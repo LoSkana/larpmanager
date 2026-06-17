@@ -46,7 +46,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     submit_confirm,
-    get_modal_iframe,
+    get_modal_iframe, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -122,7 +122,7 @@ def create_reg_editor_question(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("e")
     edit_iframe.locator("#id_name").fill(REG_EDITOR_QUESTION)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def _get_que_textarea_id(page: Any) -> str:
@@ -171,7 +171,7 @@ def create_reg_paragraph_question(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("p")
     edit_iframe.locator("#id_name").fill(REG_PARA_QUESTION)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def register_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
@@ -207,7 +207,7 @@ def create_char_editor_question(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("e")
     edit_iframe.locator("#id_name").fill(CHAR_EDITOR_QUESTION)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def create_character_with_long_editor_answer(page: Any, live_server: Any) -> None:
@@ -219,7 +219,7 @@ def create_character_with_long_editor_answer(page: Any, live_server: Any) -> Non
     # Fill the editor writing question with a long answer
     editor_id = _get_que_textarea_id(page)
     fill_tinymce(edit_iframe, editor_id, LONG_HTML_CHAR_EDITOR)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def verify_char_editor_popup(page: Any, live_server: Any) -> None:
@@ -248,7 +248,7 @@ def create_char_paragraph_question(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("p")
     edit_iframe.locator("#id_name").fill(CHAR_PARA_QUESTION)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def fill_character_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
@@ -258,7 +258,7 @@ def fill_character_with_long_paragraph_answer(page: Any, live_server: Any) -> No
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("popup test character 2")
     edit_iframe.get_by_role("row").filter(has_text=CHAR_PARA_QUESTION).get_by_role("textbox").fill(LONG_TEXT_CHAR_PARA)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def verify_char_paragraph_popup(page: Any, live_server: Any) -> None:

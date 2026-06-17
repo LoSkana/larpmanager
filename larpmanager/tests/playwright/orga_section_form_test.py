@@ -33,7 +33,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_user,
                                      submit_confirm,
                                      expect_normalized, fill_tinymce, check_feature, sidebar, nav,
-                                     get_modal_iframe,
+                                     get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -217,7 +217,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
     check_feature(page, "Navigation")
     check_feature(page, "Registrations")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # login as user
     login_user(page, live_server)

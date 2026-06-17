@@ -528,6 +528,7 @@ function refreshDatatables() {
         if (typeof window.applyColumnToggles === 'function') {
             window.applyColumnToggles();
         }
+        window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
     });
 }
 

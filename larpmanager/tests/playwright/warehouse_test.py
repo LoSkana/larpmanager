@@ -27,7 +27,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm, sidebar, get_modal_iframe
+from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm, \
+    sidebar, get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -62,7 +63,7 @@ def prepare(page: Any) -> None:
     edit_iframe.locator("#id_position").fill("bibi")
     edit_iframe.locator("#id_position").press("Tab")
     edit_iframe.locator("#id_description").fill("asdf dsfds dfdsfs")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -72,7 +73,7 @@ def prepare(page: Any) -> None:
     edit_iframe.locator("#id_position").fill("dd")
     edit_iframe.locator("#id_position").press("Tab")
     edit_iframe.locator("#id_description").fill("dsf dfsd dfsd")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator("#inv_containers tbody"), "box a bibi asdf dsfds dfdsfs boc b dd dsf dfsd dfsd")
 
     # add new tags
@@ -83,7 +84,7 @@ def prepare(page: Any) -> None:
     edit_iframe.locator("#id_name").fill("Electrical")
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("gg ds")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -91,7 +92,7 @@ def prepare(page: Any) -> None:
     edit_iframe.locator("#id_name").fill("Gru sad ")
     edit_iframe.locator("#id_description").click()
     edit_iframe.locator("#id_description").fill("dsadsa")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def add_items(page: Any) -> None:
@@ -110,7 +111,7 @@ def add_items(page: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("ele")
     edit_iframe.locator(".select2-results__option").first.click()
     load_image(page, "#id_photo")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator("#one"), "Item 1 sadsada Box A Electrical")
     page.get_by_role("link", name="New").click()
@@ -122,7 +123,7 @@ def add_items(page: Any) -> None:
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("boc")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -133,7 +134,7 @@ def add_items(page: Any) -> None:
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check items
     expect_normalized(page,
@@ -177,7 +178,7 @@ def bulk(page: Any) -> None:
     edit_iframe.get_by_role("option", name="Item 3sa").click()
     edit_iframe.locator("#id_notes").click()
     edit_iframe.locator("#id_notes").fill("maintenance")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator("#one"), "Item 3sa maintenance")
 
 
@@ -192,7 +193,7 @@ def area_assigmenents(page: Any) -> None:
     edit_iframe.locator("#id_description").click()
     edit_iframe.locator("#id_description").fill("sds")
     edit_iframe.locator("#id_description").press("CapsLock")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -203,7 +204,7 @@ def area_assigmenents(page: Any) -> None:
     edit_iframe.locator("#id_position").fill("SDsad ")
     edit_iframe.locator("#id_description").click()
     edit_iframe.locator("#id_description").fill("saddsadsa")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check
     expect_normalized(page, page.locator("#one"), "sALOON SDsad saddsadsa Item assignments")

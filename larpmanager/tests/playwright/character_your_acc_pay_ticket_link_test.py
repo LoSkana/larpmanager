@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, submit_confirm, sidebar
+from larpmanager.tests.utils import just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, submit_confirm, \
+    sidebar, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -67,7 +68,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Staff")
     edit_iframe.locator("#id_visible").uncheck()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Test 1: Direct ticket link bypasses "registration not yet open"
     ticket_link_bypasses_not_open(page, live_server)
@@ -189,7 +190,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Checkout member data
     page.locator(".fa-eye").click()
@@ -214,7 +215,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").press("Home")
     edit_iframe.locator("#id_price").fill("100.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="Please fill in your profile").click()
@@ -274,7 +275,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -284,7 +285,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check result
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -333,7 +334,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("TE")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -343,7 +344,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("TE")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check situation in second event
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -382,7 +383,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("300")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("teer")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # open request
     go_to(page, live_server, "/accounting")

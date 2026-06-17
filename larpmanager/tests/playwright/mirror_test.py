@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm, expect_normalized, \
-    get_modal_iframe
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -74,7 +74,7 @@ def test_orga_mirror(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Mirror")
     edit_iframe.locator("#id_mirror").select_option("u1")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check gallery
     go_to(page, live_server, "/test/")

@@ -40,7 +40,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm, new_option, submit_option, sidebar,
+    submit_confirm, new_option, submit_option, sidebar, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -100,7 +100,7 @@ def create_event_a(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Premium Ticket")
     edit_iframe.locator("#id_price").fill("100.00")
     edit_iframe.locator("#id_max_available").fill("10")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Create a second ticket
     page.get_by_role("link", name="New").click()
@@ -108,7 +108,7 @@ def create_event_a(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Standard Ticket")
     edit_iframe.locator("#id_price").fill("50.00")
     edit_iframe.locator("#id_max_available").fill("20")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Create registration questions
     go_to(page, live_server, "/eventa/manage/form/")
@@ -119,7 +119,7 @@ def create_event_a(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("t")
     edit_iframe.locator("#id_name").fill("Dietary restrictions")
     edit_iframe.locator("#id_description").fill("Please specify any dietary restrictions")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Add single choice question with options
     page.get_by_role("link", name="New").click()
@@ -147,7 +147,7 @@ def create_event_a(page: Any, live_server: Any) -> None:
     option_row.locator("#id_max_available").fill("5")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Add multiple choice question
     page.get_by_role("link", name="New").click()
@@ -176,7 +176,7 @@ def create_event_a(page: Any, live_server: Any) -> None:
     option_row.locator("#id_price").fill("10.00")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def create_event_b(page: Any, live_server: Any) -> None:

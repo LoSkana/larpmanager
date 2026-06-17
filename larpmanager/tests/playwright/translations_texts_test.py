@@ -28,7 +28,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, get_modal_iframe
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -45,7 +46,7 @@ def test_translations_text(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     fill_tinymce(edit_iframe, "id_text", "Hello", show=False)
     edit_iframe.locator("#id_typ").select_option("h")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -53,7 +54,7 @@ def test_translations_text(pw_page: Any) -> None:
     edit_iframe.locator("#id_language").select_option("it")
     edit_iframe.locator("#id_default").uncheck()
     edit_iframe.locator("#id_typ").select_option("h")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -61,7 +62,7 @@ def test_translations_text(pw_page: Any) -> None:
     edit_iframe.locator("#id_language").select_option("fr")
     edit_iframe.locator("#id_typ").select_option("h")
     edit_iframe.locator("#id_default").uncheck()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
 
     # test languages

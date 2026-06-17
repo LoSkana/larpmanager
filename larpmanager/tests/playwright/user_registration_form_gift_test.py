@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_user,
                                      submit,
                                      submit_confirm,
-                                     expect_normalized, new_option, submit_option, nav, get_modal_iframe,
+                                     expect_normalized, new_option, submit_option, nav, get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -121,7 +121,7 @@ def field_choice(page: Any, live_server: Any) -> None:
     option_row.locator("#id_description").fill("s")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def field_multiple(page: Any, live_server: Any) -> None:
@@ -166,7 +166,7 @@ def field_multiple(page: Any, live_server: Any) -> None:
 
     edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] .io-move-up').click()
     just_wait(page)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.locator('[id="u3"]').locator(".fa-arrow-up").click()
 
 
@@ -183,7 +183,7 @@ def field_text(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_status").select_option("d")
     edit_iframe.locator("#id_status").select_option("o")
     edit_iframe.locator("#id_giftable").check()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create paragraph
     page.get_by_role("link", name="New").click()
@@ -196,7 +196,7 @@ def field_text(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_giftable").check()
     edit_iframe.locator("#id_max_length").click()
     edit_iframe.locator("#id_max_length").fill("100")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # sign up
     go_to(page, live_server, "/test/register/")
@@ -224,7 +224,7 @@ def gift(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_text("Indicates whether the ticket").click()
     edit_iframe.locator("#id_giftable").check()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # gift
     go_to(page, live_server, "/test/gift/")

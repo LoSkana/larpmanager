@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm, sidebar,
+    submit_confirm, sidebar, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -79,7 +79,7 @@ def test_faction_all(pw_page: Any) -> None:
     edit_iframe.locator("#id_description").fill("This is visible to everyone")
     edit_iframe.locator("#id_visibility").select_option("c")  # PUBLIC
     # Note: applicable is automatically set to FACTION by the form
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Create PRIVATE WritingQuestion
     page.get_by_role("link", name="New").click()
@@ -89,7 +89,7 @@ def test_faction_all(pw_page: Any) -> None:
     edit_iframe.locator("#id_description").fill("Only visible to assigned members")
     edit_iframe.locator("#id_visibility").select_option("e")  # PRIVATE
     # Note: applicable is automatically set to FACTION by the form
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # ========== SECTION 3: Create 9 Factions (3 Primary, 3 Transversal, 3 Secret) ==========
     page.get_by_role("link", name="Factions").click()
@@ -108,7 +108,7 @@ def test_faction_all(pw_page: Any) -> None:
         edit_iframe.locator("#id_que_u8").fill(public_ans)
         edit_iframe.locator("#id_que_u9").fill(private_ans)
 
-        submit_confirm(edit_iframe)
+        save_modal(page, edit_iframe)
 
     # PRIMARY FACTIONS (typ="s")
     create_faction("s", "Primary Faction 1", "PF1 teaser", "PF1 private text",
@@ -152,7 +152,7 @@ def test_faction_all(pw_page: Any) -> None:
             edit_iframe.wait_for_timeout(500)  # Wait for dropdown
             edit_iframe.locator(".select2-results__option").filter(has_text=faction).first.click()
 
-        submit_confirm(edit_iframe)
+        save_modal(page, edit_iframe)
 
     # Character 1: Primary Faction 1 + all 3 Transversals (will be assigned to user@test.it) + 1 Secret
     create_character("Character Alpha", "Alpha teaser", "Alpha private text",
@@ -269,7 +269,7 @@ def test_faction_all(pw_page: Any) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("alpha")
     edit_iframe.get_by_role("option", name="Character Alpha").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
     # ========== SECTION 9: Verify Visibility with Assigned Character ==========

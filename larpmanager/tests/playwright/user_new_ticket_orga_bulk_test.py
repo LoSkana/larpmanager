@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, submit_confirm, sidebar
+from larpmanager.tests.utils import just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, submit_confirm, \
+    sidebar, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -71,7 +72,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("plot")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # add faction
     page.get_by_role("link", name="Factions").click()
@@ -79,7 +80,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("faz")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check base
     sidebar(page, "Characters")
@@ -136,7 +137,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("typ")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def bulk_questbuilder(live_server: Any, page: Any) -> None:
@@ -146,12 +147,12 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("q1")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("q2")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create second quest type
     page.get_by_role("link", name="Quest type").click()
@@ -159,7 +160,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("t2")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # test bulk set quest
     sidebar(page, "Quest")
@@ -175,7 +176,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("t1")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # test bulk set quest
     page.get_by_role("link", name="Bulk").click()
@@ -193,12 +194,12 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("t1")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("2")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create ability
     sidebar(page, "Abilities")
@@ -208,7 +209,7 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").fill("swor")
     edit_iframe.locator("#id_cost").click()
     edit_iframe.locator("#id_cost").fill("1")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # test bulk set type
     page.get_by_role("link", name="Bulk").click()
@@ -238,7 +239,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("box")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # add tag
     page.get_by_role("link", name="Tags").click()
@@ -246,7 +247,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("tag")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # add items
     page.get_by_role("link", name="Items").click()
@@ -257,7 +258,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("bo")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -266,7 +267,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -275,7 +276,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # add second container
     page.get_by_role("link", name="Containers").click()
@@ -283,7 +284,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("box2")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def bulk_warehouse2(live_server: Any, page: Any) -> None:
@@ -344,7 +345,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_tier").select_option("y")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("new")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # sign up with the new ticket
     go_to(page, live_server, "test")
@@ -385,7 +386,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_tier").select_option("y")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("new")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check new ticket is not available
     go_to(page, live_server, "newevent/1/")

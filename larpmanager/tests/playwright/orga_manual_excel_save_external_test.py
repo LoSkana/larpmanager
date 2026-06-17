@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      logout,
                                      submit_confirm,
-                                     get_modal_iframe,
+                                     get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -111,7 +111,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     edit_iframe.locator(".select2-results__option").first.click()
     just_wait(edit_iframe)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     just_wait(page)
     expect_normalized(page,
         page.locator("#one"),

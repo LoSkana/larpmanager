@@ -31,7 +31,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
     sidebar, \
-    get_modal_iframe
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -146,7 +146,7 @@ def check_orga_roles(page: Any) -> None:
     checked = ["Event", "Configuration", "Texts", "Navigation"]
     for s in checked:
         check_feature(page, s)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Event (Event, Configuration), Appearance (Texts, Navigation)")
     page.locator('[id="u2"]').locator(".fa-edit").click()
     _check_checkboxes(checked, page)
@@ -208,7 +208,7 @@ def check_exe_roles(page: Any) -> None:
     checked = ["Organization", "Configuration", "Events", "Texts"]
     for s in checked:
         check_feature(page, s)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     expect(page.locator('[id="u2"]')).to_contain_text(
         "Organization (Organization, Configuration), Events (Events), Appearance (Texts)"
     )

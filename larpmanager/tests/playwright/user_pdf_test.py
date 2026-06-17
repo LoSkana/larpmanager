@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     go_to_check,
     just_wait,
     login_orga,
-    submit_confirm,
+    submit_confirm, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -69,14 +69,14 @@ def test_user_pdf(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create a second character (no relationship yet)
     go_to(page, live_server, "/test/manage/characters")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("Pdf Rel Character")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # add the relationship from Test Character (u1) to Pdf Rel Character (u2)
     go_to(page, live_server, "/test/manage/characters")
@@ -151,7 +151,7 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("Player Rel Target")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # As player (orga user, who has Test Character assigned), add a player relationship
     go_to(page, live_server, "/test/register")
@@ -165,7 +165,7 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("player")
     edit_iframe.get_by_role("option", name="Player Rel Target").click()
     fill_tinymce(edit_iframe, "id_text", "player relationship text", show=False)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Go to character page and verify printable sheet (which now includes relationships) still works
     go_to(page, live_server, "/test/character/u1")

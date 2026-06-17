@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     login_orga,
     sidebar,
     submit_confirm,
-    get_modal_iframe,
+    get_modal_iframe, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -64,18 +64,18 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("progress")
     edit_iframe.locator("#id_name").fill("Status")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Create two progress steps so we can pick a non-first step
     sidebar(page, "Progress")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("Draft")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("Final")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Create a plot and set progress to "Final" (the second step)
     sidebar(page, "Plots")
@@ -83,7 +83,7 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("Progress Test Plot")
     edit_iframe.locator("#id_progress").select_option(label="2 - Final")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Edit the plot (name change only) and save
     page.locator(".fa-edit").click()
@@ -96,7 +96,7 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
     assert "Final" in progress_before, f"Expected 'Final' selected before edit, got '{progress_before}'"
 
     edit_iframe.locator("#id_name").fill("Progress Test Plot Renamed")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Re-open the edit form and verify progress is still "Final"
     page.locator(".fa-edit").click()
@@ -132,7 +132,7 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("Minor NPC")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Create a plot with two characters:
     # - Test Character: important role
@@ -158,7 +158,7 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     edit_iframe.wait_for_timeout(3000)
     fill_tinymce(edit_iframe, "ch_2", "$unimportant minor role")
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Show Characters column then Stats to make stats-characters cells visible in DOM
     page.locator("#one").get_by_role("link", name="Characters").click()

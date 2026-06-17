@@ -29,7 +29,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized
+from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -101,7 +102,7 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def character_inventory_transfer(live_server: Any, page: Any) -> None:
@@ -123,7 +124,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     edit_iframe.get_by_text("---------").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # log out and log in as the test user
     login_user(page, live_server)

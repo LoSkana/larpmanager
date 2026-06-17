@@ -31,7 +31,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
     submit_option, new_option, \
-    get_modal_iframe
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -107,7 +107,7 @@ def field_single(page: Any, live_server: Any) -> None:
     iframe.locator("#id_name").fill("wwww")
     submit_option(edit_iframe, iframe)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def field_multiple(page: Any, live_server: Any) -> None:
@@ -145,7 +145,7 @@ def field_multiple(page: Any, live_server: Any) -> None:
     iframe.get_by_role("option", name="single - wwww").click()
     submit_option(edit_iframe, iframe)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def field_text(page: Any, live_server: Any) -> None:
@@ -159,7 +159,7 @@ def field_text(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("text")
     edit_iframe.locator("#id_max_length").click()
     edit_iframe.locator("#id_max_length").fill("10")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Add paragraph
     page.get_by_role("link", name="New").click()
@@ -167,7 +167,7 @@ def field_text(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("p")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("rrr")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Create new character
     go_to(page, live_server, "/test/manage/characters")
@@ -190,7 +190,7 @@ def field_text(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_que_u6").fill("sad")
     edit_iframe.locator("#id_que_u7").click()
     edit_iframe.locator("#id_que_u7").fill("sadsadas")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def field_single_req(page: Any, live_server: Any) -> None:
@@ -211,7 +211,7 @@ def field_single_req(page: Any, live_server: Any) -> None:
     iframe.get_by_role("option", name="single - wwww").click()
     submit_option(edit_iframe, iframe)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def verify_requirements_hidden(page: Any) -> None:
@@ -338,7 +338,7 @@ def player_relationships(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
     fill_tinymce(edit_iframe, "id_text", "my relationship text", show=False)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Verify relationship appears in list
     expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) my relationship text")

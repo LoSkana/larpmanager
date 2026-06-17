@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, \
-    submit_confirm, new_option, submit_option, sidebar, nav, get_modal_iframe
+    submit_confirm, new_option, submit_option, sidebar, nav, get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -75,7 +75,7 @@ def prepare(page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("bambi")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # set option based on ticket
     sidebar(page, "Sheet")
@@ -103,7 +103,7 @@ def prepare(page: Any) -> None:
     submit_option(edit_iframe, option_row)
 
     expect_normalized(page, edit_iframe.locator("#options"), "bmb test larp (standard) bambi")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def create_character(page: Any) -> None:

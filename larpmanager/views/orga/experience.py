@@ -46,6 +46,7 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new, orga_order
 from larpmanager.utils.io.download import export_abilities, export_modifiers, export_rules, zip_exports
 from larpmanager.utils.services.bulk import handle_bulk_ability
@@ -148,7 +149,8 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
                     _("Characters from event '{run}' have been loaded. Review and confirm to save.").format(run=run),
                 )
 
-                return render(request, "larpmanager/orga/edit.html", context)
+                is_frame = request.POST.get("frame") == "1"
+                return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/edit.html")
 
             except (ValueError, ObjectDoesNotExist) as err:
                 logger.warning("Auto populate run failed: %s", err)

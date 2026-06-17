@@ -29,7 +29,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar, get_modal_iframe
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar, get_modal_iframe, \
+    save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -119,7 +120,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("c")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("comp")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # test save
     page.get_by_role("link", name="Event").click()

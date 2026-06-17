@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (just_wait,
                                      logout,
                                      submit_confirm,
                                      expect_normalized, new_option, submit_option, get_option,
-                                     get_modal_iframe,
+                                     get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -175,7 +175,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_que_u10").fill("disabled")
     edit_iframe.locator("#id_que_u11").fill("hidden")
     edit_iframe.locator("#id_status").select_option("a")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect(edit_iframe.locator("#id_que_u4")).to_have_value("cccccccccc")
@@ -198,7 +198,7 @@ def recheck_char(live_server: Any, page: Any) -> None:
     expect_normalized(page,
         edit_iframe.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
     )
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     go_to(page, live_server, "/test/character/list")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
@@ -206,7 +206,7 @@ def recheck_char(live_server: Any, page: Any) -> None:
     expect_normalized(page, edit_iframe.locator("#id_que_u10_tr"), "disabled")
     expect(edit_iframe.locator("#id_que_u11")).to_have_count(0)
     expect(page.locator("#one")).not_to_contain_text("Hidden")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def create_first_char(live_server: Any, page: Any) -> None:
@@ -277,7 +277,7 @@ def add_field_special(page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("mandatory descr")
     edit_iframe.locator("#id_status").select_option("m")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("t")
@@ -286,7 +286,7 @@ def add_field_special(page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("disabled descr")
     edit_iframe.locator("#id_status").select_option("d")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("t")
@@ -295,7 +295,7 @@ def add_field_special(page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("hidden descr")
     edit_iframe.locator("#id_status").select_option("h")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("t")
@@ -304,7 +304,7 @@ def add_field_special(page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("public descr")
     edit_iframe.locator("#id_visibility").select_option("c")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("t")
@@ -313,7 +313,7 @@ def add_field_special(page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("only descr")
     edit_iframe.get_by_role("checkbox", name="Creation").check()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def add_field_restricted(page: Any) -> None:
@@ -341,7 +341,7 @@ def add_field_restricted(page: Any) -> None:
     option_row.locator("#id_max_available").fill("1")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.locator('[id="u8"]').locator(".fa-arrow-up").click()
     page.locator('[id="u8"]').locator(".fa-edit").click()
@@ -359,7 +359,7 @@ def add_field_restricted(page: Any) -> None:
     option_row.locator("#id_description").fill("only descr")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def add_field_multiple(page: Any) -> None:
@@ -402,7 +402,7 @@ def add_field_multiple(page: Any) -> None:
     option_row.locator("#id_max_available").fill("1")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def add_field_available(page: Any) -> None:
@@ -432,7 +432,7 @@ def add_field_available(page: Any) -> None:
     option_row.locator("#id_max_available").fill("2")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def add_field_text(page: Any) -> None:
@@ -447,7 +447,7 @@ def add_field_text(page: Any) -> None:
     edit_iframe.locator("#id_max_length").click()
     edit_iframe.locator("#id_max_length").press("ArrowLeft")
     edit_iframe.locator("#id_max_length").fill("10")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("p")
@@ -463,4 +463,4 @@ def add_field_text(page: Any) -> None:
     edit_iframe.get_by_role("checkbox", name="Revision").press("Tab")
     edit_iframe.get_by_role("checkbox", name="Approved").press("Tab")
     edit_iframe.locator("#id_max_length").fill("10")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)

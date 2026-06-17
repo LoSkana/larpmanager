@@ -64,7 +64,7 @@ from larpmanager.forms.warehouse import (
 )
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.edit.backend import backend_delete, backend_edit, set_suggestion
-from larpmanager.utils.edit.base import Action
+from larpmanager.utils.edit.base import Action, render_frame_or_fallback
 
 if TYPE_CHECKING:
     from larpmanager.forms.base import BaseModelForm
@@ -257,11 +257,7 @@ def exe_form(
             redirect_view = permission
         return redirect(redirect_view)
 
-    # Render appropriate template based on mode
-    if is_frame:
-        return render(request, "elements/dashboard/form_frame.html", context)
-
-    return render(request, "larpmanager/exe/edit.html", context)
+    return render_frame_or_fallback(request, context, is_frame, "larpmanager/exe/edit.html")
 
 
 def exe_new(request: HttpRequest, permission: str) -> HttpResponse:

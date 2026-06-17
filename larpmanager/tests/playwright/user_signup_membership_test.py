@@ -36,7 +36,7 @@ from larpmanager.tests.utils import (check_download,
                                      login_orga,
                                      submit,
                                      submit_confirm,
-                                     expect_normalized, logout,
+                                     expect_normalized, logout, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -92,7 +92,7 @@ def signup(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("100.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     # signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()

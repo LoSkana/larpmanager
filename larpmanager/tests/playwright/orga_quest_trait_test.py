@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (just_wait,
                                      go_to,
                                      login_orga,
                                      submit_confirm,
-                                     expect_normalized, sidebar,
+                                     expect_normalized, sidebar, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -85,7 +85,7 @@ def quests(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Lore")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create two quests
     sidebar(page, "Quest")
@@ -94,7 +94,7 @@ def quests(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Torta")
     fill_tinymce(edit_iframe, "id_teaser", "zucchero")
     fill_tinymce(edit_iframe, "id_text", "saleee")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -102,7 +102,7 @@ def quests(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Pizza")
     fill_tinymce(edit_iframe, "id_teaser", "mozzarella")
     fill_tinymce(edit_iframe, "id_text", "americano")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check
     expect_normalized(page, page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
@@ -117,7 +117,7 @@ def traits(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Strudel")
     fill_tinymce(edit_iframe, "id_teaser", "trentina")
     fill_tinymce(edit_iframe, "id_text", "veronese")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -132,7 +132,7 @@ def traits(page: Any, live_server: Any) -> None:
     edit_iframe.locator(".select2-results__option").first.click()
     just_wait(edit_iframe)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
@@ -151,14 +151,14 @@ def traits(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Capriciossa")
     fill_tinymce(edit_iframe, "id_teaser", "normale")
     fill_tinymce(edit_iframe, "id_text", "senza pomodoro")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_quest").select_option("u2")
     edit_iframe.locator("#id_quest").press("Tab")
     edit_iframe.locator("#id_name").fill("Mare")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check how they appear on user side
     go_to(page, live_server, "/test")
@@ -180,7 +180,7 @@ def signups(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create another char
     sidebar(page, "Characters")
@@ -188,7 +188,7 @@ def signups(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Another")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create signup for another
     sidebar(page, "Registrations")
@@ -200,7 +200,7 @@ def signups(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("an")
     edit_iframe.get_by_role("option", name="Another").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def casting(page: Any, live_server: Any) -> None:
@@ -263,7 +263,7 @@ def casting(page: Any, live_server: Any) -> None:
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_qt_u1").select_option("u1")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check result
     page.get_by_role("link", name="Lore").click()

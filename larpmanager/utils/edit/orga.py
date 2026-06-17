@@ -118,7 +118,7 @@ from larpmanager.utils.edit.backend import (
     backend_order,
     set_suggestion,
 )
-from larpmanager.utils.edit.base import Action, prepare_change
+from larpmanager.utils.edit.base import Action, prepare_change, render_frame_or_fallback
 from larpmanager.utils.services.character import get_character_relationships, get_character_sheet
 
 
@@ -382,12 +382,7 @@ def _evaluate_action_result(
     if context.get("is_writing"):
         return render(request, "larpmanager/orga/writing/writing.html", context)
 
-    # Standard elements use iframe or standard edit template
-    if is_frame:
-        context["edit"] = True
-        return render(request, "elements/dashboard/form_frame.html", context)
-
-    return render(request, "larpmanager/orga/edit.html", context)
+    return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/edit.html")
 
 
 def _action_redirect(

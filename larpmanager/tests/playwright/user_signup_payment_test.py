@@ -29,7 +29,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized, get_modal_iframe
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized, \
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -86,7 +87,7 @@ def prepare(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("100.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def signup(page: Any, live_server: Any) -> None:
@@ -141,7 +142,7 @@ def characters(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # test mails
     go_to(page, live_server, "/debug/mail")
@@ -151,7 +152,7 @@ def characters(page: Any, live_server: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("listitem", name="Test Character").locator("span").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # test mails
     go_to(page, live_server, "/debug/mail")

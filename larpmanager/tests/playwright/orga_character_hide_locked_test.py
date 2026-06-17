@@ -42,7 +42,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     sidebar,
-    submit_confirm,
+    submit_confirm, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -91,7 +91,7 @@ def _create_character(page: Any, live_server: Any, name: str, teaser: str, text:
     edit_iframe.locator("#id_name").fill(name)
     fill_tinymce(edit_iframe, "id_teaser", teaser)
     fill_tinymce(edit_iframe, "id_text", text)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     uuid = f"u{counter[0]}"
     counter[0] += 1
     return uuid
@@ -104,7 +104,7 @@ def _create_faction(page: Any, live_server: Any, name: str, teaser: str, counter
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill(name)
     fill_tinymce(edit_iframe, "id_teaser", teaser)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     uuid = f"u{counter[0]}"
     counter[0] += 1
     return uuid
@@ -122,7 +122,7 @@ def _assign_to_user(page: Any, live_server: Any, char_name: str) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill(char_name[:5])
     edit_iframe.get_by_role("option", name=char_name).click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def _set_char_field(page: Any, live_server: Any, char_uuid: str, field_id: str) -> None:
@@ -232,7 +232,7 @@ def _test_faction_hide(page: Any, live_server: Any, char_counter: list, faction_
     edit_iframe.get_by_role("searchbox").fill("Hidd")
     edit_iframe.wait_for_timeout(500)
     edit_iframe.locator(".select2-results__option").filter(has_text="HiddenFaction").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     char_uuid = f"u{char_counter[0]}"
     char_counter[0] += 1
 
@@ -270,7 +270,7 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     edit_iframe.get_by_role("searchbox").fill("Lock")
     edit_iframe.wait_for_timeout(500)
     edit_iframe.locator(".select2-results__option").filter(has_text="LockedFaction").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     char_uuid = f"u{char_counter[0]}"
     char_counter[0] += 1
 

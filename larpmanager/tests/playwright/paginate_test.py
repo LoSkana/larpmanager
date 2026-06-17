@@ -28,7 +28,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import expect_normalized, get_modal_iframe, go_to, just_wait, load_image, login_orga, submit_confirm, submit
+from larpmanager.tests.utils import expect_normalized, get_modal_iframe, go_to, just_wait, load_image, login_orga, \
+    submit_confirm, submit, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -78,7 +79,7 @@ def config(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("100.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Signup
     go_to(page, live_server, "/test/register")
@@ -123,7 +124,7 @@ def exe_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_descr").fill("test outflow exe")
     load_image(page, "#id_invoice")
     edit_iframe.locator("#id_exp").select_option("a")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/manage/outflows/", "test outflow exe")
 
     # exe_inflows
@@ -133,7 +134,7 @@ def exe_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("20")
     edit_iframe.locator("#id_descr").fill("test inflow exe")
     load_image(page, "#id_invoice")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/manage/inflows/", "test inflow exe")
 
     # exe_donations
@@ -145,7 +146,7 @@ def exe_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="User Test").click()
     edit_iframe.locator("#id_descr").fill("test donation exe")
     edit_iframe.locator("#id_value").fill("5")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/manage/donations/", "test donation exe")
 
     # exe_credits
@@ -157,7 +158,7 @@ def exe_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="User Test").click()
     edit_iframe.locator("#id_descr").fill("test credit exe")
     edit_iframe.locator("#id_value").fill("50")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/manage/credits/", "test credit exe")
 
     # exe_tokens
@@ -169,7 +170,7 @@ def exe_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="User Test").click()
     edit_iframe.locator("#id_descr").fill("test token exe")
     edit_iframe.locator("#id_value").fill("30")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/manage/tokens/", "test token exe")
 
     # exe_expenses
@@ -183,7 +184,7 @@ def exe_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("15")
     load_image(page, "#id_invoice")
     edit_iframe.locator("#id_exp").select_option("a")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/manage/expenses/", "test expense exe")
 
     # exe_payments - page load only
@@ -208,7 +209,7 @@ def orga_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_descr").fill("test outflow orga")
     load_image(page, "#id_invoice")
     edit_iframe.locator("#id_exp").select_option("a")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/test/manage/outflows/", "test outflow orga")
 
     # orga_inflows
@@ -218,7 +219,7 @@ def orga_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("20")
     edit_iframe.locator("#id_descr").fill("test inflow orga")
     load_image(page, "#id_invoice")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/test/manage/inflows/", "test inflow orga")
 
     # orga_tokens
@@ -230,7 +231,7 @@ def orga_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").fill("ad")
     edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/test/manage/tokens/", "test token orga")
 
     # orga_credits
@@ -242,7 +243,7 @@ def orga_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").fill("ad")
     edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/test/manage/credits/", "test credit orga")
 
     # orga_expenses
@@ -256,7 +257,7 @@ def orga_paginate_views(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("15")
     load_image(page, "#id_invoice")
     edit_iframe.locator("#id_exp").select_option("a")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     check_paginate(page, live_server, "/test/manage/expenses/", "test expense orga")
 
     # orga_payments - page load only

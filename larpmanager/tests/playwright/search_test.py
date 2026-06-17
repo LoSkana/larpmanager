@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, new_option, \
-    submit_option, sidebar, nav, get_modal_iframe
+    submit_option, sidebar, nav, get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -140,7 +140,7 @@ def prepare(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("fassione")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create form options
     sidebar(page, "Sheet")
@@ -158,7 +158,7 @@ def prepare(page: Any, live_server: Any) -> None:
     option_row.locator("#id_name").fill("blue")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -182,12 +182,12 @@ def prepare(page: Any, live_server: Any) -> None:
     submit_option(edit_iframe, option_row)
 
     edit_iframe.locator("#id_visibility").select_option("s")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.locator('[id="u8"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_visibility").select_option("s")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def characters(page: Any, live_server: Any) -> None:
@@ -200,7 +200,7 @@ def characters(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="fassione (P)").click()
     edit_iframe.locator("#id_que_u8").select_option("u1")
     edit_iframe.get_by_role("checkbox", name="zapyr").check()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -209,7 +209,7 @@ def characters(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_que_u8").select_option("u2")
     edit_iframe.locator("#id_que_u9 div").filter(has_text="qerfi").click()
     edit_iframe.get_by_role("checkbox", name="wunder").check()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -220,7 +220,7 @@ def characters(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("fa")
     edit_iframe.get_by_role("option", name="fassione (P)").click()
     edit_iframe.get_by_role("checkbox", name="wunder").check()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="color").first.click()
     page.get_by_role("link", name="tag").first.click()

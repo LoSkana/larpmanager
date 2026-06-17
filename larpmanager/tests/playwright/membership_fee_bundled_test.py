@@ -42,7 +42,7 @@ from larpmanager.tests.utils import (
     login_orga,
     sidebar,
     submit,
-    submit_confirm,
+    submit_confirm, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -89,7 +89,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").fill("100.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Create second event (slug auto-generated as "testsecond" from "Test Second")
     go_to(page, live_server, "/manage/events/")
@@ -114,7 +114,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").fill("70.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def request_and_approve_membership(live_server: Any, page: Any) -> None:

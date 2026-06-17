@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
+    expect_normalized, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -60,7 +61,7 @@ def check_delete(live_server: Any, page: Any) -> None:
     page.wait_for_selector(".fa-edit", timeout=100)
     page.locator(".fa-edit").click(force=True)
     edit_iframe = get_modal_iframe(page)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # cancel signup
     go_to(page, live_server, "/test/manage/registrations")
@@ -118,7 +119,7 @@ def discount(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("a")
     edit_iframe.locator("#id_visible").check()
     edit_iframe.locator("#id_only_reg").uncheck()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name=re.compile(r"^Discounts ")).click()
@@ -184,7 +185,7 @@ def token_credits(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_value").fill("7")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("test")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/manage/credits")
     page.get_by_role("link", name="New").click()
@@ -196,7 +197,7 @@ def token_credits(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_value").fill("5")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("test")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/manage/tokens")
     page.get_by_role("link", name="New").click()
@@ -208,7 +209,7 @@ def token_credits(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_value").fill("17")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("teeest")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("link", name="New").click()
@@ -220,7 +221,7 @@ def token_credits(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_value").fill("19")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("testet")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def signup_pay(live_server: Any, page: Any) -> None:
@@ -289,4 +290,4 @@ def setup_payment(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("100.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)

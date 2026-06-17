@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, login_orga, login_user, logout, submit_confirm, expect_normalized, \
-    sidebar, get_modal_iframe
+    sidebar, get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -88,7 +88,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_price").fill("50")
     edit_iframe.locator("#id_description").click()
     edit_iframe.locator("#id_description").fill("Standard ticket with meals")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def registration_with_additionals(page: Any, live_server: Any) -> None:
@@ -134,7 +134,7 @@ def edit_additionals(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_additionals").fill("2")
 
     # Save changes
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
@@ -197,7 +197,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("30")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Register with both additional tickets and pay what you want
     go_to(page, live_server, "test/")

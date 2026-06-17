@@ -34,7 +34,7 @@ from larpmanager.tests.utils import (expect_normalized,
                                      go_to,
                                      login_orga,
                                      login_user, submit_confirm, sidebar,
-                                     get_modal_iframe,
+                                     get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -60,13 +60,13 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("www")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("ggggg")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     sidebar(page, "Deliveries")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -77,7 +77,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
@@ -86,7 +86,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").click()
     edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").fill("te")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create plots, assign them to player
     page.get_by_role("link", name="Plots").click()
@@ -105,7 +105,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     option.click()
     edit_iframe.wait_for_timeout(5000)
     fill_tinymce(edit_iframe, "ch_1", "prisdsa")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -121,7 +121,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     option.click()
     page.wait_for_timeout(5000)
     fill_tinymce(edit_iframe, "ch_1", "poelea s")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # add factions, one visible, one not
     page.get_by_role("link", name="Factions").click()
@@ -133,7 +133,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -146,7 +146,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # add new field
     sidebar(page, "Sheet")
@@ -155,7 +155,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("t")
     edit_iframe.get_by_role("cell", name="Question name (keep it short)").click()
     edit_iframe.locator("#id_name").fill("teeeeest")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check value now
     page.get_by_role("link", name="Characters").click()

@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (go_to,
                                      login_user,
                                      logout,
                                      submit_confirm,
-                                     expect_normalized, new_option, submit_option, get_modal_iframe,
+                                     expect_normalized, new_option, submit_option, get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -80,7 +80,7 @@ def add_text(page: Any) -> None:
     edit_iframe.locator("#id_max_length").press("ArrowLeft")
     edit_iframe.locator("#id_max_length").fill("10")
     load_image(edit_iframe, "#id_profile")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -92,7 +92,7 @@ def add_text(page: Any) -> None:
     edit_iframe.locator("#id_max_length").click()
     edit_iframe.locator("#id_max_length").press("ArrowLeft")
     edit_iframe.locator("#id_max_length").fill("10")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def add_single(page: Any) -> None:
@@ -139,7 +139,7 @@ def add_single(page: Any) -> None:
     option_row.locator("#id_max_available").fill("1")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -166,7 +166,7 @@ def add_single(page: Any) -> None:
     option_row.locator("#id_max_available").fill("1")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def add_multiple(page: Any) -> None:
@@ -212,7 +212,7 @@ def add_multiple(page: Any) -> None:
     option_row.locator("#id_max_available").fill("1")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def add_special(page: Any) -> None:
@@ -224,7 +224,7 @@ def add_special(page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("hidden descr")
     edit_iframe.locator("#id_status").select_option("h")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -234,7 +234,7 @@ def add_special(page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("disabled text")
     edit_iframe.locator("#id_status").select_option("d")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def signup_first(live_server: Any, page: Any) -> None:
@@ -269,7 +269,7 @@ def signup_first(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_description").fill("mandatory text")
     edit_iframe.locator("#id_status").select_option("m")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def signup_check(live_server: Any, page: Any) -> None:
@@ -325,7 +325,7 @@ def orga_check(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_que_u8").click()
     edit_iframe.locator("#id_que_u8").fill("asdsadsa")
     expect(edit_iframe.locator("#id_que_u9")).to_have_value("ggggg")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect(edit_iframe.locator("#id_que_u7")).to_have_value("dsadsadsa")

@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      go_to,
                                      login_orga,
                                      submit_confirm,
-                                     expect_normalized, sidebar,
+                                     expect_normalized, sidebar, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -85,7 +85,7 @@ def reading(live_server: Any, page: Any) -> None:
 
     fill_tinymce(edit_iframe, "id_text", "totxeet")
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # now read it
     sidebar(page, "Reading")
@@ -115,7 +115,7 @@ def reading(live_server: Any, page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -152,7 +152,7 @@ def relationships(live_server: Any, page: Any) -> None:
     option.click()
     edit_iframe.wait_for_timeout(5000)
     fill_tinymce(edit_iframe, "rel_u1", "ciaaoooooo")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
@@ -221,7 +221,7 @@ def plots(live_server: Any, page: Any) -> None:
     page.wait_for_timeout(5000)
     fill_tinymce(edit_iframe, "ch_2", "second char role")
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check in plot list - both characters should be there
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -269,7 +269,7 @@ def plots(live_server: Any, page: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     fill_tinymce(edit_iframe, "id_char_role_2", "bruuuu")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check in user
     go_to(page, live_server, "/test/")
@@ -284,13 +284,13 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("gaga")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("bibi")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # test adding them to character
     sidebar(page, "Characters")
@@ -367,7 +367,7 @@ def auto_relationships_setup(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("p")
     edit_iframe.locator("#id_name").fill("Background")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create the six characters that will be auto-related to the test character
     for name in ("AutoSheetA", "AutoSheetB", "AutoFactionA", "AutoFactionB", "AutoPlotA", "AutoPlotB"):
@@ -376,7 +376,7 @@ def auto_relationships_setup(live_server: Any, page: Any) -> None:
         edit_iframe = get_modal_iframe(page)
         edit_iframe.locator("#id_name").click()
         edit_iframe.locator("#id_name").fill(name)
-        submit_confirm(edit_iframe)
+        save_modal(page, edit_iframe)
 
     # on the test character: cite two characters in the sheet question, and set a manual
     # relationship for one character per source (sheet/faction/plot)
@@ -418,7 +418,7 @@ def auto_relationships_faction(live_server: Any, page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def auto_relationships_plot(live_server: Any, page: Any) -> None:
@@ -437,7 +437,7 @@ def auto_relationships_plot(live_server: Any, page: Any) -> None:
     option.click()
     edit_iframe.wait_for_timeout(5000)
     fill_tinymce(edit_iframe, "ch_1", "mentions @7 and @8")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def auto_relationships_check(live_server: Any, page: Any) -> None:

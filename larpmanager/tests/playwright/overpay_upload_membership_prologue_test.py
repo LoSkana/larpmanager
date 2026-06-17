@@ -28,8 +28,9 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, expect_normalized, \
-    submit_confirm, sidebar
+from larpmanager.tests.utils import just_wait, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, \
+    expect_normalized, \
+    submit_confirm, sidebar, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -64,7 +65,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("100.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Signup
     go_to(page, live_server, "/")
@@ -83,7 +84,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("cre")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Check signup accounting
     page.get_by_role("link", name="Registrations").click()
@@ -102,7 +103,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").press("Home")
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("www")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Check signup accounting
     page.get_by_role("link", name="Registrations").click()
@@ -120,7 +121,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("80.00")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Check accounting
     page.get_by_role("link", name="Registrations").click()
@@ -130,7 +131,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Perform save
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="accounting", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
 
@@ -162,7 +163,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
         edit_iframe.locator("#main_form"),
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
     )
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
 
 
@@ -177,7 +178,7 @@ def prologues(page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("test")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # add prologue
     page.get_by_role("link", name="Prologues", exact=True).click()
@@ -191,7 +192,7 @@ def prologues(page: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#main_form").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check result
     page.get_by_role("link", name="Characters").click()

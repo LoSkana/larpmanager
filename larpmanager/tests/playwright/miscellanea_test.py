@@ -40,7 +40,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     submit_confirm, sidebar,
-    get_modal_iframe,
+    get_modal_iframe, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -129,7 +129,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Test Gallery Character")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Test 1: Gallery should be visible without any restrictions
     logout(page)

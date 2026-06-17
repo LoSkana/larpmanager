@@ -33,7 +33,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import just_wait, check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
     _checkboxes, \
     fill_tinymce, \
-    get_modal_iframe
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -62,7 +62,7 @@ def template(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").fill("template")
     edit_iframe.get_by_role("checkbox", name="Characters").check()
     edit_iframe.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="Add").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("base role")
@@ -133,7 +133,7 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
     check_feature(page, "Navigation")
     check_feature(page, "Factions")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # give ability xp
     go_to(page, live_server, "/test/manage/experience/ability_types/")
@@ -141,7 +141,7 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("base ability")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/manage/experience/abilities/")
     page.get_by_role("link", name="New").click()
@@ -157,7 +157,7 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").click()
     edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # give delivery xp
     go_to(page, live_server, "/test/manage/experience/deliveries/")
@@ -170,7 +170,7 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def copy(live_server: Any, page: Any) -> None:

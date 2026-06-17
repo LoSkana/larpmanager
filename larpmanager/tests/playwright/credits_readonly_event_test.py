@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import get_modal_iframe, go_to, login_orga, submit_confirm
+from larpmanager.tests.utils import get_modal_iframe, go_to, login_orga, submit_confirm, save_modal
 from playwright.sync_api import expect
 
 pytestmark = pytest.mark.e2e
@@ -54,7 +54,7 @@ def test_credits_readonly_event(pw_page: Any) -> None:
     edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     edit_iframe.locator("#id_value").fill("10")
     edit_iframe.locator("#id_descr").fill("test")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Check presence of New, Edit and Delete links
     expect(page.get_by_role("link", name= "New")).to_have_count(1)

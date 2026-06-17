@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (
     fill_tinymce,
     go_to,
     login_orga,
-    submit_confirm, new_option, submit_option, get_modal_iframe,
+    submit_confirm, new_option, submit_option, get_modal_iframe, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -83,7 +83,7 @@ def create_character_form(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Text Question")
     edit_iframe.locator("#id_description").fill("A text field")
     edit_iframe.locator("#id_max_length").fill("50")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Question 2: Paragraph field
     page.get_by_role("link", name="New").click()
@@ -91,7 +91,7 @@ def create_character_form(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("p")
     edit_iframe.locator("#id_name").fill("Paragraph Question")
     edit_iframe.locator("#id_description").fill("A paragraph field")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Question 3: Single choice with 3 options
     page.get_by_role("link", name="New").click()
@@ -115,7 +115,7 @@ def create_character_form(page: Any, live_server: Any) -> None:
     option_row.locator("#id_name").fill("Option C")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Question 4: Multiple choice with 3 options
     page.get_by_role("link", name="New").click()
@@ -140,7 +140,7 @@ def create_character_form(page: Any, live_server: Any) -> None:
     option_row.locator("#id_name").fill("Choice Z")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Question 5: Another text field
     page.get_by_role("link", name="New").click()
@@ -148,7 +148,7 @@ def create_character_form(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("e")
     edit_iframe.locator("#id_name").fill("Advanced Question")
     edit_iframe.locator("#id_description").fill("Advanced text field")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def edit_first_character(page: Any, live_server: Any) -> None:
@@ -175,7 +175,7 @@ def create_second_character(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Second Character")
     fill_tinymce(edit_iframe, "id_teaser", "")
     fill_tinymce(edit_iframe, "id_text", "")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def inline_editing_name(page: Any, live_server: Any) -> None:

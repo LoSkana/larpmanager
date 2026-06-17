@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (check_feature,
                                      logout,
                                      submit_confirm,
                                      expect_normalized,
-                                     get_modal_iframe,
+                                     get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -61,7 +61,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     edit_iframe.get_by_role("option", name="User Test -").click()
     check_feature(page, "Configuration")
     check_feature(page, "Accounting")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Organization (Configuration), Accounting (Accounting)")
 
     logout(page)

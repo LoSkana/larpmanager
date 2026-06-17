@@ -29,8 +29,9 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, submit, \
-    submit_confirm
+from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, get_modal_iframe, go_to, load_image, \
+    login_orga, submit, \
+    submit_confirm, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -69,7 +70,7 @@ def expense(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_exp").select_option("g")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("dsadas")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     go_to(page, live_server, "/test/manage/expenses")
     page.get_by_role("link", name="Approve").click()
 
@@ -91,7 +92,7 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("100")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
@@ -128,7 +129,7 @@ def submit_membership(live_server: Any, page: Any) -> None:
 
     edit_iframe.locator("#main_form").click()
     edit_iframe.locator("#id_typ").select_option("m")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)
@@ -171,7 +172,7 @@ def badge(live_server: Any, page: Any) -> None:
     load_image(page, "#id_img")
     edit_iframe.get_by_role("searchbox").fill("user")
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def chat(live_server: Any, page: Any) -> None:

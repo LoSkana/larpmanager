@@ -31,7 +31,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.playwright.exe_accounting_test import verify
 from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
-    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe
+    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -96,7 +96,7 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_description").click()
     edit_iframe.locator("#id_description").fill("sasad")
     edit_iframe.locator("#id_name").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create class field
     page.get_by_role("link", name="New").click()
@@ -116,7 +116,7 @@ def setup(live_server: Any, page: Any) -> None:
     option_row.locator("#id_name").fill("Cleric")
     submit_option(edit_iframe, option_row)
 
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def ability(live_server: Any, page: Any) -> None:
@@ -126,7 +126,7 @@ def ability(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("base ability")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/manage/experience/abilities/")
     page.get_by_role("link", name="New").click()
@@ -142,7 +142,7 @@ def ability(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_cost").click()
     edit_iframe.locator("#id_cost").fill("1")
     fill_tinymce(edit_iframe, "id_descr", "sdsfdsfds", False)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -156,7 +156,7 @@ def ability(live_server: Any, page: Any) -> None:
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="Ability Template").click()
     page.get_by_role("link", name="New").click()
@@ -167,7 +167,7 @@ def ability(live_server: Any, page: Any) -> None:
     edit_iframe.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
         "This text should show"
     )
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
     page.wait_for_load_state("load")
     just_wait(page)
@@ -176,7 +176,7 @@ def ability(live_server: Any, page: Any) -> None:
     edit_iframe.get_by_text("---------").click()
     edit_iframe.get_by_role("searchbox").nth(3).fill("test_template")
     edit_iframe.get_by_role("option", name="test_template").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
     page.get_by_role("cell", name="This text should show").click()
 
@@ -192,7 +192,7 @@ def delivery(live_server: Any, page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check experience computation
     go_to(page, live_server, "/test/manage/characters/")
@@ -210,7 +210,7 @@ def delivery(live_server: Any, page: Any) -> None:
     row.get_by_role("searchbox").fill("swo")
     just_wait(page)
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator('[id="u1"]'), "11")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
@@ -228,7 +228,7 @@ def rules(page: Any) -> None:
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("2")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # create second rule - only for sword
     page.get_by_role("link", name="New").click()
@@ -244,7 +244,7 @@ def rules(page: Any) -> None:
     edit_iframe.locator("#id_operation").select_option("MUL")
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("3")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # check value
     page.get_by_role("link", name="Characters").click()
@@ -258,7 +258,7 @@ def rules(page: Any) -> None:
     just_wait(page)
     btn = edit_iframe.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
     btn.evaluate("el => el.click()")
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # recheck value
     just_wait(page)
@@ -274,7 +274,7 @@ def rules(page: Any) -> None:
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
     edit_iframe.locator(".select2-results__option").first.click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def player_choice_undo(page: Any, live_server: Any) -> None:
@@ -292,7 +292,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # choose
     go_to(page, live_server, "/test")
@@ -340,7 +340,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").click()
     edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("ro")
     edit_iframe.get_by_role("option", name="Test Larp - Class Rogue").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # test out free ability
     go_to(page, live_server, "/test")
@@ -395,7 +395,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").click()
     edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("mage")
     edit_iframe.get_by_role("option", name="Test Larp - Class Mage").click()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
@@ -430,7 +430,7 @@ def delivery_auto_populate(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="Test Larp").click()
 
     # Confirm the form
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Resubmit with auto-populated characters
     submit_confirm(page)
@@ -449,13 +449,13 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("hidden_zero")
     edit_iframe.locator("#id_cost").fill("0")
     edit_iframe.locator("#id_visible").uncheck()
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Trigger recalculation by saving the character via orga
     go_to(page, live_server, "/test/manage/characters/")
     page.locator(".fa-edit").first.click()
     edit_iframe = get_modal_iframe(page)
-    submit_confirm(edit_iframe)
+    save_modal(page, edit_iframe)
 
     # Verify hidden_zero is NOT in the character's abilities
     go_to(page, live_server, "/test")
