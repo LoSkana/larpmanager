@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm, sidebar
+from larpmanager.tests.utils import just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -323,11 +323,12 @@ def new_ticket(live_server: Any, page: Any) -> None:
 
     # add ticket
     page.get_by_role("link", name="New").click()
-    page.get_by_text("Type of ticket").click()
-    page.locator("#id_tier").select_option("y")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("new")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Type of ticket").click()
+    edit_iframe.locator("#id_tier").select_option("y")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("new")
+    submit_confirm(edit_iframe)
 
     # sign up with the new ticket
     go_to(page, live_server, "test")
@@ -364,10 +365,11 @@ def new_ticket(live_server: Any, page: Any) -> None:
 
     # add new ticket
     page.get_by_role("link", name="New").click()
-    page.locator("#id_tier").select_option("y")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("new")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_tier").select_option("y")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("new")
+    submit_confirm(edit_iframe)
 
     # check new ticket is not available
     go_to(page, live_server, "newevent/1/")

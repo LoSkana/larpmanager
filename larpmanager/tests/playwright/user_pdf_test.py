@@ -32,6 +32,7 @@ from larpmanager.tests.utils import (
     check_download,
     check_pdf_zip_download,
     fill_tinymce,
+    get_modal_iframe,
     go_to,
     go_to_check,
     just_wait,
@@ -64,10 +65,11 @@ def test_user_pdf(pw_page: Any) -> None:
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")
     page.locator(".fa-edit").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    submit_confirm(edit_iframe)
 
     # create a second character (no relationship yet)
     go_to(page, live_server, "/test/manage/characters")

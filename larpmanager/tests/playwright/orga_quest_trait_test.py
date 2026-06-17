@@ -31,6 +31,7 @@ import pytest
 from larpmanager.tests.utils import (just_wait,
                                      check_feature,
                                      fill_tinymce,
+                                     get_modal_iframe,
                                      go_to,
                                      login_orga,
                                      submit_confirm,
@@ -165,13 +166,14 @@ def signups(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").nth(1).fill("org")
-    page.get_by_role("option", name="Admin Test - orga@test.it").click()
-    page.get_by_role("list").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("org")
+    edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
+    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    submit_confirm(edit_iframe)
 
     # create another char
     sidebar(page, "Characters")
@@ -183,13 +185,14 @@ def signups(page: Any, live_server: Any) -> None:
     # create signup for another
     sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").nth(1).fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("an")
-    page.get_by_role("option", name="Another").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("an")
+    edit_iframe.get_by_role("option", name="Another").click()
+    submit_confirm(edit_iframe)
 
 
 def casting(page: Any, live_server: Any) -> None:
@@ -250,8 +253,9 @@ def casting(page: Any, live_server: Any) -> None:
 
     # manual trait assignments
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    page.locator("#id_qt_u1").select_option("u1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_qt_u1").select_option("u1")
+    submit_confirm(edit_iframe)
 
     # check result
     page.get_by_role("link", name="Lore").click()

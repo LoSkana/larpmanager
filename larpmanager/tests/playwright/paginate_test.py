@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import expect_normalized, go_to, just_wait, load_image, login_orga, submit_confirm, submit
+from larpmanager.tests.utils import expect_normalized, get_modal_iframe, go_to, just_wait, load_image, login_orga, submit_confirm, submit
 
 pytestmark = pytest.mark.e2e
 
@@ -75,9 +75,10 @@ def config(page: Any, live_server: Any) -> None:
     # set ticket price
     go_to(page, live_server, "/test/manage/tickets")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("100.00")
+    submit_confirm(edit_iframe)
 
     # Signup
     go_to(page, live_server, "/test/register")

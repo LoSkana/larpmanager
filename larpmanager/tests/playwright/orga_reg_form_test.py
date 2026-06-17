@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, nav
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, nav, get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -67,9 +67,10 @@ def prepare_form(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Form").click()
 
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    page.get_by_text("Your registration ticket").click()
-    page.get_by_text("Your registration ticket").fill("Your registration ticket2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Your registration ticket").click()
+    edit_iframe.get_by_text("Your registration ticket").fill("Your registration ticket2")
+    submit_confirm(edit_iframe)
 
     expect_normalized(page,
         page.locator("#one"),
@@ -100,19 +101,21 @@ def prepare_form(page: Any, live_server: Any) -> None:
         """,
     )
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    page.get_by_text("Reserve additional tickets").click()
-    page.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Reserve additional tickets").click()
+    edit_iframe.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
+    submit_confirm(edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Reserve additional tickets beyond your own2")
 
     # change ticket price
     page.get_by_role("link", name="Tickets").first.click()
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("5")
-    page.locator("#id_description").click()
-    page.locator("#id_description").fill("sadsadsadsa")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("5")
+    edit_iframe.locator("#id_description").click()
+    edit_iframe.locator("#id_description").fill("sadsadsadsa")
+    submit_confirm(edit_iframe)
 
 
 def prepare_surcharge(page: Any, live_server: Any) -> None:

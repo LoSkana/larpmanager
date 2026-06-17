@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm, sidebar
+from larpmanager.tests.utils import just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -183,11 +183,12 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     page.get_by_role("link", name="Registrations").click()
     page.locator(".fa-edit").click()
-    page.get_by_role("cell", name="Show available characters").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.locator(".select2-results__option").first.click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("cell", name="Show available characters").click()
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.locator(".select2-results__option").first.click()
+    submit_confirm(edit_iframe)
 
     # Checkout member data
     page.locator(".fa-eye").click()
@@ -208,10 +209,11 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     # Set ticket price
     page.get_by_role("link", name="Tickets").first.click()
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").press("Home")
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").press("Home")
+    edit_iframe.locator("#id_price").fill("100.00")
+    submit_confirm(edit_iframe)
 
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="Please fill in your profile").click()
@@ -365,14 +367,15 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     # give out credits
     sidebar(page, "Credits")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").fill("org")
-    page.locator(".select2-results__option").first.click()
-    page.locator("#id_value").click()
-    page.locator("#id_value").fill("300")
-    page.locator("#id_descr").click()
-    page.locator("#id_descr").fill("teer")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").fill("org")
+    edit_iframe.locator(".select2-results__option").first.click()
+    edit_iframe.locator("#id_value").click()
+    edit_iframe.locator("#id_value").fill("300")
+    edit_iframe.locator("#id_descr").click()
+    edit_iframe.locator("#id_descr").fill("teer")
+    submit_confirm(edit_iframe)
 
     # open request
     go_to(page, live_server, "/accounting")

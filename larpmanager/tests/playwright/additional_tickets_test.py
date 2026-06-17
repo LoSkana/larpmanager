@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, login_orga, login_user, logout, submit_confirm, expect_normalized, \
-    sidebar
+    sidebar, get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -83,11 +83,12 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     page.get_by_role("link", name="Tickets").first.click()
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("50")
-    page.locator("#id_description").click()
-    page.locator("#id_description").fill("Standard ticket with meals")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("50")
+    edit_iframe.locator("#id_description").click()
+    edit_iframe.locator("#id_description").fill("Standard ticket with meals")
+    submit_confirm(edit_iframe)
 
 
 def registration_with_additionals(page: Any, live_server: Any) -> None:
@@ -127,12 +128,13 @@ def edit_additionals(page: Any, live_server: Any) -> None:
     # Open the registration for editing
     go_to(page, live_server, "test/manage/registrations/")
     page.locator('[id="u1"]').locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
 
     # Change additional tickets from 3 to 2
-    page.locator("#id_additionals").fill("2")
+    edit_iframe.locator("#id_additionals").fill("2")
 
     # Save changes
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
@@ -192,9 +194,10 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
     # Set ticket price
     page.get_by_role("link", name="Tickets").first.click()
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("30")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("30")
+    submit_confirm(edit_iframe)
 
     # Register with both additional tickets and pay what you want
     go_to(page, live_server, "test/")

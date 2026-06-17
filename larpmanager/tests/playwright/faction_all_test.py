@@ -33,6 +33,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import (
     expect_normalized,
     fill_tinymce,
+    get_modal_iframe,
     go_to,
     login_orga,
     login_user,
@@ -257,13 +258,14 @@ def test_faction_all(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").nth(1).fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    page.get_by_role("list").click()
-    page.get_by_role("searchbox").fill("alpha")
-    page.get_by_role("option", name="Character Alpha").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").fill("alpha")
+    edit_iframe.get_by_role("option", name="Character Alpha").click()
+    submit_confirm(edit_iframe)
 
 
     # ========== SECTION 9: Verify Visibility with Assigned Character ==========

@@ -30,6 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (check_download,
+                                     get_modal_iframe,
                                      go_to,
                                      load_image,
                                      login_orga,
@@ -88,9 +89,10 @@ def signup(live_server: Any, page: Any) -> None:
     # set ticket price
     go_to(page, live_server, "/test/manage/tickets")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("100.00")
+    submit_confirm(edit_iframe)
     # signup
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()

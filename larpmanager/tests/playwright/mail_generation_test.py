@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, go_to, load_image, login_orga, submit, \
+from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, submit, \
     submit_confirm
 
 pytestmark = pytest.mark.e2e
@@ -87,9 +87,10 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
     # Wait for the edit button to appear and click it
     page.wait_for_selector("tbody tr:first-child td:first-child a i.fas.fa-edit", timeout=10000)
     page.locator("tbody tr:first-child td:first-child a i.fas.fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("100")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("100")
+    submit_confirm(edit_iframe)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()

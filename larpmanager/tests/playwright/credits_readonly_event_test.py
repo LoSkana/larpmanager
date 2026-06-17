@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga
+from larpmanager.tests.utils import get_modal_iframe, go_to, login_orga, submit_confirm
 from playwright.sync_api import expect
 
 pytestmark = pytest.mark.e2e
@@ -48,12 +48,13 @@ def test_credits_readonly_event(pw_page: Any) -> None:
     # Go to event and insert a new Credit
     go_to(page, live_server, "/test/manage/credits/")
     page.get_by_role("link", name="+ New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").fill("org")
-    page.get_by_role("option", name="Admin Test - orga@test.it").click()
-    page.locator("#id_value").fill("10")
-    page.locator("#id_descr").fill("test")
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").fill("org")
+    edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
+    edit_iframe.locator("#id_value").fill("10")
+    edit_iframe.locator("#id_descr").fill("test")
+    submit_confirm(edit_iframe)
 
     # Check presence of New, Edit and Delete links
     expect(page.get_by_role("link", name="+ New")).to_have_count(1)

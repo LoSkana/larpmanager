@@ -469,6 +469,11 @@ def submit_option(page, option):
     just_wait(page)
 
 
+def get_modal_iframe(page):
+    just_wait(page)
+    return page.locator("#lm-modal iframe").content_frame
+
+
 def sidebar(page, link):
     icon_link("#sidebar", page, link)
 

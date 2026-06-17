@@ -48,6 +48,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     expect_normalized,
+    get_modal_iframe,
     go_to,
     just_wait,
     login_orga,
@@ -91,8 +92,9 @@ def setup(live_server: Any, page: Any) -> None:
     page.wait_for_selector("table.go_datatable")
     page.wait_for_selector(".fa-edit", timeout=10000)
     page.locator(".fa-edit").click(force=True)
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").fill("100.00")
+    submit_confirm(edit_iframe)
 
 
 def _add_event_tokens(live_server: Any, page: Any, member_search: str, member_option: str, value: int) -> None:

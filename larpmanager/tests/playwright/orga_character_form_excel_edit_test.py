@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (
     fill_tinymce,
     go_to,
     login_orga,
-    submit_confirm, new_option, submit_option,
+    submit_confirm, new_option, submit_option, get_modal_iframe,
 )
 
 pytestmark = pytest.mark.e2e
@@ -78,72 +78,77 @@ def create_character_form(page: Any, live_server: Any) -> None:
 
     # Question 1: Text field
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("t")
-    page.locator("#id_name").fill("Text Question")
-    page.locator("#id_description").fill("A text field")
-    page.locator("#id_max_length").fill("50")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("t")
+    edit_iframe.locator("#id_name").fill("Text Question")
+    edit_iframe.locator("#id_description").fill("A text field")
+    edit_iframe.locator("#id_max_length").fill("50")
+    submit_confirm(edit_iframe)
 
     # Question 2: Paragraph field
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")
-    page.locator("#id_name").fill("Paragraph Question")
-    page.locator("#id_description").fill("A paragraph field")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")
+    edit_iframe.locator("#id_name").fill("Paragraph Question")
+    edit_iframe.locator("#id_description").fill("A paragraph field")
+    submit_confirm(edit_iframe)
 
     # Question 3: Single choice with 3 options
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("s")
-    page.locator("#id_name").fill("Single Choice")
-    page.locator("#id_description").fill("Choose one option")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("s")
+    edit_iframe.locator("#id_name").fill("Single Choice")
+    edit_iframe.locator("#id_description").fill("Choose one option")
 
     # Add option 1
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Option A")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Option A")
+    submit_option(edit_iframe, option_row)
 
     # Add option 2
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Option B")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Option B")
+    submit_option(edit_iframe, option_row)
 
     # Add option 3
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Option C")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Option C")
+    submit_option(edit_iframe, option_row)
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # Question 4: Multiple choice with 3 options
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("m")
-    page.locator("#id_name").fill("Multiple Choice")
-    page.locator("#id_description").fill("Choose multiple options")
-    page.locator("#id_max_length").fill("3")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("m")
+    edit_iframe.locator("#id_name").fill("Multiple Choice")
+    edit_iframe.locator("#id_description").fill("Choose multiple options")
+    edit_iframe.locator("#id_max_length").fill("3")
 
     # Add option 1
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Choice X")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Choice X")
+    submit_option(edit_iframe, option_row)
 
     # Add option 2
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Choice Y")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Choice Y")
+    submit_option(edit_iframe, option_row)
 
     # Add option 3
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Choice Z")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Choice Z")
+    submit_option(edit_iframe, option_row)
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # Question 5: Another text field
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("e")
-    page.locator("#id_name").fill("Advanced Question")
-    page.locator("#id_description").fill("Advanced text field")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("e")
+    edit_iframe.locator("#id_name").fill("Advanced Question")
+    edit_iframe.locator("#id_description").fill("Advanced text field")
+    submit_confirm(edit_iframe)
 
 
 def edit_first_character(page: Any, live_server: Any) -> None:

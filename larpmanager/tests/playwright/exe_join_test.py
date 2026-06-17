@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, go_to, just_wait, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import expect_normalized, get_modal_iframe, go_to, just_wait, load_image, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -130,8 +130,9 @@ def test_exe_join(pw_page: Any) -> None:
     go_to(page, live_server, "prova/manage/tickets/")
     page.wait_for_selector("table.go_datatable")
     page.locator(".fa-edit").first.click(force=True)
-    page.locator("#id_price").fill("10.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").fill("10.00")
+    submit_confirm(edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Biglietti di iscrizione")).to_contain_text("Fatto")
@@ -139,9 +140,10 @@ def test_exe_join(pw_page: Any) -> None:
     # Step 4: registration form question
     go_to(page, live_server, "prova/manage/form/")
     page.get_by_role("link", name="Nuovo").click()
-    page.locator("#id_typ").select_option("t")
-    page.locator("#id_name").fill("Dietary restrictions")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("t")
+    edit_iframe.locator("#id_name").fill("Dietary restrictions")
+    submit_confirm(edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Form iscrizione")).to_contain_text("Fatto")
@@ -171,9 +173,10 @@ def test_exe_join(pw_page: Any) -> None:
     # Step 7: first assignment
     go_to(page, live_server, "prova/manage/registrations/")
     page.locator(".fa-edit").first.click()
-    page.get_by_role("searchbox").fill("Test")
-    page.get_by_role("option", name="Test Character").click()
-    page.get_by_role("button", name="Conferma").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").fill("Test")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    submit_confirm(edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Prima assegnazione")).to_contain_text("Fatto")

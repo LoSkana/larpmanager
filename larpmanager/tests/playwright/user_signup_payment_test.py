@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized, get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -83,9 +83,10 @@ def prepare(page: Any, live_server: Any) -> None:
     # set ticket price
     go_to(page, live_server, "/test/manage/tickets")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("100.00")
+    submit_confirm(edit_iframe)
 
 
 def signup(page: Any, live_server: Any) -> None:
@@ -136,10 +137,11 @@ def characters(page: Any, live_server: Any) -> None:
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")
     page.locator(".fa-edit").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    submit_confirm(edit_iframe)
 
     # test mails
     go_to(page, live_server, "/debug/mail")
@@ -147,8 +149,9 @@ def characters(page: Any, live_server: Any) -> None:
     # Remove character
     go_to(page, live_server, "/test/manage/registrations")
     page.locator(".fa-edit").click()
-    page.get_by_role("listitem", name="Test Character").locator("span").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("listitem", name="Test Character").locator("span").click()
+    submit_confirm(edit_iframe)
 
     # test mails
     go_to(page, live_server, "/debug/mail")

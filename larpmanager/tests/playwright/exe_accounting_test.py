@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, \
-    new_option, submit_option
+    new_option, submit_option, get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -78,25 +78,27 @@ def verify(page: Any, live_server: Any) -> None:
 def sign_up_pay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/tickets/")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").press("Home")
-    page.locator("#id_price").fill("50.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").press("Home")
+    edit_iframe.locator("#id_price").fill("50.00")
+    submit_confirm(edit_iframe)
 
     go_to(page, live_server, "test/manage/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("pay")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("pay")
-    iframe = new_option(page)
-    iframe.locator("#id_name").click()
-    iframe.locator("#id_name").fill("ff")
-    iframe.locator("#id_price").click()
-    iframe.locator("#id_price").fill("20")
-    submit_option(page, iframe)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("pay")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.locator("#id_description").fill("pay")
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").click()
+    option_row.locator("#id_name").fill("ff")
+    option_row.locator("#id_price").click()
+    option_row.locator("#id_price").fill("20")
+    submit_option(edit_iframe, option_row)
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()

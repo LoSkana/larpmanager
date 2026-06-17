@@ -36,6 +36,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     fill_tinymce,
+    get_modal_iframe,
     go_to,
     login_orga,
     login_user,
@@ -112,13 +113,14 @@ def _assign_to_user(page: Any, live_server: Any, char_name: str) -> None:
     go_to(page, live_server, "test/manage/")
     sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").nth(1).fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    page.get_by_role("list").click()
-    page.get_by_role("searchbox").fill(char_name[:5])
-    page.get_by_role("option", name=char_name).click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").fill(char_name[:5])
+    edit_iframe.get_by_role("option", name=char_name).click()
+    submit_confirm(edit_iframe)
 
 
 def _set_char_field(page: Any, live_server: Any, char_uuid: str, field_id: str) -> None:

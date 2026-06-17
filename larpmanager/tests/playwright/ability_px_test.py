@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
-    submit_confirm, new_option, submit_option, sidebar
+    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -88,32 +88,34 @@ def setup(live_server: Any, page: Any) -> None:
     # create computed field
     sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("c")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Hit Point")
-    page.locator("#id_description").click()
-    page.locator("#id_description").fill("sasad")
-    page.locator("#id_name").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("c")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Hit Point")
+    edit_iframe.locator("#id_description").click()
+    edit_iframe.locator("#id_description").fill("sasad")
+    edit_iframe.locator("#id_name").click()
+    submit_confirm(edit_iframe)
 
     # create class field
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Class")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Class")
 
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Mage")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Mage")
+    submit_option(edit_iframe, option_row)
 
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Rogue")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Rogue")
+    submit_option(edit_iframe, option_row)
 
-    iframe = new_option(page)
-    iframe.locator("#id_name").fill("Cleric")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").fill("Cleric")
+    submit_option(edit_iframe, option_row)
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
 
 def ability(live_server: Any, page: Any) -> None:
@@ -165,10 +167,11 @@ def ability(live_server: Any, page: Any) -> None:
     page.wait_for_load_state("load")
     just_wait(page)
     page.locator("[id='u2']").locator(".fa-edit").click()
-    page.get_by_text("---------").click()
-    page.get_by_role("searchbox").nth(3).fill("test_template")
-    page.get_by_role("option", name="test_template").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_role("searchbox").nth(3).fill("test_template")
+    edit_iframe.get_by_role("option", name="test_template").click()
+    submit_confirm(edit_iframe)
     sidebar(page, "Abilities")
     page.get_by_role("cell", name="This text should show").click()
 
@@ -192,15 +195,16 @@ def delivery(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "0")
     page.locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
     page.wait_for_load_state("load")
     just_wait(page)
-    row = page.get_by_role("row", name="Abilities")
+    row = edit_iframe.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
     just_wait(page)
-    page.locator(".select2-results__option").first.click()
-    submit_confirm(page)
+    edit_iframe.locator(".select2-results__option").first.click()
+    submit_confirm(edit_iframe)
     page.get_by_role("link", name="Experience").click()
     expect_normalized(page, page.locator('[id="u1"]'), "11")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
@@ -211,28 +215,30 @@ def rules(page: Any) -> None:
     # create first rule - for everyone
     page.get_by_role("link", name="Rules").click()
     page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
 
-    page.locator("#select2-id_field-container").click()
-    page.get_by_role("searchbox").nth(1).fill("Hit")
-    page.locator(".select2-results__option").first.click()
-    page.locator("#id_amount").click()
-    page.locator("#id_amount").fill("2")
-    page.get_by_role("checkbox", name="After confirmation, add").check()
-    submit_confirm(page)
-    page.get_by_role("searchbox").click()
+    edit_iframe.locator("#select2-id_field-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
+    edit_iframe.locator(".select2-results__option").first.click()
+    edit_iframe.locator("#id_amount").click()
+    edit_iframe.locator("#id_amount").fill("2")
+    edit_iframe.get_by_role("checkbox", name="After confirmation, add").check()
+    submit_confirm(edit_iframe)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").click()
 
     # create second rule - only for sword
-    page.get_by_role("searchbox").first.fill("swor")
-    page.locator(".select2-results__option").first.click()
+    edit_iframe.get_by_role("searchbox").first.fill("swor")
+    edit_iframe.locator(".select2-results__option").first.click()
 
-    page.locator("#select2-id_field-container").click()
-    page.get_by_role("searchbox").nth(1).fill("Hit")
-    page.locator(".select2-results__option").first.click()
+    edit_iframe.locator("#select2-id_field-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
+    edit_iframe.locator(".select2-results__option").first.click()
 
-    page.locator("#id_operation").select_option("MUL")
-    page.locator("#id_amount").click()
-    page.locator("#id_amount").fill("3")
-    submit_confirm(page)
+    edit_iframe.locator("#id_operation").select_option("MUL")
+    edit_iframe.locator("#id_amount").click()
+    edit_iframe.locator("#id_amount").fill("3")
+    submit_confirm(edit_iframe)
 
     # check value
     page.get_by_role("link", name="Characters").click()
@@ -241,11 +247,12 @@ def rules(page: Any) -> None:
 
     # remove ability
     page.locator(".fa-edit").click()
-    page.get_by_role("row", name="Abilities").get_by_role("link").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("row", name="Abilities").get_by_role("link").click()
     just_wait(page)
-    btn = page.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
+    btn = edit_iframe.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
     btn.evaluate("el => el.click()")
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # recheck value
     page.get_by_role("link", name="Hit Point").click()
@@ -254,14 +261,15 @@ def rules(page: Any) -> None:
 
     # readd ability
     page.locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
     page.wait_for_load_state("load")
     just_wait(page)
-    row = page.get_by_role("row", name="Abilities")
+    row = edit_iframe.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
-    page.locator(".select2-results__option").first.click()
-    submit_confirm(page)
+    edit_iframe.locator(".select2-results__option").first.click()
+    submit_confirm(edit_iframe)
 
 
 def player_choice_undo(page: Any, live_server: Any) -> None:
@@ -275,10 +283,11 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Registrations")
     page.locator(".fa-edit").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    submit_confirm(edit_iframe)
 
     # choose
     go_to(page, live_server, "/test")
@@ -436,7 +445,8 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
     # Trigger recalculation by saving the character via orga
     go_to(page, live_server, "/test/manage/characters/")
     page.locator(".fa-edit").first.click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    submit_confirm(edit_iframe)
 
     # Verify hidden_zero is NOT in the character's abilities
     go_to(page, live_server, "/test")

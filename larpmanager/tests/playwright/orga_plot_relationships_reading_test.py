@@ -33,6 +33,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import (just_wait,
                                      check_feature,
                                      fill_tinymce,
+                                     get_modal_iframe,
                                      go_to,
                                      login_orga,
                                      submit_confirm,
@@ -76,12 +77,13 @@ def reading(live_server: Any, page: Any) -> None:
     # set prova presentation and text
     page.get_by_role("link", name="Characters").click()
     page.locator('[id="u2"]').locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
 
-    fill_tinymce(page, "id_teaser", "pppresssent")
+    fill_tinymce(edit_iframe, "id_teaser", "pppresssent")
 
-    fill_tinymce(page, "id_text", "totxeet")
+    fill_tinymce(edit_iframe, "id_text", "totxeet")
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # now read it
     sidebar(page, "Reading")
@@ -155,20 +157,22 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in char
     page.locator('[id="u2"]').locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
     just_wait(page)
-    page.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
+    edit_iframe.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
     just_wait(page, big=True)
-    expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
+    expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
     go_to(page, live_server, "/test/manage/characters/#")
     just_wait(page)
     page.locator('[id="u1"]').locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
     just_wait(page, big=True)
-    page.locator("a.my_toggle[tog='f_u2_inverse']").scroll_into_view_if_needed()
-    page.locator("a.my_toggle[tog='f_u2_inverse']").click()
-    page.locator(".f_u2_inverse").wait_for(state="visible", timeout=10000)
-    expect_normalized(page, page.locator("#form_relationships"), "ciaaoooooo")
+    edit_iframe.locator("a.my_toggle[tog='f_u2_inverse']").scroll_into_view_if_needed()
+    edit_iframe.locator("a.my_toggle[tog='f_u2_inverse']").click()
+    edit_iframe.locator(".f_u2_inverse").wait_for(state="visible", timeout=10000)
+    expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery
     go_to(page, live_server, "/test/")
@@ -181,38 +185,39 @@ def plots(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
 
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("testona")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("testona")
 
     # set concept
-    fill_tinymce(page, "id_teaser", "asadsadas")
+    fill_tinymce(edit_iframe, "id_teaser", "asadsadas")
 
     # set text
-    fill_tinymce(page, "id_text", "wwwww")
+    fill_tinymce(edit_iframe, "id_text", "wwwww")
 
     # set first char role
-    searchbox = page.get_by_role("searchbox")
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.click()
     searchbox.fill("te")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="Test Character")
+    option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
-    fill_tinymce(page, "ch_1", "prova")
+    fill_tinymce(edit_iframe, "ch_1", "prova")
 
     # add second char role
-    searchbox = page.get_by_role("searchbox")
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.fill("pro")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="prova")
+    option = edit_iframe.get_by_role("option", name="prova")
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
-    fill_tinymce(page, "ch_2", "second char role")
+    fill_tinymce(edit_iframe, "ch_2", "second char role")
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # check in plot list - both characters should be there
     page.locator("#one").get_by_role("link", name="Characters").click()

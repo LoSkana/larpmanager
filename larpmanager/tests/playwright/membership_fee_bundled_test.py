@@ -35,6 +35,7 @@ import pytest
 
 from larpmanager.tests.utils import (
     expect_normalized,
+    get_modal_iframe,
     go_to,
     just_wait,
     load_image,
@@ -86,8 +87,9 @@ def setup(live_server: Any, page: Any) -> None:
     # Set ticket price to 100 for first event
     go_to(page, live_server, "/test/manage/tickets")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").fill("100.00")
+    submit_confirm(edit_iframe)
 
     # Create second event (slug auto-generated as "testsecond" from "Test Second")
     go_to(page, live_server, "/manage/events/")
@@ -110,8 +112,9 @@ def setup(live_server: Any, page: Any) -> None:
     # Set ticket price to 70 for second event
     go_to(page, live_server, "/testsecond/manage/tickets")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").fill("70.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").fill("70.00")
+    submit_confirm(edit_iframe)
 
 
 def request_and_approve_membership(live_server: Any, page: Any) -> None:
