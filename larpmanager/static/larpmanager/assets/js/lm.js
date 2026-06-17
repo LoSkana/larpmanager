@@ -477,7 +477,7 @@ function replaceNewUrl() {
     });
 
     if ($('body').hasClass('new_v21')) {
-        $(document).on('click', 'table.go_datatable a:has(i.fa-edit)', function(e) {
+        $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit)', function(e) {
             e.preventDefault();
             openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);
             return false;
@@ -486,6 +486,13 @@ function replaceNewUrl() {
 }
 
 function refreshDatatables() {
+    $('table.pagin_datatable').each(function() {
+        const tableId = $(this).attr('id');
+        if (tableId && window.datatables && window.datatables[tableId]) {
+            window.datatables[tableId].ajax.reload(null, false);
+        }
+    });
+
     $.get(window.location.href, function(html) {
         const $newDoc = $($.parseHTML(html));
         const $newTables = $newDoc.find('table.go_datatable');
@@ -779,6 +786,10 @@ function data_tables() {
         }
         const tableId = $table.attr('id');
 
+        if (window.datatables && window.datatables[tableId]) {
+            return;
+        }
+
         const url = $table.attr('url');
 
         var thList = $table.find('thead th');
@@ -838,6 +849,9 @@ function data_tables() {
             }
             */
         });
+
+        window.datatables = window.datatables || {};
+        window.datatables[tableId] = table;
 
         table.on('draw.dt', function() {
             // Add tooltips to edit icons first

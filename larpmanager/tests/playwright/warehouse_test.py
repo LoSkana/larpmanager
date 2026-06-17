@@ -110,7 +110,7 @@ def add_items(page: Any) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("ele")
     edit_iframe.locator(".select2-results__option").first.click()
-    load_image(page, "#id_photo")
+    load_image(edit_iframe,"#id_photo")
     save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator("#one"), "Item 1 sadsada Box A Electrical")

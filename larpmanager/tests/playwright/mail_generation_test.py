@@ -66,7 +66,7 @@ def expense(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_value").click()
     edit_iframe.locator("#id_value").fill("10")
-    load_image(page, "#id_invoice")
+    load_image(edit_iframe,"#id_invoice")
     edit_iframe.locator("#id_exp").select_option("g")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("dsadas")
@@ -169,7 +169,7 @@ def badge(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_cod").fill("asasdsadd")
     edit_iframe.locator("#id_img").click()
 
-    load_image(page, "#id_img")
+    load_image(edit_iframe,"#id_img")
     edit_iframe.get_by_role("searchbox").fill("user")
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
     save_modal(page, edit_iframe)

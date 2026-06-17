@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, \
-    new_option, submit_option, get_modal_iframe, save_modal
+    new_option, submit_option, get_modal_iframe, save_modal, just_wait
 
 pytestmark = pytest.mark.e2e
 
@@ -127,7 +127,7 @@ def add_exe(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("10")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("babe")
-    load_image(page, "#id_invoice")
+    load_image(edit_iframe,"#id_invoice")
     edit_iframe.get_by_role("cell", name="--------- Indicate the").click()
     edit_iframe.locator("#id_exp").select_option("a")
     save_modal(page, edit_iframe)
@@ -140,7 +140,7 @@ def add_exe(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="Test Larp").click()
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("bibi")
-    load_image(page, "#id_invoice")
+    load_image(edit_iframe,"#id_invoice")
     edit_iframe.locator("#id_exp").select_option("c")
     save_modal(page, edit_iframe)
 
@@ -155,7 +155,7 @@ def add_exe(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="Test Larp").click()
     edit_iframe.get_by_role("combobox", name=re.compile("Test Larp$")).press("Tab")
     edit_iframe.locator("#id_descr").fill("ggg")
-    load_image(page, "#id_invoice")
+    load_image(edit_iframe,"#id_invoice")
     save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -164,7 +164,7 @@ def add_exe(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").press("Tab")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("sdfs")
-    load_image(page, "#id_invoice")
+    load_image(edit_iframe,"#id_invoice")
     save_modal(page, edit_iframe)
 
 
@@ -176,8 +176,10 @@ def add_orga(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("13")
     edit_iframe.locator("#id_value").press("Tab")
     edit_iframe.locator("#id_descr").fill("asdsada")
-    load_image(page, "#id_invoice")
+    load_image(edit_iframe,"#id_invoice")
     save_modal(page, edit_iframe)
+
+    just_wait(page)
     # Check for the inflow with value 13.00 and description "asdsada"
     expect(page.get_by_role("row", name="Test Larp asdsada 13")).to_be_visible()
     # Check for the inflow with value 50.00 and description "ggg"
@@ -190,7 +192,7 @@ def add_orga(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("47")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("asdsad")
-    load_image(page, "#id_invoice")
+    load_image(edit_iframe,"#id_invoice")
     edit_iframe.locator("#id_exp").select_option("e")
     save_modal(page, edit_iframe)
 

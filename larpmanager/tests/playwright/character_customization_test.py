@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (
     load_image_hidden,
     login_orga,
     login_user,
-    submit_confirm, logout,
+    submit_confirm, logout, get_modal_iframe, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -101,12 +101,12 @@ def create_and_assign_character(page: Any, live_server: Any) -> None:
     page.locator(".fa-edit").click(force=True)
 
     # Assign to user test
-    page.locator("#select2-id_player-container").click()
-    page.get_by_role("searchbox").fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_player-container").click()
+    edit_iframe.get_by_role("searchbox").fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
 
-    submit_confirm(page)
-    just_wait(page)
+    save_modal(page, edit_iframe)
 
     # Register user to event
     login_user(page, live_server)
