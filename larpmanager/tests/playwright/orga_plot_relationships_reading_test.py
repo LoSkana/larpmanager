@@ -70,6 +70,8 @@ def test_plot_relationship_reading(pw_page: Any) -> None:
 
     reading(live_server, page)
 
+    auto_relationships(live_server, page)
+
 
 def reading(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
@@ -333,3 +335,116 @@ def plots_character(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     expect(page.locator('[id="u1"]')).not_to_contain_text("gaga")
+
+
+def auto_relationships(live_server: Any, page: Any) -> None:
+    """Test character mentioned via sheet question/faction/plot get auto relationships.
+
+    For each of the three sources (sheet question, faction text, plot role text), the test
+    character cites two characters. One of the two also gets a manual relationship, which must
+    win over the auto-detected one. The test character should then show exactly 6 relationships:
+    3 manual (one per source) + 3 auto (the other one per source).
+    """
+    auto_relationships_setup(live_server, page)
+
+    auto_relationships_faction(live_server, page)
+
+    auto_relationships_plot(live_server, page)
+
+    auto_relationships_check(live_server, page)
+
+
+def auto_relationships_setup(live_server: Any, page: Any) -> None:
+    # add a custom character question, so a mention in it counts as "cited in the sheet"
+    go_to(page, live_server, "/test/manage/writing/form/")
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_typ").select_option("p")
+    page.locator("#id_name").fill("Background")
+    submit_confirm(page)
+
+    # create the six characters that will be auto-related to the test character
+    for name in ("AutoSheetA", "AutoSheetB", "AutoFactionA", "AutoFactionB", "AutoPlotA", "AutoPlotB"):
+        sidebar(page, "Characters")
+        page.get_by_role("link", name="New").click()
+        page.locator("#id_name").click()
+        page.locator("#id_name").fill(name)
+        submit_confirm(page)
+
+    # on the test character: cite two characters in the sheet question, and set a manual
+    # relationship for one character per source (sheet/faction/plot)
+    sidebar(page, "Characters")
+    page.locator('[id="u1"]').locator(".fa-edit").click()
+    just_wait(page, big=True)
+
+    fill_tinymce(page, "id_text", "mentions @3 and @4")
+
+    for name, target_uuid, manual_text in (
+        ("AutoSheetA", "u3", "manual sheet text"),
+        ("AutoFactionA", "u5", "manual faction text"),
+        ("AutoPlotA", "u7", "manual plot text"),
+    ):
+        page.locator("#select2-new_rel_select-container").click()
+        searchbox = page.get_by_role("searchbox").nth(2)
+        searchbox.fill(name)
+        option = page.get_by_role("option", name=name)
+        option.wait_for(state="visible")
+        option.click()
+        page.wait_for_timeout(2000)
+        fill_tinymce(page, f"rel_{target_uuid}", manual_text)
+
+    submit_confirm(page)
+
+
+def auto_relationships_faction(live_server: Any, page: Any) -> None:
+    # faction citing two other characters, with the test character as member
+    go_to(page, live_server, "/test/manage/")
+    page.get_by_role("link", name="Factions").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("AutoFaction")
+    fill_tinymce(page, "id_text", "mentions @5 and @6")
+    page.get_by_role("listitem").click()
+    searchbox = page.get_by_role("searchbox")
+    searchbox.fill("Test Char")
+    option = page.get_by_role("option", name="Test Character")
+    option.wait_for(state="visible")
+    option.click()
+    submit_confirm(page)
+
+
+def auto_relationships_plot(live_server: Any, page: Any) -> None:
+    # plot citing two other characters, in the test character's role text
+    go_to(page, live_server, "/test/manage/")
+    page.get_by_role("link", name="Plots").click()
+    page.get_by_role("link", name="New").click()
+    page.locator("#id_name").click()
+    page.locator("#id_name").fill("AutoPlot")
+    searchbox = page.get_by_role("searchbox")
+    searchbox.click()
+    searchbox.fill("Test Char")
+    option = page.get_by_role("option", name="Test Character")
+    option.wait_for(state="visible")
+    option.click()
+    page.wait_for_timeout(5000)
+    fill_tinymce(page, "ch_1", "mentions @7 and @8")
+    submit_confirm(page)
+
+
+def auto_relationships_check(live_server: Any, page: Any) -> None:
+    # check the test character shows 6 relationships: 3 manual + 3 auto
+    go_to(page, live_server, "/test/")
+    page.get_by_role("link", name="Test Character").first.click()
+    relationships = page.locator(".gallery.single.relationships")
+    expect(relationships).to_have_count(6)
+
+    for name, text in (
+        ("AutoSheetA", "manual sheet text"),
+        ("AutoSheetB", "Text"),
+        ("AutoFactionA", "manual faction text"),
+        ("AutoFactionB", "AutoFaction"),
+        ("AutoPlotA", "manual plot text"),
+        ("AutoPlotB", "AutoPlot"),
+    ):
+        entry = relationships.filter(has_text=name)
+        expect(entry).to_have_count(1)
+        expect(entry).to_contain_text(text)

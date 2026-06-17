@@ -331,6 +331,21 @@ def orga_check(live_server: Any, page: Any) -> None:
     expect(edit_iframe.locator("#id_que_u7")).to_have_value("dsadsadsa")
     expect(edit_iframe.locator("#id_que_u8")).to_have_value("asdsadsa")
 
+    # orga removes a multiple choice selection
+    page.get_by_role("checkbox", name="many (20€)").uncheck()
+    submit_confirm(page)
+    page.locator(".fa-edit").click()
+    expect(page.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="few (30€)")).to_be_checked()
+
+    # orga removes all multiple choice selections
+    page.get_by_role("checkbox", name="few (30€)").uncheck()
+    submit_confirm(page)
+    page.locator(".fa-edit").click()
+    expect(page.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
+
 
 def user_signup(live_server: Any, page: Any) -> None:
     # signup as user
@@ -345,10 +360,8 @@ def user_signup(live_server: Any, page: Any) -> None:
     expect(page.get_by_label("rescrited")).to_match_aria_snapshot(
         '- combobox "rescrited":\n  - option "all" [selected]\n  - option /only \\(\\d+€\\)/ [disabled]'
     )
-    expect(page.get_by_role("checkbox", name="few (30€)")).to_be_disabled()
-    page.get_by_role("checkbox", name="many (20€) - (Available 1)").check()
-    page.get_by_role("checkbox", name="many (20€) - (Available 1)").press("s")
-    page.get_by_role("checkbox", name="many (20€) - (Available 1)").press("d")
+    expect(page.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
+    page.get_by_role("checkbox", name="many (20€)").check()
     page.get_by_role("textbox", name="mandatory (*)").click()
     page.get_by_role("textbox", name="mandatory (*)").fill("aaaa")
     page.get_by_label("rescrited").click()
@@ -357,3 +370,14 @@ def user_signup(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "40€")
     submit_confirm(page)
+
+    # user removes all multiple choice selections
+    go_to(page, live_server, "/test/register/")
+    expect(page.get_by_role("checkbox", name="many (20€)")).to_be_checked()
+    page.get_by_role("checkbox", name="many (20€)").uncheck()
+    page.get_by_role("button", name="Continue").click()
+    submit_confirm(page)
+    go_to(page, live_server, "/test/register/")
+    expect(page.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
+    expect(page.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
