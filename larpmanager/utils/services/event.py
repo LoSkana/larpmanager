@@ -233,7 +233,8 @@ def create_default_event_setup(event: Any) -> None:
     save_event_character_form(event_features, event)
 
     if "experience" in event_features and not event.get_elements(SystemExp).exists():
-        SystemExp.objects.create(event=event, name="XP", number=1)
+        target = event.get_class_parent(SystemExp)
+        SystemExp.objects.get_or_create(event=target, number=1, defaults={"name": "XP"})
 
     clear_event_features_cache(event.id)
 
