@@ -284,11 +284,13 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("gaga")
-    edit_iframe.get_by_text("After confirmation, add").click()
     submit_confirm(edit_iframe)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("bibi")
-    submit_confirm(page)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("bibi")
+    submit_confirm(edit_iframe)
 
     # test adding them to character
     sidebar(page, "Characters")

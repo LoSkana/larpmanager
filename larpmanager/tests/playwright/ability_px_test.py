@@ -211,7 +211,7 @@ def delivery(live_server: Any, page: Any) -> None:
     just_wait(page)
     edit_iframe.locator(".select2-results__option").first.click()
     submit_confirm(edit_iframe)
-    page.get_by_role("link", name="Experience").click()
+
     expect_normalized(page, page.locator('[id="u1"]'), "11")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "1")
@@ -220,20 +220,20 @@ def delivery(live_server: Any, page: Any) -> None:
 def rules(page: Any) -> None:
     # create first rule - for everyone
     page.get_by_role("link", name="Rules").click()
+
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-
     edit_iframe.locator("#select2-id_field-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("2")
-    edit_iframe.get_by_role("checkbox", name="After confirmation, add").check()
     submit_confirm(edit_iframe)
-    edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_role("searchbox").click()
 
     # create second rule - only for sword
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").first.fill("swor")
     edit_iframe.locator(".select2-results__option").first.click()
 
@@ -261,7 +261,6 @@ def rules(page: Any) -> None:
     submit_confirm(edit_iframe)
 
     # recheck value
-    page.get_by_role("link", name="Hit Point").click()
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text 2")
 

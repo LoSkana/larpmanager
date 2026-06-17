@@ -76,11 +76,11 @@ def setup(live_server: Any, page: Any) -> None:
 
 def character_inventory_pool_types(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Pool Types").click()
-    page.get_by_role("link", name="+ New").click()
+    page.get_by_role("link", name= "New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Credits")
     submit_confirm(page)
-    page.get_by_role("link", name="+ New").click()
+    page.get_by_role("link", name= "New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("Junk")
     submit_confirm(page)
@@ -88,17 +88,20 @@ def character_inventory_pool_types(live_server: Any, page: Any) -> None:
 
 def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Character Inventory").click()
-    page.get_by_role("link", name="+ New").click()
+
+    page.get_by_role("link", name= "New").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("NPC")
-    page.get_by_text("After confirmation, add").click()
     submit_confirm(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Test Character's Bank")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    submit_confirm(page)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Test Character's Bank")
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    submit_confirm(edit_iframe)
 
 
 def character_inventory_transfer(live_server: Any, page: Any) -> None:

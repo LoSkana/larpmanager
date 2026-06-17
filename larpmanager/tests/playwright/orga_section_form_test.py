@@ -59,10 +59,10 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").fill("Preferences")
     edit_iframe.locator("#id_name").press("Tab")
     fill_tinymce(edit_iframe, "id_description", "What you prefer", show=False)
-    edit_iframe.get_by_text("After confirmation, add").click()
     edit_iframe.get_by_role("button", name="Confirm").click()
 
     # Create second section
+    page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Needs")
@@ -89,10 +89,10 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.locator("#select2-id_section-container").click()
     edit_iframe.get_by_role("searchbox").fill("pre")
     edit_iframe.get_by_role("option", name="Preferences").click()
-    edit_iframe.get_by_text("After confirmation, add").click()
     edit_iframe.get_by_role("button", name="Confirm").click()
 
     # Second question for second section
+    page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("t")
     edit_iframe.locator("#id_description").click()

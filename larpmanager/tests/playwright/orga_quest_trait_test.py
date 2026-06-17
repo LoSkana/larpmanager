@@ -94,14 +94,15 @@ def quests(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Torta")
     fill_tinymce(edit_iframe, "id_teaser", "zucchero")
     fill_tinymce(edit_iframe, "id_text", "saleee")
-    edit_iframe.get_by_text("After confirmation, add").click()
     submit_confirm(edit_iframe)
 
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Pizza")
-    fill_tinymce(page, "id_teaser", "mozzarella")
-    fill_tinymce(page, "id_text", "americano")
-    submit_confirm(page)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Pizza")
+    fill_tinymce(edit_iframe, "id_teaser", "mozzarella")
+    fill_tinymce(edit_iframe, "id_text", "americano")
+    submit_confirm(edit_iframe)
 
     # check
     expect_normalized(page, page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")

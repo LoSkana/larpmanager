@@ -158,8 +158,9 @@ def prepare(page: Any, live_server: Any) -> None:
     option_row.locator("#id_name").fill("blue")
     submit_option(edit_iframe, option_row)
 
-    edit_iframe.get_by_text("After confirmation, add").click()
     submit_confirm(edit_iframe)
+
+    page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("m")
     edit_iframe.locator("#id_name").click()
@@ -199,16 +200,18 @@ def characters(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="fassione (P)").click()
     edit_iframe.locator("#id_que_u8").select_option("u1")
     edit_iframe.get_by_role("checkbox", name="zapyr").check()
-    edit_iframe.get_by_text("After confirmation, add").click()
     submit_confirm(edit_iframe)
+
+    page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("another")
     edit_iframe.locator("#id_que_u8").select_option("u2")
     edit_iframe.locator("#id_que_u9 div").filter(has_text="qerfi").click()
     edit_iframe.get_by_role("checkbox", name="wunder").check()
-    edit_iframe.get_by_role("checkbox", name="After confirmation, add").check()
     submit_confirm(edit_iframe)
+
+    page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("wheel")

@@ -90,11 +90,11 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
 
     # create plots, assign them to player
     page.get_by_role("link", name="Plots").click()
+
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("first")
-
     # set char role
     searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.click()
@@ -105,25 +105,27 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     option.click()
     edit_iframe.wait_for_timeout(5000)
     fill_tinymce(edit_iframe, "ch_1", "prisdsa")
-    edit_iframe.get_by_text("After confirmation, add").click()
     submit_confirm(edit_iframe)
 
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("qweeerr")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("qweeerr")
     # set char role
-    searchbox = page.get_by_role("searchbox")
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.click()
     searchbox.fill("te")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="Test Character")
+    option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
     page.wait_for_timeout(5000)
-    fill_tinymce(page, "ch_1", "poelea s")
-    submit_confirm(page)
+    fill_tinymce(edit_iframe, "ch_1", "poelea s")
+    submit_confirm(edit_iframe)
 
     # add factions, one visible, one not
     page.get_by_role("link", name="Factions").click()
+
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
@@ -131,19 +133,20 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.locator(".select2-results__option").first.click()
-    edit_iframe.get_by_text("After confirmation, add").click()
     submit_confirm(edit_iframe)
 
-    page.locator("#id_typ").select_option("g")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("gggerwe")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("ted")
-    page.get_by_text("No results found").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("tes")
-    page.locator(".select2-results__option").first.click()
-    submit_confirm(page)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("g")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("gggerwe")
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("ted")
+    edit_iframe.get_by_text("No results found").click()
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("tes")
+    edit_iframe.locator(".select2-results__option").first.click()
+    submit_confirm(edit_iframe)
 
     # add new field
     sidebar(page, "Sheet")

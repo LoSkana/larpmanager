@@ -256,7 +256,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click(force=True)
-    just_wait(page)
+    just_wait(page, big=True)
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
@@ -398,9 +398,22 @@ def just_wait(page, big=False):
 class FrameLocatorWithPage:
     """Wraps a FrameLocator with the real Page so helpers can call keyboard/wait methods."""
 
-    def __init__(self, frame_locator, page):
+    def __init__(self, frame_locator, page, iframe_locator=None):
         object.__setattr__(self, '_frame', frame_locator)
         object.__setattr__(self, '_real_page', page)
+        object.__setattr__(self, '_iframe_locator', iframe_locator)
+
+    def _get_frame(self):
+        """Return the actual Frame object for JS evaluation in this iframe's context."""
+        if self._iframe_locator is not None:
+            return self._iframe_locator.element_handle().content_frame()
+        return self._real_page
+
+    def wait_for_function(self, *args, **kwargs):
+        return self._get_frame().wait_for_function(*args, **kwargs)
+
+    def evaluate(self, *args, **kwargs):
+        return self._get_frame().evaluate(*args, **kwargs)
 
     def __getattr__(self, name):
         try:
@@ -488,7 +501,8 @@ def submit_option(page, option):
 
 def get_modal_iframe(page):
     just_wait(page)
-    return FrameLocatorWithPage(page.locator("#lm-modal iframe").content_frame, page)
+    iframe_locator = page.locator("#lm-modal iframe")
+    return FrameLocatorWithPage(iframe_locator.content_frame, page, iframe_locator)
 
 
 def sidebar(page, link):

@@ -47,7 +47,7 @@ def test_credits_readonly_event(pw_page: Any) -> None:
 
     # Go to event and insert a new Credit
     go_to(page, live_server, "/test/manage/credits/")
-    page.get_by_role("link", name="+ New").click()
+    page.get_by_role("link", name= "New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").fill("org")
@@ -57,7 +57,7 @@ def test_credits_readonly_event(pw_page: Any) -> None:
     submit_confirm(edit_iframe)
 
     # Check presence of New, Edit and Delete links
-    expect(page.get_by_role("link", name="+ New")).to_have_count(1)
+    expect(page.get_by_role("link", name= "New")).to_have_count(1)
     expect(page.locator('i.fas.fa-edit')).to_have_count(1)
     expect(page.locator('i.fas.fa-trash')).to_have_count(1)
 
@@ -69,12 +69,12 @@ def test_credits_readonly_event(pw_page: Any) -> None:
 
     # Go to event and check lack of New, Edit and Delete links
     go_to(page, live_server, "/test/manage/credits/")
-    expect(page.get_by_role("link", name="+ New")).to_have_count(0)
+    expect(page.get_by_role("link", name= "New")).to_have_count(0)
     expect(page.locator('i.fas.fa-edit')).to_have_count(0)
     expect(page.locator('i.fas.fa-trash')).to_have_count(0)
 
     # Go to orga and check presence of New, Edit and Delete links
     go_to(page, live_server, "/manage/credits/")
-    expect(page.get_by_role("link", name="+ New")).to_have_count(1)
+    expect(page.get_by_role("link", name= "New")).to_have_count(1)
     expect(page.locator('i.fas.fa-edit')).to_have_count(1)
     expect(page.locator('i.fas.fa-trash')).to_have_count(1)

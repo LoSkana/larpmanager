@@ -168,11 +168,11 @@ def field_multiple(page: Any, live_server: Any) -> None:
     just_wait(page)
     submit_confirm(edit_iframe)
     page.locator('[id="u3"]').locator(".fa-arrow-up").click()
-    page.get_by_role("link", name="New").click()
 
 
 def field_text(page: Any, live_server: Any) -> None:
     # create text
+    page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_typ").select_option("t")
     edit_iframe.locator("#id_description").click()
