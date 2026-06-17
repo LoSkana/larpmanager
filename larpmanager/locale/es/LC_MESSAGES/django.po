@@ -5915,7 +5915,7 @@ msgid "Name of the discount - internal use"
 msgstr "Nombre del descuento - para uso interno"
 
 msgid "No elements are currently available"
-msgstr "Actualmente no hay elementos disponibles"
+msgstr "Este contenido no está disponible actualmente"
 
 msgid "Now set up the tokens configuration"
 msgstr "Ahora configure los tokens"
