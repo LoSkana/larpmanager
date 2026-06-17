@@ -4,14 +4,12 @@
     {% if frame %}floating_iframe{% endif %}
 {% endblock body_class %}
 {% block title %}
-    {% if not frame %}
-        {% if edit_uuid %}
-            {{ name }}
-        {% else %}
-            {% trans "New" %}
-        {% endif %}
-        - {{ form.page_title }} - {{ run.search }}
+    {% if edit_uuid %}
+        {{ name }}
+    {% else %}
+        {% trans "New" %}
     {% endif %}
+    - {{ form.page_title }} - {{ run.search }}
 {% endblock title %}
 {% block info %}
     {% if not frame %}{{ form.page_info }}{% endif %}

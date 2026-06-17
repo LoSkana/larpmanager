@@ -384,6 +384,7 @@ def _evaluate_action_result(
 
     # Standard elements use iframe or standard edit template
     if is_frame:
+        context["edit"] = True
         return render(request, "elements/dashboard/form_frame.html", context)
 
     return render(request, "larpmanager/orga/edit.html", context)

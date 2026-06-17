@@ -85,6 +85,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     const dialog = document.getElementById('lm-modal');
     const iframe = dialog.querySelector('iframe');
     let revealed = false;
+    const originalTitle = document.title;
 
     function revealIframe() {
         if (revealed) return;
@@ -92,7 +93,19 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         iframe.style.visibility = 'visible';
         const loading = dialog.querySelector('.frame-loading');
         if (loading) loading.style.display = 'none';
+        if (modalClass === 'popup_edit') {
+            try {
+                const iframeTitle = iframe.contentDocument && iframe.contentDocument.title;
+                if (iframeTitle) document.title = iframeTitle;
+            } catch (_err) {}
+        }
     }
+
+    function restoreTitle() {
+        if (modalClass === 'popup_edit') document.title = originalTitle;
+    }
+
+    iframe.addEventListener('load', revealIframe, { once: true });
 
     function onIframeMessage(e) {
         if (!e.data || !e.source || e.source !== iframe.contentWindow) return;
@@ -111,11 +124,13 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
         e.preventDefault();
         window.closeLmModal();
+        restoreTitle();
         if (typeof onClose === 'function') onClose();
     });
 
     dialog.addEventListener('close', function() {
         window.removeEventListener('message', onIframeMessage);
+        restoreTitle();
     }, { once: true });
 }
 
@@ -473,18 +488,46 @@ function replaceNewUrl() {
 function refreshDatatables() {
     $.get(window.location.href, function(html) {
         const $newDoc = $($.parseHTML(html));
-        $('table.go_datatable').each(function() {
-            const tableId = $(this).attr('id');
+        const $newTables = $newDoc.find('table.go_datatable');
+        const savedStates = {};
+
+        $('table.go_datatable').each(function(index) {
+            const $oldTable = $(this);
+            const tableId = $oldTable.attr('id');
+
             if (tableId && window.datatables && window.datatables[tableId]) {
-                window.datatables[tableId].destroy();
+                const dt = window.datatables[tableId];
+                savedStates[tableId] = {
+                    order: dt.order(),
+                    search: dt.search(),
+                    colSearches: dt.columns().search().toArray(),
+                };
+                dt.destroy();
                 delete window.datatables[tableId];
             }
-            const $newTable = $newDoc.find('#' + tableId);
+
+            let $newTable = tableId ? $newDoc.find('#' + tableId) : $();
+            if (!$newTable.length) $newTable = $newTables.eq(index);
+
             if ($newTable.length) {
-                $(this).find('tbody').html($newTable.find('tbody').html());
+                $oldTable.find('thead').html($newTable.find('thead').html());
+                $oldTable.find('tbody').html($newTable.find('tbody').html());
+                $oldTable.show();
             }
         });
+
+        window._datatablesSavedState = savedStates;
+        window._suppressTriggerTogs = true;
         data_tables();
+        delete window._datatablesSavedState;
+        delete window._suppressTriggerTogs;
+
+        if (typeof window.reloadActiveQuestions === 'function') {
+            window.reloadActiveQuestions();
+        }
+        if (typeof window.applyColumnToggles === 'function') {
+            window.applyColumnToggles();
+        }
     });
 }
 
@@ -692,9 +735,22 @@ function data_tables() {
         };
 
         window.datatables[tableId] = table;
+
+        if (window._datatablesSavedState && window._datatablesSavedState[tableId]) {
+            const state = window._datatablesSavedState[tableId];
+            let needDraw = false;
+            if (state.search) { table.search(state.search); needDraw = true; }
+            if (state.colSearches) {
+                state.colSearches.forEach(function(colSearch, i) {
+                    if (colSearch) { table.column(i).search(colSearch); needDraw = true; }
+                });
+            }
+            if (state.order && state.order.length) { table.order(state.order); needDraw = true; }
+            if (needDraw) table.draw(false);
+        }
     });
 
-    if (Array.isArray(window.trigger_togs)) {
+    if (Array.isArray(window.trigger_togs) && !window._suppressTriggerTogs) {
         window.trigger_togs.forEach(function(togValue) {
             if (togValue.startsWith('.') || togValue.startsWith('#')) {
                 $(togValue).each(function() {

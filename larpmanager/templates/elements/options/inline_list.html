@@ -10,7 +10,6 @@ Context:
 <div id="inline-options"
      {% if el %}data-question-uuid="{{ el.uuid }}"{% endif %}
      {% if inline_writing_type %} data-save-url="{% url 'orga_writing_options_inline_save' run.get_slug inline_writing_type %}" data-save-uuid-url="{% url 'orga_writing_options_inline_save' run.get_slug inline_writing_type 'OPTUUID' %}" data-reorder-url="{% url 'orga_writing_options_inline_reorder' run.get_slug inline_writing_type %}" data-delete-url="{% url 'orga_writing_options_inline_delete' run.get_slug inline_writing_type 'OPTUUID' %}" {% else %} data-save-url="{% url 'orga_registration_options_inline_save' run.get_slug %}" data-save-uuid-url="{% url 'orga_registration_options_inline_save' run.get_slug 'OPTUUID' %}" data-reorder-url="{% url 'orga_registration_options_inline_reorder' run.get_slug %}" data-delete-url="{% url 'orga_registration_options_inline_delete' run.get_slug 'OPTUUID' %}" {% endif %}>
-    <h2>{% trans "Options" %}</h2>
     <div class="orga-buttons">
         <a href="#" class="button add-inline-option">
             <i class="fas fa-plus"></i>

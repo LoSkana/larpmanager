@@ -35,7 +35,6 @@ from larpmanager.models.registration import (
     RegistrationSurcharge,
 )
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import (
     backend_order,
 )
@@ -245,38 +244,6 @@ def orga_registration_options_new(request: HttpRequest, event_slug: str) -> Http
 def orga_registration_options_edit(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Edit registration options for an event."""
     return options_edit_handler(request, event_slug, "orga_registration_form", option_uuid)
-
-
-@login_required
-def orga_registration_options_list(
-    request: HttpRequest, event_slug: str, question_uuid: str | None = None
-) -> HttpResponse:
-    """Display the list of options for a registration form question in an iframe.
-
-    This view shows only the options list section, designed to be loaded in an iframe
-    within the form edit page.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        question_uuid: Question UUID to show options for
-
-    Returns:
-        HttpResponse with the options list template
-    """
-    # Check user permissions for registration form management
-    context = check_event_context(request, event_slug, "orga_registration_form")
-    context["frame"] = 1
-
-    if question_uuid:
-        # Get the question
-        get_element(context, question_uuid, "el", RegistrationQuestion)
-
-        # Load existing options for the question
-        options_queryset = RegistrationOption.objects.filter(question=context["el"])
-        context["list"] = options_queryset.order_by("order")
-
-    return render(request, "larpmanager/orga/registration/options_list.html", context)
 
 
 @login_required

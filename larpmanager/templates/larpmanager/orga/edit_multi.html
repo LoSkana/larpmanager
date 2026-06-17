@@ -4,17 +4,15 @@
     {% if frame %}floating_iframe{% endif %}
 {% endblock body_class %}
 {% block title %}
-    {% if not frame %}
-        {% if exe %}
-            {% if creation %}
-                {% trans "New" %}
-            {% else %}
-                {{ name }}
-            {% endif %}
-            - {{ form1.page_title }}
+    {% if exe %}
+        {% if creation %}
+            {% trans "New" %}
         {% else %}
-            {{ form1.page_title }} - {{ run.search | truncatechars:50 }}
+            {{ name }}
         {% endif %}
+        - {{ form1.page_title }}
+    {% else %}
+        {{ form1.page_title }} - {{ run.search | truncatechars:50 }}
     {% endif %}
 {% endblock title %}
 {% block info %}

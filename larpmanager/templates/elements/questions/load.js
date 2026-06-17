@@ -204,14 +204,54 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('.go_table a').hide();
 
-        function setColumnsVisible(indexList, visible) {
+        window.setColumnsVisible = function(indexList, visible) {
             Object.keys(window.datatables).forEach(function(key) {
                 var table = window.datatables[key];
                 for (const index of indexList) {
                     table.column(index).visible(visible);
                 }
             });
-        }
+        };
+
+        window.reloadActiveQuestions = function() {
+            $('.load_que').each(function() {
+                var $el = $(this);
+                var key = $el.attr('key');
+                if ($('.lq_' + key).hasClass('select')) {
+                    $('.lq_' + key).removeClass('select');
+                    $el.next('.table_toggle').removeClass('select');
+                    delete done[key];
+                    load_question($el);
+                }
+            });
+        };
+
+        window.applyColumnToggles = function() {
+            if (!window.hideColumnsIndexMap) return;
+            var statsActive = $('a.table_toggle[tog="stats"]').hasClass('select');
+            $('a.table_toggle.select').each(function() {
+                var tog = $(this).attr('tog');
+                if (tog === 'stats') {
+                    Object.keys(window.hideColumnsIndexMap).forEach(function(key) {
+                        if (!key.startsWith('stats-')) return;
+                        var contentType = key.slice('stats-'.length);
+                        var contentActive = contentType === 'always' ||
+                            $('a.table_toggle[tog="' + contentType + '"]').hasClass('select');
+                        window.setColumnsVisible(window.hideColumnsIndexMap[key], contentActive);
+                    });
+                } else {
+                    var index_list = window.hideColumnsIndexMap[tog] || [];
+                    window.setColumnsVisible(index_list, true);
+                    if (statsActive) {
+                        var statsKey = 'stats-' + tog;
+                        var statsIndices = window.hideColumnsIndexMap[statsKey] || [];
+                        if (statsIndices.length) {
+                            window.setColumnsVisible(statsIndices, true);
+                        }
+                    }
+                }
+            });
+        };
 
         $('.table_toggle').on('click', function () {
             var tog = $(this).attr("tog");
@@ -225,7 +265,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     var contentType = key.slice('stats-'.length);
                     var contentActive = contentType === 'always' ||
                         $('a.table_toggle[tog="' + contentType + '"]').hasClass('select');
-                    setColumnsVisible(window.hideColumnsIndexMap[key], statsActive && contentActive);
+                    window.setColumnsVisible(window.hideColumnsIndexMap[key], statsActive && contentActive);
                 });
                 return false;
             }
@@ -246,7 +286,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 var statsKey = 'stats-' + tog;
                 var statsIndices = window.hideColumnsIndexMap[statsKey] || [];
                 if (statsIndices.length) {
-                    setColumnsVisible(statsIndices, $(this).hasClass('select'));
+                    window.setColumnsVisible(statsIndices, $(this).hasClass('select'));
                 }
             }
 

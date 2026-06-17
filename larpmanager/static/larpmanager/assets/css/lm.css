@@ -921,7 +921,7 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 
 .popup_dashboard {
   width: 60vw;
-  height: 50vh;
+  height: 60vh;
   min-height: 200px;
   max-height: 85vh;
 }
@@ -977,7 +977,8 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   .popup,
   .popup_tutorial,
   .popup_query,
-  .popup_dashboard {
+  .popup_dashboard,
+  .popup_edit {
     width: 95vw;
   }
 }

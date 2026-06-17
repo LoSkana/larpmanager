@@ -4,6 +4,18 @@
     floating_iframe
 {% endblock body_class %}
 {% block title %}
+    {% if edit %}
+        {% if nonum is None %}
+            {% if num %}
+                {{ name }}
+            {% else %}
+                {% trans "New" %}
+            {% endif %}
+            -
+        {% endif %}
+        {{ form.page_title }}
+        - {{ run.search | truncatechars:50 }}
+    {% endif %}
 {% endblock title %}
 {% block info %}
 {% endblock info %}

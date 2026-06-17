@@ -429,6 +429,7 @@ def orga_features(request: HttpRequest, event_slug: str) -> Any:
     """
     context = check_event_context(request, event_slug, "orga_features")
     context["event_form"] = True
+    context["add_another"] = False
     if backend_edit(request, context, OrgaFeatureForm):
         context["new_features"] = Feature.objects.filter(
             pk__in=context["form"].added_features,

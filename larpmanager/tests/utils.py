@@ -387,13 +387,30 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
         )
 
 def just_wait(page, big=False):
-    if big:
-        wait = 2000
-    else:
-        wait = 500
+    if not hasattr(page, 'wait_for_timeout'):
+        return
+    wait = 2000 if big else 500
     page.wait_for_timeout(wait)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
+
+
+class FrameLocatorWithPage:
+    """Wraps a FrameLocator with the real Page so helpers can call keyboard/wait methods."""
+
+    def __init__(self, frame_locator, page):
+        object.__setattr__(self, '_frame', frame_locator)
+        object.__setattr__(self, '_real_page', page)
+
+    def __getattr__(self, name):
+        try:
+            return getattr(self._frame, name)
+        except AttributeError:
+            return getattr(self._real_page, name)
+
+    def __setattr__(self, name, value):
+        object.__setattr__(self, name, value)
+
 
 class InlineOptionRow:
     """Compatibility wrapper for the inline options editor.
@@ -471,7 +488,7 @@ def submit_option(page, option):
 
 def get_modal_iframe(page):
     just_wait(page)
-    return page.locator("#lm-modal iframe").content_frame
+    return FrameLocatorWithPage(page.locator("#lm-modal iframe").content_frame, page)
 
 
 def sidebar(page, link):
