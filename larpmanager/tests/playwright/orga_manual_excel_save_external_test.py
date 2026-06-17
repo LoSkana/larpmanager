@@ -37,6 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      logout,
                                      submit_confirm,
+                                     get_modal_iframe,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -82,13 +83,14 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # add new
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Another")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Another")
 
     # test char finder
-    fill_tinymce(page, "id_teaser", "good friends with ")
-    just_wait(page)
-    frame_locator = page.frame_locator("iframe#id_teaser_ifr")
+    fill_tinymce(edit_iframe, "id_teaser", "good friends with ")
+    just_wait(edit_iframe)
+    frame_locator = edit_iframe.frame_locator("iframe#id_teaser_ifr")
     editor = frame_locator.locator("body#tinymce")
 
     editor.evaluate("""
@@ -101,15 +103,15 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
         sel.addRange(range);
     }
     """)
-    just_wait(page)
+    just_wait(edit_iframe)
     editor.press(" ")
-    just_wait(page)
+    just_wait(edit_iframe)
     editor.press("#")
-    page.get_by_role("searchbox").fill("tes")
-    page.locator(".select2-results__option").first.click()
-    just_wait(page)
+    edit_iframe.get_by_role("searchbox").fill("tes")
+    edit_iframe.locator(".select2-results__option").first.click()
+    just_wait(edit_iframe)
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
     just_wait(page)
     expect_normalized(page,
         page.locator("#one"),

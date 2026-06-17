@@ -123,12 +123,13 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     # Add surcharges
     page.get_by_role("link", name="Surcharges").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_amount").click()
-    page.locator("#id_amount").fill("5")
-    page.locator("#id_date").fill("2024-06-11")
-    just_wait(page)
-    page.locator("#id_date").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_amount").click()
+    edit_iframe.locator("#id_amount").fill("5")
+    edit_iframe.locator("#id_date").fill("2024-06-11")
+    just_wait(edit_iframe)
+    edit_iframe.locator("#id_date").click()
+    submit_confirm(edit_iframe)
 
     # set up payments
     go_to(page, live_server, "manage")

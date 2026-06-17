@@ -46,6 +46,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     submit_confirm,
+    get_modal_iframe,
 )
 
 pytestmark = pytest.mark.e2e
@@ -118,9 +119,10 @@ def test_orga_post_popup(pw_page: Any) -> None:
 def create_reg_editor_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("e")
-    page.locator("#id_name").fill(REG_EDITOR_QUESTION)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("e")
+    edit_iframe.locator("#id_name").fill(REG_EDITOR_QUESTION)
+    submit_confirm(edit_iframe)
 
 
 def _get_que_textarea_id(page: Any) -> str:
@@ -166,9 +168,10 @@ def verify_reg_editor_popup(page: Any, live_server: Any) -> None:
 def create_reg_paragraph_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")
-    page.locator("#id_name").fill(REG_PARA_QUESTION)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")
+    edit_iframe.locator("#id_name").fill(REG_PARA_QUESTION)
+    submit_confirm(edit_iframe)
 
 
 def register_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
@@ -201,20 +204,22 @@ def verify_reg_paragraph_popup(page: Any, live_server: Any) -> None:
 def create_char_editor_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/writing/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("e")
-    page.locator("#id_name").fill(CHAR_EDITOR_QUESTION)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("e")
+    edit_iframe.locator("#id_name").fill(CHAR_EDITOR_QUESTION)
+    submit_confirm(edit_iframe)
 
 
 def create_character_with_long_editor_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
     page.locator("a:has(i.fas.fa-trash)").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("popup test character")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("popup test character")
     # Fill the editor writing question with a long answer
     editor_id = _get_que_textarea_id(page)
-    fill_tinymce(page, editor_id, LONG_HTML_CHAR_EDITOR)
-    submit_confirm(page)
+    fill_tinymce(edit_iframe, editor_id, LONG_HTML_CHAR_EDITOR)
+    submit_confirm(edit_iframe)
 
 
 def verify_char_editor_popup(page: Any, live_server: Any) -> None:
@@ -240,18 +245,20 @@ def verify_char_editor_popup(page: Any, live_server: Any) -> None:
 def create_char_paragraph_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/writing/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")
-    page.locator("#id_name").fill(CHAR_PARA_QUESTION)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")
+    edit_iframe.locator("#id_name").fill(CHAR_PARA_QUESTION)
+    submit_confirm(edit_iframe)
 
 
 def fill_character_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
     page.locator("a:has(i.fas.fa-trash)").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("popup test character 2")
-    page.get_by_role("row").filter(has_text=CHAR_PARA_QUESTION).get_by_role("textbox").fill(LONG_TEXT_CHAR_PARA)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("popup test character 2")
+    edit_iframe.get_by_role("row").filter(has_text=CHAR_PARA_QUESTION).get_by_role("textbox").fill(LONG_TEXT_CHAR_PARA)
+    submit_confirm(edit_iframe)
 
 
 def verify_char_paragraph_popup(page: Any, live_server: Any) -> None:

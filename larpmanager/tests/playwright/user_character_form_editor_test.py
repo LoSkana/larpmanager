@@ -30,7 +30,8 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
-    submit_option, new_option
+    submit_option, new_option, \
+    get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -83,66 +84,68 @@ def prepare(page: Any, live_server: Any) -> None:
 def field_single(page: Any, live_server: Any) -> None:
     # add single
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("single")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("sssssingle")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("single")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.locator("#id_description").fill("sssssingle")
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("ff")
     iframe.locator("#id_max_available").click()
     iframe.locator("#id_max_available").fill("3")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("rrrr")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("wwww")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
 
 def field_multiple(page: Any, live_server: Any) -> None:
     # Add multiple
     page.get_by_role("link", name="New").click()
-    page.get_by_text("Question type").click()
-    page.locator("#id_typ").select_option("m")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("rrrrrr")
-    page.locator("#id_max_length").click()
-    page.locator("#id_max_length").fill("1")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Question type").click()
+    edit_iframe.locator("#id_typ").select_option("m")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("rrrrrr")
+    edit_iframe.locator("#id_max_length").click()
+    edit_iframe.locator("#id_max_length").fill("1")
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("q1")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("q2")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("q3")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("14")
     iframe.locator("#id_max_available").click()
     iframe.locator("#id_max_available").fill("3")
     iframe.searchbox("requirements").fill("ww")
     iframe.get_by_role("option", name="single - wwww").click()
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
 
 def field_text(page: Any, live_server: Any) -> None:
@@ -150,61 +153,65 @@ def field_text(page: Any, live_server: Any) -> None:
 
     # Add text
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("t")
-    page.get_by_role("cell", name="Question name (keep it short)").click()
-    page.locator("#id_name").fill("text")
-    page.locator("#id_max_length").click()
-    page.locator("#id_max_length").fill("10")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("t")
+    edit_iframe.get_by_role("cell", name="Question name (keep it short)").click()
+    edit_iframe.locator("#id_name").fill("text")
+    edit_iframe.locator("#id_max_length").click()
+    edit_iframe.locator("#id_max_length").fill("10")
+    submit_confirm(edit_iframe)
 
     # Add paragraph
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("rrr")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("rrr")
+    submit_confirm(edit_iframe)
 
     # Create new character
     go_to(page, live_server, "/test/manage/characters")
     just_wait(page)
     page.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("provaaaa")
+    edit_iframe = get_modal_iframe(page)
+    just_wait(edit_iframe)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("provaaaa")
 
-    fill_tinymce(page, "id_teaser", "adsdsadsa")
+    fill_tinymce(edit_iframe, "id_teaser", "adsdsadsa")
 
-    fill_tinymce(page, "id_text", "rrrr")
+    fill_tinymce(edit_iframe, "id_text", "rrrr")
 
-    just_wait(page)
-    page.locator("#id_que_u4").select_option("u3")
-    page.locator("#id_que_u4").select_option("u1")
-    page.get_by_role("checkbox", name="q2").check()
-    page.locator("#id_que_u6").click()
-    page.locator("#id_que_u6").fill("sad")
-    page.locator("#id_que_u7").click()
-    page.locator("#id_que_u7").fill("sadsadas")
-    submit_confirm(page)
+    just_wait(edit_iframe)
+    edit_iframe.locator("#id_que_u4").select_option("u3")
+    edit_iframe.locator("#id_que_u4").select_option("u1")
+    edit_iframe.get_by_role("checkbox", name="q2").check()
+    edit_iframe.locator("#id_que_u6").click()
+    edit_iframe.locator("#id_que_u6").fill("sad")
+    edit_iframe.locator("#id_que_u7").click()
+    edit_iframe.locator("#id_que_u7").fill("sadsadas")
+    submit_confirm(edit_iframe)
 
 
 def field_single_req(page: Any, live_server: Any) -> None:
     # Add a second single-choice question where one option requires "wwww" from "single"
     go_to(page, live_server, "/test/manage/writing/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("single_req")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("single_req")
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").fill("dep_a")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").fill("dep_b")
     iframe.searchbox("requirements").fill("ww")
     iframe.get_by_role("option", name="single - wwww").click()
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
 
 def verify_requirements_hidden(page: Any) -> None:
@@ -325,12 +332,13 @@ def player_relationships(page: Any, live_server: Any) -> None:
 
     # Create new relationship toward Test Character
     page.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#select2-id_target-container").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    fill_tinymce(page, "id_text", "my relationship text", show=False)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    just_wait(edit_iframe)
+    edit_iframe.locator("#select2-id_target-container").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    fill_tinymce(edit_iframe, "id_text", "my relationship text", show=False)
+    submit_confirm(edit_iframe)
 
     # Verify relationship appears in list
     expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) my relationship text")

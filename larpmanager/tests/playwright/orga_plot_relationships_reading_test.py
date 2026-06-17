@@ -105,16 +105,17 @@ def reading(live_server: Any, page: Any) -> None:
     # create faction with test character
     page.get_by_role("link", name="Factions").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("only for testt")
-    page.get_by_role("listitem").click()
-    searchbox = page.get_by_role("searchbox")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("only for testt")
+    edit_iframe.get_by_role("listitem").click()
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.fill("te")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="Test Character")
+    option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # check faction main list
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -139,18 +140,19 @@ def relationships(live_server: Any, page: Any) -> None:
     # create second character
     sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("prova")
-    page.locator("#select2-new_rel_select-container").click()
-    searchbox = page.get_by_role("searchbox")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("prova")
+    edit_iframe.locator("#select2-new_rel_select-container").click()
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.fill("tes")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="Test Character")
+    option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    page.wait_for_timeout(5000)
-    fill_tinymce(page, "rel_u1", "ciaaoooooo")
-    submit_confirm(page)
+    edit_iframe.wait_for_timeout(5000)
+    fill_tinymce(edit_iframe, "rel_u1", "ciaaoooooo")
+    submit_confirm(edit_iframe)
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
@@ -265,8 +267,9 @@ def plots(live_server: Any, page: Any) -> None:
 
     # set text
     page.locator(".fa-edit").click()
-    fill_tinymce(page, "id_char_role_2", "bruuuu")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    fill_tinymce(edit_iframe, "id_char_role_2", "bruuuu")
+    submit_confirm(edit_iframe)
 
     # check in user
     go_to(page, live_server, "/test/")
@@ -279,9 +282,10 @@ def plots_character(live_server: Any, page: Any) -> None:
     # create other plots
     sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("gaga")
-    page.get_by_text("After confirmation, add").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("gaga")
+    edit_iframe.get_by_text("After confirmation, add").click()
+    submit_confirm(edit_iframe)
     page.locator("#id_name").click()
     page.locator("#id_name").fill("bibi")
     submit_confirm(page)
@@ -358,17 +362,19 @@ def auto_relationships_setup(live_server: Any, page: Any) -> None:
     # add a custom character question, so a mention in it counts as "cited in the sheet"
     go_to(page, live_server, "/test/manage/writing/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")
-    page.locator("#id_name").fill("Background")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")
+    edit_iframe.locator("#id_name").fill("Background")
+    submit_confirm(edit_iframe)
 
     # create the six characters that will be auto-related to the test character
     for name in ("AutoSheetA", "AutoSheetB", "AutoFactionA", "AutoFactionB", "AutoPlotA", "AutoPlotB"):
         sidebar(page, "Characters")
         page.get_by_role("link", name="New").click()
-        page.locator("#id_name").click()
-        page.locator("#id_name").fill(name)
-        submit_confirm(page)
+        edit_iframe = get_modal_iframe(page)
+        edit_iframe.locator("#id_name").click()
+        edit_iframe.locator("#id_name").fill(name)
+        submit_confirm(edit_iframe)
 
     # on the test character: cite two characters in the sheet question, and set a manual
     # relationship for one character per source (sheet/faction/plot)
@@ -400,16 +406,17 @@ def auto_relationships_faction(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Factions").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("AutoFaction")
-    fill_tinymce(page, "id_text", "mentions @5 and @6")
-    page.get_by_role("listitem").click()
-    searchbox = page.get_by_role("searchbox")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("AutoFaction")
+    fill_tinymce(edit_iframe, "id_text", "mentions @5 and @6")
+    edit_iframe.get_by_role("listitem").click()
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.fill("Test Char")
-    option = page.get_by_role("option", name="Test Character")
+    option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
 
 def auto_relationships_plot(live_server: Any, page: Any) -> None:
@@ -417,17 +424,18 @@ def auto_relationships_plot(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Plots").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("AutoPlot")
-    searchbox = page.get_by_role("searchbox")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("AutoPlot")
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.click()
     searchbox.fill("Test Char")
-    option = page.get_by_role("option", name="Test Character")
+    option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    page.wait_for_timeout(5000)
-    fill_tinymce(page, "ch_1", "mentions @7 and @8")
-    submit_confirm(page)
+    edit_iframe.wait_for_timeout(5000)
+    fill_tinymce(edit_iframe, "ch_1", "mentions @7 and @8")
+    submit_confirm(edit_iframe)
 
 
 def auto_relationships_check(live_server: Any, page: Any) -> None:

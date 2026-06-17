@@ -30,7 +30,8 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
-    sidebar
+    sidebar, \
+    get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -136,15 +137,16 @@ def check_orga_config(page: Any) -> None:
 def check_orga_roles(page: Any) -> None:
     sidebar(page, "Roles")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("testona")
-    page.locator("#id_name").press("Tab")
-    page.get_by_role("searchbox").fill("org")
-    page.get_by_role("option", name="Admin Test - orga@test.it").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("testona")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.get_by_role("searchbox").fill("org")
+    edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     checked = ["Event", "Configuration", "Texts", "Navigation"]
     for s in checked:
         check_feature(page, s)
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Event (Event, Configuration), Appearance (Texts, Navigation)")
     page.locator('[id="u2"]').locator(".fa-edit").click()
     _check_checkboxes(checked, page)
@@ -197,15 +199,16 @@ def check_exe_features(page: Any) -> None:
 def check_exe_roles(page: Any) -> None:
     sidebar(page, "Roles")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("test")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("org")
-    page.get_by_role("option", name="Admin Test - orga@test.it").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("test")
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("org")
+    edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     checked = ["Organization", "Configuration", "Events", "Texts"]
     for s in checked:
         check_feature(page, s)
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
     expect(page.locator('[id="u2"]')).to_contain_text(
         "Organization (Organization, Configuration), Events (Events), Appearance (Texts)"
     )

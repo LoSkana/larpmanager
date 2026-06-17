@@ -162,8 +162,9 @@ def test_exe_join(pw_page: Any) -> None:
 
     go_to(page, live_server, "prova/manage/characters/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("Test Character")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("Test Character")
+    submit_confirm(edit_iframe)
 
     select_language(live_server, page, "it")
 

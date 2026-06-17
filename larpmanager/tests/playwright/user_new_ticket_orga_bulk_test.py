@@ -69,15 +69,17 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     # add plot
     sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("plot")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("plot")
+    submit_confirm(edit_iframe)
 
     # add faction
     page.get_by_role("link", name="Factions").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("faz")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("faz")
+    submit_confirm(edit_iframe)
 
     # check base
     sidebar(page, "Characters")
@@ -131,29 +133,33 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     # set quest type
     page.get_by_role("link", name="Quest type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("typ")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("typ")
+    submit_confirm(edit_iframe)
 
 
 def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # create quest
     sidebar(page, "Quest")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("q1")
+    submit_confirm(edit_iframe)
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("q2")
+    submit_confirm(edit_iframe)
 
     # create second quest type
     page.get_by_role("link", name="Quest type").click()
     expect_normalized(page, page.locator("#one"), "typ q1 q2")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("t2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("t2")
+    submit_confirm(edit_iframe)
 
     # test bulk set quest
     sidebar(page, "Quest")
@@ -166,9 +172,10 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # create traits
     sidebar(page, "Traits")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("t1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("t1")
+    submit_confirm(edit_iframe)
 
     # test bulk set quest
     page.get_by_role("link", name="Bulk").click()
@@ -183,22 +190,25 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     # create ability type
     page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("t1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("t1")
+    submit_confirm(edit_iframe)
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("2")
+    submit_confirm(edit_iframe)
 
     # create ability
     sidebar(page, "Abilities")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("swor")
-    page.locator("#id_cost").click()
-    page.locator("#id_cost").fill("1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("swor")
+    edit_iframe.locator("#id_cost").click()
+    edit_iframe.locator("#id_cost").fill("1")
+    submit_confirm(edit_iframe)
 
     # test bulk set type
     page.get_by_role("link", name="Bulk").click()
@@ -225,27 +235,30 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
 
     # add box
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("box")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("box")
+    submit_confirm(edit_iframe)
 
     # add tag
     page.get_by_role("link", name="Tags").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("tag")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("tag")
+    submit_confirm(edit_iframe)
 
     # add items
     page.get_by_role("link", name="Items").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("item1")
-    page.locator("#select2-id_container-container").click()
-    page.get_by_role("searchbox").nth(1).fill("bo")
-    page.locator(".select2-results__option").first.click()
-    page.get_by_role("checkbox", name="After confirmation, add").check()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("item1")
+    edit_iframe.locator("#select2-id_container-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("bo")
+    edit_iframe.locator(".select2-results__option").first.click()
+    edit_iframe.get_by_role("checkbox", name="After confirmation, add").check()
+    submit_confirm(edit_iframe)
 
     page.locator("#id_name").click()
     page.locator("#id_name").fill("item2")
@@ -265,9 +278,10 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     # add second container
     page.get_by_role("link", name="Containers").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("box2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("box2")
+    submit_confirm(edit_iframe)
 
 
 def bulk_warehouse2(live_server: Any, page: Any) -> None:

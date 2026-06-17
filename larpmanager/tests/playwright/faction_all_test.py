@@ -73,21 +73,23 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Create PUBLIC WritingQuestion
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("t")  # Text type
-    page.locator("#id_name").fill("Public Faction Question")
-    page.locator("#id_description").fill("This is visible to everyone")
-    page.locator("#id_visibility").select_option("c")  # PUBLIC
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("t")  # Text type
+    edit_iframe.locator("#id_name").fill("Public Faction Question")
+    edit_iframe.locator("#id_description").fill("This is visible to everyone")
+    edit_iframe.locator("#id_visibility").select_option("c")  # PUBLIC
     # Note: applicable is automatically set to FACTION by the form
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # Create PRIVATE WritingQuestion
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")  # Paragraph type
-    page.locator("#id_name").fill("Private Faction Question")
-    page.locator("#id_description").fill("Only visible to assigned members")
-    page.locator("#id_visibility").select_option("e")  # PRIVATE
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")  # Paragraph type
+    edit_iframe.locator("#id_name").fill("Private Faction Question")
+    edit_iframe.locator("#id_description").fill("Only visible to assigned members")
+    edit_iframe.locator("#id_visibility").select_option("e")  # PRIVATE
     # Note: applicable is automatically set to FACTION by the form
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # ========== SECTION 3: Create 9 Factions (3 Primary, 3 Transversal, 3 Secret) ==========
     page.get_by_role("link", name="Factions").click()
@@ -97,15 +99,16 @@ def test_faction_all(pw_page: Any) -> None:
         # Navigate to factions list before creating new one
         go_to(page, live_server, "test/manage/factions/")
         page.get_by_role("link", name="New").click()
-        page.locator("#id_typ").select_option(typ)
-        page.locator("#id_name").fill(name)
-        fill_tinymce(page, "id_teaser", teaser)
-        fill_tinymce(page, "id_text", text)
+        edit_iframe = get_modal_iframe(page)
+        edit_iframe.locator("#id_typ").select_option(typ)
+        edit_iframe.locator("#id_name").fill(name)
+        fill_tinymce(edit_iframe, "id_teaser", teaser)
+        fill_tinymce(edit_iframe, "id_text", text)
 
-        page.locator("#id_que_u8").fill(public_ans)
-        page.locator("#id_que_u9").fill(private_ans)
+        edit_iframe.locator("#id_que_u8").fill(public_ans)
+        edit_iframe.locator("#id_que_u9").fill(private_ans)
 
-        submit_confirm(page)
+        submit_confirm(edit_iframe)
 
     # PRIMARY FACTIONS (typ="s")
     create_faction("s", "Primary Faction 1", "PF1 teaser", "PF1 private text",
@@ -137,18 +140,19 @@ def test_faction_all(pw_page: Any) -> None:
     def create_character(name: str, teaser: str, text: str, faction_names: list) -> None:
         sidebar(page, "Characters")
         page.get_by_role("link", name="New").click()
-        page.locator("#id_name").fill(name)
-        fill_tinymce(page, "id_teaser", teaser)
-        fill_tinymce(page, "id_text", text)
+        edit_iframe = get_modal_iframe(page)
+        edit_iframe.locator("#id_name").fill(name)
+        fill_tinymce(edit_iframe, "id_teaser", teaser)
+        fill_tinymce(edit_iframe, "id_text", text)
 
         # Assign factions using select2 widget
         for faction in faction_names:
-            page.get_by_role("searchbox").click()
-            page.get_by_role("searchbox").fill(faction[:5])  # Type first 5 chars
-            page.wait_for_timeout(500)  # Wait for dropdown
-            page.locator(".select2-results__option").filter(has_text=faction).first.click()
+            edit_iframe.get_by_role("searchbox").click()
+            edit_iframe.get_by_role("searchbox").fill(faction[:5])  # Type first 5 chars
+            edit_iframe.wait_for_timeout(500)  # Wait for dropdown
+            edit_iframe.locator(".select2-results__option").filter(has_text=faction).first.click()
 
-        submit_confirm(page)
+        submit_confirm(edit_iframe)
 
     # Character 1: Primary Faction 1 + all 3 Transversals (will be assigned to user@test.it) + 1 Secret
     create_character("Character Alpha", "Alpha teaser", "Alpha private text",

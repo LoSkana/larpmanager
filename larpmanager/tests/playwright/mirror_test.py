@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm, expect_normalized, \
+    get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -69,10 +70,11 @@ def test_orga_mirror(pw_page: Any) -> None:
     # create mirror
     go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Mirror")
-    page.locator("#id_mirror").select_option("u1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Mirror")
+    edit_iframe.locator("#id_mirror").select_option("u1")
+    submit_confirm(edit_iframe)
 
     # check gallery
     go_to(page, live_server, "/test/")

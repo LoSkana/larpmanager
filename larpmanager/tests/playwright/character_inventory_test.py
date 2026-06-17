@@ -116,10 +116,11 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/quick/")
     page.get_by_role("link", name="Characters").click()
     page.locator(".fa-edit").click()
-    page.get_by_text("---------").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    submit_confirm(edit_iframe)
 
     # log out and log in as the test user
     login_user(page, live_server)

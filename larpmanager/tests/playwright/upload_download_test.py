@@ -37,6 +37,7 @@ from larpmanager.tests.utils import (
     submit_confirm,
     upload,
     expect_normalized, sidebar,
+    get_modal_iframe,
 )
 
 pytestmark = pytest.mark.e2e
@@ -83,9 +84,10 @@ def abilities(page: Any) -> None:
     # add type
     page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("test")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("test")
+    submit_confirm(edit_iframe)
 
     page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
@@ -167,9 +169,10 @@ def quest_trait(page: Any) -> None:
     check_download(page, "Download example template")
     page.get_by_role("link", name="Quest type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("bhbh")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("bhbh")
+    submit_confirm(edit_iframe)
     sidebar(page, "Quest")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")

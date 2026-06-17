@@ -209,14 +209,15 @@ def test_orga_section_form(pw_page: Any) -> None:
     # set allowed
     go_to(page, live_server, "/test/manage/roles/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("blabla")
-    page.locator("#id_name").press("Tab")
-    page.get_by_role("searchbox").fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("blabla")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.get_by_role("searchbox").fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
     check_feature(page, "Navigation")
     check_feature(page, "Registrations")
-    submit_confirm(page)
+    submit_confirm(edit_iframe)
 
     # login as user
     login_user(page, live_server)

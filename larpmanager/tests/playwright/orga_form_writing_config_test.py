@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar, get_modal_iframe
 
 pytestmark = pytest.mark.e2e
 
@@ -115,10 +115,11 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # add field computed
     sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("c")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("comp")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("c")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("comp")
+    submit_confirm(edit_iframe)
 
     # test save
     page.get_by_role("link", name="Event").click()

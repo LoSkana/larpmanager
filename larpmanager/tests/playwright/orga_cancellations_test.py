@@ -101,24 +101,26 @@ def _add_event_tokens(live_server: Any, page: Any, member_search: str, member_op
     """Add event-level token accounting item; member must already be registered."""
     go_to(page, live_server, "/test/manage/tokens")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").fill(member_search)
-    page.get_by_role("option", name=member_option).click()
-    page.locator("#id_value").fill(str(value))
-    page.locator("#id_descr").fill("test")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").fill(member_search)
+    edit_iframe.get_by_role("option", name=member_option).click()
+    edit_iframe.locator("#id_value").fill(str(value))
+    edit_iframe.locator("#id_descr").fill("test")
+    submit_confirm(edit_iframe)
 
 
 def _add_event_credits(live_server: Any, page: Any, member_search: str, member_option: str, value: int) -> None:
     """Add event-level credit accounting item; member must already be registered."""
     go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("link", name="New").click()
-    page.get_by_text("---------").click()
-    page.get_by_role("searchbox").fill(member_search)
-    page.get_by_role("option", name=member_option).click()
-    page.locator("#id_value").fill(str(value))
-    page.locator("#id_descr").fill("test")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_role("searchbox").fill(member_search)
+    edit_iframe.get_by_role("option", name=member_option).click()
+    edit_iframe.locator("#id_value").fill(str(value))
+    edit_iframe.locator("#id_descr").fill("test")
+    submit_confirm(edit_iframe)
 
 
 def _cancel_first_active_registration(live_server: Any, page: Any) -> None:

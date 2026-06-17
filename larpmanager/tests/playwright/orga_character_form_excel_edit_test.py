@@ -171,10 +171,11 @@ def create_second_character(page: Any, live_server: Any) -> None:
     """Create a new character with only the name set."""
     go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("Second Character")
-    fill_tinymce(page, "id_teaser", "")
-    fill_tinymce(page, "id_text", "")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("Second Character")
+    fill_tinymce(edit_iframe, "id_teaser", "")
+    fill_tinymce(edit_iframe, "id_text", "")
+    submit_confirm(edit_iframe)
 
 
 def inline_editing_name(page: Any, live_server: Any) -> None:

@@ -174,22 +174,24 @@ def prologues(page: Any) -> None:
 
     # redirected to prologue types
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("test")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("test")
+    submit_confirm(edit_iframe)
 
     # add prologue
     page.get_by_role("link", name="Prologues", exact=True).click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("ffff")
-    fill_tinymce(page, "id_text", "sadsadsa")
-    page.get_by_role("link", name="Show").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("tes")
-    page.locator(".select2-results__option").first.click()
-    page.locator("#main_form").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("ffff")
+    fill_tinymce(edit_iframe, "id_text", "sadsadsa")
+    edit_iframe.get_by_role("link", name="Show").click()
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("tes")
+    edit_iframe.locator(".select2-results__option").first.click()
+    edit_iframe.locator("#main_form").click()
+    submit_confirm(edit_iframe)
 
     # check result
     page.get_by_role("link", name="Characters").click()
