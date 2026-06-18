@@ -85,9 +85,10 @@ def check_overpay(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("cre")
     save_modal(page, edit_iframe)
+    just_wait(page)
 
     # Check signup accounting
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 8 40 60 100 60")
 
@@ -104,9 +105,10 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("www")
     save_modal(page, edit_iframe)
+    just_wait(page)
 
     # Check signup accounting
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 100 100 60 40")
 
@@ -122,9 +124,10 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("80.00")
     save_modal(page, edit_iframe)
+    just_wait(page)
 
     # Check accounting
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard -20 100 80 20 40 40")
 
@@ -132,6 +135,10 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     save_modal(page, edit_iframe)
+
+    page.reload()
+    just_wait(page)
+
     page.get_by_role("link", name="accounting", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
 
@@ -159,7 +166,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    expect_normalized(page,
+    expect_normalized(edit_iframe,
         edit_iframe.locator("#main_form"),
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
     )

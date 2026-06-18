@@ -183,7 +183,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("cell", name="Show available characters").click()

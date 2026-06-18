@@ -196,7 +196,7 @@ def quest_trait(page: Any) -> None:
 
 
 def registrations(page: Any) -> None:
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("registration.csv"))

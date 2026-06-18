@@ -88,7 +88,7 @@ def print_text(page: Any) -> None:
 
 
 def go_to(page: Any, live_server: Any, path: Any) -> None:
-    go_to_check(page, f"{live_server}/{path}")
+    go_to_check(page, f"{live_server}/{path.lstrip('/')}")
 
 def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
