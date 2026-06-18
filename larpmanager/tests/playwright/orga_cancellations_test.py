@@ -126,7 +126,6 @@ def _add_event_credits(live_server: Any, page: Any, member_search: str, member_o
 def _cancel_first_active_registration(live_server: Any, page: Any) -> None:
     """Cancel the first active registration shown in the organizer panel."""
     go_to(page, live_server, "/test/manage/registrations")
-    just_wait(page)
     page.locator("a:has(i.fas.fa-trash)").first.click(force=True)
     just_wait(page)
 
@@ -149,7 +148,6 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
 
     # Go to cancellations list
     go_to(page, live_server, "/test/manage/cancellations/")
-    just_wait(page)
     expect(page.locator("#cancellations")).to_be_visible()
 
     approve_link = page.get_by_role("link", name="Approve reimbursement")
@@ -179,7 +177,6 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
 
     # Verify token refund accounting entry created for user
     go_to(page, live_server, "/test/manage/tokens")
-    just_wait(page)
     refund_row = page.get_by_role("row", name=re.compile(r"User Test.*Refund"))
     expect(refund_row).to_be_visible()
     expect(refund_row).to_contain_text(str(USER_TOKEN_REFUND))
@@ -215,7 +212,6 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
 
     # Cancellations list: user row shows "Refunded", orga row has the approve link
     go_to(page, live_server, "/test/manage/cancellations/")
-    just_wait(page)
 
     approve_link = page.get_by_role("link", name="Approve reimbursement")
     expect(approve_link).to_be_visible()
@@ -246,14 +242,12 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
 
     # Verify token refund accounting entry for orga@test.it
     go_to(page, live_server, "/test/manage/tokens")
-    just_wait(page)
     token_refund_row = page.get_by_role("row", name=re.compile(r"Admin Test.*Refund"))
     expect(token_refund_row).to_be_visible()
     expect(token_refund_row).to_contain_text(str(ORGA_TOKEN_REFUND))
 
     # Verify credit refund accounting entry for orga@test.it
     go_to(page, live_server, "/test/manage/credits")
-    just_wait(page)
     credit_refund_row = page.get_by_role("row", name=re.compile(r"Admin Test.*Refund"))
     expect(credit_refund_row).to_be_visible()
     expect(credit_refund_row).to_contain_text(str(ORGA_CREDIT_REFUND))

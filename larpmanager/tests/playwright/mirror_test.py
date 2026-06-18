@@ -111,13 +111,11 @@ def casting(live_server: Any, page: Any) -> None:
 
     # test toggle casting
     go_to(page, live_server, "/test/manage/casting")
-    just_wait(page)
     expect_normalized(page, page.locator(".change").first, "YES")
     page.locator(".change").first.click()
     just_wait(page)
 
     go_to(page, live_server, "/test/manage/casting")
-    just_wait(page)
     expect_normalized(page, page.locator(".change").first, "NO")
     page.locator(".change").first.click()
     just_wait(page)

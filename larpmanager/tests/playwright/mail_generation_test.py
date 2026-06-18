@@ -121,7 +121,6 @@ def submit_membership(live_server: Any, page: Any) -> None:
     # Test membership
     go_to(page, live_server, "/manage/features/membership/on")
     go_to(page, live_server, "/manage/texts")
-    just_wait(page)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
 

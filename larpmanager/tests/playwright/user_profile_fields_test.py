@@ -202,14 +202,12 @@ def test_user_profile_fields(pw_page: Any) -> None:
 
     # Fill in every available profile field from the user profile page
     go_to(page, live_server, "/profile")
-    just_wait(page)
     expected_optional = _fill_profile_form(page, round_num=1)
     submit(page)
     expect(page.locator(".errorlist")).to_have_count(0)
 
     # Reload and verify the saved values match what was entered
     go_to(page, live_server, "/profile")
-    just_wait(page)
     _verify_profile_form(page, expected_optional)
 
     # Mark every configurable profile field as mandatory, and re-save
@@ -225,12 +223,10 @@ def test_user_profile_fields(pw_page: Any) -> None:
 
     # Change every value and re-save, now that the fields are mandatory
     go_to(page, live_server, "/profile")
-    just_wait(page)
     expected_mandatory = _fill_profile_form(page, round_num=2)
     submit(page)
     expect(page.locator(".errorlist")).to_have_count(0)
 
     # Reload and verify every field has actually been updated
     go_to(page, live_server, "/profile")
-    just_wait(page)
     _verify_profile_form(page, expected_mandatory)

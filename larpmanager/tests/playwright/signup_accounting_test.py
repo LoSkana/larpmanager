@@ -65,22 +65,18 @@ def check_delete(live_server: Any, page: Any) -> None:
 
     # cancel signup
     go_to(page, live_server, "/test/manage/registrations")
-    just_wait(page)
     page.locator("a:has(i.fas.fa-trash)").click(force=True)
     just_wait(page)
     expect(page.locator("#one")).not_to_contain_text("Admin Test")
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
-    just_wait(page)
     page.get_by_role("row", name="Admin Test Test Larp teeest").locator('.fa-trash').click()
 
     go_to(page, live_server, "/test/manage/credits")
-    just_wait(page)
     page.get_by_role("row", name="Admin Test Test Larp testet").locator('.fa-trash').click()
 
     go_to(page, live_server, "/test/manage/payments")
-    just_wait(page)
     page.get_by_role("row", name="Admin Test Wire Money").locator('.fa-trash').click()
 
 
