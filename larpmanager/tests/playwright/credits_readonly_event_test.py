@@ -47,7 +47,7 @@ def test_credits_readonly_event(pw_page: Any) -> None:
 
     # Go to event and insert a new Credit
     go_to(page, live_server, "/test/manage/credits/")
-    page.get_by_role("link", name= "New").click()
+    page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").fill("org")

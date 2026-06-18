@@ -141,6 +141,8 @@ def add_items(page: Any) -> None:
         page.locator("#one"), "item 1 sadsada box a electrical item 2 sdsadas boc b item 3sa dsad box a"
     )
 
+    page.reload()
+
 
 def bulk(page: Any) -> None:
     # test bulk

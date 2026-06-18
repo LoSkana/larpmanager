@@ -77,23 +77,27 @@ def setup(live_server: Any, page: Any) -> None:
 
 def character_inventory_pool_types(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Pool Types").click()
-    page.get_by_role("link", name= "New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Credits")
-    submit_confirm(page)
-    page.get_by_role("link", name= "New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Junk")
-    submit_confirm(page)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Credits")
+    save_modal(page, edit_iframe)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Junk")
+    save_modal(page, edit_iframe)
 
 
 def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Character Inventory").click()
 
-    page.get_by_role("link", name= "New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("NPC")
-    submit_confirm(page)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("NPC")
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
