@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, new_option, \
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, just_wait, submit_confirm, new_option, \
     submit_option, sidebar, nav, get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
@@ -224,6 +224,7 @@ def characters(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Faction", exact=True).click()
     page.get_by_role("link", name="color").first.click()
     page.get_by_role("link", name="tag").first.click()
+    just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
         "Test Character Test Teaser Test Text fassione red zapyr another blue wunder | qerfi wheel fassione blue wunder",

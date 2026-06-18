@@ -59,7 +59,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").fill("Preferences")
     edit_iframe.locator("#id_name").press("Tab")
     fill_tinymce(edit_iframe, "id_description", "What you prefer", show=False)
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # Create second section
     page.get_by_role("link", name="New").click()
@@ -68,7 +68,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").fill("Needs")
     edit_iframe.locator("#id_name").press("Tab")
     fill_tinymce(edit_iframe, "id_description", "What you need", show=False)
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # Check reordering
     expect_normalized(page, page.locator("#registration_sections_wrapper"), "Preferences Needs")
@@ -89,7 +89,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.locator("#select2-id_section-container").click()
     edit_iframe.get_by_role("searchbox").fill("pre")
     edit_iframe.get_by_role("option", name="Preferences").click()
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # Second question for second section
     page.get_by_role("link", name="New").click()
@@ -103,7 +103,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.locator("#select2-id_section-container").click()
     edit_iframe.get_by_role("searchbox").fill("nee")
     edit_iframe.get_by_role("option", name="Needs").click()
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # Check signup
     go_to(page, live_server, "/test/register")
@@ -121,9 +121,10 @@ def test_orga_section_form(pw_page: Any) -> None:
     page.locator("#registration_questions_needs").locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect(edit_iframe.locator("#select2-id_section-container")).to_match_aria_snapshot("- textbox \"Needs\"")
+    save_modal(page, edit_iframe)
 
     # Reorder sections, check they are updated
-    page.get_by_role("link", name="Sections").click()
+    sidebar(page, "Sections")
     page.locator(".fa-arrow-up").click()
 
     go_to(page, live_server, "/test/register")
@@ -146,7 +147,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Depends")
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # Select ticket as dependent
     page.get_by_role("link", name="Form").click()
@@ -155,7 +156,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").click()
     edit_iframe.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").fill("de")
     edit_iframe.get_by_role("option", name="Test Larp (Standard) Depends").click()
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # Check signup
     go_to(page, live_server, "/test/register/")
@@ -186,7 +187,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # check allowed
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Sections").click()
+    sidebar(page, "Sections")
     page.locator(".fa-arrow-up").click()
 
     sidebar(page, "Form")
@@ -196,7 +197,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
     edit_iframe.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").fill("ad")
     edit_iframe.get_by_role("option", name="Admin Test").click()
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     sidebar(page, "Registrations")
     page.get_by_role("link", name="Food").click()
@@ -215,8 +216,8 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.get_by_role("searchbox").fill("user")
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
-    check_feature(page, "Navigation")
-    check_feature(page, "Registrations")
+    check_feature(edit_iframe, "Navigation")
+    check_feature(edit_iframe, "Registrations")
     save_modal(page, edit_iframe)
 
     # login as user
@@ -228,7 +229,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     expect(page.get_by_role("link", name="sleep")).not_to_be_visible()
 
     page.get_by_role("link", name="Food").click()
-
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Depends SADSA")
 
     page.locator(".fa-edit").click()
@@ -268,7 +269,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # set up question
     sidebar(page, "Form")
@@ -280,7 +281,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("aa")
     edit_iframe.get_by_role("option", name="aaaaaccc (P)").click()
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # delete sign up
     sidebar(page, "Registrations")
@@ -306,7 +307,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Character").click()
-    edit_iframe.get_by_role("button", name="Confirm").click()
+    save_modal(page, edit_iframe)
 
     # check it is visible
     go_to(page, live_server, "/test/register")

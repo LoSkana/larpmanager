@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import just_wait, go_to, login_orga, submit_confirm, expect_normalized, get_modal_iframe, \
-    save_modal
+    save_modal, fill_tinymce
 
 pytestmark = pytest.mark.e2e
 
@@ -74,8 +74,7 @@ def test_exe_events_run(pw_page: Any) -> None:
     edit_iframe.locator("#id_form1-name").fill("Prova Event")
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#slug").fill("prova")
-    frame = edit_iframe.frame_locator("iframe.tox-edit-area__iframe")
-    frame.locator("body").fill("sadsadasdsaas")
+    fill_tinymce(edit_iframe, "id_form1-description", "sadsadasdsaas", False)
     edit_iframe.locator("#id_form1-max_pg").click()
     edit_iframe.locator("#id_form1-max_pg").fill("10")
     edit_iframe.locator("#id_form2-development").select_option("1")
