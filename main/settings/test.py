@@ -53,6 +53,8 @@ LOGGING = {
 
 FORMS_URLFIELD_ASSUME_HTTPS = True
 
+TINYMCE_DISABLED = True
+
 ADMINS = [
     ('test', 'test@test.it')
 ]

@@ -116,6 +116,7 @@ class PlayerRelationshipForm(BaseModelForm):
         exclude: ClassVar[list] = ["registration"]
         widgets: ClassVar[dict] = {
             "target": EventCharacterS2Widget,
+            "text": WritingTinyMCE(),
         }
         labels: ClassVar[dict] = {"target": _("Character")}
 

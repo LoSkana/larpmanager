@@ -195,37 +195,15 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
                 raise
 
 
-def fill_tinymce(page, iframe_id, text, show = True, timeout = 10000) -> None:
-    page.wait_for_load_state("load")
-    page.wait_for_load_state("domcontentloaded")
+def fill_tinymce(page, iframe_id, text, show = True) -> None:
+    """In test setting tinymce is not rendered, just fill the textarea."""
 
     if show:
         show_link_selector = f'a.my_toggle[tog="f_{iframe_id}"]'
-        page.wait_for_selector(show_link_selector, timeout=timeout)
         show_link = page.locator(show_link_selector)
-        show_link.wait_for(state="attached", timeout=timeout)
-        show_link.scroll_into_view_if_needed()
-        just_wait(page)
         show_link.click()
-        just_wait(page)
 
-    # Wait for TinyMCE to initialize the editor instance
-    page.wait_for_function(
-        """(id) => window.tinymce && tinymce.get(id) && tinymce.get(id).initialized === true""",
-        arg=iframe_id,
-        timeout=timeout,
-    )
-
-    # Set content via TinyMCE API and mark dirty/change
-    page.evaluate(
-        """([id, html]) => {
-            const ed = tinymce.get(id);
-            ed.setContent(html);
-            ed.fire('change');
-            ed.undoManager.add();
-        }""",
-        [iframe_id, text],
-    )
+    page.locator(f'#{iframe_id}').fill(f"<p>{text}</p>")
 
 
 def _checkboxes(page: Any, check: Any = True) -> None:
@@ -256,7 +234,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click(force=True)
-    just_wait(page, big=True)
+    just_wait(page)
 
 def save_modal(page: any, frame: Any) -> None:
     submit_btn = frame.get_by_role(
@@ -358,7 +336,6 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
 
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    just_wait(page)
 
     raw_parts = []
 

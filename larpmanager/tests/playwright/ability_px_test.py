@@ -169,8 +169,6 @@ def ability(live_server: Any, page: Any) -> None:
     )
     save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
-    page.wait_for_load_state("load")
-    just_wait(page)
     page.locator("[id='u2']").locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_text("---------").click()

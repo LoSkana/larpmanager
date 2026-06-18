@@ -962,9 +962,11 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
     # Determine if TinyMCE rich text editor should be enabled
     # Based on question type requiring formatted text input
-    tinymce = False
-    if context["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
-        tinymce = True
+    tinymce = not getattr(conf_settings, "TINYMCE_DISABLED", False) and context["question"].typ in [
+        WritingQuestionType.TEASER,
+        WritingQuestionType.SHEET,
+        BaseQuestionType.EDITOR,
+    ]
 
     # Initialize character counter HTML for length validation
     counter = ""

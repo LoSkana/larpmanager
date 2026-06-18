@@ -123,6 +123,7 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     # Add TinyMCE editor configuration
     context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
     context["TINYMCE_JS_URL"] = conf_settings.TINYMCE_JS_URL
+    context["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
 
     # Add current request function name for debugging/analytics
     if request and request.resolver_match:
