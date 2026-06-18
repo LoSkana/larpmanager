@@ -28,8 +28,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, submit_confirm, expect_normalized, get_modal_iframe, \
-    save_modal, fill_tinymce
+from larpmanager.tests.utils import fill_date, just_wait, go_to, login_orga, submit_confirm, expect_normalized, \
+    get_modal_iframe, save_modal, fill_tinymce
 
 pytestmark = pytest.mark.e2e
 
@@ -50,12 +50,8 @@ def test_exe_runs_new_session(pw_page: Any) -> None:
     page.get_by_role("option", name="Test Larp").click()
     just_wait(page)
 
-    page.locator("#id_start").fill("2060-01-10")
-    just_wait(page)
-    page.locator("#id_start").click()
-    page.locator("#id_end").fill("2060-01-12")
-    just_wait(page)
-    page.locator("#id_end").click()
+    fill_date(page, "#id_start", "2060-01-10")
+    fill_date(page, "#id_end", "2060-01-12")
     submit_confirm(page)
 
     # After saving, we are redirected to the events list
@@ -79,12 +75,8 @@ def test_exe_events_run(pw_page: Any) -> None:
     edit_iframe.locator("#id_form1-max_pg").fill("10")
     edit_iframe.locator("#id_form2-development").select_option("1")
     edit_iframe.locator("#id_form2-registration_status").select_option("o")
-    edit_iframe.locator("#id_form2-start").fill("2055-06-11")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").click()
-    edit_iframe.locator("#id_form2-end").fill("2055-06-13")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").click()
+    fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2055-06-13")
     save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator("#one"), "Prova Event")

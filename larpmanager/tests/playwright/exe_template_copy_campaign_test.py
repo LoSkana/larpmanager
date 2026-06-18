@@ -30,10 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
-    _checkboxes, \
-    fill_tinymce, \
-    get_modal_iframe, save_modal
+from larpmanager.tests.utils import fill_date, just_wait, check_feature, go_to, login_orga, submit_confirm, \
+    expect_normalized, _checkboxes, fill_tinymce, get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -85,12 +83,8 @@ def template(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#slug").fill("fromtemplate")
     # the template should be auto-selected
-    edit_iframe.locator("#id_form2-start").fill("2050-01-01")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").click()
-    edit_iframe.locator("#id_form2-end").fill("2050-01-03")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").click()
+    fill_date(edit_iframe, "#id_form2-start", "2050-01-01")
+    fill_date(edit_iframe, "#id_form2-end", "2050-01-03")
     save_modal(page, edit_iframe)
 
     # check roles
@@ -132,8 +126,8 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.get_by_role("searchbox").fill("user")
     edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
-    check_feature(page, "Navigation")
-    check_feature(page, "Factions")
+    check_feature(edit_iframe, "Navigation")
+    check_feature(edit_iframe, "Factions")
     save_modal(page, edit_iframe)
 
     # give ability xp
@@ -184,12 +178,8 @@ def copy(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").fill("copy")
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#slug").fill("copy")
-    edit_iframe.locator("#id_form2-start").fill("2050-01-01")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").click()
-    edit_iframe.locator("#id_form2-end").fill("2050-01-03")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").click()
+    fill_date(edit_iframe, "#id_form2-start", "2050-01-01")
+    fill_date(edit_iframe, "#id_form2-end", "2050-01-03")
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/copy/manage/features/copy/on")
@@ -236,12 +226,8 @@ def campaign(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.get_by_role("option", name="Test Larp", exact=True).click()
-    edit_iframe.locator("#id_form2-start").fill("2050-01-01")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").click()
-    edit_iframe.locator("#id_form2-end").fill("2050-01-03")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").click()
+    fill_date(edit_iframe, "#id_form2-start", "2050-01-01")
+    fill_date(edit_iframe, "#id_form2-end", "2050-01-03")
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/campaign/manage/characters/")

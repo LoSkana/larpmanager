@@ -217,7 +217,7 @@ def create_character_with_long_editor_answer(page: Any, live_server: Any) -> Non
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("popup test character")
     # Fill the editor writing question with a long answer
-    editor_id = _get_que_textarea_id(page)
+    editor_id = _get_que_textarea_id(edit_iframe)
     fill_tinymce(edit_iframe, editor_id, LONG_HTML_CHAR_EDITOR)
     save_modal(page, edit_iframe)
 

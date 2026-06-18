@@ -30,8 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, submit_confirm, \
-    sidebar, save_modal
+from larpmanager.tests.utils import fill_date, just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, \
+    submit_confirm, sidebar, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -305,12 +305,8 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("te")
     edit_iframe.get_by_role("option", name="Test Larp").click()
-    edit_iframe.locator("#id_form2-start").fill("2045-06-11")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").click()
-    edit_iframe.locator("#id_form2-end").fill("2045-06-13")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").click()
+    fill_date(edit_iframe, "#id_form2-start", "2045-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2045-06-13")
     save_modal(page, edit_iframe)
 
     # check we have for now the same factions

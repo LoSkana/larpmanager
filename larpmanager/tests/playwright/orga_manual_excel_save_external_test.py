@@ -85,30 +85,14 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # test char finder
     fill_tinymce(edit_iframe, "id_teaser", "good friends with ")
-    just_wait(edit_iframe)
-    frame_locator = edit_iframe.frame_locator("iframe#id_teaser_ifr")
-    editor = frame_locator.locator("body#tinymce")
-
-    editor.evaluate("""
-    el => {
-        const range = document.createRange();
-        const sel = window.getSelection();
-        range.selectNodeContents(el);
-        range.collapse(false);
-        sel.removeAllRanges();
-        sel.addRange(range);
-    }
-    """)
-    just_wait(edit_iframe)
+    editor = edit_iframe.locator("#id_teaser")
     editor.press(" ")
-    just_wait(edit_iframe)
     editor.press("#")
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.locator(".select2-results__option").first.click()
     just_wait(edit_iframe)
-
     save_modal(page, edit_iframe)
-    just_wait(page)
+
     expect_normalized(page,
         page.locator("#one"),
         "Test Character2 Test Teaser + 2 Test Text ff Another good friends with #1",

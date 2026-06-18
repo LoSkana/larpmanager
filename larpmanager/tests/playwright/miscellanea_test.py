@@ -34,6 +34,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import (
     check_feature,
     expect_normalized,
+    fill_date,
     go_to,
     just_wait,
     login_orga,
@@ -107,12 +108,8 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").fill("Test Access")
     edit_iframe.locator("#id_form2-development").select_option("1")
     edit_iframe.locator("#id_form2-registration_status").select_option("o")
-    edit_iframe.locator("#id_form2-start").fill("2055-06-11")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").click()
-    edit_iframe.locator("#id_form2-end").fill("2055-06-13")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").click()
+    fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2055-06-13")
     save_modal(page, edit_iframe)
 
     # Verify we're on the new event

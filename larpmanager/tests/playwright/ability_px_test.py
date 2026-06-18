@@ -425,10 +425,10 @@ def delivery_auto_populate(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="Test Larp").click()
 
     # Confirm the form
-    save_modal(page, edit_iframe)
+    submit_confirm(edit_iframe)
 
     # Resubmit with auto-populated characters
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator('[id="u2"]'), "5 Test Character")
 

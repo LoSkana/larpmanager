@@ -35,6 +35,7 @@ import pytest
 
 from larpmanager.tests.utils import (
     expect_normalized,
+    fill_date,
     get_modal_iframe,
     go_to,
     just_wait,
@@ -99,15 +100,8 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#id_form2-development").select_option("1")
     edit_iframe.locator("#id_form2-registration_status").select_option("o")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").scroll_into_view_if_needed()
-    edit_iframe.locator("#id_form2-start").fill("2050-06-11")
-    edit_iframe.locator("#id_form2-start").click()
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").scroll_into_view_if_needed()
-    edit_iframe.locator("#id_form2-end").fill("2050-06-13")
-    edit_iframe.locator("#id_form2-end").click()
-    just_wait(edit_iframe)
+    fill_date(edit_iframe, "#id_form2-start", "2050-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2050-06-13")
     save_modal(page, edit_iframe)
 
     # Set ticket price to 70 for second event

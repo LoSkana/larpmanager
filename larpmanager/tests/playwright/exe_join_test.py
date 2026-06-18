@@ -30,8 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, get_modal_iframe, go_to, just_wait, load_image, login_orga, \
-    submit, submit_confirm, save_modal
+from larpmanager.tests.utils import expect_normalized, fill_date, get_modal_iframe, go_to, just_wait, load_image, \
+    login_orga, submit, submit_confirm, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -97,19 +97,15 @@ def test_exe_join(pw_page: Any) -> None:
     # Step 1: create event
     go_to(page, live_server, "manage/events")
     page.get_by_role("link", name="Nuovo evento").click()
-    page.locator("#id_form1-name").fill("Prova Event")
-    page.locator("#slug").fill("prova")
-    page.locator("#id_form1-max_pg").fill("10")
-    page.locator("#id_form2-development").select_option("1")
-    page.locator("#id_form2-registration_status").select_option("o")
-    page.locator("#id_form2-start").fill("2055-06-11")
-    just_wait(page)
-    page.locator("#id_form2-start").click()
-    page.locator("#id_form2-end").fill("2055-06-13")
-    just_wait(page)
-    page.locator("#id_form2-end").click()
-    just_wait(page)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").fill("Prova Event")
+    edit_iframe.locator("#slug").fill("prova")
+    edit_iframe.locator("#id_form1-max_pg").fill("10")
+    edit_iframe.locator("#id_form2-development").select_option("1")
+    edit_iframe.locator("#id_form2-registration_status").select_option("o")
+    fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2055-06-13")
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Creazione eventi")).to_contain_text("Fatto")

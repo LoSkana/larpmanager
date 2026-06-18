@@ -70,7 +70,8 @@ def expense(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_exp").select_option("g")
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("dsadas")
-    save_modal(page, edit_iframe)
+    submit_confirm(edit_iframe)
+
     go_to(page, live_server, "/test/manage/expenses")
     page.get_by_role("link", name="Approve").click()
 
@@ -120,16 +121,15 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
 def submit_membership(live_server: Any, page: Any) -> None:
     # Test membership
     go_to(page, live_server, "/manage/features/membership/on")
+
+    # setup membership text
     go_to(page, live_server, "/manage/texts")
-    just_wait(page)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-
     fill_tinymce(edit_iframe, "id_text", "Ciao {{ member.name }}!", show=False)
-
-    edit_iframe.locator("#main_form").click()
     edit_iframe.locator("#id_typ").select_option("m")
     save_modal(page, edit_iframe)
+
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)

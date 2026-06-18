@@ -390,6 +390,14 @@ def just_wait(page, big=False):
     page.wait_for_load_state("domcontentloaded")
 
 
+def fill_date(locator, selector, value):
+    """Fill a date_p input by setting value via JS, bypassing the datetimepicker popup."""
+    locator.locator(selector).evaluate(
+        "(el, v) => { el.value = v; el.dispatchEvent(new Event('change', {bubbles: true})); }",
+        value,
+    )
+
+
 class FrameLocatorWithPage:
     """Wraps a FrameLocator with the real Page so helpers can call keyboard/wait methods."""
 

@@ -194,7 +194,8 @@ def pw_page(
     )
     page = context.new_page()
     base_url = live_server.url
-    page.set_default_timeout(5000)
+    timeout = 15000 if is_pycharm else 5000
+    page.set_default_timeout(timeout)
 
     def on_response(response: Response) -> None:
         error_status = 500

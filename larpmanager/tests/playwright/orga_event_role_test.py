@@ -62,8 +62,8 @@ def test_orga_event_role(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.get_by_role("searchbox").fill("us")
     edit_iframe.get_by_role("option", name="User Test -").click()
-    check_feature(page, "Configuration")
-    check_feature(page, "Accounting")
+    check_feature(edit_iframe, "Configuration")
+    check_feature(edit_iframe, "Accounting")
     save_modal(page, edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Event (Configuration), Accounting (Accounting)")
 

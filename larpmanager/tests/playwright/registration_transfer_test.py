@@ -34,6 +34,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     expect_normalized,
+    fill_date,
     get_modal_iframe,
     go_to,
     just_wait,
@@ -82,15 +83,8 @@ def create_event_a(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#id_form2-development").select_option("1")
     edit_iframe.locator("#id_form2-registration_status").select_option("o")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").scroll_into_view_if_needed()
-    edit_iframe.locator("#id_form2-start").fill("2055-06-11")
-    edit_iframe.locator("#id_form2-start").click()
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").scroll_into_view_if_needed()
-    edit_iframe.locator("#id_form2-end").fill("2055-06-13")
-    edit_iframe.locator("#id_form2-end").click()
-    just_wait(edit_iframe)
+    fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2055-06-13")
     save_modal(page, edit_iframe)
 
     # Create ticket with price and limit
@@ -189,15 +183,8 @@ def create_event_b(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#id_form2-development").select_option("1")
     edit_iframe.locator("#id_form2-registration_status").select_option("o")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-start").scroll_into_view_if_needed()
-    edit_iframe.locator("#id_form2-start").fill("2055-07-11")
-    edit_iframe.locator("#id_form2-start").click()
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_form2-end").scroll_into_view_if_needed()
-    edit_iframe.locator("#id_form2-end").fill("2055-07-13")
-    edit_iframe.locator("#id_form2-end").click()
-    just_wait(edit_iframe)
+    fill_date(edit_iframe, "#id_form2-start", "2055-07-11")
+    fill_date(edit_iframe, "#id_form2-end", "2055-07-13")
     save_modal(page, edit_iframe)
 
 
@@ -312,7 +299,7 @@ def verify_transfer(page: Any, live_server: Any) -> None:
     expect(edit_iframe.locator("#id_que_u8")).to_have_value("Vegetarian")
 
     # Verify t-shirt size (Medium)
-    expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "Large (10€)")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "Large (10€)")
 
     # Verify workshop selections (Combat and Crafting)
     expect(edit_iframe.get_by_role("checkbox", name="Combat (15€)")).to_be_checked()

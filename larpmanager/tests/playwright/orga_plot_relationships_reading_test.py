@@ -168,8 +168,8 @@ def relationships(live_server: Any, page: Any) -> None:
     expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
-    go_to(page, live_server, "/test/manage/characters/#")
-    just_wait(page)
+    go_to(page, live_server, "/test/manage/characters/")
+
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     just_wait(page, big=True)

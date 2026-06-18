@@ -90,6 +90,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     # Check signup accounting
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
+    just_wait(page)  # wait for accounting load TODO
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 8 40 60 100 60")
 
 
@@ -110,6 +111,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check signup accounting
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
+    just_wait(page) # wait for accounting load TODO
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 100 100 60 40")
 
     # Check accounting
@@ -129,7 +131,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check accounting
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
-    just_wait(page)
+    just_wait(page) # wait for accounting load TODO
     expect_normalized(page, page.locator("#one"), "Admin Test Standard -20 100 80 20 40 40")
 
     # Perform save
@@ -141,6 +143,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     just_wait(page)
 
     page.get_by_role("link", name="accounting", exact=True).click()
+    just_wait(page)  # wait for accounting load TODO
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
 
     # Check accounting
