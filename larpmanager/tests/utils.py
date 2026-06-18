@@ -265,9 +265,13 @@ def save_modal(page: any, frame: Any) -> None:
     )
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
+    url_before = page.url
     count_before = page.evaluate("() => window._datatablesRefreshCount || 0")
     submit_btn.click(force=True)
-    page.wait_for_function(f"() => (window._datatablesRefreshCount || 0) > {count_before}", timeout=10000)
+    page.wait_for_function(
+        f"() => (window._datatablesRefreshCount || 0) > {count_before} || window.location.href !== {repr(url_before)}",
+        timeout=10000,
+    )
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:

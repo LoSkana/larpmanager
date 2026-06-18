@@ -59,7 +59,7 @@ def test_user_new_ticket_orga_bulk(pw_page: Any) -> None:
 def bulk_writing(live_server: Any, page: Any) -> None:
     # set feature
     go_to(page, live_server, "test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()
@@ -179,6 +179,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # test bulk set quest
+    page.reload()
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing_list td:nth-child(5)").click()
     page.locator("#objs_9").select_option("u2")
@@ -212,6 +213,7 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # test bulk set type
+    page.reload()
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing td:nth-child(5)").click()
     page.get_by_role("link", name="Execute").click()
@@ -219,6 +221,7 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "swor 2 1")
 
     # test bulk change type
+    page.reload()
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing td:nth-child(5)").click()
     page.locator("#objs_10").select_option("u1")
@@ -334,7 +337,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
 
 def new_ticket(live_server: Any, page: Any) -> None:
     # add feature for ticket for new players
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="New player").check()
     submit_confirm(page)
 
@@ -376,7 +379,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # add feature also to this
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="New player").check()
     submit_confirm(page)
 

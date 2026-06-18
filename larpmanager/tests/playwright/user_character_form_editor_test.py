@@ -287,8 +287,9 @@ def character(page: Any, live_server: Any) -> None:
     # approve char
     go_to(page, live_server, "/test/manage/characters")
     page.locator('[id="u3"]').locator(".fa-edit").click()
-    page.locator("#id_status").select_option("a")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_status").select_option("a")
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Your character is: my character")
@@ -345,9 +346,10 @@ def player_relationships(page: Any, live_server: Any) -> None:
 
     # Edit the relationship and update the text
     page.locator("#player_relationships").locator(".fa-edit").click()
-    just_wait(page)
-    fill_tinymce(page, "id_text", "updated relationship text", show=False)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    just_wait(edit_iframe)
+    fill_tinymce(edit_iframe, "id_text", "updated relationship text", show=False)
+    save_modal(page, edit_iframe)
 
     # Verify updated text
     expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) updated relationship text")

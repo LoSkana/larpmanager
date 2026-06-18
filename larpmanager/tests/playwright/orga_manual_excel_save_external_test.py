@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      logout,
                                      submit_confirm,
-                                     get_modal_iframe, save_modal,
+                                     get_modal_iframe, save_modal, sidebar,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -50,7 +50,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # prepare
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     submit_confirm(page)
 
@@ -147,14 +147,15 @@ def excel(page: Any, live_server: Any) -> None:
 
     # test manual save
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    fill_tinymce(page, "id_text", "ciaoooo")
-    frame_locator = page.frame_locator("iframe#id_text_ifr")
+    edit_iframe = get_modal_iframe(page)
+    fill_tinymce(edit_iframe, "id_text", "ciaoooo")
+    frame_locator = edit_iframe.frame_locator("iframe#id_text_ifr")
     editor = frame_locator.locator("body#tinymce")
     editor.press("ControlOrMeta+s")
     just_wait(page)
 
     # check by reload
-    page.get_by_role("link", name="Characters").click()
+    page.reload()
     expect_normalized(page,
         page.locator("#one"),
         "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1 ciaoooo",
@@ -162,8 +163,9 @@ def excel(page: Any, live_server: Any) -> None:
 
     # check in page
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    page.locator('a.my_toggle[tog="f_id_text"]').click()
-    expect_normalized(page, page.locator("#one"), "good friends with #1 ciaoooo")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator('a.my_toggle[tog="f_id_text"]').click()
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "good friends with #1 ciaoooo")
 
 
 def external(page: Any, live_server: Any) -> None:
@@ -195,9 +197,10 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     page1 = context.new_page()
     page1.goto(server + "/test/manage/characters/u1/edit/")
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    just_wait(page)
-    expect_normalized(page,
-        page.locator("#test-larp"),
+    edit_iframe = get_modal_iframe(page)
+    just_wait(edit_iframe)
+    expect_normalized(edit_iframe,
+        edit_iframe.locator("#test-larp"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )
 

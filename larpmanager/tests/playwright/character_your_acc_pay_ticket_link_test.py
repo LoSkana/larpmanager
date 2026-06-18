@@ -180,7 +180,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
 def check_character_your_link(page: Any, live_server: Any) -> None:
     # Test character your link
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registrations").click()
@@ -227,7 +227,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
 
     # set up payments
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
@@ -265,7 +265,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
 def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     # Add first event factions
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Factions").check()
     submit_confirm(page)
     page.get_by_role("link", name="New").click()
@@ -293,7 +293,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 
     # add second event in campaing
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Campaign").check()
     submit_confirm(page)
     page.get_by_role("link", name="Events").click()
@@ -314,7 +314,6 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check we have for now the same factions
-    go_to(page, live_server, "/second/manage/")
     sidebar(page, "Factions")
     expect_normalized(page, page.locator("#one"), "primaaa Primary tranver Transversal")
 
@@ -367,7 +366,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
 def accounting_refund(page: Any, live_server: Any) -> None:
     # activate features
     go_to(page, live_server, "/manage")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Tokens").check()
     page.get_by_role("checkbox", name="Credits").check()
     page.get_by_role("checkbox", name="Refunds").check()

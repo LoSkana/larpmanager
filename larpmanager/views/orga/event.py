@@ -122,6 +122,8 @@ def _full_event_edit_success_response(
 ) -> HttpResponse:
     """Return the response for a successful full_event_edit save."""
     if is_frame:
+        if context.get("is_creation"):
+            context["redirect_url"] = reverse("manage", kwargs={"event_slug": saved_run.get_slug()})
         return render(request, "elements/dashboard/form_success.html", context)
 
     if is_executive and not context.get("is_creation"):

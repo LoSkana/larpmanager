@@ -81,14 +81,15 @@ def test_user_pdf(pw_page: Any) -> None:
     # add the relationship from Test Character (u1) to Pdf Rel Character (u2)
     go_to(page, live_server, "/test/manage/characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
     just_wait(page)
     # select Pdf Rel Character from the combobox so the JS creates the rel_u2 section
-    page.locator("#select2-new_rel_select-container").click()
-    page.get_by_role("searchbox").fill("pdf")
-    page.get_by_role("option", name="Pdf Rel Character").click()
-    just_wait(page)
-    fill_tinymce(page, "rel_u2", "pdf relationship text")
-    submit_confirm(page)
+    edit_iframe.locator("#select2-new_rel_select-container").click()
+    edit_iframe.get_by_role("searchbox").fill("pdf")
+    edit_iframe.get_by_role("option", name="Pdf Rel Character").click()
+    just_wait(edit_iframe)
+    fill_tinymce(edit_iframe, "rel_u2", "pdf relationship text")
+    save_modal(page, edit_iframe)
 
     # Set page_css so the "complete sheet" button is shown on the character page
     go_to(page, live_server, "/test/manage/pdf/")

@@ -51,7 +51,7 @@ def test_upload_download(pw_page: Any) -> None:
 
     # prepare
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     check_feature(page, "Factions")
     check_feature(page, "Plots")
@@ -121,7 +121,7 @@ def full(page: Any) -> None:
 
 
 def relationships(page: Any) -> None:
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Relationships")
     submit_confirm(page)
     page.get_by_role("link", name="Upload").click()
@@ -156,9 +156,11 @@ def plots(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "plott conceptt textt")
     page.locator(".fa-edit").click()
-    page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
-    expect_normalized(page, page.locator("#id_char_role_2_tr"), "characcter")
-    expect_normalized(page, page.locator("#id_char_role_2_tr"), "super start")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
+    expect_normalized(edit_iframe, page.locator("#id_char_role_2_tr"), "characcter")
+    expect_normalized(edit_iframe, page.locator("#id_char_role_2_tr"), "super start")
+
     go_to(page, live_server, "/test/manage/plots/")
     check_download(page, "Download")
 

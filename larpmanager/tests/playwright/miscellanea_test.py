@@ -119,7 +119,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testaccess/manage/")
 
     # Enable Characters feature
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     submit_confirm(page)
 

@@ -51,7 +51,7 @@ def test_plot_relationship_reading(pw_page: Any) -> None:
     # prepare
 
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     check_feature(page, "Plots")
     check_feature(page, "Relationships")
@@ -98,7 +98,7 @@ def reading(live_server: Any, page: Any) -> None:
     )
 
     # test reading with factions
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Factions")
     submit_confirm(page)
 
@@ -229,37 +229,39 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check it is the same
     page.locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
     # Wait for the toggle element to be ready
-    locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
+    locator = edit_iframe.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova second char role")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "asadsadas wwwww prova second char role")
     locator.click()
 
     # change it
-    fill_tinymce(page, "id_char_role_1", "prova222")
-    submit_confirm(page)
+    fill_tinymce(edit_iframe, "id_char_role_1", "prova222")
+    save_modal(page, edit_iframe)
 
     # check it
     page.locator("#one").get_by_role("link", name="Characters").click()
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
     page.locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
     # Wait for the toggle element to be ready
-    locator = page.locator('a.my_toggle[tog="f_id_char_role_1"]')
+    locator = edit_iframe.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(page, page.locator("#one"), "asadsadas wwwww prova222 second char role")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "asadsadas wwwww prova222 second char role")
 
     # remove first char
-    page.get_by_role("listitem", name="Test Character").locator("span").click()
+    edit_iframe.get_by_role("listitem", name="Test Character").locator("span").click()
     # add another char
-    searchbox = page.get_by_role("searchbox")
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.fill("pro")
     # Wait for the option to appear and click it
-    option = page.get_by_role("option", name="prova")
+    option = edit_iframe.get_by_role("option", name="prova")
     option.wait_for(state="visible")
     option.click()
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
     # check
     page.locator("#one").get_by_role("link", name="Characters").click()
@@ -295,18 +297,19 @@ def plots_character(live_server: Any, page: Any) -> None:
     # test adding them to character
     sidebar(page, "Characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    searchbox = page.get_by_role("searchbox")
+    edit_iframe = get_modal_iframe(page)
+    searchbox = edit_iframe.get_by_role("searchbox")
     searchbox.click()
     searchbox.fill("gag")
     # Wait for search results to appear and click first option
-    page.locator(".select2-results__option").first.wait_for(state="visible")
-    page.locator(".select2-results__option").first.click()
+    edit_iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    edit_iframe.locator(".select2-results__option").first.click()
 
     searchbox.fill("bibi")
     # Wait for search results to appear and click first option
-    page.locator(".select2-results__option").first.wait_for(state="visible")
-    page.locator(".select2-results__option").first.click()
-    submit_confirm(page)
+    edit_iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    edit_iframe.locator(".select2-results__option").first.click()
+    save_modal(page, edit_iframe)
 
     just_wait(page)
 
@@ -315,20 +318,22 @@ def plots_character(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator('[id="u1"]'), "gaga bibi")
 
     page.locator('[id="u1"]').locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
 
     # remove third
-    page.get_by_role("listitem", name="bibi").locator("span").click()
+    edit_iframe.get_by_role("listitem", name="bibi").locator("span").click()
 
     # change second
-    page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show").click()
-    fill_tinymce(page, "id_pl_2", "ffff")
-    submit_confirm(page)
+    edit_iframe.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show").click()
+    fill_tinymce(edit_iframe, "id_pl_2", "ffff")
+    save_modal(page, edit_iframe)
 
     # check
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    page.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
-    expect_normalized(page, page.locator("#id_pl_2_tr"), "gaga <p>ffff</p> ffff")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
+    expect_normalized(edit_iframe, edit_iframe.locator("#id_pl_2_tr"), "gaga <p>ffff</p> ffff")
+    save_modal(page, edit_iframe)
 
     page.locator("#one").get_by_role("link", name="Plots").click()
     expect_normalized(page, page.locator('[id="u1"]'), "gaga")
@@ -336,9 +341,10 @@ def plots_character(live_server: Any, page: Any) -> None:
 
     # check second, then remove
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    page.get_by_role("listitem", name="gaga").locator("span").click()
-    page.get_by_role("link", name="Instructions").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("listitem", name="gaga").locator("span").click()
+    edit_iframe.get_by_role("link", name="Instructions").click()
+    save_modal(page, edit_iframe)
 
     expect(page.locator('[id="u1"]')).not_to_contain_text("gaga")
 
@@ -382,25 +388,25 @@ def auto_relationships_setup(live_server: Any, page: Any) -> None:
     # relationship for one character per source (sheet/faction/plot)
     sidebar(page, "Characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    just_wait(page, big=True)
+    edit_iframe = get_modal_iframe(page)
 
-    fill_tinymce(page, "id_text", "mentions @3 and @4")
+    fill_tinymce(edit_iframe, "id_text", "mentions @3 and @4")
 
     for name, target_uuid, manual_text in (
         ("AutoSheetA", "u3", "manual sheet text"),
         ("AutoFactionA", "u5", "manual faction text"),
         ("AutoPlotA", "u7", "manual plot text"),
     ):
-        page.locator("#select2-new_rel_select-container").click()
-        searchbox = page.get_by_role("searchbox").nth(2)
+        edit_iframe.locator("#select2-new_rel_select-container").click()
+        searchbox = edit_iframe.get_by_role("searchbox").nth(2)
         searchbox.fill(name)
-        option = page.get_by_role("option", name=name)
+        option = edit_iframe.get_by_role("option", name=name)
         option.wait_for(state="visible")
         option.click()
-        page.wait_for_timeout(2000)
-        fill_tinymce(page, f"rel_{target_uuid}", manual_text)
+        edit_iframe.wait_for_timeout(2000)
+        fill_tinymce(edit_iframe, f"rel_{target_uuid}", manual_text)
 
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
 
 def auto_relationships_faction(live_server: Any, page: Any) -> None:

@@ -24,6 +24,7 @@ import logging
 import os
 import re
 import subprocess
+import sys
 from collections.abc import Generator, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
@@ -166,7 +167,10 @@ def pw_page(
     live_server: ContextList,
 ) -> Generator[tuple[Page, str, BrowserContext], None, None]:
     """Prepares browser, context and finally page, for playwright tests."""
-    headed = pytestconfig.getoption("--headed") or os.getenv("PYCHARM_DEBUG", "0") == "1"
+    is_pycharm = os.getenv("PYCHARM_HOSTED") == "1" or any(
+        "_jb_pytest_runner" in arg or "pycharm" in arg.lower() for arg in sys.argv
+    )
+    headed = pytestconfig.getoption("--headed") or is_pycharm
 
     # Check if running in CI/GitHub Actions
     is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"

@@ -47,7 +47,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     go_to(page, live_server, "test/manage")
 
     # activate features
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()

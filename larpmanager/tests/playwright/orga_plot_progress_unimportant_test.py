@@ -51,7 +51,7 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
     go_to(page, live_server, "test/1/manage")
 
     # Enable Plots and Progress features
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     check_feature(page, "Plots")
     check_feature(page, "Progress")
@@ -100,9 +100,10 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
 
     # Re-open the edit form and verify progress is still "Final"
     page.locator(".fa-edit").click()
-    just_wait(page)
+    edit_iframe = get_modal_iframe(page)
+    just_wait(edit_iframe)
 
-    progress_after = page.locator("#id_progress").evaluate(
+    progress_after = edit_iframe.locator("#id_progress").evaluate(
         "el => el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : ''"
     )
     assert "Final" in progress_after, f"Expected 'Final' after name-only edit, got '{progress_after}'"
@@ -116,7 +117,7 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     go_to(page, live_server, "test/1/manage")
 
     # Enable Characters and Plots features
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     check_feature(page, "Plots")
     submit_confirm(page)

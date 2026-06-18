@@ -51,7 +51,7 @@ def test_orga_form_writing_config(pw_page: Any) -> None:
 
 def feature_fields(page: Any) -> None:
     # set feature
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
 
@@ -104,7 +104,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     )
 
     # set experience point
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Experience points").check()
     submit_confirm(page)
 
@@ -134,7 +134,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     )
 
     # remove experience
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Experience points").uncheck()
     submit_confirm(page)
 
@@ -147,7 +147,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
 
 def form_other_writing(page: Any) -> None:
     # add other writing elements
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()
     page.get_by_role("checkbox", name="Quests and Traits").check()

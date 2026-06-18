@@ -335,16 +335,18 @@ def orga_check(live_server: Any, page: Any) -> None:
     page.get_by_role("checkbox", name="many (20€)").uncheck()
     submit_confirm(page)
     page.locator(".fa-edit").click()
-    expect(page.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
-    expect(page.get_by_role("checkbox", name="few (30€)")).to_be_checked()
-
+    edit_iframe = get_modal_iframe(page)
+    expect(edit_iframe.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
+    expect(edit_iframe.get_by_role("checkbox", name="few (30€)")).to_be_checked()
     # orga removes all multiple choice selections
-    page.get_by_role("checkbox", name="few (30€)").uncheck()
-    submit_confirm(page)
+    edit_iframe.get_by_role("checkbox", name="few (30€)").uncheck()
+    save_modal(page, edit_iframe)
+
     page.locator(".fa-edit").click()
-    expect(page.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
-    expect(page.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
-    expect(page.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
+    edit_iframe = get_modal_iframe(page)
+    expect(edit_iframe.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
+    expect(edit_iframe.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
+    expect(edit_iframe.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
 
 
 def user_signup(live_server: Any, page: Any) -> None:

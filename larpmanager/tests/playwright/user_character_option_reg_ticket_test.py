@@ -56,7 +56,7 @@ def test_user_character_option_reg_ticket(pw_page: Any) -> None:
 
 def prepare(page: Any) -> None:
     # configure event
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)

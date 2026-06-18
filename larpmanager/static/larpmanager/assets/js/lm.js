@@ -115,8 +115,12 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         }
 
         if (e.data.type === 'dashboard_form_saved') {
-            window.closeLmModal();
-            if (typeof onClose === 'function') setTimeout(onClose, 300);
+            if (e.data.redirect_url) {
+                window.location.href = e.data.redirect_url;
+            } else {
+                window.closeLmModal();
+                if (typeof onClose === 'function') setTimeout(onClose, 300);
+            }
         }
     }
     window.addEventListener('message', onIframeMessage);

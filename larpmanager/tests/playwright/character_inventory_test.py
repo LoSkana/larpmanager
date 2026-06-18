@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
-    get_modal_iframe, save_modal
+    get_modal_iframe, save_modal, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -54,7 +54,7 @@ def test_character_inventory(pw_page: Any) -> None:
 def setup(live_server: Any, page: Any) -> None:
     # activate features
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     # Event
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Character inventory").check()

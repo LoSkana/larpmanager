@@ -15,7 +15,7 @@
 {% block js2 %}
     <script>
     if (window.parent) {
-        window.parent.postMessage({type: 'dashboard_form_saved'}, '*');
+        window.parent.postMessage({type: 'dashboard_form_saved'{% if redirect_url %}, redirect_url: '{{ redirect_url }}'{% endif %}}, '*');
     }
     </script>
 {% endblock js2 %}

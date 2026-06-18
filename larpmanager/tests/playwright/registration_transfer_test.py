@@ -206,7 +206,7 @@ def copy_tickets_and_questions(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/eventb/manage/")
 
     # Activate copy
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.locator("div.feature_checkbox", has_text="Copy").locator("input[type='checkbox']").check()
     submit_confirm(page)
 

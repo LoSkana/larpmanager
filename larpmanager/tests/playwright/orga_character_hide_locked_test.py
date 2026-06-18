@@ -55,7 +55,7 @@ def test_orga_character_hide_locked(pw_page: Any) -> None:  # noqa: D103
 
     # ===== SETUP: Enable features and configs =====
     go_to(page, live_server, "test/manage")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Factions").check()
     submit_confirm(page)

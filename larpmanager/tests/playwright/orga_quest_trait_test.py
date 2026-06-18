@@ -73,7 +73,7 @@ def test_quest_trait(pw_page: Any) -> None:
 def quests(page: Any, live_server: Any) -> None:
     # Activate features
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     check_feature(page, "Casting algorithm")
     check_feature(page, "Quests and Traits")
