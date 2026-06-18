@@ -312,7 +312,7 @@ def verify_transfer(page: Any, live_server: Any) -> None:
     expect(edit_iframe.locator("#id_que_u8")).to_have_value("Vegetarian")
 
     # Verify t-shirt size (Medium)
-    expect_normalized(page, edit_iframe.locator("#main_form"), "Large (10€)")
+    expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "Large (10€)")
 
     # Verify workshop selections (Combat and Crafting)
     expect(edit_iframe.get_by_role("checkbox", name="Combat (15€)")).to_be_checked()
