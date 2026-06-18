@@ -1126,7 +1126,7 @@ def _character_relationship(
         return redirect(
             "character_relationships", event_slug=context["run"].get_slug(), character_uuid=context["char"]["uuid"]
         )
-    return render(request, "larpmanager/orga/edit.html", context)
+    return render(request, "larpmanager/member/edit.html", context)
 
 
 @login_required

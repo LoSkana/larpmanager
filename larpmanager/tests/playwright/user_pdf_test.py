@@ -160,13 +160,11 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     just_wait(page)
 
     page.get_by_role("link", name="New").click()
-    edit_iframe = get_modal_iframe(page)
-    just_wait(edit_iframe)
-    edit_iframe.locator("#select2-id_target-container").click()
-    edit_iframe.get_by_role("searchbox").fill("player")
-    edit_iframe.get_by_role("option", name="Player Rel Target").click()
-    fill_tinymce(edit_iframe, "id_text", "player relationship text", show=False)
-    save_modal(page, edit_iframe)
+    page.locator("#select2-id_target-container").click()
+    page.get_by_role("searchbox").fill("player")
+    page.get_by_role("option", name="Player Rel Target").click()
+    fill_tinymce(page, "id_text", "player relationship text", show=False)
+    submit_confirm(page)
 
     # Go to character page and verify printable sheet (which now includes relationships) still works
     go_to(page, live_server, "/test/character/u1")
