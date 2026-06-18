@@ -163,10 +163,7 @@ def ability(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("test_template")
-    edit_iframe.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
-    edit_iframe.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
-        "This text should show"
-    )
+    edit_iframe.locator("#id_name").fill("This text should show")
     save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
     page.locator("[id='u2']").locator(".fa-edit").click()

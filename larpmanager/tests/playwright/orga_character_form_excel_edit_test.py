@@ -155,16 +155,16 @@ def edit_first_character(page: Any, live_server: Any) -> None:
     """Edit character u1 (Test Character) with values for all questions."""
     go_to(page, live_server, "/test/manage/characters/")
     page.locator('[id="u1"]').get_by_role("link", name="").first.click()
-
+    edit_iframe = get_modal_iframe(page)
     # Fill all custom questions
-    page.locator("#id_que_u4").fill("Text value 1")
-    page.locator("#id_que_u5").fill("Paragraph value 1")
-    page.locator("#id_que_u6").select_option("u1")  # Option A
-    page.get_by_role("checkbox", name="Choice X").check()
-    page.get_by_role("checkbox", name="Choice Y").check()
-    fill_tinymce(page, "id_que_u8", "Advanced value 1")
+    edit_iframe.locator("#id_que_u4").fill("Text value 1")
+    edit_iframe.locator("#id_que_u5").fill("Paragraph value 1")
+    edit_iframe.locator("#id_que_u6").select_option("u1")  # Option A
+    edit_iframe.get_by_role("checkbox", name="Choice X").check()
+    edit_iframe.get_by_role("checkbox", name="Choice Y").check()
+    fill_tinymce(edit_iframe, "id_que_u8", "Advanced value 1")
 
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
 
 def create_second_character(page: Any, live_server: Any) -> None:
@@ -205,7 +205,7 @@ def inline_editing_teaser(page: Any, live_server: Any) -> None:
     # Edit u1 teaser (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Teaser").dblclick()
     just_wait(page)
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
+    page.locator("#id_teaser").fill(
         "Modified Teaser 1"
     )
     submit_confirm(page)
@@ -216,7 +216,7 @@ def inline_editing_teaser(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(3).dblclick()
     just_wait(page)
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
+    page.locator("#id_teaser").fill(
         "New Teaser 2"
     )
     submit_confirm(page)
@@ -229,7 +229,7 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
     # Edit u1 text (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text").dblclick()
     just_wait(page)
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
+    page.locator("#id_text").fill(
         "Modified Text 1"
     )
     submit_confirm(page)
@@ -240,7 +240,7 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(4).dblclick()
     just_wait(page)
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
+    page.locator("#id_text").fill(
         "New Text 2"
     )
     submit_confirm(page)
@@ -350,9 +350,7 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Advanced value 1").dblclick()
     just_wait(page)
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
-        "Text 2 modified"
-    )
+    page.locator("#id_que_u8").fill("Text 2 modified")
     submit_confirm(page)
     just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Text 2 modified")
@@ -361,9 +359,7 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(9).dblclick()
     just_wait(page)
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill(
-        "Text 2 value 2"
-    )
+    page.locator("#id_que_u8").fill("Text 2 value 2")
     submit_confirm(page)
     just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Text 2 value 2")

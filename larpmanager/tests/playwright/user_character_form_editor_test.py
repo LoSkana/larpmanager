@@ -333,23 +333,19 @@ def player_relationships(page: Any, live_server: Any) -> None:
 
     # Create new relationship toward Test Character
     page.get_by_role("link", name="New").click()
-    edit_iframe = get_modal_iframe(page)
-    just_wait(edit_iframe)
-    edit_iframe.locator("#select2-id_target-container").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
-    fill_tinymce(edit_iframe, "id_text", "my relationship text", show=False)
-    save_modal(page, edit_iframe)
-
+    page.locator("#select2-id_target-container").click()
+    page.get_by_role("searchbox").fill("te")
+    page.get_by_role("option", name="Test Character").click()
+    fill_tinymce(page, "id_text", "my relationship text", show=False)
+    submit_confirm(page)
     # Verify relationship appears in list
     expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) my relationship text")
 
     # Edit the relationship and update the text
     page.locator("#player_relationships").locator(".fa-edit").click()
-    edit_iframe = get_modal_iframe(page)
-    just_wait(edit_iframe)
-    fill_tinymce(edit_iframe, "id_text", "updated relationship text", show=False)
-    save_modal(page, edit_iframe)
+    just_wait(page)
+    fill_tinymce(page, "id_text", "updated relationship text", show=False)
+    submit_confirm(page)
 
     # Verify updated text
     expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) updated relationship text")

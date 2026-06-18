@@ -64,17 +64,13 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # change teaser
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Teaser").dblclick()
-    page.locator('iframe[title="Rich Text Area"]').content_frame.locator("html").click()
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_text("Test Teaser").click()
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Teaser + 2")
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").press("ControlOrMeta+s")
+    page.locator("#id_teaser").fill("Test Teaser + 2")
     submit_confirm(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Test Character2 Test Teaser + 2 Test Text")
 
     # change text
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text").dblclick()
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_text("Test Text").click()
-    page.locator('iframe[title="Rich Text Area"]').content_frame.get_by_label("Rich Text Area").fill("Test Text ff")
+    page.locator("#id_text").fill("Test Text ff")
     submit_confirm(page)
 
     # check by reload
@@ -130,9 +126,8 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 def excel(page: Any, live_server: Any) -> None:
     # test char finder on excel edit
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text ff").dblclick()
-    frame = page.locator('iframe[title="Rich Text Area"]').content_frame
-    frame.get_by_label("Rich Text Area").fill("Test Text ff kinda hate ")
-    frame.get_by_label("Rich Text Area").press("#")
+    page.locator("#id_text").fill("Test Text ff kinda hate ")
+    page.locator("#id_text").press("#")
     page.get_by_role("searchbox").fill("an")
     page.locator(".select2-results__option").first.click()
     just_wait(page)

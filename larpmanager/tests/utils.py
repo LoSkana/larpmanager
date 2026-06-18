@@ -201,9 +201,12 @@ def fill_tinymce(page, iframe_id, text, show = True) -> None:
     if show:
         show_link_selector = f'a.my_toggle[tog="f_{iframe_id}"]'
         show_link = page.locator(show_link_selector)
+        show_link.wait_for(state="visible")
         show_link.click()
 
-    page.locator(f'#{iframe_id}').fill(f"<p>{text}</p>")
+    input_element = page.locator(f'#{iframe_id}')
+    input_element.wait_for(state="visible")
+    input_element.fill(f"<p>{text}</p>")
 
 
 def _checkboxes(page: Any, check: Any = True) -> None:

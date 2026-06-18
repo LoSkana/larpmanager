@@ -136,8 +136,6 @@ def traits(page: Any, live_server: Any) -> None:
 
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
-    frame = page.locator('iframe[title="Rich Text Area"]').content_frame
-    frame.get_by_label("Rich Text Area").press("#")
     page.get_by_role("searchbox").fill("non")
     page.locator(".select2-results__option").first.click()
     just_wait(page)

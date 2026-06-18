@@ -158,8 +158,8 @@ def plots(live_server: Any, page: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
-    expect_normalized(edit_iframe, page.locator("#id_char_role_2_tr"), "characcter")
-    expect_normalized(edit_iframe, page.locator("#id_char_role_2_tr"), "super start")
+    expect_normalized(edit_iframe, edit_iframe.locator("#id_char_role_2_tr"), "characcter")
+    expect_normalized(edit_iframe, edit_iframe.locator("#id_char_role_2_tr"), "super start")
 
     go_to(page, live_server, "/test/manage/plots/")
     check_download(page, "Download")

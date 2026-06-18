@@ -43,6 +43,7 @@ from larpmanager.forms.utils import (
     RunRegS2Widget,
     TicketS2WidgetMulti,
     TransferTargetRunS2Widget,
+    WritingTinyMCE,
 )
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.event import Event, Run
@@ -1168,6 +1169,8 @@ class OrgaRegistrationSectionForm(BaseModelForm):
     class Meta:
         model = RegistrationSection
         exclude: ClassVar[list] = ["order"]
+
+        widgets: ClassVar[dict] = {"description": WritingTinyMCE()}
 
 
 class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):

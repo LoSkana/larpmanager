@@ -145,12 +145,13 @@ def check_orga_roles(page: Any) -> None:
     edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     checked = ["Event", "Configuration", "Texts", "Navigation"]
     for s in checked:
-        check_feature(page, s)
+        check_feature(edit_iframe, s)
     save_modal(page, edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Event (Event, Configuration), Appearance (Texts, Navigation)")
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     _check_checkboxes(checked, edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def _check_checkboxes(checked: Any, page: Any, skip_first: Any = False) -> None:
@@ -208,7 +209,7 @@ def check_exe_roles(page: Any) -> None:
     edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     checked = ["Organization", "Configuration", "Events", "Texts"]
     for s in checked:
-        check_feature(page, s)
+        check_feature(edit_iframe, s)
     save_modal(page, edit_iframe)
     expect(page.locator('[id="u2"]')).to_contain_text(
         "Organization (Organization, Configuration), Events (Events), Appearance (Texts)"
@@ -216,3 +217,4 @@ def check_exe_roles(page: Any) -> None:
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     _check_checkboxes(checked, edit_iframe)
+    save_modal(page, edit_iframe)
