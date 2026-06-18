@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     submit_confirm,
     upload,
     expect_normalized, sidebar,
-    get_modal_iframe, save_modal,
+    get_modal_iframe, save_modal, click_and_wait_question,
 )
 
 pytestmark = pytest.mark.e2e
@@ -140,7 +140,7 @@ def relationships(page: Any) -> None:
 
 
 def plots(live_server: Any, page: Any) -> None:
-    page.get_by_role("link", name="Plots").click()
+    sidebar(page, "Plots")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_first").click()
@@ -244,7 +244,7 @@ def characters(page: Any) -> None:
 
 
 def factions(page: Any) -> None:
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("faction.csv"))
@@ -274,21 +274,21 @@ def char_form(page: Any) -> None:
         "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu | trtr",
     )
     check_download(page, "Download")
-    page.get_by_role("link", name="Plot", exact=True).click()
+    click_and_wait_question(page, "Plot")
     expect_normalized(
         page, page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
     )
-    page.get_by_role("link", name="Faction", exact=True).click()
+    click_and_wait_question(page, "Faction")
     expect_normalized(
         page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
     )
-    page.locator("#one").get_by_role("link", name="Quest").click()
+    click_and_wait_question(page, "Quest")
     expect_normalized(
         page,
         page.locator("#one"),
         "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public",
     )
-    page.get_by_role("link", name="Trait", exact=True).click()
+    click_and_wait_question(page, "Trait")
     expect_normalized(
         page,
         page.locator("#one"),

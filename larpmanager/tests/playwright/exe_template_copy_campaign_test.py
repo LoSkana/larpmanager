@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_date, just_wait, check_feature, go_to, login_orga, submit_confirm, \
-    expect_normalized, _checkboxes, fill_tinymce, get_modal_iframe, save_modal
+    expect_normalized, _checkboxes, fill_tinymce, get_modal_iframe, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -204,8 +204,7 @@ def copy(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_exp_start")).to_have_value("10")
 
     go_to(page, live_server, "/copy/manage/characters/")
-    page.get_by_role("link", name="Experience").click()
-    just_wait(page)
+    click_and_wait_question(page, "Experience")
     char_row = page.locator('tr:has-text("Test Character")')
     expect_normalized(page, char_row, "12")
     expect_normalized(page, char_row, "1")
@@ -231,8 +230,7 @@ def campaign(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/campaign/manage/characters/")
-    page.get_by_role("link", name="Experience").click()
-    just_wait(page)
+    click_and_wait_question(page, "Experience")
     char_row = page.locator('tr:has-text("Test Character")').first
     expect_normalized(page, char_row, "12")
     expect_normalized(page, char_row, "1")

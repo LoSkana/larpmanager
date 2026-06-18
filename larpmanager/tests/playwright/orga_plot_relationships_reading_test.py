@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      go_to,
                                      login_orga,
                                      submit_confirm,
-                                     expect_normalized, sidebar, save_modal,
+                                     expect_normalized, sidebar, save_modal, click_and_wait_question,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -77,7 +77,7 @@ def reading(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
 
     # set prova presentation and text
-    page.get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
 
@@ -103,7 +103,7 @@ def reading(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # create faction with test character
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
@@ -118,8 +118,7 @@ def reading(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check faction main list
-    page.locator("#one").get_by_role("link", name="Characters").click()
-
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "only for testt Primary Test Character")
 
     # check reading for prova
@@ -186,7 +185,7 @@ def relationships(live_server: Any, page: Any) -> None:
 def plots(live_server: Any, page: Any) -> None:
     # create plot
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Plots").click()
+    sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
 
@@ -223,7 +222,7 @@ def plots(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check in plot list - both characters should be there
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
 
     # check it is the same
@@ -241,7 +240,7 @@ def plots(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check it
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
@@ -263,7 +262,7 @@ def plots(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww prova")
 
     # set text
@@ -310,10 +309,8 @@ def plots_character(live_server: Any, page: Any) -> None:
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
-    just_wait(page)
-
     # check there are all three
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator('[id="u1"]'), "gaga bibi")
 
     page.locator('[id="u1"]').locator(".fa-edit").click()
@@ -334,7 +331,7 @@ def plots_character(live_server: Any, page: Any) -> None:
     expect_normalized(edit_iframe, edit_iframe.locator("#id_pl_2_tr"), "gaga <p>ffff</p> ffff")
     save_modal(page, edit_iframe)
 
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator('[id="u1"]'), "gaga")
     expect(page.locator('[id="u1"]')).not_to_contain_text("bibi")
 
@@ -411,7 +408,7 @@ def auto_relationships_setup(live_server: Any, page: Any) -> None:
 def auto_relationships_faction(live_server: Any, page: Any) -> None:
     # faction citing two other characters, with the test character as member
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
@@ -429,7 +426,7 @@ def auto_relationships_faction(live_server: Any, page: Any) -> None:
 def auto_relationships_plot(live_server: Any, page: Any) -> None:
     # plot citing two other characters, in the test character's role text
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Plots").click()
+    sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()

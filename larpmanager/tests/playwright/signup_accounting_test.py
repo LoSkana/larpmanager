@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
-    expect_normalized, save_modal
+    expect_normalized, save_modal, wait_accounting_load
 
 pytestmark = pytest.mark.e2e
 
@@ -85,6 +85,7 @@ def discount(live_server: Any, page: Any) -> None:
     # check signup
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
+    wait_accounting_load(page)
     # Check for registration data with discount applied
     expect_normalized(page, page.locator("#regs_u1_Participant"), "100")
     expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
@@ -144,6 +145,7 @@ def pay(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     # Check for registration accounting data in the table
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
     expect_normalized(page, page.locator("#regs_u1_Participant"), "48")
     expect_normalized(page, page.locator("#regs_u1_Participant"), "100")

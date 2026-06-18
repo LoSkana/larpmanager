@@ -92,7 +92,7 @@ def test_faction_all(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # ========== SECTION 3: Create 9 Factions (3 Primary, 3 Transversal, 3 Secret) ==========
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
 
     # Helper to create factions
     def create_faction(typ: str, name: str, teaser: str, text: str, public_ans: str, private_ans: str) -> None:
@@ -176,7 +176,7 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Navigate to factions gallery
     page.get_by_role("link", name="Test Larp").click()
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
 
     # Verify PRIMARY and TRANSVERSAL factions are visible
     expect_normalized(page, page.locator("#one"),

@@ -31,7 +31,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.playwright.exe_accounting_test import verify
 from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
-    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal
+    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -191,14 +191,12 @@ def delivery(live_server: Any, page: Any) -> None:
 
     # check experience computation
     go_to(page, live_server, "/test/manage/characters/")
-    page.get_by_role("link", name="Experience").click()
+    click_and_wait_question(page, "Experience")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "12")
     expect_normalized(page, page.locator('[id="u1"]'), "0")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    page.wait_for_load_state("load")
-    just_wait(page)
     row = edit_iframe.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
@@ -242,8 +240,8 @@ def rules(page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check value
-    page.get_by_role("link", name="Characters").click()
-    page.get_by_role("link", name="Hit Point").click()
+    click_and_wait_question(page, "Characters")
+    click_and_wait_question(page, "Hit Point")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text 6")
 
     # remove ability
@@ -256,7 +254,6 @@ def rules(page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # recheck value
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text 2")
 
     # readd ability

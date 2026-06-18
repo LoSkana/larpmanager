@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_date, just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, \
-    submit_confirm, sidebar, save_modal
+    submit_confirm, sidebar, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -75,7 +75,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # add faction
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
@@ -84,8 +84,8 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check base
     sidebar(page, "Characters")
-    page.get_by_role("link", name="Faction", exact=True).click()
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Faction")
+    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
 
     # set faction
@@ -95,7 +95,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     just_wait(page)
 
     # check result
-    page.get_by_role("link", name="Faction", exact=True).click()
+    click_and_wait_question(page, "Faction")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text faz")
 
     # remove faction
@@ -106,7 +106,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     just_wait(page)
 
     # check result
-    page.get_by_role("link", name="Faction", exact=True).click()
+    click_and_wait_question(page, "Faction")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
 
     # add plot
@@ -117,7 +117,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     just_wait(page)
 
     # check result
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text plot")
 
     # remove plot
@@ -128,7 +128,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     just_wait(page)
 
     # check
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
 
     # set quest type

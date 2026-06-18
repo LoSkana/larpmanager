@@ -34,7 +34,7 @@ from larpmanager.tests.utils import (expect_normalized,
                                      go_to,
                                      login_orga,
                                      login_user, submit_confirm, sidebar,
-                                     get_modal_iframe, save_modal,
+                                     get_modal_iframe, save_modal, click_and_wait_question,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -89,7 +89,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # create plots, assign them to player
-    page.get_by_role("link", name="Plots").click()
+    sidebar(page, "Plots")
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -124,7 +124,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # add factions, one visible, one not
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -158,11 +158,11 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check value now
-    page.get_by_role("link", name="Characters").click()
-    page.get_by_role("link", name="Experience").click()
-    page.get_by_role("link", name="Faction", exact=True).click()
-    page.get_by_role("link", name="teeeeest").click()
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Characters")
+    click_and_wait_question(page, "Experience")
+    click_and_wait_question(page, "Faction")
+    click_and_wait_question(page, "teeeeest")
+    click_and_wait_question(page, "Plots")
     expect_normalized(page,
         page.locator("#one"),
         "Test Character 2 1 1 Test Teaser Test Text eefqq gggerwe first qweeerr",

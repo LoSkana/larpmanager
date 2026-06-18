@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     login_orga,
     sidebar,
     submit_confirm,
-    get_modal_iframe, save_modal,
+    get_modal_iframe, save_modal, click_and_wait_question,
 )
 
 pytestmark = pytest.mark.e2e
@@ -162,10 +162,8 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # Show Characters column then Stats to make stats-characters cells visible in DOM
-    page.locator("#one").get_by_role("link", name="Characters").click()
-    just_wait(page)
-    page.locator("#one").get_by_role("link", name="Stats").click()
-    just_wait(page)
+    click_and_wait_question(page, "Characters")
+    click_and_wait_question(page, "Stats")
 
     # Verify count = 2 and important = 1
     stats_cells = page.locator("#one td.stats")

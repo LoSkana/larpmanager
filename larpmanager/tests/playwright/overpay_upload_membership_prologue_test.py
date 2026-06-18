@@ -30,7 +30,7 @@ import pytest
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, \
     expect_normalized, \
-    submit_confirm, sidebar, save_modal
+    submit_confirm, sidebar, save_modal, wait_accounting_load, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -90,7 +90,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     # Check signup accounting
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
-    just_wait(page)  # wait for accounting load TODO
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 8 40 60 100 60")
 
 
@@ -111,7 +111,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check signup accounting
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
-    just_wait(page) # wait for accounting load TODO
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 100 100 60 40")
 
     # Check accounting
@@ -131,7 +131,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Check accounting
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
-    just_wait(page) # wait for accounting load TODO
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard -20 100 80 20 40 40")
 
     # Perform save
@@ -143,7 +143,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     just_wait(page)
 
     page.get_by_role("link", name="accounting", exact=True).click()
-    just_wait(page)  # wait for accounting load TODO
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
 
     # Check accounting
@@ -206,7 +206,7 @@ def prologues(page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check result
-    page.get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "P1 ffff (test) Test Character")
 
 

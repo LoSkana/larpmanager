@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_date, just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, \
-    submit_confirm, sidebar, save_modal
+    submit_confirm, sidebar, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -288,7 +288,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check result
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
 
     # add second event in campaing
@@ -318,7 +318,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=re.compile(r"^Campaign ")).click()
     page.locator("#id_campaign_faction_indep").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
     expect_normalized(page, page.locator("#one"), "No elements are currently available")
 
     # add new factions
@@ -343,19 +343,22 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check situation in second event
-    page.locator("#one").get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "PRIMAAAA Primary Test Character TRANVERSA Transversal Test Character")
+
     sidebar(page, "Characters")
-    page.get_by_role("link", name="Faction", exact=True).click()
+    click_and_wait_question(page, "Faction")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text PRIMAAAA TRANVERSA")
 
     # check situation in first event
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Factions").click()
-    page.locator("#one").get_by_role("link", name="Characters").click()
+
+    sidebar(page, "Factions")
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "primaaa Primary Test Character tranver Transversal Test Character")
+
     sidebar(page, "Characters")
-    page.get_by_role("link", name="Faction", exact=True).click()
+    click_and_wait_question(page, "Faction")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text primaaa tranver")
 
 

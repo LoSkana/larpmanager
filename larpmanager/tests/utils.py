@@ -390,6 +390,31 @@ def just_wait(page, big=False):
     page.wait_for_load_state("domcontentloaded")
 
 
+def wait_accounting_load(page: Any) -> None:
+    """Wait until the accounting AJAX call in registrations.html has completed."""
+    page.locator("#load_accounting.select").wait_for()
+
+
+def wait_question_load(page: Any, key: str) -> None:
+    """Wait until a specific question column AJAX call in load.js has completed.
+
+    key: the q_uuid / key attribute value on the .load_que link that was clicked.
+    """
+    page.wait_for_function(f"typeof window.done !== 'undefined' && ('{key}' in window.done)")
+
+
+def click_and_wait_question(page: Any, name: str) -> None:
+    """Click a .load_que link by question name and wait for its AJAX response to complete.
+
+    Returns:
+        object:
+    """
+    locator = page.locator(f"a.load_que", has_text=name)
+    key = locator.get_attribute("key")
+    locator.click()
+    wait_question_load(page, key)
+
+
 def fill_date(locator, selector, value):
     """Fill a date_p input by setting value via JS, bypassing the datetimepicker popup."""
     locator.locator(selector).evaluate(

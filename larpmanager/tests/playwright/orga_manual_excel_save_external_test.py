@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      logout,
                                      submit_confirm,
-                                     get_modal_iframe, save_modal, sidebar,
+                                     get_modal_iframe, save_modal, sidebar, click_and_wait_question,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -74,7 +74,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     submit_confirm(page)
 
     # check by reload
-    page.get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "Test Character2 Test Teaser + 2 Test Text ff")
 
     # add new
@@ -118,7 +118,7 @@ def excel(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check by reload
-    page.get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page,
         page.locator("#one"),
         "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1",
@@ -155,7 +155,7 @@ def external(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # get url
-    page.get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     url = page.locator('[id="u2"]').locator(".fa-key").locator('..').get_attribute("href")
 
     # logout, then go to the page
@@ -171,7 +171,7 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     login_orga(page, server)
 
     go_to(page, server, "/test/manage")
-    page.get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.locator('[id="u1"]').locator(".fa-edit").click(button="right")
     page1 = context.new_page()
     page1.goto(server + "/test/manage/characters/u1/edit/")
