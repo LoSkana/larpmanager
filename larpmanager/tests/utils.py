@@ -237,7 +237,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     submit_btn.click(force=True)
-    just_wait(page)
+    page.wait_for_load_state("networkidle", timeout=5000)
 
 def save_modal(page: any, frame: Any) -> None:
     submit_btn = frame.get_by_role(
@@ -484,8 +484,9 @@ class InlineOptionRow:
 
 
 def new_option(page):
+    count_before = page.locator("#inline-options-body tr.inline-option").count()
     page.locator("#inline-options .add-inline-option").click()
-    just_wait(page)
+    page.locator("#inline-options-body tr.inline-option").nth(count_before).wait_for(state="visible")
     row = page.locator("#inline-options-body tr.inline-option").last
     return InlineOptionRow(page, row)
 
@@ -499,12 +500,16 @@ def submit_option(page, option):
     # to receive its uuid (i.e. for the server to confirm the save)
     page.keyboard.press("Tab")
     expect(option.row).to_have_attribute("data-uuid", re.compile(".+"), timeout=10000)
-    just_wait(page)
 
 
 def get_modal_iframe(page):
-    just_wait(page)
     iframe_locator = page.locator("#lm-modal iframe")
+    iframe_locator.wait_for(state="visible")
+    frame_handle = iframe_locator.element_handle()
+    if frame_handle:
+        frame = frame_handle.content_frame()
+        if frame:
+            frame.wait_for_load_state("domcontentloaded")
     return FrameLocatorWithPage(iframe_locator.content_frame, page, iframe_locator)
 
 

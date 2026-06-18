@@ -171,7 +171,6 @@ def field_text(page: Any, live_server: Any) -> None:
 
     # Create new character
     go_to(page, live_server, "/test/manage/characters")
-    just_wait(page)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     just_wait(edit_iframe)
@@ -309,7 +308,6 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
 
     # Verify the Characters link is visible in the topbar
     go_to(page, live_server, "/")
-    just_wait(page)
     page.get_by_role("link", name=re.compile(" Characters$")).click()
 
     # Verify the page shows characters content

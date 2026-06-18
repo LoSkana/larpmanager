@@ -169,7 +169,6 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in other char
     go_to(page, live_server, "/test/manage/characters/")
-
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     just_wait(page, big=True)

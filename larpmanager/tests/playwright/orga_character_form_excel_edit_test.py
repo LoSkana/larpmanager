@@ -181,22 +181,17 @@ def create_second_character(page: Any, live_server: Any) -> None:
 def inline_editing_name(page: Any, live_server: Any) -> None:
     """Test editing name field inline for both characters."""
     go_to(page, live_server, "/test/manage/characters/")
-    just_wait(page)
 
     # Edit u1 name (existing value)
     page.get_by_role("cell", name="Test Character").dblclick()
-    just_wait(page)
     page.locator("#id_name").fill("Test Character Modified")
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Test Character Modified")
 
     # Edit u2 name (existing value)
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text="Second Character").dblclick()
-    just_wait(page)
     page.locator("#id_name").fill("Second Character Modified")
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Second Character Modified")
 
 
@@ -204,23 +199,21 @@ def inline_editing_teaser(page: Any, live_server: Any) -> None:
     """Test editing teaser field inline for both characters."""
     # Edit u1 teaser (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Teaser").dblclick()
-    just_wait(page)
+
     page.locator("#id_teaser").fill(
         "Modified Teaser 1"
     )
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Modified Teaser 1")
 
     # Edit u2 teaser (empty cell - click on the cell in the teaser column)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(3).dblclick()
-    just_wait(page)
+
     page.locator("#id_teaser").fill(
         "New Teaser 2"
     )
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "New Teaser 2")
 
 
@@ -228,23 +221,21 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
     """Test editing text field inline for both characters."""
     # Edit u1 text (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text").dblclick()
-    just_wait(page)
+
     page.locator("#id_text").fill(
         "Modified Text 1"
     )
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Modified Text 1")
 
     # Edit u2 text (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(4).dblclick()
-    just_wait(page)
+
     page.locator("#id_text").fill(
         "New Text 2"
     )
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "New Text 2")
 
 
@@ -255,19 +246,15 @@ def inline_editing_text_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Text value 1").dblclick()
-    just_wait(page)
     page.locator("#id_que_u4").fill("Text value modified")
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Text value modified")
 
     # Edit u2 (empty cell) - click on the appropriate column
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(5).dblclick()
-    just_wait(page)
     page.locator("#id_que_u4").fill("Text value 2")
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Text value 2")
 
 
@@ -278,19 +265,15 @@ def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Paragraph value 1").dblclick()
-    just_wait(page)
     page.locator("#id_que_u5").fill("Paragraph modified")
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Paragraph modified")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(6).dblclick()
-    just_wait(page)
     page.locator("#id_que_u5").fill("Paragraph value 2")
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Paragraph value 2")
 
 
@@ -301,19 +284,15 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value - Option A)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Option A").dblclick()
-    just_wait(page)
     page.locator("#id_que_u6").select_option("u2")  # Option B
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Option B")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(7).dblclick()
-    just_wait(page)
     page.locator("#id_que_u6").select_option("u3")  # Option C
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Option C")
 
 
@@ -324,21 +303,17 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
-    just_wait(page)
     page.get_by_role("checkbox", name="Choice X").uncheck()
     page.get_by_role("checkbox", name="Choice Z").check()
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Y")
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Z")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(8).dblclick()
-    just_wait(page)
     page.get_by_role("checkbox", name="Choice X").check()
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Choice X")
 
 
@@ -349,19 +324,17 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Advanced value 1").dblclick()
-    just_wait(page)
+
     page.locator("#id_que_u8").fill("Text 2 modified")
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Text 2 modified")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(9).dblclick()
-    just_wait(page)
+
     page.locator("#id_que_u8").fill("Text 2 value 2")
     submit_confirm(page)
-    just_wait(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Text 2 value 2")
 
 
@@ -374,7 +347,7 @@ def verify_after_refresh(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Single Choice").first.click()
     page.get_by_role("link", name="Multiple Choice").first.click()
     page.get_by_role("link", name="Advanced Question").click()
-    just_wait(page)
+
 
     # Verify u1 values
     expect_normalized(page, page.locator('[id="u1"]'), "Test Character Modified")

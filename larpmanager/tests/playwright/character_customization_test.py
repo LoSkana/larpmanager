@@ -95,7 +95,6 @@ def configure_customization_fields(page: Any, live_server: Any) -> None:
 def create_and_assign_character(page: Any, live_server: Any) -> None:
     """Create a character and assign it to user test."""
     go_to(page, live_server, "/test/manage/characters")
-    just_wait(page)
 
     # Edit character
     page.locator(".fa-edit").click(force=True)
@@ -117,7 +116,6 @@ def create_and_assign_character(page: Any, live_server: Any) -> None:
 def fill_customization_form(page: Any, live_server: Any) -> None:
     """Fill all customization form fields including image upload."""
     go_to(page, live_server, "/test")
-    just_wait(page)
 
     # Access character customization
     page.get_by_role("link", name="Test Character").first.click()
@@ -195,7 +193,6 @@ def verify_field_visibility(page: Any, live_server: Any) -> None:
     # Verify orga can see private field (as staff)
     login_orga(page, live_server)
     go_to(page, live_server, "/test/")
-    just_wait(page)
 
     # Find and view character
     page.get_by_text("My Custom Name").click()
@@ -219,7 +216,6 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     # Verify the Characters link is visible in the topbar
     login_user(page, live_server)
     go_to(page, live_server, "/")
-    just_wait(page)
     characters_link = page.locator("a[href='/characters']").filter(has_text="Characters")
     expect(characters_link).to_be_visible()
 
