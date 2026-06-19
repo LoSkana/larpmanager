@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (just_wait,
                                      go_to,
                                      login_orga,
                                      submit_confirm, submit_inline_edit, wait_for_inline_edit,
-                                     expect_normalized, sidebar, save_modal,
+                                     expect_normalized, sidebar, save_modal, _wait_lm_ready,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -136,7 +136,8 @@ def traits(page: Any, live_server: Any) -> None:
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
     panel = wait_for_inline_edit(page)
-    panel.get_by_role("searchbox").fill("non")
+    panel.locator("textarea").press("#")
+    page.get_by_role("searchbox").fill("non")
     page.locator(".select2-results__option").first.click()
     just_wait(page)
     submit_inline_edit(page)
@@ -264,7 +265,7 @@ def casting(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check result
-    page.get_by_role("link", name="Lore").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         "User Test Another Torta - Strudel Standard Admin Test Test Character Torta - Nonna Standard",
