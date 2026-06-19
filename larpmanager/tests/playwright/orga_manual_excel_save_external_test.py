@@ -76,7 +76,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     submit_inline_edit(page)
 
     # check by reload
-    click_and_wait_question(page, "Characters")
+    sidebar(page, "Characters")
     expect_normalized(page, page.locator("#one"), "Test Character2 Test Teaser + 2 Test Text ff")
 
     # add new

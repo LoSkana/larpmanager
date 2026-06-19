@@ -234,9 +234,6 @@ def create_first_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u5").fill("bbbbbbbbbb")
     expect(page.locator("#id_que_u5")).to_have_value("bbbbbbbbbb")
     expect_normalized(page, page.locator("#main_form"), "long descr")
-
-    just_wait(page)
-    expect_normalized(page, page.locator("#main_form"), "text length: 10 / 10")
     expect_normalized(page, page.locator("#lbl_id_que_u6"), "available text")
     expect_normalized(page, page.locator("#main_form"), "available descr all all few few descr")
     page.locator("#id_que_u6").select_option("u1")

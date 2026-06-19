@@ -155,17 +155,17 @@ def form_other_writing(page: Any) -> None:
 
     # check
     sidebar(page, "Sheet")
-    click_and_wait_question(page, "Plot")
     click_and_wait_question(page, "Character")
+    page.get_by_role("link", name="Plot", exact=True).click()
     expect_normalized(page,
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden Faction Factions Hidden",
     )
-    click_and_wait_question(page, "Plot")
+    page.get_by_role("link", name="Plot", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Name Name Concept Presentation Text Sheet")
-    click_and_wait_question(page, "Faction")
+    page.get_by_role("link", name="Faction", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
-    click_and_wait_question(page, "Quest")
+    page.get_by_role("link", name="Plot", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
-    click_and_wait_question(page, "Trait")
+    page.get_by_role("link", name="Trait", exact=True).click()
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")

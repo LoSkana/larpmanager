@@ -158,7 +158,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check value now
-    click_and_wait_question(page, "Characters")
+    sidebar(page, "Characters")
     click_and_wait_question(page, "Experience")
     click_and_wait_question(page, "Faction")
     click_and_wait_question(page, "teeeeest")

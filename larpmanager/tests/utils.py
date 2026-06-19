@@ -442,7 +442,8 @@ def click_and_wait_question(page: Any, name: str) -> None:
         load_que.click()
         wait_question_load(page, key)
     else:
-        page.locator("a.table_toggle", has_text=name).click()
+        tog_value = name.lower()
+        page.locator(f"a.table_toggle[tog='{tog_value}']").click()
 
 
 def fill_date(locator, selector, value):
