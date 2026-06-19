@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import contextlib
 import hashlib
 import logging
 import re
@@ -40,10 +41,12 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
+from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient
+from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -629,3 +632,31 @@ def notify_admins(subject: str, message_text: str = "", exception: Exception | N
         )
     for _name, email in conf_settings.ADMINS:
         my_send_mail(subject, message_text, email)
+
+
+# DELETION
+
+
+@background(schedule=0)
+def delete_run_task(run_uuid: str) -> None:
+    """Delete a run in the background."""
+    with contextlib.suppress(Run.DoesNotExist):
+        Run.objects.get(uuid=run_uuid).delete()
+
+
+@background(schedule=0)
+def delete_association_task(association_slug: str) -> None:
+    """Unsubscribe newsletter and delete association in the background."""
+    try:
+        association = Association.objects.get(slug=association_slug)
+    except Association.DoesNotExist:
+        return
+    newsletter_emails = set(
+        AssociationRole.objects.filter(association=association, number=1).values_list("members__email", flat=True)
+    )
+    if association.main_mail:
+        newsletter_emails.add(association.main_mail)
+    for email in newsletter_emails:
+        if email:
+            _newsletter_set_non_active(email)
+    association.delete()

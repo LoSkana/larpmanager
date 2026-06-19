@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 if TYPE_CHECKING:
@@ -317,6 +318,7 @@ def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     run = context["el"]
 
     # Create support ticket with run information
+    delete_url = reverse("lm_events_delete", args=[run.uuid])
     ticket_content = f"""
         Deletion request for run:\n\n
         UUID: {run.uuid}\n
@@ -324,7 +326,8 @@ def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
         Number: {run.number}\n
         Event: {run.event.name}\n
         Start: {run.start}\n
-        End: {run.end}
+        End: {run.end}\n\n
+        Admin delete link: {delete_url}
     """
 
     LarpManagerTicket.objects.create(
