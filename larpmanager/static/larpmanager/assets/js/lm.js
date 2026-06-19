@@ -458,6 +458,7 @@ $(document).ready(function() {
         $pageInfo.remove();
     }
 
+    window._lmReady = true;
     $(document).trigger("lm_ready");
 });
 

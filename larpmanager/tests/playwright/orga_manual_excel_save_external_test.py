@@ -147,7 +147,7 @@ def excel(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator('a.my_toggle[tog="f_id_text"]').click()
     expect_normalized(edit_iframe, edit_iframe.locator("#one"), "<p>good friends with </p> #1 <p>ciaoooo</p> ")
-
+    save_modal(page, edit_iframe)
 
 def external(page: Any, live_server: Any) -> None:
     # enable external access
@@ -179,7 +179,6 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     page1.goto(server + "/test/manage/characters/u1/edit/")
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    just_wait(edit_iframe)
     expect_normalized(edit_iframe,
         edit_iframe.locator("#test-larp"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
@@ -192,7 +191,10 @@ def working_ticket_event(page: Any, server: Any, context: Any) -> None:
     go_to(page, server, "/test/manage/config")
     page1 = context.new_page()
     page1.goto(server + "/test/manage/config")
-    just_wait(page)
+    page.wait_for_function(
+        "() => document.body.innerText.toLowerCase().includes('warning! other users are editing')",
+        timeout=15000,
+    )
     expect_normalized(page,
         page.locator("#test-larp"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",

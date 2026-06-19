@@ -161,7 +161,6 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in char
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    just_wait(page)
     edit_iframe.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
     just_wait(page, big=True)
     expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
@@ -170,7 +169,6 @@ def relationships(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/characters/")
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    just_wait(page, big=True)
     edit_iframe.locator("a.my_toggle[tog='f_u2_inverse']").scroll_into_view_if_needed()
     edit_iframe.locator("a.my_toggle[tog='f_u2_inverse']").click()
     edit_iframe.locator(".f_u2_inverse").wait_for(state="visible", timeout=10000)

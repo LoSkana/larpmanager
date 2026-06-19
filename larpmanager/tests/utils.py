@@ -90,10 +90,18 @@ def print_text(page: Any) -> None:
 def go_to(page: Any, live_server: Any, path: Any) -> None:
     go_to_check(page, f"{live_server}/{path.lstrip('/')}")
 
+def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
+    try:
+        page.wait_for_function("() => window._lmReady === true", timeout=timeout)
+    except Exception:
+        pass
+
+
 def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
+    _wait_lm_ready(page)
     ooops_check(page)
 
 def get_request(page: Any, live_server: Any, path: Any) -> dict:
@@ -236,7 +244,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
 
     # Use a generic locator with a regex filter covering both text and role fallbacks
     submit_btn = scope.locator("button, input[type='submit'], a").filter(
-        has_text=re.compile(r"^(Confirm|Submit|Conferma|Execute)$", re.IGNORECASE)
+        has_text=re.compile(r"^\s*(Confirm|Submit|Conferma|Execute)\s*$", re.IGNORECASE)
     ).first
 
     submit_btn.scroll_into_view_if_needed()
@@ -249,6 +257,8 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
         submit_btn.click(force=True)
 
     page.wait_for_load_state("networkidle", timeout=5000)
+    page.wait_for_load_state("load", timeout=5000)
+    _wait_lm_ready(page)
 
 def wait_for_inline_edit(page: Any) -> Any:
     page.wait_for_selector("#excel-edit.visible", timeout=10000)
@@ -442,7 +452,11 @@ def click_and_wait_question(page: Any, name: str) -> None:
         load_que.click()
         wait_question_load(page, key)
     else:
-        page.locator(f"a.table_toggle", has_text=name).click()
+        toggle = page.locator("a.table_toggle", has_text=name)
+        tog = toggle.get_attribute("tog")
+        page.evaluate("window._tableToggleDone = null")
+        toggle.click()
+        page.wait_for_function(f"window._tableToggleDone === '{tog}'")
 
 
 def fill_date(locator, selector, value):

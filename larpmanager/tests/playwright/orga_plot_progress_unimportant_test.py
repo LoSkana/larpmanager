@@ -88,7 +88,6 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
     # Edit the plot (name change only) and save
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    just_wait(edit_iframe)
 
     progress_before = edit_iframe.locator("#id_progress").evaluate(
         "el => el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : ''"
@@ -101,7 +100,6 @@ def test_plot_progress_preservation(pw_page: Any) -> None:
     # Re-open the edit form and verify progress is still "Final"
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    just_wait(edit_iframe)
 
     progress_after = edit_iframe.locator("#id_progress").evaluate(
         "el => el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : ''"

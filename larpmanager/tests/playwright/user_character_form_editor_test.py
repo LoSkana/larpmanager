@@ -173,7 +173,6 @@ def field_text(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-    just_wait(edit_iframe)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("provaaaa")
 

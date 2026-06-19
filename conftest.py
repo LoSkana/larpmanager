@@ -215,7 +215,7 @@ def pw_page(
     yield page, base_url, context
 
     # Capture test artifacts if test failed
-    video_info = True
+    video_info = None
     if record:
         video_info = _capture_test_artifacts(request, page, headed=headed, video_dir=video_dir)
 

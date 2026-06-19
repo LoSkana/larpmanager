@@ -267,6 +267,7 @@ window.addEventListener('DOMContentLoaded', function() {
                         $('a.table_toggle[tog="' + contentType + '"]').hasClass('select');
                     window.setColumnsVisible(window.hideColumnsIndexMap[key], statsActive && contentActive);
                 });
+                window._tableToggleDone = tog;
                 return false;
             }
 
@@ -290,6 +291,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 }
             }
 
+            window._tableToggleDone = tog;
             return false;
         });
 

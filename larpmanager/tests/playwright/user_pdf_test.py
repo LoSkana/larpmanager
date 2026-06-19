@@ -82,7 +82,6 @@ def test_user_pdf(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    just_wait(page)
     # select Pdf Rel Character from the combobox so the JS creates the rel_u2 section
     edit_iframe.locator("#select2-new_rel_select-container").click()
     edit_iframe.get_by_role("searchbox").fill("pdf")

@@ -288,6 +288,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "item1 box")
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item3 box")
+
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
@@ -304,6 +305,9 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     submit_confirm(page)
+
+    just_wait(page)
+
     expect_normalized(page, page.locator("#one"), "item3 box2")
     expect_normalized(page, page.locator("#one"), "item2 box tag")
     expect_normalized(page, page.locator("#one"), "item1 box2 tag")
@@ -313,6 +317,9 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#operation").select_option("3")
     submit_confirm(page)
+
+    just_wait(page)
+
     expect_normalized(page, page.locator("#one"), "item3 box2")
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item1 box2 tag")
