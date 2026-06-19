@@ -318,7 +318,7 @@ def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     run = context["el"]
 
     # Create support ticket with run information
-    delete_url = reverse("lm_events_delete", args=[run.uuid])
+    delete_url = request.build_absolute_uri(reverse("lm_events_delete", args=[run.uuid]))
     ticket_content = f"""
         Deletion request for run:\n\n
         UUID: {run.uuid}\n
