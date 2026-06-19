@@ -405,7 +405,10 @@ _REORDER_MODEL_MAP: dict[str, tuple[type, str, Callable | None]] = {
 @require_POST
 def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Bulk-reorder items via drag-and-drop from DataTables RowReorder."""
-    data = json.loads(request.body)
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return JsonResponse({"error": "invalid JSON"}, status=400)
     model_name = data.get("model", "")
     uuids = data.get("uuids", [])
 

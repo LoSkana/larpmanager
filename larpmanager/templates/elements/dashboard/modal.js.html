@@ -27,7 +27,7 @@ window.addEventListener('DOMContentLoaded', function() {
         const frameUrl = url + separator + 'frame=1';
 
         // Use the common openIframeModal function from lm.js
-        window.openIframeModal(frameUrl, 'popup_dashboard');
+        window.openIframeModal(frameUrl, 'popup_dashboard', reloadDashboard);
     }
 
     /**
@@ -68,16 +68,6 @@ window.addEventListener('DOMContentLoaded', function() {
         if (!e.data || !e.data.type) return;
 
         switch(e.data.type) {
-            case 'dashboard_form_saved':
-                // Only handle if a popup_dashboard iframe is open
-                if (document.querySelector('#lm-modal.popup_dashboard iframe')) {
-                    closeDashboardModal();
-                    setTimeout(function() {
-                        reloadDashboard();
-                    }, 300);
-                }
-                break;
-
             case 'dashboard_form_cancelled':
                 // User cancelled the form
                 closeDashboardModal();

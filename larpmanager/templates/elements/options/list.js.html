@@ -6,32 +6,6 @@ window.addEventListener('DOMContentLoaded', function() {
         // Get question UUID from the iframe's context
         const questionUuid = '{{ el.uuid }}';
 
-        // Auto-resize iframe based on content
-        function updateIframeHeight() {
-            if (window.parent && window.parent !== window) {
-                // Get the actual content height without accumulating padding
-                const body = document.body;
-                const html = document.documentElement;
-
-                // Calculate the real content height
-                const height = Math.max(
-                    body.scrollHeight,
-                    body.offsetHeight,
-                    html.clientHeight,
-                    html.scrollHeight,
-                    html.offsetHeight
-                );
-
-                window.parent.postMessage({
-                    type: 'iframe_resize',
-                    height: height
-                }, '*');
-            }
-        }
-
-        // Initial height update after content is rendered
-        setTimeout(updateIframeHeight, 250);
-
         // Handle "New Option" button click - send message to parent if in iframe
         $('.new-option').on('click', function(e) {
             if (window.parent && window.parent !== window) {
@@ -107,3 +81,4 @@ window.addEventListener('DOMContentLoaded', function() {
 
 });
 </script>
+{% include "elements/helpers/iframe_resize.js" %}

@@ -1,5 +1,8 @@
 {% extends "utils.html" %}
 {% load i18n tz show_tags static %}
+{% block body_class %}
+    {% if frame %}floating_iframe{% endif %}
+{% endblock body_class %}
 {% block title %}
     {% if nonum is None %}
         {% if num %}
@@ -21,4 +24,5 @@
 {% endblock content %}
 {% block js2 %}
     {% include "elements/working-ticket.js" with edit_uuid=num %}
+    {% include "elements/helpers/iframe_resize.js" %}
 {% endblock js2 %}

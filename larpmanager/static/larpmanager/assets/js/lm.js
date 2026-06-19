@@ -116,6 +116,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
 
         if (e.data.type === 'dashboard_form_saved') {
             if (e.data.redirect_url) {
+                window.closeLmModal();
                 window.location.href = e.data.redirect_url;
             } else {
                 window.closeLmModal();
@@ -491,13 +492,6 @@ function replaceNewUrl() {
 }
 
 function refreshDatatables() {
-    $('table.pagin_datatable').each(function() {
-        const tableId = $(this).attr('id');
-        if (tableId && window.datatables && window.datatables[tableId]) {
-            window.datatables[tableId].ajax.reload(null, false);
-        }
-    });
-
     $.get(window.location.href, function(html) {
         const $newDoc = $($.parseHTML(html));
         const $newTables = $newDoc.find('table.go_datatable');

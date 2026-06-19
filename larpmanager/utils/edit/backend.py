@@ -932,5 +932,11 @@ def backend_set_order(model_class: type, uuids: list[str], event: object) -> Non
         event: Event instance used as the ownership filter.
 
     """
+    instances = []
     for i, uuid in enumerate(uuids):
-        model_class.objects.filter(uuid=uuid, event=event).update(order=i * 10)
+        obj = model_class.objects.filter(uuid=uuid, event=event).first()
+        if obj:
+            obj.order = i * 10
+            instances.append(obj)
+    if instances:
+        model_class.objects.bulk_update(instances, ["order"])
