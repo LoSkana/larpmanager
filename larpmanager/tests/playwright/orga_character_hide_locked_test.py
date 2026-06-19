@@ -42,7 +42,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     sidebar,
-    submit_confirm, save_modal,
+    submit_confirm, save_modal, just_wait,
 )
 
 pytestmark = pytest.mark.e2e
