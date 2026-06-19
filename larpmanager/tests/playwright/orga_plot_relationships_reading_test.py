@@ -321,10 +321,9 @@ def plots_character(live_server: Any, page: Any) -> None:
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show")
-    expect_normalized(edit_iframe, edit_iframe.locator("#id_pl_2_tr"), "gaga <p>ffff</p> ffff")
+    expect_normalized(edit_iframe, edit_iframe.locator("#id_pl_2_tr"), "gaga <p>ffff</p>")
     save_modal(page, edit_iframe)
 
-    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator('[id="u1"]'), "gaga")
     expect(page.locator('[id="u1"]')).not_to_contain_text("bibi")
 

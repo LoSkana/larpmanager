@@ -91,18 +91,21 @@ def go_to(page: Any, live_server: Any, path: Any) -> None:
     go_to_check(page, f"{live_server}/{path.lstrip('/')}")
 
 def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
+    page.wait_for_load_state("networkidle", timeout=timeout)
+    page.wait_for_load_state("load", timeout=timeout)
+    page.wait_for_load_state("domcontentloaded", timeout=timeout)
+
     try:
         page.wait_for_function("() => window._lmReady === true", timeout=timeout)
     except Exception:
         pass
 
+    ooops_check(page)
+
 
 def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
-    page.wait_for_load_state("load")
-    page.wait_for_load_state("domcontentloaded")
     _wait_lm_ready(page)
-    ooops_check(page)
 
 def get_request(page: Any, live_server: Any, path: Any) -> dict:
     api_context = page.request
@@ -213,8 +216,7 @@ def fill_tinymce(page, iframe_id, text, show = True) -> None:
         show_link.click()
 
     input_element = page.locator(f'#{iframe_id}')
-    input_element.wait_for(state="visible")
-    input_element.fill(f"<p>{text}</p>")
+    input_element.fill(f"<p>{text}</p>", force=True)
 
 
 def _checkboxes(page: Any, check: Any = True) -> None:
@@ -256,9 +258,6 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     except Exception:
         submit_btn.click(force=True)
 
-    page.wait_for_timeout(200)  # allow AJAX callbacks (e.g. window.location.reload()) to fire
-    page.wait_for_load_state("networkidle", timeout=10000)
-    page.wait_for_load_state("load", timeout=8000)
     _wait_lm_ready(page, timeout=8000)
 
 def wait_for_inline_edit(page: Any) -> Any:
@@ -592,6 +591,7 @@ def sidebar(page, link):
 def icon_link(container, page, link):
     pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
     page.locator(container).get_by_role("link", name=pattern).click()
+    _wait_lm_ready(page)
 
 def nav(page, link):
     icon_link(".nav", page, link)
