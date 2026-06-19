@@ -8848,6 +8848,10 @@ msgstr ""
 "Aktivace a konfigurace pokročilých funkcí pro vaši organizaci a události"
 
 msgid ""
+"Character inventory is not enabled for this event: contact the organizers"
+msgstr "Pro tuto akci není povolen seznam postav: obraťte se na organizátory"
+
+msgid ""
 "Customize translations of words and phrases in the organization interface"
 msgstr "Přizpůsobení překladů slov a frází v rozhraní organizace"
 
@@ -10246,6 +10250,13 @@ msgid ""
 "by the board"
 msgstr ""
 "Oznamujeme Vám, že Vaše členství v Asociaci nebylo Výkonnou radou přijato"
+
+msgid ""
+"Acquisition of abilities by players is not enabled for this event: contact "
+"the organizers"
+msgstr ""
+"V rámci této akce není hráčům umožněno získávat schopnosti: obraťte se na "
+"organizátory"
 
 msgid ""
 "Activates 'waiting list' style tickets, available only when all main tickets"

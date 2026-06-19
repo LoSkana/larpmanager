@@ -1,0 +1,28 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% if deleted %}
+        Deletion complete
+    {% else %}
+        Deletion in progress
+    {% endif %}
+{% endblock title %}
+{% if not deleted %}
+    {% block head_extra %}
+        <meta http-equiv="refresh" content="10">
+    {% endblock head_extra %}
+{% endif %}
+{% block content %}
+    <h2>{{ label }}</h2>
+    {% if deleted %}
+        <div class="alert alert-success">
+            <strong>Deleted successfully.</strong>
+        </div>
+        <a href="{{ cancel_url }}" class="btn btn-primary">Back to list</a>
+    {% else %}
+        <div class="alert alert-info">
+            <strong>Deletion in progress...</strong> Page refreshes automatically every 10 seconds.
+        </div>
+        <a href="{{ cancel_url }}" class="btn btn-secondary">Back to list</a>
+    {% endif %}
+{% endblock content %}

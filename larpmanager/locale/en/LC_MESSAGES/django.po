@@ -11365,6 +11365,15 @@ msgstr ""
 msgid "Assigned character!"
 msgstr ""
 
+msgid ""
+"Acquisition of abilities by players is not enabled for this event: contact "
+"the organizers"
+msgstr ""
+
+msgid ""
+"Character inventory is not enabled for this event: contact the organizers"
+msgstr ""
+
 msgid "Ability removed"
 msgstr ""
 
