@@ -234,7 +234,7 @@ def plots(live_server: Any, page: Any) -> None:
     expect_normalized(edit_iframe, edit_iframe.locator("#one"), """<p>asadsadas</p> <p>wwwww</p> test character prova <p>prova</p> <p>second char role</p>""")
 
     # change it
-    fill_tinymce(edit_iframe, "id_char_role_1", "prova222")
+    fill_tinymce(edit_iframe, "id_char_role_1", "prova222", show=False)
     save_modal(page, edit_iframe)
 
     # check it
@@ -259,7 +259,6 @@ def plots(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check
-    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww prova")
 
     # set text

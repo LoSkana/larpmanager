@@ -171,13 +171,11 @@ def pw_page(
         "_jb_pytest_runner" in arg or "pycharm" in arg.lower() for arg in sys.argv
     )
     headed = pytestconfig.getoption("--headed") or is_pycharm
-
-    # Check if running in CI/GitHub Actions
-    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+    record = os.getenv("RECORD") == "1"
 
     # Configure video recording (only in headed mode)
     video_dir = None
-    if not is_ci and headed:
+    if record:
         video_dir = Path(__file__).parent / "test_videos"
         video_dir.mkdir(exist_ok=True)
 
@@ -217,7 +215,9 @@ def pw_page(
     yield page, base_url, context
 
     # Capture test artifacts if test failed
-    video_info = _capture_test_artifacts(request, page, headed=headed, video_dir=video_dir)
+    video_info = True
+    if record:
+        video_info = _capture_test_artifacts(request, page, headed=headed, video_dir=video_dir)
 
     # Close context (this finalizes the video)
     context.close()

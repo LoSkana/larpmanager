@@ -250,7 +250,6 @@ def create_first_char(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
     page.get_by_role("checkbox", name="all").check()
     page.get_by_role("checkbox", name="many - (Available 2)").check()
-    page.get_by_text("options: 2 /").click()
     page.locator("#id_que_u12").click()
     page.locator("#id_que_u12").fill("public")
     page.locator("#id_que_u12").press("Tab")

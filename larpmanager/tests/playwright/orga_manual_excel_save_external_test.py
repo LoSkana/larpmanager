@@ -115,13 +115,13 @@ def excel(page: Any, live_server: Any) -> None:
     panel = wait_for_inline_edit(page)
     panel.locator("#id_text").fill("Test Text ff kinda hate ")
     panel.locator("#id_text").press("#")
-    panel.get_by_role("searchbox").fill("an")
+    page.get_by_role("searchbox").fill("an")
     page.locator(".select2-results__option").first.click()
     just_wait(page)
     submit_inline_edit(page)
 
     # check by reload
-    click_and_wait_question(page, "Characters")
+    sidebar(page, "Characters")
     expect_normalized(page,
         page.locator("#one"),
         "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1",
@@ -131,9 +131,8 @@ def excel(page: Any, live_server: Any) -> None:
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     fill_tinymce(edit_iframe, "id_text", "ciaoooo")
-    frame_locator = edit_iframe.frame_locator("iframe#id_text_ifr")
-    editor = frame_locator.locator("body#tinymce")
-    editor.press("ControlOrMeta+s")
+
+    page.locator('body').press("ControlOrMeta+s")
     just_wait(page)
 
     # check by reload
@@ -147,7 +146,7 @@ def excel(page: Any, live_server: Any) -> None:
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator('a.my_toggle[tog="f_id_text"]').click()
-    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "good friends with #1 ciaoooo")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "<p>good friends with </p> #1 <p>ciaoooo</p> ")
 
 
 def external(page: Any, live_server: Any) -> None:

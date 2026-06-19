@@ -64,8 +64,8 @@ def handle_error(page: Any, e: Any, test_name: Any) -> NoReturn:
     logger.error("Error on %s: %s\n", test_name, page.url)
     logger.error(e)
 
-    uid = timezone.now().strftime("%Y%m%d_%H%M%S")
-    page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
+    # uid = timezone.now().strftime("%Y%m%d_%H%M%S")
+    # page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
 
     raise e
 
@@ -442,8 +442,7 @@ def click_and_wait_question(page: Any, name: str) -> None:
         load_que.click()
         wait_question_load(page, key)
     else:
-        tog_value = name.lower()
-        page.locator(f"a.table_toggle[tog='{tog_value}']").click()
+        page.locator(f"a.table_toggle", has_text=name).click()
 
 
 def fill_date(locator, selector, value):
