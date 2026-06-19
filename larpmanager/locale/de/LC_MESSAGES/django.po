@@ -3031,6 +3031,9 @@ msgstr "Kredite deaktivieren"
 msgid "Document number"
 msgstr "Nummer des Dokuments"
 
+msgid "Drag to reorder"
+msgstr "Zum Neuanordnen ziehen"
+
 msgid "Edit membership"
 msgstr "Mitgliedschaft bearbeiten"
 

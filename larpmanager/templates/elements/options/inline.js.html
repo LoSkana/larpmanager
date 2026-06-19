@@ -240,7 +240,7 @@ function flashSaved($row) {
             return false;
         });
 
-        // ========== Reorder (move row, then persist the full order) ==========
+        // ========== Reorder (drag-and-drop, then persist the full order) ==========
 
         function persistOrder() {
             const uuids = [];
@@ -251,28 +251,48 @@ function flashSaved($row) {
             if (uuids.length) $.post(reorderUrl, { 'uuids': uuids });
         }
 
-        function moveRow($row, direction) {
-            const $details = detailsRow($row);
-            const $pair = $row.add($details);
-            if (direction < 0) {
-                const $prev = $row.prevAll('.inline-option').first();
-                if ($prev.length) $pair.insertBefore($prev);
-            } else {
-                const $next = $row.nextAll('.inline-option').first();
-                if ($next.length) $pair.insertAfter(detailsRow($next));
-            }
-            persistOrder();
-        }
+        let $dragRow = null;
+        let $lastDragTarget = null;
 
-        $root.on('click', '.io-move-up', function(e) {
-            e.preventDefault();
-            moveRow(ownerRow($(this)), -1);
-            return false;
+        $root.on('dragstart', '.reorder-handle', function(e) {
+            $dragRow = $(this).closest('.inline-option');
+            $lastDragTarget = null;
+            e.originalEvent.dataTransfer.effectAllowed = 'move';
+            e.originalEvent.dataTransfer.setData('text/plain', '');
+            setTimeout(function() { if ($dragRow) $dragRow.addClass('io-dragging'); }, 0);
         });
-        $root.on('click', '.io-move-down', function(e) {
+
+        $root.on('dragend', '.reorder-handle', function() {
+            if ($dragRow) $dragRow.removeClass('io-dragging');
+            $dragRow = null;
+            $lastDragTarget = null;
+            persistOrder();
+        });
+
+        $root.on('dragover', '.inline-option, .inline-option-details', function(e) {
             e.preventDefault();
-            moveRow(ownerRow($(this)), 1);
-            return false;
+            if (!$dragRow) return;
+
+            // Resolve primary row for the element under the cursor
+            const $tr = $(this);
+            const $target = $tr.hasClass('inline-option-details') ? $tr.prev('.inline-option') : $tr;
+            if (!$target.length || $target[0] === $dragRow[0]) return;
+            // Skip if already handled this target to avoid DOM oscillation
+            if ($lastDragTarget && $lastDragTarget[0] === $target[0]) return;
+            $lastDragTarget = $target;
+
+            const $dragDetails = detailsRow($dragRow);
+            const $targetDetails = detailsRow($target);
+
+            if ($dragRow[0].compareDocumentPosition($target[0]) & Node.DOCUMENT_POSITION_FOLLOWING) {
+                // Dragging downward: insert drag pair after target pair
+                $targetDetails.after($dragRow);
+                $dragRow.after($dragDetails);
+            } else {
+                // Dragging upward: insert drag pair before target
+                $target.before($dragRow);
+                $dragRow.after($dragDetails);
+            }
         });
 
     });

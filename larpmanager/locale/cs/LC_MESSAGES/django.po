@@ -3031,6 +3031,9 @@ msgstr "Zakázat kredity"
 msgid "Document number"
 msgstr "Číslo dokumentu"
 
+msgid "Drag to reorder"
+msgstr "Přetažením změňte pořadí"
+
 msgid "Edit membership"
 msgstr "Upravit členství"
 

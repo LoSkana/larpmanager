@@ -3031,6 +3031,9 @@ msgstr "Avaktivera krediter"
 msgid "Document number"
 msgstr "Dokumentnummer"
 
+msgid "Drag to reorder"
+msgstr "Dra för att ändra ordningen"
+
 msgid "Edit membership"
 msgstr "Redigera medlemskap"
 

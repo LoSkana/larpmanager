@@ -5465,10 +5465,7 @@ msgstr ""
 msgid "Maximum"
 msgstr ""
 
-msgid "Move up"
-msgstr ""
-
-msgid "Move down"
+msgid "Drag to reorder"
 msgstr ""
 
 msgid "An error occurred while reordering"
@@ -9050,6 +9047,12 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 
 msgid "Sign In"
+msgstr ""
+
+msgid "Move up"
+msgstr ""
+
+msgid "Move down"
 msgstr ""
 
 msgid "Writing"

@@ -164,7 +164,11 @@ def field_multiple(page: Any, live_server: Any) -> None:
     option_row.locator("#id_description").fill("sarrrr")
     submit_option(edit_iframe, option_row)
 
-    edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] .io-move-up').click()
+    edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] .reorder-handle').drag_to(
+        edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"]').locator(
+            "xpath=preceding-sibling::tr[contains(@class,'inline-option') and not(contains(@class,'inline-option-details'))][1]"
+        ).locator(".reorder-handle")
+    )
     just_wait(page)
     save_modal(page, edit_iframe)
     page.locator('[id="u3"]').locator(".fa-arrow-up").click()

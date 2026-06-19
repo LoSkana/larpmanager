@@ -6,9 +6,10 @@ When opt is None, renders the blank row used as the "new option" template.
 {% endcomment %}
 <tr class="inline-option"
     {% if opt %}data-uuid="{{ opt.uuid }}"{% endif %}>
-    <td class="io-order">
-        <a class="io-move-up" title="{% trans 'Move up' %}"><i class="fa-solid fa-arrow-up"></i></a>
-        <a class="io-move-down" title="{% trans 'Move down' %}"><i class="fa-solid fa-arrow-down"></i></a>
+    <td class="io-order reorder-handle"
+        draggable="true"
+        title="{% trans 'Drag to reorder' %}">
+        <i class="fa-solid fa-grip-vertical"></i>
     </td>
     <td>
         <input type="text"
