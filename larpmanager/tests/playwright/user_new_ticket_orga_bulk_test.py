@@ -301,6 +301,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#objs_1").select_option("u2")
     page.get_by_role("link", name="Execute").click()
+    page.reload()
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item1 box2")
     expect_normalized(page, page.locator("#one"), "item3 box2")

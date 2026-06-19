@@ -404,15 +404,14 @@ def wait_question_load(page: Any, key: str) -> None:
 
 
 def click_and_wait_question(page: Any, name: str) -> None:
-    """Click a .load_que link by question name and wait for its AJAX response to complete.
-
-    Returns:
-        object:
-    """
-    locator = page.locator(f"a.load_que", has_text=name)
-    key = locator.get_attribute("key")
-    locator.click()
-    wait_question_load(page, key)
+    """Click a question column link and wait if it triggers AJAX."""
+    load_que = page.locator("a.load_que", has_text=name)
+    if load_que.count() > 0:
+        key = load_que.get_attribute("key")
+        load_que.click()
+        wait_question_load(page, key)
+    else:
+        page.locator("a.table_toggle", has_text=name).click()
 
 
 def fill_date(locator, selector, value):
