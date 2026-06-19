@@ -156,7 +156,6 @@ def fill_customization_form(page: Any, live_server: Any) -> None:
     expect(page.locator("#profile")).to_be_visible()
 
     submit_confirm(page)
-    just_wait(page)
 
 
 def verify_field_visibility(page: Any, live_server: Any) -> None:

@@ -326,14 +326,15 @@ def orga_check(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_que_u8").fill("asdsadsa")
     expect(edit_iframe.locator("#id_que_u9")).to_have_value("ggggg")
     save_modal(page, edit_iframe)
+
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect(edit_iframe.locator("#id_que_u7")).to_have_value("dsadsadsa")
     expect(edit_iframe.locator("#id_que_u8")).to_have_value("asdsadsa")
-
     # orga removes a multiple choice selection
-    page.get_by_role("checkbox", name="many (20€)").uncheck()
-    submit_confirm(page)
+    edit_iframe.get_by_role("checkbox", name="many (20€)").uncheck()
+    save_modal(page, edit_iframe)
+
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect(edit_iframe.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
@@ -347,6 +348,7 @@ def orga_check(live_server: Any, page: Any) -> None:
     expect(edit_iframe.get_by_role("checkbox", name="all (10€)")).not_to_be_checked()
     expect(edit_iframe.get_by_role("checkbox", name="many (20€)")).not_to_be_checked()
     expect(edit_iframe.get_by_role("checkbox", name="few (30€)")).not_to_be_checked()
+    save_modal(page, edit_iframe)
 
 
 def user_signup(live_server: Any, page: Any) -> None:

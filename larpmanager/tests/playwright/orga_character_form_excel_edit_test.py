@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (
     fill_tinymce,
     go_to,
     login_orga,
-    submit_confirm, submit_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
+    submit_confirm, submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -184,13 +184,15 @@ def inline_editing_name(page: Any, live_server: Any) -> None:
 
     # Edit u1 name (existing value)
     page.get_by_role("cell", name="Test Character").dblclick()
-    page.locator("#id_name").fill("Test Character Modified")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_name").fill("Test Character Modified")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Test Character Modified")
 
     # Edit u2 name (existing value)
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text="Second Character").dblclick()
-    page.locator("#id_name").fill("Second Character Modified")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_name").fill("Second Character Modified")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Second Character Modified")
 
@@ -199,20 +201,16 @@ def inline_editing_teaser(page: Any, live_server: Any) -> None:
     """Test editing teaser field inline for both characters."""
     # Edit u1 teaser (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Teaser").dblclick()
-
-    page.locator("#id_teaser").fill(
-        "Modified Teaser 1"
-    )
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_teaser").fill("Modified Teaser 1")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Modified Teaser 1")
 
     # Edit u2 teaser (empty cell - click on the cell in the teaser column)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(3).dblclick()
-
-    page.locator("#id_teaser").fill(
-        "New Teaser 2"
-    )
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_teaser").fill("New Teaser 2")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "New Teaser 2")
 
@@ -221,20 +219,16 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
     """Test editing text field inline for both characters."""
     # Edit u1 text (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text").dblclick()
-
-    page.locator("#id_text").fill(
-        "Modified Text 1"
-    )
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_text").fill("Modified Text 1")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Modified Text 1")
 
     # Edit u2 text (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(4).dblclick()
-
-    page.locator("#id_text").fill(
-        "New Text 2"
-    )
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_text").fill("New Text 2")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "New Text 2")
 
@@ -246,14 +240,16 @@ def inline_editing_text_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Text value 1").dblclick()
-    page.locator("#id_que_u4").fill("Text value modified")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_que_u4").fill("Text value modified")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Text value modified")
 
     # Edit u2 (empty cell) - click on the appropriate column
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(5).dblclick()
-    page.locator("#id_que_u4").fill("Text value 2")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_que_u4").fill("Text value 2")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Text value 2")
 
@@ -265,14 +261,16 @@ def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Paragraph value 1").dblclick()
-    page.locator("#id_que_u5").fill("Paragraph modified")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_que_u5").fill("Paragraph modified")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Paragraph modified")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(6).dblclick()
-    page.locator("#id_que_u5").fill("Paragraph value 2")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_que_u5").fill("Paragraph value 2")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Paragraph value 2")
 
@@ -284,14 +282,16 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value - Option A)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Option A").dblclick()
-    page.locator("#id_que_u6").select_option("u2")  # Option B
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_que_u6").select_option("u2")  # Option B
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Option B")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(7).dblclick()
-    page.locator("#id_que_u6").select_option("u3")  # Option C
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_que_u6").select_option("u3")  # Option C
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Option C")
 
@@ -303,8 +303,9 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
-    page.get_by_role("checkbox", name="Choice X").uncheck()
-    page.get_by_role("checkbox", name="Choice Z").check()
+    panel = wait_for_inline_edit(page)
+    panel.get_by_role("checkbox", name="Choice X").uncheck()
+    panel.get_by_role("checkbox", name="Choice Z").check()
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Y")
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Z")
@@ -312,7 +313,8 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(8).dblclick()
-    page.get_by_role("checkbox", name="Choice X").check()
+    panel = wait_for_inline_edit(page)
+    panel.get_by_role("checkbox", name="Choice X").check()
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Choice X")
 
@@ -324,16 +326,16 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Advanced value 1").dblclick()
-
-    page.locator("#id_que_u8").fill("Text 2 modified")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_que_u8").fill("Text 2 modified")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Text 2 modified")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(9).dblclick()
-
-    page.locator("#id_que_u8").fill("Text 2 value 2")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_que_u8").fill("Text 2 value 2")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Text 2 value 2")
 

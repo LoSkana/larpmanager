@@ -232,7 +232,6 @@ def plots(live_server: Any, page: Any) -> None:
     locator.wait_for(state="visible")
     locator.click()
     expect_normalized(edit_iframe, edit_iframe.locator("#one"), """<p>asadsadas</p> <p>wwwww</p> test character prova <p>prova</p> <p>second char role</p>""")
-    locator.click()
 
     # change it
     fill_tinymce(edit_iframe, "id_char_role_1", "prova222")

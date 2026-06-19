@@ -91,8 +91,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     # set faction
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
 
     # check result
     click_and_wait_question(page, "Faction")
@@ -102,8 +101,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("5")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
 
     # check result
     click_and_wait_question(page, "Faction")
@@ -113,8 +111,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("6")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
 
     # check result
     click_and_wait_question(page, "Plots")
@@ -124,8 +121,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("7")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
 
     # check
     click_and_wait_question(page, "Plots")
@@ -166,8 +162,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     sidebar(page, "Quest")
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u1"]').get_by_role("cell", name="typ").click()
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Q1 q1 t2 Q2 q2 typ")
 
     # create traits
@@ -183,8 +178,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing_list td:nth-child(5)").click()
     page.locator("#objs_9").select_option("u2")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "T1 t1 Q2 q2")
 
 
@@ -216,8 +210,7 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     page.reload()
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing td:nth-child(5)").click()
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "swor 2 1")
 
     # test bulk change type
@@ -225,8 +218,7 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing td:nth-child(5)").click()
     page.locator("#objs_10").select_option("u1")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "swor t1 1")
 
 
@@ -300,8 +292,8 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#objs_1").select_option("u2")
-    page.get_by_role("link", name="Execute").click()
-    page.reload()
+    submit_confirm(page)
+
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item1 box2")
     expect_normalized(page, page.locator("#one"), "item3 box2")
@@ -311,7 +303,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator("#operation").select_option("2")
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.get_by_role("link", name="Execute").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "item3 box2")
     expect_normalized(page, page.locator("#one"), "item2 box tag")
     expect_normalized(page, page.locator("#one"), "item1 box2 tag")
@@ -320,7 +312,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#operation").select_option("3")
-    page.get_by_role("link", name="Execute").click()
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "item3 box2")
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item1 box2 tag")

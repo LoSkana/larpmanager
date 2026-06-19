@@ -36,7 +36,7 @@ from larpmanager.tests.utils import (just_wait,
                                      go_to_check,
                                      login_orga,
                                      logout,
-                                     submit_confirm, submit_inline_edit,
+                                     submit_confirm, submit_inline_edit, wait_for_inline_edit,
                                      get_modal_iframe, save_modal, sidebar, click_and_wait_question,
                                      )
 
@@ -56,21 +56,23 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # change name
     page.get_by_role("cell", name="Test Character").dblclick()
-    page.locator("#id_name").click()
-    page.locator("#id_name").press("End")
-    page.locator("#id_name").fill("Test Character2")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_name").press("End")
+    panel.locator("#id_name").fill("Test Character2")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Test Character2 Test Teaser Test Text")
 
     # change teaser
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Teaser").dblclick()
-    page.locator("#id_teaser").fill("Test Teaser + 2")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_teaser").fill("Test Teaser + 2")
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Test Character2 Test Teaser + 2 Test Text")
 
     # change text
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text").dblclick()
-    page.locator("#id_text").fill("Test Text ff")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_text").fill("Test Text ff")
     submit_inline_edit(page)
 
     # check by reload
@@ -110,9 +112,10 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 def excel(page: Any, live_server: Any) -> None:
     # test char finder on excel edit
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Test Text ff").dblclick()
-    page.locator("#id_text").fill("Test Text ff kinda hate ")
-    page.locator("#id_text").press("#")
-    page.get_by_role("searchbox").fill("an")
+    panel = wait_for_inline_edit(page)
+    panel.locator("#id_text").fill("Test Text ff kinda hate ")
+    panel.locator("#id_text").press("#")
+    panel.get_by_role("searchbox").fill("an")
     page.locator(".select2-results__option").first.click()
     just_wait(page)
     submit_inline_edit(page)

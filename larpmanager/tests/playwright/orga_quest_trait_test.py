@@ -34,7 +34,7 @@ from larpmanager.tests.utils import (just_wait,
                                      get_modal_iframe,
                                      go_to,
                                      login_orga,
-                                     submit_confirm,
+                                     submit_confirm, submit_inline_edit, wait_for_inline_edit,
                                      expect_normalized, sidebar, save_modal,
                                      )
 
@@ -135,10 +135,11 @@ def traits(page: Any, live_server: Any) -> None:
 
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
-    page.get_by_role("searchbox").fill("non")
+    panel = wait_for_inline_edit(page)
+    panel.get_by_role("searchbox").fill("non")
     page.locator(".select2-results__option").first.click()
     just_wait(page)
-    submit_confirm(page)
+    submit_inline_edit(page)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)

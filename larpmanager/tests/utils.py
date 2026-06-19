@@ -224,20 +224,36 @@ def _checkboxes(page: Any, check: Any = True) -> None:
     submit_confirm(page)
 
 
-
 def submit_confirm(page: Any, container_id: str = None) -> None:
     scope = page
     if container_id:
         scope = page.locator(f"#{container_id}")
 
-    submit_btn = scope.get_by_role(
-        "button",
-        name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
-    )
+    # Ensure any blocking loading screen is gone before searching for elements
+    overlay = page.locator("#overlay")
+    if overlay.is_visible():
+        expect(overlay).to_be_hidden(timeout=5000)
+
+    # Use a generic locator with a regex filter covering both text and role fallbacks
+    submit_btn = scope.locator("button, input[type='submit'], a").filter(
+        has_text=re.compile(r"^(Confirm|Submit|Conferma|Execute)$", re.IGNORECASE)
+    ).first
+
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
-    submit_btn.click(force=True)
+
+    # Click normally to ensure actionability, fallback to forced action if styling dictates
+    try:
+        submit_btn.click(timeout=2000)
+    except Exception:
+        submit_btn.click(force=True)
+
     page.wait_for_load_state("networkidle", timeout=5000)
+
+def wait_for_inline_edit(page: Any) -> Any:
+    page.wait_for_selector("#excel-edit.visible", timeout=10000)
+    return page.locator("#excel-edit")
+
 
 def submit_inline_edit(page: Any) -> None:
     submit_btn = page.get_by_role(

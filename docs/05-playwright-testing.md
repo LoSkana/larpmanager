@@ -250,7 +250,7 @@ Click the "Confirm" button and wait.
 
 ```python
 page.locator("#id_name").fill("Test Name")
-submit_confirm(page)
+    submit_confirm(page)
 ```
 
 **What it does:**
@@ -419,7 +419,7 @@ go_to(page, live_server, "/test/manage/features")
 page.get_by_role("button", name="Confirm").click()
 
 # LarpManager pattern:
-submit_confirm(page)
+    submit_confirm(page)
 ```
 
 **Step 5:** Add to test file
@@ -574,13 +574,13 @@ page.locator("div > div > button")  # Fragile CSS selectors
 
 **Good:**
 ```python
-submit_confirm(page)
+    submit_confirm(page)
 expect(page.locator("#banner")).to_contain_text("Success")
 ```
 
 **Bad:**
 ```python
-submit_confirm(page)
+    submit_confirm(page)
 # No verification - test passes even if submit failed
 ```
 
@@ -589,7 +589,7 @@ submit_confirm(page)
 **Good:**
 ```python
 go_to(page, live_server, "/test/register")
-submit_confirm(page)
+    submit_confirm(page)
 ```
 
 **Bad:**
@@ -910,7 +910,7 @@ go_to(page, live_server, "/test/page")
 page.get_by_role("button", name="Confirm").click()
 
 # Good - includes scroll and visibility checks
-submit_confirm(page)
+    submit_confirm(page)
 ```
 
 3. Add network idle wait:

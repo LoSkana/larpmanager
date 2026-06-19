@@ -240,7 +240,7 @@ def rules(page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check value
-    click_and_wait_question(page, "Characters")
+    sidebar(page, "Characters")
     click_and_wait_question(page, "Hit Point")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text 6")
 
