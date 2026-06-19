@@ -171,7 +171,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect_normalized(edit_iframe,
-        edit_iframe.locator("#main_form"),
+        edit_iframe.locator("#one"),
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
     )
     save_modal(page, edit_iframe)
@@ -202,7 +202,6 @@ def prologues(page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.locator(".select2-results__option").first.click()
-    edit_iframe.locator("#main_form").click()
     save_modal(page, edit_iframe)
 
     # check result

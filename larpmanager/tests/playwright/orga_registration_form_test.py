@@ -321,7 +321,7 @@ def orga_check(live_server: Any, page: Any) -> None:
     expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u7"), "hidden")
     edit_iframe.locator("#id_que_u7").click()
     edit_iframe.locator("#id_que_u7").fill("dsadsadsa")
-    expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "hidden descr")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "hidden descr")
     edit_iframe.locator("#id_que_u8").click()
     edit_iframe.locator("#id_que_u8").fill("asdsadsa")
     expect(edit_iframe.locator("#id_que_u9")).to_have_value("ggggg")

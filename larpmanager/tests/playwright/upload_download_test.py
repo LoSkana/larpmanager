@@ -274,21 +274,21 @@ def char_form(page: Any) -> None:
         "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu | trtr",
     )
     check_download(page, "Download")
-    click_and_wait_question(page, "Plot")
+    page.get_by_role("link", name="Plot", exact=True).click()
     expect_normalized(
         page, page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
     )
-    click_and_wait_question(page, "Faction")
+    page.get_by_role("link", name="Faction", exact=True).click()
     expect_normalized(
         page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
     )
-    click_and_wait_question(page, "Quest")
+    page.get_by_role("link", name="Quest", exact=True).click()
     expect_normalized(
         page,
         page.locator("#one"),
         "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public",
     )
-    click_and_wait_question(page, "Trait")
+    page.get_by_role("link", name="Trait", exact=True).click()
     expect_normalized(
         page,
         page.locator("#one"),

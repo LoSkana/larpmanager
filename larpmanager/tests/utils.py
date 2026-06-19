@@ -239,6 +239,21 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     submit_btn.click(force=True)
     page.wait_for_load_state("networkidle", timeout=5000)
 
+def submit_inline_edit(page: Any) -> None:
+    submit_btn = page.get_by_role(
+        "button",
+        name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
+    )
+    submit_btn.scroll_into_view_if_needed()
+    expect(submit_btn).to_be_visible()
+    count_before = page.evaluate("() => window._datatablesRefreshCount || 0")
+    submit_btn.click(force=True)
+    page.wait_for_function(
+        f"() => (window._datatablesRefreshCount || 0) > {count_before}",
+        timeout=10000,
+    )
+
+
 def save_modal(page: any, frame: Any) -> None:
     submit_btn = frame.get_by_role(
         "button",

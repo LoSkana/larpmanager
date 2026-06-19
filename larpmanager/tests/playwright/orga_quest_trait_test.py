@@ -125,7 +125,7 @@ def traits(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").fill("Nonna")
     fill_tinymce(edit_iframe, "id_teaser", "amelia")
     fill_tinymce(edit_iframe, "id_text", "aliame con ")
-    editor = edit_iframe.frame_locator("#id_text")
+    editor = edit_iframe.locator("#id_text")
     editor.press("#")
     edit_iframe.get_by_role("searchbox").fill("stru")
     edit_iframe.locator(".select2-results__option").first.click()

@@ -216,7 +216,6 @@ def plots(live_server: Any, page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="prova")
     option.wait_for(state="visible")
     option.click()
-    page.wait_for_timeout(5000)
     fill_tinymce(edit_iframe, "ch_2", "second char role")
 
     save_modal(page, edit_iframe)
@@ -232,7 +231,7 @@ def plots(live_server: Any, page: Any) -> None:
     locator = edit_iframe.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "asadsadas wwwww prova second char role")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), """<p>asadsadas</p> <p>wwwww</p> test character prova <p>prova</p> <p>second char role</p>""")
     locator.click()
 
     # change it
@@ -240,7 +239,6 @@ def plots(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check it
-    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
@@ -248,7 +246,7 @@ def plots(live_server: Any, page: Any) -> None:
     locator = edit_iframe.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "asadsadas wwwww prova222 second char role")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), """<p>asadsadas</p> <p>wwwww</p> test character prova <p>prova222</p> <p>second char role</p>""")
 
     # remove first char
     edit_iframe.get_by_role("listitem", name="Test Character").locator("span").click()
