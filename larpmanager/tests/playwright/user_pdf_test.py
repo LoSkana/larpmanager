@@ -32,11 +32,12 @@ from larpmanager.tests.utils import (
     check_download,
     check_pdf_zip_download,
     fill_tinymce,
+    get_modal_iframe,
     go_to,
     go_to_check,
     just_wait,
     login_orga,
-    submit_confirm,
+    submit_confirm, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -64,28 +65,30 @@ def test_user_pdf(pw_page: Any) -> None:
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")
     page.locator(".fa-edit").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    save_modal(page, edit_iframe)
 
     # create a second character (no relationship yet)
     go_to(page, live_server, "/test/manage/characters")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("Pdf Rel Character")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("Pdf Rel Character")
+    save_modal(page, edit_iframe)
 
     # add the relationship from Test Character (u1) to Pdf Rel Character (u2)
     go_to(page, live_server, "/test/manage/characters")
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    just_wait(page)
+    edit_iframe = get_modal_iframe(page)
     # select Pdf Rel Character from the combobox so the JS creates the rel_u2 section
-    page.locator("#select2-new_rel_select-container").click()
-    page.get_by_role("searchbox").fill("pdf")
-    page.get_by_role("option", name="Pdf Rel Character").click()
-    just_wait(page)
-    fill_tinymce(page, "rel_u2", "pdf relationship text")
-    submit_confirm(page)
+    edit_iframe.locator("#select2-new_rel_select-container").click()
+    edit_iframe.get_by_role("searchbox").fill("pdf")
+    edit_iframe.get_by_role("option", name="Pdf Rel Character").click()
+    just_wait(edit_iframe)
+    fill_tinymce(edit_iframe, "rel_u2", "pdf relationship text")
+    save_modal(page, edit_iframe)
 
     # Set page_css so the "complete sheet" button is shown on the character page
     go_to(page, live_server, "/test/manage/pdf/")
@@ -146,8 +149,9 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
 
     # Create a new target character for the player relationship
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("Player Rel Target")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("Player Rel Target")
+    save_modal(page, edit_iframe)
 
     # As player (orga user, who has Test Character assigned), add a player relationship
     go_to(page, live_server, "/test/register")
@@ -155,7 +159,6 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     just_wait(page)
 
     page.get_by_role("link", name="New").click()
-    just_wait(page)
     page.locator("#select2-id_target-container").click()
     page.get_by_role("searchbox").fill("player")
     page.get_by_role("option", name="Player Rel Target").click()

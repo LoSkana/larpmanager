@@ -1091,6 +1091,8 @@ class OrgaAppearanceForm(BaseModelCssForm):
             "ter_rgb",
         )
 
+        widgets: ClassVar[dict] = {"carousel_text": WritingTinyMCE()}
+
     theme = forms.ChoiceField(
         choices=[("", "---"), *AppearanceTheme.choices],
         initial="",
@@ -1173,6 +1175,8 @@ class OrgaEventTextForm(BaseModelForm):
         abstract = True
         model = EventText
         exclude = ("number",)
+
+        widgets: ClassVar[dict] = {"text": WritingTinyMCE()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event text form with feature-based field filtering.

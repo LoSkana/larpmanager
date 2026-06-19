@@ -931,7 +931,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
     # Extract and validate discount code from request
     cod = request.POST.get("cod")
     try:
-        disc = Discount.objects.get(runs__in=[context["run"]], cod=cod)
+        disc = Discount.objects.filter(runs__in=[context["run"]], cod=cod).distinct().get()
     except ObjectDoesNotExist:
         logger.warning("Discount code not found: %s", cod)
         logger.debug(traceback.format_exc())

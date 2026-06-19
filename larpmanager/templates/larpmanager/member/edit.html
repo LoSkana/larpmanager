@@ -1,0 +1,27 @@
+{% extends "utils.html" %}
+{% load i18n show_tags %}
+{% block body_class %}
+    {% if frame %}floating_iframe{% endif %}
+{% endblock body_class %}
+{% block title %}
+    {% if nonum is None %}
+        {% if num %}
+            {{ name }}
+        {% else %}
+            {% trans "New" %}
+        {% endif %}
+        -
+    {% endif %}
+    {{ form.page_title }}
+    - {{ run.search | truncatechars:50 }}
+{% endblock title %}
+{% block info %}
+    {% if not frame %}{{ form.page_info }}{% endif %}
+{% endblock info %}
+{% block content %}
+    <div class="user_resize platform">{% include "elements/form/main.html" %}</div>
+{% endblock content %}
+{% block js2 %}
+    {% include "elements/form/max_length.js" %}
+    {% include "elements/helpers/iframe_resize.js" %}
+{% endblock js2 %}

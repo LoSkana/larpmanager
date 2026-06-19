@@ -3512,6 +3512,9 @@ msgid ""
 "it can be used by already registered participants."
 msgstr ""
 
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+
 msgid "Open"
 msgstr ""
 
@@ -5074,6 +5077,30 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+msgid "Click or drag photo here"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
+
+msgid "Uploading"
+msgstr ""
+
+msgid "Uploading image, please wait"
+msgstr ""
+
+msgid "Rotate left"
+msgstr ""
+
+msgid "Rotate right"
+msgstr ""
+
+msgid "Error uploading image"
+msgstr ""
+
+msgid "Please retry or use a smaller file"
+msgstr ""
+
 msgid "Coming soon"
 msgstr ""
 
@@ -5156,12 +5183,6 @@ msgid "Need help"
 msgstr ""
 
 msgid "Confirm"
-msgstr ""
-
-msgid "Saved successfully"
-msgstr ""
-
-msgid "Closing"
 msgstr ""
 
 msgid "What would you like to do?"
@@ -5433,6 +5454,21 @@ msgid "The tax code matches"
 msgstr ""
 
 msgid "Option saved successfully"
+msgstr ""
+
+msgid "Closing"
+msgstr ""
+
+msgid "Add option"
+msgstr ""
+
+msgid "Maximum"
+msgstr ""
+
+msgid "Move up"
+msgstr ""
+
+msgid "Move down"
 msgstr ""
 
 msgid "An error occurred while reordering"
@@ -5791,33 +5827,7 @@ msgstr ""
 msgid "Character profile"
 msgstr ""
 
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-
-msgid "Change photo"
-msgstr ""
-
-msgid "Rotate left"
-msgstr ""
-
-msgid "Rotate right"
-msgstr ""
-
-msgid "Select the new photo to upload"
-msgstr ""
-
-msgid "Uploading"
-msgstr ""
-
-msgid "Uploading image, please wait"
-msgstr ""
-
-msgid "Error uploading image"
-msgstr ""
-
-msgid "Please retry or use a smaller file"
+msgid "Upload a photo of your character specifically for this event"
 msgstr ""
 
 msgid "Your characters"
@@ -5947,9 +5957,6 @@ msgid ""
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
-msgstr ""
-
-msgid "Maximum"
 msgstr ""
 
 msgid "Question"
@@ -7678,7 +7685,7 @@ msgid ""
 "You can check and edit the list of organizations that can access your data on"
 msgstr ""
 
-msgid "Current profile image"
+msgid "Profile image"
 msgstr ""
 
 msgid "Upload your profile photo"
@@ -9045,12 +9052,6 @@ msgstr ""
 msgid "Sign In"
 msgstr ""
 
-msgid "Move up"
-msgstr ""
-
-msgid "Move down"
-msgstr ""
-
 msgid "Writing"
 msgstr ""
 
@@ -10262,6 +10263,12 @@ msgstr ""
 msgid "List of other users"
 msgstr ""
 
+msgid "Invalid request"
+msgstr ""
+
+msgid "Missing question"
+msgstr ""
+
 msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
@@ -11202,9 +11209,6 @@ msgid "Registration cancelled"
 msgstr ""
 
 msgid "Player customisation updated"
-msgstr ""
-
-msgid "Invalid request"
 msgstr ""
 
 msgid "Please select both a registration and an event"

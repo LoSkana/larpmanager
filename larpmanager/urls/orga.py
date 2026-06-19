@@ -251,19 +251,34 @@ urlpatterns = [
         name="orga_registration_options_edit",
     ),
     path(
-        "<slug:event_slug>/manage/options/list/",
-        views_of.orga_registration_options_list,
-        name="orga_registration_options_list",
-    ),
-    path(
-        "<slug:event_slug>/manage/options/list/<slug:question_uuid>/",
-        views_of.orga_registration_options_list,
-        name="orga_registration_options_list",
+        "<slug:event_slug>/manage/options/<slug:option_uuid>/order/<int:order>/",
+        views_of.orga_registration_options_order,
+        name="orga_registration_options_order",
     ),
     path(
         "<slug:event_slug>/manage/options/<slug:option_uuid>/delete/",
         views_of.orga_registration_options_delete,
         name="orga_registration_options_delete",
+    ),
+    path(
+        "<slug:event_slug>/manage/options/inline/save/",
+        views_of.orga_registration_options_inline_save,
+        name="orga_registration_options_inline_save",
+    ),
+    path(
+        "<slug:event_slug>/manage/options/inline/<slug:option_uuid>/save/",
+        views_of.orga_registration_options_inline_save,
+        name="orga_registration_options_inline_save",
+    ),
+    path(
+        "<slug:event_slug>/manage/options/inline/reorder/",
+        views_of.orga_registration_options_inline_reorder,
+        name="orga_registration_options_inline_reorder",
+    ),
+    path(
+        "<slug:event_slug>/manage/options/inline/<slug:option_uuid>/delete/",
+        views_of.orga_registration_options_inline_delete,
+        name="orga_registration_options_inline_delete",
     ),
     path(
         "<slug:event_slug>/manage/quotas/",
@@ -536,16 +551,6 @@ urlpatterns = [
         name="orga_writing_form_email",
     ),
     path(
-        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/list/",
-        views_oc.orga_writing_options_list,
-        name="orga_writing_options_list",
-    ),
-    path(
-        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/list/<slug:question_uuid>/",
-        views_oc.orga_writing_options_list,
-        name="orga_writing_options_list",
-    ),
-    path(
         "<slug:event_slug>/manage/writing/<slug:writing_type>/options/new/",
         views_oc.orga_writing_options_new,
         name="orga_writing_options_new",
@@ -559,6 +564,26 @@ urlpatterns = [
         "<slug:event_slug>/manage/writing/<slug:writing_type>/options/<slug:option_uuid>/delete/",
         views_oc.orga_writing_options_delete,
         name="orga_writing_options_delete",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/inline/save/",
+        views_oc.orga_writing_options_inline_save,
+        name="orga_writing_options_inline_save",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/inline/<slug:option_uuid>/save/",
+        views_oc.orga_writing_options_inline_save,
+        name="orga_writing_options_inline_save",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/inline/reorder/",
+        views_oc.orga_writing_options_inline_reorder,
+        name="orga_writing_options_inline_reorder",
+    ),
+    path(
+        "<slug:event_slug>/manage/writing/<slug:writing_type>/options/inline/<slug:option_uuid>/delete/",
+        views_oc.orga_writing_options_inline_delete,
+        name="orga_writing_options_inline_delete",
     ),
     path(
         "<slug:event_slug>/manage/writing/<slug:writing_type>/edit/",

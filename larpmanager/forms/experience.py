@@ -34,6 +34,7 @@ from larpmanager.forms.utils import (
     EventWritingOptionS2WidgetMulti,
     RunCampaignS2Widget,
     SystemExpS2Widget,
+    WritingTinyMCE,
 )
 from larpmanager.models.event import Run
 from larpmanager.models.experience import (
@@ -143,6 +144,8 @@ class OrgaAbilityTemplateExpForm(BaseModelForm):
         model = AbilityTemplateExp
         exclude = ("number",)
 
+        widgets: ClassVar[dict] = {"descr": WritingTinyMCE()}
+
 
 class OrgaAbilityExpForm(MultichoiceMixin, ExpBaseForm):
     """Form for OrgaAbilityExp."""
@@ -158,6 +161,7 @@ class OrgaAbilityExpForm(MultichoiceMixin, ExpBaseForm):
         exclude = ("number",)
 
         widgets: ClassVar[dict] = {
+            "descr": WritingTinyMCE(),
             "system": SystemExpS2Widget,
             "typ": AbilityTypePxS2Widget,
             "characters": EventCharacterS2WidgetMulti,

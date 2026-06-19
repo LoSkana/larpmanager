@@ -233,6 +233,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
     # Check user permissions and get initial context
     context = check_association_context(request, "exe_features")
     context["assoc_form"] = True
+    context["add_another"] = False
 
     # Process form submission and handle feature activation
     if backend_edit(request, context, ExeFeatureForm):

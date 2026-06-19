@@ -27,8 +27,9 @@ if TYPE_CHECKING:
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, QuerySet
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.bulk import reset_bulk_cache
@@ -47,8 +48,15 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.writing import Faction, Plot
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element
-from larpmanager.utils.edit.backend import backend_set_order
+from larpmanager.utils.edit.backend import (
+    backend_order,
+    backend_set_order,
+)
+from larpmanager.utils.edit.options_inline import (
+    options_inline_delete,
+    options_inline_reorder,
+    options_inline_save,
+)
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     form_edit_handler,
@@ -227,41 +235,49 @@ def orga_registration_options_edit(request: HttpRequest, event_slug: str, option
 
 
 @login_required
-def orga_registration_options_list(
-    request: HttpRequest, event_slug: str, question_uuid: str | None = None
+def orga_registration_options_order(
+    request: HttpRequest,
+    event_slug: str,
+    option_uuid: str,
+    order: int,
 ) -> HttpResponse:
-    """Display the list of options for a registration form question in an iframe.
-
-    This view shows only the options list section, designed to be loaded in an iframe
-    within the form edit page.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        question_uuid: Question UUID to show options for
-
-    Returns:
-        HttpResponse with the options list template
-    """
-    # Check user permissions for registration form management
+    """Reorder registration options within a form question."""
     context = check_event_context(request, event_slug, "orga_registration_form")
-    context["frame"] = 1
-
-    if question_uuid:
-        # Get the question
-        get_element(context, question_uuid, "el", RegistrationQuestion)
-
-        # Load existing options for the question
-        options_queryset = RegistrationOption.objects.filter(question=context["el"])
-        context["list"] = options_queryset.order_by("order")
-
-    return render(request, "larpmanager/orga/registration/options_list.html", context)
+    backend_order(context, RegistrationOption, option_uuid, order)
+    url = reverse(
+        "orga_registration_form_edit",
+        kwargs={
+            "event_slug": context["run"].get_slug(),
+            "question_uuid": context["current"].question.uuid,
+        },
+    )
+    return HttpResponseRedirect(url)
 
 
 @login_required
 def orga_registration_options_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Delete registration option for an event."""
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_FORM_OPTION, option_uuid)
+
+
+@login_required
+def orga_registration_options_inline_save(
+    request: HttpRequest, event_slug: str, option_uuid: str | None = None
+) -> HttpResponse:
+    """Create or update a registration option from the inline editor (AJAX)."""
+    return options_inline_save(request, event_slug, "orga_registration_form", option_uuid)
+
+
+@login_required
+def orga_registration_options_inline_reorder(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Persist the full ordering of a question's options (AJAX)."""
+    return options_inline_reorder(request, event_slug, "orga_registration_form")
+
+
+@login_required
+def orga_registration_options_inline_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
+    """Delete a registration option from the inline editor (AJAX)."""
+    return options_inline_delete(request, event_slug, "orga_registration_form", option_uuid)
 
 
 @login_required

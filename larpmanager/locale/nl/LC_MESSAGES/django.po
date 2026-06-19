@@ -1088,6 +1088,9 @@ msgstr "Schrijven"
 msgid "XP used"
 msgstr "Gebruikte Px"
 
+msgid "maximum"
+msgstr "maximaal"
+
 msgid "options"
 msgstr "opties"
 
@@ -1648,6 +1651,9 @@ msgstr "Boekhouding"
 
 msgid "Activation"
 msgstr "Activering"
+
+msgid "Add option"
+msgstr "Optie toevoegen"
 
 msgid "Additional"
 msgstr "Extra"
@@ -2222,9 +2228,6 @@ msgstr "Cache opnieuw ingesteld!"
 msgid "Cancellation"
 msgstr "Annulering"
 
-msgid "Change photo"
-msgstr "Foto wijzigen"
-
 msgid "City / Place"
 msgstr "Stad / Plaats"
 
@@ -2639,6 +2642,9 @@ msgstr "Voorbeeld reset"
 
 msgid "Profile Image"
 msgstr "Profiel afbeelding"
+
+msgid "Profile image"
+msgstr "Profielfoto"
 
 msgid "Progress step"
 msgstr "Stap naar voren"
@@ -3292,6 +3298,9 @@ msgstr "Moge de beste winnen"
 msgid "Member approved!"
 msgstr "Lid goedgekeurd!"
 
+msgid "Missing question"
+msgstr "Ontbrekende vraag"
+
 msgid "Multiple systems"
 msgstr "Meerdere systemen"
 
@@ -3790,9 +3799,6 @@ msgstr "Herstel voltooid!"
 msgid "Review all members"
 msgstr "Alle leden beoordelen"
 
-msgid "Saved successfully"
-msgstr "Opgeslagen"
-
 msgid "Set up quest types"
 msgstr "Zoektochttypes instellen"
 
@@ -4262,9 +4268,6 @@ msgstr "Volledig blad (Test)"
 
 msgid "Create your character"
 msgstr "Creëer je personage"
-
-msgid "Current profile image"
-msgstr "Huidige profielafbeelding"
 
 msgid "Disable amount change"
 msgstr "Bedrag wijzigen uitschakelen"
@@ -4749,6 +4752,9 @@ msgstr "Controleer snelheid larp duplicaten"
 
 msgid "Check missing speed larp"
 msgstr "Controle snelheid larp ontbreekt"
+
+msgid "Click or drag photo here"
+msgstr "Klik of sleep de foto hierheen"
 
 msgid "Code of the box or shelf"
 msgstr "Code van de doos of plank"
@@ -5409,9 +5415,6 @@ msgstr "Wachtwoord reset verzoek url voor"
 msgid "Registrations on external link"
 msgstr "Registraties op externe link"
 
-msgid "Select the new photo to upload"
-msgstr "Selecteer de nieuwe foto die u wilt uploaden"
-
 msgid "Set up the taxes configuration"
 msgstr "De belastingconfiguratie instellen"
 
@@ -5912,7 +5915,7 @@ msgid "Name of the discount - internal use"
 msgstr "Naam van korting - voor intern gebruik"
 
 msgid "No elements are currently available"
-msgstr "Er zijn momenteel geen elementen beschikbaar"
+msgstr "Deze inhoud is momenteel niet beschikbaar"
 
 msgid "Now set up the tokens configuration"
 msgstr "Stel nu de tokens-configuratie in"
@@ -7967,6 +7970,9 @@ msgstr ""
 "Houd alle persoonlijke uitgaven bij die rechtstreeks voor dit evenement zijn"
 " gemaakt"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr "Upload een foto van je personage speciaal voor dit evenement"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr ""
 "Upload het ondertekende lidmaatschapsaanvraagformulier (PDF of afbeelding)"
@@ -8734,6 +8740,11 @@ msgstr ""
 
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dit zijn de evenementregistraties waarvoor je moet betalen"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Deze kortingscode is al gebruikt in een of meer van de geselecteerde "
+"bestellingen"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
@@ -10318,13 +10329,6 @@ msgid ""
 msgstr ""
 "Upload een foto van het identiteitsbewijs dat je in de aanvraag hebt vermeld"
 " (afbeelding of pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Upload een foto van jezelf in combinatie met je personage speciaal voor dit "
-"evenement"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

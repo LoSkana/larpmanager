@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, expect_normalized, go_to, login_orga, submit_confirm, sidebar
+from larpmanager.tests.utils import fill_date, expect_normalized, get_modal_iframe, go_to, login_orga, \
+    submit_confirm, sidebar, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -58,7 +59,7 @@ def test_user_new_ticket_orga_bulk(pw_page: Any) -> None:
 def bulk_writing(live_server: Any, page: Any) -> None:
     # set feature
     go_to(page, live_server, "test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()
@@ -69,113 +70,115 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     # add plot
     sidebar(page, "Plots")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("plot")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("plot")
+    save_modal(page, edit_iframe)
 
     # add faction
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("faz")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("faz")
+    save_modal(page, edit_iframe)
 
     # check base
     sidebar(page, "Characters")
-    page.get_by_role("link", name="Faction", exact=True).click()
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Faction")
+    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
 
     # set faction
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
 
     # check result
-    page.get_by_role("link", name="Faction", exact=True).click()
+    click_and_wait_question(page, "Faction")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text faz")
 
     # remove faction
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("5")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
 
     # check result
-    page.get_by_role("link", name="Faction", exact=True).click()
+    click_and_wait_question(page, "Faction")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
 
     # add plot
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("6")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
 
     # check result
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text plot")
 
     # remove plot
     page.get_by_role("link", name="Bulk").click()
     page.get_by_role("cell", name="Test Teaser").click()
     page.locator("#operation").select_option("7")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
 
     # check
-    page.locator("#one").get_by_role("link", name="Plots").click()
+    click_and_wait_question(page, "Plots")
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
 
     # set quest type
     page.get_by_role("link", name="Quest type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("typ")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("typ")
+    save_modal(page, edit_iframe)
 
 
 def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # create quest
     sidebar(page, "Quest")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("q1")
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("q2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("q2")
+    save_modal(page, edit_iframe)
 
     # create second quest type
     page.get_by_role("link", name="Quest type").click()
     expect_normalized(page, page.locator("#one"), "typ q1 q2")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("t2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("t2")
+    save_modal(page, edit_iframe)
 
     # test bulk set quest
     sidebar(page, "Quest")
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u1"]').get_by_role("cell", name="typ").click()
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Q1 q1 t2 Q2 q2 typ")
 
     # create traits
     sidebar(page, "Traits")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("t1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("t1")
+    save_modal(page, edit_iframe)
 
     # test bulk set quest
+    page.reload()
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing_list td:nth-child(5)").click()
     page.locator("#objs_9").select_option("u2")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "T1 t1 Q2 q2")
 
 
@@ -183,36 +186,39 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     # create ability type
     page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("t1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("t1")
+    save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("2")
+    save_modal(page, edit_iframe)
 
     # create ability
     sidebar(page, "Abilities")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("swor")
-    page.locator("#id_cost").click()
-    page.locator("#id_cost").fill("1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("swor")
+    edit_iframe.locator("#id_cost").click()
+    edit_iframe.locator("#id_cost").fill("1")
+    save_modal(page, edit_iframe)
 
     # test bulk set type
+    page.reload()
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing td:nth-child(5)").click()
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "swor 2 1")
 
     # test bulk change type
+    page.reload()
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing td:nth-child(5)").click()
     page.locator("#objs_10").select_option("u1")
-    page.get_by_role("link", name="Execute").click()
-    just_wait(page)
+    submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "swor t1 1")
 
 
@@ -225,49 +231,55 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
 
     # add box
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("box")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("box")
+    save_modal(page, edit_iframe)
 
     # add tag
     page.get_by_role("link", name="Tags").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("tag")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("tag")
+    save_modal(page, edit_iframe)
 
     # add items
     page.get_by_role("link", name="Items").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("item1")
-    page.locator("#select2-id_container-container").click()
-    page.get_by_role("searchbox").nth(1).fill("bo")
-    page.locator(".select2-results__option").first.click()
-    page.get_by_role("checkbox", name="After confirmation, add").check()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("item1")
+    edit_iframe.locator("#select2-id_container-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("bo")
+    edit_iframe.locator(".select2-results__option").first.click()
+    save_modal(page, edit_iframe)
 
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("item2")
-    page.locator("#select2-id_container-container").click()
-    page.get_by_role("searchbox").nth(1).fill("box")
-    page.locator(".select2-results__option").first.click()
-    page.get_by_role("checkbox", name="After confirmation, add").check()
-    submit_confirm(page)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("item2")
+    edit_iframe.locator("#select2-id_container-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("box")
+    edit_iframe.locator(".select2-results__option").first.click()
+    save_modal(page, edit_iframe)
 
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("item3")
-    page.locator("#select2-id_container-container").click()
-    page.get_by_role("searchbox").nth(1).fill("box")
-    page.locator(".select2-results__option").first.click()
-    submit_confirm(page)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("item3")
+    edit_iframe.locator("#select2-id_container-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("box")
+    edit_iframe.locator(".select2-results__option").first.click()
+    save_modal(page, edit_iframe)
 
     # add second container
     page.get_by_role("link", name="Containers").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("box2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("box2")
+    save_modal(page, edit_iframe)
 
 
 def bulk_warehouse2(live_server: Any, page: Any) -> None:
@@ -276,11 +288,13 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "item1 box")
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item3 box")
+
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#objs_1").select_option("u2")
-    page.get_by_role("link", name="Execute").click()
+    submit_confirm(page)
+
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item1 box2")
     expect_normalized(page, page.locator("#one"), "item3 box2")
@@ -290,7 +304,8 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator("#operation").select_option("2")
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.get_by_role("link", name="Execute").click()
+    submit_confirm(page)
+
     expect_normalized(page, page.locator("#one"), "item3 box2")
     expect_normalized(page, page.locator("#one"), "item2 box tag")
     expect_normalized(page, page.locator("#one"), "item1 box2 tag")
@@ -299,7 +314,8 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#operation").select_option("3")
-    page.get_by_role("link", name="Execute").click()
+    submit_confirm(page)
+
     expect_normalized(page, page.locator("#one"), "item3 box2")
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item1 box2 tag")
@@ -317,17 +333,18 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
 
 def new_ticket(live_server: Any, page: Any) -> None:
     # add feature for ticket for new players
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="New player").check()
     submit_confirm(page)
 
     # add ticket
     page.get_by_role("link", name="New").click()
-    page.get_by_text("Type of ticket").click()
-    page.locator("#id_tier").select_option("y")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("new")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Type of ticket").click()
+    edit_iframe.locator("#id_tier").select_option("y")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("new")
+    save_modal(page, edit_iframe)
 
     # sign up with the new ticket
     go_to(page, live_server, "test")
@@ -343,31 +360,28 @@ def new_ticket(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "manage/")
     page.get_by_role("link", name="Events").click()
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_form1-name").click()
-    page.locator("#id_form1-name").fill("newevent")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").click()
+    edit_iframe.locator("#id_form1-name").fill("newevent")
     # don't set slug, let it be auto filled
-
-    page.locator("#id_form2-development").select_option("1")
-    page.locator("#id_form2-registration_status").select_option("o")
-    page.locator("#id_form2-start").fill("2045-06-11")
-    just_wait(page)
-    page.locator("#id_form2-start").click()
-    page.locator("#id_form2-end").fill("2045-06-13")
-    just_wait(page)
-    page.locator("#id_form2-end").click()
-    submit_confirm(page)
+    edit_iframe.locator("#id_form2-development").select_option("1")
+    edit_iframe.locator("#id_form2-registration_status").select_option("o")
+    fill_date(edit_iframe, "#id_form2-start", "2045-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2045-06-13")
+    save_modal(page, edit_iframe)
 
     # add feature also to this
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="New player").check()
     submit_confirm(page)
 
     # add new ticket
     page.get_by_role("link", name="New").click()
-    page.locator("#id_tier").select_option("y")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("new")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_tier").select_option("y")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("new")
+    save_modal(page, edit_iframe)
 
     # check new ticket is not available
     go_to(page, live_server, "newevent/1/")

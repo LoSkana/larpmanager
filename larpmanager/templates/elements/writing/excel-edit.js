@@ -142,6 +142,7 @@ window.addEventListener('DOMContentLoaded', function() {
                         cell.invalidate('dom');
                     }
                 });
+                window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
                 return;
             }
             // form error

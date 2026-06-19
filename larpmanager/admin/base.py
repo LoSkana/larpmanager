@@ -169,7 +169,7 @@ class FeatureAdmin(DefModelAdmin):
 
 
 @admin.register(PaymentMethod)
-class PaymentMethodAdmin(DefModelAdmin):
+class PaymentMethodAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for PaymentMethod model."""
 
     list_display = ("name", "slug")

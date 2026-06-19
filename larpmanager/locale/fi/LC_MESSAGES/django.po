@@ -1088,6 +1088,9 @@ msgstr "Kirjoittaminen"
 msgid "XP used"
 msgstr "Käytetty XP"
 
+msgid "maximum"
+msgstr "enimmäismäärä"
+
 msgid "options"
 msgstr "vaihtoehdot"
 
@@ -1648,6 +1651,9 @@ msgstr "Kirjanpito"
 
 msgid "Activation"
 msgstr "Aktivointi"
+
+msgid "Add option"
+msgstr "Lisää vaihtoehto"
 
 msgid "Additional"
 msgstr "Lisätiedot"
@@ -2222,9 +2228,6 @@ msgstr "Välimuistin nollaus!"
 msgid "Cancellation"
 msgstr "Peruutus"
 
-msgid "Change photo"
-msgstr "Vaihda kuva"
-
 msgid "City / Place"
 msgstr "Kaupunki / paikka"
 
@@ -2638,6 +2641,9 @@ msgid "Preview reset"
 msgstr "Esikatselun nollaus"
 
 msgid "Profile Image"
+msgstr "Profiilikuva"
+
+msgid "Profile image"
 msgstr "Profiilikuva"
 
 msgid "Progress step"
@@ -3292,6 +3298,9 @@ msgstr "Paras voittakoon"
 msgid "Member approved!"
 msgstr "Jäsen hyväksytty!"
 
+msgid "Missing question"
+msgstr "Puuttuva kysymys"
+
 msgid "Multiple systems"
 msgstr "Useita järjestelmiä"
 
@@ -3790,9 +3799,6 @@ msgstr "Palautus suoritettu!"
 msgid "Review all members"
 msgstr "Tarkista kaikki jäsenet"
 
-msgid "Saved successfully"
-msgstr "Tallennettu onnistuneesti"
-
 msgid "Set up quest types"
 msgstr "Määritä tehtävätyypit"
 
@@ -4262,9 +4268,6 @@ msgstr "Täydellinen lomake (testi)"
 
 msgid "Create your character"
 msgstr "Luo hahmosi"
-
-msgid "Current profile image"
-msgstr "Nykyinen profiilikuva"
 
 msgid "Disable amount change"
 msgstr "Määrän muutoksen poistaminen käytöstä"
@@ -4749,6 +4752,9 @@ msgstr "Tarkista speed-larpit"
 
 msgid "Check missing speed larp"
 msgstr "Tarkista puuttuva speed-larp"
+
+msgid "Click or drag photo here"
+msgstr "Napsauta tai vedä valokuva tähän"
 
 msgid "Code of the box or shelf"
 msgstr "Laatikon tai hyllyn koodi"
@@ -5409,9 +5415,6 @@ msgstr "Salasanan palautuspyynnön url for"
 msgid "Registrations on external link"
 msgstr "Ilmoittautumiset ulkoisen linkin kautta"
 
-msgid "Select the new photo to upload"
-msgstr "Valitse uusi ladattava valokuva"
-
 msgid "Set up the taxes configuration"
 msgstr "Määritä verojen kokoonpano"
 
@@ -5911,7 +5914,7 @@ msgid "Name of the discount - internal use"
 msgstr "Alennuksen nimi - sisäinen käyttö"
 
 msgid "No elements are currently available"
-msgstr "Tällä hetkellä ei ole saatavilla elementtejä"
+msgstr "Tämä sisältö ei ole tällä hetkellä saatavilla"
 
 msgid "Now set up the tokens configuration"
 msgstr "Määritä nyt tunnusten konfiguraatio"
@@ -7929,6 +7932,9 @@ msgstr "Tämä hahmo on inaktiivinen, eikä sitä voi antaa pelaajille"
 msgid "Track all personal expenses directly incurred for this event"
 msgstr "Kirjaa kaikki tapahtumasta suoraan aiheutuneet henkilökohtaiset kulut"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr "Lataa hahmosi valokuva nimenomaan tätä tapahtumaa varten"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr "Lataa allekirjoitettu jäsenhakemuslomake (PDF tai kuva)"
 
@@ -8643,6 +8649,10 @@ msgstr ""
 msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Nämä ovat tapahtumailmoittautumiset, joista sinun on suoritettava maksu"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Tätä alennuskoodia on jo käytetty yhdessä tai useammassa valitusta erästä"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
@@ -10138,13 +10148,6 @@ msgid ""
 msgstr ""
 "Lataa kuva hakemuksessa mainitsemastasi henkilöllisyystodistuksesta (kuva "
 "tai pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Lataa itsestäsi kuva, joka liittyy hahmoosi erityisesti tätä tapahtumaa "
-"varten"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

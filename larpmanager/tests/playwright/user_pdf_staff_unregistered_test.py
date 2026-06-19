@@ -31,7 +31,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import check_download, go_to, login_orga, login_user, submit_confirm
+from larpmanager.tests.utils import check_download, go_to, login_orga, login_user, submit_confirm, get_modal_iframe, \
+    save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -55,8 +56,9 @@ def test_staff_unregistered_can_access_pdf(pw_page: Any) -> None:
     # Create a character (staff can do this without being registered)
     go_to(page, live_server, "/test/manage/characters")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("Test Staff Character")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("Test Staff Character")
+    save_modal(page, edit_iframe)
 
     # Get the character ID from the URL
     character_url = page.locator(".fa-edit").first.locator('..').get_attribute("href")

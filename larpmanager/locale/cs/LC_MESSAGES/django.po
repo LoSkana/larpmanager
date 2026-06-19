@@ -1088,6 +1088,9 @@ msgstr "Psaní"
 msgid "XP used"
 msgstr "Použité Px"
 
+msgid "maximum"
+msgstr "maximální"
+
 msgid "options"
 msgstr "možnosti"
 
@@ -1648,6 +1651,9 @@ msgstr "Účetnictví"
 
 msgid "Activation"
 msgstr "Aktivace"
+
+msgid "Add option"
+msgstr "Přidat možnost"
 
 msgid "Additional"
 msgstr "Další"
@@ -2222,9 +2228,6 @@ msgstr "Obnovení mezipaměti!"
 msgid "Cancellation"
 msgstr "Zrušení"
 
-msgid "Change photo"
-msgstr "Změna fotografie"
-
 msgid "City / Place"
 msgstr "Město / místo"
 
@@ -2639,6 +2642,9 @@ msgstr "Obnovení náhledu"
 
 msgid "Profile Image"
 msgstr "Profilový obrázek"
+
+msgid "Profile image"
+msgstr "Profilová fotka"
 
 msgid "Progress step"
 msgstr "Krok vpřed"
@@ -3292,6 +3298,9 @@ msgstr "Ať vyhraje ten nejlepší"
 msgid "Member approved!"
 msgstr "Člen schválen!"
 
+msgid "Missing question"
+msgstr "Chybějící otázka"
+
 msgid "Multiple systems"
 msgstr "Více systémů"
 
@@ -3790,9 +3799,6 @@ msgstr "Obnova dokončena!"
 msgid "Review all members"
 msgstr "Přezkoumání všech členů"
 
-msgid "Saved successfully"
-msgstr "Úspěšně uloženo"
-
 msgid "Set up quest types"
 msgstr "Nastavení typů úkolů"
 
@@ -4262,9 +4268,6 @@ msgstr "Kompletní list (Test)"
 
 msgid "Create your character"
 msgstr "Vytvořte si postavu"
-
-msgid "Current profile image"
-msgstr "Aktuální profilový obrázek"
 
 msgid "Disable amount change"
 msgstr "Zakázat změnu částky"
@@ -4749,6 +4752,9 @@ msgstr "Zkontrolujte duplicity rychlostních larpů"
 
 msgid "Check missing speed larp"
 msgstr "Zkontrolujte chybějící rychlosti larpů"
+
+msgid "Click or drag photo here"
+msgstr "Klikněte sem nebo sem přetáhněte fotografii"
 
 msgid "Code of the box or shelf"
 msgstr "Kód krabice nebo police"
@@ -5409,9 +5415,6 @@ msgstr "URL adresa žádosti o reset hesla pro"
 msgid "Registrations on external link"
 msgstr "Registrace na externím odkazu"
 
-msgid "Select the new photo to upload"
-msgstr "Vyberte novou fotografii, kterou chcete nahrát"
-
 msgid "Set up the taxes configuration"
 msgstr "Nastavení konfigurace daní"
 
@@ -5912,7 +5915,7 @@ msgid "Name of the discount - internal use"
 msgstr "Název slevy - pro interní použití"
 
 msgid "No elements are currently available"
-msgstr "V současné době nejsou k dispozici žádné prvky"
+msgstr "Tento obsah není v současné době k dispozici"
 
 msgid "Now set up the tokens configuration"
 msgstr "Nyní nastavte konfiguraci tokenů"
@@ -7920,6 +7923,9 @@ msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"
 msgid "Track all personal expenses directly incurred for this event"
 msgstr "Sledujte všechny osobní výdaje, které přímo souvisejí s touto akcí"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr "Nahrajte fotografii své postavy speciálně pro tuto akci"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr "Nahrajte podepsanou přihlášku k členství (PDF nebo obrázek)"
 
@@ -8580,6 +8586,9 @@ msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
 
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr "Tento slevový kód již byl použit v jednom nebo více vybraných bězích"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr "Tato částka se automaticky odečte z registrace budoucí akce"
@@ -10027,12 +10036,6 @@ msgid ""
 msgstr ""
 "Nahrajte fotografii dokladu totožnosti, který jste uvedli v žádosti (obrázek"
 " nebo pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Nahrajte svou fotografii spojenou s vaší postavou speciálně pro tuto událost"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

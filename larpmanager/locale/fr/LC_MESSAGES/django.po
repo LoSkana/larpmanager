@@ -1088,6 +1088,9 @@ msgstr "Rédaction"
 msgid "XP used"
 msgstr "Px utilisé"
 
+msgid "maximum"
+msgstr "maximum"
+
 msgid "options"
 msgstr "options"
 
@@ -1648,6 +1651,9 @@ msgstr "Comptabilité"
 
 msgid "Activation"
 msgstr "Activation"
+
+msgid "Add option"
+msgstr "Ajouter une option"
 
 msgid "Additional"
 msgstr "Supplémentaire"
@@ -2222,9 +2228,6 @@ msgstr "Réinitialisation du cache !"
 msgid "Cancellation"
 msgstr "Annulation"
 
-msgid "Change photo"
-msgstr "Changer de photo"
-
 msgid "City / Place"
 msgstr "Ville / Lieu"
 
@@ -2639,6 +2642,9 @@ msgstr "Réinitialisation de l'aperçu"
 
 msgid "Profile Image"
 msgstr "Image de profil"
+
+msgid "Profile image"
+msgstr "Photo de profil"
 
 msgid "Progress step"
 msgstr "Avancer d'un pas"
@@ -3292,6 +3298,9 @@ msgstr "Que le meilleur gagne"
 msgid "Member approved!"
 msgstr "Approuvé par les membres !"
 
+msgid "Missing question"
+msgstr "Question manquante"
+
 msgid "Multiple systems"
 msgstr "Systèmes multiples"
 
@@ -3790,9 +3799,6 @@ msgstr "Restauration terminée !"
 msgid "Review all members"
 msgstr "Examiner tous les membres"
 
-msgid "Saved successfully"
-msgstr "Sauvegardé avec succès"
-
 msgid "Set up quest types"
 msgstr "Configurer les types de quêtes"
 
@@ -4262,9 +4268,6 @@ msgstr "Feuille complète (Test)"
 
 msgid "Create your character"
 msgstr "Créez votre personnage"
-
-msgid "Current profile image"
-msgstr "Image du profil actuel"
 
 msgid "Disable amount change"
 msgstr "Désactiver la modification du montant"
@@ -4749,6 +4752,9 @@ msgstr "Vérifier les doublons de speed larp"
 
 msgid "Check missing speed larp"
 msgstr "Check speed larp manquant"
+
+msgid "Click or drag photo here"
+msgstr "Clique ou fais glisser une photo ici"
 
 msgid "Code of the box or shelf"
 msgstr "Code de la boîte ou de l'étagère"
@@ -5409,9 +5415,6 @@ msgstr "URL de demande de réinitialisation du mot de passe pour"
 msgid "Registrations on external link"
 msgstr "Inscriptions sur lien externe"
 
-msgid "Select the new photo to upload"
-msgstr "Sélectionnez la nouvelle photo à télécharger"
-
 msgid "Set up the taxes configuration"
 msgstr "Configuration des taxes"
 
@@ -5912,7 +5915,7 @@ msgid "Name of the discount - internal use"
 msgstr "Nom de la remise - pour usage interne"
 
 msgid "No elements are currently available"
-msgstr "Aucun élément n'est actuellement disponible"
+msgstr "Ce contenu n'est pas disponible actuellement"
 
 msgid "Now set up the tokens configuration"
 msgstr "Il faut maintenant configurer les jetons"
@@ -8044,6 +8047,10 @@ msgid "Track all personal expenses directly incurred for this event"
 msgstr ""
 "Note toutes les dépenses personnelles directement liées à cet événement"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr ""
+"Télécharge une photo de ton personnage spécialement pour cet événement"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr "Télécharger le formulaire de demande d'adhésion signé (PDF ou image)"
 
@@ -8858,6 +8865,11 @@ msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Il s'agit des inscriptions à des événements pour lesquels vous devez "
 "effectuer un paiement"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Ce code de réduction a déjà été utilisé dans une ou plusieurs des commandes "
+"sélectionnées"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
@@ -10460,13 +10472,6 @@ msgid ""
 msgstr ""
 "Téléchargez une photo du document d'identité que vous avez mentionné dans la"
 " demande (image ou pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Téléchargez une photo de vous associée à votre personnage spécialement pour "
-"cet événement"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

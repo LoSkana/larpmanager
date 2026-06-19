@@ -33,6 +33,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_user,
                                      submit_confirm,
                                      expect_normalized, fill_tinymce, check_feature, sidebar, nav,
+                                     get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -53,19 +54,21 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Create first section
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Preferences")
-    page.locator("#id_name").press("Tab")
-    fill_tinymce(page, "id_description", "What you prefer", show=False)
-    page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Preferences")
+    edit_iframe.locator("#id_name").press("Tab")
+    fill_tinymce(edit_iframe, "id_description", "What you prefer", show=False)
+    save_modal(page, edit_iframe)
 
     # Create second section
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Needs")
-    page.locator("#id_name").press("Tab")
-    fill_tinymce(page, "id_description", "What you need", show=False)
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Needs")
+    edit_iframe.locator("#id_name").press("Tab")
+    fill_tinymce(edit_iframe, "id_description", "What you need", show=False)
+    save_modal(page, edit_iframe)
 
     # Check reordering
     expect_normalized(page, page.locator("#registration_sections_wrapper"), "Preferences Needs")
@@ -78,30 +81,32 @@ def test_orga_section_form(pw_page: Any) -> None:
     # Add one question for each section
     page.get_by_role("link", name="Form").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("t")
-    page.locator("#id_name").click()
-    page.get_by_text("Question type").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Food")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("fooood")
-    page.locator("#select2-id_section-container").click()
-    page.get_by_role("searchbox").fill("pre")
-    page.get_by_role("option", name="Preferences").click()
-    page.get_by_text("After confirmation, add").click()
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("t")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.get_by_text("Question type").click()
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Food")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.locator("#id_description").fill("fooood")
+    edit_iframe.locator("#select2-id_section-container").click()
+    edit_iframe.get_by_role("searchbox").fill("pre")
+    edit_iframe.get_by_role("option", name="Preferences").click()
+    save_modal(page, edit_iframe)
 
     # Second question for second section
-    page.locator("#id_typ").select_option("t")
-    page.locator("#id_description").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("sleep")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("sleeeep")
-    page.locator("#select2-id_section-container").click()
-    page.get_by_role("searchbox").fill("nee")
-    page.get_by_role("option", name="Needs").click()
-    page.get_by_role("button", name="Confirm").click()
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("t")
+    edit_iframe.locator("#id_description").click()
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("sleep")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.locator("#id_description").fill("sleeeep")
+    edit_iframe.locator("#select2-id_section-container").click()
+    edit_iframe.get_by_role("searchbox").fill("nee")
+    edit_iframe.get_by_role("option", name="Needs").click()
+    save_modal(page, edit_iframe)
 
     # Check signup
     go_to(page, live_server, "/test/register")
@@ -117,7 +122,9 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # check section is still available
     page.locator("#registration_questions_needs").locator(".fa-edit").click()
-    expect(page.locator("#select2-id_section-container")).to_match_aria_snapshot("- textbox \"Needs\"")
+    edit_iframe = get_modal_iframe(page)
+    expect(edit_iframe.locator("#select2-id_section-container")).to_match_aria_snapshot("- textbox \"Needs\"")
+    save_modal(page, edit_iframe)
 
     # Reorder sections, check they are updated
     page.get_by_role("link", name="Sections").click()
@@ -143,17 +150,19 @@ def test_orga_section_form(pw_page: Any) -> None:
     # Create new ticket
     sidebar(page, "Tickets")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Depends")
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Depends")
+    save_modal(page, edit_iframe)
 
     # Select ticket as dependent
     page.get_by_role("link", name="Form").click()
     page.locator("#registration_questions_preferences").locator(".fa-edit").click()
-    page.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").click()
-    page.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").fill("de")
-    page.get_by_role("option", name="Test Larp (Standard) Depends").click()
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").click()
+    edit_iframe.get_by_role("row", name="Ticket list If you select one").get_by_role("searchbox").fill("de")
+    edit_iframe.get_by_role("option", name="Test Larp (Standard) Depends").click()
+    save_modal(page, edit_iframe)
 
     # Check signup
     go_to(page, live_server, "/test/register/")
@@ -192,11 +201,12 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     sidebar(page, "Form")
     page.locator("#registration_questions_needs").locator(".fa-edit").click()
-    page.get_by_text("Staff members who are allowed").click()
-    page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
-    page.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").fill("ad")
-    page.get_by_role("option", name="Admin Test").click()
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Staff members who are allowed").click()
+    edit_iframe.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").click()
+    edit_iframe.get_by_role("cell", name="Staff members who are allowed").get_by_role("searchbox").fill("ad")
+    edit_iframe.get_by_role("option", name="Admin Test").click()
+    save_modal(page, edit_iframe)
 
     sidebar(page, "Registrations")
     page.get_by_role("link", name="Food").click()
@@ -209,14 +219,15 @@ def test_orga_section_form(pw_page: Any) -> None:
     # set allowed
     go_to(page, live_server, "/test/manage/roles/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("blabla")
-    page.locator("#id_name").press("Tab")
-    page.get_by_role("searchbox").fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    check_feature(page, "Navigation")
-    check_feature(page, "Registrations")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("blabla")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.get_by_role("searchbox").fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    check_feature(edit_iframe, "Navigation")
+    check_feature(edit_iframe, "Registrations")
+    save_modal(page, edit_iframe)
 
     # login as user
     login_user(page, live_server)
@@ -227,14 +238,15 @@ def test_orga_section_form(pw_page: Any) -> None:
     expect(page.get_by_role("link", name="sleep")).not_to_be_visible()
 
     page.get_by_role("link", name="Food").click()
-
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Depends SADSA")
 
     page.locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
 
-    expect(page.get_by_role("link", name=re.compile(r"^Needs "))).not_to_be_visible()
-    expect(page.get_by_role("cell", name="sleeeep")).not_to_be_visible()
-    expect(page.get_by_text("What you need sleep sleeeep")).not_to_be_visible()
+    expect(edit_iframe.get_by_role("link", name=re.compile(r"^Needs "))).not_to_be_visible()
+    expect(edit_iframe.get_by_role("cell", name="sleeeep")).not_to_be_visible()
+    expect(edit_iframe.get_by_text("What you need sleep sleeeep")).not_to_be_visible()
 
     # test factions
     login_orga(page, live_server)
@@ -260,23 +272,25 @@ def test_orga_section_form(pw_page: Any) -> None:
     # create faction
     sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("aaaaaccc")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("aaaaaccc")
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    save_modal(page, edit_iframe)
 
     # set up question
     sidebar(page, "Form")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("faaaaacc")
-    page.locator("#id_typ").select_option("t")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("aa")
-    page.get_by_role("option", name="aaaaaccc (P)").click()
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("faaaaacc")
+    edit_iframe.locator("#id_typ").select_option("t")
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("aa")
+    edit_iframe.get_by_role("option", name="aaaaaccc (P)").click()
+    save_modal(page, edit_iframe)
 
     # delete sign up
     sidebar(page, "Registrations")
@@ -297,11 +311,12 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Registrations")
     page.locator(".fa-edit").click()
-    page.get_by_role("link", name=re.compile(r"^Character ")).click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    page.get_by_role("button", name="Confirm").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("link", name=re.compile(r"^Character ")).click()
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    save_modal(page, edit_iframe)
 
     # check it is visible
     go_to(page, live_server, "/test/register")

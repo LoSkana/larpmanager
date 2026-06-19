@@ -28,6 +28,7 @@ from django.http import Http404
 
 from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import search_player
@@ -38,6 +39,7 @@ from larpmanager.models.form import (
     QuestionStatus,
     WritingAnswer,
     WritingChoice,
+    WritingQuestionType,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import RegistrationCharacterRel
@@ -308,6 +310,19 @@ def get_character_sheet_exp(context: dict) -> None:
 
     # Add additional character data to context
     add_char_addit(context["character"])
+
+    # Build per-system experience data for display
+    context["exp_systems_data"] = [
+        {
+            "name": sys.name,
+            "uuid": str(sys.uuid),
+            "tot": context["character"].addit.get(f"exp_tot_{sys.uuid}", 0),
+            "used": context["character"].addit.get(f"exp_used_{sys.uuid}", 0),
+            "avail": context["character"].addit.get(f"exp_avail_{sys.uuid}", 0),
+        }
+        for sys in get_event_exp_systems(context["event"])
+        if not sys.hidden
+    ]
 
 
 def get_character_sheet_prologue(context: dict) -> None:
@@ -708,8 +723,15 @@ def _collect_sources_map(character: Character) -> dict[int, set[str]]:
         for number in extract_char_numbers_from_texts([text]):
             sources_map.setdefault(number, set()).add(source_name)
 
-    for number in extract_char_numbers_from_texts([character.text or ""]):
-        sources_map.setdefault(number, set())
+    sheet_name = next(
+        (
+            q["name"]
+            for q in get_cached_writing_questions(character.event, QuestionApplicable.CHARACTER)
+            if q["typ"] == WritingQuestionType.SHEET
+        ),
+        WritingQuestionType.SHEET.label,
+    )
+    _add_refs(character.text or "", sheet_name)
 
     for answer in WritingAnswer.objects.filter(element_id=character.pk, deleted__isnull=True).select_related(
         "question"

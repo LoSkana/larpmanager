@@ -35,10 +35,10 @@ from larpmanager.tests.utils import (
     expect_normalized,
     go_to,
     just_wait,
-    load_image,
+    load_image_hidden,
     login_orga,
     login_user,
-    submit_confirm, logout,
+    submit_confirm, logout, get_modal_iframe, save_modal, _wait_lm_ready,
 )
 
 pytestmark = pytest.mark.e2e
@@ -95,18 +95,17 @@ def configure_customization_fields(page: Any, live_server: Any) -> None:
 def create_and_assign_character(page: Any, live_server: Any) -> None:
     """Create a character and assign it to user test."""
     go_to(page, live_server, "/test/manage/characters")
-    just_wait(page)
 
     # Edit character
     page.locator(".fa-edit").click(force=True)
 
     # Assign to user test
-    page.locator("#select2-id_player-container").click()
-    page.get_by_role("searchbox").fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_player-container").click()
+    edit_iframe.get_by_role("searchbox").fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
 
-    submit_confirm(page)
-    just_wait(page)
+    save_modal(page, edit_iframe)
 
     # Register user to event
     login_user(page, live_server)
@@ -117,15 +116,14 @@ def create_and_assign_character(page: Any, live_server: Any) -> None:
 def fill_customization_form(page: Any, live_server: Any) -> None:
     """Fill all customization form fields including image upload."""
     go_to(page, live_server, "/test")
-    just_wait(page)
 
     # Access character customization
     page.get_by_role("link", name="Test Character").first.click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Click customize button
     page.get_by_role("link", name="Customize").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Fill custom name
     page.locator("#id_custom_name").click()
@@ -148,8 +146,7 @@ def fill_customization_form(page: Any, live_server: Any) -> None:
     page.locator("#id_custom_private").fill("This is my private character note. Only I and organizers can see this.")
 
     # Upload character profile image
-    page.locator("#change_photo").click(force=True)
-    load_image(page, "#id_image")
+    load_image_hidden(page, "#id_image")
 
     # Wait for AJAX upload to complete
     page.wait_for_load_state("networkidle")
@@ -159,7 +156,6 @@ def fill_customization_form(page: Any, live_server: Any) -> None:
     expect(page.locator("#profile")).to_be_visible()
 
     submit_confirm(page)
-    just_wait(page)
 
 
 def verify_field_visibility(page: Any, live_server: Any) -> None:
@@ -196,11 +192,10 @@ def verify_field_visibility(page: Any, live_server: Any) -> None:
     # Verify orga can see private field (as staff)
     login_orga(page, live_server)
     go_to(page, live_server, "/test/")
-    just_wait(page)
 
     # Find and view character
     page.get_by_text("My Custom Name").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Organizers should be able to see both public and private
     expect_normalized(page, page.locator("body"), "This is my public character description")
@@ -220,13 +215,12 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     # Verify the Characters link is visible in the topbar
     login_user(page, live_server)
     go_to(page, live_server, "/")
-    just_wait(page)
     characters_link = page.locator("a[href='/characters']").filter(has_text="Characters")
     expect(characters_link).to_be_visible()
 
     # Click the characters link
     characters_link.click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Verify we're on the characters page
     expect(page).to_have_url(f"{live_server.url}/characters")

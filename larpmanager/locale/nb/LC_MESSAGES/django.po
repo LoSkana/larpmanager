@@ -1088,6 +1088,9 @@ msgstr "Skriving"
 msgid "XP used"
 msgstr "Px brukt"
 
+msgid "maximum"
+msgstr "maksimum"
+
 msgid "options"
 msgstr "alternativer"
 
@@ -1648,6 +1651,9 @@ msgstr "Regnskap"
 
 msgid "Activation"
 msgstr "Aktivering"
+
+msgid "Add option"
+msgstr "Legg til alternativ"
 
 msgid "Additional"
 msgstr "Ytterligere"
@@ -2222,9 +2228,6 @@ msgstr "Cache tilbakestilt!"
 msgid "Cancellation"
 msgstr "Avbestilling"
 
-msgid "Change photo"
-msgstr "Endre bilde"
-
 msgid "City / Place"
 msgstr "By / sted"
 
@@ -2638,6 +2641,9 @@ msgid "Preview reset"
 msgstr "Forhåndsvisning av tilbakestilling"
 
 msgid "Profile Image"
+msgstr "Profilbilde"
+
+msgid "Profile image"
 msgstr "Profilbilde"
 
 msgid "Progress step"
@@ -3292,6 +3298,9 @@ msgstr "Måtte den beste vinne"
 msgid "Member approved!"
 msgstr "Medlem godkjent!"
 
+msgid "Missing question"
+msgstr "Manglende spørsmål"
+
 msgid "Multiple systems"
 msgstr "Flere systemer"
 
@@ -3790,9 +3799,6 @@ msgstr "Gjenoppretting fullført!"
 msgid "Review all members"
 msgstr "Gjennomgå alle medlemmer"
 
-msgid "Saved successfully"
-msgstr "Lagret vellykket"
-
 msgid "Set up quest types"
 msgstr "Sett opp oppdragstyper"
 
@@ -4262,9 +4268,6 @@ msgstr "Komplett ark (Test)"
 
 msgid "Create your character"
 msgstr "Lag karakteren din"
-
-msgid "Current profile image"
-msgstr "Nåværende profilbilde"
 
 msgid "Disable amount change"
 msgstr "Deaktiver endring av beløp"
@@ -4749,6 +4752,9 @@ msgstr "Sjekk speed larp-duplikater"
 
 msgid "Check missing speed larp"
 msgstr "Sjekk hastighet larp mangler"
+
+msgid "Click or drag photo here"
+msgstr "Klikk eller dra bildet hit"
 
 msgid "Code of the box or shelf"
 msgstr "Kode for esken eller hyllen"
@@ -5409,9 +5415,6 @@ msgstr "URL for forespørsel om tilbakestilling av passord for"
 msgid "Registrations on external link"
 msgstr "Registreringer på ekstern lenke"
 
-msgid "Select the new photo to upload"
-msgstr "Velg det nye bildet som skal lastes opp"
-
 msgid "Set up the taxes configuration"
 msgstr "Sett opp skattekonfigurasjonen"
 
@@ -5910,7 +5913,7 @@ msgid "Name of the discount - internal use"
 msgstr "Navn på rabatt - til internt bruk"
 
 msgid "No elements are currently available"
-msgstr "Ingen elementer er tilgjengelige for øyeblikket"
+msgstr "Dette innholdet er for øyeblikket ikke tilgjengelig"
 
 msgid "Now set up the tokens configuration"
 msgstr "Konfigurer nå konfigurasjonen av tokens"
@@ -7931,6 +7934,9 @@ msgstr ""
 "Før oversikt over alle personlige utgifter som er påløpt direkte i "
 "forbindelse med dette arrangementet"
 
+msgid "Upload a photo of your character specifically for this event"
+msgstr "Last opp et bilde av figuren din spesielt til dette arrangementet"
+
 msgid "Upload the signed membership application form (PDF or image)"
 msgstr "Last opp det signerte medlemssøknadsskjemaet (PDF eller bilde)"
 
@@ -8637,6 +8643,10 @@ msgstr "Den engelske originalteksten slik den vises i koden (msgid i gettext)"
 
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dette er de arrangementspåmeldingene som du må betale for"
+
+msgid "This discount code is already used in one or more of the selected runs"
+msgstr ""
+"Denne rabattkoden er allerede brukt i ett eller flere av de valgte kjøpene"
 
 msgid "This is automatically deducted from the registration of a future event"
 msgstr ""
@@ -10137,13 +10147,6 @@ msgid ""
 msgstr ""
 "Last opp et bilde av identitetsdokumentet du oppga i forespørselen (bilde "
 "eller pdf)"
-
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-"Last opp et bilde av deg selv sammen med karakteren din spesielt for dette "
-"arrangementet"
 
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "

@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Any, ClassVar
 
 from django.core.validators import MinValueValidator
@@ -140,10 +141,12 @@ class RegistrationTicket(UuidMixin, BaseModel):
     def __str__(self) -> str:
         """Return ticket tier string representation with event, tier, name and price."""
         # noinspection PyUnresolvedReferences
-        return (
-            f"{self.event.name} ({self.get_tier_display()}) {self.name} "
-            f"({self.price}{self.event.association.get_currency_symbol()})"
-        )
+        parts = [f"{self.event.name} ({self.get_tier_display()}) {self.name}"]
+        if self.price:
+            price = Decimal(self.price)
+            price_str = str(int(price)) if price == price.to_integral_value() else str(price).rstrip("0")
+            parts.append(f"({price_str}{self.event.association.get_currency_symbol()})")
+        return " ".join(parts)
 
     def show(self) -> dict[str, Any]:
         """Return JSON representation of ticket tier with availability and attributes."""

@@ -60,6 +60,7 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     Faction,
+    FactionType,
     Handout,
 )
 from larpmanager.utils.core.base import get_event_context
@@ -505,6 +506,16 @@ def print_profiles(context: dict, *, force: bool = False) -> HttpResponse:
     if force or reprint(filepath):
         # Load all event cache data
         get_event_cache_all(context)
+        for character_data in context["chars"].values():
+            names = []
+            for faction_number in character_data.get("factions", []):
+                if not faction_number or faction_number not in context["factions"]:
+                    continue
+                faction_data = context["factions"][faction_number]
+                if not faction_data["name"] or faction_data["typ"] == FactionType.SECRET:
+                    continue
+                names.append(faction_data["name"])
+            character_data["factions_list"] = ", ".join(names)
         # Generate PDF from HTML template
         xhtml_pdf(context, "pdf/sheets/profiles.html", filepath)
 

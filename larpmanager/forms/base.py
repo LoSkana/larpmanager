@@ -1393,14 +1393,11 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         Creates new choices for added options and deletes removed ones.
         """
-        if not option_uuids:
-            return
-
         question_id = question["id"]
 
         # Convert option UUIDs to option IDs by looking them up from serialized options
         uuid_to_id = {str(opt["uuid"]): opt["id"] for opt in question.get("options", [])}
-        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids if uuid_str in uuid_to_id}
+        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids or [] if uuid_str in uuid_to_id}
 
         # If question already has existing choices, sync the differences
         if question_id in self.multiples:

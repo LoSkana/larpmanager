@@ -1,0 +1,163 @@
+{% load i18n %}
+<style>
+.avatar-dropzone {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    border: 2px dashed rgba(var(--ter-rgb, 136,136,136), 0.4);
+    border-radius: 8px;
+    padding: 8px;
+    min-width: 140px;
+    min-height: 140px;
+    text-align: center;
+    transition: border-color 0.2s;
+}
+.avatar-dropzone.has-image { border-style: solid; }
+.avatar-dropzone.drag-over { border-color: rgba(var(--ter-rgb, 136,136,136), 0.8); background: rgba(var(--ter-rgb, 136,136,136), 0.05); }
+.avatar-dropzone .avatar-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    border-radius: 6px;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.8rem;
+    pointer-events: none;
+}
+.avatar-dropzone:hover .avatar-overlay { display: flex; }
+.avatar-no-img {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+    color: rgba(var(--ter-rgb, 136,136,136), 0.7);
+    gap: 10px;
+    font-size: 0.9rem;
+    padding: 16px;
+}
+.avatar-no-img i { font-size: 2.5rem; }
+.avatar-rotate-btns { margin-top: 10px; }
+.avatar-rotate-btns button {
+    background: none;
+    border: 1px solid rgba(var(--ter-rgb, 136,136,136), 0.35);
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin: 0 2px;
+    font-size: 1rem;
+    color: inherit;
+    transition: background 0.15s;
+}
+.avatar-rotate-btns button:hover { background: rgba(var(--ter-rgb, 136,136,136), 0.1); }
+#profile { max-width: 200px; max-height: 200px; border-radius: 4px; display: block; margin: 0 auto; }
+</style>
+
+<div class="centerized">
+    <div class="avatar-dropzone {% if avatar_current_src %}has-image{% endif %}" id="avatar_dropzone">
+        <img id="profile"
+             {% if avatar_current_src %} src="{{ avatar_current_src }}" {% else %} class="hide" {% endif %}
+             alt="profile" />
+        <div class="avatar-no-img {% if avatar_current_src %}hide{% endif %}" id="avatar_no_img">
+            <i class="fa-solid fa-camera"></i>
+            <span>{% trans "Click or drag photo here" %}</span>
+            <small>({% trans "maximum" %} 10 MB)</small>
+        </div>
+        <div class="avatar-overlay">
+            <i class="fa-solid fa-camera-rotate"></i>
+        </div>
+        <div id="upload_spinner" class="hide">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">{% trans "Uploading" %}...</span>
+            </div>
+            <p>{% trans "Uploading image, please wait" %}...</p>
+        </div>
+    </div>
+
+    <div class="avatar-rotate-btns {% if not avatar_current_src %}hide{% endif %}" id="avatar_rotate_btns">
+        <button type="button" id="rotate_l_btn" title="{% trans "Rotate left" %}">
+            <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button type="button" id="rotate_r_btn" title="{% trans "Rotate right" %}">
+            <i class="fa-solid fa-rotate-right"></i>
+        </button>
+    </div>
+
+    <div class="hide">{{ avatar_form.image }}</div>
+</div>
+
+<script>
+(function () {
+    var uploadUrl = '{{ avatar_upload_url }}';
+    var rotateLUrl = '{{ avatar_rotate_l_url }}';
+    var rotateRUrl = '{{ avatar_rotate_r_url }}';
+    var confirmSel = '{{ avatar_confirm_selector|default:"input[type=submit]" }}';
+
+    function profileUpdate(src) {
+        var newUrl = src + '?_=' + (new Date()).getTime();
+        $('#profile').attr('src', newUrl).removeClass('hide');
+        $('#avatar_no_img').addClass('hide');
+        $('#avatar_dropzone').addClass('has-image');
+        $('#avatar_rotate_btns').removeClass('hide');
+    }
+
+    function doUpload(file) {
+        var fd = new FormData();
+        fd.append('image', file);
+        $('#profile').attr('src', '');
+        $('#upload_spinner').removeClass('hide');
+        $(confirmSel).prop('disabled', true);
+        $.ajax({
+            url: uploadUrl,
+            type: 'POST',
+            data: fd,
+            processData: false,
+            contentType: false,
+            success: function (d) {
+                profileUpdate(d.src);
+                $('#upload_spinner').addClass('hide');
+                $(confirmSel).prop('disabled', false);
+            },
+            error: function () {
+                $('#upload_spinner').addClass('hide');
+                $(confirmSel).prop('disabled', false);
+                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Error uploading image" %}. {% trans "Please retry or use a smaller file" %}.{% endfilter %}');
+            }
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', function () {
+        $('#avatar_dropzone').on('click', function () {
+            $('#id_image').trigger('click');
+        }).on('dragover', function (e) {
+            e.preventDefault();
+            $(this).addClass('drag-over');
+        }).on('dragleave', function () {
+            $(this).removeClass('drag-over');
+        }).on('drop', function (e) {
+            e.preventDefault();
+            $(this).removeClass('drag-over');
+            var files = e.originalEvent.dataTransfer.files;
+            if (files.length) doUpload(files[0]);
+        });
+
+        $('#id_image').on('change', function () {
+            if (this.files && this.files[0]) doUpload(this.files[0]);
+        });
+
+        $('#rotate_l_btn').on('click', function (e) {
+            e.stopPropagation();
+            $('#profile').attr('src', '');
+            $.ajax({ url: rotateLUrl, success: function (d) { profileUpdate(d.src); } });
+        });
+
+        $('#rotate_r_btn').on('click', function (e) {
+            e.stopPropagation();
+            $('#profile').attr('src', '');
+            $.ajax({ url: rotateRUrl, success: function (d) { profileUpdate(d.src); } });
+        });
+    });
+}());
+</script>
