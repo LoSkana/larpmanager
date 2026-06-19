@@ -912,8 +912,10 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
 
     # Check if user ability selection is enabled for this event
     if not get_event_config(event_id, "exp_user", default_value=False):
-        msg = "ehm."
-        raise Http404(msg)
+        messages.warning(
+            request, _("Acquisition of abilities by players is not enabled for this event: contact the organizers")
+        )
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Validate character access permissions
     get_char_check(request, context, character_uuid, deny_public=True)
@@ -943,8 +945,8 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
 
     # Check if user inventory is enabled for this event
     if "inventory" not in context["features"]:
-        msg = "ehm."
-        raise Http404(msg)
+        messages.warning(request, _("Character inventory is not enabled for this event: contact the organizers"))
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Validate character access permissions
     get_char_check(request, context, character_uuid, deny_public=True)

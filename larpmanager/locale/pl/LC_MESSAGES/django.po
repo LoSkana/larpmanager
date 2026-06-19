@@ -8969,6 +8969,12 @@ msgstr ""
 "Aktywuj i skonfiguruj zaawansowane funkcje dla swojej organizacji i wydarzeń"
 
 msgid ""
+"Character inventory is not enabled for this event: contact the organizers"
+msgstr ""
+"W tym wydarzeniu nie jest włączona funkcja listy postaci: skontaktuj się z "
+"organizatorami"
+
+msgid ""
 "Customize translations of words and phrases in the organization interface"
 msgstr "Dostosowywanie tłumaczeń słów i fraz w interfejsie organizacji"
 
@@ -10448,6 +10454,13 @@ msgid ""
 msgstr ""
 "Informujemy, że Twoje członkostwo w Stowarzyszeniu nie zostało zaakceptowane"
 " przez zarząd"
+
+msgid ""
+"Acquisition of abilities by players is not enabled for this event: contact "
+"the organizers"
+msgstr ""
+"W tym wydarzeniu gracze nie mogą zdobywać umiejętności: skontaktuj się z "
+"organizatorami"
 
 msgid ""
 "Activates 'waiting list' style tickets, available only when all main tickets"
