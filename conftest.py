@@ -24,6 +24,7 @@ import logging
 import os
 import re
 import subprocess
+import sys
 from collections.abc import Generator, Mapping
 from datetime import UTC, datetime
 from pathlib import Path
@@ -166,14 +167,15 @@ def pw_page(
     live_server: ContextList,
 ) -> Generator[tuple[Page, str, BrowserContext], None, None]:
     """Prepares browser, context and finally page, for playwright tests."""
-    headed = pytestconfig.getoption("--headed") or os.getenv("PYCHARM_DEBUG", "0") == "1"
-
-    # Check if running in CI/GitHub Actions
-    is_ci = os.getenv("CI") == "true" or os.getenv("GITHUB_ACTIONS") == "true"
+    is_pycharm = os.getenv("PYCHARM_HOSTED") == "1" or any(
+        "_jb_pytest_runner" in arg or "pycharm" in arg.lower() for arg in sys.argv
+    )
+    headed = pytestconfig.getoption("--headed") or is_pycharm
+    record = os.getenv("RECORD") == "1"
 
     # Configure video recording (only in headed mode)
     video_dir = None
-    if not is_ci and headed:
+    if record:
         video_dir = Path(__file__).parent / "test_videos"
         video_dir.mkdir(exist_ok=True)
 
@@ -190,7 +192,8 @@ def pw_page(
     )
     page = context.new_page()
     base_url = live_server.url
-    page.set_default_timeout(60000)
+    timeout = 15000 if is_pycharm else 5000
+    page.set_default_timeout(timeout)
 
     def on_response(response: Response) -> None:
         error_status = 500
@@ -212,7 +215,9 @@ def pw_page(
     yield page, base_url, context
 
     # Capture test artifacts if test failed
-    video_info = _capture_test_artifacts(request, page, headed=headed, video_dir=video_dir)
+    video_info = None
+    if record:
+        video_info = _capture_test_artifacts(request, page, headed=headed, video_dir=video_dir)
 
     # Close context (this finalizes the video)
     context.close()

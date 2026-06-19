@@ -3799,9 +3799,6 @@ msgstr "Palautus suoritettu!"
 msgid "Review all members"
 msgstr "Tarkista kaikki jäsenet"
 
-msgid "Saved successfully"
-msgstr "Tallennettu onnistuneesti"
-
 msgid "Set up quest types"
 msgstr "Määritä tehtävätyypit"
 
@@ -5917,7 +5914,7 @@ msgid "Name of the discount - internal use"
 msgstr "Alennuksen nimi - sisäinen käyttö"
 
 msgid "No elements are currently available"
-msgstr "Tällä hetkellä ei ole saatavilla elementtejä"
+msgstr "Tämä sisältö ei ole tällä hetkellä saatavilla"
 
 msgid "Now set up the tokens configuration"
 msgstr "Määritä nyt tunnusten konfiguraatio"

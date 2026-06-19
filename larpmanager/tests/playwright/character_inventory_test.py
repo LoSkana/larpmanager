@@ -29,7 +29,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized
+from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
+    get_modal_iframe, save_modal, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -53,7 +54,7 @@ def test_character_inventory(pw_page: Any) -> None:
 def setup(live_server: Any, page: Any) -> None:
     # activate features
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     # Event
     page.get_by_role("checkbox", name="Player editor").check()
     page.get_by_role("checkbox", name="Character inventory").check()
@@ -76,29 +77,36 @@ def setup(live_server: Any, page: Any) -> None:
 
 def character_inventory_pool_types(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Pool Types").click()
-    page.get_by_role("link", name="+ New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Credits")
-    submit_confirm(page)
-    page.get_by_role("link", name="+ New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Junk")
-    submit_confirm(page)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Credits")
+    save_modal(page, edit_iframe)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Junk")
+    save_modal(page, edit_iframe)
 
 
 def character_inventory_pools(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Character Inventory").click()
-    page.get_by_role("link", name="+ New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("NPC")
-    page.get_by_text("After confirmation, add").click()
-    submit_confirm(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Test Character's Bank")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    submit_confirm(page)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("NPC")
+    save_modal(page, edit_iframe)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Test Character's Bank")
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    save_modal(page, edit_iframe)
 
 
 def character_inventory_transfer(live_server: Any, page: Any) -> None:
@@ -116,10 +124,11 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/quick/")
     page.get_by_role("link", name="Characters").click()
     page.locator(".fa-edit").click()
-    page.get_by_text("---------").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    save_modal(page, edit_iframe)
 
     # log out and log in as the test user
     login_user(page, live_server)

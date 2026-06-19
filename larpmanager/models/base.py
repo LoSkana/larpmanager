@@ -425,10 +425,8 @@ def auto_set_media_token(instance: Any) -> None:
 def debug_set_uuid(instance: Any, *, created: bool) -> None:
     """Simplifiy uuid for debug purposes."""
     # Check if running in PyCharm via pytest runner
-    is_pycharm = (
-        os.getenv("PYCHARM_DEBUG") == "1"
-        or os.getenv("PYCHARM_HOSTED") == "1"
-        or any("_jb_pytest_runner" in arg or "pycharm" in arg.lower() for arg in sys.argv)
+    is_pycharm = os.getenv("PYCHARM_HOSTED") == "1" or any(
+        "_jb_pytest_runner" in arg or "pycharm" in arg.lower() for arg in sys.argv
     )
 
     debug_enviro = (

@@ -3799,9 +3799,6 @@ msgstr "Restauration terminée !"
 msgid "Review all members"
 msgstr "Examiner tous les membres"
 
-msgid "Saved successfully"
-msgstr "Sauvegardé avec succès"
-
 msgid "Set up quest types"
 msgstr "Configurer les types de quêtes"
 
@@ -5918,7 +5915,7 @@ msgid "Name of the discount - internal use"
 msgstr "Nom de la remise - pour usage interne"
 
 msgid "No elements are currently available"
-msgstr "Aucun élément n'est actuellement disponible"
+msgstr "Ce contenu n'est pas disponible actuellement"
 
 msgid "Now set up the tokens configuration"
 msgstr "Il faut maintenant configurer les jetons"

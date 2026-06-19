@@ -9,7 +9,7 @@
 {% endblock info %}
 {% block content %}
     <div class="success-message">
-        <strong>✓ {% trans "Option saved successfully" %}</strong>
+        <strong><i class="fa-solid fa-check"></i> {% trans "Option saved successfully" %}</strong>
     </div>
     <div class="spinner"></div>
     <p>{% trans "Closing" %}...</p>
@@ -17,9 +17,10 @@
 {% block js2 %}
     <script>
     $(document).ready(function() {
-        // Send message to parent window to close popup and reload
-        if (window.parent) {
+        if (window.parent && window.parent !== window) {
             window.parent.postMessage({type: 'option_saved'}, '*');
+        } else {
+            history.back();
         }
     });
     </script>

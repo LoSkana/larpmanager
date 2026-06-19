@@ -29,8 +29,9 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, go_to, load_image, login_orga, submit, \
-    submit_confirm
+from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, get_modal_iframe, go_to, load_image, \
+    login_orga, submit, \
+    submit_confirm, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -62,13 +63,15 @@ def expense(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/manage/features/expense/on")
     go_to(page, live_server, "/test/manage/upload_expenses/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_value").click()
-    page.locator("#id_value").fill("10")
-    load_image(page, "#id_invoice")
-    page.locator("#id_exp").select_option("g")
-    page.locator("#id_descr").click()
-    page.locator("#id_descr").fill("dsadas")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_value").click()
+    edit_iframe.locator("#id_value").fill("10")
+    load_image(edit_iframe,"#id_invoice")
+    edit_iframe.locator("#id_exp").select_option("g")
+    edit_iframe.locator("#id_descr").click()
+    edit_iframe.locator("#id_descr").fill("dsadas")
+    submit_confirm(edit_iframe)
+
     go_to(page, live_server, "/test/manage/expenses")
     page.get_by_role("link", name="Approve").click()
 
@@ -87,9 +90,10 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
     # Wait for the edit button to appear and click it
     page.wait_for_selector("tbody tr:first-child td:first-child a i.fas.fa-edit", timeout=10000)
     page.locator("tbody tr:first-child td:first-child a i.fas.fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("100")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("100")
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("button", name="Continue").click()
@@ -117,15 +121,15 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
 def submit_membership(live_server: Any, page: Any) -> None:
     # Test membership
     go_to(page, live_server, "/manage/features/membership/on")
+
+    # setup membership text
     go_to(page, live_server, "/manage/texts")
-    just_wait(page)
     page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    fill_tinymce(edit_iframe, "id_text", "Ciao {{ member.name }}!", show=False)
+    edit_iframe.locator("#id_typ").select_option("m")
+    save_modal(page, edit_iframe)
 
-    fill_tinymce(page, "id_text", "Ciao {{ member.name }}!", show=False)
-
-    page.locator("#main_form").click()
-    page.locator("#id_typ").select_option("m")
-    submit_confirm(page)
     go_to(page, live_server, "/membership")
     page.get_by_role("checkbox", name="Authorisation").check()
     submit(page)
@@ -150,24 +154,25 @@ def badge(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/manage/features/badge/on")
     go_to(page, live_server, "/manage/badges")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("prova")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_name_eng").fill("prova")
-    page.locator("#id_name_eng").press("Tab")
-    page.locator("#id_descr").fill("asdsa")
-    page.locator("#id_descr").press("Tab")
-    page.locator("#id_descr_eng").fill("asdsadaasd")
-    page.locator("#id_cod").click()
-    page.locator("#id_cod").fill("asd")
-    page.locator("#id_cod").click()
-    page.locator("#id_cod").fill("asasdsadd")
-    page.locator("#id_img").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("prova")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.locator("#id_name_eng").fill("prova")
+    edit_iframe.locator("#id_name_eng").press("Tab")
+    edit_iframe.locator("#id_descr").fill("asdsa")
+    edit_iframe.locator("#id_descr").press("Tab")
+    edit_iframe.locator("#id_descr_eng").fill("asdsadaasd")
+    edit_iframe.locator("#id_cod").click()
+    edit_iframe.locator("#id_cod").fill("asd")
+    edit_iframe.locator("#id_cod").click()
+    edit_iframe.locator("#id_cod").fill("asasdsadd")
+    edit_iframe.locator("#id_img").click()
 
-    load_image(page, "#id_img")
-    page.get_by_role("searchbox").fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    submit_confirm(page)
+    load_image(edit_iframe,"#id_img")
+    edit_iframe.get_by_role("searchbox").fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    save_modal(page, edit_iframe)
 
 
 def chat(live_server: Any, page: Any) -> None:

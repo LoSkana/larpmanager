@@ -3799,9 +3799,6 @@ msgstr "Wiederherstellung abgeschlossen!"
 msgid "Review all members"
 msgstr "Überprüfung aller Mitglieder"
 
-msgid "Saved successfully"
-msgstr "Erfolgreich gespeichert"
-
 msgid "Set up quest types"
 msgstr "Questtypen einrichten"
 
@@ -5919,7 +5916,7 @@ msgid "Name of the discount - internal use"
 msgstr "Name des Rabatts - für den internen Gebrauch"
 
 msgid "No elements are currently available"
-msgstr "Derzeit sind keine Elemente verfügbar"
+msgstr "Dieser Inhalt ist derzeit nicht verfügbar"
 
 msgid "Now set up the tokens configuration"
 msgstr "Richten Sie nun die Konfiguration der Token ein"

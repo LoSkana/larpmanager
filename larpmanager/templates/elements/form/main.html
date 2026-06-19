@@ -8,6 +8,7 @@
       id="main_form"
       {% if form.main_class %}class="{{ form.main_class }}"{% endif %}>
     {% csrf_token %}
+    {% if frame %}<input type="hidden" name="frame" value="1">{% endif %}
     <div class="form_container auto_resize">
         <table>
             {% include "elements/form/inner.html" %}
@@ -22,7 +23,7 @@
     {% endif %}
     <div class="form_container auto_resize">
         <input id="form_submit" type="submit" value="{% trans "Confirm" %}">
-        {% if add_another %}
+        {% if add_another and not frame %}
             <br />
             <br />
             <div class="continue">

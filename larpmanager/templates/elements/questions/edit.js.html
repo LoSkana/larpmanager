@@ -125,6 +125,12 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 
 
+    // Grey out "Add option" until the question name is set
+    function toggleAddOptionButton() {
+        const name = $('#id_name').val().trim();
+        $('.add-inline-option').toggleClass('disabled', !name);
+    }
+
     // ========== Initialization ==========
 
     $(document).ready(function() {
@@ -142,6 +148,10 @@ window.addEventListener('DOMContentLoaded', function() {
         // Bind event handlers for question type changes
         $('#id_typ').on('change', toggleOptions);
         $('#id_status').on('change', toggleOptions);
+
+        // Bind and initialize "Add option" enable/disable state
+        $('#id_name').on('input', toggleAddOptionButton);
+        toggleAddOptionButton();
     });
 
 });

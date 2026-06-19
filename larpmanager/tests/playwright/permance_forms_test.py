@@ -30,7 +30,8 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
-    sidebar
+    sidebar, \
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -87,7 +88,7 @@ def check_orga_preferences(page: Any) -> None:
     expect(page.locator("#id_open_registration_1_1")).not_to_be_checked()
     expect(page.locator("#id_open_registration_1_2")).to_be_checked()
     expect(page.locator("#id_open_registration_1_3")).not_to_be_checked()
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     submit_confirm(page)
     page.get_by_role("link", name="Preferences", exact=True).click()
@@ -102,7 +103,7 @@ def check_orga_preferences(page: Any) -> None:
 
 
 def check_orga_features(page: Any) -> None:
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     checked = ["Character customization", "Secret link", "Sections"]
     for s in checked:
         check_feature(page, s)
@@ -112,7 +113,7 @@ def check_orga_features(page: Any) -> None:
     expect_normalized(page,
         page.locator("#one"), "You have activated the following features, for each here's the links to follow"
     )
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     # Automatically added with character customization
     checked.append("Characters")
     _check_checkboxes(checked, page)
@@ -136,18 +137,21 @@ def check_orga_config(page: Any) -> None:
 def check_orga_roles(page: Any) -> None:
     sidebar(page, "Roles")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("testona")
-    page.locator("#id_name").press("Tab")
-    page.get_by_role("searchbox").fill("org")
-    page.get_by_role("option", name="Admin Test - orga@test.it").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("testona")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.get_by_role("searchbox").fill("org")
+    edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     checked = ["Event", "Configuration", "Texts", "Navigation"]
     for s in checked:
-        check_feature(page, s)
-    submit_confirm(page)
+        check_feature(edit_iframe, s)
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Event (Event, Configuration), Appearance (Texts, Navigation)")
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    _check_checkboxes(checked, page)
+    edit_iframe = get_modal_iframe(page)
+    _check_checkboxes(checked, edit_iframe)
+    save_modal(page, edit_iframe)
 
 
 def _check_checkboxes(checked: Any, page: Any, skip_first: Any = False) -> None:
@@ -182,7 +186,7 @@ def check_exe_config(page: Any) -> None:
 
 
 def check_exe_features(page: Any) -> None:
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
 
     checked = ["Template", "Treasurer", "Membership", "Badge"]
     for s in checked:
@@ -190,24 +194,27 @@ def check_exe_features(page: Any) -> None:
 
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Now you can create event templates")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     _check_checkboxes(checked, page, True)
 
 
 def check_exe_roles(page: Any) -> None:
     sidebar(page, "Roles")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("test")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("org")
-    page.get_by_role("option", name="Admin Test - orga@test.it").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("test")
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("org")
+    edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
     checked = ["Organization", "Configuration", "Events", "Texts"]
     for s in checked:
-        check_feature(page, s)
-    submit_confirm(page)
+        check_feature(edit_iframe, s)
+    save_modal(page, edit_iframe)
     expect(page.locator('[id="u2"]')).to_contain_text(
         "Organization (Organization, Configuration), Events (Events), Appearance (Texts)"
     )
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    _check_checkboxes(checked, page)
+    edit_iframe = get_modal_iframe(page)
+    _check_checkboxes(checked, edit_iframe)
+    save_modal(page, edit_iframe)

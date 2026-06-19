@@ -36,6 +36,7 @@ from larpmanager.forms.feature import FeatureForm, QuickSetupForm
 from larpmanager.forms.utils import (
     AssociationMemberS2WidgetMulti,
     SlugInput,
+    WritingTinyMCE,
     prepare_permissions_role,
     remove_choice,
     save_permissions_role,
@@ -115,6 +116,8 @@ class ExeAssociationTextForm(BaseModelForm):
         abstract = True
         model = AssociationText
         exclude = ("number",)
+
+        widgets: ClassVar[dict] = {"text": WritingTinyMCE()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize AssociationTextForm with feature-based field configuration.

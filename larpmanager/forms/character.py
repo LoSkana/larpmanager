@@ -475,6 +475,7 @@ class OrgaCharacterForm(CharacterForm):
             context["rel_tutorial"] = rel_tutorial
 
         context["TINYMCE_DEFAULT_CONFIG"] = conf_settings.TINYMCE_DEFAULT_CONFIG
+        context["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
         widget = EventCharacterS2WidgetUuid(attrs={"id": "new_rel_select"})
         widget.set_event(context["event"])
         context["new_rel"] = widget.render(name="new_rel_select", value="")

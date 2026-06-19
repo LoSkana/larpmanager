@@ -3799,9 +3799,6 @@ msgstr "Przywracanie zakończone!"
 msgid "Review all members"
 msgstr "Przegląd wszystkich członków"
 
-msgid "Saved successfully"
-msgstr "Zapisane pomyślnie"
-
 msgid "Set up quest types"
 msgstr "Konfigurowanie typów zadań"
 
@@ -5916,7 +5913,7 @@ msgid "Name of the discount - internal use"
 msgstr "Nazwa rabatu - do użytku wewnętrznego"
 
 msgid "No elements are currently available"
-msgstr "Żadne elementy nie są obecnie dostępne"
+msgstr "Ta zawartość jest obecnie niedostępna"
 
 msgid "Now set up the tokens configuration"
 msgstr "Teraz należy ustawić konfigurację tokenów"

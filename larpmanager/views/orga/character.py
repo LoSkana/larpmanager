@@ -607,44 +607,6 @@ def orga_writing_options_edit(
 
 
 @login_required
-def orga_writing_options_list(
-    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str | None = None
-) -> HttpResponse:
-    """Display the list of options for a writing form question in an iframe.
-
-    This view shows only the options list section, designed to be loaded in an iframe
-    within the form edit page.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        writing_type: Writing form type (background, origin, etc.)
-        question_uuid: Question UUID to show options for
-
-    Returns:
-        HttpResponse with the options list template
-    """
-    # Verify user has character form permissions and get event context
-    context = check_event_context(request, event_slug, "orga_character_form")
-    context["frame"] = 1
-
-    # Validate the writing form type exists and is allowed
-    check_writing_form_type(context, writing_type)
-
-    context["typ"] = writing_type
-
-    if question_uuid:
-        # Get the question
-        get_element(context, question_uuid, "el", WritingQuestion)
-
-        # Load existing options for the question
-        options_queryset = WritingOption.objects.filter(question=context["el"])
-        context["list"] = options_queryset.order_by("order")
-
-    return render(request, "larpmanager/orga/characters/options_list.html", context)
-
-
-@login_required
 def orga_writing_options_order(
     request: HttpRequest,
     event_slug: str,
@@ -1000,9 +962,11 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
     # Determine if TinyMCE rich text editor should be enabled
     # Based on question type requiring formatted text input
-    tinymce = False
-    if context["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
-        tinymce = True
+    tinymce = not getattr(conf_settings, "TINYMCE_DISABLED", False) and context["question"].typ in [
+        WritingQuestionType.TEASER,
+        WritingQuestionType.SHEET,
+        BaseQuestionType.EDITOR,
+    ]
 
     # Initialize character counter HTML for length validation
     counter = ""

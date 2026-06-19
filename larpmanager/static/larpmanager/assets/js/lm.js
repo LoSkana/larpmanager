@@ -37,74 +37,105 @@ window.jump_to = function(target) {
     }, 0);
 }
 
+// ========== Dialog Modal System ==========
+
+window.openLmModal = function(content, cssClass) {
+    const dialog = document.getElementById('lm-modal');
+    dialog.className = cssClass || 'popup';
+    document.getElementById('lm-modal-content').innerHTML = content;
+    dialog.showModal();
+};
+
+window.closeLmModal = function() {
+    const dialog = document.getElementById('lm-modal');
+    if (dialog && dialog.open) dialog.close();
+};
+
+(function() {
+    const dialog = document.getElementById('lm-modal');
+    if (!dialog) return;
+    dialog.addEventListener('click', function(e) {
+        const rect = dialog.getBoundingClientRect();
+        if (e.clientX < rect.left || e.clientX > rect.right ||
+            e.clientY < rect.top || e.clientY > rect.bottom) {
+            window.closeLmModal();
+        }
+    });
+})();
+
 /**
- * Open an uglipop modal with an iframe and a close button
+ * Open a dialog modal with an iframe and a close button
  * @param {string} iframeUrl - The URL to load in the iframe
- * @param {string} modalClass - CSS class for the modal (default: 'popup_option')
+ * @param {string} modalClass - CSS class for the modal (default: 'popup_dashboard')
  * @param {function} onClose - Optional callback function to call when modal is closed
  */
 window.openIframeModal = function(iframeUrl, modalClass, onClose) {
-    modalClass = modalClass || 'popup_option';
+    modalClass = modalClass || 'popup_dashboard';
 
     const frame = `
         <div class="frame-container">
-            <button class="modal-close-btn">
-                &times;
-            </button>
-            <iframe src="${iframeUrl}" width="100%" style="border: none; height: 400px;"></iframe>
+            <button class="modal-close-btn">&times;</button>
+            <div class="frame-loading"></div>
+            <iframe src="${iframeUrl}" width="100%" style="border: none; visibility: hidden;"></iframe>
         </div>
     `;
 
-    uglipop({
-        class: modalClass,
-        source: 'html',
-        content: frame
-    });
+    window.openLmModal(frame, modalClass);
 
-    // Auto-resize: update iframe height when the modal's own iframe sends its size
+    const dialog = document.getElementById('lm-modal');
+    const iframe = dialog.querySelector('iframe');
+    let revealed = false;
+    const originalTitle = document.title;
+
+    function revealIframe() {
+        if (revealed) return;
+        revealed = true;
+        iframe.style.visibility = 'visible';
+        const loading = dialog.querySelector('.frame-loading');
+        if (loading) loading.style.display = 'none';
+        if (modalClass === 'popup_edit') {
+            try {
+                const iframeTitle = iframe.contentDocument && iframe.contentDocument.title;
+                if (iframeTitle) document.title = iframeTitle;
+            } catch (_err) {}
+        }
+    }
+
+    function restoreTitle() {
+        if (modalClass === 'popup_edit') document.title = originalTitle;
+    }
+
+    iframe.addEventListener('load', revealIframe, { once: true });
+
     function onIframeMessage(e) {
+        if (!e.data || !e.source || e.source !== iframe.contentWindow) return;
 
-        if (e.data && e.data.type === 'iframe_resize') {
-            const iframe = document.querySelector('.' + modalClass + ' iframe');
-            if (iframe && e.data.height && e.source === iframe.contentWindow) {
-                const newHeight = e.data.height;
-                const currentHeight = parseFloat(iframe.style.height) || 0;
-                if (newHeight > currentHeight) {
-                    iframe.style.height = newHeight + 'px';
-                }
+        if (e.data.type === 'iframe_resize') {
+            revealIframe();
+        }
+
+        if (e.data.type === 'dashboard_form_saved') {
+            if (e.data.redirect_url) {
+                window.location.href = e.data.redirect_url;
+            } else {
+                window.closeLmModal();
+                if (typeof onClose === 'function') setTimeout(onClose, 300);
             }
         }
     }
     window.addEventListener('message', onIframeMessage);
 
-    // Attach click handler to close button after modal is opened
-    setTimeout(function() {
-        $('.modal-close-btn').on('click', function(e) {
-            e.preventDefault();
-            window.removeEventListener('message', onIframeMessage);
+    dialog.querySelector('.modal-close-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.closeLmModal();
+        restoreTitle();
+        if (typeof onClose === 'function') onClose();
+    });
 
-            // Close the popup by clicking overlay
-            const overlay = document.getElementById('uglipop_overlay');
-            if (overlay) {
-                overlay.click();
-            }
-
-            // Call optional callback
-            if (onClose && typeof onClose === 'function') {
-                onClose();
-            }
-
-            return false;
-        });
-
-        // Clean up listener when overlay is clicked directly
-        const overlay = document.getElementById('uglipop_overlay');
-        if (overlay) {
-            overlay.addEventListener('click', function() {
-                window.removeEventListener('message', onIframeMessage);
-            }, { once: true });
-        }
-    }, 100);
+    dialog.addEventListener('close', function() {
+        window.removeEventListener('message', onIframeMessage);
+        restoreTitle();
+    }, { once: true });
 }
 
 function sidebar_mobile() {
@@ -210,7 +241,7 @@ $(document).ready(function() {
         request.done(function(data) {
             if (data["res"] != 'ok') return;
 
-            uglipop({class:'popup', source:'html', content: data['txt']});
+            window.openLmModal(data['txt'], 'popup');
 
         });
 
@@ -363,11 +394,9 @@ $(document).ready(function() {
 
         el = $('#' + num).find('.popup_text.' + tp).first();
 
-        uglipop({class:'popup', //styling class for Modal
-            source:'html',
-            content: el.html()});
+        window.openLmModal(el.html(), 'popup');
 
-        $('.popup').scrollTop( 0 );
+        $('#lm-modal').scrollTop( 0 );
 
         reload_has_char();
 
@@ -429,16 +458,89 @@ $(document).ready(function() {
         $pageInfo.remove();
     }
 
+    window._lmReady = true;
     $(document).trigger("lm_ready");
 });
 
 function replaceNewUrl() {
     $('a.form-new').on('click', function(event) {
         event.preventDefault();
-        let currentUrl = window.location.href;
-        let cleanedUrl = currentUrl.split('#')[0];
-        let newUrl = cleanedUrl + 'new/';
-        window.location.href = newUrl;
+        let href = $(this).attr('href');
+        let newUrl;
+        if (href && href !== '#') {
+            newUrl = href;
+        } else {
+            let currentUrl = window.location.href;
+            let cleanedUrl = currentUrl.split('#')[0];
+            newUrl = cleanedUrl + 'new/';
+        }
+        if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+            openIframeModal(newUrl + '?frame=1', 'popup_edit', refreshDatatables);
+        } else {
+            window.location.href = newUrl;
+        }
+    });
+
+    if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+        $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit)', function(e) {
+            e.preventDefault();
+            openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);
+            return false;
+        });
+    }
+}
+
+function refreshDatatables() {
+    $('table.pagin_datatable').each(function() {
+        const tableId = $(this).attr('id');
+        if (tableId && window.datatables && window.datatables[tableId]) {
+            window.datatables[tableId].ajax.reload(null, false);
+        }
+    });
+
+    $.get(window.location.href, function(html) {
+        const $newDoc = $($.parseHTML(html));
+        const $newTables = $newDoc.find('table.go_datatable');
+        const savedStates = {};
+
+        $('table.go_datatable').each(function(index) {
+            const $oldTable = $(this);
+            const tableId = $oldTable.attr('id');
+
+            if (tableId && window.datatables && window.datatables[tableId]) {
+                const dt = window.datatables[tableId];
+                savedStates[tableId] = {
+                    order: dt.order(),
+                    search: dt.search(),
+                    colSearches: dt.columns().search().toArray(),
+                };
+                dt.destroy();
+                delete window.datatables[tableId];
+            }
+
+            let $newTable = tableId ? $newDoc.find('#' + tableId) : $();
+            if (!$newTable.length) $newTable = $newTables.eq(index);
+
+            if ($newTable.length) {
+                $oldTable.find('thead').html($newTable.find('thead').html());
+                $oldTable.find('tbody').html($newTable.find('tbody').html());
+                $oldTable.show();
+            }
+        });
+
+        window._datatablesSavedState = savedStates;
+        window._suppressTriggerTogs = true;
+        data_tables();
+        delete window._datatablesSavedState;
+        delete window._suppressTriggerTogs;
+
+        if (typeof window.reloadActiveQuestions === 'function') {
+            window.reloadActiveQuestions();
+        }
+        if (typeof window.applyColumnToggles === 'function') {
+            window.applyColumnToggles();
+        }
+        window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
     });
 }
 
@@ -646,9 +748,22 @@ function data_tables() {
         };
 
         window.datatables[tableId] = table;
+
+        if (window._datatablesSavedState && window._datatablesSavedState[tableId]) {
+            const state = window._datatablesSavedState[tableId];
+            let needDraw = false;
+            if (state.search) { table.search(state.search); needDraw = true; }
+            if (state.colSearches) {
+                state.colSearches.forEach(function(colSearch, i) {
+                    if (colSearch) { table.column(i).search(colSearch); needDraw = true; }
+                });
+            }
+            if (state.order && state.order.length) { table.order(state.order); needDraw = true; }
+            if (needDraw) table.draw(false);
+        }
     });
 
-    if (Array.isArray(window.trigger_togs)) {
+    if (Array.isArray(window.trigger_togs) && !window._suppressTriggerTogs) {
         window.trigger_togs.forEach(function(togValue) {
             if (togValue.startsWith('.') || togValue.startsWith('#')) {
                 $(togValue).each(function() {
@@ -675,6 +790,10 @@ function data_tables() {
             $table.attr('id', randomId);
         }
         const tableId = $table.attr('id');
+
+        if (window.datatables && window.datatables[tableId]) {
+            return;
+        }
 
         const url = $table.attr('url');
 
@@ -736,6 +855,9 @@ function data_tables() {
             */
         });
 
+        window.datatables = window.datatables || {};
+        window.datatables[tableId] = table;
+
         table.on('draw.dt', function() {
             // Add tooltips to edit icons first
             if (window.enviro == "prod") {
@@ -776,12 +898,12 @@ function post_popup() {
 
             if (res.k == 0) return;
 
-            uglipop({class:'popup', source:'html', content: res.v});
+            window.openLmModal(res.v, 'popup');
 
 			reload_has_char();
 
-            $('.popup').scrollTop( 0 );
-            $(".popup .hide").hide();
+            $('#lm-modal').scrollTop( 0 );
+            $('#lm-modal .hide').hide();
         });
 
         request.fail(function(res) {

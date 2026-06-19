@@ -28,8 +28,9 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, load_image, login_orga, expect_normalized, \
-    submit_confirm, sidebar
+from larpmanager.tests.utils import just_wait, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, \
+    expect_normalized, \
+    submit_confirm, sidebar, save_modal, wait_accounting_load, click_and_wait_question, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -61,9 +62,10 @@ def check_overpay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("100.00")
+    save_modal(page, edit_iframe)
 
     # Signup
     go_to(page, live_server, "/")
@@ -76,16 +78,19 @@ def check_overpay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Credits").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").fill("ad")
-    page.locator(".select2-results__option").first.click()
-    page.locator("#id_value").fill("60")
-    page.locator("#id_descr").fill("cre")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").fill("ad")
+    edit_iframe.locator(".select2-results__option").first.click()
+    edit_iframe.locator("#id_value").fill("60")
+    edit_iframe.locator("#id_descr").fill("cre")
+    save_modal(page, edit_iframe)
+    just_wait(page)
 
     # Check signup accounting
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 8 40 60 100 60")
 
 
@@ -93,17 +98,20 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     # Add tokens
     page.get_by_role("link", name="Tokens").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").fill("adm")
-    page.locator(".select2-results__option").first.click()
-    page.locator("#id_value").press("Home")
-    page.locator("#id_value").fill("60")
-    page.locator("#id_descr").fill("www")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").fill("adm")
+    edit_iframe.locator(".select2-results__option").first.click()
+    edit_iframe.locator("#id_value").press("Home")
+    edit_iframe.locator("#id_value").fill("60")
+    edit_iframe.locator("#id_descr").fill("www")
+    save_modal(page, edit_iframe)
+    just_wait(page)
 
     # Check signup accounting
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 100 100 60 40")
 
     # Check accounting
@@ -114,19 +122,28 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("80.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("80.00")
+    save_modal(page, edit_iframe)
+    just_wait(page)
 
     # Check accounting
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard -20 100 80 20 40 40")
 
     # Perform save
     page.locator(".fa-edit").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    save_modal(page, edit_iframe)
+
+    page.reload()
+    _wait_lm_ready(page)
+
     page.get_by_role("link", name="accounting", exact=True).click()
+    wait_accounting_load(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
 
     # Check accounting
@@ -152,41 +169,43 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     sidebar(page, "Registrations")
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
     page.locator(".fa-edit").click()
-    expect_normalized(page,
-        page.locator("#main_form"),
+    edit_iframe = get_modal_iframe(page)
+    expect_normalized(edit_iframe,
+        edit_iframe.locator("#one"),
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
     )
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator("#one"), "Admin Test Standard")
 
 
 def prologues(page: Any) -> None:
     # activate prologues
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Prologues").check()
     submit_confirm(page)
 
     # redirected to prologue types
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("test")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("test")
+    save_modal(page, edit_iframe)
 
     # add prologue
     page.get_by_role("link", name="Prologues", exact=True).click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("ffff")
-    fill_tinymce(page, "id_text", "sadsadsa")
-    page.get_by_role("link", name="Show").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("tes")
-    page.locator(".select2-results__option").first.click()
-    page.locator("#main_form").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("ffff")
+    fill_tinymce(edit_iframe, "id_text", "sadsadsa")
+    edit_iframe.get_by_role("link", name="Show").click()
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("tes")
+    edit_iframe.locator(".select2-results__option").first.click()
+    save_modal(page, edit_iframe)
 
     # check result
-    page.get_by_role("link", name="Characters").click()
+    click_and_wait_question(page, "Characters")
     expect_normalized(page, page.locator("#one"), "P1 ffff (test) Test Character")
 
 
@@ -218,7 +237,6 @@ def upload_membership(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Try accessing member form
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Accepted 1")
     page.locator(".fa-edit").click()
 

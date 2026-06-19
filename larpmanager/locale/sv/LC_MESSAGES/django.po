@@ -3799,9 +3799,6 @@ msgstr "Återställning slutförd!"
 msgid "Review all members"
 msgstr "Granska alla medlemmar"
 
-msgid "Saved successfully"
-msgstr "Sparades framgångsrikt"
-
 msgid "Set up quest types"
 msgstr "Ange typer av uppdrag"
 
@@ -5917,7 +5914,7 @@ msgid "Name of the discount - internal use"
 msgstr "Namn på rabatt - för internt bruk"
 
 msgid "No elements are currently available"
-msgstr "Inga element är för närvarande tillgängliga"
+msgstr "Detta innehåll är för närvarande inte tillgängligt"
 
 msgid "Now set up the tokens configuration"
 msgstr "Ställ nu in konfigurationen för tokens"

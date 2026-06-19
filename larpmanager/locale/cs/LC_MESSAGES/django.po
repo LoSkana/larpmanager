@@ -3799,9 +3799,6 @@ msgstr "Obnova dokončena!"
 msgid "Review all members"
 msgstr "Přezkoumání všech členů"
 
-msgid "Saved successfully"
-msgstr "Úspěšně uloženo"
-
 msgid "Set up quest types"
 msgstr "Nastavení typů úkolů"
 
@@ -5918,7 +5915,7 @@ msgid "Name of the discount - internal use"
 msgstr "Název slevy - pro interní použití"
 
 msgid "No elements are currently available"
-msgstr "V současné době nejsou k dispozici žádné prvky"
+msgstr "Tento obsah není v současné době k dispozici"
 
 msgid "Now set up the tokens configuration"
 msgstr "Nyní nastavte konfiguraci tokenů"
