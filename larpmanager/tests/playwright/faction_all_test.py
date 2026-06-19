@@ -176,7 +176,7 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Navigate to factions gallery
     page.get_by_role("link", name="Test Larp").click()
-    sidebar(page, "Factions")
+    page.get_by_role("link", name="Factions").click()
 
     # Verify PRIMARY and TRANSVERSAL factions are visible
     expect_normalized(page, page.locator("#one"),
