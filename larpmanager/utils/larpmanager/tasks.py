@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import contextlib
 import hashlib
 import logging
 import re
@@ -639,18 +638,32 @@ def notify_admins(subject: str, message_text: str = "", exception: Exception | N
 
 @background(schedule=0)
 def delete_run_task(run_uuid: str) -> None:
-    """Delete a run in the background."""
-    with contextlib.suppress(Run.DoesNotExist):
-        Run.objects.get(uuid=run_uuid).delete()
+    """Delete the event (and all its runs) identified by this run uuid.
+
+    Nulls out parent FK on child events first to prevent cascade-deleting them.
+    """
+    try:
+        run = Run.objects.select_related("event").get(uuid=run_uuid)
+    except Run.DoesNotExist:
+        return
+    event = run.event
+    Event.objects.filter(parent=event).update(parent=None)
+    event.delete()
 
 
 @background(schedule=0)
 def delete_association_task(association_slug: str) -> None:
-    """Unsubscribe newsletter and delete association in the background."""
+    """Unsubscribe newsletter and delete association in the background.
+
+    Nulls out parent FK on child events whose parent belongs to this association,
+    so external child events are not cascade-deleted.
+    """
     try:
         association = Association.objects.get(slug=association_slug)
     except Association.DoesNotExist:
         return
+    events_in_assoc = Event.objects.filter(association=association)
+    Event.objects.filter(parent__in=events_in_assoc).update(parent=None)
     newsletter_emails = set(
         AssociationRole.objects.filter(association=association, number=1).values_list("members__email", flat=True)
     )
