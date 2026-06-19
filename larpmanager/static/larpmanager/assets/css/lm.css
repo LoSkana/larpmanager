@@ -2931,3 +2931,18 @@ body.association.new_v20 .user_resize {
 .floating_iframe #info_bar {
   display: none;
 }
+
+#lm-modal {
+  padding: 1em;
+}
+
+#lm-modal,
+#lm-modal-content,
+.frame-container {
+  overflow: hidden;
+}
+
+body.floating_iframe #wrapper {
+  overflow-x: hidden;
+  padding-right: 0.5em;
+}
