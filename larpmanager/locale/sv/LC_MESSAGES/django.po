@@ -8914,6 +8914,12 @@ msgstr ""
 " evenemang"
 
 msgid ""
+"Character inventory is not enabled for this event: contact the organizers"
+msgstr ""
+"Karaktärsregistret är inte aktiverat för detta evenemang: kontakta "
+"arrangörerna"
+
+msgid ""
 "Customize translations of words and phrases in the organization interface"
 msgstr "Anpassa översättningar av ord och fraser i organisationsgränssnittet"
 
@@ -10371,6 +10377,13 @@ msgid ""
 msgstr ""
 "Vi informerar dig om att ditt medlemskap i föreningen inte har godkänts av "
 "styrelsen"
+
+msgid ""
+"Acquisition of abilities by players is not enabled for this event: contact "
+"the organizers"
+msgstr ""
+"Spelare kan inte skaffa sig förmågor under detta evenemang: kontakta "
+"arrangörerna"
 
 msgid ""
 "Activates 'waiting list' style tickets, available only when all main tickets"

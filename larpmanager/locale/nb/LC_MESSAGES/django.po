@@ -8928,6 +8928,12 @@ msgstr ""
 "arrangementene dine"
 
 msgid ""
+"Character inventory is not enabled for this event: contact the organizers"
+msgstr ""
+"Karakteroversikten er ikke aktivert for dette arrangementet: ta kontakt med "
+"arrangørene"
+
+msgid ""
 "Customize translations of words and phrases in the organization interface"
 msgstr "Tilpass oversettelser av ord og uttrykk i organisasjonsgrensesnittet"
 
@@ -10363,6 +10369,13 @@ msgid ""
 msgstr ""
 "Vi informerer deg om at ditt medlemskap i foreningen ikke er godkjent av "
 "hovedstyret"
+
+msgid ""
+"Acquisition of abilities by players is not enabled for this event: contact "
+"the organizers"
+msgstr ""
+"Spillere kan ikke tilegne seg ferdigheter i dette arrangementet: ta kontakt "
+"med arrangørene"
 
 msgid ""
 "Activates 'waiting list' style tickets, available only when all main tickets"
