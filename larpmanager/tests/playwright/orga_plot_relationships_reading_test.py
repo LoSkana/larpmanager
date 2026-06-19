@@ -314,7 +314,6 @@ def plots_character(live_server: Any, page: Any) -> None:
     edit_iframe.get_by_role("listitem", name="bibi").locator("span").click()
 
     # change second
-    edit_iframe.get_by_role("row", name=re.compile(r"^gaga")).get_by_role("link", name="Show").click()
     fill_tinymce(edit_iframe, "id_pl_2", "ffff")
     save_modal(page, edit_iframe)
 

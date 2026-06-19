@@ -155,7 +155,7 @@ def form_other_writing(page: Any) -> None:
 
     # check
     sidebar(page, "Sheet")
-    click_and_wait_question(page, "Character")
+    page.get_by_role("link", name="Character", exact=True).click()
     page.get_by_role("link", name="Plot", exact=True).click()
     expect_normalized(page,
         page.locator("#one"),

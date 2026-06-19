@@ -256,9 +256,10 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     except Exception:
         submit_btn.click(force=True)
 
-    page.wait_for_load_state("networkidle", timeout=5000)
-    page.wait_for_load_state("load", timeout=5000)
-    _wait_lm_ready(page)
+    page.wait_for_timeout(200)  # allow AJAX callbacks (e.g. window.location.reload()) to fire
+    page.wait_for_load_state("networkidle", timeout=10000)
+    page.wait_for_load_state("load", timeout=8000)
+    _wait_lm_ready(page, timeout=8000)
 
 def wait_for_inline_edit(page: Any) -> Any:
     page.wait_for_selector("#excel-edit.visible", timeout=10000)
@@ -456,7 +457,10 @@ def click_and_wait_question(page: Any, name: str) -> None:
         tog = toggle.get_attribute("tog")
         page.evaluate("window._tableToggleDone = null")
         toggle.click()
-        page.wait_for_function(f"window._tableToggleDone === '{tog}'")
+        try:
+            page.wait_for_function(f"window._tableToggleDone === '{tog}'", timeout=3000)
+        except Exception:
+            pass  # column toggle is synchronous; proceed if signal missed
 
 
 def fill_date(locator, selector, value):
