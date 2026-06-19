@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_date, just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, \
-    submit_confirm, sidebar, save_modal, click_and_wait_question
+    submit_confirm, sidebar, save_modal, click_and_wait_question, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -93,7 +93,7 @@ def ticket_link_bypasses_not_visible(live_server, page):
     # Test direct link
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Tickets").first.click()
-    just_wait(page)
+    _wait_lm_ready(page)
     with page.expect_popup() as popup_info:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
@@ -124,7 +124,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Tickets").first.click()
 
     # Navigate to direct ticket link - should work despite registration not open
-    just_wait(page)
+    _wait_lm_ready(page)
     with page.expect_popup() as popup_info:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
@@ -399,5 +399,5 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
 
     page.get_by_role("link", name="Done").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 180 delivered")

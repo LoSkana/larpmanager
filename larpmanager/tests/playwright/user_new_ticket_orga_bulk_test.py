@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_date, just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, \
+from larpmanager.tests.utils import fill_date, expect_normalized, get_modal_iframe, go_to, login_orga, \
     submit_confirm, sidebar, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
@@ -306,8 +306,6 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     submit_confirm(page)
 
-    just_wait(page)
-
     expect_normalized(page, page.locator("#one"), "item3 box2")
     expect_normalized(page, page.locator("#one"), "item2 box tag")
     expect_normalized(page, page.locator("#one"), "item1 box2 tag")
@@ -317,8 +315,6 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
     page.locator("#operation").select_option("3")
     submit_confirm(page)
-
-    just_wait(page)
 
     expect_normalized(page, page.locator("#one"), "item3 box2")
     expect_normalized(page, page.locator("#one"), "item2 box")

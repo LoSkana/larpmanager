@@ -53,7 +53,6 @@ def prepare_form(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     # check initial reg form
     sidebar(page, "Form")
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Ticket Your registration ticket Ticket")
 
     # Add features

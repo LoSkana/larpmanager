@@ -30,7 +30,7 @@ import pytest
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, \
     expect_normalized, \
-    submit_confirm, sidebar, save_modal, wait_accounting_load, click_and_wait_question
+    submit_confirm, sidebar, save_modal, wait_accounting_load, click_and_wait_question, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -140,7 +140,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     page.reload()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     page.get_by_role("link", name="accounting", exact=True).click()
     wait_accounting_load(page)
@@ -237,7 +237,6 @@ def upload_membership(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Try accessing member form
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Accepted 1")
     page.locator(".fa-edit").click()
 

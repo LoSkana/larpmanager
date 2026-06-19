@@ -325,7 +325,7 @@ def player_relationships(page: Any, live_server: Any) -> None:
     # Navigate to relationships page from the registration page
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name="Relationships").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Create new relationship toward Test Character
     page.get_by_role("link", name="New").click()
@@ -339,7 +339,7 @@ def player_relationships(page: Any, live_server: Any) -> None:
 
     # Edit the relationship and update the text
     page.locator("#player_relationships").locator(".fa-edit").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     fill_tinymce(page, "id_text", "updated relationship text", show=False)
     submit_confirm(page)
 

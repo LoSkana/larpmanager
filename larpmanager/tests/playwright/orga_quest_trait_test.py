@@ -59,7 +59,7 @@ def test_quest_trait(pw_page: Any) -> None:
     page.get_by_role("link", name="Test Character").nth(1).click()
     expect_normalized(page,
         page.locator("#one"),
-        "player: admin test presentation test teaser text test text torta - nonna saleee anotheraliame con torta - nonna another player: user test",
+        "player: admin test presentation test teaser text test text torta - nonna saleee aliame con another torta - nonna another player: user test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
@@ -136,6 +136,7 @@ def traits(page: Any, live_server: Any) -> None:
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
     panel = wait_for_inline_edit(page)
+    just_wait(page)
     panel.locator("textarea").press("#")
     page.get_by_role("searchbox").fill("non")
     page.locator(".select2-results__option").first.click()

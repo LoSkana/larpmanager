@@ -51,6 +51,7 @@ from larpmanager.tests.utils import (
     get_modal_iframe,
     go_to,
     just_wait,
+    _wait_lm_ready,
     login_orga,
     login_user,
     submit_confirm, save_modal,
@@ -127,7 +128,7 @@ def _cancel_first_active_registration(live_server: Any, page: Any) -> None:
     """Cancel the first active registration shown in the organizer panel."""
     go_to(page, live_server, "/test/manage/registrations")
     page.locator("a:has(i.fas.fa-trash)").first.click(force=True)
-    just_wait(page)
+    _wait_lm_ready(page)
 
 
 def refund_with_tokens(live_server: Any, page: Any) -> None:
@@ -171,7 +172,6 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # Back on cancellations: shows "Refunded", no more approve link
-    just_wait(page)
     expect(page.locator("#cancellations")).to_contain_text("Refunded")
     expect(page.get_by_role("link", name="Approve reimbursement")).not_to_be_visible()
 
@@ -185,7 +185,7 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     login_user(page, live_server)
     go_to(page, live_server, "/accounting/tokens/")
     page.get_by_role("link", name="Delivered").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, refund_row, str(USER_TOKEN_REFUND))
     go_to(page, live_server, "/accounting/")
@@ -235,7 +235,6 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # Back on cancellations: both registrations now show "Refunded"
-    just_wait(page)
     refunded_cells = page.locator("#cancellations td", has_text="Refunded")
     expect(refunded_cells).to_have_count(2)
     expect(page.get_by_role("link", name="Approve reimbursement")).not_to_be_visible()
@@ -255,14 +254,14 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     # Check orga personal accounting: token refund row in Delivered section
     go_to(page, live_server, "/accounting/tokens/")
     page.get_by_role("link", name="Delivered").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     token_refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, token_refund_row, str(ORGA_TOKEN_REFUND))
 
     # Check orga personal accounting: credit refund row in Delivered section
     go_to(page, live_server, "/accounting/credits/")
     page.get_by_role("link", name="Delivered").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     credit_refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, credit_refund_row, str(ORGA_CREDIT_REFUND))
     go_to(page, live_server, "/accounting/")
