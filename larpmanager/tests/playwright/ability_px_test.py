@@ -259,8 +259,6 @@ def rules(page: Any) -> None:
     # readd ability
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    page.wait_for_load_state("load")
-    just_wait(page)
     row = edit_iframe.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()

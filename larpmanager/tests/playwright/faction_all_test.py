@@ -149,7 +149,7 @@ def test_faction_all(pw_page: Any) -> None:
         for faction in faction_names:
             edit_iframe.get_by_role("searchbox").click()
             edit_iframe.get_by_role("searchbox").fill(faction[:5])  # Type first 5 chars
-            edit_iframe.wait_for_timeout(500)  # Wait for dropdown
+            just_wait(edit_iframe)  # Wait for dropdown
             edit_iframe.locator(".select2-results__option").filter(has_text=faction).first.click()
 
         save_modal(page, edit_iframe)

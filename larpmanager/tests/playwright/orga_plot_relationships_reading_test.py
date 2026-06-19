@@ -149,7 +149,7 @@ def relationships(live_server: Any, page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    edit_iframe.wait_for_timeout(5000)
+    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "rel_u1", "ciaaoooooo")
     save_modal(page, edit_iframe)
 
@@ -204,7 +204,7 @@ def plots(live_server: Any, page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    page.wait_for_timeout(5000)
+    just_wait(page, big=True)
     fill_tinymce(edit_iframe, "ch_1", "prova")
 
     # add second char role
@@ -391,7 +391,7 @@ def auto_relationships_setup(live_server: Any, page: Any) -> None:
         option = edit_iframe.get_by_role("option", name=name)
         option.wait_for(state="visible")
         option.click()
-        edit_iframe.wait_for_timeout(2000)
+        just_wait(edit_iframe, big=True)
         fill_tinymce(edit_iframe, f"rel_{target_uuid}", manual_text)
 
     save_modal(page, edit_iframe)
@@ -429,7 +429,7 @@ def auto_relationships_plot(live_server: Any, page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    edit_iframe.wait_for_timeout(5000)
+    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_1", "mentions @7 and @8")
     save_modal(page, edit_iframe)
 

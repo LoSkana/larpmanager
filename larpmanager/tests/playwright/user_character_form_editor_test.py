@@ -31,7 +31,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
     submit_option, new_option, \
-    get_modal_iframe, save_modal
+    get_modal_iframe, save_modal, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -149,7 +149,7 @@ def field_multiple(page: Any, live_server: Any) -> None:
 
 
 def field_text(page: Any, live_server: Any) -> None:
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Add text
     page.get_by_role("link", name="New").click()
@@ -180,7 +180,6 @@ def field_text(page: Any, live_server: Any) -> None:
 
     fill_tinymce(edit_iframe, "id_text", "rrrr")
 
-    just_wait(edit_iframe)
     edit_iframe.locator("#id_que_u4").select_option("u3")
     edit_iframe.locator("#id_que_u4").select_option("u1")
     edit_iframe.get_by_role("checkbox", name="q2").check()
@@ -250,7 +249,7 @@ def character(page: Any, live_server: Any) -> None:
 
     expect_normalized(page, page.locator("#one"), "Create your character!")
     page.get_by_role("link", name="Create your character!").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     verify_requirements_hidden(page)
 

@@ -119,8 +119,7 @@ def verify_organizer_view(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage/registrations/")
 
     # Verify additional tickets column is visible
-    page.locator("#one").get_by_role("link", name="Additional").click()
-    just_wait(page)
+    click_and_wait_question(page, "Additional")
     expect_normalized(page, page.locator("#one"), "3")
 
 

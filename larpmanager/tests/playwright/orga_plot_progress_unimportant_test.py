@@ -146,7 +146,7 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    edit_iframe.wait_for_timeout(3000)
+    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_1", "important role")
 
     searchbox = edit_iframe.get_by_role("searchbox")
@@ -154,7 +154,7 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Minor NPC")
     option.wait_for(state="visible")
     option.click()
-    edit_iframe.wait_for_timeout(3000)
+    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_2", "$unimportant minor role")
 
     save_modal(page, edit_iframe)

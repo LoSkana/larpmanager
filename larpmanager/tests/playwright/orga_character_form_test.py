@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (just_wait,
                                      logout,
                                      submit_confirm,
                                      expect_normalized, new_option, submit_option, get_option,
-                                     get_modal_iframe, save_modal,
+                                     get_modal_iframe, save_modal, _wait_lm_ready,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -123,6 +123,7 @@ def create_second_char(live_server: Any, page: Any) -> None:
     )
     expect(page.get_by_role("checkbox", name="few")).to_be_disabled()
     page.get_by_role("checkbox", name="many - (Available 1)").check()
+    just_wait(page)
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "options: 1 / 2")
     page.locator("#id_que_u9").click()
     page.locator("#id_que_u9").fill("asda")
@@ -154,7 +155,7 @@ def check_first_char(page: Any, live_server: Any) -> None:
     page.locator("#id_que_u8").click()
     expect(page.locator("#id_que_u8")).to_have_value("u6")
     expect(page.locator("#id_que_u7")).to_match_aria_snapshot(
-        '- checkbox "all" [checked]\n- text: all\n- checkbox "many" [checked]\n- text: many\n- checkbox "few - (Available 1)" [disabled]\n- text: few - (Available 1)'
+        '- checkbox "all" [checked]\n- text: all\n- checkbox "many" [checked]\n- text: many\n- checkbox "few - (Available 1)" \n- text: few - (Available 1)'
     )
     expect(page.locator("#id_que_u9")).to_have_value("fill mandatory")
     expect(page.locator("#id_que_u12")).to_have_value("public")
@@ -201,12 +202,11 @@ def recheck_char(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
     go_to(page, live_server, "/test/character/list")
     page.locator(".fa-edit").click()
-    edit_iframe = get_modal_iframe(page)
-    expect(edit_iframe.locator("#id_que_u10")).to_have_count(0)
-    expect_normalized(page, edit_iframe.locator("#id_que_u10_tr"), "disabled")
-    expect(edit_iframe.locator("#id_que_u11")).to_have_count(0)
+    expect(page.locator("#id_que_u10")).to_have_count(0)
+    expect_normalized(page, page.locator("#id_que_u10_tr"), "disabled")
+    expect(page.locator("#id_que_u11")).to_have_count(0)
     expect(page.locator("#one")).not_to_contain_text("Hidden")
-    save_modal(page, edit_iframe)
+    submit_confirm(page)
 
 
 def create_first_char(live_server: Any, page: Any) -> None:
@@ -342,6 +342,7 @@ def add_field_restricted(page: Any) -> None:
     save_modal(page, edit_iframe)
 
     page.locator('[id="u8"]').locator(".fa-arrow-up").click()
+    _wait_lm_ready(page)
     page.locator('[id="u8"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
 

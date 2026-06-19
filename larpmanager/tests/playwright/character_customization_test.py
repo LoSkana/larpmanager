@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (
     load_image_hidden,
     login_orga,
     login_user,
-    submit_confirm, logout, get_modal_iframe, save_modal,
+    submit_confirm, logout, get_modal_iframe, save_modal, _wait_lm_ready,
 )
 
 pytestmark = pytest.mark.e2e
@@ -119,11 +119,11 @@ def fill_customization_form(page: Any, live_server: Any) -> None:
 
     # Access character customization
     page.get_by_role("link", name="Test Character").first.click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Click customize button
     page.get_by_role("link", name="Customize").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Fill custom name
     page.locator("#id_custom_name").click()
@@ -195,7 +195,7 @@ def verify_field_visibility(page: Any, live_server: Any) -> None:
 
     # Find and view character
     page.get_by_text("My Custom Name").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Organizers should be able to see both public and private
     expect_normalized(page, page.locator("body"), "This is my public character description")
@@ -220,7 +220,7 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
 
     # Click the characters link
     characters_link.click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Verify we're on the characters page
     expect(page).to_have_url(f"{live_server.url}/characters")

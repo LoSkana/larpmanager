@@ -474,14 +474,14 @@ function replaceNewUrl() {
             let cleanedUrl = currentUrl.split('#')[0];
             newUrl = cleanedUrl + 'new/';
         }
-        if ($('body').hasClass('new_v21')) {
+        if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
             openIframeModal(newUrl + '?frame=1', 'popup_edit', refreshDatatables);
         } else {
             window.location.href = newUrl;
         }
     });
 
-    if ($('body').hasClass('new_v21')) {
+    if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
         $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit)', function(e) {
             e.preventDefault();
             openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);

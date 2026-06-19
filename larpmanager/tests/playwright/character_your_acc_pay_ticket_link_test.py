@@ -396,8 +396,8 @@ def accounting_refund(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/manage")
     sidebar(page, "Refunds")
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 200 request done")
+
     page.get_by_role("link", name="Done").click()
     just_wait(page)
     expect_normalized(page, page.locator("#one"), "asdsadsadsa admin test 20 180 delivered")

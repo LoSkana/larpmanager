@@ -103,7 +103,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    edit_iframe.wait_for_timeout(5000)
+    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_1", "prisdsa")
     save_modal(page, edit_iframe)
 
@@ -119,7 +119,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    page.wait_for_timeout(5000)
+    just_wait(page, big=True)
     fill_tinymce(edit_iframe, "ch_1", "poelea s")
     save_modal(page, edit_iframe)
 
