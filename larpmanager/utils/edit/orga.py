@@ -28,7 +28,7 @@ from django.shortcuts import redirect, render
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields, reset_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
 from larpmanager.forms.accounting import (
     ExeInvoiceForm,
     OrgaCreditForm,
@@ -115,7 +115,6 @@ from larpmanager.utils.edit.backend import (
     backend_delete,
     backend_edit,
     backend_get,
-    backend_order,
     set_suggestion,
 )
 from larpmanager.utils.edit.base import Action, prepare_change, render_frame_or_fallback
@@ -392,7 +391,6 @@ def _action_redirect(
     action: Action,
     action_data: dict,
     element_uuid: str,
-    additional: Any = None,
 ) -> HttpResponse:
     """Handle ORDER and DELETE actions that result in redirects.
 
@@ -412,15 +410,9 @@ def _action_redirect(
         HttpResponse: Redirect to permission's list view with event slug
     """
     form_type = action_data.get("form")
-    writing = action_data.get("writing")
     model_type = form_type.Meta.model
 
-    if action == Action.ORDER:
-        backend_order(context, model_type, element_uuid, additional)
-        if writing:
-            reset_event_cache_all(context["run"])
-
-    elif action == Action.DELETE:
+    if action == Action.DELETE:
         backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
 
     # Redirect to success page with event slug
@@ -517,7 +509,6 @@ def _orga_actions(
     action_name: str,
     action_type: Action,
     element_uuid: str | None = None,
-    additional: Any = None,
 ) -> HttpResponse | None:
     """Unified entry point for all operations on organization elements.
 
@@ -558,8 +549,8 @@ def _orga_actions(
     if action_type in [Action.EDIT, Action.NEW]:
         return _action_change(request, context, event_slug, permission, action_data, element_uuid)
 
-    if action_type in [Action.ORDER, Action.DELETE]:
-        return _action_redirect(request, context, permission, action_type, action_data, element_uuid, additional)
+    if action_type in [Action.DELETE]:
+        return _action_redirect(request, context, permission, action_type, action_data, element_uuid)
 
     return _action_show(request, context, action_type, action_data, element_uuid)
 
@@ -602,17 +593,6 @@ def orga_view(
 def orga_delete(request: HttpRequest, event_slug: str, permission: str, element_uuid: str) -> HttpResponse:
     """Delete an element from an orga view."""
     return _orga_actions(request, event_slug, permission, Action.DELETE, element_uuid)
-
-
-def orga_order(
-    request: HttpRequest,
-    event_slug: str,
-    permission: str,
-    element_uuid: str,
-    additional: int,
-) -> HttpResponse:
-    """Order an element from an orga view."""
-    return _orga_actions(request, event_slug, permission, Action.ORDER, element_uuid, additional)
 
 
 def _form_edit_list_response(

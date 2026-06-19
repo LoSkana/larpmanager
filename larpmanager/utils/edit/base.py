@@ -36,7 +36,6 @@ class Action(Enum):
     DELETE = "delete"
     VIEW = "view"
     VERSIONS = "versions"
-    ORDER = "order"
 
 
 def prepare_change(request: HttpRequest, context: dict, action_data: dict) -> str:
