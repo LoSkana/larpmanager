@@ -3031,6 +3031,9 @@ msgstr "Credits uitschakelen"
 msgid "Document number"
 msgstr "Documentnummer"
 
+msgid "Drag to reorder"
+msgstr "Sleep om de volgorde te wijzigen"
+
 msgid "Edit membership"
 msgstr "Lidmaatschap bewerken"
 

@@ -53,6 +53,9 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
     </script>
+    {% if form.plot_reorder_url %}
+        {% include "elements/form/plot_reorder.js.html" %}
+    {% endif %}
     {% include "elements/working-ticket.js" with num=edit_uuid %}
     {% include "elements/auto-save.js" %}
     {% include "elements/helpers/iframe_resize.js" %}

@@ -560,12 +560,16 @@ class OrgaCharacterForm(CharacterForm):
         self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
 
         self.add_char_finder = []
-        self.ordering_up = {}
-        self.ordering_down = {}
         self.field_link = {}
+        self.plot_reorder_uuids = {}
 
-        total_plots = len(self.plots)
-        for index, plot_character in enumerate(self.plots):
+        if self.plots and self.instance.uuid:
+            self.plot_reorder_url = reverse(
+                "orga_plots_rels_reorder",
+                args=[self.params["run"].get_slug(), self.instance.uuid],
+            )
+
+        for plot_character in self.plots:
             plot_name = plot_character.plot.name
             plot_field_name = f"pl_{plot_character.plot_id}"
             plot_field_id = f"id_{plot_field_name}"
@@ -587,26 +591,7 @@ class OrgaCharacterForm(CharacterForm):
 
             reverse_args = [self.params["run"].get_slug(), plot_character.plot.uuid]
             self.field_link[plot_field_id] = reverse("orga_plots_edit", args=reverse_args)
-
-            # if not first, add to ordering up
-            if index != 0:
-                reverse_args = [
-                    self.params["run"].get_slug(),
-                    plot_character.plot.uuid,
-                    plot_character.character.uuid,
-                    "0",
-                ]
-                self.ordering_up[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
-
-            # if not last, add to ordering down
-            if index != total_plots - 1:
-                reverse_args = [
-                    self.params["run"].get_slug(),
-                    plot_character.plot.uuid,
-                    plot_character.character.uuid,
-                    "1",
-                ]
-                self.ordering_down[plot_field_id] = reverse("orga_plots_rels_order", args=reverse_args)
+            self.plot_reorder_uuids[plot_field_id] = plot_character.plot.uuid
 
     def _save_plot(self, instance: Any) -> None:
         """Save plot associations for a character.
@@ -769,7 +754,7 @@ class OrgaCharacterForm(CharacterForm):
             # initializes on a hidden textarea and does not normalize the surrounding newlines)
             clean_value = value.strip()
 
-            # Decode HTML entities (e.g. &nbsp; → \xa0) so that TinyMCE's empty-field
+            # Decode HTML entities (e.g. &nbsp; -> \xa0) so that TinyMCE's empty-field
             # placeholder <p>&nbsp;</p> is correctly detected as whitespace-only.
             plain_text = html.unescape(strip_tags(clean_value)).strip()
 

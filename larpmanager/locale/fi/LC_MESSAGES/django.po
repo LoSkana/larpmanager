@@ -3031,6 +3031,9 @@ msgstr "Poista hyvitykset käytöstä"
 msgid "Document number"
 msgstr "Asiakirjan numero"
 
+msgid "Drag to reorder"
+msgstr "Järjestä vetämällä"
+
 msgid "Edit membership"
 msgstr "Muokkaa jäsenyyttä"
 

@@ -5283,6 +5283,9 @@ msgstr ""
 msgid "These fields are mandatory"
 msgstr ""
 
+msgid "Drag to reorder"
+msgstr ""
+
 msgid "Translate"
 msgstr ""
 

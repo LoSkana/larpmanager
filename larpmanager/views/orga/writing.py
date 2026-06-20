@@ -26,12 +26,12 @@ from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, reset_event_cache_all
 from larpmanager.forms.utils import get_members_queryset
 from larpmanager.models.access import EventRole
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -53,7 +53,6 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_handout
-from larpmanager.utils.edit.backend import backend_order
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     orga_delete,
@@ -99,47 +98,37 @@ def orga_plots_delete(request: HttpRequest, event_slug: str, plot_uuid: str) -> 
 
 
 @login_required
-def orga_plots_rels_order(
-    request: HttpRequest, event_slug: str, plot_uuid: str, character_uuid: str, order: int
-) -> HttpResponse:
-    """Reorder plot character relationships for event organization.
+def orga_plots_rels_reorder(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
+    """Reorder plot-character relationships via drag-and-drop."""
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
 
-    Args:
-        request: HTTP request object containing user and session data
-        event_slug: Event slug identifier for URL routing
-        plot_uuid: UUID of the plot
-        character_uuid: UUID of the character
-        order: Direction of reordering ('up' or 'down')
-
-    Returns:
-        HttpResponse: Redirect to character edit page
-
-    Raises:
-        Http404: If plot relationship not found or belongs to wrong event
-
-    """
-    # Check user permissions for plot management
     context = check_event_context(request, event_slug, "orga_plots")
 
-    # Retrieve the specific plot-character relationship
     try:
-        rel = PlotCharacterRel.objects.get(plot__uuid=plot_uuid, character__uuid=character_uuid)
-    except ObjectDoesNotExist as err:
+        character = Character.objects.get(uuid=character_uuid)
+    except Character.DoesNotExist as err:
         raise Http404 from err
 
-    # Validate relationship belongs to current event
-    if rel.character.event != context["event"]:
-        msg = "plot rel wrong event"
+    if character.event != context["event"]:
+        msg = "character wrong event"
         raise Http404(msg)
 
-    # Get all relationships for the same character to reorder within
-    elements = PlotCharacterRel.objects.filter(character_id=rel.character_id)
+    plot_uuids = request.POST.getlist("plot_uuids")
+    rels = {
+        str(rel.plot.uuid): rel for rel in PlotCharacterRel.objects.filter(character=character).select_related("plot")
+    }
+    to_update = []
+    for i, puuid in enumerate(plot_uuids):
+        rel = rels.get(puuid)
+        if rel:
+            rel.order = i * 10
+            to_update.append(rel)
+    if to_update:
+        PlotCharacterRel.objects.bulk_update(to_update, ["order"])
+        reset_event_cache_all(context["run"])
 
-    # Execute the order exchange operation
-    backend_order(context, PlotCharacterRel, rel, order, elements)
-
-    # Redirect back to character edit page
-    return redirect("orga_characters_edit", event_slug=context["run"].get_slug(), character_uuid=rel.character.uuid)
+    return JsonResponse({"ok": True})
 
 
 @login_required

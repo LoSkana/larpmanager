@@ -75,7 +75,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     const frame = `
         <div class="frame-container">
             <button class="modal-close-btn">&times;</button>
-            <div class="frame-loading"></div>
+            <div class="frame-loading" style="display:none;"></div>
             <iframe src="${iframeUrl}" width="100%" style="border: none; visibility: hidden;"></iframe>
         </div>
     `;
@@ -86,12 +86,17 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     const iframe = dialog.querySelector('iframe');
     let revealed = false;
     const originalTitle = document.title;
+    const loading = dialog.querySelector('.frame-loading');
+
+    const spinnerTimeout = setTimeout(function() {
+        if (!revealed && loading) loading.style.display = '';
+    }, 500);
 
     function revealIframe() {
         if (revealed) return;
         revealed = true;
+        clearTimeout(spinnerTimeout);
         iframe.style.visibility = 'visible';
-        const loading = dialog.querySelector('.frame-loading');
         if (loading) loading.style.display = 'none';
         if (modalClass === 'popup_edit') {
             try {

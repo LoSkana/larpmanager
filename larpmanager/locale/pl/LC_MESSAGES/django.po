@@ -3031,6 +3031,9 @@ msgstr "Wyłączenie kredytów"
 msgid "Document number"
 msgstr "Numer dokumentu"
 
+msgid "Drag to reorder"
+msgstr "Przeciągnij, żeby zmienić kolejność"
+
 msgid "Edit membership"
 msgstr "Edycja członkostwa"
 
