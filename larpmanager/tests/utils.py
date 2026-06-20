@@ -255,10 +255,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     url_before = page.url
 
     # Click normally to ensure actionability, fallback to forced action if styling dictates
-    try:
-        submit_btn.click(timeout=2000)
-    except Exception:
-        submit_btn.click(force=True)
+    submit_btn.click(force=True)
 
     # If click triggered navigation, wait for URL change before checking load states
     try:

@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     submit_confirm,
     upload,
     expect_normalized, sidebar,
-    get_modal_iframe, save_modal, click_and_wait_question,
+    get_modal_iframe, save_modal, click_and_wait_question, just_wait, _wait_lm_ready,
 )
 
 pytestmark = pytest.mark.e2e
@@ -106,6 +106,7 @@ def abilities(page: Any) -> None:
         "Loading performed, see logs Proceed Logs OK - Created sword OK - Created shield OK - Created sneak",
     )
     page.get_by_role("link", name="Proceed").click()
+    _wait_lm_ready(page)
     expect_normalized(
         page,
         page.locator("#one"),

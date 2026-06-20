@@ -176,7 +176,6 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
 
     # check form
-    sidebar(page, "Event")
     nav(page, "Registration")
     expect_normalized(page,
         page.locator("#register_form"),

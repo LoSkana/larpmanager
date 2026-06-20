@@ -208,7 +208,7 @@ def inline_editing_teaser(page: Any, live_server: Any) -> None:
 
     # Edit u2 teaser (empty cell - click on the cell in the teaser column)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(3).dblclick()
+    cells_u2.nth(4).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_teaser").fill("New Teaser 2")
     submit_inline_edit(page)

@@ -181,7 +181,7 @@ def pw_page(
 
     browser = browser_type.launch(
         headless=not headed,
-        slow_mo=50 if headed else 0,
+        slow_mo=0,
         args=["--disable-popup-blocking"],
     )
     context = browser.new_context(
