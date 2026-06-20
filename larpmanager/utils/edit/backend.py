@@ -931,7 +931,7 @@ def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> Non
     for i, uuid in enumerate(uuids):
         obj = objects.get(uuid)
         if obj:
-            obj.order = i * 10
+            obj.order = (i + 1) * 10
             to_update.append(obj)
     if to_update:
         model_class.objects.bulk_update(to_update, ["order"])

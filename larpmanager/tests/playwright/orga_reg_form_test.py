@@ -176,7 +176,7 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
 
     # check form
-    page.get_by_role("link", name="Event").click()
+    sidebar(page, "Event")
     nav(page, "Registration")
     expect_normalized(page,
         page.locator("#register_form"),
@@ -190,7 +190,8 @@ def check_filler(page: Any, live_server: Any) -> None:
     sidebar(page, "Features")
     page.get_by_role("checkbox", name="Filler").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Event").click()
+
+    sidebar(page, "Event")
     page.locator("#id_form1-max_filler").click()
     page.locator("#id_form1-max_filler").fill("5")
     submit_confirm(page)

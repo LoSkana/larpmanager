@@ -172,7 +172,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     new_page.close()
 
     # Clean up: disable external registration link
-    page.get_by_role("link", name="Event").click()
+    sidebar(page, "Event")
     page.locator("#id_form2-registration_status").select_option("o")
     submit_confirm(page)
 

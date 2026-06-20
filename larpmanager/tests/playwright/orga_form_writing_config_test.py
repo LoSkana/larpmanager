@@ -126,7 +126,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     # test save
-    page.get_by_role("link", name="Event").click()
+    sidebar(page, "Event")
     submit_confirm(page)
 
     # check it has not been deleted

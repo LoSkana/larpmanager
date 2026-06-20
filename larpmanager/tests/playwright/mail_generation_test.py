@@ -86,10 +86,8 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
 
     # signup
     go_to(page, live_server, "/test/manage/tickets/")
-    page.wait_for_selector("table.go_datatable")
     # Wait for the edit button to appear and click it
-    page.wait_for_selector("tbody tr:first-child td:first-child a i.fas.fa-edit", timeout=10000)
-    page.locator("tbody tr:first-child td:first-child a i.fas.fa-edit").click()
+    page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("100")
