@@ -341,12 +341,15 @@ def add_field_restricted(page: Any) -> None:
 
     save_modal(page, edit_iframe)
 
-    page.locator('[id="u8"]').locator(".fa-arrow-up").click()
-    _wait_lm_ready(page)
+    page.locator('tr[id="u8"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u8"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
     page.locator('[id="u8"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
 
-    edit_iframe.locator("#inline-options .io-move-up").nth(1).click()
+    opts = edit_iframe.locator("#inline-options .inline-option")
+    opts.nth(1).locator("td.reorder-handle").drag_to(opts.nth(0))
     just_wait(page)
     option_row = get_option(edit_iframe, "u7")
     option_row.locator("#id_name").click()

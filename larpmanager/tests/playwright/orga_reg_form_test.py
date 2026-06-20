@@ -84,8 +84,14 @@ def prepare_form(page: Any, live_server: Any) -> None:
         page.locator("#one"),
     "Rate Optional Surcharge Registration surcharge Surcharge Optional",
     )
-    page.locator('[id="u4"]').locator(".fa-arrow-up").click()
-    page.locator('[id="u2"]').locator(".fa-arrow-up").click()
+    page.locator('tr[id="u4"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u4"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
+    page.locator('tr[id="u2"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u2"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
     expect_normalized(page,
         page.locator("#one"),
         """

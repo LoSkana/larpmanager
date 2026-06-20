@@ -164,10 +164,14 @@ def field_multiple(page: Any, live_server: Any) -> None:
     option_row.locator("#id_description").fill("sarrrr")
     submit_option(edit_iframe, option_row)
 
-    edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] .io-move-up').click()
+    src = edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] td.reorder-handle')
+    src.drag_to(edit_iframe.locator('tr.inline-option[data-uuid="u4"]').locator('xpath=preceding-sibling::tr[contains(@class,"inline-option")][1]'))
     just_wait(page)
     save_modal(page, edit_iframe)
-    page.locator('[id="u3"]').locator(".fa-arrow-up").click()
+    page.locator('tr[id="u3"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
 
 
 def field_text(page: Any, live_server: Any) -> None:

@@ -240,7 +240,7 @@ function flashSaved($row) {
             return false;
         });
 
-        // ========== Reorder (move row, then persist the full order) ==========
+        // ========== Reorder (drag-and-drop, then persist the full order) ==========
 
         function persistOrder() {
             const uuids = [];
@@ -251,28 +251,43 @@ function flashSaved($row) {
             if (uuids.length) $.post(reorderUrl, { 'uuids': uuids });
         }
 
-        function moveRow($row, direction) {
-            const $details = detailsRow($row);
-            const $pair = $row.add($details);
-            if (direction < 0) {
-                const $prev = $row.prevAll('.inline-option').first();
-                if ($prev.length) $pair.insertBefore($prev);
-            } else {
-                const $next = $row.nextAll('.inline-option').first();
-                if ($next.length) $pair.insertAfter(detailsRow($next));
-            }
-            persistOrder();
-        }
+        var $dragRow = null;
+        var $lastDragTarget = null;
 
-        $root.on('click', '.io-move-up', function(e) {
+        $root.on('dragstart', '.reorder-handle', function(e) {
+            $dragRow = ownerRow($(this));
+            e.originalEvent.dataTransfer.effectAllowed = 'move';
+            setTimeout(function() {
+                if ($dragRow) {
+                    $dragRow.addClass('io-dragging');
+                    detailsRow($dragRow).addClass('io-dragging');
+                }
+            }, 0);
+        });
+
+        $root.on('dragover', '.inline-option, .inline-option-details', function(e) {
             e.preventDefault();
-            moveRow(ownerRow($(this)), -1);
+            var $target = $(this).hasClass('inline-option') ? $(this) : $(this).prev('.inline-option');
+            if (!$target.length || !$dragRow || $target.is($dragRow) || $target.is($lastDragTarget)) return false;
+            $lastDragTarget = $target;
+            var $pair = $dragRow.add(detailsRow($dragRow));
+            var pos = $dragRow[0].compareDocumentPosition($target[0]);
+            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) {
+                $pair.insertAfter(detailsRow($target));
+            } else {
+                $pair.insertBefore($target);
+            }
             return false;
         });
-        $root.on('click', '.io-move-down', function(e) {
-            e.preventDefault();
-            moveRow(ownerRow($(this)), 1);
-            return false;
+
+        $root.on('dragend', '.reorder-handle', function() {
+            if ($dragRow) {
+                $dragRow.removeClass('io-dragging');
+                detailsRow($dragRow).removeClass('io-dragging');
+            }
+            $dragRow = null;
+            $lastDragTarget = null;
+            persistOrder();
         });
 
     });

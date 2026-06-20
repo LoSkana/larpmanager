@@ -59,7 +59,6 @@ from larpmanager.utils.edit.orga import (
     orga_delete,
     orga_edit,
     orga_new,
-    orga_order,
     orga_versions,
     orga_view,
 )
@@ -97,12 +96,6 @@ def orga_plots_edit(request: HttpRequest, event_slug: str, plot_uuid: str) -> Ht
 def orga_plots_delete(request: HttpRequest, event_slug: str, plot_uuid: str) -> HttpResponse:
     """Delete plot for event."""
     return orga_delete(request, event_slug, OrgaAction.PLOTS, plot_uuid)
-
-
-@login_required
-def orga_plots_order(request: HttpRequest, event_slug: str, plot_uuid: str, order: int) -> HttpResponse:
-    """Reorder plots in event's plot list."""
-    return orga_order(request, event_slug, OrgaAction.PLOTS, plot_uuid, order)
 
 
 @login_required
@@ -185,12 +178,6 @@ def orga_factions_edit(request: HttpRequest, event_slug: str, faction_uuid: str)
 def orga_factions_delete(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Delete faction for event."""
     return orga_delete(request, event_slug, OrgaAction.FACTIONS, faction_uuid)
-
-
-@login_required
-def orga_factions_order(request: HttpRequest, event_slug: str, faction_uuid: str, order: int) -> HttpResponse:
-    """Reorder factions within an event run."""
-    return orga_order(request, event_slug, OrgaAction.FACTIONS, faction_uuid, order)
 
 
 @login_required
@@ -537,17 +524,6 @@ def orga_progress_steps_edit(request: HttpRequest, event_slug: str, step_uuid: s
 def orga_progress_steps_delete(request: HttpRequest, event_slug: str, step_uuid: str) -> HttpResponse:
     """Delete step for event."""
     return orga_delete(request, event_slug, OrgaAction.PROGRESS_STEPS, step_uuid)
-
-
-@login_required
-def orga_progress_steps_order(
-    request: HttpRequest,
-    event_slug: str,
-    step_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder progress steps for an event."""
-    return orga_order(request, event_slug, OrgaAction.PROGRESS_STEPS, step_uuid, order)
 
 
 @login_required

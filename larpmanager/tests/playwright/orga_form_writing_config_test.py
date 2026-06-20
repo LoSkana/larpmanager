@@ -58,7 +58,10 @@ def feature_fields(page: Any) -> None:
     # reorder test
     sidebar(page, "Sheet")
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
-    page.locator('[id="u3"]').locator(".fa-arrow-up").click()
+    page.locator('tr[id="u3"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title

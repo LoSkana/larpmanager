@@ -52,7 +52,9 @@ Context:
     .inline-options-table .io-col-order { width: 4em; white-space: nowrap; }
     .inline-options-table .io-col-saved, .inline-options-table .io-col-details, .inline-options-table .io-col-delete { width: 2em; text-align: center; white-space: nowrap; }
     .inline-options-table td.io-col-details a, .inline-options-table td.io-col-delete a { cursor: pointer; }
-    .inline-options-table .io-order a { cursor: pointer; margin-right: 0.3em; }
+    .inline-options-table .io-order { cursor: grab; }
+    .inline-options-table .io-dragging { opacity: 0.35; }
+    .inline-options-table .io-drag-over { outline: 2px dashed #888; }
     .inline-option-details > td { background: rgba(0, 0, 0, 0.03); }
     .inline-option-details .io-details-grid { display: flex; flex-wrap: wrap; gap: 1em; padding: 0.4em 0; }
     .inline-option-details .io-details-grid > div { flex: 1 1 18em; }
