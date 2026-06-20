@@ -20,17 +20,28 @@
             <h2>{{ item.title }}</h2>
         {% endif %}
         <table id="writing_list_{{ run.uuid }}_{{ typ }}_{{ forloop.counter }}"
-               class="que_load go_datatable writing_list {% block table_classes %}{% endblock table_classes %}"
+               class="que_load go_datatable writing_list {% block table_classes %}{% endblock table_classes %}{% if reorder_model %} row_reorder{% endif %}"
                {% block table_reorder_attrs %}
-               {% endblock table_reorder_attrs %}>
+               {% endblock table_reorder_attrs %}
+               {% if reorder_model %}data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}" data-reorder-model="{{ reorder_model }}"{% endif %}>
             <thead>
+                {% if reorder_model %}<th></th>{% endif %}
                 {% block thead %}
                 {% endblock thead %}
             </thead>
             <tbody>
                 {% with list=item.list %}
-                    {% block tbody %}
-                    {% endblock tbody %}
+                    {% for el in list %}
+                        <tr id="{{ el.uuid }}">
+                            {% if reorder_model %}
+                                <td class="reorder-handle">
+                                    <i class="fa-solid fa-grip-vertical"></i>
+                                </td>
+                            {% endif %}
+                            {% block tr_content %}
+                            {% endblock tr_content %}
+                        </tr>
+                    {% endfor %}
                 {% endwith %}
             </tbody>
         </table>

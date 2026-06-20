@@ -4867,12 +4867,6 @@ msgid ""
 "Optional - Indicates whether the ticket can be gifted to other participants"
 msgstr ""
 
-msgid "Order"
-msgstr ""
-
-msgid "Display order"
-msgstr ""
-
 msgid "Description - will be displayed at the beginning of the section"
 msgstr ""
 
@@ -4888,9 +4882,6 @@ msgid ""
 msgstr ""
 
 msgid "Extra price applied when this quota is active"
-msgstr ""
-
-msgid "Payment order"
 msgstr ""
 
 msgid ""
@@ -6554,6 +6545,9 @@ msgid "Gender"
 msgstr ""
 
 msgid "Last membership date"
+msgstr ""
+
+msgid "Order"
 msgstr ""
 
 msgid "View registrations"

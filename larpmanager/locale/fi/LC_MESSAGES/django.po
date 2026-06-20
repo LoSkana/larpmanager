@@ -2514,9 +2514,6 @@ msgstr "Määräpäivä"
 msgid "Discount back"
 msgstr "Alennus takaisin"
 
-msgid "Display order"
-msgstr "Näyttöjärjestys"
-
 msgid "Document type"
 msgstr "Asiakirjan tyyppi"
 
@@ -2618,9 +2615,6 @@ msgstr "Aiemmat istunnot"
 
 msgid "Paste as text"
 msgstr "Liitä tekstinä"
-
-msgid "Payment order"
-msgstr "Maksumääräys"
 
 msgid "Personal code"
 msgstr "Henkilökohtainen koodi"

@@ -29,7 +29,7 @@ from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, PaymentMethod, UuidMixin
+from larpmanager.models.base import BaseModel, OrderMixin, PaymentMethod, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
@@ -567,7 +567,7 @@ class DiscountType(models.TextChoices):
     GIFT = "g", _("Gift")
 
 
-class Discount(UuidMixin, BaseModel):
+class Discount(UuidMixin, OrderMixin, BaseModel):
     """Represents Discount model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))

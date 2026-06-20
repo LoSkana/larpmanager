@@ -2514,9 +2514,6 @@ msgstr "Termin"
 msgid "Discount back"
 msgstr "Zniżka z powrotem"
 
-msgid "Display order"
-msgstr "Kolejność wyświetlania"
-
 msgid "Document type"
 msgstr "Typ dokumentu"
 
@@ -2618,9 +2615,6 @@ msgstr "Poprzednie sesje"
 
 msgid "Paste as text"
 msgstr "Wklej jako tekst"
-
-msgid "Payment order"
-msgstr "Polecenie zapłaty"
 
 msgid "Personal code"
 msgstr "Kod osobisty"

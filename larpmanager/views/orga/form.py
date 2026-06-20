@@ -27,7 +27,9 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonRes
 from django.shortcuts import render
 from django.urls import reverse
 
+from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import reset_event_cache_all
+from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
 from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
 from larpmanager.models.form import RegistrationOption, RegistrationQuestion
@@ -395,4 +397,10 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     backend_set_order(context, model_class, uuids)
     if action.config.get("writing"):
         reset_event_cache_all(context["run"])
+    if action.config.get("exp"):
+        event_id = context["event"].id
+        clear_event_exp_cache(event_id)
+        clear_event_exp_systems_cache(event_id)
+    if action.config.get("button"):
+        clear_event_button_cache(context["event"].id)
     return JsonResponse({"ok": True})

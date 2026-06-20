@@ -58,7 +58,7 @@ logger = logging.getLogger(__name__)
 def orga_exp_systems(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of experience systems for an event."""
     context = check_event_context(request, event_slug, "orga_exp_systems")
-    context["list"] = context["event"].get_elements(SystemExp).order_by("number")
+    context["list"] = context["event"].get_elements(SystemExp).order_by("order")
     return render(request, "larpmanager/orga/experience/systems.html", context)
 
 
@@ -84,7 +84,7 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
 
     # Get all deliveries ordered by number
-    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("number").select_related("system"))
+    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("order").select_related("system"))
 
     # Get cached EXP relationship data and enrich delivery objects
     px_cache = get_event_exp_cache(context["event"])
@@ -214,7 +214,7 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
 
     # Query and prepare abilities list with optimized database access
-    abilities = list(context["event"].get_elements(AbilityExp).order_by("number").select_related("typ", "system"))
+    abilities = list(context["event"].get_elements(AbilityExp).order_by("order").select_related("typ", "system"))
 
     # Get cached EXP relationship data and enrich ability objects
     px_cache = get_event_exp_cache(context["event"])
@@ -252,7 +252,7 @@ def orga_exp_ability_types(request: HttpRequest, event_slug: str) -> HttpRespons
     context = check_event_context(request, event_slug, "orga_exp_ability_types")
 
     # Retrieve and order ability types by number
-    context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("number")
+    context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("order")
 
     return render(request, "larpmanager/orga/experience/ability_types.html", context)
 
@@ -301,7 +301,7 @@ def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_exp_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of ability templates for an event."""
     context = check_event_context(request, event_slug, "orga_exp_ability_templates")
-    context["list"] = context["event"].get_elements(AbilityTemplateExp).order_by("number")
+    context["list"] = context["event"].get_elements(AbilityTemplateExp).order_by("order")
     return render(request, "larpmanager/orga/experience/ability_templates.html", context)
 
 

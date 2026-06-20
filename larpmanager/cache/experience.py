@@ -63,7 +63,7 @@ def get_event_exp_systems(event: Event) -> list[SystemExp]:
     cache_key = get_event_exp_systems_key(effective_event_id)
     systems = cache.get(cache_key)
     if systems is None:
-        systems = list(event.get_elements(SystemExp).order_by("number"))
+        systems = list(event.get_elements(SystemExp).order_by("order"))
         cache.set(cache_key, systems, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return systems
 

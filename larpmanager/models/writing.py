@@ -33,13 +33,13 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
-from larpmanager.models.base import BaseModel, MediaTokenMixin, UuidMixin
+from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
 
-class Writing(MediaTokenMixin, UuidMixin, BaseConceptModel):
+class Writing(MediaTokenMixin, UuidMixin, OrderMixin, BaseConceptModel):
     """Represents Writing model."""
 
     progress = models.ForeignKey(
@@ -438,8 +438,6 @@ class Plot(Writing):
 
     characters = models.ManyToManyField(Character, related_name="plots", through="PlotCharacterRel", blank=True)
 
-    order = models.IntegerField(default=0)
-
     class Meta:
         indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
@@ -465,12 +463,10 @@ class Plot(Writing):
         )
 
 
-class PlotCharacterRel(BaseModel):
+class PlotCharacterRel(OrderMixin, BaseModel):
     """Represents PlotCharacterRel model."""
 
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
-
-    order = models.IntegerField(default=0)
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
 
@@ -506,8 +502,6 @@ class Faction(Writing):
     """Represents Faction model."""
 
     typ = models.CharField(max_length=1, choices=FactionType.choices, default=FactionType.PRIM, verbose_name=_("Type"))
-
-    order = models.IntegerField(default=0)
 
     cover = models.ImageField(
         max_length=500,

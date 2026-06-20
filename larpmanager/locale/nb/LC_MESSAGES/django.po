@@ -2514,9 +2514,6 @@ msgstr "Frist"
 msgid "Discount back"
 msgstr "Rabatt tilbake"
 
-msgid "Display order"
-msgstr "Vis rekkefølge"
-
 msgid "Document type"
 msgstr "Dokumenttype"
 
@@ -2618,9 +2615,6 @@ msgstr "Tidligere økter"
 
 msgid "Paste as text"
 msgstr "Lim inn som tekst"
-
-msgid "Payment order"
-msgstr "Betalingsordre"
 
 msgid "Personal code"
 msgstr "Personlig kode"

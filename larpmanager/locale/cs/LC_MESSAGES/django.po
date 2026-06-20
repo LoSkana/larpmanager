@@ -2514,9 +2514,6 @@ msgstr "Datum uzávěrky"
 msgid "Discount back"
 msgstr "Sleva zpět"
 
-msgid "Display order"
-msgstr "Pořadí zobrazení"
-
 msgid "Document type"
 msgstr "Typ dokumentu"
 
@@ -2618,9 +2615,6 @@ msgstr "Minulá zasedání"
 
 msgid "Paste as text"
 msgstr "Vložit jako text"
-
-msgid "Payment order"
-msgstr "Platební příkaz"
 
 msgid "Personal code"
 msgstr "Osobní kód"
