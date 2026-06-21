@@ -266,7 +266,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     _wait_lm_ready(page, timeout=8000)
 
 def wait_for_inline_edit(page: Any) -> Any:
-    page.wait_for_selector("#excel-edit.visible", timeout=10000)
+    page.wait_for_selector("#excel-edit.visible #form-excel", timeout=10000)
     return page.locator("#excel-edit")
 
 

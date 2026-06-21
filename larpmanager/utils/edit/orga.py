@@ -230,7 +230,7 @@ class OrgaAction(str, Enum):
     PROGRESS_STEPS = ("orga_progress_steps", {"form": OrgaProgressStepForm})
 
     # Registration
-    REGISTRATION_TICKETS = ("orga_registration_tickets", {"form": OrgaRegistrationTicketForm})
+    REGISTRATION_TICKETS = ("orga_registration_tickets", {"form": OrgaRegistrationTicketForm, "tickets": True})
     REGISTRATION_SECTIONS = ("orga_registration_sections", {"form": OrgaRegistrationSectionForm})
     REGISTRATION_FORM = (
         "orga_registration_form",

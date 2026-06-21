@@ -122,7 +122,7 @@ def orga_plots_rels_reorder(request: HttpRequest, event_slug: str, character_uui
     for i, puuid in enumerate(plot_uuids):
         rel = rels.get(puuid)
         if rel:
-            rel.order = i * 10
+            rel.order = (i + 1) * 10
             to_update.append(rel)
     if to_update:
         PlotCharacterRel.objects.bulk_update(to_update, ["order"])
