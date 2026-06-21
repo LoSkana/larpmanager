@@ -34,11 +34,12 @@ from django.utils import formats
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFit
+from safedelete.models import SOFT_DELETE, SOFT_DELETE_CASCADE
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association, AssociationPlan
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, UuidMixin
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.member import Member
 from larpmanager.models.utils import (
     UploadToPathAndRename,
@@ -273,6 +274,14 @@ class Event(UuidMixin, BaseModel):
         """Return the name of the object as a string."""
         return self.name
 
+    def delete(self, force_policy: int | None = None, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        """Override delete to propagate soft-delete cascade to Runs when deleted via Association cascade."""
+        # When cascade-deleted from Association (force_policy=SOFT_DELETE), propagate cascade to Runs.
+        is_cascade = kwargs.pop("is_cascade", False)
+        if force_policy == SOFT_DELETE and is_cascade:
+            force_policy = SOFT_DELETE_CASCADE
+        return super().delete(force_policy=force_policy, **kwargs)
+
     def get_elements(self, element_model_class: type[BaseModel]) -> QuerySet:
         """Get ordered elements of specified type for the parent event."""
         # Get all elements for the parent event
@@ -496,7 +505,7 @@ class BaseConceptModel(BaseModel):
         return self.name
 
 
-class EventButton(UuidMixin, BaseConceptModel):
+class EventButton(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents EventButton model."""
 
     tooltip = models.CharField(max_length=200)
@@ -576,10 +585,8 @@ class EventText(UuidMixin, BaseModel):
         ]
 
 
-class ProgressStep(UuidMixin, BaseConceptModel):
+class ProgressStep(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents ProgressStep model."""
-
-    order = models.IntegerField(default=0)
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
@@ -619,7 +626,7 @@ class RegistrationStatus(models.TextChoices):
     FUTURE = "f", _("Open on date")
 
 
-class Run(UuidMixin, BaseModel):
+class Run(MediaTokenMixin, UuidMixin, BaseModel):
     """Represents Run model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -796,7 +803,7 @@ class Run(UuidMixin, BaseModel):
         """Return the media file path for this run, creating the directory if needed."""
         # Build path by combining event media path with run number
         # noinspection PyUnresolvedReferences
-        run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}/")
+        run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}-{self.media_token}/")
 
         # Ensure directory exists
         Path(run_media_path).mkdir(parents=True, exist_ok=True)

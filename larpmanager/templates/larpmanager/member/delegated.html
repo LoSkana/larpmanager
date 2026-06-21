@@ -4,83 +4,85 @@
     {% trans "Delegated users" %}
 {% endblock title %}
 {% block content %}
-    {% if request.user.member.parent %}
-        <form action="{{ request.path }}" method="post" id="login_0">
-            {% csrf_token %}
-        </form>
-        <p>
-            {% trans "You are currently logged in with the" %}: <b>{{ request.user.member }}</b>.
-        </p>
-        <p>
-            {% trans "To log back in with the account" %} {{ request.user.member.parent }}, {% trans "press here" %}:
-            <a href="#" onclick="submitForm('login_0'); return false;">{% trans "Login" %}</a>
-        </p>
-    {% else %}
-        <p>{% trans "You are currently logged in with the" %}: {{ request.user.member }}.</p>
-        <p>{% trans "You can create new delegate accounts, or log in with them by pressing the relevant button" %}</p>
-        <br />
-        <table class="mob ">
-            <tr>
-                <th>{% trans "Name" %}</th>
-                <th>{% trans "Registrations" %}</th>
-                <th>{% trans "Accounting" %}</th>
-                <th></th>
-            </tr>
-            {% for el in list %}
-                <tr>
-                    <td>{{ el }}</td>
-                    <td>
-                        {% for registration in el.context.registration_list %}
-                            {{ registration.run }}
-                            {% if registration.ticket %}
-                                (
-                                {{ registration.ticket.name }}
-                                {% if registration.ticket.price %}<i><u> {{ registration.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
-                                )
-                            {% endif %}
-                            {% if registration.opts %}
-                                {% for k, el in registration.opts.items %}
-                                    {% include "elements/comma.html" %}
-                                    <b>{{ el.question.name }}</b> -
-                                    {% for opt in el.selected_options %}
-                                        {{ opt.name }}
-                                        {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
-                                    {% endfor %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% for registration in el.context.payments_todo %}
-                            {% include "elements/comma.html" %}
-                            <b>{{ registration.run }} </b> -
-                            {{ registration.quota|format_decimal }}{{ currency_symbol }} {% trans "by" %} {{ registration.deadline }} {% trans "days" %}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        <form action="{{ request.path }}" method="post" id="login_{{ el.uuid }}">
-                            {% csrf_token %}
-                            <input type="hidden" name="account" value="{{ el.uuid }}" />
-                        </form>
-                        <a href="#" onclick="submitForm('login_{{ el.uuid }}'); return false;">{% trans "Login" %}</a>
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
-        <div class="c nav">
-            <a href="#" class="select my_toggle" tog='add_new'>{% trans "Add new" %}</a>
-        </div>
-        <br />
-        <div class="add_new {% if not form.errors %}hide{% endif %}">
-            <form action="{{ request.path }}" method="post">
+    <div class="user_resize platform">
+        {% if request.user.member.parent %}
+            <form action="{{ request.path }}" method="post" id="login_0">
                 {% csrf_token %}
-                <table>
-                    {{ form.as_table }}
-                </table>
-                <input type="submit" value="{% trans "Confirm" %}" />
             </form>
-        </div>
-    {% endif %}
+            <p>
+                {% trans "You are currently logged in with the" %}: <b>{{ request.user.member }}</b>.
+            </p>
+            <p>
+                {% trans "To log back in with the account" %} {{ request.user.member.parent }}, {% trans "press here" %}:
+                <a href="#" onclick="submitForm('login_0'); return false;">{% trans "Login" %}</a>
+            </p>
+        {% else %}
+            <p>{% trans "You are currently logged in with the" %}: {{ request.user.member }}.</p>
+            <p>{% trans "You can create new delegate accounts, or log in with them by pressing the relevant button" %}</p>
+            <br />
+            <table class="mob ">
+                <tr>
+                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Registrations" %}</th>
+                    <th>{% trans "Accounting" %}</th>
+                    <th></th>
+                </tr>
+                {% for el in list %}
+                    <tr>
+                        <td>{{ el }}</td>
+                        <td>
+                            {% for registration in el.context.registration_list %}
+                                {{ registration.run }}
+                                {% if registration.ticket %}
+                                    (
+                                    {{ registration.ticket.name }}
+                                    {% if registration.ticket.price %}<i><u> {{ registration.ticket.price }}{{ currency_symbol }}</u></i>{% endif %}
+                                    )
+                                {% endif %}
+                                {% if registration.opts %}
+                                    {% for k, el in registration.opts.items %}
+                                        {% include "elements/comma.html" %}
+                                        <b>{{ el.question.name }}</b> -
+                                        {% for opt in el.selected_options %}
+                                            {{ opt.name }}
+                                            {% if opt.price %}<i><u>({{ opt.price }}{{ currency_symbol }})</u></i>{% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for registration in el.context.payments_todo %}
+                                {% include "elements/comma.html" %}
+                                <b>{{ registration.run }} </b> -
+                                {{ registration.quota|format_decimal }}{{ currency_symbol }} {% trans "by" %} {{ registration.deadline }} {% trans "days" %}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <form action="{{ request.path }}" method="post" id="login_{{ el.uuid }}">
+                                {% csrf_token %}
+                                <input type="hidden" name="account" value="{{ el.uuid }}" />
+                            </form>
+                            <a href="#" onclick="submitForm('login_{{ el.uuid }}'); return false;">{% trans "Login" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="c nav">
+                <a href="#" class="select my_toggle" tog='add_new'>{% trans "Add new" %}</a>
+            </div>
+            <br />
+            <div class="add_new {% if not form.errors %}hide{% endif %}">
+                <form action="{{ request.path }}" method="post">
+                    {% csrf_token %}
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                    <input type="submit" value="{% trans "Confirm" %}" />
+                </form>
+            </div>
+        {% endif %}
+    </div>
 {% endblock content %}
 {% block js %}
     <script>

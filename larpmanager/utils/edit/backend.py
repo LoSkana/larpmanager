@@ -559,10 +559,6 @@ def backend_save_ajax(form: BaseModelForm, request: HttpRequest) -> JsonResponse
     # Initialize default success response
     res = {"res": "ok"}
 
-    # Superusers bypass all validation checks
-    if is_lm_admin(request):
-        return JsonResponse(res)
-
     # Extract and validate element ID from POST data
     edit_uuid = request.POST.get("edit_uuid", "")
     if not edit_uuid:
@@ -925,3 +921,17 @@ def backend_order(
     current_element.save()
     adjacent_element.save()
     context["current"] = current_element
+
+
+def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> None:
+    """Bulk-set order field from a UUID list using index * 10 spacing."""
+    event = context["event"]
+    objects = {str(obj.uuid): obj for obj in model_class.objects.filter(event=event, uuid__in=uuids)}
+    to_update = []
+    for i, uuid in enumerate(uuids):
+        obj = objects.get(uuid)
+        if obj:
+            obj.order = (i + 1) * 10
+            to_update.append(obj)
+    if to_update:
+        model_class.objects.bulk_update(to_update, ["order"])

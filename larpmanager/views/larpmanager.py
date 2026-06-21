@@ -72,9 +72,8 @@ from larpmanager.utils.auth.admin import check_lm_admin
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
-from larpmanager.utils.larpmanager.tasks import my_send_mail, send_mail_exec
+from larpmanager.utils.larpmanager.tasks import delete_association_task, delete_run_task, my_send_mail, send_mail_exec
 from larpmanager.utils.services.association import _reset_all_association
-from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
 from larpmanager.views.user.member import get_user_backend
 
@@ -149,7 +148,7 @@ def go_redirect(
 ) -> Any:
     """Redirect user to association-specific subdomain or main domain."""
     if request.enviro in ["dev", "test"]:
-        return redirect("http://127.0.0.1:8000/")
+        return redirect(request.build_absolute_uri("/"))
 
     new_path = f"https://{slug}.{base_domain}/" if slug else f"https://{base_domain}/"
 
@@ -195,8 +194,10 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
     )
 
 
-def go_redirect_run(run: Any, path: Any, hint_slug: str = "") -> Any:
+def go_redirect_run(request: HttpRequest, run: Any, path: Any, hint_slug: str = "") -> Any:
     """Redirect to a specific run's URL on its association's domain."""
+    if request.enviro in ["dev", "test"]:
+        return redirect(request.build_absolute_uri("/"))
     full_url = f"https://{run.event.association.slug}.{run.event.association.skin.domain}/{run.get_slug()}/{path}"
     if hint_slug:
         full_url += ("&" if "?" in full_url else "?") + f"hint_slug={hint_slug}"
@@ -226,7 +227,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_sl
     if len(run_display_names) == 0:
         return render(request, "larpmanager/larpmanager/na_event.html")
     if len(run_display_names) == 1:
-        return go_redirect_run(available_runs[0], redirect_path, hint_slug=hint_slug)
+        return go_redirect_run(request, available_runs[0], redirect_path, hint_slug=hint_slug)
 
     # show page to choose them
     if request.POST:
@@ -234,7 +235,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_sl
         if form.is_valid():
             selected_index = int(form.cleaned_data["slug"])
             if selected_index < len(run_display_names):
-                return go_redirect_run(available_runs[selected_index], redirect_path, hint_slug=hint_slug)
+                return go_redirect_run(request, available_runs[selected_index], redirect_path, hint_slug=hint_slug)
     else:
         form = RedirectForm(slugs=run_display_names)
     return render(
@@ -1123,23 +1124,55 @@ def lm_clean(request: HttpRequest, association_slug: str) -> HttpResponse:
     registration_count = Registration.objects.filter(run__event__association=association).count()
 
     if request.method == "POST":
-        newsletter_emails = set(
-            AssociationRole.objects.filter(association=association, number=1).values_list("members__email", flat=True)
-        )
-        if association.main_mail:
-            newsletter_emails.add(association.main_mail)
-        for email in newsletter_emails:
-            if email:
-                _newsletter_set_non_active(email)
-        association.delete()
-        messages.success(request, f"Association '{association_slug}' deleted.")
-        return redirect("lm_list")
+        delete_association_task(association_slug)
+        return redirect("lm_clean_wait", association_slug=association_slug)
 
     context["assoc"] = association
     context["executives"] = executives
     context["events"] = events
     context["registration_count"] = registration_count
     return render(request, "larpmanager/larpmanager/delete_association.html", context)
+
+
+@login_required
+def lm_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
+    """Show run deletion confirmation page and process deletion."""
+    check_lm_admin(request)
+    run = get_object_or_404(Run, uuid=run_uuid)
+    registration_count = Registration.objects.filter(run__event=run.event).count()
+
+    if request.method == "POST":
+        delete_run_task(str(run.uuid))
+        return redirect("lm_events_delete_wait", run_uuid=run_uuid)
+
+    context = get_context(request)
+    context["run"] = run
+    context["registration_count"] = registration_count
+    return render(request, "larpmanager/larpmanager/delete_event.html", context)
+
+
+@login_required
+def lm_events_delete_wait(request: HttpRequest, run_uuid: str) -> HttpResponse:
+    """Poll until the run is gone, then confirm deletion."""
+    check_lm_admin(request)
+    deleted = not Run.objects.filter(uuid=run_uuid).exists()
+    context = get_context(request)
+    context["deleted"] = deleted
+    context["label"] = f"Run {run_uuid}"
+    context["cancel_url"] = reverse("lm_list")
+    return render(request, "larpmanager/larpmanager/delete_wait.html", context)
+
+
+@login_required
+def lm_clean_wait(request: HttpRequest, association_slug: str) -> HttpResponse:
+    """Poll until the association is gone, then confirm deletion."""
+    check_lm_admin(request)
+    deleted = not Association.objects.filter(slug=association_slug).exists()
+    context = get_context(request)
+    context["deleted"] = deleted
+    context["label"] = f"Association {association_slug}"
+    context["cancel_url"] = reverse("lm_list")
+    return render(request, "larpmanager/larpmanager/delete_wait.html", context)
 
 
 @ratelimit(key="ip", rate="5/m", block=True)

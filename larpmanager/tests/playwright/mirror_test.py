@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm, expect_normalized, \
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -69,10 +70,11 @@ def test_orga_mirror(pw_page: Any) -> None:
     # create mirror
     go_to(page, live_server, "/test/manage/characters/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Mirror")
-    page.locator("#id_mirror").select_option("u1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Mirror")
+    edit_iframe.locator("#id_mirror").select_option("u1")
+    save_modal(page, edit_iframe)
 
     # check gallery
     go_to(page, live_server, "/test/")
@@ -103,19 +105,17 @@ def casting(live_server: Any, page: Any) -> None:
     page.locator("#choice0").click()
     expect_normalized(page, page.locator("#casting"), "Mirror")
     expect_normalized(page, page.locator("#casting"), "Test Character")
-    page.wait_for_timeout(5000)
+    just_wait(page, big=True)
     page.locator("#choice0").select_option("u2")
     submit(page)
 
     # test toggle casting
     go_to(page, live_server, "/test/manage/casting")
-    just_wait(page)
     expect_normalized(page, page.locator(".change").first, "YES")
     page.locator(".change").first.click()
     just_wait(page)
 
     go_to(page, live_server, "/test/manage/casting")
-    just_wait(page)
     expect_normalized(page, page.locator(".change").first, "NO")
     page.locator(".change").first.click()
     just_wait(page)

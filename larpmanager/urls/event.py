@@ -157,11 +157,6 @@ urlpatterns = [
         name="character_pdf_sheet_friendly",
     ),
     path(
-        "<slug:event_slug>/character/<slug:character_uuid>/pdf/relationships/",
-        views_up.character_pdf_relationships,
-        name="character_pdf_relationships",
-    ),
-    path(
         "<slug:event_slug>/search/",
         views_ue.search,
         name="search",

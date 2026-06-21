@@ -22,10 +22,29 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from django_otp import user_has_device
-from django_otp.admin import OTPAdminSite
+from django_otp.admin import OTPAdminAuthenticationForm, OTPAdminSite
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
+
+
+class LarpManagerAdminAuthenticationForm(OTPAdminAuthenticationForm):
+    """Admin login form that only enforces OTP when the user has a device enrolled."""
+
+    def clean(self) -> dict:
+        """Validate credentials and enforce OTP only when the user has a device enrolled."""
+        # Run credential validation (skipping OTPAdminAuthenticationForm.clean)
+        self.cleaned_data = super(OTPAdminAuthenticationForm, self).clean()
+        user = self.get_user()
+        if user is not None and user_has_device(user):
+            self.clean_otp(user)
+        return self.cleaned_data
+
+    @property
+    def show_otp(self) -> bool:
+        """Return True only if the authenticated user has an OTP device enrolled."""
+        user = self.get_user()
+        return user is not None and user_has_device(user)
 
 
 class LarpManagerOTPAdminSite(OTPAdminSite):
@@ -35,6 +54,8 @@ class LarpManagerOTPAdminSite(OTPAdminSite):
     from the admin). Once a device is enrolled, OTP verification is required
     on every subsequent login.
     """
+
+    login_form = LarpManagerAdminAuthenticationForm
 
     def has_permission(self, request: HttpRequest) -> bool:
         """Allow access if staff; require OTP verification only when a device is enrolled."""

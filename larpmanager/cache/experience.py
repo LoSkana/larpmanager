@@ -63,7 +63,7 @@ def get_event_exp_systems(event: Event) -> list[SystemExp]:
     cache_key = get_event_exp_systems_key(effective_event_id)
     systems = cache.get(cache_key)
     if systems is None:
-        systems = list(event.get_elements(SystemExp).order_by("number"))
+        systems = list(event.get_elements(SystemExp).order_by("order"))
         cache.set(cache_key, systems, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return systems
 
@@ -387,8 +387,10 @@ def update_cache_section(event: Event, section_name: str, section_id: int, data:
 
         if cached_event_data is None:
             logger.debug("Cache miss during %s update for event %s, reinitializing", section_name, event_id)
-            # We need to get the event to reinitialize
-            event = Event.objects.get(id=event_id)
+            event = Event.objects.filter(id=event_id).first()
+            if event is None:
+                logger.warning("Event %s not found, skipping cache reinitialization", event_id)
+                return
             init_event_exp_all(event)
             return
 
@@ -431,28 +433,28 @@ def refresh_rule_relationships(rule: RuleExp) -> None:
 # Background tasks for cache updates
 
 
-@background_auto(queue="cache-experience")
+@background_auto(queue="cache-experience", skip_duplicates=True)
 def refresh_ability_character_rels_background(ability_ids: int | list[int]) -> None:
     """Update ability relationships in cache (dirty-aware background task)."""
     abilities = _validate_and_fetch_objects(AbilityExp, ability_ids, "AbilityExp")
     _refresh_exp_if_dirty("abilities", abilities, refresh_ability_relationships)
 
 
-@background_auto(queue="cache-experience")
+@background_auto(queue="cache-experience", skip_duplicates=True)
 def refresh_delivery_rels_dirty_background(delivery_ids: int | list[int]) -> None:
     """Update delivery relationships in cache (dirty-aware background task)."""
     deliveries = _validate_and_fetch_objects(DeliveryExp, delivery_ids, "DeliveryExp")
     _refresh_exp_if_dirty("deliveries", deliveries, refresh_delivery_relationships)
 
 
-@background_auto(queue="cache-experience")
+@background_auto(queue="cache-experience", skip_duplicates=True)
 def refresh_modifier_rels_dirty_background(modifier_ids: int | list[int]) -> None:
     """Update modifier relationships in cache (dirty-aware background task)."""
     modifiers = _validate_and_fetch_objects(ModifierExp, modifier_ids, "ModifierExp")
     _refresh_exp_if_dirty("modifiers", modifiers, refresh_modifier_relationships)
 
 
-@background_auto(queue="cache-experience")
+@background_auto(queue="cache-experience", skip_duplicates=True)
 def refresh_rule_rels_dirty_background(rule_ids: int | list[int]) -> None:
     """Update rule relationships in cache (dirty-aware background task)."""
     rules = _validate_and_fetch_objects(RuleExp, rule_ids, "RuleExp")

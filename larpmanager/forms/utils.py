@@ -24,8 +24,9 @@ from datetime import timedelta
 from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
+from django.conf import settings as conf_settings
 from django.db.models import Q, QuerySet
-from django.forms.widgets import Widget
+from django.forms.widgets import Textarea, Widget
 from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
@@ -1147,3 +1148,9 @@ class WritingTinyMCE(CSRFTinyMCE):
             "content_style": ".char-marker { background: yellow !important; }",
         }
         super().__init__(attrs=mce_attrs)
+
+    def render(self, name, value, attrs=None, renderer=None):  # noqa: ANN001, ANN201
+        """If running in test mode, do not render tinymce."""
+        if getattr(conf_settings, "TINYMCE_DISABLED", False):
+            return Textarea(attrs={"rows": 20}).render(name, value, attrs=attrs, renderer=renderer)
+        return super().render(name, value, attrs=attrs, renderer=renderer)

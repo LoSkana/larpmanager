@@ -202,6 +202,7 @@ from larpmanager.models.base import (
     Feature,
     FeatureModule,
     auto_assign_sequential_numbers,
+    auto_set_media_token,
     auto_set_uuid,
     debug_set_uuid,
     update_model_search_field,
@@ -356,6 +357,9 @@ def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any)
 
     # Assign uuid for models that has it
     auto_set_uuid(instance)
+
+    # Assign media_token for models that has it
+    auto_set_media_token(instance)
 
     if isinstance(instance, RESET_WIDGETS_TYPES):
         reset_widgets(instance)
@@ -880,8 +884,8 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     clear_event_cache_all_runs(instance)
     clear_event_features_cache(instance.id)
 
-    # Setup campaign inheritance if not explicitly skipped
-    if not getattr(instance, "_skip_campaign_setup", False):  # Internal flag to prevent recursion
+    # Setup campaign inheritance if not explicitly skipped and not being deleted
+    if not getattr(instance, "_skip_campaign_setup", False) and instance.deleted is None:
         copy_parent_event_to_campaign(instance)
 
     # Clear run and registration related caches
@@ -1019,6 +1023,13 @@ def pre_save_faction(sender: type, instance: Faction, *args: Any, **kwargs: Any)
     """Signal handler that updates faction before saving."""
     replace_character_names(instance)
     on_faction_pre_save_update_cache(instance)
+    if instance.pk:
+        try:
+            instance.pre_save_faction_text = Faction.objects.values_list("text", flat=True).get(pk=instance.pk)
+        except Faction.DoesNotExist:
+            instance.pre_save_faction_text = None
+    else:
+        instance.pre_save_faction_text = None
 
 
 @receiver(post_save, sender=Faction)
@@ -1034,10 +1045,13 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
     # Update faction cache for event relationships
     refresh_event_faction_relationships_background(instance.id)
 
-    # Update cache for all characters belonging to this faction
+    # Update cache for all characters belonging to this faction;
+    # only recompute auto-rels if faction text changed (it feeds _collect_sources_map)
+    text_changed = getattr(instance, "pre_save_faction_text", None) != instance.text
     for char in instance.characters.all():
         refresh_character_relationships_background(char.id)
-        update_character_referenced_chars_background(char.id)
+        if text_changed:
+            update_character_referenced_chars_background(char.id)
 
     # Clean up faction PDFs after save operation
     cleanup_faction_pdfs_on_save(instance)
@@ -1329,6 +1343,8 @@ def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> 
 @receiver(post_save, sender=PlotCharacterRel)
 def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
     """Recompute auto relationships when a plot-character relation changes."""
+    if instance.plot_id:
+        refresh_event_plot_relationships_background(instance.plot_id)
     if instance.character_id:
         update_character_referenced_chars_background(instance.character_id)
 
@@ -1336,6 +1352,8 @@ def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, 
 @receiver(post_delete, sender=PlotCharacterRel)
 def post_delete_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
     """Recompute auto relationships when a plot-character relation is deleted."""
+    if instance.plot_id:
+        refresh_event_plot_relationships_background(instance.plot_id)
     if instance.character_id:
         update_character_referenced_chars_background(instance.character_id)
 
@@ -1861,10 +1879,8 @@ def on_faction_characters_refs_changed(
         # instance is Character, pk_set is faction IDs
         update_character_referenced_chars_background(instance.id)
     else:
-        # instance is Faction, pk_set is character IDs: update changed chars + existing members
+        # instance is Faction, pk_set is character IDs: only update chars whose membership changed
         for char_id in pk_set:
-            update_character_referenced_chars_background(char_id)
-        for char_id in instance.characters.exclude(pk__in=pk_set).values_list("id", flat=True):
             update_character_referenced_chars_background(char_id)
 
 

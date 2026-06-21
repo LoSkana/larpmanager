@@ -41,7 +41,7 @@ from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
 logger = logging.getLogger(__name__)
 
 
-@background_auto(queue="acc")
+@background_auto(queue="acc", skip_duplicates=True)
 def update_registration_status_bkg(registration_id: Any) -> None:
     """Background task to update registration status with delay."""
     time.sleep(1)

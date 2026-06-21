@@ -40,10 +40,12 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
+from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient
+from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -629,3 +631,45 @@ def notify_admins(subject: str, message_text: str = "", exception: Exception | N
         )
     for _name, email in conf_settings.ADMINS:
         my_send_mail(subject, message_text, email)
+
+
+# DELETION
+
+
+@background(schedule=0)
+def delete_run_task(run_uuid: str) -> None:
+    """Delete the event (and all its runs) identified by this run uuid.
+
+    Nulls out parent FK on child events first to prevent cascade-deleting them.
+    """
+    try:
+        run = Run.objects.select_related("event").get(uuid=run_uuid)
+    except Run.DoesNotExist:
+        return
+    event = run.event
+    Event.objects.filter(parent=event).update(parent=None)
+    event.delete()
+
+
+@background(schedule=0)
+def delete_association_task(association_slug: str) -> None:
+    """Unsubscribe newsletter and delete association in the background.
+
+    Nulls out parent FK on child events whose parent belongs to this association,
+    so external child events are not cascade-deleted.
+    """
+    try:
+        association = Association.objects.get(slug=association_slug)
+    except Association.DoesNotExist:
+        return
+    events_in_assoc = Event.objects.filter(association=association)
+    Event.objects.filter(parent__in=events_in_assoc).update(parent=None)
+    newsletter_emails = set(
+        AssociationRole.objects.filter(association=association, number=1).values_list("members__email", flat=True)
+    )
+    if association.main_mail:
+        newsletter_emails.add(association.main_mail)
+    for email in newsletter_emails:
+        if email:
+            _newsletter_set_non_active(email)
+    association.delete()

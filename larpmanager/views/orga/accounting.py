@@ -62,7 +62,7 @@ def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_discounts")
 
     # Get all discounts for the event ordered by number
-    context["list"] = Discount.objects.filter(event=context["event"]).order_by("number")
+    context["list"] = Discount.objects.filter(event=context["event"]).order_by("order")
 
     return render(request, "larpmanager/orga/accounting/discounts.html", context)
 

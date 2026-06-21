@@ -4,11 +4,8 @@
     {% trans "Plots" %} - {{ event.name }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the plots of the event" %}
+    {% trans "Manage all plots for this event" %}
 {% endblock info %}
-{% block table_classes %}
-    ordering_arrow
-{% endblock table_classes %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
     <a href="#" class="table_toggle" tog='characters'>{% trans "Characters" %}</a>
@@ -22,51 +19,37 @@
     <th class="stats stats-characters">
         <i class="fa fa-hashtag"></i>
     </th>
-    <th></th>
-    <th></th>
+    {% if writing_unimportant %}
+        <th class="stats stats-characters">
+            <i class="fa fa-hashtag"></i> {% trans "Important" %}
+        </th>
+    {% endif %}
     <th></th>
 {% endblock thead %}
-{% block tbody %}
-    {% for el in list %}
-        <tr id="{{ el.uuid }}">
-            <td>
-                <a href="{% url 'orga_plots_edit' run.get_slug el.uuid %}"
-                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-            </td>
-            <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
-            <td>
-                <a href="{% url 'orga_plots_view' run.get_slug el.uuid %}"
-                   qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_plots_versions' run.get_slug el.uuid %}"
-                   qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
-            </td>
-            {% include "elements/writing/questions_body.html" %}
-            <td class="characters dot_links">
-                {% for ch in el.character_rels.list %}
-                    {% include "elements/comma.html" %}
-                    <a href="{% url 'orga_characters_edit' run.get_slug ch.0 %}">{{ ch.1 }}</a>
-                {% endfor %}
-            </td>
-            <td class="stats">{{ el.character_rels.count }}</td>
-            <td>
-                {% if not forloop.first %}
-                    <a href="{% url 'orga_plots_order' run.get_slug el.uuid 0 %}">
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </a>
-                {% endif %}
-            </td>
-            <td>
-                {% if not forloop.last %}
-                    <a href="{% url 'orga_plots_order' run.get_slug el.uuid 1 %}">
-                        <i class="fa-solid fa-arrow-down"></i>
-                    </a>
-                {% endif %}
-            </td>
-            <td>
-                <a href="{% url 'orga_plots_delete' run.get_slug el.uuid %}"
-                   qtip="{% trans "Delete" %}"
-                   class="only_new_v18"><i class="fas fa-trash"></i></a>
-            </td>
-        </tr>
-    {% endfor %}
-{% endblock tbody %}
+{% block tr_content %}
+    <td>
+        <a href="{% url 'orga_plots_edit' run.get_slug el.uuid %}"
+           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+    </td>
+    <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
+    <td>
+        <a href="{% url 'orga_plots_view' run.get_slug el.uuid %}"
+           qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
+        <a href="{% url 'orga_plots_versions' run.get_slug el.uuid %}"
+           qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
+    </td>
+    {% include "elements/writing/questions_body.html" %}
+    <td class="characters dot_links">
+        {% for ch in el.character_rels.list %}
+            {% include "elements/comma.html" %}
+            <a href="{% url 'orga_characters_edit' run.get_slug ch.0 %}">{{ ch.1 }}</a>
+        {% endfor %}
+    </td>
+    <td class="stats">{{ el.character_rels.count }}</td>
+    {% if writing_unimportant %}<td class="stats">{{ el.character_rels.important }}</td>{% endif %}
+    <td>
+        <a href="{% url 'orga_plots_delete' run.get_slug el.uuid %}"
+           qtip="{% trans "Delete" %}"
+           class="only_new_v18"><i class="fas fa-trash"></i></a>
+    </td>
+{% endblock tr_content %}

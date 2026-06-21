@@ -33,13 +33,13 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
-from larpmanager.models.base import BaseModel, UuidMixin
+from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
 
 
-class Writing(UuidMixin, BaseConceptModel):
+class Writing(MediaTokenMixin, UuidMixin, OrderMixin, BaseConceptModel):
     """Represents Writing model."""
 
     progress = models.ForeignKey(
@@ -333,29 +333,26 @@ class Character(Writing):
     @staticmethod
     def get_character_filepath(run: Run) -> str:
         """Get the directory path for storing character files for a given run."""
-        # Build the path to the characters directory for this run
-        directory_path = str(Path(run.event.get_media_filepath()) / "characters" / f"{run.number}/")
-        # Ensure the directory exists
+        directory_path = str(Path(run.get_media_filepath()) / "characters/")
         Path(directory_path).mkdir(parents=True, exist_ok=True)
         return directory_path
 
+    def get_media_filepath(self, run: Run, descr: str) -> str:
+        """Get the base path to this character's PDF files."""
+        character_directory = self.get_character_filepath(run)
+        return str(Path(character_directory) / f"{self.number}-{self.media_token}-{descr}.pdf")
+
     def get_sheet_filepath(self, run: Run) -> str:
         """Get the path to this character's PDF sheet file."""
-        # Build the character's directory path
-        character_directory = self.get_character_filepath(run)
+        return self.get_media_filepath(run, "full")
 
-        # Create sheet filename using character number
-        sheet_filename = f"#{self.number}.pdf"
-
-        return str(Path(character_directory) / sheet_filename)
-
-    def get_sheet_friendly_filepath(self, character_run: Any = None) -> Any:
+    def get_sheet_friendly_filepath(self, run: Run) -> str:
         """Return filepath for the light PDF version of the character sheet."""
-        return str(Path(self.get_character_filepath(character_run)) / f"#{self.number}-light.pdf")
+        return self.get_media_filepath(run, "light")
 
-    def get_relationships_filepath(self, run: Any = None) -> Any:
+    def get_relationships_filepath(self, run: Run) -> str:
         """Return filepath for the relationships PDF."""
-        return str(Path(self.get_character_filepath(run)) / f"#{self.number}-rels.pdf")
+        return self.get_media_filepath(run, "rels")
 
     def show_thumb(self) -> Any:
         """Return HTML for displaying character thumbnail image if available."""
@@ -441,8 +438,6 @@ class Plot(Writing):
 
     characters = models.ManyToManyField(Character, related_name="plots", through="PlotCharacterRel", blank=True)
 
-    order = models.IntegerField(default=0)
-
     class Meta:
         indexes: ClassVar[list] = [
             models.Index(fields=["number", "event"]),
@@ -468,12 +463,10 @@ class Plot(Writing):
         )
 
 
-class PlotCharacterRel(BaseModel):
+class PlotCharacterRel(OrderMixin, BaseModel):
     """Represents PlotCharacterRel model."""
 
     plot = models.ForeignKey(Plot, on_delete=models.CASCADE)
-
-    order = models.IntegerField(default=0)
 
     character = models.ForeignKey(Character, on_delete=models.CASCADE)
 
@@ -510,8 +503,6 @@ class Faction(Writing):
 
     typ = models.CharField(max_length=1, choices=FactionType.choices, default=FactionType.PRIM, verbose_name=_("Type"))
 
-    order = models.IntegerField(default=0)
-
     cover = models.ImageField(
         max_length=500,
         upload_to=UploadToPathAndRename("faction/cover/"),
@@ -546,24 +537,14 @@ class Faction(Writing):
     @staticmethod
     def get_faction_filepath(run: Run) -> str:
         """Get the directory path for storing faction PDF files for a specific run."""
-        # Build directory path: event_media/factions/run_number/
-        directory_path = str(Path(run.event.get_media_filepath()) / "factions" / f"{run.number}/")
-
-        # Ensure directory exists, creating parent directories as needed
+        directory_path = str(Path(run.get_media_filepath()) / "factions/")
         Path(directory_path).mkdir(parents=True, exist_ok=True)
-
         return directory_path
 
     def get_sheet_filepath(self, run: Run) -> str:
         """Get the complete file path for this faction's PDF sheet."""
-        # Get the faction directory for this run
         faction_directory = self.get_faction_filepath(run)
-
-        # Construct filename with faction number
-        sheet_filename = f"#{self.number}.pdf"
-
-        # Return complete path to faction sheet PDF
-        return str(Path(faction_directory) / sheet_filename)
+        return str(Path(faction_directory) / f"{self.number}-{self.media_token}.pdf")
 
     def show_red(self) -> dict:
         """Update JavaScript response with 'typ' and 'teaser' attributes."""
@@ -691,12 +672,9 @@ class Handout(Writing):
 
     def get_filepath(self, run: Run) -> str:
         """Build the file path for this handout's PDF within the event's media directory."""
-        # Build handouts directory path within event media
         handouts_directory = str(Path(run.event.get_media_filepath()) / "handouts")
         Path(handouts_directory).mkdir(parents=True, exist_ok=True)
-
-        # Generate PDF filename using handout number
-        return str(Path(handouts_directory) / f"H{self.number}.pdf")
+        return str(Path(handouts_directory) / f"{self.number}-{self.media_token}.pdf")
 
 
 class TextVersionChoices(models.TextChoices):

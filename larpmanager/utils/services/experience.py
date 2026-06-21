@@ -685,7 +685,7 @@ def remove_char_ability(char: Any, ability_id: Any) -> set:
     return ability_ids_to_remove
 
 
-@background_auto(queue="experience")
+@background_auto(queue="experience", skip_duplicates=True)
 def calculate_character_experience_points_bgk(character_ids: int | list) -> None:
     """Update experience points for a character."""
     if not isinstance(character_ids, list):
@@ -700,7 +700,7 @@ def calculate_character_experience_points_bgk(character_ids: int | list) -> None
             pass
 
 
-@background_auto(queue="experience")
+@background_auto(queue="experience", skip_duplicates=True)
 def calculate_event_experience_points_bgk(event_id: int) -> None:
     """Update experience points for all event characters."""
     try:

@@ -79,7 +79,7 @@ function search_tutorial() {
         if (result.trim() === "")
             result = "{% trans "No results found; please try with more simpler terms (remember to write in English)" %}";
 
-        uglipop({class:'popup_query', source:'html', content: result});
+        window.openLmModal(result, 'popup_query');
     });
 
 }

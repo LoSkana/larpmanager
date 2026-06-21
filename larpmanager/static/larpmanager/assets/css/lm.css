@@ -20,43 +20,12 @@ i.fas {
   padding: 0;
 }
 
-.new_v20 input[type="submit"],
-.new_v20 input[type="reset"],
-.new_v20 input[type="button"],
-.new_v20 input[type="confirm"],
-.new_v20 button,
-.new_v20 .button {
-  background: rgba(var(--ter-rgb), 0.35);
-  color: rgba(var(--pri-rgb), 0.85);
-  border-color: rgba(var(--sec-rgb), 0.85) !important;
+.hide-screen {
+  display: none;
 }
 
-.new_v20 input[type="submit"],
-.new_v20 input[type="reset"],
-.new_v20 input[type="button"],
-.new_v20 input[type="confirm"] {
-  display: block;
-  margin: 0.5em auto;
-}
-
-body.association.new_v20 .user_resize {
-  padding: 0.5em 1em;
-  margin: 0.5em auto;
-  border-radius: 8px;
-  background-color: rgba(var(--pri-rgb), 0.04);
-}
-
-@media (max-width: 800px) {
-  body.association.new_v20 .user_resize {
-    padding: 0em 0em;
-    margin: 0.2em auto;
-    border-radius: 0px;
-    background-color: transparent;
-  }
-
-  body.association.new_v20 .user_resize table tbody tr {
-    padding: 0.5em;
-  }
+.hide-screen {
+  display: none;
 }
 
 .hide {
@@ -989,12 +958,12 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 .popup,
 .popup_small,
 .popup_tutorial,
-.popup_option,
-.popup_dashboard {
+.popup_dashboard,
+.popup_edit {
   border-radius: 2em;
   background-color: var(--sec-clr);
   color: var(--pri-clr) !important;
-  padding: 1em;
+  padding: 0 1em;
   -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
   box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
@@ -1011,28 +980,28 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   max-height: 60vh;
 }
 
-.popup_option,
-.popup_dashboard {
+.popup_edit {
   width: 70vw;
+  height: 80vh;
 }
 
-.popup_option,
 .popup_dashboard {
-  height: auto;
+  width: 60vw;
+  height: 60vh;
   min-height: 200px;
   max-height: 85vh;
 }
 
 @media (max-width: 1200px) {
-  .popup_option,
-  .popup_dashboard {
+  .popup_dashboard,
+  .popup_edit {
     width: 80vw;
   }
 }
 
 @media (max-width: 1000px) {
-  .popup_option,
-  .popup_dashboard {
+  .popup_dashboard,
+  .popup_edit {
     width: 90vw;
   }
 }
@@ -1073,9 +1042,9 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 @media (max-width: 800px) {
   .popup,
   .popup_tutorial,
-  .popup_option,
   .popup_query,
-  .popup_dashboard {
+  .popup_dashboard,
+  .popup_edit {
     width: 95vw;
   }
 }
@@ -1094,9 +1063,17 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   }
 }
 
-/* Force uglipop elements to be on top */
-[id*="uglipop"] {
-  z-index: 99999 !important;
+/* Dialog modal system */
+dialog {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: none;
+  max-height: none;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .popup_tutorial img,
@@ -1566,7 +1543,7 @@ header.sec h1 {
     height: auto;
   }
 
-  #uglipop_popbox img {
+  #lm-modal img {
     max-width: 95%;
     display: block;
     width: auto;
@@ -1574,8 +1551,9 @@ header.sec h1 {
     margin: auto;
   }
 
-  #uglipop_content_fixed {
+  #lm-modal-content {
     width: 95%;
+    height: 100%;
   }
 
   .info {
@@ -1984,7 +1962,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Registration
+   Application - Registration
    --------------------------------------------------------------------------- */
 
 .reg_status {
@@ -1993,100 +1971,6 @@ header.sec h1 {
 
 .reg_status br {
   display: none;
-}
-
-.new_v20 .no_v20 {
-  display: none;
-}
-
-.new_v20 hr {
-  opacity: 0.3;
-}
-
-/* Registration status row */
-.new_v20 .reg_status {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.5em;
-  padding: 0.5em;
-}
-
-/* Registration status block */
-.new_v20 .reg_status .reg-status-block {
-  margin: 0 auto;
-  align-items: center;
-  gap: 0.6em;
-  padding: 0.45em 0.75em;
-  border-radius: 5px;
-  border-left: 4px solid #ccc;
-  background: rgba(0, 0, 0, 0.03);
-  text-align: left;
-}
-
-.new_v20 .reg_status .reg-status-label {
-  font-weight: 600;
-}
-
-.new_v20 .reg_status .reg-action {
-  font-size: 0.93em;
-}
-
-.new_v20 .reg_status .reg-action-link {
-  font-weight: 600;
-}
-
-.new_v20 .reg_status .reg-action-info {
-  font-style: italic;
-  opacity: 0.85;
-}
-
-.new_v20 .reg_status .reg-action-note {
-  font-size: 0.88em;
-  opacity: 0.75;
-  font-style: italic;
-}
-
-/* State colours */
-.new_v20 .reg_status .reg-confirmed {
-  border-left-color: #28a745;
-}
-.new_v20 .reg_status .reg-confirmed .reg-status-label i {
-  color: #28a745;
-}
-
-.new_v20 .reg_status .reg-patron {
-  border-left-color: #d4a017;
-}
-.new_v20 .reg_status .reg-patron .reg-status-label i {
-  color: #d4a017;
-}
-
-.new_v20 .reg_status .reg-action_needed {
-  border-left-color: #e67e22;
-  background: rgba(230, 126, 34, 0.07);
-}
-.new_v20 .reg_status .reg-action_needed .reg-status-label i {
-  color: #e67e22;
-}
-.new_v20 .reg_status .reg-action_needed .reg-action-link {
-  color: #c0392b;
-}
-
-.new_v20 .reg_status .reg-pending {
-  border-left-color: #f0ad4e;
-  background: rgba(240, 173, 78, 0.07);
-}
-.new_v20 .reg_status .reg-pending .reg-status-label i {
-  color: #c89900;
-}
-
-.new_v20 .reg_status .reg-provisional {
-  border-left-color: #5bc0de;
-  background: rgba(91, 192, 222, 0.07);
-}
-.new_v20 .reg_status .reg-provisional .reg-status-label i {
-  color: #31b0d5;
 }
 
 .reg_profile {
@@ -2119,7 +2003,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Character & Profile
+   Application - Character & Profile
    --------------------------------------------------------------------------- */
 
 .character-cover {
@@ -2166,7 +2050,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Membership
+   Application - Membership
    --------------------------------------------------------------------------- */
 
 .membership_request {
@@ -2182,7 +2066,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Accounting & Payment
+   Application - Accounting & Payment
    --------------------------------------------------------------------------- */
 
 .accounting_record {
@@ -2219,7 +2103,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Casting
+   Application - Casting
    --------------------------------------------------------------------------- */
 
 #main_casting hr {
@@ -2227,7 +2111,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Features & Permissions
+   Application - Features & Permissions
    --------------------------------------------------------------------------- */
 
 #id_members_info div,
@@ -2270,7 +2154,7 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Application – Misc
+   Application - Misc
    --------------------------------------------------------------------------- */
 
 #err {
@@ -2726,12 +2610,22 @@ header.sec h1 {
 }
 
 /* ---------------------------------------------------------------------------
-   Floating Iframe – Hide structural chrome
+   Floating Iframe - Hide structural chrome
    --------------------------------------------------------------------------- */
+
+html:has(body.floating_iframe) {
+  overflow: hidden !important;
+}
 
 body.floating_iframe {
   background: transparent !important;
   padding: 0px;
+}
+
+body.floating_iframe #page-wrapper {
+  overflow-y: auto !important;
+  height: 100vh;
+  scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
 }
 
 body.floating_iframe #header,
@@ -2777,6 +2671,10 @@ body.floating_iframe .is-preload {
   padding-top: 0 !important;
 }
 
+body.floating_iframe .wrapper {
+  margin: 0 !important;
+}
+
 body.floating_iframe .inner {
   display: block !important;
   padding: 0 !important;
@@ -2787,6 +2685,10 @@ body.floating_iframe .inner {
   width: 100% !important;
 }
 
+.floating_iframe .auto_resize table {
+  width: 100%;
+}
+
 #options-iframe {
   width: 100%;
   border: none;
@@ -2794,10 +2696,43 @@ body.floating_iframe .inner {
   transition: opacity 0.2s ease-in-out;
 }
 
+#lm-modal-content {
+  height: 100%;
+}
+
 .frame-container {
   position: relative;
   width: 100%;
   height: 100%;
+}
+
+.frame-container iframe {
+  transition: height 0.2s ease;
+  height: 100%;
+}
+
+.frame-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+  padding: 24px;
+}
+
+.frame-loading::after {
+  content: "";
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(var(--pri-rgb), 0.2);
+  border-top-color: rgba(var(--pri-rgb), 1);
+  border-radius: 50%;
+  animation: frame-spin 0.7s linear infinite;
+}
+
+@keyframes frame-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .modal-close-btn {
@@ -2865,4 +2800,257 @@ body.floating_iframe .inner {
 .new_v20 .manage #search {
   text-align: left;
   margin: 0.5em 0 0 0;
+}
+
+/* ---------------------------------------------------------------------------
+   DataTables Responsive - inline expand control
+   --------------------------------------------------------------------------- */
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+  vertical-align: top;
+}
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control::before {
+  margin-right: 0.5em;
+  display: inline-block;
+  box-sizing: border-box;
+  content: "";
+  border-top: 5px solid transparent;
+  border-left: 10px solid var(--pri-clr);
+  border-bottom: 5px solid transparent;
+  border-right: 0px solid transparent;
+}
+
+table.dataTable.dtr-inline.collapsed
+  > tbody
+  > tr.dtr-expanded
+  > td.dtr-control::before,
+table.dataTable.dtr-inline.collapsed
+  > tbody
+  > tr.dtr-expanded
+  > th.dtr-control::before {
+  border-top: 10px solid var(--pri-clr);
+  border-left: 5px solid transparent;
+  border-bottom: 0px solid transparent;
+  border-right: 5px solid transparent;
+}
+
+/* ---------------------------------------------------------------------------
+   Version 20 interface
+   --------------------------------------------------------------------------- */
+
+.new_v20 .no_v20 {
+  display: none;
+}
+
+.only_v20 {
+  display: none;
+}
+
+.new_v20 .only_v20 {
+  display: block;
+}
+
+.new_v20 hr {
+  opacity: 0.3;
+}
+
+.new_v20 .auto_resize {
+  width: auto;
+}
+
+body.manage.new_v20 #banner h1 {
+  display: block;
+  margin: 0;
+  text-align: left;
+}
+
+body.manage.new_v20 #one .inner {
+  text-align: left;
+}
+
+.new_v20 .staff-list {
+  text-align: left;
+  clear: both;
+}
+
+.new_v20 .manage p,
+.new_v20 .manage h1,
+.new_v20 .manage h2,
+.new_v20 .manage h3,
+.new_v20 .manage h4 {
+  text-align: left;
+}
+
+.new_v20 .manage h1 {
+  margin-left: 2em;
+}
+
+.new_v20 .manage input {
+  margin: 0;
+}
+
+.new_v20 .manage #search {
+  margin: 0;
+  text-align: left;
+}
+
+.new_v20 input[type="submit"],
+.new_v20 input[type="reset"],
+.new_v20 input[type="button"],
+.new_v20 input[type="confirm"],
+.new_v20 button,
+.new_v20 .button {
+  background: rgba(var(--ter-rgb), 0.35);
+  color: rgba(var(--pri-rgb), 0.85);
+  border-color: rgba(var(--sec-rgb), 0.85) !important;
+}
+
+.new_v20 textarea {
+  margin: 0;
+}
+
+.new_v20 #payment_form {
+  width: 100%;
+}
+
+.new_v20 input[type="submit"],
+.new_v20 input[type="reset"],
+.new_v20 input[type="button"],
+.new_v20 input[type="confirm"] {
+  display: block;
+  margin: 0.5em auto;
+}
+
+body.association.new_v20 .user_resize {
+  padding: 0.5em 1em;
+  margin: 0.5em auto;
+  border-radius: 8px;
+  background-color: rgba(var(--pri-rgb), 0.04);
+}
+
+@media (max-width: 800px) {
+  body.association.new_v20 .user_resize {
+    padding: 0em 0em;
+    margin: 0.2em auto;
+    border-radius: 0px;
+    background-color: transparent;
+  }
+
+  body.association.new_v20 .user_resize table tbody tr {
+    padding: 0.5em;
+  }
+}
+
+/* Registration status row */
+.new_v20 .reg_status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5em;
+  padding: 0.5em;
+}
+
+/* Registration status block */
+.new_v20 .reg_status .reg-status-block {
+  margin: 0 auto;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.45em 0.75em;
+  border-radius: 5px;
+  border-left: 4px solid #ccc;
+  background: rgba(0, 0, 0, 0.03);
+  text-align: left;
+}
+
+.new_v20 .reg_status .reg-status-label {
+  font-weight: 600;
+}
+
+.new_v20 .reg_status .reg-action {
+  font-size: 0.93em;
+}
+
+.new_v20 .reg_status .reg-action-link {
+  font-weight: 600;
+}
+
+.new_v20 .reg_status .reg-action-info {
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.new_v20 .reg_status .reg-action-note {
+  font-size: 0.88em;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+/* State colours */
+.new_v20 .reg_status .reg-confirmed {
+  border-left-color: #28a745;
+}
+.new_v20 .reg_status .reg-confirmed .reg-status-label i {
+  color: #28a745;
+}
+
+.new_v20 .reg_status .reg-patron {
+  border-left-color: #d4a017;
+}
+.new_v20 .reg_status .reg-patron .reg-status-label i {
+  color: #d4a017;
+}
+
+.new_v20 .reg_status .reg-action_needed {
+  border-left-color: #e67e22;
+  background: rgba(230, 126, 34, 0.07);
+}
+.new_v20 .reg_status .reg-action_needed .reg-status-label i {
+  color: #e67e22;
+}
+.new_v20 .reg_status .reg-action_needed .reg-action-link {
+  color: #c0392b;
+}
+
+.new_v20 .reg_status .reg-pending {
+  border-left-color: #f0ad4e;
+  background: rgba(240, 173, 78, 0.07);
+}
+.new_v20 .reg_status .reg-pending .reg-status-label i {
+  color: #c89900;
+}
+
+.new_v20 .reg_status .reg-provisional {
+  border-left-color: #5bc0de;
+  background: rgba(91, 192, 222, 0.07);
+}
+.new_v20 .reg_status .reg-provisional .reg-status-label i {
+  color: #31b0d5;
+}
+
+#info_bar {
+  font-style: italic;
+  font-size: 85%;
+  margin-bottom: 1em;
+}
+
+.floating_iframe #info_bar {
+  display: none;
+}
+
+#lm-modal {
+  padding: 1em;
+}
+
+#lm-modal,
+#lm-modal-content,
+.frame-container {
+  overflow: hidden;
+}
+
+body.floating_iframe #wrapper {
+  overflow-x: hidden;
+  padding-right: 0.5em;
 }

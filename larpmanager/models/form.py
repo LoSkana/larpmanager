@@ -29,7 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 
-from larpmanager.models.base import BaseModel, UuidMixin
+from larpmanager.models.base import BaseModel, OrderMixin, UuidMixin
 from larpmanager.models.event import Event
 from larpmanager.models.member import Member
 from larpmanager.models.registration import (
@@ -211,7 +211,7 @@ class QuestionApplicable(models.TextChoices):
         return dict(cls.choices)
 
 
-class WritingQuestion(UuidMixin, BaseModel):
+class WritingQuestion(UuidMixin, OrderMixin, BaseModel):
     """Form questions for character writing and story elements."""
 
     typ = models.CharField(
@@ -235,8 +235,6 @@ class WritingQuestion(UuidMixin, BaseModel):
         verbose_name=_("Description"),
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
-
-    order = models.IntegerField(default=0)
 
     status = models.CharField(
         max_length=1,
@@ -353,7 +351,7 @@ class WritingQuestion(UuidMixin, BaseModel):
         ]
 
 
-class WritingOption(UuidMixin, BaseModel):
+class WritingOption(UuidMixin, OrderMixin, BaseModel):
     """Represents WritingOption model."""
 
     search = models.CharField(max_length=1000, editable=False)
@@ -381,8 +379,6 @@ class WritingOption(UuidMixin, BaseModel):
         validators=[MinValueValidator(0)],
         help_text=_("Optional - Maximum number of times it can be selected across all characters (0 = unlimited)"),
     )
-
-    order = models.IntegerField(default=0)
 
     requirements = models.ManyToManyField(
         "self",
@@ -495,7 +491,7 @@ class WritingAnswer(BaseModel):
         ]
 
 
-class RegistrationQuestion(UuidMixin, BaseModel):
+class RegistrationQuestion(UuidMixin, OrderMixin, BaseModel):
     """Represents RegistrationQuestion model."""
 
     typ = models.CharField(
@@ -519,8 +515,6 @@ class RegistrationQuestion(UuidMixin, BaseModel):
         verbose_name=_("Description"),
         help_text=_("Optional - Extended description (displayed in small gray text)"),
     )
-
-    order = models.IntegerField(default=0)
 
     status = models.CharField(
         max_length=1,
@@ -653,7 +647,7 @@ class RegistrationQuestion(UuidMixin, BaseModel):
         ]
 
 
-class RegistrationOption(UuidMixin, BaseModel):
+class RegistrationOption(UuidMixin, OrderMixin, BaseModel):
     """Represents RegistrationOption model."""
 
     search = models.CharField(max_length=1000, editable=False)
@@ -691,8 +685,6 @@ class RegistrationOption(UuidMixin, BaseModel):
         verbose_name=_("Maximum number"),
         help_text=_("Optional - Maximum number of times it can be selected across all registrations (0 = unlimited)"),
     )
-
-    order = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         """Return string representation."""

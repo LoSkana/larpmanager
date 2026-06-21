@@ -7,20 +7,15 @@
 {% endblock title %}
 {% block info %}
 {% endblock info %}
+{% block css %}
+    <style>body { visibility: hidden !important; }</style>
+{% endblock css %}
 {% block content %}
-    <div class="success-message">
-        <strong>{% trans "Saved successfully" %}</strong>
-    </div>
-    <div class="spinner"></div>
-    <p>{% trans "Closing" %}...</p>
 {% endblock content %}
 {% block js2 %}
     <script>
-    $(document).ready(function() {
-        // Send message to parent window to reload dashboard
-        if (window.parent) {
-            window.parent.postMessage({type: 'dashboard_form_saved'}, '*');
-        }
-    });
+    if (window.parent) {
+        window.parent.postMessage({type: 'dashboard_form_saved'{% if redirect_url %}, redirect_url: '{{ redirect_url }}'{% endif %}}, '*');
+    }
     </script>
 {% endblock js2 %}

@@ -40,11 +40,13 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('#main_form table tbody').append(html);
 
+        {% if not TINYMCE_DISABLED %}
         window.addTinyMCETextarea('.f_ch_{0} textarea'.format(ch_id)).then((editorId) => {
             setUpAutoSave(editorId);
             setUpCharFinder(editorId);
             setUpHighlight(editorId);
         });
+        {% endif %}
         already.push(ch_id);
 
     }
@@ -53,7 +55,9 @@ window.addEventListener('DOMContentLoaded', function() {
         let prevSelected = ($("#id_characters").val() || []).map(String);
 
         document.getElementById('main_form').addEventListener('submit', function(e) {
+            {% if not TINYMCE_DISABLED %}
             tinymce.triggerSave();
+            {% endif %}
         });
 
         // add new

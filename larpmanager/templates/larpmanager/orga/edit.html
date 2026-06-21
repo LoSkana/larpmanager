@@ -1,5 +1,8 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
+{% block body_class %}
+    {% if frame %}floating_iframe{% endif %}
+{% endblock body_class %}
 {% block title %}
     {% if nonum is None %}
         {% if num %}
@@ -13,7 +16,7 @@
     - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
-    {{ form.page_info }}
+    {% if not frame %}{{ form.page_info }}{% endif %}
 {% endblock info %}
 {% block content %}
     {% include "elements/form/main.html" %}
@@ -22,4 +25,5 @@
     {% include "elements/form/max_length.js" %}
     {% include "elements/form/jump_section.js" %}
     {% include "elements/working-ticket.js" with edit_uuid=num %}
+    {% include "elements/helpers/iframe_resize.js" %}
 {% endblock js2 %}

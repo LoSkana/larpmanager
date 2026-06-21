@@ -1,0 +1,70 @@
+{% load i18n %}
+{% comment %}
+Inline (no-modal, no-iframe) options editor.
+Context:
+  - el: the question being edited (may be None for new questions)
+  - inline_cfg: visibility flags + M2M choices (see inline_options_config)
+  - inline_options: queryset of existing options (ordered)
+  - inline_writing_type: writing form type, when in the writing context
+{% endcomment %}
+<div id="inline-options"
+     {% if el %}data-question-uuid="{{ el.uuid }}"{% endif %}
+     {% if inline_writing_type %} data-save-url="{% url 'orga_writing_options_inline_save' run.get_slug inline_writing_type %}" data-save-uuid-url="{% url 'orga_writing_options_inline_save' run.get_slug inline_writing_type 'OPTUUID' %}" data-reorder-url="{% url 'orga_writing_options_inline_reorder' run.get_slug inline_writing_type %}" data-delete-url="{% url 'orga_writing_options_inline_delete' run.get_slug inline_writing_type 'OPTUUID' %}" {% else %} data-save-url="{% url 'orga_registration_options_inline_save' run.get_slug %}" data-save-uuid-url="{% url 'orga_registration_options_inline_save' run.get_slug 'OPTUUID' %}" data-reorder-url="{% url 'orga_registration_options_inline_reorder' run.get_slug %}" data-delete-url="{% url 'orga_registration_options_inline_delete' run.get_slug 'OPTUUID' %}" {% endif %}>
+    <div class="orga-buttons">
+        <a href="#" class="button add-inline-option">
+            <i class="fas fa-plus"></i>
+            {% trans "Add option" %}
+        </a>
+        <span class="inline-options-status" aria-live="polite"></span>
+    </div>
+    <table class="writing inline-options-table">
+        <thead>
+            <tr>
+                <th class="io-col-order"></th>
+                <th>{% trans "Name" %}</th>
+                {% if inline_cfg.show_price %}
+                    <th class="io-col-num">{% trans "Price" %}</th>
+                {% endif %}
+                {% if inline_cfg.show_max %}
+                    <th class="io-col-num">{% trans "Maximum" %}</th>
+                {% endif %}
+                <th class="io-col-saved"></th>
+                <th class="io-col-details"></th>
+                <th class="io-col-delete"></th>
+            </tr>
+        </thead>
+        <tbody id="inline-options-body">
+            {% for opt in inline_options %}
+                {% include "elements/options/inline_row.html" with opt=opt %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <template id="inline-option-template">
+        {% include "elements/options/inline_row.html" with opt=None %}
+    </template>
+</div>
+<style>
+    .inline-options-table input[type="text"], .inline-options-table input[type="number"] {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .inline-options-table .io-col-num { width: 7em; }
+    .inline-options-table .io-col-order { width: 4em; white-space: nowrap; }
+    .inline-options-table .io-col-saved, .inline-options-table .io-col-details, .inline-options-table .io-col-delete { width: 2em; text-align: center; white-space: nowrap; }
+    .inline-options-table td.io-col-details a, .inline-options-table td.io-col-delete a { cursor: pointer; }
+    .inline-options-table .io-order { cursor: grab; }
+    .inline-options-table .io-dragging { opacity: 0.35; }
+    .inline-options-table .io-drag-over { outline: 2px dashed #888; }
+    .inline-option-details > td { background: rgba(0, 0, 0, 0.03); }
+    .inline-option-details .io-details-grid { display: flex; flex-wrap: wrap; gap: 1em; padding: 0.4em 0; }
+    .inline-option-details .io-details-grid > div { flex: 1 1 18em; }
+    .inline-option-details label { display: block; font-size: 0.85em; opacity: 0.8; margin-bottom: 0.2em; }
+    .inline-option-details textarea { width: 100%; box-sizing: border-box; min-height: 3em; }
+    .inline-option-details select[multiple] { width: 100%; }
+    .inline-options-table .io-error { border: 1px solid #c0392b !important; }
+    .inline-options-table .io-error-msg { color: #c0392b; font-size: 0.85em; display: block; }
+    .inline-options-table .io-saved { color: #27ae60; opacity: 0; transition: opacity 0.4s; }
+    .inline-options-table .io-saved.show { opacity: 1; }
+    .inline-options-table .io-confirm-delete { color: #c0392b; font-weight: bold; }
+    .add-inline-option.disabled { opacity: 0.4; pointer-events: none; cursor: not-allowed; }
+</style>

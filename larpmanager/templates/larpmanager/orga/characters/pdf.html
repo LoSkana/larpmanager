@@ -4,7 +4,7 @@
     {% trans "Pdf" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the settings for PDF printing" %}
+    {% trans "Configure PDF template settings and preview or download character sheets" %}
 {% endblock info %}
 {% block content %}
     <div id="sheet_pdf">
@@ -22,6 +22,10 @@
                 <td>
                     <a href="{% url 'orga_characters_pdf_bulk' run.get_slug %}"
                        target="_blank">{% trans "Bulk download" %}</a>
+                </td>
+                <td>
+                    <a href="{% url 'orga_characters_friendly_bundle_build' run.get_slug %}"
+                       target="_blank">{% trans "All printable sheets" %} (ZIP)</a>
                 </td>
             </tr>
         </table>
@@ -53,16 +57,6 @@
                     <a orig="{% url 'orga_characters_friendly_test' run.get_slug 0 %}"
                        class="link"
                        target="_blank">{% trans "Lightweight sheet (Test)" %}</a>
-                </td>
-                <td>
-                    <a orig="{% url 'orga_characters_relationships_pdf' run.get_slug 0 %}"
-                       class="link"
-                       download>{% trans "Relationships (Pdf)" %}</a>
-                </td>
-                <td>
-                    <a orig="{% url 'orga_characters_relationships_test' run.get_slug 0 %}"
-                       class="link"
-                       target="_blank">{% trans "Relationships (Test)" %}</a>
                 </td>
             </tr>
         </table>

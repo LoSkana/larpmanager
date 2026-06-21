@@ -18,7 +18,7 @@
                 <i>{% trans "The tax code matches" %}!</i>
             </p>
         {% endif %}
-    {% else %}
+    {% elif member.nationality %}
         <h2>
             {% trans "Nationality" %}: {{ member.get_nationality_display }}
             {% if el.fiscal_code %}, {{ el.fiscal_code }}{% endif %}

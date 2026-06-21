@@ -1,0 +1,92 @@
+{% load i18n %}
+{% comment %}
+One option of the inline editor: a primary always-editable row, plus an
+expandable details row (description + feature-gated M2M fields).
+When opt is None, renders the blank row used as the "new option" template.
+{% endcomment %}
+<tr class="inline-option"
+    {% if opt %}data-uuid="{{ opt.uuid }}"{% endif %}>
+    <td class="io-order reorder-handle" draggable="true">
+        <i class="fa-solid fa-grip-vertical"></i>
+    </td>
+    <td>
+        <input type="text"
+               name="name"
+               maxlength="170"
+               value="{% if opt %}{{ opt.name }}{% endif %}"
+               placeholder="{% trans 'Option name, displayed within the question (keep it short)' %}" />
+        <span class="io-error-msg" data-field="name"></span>
+    </td>
+    {% if inline_cfg.show_price %}
+        <td>
+            <input type="number"
+                   name="price"
+                   min="0"
+                   step="0.01"
+                   value="{% if opt %}{{ opt.price|stringformat:'g' }}{% endif %}"
+                   placeholder="0" />
+            <span class="io-error-msg" data-field="price"></span>
+        </td>
+    {% endif %}
+    {% if inline_cfg.show_max %}
+        <td>
+            <input type="number"
+                   name="max_available"
+                   min="0"
+                   step="1"
+                   value="{% if opt and opt.max_available %}{{ opt.max_available }}{% endif %}"
+                   placeholder="∞" />
+            <span class="io-error-msg" data-field="max_available"></span>
+        </td>
+    {% endif %}
+    <td class="io-col-saved">
+        <span class="io-saved"><i class="fas fa-check"></i></span>
+    </td>
+    <td class="io-col-details">
+        <a class="io-toggle-details" title="{% trans 'Description' %}">
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </td>
+    <td class="io-col-delete">
+        <a class="io-delete" title="{% trans 'Delete' %}"><i class="fas fa-trash"></i></a>
+    </td>
+</tr>
+<tr class="inline-option-details hide">
+    <td colspan="10">
+        <div class="io-details-grid">
+            <div>
+                <label>{% trans "Description" %}</label>
+                <textarea name="description" maxlength="500">{% if opt %}{{ opt.description }}{% endif %}</textarea>
+                <span class="io-error-msg" data-field="description"></span>
+            </div>
+            {% if inline_cfg.show_requirements %}
+                <div>
+                    <label>{% trans "Requirements" %}</label>
+                    <select name="requirements" multiple class="io-m2m">
+                        {% for choice in inline_cfg.requirements_choices %}
+                            {% if not opt or choice.question_id != opt.question_id %}
+                                <option value="{{ choice.id }}"
+                                        {% if opt and choice in opt.requirements.all %}selected{% endif %}>
+                                    {{ choice.question.name|truncatechars:30 }} - {{ choice.name }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <span class="io-error-msg" data-field="requirements"></span>
+                </div>
+            {% endif %}
+            {% if inline_cfg.show_tickets %}
+                <div>
+                    <label>{% trans "Ticket list" %}</label>
+                    <select name="tickets" multiple class="io-m2m">
+                        {% for choice in inline_cfg.tickets_choices %}
+                            <option value="{{ choice.id }}"
+                                    {% if opt and choice in opt.tickets.all %}selected{% endif %}>{{ choice }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="io-error-msg" data-field="tickets"></span>
+                </div>
+            {% endif %}
+        </div>
+    </td>
+</tr>

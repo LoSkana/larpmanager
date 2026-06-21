@@ -64,8 +64,8 @@ def handle_error(page: Any, e: Any, test_name: Any) -> NoReturn:
     logger.error("Error on %s: %s\n", test_name, page.url)
     logger.error(e)
 
-    uid = timezone.now().strftime("%Y%m%d_%H%M%S")
-    page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
+    # uid = timezone.now().strftime("%Y%m%d_%H%M%S")
+    # page.screenshot(path=f"test_screenshots/{test_name}_{uid}.png")
 
     raise e
 
@@ -88,13 +88,24 @@ def print_text(page: Any) -> None:
 
 
 def go_to(page: Any, live_server: Any, path: Any) -> None:
-    go_to_check(page, f"{live_server}/{path}")
+    go_to_check(page, f"{live_server}/{path.lstrip('/')}")
+
+def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
+    page.wait_for_load_state("networkidle", timeout=timeout)
+    page.wait_for_load_state("load", timeout=timeout)
+    page.wait_for_load_state("domcontentloaded", timeout=timeout)
+
+    try:
+        page.wait_for_function("() => window._lmReady === true", timeout=timeout)
+    except Exception:
+        pass
+
+    ooops_check(page)
+
 
 def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
-    page.wait_for_load_state("load")
-    page.wait_for_load_state("domcontentloaded")
-    ooops_check(page)
+    _wait_lm_ready(page)
 
 def get_request(page: Any, live_server: Any, path: Any) -> dict:
     api_context = page.request
@@ -167,37 +178,45 @@ def check_download(page: Any, link: str, locator: Any = None) -> None:
                 raise
 
 
-def fill_tinymce(page, iframe_id, text, show = True, timeout = 10000) -> None:
-    page.wait_for_load_state("load")
-    page.wait_for_load_state("domcontentloaded")
+def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
+    """Download a ZIP and verify it contains at least one PDF file."""
+    max_tries = 3
+    current_try = 0
+    while current_try < max_tries:
+        try:
+            with page.expect_download(timeout=100_000) as download_info:
+                if locator is not None:
+                    locator.click()
+                else:
+                    page.click(f"text={link}")
+            download = download_info.value
+            download_path = download.path()
+            assert download_path is not None, "Download failed"
+            with open(download_path, "rb") as f:
+                content = f.read()
+            assert zipfile.is_zipfile(io.BytesIO(content)), "Downloaded file is not a ZIP"
+            with zipfile.ZipFile(io.BytesIO(content)) as zf:
+                pdf_members = [m for m in zf.namelist() if m.lower().endswith(".pdf")]
+                assert pdf_members, "ZIP contains no PDF files"
+            return
+        except Exception as err:
+            logger.warning("PDF zip download attempt %s/%s failed: %s", current_try + 1, max_tries, err)
+            current_try += 1
+            if current_try >= max_tries:
+                raise
+
+
+def fill_tinymce(page, iframe_id, text, show = True) -> None:
+    """In test setting tinymce is not rendered, just fill the textarea."""
 
     if show:
         show_link_selector = f'a.my_toggle[tog="f_{iframe_id}"]'
-        page.wait_for_selector(show_link_selector, timeout=timeout)
         show_link = page.locator(show_link_selector)
-        show_link.wait_for(state="attached", timeout=timeout)
-        show_link.scroll_into_view_if_needed()
-        just_wait(page)
+        show_link.wait_for(state="visible")
         show_link.click()
-        just_wait(page)
 
-    # Wait for TinyMCE to initialize the editor instance
-    page.wait_for_function(
-        """(id) => window.tinymce && tinymce.get(id) && tinymce.get(id).initialized === true""",
-        arg=iframe_id,
-        timeout=timeout,
-    )
-
-    # Set content via TinyMCE API and mark dirty/change
-    page.evaluate(
-        """([id, html]) => {
-            const ed = tinymce.get(id);
-            ed.setContent(html);
-            ed.fire('change');
-            ed.undoManager.add();
-        }""",
-        [iframe_id, text],
-    )
+    input_element = page.locator(f'#{iframe_id}')
+    input_element.fill(f"<p>{text}</p>", force=True)
 
 
 def _checkboxes(page: Any, check: Any = True) -> None:
@@ -215,20 +234,71 @@ def _checkboxes(page: Any, check: Any = True) -> None:
     submit_confirm(page)
 
 
-
 def submit_confirm(page: Any, container_id: str = None) -> None:
     scope = page
     if container_id:
         scope = page.locator(f"#{container_id}")
 
-    submit_btn = scope.get_by_role(
+    # Ensure any blocking loading screen is gone before searching for elements
+    overlay = page.locator("#overlay")
+    if overlay.is_visible():
+        expect(overlay).to_be_hidden(timeout=5000)
+
+    # Use a generic locator with a regex filter covering both text and role fallbacks
+    submit_btn = scope.locator("button, input[type='submit'], a").filter(
+        has_text=re.compile(r"^\s*(Confirm|Submit|Conferma|Execute)\s*$", re.IGNORECASE)
+    ).first
+
+    submit_btn.scroll_into_view_if_needed()
+    expect(submit_btn).to_be_visible()
+
+    url_before = page.url
+
+    # Click normally to ensure actionability, fallback to forced action if styling dictates
+    submit_btn.click(force=True)
+
+    # If click triggered navigation, wait for URL change before checking load states
+    try:
+        page.wait_for_url(lambda url: url != url_before, timeout=1000)
+    except Exception:
+        pass
+
+    _wait_lm_ready(page, timeout=8000)
+
+def wait_for_inline_edit(page: Any) -> Any:
+    page.wait_for_selector("#excel-edit.visible", timeout=10000)
+    return page.locator("#excel-edit")
+
+
+def submit_inline_edit(page: Any) -> None:
+    submit_btn = page.get_by_role(
         "button",
         name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
     )
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
+    count_before = page.evaluate("() => window._datatablesRefreshCount || 0")
     submit_btn.click(force=True)
-    just_wait(page)
+    page.wait_for_function(
+        f"() => (window._datatablesRefreshCount || 0) > {count_before}",
+        timeout=10000,
+    )
+
+
+def save_modal(page: any, frame: Any) -> None:
+    submit_btn = frame.get_by_role(
+        "button",
+        name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
+    )
+    submit_btn.scroll_into_view_if_needed()
+    expect(submit_btn).to_be_visible()
+    url_before = page.url
+    count_before = page.evaluate("() => window._datatablesRefreshCount || 0")
+    submit_btn.click(force=True)
+    page.wait_for_function(
+        f"() => (window._datatablesRefreshCount || 0) > {count_before} || window.location.href !== {repr(url_before)}",
+        timeout=10000,
+    )
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
@@ -257,6 +327,15 @@ def check_feature(page: Any, name: Any) -> None:
 def load_image(page: Any, element_id: Any) -> None:
     image_path = Path(__file__).parent / "image.jpg"
     upload(page, element_id, image_path)
+
+
+def load_image_hidden(page: Any, element_id: str) -> None:
+    """Set files on a hidden file input (e.g. inside an avatar dropzone widget)."""
+    image_path = Path(__file__).parent / "image.jpg"
+    sel = element_id.lstrip("#")
+    page.evaluate(f"document.getElementById('{sel}').style.display = 'block'")
+    inp = page.locator(element_id)
+    inp.set_input_files(str(image_path))
 
 
 def upload(page: Any, element_id: Any, image_path: Any) -> None:
@@ -306,12 +385,24 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
 
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
-    just_wait(page)
 
     raw_parts = []
 
-    # testo elemento principale
+    # main text element
     raw_parts.append(locator.inner_text() or "")
+
+    # field values
+    try:
+        field_values = locator.evaluate(
+            """(el) => Array.from(el.querySelectorAll('input, textarea, select'))
+                .map(f => f.tagName === 'SELECT'
+                    ? Array.from(f.selectedOptions).map(o => o.text).join(' ')
+                    : f.value)
+                .join(' ')"""
+        )
+        raw_parts.append(field_values or "")
+    except:
+        pass
 
     # iframe discendenti (same-origin)
     iframes = locator.locator("iframe")
@@ -337,22 +428,166 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
         )
 
 def just_wait(page, big=False):
-    if big:
-        wait = 2000
-    else:
-        wait = 500
+    if not hasattr(page, 'wait_for_timeout'):
+        return
+    wait = 2000 if big else 500
     page.wait_for_timeout(wait)
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
 
-def new_option(page):
-    page.locator("#options-iframe").content_frame.get_by_role("link", name="New").click()
-    just_wait(page, big=True)
-    return page.locator("#uglipop_popbox iframe").content_frame
 
-def submit_option(page, iframe):
-    iframe.get_by_role("button", name="Confirm").click()
-    just_wait(page)
+def wait_accounting_load(page: Any) -> None:
+    """Wait until the accounting AJAX call in registrations.html has completed."""
+    page.locator("#load_accounting.select").wait_for()
+
+
+def wait_question_load(page: Any, key: str) -> None:
+    """Wait until a specific question column AJAX call in load.js has completed.
+
+    key: the q_uuid / key attribute value on the .load_que link that was clicked.
+    """
+    page.wait_for_function(f"typeof window.done !== 'undefined' && ('{key}' in window.done)")
+
+
+def click_and_wait_question(page: Any, name: str) -> None:
+    """Click a question column link and wait if it triggers AJAX."""
+    load_que = page.locator("a.load_que", has_text=name)
+    if load_que.count() > 0:
+        key = load_que.get_attribute("key")
+        load_que.click()
+        wait_question_load(page, key)
+    else:
+        toggle = page.locator("a.table_toggle", has_text=name)
+        tog = toggle.get_attribute("tog")
+        page.evaluate("window._tableToggleDone = null")
+        toggle.click()
+        try:
+            page.wait_for_function(f"window._tableToggleDone === '{tog}'", timeout=3000)
+        except Exception:
+            pass  # column toggle is synchronous; proceed if signal missed
+
+
+def fill_date(locator, selector, value):
+    """Fill a date_p input by setting value via JS, bypassing the datetimepicker popup."""
+    locator.locator(selector).evaluate(
+        "(el, v) => { el.value = v; el.dispatchEvent(new Event('change', {bubbles: true})); }",
+        value,
+    )
+
+
+class FrameLocatorWithPage:
+    """Wraps a FrameLocator with the real Page so helpers can call keyboard/wait methods."""
+
+    def __init__(self, frame_locator, page, iframe_locator=None):
+        object.__setattr__(self, '_frame', frame_locator)
+        object.__setattr__(self, '_real_page', page)
+        object.__setattr__(self, '_iframe_locator', iframe_locator)
+
+    def _get_frame(self):
+        """Return the actual Frame object for JS evaluation in this iframe's context."""
+        if self._iframe_locator is not None:
+            return self._iframe_locator.element_handle().content_frame()
+        return self._real_page
+
+    def wait_for_function(self, *args, **kwargs):
+        return self._get_frame().wait_for_function(*args, **kwargs)
+
+    def evaluate(self, *args, **kwargs):
+        return self._get_frame().evaluate(*args, **kwargs)
+
+    def __getattr__(self, name):
+        try:
+            return getattr(self._frame, name)
+        except AttributeError:
+            return getattr(self._real_page, name)
+
+    def __setattr__(self, name, value):
+        object.__setattr__(self, name, value)
+
+
+class InlineOptionRow:
+    """Compatibility wrapper for the inline options editor.
+
+    Exposes the same selector API (#id_name, #id_price, ...) that tests used
+    with the old modal-iframe flow, mapping it onto one row of the inline
+    editor. Fields living in the expandable details row are reached by
+    expanding it on demand.
+    """
+
+    PRIMARY_FIELDS = {
+        "#id_name": "input[name=name]",
+        "#id_price": "input[name=price]",
+        "#id_max_available": "input[name=max_available]",
+    }
+    DETAILS_FIELDS = {
+        "#id_description": "textarea[name=description]",
+    }
+
+    def __init__(self, page, row):
+        self.page = page
+        self.row = row
+        self.details = row.locator("xpath=following-sibling::tr[1]")
+
+    def _ensure_details(self):
+        if "hide" in (self.details.get_attribute("class") or ""):
+            self.row.locator(".io-toggle-details").click()
+            self.page.wait_for_timeout(200)
+
+    def locator(self, selector):
+        if selector in self.PRIMARY_FIELDS:
+            return self.row.locator(self.PRIMARY_FIELDS[selector])
+        # The select2 dropdown is portaled to the page body
+        if "select2-results" in selector or "select2-dropdown" in selector:
+            return self.page.locator(selector)
+        self._ensure_details()
+        if selector in self.DETAILS_FIELDS:
+            return self.details.locator(self.DETAILS_FIELDS[selector])
+        return self.details.locator(selector)
+
+    def get_by_role(self, role, *args, **kwargs):
+        # The select2 dropdown is portaled to the page body
+        if role == "option":
+            return self.page.get_by_role(role, *args, **kwargs)
+        self._ensure_details()
+        return self.details.get_by_role(role, *args, **kwargs)
+
+    def searchbox(self, field):
+        """Return the select2 search field of an M2M column (requirements / tickets)."""
+        self._ensure_details()
+        container = self.details.locator(
+            f"select[name={field}] ~ .select2"
+        )
+        return container.get_by_role("searchbox")
+
+
+def new_option(page):
+    count_before = page.locator("#inline-options-body tr.inline-option").count()
+    page.locator("#inline-options .add-inline-option").click()
+    page.locator("#inline-options-body tr.inline-option").nth(count_before).wait_for(state="visible")
+    row = page.locator("#inline-options-body tr.inline-option").last
+    return InlineOptionRow(page, row)
+
+def get_option(page, uuid):
+    """Return the inline editor row for an existing option."""
+    row = page.locator(f'#inline-options-body tr.inline-option[data-uuid="{uuid}"]')
+    return InlineOptionRow(page, row)
+
+def submit_option(page, option):
+    # The inline editor autosaves: blur the fields and wait for the row
+    # to receive its uuid (i.e. for the server to confirm the save)
+    page.keyboard.press("Tab")
+    expect(option.row).to_have_attribute("data-uuid", re.compile(".+"), timeout=10000)
+
+
+def get_modal_iframe(page):
+    iframe_locator = page.locator("#lm-modal iframe")
+    iframe_locator.wait_for(state="visible")
+    frame_handle = iframe_locator.element_handle()
+    if frame_handle:
+        frame = frame_handle.content_frame()
+        if frame:
+            frame.wait_for_load_state("domcontentloaded")
+    return FrameLocatorWithPage(iframe_locator.content_frame, page, iframe_locator)
 
 
 def sidebar(page, link):
@@ -361,6 +596,7 @@ def sidebar(page, link):
 def icon_link(container, page, link):
     pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
     page.locator(container).get_by_role("link", name=pattern).click()
+    _wait_lm_ready(page)
 
 def nav(page, link):
     icon_link(".nav", page, link)

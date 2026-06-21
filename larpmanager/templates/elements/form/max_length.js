@@ -87,7 +87,9 @@ function update_count(key, limit, typ, loop) {
         el.parent().find(".count").html(checkedCount);
     } else if (tinymce_count.includes(typ)) {
         const editor = tinymce.get(key);
-        tiny_count(editor, key);
+        if (editor) {
+            tiny_count(editor, key);
+        }
     }
 
     if (loop) {

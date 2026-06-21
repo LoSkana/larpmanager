@@ -4,13 +4,17 @@
     {% trans "Answers WS" %} - {{ run.search }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the response options for questions about the workshops of the event" %}
+    {% trans "Manage the answer options for each workshop question, marking which answers are correct" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="workshop_options" class="go_datatable writing">
+    <table id="workshop_options"
+           class="go_datatable writing row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="orga_workshop_options">
         <thead>
             <tr>
+                <th class="reorder-handle"></th>
                 <th></th>
                 <th>{% trans "Module" %}</th>
                 <th>{% trans "Question" %}</th>
@@ -22,6 +26,9 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
                     <td>
                         <a href="{% url 'orga_workshop_options_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

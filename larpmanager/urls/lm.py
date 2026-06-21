@@ -198,4 +198,19 @@ urlpatterns = [
         views_lm.lm_clean,
         name="lm_clean",
     ),
+    path(
+        "lm/event/delete/<str:run_uuid>/",
+        views_lm.lm_events_delete,
+        name="lm_events_delete",
+    ),
+    path(
+        "lm/event/delete/<str:run_uuid>/wait/",
+        views_lm.lm_events_delete_wait,
+        name="lm_events_delete_wait",
+    ),
+    path(
+        "lm/clean/<slug:association_slug>/wait/",
+        views_lm.lm_clean_wait,
+        name="lm_clean_wait",
+    ),
 ]

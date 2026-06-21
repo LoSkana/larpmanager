@@ -29,7 +29,6 @@ from django.db.models import Max
 from django.db.models.functions import Length, Substr
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -67,7 +66,12 @@ from larpmanager.models.writing import (
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
-from larpmanager.utils.edit.backend import _process_working_ticket, backend_order
+from larpmanager.utils.edit.backend import _process_working_ticket
+from larpmanager.utils.edit.options_inline import (
+    options_inline_delete,
+    options_inline_reorder,
+    options_inline_save,
+)
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     check_writing_form_type,
@@ -550,40 +554,6 @@ def orga_writing_form_delete(
 
 
 @login_required
-def orga_writing_form_order(
-    request: HttpRequest,
-    event_slug: str,
-    writing_type: str,
-    question_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder writing form questions by swapping positions.
-
-    Args:
-        request: The HTTP request object.
-        event_slug: Event slug identifier.
-        writing_type: The writing form type to reorder questions for.
-        question_uuid: The question UUID to move.
-        order: The direction to move ('up' or 'down').
-
-    Returns:
-        Redirect to the writing form page.
-
-    """
-    # Verify user has permission to modify character forms
-    context = check_event_context(request, event_slug, "orga_character_form")
-
-    # Validate the writing form type exists
-    check_writing_form_type(context, writing_type)
-
-    # Exchange the order of questions
-    backend_order(context, WritingQuestion, question_uuid, order)
-
-    # Redirect back to the writing form page
-    return redirect("orga_writing_form", event_slug=context["run"].get_slug(), writing_type=writing_type)
-
-
-@login_required
 def orga_writing_options_new(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
     """Edit writing form option for event organizers."""
     return options_edit_handler(
@@ -602,86 +572,6 @@ def orga_writing_options_edit(
 
 
 @login_required
-def orga_writing_options_list(
-    request: HttpRequest, event_slug: str, writing_type: str, question_uuid: str | None = None
-) -> HttpResponse:
-    """Display the list of options for a writing form question in an iframe.
-
-    This view shows only the options list section, designed to be loaded in an iframe
-    within the form edit page.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        writing_type: Writing form type (background, origin, etc.)
-        question_uuid: Question UUID to show options for
-
-    Returns:
-        HttpResponse with the options list template
-    """
-    # Verify user has character form permissions and get event context
-    context = check_event_context(request, event_slug, "orga_character_form")
-    context["frame"] = 1
-
-    # Validate the writing form type exists and is allowed
-    check_writing_form_type(context, writing_type)
-
-    context["typ"] = writing_type
-
-    if question_uuid:
-        # Get the question
-        get_element(context, question_uuid, "el", WritingQuestion)
-
-        # Load existing options for the question
-        options_queryset = WritingOption.objects.filter(question=context["el"])
-        context["list"] = options_queryset.order_by("order")
-
-    return render(request, "larpmanager/orga/characters/options_list.html", context)
-
-
-@login_required
-def orga_writing_options_order(
-    request: HttpRequest,
-    event_slug: str,
-    writing_type: str,
-    option_uuid: str,
-    order: int,
-) -> HttpResponseRedirect:
-    """Reorder writing options within a writing form question.
-
-    Args:
-        request: HTTP request object
-        event_slug: Event slug identifier
-        writing_type: Writing form type identifier
-        option_uuid: Option UUID
-        order: New order position for the option
-
-    Returns:
-        Redirect to the writing form edit page
-
-    """
-    # Check event permission and initialize context
-    context = check_event_context(request, event_slug, "orga_character_form")
-
-    # Validate writing form type exists in context
-    check_writing_form_type(context, writing_type)
-
-    # Exchange order positions of WritingOption objects
-    backend_order(context, WritingOption, option_uuid, order)
-
-    # Redirect back to writing form edit view
-    url = reverse(
-        "orga_writing_form_edit",
-        kwargs={
-            "event_slug": context["run"].get_slug(),
-            "writing_type": writing_type,
-            "question_uuid": context["current"].question.uuid,
-        },
-    )
-    return HttpResponseRedirect(url)
-
-
-@login_required
 def orga_writing_options_delete(
     request: HttpRequest,
     event_slug: str,
@@ -690,6 +580,34 @@ def orga_writing_options_delete(
 ) -> HttpResponse:
     """Delete writing option for an event."""
     return orga_delete(request, event_slug, OrgaAction.CHARACTER_FORM_OPTION, option_uuid)
+
+
+@login_required
+def orga_writing_options_inline_save(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,
+    option_uuid: str | None = None,
+) -> HttpResponse:
+    """Create or update a writing option from the inline editor (AJAX)."""
+    return options_inline_save(request, event_slug, "orga_character_form", option_uuid, writing_type=writing_type)
+
+
+@login_required
+def orga_writing_options_inline_reorder(request: HttpRequest, event_slug: str, writing_type: str) -> HttpResponse:
+    """Persist the full ordering of a question's options (AJAX)."""
+    return options_inline_reorder(request, event_slug, "orga_character_form", writing_type=writing_type)
+
+
+@login_required
+def orga_writing_options_inline_delete(
+    request: HttpRequest,
+    event_slug: str,
+    writing_type: str,
+    option_uuid: str,
+) -> HttpResponse:
+    """Delete a writing option from the inline editor (AJAX)."""
+    return options_inline_delete(request, event_slug, "orga_character_form", option_uuid, writing_type=writing_type)
 
 
 @login_required
@@ -967,9 +885,11 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
 
     # Determine if TinyMCE rich text editor should be enabled
     # Based on question type requiring formatted text input
-    tinymce = False
-    if context["question"].typ in [WritingQuestionType.TEASER, WritingQuestionType.SHEET, BaseQuestionType.EDITOR]:
-        tinymce = True
+    tinymce = not getattr(conf_settings, "TINYMCE_DISABLED", False) and context["question"].typ in [
+        WritingQuestionType.TEASER,
+        WritingQuestionType.SHEET,
+        BaseQuestionType.EDITOR,
+    ]
 
     # Initialize character counter HTML for length validation
     counter = ""

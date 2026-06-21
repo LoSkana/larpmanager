@@ -48,7 +48,7 @@ def get_or_create_index_tutorial(tutorial_index_directory: str) -> object:
     return _save_index(tutorial_index_directory, tutorial_schema)
 
 
-@background_auto(queue="whoosh")
+@background_auto(queue="whoosh", skip_duplicates=True)
 def add_tutorial_to_search_index(tutorial_id: int) -> None:
     """Index tutorial content for search functionality.
 
@@ -105,7 +105,7 @@ def add_tutorial_to_search_index(tutorial_id: int) -> None:
     writer.commit()
 
 
-@background_auto(queue="whoosh")
+@background_auto(queue="whoosh", skip_duplicates=True)
 def remove_tutorial_from_search_index(tutorial_id: int) -> None:
     """Remove a tutorial from the search index by ID."""
     # Get or create the tutorial index
@@ -130,7 +130,7 @@ def get_or_create_index_guide(index_directory_path: str) -> object:
     return _save_index(index_directory_path, guide_schema)
 
 
-@background_auto(queue="whoosh")
+@background_auto(queue="whoosh", skip_duplicates=True)
 def add_guide_to_search_index(guide_id: Any) -> None:
     """Index a guide document for search functionality.
 
@@ -161,7 +161,7 @@ def add_guide_to_search_index(guide_id: Any) -> None:
     writer.commit()
 
 
-@background_auto(queue="whoosh")
+@background_auto(queue="whoosh", skip_duplicates=True)
 def remove_guide_from_search_index(guide_id: int) -> None:
     """Remove a guide from the search index by ID."""
     # Get or create the guide search index

@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, go_to, just_wait, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import expect_normalized, fill_date, get_modal_iframe, go_to, just_wait, load_image, \
+    login_orga, submit, submit_confirm, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -96,19 +97,15 @@ def test_exe_join(pw_page: Any) -> None:
     # Step 1: create event
     go_to(page, live_server, "manage/events")
     page.get_by_role("link", name="Nuovo evento").click()
-    page.locator("#id_form1-name").fill("Prova Event")
-    page.locator("#slug").fill("prova")
-    page.locator("#id_form1-max_pg").fill("10")
-    page.locator("#id_form2-development").select_option("1")
-    page.locator("#id_form2-registration_status").select_option("o")
-    page.locator("#id_form2-start").fill("2055-06-11")
-    just_wait(page)
-    page.locator("#id_form2-start").click()
-    page.locator("#id_form2-end").fill("2055-06-13")
-    just_wait(page)
-    page.locator("#id_form2-end").click()
-    just_wait(page)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").fill("Prova Event")
+    edit_iframe.locator("#slug").fill("prova")
+    edit_iframe.locator("#id_form1-max_pg").fill("10")
+    edit_iframe.locator("#id_form2-development").select_option("1")
+    edit_iframe.locator("#id_form2-registration_status").select_option("o")
+    fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2055-06-13")
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Creazione eventi")).to_contain_text("Fatto")
@@ -130,8 +127,9 @@ def test_exe_join(pw_page: Any) -> None:
     go_to(page, live_server, "prova/manage/tickets/")
     page.wait_for_selector("table.go_datatable")
     page.locator(".fa-edit").first.click(force=True)
-    page.locator("#id_price").fill("10.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").fill("10.00")
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Biglietti di iscrizione")).to_contain_text("Fatto")
@@ -139,9 +137,10 @@ def test_exe_join(pw_page: Any) -> None:
     # Step 4: registration form question
     go_to(page, live_server, "prova/manage/form/")
     page.get_by_role("link", name="Nuovo").click()
-    page.locator("#id_typ").select_option("t")
-    page.locator("#id_name").fill("Dietary restrictions")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("t")
+    edit_iframe.locator("#id_name").fill("Dietary restrictions")
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Form iscrizione")).to_contain_text("Fatto")
@@ -160,8 +159,9 @@ def test_exe_join(pw_page: Any) -> None:
 
     go_to(page, live_server, "prova/manage/characters/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("Test Character")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("Test Character")
+    save_modal(page, edit_iframe)
 
     select_language(live_server, page, "it")
 
@@ -171,9 +171,10 @@ def test_exe_join(pw_page: Any) -> None:
     # Step 7: first assignment
     go_to(page, live_server, "prova/manage/registrations/")
     page.locator(".fa-edit").first.click()
-    page.get_by_role("searchbox").fill("Test")
-    page.get_by_role("option", name="Test Character").click()
-    page.get_by_role("button", name="Conferma").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("searchbox").fill("Test")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Prima assegnazione")).to_contain_text("Fatto")

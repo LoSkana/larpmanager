@@ -101,7 +101,7 @@
                             {% include "larpmanager/manage/nav.html" %}
                         {% endblock nav %}
                         {% if not request.GET.in_iframe and not request.GET.frame %}
-                            <div class="info_bar only_v20">
+                            <div id="info_bar" class="only_v20">
                                 {% block info %}
                                 {% endblock info %}
                                 {% if tutorial %}
@@ -243,7 +243,6 @@
     {% endif %}
 {% endblock css-req %}
 {% block js-req %}
-    <script src="https://cdn.jsdelivr.net/npm/uglipop@1.0.0/uglipop.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
             integrity="sha512-AIOTidJAcHBH2G/oZv9viEGXRqDNmfdPVPYOYKGy3fti0xIplnlgMHUGfuNRzC6FkzIo0iIxgFnr9RikFxK+sw=="
             crossorigin="anonymous"

@@ -1,0 +1,51 @@
+{% load i18n %}
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    $(function() {
+        var plotReorderUrl = '{{ form.plot_reorder_url }}';
+        var $dragRow = null;
+        var $lastDragTarget = null;
+
+        $(document).on('dragstart', '.plot-drag-handle', function(e) {
+            $dragRow = $(this).closest('tr');
+            e.originalEvent.dataTransfer.effectAllowed = 'move';
+            setTimeout(function() {
+                if ($dragRow) $dragRow.addClass('plot-dragging');
+            }, 0);
+        });
+
+        $(document).on('dragover', 'tr[id^="id_pl_"]', function(e) {
+            e.preventDefault();
+            var $target = $(this);
+            if (!$dragRow || $target.is($dragRow) || $target.is($lastDragTarget)) return false;
+            $lastDragTarget = $target;
+            var pos = $dragRow[0].compareDocumentPosition($target[0]);
+            if (pos & Node.DOCUMENT_POSITION_FOLLOWING) {
+                $dragRow.insertAfter($target);
+            } else {
+                $dragRow.insertBefore($target);
+            }
+            return false;
+        });
+
+        $(document).on('dragend', '.plot-drag-handle', function() {
+            if ($dragRow) $dragRow.removeClass('plot-dragging');
+            $dragRow = null;
+            $lastDragTarget = null;
+
+            var uuids = [];
+            $('tr[id^="id_pl_"]').each(function() {
+                var uuid = $(this).find('.plot-drag-handle').data('plot-uuid');
+                if (uuid) uuids.push(uuid);
+            });
+            if (uuids.length) {
+                $.post(plotReorderUrl, $.param({'plot_uuids': uuids}, true));
+            }
+        });
+    });
+});
+</script>
+<style>
+    .plot-drag-handle { cursor: grab; margin-right: 4px; }
+    .plot-dragging { opacity: 0.4; }
+</style>

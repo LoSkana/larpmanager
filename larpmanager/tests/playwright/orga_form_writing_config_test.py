@@ -29,7 +29,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar, get_modal_iframe, \
+    save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -50,14 +51,17 @@ def test_orga_form_writing_config(pw_page: Any) -> None:
 
 def feature_fields(page: Any) -> None:
     # set feature
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
 
     # reorder test
     sidebar(page, "Sheet")
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
-    page.locator('[id="u3"]').locator(".fa-arrow-up").click()
+    page.locator('tr[id="u3"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title
@@ -103,7 +107,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     )
 
     # set experience point
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Experience points").check()
     submit_confirm(page)
 
@@ -115,13 +119,14 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # add field computed
     sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("c")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("comp")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("c")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("comp")
+    save_modal(page, edit_iframe)
 
     # test save
-    page.get_by_role("link", name="Event").click()
+    sidebar(page, "Event")
     submit_confirm(page)
 
     # check it has not been deleted
@@ -132,7 +137,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     )
 
     # remove experience
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Experience points").uncheck()
     submit_confirm(page)
 
@@ -145,7 +150,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
 
 def form_other_writing(page: Any) -> None:
     # add other writing elements
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Plots").check()
     page.get_by_role("checkbox", name="Factions").check()
     page.get_by_role("checkbox", name="Quests and Traits").check()
@@ -153,8 +158,6 @@ def form_other_writing(page: Any) -> None:
 
     # check
     sidebar(page, "Sheet")
-    page.get_by_role("link", name="Plot", exact=True).click()
-    page.get_by_role("link", name="Character", exact=True).click()
     expect_normalized(page,
         page.locator("#one"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden Faction Factions Hidden",

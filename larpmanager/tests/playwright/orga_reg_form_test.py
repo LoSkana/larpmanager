@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, nav
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, nav, \
+    get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -52,11 +53,10 @@ def prepare_form(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     # check initial reg form
     sidebar(page, "Form")
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Ticket Your registration ticket Ticket")
 
     # Add features
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Additional tickets").check()
     page.get_by_role("checkbox", name="Dynamic rates").check()
     page.get_by_role("checkbox", name="Surcharge").check()
@@ -67,9 +67,10 @@ def prepare_form(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Form").click()
 
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    page.get_by_text("Your registration ticket").click()
-    page.get_by_text("Your registration ticket").fill("Your registration ticket2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Your registration ticket").click()
+    edit_iframe.get_by_text("Your registration ticket").fill("Your registration ticket2")
+    save_modal(page, edit_iframe)
 
     expect_normalized(page,
         page.locator("#one"),
@@ -83,8 +84,14 @@ def prepare_form(page: Any, live_server: Any) -> None:
         page.locator("#one"),
     "Rate Optional Surcharge Registration surcharge Surcharge Optional",
     )
-    page.locator('[id="u4"]').locator(".fa-arrow-up").click()
-    page.locator('[id="u2"]').locator(".fa-arrow-up").click()
+    page.locator('tr[id="u4"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u4"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
+    page.locator('tr[id="u2"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u2"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
     expect_normalized(page,
         page.locator("#one"),
         """
@@ -100,19 +107,21 @@ def prepare_form(page: Any, live_server: Any) -> None:
         """,
     )
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    page.get_by_text("Reserve additional tickets").click()
-    page.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Reserve additional tickets").click()
+    edit_iframe.get_by_text("Reserve additional tickets").fill("Reserve additional tickets beyond your own2")
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Reserve additional tickets beyond your own2")
 
     # change ticket price
     page.get_by_role("link", name="Tickets").first.click()
     page.locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("5")
-    page.locator("#id_description").click()
-    page.locator("#id_description").fill("sadsadsadsa")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("5")
+    edit_iframe.locator("#id_description").click()
+    edit_iframe.locator("#id_description").fill("sadsadsadsa")
+    save_modal(page, edit_iframe)
 
 
 def prepare_surcharge(page: Any, live_server: Any) -> None:
@@ -120,12 +129,13 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     # Add surcharges
     page.get_by_role("link", name="Surcharges").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_amount").click()
-    page.locator("#id_amount").fill("5")
-    page.locator("#id_date").fill("2024-06-11")
-    just_wait(page)
-    page.locator("#id_date").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_amount").click()
+    edit_iframe.locator("#id_amount").fill("5")
+    edit_iframe.locator("#id_date").fill("2024-06-11")
+    just_wait(edit_iframe)
+    edit_iframe.locator("#id_date").click()
+    save_modal(page, edit_iframe)
 
     # set up payments
     go_to(page, live_server, "manage")
@@ -166,7 +176,6 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
 
     # check form
-    page.get_by_role("link", name="Event").click()
     nav(page, "Registration")
     expect_normalized(page,
         page.locator("#register_form"),
@@ -180,10 +189,11 @@ def signup(page: Any, live_server: Any) -> None:
 def check_filler(page: Any, live_server: Any) -> None:
     # set up filler
     go_to(page, live_server, "test/manage")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Filler").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Event").click()
+
+    sidebar(page, "Event")
     page.locator("#id_form1-max_filler").click()
     page.locator("#id_form1-max_filler").fill("5")
     submit_confirm(page)

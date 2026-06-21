@@ -1,5 +1,8 @@
 {% extends "utils.html" %}
 {% load i18n static show_tags %}
+{% block body_class %}
+    {% if frame %}floating_iframe{% endif %}
+{% endblock body_class %}
 {% block title %}
     {% if edit_uuid %}
         {{ name }}
@@ -9,7 +12,7 @@
     - {{ form.page_title }} - {{ run.search }}
 {% endblock title %}
 {% block info %}
-    {{ form.page_info }}
+    {% if not frame %}{{ form.page_info }}{% endif %}
 {% endblock info %}
 {% block content %}
     {% include "elements/form/main.html" %}
@@ -50,6 +53,10 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
     </script>
+    {% if form.plot_reorder_url %}
+        {% include "elements/form/plot_reorder.js.html" %}
+    {% endif %}
     {% include "elements/working-ticket.js" with num=edit_uuid %}
     {% include "elements/auto-save.js" %}
+    {% include "elements/helpers/iframe_resize.js" %}
 {% endblock js2 %}

@@ -1458,14 +1458,11 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         Creates new choices for added options and deletes removed ones.
         """
-        if not option_uuids:
-            return
-
         question_id = question["id"]
 
         # Convert option UUIDs to option IDs by looking them up from serialized options
         uuid_to_id = {str(opt["uuid"]): opt["id"] for opt in question.get("options", [])}
-        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids if uuid_str in uuid_to_id}
+        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids or [] if uuid_str in uuid_to_id}
 
         # If question already has existing choices, sync the differences
         if question_id in self.multiples:
@@ -1473,7 +1470,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
             # Create new choices for added options
             for add in selected_option_ids - old:
-                self.choice_class.objects.create(
+                self.choice_class.objects.get_or_create(
                     **{"question_id": question_id, self.instance_key: instance.id, "option_id": add}
                 )
 
@@ -1485,7 +1482,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         else:
             # Create all choices from scratch if none exist
             for pkoid in selected_option_ids:
-                self.choice_class.objects.create(
+                self.choice_class.objects.get_or_create(
                     **{"question_id": question_id, self.instance_key: instance.id, "option_id": pkoid}
                 )
 

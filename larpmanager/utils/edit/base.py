@@ -22,8 +22,10 @@ from __future__ import annotations
 from enum import Enum
 from typing import TYPE_CHECKING
 
+from django.shortcuts import render
+
 if TYPE_CHECKING:
-    from django.http import HttpRequest
+    from django.http import HttpRequest, HttpResponse
 
 
 class Action(Enum):
@@ -80,3 +82,17 @@ def prepare_change(request: HttpRequest, context: dict, action_data: dict) -> st
         context["frame"] = True
 
     return redirect_view
+
+
+def render_frame_or_fallback(
+    request: HttpRequest,
+    context: dict,
+    is_frame: bool,  # noqa: FBT001
+    fallback_template: str,
+) -> HttpResponse:
+    """Render form_frame.html in iframe mode, or fallback_template otherwise."""
+    context["frame"] = is_frame
+    if is_frame:
+        context["edit"] = True
+        return render(request, "elements/dashboard/form_frame.html", context)
+    return render(request, fallback_template, context)

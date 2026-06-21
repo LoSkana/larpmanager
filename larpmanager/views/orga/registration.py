@@ -556,6 +556,8 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         if request.POST.get("download") == "1":
             return download(context, Registration, "registration")
 
+    context["page_info"] = OrgaRegistrationForm.page_info
+
     # Load all cached character, faction, and event data
     get_event_cache_all(context)
 
@@ -833,6 +835,45 @@ def orga_registrations_new(request: HttpRequest, event_slug: str) -> HttpRespons
     return orga_registrations_edit(request, event_slug, None)
 
 
+def _save_registration_edit(
+    request: HttpRequest,
+    context: dict,
+    form: OrgaRegistrationForm,
+    registration_uuid: str | None,
+    *,
+    is_frame: bool,
+) -> HttpResponse:
+    """Persist a validated registration form and return the appropriate response."""
+    registration = form.save()
+
+    # Handle registration deletion if requested
+    if request.POST.get("delete") == "1":
+        save_log(context, Registration, registration, None, operation_type=LogOperationType.DELETE)
+        cancel_reg(registration)
+        messages.success(request, _("Registration cancelled"))
+        if is_frame:
+            return render(request, "elements/dashboard/form_success.html", context)
+        return redirect("orga_registrations", event_slug=context["run"].get_slug())
+
+    save_log(context, Registration, registration, registration_uuid)
+
+    # Save registration-specific questions and answers
+    form.save_registration_questions(registration)
+
+    # Process quest builder data if feature is enabled
+    if "questbuilder" in context["features"]:
+        _save_questbuilder(context, form, registration)
+
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
+
+    # Redirect based on user choice: continue adding or return to list
+    if context["continue_add"]:
+        return redirect("orga_registrations_new", context["run"].get_slug())
+
+    return redirect("orga_registrations", event_slug=context["run"].get_slug())
+
+
 @login_required
 def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_uuid: str) -> HttpResponse:
     """Edit or create a registration for an event.
@@ -863,6 +904,9 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
     context["orga_characters"] = has_event_permission(request, context, context["event"].slug, "orga_characters")
     context["continue_add"] = "continue" in request.POST
 
+    # Check if this is an iframe request
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
     # Load existing registration if editing (num != 0)
     if registration_uuid:
         get_registration(context, registration_uuid)
@@ -882,29 +926,7 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
 
         # Process valid form submission
         if form.is_valid():
-            registration = form.save()
-
-            # Handle registration deletion if requested
-            if "delete" in request.POST and request.POST["delete"] == "1":
-                save_log(context, Registration, registration, None, operation_type=LogOperationType.DELETE)
-                cancel_reg(registration)
-                messages.success(request, _("Registration cancelled"))
-                return redirect("orga_registrations", event_slug=context["run"].get_slug())
-
-            save_log(context, Registration, registration, registration_uuid)
-
-            # Save registration-specific questions and answers
-            form.save_registration_questions(registration)
-
-            # Process quest builder data if feature is enabled
-            if "questbuilder" in context["features"]:
-                _save_questbuilder(context, form, registration)
-
-            # Redirect based on user choice: continue adding or return to list
-            if context["continue_add"]:
-                return redirect("orga_registrations_new", context["run"].get_slug())
-
-            return redirect("orga_registrations", event_slug=context["run"].get_slug())
+            return _save_registration_edit(request, context, form, registration_uuid, is_frame=is_frame)
 
     # Handle GET request: initialize form for display
     elif registration_uuid:
@@ -920,6 +942,9 @@ def orga_registrations_edit(request: HttpRequest, event_slug: str, registration_
     context["num"] = registration_uuid
     if registration_uuid:
         context["name"] = str(context["registration"].member)
+
+    if is_frame:
+        return render(request, "elements/dashboard/form_frame.html", context)
 
     return render(request, "larpmanager/orga/edit.html", context)
 

@@ -71,6 +71,7 @@ from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
 from larpmanager.utils.edit.backend import user_edit
+from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
 from larpmanager.utils.services.character import (
     _get_character_cache_id,
@@ -166,6 +167,8 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     context["approval"] = get_event_config(
         context["event"].id, "user_character_approval", default_value=False, context=context
     )
+
+    context["show_full_pdf"] = has_pdf_customization(context["event"].id)
 
     return render(request, "larpmanager/event/character.html", context)
 
@@ -909,8 +912,10 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
 
     # Check if user ability selection is enabled for this event
     if not get_event_config(event_id, "exp_user", default_value=False):
-        msg = "ehm."
-        raise Http404(msg)
+        messages.warning(
+            request, _("Acquisition of abilities by players is not enabled for this event: contact the organizers")
+        )
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Validate character access permissions
     get_char_check(request, context, character_uuid, deny_public=True)
@@ -940,8 +945,8 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
 
     # Check if user inventory is enabled for this event
     if "inventory" not in context["features"]:
-        msg = "ehm."
-        raise Http404(msg)
+        messages.warning(request, _("Character inventory is not enabled for this event: contact the organizers"))
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Validate character access permissions
     get_char_check(request, context, character_uuid, deny_public=True)
@@ -1123,7 +1128,7 @@ def _character_relationship(
         return redirect(
             "character_relationships", event_slug=context["run"].get_slug(), character_uuid=context["char"]["uuid"]
         )
-    return render(request, "larpmanager/orga/edit.html", context)
+    return render(request, "larpmanager/member/edit.html", context)
 
 
 @login_required

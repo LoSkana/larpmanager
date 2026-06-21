@@ -2,12 +2,13 @@
 {% if show_addit.print_pdf and not external_access %}
     <p>
         {% trans "Download" %}
-        <a href="{% url 'character_pdf_sheet' run.get_slug char.uuid %}"
-           download>{% trans "complete sheet" %}</a>
-        | <a href="{% url 'character_pdf_sheet_friendly' run.get_slug char.uuid %}"
-    download>{% trans "printable sheet" %}</a>
-        | <a href="{% url 'character_pdf_relationships' run.get_slug char.uuid %}"
-    download>{% trans "relationships" %}</a>
+        {% if show_full_pdf %}
+            <a href="{% url 'character_pdf_sheet' run.get_slug char.uuid %}"
+               download>{% trans "complete sheet" %}</a>
+            |
+        {% endif %}
+        <a href="{% url 'character_pdf_sheet_friendly' run.get_slug char.uuid %}"
+           download>{% trans "printable sheet" %}</a>
     </p>
     <hr class="clear" />
 {% endif %}
