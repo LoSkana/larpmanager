@@ -140,7 +140,7 @@ def traits(page: Any, live_server: Any) -> None:
     just_wait(page)
     panel.locator("textarea").press("#")
     page.get_by_role("searchbox").fill("non")
-    _wait_select2_results(edit_iframe)
+    _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
     just_wait(page)
     submit_inline_edit(page)

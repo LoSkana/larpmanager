@@ -29,16 +29,15 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (submit_register,
-    check_download,
-    check_pdf_zip_download,
-    fill_tinymce,
-    get_modal_iframe,
-    go_to,
-    go_to_check,
-    just_wait,
-    login_orga,
-    submit_confirm, save_modal,
-)
+                                     check_download,
+                                     fill_tinymce,
+                                     get_modal_iframe,
+                                     go_to,
+                                     go_to_check,
+                                     just_wait,
+                                     login_orga,
+                                     submit_confirm, save_modal,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
