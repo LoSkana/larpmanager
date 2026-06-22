@@ -387,8 +387,6 @@ def normalize_whitespace(text: str) -> str:
     return text.strip().lower()
 
 def expect_normalized(page, locator, expected: str, timeout=10000):
-    _wait_lm_ready(page)
-
     locator.wait_for(state="visible", timeout=timeout)
 
     page.wait_for_load_state("load")
