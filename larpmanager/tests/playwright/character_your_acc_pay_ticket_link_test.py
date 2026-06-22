@@ -31,7 +31,8 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_date, just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, \
-    submit_confirm, sidebar, save_modal, click_and_wait_question, _wait_lm_ready
+    submit_register, \
+    submit_confirm, sidebar, save_modal, click_and_wait_question, _wait_lm_ready, _wait_select2_results
 
 pytestmark = pytest.mark.e2e
 
@@ -96,8 +97,7 @@ def ticket_link_bypasses_not_visible(live_server, page):
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
     expect(new_page.locator("#id_ticket_1")).to_be_checked()
-    new_page.get_by_role("button", name="Continue").click()
-    submit_confirm(new_page)
+    submit_register(new_page)
     go_to(page, live_server, "/test/")
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Staff)")
 
@@ -188,6 +188,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("cell", name="Show available characters").click()
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -221,8 +222,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registration confirmed (Staff)").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # set up payments
     go_to(page, live_server, "/manage")
@@ -376,6 +376,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").fill("org")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_value").click()
     edit_iframe.locator("#id_value").fill("300")

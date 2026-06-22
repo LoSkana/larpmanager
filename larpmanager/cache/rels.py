@@ -181,6 +181,19 @@ def refresh_character_related_caches(character: Character) -> None:
         refresh_event_prologue_relationships_background(prologue_ids)
 
 
+def mark_plot_character_rel_dirty(plot_id: int, character_id: int | None = None) -> None:
+    """Mark plots rels cache dirty for immediate resolution on next read.
+
+    Call this after directly creating/deleting PlotCharacterRel objects (i.e. without
+    Django's M2M API), so get_event_rels_cache() returns fresh data instead of
+    waiting for the background task.
+    """
+    event_id = Plot.objects.values_list("event_id", flat=True).get(id=plot_id)
+    _mark_rels_dirty("plots", [plot_id], event_id)
+    if character_id is not None:
+        _mark_rels_dirty("characters", [character_id], event_id)
+
+
 def update_m2m_related_characters(
     instance: Plot | Faction | SpeedLarp | Prologue,
     character_ids: set[int],

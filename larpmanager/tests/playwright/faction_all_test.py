@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm, sidebar, save_modal, just_wait,
+    submit_confirm, sidebar, save_modal, _wait_select2_results,
 )
 
 pytestmark = pytest.mark.e2e
@@ -149,7 +149,7 @@ def test_faction_all(pw_page: Any) -> None:
         for faction in faction_names:
             edit_iframe.get_by_role("searchbox").click()
             edit_iframe.get_by_role("searchbox").fill(faction[:5])  # Type first 5 chars
-            just_wait(edit_iframe)  # Wait for dropdown
+            _wait_select2_results(edit_iframe)
             edit_iframe.locator(".select2-results__option").filter(has_text=faction).first.click()
 
         save_modal(page, edit_iframe)

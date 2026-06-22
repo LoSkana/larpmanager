@@ -30,12 +30,11 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (
-    just_wait,
     expect_normalized,
     fill_tinymce,
     go_to,
     login_orga,
-    submit_confirm, submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
+    submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
 )
 
 pytestmark = pytest.mark.e2e

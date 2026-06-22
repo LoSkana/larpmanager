@@ -28,7 +28,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm, \
-    sidebar, get_modal_iframe, save_modal
+    sidebar, get_modal_iframe, save_modal, _wait_select2_results
 
 pytestmark = pytest.mark.e2e
 
@@ -106,9 +106,11 @@ def add_items(page: Any) -> None:
     edit_iframe.locator("#id_description").fill("sadsada")
     edit_iframe.get_by_label("", exact=True).click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box A")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("ele")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     load_image(edit_iframe,"#id_photo")
     save_modal(page, edit_iframe)
@@ -122,6 +124,7 @@ def add_items(page: Any) -> None:
     edit_iframe.locator("#id_description").fill("sdsadas")
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("boc")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -133,6 +136,7 @@ def add_items(page: Any) -> None:
     edit_iframe.locator("#id_description").fill("dsad")
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 

@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (go_to,
+from larpmanager.tests.utils import (go_to, submit_register,
                                      load_image,
                                      login_orga,
                                      login_user,
@@ -255,8 +255,7 @@ def signup_first(live_server: Any, page: Any) -> None:
     page.locator('label[for="id_que_u6_2"]').click()
     expect(page.locator('#id_que_u6_0')).to_be_disabled()
     expect(page.get_by_role("textbox", name="disabled")).to_have_count(0)
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
     # add mandatory
     go_to(page, live_server, "/test/manage/form/")
     page.get_by_role("link", name="New").click()
@@ -372,8 +371,8 @@ def user_signup(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register/")
     expect(page.locator('#id_que_u6_1')).to_be_checked()
     page.locator('#id_que_u6_1').uncheck(force=True)
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
+
     go_to(page, live_server, "/test/register/")
     expect(page.locator('#id_que_u6_0')).not_to_be_checked()
     expect(page.locator('#id_que_u6_1')).not_to_be_checked()

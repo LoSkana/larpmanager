@@ -30,7 +30,7 @@ from django.urls import reverse
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.registration import clear_registration_tickets_cache, get_registration_tickets
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
 from larpmanager.models.form import RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
@@ -389,6 +389,8 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
         return JsonResponse({"error": "Invalid JSON"}, status=400)
     model_key = data.get("model", "")
     uuids = data.get("uuids", [])
+    if not isinstance(uuids, list):
+        return JsonResponse({"error": "uuids must be a list"}, status=400)
     action = OrgaAction.from_string(model_key)
     if action is None or not action.config.get("form"):
         return JsonResponse({"error": "Invalid model"}, status=400)
@@ -403,4 +405,6 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
         clear_event_exp_systems_cache(event_id)
     if action.config.get("button"):
         clear_event_button_cache(context["event"].id)
+    if action.config.get("tickets"):
+        clear_registration_tickets_cache(context["event"].id)
     return JsonResponse({"ok": True})

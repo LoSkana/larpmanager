@@ -33,7 +33,6 @@ from larpmanager.tests.utils import (check_feature,
                                      login_orga,
                                      login_user,
                                      logout,
-                                     submit_confirm,
                                      expect_normalized,
                                      get_modal_iframe, save_modal,
                                      )

@@ -120,6 +120,7 @@ from larpmanager.cache.registration import (
 )
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
+    mark_plot_character_rel_dirty,
     on_faction_characters_m2m_changed,
     on_plot_characters_m2m_changed,
     on_prologue_characters_m2m_changed,
@@ -1345,6 +1346,7 @@ def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, 
     """Recompute auto relationships when a plot-character relation changes."""
     if instance.plot_id:
         refresh_event_plot_relationships_background(instance.plot_id)
+        mark_plot_character_rel_dirty(instance.plot_id, instance.character_id)
     if instance.character_id:
         update_character_referenced_chars_background(instance.character_id)
 
@@ -1354,6 +1356,7 @@ def post_delete_plot_character_rel_refs(sender: type, instance: PlotCharacterRel
     """Recompute auto relationships when a plot-character relation is deleted."""
     if instance.plot_id:
         refresh_event_plot_relationships_background(instance.plot_id)
+        mark_plot_character_rel_dirty(instance.plot_id, instance.character_id)
     if instance.character_id:
         update_character_referenced_chars_background(instance.character_id)
 

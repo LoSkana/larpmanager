@@ -29,9 +29,9 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.playwright.exe_accounting_test import verify
 from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
-    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, click_and_wait_question
+    submit_register, submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, \
+    click_and_wait_question, _wait_select2_results
 
 pytestmark = pytest.mark.e2e
 
@@ -133,6 +133,7 @@ def ability(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
     edit_iframe.get_by_role("searchbox").nth(3).fill("base")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("standard")
@@ -148,6 +149,7 @@ def ability(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
     edit_iframe.get_by_role("searchbox").nth(3).fill("base")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_name").fill("double shield")
     edit_iframe.locator("#id_cost").click()
@@ -155,6 +157,7 @@ def ability(live_server: Any, page: Any) -> None:
     row = edit_iframe.get_by_role("row", name="Pre-requisites")
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -201,7 +204,7 @@ def delivery(live_server: Any, page: Any) -> None:
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
-    just_wait(page)
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -218,6 +221,7 @@ def rules(page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_field-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("2")
@@ -228,10 +232,12 @@ def rules(page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").first.fill("swor")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
 
     edit_iframe.locator("#select2-id_field-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
 
     edit_iframe.locator("#id_operation").select_option("MUL")
@@ -263,6 +269,7 @@ def rules(page: Any) -> None:
     row.get_by_role("link").click()
     row.get_by_role("searchbox").click()
     row.get_by_role("searchbox").fill("swo")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -271,8 +278,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     # signup
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Registration is open!").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Assign char
     go_to(page, live_server, "/test/manage/")
@@ -435,6 +441,7 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
     edit_iframe.get_by_role("searchbox").nth(3).fill("base")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_name").fill("hidden_zero")
     edit_iframe.locator("#id_cost").fill("0")

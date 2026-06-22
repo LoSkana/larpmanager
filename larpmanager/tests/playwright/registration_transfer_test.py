@@ -37,7 +37,6 @@ from larpmanager.tests.utils import (
     fill_date,
     get_modal_iframe,
     go_to,
-    just_wait,
     login_orga,
     login_user,
     logout,

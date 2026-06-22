@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (submit_register,
     check_download,
     check_pdf_zip_download,
     fill_tinymce,
@@ -59,8 +59,7 @@ def test_user_pdf(pw_page: Any) -> None:
 
     # signup
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")

@@ -30,8 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_date, expect_normalized, get_modal_iframe, go_to, login_orga, \
-    submit_confirm, sidebar, save_modal, click_and_wait_question
+from larpmanager.tests.utils import fill_date, expect_normalized, get_modal_iframe, go_to, login_orga, submit_register, \
+    submit_confirm, sidebar, save_modal, click_and_wait_question, _wait_select2_results
 
 pytestmark = pytest.mark.e2e
 
@@ -252,6 +252,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").fill("item1")
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("bo")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -261,6 +262,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").fill("item2")
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -270,6 +272,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").fill("item3")
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -351,8 +354,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Register").click()
     expect(page.locator("#id_ticket")).to_match_aria_snapshot('- radio "Standard"\n- text: Standard\n- radio "new"\n- text: new')
     page.locator('label[for="id_ticket_1"]').click()  # select "new" ticket
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # create new event
     go_to(page, live_server, "manage/")

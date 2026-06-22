@@ -38,7 +38,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
+from larpmanager.tests.utils import (submit_register,
     fill_tinymce,
     go_to,
     login_orga,
@@ -140,8 +140,7 @@ def register_with_long_editor_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     editor_id = _get_que_textarea_id(page)
     fill_tinymce(page, editor_id, LONG_HTML_REG_EDITOR)
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
 
 def verify_reg_editor_popup(page: Any, live_server: Any) -> None:
@@ -175,8 +174,7 @@ def create_reg_paragraph_question(page: Any, live_server: Any) -> None:
 def register_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     page.get_by_role("textbox", name=REG_PARA_QUESTION).fill(LONG_TEXT_REG_PARA)
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
 
 def verify_reg_paragraph_popup(page: Any, live_server: Any) -> None:

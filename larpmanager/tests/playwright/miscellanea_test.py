@@ -31,18 +31,18 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    check_feature,
-    expect_normalized,
-    fill_date,
-    go_to,
-    just_wait,
-    login_orga,
-    login_user,
-    logout,
-    submit_confirm, sidebar,
-    get_modal_iframe, save_modal,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     check_feature,
+                                     expect_normalized,
+                                     fill_date,
+                                     go_to,
+                                     just_wait,
+                                     login_orga,
+                                     login_user,
+                                     logout,
+                                     submit_confirm, sidebar,
+                                     get_modal_iframe, save_modal,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -175,8 +175,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Register the user to the event
     page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Now user is registered, they should be able to access the gallery
     go_to(page, live_server, "/testaccess/")
@@ -225,8 +224,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Register again
     page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Now can access again
     go_to(page, live_server, "/testaccess/")
