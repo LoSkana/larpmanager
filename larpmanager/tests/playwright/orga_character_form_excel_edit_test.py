@@ -325,7 +325,8 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
     click_and_wait_question(page, "Advanced Question")
 
     # Edit u1 (existing value)
-    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Advanced value 1").dblclick()
+    cells_u2 = page.locator('[id="u1"]').get_by_role("cell")
+    cells_u2.nth(10).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u8").fill("Text 2 modified")
     submit_inline_edit(page)
