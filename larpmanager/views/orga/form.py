@@ -22,7 +22,7 @@ from __future__ import annotations
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, QuerySet
+from django.db.models import F, Prefetch, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -176,7 +176,9 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
     context["download"] = 1
 
     # Fetch ordered registration questions with their options
-    context["list"] = get_ordered_registration_questions(context).prefetch_related("options")
+    context["list"] = get_ordered_registration_questions(context).prefetch_related(
+        Prefetch("options", queryset=RegistrationOption.objects.order_by("order"))
+    )
 
     return render(request, "larpmanager/orga/registration/form.html", context)
 
