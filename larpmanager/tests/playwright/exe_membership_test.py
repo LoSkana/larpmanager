@@ -28,7 +28,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import expect_normalized, go_to, load_image, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import expect_normalized, go_to, load_image, login_orga, submit, submit_confirm, \
+    submit_register
 
 pytestmark = pytest.mark.e2e
 
@@ -49,8 +50,7 @@ def test_exe_membership(pw_page: Any) -> None:
 
     # register
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # confirm profile
     page.get_by_role("checkbox", name="Authorisation").check()

@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (just_wait, submit_register, \
                                      go_to,
                                      load_image,
                                      login_orga,
@@ -212,8 +212,7 @@ def field_text(page: Any, live_server: Any) -> None:
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("sadsadsadsad")
     expect_normalized(page, page.locator("#register_form"), "text length: 12 / 100")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/register/")
     nav(page, "Registration")
@@ -239,8 +238,7 @@ def gift(page: Any, live_server: Any) -> None:
     page.get_by_role("textbox", name="who").fill("wwww")
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("fffdsfs")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
     expect_normalized(page, page.locator("#one"), "( Standard ) wow - one | choice - prima (10.00€)")
     expect_normalized(page, page.locator("#one"), "10€ within 8 days")
 

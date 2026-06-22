@@ -38,6 +38,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      submit_confirm,
                                      expect_normalized, sidebar, save_modal, click_and_wait_question,
+                                     _wait_select2_results,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -294,12 +295,12 @@ def plots_character(live_server: Any, page: Any) -> None:
     searchbox.click()
     searchbox.fill("gag")
     # Wait for search results to appear and click first option
-    edit_iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
 
     searchbox.fill("bibi")
     # Wait for search results to appear and click first option
-    edit_iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 

@@ -35,6 +35,7 @@ from larpmanager.tests.utils import (expect_normalized,
                                      login_orga,
                                      login_user, submit_confirm, sidebar,
                                      get_modal_iframe, save_modal, click_and_wait_question, just_wait,
+                                     _wait_select2_results,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -76,6 +77,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_amount").fill("2")
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("te")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
@@ -85,6 +87,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_cost").fill("1")
     edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").click()
     edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").fill("te")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -132,6 +135,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").fill("eefqq")
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -145,6 +149,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.get_by_text("No results found").click()
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 

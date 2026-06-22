@@ -31,6 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm, expect_normalized, \
+    submit_register, \
     get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
@@ -97,8 +98,7 @@ def casting(live_server: Any, page: Any) -> None:
 
     # sign up and fill preferences
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/casting")
     page.locator("#faction0").select_option("all")

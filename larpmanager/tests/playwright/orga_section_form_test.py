@@ -27,11 +27,10 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (just_wait, submit_register,
                                      go_to,
                                      login_orga,
                                      login_user,
-                                     submit_confirm,
                                      expect_normalized, fill_tinymce, check_feature, sidebar, nav,
                                      get_modal_iframe, save_modal,
                                      )
@@ -297,8 +296,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/register")
     expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
     page.get_by_label("Ticket (*)").select_option("u1")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # check does not show on sign up
     go_to(page, live_server, "/test/register")

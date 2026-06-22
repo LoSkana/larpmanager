@@ -28,7 +28,6 @@ from typing import Any, NoReturn
 from urllib.parse import urlparse
 
 import pandas as pd
-from django.utils import timezone
 from playwright.sync_api import expect
 
 logger = logging.getLogger(__name__)
@@ -264,6 +263,12 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
         pass
 
     _wait_lm_ready(page, timeout=8000)
+
+def submit_register(page: Any) -> None:
+    page.get_by_role("button", name="Continue").click()
+    page.locator("#riepilogo").wait_for(state="visible")
+    submit_confirm(page)
+
 
 def wait_for_inline_edit(page: Any) -> Any:
     page.wait_for_selector("#excel-edit.visible #form-excel", timeout=10000)
@@ -600,3 +605,7 @@ def icon_link(container, page, link):
 
 def nav(page, link):
     icon_link(".nav", page, link)
+
+def _wait_select2_results(page):
+    page.locator(".select2-results__option").first.wait_for(state="visible")
+    expect(page.locator(".select2-results__option")).not_to_have_count(0)

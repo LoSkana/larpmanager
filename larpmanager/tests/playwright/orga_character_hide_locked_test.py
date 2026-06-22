@@ -42,7 +42,7 @@ from larpmanager.tests.utils import (
     login_user,
     logout,
     sidebar,
-    submit_confirm, save_modal, just_wait,
+    submit_confirm, save_modal, _wait_select2_results,
 )
 
 pytestmark = pytest.mark.e2e
@@ -230,7 +230,7 @@ def _test_faction_hide(page: Any, live_server: Any, char_counter: list, faction_
     # Assign faction via select2
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("Hidd")
-    just_wait(edit_iframe)
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").filter(has_text="HiddenFaction").first.click()
     save_modal(page, edit_iframe)
     char_uuid = f"u{char_counter[0]}"
@@ -268,7 +268,7 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     fill_tinymce(edit_iframe, "id_text", "flocked private text")
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("Lock")
-    just_wait(edit_iframe)
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").filter(has_text="LockedFaction").first.click()
     save_modal(page, edit_iframe)
     char_uuid = f"u{char_counter[0]}"

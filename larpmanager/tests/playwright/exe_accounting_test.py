@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, \
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, \
     new_option, submit_option, get_modal_iframe, save_modal, just_wait
 
 pytestmark = pytest.mark.e2e
@@ -101,8 +101,7 @@ def sign_up_pay(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/manage/payments/")
     page.get_by_role("link", name="New").click()

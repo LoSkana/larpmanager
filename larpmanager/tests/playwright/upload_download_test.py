@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     submit_confirm,
     upload,
     expect_normalized, sidebar,
-    get_modal_iframe, save_modal, click_and_wait_question, just_wait, _wait_lm_ready,
+    get_modal_iframe, save_modal, _wait_lm_ready,
 )
 
 pytestmark = pytest.mark.e2e

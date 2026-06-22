@@ -30,12 +30,11 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (
-    just_wait,
     expect_normalized,
     fill_tinymce,
     go_to,
     login_orga,
-    submit_confirm, submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
+    submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -226,7 +225,7 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
 
     # Edit u2 text (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(4).dblclick()
+    cells_u2.nth(5).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_text").fill("New Text 2")
     submit_inline_edit(page)
@@ -247,7 +246,7 @@ def inline_editing_text_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell) - click on the appropriate column
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(5).dblclick()
+    cells_u2.nth(6).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u4").fill("Text value 2")
     submit_inline_edit(page)
@@ -268,7 +267,7 @@ def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(6).dblclick()
+    cells_u2.nth(7).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u5").fill("Paragraph value 2")
     submit_inline_edit(page)
@@ -289,7 +288,7 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(7).dblclick()
+    cells_u2.nth(8).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u6").select_option("u3")  # Option C
     submit_inline_edit(page)
@@ -312,7 +311,7 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(8).dblclick()
+    cells_u2.nth(9).dblclick()
     panel = wait_for_inline_edit(page)
     panel.get_by_role("checkbox", name="Choice X").check()
     submit_inline_edit(page)
@@ -333,7 +332,7 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(9).dblclick()
+    cells_u2.nth(10).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u8").fill("Text 2 value 2")
     submit_inline_edit(page)

@@ -29,7 +29,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, check_download, fill_tinymce, get_modal_iframe, go_to, load_image, \
+from larpmanager.tests.utils import check_download, fill_tinymce, get_modal_iframe, go_to, load_image, submit_register, \
     login_orga, submit, \
     submit_confirm, save_modal
 
@@ -94,8 +94,7 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
     # Set membership fee
     go_to(page, live_server, "/manage/config/")
     page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
@@ -106,8 +105,7 @@ def resubmit_membership(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     # update signup, go to membership
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
     submit(page)
     page.locator("#id_confirm_1").check()
     page.locator("#id_confirm_2").check()

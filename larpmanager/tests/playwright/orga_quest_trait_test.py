@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (just_wait,
                                      go_to,
                                      login_orga,
                                      submit_confirm, submit_inline_edit, wait_for_inline_edit,
-                                     expect_normalized, sidebar, save_modal, _wait_lm_ready,
+                                     expect_normalized, sidebar, save_modal, _wait_lm_ready, _wait_select2_results,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -128,6 +128,7 @@ def traits(page: Any, live_server: Any) -> None:
     editor = edit_iframe.locator("#id_text")
     editor.press("#")
     edit_iframe.get_by_role("searchbox").fill("stru")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     just_wait(edit_iframe)
 
@@ -139,6 +140,7 @@ def traits(page: Any, live_server: Any) -> None:
     just_wait(page)
     panel.locator("textarea").press("#")
     page.get_by_role("searchbox").fill("non")
+    _wait_select2_results(edit_iframe)
     page.locator(".select2-results__option").first.click()
     just_wait(page)
     submit_inline_edit(page)

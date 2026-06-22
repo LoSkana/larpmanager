@@ -30,6 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
+    submit_register, \
     submit_option, new_option, \
     get_modal_iframe, save_modal, _wait_lm_ready
 
@@ -241,8 +242,7 @@ def verify_requirements_hidden(page: Any) -> None:
 def character(page: Any, live_server: Any) -> None:
     # signup, create char
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)

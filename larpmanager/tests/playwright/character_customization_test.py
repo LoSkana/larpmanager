@@ -31,15 +31,15 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    expect_normalized,
-    go_to,
-    just_wait,
-    load_image_hidden,
-    login_orga,
-    login_user,
-    submit_confirm, logout, get_modal_iframe, save_modal, _wait_lm_ready,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     expect_normalized,
+                                     go_to,
+                                     just_wait,
+                                     load_image_hidden,
+                                     login_orga,
+                                     login_user,
+                                     submit_confirm, logout, get_modal_iframe, save_modal, _wait_lm_ready,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -110,8 +110,7 @@ def create_and_assign_character(page: Any, live_server: Any) -> None:
     # Register user to event
     login_user(page, live_server)
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
 def fill_customization_form(page: Any, live_server: Any) -> None:
     """Fill all customization form fields including image upload."""
