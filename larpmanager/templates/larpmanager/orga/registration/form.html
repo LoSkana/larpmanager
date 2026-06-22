@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Registration form" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
+{% block info %}
+    {{ page_info }}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     {% define "-1" as old_section %}

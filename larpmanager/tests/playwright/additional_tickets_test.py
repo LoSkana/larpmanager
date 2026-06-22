@@ -139,7 +139,7 @@ def edit_additionals(page: Any, live_server: Any) -> None:
 
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
-    page.locator("#one").get_by_role("link", name="Additional").click()
+    click_and_wait_question(page, "Additional")
     expect_normalized(page, page.locator("#one"), "2")
 
 
@@ -219,7 +219,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Verify in organizer view
     go_to(page, live_server, "test/manage/registrations/")
-    page.locator("#one").get_by_role("link", name="Additional").click()
+    click_and_wait_question(page, "Additional")
     expect_normalized(page, page.locator("#one"), "2")
 
 
