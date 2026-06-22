@@ -1637,6 +1637,9 @@ msgstr "Lagerhaus"
 msgid "Workshops"
 msgstr "Werkstätten"
 
+msgid "available"
+msgstr "verfügbar"
+
 msgid "donations"
 msgstr "Spenden"
 

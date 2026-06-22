@@ -1637,6 +1637,9 @@ msgstr "Magazzino"
 msgid "Workshops"
 msgstr "Workshops"
 
+msgid "available"
+msgstr "disponibile"
+
 msgid "donations"
 msgstr "donazioni"
 

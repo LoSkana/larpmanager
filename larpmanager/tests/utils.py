@@ -226,9 +226,9 @@ def _checkboxes(page: Any, check: Any = True) -> None:
         if checkbox.is_visible() and checkbox.is_enabled():
             if check:
                 if not checkbox.is_checked():
-                    checkbox.check()
+                    checkbox.check(force=True)
             elif checkbox.is_checked():
-                checkbox.uncheck()
+                checkbox.uncheck(force=True)
 
     submit_confirm(page)
 
@@ -304,6 +304,7 @@ def save_modal(page: any, frame: Any) -> None:
         f"() => (window._datatablesRefreshCount || 0) > {count_before} || window.location.href !== {repr(url_before)}",
         timeout=10000,
     )
+    page.locator("#lm-modal").wait_for(state="hidden")
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:

@@ -170,7 +170,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     expect(page.get_by_text("What you prefer Food fooood")).not_to_be_visible()
 
     # select ticket
-    page.get_by_label("Ticket (*)").select_option("u2")
+    page.locator('label[for="id_ticket_1"]').click()
 
     # section and field are visible
     expect(page.get_by_role("link", name=re.compile(r"^Preferences "))).to_be_visible()
@@ -179,7 +179,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     expect(page.get_by_text("What you prefer Food fooood")).to_be_visible()
 
     # signup
-    page.get_by_label("Ticket (*)").select_option("u2")
+    page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("textbox", name="Food").click()
     page.get_by_role("textbox", name="Food").fill("SADSA")
     page.get_by_role("link", name=re.compile(r"^Needs ")).click()
@@ -295,7 +295,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     # check does not show on new sign up
     go_to(page, live_server, "/test/register")
     expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
-    page.get_by_label("Ticket (*)").select_option("u1")
+    page.locator('label[for="id_ticket_0"]').click()
     submit_register(page)
 
     # check does not show on sign up

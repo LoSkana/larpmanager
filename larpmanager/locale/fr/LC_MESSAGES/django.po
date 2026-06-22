@@ -1637,6 +1637,9 @@ msgstr "Entrepôt"
 msgid "Workshops"
 msgstr "Ateliers"
 
+msgid "available"
+msgstr "disponibles"
+
 msgid "donations"
 msgstr "dons"
 

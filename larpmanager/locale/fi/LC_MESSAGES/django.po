@@ -1637,6 +1637,9 @@ msgstr "Varasto"
 msgid "Workshops"
 msgstr "Työpajat"
 
+msgid "available"
+msgstr "saatavilla"
+
 msgid "donations"
 msgstr "lahjoitukset"
 

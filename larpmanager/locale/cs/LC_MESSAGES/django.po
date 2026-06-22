@@ -1637,6 +1637,9 @@ msgstr "Sklad"
 msgid "Workshops"
 msgstr "Workshopy"
 
+msgid "available"
+msgstr "k dispozici na"
+
 msgid "donations"
 msgstr "dary"
 

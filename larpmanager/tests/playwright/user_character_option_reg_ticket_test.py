@@ -111,7 +111,7 @@ def prepare(page: Any) -> None:
 def create_character(page: Any) -> None:
     # signup first ticket
     page.get_by_role("link", name="Register").click()
-    page.get_by_label("Ticket").select_option("u1")
+    page.locator('label[for="id_ticket_0"]').click()
     submit_register(page)
 
     # confirm profile
@@ -121,7 +121,8 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Create your character!").click()
 
     # check only one option
-    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "st" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "st"\n- text: st')
+    page.locator('label[for="id_que_u4_0"]').click()  # select "st"
 
     # create player
     page.locator("#id_name").click()
@@ -139,7 +140,7 @@ def create_character(page: Any) -> None:
 
     # change ticket
     nav(page, "Registration")
-    page.get_by_label("Ticket").select_option("u2")
+    page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
 
@@ -150,7 +151,8 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Edit").click()
 
     # check only one option available
-    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"\n- text: bmb')
+    page.locator('label[for="id_que_u4_0"]').click()  # select "bmb" (only option)
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
 
@@ -159,6 +161,6 @@ def create_character(page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
     page.get_by_role("link", name="Edit").click()
-    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"')
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")

@@ -204,9 +204,9 @@ def field_text(page: Any, live_server: Any) -> None:
 
     # sign up
     go_to(page, live_server, "/test/register/")
-    page.get_by_text("twp (10€) - (Available 2)").click()
+    page.locator('label[for="id_que_u3_0"]').click()  # twp (10€, available 2)
     expect_normalized(page, page.locator("#register_form"), "options: 1 / 1")
-    page.get_by_label("choice").select_option("u2")
+    page.locator('label[for="id_que_u2_1"]').click()  # secondas
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("sadsadas")
     page.get_by_role("textbox", name="when").click()
@@ -217,7 +217,7 @@ def field_text(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     nav(page, "Registration")
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
-    expect(page.get_by_label("choice")).to_contain_text("secondas")
+    expect(page.locator("#id_que_u2")).to_contain_text("secondas")
 
 
 def gift(page: Any, live_server: Any) -> None:
@@ -233,7 +233,7 @@ def gift(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/gift/")
     page.get_by_role("link", name="Add new").click()
     page.locator("#id_que_u3").get_by_text("one").click()
-    page.get_by_label("choice").select_option("u1")
+    page.locator('label[for="id_que_u2_0"]').click()  # prima
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("wwww")
     page.get_by_role("textbox", name="when").click()

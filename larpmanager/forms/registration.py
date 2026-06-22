@@ -45,6 +45,7 @@ from larpmanager.forms.utils import (
     TransferTargetRunS2Widget,
     WritingTinyMCE,
 )
+from larpmanager.forms.widgets import DescriptionRadioSelect
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -63,6 +64,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
     TicketTier,
 )
+from larpmanager.models.utils import decimal_to_str
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.users.registration import get_reduced_available_count
@@ -349,29 +351,52 @@ class RegistrationForm(BaseRegistrationForm):
         # Get available tickets based on event, registration counts and run
         available_tickets = self.get_available_tickets(event, registration_counts, run)
 
-        # Build ticket choices and collect descriptions for help text
+        # Build ticket choices and collect descriptions
         ticket_choices = []
+        ticket_descriptions = {}
+        ticket_metadata = {}
         ticket_help_html = ""
 
-        # Process each available ticket to create form choices and help text
+        # Process each available ticket to create form choices and descriptions
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
             currency_symbol = self.params.get("currency_symbol")
             ticket_display_name = get_ticket_form_text(ticket, currency_symbol)
-            ticket_choices.append((str(ticket.get("uuid")), ticket_display_name))
+            ticket_uuid = str(ticket.get("uuid"))
+            ticket_choices.append((ticket_uuid, ticket_display_name))
 
-            # Add ticket description to help text if available
+            # Build card metadata for this ticket
+            price_text = None
+            if ticket.get("price") and ticket["price"] > 0:
+                price_text = f"{decimal_to_str(ticket['price'])}{currency_symbol or ''}"
+            ticket_metadata[ticket_uuid] = {
+                "name": ticket["name"],
+                "price": price_text,
+                "available": ticket.get("available"),
+            }
+
             if ticket.get("description"):
-                ticket_help_html += f"<p><b>{ticket.get('name')}</b>: {ticket.get('description')}</p>"
+                ticket_descriptions[ticket_uuid] = ticket.get("description")
+                if not self._use_inline_widgets_v20:
+                    ticket_help_html += f"<p><b>{ticket.get('name')}</b>: {ticket.get('description')}</p>"
 
-        # Create the ticket selection field with available choices
-        self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
+        # Create the ticket selection field; use radio buttons with inline descriptions for v20+
+        ticket_field_kwargs: dict = {"required": True, "choices": ticket_choices}
+        if self._use_inline_widgets_v20:
+            ticket_field_kwargs["widget"] = DescriptionRadioSelect(
+                attrs={"class": "my-radio-class"}, descriptions=ticket_descriptions, metadata=ticket_metadata
+            )
+        self.fields["ticket"] = forms.ChoiceField(**ticket_field_kwargs)
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
             self.initial["ticket"] = str(self.instance.ticket.uuid)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
+
+        # If only one ticket available, auto-select it
+        if len(ticket_choices) == 1:
+            self.initial["ticket"] = ticket_choices[0][0]
 
         return ticket_help_html
 
@@ -790,12 +815,33 @@ class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
         tickets = sorted(get_registration_tickets(self.params["run"].event_id), key=lambda t: t["price"], reverse=True)
         currency_symbol = self.params.get("currency_symbol", "")
 
-        self.fields["ticket"] = forms.ChoiceField(
-            required=self.fields["ticket"].required,
-            label=self.fields["ticket"].label,
-            help_text=self.fields["ticket"].help_text,
-            choices=[(ticket["uuid"], get_ticket_form_text(ticket, currency_symbol)) for ticket in tickets],
-        )
+        orga_ticket_kwargs: dict = {
+            "required": self.fields["ticket"].required,
+            "label": self.fields["ticket"].label,
+            "help_text": self.fields["ticket"].help_text,
+            "choices": [(str(ticket["uuid"]), get_ticket_form_text(ticket, currency_symbol)) for ticket in tickets],
+        }
+        if self._use_inline_widgets_v20:
+            orga_descriptions = {}
+            orga_metadata = {}
+            for ticket in tickets:
+                ticket_uuid = str(ticket["uuid"])
+                if ticket.get("description"):
+                    orga_descriptions[ticket_uuid] = ticket["description"]
+                price_text = None
+                if ticket.get("price") and ticket["price"] > 0:
+                    price_text = f"{decimal_to_str(ticket['price'])}{currency_symbol}"
+                orga_metadata[ticket_uuid] = {
+                    "name": ticket["name"],
+                    "price": price_text,
+                    "available": ticket.get("available"),
+                }
+            orga_ticket_kwargs["widget"] = DescriptionRadioSelect(
+                attrs={"class": "my-radio-class"},
+                descriptions=orga_descriptions,
+                metadata=orga_metadata,
+            )
+        self.fields["ticket"] = forms.ChoiceField(**orga_ticket_kwargs)
 
         # Set initial value if editing existing instance
         if self.instance.pk and self.instance.ticket:

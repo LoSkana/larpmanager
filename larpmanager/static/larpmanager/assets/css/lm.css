@@ -24,6 +24,10 @@ i.fas {
   display: none;
 }
 
+.hide-screen {
+  display: none;
+}
+
 .hide {
   display: none;
 }
@@ -316,9 +320,71 @@ input[type="number"] {
   }
 }
 
-.my-checkbox-class div {
+.my-checkbox-class > div {
   display: inline-block;
   padding: 0.5em;
+}
+
+.reg-checkbox-class > div,
+.reg-radio-class > div {
+  display: block;
+  padding: 0.3em 0;
+}
+
+.opt-desc {
+  display: block;
+  color: #888;
+  font-size: 0.85em;
+  margin-left: 1.6em;
+  margin-top: 0.1em;
+}
+
+.my-checkbox-class label,
+.my-radio-class label,
+.reg-checkbox-class label,
+.reg-radio-class label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4em;
+}
+
+.opt-card-body {
+  display: block;
+  flex: 1;
+}
+
+.opt-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+}
+
+.opt-card-name {
+  font-weight: 500;
+}
+
+.opt-card-price {
+  background: rgba(var(--ter-rgb), 0.15);
+  color: rgba(var(--ter-rgb), 0.9);
+  border-radius: 3px;
+  padding: 0 6px;
+  font-size: 0.85em;
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.opt-card-desc {
+  color: #666;
+  font-size: 0.85em;
+  margin-top: 0.15em;
+}
+
+.opt-card-avail {
+  font-size: 0.8em;
+  color: #888;
+  margin-top: 0.1em;
 }
 
 #id_share {
@@ -2692,6 +2758,48 @@ body.floating_iframe .inner {
 
 .modal-close-btn:hover {
   background-color: rgba(var(--pri-rgb), 0.55);
+}
+
+.new_v20 .form_container table input[type="checkbox"],
+.new_v20 .form_container table input[type="radio"] {
+  margin-top: 0.2em !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Manage
+   --------------------------------------------------------------------------- */
+
+.new_v20 #page-wrapper.manage #banner .inner h1 {
+  text-align: left;
+  justify-content: flex-start;
+  padding-left: 0;
+}
+
+.new_v20 .manage .auto_resize {
+  width: 100%;
+}
+
+.new_v20 .manage .info_bar {
+  text-align: left;
+  font-size: 80%;
+  font-style: italic;
+}
+
+.new_v20 .manage .staff-list {
+  text-align: left;
+}
+
+.new_v20 .manage p,
+.new_v20 h1,
+.new_v20 h2,
+.new_v20 h3,
+.new_v20 h4 {
+  text-align: left;
+}
+
+.new_v20 .manage #search {
+  text-align: left;
+  margin: 0.5em 0 0 0;
 }
 
 /* ---------------------------------------------------------------------------

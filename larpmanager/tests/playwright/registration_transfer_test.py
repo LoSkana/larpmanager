@@ -205,8 +205,8 @@ def copy_tickets_and_questions(page: Any, live_server: Any) -> None:
     page.get_by_role("option", name="Event A").click()
 
     # Select tickets and registration form
-    page.get_by_role("checkbox", name="Registration Tickets").check()
-    page.get_by_role("checkbox", name="Registration Form").check()
+    page.get_by_role("checkbox", name="Registration Tickets").check(force=True)
+    page.get_by_role("checkbox", name="Registration Form").check(force=True)
 
     submit_confirm(page)
 
@@ -232,17 +232,17 @@ def create_signup_event_a(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/eventa/register/")
 
     # Select Standard Ticket
-    page.get_by_label("Ticket").select_option(label="Standard Ticket - 50€ - (Available: 20)")
+    page.locator('label[for="id_ticket_1"]').click()
 
     # Fill in dietary restrictions
     page.get_by_role("textbox", name="Dietary restrictions").fill("Vegetarian")
 
-    # Select Medium t-shirt
-    page.get_by_label("T-shirt size").select_option(label="Large (10€) - (Available 5)")
+    # Select Large t-shirt
+    page.locator('label[for="id_que_u4_2"]').click()
 
     # Select workshops (Combat and Crafting)
-    page.get_by_role("checkbox", name="Combat (15€)").check()
-    page.get_by_role("checkbox", name="Crafting (10€)").check()
+    page.locator('label[for="id_que_u5_0"]').click()
+    page.locator('label[for="id_que_u5_2"]').click()
 
     page.get_by_role("button", name="Continue").click()
 
@@ -292,18 +292,18 @@ def verify_transfer(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
 
     # Verify ticket type is maintained (Standard Ticket)
-    expect(edit_iframe.locator("#id_ticket option:checked")).to_have_text("Standard Ticket - 50€")
+    expect(edit_iframe.locator("label").filter(has_text="Standard Ticket").locator("input[name='ticket']")).to_be_checked()
 
     # Verify dietary restrictions answer
     expect(edit_iframe.locator("#id_que_u8")).to_have_value("Vegetarian")
 
-    # Verify t-shirt size (Medium)
-    expect_normalized(edit_iframe, edit_iframe.locator("#one"), "Large (10€)")
+    # Verify t-shirt size (Large)
+    expect(edit_iframe.locator("label").filter(has_text="Large").locator("input[type='radio']").first).to_be_checked()
 
     # Verify workshop selections (Combat and Crafting)
-    expect(edit_iframe.get_by_role("checkbox", name="Combat (15€)")).to_be_checked()
-    expect(edit_iframe.get_by_role("checkbox", name="Crafting (10€)")).to_be_checked()
-    expect(edit_iframe.get_by_role("checkbox", name="Makeup (20€)")).not_to_be_checked()
+    expect(edit_iframe.locator("label").filter(has_text="Combat").locator("input[type='checkbox']")).to_be_checked()
+    expect(edit_iframe.locator("label").filter(has_text="Crafting").locator("input[type='checkbox']")).to_be_checked()
+    expect(edit_iframe.locator("label").filter(has_text="Makeup").locator("input[type='checkbox']")).not_to_be_checked()
 
     # Verify Event A no longer has the registration
     go_to(page, live_server, "/eventa/manage/registrations/")

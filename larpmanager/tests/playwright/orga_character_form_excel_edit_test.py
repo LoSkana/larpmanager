@@ -158,9 +158,9 @@ def edit_first_character(page: Any, live_server: Any) -> None:
     # Fill all custom questions
     edit_iframe.locator("#id_que_u4").fill("Text value 1")
     edit_iframe.locator("#id_que_u5").fill("Paragraph value 1")
-    edit_iframe.locator("#id_que_u6").select_option("u1")  # Option A
-    edit_iframe.get_by_role("checkbox", name="Choice X").check()
-    edit_iframe.get_by_role("checkbox", name="Choice Y").check()
+    edit_iframe.locator('label[for="id_que_u6_0"]').click()  # Option A
+    edit_iframe.locator('label[for="id_que_u7_0"]').click()
+    edit_iframe.locator('label[for="id_que_u7_1"]').click()
     fill_tinymce(edit_iframe, "id_que_u8", "Advanced value 1")
 
     save_modal(page, edit_iframe)
@@ -282,7 +282,7 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing value - Option A)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Option A").dblclick()
     panel = wait_for_inline_edit(page)
-    panel.locator("#id_que_u6").select_option("u2")  # Option B
+    panel.locator('label[for="id_que_u6_1"]').click()  # Option B
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Option B")
 
@@ -290,7 +290,7 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(8).dblclick()
     panel = wait_for_inline_edit(page)
-    panel.locator("#id_que_u6").select_option("u3")  # Option C
+    panel.locator('label[for="id_que_u6_2"]').click()  # Option C
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Option C")
 
@@ -303,8 +303,8 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
     panel = wait_for_inline_edit(page)
-    panel.get_by_role("checkbox", name="Choice X").uncheck()
-    panel.get_by_role("checkbox", name="Choice Z").check()
+    panel.locator('label[for="id_que_u7_0"]').click()
+    panel.locator('label[for="id_que_u7_2"]').click()
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Y")
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Z")
@@ -313,7 +313,7 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(9).dblclick()
     panel = wait_for_inline_edit(page)
-    panel.get_by_role("checkbox", name="Choice X").check()
+    panel.locator('label[for="id_que_u7_0"]').click()
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Choice X")
 

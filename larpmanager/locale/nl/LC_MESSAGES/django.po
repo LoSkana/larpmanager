@@ -1637,6 +1637,9 @@ msgstr "Magazijn"
 msgid "Workshops"
 msgstr "Workshops"
 
+msgid "available"
+msgstr "beschikbaar"
+
 msgid "donations"
 msgstr "donaties"
 

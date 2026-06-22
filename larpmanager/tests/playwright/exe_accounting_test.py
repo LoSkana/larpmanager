@@ -101,6 +101,7 @@ def sign_up_pay(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register/")
+    page.locator('label[for="id_que_u2_0"]').click()
     submit_register(page)
 
     go_to(page, live_server, "/test/manage/payments/")

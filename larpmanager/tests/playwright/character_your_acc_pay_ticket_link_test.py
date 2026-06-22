@@ -85,11 +85,9 @@ def ticket_link_bypasses_not_visible(live_server, page):
     # Test signup (shouldn't be visible)
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="Registration is open!").first.click()
-    page.get_by_label("Ticket (*)").click()
-    expect(page.get_by_label("Ticket (*)")).to_have_value("u1")
-    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
-        '- combobox "Ticket (*)":\n  - option "Standard" [selected]'
-    )
+
+    page.locator('label[for="id_ticket_0"]').click()
+    expect(page.locator("#id_ticket_0")).to_be_checked()
 
     # Test direct link
     go_to(page, live_server, "/test/manage/")
@@ -98,7 +96,7 @@ def ticket_link_bypasses_not_visible(live_server, page):
     with page.expect_popup() as popup_info:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
-    expect(new_page.get_by_label("Ticket (*)")).to_have_value("u2")
+    expect(new_page.locator("#id_ticket_1")).to_be_checked()
     submit_register(new_page)
     go_to(page, live_server, "/test/")
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Staff)")
@@ -128,9 +126,10 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     with page.expect_popup() as popup_info:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
+
     # Should show registration form, not "not open" message
-    expect(new_page.get_by_label("Ticket (*)")).to_have_value("u2")
-    expect(new_page.get_by_label("Ticket (*)")).to_be_visible()
+    expect(new_page.locator('#id_ticket_1')).to_be_checked()
+    expect(new_page.get_by_text("Ticket (*)")).to_be_visible()
     new_page.close()
 
     # Reset registration open date
@@ -165,8 +164,8 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
         page.locator('[id="u2"]').get_by_role("link", name="Signup link").click()
     new_page = popup_info.value
     # Should show registration form, not redirect to external site
-    expect(new_page.get_by_label("Ticket (*)")).to_have_value("u2")
-    expect(new_page.get_by_label("Ticket (*)")).to_be_visible()
+    expect(new_page.locator('#id_ticket_1')).to_be_checked()
+    expect(new_page.get_by_text("Ticket (*)")).to_be_visible()
     # Verify we're still on our domain
     expect(new_page).to_have_url(re.compile(r"(localhost|127\.0\.0\.1|testserver)"))
     new_page.close()

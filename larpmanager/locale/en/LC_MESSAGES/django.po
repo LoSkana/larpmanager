@@ -2628,6 +2628,9 @@ msgstr ""
 msgid "An assignment for this item and area already exists"
 msgstr ""
 
+msgid "available"
+msgstr ""
+
 msgid "Character Relationship"
 msgstr ""
 
