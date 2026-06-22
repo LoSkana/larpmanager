@@ -101,12 +101,9 @@ def casting(live_server: Any, page: Any) -> None:
     submit_register(page)
 
     go_to(page, live_server, "/test/casting")
-    page.locator("#faction0").select_option("all")
-    page.locator("#choice0").click()
-    expect_normalized(page, page.locator("#casting"), "Mirror")
-    expect_normalized(page, page.locator("#casting"), "Test Character")
-    just_wait(page, big=True)
-    page.locator("#choice0").select_option("u2")
+    expect_normalized(page, page.locator("#char-list"), "Mirror")
+    expect_normalized(page, page.locator("#char-list"), "Test Character")
+    page.locator("#char-list .char-card").filter(has_text="Mirror").click()
     submit(page)
 
     # test toggle casting

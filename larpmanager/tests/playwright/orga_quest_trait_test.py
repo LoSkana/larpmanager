@@ -220,12 +220,9 @@ def casting(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
-    page.locator("#faction0").select_option("Torta")
-    page.locator("#choice0").select_option("u2")
-    page.locator("#faction1").select_option("Torta")
-    page.locator("#choice1").select_option("u1")
-    page.locator("#faction2").select_option("Pizza")
-    page.locator("#choice2").select_option("u3")
+    page.locator("#char-list .char-card").filter(has_text="Nonna").click()
+    page.locator("#char-list .char-card").filter(has_text="Strudel").click()
+    page.locator("#char-list .char-card").filter(has_text="Capriciossa").click()
     submit_confirm(page)
 
     # test toggle casting
