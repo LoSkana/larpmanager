@@ -27,6 +27,7 @@ from unittest.mock import patch
 
 import pytest
 
+from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.accounting.registration import (
     cancel_reg,
     get_date_surcharge,
@@ -38,7 +39,6 @@ from larpmanager.accounting.registration import (
     registration_payments_status,
     round_to_nearest_cent,
 )
-from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,

@@ -2514,9 +2514,6 @@ msgstr "Datum der Frist"
 msgid "Discount back"
 msgstr "Rabatt zurück"
 
-msgid "Display order"
-msgstr "Bestellung anzeigen"
-
 msgid "Document type"
 msgstr "Art des Dokuments"
 
@@ -2618,9 +2615,6 @@ msgstr "Vergangene Sitzungen"
 
 msgid "Paste as text"
 msgstr "Als Text einfügen"
-
-msgid "Payment order"
-msgstr "Zahlungsauftrag"
 
 msgid "Personal code"
 msgstr "Persönlicher Code"
@@ -3030,6 +3024,9 @@ msgstr "Kredite deaktivieren"
 
 msgid "Document number"
 msgstr "Nummer des Dokuments"
+
+msgid "Drag to reorder"
+msgstr "Zum Neuanordnen ziehen"
 
 msgid "Edit membership"
 msgstr "Mitgliedschaft bearbeiten"

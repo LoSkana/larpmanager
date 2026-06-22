@@ -84,8 +84,14 @@ def prepare_form(page: Any, live_server: Any) -> None:
         page.locator("#one"),
     "Rate Optional Surcharge Registration surcharge Surcharge Optional",
     )
-    page.locator('[id="u4"]').locator(".fa-arrow-up").click()
-    page.locator('[id="u2"]').locator(".fa-arrow-up").click()
+    page.locator('tr[id="u4"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u4"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
+    page.locator('tr[id="u2"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u2"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
     expect_normalized(page,
         page.locator("#one"),
         """
@@ -170,7 +176,6 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
 
     # check form
-    page.get_by_role("link", name="Event").click()
     nav(page, "Registration")
     expect_normalized(page,
         page.locator("#register_form"),
@@ -184,7 +189,8 @@ def check_filler(page: Any, live_server: Any) -> None:
     sidebar(page, "Features")
     page.get_by_role("checkbox", name="Filler").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Event").click()
+
+    sidebar(page, "Event")
     page.locator("#id_form1-max_filler").click()
     page.locator("#id_form1-max_filler").fill("5")
     submit_confirm(page)

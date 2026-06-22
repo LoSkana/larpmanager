@@ -46,16 +46,16 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    expect_normalized,
-    get_modal_iframe,
-    go_to,
-    just_wait,
-    _wait_lm_ready,
-    login_orga,
-    login_user,
-    submit_confirm, save_modal,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     expect_normalized,
+                                     get_modal_iframe,
+                                     go_to,
+                                     just_wait,
+                                     _wait_lm_ready,
+                                     login_orga,
+                                     login_user,
+                                     submit_confirm, save_modal,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -136,8 +136,7 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     # Register as user
     login_user(page, live_server)
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Login as orga and assign tokens/credits for user@test.it.
     login_orga(page, live_server)
@@ -200,8 +199,7 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     """
     # Orga registers for the event as a participant
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Add tokens and credits for orga@test.it (now registered, visible in dropdown)
     _add_event_tokens(live_server, page, "org", "Admin Test - orga@test.it", ORGA_TOKENS)

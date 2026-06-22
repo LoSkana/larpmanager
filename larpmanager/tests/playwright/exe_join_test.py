@@ -24,7 +24,6 @@ Verifies new user registration, organization creation with automatic slug genera
 profile picture upload, and organization dashboard access.
 """
 
-import re
 from typing import Any
 
 import pytest

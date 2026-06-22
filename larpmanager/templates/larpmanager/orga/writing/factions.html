@@ -6,9 +6,6 @@
 {% block info %}
     {% trans "Manage all character factions of the event" %}
 {% endblock info %}
-{% block table_classes %}
-    ordering_arrow
-{% endblock table_classes %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
     <a href="#" class="table_toggle" tog='characters'>{% trans "Characters" %}</a>
@@ -30,71 +27,51 @@
         <i class="fa fa-hashtag"></i> {% trans "Characters" %}
     </th>
     <th></th>
-    <th></th>
-    <th></th>
 {% endblock thead %}
-{% block tbody %}
-    {% for el in list %}
-        <tr id="{{ el.uuid }}">
-            <td>
-                <a href="{% url 'orga_factions_edit' run.get_slug el.uuid %}"
-                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-            </td>
-            <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
-            <td>
-                <a href="{% url 'orga_factions_view' run.get_slug el.uuid %}"
-                   qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_factions_versions' run.get_slug el.uuid %}"
-                   qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
-                {% if features.print_pdf %}
-                    <a href="{% url 'orga_factions_sheet_pdf' run.get_slug el.uuid %}"
-                       download
-                       qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
-                {% endif %}
-            </td>
-            <td>{{ el.get_typ_display }}</td>
-            {% if features.user_character %}
-                <td>
-                    {% if el.selectable %}<i class="fa-solid fa-check"></i>{% endif %}
-                </td>
+{% block tr_content %}
+    <td>
+        <a href="{% url 'orga_factions_edit' run.get_slug el.uuid %}"
+           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+    </td>
+    <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
+    <td>
+        <a href="{% url 'orga_factions_view' run.get_slug el.uuid %}"
+           qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
+        <a href="{% url 'orga_factions_versions' run.get_slug el.uuid %}"
+           qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
+        {% if features.print_pdf %}
+            <a href="{% url 'orga_factions_sheet_pdf' run.get_slug el.uuid %}"
+               download
+               qtip="PDF"><i class="fa-solid fa-file-pdf"></i></a>
+        {% endif %}
+    </td>
+    <td>{{ el.get_typ_display }}</td>
+    {% if features.user_character %}
+        <td>
+            {% if el.selectable %}<i class="fa-solid fa-check"></i>{% endif %}
+        </td>
+    {% endif %}
+    {% if features.ensemble %}
+        <td>
+            {% if el.color %}
+                <div style="width: 40px;
+                            height: 20px;
+                            background-color: {{ el.color }};
+                            border-radius: 3px"></div>
             {% endif %}
-            {% if features.ensemble %}
-                <td>
-                    {% if el.color %}
-                        <div style="width: 40px;
-                                    height: 20px;
-                                    background-color: {{ el.color }};
-                                    border-radius: 3px"></div>
-                    {% endif %}
-                </td>
-            {% endif %}
-            {% include "elements/writing/questions_body.html" %}
-            <td class="characters dot_links">
-                {% for ch in el.character_rels.list %}
-                    {% include "elements/comma.html" %}
-                    <a href="{% url 'orga_characters_edit' run.get_slug ch.0 %}">{{ ch.1 }}</a>
-                {% endfor %}
-            </td>
-            <td class="stats">{{ el.character_rels.count }}</td>
-            <td>
-                {% if not forloop.first %}
-                    <a href="{% url 'orga_factions_order' run.get_slug el.uuid 0 %}">
-                        <i class="fa-solid fa-arrow-up"></i>
-                    </a>
-                {% endif %}
-            </td>
-            <td>
-                {% if not forloop.last %}
-                    <a href="{% url 'orga_factions_order' run.get_slug el.uuid 1 %}">
-                        <i class="fa-solid fa-arrow-down"></i>
-                    </a>
-                {% endif %}
-            </td>
-            <td>
-                <a href="{% url 'orga_factions_delete' run.get_slug el.uuid %}"
-                   qtip="{% trans "Delete" %}"
-                   class="only_new_v18"><i class="fas fa-trash"></i></a>
-            </td>
-        </tr>
-    {% endfor %}
-{% endblock tbody %}
+        </td>
+    {% endif %}
+    {% include "elements/writing/questions_body.html" %}
+    <td class="characters dot_links">
+        {% for ch in el.character_rels.list %}
+            {% include "elements/comma.html" %}
+            <a href="{% url 'orga_characters_edit' run.get_slug ch.0 %}">{{ ch.1 }}</a>
+        {% endfor %}
+    </td>
+    <td class="stats">{{ el.character_rels.count }}</td>
+    <td>
+        <a href="{% url 'orga_factions_delete' run.get_slug el.uuid %}"
+           qtip="{% trans "Delete" %}"
+           class="only_new_v18"><i class="fas fa-trash"></i></a>
+    </td>
+{% endblock tr_content %}

@@ -39,7 +39,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association, AssociationPlan
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, MediaTokenMixin, UuidMixin
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.member import Member
 from larpmanager.models.utils import (
     UploadToPathAndRename,
@@ -505,7 +505,7 @@ class BaseConceptModel(BaseModel):
         return self.name
 
 
-class EventButton(UuidMixin, BaseConceptModel):
+class EventButton(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents EventButton model."""
 
     tooltip = models.CharField(max_length=200)
@@ -585,10 +585,8 @@ class EventText(UuidMixin, BaseModel):
         ]
 
 
-class ProgressStep(UuidMixin, BaseConceptModel):
+class ProgressStep(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents ProgressStep model."""
-
-    order = models.IntegerField(default=0)
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]

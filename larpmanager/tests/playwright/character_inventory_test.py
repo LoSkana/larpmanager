@@ -30,6 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
+    submit_register, \
     get_modal_iframe, save_modal, sidebar
 
 pytestmark = pytest.mark.e2e
@@ -69,8 +70,7 @@ def setup(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/manage/quick/")
 
@@ -138,8 +138,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
 
     # do transfers as a user
     page.get_by_role("link", name="View Details").first.click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # submit profile
     page.get_by_role("checkbox", name="Authorisation").check()

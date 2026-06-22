@@ -203,7 +203,7 @@ class OrgaAction(str, Enum):
     APPEARANCE = ("orga_appearance", {"form": OrgaAppearanceForm, "event_form": True})
     ROLES = ("orga_roles", {"form": OrgaEventRoleForm, "can_delete": lambda _context, element: element.number != 1})
     TEXTS = ("orga_texts", {"form": OrgaEventTextForm})
-    BUTTONS = ("orga_buttons", {"form": OrgaEventButtonForm})
+    BUTTONS = ("orga_buttons", {"form": OrgaEventButtonForm, "button": True})
 
     # Characters and writing forms
     CHARACTERS = ("orga_characters", {"form": OrgaCharacterForm, "writing": TextVersionChoices.CHARACTER})
@@ -230,7 +230,7 @@ class OrgaAction(str, Enum):
     PROGRESS_STEPS = ("orga_progress_steps", {"form": OrgaProgressStepForm})
 
     # Registration
-    REGISTRATION_TICKETS = ("orga_registration_tickets", {"form": OrgaRegistrationTicketForm})
+    REGISTRATION_TICKETS = ("orga_registration_tickets", {"form": OrgaRegistrationTicketForm, "tickets": True})
     REGISTRATION_SECTIONS = ("orga_registration_sections", {"form": OrgaRegistrationSectionForm})
     REGISTRATION_FORM = (
         "orga_registration_form",
@@ -242,11 +242,11 @@ class OrgaAction(str, Enum):
     REGISTRATION_SURCHARGES = ("orga_registration_surcharges", {"form": OrgaRegistrationSurchargeForm})
 
     # Experience Points
-    PX_SYSTEMS = ("orga_exp_systems", {"form": OrgaSystemExpForm})
-    PX_DELIVERIES = ("orga_exp_deliveries", {"form": OrgaDeliveryExpForm})
-    PX_ABILITIES = ("orga_exp_abilities", {"form": OrgaAbilityExpForm, "check": validate_ability_exp})
-    PX_ABILITY_TYPES = ("orga_exp_ability_types", {"form": OrgaAbilityTypeExpForm})
-    PX_ABILITY_TEMPLATES = ("orga_exp_ability_templates", {"form": OrgaAbilityTemplateExpForm})
+    PX_SYSTEMS = ("orga_exp_systems", {"form": OrgaSystemExpForm, "exp": True})
+    PX_DELIVERIES = ("orga_exp_deliveries", {"form": OrgaDeliveryExpForm, "exp": True})
+    PX_ABILITIES = ("orga_exp_abilities", {"form": OrgaAbilityExpForm, "check": validate_ability_exp, "exp": True})
+    PX_ABILITY_TYPES = ("orga_exp_ability_types", {"form": OrgaAbilityTypeExpForm, "exp": True})
+    PX_ABILITY_TEMPLATES = ("orga_exp_ability_templates", {"form": OrgaAbilityTemplateExpForm, "exp": True})
     PX_RULES = ("orga_exp_rules", {"form": OrgaRuleExpForm})
     PX_MODIFIERS = ("orga_exp_modifiers", {"form": OrgaModifierExpForm})
 

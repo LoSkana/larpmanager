@@ -30,8 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, \
-    submit_confirm, new_option, submit_option, sidebar, nav, get_modal_iframe, save_modal
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, submit_register, \
+    submit_confirm, new_option, submit_option, sidebar, nav, get_modal_iframe, save_modal, _wait_select2_results
 
 pytestmark = pytest.mark.e2e
 
@@ -90,6 +90,7 @@ def prepare(page: Any) -> None:
     option_row.locator("#id_name").fill("st")
     option_row.get_by_role("searchbox").click()
     option_row.get_by_role("searchbox").fill("st")
+    _wait_select2_results(edit_iframe)
     option_row.locator(".select2-results__option").first.click()
     submit_option(edit_iframe, option_row)
 
@@ -99,6 +100,7 @@ def prepare(page: Any) -> None:
     option_row.locator("#id_name").fill("bmb")
     option_row.get_by_role("searchbox").click()
     option_row.get_by_role("searchbox").fill("bam")
+    _wait_select2_results(edit_iframe)
     option_row.locator(".select2-results__option").first.click()
     submit_option(edit_iframe, option_row)
 
@@ -110,8 +112,7 @@ def create_character(page: Any) -> None:
     # signup first ticket
     page.get_by_role("link", name="Register").click()
     page.get_by_label("Ticket").select_option("u1")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # confirm profile
     page.get_by_role("checkbox", name="Authorisation").check()

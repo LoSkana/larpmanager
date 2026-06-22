@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (just_wait, submit_register, \
                                      go_to,
                                      load_image,
                                      login_orga,
@@ -164,10 +164,14 @@ def field_multiple(page: Any, live_server: Any) -> None:
     option_row.locator("#id_description").fill("sarrrr")
     submit_option(edit_iframe, option_row)
 
-    edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] .io-move-up').click()
+    src = edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] td.reorder-handle')
+    src.drag_to(edit_iframe.locator('tr.inline-option[data-uuid="u4"]').locator('xpath=preceding-sibling::tr[contains(@class,"inline-option")][1]'))
     just_wait(page)
     save_modal(page, edit_iframe)
-    page.locator('[id="u3"]').locator(".fa-arrow-up").click()
+    page.locator('tr[id="u3"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
 
 
 def field_text(page: Any, live_server: Any) -> None:
@@ -208,8 +212,7 @@ def field_text(page: Any, live_server: Any) -> None:
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("sadsadsadsad")
     expect_normalized(page, page.locator("#register_form"), "text length: 12 / 100")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/register/")
     nav(page, "Registration")
@@ -235,8 +238,7 @@ def gift(page: Any, live_server: Any) -> None:
     page.get_by_role("textbox", name="who").fill("wwww")
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("fffdsfs")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
     expect_normalized(page, page.locator("#one"), "( Standard ) wow - one | choice - prima (10.00€)")
     expect_normalized(page, page.locator("#one"), "10€ within 8 days")
 

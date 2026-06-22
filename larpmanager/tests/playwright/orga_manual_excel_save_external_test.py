@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      logout,
                                      submit_confirm, submit_inline_edit, wait_for_inline_edit,
-                                     get_modal_iframe, save_modal, sidebar, click_and_wait_question,
+                                     get_modal_iframe, save_modal, sidebar, _wait_select2_results,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -91,6 +91,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     editor.press(" ")
     editor.press("#")
     edit_iframe.get_by_role("searchbox").fill("tes")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     just_wait(edit_iframe)
     save_modal(page, edit_iframe)
@@ -116,6 +117,7 @@ def excel(page: Any, live_server: Any) -> None:
     panel.locator("#id_text").fill("Test Text ff kinda hate ")
     panel.locator("#id_text").press("#")
     page.get_by_role("searchbox").fill("an")
+    _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
     just_wait(page)
     submit_inline_edit(page)

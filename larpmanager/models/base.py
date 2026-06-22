@@ -78,6 +78,15 @@ class MediaTokenMixin(models.Model):
         abstract = True
 
 
+class OrderMixin(models.Model):
+    """Adds an order field for user-controlled display ordering."""
+
+    order = models.IntegerField(default=0)
+
+    class Meta:
+        abstract = True
+
+
 class BaseModel(CloneMixin, SafeDeleteModel):
     """Represents BaseModel model."""
 
@@ -192,7 +201,7 @@ class FeatureNationality:
     )
 
 
-class FeatureModule(BaseModel):
+class FeatureModule(OrderMixin, BaseModel):
     """Represents FeatureModule model."""
 
     name = models.CharField(max_length=100)
@@ -201,12 +210,10 @@ class FeatureModule(BaseModel):
 
     icon = models.CharField(max_length=100)
 
-    order = models.IntegerField()
-
     nationality = models.CharField(max_length=2, choices=FeatureNationality.choices, blank=True, null=True)
 
 
-class Feature(BaseModel):
+class Feature(OrderMixin, BaseModel):
     """Represents Feature model."""
 
     name = models.CharField(max_length=100)
@@ -214,8 +221,6 @@ class Feature(BaseModel):
     descr = models.TextField(max_length=500, blank=True)
 
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
-
-    order = models.IntegerField()
 
     overall = models.BooleanField(default=False)
 

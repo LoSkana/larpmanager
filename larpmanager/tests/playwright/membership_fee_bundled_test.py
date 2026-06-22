@@ -27,9 +27,8 @@ the reservation is held by the first invoice. After payment confirmation the mem
 accounting entry and reg_status display are verified for both events.
 """
 
-from typing import Any
-
 import re
+from typing import Any
 
 import pytest
 

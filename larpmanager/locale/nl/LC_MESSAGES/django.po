@@ -2514,9 +2514,6 @@ msgstr "Uiterste datum"
 msgid "Discount back"
 msgstr "Korting terug"
 
-msgid "Display order"
-msgstr "Volgorde weergeven"
-
 msgid "Document type"
 msgstr "Type document"
 
@@ -2618,9 +2615,6 @@ msgstr "Voorbije sessies"
 
 msgid "Paste as text"
 msgstr "Plakken als tekst"
-
-msgid "Payment order"
-msgstr "Betalingsopdracht"
 
 msgid "Personal code"
 msgstr "Persoonlijke code"
@@ -3030,6 +3024,9 @@ msgstr "Credits uitschakelen"
 
 msgid "Document number"
 msgstr "Documentnummer"
+
+msgid "Drag to reorder"
+msgstr "Sleep om de volgorde te wijzigen"
 
 msgid "Edit membership"
 msgstr "Lidmaatschap bewerken"

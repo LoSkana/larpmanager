@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (just_wait, submit_register,
                                      fill_tinymce,
                                      go_to,
                                      login_orga,
@@ -38,8 +38,7 @@ from larpmanager.tests.utils import (just_wait,
                                      logout,
                                      submit_confirm,
                                      expect_normalized, new_option, submit_option, get_option,
-                                     get_modal_iframe, save_modal, _wait_lm_ready,
-                                     )
+                                     get_modal_iframe, save_modal, )
 
 pytestmark = pytest.mark.e2e
 
@@ -98,8 +97,7 @@ def test_orga_character_form(pw_page: Any) -> None:
 def create_second_char(live_server: Any, page: Any) -> None:
     login_user(page, live_server)
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Create your character!").click()
@@ -212,8 +210,7 @@ def recheck_char(live_server: Any, page: Any) -> None:
 def create_first_char(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Create your character!").click()
@@ -341,12 +338,15 @@ def add_field_restricted(page: Any) -> None:
 
     save_modal(page, edit_iframe)
 
-    page.locator('[id="u8"]').locator(".fa-arrow-up").click()
-    _wait_lm_ready(page)
+    page.locator('tr[id="u8"] td.reorder-handle').drag_to(
+        page.locator('tr[id="u8"]').locator("xpath=preceding-sibling::tr[1]")
+    )
+    page.wait_for_timeout(300)
     page.locator('[id="u8"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
 
-    edit_iframe.locator("#inline-options .io-move-up").nth(1).click()
+    opts = edit_iframe.locator("#inline-options .inline-option")
+    opts.nth(1).locator("td.reorder-handle").drag_to(opts.nth(0))
     just_wait(page)
     option_row = get_option(edit_iframe, "u7")
     option_row.locator("#id_name").click()

@@ -4867,12 +4867,6 @@ msgid ""
 "Optional - Indicates whether the ticket can be gifted to other participants"
 msgstr ""
 
-msgid "Order"
-msgstr ""
-
-msgid "Display order"
-msgstr ""
-
 msgid "Description - will be displayed at the beginning of the section"
 msgstr ""
 
@@ -4888,9 +4882,6 @@ msgid ""
 msgstr ""
 
 msgid "Extra price applied when this quota is active"
-msgstr ""
-
-msgid "Payment order"
 msgstr ""
 
 msgid ""
@@ -5283,6 +5274,9 @@ msgstr ""
 msgid "These fields are mandatory"
 msgstr ""
 
+msgid "Drag to reorder"
+msgstr ""
+
 msgid "Translate"
 msgstr ""
 
@@ -5463,12 +5457,6 @@ msgid "Add option"
 msgstr ""
 
 msgid "Maximum"
-msgstr ""
-
-msgid "Move up"
-msgstr ""
-
-msgid "Move down"
 msgstr ""
 
 msgid "An error occurred while reordering"
@@ -6557,6 +6545,9 @@ msgid "Gender"
 msgstr ""
 
 msgid "Last membership date"
+msgstr ""
+
+msgid "Order"
 msgstr ""
 
 msgid "View registrations"
@@ -9050,6 +9041,12 @@ msgid "Enter your email below to receive instructions on how to change it"
 msgstr ""
 
 msgid "Sign In"
+msgstr ""
+
+msgid "Move up"
+msgstr ""
+
+msgid "Move down"
 msgstr ""
 
 msgid "Writing"

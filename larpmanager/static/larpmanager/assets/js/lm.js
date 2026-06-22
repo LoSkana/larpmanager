@@ -75,7 +75,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     const frame = `
         <div class="frame-container">
             <button class="modal-close-btn">&times;</button>
-            <div class="frame-loading"></div>
+            <div class="frame-loading" style="display:none;"></div>
             <iframe src="${iframeUrl}" width="100%" style="border: none; visibility: hidden;"></iframe>
         </div>
     `;
@@ -86,12 +86,17 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     const iframe = dialog.querySelector('iframe');
     let revealed = false;
     const originalTitle = document.title;
+    const loading = dialog.querySelector('.frame-loading');
+
+    const spinnerTimeout = setTimeout(function() {
+        if (!revealed && loading) loading.style.display = '';
+    }, 500);
 
     function revealIframe() {
         if (revealed) return;
         revealed = true;
+        clearTimeout(spinnerTimeout);
         iframe.style.visibility = 'visible';
-        const loading = dialog.querySelector('.frame-loading');
         if (loading) loading.style.display = 'none';
         if (modalClass === 'popup_edit') {
             try {
@@ -528,6 +533,10 @@ function refreshDatatables() {
             }
         });
 
+        if (!$newDoc.find('.no-elements-available').length) {
+            $('.no-elements-available').hide();
+        }
+
         window._datatablesSavedState = savedStates;
         window._suppressTriggerTogs = true;
         data_tables();
@@ -686,10 +695,11 @@ function data_tables() {
             });
         }
 
-        var full_layout = rowCount >= 10;
+        var is_reorder = $table.hasClass('row_reorder');
+        var full_layout = !is_reorder && rowCount >= 10;
         var no_buttons = $table.attr('no_buttons') !== undefined;
 
-        const table = new DataTable('#' + tableId, {
+        var dtConfig = {
             scrollX: true,
             responsive: window.enviro === 'prod',
             stateSave: false,
@@ -719,7 +729,32 @@ function data_tables() {
                 }
               })
             }
-        });
+        };
+
+        if (is_reorder) {
+            dtConfig.rowReorder = { selector: 'td.reorder-handle', update: false };
+        }
+
+        const table = new DataTable('#' + tableId, dtConfig);
+
+        if (is_reorder) {
+            var reorderUrl = $table.data('reorder-url');
+            var reorderModel = $table.data('reorder-model');
+            table.on('row-reorder', function() {
+                var uuids = [];
+                $table.find('tbody tr[id]').each(function() {
+                    uuids.push($(this).attr('id'));
+                });
+                if (uuids.length && reorderUrl && reorderModel) {
+                    $.ajax({
+                        url: reorderUrl,
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ model: reorderModel, uuids: uuids })
+                    });
+                }
+            });
+        }
 
         table.on('draw.dt', function() {
             // Add tooltips to edit icons first

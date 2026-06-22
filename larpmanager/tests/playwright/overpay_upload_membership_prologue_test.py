@@ -29,8 +29,10 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, \
+    submit_register, \
     expect_normalized, \
-    submit_confirm, sidebar, save_modal, wait_accounting_load, click_and_wait_question, _wait_lm_ready
+    submit_confirm, sidebar, save_modal, wait_accounting_load, click_and_wait_question, _wait_lm_ready, \
+    _wait_select2_results
 
 pytestmark = pytest.mark.e2e
 
@@ -71,8 +73,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Registration is open!").click()
     page.locator("#register_form").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Add credits
     go_to(page, live_server, "/test/manage/")
@@ -81,6 +82,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").fill("ad")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("cre")
@@ -101,6 +103,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_member-container").click()
     edit_iframe.get_by_role("searchbox").fill("adm")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.locator("#id_value").press("Home")
     edit_iframe.locator("#id_value").fill("60")
@@ -201,6 +204,7 @@ def prologues(page: Any) -> None:
     edit_iframe.get_by_role("link", name="Show").click()
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -227,6 +231,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Upload membership document").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
+    _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
     page.locator("#id_date").fill("2024-06-11")
     load_image(page, "#id_request")
@@ -277,6 +282,7 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Upload membership fee").click()
     page.locator("#select2-id_member-container").click()
     page.get_by_role("searchbox").fill("adm")
+    _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
     load_image(page, "#id_invoice")
     submit_confirm(page)

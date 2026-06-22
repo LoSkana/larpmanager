@@ -27,11 +27,10 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (just_wait, submit_register,
                                      go_to,
                                      login_orga,
                                      login_user,
-                                     submit_confirm,
                                      expect_normalized, fill_tinymce, check_feature, sidebar, nav,
                                      get_modal_iframe, save_modal,
                                      )
@@ -72,7 +71,9 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Check reordering
     expect_normalized(page, page.locator("#registration_sections_wrapper"), "Preferences Needs")
-    page.locator(".fa-arrow-up").click()
+    rows = page.locator("#registration_sections tbody tr")
+    rows.nth(1).locator("td.reorder-handle").drag_to(rows.nth(0))
+    page.wait_for_timeout(500)
     expect_normalized(page, page.locator("#one"), "Needs Preferences")
 
     # Add one question for each section
@@ -125,7 +126,9 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Reorder sections, check they are updated
     sidebar(page, "Sections")
-    page.locator(".fa-arrow-up").click()
+    rows = page.locator("#registration_sections tbody tr")
+    rows.nth(1).locator("td.reorder-handle").drag_to(rows.nth(0))
+    page.wait_for_timeout(500)
 
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"^Needs ")).click()
@@ -188,7 +191,9 @@ def test_orga_section_form(pw_page: Any) -> None:
     # check allowed
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Sections")
-    page.locator(".fa-arrow-up").click()
+    rows = page.locator("#registration_sections tbody tr")
+    rows.nth(1).locator("td.reorder-handle").drag_to(rows.nth(0))
+    page.wait_for_timeout(500)
 
     sidebar(page, "Form")
     page.locator("#registration_questions_needs").locator(".fa-edit").click()
@@ -291,8 +296,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/register")
     expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
     page.get_by_label("Ticket (*)").select_option("u1")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # check does not show on sign up
     go_to(page, live_server, "/test/register")

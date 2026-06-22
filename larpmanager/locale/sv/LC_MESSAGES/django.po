@@ -2514,9 +2514,6 @@ msgstr "Sista inlämningsdag"
 msgid "Discount back"
 msgstr "Rabatt tillbaka"
 
-msgid "Display order"
-msgstr "Visa order"
-
 msgid "Document type"
 msgstr "Typ av dokument"
 
@@ -2618,9 +2615,6 @@ msgstr "Tidigare sessioner"
 
 msgid "Paste as text"
 msgstr "Klistra in som text"
-
-msgid "Payment order"
-msgstr "Betalningsorder"
 
 msgid "Personal code"
 msgstr "Personlig kod"
@@ -3030,6 +3024,9 @@ msgstr "Avaktivera krediter"
 
 msgid "Document number"
 msgstr "Dokumentnummer"
+
+msgid "Drag to reorder"
+msgstr "Dra för att ändra ordningen"
 
 msgid "Edit membership"
 msgstr "Redigera medlemskap"
