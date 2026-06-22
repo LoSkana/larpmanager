@@ -105,6 +105,7 @@ def quests(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check
+    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
 
 
