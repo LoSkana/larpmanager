@@ -133,12 +133,11 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
-$(function() {
+    <script>window.lmPageInit = function() {
     $('form').on('submit', function() {
         return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Did you check the required data properly" %}{% endfilter %}?');
     });
-});
-});
+};
+window.lmPageInit();
     </script>
 {% endblock js %}

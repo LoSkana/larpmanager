@@ -1,40 +1,39 @@
 {% load show_tags i18n %}
 <script>
 
-const abilities = {{ available | safe }};
+var abilities = {{ available | safe }};
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
-        $('form').on('submit', function() {
-            return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you sure" %}{% endfilter %}?');
-        });
+window.lmPageInit = function() {
+    $('form').on('submit', function() {
+        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you sure" %}{% endfilter %}?');
+    });
 
-        $('input[type="submit"]').prop('disabled', true);
+    $('input[type="submit"]').prop('disabled', true);
 
-        $('#ability_type').on('change', function () {
-            const typeId = $(this).val();
-            const $abilitySelect = $('#ability_select');
-            var selectAbilityLabel = "{% filter escapejs %}{% trans 'Select ability' %}{% endfilter %}";
-            selectAbilityLabel = selectAbilityLabel.replace(/["']/g, function(m){return m === '"' ? '&quot;' : '&#39;'})
-            $abilitySelect.empty().append(
-                '<option value="" disabled selected>--- ' + selectAbilityLabel + '</option>'
-            );
-            if (abilities[typeId] && abilities[typeId]['list']) {
-                $.each(abilities[typeId]['list'], function (id, label) {
-                    $abilitySelect.append($('<option>', { value: id, text: label }));
-                });
-            }
-        });
-
-        $('#ability_select').on('change', function () {
-            $('input[type="submit"]').prop('disabled', false);
-        });
-
-        const $typeSelect = $('#ability_type');
-        if ($typeSelect.children('option').length > 0) {
-            $typeSelect.prop('selectedIndex', 0).trigger('change');
+    $('#ability_type').on('change', function () {
+        const typeId = $(this).val();
+        const $abilitySelect = $('#ability_select');
+        var selectAbilityLabel = "{% filter escapejs %}{% trans 'Select ability' %}{% endfilter %}";
+        selectAbilityLabel = selectAbilityLabel.replace(/["']/g, function(m){return m === '"' ? '&quot;' : '&#39;'})
+        $abilitySelect.empty().append(
+            '<option value="" disabled selected>--- ' + selectAbilityLabel + '</option>'
+        );
+        if (abilities[typeId] && abilities[typeId]['list']) {
+            $.each(abilities[typeId]['list'], function (id, label) {
+                $abilitySelect.append($('<option>', { value: id, text: label }));
+            });
         }
     });
-});
+
+    $('#ability_select').on('change', function () {
+        $('input[type="submit"]').prop('disabled', false);
+    });
+
+    const $typeSelect = $('#ability_type');
+    if ($typeSelect.children('option').length > 0) {
+        $typeSelect.prop('selectedIndex', 0).trigger('change');
+    }
+};
+window.lmPageInit();
 
 </script>

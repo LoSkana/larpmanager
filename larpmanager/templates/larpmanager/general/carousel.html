@@ -41,7 +41,7 @@
     <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js" defer></script>
     {{ json|json_script:"carousel-data" }}
     <script>
-const base_url = "{% url 'event_register' '0' %}";
+var base_url = "{% url 'event_register' '0' %}";
 
 window.addEventListener('DOMContentLoaded', function() {
 const dictElement = document.getElementById('carousel-data');

@@ -225,25 +225,14 @@
         $('#err').show();
     }
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
+window.lmPageInit = function() {
+    add_rows();
 
-        add_rows();
+    load_choice();
 
-        load_choice();
-        /*
-        $('#tipo').change(function() {
-            url = document.URL;
-            url = url.replace(/&t=[0-9]/i, '');
-            url += '&t=' + this.value;
-            window.location = url;
-        });
-        $('#tipo').val($this->tipo);
-        */
-
-        $('#choices').attr('action', document.URL);
-    });
-});
+    $('#choices').attr('action', document.URL);
+};
+window.lmPageInit();
 
     function select_f(uuid) {
         $('#f' + uuid).toggleClass('sel');

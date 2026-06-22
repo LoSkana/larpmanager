@@ -80,7 +80,10 @@
                             </table>
                         </div>
                     {% endif %}
-                    <input type="button" id="confirm" value="{% trans "Continue" %}" />
+                    <input type="button"
+                           id="confirm"
+                           value="{% trans "Continue" %}"
+                           hx-boost="false" />
                 </div>
                 <div id="riepilogo" class="hide form_container">
                     <br />

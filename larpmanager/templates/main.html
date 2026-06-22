@@ -278,24 +278,20 @@
     {% endif %}
     <script>
     {% get_current_language as LANGUAGE_CODE %}
-    const currentLanguage = "{{ LANGUAGE_CODE }}";
+    var currentLanguage = "{{ LANGUAGE_CODE }}";
 
+    window.lmBaseInit = function() {
 
-    window.addEventListener('DOMContentLoaded', function() {
-        $(function() {
+        $('div.info').filter(function() {
+          return $(this).children().length === 0 && $.trim($(this).text()) === '';
+        }).hide();
 
-            $('div.info').filter(function() {
-              return $(this).children().length === 0 && $.trim($(this).text()) === '';
-            }).hide();
+        $('#real_logout').parent().hide();
 
-            $('#real_logout').parent().hide();
-
-            $('#logout').on( "click", function(event) {
-                event.preventDefault();
-                $('#real_logout').click();
-                return false;
-            });
-
+        $('#logout').off('click').on('click', function(event) {
+            event.preventDefault();
+            $('#real_logout').click();
+            return false;
         });
 
         {% if messages %}
@@ -346,11 +342,12 @@
 
         {% endif %}
 
-        $('#delete_confirm').click(function(event) {
+        $('#delete_confirm').off('click').on('click', function(event) {
             event.preventDefault();
             $('#id_delete').val('1');
             $('#main_form').submit();
         });
-    });
+    };
+    window.lmBaseInit();
     </script>
 {% endblock js-req %}

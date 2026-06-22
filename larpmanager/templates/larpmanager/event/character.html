@@ -115,12 +115,10 @@ function go_chart() {
     });
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-    $( document ).ready(function() {
-        go_chart();
-    });
-
-});
+window.lmPageInit = function() {
+    go_chart();
+};
+window.lmPageInit();
         </script>
     {% endif %}
 {% endblock js %}

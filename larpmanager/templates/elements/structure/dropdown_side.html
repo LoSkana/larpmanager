@@ -8,7 +8,9 @@
                 <i class="fa-solid fa-users"></i> User
             </a>
         {% else %}
-            <a href="{% url 'manage' run.get_slug %}" class="admin-link">
+            <a href="{% url 'manage' run.get_slug %}"
+               class="admin-link"
+               hx-boost="false">
                 <i class="fa-solid fa-toolbox"></i> Admin
             </a>
         {% endif %}
@@ -19,7 +21,7 @@
             </a>
         {% else %}
             {% if association_role %}
-                <a href="{% url 'manage' %}" class="admin-link">
+                <a href="{% url 'manage' %}" class="admin-link" hx-boost="false">
                     <i class="fa-solid fa-toolbox"></i> Admin
                 </a>
             {% endif %}

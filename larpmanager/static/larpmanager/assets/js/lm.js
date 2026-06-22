@@ -199,13 +199,13 @@ $(document).ready(function() {
         }
     });
 
-    $('.dropdown-button').click(function(event) {
+    $(document).on('click', '.dropdown-button', function(event) {
         event.stopPropagation();
     });
 
-    $('.dropdown').on('mouseenter', function() {
+    $(document).on('mouseenter', '.dropdown', function() {
         $(this).children('.dropdown-menu').fadeIn(100);
-    }).on('mouseleave', function() {
+    }).on('mouseleave', '.dropdown', function() {
         $(this).children('.dropdown-menu').fadeOut(100);
     });
 

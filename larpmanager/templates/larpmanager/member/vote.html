@@ -58,14 +58,13 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
-$(document).ready(function () {
+    <script>window.lmPageInit = function() {
     $( "input.votes" ).change(function() {
         var cnt = $( "input.votes:checked" ).length;
         // console.log(cnt);
         $( "#submit" ).attr("disabled", cnt < {{ vote_min }} || cnt > {{ vote_max }} );
     });
-});
-});
+};
+window.lmPageInit();
     </script>
 {% endblock js %}

@@ -106,7 +106,7 @@
     <script src="{% static 'larpmanager/pswipe/photoswipe.min.js' %}">});</script>
     <script src="{% static 'larpmanager/pswipe/photoswipe-ui-default.min.js' %}">});</script>
     <script type="text/javascript">
-    window.addEventListener('DOMContentLoaded', function() {
+    window.lmPageInit = function() {
     (function() {
 
         var initPhotoSwipeFromDOM = function(gallerySelector) {
@@ -405,7 +405,7 @@
         initPhotoSwipeFromDOM('#album');
 
     })();
-
-    });
+    };
+    window.lmPageInit();
     </script>
 {% endblock js %}

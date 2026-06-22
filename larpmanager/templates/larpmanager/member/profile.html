@@ -99,34 +99,32 @@
 
 {% endif %}
 
-    window.addEventListener('DOMContentLoaded', function() {
+    window.lmPageInit = function() {
 
-        $(function () {
+        {% if form.country_subdivisions_map %}
 
-            {% if form.country_subdivisions_map %}
-
-                {% if form.initial_nation %}
-                    province_update();
-                {% else %}
-                    $('#id_residence_address_0').prepend('<option value="----" disabled selected>----</option>');
-                {% endif %}
-
-                $('#id_residence_address_0').on('change', province_update);
+            {% if form.initial_nation %}
+                province_update();
+            {% else %}
+                $('#id_residence_address_0').prepend('<option value="----" disabled selected>----</option>');
             {% endif %}
 
-            {% if 'profile' in form.mandatory %}
-                $('#profile_form').on('submit', function(e) {
-                    $('#avatar_error').empty();
-                    if ($('#profile').hasClass('hide')) {
-                        e.preventDefault();
-                        $('#avatar_error').html("<p><b class='form-error' style='color: var(--ter-clr);'>{% trans "Please upload your profile photo" %}!</b></p>");
-                        window.jump_to('#avatar_dropzone');
-                    }
-                });
-            {% endif %}
+            $('#id_residence_address_0').on('change', province_update);
+        {% endif %}
 
-        });
-    });
+        {% if 'profile' in form.mandatory %}
+            $('#profile_form').on('submit', function(e) {
+                $('#avatar_error').empty();
+                if ($('#profile').hasClass('hide')) {
+                    e.preventDefault();
+                    $('#avatar_error').html("<p><b class='form-error' style='color: var(--ter-clr);'>{% trans "Please upload your profile photo" %}!</b></p>");
+                    window.jump_to('#avatar_dropzone');
+                }
+            });
+        {% endif %}
+
+    };
+    window.lmPageInit();
 
     </script>
 {% endblock js %}

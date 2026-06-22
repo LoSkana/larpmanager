@@ -49,56 +49,9 @@
     var submitted = {{ submitted | safe }};
     var mandatory = {{ form.mandatory | safe }};
 
-    window.addEventListener('DOMContentLoaded', function() {
+    window.lmPageInit = function() {
 
-        $(function () {
-
-            for (const el of ['id_name']) {
-                if ( $( "#" + el ).length ) mandatory.unshift(el);
-            }
-
-            Object.entries(unavail).forEach(([question, values]) => {
-                values.forEach(value => {
-                    const selectorPrefix = '#id_que_' + question + '_tr ';
-                    if (hide_unavailable) {
-                        $(selectorPrefix + 'option[value="' + value + '"]').remove();
-                        $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]').closest('label').remove();
-                    } else {
-                        $(selectorPrefix + 'option[value="' + value + '"]').prop("disabled", true);
-                        $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]')
-                            .prop("disabled", true)
-                            .addClass("unavail");
-                    }
-                });
-            });
-
-            $('select').each(function(index, value) {
-                var nm = $(this).attr('id').replace("id_", "");
-
-                if (nm == 'factions_list') return;
-
-                // skip in only one option
-                if ($(this).find('option').length == 1) return;
-
-                // skip if the value was submitted in a previous POST
-                if ((nm in submitted) && submitted[nm]) return;
-
-                $(this).prepend('<option selected="true" disabled="disabled">' + diss + '</option>');
-            });
-
-            $('#confirm').on('click', function() {
-                if (!check_mandatory()) return false;
-            });
-
-            disable_dependencies();
-
-            $('select, input[type="checkbox"], input[type="radio"]').on('change', function() {
-                disable_dependencies();
-            });
-
-        });
-
-    function check_dependencies(dependencies) {
+        function check_dependencies(dependencies) {
         let selects = [];
         let checkboxes = [];
         let radios = [];
@@ -291,7 +244,51 @@
         return true;
     }
 
-    });
+        for (const el of ['id_name']) {
+            if ( $( "#" + el ).length ) mandatory.unshift(el);
+        }
+
+        Object.entries(unavail).forEach(([question, values]) => {
+            values.forEach(value => {
+                const selectorPrefix = '#id_que_' + question + '_tr ';
+                if (hide_unavailable) {
+                    $(selectorPrefix + 'option[value="' + value + '"]').remove();
+                    $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]').closest('label').remove();
+                } else {
+                    $(selectorPrefix + 'option[value="' + value + '"]').prop("disabled", true);
+                    $(selectorPrefix + 'input[type="checkbox"][value="' + value + '"]')
+                        .prop("disabled", true)
+                        .addClass("unavail");
+                }
+            });
+        });
+
+        $('select').each(function(index, value) {
+            var nm = $(this).attr('id').replace("id_", "");
+
+            if (nm == 'factions_list') return;
+
+            // skip in only one option
+            if ($(this).find('option').length == 1) return;
+
+            // skip if the value was submitted in a previous POST
+            if ((nm in submitted) && submitted[nm]) return;
+
+            $(this).prepend('<option selected="true" disabled="disabled">' + diss + '</option>');
+        });
+
+        $('#confirm').on('click', function() {
+            if (!check_mandatory()) return false;
+        });
+
+        disable_dependencies();
+
+        $('select, input[type="checkbox"], input[type="radio"]').on('change', function() {
+            disable_dependencies();
+        });
+
+    };
+    window.lmPageInit();
 
     </script>
 {% endblock js %}

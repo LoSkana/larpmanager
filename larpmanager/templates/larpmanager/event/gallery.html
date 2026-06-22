@@ -50,11 +50,10 @@
 {% endblock content %}
 {% block js %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function() {
-      resize_to_fit();
-    });
-});
+window.lmPageInit = function() {
+    resize_to_fit();
+};
+window.lmPageInit();
 
 function resize_to_fit() {
     $(".icon-name p").each(function( index ) {

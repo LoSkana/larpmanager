@@ -80,6 +80,10 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
                 integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
                 crossorigin="anonymous"></script>
+        {% if not manage %}
+            <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"
+                    crossorigin="anonymous"></script>
+        {% endif %}
         <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.3.2/b-3.2.4/b-colvis-3.2.4/b-html5-3.2.4/b-print-3.2.4/cr-2.1.1/cc-1.0.7/date-1.5.6/fc-5.0.4/fh-4.0.3/kt-2.12.1/r-3.0.5/sc-2.4.3/sb-1.8.3/sp-2.3.4/sr-1.4.1/datatables.min.css"
               rel="stylesheet"
               integrity="sha384-M/9dsiCLRUVi149iSn76/6ZQNoFhHZYIO5YeB8dkc+PSnjgpSozqnhNGkouxafnr"
@@ -129,7 +133,8 @@
         </noscript>
     </head>
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {% if lm or effective_version >= 18 %}new_v18{% endif %} {% if effective_version >= 19 %}new_v19{% endif %} {% if effective_version >= 20 %}new_v20{% endif %} {% if effective_version >= 21 %}new_v21{% endif %} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}">
+          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {% if lm or effective_version >= 18 %}new_v18{% endif %} {% if effective_version >= 19 %}new_v19{% endif %} {% if effective_version >= 20 %}new_v20{% endif %} {% if effective_version >= 21 %}new_v21{% endif %} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}"
+          {% if not manage %}hx-boost="true"{% endif %}>
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
@@ -166,6 +171,17 @@ window['icon_texts'] = {
         <!-- Scripts -->
         {% block js-req %}
         {% endblock js-req %}
+        <script>
+            var url_feature_description = "{% url 'feature_description' %}";
+            var url_tutorials = "{% url 'tutorials' %}";
+        </script>
+        {% include "elements/dashboard/modal.js.html" %}
+        {% if manage %}
+            <link rel="stylesheet"
+                  href="{% static 'admin/css/vendor/select2/select2.min.css' %}">
+            <script src="{% static 'admin/js/vendor/select2/select2.full.min.js' %}"></script>
+            {% include "elements/dashboard/wwyltd.js.html" %}
+        {% endif %}
         <!--- script pipeline -->
         {% compress js %}
             <script defer
@@ -175,17 +191,6 @@ window['icon_texts'] = {
             <script defer
                     src="{% static 'larpmanager/assets/js/jquery.textfill.min.js' %}"></script>
         {% endcompress %}
-        <script>
-            let url_feature_description = "{% url 'feature_description' %}";
-            let url_tutorials = "{% url 'tutorials' %}";
-        </script>
-        {% include "elements/dashboard/modal.js.html" %}
-        {% if manage %}
-            <link rel="stylesheet"
-                  href="{% static 'admin/css/vendor/select2/select2.min.css' %}">
-            <script src="{% static 'admin/js/vendor/select2/select2.full.min.js' %}"></script>
-            {% include "elements/dashboard/wwyltd.js.html" %}
-        {% endif %}
         {% if association.id == 0 %}
             {% if google_tag %}
                 <!-- Google Tag Manager (noscript) -->
@@ -279,43 +284,60 @@ window['icon_texts'] = {
             });
         }
 
-    window.addEventListener('DOMContentLoaded', function() {
-
-        $(document).ready(function() {
-
-            const csrftoken = getCookie('csrftoken');
-            $.ajaxSetup({
-                beforeSend: function(xhr, settings) {
-                    if (!(/^GET|HEAD|OPTIONS|TRACE$/.test(settings.type)) && !this.crossDomain) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    }
+    function initPage() {
+        const csrftoken = getCookie('csrftoken');
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!(/^GET|HEAD|OPTIONS|TRACE$/.test(settings.type)) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
-            });
-
-            $('#sidebar-open, #sidebar-close').click(function() {
-                sidebar();
-            });
-
-            {% if manage and is_sidebar_open %}
-                $('#sidebar-close').hide();
-            {% else %}
-                $('#sidebar-open').hide();
-            {% endif %}
-
-            // add origin for manage links
-            {% if run %}
-                let origin = '{{ run.uuid }}';
-            {% else %}
-                let origin = '0';
-            {% endif %}
-            $('a[href].origin').each(function() {
-                const url = new URL(this.href);
-                url.searchParams.set('origin', origin);
-                this.href = url.toString();
-            });
+            }
         });
 
+        $('#sidebar-open, #sidebar-close').off('click').on('click', function() {
+            sidebar();
+        });
+
+        {% if manage and is_sidebar_open %}
+            $('#sidebar-close').hide();
+        {% else %}
+            $('#sidebar-open').hide();
+        {% endif %}
+
+        // add origin for manage links
+        {% if run %}
+            let origin = '{{ run.uuid }}';
+        {% else %}
+            let origin = '0';
+        {% endif %}
+        $('a[href].origin').each(function() {
+            const url = new URL(this.href);
+            url.searchParams.set('origin', origin);
+            this.href = url.toString();
+        });
+    }
+
+    window.addEventListener('DOMContentLoaded', initPage);
+
+    document.addEventListener('htmx:configRequest', function(evt) {
+        evt.detail.headers['X-CSRFToken'] = getCookie('csrftoken');
     });
+
+    {% if not manage %}
+    document.addEventListener('htmx:afterSettle', function() {
+        document.body.classList.remove('is-preload');
+        $('#one .inner, #topbar .inner, #sidebar .inner, #footer .inner').fadeIn(100);
+        initPage();
+        if (typeof window.lmBaseInit === 'function') {
+            window.lmBaseInit();
+            window.lmBaseInit = null;
+        }
+        if (typeof window.lmPageInit === 'function') {
+            window.lmPageInit();
+            window.lmPageInit = null;
+        }
+    });
+    {% endif %}
         </script>
         <dialog id="lm-modal">
             <div id="lm-modal-content"></div>

@@ -62,11 +62,9 @@
 {% endblock content %}
 {% block js %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-
-    $(function() {
-        $('.form_amount').hide();
-    });
-});
+window.lmPageInit = function() {
+    $('.form_amount').hide();
+};
+window.lmPageInit();
     </script>
 {% endblock js %}

@@ -1,7 +1,7 @@
 <div class="dropdown-button">
     <a href="#" class="switch"><i class="fa-solid fa-circle-chevron-down"></i></a>
 </div>
-<div class="dropdown-menu">
+<div class="dropdown-menu" hx-boost="false">
     {% for rid, v in open_runs.items %}
         {% if run and run.event.slug == v.e and run.number == v.r %}
             <!-- skip -->

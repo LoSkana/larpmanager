@@ -48,8 +48,7 @@
     </form>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
-$(function() {
+    <script>window.lmPageInit = function() {
     {% for el in list %}
     $('#{{ el.uuid }}_go').on('click', function() { $('#{{ el.uuid }}_sec').toggle(500); });
 
@@ -59,7 +58,7 @@ $(function() {
     {% endif %}
 
     {% endfor %}
-});
-});
+};
+window.lmPageInit();
     </script>
 {% endblock js %}

@@ -6,6 +6,9 @@
 
 (function($) {
 
+	if (window.__solidStateMainInit) return;
+	window.__solidStateMainInit = true;
+
 	var	$window = $(window),
 		$body = $('body'),
 		$header = $('#header'),

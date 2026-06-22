@@ -6,6 +6,9 @@
 
 (function($) {
 
+	if (window.__alphaMainInit) return;
+	window.__alphaMainInit = true;
+
 	var	$window = $(window),
 		$body = $('body'),
 		$header = $('#header'),

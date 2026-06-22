@@ -41,11 +41,11 @@
 {% endblock content %}
 {% block js %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-
-$('#close').click(function(){
-    return window.lmTesting ? true : confirm("{% filter escapejs %}{% trans "Confirm" %}{% endfilter %}?");
-})
-});
+window.lmPageInit = function() {
+    $('#close').click(function(){
+        return window.lmTesting ? true : confirm("{% filter escapejs %}{% trans "Confirm" %}{% endfilter %}?");
+    });
+};
+window.lmPageInit();
     </script>
 {% endblock js %}
