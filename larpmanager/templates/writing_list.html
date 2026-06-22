@@ -3,6 +3,9 @@
 {% block special %}
     manage
 {% endblock special %}
+{% block info %}
+    {{ page_info }}
+{% endblock info %}
 {% block meta %}
     <meta name="csrf-token" content="{{ csrf_token }}">
 {% endblock meta %}
