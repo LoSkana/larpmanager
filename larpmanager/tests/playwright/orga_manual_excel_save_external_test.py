@@ -117,7 +117,7 @@ def excel(page: Any, live_server: Any) -> None:
     panel.locator("#id_text").fill("Test Text ff kinda hate ")
     panel.locator("#id_text").press("#")
     page.get_by_role("searchbox").fill("an")
-    _wait_select2_results(edit_iframe)
+    _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
     just_wait(page)
     submit_inline_edit(page)
