@@ -2643,10 +2643,16 @@ msgstr ""
 msgid "Plot"
 msgstr ""
 
+msgid "Manage all plots for this event"
+msgstr ""
+
 msgid "This text will be added to the sheet of"
 msgstr ""
 
 msgid "Faction"
+msgstr ""
+
+msgid "Manage all character factions of the event"
 msgstr ""
 
 msgid "Primary"
@@ -2673,13 +2679,22 @@ msgstr ""
 msgid "Quest"
 msgstr ""
 
+msgid "Manage all quests for the event"
+msgstr ""
+
 msgid "Trait"
+msgstr ""
+
+msgid "Manage all traits linked to quests, with their writing questions"
 msgstr ""
 
 msgid "Handout"
 msgstr ""
 
 msgid "Prologue type"
+msgstr ""
+
+msgid "Manage all prologues for this event"
 msgstr ""
 
 msgid "Speed larp"
@@ -5761,10 +5776,13 @@ msgstr ""
 msgid "global preferences"
 msgstr ""
 
-msgid "Filter factions"
+msgid "Available characters"
 msgstr ""
 
-msgid "Select the faction on which you want to filter characters"
+msgid "Your preferences"
+msgstr ""
+
+msgid "Drag items to reorder your preferences"
 msgstr ""
 
 msgid "Indicate here any element you wish to avoid in the assignment"
@@ -5773,10 +5791,13 @@ msgstr ""
 msgid "Confirm your choices"
 msgstr ""
 
-msgid "You have not reached the minimum number of preferences"
+msgid "No characters found"
 msgstr ""
 
-msgid "You have chosen the same option in more than one preference"
+msgid "Click a character to add it to your preferences"
+msgstr ""
+
+msgid "You have not reached the minimum number of preferences"
 msgstr ""
 
 msgid "History preferences"
@@ -8855,9 +8876,6 @@ msgstr ""
 msgid "Check missing speed larp"
 msgstr ""
 
-msgid "Manage all character factions of the event"
-msgstr ""
-
 msgid "Tipo"
 msgstr ""
 
@@ -8881,9 +8899,6 @@ msgstr ""
 msgid "Manage all handouts for this event"
 msgstr ""
 
-msgid "Manage all plots for this event"
-msgstr ""
-
 msgid "Progress step"
 msgstr ""
 
@@ -8899,17 +8914,11 @@ msgid ""
 "Manage prologue categories that group individual prologues for this event"
 msgstr ""
 
-msgid "Manage all prologues for this event"
-msgstr ""
-
 msgid "Quest Type"
 msgstr ""
 
 msgid ""
 "Manage quest categories, each with a presentation text and associated quests"
-msgstr ""
-
-msgid "Manage all quests for the event"
 msgstr ""
 
 msgid ""
@@ -8928,9 +8937,6 @@ msgid ""
 msgstr ""
 
 msgid "Station"
-msgstr ""
-
-msgid "Manage all traits linked to quests, with their writing questions"
 msgstr ""
 
 msgid ""

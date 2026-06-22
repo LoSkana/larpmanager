@@ -49,222 +49,314 @@
                 </p>
             {% endif %}
             {% if faction_filter %}
-                <br />
-                <h3>
-                    <a href="#" class="my_toggle" tog='factions'>{% trans "Filter factions" %}</a>
-                </h3>
-                <span class="helptext">{% trans "Select the faction on which you want to filter characters" %}.</span>
-                <div id="factions" class="nav hide factions">
+                <div class="faction-chips" id="faction-chips">
                     {% for f in faction_filter %}
-                        <a id="f{{ f.uuid }}"
-                           href="#"
-                           onclick="return select_f('{{ f.uuid }}');">{{ f.name }}</a>
+                        <span class="faction-chip"
+                              data-uuid="{{ f.uuid }}"
+                              onclick="toggle_faction_chip(this, '{{ f.uuid }}')">{{ f.name }}</span>
                     {% endfor %}
                 </div>
-                <br />
             {% endif %}
-            <br />
-            <form action="{{ request.path }}" method="post">
+            <form action="{{ request.path }}" method="post" id="casting-form">
                 {% csrf_token %}
-                <table id="casting" class="no-more-tables">
-                    <tr>
-                        <td>{% trans "Preference" %}</td>
-                        <td>{{ cl_name }}</td>
-                        <td>{{ el_name }}</td>
-                    </tr>
-                    <tr>
-                        <!-- filled later -->
-                    </tr>
-                </table>
-                {% if casting_avoid %}
-                    <p>
-                        <i>{% trans "Indicate here any element you wish to avoid in the assignment" %}:</i>
-                    </p>
-                    <input type="text" name="avoid" id="avoid" value="{{ avoid }}" />
-                    <br />
-                    <br />
-                {% endif %}
-                <input type="submit"
-                       name="subm"
-                       id="submit"
-                       value="{% trans "Submit" %}"
-                       onClick="return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
-                <p id="err"></p>
-            </form>
-        {% endif %}
-    </div>
-{% endblock content %}
-{% block js %}
-    <script>
+                <div id="hidden-inputs"></div>
+                <div class="casting-layout">
+                    <div class="casting-panel">
+                        <h4>{% trans "Available characters" %}</h4>
+                        <input type="text"
+                               class="casting-search"
+                               id="char-search"
+                               placeholder="{% trans "Search" %}..."
+                               oninput="render_char_list()">
+                        <div class="char-list" id="char-list"></div>
+                    </div>
+                    <div class="casting-panel">
+                        <h4>{% trans "Your preferences" %}</h4>
+                        <div id="castig-info">
+                            <span class="pref-counter" id="pref-counter"></span>
+                            <span class="helptext">
+                                <i>{% trans "Drag items to reorder your preferences" %}.
+                                </i></span>
+                            </div>
+                            <div class="pref-list" id="pref-list"></div>
+                            <div class="casting-err" id="err"></div>
+                        </div>
+                    </div>
+                    {% if casting_avoid %}
+                        <p class="casting-avoid">
+                            <i>{% trans "Indicate here any element you wish to avoid in the assignment" %}:</i>
+                        </p>
+                        <input type="text" name="avoid" id="avoid" value="{{ avoid }}" />
+                        <br />
+                        <br />
+                    {% endif %}
+                    <input type="submit"
+                           name="subm"
+                           id="submit"
+                           value="{% trans "Submit" %}"
+                           style="margin-top:1rem"
+                           onClick="return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
+                </form>
+            {% endif %}
+        </div>
+    {% endblock content %}
+    {% block js %}
+        <script>
     var casting_max = {{ casting_max }};
     var casting_min = {{ casting_min }};
     var factions_dict = {{ factions_json | safe }};
     var choices_dict = {{ choices | safe }};
-
-    var faction_filter = [];
-
     var already = {{ already | safe }};
 
-    function add_rows() {
+    var all_chars = [];
+    (function() {
+        Object.keys(choices_dict).forEach(function(fk) {
+            Object.keys(choices_dict[fk]).forEach(function(ck) {
+                var c = choices_dict[fk][ck];
+                all_chars.push({
+                    key: ck,
+                    faction_key: fk,
+                    faction_name: factions_dict[fk],
+                    number: c.number,
+                    name: c.name,
+                    title: c.title || '',
+                    factions: c.factions || []
+                });
+            });
+        });
+        all_chars.sort(function(a, b) { return a.number - b.number; });
+    })();
+
+    var preferences = [];
+    var active_factions = [];
+    var dragged_idx = null;
+
+    function get_char(key) {
+        for (var i = 0; i < all_chars.length; i++) {
+            if (all_chars[i].key === key) return all_chars[i];
+        }
+        return null;
+    }
+
+    function char_passes_filter(c) {
+        var search = document.getElementById('char-search').value.toLowerCase();
+        if (search) {
+            var haystack = ('#' + c.number + ' ' + c.name + ' ' + c.title).toLowerCase();
+            if (haystack.indexOf(search) < 0) return false;
+        }
+        if (active_factions.length > 0) {
+            var el_f = c.factions.map(function(f) { return f.uuid; });
+            for (var i = 0; i < active_factions.length; i++) {
+                if (el_f.indexOf(active_factions[i]) < 0) return false;
+            }
+        }
+        return true;
+    }
+
+    function make_char_info_el(c) {
+        var infoEl = document.createElement('div');
+        infoEl.className = 'char-info';
+        var nameEl = document.createElement('div');
+        nameEl.className = 'char-name';
+        nameEl.textContent = c.name;
+        infoEl.appendChild(nameEl);
+        if (c.title && c.title.trim()) {
+            var titleEl = document.createElement('div');
+            titleEl.className = 'char-title';
+            titleEl.textContent = c.title;
+            infoEl.appendChild(titleEl);
+        }
+        return infoEl;
+    }
+
+    function render_char_list() {
+        var list = document.getElementById('char-list');
+        list.innerHTML = '';
+
+        var visible = all_chars.filter(char_passes_filter);
+
+        if (visible.length === 0) {
+            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No characters found" %}{% endfilter %}</div>';
+            return;
+        }
+
+        visible.forEach(function(c) {
+            var selected = preferences.indexOf(c.key) >= 0;
+            var card = document.createElement('div');
+            card.className = 'char-card' + (selected ? ' selected' : '');
+            card.onclick = function() { add_preference(c.key); };
+
+            var numEl = document.createElement('span');
+            numEl.className = 'char-num';
+            numEl.textContent = '#' + c.number;
+
+            var badgeEl = document.createElement('span');
+            badgeEl.className = 'char-faction-badge';
+            badgeEl.textContent = c.faction_name;
+
+            card.appendChild(numEl);
+            card.appendChild(make_char_info_el(c));
+            card.appendChild(badgeEl);
+            list.appendChild(card);
+        });
+    }
+
+    function render_pref_list() {
+        var list = document.getElementById('pref-list');
+        list.innerHTML = '';
+
+        document.getElementById('pref-counter').textContent = preferences.length + ' / ' + casting_max;
+
+        if (preferences.length === 0) {
+            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "Click a character to add it to your preferences" %}{% endfilter %}</div>';
+            return;
+        }
+
+        preferences.forEach(function(key, idx) {
+            var c = get_char(key);
+            if (!c) return;
+
+            var item = document.createElement('div');
+            item.className = 'pref-item';
+            item.draggable = true;
+
+            item.addEventListener('dragstart', function(e) {
+                dragged_idx = idx;
+                setTimeout(function() { item.classList.add('dragging'); }, 0);
+                e.dataTransfer.effectAllowed = 'move';
+            });
+            item.addEventListener('dragend', function() {
+                item.classList.remove('dragging');
+                document.querySelectorAll('.pref-item').forEach(function(el) {
+                    el.classList.remove('drag-over');
+                });
+                dragged_idx = null;
+            });
+            item.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                document.querySelectorAll('.pref-item').forEach(function(el) {
+                    el.classList.remove('drag-over');
+                });
+                item.classList.add('drag-over');
+            });
+            item.addEventListener('drop', function(e) {
+                e.preventDefault();
+                if (dragged_idx === null || dragged_idx === idx) return;
+                var moved = preferences.splice(dragged_idx, 1)[0];
+                preferences.splice(idx, 0, moved);
+                render_pref_list();
+                render_char_list();
+                check_preferences();
+            });
+
+            var handleEl = document.createElement('span');
+            handleEl.className = 'drag-handle';
+            handleEl.textContent = '⠿';
+
+            var rankEl = document.createElement('span');
+            rankEl.className = 'pref-rank';
+            rankEl.textContent = idx + 1;
+
+            var numEl = document.createElement('span');
+            numEl.className = 'char-num';
+            numEl.textContent = '#' + c.number;
+
+            var removeBtn = document.createElement('button');
+            removeBtn.className = 'pref-remove';
+            removeBtn.type = 'button';
+            var removeIcon = document.createElement('i');
+            removeIcon.className = 'fas fa-times';
+            removeBtn.appendChild(removeIcon);
+            removeBtn.onclick = function() { remove_preference(idx); };
+
+            item.appendChild(handleEl);
+            item.appendChild(rankEl);
+            item.appendChild(numEl);
+            item.appendChild(make_char_info_el(c));
+            item.appendChild(removeBtn);
+            list.appendChild(item);
+        });
+    }
+
+    function add_preference(key) {
+        if (preferences.indexOf(key) >= 0) return;
+        if (preferences.length >= casting_max) return;
+        preferences.push(key);
+        render_pref_list();
+        render_char_list();
+        check_preferences();
+    }
+
+    function remove_preference(idx) {
+        preferences.splice(idx, 1);
+        render_pref_list();
+        render_char_list();
+        check_preferences();
+    }
+
+    function toggle_faction_chip(el, uuid) {
+        var idx = active_factions.indexOf(uuid);
+        if (idx >= 0) {
+            active_factions.splice(idx, 1);
+            el.classList.remove('active');
+        } else {
+            active_factions.push(uuid);
+            el.classList.add('active');
+        }
+        render_char_list();
+    }
+
+    function update_hidden_inputs() {
+        var container = document.getElementById('hidden-inputs');
+        container.innerHTML = '';
         for (var ix = 0; ix < casting_max; ix++) {
-            var row = "<tr><td class='simple'><h3>#{1}</h3></td>".format(ix, ix+1);
-            row += "<td class='simple'><select id='faction{0}' name='faction{0}'><option value='' selected disabled>Choose here</option></select></td>".format(ix, ix+1);
-            row += "<td class='simple'><select id='choice{0}' name='choice{0}'></select></td></tr>".format(ix, ix+1);
-            $('#casting tr:last').prev().after(row);
+            var fInput = document.createElement('input');
+            fInput.type = 'hidden';
+            fInput.name = 'faction' + ix;
+            var cInput = document.createElement('input');
+            cInput.type = 'hidden';
+            cInput.name = 'choice' + ix;
+            if (ix < preferences.length) {
+                var c = get_char(preferences[ix]);
+                if (c) {
+                    fInput.value = c.faction_key;
+                    cInput.value = c.key;
+                }
+            }
+            container.appendChild(fInput);
+            container.appendChild(cInput);
         }
     }
 
-    function load_choice() {
+    function check_preferences() {
+        var submit = document.getElementById('submit');
+        var err = document.getElementById('err');
+        submit.disabled = true;
+        err.textContent = '';
 
-        var faction_keys = Object.keys(factions_dict);
-        for (var ix = 0; ix < casting_max; ix++) {
-            for (var iy = 0; iy < faction_keys.length; iy++) {
-                var faction_key = faction_keys[iy];
-                var faction_name = factions_dict[faction_key];
-                $('#faction' + ix).append(new Option(faction_name, faction_key));
-            }
-
-            const g = ix;
-
-            $('#faction' + ix).change(function() {
-                update_el_dict(g);
-            });
-
-            $('#choice' + ix).change(function() {
-                check_preferences();
-            });
+        if (preferences.length < casting_min) {
+            err.textContent = '{% filter escapejs %}{% trans "You have not reached the minimum number of preferences" %}{% endfilter %}';
+            return;
         }
 
-        load_already();
-
-        check_preferences();
+        submit.disabled = false;
+        update_hidden_inputs();
     }
 
     function load_already() {
         for (var ix = 0; ix < casting_max; ix++) {
             if (already[ix] === undefined || already[ix] === '') continue;
-            load_already_el(ix, already[ix]);
+            if (preferences.indexOf(already[ix]) < 0) preferences.push(already[ix]);
         }
     }
 
-    function load_already_el(ix, elem) {
-
-        var faction_keys = Object.keys(factions_dict);
-        for (var iy = 0; iy < faction_keys.length; iy++) {
-            var faction_key = faction_keys[iy];
-            for (kkey in choices_dict[faction_key]) {
-
-                if (kkey !== elem) continue;
-
-                $('#faction' + ix + ' option[value="'+faction_key+'"]').attr('selected', 'selected');
-                update_el_dict(ix);
-
-                $('#choice' + ix + ' option[value="'+kkey+'"]').attr('selected', 'selected');
-                return;
-            }
-        }
-    }
-
-
-    function update_el_dict(ix) {
-        var faction = $('#faction' + ix).children('option:selected').val();
-        var alr = [];
-        for (var yx = 0; yx < casting_max; yx++) {
-            if (ix != yx) alr.push($('#choice' + yx).children('option:selected').val());
-        }
-        alr.sort();
-        // console.log(alr);
-        // alert(faction);
-        $('#choice' + ix).empty();
-        $('#choice' + ix).append('<option value=\'\' selected disabled>Choose here</option>');
-
-        // Sort keys by character number for consistent ordering
-        var keys = Object.keys(choices_dict[faction]);
-        keys.sort(function(a, b) {
-            return choices_dict[faction][a]['number'] - choices_dict[faction][b]['number'];
-        });
-
-        for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            var el = choices_dict[faction][key];
-            if (!in_faction(el)) continue;
-            var text = "#{0} {1}".format(el['number'], el['name']);
-            if (el['title'] !== undefined && el['title'].trim() !== "") {
-                text = "{0} - {1}".format(text, el['title']);
-            }
-            $('#choice' + ix).append(new Option(text, key));
-        }
-
-    }
-
-    function check_preferences() {
-        $('#submit').prop( 'disabled', true );
-        $('#err').hide();
-
-        for (var ix = 0; ix < casting_min; ix++) {
-            var pref = $('#choice' + ix).children('option:selected').val();
-            if (pref === undefined || pref === '') { show_err('{% filter escapejs %}{% trans "You have not reached the minimum number of preferences" %}{% endfilter %}'); return; }
-        }
-
-        for (var ix = 0; ix < casting_max; ix++) {
-            var pref1 = $('#choice' + ix).children('option:selected').val();
-            if (pref1 === undefined) continue;
-            for (var iy = ix + 1; iy < casting_max; iy++) {
-                var pref2 = $('#choice' + iy).children('option:selected').val();
-                if (pref1 === pref2) { show_err('{% filter escapejs %}{% trans "You have chosen the same option in more than one preference" %}{% endfilter %}'); return; }
-            }
-        }
-
-        $('#err').hide();
-        $('#submit').prop( 'disabled', false );
-
-    }
-
-    function show_err(txt) {
-        $('#err').text(txt);
-        $('#err').show();
-    }
-
-window.lmPageInit = function() {
-    add_rows();
-
-    load_choice();
-
-    $('#choices').attr('action', document.URL);
-};
-window.lmPageInit();
-
-    function select_f(uuid) {
-        $('#f' + uuid).toggleClass('sel');
-
-        var index = faction_filter.indexOf(uuid);
-        if (index > -1) {
-            faction_filter.splice(index, 1);
-        } else {
-            faction_filter.push(uuid);
-        }
-
-        return false;
-    }
-
-
-    function in_faction(el) {
-        if (faction_filter.length == 0) return true;
-
-        var el_f = [];
-        for (var ix = 0; ix < el.factions.length; ix++) {
-            el_f.push(el.factions[ix].uuid);
-        }
-        el_f.sort();
-
-        for (var ix = 0; ix < faction_filter.length; ix++) {
-            const index = el_f.indexOf(faction_filter[ix]);
-            if (index < 0) return false;
-        }
-
-        return true;
-    }
-
-
-    </script>
-{% endblock js %}
+    window.lmPageInit = function() {
+        load_already();
+        render_char_list();
+        render_pref_list();
+        check_preferences();
+    });
+            window.lmPageInit();
+        </script>
+    {% endblock js %}
