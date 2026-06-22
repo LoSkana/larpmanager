@@ -30,7 +30,9 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
-    submit_option, new_option
+    submit_register, \
+    submit_option, new_option, \
+    get_modal_iframe, save_modal, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -83,128 +85,131 @@ def prepare(page: Any, live_server: Any) -> None:
 def field_single(page: Any, live_server: Any) -> None:
     # add single
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("single")
-    page.locator("#id_name").press("Tab")
-    page.locator("#id_description").fill("sssssingle")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("single")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.locator("#id_description").fill("sssssingle")
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("ff")
     iframe.locator("#id_max_available").click()
     iframe.locator("#id_max_available").fill("3")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("rrrr")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("wwww")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
 
 def field_multiple(page: Any, live_server: Any) -> None:
     # Add multiple
     page.get_by_role("link", name="New").click()
-    page.get_by_text("Question type").click()
-    page.locator("#id_typ").select_option("m")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("rrrrrr")
-    page.locator("#id_max_length").click()
-    page.locator("#id_max_length").fill("1")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("Question type").click()
+    edit_iframe.locator("#id_typ").select_option("m")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("rrrrrr")
+    edit_iframe.locator("#id_max_length").click()
+    edit_iframe.locator("#id_max_length").fill("1")
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("q1")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("q2")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("q3")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").click()
     iframe.locator("#id_name").fill("14")
     iframe.locator("#id_max_available").click()
     iframe.locator("#id_max_available").fill("3")
-    iframe.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
-    iframe.get_by_role("option", name="Test Larp - single wwww").click()
-    submit_option(page, iframe)
+    iframe.searchbox("requirements").fill("ww")
+    iframe.get_by_role("option", name="single - wwww").click()
+    submit_option(edit_iframe, iframe)
 
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
 
 def field_text(page: Any, live_server: Any) -> None:
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Add text
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("t")
-    page.get_by_role("cell", name="Question name (keep it short)").click()
-    page.locator("#id_name").fill("text")
-    page.locator("#id_max_length").click()
-    page.locator("#id_max_length").fill("10")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("t")
+    edit_iframe.get_by_role("cell", name="Question name (keep it short)").click()
+    edit_iframe.locator("#id_name").fill("text")
+    edit_iframe.locator("#id_max_length").click()
+    edit_iframe.locator("#id_max_length").fill("10")
+    save_modal(page, edit_iframe)
 
     # Add paragraph
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("rrr")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("rrr")
+    save_modal(page, edit_iframe)
 
     # Create new character
     go_to(page, live_server, "/test/manage/characters")
-    just_wait(page)
     page.get_by_role("link", name="New").click()
-    just_wait(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("provaaaa")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("provaaaa")
 
-    fill_tinymce(page, "id_teaser", "adsdsadsa")
+    fill_tinymce(edit_iframe, "id_teaser", "adsdsadsa")
 
-    fill_tinymce(page, "id_text", "rrrr")
+    fill_tinymce(edit_iframe, "id_text", "rrrr")
 
-    just_wait(page)
-    page.locator("#id_que_u4").select_option("u3")
-    page.locator("#id_que_u4").select_option("u1")
-    page.get_by_role("checkbox", name="q2").check()
-    page.locator("#id_que_u6").click()
-    page.locator("#id_que_u6").fill("sad")
-    page.locator("#id_que_u7").click()
-    page.locator("#id_que_u7").fill("sadsadas")
-    submit_confirm(page)
+    edit_iframe.locator('label[for="id_que_u4_2"]').click()  # wwww
+    edit_iframe.locator('label[for="id_que_u4_0"]').click()  # ff
+    edit_iframe.locator('label[for="id_que_u5_1"]').click()  # q2
+    edit_iframe.locator("#id_que_u6").click()
+    edit_iframe.locator("#id_que_u6").fill("sad")
+    edit_iframe.locator("#id_que_u7").click()
+    edit_iframe.locator("#id_que_u7").fill("sadsadas")
+    save_modal(page, edit_iframe)
 
 
 def field_single_req(page: Any, live_server: Any) -> None:
     # Add a second single-choice question where one option requires "wwww" from "single"
     go_to(page, live_server, "/test/manage/writing/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("single_req")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("single_req")
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").fill("dep_a")
-    submit_option(page, iframe)
+    submit_option(edit_iframe, iframe)
 
-    iframe = new_option(page)
+    iframe = new_option(edit_iframe)
     iframe.locator("#id_name").fill("dep_b")
-    iframe.get_by_role("row", name="Prerequisites").get_by_role("searchbox").fill("ww")
-    iframe.get_by_role("option", name="Test Larp - single wwww").click()
-    submit_option(page, iframe)
+    iframe.searchbox("requirements").fill("ww")
+    iframe.get_by_role("option", name="single - wwww").click()
+    submit_option(edit_iframe, iframe)
 
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
 
 def verify_requirements_hidden(page: Any) -> None:
@@ -212,40 +217,39 @@ def verify_requirements_hidden(page: Any) -> None:
 
     Tests both question types:
     - multiple-choice (checkbox): option "14" (u7) requires "wwww" (u3)
-    - single-choice (select): option "dep_b" (u9) in "single_req" (u8) requires "wwww" (u3)
+    - single-choice (radio): option "dep_b" (u9, index 1) in "single_req" (u8) requires "wwww" (u3)
     """
     label_14 = page.locator('input[type="checkbox"][value="u7"]')
-    dep_b_option = page.locator('#id_que_u8 option[value="u9"]')
+    dep_b_radio = page.locator('input[type="radio"][value="u9"]')
 
     # Nothing selected yet in "single" - both dependent options must be hidden
     expect(label_14).to_be_hidden()
-    expect(dep_b_option).to_have_attribute("hidden", "")
+    expect(dep_b_radio).to_be_hidden()
 
-    # Select a different option ("rrrr") - both must still be hidden
-    page.locator("#id_que_u4").select_option("u2")
+    # Select a different option ("rrrr", index 1) - both must still be hidden
+    page.locator('label[for="id_que_u4_1"]').click()
     just_wait(page)
     expect(label_14).to_be_hidden()
-    expect(dep_b_option).to_have_attribute("hidden", "")
+    expect(dep_b_radio).to_be_hidden()
 
-    # Select "wwww" - both must become visible
-    page.locator("#id_que_u4").select_option("u3")
+    # Select "wwww" (index 2) - both must become visible
+    page.locator('label[for="id_que_u4_2"]').click()
     just_wait(page)
     expect(label_14).to_be_visible()
-    expect(dep_b_option).not_to_have_attribute("hidden", "")
+    expect(dep_b_radio).to_be_visible()
 
 
 def character(page: Any, live_server: Any) -> None:
     # signup, create char
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
 
     expect_normalized(page, page.locator("#one"), "Create your character!")
     page.get_by_role("link", name="Create your character!").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     verify_requirements_hidden(page)
 
@@ -256,9 +260,9 @@ def character(page: Any, live_server: Any) -> None:
 
     fill_tinymce(page, "id_text", "so braaaave")
 
-    page.locator("#id_que_u4").select_option("u1")
-    page.locator("#id_que_u4").select_option("u3")
-    page.get_by_role("checkbox", name="- (Available 3)").check()
+    page.locator('label[for="id_que_u4_0"]').click()  # ff
+    page.locator('label[for="id_que_u4_2"]').click()  # wwww
+    page.locator('label[for="id_que_u5_3"]').click()  # 14 (Available 3)
     page.locator("#id_que_u6").click()
     page.locator("#id_que_u6").fill("wow")
     page.locator("#id_que_u7").click()
@@ -280,8 +284,9 @@ def character(page: Any, live_server: Any) -> None:
     # approve char
     go_to(page, live_server, "/test/manage/characters")
     page.locator('[id="u3"]').locator(".fa-edit").click()
-    page.locator("#id_status").select_option("a")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_status").select_option("a")
+    save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Your character is: my character")
@@ -301,7 +306,6 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
 
     # Verify the Characters link is visible in the topbar
     go_to(page, live_server, "/")
-    just_wait(page)
     page.get_by_role("link", name=re.compile(" Characters$")).click()
 
     # Verify the page shows characters content
@@ -321,23 +325,21 @@ def player_relationships(page: Any, live_server: Any) -> None:
     # Navigate to relationships page from the registration page
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name="Relationships").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     # Create new relationship toward Test Character
     page.get_by_role("link", name="New").click()
-    just_wait(page)
     page.locator("#select2-id_target-container").click()
     page.get_by_role("searchbox").fill("te")
     page.get_by_role("option", name="Test Character").click()
     fill_tinymce(page, "id_text", "my relationship text", show=False)
     submit_confirm(page)
-
     # Verify relationship appears in list
     expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) my relationship text")
 
     # Edit the relationship and update the text
     page.locator("#player_relationships").locator(".fa-edit").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     fill_tinymce(page, "id_text", "updated relationship text", show=False)
     submit_confirm(page)
 

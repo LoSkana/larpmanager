@@ -25,13 +25,13 @@ from django.db.models import Q, UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from tinymce.models import HTMLField
 
-from larpmanager.models.base import UuidMixin
+from larpmanager.models.base import OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Character
 
 
-class SystemExp(UuidMixin, BaseConceptModel):
+class SystemExp(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents a named experience system for an event."""
 
     hidden = models.BooleanField(default=False, verbose_name=_("Hidden"))
@@ -51,7 +51,7 @@ class SystemExp(UuidMixin, BaseConceptModel):
         ]
 
 
-class AbilityTemplateExp(UuidMixin, BaseConceptModel):
+class AbilityTemplateExp(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents AbilityTemplateExp model."""
 
     name = models.CharField(max_length=150)
@@ -66,7 +66,7 @@ class AbilityTemplateExp(UuidMixin, BaseConceptModel):
         return self.name
 
 
-class AbilityTypeExp(UuidMixin, BaseConceptModel):
+class AbilityTypeExp(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents AbilityTypeExp model."""
 
     name = models.CharField(max_length=150, blank=True)
@@ -86,12 +86,12 @@ class AbilityTypeExp(UuidMixin, BaseConceptModel):
         ]
 
 
-class AbilityExp(UuidMixin, BaseConceptModel):
+class AbilityExp(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents AbilityExp model."""
 
     system = models.ForeignKey(
         SystemExp,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="abilities",
         verbose_name=_("System"),
     )
@@ -167,12 +167,12 @@ class AbilityExp(UuidMixin, BaseConceptModel):
         return self.template.descr if self.template else self.descr
 
 
-class DeliveryExp(UuidMixin, BaseConceptModel):
+class DeliveryExp(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents DeliveryExp model."""
 
     system = models.ForeignKey(
         SystemExp,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="deliveries",
         verbose_name=_("System"),
     )
@@ -209,7 +209,7 @@ class Operation(models.TextChoices):
     DIVISION = "DIV", _("Division")
 
 
-class RuleExp(UuidMixin, BaseConceptModel):
+class RuleExp(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents RuleExp model."""
 
     abilities = models.ManyToManyField(
@@ -236,10 +236,8 @@ class RuleExp(UuidMixin, BaseConceptModel):
 
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
-    order = models.IntegerField(default=0)
 
-
-class ModifierExp(UuidMixin, BaseConceptModel):
+class ModifierExp(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents ModifierExp model."""
 
     abilities = models.ManyToManyField(AbilityExp, related_name="modifiers_abilities", blank=True)
@@ -261,8 +259,6 @@ class ModifierExp(UuidMixin, BaseConceptModel):
         verbose_name=_("Requirements"),
         help_text=_("Indicate the required character options"),
     )
-
-    order = models.IntegerField()
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]

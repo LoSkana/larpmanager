@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import base64
 import contextlib
 import io
 import logging
@@ -39,6 +40,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from PIL import Image, ImageDraw
 from xhtml2pdf import pisa
 
 from larpmanager.cache.association import get_cache_association
@@ -58,6 +60,7 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     Faction,
+    FactionType,
     Handout,
 )
 from larpmanager.utils.core.base import get_event_context
@@ -87,6 +90,15 @@ logger = logging.getLogger(__name__)
 def fix_filename(filename: Any) -> Any:
     """Remove special characters from filename for safe PDF generation."""
     return re.sub(r"[^A-Za-z0-9 ]+", "", filename)
+
+
+def has_pdf_customization(event_id: int) -> bool:
+    """Return True if event has any custom PDF styling configured."""
+    for key in ["page_css", "header_content", "footer_content"]:
+        value = get_event_config(event_id, key, default_value="")
+        if value and str(value).strip():
+            return True
+    return False
 
 
 # reprint if file not exists, older than 1 day, or debug
@@ -165,6 +177,35 @@ def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
         return ""
 
     return path
+
+
+_REL_IMAGE_SIZE = 400
+
+
+def _round_image_data_uri(url: str, radius: int = _REL_IMAGE_SIZE // 6) -> str | None:
+    """Convert image URL to fixed-size square data URI with rounded corners via Pillow mask."""
+    file_path = link_callback(url, "")
+    if not file_path:
+        return None
+    try:
+        img = Image.open(file_path).convert("RGBA")
+        # Crop to square from center
+        w, h = img.size
+        side = min(w, h)
+        left = (w - side) // 2
+        top = (h - side) // 2
+        img = img.crop((left, top, left + side, top + side))
+        img = img.resize((_REL_IMAGE_SIZE, _REL_IMAGE_SIZE), Image.LANCZOS)
+        mask = Image.new("L", img.size, 0)
+        draw = ImageDraw.Draw(mask)
+        s = _REL_IMAGE_SIZE - 1
+        draw.rounded_rectangle([0, 0, s, s], radius=radius, fill=255)
+        img.putalpha(mask)
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        return "data:image/png;base64," + base64.b64encode(buf.getvalue()).decode()
+    except Exception:  # noqa: BLE001
+        return None
 
 
 def add_pdf_instructions(context: dict) -> None:
@@ -265,6 +306,12 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
         template = get_template(template_path)
         html_content = template.render(context)
 
+    # Remove empty or whitespace-only <p> tags before PDF rendering
+    html_content = re.sub(r"<p[^>]*>(\s|&nbsp;)*</p>", "", html_content)
+
+    # Replace <br> tags with non-breaking space for horizontal spacing
+    html_content = re.sub(r"<br\s*/?>", "&nbsp;", html_content)
+
     # Generate PDF file from rendered HTML
     with Path(output_filename).open("wb") as pdf_file:
         # Convert HTML to PDF using xhtml2pdf library
@@ -309,14 +356,31 @@ def print_character(context: dict, *, force: bool = False) -> HttpResponse:
 
     # Generate PDF if forced or if reprint is needed
     if force or reprint(file_path):
-        if context.get("writing_field_visibility"):
-            context.pop("show_all", None)
-        get_character_sheet(context)
+        _get_character_pdf_data(context)
         add_pdf_instructions(context)
         xhtml_pdf(context, "pdf/sheets/auxiliary.html", file_path)
 
     # Return the PDF response
     return return_pdf(file_path, context["character"].name)
+
+
+def _process_rel_images(context: dict) -> None:
+    blank_avatar_url = conf_settings.STATIC_URL + "larpmanager/assets/blank-avatar.png"
+    blank_avatar_uri = _round_image_data_uri(blank_avatar_url)
+    for rel_entry in context.get("rel", []):
+        url = rel_entry.get("player_prof") or blank_avatar_url
+        rounded = _round_image_data_uri(url)
+        rel_entry["player_prof"] = rounded or blank_avatar_uri
+
+
+def _get_character_pdf_data(context: dict) -> None:
+    """Add to context the data needed for pdf write of character."""
+    if context.get("writing_field_visibility"):
+        context.pop("show_all", None)
+    get_character_sheet(context)
+    get_event_cache_all(context)
+    get_character_relationships(context)
+    _process_rel_images(context)
 
 
 def print_character_friendly(context: dict, *, force: bool = False) -> HttpResponse:
@@ -337,9 +401,7 @@ def print_character_friendly(context: dict, *, force: bool = False) -> HttpRespo
     # Generate PDF if forced or if file needs reprinting
     if force or reprint(file_path):
         context["light_pdf"] = True
-        if context.get("writing_field_visibility"):
-            context.pop("show_all", None)
-        get_character_sheet(context)
+        _get_character_pdf_data(context)
         xhtml_pdf(context, "pdf/sheets/friendly.html", file_path)
 
     # Return the PDF file as HTTP response
@@ -383,30 +445,6 @@ def print_faction(context: dict, *, force: bool = False) -> HttpResponse:
 
     # Return the PDF file as HTTP response with faction name in filename
     return return_pdf(file_path, context["faction"].name)
-
-
-def print_character_rel(context: dict, *, force: bool = False) -> HttpResponse:
-    """Generate and return character relationships PDF.
-
-    Args:
-        context: Context dictionary containing character and run data
-        force: Whether to force regeneration of the PDF
-
-    Returns:
-        HTTP response with the relationships PDF
-
-    """
-    # Get the filepath for the character relationships PDF
-    filepath = context["character"].get_relationships_filepath(context["run"])
-
-    # Generate PDF if forced or if reprint is needed
-    if force or reprint(filepath):
-        get_event_cache_all(context)
-        get_character_relationships(context)
-        xhtml_pdf(context, "pdf/sheets/relationships.html", filepath)
-
-    # Return the PDF response with localized filename
-    return return_pdf(filepath, f"{context['character'].name} - " + _("Relationships"))
 
 
 def print_gallery(context: dict, *, force: bool = False) -> HttpResponse:
@@ -468,6 +506,16 @@ def print_profiles(context: dict, *, force: bool = False) -> HttpResponse:
     if force or reprint(filepath):
         # Load all event cache data
         get_event_cache_all(context)
+        for character_data in context["chars"].values():
+            names = []
+            for faction_number in character_data.get("factions", []):
+                if not faction_number or faction_number not in context["factions"]:
+                    continue
+                faction_data = context["factions"][faction_number]
+                if not faction_data["name"] or faction_data["typ"] == FactionType.SECRET:
+                    continue
+                names.append(faction_data["name"])
+            character_data["factions_list"] = ", ".join(names)
         # Generate PDF from HTML template
         xhtml_pdf(context, "pdf/sheets/profiles.html", filepath)
 
@@ -691,20 +739,22 @@ def print_handout_go(context: dict, handout_id: int) -> HttpResponse:
     return print_handout(context)
 
 
-def get_fake_request(association_slug: str) -> HttpRequest:
+def get_fake_request(association_slug: str) -> HttpRequest | None:
     """Create a fake HTTP request with association and anonymous user."""
     request = HttpRequest()
-    # Attach association from cache
     request.association = get_cache_association(association_slug)
-    # Set anonymous user for the request
+    if request.association is None:
+        return None
     request.user = AnonymousUser()
     return request
 
 
-@background_auto(queue="pdf")
+@background_auto(queue="pdf", skip_duplicates=True)
 def print_handout_bkg(association_slug: str, event_slug: str, handout_id: int) -> None:
     """Print handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(association_slug)
+    if request is None:
+        return
     context = get_event_context(request, event_slug, check_visibility=False)
     print_handout_go(context, handout_id)
 
@@ -718,22 +768,23 @@ def print_character_go(context: dict, character_uuid: str) -> None:
         # Generate and cache character print outputs
         print_character(context, force=True)
         print_character_friendly(context, force=True)
-        print_character_rel(context, force=True)
     except Http404:
         pass
     except NotFoundError:
         pass
 
 
-@background_auto(queue="pdf")
+@background_auto(queue="pdf", skip_duplicates=True)
 def print_character_bkg(association_slug: str, event_slug: str, character_uuid: str) -> None:
     """Print character background for a given association, event slug, and character."""
     request = get_fake_request(association_slug)
+    if request is None:
+        return
     context = get_event_context(request, event_slug, check_visibility=False)
     print_character_go(context, character_uuid)
 
 
-@background_auto(queue="pdf")
+@background_auto(queue="pdf", skip_duplicates=True)
 def print_run_bkg(association_slug: str, event_slug: str) -> None:
     """Print all background materials for a run including gallery, profiles, characters, and handouts.
 
@@ -747,6 +798,8 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
     """
     # Create fake request context and get event run data
     request = get_fake_request(association_slug)
+    if request is None:
+        return
     context = get_event_context(request, event_slug, check_visibility=False)
 
     # Print gallery and character profiles
@@ -869,6 +922,79 @@ def print_bulk(context: dict, request: HttpRequest) -> HttpResponse:
     timestamp = timezone.now().strftime("%Y%m%d_%H%M%S")
     response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_pdfs_{timestamp}.zip"'
 
+    return response
+
+
+def get_friendly_bundle_filepath(run: Run) -> Path:
+    """Return the filesystem path for the pre-built printable bundle ZIP."""
+    return Path(conf_settings.MEDIA_ROOT) / "bundles" / f"{run.media_token}_printable.zip"
+
+
+@background_auto(queue="pdf", skip_duplicates=True)
+def build_friendly_bundle_bkg(association_slug: str, event_slug: str) -> None:
+    """Build printable character sheet ZIP bundle in the background and save to disk."""
+    request = get_fake_request(association_slug)
+    if request is None:
+        return
+    context = get_event_context(request, event_slug, check_visibility=False)
+    run = context["run"]
+
+    zip_path = get_friendly_bundle_filepath(run)
+    zip_path.parent.mkdir(parents=True, exist_ok=True)
+    zip_path_tmp = zip_path.with_suffix(".tmp")
+
+    try:
+        with zipfile.ZipFile(zip_path_tmp, "w", zipfile.ZIP_DEFLATED) as zip_file:
+            for character in context["event"].get_elements(Character):
+                try:
+                    get_char_check(request, context, character.uuid, bypass_access_checks=True)
+                    filepath = context["character"].get_sheet_friendly_filepath(run)
+
+                    if not Path(filepath).exists():
+                        print_character_friendly(context, force=True)
+
+                    if Path(filepath).exists():
+                        zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
+                except (Http404, NotFoundError):
+                    pass
+                except Exception:  # noqa: BLE001, S110
+                    pass
+        zip_path_tmp.rename(zip_path)
+    except Exception:
+        zip_path_tmp.unlink(missing_ok=True)
+        raise
+
+
+def print_all_friendly(context: dict, request: HttpRequest) -> HttpResponse:
+    """Generate a ZIP file containing printable character sheet PDFs for all characters.
+
+    Args:
+        context: Context dictionary containing event and run data
+        request: HTTP request object used for character access checks and warnings
+
+    Returns:
+        HttpResponse: ZIP file download response with timestamped filename
+
+    """
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        for character in context["event"].get_elements(Character):
+            try:
+                get_char_check(request, context, character.uuid, deny_public=True)
+                filepath = context["character"].get_sheet_friendly_filepath(context["run"])
+
+                if not Path(filepath).exists() or reprint(filepath):
+                    print_character_friendly(context, force=True)
+
+                if Path(filepath).exists():
+                    zip_file.write(filepath, f"character_{character.number}_{character.name}.pdf")
+            except Exception as e:  # noqa: BLE001 - Batch operation must continue on any error
+                messages.warning(request, _("Failed to add character") + f" #{character.number}: {e}")
+
+    zip_buffer.seek(0)
+    response = HttpResponse(zip_buffer.getvalue(), content_type="application/zip")
+    timestamp = timezone.now().strftime("%Y%m%d_%H%M%S")
+    response["Content-Disposition"] = f'attachment; filename="{context["run"].get_slug()}_printable_{timestamp}.zip"'
     return response
 
 

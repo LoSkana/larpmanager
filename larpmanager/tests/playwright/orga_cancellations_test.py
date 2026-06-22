@@ -46,14 +46,16 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    expect_normalized,
-    go_to,
-    just_wait,
-    login_orga,
-    login_user,
-    submit_confirm,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     expect_normalized,
+                                     get_modal_iframe,
+                                     go_to,
+                                     just_wait,
+                                     _wait_lm_ready,
+                                     login_orga,
+                                     login_user,
+                                     submit_confirm, save_modal,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -91,40 +93,42 @@ def setup(live_server: Any, page: Any) -> None:
     page.wait_for_selector("table.go_datatable")
     page.wait_for_selector(".fa-edit", timeout=10000)
     page.locator(".fa-edit").click(force=True)
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").fill("100.00")
+    save_modal(page, edit_iframe)
 
 
 def _add_event_tokens(live_server: Any, page: Any, member_search: str, member_option: str, value: int) -> None:
     """Add event-level token accounting item; member must already be registered."""
     go_to(page, live_server, "/test/manage/tokens")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").fill(member_search)
-    page.get_by_role("option", name=member_option).click()
-    page.locator("#id_value").fill(str(value))
-    page.locator("#id_descr").fill("test")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").fill(member_search)
+    edit_iframe.get_by_role("option", name=member_option).click()
+    edit_iframe.locator("#id_value").fill(str(value))
+    edit_iframe.locator("#id_descr").fill("test")
+    save_modal(page, edit_iframe)
 
 
 def _add_event_credits(live_server: Any, page: Any, member_search: str, member_option: str, value: int) -> None:
     """Add event-level credit accounting item; member must already be registered."""
     go_to(page, live_server, "/test/manage/credits")
     page.get_by_role("link", name="New").click()
-    page.get_by_text("---------").click()
-    page.get_by_role("searchbox").fill(member_search)
-    page.get_by_role("option", name=member_option).click()
-    page.locator("#id_value").fill(str(value))
-    page.locator("#id_descr").fill("test")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_text("---------").click()
+    edit_iframe.get_by_role("searchbox").fill(member_search)
+    edit_iframe.get_by_role("option", name=member_option).click()
+    edit_iframe.locator("#id_value").fill(str(value))
+    edit_iframe.locator("#id_descr").fill("test")
+    save_modal(page, edit_iframe)
 
 
 def _cancel_first_active_registration(live_server: Any, page: Any) -> None:
     """Cancel the first active registration shown in the organizer panel."""
     go_to(page, live_server, "/test/manage/registrations")
-    just_wait(page)
     page.locator("a:has(i.fas.fa-trash)").first.click(force=True)
-    just_wait(page)
+    _wait_lm_ready(page)
 
 
 def refund_with_tokens(live_server: Any, page: Any) -> None:
@@ -132,8 +136,7 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     # Register as user
     login_user(page, live_server)
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Login as orga and assign tokens/credits for user@test.it.
     login_orga(page, live_server)
@@ -145,7 +148,6 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
 
     # Go to cancellations list
     go_to(page, live_server, "/test/manage/cancellations/")
-    just_wait(page)
     expect(page.locator("#cancellations")).to_be_visible()
 
     approve_link = page.get_by_role("link", name="Approve reimbursement")
@@ -169,13 +171,11 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # Back on cancellations: shows "Refunded", no more approve link
-    just_wait(page)
     expect(page.locator("#cancellations")).to_contain_text("Refunded")
     expect(page.get_by_role("link", name="Approve reimbursement")).not_to_be_visible()
 
     # Verify token refund accounting entry created for user
     go_to(page, live_server, "/test/manage/tokens")
-    just_wait(page)
     refund_row = page.get_by_role("row", name=re.compile(r"User Test.*Refund"))
     expect(refund_row).to_be_visible()
     expect(refund_row).to_contain_text(str(USER_TOKEN_REFUND))
@@ -184,7 +184,7 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     login_user(page, live_server)
     go_to(page, live_server, "/accounting/tokens/")
     page.get_by_role("link", name="Delivered").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, refund_row, str(USER_TOKEN_REFUND))
     go_to(page, live_server, "/accounting/")
@@ -199,8 +199,7 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     """
     # Orga registers for the event as a participant
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Add tokens and credits for orga@test.it (now registered, visible in dropdown)
     _add_event_tokens(live_server, page, "org", "Admin Test - orga@test.it", ORGA_TOKENS)
@@ -211,7 +210,6 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
 
     # Cancellations list: user row shows "Refunded", orga row has the approve link
     go_to(page, live_server, "/test/manage/cancellations/")
-    just_wait(page)
 
     approve_link = page.get_by_role("link", name="Approve reimbursement")
     expect(approve_link).to_be_visible()
@@ -235,21 +233,18 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     # Back on cancellations: both registrations now show "Refunded"
-    just_wait(page)
     refunded_cells = page.locator("#cancellations td", has_text="Refunded")
     expect(refunded_cells).to_have_count(2)
     expect(page.get_by_role("link", name="Approve reimbursement")).not_to_be_visible()
 
     # Verify token refund accounting entry for orga@test.it
     go_to(page, live_server, "/test/manage/tokens")
-    just_wait(page)
     token_refund_row = page.get_by_role("row", name=re.compile(r"Admin Test.*Refund"))
     expect(token_refund_row).to_be_visible()
     expect(token_refund_row).to_contain_text(str(ORGA_TOKEN_REFUND))
 
     # Verify credit refund accounting entry for orga@test.it
     go_to(page, live_server, "/test/manage/credits")
-    just_wait(page)
     credit_refund_row = page.get_by_role("row", name=re.compile(r"Admin Test.*Refund"))
     expect(credit_refund_row).to_be_visible()
     expect(credit_refund_row).to_contain_text(str(ORGA_CREDIT_REFUND))
@@ -257,14 +252,14 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     # Check orga personal accounting: token refund row in Delivered section
     go_to(page, live_server, "/accounting/tokens/")
     page.get_by_role("link", name="Delivered").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     token_refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, token_refund_row, str(ORGA_TOKEN_REFUND))
 
     # Check orga personal accounting: credit refund row in Delivered section
     go_to(page, live_server, "/accounting/credits/")
     page.get_by_role("link", name="Delivered").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     credit_refund_row = page.get_by_role("row").filter(has_text="Refund")
     expect_normalized(page, credit_refund_row, str(ORGA_CREDIT_REFUND))
     go_to(page, live_server, "/accounting/")

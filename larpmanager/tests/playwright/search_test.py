@@ -28,8 +28,8 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, new_option, \
-    submit_option, sidebar, nav
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, just_wait, submit_confirm, new_option, \
+    submit_option, sidebar, nav, get_modal_iframe, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -129,7 +129,7 @@ def prepare(page: Any, live_server: Any) -> None:
     # prepare
     login_orga(page, live_server)
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Factions").check()
     submit_confirm(page)
@@ -137,83 +137,96 @@ def prepare(page: Any, live_server: Any) -> None:
     # create faction
     sidebar(page, "Factions")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("fassione")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("fassione")
+    save_modal(page, edit_iframe)
 
     # create form options
     sidebar(page, "Sheet")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("color")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("color")
 
-    iframe = new_option(page)
-    iframe.locator("#id_name").click()
-    iframe.locator("#id_name").fill("red")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").click()
+    option_row.locator("#id_name").fill("red")
+    submit_option(edit_iframe, option_row)
 
-    iframe = new_option(page)
-    iframe.locator("#id_name").click()
-    iframe.locator("#id_name").fill("blue")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").click()
+    option_row.locator("#id_name").fill("blue")
+    submit_option(edit_iframe, option_row)
 
-    page.get_by_text("After confirmation, add").click()
-    submit_confirm(page)
-    page.locator("#id_typ").select_option("m")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("tag")
+    save_modal(page, edit_iframe)
 
-    iframe = new_option(page)
-    iframe.locator("#id_name").click()
-    iframe.locator("#id_name").fill("wunder")
-    submit_option(page, iframe)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("m")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("tag")
 
-    iframe = new_option(page)
-    iframe.locator("#id_name").click()
-    iframe.locator("#id_name").fill("zapyr")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").click()
+    option_row.locator("#id_name").fill("wunder")
+    submit_option(edit_iframe, option_row)
 
-    iframe = new_option(page)
-    iframe.locator("#id_name").click()
-    iframe.locator("#id_name").fill("qerfi")
-    submit_option(page, iframe)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").click()
+    option_row.locator("#id_name").fill("zapyr")
+    submit_option(edit_iframe, option_row)
 
-    page.locator("#id_visibility").select_option("s")
-    submit_confirm(page)
+    option_row = new_option(edit_iframe)
+    option_row.locator("#id_name").click()
+    option_row.locator("#id_name").fill("qerfi")
+    submit_option(edit_iframe, option_row)
+
+    edit_iframe.locator("#id_visibility").select_option("s")
+    save_modal(page, edit_iframe)
 
     page.locator('[id="u8"]').locator(".fa-edit").click()
-    page.locator("#id_visibility").select_option("s")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_visibility").select_option("s")
+    save_modal(page, edit_iframe)
 
 
 def characters(page: Any, live_server: Any) -> None:
     # create characters
-    page.get_by_role("link", name="Characters").click()
+    sidebar(page, "Characters")
     page.locator(".fa-edit").click()
-    page.get_by_role("list").click()
-    page.get_by_role("searchbox").fill("fas")
-    page.get_by_role("option", name="fassione (P)").click()
-    page.locator("#id_que_u8").select_option("u1")
-    page.get_by_role("checkbox", name="zapyr").check()
-    page.get_by_text("After confirmation, add").click()
-    submit_confirm(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("another")
-    page.locator("#id_que_u8").select_option("u2")
-    page.locator("#id_que_u9 div").filter(has_text="qerfi").click()
-    page.get_by_role("checkbox", name="wunder").check()
-    page.get_by_role("checkbox", name="After confirmation, add").check()
-    submit_confirm(page)
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("wheel")
-    page.locator("#id_que_u8").select_option("u2")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("fa")
-    page.get_by_role("option", name="fassione (P)").click()
-    page.get_by_role("checkbox", name="wunder").check()
-    submit_confirm(page)
-    page.get_by_role("link", name="Faction", exact=True).click()
-    page.get_by_role("link", name="color").first.click()
-    page.get_by_role("link", name="tag").first.click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").fill("fas")
+    edit_iframe.get_by_role("option", name="fassione (P)").click()
+    edit_iframe.locator('label[for="id_que_u8_0"]').click()
+    edit_iframe.locator('label[for="id_que_u9_1"]').click()
+    save_modal(page, edit_iframe)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("another")
+    edit_iframe.locator('label[for="id_que_u8_1"]').click()
+    edit_iframe.locator('label[for="id_que_u9_2"]').click()
+    edit_iframe.locator('label[for="id_que_u9_0"]').click()
+    save_modal(page, edit_iframe)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("wheel")
+    edit_iframe.locator('label[for="id_que_u8_1"]').click()
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("fa")
+    edit_iframe.get_by_role("option", name="fassione (P)").click()
+    edit_iframe.get_by_role("checkbox", name="wunder").check(force=True)
+    save_modal(page, edit_iframe)
+
+    click_and_wait_question(page, "Faction")
+    click_and_wait_question(page, "color")
+    click_and_wait_question(page, "tag")
+
+    just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
         "Test Character Test Teaser Test Text fassione red zapyr another blue wunder | qerfi wheel fassione blue wunder",

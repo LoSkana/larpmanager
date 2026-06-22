@@ -3,14 +3,15 @@
 {% block title %}
     {% trans "Event navigation" %}
 {% endblock title %}
-{% block info %}
-    {% trans "This page summarises the customised navigation buttons of the event" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="buttons" class="go_datatable">
+    <table id="buttons"
+           class="go_datatable row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="orga_buttons">
         <thead>
             <tr>
+                <th class="reorder-handle"></th>
                 <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Icon" %}</th>
@@ -22,6 +23,9 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
                     <td>
                         <a href="{% url 'orga_buttons_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

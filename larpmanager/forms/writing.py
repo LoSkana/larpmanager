@@ -94,10 +94,14 @@ class WritingForm(BaseModelForm):
             self.delete_field("assigned")
 
         if WritingQuestionType.PROGRESS in question_types:
-            self.fields["progress"].choices = [
-                (step.uuid, str(step))
-                for step in ProgressStep.objects.filter(event=self.params.get("run").event).order_by("order")
-            ]
+            run_event = self.params.get("run").event
+            progress_event = run_event.parent if run_event.parent else run_event
+            self.fields["progress"].queryset = ProgressStep.objects.filter(event=progress_event).order_by("order")
+            self.fields["progress"].to_field_name = "uuid"
+            if self.instance.pk and self.instance.progress_id:
+                progress_step = ProgressStep.objects.filter(pk=self.instance.progress_id).first()
+                if progress_step:
+                    self.initial["progress"] = progress_step.uuid
         else:
             self.delete_field("progress")
 
@@ -112,6 +116,7 @@ class PlayerRelationshipForm(BaseModelForm):
         exclude: ClassVar[list] = ["registration"]
         widgets: ClassVar[dict] = {
             "target": EventCharacterS2Widget,
+            "text": WritingTinyMCE(),
         }
         labels: ClassVar[dict] = {"target": _("Character")}
 
@@ -269,7 +274,12 @@ class OrgaPlotForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "hide", "order")
 
-        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
+        widgets: ClassVar[dict] = {
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
+            "characters": EventCharacterS2WidgetMulti,
+            "assigned": RunStaffS2Widget,
+        }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize plot form with character relationships and dynamic fields.
@@ -395,7 +405,12 @@ class OrgaFactionForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 
         exclude = ("number", "temp", "order")
 
-        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
+        widgets: ClassVar[dict] = {
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
+            "characters": EventCharacterS2WidgetMulti,
+            "assigned": RunStaffS2Widget,
+        }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize faction form with field configuration and help text."""
@@ -460,7 +475,7 @@ class OrgaQuestForm(WritingForm, BaseWritingForm):
         model = Quest
         exclude = ("number", "temp", "hide", "order")
 
-        widgets: ClassVar[dict] = {"assigned": RunStaffS2Widget}
+        widgets: ClassVar[dict] = {"teaser": WritingTinyMCE(), "text": WritingTinyMCE(), "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize the form with organization fields and quest type choices."""
@@ -486,7 +501,7 @@ class OrgaTraitForm(WritingForm, BaseWritingForm):
         model = Trait
         exclude = ("number", "temp", "hide", "order", "traits")
 
-        widgets: ClassVar[dict] = {"assigned": RunStaffS2Widget}
+        widgets: ClassVar[dict] = {"teaser": WritingTinyMCE(), "text": WritingTinyMCE(), "assigned": RunStaffS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and configure quest field choices."""
@@ -560,7 +575,11 @@ class OrgaPrologueForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 
         exclude = ("number", "teaser", "temp", "hide")
 
-        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "assigned": RunStaffS2Widget}
+        widgets: ClassVar[dict] = {
+            "text": WritingTinyMCE(),
+            "characters": EventCharacterS2WidgetMulti,
+            "assigned": RunStaffS2Widget,
+        }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with prologue choices and field configuration."""

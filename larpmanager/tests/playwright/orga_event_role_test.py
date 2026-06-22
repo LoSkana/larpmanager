@@ -33,8 +33,8 @@ from larpmanager.tests.utils import (check_feature,
                                      login_orga,
                                      login_user,
                                      logout,
-                                     submit_confirm,
                                      expect_normalized,
+                                     get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -55,14 +55,15 @@ def test_orga_event_role(pw_page: Any) -> None:
 
     go_to(page, live_server, "/test/manage/roles")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("test role")
-    page.locator("#id_name").press("Tab")
-    page.get_by_role("searchbox").fill("us")
-    page.get_by_role("option", name="User Test -").click()
-    check_feature(page, "Configuration")
-    check_feature(page, "Accounting")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("test role")
+    edit_iframe.locator("#id_name").press("Tab")
+    edit_iframe.get_by_role("searchbox").fill("us")
+    edit_iframe.get_by_role("option", name="User Test -").click()
+    check_feature(edit_iframe, "Configuration")
+    check_feature(edit_iframe, "Accounting")
+    save_modal(page, edit_iframe)
     expect_normalized(page, page.locator('[id="u2"]'), "Event (Configuration), Accounting (Accounting)")
 
     logout(page)

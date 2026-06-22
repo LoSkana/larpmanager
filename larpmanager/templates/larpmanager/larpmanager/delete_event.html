@@ -1,0 +1,55 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    Delete Event: {{ run.search }}
+{% endblock title %}
+{% block content %}
+    <h2>
+        Delete Event: <strong>{{ run.search }}</strong>
+    </h2>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <td>{{ run.search }}</td>
+        </tr>
+        <tr>
+            <th>UUID</th>
+            <td>{{ run.uuid }}</td>
+        </tr>
+        <tr>
+            <th>Event</th>
+            <td>{{ run.event.name }}</td>
+        </tr>
+        <tr>
+            <th>Association</th>
+            <td>{{ run.event.association.name }}</td>
+        </tr>
+        <tr>
+            <th>Number</th>
+            <td>{{ run.number }}</td>
+        </tr>
+        <tr>
+            <th>Start</th>
+            <td>{{ run.start|date:"Y-m-d"|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>End</th>
+            <td>{{ run.end|date:"Y-m-d"|default:"-" }}</td>
+        </tr>
+        <tr>
+            <th>Registrations</th>
+            <td>{{ registration_count }}</td>
+        </tr>
+    </table>
+    <hr />
+    <p>
+        <strong>This action is irreversible.</strong> All data for this run will be permanently deleted.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit"
+                class="btn btn-danger"
+                onclick="return confirm('Permanently delete {{ run.search }}?')">Delete event</button>
+        <a href="{% url 'lm_list' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+{% endblock content %}

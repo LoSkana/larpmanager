@@ -134,34 +134,36 @@ msgstr ""
 msgid "Tot"
 msgstr ""
 
-msgid "Manage expense items for contributors"
+msgid ""
+"Track your personal expense reimbursement requests submitted for this event"
 msgstr ""
 
 msgid "Expenses collaborators"
 msgstr ""
 
-msgid "Manage expenses for contributors"
+msgid ""
+"Review and approve expense reimbursement requests submitted by collaborators "
+"for this event"
 msgstr ""
 
-msgid "Manage"
+msgid "Manage token assignments issued to participants for this event"
 msgstr ""
 
-msgid "assignments"
-msgstr ""
-
-msgid "Manage credit assignments"
+msgid "Manage credit assignments issued to participants for this event"
 msgstr ""
 
 msgid "Payments"
 msgstr ""
 
-msgid "Manage payment items"
+msgid ""
+"Track all member payments across events, review amounts and statuses, and "
+"confirm pending registration invoices"
 msgstr ""
 
-msgid "Manage expense items incurred"
+msgid "Manage outgoing payments linked to events"
 msgstr ""
 
-msgid "Manage event revenue other than participants' registration fees"
+msgid "Manage incoming revenue linked to events"
 msgstr ""
 
 msgid "Donations"
@@ -173,10 +175,20 @@ msgstr ""
 msgid "Invoices"
 msgstr ""
 
-msgid "Manage invoices"
+msgid ""
+"Browse all payment invoices and confirm submitted ones to update their status"
+msgstr ""
+
+msgid "Manage all credit assignments issued to members across events"
 msgstr ""
 
 msgid "Assignment"
+msgstr ""
+
+msgid "Manage all token assignments issued to members across events"
+msgstr ""
+
+msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
 
 msgid "Collections"
@@ -185,7 +197,9 @@ msgstr ""
 msgid "A member must be selected to mark the collection as paid"
 msgstr ""
 
-msgid "Manage discounts"
+msgid ""
+"Manage discounts configured for this event, including type, value, and "
+"redemption codes"
 msgstr ""
 
 msgid "Indicates the sessions for which the discount is available"
@@ -217,7 +231,9 @@ msgstr ""
 msgid "Payment Methods"
 msgstr ""
 
-msgid "Manage payment methods"
+msgid ""
+"Enable or disable payment methods available at checkout, and configure "
+"credentials for each active payment gateway"
 msgstr ""
 
 msgid "Description of this payment method to be displayed to the user"
@@ -246,13 +262,13 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-msgid "Manage main organization settings"
+msgid "Edit the core settings for your organization"
 msgstr ""
 
 msgid "Texts"
 msgstr ""
 
-msgid "Manage organization-specific texts"
+msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 
 msgid "Added at the top of the user profile page"
@@ -303,20 +319,29 @@ msgid "Translations"
 msgstr ""
 
 msgid ""
-"Manage organization-specific translation overrides for customizing "
-"terminology and text"
+"Manage custom translation overrides that replace default interface strings "
+"for this organization"
 msgstr ""
 
 msgid "Roles"
 msgstr ""
 
-msgid "Manage association roles"
+msgid ""
+"Manage organization roles, assign members, and configure the permissions "
+"granted to each role"
+msgstr ""
+
+msgid ""
+"If you don't find an user, you can save the role, and then invite them "
+"clicking on"
 msgstr ""
 
 msgid "Appearance"
 msgstr ""
 
-msgid "Manage appearance settings and presentation of the organization"
+msgid ""
+"Customize the visual appearance of your organization by selecting a theme, "
+"colors, font, background"
 msgstr ""
 
 msgid "Theme"
@@ -330,15 +355,15 @@ msgstr ""
 msgid "Features"
 msgstr ""
 
-msgid ""
-"Manage features activated for the organization and all its events (click on "
-"a feature to show its description)"
+msgid "Enable or disable features for your organization and all its events"
 msgstr ""
 
 msgid "Configuration"
 msgstr ""
 
-msgid "Manage configuration of activated features"
+msgid ""
+"Fine-tune the behavior of each activated feature by adjusting its "
+"configuration options"
 msgstr ""
 
 msgid "Interface"
@@ -865,7 +890,8 @@ msgid "Quick Setup"
 msgstr ""
 
 msgid ""
-"You are choosing the most common features to activate for your organization"
+"Select which common features to activate for your organization to get "
+"started quickly"
 msgstr ""
 
 msgid ""
@@ -926,7 +952,11 @@ msgstr ""
 msgid "Personal preferences"
 msgstr ""
 
-msgid "Manage your personal interface preferences"
+msgid ""
+"Set your personal theme, notification digest mode, and interface version"
+msgstr ""
+
+msgid "these settings override the organization defaults for your account only"
 msgstr ""
 
 msgid "Personal theme preference, overrides the event and organization theme."
@@ -994,7 +1024,7 @@ msgstr ""
 msgid "Select only one primary faction"
 msgstr ""
 
-msgid "Manage characters"
+msgid "Manage characters of the event"
 msgstr ""
 
 msgid "Characters"
@@ -1028,13 +1058,13 @@ msgstr ""
 msgid "Show available deliveries"
 msgstr ""
 
-msgid "Manage form questions for writing elements"
+msgid "Manage the questions displayed in the character writing form"
 msgstr ""
 
 msgid "Sheet"
 msgstr ""
 
-msgid "Manage options in form questions for writing elements"
+msgid "Manage the selectable options for a character form question"
 msgstr ""
 
 msgid "Writing options"
@@ -1058,18 +1088,23 @@ msgstr ""
 msgid "Event"
 msgstr ""
 
-msgid "Manage event settings"
+msgid "Edit the basic settings of this event"
 msgstr ""
 
 msgid "Event features"
 msgstr ""
 
 msgid ""
-"Manage features activated for this event and all its runs (click on a "
-"feature to show its description)"
+"Enable or disable features for this event and all its runs; click a feature "
+"name to read its description"
 msgstr ""
 
 msgid "Event Configuration"
+msgstr ""
+
+msgid ""
+"View and adjust configuration options for each feature activated on this "
+"event"
 msgstr ""
 
 msgid "Display"
@@ -1699,7 +1734,7 @@ msgstr ""
 msgid "Event Appearance"
 msgstr ""
 
-msgid "Manage appearance and presentation of the event"
+msgid "Customize the visual appearance of the event"
 msgstr ""
 
 msgid ""
@@ -1710,7 +1745,7 @@ msgstr ""
 msgid "Event Texts"
 msgstr ""
 
-msgid "Manage event texts"
+msgid "Manage custom text entries used across different sections of this event"
 msgstr ""
 
 msgid "Text show at the start of all character sheets"
@@ -1741,13 +1776,15 @@ msgid ""
 "Content of mail notifying participants of their character in review status"
 msgstr ""
 
-msgid "Manage event access roles"
+msgid ""
+"Manage organizer roles and assign permissions to staff members for this event"
 msgstr ""
 
 msgid "Event Navigation"
 msgstr ""
 
-msgid "Manage event navigation buttons"
+msgid ""
+"Manage custom navigation buttons displayed to participants for this event"
 msgstr ""
 
 msgid "Icon"
@@ -1759,10 +1796,11 @@ msgstr ""
 msgid "Select the event of this new session"
 msgstr ""
 
-msgid "Manage new session for an existing event"
+msgid "Create a new session for an existing event"
 msgstr ""
 
-msgid "Manage date settings for this event"
+msgid ""
+"Edit the dates, status, and registration settings for this event session"
 msgstr ""
 
 msgid "Not visible to users"
@@ -1880,10 +1918,14 @@ msgstr ""
 msgid "Event Template"
 msgstr ""
 
-msgid "Manage template features (click on a feature to show its description)"
+msgid ""
+"Manage event templates used as the basis for new events, including their "
+"roles and configuration"
 msgstr ""
 
-msgid "Select the features you want to activate for this event"
+msgid ""
+"Quickly enable or disable key features for this event using a simplified "
+"checklist"
 msgstr ""
 
 msgid "Do you want to manage characters assigned to registered participants"
@@ -2014,7 +2056,9 @@ msgstr ""
 msgid "Enter a valid number"
 msgstr ""
 
-msgid "Manage event metadata for external promotion"
+msgid ""
+"Fill in the public metadata used to promote this event externally, including "
+"language, type, setting, location, and style"
 msgstr ""
 
 msgid "Informations"
@@ -2091,10 +2135,10 @@ msgstr ""
 msgid "Experience System"
 msgstr ""
 
-msgid "Manage experience point systems"
+msgid "Manage the experience point systems available for this event"
 msgstr ""
 
-msgid "Manage experience point deliveries"
+msgid "Manage experience point deliveries awarded to characters"
 msgstr ""
 
 msgid "Load from event"
@@ -2108,13 +2152,17 @@ msgstr ""
 msgid "Ability Template"
 msgstr ""
 
-msgid "This page allows you to add or edit an ability template"
+msgid ""
+"Define reusable ability templates that can be assigned to individual "
+"abilities"
 msgstr ""
 
 msgid "Ability"
 msgstr ""
 
-msgid "Manage experience point abilities"
+msgid ""
+"Manage the abilities participants can purchase with experience points for "
+"this event"
 msgstr ""
 
 msgid "Show available options"
@@ -2126,18 +2174,20 @@ msgstr ""
 msgid "Ability type"
 msgstr ""
 
-msgid "Manage experience point ability types"
+msgid ""
+"Organize purchasable abilities into categories by managing ability types"
 msgstr ""
 
 msgid "Rule"
 msgstr ""
 
-msgid "Manage rules for computed fields"
+msgid ""
+"Define rules that determine how abilities modify computed character fields"
 msgstr ""
 
 msgid ""
-"Manage ability modifiers. Modifiers are triggered only if all prerequisites "
-"and requirements are met. If multiple modifiers apply, only the first is used"
+"Configure cost modifiers that adjust ability prices based on prerequisites "
+"or character fields"
 msgstr ""
 
 msgid "click on the icon to open the tutorial"
@@ -2146,13 +2196,15 @@ msgstr ""
 msgid "Inventories"
 msgstr ""
 
-msgid "This page allows you to add or edit a character inventory"
+msgid "Manage character inventories and view their contents for this event"
 msgstr ""
 
 msgid "Pool type"
 msgstr ""
 
-msgid "This page allows you to add or edit a ci pool type"
+msgid ""
+"Define the resource pool types available in character inventories for this "
+"event"
 msgstr ""
 
 msgid "The name of our hobby, four letters"
@@ -2233,16 +2285,24 @@ msgstr ""
 msgid "Volounteer data"
 msgstr ""
 
-msgid "Manage volunteer entries"
+msgid ""
+"Manage the volunteer registry: view, add, and edit volunteer records, and "
+"print an official PDF copy"
 msgstr ""
 
-msgid "Manage member profiles"
+msgid ""
+"View and edit a member's profile, including personal data, membership "
+"documents, and links to their registrations and accounting"
 msgstr ""
 
-msgid "Manage member membership status"
+msgid ""
+"Manage association memberships: review applicants, approve or reject "
+"requests, and track renewal status for the current year"
 msgstr ""
 
-msgid "Manage membership fee invoice upload"
+msgid ""
+"Upload a membership fee invoice for a member to record and confirm their "
+"payment for the current year"
 msgstr ""
 
 msgid "Upload membership fee"
@@ -2257,12 +2317,12 @@ msgstr ""
 msgid "Membership fee already existing for this user and for this year"
 msgstr ""
 
-msgid "Manage membership document upload"
+msgid "Upload membership documents to complete a member's approval"
 msgstr ""
 
 msgid ""
-"Please note that the user must have confirmed their consent to share their "
-"data with your organization"
+"The member must have already confirmed their consent to share personal data "
+"with your organization"
 msgstr ""
 
 msgid "Upload membership document"
@@ -2286,12 +2346,14 @@ msgstr ""
 msgid "There is already a member with this number"
 msgstr ""
 
-msgid "Manage badges and user assignments"
+msgid ""
+"Manage association badges: view, create, edit, and track how many members "
+"each badge has been assigned to"
 msgstr ""
 
 msgid ""
-"Select the personal data fields to be requested from participants during "
-"registration"
+"Configure which personal data fields are collected during registration, "
+"setting each field as mandatory, optional, or absent"
 msgstr ""
 
 msgid "6-digit code from your authenticator app"
@@ -2315,41 +2377,48 @@ msgstr ""
 msgid "Seconds to wait between each email batch"
 msgstr ""
 
-msgid "Manage participant questions"
+msgid "Manage participant questions by answering or closing each one"
 msgstr ""
 
 msgid "Participant questions"
 msgstr ""
 
-msgid "Manage albums"
+msgid "Manage photo and video albums uploaded for this event"
 msgstr ""
 
 msgid "Album"
 msgstr ""
 
-msgid "Manage reported problems"
+msgid "Manage problems reported by contributors during this event"
 msgstr ""
 
 msgid "Problems"
 msgstr ""
 
-msgid "Manage URL shorteners"
+msgid ""
+"Manage URL shorteners that redirect custom short codes to external links for "
+"sharing"
 msgstr ""
 
 msgid "Shorten URL"
 msgstr ""
 
-msgid "Manage competencies"
+msgid ""
+"Manage the organization's competences, defining skill areas that "
+"contributors can self-assess"
 msgstr ""
 
 msgid ""
-"Manage content that should be accessed only one time with a specific token"
+"Manage secure video and audio content protected by one-time access tokens "
+"for this event"
 msgstr ""
 
 msgid "One-time content"
 msgstr ""
 
-msgid "Manage tokens to access the one-time content"
+msgid ""
+"View all single-use access tokens generated for one-time content in this "
+"event"
 msgstr ""
 
 msgid "One-time token"
@@ -2385,7 +2454,9 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-msgid "Manage event signups"
+msgid ""
+"Manage all active participant registrations, including character "
+"assignments, ticket types, and payment status"
 msgstr ""
 
 msgid "Registration"
@@ -2412,16 +2483,22 @@ msgstr ""
 msgid "User already has a registration for this event!"
 msgstr ""
 
-msgid "Manage ticket types for participant registration"
+msgid ""
+"Define the ticket types participants can select when registering, including "
+"pricing and tiers"
 msgstr ""
 
-msgid "Manage signup form sections"
+msgid ""
+"Organize registration form questions into named sections to group related "
+"fields together"
 msgstr ""
 
 msgid "Form section"
 msgstr ""
 
-msgid "Manage signup form questions"
+msgid ""
+"Manage the custom questions participants must answer when registering for "
+"this event"
 msgstr ""
 
 msgid "Registration form"
@@ -2433,13 +2510,16 @@ msgstr ""
 msgid "Show available tickets"
 msgstr ""
 
-msgid "Manage signup form question options"
+msgid ""
+"Manage the selectable options available for a registration form question"
 msgstr ""
 
 msgid "Registration options"
 msgstr ""
 
-msgid "Manage dynamic payment installments for participants"
+msgid ""
+"Set up installment quota plans that divide ticket prices into equal portions "
+"for participants to pay over time"
 msgstr ""
 
 msgid "Dynamic rates"
@@ -2455,7 +2535,9 @@ msgstr ""
 msgid "A quota with %(quotas)d payments already exists for this event"
 msgstr ""
 
-msgid "Manage fixed payment installments for participants"
+msgid ""
+"Define installment schedules that split ticket costs into multiple payment "
+"deadlines for participants"
 msgstr ""
 
 msgid "Fixed instalments"
@@ -2470,7 +2552,9 @@ msgid ""
 "ticket(s): %(tickets)s"
 msgstr ""
 
-msgid "Manage registration surcharges"
+msgid ""
+"Configure date-based surcharges that add extra fees to registrations after a "
+"specified deadline"
 msgstr ""
 
 msgid "Select the event you wish to pre-register for"
@@ -2492,7 +2576,8 @@ msgstr ""
 msgid "Select the new event"
 msgstr ""
 
-msgid "Manage warehouse items"
+msgid ""
+"Manage all warehouse items, including their containers, tags, and quantities"
 msgstr ""
 
 msgid "Warehouse items"
@@ -2501,13 +2586,14 @@ msgstr ""
 msgid "Show available tags"
 msgstr ""
 
-msgid "Manage warehouse containers"
+msgid ""
+"Manage the physical containers used to organize and store warehouse items"
 msgstr ""
 
 msgid "Warehouse containers"
 msgstr ""
 
-msgid "Manage warehouse item tags"
+msgid "Manage tags used to categorize and group warehouse items"
 msgstr ""
 
 msgid "Warehouse tags"
@@ -2519,25 +2605,30 @@ msgstr ""
 msgid "Show available items"
 msgstr ""
 
-msgid "Manage warehouse item movements, loans, and repairs"
+msgid "Track the assignment of warehouse items to event areas for each run"
 msgstr ""
 
 msgid "Warehouse movements"
 msgstr ""
 
-msgid "Manage event areas"
+msgid "Manage the event areas where warehouse items will be deployed"
 msgstr ""
 
 msgid "Event area"
 msgstr ""
 
-msgid "Manage warehouse item assignments to event areas"
+msgid ""
+"Select and assign warehouse items to this area, setting quantities and notes "
+"for each"
 msgstr ""
 
 msgid "Warehouse assignments"
 msgstr ""
 
 msgid "An assignment for this item and area already exists"
+msgstr ""
+
+msgid "available"
 msgstr ""
 
 msgid "Character Relationship"
@@ -3422,6 +3513,9 @@ msgstr ""
 msgid ""
 "Indicate whether the discount can be used only on new enrollment, or whether "
 "it can be used by already registered participants."
+msgstr ""
+
+msgid "This discount code is already used in one or more of the selected runs"
 msgstr ""
 
 msgid "Open"
@@ -4776,12 +4870,6 @@ msgid ""
 "Optional - Indicates whether the ticket can be gifted to other participants"
 msgstr ""
 
-msgid "Order"
-msgstr ""
-
-msgid "Display order"
-msgstr ""
-
 msgid "Description - will be displayed at the beginning of the section"
 msgstr ""
 
@@ -4797,9 +4885,6 @@ msgid ""
 msgstr ""
 
 msgid "Extra price applied when this quota is active"
-msgstr ""
-
-msgid "Payment order"
 msgstr ""
 
 msgid ""
@@ -4986,6 +5071,30 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
+msgid "Click or drag photo here"
+msgstr ""
+
+msgid "maximum"
+msgstr ""
+
+msgid "Uploading"
+msgstr ""
+
+msgid "Uploading image, please wait"
+msgstr ""
+
+msgid "Rotate left"
+msgstr ""
+
+msgid "Rotate right"
+msgstr ""
+
+msgid "Error uploading image"
+msgstr ""
+
+msgid "Please retry or use a smaller file"
+msgstr ""
+
 msgid "Coming soon"
 msgstr ""
 
@@ -5068,12 +5177,6 @@ msgid "Need help"
 msgstr ""
 
 msgid "Confirm"
-msgstr ""
-
-msgid "Saved successfully"
-msgstr ""
-
-msgid "Closing"
 msgstr ""
 
 msgid "What would you like to do?"
@@ -5172,6 +5275,9 @@ msgid "Attention! The form contains errors in the fields"
 msgstr ""
 
 msgid "These fields are mandatory"
+msgstr ""
+
+msgid "Drag to reorder"
 msgstr ""
 
 msgid "Translate"
@@ -5306,9 +5412,6 @@ msgid ""
 "either Required, Optional or Hidden"
 msgstr ""
 
-msgid "If you don't find an user, invite them to the role"
-msgstr ""
-
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""
 
@@ -5348,6 +5451,15 @@ msgid "The tax code matches"
 msgstr ""
 
 msgid "Option saved successfully"
+msgstr ""
+
+msgid "Closing"
+msgstr ""
+
+msgid "Add option"
+msgstr ""
+
+msgid "Maximum"
 msgstr ""
 
 msgid "An error occurred while reordering"
@@ -5495,9 +5607,6 @@ msgid "complete sheet"
 msgstr ""
 
 msgid "printable sheet"
-msgstr ""
-
-msgid "relationships"
 msgstr ""
 
 msgid "This character represents the true secret identity of another character"
@@ -5715,33 +5824,7 @@ msgstr ""
 msgid "Character profile"
 msgstr ""
 
-msgid ""
-"Upload a photo of yourself associated with your character specifically for "
-"this event"
-msgstr ""
-
-msgid "Change photo"
-msgstr ""
-
-msgid "Rotate left"
-msgstr ""
-
-msgid "Rotate right"
-msgstr ""
-
-msgid "Select the new photo to upload"
-msgstr ""
-
-msgid "Uploading"
-msgstr ""
-
-msgid "Uploading image, please wait"
-msgstr ""
-
-msgid "Error uploading image"
-msgstr ""
-
-msgid "Please retry or use a smaller file"
+msgid "Upload a photo of your character specifically for this event"
 msgstr ""
 
 msgid "Your characters"
@@ -5871,9 +5954,6 @@ msgid ""
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
-msgstr ""
-
-msgid "Maximum"
 msgstr ""
 
 msgid "Question"
@@ -6144,9 +6224,7 @@ msgstr ""
 msgid "Organization"
 msgstr ""
 
-msgid ""
-"This page shows the total membership accounts, dues, donations, expenses, "
-"the overall cash and individual event budget"
+msgid "Review the organization's overall financial position"
 msgstr ""
 
 msgid ""
@@ -6189,7 +6267,9 @@ msgstr ""
 msgid "Accounting - History"
 msgstr ""
 
-msgid "This page shows the historical accounting of the organization"
+msgid ""
+"Track the historical evolution of the organization's global and bank "
+"balances over time as interactive charts"
 msgstr ""
 
 msgid ""
@@ -6204,15 +6284,13 @@ msgid ""
 msgstr ""
 
 msgid ""
-"This page prepares the cash balance already formatted for annual declaration"
-msgstr ""
-
-msgid "This page shows the collections opened by participants"
+"Review the annual balance sheet with income and expenditure categories "
+"formatted for the yearly fiscal declaration"
 msgstr ""
 
 msgid ""
-"You can update them by indicating the recipient and assigning the "
-"contributed money"
+"Manage participant-initiated collections by assigning recipients and "
+"tracking contributed amounts"
 msgstr ""
 
 msgid "Show collections"
@@ -6224,21 +6302,15 @@ msgstr ""
 msgid "Organizer"
 msgstr ""
 
-msgid "This page summarises the assignments of"
-msgstr ""
-
-msgid "This page shows all donations recorded in the system"
-msgstr ""
-
 msgid ""
-"This page shows all expenses incurred by collaborators, recorded in the "
-"system"
+"Track all donations received by the organization and confirm pending "
+"donation invoices"
 msgstr ""
 
 msgid "Movements"
 msgstr ""
 
-msgid "This page presents the complete list of financial movements"
+msgid "Browse all financial movements for a selected year"
 msgstr ""
 
 msgid "Size"
@@ -6253,25 +6325,9 @@ msgstr ""
 msgid "negatives"
 msgstr ""
 
-msgid "This page summarizes all revenue items recorded in the system"
-msgstr ""
-
-msgid "This page shows all invoices registered in the system"
-msgstr ""
-
-msgid "This page shows all expense items recorded in the system"
-msgstr ""
-
-msgid "This page shows all payment items registered in the system"
-msgstr ""
-
-msgid "This page lists all reimbursement claims submitted by members"
-msgstr ""
-
-msgid "you can review, edit, and mark them as assigned"
-msgstr ""
-
-msgid "This page summarises the system entries of"
+msgid ""
+"Review and process member refund requests, tracking their status and marking "
+"them as paid once completed"
 msgstr ""
 
 msgid "Activation"
@@ -6336,19 +6392,14 @@ msgid "Competences"
 msgstr ""
 
 msgid ""
-"This page shows in detail, for each expertise, the users who have indicated "
-"it"
+"View all members who have self-assessed this competence, along with their "
+"experience level and event history"
 msgstr ""
 
 msgid "Experience"
 msgstr ""
 
 msgid "Number events"
-msgstr ""
-
-msgid ""
-"This page shows global competencies, skill areas in which contributors can "
-"score themselves"
 msgstr ""
 
 msgid "Marked"
@@ -6358,30 +6409,35 @@ msgid "Competences events"
 msgstr ""
 
 msgid ""
-"This page shows for each event, the collaborators marked with which expertise"
+"Browse each event's staff members and the competences they bring to the team"
 msgstr ""
 
 msgid ""
-"This page shows in the detail of an event, the list of expertises covered by "
-"the contributors"
+"Review the full breakdown of competences covered by each contributor for "
+"this event"
 msgstr ""
 
 msgid "Competences member"
 msgstr ""
 
 msgid ""
-"This page shows in detail a contributor's skills for to which they marked"
-msgstr ""
-
-msgid "This page shows in detail the skills marked by a contributor"
+"Browse all contributors across the organization and track which competences "
+"and events they are associated with"
 msgstr ""
 
 msgid ""
-"This page shows the deadlines of upcoming organization events, the "
-"activities to be monitored, and the list of users to be solicited"
+"View the full list of competences self-assessed by this contributor, "
+"including experience levels and notes"
 msgstr ""
 
-msgid "This page shows all events; you can edit them, or create new ones"
+msgid ""
+"Track upcoming event deadlines and identify members who need to be followed "
+"up"
+msgstr ""
+
+msgid ""
+"Manage all organization events, view their status and registration counts, "
+"and create new ones"
 msgstr ""
 
 msgid "New event"
@@ -6400,8 +6456,8 @@ msgid "Copy link to clipboard"
 msgstr ""
 
 msgid ""
-"This page shows larpmanager usage costs, total and divided by individual "
-"event"
+"Review LarpManager usage costs broken down by event, including subscription "
+"plans and registration fees"
 msgstr ""
 
 msgid "Subscription"
@@ -6413,13 +6469,15 @@ msgstr ""
 msgid "Logs"
 msgstr ""
 
-msgid "This page shows all log entries for the organization"
+msgid "View log entries of all actions performed within the organization"
 msgstr ""
 
 msgid "Pre registrations"
 msgstr ""
 
-msgid "This page shows the total number of pre-registrations for each event"
+msgid ""
+"Track pre-registration counts for all events, broken down by preference "
+"order or total"
 msgstr ""
 
 msgid "First"
@@ -6437,28 +6495,18 @@ msgstr ""
 msgid "Fifth"
 msgstr ""
 
-msgid ""
-"This page summarises the roles to be assigned in order to use the functions "
-"concerning the organisation"
+msgid "Invite"
 msgstr ""
 
 msgid "Pending invites"
 msgstr ""
 
-msgid "Invite"
-msgstr ""
-
-msgid ""
-"This page shows all event templates; you can edit them, or create new ones"
-msgstr ""
-
 msgid "Add"
 msgstr ""
 
-msgid "This page summarizes the organizations's custom texts"
-msgstr ""
-
-msgid "This page summarizes the organization's custom translations"
+msgid ""
+"Manage custom texts used across the organization, such as emails and "
+"registration pages, per language"
 msgstr ""
 
 msgid "Translation"
@@ -6467,7 +6515,8 @@ msgstr ""
 msgid "Trash"
 msgstr ""
 
-msgid "This page shows deleted objects to restore"
+msgid ""
+"Review soft-deleted records and restore any item that was removed by mistake"
 msgstr ""
 
 msgid "Deleted on"
@@ -6479,9 +6528,6 @@ msgstr ""
 msgid "Url Shortner"
 msgstr ""
 
-msgid "This page shows the url shortners"
-msgstr ""
-
 msgid "External link"
 msgstr ""
 
@@ -6491,18 +6537,14 @@ msgstr ""
 msgid "Archive mail"
 msgstr ""
 
-msgid "This page shows all emails, both queued and sent"
+msgid ""
+"Browse all emails sent by the system, with recipient, subject, and delivery "
+"status"
 msgstr ""
 
 msgid ""
-"This page shows membership badges. You can edit them, assign them, create "
-"new ones"
-msgstr ""
-
-msgid ""
-"This page summarises the list of members, formatted ready to be sent to the "
-"insurance company. It only displays members who have renewed their "
-"membership in this calendar year, in order of renewal"
+"View the yearly enrollment list of members with card numbers and renewal "
+"dates"
 msgstr ""
 
 msgid "Residence"
@@ -6514,9 +6556,7 @@ msgstr ""
 msgid "Last membership date"
 msgstr ""
 
-msgid ""
-"This page shows all information about the individual member available in the "
-"system"
+msgid "Order"
 msgstr ""
 
 msgid "View registrations"
@@ -6531,13 +6571,17 @@ msgstr ""
 msgid "Personal data"
 msgstr ""
 
-msgid "This page shows all accounting information for the member"
+msgid ""
+"Review a member's full accounting history, including payments, transactions, "
+"balances, and applied discounts"
 msgstr ""
 
 msgid "Detail"
 msgstr ""
 
-msgid "This page shows all event registrations for the member"
+msgid ""
+"Track a member's full event registration history with payment status for "
+"each run"
 msgstr ""
 
 msgid "Given"
@@ -6552,11 +6596,6 @@ msgstr ""
 msgid "Members list"
 msgstr ""
 
-msgid ""
-"This page shows the list of members, divided by type: applicants, approved, "
-"renewed for the current year"
-msgstr ""
-
 msgid "Total members"
 msgstr ""
 
@@ -6569,7 +6608,9 @@ msgstr ""
 msgid "Member Data Checks"
 msgstr ""
 
-msgid "This page performs checks on members' data"
+msgid ""
+"Review data inconsistencies across member records, including fiscal code "
+"validation errors"
 msgstr ""
 
 msgid "Tax code check"
@@ -6585,8 +6626,8 @@ msgid "Membership requests"
 msgstr ""
 
 msgid ""
-"This page displays the application for membership in the organization. You "
-"can accept or reject the application"
+"Evaluate a membership application and approve or reject it, with duplicate "
+"detection and document review"
 msgstr ""
 
 msgid "Warning: there is already an approved member with the same name"
@@ -6596,8 +6637,8 @@ msgid "Request for"
 msgstr ""
 
 msgid ""
-"This page shows email lists of users, divided by their expressed preferences "
-"regarding newsletter communications"
+"View newsletter subscriber email lists segmented by language and "
+"communication preference"
 msgstr ""
 
 msgid "All comunications"
@@ -6610,9 +6651,8 @@ msgid "Questions"
 msgstr ""
 
 msgid ""
-"This page shows the questions submitted by users, divided by the events they "
-"refer to. You can answer the question or close it if requires no further "
-"action"
+"Manage help questions submitted by members: answer open requests or close "
+"those requiring no further action"
 msgstr ""
 
 msgid "Show questions already answered"
@@ -6627,8 +6667,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"This page displays the conversation with a participant regarding their "
-"expressed need"
+"Answer a participant's help request, and review the full conversation history"
 msgstr ""
 
 msgid "Give a new answer"
@@ -6640,13 +6679,15 @@ msgstr ""
 msgid "Read mail"
 msgstr ""
 
-msgid "This page shows an email sent by the system"
+msgid "View the full content of an archived email sent by the system"
 msgstr ""
 
 msgid "Registry"
 msgstr ""
 
-msgid "This page summarises the list of members as a registry"
+msgid ""
+"Browse the official member registry with card numbers and personal data for "
+"all association members"
 msgstr ""
 
 msgid "Card number"
@@ -6658,7 +6699,7 @@ msgstr ""
 msgid "Send emails"
 msgstr ""
 
-msgid "From this page you can email any list of recipients"
+msgid "Send a bulk email to event's participants"
 msgstr ""
 
 msgid "Are you really sure"
@@ -6667,16 +6708,15 @@ msgstr ""
 msgid "Volunteer Registry"
 msgstr ""
 
-msgid "This page summarises the organization's volunteers"
-msgstr ""
-
 msgid "Print registry"
 msgstr ""
 
 msgid "Vote"
 msgstr ""
 
-msgid "This page shows the settings available for the membership voting"
+msgid ""
+"Track candidate vote counts and view the list of members who have already "
+"voted in the current year"
 msgstr ""
 
 msgid "Collected votes"
@@ -6689,8 +6729,8 @@ msgid "Payment Verification"
 msgstr ""
 
 msgid ""
-"Manage payment verification. Upload payments from your verified payment "
-"system to match them with registrations in the system"
+"Verify pending payments by uploading a CSV from your bank to match "
+"transactions against registrations"
 msgstr ""
 
 msgid "Upload verified payments"
@@ -6744,13 +6784,7 @@ msgstr ""
 msgid "The organization is running the latest version"
 msgstr ""
 
-msgid "This page shows the warehouse containers"
-msgstr ""
-
 msgid "Position"
-msgstr ""
-
-msgid "This page shows the warehouse items"
 msgstr ""
 
 msgid "Container"
@@ -6759,16 +6793,10 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-msgid "This page shows the assignment of warehouse items to event area"
-msgstr ""
-
 msgid "Item"
 msgstr ""
 
 msgid "Notes"
-msgstr ""
-
-msgid "This page shows the warehouse tags"
 msgstr ""
 
 msgid "leaderboard"
@@ -7657,7 +7685,7 @@ msgid ""
 "You can check and edit the list of organizations that can access your data on"
 msgstr ""
 
-msgid "Current profile image"
+msgid "Profile image"
 msgstr ""
 
 msgid "Upload your profile photo"
@@ -7735,14 +7763,16 @@ msgid "Event accounting"
 msgstr ""
 
 msgid ""
-"This page shows the accounting status of the event, divided into the various "
-"expense types"
+"View a full financial overview of the event, broken down by revenue, costs, "
+"and balance"
 msgstr ""
 
 msgid "Refund for"
 msgstr ""
 
-msgid "Manage refund for a participant who has cancelled"
+msgid ""
+"Process a token or credit refund for a participant who has cancelled their "
+"registration"
 msgstr ""
 
 msgid "Registration fee"
@@ -7790,25 +7820,13 @@ msgstr ""
 msgid "Cancellations"
 msgstr ""
 
-msgid "This page shows cancelled enrollments"
+msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 
-msgid "Show cancellations"
-msgstr ""
-
-msgid "no payment"
-msgstr ""
-
-msgid "Days"
+msgid "Days before event"
 msgstr ""
 
 msgid "Cancellation date"
-msgstr ""
-
-msgid "This page summarises the assignments in this event of"
-msgstr ""
-
-msgid "This page shows the discounts activated for this event"
 msgstr ""
 
 msgid "Max uses"
@@ -7817,45 +7835,31 @@ msgstr ""
 msgid "Session active"
 msgstr ""
 
-msgid "This page provides a summary of all expenses submitted by collaborators"
-msgstr ""
-
-msgid "once approved, the corresponding amounts are assigned as "
-msgstr ""
-
-msgid "This page shows your personal spending items"
-msgstr ""
-
 msgid "New refund request"
 msgstr ""
 
-msgid "Manage personal expense submission"
+msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 
-msgid "This page shows all inflows received for this event"
+msgid "Track all external income entries recorded for this event"
 msgstr ""
 
-msgid "Manage manual payment approval"
+msgid "Review and confirm submitted payment invoices awaiting manual approval"
 msgstr ""
 
 msgid "Net"
 msgstr ""
 
-msgid ""
-"This page shows all expenses incurred directly by the organization "
-"concerning this event"
+msgid "Track all personal expenses directly incurred for this event"
 msgstr ""
 
-msgid "This page shows all payments received for this event"
-msgstr ""
-
-msgid "This page shows the uploaded photo albums"
+msgid "Manage all payments received from participants for this event"
 msgstr ""
 
 msgid "Master"
 msgstr ""
 
-msgid "Manage photo album upload"
+msgid "Upload a zip file of photos and videos to populate this album"
 msgstr ""
 
 msgid "Upload of photo and video"
@@ -7869,15 +7873,12 @@ msgstr ""
 msgid "Event navigation"
 msgstr ""
 
-msgid "This page summarises the customised navigation buttons of the event"
-msgstr ""
-
 msgid "Tooltip"
 msgstr ""
 
 msgid ""
-"This page shows the casting preferences expressed by participants, and "
-"allows them to be assigned through an optimization algorithm"
+"Assign participants to roles by reviewing their preferences and running the "
+"casting optimization algorithm"
 msgstr ""
 
 msgid "Casting management for"
@@ -7932,9 +7933,6 @@ msgstr ""
 msgid "Email list"
 msgstr ""
 
-msgid "This page summarises the available questions of the character form"
-msgstr ""
-
 msgid "Configure form"
 msgstr ""
 
@@ -7944,7 +7942,8 @@ msgstr ""
 msgid "Pdf"
 msgstr ""
 
-msgid "This page shows the settings for PDF printing"
+msgid ""
+"Configure PDF template settings and preview or download character sheets"
 msgstr ""
 
 msgid "Gallery Pdf"
@@ -7957,6 +7956,9 @@ msgid "PDF Profiles"
 msgstr ""
 
 msgid "Bulk download"
+msgstr ""
+
+msgid "All printable sheets"
 msgstr ""
 
 msgid "Try the sheet generation"
@@ -7974,12 +7976,6 @@ msgstr ""
 msgid "Lightweight sheet (Test)"
 msgstr ""
 
-msgid "Relationships (Pdf)"
-msgstr ""
-
-msgid "Relationships (Test)"
-msgstr ""
-
 msgid "Current template"
 msgstr ""
 
@@ -7992,13 +7988,34 @@ msgstr ""
 msgid "Pdf bulk"
 msgstr ""
 
-msgid "This page allows you to select items to bulk download"
+msgid ""
+"Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
+msgstr ""
+
+msgid "Generating Bundle"
+msgstr ""
+
+msgid ""
+"Track the progress of the printable character sheet ZIP bundle being "
+"generated in the background"
+msgstr ""
+
+msgid "Bundle is ready"
+msgstr ""
+
+msgid "Back to PDF settings"
+msgstr ""
+
+msgid "Bundle generation in progress"
+msgstr ""
+
+msgid "This page will refresh automatically every 10 seconds"
+msgstr ""
+
+msgid "Please wait"
 msgstr ""
 
 msgid "Character Inventories"
-msgstr ""
-
-msgid "This page summarizes the character inventories"
 msgstr ""
 
 msgid "Inventory"
@@ -8040,16 +8057,15 @@ msgstr ""
 msgid "Character Inventory Pool Types"
 msgstr ""
 
-msgid "This page summarizes the types of pools that a character inventory has"
-msgstr ""
-
 msgid "Pool"
 msgstr ""
 
 msgid "Copy"
 msgstr ""
 
-msgid "Manage copying event settings from another event"
+msgid ""
+"Copy selected elements from another event into this event, overwriting "
+"existing data"
 msgstr ""
 
 msgid "Select which elements to copy, from which other event"
@@ -8058,23 +8074,13 @@ msgstr ""
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 
-msgid "This page shows the deadlines to be met for this event"
-msgstr ""
-
-msgid ""
-"This page summarizes the abilities that participants can purchase with "
-"experience points"
+msgid "View all deadlines that must be met for this event run"
 msgstr ""
 
 msgid "Cost"
 msgstr ""
 
 msgid "Ability Templates"
-msgstr ""
-
-msgid ""
-"This page summarizes the reusable ability templates that can be assigned to "
-"abilities"
 msgstr ""
 
 msgid "Template Name"
@@ -8086,22 +8092,7 @@ msgstr ""
 msgid "Ability types"
 msgstr ""
 
-msgid ""
-"This page summarizes the types of abilities that participants can purchase"
-msgstr ""
-
-msgid "This page summarizes xp delivery to characters"
-msgstr ""
-
-msgid ""
-"This page summarizes the modifiers that are applied to abilities based on "
-"other abilities, or character fields"
-msgstr ""
-
 msgid "New cost"
-msgstr ""
-
-msgid "This page summarizes the rules that are applied to the computed fields"
 msgstr ""
 
 msgid "Field"
@@ -8113,27 +8104,16 @@ msgstr ""
 msgid "Experience Systems"
 msgstr ""
 
-msgid "This page lists experience systems defined for this event"
+msgid "View all log entries recorded for this event"
 msgstr ""
 
-msgid "This page shows all log entries for this event"
-msgstr ""
-
-msgid "This page shows the event milestones"
-msgstr ""
-
-msgid "Completed milestones are hidden by default"
+msgid "Manage event milestones and track their deadlines and completion status"
 msgstr ""
 
 msgid "Show/hide completed milestones"
 msgstr ""
 
 msgid "Days remaining"
-msgstr ""
-
-msgid ""
-"This page shows the secure video/audio content with one-time access tokens "
-"for the event"
 msgstr ""
 
 msgid "File"
@@ -8143,12 +8123,6 @@ msgid "Content Type"
 msgstr ""
 
 msgid "Created"
-msgstr ""
-
-msgid "This page shows all access tokens for one-time content"
-msgstr ""
-
-msgid "Each token can only be used once"
 msgstr ""
 
 msgid "Access Link"
@@ -8172,26 +8146,23 @@ msgstr ""
 msgid "Copy URL"
 msgstr ""
 
-msgid ""
-"This page shows problems reported by contributors, for direct management "
-"during the event"
-msgstr ""
-
 msgid "Show closed"
 msgstr ""
 
 msgid "Rensponsable"
 msgstr ""
 
-msgid "Manage reading writing elements using the table search controls"
+msgid ""
+"Browse and search all writing elements for this event, including characters, "
+"plots, factions, and more"
 msgstr ""
 
 msgid "Read"
 msgstr ""
 
 msgid ""
-"This page shows active discounts on the participant, allows you to activate "
-"or deactivate them"
+"Manage discounts applied to a participant's registration by adding or "
+"removing available discount entries"
 msgstr ""
 
 msgid "Discounts active"
@@ -8200,14 +8171,7 @@ msgstr ""
 msgid "Discounts available"
 msgstr ""
 
-msgid ""
-"This page shows the available questions of the registration form of the event"
-msgstr ""
-
 msgid "Installments"
-msgstr ""
-
-msgid "This page shows the payment deadline settings for the event"
 msgstr ""
 
 msgid "Installment"
@@ -8219,7 +8183,9 @@ msgstr ""
 msgid "Deadline (date)"
 msgstr ""
 
-msgid "This page shows the information to perform the drawing of the lottery"
+msgid ""
+"Run the lottery draw to randomly select participants from lottery-tier "
+"registrations and upgrade them to confirmed tickets"
 msgstr ""
 
 msgid "The following registrations were drawn"
@@ -8242,7 +8208,9 @@ msgstr ""
 msgid "Perform extraction"
 msgstr ""
 
-msgid "This page shows the pre-signups for the event"
+msgid ""
+"Review pre-registered members and track which ones have not yet completed a "
+"full registration"
 msgstr ""
 
 msgid "Pre-registration link"
@@ -8255,9 +8223,6 @@ msgid "Pre registrations total"
 msgstr ""
 
 msgid "Joined"
-msgstr ""
-
-msgid "This page shows the quota options available for payment of the event"
 msgstr ""
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
@@ -8274,9 +8239,6 @@ msgid ""
 msgstr ""
 
 msgid "Available days"
-msgstr ""
-
-msgid "This page shows the signups of the event"
 msgstr ""
 
 msgid "Columns"
@@ -8321,6 +8283,9 @@ msgstr ""
 msgid "Owing"
 msgstr ""
 
+msgid "Manage"
+msgstr ""
+
 msgid "Amount of the next payment instalment required"
 msgstr ""
 
@@ -8358,18 +8323,7 @@ msgstr ""
 msgid "Registration sections"
 msgstr ""
 
-msgid "This page shows the sections of the event registration form"
-msgstr ""
-
 msgid "Surcharges"
-msgstr ""
-
-msgid "This page shows the registration surcharges"
-msgstr ""
-
-msgid ""
-"This page shows the different tickets with which participants can register "
-"for the event"
 msgstr ""
 
 msgid "Direct link"
@@ -8381,13 +8335,17 @@ msgstr ""
 msgid "Transfer registration"
 msgstr ""
 
-msgid "Transfer a registration from this event to another"
+msgid ""
+"Select a participant and a target event run to initiate a registration "
+"transfer"
 msgstr ""
 
 msgid "Transfer preview"
 msgstr ""
 
-msgid "Review the transfer before confirming"
+msgid ""
+"Review the ticket mapping and transfer details before confirming the move to "
+"the target run"
 msgstr ""
 
 msgid "Errors"
@@ -8478,18 +8436,12 @@ msgstr ""
 msgid "Confirm Restore"
 msgstr ""
 
-msgid ""
-"This page summarises the roles to be assigned in order to use the functions "
-"concerning the event"
-msgstr ""
-
 msgid "Event texts"
 msgstr ""
 
-msgid "This page summarises the customised texts of the event"
-msgstr ""
-
-msgid "Manage event translation"
+msgid ""
+"Edit event-specific translation overrides to customize terminology and "
+"displayed text"
 msgstr ""
 
 msgid "You can upload data directly from CSV file"
@@ -8566,8 +8518,8 @@ msgid "Proceed"
 msgstr ""
 
 msgid ""
-"This page shows the sensitive information of registered participants "
-"regarding diet"
+"Review dietary preferences submitted by registered participants, grouped "
+"with their assigned characters"
 msgstr ""
 
 msgid ""
@@ -8580,7 +8532,9 @@ msgid ""
 "them in anonymous form"
 msgstr ""
 
-msgid "This page shows the email lists of subscribers"
+msgid ""
+"Export the email list of active registrants for use in newsletters and "
+"communications"
 msgstr ""
 
 msgid "Simple list"
@@ -8592,7 +8546,9 @@ msgstr ""
 msgid "Preaching"
 msgstr ""
 
-msgid "This page shows users who can be persuaded to sign up"
+msgid ""
+"Identify association members who haven't registered yet, including their pre-"
+"registration status and past participation history"
 msgstr ""
 
 msgid "List of users who have not registered for a future session of the event"
@@ -8607,32 +8563,31 @@ msgstr ""
 msgid "Event already played"
 msgstr ""
 
-msgid "This page shows the questions submitted by participants"
-msgstr ""
-
 msgid ""
-"This page shows the sensitive information of registered participants "
-"regarding safety"
+"Review safety information submitted by registered participants, grouped with "
+"their assigned characters"
 msgstr ""
 
 msgid "Users data"
 msgstr ""
 
-msgid "This page shows the general information of registered participants"
+msgid ""
+"Access personal data fields for all registered participants and staff, along "
+"with their character assignments"
 msgstr ""
 
 msgid "Spam"
 msgstr ""
 
 msgid ""
-"This page shows the email addresses to which to send updates in order to get "
-"them to sign up"
+"Target newsletter subscribers who haven't played this event yet, grouped by "
+"language for outreach campaigns"
 msgstr ""
 
 msgid "List of newsletter subscribers who have not yet played this event"
 msgstr ""
 
-msgid "This page shows the uploaded resources available to the event"
+msgid "Manage uploaded resource files available to participants for this event"
 msgstr ""
 
 msgid "Dimension"
@@ -8644,22 +8599,14 @@ msgstr ""
 msgid "Warehouse area"
 msgstr ""
 
-msgid ""
-"This page shows the event area where warehouse items needs to be deployed"
-msgstr ""
-
 msgid "Item assignments"
-msgstr ""
-
-msgid "In this page you can mark which items to add to the game area"
 msgstr ""
 
 msgid "Selected"
 msgstr ""
 
 msgid ""
-"This page displays cases where the same item has been assigned to multiple "
-"areas"
+"Identify items assigned to more than one area to spot and resolve conflicts"
 msgstr ""
 
 msgid "Area"
@@ -8669,8 +8616,8 @@ msgid "Commit warehouse quantities"
 msgstr ""
 
 msgid ""
-"This page shows what will happen when you commit the warehouse quantities "
-"based on the current assignments"
+"Review the quantity changes that will be applied to warehouse stock before "
+"confirming the commit"
 msgstr ""
 
 msgid "Warning"
@@ -8733,7 +8680,8 @@ msgid "Cargo manifest"
 msgstr ""
 
 msgid ""
-"This page shows the cargo manifest, and the status of each item assignment"
+"Track all item assignments grouped by area, marking each item as loaded and "
+"deployed"
 msgstr ""
 
 msgid ""
@@ -8756,15 +8704,17 @@ msgstr ""
 msgid "Modules WS"
 msgstr ""
 
-msgid "This page shows the modules for the workshop questions of the event"
+msgid ""
+"Manage the modules used to group and organize workshop questions for this "
+"event"
 msgstr ""
 
 msgid "Answers WS"
 msgstr ""
 
 msgid ""
-"This page shows the response options for questions about the workshops of "
-"the event"
+"Manage the answer options for each workshop question, marking which answers "
+"are correct"
 msgstr ""
 
 msgid "Module"
@@ -8773,20 +8723,20 @@ msgstr ""
 msgid "Questions WS"
 msgstr ""
 
-msgid "This page shows the workshop questions for the event"
+msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
 
 msgid ""
-"This page shows for each participant their completion status of workshops"
+"Track which registered participants have completed all required workshops in "
+"the past year"
 msgstr ""
 
 msgid "Not completed"
 msgstr ""
 
-msgid "This page shows character assignments to participants"
-msgstr ""
-
-msgid "This page shows the characters of the event"
+msgid ""
+"Review which characters and traits have been assigned to players, grouped by "
+"faction"
 msgstr ""
 
 msgid "Attending"
@@ -8819,10 +8769,13 @@ msgstr ""
 msgid "Option"
 msgstr ""
 
-msgid "This page shows the factions and plots of the indicated character"
+msgid ""
+"Preview the factions and plots linked to this character as a compact summary"
 msgstr ""
 
-msgid "This page performs several correctness checks of the character sheets"
+msgid ""
+"Run consistency checks on character sheets to detect missing, invalid, or "
+"asymmetric relationships"
 msgstr ""
 
 msgid "Check inverse relationship"
@@ -8908,7 +8861,7 @@ msgstr ""
 msgid "Check missing speed larp"
 msgstr ""
 
-msgid "This page shows the factions (character groups) of the event"
+msgid "Manage all character factions of the event"
 msgstr ""
 
 msgid "Tipo"
@@ -8920,7 +8873,9 @@ msgstr ""
 msgid "Handout template"
 msgstr ""
 
-msgid "This page shows the templates for event handouts"
+msgid ""
+"Manage CSS layout templates that control the visual formatting of printed "
+"handouts"
 msgstr ""
 
 msgid "CSS"
@@ -8929,71 +8884,76 @@ msgstr ""
 msgid "Handouts"
 msgstr ""
 
-msgid ""
-"This page shows the handouts (information dissemination tools) of the event"
+msgid "Manage all handouts for this event"
 msgstr ""
 
-msgid "This page shows the plots of the event"
+msgid "Manage all plots for this event"
 msgstr ""
 
 msgid "Progress step"
 msgstr ""
 
 msgid ""
-"This page shows the progress steps that can be assigned to writing elements"
+"Manage the progress steps that track the completion status of writing "
+"elements"
 msgstr ""
 
 msgid "Type prologues"
 msgstr ""
 
-msgid "This page shows the types of event prologue"
+msgid ""
+"Manage prologue categories that group individual prologues for this event"
 msgstr ""
 
-msgid "This page shows the prologues of the event"
+msgid "Manage all prologues for this event"
 msgstr ""
 
 msgid "Quest Type"
 msgstr ""
 
-msgid "This page shows the types of quests in the event"
+msgid ""
+"Manage quest categories, each with a presentation text and associated quests"
 msgstr ""
 
-msgid "This page shows the quests for the event"
+msgid "Manage all quests for the event"
 msgstr ""
 
-msgid "This page shows the relationships between characters"
+msgid ""
+"View and edit all directed relationships between characters in this event"
 msgstr ""
 
-msgid "This page shows the roles of the characters"
+msgid ""
+"Overview of all characters with their assigned role values per role type"
 msgstr ""
 
 msgid "SpeedLarp"
 msgstr ""
 
-msgid "This page shows the speedlarps of the event"
+msgid ""
+"Manage speed-larp scenes, their station, sheet text, and assigned characters"
 msgstr ""
 
 msgid "Station"
 msgstr ""
 
-msgid "This page shows the traits of the quests for the event"
+msgid "Manage all traits linked to quests, with their writing questions"
 msgstr ""
 
 msgid ""
-"This page shows the different versions available of the character, and the "
-"differences between them"
+"Browse the edit history of this writing element and compare version "
+"differences"
 msgstr ""
 
-msgid "Manage viewing writing element"
+msgid ""
+"Preview the rendered sheet of this writing element as players will see it"
 msgstr ""
 
 msgid "Accept role invitation"
 msgstr ""
 
-msgid "You have been invited to join a role"
-msgstr ""
-
-msgid "Review the details below and confirm to accept"
+msgid ""
+"Accept your role invitation to gain access to the associated event or "
+"organization"
 msgstr ""
 
 msgid "Role invitation"
@@ -9023,10 +8983,7 @@ msgstr ""
 msgid "Invite to role"
 msgstr ""
 
-msgid "Send an email invitation to join this role"
-msgstr ""
-
-msgid "The recipient will receive a link to accept the invitation"
+msgid "Invite a user by email to join this role"
 msgstr ""
 
 msgid "Email address"
@@ -9048,6 +9005,21 @@ msgid "Redeemed"
 msgstr ""
 
 msgid "Privacy Policy"
+msgstr ""
+
+msgid "Please correct the error below."
+msgstr ""
+
+msgid "Please correct the errors below."
+msgstr ""
+
+#, python-format
+msgid ""
+"You are authenticated as %(username)s, but are not authorized to access this "
+"page. Would you like to login to a different account?"
+msgstr ""
+
+msgid "Forgotten your password or username?"
 msgstr ""
 
 msgid "Password reset"
@@ -9833,6 +9805,9 @@ msgstr ""
 msgid "Containers"
 msgstr ""
 
+msgid "Manage warehouse containers"
+msgstr ""
+
 msgid "Create and manage events and their setting - names, dates, status"
 msgstr ""
 
@@ -9913,6 +9888,9 @@ msgstr ""
 msgid "quick"
 msgstr ""
 
+msgid "Manage warehouse items"
+msgstr ""
+
 msgid "Manage warehouse movements"
 msgstr ""
 
@@ -9945,6 +9923,9 @@ msgid "Assign crew roles and grant specific access to event functions"
 msgstr ""
 
 msgid "Activate features for the event"
+msgstr ""
+
+msgid "Manage event metadata for external promotion"
 msgstr ""
 
 msgid "Copy elements from another event"
@@ -10288,6 +10269,12 @@ msgstr ""
 msgid "List of other users"
 msgstr ""
 
+msgid "Invalid request"
+msgstr ""
+
+msgid "Missing question"
+msgstr ""
+
 msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
@@ -10350,7 +10337,7 @@ msgstr ""
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
 
-msgid "The rule's name"
+msgid "The rule's number (unique identifier)"
 msgstr ""
 
 msgid ""
@@ -10369,7 +10356,7 @@ msgstr ""
 msgid "(Optional) Display order"
 msgstr ""
 
-msgid "The modifier's name"
+msgid "The modifier's number (unique identifier)"
 msgstr ""
 
 msgid "(Optional) Ability names, comma-separated"
@@ -10473,13 +10460,13 @@ msgstr ""
 msgid "Profiles"
 msgstr ""
 
+msgid "Failed to add character"
+msgstr ""
+
 msgid "Failed to add handout"
 msgstr ""
 
 msgid "Failed to add faction"
-msgstr ""
-
-msgid "Failed to add character"
 msgstr ""
 
 msgid "Failed to add profiles"
@@ -11218,6 +11205,9 @@ msgstr ""
 msgid "Regeneration pdf started"
 msgstr ""
 
+msgid "Bundle not ready yet"
+msgstr ""
+
 msgid "Provisional"
 msgstr ""
 
@@ -11225,9 +11215,6 @@ msgid "Registration cancelled"
 msgstr ""
 
 msgid "Player customisation updated"
-msgstr ""
-
-msgid "Invalid request"
 msgstr ""
 
 msgid "Please select both a registration and an event"
@@ -11379,6 +11366,15 @@ msgid "This character is inactive and cannot be assigned to players"
 msgstr ""
 
 msgid "Assigned character!"
+msgstr ""
+
+msgid ""
+"Acquisition of abilities by players is not enabled for this event: contact "
+"the organizers"
+msgstr ""
+
+msgid ""
+"Character inventory is not enabled for this event: contact the organizers"
 msgstr ""
 
 msgid "Ability removed"

@@ -1639,6 +1639,22 @@ def _get_row_name(csv_row: dict) -> tuple[str | None, str | None]:
     return str(name), None
 
 
+def _get_row_number(csv_row: dict) -> tuple[int | None, str | None]:
+    """Extract and validate number from a CSV row. Returns (number, error) tuple."""
+    if "number" not in csv_row:
+        return None, "ERR - There is no number column"
+    number = csv_row["number"]
+    try:
+        if pd.isna(number):
+            return None, "ERR - Empty number, row skipped"
+    except (TypeError, ValueError):
+        pass
+    try:
+        return int(number), None
+    except (TypeError, ValueError):
+        return None, f"ERR - Invalid number value: {number}"
+
+
 def tickets_load(context: dict, form: Form) -> list[str]:
     """Load tickets from uploaded file data."""
     # Extract and validate file data from form
@@ -1966,23 +1982,23 @@ def _apply_rule_field(context: dict, rule: RuleExp, logs: list[str], field_name:
 
 def _rule_load(context: dict, csv_row: dict) -> str:
     """Load rule data from CSV row for bulk import."""
-    name, err = _get_row_name(csv_row)
+    number, err = _get_row_number(csv_row)
     if err:
         return err
 
     event = context["event"]
     event_parent = event.get_class_parent(RuleExp)
 
-    rule = RuleExp.objects.filter(event=event_parent, name=name).first()
+    rule = RuleExp.objects.filter(event=event_parent, number=number).first()
     was_created = rule is None
     if was_created:
-        rule = RuleExp(event=event_parent, name=name)
+        rule = RuleExp(event=event_parent, number=number)
 
     logs = []
     abilities_value = None
 
     for field_name, field_value in csv_row.items():
-        if field_value is None or field_name == "name":
+        if field_value is None or field_name == "number":
             continue
         try:
             if pd.isna(field_value):
@@ -1995,7 +2011,7 @@ def _rule_load(context: dict, csv_row: dict) -> str:
             _apply_rule_field(context, rule, logs, field_name, field_value)
 
     if was_created and not rule.field_id:
-        return f"ERR - Cannot create rule '{name}': missing required 'field'"
+        return f"ERR - Cannot create rule '{number}': missing required 'field'"
 
     rule.save()
     save_log(context, RuleExp, rule, operation_type=LogOperationType.UPLOAD)
@@ -2017,7 +2033,7 @@ def modifiers_load(context: dict, form: Form) -> list[str]:
 
 def _modifier_load(context: dict, csv_row: dict) -> str:
     """Load modifier data from CSV row for bulk import."""
-    name, err = _get_row_name(csv_row)
+    number, err = _get_row_number(csv_row)
     if err:
         return err
 
@@ -2025,14 +2041,14 @@ def _modifier_load(context: dict, csv_row: dict) -> str:
 
     (modifier, was_created) = ModifierExp.objects.get_or_create(
         event=event.get_class_parent(ModifierExp),
-        name=name,
+        number=number,
         defaults={"order": 0},
     )
 
     logs = []
 
     for field_name, field_value in csv_row.items():
-        if not field_value or pd.isna(field_value) or field_name == "name":
+        if not field_value or pd.isna(field_value) or field_name == "number":
             continue
 
         if field_name == "abilities":

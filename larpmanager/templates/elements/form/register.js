@@ -134,8 +134,18 @@ $(document).ready(function(){
         // check additionals
         const additionals = $("#id_additionals");
         if (additionals.length && additionals.val()) {
-            const addTickets = additionals.val();
-            sum += price_map["id_ticket"] * addTickets;
+            const addTickets = parseInt(additionals.val());
+            let ticketUnitPrice = price_map["id_ticket"];
+            if (ticketUnitPrice === undefined) {
+                // ticket may use radio buttons (v20+) instead of select
+                const checkedTicket = $('input[name="ticket"]:checked');
+                if (checkedTicket.length) {
+                    ticketUnitPrice = get_price(checkedTicket.closest('label').text());
+                }
+            }
+            if (ticketUnitPrice) {
+                sum += ticketUnitPrice * addTickets;
+            }
         }
 
         $('input:checked').each(function () {
@@ -292,8 +302,9 @@ function check_mandatory() {
 
 
 function check_tickets_map() {
-    // get selected ticket
+    // get selected ticket (select or radio group)
     var sel = $('#id_ticket').val();
+    if (!sel) sel = $('input[name="ticket"]:checked').val();
     if( !sel ) sel = 0;
 
     $.each(tickets_map, function(index, value) {

@@ -4,7 +4,7 @@
     {% trans "Quest" %} - {{ event.name }}
 {% endblock title %}
 {% block info %}
-    {% trans "This page shows the quests for the event" %}
+    {% trans "Manage all quests for the event" %}
 {% endblock info %}
 {% block nav_fields %}
     {% include "elements/writing/questions_nav.html" %}
@@ -22,34 +22,30 @@
     </th>
     <th></th>
 {% endblock thead %}
-{% block tbody %}
-    {% for el in list %}
-        <tr id="{{ el.uuid }}">
-            <td>
-                <a href="{% url 'orga_quests_edit' run.get_slug el.uuid %}"
-                   qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-            </td>
-            <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
-            <td>
-                <a href="{% url 'orga_quests_view' run.get_slug el.uuid %}"
-                   qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
-                <a href="{% url 'orga_quests_versions' run.get_slug el.uuid %}"
-                   qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
-            </td>
-            <td>{{ el.typ }}</td>
-            {% include "elements/writing/questions_body.html" %}
-            <td class="hide traits dot_links">
-                {% for t in el.trait_rels.list %}
-                    {% include "elements/comma.html" %}
-                    <a href="{% url 'orga_traits_edit' run.get_slug t.0 %}">{{ t.1 }}</a>
-                {% endfor %}
-            </td>
-            <td class="hide stats">{{ el.trait_rels.count }}</td>
-            <td>
-                <a href="{% url 'orga_quests_delete' run.get_slug el.uuid %}"
-                   qtip="{% trans "Delete" %}"
-                   class="only_new_v18"><i class="fas fa-trash"></i></a>
-            </td>
-        </tr>
-    {% endfor %}
-{% endblock tbody %}
+{% block tr_content %}
+    <td>
+        <a href="{% url 'orga_quests_edit' run.get_slug el.uuid %}"
+           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+    </td>
+    <td class="editable" question_uuid="{{ name_que_uuid }}">{{ el }}</td>
+    <td>
+        <a href="{% url 'orga_quests_view' run.get_slug el.uuid %}"
+           qtip="{% trans "View" %}"><i class="fa-solid fa-book-open"></i></a>
+        <a href="{% url 'orga_quests_versions' run.get_slug el.uuid %}"
+           qtip="{% trans "Versions" %}"><i class="fas fa-file-alt"></i></a>
+    </td>
+    <td>{{ el.typ }}</td>
+    {% include "elements/writing/questions_body.html" %}
+    <td class="hide traits dot_links">
+        {% for t in el.trait_rels.list %}
+            {% include "elements/comma.html" %}
+            <a href="{% url 'orga_traits_edit' run.get_slug t.0 %}">{{ t.1 }}</a>
+        {% endfor %}
+    </td>
+    <td class="hide stats">{{ el.trait_rels.count }}</td>
+    <td>
+        <a href="{% url 'orga_quests_delete' run.get_slug el.uuid %}"
+           qtip="{% trans "Delete" %}"
+           class="only_new_v18"><i class="fas fa-trash"></i></a>
+    </td>
+{% endblock tr_content %}

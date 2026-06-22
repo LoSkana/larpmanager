@@ -3,14 +3,15 @@
 {% block title %}
     {% trans "Ability types" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% trans "This page summarizes the types of abilities that participants can purchase" %}
-{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
-    <table id="ability_tipes" class="go_datatable writing">
+    <table id="ability_tipes"
+           class="go_datatable writing row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="orga_exp_ability_types">
         <thead>
             <tr>
+                <th class="reorder-handle"></th>
                 <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Ability" %}</th>
@@ -20,6 +21,9 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
                     <td>
                         <a href="{% url 'orga_exp_ability_types_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

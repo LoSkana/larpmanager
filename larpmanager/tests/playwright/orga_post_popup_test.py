@@ -38,15 +38,14 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    fill_tinymce,
-    go_to,
-    just_wait,
-    login_orga,
-    login_user,
-    logout,
-    submit_confirm,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     fill_tinymce,
+                                     go_to,
+                                     login_orga,
+                                     login_user,
+                                     logout,
+                                     get_modal_iframe, save_modal,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -118,9 +117,10 @@ def test_orga_post_popup(pw_page: Any) -> None:
 def create_reg_editor_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("e")
-    page.locator("#id_name").fill(REG_EDITOR_QUESTION)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("e")
+    edit_iframe.locator("#id_name").fill(REG_EDITOR_QUESTION)
+    save_modal(page, edit_iframe)
 
 
 def _get_que_textarea_id(page: Any) -> str:
@@ -139,21 +139,19 @@ def register_with_long_editor_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     editor_id = _get_que_textarea_id(page)
     fill_tinymce(page, editor_id, LONG_HTML_REG_EDITOR)
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
 
 def verify_reg_editor_popup(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations/")
     # The editor column is hidden by default: toggle it visible
     page.get_by_role("link", name=REG_EDITOR_QUESTION).click()
-    just_wait(page)
     # Eye icon should now appear in the column for the long answer
     eye_icon = page.locator(".post_popup").first
     eye_icon.wait_for(state="visible", timeout=10000)
     eye_icon.click()
     # Popup shows full content
-    popup = page.locator("#uglipop_popbox")
+    popup = page.locator("#lm-modal")
     popup.wait_for(state="visible", timeout=10000)
     expect(popup).to_contain_text(LONG_TEXT_REG_EDITOR[:80])
 
@@ -166,29 +164,28 @@ def verify_reg_editor_popup(page: Any, live_server: Any) -> None:
 def create_reg_paragraph_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")
-    page.locator("#id_name").fill(REG_PARA_QUESTION)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")
+    edit_iframe.locator("#id_name").fill(REG_PARA_QUESTION)
+    save_modal(page, edit_iframe)
 
 
 def register_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     page.get_by_role("textbox", name=REG_PARA_QUESTION).fill(LONG_TEXT_REG_PARA)
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
 
 def verify_reg_paragraph_popup(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations/")
     # Load the paragraph question answers via the AJAX load button
     page.get_by_role("link", name=REG_PARA_QUESTION).click()
-    just_wait(page, big=True)
     # Eye icon should appear for the long paragraph answer
     eye_icon = page.locator(".post_popup").first
     eye_icon.wait_for(state="visible", timeout=10000)
     eye_icon.click()
     # Popup shows full content
-    popup = page.locator("#uglipop_popbox")
+    popup = page.locator("#lm-modal")
     popup.wait_for(state="visible", timeout=10000)
     expect(popup).to_contain_text(LONG_TEXT_REG_PARA[:80])
 
@@ -201,33 +198,34 @@ def verify_reg_paragraph_popup(page: Any, live_server: Any) -> None:
 def create_char_editor_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/writing/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("e")
-    page.locator("#id_name").fill(CHAR_EDITOR_QUESTION)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("e")
+    edit_iframe.locator("#id_name").fill(CHAR_EDITOR_QUESTION)
+    save_modal(page, edit_iframe)
 
 
 def create_character_with_long_editor_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
     page.locator("a:has(i.fas.fa-trash)").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("popup test character")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("popup test character")
     # Fill the editor writing question with a long answer
-    editor_id = _get_que_textarea_id(page)
-    fill_tinymce(page, editor_id, LONG_HTML_CHAR_EDITOR)
-    submit_confirm(page)
+    editor_id = _get_que_textarea_id(edit_iframe)
+    fill_tinymce(edit_iframe, editor_id, LONG_HTML_CHAR_EDITOR)
+    save_modal(page, edit_iframe)
 
 
 def verify_char_editor_popup(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters/")
     # Toggle the editor question column visible
     page.get_by_role("link", name=CHAR_EDITOR_QUESTION).click()
-    just_wait(page)
     # Eye icon should appear for the long answer
     eye_icon = page.locator(".post_popup").first
     eye_icon.wait_for(state="visible", timeout=10000)
     eye_icon.click()
     # Popup shows full content
-    popup = page.locator("#uglipop_popbox")
+    popup = page.locator("#lm-modal")
     popup.wait_for(state="visible", timeout=10000)
     expect(popup).to_contain_text(LONG_TEXT_CHAR_EDITOR[:80])
 
@@ -240,18 +238,20 @@ def verify_char_editor_popup(page: Any, live_server: Any) -> None:
 def create_char_paragraph_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/writing/form/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_typ").select_option("p")
-    page.locator("#id_name").fill(CHAR_PARA_QUESTION)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_typ").select_option("p")
+    edit_iframe.locator("#id_name").fill(CHAR_PARA_QUESTION)
+    save_modal(page, edit_iframe)
 
 
 def fill_character_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
     page.locator("a:has(i.fas.fa-trash)").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("popup test character 2")
-    page.get_by_role("row").filter(has_text=CHAR_PARA_QUESTION).get_by_role("textbox").fill(LONG_TEXT_CHAR_PARA)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("popup test character 2")
+    edit_iframe.get_by_role("row").filter(has_text=CHAR_PARA_QUESTION).get_by_role("textbox").fill(LONG_TEXT_CHAR_PARA)
+    save_modal(page, edit_iframe)
 
 
 def verify_char_paragraph_popup(page: Any, live_server: Any) -> None:
@@ -259,12 +259,11 @@ def verify_char_paragraph_popup(page: Any, live_server: Any) -> None:
     # The paragraph column is loaded via AJAX (load_que); AJAX returns empty for inline
     # questions so the pre-rendered inline content (with eye icon) is preserved
     page.get_by_role("link", name=CHAR_PARA_QUESTION).click()
-    just_wait(page)
     # Eye icon should appear for the long answer
     eye_icon = page.locator(".post_popup").first
     eye_icon.wait_for(state="visible", timeout=10000)
     eye_icon.click()
     # Popup shows full content
-    popup = page.locator("#uglipop_popbox")
+    popup = page.locator("#lm-modal")
     popup.wait_for(state="visible", timeout=10000)
     expect(popup).to_contain_text(LONG_TEXT_CHAR_PARA[:80])

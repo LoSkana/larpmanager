@@ -2,7 +2,7 @@
 
 LarpManager is a free platform to manage live-action roleplaying (LARP) events.
 
-If you don’t want to self-host, you can use the free hosted instance at:
+If you don't want to self-host, you can use the free hosted instance at:
 https://larpmanager.com
 
 ---
@@ -175,6 +175,88 @@ run it:
 sudo systemctl start docker
 sudo systemctl enable docker
 ```
+
+---
+
+## Portainer deployment
+
+[Portainer](https://www.portainer.io/) lets you deploy and manage the stack through a web UI instead of the CLI.
+
+### Prerequisites
+
+Portainer must already be installed and running. If not, follow the
+[official install guide](https://docs.portainer.io/start/install-ce/server/docker/linux).
+
+### Deploy the stack
+
+1. In Portainer, go to **Stacks -> Add stack**
+2. Name it `larpmanager`
+3. Choose **Repository** and point it to your local clone of this repo, or use **Web editor** and paste the contents of `docker-compose.yml`
+4. Scroll down to **Environment variables** and add the values listed in `.env.example` (see [Environment variables](#environment-variables) for descriptions)
+5. Click **Deploy the stack**
+
+Portainer pulls images, builds the app container, and starts all services.
+
+### First-time setup
+
+Once the stack is running, open a console into the app container:
+
+1. Portainer -> **Containers** -> click `larpmanager` -> **Console** -> **Connect**
+2. Run:
+
+```
+python manage.py createsuperuser
+```
+
+3. Browse to `http://your-server-ip:8264/admin/larpmanager/association/` and create your organization (Name, URL identifier `def`, Logo, Main mail -- leave everything else empty).
+
+### Verify everything is working
+
+- **App responds**: browse to `http://your-server-ip:8264/` -- you should see the LarpManager login page
+- **Admin works**: browse to `http://your-server-ip:8264/admin/` and log in with the superuser you created
+- **Static files load**: CSS and images render correctly (served by nginx via the `static_data` volume)
+- **Media uploads work**: upload a logo in the association admin; it should save without errors
+
+### Expose on a specific IP or change the port
+
+By default nginx binds port 8264 on all interfaces (`0.0.0.0`). To restrict to a specific IP, edit the `nginx` ports line in the stack editor:
+
+```yaml
+nginx:
+  ports:
+    - "192.168.1.50:8264:80"   # only this IP accepts connections
+```
+
+Replace `192.168.1.50` with your server's LAN or public IP. To use a different host port, change the first number (e.g. `"80:80"`).
+
+### Use a reverse proxy for a domain name
+
+To serve on a domain with standard ports (80/443), run a reverse proxy as a separate Portainer stack (nginx, Traefik, Caddy, etc.). Example minimal nginx config:
+
+```nginx
+server {
+    listen 80;
+    server_name example.com;
+
+    location / {
+        proxy_pass http://localhost:8264;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
+```
+
+With this in place, remove the `ports` section from the `nginx` service in the LarpManager stack so it is no longer exposed directly.
+
+### Day-to-day operations via Portainer
+
+| Task | How |
+|------|-----|
+| View logs | Containers -> `larpmanager` -> Logs |
+| Run management commands | Containers -> `larpmanager` -> Console |
+| Update to latest code | Pull repo on host, then Console: `scripts/deploy.sh` |
+| Daily automation | Console: `python manage.py automate` (schedule via host cron or Portainer scheduled jobs) |
+| Backup data | Volumes -> download `pgdata` and `media_data` |
 
 ---
 

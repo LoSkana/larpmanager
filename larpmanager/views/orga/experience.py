@@ -46,7 +46,8 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.exceptions import ReturnNowError
-from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new, orga_order
+from larpmanager.utils.edit.base import render_frame_or_fallback
+from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import export_abilities, export_modifiers, export_rules, zip_exports
 from larpmanager.utils.services.bulk import handle_bulk_ability
 
@@ -57,7 +58,7 @@ logger = logging.getLogger(__name__)
 def orga_exp_systems(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of experience systems for an event."""
     context = check_event_context(request, event_slug, "orga_exp_systems")
-    context["list"] = context["event"].get_elements(SystemExp).order_by("number")
+    context["list"] = context["event"].get_elements(SystemExp).order_by("order")
     return render(request, "larpmanager/orga/experience/systems.html", context)
 
 
@@ -83,7 +84,7 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
 
     # Get all deliveries ordered by number
-    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("number").select_related("system"))
+    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("order").select_related("system"))
 
     # Get cached EXP relationship data and enrich delivery objects
     px_cache = get_event_exp_cache(context["event"])
@@ -148,7 +149,8 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
                     _("Characters from event '{run}' have been loaded. Review and confirm to save.").format(run=run),
                 )
 
-                return render(request, "larpmanager/orga/edit.html", context)
+                is_frame = request.POST.get("frame") == "1"
+                return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/edit.html")
 
             except (ValueError, ObjectDoesNotExist) as err:
                 logger.warning("Auto populate run failed: %s", err)
@@ -212,7 +214,7 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
 
     # Query and prepare abilities list with optimized database access
-    abilities = list(context["event"].get_elements(AbilityExp).order_by("number").select_related("typ", "system"))
+    abilities = list(context["event"].get_elements(AbilityExp).order_by("order").select_related("typ", "system"))
 
     # Get cached EXP relationship data and enrich ability objects
     px_cache = get_event_exp_cache(context["event"])
@@ -250,7 +252,7 @@ def orga_exp_ability_types(request: HttpRequest, event_slug: str) -> HttpRespons
     context = check_event_context(request, event_slug, "orga_exp_ability_types")
 
     # Retrieve and order ability types by number
-    context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("number")
+    context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("order")
 
     return render(request, "larpmanager/orga/experience/ability_types.html", context)
 
@@ -299,7 +301,7 @@ def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_exp_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of ability templates for an event."""
     context = check_event_context(request, event_slug, "orga_exp_ability_templates")
-    context["list"] = context["event"].get_elements(AbilityTemplateExp).order_by("number")
+    context["list"] = context["event"].get_elements(AbilityTemplateExp).order_by("order")
     return render(request, "larpmanager/orga/experience/ability_templates.html", context)
 
 
@@ -337,17 +339,6 @@ def orga_exp_rules_edit(request: HttpRequest, event_slug: str, rule_uuid: str) -
 def orga_exp_rules_delete(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
     """Delete rule for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_RULES, rule_uuid)
-
-
-@login_required
-def orga_exp_rules_order(
-    request: HttpRequest,
-    event_slug: str,
-    rule_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder EXP rules for an event."""
-    return orga_order(request, event_slug, OrgaAction.PX_RULES, rule_uuid, order)
 
 
 @login_required
@@ -392,17 +383,6 @@ def orga_exp_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid
 def orga_exp_modifiers_delete(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Delete modifier for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid)
-
-
-@login_required
-def orga_exp_modifiers_order(
-    request: HttpRequest,
-    event_slug: str,
-    modifier_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder experience modifiers in the organizer interface."""
-    return orga_order(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid, order)
 
 
 @login_required

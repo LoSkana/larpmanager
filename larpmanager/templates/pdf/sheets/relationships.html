@@ -1,200 +1,40 @@
 {% load show_tags static i18n %}
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>Profiles</title>
-        <meta charset="utf-8">
-        <meta name="keywords" content="none">
-        <meta name="description" content="none">
-        <style>
-            @media print {
-                .new-page {
-                    page-break-before: always;
-                }
-            }
-
-            @page {
-                size: A4;
-                margin-top: 0.5cm;
-                margin-right: 0.5cm;
-                margin-bottom: 0.5cm;
-                margin-left: 0.5cm;
-            }
-
-            body {
-                background: white;
-                text-align: center;
-                padding: 2em;
-                font-size: 10pt;
-            }
-
-            table {
-                margin: 0 auto;
-                width: 100%
-            }
-
-            body {
-                background: white;
-            }
-
-            a {
-                color: #6495ED;
-                font-weight: bold;
-                text-decoration: none;
-            }
-
-            td {
-                padding: 0.4em;
-                border: none;
-                text-align: center;
-                vertical-align: top;
-            }
-
-            td.left,
-            td.right {
-                padding: 0.6em;
-                background: #f4f4f4;
-                border-radius: 10pt;
-            }
-
-            .char-img {
-                width: 100%;
-                border-radius: 8pt;
-            }
-
-            .inner {
-                width: 100%;
-                border: none;
-                border-collapse: collapse;
-            }
-
-            .img-cell {
-                width: 40%;
-                vertical-align: top;
-                text-align: center;
-                padding: 0 6pt 0 0;
-                border: none;
-            }
-
-            .relationship {
-                display: block;
-                text-align: left;
-                margin: 0 0.5em;
-            }
-
-            .right .relationship p {
-                margin-left: -0.5em;
-            }
-
-            .text-cell {
-                vertical-align: top;
-                text-align: left;
-                padding: 0;
-                border: none;
-            }
-
-            p {
-                line-height: 100%;
-                margin: 0.3em;
-            }
-
-            .text-cell p {
-                margin-bottom: 1em;
-            }
-
-            .name {
-                font-size: 110%;
-            }
-
-            table,
-            tr,
-            td,
-            th,
-            tbody,
-            thead,
-            tfoot {
-                page-break-inside: avoid !important;
-            }
-
-            table.outer {
-                border-collapse: separate;
-                border-spacing: 6pt;
-            }
-
-            table.inner {
-                border-collapse: collapse;
-            }
-        </style>
-    </head>
-    <body>
-        {% if rel %}
-            <table class="outer">
-                <tr>
-                    {% for el in rel %}
-                        <td class="{% if forloop.counter|divisibleby:2 %}right{% else %}left{% endif %}">
-                            <table class="inner">
-                                <tr>
-                                    <td class="img-cell">
-                                        {% if el.player_uuid and el.player_prof %}
-                                            <img class="char-img" src="{{ el.player_prof }}" alt="player profile" />
-                                        {% else %}
-                                            <img class="char-img"
-                                                 src="{% static 'larpmanager/assets/blank-avatar.png' %}"
-                                                 alt="player profile" />
-                                        {% endif %}
-                                    </td>
-                                    <td class="text-cell">
-                                        <p>
-                                            <span class="name"><a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a></span>
-                                            {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
-                                            {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                                        </p>
-                                        {% if el.player_uuid %}
-                                            <p>
-                                                <b>Player:</b> <a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
-                                            </p>
-                                        {% endif %}
-                                        {% if el.factions_list %}
-                                            <p>
-                                                <b>{% trans "Factions" %}:</b> {{ el.factions_list }}
-                                            </p>
-                                        {% endif %}
-                                        <span class="relationship">{% show_char el.text run 1 %}</span>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        {% if forloop.counter|divisibleby:2 and not forloop.last %}
-                        </tr>
-                        <tr>
+{% if rel %}
+    <style>
+        table.rel-item { width: 100%; margin-bottom: 14pt; page-break-inside: avoid; border-collapse: collapse; }
+        td.rel-img-cell { width: 100pt; text-align: center; vertical-align: top; padding-right: 6pt; }
+        td.rel-text-cell { text-align: left; vertical-align: top; }
+        img.rel-img { width: 90pt; height: auto; }
+        span.rel-name { font-size: 110%; }
+        p.rel-info { line-height: 100%; margin: 0.3em 0 1em 0; }
+    </style>
+    <h2>{% trans "Relationships" %}</h2>
+    {% for el in rel %}
+        <table class="rel-item">
+            <tr>
+                <td class="rel-img-cell">
+                    {% if el.player_prof %}<img class="rel-img" src="{{ el.player_prof }}" alt="player profile" />{% endif %}
+                </td>
+                <td class="rel-text-cell">
+                    <p class="rel-info">
+                        <span class="rel-name">{{ el.name }}</span>
+                        {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                        {% if el.pronoun %}({{ el.pronoun }}){% endif %}
+                        {% if el.player_uuid %}
+                            | <b>{% trans "Player" %}:&nbsp;</b>
+                            <a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                         {% endif %}
-                    {% endfor %}
-                </tr>
-            </table>
-        {% endif %}
-    </body>
-    <script src="https://{{ association.slug }}.{{ association.main_domain }}/{% static "larpmanager/assets/js/jquery.min.js" %}"></script>
-    <script>
-$(function() {
-  resize_texts();
-});
-
-function resize_texts() {
-    $(".relationship").each(function( index ) {
-        var textLength = stripHTML($(this).text()).length;
-        fontSize = Math.round(100 - textLength / 80);
-        $(this).css('font-size', fontSize + '%');
-    });
-
-}
-
-function stripHTML(dirtyString) {
-  var container = document.createElement('div');
-  var text = document.createTextNode(dirtyString);
-  container.appendChild(text);
-  return container.innerHTML; // innerHTML will be a xss safe string
-}
-
-
-    </script>
-</html>
+                        {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
+                    </p>
+                    {% if show_character.teaser and el.teaser %}
+                        {% with teaser=el.teaser|truncatechars:800 %}
+                            <span class="pdf-inline" style="font-size: {{ el.font_size }}%">{% show_char teaser run 1 %}</span>
+                        {% endwith %}
+                        <p class="no-inline">-</p>
+                    {% endif %}
+                    <span class="pdf-inline" style="font-size: {{ el.font_size }}%">{% show_char el.text run 1 %}</span>
+                </td>
+            </tr>
+        </table>
+    {% endfor %}
+{% endif %}

@@ -151,14 +151,12 @@ def save_all_element_configs(obj: BaseModel, dct: dict[str, str]) -> None:
 
 def save_single_config(obj: object, name: str, value: any) -> None:
     """Save single configuration value for an element."""
-    # Get the foreign key field name for this object type
     fk_field = _get_fkey_config(obj)
-
-    # Create or update the configuration entry in the database
-    # Uses update_or_create to avoid duplicates and handle both insert/update cases
-    obj.configs.model.objects.update_or_create(defaults={"value": value}, **{fk_field: obj, "name": name})
-
-    # Invalidate the cache so the next read fetches the updated value from the database
+    # Include deleted=None in the lookup so safedelete's update_or_create never
+    # tries to restore a stale soft-deleted record that conflicts with the live one.
+    obj.configs.model.objects.update_or_create(
+        defaults={"value": value}, **{fk_field: obj, "name": name, "deleted": None}
+    )
     reset_element_configs(obj)
 
 

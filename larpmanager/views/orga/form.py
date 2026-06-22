@@ -19,13 +19,18 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, QuerySet
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.button import clear_event_button_cache
+from larpmanager.cache.character import reset_event_cache_all
+from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
+from larpmanager.cache.registration import clear_registration_tickets_cache, get_registration_tickets
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
 from larpmanager.models.form import RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
@@ -35,9 +40,14 @@ from larpmanager.models.registration import (
     RegistrationSurcharge,
 )
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import (
     backend_order,
+    backend_set_order,
+)
+from larpmanager.utils.edit.options_inline import (
+    options_inline_delete,
+    options_inline_reorder,
+    options_inline_save,
 )
 from larpmanager.utils.edit.orga import (
     OrgaAction,
@@ -46,7 +56,6 @@ from larpmanager.utils.edit.orga import (
     orga_delete,
     orga_edit,
     orga_new,
-    orga_order,
 )
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
 
@@ -105,14 +114,6 @@ def orga_registration_tickets_delete(request: HttpRequest, event_slug: str, tick
 
 
 @login_required
-def orga_registration_tickets_order(
-    request: HttpRequest, event_slug: str, ticket_uuid: str, order: int
-) -> HttpResponse:
-    """Reorder registration tickets for an event."""
-    return orga_order(request, event_slug, OrgaAction.REGISTRATION_TICKETS, ticket_uuid, order)
-
-
-@login_required
 def orga_registration_sections(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display registration sections for an event."""
     # Check permissions and get event context
@@ -140,17 +141,6 @@ def orga_registration_sections_edit(request: HttpRequest, event_slug: str, secti
 def orga_registration_sections_delete(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
     """Delete section for event."""
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid)
-
-
-@login_required
-def orga_registration_sections_order(
-    request: HttpRequest,
-    event_slug: str,
-    section_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder registration sections within an event."""
-    return orga_order(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid, order)
 
 
 def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQuestion]:
@@ -225,12 +215,6 @@ def orga_registration_form_delete(request: HttpRequest, event_slug: str, questio
 
 
 @login_required
-def orga_registration_form_order(request: HttpRequest, event_slug: str, question_uuid: str, order: int) -> HttpResponse:
-    """Reorders registration form questions for an event."""
-    return orga_order(request, event_slug, OrgaAction.REGISTRATION_FORM, question_uuid, order)
-
-
-@login_required
 def orga_registration_options_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new registration option."""
     return options_edit_handler(request, event_slug, "orga_registration_form", None)
@@ -240,38 +224,6 @@ def orga_registration_options_new(request: HttpRequest, event_slug: str) -> Http
 def orga_registration_options_edit(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Edit registration options for an event."""
     return options_edit_handler(request, event_slug, "orga_registration_form", option_uuid)
-
-
-@login_required
-def orga_registration_options_list(
-    request: HttpRequest, event_slug: str, question_uuid: str | None = None
-) -> HttpResponse:
-    """Display the list of options for a registration form question in an iframe.
-
-    This view shows only the options list section, designed to be loaded in an iframe
-    within the form edit page.
-
-    Args:
-        request: The HTTP request object
-        event_slug: Event slug identifier
-        question_uuid: Question UUID to show options for
-
-    Returns:
-        HttpResponse with the options list template
-    """
-    # Check user permissions for registration form management
-    context = check_event_context(request, event_slug, "orga_registration_form")
-    context["frame"] = 1
-
-    if question_uuid:
-        # Get the question
-        get_element(context, question_uuid, "el", RegistrationQuestion)
-
-        # Load existing options for the question
-        options_queryset = RegistrationOption.objects.filter(question=context["el"])
-        context["list"] = options_queryset.order_by("order")
-
-    return render(request, "larpmanager/orga/registration/options_list.html", context)
 
 
 @login_required
@@ -314,6 +266,26 @@ def orga_registration_options_order(
 def orga_registration_options_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
     """Delete registration option for an event."""
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_FORM_OPTION, option_uuid)
+
+
+@login_required
+def orga_registration_options_inline_save(
+    request: HttpRequest, event_slug: str, option_uuid: str | None = None
+) -> HttpResponse:
+    """Create or update a registration option from the inline editor (AJAX)."""
+    return options_inline_save(request, event_slug, "orga_registration_form", option_uuid)
+
+
+@login_required
+def orga_registration_options_inline_reorder(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Persist the full ordering of a question's options (AJAX)."""
+    return options_inline_reorder(request, event_slug, "orga_registration_form")
+
+
+@login_required
+def orga_registration_options_inline_delete(request: HttpRequest, event_slug: str, option_uuid: str) -> HttpResponse:
+    """Delete a registration option from the inline editor (AJAX)."""
+    return options_inline_delete(request, event_slug, "orga_registration_form", option_uuid)
 
 
 @login_required
@@ -404,3 +376,35 @@ def orga_registration_surcharges_edit(request: HttpRequest, event_slug: str, sur
 def orga_registration_surcharges_delete(request: HttpRequest, event_slug: str, surcharge_uuid: str) -> HttpResponse:
     """Delete surcharge for event."""
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SURCHARGES, surcharge_uuid)
+
+
+@login_required
+def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Unified drag-and-drop reorder endpoint. POST JSON {model, uuids}."""
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
+    try:
+        data = json.loads(request.body)
+    except (json.JSONDecodeError, ValueError):
+        return JsonResponse({"error": "Invalid JSON"}, status=400)
+    model_key = data.get("model", "")
+    uuids = data.get("uuids", [])
+    if not isinstance(uuids, list):
+        return JsonResponse({"error": "uuids must be a list"}, status=400)
+    action = OrgaAction.from_string(model_key)
+    if action is None or not action.config.get("form"):
+        return JsonResponse({"error": "Invalid model"}, status=400)
+    context = check_event_context(request, event_slug, model_key)
+    model_class = action.config["form"].Meta.model
+    backend_set_order(context, model_class, uuids)
+    if action.config.get("writing"):
+        reset_event_cache_all(context["run"])
+    if action.config.get("exp"):
+        event_id = context["event"].id
+        clear_event_exp_cache(event_id)
+        clear_event_exp_systems_cache(event_id)
+    if action.config.get("button"):
+        clear_event_button_cache(context["event"].id)
+    if action.config.get("tickets"):
+        clear_registration_tickets_cache(context["event"].id)
+    return JsonResponse({"ok": True})

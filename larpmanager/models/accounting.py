@@ -21,6 +21,7 @@
 from decimal import Decimal
 from typing import Any, ClassVar
 
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator
 from django.db import models, transaction
 from django.db.models import Q
@@ -28,7 +29,7 @@ from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, PaymentMethod, UuidMixin
+from larpmanager.models.base import BaseModel, OrderMixin, PaymentMethod, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.registration import Registration
@@ -566,7 +567,7 @@ class DiscountType(models.TextChoices):
     GIFT = "g", _("Gift")
 
 
-class Discount(UuidMixin, BaseModel):
+class Discount(UuidMixin, OrderMixin, BaseModel):
     """Represents Discount model."""
 
     name = models.CharField(max_length=100, help_text=_("Name of the discount - internal use"))
@@ -662,6 +663,17 @@ class Discount(UuidMixin, BaseModel):
     def show_event(self) -> str:
         """Return comma-separated list of all associated runs."""
         return ", ".join([str(c) for c in self.runs.all()])
+
+    def clean(self) -> None:
+        """Check uniqueness of discount code across runs."""
+        if self.pk:
+            conflict = (
+                Discount.objects.filter(cod=self.cod, runs__in=self.runs.all()).exclude(pk=self.pk).distinct().exists()
+            )
+            if conflict:
+                raise ValidationError(
+                    {"cod": _("This discount code is already used in one or more of the selected runs")}
+                )
 
 
 class AccountingItemDiscount(AccountingItem):

@@ -594,6 +594,9 @@ def init_form_submitted(context: dict, form: object, request: HttpRequest, regis
     if "ticket" in context:
         context["submitted"]["ticket"] = context["ticket"]
 
+    if not context["submitted"].get("ticket") and hasattr(form, "initial") and form.initial.get("ticket"):
+        context["submitted"]["ticket"] = str(form.initial["ticket"])
+
 
 @login_required
 def register(
@@ -931,7 +934,7 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
     # Extract and validate discount code from request
     cod = request.POST.get("cod")
     try:
-        disc = Discount.objects.get(runs__in=[context["run"]], cod=cod)
+        disc = Discount.objects.filter(runs__in=[context["run"]], cod=cod).distinct().get()
     except ObjectDoesNotExist:
         logger.warning("Discount code not found: %s", cod)
         logger.debug(traceback.format_exc())

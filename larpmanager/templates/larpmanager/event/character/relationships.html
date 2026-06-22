@@ -4,64 +4,66 @@
     {% trans "Character relationships" %}
 {% endblock title %}
 {% block content %}
-    <div class="staff-list">
-        <div class="orga-buttons">
-            <a class="new button"
-               href="{% url 'character_relationships_new' run.get_slug char.uuid %}">{% trans "New" %}</a>
+    <div class="user_resize platform">
+        <div class="staff-list">
+            <div class="orga-buttons">
+                <a class="new button"
+                   href="{% url 'character_relationships_new' run.get_slug char.uuid %}">{% trans "New" %}</a>
+            </div>
         </div>
-    </div>
-    <h3>{% trans "Relationships of your character" %}</h3>
-    <table id="player_relationships">
-        <tr>
-            <th></th>
-            <th></th>
-            <th>{% trans "Details" %}</th>
-            <th>{% trans "Relationship" %}</th>
-        </tr>
-        {% for el in rel %}
+        <h3>{% trans "Relationships of your character" %}</h3>
+        <table id="player_relationships">
             <tr>
-                <td>
-                    <a href="{% url 'character_relationships_edit' run.get_slug char.uuid el.uuid %}"
-                       qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                </td>
-                <td>
-                    {% if el.player_uuid %}
-                        <img class="rel-img" src="{{ el.player_prof }}" alt="character profile" />
-                    {% else %}
-                        <img class="rel-img"
-                             src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
-                             alt="character profile" />
-                    {% endif %}
-                </td>
-                <td class="rel-description">
-                    <a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a>
-                    {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
-                    {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                    <br />
-                    {% if el.player_uuid %}
-                        <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_uuid %}">
-                            {% if run.id in all_runs %}
-                                {{ el.player_full }}
-                            {% else %}
-                                {{ el.player }}
-                            {% endif %}
-                        </a>
-                    {% endif %}
-                    <br />
-                    <b>{% trans "Factions" %}:</b>
-                    {% for g in el.factions %}
-                        {% if not g.typ == 'g' %}
-                            {% include "elements/comma.html" %}
-                            {{ g.name }}
-                        {% endif %}
-                    {% endfor %}
-                    <br />
-                    <div class="go-inline">
-                        <span class="teas">{{ el.teaser | safe | clean_tags | truncatechars:1000 }} (...)</span>
-                    </div>
-                </td>
-                <td>{{ el.text | safe | clean_tags | truncatechars:500 }}</td>
+                <th></th>
+                <th></th>
+                <th>{% trans "Details" %}</th>
+                <th>{% trans "Relationship" %}</th>
             </tr>
-        {% endfor %}
-    </table>
+            {% for el in rel %}
+                <tr>
+                    <td>
+                        <a href="{% url 'character_relationships_edit' run.get_slug char.uuid el.uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>
+                        {% if el.player_uuid %}
+                            <img class="rel-img" src="{{ el.player_prof }}" alt="character profile" />
+                        {% else %}
+                            <img class="rel-img"
+                                 src="{% static 'larpmanager/assets/blank-avatar.svg' %}"
+                                 alt="character profile" />
+                        {% endif %}
+                    </td>
+                    <td class="rel-description">
+                        <a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a>
+                        {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                        {% if el.pronoun %}({{ el.pronoun }}){% endif %}
+                        <br />
+                        {% if el.player_uuid %}
+                            <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_uuid %}">
+                                {% if run.id in all_runs %}
+                                    {{ el.player_full }}
+                                {% else %}
+                                    {{ el.player }}
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                        <br />
+                        <b>{% trans "Factions" %}:</b>
+                        {% for g in el.factions %}
+                            {% if not g.typ == 'g' %}
+                                {% include "elements/comma.html" %}
+                                {{ g.name }}
+                            {% endif %}
+                        {% endfor %}
+                        <br />
+                        <div class="go-inline">
+                            <span class="teas">{{ el.teaser | safe | clean_tags | truncatechars:1000 }} (...)</span>
+                        </div>
+                    </td>
+                    <td>{{ el.text | safe | clean_tags | truncatechars:500 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 {% endblock content %}

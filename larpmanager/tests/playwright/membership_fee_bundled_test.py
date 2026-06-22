@@ -27,21 +27,22 @@ the reservation is held by the first invoice. After payment confirmation the mem
 accounting entry and reg_status display are verified for both events.
 """
 
-from typing import Any
-
 import re
+from typing import Any
 
 import pytest
 
 from larpmanager.tests.utils import (
     expect_normalized,
+    fill_date,
+    get_modal_iframe,
     go_to,
     just_wait,
     load_image,
     login_orga,
     sidebar,
     submit,
-    submit_confirm,
+    submit_confirm, save_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -86,32 +87,28 @@ def setup(live_server: Any, page: Any) -> None:
     # Set ticket price to 100 for first event
     go_to(page, live_server, "/test/manage/tickets")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").fill("100.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").fill("100.00")
+    save_modal(page, edit_iframe)
 
     # Create second event (slug auto-generated as "testsecond" from "Test Second")
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_form1-name").fill("Test Second")
-    page.locator("#id_form1-name").press("Tab")
-    page.locator("#id_form2-development").select_option("1")
-    page.locator("#id_form2-registration_status").select_option("o")
-    just_wait(page, big=True)
-    page.locator("#id_form2-start").scroll_into_view_if_needed()
-    page.locator("#id_form2-start").fill("2050-06-11")
-    page.locator("#id_form2-start").click()
-    just_wait(page, big=True)
-    page.locator("#id_form2-end").scroll_into_view_if_needed()
-    page.locator("#id_form2-end").fill("2050-06-13")
-    page.locator("#id_form2-end").click()
-    just_wait(page, big=True)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").fill("Test Second")
+    edit_iframe.locator("#id_form1-name").press("Tab")
+    edit_iframe.locator("#id_form2-development").select_option("1")
+    edit_iframe.locator("#id_form2-registration_status").select_option("o")
+    fill_date(edit_iframe, "#id_form2-start", "2050-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2050-06-13")
+    save_modal(page, edit_iframe)
 
     # Set ticket price to 70 for second event
     go_to(page, live_server, "/testsecond/manage/tickets")
     page.locator(".fa-edit").click()
-    page.locator("#id_price").fill("70.00")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").fill("70.00")
+    save_modal(page, edit_iframe)
 
 
 def request_and_approve_membership(live_server: Any, page: Any) -> None:

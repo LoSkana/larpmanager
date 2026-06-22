@@ -32,31 +32,33 @@ window.addEventListener('DOMContentLoaded', function() {
         // Initial height update after content is rendered
         setTimeout(updateIframeHeight, 250);
 
-        // Handle "New Option" button click - send message to parent
+        // Handle "New Option" button click - send message to parent if in iframe
         $('.new-option').on('click', function(e) {
-            e.preventDefault();
             if (window.parent && window.parent !== window) {
+                e.preventDefault();
                 window.parent.postMessage({
                     type: 'open_option_modal',
                     optionUuid: '',
                     questionUuid: questionUuid
                 }, '*');
+                return false;
             }
-            return false;
+            // standalone: allow default href navigation
         });
 
-        // Handle "Edit Option" link click - send message to parent
+        // Handle "Edit Option" link click - send message to parent if in iframe
         $(document).on('click', '.edit-option-ajax', function(e) {
-            e.preventDefault();
-            const optionUuid = $(this).data('option-uuid');
             if (window.parent && window.parent !== window) {
+                e.preventDefault();
+                const optionUuid = $(this).data('option-uuid');
                 window.parent.postMessage({
                     type: 'open_option_modal',
                     optionUuid: optionUuid,
                     questionUuid: questionUuid
                 }, '*');
+                return false;
             }
-            return false;
+            // standalone: allow default href navigation
         });
 
         // Handle ordering links (arrow up/down) - AJAX request then reload iframe

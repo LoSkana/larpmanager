@@ -9,51 +9,30 @@
     {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% if user_character_text %}
-        {{ user_character_text | safe }}
-        <hr />
-    {% endif %}
-    {% if avatar_form %}
-        <form action="{{ request.path }}"
-              enctype="multipart/form-data"
-              method="post"
-              id="avatar_form">
-            {% csrf_token %}
+    <div class="user_resize platform">
+        {% if user_character_text %}
+            {{ user_character_text | safe }}
+            <hr />
+        {% endif %}
+        {% if avatar_form %}
             <div class="centerized">
-                <h4>{% trans "Character profile" %}:</h4>
-                <div class="helptext char_profile">
-                    {% trans "Upload a photo of yourself associated with your character specifically for this event" %}!
-                </div>
-                <br />
-                <br />
-                <input type="button"
-                       id="change_photo"
-                       value="{% trans "Change photo" %}"
-                       class="my_toggle"
-                       tog="change-field">
-                <input type="button" id="rotate_l_btn" value="{% trans "Rotate left" %}" \>
-                <input type="button" id="rotate_r_btn" value="{% trans "Rotate right" %}" \>
-                <br />
-                <br />
-                <div class="hide change-field">
-                    {% trans "Select the new photo to upload" %}: {{ avatar_form.image }} (maximum 10 MB)
-                    <br />
-                    <br />
-                </div>
-                <img id="profile"
-                     {% if custom_profile %} src="{{ custom_profile }}" {% else %} class="hide" {% endif %}
-                     alt="custom character profile" />
-                <div id="upload_spinner" class="hide">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="sr-only">{% trans "Uploading" %}...</span>
-                    </div>
-                    <p>{% trans "Uploading image, please wait" %}...</p>
-                </div>
+                <h4>{% trans "Character profile" %}</h4>
+                {% url 'character_profile_upload' run.get_slug character.uuid as av_upload %}
+                {% url 'character_profile_rotate' run.get_slug character.uuid 1 as av_rot_l %}
+                {% url 'character_profile_rotate' run.get_slug character.uuid 0 as av_rot_r %}
+                <form action="{{ request.path }}"
+                      enctype="multipart/form-data"
+                      method="post"
+                      id="avatar_form">
+                    {% csrf_token %}
+                    {% include "elements/avatar_upload.html" with avatar_current_src=custom_profile avatar_upload_url=av_upload avatar_rotate_l_url=av_rot_l avatar_rotate_r_url=av_rot_r avatar_confirm_selector="#confirm" %}
+                </form>
+                <div class="helptext char_profile">{% trans "Upload a photo of your character specifically for this event" %}!</div>
             </div>
-        </form>
-        <hr />
-    {% endif %}
-    {% include "elements/form/main.html" %}
+            <hr />
+        {% endif %}
+        {% include "elements/form/main.html" %}
+    </div>
 {% endblock content %}
 {% block js %}
     {% include "elements/form/max_length.js" %}
@@ -113,54 +92,16 @@
 
             disable_dependencies();
 
-            $('select, input[type="checkbox"]').on('change', function() {
+            $('select, input[type="checkbox"], input[type="radio"]').on('change', function() {
                 disable_dependencies();
             });
 
-            {% if avatar_form  %}
-                {% if not custom_profile %}
-                $('#change_photo').trigger('click');
-                {% endif %}
-
-                $('#id_image').change(function() {
-
-                    var formData = new FormData();
-                    var fileInput = document.getElementById('id_image');
-                    var file = fileInput.files[0];
-                    formData.append('image', file);
-
-                    // Show spinner and disable confirm button
-                    $('#profile').attr("src", "");
-                    $('#upload_spinner').removeClass('hide');
-                    $('#confirm').prop('disabled', true);
-
-                    $.ajax({
-                        url: upload,
-                        type: 'POST',
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        success: function(d){
-                            profile_update(d.src);
-                            $('#change_photo').trigger('click');
-                            // Hide spinner and enable confirm button
-                            $('#upload_spinner').addClass('hide');
-                            $('#confirm').prop('disabled', false);
-                        },
-                        error: function(){
-                            // Hide spinner and enable confirm button on error
-                            $('#upload_spinner').addClass('hide');
-                            $('#confirm').prop('disabled', false);
-                            if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Error uploading image" %}. {% trans "Please retry or use a smaller file" %}.{% endfilter %}');
-                        }
-                    });
-                });
-            {% endif %};
         });
 
     function check_dependencies(dependencies) {
         let selects = [];
         let checkboxes = [];
+        let radios = [];
         let remainingDependencies = [...dependencies]; // Create a copy of the dependencies array to manipulate it
 
         // Collect the selects that contain dependency values
@@ -189,6 +130,19 @@
             }
         });
 
+        // Collect radio groups that contain dependency values
+        $('input[type="radio"]:checked').each(function () {
+            const name = $(this).attr('name');
+            const value = $(this).val();
+
+            if (value && remainingDependencies.includes(value)) {
+                remainingDependencies = remainingDependencies.filter(v => v !== value);
+                if (!radios.includes(name)) {
+                    radios.push(name);
+                }
+            }
+        });
+
         // Check the remaining values in dependencies
         for (let val of remainingDependencies) {
             // If the remaining value is in a select not yet selected, return false
@@ -209,6 +163,15 @@
 
             if (checkboxFound) {
                 return false; // If the remaining value is in a checkbox that was not included, return false
+            }
+
+            // If the remaining value is in a radio group not yet selected, return false
+            let radioFound = $('input[type="radio"]').is(function () {
+                return $(this).val() === val && !radios.includes($(this).attr('name'));
+            });
+
+            if (radioFound) {
+                return false; // If the remaining value is in a radio group, return false
             }
         }
 
@@ -251,6 +214,22 @@
                   $(this).hide();
                   $(this).closest('label').hide();
                   $('#hp_' + key).hide();
+                  $(this).closest('div').hide();
+                }
+                if (!available && $(this).is(':checked')) {
+                    $(this).prop('checked', false);
+                }
+            });
+
+            // disable radio options with that value
+            $('input[type="radio"][value="' + key + '"]').each(function() {
+                if (available) {
+                  $(this).closest('div').show();
+                  $(this).show();
+                  $(this).closest('label').show();
+                } else {
+                  $(this).hide();
+                  $(this).closest('label').hide();
                   $(this).closest('div').hide();
                 }
                 if (!available && $(this).is(':checked')) {
@@ -311,45 +290,6 @@
 
         return true;
     }
-
-    {% if avatar_form %}
-
-        var upload = '{% url 'character_profile_upload' run.get_slug character.uuid %}';
-        var rotate_l = '{% url 'character_profile_rotate' run.get_slug character.uuid 1 %}';
-        var rotate_r = '{% url 'character_profile_rotate' run.get_slug character.uuid 0 %}';
-
-        function profile_update(src) {
-            timestamp = (new Date()).getTime();
-            newUrl = src + '?_=' + timestamp;
-            $('#profile').attr("src", newUrl);
-            $('#profile').show();
-        }
-
-        $('#rotate_l_btn').on('click', function () {
-            $('#profile').attr("src", "");
-            $.ajax({
-                url: rotate_l,
-                context: document.body,
-                success: function(d){
-                    profile_update(d.src);
-
-                }
-            });
-        });
-
-
-        $('#rotate_r_btn').on('click', function () {
-            $('#profile').attr("src", "");
-            $.ajax({
-                url: rotate_r,
-                context: document.body,
-                success: function(d){
-                    profile_update(d.src);
-                }
-            });
-        });
-
-    {% endif %}
 
     });
 

@@ -49,7 +49,7 @@ class ExeWarehouseItemForm(MultichoiceMixin, BaseModelForm):
 
     load_js: ClassVar[list] = ["multichoice"]
 
-    page_info = _("Manage warehouse items")
+    page_info = _("Manage all warehouse items, including their containers, tags, and quantities")
 
     page_title = _("Warehouse items")
 
@@ -94,7 +94,7 @@ class ExeWarehouseItemForm(MultichoiceMixin, BaseModelForm):
 class ExeWarehouseContainerForm(BaseModelForm):
     """Form for ExeWarehouseContainer."""
 
-    page_info = _("Manage warehouse containers")
+    page_info = _("Manage the physical containers used to organize and store warehouse items")
 
     page_title = _("Warehouse containers")
 
@@ -109,7 +109,7 @@ class ExeWarehouseTagForm(MultichoiceMixin, BaseModelForm):
 
     load_js: ClassVar[list] = ["multichoice"]
 
-    page_info = _("Manage warehouse item tags")
+    page_info = _("Manage tags used to categorize and group warehouse items")
 
     page_title = _("Warehouse tags")
 
@@ -152,7 +152,7 @@ class ExeWarehouseTagForm(MultichoiceMixin, BaseModelForm):
 class ExeWarehouseMovementForm(BaseModelForm):
     """Form for ExeWarehouseMovement."""
 
-    page_info = _("Manage warehouse item movements, loans, and repairs")
+    page_info = _("Track the assignment of warehouse items to event areas for each run")
 
     page_title = _("Warehouse movements")
 
@@ -178,7 +178,7 @@ class ExeWarehouseMovementForm(BaseModelForm):
 class OrgaWarehouseAreaForm(BaseModelForm):
     """Form for OrgaWarehouseArea."""
 
-    page_info = _("Manage event areas")
+    page_info = _("Manage the event areas where warehouse items will be deployed")
 
     page_title = _("Event area")
 
@@ -191,7 +191,7 @@ class OrgaWarehouseAreaForm(BaseModelForm):
 class OrgaWarehouseItemAssignmentForm(BaseModelForm):
     """Form for OrgaWarehouseItemAssignment."""
 
-    page_info = _("Manage warehouse item assignments to event areas")
+    page_info = _("Select and assign warehouse items to this area, setting quantities and notes for each")
 
     page_title = _("Warehouse assignments")
 

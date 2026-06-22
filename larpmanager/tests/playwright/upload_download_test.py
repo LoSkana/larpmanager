@@ -37,6 +37,7 @@ from larpmanager.tests.utils import (
     submit_confirm,
     upload,
     expect_normalized, sidebar,
+    get_modal_iframe, save_modal, _wait_lm_ready,
 )
 
 pytestmark = pytest.mark.e2e
@@ -50,7 +51,7 @@ def test_upload_download(pw_page: Any) -> None:
 
     # prepare
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     check_feature(page, "Factions")
     check_feature(page, "Plots")
@@ -83,9 +84,10 @@ def abilities(page: Any) -> None:
     # add type
     page.get_by_role("link", name="Ability type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("test")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("test")
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
@@ -104,6 +106,7 @@ def abilities(page: Any) -> None:
         "Loading performed, see logs Proceed Logs OK - Created sword OK - Created shield OK - Created sneak",
     )
     page.get_by_role("link", name="Proceed").click()
+    _wait_lm_ready(page)
     expect_normalized(
         page,
         page.locator("#one"),
@@ -119,7 +122,7 @@ def full(page: Any) -> None:
 
 
 def relationships(page: Any) -> None:
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Relationships")
     submit_confirm(page)
     page.get_by_role("link", name="Upload").click()
@@ -138,7 +141,7 @@ def relationships(page: Any) -> None:
 
 
 def plots(live_server: Any, page: Any) -> None:
-    page.get_by_role("link", name="Plots").click()
+    sidebar(page, "Plots")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     page.locator("#id_first").click()
@@ -154,9 +157,11 @@ def plots(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Proceed").click()
     expect_normalized(page, page.locator("#one"), "plott conceptt textt")
     page.locator(".fa-edit").click()
-    page.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
-    expect_normalized(page, page.locator("#id_char_role_2_tr"), "characcter")
-    expect_normalized(page, page.locator("#id_char_role_2_tr"), "super start")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
+    expect_normalized(edit_iframe, edit_iframe.locator("#id_char_role_2_tr"), "characcter")
+    expect_normalized(edit_iframe, edit_iframe.locator("#id_char_role_2_tr"), "super start")
+
     go_to(page, live_server, "/test/manage/plots/")
     check_download(page, "Download")
 
@@ -167,9 +172,10 @@ def quest_trait(page: Any) -> None:
     check_download(page, "Download example template")
     page.get_by_role("link", name="Quest type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("bhbh")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("bhbh")
+    save_modal(page, edit_iframe)
     sidebar(page, "Quest")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
@@ -191,7 +197,7 @@ def quest_trait(page: Any) -> None:
 
 
 def registrations(page: Any) -> None:
-    page.get_by_role("link", name="Registrations").click()
+    sidebar(page, "Registrations")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("registration.csv"))
@@ -239,7 +245,7 @@ def characters(page: Any) -> None:
 
 
 def factions(page: Any) -> None:
-    page.get_by_role("link", name="Factions").click()
+    sidebar(page, "Factions")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("faction.csv"))
@@ -277,7 +283,7 @@ def char_form(page: Any) -> None:
     expect_normalized(
         page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
     )
-    page.locator("#one").get_by_role("link", name="Quest").click()
+    page.get_by_role("link", name="Quest", exact=True).click()
     expect_normalized(
         page,
         page.locator("#one"),

@@ -53,23 +53,29 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('#form_relationships').prepend(html);
 
+        {% if not TINYMCE_DISABLED %}
         window.addTinyMCETextarea('.f_rel_{0} textarea'.format(ch_uuid)).then((editorId) => {
             setupRelationshipEditor(editorId);
         });
+        {% endif %}
         already.push(ch_uuid);
 
     }
 
     $(function() {
         {% for key, item in relationships.items %}
+            {% if not TINYMCE_DISABLED %}
             window.addTinyMCETextarea('.f_{{ key }} textarea').then((editorId) => {
                 setupRelationshipEditor(editorId);
             });
+            {% endif %}
             already.push('{{ key }}');
         {% endfor %}
 
         document.getElementById('main_form').addEventListener('submit', function(e) {
+            {% if not TINYMCE_DISABLED %}
             tinymce.triggerSave();
+            {% endif %}
         });
 
         // add new

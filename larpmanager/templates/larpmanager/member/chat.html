@@ -4,21 +4,23 @@
     Chat - {{ member.display_member }}
 {% endblock title %}
 {% block content %}
-    <form action="{{ request.path }}"  method="post">
-        {% csrf_token %}
-        <table class="mob ">
-            <tr>
-                <td>
-                    <textarea name="text" maxlength="1000" cols="80" rows="3"></textarea>
-                </td>
-                <td>
-                    <input type="submit" value="{% trans "Submit" %}">
-                </td>
-            </tr>
-        </table>
-    </form>
-    <hr />
-    {% for el in list %}
-        <div class="plot question{% if el.receiver == member %} user{% endif %}">{{ el.message }}</div>
-    {% endfor %}
+    <div class="user_resize platform">
+        <form action="{{ request.path }}"  method="post">
+            {% csrf_token %}
+            <table class="mob ">
+                <tr>
+                    <td>
+                        <textarea name="text" maxlength="1000" cols="80" rows="3"></textarea>
+                    </td>
+                    <td>
+                        <input type="submit" value="{% trans "Submit" %}">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <hr />
+        {% for el in list %}
+            <div class="plot question{% if el.receiver == member %} user{% endif %}">{{ el.message }}</div>
+        {% endfor %}
+    </div>
 {% endblock content %}

@@ -4,21 +4,23 @@
     {% trans "Sharing" %}
 {% endblock title %}
 {% block content %}
-    <p>
-        <i>
-            {% trans "Your data will be saved in the system, which is used by several associations" %}.
-            {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
-            {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
-            {% trans "They will not be communicated, shared or processed in any other way" %}.
-        </i>
-    </p>
-    <p>
-        {% trans "By clicking the button below, you confirm that you consent to the sharing of your personal data with this organization, in accordance with the GDPR and our Privacy Policy" %}:
-    </p>
-    <form action="{{ request.path }}"
-          method="post"
-          enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="submit" value="{% trans "Confirm" %}">
-    </form>
+    <div class="user_resize platform">
+        <p>
+            <i>
+                {% trans "Your data will be saved in the system, which is used by several associations" %}.
+                {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
+                {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
+                {% trans "They will not be communicated, shared or processed in any other way" %}.
+            </i>
+        </p>
+        <p>
+            {% trans "By clicking the button below, you confirm that you consent to the sharing of your personal data with this organization, in accordance with the GDPR and our Privacy Policy" %}:
+        </p>
+        <form action="{{ request.path }}"
+              method="post"
+              enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="submit" value="{% trans "Confirm" %}">
+        </form>
+    </div>
 {% endblock content %}

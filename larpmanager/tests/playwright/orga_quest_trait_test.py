@@ -31,10 +31,11 @@ import pytest
 from larpmanager.tests.utils import (just_wait,
                                      check_feature,
                                      fill_tinymce,
+                                     get_modal_iframe,
                                      go_to,
                                      login_orga,
-                                     submit_confirm,
-                                     expect_normalized, sidebar,
+                                     submit_confirm, submit_inline_edit, wait_for_inline_edit,
+                                     expect_normalized, sidebar, save_modal, _wait_lm_ready, _wait_select2_results,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -58,13 +59,13 @@ def test_quest_trait(pw_page: Any) -> None:
     page.get_by_role("link", name="Test Character").nth(1).click()
     expect_normalized(page,
         page.locator("#one"),
-        "player: admin test presentation test teaser text test text torta - nonna saleee anotheraliame con torta - nonna another player: user test",
+        "player: admin test presentation test teaser text test text torta - nonna saleee aliame con another torta - nonna another player: user test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
     expect_normalized(page,
         page.locator("#one"),
-        "your character is: test character player: user test torta - strudel saleee test characterveronese torta - strudel test character player: admin test",
+        "your character is: test character player: user test torta - strudel saleee test character veronese torta - strudel test character player: admin test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
 
@@ -72,7 +73,7 @@ def test_quest_trait(pw_page: Any) -> None:
 def quests(page: Any, live_server: Any) -> None:
     # Activate features
     go_to(page, live_server, "/test/manage/")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     check_feature(page, "Casting algorithm")
     check_feature(page, "Quests and Traits")
@@ -81,24 +82,27 @@ def quests(page: Any, live_server: Any) -> None:
     # create quest type
     page.get_by_role("link", name="Quest type").click()
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Lore")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Lore")
+    save_modal(page, edit_iframe)
 
     # create two quests
     sidebar(page, "Quest")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("Torta")
-    fill_tinymce(page, "id_teaser", "zucchero")
-    fill_tinymce(page, "id_text", "saleee")
-    page.get_by_text("After confirmation, add").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("Torta")
+    fill_tinymce(edit_iframe, "id_teaser", "zucchero")
+    fill_tinymce(edit_iframe, "id_text", "saleee")
+    save_modal(page, edit_iframe)
 
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Pizza")
-    fill_tinymce(page, "id_teaser", "mozzarella")
-    fill_tinymce(page, "id_text", "americano")
-    submit_confirm(page)
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Pizza")
+    fill_tinymce(edit_iframe, "id_teaser", "mozzarella")
+    fill_tinymce(edit_iframe, "id_text", "americano")
+    save_modal(page, edit_iframe)
 
     # check
     expect_normalized(page, page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
@@ -108,49 +112,55 @@ def traits(page: Any, live_server: Any) -> None:
     # create traits
     sidebar(page, "Traits")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Strudel")
-    fill_tinymce(page, "id_teaser", "trentina")
-    fill_tinymce(page, "id_text", "veronese")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Strudel")
+    fill_tinymce(edit_iframe, "id_teaser", "trentina")
+    fill_tinymce(edit_iframe, "id_text", "veronese")
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Nonna")
-    fill_tinymce(page, "id_teaser", "amelia")
-    fill_tinymce(page, "id_text", "aliame con ")
-    frame_locator = page.frame_locator("iframe#id_text_ifr")
-    editor = frame_locator.locator("body#tinymce")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Nonna")
+    fill_tinymce(edit_iframe, "id_teaser", "amelia")
+    fill_tinymce(edit_iframe, "id_text", "aliame con ")
+    editor = edit_iframe.locator("#id_text")
     editor.press("#")
-    page.get_by_role("searchbox").fill("stru")
-    page.locator(".select2-results__option").first.click()
-    just_wait(page)
+    edit_iframe.get_by_role("searchbox").fill("stru")
+    _wait_select2_results(edit_iframe)
+    edit_iframe.locator(".select2-results__option").first.click()
+    just_wait(edit_iframe)
 
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
-    frame = page.locator('iframe[title="Rich Text Area"]').content_frame
-    frame.get_by_label("Rich Text Area").press("#")
+    panel = wait_for_inline_edit(page)
+    just_wait(page)
+    panel.locator("textarea").press("#")
     page.get_by_role("searchbox").fill("non")
+    _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
     just_wait(page)
-    submit_confirm(page)
+    submit_inline_edit(page)
 
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_quest").select_option("u2")
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Capriciossa")
-    fill_tinymce(page, "id_teaser", "normale")
-    fill_tinymce(page, "id_text", "senza pomodoro")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_quest").select_option("u2")
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Capriciossa")
+    fill_tinymce(edit_iframe, "id_teaser", "normale")
+    fill_tinymce(edit_iframe, "id_text", "senza pomodoro")
+    save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
-    page.locator("#id_quest").select_option("u2")
-    page.locator("#id_quest").press("Tab")
-    page.locator("#id_name").fill("Mare")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_quest").select_option("u2")
+    edit_iframe.locator("#id_quest").press("Tab")
+    edit_iframe.locator("#id_name").fill("Mare")
+    save_modal(page, edit_iframe)
 
     # check how they appear on user side
     go_to(page, live_server, "/test")
@@ -165,31 +175,34 @@ def signups(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").nth(1).fill("org")
-    page.get_by_role("option", name="Admin Test - orga@test.it").click()
-    page.get_by_role("list").click()
-    page.get_by_role("searchbox").fill("te")
-    page.get_by_role("option", name="Test Character").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("org")
+    edit_iframe.get_by_role("option", name="Admin Test - orga@test.it").click()
+    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").fill("te")
+    edit_iframe.get_by_role("option", name="Test Character").click()
+    save_modal(page, edit_iframe)
 
     # create another char
     sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Another")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Another")
+    save_modal(page, edit_iframe)
 
     # create signup for another
     sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").nth(1).fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("an")
-    page.get_by_role("option", name="Another").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("an")
+    edit_iframe.get_by_role("option", name="Another").click()
+    save_modal(page, edit_iframe)
 
 
 def casting(page: Any, live_server: Any) -> None:
@@ -250,11 +263,12 @@ def casting(page: Any, live_server: Any) -> None:
 
     # manual trait assignments
     page.locator('[id="u2"]').locator(".fa-edit").click()
-    page.locator("#id_qt_u1").select_option("u1")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_qt_u1").select_option("u1")
+    save_modal(page, edit_iframe)
 
     # check result
-    page.get_by_role("link", name="Lore").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         "User Test Another Torta - Strudel Standard Admin Test Test Character Torta - Nonna Standard",

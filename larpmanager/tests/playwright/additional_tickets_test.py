@@ -30,7 +30,8 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, login_orga, login_user, logout, submit_confirm, expect_normalized, \
-    sidebar
+    submit_register, \
+    sidebar, get_modal_iframe, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -71,7 +72,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
 
     # Enable additional tickets feature
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Additional tickets").check()
     submit_confirm(page)
 
@@ -83,11 +84,12 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     page.get_by_role("link", name="Tickets").first.click()
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("50")
-    page.locator("#id_description").click()
-    page.locator("#id_description").fill("Standard ticket with meals")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("50")
+    edit_iframe.locator("#id_description").click()
+    edit_iframe.locator("#id_description").fill("Standard ticket with meals")
+    save_modal(page, edit_iframe)
 
 
 def registration_with_additionals(page: Any, live_server: Any) -> None:
@@ -118,7 +120,7 @@ def verify_organizer_view(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage/registrations/")
 
     # Verify additional tickets column is visible
-    page.locator("#one").get_by_role("link", name="Additional").click()
+    click_and_wait_question(page, "Additional")
     expect_normalized(page, page.locator("#one"), "3")
 
 
@@ -127,12 +129,13 @@ def edit_additionals(page: Any, live_server: Any) -> None:
     # Open the registration for editing
     go_to(page, live_server, "test/manage/registrations/")
     page.locator('[id="u1"]').locator(".fa-edit").click()
+    edit_iframe = get_modal_iframe(page)
 
     # Change additional tickets from 3 to 2
-    page.locator("#id_additionals").fill("2")
+    edit_iframe.locator("#id_additionals").fill("2")
 
     # Save changes
-    submit_confirm(page)
+    save_modal(page, edit_iframe)
 
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
@@ -184,7 +187,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Enable multiple features
     go_to(page, live_server, "test/manage")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Additional tickets").check()
     page.get_by_role("checkbox", name="Pay what you want").check()
     submit_confirm(page)
@@ -192,9 +195,10 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
     # Set ticket price
     page.get_by_role("link", name="Tickets").first.click()
     page.locator('[id="u1"]').locator(".fa-edit").click()
-    page.locator("#id_price").click()
-    page.locator("#id_price").fill("30")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_price").click()
+    edit_iframe.locator("#id_price").fill("30")
+    save_modal(page, edit_iframe)
 
     # Register with both additional tickets and pay what you want
     go_to(page, live_server, "test/")
@@ -227,7 +231,7 @@ def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
 
     # Make sure additional tickets feature is disabled
     go_to(page, live_server, "test/manage")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
 
     # Uncheck additional tickets if it's checked
     if page.get_by_role("checkbox", name="Additional tickets").is_checked():
@@ -242,8 +246,7 @@ def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
     expect(page.locator("body")).not_to_contain_text("Additional")
 
     # Verify form can still be submitted
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Verify registration succeeded
     expect(page.locator("#one")).to_be_visible()

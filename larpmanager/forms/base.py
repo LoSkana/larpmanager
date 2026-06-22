@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import logging
 import re
+from functools import cached_property
 from typing import TYPE_CHECKING, Any
 
 from django import forms
@@ -35,6 +36,7 @@ from django_select2 import forms as s2forms
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.utils import ReadOnlyWidget, WritingTinyMCE, css_delimeter
+from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -49,6 +51,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import RegistrationTicket
 from larpmanager.models.utils import (
+    decimal_to_str,
     generate_id,
     get_attr,
     get_option_form_text as util_get_option_form_text,
@@ -537,6 +540,7 @@ class BaseRegistrationForm(BaseModelFormRun):
     """
 
     gift = False
+    _inline_widgets_min_version = 20
     answer_class = RegistrationAnswer
     choice_class = RegistrationChoice
     option_class = RegistrationOption
@@ -553,6 +557,11 @@ class BaseRegistrationForm(BaseModelFormRun):
         self.show_link = []
         # Store form sections organized by category
         self.sections = {}
+
+    @cached_property
+    def _use_inline_widgets_v20(self) -> bool:
+        """Return True if effective_version >= 20 (radio/checkbox with inline descriptions)."""
+        return int(self.params.get("effective_version", 0)) >= self._inline_widgets_min_version
 
     def _init_registration_question(self, instance: Any | None, event: Event) -> None:
         """Initialize registration questions and answers from existing instance.
@@ -606,12 +615,41 @@ class BaseRegistrationForm(BaseModelFormRun):
         event_association = self.params.get("run").event.association if not currency_symbol else None
         return util_get_option_form_text(option, currency_symbol, event_association)
 
+    def _resolve_option(
+        self,
+        option: dict,
+        chosen_options: list | None,
+        registration_count: dict | None,
+        question_uuid: str | None,
+    ) -> tuple[str, int | None, bool]:
+        """Check availability and ticket compatibility for one option.
+
+        Returns (display_name, remaining_availability, is_valid).
+        """
+        option_display_name = self.get_option_form_text(option)
+        remaining_availability: int | None = None
+
+        if registration_count and option.get("max_available", 0) > 0:
+            option_display_name, is_valid, remaining_availability = self.check_option(
+                chosen_options, option_display_name, option, registration_count, question_uuid
+            )
+            if not is_valid:
+                return option_display_name, None, False
+
+        if registration_count and "tickets_map" in option:
+            valid_ticket_ids = [ticket_id for ticket_id in option["tickets_map"] if ticket_id is not None]
+            registration = self.params.get("registration")
+            if valid_ticket_ids and registration and registration.ticket_id not in valid_ticket_ids:
+                return option_display_name, None, False
+
+        return option_display_name, remaining_availability, True
+
     def get_choice_options(
         self,
         question: dict,
         chosen_options: list | None = None,
         registration_count: dict | None = None,
-    ) -> tuple[list[tuple], str]:
+    ) -> tuple[list[tuple], str, dict, dict]:
         """Build form choice options for a question with availability and ticket validation.
 
         Processes available options for a registration question, applying availability
@@ -623,45 +661,58 @@ class BaseRegistrationForm(BaseModelFormRun):
             registration_count:  Registration count data used for availability verification
 
         Returns:
-            tuple[list[tuple], str]: A tuple containing:
+            tuple[list[tuple], str, dict, dict]: A tuple containing:
                 - List of (option_id, display_name) tuples for form choices
-                - Combined help text string with question description and option details
+                - Help text string with question description
+                - Dict mapping option UUID strings to their descriptions
+                - Dict mapping option UUID strings to card metadata (name, price, available)
 
         """
         choices = []
         help_text = question["description"]
+        descriptions = {}
+        metadata = {}
 
         # Early return if no options available for this question
         available_options = question.get("options")
         if not available_options:
-            return choices, help_text
+            return choices, help_text, descriptions, metadata
 
-        # Process each available option for the question
+        # Resolve currency symbol once (only needed for v20+ card metadata)
+        cs = None
+        if self._use_inline_widgets_v20:
+            cs = self.params.get("currency_symbol")
+            if not cs and self.params.get("run"):
+                cs = self.params["run"].event.association.get_currency_symbol()
+
         for option in available_options:
-            # Generate display text with pricing information
-            option_display_name = self.get_option_form_text(option)
+            option_display_name, remaining_availability, is_valid = self._resolve_option(
+                option, chosen_options, registration_count, question.get("uuid")
+            )
+            if not is_valid:
+                continue
 
-            # Check availability constraints if registration counts provided
-            if registration_count and option.get("max_available", 0) > 0:
-                option_display_name, is_valid = self.check_option(
-                    chosen_options, option_display_name, option, registration_count, question.get("uuid")
-                )
-                if not is_valid:
-                    continue
+            option_uuid = str(option["uuid"])
 
-            # Validate ticket compatibility if ticket mapping exists
-            if registration_count and "tickets_map" in option:
-                valid_ticket_ids = [ticket_id for ticket_id in option["tickets_map"] if ticket_id is not None]
-                registration = self.params.get("registration")
-                if valid_ticket_ids and registration and registration.ticket_id not in valid_ticket_ids:
-                    continue
+            # Build card metadata only for v20+ widgets
+            if self._use_inline_widgets_v20:
+                price = option.get("price", 0) if isinstance(option, dict) else getattr(option, "price", 0)
+                price_text = None
+                if price and price > 0 and cs:
+                    price_text = f"{decimal_to_str(price)}{cs}"
+                metadata[option_uuid] = {
+                    "name": option["name"] if isinstance(option, dict) else option.name,
+                    "price": price_text,
+                    "available": remaining_availability,
+                }
 
-            # Add valid option to choices and append description to help text
-            choices.append((str(option["uuid"]), option_display_name))
+            choices.append((option_uuid, option_display_name))
             if option.get("description"):
-                help_text += f'<p id="hp_{option["uuid"]!s}"><b>{option["name"]}</b> {option["description"]}</p>'
+                descriptions[option_uuid] = option["description"]
+                if not self._use_inline_widgets_v20:
+                    help_text += f'<p id="hp_{option["uuid"]!s}"><b>{option["name"]}</b> {option["description"]}</p>'
 
-        return choices, help_text
+        return choices, help_text, descriptions, metadata
 
     def check_option(
         self,
@@ -670,7 +721,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         option: dict,
         registration_count_by_option: dict,
         question_uuid: str | None = None,
-    ) -> tuple[str, bool]:
+    ) -> tuple[str, bool, int | None]:
         """Check option availability and update display name with availability info.
 
         Verifies if an option is available for selection based on current registrations
@@ -684,14 +735,16 @@ class BaseRegistrationForm(BaseModelFormRun):
             question_uuid: UUID of the parent question (needed for tracking unavailable options)
 
         Returns:
-            tuple[str, bool]: A tuple containing:
+            tuple[str, bool, int | None]: A tuple containing:
                 - updated_name: Display name with availability info appended
                 - is_valid: Boolean indicating if the option is valid/available
+                - remaining: Remaining availability count, or None if already chosen / no limit
 
         """
         # Check if this option was already chosen by the user
         option_already_chosen = False
         is_valid = True
+        remaining_out: int | None = None
 
         if previously_chosen_options:
             for choice in previously_chosen_options:
@@ -718,8 +771,9 @@ class BaseRegistrationForm(BaseModelFormRun):
             else:
                 # Append availability count to the display name
                 display_name += " - (" + _("Available") + f" {remaining_availability})"
+                remaining_out = remaining_availability
 
-        return display_name, is_valid
+        return display_name, is_valid, remaining_out
 
     def _validate_multiple_choice(self, form_data: dict, question: dict, field_key: str) -> None:
         """Validate multiple choice question selections.
@@ -1172,10 +1226,10 @@ class BaseRegistrationForm(BaseModelFormRun):
         """
         if is_organizer:
             # Get choice options for organizational context
-            (available_choices, help_text) = self.get_choice_options(question)
+            (available_choices, help_text, descriptions, metadata) = self.get_choice_options(question)
 
-            # Add default "Not selected" option if no previous selection exists
-            if question["id"] not in self.singles:
+            # Add default "Not selected" option if no previous selection exists and not using inline widgets
+            if question["id"] not in self.singles and not self._use_inline_widgets_v20:
                 available_choices.insert(0, (0, "--- " + _("Not selected")))
         else:
             # Prepare list of previously chosen options for user context
@@ -1184,19 +1238,24 @@ class BaseRegistrationForm(BaseModelFormRun):
                 previously_chosen_options.append(self.singles[question["id"]])
 
             # Get choice options with quota tracking for user registration
-            (available_choices, help_text) = self.get_choice_options(
+            (available_choices, help_text, descriptions, metadata) = self.get_choice_options(
                 question,
                 previously_chosen_options,
                 registration_counts,
             )
 
         # Create the choice field with determined options and configuration
-        self.fields[field_key] = forms.ChoiceField(
-            required=is_required,
-            choices=available_choices,
-            label=question["name"],
-            help_text=help_text,
-        )
+        field_kwargs: dict = {
+            "required": is_required,
+            "choices": available_choices,
+            "label": question["name"],
+            "help_text": help_text,
+        }
+        if self._use_inline_widgets_v20:
+            field_kwargs["widget"] = DescriptionRadioSelect(
+                attrs={"class": "my-radio-class"}, descriptions=descriptions, metadata=metadata
+            )
+        self.fields[field_key] = forms.ChoiceField(**field_kwargs)
 
         # Set initial value from previous selection if it exists and is still valid
         if question["id"] in self.singles and self.singles[question["id"]].option:
@@ -1236,13 +1295,13 @@ class BaseRegistrationForm(BaseModelFormRun):
         """
         # Process choice options differently for organizational vs regular forms
         if is_organizer:
-            (available_choices, help_text) = self.get_choice_options(question)
+            (available_choices, help_text, descriptions, metadata) = self.get_choice_options(question)
         else:
             previously_selected_choices = []
             # Retrieve previously selected choices if they exist
             if question["id"] in self.multiples:
                 previously_selected_choices = self.multiples[question["id"]]
-            (available_choices, help_text) = self.get_choice_options(
+            (available_choices, help_text, descriptions, metadata) = self.get_choice_options(
                 question,
                 previously_selected_choices,
                 registration_counts,
@@ -1252,10 +1311,16 @@ class BaseRegistrationForm(BaseModelFormRun):
         field_validators = [max_selections_validator(question["max_length"])] if question.get("max_length") else []
 
         # Create the multiple choice field with checkbox widget
+        if self._use_inline_widgets_v20:
+            widget = DescriptionCheckboxSelectMultiple(
+                attrs={"class": "my-checkbox-class"}, descriptions=descriptions, metadata=metadata
+            )
+        else:
+            widget = forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
         self.fields[field_key] = forms.MultipleChoiceField(
             required=is_required,
             choices=available_choices,
-            widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
+            widget=widget,
             label=question["name"],
             help_text=help_text,
             validators=field_validators,
@@ -1393,14 +1458,11 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         Creates new choices for added options and deletes removed ones.
         """
-        if not option_uuids:
-            return
-
         question_id = question["id"]
 
         # Convert option UUIDs to option IDs by looking them up from serialized options
         uuid_to_id = {str(opt["uuid"]): opt["id"] for opt in question.get("options", [])}
-        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids if uuid_str in uuid_to_id}
+        selected_option_ids = {uuid_to_id[uuid_str] for uuid_str in option_uuids or [] if uuid_str in uuid_to_id}
 
         # If question already has existing choices, sync the differences
         if question_id in self.multiples:
@@ -1408,7 +1470,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
             # Create new choices for added options
             for add in selected_option_ids - old:
-                self.choice_class.objects.create(
+                self.choice_class.objects.get_or_create(
                     **{"question_id": question_id, self.instance_key: instance.id, "option_id": add}
                 )
 
@@ -1420,7 +1482,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         else:
             # Create all choices from scratch if none exist
             for pkoid in selected_option_ids:
-                self.choice_class.objects.create(
+                self.choice_class.objects.get_or_create(
                     **{"question_id": question_id, self.instance_key: instance.id, "option_id": pkoid}
                 )
 

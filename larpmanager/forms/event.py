@@ -135,7 +135,7 @@ class OrgaEventForm(BaseModelForm):
 
     page_title = _("Event")
 
-    page_info = _("Manage event settings")
+    page_info = _("Edit the basic settings of this event")
 
     load_templates: ClassVar[list] = ["event"]
 
@@ -268,7 +268,7 @@ class OrgaFeatureForm(FeatureForm):
     page_title = _("Event features")
 
     page_info = _(
-        "Manage features activated for this event and all its runs (click on a feature to show its description)",
+        "Enable or disable features for this event and all its runs; click a feature name to read its description"
     )
 
     load_js: ClassVar[list] = ["feature-search"]
@@ -301,7 +301,7 @@ class OrgaConfigForm(ConfigForm):
 
     page_title = _("Event Configuration")
 
-    page_info = _("Manage configuration of activated features")
+    page_info = _("View and adjust configuration options for each feature activated on this event")
 
     section_replace = True
 
@@ -1074,7 +1074,7 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
     page_title = _("Event Appearance")
 
-    page_info = _("Manage appearance and presentation of the event")
+    page_info = _("Customize the visual appearance of the event")
 
     load_js: ClassVar[list] = ["appearance-colors"]
 
@@ -1090,6 +1090,8 @@ class OrgaAppearanceForm(BaseModelCssForm):
             "sec_rgb",
             "ter_rgb",
         )
+
+        widgets: ClassVar[dict] = {"carousel_text": WritingTinyMCE()}
 
     theme = forms.ChoiceField(
         choices=[("", "---"), *AppearanceTheme.choices],
@@ -1167,12 +1169,14 @@ class OrgaEventTextForm(BaseModelForm):
 
     page_title = _("Event Texts")
 
-    page_info = _("Manage event texts")
+    page_info = _("Manage custom text entries used across different sections of this event")
 
     class Meta:
         abstract = True
         model = EventText
         exclude = ("number",)
+
+        widgets: ClassVar[dict] = {"text": WritingTinyMCE()}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize event text form with feature-based field filtering.
@@ -1268,9 +1272,7 @@ class OrgaEventRoleForm(BaseModelForm):
 
     page_title = _("Roles")
 
-    page_info = _("Manage event access roles")
-
-    load_templates: ClassVar[list] = ["share"]
+    page_info = _("Manage organizer roles and assign permissions to staff members for this event")
 
     class Meta:
         model = EventRole
@@ -1284,6 +1286,10 @@ class OrgaEventRoleForm(BaseModelForm):
         self.configure_field_association("members", self.params["association_id"])
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
+        self.fields["members"].help_text = (
+            _("If you don't find an user, you can save the role, and then invite them clicking on")
+            + " <i class='fas fa-envelope'></i>"
+        )
 
     def save(self, commit: bool = True) -> EventRole:  # noqa: FBT001, FBT002, ARG002
         """Save form instance and update role permissions."""
@@ -1335,7 +1341,7 @@ class OrgaEventButtonForm(BaseModelForm):
 
     page_title = _("Event Navigation")
 
-    page_info = _("Manage event navigation buttons")
+    page_info = _("Manage custom navigation buttons displayed to participants for this event")
 
     icon = forms.ChoiceField(choices=_BUTTON_ICON_CHOICES, required=False, label=_("Icon"))
 
@@ -1390,9 +1396,9 @@ class OrgaRunForm(ConfigForm):
             self.fields["event"].help_text = _("Select the event of this new session")
             self.fields["event"].to_field_name = None
             self.choose_event = True
-            self.page_info = _("Manage new session for an existing event")
+            self.page_info = _("Create a new session for an existing event")
         else:
-            self.page_info = _("Manage date settings for this event")
+            self.page_info = _("Edit the dates, status, and registration settings for this event session")
             self.delete_field("event")
 
         # do not show cancelled or done options for development if date are not set
@@ -1751,7 +1757,7 @@ class ExeTemplateForm(FeatureForm):
 
     page_title = _("Event Template")
 
-    page_info = _("Manage template features (click on a feature to show its description)")
+    page_info = _("Manage event templates used as the basis for new events, including their roles and configuration")
 
     class Meta:
         model = Event
@@ -1806,7 +1812,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
 
     page_title = _("Quick Setup")
 
-    page_info = _("Select the features you want to activate for this event")
+    page_info = _("Quickly enable or disable key features for this event using a simplified checklist")
 
     class Meta:
         model = Event
@@ -2279,7 +2285,9 @@ class OrgaPromotionForm(ConfigForm):
 
     page_title = _("Promotion")
 
-    page_info = _("Manage event metadata for external promotion")
+    page_info = _(
+        "Fill in the public metadata used to promote this event externally, including language, type, setting, location, and style"
+    )
 
     show_sections = True
 

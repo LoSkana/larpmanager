@@ -36,12 +36,13 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     fill_tinymce,
+    get_modal_iframe,
     go_to,
     login_orga,
     login_user,
     logout,
     sidebar,
-    submit_confirm,
+    submit_confirm, save_modal, _wait_select2_results,
 )
 
 pytestmark = pytest.mark.e2e
@@ -54,7 +55,7 @@ def test_orga_character_hide_locked(pw_page: Any) -> None:  # noqa: D103
 
     # ===== SETUP: Enable features and configs =====
     go_to(page, live_server, "test/manage")
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     page.get_by_role("checkbox", name="Characters").check()
     page.get_by_role("checkbox", name="Factions").check()
     submit_confirm(page)
@@ -86,10 +87,11 @@ def _create_character(page: Any, live_server: Any, name: str, teaser: str, text:
     """Create a character via orga form and return its UUID using the sequential debug counter."""
     sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill(name)
-    fill_tinymce(page, "id_teaser", teaser)
-    fill_tinymce(page, "id_text", text)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill(name)
+    fill_tinymce(edit_iframe, "id_teaser", teaser)
+    fill_tinymce(edit_iframe, "id_text", text)
+    save_modal(page, edit_iframe)
     uuid = f"u{counter[0]}"
     counter[0] += 1
     return uuid
@@ -99,9 +101,10 @@ def _create_faction(page: Any, live_server: Any, name: str, teaser: str, counter
     """Create a faction via orga form and return its UUID using the sequential debug counter."""
     go_to(page, live_server, "test/manage/factions/")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill(name)
-    fill_tinymce(page, "id_teaser", teaser)
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill(name)
+    fill_tinymce(edit_iframe, "id_teaser", teaser)
+    save_modal(page, edit_iframe)
     uuid = f"u{counter[0]}"
     counter[0] += 1
     return uuid
@@ -112,13 +115,14 @@ def _assign_to_user(page: Any, live_server: Any, char_name: str) -> None:
     go_to(page, live_server, "test/manage/")
     sidebar(page, "Registrations")
     page.get_by_role("link", name="New").click()
-    page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").nth(1).fill("user")
-    page.get_by_role("option", name="User Test - user@test.it").click()
-    page.get_by_role("list").click()
-    page.get_by_role("searchbox").fill(char_name[:5])
-    page.get_by_role("option", name=char_name).click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_member-container").click()
+    edit_iframe.get_by_role("searchbox").nth(1).fill("user")
+    edit_iframe.get_by_role("option", name="User Test - user@test.it").click()
+    edit_iframe.get_by_role("list").click()
+    edit_iframe.get_by_role("searchbox").fill(char_name[:5])
+    edit_iframe.get_by_role("option", name=char_name).click()
+    save_modal(page, edit_iframe)
 
 
 def _set_char_field(page: Any, live_server: Any, char_uuid: str, field_id: str) -> None:
@@ -219,15 +223,16 @@ def _test_faction_hide(page: Any, live_server: Any, char_counter: list, faction_
     # Create character in that faction
     sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("FactionHiddenChar")
-    fill_tinymce(page, "id_teaser", "fhidden teaser")
-    fill_tinymce(page, "id_text", "fhidden text")
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("FactionHiddenChar")
+    fill_tinymce(edit_iframe, "id_teaser", "fhidden teaser")
+    fill_tinymce(edit_iframe, "id_text", "fhidden text")
     # Assign faction via select2
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("Hidd")
-    page.wait_for_timeout(500)
-    page.locator(".select2-results__option").filter(has_text="HiddenFaction").first.click()
-    submit_confirm(page)
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("Hidd")
+    _wait_select2_results(edit_iframe)
+    edit_iframe.locator(".select2-results__option").filter(has_text="HiddenFaction").first.click()
+    save_modal(page, edit_iframe)
     char_uuid = f"u{char_counter[0]}"
     char_counter[0] += 1
 
@@ -257,14 +262,15 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     # Create character in that faction
     sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").fill("FactionLockedChar")
-    fill_tinymce(page, "id_teaser", "flocked teaser")
-    fill_tinymce(page, "id_text", "flocked private text")
-    page.get_by_role("searchbox").click()
-    page.get_by_role("searchbox").fill("Lock")
-    page.wait_for_timeout(500)
-    page.locator(".select2-results__option").filter(has_text="LockedFaction").first.click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill("FactionLockedChar")
+    fill_tinymce(edit_iframe, "id_teaser", "flocked teaser")
+    fill_tinymce(edit_iframe, "id_text", "flocked private text")
+    edit_iframe.get_by_role("searchbox").click()
+    edit_iframe.get_by_role("searchbox").fill("Lock")
+    _wait_select2_results(edit_iframe)
+    edit_iframe.locator(".select2-results__option").filter(has_text="LockedFaction").first.click()
+    save_modal(page, edit_iframe)
     char_uuid = f"u{char_counter[0]}"
     char_counter[0] += 1
 

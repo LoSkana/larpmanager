@@ -31,16 +31,18 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    check_feature,
-    expect_normalized,
-    go_to,
-    just_wait,
-    login_orga,
-    login_user,
-    logout,
-    submit_confirm, sidebar,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     check_feature,
+                                     expect_normalized,
+                                     fill_date,
+                                     go_to,
+                                     just_wait,
+                                     login_orga,
+                                     login_user,
+                                     logout,
+                                     submit_confirm, sidebar,
+                                     get_modal_iframe, save_modal,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -101,33 +103,30 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     # create event
     go_to(page, live_server, "/manage/events/")
     page.get_by_role("link", name="New event").click()
-    page.locator("#id_form1-name").click()
-    page.locator("#id_form1-name").fill("Test Access")
-
-    page.locator("#id_form2-development").select_option("1")
-    page.locator("#id_form2-registration_status").select_option("o")
-    page.locator("#id_form2-start").fill("2055-06-11")
-    just_wait(page)
-    page.locator("#id_form2-start").click()
-    page.locator("#id_form2-end").fill("2055-06-13")
-    just_wait(page)
-    page.locator("#id_form2-end").click()
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").click()
+    edit_iframe.locator("#id_form1-name").fill("Test Access")
+    edit_iframe.locator("#id_form2-development").select_option("1")
+    edit_iframe.locator("#id_form2-registration_status").select_option("o")
+    fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
+    fill_date(edit_iframe, "#id_form2-end", "2055-06-13")
+    save_modal(page, edit_iframe)
 
     # Verify we're on the new event
     go_to(page, live_server, "/testaccess/manage/")
 
     # Enable Characters feature
-    page.get_by_role("link", name="Features").first.click()
+    sidebar(page, "Features")
     check_feature(page, "Characters")
     submit_confirm(page)
 
     # Create a test character to have something in the gallery
     sidebar(page, "Characters")
     page.get_by_role("link", name="New").click()
-    page.locator("#id_name").click()
-    page.locator("#id_name").fill("Test Gallery Character")
-    submit_confirm(page)
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("Test Gallery Character")
+    save_modal(page, edit_iframe)
 
     # Test 1: Gallery should be visible without any restrictions
     logout(page)
@@ -176,8 +175,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Register the user to the event
     page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Now user is registered, they should be able to access the gallery
     go_to(page, live_server, "/testaccess/")
@@ -226,8 +224,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Register again
     page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Now can access again
     go_to(page, live_server, "/testaccess/")
@@ -275,4 +272,4 @@ def reset_caches(live_server, page):
     go_to(page, live_server, "/manage/")
 
     page.get_by_role("link", name="Reset Cache").click()
-    expect_normalized(page, page.locator("#banner"), "Dashboard")
+    expect_normalized(page, page.locator("#banner"),"Dashboard")

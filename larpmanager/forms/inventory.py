@@ -49,7 +49,7 @@ class OrgaInventoryForm(MultichoiceMixin, InventoryBaseForm):
     load_js: ClassVar[list[str]] = ["multichoice"]
 
     page_title = _("Inventories")
-    page_info = _("This page allows you to add or edit a character inventory")
+    page_info = _("Manage character inventories and view their contents for this event")
 
     class Meta:
         model = Inventory
@@ -93,7 +93,7 @@ class OrgaPoolTypeForm(BaseModelForm):
 
     page_title = _("Pool type")
 
-    page_info = _("This page allows you to add or edit a ci pool type")
+    page_info = _("Define the resource pool types available in character inventories for this event")
 
     class Meta:
         model = PoolTypeCI

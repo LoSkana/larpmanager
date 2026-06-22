@@ -43,7 +43,9 @@ from larpmanager.forms.utils import (
     RunRegS2Widget,
     TicketS2WidgetMulti,
     TransferTargetRunS2Widget,
+    WritingTinyMCE,
 )
+from larpmanager.forms.widgets import DescriptionRadioSelect
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -62,6 +64,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
     TicketTier,
 )
+from larpmanager.models.utils import decimal_to_str
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.users.registration import get_reduced_available_count
@@ -348,29 +351,52 @@ class RegistrationForm(BaseRegistrationForm):
         # Get available tickets based on event, registration counts and run
         available_tickets = self.get_available_tickets(event, registration_counts, run)
 
-        # Build ticket choices and collect descriptions for help text
+        # Build ticket choices and collect descriptions
         ticket_choices = []
+        ticket_descriptions = {}
+        ticket_metadata = {}
         ticket_help_html = ""
 
-        # Process each available ticket to create form choices and help text
+        # Process each available ticket to create form choices and descriptions
         for ticket in available_tickets:
             # Generate formatted ticket name with pricing information
             currency_symbol = self.params.get("currency_symbol")
             ticket_display_name = get_ticket_form_text(ticket, currency_symbol)
-            ticket_choices.append((str(ticket.get("uuid")), ticket_display_name))
+            ticket_uuid = str(ticket.get("uuid"))
+            ticket_choices.append((ticket_uuid, ticket_display_name))
 
-            # Add ticket description to help text if available
+            # Build card metadata for this ticket
+            price_text = None
+            if ticket.get("price") and ticket["price"] > 0:
+                price_text = f"{decimal_to_str(ticket['price'])}{currency_symbol or ''}"
+            ticket_metadata[ticket_uuid] = {
+                "name": ticket["name"],
+                "price": price_text,
+                "available": ticket.get("available"),
+            }
+
             if ticket.get("description"):
-                ticket_help_html += f"<p><b>{ticket.get('name')}</b>: {ticket.get('description')}</p>"
+                ticket_descriptions[ticket_uuid] = ticket.get("description")
+                if not self._use_inline_widgets_v20:
+                    ticket_help_html += f"<p><b>{ticket.get('name')}</b>: {ticket.get('description')}</p>"
 
-        # Create the ticket selection field with available choices
-        self.fields["ticket"] = forms.ChoiceField(required=True, choices=ticket_choices)
+        # Create the ticket selection field; use radio buttons with inline descriptions for v20+
+        ticket_field_kwargs: dict = {"required": True, "choices": ticket_choices}
+        if self._use_inline_widgets_v20:
+            ticket_field_kwargs["widget"] = DescriptionRadioSelect(
+                attrs={"class": "my-radio-class"}, descriptions=ticket_descriptions, metadata=ticket_metadata
+            )
+        self.fields["ticket"] = forms.ChoiceField(**ticket_field_kwargs)
 
         # Set initial ticket value from existing instance or parameters
         if self.instance and self.instance.ticket:
             self.initial["ticket"] = str(self.instance.ticket.uuid)
         elif self.params.get("ticket"):
             self.initial["ticket"] = self.params["ticket"]
+
+        # If only one ticket available, auto-select it
+        if len(ticket_choices) == 1:
+            self.initial["ticket"] = ticket_choices[0][0]
 
         return ticket_help_html
 
@@ -627,11 +653,11 @@ class RegistrationGiftForm(RegistrationForm):
 class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
-    page_info = _("Manage event signups")
+    page_info = _(
+        "Manage all active participant registrations, including character assignments, ticket types, and payment status"
+    )
 
     page_title = _("Registrations")
-
-    load_templates: ClassVar[list] = ["share"]
 
     load_js: ClassVar[list] = ["multichoice"]
 
@@ -789,12 +815,33 @@ class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
         tickets = sorted(get_registration_tickets(self.params["run"].event_id), key=lambda t: t["price"], reverse=True)
         currency_symbol = self.params.get("currency_symbol", "")
 
-        self.fields["ticket"] = forms.ChoiceField(
-            required=self.fields["ticket"].required,
-            label=self.fields["ticket"].label,
-            help_text=self.fields["ticket"].help_text,
-            choices=[(ticket["uuid"], get_ticket_form_text(ticket, currency_symbol)) for ticket in tickets],
-        )
+        orga_ticket_kwargs: dict = {
+            "required": self.fields["ticket"].required,
+            "label": self.fields["ticket"].label,
+            "help_text": self.fields["ticket"].help_text,
+            "choices": [(str(ticket["uuid"]), get_ticket_form_text(ticket, currency_symbol)) for ticket in tickets],
+        }
+        if self._use_inline_widgets_v20:
+            orga_descriptions = {}
+            orga_metadata = {}
+            for ticket in tickets:
+                ticket_uuid = str(ticket["uuid"])
+                if ticket.get("description"):
+                    orga_descriptions[ticket_uuid] = ticket["description"]
+                price_text = None
+                if ticket.get("price") and ticket["price"] > 0:
+                    price_text = f"{decimal_to_str(ticket['price'])}{currency_symbol}"
+                orga_metadata[ticket_uuid] = {
+                    "name": ticket["name"],
+                    "price": price_text,
+                    "available": ticket.get("available"),
+                }
+            orga_ticket_kwargs["widget"] = DescriptionRadioSelect(
+                attrs={"class": "my-radio-class"},
+                descriptions=orga_descriptions,
+                metadata=orga_metadata,
+            )
+        self.fields["ticket"] = forms.ChoiceField(**orga_ticket_kwargs)
 
         # Set initial value if editing existing instance
         if self.instance.pk and self.instance.ticket:
@@ -1067,7 +1114,7 @@ class RegistrationCharacterRelForm(BaseModelForm):
 class OrgaRegistrationTicketForm(BaseModelForm):
     """Form for OrgaRegistrationTicket."""
 
-    page_info = _("Manage ticket types for participant registration")
+    page_info = _("Define the ticket types participants can select when registering, including pricing and tiers")
 
     page_title = _("Tickets")
 
@@ -1161,7 +1208,7 @@ class OrgaRegistrationTicketForm(BaseModelForm):
 class OrgaRegistrationSectionForm(BaseModelForm):
     """Form for OrgaRegistrationSection."""
 
-    page_info = _("Manage signup form sections")
+    page_info = _("Organize registration form questions into named sections to group related fields together")
 
     page_title = _("Form section")
 
@@ -1169,13 +1216,15 @@ class OrgaRegistrationSectionForm(BaseModelForm):
         model = RegistrationSection
         exclude: ClassVar[list] = ["order"]
 
+        widgets: ClassVar[dict] = {"description": WritingTinyMCE()}
+
 
 class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
     """Form for OrgaRegistrationQuestion."""
 
     load_js: ClassVar[list] = ["multichoice"]
 
-    page_info = _("Manage signup form questions")
+    page_info = _("Manage the custom questions participants must answer when registering for this event")
 
     page_title = _("Registration form")
 
@@ -1344,7 +1393,7 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
 class OrgaRegistrationOptionForm(BaseModelForm):
     """Form for OrgaRegistrationOption."""
 
-    page_info = _("Manage signup form question options")
+    page_info = _("Manage the selectable options available for a registration form question")
 
     page_title = _("Registration options")
 
@@ -1355,6 +1404,19 @@ class OrgaRegistrationOptionForm(BaseModelForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and set question field from params if provided."""
         super().__init__(*args, **kwargs)
+        for field in ("price", "max_available"):
+            if field in self.fields:
+                self.fields[field].required = False
+
+    def clean_price(self) -> Any:
+        """Treat blank price as 0."""
+        value = self.cleaned_data.get("price")
+        return value if value is not None else 0
+
+    def clean_max_available(self) -> int:
+        """Treat blank max_available as 0."""
+        value = self.cleaned_data.get("max_available")
+        return value if value is not None else 0
 
     def save(self, commit: bool = True) -> RegistrationOption:  # noqa: FBT001, FBT002
         """Save the form instance, setting question for new instances."""
@@ -1367,7 +1429,9 @@ class OrgaRegistrationOptionForm(BaseModelForm):
 class OrgaRegistrationQuotaForm(BaseModelForm):
     """Form for OrgaRegistrationQuota."""
 
-    page_info = _("Manage dynamic payment installments for participants")
+    page_info = _(
+        "Set up installment quota plans that divide ticket prices into equal portions for participants to pay over time"
+    )
 
     page_title = _("Dynamic rates")
 
@@ -1416,7 +1480,9 @@ class OrgaRegistrationInstallmentForm(MultichoiceMixin, BaseModelForm):
 
     load_js: ClassVar[list] = ["multichoice"]
 
-    page_info = _("Manage fixed payment installments for participants")
+    page_info = _(
+        "Define installment schedules that split ticket costs into multiple payment deadlines for participants"
+    )
 
     page_title = _("Fixed instalments")
 
@@ -1519,7 +1585,7 @@ class OrgaRegistrationInstallmentForm(MultichoiceMixin, BaseModelForm):
 class OrgaRegistrationSurchargeForm(BaseModelForm):
     """Form for OrgaRegistrationSurcharge."""
 
-    page_info = _("Manage registration surcharges")
+    page_info = _("Configure date-based surcharges that add extra fees to registrations after a specified deadline")
 
     page_title = _("Surcharge")
 
