@@ -302,8 +302,9 @@ function check_mandatory() {
 
 
 function check_tickets_map() {
-    // get selected ticket
+    // get selected ticket (select or radio group)
     var sel = $('#id_ticket').val();
+    if (!sel) sel = $('input[name="ticket"]:checked').val();
     if( !sel ) sel = 0;
 
     $.each(tickets_map, function(index, value) {

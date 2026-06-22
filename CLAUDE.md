@@ -126,10 +126,11 @@ Models are organized in `larpmanager/models/` by domain:
 - **Responsive design**: Bootstrap-based UI
 
 ### Testing Strategy
-- **Test framework**: pytest with django-pytest plugin
+- **Test framework**: pytest with django-pytest plugin; always run only one test at a time.
 - **E2E testing**: Playwright for browser automation
 - **Test markers**: `@pytest.mark.e2e`, `@pytest.mark.slow`, `@pytest.mark.django_db_reset_sequences`
 - **Test location**: `larpmanager/tests/` directory
+- **Debugging failures**: Run with `RECORD=1`; on failure, screenshot and HTML are saved to `test_screenshots/{timestamp}_{testname}.{png,html}`. Always read the saved HTML to understand what the page actually showed before attempting to fix a failing test.
 
 ### Key Configuration Files
 - **Django settings**: Environment-specific files in `main/settings/`
@@ -171,7 +172,7 @@ Models are organized in `larpmanager/models/` by domain:
 
 ## Code Conventions
 
-- **Never name a variable `_`** — use a descriptive name or a more specific throwaway like `_unused`.
+- **Never name a variable `_`** - use a descriptive name or a more specific throwaway like `_unused`.
 
 ## Contributing Workflow
 

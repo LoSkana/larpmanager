@@ -122,17 +122,14 @@ def _capture_test_artifacts(
     request: pytest.FixtureRequest,
     page: Page,
     *,
-    headed: bool,
+    headed: bool,  # noqa: ARG001
     video_dir: Path | None,
 ) -> Any:
-    """Capture screenshot, HTML and video if test failed in headed mode.
+    """Capture screenshot, HTML and video if test failed.
 
     Returns video object if available and test failed, None otherwise.
     """
     if not (hasattr(request.node, "rep_call") and request.node.rep_call.failed):
-        return None
-
-    if not headed:
         return None
 
     screenshot_dir = Path(__file__).parent / "test_screenshots"

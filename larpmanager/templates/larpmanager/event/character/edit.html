@@ -92,7 +92,7 @@
 
             disable_dependencies();
 
-            $('select, input[type="checkbox"]').on('change', function() {
+            $('select, input[type="checkbox"], input[type="radio"]').on('change', function() {
                 disable_dependencies();
             });
 
@@ -101,6 +101,7 @@
     function check_dependencies(dependencies) {
         let selects = [];
         let checkboxes = [];
+        let radios = [];
         let remainingDependencies = [...dependencies]; // Create a copy of the dependencies array to manipulate it
 
         // Collect the selects that contain dependency values
@@ -129,6 +130,19 @@
             }
         });
 
+        // Collect radio groups that contain dependency values
+        $('input[type="radio"]:checked').each(function () {
+            const name = $(this).attr('name');
+            const value = $(this).val();
+
+            if (value && remainingDependencies.includes(value)) {
+                remainingDependencies = remainingDependencies.filter(v => v !== value);
+                if (!radios.includes(name)) {
+                    radios.push(name);
+                }
+            }
+        });
+
         // Check the remaining values in dependencies
         for (let val of remainingDependencies) {
             // If the remaining value is in a select not yet selected, return false
@@ -149,6 +163,15 @@
 
             if (checkboxFound) {
                 return false; // If the remaining value is in a checkbox that was not included, return false
+            }
+
+            // If the remaining value is in a radio group not yet selected, return false
+            let radioFound = $('input[type="radio"]').is(function () {
+                return $(this).val() === val && !radios.includes($(this).attr('name'));
+            });
+
+            if (radioFound) {
+                return false; // If the remaining value is in a radio group, return false
             }
         }
 
@@ -191,6 +214,22 @@
                   $(this).hide();
                   $(this).closest('label').hide();
                   $('#hp_' + key).hide();
+                  $(this).closest('div').hide();
+                }
+                if (!available && $(this).is(':checked')) {
+                    $(this).prop('checked', false);
+                }
+            });
+
+            // disable radio options with that value
+            $('input[type="radio"][value="' + key + '"]').each(function() {
+                if (available) {
+                  $(this).closest('div').show();
+                  $(this).show();
+                  $(this).closest('label').show();
+                } else {
+                  $(this).hide();
+                  $(this).closest('label').hide();
                   $(this).closest('div').hide();
                 }
                 if (!available && $(this).is(':checked')) {

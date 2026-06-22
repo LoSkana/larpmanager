@@ -170,16 +170,15 @@ def check_first_char(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_que_u4").press("Tab")
     edit_iframe.get_by_text("bbbbbbbbbb").click()
     edit_iframe.get_by_text("bbbbbbbbbb").fill("dddddddddd")
-    edit_iframe.locator('#id_que_u6_1').click(force=True)
-    edit_iframe.locator('#id_que_u8_0').click(force=True)
-    edit_iframe.locator("#id_que_u7_0").uncheck(force=True)
-    edit_iframe.locator("#id_que_u7_2").check(force=True)
+    edit_iframe.locator('label[for="id_que_u6_1"]').click()
+    edit_iframe.locator('label[for="id_que_u8_0"]').click()
+    edit_iframe.locator('label[for="id_que_u7_0"]').click()
+    edit_iframe.locator('label[for="id_que_u7_2"]').click()
     edit_iframe.locator("#id_que_u10").fill("disabled")
     edit_iframe.locator("#id_que_u11").fill("hidden")
     edit_iframe.locator("#id_status").select_option("a")
     save_modal(page, edit_iframe)
-
-    edit_iframe.locator('[id="u2"]').locator(".fa-edit").click()
+    page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect(edit_iframe.locator("#id_que_u4")).to_have_value("cccccccccc")
     expect(edit_iframe.get_by_text("dddddddddd")).to_have_value("dddddddddd")
@@ -190,7 +189,6 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u5"), "long text")
     expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "short descr")
     edit_iframe.get_by_text("long descr").click()
-    save_modal(page, edit_iframe)
 
 def recheck_char(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
@@ -199,7 +197,7 @@ def recheck_char(live_server: Any, page: Any) -> None:
     expect_normalized(page, edit_iframe.locator("#main_form"), "only only descr all all descr restricted text")
     expect_normalized(page, edit_iframe.locator('[id="id_que_u7_tr"]'), "multiple text")
     expect_normalized(page,
-        page.locator('[id="id_que_u7_tr"]'), "all all descr many many descr few few descr multiple descr"
+        edit_iframe.locator('[id="id_que_u7_tr"]'), "all all descr many many descr few few descr multiple descr"
     )
     save_modal(page, edit_iframe)
     go_to(page, live_server, "/test/character/list")

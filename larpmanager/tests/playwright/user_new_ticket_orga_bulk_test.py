@@ -349,10 +349,8 @@ def new_ticket(live_server: Any, page: Any) -> None:
     # sign up with the new ticket
     go_to(page, live_server, "test")
     page.get_by_role("link", name="Register").click()
-    expect(page.get_by_label("Ticket")).to_match_aria_snapshot(
-        '- combobox "Ticket (*)":\n  - option "-------" [disabled] [selected]\n  - option "Standard"\n  - option "new"'
-    )
-    page.get_by_label("Ticket").select_option("u2")
+    expect(page.locator("#id_ticket")).to_match_aria_snapshot('- radio "Standard"\n- text: Standard\n- radio "new"\n- text: new')
+    page.locator('label[for="id_ticket_1"]').click()  # select "new" ticket
     page.get_by_role("button", name="Continue").click()
     submit_confirm(page)
 
@@ -386,4 +384,4 @@ def new_ticket(live_server: Any, page: Any) -> None:
     # check new ticket is not available
     go_to(page, live_server, "newevent/1/")
     page.get_by_role("link", name="Register").click()
-    expect(page.get_by_label("Ticket")).to_match_aria_snapshot('- combobox "Ticket (*)":\n  - option "Standard" [selected]')
+    expect(page.locator("#id_ticket")).to_match_aria_snapshot('- radio "Standard"\n- text: Standard')

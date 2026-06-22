@@ -105,7 +105,7 @@ def discount(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("discount")
-    edit_iframe.get_by_role("checkbox", name="Test Larp").check()
+    edit_iframe.get_by_role("checkbox", name="Test Larp").check(force=True)
     edit_iframe.locator("#id_value").click()
     edit_iframe.locator("#id_value").press("Home")
     edit_iframe.locator("#id_value").fill("20")
