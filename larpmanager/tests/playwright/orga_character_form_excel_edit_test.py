@@ -35,6 +35,7 @@ from larpmanager.tests.utils import (
     go_to,
     login_orga,
     submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
+    click_and_wait_question,
 )
 
 pytestmark = pytest.mark.e2e
@@ -235,7 +236,7 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
 def inline_editing_text_question(page: Any, live_server: Any) -> None:
     """Test editing Text Question field inline for both characters."""
 
-    page.get_by_role("link", name="Text Question").click()
+    click_and_wait_question(page, "Text Question")
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Text value 1").dblclick()
@@ -256,7 +257,7 @@ def inline_editing_text_question(page: Any, live_server: Any) -> None:
 def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
     """Test editing Paragraph Question field inline for both characters."""
 
-    page.get_by_role("link", name="Paragraph Question").click()
+    click_and_wait_question(page, "Paragraph Question")
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Paragraph value 1").dblclick()
@@ -277,7 +278,7 @@ def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
 def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     """Test editing Single Choice field inline for both characters."""
 
-    page.get_by_role("link", name="Single Choice").first.click()
+    click_and_wait_question(page, "Single Choice")
 
     # Edit u1 (existing value - Option A)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Option A").dblclick()
@@ -298,7 +299,7 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
 def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     """Test editing Multiple Choice field inline for both characters."""
 
-    page.get_by_role("link", name="Multiple Choice").first.click()
+    click_and_wait_question(page, "Multiple Choice")
 
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
@@ -321,7 +322,7 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
 def inline_editing_text2_question(page: Any, live_server: Any) -> None:
     """Test editing Text Question 2 field inline for both characters."""
 
-    page.get_by_role("link", name="Advanced Question").click()
+    click_and_wait_question(page, "Advanced Question")
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Advanced value 1").dblclick()
@@ -343,11 +344,11 @@ def verify_after_refresh(page: Any, live_server: Any) -> None:
     """Refresh the page and verify all edited values are still correct."""
     go_to(page, live_server, "/test/manage/characters/")
 
-    page.get_by_role("link", name="Text Question").click()
-    page.get_by_role("link", name="Paragraph Question").click()
-    page.get_by_role("link", name="Single Choice").first.click()
-    page.get_by_role("link", name="Multiple Choice").first.click()
-    page.get_by_role("link", name="Advanced Question").click()
+    click_and_wait_question(page, "Text Question")
+    click_and_wait_question(page, "Paragraph Question")
+    click_and_wait_question(page, "Single Choice")
+    click_and_wait_question(page, "Multiple Choice")
+    click_and_wait_question(page, "Advanced Question")
 
 
     # Verify u1 values
