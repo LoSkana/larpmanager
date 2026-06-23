@@ -5830,6 +5830,9 @@ msgstr "Ilmoita kokemuksesi taso"
 msgid "Lottery tickets currently present"
 msgstr "Arpajaisliput tällä hetkellä läsnä"
 
+msgid "Manage speed larps for this event"
+msgstr "Hallinnoi tämän tapahtuman nopeita larppejä"
+
 msgid "No activation steps are available"
 msgstr "Aktivointivaiheita ei ole saatavilla"
 
@@ -6136,6 +6139,9 @@ msgstr "Ilmoita lahjoituksesi määrä"
 msgid "Indicates the details of the request"
 msgstr "Ilmoittaa pyynnön yksityiskohdat"
 
+msgid "Manage prologue types for this event"
+msgstr "Hallitse tämän tapahtuman prologityyppejä"
+
 msgid "Manage the models for event handouts"
 msgstr "Tapahtuman käsiohjelmien mallien hallinta"
 
@@ -6269,6 +6275,9 @@ msgstr "Opettele kaikki hahmot ennen tapahtumaa"
 msgid "Location - rent, gas, overnight stays"
 msgstr "Sijainti - vuokra, kaasu, yöpymiset"
 
+msgid "Manage all quest types for this event"
+msgstr "Hallinnoi kaikkia tämän tapahtuman tehtävätyyppejä"
+
 msgid "Manage answers for workshop questions"
 msgstr "Hallitse vastauksia työpajan kysymyksiin"
 
@@ -6393,6 +6402,9 @@ msgstr "Se näytetään muille osallistujille"
 
 msgid "Manage the type of character abilities"
 msgstr "Hallitse hahmon kykyjen tyyppiä"
+
+msgid "Manage workshop modules for this event"
+msgstr "Hallinnoi tämän tapahtuman työpajamoduuleja"
 
 msgid "Membership of the Organization refused"
 msgstr "Järjestön jäsenyys evättiin"
@@ -6608,6 +6620,9 @@ msgstr "Jos haluat päivittää henkilötietojasi"
 
 msgid "Invite a user by email to join this role"
 msgstr "Kutsu käyttäjä sähköpostitse tähän rooliin"
+
+msgid "Manage character handouts for this event"
+msgstr "Hallinnoi tämän tapahtuman hahmojen taustatietoja"
 
 msgid "Manage collections participated by users"
 msgstr "Käyttäjien osallistuneiden kokoelmien hallinta"
@@ -7024,6 +7039,9 @@ msgstr "(Valinnainen) Saatavilla olevien paikkojen enimmäismäärä"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Peruutus puuttuvan profiilin laatimisen vuoksi"
+
+msgid "Configure casting preferences for this event"
+msgstr "Määritä tämän tapahtuman lähetysasetukset"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Mukauta tapahtuman ulkoasua"
@@ -7941,6 +7959,9 @@ msgstr "Luo vähintään yksi lipputyyppi tapahtumien rekisteröintiä varten"
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Jos valittuna: näyttää kalenterissa linkin aiempiin tapahtumiin"
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr "Hallinnoi tämän tapahtuman apuohjelmia ja QR-koodityökaluja"
+
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Hallinnoi miehistön tekemiä kuluesityksiä ja hyväksy ne"
 
@@ -8155,8 +8176,14 @@ msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Hallitse sivuilla ja sähköposteissa näkyviä mukautettuja tekstikappaleita"
 
+msgid "Manage event milestones and their deadlines for this event"
+msgstr "Hallinnoi tämän tapahtuman välitavoitteita ja niiden määräaikoja"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr "Hallinnoi tapahtuman aikana osallistujien ilmoittamia ongelmia"
+
+msgid "Manage the answer options available for workshop questions"
+msgstr "Hallitse työpajan kysymyksiin tarjolla olevia vastausvaihtoehtoja"
 
 msgid "No contributors with competences found in the organization"
 msgstr "Organisaatiosta ei löytynyt päteviä tekijöitä"
@@ -8299,6 +8326,11 @@ msgstr "Jäsenkirjassa jäsenkorttisi numero on seuraava"
 
 msgid "Manage all token assignments issued to members across events"
 msgstr "Hallinnoi kaikkia jäsenille eri tapahtumissa myönnettyjä tunnuksia"
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+"Hallitse hahmojen esittelylehtien luomiseen käytettäviä "
+"esittelylehtimallipohjia"
 
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
@@ -8624,6 +8656,10 @@ msgstr ""
 "Hallitse kaikkia tehtäviin liittyviä ominaisuuksia ja niihin liittyviä "
 "kirjoituskysymyksiä"
 
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+"Hallinnoi tämän tapahtuman työpajatoimintojen aikana esitettyjä kysymyksiä"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr ""
 "Nyt osallistujat voivat lähettää kokoelmia, ja sinä voit tarkastella niitä"
@@ -8920,6 +8956,10 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Tekee tulevista tapahtumista näkyviä ulkoisille sivustoille julkisen API:n "
 "kautta"
+
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+"Hallitse tapahtuman aikana osallistujille näytettäviä etenemisvaiheita"
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr "Hallinnoi tämän tapahtuman kunkin työpajamoduulin kysymyksiä"
@@ -9828,6 +9868,12 @@ msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr ""
 "Käyttääksesi pyytämääsi toimintoa sinun on aktivoitava seuraava toiminto"
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
+msgstr ""
+"Tarkastele valintahistoriaa, josta näkyvät hahmojen ja ominaisuuksien "
+"jakautuminen eri istuntojen välillä"
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"

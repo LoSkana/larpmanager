@@ -5830,6 +5830,9 @@ msgstr "Wskaż swój poziom doświadczenia"
 msgid "Lottery tickets currently present"
 msgstr "Obecne kupony loteryjne"
 
+msgid "Manage speed larps for this event"
+msgstr "Zajmij się organizacją szybkich larpów na tę imprezę"
+
 msgid "No activation steps are available"
 msgstr "Nie ma żadnych kroków aktywacyjnych"
 
@@ -6135,6 +6138,9 @@ msgstr "Wskaż kwotę darowizny"
 msgid "Indicates the details of the request"
 msgstr "Wskazuje szczegóły żądania"
 
+msgid "Manage prologue types for this event"
+msgstr "Zarządzaj typami prologów dla tego wydarzenia"
+
 msgid "Manage the models for event handouts"
 msgstr "Zarządzanie modelami materiałów informacyjnych dla wydarzeń"
 
@@ -6268,6 +6274,9 @@ msgstr "Poznaj wszystkie postacie przed wydarzeniem"
 msgid "Location - rent, gas, overnight stays"
 msgstr "Lokalizacja - czynsz, gaz, noclegi"
 
+msgid "Manage all quest types for this event"
+msgstr "Zarządzaj wszystkimi rodzajami zadań w ramach tego wydarzenia"
+
 msgid "Manage answers for workshop questions"
 msgstr "Zarządzanie odpowiedziami na pytania warsztatowe"
 
@@ -6392,6 +6401,9 @@ msgstr "Zostanie on pokazany innym uczestnikom"
 
 msgid "Manage the type of character abilities"
 msgstr "Zarządzanie typem zdolności postaci"
+
+msgid "Manage workshop modules for this event"
+msgstr "Zarządzaj modułami warsztatów dla tego wydarzenia"
 
 msgid "Membership of the Organization refused"
 msgstr "Odmowa członkostwa w organizacji"
@@ -6610,6 +6622,9 @@ msgstr "Jeśli użytkownik chce zaktualizować swoje dane osobowe"
 
 msgid "Invite a user by email to join this role"
 msgstr "Zaproś użytkownika e-mailem do tej roli"
+
+msgid "Manage character handouts for this event"
+msgstr "Zarządzaj materiałami dla postaci na to wydarzenie"
 
 msgid "Manage collections participated by users"
 msgstr "Zarządzanie kolekcjami, w których uczestniczą użytkownicy"
@@ -7028,6 +7043,9 @@ msgstr "(Opcjonalnie) Maksymalna liczba dostępnych miejsc"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Anulowanie z powodu braku kompilacji profilu"
+
+msgid "Configure casting preferences for this event"
+msgstr "Skonfiguruj ustawienia transmisji tego wydarzenia"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Dostosuj wygląd wydarzenia"
@@ -7950,6 +7968,11 @@ msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
 "Jeśli zaznaczone: wyświetla łącze w kalendarzu do poprzednich wydarzeń"
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr ""
+"Zarządzaj narzędziami organizacyjnymi i narzędziami do kodów QR dla tego "
+"wydarzenia"
+
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Zarządzanie zgłoszeniami wydatków od załogi i ich autoryzacja"
 
@@ -8170,8 +8193,14 @@ msgstr ""
 "Zarządzaj niestandardowymi blokami tekstowymi wyświetlanymi na stronach i w "
 "wiadomościach e-mail"
 
+msgid "Manage event milestones and their deadlines for this event"
+msgstr "Zarządzaj etapami wydarzenia i ich terminami dla tego wydarzenia"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr "Zajmij się zgłoszeniami od uczestników podczas tego wydarzenia"
+
+msgid "Manage the answer options available for workshop questions"
+msgstr "Zarządzaj opcjami odpowiedzi dostępnymi dla pytań z warsztatów"
 
 msgid "No contributors with competences found in the organization"
 msgstr ""
@@ -8317,6 +8346,9 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Zarządzaj wszystkimi przypisanymi tokenami dla uczestników wszystkich "
 "wydarzeń"
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr "Zarządzaj szablonami kart postaci używanymi do tworzenia kart postaci"
 
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
@@ -8655,6 +8687,10 @@ msgstr ""
 "Zarządzaj wszystkimi cechami powiązanymi z zadaniami wraz z pytaniami do "
 "nich"
 
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+"Zarządzaj pytaniami zadawanymi podczas warsztatów w ramach tego wydarzenia"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Teraz uczestnicy mogą przesyłać kolekcje, a Ty możesz je przeglądać"
 
@@ -8963,6 +8999,10 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Sprawia, że nadchodzące wydarzenia są widoczne dla zewnętrznych witryn za "
 "pośrednictwem publicznego interfejsu API"
+
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+"Zarządzaj etapami postępów wyświetlanymi uczestnikom podczas tego wydarzenia"
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
@@ -9885,6 +9925,12 @@ msgstr "Pełna nazwa organizacji, która będzie wyświetlana na platformie"
 msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr "Aby korzystać z żądanej funkcji, należy aktywować następującą funkcję"
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
+msgstr ""
+"Wyświetl historię obsady, pokazującą przypisania ról i cech w poszczególnych"
+" sesjach"
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"

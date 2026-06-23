@@ -104,6 +104,8 @@ class LmSendMailForm(SendMailForm):
 class UtilForm(BaseModelForm):
     """Form for Util."""
 
+    page_info = _("Manage event utilities and QR code tools for this event")
+
     class Meta:
         model = Util
         fields = ("name", "util", "cod", "event")
@@ -156,6 +158,8 @@ class OrgaHelpQuestionForm(BaseModelForm):
 class WorkshopModuleForm(BaseModelForm):
     """Form for WorkshopModule."""
 
+    page_info = _("Manage workshop modules for this event")
+
     class Meta:
         model = WorkshopModule
         exclude = ("members", "number")
@@ -163,6 +167,8 @@ class WorkshopModuleForm(BaseModelForm):
 
 class WorkshopQuestionForm(BaseModelForm):
     """Form for WorkshopQuestion."""
+
+    page_info = _("Manage questions asked during workshop activities for this event")
 
     class Meta:
         model = WorkshopQuestion
@@ -179,6 +185,8 @@ class WorkshopQuestionForm(BaseModelForm):
 
 class WorkshopOptionForm(BaseModelForm):
     """Form for WorkshopOption."""
+
+    page_info = _("Manage the answer options available for workshop questions")
 
     class Meta:
         model = WorkshopOption
@@ -564,6 +572,8 @@ class OrgaMilestoneForm(BaseModelForm):
     """Form for event Milestones."""
 
     page_title = _("Milestone")
+
+    page_info = _("Manage event milestones and their deadlines for this event")
 
     class Meta:
         model = Milestone

@@ -1885,6 +1885,9 @@ msgstr ""
 msgid "Progression"
 msgstr ""
 
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world"
@@ -2377,10 +2380,22 @@ msgstr ""
 msgid "Seconds to wait between each email batch"
 msgstr ""
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr ""
+
 msgid "Manage participant questions by answering or closing each one"
 msgstr ""
 
 msgid "Participant questions"
+msgstr ""
+
+msgid "Manage workshop modules for this event"
+msgstr ""
+
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+
+msgid "Manage the answer options available for workshop questions"
 msgstr ""
 
 msgid "Manage photo and video albums uploaded for this event"
@@ -2425,6 +2440,9 @@ msgid "One-time token"
 msgstr ""
 
 msgid "Milestone"
+msgstr ""
+
+msgid "Manage event milestones and their deadlines for this event"
 msgstr ""
 
 #, python-format
@@ -2676,6 +2694,9 @@ msgstr ""
 msgid "Quest type"
 msgstr ""
 
+msgid "Manage all quest types for this event"
+msgstr ""
+
 msgid "Quest"
 msgstr ""
 
@@ -2691,13 +2712,25 @@ msgstr ""
 msgid "Handout"
 msgstr ""
 
+msgid "Manage character handouts for this event"
+msgstr ""
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+
 msgid "Prologue type"
+msgstr ""
+
+msgid "Manage prologue types for this event"
 msgstr ""
 
 msgid "Manage all prologues for this event"
 msgstr ""
 
 msgid "Speed larp"
+msgstr ""
+
+msgid "Manage speed larps for this event"
 msgstr ""
 
 msgid "Reimbursement approved"
@@ -11622,6 +11655,13 @@ msgid "Receipt already confirmed"
 msgstr ""
 
 msgid "Element saved"
+msgstr ""
+
+msgid "Configure casting preferences for this event"
+msgstr ""
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
 msgstr ""
 
 msgid "Results not present"

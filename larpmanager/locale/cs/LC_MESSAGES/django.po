@@ -5830,6 +5830,9 @@ msgstr "Uveďte svou úroveň zkušeností"
 msgid "Lottery tickets currently present"
 msgstr "Existují losy"
 
+msgid "Manage speed larps for this event"
+msgstr "Zajistěte organizaci rychlých LARPů pro tuto akci"
+
 msgid "No activation steps are available"
 msgstr "Nejsou k dispozici žádné kroky k aktivaci"
 
@@ -6137,6 +6140,9 @@ msgstr "Uveďte výši svého daru"
 msgid "Indicates the details of the request"
 msgstr "Uvádí podrobnosti o nároku"
 
+msgid "Manage prologue types for this event"
+msgstr "Správa typů prologů pro tuto událost"
+
 msgid "Manage the models for event handouts"
 msgstr "Správa modelů pro materiály k událostem"
 
@@ -6270,6 +6276,9 @@ msgstr "Naučte se všechny znaky před akcí"
 msgid "Location - rent, gas, overnight stays"
 msgstr "Poloha - nájemné, benzín, noclehy"
 
+msgid "Manage all quest types for this event"
+msgstr "Spravovat všechny typy úkolů pro tuto akci"
+
 msgid "Manage answers for workshop questions"
 msgstr "Správa odpovědí na otázky z workshopů"
 
@@ -6394,6 +6403,9 @@ msgstr "Bude ukázán ostatním účastníkům"
 
 msgid "Manage the type of character abilities"
 msgstr "Správa typu schopností postavy"
+
+msgid "Manage workshop modules for this event"
+msgstr "Správa modulů workshopů pro tuto akci"
 
 msgid "Membership of the Organization refused"
 msgstr "Členství odmítnuto"
@@ -6609,6 +6621,9 @@ msgstr "Pokud si přejete aktualizovat své osobní údaje"
 
 msgid "Invite a user by email to join this role"
 msgstr "Pozvěte uživatele e-mailem, aby se připojil k této roli"
+
+msgid "Manage character handouts for this event"
+msgstr "Správa materiálů k postavám pro tuto akci"
 
 msgid "Manage collections participated by users"
 msgstr "Správa sbírek, kterých se účastní uživatelé"
@@ -7025,6 +7040,9 @@ msgstr "(Nepovinné) Maximální počet volných míst"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Zrušení kvůli chybějícímu sestavení profilu"
+
+msgid "Configure casting preferences for this event"
+msgstr "Nastavit předvolby vysílání pro tuto událost"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Přizpůsobte vzhled události"
@@ -7938,6 +7956,10 @@ msgstr "Vytvoření alespoň jednoho typu vstupenky pro registrace na událost"
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Pokud je zaškrtnuto: zobrazí v kalendáři odkaz na minulé události"
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr ""
+"Správa pomocných nástrojů a nástrojů pro práci s QR kódy pro tuto akci"
+
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Správa žádostí o výdaje od posádky a jejich schvalování"
 
@@ -8149,8 +8171,14 @@ msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Správa vlastních textových bloků zobrazených na stránkách a v e-mailech"
 
+msgid "Manage event milestones and their deadlines for this event"
+msgstr "Spravujte milníky akce a jejich termíny pro tuto akci"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr "Řešení problémů nahlášených účastníky během této akce"
+
+msgid "Manage the answer options available for workshop questions"
+msgstr "Správa možností odpovědí dostupných pro otázky v rámci workshopu"
 
 msgid "No contributors with competences found in the organization"
 msgstr ""
@@ -8290,6 +8318,11 @@ msgstr "V členské knize je vaše členské číslo"
 msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Spravujte všechna přidělení tokenů vydaná členům v rámci jednotlivých akcí"
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+"Správa šablon charakteristik postav používaných k vytváření charakteristik "
+"postav"
 
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
@@ -8589,6 +8622,10 @@ msgid "Manage all traits linked to quests, with their writing questions"
 msgstr ""
 "Spravujte všechny vlastnosti spojené s úkoly včetně otázek k jejich vyplnění"
 
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+"Spravujte otázky položené během workshopových aktivit v rámci této akce"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Nyní mohou účastníci odesílat sbírky a vy si je můžete prohlédnout"
 
@@ -8868,6 +8905,10 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Zviditelnění nadcházejících událostí pro externí weby prostřednictvím "
 "veřejného rozhraní API"
+
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+"Spravujte kroky postupu, které se účastníkům během této akce zobrazují"
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
@@ -9723,6 +9764,12 @@ msgid ""
 msgstr ""
 "Chcete-li používat požadovanou funkci, musí být aktivována následující "
 "funkce"
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
+msgstr ""
+"Zobrazit historii obsazení, která ukazuje přiřazení postav a vlastností v "
+"jednotlivých sezeních"
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"

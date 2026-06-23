@@ -1621,6 +1621,8 @@ class OrgaProgressStepForm(BaseModelForm):
 
     page_title = _("Progression")
 
+    page_info = _("Manage the progression steps shown to participants during this event")
+
     class Meta:
         model = ProgressStep
         exclude = ("number", "order")

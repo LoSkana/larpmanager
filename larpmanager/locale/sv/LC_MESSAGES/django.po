@@ -5830,6 +5830,9 @@ msgstr "Ange din erfarenhetsnivå"
 msgid "Lottery tickets currently present"
 msgstr "Det finns lotter"
 
+msgid "Manage speed larps for this event"
+msgstr "Hantera speed-larp för detta evenemang"
+
 msgid "No activation steps are available"
 msgstr "Det finns inga aktiveringssteg"
 
@@ -6136,6 +6139,9 @@ msgstr "Ange beloppet för din donation"
 msgid "Indicates the details of the request"
 msgstr "Anger detaljerna för fordran"
 
+msgid "Manage prologue types for this event"
+msgstr "Hantera prologtyper för detta evenemang"
+
 msgid "Manage the models for event handouts"
 msgstr "Hantera modellerna för evenemangshandouts"
 
@@ -6269,6 +6275,9 @@ msgstr "Lär dig alla karaktärer före evenemanget"
 msgid "Location - rent, gas, overnight stays"
 msgstr "Plats - hyra, gas, övernattningar"
 
+msgid "Manage all quest types for this event"
+msgstr "Hantera alla typer av uppdrag för detta evenemang"
+
 msgid "Manage answers for workshop questions"
 msgstr "Hantera svar på frågor från workshops"
 
@@ -6395,6 +6404,9 @@ msgstr "Den kommer att visas för andra deltagare"
 
 msgid "Manage the type of character abilities"
 msgstr "Hantera typen av karaktärsförmågor"
+
+msgid "Manage workshop modules for this event"
+msgstr "Hantera workshopmodulerna för detta evenemang"
 
 msgid "Membership of the Organization refused"
 msgstr "Medlemskap nekat"
@@ -6610,6 +6622,9 @@ msgstr "Om du vill uppdatera dina personuppgifter"
 
 msgid "Invite a user by email to join this role"
 msgstr "Bjud in en användare via e-post att ansluta sig till denna roll"
+
+msgid "Manage character handouts for this event"
+msgstr "Hantera karaktärsinformation för detta evenemang"
 
 msgid "Manage collections participated by users"
 msgstr "Hantera samlingar som användare har deltagit i"
@@ -7026,6 +7041,9 @@ msgstr "(Valfritt) Maximalt antal tillgängliga platser"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Avbokning på grund av utebliven profilsammanställning"
+
+msgid "Configure casting preferences for this event"
+msgstr "Ställ in sändningsinställningarna för detta evenemang"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Anpassa evenemangets utseende"
@@ -7944,6 +7962,9 @@ msgstr "Skapa minst en biljettyp för registrering av evenemang"
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Om markerad: visar en länk i kalendern till tidigare evenemang"
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr "Hantera evenemangsverktyg och QR-kodverktyg för detta evenemang"
+
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Hantera utläggsansökningar från besättningen och godkänna dem"
 
@@ -8151,8 +8172,15 @@ msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Hantera anpassade textblock som visas på sidor och i e-postmeddelanden"
 
+msgid "Manage event milestones and their deadlines for this event"
+msgstr "Hantera milstolpar och deras tidsfrister för detta evenemang"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr "Hantera problem som rapporterats av deltagarna under detta evenemang"
+
+msgid "Manage the answer options available for workshop questions"
+msgstr ""
+"Hantera de svarsalternativ som finns tillgängliga för frågorna i workshopen"
 
 msgid "No contributors with competences found in the organization"
 msgstr "Inga medarbetare med relevant kompetens hittades inom organisationen"
@@ -8295,6 +8323,11 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Hantera alla tilldelningar av token som utfärdats till medlemmar vid olika "
 "evenemang"
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+"Hantera mallar för karaktärsbeskrivningar som används för att skapa "
+"karaktärsbeskrivningar"
 
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr "Hantera engångsåtkomsttokens för säkert video-/audioinnehåll"
@@ -8620,6 +8653,10 @@ msgstr ""
 "Hantera alla egenskaper som är kopplade till uppdrag, inklusive frågorna som"
 " hör till dem"
 
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+"Hantera frågor som ställs under workshopaktiviteterna för detta evenemang"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Nu kan deltagare skicka in samlingar och du kan granska dem"
 
@@ -8921,6 +8958,10 @@ msgstr ""
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Gör kommande evenemang synliga för externa webbplatser via ett publikt API"
+
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+"Hantera de framstegssteg som visas för deltagarna under detta evenemang"
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
@@ -9829,6 +9870,12 @@ msgid ""
 msgstr ""
 "För att kunna använda den funktion du har begärt måste följande funktion "
 "vara aktiverad"
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
+msgstr ""
+"Visa tilldelningshistorik som visar vilka karaktärer och egenskaper som "
+"tilldelats under olika sessioner"
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"

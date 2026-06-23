@@ -5830,6 +5830,9 @@ msgstr "Indica tu nivel de experiencia"
 msgid "Lottery tickets currently present"
 msgstr "Hay entradas de lotería disponibles"
 
+msgid "Manage speed larps for this event"
+msgstr "Organiza los larps rápidos para este evento"
+
 msgid "No activation steps are available"
 msgstr "No hay pasos de activación disponibles"
 
@@ -6137,6 +6140,9 @@ msgstr "Indica el importe de tu donación"
 msgid "Indicates the details of the request"
 msgstr "Indica los detalles de la solicitud"
 
+msgid "Manage prologue types for this event"
+msgstr "Gestionar los tipos de prólogo para este evento"
+
 msgid "Manage the models for event handouts"
 msgstr "Gestionar los modelos de folletos para eventos"
 
@@ -6270,6 +6276,9 @@ msgstr "Apréndete todos los personajes antes del evento"
 msgid "Location - rent, gas, overnight stays"
 msgstr "Localización - alquiler, gasolina, alojamientos"
 
+msgid "Manage all quest types for this event"
+msgstr "Gestiona todos los tipos de misiones de este evento"
+
 msgid "Manage answers for workshop questions"
 msgstr "Gestionar las respuestas a las preguntas de los talleres"
 
@@ -6394,6 +6403,9 @@ msgstr "Se mostrará a los demás participantes"
 
 msgid "Manage the type of character abilities"
 msgstr "Gestionar el tipo de habilidades de los personajes"
+
+msgid "Manage workshop modules for this event"
+msgstr "Gestionar los módulos de los talleres de este evento"
 
 msgid "Membership of the Organization refused"
 msgstr "¡Solicitud de afiliación denegada"
@@ -6609,6 +6621,9 @@ msgstr "Si deseas actualizar tus datos personales"
 
 msgid "Invite a user by email to join this role"
 msgstr "Invita a un usuario por correo electrónico a unirse a este rol"
+
+msgid "Manage character handouts for this event"
+msgstr "Gestiona las fichas de los personajes para este evento"
 
 msgid "Manage collections participated by users"
 msgstr "Gestionar las colecciones participadas por los usuarios"
@@ -7025,6 +7040,9 @@ msgstr "(Opcional) Número máximo de plazas disponibles"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Anulación por falta de compilación de perfiles"
+
+msgid "Configure casting preferences for this event"
+msgstr "Configura las preferencias de retransmisión para este evento"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Personaliza el aspecto visual del evento"
@@ -7965,6 +7983,11 @@ msgstr "Crear al menos un tipo de entrada para las inscripciones a eventos"
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Si está marcada: muestra un enlace en el calendario a eventos pasados"
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr ""
+"Gestiona los servicios del evento y las herramientas de códigos QR para este"
+" evento"
+
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Gestionar las solicitudes de gastos de la tripulación y autorizarlas"
 
@@ -8187,10 +8210,17 @@ msgstr ""
 "Gestiona los bloques de texto personalizados que se muestran en las páginas "
 "y en los correos electrónicos"
 
+msgid "Manage event milestones and their deadlines for this event"
+msgstr "Gestiona las etapas clave de este evento y sus plazos"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr ""
 "Gestiona los problemas que hayan comunicado los colaboradores durante este "
 "evento"
+
+msgid "Manage the answer options available for workshop questions"
+msgstr ""
+"Gestiona las opciones de respuesta disponibles para las preguntas del taller"
 
 msgid "No contributors with competences found in the organization"
 msgstr ""
@@ -8348,6 +8378,10 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Gestiona todas las asignaciones de tokens realizadas a los miembros en todos"
 " los eventos"
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+"Gestionar las plantillas de fichas de personaje que se usan para generarlas"
 
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr ""
@@ -8695,6 +8729,11 @@ msgstr ""
 "Gestiona todos los rasgos relacionados con las misiones, junto con las "
 "preguntas correspondientes"
 
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+"Gestiona las preguntas que se hagan durante las actividades de los talleres "
+"de este evento"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr ""
 "Ahora los participantes pueden enviar colecciones, y usted puede revisarlas"
@@ -9024,6 +9063,11 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Hace visibles los próximos eventos a sitios externos a través de una API "
 "pública"
+
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+"Gestiona los pasos del proceso que se muestran a los participantes durante "
+"este evento"
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
@@ -9982,6 +10026,12 @@ msgid ""
 msgstr ""
 "Para utilizar la función que ha solicitado, debe estar activada la siguiente"
 " función"
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
+msgstr ""
+"Ver el historial de reparto, que muestra las asignaciones de personajes y "
+"rasgos en todas las sesiones"
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"

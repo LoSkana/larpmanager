@@ -5830,6 +5830,9 @@ msgstr "Angi ditt erfaringsnivå"
 msgid "Lottery tickets currently present"
 msgstr "Det er lodd i lotteriet"
 
+msgid "Manage speed larps for this event"
+msgstr "Administrer «speed-larp»-arrangementer for dette arrangementet"
+
 msgid "No activation steps are available"
 msgstr "Det finnes ingen aktiveringstrinn"
 
@@ -6135,6 +6138,9 @@ msgstr "Angi beløpet for donasjonen din"
 msgid "Indicates the details of the request"
 msgstr "Angir detaljene i kravet"
 
+msgid "Manage prologue types for this event"
+msgstr "Administrer prologtyper for denne begivenheten"
+
 msgid "Manage the models for event handouts"
 msgstr "Administrerer modeller for utdeling av arrangementer"
 
@@ -6268,6 +6274,9 @@ msgstr "Lær alle tegnene før arrangementet"
 msgid "Location - rent, gas, overnight stays"
 msgstr "Beliggenhet - husleie, bensin, overnattinger"
 
+msgid "Manage all quest types for this event"
+msgstr "Administrer alle oppdragstyper for dette arrangementet"
+
 msgid "Manage answers for workshop questions"
 msgstr "Administrer svar på spørsmål om workshopen"
 
@@ -6394,6 +6403,9 @@ msgstr "Den vil bli vist til andre deltakere"
 
 msgid "Manage the type of character abilities"
 msgstr "Administrer typen karakteregenskaper"
+
+msgid "Manage workshop modules for this event"
+msgstr "Administrer verkstedsmodulene for dette arrangementet"
 
 msgid "Membership of the Organization refused"
 msgstr "Medlemskap avslått"
@@ -6611,6 +6623,9 @@ msgstr "Hvis du ønsker å oppdatere personopplysningene dine"
 
 msgid "Invite a user by email to join this role"
 msgstr "Inviter en bruker via e-post til å bli tilknyttet denne rollen"
+
+msgid "Manage character handouts for this event"
+msgstr "Administrer karakterbeskrivelser for dette arrangementet"
 
 msgid "Manage collections participated by users"
 msgstr "Administrer samlinger som brukere har deltatt i"
@@ -7027,6 +7042,9 @@ msgstr "(Valgfritt) Maksimalt antall tilgjengelige plasser"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Avbestilling på grunn av manglende profilkompilering"
+
+msgid "Configure casting preferences for this event"
+msgstr "Konfigurer innstillinger for direktesending av dette arrangementet"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Tilpass utseendet på arrangementet"
@@ -7954,6 +7972,11 @@ msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
 "Hvis avkrysset: viser en lenke i kalenderen til tidligere arrangementer"
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr ""
+"Administrer verktøy for arrangementet og QR-kodeverktøy for dette "
+"arrangementet"
+
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Administrere og godkjenne utgiftsinnleveringer fra mannskapet"
 
@@ -8165,9 +8188,17 @@ msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Administrer egendefinerte tekstblokker som vises på sider og i e-poster"
 
+msgid "Manage event milestones and their deadlines for this event"
+msgstr "Administrer milepæler og tidsfrister for dette arrangementet"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr ""
 "Håndtere problemer som bidragsytere har rapportert under dette arrangementet"
+
+msgid "Manage the answer options available for workshop questions"
+msgstr ""
+"Administrer svaralternativene som er tilgjengelige for spørsmålene i "
+"workshopen"
 
 msgid "No contributors with competences found in the organization"
 msgstr ""
@@ -8311,6 +8342,11 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Administrer alle tildelte adgangskoder til medlemmer på tvers av "
 "arrangementer"
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+"Administrer maler for karakterbeskrivelser som brukes til å generere "
+"karakterbeskrivelser"
 
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr "Administrer engangskoder for sikker tilgang til video-/lydinnhold"
@@ -8642,6 +8678,11 @@ msgstr ""
 "Administrer alle egenskaper knyttet til oppdrag, sammen med spørsmålene som "
 "hører til"
 
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+"Administrer spørsmålene som stilles under workshopaktivitetene i forbindelse"
+" med dette arrangementet"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Nå kan deltakerne sende inn innsamlinger, og du kan gå gjennom dem"
 
@@ -8946,6 +8987,11 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Gjør kommende arrangementer synlige for eksterne nettsteder gjennom et "
 "offentlig API"
+
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+"Administrer fremdriftstrinnene som vises til deltakerne under dette "
+"arrangementet"
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
@@ -9839,6 +9885,12 @@ msgid ""
 "To use the feature you requested, you need to activate the following feature"
 msgstr ""
 "For å bruke funksjonen du har bedt om, må følgende funksjon være aktivert"
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
+msgstr ""
+"Vis castinghistorikk som viser tildeling av karakterer og egenskaper på "
+"tvers av økter"
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"

@@ -5830,6 +5830,9 @@ msgstr "Geef je ervaringsniveau aan"
 msgid "Lottery tickets currently present"
 msgstr "Er zijn loten"
 
+msgid "Manage speed larps for this event"
+msgstr "Organiseer speed-larps voor dit evenement"
+
 msgid "No activation steps are available"
 msgstr "Er zijn geen activeringsstappen beschikbaar"
 
@@ -6137,6 +6140,9 @@ msgstr "Vermeld het bedrag van je donatie"
 msgid "Indicates the details of the request"
 msgstr "Geeft de details van de claim aan"
 
+msgid "Manage prologue types for this event"
+msgstr "Beheer de proloogtypes voor dit evenement"
+
 msgid "Manage the models for event handouts"
 msgstr "De modellen voor hand-outs voor evenementen beheren"
 
@@ -6270,6 +6276,9 @@ msgstr "Leer alle personages voor het evenement"
 msgid "Location - rent, gas, overnight stays"
 msgstr "Locatie - huur, gas, overnachtingen"
 
+msgid "Manage all quest types for this event"
+msgstr "Beheer alle soorten opdrachten voor dit evenement"
+
 msgid "Manage answers for workshop questions"
 msgstr "Antwoorden voor workshopvragen beheren"
 
@@ -6396,6 +6405,9 @@ msgstr "Het wordt getoond aan andere deelnemers"
 
 msgid "Manage the type of character abilities"
 msgstr "Het type karaktervaardigheden beheren"
+
+msgid "Manage workshop modules for this event"
+msgstr "Beheer de workshopmodules voor dit evenement"
 
 msgid "Membership of the Organization refused"
 msgstr "Lidmaatschap geweigerd"
@@ -6615,6 +6627,9 @@ msgstr "Als u uw persoonlijke gegevens wilt bijwerken"
 
 msgid "Invite a user by email to join this role"
 msgstr "Nodig een gebruiker via e-mail uit om deze rol te vervullen"
+
+msgid "Manage character handouts for this event"
+msgstr "Beheer de hand-outs voor de personages voor dit evenement"
 
 msgid "Manage collections participated by users"
 msgstr "Collecties beheren waaraan gebruikers deelnemen"
@@ -7032,6 +7047,9 @@ msgstr "(Optioneel) Maximaal aantal beschikbare plaatsen"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Annulering wegens ontbrekende profielcompilatie"
+
+msgid "Configure casting preferences for this event"
+msgstr "Stel je voorkeuren voor het uitzenden van dit evenement in"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Pas het uiterlijk van het evenement aan"
@@ -7970,6 +7988,9 @@ msgstr ""
 "Indien aangevinkt: toont een link in de kalender naar evenementen uit het "
 "verleden"
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr "Beheer de hulpprogramma’s en QR-code-tools voor dit evenement"
+
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Onkostendeclaraties van het personeel beheren en autoriseren"
 
@@ -8196,9 +8217,15 @@ msgstr ""
 "Beheer aangepaste tekstblokken die op pagina’s en in e-mails worden "
 "weergegeven"
 
+msgid "Manage event milestones and their deadlines for this event"
+msgstr "Beheer de mijlpalen en deadlines voor dit evenement"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr ""
 "Behandel de problemen die door deelnemers tijdens dit evenement zijn gemeld"
+
+msgid "Manage the answer options available for workshop questions"
+msgstr "De antwoordopties voor workshopvragen beheren"
 
 msgid "No contributors with competences found in the organization"
 msgstr ""
@@ -8351,6 +8378,10 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Beheer alle token-toewijzingen die aan leden zijn verstrekt voor alle "
 "evenementen"
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+"Beheer de sjablonen die worden gebruikt om personageoverzichten te maken"
 
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr "Beheer eenmalige toegangstokens voor beveiligde video/audio-inhoud"
@@ -8705,6 +8736,11 @@ msgstr ""
 "Beheer alle eigenschappen die bij quests horen, inclusief de bijbehorende "
 "vragen"
 
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+"Beheer de vragen die tijdens de workshopactiviteiten van dit evenement "
+"worden gesteld"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Deelnemers kunnen nu collecties indienen en jij kunt ze bekijken"
 
@@ -9035,6 +9071,11 @@ msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Maakt aankomende evenementen zichtbaar voor externe sites via een openbare "
 "API"
+
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+"Beheer de voortgangsstappen die tijdens dit evenement aan de deelnemers "
+"worden getoond"
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
@@ -10001,6 +10042,12 @@ msgid ""
 msgstr ""
 "Om de functie die je hebt aangevraagd te kunnen gebruiken, moet de volgende "
 "functie geactiveerd zijn"
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
+msgstr ""
+"Bekijk de castinggeschiedenis met de toewijzingen van personages en "
+"eigenschappen per sessie"
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"
