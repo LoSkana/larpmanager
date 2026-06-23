@@ -62,7 +62,6 @@ from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 from larpmanager.utils.publication.base import publish_event_all
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
-from larpmanager.utils.users.member import update_leaderboard
 
 
 class Command(BaseCommand):
@@ -416,8 +415,6 @@ class Command(BaseCommand):
                 ticket__tier=TicketTier.WAITING,
             ):
                 self.check_friends_player(registration, cache)
-
-        update_leaderboard(association.id)
 
     def add_member_badge(self, badge_code: str, member: Member, badge_cache: dict) -> None:
         """Award a badge to a member if not already possessed.

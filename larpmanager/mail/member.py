@@ -35,6 +35,7 @@ from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Badge, Member, NotificationType
 from larpmanager.utils.larpmanager.tasks import my_send_mail
+from larpmanager.utils.users.member import update_leaderboard
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -127,14 +128,16 @@ def handle_badge_assignment_notifications(instance: Any, pk_set: Any) -> None:
 
 
 def on_member_badges_m2m_changed(sender: Any, **kwargs: Any) -> None:  # noqa: ARG001
-    """Handle badge assignment notifications."""
+    """Handle badge assignment notifications and leaderboard cache update."""
     action = kwargs.pop("action", None)
-    if action != "post_add":
-        return
     instance: Badge | None = kwargs.pop("instance", None)
     pk_set: list[int] | None = kwargs.pop("pk_set", None)
 
-    handle_badge_assignment_notifications(instance, pk_set)
+    if action == "post_add":
+        handle_badge_assignment_notifications(instance, pk_set)
+
+    if action in ("post_add", "post_remove", "post_clear") and instance:
+        update_leaderboard(instance.association_id)
 
 
 def notify_membership_approved(member: Member, resp: str) -> None:
