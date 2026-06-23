@@ -47,4 +47,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "No payment invoices awaiting confirmation at this time" %}.</p>
+    {% endif %}
 {% endblock content %}

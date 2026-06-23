@@ -50,4 +50,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No prologue categories have been created yet" %}. {% trans "Use the button above to add a prologue type to group your prologues" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

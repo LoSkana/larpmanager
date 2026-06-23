@@ -34,4 +34,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No warehouse containers defined yet" %}. {% trans "Use the button above to add a container" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

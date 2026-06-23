@@ -45,5 +45,8 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "No contributors with competences found in the organization" %}.</p>
+    {% endif %}
     {{ list | length }}
 {% endblock content %}

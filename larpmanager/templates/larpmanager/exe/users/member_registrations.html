@@ -42,4 +42,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not regs %}
+        <p class="no-elements-available">{% trans "This member has not registered for any events yet" %}.</p>
+    {% endif %}
 {% endblock content %}

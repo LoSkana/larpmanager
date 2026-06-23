@@ -4,7 +4,7 @@
     {% trans "Restore Preview" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    <p>{% trans "The following changes will be applied when you confirm. Review carefully before proceeding." %}</p>
+    <p>{% trans "The following changes will be applied when you confirm. Review carefully before proceeding" %}.</p>
     {% if unknown_files %}
         <div class="alert">
             <b>{% trans "Unrecognized files in ZIP (will be skipped)" %}:</b>
@@ -60,7 +60,7 @@
         </table>
     {% empty %}
         <p>
-            <em>{% trans "No recognized files found in the ZIP." %}</em>
+            <em>{% trans "No recognized files found in the ZIP" %}.</em>
         </p>
     {% endfor %}
     <br />

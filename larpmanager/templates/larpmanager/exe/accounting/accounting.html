@@ -226,6 +226,9 @@
                     {% endif %}
                 {% endfor %}
             </table>
+            {% if not list %}
+                <p class="no-elements-available">{% trans "No participants have been issued tokens yet" %}.</p>
+            {% endif %}
         </div>
     {% endif %}
     {% if features.credits %}
@@ -251,6 +254,9 @@
                     {% endif %}
                 {% endfor %}
             </table>
+            {% if not list %}
+                <p class="no-elements-available">{% trans "No participants have been issued credits yet" %}.</p>
+            {% endif %}
         </div>
     {% endif %}
     <div class="hide runs">
@@ -277,6 +283,9 @@
                 </tr>
             {% endfor %}
         </table>
+        {% if not runs %}
+            <p class="no-elements-available">{% trans "No event runs have been recorded yet" %}.</p>
+        {% endif %}
     </div>
 {% endblock content %}
 {% block js %}

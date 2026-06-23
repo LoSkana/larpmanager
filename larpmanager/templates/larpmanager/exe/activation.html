@@ -71,6 +71,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not checklist %}
+        <p class="no-elements-available">{% trans "No activation steps are available" %}.</p>
+    {% endif %}
     <br />
     {% if all_done %}
         <form method="post">

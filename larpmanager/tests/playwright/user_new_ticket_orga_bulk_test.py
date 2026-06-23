@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_date, expect_normalized, get_modal_iframe, go_to, login_orga, submit_register, \
-    submit_confirm, sidebar, save_modal, click_and_wait_question, _wait_select2_results
+    submit_confirm, sidebar, save_modal, click_and_wait_question, _wait_select2_results, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -152,6 +152,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
 
     # create second quest type
     page.get_by_role("link", name="Quest type").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "typ q1 q2")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
@@ -288,6 +289,7 @@ def bulk_warehouse(live_server: Any, page: Any) -> None:
 def bulk_warehouse2(live_server: Any, page: Any) -> None:
     # bulk move to box
     page.get_by_role("link", name="Items").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "item1 box")
     expect_normalized(page, page.locator("#one"), "item2 box")
     expect_normalized(page, page.locator("#one"), "item3 box")
@@ -326,6 +328,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     # check link when bulk active
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u1"]').get_by_role("link", name="box2").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#banner"), "Warehouse items - Organization")
 
     # check link when bulk not active

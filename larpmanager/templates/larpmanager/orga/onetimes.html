@@ -52,4 +52,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No one-time content items defined yet" %}. {% trans "Use the button above to upload the first item" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

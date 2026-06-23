@@ -48,4 +48,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No answer options have been defined yet" %}. {% trans "Use the button above to add an answer option for a workshop question" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

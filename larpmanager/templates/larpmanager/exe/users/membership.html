@@ -67,6 +67,11 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No members found" %}. {% trans "Members will appear here once they have submitted a membership request" %}.
+        </p>
+    {% endif %}
     <hr />
     <h2>
         <a href="#" class="my_toggle" tog="emails">{% trans "Emails" %}</a>

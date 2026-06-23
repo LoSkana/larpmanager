@@ -24,6 +24,11 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No candidates registered yet" %}. {% trans "Candidates will appear here once they are added to the vote" %}.
+        </p>
+    {% endif %}
     <h3>{% trans "List of voters" %}</h3>
     <p>
         {% for el in voters %}

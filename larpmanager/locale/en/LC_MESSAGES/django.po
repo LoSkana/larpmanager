@@ -6274,6 +6274,15 @@ msgstr ""
 msgid "Participant"
 msgstr ""
 
+msgid "No participants have been issued tokens yet"
+msgstr ""
+
+msgid "No participants have been issued credits yet"
+msgstr ""
+
+msgid "No event runs have been recorded yet"
+msgstr ""
+
 msgid "Accounting - History"
 msgstr ""
 
@@ -6312,6 +6321,9 @@ msgstr ""
 msgid "Organizer"
 msgstr ""
 
+msgid "No collections have been created yet"
+msgstr ""
+
 msgid ""
 "Track all donations received by the organization and confirm pending "
 "donation invoices"
@@ -6329,10 +6341,19 @@ msgstr ""
 msgid "Organization fee"
 msgstr ""
 
+msgid "No outflows recorded for the selected year"
+msgstr ""
+
 msgid "positive"
 msgstr ""
 
+msgid "No members with positive credits for the selected year"
+msgstr ""
+
 msgid "negatives"
+msgstr ""
+
+msgid "No members with negative credits for the selected year"
 msgstr ""
 
 msgid ""
@@ -6392,6 +6413,9 @@ msgstr ""
 msgid "Go"
 msgstr ""
 
+msgid "No activation steps are available"
+msgstr ""
+
 msgid "Activate advanced mode"
 msgstr ""
 
@@ -6412,7 +6436,16 @@ msgstr ""
 msgid "Number events"
 msgstr ""
 
+msgid "No members have self-assessed this competence yet"
+msgstr ""
+
 msgid "Marked"
+msgstr ""
+
+msgid "No competences have been defined yet"
+msgstr ""
+
+msgid "Add one to get started"
 msgstr ""
 
 msgid "Competences events"
@@ -6420,6 +6453,9 @@ msgstr ""
 
 msgid ""
 "Browse each event's staff members and the competences they bring to the team"
+msgstr ""
+
+msgid "No events with staff competences found"
 msgstr ""
 
 msgid ""
@@ -6435,9 +6471,15 @@ msgid ""
 "and events they are associated with"
 msgstr ""
 
+msgid "No contributors with competences found in the organization"
+msgstr ""
+
 msgid ""
 "View the full list of competences self-assessed by this contributor, "
 "including experience levels and notes"
+msgstr ""
+
+msgid "This contributor has not self-assessed any competences yet"
 msgstr ""
 
 msgid ""
@@ -6465,6 +6507,12 @@ msgstr ""
 msgid "Copy link to clipboard"
 msgstr ""
 
+msgid "No events yet"
+msgstr ""
+
+msgid "Create your first event using the button above"
+msgstr ""
+
 msgid ""
 "Review LarpManager usage costs broken down by event, including subscription "
 "plans and registration fees"
@@ -6474,6 +6522,12 @@ msgid "Subscription"
 msgstr ""
 
 msgid "Payed"
+msgstr ""
+
+msgid "No events with LarpManager costs found"
+msgstr ""
+
+msgid "Costs will appear here once events are created and run"
 msgstr ""
 
 msgid "Logs"
@@ -6505,13 +6559,37 @@ msgstr ""
 msgid "Fifth"
 msgstr ""
 
+msgid "No pre-registrations found"
+msgstr ""
+
+msgid ""
+"Pre-registrations will appear here once participants sign up for upcoming "
+"events"
+msgstr ""
+
 msgid "Invite"
 msgstr ""
 
 msgid "Pending invites"
 msgstr ""
 
+msgid "No roles defined yet"
+msgstr ""
+
+msgid ""
+"Create a role to assign permissions and invite staff members to your "
+"organization"
+msgstr ""
+
 msgid "Add"
+msgstr ""
+
+msgid "No templates defined yet"
+msgstr ""
+
+msgid ""
+"Create a template to reuse event configurations and role assignments across "
+"events"
 msgstr ""
 
 msgid ""
@@ -6519,7 +6597,22 @@ msgid ""
 "registration pages, per language"
 msgstr ""
 
+msgid "No custom texts defined yet"
+msgstr ""
+
+msgid ""
+"Add a text to customize emails and registration pages for your organization"
+msgstr ""
+
 msgid "Translation"
+msgstr ""
+
+msgid "No custom translations defined yet"
+msgstr ""
+
+msgid ""
+"Add a translation to override default interface strings for a specific "
+"language"
 msgstr ""
 
 msgid "Trash"
@@ -6544,12 +6637,24 @@ msgstr ""
 msgid "Short url"
 msgstr ""
 
+msgid "No shortened URLs defined yet"
+msgstr ""
+
+msgid "Create a short URL to share easy-to-remember links for your events"
+msgstr ""
+
 msgid "Archive mail"
 msgstr ""
 
 msgid ""
 "Browse all emails sent by the system, with recipient, subject, and delivery "
 "status"
+msgstr ""
+
+msgid "No badges have been created yet"
+msgstr ""
+
+msgid "Use the button above to add a new badge"
 msgstr ""
 
 msgid ""
@@ -6567,6 +6672,13 @@ msgid "Last membership date"
 msgstr ""
 
 msgid "Order"
+msgstr ""
+
+msgid "No members have enrolled yet"
+msgstr ""
+
+msgid ""
+"Members will appear here once they have completed their yearly enrollment"
 msgstr ""
 
 msgid "View registrations"
@@ -6603,6 +6715,9 @@ msgstr ""
 msgid "Unpaid"
 msgstr ""
 
+msgid "This member has not registered for any events yet"
+msgstr ""
+
 msgid "Members list"
 msgstr ""
 
@@ -6610,6 +6725,12 @@ msgid "Total members"
 msgstr ""
 
 msgid "Paid current year"
+msgstr ""
+
+msgid "No members found"
+msgstr ""
+
+msgid "Members will appear here once they have submitted a membership request"
 msgstr ""
 
 msgid "Emails"
@@ -6630,6 +6751,12 @@ msgid "Card"
 msgstr ""
 
 msgid "Error"
+msgstr ""
+
+msgid "No fiscal code errors found"
+msgstr ""
+
+msgid "All member records are consistent"
 msgstr ""
 
 msgid "Membership requests"
@@ -6671,9 +6798,19 @@ msgstr ""
 msgid "Answer"
 msgstr ""
 
-msgid ""
-"For your convenience, this page only shows questions from the last 3 months. "
-"To view previous questions click here"
+msgid "No open questions at the moment"
+msgstr ""
+
+msgid "All member requests have been answered or closed"
+msgstr ""
+
+msgid "This page only shows questions from the last 3 months"
+msgstr ""
+
+msgid "To view previous questions click here"
+msgstr ""
+
+msgid "No answered questions in the last 3 months"
 msgstr ""
 
 msgid ""
@@ -6706,6 +6843,13 @@ msgstr ""
 msgid "Date of association"
 msgstr ""
 
+msgid "No members in the registry yet"
+msgstr ""
+
+msgid ""
+"Members will appear here once they have been accepted into the association"
+msgstr ""
+
 msgid "Send emails"
 msgstr ""
 
@@ -6721,6 +6865,12 @@ msgstr ""
 msgid "Print registry"
 msgstr ""
 
+msgid "No volunteers registered yet"
+msgstr ""
+
+msgid "Use the button above to add a volunteer entry"
+msgstr ""
+
 msgid "Vote"
 msgstr ""
 
@@ -6730,6 +6880,12 @@ msgid ""
 msgstr ""
 
 msgid "Collected votes"
+msgstr ""
+
+msgid "No candidates registered yet"
+msgstr ""
+
+msgid "Candidates will appear here once they are added to the vote"
 msgstr ""
 
 msgid "List of voters"
@@ -6762,6 +6918,12 @@ msgid "Payment"
 msgstr ""
 
 msgid "Verification"
+msgstr ""
+
+msgid "No payments pending verification"
+msgstr ""
+
+msgid "All payments have been verified or none have been submitted yet"
 msgstr ""
 
 msgid "Version Management"
@@ -6797,16 +6959,40 @@ msgstr ""
 msgid "Position"
 msgstr ""
 
+msgid "No warehouse containers defined yet"
+msgstr ""
+
+msgid "Use the button above to add a container"
+msgstr ""
+
 msgid "Container"
 msgstr ""
 
 msgid "Tags"
 msgstr ""
 
+msgid "No warehouse items found"
+msgstr ""
+
+msgid "Use the button above to add a new item to the inventory"
+msgstr ""
+
 msgid "Item"
 msgstr ""
 
 msgid "Notes"
+msgstr ""
+
+msgid "No items have been assigned to this run yet"
+msgstr ""
+
+msgid "Use the button above to assign warehouse items"
+msgstr ""
+
+msgid "No warehouse tags defined yet"
+msgstr ""
+
+msgid "Use the button above to create a tag for categorizing items"
 msgstr ""
 
 msgid "leaderboard"
@@ -7839,15 +8025,30 @@ msgstr ""
 msgid "Cancellation date"
 msgstr ""
 
+msgid "No cancelled registrations found for this event"
+msgstr ""
+
 msgid "Max uses"
 msgstr ""
 
 msgid "Session active"
 msgstr ""
 
+msgid "No discounts created yet"
+msgstr ""
+
+msgid "Add a discount to offer reduced prices or promo codes to participants"
+msgstr ""
+
 msgid ""
 "List of personal expenses submitted for this event run. Upload receipts and "
 "track approval status."
+msgstr ""
+
+msgid "No expenses submitted yet"
+msgstr ""
+
+msgid "Use the button above to add a new expense with a receipt"
 msgstr ""
 
 msgid "New refund request"
@@ -7865,6 +8066,9 @@ msgstr ""
 msgid "Net"
 msgstr ""
 
+msgid "No payment invoices awaiting confirmation at this time"
+msgstr ""
+
 msgid "Track all personal expenses directly incurred for this event"
 msgstr ""
 
@@ -7872,6 +8076,12 @@ msgid "Manage all payments received from participants for this event"
 msgstr ""
 
 msgid "Master"
+msgstr ""
+
+msgid "No albums created yet"
+msgstr ""
+
+msgid "Add an album to organize and share photos for this event"
 msgstr ""
 
 msgid "Upload a zip file of photos and videos to populate this album"
@@ -7889,6 +8099,12 @@ msgid "Event navigation"
 msgstr ""
 
 msgid "Tooltip"
+msgstr ""
+
+msgid "No navigation buttons defined yet"
+msgstr ""
+
+msgid "Add a button to provide quick links in the event navigation menu"
 msgstr ""
 
 msgid ""
@@ -7954,6 +8170,13 @@ msgstr ""
 msgid "Modifiable"
 msgstr ""
 
+msgid "No form fields defined yet"
+msgstr ""
+
+msgid ""
+"Add a field to collect information from players on their character sheet"
+msgstr ""
+
 msgid "Pdf"
 msgstr ""
 
@@ -8007,6 +8230,9 @@ msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 
+msgid "No characters or handouts available to export as PDF"
+msgstr ""
+
 msgid "Generating Bundle"
 msgstr ""
 
@@ -8034,6 +8260,12 @@ msgid "Character Inventories"
 msgstr ""
 
 msgid "Inventory"
+msgstr ""
+
+msgid "No character inventories created yet"
+msgstr ""
+
+msgid "Add an inventory to track items assigned to characters"
 msgstr ""
 
 msgid "Character Inventory"
@@ -8075,6 +8307,12 @@ msgstr ""
 msgid "Pool"
 msgstr ""
 
+msgid "No inventory pool types defined yet"
+msgstr ""
+
+msgid "Add a pool type to categorize items available in character inventories"
+msgstr ""
+
 msgid "Copy"
 msgstr ""
 
@@ -8095,6 +8333,12 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
+msgid "No abilities defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first ability"
+msgstr ""
+
 msgid "Ability Templates"
 msgstr ""
 
@@ -8104,10 +8348,34 @@ msgstr ""
 msgid "Components"
 msgstr ""
 
+msgid "No ability templates defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first template"
+msgstr ""
+
 msgid "Ability types"
 msgstr ""
 
+msgid "No ability types defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first ability type"
+msgstr ""
+
+msgid "No deliveries defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first delivery"
+msgstr ""
+
 msgid "New cost"
+msgstr ""
+
+msgid "No cost modifiers defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first modifier"
 msgstr ""
 
 msgid "Field"
@@ -8116,7 +8384,19 @@ msgstr ""
 msgid "Operation"
 msgstr ""
 
+msgid "No experience rules defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first rule"
+msgstr ""
+
 msgid "Experience Systems"
+msgstr ""
+
+msgid "No experience systems defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first system"
 msgstr ""
 
 msgid "View all log entries recorded for this event"
@@ -8131,6 +8411,12 @@ msgstr ""
 msgid "Days remaining"
 msgstr ""
 
+msgid "No milestones defined yet"
+msgstr ""
+
+msgid "Use the button above to add the first milestone"
+msgstr ""
+
 msgid "File"
 msgstr ""
 
@@ -8138,6 +8424,12 @@ msgid "Content Type"
 msgstr ""
 
 msgid "Created"
+msgstr ""
+
+msgid "No one-time content items defined yet"
+msgstr ""
+
+msgid "Use the button above to upload the first item"
 msgstr ""
 
 msgid "Access Link"
@@ -8161,10 +8453,23 @@ msgstr ""
 msgid "Copy URL"
 msgstr ""
 
+msgid "No access tokens generated yet"
+msgstr ""
+
+msgid ""
+"Create one-time content items first, then generate tokens for distribution"
+msgstr ""
+
 msgid "Show closed"
 msgstr ""
 
 msgid "Rensponsable"
+msgstr ""
+
+msgid "No problems have been reported for this event yet"
+msgstr ""
+
+msgid "Use the button above to add a new problem"
 msgstr ""
 
 msgid ""
@@ -8173,6 +8478,13 @@ msgid ""
 msgstr ""
 
 msgid "Read"
+msgstr ""
+
+msgid "No writing elements are available for this event yet"
+msgstr ""
+
+msgid ""
+"Create characters, plots, factions, or other elements to see them listed here"
 msgstr ""
 
 msgid ""
@@ -8186,6 +8498,12 @@ msgstr ""
 msgid "Discounts available"
 msgstr ""
 
+msgid "No registration form questions have been created yet"
+msgstr ""
+
+msgid "Use the button above to add questions to the registration form"
+msgstr ""
+
 msgid "Installments"
 msgstr ""
 
@@ -8196,6 +8514,12 @@ msgid "Deadline (days)"
 msgstr ""
 
 msgid "Deadline (date)"
+msgstr ""
+
+msgid "No installment plans have been configured for this event yet"
+msgstr ""
+
+msgid "Use the button above to add an installment"
 msgstr ""
 
 msgid ""
@@ -8254,6 +8578,12 @@ msgid ""
 msgstr ""
 
 msgid "Available days"
+msgstr ""
+
+msgid "No payment quota options have been defined for this event yet"
+msgstr ""
+
+msgid "Use the button above to add a quota plan"
 msgstr ""
 
 msgid "Columns"
@@ -8338,13 +8668,34 @@ msgstr ""
 msgid "Registration sections"
 msgstr ""
 
+msgid "No registration form sections have been created yet"
+msgstr ""
+
+msgid ""
+"Use the button above to add a section to organize your registration questions"
+msgstr ""
+
 msgid "Surcharges"
+msgstr ""
+
+msgid "No surcharges have been configured for this event yet"
+msgstr ""
+
+msgid "Use the button above to add a surcharge with its applicable date"
 msgstr ""
 
 msgid "Direct link"
 msgstr ""
 
 msgid "Signup link"
+msgstr ""
+
+msgid "No tickets have been created for this event yet"
+msgstr ""
+
+msgid ""
+"Use the button above to add a ticket type that participants can choose when "
+"registering"
 msgstr ""
 
 msgid "Transfer registration"
@@ -8425,7 +8776,7 @@ msgstr ""
 
 msgid ""
 "The following changes will be applied when you confirm. Review carefully "
-"before proceeding."
+"before proceeding"
 msgstr ""
 
 msgid "Unrecognized files in ZIP (will be skipped)"
@@ -8446,13 +8797,26 @@ msgstr ""
 msgid "No changes"
 msgstr ""
 
-msgid "No recognized files found in the ZIP."
+msgid "No recognized files found in the ZIP"
 msgstr ""
 
 msgid "Confirm Restore"
 msgstr ""
 
+msgid "No roles have been defined for this event yet"
+msgstr ""
+
+msgid ""
+"Use the button above to create a role and assign permissions to staff members"
+msgstr ""
+
 msgid "Event texts"
+msgstr ""
+
+msgid "No texts have been created yet"
+msgstr ""
+
+msgid "Use the button above to add a new event text"
 msgstr ""
 
 msgid ""
@@ -8580,6 +8944,17 @@ msgid "Event already played"
 msgstr ""
 
 msgid ""
+"All association members have already registered for a future session of this "
+"event"
+msgstr ""
+
+msgid "There are no open questions from participants at this time"
+msgstr ""
+
+msgid "No questions have been answered yet"
+msgstr ""
+
+msgid ""
 "Review safety information submitted by registered participants, grouped with "
 "their assigned characters"
 msgstr ""
@@ -8612,13 +8987,28 @@ msgstr ""
 msgid "Internal link"
 msgstr ""
 
+msgid "No resource files have been uploaded yet"
+msgstr ""
+
+msgid "Use the button above to add a new file or link"
+msgstr ""
+
 msgid "Warehouse area"
 msgstr ""
 
 msgid "Item assignments"
 msgstr ""
 
+msgid "No warehouse areas have been defined yet"
+msgstr ""
+
+msgid "Use the button above to create a new area"
+msgstr ""
+
 msgid "Selected"
+msgstr ""
+
+msgid "No items are available in the warehouse to assign to this area"
 msgstr ""
 
 msgid ""
@@ -8626,6 +9016,9 @@ msgid ""
 msgstr ""
 
 msgid "Area"
+msgstr ""
+
+msgid "No item has conflicting area assignments"
 msgstr ""
 
 msgid "Commit warehouse quantities"
@@ -8673,6 +9066,9 @@ msgstr ""
 msgid "WILL BE UPDATED"
 msgstr ""
 
+msgid "No items with assigned quantities were found for this event"
+msgstr ""
+
 msgid ""
 "Are you sure you want to commit these quantities? This operation cannot be "
 "undone!"
@@ -8717,12 +9113,21 @@ msgstr ""
 msgid "Deployed"
 msgstr ""
 
+msgid "No items have been assigned to this area yet"
+msgstr ""
+
 msgid "Modules WS"
 msgstr ""
 
 msgid ""
 "Manage the modules used to group and organize workshop questions for this "
 "event"
+msgstr ""
+
+msgid "No workshop modules have been created yet"
+msgstr ""
+
+msgid "Use the button above to add a new module"
 msgstr ""
 
 msgid "Answers WS"
@@ -8736,15 +9141,31 @@ msgstr ""
 msgid "Module"
 msgstr ""
 
+msgid "No answer options have been defined yet"
+msgstr ""
+
+msgid "Use the button above to add an answer option for a workshop question"
+msgstr ""
+
 msgid "Questions WS"
 msgstr ""
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
 
+msgid "No workshop questions have been created yet"
+msgstr ""
+
+msgid "Use the button above to add a new question"
+msgstr ""
+
 msgid ""
 "Track which registered participants have completed all required workshops in "
 "the past year"
+msgstr ""
+
+msgid ""
+"No registered participants have completed any workshops for this event yet"
 msgstr ""
 
 msgid "Not completed"
@@ -8753,6 +9174,21 @@ msgstr ""
 msgid ""
 "Review which characters and traits have been assigned to players, grouped by "
 "faction"
+msgstr ""
+
+msgid "No characters have been created yet"
+msgstr ""
+
+msgid "Add characters to see their player assignments here"
+msgstr ""
+
+msgid "No traits have been assigned yet"
+msgstr ""
+
+msgid "Assign traits to characters via the quest builder"
+msgstr ""
+
+msgid "No characters have been assigned to this faction yet"
 msgstr ""
 
 msgid "Attending"
@@ -8897,7 +9333,19 @@ msgstr ""
 msgid "Handouts"
 msgstr ""
 
+msgid "No handout templates have been created yet"
+msgstr ""
+
+msgid "Use the button above to add a CSS layout template for your handouts"
+msgstr ""
+
 msgid "Manage all handouts for this event"
+msgstr ""
+
+msgid "No handouts have been created yet"
+msgstr ""
+
+msgid "Use the button above to add your first handout"
 msgstr ""
 
 msgid "Progress step"
@@ -8908,11 +9356,25 @@ msgid ""
 "elements"
 msgstr ""
 
+msgid "No progress steps have been defined yet"
+msgstr ""
+
+msgid ""
+"Use the button above to add steps for tracking the completion status of "
+"writing elements"
+msgstr ""
+
 msgid "Type prologues"
 msgstr ""
 
 msgid ""
 "Manage prologue categories that group individual prologues for this event"
+msgstr ""
+
+msgid "No prologue categories have been created yet"
+msgstr ""
+
+msgid "Use the button above to add a prologue type to group your prologues"
 msgstr ""
 
 msgid "Quest Type"
@@ -8922,12 +9384,27 @@ msgid ""
 "Manage quest categories, each with a presentation text and associated quests"
 msgstr ""
 
+msgid "No quest categories have been created yet"
+msgstr ""
+
+msgid "Use the button above to add a quest type to organize your quests"
+msgstr ""
+
 msgid ""
 "View and edit all directed relationships between characters in this event"
 msgstr ""
 
+msgid "No relationships have been defined yet"
+msgstr ""
+
 msgid ""
 "Overview of all characters with their assigned role values per role type"
+msgstr ""
+
+msgid "Add characters to see their role assignments here"
+msgstr ""
+
+msgid "No characters have been assigned this role value yet"
 msgstr ""
 
 msgid "SpeedLarp"
@@ -8938,6 +9415,12 @@ msgid ""
 msgstr ""
 
 msgid "Station"
+msgstr ""
+
+msgid "No speed-larp scenes have been created yet"
+msgstr ""
+
+msgid "Use the button above to add your first speed-larp scene"
 msgstr ""
 
 msgid ""
@@ -8972,7 +9455,7 @@ msgstr ""
 msgid ""
 "By accepting this invitation, your profile data (name, email, and other "
 "information you have provided) will be shared with this organization through "
-"the LarpManager platform."
+"the LarpManager platform"
 msgstr ""
 
 msgid "I authorize sharing my data with this organization"
@@ -9008,10 +9491,10 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
-msgid "Please correct the error below."
+msgid "Please correct the error below"
 msgstr ""
 
-msgid "Please correct the errors below."
+msgid "Please correct the errors below"
 msgstr ""
 
 #, python-format

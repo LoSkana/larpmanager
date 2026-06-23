@@ -63,6 +63,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if preview_items %}
+            <p class="no-elements-available">{% trans "No items with assigned quantities were found for this event" %}.</p>
+        {% endif %}
         <div class="mt-4">
             <form method="post"
                   action="{% url 'orga_warehouse_commit_quantities' run.get_slug %}"

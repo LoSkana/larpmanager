@@ -32,4 +32,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No surcharges have been configured for this event yet" %}. {% trans "Use the button above to add a surcharge with its applicable date" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

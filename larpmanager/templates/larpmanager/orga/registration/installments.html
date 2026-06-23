@@ -47,4 +47,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No installment plans have been configured for this event yet" %}. {% trans "Use the button above to add an installment" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

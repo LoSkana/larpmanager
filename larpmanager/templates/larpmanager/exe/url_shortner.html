@@ -38,4 +38,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No shortened URLs defined yet" %}. {% trans "Create a short URL to share easy-to-remember links for your events" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -88,4 +88,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No form fields defined yet" %}. {% trans "Add a field to collect information from players on their character sheet" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -36,4 +36,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No resource files have been uploaded yet" %}. {% trans "Use the button above to add a new file or link" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

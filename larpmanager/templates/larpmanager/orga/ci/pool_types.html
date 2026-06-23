@@ -32,4 +32,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No inventory pool types defined yet" %}. {% trans "Add a pool type to categorize items available in character inventories" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

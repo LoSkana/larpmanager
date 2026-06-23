@@ -56,4 +56,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No quest categories have been created yet" %}. {% trans "Use the button above to add a quest type to organize your quests" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

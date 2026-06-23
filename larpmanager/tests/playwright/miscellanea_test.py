@@ -41,7 +41,7 @@ from larpmanager.tests.utils import (submit_register,
                                      login_user,
                                      logout,
                                      submit_confirm, sidebar,
-                                     get_modal_iframe, save_modal,
+                                     get_modal_iframe, save_modal, _wait_lm_ready,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -89,6 +89,7 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     go_to(page, live_server, "/accounting/")
     page.get_by_role("link", name="follow this link").click()
+    _wait_lm_ready(page)
     expect_normalized(
         page,
         page.locator("#wrapper"),
@@ -266,10 +267,12 @@ def reset_caches(live_server, page):
     go_to(page, live_server, "/test/manage/")
 
     page.get_by_role("link", name="Reset Cache").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#banner"), "Dashboard")
 
     # Test association-level cache reset
     go_to(page, live_server, "/manage/")
 
     page.get_by_role("link", name="Reset Cache").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#banner"),"Dashboard")

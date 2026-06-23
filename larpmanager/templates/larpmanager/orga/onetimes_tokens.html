@@ -63,4 +63,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No access tokens generated yet" %}. {% trans "Create one-time content items first, then generate tokens for distribution" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

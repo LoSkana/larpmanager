@@ -57,17 +57,20 @@ def test_quest_trait(pw_page: Any) -> None:
     # check result
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Test Character").nth(1).click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         "player: admin test presentation test teaser text test text torta - nonna saleee aliame con another torta - nonna another player: user test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         "your character is: test character player: user test torta - strudel saleee test character veronese torta - strudel test character player: admin test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
+    _wait_lm_ready(page)
 
 
 def quests(page: Any, live_server: Any) -> None:
@@ -166,8 +169,10 @@ def traits(page: Any, live_server: Any) -> None:
     # check how they appear on user side
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Quest").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Name Quest Lore Torta | Pizza")
     page.get_by_role("link", name="Torta").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 
 
@@ -252,6 +257,7 @@ def casting(page: Any, live_server: Any) -> None:
     # check signups
     sidebar(page, "Registrations")
     page.get_by_role("link", name="Lore").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"), "User Test Another Standard "
     )
