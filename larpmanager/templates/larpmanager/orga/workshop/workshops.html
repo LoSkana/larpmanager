@@ -26,6 +26,11 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No registered participants have completed any workshops for this event yet" %}.
+        </p>
+    {% endif %}
     <h2>{% trans "Not completed" %}</h2>
     <table>
         <tr>

@@ -44,4 +44,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No ability types defined yet" %}. {% trans "Use the button above to create the first ability type" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

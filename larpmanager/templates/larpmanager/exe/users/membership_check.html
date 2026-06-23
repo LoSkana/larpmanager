@@ -31,6 +31,14 @@
                     <td>{{ el.supplied_cf }}</td>
                     <td>{{ el.error_cf }}</td>
                 </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="100">
+                        <p class="no-elements-available">
+                            {% trans "No fiscal code errors found" %}. {% trans "All member records are consistent" %}.
+                        </p>
+                    </td>
+                </tr>
             {% endfor %}
         </table>
     {% endif %}

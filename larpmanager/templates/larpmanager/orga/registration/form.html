@@ -98,4 +98,9 @@
         {% endfor %}
     </tbody>
 </table>
+{% if not list %}
+    <p class="no-elements-available">
+        {% trans "No registration form questions have been created yet" %}. {% trans "Use the button above to add questions to the registration form" %}.
+    </p>
+{% endif %}
 {% endblock content %}

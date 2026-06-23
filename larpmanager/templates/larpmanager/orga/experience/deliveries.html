@@ -52,4 +52,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No deliveries defined yet" %}. {% trans "Use the button above to create the first delivery" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

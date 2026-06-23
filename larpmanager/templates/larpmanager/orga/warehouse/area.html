@@ -39,4 +39,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No warehouse areas have been defined yet" %}. {% trans "Use the button above to create a new area" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

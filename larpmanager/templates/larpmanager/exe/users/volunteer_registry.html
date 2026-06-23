@@ -40,4 +40,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No volunteers registered yet" %}. {% trans "Use the button above to add a volunteer entry" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

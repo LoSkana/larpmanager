@@ -34,6 +34,9 @@
                     {% endfor %}
                 </tbody>
             </table>
+            {% if not list %}
+                <p class="no-elements-available">{% trans "No characters or handouts available to export as PDF" %}.</p>
+            {% endif %}
             <input type="submit" value="{% trans "Confirm" %}">
         </form>
     {% endif %}

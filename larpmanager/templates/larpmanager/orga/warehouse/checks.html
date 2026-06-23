@@ -51,6 +51,12 @@
                             {% endif %}
                             <td>{{ el.notes }}</td>
                         </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="100">
+                                <p class="no-elements-available">{% trans "This item has no conflicting area assignments" %}.</p>
+                            </td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>

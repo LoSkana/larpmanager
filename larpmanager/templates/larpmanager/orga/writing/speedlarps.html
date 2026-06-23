@@ -82,4 +82,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No speed-larp scenes have been created yet" %}. {% trans "Use the button above to add your first speed-larp scene" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -36,6 +36,12 @@
                         <a href="{% url 'orga_questions_close' run.get_slug el.member.uuid %}">{% trans "Close" %}</a>
                     </td>
                 </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="100">
+                        <p class="no-elements-available">{% trans "There are no open questions from participants at this time" %}.</p>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
@@ -58,6 +64,12 @@
                         <td>{{ el.text }}</td>
                         <td>
                             <a href="{% url 'orga_questions_answer' run.get_slug el.member.uuid %}">{% trans "Answer" %}</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="100">
+                            <p class="no-elements-available">{% trans "No questions have been answered yet" %}.</p>
                         </td>
                     </tr>
                 {% endfor %}

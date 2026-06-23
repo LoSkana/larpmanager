@@ -52,6 +52,11 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No items have been assigned to this run yet" %}. {% trans "Use the button above to assign warehouse items" %}.
+        </p>
+    {% endif %}
     <div id="imagePopup">
         <img id="popupImg" src="" alt="popup image" />
     </div>

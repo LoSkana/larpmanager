@@ -42,4 +42,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No workshop questions have been created yet" %}. {% trans "Use the button above to add a new question" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

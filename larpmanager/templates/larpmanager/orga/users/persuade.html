@@ -30,6 +30,14 @@
                 </td>
                 <td>{{ el.5 }}</td>
             </tr>
+        {% empty %}
+            <tr>
+                <td colspan="100">
+                    <p class="no-elements-available">
+                        {% trans "All association members have already registered for a future session of this event" %}.
+                    </p>
+                </td>
+            </tr>
         {% endfor %}
     </table>
 {% endblock content %}

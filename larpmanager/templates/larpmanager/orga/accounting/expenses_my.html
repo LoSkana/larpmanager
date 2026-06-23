@@ -29,4 +29,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No expenses submitted yet" %}. {% trans "Use the button above to add a new expense with a receipt" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

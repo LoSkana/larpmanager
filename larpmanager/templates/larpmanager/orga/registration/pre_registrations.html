@@ -47,6 +47,12 @@
                 <td>{{ el.info }}</td>
                 <td>{{ el.created }}</td>
             </tr>
+        {% empty %}
+            <tr>
+                <td colspan="100">
+                    <p class="no-elements-available">{% trans "No pre-registrations have been received for this event yet" %}.</p>
+                </td>
+            </tr>
         {% endfor %}
     </table>
 {% endblock content %}

@@ -37,6 +37,12 @@
                                     </button>
                                 </td>
                             </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="100">
+                                    <p class="no-elements-available">{% trans "No deleted items found in this category" %}.</p>
+                                </td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>

@@ -46,6 +46,11 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No open questions at the moment. All member requests have been answered or closed" %}.
+        </p>
+    {% endif %}
     <div class="hide closed">
         <h2>Domande già risposte</h2>
         <p>
@@ -76,6 +81,12 @@
                         <td>{{ el.text }}</td>
                         <td>
                             <a href="{% url 'exe_questions_answer' el.member.uuid %}">{% trans "Answer" %}</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="100">
+                            <p class="no-elements-available">{% trans "No answered questions in the last 3 months" %}.</p>
                         </td>
                     </tr>
                 {% endfor %}

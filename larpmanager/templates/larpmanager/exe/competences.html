@@ -32,4 +32,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No competences have been defined yet" %}. {% trans "Add one to get started" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

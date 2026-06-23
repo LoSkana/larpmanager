@@ -40,4 +40,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No custom texts defined yet" %}. {% trans "Add a text to customize emails and registration pages for your organization" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

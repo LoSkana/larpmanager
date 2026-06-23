@@ -52,6 +52,11 @@
             </tr>
         {% endfor %}
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No members have enrolled yet" %}. {% trans "Members will appear here once they have completed their yearly enrollment" %}.
+        </p>
+    {% endif %}
 {% endblock content %}
 {% block js2 %}
     <script>window.addEventListener('DOMContentLoaded', function() {

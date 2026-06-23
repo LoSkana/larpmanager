@@ -34,6 +34,12 @@
                         {% endif %}
                     </td>
                 </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="100">
+                        <p class="no-elements-available">{% trans "No financial movements recorded for the selected year" %}.</p>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
         {% for el in donations %}
@@ -113,6 +119,12 @@
                         {% endif %}
                     </td>
                 </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="100">
+                        <p class="no-elements-available">{% trans "No outflows recorded for the selected year" %}.</p>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
         {% for el in expenses %}
@@ -146,6 +158,12 @@
                     <td>{{ el.member }}</td>
                     <td>{{ el.credit }}</td>
                 </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="100">
+                        <p class="no-elements-available">{% trans "No members with positive credits for the selected year" %}.</p>
+                    </td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>
@@ -162,6 +180,12 @@
                 <tr>
                     <td>{{ el.member }}</td>
                     <td>{{ el.credit }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="100">
+                        <p class="no-elements-available">{% trans "No members with negative credits for the selected year" %}.</p>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

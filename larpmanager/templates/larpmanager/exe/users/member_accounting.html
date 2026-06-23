@@ -34,6 +34,12 @@
                         <td>{{ el.value }}</td>
                         <td>{{ el.typ }}</td>
                     </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="100">
+                            <p class="no-elements-available">{% trans "No payments found for this member" %}.</p>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -59,6 +65,12 @@
                         <td>{{ el.value }}</td>
                         <td>{{ el.typ }}</td>
                     </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="100">
+                            <p class="no-elements-available">{% trans "No transactions found for this member" %}.</p>
+                        </td>
+                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -79,6 +91,12 @@
                         <td>{{ el.run.search }}</td>
                         <td>{{ el.disc }}</td>
                         <td>{{ el.detail }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="100">
+                            <p class="no-elements-available">{% trans "No discounts have been applied to this member" %}.</p>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

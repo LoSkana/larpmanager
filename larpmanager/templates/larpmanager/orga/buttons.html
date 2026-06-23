@@ -45,4 +45,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No navigation buttons defined yet" %}. {% trans "Add a button to provide quick links in the event navigation menu" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

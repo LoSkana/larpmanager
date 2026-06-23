@@ -46,4 +46,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No problems have been reported for this event yet" %}. {% trans "Use the button above to add a new problem" %}.
+        </p>
+    {% endif %}
 {% endblock content %}
