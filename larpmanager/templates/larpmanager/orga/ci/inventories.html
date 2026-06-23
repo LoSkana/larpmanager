@@ -35,4 +35,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No character inventories created yet" %}. {% trans "Add an inventory to track items assigned to characters" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -45,4 +45,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No payment quota options have been defined for this event yet" %}. {% trans "Use the button above to add a quota plan" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

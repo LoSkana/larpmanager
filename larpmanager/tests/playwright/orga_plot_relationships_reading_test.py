@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      submit_confirm,
                                      expect_normalized, sidebar, save_modal, click_and_wait_question,
-                                     _wait_select2_results,
+                                     _wait_select2_results, _wait_lm_ready,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -91,6 +91,7 @@ def reading(live_server: Any, page: Any) -> None:
     # now read it
     sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         """
@@ -125,6 +126,7 @@ def reading(live_server: Any, page: Any) -> None:
     # check reading for prova
     sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character only for testt test teaser ciaaoooooo",
@@ -133,6 +135,7 @@ def reading(live_server: Any, page: Any) -> None:
     # check reading plot
     sidebar(page, "Reading")
     page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
 
 
@@ -178,6 +181,7 @@ def relationships(live_server: Any, page: Any) -> None:
     # check in gallery
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Relationships Test Character test teaser ciaaoooooo")
 
 
@@ -269,6 +273,7 @@ def plots(live_server: Any, page: Any) -> None:
     # check in user
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "testona wwwww bruuuu")
 
 

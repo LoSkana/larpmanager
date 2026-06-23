@@ -56,4 +56,7 @@
             </table>
         {% endif %}
     {% endfor %}
+    {% if not items.items %}
+        <p class="no-elements-available">{% trans "No item has conflicting area assignments" %}.</p>
+    {% endif %}
 {% endblock content %}

@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar, get_modal_iframe, \
-    save_modal
+    save_modal, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -163,10 +163,14 @@ def form_other_writing(page: Any) -> None:
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden Faction Factions Hidden",
     )
     page.get_by_role("link", name="Plot", exact=True).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Name Name Concept Presentation Text Sheet")
     page.get_by_role("link", name="Faction", exact=True).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
     page.locator("#one").get_by_role("link", name="Quest").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
     page.get_by_role("link", name="Trait", exact=True).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")

@@ -52,4 +52,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No roles defined yet" %}. {% trans "Create a role to assign permissions and invite staff members to your organization" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

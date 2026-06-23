@@ -38,4 +38,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No custom translations defined yet" %}. {% trans "Add a translation to override default interface strings for a specific language" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

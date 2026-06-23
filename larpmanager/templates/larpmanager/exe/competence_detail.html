@@ -34,6 +34,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "No members have self-assessed this competence yet" %}.</p>
+    {% endif %}
     <p>
         {% for el in list %}
             {% include "elements/comma.html" %}

@@ -41,8 +41,13 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No characters have been created yet" %}. {% trans "Add characters to see their player assignments here" %}.
+        </p>
+    {% endif %}
     {% if features.questbuilder %}
-        <h2>Tratti</h2>
+        <h2>{% trans "Traits" %}</h2>
         <table id="traits" class="go_datatable writing">
             <thead>
                 <tr>
@@ -73,6 +78,11 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if not traits %}
+            <p class="no-elements-available">
+                {% trans "No traits have been assigned yet" %}. {% trans "Assign traits to characters via the quest builder" %}.
+            </p>
+        {% endif %}
     {% endif %}
     {% for fnum, fac in factions.items %}
         <h2>{{ fac.name }}</h2>
@@ -112,4 +122,7 @@
             </tbody>
         </table>
     {% endfor %}
+    {% if not fac.characters %}
+        <p class="no-elements-available">{% trans "No characters have been assigned to this faction yet" %}.</p>
+    {% endif %}
 {% endblock content %}

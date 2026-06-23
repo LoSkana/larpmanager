@@ -39,6 +39,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not open %}
+        <p class="no-elements-available">{% trans "There are no open questions from participants at this time" %}.</p>
+    {% endif %}
     <div class="hide closed">
         <h2>Domande già risposte</h2>
         <table id="questions_closed" class="go_datatable">
@@ -63,5 +66,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if not closed %}
+            <p class="no-elements-available">{% trans "No questions have been answered yet" %}.</p>
+        {% endif %}
     </div>
 {% endblock content %}

@@ -45,4 +45,9 @@
             </tr>
         {% endfor %}
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No members in the registry yet" %}. {% trans "Members will appear here once they have been accepted into the association" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -45,4 +45,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "No collections have been created yet" %}.</p>
+    {% endif %}
 {% endblock content %}

@@ -20,20 +20,27 @@
         }
         </style>
     {% endif %}
-{% endblock %}
-{% block bodyclass %}{{ block.super }} login{% endblock %}
-{% block usertools %}{% endblock %}
-{% block nav-global %}{% endblock %}
-{% block content_title %}{% endblock %}
-{% block breadcrumbs %}{% endblock %}
-{% block nav-sidebar %}{% endblock %}
+{% endblock extrastyle %}
+{% block bodyclass %}
+    {{ block.super }} login
+{% endblock bodyclass %}
+{% block usertools %}
+{% endblock usertools %}
+{% block nav-global %}
+{% endblock nav-global %}
+{% block content_title %}
+{% endblock content_title %}
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+{% block nav-sidebar %}
+{% endblock nav-sidebar %}
 {% block content %}
     {% if form.errors and not form.non_field_errors %}
         <p class="errornote">
             {% if form.errors.items|length == 1 %}
-                {% trans "Please correct the error below." %}
+                {% trans "Please correct the error below" %}.
             {% else %}
-                {% trans "Please correct the errors below." %}
+                {% trans "Please correct the errors below" %}.
             {% endif %}
         </p>
     {% endif %}
@@ -92,4 +99,4 @@
             </div>
         </form>
     </div>
-{% endblock %}
+{% endblock content %}

@@ -45,4 +45,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No templates defined yet" %}. {% trans "Create a template to reuse event configurations and role assignments across events" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

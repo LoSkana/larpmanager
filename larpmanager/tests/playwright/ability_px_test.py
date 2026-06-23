@@ -31,7 +31,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
     submit_register, submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, \
-    click_and_wait_question, _wait_select2_results
+    click_and_wait_question, _wait_select2_results, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -294,6 +294,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Abilities").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         """
@@ -304,6 +305,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     # get ability
     page.locator("#ability_select").select_option("u2")
     page.get_by_role("button", name="Submit", exact=True).click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         """Obtain ability Select the new ability to get --- Select ability
@@ -314,6 +316,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
 
     # remove ability
     page.get_by_role("heading", name=re.compile("^double shield")).get_by_role("link").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         """
