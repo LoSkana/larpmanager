@@ -1981,6 +1981,11 @@ header.sec h1 {
   margin-bottom: 0.5em;
 }
 
+.page_leaderboard h2,
+.page_badges h2 {
+  text-align: center;
+}
+
 .cover-container {
   width: 25%;
 }
