@@ -365,43 +365,55 @@ class Command(BaseCommand):
     def check_achievements(self, association: Association) -> None:
         """Process badge achievements for association members.
 
-        Analyzes past and future event registrations to award badges
-        based on participation and friend referral patterns. Processes
-        all completed events for participation badges and future events
-        for friend referral tracking.
-
-        Args:
-            association: Association instance to process badges for
-
-        Returns:
-            None: Function performs side effects by updating badge cache
-
+        Analyzes past and future event registrations and past event roles to award
+        badges based on participation, organization, and friend referral patterns.
         """
         # Initialize cache for badges and player data
         cache = {"badges": {}, "players": {}}
         events_by_id = {}
 
-        # Process past events for participation badges
-        for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
-            # Get all non-cancelled registrations
-            registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+        # Track which members have already been processed for roles per event to prevent double counting
+        processed_orga_events = set()
+        processed_staff_events = set()
 
-            # Process registrations excluding waiting list, staff, and NPCs
+        # Process past events for participation and staff/organizer roles
+        for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
+            # Process regular player registrations
+            registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
             for registration in registrations.exclude(
                 ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
             ):
                 self.check_ach_player(registration, cache)
+
+            # Process staff and organizer roles for this event
+            event = run.event
+            event_roles = EventRole.objects.filter(event=event).prefetch_related("members")
+
+            for role in event_roles:
+                for member in role.members.all():
+                    if role.number == 1:
+                        # Organizer role tracking
+                        tracking_key = (member.id, event.id)
+                        if tracking_key not in processed_orga_events:
+                            processed_orga_events.add(tracking_key)
+                            self.get_count("orga", cache, member)
+                            self.check_badge_orga(member, cache)
+                    else:
+                        # Staff role tracking
+                        tracking_key = (member.id, event.id)
+                        if tracking_key not in processed_staff_events:
+                            processed_staff_events.add(tracking_key)
+                            self.get_count("staff", cache, member)
+                            self.check_badge_staff(member, cache)
 
             # Cache event data for reference
             events_by_id[run.event_id] = run.event
 
         # Process future events for friend referral tracking
         for run in Run.objects.filter(end__gt=timezone.now().date()):
-            # Get confirmed registrations (excluding waiting list)
             for registration in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
                 ticket__tier=TicketTier.WAITING,
             ):
-                # Check friend referral achievements
                 self.check_friends_player(registration, cache)
 
     def add_member_badge(self, badge_code: str, member: Member, badge_cache: dict) -> None:
