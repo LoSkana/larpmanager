@@ -51,6 +51,7 @@ from larpmanager.models.miscellanea import WorkshopModule, WorkshopOption, Works
 from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationQuota,
+    RegistrationSection,
     RegistrationSurcharge,
     RegistrationTicket,
 )
@@ -715,9 +716,13 @@ def copy_registration(source_event_id: int, targets: list[str], target_event_id:
 
     # Copy registration questions and their options, then fix relationships
     if "question" in targets:
+        copy_class(source_event_id, target_event_id, RegistrationSection)
         copy_class(source_event_id, target_event_id, RegistrationQuestion)
         copy_class(source_event_id, target_event_id, RegistrationOption)
+        correct_rels(source_event_id, target_event_id, RegistrationSection, RegistrationQuestion, "section", "name")
         correct_rels(source_event_id, target_event_id, RegistrationQuestion, RegistrationOption, "question", "name")
+        correct_rels_many(target_event_id, RegistrationTicket, RegistrationQuestion, "tickets", "name")
+        correct_rels_many(target_event_id, RegistrationTicket, RegistrationOption, "tickets", "name")
 
     # Copy discount configurations
     if "discount" in targets:
