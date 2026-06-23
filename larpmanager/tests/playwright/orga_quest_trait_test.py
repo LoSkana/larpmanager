@@ -27,6 +27,7 @@ import re
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
                                      check_feature,
@@ -134,7 +135,7 @@ def traits(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("stru")
     _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
-    just_wait(edit_iframe)
+    expect(edit_iframe.locator("#id_text")).to_have_value(re.compile(r"@\d+"))
 
     save_modal(page, edit_iframe)
 
@@ -146,7 +147,7 @@ def traits(page: Any, live_server: Any) -> None:
     page.get_by_role("searchbox").fill("non")
     _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
-    just_wait(page)
+    expect(panel.locator("textarea")).to_have_value(re.compile(r"@\d+"))
     submit_inline_edit(page)
 
     page.get_by_role("link", name="New").click()
