@@ -63,15 +63,12 @@
                         {% endif %}
                     </td>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="100">
-                        <p class="no-elements-available">{% trans "No items are available in the warehouse to assign to this area" %}.</p>
-                    </td>
-                </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% if not item_all.values %}
+        <p class="no-elements-available">{% trans "No items are available in the warehouse to assign to this area" %}.</p>
+    {% endif %}
     <div id="imagePopup">
         <img id="popupImg" src="" alt="popup image" />
     </div>

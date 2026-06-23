@@ -5590,6 +5590,9 @@ msgstr "Zatím nebyly vytvořeny žádné odznaky"
 msgid "No experience rules defined yet"
 msgstr "Zatím nejsou definována žádná pravidla pro zkušenosti"
 
+msgid "No open questions at the moment"
+msgstr "V tuto chvíli nejsou žádné otevřené otázky"
+
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Obnovení hesla uživatele %(user)s"
@@ -5844,9 +5847,6 @@ msgstr "Zatím nebyly vytvořeny žádné podklady"
 
 msgid "No navigation buttons defined yet"
 msgstr "Zatím nejsou definována žádná navigační tlačítka"
-
-msgid "No payments found for this member"
-msgstr "Pro tohoto člena nebyly nalezeny žádné platby"
 
 msgid "Now you can set the taxes options"
 msgstr "Nyní můžete nastavit možnosti daní"
@@ -6285,9 +6285,6 @@ msgstr "Zrcadlový typ znaku, nelze vybrat"
 msgid "No one-time content items defined yet"
 msgstr "Zatím nebyly definovány žádné jednorázové položky obsahu"
 
-msgid "No transactions found for this member"
-msgstr "Pro tohoto člena nebyly nalezeny žádné transakce"
-
 msgid "Now you can create fixed installments"
 msgstr "Nyní můžete vytvořit pevné splátky"
 
@@ -6330,6 +6327,9 @@ msgstr "Typ otázky, povolené hodnoty jsou"
 
 msgid "The rule's number (unique identifier)"
 msgstr "Číslo pravidla (jedinečný identifikátor)"
+
+msgid "To view previous questions click here"
+msgstr "Chcete-li si prohlédnout předchozí otázky, klikněte sem"
 
 msgid "Total amount refunded to participants"
 msgstr "Celková částka vrácená účastníkům"
@@ -6510,9 +6510,6 @@ msgstr "Členství ve sdružení je přijato"
 msgid "No answer options have been defined yet"
 msgstr "Zatím nebyly definovány žádné možnosti odpovědí"
 
-msgid "No deleted items found in this category"
-msgstr "V souboru ZIP nebyly nalezeny žádné rozpoznané soubory"
-
 msgid "No progress steps have been defined yet"
 msgstr "Zatím nebyly definovány žádné kroky k dosažení pokroku"
 
@@ -6618,6 +6615,9 @@ msgstr "Správa příjmů souvisejících s akcemi"
 
 msgid "Name of the ticket into which to convert"
 msgstr "Název tipu, do kterého se má převést"
+
+msgid "No item has conflicting area assignments"
+msgstr "Žádná položka nemá protichůdná přiřazení oblastí"
 
 msgid "No resource files have been uploaded yet"
 msgstr "Zatím nebyly nahrány žádné soubory se zdroji"
@@ -7152,9 +7152,6 @@ msgstr "Člen, který použil tento token (je-li ověřen)"
 msgid "Modify the character details to make it yours"
 msgstr "Upravte údaje o postavě tak, aby byla vaše"
 
-msgid "No discounts have been applied to this member"
-msgstr "Na tohoto člena nebyly uplatněny žádné slevy"
-
 msgid "No roles have been defined for this event yet"
 msgstr "Pro tuto událost zatím nebyly definovány žádné role"
 
@@ -7176,9 +7173,6 @@ msgstr "Vyberte událost, na kterou se chcete předběžně zaregistrovat"
 
 msgid "The user has been assigned the specified role"
 msgstr "Uživateli byla přidělena zadaná role"
-
-msgid "This item has no conflicting area assignments"
-msgstr "U této položky nedochází ke konfliktům při přiřazování oblastí"
 
 msgid "Upload your membership application to proceed"
 msgstr "Nahrajte svou žádost o členství a pokračujte"
@@ -7363,6 +7357,9 @@ msgstr "Byli jste přesměrováni na panel událostí"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>"
+
+msgid "All member requests have been answered or closed"
+msgstr "Všechny žádosti členů byly vyřízeny nebo uzavřeny"
 
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Jste si jistý? Položky nemusí být možné obnovit"
@@ -7776,9 +7773,6 @@ msgstr "Správa dynamických splátek za registrace"
 msgid "Manage photo and video albums uploaded for this event"
 msgstr "Spravovat fotoalba a videa nahraná k této události"
 
-msgid "No financial movements recorded for the selected year"
-msgstr "Za vybraný rok nebyly zaznamenány žádné finanční pohyby"
-
 msgid "No surcharges have been configured for this event yet"
 msgstr "Pro tuto akci zatím nebyly nastaveny žádné příplatky"
 
@@ -7809,6 +7803,9 @@ msgstr "Datum vydání vašeho dokladu totožnosti"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Byl uveden celkový počet losů, které budou vylosovány"
+
+msgid "This page only shows questions from the last 3 months"
+msgstr "Na této stránce se zobrazují pouze otázky z posledních 3 měsíců"
 
 msgid "This page will refresh automatically every 10 seconds"
 msgstr "Tato stránka se bude automaticky aktualizovat každých 10 sekund"
@@ -7946,9 +7943,6 @@ msgstr "Správa stavu nakládky a nasazení skladových položek"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Správa plateb provedených účastníky všech událostí"
-
-msgid "No discounts are currently active for this registration"
-msgstr "V současné době nejsou pro tuto registraci k dispozici žádné slevy"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Přehled uživatelů, kteří nedodržují termíny události"
@@ -8159,9 +8153,6 @@ msgid "No contributors with competences found in the organization"
 msgstr ""
 "V organizaci nebyli nalezeni žádní spolupracovníci s příslušnými "
 "kompetencemi"
-
-msgid "No pre-registrations have been received for this event yet"
-msgstr "Na tuto akci zatím nebyly přijaty žádné předběžné registrace"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"
@@ -8740,9 +8731,6 @@ msgstr "Správa distribuce zkušeností pro nákup schopností postavy."
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "spravuje kredity, které účastníci využívají k úhradě registračního poplatku"
-
-msgid "No additional discounts are available to add for this registration"
-msgstr "K této registraci nelze uplatnit žádné další slevy"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Vyberte typy prvků psaní, kterých se tato otázka týká"
@@ -10196,13 +10184,6 @@ msgid ""
 "cancelled"
 msgstr ""
 "Pokud v této lhůtě platbu neobdržíte, může být vaše registrace zrušena"
-
-msgid ""
-"No open questions at the moment. All member requests have been answered or "
-"closed"
-msgstr ""
-"V tuto chvíli nejsou žádné otevřené dotazy. Na všechny žádosti členů bylo "
-"odpovězeno nebo byly uzavřeny"
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
@@ -12298,13 +12279,6 @@ msgid ""
 msgstr ""
 "Zapněte nebo vypněte platební metody dostupné při placení a nastavte "
 "přihlašovací údaje pro každou aktivní platební bránu"
-
-msgid ""
-"For your convenience, this page only shows questions from the last 3 months."
-" To view previous questions click here"
-msgstr ""
-"Pro vaše pohodlí se na této stránce zobrazují pouze otázky za poslední 3 "
-"měsíce. Pro zobrazení předchozích otázek klikněte zde"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

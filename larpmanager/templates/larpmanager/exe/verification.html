@@ -59,14 +59,11 @@
                     {% if el.reg_cod %}{{ el.reg_cod }}{% endif %}
                 </td>
             </tr>
-        {% empty %}
-            <tr>
-                <td colspan="100">
-                    <p class="no-elements-available">
-                        {% trans "No payments pending verification" %}. {% trans "All payments have been verified or none have been submitted yet" %}.
-                    </p>
-                </td>
-            </tr>
         {% endfor %}
     </table>
+    {% if not todo %}
+        <p class="no-elements-available">
+            {% trans "No payments pending verification" %}. {% trans "All payments have been verified or none have been submitted yet" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

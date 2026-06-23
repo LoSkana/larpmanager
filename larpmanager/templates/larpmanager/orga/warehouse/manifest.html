@@ -96,15 +96,12 @@
                                class="only_new_v18"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="100">
-                            <p class="no-elements-available">{% trans "No items have been assigned to this area yet" %}.</p>
-                        </td>
-                    </tr>
                 {% endfor %}
             </tbody>
         </table>
+        {% if area.items %}
+            <p class="no-elements-available">{% trans "No items have been assigned to this area yet" %}.</p>
+        {% endif %}
     {% endfor %}
     <div id="imagePopup">
         <img id="popupImg" src="" alt="popup image" />

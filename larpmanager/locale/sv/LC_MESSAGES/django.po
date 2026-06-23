@@ -5590,6 +5590,9 @@ msgstr "Inga märken har skapats ännu"
 msgid "No experience rules defined yet"
 msgstr "Inga erfarenhetsregler har definierats ännu"
 
+msgid "No open questions at the moment"
+msgstr "Det finns inga öppna frågor just nu"
+
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Lösenordsåterställning för användare %(user)s"
@@ -5844,9 +5847,6 @@ msgstr "Det har ännu inte skapats några utdelningsmaterial"
 
 msgid "No navigation buttons defined yet"
 msgstr "Inga navigeringsknappar har definierats ännu"
-
-msgid "No payments found for this member"
-msgstr "Inga betalningar hittades för denna medlem"
 
 msgid "Now you can set the taxes options"
 msgstr "Nu kan du ställa in skattealternativen"
@@ -6284,9 +6284,6 @@ msgstr "Spegelkaraktär, inte valbar"
 msgid "No one-time content items defined yet"
 msgstr "Inga engångsinnehållsobjekt har definierats ännu"
 
-msgid "No transactions found for this member"
-msgstr "Inga transaktioner hittades för denna medlem"
-
 msgid "Now you can create fixed installments"
 msgstr "Nu kan du skapa fasta delbetalningar"
 
@@ -6329,6 +6326,9 @@ msgstr "Frågetyp, tillåtna värden är"
 
 msgid "The rule's number (unique identifier)"
 msgstr "Regelns nummer (unik identifierare)"
+
+msgid "To view previous questions click here"
+msgstr "Klicka här för att se tidigare frågor"
 
 msgid "Total amount refunded to participants"
 msgstr "Totalt belopp som återbetalas till deltagarna"
@@ -6511,9 +6511,6 @@ msgstr "Medlemskap i föreningen accepteras"
 msgid "No answer options have been defined yet"
 msgstr "Inga svarsalternativ har definierats ännu"
 
-msgid "No deleted items found in this category"
-msgstr "Inga identifierade filer hittades i ZIP"
-
 msgid "No progress steps have been defined yet"
 msgstr "Inga steg i processen har fastställts ännu"
 
@@ -6619,6 +6616,9 @@ msgstr "Hantera intäkter från evenemang"
 
 msgid "Name of the ticket into which to convert"
 msgstr "Namn på den biljett som ska konverteras till"
+
+msgid "No item has conflicting area assignments"
+msgstr "Ingen post har motstridiga områdestilldelningar"
 
 msgid "No resource files have been uploaded yet"
 msgstr "Inga resursfiler har laddats upp ännu"
@@ -7153,9 +7153,6 @@ msgstr "Medlem som använde denna token (om den är autentiserad)"
 msgid "Modify the character details to make it yours"
 msgstr "Modifiera karaktärsdetaljerna för att göra den till din egen"
 
-msgid "No discounts have been applied to this member"
-msgstr "Inga rabatter har tillämpats för denna medlem"
-
 msgid "No roles have been defined for this event yet"
 msgstr "Det har ännu inte definierats några roller för detta evenemang"
 
@@ -7177,9 +7174,6 @@ msgstr "Välj det evenemang du vill föranmäla dig till"
 
 msgid "The user has been assigned the specified role"
 msgstr "Användaren har tilldelats den angivna rollen"
-
-msgid "This item has no conflicting area assignments"
-msgstr "Denna post har inga motstridiga områdestilldelningar"
 
 msgid "Upload your membership application to proceed"
 msgstr "Ladda upp din medlemsansökan för att fortsätta"
@@ -7364,6 +7358,9 @@ msgstr "Du har omdirigerats till Event Dashboard"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Få tillgång till din karaktär <a href='%(url)s'>här</a>"
+
+msgid "All member requests have been answered or closed"
+msgstr "Alla medlemsförfrågningar har besvarats eller avslutats"
 
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Är du säker på det? Föremålen kanske inte kan återställas"
@@ -7776,9 +7773,6 @@ msgstr "Hantera dynamiska delbetalningar för registreringar"
 msgid "Manage photo and video albums uploaded for this event"
 msgstr "Hantera foto- och videoalbum som har laddats upp för detta evenemang"
 
-msgid "No financial movements recorded for the selected year"
-msgstr "Inga ekonomiska transaktioner har registrerats för det valda året"
-
 msgid "No surcharges have been configured for this event yet"
 msgstr ""
 "Det har ännu inte ställts in några tilläggsavgifter för detta evenemang"
@@ -7810,6 +7804,9 @@ msgstr "Datum då din identitetshandling utfärdades"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
+
+msgid "This page only shows questions from the last 3 months"
+msgstr "På den här sidan visas endast frågor från de senaste 3 månaderna"
 
 msgid "This page will refresh automatically every 10 seconds"
 msgstr "Denna sida uppdateras automatiskt var 10:e sekund"
@@ -7951,9 +7948,6 @@ msgstr "Hantera lastnings- och utplaceringsstatus för lagerartiklar"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Hantera betalningar som utförs av deltagare på alla evenemang"
-
-msgid "No discounts are currently active for this registration"
-msgstr "Det finns för närvarande inga rabatter för denna anmälan"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Granska de användare som inte klarar evenemangets deadlines"
@@ -8158,10 +8152,6 @@ msgstr "Hantera problem som rapporterats av deltagarna under detta evenemang"
 
 msgid "No contributors with competences found in the organization"
 msgstr "Inga medarbetare med relevant kompetens hittades inom organisationen"
-
-msgid "No pre-registrations have been received for this event yet"
-msgstr ""
-"Det har ännu inte kommit in några förhandsanmälningar till detta evenemang"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets namn, visas i frågan (håll det kort)"
@@ -8778,10 +8768,6 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Hanterar krediter som används av deltagarna för att täcka "
 "registreringsavgiften"
-
-msgid "No additional discounts are available to add for this registration"
-msgstr ""
-"Det finns inga ytterligare rabatter som kan läggas till för denna anmälan"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Välj de typer av skrivelement som den här frågan gäller"
@@ -10317,13 +10303,6 @@ msgid ""
 msgstr ""
 "Om betalning inte erhålls inom denna period kan din registrering komma att "
 "annulleras"
-
-msgid ""
-"No open questions at the moment. All member requests have been answered or "
-"closed"
-msgstr ""
-"Det finns inga öppna frågor just nu. Alla förfrågningar från medlemmar har "
-"besvarats eller avslutats"
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
@@ -12459,13 +12438,6 @@ msgid ""
 msgstr ""
 "Aktivera eller inaktivera de betalningsmetoder som är tillgängliga i kassan "
 "och konfigurera inloggningsuppgifter för varje aktiv betalningsgateway"
-
-msgid ""
-"For your convenience, this page only shows questions from the last 3 months."
-" To view previous questions click here"
-msgstr ""
-"För din bekvämlighet visar denna sida endast frågor från de senaste 3 "
-"månaderna. För att se tidigare frågor klicka här"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

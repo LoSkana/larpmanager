@@ -5590,6 +5590,9 @@ msgstr "Nie utworzono jeszcze żadnych odznak"
 msgid "No experience rules defined yet"
 msgstr "Nie zdefiniowano jeszcze żadnych reguł dotyczących doświadczenia"
 
+msgid "No open questions at the moment"
+msgstr "W tej chwili nie ma żadnych otwartych pytań"
+
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Reset hasła użytkownika %(user)s"
@@ -5844,9 +5847,6 @@ msgstr "Na razie nie przygotowano żadnych materiałów informacyjnych"
 
 msgid "No navigation buttons defined yet"
 msgstr "Nie zdefiniowano jeszcze żadnych przycisków nawigacyjnych"
-
-msgid "No payments found for this member"
-msgstr "Nie znaleziono żadnych płatności dla tego członka"
 
 msgid "Now you can set the taxes options"
 msgstr "Teraz możesz ustawić opcje podatków"
@@ -6283,9 +6283,6 @@ msgstr "Znak typu lustrzanego, bez możliwości wyboru"
 msgid "No one-time content items defined yet"
 msgstr "Nie zdefiniowano jeszcze żadnych elementów treści jednorazowych"
 
-msgid "No transactions found for this member"
-msgstr "Nie znaleziono żadnych transakcji dla tego użytkownika"
-
 msgid "Now you can create fixed installments"
 msgstr "Teraz możesz tworzyć stałe raty"
 
@@ -6328,6 +6325,9 @@ msgstr "Typ pytania, dozwolone wartości to"
 
 msgid "The rule's number (unique identifier)"
 msgstr "Numer reguły (unikalny identyfikator)"
+
+msgid "To view previous questions click here"
+msgstr "Żeby zobaczyć poprzednie pytania, kliknij tutaj"
 
 msgid "Total amount refunded to participants"
 msgstr "Całkowita kwota zwrócona uczestnikom"
@@ -6511,9 +6511,6 @@ msgstr "Członkostwo w organizacji przyjęte"
 msgid "No answer options have been defined yet"
 msgstr "Nie zdefiniowano jeszcze żadnych opcji odpowiedzi"
 
-msgid "No deleted items found in this category"
-msgstr "Nie znaleziono rozpoznanych plików w pliku ZIP"
-
 msgid "No progress steps have been defined yet"
 msgstr "Nie zdefiniowano jeszcze żadnych etapów realizacji"
 
@@ -6619,6 +6616,9 @@ msgstr "Zarządzaj przychodami związanymi z wydarzeniami"
 
 msgid "Name of the ticket into which to convert"
 msgstr "Nazwa biletu, na który ma zostać dokonana konwersja"
+
+msgid "No item has conflicting area assignments"
+msgstr "Żadna pozycja nie ma sprzecznych przypisów obszarów"
 
 msgid "No resource files have been uploaded yet"
 msgstr "Nie dodano jeszcze żadnych plików zasobów"
@@ -7155,9 +7155,6 @@ msgstr "Członek, który użył tego tokena (jeśli jest uwierzytelniony)"
 msgid "Modify the character details to make it yours"
 msgstr "Zmodyfikuj szczegóły postaci, aby uczynić ją swoją"
 
-msgid "No discounts have been applied to this member"
-msgstr "W przypadku tego członka nie zastosowano żadnych zniżek"
-
 msgid "No roles have been defined for this event yet"
 msgstr "Dla tego wydarzenia nie zdefiniowano jeszcze żadnych ról"
 
@@ -7179,9 +7176,6 @@ msgstr "Wybierz wydarzenie, na które chcesz się wstępnie zarejestrować"
 
 msgid "The user has been assigned the specified role"
 msgstr "Użytkownikowi przypisano określoną rolę"
-
-msgid "This item has no conflicting area assignments"
-msgstr "Ten element nie ma żadnych kolidujących przypisów obszarów"
 
 msgid "Upload your membership application to proceed"
 msgstr "Prześlij swój wniosek o członkostwo, aby kontynuować"
@@ -7368,6 +7362,9 @@ msgstr "Nastąpiło przekierowanie do pulpitu nawigacyjnego wydarzenia"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Uzyskaj dostęp do swojej postaci <a href='%(url)s'>tutaj</a>"
+
+msgid "All member requests have been answered or closed"
+msgstr "Wszystkie zgłoszenia członków zostały rozpatrzone lub zamknięte"
 
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Czy na pewno? Elementy mogą być niemożliwe do odzyskania"
@@ -7784,9 +7781,6 @@ msgstr "Zarządzanie dynamicznymi płatnościami ratalnymi za rejestracje"
 msgid "Manage photo and video albums uploaded for this event"
 msgstr "Zarządzaj albumami ze zdjęciami i filmami dodanymi do tego wydarzenia"
 
-msgid "No financial movements recorded for the selected year"
-msgstr "W wybranym roku nie odnotowano żadnych transakcji finansowych"
-
 msgid "No surcharges have been configured for this event yet"
 msgstr "Na razie nie skonfigurowano żadnych dopłat dla tego wydarzenia"
 
@@ -7818,6 +7812,9 @@ msgstr "Data wydania dokumentu tożsamości"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Podano całkowitą liczbę losów do rozlosowania"
+
+msgid "This page only shows questions from the last 3 months"
+msgstr "Na tej stronie wyświetlane są tylko pytania z ostatnich 3 miesięcy"
 
 msgid "This page will refresh automatically every 10 seconds"
 msgstr "Ta strona będzie odświeżać się automatycznie co 10 sekund"
@@ -7960,9 +7957,6 @@ msgstr ""
 msgid "Manage payments performed by participants on all events"
 msgstr ""
 "Zarządzanie płatnościami dokonywanymi przez uczestników wszystkich wydarzeń"
-
-msgid "No discounts are currently active for this registration"
-msgstr "W tej chwili nie ma żadnych zniżek na tę rejestrację"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Przejrzyj użytkowników, którzy nie dotrzymali terminów wydarzenia"
@@ -8180,9 +8174,6 @@ msgid "No contributors with competences found in the organization"
 msgstr ""
 "W organizacji nie znaleziono żadnych pracowników o odpowiednich "
 "kompetencjach"
-
-msgid "No pre-registrations have been received for this event yet"
-msgstr "Na razie nie otrzymaliśmy żadnych zgłoszeń wstępnych na to wydarzenie"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nazwa opcji wyświetlana w pytaniu (powinna być krótka)"
@@ -8821,10 +8812,6 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Zarządza kredytami wykorzystywanymi przez uczestników do pokrycia opłaty "
 "rejestracyjnej"
-
-msgid "No additional discounts are available to add for this registration"
-msgstr ""
-"W przypadku tej rejestracji nie można dodać żadnych dodatkowych zniżek"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Wybierz typy elementów tekstu, których dotyczy to pytanie"
@@ -10389,13 +10376,6 @@ msgid ""
 msgstr ""
 "Jeśli płatność nie wpłynie w tym terminie, Twoja rejestracja może zostać "
 "anulowana"
-
-msgid ""
-"No open questions at the moment. All member requests have been answered or "
-"closed"
-msgstr ""
-"W tej chwili nie ma żadnych otwartych pytań. Na wszystkie prośby członków "
-"udzielono odpowiedzi lub je zamknięto"
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
@@ -12532,13 +12512,6 @@ msgid ""
 msgstr ""
 "Włącz lub wyłącz metody płatności dostępne przy finalizacji zamówienia oraz "
 "skonfiguruj dane logowania dla każdej aktywnej bramki płatniczej"
-
-msgid ""
-"For your convenience, this page only shows questions from the last 3 months."
-" To view previous questions click here"
-msgstr ""
-"Dla wygody użytkowników na tej stronie wyświetlane są tylko pytania z "
-"ostatnich 3 miesięcy. Aby wyświetlić poprzednie pytania, kliknij tutaj"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

@@ -5590,6 +5590,9 @@ msgstr "Er zijn nog geen badges aangemaakt"
 msgid "No experience rules defined yet"
 msgstr "Er zijn nog geen regels voor ervaring gedefinieerd"
 
+msgid "No open questions at the moment"
+msgstr "Er zijn op dit moment geen openstaande vragen"
+
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Wachtwoord reset van gebruiker %(user)s"
@@ -5844,9 +5847,6 @@ msgstr "Er zijn nog geen hand-outs gemaakt"
 
 msgid "No navigation buttons defined yet"
 msgstr "Er zijn nog geen navigatieknoppen gedefinieerd"
-
-msgid "No payments found for this member"
-msgstr "Er zijn geen betalingen gevonden voor dit lid"
 
 msgid "Now you can set the taxes options"
 msgstr "Nu kun je de belastingopties instellen"
@@ -6285,9 +6285,6 @@ msgstr "Spiegeltype teken, niet selecteerbaar"
 msgid "No one-time content items defined yet"
 msgstr "Er zijn nog geen eenmalige inhoudsitems gedefinieerd"
 
-msgid "No transactions found for this member"
-msgstr "Er zijn geen transacties gevonden voor dit lid"
-
 msgid "Now you can create fixed installments"
 msgstr "Nu kun je vaste afbetalingen maken"
 
@@ -6330,6 +6327,9 @@ msgstr "Het vraagtype, toegestane waarden zijn"
 
 msgid "The rule's number (unique identifier)"
 msgstr "Het nummer van de regel (unieke identificatiecode)"
+
+msgid "To view previous questions click here"
+msgstr "Klik hier om eerdere vragen te bekijken"
 
 msgid "Total amount refunded to participants"
 msgstr "Totaalbedrag terugbetaald aan deelnemers"
@@ -6516,9 +6516,6 @@ msgstr "Lidmaatschap van de vereniging geaccepteerd"
 msgid "No answer options have been defined yet"
 msgstr "Er zijn nog geen antwoordopties gedefinieerd"
 
-msgid "No deleted items found in this category"
-msgstr "Geen herkende bestanden gevonden in de ZIP"
-
 msgid "No progress steps have been defined yet"
 msgstr "Er zijn nog geen stappen in het proces vastgesteld"
 
@@ -6624,6 +6621,9 @@ msgstr "Beheer inkomsten uit evenementen"
 
 msgid "Name of the ticket into which to convert"
 msgstr "Naam van het ticket waarnaar geconverteerd moet worden"
+
+msgid "No item has conflicting area assignments"
+msgstr "Geen enkel item heeft tegenstrijdige gebiedstoewijzingen"
 
 msgid "No resource files have been uploaded yet"
 msgstr "Er zijn nog geen bronbestanden geüpload"
@@ -7161,9 +7161,6 @@ msgstr "Lid dat dit token heeft gebruikt (indien geverifieerd)"
 msgid "Modify the character details to make it yours"
 msgstr "Pas de details van het personage aan om het van jou te maken"
 
-msgid "No discounts have been applied to this member"
-msgstr "Er zijn geen kortingen toegepast op dit lid"
-
 msgid "No roles have been defined for this event yet"
 msgstr "Er zijn nog geen rollen gedefinieerd voor dit evenement"
 
@@ -7185,9 +7182,6 @@ msgstr "Selecteer het evenement waarvoor je je wilt voorregistreren"
 
 msgid "The user has been assigned the specified role"
 msgstr "De gebruiker heeft de opgegeven rol toegewezen gekregen"
-
-msgid "This item has no conflicting area assignments"
-msgstr "Dit item heeft geen conflicterende gebiedstoewijzingen"
 
 msgid "Upload your membership application to proceed"
 msgstr "Upload je lidmaatschapsaanvraag om verder te gaan"
@@ -7377,6 +7371,9 @@ msgstr "Je bent doorgestuurd naar het Event Dashboard"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Krijg toegang tot je personage <a href='%(url)s'>hier</a>"
+
+msgid "All member requests have been answered or closed"
+msgstr "Alle verzoeken van leden zijn beantwoord of afgesloten"
 
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Weet je het zeker? De items kunnen misschien niet worden teruggehaald"
@@ -7798,11 +7795,6 @@ msgstr "Beheer dynamische termijnbetalingen voor registraties"
 msgid "Manage photo and video albums uploaded for this event"
 msgstr "Beheer de foto- en videoalbums die voor dit evenement zijn geüpload"
 
-msgid "No financial movements recorded for the selected year"
-msgstr ""
-"Er zijn geen financiële transacties geregistreerd voor het geselecteerde "
-"jaar"
-
 msgid "No surcharges have been configured for this event yet"
 msgstr "Er zijn nog geen toeslagen ingesteld voor dit evenement"
 
@@ -7834,6 +7826,9 @@ msgstr "De datum waarop je identiteitsbewijs is uitgegeven"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Het totale aantal te verloten tickets is aangegeven"
+
+msgid "This page only shows questions from the last 3 months"
+msgstr "Op deze pagina staan alleen vragen van de afgelopen 3 maanden"
 
 msgid "This page will refresh automatically every 10 seconds"
 msgstr "Deze pagina wordt elke 10 seconden automatisch vernieuwd"
@@ -7980,9 +7975,6 @@ msgstr "De laad- en inzetstatus van magazijnitems beheren"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Beheer betalingen door deelnemers aan alle evenementen"
-
-msgid "No discounts are currently active for this registration"
-msgstr "Er zijn momenteel geen kortingen van toepassing op deze inschrijving"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Bekijk de gebruikers die de deadlines van het evenement missen"
@@ -8209,9 +8201,6 @@ msgid "No contributors with competences found in the organization"
 msgstr ""
 "Er zijn geen medewerkers met de benodigde vaardigheden gevonden binnen de "
 "organisatie"
-
-msgid "No pre-registrations have been received for this event yet"
-msgstr "Er zijn nog geen voorinschrijvingen voor dit evenement binnengekomen"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
@@ -8887,9 +8876,6 @@ msgstr ""
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Beheert de kredieten die deelnemers gebruiken om het inschrijfgeld te dekken"
-
-msgid "No additional discounts are available to add for this registration"
-msgstr "Voor deze inschrijving kun je geen extra kortingen meer toevoegen"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
@@ -10503,13 +10489,6 @@ msgid ""
 msgstr ""
 "Als de betaling niet binnen deze periode is ontvangen, kan je registratie "
 "worden geannuleerd"
-
-msgid ""
-"No open questions at the moment. All member requests have been answered or "
-"closed"
-msgstr ""
-"Er zijn op dit moment geen openstaande vragen. Alle verzoeken van leden zijn"
-" beantwoord of afgesloten"
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
@@ -12655,13 +12634,6 @@ msgid ""
 msgstr ""
 "Schakel betaalmethoden in of uit die bij het afrekenen beschikbaar zijn, en "
 "stel de inloggegevens voor elke actieve betalingsgateway in"
-
-msgid ""
-"For your convenience, this page only shows questions from the last 3 months."
-" To view previous questions click here"
-msgstr ""
-"Voor je gemak worden op deze pagina alleen vragen van de afgelopen 3 maanden"
-" getoond. Klik hier om eerdere vragen te bekijken"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

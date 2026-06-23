@@ -26,12 +26,6 @@
                             <a href="{% url 'orga_registration_discount_del' run.get_slug registration.uuid el.uuid %}">{% trans "Delete" %}</a>
                         </td>
                     </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="100">
-                            <p class="no-elements-available">{% trans "No discounts are currently active for this registration" %}.</p>
-                        </td>
-                    </tr>
                 {% endfor %}
             </tbody>
         </table>
@@ -53,12 +47,6 @@
                         <td>{{ el.value }}</td>
                         <td>
                             <a href="{% url 'orga_registration_discount_add' run.get_slug registration.uuid el.uuid %}">{% trans "Add" %}</a>
-                        </td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="100">
-                            <p class="no-elements-available">{% trans "No additional discounts are available to add for this registration" %}.</p>
                         </td>
                     </tr>
                 {% endfor %}

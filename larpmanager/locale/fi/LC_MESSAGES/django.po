@@ -5590,6 +5590,9 @@ msgstr "Merkkejä ei ole vielä luotu"
 msgid "No experience rules defined yet"
 msgstr "Kokemussääntöjä ei ole vielä määritelty"
 
+msgid "No open questions at the moment"
+msgstr "Tällä hetkellä ei ole avoimia kysymyksiä"
+
 #, python-format
 msgid "Password reset of user %(user)s"
 msgstr "Käyttäjän %(user)s salasanan palautus"
@@ -5844,9 +5847,6 @@ msgstr "Esitteitä ei ole vielä laadittu"
 
 msgid "No navigation buttons defined yet"
 msgstr "Navigointipainikkeita ei ole vielä määritelty"
-
-msgid "No payments found for this member"
-msgstr "Tälle jäsenelle ei löytynyt maksuja"
 
 msgid "Now you can set the taxes options"
 msgstr "Nyt voit asettaa verovaihtoehdot"
@@ -6284,9 +6284,6 @@ msgstr "Peilityyppinen merkki, ei valittavissa"
 msgid "No one-time content items defined yet"
 msgstr "Kertaluonteisia sisältökohteita ei ole vielä määritelty"
 
-msgid "No transactions found for this member"
-msgstr "Tälle jäsenelle ei löytynyt tapahtumia"
-
 msgid "Now you can create fixed installments"
 msgstr "Nyt voit luoda kiinteitä maksueriä"
 
@@ -6329,6 +6326,9 @@ msgstr "Kysymystyyppi, sallitut arvot ovat"
 
 msgid "The rule's number (unique identifier)"
 msgstr "Säännön numero (yksilöllinen tunniste)"
+
+msgid "To view previous questions click here"
+msgstr "Voit tarkastella aiempia kysymyksiä napsauttamalla tätä"
 
 msgid "Total amount refunded to participants"
 msgstr "Osallistujille palautettu kokonaismäärä"
@@ -6509,9 +6509,6 @@ msgstr "Järjestön hyväksytty jäsenyys"
 msgid "No answer options have been defined yet"
 msgstr "Vastausvaihtoehtoja ei ole vielä määritelty"
 
-msgid "No deleted items found in this category"
-msgstr "ZIP-tiedostosta ei löytynyt tunnistettuja tiedostoja"
-
 msgid "No progress steps have been defined yet"
 msgstr "Edistymisvaiheita ei ole vielä määritelty"
 
@@ -6617,6 +6614,9 @@ msgstr "Hallinnoi tapahtumiin liittyviä tuloja"
 
 msgid "Name of the ticket into which to convert"
 msgstr "Sen lipun nimi, johon lippu muunnetaan"
+
+msgid "No item has conflicting area assignments"
+msgstr "Yhdelläkään kohteella ei ole ristiriitaisia aluejakoja"
 
 msgid "No resource files have been uploaded yet"
 msgstr "Resurssitiedostoja ei ole vielä ladattu"
@@ -7151,9 +7151,6 @@ msgstr "Jäsen, joka on käyttänyt tätä tunnusta (jos se on todennettu)"
 msgid "Modify the character details to make it yours"
 msgstr "Muokkaa hahmon yksityiskohtia, jotta se olisi omasi"
 
-msgid "No discounts have been applied to this member"
-msgstr "Tälle jäsenelle ei ole myönnetty alennuksia"
-
 msgid "No roles have been defined for this event yet"
 msgstr "Tälle tapahtumalle ei ole vielä määritelty rooleja"
 
@@ -7175,9 +7172,6 @@ msgstr "Valitse tapahtuma, johon haluat ilmoittautua ennakkoon"
 
 msgid "The user has been assigned the specified role"
 msgstr "Käyttäjälle on annettu määritetty rooli"
-
-msgid "This item has no conflicting area assignments"
-msgstr "Tällä kohteella ei ole ristiriitaisia alueiden määrityksiä"
 
 msgid "Upload your membership application to proceed"
 msgstr "Lataa jäsenhakemuksesi jatkaaksesi"
@@ -7363,6 +7357,9 @@ msgstr "Sinut on ohjattu tapahtuman kojelaudalle"
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Pääset hahmoosi <a href='%(url)s'>täältä</a>"
+
+msgid "All member requests have been answered or closed"
+msgstr "Kaikki jäsenten pyynnöt on käsitelty tai suljettu"
 
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Oletko varma? Kohteita ei ehkä voida palauttaa"
@@ -7776,9 +7773,6 @@ msgstr "Ilmoittautumisten dynaamisten osamaksujen hallinta"
 msgid "Manage photo and video albums uploaded for this event"
 msgstr "Hallitse tähän tapahtumaan ladattuja valokuva- ja videoalbumeita"
 
-msgid "No financial movements recorded for the selected year"
-msgstr "Valitulta vuodelta ei ole kirjattu taloudellisia tapahtumia"
-
 msgid "No surcharges have been configured for this event yet"
 msgstr "Tälle tapahtumalle ei ole vielä määritetty lisämaksuja"
 
@@ -7809,6 +7803,10 @@ msgstr "Henkilöllisyystodistuksen myöntämispäivä"
 
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Arvottavien lippujen kokonaismäärä ilmoitettiin seuraavasti"
+
+msgid "This page only shows questions from the last 3 months"
+msgstr ""
+"Tällä sivulla näkyvät vain viimeisten 3 kuukauden aikana esitetyt kysymykset"
 
 msgid "This page will refresh automatically every 10 seconds"
 msgstr "Tämä sivu päivittyy automaattisesti 10 sekunnin välein"
@@ -7948,10 +7946,6 @@ msgstr "Varastotavaroiden lastauksen ja käyttöönoton tilan hallinta"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Hallitse osallistujien suorittamia maksuja kaikissa tapahtumissa"
-
-msgid "No discounts are currently active for this registration"
-msgstr ""
-"Tällä hetkellä tälle ilmoittautumiselle ei ole voimassa olevia alennuksia"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Tarkista käyttäjät, jotka ovat jääneet pois tapahtuman määräajoista"
@@ -8163,9 +8157,6 @@ msgstr "Hallinnoi tapahtuman aikana osallistujien ilmoittamia ongelmia"
 
 msgid "No contributors with competences found in the organization"
 msgstr "Organisaatiosta ei löytynyt päteviä tekijöitä"
-
-msgid "No pre-registrations have been received for this event yet"
-msgstr "Tähän tapahtumaan ei ole vielä saatu yhtään ennakkoilmoittautumista"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Vaihtoehdon nimi, joka näkyy kysymyksessä (pidä se lyhyenä)"
@@ -8791,9 +8782,6 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Hallinnoi osallistujien käyttämiä hyvityksiä ilmoittautumismaksun "
 "kattamiseksi"
-
-msgid "No additional discounts are available to add for this registration"
-msgstr "Tähän ilmoittautumiseen ei voi lisätä muita alennuksia"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
@@ -10312,13 +10300,6 @@ msgid ""
 msgstr ""
 "Jos maksua ei ole vastaanotettu tämän ajan kuluessa, rekisteröinti voidaan "
 "peruuttaa"
-
-msgid ""
-"No open questions at the moment. All member requests have been answered or "
-"closed"
-msgstr ""
-"Tällä hetkellä ei ole avoimia kysymyksiä. Kaikki jäsenten pyynnöt on "
-"vastattu tai suljettu"
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
@@ -12433,13 +12414,6 @@ msgid ""
 msgstr ""
 "Ota käyttöön tai poista käytöstä kassalla käytettävissä olevat maksutavat ja"
 " määritä tunnistetiedot jokaiselle aktiiviselle maksuportaalille"
-
-msgid ""
-"For your convenience, this page only shows questions from the last 3 months."
-" To view previous questions click here"
-msgstr ""
-"Tällä sivulla näkyvät kätevästi vain viimeisten 3 kuukauden kysymykset. Voit"
-" tarkastella aiempia kysymyksiä klikkaamalla tästä"
 
 msgid ""
 "Indicate all references of how you want your refund to be paid  (ex: IBAN "

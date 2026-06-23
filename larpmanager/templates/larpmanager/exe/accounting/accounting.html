@@ -281,14 +281,11 @@
                     </td>
                     <td>{{ el.start | date:"Y/m/d" }}</td>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="100">
-                        <p class="no-elements-available">{% trans "No event runs have been recorded yet" %}.</p>
-                    </td>
-                </tr>
             {% endfor %}
         </table>
+        {% if not runs %}
+            <p class="no-elements-available">{% trans "No event runs have been recorded yet" %}.</p>
+        {% endif %}
     </div>
 {% endblock content %}
 {% block js %}

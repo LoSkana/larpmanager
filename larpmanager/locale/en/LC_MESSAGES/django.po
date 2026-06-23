@@ -6346,9 +6346,6 @@ msgstr ""
 msgid "Organization fee"
 msgstr ""
 
-msgid "No financial movements recorded for the selected year"
-msgstr ""
-
 msgid "No outflows recorded for the selected year"
 msgstr ""
 
@@ -6633,9 +6630,6 @@ msgstr ""
 msgid "Deleted on"
 msgstr ""
 
-msgid "No deleted items found in this category"
-msgstr ""
-
 msgid "The trash is empty"
 msgstr ""
 
@@ -6709,16 +6703,7 @@ msgid ""
 "balances, and applied discounts"
 msgstr ""
 
-msgid "No payments found for this member"
-msgstr ""
-
-msgid "No transactions found for this member"
-msgstr ""
-
 msgid "Detail"
-msgstr ""
-
-msgid "No discounts have been applied to this member"
 msgstr ""
 
 msgid ""
@@ -6818,14 +6803,16 @@ msgstr ""
 msgid "Answer"
 msgstr ""
 
-msgid ""
-"No open questions at the moment. All member requests have been answered or "
-"closed"
+msgid "No open questions at the moment"
 msgstr ""
 
-msgid ""
-"For your convenience, this page only shows questions from the last 3 months. "
-"To view previous questions click here"
+msgid "All member requests have been answered or closed"
+msgstr ""
+
+msgid "This page only shows questions from the last 3 months"
+msgstr ""
+
+msgid "To view previous questions click here"
 msgstr ""
 
 msgid "No answered questions in the last 3 months"
@@ -8508,13 +8495,7 @@ msgstr ""
 msgid "Discounts active"
 msgstr ""
 
-msgid "No discounts are currently active for this registration"
-msgstr ""
-
 msgid "Discounts available"
-msgstr ""
-
-msgid "No additional discounts are available to add for this registration"
 msgstr ""
 
 msgid "No registration form questions have been created yet"
@@ -8581,9 +8562,6 @@ msgid "Pre registrations total"
 msgstr ""
 
 msgid "Joined"
-msgstr ""
-
-msgid "No pre-registrations have been received for this event yet"
 msgstr ""
 
 msgid "The ticket will be divided equally in the number of quotas indicated"
@@ -9039,7 +9017,7 @@ msgstr ""
 msgid "Area"
 msgstr ""
 
-msgid "This item has no conflicting area assignments"
+msgid "No item has conflicting area assignments"
 msgstr ""
 
 msgid "Commit warehouse quantities"

@@ -48,13 +48,10 @@
                     </td>
                     <td>{{ c.0.pronoun | default_if_none:"" }}</td>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="100">
-                        <p class="no-elements-available">{% trans "No characters have been assigned this role value yet" %}.</p>
-                    </td>
-                </tr>
             {% endfor %}
         </table>
+        {% if not roles_list %}
+            <p class="no-elements-available">{% trans "No characters have been assigned this role value yet" %}.</p>
+        {% endif %}
     {% endfor %}
 {% endblock content %}

@@ -34,63 +34,57 @@
                         {% endif %}
                     </td>
                 </tr>
-            {% empty %}
+            {% endfor %}
+            {% for el in donations %}
                 <tr>
-                    <td colspan="100">
-                        <p class="no-elements-available">{% trans "No financial movements recorded for the selected year" %}.</p>
+                    <td>{{ el.created | date:"d/m/Y" }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>
+                        {% if el.descr %}{{ el.descr }} -{% endif %}
+                        {{ el.member }}
+                    </td>
+                    <td>donation</td>
+                    <td></td>
+                    <td>
+                        {% if el.inv.invoice %}
+                            <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for el in inflows %}
+                <tr>
+                    <td>{{ el.created | date:"d/m/Y" }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>{{ el.descr }}</td>
+                    <td>inflow</td>
+                    <td>
+                        {% if el.run %}{{ el.run }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.invoice %}
+                            <a href="{{ el.download }}">{% trans "Download" %}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for el in tickets %}
+                <tr>
+                    <td>{{ el.created | date:"d/m/Y" }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>{{ el.member }}</td>
+                    <td>event</td>
+                    <td>
+                        {% if el.registration %}{{ el.registration.run }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.inv.invoice %}
+                            <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
         </tbody>
-        {% for el in donations %}
-            <tr>
-                <td>{{ el.created | date:"d/m/Y" }}</td>
-                <td>{{ el.value }}</td>
-                <td>
-                    {% if el.descr %}{{ el.descr }} -{% endif %}
-                    {{ el.member }}
-                </td>
-                <td>donation</td>
-                <td></td>
-                <td>
-                    {% if el.inv.invoice %}
-                        <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        {% for el in inflows %}
-            <tr>
-                <td>{{ el.created | date:"d/m/Y" }}</td>
-                <td>{{ el.value }}</td>
-                <td>{{ el.descr }}</td>
-                <td>inflow</td>
-                <td>
-                    {% if el.run %}{{ el.run }}{% endif %}
-                </td>
-                <td>
-                    {% if el.invoice %}
-                        <a href="{{ el.download }}">{% trans "Download" %}</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        {% for el in tickets %}
-            <tr>
-                <td>{{ el.created | date:"d/m/Y" }}</td>
-                <td>{{ el.value }}</td>
-                <td>{{ el.member }}</td>
-                <td>event</td>
-                <td>
-                    {% if el.registration %}{{ el.registration.run }}{% endif %}
-                </td>
-                <td>
-                    {% if el.inv.invoice %}
-                        <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
     </table>
     <h4>{% trans "Outflows" %}</h4>
     <table class="go_datatable">
@@ -158,15 +152,12 @@
                     <td>{{ el.member }}</td>
                     <td>{{ el.credit }}</td>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="100">
-                        <p class="no-elements-available">{% trans "No members with positive credits for the selected year" %}.</p>
-                    </td>
-                </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% if not pos %}
+        <p class="no-elements-available">{% trans "No members with positive credits for the selected year" %}.</p>
+    {% endif %}
     <h4>{{ credits_name }} {% trans "negatives" %}</h4>
     <table class="go_datatable">
         <thead>
@@ -181,13 +172,10 @@
                     <td>{{ el.member }}</td>
                     <td>{{ el.credit }}</td>
                 </tr>
-            {% empty %}
-                <tr>
-                    <td colspan="100">
-                        <p class="no-elements-available">{% trans "No members with negative credits for the selected year" %}.</p>
-                    </td>
-                </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% if not neg %}
+        <p class="no-elements-available">{% trans "No members with negative credits for the selected year" %}.</p>
+    {% endif %}
 {% endblock content %}
