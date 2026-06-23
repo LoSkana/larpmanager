@@ -7845,6 +7845,11 @@ msgstr ""
 msgid "Session active"
 msgstr ""
 
+msgid ""
+"List of personal expenses submitted for this event run. Upload receipts and "
+"track approval status."
+msgstr ""
+
 msgid "New refund request"
 msgstr ""
 
@@ -8367,9 +8372,10 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-msgid ""
-"Upload a backup ZIP file to restore event data. A preview of the changes "
-"will be shown before any data is modified."
+msgid "Upload a backup ZIP file to restore event data"
+msgstr ""
+
+msgid "A preview of the changes will be shown before any data is modified"
 msgstr ""
 
 msgid "Files recognized in the ZIP"
@@ -8454,7 +8460,7 @@ msgid ""
 "displayed text"
 msgstr ""
 
-msgid "You can upload data directly from CSV file"
+msgid "Upload data directly from CSV file"
 msgstr ""
 
 msgid ""

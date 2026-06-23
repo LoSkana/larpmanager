@@ -3,9 +3,10 @@
 {% block title %}
     {% trans "Upload" %} - {{ run.search }}
 {% endblock title %}
+{% block info %}
+    {% trans "Upload data directly from CSV file" %}.
+{% endblock info %}
 {% block content %}
-    <br />
-    <p>{% trans "You can upload data directly from CSV file" %}.</p>
     {% if typ == 'registration' %}
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table>

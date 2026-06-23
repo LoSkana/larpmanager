@@ -5866,6 +5866,9 @@ msgstr "De betaling is niet voltooid"
 msgid "Type(s) of accommodation available"
 msgstr "Type(n) accommodatie beschikbaar"
 
+msgid "Upload data directly from CSV file"
+msgstr "Gegevens rechtstreeks vanuit een CSV-bestand uploaden"
+
 msgid "You are about to make a payment of"
 msgstr "Je staat op het punt een betaling te doen van"
 
@@ -6710,9 +6713,6 @@ msgstr "Deze uitnodiging is al ingewisseld."
 msgid "Warning! Other users are editing this item"
 msgstr "Waarschuwing! Andere gebruikers bewerken dit item"
 
-msgid "You can upload data directly from CSV file"
-msgstr "Je kunt gegevens rechtstreeks uploaden vanuit een CSV-bestand"
-
 msgid "Your first name as you prefer to be called"
 msgstr "Je voornaam zoals je liever genoemd wilt worden"
 
@@ -7012,6 +7012,9 @@ msgstr "De organisatie gebruikt de nieuwste versie"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totaal ingehouden bedrag voor overschrijvingsprovisies"
+
+msgid "Upload a backup ZIP file to restore event data"
+msgstr "Upload een ZIP-back-upbestand om de evenementgegevens te herstellen"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Welkom op het dashboard van je organisatie!"
@@ -8413,6 +8416,12 @@ msgstr "Je volledige woonadres inclusief straat, stad en land"
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""
 "of het personage zich bewust is van de identiteit van de andere eigenschap"
+
+msgid "A preview of the changes will be shown before any data is modified"
+msgstr ""
+"Upload een back-up ZIP-bestand om gebeurtenisgegevens te herstellen. Er "
+"wordt een voorbeeld van de wijzigingen weergegeven voordat er gegevens "
+"worden gewijzigd"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
@@ -11305,6 +11314,13 @@ msgstr ""
 "betalingsbedrag voor zijn vermeldingen te wijzigen"
 
 msgid ""
+"List of personal expenses submitted for this event run. Upload receipts and "
+"track approval status."
+msgstr ""
+"Lijst met persoonlijke onkosten die voor dit evenement zijn ingediend. "
+"Upload bonnetjes en houd de goedkeuringsstatus bij."
+
+msgid ""
 "Run consistency checks on character sheets to detect missing, invalid, or "
 "asymmetric relationships"
 msgstr ""
@@ -12141,14 +12157,6 @@ msgid ""
 msgstr ""
 "Aantal maanden, vanaf het begin van het lidmaatschapsjaar, waarvoor de "
 "lidmaatschapsbijdrage gratis kan worden betaald"
-
-msgid ""
-"Upload a backup ZIP file to restore event data. A preview of the changes "
-"will be shown before any data is modified."
-msgstr ""
-"Upload een back-up ZIP-bestand om gebeurtenisgegevens te herstellen. Er "
-"wordt een voorbeeld van de wijzigingen weergegeven voordat er gegevens "
-"worden gewijzigd."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

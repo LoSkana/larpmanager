@@ -5864,6 +5864,9 @@ msgstr "Betalingen ble ikke fullført"
 msgid "Type(s) of accommodation available"
 msgstr "Type(r) tilgjengelig(e) innkvartering(er)"
 
+msgid "Upload data directly from CSV file"
+msgstr "Last opp data direkte fra en CSV-fil"
+
 msgid "You are about to make a payment of"
 msgstr "Du er i ferd med å foreta en betaling på"
 
@@ -6708,9 +6711,6 @@ msgstr "Denne invitasjonen har allerede blitt innløst."
 msgid "Warning! Other users are editing this item"
 msgstr "Advarsel! Andre brukere redigerer dette elementet"
 
-msgid "You can upload data directly from CSV file"
-msgstr "Du kan laste opp data direkte fra en CSV-fil"
-
 msgid "Your first name as you prefer to be called"
 msgstr "Fornavnet ditt, slik du foretrekker å bli kalt"
 
@@ -7008,6 +7008,10 @@ msgstr "Organisasjonen kjører den nyeste versjonen"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt beløp holdt tilbake for overføringsprovisjoner"
+
+msgid "Upload a backup ZIP file to restore event data"
+msgstr ""
+"Last opp en ZIP-fil med sikkerhetskopi for å gjenopprette hendelsesdata"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Velkommen til dashbordet i organisasjonen din!"
@@ -8342,6 +8346,11 @@ msgstr "Fullstendig bostedsadresse, inkludert gate, by og land"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "om karakteren er klar over identiteten til det andre trekket"
+
+msgid "A preview of the changes will be shown before any data is modified"
+msgstr ""
+"Last opp en ZIP-fil for å gjenopprette hendelsesdata. En forhåndsvisning av "
+"endringene vises før dataene endres"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
@@ -11117,6 +11126,13 @@ msgstr ""
 "betalingsbeløpet for oppføringene sine"
 
 msgid ""
+"List of personal expenses submitted for this event run. Upload receipts and "
+"track approval status."
+msgstr ""
+"Liste over personlige utgifter som er innsendt for dette arrangementet. Last"
+" opp kvitteringer og følg med på godkjenningsstatusen."
+
+msgid ""
 "Run consistency checks on character sheets to detect missing, invalid, or "
 "asymmetric relationships"
 msgstr ""
@@ -11948,13 +11964,6 @@ msgid ""
 msgstr ""
 "Antall måneder, regnet fra begynnelsen av medlemsåret, hvor "
 "medlemskontingenten kan betales gratis"
-
-msgid ""
-"Upload a backup ZIP file to restore event data. A preview of the changes "
-"will be shown before any data is modified."
-msgstr ""
-"Last opp en ZIP-fil for å gjenopprette hendelsesdata. En forhåndsvisning av "
-"endringene vises før dataene endres."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

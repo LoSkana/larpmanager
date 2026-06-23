@@ -5866,6 +5866,9 @@ msgstr "Platba nebyla dokončena"
 msgid "Type(s) of accommodation available"
 msgstr "Typ(y) dostupného ubytování"
 
+msgid "Upload data directly from CSV file"
+msgstr "Načíst data přímo ze souboru CSV"
+
 msgid "You are about to make a payment of"
 msgstr "Chystáte se provést platbu ve výši"
 
@@ -6708,9 +6711,6 @@ msgstr "Toto pozvání již bylo vykoupeno."
 msgid "Warning! Other users are editing this item"
 msgstr "Pozor! Tuto položku upravují další uživatelé"
 
-msgid "You can upload data directly from CSV file"
-msgstr "Data můžete nahrát přímo ze souboru CSV"
-
 msgid "Your first name as you prefer to be called"
 msgstr "Vaše křestní jméno, jak si přejete být oslovován"
 
@@ -7008,6 +7008,9 @@ msgstr "Organizace používá nejnovější verzi"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Celková částka sražená na provize za převod"
+
+msgid "Upload a backup ZIP file to restore event data"
+msgstr "Nahrajte záložní soubor ZIP, abyste obnovili data událostí"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Vítejte na palubní desce vaší organizace!"
@@ -8297,6 +8300,11 @@ msgstr "Úplná adresa bydliště včetně ulice, města a země"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "zda si je postava vědoma identity druhého rysu"
+
+msgid "A preview of the changes will be shown before any data is modified"
+msgstr ""
+"Nahrajte záložní soubor ZIP a obnovte data událostí. Před úpravou dat se "
+"zobrazí náhled změn"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr "Přidáno na konec všech e-mailů potvrzujících účastníkům přihlášení"
@@ -10986,6 +10994,13 @@ msgstr ""
 "záznamy"
 
 msgid ""
+"List of personal expenses submitted for this event run. Upload receipts and "
+"track approval status."
+msgstr ""
+"Seznam osobních výdajů předložených v souvislosti s touto akcí. Nahrajte "
+"účtenky a sledujte stav schvalování."
+
+msgid ""
 "Run consistency checks on character sheets to detect missing, invalid, or "
 "asymmetric relationships"
 msgstr ""
@@ -11816,13 +11831,6 @@ msgid ""
 msgstr ""
 "Počet měsíců, počínaje začátkem členského roku, za které lze zaplatit "
 "členský příspěvek zdarma"
-
-msgid ""
-"Upload a backup ZIP file to restore event data. A preview of the changes "
-"will be shown before any data is modified."
-msgstr ""
-"Nahrajte záložní soubor ZIP a obnovte data událostí. Před úpravou dat se "
-"zobrazí náhled změn."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

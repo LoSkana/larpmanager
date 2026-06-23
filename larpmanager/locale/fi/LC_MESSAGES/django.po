@@ -5865,6 +5865,9 @@ msgstr "Maksua ei ole suoritettu"
 msgid "Type(s) of accommodation available"
 msgstr "Saatavilla oleva(t) majoitustyyppi(t)"
 
+msgid "Upload data directly from CSV file"
+msgstr "Lataa tiedot suoraan CSV-tiedostosta"
+
 msgid "You are about to make a payment of"
 msgstr "Olet suorittamassa maksun, jonka suuruus on"
 
@@ -6707,9 +6710,6 @@ msgstr "Tämä kutsu on jo lunastettu."
 msgid "Warning! Other users are editing this item"
 msgstr "Varoitus! Muut käyttäjät muokkaavat tätä kohdetta"
 
-msgid "You can upload data directly from CSV file"
-msgstr "Voit ladata tietoja suoraan CSV-tiedostosta"
-
 msgid "Your first name as you prefer to be called"
 msgstr "Etunimesi, jolla haluat, että sinua kutsutaan"
 
@@ -7007,6 +7007,9 @@ msgstr "Organisaatiossa on käytössä uusin versio"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Siirtopalkkioita varten pidätetty kokonaismäärä"
+
+msgid "Upload a backup ZIP file to restore event data"
+msgstr "Lataa varmuuskopio-ZIP-tiedosto tapahtumatietojen palauttamiseksi"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Tervetuloa organisaatiosi kojelautaan!"
@@ -8339,6 +8342,11 @@ msgstr "Täydellinen asuinosoitteesi, mukaan lukien katu, kaupunki ja maa"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "onko hahmo tietoinen toisen ominaisuuden henkilöllisyydestä"
+
+msgid "A preview of the changes will be shown before any data is modified"
+msgstr ""
+"Lataa varmuuskopio ZIP-tiedosto tapahtumatietojen palauttamiseksi. Muutosten"
+" esikatselu näytetään ennen tietojen muuttamista"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
@@ -11107,6 +11115,13 @@ msgstr ""
 "merkintöjen osalta"
 
 msgid ""
+"List of personal expenses submitted for this event run. Upload receipts and "
+"track approval status."
+msgstr ""
+"Luettelo tästä tapahtumasta ilmoitetuista henkilökohtaisista kuluista. Lataa"
+" kuitit ja seuraa hyväksymistilannetta."
+
+msgid ""
 "Run consistency checks on character sheets to detect missing, invalid, or "
 "asymmetric relationships"
 msgstr ""
@@ -11939,13 +11954,6 @@ msgid ""
 msgstr ""
 "Kuukausien lukumäärä jäsenyysvuoden alusta alkaen, joilta jäsenmaksu on "
 "maksettava maksutta"
-
-msgid ""
-"Upload a backup ZIP file to restore event data. A preview of the changes "
-"will be shown before any data is modified."
-msgstr ""
-"Lataa varmuuskopio ZIP-tiedosto tapahtumatietojen palauttamiseksi. Muutosten"
-" esikatselu näytetään ennen tietojen muuttamista."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

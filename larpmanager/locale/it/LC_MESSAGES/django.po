@@ -5864,6 +5864,9 @@ msgstr "Il versamento non è completo"
 msgid "Type(s) of accommodation available"
 msgstr "Tipo/i di alloggio disponibile/i"
 
+msgid "Upload data directly from CSV file"
+msgstr "Carica i dati direttamente da un file CSV"
+
 msgid "You are about to make a payment of"
 msgstr "Stai per effettuare una versamento di"
 
@@ -6706,9 +6709,6 @@ msgstr "Questo invito è già stato riscattato."
 msgid "Warning! Other users are editing this item"
 msgstr "Attenzione! Altri utenti stanno modificando questo elemento"
 
-msgid "You can upload data directly from CSV file"
-msgstr "È possibile caricare i dati direttamente da un file CSV"
-
 msgid "Your first name as you prefer to be called"
 msgstr "Il tuo nome di battesimo, oppure come preferisci essere chiamato"
 
@@ -7008,6 +7008,9 @@ msgstr "L'organizzazione sta utilizzando l'ultima versione"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Importo totale trattenuto per commissioni di trasferimento"
+
+msgid "Upload a backup ZIP file to restore event data"
+msgstr "Carica un file ZIP di backup per ripristinare i dati degli eventi"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Benvenuto nella dashboard della tua organizzazione!"
@@ -8412,6 +8415,11 @@ msgstr ""
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "se il personaggio è a conoscenza dell'identità dell'altro tratto"
+
+msgid "A preview of the changes will be shown before any data is modified"
+msgstr ""
+"Carica un file ZIP di backup per ripristinare i dati evento. Prima di "
+"modificare i dati, viene visualizzata un'anteprima delle modifiche"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
@@ -11330,6 +11338,13 @@ msgstr ""
 "l'importo del pagamento per le sue iscrizioni"
 
 msgid ""
+"List of personal expenses submitted for this event run. Upload receipts and "
+"track approval status."
+msgstr ""
+"Elenco delle spese personali presentate per questa edizione dell'evento. "
+"Carica le ricevute e controlla lo stato di approvazione."
+
+msgid ""
 "Run consistency checks on character sheets to detect missing, invalid, or "
 "asymmetric relationships"
 msgstr ""
@@ -12165,13 +12180,6 @@ msgid ""
 msgstr ""
 "Numero di mesi, a partire dall'inizio dell'anno associativo, per cui rendere"
 " libero il versamento della quota sociale"
-
-msgid ""
-"Upload a backup ZIP file to restore event data. A preview of the changes "
-"will be shown before any data is modified."
-msgstr ""
-"Carica un file ZIP di backup per ripristinare i dati evento. Prima di "
-"modificare i dati, viene visualizzata un'anteprima delle modifiche."
 
 msgid ""
 "If you select one (or more) tickets, the option will only be available to "

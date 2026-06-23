@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Questions" %} - {{ run.search }}
 {% endblock title %}
+{% block info %}
+    {% trans "Manage help questions submitted by members: answer open requests or close those requiring no further action" %}
+{% endblock info %}
 {% block content %}
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
