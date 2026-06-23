@@ -3015,6 +3015,33 @@ body.floating_iframe .inner {
 }
 
 /* ---------------------------------------------------------------------------
+   Badges assignment
+   --------------------------------------------------------------------------- */
+
+.badge-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+#badge-thumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.casting-layout {
+  display: none;
+}
+
+#badge-empty {
+  margin-top: 1rem;
+  color: #888;
+}
+
+/* ---------------------------------------------------------------------------
    DataTables Responsive - inline expand control
    --------------------------------------------------------------------------- */
 

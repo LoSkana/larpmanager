@@ -4,7 +4,7 @@
     {% trans "Expenses" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
-    {% trans "List of personal expenses submitted for this event run. Upload receipts and track approval status." %}
+    {% trans "List of personal expenses submitted for this event" %}. {% trans "Upload receipts and track approval status" %}.
 {% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}

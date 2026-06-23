@@ -2475,6 +2475,9 @@ msgstr "Valg av alder"
 msgid "Apply Upgrade"
 msgstr "Bruk oppgradering"
 
+msgid "Assign Badges"
+msgstr "Tildel merker"
+
 msgid "Authorisation"
 msgstr "Autorisasjon"
 
@@ -2743,8 +2746,14 @@ msgstr "Aktive enheter"
 msgid "Add to faction"
 msgstr "Legg til i fraksjon"
 
+msgid "Assign members"
+msgstr "Tildel medlemmer"
+
 msgid "Available days"
 msgstr "Tilgjengelige dager"
+
+msgid "Back to badges"
+msgstr "Tilbake til merker"
 
 msgid "Bring a friend"
 msgstr "Ta med en venn"
@@ -2974,6 +2983,9 @@ msgstr "tilpasninger"
 msgid "refund request"
 msgstr "anmodning om refusjon"
 
+msgid "select a badge"
+msgstr "velg et merke"
+
 msgid "Ability missing"
 msgstr "Evne mangler"
 
@@ -3009,6 +3021,9 @@ msgstr "Koblinger til tegn"
 
 msgid "Characters list"
 msgstr "Liste over tegn"
+
+msgid "Click to assign"
+msgstr "Klikk for å tildele"
 
 msgid "Collected votes"
 msgstr "Mottatte stemmer"
@@ -3480,6 +3495,9 @@ msgstr "Algoritme for støping"
 
 msgid "Character profile"
 msgstr "Karakterprofil"
+
+msgid "Click to unassign"
+msgstr "Klikk for å oppheve tilordningen"
 
 msgid "Closed collection"
 msgstr "Lukket samling"
@@ -3960,6 +3978,9 @@ msgstr "Ny forespørsel om skyttelbuss"
 
 msgid "No characters found"
 msgstr "Ingen tegn funnet"
+
+msgid "No members assigned"
+msgstr "Ingen medlemmer er tildelt"
 
 msgid "Non-cumulative code"
 msgstr "Ikke-kumulativ kode"
@@ -4594,6 +4615,9 @@ msgstr "Total registreringsavgift"
 
 msgid "Track event milestones"
 msgstr "Spor milepæler i arrangementet"
+
+msgid "Type to search members"
+msgstr "Skriv inn for å søke etter medlemmer"
 
 msgid "Unknow error on upload"
 msgstr "Ukjent feil ved opplasting"
@@ -5954,6 +5978,9 @@ msgstr "Registrering oppdatert til %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Registreringene åpner kl: %(date)s"
 
+msgid "Review carefully before proceeding"
+msgstr "Les nøye gjennom før du fortsetter"
+
 msgid "Review participants' personal data"
 msgstr "Gjennomgå deltakernes personopplysninger"
 
@@ -6790,6 +6817,9 @@ msgstr "Modifikatorens nummer (unik identifikator)"
 msgid "Total amount paid for platform management"
 msgstr "Totalt beløp betalt for plattformforvaltning"
 
+msgid "Upload receipts and track approval status"
+msgstr "Last opp kvitteringer og følg med på godkjenningsstatusen"
+
 msgid "Use the button above to add a new problem"
 msgstr "Bruk knappen ovenfor for å legge til et nytt problem"
 
@@ -6909,6 +6939,9 @@ msgstr "Omdirigerer til en ekstern registreringslenke"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reserver flere billetter utover dine egne"
+
+msgid "Select a badge above to manage its members"
+msgstr "Velg et merke ovenfor for å administrere medlemmene i det"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Velg tilfeldig lodd for å oppgradere"
@@ -7594,6 +7627,10 @@ msgstr "Hvis avkrysset, ikke bruk den overordnede hendelsens fraksjoner"
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Hvis du ønsker det, kan du angi et pronomen for karakteren din"
 
+msgid "List of personal expenses submitted for this event"
+msgstr ""
+"Liste over personlige utgifter som er innrapportert for dette arrangementet"
+
 msgid "Manage the configuration of the activated features"
 msgstr "Administrer konfigurasjonen av de aktiverte funksjonene"
 
@@ -7617,6 +7654,9 @@ msgstr "Påmeldingen til arrangementet ble avlyst"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deltakeravgifter redusert gjennom rabatter"
+
+msgid "View all deadlines that must be met for this event"
+msgstr "Vis alle frister som må overholdes for dette arrangementet"
 
 msgid "hidden faction visible only to assigned characters"
 msgstr "skjult fraksjon som kun er synlig for tildelte karakterer"
@@ -7933,6 +7973,9 @@ msgstr "Gjenopprettingsøkten er utløpt, vennligst last opp filen på nytt."
 msgid "Some features require 'Character', which is not active"
 msgstr "Noen funksjoner krever \"Character\", som ikke er aktiv"
 
+msgid "The following changes will be applied when you confirm"
+msgstr "Følgende endringer vil bli gjennomført når du bekrefter"
+
 msgid "The registration request will be updated automatically"
 msgstr "Søknaden oppdateres automatisk"
 
@@ -7941,11 +7984,6 @@ msgstr "Brukeren har bekreftet sin påmelding til dette arrangementet"
 
 msgid "The user has updated their registration for this event"
 msgstr "Brukeren har oppdatert sin påmelding til dette arrangementet"
-
-msgid "View all deadlines that must be met for this event run"
-msgstr ""
-"Vis alle frister som må overholdes for denne gjennomføringen av "
-"arrangementet"
 
 msgid "Whether this content is currently available for access"
 msgstr "Om dette innholdet for øyeblikket er tilgjengelig for tilgang"
@@ -9737,6 +9775,11 @@ msgid ""
 msgstr "Merk betalingen som fullført på den siden når overføringen er utført"
 
 msgid ""
+"Select a participant and a target event to initiate a registration transfer"
+msgstr ""
+"Velg en deltaker og en målhendelse for å starte en overføring av påmeldingen"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Velg figurer, fraksjoner og bakgrunnsmateriale som du vil laste ned som en "
@@ -10211,12 +10254,6 @@ msgid ""
 msgstr ""
 "Valgfritt - Beløp som legges til registreringsavgiften hvis valgt (0 = ingen"
 " ekstra kostnad)"
-
-msgid ""
-"Select a participant and a target event run to initiate a registration "
-"transfer"
-msgstr ""
-"Velg en deltaker og en måløkt for å starte en overføring av påmeldingen"
 
 msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
@@ -11137,13 +11174,6 @@ msgstr ""
 "med den eksterne applikasjonen"
 
 msgid ""
-"The following changes will be applied when you confirm. Review carefully "
-"before proceeding"
-msgstr ""
-"Følgende endringer vil bli brukt når du bekrefter. Les nøye gjennom før du "
-"fortsetter"
-
-msgid ""
 "Track which registered participants have completed all required workshops in"
 " the past year"
 msgstr ""
@@ -11736,13 +11766,6 @@ msgid ""
 msgstr ""
 "Hvis avkrysset: Skjuler muligheten for deltakeren til å endre "
 "betalingsbeløpet for oppføringene sine"
-
-msgid ""
-"List of personal expenses submitted for this event run. Upload receipts and "
-"track approval status."
-msgstr ""
-"Liste over personlige utgifter som er innsendt for dette arrangementet. Last"
-" opp kvitteringer og følg med på godkjenningsstatusen."
 
 msgid ""
 "Run consistency checks on character sheets to detect missing, invalid, or "

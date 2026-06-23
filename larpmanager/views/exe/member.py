@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import csv
+import json
 import logging
 from collections import defaultdict
 from datetime import UTC, datetime
@@ -26,8 +27,9 @@ from typing import Any
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Case, Count, IntegerField, Value, When
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -913,6 +915,60 @@ def exe_badges_edit(request: HttpRequest, badge_uuid: str) -> HttpResponse:
 def exe_badges_delete(request: HttpRequest, badge_uuid: str) -> HttpResponse:
     """Delete badge."""
     return exe_delete(request, ExeAction.BADGES, badge_uuid)
+
+
+@login_required
+def exe_badges_assign(request: HttpRequest) -> HttpResponse:
+    """Two-panel badge assignment UI: search members, click to assign/unassign."""
+    context = check_association_context(request, "exe_badges")
+    association_id = context["association_id"]
+
+    badges = Badge.objects.filter(association_id=association_id).prefetch_related("members")
+
+    badges_data = []
+    for badge in badges:
+        entry = {
+            "uuid": str(badge.uuid),
+            "name": badge.name,
+            "members": [str(m.uuid) for m in badge.members.all()],
+        }
+        if badge.img:
+            entry["img_url"] = badge.img_thumb.url
+        badges_data.append(entry)
+
+    allowed_statuses = [MembershipStatus.ACCEPTED, MembershipStatus.SUBMITTED, MembershipStatus.JOINED]
+    members_qs = (
+        Member.objects.filter(memberships__association_id=association_id, memberships__status__in=allowed_statuses)
+        .distinct()
+        .order_by("surname", "name")
+    )
+    members_data = [{"uuid": str(m.uuid), "name": str(m)} for m in members_qs]
+
+    context["badges_json"] = json.dumps(badges_data)
+    context["members_json"] = json.dumps(members_data)
+
+    return render(request, "larpmanager/exe/users/badges_assign.html", context)
+
+
+@login_required
+def exe_badges_toggle(request: HttpRequest) -> JsonResponse:
+    """Toggle a member's assignment to a badge (AJAX POST)."""
+    context = check_association_context(request, "exe_badges")
+
+    try:
+        badge_uuid = request.POST["badge_uuid"]
+        member_uuid = request.POST["member_uuid"]
+
+        badge = Badge.objects.get(uuid=badge_uuid, association_id=context["association_id"])
+        member = Member.objects.get(uuid=member_uuid)
+
+        if badge.members.filter(pk=member.pk).exists():
+            badge.members.remove(member)
+            return JsonResponse({"res": "ok", "action": "removed"})
+        badge.members.add(member)
+        return JsonResponse({"res": "ok", "action": "added"})
+    except (ObjectDoesNotExist, KeyError):
+        return JsonResponse({"res": "ko"})
 
 
 @login_required

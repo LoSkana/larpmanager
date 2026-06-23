@@ -2475,6 +2475,9 @@ msgstr "Selezione dell'età"
 msgid "Apply Upgrade"
 msgstr "Applica l'aggiornamento"
 
+msgid "Assign Badges"
+msgstr "Assegna i badge"
+
 msgid "Authorisation"
 msgstr "Autorizzazione"
 
@@ -2743,8 +2746,14 @@ msgstr "Dispositivi attivi"
 msgid "Add to faction"
 msgstr "Aggiungi alla fazione"
 
+msgid "Assign members"
+msgstr "Assegna i membri"
+
 msgid "Available days"
 msgstr "Giorni disponibili"
+
+msgid "Back to badges"
+msgstr "Torna ai badge"
 
 msgid "Bring a friend"
 msgstr "Porta un amico"
@@ -2974,6 +2983,9 @@ msgstr "personalizzazioni"
 msgid "refund request"
 msgstr "richiesta di rimborso"
 
+msgid "select a badge"
+msgstr "scegli un badge"
+
 msgid "Ability missing"
 msgstr "Abilità mancante"
 
@@ -3009,6 +3021,9 @@ msgstr "Link personaggi"
 
 msgid "Characters list"
 msgstr "Lista personaggi"
+
+msgid "Click to assign"
+msgstr "Clicca per assegnare"
 
 msgid "Collected votes"
 msgstr "Voti ricevuti"
@@ -3480,6 +3495,9 @@ msgstr "Algoritmo di casting"
 
 msgid "Character profile"
 msgstr "Profilo personaggio"
+
+msgid "Click to unassign"
+msgstr "Clicca per annullare l'assegnazione"
 
 msgid "Closed collection"
 msgstr "Colletta chiusa"
@@ -3960,6 +3978,9 @@ msgstr "Nuova richiesta shuttle"
 
 msgid "No characters found"
 msgstr "Nessun personaggio trovato"
+
+msgid "No members assigned"
+msgstr "Nessun membro assegnato"
 
 msgid "Non-cumulative code"
 msgstr "Codice non cumulabile"
@@ -4594,6 +4615,9 @@ msgstr "Quota di iscrizione totale"
 
 msgid "Track event milestones"
 msgstr "Traccia le tappe dell'evento"
+
+msgid "Type to search members"
+msgstr "Digita per cercare i membri"
 
 msgid "Unknow error on upload"
 msgstr "Errore sconosciuto durante il caricamento"
@@ -5954,6 +5978,9 @@ msgstr "Iscrizione aggiornata a %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Apertura delle iscrizioni il: %(date)s"
 
+msgid "Review carefully before proceeding"
+msgstr "Controlla attentamente prima di continuare"
+
 msgid "Review participants' personal data"
 msgstr "Esamina i dati personali dei partecipanti"
 
@@ -6786,6 +6813,9 @@ msgstr "Il numero del modificatore (identificatore univoco)"
 msgid "Total amount paid for platform management"
 msgstr "Importo totale pagato per la gestione della piattaforma"
 
+msgid "Upload receipts and track approval status"
+msgstr "Carica le ricevute e controlla lo stato di approvazione"
+
 msgid "Use the button above to add a new problem"
 msgstr "Usa il pulsante qui sopra per aggiungere un nuovo problema"
 
@@ -6905,6 +6935,9 @@ msgstr "Reindirizza a un link di iscrizione esterno"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Prenota altri biglietti oltre al tuo"
+
+msgid "Select a badge above to manage its members"
+msgstr "Seleziona un badge qui sopra per gestire i suoi membri"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Seleziona in modo casuale i biglietti della lotteria da aggiornare"
@@ -7593,6 +7626,9 @@ msgstr "Se selezionata, non utilizzare le fazioni dell'evento padre"
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Se lo desideri, indica un pronome per il tuo personaggio"
 
+msgid "List of personal expenses submitted for this event"
+msgstr "Elenco delle spese personali presentate per questo evento"
+
 msgid "Manage the configuration of the activated features"
 msgstr "Gestisci la configurazione delle funzionalità attivate"
 
@@ -7616,6 +7652,9 @@ msgstr "L'iscrizione all'evento è stata disdetta"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Quote di partecipazione totali ridotte grazie agli sconti"
+
+msgid "View all deadlines that must be met for this event"
+msgstr "Visualizza tutte le scadenze da rispettare per questo evento"
 
 msgid "hidden faction visible only to assigned characters"
 msgstr "fazione nascosta visibile solo ai personaggi assegnati"
@@ -7937,6 +7976,9 @@ msgstr "La sessione di ripristino è scaduta, caricare nuovamente il file."
 msgid "Some features require 'Character', which is not active"
 msgstr "Alcune funzioni richiedono \"Personaggi\", che non è attivo"
 
+msgid "The following changes will be applied when you confirm"
+msgstr "Le seguenti modifiche verranno applicate quando confermerai"
+
 msgid "The registration request will be updated automatically"
 msgstr "La richiesta di iscrizione verrà aggiornata automaticamente"
 
@@ -7945,10 +7987,6 @@ msgstr "L'utente ha confermato la sua iscrizione a questo evento"
 
 msgid "The user has updated their registration for this event"
 msgstr "L'utente ha aggiornato la sua iscrizione a questo evento"
-
-msgid "View all deadlines that must be met for this event run"
-msgstr ""
-"Visualizza tutte le scadenze da rispettare per questa edizione dell'evento"
 
 msgid "Whether this content is currently available for access"
 msgstr "Se il contenuto è attualmente disponibile per l'accesso"
@@ -9900,6 +9938,12 @@ msgstr ""
 "effettuato il trasferimento"
 
 msgid ""
+"Select a participant and a target event to initiate a registration transfer"
+msgstr ""
+"Seleziona un partecipante e un evento di destinazione per avviare il "
+"trasferimento dell'iscrizione"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Seleziona personaggi, fazioni e schede di gioco da scaricare in un unico "
@@ -10400,13 +10444,6 @@ msgid ""
 msgstr ""
 "Facoltativo - Importo aggiunto alla quota di iscrizione se selezionato (0 = "
 "nessun costo aggiuntivo)"
-
-msgid ""
-"Select a participant and a target event run to initiate a registration "
-"transfer"
-msgstr ""
-"Seleziona un partecipante e un evento di destinazione per avviare il "
-"trasferimento dell'iscrizione"
 
 msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
@@ -11349,13 +11386,6 @@ msgstr ""
 "con l'applicazione esterna"
 
 msgid ""
-"The following changes will be applied when you confirm. Review carefully "
-"before proceeding"
-msgstr ""
-"Le seguenti modifiche saranno applicate al momento della conferma. Esaminare"
-" attentamente prima di procedere"
-
-msgid ""
 "Track which registered participants have completed all required workshops in"
 " the past year"
 msgstr ""
@@ -11949,13 +11979,6 @@ msgid ""
 msgstr ""
 "Se selezionato: Nasconde la possibilità per il partecipante di modificare "
 "l'importo del pagamento per le sue iscrizioni"
-
-msgid ""
-"List of personal expenses submitted for this event run. Upload receipts and "
-"track approval status."
-msgstr ""
-"Elenco delle spese personali presentate per questa edizione dell'evento. "
-"Carica le ricevute e controlla lo stato di approvazione."
 
 msgid ""
 "Run consistency checks on character sheets to detect missing, invalid, or "

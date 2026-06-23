@@ -6684,10 +6684,40 @@ msgid ""
 "status"
 msgstr ""
 
+msgid "Assign members"
+msgstr ""
+
 msgid "No badges have been created yet"
 msgstr ""
 
 msgid "Use the button above to add a new badge"
+msgstr ""
+
+msgid "Assign Badges"
+msgstr ""
+
+msgid "Back to badges"
+msgstr ""
+
+msgid "select a badge"
+msgstr ""
+
+msgid "Select a badge above to manage its members"
+msgstr ""
+
+msgid "Type to search members"
+msgstr ""
+
+msgid "No members found"
+msgstr ""
+
+msgid "Click to assign"
+msgstr ""
+
+msgid "No members assigned"
+msgstr ""
+
+msgid "Click to unassign"
 msgstr ""
 
 msgid ""
@@ -6758,9 +6788,6 @@ msgid "Total members"
 msgstr ""
 
 msgid "Paid current year"
-msgstr ""
-
-msgid "No members found"
 msgstr ""
 
 msgid "Members will appear here once they have submitted a membership request"
@@ -8073,9 +8100,10 @@ msgstr ""
 msgid "Add a discount to offer reduced prices or promo codes to participants"
 msgstr ""
 
-msgid ""
-"List of personal expenses submitted for this event run. Upload receipts and "
-"track approval status."
+msgid "List of personal expenses submitted for this event"
+msgstr ""
+
+msgid "Upload receipts and track approval status"
 msgstr ""
 
 msgid "No expenses submitted yet"
@@ -8360,7 +8388,7 @@ msgstr ""
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 
-msgid "View all deadlines that must be met for this event run"
+msgid "View all deadlines that must be met for this event"
 msgstr ""
 
 msgid "Cost"
@@ -8735,8 +8763,7 @@ msgid "Transfer registration"
 msgstr ""
 
 msgid ""
-"Select a participant and a target event run to initiate a registration "
-"transfer"
+"Select a participant and a target event to initiate a registration transfer"
 msgstr ""
 
 msgid "Transfer preview"
@@ -8807,9 +8834,10 @@ msgstr ""
 msgid "Restore Preview"
 msgstr ""
 
-msgid ""
-"The following changes will be applied when you confirm. Review carefully "
-"before proceeding"
+msgid "The following changes will be applied when you confirm"
+msgstr ""
+
+msgid "Review carefully before proceeding"
 msgstr ""
 
 msgid "Unrecognized files in ZIP (will be skipped)"
