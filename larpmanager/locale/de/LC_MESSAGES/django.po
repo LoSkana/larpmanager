@@ -3040,9 +3040,6 @@ msgstr "Ereignis nicht gefunden"
 msgid "External access"
 msgstr "Externer Zugang"
 
-msgid "Filter factions"
-msgstr "Gruppen filtern"
-
 msgid "First character"
 msgstr "Erstes Zeichen"
 
@@ -3420,6 +3417,9 @@ msgstr "Transaktionsgebühren"
 
 msgid "Transfer preview"
 msgstr "Transfer-Vorschau"
+
+msgid "Your preferences"
+msgstr "Deine Einstellungen"
 
 msgid "are not yet open"
 msgstr "sind noch nicht geöffnet"
@@ -3952,6 +3952,9 @@ msgstr "Sprache der Navigation"
 msgid "New shuttle request"
 msgstr "Neue Shuttle-Anfrage"
 
+msgid "No characters found"
+msgstr "Es wurden keine Zeichen gefunden"
+
 msgid "Non-cumulative code"
 msgstr "Nicht kumulativer Code"
 
@@ -4026,6 +4029,9 @@ msgstr "Erweiterter Texteditor"
 
 msgid "All printable sheets"
 msgstr "Alle Druckvorlagen"
+
+msgid "Available characters"
+msgstr "Verfügbare Zeichen"
 
 msgid "Back to PDF settings"
 msgstr "Zurück zu den PDF-Einstellungen"
@@ -6227,6 +6233,10 @@ msgstr "Farbe zur Hervorhebung von wichtigem Text"
 msgid "Create a ticket type by clicking 'New'"
 msgstr "Erstelle einen Ticket-Typ, indem du auf \"Neu\" klickst"
 
+msgid "Drag items to reorder your preferences"
+msgstr ""
+"Zieh die Einträge per Drag & Drop, um deine Einstellungen neu anzuordnen"
+
 msgid "Fill in your character's relationships"
 msgstr "Fülle die Beziehungen deines Charakters aus"
 
@@ -7021,6 +7031,9 @@ msgstr "Ihre Präferenzen wurden im System gespeichert"
 msgid "Added to the registration page, before the form"
 msgstr "Zur Registrierungsseite hinzugefügt, vor dem Formular"
 
+msgid "Click a character to add it to your preferences"
+msgstr "Klicke auf eine Figur, um sie zu deinen Favoriten hinzuzufügen"
+
 msgid "Customize specific texts on the event interface"
 msgstr "Anpassen spezifischer Texte auf der Ereignisoberfläche"
 
@@ -7778,10 +7791,6 @@ msgstr "Jetzt können Sie die historischen Buchhaltungsinformationen einsehen"
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Optional - Andere Optionen als Anforderungen, durch Komma getrennt"
 
-msgid "Select the faction on which you want to filter characters"
-msgstr ""
-"Wählen Sie die Gruppen aus, nach denen Sie die Zeichen filtern möchten"
-
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Mitarbeiter, die Supportanfragen erhalten und verwalten werden"
 
@@ -7967,9 +7976,6 @@ msgstr "Wo wurde sie platziert? Wann wird sie voraussichtlich zurückkommen?"
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr ""
 "Sie können die Zahlung <a href='%(url)s'>auf dieser Seite vornehmen</a>"
-
-msgid "You have chosen the same option in more than one preference"
-msgstr "Sie haben die gleiche Option in mehr als einer Präferenz angegeben"
 
 msgid "You must consent to data sharing to accept this invitation."
 msgstr ""
@@ -8233,10 +8239,6 @@ msgid "Indicate your legal gender as it appears on official documents"
 msgstr ""
 "Geben Sie Ihr rechtliches Geschlecht an, wie es in offiziellen Dokumenten "
 "angegeben ist"
-
-msgid "Manage factions and their character assignments for this event"
-msgstr ""
-"Verwalte die Fraktionen und ihre Charakterzuweisungen für dieses Event"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""

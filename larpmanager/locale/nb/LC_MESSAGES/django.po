@@ -3040,9 +3040,6 @@ msgstr "Hendelsen ble ikke funnet"
 msgid "External access"
 msgstr "Ekstern tilgang"
 
-msgid "Filter factions"
-msgstr "Filtergrupper"
-
 msgid "First character"
 msgstr "Første tegn"
 
@@ -3420,6 +3417,9 @@ msgstr "Transaksjonsgebyrer"
 
 msgid "Transfer preview"
 msgstr "Forhåndsvisning av overganger"
+
+msgid "Your preferences"
+msgstr "Dine innstillinger"
 
 msgid "are not yet open"
 msgstr "er ennå ikke åpnet"
@@ -3952,6 +3952,9 @@ msgstr "Navigasjonsspråk"
 msgid "New shuttle request"
 msgstr "Ny forespørsel om skyttelbuss"
 
+msgid "No characters found"
+msgstr "Ingen tegn funnet"
+
 msgid "Non-cumulative code"
 msgstr "Ikke-kumulativ kode"
 
@@ -4026,6 +4029,9 @@ msgstr "Avansert tekstredigeringsprogram"
 
 msgid "All printable sheets"
 msgstr "Alle utskriftsark"
+
+msgid "Available characters"
+msgstr "Tilgjengelige tegn"
 
 msgid "Back to PDF settings"
 msgstr "Tilbake til PDF-innstillinger"
@@ -6224,6 +6230,9 @@ msgstr "Farge som brukes til å fremheve viktig tekst"
 msgid "Create a ticket type by clicking 'New'"
 msgstr "Opprett en billettype ved å klikke på \"Ny"
 
+msgid "Drag items to reorder your preferences"
+msgstr "Dra elementene for å endre rekkefølgen på innstillingene dine"
+
 msgid "Fill in your character's relationships"
 msgstr "Fyll inn karakterens relasjoner"
 
@@ -7009,6 +7018,9 @@ msgstr "Dine preferanser er lagret i systemet"
 msgid "Added to the registration page, before the form"
 msgstr "Lagt til på registreringssiden, før skjemaet"
 
+msgid "Click a character to add it to your preferences"
+msgstr "Klikk på en karakter for å legge den til i innstillingene dine"
+
 msgid "Customize specific texts on the event interface"
 msgstr "Tilpass spesifikke tekster på hendelsesgrensesnittet"
 
@@ -7702,9 +7714,6 @@ msgstr "Nå kan du gå gjennom den historiske regnskapsinformasjonen"
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Valgfritt - Andre alternativer som krav, kommaseparert"
 
-msgid "Select the faction on which you want to filter characters"
-msgstr "Velg gruppene du vil filtrere tegnene etter"
-
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Medarbeidere som skal motta og håndtere supporthenvendelser"
 
@@ -7864,9 +7873,6 @@ msgstr "Hvor har den blitt plassert? Når forventes den å komme tilbake?"
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Du kan foreta betalingen <a href='%(url)s'>på denne siden</a>"
-
-msgid "You have chosen the same option in more than one preference"
-msgstr "Du har angitt det samme alternativet i mer enn én innstilling"
 
 msgid "You must consent to data sharing to accept this invitation."
 msgstr "Du må samtykke til datadeling for å akseptere denne invitasjonen."
@@ -8080,11 +8086,6 @@ msgstr "Hvis du støter på problemer, kan du kontakte oss, så hjelper vi deg"
 
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Oppgi ditt juridiske kjønn slik det fremgår av offisielle dokumenter"
-
-msgid "Manage factions and their character assignments for this event"
-msgstr ""
-"Administrer fraksjonene og karaktertildelingene deres for dette "
-"arrangementet"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""

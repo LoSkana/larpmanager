@@ -269,6 +269,8 @@ class OrgaPlotForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 
     page_title = _("Plot")
 
+    page_info = _("Manage all plots for this event")
+
     class Meta:
         model = Plot
 
@@ -400,7 +402,7 @@ class OrgaFactionForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 
     page_title = _("Faction")
 
-    page_info = _("Manage factions and their character assignments for this event")
+    page_info = _("Manage all character factions of the event")
 
     class Meta:
         model = Faction
@@ -473,6 +475,8 @@ class OrgaQuestForm(WritingForm, BaseWritingForm):
 
     page_title = _("Quest")
 
+    page_info = _("Manage all quests for the event")
+
     class Meta:
         model = Quest
         exclude = ("number", "temp", "hide", "order")
@@ -496,6 +500,8 @@ class OrgaTraitForm(WritingForm, BaseWritingForm):
     """Form for Trait."""
 
     page_title = _("Trait")
+
+    page_info = _("Manage all traits linked to quests, with their writing questions")
 
     load_templates: ClassVar[list] = ["trait"]
 
@@ -569,6 +575,8 @@ class OrgaPrologueForm(MultichoiceMixin, WritingForm, BaseWritingForm):
     """Form for Prologue."""
 
     page_title = _("Prologue")
+
+    page_info = _("Manage all prologues for this event")
 
     load_js: ClassVar[list] = ["multichoice"]
 

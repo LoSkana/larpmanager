@@ -3040,9 +3040,6 @@ msgstr "Tapahtumaa ei löydy"
 msgid "External access"
 msgstr "Ulkoinen pääsy"
 
-msgid "Filter factions"
-msgstr "Suodata ryhmittymät"
-
 msgid "First character"
 msgstr "Ensimmäinen merkki"
 
@@ -3420,6 +3417,9 @@ msgstr "Transaktiomaksut"
 
 msgid "Transfer preview"
 msgstr "Siirtojen esikatselu"
+
+msgid "Your preferences"
+msgstr "Asetuksesi"
 
 msgid "are not yet open"
 msgstr "eivät ole vielä avoinna"
@@ -3952,6 +3952,9 @@ msgstr "Navigointikieli"
 msgid "New shuttle request"
 msgstr "Uusi sukkulapyyntö"
 
+msgid "No characters found"
+msgstr "Hahmoja ei löytynyt"
+
 msgid "Non-cumulative code"
 msgstr "Ei-kumulatiivinen koodi"
 
@@ -4026,6 +4029,9 @@ msgstr "Edistynyt tekstieditori"
 
 msgid "All printable sheets"
 msgstr "Kaikki tulostettavat arkit"
+
+msgid "Available characters"
+msgstr "Käytettävissä olevat merkit"
 
 msgid "Back to PDF settings"
 msgstr "Takaisin PDF-asetuksiin"
@@ -6223,6 +6229,9 @@ msgstr "Tärkeän tekstin korostamiseen käytetty väri"
 msgid "Create a ticket type by clicking 'New'"
 msgstr "Luo lipputyyppi klikkaamalla 'Uusi'"
 
+msgid "Drag items to reorder your preferences"
+msgstr "Voit järjestää asetuksesi uudelleen vetämällä kohteita"
+
 msgid "Fill in your character's relationships"
 msgstr "Täytä hahmosi suhteet"
 
@@ -7008,6 +7017,9 @@ msgstr "Asetuksesi on tallennettu järjestelmään"
 msgid "Added to the registration page, before the form"
 msgstr "Lisätty ilmoittautumissivulle, ennen lomaketta"
 
+msgid "Click a character to add it to your preferences"
+msgstr "Napsauta hahmoa lisätäksesi sen suosikkeihisi"
+
 msgid "Customize specific texts on the event interface"
 msgstr "Tapahtuman käyttöliittymän erityisten tekstien mukauttaminen"
 
@@ -7705,9 +7717,6 @@ msgid "Optional - Other options as requirements, comma-separated"
 msgstr ""
 "Valinnainen - Muut vaatimukset täyttävät vaihtoehdot, pilkulla eroteltuina"
 
-msgid "Select the faction on which you want to filter characters"
-msgstr "Valitse ryhmittymä, jonka hahmoja haluat suodattaa"
-
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Henkilöstön jäsenet, jotka vastaanottavat ja hallinnoivat tukilippuja"
 
@@ -7861,10 +7870,6 @@ msgstr "Mihin se on sijoitettu? Milloin sen odotetaan palaavan?"
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Voit suorittaa maksun <a href='%(url)s'>tältä sivulta</a>"
-
-msgid "You have chosen the same option in more than one preference"
-msgstr ""
-"Olet valinnut saman vaihtoehdon useammassa kuin yhdessä mieltymyksessä"
 
 msgid "You must consent to data sharing to accept this invitation."
 msgstr ""
@@ -8086,9 +8091,6 @@ msgid "Indicate your legal gender as it appears on official documents"
 msgstr ""
 "Ilmoita laillinen sukupuolesi sellaisena kuin se näkyy virallisissa "
 "asiakirjoissa"
-
-msgid "Manage factions and their character assignments for this event"
-msgstr "Hallinnoi ryhmittymiä ja niiden hahmojen tehtäviä tässä tapahtumassa"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Hallitse tapahtuman osallistujille myönnettyjä tunnuksia"

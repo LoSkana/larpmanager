@@ -2797,6 +2797,219 @@ body.floating_iframe .inner {
 }
 
 /* ---------------------------------------------------------------------------
+   Casting - choose characters
+   --------------------------------------------------------------------------- */
+
+.casting-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.casting-panel {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #fafafa;
+}
+.casting-panel h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: #333;
+}
+.casting-search {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+}
+.faction-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+.faction-chip {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid #999;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.faction-chip.active {
+  background: #333;
+  color: #fff;
+  border-color: #333;
+}
+.char-list {
+  max-height: 420px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.char-card {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  font-size: 0.9rem;
+}
+.char-card:hover {
+  border-color: #888;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+.char-card.selected {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.char-num {
+  font-weight: bold;
+  color: #555;
+  min-width: 2.5rem;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+.char-info {
+  flex: 1;
+  min-width: 0;
+}
+.char-name {
+  font-weight: 600;
+}
+.char-title {
+  font-size: 0.78rem;
+  color: #777;
+}
+.char-faction-badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: #eee;
+  color: #555;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pref-counter {
+  font-size: 0.82rem;
+  color: #777;
+  margin-bottom: 0.6rem;
+}
+.pref-list {
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.pref-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 2px solid rgba(var(--ter-rgb), 0.35);
+  background: rgba(var(--ter-rgb), 0.1);
+  cursor: grab;
+  user-select: none;
+  font-size: 0.9rem;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s,
+    opacity 0.15s;
+}
+.pref-item.dragging {
+  opacity: 0.45;
+  cursor: grabbing;
+}
+.pref-item.drag-over {
+  border-color: rgba(var(--ter-rgb), 0.8);
+  box-shadow: 0 0 0 2px rgba(var(--ter-rgb), 0.3);
+}
+.pref-rank {
+  font-weight: bold;
+  color: rgba(var(--ter-rgb), 0.9);
+  min-width: 1.5rem;
+  text-align: center;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+.drag-handle {
+  color: rgba(var(--ter-rgb), 0.5);
+  font-size: 1rem;
+  cursor: grab;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.pref-remove {
+  margin-left: auto;
+  color: #c62828;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0;
+  border: none;
+  background: none;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+.pref-remove:hover {
+  color: #b71c1c;
+}
+.pref-remove i.fas {
+  font-size: inherit;
+}
+.pref-empty {
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+.casting-err {
+  color: #c62828;
+  font-size: 0.88rem;
+  margin-top: 0.75rem;
+  min-height: 1.2em;
+}
+@media (max-width: 680px) {
+  .casting-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+#char-search,
+#castig-info {
+  margin-bottom: 1em;
+}
+
+.casting-panel .helptext {
+  display: initial;
+  margin-left: 2em;
+}
+
+.casting-avoid {
+  margin-top: 1rem;
+}
+
+/* ---------------------------------------------------------------------------
    DataTables Responsive - inline expand control
    --------------------------------------------------------------------------- */
 

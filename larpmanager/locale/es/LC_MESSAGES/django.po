@@ -3040,9 +3040,6 @@ msgstr "Evento no encontrado"
 msgid "External access"
 msgstr "Acceso exterior"
 
-msgid "Filter factions"
-msgstr "Filtrar facciones"
-
 msgid "First character"
 msgstr "Primer carácter"
 
@@ -3420,6 +3417,9 @@ msgstr "Comisiones de transacción"
 
 msgid "Transfer preview"
 msgstr "Previsión de fichajes"
+
+msgid "Your preferences"
+msgstr "Tus preferencias"
 
 msgid "are not yet open"
 msgstr "¡aún no están abiertas"
@@ -3952,6 +3952,9 @@ msgstr "Idioma de navegación"
 msgid "New shuttle request"
 msgstr "Nueva solicitud de transporte"
 
+msgid "No characters found"
+msgstr "No se han encontrado personajes"
+
 msgid "Non-cumulative code"
 msgstr "Código no acumulativo"
 
@@ -4026,6 +4029,9 @@ msgstr "Editor de texto avanzado"
 
 msgid "All printable sheets"
 msgstr "Todas las hojas para imprimir"
+
+msgid "Available characters"
+msgstr "Personajes disponibles"
 
 msgid "Back to PDF settings"
 msgstr "Volver a la configuración del PDF"
@@ -6224,6 +6230,9 @@ msgstr "Color utilizado para resaltar texto importante"
 msgid "Create a ticket type by clicking 'New'"
 msgstr "Crea un tipo de ticket haciendo clic en \"Nuevo"
 
+msgid "Drag items to reorder your preferences"
+msgstr "Arrastra los elementos para cambiar el orden de tus preferencias"
+
 msgid "Fill in your character's relationships"
 msgstr "Rellena las relaciones de tu personaje"
 
@@ -7014,6 +7023,9 @@ msgstr "Sus preferencias se han guardado en el sistema"
 msgid "Added to the registration page, before the form"
 msgstr "Añadido a la página de registro, antes del formulario"
 
+msgid "Click a character to add it to your preferences"
+msgstr "Haz clic en un personaje para añadirlo a tus favoritos"
+
 msgid "Customize specific texts on the event interface"
 msgstr "Personalizar textos específicos en la interfaz de eventos"
 
@@ -7732,9 +7744,6 @@ msgstr "Ahora puede revisar la información contable histórica"
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Opcional - Otras opciones según los requisitos, separadas por comas"
 
-msgid "Select the faction on which you want to filter characters"
-msgstr "Selecciona la facción de la que quieres filtrar los personajes"
-
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Personal que recibirá y gestionará las solicitudes de asistencia"
 
@@ -7903,9 +7912,6 @@ msgstr "¿Dónde se ha colocado? ¿Cuándo se espera que vuelva?"
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Puedes realizar el pago <a href='%(url)s'>en esta página</a>"
-
-msgid "You have chosen the same option in more than one preference"
-msgstr "Has indicado la misma opción en más de una preferencia"
 
 msgid "You must consent to data sharing to accept this invitation."
 msgstr ""
@@ -8145,9 +8151,6 @@ msgstr ""
 
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Indique su sexo legal tal como aparece en los documentos oficiales"
-
-msgid "Manage factions and their character assignments for this event"
-msgstr "Gestiona las facciones y la asignación de personajes para este evento"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""
