@@ -11805,13 +11805,6 @@ msgstr ""
 "gedefinieerde waarschijnlijkheid, en kent optioneel een resultaat toe"
 
 msgid ""
-"Select which information participants must provide during registration: "
-"either Required, Optional or Hidden"
-msgstr ""
-"Selecteer welke informatie deelnemers moeten verstrekken tijdens de "
-"registratie: Verplicht, Optioneel of Verborgen"
-
-msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""

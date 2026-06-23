@@ -11483,13 +11483,6 @@ msgstr ""
 "pravděpodobnosti a volitelně přiřadí výsledek"
 
 msgid ""
-"Select which information participants must provide during registration: "
-"either Required, Optional or Hidden"
-msgstr ""
-"Vyberte, které informace musí účastníci při registraci poskytnout: povinné, "
-"nepovinné nebo skryté"
-
-msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""

@@ -11952,13 +11952,6 @@ msgstr ""
 "d'une probabilité définie, et attribue éventuellement un résultat"
 
 msgid ""
-"Select which information participants must provide during registration: "
-"either Required, Optional or Hidden"
-msgstr ""
-"Sélectionnez les informations que les participants doivent fournir lors de "
-"l'inscription : obligatoires, facultatives ou cachées"
-
-msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""

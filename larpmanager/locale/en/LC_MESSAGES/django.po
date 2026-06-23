@@ -5407,11 +5407,6 @@ msgid ""
 "additional plot information"
 msgstr ""
 
-msgid ""
-"Select which information participants must provide during registration: "
-"either Required, Optional or Hidden"
-msgstr ""
-
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""
 

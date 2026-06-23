@@ -1009,12 +1009,6 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 .popup_tutorial {
   width: 80vw;
   height: 80vh;
-  z-index: 10000 !important;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: hidden;
 }
 
 .popup_tutorial iframe {

@@ -104,6 +104,13 @@
                             <div id="info_bar" class="only_v20">
                                 <span id="info">
                                     {% block info %}
+                                        {% if not frame %}
+                                            {% if form %}
+                                                {{ form.page_info }}
+                                            {% else %}
+                                                {{ page_info }}
+                                            {% endif %}
+                                        {% endif %}
                                     {% endblock info %}
                                 </span>
                                 {% if tutorial %}

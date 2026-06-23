@@ -11606,13 +11606,6 @@ msgstr ""
 "todennäköisyyden perusteella ja määrittää valinnaisesti tuloksen"
 
 msgid ""
-"Select which information participants must provide during registration: "
-"either Required, Optional or Hidden"
-msgstr ""
-"Valitse, mitkä tiedot osallistujien on annettava rekisteröinnin aikana: joko"
-" pakolliset, valinnaiset tai piilotetut"
-
-msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""

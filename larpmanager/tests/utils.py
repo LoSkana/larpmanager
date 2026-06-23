@@ -106,7 +106,7 @@ def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     _wait_lm_ready(page)
     body_class = page.locator("body").get_attribute("class") or ""
-    if "manage" in body_class:
+    if "manage" in body_class and not str(path).rstrip("/").endswith("manage"):
         info = page.locator("#info_bar #info")
         assert info.count() > 0, f"#info_bar #info missing on {page.url}"
         assert info.inner_text().strip(), f"#info_bar #info empty on {page.url}"

@@ -11625,13 +11625,6 @@ msgstr ""
 "sannolikhet, och tilldelar eventuellt ett resultat"
 
 msgid ""
-"Select which information participants must provide during registration: "
-"either Required, Optional or Hidden"
-msgstr ""
-"Välj vilken information deltagarna måste lämna vid registreringen: antingen "
-"Obligatorisk, Valfri eller Dold"
-
-msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
