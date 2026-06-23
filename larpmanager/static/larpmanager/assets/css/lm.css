@@ -3048,3 +3048,7 @@ body.floating_iframe #wrapper {
   overflow-x: hidden;
   padding-right: 0.5em;
 }
+
+#first_event h1 {
+  margin: 0;
+}
