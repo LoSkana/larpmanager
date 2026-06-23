@@ -31,7 +31,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
     submit_register, submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, \
-    click_and_wait_question, _wait_select2_results
+    click_and_wait_question, _wait_select2_results, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 

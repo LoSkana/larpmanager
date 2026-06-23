@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar, get_modal_iframe, \
-    save_modal
+    save_modal, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 

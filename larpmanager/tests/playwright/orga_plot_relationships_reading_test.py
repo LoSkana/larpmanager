@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      submit_confirm,
                                      expect_normalized, sidebar, save_modal, click_and_wait_question,
-                                     _wait_select2_results,
+                                     _wait_select2_results, _wait_lm_ready,
                                      )
 
 pytestmark = pytest.mark.e2e
