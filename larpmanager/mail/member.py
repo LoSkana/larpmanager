@@ -121,7 +121,7 @@ def handle_badge_assignment_notifications(instance: Any, pk_set: Any) -> None:
         subject = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
         body = _("You have been awarded an achievement") + "!" + "<br /><br />"
         body += _("Description") + f": {badge['descr']}<br /><br />"
-        profile_url = get_url(f"public/{member.id}/", instance)
+        profile_url = get_url(f"public/{member.uuid}/", instance)
         body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": profile_url} + "."
         my_send_mail(subject, body, member, instance)
 
