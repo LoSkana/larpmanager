@@ -253,7 +253,7 @@ def checks(page: Any) -> None:
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "New Kitchen Position: ss Description: sds")
     expect_normalized(page,
-        page.locator("#one"), "Item 1 Boc B - dd Item 3sa Box A - bibi	 b sALOON Position: SDsad Description: saddsadsa "
+        page.locator("#one"), """Item 1 Boc B - dd Item 3sa Box A - bibi	 b no items have been assigned to this area yet. sALOON Position: SDsad Description: saddsadsa """
     )
     expect_normalized(page, page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Box A - bibi	 sss")
 
