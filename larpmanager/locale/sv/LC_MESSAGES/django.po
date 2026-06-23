@@ -7808,6 +7808,9 @@ msgstr "(Valfritt) Obligatoriska namn på teckenalternativ, kommaseparerade"
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
 msgstr "Öppna hanteringspanelen <a href= %(url)s'>från här</a>"
 
+msgid "Check and complete your organization's activation checklist"
+msgstr "Kontrollera och fyll i din organisations aktiveringslista"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vill du acceptera betalningar som behandlas via systemet"
 
@@ -8069,6 +8072,10 @@ msgstr "Om du stöter på några problem, kontakta oss så hjälper vi dig"
 
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Ange ditt juridiska kön så som det framgår av officiella dokument"
+
+msgid "Manage factions and their character assignments for this event"
+msgstr ""
+"Hantera fraktionerna och deras karaktärstilldelningar för detta evenemang"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""

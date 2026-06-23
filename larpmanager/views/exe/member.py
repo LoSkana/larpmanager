@@ -110,6 +110,7 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
+    context["page_info"] = ExeMembershipForm.page_info
 
     # Pending membership invoice approvals requiring confirmation
     context["pending_invoices"] = (

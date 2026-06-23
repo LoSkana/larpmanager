@@ -400,6 +400,8 @@ class OrgaFactionForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 
     page_title = _("Faction")
 
+    page_info = _("Manage factions and their character assignments for this event")
+
     class Meta:
         model = Faction
 

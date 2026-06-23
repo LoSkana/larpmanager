@@ -7823,6 +7823,10 @@ msgstr "(Opcjonalnie) Wymagane nazwy opcji znaków, oddzielone przecinkami"
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
 msgstr "Dostęp do panelu zarządzania <a href= %(url)s'>z tego miejsca</a>"
 
+msgid "Check and complete your organization's activation checklist"
+msgstr ""
+"Sprawdź i uzupełnij listę kontrolną dotyczącą aktywacji Twojej organizacji"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Czy chcesz akceptować płatności przetwarzane przez system"
 
@@ -8096,6 +8100,10 @@ msgstr ""
 
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Wskaż swoją płeć prawną, która widnieje w oficjalnych dokumentach"
+
+msgid "Manage factions and their character assignments for this event"
+msgstr ""
+"Zarządzaj frakcjami i przypisaniem do nich postaci w ramach tego wydarzenia"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Zarządzaj przypisaniem tokenów wydanych uczestnikom tego wydarzenia"

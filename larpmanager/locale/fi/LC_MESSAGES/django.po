@@ -7817,6 +7817,9 @@ msgstr ""
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
 msgstr "Pääset hallintapaneeliin <a href= %(url)s'>täältä</a>"
 
+msgid "Check and complete your organization's activation checklist"
+msgstr "Tarkista ja täytä organisaatiosi käyttöönottolista"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Haluatko hyväksyä järjestelmän kautta käsitellyt maksut"
 
@@ -8083,6 +8086,9 @@ msgid "Indicate your legal gender as it appears on official documents"
 msgstr ""
 "Ilmoita laillinen sukupuolesi sellaisena kuin se näkyy virallisissa "
 "asiakirjoissa"
+
+msgid "Manage factions and their character assignments for this event"
+msgstr "Hallinnoi ryhmittymiä ja niiden hahmojen tehtäviä tässä tapahtumassa"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Hallitse tapahtuman osallistujille myönnettyjä tunnuksia"

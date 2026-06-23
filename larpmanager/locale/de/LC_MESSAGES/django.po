@@ -7911,6 +7911,11 @@ msgstr "(Optional) Erforderliche Zeichenoptionsnamen, durch Komma getrennt"
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
 msgstr "Zugang zum Verwaltungsbereich <a href= %(url)s'>von hier aus</a>"
 
+msgid "Check and complete your organization's activation checklist"
+msgstr ""
+"Überprüfe und vervollständige die Aktivierungs-Checkliste deiner "
+"Organisation"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr ""
 "Möchten Sie Zahlungen akzeptieren, die über das System abgewickelt werden"
@@ -8228,6 +8233,10 @@ msgid "Indicate your legal gender as it appears on official documents"
 msgstr ""
 "Geben Sie Ihr rechtliches Geschlecht an, wie es in offiziellen Dokumenten "
 "angegeben ist"
+
+msgid "Manage factions and their character assignments for this event"
+msgstr ""
+"Verwalte die Fraktionen und ihre Charakterzuweisungen für dieses Event"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""

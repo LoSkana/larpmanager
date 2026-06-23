@@ -7847,6 +7847,11 @@ msgstr ""
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
 msgstr "Accedi al pannello di gestione <a href= %(url)s'>da qui</a>"
 
+msgid "Check and complete your organization's activation checklist"
+msgstr ""
+"Controlla e completa la lista di controllo per l'attivazione della tua "
+"organizzazione"
+
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vuoi accettare pagamenti elaborati attraverso il sistema"
 
@@ -8130,6 +8135,9 @@ msgstr "In caso di problemi, contattaci e ti assisteremo"
 
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Indica il tuo genere legale, così come appare sui documenti ufficiali"
+
+msgid "Manage factions and their character assignments for this event"
+msgstr "Gestisci le fazioni e l'assegnazione dei personaggi per questo evento"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Gestisci l'assegnazione dei token ai partecipanti a questo evento"

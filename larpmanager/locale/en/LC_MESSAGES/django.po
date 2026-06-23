@@ -2649,6 +2649,9 @@ msgstr ""
 msgid "Faction"
 msgstr ""
 
+msgid "Manage factions and their character assignments for this event"
+msgstr ""
+
 msgid "Primary"
 msgstr ""
 
@@ -10849,6 +10852,9 @@ msgid "Please wait before retrying."
 msgstr ""
 
 msgid "Cache reset!"
+msgstr ""
+
+msgid "Check and complete your organization's activation checklist"
 msgstr ""
 
 msgid "Advanced mode activated! All features are now available."
