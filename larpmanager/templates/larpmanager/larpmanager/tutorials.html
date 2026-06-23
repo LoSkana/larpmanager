@@ -52,8 +52,6 @@
 {% endblock content %}
 {% block js %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-
     function slugify(text) {
         return text
             .toString()
@@ -131,7 +129,6 @@ window.addEventListener('DOMContentLoaded', function() {
             scrollTop: $('html').scrollTop() + $(target).offset().top - headerHeight * 1
         }, 0);
     }
-});
 
     </script>
 {% endblock js %}

@@ -85,8 +85,7 @@ function search_tutorial() {
 }
 
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
+$(function() {
 
         $('#tutorial_query').on('input', function () {
             clearTimeout(timeout);
@@ -99,6 +98,5 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
     });
-});
 
 </script>

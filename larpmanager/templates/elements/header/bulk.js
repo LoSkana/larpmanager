@@ -4,8 +4,7 @@
 
 // handle bulk operations
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).on("lm_ready", function() {
+$(document).on("lm_ready", function() {
 
         // Set to select rows when bulk is available
         Object.keys(window.datatables).forEach(function(key) {
@@ -76,5 +75,4 @@ $("#main_bulk #exec").on("click", function(e) {
 
 
     });
-});
 </script>

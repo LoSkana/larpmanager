@@ -33,13 +33,12 @@
     </p>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script>
         $(document).ready(function() {
             setTimeout(function() {
                 $('*[data-column="1"]').click();
                 $('*[data-column="1"]').click();
             }, 500);
         });
-    });
     </script>
 {% endblock js %}

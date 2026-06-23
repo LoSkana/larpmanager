@@ -151,7 +151,7 @@ body {
 /* Topbar + page-wrapper integration */
 #sidebar.topbar,
 #page-wrapper.topbar,
-#page-wrapper.topbar header {
+#page-wrapper.topbar #header {
   margin-top: var(--topbar-height);
 }
 

@@ -33,10 +33,8 @@ function callWorkingTicket() {
     setTimeout(()=>callWorkingTicket(), w_timeout);
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
-        callWorkingTicket();
-    });
+$(function() {
+    callWorkingTicket();
 });
 
 {% endif %}

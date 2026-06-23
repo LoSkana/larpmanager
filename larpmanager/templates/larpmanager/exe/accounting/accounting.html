@@ -281,8 +281,7 @@
 {% endblock content %}
 {% block js %}
     <script>
-    window.addEventListener('DOMContentLoaded', function() {
-        $(function() {
+    $(function() {
 
             $('.summary').on( "click", function(event) {
                 event.preventDefault();
@@ -307,6 +306,5 @@
 
             });
         });
-    });
     </script>
 {% endblock js %}

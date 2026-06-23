@@ -136,8 +136,8 @@ def pay(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "100")
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
-
     submit(page)
+
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()

@@ -86,8 +86,7 @@ function setUpHighlight(key) {
     });
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function(){
+$(document).ready(function(){
         {% for question in form.questions %}
             {% if question.typ == 'e' %}
                 setUpHighlight('id_que_{{ question.uuid }}');
@@ -106,7 +105,5 @@ window.addEventListener('DOMContentLoaded', function() {
 
 
     });
-
-});
 
 </script>

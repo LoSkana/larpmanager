@@ -10,9 +10,7 @@ const methodsMapping = {
     {% endfor %}
 };
 
-window.addEventListener('DOMContentLoaded', function() {
-
-    $(function() {
+$(function() {
 
         const checkboxes = document.querySelectorAll('#id_payment_methods input[type="checkbox"]');
 
@@ -42,7 +40,5 @@ window.addEventListener('DOMContentLoaded', function() {
             window.disable_jump = false;
         }, 500);
     });
-
-});
 
 </script>

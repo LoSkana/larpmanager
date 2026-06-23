@@ -4,11 +4,13 @@
         {% trans "Download" %}
         {% if show_full_pdf %}
             <a href="{% url 'character_pdf_sheet' run.get_slug char.uuid %}"
-               download>{% trans "complete sheet" %}</a>
+               download
+               hx-boost="false">{% trans "complete sheet" %}</a>
             |
         {% endif %}
         <a href="{% url 'character_pdf_sheet_friendly' run.get_slug char.uuid %}"
-           download>{% trans "printable sheet" %}</a>
+           download
+           hx-boost="false">{% trans "printable sheet" %}</a>
     </p>
     <hr class="clear" />
 {% endif %}

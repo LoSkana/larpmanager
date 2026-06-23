@@ -1,9 +1,7 @@
 {% load i18n %}
 
 <script>
-window.addEventListener('DOMContentLoaded', function() {
-
-    var templateDescriptions = {
+var templateDescriptions = {
         {% for slug, label, icon, desc, feats in form.template_data %}
         "{{ slug }}": {
             label: "{{ label|escapejs }}",
@@ -62,5 +60,4 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-});
 </script>

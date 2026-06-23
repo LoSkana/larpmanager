@@ -21,8 +21,7 @@
 {% endblock content %}
 {% block js %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function(){
+$(document).ready(function(){
 
         $("#register_form").submit( function(eventObj) {
             var val = $('#id_email').val();
@@ -51,7 +50,6 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
     });
-});
 
     </script>
 {% endblock js %}

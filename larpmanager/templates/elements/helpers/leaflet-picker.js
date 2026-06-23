@@ -4,8 +4,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-window.addEventListener('DOMContentLoaded', function () {
-    var latField = document.getElementById('id_pub_lat');
+var latField = document.getElementById('id_pub_lat');
     var lonField = document.getElementById('id_pub_lon');
     if (!latField || !lonField) return;
 
@@ -125,5 +124,4 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Force Leaflet to recalculate size after insertion
     setTimeout(function () { map.invalidateSize(); }, 100);
-});
 </script>

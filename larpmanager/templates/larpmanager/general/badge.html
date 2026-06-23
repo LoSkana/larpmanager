@@ -28,11 +28,9 @@
 {% endblock content %}
 {% block js %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function() {
+$(document).ready(function() {
       resize_to_fit();
     });
-});
 function resize_to_fit() {
     $(".icon-name p").each(function( index ) {
         var that = $(this),

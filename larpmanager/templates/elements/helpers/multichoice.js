@@ -1,8 +1,7 @@
 {% load i18n %}
 {% if form.multichoice_configs %}
 <script>
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
+$(function() {
         {% for cfg in form.multichoice_configs %}
         $('#id_{{ cfg.field_id }}_tr td').append("<span id='{{ cfg.link_id }}_wrap'><br class='show' /><br class='show' /><a id='{{ cfg.link_id }}'>{{ cfg.label }}</a></span>");
         if ($('[tog="f_id_{{ cfg.field_id }}"]').length) {
@@ -54,6 +53,5 @@ window.addEventListener('DOMContentLoaded', function() {
         });
         {% endfor %}
     });
-});
 </script>
 {% endif %}

@@ -104,8 +104,7 @@ function insertReference(text) {
     }
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
+$(function() {
 
         // char finder
         $(document).on('keydown', function(ev) {
@@ -153,6 +152,5 @@ window.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-});
 
 </script>

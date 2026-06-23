@@ -221,9 +221,7 @@
 {% endblock alpha %}
 {% block js2 %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-
-      const counters = document.querySelectorAll('.key-number-value');
+const counters = document.querySelectorAll('.key-number-value');
       const speed = 60; // animation speed
 
       counters.forEach(counter => {
@@ -315,8 +313,6 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
     });
-
-});
 
     </script>
 {% endblock js2 %}

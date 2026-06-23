@@ -5,11 +5,9 @@
 {% endblock title %}
 {% block js %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-    jQuery(function(){
-       jQuery('.major').remove();
-       jQuery('h1').addClass('major');
-    });
+jQuery(function(){
+   jQuery('.major').remove();
+   jQuery('h1').addClass('major');
 });
     </script>
 {% endblock js %}

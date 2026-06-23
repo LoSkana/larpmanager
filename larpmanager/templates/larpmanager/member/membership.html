@@ -25,7 +25,7 @@
             <h3>{% trans "You are not yet a Member of the Organization" %}!</h3>
             <p>{% trans "In order to subscribe to the Organization's events you must apply to be admitted as a Member" %}.</p>
             <p>
-                {% trans "We have pre-filled the application form based on the data you provided us" %}: <a href="{% url 'membership_request' %}" download>{% trans "download it here" %}</a>.
+                {% trans "We have pre-filled the application form based on the data you provided us" %}: <a href="{% url 'membership_request' %}" download hx-boost="false">{% trans "download it here" %}</a>.
                 <br />
                 ({% trans "If there are wrong data you can update your" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>. {% trans "The registration request will be updated automatically" %}.)
             </p>
@@ -102,7 +102,9 @@
                 {% trans "Your request will be approved at the next Board meeting. You will receive confirmation of the outcome of its evaluation very soon" %}.
             </p>
             <p>
-                {% trans "Request submitted" %}: <a href="{{ member.membership.get_request_filepath }}" download>{% trans "download it here" %}</a>.
+                {% trans "Request submitted" %}: <a href="{{ member.membership.get_request_filepath }}"
+    download
+    hx-boost="false">{% trans "download it here" %}</a>.
             </p>
         {% elif member.membership.status == 'r' %}
             <h3>{% trans "Member revoked" %}</h3>

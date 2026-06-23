@@ -24,12 +24,11 @@
     </form>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script>
 $(function() {
     $('form').on('submit', function() {
         return window.lmTesting ? true : confirm('Sei davvero sicuro?');
     });
-});
 });
     </script>
 {% endblock js %}

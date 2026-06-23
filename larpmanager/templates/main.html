@@ -58,14 +58,12 @@
                 {% include "elements/structure/contact_form.html" %}
                 {% if contact_form.errors %}
                     <script>
-            window.addEventListener('DOMContentLoaded', function() {
-                $( function() {
+            $( function() {
                     var el = document.getElementById("cnt-form");
                     const yOffset = -80;
                     const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
                     window.scrollTo({top: y, behavior: 'smooth'});
                 });
-            });
                     </script>
                 {% endif %}
             {% endif %}

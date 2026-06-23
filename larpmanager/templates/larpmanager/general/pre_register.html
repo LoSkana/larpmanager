@@ -55,7 +55,7 @@
     {% endif %}
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script>
 $(function(){
 
 $('select[name$="_pref"]').change(function() {
@@ -78,7 +78,6 @@ $('select[name$="_pref"]').change(function() {
 
 {% endif %}
 
-});
 });
     </script>
 {% endblock js %}

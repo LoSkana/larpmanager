@@ -2,9 +2,7 @@
 
 <script>
 
-window.addEventListener('DOMContentLoaded', function() {
-
-    function search(key) {
+function search(key) {
         $('#one tr').each(function( index ) {
             chi = $(this).children();
             var tx = chi.eq(0).html() + chi.eq(1).html();
@@ -48,7 +46,5 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('#search').on('input', function() { search($(this).val()); });
     });
-
-});
 
 </script>

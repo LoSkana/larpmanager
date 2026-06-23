@@ -38,11 +38,9 @@
 {% endblock content %}
 {% block js %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
+$(function() {
         $('#search').on('input', function() { search($(this).val()); });
     });
-});
 
 function search(key) {
     $('.faq').each(function( index ) {

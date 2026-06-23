@@ -82,9 +82,7 @@ document.getElementById('imagePopup').onclick = function() {
 };
 
 
-window.addEventListener('DOMContentLoaded', function() {
-
-    $(document).on("lm_ready", function() {
+$(document).on("lm_ready", function() {
 
         const table = $('#inv_assignments_items').DataTable();
 
@@ -186,7 +184,6 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
     });
-});
 
     </script>
 {% endblock js %}

@@ -100,15 +100,12 @@ function update_count(key, limit, typ, loop) {
     }
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function(){
+$(document).ready(function(){
 
         {% for key, args in form.max_lengths.items %}
             setUpMaxLength('{{ key }}', {{ args.0 }}, '{{ args.1 }}');
         {% endfor %}
 
     });
-
-});
 
 </script>

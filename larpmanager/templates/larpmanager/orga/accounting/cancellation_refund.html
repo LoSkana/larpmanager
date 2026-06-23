@@ -163,8 +163,7 @@ function select_p(id) {
     return false;
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function(){
+$(document).ready(function(){
         // Select default type based on available features
         {% if features.tokens %}
             select_typ('t');
@@ -182,6 +181,5 @@ window.addEventListener('DOMContentLoaded', function() {
             {% endif %}
         });
     });
-});
     </script>
 {% endblock js %}

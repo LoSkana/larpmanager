@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import logging
+import time
 from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING
 
@@ -77,6 +78,10 @@ def cache_event_links(request: HttpRequest, context: dict) -> None:
         )
 
     context.update(navigation_context)
+
+    # Expose reset timestamp for client-side HTMX history staleness detection
+    ts_key = get_cache_event_ts_key(context["member"].id, context["association_id"])
+    context["nav_cache_ts"] = cache.get(ts_key, 0)
     return
 
 
@@ -233,14 +238,18 @@ def on_registration_post_save_reset_event_links(instance: Registration) -> None:
 
 def reset_event_links(member_id: int, association_id: int) -> None:
     """Clear event link cache for a specific member and association."""
-    # Generate cache key for the specific member-association combination
     cache_key = get_cache_event_key(member_id, association_id)
-
-    # Remove the cached event links from cache
     cache.delete(cache_key)
+
+    ts_key = get_cache_event_ts_key(member_id, association_id)
+    cache.set(ts_key, int(time.time()), timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
 def get_cache_event_key(member_id: int, association_id: int) -> str:
     """Generate cache key for member event links."""
-    # Generate cache key using member and association IDs
     return f"ctx_event_links_{member_id}_{association_id}"
+
+
+def get_cache_event_ts_key(member_id: int, association_id: int) -> str:
+    """Generate cache key for the last reset timestamp of member event links."""
+    return f"cache_event_links_ts_{member_id}_{association_id}"

@@ -134,8 +134,9 @@
     </head>
     <body id="{{ association.name | slugify }}"
           class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {% if lm or effective_version >= 18 %}new_v18{% endif %} {% if effective_version >= 19 %}new_v19{% endif %} {% if effective_version >= 20 %}new_v20{% endif %} {% if effective_version >= 21 %}new_v21{% endif %} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}"
-          {% if not manage %}hx-boost="true"{% endif %}>
+          {% if not manage %}hx-boost="true" hx-target="#page-wrapper" hx-select="#page-wrapper" hx-select-oob="#page-scripts:outerHTML"{% endif %}>
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
+        {% if not manage %}<div id="nav-cache-ts" data-ts="{{ nav_cache_ts|default:0 }}" hidden></div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
                 {% if user.is_authenticated %}
@@ -169,8 +170,6 @@ window['icon_texts'] = {
 }
         </script>
         <!-- Scripts -->
-        {% block js-req %}
-        {% endblock js-req %}
         <script>
             var url_feature_description = "{% url 'feature_description' %}";
             var url_tutorials = "{% url 'tutorials' %}";
@@ -216,10 +215,14 @@ window['icon_texts'] = {
                 <script defer src="{% static 'larpmanager/assets/js/lm.js' %}"></script>
             {% endcompress %}
         {% endif %}
-        {% block js %}
-        {% endblock js %}
-        {% block js2 %}
-        {% endblock js2 %}
+        <div id="page-scripts">
+            {% block js-req %}
+            {% endblock js-req %}
+            {% block js %}
+            {% endblock js %}
+            {% block js2 %}
+            {% endblock js2 %}
+        </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"
                 integrity="sha384-VFQrHzqBh5qiJIU0uGU5CIW3+OWpdGGJM9LBnGbuIH2mkICcFZ7lPd/AAtI7SNf7"
                 crossorigin="anonymous"></script>
@@ -317,17 +320,43 @@ window['icon_texts'] = {
         });
     }
 
-    window.addEventListener('DOMContentLoaded', initPage);
+    function seedNavCacheTs() {
+        var el = document.getElementById('nav-cache-ts');
+        if (!el) return;
+        var ts = parseInt(el.dataset.ts || '0', 10);
+        if (ts > 0) localStorage.setItem('lm_nav_cache_ts', String(ts));
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        initPage();
+        seedNavCacheTs();
+    });
 
     document.addEventListener('htmx:configRequest', function(evt) {
         evt.detail.headers['X-CSRFToken'] = getCookie('csrftoken');
     });
 
     {% if not manage %}
+    document.addEventListener('htmx:beforeRequest', function() {
+        window._lmReady = false;
+    });
+
+    document.addEventListener('htmx:beforeSwap', function(evt) {
+        var html = (evt.detail.xhr && evt.detail.xhr.responseText) || '';
+        var match = html.match(/id="nav-cache-ts"[^>]*data-ts="(\d+)"/);
+        var newTs = match ? parseInt(match[1], 10) : 0;
+        var storedTs = parseInt(localStorage.getItem('lm_nav_cache_ts') || '0', 10);
+        if (newTs > storedTs) {
+            evt.detail.shouldSwap = false;
+            window.location.href = (evt.detail.xhr && evt.detail.xhr.responseURL) || window.location.href;
+        }
+    });
+
     document.addEventListener('htmx:afterSettle', function() {
         document.body.classList.remove('is-preload');
-        $('#one .inner, #topbar .inner, #sidebar .inner, #footer .inner').fadeIn(100);
+        $('#one .inner, #footer .inner').fadeIn(100);
         initPage();
+        seedNavCacheTs();
         if (typeof window.lmBaseInit === 'function') {
             window.lmBaseInit();
             window.lmBaseInit = null;
@@ -335,6 +364,16 @@ window['icon_texts'] = {
         if (typeof window.lmPageInit === 'function') {
             window.lmPageInit();
             window.lmPageInit = null;
+        }
+        window._lmReady = true;
+    });
+
+    document.addEventListener('htmx:historyRestore', function() {
+        var el = document.getElementById('nav-cache-ts');
+        var restoredTs = parseInt(el && el.dataset.ts || '0', 10);
+        var currentTs = parseInt(localStorage.getItem('lm_nav_cache_ts') || '0', 10);
+        if (restoredTs > 0 && currentTs > restoredTs) {
+            window.location.reload();
         }
     });
     {% endif %}

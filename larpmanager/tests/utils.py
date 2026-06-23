@@ -114,8 +114,7 @@ def get_request(page: Any, live_server: Any, path: Any) -> dict:
 
 def submit(page: Any) -> None:
     submit_confirm(page)
-    page.wait_for_load_state("load")
-    page.wait_for_load_state("domcontentloaded")
+    _wait_lm_ready(page)
     ooops_check(page)
 
 

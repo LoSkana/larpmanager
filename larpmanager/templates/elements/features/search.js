@@ -1,14 +1,12 @@
 <script>
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
-        $('#search').on('input', function() { search($(this).val()); });
+$(function() {
+    $('#search').on('input', function() { search($(this).val()); });
 
-            setTimeout(function() {
-                $('*[data-column="0"]').click();
-            }, 200);
-        });
-});
+        setTimeout(function() {
+            $('*[data-column="0"]').click();
+        }, 200);
+    });
 
 function search(key) {
     $('.fea').each(function( index ) {

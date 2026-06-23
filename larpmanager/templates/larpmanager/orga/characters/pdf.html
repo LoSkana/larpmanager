@@ -11,13 +11,17 @@
         <table>
             <tr>
                 <td>
-                    <a href="{% url 'orga_gallery_pdf' run.get_slug %}" download>{% trans "Gallery Pdf" %}</a>
+                    <a href="{% url 'orga_gallery_pdf' run.get_slug %}"
+                       download
+                       hx-boost="false">{% trans "Gallery Pdf" %}</a>
                 </td>
                 <td>
                     <a href="{% url 'orga_gallery_test' run.get_slug %}" target="_blank">{% trans "Test gallery" %}</a>
                 </td>
                 <td>
-                    <a href="{% url 'orga_profiles_pdf' run.get_slug %}" download>{% trans "PDF Profiles" %}</a>
+                    <a href="{% url 'orga_profiles_pdf' run.get_slug %}"
+                       download
+                       hx-boost="false">{% trans "PDF Profiles" %}</a>
                 </td>
                 <td>
                     <a href="{% url 'orga_characters_pdf_bulk' run.get_slug %}"
@@ -41,7 +45,8 @@
                 <td>
                     <a orig="{% url 'orga_characters_sheet_pdf' run.get_slug 0 %}"
                        class="link"
-                       download>{% trans "Complete sheet (Pdf)" %}</a>
+                       download
+                       hx-boost="false">{% trans "Complete sheet (Pdf)" %}</a>
                 </td>
                 <td>
                     <a orig="{% url 'orga_characters_sheet_test' run.get_slug 0 %}"
@@ -51,7 +56,8 @@
                 <td>
                     <a orig="{% url 'orga_characters_friendly_pdf' run.get_slug 0 %}"
                        class="link"
-                       download>{% trans "Lightweight sheet (Pdf)" %}</a>
+                       download
+                       hx-boost="false">{% trans "Lightweight sheet (Pdf)" %}</a>
                 </td>
                 <td>
                     <a orig="{% url 'orga_characters_friendly_test' run.get_slug 0 %}"
@@ -202,9 +208,9 @@
     </div>
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
-    var old = '0'
+    <script>
 $(function(){
+var old = '0';
 $('#char').change(function() {
     var id = $(this).val();
     $('.link').each(function() {
@@ -213,7 +219,6 @@ $('#char').change(function() {
     });
     old = id;
   });
-});
 });
     </script>
 {% endblock js %}

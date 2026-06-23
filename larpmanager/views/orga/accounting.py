@@ -493,7 +493,7 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "status": lambda el: el.inv.get_status_display() if el.inv else "",
                 "net": lambda el: format_decimal(el.net),
                 "trans": lambda el: format_decimal(el.trans) if el.trans else "",
-                "receipt": lambda el: f"<a href='{el.inv.download()}' target='_blank' download>{_('Download')}</a>"
+                "receipt": lambda el: f"<a href='{el.inv.download()}' target='_blank' download hx-boost='false'>{_('Download')}</a>"
                 if el.inv and el.inv.invoice and el.pay == PaymentChoices.MONEY
                 else "",
             },

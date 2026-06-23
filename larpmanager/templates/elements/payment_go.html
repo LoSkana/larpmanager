@@ -3,7 +3,10 @@
     {% trans "You are about to make a payment of" %}: <b>{{ invoice.mc_gross | format_decimal }} {{ currency_symbol }}</b>.
 </p>
 {% if method == 'redsys' %}
-    <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="post">
+    <form name="from"
+          action="{{ redsys_form.Ds_Redsys_Url }}"
+          method="post"
+          hx-boost="false">
         <input type="hidden"
                name="Ds_SignatureVersion"
                value="{{ redsys_form.Ds_SignatureVersion }}" />
@@ -102,7 +105,8 @@
     </p>
     <form action="{% url 'accounting_submit' 'any' invoice.uuid request.path %}"
           method="post"
-          class="accounting_submit">
+          class="accounting_submit"
+          hx-boost="false">
         {% csrf_token %}
         <table class="mob ">
             {{ any_form.as_table }}
@@ -163,7 +167,8 @@
     <form action="{% url 'accounting_submit' 'wire' invoice.uuid request.path %}"
           enctype="multipart/form-data"
           method="post"
-          class="accounting_submit">
+          class="accounting_submit"
+          hx-boost="false">
         {% csrf_token %}
         <br />
         {{ wire_form.as_p }}
@@ -195,7 +200,8 @@
     <hr />
     <form action="{% url 'accounting_submit' 'paypal_nf' invoice.uuid request.path %}"
           enctype="multipart/form-data"
-          method="post">
+          method="post"
+          hx-boost="false">
         {% csrf_token %}
         {{ wire_form.as_p }}
         <input type="submit" value="{% trans "Submit" %}">
@@ -214,8 +220,7 @@
 {% endif %}
 <script>
 
-    window.addEventListener('DOMContentLoaded', function() {
-        $(function() {
+    $(function() {
 
             $('form').each(function() {
                 var actionUrl = $(this).attr('action');
@@ -224,7 +229,5 @@
             });
 
         });
-
-    });
 
 </script>

@@ -1,7 +1,6 @@
 {% load i18n %}
 <script>
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
+$(function() {
         var plotReorderUrl = '{{ form.plot_reorder_url }}';
         var $dragRow = null;
         var $lastDragTarget = null;
@@ -43,7 +42,6 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-});
 </script>
 <style>
     .plot-drag-handle { cursor: grab; margin-right: 4px; }

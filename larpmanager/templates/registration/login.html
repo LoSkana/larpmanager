@@ -70,8 +70,7 @@ function isMobileNonChrome() {
     return isMobile && !isChrome;
 }
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(function(){
+$(function(){
 
     {% if association.id != 0 %}
 
@@ -115,8 +114,6 @@ window.addEventListener('DOMContentLoaded', function() {
         // Return true if the device is mobile and the browser is not Chrome
         return isMobile && !isChrome;
     }
-
-});
 
     </script>
 {% endblock js %}

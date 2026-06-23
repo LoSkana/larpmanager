@@ -26,8 +26,7 @@
         {% include "elements/form/char_finder.js" %}
     {% endif %}
     <script>
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
+$(function() {
 
         $('form').on('submit', function() {
             return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
@@ -51,7 +50,6 @@ window.addEventListener('DOMContentLoaded', function() {
         500);
 
     });
-});
     </script>
     {% if form.plot_reorder_url %}
         {% include "elements/form/plot_reorder.js.html" %}

@@ -2,9 +2,7 @@
 
 <script>
 
-window.addEventListener('DOMContentLoaded', function() {
-
-    function search(key) {
+function search(key) {
         $('.feature_checkbox').each(function( index ) {
             chi = $(this).children();
             console.log(chi);
@@ -40,7 +38,5 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('#search').on('input', function() { search($(this).val()); });
     });
-
-});
 
 </script>

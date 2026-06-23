@@ -106,13 +106,13 @@
                 {% if registration %}
                     {% if features.print_pdf and show_character %}
                         <div class="lm_tooltip">
-                            <a href="{% url 'portraits' run.get_slug %}" download><i class="fa-solid fa-id-badge"></i> <span class="nav-label">{% trans "Portraits (PDF)" %}</span></a>
+                            <a href="{% url 'portraits' run.get_slug %}" download hx-boost="false"><i class="fa-solid fa-id-badge"></i> <span class="nav-label">{% trans "Portraits (PDF)" %}</span></a>
                             <div class="lm_tooltiptext">
                                 {% trans "Download the list of characters with their interpreters' profile images" %}!
                             </div>
                         </div>
                         <div class="lm_tooltip">
-                            <a href="{% url 'profiles' run.get_slug %}" download><i class="fa-solid fa-address-card"></i> <span class="nav-label">{% trans "Profiles (PDF)" %}</span></a>
+                            <a href="{% url 'profiles' run.get_slug %}" download hx-boost="false"><i class="fa-solid fa-address-card"></i> <span class="nav-label">{% trans "Profiles (PDF)" %}</span></a>
                             <div class="lm_tooltiptext">
                                 {% trans "Download the list of characters with their interpreters' profile images" %}!
                             </div>

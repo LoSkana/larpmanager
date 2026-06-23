@@ -187,8 +187,7 @@ document.querySelectorAll('.que_load thead th').forEach(function(th) {
     });
 });
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
+$(function() {
 
         setTimeout(reload_table, 1000);
 
@@ -296,5 +295,3 @@ window.addEventListener('DOMContentLoaded', function() {
         });
 
     });
-
-});

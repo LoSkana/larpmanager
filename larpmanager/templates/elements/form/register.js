@@ -59,7 +59,6 @@ var submitted = {{ submitted | safe }};
 
 var diss = '-------';
 
-window.addEventListener('DOMContentLoaded', function() {
 $(document).ready(function(){
 
     if (!("ticket" in submitted) || !(submitted["ticket"])) {
@@ -415,7 +414,5 @@ function discount_go() {
 }
 
 {% endif %}
-
-});
 
 </script>

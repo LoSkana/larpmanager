@@ -48,8 +48,7 @@
 {% endblock content %}
 {% block js %}
     <script>
- window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function() {
+$(document).ready(function() {
         $('.confirm-link').on('click', function(e) {
             const confirmAction = window.lmTesting || confirm('Sei sicuro di voler procedere?');
             if (!confirmAction) {
@@ -57,6 +56,5 @@
             }
         });
     });
-});
     </script>
 {% endblock js %}

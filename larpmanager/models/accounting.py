@@ -172,7 +172,7 @@ class PaymentInvoice(UuidMixin, BaseModel):
 
         # Add download link if invoice is available
         if self.invoice:
-            details_html += f" <a href='{self.download()}' target='_blank' download>Download</a>"
+            details_html += f" <a href='{self.download()}' target='_blank' download hx-boost='false'>Download</a>"
 
         # Append payment method text description
         if self.text:

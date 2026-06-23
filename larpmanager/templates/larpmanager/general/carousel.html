@@ -43,7 +43,6 @@
     <script>
 var base_url = "{% url 'event_register' '0' %}";
 
-window.addEventListener('DOMContentLoaded', function() {
 const dictElement = document.getElementById('carousel-data');
 var dict = dictElement ? JSON.parse(dictElement.textContent) : [];
 (function ($) {
@@ -133,8 +132,6 @@ var dict = dictElement ? JSON.parse(dictElement.textContent) : [];
     show(0);
 
 })(jQuery);
-
-});
 
 function show(index) {
     var el = dict[index];

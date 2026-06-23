@@ -1,11 +1,8 @@
 {% load show_tags i18n %}
 <script>
-window.addEventListener('DOMContentLoaded', function() {
-
-    $(function() {
-        $('#slug').on('slug:changed', function (e, cleanedVal) {
-            $('.slug_pre').text("Preview: https://{{ association.slug }}.{{ association.main_domain }}/" + cleanedVal);
-        });
+$(function() {
+    $('#slug').on('slug:changed', function (e, cleanedVal) {
+        $('.slug_pre').text("Preview: https://{{ association.slug }}.{{ association.main_domain }}/" + cleanedVal);
     });
 });
 </script>

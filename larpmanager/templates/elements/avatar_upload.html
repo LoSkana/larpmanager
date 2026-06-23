@@ -54,13 +54,14 @@
 .avatar-rotate-btns button:hover { background: rgba(var(--ter-rgb, 136,136,136), 0.1); }
 #profile { max-width: 200px; max-height: 200px; border-radius: 4px; display: block; margin: 0 auto; }
 </style>
-
 <div class="centerized">
-    <div class="avatar-dropzone {% if avatar_current_src %}has-image{% endif %}" id="avatar_dropzone">
+    <div class="avatar-dropzone {% if avatar_current_src %}has-image{% endif %}"
+         id="avatar_dropzone">
         <img id="profile"
              {% if avatar_current_src %} src="{{ avatar_current_src }}" {% else %} class="hide" {% endif %}
              alt="profile" />
-        <div class="avatar-no-img {% if avatar_current_src %}hide{% endif %}" id="avatar_no_img">
+        <div class="avatar-no-img {% if avatar_current_src %}hide{% endif %}"
+             id="avatar_no_img">
             <i class="fa-solid fa-camera"></i>
             <span>{% trans "Click or drag photo here" %}</span>
             <small>({% trans "maximum" %} 10 MB)</small>
@@ -75,8 +76,8 @@
             <p>{% trans "Uploading image, please wait" %}...</p>
         </div>
     </div>
-
-    <div class="avatar-rotate-btns {% if not avatar_current_src %}hide{% endif %}" id="avatar_rotate_btns">
+    <div class="avatar-rotate-btns {% if not avatar_current_src %}hide{% endif %}"
+         id="avatar_rotate_btns">
         <button type="button" id="rotate_l_btn" title="{% trans "Rotate left" %}">
             <i class="fa-solid fa-rotate-left"></i>
         </button>
@@ -84,10 +85,8 @@
             <i class="fa-solid fa-rotate-right"></i>
         </button>
     </div>
-
     <div class="hide">{{ avatar_form.image }}</div>
 </div>
-
 <script>
 (function () {
     var uploadUrl = '{{ avatar_upload_url }}';
@@ -128,7 +127,7 @@
         });
     }
 
-    window.addEventListener('DOMContentLoaded', function () {
+    $(function () {
         $('#avatar_dropzone').on('click', function () {
             $('#id_image').trigger('click');
         }).on('dragover', function (e) {

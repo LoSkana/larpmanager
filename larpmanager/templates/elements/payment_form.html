@@ -8,7 +8,7 @@
             {% endfor %}
         </p>
     {% endif %}
-    <form action="{{ request.path }}" method="post">
+    <form action="{{ request.path }}" method="post" hx-boost="false">
         {% csrf_token %}
         {% if amount %}
             <input type="hidden" name="amount" id="id_amount" value="{{ amount }}" />
@@ -65,8 +65,7 @@
             $("#submit").prop("disabled", false);
         }
 
-    window.addEventListener('DOMContentLoaded', function() {
-        $(function() {
+    $(function() {
 
             $("#submit").prop("disabled", true);
 
@@ -84,5 +83,4 @@
             {% endif %}
 
         });
-});
 </script>

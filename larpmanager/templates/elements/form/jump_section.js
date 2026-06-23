@@ -4,8 +4,7 @@
 
 <script>
 
-window.addEventListener('DOMContentLoaded', function() {
-    $(document).ready(function(){
+$(document).ready(function(){
         setTimeout(()=> {
             var el = $('a.my_toggle[tog="sec_{{ form.jump_section | slugify }}"]')
 
@@ -21,7 +20,6 @@ window.addEventListener('DOMContentLoaded', function() {
 
         }, 100);
     });
-});
 
 </script>
 

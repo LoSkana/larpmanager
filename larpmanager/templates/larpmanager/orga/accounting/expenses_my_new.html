@@ -10,12 +10,11 @@
     {% include "elements/form/main.html" %}
 {% endblock content %}
 {% block js %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script>
 $(function() {
     $('form').on('submit', function() {
         return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
     });
-});
 });
     </script>
 {% endblock js %}

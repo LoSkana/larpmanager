@@ -6,7 +6,10 @@
 {% block content %}
     <p>
         Clicca qui per ottenere una stampa del registro a norma di legge:
-        <a href="{% url 'exe_volunteer_registry_print' %}" class="link" download>{% trans "Print registry" %}</a>
+        <a href="{% url 'exe_volunteer_registry_print' %}"
+           class="link"
+           download
+           hx-boost="false">{% trans "Print registry" %}</a>
         Ricorda di applicare firma digitale, e salvarlo in un sistema di storage adeguato.
     </p>
     <hr />

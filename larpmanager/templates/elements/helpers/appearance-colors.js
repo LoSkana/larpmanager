@@ -2,9 +2,7 @@
 
 <script>
 
-window.addEventListener('DOMContentLoaded', function() {
-
-    /**
+/**
      * Convert hex color to RGB comma-separated string
      * @param {string} hex - Hex color string (e.g., '#FF0000' or 'FF0000')
      * @returns {string} RGB values as comma-separated string (e.g., '255,0,0')
@@ -123,7 +121,5 @@ window.addEventListener('DOMContentLoaded', function() {
             updateThemePreview(this.value);
         });
     }
-
-});
 
 </script>

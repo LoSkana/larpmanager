@@ -1,7 +1,6 @@
 {% load i18n static %}
 <script>
-window.addEventListener('DOMContentLoaded', function() {
-    var $sel = $('#id_wwyltd');
+var $sel = $('#id_wwyltd');
     if (!$sel.length) return;
 
     {% if run %}
@@ -66,5 +65,4 @@ window.addEventListener('DOMContentLoaded', function() {
             },
         });
     });
-});
 </script>

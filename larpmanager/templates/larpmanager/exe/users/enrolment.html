@@ -54,12 +54,11 @@
     </table>
 {% endblock content %}
 {% block js2 %}
-    <script>window.addEventListener('DOMContentLoaded', function() {
+    <script>
         $(document).ready(function() {
             setTimeout(function() {
                 $('*[data-column="15"]').click();
             }, 500);
         });
-    });
     </script>
 {% endblock js2 %}

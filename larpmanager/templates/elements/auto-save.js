@@ -133,12 +133,10 @@ function setUpAutoSave(key) {
     });
 }
 
-window.addEventListener('DOMContentLoaded', function() {
+$(function() {
     {% if auto_save %}
     if (edit_uuid) {
-        $(function() {
-            submitForm(true);
-        });
+        submitForm(true);
     }
     {% endif %}
 

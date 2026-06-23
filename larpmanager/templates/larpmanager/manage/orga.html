@@ -55,14 +55,12 @@
     {% include "elements/dashboard/tutorial_query.js" %}
     {% include "elements/dashboard/driver.js.html" %}
     <script>
-    window.addEventListener('DOMContentLoaded', function() {
-        $(document).ready(function() {
+    $(document).ready(function() {
             {% if open_shortcuts %}
                 if ($('#sidebar-mobile-open').is(':visible')) {
                     $('body').toggleClass('is-sidebar-visible');
                 }
             {% endif %}
         });
-    });
     </script>
 {% endblock js %}
