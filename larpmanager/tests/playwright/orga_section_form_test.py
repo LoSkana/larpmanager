@@ -133,6 +133,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"^Needs ")).click()
     page.get_by_role("link", name=re.compile(r"^Preferences ")).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#register_form"),
     "Ticket (*) Standard Your registration ticket Preferences What you prefer Food fooood Needs What you need sleep sleeeep")
 

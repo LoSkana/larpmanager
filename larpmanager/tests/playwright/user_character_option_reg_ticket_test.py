@@ -136,6 +136,7 @@ def create_character(page: Any) -> None:
     nav(page, "Registration")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
 
     # change ticket

@@ -28,7 +28,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm, \
-    sidebar, get_modal_iframe, save_modal, _wait_select2_results
+    sidebar, get_modal_iframe, save_modal, _wait_select2_results, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -250,6 +250,7 @@ def area_assigmenents(page: Any) -> None:
 def checks(page: Any) -> None:
     # check manifest
     page.get_by_role("link", name="Manifest").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "New Kitchen Position: ss Description: sds")
     expect_normalized(page,
         page.locator("#one"), "Item 1 Boc B - dd Item 3sa Box A - bibi	 b sALOON Position: SDsad Description: saddsadsa "
@@ -258,6 +259,7 @@ def checks(page: Any) -> None:
 
     # check checks
     page.get_by_role("link", name="Checks").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Item 1 Description: sadsada Photo")
     expect_normalized(page, page.locator("#one"), "Kitchen sALOON ffff Item 3sa Description: dsad")
     expect_normalized(page, page.locator("#one"), "Kitchen b sALOON sss")
