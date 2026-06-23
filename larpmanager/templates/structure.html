@@ -134,7 +134,7 @@
     </head>
     <body id="{{ association.name | slugify }}"
           class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {% if lm or effective_version >= 18 %}new_v18{% endif %} {% if effective_version >= 19 %}new_v19{% endif %} {% if effective_version >= 20 %}new_v20{% endif %} {% if effective_version >= 21 %}new_v21{% endif %} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}"
-          {% if not manage %}hx-boost="true" hx-target="#page-wrapper" hx-select="#page-wrapper" hx-select-oob="#page-scripts:outerHTML"{% endif %}>
+          {% if not manage %}hx-boost="true" hx-target="#page-wrapper" hx-select="#page-wrapper" hx-swap="outerHTML" hx-select-oob="#page-scripts:outerHTML"{% endif %}>
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         {% if not manage %}<div id="nav-cache-ts" data-ts="{{ nav_cache_ts|default:0 }}" hidden></div>{% endif %}
         <div id="page-container">
