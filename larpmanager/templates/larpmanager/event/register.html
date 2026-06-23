@@ -47,7 +47,7 @@
                 </p>
             {% endif %}
             {% if custom_text %}{{ custom_text | safe }}{% endif %}
-            <form id="register_form" action="{{ request.path }}" method="post">
+            <form id="register_form" action="{{ request.path }}" method="post" novalidate>
                 {% csrf_token %}
                 <div>
                     {% include "elements/form/register.html" %}
