@@ -28,7 +28,7 @@ from django.core.cache import cache
 
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
-from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
+from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
 from larpmanager.utils.core.common import _validate_and_fetch_objects
 from larpmanager.utils.larpmanager.tasks import background_auto
 
@@ -298,6 +298,7 @@ def init_event_exp_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
             ("deliveries", DeliveryExp, get_delivery_rels),
             ("modifiers", ModifierExp, get_modifier_rels),
             ("rules", RuleExp, get_rule_rels),
+            ("criterions", CriterionExp, get_criterion_rels),
         ]
 
         # Process each EXP type
@@ -501,6 +502,10 @@ def on_writing_option_saved(option: WritingOption, event_id: int) -> None:
     modifier_ids = list(ModifierExp.objects.filter(requirements=option).values_list("id", flat=True))
     if modifier_ids:
         refresh_modifier_rels_dirty_background(modifier_ids)
+
+    criterion_ids = list(CriterionExp.objects.filter(requirements=option).values_list("id", flat=True))
+    if criterion_ids:
+        refresh_criterion_rels_dirty_background(criterion_ids)
 
 
 # Signal handlers for M2M changes
@@ -870,3 +875,100 @@ def on_rule_abilities_m2m_changed(
 
     _mark_exp_dirty("rules", rule_ids, instance.event_id)
     refresh_rule_rels_dirty_background(rule_ids)
+
+
+def get_criterion_rels(criterion: CriterionExp) -> dict[str, Any]:
+    """Get criterion relationships (prerequisites, requirements)."""
+    relationships = {}
+
+    try:
+        prerequisites = criterion.prerequisites.all()
+        prerequisite_list = [(prereq.uuid, prereq.name) for prereq in prerequisites]
+        relationships["prerequisite_rels"] = build_relationship_dict(prerequisite_list)
+
+        requirements = criterion.requirements.all()
+        requirement_list = [(req.uuid, req.name) for req in requirements]
+        relationships["requirement_rels"] = build_relationship_dict(requirement_list)
+
+    except Exception:
+        logger.exception("Error getting relationships for criterion %s", criterion.id)
+        relationships = {}
+
+    return relationships
+
+
+def refresh_criterion_relationships(criterion: CriterionExp) -> None:
+    """Update criterion relationships in cache."""
+    criterion_relationship_data = get_criterion_rels(criterion)
+    update_cache_section(criterion.event, "criterions", criterion.id, criterion_relationship_data)
+
+
+@background_auto(queue="cache-experience", skip_duplicates=True)
+def refresh_criterion_rels_dirty_background(criterion_ids: int | list[int]) -> None:
+    """Update criterion relationships in cache (dirty-aware background task)."""
+    criterions = _validate_and_fetch_objects(CriterionExp, criterion_ids, "CriterionExp")
+    _refresh_exp_if_dirty("criterions", criterions, refresh_criterion_relationships)
+
+
+def on_criterion_prerequisites_m2m_changed(
+    sender: type,  # noqa: ARG001
+    instance: CriterionExp,
+    action: str,
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
+    **kwargs: object,  # noqa: ARG001
+) -> None:
+    """Handle criterion-prerequisite relationship changes."""
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        if pk_set:
+            criterion_ids = list(pk_set)
+        elif action == "post_clear":
+            criterion_ids = list(CriterionExp.objects.filter(prerequisites=instance).values_list("id", flat=True))
+        else:
+            criterion_ids = []
+    else:
+        criterion_ids = [instance.id]
+
+    if not criterion_ids:
+        return
+
+    _mark_exp_dirty("criterions", criterion_ids, instance.event_id)
+    refresh_criterion_rels_dirty_background(criterion_ids)
+
+
+def on_criterion_requirements_m2m_changed(
+    sender: type,  # noqa: ARG001
+    instance: CriterionExp,
+    action: str,
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
+    **kwargs: object,  # noqa: ARG001
+) -> None:
+    """Handle criterion-requirement relationship changes."""
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        if pk_set:
+            criterion_ids = list(pk_set)
+        elif action == "post_clear":
+            criterion_ids = list(CriterionExp.objects.filter(requirements=instance).values_list("id", flat=True))
+        else:
+            criterion_ids = []
+        event_id = (
+            CriterionExp.objects.filter(id__in=criterion_ids).values_list("event_id", flat=True).first()
+            if criterion_ids
+            else None
+        )
+    else:
+        criterion_ids = [instance.id]
+        event_id = instance.event_id
+
+    if not criterion_ids:
+        return
+
+    _mark_exp_dirty("criterions", criterion_ids, event_id)
+    refresh_criterion_rels_dirty_background(criterion_ids)

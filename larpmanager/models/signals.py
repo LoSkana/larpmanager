@@ -84,12 +84,15 @@ from larpmanager.cache.experience import (
     on_ability_requirements_m2m_changed,
     on_ability_saved,
     on_character_saved,
+    on_criterion_prerequisites_m2m_changed,
+    on_criterion_requirements_m2m_changed,
     on_delivery_characters_m2m_changed,
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
     on_writing_option_saved,
+    refresh_criterion_relationships,
     refresh_delivery_relationships,
     refresh_modifier_relationships,
     refresh_modifier_rels_dirty_background,
@@ -219,7 +222,15 @@ from larpmanager.models.event import (
     Run,
     RunConfig,
 )
-from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTypeExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+    SystemExp,
+)
 from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
@@ -1681,6 +1692,19 @@ def post_delete_rule_exp(sender: type, instance: object, *args: Any, **kwargs: A
     _recalcuate_characters_experience_points(instance)
 
 
+@receiver(post_save, sender=CriterionExp)
+def post_save_criterion_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update character experience when a criterion is saved."""
+    _recalcuate_characters_experience_points(instance)
+    refresh_criterion_relationships(instance)
+
+
+@receiver(post_delete, sender=CriterionExp)
+def post_delete_criterion_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update character experience when a criterion is deleted."""
+    _recalcuate_characters_experience_points(instance)
+
+
 @receiver(pre_save, sender=Run)
 def pre_save_run(sender: type, instance: Any, **kwargs: Any) -> None:
     """Invalidate cache on run pre-save signal."""
@@ -1939,6 +1963,8 @@ m2m_changed.connect(on_modifier_abilities_m2m_changed_cache, sender=ModifierExp.
 m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierExp.prerequisites.through)
 m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierExp.requirements.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilities.through)
+m2m_changed.connect(on_criterion_prerequisites_m2m_changed, sender=CriterionExp.prerequisites.through)
+m2m_changed.connect(on_criterion_requirements_m2m_changed, sender=CriterionExp.requirements.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 

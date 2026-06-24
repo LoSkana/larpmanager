@@ -1460,6 +1460,9 @@ msgstr "Container"
 msgid "Copy done"
 msgstr "Uitgevoerd exemplaar"
 
+msgid "Criterion"
+msgstr "Criterium"
+
 msgid "Customize"
 msgstr "aanpassen"
 
@@ -1717,6 +1720,9 @@ msgstr "Neem contact met ons op"
 
 msgid "Containers"
 msgstr "Containers"
+
+msgid "Criterions"
+msgstr "Criteria"
 
 msgid "Deleted on"
 msgstr "Verwijderd op"
@@ -4947,6 +4953,9 @@ msgstr "Vrijwilligersregister beheren"
 msgid "New message from %(user)s"
 msgstr "Nieuw bericht van %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Er zijn nog geen criteria vastgesteld"
+
 msgid "No deliveries defined yet"
 msgstr "Er zijn nog geen leveringen gedefinieerd"
 
@@ -5275,6 +5284,9 @@ msgstr "Indien aangevinkt: leden kunnen stemmen"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Uitnodiging verstuurd naar %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Ervaringscriteria beheren"
 
 msgid "Manage the event speed-larps"
 msgstr "De snelheidsbeperkingen voor evenementen beheren"
@@ -7609,6 +7621,9 @@ msgstr "De registratie voor het evenement werd geannuleerd"
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deelnamekosten verlaagd door kortingen"
 
+msgid "Use the button above to create the first criterion"
+msgstr "Gebruik de knop hierboven om het eerste criterium aan te maken"
+
 msgid "hidden faction visible only to assigned characters"
 msgstr "verborgen factie alleen zichtbaar voor toegewezen personages"
 
@@ -8990,6 +9005,11 @@ msgstr ""
 msgid "We confirm that your registration for this event has been cancelled"
 msgstr "We bevestigen dat de registratie voor dit evenement is geannuleerd"
 
+msgid "All prerequisite abilities must be owned for this criterion to apply"
+msgstr ""
+"Je moet over alle vereiste vaardigheden beschikken om aan dit criterium te "
+"voldoen"
+
 msgid "Allows participants to create and modify their own characters freely"
 msgstr "Deelnemers kunnen hun eigen personages maken en aanpassen"
 
@@ -9742,6 +9762,12 @@ msgid ""
 msgstr ""
 "Voeg tekst toe om e-mails en registratiepagina’s voor je organisatie aan te "
 "passen"
+
+msgid ""
+"All required character options must be selected for this criterion to apply"
+msgstr ""
+"Alle vereiste tekenopties moeten worden geselecteerd om dit criterium te "
+"laten gelden"
 
 #, python-brace-format
 msgid ""
@@ -12469,6 +12495,13 @@ msgid ""
 msgstr ""
 "Ondersteuning toegevoegd voor het toekennen van XP (ervaringspunten) aan "
 "personages, die vervolgens kunnen worden gebruikt om vaardigheden te kopen"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Stel criteria vast waarmee je het totaal aantal ervaringspunten "
+"voorwaardelijk kunt aanpassen op basis van vereisten of personage-opties"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

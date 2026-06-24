@@ -1460,6 +1460,9 @@ msgstr "Contenedor"
 msgid "Copy done"
 msgstr "Copia realizada"
 
+msgid "Criterion"
+msgstr "Criterio"
+
 msgid "Customize"
 msgstr "Personalización"
 
@@ -1717,6 +1720,9 @@ msgstr "Contactar"
 
 msgid "Containers"
 msgstr "Contenedores"
+
+msgid "Criterions"
+msgstr "Criterios"
 
 msgid "Deleted on"
 msgstr "Suprimido el"
@@ -4947,6 +4953,9 @@ msgstr "Gestionar el registro de voluntarios"
 msgid "New message from %(user)s"
 msgstr "Nuevo mensaje de %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Aún no se han definido criterios"
+
 msgid "No deliveries defined yet"
 msgstr "Aún no hay entregas definidas"
 
@@ -5275,6 +5284,9 @@ msgstr "Si está marcada: los miembros pueden votar"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Invitación enviada a %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Gestionar criterios de experiencia"
 
 msgid "Manage the event speed-larps"
 msgstr "Gestionar los speed-larps de los eventos"
@@ -7603,6 +7615,9 @@ msgstr "Se canceló la inscripción en el acto"
 msgid "Total participation fees reduced through discounts"
 msgstr "Cuotas de participación totales reducidas mediante descuentos"
 
+msgid "Use the button above to create the first criterion"
+msgstr "Usa el botón de arriba para crear el primer criterio"
+
 msgid "hidden faction visible only to assigned characters"
 msgstr "facción oculta visible sólo para los personajes asignados"
 
@@ -8972,6 +8987,10 @@ msgstr ""
 msgid "We confirm that your registration for this event has been cancelled"
 msgstr "Confirmamos que tu inscripción para este evento ha sido cancelada"
 
+msgid "All prerequisite abilities must be owned for this criterion to apply"
+msgstr ""
+"Para que se cumpla este criterio, debes cumplir todos los requisitos previos"
+
 msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 "Permite a los participantes crear y modificar libremente sus propios "
@@ -9723,6 +9742,12 @@ msgid ""
 msgstr ""
 "Añade un texto para personalizar los correos electrónicos y las páginas de "
 "registro de tu organización"
+
+msgid ""
+"All required character options must be selected for this criterion to apply"
+msgstr ""
+"Para que se aplique este criterio, hay que seleccionar todas las opciones de"
+" caracteres obligatorias"
 
 #, python-brace-format
 msgid ""
@@ -12452,6 +12477,14 @@ msgid ""
 msgstr ""
 "Añade la posibilidad de asignar XP (puntos de experiencia) a los personajes,"
 " que pueden utilizarse para comprar habilidades"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Define criterios que modifiquen de forma condicional el total de puntos de "
+"experiencia en función de los requisitos previos o las opciones del "
+"personaje"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

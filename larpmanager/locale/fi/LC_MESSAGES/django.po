@@ -1460,6 +1460,9 @@ msgstr "Kontti"
 msgid "Copy done"
 msgstr "Kopioitu valmis"
 
+msgid "Criterion"
+msgstr "Peruste"
+
 msgid "Customize"
 msgstr "Mukauta"
 
@@ -1717,6 +1720,9 @@ msgstr "Ota yhteyttä"
 
 msgid "Containers"
 msgstr "Säiliöt"
+
+msgid "Criterions"
+msgstr "Kriteerit"
 
 msgid "Deleted on"
 msgstr "Poistettu"
@@ -4947,6 +4953,9 @@ msgstr "Vapaaehtoisten rekisterin hallinnointi"
 msgid "New message from %(user)s"
 msgstr "Uusi viesti %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Kriteerejä ei ole vielä määritelty"
+
 msgid "No deliveries defined yet"
 msgstr "Toimituksia ei ole vielä määritelty"
 
@@ -5275,6 +5284,9 @@ msgstr "Jos valitaan: jäsenet voivat äänestää"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Kutsu lähetetään %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Kokemuskriteerien hallinta"
 
 msgid "Manage the event speed-larps"
 msgstr "Hallitse speed-larp tapahtumaa"
@@ -7592,6 +7604,9 @@ msgstr "Ilmoittautuminen tähän tapahtumaan on peruttu"
 msgid "Total participation fees reduced through discounts"
 msgstr "Osallistumismaksujen kokonaismäärä alennusten ansiosta"
 
+msgid "Use the button above to create the first criterion"
+msgstr "Luo ensimmäinen kriteeri yllä olevan painikkeen avulla"
+
 msgid "hidden faction visible only to assigned characters"
 msgstr "piilotettu ryhmittymä, joka näkyy vain sille osoitetuille hahmoille"
 
@@ -8878,6 +8893,11 @@ msgstr "Katso kaikki tapahtuman tiedot ja lippujen hinnat sen sisältämässä"
 msgid "We confirm that your registration for this event has been cancelled"
 msgstr "Vahvistamme, että ilmoittautumisesi tähän tapahtumaan on peruttu"
 
+msgid "All prerequisite abilities must be owned for this criterion to apply"
+msgstr ""
+"Tämän kriteerin täyttymiseksi kaikkien edellytettyjen taitojen on oltava "
+"hallussa"
+
 msgid "Allows participants to create and modify their own characters freely"
 msgstr "Osallistujat voivat luoda ja muokata omia hahmojaan vapaasti"
 
@@ -9591,6 +9611,12 @@ msgid ""
 msgstr ""
 "Lisää teksti, jolla voit mukauttaa organisaatiosi sähköposteja ja "
 "rekisteröintisivuja"
+
+msgid ""
+"All required character options must be selected for this criterion to apply"
+msgstr ""
+"Jotta tämä kriteeri tulisi voimaan, kaikki vaaditut merkkiasetukset on "
+"valittava"
 
 #, python-brace-format
 msgid ""
@@ -12249,6 +12275,13 @@ msgid ""
 msgstr ""
 "Lisää tuen XP:n (kokemuspisteiden) antamiselle hahmoille, joita voi sitten "
 "käyttää kykyjen ostamiseen"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Määritä kriteerit, jotka muuttavat kokemuspisteiden kokonaismäärää "
+"ehdollisesti ennakkoedellytysten tai hahmon valintojen perusteella"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

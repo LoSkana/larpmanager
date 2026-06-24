@@ -1460,6 +1460,9 @@ msgstr "Behållare"
 msgid "Copy done"
 msgstr "Utförd kopia"
 
+msgid "Criterion"
+msgstr "Kriterium"
+
 msgid "Customize"
 msgstr "Anpassa"
 
@@ -1717,6 +1720,9 @@ msgstr "Kontakta oss"
 
 msgid "Containers"
 msgstr "Behållare"
+
+msgid "Criterions"
+msgstr "Kriterier"
 
 msgid "Deleted on"
 msgstr "Raderad på"
@@ -4947,6 +4953,9 @@ msgstr "Hantera volontärregister"
 msgid "New message from %(user)s"
 msgstr "Nytt meddelande från %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Inga kriterier har fastställts ännu"
+
 msgid "No deliveries defined yet"
 msgstr "Inga leveranser har angetts ännu"
 
@@ -5275,6 +5284,9 @@ msgstr "Om markerat: medlemmar kan rösta"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Inbjudan skickad till %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Hantera kriterier för användarupplevelsen"
 
 msgid "Manage the event speed-larps"
 msgstr "Hantera evenemangets speed-larps"
@@ -7595,6 +7607,9 @@ msgstr "Anmälan till evenemanget avbröts"
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
 
+msgid "Use the button above to create the first criterion"
+msgstr "Använd knappen ovan för att skapa det första kriteriet"
+
 msgid "hidden faction visible only to assigned characters"
 msgstr "dold fraktion som endast är synlig för tilldelade karaktärer"
 
@@ -8879,6 +8894,10 @@ msgstr ""
 msgid "We confirm that your registration for this event has been cancelled"
 msgstr "Vi bekräftar att registreringen för detta evenemang har avbrutits"
 
+msgid "All prerequisite abilities must be owned for this criterion to apply"
+msgstr ""
+"Alla nödvändiga färdigheter måste finnas för att detta kriterium ska gälla"
+
 msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 "Ger deltagarna möjlighet att fritt skapa och modifiera sina egna karaktärer"
@@ -9583,6 +9602,12 @@ msgid ""
 msgstr ""
 "Lägg till en text för att anpassa e-postmeddelanden och registreringssidor "
 "för din organisation"
+
+msgid ""
+"All required character options must be selected for this criterion to apply"
+msgstr ""
+"Alla obligatoriska teckenalternativ måste väljas för att detta kriterium ska"
+" gälla"
 
 #, python-brace-format
 msgid ""
@@ -12274,6 +12299,13 @@ msgid ""
 msgstr ""
 "Lägger till stöd för att tilldela XP (erfarenhetspoäng) till karaktärer, som"
 " sedan kan användas för att köpa förmågor"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Fastställ kriterier som villkorligt justerar summan av erfarenhetspoäng "
+"utifrån förutsättningar eller karaktärsval"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

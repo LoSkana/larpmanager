@@ -32,7 +32,7 @@ from larpmanager.cache.config import get_event_config, save_all_element_configs,
 from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event
-from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp, Operation, RuleExp
+from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, Operation, RuleExp
 from larpmanager.models.form import (
     QuestionApplicable,
     WritingAnswer,
@@ -274,8 +274,60 @@ def _auto_buy_abilities(
     return current_character_abilities
 
 
+def _apply_criterion_exp(
+    character: Any,
+    deliveries_by_system: dict[int, int],
+    current_character_abilities: set[int] | None = None,
+    current_character_choices: set[int] | None = None,
+) -> None:
+    """Apply all matching CriterionExp rules to deliveries_by_system in order."""
+    criterions = (
+        character.event.get_elements(CriterionExp)
+        .select_related("system")
+        .order_by("order")
+        .prefetch_related(
+            Prefetch("prerequisites", queryset=AbilityExp.objects.only("id")),
+            Prefetch("requirements", queryset=WritingOption.objects.only("id", "question_id")),
+        )
+    )
+
+    criterion_operations = {
+        Operation.ADDITION: lambda tot, amt: int(tot + amt),
+        Operation.SUBTRACTION: lambda tot, amt: int(tot - amt),
+        Operation.MULTIPLICATION: lambda tot, amt: int(tot * amt),
+        Operation.DIVISION: lambda tot, amt: int(tot / amt) if amt != 0 else tot,
+    }
+
+    ability_ids = current_character_abilities or set()
+    choice_ids = current_character_choices or set()
+
+    for criterion in criterions:
+        prereq_ids = {a.id for a in criterion.prerequisites.all()}
+        if prereq_ids and not prereq_ids.issubset(ability_ids):
+            continue
+
+        requirements_by_question: dict[int, set[int]] = defaultdict(set)
+        for option in criterion.requirements.all():
+            requirements_by_question[option.question_id].add(option.id)
+
+        if requirements_by_question and not all(
+            bool(option_ids & choice_ids) for option_ids in requirements_by_question.values()
+        ):
+            continue
+
+        system_id = criterion.system_id
+        current_total = deliveries_by_system.get(system_id, 0)
+        op_func = criterion_operations.get(criterion.operation)
+        if op_func:
+            deliveries_by_system[system_id] = op_func(current_total, criterion.amount)
+
+
 def _build_px_avail_by_system(
-    character: Any, current_abilities: list, starting_experience_points: int
+    character: Any,
+    current_abilities: list,
+    starting_experience_points: int,
+    current_character_abilities: set[int] | None = None,
+    current_character_choices: set[int] | None = None,
 ) -> dict[int, int]:
     """Build a mapping of system_id -> available EXP points.
 
@@ -283,6 +335,8 @@ def _build_px_avail_by_system(
         character: Character instance.
         current_abilities: List of current abilities with costs (must have .system_id).
         starting_experience_points: Global starting EXP added to the first system found.
+        current_character_abilities: Set of ability IDs the character currently has.
+        current_character_choices: Set of choice IDs the character currently has.
 
     Returns:
         Dict mapping system_id to available EXP points.
@@ -308,6 +362,8 @@ def _build_px_avail_by_system(
         starting_experience_points
     )
 
+    _apply_criterion_exp(character, deliveries_by_system, current_character_abilities, current_character_choices)
+
     px_avail_by_system: dict[int, int] = {}
     for system in systems:
         tot = deliveries_by_system.get(system.id, 0)
@@ -317,13 +373,21 @@ def _build_px_avail_by_system(
     return px_avail_by_system
 
 
-def _build_experience_data(character: Any, current_abilities: list, starting_experience_points: int) -> dict:
+def _build_experience_data(
+    character: Any,
+    current_abilities: list,
+    starting_experience_points: int,
+    current_character_abilities: set[int] | None = None,
+    current_character_choices: set[int] | None = None,
+) -> dict:
     """Build experience data dict with global and per-system values.
 
     Args:
         character: Character instance.
         current_abilities: List of current abilities with costs.
         starting_experience_points: Global starting EXP.
+        current_character_abilities: Set of ability IDs the character currently has.
+        current_character_choices: Set of choice IDs the character currently has.
 
     Returns:
         Dict with exp_tot/exp_used/exp_avail and per-system keys.
@@ -344,6 +408,8 @@ def _build_experience_data(character: Any, current_abilities: list, starting_exp
         deliveries_by_system[first_system_id] = deliveries_by_system.get(first_system_id, 0) + int(
             starting_experience_points
         )
+
+    _apply_criterion_exp(character, deliveries_by_system, current_character_abilities, current_character_choices)
 
     experience_data: dict = {}
     total_tot = 0
@@ -384,7 +450,13 @@ def calculate_character_experience_points(character: Any) -> None:
 
     # Auto-buy abilities if configured
     if get_event_config(character.event_id, "exp_auto_buy", default_value=False):
-        px_avail_by_system = _build_px_avail_by_system(character, current_abilities, starting_experience_points)
+        px_avail_by_system = _build_px_avail_by_system(
+            character,
+            current_abilities,
+            starting_experience_points,
+            current_character_abilities,
+            current_character_choices,
+        )
         current_character_abilities = _auto_buy_abilities(
             character, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail_by_system
         )
@@ -393,7 +465,13 @@ def calculate_character_experience_points(character: Any) -> None:
             character, current_character_abilities, current_character_choices, modifiers_by_ability
         )
 
-    experience_data = _build_experience_data(character, current_abilities, starting_experience_points)
+    experience_data = _build_experience_data(
+        character,
+        current_abilities,
+        starting_experience_points,
+        current_character_abilities,
+        current_character_choices,
+    )
 
     save_all_element_configs(character, experience_data)
 

@@ -1460,6 +1460,9 @@ msgstr "Kontejner"
 msgid "Copy done"
 msgstr "Provedená kopie"
 
+msgid "Criterion"
+msgstr "Kritérium"
+
 msgid "Customize"
 msgstr "Přizpůsobení"
 
@@ -1717,6 +1720,9 @@ msgstr "Kontaktujte nás"
 
 msgid "Containers"
 msgstr "Kontejnery"
+
+msgid "Criterions"
+msgstr "Kritéria"
 
 msgid "Deleted on"
 msgstr "Odstraněno dne"
@@ -4947,6 +4953,9 @@ msgstr "Správa registru dobrovolníků"
 msgid "New message from %(user)s"
 msgstr "Nová zpráva od %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Zatím nebyla definována žádná kritéria"
+
 msgid "No deliveries defined yet"
 msgstr "Zatím nejsou definovány žádné dodávky"
 
@@ -5275,6 +5284,9 @@ msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Pozvánka zaslaná na %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Správa kritérií uživatelského zážitku"
 
 msgid "Manage the event speed-larps"
 msgstr "Správa rychlostních svorek událostí"
@@ -7591,6 +7603,9 @@ msgstr "Registrace na akci byla zrušena"
 msgid "Total participation fees reduced through discounts"
 msgstr "Celkové účastnické poplatky snížené díky slevám"
 
+msgid "Use the button above to create the first criterion"
+msgstr "Pomocí tlačítka výše vytvořte první kritérium"
+
 msgid "hidden faction visible only to assigned characters"
 msgstr "skrytá frakce viditelná pouze pro přiřazené postavy"
 
@@ -8828,6 +8843,11 @@ msgstr ""
 msgid "We confirm that your registration for this event has been cancelled"
 msgstr "Potvrzujeme, že registrace na tuto akci byla zrušena"
 
+msgid "All prerequisite abilities must be owned for this criterion to apply"
+msgstr ""
+"Aby se toto kritérium uplatnilo, je nutné splnit všechny požadované "
+"dovednosti"
+
 msgid "Allows participants to create and modify their own characters freely"
 msgstr "Umožňuje účastníkům volně vytvářet a upravovat vlastní postavy"
 
@@ -9490,6 +9510,12 @@ msgid ""
 msgstr ""
 "Přidejte text a přizpůsobte tak e-maily a registrační stránky pro vaši "
 "organizaci"
+
+msgid ""
+"All required character options must be selected for this criterion to apply"
+msgstr ""
+"Aby se toto kritérium uplatnilo, je nutné vybrat všechny požadované možnosti"
+" znaků"
 
 #, python-brace-format
 msgid ""
@@ -12115,6 +12141,13 @@ msgid ""
 msgstr ""
 "Přidává podporu pro přidělování zkušenostních bodů (XP) postavám, které lze "
 "následně použít k nákupu schopností"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Definujte kritéria, která podmíněně upravují celkový počet zkušenostních "
+"bodů na základě předpokladů nebo nastavení postavy"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

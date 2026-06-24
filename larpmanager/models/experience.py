@@ -277,3 +277,52 @@ class ModifierExp(UuidMixin, OrderMixin, BaseConceptModel):
     def display(self) -> str:
         """Return display name with cost."""
         return f"{self.name} ({self.cost})"
+
+
+class CriterionExp(UuidMixin, OrderMixin, BaseConceptModel):
+    """Applies a conditional operation to an experience system's total based on character prerequisites and requirements."""
+
+    system = models.ForeignKey(
+        SystemExp,
+        on_delete=models.CASCADE,
+        related_name="criterions",
+        verbose_name=_("System"),
+    )
+
+    operation = models.CharField(
+        max_length=3,
+        choices=Operation.choices,
+        default=Operation.ADDITION,
+    )
+
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    prerequisites = models.ManyToManyField(
+        AbilityExp,
+        related_name="criterion_prerequisites",
+        blank=True,
+        verbose_name=_("Pre-requisites"),
+        help_text=_("All prerequisite abilities must be owned for this criterion to apply"),
+    )
+
+    requirements = models.ManyToManyField(
+        WritingOption,
+        related_name="criterion_requirements",
+        blank=True,
+        verbose_name=_("Requirements"),
+        help_text=_("All required character options must be selected for this criterion to apply"),
+    )
+
+    class Meta:
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_criterion_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_criterion_without_optional",
+            ),
+        ]

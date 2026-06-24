@@ -1460,6 +1460,9 @@ msgstr "Pojemnik"
 msgid "Copy done"
 msgstr "Kopia wykonana"
 
+msgid "Criterion"
+msgstr "Kryterium"
+
 msgid "Customize"
 msgstr "Dostosuj"
 
@@ -1717,6 +1720,9 @@ msgstr "Skontaktuj się z nami"
 
 msgid "Containers"
 msgstr "Pojemniki"
+
+msgid "Criterions"
+msgstr "Kryteria"
 
 msgid "Deleted on"
 msgstr "Usunięto dnia"
@@ -4947,6 +4953,9 @@ msgstr "Zarządzanie rejestrem wolontariuszy"
 msgid "New message from %(user)s"
 msgstr "Nowa wiadomość od %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Nie zdefiniowano jeszcze żadnych kryteriów"
+
 msgid "No deliveries defined yet"
 msgstr "Nie zdefiniowano jeszcze żadnych dostaw"
 
@@ -5275,6 +5284,9 @@ msgstr "Jeśli zaznaczone: członkowie mogą głosować"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Zaproszenie wysłane do %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Zarządzaj kryteriami doświadczenia"
 
 msgid "Manage the event speed-larps"
 msgstr "Zarządzanie przyciskami prędkości zdarzeń"
@@ -7596,6 +7608,9 @@ msgstr "Rejestracja na to wydarzenie została anulowana"
 msgid "Total participation fees reduced through discounts"
 msgstr "Całkowite opłaty za uczestnictwo obniżone dzięki zniżkom"
 
+msgid "Use the button above to create the first criterion"
+msgstr "Użyj przycisku powyżej, żeby utworzyć pierwsze kryterium"
+
 msgid "hidden faction visible only to assigned characters"
 msgstr "ukryta frakcja widoczna tylko dla przypisanych postaci"
 
@@ -8917,6 +8932,11 @@ msgstr ""
 msgid "We confirm that your registration for this event has been cancelled"
 msgstr "Potwierdzamy, że rejestracja na to wydarzenie została anulowana"
 
+msgid "All prerequisite abilities must be owned for this criterion to apply"
+msgstr ""
+"Aby to kryterium miało zastosowanie, musisz posiadać wszystkie wymagane "
+"umiejętności"
+
 msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 "Umożliwia uczestnikom swobodne tworzenie i modyfikowanie własnych postaci"
@@ -9641,6 +9661,12 @@ msgid ""
 msgstr ""
 "Dodaj tekst, żeby dostosować wiadomości e-mail i strony rejestracji do "
 "potrzeb swojej organizacji"
+
+msgid ""
+"All required character options must be selected for this criterion to apply"
+msgstr ""
+"Aby to kryterium miało zastosowanie, trzeba zaznaczyć wszystkie wymagane "
+"opcje dotyczące znaków"
 
 #, python-brace-format
 msgid ""
@@ -12348,6 +12374,13 @@ msgid ""
 msgstr ""
 "Dodano obsługę przypisywania PD (punktów doświadczenia) do postaci, które "
 "można następnie wykorzystać do zakupu umiejętności"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Określ kryteria, które warunkowo zmieniają sumę punktów doświadczenia w "
+"zależności od wymagań wstępnych lub opcji postaci"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "
