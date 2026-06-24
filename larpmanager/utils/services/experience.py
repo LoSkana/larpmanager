@@ -295,7 +295,7 @@ def _apply_criterion_exp(
         Operation.ADDITION: lambda tot, amt: int(tot + amt),
         Operation.SUBTRACTION: lambda tot, amt: int(tot - amt),
         Operation.MULTIPLICATION: lambda tot, amt: int(tot * amt),
-        Operation.DIVISION: lambda tot, amt: int(tot / amt) if amt != 0 else tot,
+        Operation.DIVISION: lambda tot, amt: int(tot // amt) if amt != 0 else tot,
     }
 
     ability_ids = current_character_abilities or set()
