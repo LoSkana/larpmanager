@@ -7,6 +7,12 @@
                 {% trans "New" %}
             </a>
         {% endif %}
+        {% if extra_link_url %}
+            <a class="new button" href="{{ extra_link_url }}">
+                {% if extra_link_icon %}<i class="{{ extra_link_icon }}"></i>{% endif %}
+                {{ extra_link_label }}
+            </a>
+        {% endif %}
         {% if upload %}
             <a class="new button" href="{% url 'orga_upload' run.get_slug upload %}">
                 <i class="fas fa-upload"></i>

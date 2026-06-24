@@ -1398,6 +1398,13 @@ msgid ""
 "Set maximum length on character relationships (default 10000 characters)"
 msgstr ""
 
+msgid "Disable auto relationships"
+msgstr ""
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+
 msgid "Disable character finder"
 msgstr ""
 
@@ -1883,6 +1890,9 @@ msgid "Value required"
 msgstr ""
 
 msgid "Progression"
+msgstr ""
+
+msgid "Manage the progression steps shown to participants during this event"
 msgstr ""
 
 msgid ""
@@ -2385,10 +2395,22 @@ msgstr ""
 msgid "Seconds to wait between each email batch"
 msgstr ""
 
+msgid "Manage event utilities and QR code tools for this event"
+msgstr ""
+
 msgid "Manage participant questions by answering or closing each one"
 msgstr ""
 
 msgid "Participant questions"
+msgstr ""
+
+msgid "Manage workshop modules for this event"
+msgstr ""
+
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+
+msgid "Manage the answer options available for workshop questions"
 msgstr ""
 
 msgid "Manage photo and video albums uploaded for this event"
@@ -2433,6 +2455,9 @@ msgid "One-time token"
 msgstr ""
 
 msgid "Milestone"
+msgstr ""
+
+msgid "Manage event milestones and their deadlines for this event"
 msgstr ""
 
 #, python-format
@@ -2684,6 +2709,9 @@ msgstr ""
 msgid "Quest type"
 msgstr ""
 
+msgid "Manage all quest types for this event"
+msgstr ""
+
 msgid "Quest"
 msgstr ""
 
@@ -2699,13 +2727,25 @@ msgstr ""
 msgid "Handout"
 msgstr ""
 
+msgid "Manage character handouts for this event"
+msgstr ""
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+
 msgid "Prologue type"
+msgstr ""
+
+msgid "Manage prologue types for this event"
 msgstr ""
 
 msgid "Manage all prologues for this event"
 msgstr ""
 
 msgid "Speed larp"
+msgstr ""
+
+msgid "Manage speed larps for this event"
 msgstr ""
 
 msgid "Reimbursement approved"
@@ -4071,11 +4111,12 @@ msgstr ""
 msgid "Indicate the required character options"
 msgstr ""
 
-msgid "All prerequisite abilities must be owned for this criterion to apply"
+msgid ""
+"This criterion will apply only to characters owning all prerequisite "
+"abilities"
 msgstr ""
 
-msgid ""
-"All required character options must be selected for this criterion to apply"
+msgid "This criterion will apply only to characters with all required options"
 msgstr ""
 
 msgid "Single choice"
@@ -5437,11 +5478,6 @@ msgid ""
 "additional plot information"
 msgstr ""
 
-msgid ""
-"Select which information participants must provide during registration: "
-"either Required, Optional or Hidden"
-msgstr ""
-
 msgid "whether the character is aware of the identity of the other trait"
 msgstr ""
 
@@ -6671,10 +6707,40 @@ msgid ""
 "status"
 msgstr ""
 
+msgid "Assign members"
+msgstr ""
+
 msgid "No badges have been created yet"
 msgstr ""
 
 msgid "Use the button above to add a new badge"
+msgstr ""
+
+msgid "Assign Badges"
+msgstr ""
+
+msgid "Back to badges"
+msgstr ""
+
+msgid "select a badge"
+msgstr ""
+
+msgid "Select a badge above to manage its members"
+msgstr ""
+
+msgid "Type to search members"
+msgstr ""
+
+msgid "No members found"
+msgstr ""
+
+msgid "Click to assign"
+msgstr ""
+
+msgid "No members assigned"
+msgstr ""
+
+msgid "Click to unassign"
 msgstr ""
 
 msgid ""
@@ -6745,9 +6811,6 @@ msgid "Total members"
 msgstr ""
 
 msgid "Paid current year"
-msgstr ""
-
-msgid "No members found"
 msgstr ""
 
 msgid "Members will appear here once they have submitted a membership request"
@@ -8060,6 +8123,12 @@ msgstr ""
 msgid "Add a discount to offer reduced prices or promo codes to participants"
 msgstr ""
 
+msgid "List of personal expenses submitted for this event"
+msgstr ""
+
+msgid "Upload receipts and track approval status"
+msgstr ""
+
 msgid "No expenses submitted yet"
 msgstr ""
 
@@ -8342,7 +8411,7 @@ msgstr ""
 msgid "ATTENTION: This action overwrites changes made to this event"
 msgstr ""
 
-msgid "View all deadlines that must be met for this event run"
+msgid "View all deadlines that must be met for this event"
 msgstr ""
 
 msgid "Cost"
@@ -8726,8 +8795,7 @@ msgid "Transfer registration"
 msgstr ""
 
 msgid ""
-"Select a participant and a target event run to initiate a registration "
-"transfer"
+"Select a participant and a target event to initiate a registration transfer"
 msgstr ""
 
 msgid "Transfer preview"
@@ -8747,9 +8815,10 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-msgid ""
-"Upload a backup ZIP file to restore event data. A preview of the changes "
-"will be shown before any data is modified"
+msgid "Upload a backup ZIP file to restore event data"
+msgstr ""
+
+msgid "A preview of the changes will be shown before any data is modified"
 msgstr ""
 
 msgid "Files recognized in the ZIP"
@@ -8797,9 +8866,10 @@ msgstr ""
 msgid "Restore Preview"
 msgstr ""
 
-msgid ""
-"The following changes will be applied when you confirm. Review carefully "
-"before proceeding"
+msgid "The following changes will be applied when you confirm"
+msgstr ""
+
+msgid "Review carefully before proceeding"
 msgstr ""
 
 msgid "Unrecognized files in ZIP (will be skipped)"
@@ -8847,7 +8917,7 @@ msgid ""
 "displayed text"
 msgstr ""
 
-msgid "You can upload data directly from CSV file"
+msgid "Upload data directly from CSV file"
 msgstr ""
 
 msgid ""
@@ -11372,6 +11442,9 @@ msgstr ""
 msgid "Cache reset!"
 msgstr ""
 
+msgid "Check and complete your organization's activation checklist"
+msgstr ""
+
 msgid "Advanced mode activated! All features are now available."
 msgstr ""
 
@@ -11645,6 +11718,13 @@ msgid "Receipt already confirmed"
 msgstr ""
 
 msgid "Element saved"
+msgstr ""
+
+msgid "Configure casting preferences for this event"
+msgstr ""
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
 msgstr ""
 
 msgid "Results not present"

@@ -11,9 +11,6 @@
     {% endif %}
     - {{ form.page_title }} - {{ run.search }}
 {% endblock title %}
-{% block info %}
-    {% if not frame %}{{ form.page_info }}{% endif %}
-{% endblock info %}
 {% block content %}
     {% include "elements/form/main.html" %}
     {% include "elements/form/char_finder.html" %}
@@ -42,13 +39,6 @@ window.addEventListener('DOMContentLoaded', function() {
             v = v.replace('&$£', '#');
             $(this).text(v);
         });
-
-        setTimeout(function() {
-            $('.hide_later').each(function(){
-                $(this).hide();
-            })
-        },
-        500);
 
     });
 });

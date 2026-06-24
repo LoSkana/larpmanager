@@ -28,11 +28,23 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, get_modal_iframe, go_to, load_image, login_orga, \
-    submit_register, \
-    expect_normalized, \
-    submit_confirm, sidebar, save_modal, wait_accounting_load, click_and_wait_question, _wait_lm_ready, \
-    _wait_select2_results
+from larpmanager.tests.utils import (
+    _select2_search_and_pick,
+    _wait_lm_ready,
+    click_and_wait_question,
+    expect_normalized,
+    fill_tinymce,
+    get_modal_iframe,
+    go_to,
+    just_wait,
+    load_image,
+    login_orga,
+    save_modal,
+    sidebar,
+    submit_confirm,
+    submit_register,
+    wait_accounting_load,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -81,9 +93,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_member-container").click()
-    edit_iframe.get_by_role("searchbox").fill("ad")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "ad")
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("cre")
     save_modal(page, edit_iframe)
@@ -102,9 +112,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_member-container").click()
-    edit_iframe.get_by_role("searchbox").fill("adm")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "adm")
     edit_iframe.locator("#id_value").press("Home")
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("www")
@@ -202,10 +210,7 @@ def prologues(page: Any) -> None:
     edit_iframe.locator("#id_name").fill("ffff")
     fill_tinymce(edit_iframe, "id_text", "sadsadsa")
     edit_iframe.get_by_role("link", name="Show").click()
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("tes")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "tes")
     save_modal(page, edit_iframe)
 
     # check result
@@ -230,9 +235,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Members").click()
     page.get_by_role("link", name="Upload membership document").click()
     page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").fill("adm")
-    _wait_select2_results(page)
-    page.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(page.get_by_role("searchbox"), page, "adm")
     page.locator("#id_date").fill("2024-06-11")
     load_image(page, "#id_request")
     load_image(page, "#id_document")
@@ -281,9 +284,7 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Members").click()
     page.get_by_role("link", name="Upload membership fee").click()
     page.locator("#select2-id_member-container").click()
-    page.get_by_role("searchbox").fill("adm")
-    _wait_select2_results(page)
-    page.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(page.get_by_role("searchbox"), page, "adm")
     load_image(page, "#id_invoice")
     submit_confirm(page)
 

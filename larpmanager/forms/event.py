@@ -690,6 +690,10 @@ class OrgaConfigForm(ConfigForm):
             config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
             self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
 
+            config_label = _("Disable auto relationships")
+            config_help_text = _("If checked, auto-relationships from character references will not be created")
+            self.add_configs("writing_disable_auto_relationship", ConfigType.BOOL, config_label, config_help_text)
+
         config_label = _("Disable character finder")
         config_help_text = (
             _("Disable the system that finds the character number when a special reference symbol is written")
@@ -1625,6 +1629,8 @@ class OrgaProgressStepForm(BaseModelForm):
     """Form for managing event progression steps."""
 
     page_title = _("Progression")
+
+    page_info = _("Manage the progression steps shown to participants during this event")
 
     class Meta:
         model = ProgressStep

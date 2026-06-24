@@ -30,9 +30,21 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_date, just_wait, expect_normalized, get_modal_iframe, go_to, login_orga, \
-    submit_register, \
-    submit_confirm, sidebar, save_modal, click_and_wait_question, _wait_lm_ready, _wait_select2_results
+from larpmanager.tests.utils import (
+    _select2_search_and_pick,
+    _wait_lm_ready,
+    click_and_wait_question,
+    expect_normalized,
+    fill_date,
+    get_modal_iframe,
+    go_to,
+    just_wait,
+    login_orga,
+    save_modal,
+    sidebar,
+    submit_confirm,
+    submit_register,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -186,10 +198,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("cell", name="Show available characters").click()
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "te")
     save_modal(page, edit_iframe)
 
     # Checkout member data
@@ -375,9 +384,7 @@ def accounting_refund(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_member-container").click()
-    edit_iframe.get_by_role("searchbox").fill("org")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "org")
     edit_iframe.locator("#id_value").click()
     edit_iframe.locator("#id_value").fill("300")
     edit_iframe.locator("#id_descr").click()

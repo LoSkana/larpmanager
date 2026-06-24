@@ -971,8 +971,6 @@ class ExeProfileForm(BaseModelForm):
         "Configure which personal data fields are collected during registration, setting each field as mandatory, optional, or absent"
     )
 
-    load_templates: ClassVar[list] = ["profile"]
-
     class Meta:
         model = Association
         fields = ()

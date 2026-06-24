@@ -302,7 +302,7 @@ class CriterionExp(UuidMixin, OrderMixin, BaseConceptModel):
         related_name="criterion_prerequisites",
         blank=True,
         verbose_name=_("Pre-requisites"),
-        help_text=_("All prerequisite abilities must be owned for this criterion to apply"),
+        help_text=_("This criterion will apply only to characters owning all prerequisite abilities"),
     )
 
     requirements = models.ManyToManyField(
@@ -310,7 +310,7 @@ class CriterionExp(UuidMixin, OrderMixin, BaseConceptModel):
         related_name="criterion_requirements",
         blank=True,
         verbose_name=_("Requirements"),
-        help_text=_("All required character options must be selected for this criterion to apply"),
+        help_text=_("This criterion will apply only to characters with all required options"),
     )
 
     class Meta:
