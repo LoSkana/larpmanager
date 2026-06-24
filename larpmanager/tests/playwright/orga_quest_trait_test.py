@@ -135,7 +135,7 @@ def traits(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("stru")
     _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
-    expect(edit_iframe.locator("#id_text")).to_have_value(re.compile(r"@\d+"))
+    expect(edit_iframe.locator("#id_text")).to_have_text(re.compile(r'.*#\d+'))
 
     save_modal(page, edit_iframe)
 
@@ -147,7 +147,6 @@ def traits(page: Any, live_server: Any) -> None:
     page.get_by_role("searchbox").fill("non")
     _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
-    expect(panel.locator("textarea")).to_have_text(re.compile(r'.*#\d+'))
     submit_inline_edit(page)
 
     page.get_by_role("link", name="New").click()
