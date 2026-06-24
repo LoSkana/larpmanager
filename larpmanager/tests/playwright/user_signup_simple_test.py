@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, \
+    _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -131,9 +132,11 @@ def pre_register(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/")
     expect_normalized(page, page.locator("#one"), "Pre-register to the event!")
     page.get_by_role("link", name="Pre-register to the event!").click()
-
     submit_confirm(page)
+
     page.get_by_role("link", name="Delete").click()
+    _wait_lm_ready(page)
+
     page.get_by_role("textbox", name="Informations").click()
     page.get_by_role("textbox", name="Informations").fill("bauuu")
     page.get_by_label("Event").select_option("u1")
