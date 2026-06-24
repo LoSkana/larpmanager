@@ -214,13 +214,15 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
 def fill_tinymce(page, iframe_id, text, show = True) -> None:
     """In test setting tinymce is not rendered, just fill the textarea."""
 
+    input_element = page.locator(f'#{iframe_id}')
+
     if show:
         show_link_selector = f'a.my_toggle[tog="f_{iframe_id}"]'
         show_link = page.locator(show_link_selector)
         show_link.wait_for(state="visible")
         show_link.click()
+        input_element.wait_for(state="visible")
 
-    input_element = page.locator(f'#{iframe_id}')
     input_element.fill(f"<p>{text}</p>", force=True)
 
 
@@ -620,3 +622,12 @@ def nav(page, link):
 def _wait_select2_results(page):
     page.locator(".select2-results__option").first.wait_for(state="visible")
     expect(page.locator(".select2-results__option")).not_to_have_count(0)
+
+
+def _select2_search_and_pick(searchbox, iframe, value):
+    # fill() skips the "stable" check that click() requires, handling toggle animations
+    searchbox.fill(value)
+    iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    expect(iframe.locator(".select2-results__option")).not_to_have_count(0)
+    iframe.locator(".select2-results__option").first.click()
+    iframe.locator(".select2-dropdown").wait_for(state="hidden")

@@ -168,7 +168,7 @@ def pw_page(
         "_jb_pytest_runner" in arg or "pycharm" in arg.lower() for arg in sys.argv
     )
     headed = pytestconfig.getoption("--headed") or is_pycharm
-    record = True  # os.getenv("RECORD") == "1"
+    record = os.getenv("RECORD") == "1"
 
     # Configure video recording (only in headed mode)
     video_dir = None

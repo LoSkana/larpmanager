@@ -29,15 +29,22 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
-                                     check_feature,
-                                     fill_tinymce,
-                                     get_modal_iframe,
-                                     go_to,
-                                     login_orga,
-                                     submit_confirm, submit_inline_edit, wait_for_inline_edit,
-                                     expect_normalized, sidebar, save_modal, _wait_lm_ready, _wait_select2_results,
-                                     )
+from larpmanager.tests.utils import (
+    _select2_search_and_pick,
+    _wait_lm_ready,
+    check_feature,
+    expect_normalized,
+    fill_tinymce,
+    get_modal_iframe,
+    go_to,
+    just_wait,
+    login_orga,
+    save_modal,
+    sidebar,
+    submit_confirm,
+    submit_inline_edit,
+    wait_for_inline_edit,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -132,9 +139,7 @@ def traits(page: Any, live_server: Any) -> None:
     fill_tinymce(edit_iframe, "id_text", "aliame con ")
     editor = edit_iframe.locator("#id_text")
     editor.press("#")
-    edit_iframe.get_by_role("searchbox").fill("stru")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "stru")
     just_wait(page)
     expect(edit_iframe.locator("#id_text")).to_have_value(re.compile(r'.*#\d+'))
 
@@ -145,9 +150,7 @@ def traits(page: Any, live_server: Any) -> None:
     panel = wait_for_inline_edit(page)
     just_wait(page)
     panel.locator("textarea").press("#")
-    page.get_by_role("searchbox").fill("non")
-    _wait_select2_results(page)
-    page.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(page.get_by_role("searchbox"), page, "non")
     submit_inline_edit(page)
 
     page.get_by_role("link", name="New").click()
