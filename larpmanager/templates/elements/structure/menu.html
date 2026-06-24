@@ -86,13 +86,13 @@
                 </form>
             {% else %}
                 <li>
-                    <a href="{% url 'login' %}"><i class="fa-solid fa-right-to-bracket"></i> Log In</a>
+                    <a href="{% url 'login' %}" hx-boost='false'><i class="fa-solid fa-right-to-bracket"></i> Log In</a>
                 </li>
                 <li>
-                    <a href="{% url 'registration_register' %}"><i class="fa-solid fa-user-plus"></i> {% trans "Register" %}</a>
+                    <a href="{% url 'registration_register' %}" hx-boost='false'><i class="fa-solid fa-user-plus"></i> {% trans "Register" %}</a>
                 </li>
                 <li>
-                    <a href="{% url 'password_reset' %}"><i class="fa-solid fa-key"></i> {% trans "Change password" %}</a>
+                    <a href="{% url 'password_reset' %}" hx-boost='false'><i class="fa-solid fa-key"></i> {% trans "Change password" %}</a>
                 </li>
             {% endif %}
             <li>

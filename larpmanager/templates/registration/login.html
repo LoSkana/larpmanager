@@ -35,7 +35,7 @@
 <i>In the meantime, you can login with this procedure: (1) perform a password reset, using your google email; (2) login with the new password</i>
 
 -->
-        <form method="post">
+        <form method="post" hx-boost="false">
             {% csrf_token %}
             <table class="mob ">
                 {{ form.as_table }}
@@ -46,11 +46,11 @@
                 {% if request.GET.next %}
                     <a href="{% url 'registration_register' %}?next={{ request.GET.next|urlencode }}">{% trans "Register" %}</a>
                 {% else %}
-                    <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>
+                    <a href="{% url 'registration_register' %}" hx-boost='false'>{% trans "Register" %}</a>
                 {% endif %}
             </p>
             <p class="password_reset">
-                <a href="{% url 'password_reset' %}">{% trans "Password reset" %}</a>
+                <a href="{% url 'password_reset' %}" hx-boost='false'>{% trans "Password reset" %}</a>
             </p>
         </form>
     </div>
