@@ -1377,6 +1377,11 @@ class OrgaRunForm(ConfigForm):
 
         self.main_class = ""
 
+        if "start" in self.fields:
+            self.fields["start"].required = True
+        if "end" in self.fields:
+            self.fields["end"].required = True
+
         if "exe" not in self.params:
             self.prevent_canc = True
 
