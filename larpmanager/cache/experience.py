@@ -502,10 +502,12 @@ def on_writing_option_saved(option: WritingOption, event_id: int) -> None:
 
     modifier_ids = list(ModifierExp.objects.filter(requirements=option).values_list("id", flat=True))
     if modifier_ids:
+        _mark_exp_dirty("modifiers", modifier_ids, event_id)
         refresh_modifier_rels_dirty_background(modifier_ids)
 
     criterion_ids = list(CriterionExp.objects.filter(requirements=option).values_list("id", flat=True))
     if criterion_ids:
+        _mark_exp_dirty("criterions", criterion_ids, event_id)
         refresh_criterion_rels_dirty_background(criterion_ids)
 
 
@@ -930,12 +932,19 @@ def on_criterion_prerequisites_m2m_changed(
             criterion_ids = list(CriterionExp.objects.filter(prerequisites=instance).values_list("id", flat=True))
         else:
             criterion_ids = []
-    else:
-        criterion_ids = [instance.id]
 
-    if not criterion_ids:
+        if not criterion_ids:
+            return
+
+        ids_by_event: dict[int, list[int]] = {}
+        for crit in CriterionExp.objects.filter(id__in=criterion_ids).values("id", "event_id"):
+            ids_by_event.setdefault(crit["event_id"], []).append(crit["id"])
+        for ev_id, ids in ids_by_event.items():
+            _mark_exp_dirty("criterions", ids, ev_id)
+        refresh_criterion_rels_dirty_background(criterion_ids)
         return
 
+    criterion_ids = [instance.id]
     _mark_exp_dirty("criterions", criterion_ids, instance.event_id)
     refresh_criterion_rels_dirty_background(criterion_ids)
 

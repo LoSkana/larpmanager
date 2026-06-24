@@ -44,6 +44,13 @@ from larpmanager.models.form import (
 from larpmanager.models.writing import Character, CharacterConfig
 from larpmanager.utils.larpmanager.tasks import background_auto
 
+_CRITERION_OPERATIONS = {
+    Operation.ADDITION: lambda tot, amt: int(tot + amt),
+    Operation.SUBTRACTION: lambda tot, amt: int(tot - amt),
+    Operation.MULTIPLICATION: lambda tot, amt: int(tot * amt),
+    Operation.DIVISION: lambda tot, amt: int(tot // amt) if amt != 0 else tot,
+}
+
 
 def _build_exp_context(character: Any) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int]]]]]:
     """Build context for character experience point calculations.
@@ -291,13 +298,6 @@ def _apply_criterion_exp(
         )
     )
 
-    criterion_operations = {
-        Operation.ADDITION: lambda tot, amt: int(tot + amt),
-        Operation.SUBTRACTION: lambda tot, amt: int(tot - amt),
-        Operation.MULTIPLICATION: lambda tot, amt: int(tot * amt),
-        Operation.DIVISION: lambda tot, amt: int(tot // amt) if amt != 0 else tot,
-    }
-
     ability_ids = current_character_abilities or set()
     choice_ids = current_character_choices or set()
 
@@ -317,7 +317,7 @@ def _apply_criterion_exp(
 
         system_id = criterion.system_id
         current_total = deliveries_by_system.get(system_id, 0)
-        op_func = criterion_operations.get(criterion.operation)
+        op_func = _CRITERION_OPERATIONS.get(criterion.operation)
         if op_func:
             deliveries_by_system[system_id] = op_func(current_total, criterion.amount)
 
