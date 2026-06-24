@@ -833,6 +833,8 @@ function data_tables() {
             return;
         }
 
+        window._datatablesInitPending = (window._datatablesInitPending || 0) + 1;
+
         const url = $table.attr('url');
 
         var thList = $table.find('thead th');
@@ -895,6 +897,10 @@ function data_tables() {
 
         window.datatables = window.datatables || {};
         window.datatables[tableId] = table;
+
+        table.one('init.dt', function() {
+            window._datatablesInitPending = Math.max(0, (window._datatablesInitPending || 0) - 1);
+        });
 
         table.on('draw.dt', function() {
             // Add tooltips to edit icons first

@@ -99,6 +99,22 @@ def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
     except Exception:
         pass
 
+    try:
+        page.wait_for_function(
+            "() => !window._datatablesInitPending || window._datatablesInitPending <= 0",
+            timeout=timeout,
+        )
+    except Exception:
+        pass
+
+    try:
+        page.wait_for_function(
+            "() => !window._questionLoadPending || window._questionLoadPending <= 0",
+            timeout=timeout,
+        )
+    except Exception:
+        pass
+
     ooops_check(page)
 
 
