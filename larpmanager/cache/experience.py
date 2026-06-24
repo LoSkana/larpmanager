@@ -360,6 +360,7 @@ def get_event_exp_cache(event: Event) -> dict[str, Any]:
             ("deliveries", DeliveryExp, get_delivery_rels),
             ("modifiers", ModifierExp, get_modifier_rels),
             ("rules", RuleExp, get_rule_rels),
+            ("criterions", CriterionExp, get_criterion_rels),
         ):
             if _resolve_dirty_exp_section(effective_event.id, cached_relationships, _section, _model, _get_rels):
                 any_resolved = True

@@ -2801,6 +2801,12 @@ body.floating_iframe .inner {
   margin: 0.5em 0 0 0;
 }
 
+@media (max-width: 840px) {
+  .calendar .gall h3 {
+    text-align: center;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Casting - choose characters
    --------------------------------------------------------------------------- */

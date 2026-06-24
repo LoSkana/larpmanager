@@ -341,7 +341,7 @@ class OrgaModifierExpForm(MultichoiceMixin, BaseModelForm):
                 )
 
 
-class OrgaCriterionExpForm(MultichoiceMixin, BaseModelForm):
+class OrgaCriterionExpForm(MultichoiceMixin, ExpBaseForm):
     """Form for OrgaCriterionExp."""
 
     load_js: ClassVar[list] = ["multichoice"]
