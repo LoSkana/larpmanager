@@ -227,6 +227,7 @@ def casting(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
+    _wait_lm_ready(page)
     page.locator("#char-list .char-card").filter(has_text="Nonna").click()
     page.locator("#char-list .char-card").filter(has_text="Strudel").click()
     page.locator("#char-list .char-card").filter(has_text="Capriciossa").click()
