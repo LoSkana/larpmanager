@@ -42,7 +42,7 @@ from larpmanager.tests.utils import (
     login_orga,
     sidebar,
     submit,
-    submit_confirm, save_modal,
+    submit_confirm, save_modal, _wait_lm_ready,
 )
 
 pytestmark = pytest.mark.e2e
@@ -117,18 +117,21 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     # First event: riepilogo shows ticket 100 + membership 20 = 120, don't confirm
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 120")
     expect_normalized(page, page.locator("#riepilogo"), "Includes membership fee 2050: 20")
 
     # Second event: riepilogo shows 90 (70 ticket + 20 membership, not yet reserved by any invoice)
     go_to(page, live_server, "/testsecond/register")
     page.get_by_role("button", name="Continue").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 90")
     expect_normalized(page, page.locator("#riepilogo"), "Includes membership fee 2050: 20")
 
     # First event: register and confirm (creates provisional registration)
     go_to(page, live_server, "/test/register")
     page.get_by_role("button", name="Continue").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#riepilogo"), "you must request to register as a member")
     submit_confirm(page)
 
@@ -136,6 +139,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Provisional registration")
     page.get_by_role("link", name="Accounting", exact=True).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
     page.get_by_role("link", name="Upload your membership application to proceed").click()
 
@@ -167,6 +171,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
     page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "The total registration fee is: 100")
     expect_normalized(page, page.locator("#one"), "membership fee 2050: 20")
     expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 120 €")
@@ -218,6 +223,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testsecond/register")
     expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
     page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "70 EUR")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
     submit(page)

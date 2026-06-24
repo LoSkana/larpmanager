@@ -38,4 +38,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No texts have been created yet" %}. {% trans "Use the button above to add a new event text" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

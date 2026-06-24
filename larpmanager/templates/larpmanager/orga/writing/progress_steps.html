@@ -40,4 +40,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No progress steps have been defined yet" %}. {% trans "Use the button above to add steps for tracking the completion status of writing elements" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

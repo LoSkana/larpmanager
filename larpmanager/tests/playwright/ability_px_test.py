@@ -29,9 +29,24 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
-    submit_register, submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, \
-    click_and_wait_question, _wait_select2_results
+from larpmanager.tests.utils import (
+    _select2_search_and_pick,
+    _wait_lm_ready,
+    click_and_wait_question,
+    expect_normalized,
+    fill_tinymce,
+    get_modal_iframe,
+    get_request,
+    go_to,
+    just_wait,
+    login_orga,
+    new_option,
+    save_modal,
+    sidebar,
+    submit_confirm,
+    submit_option,
+    submit_register,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -132,9 +147,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    edit_iframe.get_by_role("searchbox").nth(3).fill("base")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(3), edit_iframe, "base")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("standard")
     edit_iframe.locator("#id_cost").click()
@@ -148,17 +161,12 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    edit_iframe.get_by_role("searchbox").nth(3).fill("base")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(3), edit_iframe, "base")
     edit_iframe.locator("#id_name").fill("double shield")
     edit_iframe.locator("#id_cost").click()
     edit_iframe.locator("#id_cost").fill("2")
     row = edit_iframe.get_by_role("row", name="Pre-requisites")
-    row.get_by_role("searchbox").click()
-    row.get_by_role("searchbox").fill("swo")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(row.get_by_role("searchbox"), edit_iframe, "swo")
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="Ability Template").click()
@@ -202,10 +210,7 @@ def delivery(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     row = edit_iframe.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
-    row.get_by_role("searchbox").click()
-    row.get_by_role("searchbox").fill("swo")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(row.get_by_role("searchbox"), edit_iframe, "swo")
     save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator('[id="u1"]'), "11")
@@ -220,9 +225,7 @@ def rules(page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_field-container").click()
-    edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(1), edit_iframe, "Hit")
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("2")
     save_modal(page, edit_iframe)
@@ -230,15 +233,10 @@ def rules(page: Any) -> None:
     # create second rule - only for sword
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").first.fill("swor")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").first, edit_iframe, "swor")
 
     edit_iframe.locator("#select2-id_field-container").click()
-    edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(1), edit_iframe, "Hit")
 
     edit_iframe.locator("#id_operation").select_option("MUL")
     edit_iframe.locator("#id_amount").click()
@@ -267,10 +265,7 @@ def rules(page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     row = edit_iframe.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
-    row.get_by_role("searchbox").click()
-    row.get_by_role("searchbox").fill("swo")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(row.get_by_role("searchbox"), edit_iframe, "swo")
     save_modal(page, edit_iframe)
 
 
@@ -294,6 +289,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Abilities").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         """
@@ -304,6 +300,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     # get ability
     page.locator("#ability_select").select_option("u2")
     page.get_by_role("button", name="Submit", exact=True).click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         """Obtain ability Select the new ability to get --- Select ability
@@ -314,6 +311,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
 
     # remove ability
     page.get_by_role("heading", name=re.compile("^double shield")).get_by_role("link").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         """
@@ -440,9 +438,7 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    edit_iframe.get_by_role("searchbox").nth(3).fill("base")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(3), edit_iframe, "base")
     edit_iframe.locator("#id_name").fill("hidden_zero")
     edit_iframe.locator("#id_cost").fill("0")
     edit_iframe.locator("#id_visible").uncheck()

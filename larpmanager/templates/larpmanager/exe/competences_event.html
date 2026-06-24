@@ -32,4 +32,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "No events with staff competences found" %}.</p>
+    {% endif %}
 {% endblock content %}

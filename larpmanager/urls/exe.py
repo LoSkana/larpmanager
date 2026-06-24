@@ -193,6 +193,16 @@ urlpatterns = [
         name="exe_badges_delete",
     ),
     path(
+        "manage/badges/assign/",
+        views_em.exe_badges_assign,
+        name="exe_badges_assign",
+    ),
+    path(
+        "manage/badges/toggle/",
+        views_em.exe_badges_toggle,
+        name="exe_badges_toggle",
+    ),
+    path(
         "manage/mail/send",
         views_em.exe_send_mail,
         name="exe_send_mail",

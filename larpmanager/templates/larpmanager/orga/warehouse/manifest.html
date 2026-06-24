@@ -99,6 +99,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if area.items %}
+            <p class="no-elements-available">{% trans "No items have been assigned to this area yet" %}.</p>
+        {% endif %}
     {% endfor %}
     <div id="imagePopup">
         <img id="popupImg" src="" alt="popup image" />

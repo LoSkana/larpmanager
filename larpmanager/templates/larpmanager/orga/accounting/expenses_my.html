@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Expenses" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
+{% block info %}
+    {% trans "List of personal expenses submitted for this event" %}. {% trans "Upload receipts and track approval status" %}.
+{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     <table id="expenses" class="go_datatable mob">
@@ -29,4 +32,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No expenses submitted yet" %}. {% trans "Use the button above to add a new expense with a receipt" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

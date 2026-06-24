@@ -52,8 +52,8 @@
                 <div class="faction-chips" id="faction-chips">
                     {% for f in faction_filter %}
                         <span class="faction-chip"
-                              data-uuid="{{ f.uuid }}"
-                              onclick="toggle_faction_chip(this, '{{ f.uuid }}')">{{ f.name }}</span>
+                              data-number="{{ f.number }}"
+                              onclick="toggle_faction_chip(this, {{ f.number }})">{{ f.name }}</span>
                     {% endfor %}
                 </div>
             {% endif %}
@@ -145,9 +145,8 @@
             if (haystack.indexOf(search) < 0) return false;
         }
         if (active_factions.length > 0) {
-            var el_f = c.factions.map(function(f) { return f.uuid; });
             for (var i = 0; i < active_factions.length; i++) {
-                if (el_f.indexOf(active_factions[i]) < 0) return false;
+                if (c.factions.indexOf(active_factions[i]) < 0) return false;
             }
         }
         return true;
@@ -190,13 +189,14 @@
             numEl.className = 'char-num';
             numEl.textContent = '#' + c.number;
 
-            var badgeEl = document.createElement('span');
-            badgeEl.className = 'char-faction-badge';
-            badgeEl.textContent = c.faction_name;
-
             card.appendChild(numEl);
             card.appendChild(make_char_info_el(c));
-            card.appendChild(badgeEl);
+            if (c.faction_key !== 'all') {
+                var badgeEl = document.createElement('span');
+                badgeEl.className = 'char-faction-badge';
+                badgeEl.textContent = c.faction_name;
+                card.appendChild(badgeEl);
+            }
             list.appendChild(card);
         });
     }

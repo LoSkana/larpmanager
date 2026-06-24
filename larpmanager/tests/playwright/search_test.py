@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, just_wait, submit_confirm, new_option, \
-    submit_option, sidebar, nav, get_modal_iframe, save_modal, click_and_wait_question
+    submit_option, sidebar, nav, get_modal_iframe, save_modal, click_and_wait_question, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -112,11 +112,13 @@ def filter_faction(page: Any) -> None:
     )
     page.get_by_role("link", name="Factions").nth(1).click()
     page.locator("#factions").get_by_role("link", name="fassione").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) Factions: fassione None Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
     page.locator("#factions").get_by_role("link", name="fassione").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) All Factions: fassione another Player: Absent color: blue tag: wunder | qerfi",

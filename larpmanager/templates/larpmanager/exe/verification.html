@@ -61,4 +61,9 @@
             </tr>
         {% endfor %}
     </table>
+    {% if not todo %}
+        <p class="no-elements-available">
+            {% trans "No payments pending verification" %}. {% trans "All payments have been verified or none have been submitted yet" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -25,4 +25,7 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "This contributor has not self-assessed any competences yet" %}.</p>
+    {% endif %}
 {% endblock content %}

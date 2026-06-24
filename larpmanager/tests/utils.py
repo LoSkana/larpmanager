@@ -105,6 +105,12 @@ def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
 def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     _wait_lm_ready(page)
+    body_class = page.locator("body").get_attribute("class") or ""
+    url_path = urlparse(page.url).path.rstrip("/")
+    if "manage" in body_class and not url_path.endswith("/manage"):
+        info = page.locator("#info_bar #info")
+        assert info.count() > 0, f"#info_bar #info missing on {page.url}"
+        assert info.inner_text().strip(), f"#info_bar #info empty on {page.url}"
 
 def get_request(page: Any, live_server: Any, path: Any) -> dict:
     api_context = page.request
@@ -207,13 +213,15 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
 def fill_tinymce(page, iframe_id, text, show = True) -> None:
     """In test setting tinymce is not rendered, just fill the textarea."""
 
+    input_element = page.locator(f'#{iframe_id}')
+
     if show:
         show_link_selector = f'a.my_toggle[tog="f_{iframe_id}"]'
         show_link = page.locator(show_link_selector)
         show_link.wait_for(state="visible")
         show_link.click()
+        input_element.wait_for(state="visible")
 
-    input_element = page.locator(f'#{iframe_id}')
     input_element.fill(f"<p>{text}</p>", force=True)
 
 
@@ -352,6 +360,8 @@ def upload(page: Any, element_id: Any, image_path: Any) -> None:
 
 def normalize_whitespace(text: str) -> str:
     """Normalize whitespace by removing newlines and collapsing multiple spaces."""
+
+    text = re.sub(r'<[^>]+>', '', text)
 
     lines = []
     for line in text.splitlines():
@@ -611,3 +621,12 @@ def nav(page, link):
 def _wait_select2_results(page):
     page.locator(".select2-results__option").first.wait_for(state="visible")
     expect(page.locator(".select2-results__option")).not_to_have_count(0)
+
+
+def _select2_search_and_pick(searchbox, iframe, value):
+    # fill() skips the "stable" check that click() requires, handling toggle animations
+    searchbox.fill(value)
+    iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    expect(iframe.locator(".select2-results__option")).not_to_have_count(0)
+    iframe.locator(".select2-results__option").first.click()
+    iframe.locator(".select2-dropdown").wait_for(state="hidden")

@@ -21,23 +21,30 @@
                 <th>{% trans "Payed" %}</th>
             </tr>
         </thead>
-        {% for el in list %}
-            <tr>
-                <td>{{ el }}</td>
-                <td>{{ el.start | date:"Y/m/d" }}</td>
-                <td>{{ el.end | date:"Y/m/d" }}</td>
-                <td>{{ el.features }}</td>
-                <td>{{ el.get_plan_display }}</td>
-                <td>{{ el.active_registrations }}</td>
-                <td>
-                    {% if el.tot %}{{ el.tot | format_decimal }}€{% endif %}
-                </td>
-                <td>
-                    {% if el.paid %}{{ el.paid | format_decimal }}€{% endif %}
-                </td>
-            </tr>
-        {% endfor %}
+        <tbody>
+            {% for el in list %}
+                <tr>
+                    <td>{{ el }}</td>
+                    <td>{{ el.start | date:"Y/m/d" }}</td>
+                    <td>{{ el.end | date:"Y/m/d" }}</td>
+                    <td>{{ el.features }}</td>
+                    <td>{{ el.get_plan_display }}</td>
+                    <td>{{ el.active_registrations }}</td>
+                    <td>
+                        {% if el.tot %}{{ el.tot | format_decimal }}€{% endif %}
+                    </td>
+                    <td>
+                        {% if el.paid %}{{ el.paid | format_decimal }}€{% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No events with LarpManager costs found" %}. {% trans "Costs will appear here once events are created and run" %}.
+        </p>
+    {% endif %}
     <h2>{% trans "Total" %}: {{ tot | format_decimal }}€</h2>
     <h2>{% trans "Payments" %}: {{ payments | format_decimal }}€</h2>
 {% endblock content %}

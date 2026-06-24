@@ -22,17 +22,24 @@
                 {% endif %}
             </tr>
         </thead>
-        {% for el in list %}
-            <tr>
-                <td>
-                    <a href="{% url 'orga_pre_registrations' el.slug %}">{{ el }}</a>
-                </td>
-                {% if preferences %}
-                    {% for k, v in el.count.items %}<td>{{ v }}</td>{% endfor %}
-                {% else %}
-                    <td>{{ el.total }}</td>
-                {% endif %}
-            </tr>
-        {% endfor %}
+        <tbody>
+            {% for el in list %}
+                <tr>
+                    <td>
+                        <a href="{% url 'orga_pre_registrations' el.slug %}">{{ el }}</a>
+                    </td>
+                    {% if preferences %}
+                        {% for k, v in el.count.items %}<td>{{ v }}</td>{% endfor %}
+                    {% else %}
+                        <td>{{ el.total }}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No pre-registrations found" %}. {% trans "Pre-registrations will appear here once participants sign up for upcoming events" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

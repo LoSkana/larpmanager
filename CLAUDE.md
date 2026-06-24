@@ -18,6 +18,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **[Security Best Practices](docs/08-security-best-practices.md)** - Critical security requirements including UUID usage
 - **[README.md](README.md)** - Installation, deployment, and contribution guidelines
 
+## Code Conventions
+
+- **Never name a variable `_`** - use a descriptive name or a more specific throwaway like `_unused`.
+- **Never use non-ascii characters** - if a symbol is needed, use a font-awesone icon.
+- **Never put css style inline** - always put the css in lm.css.
+
 ## Package Management
 
 The project uses **uv** for fast and reliable Python package management. All dependencies are defined in `pyproject.toml`.
@@ -169,10 +175,6 @@ Models are organized in `larpmanager/models/` by domain:
   - `AssociationPermission` for organization dashboard
   - `EventPermission` for event dashboard
   - Both link to views via `slug` field
-
-## Code Conventions
-
-- **Never name a variable `_`** - use a descriptive name or a more specific throwaway like `_unused`.
 
 ## Contributing Workflow
 

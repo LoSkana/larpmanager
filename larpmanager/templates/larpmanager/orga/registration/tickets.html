@@ -75,4 +75,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No tickets have been created for this event yet" %}. {% trans "Use the button above to add a ticket type that participants can choose when registering" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

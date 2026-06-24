@@ -50,4 +50,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No ability templates defined yet" %}. {% trans "Use the button above to create the first template" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -4,7 +4,11 @@
     {% trans "Badge" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% url 'exe_badges_assign' as assign_url %}
+    {% trans "Assign members" as assign_label %}
+    {% with extra_link_url=assign_url extra_link_icon="fas fa-user-tag" extra_link_label=assign_label %}
+        {% include "elements/header/edit.html" %}
+    {% endwith %}
     <table id="badges" class="go_datatable">
         <thead>
             <tr>
@@ -39,4 +43,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No badges have been created yet" %}. {% trans "Use the button above to add a new badge" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -1377,6 +1377,11 @@ class OrgaRunForm(ConfigForm):
 
         self.main_class = ""
 
+        if "start" in self.fields:
+            self.fields["start"].required = True
+        if "end" in self.fields:
+            self.fields["end"].required = True
+
         if "exe" not in self.params:
             self.prevent_canc = True
 
@@ -1620,6 +1625,8 @@ class OrgaProgressStepForm(BaseModelForm):
     """Form for managing event progression steps."""
 
     page_title = _("Progression")
+
+    page_info = _("Manage the progression steps shown to participants during this event")
 
     class Meta:
         model = ProgressStep
