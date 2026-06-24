@@ -5068,6 +5068,9 @@ msgstr "sjekk det omvendte forholdet"
 msgid "City or place of the event"
 msgstr "By eller sted for arrangementet"
 
+msgid "Disable auto relationships"
+msgstr "Deaktiver automatiske relasjoner"
+
 msgid "Discover the game factions"
 msgstr "Oppdag spillgruppene"
 
@@ -9834,6 +9837,12 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, kan et alternativ bare være synlig hvis andre alternativer "
 "er valgt"
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+"Hvis dette feltet er merket av, vil det ikke opprettes automatiske "
+"relasjoner fra karakterreferanser"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"

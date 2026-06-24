@@ -1398,6 +1398,13 @@ msgid ""
 "Set maximum length on character relationships (default 10000 characters)"
 msgstr ""
 
+msgid "Disable auto relationships"
+msgstr ""
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+
 msgid "Disable character finder"
 msgstr ""
 

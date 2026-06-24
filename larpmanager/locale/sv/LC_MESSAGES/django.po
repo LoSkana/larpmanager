@@ -5068,6 +5068,9 @@ msgstr "kontrollera omvänt förhållande"
 msgid "City or place of the event"
 msgstr "Stad eller plats för evenemanget"
 
+msgid "Disable auto relationships"
+msgstr "Inaktivera automatiska kopplingar"
+
 msgid "Discover the game factions"
 msgstr "Upptäck spelgrupperna"
 
@@ -9820,6 +9823,12 @@ msgid ""
 msgstr ""
 "Om den är markerad kan ett alternativ endast visas om andra alternativ är "
 "valda"
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+"Om denna ruta är markerad kommer inga automatiska relationer från "
+"karaktärsreferenser att skapas"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
