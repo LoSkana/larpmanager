@@ -5044,6 +5044,9 @@ msgstr "Tarkista käänteinen suhde"
 msgid "City or place of the event"
 msgstr "Tapahtuman kaupunki tai paikka"
 
+msgid "Disable auto relationships"
+msgstr "Poista automaattisten suhteiden käyttö"
+
 msgid "Discover the game factions"
 msgstr "Tutustu pelin ryhmittymiin"
 
@@ -9726,6 +9729,12 @@ msgid ""
 msgstr ""
 "Jos valittuna, vaihtoehto voi olla näkyvissä vain, jos muut vaihtoehdot ovat"
 " valittuna"
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+"Jos tämä valinta on valittuna, hahmoviittauksista ei luoda automaattisia "
+"suhteita"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"

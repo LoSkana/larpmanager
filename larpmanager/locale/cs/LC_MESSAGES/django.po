@@ -5044,6 +5044,9 @@ msgstr "kontrola inverzního vztahu"
 msgid "City or place of the event"
 msgstr "Město nebo místo konání akce"
 
+msgid "Disable auto relationships"
+msgstr "Zakázat automatické vztahy"
+
 msgid "Discover the game factions"
 msgstr "Objevte herní skupiny"
 
@@ -9624,6 +9627,12 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, je možnost viditelná pouze v případě, že jsou vybrány "
 "jiné možnosti"
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+"Je-li tato možnost zaškrtnuta, nebudou se automaticky vytvářet vztahy na "
+"základě odkazů na postavy"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"

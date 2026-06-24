@@ -5044,6 +5044,9 @@ msgstr "controleer omgekeerde relatie"
 msgid "City or place of the event"
 msgstr "Stad of plaats van het evenement"
 
+msgid "Disable auto relationships"
+msgstr "Automatische relaties uitschakelen"
+
 msgid "Discover the game factions"
 msgstr "Ontdek de spelgroepen"
 
@@ -9890,6 +9893,12 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, is deze alleen zichtbaar als andere opties "
 "zijn geselecteerd"
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+"Als dit aangevinkt is, worden er geen automatische relaties aangemaakt op "
+"basis van personagereferenties"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"

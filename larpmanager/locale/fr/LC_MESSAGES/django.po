@@ -5044,6 +5044,9 @@ msgstr "vérifier la relation inverse"
 msgid "City or place of the event"
 msgstr "Ville ou lieu de l'événement"
 
+msgid "Disable auto relationships"
+msgstr "Désactiver les relations automatiques"
+
 msgid "Discover the game factions"
 msgstr "Découvrez les groupes de jeu"
 
@@ -10028,6 +10031,12 @@ msgid ""
 msgstr ""
 "Si cette case est cochée, l'option n'est visible que si d'autres options "
 "sont sélectionnées"
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+"Si cette case est cochée, les relations automatiques issues des références "
+"de personnages ne seront pas créées"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
