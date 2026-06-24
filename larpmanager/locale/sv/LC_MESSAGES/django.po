@@ -2475,6 +2475,9 @@ msgstr "Val av ålder"
 msgid "Apply Upgrade"
 msgstr "Ansök om uppgradering"
 
+msgid "Assign Badges"
+msgstr "Tilldela märken"
+
 msgid "Authorisation"
 msgstr "Auktorisation"
 
@@ -2743,8 +2746,14 @@ msgstr "Aktiva enheter"
 msgid "Add to faction"
 msgstr "Lägg till i fraktion"
 
+msgid "Assign members"
+msgstr "Utse medlemmar"
+
 msgid "Available days"
 msgstr "Tillgängliga dagar"
+
+msgid "Back to badges"
+msgstr "Tillbaka till märkena"
 
 msgid "Bring a friend"
 msgstr "Ta med en vän"
@@ -2974,6 +2983,9 @@ msgstr "Anpassningar"
 msgid "refund request"
 msgstr "begäran om återbetalning"
 
+msgid "select a badge"
+msgstr "välj ett märke"
+
 msgid "Ability missing"
 msgstr "Förmåga saknas"
 
@@ -3009,6 +3021,9 @@ msgstr "Länkar till karaktärer"
 
 msgid "Characters list"
 msgstr "Lista över karaktärer"
+
+msgid "Click to assign"
+msgstr "Klicka för att tilldela"
 
 msgid "Collected votes"
 msgstr "Erhållna röster"
@@ -3480,6 +3495,9 @@ msgstr "Algoritm för gjutning"
 
 msgid "Character profile"
 msgstr "Karaktärsprofil"
+
+msgid "Click to unassign"
+msgstr "Klicka för att ta bort tilldelningen"
 
 msgid "Closed collection"
 msgstr "Stängd samling"
@@ -3960,6 +3978,9 @@ msgstr "Ny förfrågan om skyttel"
 
 msgid "No characters found"
 msgstr "Inga tecken hittades"
+
+msgid "No members assigned"
+msgstr "Inga medlemmar har tilldelats"
 
 msgid "Non-cumulative code"
 msgstr "Icke-kumulativ kod"
@@ -4595,6 +4616,9 @@ msgstr "Total registreringsavgift"
 msgid "Track event milestones"
 msgstr "Spåra milstolpar i evenemanget"
 
+msgid "Type to search members"
+msgstr "Skriv in sökord för att söka efter medlemmar"
+
 msgid "Unknow error on upload"
 msgstr "Okänt fel vid uppladdning"
 
@@ -5043,6 +5067,9 @@ msgstr "kontrollera omvänt förhållande"
 
 msgid "City or place of the event"
 msgstr "Stad eller plats för evenemanget"
+
+msgid "Disable auto relationships"
+msgstr "Inaktivera automatiska kopplingar"
 
 msgid "Discover the game factions"
 msgstr "Upptäck spelgrupperna"
@@ -5830,6 +5857,9 @@ msgstr "Ange din erfarenhetsnivå"
 msgid "Lottery tickets currently present"
 msgstr "Det finns lotter"
 
+msgid "Manage speed larps for this event"
+msgstr "Hantera speed-larp för detta evenemang"
+
 msgid "No activation steps are available"
 msgstr "Det finns inga aktiveringssteg"
 
@@ -5952,6 +5982,9 @@ msgstr "Registrering uppdaterad till %(event)s!"
 msgid "Registrations opening at: %(date)s"
 msgstr "Registreringar öppnar kl: %(date)s"
 
+msgid "Review carefully before proceeding"
+msgstr "Läs igenom noggrant innan du fortsätter"
+
 msgid "Review participants' personal data"
 msgstr "Granska deltagarnas personuppgifter"
 
@@ -5978,6 +6011,9 @@ msgstr "Betalningen slutfördes inte"
 
 msgid "Type(s) of accommodation available"
 msgstr "Typ(er) av tillgängligt boende"
+
+msgid "Upload data directly from CSV file"
+msgstr "Ladda upp data direkt från en CSV-fil"
 
 msgid "You are about to make a payment of"
 msgstr "Du är på väg att göra en betalning på"
@@ -6133,6 +6169,9 @@ msgstr "Ange beloppet för din donation"
 msgid "Indicates the details of the request"
 msgstr "Anger detaljerna för fordran"
 
+msgid "Manage prologue types for this event"
+msgstr "Hantera prologtyper för detta evenemang"
+
 msgid "Manage the models for event handouts"
 msgstr "Hantera modellerna för evenemangshandouts"
 
@@ -6266,6 +6305,9 @@ msgstr "Lär dig alla karaktärer före evenemanget"
 msgid "Location - rent, gas, overnight stays"
 msgstr "Plats - hyra, gas, övernattningar"
 
+msgid "Manage all quest types for this event"
+msgstr "Hantera alla typer av uppdrag för detta evenemang"
+
 msgid "Manage answers for workshop questions"
 msgstr "Hantera svar på frågor från workshops"
 
@@ -6392,6 +6434,9 @@ msgstr "Den kommer att visas för andra deltagare"
 
 msgid "Manage the type of character abilities"
 msgstr "Hantera typen av karaktärsförmågor"
+
+msgid "Manage workshop modules for this event"
+msgstr "Hantera workshopmodulerna för detta evenemang"
 
 msgid "Membership of the Organization refused"
 msgstr "Medlemskap nekat"
@@ -6608,6 +6653,9 @@ msgstr "Om du vill uppdatera dina personuppgifter"
 msgid "Invite a user by email to join this role"
 msgstr "Bjud in en användare via e-post att ansluta sig till denna roll"
 
+msgid "Manage character handouts for this event"
+msgstr "Hantera karaktärsinformation för detta evenemang"
+
 msgid "Manage collections participated by users"
 msgstr "Hantera samlingar som användare har deltagit i"
 
@@ -6771,6 +6819,9 @@ msgstr "Modifierarens nummer (unik identifierare)"
 msgid "Total amount paid for platform management"
 msgstr "Totalt belopp som betalats för plattformshantering"
 
+msgid "Upload receipts and track approval status"
+msgstr "Ladda upp kvitton och följ godkännandestatusen"
+
 msgid "Use the button above to add a new problem"
 msgstr "Använd knappen ovan för att lägga till ett nytt problem"
 
@@ -6891,6 +6942,9 @@ msgstr "Omdirigeringar till en extern registreringslänk"
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reservera ytterligare biljetter utöver din egen"
 
+msgid "Select a badge above to manage its members"
+msgstr "Välj en grupp ovan för att hantera dess medlemmar"
+
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Välj slumpmässigt lotter för att uppgradera"
 
@@ -6918,9 +6972,6 @@ msgstr "Använd knappen ovan för att lägga till en delbetalning"
 
 msgid "Warning! Other users are editing this item"
 msgstr "Varning, varning! Andra användare redigerar detta objekt"
-
-msgid "You can upload data directly from CSV file"
-msgstr "Du kan ladda upp data direkt från en CSV-fil"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Ditt förnamn som du föredrar att bli kallad"
@@ -7026,6 +7077,9 @@ msgstr "(Valfritt) Maximalt antal tillgängliga platser"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Avbokning på grund av utebliven profilsammanställning"
+
+msgid "Configure casting preferences for this event"
+msgstr "Ställ in sändningsinställningarna för detta evenemang"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Anpassa evenemangets utseende"
@@ -7255,6 +7309,10 @@ msgstr "Organisationen kör den senaste versionen"
 
 msgid "Total amount withheld for transfer commissions"
 msgstr "Totalt belopp som innehållits för överföringsprovisioner"
+
+msgid "Upload a backup ZIP file to restore event data"
+msgstr ""
+"Ladda upp en ZIP-fil med säkerhetskopian för att återställa händelsedata"
 
 msgid "Use the button above to add a new file or link"
 msgstr "Använd knappen ovan för att lägga till en ny fil eller länk"
@@ -7571,6 +7629,10 @@ msgstr "Om markerat, använd inte föräldrahändelsens fraktioner"
 msgid "If you wish, indicate a pronoun for your character"
 msgstr "Om du vill, ange ett pronomen för din karaktär"
 
+msgid "List of personal expenses submitted for this event"
+msgstr ""
+"Förteckning över personliga utgifter som lämnats in för detta evenemang"
+
 msgid "Manage the configuration of the activated features"
 msgstr "Hantera konfigurationen av de aktiverade funktionerna"
 
@@ -7594,6 +7656,9 @@ msgstr "Anmälan till evenemanget avbröts"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
+
+msgid "View all deadlines that must be met for this event"
+msgstr "Visa alla tidsfrister som måste iakttas för detta evenemang"
 
 msgid "hidden faction visible only to assigned characters"
 msgstr "dold fraktion som endast är synlig för tilldelade karaktärer"
@@ -7904,6 +7969,9 @@ msgstr "Återställningssessionen har löpt ut, vänligen ladda upp filen igen."
 msgid "Some features require 'Character', which is not active"
 msgstr "Vissa funktioner kräver \"Character\", som inte är aktiv"
 
+msgid "The following changes will be applied when you confirm"
+msgstr "Följande ändringar kommer att genomföras när du bekräftar"
+
 msgid "The registration request will be updated automatically"
 msgstr "Ansökan kommer att uppdateras automatiskt"
 
@@ -7912,9 +7980,6 @@ msgstr "Användaren har bekräftat sin anmälan till detta evenemang"
 
 msgid "The user has updated their registration for this event"
 msgstr "Användaren har uppdaterat sin registrering för detta evenemang"
-
-msgid "View all deadlines that must be met for this event run"
-msgstr "Visa alla tidsfrister som måste hållas för detta evenemang"
 
 msgid "Whether this content is currently available for access"
 msgstr "Om detta innehåll för närvarande är tillgängligt för åtkomst"
@@ -7939,6 +8004,9 @@ msgstr "Skapa minst en biljettyp för registrering av evenemang"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Om markerad: visar en länk i kalendern till tidigare evenemang"
+
+msgid "Manage event utilities and QR code tools for this event"
+msgstr "Hantera evenemangsverktyg och QR-kodverktyg för detta evenemang"
 
 msgid "Manage expense submissions from crew and authorize them"
 msgstr "Hantera utläggsansökningar från besättningen och godkänna dem"
@@ -8147,8 +8215,15 @@ msgid "Manage custom text blocks displayed on pages and in emails"
 msgstr ""
 "Hantera anpassade textblock som visas på sidor och i e-postmeddelanden"
 
+msgid "Manage event milestones and their deadlines for this event"
+msgstr "Hantera milstolpar och deras tidsfrister för detta evenemang"
+
 msgid "Manage problems reported by contributors during this event"
 msgstr "Hantera problem som rapporterats av deltagarna under detta evenemang"
+
+msgid "Manage the answer options available for workshop questions"
+msgstr ""
+"Hantera de svarsalternativ som finns tillgängliga för frågorna i workshopen"
 
 msgid "No contributors with competences found in the organization"
 msgstr "Inga medarbetare med relevant kompetens hittades inom organisationen"
@@ -8193,6 +8268,9 @@ msgstr "Öppna hanteringspanelen <a href= %(url)s'>från här</a>"
 msgid "Candidates will appear here once they are added to the vote"
 msgstr ""
 "Kandidaterna kommer att visas här så snart de har lagts till i omröstningen"
+
+msgid "Check and complete your organization's activation checklist"
+msgstr "Kontrollera och fyll i din organisations aktiveringslista"
 
 msgid "Do you want to accept payments processed through the system"
 msgstr "Vill du acceptera betalningar som behandlas via systemet"
@@ -8288,6 +8366,11 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Hantera alla tilldelningar av token som utfärdats till medlemmar vid olika "
 "evenemang"
+
+msgid "Manage handout templates used to generate character handouts"
+msgstr ""
+"Hantera mallar för karaktärsbeskrivningar som används för att skapa "
+"karaktärsbeskrivningar"
 
 msgid "Manage one-time access tokens for secure video/audio content"
 msgstr "Hantera engångsåtkomsttokens för säkert video-/audioinnehåll"
@@ -8613,6 +8696,10 @@ msgstr ""
 "Hantera alla egenskaper som är kopplade till uppdrag, inklusive frågorna som"
 " hör till dem"
 
+msgid "Manage questions asked during workshop activities for this event"
+msgstr ""
+"Hantera frågor som ställs under workshopaktiviteterna för detta evenemang"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Nu kan deltagare skicka in samlingar och du kan granska dem"
 
@@ -8735,6 +8822,9 @@ msgstr "Din fullständiga bostadsadress, inklusive gata, stad och land"
 
 msgid "whether the character is aware of the identity of the other trait"
 msgstr "om karaktären är medveten om den andra egenskapens identitet"
+
+msgid "A preview of the changes will be shown before any data is modified"
+msgstr "En förhandsvisning av ändringarna visas innan några uppgifter ändras"
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
@@ -8911,6 +9001,10 @@ msgstr ""
 msgid "Makes upcoming events visible to external sites through a public API"
 msgstr ""
 "Gör kommande evenemang synliga för externa webbplatser via ett publikt API"
+
+msgid "Manage the progression steps shown to participants during this event"
+msgstr ""
+"Hantera de framstegssteg som visas för deltagarna under detta evenemang"
 
 msgid "Manage the questions assigned to each workshop module for this event"
 msgstr ""
@@ -9669,6 +9763,12 @@ msgstr ""
 "Markera betalningen som genomförd på den sidan när överföringen är klar"
 
 msgid ""
+"Select a participant and a target event to initiate a registration transfer"
+msgstr ""
+"Välj en deltagare och ett målehändelse för att påbörja en överföring av "
+"anmälan"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Välj karaktärer, fraktioner och informationsblad som du vill ladda ner som "
@@ -9723,6 +9823,12 @@ msgid ""
 msgstr ""
 "Om den är markerad kan ett alternativ endast visas om andra alternativ är "
 "valda"
+
+msgid ""
+"If checked, auto-relationships from character references will not be created"
+msgstr ""
+"Om denna ruta är markerad kommer inga automatiska relationer från "
+"karaktärsreferenser att skapas"
 
 msgid ""
 "If checked, shows the original image in the cover, not the thumbnail version"
@@ -9819,6 +9925,12 @@ msgid ""
 msgstr ""
 "För att kunna använda den funktion du har begärt måste följande funktion "
 "vara aktiverad"
+
+msgid ""
+"View casting history showing character and trait assignments across sessions"
+msgstr ""
+"Visa tilldelningshistorik som visar vilka karaktärer och egenskaper som "
+"tilldelats under olika sessioner"
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"
@@ -10137,13 +10249,6 @@ msgid ""
 msgstr ""
 "Valfritt - Belopp som läggs till registreringsavgiften om det väljs (0 = "
 "ingen extra kostnad)"
-
-msgid ""
-"Select a participant and a target event run to initiate a registration "
-"transfer"
-msgstr ""
-"Välj en deltagare och ett mål-evenemang för att påbörja en överföring av "
-"anmälan"
 
 msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
@@ -11072,13 +11177,6 @@ msgid ""
 msgstr ""
 "Hemlig nyckel som används för att signera JWT-token för SSO-autentisering "
 "med den externa applikationen"
-
-msgid ""
-"The following changes will be applied when you confirm. Review carefully "
-"before proceeding"
-msgstr ""
-"Följande ändringar kommer att tillämpas när du bekräftar. Läs igenom dem "
-"noggrant innan du fortsätter"
 
 msgid ""
 "Track which registered participants have completed all required workshops in"
@@ -12184,13 +12282,6 @@ msgstr ""
 "sannolikhet, och tilldelar eventuellt ett resultat"
 
 msgid ""
-"Select which information participants must provide during registration: "
-"either Required, Optional or Hidden"
-msgstr ""
-"Välj vilken information deltagarna måste lämna vid registreringen: antingen "
-"Obligatorisk, Valfri eller Dold"
-
-msgid ""
 "Target newsletter subscribers who haven't played this event yet, grouped by "
 "language for outreach campaigns"
 msgstr ""
@@ -12466,13 +12557,6 @@ msgid ""
 msgstr ""
 "Granska årsbalansräkningen med intäkts- och utgiftsposter som är anpassade "
 "för den årliga skattedeklarationen"
-
-msgid ""
-"Upload a backup ZIP file to restore event data. A preview of the changes "
-"will be shown before any data is modified"
-msgstr ""
-"Ladda upp en ZIP-fil för säkerhetskopiering för att återställa händelsedata."
-" En förhandsgranskning av ändringarna visas innan några data ändras"
 
 msgid ""
 "Activates a page summarizing overdue participants and their deadlines "

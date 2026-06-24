@@ -1009,12 +1009,6 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 .popup_tutorial {
   width: 80vw;
   height: 80vh;
-  z-index: 10000 !important;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  overflow: hidden;
 }
 
 .popup_tutorial iframe {
@@ -3021,6 +3015,29 @@ body.floating_iframe .inner {
 }
 
 /* ---------------------------------------------------------------------------
+   Badges assignment
+   --------------------------------------------------------------------------- */
+
+.badge-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+#badge-thumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+#badge-empty {
+  margin-top: 1rem;
+  color: #888;
+}
+
+/* ---------------------------------------------------------------------------
    DataTables Responsive - inline expand control
    --------------------------------------------------------------------------- */
 
@@ -3271,4 +3288,8 @@ body.association.new_v20 .user_resize {
 body.floating_iframe #wrapper {
   overflow-x: hidden;
   padding-right: 0.5em;
+}
+
+#first_event h1 {
+  margin: 0;
 }

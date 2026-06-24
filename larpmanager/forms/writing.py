@@ -463,6 +463,8 @@ class OrgaQuestTypeForm(WritingForm):
 
     page_title = _("Quest type")
 
+    page_info = _("Manage all quest types for this event")
+
     class Meta:
         model = QuestType
         fields: ClassVar[list] = ["name", "teaser", "event"]
@@ -529,6 +531,8 @@ class OrgaHandoutForm(WritingForm):
 
     page_title = _("Handout")
 
+    page_info = _("Manage character handouts for this event")
+
     class Meta:
         model = Handout
         fields: ClassVar[list] = ["template", "name", "text", "event"]
@@ -549,6 +553,8 @@ class OrgaHandoutForm(WritingForm):
 class OrgaHandoutTemplateForm(WritingForm):
     """Form for HandoutTemplate."""
 
+    page_info = _("Manage handout templates used to generate character handouts")
+
     load_templates: ClassVar[list] = ["handout-template"]
 
     class Meta:
@@ -565,6 +571,8 @@ class OrgaPrologueTypeForm(WritingForm):
     """Form for PrologueType."""
 
     page_title = _("Prologue type")
+
+    page_info = _("Manage prologue types for this event")
 
     class Meta:
         model = PrologueType
@@ -620,6 +628,8 @@ class OrgaSpeedLarpForm(MultichoiceMixin, WritingForm):
     """Form for SpeedLarp."""
 
     page_title = _("Speed larp")
+
+    page_info = _("Manage speed larps for this event")
 
     load_js: ClassVar[list] = ["multichoice"]
 

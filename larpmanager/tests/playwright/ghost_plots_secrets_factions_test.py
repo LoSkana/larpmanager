@@ -29,14 +29,21 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (expect_normalized,
-                                     fill_tinymce,
-                                     go_to,
-                                     login_orga,
-                                     login_user, submit_confirm, sidebar,
-                                     get_modal_iframe, save_modal, click_and_wait_question, just_wait,
-                                     _wait_select2_results, _wait_lm_ready,
-                                     )
+from larpmanager.tests.utils import (
+    _select2_search_and_pick,
+    _wait_lm_ready,
+    click_and_wait_question,
+    expect_normalized,
+    fill_tinymce,
+    get_modal_iframe,
+    go_to,
+    just_wait,
+    login_orga,
+    login_user,
+    save_modal,
+    sidebar,
+    submit_confirm,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -75,20 +82,14 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").fill("eeee2")
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("2")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "te")
     save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_cost").click()
     edit_iframe.locator("#id_cost").fill("1")
-    edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").click()
-    edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").fill("te")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox"), edit_iframe, "te")
     save_modal(page, edit_iframe)
 
     # create plots, assign them to player
@@ -133,10 +134,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("eefqq")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("tes")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "tes")
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
@@ -147,10 +145,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("ted")
     edit_iframe.get_by_text("No results found").click()
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("tes")
-    _wait_select2_results(edit_iframe)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "tes")
     save_modal(page, edit_iframe)
 
     # add new field

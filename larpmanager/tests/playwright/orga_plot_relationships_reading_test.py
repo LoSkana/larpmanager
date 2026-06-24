@@ -238,6 +238,7 @@ def plots(live_server: Any, page: Any) -> None:
 
     # change it
     fill_tinymce(edit_iframe, "id_char_role_1", "prova222", show=False)
+    just_wait(page)
     save_modal(page, edit_iframe)
 
     # check it

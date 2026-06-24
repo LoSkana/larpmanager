@@ -33,6 +33,8 @@ function load_question(el) {
 
     $( '.lq_{0}'.format(key) ).addClass('select');
 
+    window._questionLoadPending = (window._questionLoadPending || 0) + 1;
+
     request = $.ajax({
         url: url_load_questions,
         data: { q_uuid: key },
@@ -104,6 +106,7 @@ function load_question(el) {
         });
 
          done[q_uuid] = 1;
+         window._questionLoadPending = Math.max(0, (window._questionLoadPending || 0) - 1);
 
          if (spinner) {
             stop_spinner();

@@ -1,0 +1,227 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Assign Badges" %} - {% trans "Organization" %}
+{% endblock title %}
+{% block content %}
+    <div class="form_container">
+        <h2>{% trans "Assign Badges" %}</h2>
+        <p>
+            <a href="{% url 'exe_badges' %}"><i class="fa-solid fa-arrow-left"></i> {% trans "Back to badges" %}</a>
+        </p>
+        <div id="badge-assign-app">
+            <div class="badge-selector">
+                <label for="badge-select">{% trans "Badge" %}:</label>
+                <select id="badge-select" onchange="select_badge(this.value)">
+                    <option value="">- {% trans "select a badge" %} -</option>
+                </select>
+                <span id="badge-thumb"></span>
+            </div>
+            <div id="panels" class="casting-layout">
+                <div class="casting-panel">
+                    <h4>{% trans "Members" %}</h4>
+                    <input type="text"
+                           id="member-search"
+                           class="casting-search"
+                           placeholder="{% trans "Search" %}..."
+                           oninput="render_left()">
+                    <div id="member-list" class="char-list"></div>
+                </div>
+                <div class="casting-panel">
+                    <h4>
+                        {% trans "Assigned" %} <span id="assigned-count" class="pref-counter"></span>
+                    </h4>
+                    <div id="assigned-list" class="char-list"></div>
+                </div>
+            </div>
+            <div id="badge-empty">{% trans "Select a badge above to manage its members" %}.</div>
+        </div>
+    </div>
+{% endblock content %}
+{% block js %}
+    {{ block.super }}
+    <script>
+    var all_badges = {{ badges_json|safe }};
+    var all_members = {{ members_json|safe }};
+    var toggle_url = "{% url 'exe_badges_toggle' %}";
+    var csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    // badge_uuid -> Set of member uuids
+    var assignments = {};
+    all_badges.forEach(function(b) {
+        assignments[b.uuid] = new Set(b.members);
+    });
+
+    var current_badge = null;
+
+    function select_badge(uuid) {
+        current_badge = uuid || null;
+        document.getElementById('assigned-count').textContent = '';
+
+        var thumbEl = document.getElementById('badge-thumb');
+        thumbEl.innerHTML = '';
+
+        if (!current_badge) {
+            document.getElementById('panels').style.display = 'none';
+            document.getElementById('badge-empty').style.display = '';
+            return;
+        }
+
+        var badge = all_badges.find(function(b) { return b.uuid === current_badge; });
+        if (badge && badge.img_url) {
+            var img = document.createElement('img');
+            img.src = badge.img_url;
+            img.style.cssText = 'width:52px;height:52px;object-fit:cover;border-radius:6px;border:1px solid #ccc';
+            thumbEl.appendChild(img);
+        }
+
+        document.getElementById('panels').style.display = '';
+        document.getElementById('badge-empty').style.display = 'none';
+        document.getElementById('member-search').value = '';
+        render_left();
+        render_right();
+    }
+
+    function render_left() {
+        var list = document.getElementById('member-list');
+        list.innerHTML = '';
+        if (!current_badge) return;
+
+        var search = document.getElementById('member-search').value.toLowerCase().trim();
+        var assigned = assignments[current_badge];
+
+        if (!search) {
+            list.innerHTML = '<div class="pref-empty"><i class="fas fa-search"></i> {% filter escapejs %}{% trans "Type to search members" %}{% endfilter %}</div>';
+            return;
+        }
+
+        var visible = all_members.filter(function(m) {
+            if (assigned.has(m.uuid)) return false;
+            if (m.name.toLowerCase().indexOf(search) < 0) return false;
+            return true;
+        });
+
+        if (visible.length === 0) {
+            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No members found" %}{% endfilter %}</div>';
+            return;
+        }
+
+        visible.forEach(function(m) {
+            var card = document.createElement('div');
+            card.className = 'char-card';
+            card.style.cursor = 'pointer';
+            card.title = '{% filter escapejs %}{% trans "Click to assign" %}{% endfilter %}';
+
+            var nameEl = document.createElement('span');
+            nameEl.className = 'char-info';
+            nameEl.textContent = m.name;
+
+            var icon = document.createElement('i');
+            icon.className = 'fas fa-plus';
+            icon.style.cssText = 'margin-left:auto;color:#4caf50';
+
+            card.appendChild(nameEl);
+            card.appendChild(icon);
+            card.onclick = function() { toggle_member(m.uuid); };
+            list.appendChild(card);
+        });
+    }
+
+    function render_right() {
+        var list = document.getElementById('assigned-list');
+        list.innerHTML = '';
+        if (!current_badge) return;
+
+        var assigned = assignments[current_badge];
+        var members = all_members.filter(function(m) { return assigned.has(m.uuid); });
+
+        document.getElementById('assigned-count').textContent = '(' + members.length + ')';
+
+        if (members.length === 0) {
+            list.innerHTML = '<div class="pref-empty">{% filter escapejs %}{% trans "No members assigned" %}{% endfilter %}</div>';
+            return;
+        }
+
+        members.forEach(function(m) {
+            var item = document.createElement('div');
+            item.className = 'pref-item';
+            item.style.cursor = 'pointer';
+            item.title = '{% filter escapejs %}{% trans "Click to unassign" %}{% endfilter %}';
+
+            var nameEl = document.createElement('span');
+            nameEl.className = 'char-info';
+            nameEl.style.flex = '1';
+            nameEl.textContent = m.name;
+
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'pref-remove';
+            var icon = document.createElement('i');
+            icon.className = 'fas fa-times';
+            btn.appendChild(icon);
+            btn.onclick = function(e) { e.stopPropagation(); toggle_member(m.uuid); };
+
+            item.appendChild(nameEl);
+            item.appendChild(btn);
+            item.onclick = function() { toggle_member(m.uuid); };
+            list.appendChild(item);
+        });
+    }
+
+    function toggle_member(member_uuid) {
+        if (!current_badge) return;
+
+        var assigned = assignments[current_badge];
+        var optimistic_action = assigned.has(member_uuid) ? 'removed' : 'added';
+
+        // optimistic update
+        if (optimistic_action === 'added') {
+            assigned.add(member_uuid);
+        } else {
+            assigned.delete(member_uuid);
+        }
+        render_left();
+        render_right();
+
+        var data = new FormData();
+        data.append('badge_uuid', current_badge);
+        data.append('member_uuid', member_uuid);
+        data.append('csrfmiddlewaretoken', csrf_token);
+
+        fetch(toggle_url, { method: 'POST', body: data })
+            .then(function(r) { return r.json(); })
+            .then(function(json) {
+                if (json.res !== 'ok') {
+                    // rollback
+                    if (optimistic_action === 'added') {
+                        assigned.delete(member_uuid);
+                    } else {
+                        assigned.add(member_uuid);
+                    }
+                    render_left();
+                    render_right();
+                }
+            })
+            .catch(function() {
+                // rollback on network error
+                if (optimistic_action === 'added') {
+                    assigned.delete(member_uuid);
+                } else {
+                    assigned.add(member_uuid);
+                }
+                render_left();
+                render_right();
+            });
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+        var sel = document.getElementById('badge-select');
+        all_badges.forEach(function(b) {
+            var opt = document.createElement('option');
+            opt.value = b.uuid;
+            opt.textContent = b.name;
+            sel.appendChild(opt);
+        });
+    });
+    </script>
+{% endblock js %}

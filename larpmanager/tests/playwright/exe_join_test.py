@@ -147,6 +147,7 @@ def test_exe_join(pw_page: Any) -> None:
     # Step 5: first registration
     go_to(page, live_server, "prova/register")
     page.get_by_role("button", name="Continua").click()
+    page.locator("#riepilogo").wait_for(state="visible")
     submit_confirm(page)
 
     go_to(page, live_server, "manage/activation/")
