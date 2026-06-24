@@ -135,7 +135,8 @@ def traits(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("stru")
     _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
-    expect(edit_iframe.locator("#id_text")).to_have_text(re.compile(r'.*#\d+'))
+    just_wait(page)
+    expect(edit_iframe.locator("#id_text")).to_have_value(re.compile(r'.*#\d+'))
 
     save_modal(page, edit_iframe)
 

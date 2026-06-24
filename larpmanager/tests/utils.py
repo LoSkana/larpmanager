@@ -360,6 +360,8 @@ def upload(page: Any, element_id: Any, image_path: Any) -> None:
 def normalize_whitespace(text: str) -> str:
     """Normalize whitespace by removing newlines and collapsing multiple spaces."""
 
+    text = re.sub(r'<[^>]+>', '', text)
+
     lines = []
     for line in text.splitlines():
         line = line.strip()

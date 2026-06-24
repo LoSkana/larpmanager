@@ -3032,10 +3032,6 @@ body.floating_iframe .inner {
   gap: 0.5rem;
 }
 
-.casting-layout {
-  display: none;
-}
-
 #badge-empty {
   margin-top: 1rem;
   color: #888;
