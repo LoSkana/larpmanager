@@ -511,15 +511,21 @@ def correct_plot_character(e_id: Any, p_id: Any) -> None:
         p_id: Source parent event ID with original elements
 
     """
+    # Map target characters/plots by number
+    target_character_by_number = dict(Character.objects.values_list("number", "id").filter(event_id=e_id))
+    target_plot_by_number = dict(Plot.objects.values_list("number", "id").filter(event_id=e_id))
+
     character_id_mapping = {}
     for old_character in Character.objects.values_list("id", "number").filter(event_id=p_id):
-        new_character_id = Character.objects.values_list("id").get(event_id=e_id, number=old_character[1])[0]
-        character_id_mapping[old_character[0]] = new_character_id
+        new_character_id = target_character_by_number.get(old_character[1])
+        if new_character_id is not None:
+            character_id_mapping[old_character[0]] = new_character_id
 
     plot_id_mapping = {}
     for old_plot in Plot.objects.values_list("id", "number").filter(event_id=p_id):
-        new_plot_id = Plot.objects.values_list("id").get(event_id=e_id, number=old_plot[1])[0]
-        plot_id_mapping[old_plot[0]] = new_plot_id
+        new_plot_id = target_plot_by_number.get(old_plot[1])
+        if new_plot_id is not None:
+            plot_id_mapping[old_plot[0]] = new_plot_id
 
     # Pre-fetch existing plot-character relationships
     existing_plot_character_rels = set(
@@ -527,8 +533,12 @@ def correct_plot_character(e_id: Any, p_id: Any) -> None:
     )
 
     for relationship in PlotCharacterRel.objects.filter(character__event_id=p_id):
-        new_character_id = character_id_mapping[relationship.character_id]
-        new_plot_id = plot_id_mapping[relationship.plot_id]
+        new_character_id = character_id_mapping.get(relationship.character_id)
+        new_plot_id = plot_id_mapping.get(relationship.plot_id)
+
+        # Skip relationships whose character or plot has no counterpart in target
+        if new_character_id is None or new_plot_id is None:
+            continue
 
         # Check existence using pre-fetched set instead of query
         if (new_character_id, new_plot_id) in existing_plot_character_rels:

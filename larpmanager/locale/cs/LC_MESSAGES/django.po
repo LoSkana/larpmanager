@@ -95,6 +95,9 @@ msgstr "tot"
 msgid "Area"
 msgstr "Oblast"
 
+msgid "Back"
+msgstr "Zpět"
+
 msgid "Body"
 msgstr "Tělo"
 
@@ -891,6 +894,9 @@ msgstr "Historické stránky"
 
 msgid "ID Card"
 msgstr "Průkaz totožnosti"
+
+msgid "Ignored"
+msgstr "Ignorováno"
 
 msgid "Inflows"
 msgstr "Příjmy"
@@ -3718,6 +3724,9 @@ msgstr "Aktivace účtu"
 msgid "Add to xp delivery"
 msgstr "Přidat do dodávky xp"
 
+msgid "Added to the queue"
+msgstr "Mail přidán do fronty"
+
 msgid "Additional tickets"
 msgstr "Další vstupenky"
 
@@ -4536,6 +4545,9 @@ msgstr "Žádost o změnu kyvadlové dopravy"
 
 msgid "Newsletter preferences"
 msgstr "Předvolby pro zasílání novinek"
+
+msgid "No address was ignored"
+msgstr "Žádná adresa nebyla vynechána"
 
 msgid "No registrations found"
 msgstr "Nebyly nalezeny žádné registrace"
@@ -5437,6 +5449,9 @@ msgstr "Otevření registrací není nastaveno"
 msgid "Request refund from: %(user)s"
 msgstr "Žádost o vrácení peněz od: %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Výsledek hromadného rozesílání e-mailů"
+
 msgid "Select the new ability to get"
 msgstr "Vyberte novou dovednost, kterou chcete získat"
 
@@ -5862,6 +5877,9 @@ msgstr "Zajistěte organizaci rychlých LARPů pro tuto akci"
 
 msgid "No activation steps are available"
 msgstr "Nejsou k dispozici žádné kroky k aktivaci"
+
+msgid "No address was added to the queue"
+msgstr "Mail přidán do fronty"
 
 msgid "No character found for this event"
 msgstr "Pro tuto událost nebyla nalezena žádná postava"
@@ -12460,6 +12478,13 @@ msgid ""
 msgstr ""
 "Sbírka je aktivní! Chcete-li se zapojit, klikněte na následující odkaz nebo "
 "ho zkopírujte tomu, kdo se chce zapojit"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Tyto adresy nepatří uživateli, který sdílel svá data s organizací, a nebyly "
+"zařazeny do fronty"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

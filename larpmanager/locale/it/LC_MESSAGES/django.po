@@ -95,6 +95,9 @@ msgstr "tot"
 msgid "Area"
 msgstr "Area"
 
+msgid "Back"
+msgstr "Indietro"
+
 msgid "Body"
 msgstr "Corpo"
 
@@ -891,6 +894,9 @@ msgstr "Storico"
 
 msgid "ID Card"
 msgstr "Carta identità"
+
+msgid "Ignored"
+msgstr "Ignorato"
 
 msgid "Inflows"
 msgstr "Entrate"
@@ -3718,6 +3724,9 @@ msgstr "Attivazione del conto"
 msgid "Add to xp delivery"
 msgstr "Aggiungi alla consegna xp"
 
+msgid "Added to the queue"
+msgstr "Mail aggiunta alla coda"
+
 msgid "Additional tickets"
 msgstr "Biglietti aggiuntivi"
 
@@ -4536,6 +4545,9 @@ msgstr "Modifica richiesta shuttle"
 
 msgid "Newsletter preferences"
 msgstr "Preferenze per la newsletter"
+
+msgid "No address was ignored"
+msgstr "Nessun indirizzo è stato tralasciato"
 
 msgid "No registrations found"
 msgstr "Nessuna registrazione trovata"
@@ -5437,6 +5449,9 @@ msgstr "Apertura delle iscrizioni non impostata"
 msgid "Request refund from: %(user)s"
 msgstr "Richiesta di rimborso da: %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Risultato dell'invio di email di massa"
+
 msgid "Select the new ability to get"
 msgstr "Seleziona la nuova abilità da acquisire"
 
@@ -5862,6 +5877,9 @@ msgstr "Gestisci i larp veloci per questo evento"
 
 msgid "No activation steps are available"
 msgstr "Non sono disponibili procedure di attivazione"
+
+msgid "No address was added to the queue"
+msgstr "Mail aggiunta alla coda"
 
 msgid "No character found for this event"
 msgstr "Nessun personaggio trovato per questo evento"
@@ -12839,6 +12857,13 @@ msgid ""
 msgstr ""
 "La colletta è attiva! Per partecipare clicca sul seguente link, o copialo a "
 "chi vuoi coinvolgere"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Questi indirizzi non appartengono a un utente che ha condiviso i propri dati"
+" con l'organizzazione e non sono stati aggiunti alla coda"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "
