@@ -11,6 +11,7 @@
     <table id="assignments" class="go_datatable writing">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Character" %}</th>
                 <th>{% trans "Factions" %}</th>
                 <th>{% trans "Player" %}</th>
@@ -21,6 +22,7 @@
         <tbody>
             {% for num, cha in chars.items %}
                 <tr>
+                    <td></td>
                     <td>{{ cha.name }}</td>
                     <td>
                         {% for fnum in cha.factions %}
@@ -51,6 +53,7 @@
         <table id="traits" class="go_datatable writing">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Trait" %}</th>
                     <th>{% trans "Quest" %}</th>
                     <th>{% trans "Character" %}</th>
@@ -62,6 +65,7 @@
             <tbody>
                 {% for tnum, tra in traits.items %}
                     <tr>
+                        <td></td>
                         <td>{{ tra.name }}</td>
                         <td>{{ tra.quest.name }}</td>
                         {% if tra.char %}
@@ -89,6 +93,7 @@
         <table id="faction-{{ fnum }}" class="go_datatable writing">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Character" %}</th>
                     <th>{% trans "Factions" %}</th>
                     <th>{% trans "Player" %}</th>
@@ -100,6 +105,7 @@
                 {% for chnum in fac.characters %}
                     {% with chars|get:chnum as cha %}
                         <tr>
+                            <td></td>
                             <td>{{ cha.name }}</td>
                             <td>
                                 {% for fnum in cha.factions %}

@@ -5,6 +5,7 @@
             <thead>
                 <tr>
                     <th></th>
+                    <th></th>
                     <th>{% trans "Event" %}</th>
                     <th>{% trans "Dates" %}</th>
                     <th>{% trans "Status" %}</th>
@@ -15,6 +16,7 @@
             <tbody>
                 {% for run in ongoing_runs %}
                     <tr>
+                        <td></td>
                         <td>
                             <a href="{% url 'manage' run.slug %}" qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                         </td>

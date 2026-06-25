@@ -28,6 +28,7 @@
                {% endblock table_reorder_attrs %}
                {% if reorder_model %}data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}" data-reorder-model="{{ reorder_model }}"{% endif %}>
             <thead>
+                <th></th>
                 {% if reorder_model %}<th></th>{% endif %}
                 {% block thead %}
                 {% endblock thead %}
@@ -36,6 +37,7 @@
                 {% with list=item.list %}
                     {% for el in list %}
                         <tr id="{{ el.uuid }}">
+                            <td></td>
                             {% if reorder_model %}
                                 <td class="reorder-handle">
                                     <i class="fa-solid fa-grip-vertical"></i>

@@ -10,6 +10,7 @@
     <table id="roles" class="go_datatable writing">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Character" %}</th>
                 <th>{% trans "Player" %}</th>
                 {% for rl in all_roles %}<th>{{ rl }}</th>{% endfor %}
@@ -18,6 +19,7 @@
         <tbody>
             {% for num, char in chars.items %}
                 <tr>
+                    <td></td>
                     <td>{{ char.name }}</td>
                     <td>{{ char.player_full }}</td>
                     {% for rl in all_roles %}

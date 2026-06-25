@@ -13,6 +13,7 @@
     <table id="questions_open" class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Participant" %}</th>
                 <th>{% trans "Question" %}</th>
@@ -24,6 +25,7 @@
         <tbody>
             {% for el in open %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created }}</td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.text }}</td>
@@ -50,6 +52,7 @@
         <table id="questions_closed" class="go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Date" %}</th>
                     <th>{% trans "Participant" %}</th>
                     <th>{% trans "Question" %}</th>
@@ -59,6 +62,7 @@
             <tbody>
                 {% for el in closed %}
                     <tr>
+                        <td></td>
                         <td>{{ el.created }}</td>
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>

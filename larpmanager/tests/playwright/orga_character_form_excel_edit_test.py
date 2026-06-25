@@ -208,7 +208,7 @@ def inline_editing_teaser(page: Any, live_server: Any) -> None:
 
     # Edit u2 teaser (empty cell - click on the cell in the teaser column)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(4).dblclick()
+    cells_u2.nth(5).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_teaser").fill("New Teaser 2")
     submit_inline_edit(page)
@@ -226,7 +226,7 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
 
     # Edit u2 text (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(5).dblclick()
+    cells_u2.nth(6).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_text").fill("New Text 2")
     submit_inline_edit(page)
@@ -247,7 +247,7 @@ def inline_editing_text_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell) - click on the appropriate column
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(6).dblclick()
+    cells_u2.nth(7).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u4").fill("Text value 2")
     submit_inline_edit(page)
@@ -268,7 +268,7 @@ def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(7).dblclick()
+    cells_u2.nth(8).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u5").fill("Paragraph value 2")
     submit_inline_edit(page)
@@ -289,7 +289,7 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(8).dblclick()
+    cells_u2.nth(9).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator('label[for="id_que_u6_2"]').click()  # Option C
     submit_inline_edit(page)
@@ -312,7 +312,7 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(9).dblclick()
+    cells_u2.nth(10).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator('label[for="id_que_u7_0"]').click()
     submit_inline_edit(page)
@@ -326,7 +326,7 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
 
     # Edit u1 (existing value)
     cells_u2 = page.locator('[id="u1"]').get_by_role("cell")
-    cells_u2.nth(10).dblclick()
+    cells_u2.nth(11).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u8").fill("Text 2 modified")
     submit_inline_edit(page)
@@ -334,7 +334,7 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(10).dblclick()
+    cells_u2.nth(11).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u8").fill("Text 2 value 2")
     submit_inline_edit(page)

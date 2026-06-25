@@ -13,6 +13,7 @@
     <table class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Size" %}</th>
                 <th>{% trans "Description" %}</th>
@@ -23,6 +24,7 @@
         <tbody>
             {% for el in memberships %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created | date:"d/m/Y" }}</td>
                     <td>{{ el.value }}</td>
                     <td>{% trans "Organization fee" %} - {{ el.member }} - {{ el.year }}</td>
@@ -37,6 +39,7 @@
             {% endfor %}
             {% for el in donations %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created | date:"d/m/Y" }}</td>
                     <td>{{ el.value }}</td>
                     <td>
@@ -54,6 +57,7 @@
             {% endfor %}
             {% for el in inflows %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created | date:"d/m/Y" }}</td>
                     <td>{{ el.value }}</td>
                     <td>{{ el.descr }}</td>
@@ -70,6 +74,7 @@
             {% endfor %}
             {% for el in tickets %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created | date:"d/m/Y" }}</td>
                     <td>{{ el.value }}</td>
                     <td>{{ el.member }}</td>
@@ -90,6 +95,7 @@
     <table class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Size" %}</th>
                 <th>{% trans "Description" %}</th>
@@ -100,6 +106,7 @@
         <tbody>
             {% for el in outflows %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created | date:"d/m/Y" }}</td>
                     <td>{{ el.value }}</td>
                     <td>{{ el.descr }}</td>
@@ -115,6 +122,7 @@
                 </tr>
             {% empty %}
                 <tr>
+                    <td></td>
                     <td colspan="100">
                         <p class="no-elements-available">{% trans "No outflows recorded for the selected year" %}.</p>
                     </td>
@@ -142,6 +150,7 @@
     <table class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Member" %}</th>
                 <th>{% trans "Amount" %}</th>
             </tr>
@@ -149,6 +158,7 @@
         <tbody>
             {% for el in pos %}
                 <tr>
+                    <td></td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.credit }}</td>
                 </tr>
@@ -162,6 +172,7 @@
     <table class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Member" %}</th>
                 <th>{% trans "Amount" %}</th>
             </tr>
@@ -169,6 +180,7 @@
         <tbody>
             {% for el in neg %}
                 <tr>
+                    <td></td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.credit }}</td>
                 </tr>

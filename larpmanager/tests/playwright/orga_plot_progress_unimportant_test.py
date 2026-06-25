@@ -169,14 +169,14 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
         page.locator("table.writing_list tbody tr")
         .nth(0)
         .locator("td")
-        .nth(9)
+        .nth(10)
         .inner_text()
     )
     important_text = (
         page.locator("table.writing_list tbody tr")
         .nth(0)
         .locator("td")
-        .nth(10)
+        .nth(11)
         .inner_text()
     )
 

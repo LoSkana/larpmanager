@@ -11,6 +11,7 @@
     <table id="expenses" class="go_datatable mob">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Receipt" %}</th>
                 <th>{% trans "Type" %}</th>
                 <th>{% trans "Description" %}</th>
@@ -21,6 +22,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         <a href="{{ el.download }}">{% trans "Download" %}</a>
                     </td>

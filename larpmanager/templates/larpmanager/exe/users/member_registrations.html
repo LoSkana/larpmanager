@@ -11,6 +11,7 @@
     <table class="writing go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Event" %}</th>
                 <th>{% trans "Total" %}</th>
                 <th>{% trans "Given" %}</th>
@@ -20,6 +21,7 @@
         <tbody>
             {% for el in regs %}
                 <tr>
+                    <td></td>
                     <td>{{ el.run.search }}</td>
                     <td>{{ el.tot_iscr|format_decimal }}</td>
                     <td>{{ el.tot_payed|format_decimal }}</td>
