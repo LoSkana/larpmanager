@@ -5187,7 +5187,7 @@ msgstr ""
 msgid "Select ability"
 msgstr ""
 
-msgid "Are you sure you want to delete"
+msgid "Are you sure you want to delete this element"
 msgstr ""
 
 msgid "Confirm"

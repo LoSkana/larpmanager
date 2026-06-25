@@ -5598,9 +5598,6 @@ msgstr "Aktivoi tapahtuman ominaisuudet"
 msgid "After confirmation, add another"
 msgstr "Vahvistuksen jälkeen lisää toinen"
 
-msgid "Are you sure you want to delete"
-msgstr "Haluatko varmasti poistaa tämän"
-
 msgid "Browse the presentation website"
 msgstr "Selaa esittelyn verkkosivustoa"
 
@@ -7105,6 +7102,9 @@ msgstr "Sinulle lahjoitettu ilmoittautuminen on lunastettu!"
 
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Valinnainen) Saatavilla olevien paikkojen enimmäismäärä"
+
+msgid "Are you sure you want to delete this element"
+msgstr "Haluatko varmasti poistaa tämän elementin"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Peruutus puuttuvan profiilin laatimisen vuoksi"

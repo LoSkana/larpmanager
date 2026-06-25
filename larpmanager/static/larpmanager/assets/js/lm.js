@@ -118,7 +118,10 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         if (e.data.type === 'iframe_resize') {
             revealIframe();
             if (modalClass === 'popup_delete' && e.data.height) {
-                iframe.style.height = e.data.height + 'px';
+                const h = e.data.height + 'px';
+                iframe.style.height = h;
+                const fc = iframe.closest('.frame-container');
+                if (fc) fc.style.height = h;
             }
         }
 

@@ -5598,9 +5598,6 @@ msgstr "Activar funciones para el evento"
 msgid "After confirmation, add another"
 msgstr "Tras la confirmación, añada otro"
 
-msgid "Are you sure you want to delete"
-msgstr "¿Estás seguro de que quieres borrar"
-
 msgid "Browse the presentation website"
 msgstr "Navega por la web de presentación"
 
@@ -7107,6 +7104,9 @@ msgstr "¡Tu inscripción regalada ha sido canjeada!"
 
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Opcional) Número máximo de plazas disponibles"
+
+msgid "Are you sure you want to delete this element"
+msgstr "¿Estás seguro de que quieres borrar este elemento"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Anulación por falta de compilación de perfiles"

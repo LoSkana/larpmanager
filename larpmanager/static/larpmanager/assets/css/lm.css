@@ -991,13 +991,18 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   min-width: 400px;
   max-width: 40vw;
   height: fit-content;
+  min-height: 300px;
   max-height: 50vh;
 }
 
 .popup_delete #lm-modal-content,
-.popup_delete .frame-container,
-.popup_delete .frame-container iframe {
+.popup_delete .frame-container {
   height: auto;
+}
+
+.popup_delete .frame-container iframe {
+  height: 200px;
+  min-height: 200px;
 }
 
 @media (max-width: 800px) {
@@ -2685,6 +2690,10 @@ body.floating_iframe #page-wrapper {
   padding: 0 !important;
   margin: 0 !important;
   width: 100%;
+}
+
+body.floating_iframe.outer_delete #wrapper {
+  overflow-y: hidden !important;
 }
 
 body.floating_iframe #main,

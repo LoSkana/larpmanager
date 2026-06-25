@@ -719,7 +719,7 @@ def backend_delete_frame(
         return render(request, "elements/dashboard/form_success.html", context)
 
     backend_get(context, model_type, entity_uuid, None)
-    context["el_name"] = _element_display_name(context["el"])
+    context["el_name"] = '"_element_display_name(context["el"])"'
     return render(request, "elements/dashboard/delete_confirm.html", context)
 
 

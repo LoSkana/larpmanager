@@ -962,7 +962,8 @@ def orga_registrations_delete(request: HttpRequest, event_slug: str, registratio
         return render(request, "elements/dashboard/form_success.html", context)
 
     registration = context["registration"]
-    context["el_name"] = str(registration.member)
+    text = _("Registration")
+    context["el_name"] = f"{text} - {registration.member} - {registration.ticket.name}"
     return render(request, "elements/dashboard/delete_confirm.html", context)
 
 
