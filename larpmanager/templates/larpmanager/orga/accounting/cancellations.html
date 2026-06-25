@@ -10,6 +10,7 @@
     <table id="cancellations" class="go_datatable writing">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Registration fee" %}</th>
                 <th>{% trans "Payment" %}</th>
                 {% if features.tokens %}<th>{{ tokens_name }}</th>{% endif %}
@@ -31,6 +32,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         {% if el.tot_iscr %}{{ el.tot_iscr | floatformat:"0" }}{% endif %}
                     </td>

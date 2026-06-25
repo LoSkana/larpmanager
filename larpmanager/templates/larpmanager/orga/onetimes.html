@@ -9,6 +9,7 @@
     <table id="onetimes" class="go_datatable writing">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "File" %}</th>
@@ -22,6 +23,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         <a href="{% url 'orga_onetimes_edit' run.get_slug el.uuid %}">{{ el.name }}</a>
                     </td>

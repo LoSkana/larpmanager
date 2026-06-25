@@ -11,6 +11,7 @@
     <table id="workshops" class="go_datatable writing">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Player" %}</th>
                 <th>{% trans "Done" %}</th>
             </tr>
@@ -18,6 +19,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         <a href="{% url 'public' el.member.uuid %}">{{ el.member }}</a>
                     </td>

@@ -11,6 +11,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "From" %}</th>
                 <th>{% trans "To" %}</th>
                 <th>{% trans "Text" %}</th>
@@ -22,6 +23,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         <a href="{% url 'orga_relationship_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

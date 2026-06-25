@@ -10,6 +10,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Selected" %}</th>
                 <th>{% trans "Item" %}</th>
                 <th>{% trans "Description" %}</th>
@@ -26,6 +27,7 @@
         <tbody>
             {% for el in item_all.values %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td></td>
                     <td data-order="{% if el.selected %}1{% else %}0{% endif %}"
                         class="selected">
