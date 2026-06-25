@@ -1466,6 +1466,9 @@ msgstr "Kontti"
 msgid "Copy done"
 msgstr "Kopioitu valmis"
 
+msgid "Criterion"
+msgstr "Peruste"
+
 msgid "Customize"
 msgstr "Mukauta"
 
@@ -1723,6 +1726,9 @@ msgstr "Ota yhteyttä"
 
 msgid "Containers"
 msgstr "Säiliöt"
+
+msgid "Criterions"
+msgstr "Kriteerit"
 
 msgid "Deleted on"
 msgstr "Poistettu"
@@ -4983,6 +4989,9 @@ msgstr "Vapaaehtoisten rekisterin hallinnointi"
 msgid "New message from %(user)s"
 msgstr "Uusi viesti %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Kriteerejä ei ole vielä määritelty"
+
 msgid "No deliveries defined yet"
 msgstr "Toimituksia ei ole vielä määritelty"
 
@@ -5314,6 +5323,9 @@ msgstr "Jos valitaan: jäsenet voivat äänestää"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Kutsu lähetetään %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Kokemuskriteerien hallinta"
 
 msgid "Manage the event speed-larps"
 msgstr "Hallitse speed-larp tapahtumaa"
@@ -7190,6 +7202,9 @@ msgstr "Et ole vielä järjestön jäsen"
 msgid "You are now logged in with your main account"
 msgstr "Olet nyt kirjautuneena sisään päätililläsi"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr "Jakokriteerien osalta summan on oltava eri kuin nolla"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Sovelletaanko päivitystä koko organisaatioon?"
 
@@ -7670,6 +7685,9 @@ msgstr "Ilmoittautuminen tähän tapahtumaan on peruttu"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Osallistumismaksujen kokonaismäärä alennusten ansiosta"
+
+msgid "Use the button above to create the first criterion"
+msgstr "Luo ensimmäinen kriteeri yllä olevan painikkeen avulla"
 
 msgid "View all deadlines that must be met for this event"
 msgstr "Näytä kaikki tämän tapahtuman määräajat, jotka on noudatettava"
@@ -9209,6 +9227,10 @@ msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Nämä ovat tapahtumailmoittautumiset, joista sinun on suoritettava maksu"
 
+msgid "This criterion will apply only to characters with all required options"
+msgstr ""
+"Tämä kriteeri koskee vain hahmoja, joilla on kaikki vaaditut vaihtoehdot"
+
 msgid "This discount code is already used in one or more of the selected runs"
 msgstr ""
 "Tätä alennuskoodia on jo käytetty yhdessä tai useammassa valitusta erästä"
@@ -10181,6 +10203,11 @@ msgid ""
 msgstr ""
 "Nämä ovat delegoituja tilirekisteröintejä, joista sinun on suoritettava "
 "maksu"
+
+msgid ""
+"This criterion will apply only to characters owning all prerequisite "
+"abilities"
+msgstr "Tämä kriteeri koskee vain hahmoja, joilla on kaikki vaaditut kyvyt"
 
 #, python-format
 msgid ""
@@ -12356,6 +12383,13 @@ msgid ""
 msgstr ""
 "Lisää tuen XP:n (kokemuspisteiden) antamiselle hahmoille, joita voi sitten "
 "käyttää kykyjen ostamiseen"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Määritä kriteerit, jotka muuttavat kokemuspisteiden kokonaismäärää "
+"ehdollisesti ennakkoedellytysten tai hahmon valintojen perusteella"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

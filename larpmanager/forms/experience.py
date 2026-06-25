@@ -41,8 +41,10 @@ from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CriterionExp,
     DeliveryExp,
     ModifierExp,
+    Operation,
     RuleExp,
     SystemExp,
 )
@@ -338,6 +340,70 @@ class OrgaModifierExpForm(MultichoiceMixin, BaseModelForm):
                     data={"type": "writing_option", "owner": "modifierexp", "field": "requirements"},
                     form_edit_uuid=True,
                 )
+
+
+class OrgaCriterionExpForm(MultichoiceMixin, ExpBaseForm):
+    """Form for OrgaCriterionExp."""
+
+    load_js: ClassVar[list] = ["multichoice"]
+
+    page_title = _("Criterion")
+
+    page_info = _(
+        "Define criteria that conditionally modify experience point totals based on prerequisites or character options"
+    )
+
+    class Meta:
+        model = CriterionExp
+        exclude = ("number", "order")
+        widgets: ClassVar[dict] = {
+            "system": SystemExpS2Widget,
+            "prerequisites": AbilityS2WidgetMulti,
+            "requirements": EventWritingOptionS2WidgetMulti,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form and configure event-related fields."""
+        super().__init__(*args, **kwargs)
+        self.delete_field("name")
+
+        event = self.params.get("event")
+        systems = list(event.get_elements(SystemExp)) if event else []
+        if len(systems) == 1:
+            self.delete_field("system")
+            self.instance._default_system = systems[0]  # noqa: SLF001
+        elif "system" in self.fields:
+            self.configure_field_event("system", event)
+
+        for field in ["prerequisites", "requirements"]:
+            self.configure_field_event(field, event)
+
+        run = self.params.get("run")
+        if run:
+            if "prerequisites" in self.fields:
+                self.add_multichoice_config(
+                    field_id="prerequisites",
+                    link_id="criterion_prerequisites_available",
+                    label=str(_("Show available abilities")),
+                    url=reverse("orga_exp_available", args=[run.get_slug()]),
+                    data={"type": "ability"},
+                )
+            if "requirements" in self.fields:
+                self.add_multichoice_config(
+                    field_id="requirements",
+                    link_id="criterion_requirements_available",
+                    label=str(_("Show available options")),
+                    url=reverse("orga_form_available", args=[run.get_slug()]),
+                    data={"type": "writing_option", "owner": "criterionexp", "field": "requirements"},
+                    form_edit_uuid=True,
+                )
+
+    def clean(self) -> dict:
+        """Validate that DIVISION criteria have a non-zero amount."""
+        cleaned = super().clean()
+        if cleaned.get("operation") == Operation.DIVISION and "amount" in cleaned and not cleaned["amount"]:
+            self.add_error("amount", _("Amount must be non-zero for division criteria"))
+        return cleaned
 
 
 class SelectNewAbility(BaseForm):

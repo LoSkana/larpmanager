@@ -1301,6 +1301,26 @@ urlpatterns = [
         name="orga_exp_modifiers_delete",
     ),
     path(
+        "<slug:event_slug>/manage/experience/criterions/",
+        views_ox.orga_exp_criterions,
+        name="orga_exp_criterions",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/criterions/new/",
+        views_ox.orga_exp_criterions_new,
+        name="orga_exp_criterions_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/criterions/<slug:criterion_uuid>/edit/",
+        views_ox.orga_exp_criterions_edit,
+        name="orga_exp_criterions_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/experience/criterions/<slug:criterion_uuid>/delete/",
+        views_ox.orga_exp_criterions_delete,
+        name="orga_exp_criterions_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/experience/available/",
         views_ox.orga_exp_available,
         name="orga_exp_available",

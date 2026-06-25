@@ -2200,6 +2200,17 @@ msgid ""
 "or character fields"
 msgstr ""
 
+msgid "Criterion"
+msgstr ""
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+
+msgid "Amount must be non-zero for division criteria"
+msgstr ""
+
 msgid "click on the icon to open the tutorial"
 msgstr ""
 
@@ -4101,6 +4112,14 @@ msgid "Indicate the prerequisite abilities"
 msgstr ""
 
 msgid "Indicate the required character options"
+msgstr ""
+
+msgid ""
+"This criterion will apply only to characters owning all prerequisite "
+"abilities"
+msgstr ""
+
+msgid "This criterion will apply only to characters with all required options"
 msgstr ""
 
 msgid "Single choice"
@@ -8454,6 +8473,18 @@ msgstr ""
 msgid "Use the button above to create the first ability type"
 msgstr ""
 
+msgid "Criterions"
+msgstr ""
+
+msgid "Operation"
+msgstr ""
+
+msgid "No criterions defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first criterion"
+msgstr ""
+
 msgid "No deliveries defined yet"
 msgstr ""
 
@@ -8470,9 +8501,6 @@ msgid "Use the button above to create the first modifier"
 msgstr ""
 
 msgid "Field"
-msgstr ""
-
-msgid "Operation"
 msgstr ""
 
 msgid "No experience rules defined yet"
@@ -10666,6 +10694,9 @@ msgid "Manage experience rules"
 msgstr ""
 
 msgid "Manage experience modifiers"
+msgstr ""
+
+msgid "Manage experience criterions"
 msgstr ""
 
 msgid "Systems"

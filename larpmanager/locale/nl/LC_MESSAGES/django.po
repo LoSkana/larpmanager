@@ -1466,6 +1466,9 @@ msgstr "Container"
 msgid "Copy done"
 msgstr "Uitgevoerd exemplaar"
 
+msgid "Criterion"
+msgstr "Criterium"
+
 msgid "Customize"
 msgstr "aanpassen"
 
@@ -1723,6 +1726,9 @@ msgstr "Neem contact met ons op"
 
 msgid "Containers"
 msgstr "Containers"
+
+msgid "Criterions"
+msgstr "Criteria"
 
 msgid "Deleted on"
 msgstr "Verwijderd op"
@@ -4983,6 +4989,9 @@ msgstr "Vrijwilligersregister beheren"
 msgid "New message from %(user)s"
 msgstr "Nieuw bericht van %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Er zijn nog geen criteria vastgesteld"
+
 msgid "No deliveries defined yet"
 msgstr "Er zijn nog geen leveringen gedefinieerd"
 
@@ -5314,6 +5323,9 @@ msgstr "Indien aangevinkt: leden kunnen stemmen"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Uitnodiging verstuurd naar %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Ervaringscriteria beheren"
 
 msgid "Manage the event speed-larps"
 msgstr "De snelheidsbeperkingen voor evenementen beheren"
@@ -7199,6 +7211,11 @@ msgstr "Je bent nog geen lid van de vereniging"
 msgid "You are now logged in with your main account"
 msgstr "Je bent nu ingelogd met je hoofdaccount"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr ""
+"Het bedrag moet groter zijn dan nul om aan de criteria voor deling te "
+"voldoen"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "De upgrade toepassen op de hele organisatie?"
 
@@ -7687,6 +7704,9 @@ msgstr "De registratie voor het evenement werd geannuleerd"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deelnamekosten verlaagd door kortingen"
+
+msgid "Use the button above to create the first criterion"
+msgstr "Gebruik de knop hierboven om het eerste criterium aan te maken"
 
 msgid "View all deadlines that must be met for this event"
 msgstr "Bekijk alle deadlines die je voor dit evenement moet halen"
@@ -9324,6 +9344,11 @@ msgstr ""
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dit zijn de evenementregistraties waarvoor je moet betalen"
 
+msgid "This criterion will apply only to characters with all required options"
+msgstr ""
+"Dit criterium geldt alleen voor personages die aan alle vereiste opties "
+"voldoen"
+
 msgid "This discount code is already used in one or more of the selected runs"
 msgstr ""
 "Deze kortingscode is al gebruikt in een of meer van de geselecteerde "
@@ -10370,6 +10395,13 @@ msgid ""
 "These are delegated account registrations for which you have to make a "
 "payment"
 msgstr "Dit zijn gedelegeerde accountregistraties waarvoor je moet betalen"
+
+msgid ""
+"This criterion will apply only to characters owning all prerequisite "
+"abilities"
+msgstr ""
+"Dit criterium geldt alleen voor personages die over alle vereiste "
+"vaardigheden beschikken"
 
 #, python-format
 msgid ""
@@ -12578,6 +12610,13 @@ msgid ""
 msgstr ""
 "Ondersteuning toegevoegd voor het toekennen van XP (ervaringspunten) aan "
 "personages, die vervolgens kunnen worden gebruikt om vaardigheden te kopen"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Stel criteria vast waarmee je het totaal aantal ervaringspunten "
+"voorwaardelijk kunt aanpassen op basis van vereisten of personage-opties"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

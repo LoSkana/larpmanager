@@ -1466,6 +1466,9 @@ msgstr "Contenedor"
 msgid "Copy done"
 msgstr "Copia realizada"
 
+msgid "Criterion"
+msgstr "Criterio"
+
 msgid "Customize"
 msgstr "Personalización"
 
@@ -1723,6 +1726,9 @@ msgstr "Contactar"
 
 msgid "Containers"
 msgstr "Contenedores"
+
+msgid "Criterions"
+msgstr "Criterios"
 
 msgid "Deleted on"
 msgstr "Suprimido el"
@@ -4983,6 +4989,9 @@ msgstr "Gestionar el registro de voluntarios"
 msgid "New message from %(user)s"
 msgstr "Nuevo mensaje de %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Aún no se han definido los criterios"
+
 msgid "No deliveries defined yet"
 msgstr "Aún no hay entregas definidas"
 
@@ -5314,6 +5323,9 @@ msgstr "Si está marcada: los miembros pueden votar"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Invitación enviada a %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Gestionar criterios de experiencia"
 
 msgid "Manage the event speed-larps"
 msgstr "Gestionar los speed-larps de los eventos"
@@ -7192,6 +7204,10 @@ msgstr "¡Aún no eres miembro de la Organización"
 msgid "You are now logged in with your main account"
 msgstr "Ya has iniciado sesión con tu cuenta principal"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr ""
+"El importe debe ser distinto de cero para cumplir los criterios de división"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "¿Aplicar la actualización a toda la organización?"
 
@@ -7683,6 +7699,9 @@ msgstr "Se canceló la inscripción en el acto"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Cuotas de participación totales reducidas mediante descuentos"
+
+msgid "Use the button above to create the first criterion"
+msgstr "Usa el botón de arriba para crear el primer criterio"
 
 msgid "View all deadlines that must be met for this event"
 msgstr "Ver todos los plazos que hay que cumplir para este evento"
@@ -9317,6 +9336,11 @@ msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Estas son las inscripciones a eventos por las que tiene que efectuar un pago"
 
+msgid "This criterion will apply only to characters with all required options"
+msgstr ""
+"Este criterio solo se aplicará a los personajes que cumplan todos los "
+"requisitos"
+
 msgid "This discount code is already used in one or more of the selected runs"
 msgstr ""
 "Este código de descuento ya se ha utilizado en una o varias de las tiradas "
@@ -10356,6 +10380,13 @@ msgid ""
 msgstr ""
 "Se trata de registros de cuentas delegadas por los que tiene que efectuar un"
 " pago"
+
+msgid ""
+"This criterion will apply only to characters owning all prerequisite "
+"abilities"
+msgstr ""
+"Este criterio solo se aplicará a los personajes que tengan todas las "
+"habilidades necesarias"
 
 #, python-format
 msgid ""
@@ -12568,6 +12599,14 @@ msgid ""
 msgstr ""
 "Añade la posibilidad de asignar XP (puntos de experiencia) a los personajes,"
 " que pueden utilizarse para comprar habilidades"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Define criterios que modifiquen de forma condicional el total de puntos de "
+"experiencia en función de los requisitos previos o las opciones del "
+"personaje"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

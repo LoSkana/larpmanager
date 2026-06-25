@@ -1466,6 +1466,9 @@ msgstr "Pojemnik"
 msgid "Copy done"
 msgstr "Kopia wykonana"
 
+msgid "Criterion"
+msgstr "Kryterium"
+
 msgid "Customize"
 msgstr "Dostosuj"
 
@@ -1723,6 +1726,9 @@ msgstr "Skontaktuj się z nami"
 
 msgid "Containers"
 msgstr "Pojemniki"
+
+msgid "Criterions"
+msgstr "Kryteria"
 
 msgid "Deleted on"
 msgstr "Usunięto dnia"
@@ -4983,6 +4989,9 @@ msgstr "Zarządzanie rejestrem wolontariuszy"
 msgid "New message from %(user)s"
 msgstr "Nowa wiadomość od %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Nie zdefiniowano jeszcze żadnych kryteriów"
+
 msgid "No deliveries defined yet"
 msgstr "Nie zdefiniowano jeszcze żadnych dostaw"
 
@@ -5314,6 +5323,9 @@ msgstr "Jeśli zaznaczone: członkowie mogą głosować"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Zaproszenie wysłane do %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Zarządzaj kryteriami doświadczenia"
 
 msgid "Manage the event speed-larps"
 msgstr "Zarządzanie przyciskami prędkości zdarzeń"
@@ -7194,6 +7206,9 @@ msgstr "Nie jesteś jeszcze członkiem organizacji"
 msgid "You are now logged in with your main account"
 msgstr "Jesteś teraz zalogowany na swoje główne konto"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr "Wartość musi być niezerowa, żeby spełnić kryteria podziału"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Zastosować aktualizację w całej organizacji?"
 
@@ -7673,6 +7688,9 @@ msgstr "Rejestracja na to wydarzenie została anulowana"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Całkowite opłaty za uczestnictwo obniżone dzięki zniżkom"
+
+msgid "Use the button above to create the first criterion"
+msgstr "Użyj przycisku powyżej, żeby utworzyć pierwsze kryterium"
 
 msgid "View all deadlines that must be met for this event"
 msgstr ""
@@ -9248,6 +9266,11 @@ msgstr ""
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Są to rejestracje wydarzeń, za które należy dokonać płatności"
 
+msgid "This criterion will apply only to characters with all required options"
+msgstr ""
+"To kryterium będzie dotyczyło tylko postaci, które mają wszystkie wymagane "
+"opcje"
+
 msgid "This discount code is already used in one or more of the selected runs"
 msgstr ""
 "Ten kod rabatowy został już wykorzystany w co najmniej jednej z wybranych "
@@ -10253,6 +10276,13 @@ msgid ""
 "payment"
 msgstr ""
 "Są to rejestracje kont delegowanych, za które należy dokonać płatności"
+
+msgid ""
+"This criterion will apply only to characters owning all prerequisite "
+"abilities"
+msgstr ""
+"To kryterium będzie dotyczyło tylko postaci, które posiadają wszystkie "
+"wymagane umiejętności"
 
 #, python-format
 msgid ""
@@ -12455,6 +12485,13 @@ msgid ""
 msgstr ""
 "Dodano obsługę przypisywania PD (punktów doświadczenia) do postaci, które "
 "można następnie wykorzystać do zakupu umiejętności"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Określ kryteria, które warunkowo zmieniają sumę punktów doświadczenia w "
+"zależności od wymagań wstępnych lub opcji postaci"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

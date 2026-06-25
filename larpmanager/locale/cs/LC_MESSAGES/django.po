@@ -1466,6 +1466,9 @@ msgstr "Kontejner"
 msgid "Copy done"
 msgstr "Provedená kopie"
 
+msgid "Criterion"
+msgstr "Kritérium"
+
 msgid "Customize"
 msgstr "Přizpůsobení"
 
@@ -1723,6 +1726,9 @@ msgstr "Kontaktujte nás"
 
 msgid "Containers"
 msgstr "Kontejnery"
+
+msgid "Criterions"
+msgstr "Kritéria"
 
 msgid "Deleted on"
 msgstr "Odstraněno dne"
@@ -4983,6 +4989,9 @@ msgstr "Správa registru dobrovolníků"
 msgid "New message from %(user)s"
 msgstr "Nová zpráva od %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Zatím nebyla definována žádná kritéria"
+
 msgid "No deliveries defined yet"
 msgstr "Zatím nejsou definovány žádné dodávky"
 
@@ -5314,6 +5323,9 @@ msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Pozvánka zaslaná na %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Správa kritérií uživatelského zážitku"
 
 msgid "Manage the event speed-larps"
 msgstr "Správa rychlostních svorek událostí"
@@ -7191,6 +7203,9 @@ msgstr "Ještě nejste členem asociace"
 msgid "You are now logged in with your main account"
 msgstr "Nyní jste přihlášeni pomocí svého hlavního účtu"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr "Hodnota musí být nenulová, aby splňovala kritéria pro dělení"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Použít upgrade pro celou organizaci?"
 
@@ -7668,6 +7683,9 @@ msgstr "Registrace na akci byla zrušena"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Celkové účastnické poplatky snížené díky slevám"
+
+msgid "Use the button above to create the first criterion"
+msgstr "Pomocí tlačítka výše vytvořte první kritérium"
 
 msgid "View all deadlines that must be met for this event"
 msgstr ""
@@ -9139,6 +9157,11 @@ msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Jedná se o registrace událostí, za které je třeba zaplatit"
 
+msgid "This criterion will apply only to characters with all required options"
+msgstr ""
+"Toto kritérium se bude vztahovat pouze na znaky, které obsahují všechny "
+"požadované možnosti"
+
 msgid "This discount code is already used in one or more of the selected runs"
 msgstr "Tento slevový kód již byl použit v jednom nebo více vybraných bězích"
 
@@ -10074,6 +10097,13 @@ msgid ""
 "These are delegated account registrations for which you have to make a "
 "payment"
 msgstr "Jedná se o registrace delegovaných účtů, za které je třeba zaplatit"
+
+msgid ""
+"This criterion will apply only to characters owning all prerequisite "
+"abilities"
+msgstr ""
+"Toto kritérium se bude vztahovat pouze na postavy, které disponují všemi "
+"požadovanými schopnostmi"
 
 #, python-format
 msgid ""
@@ -12223,6 +12253,13 @@ msgid ""
 msgstr ""
 "Přidává podporu pro přidělování zkušenostních bodů (XP) postavám, které lze "
 "následně použít k nákupu schopností"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Definujte kritéria, která podmíněně upravují celkový počet zkušenostních "
+"bodů na základě předpokladů nebo nastavení postavy"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

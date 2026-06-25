@@ -1466,6 +1466,9 @@ msgstr "Behållare"
 msgid "Copy done"
 msgstr "Utförd kopia"
 
+msgid "Criterion"
+msgstr "Kriterium"
+
 msgid "Customize"
 msgstr "Anpassa"
 
@@ -1723,6 +1726,9 @@ msgstr "Kontakta oss"
 
 msgid "Containers"
 msgstr "Behållare"
+
+msgid "Criterions"
+msgstr "Kriterier"
 
 msgid "Deleted on"
 msgstr "Raderad på"
@@ -4983,6 +4989,9 @@ msgstr "Hantera volontärregister"
 msgid "New message from %(user)s"
 msgstr "Nytt meddelande från %(user)s"
 
+msgid "No criterions defined yet"
+msgstr "Inga kriterier har fastställts ännu"
+
 msgid "No deliveries defined yet"
 msgstr "Inga leveranser har angetts ännu"
 
@@ -5314,6 +5323,9 @@ msgstr "Om markerat: medlemmar kan rösta"
 #, python-format
 msgid "Invitation sent to %(email)s"
 msgstr "Inbjudan skickad till %(email)s"
+
+msgid "Manage experience criterions"
+msgstr "Hantera kriterier för användarupplevelsen"
 
 msgid "Manage the event speed-larps"
 msgstr "Hantera evenemangets speed-larps"
@@ -7192,6 +7204,10 @@ msgstr "Du är ännu inte medlem i föreningen"
 msgid "You are now logged in with your main account"
 msgstr "Du är nu inloggad med ditt huvudkonto"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr ""
+"Värdet måste vara större än noll för att uppfylla kriterierna för division"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Tillämpa uppgraderingen på hela organisationen?"
 
@@ -7674,6 +7690,9 @@ msgstr "Anmälan till evenemanget avbröts"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
+
+msgid "Use the button above to create the first criterion"
+msgstr "Använd knappen ovan för att skapa det första kriteriet"
 
 msgid "View all deadlines that must be met for this event"
 msgstr "Visa alla tidsfrister som måste iakttas för detta evenemang"
@@ -9201,6 +9220,11 @@ msgid "These are the event registrations for which you have to make a payment"
 msgstr ""
 "Detta är de evenemangsregistreringar för vilka du måste göra en betalning"
 
+msgid "This criterion will apply only to characters with all required options"
+msgstr ""
+"Detta kriterium gäller endast för tecken som uppfyller alla nödvändiga "
+"villkor"
+
 msgid "This discount code is already used in one or more of the selected runs"
 msgstr ""
 "Denna rabattkod har redan använts i en eller flera av de valda omgångarna"
@@ -10185,6 +10209,13 @@ msgid ""
 "payment"
 msgstr ""
 "Detta är delegerade kontoregistreringar för vilka du måste göra en betalning"
+
+msgid ""
+"This criterion will apply only to characters owning all prerequisite "
+"abilities"
+msgstr ""
+"Detta kriterium gäller endast för karaktärer som besitter alla nödvändiga "
+"förmågor"
 
 #, python-format
 msgid ""
@@ -12383,6 +12414,13 @@ msgid ""
 msgstr ""
 "Lägger till stöd för att tilldela XP (erfarenhetspoäng) till karaktärer, som"
 " sedan kan användas för att köpa förmågor"
+
+msgid ""
+"Define criteria that conditionally modify experience point totals based on "
+"prerequisites or character options"
+msgstr ""
+"Fastställ kriterier som villkorligt justerar summan av erfarenhetspoäng "
+"utifrån förutsättningar eller karaktärsval"
 
 msgid ""
 "The relationship between these characters turns out to be empty. Check "

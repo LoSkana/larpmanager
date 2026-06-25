@@ -28,7 +28,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.experience import get_event_exp_cache
+from larpmanager.cache.experience import get_event_exp_cache, get_event_exp_systems
 from larpmanager.forms.experience import (
     OrgaDeliveryExpForm,
 )
@@ -37,6 +37,7 @@ from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CriterionExp,
     DeliveryExp,
     ModifierExp,
     RuleExp,
@@ -81,7 +82,7 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_exp_deliveries")
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
 
     # Get all deliveries ordered by number
     deliveries = list(context["event"].get_elements(DeliveryExp).order_by("order").select_related("system"))
@@ -211,7 +212,7 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
 
     # Query and prepare abilities list with optimized database access
     abilities = list(context["event"].get_elements(AbilityExp).order_by("order").select_related("typ", "system"))
@@ -383,6 +384,42 @@ def orga_exp_modifiers_edit(request: HttpRequest, event_slug: str, modifier_uuid
 def orga_exp_modifiers_delete(request: HttpRequest, event_slug: str, modifier_uuid: str) -> HttpResponse:
     """Delete modifier for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid)
+
+
+@login_required
+def orga_exp_criterions(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display and manage experience criterions for an event."""
+    context = check_event_context(request, event_slug, "orga_exp_criterions")
+
+    criterions = list(context["event"].get_elements(CriterionExp).order_by("order").select_related("system"))
+
+    px_cache = get_event_exp_cache(context["event"])
+    for criterion in criterions:
+        if criterion.id in px_cache.get("criterions", {}):
+            criterion.cached_rels = px_cache["criterions"][criterion.id]
+
+    context["list"] = criterions
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
+
+    return render(request, "larpmanager/orga/experience/criterions.html", context)
+
+
+@login_required
+def orga_exp_criterions_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create experience criterion for an event."""
+    return orga_new(request, event_slug, OrgaAction.PX_CRITERIONS)
+
+
+@login_required
+def orga_exp_criterions_edit(request: HttpRequest, event_slug: str, criterion_uuid: str) -> HttpResponse:
+    """Edit experience criterion for an event."""
+    return orga_edit(request, event_slug, OrgaAction.PX_CRITERIONS, criterion_uuid)
+
+
+@login_required
+def orga_exp_criterions_delete(request: HttpRequest, event_slug: str, criterion_uuid: str) -> HttpResponse:
+    """Delete criterion for event."""
+    return orga_delete(request, event_slug, OrgaAction.PX_CRITERIONS, criterion_uuid)
 
 
 @login_required
