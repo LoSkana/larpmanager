@@ -2901,12 +2901,13 @@ body.floating_iframe .inner {
   color: #777;
 }
 .char-faction-badge {
-  font-size: 0.75rem;
+  font-size: 0.6rem;
   padding: 0.15rem 0.45rem;
   border-radius: 4px;
   background: #eee;
   color: #555;
-  white-space: nowrap;
+  white-space: normal;
+  max-width: 30%;
   flex-shrink: 0;
 }
 .pref-counter {
