@@ -7218,6 +7218,9 @@ msgstr "Sie sind noch nicht Mitglied der Vereinigung"
 msgid "You are now logged in with your main account"
 msgstr "Sie sind jetzt mit Ihrem Hauptkonto eingeloggt"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr "Der Betrag muss für die Divisionskriterien ungleich Null sein"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Das Upgrade auf die gesamte Organisation anwenden?"
 

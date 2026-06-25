@@ -28,7 +28,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.experience import get_event_exp_cache
+from larpmanager.cache.experience import get_event_exp_cache, get_event_exp_systems
 from larpmanager.forms.experience import (
     OrgaDeliveryExpForm,
 )
@@ -82,7 +82,7 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_exp_deliveries")
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
 
     # Get all deliveries ordered by number
     deliveries = list(context["event"].get_elements(DeliveryExp).order_by("order").select_related("system"))
@@ -212,7 +212,7 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
 
     # Query and prepare abilities list with optimized database access
     abilities = list(context["event"].get_elements(AbilityExp).order_by("order").select_related("typ", "system"))
@@ -399,7 +399,7 @@ def orga_exp_criterions(request: HttpRequest, event_slug: str) -> HttpResponse:
             criterion.cached_rels = px_cache["criterions"][criterion.id]
 
     context["list"] = criterions
-    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
 
     return render(request, "larpmanager/orga/experience/criterions.html", context)
 

@@ -7203,6 +7203,9 @@ msgstr "Ještě nejste členem asociace"
 msgid "You are now logged in with your main account"
 msgstr "Nyní jste přihlášeni pomocí svého hlavního účtu"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr "Hodnota musí být nenulová, aby splňovala kritéria pro dělení"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Použít upgrade pro celou organizaci?"
 

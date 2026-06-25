@@ -2208,6 +2208,9 @@ msgid ""
 "prerequisites or character options"
 msgstr ""
 
+msgid "Amount must be non-zero for division criteria"
+msgstr ""
+
 msgid "click on the icon to open the tutorial"
 msgstr ""
 

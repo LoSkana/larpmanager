@@ -19,7 +19,9 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import contextlib
 import logging
+import threading
 from functools import partial
 from typing import TYPE_CHECKING, Any
 
@@ -36,6 +38,10 @@ if TYPE_CHECKING:
     from larpmanager.models.form import WritingOption
 
 logger = logging.getLogger(__name__)
+
+_pre_clear_criterion_ids: threading.local = threading.local()
+_pre_clear_modifier_ids: threading.local = threading.local()
+_pre_clear_rule_ids: threading.local = threading.local()
 
 _EXP_NS = "exp"
 _get_exp_has_dirty_key = partial(get_has_dirty_key, _EXP_NS)
@@ -762,6 +768,13 @@ def on_modifier_prerequisites_m2m_changed(
         **kwargs: Additional keyword arguments
 
     """
+    store_key = f"{instance.pk}_modifier_prerequisites"
+
+    if reverse and action == "pre_clear":
+        captured = list(ModifierExp.objects.filter(prerequisites=instance).values_list("id", flat=True))
+        setattr(_pre_clear_modifier_ids, store_key, captured)
+        return
+
     if action not in ("post_add", "post_remove", "post_clear"):
         return
 
@@ -771,7 +784,9 @@ def on_modifier_prerequisites_m2m_changed(
         if pk_set:
             modifier_ids = list(pk_set)
         elif action == "post_clear":
-            modifier_ids = list(ModifierExp.objects.filter(prerequisites=instance).values_list("id", flat=True))
+            modifier_ids = getattr(_pre_clear_modifier_ids, store_key, [])
+            with contextlib.suppress(AttributeError):
+                delattr(_pre_clear_modifier_ids, store_key)
         else:
             modifier_ids = []
     else:
@@ -806,6 +821,13 @@ def on_modifier_requirements_m2m_changed(
         **kwargs: Additional keyword arguments
 
     """
+    store_key = f"{instance.pk}_modifier_requirements"
+
+    if reverse and action == "pre_clear":
+        rows = list(ModifierExp.objects.filter(requirements=instance).values("id", "event_id"))
+        setattr(_pre_clear_modifier_ids, store_key, rows)
+        return
+
     if action not in ("post_add", "post_remove", "post_clear"):
         return
 
@@ -814,16 +836,21 @@ def on_modifier_requirements_m2m_changed(
         # pk_set contains modifier IDs, so refresh each modifier
         if pk_set:
             modifier_ids = list(pk_set)
+            # WritingOption has no event_id; derive it from the affected modifiers
+            event_id = (
+                ModifierExp.objects.filter(id__in=modifier_ids).values_list("event_id", flat=True).first()
+                if modifier_ids
+                else None
+            )
         elif action == "post_clear":
-            modifier_ids = list(ModifierExp.objects.filter(requirements=instance).values_list("id", flat=True))
+            rows = getattr(_pre_clear_modifier_ids, store_key, [])
+            with contextlib.suppress(AttributeError):
+                delattr(_pre_clear_modifier_ids, store_key)
+            modifier_ids = [r["id"] for r in rows]
+            event_id = rows[0]["event_id"] if rows else None
         else:
             modifier_ids = []
-        # WritingOption has no event_id; derive it from the affected modifiers
-        event_id = (
-            ModifierExp.objects.filter(id__in=modifier_ids).values_list("event_id", flat=True).first()
-            if modifier_ids
-            else None
-        )
+            event_id = None
     else:
         # Signal came from ModifierExp.requirements - instance is a ModifierExp
         modifier_ids = [instance.id]
@@ -857,6 +884,13 @@ def on_rule_abilities_m2m_changed(
         **kwargs: Additional keyword arguments
 
     """
+    store_key = f"{instance.pk}_rule_abilities"
+
+    if reverse and action == "pre_clear":
+        captured = list(RuleExp.objects.filter(abilities=instance).values_list("id", flat=True))
+        setattr(_pre_clear_rule_ids, store_key, captured)
+        return
+
     if action not in ("post_add", "post_remove", "post_clear"):
         return
 
@@ -866,7 +900,9 @@ def on_rule_abilities_m2m_changed(
         if pk_set:
             rule_ids = list(pk_set)
         elif action == "post_clear":
-            rule_ids = list(RuleExp.objects.filter(abilities=instance).values_list("id", flat=True))
+            rule_ids = getattr(_pre_clear_rule_ids, store_key, [])
+            with contextlib.suppress(AttributeError):
+                delattr(_pre_clear_rule_ids, store_key)
         else:
             rule_ids = []
     else:
@@ -902,8 +938,7 @@ def get_criterion_rels(criterion: CriterionExp) -> dict[str, Any]:
 
 def refresh_criterion_relationships(criterion: CriterionExp) -> None:
     """Update criterion relationships in cache."""
-    criterion_relationship_data = get_criterion_rels(criterion)
-    update_cache_section(criterion.event, "criterions", criterion.id, criterion_relationship_data)
+    update_cache_section(criterion.event, "criterions", criterion.id, get_criterion_rels(criterion))
 
 
 @background_auto(queue="cache-experience", skip_duplicates=True)
@@ -911,6 +946,55 @@ def refresh_criterion_rels_dirty_background(criterion_ids: int | list[int]) -> N
     """Update criterion relationships in cache (dirty-aware background task)."""
     criterions = _validate_and_fetch_objects(CriterionExp, criterion_ids, "CriterionExp")
     _refresh_exp_if_dirty("criterions", criterions, refresh_criterion_relationships)
+
+
+def _on_criterion_m2m_changed(
+    instance: CriterionExp,
+    action: str,
+    pk_set: set[int] | None,
+    reverse: bool,  # noqa: FBT001
+    filter_field: str,
+) -> None:
+    """Shared handler for criterion M2M changes (prerequisites and requirements)."""
+    store_key = f"{instance.pk}_{filter_field}"
+
+    if reverse and action == "pre_clear":
+        # Capture criterion IDs and their events before Django deletes the M2M rows,
+        # because post_clear fires after deletion so the filter would return nothing.
+        rows = list(CriterionExp.objects.filter(**{filter_field: instance}).values("id", "event_id"))
+        setattr(_pre_clear_criterion_ids, store_key, rows)
+        return
+
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        if pk_set:
+            rows = list(CriterionExp.objects.filter(id__in=pk_set).values("id", "event_id"))
+            criterion_ids = [r["id"] for r in rows]
+        elif action == "post_clear":
+            rows = getattr(_pre_clear_criterion_ids, store_key, [])
+            with contextlib.suppress(AttributeError):
+                delattr(_pre_clear_criterion_ids, store_key)
+            criterion_ids = [r["id"] for r in rows]
+        else:
+            rows = []
+            criterion_ids = []
+
+        if not criterion_ids:
+            return
+
+        ids_by_event: dict[int, list[int]] = {}
+        for row in rows:
+            ids_by_event.setdefault(row["event_id"], []).append(row["id"])
+        for ev_id, ids in ids_by_event.items():
+            _mark_exp_dirty("criterions", ids, ev_id)
+        refresh_criterion_rels_dirty_background(criterion_ids)
+        return
+
+    criterion_ids = [instance.id]
+    _mark_exp_dirty("criterions", criterion_ids, instance.event_id)
+    refresh_criterion_rels_dirty_background(criterion_ids)
 
 
 def on_criterion_prerequisites_m2m_changed(
@@ -922,31 +1006,7 @@ def on_criterion_prerequisites_m2m_changed(
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle criterion-prerequisite relationship changes."""
-    if action not in ("post_add", "post_remove", "post_clear"):
-        return
-
-    if reverse:
-        if pk_set:
-            criterion_ids = list(pk_set)
-        elif action == "post_clear":
-            criterion_ids = list(CriterionExp.objects.filter(prerequisites=instance).values_list("id", flat=True))
-        else:
-            criterion_ids = []
-
-        if not criterion_ids:
-            return
-
-        ids_by_event: dict[int, list[int]] = {}
-        for crit in CriterionExp.objects.filter(id__in=criterion_ids).values("id", "event_id"):
-            ids_by_event.setdefault(crit["event_id"], []).append(crit["id"])
-        for ev_id, ids in ids_by_event.items():
-            _mark_exp_dirty("criterions", ids, ev_id)
-        refresh_criterion_rels_dirty_background(criterion_ids)
-        return
-
-    criterion_ids = [instance.id]
-    _mark_exp_dirty("criterions", criterion_ids, instance.event_id)
-    refresh_criterion_rels_dirty_background(criterion_ids)
+    _on_criterion_m2m_changed(instance, action, pk_set, reverse, "prerequisites")
 
 
 def on_criterion_requirements_m2m_changed(
@@ -958,28 +1018,4 @@ def on_criterion_requirements_m2m_changed(
     **kwargs: object,  # noqa: ARG001
 ) -> None:
     """Handle criterion-requirement relationship changes."""
-    if action not in ("post_add", "post_remove", "post_clear"):
-        return
-
-    if reverse:
-        if pk_set:
-            criterion_ids = list(pk_set)
-        elif action == "post_clear":
-            criterion_ids = list(CriterionExp.objects.filter(requirements=instance).values_list("id", flat=True))
-        else:
-            criterion_ids = []
-
-        if not criterion_ids:
-            return
-
-        ids_by_event: dict[int, list[int]] = {}
-        for crit in CriterionExp.objects.filter(id__in=criterion_ids).values("id", "event_id"):
-            ids_by_event.setdefault(crit["event_id"], []).append(crit["id"])
-        for ev_id, ids in ids_by_event.items():
-            _mark_exp_dirty("criterions", ids, ev_id)
-        refresh_criterion_rels_dirty_background(criterion_ids)
-        return
-
-    criterion_ids = [instance.id]
-    _mark_exp_dirty("criterions", criterion_ids, instance.event_id)
-    refresh_criterion_rels_dirty_background(criterion_ids)
+    _on_criterion_m2m_changed(instance, action, pk_set, reverse, "requirements")

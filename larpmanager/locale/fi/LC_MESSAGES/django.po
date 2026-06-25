@@ -7202,6 +7202,9 @@ msgstr "Et ole vielä järjestön jäsen"
 msgid "You are now logged in with your main account"
 msgstr "Olet nyt kirjautuneena sisään päätililläsi"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr "Jakokriteerien osalta summan on oltava eri kuin nolla"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Sovelletaanko päivitystä koko organisaatioon?"
 

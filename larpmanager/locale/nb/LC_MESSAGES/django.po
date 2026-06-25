@@ -7205,6 +7205,9 @@ msgstr "Du er ennå ikke medlem av foreningen"
 msgid "You are now logged in with your main account"
 msgstr "Du er nå logget inn med hovedkontoen din"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr "Beløpet må være større enn null for å oppfylle delingskriteriene"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Bruke oppgraderingen på hele organisasjonen?"
 

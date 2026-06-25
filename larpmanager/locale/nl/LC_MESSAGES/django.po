@@ -7211,6 +7211,11 @@ msgstr "Je bent nog geen lid van de vereniging"
 msgid "You are now logged in with your main account"
 msgstr "Je bent nu ingelogd met je hoofdaccount"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr ""
+"Het bedrag moet groter zijn dan nul om aan de criteria voor deling te "
+"voldoen"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "De upgrade toepassen op de hele organisatie?"
 

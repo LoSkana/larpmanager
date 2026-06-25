@@ -44,6 +44,7 @@ from larpmanager.models.experience import (
     CriterionExp,
     DeliveryExp,
     ModifierExp,
+    Operation,
     RuleExp,
     SystemExp,
 )
@@ -396,6 +397,13 @@ class OrgaCriterionExpForm(MultichoiceMixin, ExpBaseForm):
                     data={"type": "writing_option", "owner": "criterionexp", "field": "requirements"},
                     form_edit_uuid=True,
                 )
+
+    def clean(self) -> dict:
+        """Validate that DIVISION criteria have a non-zero amount."""
+        cleaned = super().clean()
+        if cleaned.get("operation") == Operation.DIVISION and "amount" in cleaned and not cleaned["amount"]:
+            self.add_error("amount", _("Amount must be non-zero for division criteria"))
+        return cleaned
 
 
 class SelectNewAbility(BaseForm):

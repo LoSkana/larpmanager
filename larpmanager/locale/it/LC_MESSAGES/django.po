@@ -7201,6 +7201,9 @@ msgstr "Non sei ancora iscritto all'Associazione"
 msgid "You are now logged in with your main account"
 msgstr "Ora sei loggato con l'account principale"
 
+msgid "Amount must be non-zero for division criteria"
+msgstr "L'importo deve essere diverso da zero per i criteri di divisione"
+
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Applica l'aggiornamento all'intera organizzazione?"
 
