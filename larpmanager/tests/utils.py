@@ -289,9 +289,29 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     _wait_lm_ready(page, timeout=8000)
 
 def submit_register(page: Any) -> None:
-    page.get_by_role("button", name="Continue").click()
-    page.locator("#riepilogo").wait_for(state="visible")
-    submit_confirm(page)
+    # Settle late init
+    _wait_lm_ready(page)
+    url_before = page.url
+
+    # Opening the summary can be undone by a late 'change' event; retry a few times
+    for _ in range(3):
+        page.get_by_role("button", name="Continue").click()
+        try:
+            page.locator("#riepilogo").wait_for(state="visible", timeout=3000)
+            break
+        except Exception:
+            continue
+
+    # Click the real submit button by id
+    register_go = page.locator("#register_go")
+    register_go.scroll_into_view_if_needed()
+    expect(register_go).to_be_visible()
+    register_go.click()
+
+    # Assert the navigation actually happened
+    page.wait_for_url(lambda url: url != url_before, timeout=10000)
+    _wait_lm_ready(page)
+    ooops_check(page)
 
 
 def wait_for_inline_edit(page: Any) -> Any:
