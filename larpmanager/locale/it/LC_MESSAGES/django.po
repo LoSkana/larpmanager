@@ -3508,6 +3508,9 @@ msgstr "Algoritmo di casting"
 msgid "Character profile"
 msgstr "Profilo personaggio"
 
+msgid "Choose one option"
+msgstr "Scegli un'opzione"
+
 msgid "Click to unassign"
 msgstr "Clicca per annullare l'assegnazione"
 
@@ -5131,6 +5134,9 @@ msgstr "Opzione non più disponibile"
 
 msgid "Pre-registration confirmed"
 msgstr "Pre-iscrizione confermata"
+
+msgid "Select one or more options"
+msgstr "Seleziona una o più opzioni"
 
 msgid "Short name - international"
 msgstr "Nome breve - in inglese"

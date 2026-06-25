@@ -3508,6 +3508,9 @@ msgstr "Algoritme for støping"
 msgid "Character profile"
 msgstr "Karakterprofil"
 
+msgid "Choose one option"
+msgstr "Velg ett alternativ"
+
 msgid "Click to unassign"
 msgstr "Klikk for å oppheve tilordningen"
 
@@ -5131,6 +5134,9 @@ msgstr "Alternativet er ikke lenger tilgjengelig"
 
 msgid "Pre-registration confirmed"
 msgstr "Forhåndsregistrering bekreftet"
+
+msgid "Select one or more options"
+msgstr "Velg ett eller flere alternativer"
 
 msgid "Short name - international"
 msgstr "Kort navn - på engelsk"

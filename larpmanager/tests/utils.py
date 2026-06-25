@@ -479,6 +479,15 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
             f"ACTUAL:\n{actual}"
         )
 
+def click_option(input_locator):
+    """Toggle a radio/checkbox whose native input is visually hidden by lm.css.
+
+    Inline registration/character options hide the native input with zero size
+    (see .reg-checkbox-class / .reg-radio-class in lm.css), so Playwright cannot
+    click it directly; click the wrapping label, which forwards the toggle."""
+    input_locator.locator("xpath=ancestor::label[1]").click()
+
+
 def just_wait(page, big=False):
     if not hasattr(page, 'wait_for_timeout'):
         return

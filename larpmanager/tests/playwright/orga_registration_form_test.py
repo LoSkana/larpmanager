@@ -30,6 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (go_to, submit_register,
+                                     click_option,
                                      load_image,
                                      login_orga,
                                      login_user,
@@ -286,7 +287,7 @@ def signup_check(live_server: Any, page: Any) -> None:
     expect(page.locator('#id_que_u6_0')).not_to_be_checked()
     expect(page.locator('#id_que_u6_1')).to_be_checked()
     expect(page.locator('#id_que_u6_2')).to_be_checked()
-    page.locator('#id_que_u6_2').uncheck(force=True)
+    click_option(page.locator('#id_que_u6_2'))
     page.locator('label[for="id_que_u6_2"]').click()
     expect(page.locator('#id_que_u6_2')).to_be_checked()
     expect_normalized(page, page.locator("#register_form"), "multiple descr")
@@ -329,7 +330,7 @@ def orga_check(live_server: Any, page: Any) -> None:
     expect(edit_iframe.locator("#id_que_u7")).to_have_value("dsadsadsa")
     expect(edit_iframe.locator("#id_que_u8")).to_have_value("asdsadsa")
     # orga removes a multiple choice selection
-    edit_iframe.locator('#id_que_u6_1').uncheck(force=True)
+    click_option(edit_iframe.locator('#id_que_u6_1'))
     save_modal(page, edit_iframe)
 
     page.locator(".fa-edit").click()
@@ -337,7 +338,7 @@ def orga_check(live_server: Any, page: Any) -> None:
     expect(edit_iframe.locator('#id_que_u6_1')).not_to_be_checked()
     expect(edit_iframe.locator('#id_que_u6_2')).to_be_checked()
     # orga removes all multiple choice selections
-    edit_iframe.locator('#id_que_u6_2').uncheck(force=True)
+    click_option(edit_iframe.locator('#id_que_u6_2'))
     save_modal(page, edit_iframe)
 
     page.locator(".fa-edit").click()
@@ -370,7 +371,7 @@ def user_signup(live_server: Any, page: Any) -> None:
     # user removes all multiple choice selections
     go_to(page, live_server, "/test/register/")
     expect(page.locator('#id_que_u6_1')).to_be_checked()
-    page.locator('#id_que_u6_1').uncheck(force=True)
+    click_option(page.locator('#id_que_u6_1'))
     submit_register(page)
 
     go_to(page, live_server, "/test/register/")

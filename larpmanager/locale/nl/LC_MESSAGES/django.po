@@ -3508,6 +3508,9 @@ msgstr "Gietalgoritme"
 msgid "Character profile"
 msgstr "Karakterprofiel"
 
+msgid "Choose one option"
+msgstr "Kies één optie"
+
 msgid "Click to unassign"
 msgstr "Klik om de toewijzing ongedaan te maken"
 
@@ -5131,6 +5134,9 @@ msgstr "Optie niet langer beschikbaar"
 
 msgid "Pre-registration confirmed"
 msgstr "Voorinschrijving bevestigd"
+
+msgid "Select one or more options"
+msgstr "Kies één of meerdere opties"
 
 msgid "Short name - international"
 msgstr "Korte naam - in het Engels"

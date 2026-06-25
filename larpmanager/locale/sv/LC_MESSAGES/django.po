@@ -3508,6 +3508,9 @@ msgstr "Algoritm för gjutning"
 msgid "Character profile"
 msgstr "Karaktärsprofil"
 
+msgid "Choose one option"
+msgstr "Välj ett alternativ"
+
 msgid "Click to unassign"
 msgstr "Klicka för att ta bort tilldelningen"
 
@@ -5131,6 +5134,9 @@ msgstr "Alternativet är inte längre tillgängligt"
 
 msgid "Pre-registration confirmed"
 msgstr "Förhandsanmälan bekräftad"
+
+msgid "Select one or more options"
+msgstr "Välj ett eller flera alternativ"
 
 msgid "Short name - international"
 msgstr "Kort namn - på engelska"

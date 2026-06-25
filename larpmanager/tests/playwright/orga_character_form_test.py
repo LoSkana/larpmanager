@@ -31,6 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait, submit_register,
+                                     click_option,
                                      fill_tinymce,
                                      go_to,
                                      login_orga,
@@ -111,7 +112,7 @@ def create_second_char(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_que_u6")).to_match_aria_snapshot(
         '- radio /all.*/\n- radio /few.*/'
     )
-    page.locator("#id_que_u6_0").click(force=True)
+    click_option(page.locator("#id_que_u6_0"))
     expect(page.locator("#id_que_u8")).to_match_aria_snapshot(
         '- radio /only.*/\n- radio /all.*/'
     )
@@ -124,7 +125,7 @@ def create_second_char(live_server: Any, page: Any) -> None:
       - text: few few descr
     """)
     expect(page.locator("#id_que_u7_2")).to_be_disabled()
-    page.locator("#id_que_u7_1").check(force=True)
+    click_option(page.locator("#id_que_u7_1"))
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "options: 1 / 2")
     page.locator("#id_que_u9").click()
     page.locator("#id_que_u9").fill("asda")
@@ -193,10 +194,10 @@ def recheck_char(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     expect_normalized(page, edit_iframe.locator("#main_form"), "long descr")
     expect_normalized(page, edit_iframe.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, edit_iframe.locator("#main_form"), "only only descr all all descr restricted text")
+    expect_normalized(page, edit_iframe.locator("#main_form"), "only only descr all all descr choose one option - restricted text")
     expect_normalized(page, edit_iframe.locator('[id="id_que_u7_tr"]'), "multiple text")
     expect_normalized(page,
-        edit_iframe.locator('[id="id_que_u7_tr"]'), "all all descr many many descr few few descr multiple descr"
+        edit_iframe.locator('[id="id_que_u7_tr"]'), "all all descr many many descr few few descr select one or more options - multiple descr"
     )
     save_modal(page, edit_iframe)
     go_to(page, live_server, "/test/character/list")
@@ -233,17 +234,17 @@ def create_first_char(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_que_u5")).to_have_value("bbbbbbbbbb")
     expect_normalized(page, page.locator("#main_form"), "long descr")
     expect_normalized(page, page.locator("#lbl_id_que_u6"), "available text")
-    expect_normalized(page, page.locator("#main_form"), "available text all all few few descr 2 available available descr")
-    page.locator("#id_que_u6_0").click(force=True)
-    page.locator("#id_que_u8_1").click(force=True)
+    expect_normalized(page, page.locator("#main_form"), "available text all all few few descr 2 available choose one option - available descr")
+    click_option(page.locator("#id_que_u6_0"))
+    click_option(page.locator("#id_que_u8_1"))
     expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, page.locator("#main_form"), "restricted only only descr 1 available all all descr restricted text")
-    page.locator("#id_que_u7_1").click(force=True)
+    expect_normalized(page, page.locator("#main_form"), "restricted only only descr 1 available all all descr choose one option - restricted text")
+    click_option(page.locator("#id_que_u7_1"))
     expect_normalized(page,
-        page.locator('[id="id_que_u7_tr"]'), "multiple text all all descr many many descr 2 available few few descr 1 available multiple descr options: 1 / 2"
+        page.locator('[id="id_que_u7_tr"]'), "multiple text all all descr many many descr 2 available few few descr 1 available select one or more options - multiple descr options: 1 / 2"
     )
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
-    page.locator("#id_que_u7_0").check(force=True)
+    click_option(page.locator("#id_que_u7_0"))
     page.locator("#id_que_u12").click()
     page.locator("#id_que_u12").fill("public")
     page.locator("#id_que_u12").press("Tab")
