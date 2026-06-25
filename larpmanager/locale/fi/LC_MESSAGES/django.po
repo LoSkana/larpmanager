@@ -3502,6 +3502,9 @@ msgstr "Hahmojaon algoritmi"
 msgid "Character profile"
 msgstr "Hahmon profiili"
 
+msgid "Choose one option"
+msgstr "Valitse yksi vaihtoehto"
+
 msgid "Click to unassign"
 msgstr "Napsauta poistaaksesi määrityksen"
 
@@ -5122,6 +5125,9 @@ msgstr "Vaihtoehto ei ole enää saatavilla"
 
 msgid "Pre-registration confirmed"
 msgstr "EnnakkoIlmoittautuminen vahvistettu"
+
+msgid "Select one or more options"
+msgstr "Valitse yksi tai useampi vaihtoehto"
 
 msgid "Short name - international"
 msgstr "Lyhyt nimi - kansainvälinen"

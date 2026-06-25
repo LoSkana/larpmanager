@@ -3502,6 +3502,9 @@ msgstr "Algorithme de moulage"
 msgid "Character profile"
 msgstr "Profil du personnage"
 
+msgid "Choose one option"
+msgstr "Choisis une option"
+
 msgid "Click to unassign"
 msgstr "Clique pour annuler l'affectation"
 
@@ -5122,6 +5125,9 @@ msgstr "L'option n'est plus disponible"
 
 msgid "Pre-registration confirmed"
 msgstr "Préinscription confirmée"
+
+msgid "Select one or more options"
+msgstr "Choisis une ou plusieurs options"
 
 msgid "Short name - international"
 msgstr "Nom court - en anglais"

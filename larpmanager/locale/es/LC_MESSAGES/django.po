@@ -3502,6 +3502,9 @@ msgstr "Algoritmo de fundición"
 msgid "Character profile"
 msgstr "Perfil de personaje"
 
+msgid "Choose one option"
+msgstr "Elige una opción"
+
 msgid "Click to unassign"
 msgstr "Haz clic para desasignar"
 
@@ -5122,6 +5125,9 @@ msgstr "Opción ya no disponible"
 
 msgid "Pre-registration confirmed"
 msgstr "Preinscripción confirmada"
+
+msgid "Select one or more options"
+msgstr "Selecciona una o varias opciones"
 
 msgid "Short name - international"
 msgstr "Nombre corto - internacional"

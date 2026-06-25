@@ -3502,6 +3502,9 @@ msgstr "Algoritmus obsazování"
 msgid "Character profile"
 msgstr "Profil postavy"
 
+msgid "Choose one option"
+msgstr "Vyberte jednu možnost"
+
 msgid "Click to unassign"
 msgstr "Kliknutím zrušíte přiřazení"
 
@@ -5122,6 +5125,9 @@ msgstr "Možnost již není k dispozici"
 
 msgid "Pre-registration confirmed"
 msgstr "Předběžná registrace potvrzena"
+
+msgid "Select one or more options"
+msgstr "Vyberte jednu nebo více možností"
 
 msgid "Short name - international"
 msgstr "Krátký název - v angličtině"
