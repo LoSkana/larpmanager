@@ -2796,6 +2796,10 @@ body.floating_iframe .inner {
   text-align: left;
 }
 
+.calendar h3 {
+  text-align: center;
+}
+
 .new_v20 .manage #search {
   text-align: left;
   margin: 0.5em 0 0 0;

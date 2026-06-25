@@ -95,6 +95,9 @@ msgstr "tot"
 msgid "Area"
 msgstr "Område"
 
+msgid "Back"
+msgstr "Tillbaka"
+
 msgid "Body"
 msgstr "Kropp"
 
@@ -891,6 +894,9 @@ msgstr "Historisk"
 
 msgid "ID Card"
 msgstr "Identitetskort"
+
+msgid "Ignored"
+msgstr "Ignorerad"
 
 msgid "Inflows"
 msgstr "Intäkter"
@@ -3718,6 +3724,9 @@ msgstr "Aktivering av konto"
 msgid "Add to xp delivery"
 msgstr "Lägg till i xp-leverans"
 
+msgid "Added to the queue"
+msgstr "Mail läggs till i kön"
+
 msgid "Additional tickets"
 msgstr "Ytterligare biljetter"
 
@@ -4536,6 +4545,9 @@ msgstr "Ändra begäran om skyttel"
 
 msgid "Newsletter preferences"
 msgstr "Inställningar för nyhetsbrev"
+
+msgid "No address was ignored"
+msgstr "Ingen adress har utelämnats"
 
 msgid "No registrations found"
 msgstr "Inga registreringar hittades"
@@ -5437,6 +5449,9 @@ msgstr "Registreringsöppning ej fastställd"
 msgid "Request refund from: %(user)s"
 msgstr "Begär återbetalning från: %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Resultat av massutskicket"
+
 msgid "Select the new ability to get"
 msgstr "Välj den nya färdighet som ska förvärvas"
 
@@ -5862,6 +5877,9 @@ msgstr "Hantera speed-larp för detta evenemang"
 
 msgid "No activation steps are available"
 msgstr "Det finns inga aktiveringssteg"
+
+msgid "No address was added to the queue"
+msgstr "Mail läggs till i kön"
 
 msgid "No character found for this event"
 msgstr "Ingen karaktär hittades för detta evenemang"
@@ -12621,6 +12639,13 @@ msgid ""
 msgstr ""
 "Insamlingen är aktiv! För att delta klicka på följande länk, eller kopiera "
 "den till den du vill ska engagera sig"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Dessa adresser tillhör inte någon användare som har delat sina uppgifter med"
+" organisationen och har inte lagts till i kön"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "
