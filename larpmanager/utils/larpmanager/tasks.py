@@ -43,7 +43,7 @@ from larpmanager.mail.factory import EmailConnectionFactory
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member, MembershipStatus
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
@@ -163,11 +163,11 @@ def partition_shared_recipients(recipients: list, association_id: int | None) ->
 
     shared_emails = {
         email.lower()
-        for email in Member.objects.filter(
-            memberships__association_id=association_id,
+        for email in Membership.objects.filter(
+            association_id=association_id,
         )
-        .exclude(memberships__status=MembershipStatus.EMPTY)
-        .values_list("email", flat=True)
+        .exclude(status=MembershipStatus.EMPTY)
+        .values_list("member__email", flat=True)
         if email
     }
 
