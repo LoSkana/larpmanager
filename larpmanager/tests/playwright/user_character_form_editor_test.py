@@ -219,8 +219,10 @@ def verify_requirements_hidden(page: Any) -> None:
     - multiple-choice (checkbox): option "14" (u7) requires "wwww" (u3)
     - single-choice (radio): option "dep_b" (u9, index 1) in "single_req" (u8) requires "wwww" (u3)
     """
-    label_14 = page.locator('input[type="checkbox"][value="u7"]')
-    dep_b_radio = page.locator('input[type="radio"][value="u9"]')
+    # the native inputs are visually hidden by lm.css (zero size); the dependency
+    # JS toggles the wrapping label, so assert visibility on the label instead
+    label_14 = page.locator('label:has(input[type="checkbox"][value="u7"])')
+    dep_b_radio = page.locator('label:has(input[type="radio"][value="u9"])')
 
     # Nothing selected yet in "single" - both dependent options must be hidden
     expect(label_14).to_be_hidden()

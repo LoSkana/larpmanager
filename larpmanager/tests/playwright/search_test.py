@@ -29,7 +29,8 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, just_wait, submit_confirm, new_option, \
-    submit_option, sidebar, nav, get_modal_iframe, save_modal, click_and_wait_question, _wait_lm_ready
+    submit_option, sidebar, nav, get_modal_iframe, save_modal, click_and_wait_question, _wait_lm_ready, \
+    click_option
 
 pytestmark = pytest.mark.e2e
 
@@ -221,7 +222,7 @@ def characters(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("fa")
     edit_iframe.get_by_role("option", name="fassione (P)").click()
-    edit_iframe.get_by_role("checkbox", name="wunder").check(force=True)
+    click_option(edit_iframe.get_by_role("checkbox", name="wunder"))
     save_modal(page, edit_iframe)
 
     click_and_wait_question(page, "Faction")
