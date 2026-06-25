@@ -24,7 +24,6 @@ Verifies new player ticket creation and availability, bulk operations for wareho
 (containers, tags), writing (factions, plots), quest builder, and experience points.
 """
 
-import re
 from typing import Any
 
 import pytest
@@ -177,7 +176,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # test bulk set quest
     page.reload()
     page.get_by_role("link", name="Bulk").click()
-    page.locator(".writing_list td:nth-child(5)").click()
+    page.locator(".writing_list td:nth-child(6)").click()
     page.locator("#objs_9").select_option("u2")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "T1 t1 Q2 q2")
@@ -295,8 +294,8 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "item3 box")
 
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="u3"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u3"]').get_by_role("cell").nth(0).click()
+    page.locator('[id="u1"]').get_by_role("cell").nth(0).click()
     page.locator("#objs_1").select_option("u2")
     submit_confirm(page)
 
@@ -307,8 +306,8 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     # bulk add tag
     page.get_by_role("link", name="Bulk").click()
     page.locator("#operation").select_option("2")
-    page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
-    page.locator('[id="u1"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u2"]').get_by_role("cell").nth(0).click()
+    page.locator('[id="u1"]').get_by_role("cell").nth(0).click()
     submit_confirm(page)
 
     expect_normalized(page, page.locator("#one"), "item3 box2")
@@ -317,7 +316,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
 
     # bulk remove tag
     page.get_by_role("link", name="Bulk").click()
-    page.locator('[id="u2"]').get_by_role("cell").filter(has_text=re.compile(r"^$")).click()
+    page.locator('[id="u2"]').get_by_role("cell").nth(0).click()
     page.locator("#operation").select_option("3")
     submit_confirm(page)
 

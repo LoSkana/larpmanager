@@ -23,6 +23,7 @@
                data-reorder-model="orga_registration_form">
             <thead>
                 <tr>
+                    <th></th>
                     <th class="reorder-handle"></th>
                     <th></th>
                     <th>{% trans "Name" %}</th>
@@ -46,6 +47,7 @@
                 {% define el.section as old_section %}
             {% endif %}
             <tr id="{{ el.uuid }}">
+                <td></td>
                 <td class="reorder-handle">
                     <i class="fa-solid fa-grip-vertical"></i>
                 </td>

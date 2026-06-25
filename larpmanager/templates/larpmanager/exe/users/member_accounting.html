@@ -20,6 +20,7 @@
         <table id="members_pay" class="writing go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Registration" %}</th>
                     <th>{% trans "Date" %}</th>
                     <th>{% trans "Value" %}</th>
@@ -29,6 +30,7 @@
             <tbody>
                 {% for el in pays %}
                     <tr>
+                        <td></td>
                         <td>{{ el.registration.run }}</td>
                         <td>{{ el.created | date:'Y-m-d' }}</td>
                         <td>{{ el.value }}</td>
@@ -43,6 +45,7 @@
         <table id="members_other" class="writing go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Event" %}</th>
                     <th>{% trans "Date" %}</th>
                     <th>{% trans "Description" %}</th>
@@ -53,6 +56,7 @@
             <tbody>
                 {% for el in others %}
                     <tr>
+                        <td></td>
                         <td>{{ el.run.search }}</td>
                         <td>{{ el.created | date:'Y-m-d' }}</td>
                         <td>{{ el.descr }}</td>
@@ -68,6 +72,7 @@
         <table id="members_discount" class="writing go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Event" %}</th>
                     <th>{% trans "Discount" %}</th>
                     <th>{% trans "Detail" %}</th>
@@ -76,6 +81,7 @@
             <tbody>
                 {% for el in discounts %}
                     <tr>
+                        <td></td>
                         <td>{{ el.run.search }}</td>
                         <td>{{ el.disc }}</td>
                         <td>{{ el.detail }}</td>

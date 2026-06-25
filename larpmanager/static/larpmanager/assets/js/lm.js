@@ -733,9 +733,6 @@ function data_tables() {
 
         if (is_reorder) {
             dtConfig.rowReorder = { selector: 'td.reorder-handle', update: false };
-            if (dtConfig.responsive) {
-                dtConfig.responsive = { details: { target: 2 } };
-            }
         }
 
         const table = new DataTable('#' + tableId, dtConfig);

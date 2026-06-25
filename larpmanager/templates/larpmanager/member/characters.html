@@ -13,6 +13,7 @@
                         <table class="go_datatable">
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>{% trans "Character" %}</th>
                                     <th>{% trans "Active" %}</th>
                                     <th>{% trans "Last Event" %}</th>
@@ -21,6 +22,7 @@
                             <tbody>
                                 {% for rel in campaign_data.characters.values %}
                                     <tr>
+                                        <td></td>
                                         <td>
                                             <a href="{% url 'character' rel.registration.run.get_slug rel.character.uuid %}">{{ rel.character.name }}</a>
                                         </td>
@@ -39,6 +41,7 @@
                 <table class="go_datatable" no_header_cols="all">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>{% trans "Character" %}</th>
                             <th>{% trans "Event" %}</th>
                         </tr>
@@ -46,6 +49,7 @@
                     <tbody>
                         {% for rel in oneshots %}
                             <tr>
+                                <td></td>
                                 <td>
                                     <a href="{% url 'character' rel.registration.run.get_slug rel.character.uuid %}">
                                         {{ rel.character.name }}

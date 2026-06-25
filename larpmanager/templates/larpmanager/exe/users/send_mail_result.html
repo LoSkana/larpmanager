@@ -1,0 +1,32 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Send emails" %} - {% trans "Organization" %}
+{% endblock title %}
+{% block info %}
+    {% trans "Result of the bulk email send" %}
+{% endblock info %}
+{% block content %}
+    <h2>{% trans "Added to the queue" %}</h2>
+    {% if added %}
+        <ul>
+            {% for email in added %}<li>{{ email }}</li>{% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans "No address was added to the queue" %}</p>
+    {% endif %}
+    <h2>{% trans "Ignored" %}</h2>
+    {% if ignored %}
+        <p>
+            {% trans "These addresses do not belong to a user who shared their data with the organization, and were not added to the queue" %}:
+        </p>
+        <ul>
+            {% for email in ignored %}<li>{{ email }}</li>{% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans "No address was ignored" %}</p>
+    {% endif %}
+    <p>
+        <a href="{{ request.path }}">{% trans "Back" %}</a>
+    </p>
+{% endblock content %}

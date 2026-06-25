@@ -95,6 +95,9 @@ msgstr "tot"
 msgid "Area"
 msgstr "Bereich"
 
+msgid "Back"
+msgstr "Zurück"
+
 msgid "Body"
 msgstr "Körper"
 
@@ -891,6 +894,9 @@ msgstr "Historisch"
 
 msgid "ID Card"
 msgstr "Identitätskarte"
+
+msgid "Ignored"
+msgstr "Ignoriert"
 
 msgid "Inflows"
 msgstr "Einnahmen"
@@ -3724,6 +3730,9 @@ msgstr "Aktivierung des Kontos"
 msgid "Add to xp delivery"
 msgstr "Zur xp-Lieferung hinzufügen"
 
+msgid "Added to the queue"
+msgstr "Mail zur Warteschlange hinzugefügt"
+
 msgid "Additional tickets"
 msgstr "Zusätzliche Tickets"
 
@@ -4542,6 +4551,9 @@ msgstr "Shuttle-Anfrage ändern"
 
 msgid "Newsletter preferences"
 msgstr "Newsletter-Einstellungen"
+
+msgid "No address was ignored"
+msgstr "Keine Adresse wurde übersehen"
 
 msgid "No registrations found"
 msgstr "Keine Registrierungen gefunden"
@@ -5449,6 +5461,9 @@ msgstr "Öffnung der Registrierungen nicht festgelegt"
 msgid "Request refund from: %(user)s"
 msgstr "Antrag auf Erstattung von: %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Ergebnis des Massen-E-Mail-Versands"
+
 msgid "Select the new ability to get"
 msgstr "Wählen Sie die neu zu erwerbende Fähigkeit"
 
@@ -5874,6 +5889,9 @@ msgstr "Organisiere Speed-LARPs für diese Veranstaltung"
 
 msgid "No activation steps are available"
 msgstr "Es sind keine Aktivierungsschritte verfügbar"
+
+msgid "No address was added to the queue"
+msgstr "Mail zur Warteschlange hinzugefügt"
 
 msgid "No character found for this event"
 msgstr "Kein Zeichen für dieses Ereignis gefunden"
@@ -13056,6 +13074,13 @@ msgid ""
 msgstr ""
 "Die Sammlung ist aktiv! Um teilzunehmen, klicken Sie auf den folgenden Link,"
 " oder kopieren Sie ihn an alle, die sich beteiligen möchten"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Diese Adressen gehören keinem Nutzer, der seine Daten mit der Organisation "
+"geteilt hat, und wurden nicht in die Warteschlange aufgenommen"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

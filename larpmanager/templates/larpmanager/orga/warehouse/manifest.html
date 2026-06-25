@@ -41,6 +41,7 @@
             <thead>
                 <tr>
                     <th></th>
+                    <th></th>
                     <th>{% trans "Item" %}</th>
                     <th>{% trans "Container" %}</th>
                     <th>{% trans "Loaded" %}</th>
@@ -56,6 +57,7 @@
             <tbody>
                 {% for el in area.items %}
                     <tr id="{{ el.uuid }}">
+                        <td></td>
                         <td>
                             <a href="{% url 'orga_warehouse_assignment_item_edit' run.get_slug el.uuid %}"
                                qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

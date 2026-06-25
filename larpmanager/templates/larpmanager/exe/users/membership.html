@@ -28,6 +28,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Surname" %}</th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Email" %}</th>
@@ -40,6 +41,7 @@
         <tbody>
             {% for el in list %}
                 <tr class="member">
+                    <td></td>
                     <td>
                         <a href="{% url 'exe_member' el.member__uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

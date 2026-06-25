@@ -10,6 +10,7 @@
     <table id="invoices" class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Participant" %}</th>
                 <th>{% trans "Method" %}</th>
                 <th>{% trans "Type" %}</th>
@@ -25,6 +26,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>{{ el.member }}</td>
                     <td>
                         {% if el.method %}{{ el.method }}{% endif %}

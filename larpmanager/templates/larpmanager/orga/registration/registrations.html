@@ -95,6 +95,7 @@
                     <thead>
                         <tr>
                             <th></th>
+                            <th></th>
                             <th>{% trans "Participant" %}</th>
                             {% if registration_reg_que_age %}
                                 <th class="age">{% trans "Age (during the event)" %}</th>
@@ -146,6 +147,7 @@
                     <tbody>
                         {% for registration in dc.list %}
                             <tr id="{{ registration.uuid }}">
+                                <td></td>
                                 <td>
                                     <a href="{% url 'orga_registrations_edit' run.get_slug registration.uuid %}"
                                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

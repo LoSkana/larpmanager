@@ -261,12 +261,14 @@ def _set_filtering(
     for index, filter_value in column_filters.items():
         column_index = int(index)
 
-        # Validate column index is within bounds
-        if column_index >= len(context["fields"]):
-            logger.debug("Column index out of bounds in _get_ordering: %s %s", column_filters, context["fields"])
+        # Column 0 is empty column for responsive expand, column 1 is the edit link; data starts at 2
+        field_idx = column_index - 2
+        if field_idx < 0 or field_idx >= len(context["fields"]):
+            logger.debug("Column index out of bounds in _set_filtering: %s %s", column_filters, context["fields"])
+            continue
 
         # Extract field and name from context fields
-        field_name, _display_name = context["fields"][column_index - 1]
+        field_name, _display_name = context["fields"][field_idx]
 
         # Handle special case for run field with search capability
         if field_name == "run":
@@ -328,10 +330,12 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
             is_ascending = False
             column_index_int = -column_index_int
 
-        # Validate column index is within bounds
-        if column_index_int >= len(context["fields"]):
+        # Column 0 is empty column for responsive expand, column 1 is the edit link; data starts at 2
+        field_idx = column_index_int - 2
+        if field_idx < 0 or field_idx >= len(context["fields"]):
             logger.debug("Column index out of bounds in _get_ordering: %s %s", column_order, context["fields"])
-        field_name, _display_name = context["fields"][column_index_int - 1]
+            continue
+        field_name, _display_name = context["fields"][field_idx]
 
         # Skip callback fields unless an explicit DB path override is provided
         if field_name in context.get("callbacks", {}):
@@ -467,10 +471,11 @@ def _prepare_data_json(
             else:
                 edit_url = reverse(edit_view, args=[context["run"].get_slug(), model_object.uuid])
             edit_text = f'<a href="{edit_url}" qtip="{edit_label}"><i class="fas fa-edit"></i></a>'
-        row_data = {"0": edit_text}
+        # Column 0 is the empty column for responsive expand; column 1 is the edit link
+        row_data = {"0": "", "1": edit_text}
 
-        # Add data for each configured field, starting from column 1
-        for column_index, (field_name, _field_label) in enumerate(context["fields"], start=1):
+        # Add data for each configured field, starting from column 2
+        for column_index, (field_name, _field_label) in enumerate(context["fields"], start=2):
             if field_name in field_to_formatter:
                 row_data[str(column_index)] = field_to_formatter[field_name](model_object)
             else:
@@ -481,7 +486,7 @@ def _prepare_data_json(
         # Add delete button if delete_view is provided
         if delete_view:
             # Add delete button in the last column
-            last_column = str(len(context["fields"]) + 1)
+            last_column = str(len(context["fields"]) + 2)
 
             # Check if page must be readonly in events
             if readonly_event:

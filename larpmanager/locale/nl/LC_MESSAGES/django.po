@@ -95,6 +95,9 @@ msgstr "tot"
 msgid "Area"
 msgstr "Gebied"
 
+msgid "Back"
+msgstr "Terug"
+
 msgid "Body"
 msgstr "Lichaam"
 
@@ -891,6 +894,9 @@ msgstr "Historisch"
 
 msgid "ID Card"
 msgstr "Identiteitskaart"
+
+msgid "Ignored"
+msgstr "Genegeerd"
 
 msgid "Inflows"
 msgstr "Inkomsten"
@@ -3724,6 +3730,9 @@ msgstr "Account activeren"
 msgid "Add to xp delivery"
 msgstr "Toevoegen aan xp levering"
 
+msgid "Added to the queue"
+msgstr "Mail toegevoegd aan wachtrij"
+
 msgid "Additional tickets"
 msgstr "Extra tickets"
 
@@ -4542,6 +4551,9 @@ msgstr "Shuttleverzoek wijzigen"
 
 msgid "Newsletter preferences"
 msgstr "Voorkeuren nieuwsbrief"
+
+msgid "No address was ignored"
+msgstr "Er is geen enkel adres over het hoofd gezien"
 
 msgid "No registrations found"
 msgstr "Geen registraties gevonden"
@@ -5449,6 +5461,9 @@ msgstr "Registraties openen niet ingesteld"
 msgid "Request refund from: %(user)s"
 msgstr "Verzoek om terugbetaling van: %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Resultaat van de massale e-mailverzending"
+
 msgid "Select the new ability to get"
 msgstr "Selecteer de nieuwe vaardigheid die je wilt leren"
 
@@ -5874,6 +5889,9 @@ msgstr "Organiseer speed-larps voor dit evenement"
 
 msgid "No activation steps are available"
 msgstr "Er zijn geen activeringsstappen beschikbaar"
+
+msgid "No address was added to the queue"
+msgstr "Mail toegevoegd aan wachtrij"
 
 msgid "No character found for this event"
 msgstr "Geen personage gevonden voor dit evenement"
@@ -12852,6 +12870,13 @@ msgid ""
 msgstr ""
 "De inzameling is actief! Om mee te doen klik je op de volgende link, of "
 "kopieer je deze naar wie je ook wilt betrekken"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Deze adressen zijn niet van een gebruiker die zijn gegevens met de "
+"organisatie heeft gedeeld, en zijn niet aan de wachtrij toegevoegd"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

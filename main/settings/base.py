@@ -398,6 +398,7 @@ IGNORABLE_404_URLS = [
     re.compile(r'favicon\.ico'),
     re.compile(r'/wp-'),
     re.compile(r'/xmlrpc\.php'),
+    re.compile(r'/\.env\.webhook'),
 ]
 
 # PAYMENT SETTINGS

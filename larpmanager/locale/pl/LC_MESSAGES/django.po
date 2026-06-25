@@ -95,6 +95,9 @@ msgstr "całość"
 msgid "Area"
 msgstr "Obszar"
 
+msgid "Back"
+msgstr "Powrót"
+
 msgid "Body"
 msgstr "Ciało"
 
@@ -891,6 +894,9 @@ msgstr "Historia"
 
 msgid "ID Card"
 msgstr "Karta identyfikacyjna"
+
+msgid "Ignored"
+msgstr "Zignorowano"
 
 msgid "Inflows"
 msgstr "Wpływy"
@@ -3724,6 +3730,9 @@ msgstr "Aktywacja konta"
 msgid "Add to xp delivery"
 msgstr "Dodaj do dostawy xp"
 
+msgid "Added to the queue"
+msgstr "Poczta dodana do kolejki"
+
 msgid "Additional tickets"
 msgstr "Dodatkowe bilety"
 
@@ -4542,6 +4551,9 @@ msgstr "Modyfikacja żądania transferu"
 
 msgid "Newsletter preferences"
 msgstr "Preferencje dotyczące biuletynu"
+
+msgid "No address was ignored"
+msgstr "Żaden adres nie został pominięty"
 
 msgid "No registrations found"
 msgstr "Nie znaleziono żadnych rejestracji"
@@ -5449,6 +5461,9 @@ msgstr "Otwarcie rejestracji nie zostało ustawione"
 msgid "Request refund from: %(user)s"
 msgstr "Żądanie zwrotu pieniędzy od: %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Wynik masowej wysyłki e-maili"
+
 msgid "Select the new ability to get"
 msgstr "Wybierz nową zdolność, aby uzyskać"
 
@@ -5874,6 +5889,9 @@ msgstr "Zajmij się organizacją szybkich larpów na tę imprezę"
 
 msgid "No activation steps are available"
 msgstr "Nie ma żadnych kroków aktywacyjnych"
+
+msgid "No address was added to the queue"
+msgstr "Poczta dodana do kolejki"
 
 msgid "No character found for this event"
 msgstr "Nie znaleziono postaci dla tego wydarzenia"
@@ -12727,6 +12745,13 @@ msgid ""
 msgstr ""
 "Zbiórka jest aktywna! Aby wziąć w niej udział, kliknij poniższy link lub "
 "skopiuj go komukolwiek, kogo chcesz zaangażować"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Te adresy nie należą do użytkownika, który udostępnił swoje dane "
+"organizacji, i nie zostały dodane do kolejki"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

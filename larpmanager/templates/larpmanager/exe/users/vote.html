@@ -11,6 +11,7 @@
     <table id="votes" class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>Nome</th>
                 <th>Voti</th>
             </tr>
@@ -18,6 +19,7 @@
         <tbody>
             {% for idx, el in candidates.items %}
                 <tr>
+                    <td></td>
                     <td>{{ el }}</td>
                     <td>{{ el.votes }}</td>
                 </tr>

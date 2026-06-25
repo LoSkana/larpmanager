@@ -6942,6 +6942,29 @@ msgstr ""
 msgid "Are you really sure"
 msgstr ""
 
+msgid "Result of the bulk email send"
+msgstr ""
+
+msgid "Added to the queue"
+msgstr ""
+
+msgid "No address was added to the queue"
+msgstr ""
+
+msgid "Ignored"
+msgstr ""
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+
+msgid "No address was ignored"
+msgstr ""
+
+msgid "Back"
+msgstr ""
+
 msgid "Volunteer Registry"
 msgstr ""
 
@@ -11472,9 +11495,6 @@ msgstr ""
 msgid "Membership fee of"
 msgstr ""
 
-msgid "Mail added to queue!"
-msgstr ""
-
 msgid "Answer submitted!"
 msgstr ""
 
@@ -11493,6 +11513,9 @@ msgstr ""
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
+msgstr ""
+
+msgid "Mail added to queue!"
 msgstr ""
 
 msgid "No events are present, create one"

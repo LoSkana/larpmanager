@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Pool" %}</th>
                 <th></th>
@@ -17,6 +18,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         <a href="{% url 'orga_ci_pool_types_edit' run.get_slug el.number %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

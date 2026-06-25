@@ -12,6 +12,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Severity" %}</th>
                 <th>{% trans "Status" %}</th>
                 <th>{% trans "Where" %}</th>
@@ -26,6 +27,7 @@
             {% for el in list %}
                 <tr id="{{ el.uuid }}"
                     {% if el.status == 'c' %}class="closed hide"{% endif %}>
+                    <td></td>
                     <td>
                         <a href="{% url 'orga_problems_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>

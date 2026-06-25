@@ -95,6 +95,9 @@ msgstr "tot"
 msgid "Area"
 msgstr "Zona"
 
+msgid "Back"
+msgstr "Atrás"
+
 msgid "Body"
 msgstr "Cuerpo"
 
@@ -891,6 +894,9 @@ msgstr "Histórico"
 
 msgid "ID Card"
 msgstr "Documento de identidad"
+
+msgid "Ignored"
+msgstr "Ignorado"
 
 msgid "Inflows"
 msgstr "Ingresos"
@@ -3724,6 +3730,9 @@ msgstr "Activación de la cuenta"
 msgid "Add to xp delivery"
 msgstr "Añadir a la entrega xp"
 
+msgid "Added to the queue"
+msgstr "¡Correo añadido a la cola"
+
 msgid "Additional tickets"
 msgstr "Entradas adicionales"
 
@@ -4542,6 +4551,9 @@ msgstr "Cambiar solicitud de transporte"
 
 msgid "Newsletter preferences"
 msgstr "Preferencias del boletín"
+
+msgid "No address was ignored"
+msgstr "No se ha pasado por alto ninguna dirección"
 
 msgid "No registrations found"
 msgstr "No se han encontrado registros"
@@ -5449,6 +5461,9 @@ msgstr "Apertura de registros no fijada"
 msgid "Request refund from: %(user)s"
 msgstr "Solicitar reembolso a: %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Resultado del envío masivo de correos electrónicos"
+
 msgid "Select the new ability to get"
 msgstr "Selecciona la nueva habilidad"
 
@@ -5874,6 +5889,9 @@ msgstr "Organiza los larps rápidos para este evento"
 
 msgid "No activation steps are available"
 msgstr "No hay pasos de activación disponibles"
+
+msgid "No address was added to the queue"
+msgstr "¡Correo añadido a la cola"
 
 msgid "No character found for this event"
 msgstr "No se ha encontrado ningún personaje para este evento"
@@ -12843,6 +12861,13 @@ msgid ""
 msgstr ""
 "¡La colecta está activa! Para participar pincha en el siguiente enlace, o "
 "cópialo a quien quieras que participe"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Estas direcciones no pertenecen a ningún usuario que haya compartido sus "
+"datos con la organización, y no se han añadido a la cola"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

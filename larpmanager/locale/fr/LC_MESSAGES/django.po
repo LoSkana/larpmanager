@@ -95,6 +95,9 @@ msgstr "tot"
 msgid "Area"
 msgstr "Zone"
 
+msgid "Back"
+msgstr "Retour"
+
 msgid "Body"
 msgstr "Corps"
 
@@ -891,6 +894,9 @@ msgstr "Historique"
 
 msgid "ID Card"
 msgstr "Carte d'identité"
+
+msgid "Ignored"
+msgstr "Ignoré"
 
 msgid "Inflows"
 msgstr "Recettes"
@@ -3724,6 +3730,9 @@ msgstr "Activation du compte"
 msgid "Add to xp delivery"
 msgstr "Ajouter à la livraison xp"
 
+msgid "Added to the queue"
+msgstr "Courrier ajouté à la file d'attente "
+
 msgid "Additional tickets"
 msgstr "Billets supplémentaires"
 
@@ -4542,6 +4551,9 @@ msgstr "Modification de la demande de navette"
 
 msgid "Newsletter preferences"
 msgstr "Préférences pour le bulletin d'information"
+
+msgid "No address was ignored"
+msgstr "Aucune adresse n'a été ignorée"
 
 msgid "No registrations found"
 msgstr "Aucun enregistrement trouvé"
@@ -5449,6 +5461,9 @@ msgstr "Ouverture des inscriptions non fixée"
 msgid "Request refund from: %(user)s"
 msgstr "Demande de remboursement auprès de : %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Résultat de l'envoi massif d'e-mails"
+
 msgid "Select the new ability to get"
 msgstr "Sélectionner la nouvelle compétence à acquérir"
 
@@ -5874,6 +5889,9 @@ msgstr "Gérer les GN rapides pour cet événement"
 
 msgid "No activation steps are available"
 msgstr "Il n'y a aucune étape d'activation disponible"
+
+msgid "No address was added to the queue"
+msgstr "Courrier ajouté à la file d'attente "
 
 msgid "No character found for this event"
 msgstr "Aucun personnage n'a été trouvé pour cet événement"
@@ -13016,6 +13034,13 @@ msgid ""
 msgstr ""
 "La collecte est active ! Pour participer, cliquez sur le lien suivant, ou "
 "copiez-le à la personne que vous souhaitez impliquer"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Ces adresses n'appartiennent pas à un utilisateur ayant partagé ses données "
+"avec l'organisation, et n'ont pas été ajoutées à la file d'attente"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

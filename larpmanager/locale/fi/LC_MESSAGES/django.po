@@ -95,6 +95,9 @@ msgstr "tot"
 msgid "Area"
 msgstr "Alue"
 
+msgid "Back"
+msgstr "Takaisin"
+
 msgid "Body"
 msgstr "Keho"
 
@@ -891,6 +894,9 @@ msgstr "Historia"
 
 msgid "ID Card"
 msgstr "Henkilökortti"
+
+msgid "Ignored"
+msgstr "Ohitettu"
 
 msgid "Inflows"
 msgstr "Tulot"
@@ -3724,6 +3730,9 @@ msgstr "Tilin aktivointi"
 msgid "Add to xp delivery"
 msgstr "Lisää XP-jakamiseen"
 
+msgid "Added to the queue"
+msgstr "Posti lisätty jonoon"
+
 msgid "Additional tickets"
 msgstr "Lisäliput"
 
@@ -4542,6 +4551,9 @@ msgstr "Muokkaa sukkulapyyntöä"
 
 msgid "Newsletter preferences"
 msgstr "Uutiskirjeen asetukset"
+
+msgid "No address was ignored"
+msgstr "Yhtään osoitetta ei jätetty huomiotta"
 
 msgid "No registrations found"
 msgstr "Rekisteröintejä ei löytynyt"
@@ -5449,6 +5461,9 @@ msgstr "Ilmoittautumisen aukeamista ei ole asetettu"
 msgid "Request refund from: %(user)s"
 msgstr "Palautuspyyntö: %(user)s"
 
+msgid "Result of the bulk email send"
+msgstr "Massapostituksen tulos"
+
 msgid "Select the new ability to get"
 msgstr "Valitse uusi taito lisätäksesi se hahmollesi"
 
@@ -5874,6 +5889,9 @@ msgstr "Hallinnoi tämän tapahtuman nopeita larppejä"
 
 msgid "No activation steps are available"
 msgstr "Aktivointivaiheita ei ole saatavilla"
+
+msgid "No address was added to the queue"
+msgstr "Posti lisätty jonoon"
 
 msgid "No character found for this event"
 msgstr "Tälle tapahtumalle ei löytynyt merkkiä"
@@ -12625,6 +12643,13 @@ msgid ""
 msgstr ""
 "Keräys on aktiivinen! Osallistuaksesi klikkaa seuraavaa linkkiä tai kopioi "
 "se kenelle tahansa, jonka haluat ottaa mukaan"
+
+msgid ""
+"These addresses do not belong to a user who shared their data with the "
+"organization, and were not added to the queue"
+msgstr ""
+"Nämä osoitteet eivät kuulu käyttäjälle, joka on jakanut tietonsa "
+"organisaatiolle, eikä niitä ole lisätty jonoon"
 
 msgid ""
 "Your registration will now be saved in provisional status. It will be "

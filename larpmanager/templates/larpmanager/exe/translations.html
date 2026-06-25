@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Language" %}</th>
                 <th>{% trans "Original" %}</th>
                 <th>{% trans "Translation" %}</th>
@@ -19,6 +20,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         <a href="{% url 'exe_translations_edit' el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
