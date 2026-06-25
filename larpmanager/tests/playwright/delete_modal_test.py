@@ -54,11 +54,11 @@ def test_delete_modal(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
     expect(page.locator('[id="u2"]')).to_contain_text("Disposable Role")
 
-    # Cancel the deletion: modal opens, shows the name, element stays
+    # Cancel the deletion: modal opens, shows the name, pressing ESC keeps the element
     page.locator('#u2 .fa-trash').click(force=True)
     cancel_iframe = get_modal_iframe(page)
     expect(cancel_iframe.locator(".delete-confirm-message")).to_contain_text("Disposable Role")
-    cancel_iframe.get_by_role("button", name="Cancel").click()
+    page.keyboard.press("Escape")
     page.locator("#lm-modal").wait_for(state="hidden")
     expect(page.locator('[id="u2"]')).to_contain_text("Disposable Role")
 
