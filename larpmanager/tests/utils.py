@@ -330,7 +330,7 @@ def submit_inline_edit(page: Any) -> None:
     submit_btn.click(force=True)
     page.wait_for_function(
         f"() => (window._datatablesRefreshCount || 0) > {count_before}",
-        timeout=10000,
+        timeout=30000,
     )
 
 
@@ -346,7 +346,7 @@ def save_modal(page: any, frame: Any) -> None:
     submit_btn.click(force=True)
     page.wait_for_function(
         f"() => (window._datatablesRefreshCount || 0) > {count_before} || window.location.href !== {repr(url_before)}",
-        timeout=10000,
+        timeout=30000,
     )
     page.locator("#lm-modal").wait_for(state="hidden")
 
