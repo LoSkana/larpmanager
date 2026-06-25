@@ -959,6 +959,7 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 .popup_small,
 .popup_tutorial,
 .popup_dashboard,
+.popup_delete,
 .popup_edit {
   border-radius: 2em;
   background-color: var(--sec-clr);
@@ -983,6 +984,26 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
 .popup_edit {
   width: 70vw;
   height: 80vh;
+}
+
+.popup_delete {
+  width: fit-content;
+  min-width: 400px;
+  max-width: 40vw;
+  height: fit-content;
+  max-height: 50vh;
+}
+
+.popup_delete #lm-modal-content,
+.popup_delete .frame-container,
+.popup_delete .frame-container iframe {
+  height: auto;
+}
+
+@media (max-width: 800px) {
+  .popup_delete {
+    max-width: 90vw;
+  }
 }
 
 .popup_dashboard {
@@ -2335,15 +2356,23 @@ header.sec h1 {
 
 .form-actions {
   display: flex;
-  gap: 50px;
+  gap: 20px;
   justify-content: center;
+  align-items: center;
   margin-top: 20px;
 }
 
 .btn-save,
 .btn-cancel {
+  box-sizing: border-box;
+  min-width: 100px;
   padding: 10px 20px;
   border: none;
+  margin: 0;
+  font: inherit;
+  line-height: normal;
+  text-align: center;
+  vertical-align: middle;
   cursor: pointer;
   border-radius: 4px;
 }
@@ -2364,6 +2393,12 @@ header.sec h1 {
 
 .btn-cancel:hover {
   background-color: rgba(var(--ter-rgb), 0.9);
+}
+
+.delete-confirm-message {
+  text-align: center;
+  padding: 20px 10px;
+  font-size: 1.1em;
 }
 
 /* ---------------------------------------------------------------------------

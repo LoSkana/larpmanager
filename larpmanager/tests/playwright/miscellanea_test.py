@@ -32,6 +32,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (submit_register,
+                                     delete_modal,
                                      check_feature,
                                      expect_normalized,
                                      fill_date,
@@ -188,7 +189,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testaccess/manage/")
     sidebar(page, "Registrations")
     # Find and delete the user's registration
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
 
     # Logout and login as user - now without registration
     logout(page)

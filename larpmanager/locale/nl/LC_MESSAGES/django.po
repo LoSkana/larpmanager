@@ -5598,6 +5598,9 @@ msgstr "Functies voor het evenement activeren"
 msgid "After confirmation, add another"
 msgstr "Voeg na bevestiging nog een"
 
+msgid "Are you sure you want to delete"
+msgstr "Weet je zeker dat je dit wilt verwijderen"
+
 msgid "Browse the presentation website"
 msgstr "Blader door de presentatiesite"
 

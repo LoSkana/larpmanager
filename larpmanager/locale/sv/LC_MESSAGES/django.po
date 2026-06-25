@@ -5598,6 +5598,9 @@ msgstr "Aktivera funktioner för evenemanget"
 msgid "After confirmation, add another"
 msgstr "Efter bekräftelse, lägg till ytterligare en"
 
+msgid "Are you sure you want to delete"
+msgstr "Är du säker på att du vill ta bort"
+
 msgid "Browse the presentation website"
 msgstr "Bläddra igenom presentationswebbplatsen"
 

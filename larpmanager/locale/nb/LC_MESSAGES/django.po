@@ -5598,6 +5598,9 @@ msgstr "Aktiver funksjoner for arrangementet"
 msgid "After confirmation, add another"
 msgstr "Etter bekreftelse legger du til en ny"
 
+msgid "Are you sure you want to delete"
+msgstr "Er du sikker på at du vil slette"
+
 msgid "Browse the presentation website"
 msgstr "Bla gjennom presentasjonssiden"
 

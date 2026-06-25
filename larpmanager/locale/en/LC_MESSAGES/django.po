@@ -5187,6 +5187,12 @@ msgstr ""
 msgid "Select ability"
 msgstr ""
 
+msgid "Are you sure you want to delete"
+msgstr ""
+
+msgid "Confirm"
+msgstr ""
+
 msgid "Your organization has been created"
 msgstr ""
 
@@ -5248,9 +5254,6 @@ msgid "Module Activation"
 msgstr ""
 
 msgid "Need help"
-msgstr ""
-
-msgid "Confirm"
 msgstr ""
 
 msgid "What would you like to do?"

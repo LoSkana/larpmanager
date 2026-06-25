@@ -28,6 +28,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait, submit_register,
+                                     delete_modal,
                                      go_to,
                                      login_orga,
                                      login_user,
@@ -291,7 +292,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # delete sign up
     sidebar(page, "Registrations")
-    page.locator('.fa-trash').click()
+    delete_modal(page)
 
     # check does not show on new sign up
     go_to(page, live_server, "/test/register")

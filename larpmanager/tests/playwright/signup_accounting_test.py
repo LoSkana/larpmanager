@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
-    submit_register, \
+    submit_register, delete_modal, \
     expect_normalized, save_modal, wait_accounting_load, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
@@ -66,19 +66,19 @@ def check_delete(live_server: Any, page: Any) -> None:
 
     # cancel signup
     go_to(page, live_server, "/test/manage/registrations")
-    page.locator("a:has(i.fas.fa-trash)").click(force=True)
+    delete_modal(page)
     just_wait(page)
     expect(page.locator("#one")).not_to_contain_text("Admin Test")
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
-    page.get_by_role("row", name="Admin Test Test Larp teeest").locator('.fa-trash').click()
+    delete_modal(page, page.get_by_role("row", name="Admin Test Test Larp teeest").locator('.fa-trash'))
 
     go_to(page, live_server, "/test/manage/credits")
-    page.get_by_role("row", name="Admin Test Test Larp testet").locator('.fa-trash').click()
+    delete_modal(page, page.get_by_role("row", name="Admin Test Test Larp testet").locator('.fa-trash'))
 
     go_to(page, live_server, "/test/manage/payments")
-    page.get_by_role("row", name="Admin Test Wire Money").locator('.fa-trash').click()
+    delete_modal(page, page.get_by_role("row", name="Admin Test Wire Money").locator('.fa-trash'))
 
 
 

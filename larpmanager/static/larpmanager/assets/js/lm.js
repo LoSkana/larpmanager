@@ -117,6 +117,9 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
 
         if (e.data.type === 'iframe_resize') {
             revealIframe();
+            if (modalClass === 'popup_delete' && e.data.height) {
+                iframe.style.height = e.data.height + 'px';
+            }
         }
 
         if (e.data.type === 'dashboard_form_saved') {
@@ -384,8 +387,13 @@ $(document).ready(function() {
 
     // resize_title();
 
-    // Confirmation for delete icons (fa-trash)
+    // Confirmation for delete icons (fa-trash). On v21 manage pages the confirmation
+    // is handled by the iframe modal (see replaceNewUrl), so skip the native confirm.
     $(document).on('click', 'a:has(i.fa-trash), a:has(i.fa-solid.fa-trash), a:has(i.fas.fa-trash)', function(e) {
+        const inDatatable = $(this).closest('table.go_datatable, table.pagin_datatable').length > 0;
+        if (inDatatable && $('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+            return;
+        }
         if (!window.lmTesting && !confirm('Are you sure you want to delete this item?')) {
             e.preventDefault();
             e.stopPropagation();
@@ -490,6 +498,13 @@ function replaceNewUrl() {
         $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit)', function(e) {
             e.preventDefault();
             openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);
+            return false;
+        });
+
+        $(document).on('click', 'table.go_datatable a:has(i.fa-trash), table.pagin_datatable a:has(i.fa-trash)', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openIframeModal(this.href + '?frame=1', 'popup_delete', refreshDatatables);
             return false;
         });
     }

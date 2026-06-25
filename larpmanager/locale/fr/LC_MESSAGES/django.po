@@ -5598,6 +5598,9 @@ msgstr "Activer les fonctionnalités de l'événement"
 msgid "After confirmation, add another"
 msgstr "Après confirmation, ajoutez un autre"
 
+msgid "Are you sure you want to delete"
+msgstr "Tu es sûr de vouloir supprimer"
+
 msgid "Browse the presentation website"
 msgstr "Parcourez le site de présentation"
 

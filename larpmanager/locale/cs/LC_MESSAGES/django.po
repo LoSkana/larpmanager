@@ -5598,6 +5598,9 @@ msgstr "Aktivace funkcí pro událost"
 msgid "After confirmation, add another"
 msgstr "Po potvrzení přidejte další"
 
+msgid "Are you sure you want to delete"
+msgstr "Opravdu chcete smazat"
+
 msgid "Browse the presentation website"
 msgstr "Prohlédněte si prezentační stránky"
 

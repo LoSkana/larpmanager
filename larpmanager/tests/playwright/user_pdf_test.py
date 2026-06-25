@@ -29,6 +29,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (submit_register,
+                                     delete_modal,
                                      check_download,
                                      fill_tinymce,
                                      get_modal_iframe,
@@ -142,7 +143,7 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
 
     # Delete the orga-created character: this cascades the orga relationship deletion
     go_to(page, live_server, "/test/manage/characters")
-    page.get_by_role("row", name="Pdf Rel Character").locator(".fa-trash").click()
+    delete_modal(page, page.get_by_role("row", name="Pdf Rel Character").locator(".fa-trash"))
     just_wait(page)
 
     # Create a new target character for the player relationship
