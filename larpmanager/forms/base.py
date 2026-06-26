@@ -192,7 +192,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
                 field.to_field_name = "uuid"
 
         # Remove system fields that shouldn't be user-editable
-        for m in ["deleted", "temp"]:
+        for m in ["deleted", "temp", "order"]:
             self.delete_field(m)
 
         # Configure characters field widget with event context
