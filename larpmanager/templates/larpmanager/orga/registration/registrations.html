@@ -344,7 +344,7 @@
                 </a>
             </div>
         </div>
-        {% include "elements/registrations_list.html" %}
+        <div id="registrations_summary">{% include "elements/registrations_list.html" %}</div>
     {% else %}
         <br />
         <p class="no-elements-available">
@@ -459,7 +459,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     $(function() {
 
-        $('#load_accounting').on('click', function () {
+        $(document).on('click', '#load_accounting', function () {
             load_accounting($(this));
             return false;
         });
