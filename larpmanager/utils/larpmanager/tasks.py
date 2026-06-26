@@ -241,14 +241,14 @@ def send_mail_exec(
     seen_emails = {}
 
     sender_context = None
-    # Determine sender context (Association or Run object, or LM )
-    if association_id:
-        sender_context = Association.objects.filter(pk=association_id).first()
-    elif run_id:
+    # Determine sender context: run wins over association
+    if run_id:
         sender_context = Run.objects.filter(pk=run_id).first()
         # Extract association_id from run if not provided
         if sender_context and not association_id:
             association_id = sender_context.event.association_id
+    elif association_id:
+        sender_context = Association.objects.filter(pk=association_id).first()
 
     if sender_context:
         # Add organization/run prefix to subject line
