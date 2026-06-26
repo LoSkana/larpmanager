@@ -2955,6 +2955,22 @@ body.floating_iframe .inner {
   color: rgba(var(--pri-rgb), 0.9);
   border-color: rgba(var(--sec-rgb), 0.9);
 }
+.faction-logo {
+  height: 1.2em;
+  width: auto;
+  vertical-align: middle;
+  margin-right: 0.4em;
+  border-radius: 10%;
+}
+.faction-logo-title {
+  height: 2em;
+}
+.faction-logo-cover {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 10%;
+  margin-bottom: 1em;
+}
 .char-list {
   max-height: 420px;
   overflow-y: auto;

@@ -554,6 +554,12 @@ class Faction(Writing):
         for s in ["typ", "teaser", "color"]:
             self.upd_js_attr(js, s)
 
+        if self.cover:
+            # noinspection PyUnresolvedReferences
+            js["cover"] = self.cover.url
+            # noinspection PyUnresolvedReferences
+            js["thumb"] = self.thumb.url
+
         return js
 
     def __str__(self) -> str:
