@@ -131,7 +131,7 @@ class ExceptionHandlingMiddleware:
                 ),
             ),
             # Flow control exceptions - handle redirects and early returns
-            (RedirectError, lambda ex: redirect(ex.view, *ex.args, **ex.kwargs)),
+            (RedirectError, lambda ex: self._handle_redirect(request, ex)),
             (ReturnNowError, lambda ex: ex.value),
             # Domain and membership management errors
             (
@@ -151,6 +151,16 @@ class ExceptionHandlingMiddleware:
 
         # Return None for unhandled exceptions to use Django's default handling
         return None
+
+    @staticmethod
+    def _handle_redirect(request: HttpRequest, exception: RedirectError) -> HttpResponse:
+        """Redirect to the target view, breaking out of an iframe modal when in frame mode."""
+        target = reverse(exception.view, args=exception.args, kwargs=exception.kwargs)
+        is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+        if is_frame:
+            # If inside an iframe modal, get out
+            return render(request, "elements/dashboard/frame_redirect.html", {"redirect_url": target})
+        return HttpResponseRedirect(target)
 
     @staticmethod
     def _redirect_with_message(
