@@ -6523,6 +6523,9 @@ msgstr "klicka på ikonen för att öppna handledningen"
 msgid "configure at least one method and save"
 msgstr "konfigurera minst en metod och spara"
 
+msgid "otherwise please open a support ticket"
+msgstr "I annat fall ber vi dig att skapa ett supportärende"
+
 msgid "we'll let you know as soon as possible"
 msgstr "vi meddelar dig så snart som möjligt"
 
@@ -7715,6 +7718,9 @@ msgstr "du kan fortfarande betala det återstående beloppet om du vill"
 msgid "Add characters to see their player assignments here"
 msgstr "Lägg till karaktärer för att se vilka spelare som tilldelats dem här"
 
+msgid "An account with this phone number may already exist"
+msgstr "Det kan hända att det redan finns ett konto med det här telefonnumret"
+
 msgid "An assignment for this item and area already exists"
 msgstr "Ett uppdrag för detta objekt och område finns redan"
 
@@ -7871,6 +7877,9 @@ msgstr "Av säkerhetsskäl kan varje token endast användas en gång"
 
 msgid "Have at least one participant registered for an event"
 msgstr "Har minst en deltagare registrerad för ett evenemang"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Om det är ditt, hämta det gärna från inloggningssidan"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Felaktigt svar. Vänligen ange namnet på vår hobby."

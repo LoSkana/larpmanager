@@ -2283,6 +2283,15 @@ msgstr ""
 msgid "Residence address"
 msgstr ""
 
+msgid "An account with this phone number may already exist"
+msgstr ""
+
+msgid "If it is yours, please recover it from the login page"
+msgstr ""
+
+msgid "otherwise please open a support ticket"
+msgstr ""
+
 #, python-format
 msgid "Minimum age: %(number)d"
 msgstr ""

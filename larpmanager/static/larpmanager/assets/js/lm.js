@@ -26,6 +26,7 @@ $.ajaxSetup({
      }
 });
 
+// Smooth-scroll the page wrapper so the target element sits below the header.
 window.jump_to = function(target) {
 
     var headerHeight = $('header').length
@@ -39,6 +40,7 @@ window.jump_to = function(target) {
 
 // ========== Dialog Modal System ==========
 
+// Show the shared <dialog id="lm-modal"> with given HTML content and CSS class.
 window.openLmModal = function(content, cssClass) {
     const dialog = document.getElementById('lm-modal');
     dialog.className = cssClass || 'popup';
@@ -46,11 +48,13 @@ window.openLmModal = function(content, cssClass) {
     dialog.showModal();
 };
 
+// Close the shared modal dialog if open.
 window.closeLmModal = function() {
     const dialog = document.getElementById('lm-modal');
     if (dialog && dialog.open) dialog.close();
 };
 
+// Close the modal when clicking the backdrop (outside the dialog bounds).
 (function() {
     const dialog = document.getElementById('lm-modal');
     if (!dialog) return;
@@ -149,6 +153,7 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
     }, { once: true });
 }
 
+// Toggle the mobile sidebar visibility and swap the open/close buttons.
 function sidebar_mobile() {
     $('body').toggleClass('is-sidebar-visible');
     $('#sidebar-mobile-open').toggle();
@@ -157,6 +162,7 @@ function sidebar_mobile() {
 
 const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
 
+// Initialize TinyMCE on matching textareas; resolves with the editor id once ready.
 window.addTinyMCETextarea = function(sel) {
     return new Promise((resolve) => {
         let config = Object.assign({}, tinymceConfig);
@@ -171,17 +177,15 @@ window.addTinyMCETextarea = function(sel) {
     });
 }
 
-$(document).ready(function() {
+// ========== Init: Headings ==========
 
-    $('.association #banner h1').textfill({
-    });
+// Fit banner/sidebar/header titles with textfill and strip trailing ":" from table header labels.
+function initHeadings() {
+    $('.association #banner h1').textfill({});
+    $('#sidebar h1').textfill({});
+    $('#header h1').textfill({});
 
-    $('#sidebar h1').textfill({
-    });
-
-    $('#header h1').textfill({
-    });
-
+    // strip trailing ":" from table header labels
     $("th label").each(function() {
         $(this).contents().filter(function() {
             return this.nodeType === 3; // Nodo di testo
@@ -189,8 +193,12 @@ $(document).ready(function() {
             this.nodeValue = this.nodeValue.replace(":", "");
         });
     });
+}
 
-    // Sidebar
+// ========== Init: Sidebar ==========
+
+// Wire mobile sidebar open/close toggles, close-on-outside-click, and highlight the active link.
+function initSidebar() {
     $('#sidebar-mobile-open, #sidebar-mobile-close').on('click', function(event) {
         sidebar_mobile();
     });
@@ -205,6 +213,13 @@ $(document).ready(function() {
         }
     });
 
+    show_sidebar_active();
+}
+
+// ========== Init: Dropdowns ==========
+
+// Hover fade for dropdown menus, stop button click bubbling, and mark empty menus as "nope".
+function initDropdowns() {
     $('.dropdown-button').click(function(event) {
         event.stopPropagation();
     });
@@ -215,6 +230,17 @@ $(document).ready(function() {
         $(this).children('.dropdown-menu').fadeOut(100);
     });
 
+    $('.dropdown-menu').each(function() {
+      if ($(this).children().length == 0) {
+        $(this).addClass('nope');
+      }
+    });
+}
+
+// ========== Init: Feature modals ==========
+
+// Open tutorial/feature iframe modals and the feature-description popup via AJAX.
+function initFeatureModals() {
     $('a.feature_tutorial').on('mousedown', function(event) {
         event.preventDefault();
 
@@ -258,49 +284,72 @@ $(document).ready(function() {
 
         return false;
     });
+}
 
-    // Menu.
-            $menu_openers = $('#menu .opener');
+// ========== Init: Menu ==========
 
-        // Openers.
-            $menu_openers.each(function() {
+// Accordion behavior for menu openers and removal of empty menu lists/cells.
+function initMenu() {
+    $menu_openers = $('#menu .opener');
 
-                var $this = $(this);
+    // Openers.
+    $menu_openers.each(function() {
 
-                $this.on('click', function(event) {
+        var $this = $(this);
 
-                    // Prevent default.
-                        event.preventDefault();
+        $this.on('click', function(event) {
 
-                    // Toggle.
-                        $menu_openers.not($this).removeClass('active');
-                        $this.toggleClass('active');
+            // Prevent default.
+                event.preventDefault();
 
-                    // Trigger resize (sidebar lock).
-                        $(window).triggerHandler('resize.sidebar-lock');
+            // Toggle.
+                $menu_openers.not($this).removeClass('active');
+                $this.toggleClass('active');
 
-                });
+            // Trigger resize (sidebar lock).
+                $(window).triggerHandler('resize.sidebar-lock');
 
-            });
+        });
 
-    $('.hideMe').fadeIn(200);
-
-    setTimeout(function() {
-        $('.hideMe').fadeOut(200);
-    }, 5000); // <-- time in milliseconds
+    });
 
     $('#menu .links ul:empty ').hide();
 
     $('#menu .links ul:not(:has(*))').parent().remove();
 
     $('.links td:not(:has(*))').parent().remove();
+}
 
+// ========== Init: Flash messages ==========
+
+// Fade flash messages in, then auto-dismiss them after 5 seconds.
+function initFlashMessages() {
+    $('.hideMe').fadeIn(200);
+
+    setTimeout(function() {
+        $('.hideMe').fadeOut(200);
+    }, 5000); // <-- time in milliseconds
+}
+
+// ========== Init: Tooltips ==========
+
+// Init qtip tooltips (prod only) plus character and generic hover tooltips.
+function initTooltips() {
     /* QTIP TOOLTIP */
     if (window.enviro == "prod") {
         lm_tooltip();
         add_icon_tooltips();
     }
 
+    reload_has_char();
+
+    reload_has_tooltip();
+}
+
+// ========== Init: Date pickers ==========
+
+// Attach datetimepicker widgets to date_p / datetime_p / time_p inputs.
+function initDatepickers() {
     $(':input[type="date_p"]').datetimepicker({
         format:'Y-m-d',
         timepicker: false,
@@ -319,7 +368,12 @@ $(document).ready(function() {
         datepicker: false,
         scrollInput : false
     });
+}
 
+// ========== Init: Slug field ==========
+
+// Sanitize manual slug input and auto-generate the slug from the name until the user edits it.
+function initSlugField() {
     let slugTouched = false;
     let slugTimeout;
 
@@ -351,11 +405,12 @@ $(document).ready(function() {
             $('#slug').val(autoSlug).trigger('slug:changed', [autoSlug]);
         }
     });
+}
 
-    reload_has_char();
+// ========== Init: Toggles ==========
 
-    reload_has_tooltip();
-
+// Show/hide target blocks via .my_toggle, scrolling into view and tracking select state.
+function initToggles() {
     $(document).on("click", ".my_toggle", function() {
         var k = $(this).attr("tog");
         var el =  $("." + k);
@@ -375,7 +430,12 @@ $(document).ready(function() {
         return false;
 
     });
+}
 
+// ========== Init: Datatable links / delete confirm ==========
+
+// Suppress link navigation during bulk mode and add native delete confirmation outside v21 modals.
+function initDatatableLinks() {
     // dont' follow links if bulk is active
     $('.go_datatable').on('click', 'a', function(e) {
         if ($('#main_bulk').is(':visible')) {
@@ -383,12 +443,6 @@ $(document).ready(function() {
             e.stopPropagation();
         }
     });
-
-    // table_csv();
-
-    resize_fields();
-
-    // resize_title();
 
     // Confirmation for delete icons (fa-trash). On v21 manage pages the confirmation
     // is handled by the iframe modal (see replaceNewUrl), so skip the native confirm.
@@ -403,7 +457,12 @@ $(document).ready(function() {
             return false;
         }
     });
+}
 
+// ========== Init: Popups ==========
+
+// Open inline .show_popup content in the modal and wire AJAX post_popup handlers.
+function initPopups() {
     $(document).on("click", ".show_popup", function() {
         num = $(this).attr("pop");
         tp = $(this).attr("fie");
@@ -419,6 +478,13 @@ $(document).ready(function() {
         return false;
     });
 
+    post_popup();
+}
+
+// ========== Init: Table search ==========
+
+// Live filter writing-table rows against the #search_tbl input text.
+function initTableSearch() {
     $('#search_tbl').on('input', function() {
         key = $(this).val();
         $('table.writing tr').each(function( index ) {
@@ -435,30 +501,28 @@ $(document).ready(function() {
         });
 
     });
+}
 
+// ========== Init: Fade-ins ==========
+
+// Fade in the main layout regions (content, topbar, sidebar, footer) on load.
+function initFadeIns() {
+    $('#one .inner').fadeIn(100);
+    $('#topbar .inner').fadeIn(100);
+    $('#sidebar .inner').fadeIn(100);
+    $('#footer .inner').fadeIn(100);
+}
+
+// ========== Init: Misc ==========
+
+// Leftover setup: hide empty info box, resize fields, clipboard buttons, select chevrons,
+// conditional fields, new-url handlers, and removal of empty page-info.
+function initMisc() {
     if ($('.info').is(':empty')) {
         $('.info').hide();
     }
 
-    data_tables();
-
-    post_popup();
-
-    $('.dropdown-menu').each(function() {
-      if ($(this).children().length == 0) {
-        $(this).addClass('nope');
-      }
-    });
-
-    $('#one .inner').fadeIn(100);
-
-    $('#topbar .inner').fadeIn(100);
-
-    $('#sidebar .inner').fadeIn(100);
-
-    $('#footer .inner').fadeIn(100);
-
-    show_sidebar_active();
+    resize_fields();
 
     copyClipboardButton();
 
@@ -473,11 +537,43 @@ $(document).ready(function() {
     if ($pageInfo.length && !$pageInfo.attr('qtip').trim()) {
         $pageInfo.remove();
     }
+}
+
+$(document).ready(function() {
+
+    // Layout / chrome
+    initHeadings();
+    initSidebar();
+    initDropdowns();
+    initMenu();
+    initFadeIns();
+
+    // Notifications
+    initFlashMessages();
+    initTooltips();
+
+    // Forms / inputs
+    initDatepickers();
+    initSlugField();
+
+    // Interactions
+    initToggles();
+    initFeatureModals();
+    initPopups();
+    initTableSearch();
+
+    // Tables
+    initDatatableLinks();
+    data_tables();
+
+    // Misc
+    initMisc();
 
     window._lmReady = true;
     $(document).trigger("lm_ready");
 });
 
+// Route "new"/edit/delete table links through iframe modals on v21 manage pages.
 function replaceNewUrl() {
     $(document).on('click', 'a.form-new', function(event) {
         event.preventDefault();
@@ -513,6 +609,7 @@ function replaceNewUrl() {
     }
 }
 
+// Reload datatable contents after a modal save, re-fetching the page and patching tables/headings.
 function refreshDatatables() {
     $('table.pagin_datatable').each(function() {
         const tableId = $(this).attr('id');
@@ -671,6 +768,7 @@ function setupConditionalFields() {
     });
 }
 
+// Build an inline SVG chevron tinted with the theme color and apply it as the select background.
 function setSelectChevronColor() {
   const priRgb = getComputedStyle(document.body)
     .getPropertyValue('--ter-rgb')
@@ -694,6 +792,7 @@ function setSelectChevronColor() {
     );
 }
 
+// Mark the sidebar link matching the current URL as selected and scroll it into center view.
 function show_sidebar_active() {
     // set select on sidebar
     var currentUrl = window.location.pathname.replace(/\/$/, '');
@@ -725,6 +824,8 @@ function show_sidebar_active() {
 
 }
 
+// Initialize client-side (go_datatable) and server-side (pagin_datatable) DataTables,
+// applying sort/visibility config, row reorder, tooltips, and saved state.
 function data_tables() {
     window.datatables = window.datatables || {};
 
@@ -1005,6 +1106,7 @@ function data_tables() {
     });
 }
 
+// Wire .post_popup clicks to POST for popup content and show the result in the modal.
 function post_popup() {
     $(document).on('click', '.post_popup', function (e) {
 
@@ -1038,6 +1140,7 @@ function post_popup() {
     });
 }
 
+// (Re)bind character preview qtip tooltips to .has_show_char elements within parent.
 function reload_has_char(parent='') {
 
     $(parent + ' ' + '.has_show_char').each(function() {
@@ -1064,6 +1167,7 @@ function reload_has_char(parent='') {
 
 }
 
+// Bind the various qtip tooltip styles: .lm_tooltip, .explain-icon, data-tooltip, and a[qtip].
 function lm_tooltip() {
 
     $('.lm_tooltip').each(function() {
@@ -1148,6 +1252,7 @@ function lm_tooltip() {
 }
 
 
+// (Re)bind generic qtip tooltips to .has_show_tooltip elements within parent.
 function reload_has_tooltip(parent='') {
 
     $(parent + ' ' + '.has_show_tooltip').each(function() {
@@ -1174,6 +1279,7 @@ function reload_has_tooltip(parent='') {
 
 }
 
+// Add translated qtip tooltips to edit/up/down/trash action icons that lack one.
 function add_icon_tooltips() {
     // Dictionary mapping icon classes to their tooltip texts
     var iconTooltips = {
@@ -1233,12 +1339,14 @@ function add_icon_tooltips() {
 
 
 
+// POST the chosen UI language to the server.
 function selectLanguage(lang) {
     xhttp.open("POST", set_language_url, true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("language=" + lang);
 }
 
+// Scale writing-table cell font size down as text length grows (excluding popup text).
 function resize_fields() {
     $(".writing td").each(function( index ) {
 
@@ -1255,6 +1363,7 @@ function resize_fields() {
 
 }
 
+// Return an HTML-escaped (XSS-safe) version of the input string.
 function stripHTML(dirtyString) {
   var container = document.createElement('div');
   var text = document.createTextNode(dirtyString);
@@ -1262,6 +1371,7 @@ function stripHTML(dirtyString) {
   return container.innerHTML; // innerHTML will be a xss safe string
 }
 
+// String.format/f: replace {0}, {1}, ... placeholders with the given arguments.
 String.prototype.format = String.prototype.f = function() {
     var s = this,
         i = arguments.length;
@@ -1272,6 +1382,7 @@ String.prototype.format = String.prototype.f = function() {
     return s;
 };
 
+// Convert a string into a URL-safe slug (lowercase, accents stripped, hyphen-separated).
 function slugify(str) {
   return String(str)
     .normalize('NFKD') // split accented characters into their base characters and diacritical marks
@@ -1283,6 +1394,7 @@ function slugify(str) {
     .replace(/-+/g, '-'); // remove consecutive hyphens
 }
 
+// Fallback String.format polyfill if not already defined above.
 if (!String.prototype.format) {
   String.prototype.format = function() {
     var args = arguments;
@@ -1295,6 +1407,7 @@ if (!String.prototype.format) {
   };
 }
 
+// Copy a link to the clipboard on .copy-link-btn click, with temporary check-icon feedback.
 function copyClipboardButton() {
     // Copy link to clipboard functionality (jQuery)
     $(document).on('click', '.copy-link-btn', function (e) {
@@ -1322,82 +1435,3 @@ function copyClipboardButton() {
 }
 
 });
-
-
-//function download_csv(csv, filename) {
-//    var csvFile;
-//    var downloadLink;
-//
-//    // CSV FILE
-//    csvFile = new Blob([csv], {type: "text/csv"});
-//
-//    // Download link
-//    downloadLink = document.createElement("a");
-//
-//    // File name
-//    downloadLink.download = filename;
-//
-//    // We have to create a link to the file
-//    downloadLink.href = window.URL.createObjectURL(csvFile);
-//
-//    // Make sure that the link is not displayed
-//    downloadLink.style.display = "none";
-//
-//    // Add the link to your DOM
-//    document.body.appendChild(downloadLink);
-//
-//    // Lanzamos
-//    downloadLink.click();
-//}
-
-//function export_table_to_csv(sel, filename) {
-//    var csv = [];
-//    var rows = document.querySelectorAll(sel + " tr");
-//
-//    for (var i = 0; i < rows.length; i++) {
-//        var row = [], cols = rows[i].querySelectorAll("td, th");
-//
-//        for (var j = 0; j < cols.length; j++) {
-//            var tx = cols[j].innerText;
-//            tx = tx.replace(/\t/g, " ");
-//            tx = tx.replace(/\n/g, " ");
-//            tx = tx.replace(/\r/g, " ");
-//            row.push(tx);
-//        }
-//
-//        csv.push(row.join("\t"));
-//    }
-//
-//    // Download CSV
-//    download_csv(csv.join("\n"), filename);
-//}
-
-//function go_table_csv(eid) {
-//    export_table_to_csv('#' + eid, "table " + document.title + ".csv");
-//    return false;
-//}
-
-//function table_csv() {
-//    $(".manage table").each(function( index ) {
-//
-//        if ( $(this).hasClass("") ) return;
-//
-//        if ( $(this).find('tbody').length === 0 || $(this).find('tbody tr').length === 0 ) {
-//            return;
-//        }
-//
-//        if ( $(this).is("#idSelector") ) {
-//            var eid = $(this).attr('id');
-//        } else {
-//            var eid = "a" + Math.random().toString(36).slice(2);
-//            $(this).attr('id', eid);
-//        }
-//
-//        $(this).parent().after('<p class="go_table"><a href="#" eid="' + eid + '">Download as csv</a></p>');
-//    });
-//
-//    $(".go_table a").on( "click", function() {
-//        eid = $(this).attr("eid");
-//        go_table_csv(eid);
-//    });
-//}

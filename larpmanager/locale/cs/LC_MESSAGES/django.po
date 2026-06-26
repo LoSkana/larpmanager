@@ -6522,6 +6522,9 @@ msgstr "kliknutím na ikonu otevřete výukový program"
 msgid "configure at least one method and save"
 msgstr "nakonfigurovat alespoň jednu metodu a uložit"
 
+msgid "otherwise please open a support ticket"
+msgstr "v opačném případě prosím otevřete žádost o podporu"
+
 msgid "we'll let you know as soon as possible"
 msgstr "dáme vám co nejdříve vědět"
 
@@ -7709,6 +7712,9 @@ msgstr "pokud si přejete, můžete zaplatit zbývající částku"
 msgid "Add characters to see their player assignments here"
 msgstr "Klikněte zde a zobrazte přiřazení postav k jednotlivým hráčům"
 
+msgid "An account with this phone number may already exist"
+msgstr "Účet s tímto telefonním číslem již možná existuje"
+
 msgid "An assignment for this item and area already exists"
 msgstr "Pro tuto položku a oblast již existuje přiřazení"
 
@@ -7869,6 +7875,9 @@ msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou"
 
 msgid "Have at least one participant registered for an event"
 msgstr "Mít alespoň jednoho účastníka registrovaného na akci"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Pokud je to váš účet, obnovte si jej prosím na přihlašovací stránce"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Nesprávná odpověď. Zadejte prosím název našeho koníčku."

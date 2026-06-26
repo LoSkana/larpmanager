@@ -6529,6 +6529,9 @@ msgstr "Klicken Sie auf das Symbol, um das Tutorial zu öffnen"
 msgid "configure at least one method and save"
 msgstr "Mindestens eine Methode konfigurieren und speichern"
 
+msgid "otherwise please open a support ticket"
+msgstr "Andernfalls eröffne bitte ein Support-Ticket"
+
 msgid "we'll let you know as soon as possible"
 msgstr "Wir werden Sie so schnell wie möglich informieren"
 
@@ -7751,6 +7754,9 @@ msgstr "Sie können den Restbetrag immer noch bezahlen, wenn Sie dies wünschen"
 msgid "Add characters to see their player assignments here"
 msgstr "Füge hier Charaktere hinzu, um ihre Spielerzuordnungen zu sehen"
 
+msgid "An account with this phone number may already exist"
+msgstr "Möglicherweise gibt es bereits ein Konto mit dieser Telefonnummer"
+
 msgid "An assignment for this item and area already exists"
 msgstr ""
 "Für diese Position und diesen Bereich existiert bereits eine Zuordnung"
@@ -7925,6 +7931,9 @@ msgstr "Jeder Token kann aus Sicherheitsgründen nur einmal verwendet werden"
 
 msgid "Have at least one participant registered for an event"
 msgstr "Mindestens einen Teilnehmer für eine Veranstaltung angemeldet haben"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Falls es dir gehört, hol es dir bitte über die Anmeldeseite ab"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Falsche Antwort. Bitte geben Sie den Namen unseres Hobbys ein."

@@ -6527,6 +6527,9 @@ msgstr "cliquez sur l'icône pour ouvrir le tutoriel"
 msgid "configure at least one method and save"
 msgstr "configure au moins une méthode et enregistre"
 
+msgid "otherwise please open a support ticket"
+msgstr "Sinon, n'hésite pas à ouvrir un ticket d'assistance"
+
 msgid "we'll let you know as soon as possible"
 msgstr "nous vous en informerons dès que possible"
 
@@ -7750,6 +7753,9 @@ msgid "Add characters to see their player assignments here"
 msgstr ""
 "Ajoute des personnages pour voir à quels joueurs ils sont attribués ici"
 
+msgid "An account with this phone number may already exist"
+msgstr "Il se peut qu'un compte associé à ce numéro de téléphone existe déjà"
+
 msgid "An assignment for this item and area already exists"
 msgstr "Une affectation pour ce poste et ce domaine existe déjà"
 
@@ -7924,6 +7930,9 @@ msgstr ""
 
 msgid "Have at least one participant registered for an event"
 msgstr "Avoir au moins un participant inscrit à un événement"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Si c'est le tien, récupère-le depuis la page de connexion"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Mauvaise réponse. Veuillez saisir le nom de notre hobby."
