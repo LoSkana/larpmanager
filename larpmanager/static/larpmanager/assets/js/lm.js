@@ -117,6 +117,12 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
 
         if (e.data.type === 'iframe_resize') {
             revealIframe();
+            if (modalClass === 'popup_delete' && e.data.height) {
+                const h = e.data.height + 'px';
+                iframe.style.height = h;
+                const fc = iframe.closest('.frame-container');
+                if (fc) fc.style.height = h;
+            }
         }
 
         if (e.data.type === 'dashboard_form_saved') {
@@ -384,8 +390,13 @@ $(document).ready(function() {
 
     // resize_title();
 
-    // Confirmation for delete icons (fa-trash)
+    // Confirmation for delete icons (fa-trash). On v21 manage pages the confirmation
+    // is handled by the iframe modal (see replaceNewUrl), so skip the native confirm.
     $(document).on('click', 'a:has(i.fa-trash), a:has(i.fa-solid.fa-trash), a:has(i.fas.fa-trash)', function(e) {
+        const inDatatable = $(this).closest('table.go_datatable, table.pagin_datatable').length > 0;
+        if (inDatatable && $('body').hasClass('new_v21') && $('body').hasClass('manage')) {
+            return;
+        }
         if (!window.lmTesting && !confirm('Are you sure you want to delete this item?')) {
             e.preventDefault();
             e.stopPropagation();
@@ -393,7 +404,7 @@ $(document).ready(function() {
         }
     });
 
-    $('.show_popup').on( "click", function() {
+    $(document).on("click", ".show_popup", function() {
         num = $(this).attr("pop");
         tp = $(this).attr("fie");
 
@@ -468,7 +479,7 @@ $(document).ready(function() {
 });
 
 function replaceNewUrl() {
-    $('a.form-new').on('click', function(event) {
+    $(document).on('click', 'a.form-new', function(event) {
         event.preventDefault();
         let href = $(this).attr('href');
         let newUrl;
@@ -492,6 +503,13 @@ function replaceNewUrl() {
             openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);
             return false;
         });
+
+        $(document).on('click', 'table.go_datatable a:has(i.fa-trash), table.pagin_datatable a:has(i.fa-trash)', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openIframeModal(this.href + '?frame=1', 'popup_delete', refreshDatatables);
+            return false;
+        });
     }
 }
 
@@ -507,6 +525,31 @@ function refreshDatatables() {
         const $newDoc = $($.parseHTML(html));
         const $newTables = $newDoc.find('table.go_datatable');
         const savedStates = {};
+        let $emptyAnchor = null;
+
+        // page was empty (no tables) but now has content: replace the whole content wrapper
+        if (!$('table.go_datatable').length && $newTables.length) {
+            const $page = $('[class^="page_"], [class*=" page_"]').first();
+            const $newPage = $newDoc.find('[class^="page_"], [class*=" page_"]').first();
+            if ($page.length && $newPage.length) {
+                $page.html($newPage.html());
+                // rebuild column index map from the freshly injected table headers
+                if (typeof window.buildHideColumnsIndexMap === 'function') window.buildHideColumnsIndexMap();
+                // do NOT suppress trigger togs: apply default column visibility (hidden columns)
+                data_tables();
+                if (typeof window.reloadActiveQuestions === 'function') window.reloadActiveQuestions();
+                if (typeof window.applyColumnToggles === 'function') window.applyColumnToggles();
+                window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
+                return;
+            }
+        }
+
+        // nearest heading right before a table (skipping <hr>), or empty set
+        function headingFor($table) {
+            let node = $table[0].previousElementSibling;
+            while (node && node.tagName === 'HR') node = node.previousElementSibling;
+            return node && node.tagName === 'H2' ? $(node) : $();
+        }
 
         $('table.go_datatable').each(function(index) {
             const $oldTable = $(this);
@@ -526,15 +569,55 @@ function refreshDatatables() {
             let $newTable = tableId ? $newDoc.find('#' + tableId) : $();
             if (!$newTable.length) $newTable = $newTables.eq(index);
 
-            if ($newTable.length) {
+            // heading (with element count) tied to this table, if present right before it
+            const $oldHeading = headingFor($oldTable);
+
+            const newRows = $newTable.length ? $newTable.find('tbody > tr').length : 0;
+            if ($newTable.length && newRows > 0) {
                 $oldTable.find('thead').html($newTable.find('thead').html());
                 $oldTable.find('tbody').html($newTable.find('tbody').html());
                 $oldTable.show();
+                // refresh heading (counts may have changed)
+                const $newHeading = $newTable.length ? headingFor($newTable) : $();
+                if ($oldHeading.length && $newHeading.length) {
+                    $oldHeading.html($newHeading.html());
+                }
+            } else {
+                // no rows left in new page (group/last element deleted): remove table and heading
+                const $anchorRef = $oldHeading.length ? $oldHeading : $oldTable;
+                if (!$emptyAnchor) $emptyAnchor = $('<span>').insertBefore($anchorRef);
+                // remove a leading <hr> separator if it belongs to this block
+                const prev = $anchorRef[0].previousElementSibling;
+                if (prev && prev.tagName === 'HR') prev.remove();
+                $oldHeading.remove();
+                $oldTable.remove();
             }
         });
 
-        if (!$newDoc.find('.no-elements-available').length) {
+        const $newNoElements = $newDoc.find('.no-elements-available');
+        if (!$newNoElements.length) {
             $('.no-elements-available').hide();
+        } else if (!$('.no-elements-available').length) {
+            // new page shows the empty placeholder but current page has none: inject it
+            if ($emptyAnchor) {
+                $emptyAnchor.replaceWith($newNoElements);
+            } else {
+                $('table.pagin_datatable, table.go_datatable').first().after($newNoElements);
+            }
+        } else {
+            $('.no-elements-available').show();
+        }
+        if ($emptyAnchor) $emptyAnchor.remove();
+
+        // refresh summary sections that hold derived lists/counts (e.g. registrations email lists)
+        const $oldSummary = $('#registrations_summary');
+        if ($oldSummary.length) {
+            const $newSummary = $newDoc.find('#registrations_summary');
+            if ($newSummary.length) {
+                $oldSummary.html($newSummary.html());
+            } else {
+                $oldSummary.remove();
+            }
         }
 
         window._datatablesSavedState = savedStates;
@@ -1214,7 +1297,7 @@ if (!String.prototype.format) {
 
 function copyClipboardButton() {
     // Copy link to clipboard functionality (jQuery)
-    $('.copy-link-btn').on('click', function (e) {
+    $(document).on('click', '.copy-link-btn', function (e) {
         e.preventDefault();
 
         const $btn = $(this);

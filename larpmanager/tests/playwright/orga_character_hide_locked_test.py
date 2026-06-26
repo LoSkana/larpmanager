@@ -35,6 +35,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    delete_modal,
     fill_tinymce,
     get_modal_iframe,
     go_to,
@@ -202,7 +203,7 @@ def _test_character_locked(page: Any, live_server: Any, char_counter: list) -> N
 
     go_to(page, live_server, "test/manage/")
     sidebar(page, "Registrations")
-    page.locator("a:has(i.fas.fa-trash)").click(force=True)
+    delete_modal(page)
 
 
 def _test_faction_hide(page: Any, live_server: Any, char_counter: list, faction_counter: list) -> None:

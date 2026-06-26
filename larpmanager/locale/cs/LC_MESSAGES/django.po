@@ -7110,6 +7110,9 @@ msgstr "Vaše darovaná registrace byla uplatněna!"
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Nepovinné) Maximální počet volných míst"
 
+msgid "Are you sure you want to delete this element"
+msgstr "Opravdu chcete tento prvek smazat"
+
 msgid "Cancellation for missing profile compilation"
 msgstr "Zrušení kvůli chybějícímu sestavení profilu"
 

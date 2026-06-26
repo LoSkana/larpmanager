@@ -39,6 +39,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (submit_register,
+                                     delete_modal,
                                      fill_tinymce,
                                      go_to,
                                      login_orga,
@@ -95,7 +96,7 @@ def test_orga_post_popup(pw_page: Any) -> None:
     verify_reg_editor_popup(page, live_server)
 
     go_to(page, live_server, "/test/manage/registrations/")
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
 
     # Registration: multiline paragraph question (p)
     create_reg_paragraph_question(page, live_server)
@@ -206,7 +207,7 @@ def create_char_editor_question(page: Any, live_server: Any) -> None:
 
 def create_character_with_long_editor_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("popup test character")
@@ -246,7 +247,7 @@ def create_char_paragraph_question(page: Any, live_server: Any) -> None:
 
 def fill_character_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("popup test character 2")

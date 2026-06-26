@@ -47,6 +47,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (submit_register,
+                                     delete_modal,
                                      expect_normalized,
                                      get_modal_iframe,
                                      go_to,
@@ -127,7 +128,7 @@ def _add_event_credits(live_server: Any, page: Any, member_search: str, member_o
 def _cancel_first_active_registration(live_server: Any, page: Any) -> None:
     """Cancel the first active registration shown in the organizer panel."""
     go_to(page, live_server, "/test/manage/registrations")
-    page.locator("a:has(i.fas.fa-trash)").first.click(force=True)
+    delete_modal(page)
     _wait_lm_ready(page)
 
 

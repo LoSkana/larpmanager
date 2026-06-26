@@ -7111,6 +7111,9 @@ msgstr "Din förmånliga registrering har lösts in!"
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Valfritt) Maximalt antal tillgängliga platser"
 
+msgid "Are you sure you want to delete this element"
+msgstr "Är du säker på att du vill ta bort det här elementet"
+
 msgid "Cancellation for missing profile compilation"
 msgstr "Avbokning på grund av utebliven profilsammanställning"
 

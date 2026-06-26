@@ -956,11 +956,15 @@ def orga_registrations_delete(request: HttpRequest, event_slug: str, registratio
 
     get_registration(context, registration_uuid)
 
-    cancel_reg(context["registration"])
+    if request.method == "POST":
+        cancel_reg(context["registration"])
+        messages.success(request, _("Registration cancelled"))
+        return render(request, "elements/dashboard/form_success.html", context)
 
-    messages.success(request, _("Registration cancelled"))
-
-    return redirect("orga_registrations", event_slug=context["run"].get_slug())
+    registration = context["registration"]
+    text = _("Registration")
+    context["el_name"] = f"{text} - {registration.member} - {registration.ticket.name}"
+    return render(request, "elements/dashboard/delete_confirm.html", context)
 
 
 def _save_questbuilder(context: dict, form: object, registration: Any) -> None:

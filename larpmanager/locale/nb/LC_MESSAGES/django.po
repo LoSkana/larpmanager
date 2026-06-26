@@ -7112,6 +7112,9 @@ msgstr "Din begavede registrering har blitt innløst!"
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Valgfritt) Maksimalt antall tilgjengelige plasser"
 
+msgid "Are you sure you want to delete this element"
+msgstr "Er du sikker på at du vil slette dette elementet"
+
 msgid "Cancellation for missing profile compilation"
 msgstr "Avbestilling på grunn av manglende profilkompilering"
 

@@ -63,7 +63,7 @@ from larpmanager.forms.warehouse import (
     ExeWarehouseTagForm,
 )
 from larpmanager.utils.core.base import check_association_context
-from larpmanager.utils.edit.backend import backend_delete, backend_edit, set_suggestion
+from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_edit, set_suggestion
 from larpmanager.utils.edit.base import Action, render_frame_or_fallback
 
 if TYPE_CHECKING:
@@ -176,6 +176,10 @@ def _exe_actions(
 
     # Perform DELETE
     if action_type == Action.DELETE:
+        is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+        if is_frame:
+            context["frame"] = True
+            return backend_delete_frame(request, context, model_type, element_uuid, action_data.get("can_delete"))
         backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
         return redirect(permission)
 

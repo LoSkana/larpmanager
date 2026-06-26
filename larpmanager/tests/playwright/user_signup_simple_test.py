@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, delete_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -59,7 +59,7 @@ def signup(live_server: Any, page: Any) -> None:
 
     # delete sign up
     go_to(page, live_server, "/test/manage/registrations")
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
 
     # sign up, confirm profile
     go_to(page, live_server, "/test/register")

@@ -7120,6 +7120,9 @@ msgstr "Votre cadeau d'enregistrement a été échangé !"
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Facultatif) Nombre maximal de places disponibles"
 
+msgid "Are you sure you want to delete this element"
+msgstr "Tu es sûr de vouloir supprimer cet élément "
+
 msgid "Cancellation for missing profile compilation"
 msgstr "Annulation pour absence de compilation de profil"
 

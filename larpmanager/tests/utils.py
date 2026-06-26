@@ -89,6 +89,7 @@ def print_text(page: Any) -> None:
 def go_to(page: Any, live_server: Any, path: Any) -> None:
     go_to_check(page, f"{live_server}/{path.lstrip('/')}")
 
+
 def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
     page.wait_for_load_state("networkidle", timeout=timeout)
     page.wait_for_load_state("load", timeout=timeout)
@@ -128,11 +129,13 @@ def go_to_check(page: Any, path: Any) -> None:
         assert info.count() > 0, f"#info_bar #info missing on {page.url}"
         assert info.inner_text().strip(), f"#info_bar #info empty on {page.url}"
 
+
 def get_request(page: Any, live_server: Any, path: Any) -> dict:
     api_context = page.request
     response = api_context.get(f"{live_server}/{path}")
     assert response.ok
     return response.json()
+
 
 def submit(page: Any) -> None:
     submit_confirm(page)
@@ -227,10 +230,10 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
                 raise
 
 
-def fill_tinymce(page, iframe_id, text, show = True) -> None:
+def fill_tinymce(page, iframe_id, text, show=True) -> None:
     """In test setting tinymce is not rendered, just fill the textarea."""
 
-    input_element = page.locator(f'#{iframe_id}')
+    input_element = page.locator(f"#{iframe_id}")
 
     if show:
         show_link_selector = f'a.my_toggle[tog="f_{iframe_id}"]'
@@ -268,9 +271,11 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
         expect(overlay).to_be_hidden(timeout=5000)
 
     # Use a generic locator with a regex filter covering both text and role fallbacks
-    submit_btn = scope.locator("button, input[type='submit'], a").filter(
-        has_text=re.compile(r"^\s*(Confirm|Submit|Conferma|Execute)\s*$", re.IGNORECASE)
-    ).first
+    submit_btn = (
+        scope.locator("button, input[type='submit'], a")
+        .filter(has_text=re.compile(r"^\s*(Confirm|Submit|Conferma|Execute)\s*$", re.IGNORECASE))
+        .first
+    )
 
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
@@ -287,6 +292,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
         pass
 
     _wait_lm_ready(page, timeout=8000)
+
 
 def submit_register(page: Any) -> None:
     # Settle late init
@@ -320,10 +326,7 @@ def wait_for_inline_edit(page: Any) -> Any:
 
 
 def submit_inline_edit(page: Any) -> None:
-    submit_btn = page.get_by_role(
-        "button",
-        name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
-    )
+    submit_btn = page.get_by_role("button", name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE))
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     count_before = page.evaluate("() => window._datatablesRefreshCount || 0")
@@ -335,10 +338,7 @@ def submit_inline_edit(page: Any) -> None:
 
 
 def save_modal(page: any, frame: Any) -> None:
-    submit_btn = frame.get_by_role(
-        "button",
-        name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
-    )
+    submit_btn = frame.get_by_role("button", name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE))
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     url_before = page.url
@@ -349,6 +349,22 @@ def save_modal(page: any, frame: Any) -> None:
         timeout=30000,
     )
     page.locator("#lm-modal").wait_for(state="hidden")
+
+
+def delete_modal(page: Any, trash_locator: Any = None, name: str = None) -> None:
+    """Open the v21 delete confirmation modal, optionally check the element name, and confirm.
+
+    Clicks the trash icon (the first one on the page when no locator is given), waits for the
+    iframe modal to appear, verifies the confirmation message contains the expected name when
+    provided, then clicks Confirm and waits for the listing to refresh and the modal to close.
+    """
+    if trash_locator is None:
+        trash_locator = page.locator("a:has(i.fa-trash)").first
+    trash_locator.click(force=True)
+    frame = get_modal_iframe(page)
+    if name is not None:
+        expect(frame.locator(".delete-confirm-message")).to_contain_text(name)
+    save_modal(page, frame)
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
@@ -398,7 +414,7 @@ def upload(page: Any, element_id: Any, image_path: Any) -> None:
 def normalize_whitespace(text: str) -> str:
     """Normalize whitespace by removing newlines and collapsing multiple spaces."""
 
-    text = re.sub(r'<[^>]+>', '', text)
+    text = re.sub(r"<[^>]+>", "", text)
 
     lines = []
     for line in text.splitlines():
@@ -431,6 +447,7 @@ def normalize_whitespace(text: str) -> str:
     text = re.sub(r"\s+", " ", text)
     # Strip leading/trailing whitespace
     return text.strip().lower()
+
 
 def expect_normalized(page, locator, expected: str, timeout=10000):
     locator.wait_for(state="visible", timeout=timeout)
@@ -473,11 +490,8 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
     exp = normalize_whitespace(expected)
 
     if exp not in actual:
-        raise AssertionError(
-            "Text mismatch\n\n"
-            f"EXPECTED:\n{exp}\n\n"
-            f"ACTUAL:\n{actual}"
-        )
+        raise AssertionError(f"Text mismatch\n\nEXPECTED:\n{exp}\n\nACTUAL:\n{actual}")
+
 
 def click_option(input_locator):
     """Toggle a radio/checkbox whose native input is visually hidden by lm.css.
@@ -489,7 +503,7 @@ def click_option(input_locator):
 
 
 def just_wait(page, big=False):
-    if not hasattr(page, 'wait_for_timeout'):
+    if not hasattr(page, "wait_for_timeout"):
         return
     wait = 2000 if big else 500
     page.wait_for_timeout(wait)
@@ -540,9 +554,9 @@ class FrameLocatorWithPage:
     """Wraps a FrameLocator with the real Page so helpers can call keyboard/wait methods."""
 
     def __init__(self, frame_locator, page, iframe_locator=None):
-        object.__setattr__(self, '_frame', frame_locator)
-        object.__setattr__(self, '_real_page', page)
-        object.__setattr__(self, '_iframe_locator', iframe_locator)
+        object.__setattr__(self, "_frame", frame_locator)
+        object.__setattr__(self, "_real_page", page)
+        object.__setattr__(self, "_iframe_locator", iframe_locator)
 
     def _get_frame(self):
         """Return the actual Frame object for JS evaluation in this iframe's context."""
@@ -615,9 +629,7 @@ class InlineOptionRow:
     def searchbox(self, field):
         """Return the select2 search field of an M2M column (requirements / tickets)."""
         self._ensure_details()
-        container = self.details.locator(
-            f"select[name={field}] ~ .select2"
-        )
+        container = self.details.locator(f"select[name={field}] ~ .select2")
         return container.get_by_role("searchbox")
 
 
@@ -628,10 +640,12 @@ def new_option(page):
     row = page.locator("#inline-options-body tr.inline-option").last
     return InlineOptionRow(page, row)
 
+
 def get_option(page, uuid):
     """Return the inline editor row for an existing option."""
     row = page.locator(f'#inline-options-body tr.inline-option[data-uuid="{uuid}"]')
     return InlineOptionRow(page, row)
+
 
 def submit_option(page, option):
     # The inline editor autosaves: blur the fields and wait for the row
@@ -654,6 +668,7 @@ def get_modal_iframe(page):
 def sidebar(page, link):
     icon_link("#sidebar", page, link)
 
+
 def icon_link(container, page, link):
     pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
     locator = page.locator(container).get_by_role("link", name=pattern)
@@ -661,8 +676,10 @@ def icon_link(container, page, link):
     locator.click()
     _wait_lm_ready(page)
 
+
 def nav(page, link):
     icon_link(".nav", page, link)
+
 
 def _wait_select2_results(page):
     page.locator(".select2-results__option").first.wait_for(state="visible")
