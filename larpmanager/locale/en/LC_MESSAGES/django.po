@@ -1532,6 +1532,14 @@ msgid ""
 "prerequisites and requirements"
 msgstr ""
 
+msgid "Criterions"
+msgstr ""
+
+msgid ""
+"If checked, enables criterions that conditionally modify experience point "
+"totals based on prerequisites and requirements"
+msgstr ""
+
 msgid "Auto buy"
 msgstr ""
 
@@ -8477,9 +8485,6 @@ msgid "No ability types defined yet"
 msgstr ""
 
 msgid "Use the button above to create the first ability type"
-msgstr ""
-
-msgid "Criterions"
 msgstr ""
 
 msgid "Operation"

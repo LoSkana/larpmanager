@@ -12858,6 +12858,13 @@ msgstr ""
 "silny)"
 
 msgid ""
+"If checked, enables criterions that conditionally modify experience point "
+"totals based on prerequisites and requirements"
+msgstr ""
+"Jeśli to pole jest zaznaczone, włącza kryteria, które warunkowo modyfikują "
+"sumy punktów doświadczenia w oparciu o warunki wstępne i wymagania"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""

@@ -12623,6 +12623,13 @@ msgstr ""
 "= výchozí zakázáno, 1 = normální, 10 = silné)"
 
 msgid ""
+"If checked, enables criterions that conditionally modify experience point "
+"totals based on prerequisites and requirements"
+msgstr ""
+"Je-li tato možnost zaškrtnuta, aktivují se kritéria, která podmíněně "
+"upravují celkový počet zkušenostních bodů na základě předpokladů a požadavků"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""

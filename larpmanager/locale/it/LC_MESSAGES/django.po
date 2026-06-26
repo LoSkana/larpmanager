@@ -13002,6 +13002,13 @@ msgstr ""
 "pagamento prima (0=disabilitato di default, 1=normale, 10=forte)"
 
 msgid ""
+"If checked, enables criterions that conditionally modify experience point "
+"totals based on prerequisites and requirements"
+msgstr ""
+"Se selezionato, attiva dei criteri che modificano in modo condizionale il "
+"totale dei punti esperienza in base ai prerequisiti e ai requisiti"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""
