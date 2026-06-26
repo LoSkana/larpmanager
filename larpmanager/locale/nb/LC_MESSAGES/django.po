@@ -6524,6 +6524,9 @@ msgstr "klikk på ikonet for å åpne veiledningen"
 msgid "configure at least one method and save"
 msgstr "konfigurer minst én metode og lagre"
 
+msgid "otherwise please open a support ticket"
+msgstr "Ellers ber vi deg om å opprette en supportsak"
+
 msgid "we'll let you know as soon as possible"
 msgstr "vi gir deg beskjed så snart som mulig"
 
@@ -7715,6 +7718,10 @@ msgstr "du kan fortsatt betale det resterende beløpet hvis du ønsker det"
 msgid "Add characters to see their player assignments here"
 msgstr "Legg til karakterer for å se hvilke spillere de er tilordnet her"
 
+msgid "An account with this phone number may already exist"
+msgstr ""
+"Det kan hende at det allerede finnes en konto med dette telefonnummeret"
+
 msgid "An assignment for this item and area already exists"
 msgstr "Det finnes allerede et oppdrag for dette elementet og området"
 
@@ -7876,6 +7883,9 @@ msgstr "Hver token kan bare brukes én gang av sikkerhetsmessige årsaker"
 
 msgid "Have at least one participant registered for an event"
 msgstr "Ha minst én deltaker påmeldt til et arrangement"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Hvis det er ditt, kan du hente det fra innloggingssiden"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Feil svar. Vennligst skriv inn navnet på hobbyen vår."
