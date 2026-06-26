@@ -43,7 +43,7 @@ from larpmanager.mail.factory import EmailConnectionFactory
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member, MembershipStatus
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
@@ -163,11 +163,11 @@ def partition_shared_recipients(recipients: list, association_id: int | None) ->
 
     shared_emails = {
         email.lower()
-        for email in Member.objects.filter(
-            memberships__association_id=association_id,
+        for email in Membership.objects.filter(
+            association_id=association_id,
         )
-        .exclude(memberships__status=MembershipStatus.EMPTY)
-        .values_list("email", flat=True)
+        .exclude(status=MembershipStatus.EMPTY)
+        .values_list("member__email", flat=True)
         if email
     }
 
@@ -241,14 +241,14 @@ def send_mail_exec(
     seen_emails = {}
 
     sender_context = None
-    # Determine sender context (Association or Run object, or LM )
-    if association_id:
-        sender_context = Association.objects.filter(pk=association_id).first()
-    elif run_id:
+    # Determine sender context: run wins over association
+    if run_id:
         sender_context = Run.objects.filter(pk=run_id).first()
         # Extract association_id from run if not provided
         if sender_context and not association_id:
             association_id = sender_context.event.association_id
+    elif association_id:
+        sender_context = Association.objects.filter(pk=association_id).first()
 
     if sender_context:
         # Add organization/run prefix to subject line

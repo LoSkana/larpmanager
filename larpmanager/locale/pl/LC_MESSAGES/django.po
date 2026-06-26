@@ -3508,6 +3508,9 @@ msgstr "Algorytm odlewania"
 msgid "Character profile"
 msgstr "Profil postaci"
 
+msgid "Choose one option"
+msgstr "Wybierz jedną opcję"
+
 msgid "Click to unassign"
 msgstr "Kliknij, żeby cofnąć przypisanie"
 
@@ -5131,6 +5134,9 @@ msgstr "Opcja nie jest już dostępna"
 
 msgid "Pre-registration confirmed"
 msgstr "Wstępna rejestracja potwierdzona"
+
+msgid "Select one or more options"
+msgstr "Wybierz jedną lub więcej opcji"
 
 msgid "Short name - international"
 msgstr "Nazwa skrócona - międzynarodowy"

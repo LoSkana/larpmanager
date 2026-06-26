@@ -996,6 +996,12 @@ msgstr ""
 msgid "Not selected"
 msgstr ""
 
+msgid "Choose one option"
+msgstr ""
+
+msgid "Select one or more options"
+msgstr ""
+
 msgid ""
 "<b>Nebula</b>: mixed dark and light theme (default). <b>Aurora</b>: full "
 "light theme. <b>Eclipse</b>: full dark theme. <b>Halo</b>: custom (enables "

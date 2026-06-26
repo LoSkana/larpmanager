@@ -1252,6 +1252,10 @@ class BaseRegistrationForm(BaseModelFormRun):
             "help_text": help_text,
         }
         if self._use_inline_widgets_v20:
+            hint = _("Choose one option")
+            field_kwargs["help_text"] = f'<span class="choice-hint">{hint}</span>' + (
+                f" - {help_text}" if help_text else ""
+            )
             field_kwargs["widget"] = DescriptionRadioSelect(
                 attrs={"class": "my-radio-class"}, descriptions=descriptions, metadata=metadata
             )
@@ -1315,6 +1319,8 @@ class BaseRegistrationForm(BaseModelFormRun):
             widget = DescriptionCheckboxSelectMultiple(
                 attrs={"class": "my-checkbox-class"}, descriptions=descriptions, metadata=metadata
             )
+            hint = _("Select one or more options")
+            help_text = f'<span class="choice-hint">{hint}</span>' + (f" - {help_text}" if help_text else "")
         else:
             widget = forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"})
         self.fields[field_key] = forms.MultipleChoiceField(

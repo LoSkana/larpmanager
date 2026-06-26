@@ -328,7 +328,55 @@ input[type="number"] {
 .reg-checkbox-class > div,
 .reg-radio-class > div {
   display: block;
-  padding: 0.3em 0;
+  margin: 0.4em 0;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  padding: 0.6em 0.8em;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.reg-checkbox-class > div:hover,
+.reg-radio-class > div:hover {
+  border-color: rgba(var(--ter-rgb), 0.5);
+  background-color: rgba(var(--ter-rgb), 0.04);
+}
+
+.reg-checkbox-class > div:has(input:checked),
+.reg-radio-class > div:has(input:checked) {
+  border-color: rgba(var(--ter-rgb), 0.9);
+  background-color: rgba(var(--ter-rgb), 0.08);
+  box-shadow: 0 0 0 1px rgba(var(--ter-rgb), 0.9) inset;
+}
+
+.reg-checkbox-class > div:has(input:focus-visible),
+.reg-radio-class > div:has(input:focus-visible) {
+  outline: 2px solid rgba(var(--ter-rgb), 0.6);
+  outline-offset: 2px;
+}
+
+.reg-checkbox-class input[type="checkbox"],
+.reg-radio-class input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+.choice-hint {
+  display: inline-block;
+  font-size: 0.85em;
+  font-style: italic;
+  color: rgba(var(--ter-rgb), 0.9);
+}
+
+.reg-checkbox-class label,
+.reg-radio-class label {
+  cursor: pointer;
 }
 
 .opt-desc {
