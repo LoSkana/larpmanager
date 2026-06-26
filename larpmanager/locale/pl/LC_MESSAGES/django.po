@@ -6523,6 +6523,9 @@ msgstr "Kliknij ikonę, aby otworzyć samouczek"
 msgid "configure at least one method and save"
 msgstr "skonfiguruj co najmniej jedną metodę i zapisz"
 
+msgid "otherwise please open a support ticket"
+msgstr "w przeciwnym razie zgłoś sprawę do pomocy technicznej"
+
 msgid "we'll let you know as soon as possible"
 msgstr "Poinformujemy cię tak szybko, jak to możliwe"
 
@@ -7717,6 +7720,9 @@ msgstr ""
 "Kliknij tutaj, żeby zobaczyć, do jakich drużyn przypisani są poszczególni "
 "bohaterowie"
 
+msgid "An account with this phone number may already exist"
+msgstr "Być może istnieje już konto powiązane z tym numerem telefonu"
+
 msgid "An assignment for this item and area already exists"
 msgstr "Przypisanie dla tego elementu i obszaru już istnieje"
 
@@ -7878,6 +7884,9 @@ msgstr "Ze względów bezpieczeństwa każdy token może być użyty tylko raz"
 
 msgid "Have at least one participant registered for an event"
 msgstr "Co najmniej jeden uczestnik zarejestrowany w wydarzeniu"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Jeśli to twoje konto, odzyskaj je na stronie logowania"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Nieprawidłowa odpowiedź. Podaj nazwę naszego hobby."

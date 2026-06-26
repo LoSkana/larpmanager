@@ -6521,6 +6521,9 @@ msgstr "klikkaa kuvaketta avataksesi opetusohjelman"
 msgid "configure at least one method and save"
 msgstr "määrittää vähintään yhden menetelmän ja tallentaa"
 
+msgid "otherwise please open a support ticket"
+msgstr "muussa tapauksessa avaa tukipyyntö"
+
 msgid "we'll let you know as soon as possible"
 msgstr "ilmoitamme sinulle mahdollisimman pian"
 
@@ -7710,6 +7713,9 @@ msgstr "voit halutessasi maksaa jäljellä olevan summan"
 msgid "Add characters to see their player assignments here"
 msgstr "Lisää hahmoja nähdäksesi heidän pelaajamääräyksensä täällä"
 
+msgid "An account with this phone number may already exist"
+msgstr "Tällä puhelinnumerolla saattaa jo olla tili"
+
 msgid "An assignment for this item and area already exists"
 msgstr "Tätä kohdetta ja aluetta koskeva tehtävä on jo olemassa"
 
@@ -7869,6 +7875,9 @@ msgstr "Kukin tunniste voidaan käyttää vain kerran turvallisuussyistä"
 
 msgid "Have at least one participant registered for an event"
 msgstr "Vähintään yksi osallistuja on rekisteröitynyt tapahtumaan"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Jos se on sinun, nouda se kirjautumissivulta"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Väärä vastaus. Kirjoita harrastuksemme nimi."
