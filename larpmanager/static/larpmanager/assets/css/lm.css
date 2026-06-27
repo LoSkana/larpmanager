@@ -2866,6 +2866,12 @@ body.floating_iframe .inner {
   padding-left: 0;
 }
 
+@media (max-width: 840px) {
+  .new_v20 #page-wrapper.manage #banner .inner h1 {
+    text-align: center;
+  }
+}
+
 .new_v20 .manage .auto_resize {
   width: 100%;
 }
@@ -3393,6 +3399,10 @@ body.association.new_v20 .user_resize {
   font-style: italic;
   font-size: 85%;
   margin-bottom: 1em;
+}
+
+#info_bar:empty {
+  margin-bottom: 0;
 }
 
 .floating_iframe #info_bar {

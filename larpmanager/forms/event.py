@@ -821,6 +821,14 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("exp_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
 
+            # Criterions configuration
+            criterions_label = _("Criterions")
+            criterions_help_text = _(
+                "If checked, enables criterions that conditionally modify experience point totals "
+                "based on prerequisites and requirements",
+            )
+            self.add_configs("exp_criterions", ConfigType.BOOL, criterions_label, criterions_help_text)
+
             # Auto buy configuration
             auto_buy_label = _("Auto buy")
             auto_buy_help_text = _(

@@ -12797,6 +12797,13 @@ msgstr ""
 "tidigare (0=standardinaktiverad, 1=normal, 10=stark)"
 
 msgid ""
+"If checked, enables criterions that conditionally modify experience point "
+"totals based on prerequisites and requirements"
+msgstr ""
+"Om denna ruta är markerad aktiveras kriterier som villkorligt justerar "
+"summan av erfarenhetspoäng utifrån förutsättningar och krav"
+
+msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
 "match and approve corresponding wire payments"
 msgstr ""
