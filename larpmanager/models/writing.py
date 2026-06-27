@@ -313,9 +313,6 @@ class Character(Writing):
             # Check if this is a primary faction
             if faction.typ == FactionType.PRIM:
                 has_primary_faction = True
-                # Set thumbnail if cover image exists
-                if faction.cover:
-                    js["thumb"] = faction.thumb.url
 
             # Add faction object with uuid and number
             js["factions"].append(faction.number)
