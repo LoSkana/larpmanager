@@ -5841,12 +5841,6 @@ msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"
 msgstr ""
 
-msgid "Selected"
-msgstr ""
-
-msgid "Filter selected"
-msgstr ""
-
 msgid "Go to the casting for"
 msgstr ""
 
@@ -9151,6 +9145,9 @@ msgid "No warehouse areas have been defined yet"
 msgstr ""
 
 msgid "Use the button above to create a new area"
+msgstr ""
+
+msgid "Selected"
 msgstr ""
 
 msgid "No items are available in the warehouse to assign to this area"

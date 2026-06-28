@@ -3070,9 +3070,6 @@ msgstr "Tapahtumaa ei löydy"
 msgid "External access"
 msgstr "Ulkoinen pääsy"
 
-msgid "Filter selected"
-msgstr "Suodatin valittu"
-
 msgid "First character"
 msgstr "Ensimmäinen merkki"
 

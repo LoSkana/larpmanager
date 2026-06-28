@@ -26,7 +26,7 @@
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>
-                        {% if el.player_uuid %}
+                        {% if el.player_uuid and el.player_prof %}
                             <img class="rel-img" src="{{ el.player_prof }}" alt="character profile" />
                         {% else %}
                             <img class="rel-img"

@@ -3070,9 +3070,6 @@ msgstr "Händelsen hittades inte"
 msgid "External access"
 msgstr "Extern åtkomst"
 
-msgid "Filter selected"
-msgstr "Filter valt"
-
 msgid "First character"
 msgstr "Första tecknet"
 
