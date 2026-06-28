@@ -794,22 +794,29 @@ function setSelectChevronColor() {
 
 // Mark the sidebar link matching the current URL as selected and scroll it into center view.
 function show_sidebar_active() {
-    // set select on sidebar
+    // set select on sidebar, pick only the most specific match
     var currentUrl = window.location.pathname.replace(/\/$/, '');
+    var bestMatch = null;
+    var bestLen = -1;
+
     $('.sidebar-link').each(function() {
       var linkHref = $(this).attr('href').replace(/\/$/, '');
       var safeHref = linkHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       var regex = new RegExp('^' + safeHref + '(?:$|\\/.*)');
 
+      var match;
       if (linkHref.endsWith('manage'))
-         var match = currentUrl.endsWith('manage');
+        match = currentUrl.endsWith('manage');
       else
-        var match = regex.test(currentUrl);
+        match = regex.test(currentUrl);
 
-      if (match) {
-        $(this).addClass('select');
+      if (match && linkHref.length > bestLen) {
+        bestMatch = this;
+        bestLen = linkHref.length;
       }
     });
+
+    if (bestMatch) $(bestMatch).addClass('select');
 
     // scroll sidebar to center the active link
     var $active = $('.sidebar-link.select').first();

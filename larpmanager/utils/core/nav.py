@@ -22,11 +22,25 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
+from django.core.cache import cache
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.models.registration import Registration
+
 if TYPE_CHECKING:
     from django.http import HttpRequest
+
+_USER_NAV_CACHE_TIMEOUT = 3600 * 24
+
+
+def _user_nav_cache_key(member_id: int) -> str:
+    return f"user_nav_entries_{member_id}"
+
+
+def invalidate_user_nav_entries(member_id: int) -> None:
+    """Invalidate list of registrations for the user."""
+    cache.delete(_user_nav_cache_key(member_id))
 
 
 def _item(
@@ -65,7 +79,7 @@ def _add_registration_items(
                 active=active == "register",
             )
         )
-        if registration.character:
+        if getattr(registration, "character", None):
             items.append(
                 _item(
                     reverse("character_your", args=[slug]),
@@ -231,6 +245,64 @@ def _add_extra_items(
                 download=True,
             )
         )
+
+
+def _build_reg_nav_entries(member_id: int) -> list[dict[str, Any]]:
+    regs = (
+        Registration.objects.filter(
+            member_id=member_id,
+            cancellation_date__isnull=True,
+            deleted__isnull=True,
+        )
+        .select_related("run__event__association")
+        .order_by("-run__start")
+    )
+
+    entries = []
+    for reg in regs:
+        run = reg.run
+        event = run.event
+        slug = run.get_slug()
+        entries.append(
+            {
+                "label": event.get_name(),
+                "url": reverse("register", args=[slug]),
+                "slug": slug,
+                "assoc_name": event.association.name if event.association else "",
+            }
+        )
+    return entries
+
+
+def build_user_nav_entries(request: Any) -> list[dict[str, Any]]:
+    """Build top-level user context selector: profile + active registrations across all associations."""
+    if not getattr(request, "user", None) or not request.user.is_authenticated:
+        return []
+    if not hasattr(request.user, "member"):
+        return []
+
+    member_id = request.user.member.id
+    current_slug = request.resolver_match.kwargs.get("slug") if request.resolver_match else None
+
+    cache_key = _user_nav_cache_key(member_id)
+    reg_entries = cache.get(cache_key)
+    if reg_entries is None:
+        reg_entries = _build_reg_nav_entries(member_id)
+        cache.set(cache_key, reg_entries, _USER_NAV_CACHE_TIMEOUT)
+
+    result: list[dict[str, Any]] = [
+        {
+            "label": str(_("Profile")),
+            "url": reverse("profile"),
+            "icon": "fa-solid fa-user",
+            "active": current_slug is None,
+        }
+    ]
+    result.extend(
+        {**entry, "icon": "fa-solid fa-calendar-days", "active": current_slug == entry["slug"]} for entry in reg_entries
+    )
+
+    return result
 
 
 def build_main_nav_items(context: dict[str, Any]) -> list[dict[str, Any]]:

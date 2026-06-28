@@ -24,7 +24,7 @@ from django.http import HttpRequest
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.nav import build_profile_nav_items
+from larpmanager.utils.core.nav import build_profile_nav_items, build_user_nav_entries
 from main.settings import CACHE_TIMEOUT_1_DAY
 
 
@@ -69,6 +69,7 @@ def cache_association(request: HttpRequest) -> dict:
 
     # Add tracking and analytics configuration
     context["profile_nav_items"] = build_profile_nav_items(request)
+    context["user_nav_entries"] = build_user_nav_entries(request)
 
     context["google_tag"] = getattr(conf_settings, "GOOGLE_TAG", None)
     hotjar_siteid = getattr(conf_settings, "HOTJAR_SITEID", None)

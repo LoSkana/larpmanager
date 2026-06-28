@@ -5766,6 +5766,9 @@ msgstr ""
 msgid "Password reset"
 msgstr ""
 
+msgid "Go to"
+msgstr ""
+
 msgid "Access the event dashboard"
 msgstr ""
 

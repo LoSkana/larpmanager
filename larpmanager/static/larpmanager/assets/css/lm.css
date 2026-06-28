@@ -3497,7 +3497,7 @@ body.floating_iframe #wrapper {
    --------------------------------------------------------------------------- */
 
 .new_v22 .no_v22 {
-  display: none;
+  display: none !important;
 }
 
 .only_v22 {
@@ -3506,4 +3506,49 @@ body.floating_iframe #wrapper {
 
 .new_v22 .only_v22 {
   display: initial;
+}
+
+.new_v22 #sidebar .inner {
+  padding-bottom: 1em;
+  display: flex;
+  flex-direction: column;
+}
+
+.new_v22 #sidebar .inner .sidebar-footer {
+  margin-top: auto;
+}
+
+.new_v22 #sidebar .sidebar-context-selector {
+  padding: 0.5em 0.75em;
+  border-bottom: 1px solid rgba(var(--pri-rgb), 0.15);
+  margin-bottom: 0.25em;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.new_v22 #sidebar .sidebar-context-selector select {
+  width: 100%;
+  max-width: 100% !important;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0.4em 0.5em;
+  border-radius: 6px;
+  border: 1px solid rgba(var(--pri-rgb), 0.3);
+  background-color: rgba(var(--pri-rgb), 0.06);
+  color: inherit;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
+.new_v22 #one .inner {
+  padding-bottom: 0em !important;
+}
+
+body.association.new_v22 .user_resize {
+  padding: 0.5em 1em;
+  margin: 0auto;
+  border-radius: 8px;
+  background-color: rgba(var(--pri-rgb), 0.04);
+  max-width: 100%;
 }

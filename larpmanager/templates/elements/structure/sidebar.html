@@ -24,6 +24,19 @@
                         </a>
                     </span>
                 {% else %}
+                    {% if user_nav_entries %}
+                        <div class="sidebar-context-selector">
+                            <select onchange="if(this.value) window.location.href=this.value;">
+                                <option value="" disabled selected>{% trans "Go to" %}...</option>
+                                {% for entry in user_nav_entries %}
+                                    <option value="{{ entry.url }}">
+                                        {% if entry.assoc_name %}[{{ entry.assoc_name }}]{% endif %}
+                                        {{ entry.label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
                     {% if run %}
                         {% for item in main_nav_items %}
                             <span class="sidebar-link-wrap">
@@ -46,17 +59,6 @@
                             </span>
                         {% endfor %}
                     {% endif %}
-                    <hr />
-                    <span class="sidebar-link-wrap">
-                        <a class="sidebar-link" id="logout" href="{% url 'logout' %}">
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span>Logout</span>
-                        </a>
-                    </span>
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" id="real_logout">logout</button>
-                    </form>
                 {% endif %}
                 {% include "elements/structure/sidebar-footer.html" %}
             </div>

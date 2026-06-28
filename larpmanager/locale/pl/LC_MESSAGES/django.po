@@ -387,6 +387,9 @@ msgstr "Gatunek"
 msgid "Given"
 msgstr "Biorąc pod uwagę"
 
+msgid "Go to"
+msgstr "Przejdź do"
+
 msgid "Graph"
 msgstr "Wykres"
 

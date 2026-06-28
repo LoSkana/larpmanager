@@ -387,6 +387,9 @@ msgstr "Sjanger"
 msgid "Given"
 msgstr "Data"
 
+msgid "Go to"
+msgstr "Gå til"
+
 msgid "Graph"
 msgstr "Graf"
 

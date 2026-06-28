@@ -387,6 +387,9 @@ msgstr "Genre"
 msgid "Given"
 msgstr "Données"
 
+msgid "Go to"
+msgstr "Aller à"
+
 msgid "Graph"
 msgstr "Graphique"
 

@@ -387,6 +387,9 @@ msgstr "Genre"
 msgid "Given"
 msgstr "Annettu"
 
+msgid "Go to"
+msgstr "Siirry kohtaan"
+
 msgid "Graph"
 msgstr "Kaavio"
 
