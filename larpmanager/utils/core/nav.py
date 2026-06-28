@@ -65,7 +65,7 @@ def _add_registration_items(
                 active=active == "register",
             )
         )
-        if registration.character:
+        if getattr(registration, "character", None):
             items.append(
                 _item(
                     reverse("character_your", args=[slug]),
