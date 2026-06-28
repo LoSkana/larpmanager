@@ -1,4 +1,9 @@
 {% load show_tags i18n %}
+{% if faction.cover %}
+    <img class="faction-logo-cover"
+         src="{{ faction.cover }}"
+         alt="faction logo" />
+{% endif %}
 {% if show_faction.teaser %}
     <p>{% show_char faction.teaser run 1 %}</p>
 {% endif %}
