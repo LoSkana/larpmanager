@@ -3070,6 +3070,9 @@ msgstr "Událost nebyla nalezena"
 msgid "External access"
 msgstr "Externí přístup"
 
+msgid "Filter selected"
+msgstr "Filtr vybrán"
+
 msgid "First character"
 msgstr "První znak"
 
