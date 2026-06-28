@@ -502,6 +502,36 @@ def click_option(input_locator):
     input_locator.locator("xpath=ancestor::label[1]").click()
 
 
+def drag_reorder(page, source, target):
+    """Drag a reorder handle onto a target row and persist the new order.
+
+    Both the DataTables ``rowReorder`` widget (mouse events) and the inline-option
+    editor (native HTML5 drag-and-drop) listen for a real pointer sequence. Playwright's
+    ``Locator.drag_to`` is flaky for the HTML5 path because Chromium only emits
+    ``dragstart``/``dragover`` after several intermediate moves. Drive the mouse manually
+    with the documented multi-move pattern instead so both mechanisms fire reliably.
+
+    source/target may be main-page or frame locators; ``bounding_box`` returns
+    main-viewport coordinates either way, so ``page.mouse`` works for both."""
+    source.scroll_into_view_if_needed()
+    src_box = source.bounding_box()
+    tgt_box = target.bounding_box()
+    sx = src_box["x"] + src_box["width"] / 2
+    sy = src_box["y"] + src_box["height"] / 2
+    tx = tgt_box["x"] + tgt_box["width"] / 2
+    ty = tgt_box["y"] + tgt_box["height"] / 2
+
+    page.mouse.move(sx, sy)
+    page.mouse.down()
+    # First move past the drag threshold to trigger dragstart, then onto the
+    # target so dragover/row-reorder fires; extra steps keep Chromium happy.
+    page.mouse.move(sx, sy + 8, steps=5)
+    page.mouse.move(tx, ty, steps=10)
+    page.mouse.move(tx, ty, steps=5)
+    page.mouse.up()
+    just_wait(page)
+
+
 def just_wait(page, big=False):
     if not hasattr(page, "wait_for_timeout"):
         return

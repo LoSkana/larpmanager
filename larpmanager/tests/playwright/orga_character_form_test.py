@@ -30,8 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait, submit_register,
-                                     click_option,
+from larpmanager.tests.utils import (submit_register,
+                                     click_option, drag_reorder,
                                      fill_tinymce,
                                      go_to,
                                      login_orga,
@@ -336,16 +336,16 @@ def add_field_restricted(page: Any) -> None:
 
     save_modal(page, edit_iframe)
 
-    page.locator('tr[id="u8"] td.reorder-handle').drag_to(
-        page.locator('tr[id="u8"]').locator("xpath=preceding-sibling::tr[1]")
+    drag_reorder(
+        page,
+        page.locator('tr[id="u8"] td.reorder-handle'),
+        page.locator('tr[id="u8"]').locator("xpath=preceding-sibling::tr[1]"),
     )
-    page.wait_for_timeout(300)
     page.locator('[id="u8"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
 
     opts = edit_iframe.locator("#inline-options .inline-option")
-    opts.nth(1).locator("td.reorder-handle").drag_to(opts.nth(0))
-    just_wait(page)
+    drag_reorder(page, opts.nth(1).locator("td.reorder-handle"), opts.nth(0))
     option_row = get_option(edit_iframe, "u7")
     option_row.locator("#id_name").click()
     option_row.locator("#id_name").fill("w")
