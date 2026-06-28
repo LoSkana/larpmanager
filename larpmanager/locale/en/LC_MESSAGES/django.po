@@ -7345,57 +7345,6 @@ msgid ""
 "follow"
 msgstr ""
 
-msgid "Discover what this event is about"
-msgstr ""
-
-msgid "Browse the presentation website"
-msgstr ""
-
-msgid "Update here the registration options"
-msgstr ""
-
-msgid "Your character"
-msgstr ""
-
-msgid "Access your character"
-msgstr ""
-
-msgid "Select your preferences on the characters to play"
-msgstr ""
-
-msgid "Register to the event"
-msgstr ""
-
-msgid "View the list of characters and participants"
-msgstr ""
-
-msgid "Filter or search the characters"
-msgstr ""
-
-msgid "Learn all characters before the event"
-msgstr ""
-
-msgid "Discover the game factions"
-msgstr ""
-
-msgid "Find out what quests are available"
-msgstr ""
-
-msgid "View photos from the event"
-msgstr ""
-
-msgid "Give a card to your friend"
-msgstr ""
-
-msgid "Portraits (PDF)"
-msgstr ""
-
-msgid "Download the list of characters with their interpreters' profile images"
-msgstr ""
-
-msgid "Profiles (PDF)"
-msgstr ""
-
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr ""
@@ -10839,6 +10788,57 @@ msgid "You must be registered to view this page"
 msgstr ""
 
 msgid "Welcome"
+msgstr ""
+
+msgid "Update here the registration options"
+msgstr ""
+
+msgid "Your character"
+msgstr ""
+
+msgid "Access your character"
+msgstr ""
+
+msgid "Select your preferences on the characters to play"
+msgstr ""
+
+msgid "Register to the event"
+msgstr ""
+
+msgid "View the list of characters and participants"
+msgstr ""
+
+msgid "Filter or search the characters"
+msgstr ""
+
+msgid "Learn all characters before the event"
+msgstr ""
+
+msgid "Discover the game factions"
+msgstr ""
+
+msgid "Find out what quests are available"
+msgstr ""
+
+msgid "View photos from the event"
+msgstr ""
+
+msgid "Give a card to your friend"
+msgstr ""
+
+msgid "Download the list of characters with their interpreters' profile images"
+msgstr ""
+
+msgid "Portraits (PDF)"
+msgstr ""
+
+msgid "Profiles (PDF)"
+msgstr ""
+
+msgid "Discover what this event is about"
+msgstr ""
+
+msgid "Browse the presentation website"
 msgstr ""
 
 #, python-format

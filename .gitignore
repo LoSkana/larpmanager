@@ -1,5 +1,7 @@
 ### Custom
 
+.claude/settings.json
+
 media/
 static-prod/
 .idea/
