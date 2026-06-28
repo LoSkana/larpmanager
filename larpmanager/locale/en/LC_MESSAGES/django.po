@@ -1532,6 +1532,14 @@ msgid ""
 "prerequisites and requirements"
 msgstr ""
 
+msgid "Criterions"
+msgstr ""
+
+msgid ""
+"If checked, enables criterions that conditionally modify experience point "
+"totals based on prerequisites and requirements"
+msgstr ""
+
 msgid "Auto buy"
 msgstr ""
 
@@ -2281,6 +2289,15 @@ msgid "Character not allowed"
 msgstr ""
 
 msgid "Residence address"
+msgstr ""
+
+msgid "An account with this phone number may already exist"
+msgstr ""
+
+msgid "If it is yours, please recover it from the login page"
+msgstr ""
+
+msgid "otherwise please open a support ticket"
 msgstr ""
 
 #, python-format
@@ -8480,9 +8497,6 @@ msgid "No ability types defined yet"
 msgstr ""
 
 msgid "Use the button above to create the first ability type"
-msgstr ""
-
-msgid "Criterions"
 msgstr ""
 
 msgid "Operation"

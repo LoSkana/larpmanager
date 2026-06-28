@@ -6520,6 +6520,9 @@ msgstr "fai clic sull'icona per aprire l'esercitazione"
 msgid "configure at least one method and save"
 msgstr "configurare almeno un metodo e salvare"
 
+msgid "otherwise please open a support ticket"
+msgstr "altrimenti apri un ticket di assistenza"
+
 msgid "we'll let you know as soon as possible"
 msgstr "vi faremo sapere il prima possibile"
 
@@ -7713,6 +7716,10 @@ msgstr "se lo desideri, puoi comunque pagare l'importo rimanente"
 msgid "Add characters to see their player assignments here"
 msgstr "Aggiungi i personaggi per vedere a quali giocatori sono assegnati qui"
 
+msgid "An account with this phone number may already exist"
+msgstr ""
+"Potrebbe già esistere un account associato a questo numero di telefono"
+
 msgid "An assignment for this item and area already exists"
 msgstr "Esiste già un'assegnazione per questo oggetto e area"
 
@@ -7877,6 +7884,9 @@ msgstr ""
 
 msgid "Have at least one participant registered for an event"
 msgstr "Avere almeno un partecipante iscritto a un evento"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Se è tuo, recuperalo dalla pagina di accesso"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Risposta errata. Inserisciil nome del nostro hobby."
@@ -13003,6 +13013,13 @@ msgid ""
 msgstr ""
 "Una misura di quanto favorire i partecipanti che hanno completato il "
 "pagamento prima (0=disabilitato di default, 1=normale, 10=forte)"
+
+msgid ""
+"If checked, enables criterions that conditionally modify experience point "
+"totals based on prerequisites and requirements"
+msgstr ""
+"Se selezionato, attiva dei criteri che modificano in modo condizionale il "
+"totale dei punti esperienza in base ai prerequisiti e ai requisiti"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "

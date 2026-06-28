@@ -617,6 +617,27 @@ class ProfileForm(BaseProfileForm):
                 + "?",
             )
 
+    def clean_phone_contact(self) -> Any:
+        """Validate phone uniqueness with a helpful recovery message."""
+        data = self.cleaned_data.get("phone_contact")
+        if not data:
+            return data
+
+        duplicates = Member.objects.filter(phone_contact=data)
+        if self.instance.pk:
+            duplicates = duplicates.exclude(pk=self.instance.pk)
+        if duplicates.exists():
+            raise ValidationError(
+                _("An account with this phone number may already exist")
+                + ". "
+                + _("If it is yours, please recover it from the login page")
+                + "; "
+                + _("otherwise please open a support ticket")
+                + ". "
+            )
+
+        return data
+
     def clean_birth_date(self) -> date:
         """Optimized birth date validation with cached association data."""
         data = self.cleaned_data["birth_date"]

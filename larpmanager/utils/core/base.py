@@ -451,14 +451,15 @@ def get_event_context(
 
     # Check character visibility restrictions if requested (skip for users with event permissions)
     if check_visibility and not is_staff:
-        event_url = reverse("register", kwargs={"event_slug": context["run"].get_slug()})
+        event_view = "register"
+        event_kwargs = {"event_slug": context["run"].get_slug()}
         # Check if gallery is hidden for non-authenticated users
         hide_gallery_for_non_login = get_event_config(
             context["event"].id, "gallery_hide_login", default_value=False, context=context
         )
         if hide_gallery_for_non_login and not request.user.is_authenticated:
             messages.warning(request, _("You must be logged in to view this page"))
-            raise RedirectError(event_url)
+            raise RedirectError(event_view, kwargs=event_kwargs)
 
         # Check if gallery is hidden for non-registered users
         hide_gallery_for_non_signup = get_event_config(
@@ -466,7 +467,7 @@ def get_event_context(
         )
         if hide_gallery_for_non_signup and not registration:
             messages.warning(request, _("You must be registered to view this page"))
-            raise RedirectError(event_url)
+            raise RedirectError(event_view, kwargs=event_kwargs)
 
     return context
 

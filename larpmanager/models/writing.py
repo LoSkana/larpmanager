@@ -313,9 +313,6 @@ class Character(Writing):
             # Check if this is a primary faction
             if faction.typ == FactionType.PRIM:
                 has_primary_faction = True
-                # Set thumbnail if cover image exists
-                if faction.cover:
-                    js["thumb"] = faction.thumb.url
 
             # Add faction object with uuid and number
             js["factions"].append(faction.number)
@@ -553,6 +550,12 @@ class Faction(Writing):
         # Update JS attributes for typ, teaser and color fields
         for s in ["typ", "teaser", "color"]:
             self.upd_js_attr(js, s)
+
+        if self.cover:
+            # noinspection PyUnresolvedReferences
+            js["cover"] = self.cover.url
+            # noinspection PyUnresolvedReferences
+            js["thumb"] = self.thumb.url
 
         return js
 

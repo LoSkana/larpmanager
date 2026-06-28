@@ -6528,6 +6528,9 @@ msgstr "klik op het pictogram om de zelfstudie te openen"
 msgid "configure at least one method and save"
 msgstr "ten minste één methode configureren en opslaan"
 
+msgid "otherwise please open a support ticket"
+msgstr "anders kun je een supportticket aanmaken"
+
 msgid "we'll let you know as soon as possible"
 msgstr "we laten het je zo snel mogelijk weten"
 
@@ -7731,6 +7734,9 @@ msgstr ""
 "Klik hier om personages toe te voegen en te zien aan welke spelers ze zijn "
 "toegewezen"
 
+msgid "An account with this phone number may already exist"
+msgstr "Er bestaat misschien al een account met dit telefoonnummer"
+
 msgid "An assignment for this item and area already exists"
 msgstr "Er bestaat al een opdracht voor dit item en gebied"
 
@@ -7893,6 +7899,9 @@ msgstr "Om veiligheidsredenen kan elk token maar één keer worden gebruikt"
 
 msgid "Have at least one participant registered for an event"
 msgstr "Minstens één deelnemer hebben geregistreerd voor een evenement"
+
+msgid "If it is yours, please recover it from the login page"
+msgstr "Als het van jou is, haal het dan alsjeblieft op via de inlogpagina"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Fout antwoord. Voer de naam van onze hobby in."
@@ -12987,6 +12996,14 @@ msgstr ""
 "Een maatstaf voor de mate waarin deelnemers worden bevoordeeld die de "
 "volledige betaling eerder hebben voltooid (0=standaard uitgeschakeld, "
 "1=normaal, 10=sterk)"
+
+msgid ""
+"If checked, enables criterions that conditionally modify experience point "
+"totals based on prerequisites and requirements"
+msgstr ""
+"Als dit aangevinkt is, worden criteria ingeschakeld die het totaal aantal "
+"ervaringspunten voorwaardelijk aanpassen op basis van voorwaarden en "
+"vereisten"
 
 msgid ""
 "Allows you to upload financial system statements (e.g., bank statements) to "
