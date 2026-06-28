@@ -31,6 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    drag_reorder,
     expect_normalized,
     fill_tinymce,
     get_modal_iframe,
@@ -234,8 +235,7 @@ def test_faction_all(pw_page: Any) -> None:
     expect(first_row).to_contain_text("Primary Faction 1")
 
     rows = page.locator(".writing_list tbody tr")
-    rows.nth(1).locator("td.reorder-handle").drag_to(rows.nth(0))
-    page.wait_for_timeout(500)
+    drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
 
     # Verify order changed - Primary Faction 2 should now be first
     go_to(page, live_server, "test/manage/factions")

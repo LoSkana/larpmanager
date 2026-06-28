@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait, submit_register, \
+from larpmanager.tests.utils import (submit_register, drag_reorder, \
                                      go_to,
                                      load_image,
                                      login_orga,
@@ -165,13 +165,13 @@ def field_multiple(page: Any, live_server: Any) -> None:
     submit_option(edit_iframe, option_row)
 
     src = edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] td.reorder-handle')
-    src.drag_to(edit_iframe.locator('tr.inline-option[data-uuid="u4"]').locator('xpath=preceding-sibling::tr[contains(@class,"inline-option")][1]'))
-    just_wait(page)
+    drag_reorder(page, src, edit_iframe.locator('tr.inline-option[data-uuid="u4"]').locator('xpath=preceding-sibling::tr[contains(@class,"inline-option")][1]'))
     save_modal(page, edit_iframe)
-    page.locator('tr[id="u3"] td.reorder-handle').drag_to(
-        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
+    drag_reorder(
+        page,
+        page.locator('tr[id="u3"] td.reorder-handle'),
+        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]"),
     )
-    page.wait_for_timeout(300)
 
 
 def field_text(page: Any, live_server: Any) -> None:

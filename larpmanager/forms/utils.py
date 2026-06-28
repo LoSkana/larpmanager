@@ -309,7 +309,24 @@ def save_permissions_role(instance: EventRole | AssociationRole, form: BaseModel
     instance.save()
 
 
-class EventS2Widget(s2forms.ModelSelect2Widget):
+class _MinInputZeroMixin:
+    """Show the first elements on click instead of requiring typed input."""
+
+    def build_attrs(self, base_attrs: dict, extra_attrs: dict | None = None) -> dict:
+        attrs = super().build_attrs(base_attrs, extra_attrs=extra_attrs)
+        attrs["data-minimum-input-length"] = 0
+        return attrs
+
+
+class S2Widget(_MinInputZeroMixin, s2forms.ModelSelect2Widget):
+    """Project base single-select Select2 widget (shows first elements on click)."""
+
+
+class S2WidgetMulti(_MinInputZeroMixin, s2forms.ModelSelect2MultipleWidget):
+    """Project base multi-select Select2 widget (shows first elements on click)."""
+
+
+class EventS2Widget(S2Widget):
     """Represents EventS2Widget model."""
 
     search_fields: ClassVar[list] = [
@@ -336,7 +353,7 @@ class EventS2Widget(s2forms.ModelSelect2Widget):
         return queryset
 
 
-class CampaignS2Widget(s2forms.ModelSelect2Widget):
+class CampaignS2Widget(S2Widget):
     """Represents CampaignS2Widget model."""
 
     search_fields: ClassVar[list] = [
@@ -367,7 +384,7 @@ class CampaignS2Widget(s2forms.ModelSelect2Widget):
         return queryset
 
 
-class TemplateS2Widget(s2forms.ModelSelect2Widget):
+class TemplateS2Widget(S2Widget):
     """Represents TemplateS2Widget model."""
 
     search_fields: ClassVar[list] = [
@@ -407,15 +424,15 @@ class AssocMS2:
         return f"{obj.display_real()} - {obj.email}"
 
 
-class AssociationMemberS2WidgetMulti(AssocMS2, s2forms.ModelSelect2MultipleWidget):
+class AssociationMemberS2WidgetMulti(AssocMS2, S2WidgetMulti):
     """Represents AssociationMemberS2WidgetMulti model."""
 
 
-class AssociationMemberS2Widget(AssocMS2, s2forms.ModelSelect2Widget):
+class AssociationMemberS2Widget(AssocMS2, S2Widget):
     """Represents AssociationMemberS2Widget model."""
 
 
-class RunMemberS2Widget(s2forms.ModelSelect2Widget):
+class RunMemberS2Widget(S2Widget):
     """Widget to select only members that have signed up to that run."""
 
     search_fields: ClassVar[list] = [
@@ -454,7 +471,7 @@ class RunMemberS2Widget(s2forms.ModelSelect2Widget):
         return f"{obj.display_real()} - {obj.email}"
 
 
-class RunStaffS2Widget(s2forms.ModelSelect2Widget):
+class RunStaffS2Widget(S2Widget):
     """Widget to select only staff of a run."""
 
     search_fields: ClassVar[list] = [
@@ -522,7 +539,7 @@ def get_run_choices(self: Any, *, past: bool = False) -> None:
         self.initial["run"] = self.params.get("run").uuid
 
 
-class EventRegS2Widget(s2forms.ModelSelect2Widget):
+class EventRegS2Widget(S2Widget):
     """Represents EventRegS2Widget model."""
 
     search_fields: ClassVar[list] = [
@@ -546,7 +563,7 @@ class EventRegS2Widget(s2forms.ModelSelect2Widget):
         return s
 
 
-class AssocRegS2Widget(s2forms.ModelSelect2Widget):
+class AssocRegS2Widget(S2Widget):
     """Represents AssocRegS2Widget model."""
 
     search_fields: ClassVar[list] = [
@@ -573,7 +590,7 @@ class AssocRegS2Widget(s2forms.ModelSelect2Widget):
         return s
 
 
-class RunS2Widget(s2forms.ModelSelect2Widget):
+class RunS2Widget(S2Widget):
     """Represents RunS2Widget model."""
 
     search_fields: ClassVar[list] = [
@@ -589,7 +606,7 @@ class RunS2Widget(s2forms.ModelSelect2Widget):
         return Run.objects.filter(event__association_id=self.association_id)
 
 
-class RunRegS2Widget(s2forms.ModelSelect2Widget):
+class RunRegS2Widget(S2Widget):
     """Select2 widget for registrations filtered by run."""
 
     search_fields: ClassVar[list] = [
@@ -613,7 +630,7 @@ class RunRegS2Widget(s2forms.ModelSelect2Widget):
         return str(obj)
 
 
-class TransferTargetRunS2Widget(s2forms.ModelSelect2Widget):
+class TransferTargetRunS2Widget(S2Widget):
     """Select2 widget for target runs in registration transfers."""
 
     search_fields: ClassVar[list] = [
@@ -658,15 +675,15 @@ class EventCharacterS2:
         )
 
 
-class EventCharacterS2WidgetMulti(EventCharacterS2, s2forms.ModelSelect2MultipleWidget):
+class EventCharacterS2WidgetMulti(EventCharacterS2, S2WidgetMulti):
     """Represents EventCharacterS2WidgetMulti model."""
 
 
-class EventCharacterS2Widget(EventCharacterS2, s2forms.ModelSelect2Widget):
+class EventCharacterS2Widget(EventCharacterS2, S2Widget):
     """Represents EventCharacterS2Widget model."""
 
 
-class EventCharacterS2WidgetUuid(EventCharacterS2, s2forms.ModelSelect2Widget):
+class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
     """Select2 widget for characters that returns UUID instead of ID as value."""
 
     def label_from_instance(self, obj: Character) -> str:
@@ -708,7 +725,7 @@ class RunCampaignS2:
         return Run.objects.filter(event_id__in=self.event_ids).order_by("-end")
 
 
-class RunCampaignS2Widget(RunCampaignS2, s2forms.ModelSelect2Widget):
+class RunCampaignS2Widget(RunCampaignS2, S2Widget):
     """Represents RunCampaignS2Widget model."""
 
 
@@ -730,11 +747,11 @@ class EventPlotS2:
         return self.event.get_elements(Plot)
 
 
-class EventPlotS2WidgetMulti(EventPlotS2, s2forms.ModelSelect2MultipleWidget):
+class EventPlotS2WidgetMulti(EventPlotS2, S2WidgetMulti):
     """Represents EventPlotS2WidgetMulti model."""
 
 
-class EventPlotS2Widget(EventPlotS2, s2forms.ModelSelect2Widget):
+class EventPlotS2Widget(EventPlotS2, S2Widget):
     """Represents EventPlotS2Widget model."""
 
 
@@ -756,11 +773,11 @@ class EventTraitS2:
         return self.event.get_elements(Trait).only("id", "name", "number", "teaser", "event_id").order_by("number")
 
 
-class EventTraitS2Widget(EventTraitS2, s2forms.ModelSelect2Widget):
+class EventTraitS2Widget(EventTraitS2, S2Widget):
     """Represents EventTraitS2Widget model."""
 
 
-class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+class EventWritingOptionS2WidgetMulti(S2WidgetMulti):
     """Represents EventWritingOptionS2WidgetMulti model."""
 
     search_fields: ClassVar[list] = [
@@ -777,7 +794,7 @@ class EventWritingOptionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return self.event.get_elements(WritingOption)
 
 
-class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+class FactionS2WidgetMulti(S2WidgetMulti):
     """Represents FactionS2WidgetMulti model."""
 
     search_fields: ClassVar[list] = [
@@ -801,7 +818,7 @@ class FactionS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return f"{instance.name} ({code[instance.typ]})"
 
 
-class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+class AbilityS2WidgetMulti(S2WidgetMulti):
     """Represents AbilityS2WidgetMulti model."""
 
     search_fields: ClassVar[list] = [
@@ -817,7 +834,7 @@ class AbilityS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return self.event.get_elements(AbilityExp)
 
 
-class ComputedFieldS2Widget(s2forms.ModelSelect2Widget):
+class ComputedFieldS2Widget(S2Widget):
     """Represents selection of event computed fields."""
 
     search_fields: ClassVar[list] = [
@@ -833,7 +850,7 @@ class ComputedFieldS2Widget(s2forms.ModelSelect2Widget):
         return self.event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
 
 
-class SystemExpS2Widget(s2forms.ModelSelect2Widget):
+class SystemExpS2Widget(S2Widget):
     """Represents selection of an XP system for an event."""
 
     search_fields: ClassVar[list] = [
@@ -849,7 +866,7 @@ class SystemExpS2Widget(s2forms.ModelSelect2Widget):
         return self.event.get_elements(SystemExp)
 
 
-class AbilityTypePxS2Widget(s2forms.ModelSelect2Widget):
+class AbilityTypePxS2Widget(S2Widget):
     """Represents selection of an ability type for an event."""
 
     search_fields: ClassVar[list] = [
@@ -865,7 +882,7 @@ class AbilityTypePxS2Widget(s2forms.ModelSelect2Widget):
         return self.event.get_elements(AbilityTypeExp)
 
 
-class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
+class AbilityTemplateS2WidgetMulti(S2Widget):
     """Represents AbilityTemplateS2WidgetMulti model."""
 
     search_fields: ClassVar[list] = [
@@ -885,7 +902,7 @@ class AbilityTemplateS2WidgetMulti(s2forms.ModelSelect2Widget):
         return obj.get_full_name()
 
 
-class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+class TicketS2WidgetMulti(S2WidgetMulti):
     """Represents TicketS2WidgetMulti model."""
 
     search_fields: ClassVar[list] = [
@@ -901,7 +918,7 @@ class TicketS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return self.event.get_elements(RegistrationTicket)
 
 
-class RegistrationSectionS2Widget(s2forms.ModelSelect2Widget):
+class RegistrationSectionS2Widget(S2Widget):
     """Select2 widget for registration sections."""
 
     search_fields: ClassVar[list] = [
@@ -933,7 +950,7 @@ class RegistrationSectionS2Widget(s2forms.ModelSelect2Widget):
         }
 
 
-class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
+class AllowedS2WidgetMulti(S2WidgetMulti):
     """Represents AllowedS2WidgetMulti model."""
 
     search_fields: ClassVar[list] = [
@@ -956,7 +973,7 @@ class AllowedS2WidgetMulti(s2forms.ModelSelect2MultipleWidget):
         return Member.objects.filter(pk__in=self.allowed_member_ids)
 
 
-class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
+class WarehouseContainerS2Widget(S2Widget):
     """Represents WarehouseContainerS2Widget model."""
 
     search_fields: ClassVar[list] = [
@@ -973,7 +990,7 @@ class WarehouseContainerS2Widget(s2forms.ModelSelect2Widget):
         return WarehouseContainer.objects.filter(association_id=self.association_id)
 
 
-class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
+class WarehouseAreaS2Widget(S2Widget):
     """Represents WarehouseAreaS2Widget model."""
 
     search_fields: ClassVar[list] = [
@@ -990,7 +1007,7 @@ class WarehouseAreaS2Widget(s2forms.ModelSelect2Widget):
         return self.event.get_elements(WarehouseArea)
 
 
-class WarehouseItemS2(s2forms.ModelSelect2Widget):
+class WarehouseItemS2(S2Widget):
     """Represents WarehouseItemS2 model."""
 
     search_fields: ClassVar[list] = [
@@ -1007,15 +1024,15 @@ class WarehouseItemS2(s2forms.ModelSelect2Widget):
         return WarehouseItem.objects.filter(association_id=self.association_id)
 
 
-class WarehouseItemS2WidgetMulti(WarehouseItemS2, s2forms.ModelSelect2MultipleWidget):
+class WarehouseItemS2WidgetMulti(WarehouseItemS2, S2WidgetMulti):
     """Represents WarehouseItemS2WidgetMulti model."""
 
 
-class WarehouseItemS2Widget(WarehouseItemS2, s2forms.ModelSelect2Widget):
+class WarehouseItemS2Widget(WarehouseItemS2, S2Widget):
     """Represents WarehouseItemS2Widget model."""
 
 
-class WarehouseTagS2(s2forms.ModelSelect2Widget):
+class WarehouseTagS2(S2Widget):
     """Represents WarehouseTagS2 model."""
 
     search_fields: ClassVar[list] = [
@@ -1032,11 +1049,11 @@ class WarehouseTagS2(s2forms.ModelSelect2Widget):
         return WarehouseTag.objects.filter(association_id=self.association_id)
 
 
-class WarehouseTagS2WidgetMulti(WarehouseTagS2, s2forms.ModelSelect2MultipleWidget):
+class WarehouseTagS2WidgetMulti(WarehouseTagS2, S2WidgetMulti):
     """Represents WarehouseTagS2WidgetMulti model."""
 
 
-class WarehouseTagS2Widget(WarehouseTagS2, s2forms.ModelSelect2Widget):
+class WarehouseTagS2Widget(WarehouseTagS2, S2Widget):
     """Represents WarehouseTagS2Widget model."""
 
 

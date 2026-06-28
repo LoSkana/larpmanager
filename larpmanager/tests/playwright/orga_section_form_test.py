@@ -28,7 +28,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait, submit_register,
-                                     delete_modal,
+                                     delete_modal, drag_reorder,
                                      go_to,
                                      login_orga,
                                      login_user,
@@ -73,8 +73,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     # Check reordering
     expect_normalized(page, page.locator("#registration_sections_wrapper"), "Preferences Needs")
     rows = page.locator("#registration_sections tbody tr")
-    rows.nth(1).locator("td.reorder-handle").drag_to(rows.nth(0))
-    page.wait_for_timeout(500)
+    drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
     expect_normalized(page, page.locator("#one"), "Needs Preferences")
 
     # Add one question for each section
@@ -128,8 +127,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     # Reorder sections, check they are updated
     sidebar(page, "Sections")
     rows = page.locator("#registration_sections tbody tr")
-    rows.nth(1).locator("td.reorder-handle").drag_to(rows.nth(0))
-    page.wait_for_timeout(500)
+    drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
 
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"^Needs ")).click()
@@ -194,8 +192,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Sections")
     rows = page.locator("#registration_sections tbody tr")
-    rows.nth(1).locator("td.reorder-handle").drag_to(rows.nth(0))
-    page.wait_for_timeout(500)
+    drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
 
     sidebar(page, "Form")
     page.locator("#registration_questions_needs").locator(".fa-edit").click()
