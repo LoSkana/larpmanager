@@ -1,6 +1,6 @@
 {% load i18n %}
 {% if association %}
-    <div class="nav">
+    <div class="nav no_v22">
         {% for item in profile_nav_items %}
             <a {% if item.active %}class="sel"{% endif %} href="{{ item.url }}">
                 <i class="{{ item.icon }}"></i> <span class="nav-label">{{ item.label }}</span>

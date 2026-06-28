@@ -2393,6 +2393,9 @@ msgstr "Exposición histórica"
 msgid "Subscription"
 msgstr "Suscripción"
 
+msgid "Tech Support"
+msgstr "Soporte técnico"
+
 msgid "Tell me more"
 msgstr "Más información"
 

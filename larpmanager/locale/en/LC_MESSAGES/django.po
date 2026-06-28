@@ -5754,6 +5754,18 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
+msgid "Tech Support"
+msgstr ""
+
+msgid "Privacy Policy"
+msgstr ""
+
+msgid "Legal Notice"
+msgstr ""
+
+msgid "Password reset"
+msgstr ""
+
 msgid "Access the event dashboard"
 msgstr ""
 
@@ -7170,9 +7182,6 @@ msgid "Next"
 msgstr ""
 
 msgid "Last"
-msgstr ""
-
-msgid "Legal Notice"
 msgstr ""
 
 msgid "These are our past events"
@@ -9579,9 +9588,6 @@ msgstr ""
 msgid "Redeemed"
 msgstr ""
 
-msgid "Privacy Policy"
-msgstr ""
-
 msgid "Please correct the error below"
 msgstr ""
 
@@ -9595,9 +9601,6 @@ msgid ""
 msgstr ""
 
 msgid "Forgotten your password or username?"
-msgstr ""
-
-msgid "Password reset"
 msgstr ""
 
 msgid "Two-Factor Authentication"

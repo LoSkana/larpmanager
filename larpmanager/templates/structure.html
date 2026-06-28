@@ -129,7 +129,7 @@
         </noscript>
     </head>
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {{ effective_version|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}">
+          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {{ effective_version|default:association.assoc_version|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
@@ -146,7 +146,7 @@
             {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if manage %}manage{% endif %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
+                 class=" {% if manage %}manage{% endif %} {% with effective_version|default:association.assoc_version as eff_ver %} {% if eff_ver >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} {% endwith %} {% if not frame and association.id != 0 %}topbar{% endif %} ">
                 {% block main %}
                 {% endblock main %}
             </div>

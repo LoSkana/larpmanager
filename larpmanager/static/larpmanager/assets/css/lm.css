@@ -3491,3 +3491,19 @@ body.floating_iframe #wrapper {
 #first_event h1 {
   margin: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Version 22 interface
+   --------------------------------------------------------------------------- */
+
+.new_v22 .no_v22 {
+  display: none;
+}
+
+.only_v22 {
+  display: none;
+}
+
+.new_v22 .only_v22 {
+  display: initial;
+}

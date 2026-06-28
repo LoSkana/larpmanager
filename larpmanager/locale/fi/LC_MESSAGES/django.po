@@ -2393,6 +2393,9 @@ msgstr "Näytä historia"
 msgid "Subscription"
 msgstr "Tilaus"
 
+msgid "Tech Support"
+msgstr "Tekninen tuki"
+
 msgid "Tell me more"
 msgstr "Kerro lisää"
 

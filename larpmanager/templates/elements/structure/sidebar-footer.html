@@ -1,0 +1,32 @@
+{% load i18n %}
+<div class="sidebar-footer sidebar-section">
+    {% if 'help' in association.features %}
+        <span class="sidebar-link-wrap">
+            <a class="sidebar-link"
+               href="{% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %}">
+                <i class="fa-solid fa-circle-question"></i>
+                <span>{% trans "Need help" %}?</span>
+            </a>
+        </span>
+    {% endif %}
+    <span class="sidebar-link-wrap">
+        <a class="sidebar-link" href="{% url 'ticket' %}">
+            <i class="fa-solid fa-headset"></i>
+            <span>{% trans "Tech Support" %}</span>
+        </a>
+    </span>
+    <span class="sidebar-link-wrap">
+        <a class="sidebar-link" href="{% url 'privacy' %}">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>{% trans "Privacy Policy" %}</span>
+        </a>
+    </span>
+    {% if 'legal_notice' in association.features %}
+        <span class="sidebar-link-wrap">
+            <a class="sidebar-link" href="{% url 'legal_notice' %}">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>{% trans "Legal Notice" %}</span>
+            </a>
+        </span>
+    {% endif %}
+</div>
