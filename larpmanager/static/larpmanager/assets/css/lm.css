@@ -425,8 +425,10 @@ input[type="number"] {
 
 .opt-card-desc {
   color: #666;
-  font-size: 0.85em;
+  font-size: 0.75em;
   margin-top: 0.15em;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .opt-card-avail {
@@ -704,7 +706,23 @@ th select {
 
   #id_discount {
     display: inline-block;
-    margin: 1em auto;
+  }
+
+  .discount_input_row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1em 0;
+  }
+
+  @media (max-width: 600px) {
+    .discount_input_row {
+      flex-wrap: wrap;
+    }
+    .discount_input_row input {
+      width: 100%;
+    }
   }
 
   .nav a {

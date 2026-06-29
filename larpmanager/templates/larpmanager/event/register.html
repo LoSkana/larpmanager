@@ -47,7 +47,10 @@
                 </p>
             {% endif %}
             {% if custom_text %}{{ custom_text | safe }}{% endif %}
-            <form id="register_form" action="{{ request.path }}" method="post" novalidate>
+            <form id="register_form"
+                  action="{{ request.path }}"
+                  method="post"
+                  novalidate>
                 {% csrf_token %}
                 <div>
                     {% include "elements/form/register.html" %}
@@ -71,9 +74,10 @@
                                                 </tr>
                                             </table>
                                         </div>
-                                        <input type="text" name="discount" id="id_discount">
-                                        <input type="button" value="{% trans "Confirm" %}" id="discount_go">
-                                        <br>
+                                        <div class="discount_input_row">
+                                            <input type="text" name="discount" id="id_discount">
+                                            <input type="button" value="{% trans "Confirm" %}" id="discount_go">
+                                        </div>
                                         <span class="helptext">{% trans "If you have a discount code, enter it here and press enter" %}.</span>
                                     </td>
                                 </tr>
