@@ -151,7 +151,7 @@ def test_exe_join(pw_page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "manage/activation/")
-    expect(page.locator("tr", has_text="Prima iscrizione")).to_contain_text("Fatto")
+    expect(page.locator("tr", has_text="Prima iscrizione")).to_contain_text("Fatto", timeout=15000)
 
     # Step 6: first character
 

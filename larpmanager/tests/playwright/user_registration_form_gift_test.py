@@ -38,6 +38,7 @@ from larpmanager.tests.utils import (submit_register, drag_reorder, \
                                      submit,
                                      submit_confirm,
                                      expect_normalized, new_option, submit_option, nav, get_modal_iframe, save_modal,
+                                     just_wait,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -245,6 +246,7 @@ def gift(page: Any, live_server: Any) -> None:
     # pay
     page.get_by_role("link", name="10€ within 8 days").click()
     submit_confirm(page)
+    just_wait(page, big=True)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
