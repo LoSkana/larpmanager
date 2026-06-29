@@ -39,7 +39,7 @@ from larpmanager.cache.rels import refresh_character_relationships_background
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
-    EventCharacterS2WidgetMulti,
+    CharacterDualListWidget,
     EventCharacterS2WidgetUuid,
     EventPlotS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
@@ -107,7 +107,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
             "player": AssociationMemberS2Widget,
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "assigned": RunStaffS2Widget,
         }
 

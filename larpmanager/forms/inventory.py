@@ -23,7 +23,7 @@ from typing import Any, ClassVar
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import BaseModelForm
-from larpmanager.forms.utils import EventCharacterS2WidgetMulti
+from larpmanager.forms.utils import CharacterDualListWidget
 from larpmanager.models.inventory import Inventory, PoolTypeCI
 from larpmanager.models.writing import Character
 
@@ -52,7 +52,7 @@ class OrgaInventoryForm(InventoryBaseForm):
         model = Inventory
         exclude = ("number",)
         widgets: ClassVar[dict[str, type]] = {
-            "owners": EventCharacterS2WidgetMulti,
+            "owners": CharacterDualListWidget,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

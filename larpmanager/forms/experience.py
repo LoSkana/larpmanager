@@ -28,8 +28,8 @@ from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
     AbilityTemplateS2WidgetMulti,
     AbilityTypePxS2Widget,
+    CharacterDualListWidget,
     ComputedFieldS2Widget,
-    EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     RunCampaignS2Widget,
     SystemExpS2Widget,
@@ -104,7 +104,7 @@ class OrgaDeliveryExpForm(ExpBaseForm):
         model = DeliveryExp
         exclude = ("number",)
 
-        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "system": SystemExpS2Widget}
+        widgets: ClassVar[dict] = {"characters": CharacterDualListWidget, "system": SystemExpS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with event configuration."""
@@ -150,7 +150,7 @@ class OrgaAbilityExpForm(ExpBaseForm):
             "descr": WritingTinyMCE(),
             "system": SystemExpS2Widget,
             "typ": AbilityTypePxS2Widget,
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
             "template": AbilityTemplateS2WidgetMulti,

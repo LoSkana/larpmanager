@@ -28,8 +28,8 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import (
+    CharacterDualListWidget,
     EventCharacterS2Widget,
-    EventCharacterS2WidgetMulti,
     RunStaffS2Widget,
     WritingTinyMCE,
 )
@@ -279,7 +279,7 @@ class OrgaPlotForm(WritingForm, BaseWritingForm):
         widgets: ClassVar[dict] = {
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "assigned": RunStaffS2Widget,
         }
 
@@ -399,7 +399,7 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
         widgets: ClassVar[dict] = {
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "assigned": RunStaffS2Widget,
         }
 
@@ -569,7 +569,7 @@ class OrgaPrologueForm(WritingForm, BaseWritingForm):
 
         widgets: ClassVar[dict] = {
             "text": WritingTinyMCE(),
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "assigned": RunStaffS2Widget,
         }
 
@@ -599,7 +599,7 @@ class OrgaSpeedLarpForm(WritingForm):
         exclude = ("teaser", "temp", "hide")
 
         widgets: ClassVar[dict] = {
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "text": WritingTinyMCE(),
             "assigned": RunStaffS2Widget,
         }
