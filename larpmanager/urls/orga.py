@@ -1321,7 +1321,6 @@ urlpatterns = [
         name="orga_exp_criterions_delete",
     ),
     path(
-    path(
         "<slug:event_slug>/manage/characters/search/",
         views_ox.orga_character_search,
         name="orga_character_search",
