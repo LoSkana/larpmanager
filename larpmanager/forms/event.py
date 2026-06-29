@@ -284,14 +284,13 @@ class OrgaFeatureForm(FeatureForm):
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and update event features cache."""
-        # Save form without committing to database yet
         instance: Event = super().save(commit=False)
 
-        # Update associated features for this event
-        self._save_features(instance)
+        # Save features to parent if campaign child, otherwise to self
+        target = instance.parent if instance.parent_id else instance
+        self._save_features(target)
 
-        # Invalidate cached event features
-        clear_event_features_cache(instance.id)
+        clear_event_features_cache(target.id)
 
         return instance
 
@@ -315,6 +314,10 @@ class OrgaConfigForm(ConfigForm):
         """Initialize form and prevent registration cancellation."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
+
+    def _get_config_save_target(self, instance: Any) -> Any:
+        """Save configs to parent event if one exists, otherwise to the event itself."""
+        return instance.parent if instance.parent_id else instance
 
     def set_configs(self) -> None:
         """Configure form fields for event settings and features."""

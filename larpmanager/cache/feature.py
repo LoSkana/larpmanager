@@ -22,6 +22,7 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
+from larpmanager.cache.config import _get_event_parent_id
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event
 
@@ -111,10 +112,11 @@ def cache_event_features_key(event_id: int) -> str:
 
 def get_event_features(event_id: int) -> dict[str, int]:
     """Get cached event features, updating cache if needed."""
-    cache_key = cache_event_features_key(event_id)
+    lookup_id = _get_event_parent_id(event_id, None) or event_id
+    cache_key = cache_event_features_key(lookup_id)
     cached_features = cache.get(cache_key)
     if cached_features is None:
-        cached_features = update_event_features(event_id)
+        cached_features = update_event_features(lookup_id)
         cache.set(cache_key, cached_features, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return cached_features
 
