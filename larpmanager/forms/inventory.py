@@ -20,10 +20,9 @@
 import logging
 from typing import Any, ClassVar
 
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import BaseModelForm, MultichoiceMixin
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import CharacterDualListWidget
 from larpmanager.models.inventory import Inventory, PoolTypeCI
 from larpmanager.models.writing import Character
@@ -43,10 +42,8 @@ class InventoryBaseForm(BaseModelForm):
         super().__init__(*args, **kwargs)
 
 
-class OrgaInventoryForm(MultichoiceMixin, InventoryBaseForm):
+class OrgaInventoryForm(InventoryBaseForm):
     """Form for organization-level inventory management with character selection."""
-
-    load_js: ClassVar[list[str]] = ["multichoice"]
 
     page_title = _("Inventories")
     page_info = _("Manage character inventories and view their contents for this event")
@@ -75,17 +72,6 @@ class OrgaInventoryForm(MultichoiceMixin, InventoryBaseForm):
         else:
             # No event: empty queryset
             self.fields["owners"].queryset = Character.objects.none()
-
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="characters",
-                link_id="characters_available",
-                label=str(_("Show available characters")),
-                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
-                data={"type": self._meta.model.__name__.lower()},
-                ctx_edit_uuid=True,
-            )
 
 
 class OrgaPoolTypeForm(BaseModelForm):

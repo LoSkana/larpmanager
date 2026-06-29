@@ -23,13 +23,12 @@ from typing import Any, ClassVar
 
 from django import forms
 from django.db import models
-from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.config import get_association_config
-from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm, BaseModelFormRun, MultichoiceMixin
+from larpmanager.forms.base import BaseAccForm, BaseForm, BaseModelForm, BaseModelFormRun
 from larpmanager.forms.member import MembershipForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -333,10 +332,8 @@ class ExeDonationForm(BaseModelForm):
         self.fields["member"].required = True
 
 
-class OrgaPaymentForm(MultichoiceMixin, ExePaymentForm):
+class OrgaPaymentForm(ExePaymentForm):
     """Form for managing payment accounting records in event context."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     class Meta(ExePaymentForm.Meta):
         widgets: ClassVar[dict] = {"registration": RunRegS2Widget}
@@ -346,15 +343,6 @@ class OrgaPaymentForm(MultichoiceMixin, ExePaymentForm):
         self.auto_run = True
         super().__init__(*args, **kwargs)
         self.fields["registration"].required = True
-
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="registration",
-                link_id="signups_available",
-                label=str(_("Show available signups")),
-                url=reverse("orga_payments_signups_available", args=[run.get_slug()]),
-            )
 
     def _configure_registration(self) -> None:
         """Configure registration field filtered by current run."""

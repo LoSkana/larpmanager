@@ -1,7 +1,7 @@
 {% load show_tags i18n %}
 <div class="staff-list">
     <div class="orga-buttons">
-        {% if not readonly_event %}
+        {% if not readonly_event and not hide_new %}
             <a class="new button form-new" href="#">
                 <i class="fas fa-plus"></i>
                 {% trans "New" %}

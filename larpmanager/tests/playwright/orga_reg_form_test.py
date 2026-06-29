@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, nav, \
-    get_modal_iframe, save_modal
+    get_modal_iframe, save_modal, drag_reorder
 
 pytestmark = pytest.mark.e2e
 
@@ -84,14 +84,16 @@ def prepare_form(page: Any, live_server: Any) -> None:
         page.locator("#one"),
     "Rate Optional Surcharge Registration surcharge Surcharge Optional",
     )
-    page.locator('tr[id="u4"] td.reorder-handle').drag_to(
-        page.locator('tr[id="u4"]').locator("xpath=preceding-sibling::tr[1]")
+    drag_reorder(
+        page,
+        page.locator('tr[id="u4"] td.reorder-handle'),
+        page.locator('tr[id="u4"]').locator("xpath=preceding-sibling::tr[1]"),
     )
-    page.wait_for_timeout(300)
-    page.locator('tr[id="u2"] td.reorder-handle').drag_to(
-        page.locator('tr[id="u2"]').locator("xpath=preceding-sibling::tr[1]")
+    drag_reorder(
+        page,
+        page.locator('tr[id="u2"] td.reorder-handle'),
+        page.locator('tr[id="u2"]').locator("xpath=preceding-sibling::tr[1]"),
     )
-    page.wait_for_timeout(300)
     expect_normalized(page,
         page.locator("#one"),
         """

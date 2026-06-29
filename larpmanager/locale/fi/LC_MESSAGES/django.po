@@ -4036,9 +4036,6 @@ msgstr "Poista ryhmästä"
 msgid "Results not present"
 msgstr "Tuloksia ei ole"
 
-msgid "Show available tags"
-msgstr "Näytä käytettävissä olevat tunnisteet"
-
 msgid "Signup cancellation"
 msgstr "Rekisteröitymisen peruutus"
 
@@ -4243,9 +4240,6 @@ msgstr "Aseta merkin tila"
 
 msgid "Set up ability types"
 msgstr "Määritä taitojen tyypit"
-
-msgid "Show available items"
-msgstr "Näytä käytettävissä olevat kohteet"
 
 msgid "Sign up as a filler!"
 msgstr "Ilmoittaudu täytehahmoksi!"
@@ -4607,21 +4601,6 @@ msgstr "Valitse hahmosi!"
 msgid "Set up payment methods"
 msgstr "Määritä maksutavat"
 
-msgid "Show available members"
-msgstr "Näytä käytettävissä olevat jäsenet"
-
-msgid "Show available options"
-msgstr "Näytä käytettävissä olevat vaihtoehdot"
-
-msgid "Show available players"
-msgstr "Näytä käytettävissä olevat pelaajat"
-
-msgid "Show available signups"
-msgstr "Näytä käytettävissä olevat ilmoittautumiset"
-
-msgid "Show available tickets"
-msgstr "Näytä saatavilla olevat liput"
-
 msgid "Split by participation"
 msgstr "Jako osallistumisen mukaan"
 
@@ -4913,9 +4892,6 @@ msgstr "Salainen ilmoittautumiskoodi"
 msgid "Secret registration link"
 msgstr "Salainen ilmoittautumislinkki"
 
-msgid "Show available abilities"
-msgstr "Näytä käytettävissä olevat kyvyt"
-
 msgid "Target session not found"
 msgstr "Kohdeistuntoa ei löydy"
 
@@ -5052,9 +5028,6 @@ msgstr "Aseta kiinteitä maksueriä"
 
 msgid "Show available characters"
 msgstr "Näytä käytettävissä olevat merkit"
-
-msgid "Show available deliveries"
-msgstr "Näytä käytettävissä olevat toimitukset"
 
 msgid "Size of the file in bytes"
 msgstr "Tiedoston koko tavuina"

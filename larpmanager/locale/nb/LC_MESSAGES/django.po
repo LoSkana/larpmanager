@@ -4036,9 +4036,6 @@ msgstr "Fjern fra fraksjon"
 msgid "Results not present"
 msgstr "Resultater ikke til stede"
 
-msgid "Show available tags"
-msgstr "Vis tilgjengelige tagger"
-
 msgid "Signup cancellation"
 msgstr "Oppsigelse av abonnement"
 
@@ -4243,9 +4240,6 @@ msgstr "Angi tegnstatus"
 
 msgid "Set up ability types"
 msgstr "Sett opp evnetyper"
-
-msgid "Show available items"
-msgstr "Vis tilgjengelige varer"
 
 msgid "Sign up as a filler!"
 msgstr "Registrer deg som utfyller!"
@@ -4607,21 +4601,6 @@ msgstr "Velg din karakter!"
 msgid "Set up payment methods"
 msgstr "Konfigurer betalingsmetoder"
 
-msgid "Show available members"
-msgstr "Vis tilgjengelige medlemmer"
-
-msgid "Show available options"
-msgstr "Vis tilgjengelige alternativer"
-
-msgid "Show available players"
-msgstr "Vis tilgjengelige spillere"
-
-msgid "Show available signups"
-msgstr "Vis tilgjengelige påmeldinger"
-
-msgid "Show available tickets"
-msgstr "Vis tilgjengelige billetter"
-
 msgid "Split by participation"
 msgstr "Fordelt etter deltakelse"
 
@@ -4913,9 +4892,6 @@ msgstr "Hemmelig registreringskode"
 msgid "Secret registration link"
 msgstr "Hemmelig registreringslenke"
 
-msgid "Show available abilities"
-msgstr "Vis tilgjengelige evner"
-
 msgid "Target session not found"
 msgstr "Måløkten ble ikke funnet"
 
@@ -5052,9 +5028,6 @@ msgstr "Sett opp faste avdrag"
 
 msgid "Show available characters"
 msgstr "Vis tilgjengelige tegn"
-
-msgid "Show available deliveries"
-msgstr "Vis tilgjengelige leveranser"
 
 msgid "Size of the file in bytes"
 msgstr "Filens størrelse i byte"

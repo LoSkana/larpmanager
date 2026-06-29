@@ -67,6 +67,7 @@ def _fill_profile_form(page: Any, round_num: int) -> dict:
     # Phone contact needs a syntactically valid phone number
     phone_input = page.locator("#id_phone_contact")
     if phone_input.count() > 0:
+        just_wait(page)
         phone_input.fill(phone_value)
         expected["id_phone_contact"] = phone_value
 

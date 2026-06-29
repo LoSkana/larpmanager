@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, sidebar, get_modal_iframe, \
-    save_modal, _wait_lm_ready
+    save_modal, _wait_lm_ready, drag_reorder
 
 pytestmark = pytest.mark.e2e
 
@@ -58,10 +58,11 @@ def feature_fields(page: Any) -> None:
     # reorder test
     sidebar(page, "Sheet")
     expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
-    page.locator('tr[id="u3"] td.reorder-handle').drag_to(
-        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]")
+    drag_reorder(
+        page,
+        page.locator('tr[id="u3"] td.reorder-handle'),
+        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]"),
     )
-    page.wait_for_timeout(300)
     expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title

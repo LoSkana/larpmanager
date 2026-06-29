@@ -1768,6 +1768,9 @@ class ExeEventForm(OrgaEventForm):
                     for config_name, config_value in _FEATURE_IMPLIED_CONFIGS.get(feat_slug, {}).items():
                         save_single_config(instance, config_name, config_value)
 
+                # Re-save so post_save default setup runs with the template features applied
+                instance.save()
+
         return instance
 
 

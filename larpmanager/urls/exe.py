@@ -168,11 +168,6 @@ urlpatterns = [
         name="exe_warehouse_movements_delete",
     ),
     path(
-        "manage/warehouse/available/",
-        views_ems.exe_warehouse_available,
-        name="exe_warehouse_available",
-    ),
-    path(
         "manage/badges/",
         views_em.exe_badges,
         name="exe_badges",

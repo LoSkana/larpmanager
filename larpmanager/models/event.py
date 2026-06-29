@@ -327,6 +327,7 @@ class Event(UuidMixin, BaseModel):
             "ruleexp",
             "abilitytemplateexp",
             "modifierexp",
+            "criterionexp",
             "systemexp",
             "systemexppooltypeci",
             "writingquestion",

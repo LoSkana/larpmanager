@@ -169,9 +169,6 @@ msgstr ""
 msgid "Donations"
 msgstr ""
 
-msgid "Show available signups"
-msgstr ""
-
 msgid "Invoices"
 msgstr ""
 
@@ -1036,12 +1033,6 @@ msgstr ""
 msgid "Characters"
 msgstr ""
 
-msgid "Show available characters"
-msgstr ""
-
-msgid "Show available players"
-msgstr ""
-
 msgid "--- NOT ASSIGNED ---"
 msgstr ""
 
@@ -1056,12 +1047,6 @@ msgid "Abilities"
 msgstr ""
 
 msgid "Delivery"
-msgstr ""
-
-msgid "Show available abilities"
-msgstr ""
-
-msgid "Show available deliveries"
 msgstr ""
 
 msgid "Manage the questions displayed in the character writing form"
@@ -2189,9 +2174,6 @@ msgid ""
 "this event"
 msgstr ""
 
-msgid "Show available options"
-msgstr ""
-
 msgid "An ability cannot be a prerequisite of itself."
 msgstr ""
 
@@ -2524,9 +2506,6 @@ msgstr ""
 msgid "Main"
 msgstr ""
 
-msgid "Show available members"
-msgstr ""
-
 msgid "Free donation"
 msgstr ""
 
@@ -2564,9 +2543,6 @@ msgid "Registration form"
 msgstr ""
 
 msgid "--- Empty"
-msgstr ""
-
-msgid "Show available tickets"
 msgstr ""
 
 msgid ""
@@ -2642,9 +2618,6 @@ msgstr ""
 msgid "Warehouse items"
 msgstr ""
 
-msgid "Show available tags"
-msgstr ""
-
 msgid ""
 "Manage the physical containers used to organize and store warehouse items"
 msgstr ""
@@ -2659,9 +2632,6 @@ msgid "Warehouse tags"
 msgstr ""
 
 msgid "Items"
-msgstr ""
-
-msgid "Show available items"
 msgstr ""
 
 msgid "Track the assignment of warehouse items to event areas for each run"
@@ -7351,57 +7321,6 @@ msgid ""
 "follow"
 msgstr ""
 
-msgid "Discover what this event is about"
-msgstr ""
-
-msgid "Browse the presentation website"
-msgstr ""
-
-msgid "Update here the registration options"
-msgstr ""
-
-msgid "Your character"
-msgstr ""
-
-msgid "Access your character"
-msgstr ""
-
-msgid "Select your preferences on the characters to play"
-msgstr ""
-
-msgid "Register to the event"
-msgstr ""
-
-msgid "View the list of characters and participants"
-msgstr ""
-
-msgid "Filter or search the characters"
-msgstr ""
-
-msgid "Learn all characters before the event"
-msgstr ""
-
-msgid "Discover the game factions"
-msgstr ""
-
-msgid "Find out what quests are available"
-msgstr ""
-
-msgid "View photos from the event"
-msgstr ""
-
-msgid "Give a card to your friend"
-msgstr ""
-
-msgid "Portraits (PDF)"
-msgstr ""
-
-msgid "Download the list of characters with their interpreters' profile images"
-msgstr ""
-
-msgid "Profiles (PDF)"
-msgstr ""
-
 #, python-format
 msgid "<b>Lite Mode</b>: %(progress)s%% complete"
 msgstr ""
@@ -10835,6 +10754,9 @@ msgstr ""
 msgid "No elements are currently available"
 msgstr ""
 
+msgid "Show available characters"
+msgstr ""
+
 msgid "You must be logged in to view this page"
 msgstr ""
 
@@ -10842,6 +10764,57 @@ msgid "You must be registered to view this page"
 msgstr ""
 
 msgid "Welcome"
+msgstr ""
+
+msgid "Update here the registration options"
+msgstr ""
+
+msgid "Your character"
+msgstr ""
+
+msgid "Access your character"
+msgstr ""
+
+msgid "Select your preferences on the characters to play"
+msgstr ""
+
+msgid "Register to the event"
+msgstr ""
+
+msgid "View the list of characters and participants"
+msgstr ""
+
+msgid "Filter or search the characters"
+msgstr ""
+
+msgid "Learn all characters before the event"
+msgstr ""
+
+msgid "Discover the game factions"
+msgstr ""
+
+msgid "Find out what quests are available"
+msgstr ""
+
+msgid "View photos from the event"
+msgstr ""
+
+msgid "Give a card to your friend"
+msgstr ""
+
+msgid "Download the list of characters with their interpreters' profile images"
+msgstr ""
+
+msgid "Portraits (PDF)"
+msgstr ""
+
+msgid "Profiles (PDF)"
+msgstr ""
+
+msgid "Discover what this event is about"
+msgstr ""
+
+msgid "Browse the presentation website"
 msgstr ""
 
 #, python-format

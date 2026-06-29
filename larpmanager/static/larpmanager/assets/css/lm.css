@@ -425,8 +425,10 @@ input[type="number"] {
 
 .opt-card-desc {
   color: #666;
-  font-size: 0.85em;
+  font-size: 0.75em;
   margin-top: 0.15em;
+  white-space: normal;
+  word-break: break-word;
 }
 
 .opt-card-avail {
@@ -560,6 +562,54 @@ input,
    Tables
    --------------------------------------------------------------------------- */
 
+/* Inline options editor: override global input width caps so cells stay aligned in one row */
+.inline-options-table input[type="text"],
+.inline-options-table input[type="number"] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Keep the details row collapsed when toggled shut, even nested inside a .mob form table on mobile */
+.inline-option-details.hide {
+  display: none !important;
+}
+
+/* On mobile, the input cells stack full-width, then the drag handle and the
+   saved/details/delete icons share one row below (instead of every cell stacking) */
+@media (max-width: 1000px) {
+  .inline-options-table tr.inline-option {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .inline-options-table tr.inline-option > td {
+    display: inline-block !important;
+    width: auto !important;
+  }
+
+  .inline-options-table tr.inline-option > td:not([class]) {
+    order: 0;
+    flex: 1 1 100%;
+  }
+
+  .inline-options-table tr.inline-option > td.io-order {
+    order: 1;
+  }
+
+  .inline-options-table tr.inline-option > td.io-col-saved {
+    order: 2;
+  }
+
+  .inline-options-table tr.inline-option > td.io-col-details {
+    order: 3;
+  }
+
+  .inline-options-table tr.inline-option > td.io-col-delete {
+    order: 4;
+  }
+}
+
 table.fixed {
   table-layout: fixed;
 }
@@ -656,7 +706,23 @@ th select {
 
   #id_discount {
     display: inline-block;
-    margin: 1em auto;
+  }
+
+  .discount_input_row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1em 0;
+  }
+
+  @media (max-width: 600px) {
+    .discount_input_row {
+      flex-wrap: wrap;
+    }
+    .discount_input_row input {
+      width: 100%;
+    }
   }
 
   .nav a {
@@ -1620,7 +1686,7 @@ header.sec h1 {
   }
 
   #lm-modal-content {
-    width: 95%;
+    width: 100%;
     height: 100%;
   }
 
@@ -3185,7 +3251,7 @@ body.floating_iframe .inner {
 
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
 table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control::before,
