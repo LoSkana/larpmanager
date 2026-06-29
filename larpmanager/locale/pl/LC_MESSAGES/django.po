@@ -3070,9 +3070,6 @@ msgstr "Nie znaleziono zdarzenia"
 msgid "External access"
 msgstr "Dostęp zewnętrzny"
 
-msgid "Filter selected"
-msgstr "Filtr wybrany"
-
 msgid "First character"
 msgstr "Pierwsza postać"
 
