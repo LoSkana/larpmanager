@@ -280,7 +280,8 @@ class OrgaFeatureForm(FeatureForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and features."""
         super().__init__(*args, **kwargs)
-        self._init_features(is_association=False)
+        source = self.instance.parent if self.instance.parent_id else self.instance
+        self._init_features(is_association=False, source=source)
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and update event features cache."""
@@ -318,6 +319,15 @@ class OrgaConfigForm(ConfigForm):
     def _get_config_save_target(self, instance: Any) -> Any:
         """Save configs to parent event if one exists, otherwise to the event itself."""
         return instance.parent if instance.parent_id else instance
+
+    def _get_all_element_configs(self) -> dict[str, str]:
+        """Read configs from parent event if one exists, so displayed values match runtime behavior."""
+        source = self.instance.parent if self.instance.parent_id else self.instance
+        config_mapping = {}
+        if source.pk:
+            for config in source.configs.all():
+                config_mapping[config.name] = config.value
+        return config_mapping
 
     def set_configs(self) -> None:
         """Configure form fields for event settings and features."""

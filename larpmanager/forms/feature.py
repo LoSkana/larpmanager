@@ -117,21 +117,24 @@ class FeatureForm(BaseModelForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
-    def _init_features(self, *, is_association: bool) -> None:
+    def _init_features(self, *, is_association: bool, source: Any = None) -> None:
         """Initialize feature selection fields organized by modules.
 
         Args:
             is_association: If True, initialize association-level features;
                                  if False, initialize event-level features
+            source: Instance to read current features from; defaults to self.instance
 
         Side effects:
             Adds feature selection fields to the form organized by modules
             Sets initial values based on current feature assignments
 
         """
+        if source is None:
+            source = self.instance
         selected_feature_ids = None
-        if self.instance.pk:
-            selected_feature_ids = [str(v) for v in self.instance.features.values_list("pk", flat=True)]
+        if source.pk:
+            selected_feature_ids = [str(v) for v in source.features.values_list("pk", flat=True)]
 
         feature_modules = FeatureModule.objects.exclude(order=0).order_by("order")
         if is_association:
