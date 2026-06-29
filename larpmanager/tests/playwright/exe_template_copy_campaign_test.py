@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_date, just_wait, check_feature, go_to, login_orga, submit_confirm, \
-    expect_normalized, _checkboxes, fill_tinymce, get_modal_iframe, save_modal, click_and_wait_question
+    expect_normalized, _checkboxes, fill_tinymce, get_modal_iframe, save_modal, click_and_wait_question, char_dual_pick
 
 pytestmark = pytest.mark.e2e
 
@@ -149,9 +149,7 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_cost").click()
     edit_iframe.locator("#id_cost").fill("1")
     fill_tinymce(edit_iframe, "id_descr", "sdsfdsfds", False)
-    edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").click()
-    edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     # give delivery xp
@@ -162,9 +160,7 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").fill("first live")
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_amount").fill("2")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
 

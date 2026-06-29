@@ -33,7 +33,7 @@ from larpmanager.tests.utils import (just_wait, submit_register,
                                      login_orga,
                                      login_user,
                                      expect_normalized, fill_tinymce, check_feature, sidebar, nav,
-                                     get_modal_iframe, save_modal, _wait_lm_ready,
+                                     get_modal_iframe, save_modal, _wait_lm_ready, char_dual_pick,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -273,9 +273,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("aaaaaccc")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     # set up question

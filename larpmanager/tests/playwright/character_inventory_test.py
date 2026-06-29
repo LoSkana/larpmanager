@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
-    submit_register, \
+    submit_register, char_dual_pick, \
     get_modal_iframe, save_modal, sidebar
 
 pytestmark = pytest.mark.e2e
@@ -103,9 +103,7 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Test Character's Bank")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
 

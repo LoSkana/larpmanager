@@ -693,3 +693,19 @@ def _select2_search_and_pick(searchbox, iframe, value):
     expect(iframe.locator(".select2-results__option")).not_to_have_count(0)
     iframe.locator(".select2-results__option").first.click()
     iframe.locator(".select2-dropdown").wait_for(state="hidden")
+
+
+def char_dual_pick(context, term, name):
+    """Select a character by name in a CharacterDualListWidget.
+
+    context: a Playwright Locator or Page scoped to the widget's container (e.g. edit_iframe).
+    term: search string to type in the available-side search box.
+    name: the character name text to match and click in the available list.
+    """
+    search = context.locator(".char-dual-available .char-dual-search").first
+    search.wait_for(state="visible")
+    search.fill(term)
+    item = context.locator(".char-dual-avail-list .char-dual-item").filter(has_text=name).first
+    item.wait_for(state="visible", timeout=10000)
+    item.click()
+    context.locator(".char-dual-sel-list .char-dual-item").filter(has_text=name).wait_for(state="visible", timeout=10000)

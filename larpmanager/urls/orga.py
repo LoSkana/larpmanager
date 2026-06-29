@@ -1326,6 +1326,11 @@ urlpatterns = [
         name="orga_exp_available",
     ),
     path(
+        "<slug:event_slug>/manage/characters/search/",
+        views_ox.orga_character_search,
+        name="orga_character_search",
+    ),
+    path(
         "<slug:event_slug>/manage/form/available/",
         views_ow.orga_form_available,
         name="orga_form_available",

@@ -187,9 +187,6 @@ def get_index_association_permissions(
         has_default=is_admin,
     )
 
-    # Set sidebar state from user session
-    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
-
 
 def get_event_roles(request: HttpRequest, context: dict, slug: str) -> tuple[bool, dict[str, int], list[str]]:
     """Get user's event roles and permissions for a specific event slug.

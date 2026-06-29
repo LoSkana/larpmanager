@@ -33,6 +33,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import (
     _select2_search_and_pick,
     _wait_lm_ready,
+    char_dual_pick,
     click_and_wait_question,
     expect_normalized,
     fill_date,
@@ -280,9 +281,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("primaaa")
-    edit_iframe.get_by_role("list").click()
-    edit_iframe.get_by_role("searchbox").fill("tes")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "tes", "Test Character")
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
@@ -290,9 +289,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("t")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("tranver")
-    edit_iframe.get_by_role("list").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     # check result
@@ -304,8 +301,8 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     sidebar(page, "Features")
     page.get_by_role("checkbox", name="Campaign").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Events").click()
 
+    sidebar(page, "Events")
     page.get_by_role("link", name="New event").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_form1-name").click()
@@ -335,9 +332,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").press("CapsLock")
     edit_iframe.locator("#id_name").fill("PRIMAAAA")
-    edit_iframe.get_by_role("list").click()
-    edit_iframe.get_by_role("searchbox").fill("TE")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "TE", "Test Character")
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
@@ -345,9 +340,7 @@ def check_factions_indep_campaign(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("t")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("TRANVERSA")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("TE")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "TE", "Test Character")
     save_modal(page, edit_iframe)
 
     # check situation in second event

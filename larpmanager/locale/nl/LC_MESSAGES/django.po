@@ -3070,6 +3070,9 @@ msgstr "Evenement niet gevonden"
 msgid "External access"
 msgstr "Externe toegang"
 
+msgid "Filter selected"
+msgstr "Filter geselecteerd"
+
 msgid "First character"
 msgstr "Eerste teken"
 

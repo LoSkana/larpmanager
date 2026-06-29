@@ -35,7 +35,7 @@ from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
-from larpmanager.forms.utils import ReadOnlyWidget, WritingTinyMCE, css_delimeter
+from larpmanager.forms.utils import CharacterDualListWidget, ReadOnlyWidget, WritingTinyMCE, css_delimeter
 from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
@@ -185,8 +185,11 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         for field in self.fields.values():
             # Check if field is a ModelChoiceField / ModelMultipleChoiceField
             if isinstance(field, forms.ModelChoiceField):
-                # Skip if it's a Select2 widget
-                if isinstance(field.widget, (s2forms.ModelSelect2Widget, s2forms.ModelSelect2MultipleWidget)):
+                # Skip if it's a Select2 or CharacterDualListWidget (handles its own UUID→PK mapping)
+                if isinstance(
+                    field.widget,
+                    (s2forms.ModelSelect2Widget, s2forms.ModelSelect2MultipleWidget, CharacterDualListWidget),
+                ):
                     continue
 
                 field.to_field_name = "uuid"
@@ -421,7 +424,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         for field in self.fields:
             if hasattr(self, "custom_field") and field in self.custom_field:
                 continue
-            if isinstance(self.fields[field].widget, s2forms.ModelSelect2MultipleWidget):
+            if isinstance(self.fields[field].widget, (s2forms.ModelSelect2MultipleWidget, CharacterDualListWidget)):
                 self._save_multi(field, instance)
 
     def _save_multi(self, field: str, instance: Any) -> None:
