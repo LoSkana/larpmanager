@@ -220,6 +220,10 @@ def get_element_config(element: Any, config_name: str, default_value: Any, *, by
         cache (default) or directly from database (if bypass_cache=True).
 
     """
+    # If element is an Event with a parent, use parent's config directly
+    if element._meta.model_name.lower() == "event" and getattr(element, "parent_id", None):  # noqa: SLF001
+        element = element.parent
+
     # Check if element already has cached configurations
     if not hasattr(element, "aux_configs"):
         if bypass_cache:
