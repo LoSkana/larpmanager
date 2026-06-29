@@ -36,7 +36,6 @@
 {% endblock content %}
 {% block js %}
     {% include "elements/form/max_length.js" %}
-    {% include "elements/helpers/multichoice.js" %}
     {{ form.unavail|json_script:"unavail" }}
     <script>
     var dependencies = {{ dependencies | safe }};

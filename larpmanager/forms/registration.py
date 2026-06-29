@@ -24,7 +24,6 @@ from typing import TYPE_CHECKING, Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
@@ -33,7 +32,7 @@ from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.cache.registration import get_registration_counts, get_registration_tickets, get_ticket_form_text
-from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, MultichoiceMixin, get_question_key
+from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
     AssociationMemberS2Widget,
@@ -650,7 +649,7 @@ class RegistrationGiftForm(RegistrationForm):
         self.has_mandatory = len(self.mandatory) > 0
 
 
-class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
+class OrgaRegistrationForm(BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
     page_info = _(
@@ -658,8 +657,6 @@ class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
     )
 
     page_title = _("Registrations")
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     class Meta:
         model = Registration
@@ -743,22 +740,6 @@ class OrgaRegistrationForm(MultichoiceMixin, BaseRegistrationForm):
         # Control section visibility based on feature flag
         if "reg_que_sections" not in self.params["features"]:
             self.show_sections = True
-
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="characters_new",
-                link_id="characters_reg_available",
-                label=str(_("Show available characters")),
-                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
-                data={"type": "registrations"},
-            )
-            self.add_multichoice_config(
-                field_id="member",
-                link_id="member_available",
-                label=str(_("Show available members")),
-                url=reverse("orga_members_available", args=[run.get_slug()]),
-            )
 
     def init_additionals(self, registration_section: Any) -> None:
         """Initialize additional tickets section if feature is enabled."""
@@ -1219,10 +1200,8 @@ class OrgaRegistrationSectionForm(BaseModelForm):
         widgets: ClassVar[dict] = {"description": WritingTinyMCE()}
 
 
-class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
+class OrgaRegistrationQuestionForm(BaseModelForm):
     """Form for OrgaRegistrationQuestion."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_info = _("Manage the custom questions participants must answer when registering for this event")
 
@@ -1260,10 +1239,6 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
             self.delete_field("status")
 
         self._init_feature_fields()
-
-        run = self.params.get("run")
-        if run:
-            self._init_multichoice(run)
 
     def _init_feature_fields(self) -> None:
         """Configure fields based on active features, removing unavailable ones."""
@@ -1316,36 +1291,6 @@ class OrgaRegistrationQuestionForm(MultichoiceMixin, BaseModelForm):
         self.fields["status"].help_text = ", ".join(
             f"<b>{choice.label}</b>: {text}" for choice, text in help_texts.items() if choice.value in visible_choices
         )
-
-    def _init_multichoice(self, run: Any) -> None:
-        """Add multichoice popup configs for tickets, factions, and allowed fields."""
-        if "tickets" in self.fields:
-            self.add_multichoice_config(
-                field_id="tickets",
-                link_id="question_tickets_available",
-                label=str(_("Show available tickets")),
-                url=reverse("orga_form_available", args=[run.get_slug()]),
-                data={"type": "ticket", "owner": "registrationquestion", "field": "tickets"},
-                form_edit_uuid=True,
-            )
-        if "factions" in self.fields:
-            self.add_multichoice_config(
-                field_id="factions",
-                link_id="question_factions_available",
-                label=str(_("Show available factions")),
-                url=reverse("orga_form_available", args=[run.get_slug()]),
-                data={"type": "faction", "owner": "registrationquestion", "field": "factions"},
-                form_edit_uuid=True,
-            )
-        if "allowed" in self.fields:
-            self.add_multichoice_config(
-                field_id="allowed",
-                link_id="question_members_available",
-                label=str(_("Show available members")),
-                url=reverse("orga_members_available", args=[run.get_slug()]),
-                data={"type": "staff", "owner": "registrationquestion", "field": "allowed"},
-                form_edit_uuid=True,
-            )
 
     def _init_type(self) -> None:
         """Initialize registration question type field choices.
@@ -1475,10 +1420,8 @@ class OrgaRegistrationQuotaForm(BaseModelForm):
         return quotas
 
 
-class OrgaRegistrationInstallmentForm(MultichoiceMixin, BaseModelForm):
+class OrgaRegistrationInstallmentForm(BaseModelForm):
     """Form for OrgaRegistrationInstallment."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_info = _(
         "Define installment schedules that split ticket costs into multiple payment deadlines for participants"
@@ -1499,17 +1442,6 @@ class OrgaRegistrationInstallmentForm(MultichoiceMixin, BaseModelForm):
         """Initialize form and configure event-specific ticket widget."""
         super().__init__(*args, **kwargs)
         self.configure_field_event("tickets", self.params["event"])
-
-        run = self.params.get("run")
-        if run and "tickets" in self.fields:
-            self.add_multichoice_config(
-                field_id="tickets",
-                link_id="installment_tickets_available",
-                label=str(_("Show available tickets")),
-                url=reverse("orga_form_available", args=[run.get_slug()]),
-                data={"type": "ticket", "owner": "registrationinstallment", "field": "tickets"},
-                form_edit_uuid=True,
-            )
 
     def clean_order(self) -> int:
         """Validate that the order is unique for installments of this event."""

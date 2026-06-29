@@ -4033,9 +4033,6 @@ msgstr "Retirer de la faction"
 msgid "Results not present"
 msgstr "Résultats non disponibles"
 
-msgid "Show available tags"
-msgstr "Afficher les étiquettes disponibles"
-
 msgid "Signup cancellation"
 msgstr "Annulation de l'abonnement"
 
@@ -4240,9 +4237,6 @@ msgstr "Définir l'état des caractères"
 
 msgid "Set up ability types"
 msgstr "Configurer les types d'aptitudes"
-
-msgid "Show available items"
-msgstr "Afficher les articles disponibles"
 
 msgid "Sign up as a filler!"
 msgstr "Inscrivez-vous comme remplisseur !"
@@ -4604,21 +4598,6 @@ msgstr "Sélectionnez votre personnage !"
 msgid "Set up payment methods"
 msgstr "Mise en place des moyens de paiement"
 
-msgid "Show available members"
-msgstr "Afficher les membres disponibles"
-
-msgid "Show available options"
-msgstr "Afficher les options disponibles"
-
-msgid "Show available players"
-msgstr "Afficher les joueurs disponibles"
-
-msgid "Show available signups"
-msgstr "Afficher les inscriptions disponibles"
-
-msgid "Show available tickets"
-msgstr "Afficher les billets disponibles"
-
 msgid "Split by participation"
 msgstr "Répartition par participation"
 
@@ -4910,9 +4889,6 @@ msgstr "Code d'enregistrement secret"
 msgid "Secret registration link"
 msgstr "Lien d'enregistrement secret"
 
-msgid "Show available abilities"
-msgstr "Afficher les capacités disponibles"
-
 msgid "Target session not found"
 msgstr "Session cible non trouvée"
 
@@ -5049,9 +5025,6 @@ msgstr "Mise en place de versements fixes"
 
 msgid "Show available characters"
 msgstr "Afficher les caractères disponibles"
-
-msgid "Show available deliveries"
-msgstr "Afficher les livraisons disponibles"
 
 msgid "Size of the file in bytes"
 msgstr "Taille du fichier en octets"
