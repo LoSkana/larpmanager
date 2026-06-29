@@ -52,6 +52,7 @@ from larpmanager.utils.core.exceptions import (
     UserPermissionError,
     check_event_feature,
 )
+from larpmanager.utils.core.nav import build_main_nav_items
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
 
@@ -514,6 +515,7 @@ def prepare_run(context: Any) -> None:
                 run_configuration[additional_config_name][additional_feature] = True
 
     context.update(run_configuration)
+    context["main_nav_items"] = build_main_nav_items(context)
 
 
 def get_run(context: Any, event_slug: Any) -> None:

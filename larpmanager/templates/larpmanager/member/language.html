@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     {% if request.user.is_authenticated %}
-        {% include "larpmanager/member/profile_nav.html" with active="language" %}
+        {% include "larpmanager/member/profile_nav.html" %}
     {% endif %}
     <div class="user_resize platform form_container">
         <hr class="no_v20" />

@@ -43,7 +43,10 @@ from larpmanager.models.utils import get_option_form_text
 from larpmanager.models.writing import Character, FactionType
 from larpmanager.utils.core.common import clean_html, html_clean
 from larpmanager.utils.io.pdf import get_trait_character
+from larpmanager.utils.larpmanager.versions import VERSIONS
 from larpmanager.utils.services.association import get_hint_for_slug
+
+_VERSION_BODY_CLASS_START = min(v["number"] for v in VERSIONS)
 
 if TYPE_CHECKING:
     from django.forms import BoundField, Form
@@ -883,3 +886,11 @@ def concat(val1: Any, val2: Any) -> str:
 def activation_hint(slug: str) -> str:
     """Return the translated hint text for an activation checklist slug."""
     return get_hint_for_slug(slug)
+
+
+@register.filter
+def version_body_classes(effective_version: int) -> str:
+    """Return CSS body classes for interface version gating."""
+    if not effective_version:
+        return ""
+    return " ".join(f"new_v{v}" for v in range(_VERSION_BODY_CLASS_START, int(effective_version) + 1))
