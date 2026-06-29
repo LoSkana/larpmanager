@@ -20,7 +20,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -45,7 +45,6 @@ from larpmanager.models.accounting import (
     PaymentType,
 )
 from larpmanager.models.member import LogOperationType
-from larpmanager.models.registration import Registration
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
@@ -522,17 +521,6 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_payments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new payment for an event."""
     return orga_new(request, event_slug, OrgaAction.PAYMENTS)
-
-
-@login_required
-def orga_payments_signups_available(request: HttpRequest, event_slug: str) -> JsonResponse | Http404:
-    """Return active signups for the current run as JSON for the multichoice popup."""
-    if request.method != "POST":
-        raise Http404
-    context = check_event_context(request, event_slug, "orga_payments")
-    signups = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).select_related("member")
-    res = [(str(s.uuid), str(s.member)) for s in signups]
-    return JsonResponse({"res": res})
 
 
 def payment_edit(

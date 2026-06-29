@@ -66,49 +66,6 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class MultichoiceMixin:
-    """Mixin that adds multichoice popup configuration to a form."""
-
-    def add_multichoice_config(
-        self,
-        field_id: str,
-        link_id: str,
-        label: str,
-        url: str,
-        data: dict | None = None,
-        *,
-        ctx_edit_uuid: bool = False,
-        form_edit_uuid: bool = False,
-        form_orga: bool = False,
-    ) -> None:
-        """Register a multichoice popup configuration on this form.
-
-        Args:
-            field_id: Django field name; template targets ``#id_{field_id}_tr td``.
-            link_id: Unique DOM id for the trigger link.
-            label: Already-translated string to display as the link text.
-            url: Fully resolved URL string for the AJAX POST request.
-            data: Dict of static POST data (default ``{}``).
-            ctx_edit_uuid: If True, template adds ``edit_uuid`` from context to POST data.
-            form_edit_uuid: If True, template adds ``edit_uuid`` from ``form.instance.uuid``.
-            form_orga: If True, template adds ``orga`` (1 if ``form.orga`` else 0) to POST data.
-        """
-        if not hasattr(self, "multichoice_configs"):
-            self.multichoice_configs = []
-        self.multichoice_configs.append(
-            {
-                "field_id": field_id,
-                "link_id": link_id,
-                "label": label,
-                "url": url,
-                "data": data or {},
-                "ctx_edit_uuid": ctx_edit_uuid,
-                "form_edit_uuid": form_edit_uuid,
-                "form_orga": form_orga,
-            }
-        )
-
-
 class FormMixin:
     """Mixin for common form operations."""
 

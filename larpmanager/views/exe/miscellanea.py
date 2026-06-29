@@ -18,11 +18,9 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-import contextlib
 
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.utils.translation import gettext_lazy as _
 
@@ -279,31 +277,3 @@ def exe_trash(request: HttpRequest) -> HttpResponse:
 
     context["deleted_items"] = deleted_items
     return render(request, "larpmanager/exe/trash.html", context)
-
-
-@login_required
-def exe_warehouse_available(request: HttpRequest) -> JsonResponse | Http404:
-    """Return available warehouse items or tags for multichoice popups via AJAX."""
-    if request.method != "POST":
-        return Http404()
-
-    context = check_association_context(request)
-    association_id = context["association_id"]
-    kind = request.POST.get("type", "")
-    edit_uuid = request.POST.get("edit_uuid", "")
-
-    if kind == "item":
-        queryset = WarehouseItem.objects.filter(association_id=association_id)
-        if edit_uuid:
-            with contextlib.suppress(ObjectDoesNotExist):
-                tag = WarehouseTag.objects.get(association_id=association_id, uuid=edit_uuid)
-                queryset = queryset.exclude(pk__in=tag.items.values_list("id", flat=True))
-    else:
-        queryset = WarehouseTag.objects.filter(association_id=association_id)
-        if edit_uuid:
-            with contextlib.suppress(ObjectDoesNotExist):
-                item = WarehouseItem.objects.get(association_id=association_id, uuid=edit_uuid)
-                queryset = queryset.exclude(pk__in=item.tags.values_list("id", flat=True))
-
-    res = [(str(el.uuid), str(el)) for el in queryset]
-    return JsonResponse({"res": res})
