@@ -294,7 +294,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get All base ability double shield 2
+        Obtain ability Select the new ability to get All base ability double shield 2 This text should show Requires: sword1
         Experience points 12 Total 1 Used 11 Available Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
     )
 
@@ -317,7 +317,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get All base ability double shield 2
+        Obtain ability Select the new ability to get All base ability double shield 2 This text should show Requires: sword1
         Experience points 12 Total 1 Used 11 Available
         Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
     )
