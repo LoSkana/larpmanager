@@ -281,6 +281,35 @@ def get_association_config(
     )
 
 
+def _get_event_parent_id(event_id: int, context: dict | None) -> int | None:
+    """Get parent_id for an event, cached in context and Redis."""
+    if context is None:
+        context = {}
+    ctx_key = "event_parent_ids"
+    if ctx_key not in context:
+        context[ctx_key] = {}
+    if event_id in context[ctx_key]:
+        return context[ctx_key][event_id]
+
+    redis_key = f"event_parent_{event_id}"
+    cached = cache.get(redis_key)
+    if cached is not None:
+        parent_id = cached if cached != 0 else None
+    else:
+        from larpmanager.models.event import Event  # noqa: PLC0415
+
+        parent_id = Event.objects.filter(pk=event_id).values_list("parent_id", flat=True).first()
+        cache.set(redis_key, parent_id if parent_id is not None else 0, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    context[ctx_key][event_id] = parent_id
+    return parent_id
+
+
+def reset_event_parent_cache(event_id: int) -> None:
+    """Invalidate cached parent_id for an event."""
+    cache.delete(f"event_parent_{event_id}")
+
+
 def get_event_config(
     event_id: int,
     config_name: str,
@@ -289,9 +318,15 @@ def get_event_config(
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
-    """Get event configuration value from cache or database."""
+    """Get event configuration value; for campaign always using parent."""
+    if context is None:
+        context = {}
+
+    parent_id = _get_event_parent_id(event_id, context)
+    lookup_id = parent_id if parent_id else event_id
+
     return _get_cached_config(
-        event_id, "event", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
+        lookup_id, "event", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
     )
 
 

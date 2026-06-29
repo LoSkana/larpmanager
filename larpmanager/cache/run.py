@@ -28,7 +28,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 
 from larpmanager.cache.button import get_event_button_cache
-from larpmanager.cache.config import get_event_config, save_single_config
+from larpmanager.cache.config import get_event_config, reset_event_parent_cache, save_single_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
@@ -219,6 +219,8 @@ def on_event_post_save_reset_config_cache(instance: Event) -> None:
     if instance.pk:
         for run in instance.runs.all():
             reset_cache_config_run(run)
+
+        reset_event_parent_cache(instance.pk)
 
 
 def update_visible_factions(event: Event) -> None:

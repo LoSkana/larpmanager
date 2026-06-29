@@ -316,6 +316,10 @@ class OrgaConfigForm(ConfigForm):
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
 
+    def _get_config_save_target(self, instance: Any) -> Any:
+        """Save configs to parent event if one exists, otherwise to the event itself."""
+        return instance.parent if instance.parent_id else instance
+
     def set_configs(self) -> None:
         """Configure form fields for event settings and features."""
         # 1. Appearance
