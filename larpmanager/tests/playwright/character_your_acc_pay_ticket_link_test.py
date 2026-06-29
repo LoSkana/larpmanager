@@ -197,7 +197,6 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     sidebar(page, "Registrations")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_role("cell", name="Show available characters").click()
     _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "te")
     save_modal(page, edit_iframe)
 
