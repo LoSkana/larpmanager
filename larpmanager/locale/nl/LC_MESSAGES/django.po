@@ -1346,6 +1346,9 @@ msgstr "Antwoord op"
 msgid "Required"
 msgstr "Vereist"
 
+msgid "Requires"
+msgstr "Vereist"
+
 msgid "Resource"
 msgstr "Bron"
 
@@ -1606,6 +1609,12 @@ msgstr "Zoektocht instellen"
 
 msgid "Short url"
 msgstr "Korte url"
+
+msgid "Show less"
+msgstr "Minder weergeven"
+
+msgid "Show more"
+msgstr "Meer weergeven"
 
 msgid "SpeedLarp"
 msgstr "SpeedLarp"
@@ -2932,9 +2941,6 @@ msgstr "Ondertekend verzoek"
 msgid "Returning type"
 msgstr "Type terugkeer"
 
-msgid "Select ability"
-msgstr "Selecteer vermogen"
-
 msgid "Sensitive data"
 msgstr "Gevoelige gegevens"
 
@@ -3417,6 +3423,9 @@ msgstr "Verzoek goedgekeurd"
 
 msgid "Required feature"
 msgstr "Vereist kenmerk"
+
+msgid "Search abilities"
+msgstr "Zoekmogelijkheden"
 
 msgid "Selected options"
 msgstr "Geselecteerde opties"
@@ -3993,6 +4002,9 @@ msgstr "Taal voor navigatie"
 
 msgid "New shuttle request"
 msgstr "Nieuw shuttleverzoek"
+
+msgid "No abilities found."
+msgstr "Er zijn geen vaardigheden gevonden."
 
 msgid "No characters found"
 msgstr "Er zijn geen personages gevonden"

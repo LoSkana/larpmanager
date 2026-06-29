@@ -1346,6 +1346,9 @@ msgstr "Odpowiedzieć do"
 msgid "Required"
 msgstr "Wymagane"
 
+msgid "Requires"
+msgstr "Wymagania"
+
 msgid "Resource"
 msgstr "Zasoby"
 
@@ -1606,6 +1609,12 @@ msgstr "Zestaw zadań"
 
 msgid "Short url"
 msgstr "Krótki adres URL"
+
+msgid "Show less"
+msgstr "Pokaż mniej"
+
+msgid "Show more"
+msgstr "Pokaż więcej"
 
 msgid "SpeedLarp"
 msgstr "SpeedLarp"
@@ -2932,9 +2941,6 @@ msgstr "Wniosek podpisany"
 msgid "Returning type"
 msgstr "Typ zwrotu"
 
-msgid "Select ability"
-msgstr "Wybierz zdolność"
-
 msgid "Sensitive data"
 msgstr "Wrażliwe dane"
 
@@ -3417,6 +3423,9 @@ msgstr "Wniosek zatwierdzony"
 
 msgid "Required feature"
 msgstr "Wymagana funkcja"
+
+msgid "Search abilities"
+msgstr "Funkcje wyszukiwania"
 
 msgid "Selected options"
 msgstr "Wybrane opcje"
@@ -3993,6 +4002,9 @@ msgstr "Język nawigacji"
 
 msgid "New shuttle request"
 msgstr "Nowa prośba o transport"
+
+msgid "No abilities found."
+msgstr "Nie znaleziono żadnych umiejętności."
 
 msgid "No characters found"
 msgstr "Nie znaleziono żadnych znaków"

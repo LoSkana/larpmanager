@@ -1346,6 +1346,9 @@ msgstr "Reply To"
 msgid "Required"
 msgstr "Vaadittu"
 
+msgid "Requires"
+msgstr "Vaatii"
+
 msgid "Resource"
 msgstr "Resurssit"
 
@@ -1606,6 +1609,12 @@ msgstr "Aseta tehtävä"
 
 msgid "Short url"
 msgstr "Lyhyt url"
+
+msgid "Show less"
+msgstr "Näytä vähemmän"
+
+msgid "Show more"
+msgstr "Näytä lisää"
 
 msgid "SpeedLarp"
 msgstr "SpeedLarp"
@@ -2932,9 +2941,6 @@ msgstr "Allekirjoitettu pyyntö"
 msgid "Returning type"
 msgstr "Palauttava tyyppi"
 
-msgid "Select ability"
-msgstr "Valitse taito"
-
 msgid "Sensitive data"
 msgstr "Arkaluonteiset tiedot"
 
@@ -3417,6 +3423,9 @@ msgstr "Pyyntö hyväksytty"
 
 msgid "Required feature"
 msgstr "Vaadittu ominaisuus"
+
+msgid "Search abilities"
+msgstr "Hakutoiminnot"
 
 msgid "Selected options"
 msgstr "Valitut vaihtoehdot"
@@ -3993,6 +4002,9 @@ msgstr "Navigointikieli"
 
 msgid "New shuttle request"
 msgstr "Uusi sukkulapyyntö"
+
+msgid "No abilities found."
+msgstr "Kykyjä ei löytynyt."
 
 msgid "No characters found"
 msgstr "Hahmoja ei löytynyt"

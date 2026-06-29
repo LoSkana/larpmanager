@@ -1346,6 +1346,9 @@ msgstr "Odpovědět na"
 msgid "Required"
 msgstr "Požadované"
 
+msgid "Requires"
+msgstr "Vyžaduje"
+
 msgid "Resource"
 msgstr "Zdroje"
 
@@ -1606,6 +1609,12 @@ msgstr "Zadání úkolu"
 
 msgid "Short url"
 msgstr "Krátká url adresa"
+
+msgid "Show less"
+msgstr "Zobrazit méně"
+
+msgid "Show more"
+msgstr "Zobrazit více"
 
 msgid "SpeedLarp"
 msgstr "SpeedLarp"
@@ -2932,9 +2941,6 @@ msgstr "Podepsaná žádost"
 msgid "Returning type"
 msgstr "Typ návratu"
 
-msgid "Select ability"
-msgstr "Vybrat schopnost"
-
 msgid "Sensitive data"
 msgstr "Citlivé údaje"
 
@@ -3417,6 +3423,9 @@ msgstr "Žádost schválena"
 
 msgid "Required feature"
 msgstr "Požadovaná funkce"
+
+msgid "Search abilities"
+msgstr "Funkce vyhledávání"
 
 msgid "Selected options"
 msgstr "Vybrané možnosti"
@@ -3993,6 +4002,9 @@ msgstr "Navigační jazyk"
 
 msgid "New shuttle request"
 msgstr "Nová žádost o kyvadlovou dopravu"
+
+msgid "No abilities found."
+msgstr "Nebyly nalezeny žádné schopnosti."
 
 msgid "No characters found"
 msgstr "Nebyly nalezeny žádné znaky"

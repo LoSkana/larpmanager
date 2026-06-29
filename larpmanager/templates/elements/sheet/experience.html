@@ -2,24 +2,25 @@
 {% if features.experience and not exp_auto_buy %}
     <h2>{% trans "Experience points" %}</h2>
     {% if exp_systems_data %}
-        <table class="mob">
-            <tr>
-                <th></th>
-                <th>{% trans "Total" %}</th>
-                <th>{% trans "Used" %}</th>
-                <th>{% trans "Available" %}</th>
-            </tr>
-            {% for sys in exp_systems_data %}
-                <tr>
-                    <td>
-                        {% if exp_systems_data|length > 1 %}{{ sys.name }}{% endif %}
-                    </td>
-                    <td>{{ sys.tot }}</td>
-                    <td>{{ sys.used }}</td>
-                    <td>{{ sys.avail }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+        {% for sys in exp_systems_data %}
+            <div class="exp-summary">
+                {% if exp_systems_data|length > 1 %}<span class="exp-system-name">{{ sys.name }}</span>{% endif %}
+                <div class="exp-stat-row">
+                    <div class="exp-stat">
+                        <span class="exp-stat-value">{{ sys.tot }}</span>
+                        <span class="exp-stat-label">{% trans "Total" %}</span>
+                    </div>
+                    <div class="exp-stat exp-stat-used">
+                        <span class="exp-stat-value">{{ sys.used }}</span>
+                        <span class="exp-stat-label">{% trans "Used" %}</span>
+                    </div>
+                    <div class="exp-stat exp-stat-avail">
+                        <span class="exp-stat-value">{{ sys.avail }}</span>
+                        <span class="exp-stat-label">{% trans "Available" %}</span>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     {% endif %}
     {% if sheet_abilities %}
         <h2>{% trans "Abilities" %}</h2>

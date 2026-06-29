@@ -3509,3 +3509,257 @@ body.floating_iframe #wrapper {
 #first_event h1 {
   margin: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Ability selector
+   --------------------------------------------------------------------------- */
+
+.ability-selector {
+  margin-bottom: 1.5em;
+}
+
+.ability-submit-row {
+  text-align: left;
+}
+
+.ability-submit-row input[type="submit"] {
+  margin: 0;
+}
+
+.ability-top-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+  margin-bottom: 1.2em;
+}
+
+.ability-search-bar {
+  flex: 0 0 260px;
+  min-width: 180px;
+}
+
+@media (min-width: 900px) {
+  .ability-top-row {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.ability-search-bar input[type="text"] {
+  width: 100%;
+  max-width: 100% !important;
+  padding: 0.6em 1em;
+  border: 2px solid var(--ter-clr);
+  border-radius: 2em;
+  background: var(--sec-clr);
+  color: var(--pri-clr);
+  font-size: 1em;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.ability-search-bar input[type="text"]:focus {
+  border-color: var(--ter-clr);
+  box-shadow: 0 0 0 2px rgba(var(--ter-rgb), 0.3);
+}
+
+.ability-type-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  flex: 1;
+}
+
+.ability-tab-btn {
+  padding: 0.4em 1.1em;
+  border: 2px solid var(--ter-clr);
+  border-radius: 2em;
+  background: var(--sec-clr);
+  color: var(--pri-clr);
+  cursor: pointer;
+  font-size: 0.9em;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.ability-tab-btn.active,
+.ability-tab-btn:hover {
+  background: var(--ter-clr);
+  color: var(--sec-clr);
+}
+
+.ability-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1em;
+}
+
+.ability-card {
+  background: var(--sec-clr);
+  color: var(--pri-clr);
+  border: 2px solid var(--ter-clr);
+  border-radius: 0.75em;
+  padding: 0.9em 1em;
+  cursor: pointer;
+  transition:
+    transform 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.ability-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--pri-clr);
+}
+
+.ability-card.selected {
+  background: var(--ter-clr);
+  color: var(--sec-clr);
+  border-color: var(--pri-clr);
+}
+
+.ability-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+.ability-card-name {
+  font-weight: bold;
+  font-size: 1em;
+  flex: 1;
+}
+
+.ability-cost-badge {
+  background: var(--ter-clr);
+  color: var(--sec-clr);
+  border-radius: 1em;
+  padding: 0.15em 0.65em;
+  font-size: 0.82em;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.ability-card.selected .ability-cost-badge {
+  background: var(--sec-clr);
+  color: var(--pri-clr);
+}
+
+.ability-card-descr {
+  font-size: 0.85em;
+  opacity: 0.8;
+  margin: 0;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.ability-card-prereqs {
+  font-size: 0.78em;
+  opacity: 0.65;
+  margin: 0;
+  font-style: italic;
+}
+
+.ability-show-more-btn {
+  grid-column: 1 / -1;
+  padding: 0.5em 1.5em;
+  border: 2px solid var(--ter-clr);
+  border-radius: 2em;
+  background: var(--sec-clr);
+  color: var(--pri-clr);
+  cursor: pointer;
+  font-size: 0.9em;
+  transition:
+    background 0.2s,
+    color 0.2s;
+  justify-self: center;
+  margin-top: 0.5em;
+}
+
+.ability-show-more-btn:hover {
+  background: var(--ter-clr);
+  color: var(--sec-clr);
+}
+
+.ability-empty-msg {
+  opacity: 0.6;
+  font-style: italic;
+  padding: 1em 0;
+}
+
+.ability-submit-row {
+  margin-top: 1em;
+}
+
+/* Experience points summary */
+.exp-summary {
+  margin-bottom: 1em;
+}
+
+.exp-system-name {
+  display: block;
+  font-size: 0.85em;
+  opacity: 0.7;
+  margin-bottom: 0.4em;
+  font-style: italic;
+}
+
+.exp-stat-row {
+  display: flex;
+  gap: 0.75em;
+  flex-wrap: wrap;
+}
+
+.exp-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--sec-clr);
+  border: 2px solid var(--ter-clr);
+  border-radius: 0.6em;
+  padding: 0.5em 1.2em;
+  min-width: 70px;
+}
+
+.exp-stat-value {
+  font-size: 1.6em;
+  font-weight: bold;
+  color: var(--pri-clr);
+  line-height: 1.1;
+}
+
+.exp-stat-label {
+  font-size: 0.72em;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.2em;
+}
+
+.exp-stat-avail .exp-stat-value {
+  color: var(--ter-clr);
+}
+
+@media (max-width: 600px) {
+  .ability-cards-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ability-tab-btn {
+    font-size: 0.82em;
+    padding: 0.35em 0.85em;
+  }
+}
+
+#ability_empty_msg {
+  display: none;
+}
