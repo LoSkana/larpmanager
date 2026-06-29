@@ -54,16 +54,17 @@
     {% endif %}
     {% if character.exp_delivery_list.count %}
         <h2>{% trans "Deliveries" %}</h2>
-        <p>
+        <div class="exp-stat-row">
             {% for el in character.exp_delivery_list.all %}
-                {% include "elements/comma.html" %}
-                {% if exp_systems_data|length > 1 %}
-                    {{ el.name }} ({{ el.amount }}, {{ el.system.name }})
-                {% else %}
-                    {{ el.name }} ({{ el.amount }})
-                {% endif %}
+                <div class="exp-stat">
+                    <span class="exp-stat-value">{{ el.amount }}</span>
+                    <span class="exp-stat-label">
+                        {{ el.name }}
+                        {% if exp_systems_data|length > 1 %}({{ el.system.name }}){% endif %}
+                    </span>
+                </div>
             {% endfor %}
-        </p>
+        </div>
         <hr class="clear" />
     {% endif %}
 {% endif %}
