@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (
     login_orga,
     sidebar,
     submit_confirm,
-    get_modal_iframe, save_modal, click_and_wait_question,
+    get_modal_iframe, save_modal, click_and_wait_question, char_dual_pick,
 )
 
 pytestmark = pytest.mark.e2e
@@ -141,19 +141,11 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("Stats Test Plot")
 
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.fill("Test")
-    option = edit_iframe.get_by_role("option", name="Test Character")
-    option.wait_for(state="visible")
-    option.click()
+    char_dual_pick(edit_iframe, "Test", "Test Character")
     just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_1", "important role")
 
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.fill("Minor")
-    option = edit_iframe.get_by_role("option", name="Minor NPC")
-    option.wait_for(state="visible")
-    option.click()
+    char_dual_pick(edit_iframe, "Minor", "Minor NPC")
     just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_2", "$unimportant minor role")
 

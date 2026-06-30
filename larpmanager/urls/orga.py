@@ -1321,9 +1321,9 @@ urlpatterns = [
         name="orga_exp_criterions_delete",
     ),
     path(
-        "<slug:event_slug>/manage/experience/available/",
-        views_ox.orga_exp_available,
-        name="orga_exp_available",
+        "<slug:event_slug>/manage/characters/search/",
+        views_ox.orga_character_search,
+        name="orga_character_search",
     ),
     path(
         "<slug:event_slug>/manage/form/available/",
@@ -1424,11 +1424,6 @@ urlpatterns = [
         "<slug:event_slug>/manage/payments/<slug:payment_uuid>/delete/",
         views_oa.orga_payments_delete,
         name="orga_payments_delete",
-    ),
-    path(
-        "<slug:event_slug>/manage/payments/signups/available/",
-        views_oa.orga_payments_signups_available,
-        name="orga_payments_signups_available",
     ),
     path(
         "<slug:event_slug>/manage/credits/",
@@ -1709,11 +1704,6 @@ urlpatterns = [
         "<slug:event_slug>/manage/sensitive/",
         views_om.orga_sensitive,
         name="orga_sensitive",
-    ),
-    path(
-        "<slug:event_slug>/manage/multichoice/available",
-        views_ow.orga_multichoice_available,
-        name="orga_multichoice_available",
     ),
     path(
         "<slug:event_slug>/manage/factions/available",

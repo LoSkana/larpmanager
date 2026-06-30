@@ -307,7 +307,6 @@ from larpmanager.utils.services.association import (
 from larpmanager.utils.services.character import count_distinct_text_links, update_character_referenced_chars_background
 from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
-    copy_parent_event_to_campaign,
     create_default_event_setup,
     on_event_features_m2m_changed,
     prepare_campaign_event_data,
@@ -895,10 +894,6 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     # Clear event-related caches to ensure fresh data
     clear_event_cache_all_runs(instance)
     clear_event_features_cache(instance.id)
-
-    # Setup campaign inheritance if not explicitly skipped and not being deleted
-    if not getattr(instance, "_skip_campaign_setup", False) and instance.deleted is None:
-        copy_parent_event_to_campaign(instance)
 
     # Clear run and registration related caches
     clear_run_event_links_cache(instance)

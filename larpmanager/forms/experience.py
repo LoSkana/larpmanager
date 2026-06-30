@@ -20,17 +20,16 @@
 from typing import Any, ClassVar
 
 from django import forms
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.forms.base import BaseForm, BaseModelForm, MultichoiceMixin
+from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.forms.utils import (
     AbilityS2WidgetMulti,
     AbilityTemplateS2WidgetMulti,
     AbilityTypePxS2Widget,
+    CharacterDualListWidget,
     ComputedFieldS2Widget,
-    EventCharacterS2WidgetMulti,
     EventWritingOptionS2WidgetMulti,
     RunCampaignS2Widget,
     SystemExpS2Widget,
@@ -84,10 +83,8 @@ class ExpBaseForm(BaseModelForm):
         return instance
 
 
-class OrgaDeliveryExpForm(MultichoiceMixin, ExpBaseForm):
+class OrgaDeliveryExpForm(ExpBaseForm):
     """Form for OrgaDeliveryExp."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Delivery")
 
@@ -107,7 +104,7 @@ class OrgaDeliveryExpForm(MultichoiceMixin, ExpBaseForm):
         model = DeliveryExp
         exclude = ("number",)
 
-        widgets: ClassVar[dict] = {"characters": EventCharacterS2WidgetMulti, "system": SystemExpS2Widget}
+        widgets: ClassVar[dict] = {"characters": CharacterDualListWidget, "system": SystemExpS2Widget}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form with event configuration."""
@@ -122,17 +119,6 @@ class OrgaDeliveryExpForm(MultichoiceMixin, ExpBaseForm):
             self.instance._default_system = systems[0]  # noqa: SLF001
         elif "system" in self.fields:
             self.configure_field_event("system", event)
-
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="characters",
-                link_id="characters_available",
-                label=str(_("Show available characters")),
-                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
-                data={"type": self._meta.model.__name__.lower()},
-                ctx_edit_uuid=True,
-            )
 
 
 class OrgaAbilityTemplateExpForm(BaseModelForm):
@@ -149,10 +135,8 @@ class OrgaAbilityTemplateExpForm(BaseModelForm):
         widgets: ClassVar[dict] = {"descr": WritingTinyMCE()}
 
 
-class OrgaAbilityExpForm(MultichoiceMixin, ExpBaseForm):
+class OrgaAbilityExpForm(ExpBaseForm):
     """Form for OrgaAbilityExp."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Ability")
 
@@ -166,7 +150,7 @@ class OrgaAbilityExpForm(MultichoiceMixin, ExpBaseForm):
             "descr": WritingTinyMCE(),
             "system": SystemExpS2Widget,
             "typ": AbilityTypePxS2Widget,
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
             "template": AbilityTemplateS2WidgetMulti,
@@ -202,35 +186,6 @@ class OrgaAbilityExpForm(MultichoiceMixin, ExpBaseForm):
         if not exp_user:
             self.delete_field("visible")
 
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="characters",
-                link_id="characters_available",
-                label=str(_("Show available characters")),
-                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
-                data={"type": self._meta.model.__name__.lower()},
-                ctx_edit_uuid=True,
-            )
-            if "prerequisites" in self.fields:
-                self.add_multichoice_config(
-                    field_id="prerequisites",
-                    link_id="prerequisites_available",
-                    label=str(_("Show available abilities")),
-                    url=reverse("orga_exp_available", args=[run.get_slug()]),
-                    data={"type": "ability", "filter_context": "ability"},
-                    form_edit_uuid=True,
-                )
-            if "requirements" in self.fields:
-                self.add_multichoice_config(
-                    field_id="requirements",
-                    link_id="ability_requirements_available",
-                    label=str(_("Show available options")),
-                    url=reverse("orga_form_available", args=[run.get_slug()]),
-                    data={"type": "writing_option", "owner": "abilityexp", "field": "requirements"},
-                    form_edit_uuid=True,
-                )
-
     def clean(self) -> dict:
         """Validate that the ability is not listed as its own prerequisite."""
         cleaned_data = super().clean()
@@ -252,10 +207,8 @@ class OrgaAbilityTypeExpForm(BaseModelForm):
         exclude = ("number",)
 
 
-class OrgaRuleExpForm(MultichoiceMixin, BaseModelForm):
+class OrgaRuleExpForm(BaseModelForm):
     """Form for OrgaRuleExp."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Rule")
 
@@ -275,21 +228,9 @@ class OrgaRuleExpForm(MultichoiceMixin, BaseModelForm):
             # Configure abilities widget with event context
             self.configure_field_event(field, self.params.get("event"))
 
-        run = self.params.get("run")
-        if run and "abilities" in self.fields:
-            self.add_multichoice_config(
-                field_id="abilities",
-                link_id="rule_abilities_available",
-                label=str(_("Show available abilities")),
-                url=reverse("orga_exp_available", args=[run.get_slug()]),
-                data={"type": "ability"},
-            )
 
-
-class OrgaModifierExpForm(MultichoiceMixin, BaseModelForm):
+class OrgaModifierExpForm(BaseModelForm):
     """Form for OrgaModifierExp."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Rule")
 
@@ -313,39 +254,9 @@ class OrgaModifierExpForm(MultichoiceMixin, BaseModelForm):
         for field in ["abilities", "prerequisites", "requirements"]:
             self.configure_field_event(field, self.params.get("event"))
 
-        run = self.params.get("run")
-        if run:
-            if "abilities" in self.fields:
-                self.add_multichoice_config(
-                    field_id="abilities",
-                    link_id="modifier_abilities_available",
-                    label=str(_("Show available abilities")),
-                    url=reverse("orga_exp_available", args=[run.get_slug()]),
-                    data={"type": "ability"},
-                )
-            if "prerequisites" in self.fields:
-                self.add_multichoice_config(
-                    field_id="prerequisites",
-                    link_id="modifier_prerequisites_available",
-                    label=str(_("Show available abilities")),
-                    url=reverse("orga_exp_available", args=[run.get_slug()]),
-                    data={"type": "ability"},
-                )
-            if "requirements" in self.fields:
-                self.add_multichoice_config(
-                    field_id="requirements",
-                    link_id="modifier_requirements_available",
-                    label=str(_("Show available options")),
-                    url=reverse("orga_form_available", args=[run.get_slug()]),
-                    data={"type": "writing_option", "owner": "modifierexp", "field": "requirements"},
-                    form_edit_uuid=True,
-                )
 
-
-class OrgaCriterionExpForm(MultichoiceMixin, ExpBaseForm):
+class OrgaCriterionExpForm(ExpBaseForm):
     """Form for OrgaCriterionExp."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Criterion")
 
@@ -377,26 +288,6 @@ class OrgaCriterionExpForm(MultichoiceMixin, ExpBaseForm):
 
         for field in ["prerequisites", "requirements"]:
             self.configure_field_event(field, event)
-
-        run = self.params.get("run")
-        if run:
-            if "prerequisites" in self.fields:
-                self.add_multichoice_config(
-                    field_id="prerequisites",
-                    link_id="criterion_prerequisites_available",
-                    label=str(_("Show available abilities")),
-                    url=reverse("orga_exp_available", args=[run.get_slug()]),
-                    data={"type": "ability"},
-                )
-            if "requirements" in self.fields:
-                self.add_multichoice_config(
-                    field_id="requirements",
-                    link_id="criterion_requirements_available",
-                    label=str(_("Show available options")),
-                    url=reverse("orga_form_available", args=[run.get_slug()]),
-                    data={"type": "writing_option", "owner": "criterionexp", "field": "requirements"},
-                    form_edit_uuid=True,
-                )
 
     def clean(self) -> dict:
         """Validate that DIVISION criteria have a non-zero amount."""

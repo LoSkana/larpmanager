@@ -32,6 +32,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import (
     _select2_search_and_pick,
     _wait_lm_ready,
+    char_dual_pick,
     click_and_wait_question,
     expect_normalized,
     fill_tinymce,
@@ -147,7 +148,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(3), edit_iframe, "base")
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "base")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("standard")
     edit_iframe.locator("#id_cost").click()
@@ -161,7 +162,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(3), edit_iframe, "base")
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "base")
     edit_iframe.locator("#id_name").fill("double shield")
     edit_iframe.locator("#id_cost").click()
     edit_iframe.locator("#id_cost").fill("2")
@@ -180,7 +181,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.locator("[id='u2']").locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_text("---------").click()
-    edit_iframe.get_by_role("searchbox").nth(3).fill("test_template")
+    edit_iframe.locator(".select2-container--open .select2-search__field").fill("test_template")
     edit_iframe.get_by_role("option", name="test_template").click()
     save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
@@ -195,9 +196,7 @@ def delivery(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").fill("first live")
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_amount").fill("2")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     # check experience computation
@@ -428,7 +427,7 @@ def delivery_auto_populate(page: Any, live_server: Any) -> None:
 
     # Select run in auto_populate_run field
     edit_iframe.locator("#select2-id_auto_populate_run-container").click()
-    edit_iframe.get_by_role("searchbox").nth(1).fill("tes")
+    edit_iframe.locator(".select2-container--open .select2-search__field").fill("tes")
     edit_iframe.get_by_role("option", name="Test Larp").click()
 
     # Confirm the form
@@ -446,7 +445,7 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(3), edit_iframe, "base")
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "base")
     edit_iframe.locator("#id_name").fill("hidden_zero")
     edit_iframe.locator("#id_cost").fill("0")
     edit_iframe.locator("#id_visible").uncheck()

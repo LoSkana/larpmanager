@@ -35,7 +35,7 @@ from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
-from larpmanager.forms.utils import ReadOnlyWidget, WritingTinyMCE, css_delimeter
+from larpmanager.forms.utils import CharacterDualListWidget, ReadOnlyWidget, WritingTinyMCE, css_delimeter
 from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
@@ -64,49 +64,6 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
 logger = logging.getLogger(__name__)
-
-
-class MultichoiceMixin:
-    """Mixin that adds multichoice popup configuration to a form."""
-
-    def add_multichoice_config(
-        self,
-        field_id: str,
-        link_id: str,
-        label: str,
-        url: str,
-        data: dict | None = None,
-        *,
-        ctx_edit_uuid: bool = False,
-        form_edit_uuid: bool = False,
-        form_orga: bool = False,
-    ) -> None:
-        """Register a multichoice popup configuration on this form.
-
-        Args:
-            field_id: Django field name; template targets ``#id_{field_id}_tr td``.
-            link_id: Unique DOM id for the trigger link.
-            label: Already-translated string to display as the link text.
-            url: Fully resolved URL string for the AJAX POST request.
-            data: Dict of static POST data (default ``{}``).
-            ctx_edit_uuid: If True, template adds ``edit_uuid`` from context to POST data.
-            form_edit_uuid: If True, template adds ``edit_uuid`` from ``form.instance.uuid``.
-            form_orga: If True, template adds ``orga`` (1 if ``form.orga`` else 0) to POST data.
-        """
-        if not hasattr(self, "multichoice_configs"):
-            self.multichoice_configs = []
-        self.multichoice_configs.append(
-            {
-                "field_id": field_id,
-                "link_id": link_id,
-                "label": label,
-                "url": url,
-                "data": data or {},
-                "ctx_edit_uuid": ctx_edit_uuid,
-                "form_edit_uuid": form_edit_uuid,
-                "form_orga": form_orga,
-            }
-        )
 
 
 class FormMixin:
@@ -185,8 +142,11 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         for field in self.fields.values():
             # Check if field is a ModelChoiceField / ModelMultipleChoiceField
             if isinstance(field, forms.ModelChoiceField):
-                # Skip if it's a Select2 widget
-                if isinstance(field.widget, (s2forms.ModelSelect2Widget, s2forms.ModelSelect2MultipleWidget)):
+                # Skip if it's a Select2 or CharacterDualListWidget (handles its own UUID→PK mapping)
+                if isinstance(
+                    field.widget,
+                    (s2forms.ModelSelect2Widget, s2forms.ModelSelect2MultipleWidget, CharacterDualListWidget),
+                ):
                     continue
 
                 field.to_field_name = "uuid"
@@ -421,7 +381,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         for field in self.fields:
             if hasattr(self, "custom_field") and field in self.custom_field:
                 continue
-            if isinstance(self.fields[field].widget, s2forms.ModelSelect2MultipleWidget):
+            if isinstance(self.fields[field].widget, (s2forms.ModelSelect2MultipleWidget, CharacterDualListWidget)):
                 self._save_multi(field, instance)
 
     def _save_multi(self, field: str, instance: Any) -> None:

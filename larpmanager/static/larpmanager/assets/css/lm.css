@@ -3763,3 +3763,117 @@ body.floating_iframe #wrapper {
 #ability_empty_msg {
   display: none;
 }
+
+/* ---------------------------------------------------------------------------
+   Character dual-list widget
+   --------------------------------------------------------------------------- */
+
+.char-dual-hidden {
+  display: none;
+}
+
+.char-dual {
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+}
+
+.char-dual-col {
+  flex: 1 1 0;
+  min-width: 0;
+  border: 1px solid var(--pri-clr);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.char-dual-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.4em 0.6em;
+  background: rgba(var(--sec-rgb), 0.55);
+  color: var(--pri-clr);
+  font-weight: bold;
+}
+
+.char-dual-count {
+  background: rgba(var(--pri-rgb), 0.55);
+  color: var(--sec-clr);
+  border-radius: 10px;
+  padding: 0 0.5em;
+  font-size: 0.85em;
+}
+
+.char-dual-search {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.35em 0.5em;
+  border: none;
+  border-bottom: 1px solid var(--pri-clr);
+  outline: none;
+  font-size: 0.9em;
+}
+
+.char-dual-list {
+  list-style: none;
+  margin: 0;
+  padding: 0.2em 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.char-dual-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.3em 0.4em;
+  padding: 0.4em 0.65em;
+  border-radius: 6px;
+  border: 1px solid rgba(var(--pri-rgb), 0.15);
+  background: rgba(var(--pri-rgb), 0.04);
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+  font-size: 0.88em;
+}
+
+.char-dual-item:hover {
+  border-color: rgba(var(--pri-rgb), 0.5);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.char-dual-icon {
+  color: rgba(var(--ter-rgb), 0.5);
+  flex-shrink: 0;
+}
+
+.char-dual-num {
+  font-weight: bold;
+  color: rgba(var(--pri-rgb), 0.6);
+  min-width: 2rem;
+  font-size: 0.85em;
+  flex-shrink: 0;
+}
+
+.char-dual-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+  .char-dual {
+    flex-direction: column;
+  }
+
+  .char-dual-col {
+    width: 100%;
+  }
+
+  .char-dual-list {
+    max-height: 180px;
+  }
+}

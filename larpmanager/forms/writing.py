@@ -26,10 +26,10 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.question import get_cached_writing_questions
-from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, MultichoiceMixin
+from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm
 from larpmanager.forms.utils import (
+    CharacterDualListWidget,
     EventCharacterS2Widget,
-    EventCharacterS2WidgetMulti,
     RunStaffS2Widget,
     WritingTinyMCE,
 )
@@ -260,12 +260,12 @@ class BaseWritingForm(BaseRegistrationForm):
         return instance
 
 
-class OrgaPlotForm(MultichoiceMixin, WritingForm, BaseWritingForm):
+class OrgaPlotForm(WritingForm, BaseWritingForm):
     """Form for Plot."""
 
     load_templates: ClassVar[list] = ["plot"]
 
-    load_js: ClassVar[list] = ["multichoice", "plot-roles"]
+    load_js: ClassVar[list] = ["plot-roles"]
 
     page_title = _("Plot")
 
@@ -279,7 +279,7 @@ class OrgaPlotForm(MultichoiceMixin, WritingForm, BaseWritingForm):
         widgets: ClassVar[dict] = {
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "assigned": RunStaffS2Widget,
         }
 
@@ -317,17 +317,6 @@ class OrgaPlotForm(MultichoiceMixin, WritingForm, BaseWritingForm):
         self.role_help_text = _("This text will be added to the sheet of")
 
         self._init_special_fields()
-
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="characters",
-                link_id="characters_available",
-                label=str(_("Show available characters")),
-                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
-                data={"type": self._meta.model.__name__.lower()},
-                ctx_edit_uuid=True,
-            )
 
         # PLOT CHARACTERS REL
         self.add_char_finder = []
@@ -393,12 +382,10 @@ class OrgaPlotForm(MultichoiceMixin, WritingForm, BaseWritingForm):
         return instance
 
 
-class OrgaFactionForm(MultichoiceMixin, WritingForm, BaseWritingForm):
+class OrgaFactionForm(WritingForm, BaseWritingForm):
     """Form for Faction."""
 
     load_templates: ClassVar[list] = ["faction"]
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_title = _("Faction")
 
@@ -412,7 +399,7 @@ class OrgaFactionForm(MultichoiceMixin, WritingForm, BaseWritingForm):
         widgets: ClassVar[dict] = {
             "teaser": WritingTinyMCE(),
             "text": WritingTinyMCE(),
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "assigned": RunStaffS2Widget,
         }
 
@@ -445,17 +432,6 @@ class OrgaFactionForm(MultichoiceMixin, WritingForm, BaseWritingForm):
             _("Secret"): _("hidden faction visible only to assigned characters"),
         }
         self.fields["typ"].help_text = ", ".join([f"<b>{key}</b>: {value}" for key, value in help_texts.items()])
-
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="characters",
-                link_id="characters_available",
-                label=str(_("Show available characters")),
-                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
-                data={"type": self._meta.model.__name__.lower()},
-                ctx_edit_uuid=True,
-            )
 
 
 class OrgaQuestTypeForm(WritingForm):
@@ -579,14 +555,12 @@ class OrgaPrologueTypeForm(WritingForm):
         fields: ClassVar[list] = ["name", "event"]
 
 
-class OrgaPrologueForm(MultichoiceMixin, WritingForm, BaseWritingForm):
+class OrgaPrologueForm(WritingForm, BaseWritingForm):
     """Form for Prologue."""
 
     page_title = _("Prologue")
 
     page_info = _("Manage all prologues for this event")
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     class Meta:
         model = Prologue
@@ -595,7 +569,7 @@ class OrgaPrologueForm(MultichoiceMixin, WritingForm, BaseWritingForm):
 
         widgets: ClassVar[dict] = {
             "text": WritingTinyMCE(),
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "assigned": RunStaffS2Widget,
         }
 
@@ -612,33 +586,20 @@ class OrgaPrologueForm(MultichoiceMixin, WritingForm, BaseWritingForm):
         self.reorder_field("characters")
         self._init_special_fields()
 
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="characters",
-                link_id="characters_available",
-                label=str(_("Show available characters")),
-                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
-                data={"type": self._meta.model.__name__.lower()},
-                ctx_edit_uuid=True,
-            )
 
-
-class OrgaSpeedLarpForm(MultichoiceMixin, WritingForm):
+class OrgaSpeedLarpForm(WritingForm):
     """Form for SpeedLarp."""
 
     page_title = _("Speed larp")
 
     page_info = _("Manage speed larps for this event")
 
-    load_js: ClassVar[list] = ["multichoice"]
-
     class Meta:
         model = SpeedLarp
         exclude = ("teaser", "temp", "hide")
 
         widgets: ClassVar[dict] = {
-            "characters": EventCharacterS2WidgetMulti,
+            "characters": CharacterDualListWidget,
             "text": WritingTinyMCE(),
             "assigned": RunStaffS2Widget,
         }
@@ -646,14 +607,3 @@ class OrgaSpeedLarpForm(MultichoiceMixin, WritingForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize writing element form."""
         super().__init__(*args, **kwargs)
-
-        run = self.params.get("run")
-        if run:
-            self.add_multichoice_config(
-                field_id="characters",
-                link_id="characters_available",
-                label=str(_("Show available characters")),
-                url=reverse("orga_multichoice_available", args=[run.get_slug()]),
-                data={"type": self._meta.model.__name__.lower()},
-                ctx_edit_uuid=True,
-            )

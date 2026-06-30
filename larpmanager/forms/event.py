@@ -280,18 +280,18 @@ class OrgaFeatureForm(FeatureForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and features."""
         super().__init__(*args, **kwargs)
-        self._init_features(is_association=False)
+        source = self.instance.parent if self.instance.parent_id else self.instance
+        self._init_features(is_association=False, source=source)
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and update event features cache."""
-        # Save form without committing to database yet
         instance: Event = super().save(commit=False)
 
-        # Update associated features for this event
-        self._save_features(instance)
+        # Save features to parent if campaign child, otherwise to self
+        target = instance.parent if instance.parent_id else instance
+        self._save_features(target)
 
-        # Invalidate cached event features
-        clear_event_features_cache(instance.id)
+        clear_event_features_cache(target.id)
 
         return instance
 
@@ -315,6 +315,19 @@ class OrgaConfigForm(ConfigForm):
         """Initialize form and prevent registration cancellation."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
+
+    def _get_config_save_target(self, instance: Any) -> Any:
+        """Save configs to parent event if one exists, otherwise to the event itself."""
+        return instance.parent if instance.parent_id else instance
+
+    def _get_all_element_configs(self) -> dict[str, str]:
+        """Read configs from parent event if one exists, so displayed values match runtime behavior."""
+        source = self.instance.parent if self.instance.parent_id else self.instance
+        config_mapping = {}
+        if source.pk:
+            for config in source.configs.all():
+                config_mapping[config.name] = config.value
+        return config_mapping
 
     def set_configs(self) -> None:
         """Configure form fields for event settings and features."""

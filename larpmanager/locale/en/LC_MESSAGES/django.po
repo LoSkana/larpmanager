@@ -169,9 +169,6 @@ msgstr ""
 msgid "Donations"
 msgstr ""
 
-msgid "Show available signups"
-msgstr ""
-
 msgid "Invoices"
 msgstr ""
 
@@ -1036,12 +1033,6 @@ msgstr ""
 msgid "Characters"
 msgstr ""
 
-msgid "Show available characters"
-msgstr ""
-
-msgid "Show available players"
-msgstr ""
-
 msgid "--- NOT ASSIGNED ---"
 msgstr ""
 
@@ -1056,12 +1047,6 @@ msgid "Abilities"
 msgstr ""
 
 msgid "Delivery"
-msgstr ""
-
-msgid "Show available abilities"
-msgstr ""
-
-msgid "Show available deliveries"
 msgstr ""
 
 msgid "Manage the questions displayed in the character writing form"
@@ -2189,9 +2174,6 @@ msgid ""
 "this event"
 msgstr ""
 
-msgid "Show available options"
-msgstr ""
-
 msgid "An ability cannot be a prerequisite of itself."
 msgstr ""
 
@@ -2524,9 +2506,6 @@ msgstr ""
 msgid "Main"
 msgstr ""
 
-msgid "Show available members"
-msgstr ""
-
 msgid "Free donation"
 msgstr ""
 
@@ -2564,9 +2543,6 @@ msgid "Registration form"
 msgstr ""
 
 msgid "--- Empty"
-msgstr ""
-
-msgid "Show available tickets"
 msgstr ""
 
 msgid ""
@@ -2642,9 +2618,6 @@ msgstr ""
 msgid "Warehouse items"
 msgstr ""
 
-msgid "Show available tags"
-msgstr ""
-
 msgid ""
 "Manage the physical containers used to organize and store warehouse items"
 msgstr ""
@@ -2659,9 +2632,6 @@ msgid "Warehouse tags"
 msgstr ""
 
 msgid "Items"
-msgstr ""
-
-msgid "Show available items"
 msgstr ""
 
 msgid "Track the assignment of warehouse items to event areas for each run"
@@ -5848,6 +5818,12 @@ msgstr ""
 
 msgid ""
 "We could not find the event indicated in the url; perhaps it is one of these"
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+msgid "Filter selected"
 msgstr ""
 
 msgid "Go to the casting for"
@@ -9108,9 +9084,6 @@ msgstr ""
 msgid "Use the button above to create a new area"
 msgstr ""
 
-msgid "Selected"
-msgstr ""
-
 msgid "No items are available in the warehouse to assign to this area"
 msgstr ""
 
@@ -10791,6 +10764,9 @@ msgid "Fields"
 msgstr ""
 
 msgid "No elements are currently available"
+msgstr ""
+
+msgid "Show available characters"
 msgstr ""
 
 msgid "You must be logged in to view this page"

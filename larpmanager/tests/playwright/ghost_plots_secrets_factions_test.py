@@ -32,6 +32,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import (
     _select2_search_and_pick,
     _wait_lm_ready,
+    char_dual_pick,
     click_and_wait_question,
     expect_normalized,
     fill_tinymce,
@@ -82,14 +83,14 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").fill("eeee2")
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("2")
-    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "te")
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_cost").click()
     edit_iframe.locator("#id_cost").fill("1")
-    _select2_search_and_pick(edit_iframe.get_by_role("row", name="Characters").get_by_role("searchbox"), edit_iframe, "te")
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     # create plots, assign them to player
@@ -99,14 +100,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("first")
-    # set char role
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.click()
-    searchbox.fill("te")
-    # Wait for the option to appear and click it
-    option = edit_iframe.get_by_role("option", name="Test Character")
-    option.wait_for(state="visible")
-    option.click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_1", "prisdsa")
     save_modal(page, edit_iframe)
@@ -115,14 +109,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("qweeerr")
-    # set char role
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.click()
-    searchbox.fill("te")
-    # Wait for the option to appear and click it
-    option = edit_iframe.get_by_role("option", name="Test Character")
-    option.wait_for(state="visible")
-    option.click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     just_wait(page, big=True)
     fill_tinymce(edit_iframe, "ch_1", "poelea s")
     save_modal(page, edit_iframe)
@@ -134,7 +121,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("eefqq")
-    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "tes")
+    char_dual_pick(edit_iframe, "tes", "Test Character")
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
@@ -142,10 +129,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("g")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("gggerwe")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("ted")
-    edit_iframe.get_by_text("No results found").click()
-    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "tes")
+    char_dual_pick(edit_iframe, "tes", "Test Character")
     save_modal(page, edit_iframe)
 
     # add new field

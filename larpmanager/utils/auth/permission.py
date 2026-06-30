@@ -187,7 +187,6 @@ def get_index_association_permissions(
         has_default=is_admin,
     )
 
-    # Set sidebar state from user session
     context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
 

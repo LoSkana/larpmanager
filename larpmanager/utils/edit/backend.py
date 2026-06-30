@@ -957,7 +957,7 @@ def backend_order(
 
 def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> None:
     """Bulk-set order field from a UUID list using index * 10 spacing."""
-    event = context["event"]
+    event = context["event"].get_class_parent(model_class)
     objects = {str(obj.uuid): obj for obj in model_class.objects.filter(event=event, uuid__in=uuids)}
     to_update = []
     for i, uuid in enumerate(uuids):
