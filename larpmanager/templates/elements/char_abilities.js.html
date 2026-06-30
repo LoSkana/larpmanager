@@ -4,37 +4,160 @@
 const abilities = {{ available | safe }};
 
 window.addEventListener('DOMContentLoaded', function() {
-    $(function() {
-        $('form').on('submit', function() {
-            return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you sure" %}{% endfilter %}?');
-        });
-
-        $('input[type="submit"]').prop('disabled', true);
-
-        $('#ability_type').on('change', function () {
-            const typeId = $(this).val();
-            const $abilitySelect = $('#ability_select');
-            var selectAbilityLabel = "{% filter escapejs %}{% trans 'Select ability' %}{% endfilter %}";
-            selectAbilityLabel = selectAbilityLabel.replace(/["']/g, function(m){return m === '"' ? '&quot;' : '&#39;'})
-            $abilitySelect.empty().append(
-                '<option value="" disabled selected>--- ' + selectAbilityLabel + '</option>'
-            );
-            if (abilities[typeId] && abilities[typeId]['list']) {
-                $.each(abilities[typeId]['list'], function (id, label) {
-                    $abilitySelect.append($('<option>', { value: id, text: label }));
-                });
-            }
-        });
-
-        $('#ability_select').on('change', function () {
-            $('input[type="submit"]').prop('disabled', false);
-        });
-
-        const $typeSelect = $('#ability_type');
-        if ($typeSelect.children('option').length > 0) {
-            $typeSelect.prop('selectedIndex', 0).trigger('change');
-        }
+    $('form').on('submit', function() {
+        return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you sure" %}{% endfilter %}?');
     });
+
+    const typeOrder = {{ type_available | safe }};
+    const typeIds = Object.keys(typeOrder);
+
+    let activeType = null;
+    let selectedUuid = null;
+
+    const $tabs = $('#ability_type_tabs');
+    const $grid = $('#ability_cards_grid');
+    const $emptyMsg = $('#ability_empty_msg');
+    const $search = $('#ability_search');
+    const $submit = $('input[type="submit"]');
+    const $hiddenType = $('#ability_type');
+    const $hiddenAbility = $('#ability_select');
+
+    var labelAll = "{% filter escapejs %}{% trans 'All' %}{% endfilter %}";
+    var labelShowMore = "{% filter escapejs %}{% trans 'Show more' %}{% endfilter %}";
+    var labelShowLess = "{% filter escapejs %}{% trans 'Show less' %}{% endfilter %}";
+    const PAGE_SIZE = 10;
+    let expanded = false;
+
+    function buildTabs() {
+        $tabs.empty();
+        var $allBtn = $('<button>', {
+            type: 'button',
+            text: labelAll,
+            'data-typ': '',
+            'class': 'ability-tab-btn' + (activeType === null ? ' active' : '')
+        });
+        $allBtn.on('click', function() {
+            activeType = null;
+            resetSelection();
+            $tabs.find('.ability-tab-btn').removeClass('active');
+            $(this).addClass('active');
+            renderCards();
+        });
+        $tabs.append($allBtn);
+
+        typeIds.forEach(function(typId) {
+            const name = typeOrder[typId];
+            const $btn = $('<button>', {
+                type: 'button',
+                text: name,
+                'data-typ': typId,
+                'class': 'ability-tab-btn' + (typId === activeType ? ' active' : '')
+            });
+            $btn.on('click', function() {
+                activeType = typId;
+                resetSelection();
+                $tabs.find('.ability-tab-btn').removeClass('active');
+                $(this).addClass('active');
+                renderCards();
+            });
+            $tabs.append($btn);
+        });
+    }
+
+    function resetSelection() {
+        selectedUuid = null;
+        expanded = false;
+        $hiddenType.val('');
+        $hiddenAbility.val('');
+        $submit.prop('disabled', true);
+    }
+
+    function buildCard(uuid, typId, ab) {
+        const isSelected = uuid === selectedUuid;
+        const $card = $('<div>', {
+            'class': 'ability-card' + (isSelected ? ' selected' : ''),
+            'data-uuid': uuid,
+            'data-typ': typId
+        });
+        const $header = $('<div class="ability-card-header">');
+        $header.append($('<span class="ability-card-name">').text(ab.name));
+        const costLabel = ab.system ? ab.cost + ' [' + ab.system + ']' : String(ab.cost);
+        $header.append($('<span class="ability-cost-badge">').text(costLabel));
+        $card.append($header);
+        if (ab.descr) {
+            const stripped = ab.descr.replace(/<[^>]+>/g, '');
+            const preview = stripped.length > 100 ? stripped.slice(0, 120) + '...' : stripped;
+            $card.append($('<p class="ability-card-descr">').text(preview));
+        }
+        if (ab.prereqs && ab.prereqs.length > 0) {
+            const $prereq = $('<p class="ability-card-prereqs">');
+            $prereq.text('{% filter escapejs %}{% trans "Requires" %}{% endfilter %}: ' + ab.prereqs.join(', '));
+            $card.append($prereq);
+        }
+        $card.on('click', function() {
+            selectedUuid = uuid;
+            $hiddenType.val(typId);
+            $hiddenAbility.val(uuid);
+            $submit.prop('disabled', false);
+            $grid.find('.ability-card').removeClass('selected');
+            $(this).addClass('selected');
+        });
+        return $card;
+    }
+
+    function renderCards() {
+        $grid.empty();
+        const query = $search.val().toLowerCase().trim();
+        const allMatches = [];
+
+        var typesToRender = activeType ? [activeType] : typeIds;
+        typesToRender.forEach(function(typId) {
+            const typData = abilities[typId];
+            if (!typData) return;
+            const list = typData.list || {};
+            Object.keys(list).forEach(function(uuid) {
+                const ab = list[uuid];
+                if (query && ab.name.toLowerCase().indexOf(query) === -1) return;
+                allMatches.push({uuid: uuid, typId: typId, ab: ab});
+            });
+        });
+
+        if (allMatches.length === 0) {
+            $emptyMsg.show();
+            return;
+        }
+        $emptyMsg.hide();
+
+        const visible = expanded ? allMatches : allMatches.slice(0, PAGE_SIZE);
+        visible.forEach(function(m) {
+            $grid.append(buildCard(m.uuid, m.typId, m.ab));
+        });
+
+        if (allMatches.length > PAGE_SIZE) {
+            const $toggle = $('<button>', {
+                type: 'button',
+                'class': 'ability-show-more-btn',
+                text: expanded ? labelShowLess : labelShowMore
+            });
+            $toggle.on('click', function() {
+                expanded = !expanded;
+                renderCards();
+            });
+            $grid.append($toggle);
+        }
+    }
+
+    $search.on('input', function() {
+        selectedUuid = null;
+        expanded = false;
+        $hiddenType.val('');
+        $hiddenAbility.val('');
+        $submit.prop('disabled', true);
+        renderCards();
+    });
+
+    buildTabs();
+    renderCards();
 });
 
 </script>

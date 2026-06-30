@@ -1349,6 +1349,9 @@ msgstr "Responder a"
 msgid "Required"
 msgstr "Requerido"
 
+msgid "Requires"
+msgstr "Se necesita"
+
 msgid "Resource"
 msgstr "Recursos"
 
@@ -1609,6 +1612,12 @@ msgstr "Establecer búsqueda"
 
 msgid "Short url"
 msgstr "URL corta"
+
+msgid "Show less"
+msgstr "Mostrar menos"
+
+msgid "Show more"
+msgstr "Ver más"
 
 msgid "SpeedLarp"
 msgstr "Escenas Previas"
@@ -2947,9 +2956,6 @@ msgstr "Solicitud firmada"
 msgid "Returning type"
 msgstr "Tipo de devolución"
 
-msgid "Select ability"
-msgstr "Seleccionar habilidad"
-
 msgid "Sensitive data"
 msgstr "Datos sensibles"
 
@@ -3435,6 +3441,9 @@ msgstr "Solicitud aprobada"
 
 msgid "Required feature"
 msgstr "Característica requerida"
+
+msgid "Search abilities"
+msgstr "Funciones de búsqueda"
 
 msgid "Selected options"
 msgstr "Opciones seleccionadas"
@@ -4011,6 +4020,9 @@ msgstr "Idioma de navegación"
 
 msgid "New shuttle request"
 msgstr "Nueva solicitud de transporte"
+
+msgid "No abilities found."
+msgstr "No se han encontrado habilidades."
 
 msgid "No characters found"
 msgstr "No se han encontrado personajes"

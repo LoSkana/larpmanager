@@ -289,36 +289,39 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Abilities").click()
     _wait_lm_ready(page)
+    expect(page.locator(".ability-cards-grid")).to_contain_text("double shield")
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
-        Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All base ability double shield 2 This text should show Requires: sword1
+        select the new ability to get
+        Experience points 12 Total 1 Used 11 Available Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
 
     # get ability
-    page.locator("#ability_select").select_option("u2")
-    page.get_by_role("button", name="Submit", exact=True).click()
+    page.locator(".ability-card", has_text="double shield").click()
+    submit_confirm(page)
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
-        """Obtain ability Select the new ability to get --- Select ability
-        Experience points Total Used Available 12 3 9 Abilities base ability double shield (2)
-        This text should show sword1 (1) sdsfdsfds Deliveries first live (2) """,
+        """Obtain ability all No abilities found. Select the new ability to get
+        Experience points 12 Total 3 Used 9 Available Abilities base ability double shield (2)
+        This text should show sword1 (1) sdsfdsfds deliveries 2 first live """,
     )
-    expect(page.locator("#ability_select")).not_to_contain_text("double shield")
+    expect(page.locator(".ability-cards-grid")).not_to_contain_text("double shield")
 
     # remove ability
     page.get_by_role("heading", name=re.compile("^double shield")).get_by_role("link").click()
     _wait_lm_ready(page)
+    expect(page.locator(".ability-cards-grid")).to_contain_text("double shield")
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
-        Experience points Total Used Available 12 1 11
-        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All base ability double shield 2 This text should show Requires: sword1
+        Select the new ability to get
+        Experience points 12 Total 1 Used 11 Available
+        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
-    expect_normalized(page, page.locator("#ability_select"), "--- Select ability double shield - 2")
 
 
 def modifiers(page: Any, live_server: Any) -> None:
@@ -340,13 +343,14 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Abilities").click()
 
-    # ability is not there
+    # ability is not bought
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
-        Experience points Total Used Available 12 1 11
-        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All base ability double shield 2
+        this text should show requires: sword1 Select the new ability to get
+        Experience points 12 Total 1 Used 11 Available
+        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -357,9 +361,9 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get --- Select ability
-        Experience points Total Used Available 12 1 11 Abilities base ability double shield (0)
-        This text should show sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All No abilities found. Select the new ability to get
+        Experience points 12 Total 1 Used 11 Available Abilities base ability double shield (0)
+        This text should show sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -370,9 +374,10 @@ def modifiers(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
-        Experience points Total Used Available 12 1 11
-        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All base ability double shield 2
+        this text should show requires: sword1 Select the new ability to get
+        Experience points 12 Total 1 Used 11 Available
+        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
 
     # now test increase cost modifiers
@@ -392,15 +397,18 @@ def modifiers(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
+    page.get_by_role("link", name="Edit").click()
+    page.locator('label[for="id_que_u5_0"]').click()
+    submit_confirm(page)
     page.get_by_role("link", name="Abilities").click()
-    page.locator("#ability_select").select_option("u2")
+    page.locator(".ability-card", has_text="double shield").click()
     submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get --- Select ability
-        Experience points Total Used Available 12 4 8 Abilities base ability double shield (3)
-        This text should show sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All No abilities found. Select the new ability to get
+        Experience points 12 Total 4 Used 8 Available Abilities base ability double shield (3)
+        This text should show sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
 
 

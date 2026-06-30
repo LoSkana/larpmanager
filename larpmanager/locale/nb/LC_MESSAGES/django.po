@@ -1349,6 +1349,9 @@ msgstr "Svar til"
 msgid "Required"
 msgstr "Nødvendig"
 
+msgid "Requires"
+msgstr "Krav"
+
 msgid "Resource"
 msgstr "Ressurs"
 
@@ -1609,6 +1612,12 @@ msgstr "Sett oppdrag"
 
 msgid "Short url"
 msgstr "Kort nettadresse"
+
+msgid "Show less"
+msgstr "Vis mindre"
+
+msgid "Show more"
+msgstr "Vis mer"
 
 msgid "SpeedLarp"
 msgstr "SpeedLarp"
@@ -2947,9 +2956,6 @@ msgstr "Signert forespørsel"
 msgid "Returning type"
 msgstr "Avkastningstype"
 
-msgid "Select ability"
-msgstr "Velg evne"
-
 msgid "Sensitive data"
 msgstr "Sensitive data"
 
@@ -3435,6 +3441,9 @@ msgstr "Anmodning godkjent"
 
 msgid "Required feature"
 msgstr "Nødvendig funksjon"
+
+msgid "Search abilities"
+msgstr "Søkefunksjoner"
 
 msgid "Selected options"
 msgstr "Utvalgte alternativer"
@@ -4011,6 +4020,9 @@ msgstr "Navigasjonsspråk"
 
 msgid "New shuttle request"
 msgstr "Ny forespørsel om skyttelbuss"
+
+msgid "No abilities found."
+msgstr "Ingen evner funnet."
 
 msgid "No characters found"
 msgstr "Ingen tegn funnet"

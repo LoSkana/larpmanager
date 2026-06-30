@@ -1349,6 +1349,9 @@ msgstr "Svara på"
 msgid "Required"
 msgstr "Krävs"
 
+msgid "Requires"
+msgstr "Kräver"
+
 msgid "Resource"
 msgstr "Resurs"
 
@@ -1609,6 +1612,12 @@ msgstr "Ställ in uppdrag"
 
 msgid "Short url"
 msgstr "Kort url"
+
+msgid "Show less"
+msgstr "Visa mindre"
+
+msgid "Show more"
+msgstr "Visa mer"
 
 msgid "SpeedLarp"
 msgstr "SpeedLarp"
@@ -2947,9 +2956,6 @@ msgstr "Undertecknad begäran"
 msgid "Returning type"
 msgstr "Typ av retur"
 
-msgid "Select ability"
-msgstr "Välj förmåga"
-
 msgid "Sensitive data"
 msgstr "Känsliga uppgifter"
 
@@ -3435,6 +3441,9 @@ msgstr "Begäran godkänd"
 
 msgid "Required feature"
 msgstr "Obligatorisk funktion"
+
+msgid "Search abilities"
+msgstr "Sökfunktioner"
 
 msgid "Selected options"
 msgstr "Valda alternativ"
@@ -4011,6 +4020,9 @@ msgstr "Språk för navigering"
 
 msgid "New shuttle request"
 msgstr "Ny förfrågan om skyttel"
+
+msgid "No abilities found."
+msgstr "Inga förmågor hittades."
 
 msgid "No characters found"
 msgstr "Inga tecken hittades"
