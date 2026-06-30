@@ -39,7 +39,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm, sidebar, save_modal, _wait_select2_results,
+    submit_confirm, sidebar, save_modal, _wait_select2_results, topbar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -176,8 +176,8 @@ def test_faction_all(pw_page: Any) -> None:
     go_to(page, live_server, "/")
 
     # Navigate to factions gallery
-    page.get_by_role("link", name="Test Larp").click()
-    page.get_by_role("link", name="Factions").click()
+    topbar(page, "Test Larp")
+    sidebar(page, "Factions")
 
     # Verify PRIMARY and TRANSVERSAL factions are visible
     expect_normalized(page, page.locator("#one"),
@@ -277,7 +277,7 @@ def test_faction_all(pw_page: Any) -> None:
     go_to(page, live_server, "/")
 
     # Navigate to Character Alpha
-    page.get_by_role("link", name="Test Larp").click()
+    topbar(page, "Test Larp")
     page.get_by_role("link", name="Character Alpha").first.click()
 
     # Verify character info are visible

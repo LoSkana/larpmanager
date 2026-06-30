@@ -323,6 +323,9 @@ msgstr "utilisé"
 msgid "Actor"
 msgstr "Acteur"
 
+msgid "Admin"
+msgstr "Admin"
+
 msgid "Album"
 msgstr "Albums"
 
@@ -1126,6 +1129,9 @@ msgstr "Attribuer"
 
 msgid "Auto buy"
 msgstr "Achat d'automobiles"
+
+msgid "Calendar"
+msgstr "Agenda"
 
 msgid "Campaign"
 msgstr "Campagne"
@@ -2156,6 +2162,9 @@ msgstr "Demande de"
 msgid "Rotate left"
 msgstr "Roue gauche"
 
+msgid "Scroll left"
+msgstr "Fais défiler vers la gauche"
+
 msgid "Secret link"
 msgstr "Lien secret"
 
@@ -2402,6 +2411,9 @@ msgstr "Exigences"
 msgid "Rotate right"
 msgstr "Roue droite"
 
+msgid "Scroll right"
+msgstr "Fais défiler vers la droite"
+
 msgid "See you soon"
 msgstr "Nous vous attendons"
 
@@ -2410,6 +2422,9 @@ msgstr "Exposition historique"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tech Support"
+msgstr "Assistance technique"
 
 msgid "Tell me more"
 msgstr "En savoir plus"
@@ -2660,6 +2675,9 @@ msgstr "Code personnel"
 
 msgid "Personal data"
 msgstr "Données personnelles"
+
+msgid "Personal info"
+msgstr "Informations personnelles"
 
 msgid "Phone contact"
 msgstr "Contact téléphonique"
@@ -9273,11 +9291,6 @@ msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 "Voulez-vous gérer les personnages attribués aux participants inscrits "
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Si coché : affiche un lien dans la barre supérieure pour afficher tous les "
-"caractères de l'utilisateur"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr ""
 "Indique si la réduction est visible et utilisable par les participants"
@@ -9380,6 +9393,11 @@ msgstr ""
 msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Si coché : Envoyer un e-mail aux organisateurs pour chaque paiement reçu"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Si cette case est cochée : affiche un lien dans la barre latérale permettant"
+" de voir tous les personnages de l'utilisateur"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
@@ -9576,12 +9594,6 @@ msgstr ""
 "de vérifier les entrées marquées d'un astérisque"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Si coché : affiche un lien dans la barre supérieure pour afficher les "
-"enregistrements de tous les utilisateurs"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Liste des utilisateurs qui ne se sont pas inscrits à une prochaine édition "
@@ -9705,6 +9717,12 @@ msgid ""
 msgstr ""
 "Si coché : envoie au courrier principal une copie de tous les courriers "
 "envoyés aux participants"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Si cette case est cochée : affiche un lien dans la barre latérale permettant"
+" de consulter toutes les inscriptions de l'utilisateur"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

@@ -442,8 +442,8 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     key = f"{registration.id}_{registration.num_payments}"
 
     # Load association configuration for payment display
-    context["association"] = Association.objects.get(pk=context["association_id"])
-    context["hide_amount"] = context["association"].get_config("payment_hide_amount", default_value=False)
+    association_obj = Association.objects.get(pk=context["association_id"])
+    context["hide_amount"] = association_obj.get_config("payment_hide_amount", default_value=False)
 
     # Pre-select payment method if specified
     if method:

@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
-    get_modal_iframe, save_modal
+    get_modal_iframe, save_modal, topbar
 
 pytestmark = pytest.mark.e2e
 
@@ -74,15 +74,20 @@ def test_translations_text(pw_page: Any) -> None:
     page.get_by_label("Select Language").click()
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "BUONGIORNO")
-    expect_normalized(page, page.locator("#topbar"), "Contabilità Profilo")
+    topbar(page, "Profilo")
+    expect_normalized(page, page.locator("#sidebar"), "Dati personali")
+
 
     go_to(page, live_server, "/language")
     page.get_by_label("Seleziona la lingua").select_option("fr")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "bonjour")
-    expect_normalized(page, page.locator("#topbar"), "Comptabilité Profil")
+    topbar(page, "Profil")
+    expect_normalized(page, page.locator("#sidebar"), "Informations personnelles")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Sélectionner la langue").select_option("de")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Hello")
+    topbar(page, "Profil")
+    expect_normalized(page, page.locator("#sidebar"), "Persönliche Angaben")

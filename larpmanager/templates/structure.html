@@ -129,24 +129,28 @@
         </noscript>
     </head>
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {{ effective_version|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}">
+          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {{ effective_version|default:association.assoc_version|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
-                {% if user.is_authenticated %}
-                    {% if topbar_admin %}
-                        {% include "elements/structure/topbar-admin.html" %}
+                {% with effective_version|default:association.assoc_version as eff_ver %}
+                    {% if eff_ver >= 22 %}
+                        {% include "elements/structure/topbar-v22.html" %}
+                    {% elif user.is_authenticated %}
+                        {% if topbar_admin %}
+                            {% include "elements/structure/topbar-admin.html" %}
+                        {% else %}
+                            {% include "elements/structure/topbar-user.html" %}
+                        {% endif %}
                     {% else %}
-                        {% include "elements/structure/topbar-user.html" %}
+                        {% include "elements/structure/topbar.html" %}
                     {% endif %}
-                {% else %}
-                    {% include "elements/structure/topbar.html" %}
-                {% endif %}
+                    {% include "elements/structure/sidebar.html" %}
+                {% endwith %}
             {% endif %}
-            {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if manage %}manage{% endif %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% if not frame and association.id != 0 %}topbar{% endif %}">
+                 class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% with effective_version|default:association.assoc_version as eff_ver %} {% if eff_ver >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} {% endwith %} topbar{% endif %} ">
                 {% block main %}
                 {% endblock main %}
             </div>

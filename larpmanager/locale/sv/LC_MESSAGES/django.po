@@ -323,6 +323,9 @@ msgstr "används"
 msgid "Actor"
 msgstr "Skådespelare"
 
+msgid "Admin"
+msgstr "Admin"
+
 msgid "Album"
 msgstr "Album"
 
@@ -1126,6 +1129,9 @@ msgstr "Tilldela"
 
 msgid "Auto buy"
 msgstr "Köp av bil"
+
+msgid "Calendar"
+msgstr "Kalender"
 
 msgid "Campaign"
 msgstr "Kampanj"
@@ -2156,6 +2162,9 @@ msgstr "Begäran om"
 msgid "Rotate left"
 msgstr "Vänster hjul"
 
+msgid "Scroll left"
+msgstr "Bläddra åt vänster"
+
 msgid "Secret link"
 msgstr "Hemlig länk"
 
@@ -2402,6 +2411,9 @@ msgstr "Krav och önskemål"
 msgid "Rotate right"
 msgstr "Höger hjul"
 
+msgid "Scroll right"
+msgstr "Bläddra åt höger"
+
 msgid "See you soon"
 msgstr "Vi väntar på dig"
 
@@ -2410,6 +2422,9 @@ msgstr "Historisk utställning"
 
 msgid "Subscription"
 msgstr "Prenumeration"
+
+msgid "Tech Support"
+msgstr "Teknisk support"
 
 msgid "Tell me more"
 msgstr "Ta reda på mer"
@@ -2659,6 +2674,9 @@ msgid "Personal code"
 msgstr "Personlig kod"
 
 msgid "Personal data"
+msgstr "Personuppgifter"
+
+msgid "Personal info"
 msgstr "Personuppgifter"
 
 msgid "Phone contact"
@@ -9050,11 +9068,6 @@ msgstr "Datum då medlemskapet officiellt godkändes av organisationen"
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Vill du hantera karaktärer som tilldelats registrerade deltagare"
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Om markerad: visar en länk i det övre fältet för att visa alla användares "
-"tecken"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Anger om rabatten är synlig och användbar för deltagarna"
 
@@ -9144,6 +9157,11 @@ msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Om markerad: Skicka ett e-postmeddelande till arrangörerna för varje "
 "mottagen betalning"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Om rutan är markerad: visar en länk i sidofältet för att visa alla "
+"användarens karaktärer"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
@@ -9313,12 +9331,6 @@ msgstr ""
 "poster som är markerade"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Om markerad: visar en länk i toppfältet för att visa alla användares "
-"registreringar"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Lista över användare som inte har registrerat sig för en framtida session av"
@@ -9438,6 +9450,12 @@ msgid ""
 msgstr ""
 "Om markerad: Skickar huvudmailet en kopia av alla mail som skickats till "
 "deltagarna"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Om rutan är markerad: visar en länk i sidofältet för att visa alla "
+"användarens registreringar"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

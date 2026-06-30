@@ -214,6 +214,27 @@ function initSidebar() {
     });
 
     show_sidebar_active();
+
+    var collapseBtn = document.getElementById('sidebar-collapse-btn');
+    if (collapseBtn) {
+        var sidebar = document.getElementById('sidebar');
+        var pageWrapper = document.getElementById('page-wrapper');
+        function applySidebarCollapse(collapsed) {
+            sidebar.classList.toggle('sidebar-collapsed', collapsed);
+            if (pageWrapper) {
+                pageWrapper.classList.toggle('sidebar-collapsed', collapsed);
+            }
+            document.body.classList.toggle('sidebar-collapsed', collapsed);
+        }
+        if (localStorage.getItem('sidebarCollapsed') === '1') {
+            applySidebarCollapse(true);
+        }
+        collapseBtn.addEventListener('click', function() {
+            var collapsed = !sidebar.classList.contains('sidebar-collapsed');
+            applySidebarCollapse(collapsed);
+            localStorage.setItem('sidebarCollapsed', collapsed ? '1' : '0');
+        });
+    }
 }
 
 // ========== Init: Dropdowns ==========
@@ -794,22 +815,29 @@ function setSelectChevronColor() {
 
 // Mark the sidebar link matching the current URL as selected and scroll it into center view.
 function show_sidebar_active() {
-    // set select on sidebar
+    // set select on sidebar, pick only the most specific match
     var currentUrl = window.location.pathname.replace(/\/$/, '');
+    var bestMatch = null;
+    var bestLen = -1;
+
     $('.sidebar-link').each(function() {
       var linkHref = $(this).attr('href').replace(/\/$/, '');
       var safeHref = linkHref.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       var regex = new RegExp('^' + safeHref + '(?:$|\\/.*)');
 
+      var match;
       if (linkHref.endsWith('manage'))
-         var match = currentUrl.endsWith('manage');
+        match = currentUrl.endsWith('manage');
       else
-        var match = regex.test(currentUrl);
+        match = regex.test(currentUrl);
 
-      if (match) {
-        $(this).addClass('select');
+      if (match && linkHref.length > bestLen) {
+        bestMatch = this;
+        bestLen = linkHref.length;
       }
     });
+
+    if (bestMatch) $(bestMatch).addClass('select');
 
     // scroll sidebar to center the active link
     var $active = $('.sidebar-link.select').first();

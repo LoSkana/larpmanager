@@ -323,6 +323,9 @@ msgstr "použité"
 msgid "Actor"
 msgstr "Herec"
 
+msgid "Admin"
+msgstr "Správce"
+
 msgid "Album"
 msgstr "Alba"
 
@@ -1126,6 +1129,9 @@ msgstr "Přiřaďte"
 
 msgid "Auto buy"
 msgstr "Automatický nákup"
+
+msgid "Calendar"
+msgstr "Kalendář"
 
 msgid "Campaign"
 msgstr "Kampaň"
@@ -2156,6 +2162,9 @@ msgstr "Žádost o"
 msgid "Rotate left"
 msgstr "Levé kolo"
 
+msgid "Scroll left"
+msgstr "Posunout doleva"
+
 msgid "Secret link"
 msgstr "Tajný odkaz"
 
@@ -2402,6 +2411,9 @@ msgstr "Požadavky"
 msgid "Rotate right"
 msgstr "Pravé kolo"
 
+msgid "Scroll right"
+msgstr "Posuňte doprava"
+
 msgid "See you soon"
 msgstr "Čekáme na vás"
 
@@ -2410,6 +2422,9 @@ msgstr "Historická výstava"
 
 msgid "Subscription"
 msgstr "Předplatné"
+
+msgid "Tech Support"
+msgstr "Technická podpora"
 
 msgid "Tell me more"
 msgstr "Zjistěte více"
@@ -2659,6 +2674,9 @@ msgid "Personal code"
 msgstr "Osobní kód"
 
 msgid "Personal data"
+msgstr "Osobní údaje"
+
+msgid "Personal info"
 msgstr "Osobní údaje"
 
 msgid "Phone contact"
@@ -8995,11 +9013,6 @@ msgstr "Datum, kdy bylo členství oficiálně schváleno organizací"
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Chcete spravovat postavy přiřazené registrovaným účastníkům"
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Pokud je zaškrtnuto: zobrazí odkaz na horním panelu pro zobrazení všech "
-"znaků uživatele"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Označuje, zda je sleva viditelná a účastníci ji mohou využít"
 
@@ -9088,6 +9101,11 @@ msgstr ""
 msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Pokud je zaškrtnuto: Odeslat e-mail organizátorům za každou přijatou platbu"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Je-li zaškrtnuto: v postranním panelu se zobrazí odkaz pro zobrazení všech "
+"postav daného uživatele"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
@@ -9247,12 +9265,6 @@ msgstr ""
 "označené položky"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Pokud je zaškrtnuto: zobrazí odkaz v horním panelu pro zobrazení všech "
-"registrací uživatelů"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Seznam uživatelů, kteří se nezaregistrovali na budoucí relaci události"
@@ -9359,6 +9371,12 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto: Odesílá hlavní poštu kopii všech e-mailů odeslaných "
 "účastníkům"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Je-li zaškrtnuto: v postranním panelu se zobrazí odkaz na zobrazení všech "
+"registrací daného uživatele"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

@@ -140,6 +140,9 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
                 name="intro_driver",
             ).delete()
 
+    # Set sidebar state from user session
+    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
+
     return context
 
 
@@ -233,9 +236,8 @@ def check_association_context(request: HttpRequest, permission_slug: str | list[
     context["manage"] = 1
     context["exe_page"] = 1
 
-    # Load association permissions and sidebar state
+    # Load association permissions
     get_index_association_permissions(request, context, context["association_id"])
-    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Add tutorial information if not already present
     if "tutorial" not in context:
@@ -436,10 +438,9 @@ def get_event_context(
     if include_status:
         context["run_status"] = registration_status(context, context["run"], context["member"])
 
-    # Configure user permissions and sidebar for authorized users
+    # Configure user permissions for authorized users
     if is_staff:
         get_index_event_permissions(request, context, event_slug)
-        context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Set association slug from request or event object
     if hasattr(request, "association"):

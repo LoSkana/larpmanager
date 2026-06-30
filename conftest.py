@@ -23,6 +23,7 @@
 import logging
 import os
 import re
+import shutil
 import subprocess
 import sys
 from collections.abc import Generator, Mapping
@@ -31,7 +32,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from django.conf import settings
+from django.conf import settings, settings as django_settings
 from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection, transaction
@@ -54,6 +55,15 @@ _DB_SCHEMA_CHECKED = {}
 def _env_for_tests() -> None:
     os.environ.setdefault("PYTHONHASHSEED", "0")
     os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
+
+
+@pytest.fixture(autouse=True, scope="session")
+def _copy_test_media() -> None:
+    """Copy test media fixtures to MEDIA_ROOT so image files resolve during tests."""
+    src = Path(__file__).parent / "larpmanager" / "tests" / "media"
+    dst = Path(django_settings.MEDIA_ROOT)
+    if src.exists():
+        shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
 @pytest.fixture(autouse=True)

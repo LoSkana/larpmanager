@@ -364,7 +364,7 @@ def new_ticket(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New event").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_form1-name").click()
-    edit_iframe.locator("#id_form1-name").fill("newevent")
+    edit_iframe.locator("#id_form1-name").fill("Electric Boogaloo")
     # don't set slug, let it be auto filled
     edit_iframe.locator("#id_form2-development").select_option("1")
     edit_iframe.locator("#id_form2-registration_status").select_option("o")
@@ -386,6 +386,6 @@ def new_ticket(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check new ticket is not available
-    go_to(page, live_server, "newevent/1/")
+    go_to(page, live_server, "electricboogaloo/1/")
     page.get_by_role("link", name="Register").click()
     expect(page.locator("#id_ticket")).to_match_aria_snapshot('- radio "Standard"\n- text: Standard')
