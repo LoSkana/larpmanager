@@ -4,6 +4,11 @@
     {{ badge.name }}
 {% endblock title %}
 {% block content %}
+    {% if badge.img_url %}
+        <div class="badge-header-img">
+            <img src="{{ badge.img_url }}" alt="{{ badge.name }}" />
+        </div>
+    {% endif %}
     {{ badge.descr }}
     <hr />
     <div class="gallery">

@@ -12,7 +12,7 @@
         <div id="badge-assign-app">
             <div class="badge-selector">
                 <label for="badge-select">{% trans "Badge" %}:</label>
-                <select id="badge-select" onchange="select_badge(this.value)">
+                <select id="badge-select" class="select2">
                     <option value="">- {% trans "select a badge" %} -</option>
                 </select>
                 <span id="badge-thumb"></span>
@@ -218,6 +218,10 @@
             opt.textContent = b.name;
             sel.appendChild(opt);
         });
+
+        $(sel).select2({ width: 'resolve' });
+        $(sel).on('select2:select', function(e) { select_badge(e.params.data.id); });
+        $(sel).on('select2:clear', function() { select_badge(''); });
     });
     </script>
 {% endblock js %}
