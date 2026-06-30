@@ -323,6 +323,9 @@ msgstr "použité"
 msgid "Actor"
 msgstr "Herec"
 
+msgid "Admin"
+msgstr "Správce"
+
 msgid "Album"
 msgstr "Alba"
 
@@ -386,9 +389,6 @@ msgstr "Žánr"
 
 msgid "Given"
 msgstr "Data"
-
-msgid "Go to"
-msgstr "Přejít na"
 
 msgid "Graph"
 msgstr "Graf"
@@ -2141,6 +2141,9 @@ msgstr "Žádost o"
 msgid "Rotate left"
 msgstr "Levé kolo"
 
+msgid "Scroll left"
+msgstr "Posunout doleva"
+
 msgid "Secret link"
 msgstr "Tajný odkaz"
 
@@ -2173,6 +2176,9 @@ msgstr "Odčítání"
 
 msgid "Suggestions"
 msgstr "Návrhy"
+
+msgid "Switch mode"
+msgstr "Režim přepínání"
 
 msgid "Ticket list"
 msgstr "Seznam vstupenek"
@@ -2386,6 +2392,9 @@ msgstr "Požadavky"
 
 msgid "Rotate right"
 msgstr "Pravé kolo"
+
+msgid "Scroll right"
+msgstr "Posuňte doprava"
 
 msgid "See you soon"
 msgstr "Čekáme na vás"

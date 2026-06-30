@@ -323,6 +323,9 @@ msgstr "brukt"
 msgid "Actor"
 msgstr "Skuespiller"
 
+msgid "Admin"
+msgstr "Admin"
+
 msgid "Album"
 msgstr "Album"
 
@@ -386,9 +389,6 @@ msgstr "Sjanger"
 
 msgid "Given"
 msgstr "Data"
-
-msgid "Go to"
-msgstr "Gå til"
 
 msgid "Graph"
 msgstr "Graf"
@@ -2141,6 +2141,9 @@ msgstr "Anmodning om"
 msgid "Rotate left"
 msgstr "Venstre hjul"
 
+msgid "Scroll left"
+msgstr "Rull til venstre"
+
 msgid "Secret link"
 msgstr "Hemmelig lenke"
 
@@ -2173,6 +2176,9 @@ msgstr "Subtraksjon"
 
 msgid "Suggestions"
 msgstr "Forslag"
+
+msgid "Switch mode"
+msgstr "Bytte modus"
 
 msgid "Ticket list"
 msgstr "Billettliste"
@@ -2386,6 +2392,9 @@ msgstr "Krav"
 
 msgid "Rotate right"
 msgstr "Høyre hjul"
+
+msgid "Scroll right"
+msgstr "Rull til høyre"
 
 msgid "See you soon"
 msgstr "Vi venter på deg"

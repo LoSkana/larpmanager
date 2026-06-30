@@ -5754,6 +5754,9 @@ msgstr ""
 msgid "Change password"
 msgstr ""
 
+msgid "Password reset"
+msgstr ""
+
 msgid "Tech Support"
 msgstr ""
 
@@ -5761,12 +5764,6 @@ msgid "Privacy Policy"
 msgstr ""
 
 msgid "Legal Notice"
-msgstr ""
-
-msgid "Password reset"
-msgstr ""
-
-msgid "Go to"
 msgstr ""
 
 msgid "Access the event dashboard"
@@ -5785,6 +5782,21 @@ msgid "Role"
 msgstr ""
 
 msgid "Hi"
+msgstr ""
+
+msgid "Scroll left"
+msgstr ""
+
+msgid "Scroll right"
+msgstr ""
+
+msgid "Switch mode"
+msgstr ""
+
+msgid "User"
+msgstr ""
+
+msgid "Admin"
 msgstr ""
 
 msgid "No organization found"
@@ -7764,9 +7776,6 @@ msgid "Last Event"
 msgstr ""
 
 msgid "You don't have any characters yet"
-msgstr ""
-
-msgid "User"
 msgstr ""
 
 msgid "Your messages"

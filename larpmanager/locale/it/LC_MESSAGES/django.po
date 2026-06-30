@@ -323,6 +323,9 @@ msgstr "usato"
 msgid "Actor"
 msgstr "Attore"
 
+msgid "Admin"
+msgstr "Amministratore"
+
 msgid "Album"
 msgstr "Album"
 
@@ -386,9 +389,6 @@ msgstr "Genere"
 
 msgid "Given"
 msgstr "Dato"
-
-msgid "Go to"
-msgstr "Vai a"
 
 msgid "Graph"
 msgstr "Grafico"
@@ -2141,6 +2141,9 @@ msgstr "Richiesta di"
 msgid "Rotate left"
 msgstr "Ruota sinistra"
 
+msgid "Scroll left"
+msgstr "Scorri verso sinistra"
+
 msgid "Secret link"
 msgstr "Collegamento segreto"
 
@@ -2173,6 +2176,9 @@ msgstr "Sottrazione"
 
 msgid "Suggestions"
 msgstr "Suggerimenti"
+
+msgid "Switch mode"
+msgstr "Modalità switch"
 
 msgid "Ticket list"
 msgstr "Elenco dei biglietti"
@@ -2386,6 +2392,9 @@ msgstr "Requisiti"
 
 msgid "Rotate right"
 msgstr "Ruota destra"
+
+msgid "Scroll right"
+msgstr "Scorri verso destra"
 
 msgid "See you soon"
 msgstr "Ti aspettiamo"

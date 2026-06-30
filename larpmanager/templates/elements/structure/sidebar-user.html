@@ -1,0 +1,19 @@
+{% load static i18n %}
+<div id="sidebar"
+     class="only_v22 {% if is_sidebar_open == False %}hide{% endif %} topbar">
+    <div class="inner new-menu">
+        {% include "elements/structure/sidebar-header.html" %}
+        <div class="sidebar-section">
+            {% for item in profile_nav_items %}
+                <span class="sidebar-link-wrap">
+                    <a class="sidebar-link{% if item.active %} select{% endif %}"
+                       href="{{ item.url }}">
+                        {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
+                        <span>{{ item.label }}</span>
+                    </a>
+                </span>
+            {% endfor %}
+        </div>
+        {% include "elements/structure/sidebar-footer.html" %}
+    </div>
+</div>

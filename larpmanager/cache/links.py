@@ -34,6 +34,7 @@ from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.core.common import get_coming_runs
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -115,7 +116,20 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     # Store personal theme preference (overrides event/association theme)
     navigation_context["member_theme"] = member.get_config("member_theme", default_value="")
 
+    # Visible runs for v22 topbar (public upcoming events)
+    navigation_context["visible_runs"] = _get_visible_runs(association_id)
+
     return navigation_context
+
+
+def _get_visible_runs(association_id: int) -> list[dict]:
+    """Get public upcoming runs for the association, cached per association."""
+    cache_key = f"visible_runs:{association_id}"
+    result = cache.get(cache_key)
+    if result is None:
+        result = [{"slug": run.get_slug(), "name": str(run)} for run in get_coming_runs(association_id)]
+        cache.set(cache_key, result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return result
 
 
 def _get_association_roles(member: Member, association_id: int, request: HttpRequest) -> dict[int, int]:
@@ -198,6 +212,9 @@ def clear_run_event_links_cache(event: Event) -> None:
         May perform multiple database queries to fetch role memberships.
 
     """
+    # Clear visible_runs cache for this association (public run list may have changed)
+    cache.delete(f"visible_runs:{event.association_id}")
+
     # Clear cache for all members with roles in this specific event
     for event_role in EventRole.objects.filter(event=event).prefetch_related("members"):
         for member in event_role.members.all():

@@ -133,15 +133,19 @@
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
-                {% if user.is_authenticated %}
-                    {% if topbar_admin %}
-                        {% include "elements/structure/topbar-admin.html" %}
+                {% with effective_version|default:association.assoc_version as eff_ver %}
+                    {% if eff_ver >= 22 %}
+                        {% include "elements/structure/topbar-v22.html" %}
+                    {% elif user.is_authenticated %}
+                        {% if topbar_admin %}
+                            {% include "elements/structure/topbar-admin.html" %}
+                        {% else %}
+                            {% include "elements/structure/topbar-user.html" %}
+                        {% endif %}
                     {% else %}
-                        {% include "elements/structure/topbar-user.html" %}
+                        {% include "elements/structure/topbar.html" %}
                     {% endif %}
-                {% else %}
-                    {% include "elements/structure/topbar.html" %}
-                {% endif %}
+                {% endwith %}
             {% endif %}
             {% include "elements/structure/sidebar.html" %}
             <!-- Page Wrapper -->
