@@ -57,6 +57,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>{% trans "Date" %}</th>
                         <th>{% trans "Type" %}</th>
                         <th>{% trans "Info" %}</th>
                         <th>{% trans "Amount" %}</th>
@@ -65,6 +66,7 @@
                 <tbody>
                     {% for item in payment_items %}
                         <tr>
+                            <td>{{ item.created|date:"d/m/Y H:i" }}</td>
                             <td>{{ item.get_pay_display }}</td>
                             <td>{{ item.info|default:"" }}</td>
                             <td>
@@ -96,7 +98,7 @@
                 <tbody>
                     {% for inv in invoices %}
                         <tr>
-                            <td>{{ inv.created|date:"Y-m-d" }}</td>
+                            <td>{{ inv.created|date:"d/m/Y H:i" }}</td>
                             <td>{{ inv.method }}</td>
                             <td>{{ inv.get_status_display }}</td>
                             <td>
@@ -126,6 +128,7 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>{% trans "Date" %}</th>
                         <th>{% trans "Type" %}</th>
                         <th>{% trans "Description" %}</th>
                         <th>{% trans "Amount" %}</th>
@@ -134,6 +137,7 @@
                 <tbody>
                     {% for item in other_items %}
                         <tr>
+                            <td>{{ item.created|date:"d/m/Y H:i" }}</td>
                             <td>{{ item.get_oth_display }}</td>
                             <td>{{ item.descr }}</td>
                             <td>
