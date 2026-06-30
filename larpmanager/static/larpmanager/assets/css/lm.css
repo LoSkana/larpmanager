@@ -2115,11 +2115,6 @@ header.sec h1 {
   margin-bottom: 0.5em;
 }
 
-.page_leaderboard h2,
-.page_badges h2 {
-  text-align: center;
-}
-
 .cover-container {
   width: 25%;
 }
@@ -3208,6 +3203,21 @@ body.floating_iframe .inner {
 /* ---------------------------------------------------------------------------
    Badges assignment
    --------------------------------------------------------------------------- */
+
+.page_leaderboard h2,
+.page_badges h2 {
+  text-align: center;
+}
+
+.page_leaderboard .icon,
+.page_badges .icon {
+  padding-bottom: 0em;
+}
+
+.page_leaderboard .el,
+.page_badges .el {
+  margin-bottom: 1em;
+}
 
 .badge-selector {
   display: flex;

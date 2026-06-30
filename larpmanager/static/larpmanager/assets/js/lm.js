@@ -636,6 +636,7 @@ function refreshDatatables() {
                 data_tables();
                 if (typeof window.reloadActiveQuestions === 'function') window.reloadActiveQuestions();
                 if (typeof window.applyColumnToggles === 'function') window.applyColumnToggles();
+                resize_fields();
                 window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
                 return;
             }
@@ -729,6 +730,7 @@ function refreshDatatables() {
         if (typeof window.applyColumnToggles === 'function') {
             window.applyColumnToggles();
         }
+        resize_fields();
         window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
     });
 }
