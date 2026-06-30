@@ -761,10 +761,9 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         # noinspection PyUnresolvedReferences
         return self.event.where
 
-    def get_cover_url(self) -> str:
+    def get_cover_url(self) -> str | None:
         """Return the thumbnail URL of the associated event's cover image."""
-        # noinspection PyUnresolvedReferences
-        return self.event.cover_thumb.url
+        return self.event.get_cover_thumb_url()
 
     def pretty_dates(self) -> str:
         """Format start and end dates into a human-readable string.

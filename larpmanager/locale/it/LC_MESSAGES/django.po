@@ -2195,9 +2195,6 @@ msgstr "Sottrazione"
 msgid "Suggestions"
 msgstr "Suggerimenti"
 
-msgid "Switch mode"
-msgstr "Modalità switch"
-
 msgid "Ticket list"
 msgstr "Elenco dei biglietti"
 
@@ -9176,11 +9173,6 @@ msgstr ""
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Vuoi Gestisci i personaggi assegnati ai partecipanti registrati"
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Se selezionato: mostra un link nella barra in alto per visualizzare tutti i "
-"personaggi dell'utente"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Indica se lo sconto è visibile e utilizzabile dai partecipanti"
 
@@ -9283,6 +9275,11 @@ msgstr ""
 msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Se checkato: Invia una email agli organizzatori per ogni pagamento ricevuto"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Se selezionato: mostra un link nella barra laterale per visualizzare tutti i"
+" personaggi dell'utente"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
@@ -9470,12 +9467,6 @@ msgstr ""
 " voci segnate"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Se selezionato: mostra un link nella barra in alto per visualizzare tutte le"
-" iscrizioni di un utente"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Elenco degli utenti che non si sono registrati per una sessione futura "
@@ -9598,6 +9589,12 @@ msgid ""
 msgstr ""
 "Se selezionato: Invia alla mail principale una copia di tutte le mail "
 "inviate ai partecipanti"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Se selezionato: mostra un link nella barra laterale per visualizzare tutte "
+"le registrazioni dell'utente"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

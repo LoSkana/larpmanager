@@ -38,9 +38,14 @@ def _user_nav_cache_key(member_id: int) -> str:
     return f"user_nav_entries_{member_id}"
 
 
+def _user_nav_profile_flags_cache_key(member_id: int) -> str:
+    return f"user_nav_profile_flags_{member_id}"
+
+
 def invalidate_user_nav_entries(member_id: int) -> None:
     """Invalidate list of registrations for the user."""
     cache.delete(_user_nav_cache_key(member_id))
+    cache.delete(_user_nav_profile_flags_cache_key(member_id))
 
 
 def _item(
@@ -52,8 +57,16 @@ def _item(
     active: bool = False,
     target: str | None = None,
     download: bool = False,
+    home: bool = False,
 ) -> dict[str, Any]:
-    entry: dict[str, Any] = {"url": url, "icon": icon, "label": label, "tooltip": tooltip, "active": active}
+    entry: dict[str, Any] = {
+        "url": url,
+        "icon": icon,
+        "label": label,
+        "tooltip": tooltip,
+        "active": active,
+        "home": home,
+    }
     if target:
         entry["target"] = target
     if download:
@@ -284,37 +297,6 @@ def _build_reg_nav_entries(member_id: int) -> list[dict[str, Any]]:
     return entries
 
 
-def build_user_nav_entries(request: Any) -> list[dict[str, Any]]:
-    """Build top-level user context selector: profile + active registrations across all associations."""
-    if not getattr(request, "user", None) or not request.user.is_authenticated:
-        return []
-    if not hasattr(request.user, "member"):
-        return []
-
-    member_id = request.user.member.id
-    current_slug = request.resolver_match.kwargs.get("slug") if request.resolver_match else None
-
-    cache_key = _user_nav_cache_key(member_id)
-    reg_entries = cache.get(cache_key)
-    if reg_entries is None:
-        reg_entries = _build_reg_nav_entries(member_id)
-        cache.set(cache_key, reg_entries, _USER_NAV_CACHE_TIMEOUT)
-
-    result: list[dict[str, Any]] = [
-        {
-            "label": str(_("Profile")),
-            "url": reverse("profile"),
-            "icon": "fa-solid fa-user",
-            "active": current_slug is None,
-        }
-    ]
-    result.extend(
-        {**entry, "icon": "fa-solid fa-calendar-days", "active": current_slug == entry["slug"]} for entry in reg_entries
-    )
-
-    return result
-
-
 def build_main_nav_items(context: dict[str, Any]) -> list[dict[str, Any]]:
     """Build the main event navigation item list from view context."""
     run = context.get("run")
@@ -356,62 +338,142 @@ def build_main_nav_items(context: dict[str, Any]) -> list[dict[str, Any]]:
     return items
 
 
-_URL_TO_PROFILE_ACTIVE: dict[str, str] = {
-    "profile": "profile",
-    "profile_privacy": "privacy",
-    "membership": "membership",
-    "accounting": "accounting",
-    "registrations": "registrations",
-    "badges": "badges",
-    "delegated": "delegated",
-    "chats": "messages",
-    "language": "language",
-    "profile_otp": "security",
-}
-
-
 def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
     """Build profile navigation item list from request."""
     if not hasattr(request, "association"):
         return []
 
     features = request.association.get("features", set())
-    url_name = request.resolver_match.url_name if request.resolver_match else ""
-    active = _URL_TO_PROFILE_ACTIVE.get(url_name, "")
+    active = request.resolver_match.url_name if request.resolver_match else ""
 
     items: list[dict[str, Any]] = [
-        _item(reverse("profile"), "fa-solid fa-user", _("Profile"), "", active=active == "profile"),
-        _item(reverse("profile_privacy"), "fa-solid fa-shield-halved", _("Privacy"), "", active=active == "privacy"),
+        _item(reverse("profile"), "fa-solid fa-user", _("Profile"), "", active=active == "profile", home=False),
+        _item(
+            reverse("privacy"),
+            "fa-solid fa-shield-halved",
+            _("Privacy"),
+            "",
+            active=active == "privacy",
+            home=False,
+        ),
     ]
 
     if "membership" in features:
         items.append(
-            _item(reverse("membership"), "fa-solid fa-id-card", _("Membership"), "", active=active == "membership")
+            _item(
+                reverse("membership"),
+                "fa-solid fa-id-card",
+                _("Membership"),
+                "",
+                active=active == "membership",
+                home=False,
+            )
         )
-
-    items.append(
-        _item(reverse("accounting"), "fa-solid fa-money-bill", _("Accounting"), "", active=active == "accounting")
-    )
-    items.append(
-        _item(
-            reverse("registrations"), "fa-solid fa-list-check", _("Registrations"), "", active=active == "registrations"
-        )
-    )
-
-    if "badge" in features:
-        items.append(_item(reverse("badges"), "fa-solid fa-trophy", _("Badges"), "", active=active == "badges"))
 
     if "delegated_members" in features:
         items.append(
             _item(
-                reverse("delegated"), "fa-solid fa-user-shield", _("Delegated users"), "", active=active == "delegated"
+                reverse("delegated"),
+                "fa-solid fa-user-shield",
+                _("Delegated users"),
+                "",
+                active=active == "delegated",
+                home=False,
             )
         )
 
-    if "chat" in features:
-        items.append(_item(reverse("chats"), "fa-solid fa-message", _("Messages"), "", active=active == "messages"))
+    items.append(
+        _item(reverse("language"), "fa-solid fa-language", _("Language"), "", active=active == "language", home=False)
+    )
+    items.append(
+        _item(reverse("security"), "fa-solid fa-lock", _("Security"), "", active=active == "security", home=False)
+    )
 
-    items.append(_item(reverse("language"), "fa-solid fa-language", _("Language"), "", active=active == "language"))
-    items.append(_item(reverse("profile_otp"), "fa-solid fa-lock", _("Security"), "", active=active == "security"))
+    return items
+
+
+def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
+    """Build home shortcut navigation item list from request."""
+    if not hasattr(request, "association"):
+        return []
+
+    features = request.association.get("features", set())
+    active = request.resolver_match.url_name if request.resolver_match else ""
+
+    member = getattr(getattr(request, "user", None), "member", None)
+    has_registrations = False
+    has_paid_registrations = False
+    if member:
+        flags_cache_key = _user_nav_profile_flags_cache_key(member.id)
+        flags = cache.get(flags_cache_key)
+        if flags is None:
+            qs = Registration.objects.filter(member=member)
+            flags = {
+                "has_registrations": qs.exists(),
+                "has_paid_registrations": qs.filter(tot_iscr__gt=0).exists(),
+            }
+            cache.set(flags_cache_key, flags, _USER_NAV_CACHE_TIMEOUT)
+        has_registrations = flags["has_registrations"]
+        has_paid_registrations = flags["has_paid_registrations"]
+
+    items: list[dict[str, Any]] = []
+
+    if request.association.get("user_characters_shortcut", False):
+        items.append(
+            _item(
+                reverse("characters"),
+                "fa-solid fa-users",
+                _("Characters"),
+                "",
+                active=active == "characters",
+                home=True,
+            )
+        )
+
+    if has_registrations and request.association.get("user_registrations_shortcut", False):
+        items.append(
+            _item(
+                reverse("registrations"),
+                "fa-solid fa-list-check",
+                _("Registrations"),
+                "",
+                active=active == "registrations",
+                home=True,
+            )
+        )
+
+    if has_registrations and "past_events" in features and request.association.get("calendar_past_events", False):
+        items.append(
+            _item(
+                reverse("calendar_past"),
+                "fa-solid fa-clock-rotate-left",
+                _("Past events"),
+                "",
+                active=active == "calendar_past",
+                home=True,
+            )
+        )
+
+    if has_paid_registrations:
+        items.append(
+            _item(
+                reverse("accounting"),
+                "fa-solid fa-money-bill",
+                _("Accounting"),
+                "",
+                active=active == "accounting",
+                home=True,
+            )
+        )
+
+    if "badge" in features:
+        items.append(
+            _item(reverse("badges"), "fa-solid fa-trophy", _("Badges"), "", active=active == "badges", home=True)
+        )
+
+    if "chat" in features:
+        items.append(
+            _item(reverse("messages"), "fa-solid fa-message", _("Messages"), "", active=active == "messages", home=True)
+        )
 
     return items

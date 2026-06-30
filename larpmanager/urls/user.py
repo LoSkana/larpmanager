@@ -112,7 +112,7 @@ urlpatterns = [
     path(
         "profile/privacy/",
         views_um.profile_privacy,
-        name="profile_privacy",
+        name="privacy",
     ),
     path(
         "profile/privacy/rewoke/<slug:slug>/",
@@ -121,8 +121,8 @@ urlpatterns = [
     ),
     path(
         "profile/otp/",
-        views_um.profile_otp,
-        name="profile_otp",
+        views_um.security,
+        name="security",
     ),
     path(
         "pre_register/",
@@ -182,7 +182,7 @@ urlpatterns = [
     path(
         "chats/",
         views_um.chats,
-        name="chats",
+        name="messages",
     ),
     path(
         "chat/<slug:slug>/",

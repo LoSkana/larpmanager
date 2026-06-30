@@ -1309,7 +1309,7 @@ class WhatWouldYouLikeForm(Form):
         # Add run dashboard choices for each accessible run
         choices.extend(
             [
-                (f"manage_orga|{run_data['slug']}", run_data["s"] + " - " + _("Dashboard"))
+                (f"manage_orga|{run_data['slug']}", run_data["label"] + " - " + _("Dashboard"))
                 for run_data in all_runs.values()
             ]
         )

@@ -6,21 +6,51 @@
     </button>
     <div class="tv22-pills-wrapper">
         <div class="tv22-pills" id="tv22-user-pills">
-            <a class="tv22-pill{% if not run and not manage and request.resolver_match.url_name == 'home' %} active{% endif %}"
-               href="{% url 'home' %}">
-                <i class="fa-solid fa-house"></i>
-                <span>Home</span>
-            </a>
-            {% for vrun in visible_runs %}
-                <a class="tv22-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
-                   href="{% url 'event_redirect' event_slug=vrun.slug %}">{{ vrun.name }}</a>
-            {% endfor %}
-            {% if user.is_authenticated %}
-                <a class="tv22-pill{% if not run and not manage and request.resolver_match.url_name != 'home' %} active{% endif %}"
-                   href="{% url 'profile' %}">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>{% trans "Settings" %}</span>
+            {% if manage %}
+                {% if association_role %}
+                    <a class="tv22-pill{% if not run %} active{% endif %}"
+                       href="{% url 'manage' %}">
+                        {% if association.favicon %}<img class="tv22-pill-img" src="{{ association.favicon }}" alt="">{% endif %}
+                        {{ association.name }}
+                    </a>
+                {% endif %}
+                {% for id, open_run in open_runs.items %}
+                    <a class="tv22-pill{% if run and run.event.slug == open_run.event_slug and run.number == open_run.number %} active{% endif %}"
+                       href="{% url 'manage' open_run.slug %}">
+                        {% if open_run.cover_url %}<img class="tv22-pill-img" src="{{ open_run.cover_url }}" alt="">{% endif %}
+                        {{ open_run.label }}
+                    </a>
+                {% endfor %}
+            {% else %}
+                <a class="tv22-pill{% if not run and not manage and request.resolver_match.url_name == 'home' %} active{% endif %}"
+                   href="{% url 'home' %}">
+                    {% if association.favicon %}
+                        <img class="tv22-pill-img" src="{{ association.favicon }}" alt="">
+                    {% else %}
+                        <i class="fa-solid fa-house"></i>
+                    {% endif %}
+                    <span>Home</span>
                 </a>
+                {% for vrun in visible_runs %}
+                    <a class="tv22-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
+                       href="{% url 'event_redirect' event_slug=vrun.slug %}">
+                        {% if vrun.cover_url %}<img class="tv22-pill-img" src="{{ vrun.cover_url }}" alt="">{% endif %}
+                        {{ vrun.name }}
+                    </a>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    <a class="tv22-pill tv22-pill-profile{% if not run and not manage and request.resolver_match.url_name != 'home' %} active{% endif %}"
+                       href="{% url 'profile' %}">
+                        {% if user.member.profile %}
+                            <img class="tv22-pill-img"
+                                 src="{{ user.member.profile_thumb.url }}"
+                                 alt="">
+                        {% else %}
+                            <i class="fa-solid fa-gear"></i>
+                        {% endif %}
+                        <span>{% trans "Settings" %}</span>
+                    </a>
+                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -31,34 +61,24 @@
     {% if topbar_admin %}
         {% if manage %}
             {% if run %}
-                {% url 'event_redirect' event_slug=run.get_slug as switch_href %}
+                {% url 'event_redirect' event_slug=run.get_slug as user_href %}
             {% else %}
-                {% url 'home' as switch_href %}
+                {% url 'home' as user_href %}
             {% endif %}
-            <a class="tv22-switch"
-               href="{{ switch_href }}"
-               title="{% trans "Switch mode" %}">
-                <i class="fa-solid fa-right-left"></i>
-                <span>{% trans "User" %}</span>
-            </a>
+            <div class="tv22-switch">
+                <a class="tv22-switch-opt" href="{{ user_href }}">{% trans "User" %}</a>
+                <span class="tv22-switch-opt active">{% trans "Admin" %}</span>
+            </div>
         {% else %}
             {% if run %}
-                {% url 'manage' run.get_slug as switch_href %}
-            {% elif open_runs %}
-                {% for run_id, run_data in open_runs.items %}
-                    {% if forloop.first %}
-                        {% url 'manage' run_data.slug as switch_href %}
-                    {% endif %}
-                {% endfor %}
+                {% url 'manage' run.get_slug as admin_href %}
             {% else %}
-                {% url 'manage' as switch_href %}
+                {% url 'manage' as admin_href %}
             {% endif %}
-            <a class="tv22-switch"
-               href="{{ switch_href }}"
-               title="{% trans "Switch mode" %}">
-                <i class="fa-solid fa-right-left"></i>
-                <span>{% trans "Admin" %}</span>
-            </a>
+            <div class="tv22-switch">
+                <span class="tv22-switch-opt active">{% trans "User" %}</span>
+                <a class="tv22-switch-opt" href="{{ admin_href }}">{% trans "Admin" %}</a>
+            </div>
         {% endif %}
     {% endif %}
 </div>
@@ -76,7 +96,7 @@
 
     var scrollInterval;
     function startScroll(dir) {
-        scrollInterval = setInterval(function () { wrapper.scrollLeft += dir * 8; updateScrollBtns(); }, 16);
+        scrollInterval = setInterval(function () { wrapper.scrollLeft += dir * 200; updateScrollBtns(); }, 16);
     }
     function stopScroll() { clearInterval(scrollInterval); }
 

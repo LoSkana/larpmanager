@@ -2195,9 +2195,6 @@ msgstr "Subtraksjon"
 msgid "Suggestions"
 msgstr "Forslag"
 
-msgid "Switch mode"
-msgstr "Bytte modus"
-
 msgid "Ticket list"
 msgstr "Billettliste"
 
@@ -9092,10 +9089,6 @@ msgstr "Dato da medlemskapet ble offisielt godkjent av organisasjonen"
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Ønsker du å administrere tegn som er tildelt registrerte deltakere"
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Hvis avkrysset: viser en lenke i topplinjen for å se alle brukerens tegn"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Angir om rabatten er synlig og kan brukes av deltakerne"
 
@@ -9186,6 +9179,11 @@ msgstr ""
 msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Hvis avkrysset: Send en e-post til arrangørene for hver betaling som mottas"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Hvis dette er merket av: vises det en lenke i sidefeltet som lar deg se alle"
+" brukerens karakterer"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
@@ -9352,12 +9350,6 @@ msgstr ""
 " som er merket"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Hvis avkrysset: viser en lenke i topplinjen for å se alle "
-"brukerregistreringer"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Liste over brukere som ikke har registrert seg for en fremtidig økt av "
@@ -9478,6 +9470,12 @@ msgid ""
 msgstr ""
 "Hvis avkrysset: Sender hovedmailen en kopi av alle mailer som er sendt til "
 "deltakerne"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Hvis dette er merket av: vises en lenke i sidefeltet for å se alle brukerens"
+" registreringer"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

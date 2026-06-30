@@ -3913,11 +3913,6 @@ body.floating_iframe #wrapper {
 .new_v22 #banner h1 {
   text-align: left;
 }
-
-.new_v22 #banner .inner {
-  margin: 0;
-}
-
 .new_v22 .reg_status {
   text-align: left;
 }
@@ -3970,7 +3965,12 @@ body.floating_iframe #wrapper {
 }
 
 .new_v22 #one .inner {
-  padding-bottom: 0em !important;
+  padding: 0em 1em 0em 0.5em !important;
+}
+
+.new_v22 #banner .inner {
+  margin: 0;
+  padding: 0 0.5em;
 }
 
 body.association.new_v22 .user_resize {
@@ -4072,9 +4072,20 @@ body.association.new_v22 .user_resize {
 }
 
 .tv22-pill.active {
-  background: rgba(var(--pri-rgb), 0.2);
+  background: rgba(var(--ter-rgb), 0.4);
   border-color: rgba(var(--pri-rgb), 0.6);
   font-weight: 700;
+}
+
+#topbar .tv22-pill-img {
+  width: 1.4em;
+  height: 1.4em;
+  border-radius: 50%;
+  object-fit: cover;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  margin: 0 0.2em 0 -0.2em;
 }
 
 .tv22-scroll-btn {
@@ -4097,32 +4108,46 @@ body.association.new_v22 .user_resize {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
-  gap: 0.35em;
-  padding: 0.2em 0.75em;
   border-radius: 999px;
   font-size: 0.8em;
   font-weight: 600;
-  background: rgba(var(--pri-rgb), 0.12);
   border: 1px solid rgba(var(--pri-rgb), 0.3);
-  cursor: pointer;
-  color: inherit;
+  overflow: hidden;
   white-space: nowrap;
   margin-left: 0.5em;
+  margin-right: 1em;
 }
 
-.tv22-switch:hover {
-  background: rgba(var(--pri-rgb), 0.22);
+.tv22-switch a {
+  margin: 0;
+}
+
+.tv22-switch-opt {
+  padding: 0.2em 0.75em;
+  color: inherit;
+  text-decoration: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.tv22-switch-opt.active {
+  background: rgba(var(--ter-rgb), 0.35);
+  color: inherit;
+}
+
+.tv22-switch-opt:not(.active):hover {
+  background: rgba(var(--pri-rgb), 0.1);
 }
 
 /* sidebar margin in v22: not full page height, with bottom gap */
-.new_v22:not(.manage) #sidebar.topbar {
+.new_v22 #sidebar.topbar {
   height: calc(100vh - var(--topbar-height) - 1.5em);
   margin-bottom: 1.5em;
   border-radius: 0 0 8px 0;
 }
 
 @media (min-width: 1201px) {
-  .new_v22:not(.manage) #sidebar.topbar {
+  .new_v22 #sidebar.topbar {
     height: calc(100vh - 1em);
     margin-top: 0;
   }
@@ -4134,4 +4159,8 @@ body.association.new_v22 .user_resize {
 
 .new_v22 .reg-links {
   text-align: left !important;
+}
+
+.new_v22 .grid {
+  padding: 0;
 }

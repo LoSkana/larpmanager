@@ -2195,9 +2195,6 @@ msgstr "Aftrekken"
 msgid "Suggestions"
 msgstr "Suggesties"
 
-msgid "Switch mode"
-msgstr "Schakelmodus"
-
 msgid "Ticket list"
 msgstr "Ticketlijst"
 
@@ -9177,11 +9174,6 @@ msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 "Wil je personages beheren die zijn toegewezen aan geregistreerde deelnemers"
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Indien aangevinkt: toont een link in de bovenbalk om alle tekens van "
-"gebruikers te bekijken"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Geeft aan of de korting zichtbaar en bruikbaar is voor deelnemers"
 
@@ -9278,6 +9270,11 @@ msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Indien aangevinkt: Stuur een e-mail naar de organisatoren voor elke "
 "ontvangen betaling"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Als dit is aangevinkt: er verschijnt een link in de zijbalk waarmee je alle "
+"personages van de gebruiker kunt bekijken"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
@@ -9456,12 +9453,6 @@ msgstr ""
 "boekingen te verifiëren"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Indien aangevinkt: toont een link in de bovenbalk om alle registraties van "
-"gebruikers te bekijken"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Lijst van gebruikers die zich niet hebben geregistreerd voor een toekomstige"
@@ -9584,6 +9575,12 @@ msgid ""
 msgstr ""
 "Indien aangevinkt: Stuurt de hoofdmail een kopie van alle mails die naar "
 "deelnemers zijn gestuurd"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Als dit is aangevinkt: er verschijnt een link in de zijbalk waarmee je alle "
+"registraties van de gebruiker kunt bekijken"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

@@ -7,7 +7,7 @@
                 <span>Logout</span>
             </a>
         </span>
-        <form method="post" action="{% url 'logout' %}">
+        <form method="post" action="{% url 'logout' %}" class="hide">
             {% csrf_token %}
             <button type="submit" id="real_logout">logout</button>
         </form>

@@ -127,7 +127,10 @@ def _get_visible_runs(association_id: int) -> list[dict]:
     cache_key = f"visible_runs:{association_id}"
     result = cache.get(cache_key)
     if result is None:
-        result = [{"slug": run.get_slug(), "name": str(run)} for run in get_coming_runs(association_id)]
+        result = [
+            {"slug": run.get_slug(), "name": str(run), "cover_url": run.get_cover_url()}
+            for run in get_coming_runs(association_id)
+        ]
         cache.set(cache_key, result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return result
 
@@ -173,10 +176,11 @@ def _get_accessible_runs(association_id: int, association_roles: dict, event_rol
         # Create run element for display
         run_element = {
             "slug": run.get_slug(),
-            "e": run.event.slug,
-            "r": run.number,
-            "s": str(run),
-            "k": (run.start if run.start else datetime.max.replace(tzinfo=UTC).date()),
+            "event_slug": run.event.slug,
+            "number": run.number,
+            "label": str(run),
+            "start_date": (run.start if run.start else datetime.max.replace(tzinfo=UTC).date()),
+            "cover_url": run.get_cover_url(),
         }
 
         # Categorize as open or past run
