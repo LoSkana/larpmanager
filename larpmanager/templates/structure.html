@@ -150,7 +150,7 @@
             {% endif %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class=" {% if manage %}manage{% endif %} {% with effective_version|default:association.assoc_version as eff_ver %} {% if eff_ver >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} {% endwith %} {% if not frame and association.id != 0 %}topbar{% endif %} ">
+                 class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% with effective_version|default:association.assoc_version as eff_ver %} {% if eff_ver >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} {% endwith %} topbar{% endif %} ">
                 {% block main %}
                 {% endblock main %}
             </div>
