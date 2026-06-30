@@ -3623,3 +3623,9 @@ body.floating_iframe #wrapper {
     max-height: 180px;
   }
 }
+
+input.char-dual-search {
+  margin: 0 0.5em !important;
+  width: auto !important;
+  max-width: initial !important;
+}
