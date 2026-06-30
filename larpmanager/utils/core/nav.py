@@ -349,7 +349,7 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
     items: list[dict[str, Any]] = [
         _item(reverse("profile"), "fa-solid fa-user", _("Personal info"), "", active=active == "profile", home=False),
         _item(
-            reverse("privacy"),
+            reverse("profile_privacy"),
             "fa-solid fa-shield-halved",
             _("Privacy"),
             "",
@@ -442,18 +442,6 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
             )
         )
 
-    if has_registrations and "past_events" in features and request.association.get("calendar_past_events", False):
-        items.append(
-            _item(
-                reverse("calendar_past"),
-                "fa-solid fa-clock-rotate-left",
-                _("Past events"),
-                "",
-                active=active == "calendar_past",
-                home=True,
-            )
-        )
-
     if has_paid_registrations:
         items.append(
             _item(
@@ -462,6 +450,18 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
                 _("Accounting"),
                 "",
                 active=active == "accounting",
+                home=True,
+            )
+        )
+
+    if has_registrations and "past_events" in features and request.association.get("calendar_past_events", False):
+        items.append(
+            _item(
+                reverse("calendar_past"),
+                "fa-solid fa-clock-rotate-left",
+                _("Past events"),
+                "",
+                active=active == "calendar_past",
                 home=True,
             )
         )
