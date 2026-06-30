@@ -3897,11 +3897,11 @@ body.floating_iframe #wrapper {
 }
 
 .only_v22 {
-  display: none;
+  display: none !important;
 }
 
 .new_v22 .only_v22 {
-  display: initial;
+  display: initial !important;
 }
 
 .new_v22 #sidebar .inner {
