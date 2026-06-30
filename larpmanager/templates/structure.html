@@ -129,7 +129,7 @@
         </noscript>
     </head>
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association{% endif %} {% if manage %}manage{% endif %} {{ effective_version|default:association.assoc_version|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}">
+          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association {% if manage %}manage{% endif %} {{ effective_version|default:association.assoc_version|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
