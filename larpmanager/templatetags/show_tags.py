@@ -891,4 +891,6 @@ def activation_hint(slug: str) -> str:
 @register.filter
 def version_body_classes(effective_version: int) -> str:
     """Return CSS body classes for interface version gating."""
-    return " ".join(f"new_v{v}" for v in range(_VERSION_BODY_CLASS_START, effective_version + 1))
+    if not effective_version:
+        return ""
+    return " ".join(f"new_v{v}" for v in range(_VERSION_BODY_CLASS_START, int(effective_version) + 1))

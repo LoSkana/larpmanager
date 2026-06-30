@@ -679,6 +679,64 @@ class EventCharacterS2WidgetMulti(EventCharacterS2, S2WidgetMulti):
     """Represents EventCharacterS2WidgetMulti model."""
 
 
+class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
+    """Dual-column (available / selected) character picker with AJAX search.
+
+    Renders a two-panel UI instead of the default select2 tag-cloud.
+    Available panel: server-side search, max 25 results, excludes already selected.
+    Selected panel: client-side filter, always sorted by name, with a count badge.
+    Values are exchanged as UUIDs between the browser and the widget; value_from_datadict
+    maps them back to PKs so the owning ModelMultipleChoiceField validates normally.
+    """
+
+    template_name = "forms/widgets/character_dual.html"
+
+    class Media:
+        js: ClassVar[list] = ["larpmanager/assets/js/character-dual.js"]
+
+    def _get_search_url(self) -> str:
+        from django.urls import reverse  # noqa: PLC0415
+
+        if hasattr(self, "event"):
+            return reverse("orga_character_search", args=[self.event.slug])
+        return ""
+
+    def _get_selected_chars(self, value: list) -> list[tuple[str, str]]:
+        """Return (uuid, label) pairs for all currently selected values, sorted by name.
+
+        Value may be a list of UUIDs (when to_field_name='uuid') or PKs (initial load).
+        We try UUID filter first; fall back to PK filter if no results.
+        """
+        if not value or not hasattr(self, "event"):
+            return []
+        val_list = [v for v in value if v not in ("", None)]
+        if not val_list:
+            return []
+        from larpmanager.cache.config import get_event_config  # noqa: PLC0415
+
+        show_number = get_event_config(self.event.id, "writing_number", default_value=False)
+        base_qs = self.event.get_elements(Character).only("id", "uuid", "name", "number").order_by("name")
+        qs = base_qs.filter(uuid__in=val_list)
+        if not qs.exists():
+            qs = base_qs.filter(pk__in=val_list)
+        return [(str(ch.uuid), f"#{ch.number} {ch.name}" if show_number else ch.name, ch.pk) for ch in qs]
+
+    def get_context(self, name: str, value: list, attrs: dict | None) -> dict:
+        """Build template context for the dual-list widget."""
+        ctx = super().get_context(name, value, attrs)
+        ctx["widget"]["search_url"] = self._get_search_url()
+        ctx["widget"]["selected_chars"] = self._get_selected_chars(value or [])
+        return ctx
+
+    def value_from_datadict(self, data: dict, files: Any, name: str) -> list[str]:  # noqa: ARG002
+        """Convert submitted UUID strings to PKs so ModelMultipleChoiceField validates normally."""
+        uuids = data.getlist(name)
+        if not uuids or not hasattr(self, "event"):
+            return uuids
+        pks = list(self.event.get_elements(Character).filter(uuid__in=uuids).values_list("pk", flat=True))
+        return [str(pk) for pk in pks]
+
+
 class EventCharacterS2Widget(EventCharacterS2, S2Widget):
     """Represents EventCharacterS2Widget model."""
 

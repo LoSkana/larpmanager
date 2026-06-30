@@ -22,7 +22,8 @@ import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.db.models import Q
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
@@ -46,7 +47,7 @@ from larpmanager.models.experience import (
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.core.exceptions import FeatureError, ReturnNowError, UserPermissionError
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import export_abilities, export_modifiers, export_rules, zip_exports
@@ -127,9 +128,10 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
                 # Filter registrations without characters
                 character_ids = [cid for cid in character_ids if cid is not None]
 
-                # Pass the POST data but override the characters field
+                # Pass the POST data but override the characters field (use UUIDs for widget)
+                character_uuids = list(Character.objects.filter(id__in=character_ids).values_list("uuid", flat=True))
                 form_data = request.POST.copy()
-                form_data.setlist("characters", [str(cid) for cid in character_ids])
+                form_data.setlist("characters", [str(u) for u in character_uuids])
 
                 # Create the form with pre-populated data
                 form = OrgaDeliveryExpForm(form_data, instance=None, context=context)
@@ -420,6 +422,38 @@ def orga_exp_criterions_edit(request: HttpRequest, event_slug: str, criterion_uu
 def orga_exp_criterions_delete(request: HttpRequest, event_slug: str, criterion_uuid: str) -> HttpResponse:
     """Delete criterion for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_CRITERIONS, criterion_uuid)
+
+
+@login_required
+def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Return up to 25 characters matching a search term for the dual-list widget."""
+    if request.method != "POST":
+        return JsonResponse({"res": []})
+
+    try:
+        context = get_event_context(request, event_slug)
+    except (Http404, PermissionDenied, UserPermissionError, FeatureError):
+        return JsonResponse({"res": []}, status=403)
+
+    term = request.POST.get("term", "").strip()
+    exclude_raw = request.POST.get("exclude", "")
+    exclude_uuids = [u.strip() for u in exclude_raw.split(",") if u.strip()]
+
+    qs = context["event"].get_elements(Character).only("id", "uuid", "name", "number")
+
+    if term:
+        qs = qs.filter(
+            Q(number__icontains=term) | Q(name__icontains=term) | Q(teaser__icontains=term) | Q(title__icontains=term)
+        )
+
+    if exclude_uuids:
+        qs = qs.exclude(uuid__in=exclude_uuids)
+
+    show_number = get_event_config(context["event"].id, "writing_number", default_value=False, context=context)
+
+    qs = qs.order_by("name")[:25]
+    res = [(str(ch.uuid), f"#{ch.number} {ch.name}" if show_number else ch.name, ch.pk) for ch in qs]
+    return JsonResponse({"res": res})
 
 
 @login_required

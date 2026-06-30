@@ -3085,6 +3085,9 @@ msgstr "Evento no encontrado"
 msgid "External access"
 msgstr "Acceso exterior"
 
+msgid "Filter selected"
+msgstr "Filtro seleccionado"
+
 msgid "First character"
 msgstr "Primer carácter"
 
@@ -4048,9 +4051,6 @@ msgstr "Eliminar de la facción"
 msgid "Results not present"
 msgstr "Resultados no presentes"
 
-msgid "Show available tags"
-msgstr "Mostrar etiquetas disponibles"
-
 msgid "Signup cancellation"
 msgstr "Cancelación de la suscripción"
 
@@ -4255,9 +4255,6 @@ msgstr "Establecer el estado de los caracteres"
 
 msgid "Set up ability types"
 msgstr "Establecer tipos de habilidad"
-
-msgid "Show available items"
-msgstr "Mostrar artículos disponibles"
 
 msgid "Sign up as a filler!"
 msgstr "¡Apúntate como relleno!"
@@ -4619,21 +4616,6 @@ msgstr "Selecciona tu personaje"
 msgid "Set up payment methods"
 msgstr "Establecer métodos de pago"
 
-msgid "Show available members"
-msgstr "Mostrar miembros disponibles"
-
-msgid "Show available options"
-msgstr "Mostrar opciones disponibles"
-
-msgid "Show available players"
-msgstr "Mostrar jugadores disponibles"
-
-msgid "Show available signups"
-msgstr "Mostrar inscripciones disponibles"
-
-msgid "Show available tickets"
-msgstr "Mostrar entradas disponibles"
-
 msgid "Split by participation"
 msgstr "Reparto por participación"
 
@@ -4925,9 +4907,6 @@ msgstr "Código secreto de registro"
 msgid "Secret registration link"
 msgstr "Enlace de inscripción secreto"
 
-msgid "Show available abilities"
-msgstr "Mostrar habilidades disponibles"
-
 msgid "Target session not found"
 msgstr "Sesión objetivo no encontrada"
 
@@ -5064,9 +5043,6 @@ msgstr "Establecer plazos fijos"
 
 msgid "Show available characters"
 msgstr "Mostrar caracteres disponibles"
-
-msgid "Show available deliveries"
-msgstr "Mostrar entregas disponibles"
 
 msgid "Size of the file in bytes"
 msgstr "Tamaño del archivo en bytes"

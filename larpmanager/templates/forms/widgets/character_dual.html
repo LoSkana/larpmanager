@@ -1,0 +1,39 @@
+{% load i18n %}
+<div class="char-dual"
+     data-search-url="{{ widget.search_url }}"
+     data-field-id="{{ widget.attrs.id }}">
+    <div class="char-dual-col char-dual-available">
+        <div class="char-dual-head">
+            <span>{% trans "Available" %}</span>
+        </div>
+        <input class="char-dual-search"
+               type="text"
+               placeholder="{% trans "Search" %}..."
+               autocomplete="off" />
+        <ul class="char-dual-list char-dual-avail-list">
+        </ul>
+    </div>
+    <div class="char-dual-col char-dual-selected">
+        <div class="char-dual-h ead">
+            <span>{% trans "Selected" %}</span>
+            <span class="char-dual-count">0</span>
+        </div>
+        <input class="char-dual-search char-dual-sel-search"
+               type="text"
+               placeholder="{% trans "Filter selected" %}..."
+               autocomplete="off" />
+        <ul class="char-dual-list char-dual-sel-list">
+            {% for uuid, label, pk in widget.selected_chars %}
+                <li data-uuid="{{ uuid }}" data-label="{{ label }}" data-pk="{{ pk }}"></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <select name="{{ widget.name }}"
+            id="{{ widget.attrs.id }}"
+            class="char-dual-hidden"
+            multiple>
+        {% for uuid, label, pk in widget.selected_chars %}
+            <option value="{{ uuid }}" data-pk="{{ pk }}" selected>{{ label }}</option>
+        {% endfor %}
+    </select>
+</div>

@@ -3085,6 +3085,9 @@ msgstr "Událost nebyla nalezena"
 msgid "External access"
 msgstr "Externí přístup"
 
+msgid "Filter selected"
+msgstr "Filtr vybrán"
+
 msgid "First character"
 msgstr "První znak"
 
@@ -4048,9 +4051,6 @@ msgstr "Odstranění z frakce"
 msgid "Results not present"
 msgstr "Výsledky nejsou k dispozici"
 
-msgid "Show available tags"
-msgstr "Zobrazit dostupné značky"
-
 msgid "Signup cancellation"
 msgstr "Zrušení předplatného"
 
@@ -4255,9 +4255,6 @@ msgstr "Nastavení stavu znaku"
 
 msgid "Set up ability types"
 msgstr "Nastavení typů schopností"
-
-msgid "Show available items"
-msgstr "Zobrazit dostupné položky"
 
 msgid "Sign up as a filler!"
 msgstr "Zaregistrujte se jako výplň!"
@@ -4619,21 +4616,6 @@ msgstr "Vyberte si svou postavu!"
 msgid "Set up payment methods"
 msgstr "Nastavení platebních metod"
 
-msgid "Show available members"
-msgstr "Zobrazit dostupné členy"
-
-msgid "Show available options"
-msgstr "Zobrazit dostupné možnosti"
-
-msgid "Show available players"
-msgstr "Zobrazit dostupné hráče"
-
-msgid "Show available signups"
-msgstr "Zobrazit dostupné přihlášky"
-
-msgid "Show available tickets"
-msgstr "Zobrazit dostupné vstupenky"
-
 msgid "Split by participation"
 msgstr "Rozdělení podle účasti"
 
@@ -4925,9 +4907,6 @@ msgstr "Tajný registrační kód"
 msgid "Secret registration link"
 msgstr "Tajný registrační odkaz"
 
-msgid "Show available abilities"
-msgstr "Zobrazit dostupné schopnosti"
-
 msgid "Target session not found"
 msgstr "Cílová relace nebyla nalezena"
 
@@ -5064,9 +5043,6 @@ msgstr "Nastavení pevných splátek"
 
 msgid "Show available characters"
 msgstr "Zobrazit dostupné znaky"
-
-msgid "Show available deliveries"
-msgstr "Zobrazit dostupné dodávky"
 
 msgid "Size of the file in bytes"
 msgstr "Velikost souboru v bytech"

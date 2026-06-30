@@ -1439,6 +1439,12 @@ function copyClipboardButton() {
         });
     });
 
+    $('.opt-card-desc').each(function () {
+        var len = $(this).text().trim().length;
+        var size = len < 60 ? '0.85em' : len < 120 ? '0.75em' : len < 200 ? '0.65em' : '0.55em';
+        $(this).css('font-size', size);
+    });
+
 }
 
 });
