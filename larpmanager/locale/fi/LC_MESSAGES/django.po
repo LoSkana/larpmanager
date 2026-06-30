@@ -2673,6 +2673,9 @@ msgstr "Henkilökohtainen koodi"
 msgid "Personal data"
 msgstr "Henkilötiedot"
 
+msgid "Personal info"
+msgstr "Henkilötiedot"
+
 msgid "Phone contact"
 msgstr "Puhelinyhteys"
 

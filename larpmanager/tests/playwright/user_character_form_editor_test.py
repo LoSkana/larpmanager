@@ -32,7 +32,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
     submit_register, \
     submit_option, new_option, \
-    get_modal_iframe, save_modal, _wait_lm_ready
+    get_modal_iframe, save_modal, _wait_lm_ready, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -308,12 +308,11 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
 
     # Verify the Characters link is visible in the topbar
     go_to(page, live_server, "/")
-    page.get_by_role("link", name=re.compile(" Characters$")).click()
+    sidebar(page, "Characters")
 
     # Verify the page shows characters content
     expect_normalized(page, page.locator("#one"), "character active last event character active last event my character test larp")
-
-    page.get_by_role("link", name=re.compile(" Registrations$")).click()
+    sidebar(page, "Registrations")
 
     expect_normalized(page, page.locator("#one"),
   "test larp 19 march 2050 registration confirmed (standard) your character is: my character")

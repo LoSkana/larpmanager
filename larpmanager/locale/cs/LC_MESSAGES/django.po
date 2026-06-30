@@ -2673,6 +2673,9 @@ msgstr "Osobní kód"
 msgid "Personal data"
 msgstr "Osobní údaje"
 
+msgid "Personal info"
+msgstr "Osobní údaje"
+
 msgid "Phone contact"
 msgstr "Telefonní kontakt"
 

@@ -2673,6 +2673,9 @@ msgstr "Persoonlijke code"
 msgid "Personal data"
 msgstr "Persoonlijke gegevens"
 
+msgid "Personal info"
+msgstr "Persoonlijke gegevens"
+
 msgid "Phone contact"
 msgstr "Telefonisch contact"
 

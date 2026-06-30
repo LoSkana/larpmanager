@@ -2673,6 +2673,9 @@ msgstr "Personlig kod"
 msgid "Personal data"
 msgstr "Personuppgifter"
 
+msgid "Personal info"
+msgstr "Personuppgifter"
+
 msgid "Phone contact"
 msgstr "Telefonkontakt"
 

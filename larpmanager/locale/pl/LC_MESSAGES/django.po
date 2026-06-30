@@ -2673,6 +2673,9 @@ msgstr "Kod osobisty"
 msgid "Personal data"
 msgstr "Dane osobowe"
 
+msgid "Personal info"
+msgstr "Dane osobowe"
+
 msgid "Phone contact"
 msgstr "Kontakt telefoniczny"
 

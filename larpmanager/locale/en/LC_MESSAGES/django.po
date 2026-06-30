@@ -7984,6 +7984,9 @@ msgstr ""
 msgid "Remove consent"
 msgstr ""
 
+msgid "Personal info"
+msgstr ""
+
 msgid "You are logged in with an email address"
 msgstr ""
 

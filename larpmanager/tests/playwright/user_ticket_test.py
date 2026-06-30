@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, load_image, login_user, submit_confirm, sidebar
+from larpmanager.tests.utils import go_to, load_image, login_user, submit_confirm, sidebar, topbar
 
 pytestmark = pytest.mark.e2e
 
@@ -79,7 +79,8 @@ def test_user_ticket(pw_page: Any) -> None:
     submit_confirm(page)
 
     # change email
-    page.get_by_role("link", name=re.compile("Profile")).click()
+    topbar(page, "Settings")
+    sidebar(page, "Personal info")
     page.get_by_role("link", name="Would you like to change it?").click()
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("asdsa@dasasd.it")

@@ -347,7 +347,7 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
     active = request.resolver_match.url_name if request.resolver_match else ""
 
     items: list[dict[str, Any]] = [
-        _item(reverse("profile"), "fa-solid fa-user", _("Profile"), "", active=active == "profile", home=False),
+        _item(reverse("profile"), "fa-solid fa-user", _("Personal info"), "", active=active == "profile", home=False),
         _item(
             reverse("privacy"),
             "fa-solid fa-shield-halved",

@@ -214,6 +214,12 @@ function initSidebar() {
     });
 
     show_sidebar_active();
+
+    $('.sidebar-link span').each(function() {
+        if ($(this).text().trim().length >= 17) {
+            $(this).css('font-size', '90%');
+        }
+    });
 }
 
 // ========== Init: Dropdowns ==========
