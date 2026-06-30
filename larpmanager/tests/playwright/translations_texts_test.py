@@ -89,5 +89,5 @@ def test_translations_text(pw_page: Any) -> None:
     page.get_by_label("Sélectionner la langue").select_option("de")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Hello")
-    topbar(page, "Profilo")
+    topbar(page, "Profil")
     expect_normalized(page, page.locator("#sidebar"), "IPersönliche Angaben")
