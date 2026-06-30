@@ -3088,9 +3088,6 @@ msgstr "Color de realce"
 msgid "Invalid request"
 msgstr "Solicitud no válida"
 
-msgid "Load from event"
-msgstr "Cargar desde evento"
-
 msgid "Mail assignment"
 msgstr "Correo de asignación"
 
@@ -3606,6 +3603,9 @@ msgstr "Selección no válida"
 
 msgid "Invoice not found"
 msgstr "Factura no encontrada"
+
+msgid "Load participants"
+msgstr "Cargar participantes"
 
 msgid "Maximum available"
 msgstr "Máximo disponible"
@@ -9873,13 +9873,6 @@ msgstr ""
 "Añade un texto para personalizar los correos electrónicos y las páginas de "
 "registro de tu organización"
 
-#, python-brace-format
-msgid ""
-"Characters from event '{run}' have been loaded. Review and confirm to save."
-msgstr ""
-"Se han cargado los personajes del evento '{run}'. Revise y confirme para "
-"guardar."
-
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9965,6 +9958,12 @@ msgid ""
 msgstr ""
 "Selecciona un participante y un evento de destino para iniciar una "
 "transferencia de inscripción"
+
+msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Elige un evento para cargar previamente los participantes inscritos en una "
+"nueva entrega"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -11122,6 +11121,13 @@ msgstr ""
 "antes posible"
 
 msgid ""
+"All characters from this event's registrations will be pre-loaded into the "
+"new delivery"
+msgstr ""
+"Todos los personajes de las inscripciones de este evento se cargarán de "
+"antemano en la nueva versión"
+
+msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
@@ -12103,13 +12109,6 @@ msgid ""
 msgstr ""
 "Si está marcada, las opciones que ya no están disponibles en el formulario "
 "se ocultan, en lugar de mostrarse desactivadas"
-
-msgid ""
-"If you select an event, all characters from that event's registrations will "
-"be automatically loaded"
-msgstr ""
-"Si selecciona un evento, se cargarán automáticamente todos los caracteres de"
-" las inscripciones de ese evento"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

@@ -413,27 +413,23 @@ def modifiers(page: Any, live_server: Any) -> None:
 
 
 def delivery_auto_populate(page: Any, live_server: Any) -> None:
-    """Test auto-populate delivery from run."""
-    # Go to deliveries page
+    """Test auto-populate delivery from run via Load participants button."""
+    # Go to deliveries page and click Load participants
     go_to(page, live_server, "/test/manage/experience/deliveries/")
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="Load participants").click()
     edit_iframe = get_modal_iframe(page)
 
-    # Fill in delivery name and amount
-    edit_iframe.locator("#id_name").click()
-    edit_iframe.locator("#id_name").fill("auto populated delivery")
-    edit_iframe.locator("#id_amount").click()
-    edit_iframe.locator("#id_amount").fill("5")
+    # Select run in the load form
+    edit_iframe.locator("#select2-id_run-container").click()
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "tes")
 
-    # Select run in auto_populate_run field
-    edit_iframe.locator("#select2-id_auto_populate_run-container").click()
-    edit_iframe.locator(".select2-container--open .select2-search__field").fill("tes")
-    edit_iframe.get_by_role("option", name="Test Larp").click()
-
-    # Confirm the form
+    # Submit the load form - iframe redirects to new delivery form with characters pre-populated
     submit_confirm(edit_iframe)
+    edit_iframe = get_modal_iframe(page)
 
-    # Resubmit with auto-populated characters
+    # Fill in delivery name and amount inside the modal
+    edit_iframe.locator("#id_name").fill("auto populated delivery")
+    edit_iframe.locator("#id_amount").fill("5")
     save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator('[id="u2"]'), "5 Test Character")

@@ -3878,8 +3878,8 @@ body.floating_iframe #wrapper {
   }
 }
 
-input.char-dual-search {
-  margin: 0 0.5em !important;
+.form_container table input.char-dual-search {
+  margin: 0.5em !important;
   width: auto !important;
   max-width: initial !important;
 }

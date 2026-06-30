@@ -3088,9 +3088,6 @@ msgstr "Kleur markeren"
 msgid "Invalid request"
 msgstr "Ongeldig verzoek"
 
-msgid "Load from event"
-msgstr "Laden van gebeurtenis"
-
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
 
@@ -3606,6 +3603,9 @@ msgstr "Ongeldige selectie"
 
 msgid "Invoice not found"
 msgstr "Factuur niet gevonden"
+
+msgid "Load participants"
+msgstr "Deelnemers laden"
 
 msgid "Maximum available"
 msgstr "Maximaal beschikbaar"
@@ -9886,13 +9886,6 @@ msgstr ""
 "Voeg tekst toe om e-mails en registratiepagina’s voor je organisatie aan te "
 "passen"
 
-#, python-brace-format
-msgid ""
-"Characters from event '{run}' have been loaded. Review and confirm to save."
-msgstr ""
-"Tekens van evenement '{run}' zijn geladen. Controleer en bevestig om op te "
-"slaan."
-
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9981,6 +9974,12 @@ msgid ""
 msgstr ""
 "Kies een deelnemer en een evenement om de overdracht van de inschrijving te "
 "starten"
+
+msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Kies een evenement om de geregistreerde deelnemers ervan vooraf in een "
+"nieuwe verzending te laden"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -11134,6 +11133,13 @@ msgstr ""
 "mogelijk"
 
 msgid ""
+"All characters from this event's registrations will be pre-loaded into the "
+"new delivery"
+msgstr ""
+"Alle personages uit de registraties voor dit evenement worden vooraf in de "
+"nieuwe versie geladen"
+
+msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
@@ -12115,13 +12121,6 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, worden opties die niet langer beschikbaar zijn"
 " in het formulier verborgen in plaats van uitgeschakeld weergegeven"
-
-msgid ""
-"If you select an event, all characters from that event's registrations will "
-"be automatically loaded"
-msgstr ""
-"Als je een evenement selecteert, worden alle tekens uit de registraties van "
-"dat evenement automatisch geladen"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

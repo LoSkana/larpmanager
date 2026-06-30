@@ -3088,9 +3088,6 @@ msgstr "Markera färg"
 msgid "Invalid request"
 msgstr "Ogiltig begäran"
 
-msgid "Load from event"
-msgstr "Ladda från evenemang"
-
 msgid "Mail assignment"
 msgstr "Tilldelning av post"
 
@@ -3606,6 +3603,9 @@ msgstr "Ogiltigt val"
 
 msgid "Invoice not found"
 msgstr "Fakturan hittades inte"
+
+msgid "Load participants"
+msgstr "Ladda deltagare"
 
 msgid "Maximum available"
 msgstr "Maximalt tillgänglig"
@@ -9726,12 +9726,6 @@ msgstr ""
 "Lägg till en text för att anpassa e-postmeddelanden och registreringssidor "
 "för din organisation"
 
-#, python-brace-format
-msgid ""
-"Characters from event '{run}' have been loaded. Review and confirm to save."
-msgstr ""
-"Tecken från eventet '{run}' har laddats. Granska och bekräfta för att spara."
-
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9815,6 +9809,11 @@ msgid ""
 msgstr ""
 "Välj en deltagare och ett målehändelse för att påbörja en överföring av "
 "anmälan"
+
+msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Välj ett evenemang för att förladda de anmälda deltagarna till en ny utskick"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -10942,6 +10941,13 @@ msgstr ""
 " så snart som möjligt"
 
 msgid ""
+"All characters from this event's registrations will be pre-loaded into the "
+"new delivery"
+msgstr ""
+"Alla karaktärer från anmälningarna till detta evenemang kommer att "
+"förinstalleras i den nya leveransen"
+
+msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
@@ -11920,13 +11926,6 @@ msgid ""
 msgstr ""
 "Om den är markerad döljs alternativ som inte längre är tillgängliga i "
 "formuläret, istället för att visas inaktiverade"
-
-msgid ""
-"If you select an event, all characters from that event's registrations will "
-"be automatically loaded"
-msgstr ""
-"Om du väljer ett evenemang laddas alla tecken från det evenemangets "
-"registreringar automatiskt"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

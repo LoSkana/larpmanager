@@ -149,6 +149,7 @@ def test_exe_join(pw_page: Any) -> None:
     page.get_by_role("button", name="Continua").click()
     page.locator("#riepilogo").wait_for(state="visible")
     submit_confirm(page)
+    just_wait(page)
 
     go_to(page, live_server, "manage/activation/")
     expect(page.locator("tr", has_text="Prima iscrizione")).to_contain_text("Fatto", timeout=15000)

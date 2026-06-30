@@ -90,16 +90,6 @@ class OrgaDeliveryExpForm(ExpBaseForm):
 
     page_info = _("Manage experience point deliveries awarded to characters")
 
-    auto_populate_run = forms.ModelChoiceField(
-        queryset=Run.objects.none(),
-        required=False,
-        label=_("Load from event"),
-        help_text=_(
-            "If you select an event, all characters from that event's registrations will be automatically loaded"
-        ),
-        widget=RunCampaignS2Widget,
-    )
-
     class Meta:
         model = DeliveryExp
         exclude = ("number",)
@@ -110,8 +100,6 @@ class OrgaDeliveryExpForm(ExpBaseForm):
         """Initialize form with event configuration."""
         super().__init__(*args, **kwargs)
 
-        self.configure_field_event("auto_populate_run", self.params.get("event"))
-
         event = self.params.get("event")
         systems = list(event.get_elements(SystemExp)) if event else []
         if len(systems) == 1:
@@ -119,6 +107,27 @@ class OrgaDeliveryExpForm(ExpBaseForm):
             self.instance._default_system = systems[0]  # noqa: SLF001
         elif "system" in self.fields:
             self.configure_field_event("system", event)
+
+
+class OrgaDeliveryExpLoadForm(BaseForm):
+    """Form for selecting a run to pre-populate delivery characters."""
+
+    page_title = _("Load participants")
+    page_info = _("Select an event to pre-load its registered participants into a new delivery")
+
+    run = forms.ModelChoiceField(
+        queryset=Run.objects.none(),
+        required=True,
+        label=_("Event"),
+        help_text=_("All characters from this event's registrations will be pre-loaded into the new delivery"),
+        widget=RunCampaignS2Widget,
+    )
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with event-scoped run queryset."""
+        self.params = kwargs.pop("context", {})
+        super().__init__(*args, **kwargs)
+        self.configure_field_event("run", self.params.get("event"))
 
 
 class OrgaAbilityTemplateExpForm(BaseModelForm):
