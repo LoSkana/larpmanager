@@ -1,5 +1,5 @@
 {% load i18n %}
-<div class="calendar">
+<div class="calendar no_v22">
     <table class="mob">
         {% for run in list %}
             <tr class="gall">
@@ -49,4 +49,62 @@
             </tr>
         {% endfor %}
     </table>
+</div>
+<div class="run-card-grid only_v22">
+    {% for run in list %}
+        <div class="run-card">
+            <a class="run-card-cover-link" href="{% url 'gallery' run.get_slug %}">
+                {% if run.event.cover %}
+                    <img class="run-card-cover"
+                         src="{{ run.event.cover_thumb.url }}"
+                         alt="run cover image" />
+                {% else %}
+                    <div class="run-card-cover run-card-cover-placeholder">
+                        <i class="fa-solid fa-mask"></i>
+                    </div>
+                {% endif %}
+            </a>
+            <div class="run-card-body">
+                <h3 class="run-card-title">
+                    <a href="{% url 'gallery' run.get_slug %}">{{ run }}</a>
+                </h3>
+                {% if association.id == 0 %}
+                    <div class="run-card-meta">
+                        <i class="fa-solid fa-building"></i> <b>{{ run.event.association.name }}</b>
+                    </div>
+                {% endif %}
+                {% if 'genre' in association.features and run.event.genre %}
+                    <div class="run-card-meta">
+                        <i class="fa-solid fa-masks-theater"></i> {{ run.event.genre }}
+                    </div>
+                {% endif %}
+                <div class="run-card-meta">
+                    <i class="fa-solid fa-calendar"></i> {{ run.pretty_dates }}
+                </div>
+                {% if 'where' in association.features %}
+                    {% if run.event.where or run.event.maps_url %}
+                        <div class="run-card-meta">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            {% if run.event.where %}{{ run.event.where }}{% endif %}
+                            {% if run.event.maps_url %}
+                                <a href="{{ run.event.maps_url }}"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if 'website' in association.features and run.event.website %}
+                    <div class="run-card-meta">
+                        <a href="{{ run.event.website }}"><i class="fa-solid fa-globe"></i> {% trans "Website" %}</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="run-card-footer">
+                {% include "elements/reg_status.html" with run_status=run.status registration=run.status.registration %}
+            </div>
+        </div>
+    {% endfor %}
 </div>

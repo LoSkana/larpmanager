@@ -3888,7 +3888,6 @@ body.floating_iframe #wrapper {
   margin-bottom: 0.5em;
 }
 
-
 /* ---------------------------------------------------------------------------
    Version 22 interface
    --------------------------------------------------------------------------- */
@@ -4164,4 +4163,100 @@ body.association.new_v22 .user_resize {
 
 .new_v22 .grid {
   padding: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   v22 Run card grid (calendar page)
+   --------------------------------------------------------------------------- */
+
+.run-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+  margin: 1em 0;
+}
+
+.run-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border: 1px solid rgba(var(--pri-rgb), 0.15);
+  background: rgba(var(--pri-rgb), 0.03);
+  box-shadow: 0 2px 8px rgba(var(--pri-rgb), 0.06);
+  overflow: hidden;
+  transition:
+    box-shadow 0.15s,
+    border-color 0.15s;
+}
+
+.run-card:hover {
+  border-color: rgba(var(--pri-rgb), 0.3);
+  box-shadow: 0 4px 16px rgba(var(--pri-rgb), 0.12);
+}
+
+.run-card-cover-link {
+  display: block;
+  line-height: 0;
+}
+
+.run-card-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.run-card-cover-placeholder {
+  background: rgba(var(--pri-rgb), 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.run-card-cover-placeholder i {
+  font-size: 2.5rem;
+  opacity: 0.3;
+}
+
+.run-card-body {
+  flex: 1;
+  padding: 0.85rem 1rem 0.5rem;
+}
+
+.run-card-title {
+  margin: 0 0 0.6em;
+  font-size: 1.05em;
+  text-align: left;
+}
+
+.run-card-meta {
+  font-size: 0.88em;
+  margin-bottom: 0.3em;
+  opacity: 0.85;
+}
+
+.run-card-meta i {
+  font-size: 0.9em;
+  width: 1.1em;
+  text-align: center;
+}
+
+.run-card-footer {
+  padding: 0.6rem 1rem;
+  border-top: 1px solid rgba(var(--pri-rgb), 0.1);
+  background: rgba(var(--pri-rgb), 0.025);
+  font-size: 0.9em;
+}
+
+@media (max-width: 900px) {
+  .run-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .run-card-grid {
+    grid-template-columns: 1fr;
+  }
 }

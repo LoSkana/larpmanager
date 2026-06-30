@@ -221,17 +221,6 @@
                             <span>Tutorials</span>
                         </a>
                     </span>
-                    <hr />
-                    <span class="sidebar-link-wrap">
-                        <a class="sidebar-link" id="logout" href="{% url 'logout' %}">
-                            <i class="fa-solid fa-right-from-bracket"></i>
-                            <span>Logout</span>
-                        </a>
-                    </span>
-                    <form method="post" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" id="real_logout">logout</button>
-                    </form>
                     {% include "elements/structure/sidebar-footer.html" %}
                 </div>
             {% endif %}
