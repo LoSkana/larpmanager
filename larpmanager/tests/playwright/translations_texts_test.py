@@ -90,4 +90,4 @@ def test_translations_text(pw_page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Hello")
     topbar(page, "Profil")
-    expect_normalized(page, page.locator("#sidebar"), "IPersönliche Angaben")
+    expect_normalized(page, page.locator("#sidebar"), "Persönliche Angaben")
