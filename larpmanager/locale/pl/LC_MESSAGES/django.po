@@ -323,6 +323,9 @@ msgstr "używany"
 msgid "Actor"
 msgstr "Aktor"
 
+msgid "Admin"
+msgstr "Admin"
+
 msgid "Album"
 msgstr "Album"
 
@@ -1126,6 +1129,9 @@ msgstr "Przypisany"
 
 msgid "Auto buy"
 msgstr "Automatyczny zakup"
+
+msgid "Calendar"
+msgstr "Kalendarz"
 
 msgid "Campaign"
 msgstr "Kampania"
@@ -2156,6 +2162,9 @@ msgstr "Wniosek o"
 msgid "Rotate left"
 msgstr "Obrót w lewo"
 
+msgid "Scroll left"
+msgstr "Przesuń w lewo"
+
 msgid "Secret link"
 msgstr "Tajne łącze"
 
@@ -2402,6 +2411,9 @@ msgstr "Wymagania"
 msgid "Rotate right"
 msgstr "Obrót w prawo"
 
+msgid "Scroll right"
+msgstr "Przesuń w prawo"
+
 msgid "See you soon"
 msgstr "Do zobaczenia wkrótce"
 
@@ -2410,6 +2422,9 @@ msgstr "Pokaż historię"
 
 msgid "Subscription"
 msgstr "Subskrypcja"
+
+msgid "Tech Support"
+msgstr "Pomoc techniczna"
 
 msgid "Tell me more"
 msgstr "Powiedz mi więcej"
@@ -2659,6 +2674,9 @@ msgid "Personal code"
 msgstr "Kod osobisty"
 
 msgid "Personal data"
+msgstr "Dane osobowe"
+
+msgid "Personal info"
 msgstr "Dane osobowe"
 
 msgid "Phone contact"
@@ -9087,11 +9105,6 @@ msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 "Czy chcesz zarządzać postaciami przypisanymi do zarejestrowanych uczestników"
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Jeśli zaznaczone: wyświetla link na górnym pasku, aby wyświetlić wszystkie "
-"znaki użytkownika"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr ""
 "Wskazuje, czy rabat jest widoczny i możliwy do wykorzystania przez "
@@ -9185,6 +9198,11 @@ msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Jeśli zaznaczone: Wyślij wiadomość e-mail do organizatorów za każdą "
 "otrzymaną płatność"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Jeśli opcja jest zaznaczona: w pasku bocznym pojawia się link umożliwiający "
+"wyświetlenie wszystkich postaci użytkownika"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
@@ -9364,12 +9382,6 @@ msgstr ""
 "wpisy"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Jeśli zaznaczone: wyświetla link na górnym pasku, aby wyświetlić wszystkie "
-"rejestracje użytkownika"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Lista użytkowników, którzy nie zarejestrowali się na przyszłą sesję "
@@ -9483,6 +9495,12 @@ msgid ""
 msgstr ""
 "Jeśli zaznaczone: Wysyła na główną pocztę kopię wszystkich wiadomości "
 "wysłanych do uczestników"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Jeśli opcja jest zaznaczona: w pasku bocznym pojawia się link umożliwiający "
+"wyświetlenie wszystkich rejestracji użytkownika"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

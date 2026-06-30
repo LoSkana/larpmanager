@@ -323,6 +323,9 @@ msgstr "gebraucht"
 msgid "Actor"
 msgstr "Schauspieler"
 
+msgid "Admin"
+msgstr "Admin"
+
 msgid "Album"
 msgstr "Alben"
 
@@ -1126,6 +1129,9 @@ msgstr "Zuweisen"
 
 msgid "Auto buy"
 msgstr "Auto kaufen"
+
+msgid "Calendar"
+msgstr "Kalender"
 
 msgid "Campaign"
 msgstr "Kampagne"
@@ -2156,6 +2162,9 @@ msgstr "Antrag auf"
 msgid "Rotate left"
 msgstr "Linkes Rad"
 
+msgid "Scroll left"
+msgstr "Nach links scrollen"
+
 msgid "Secret link"
 msgstr "Geheime Verbindung"
 
@@ -2402,6 +2411,9 @@ msgstr "Anforderungen"
 msgid "Rotate right"
 msgstr "Rechtes Rad"
 
+msgid "Scroll right"
+msgstr "Nach rechts scrollen"
+
 msgid "See you soon"
 msgstr "Wir warten auf Sie"
 
@@ -2410,6 +2422,9 @@ msgstr "Historische Ausstellung"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tech Support"
+msgstr "Technischer Support"
 
 msgid "Tell me more"
 msgstr "Weitere Informationen"
@@ -2660,6 +2675,9 @@ msgstr "Persönlicher Code"
 
 msgid "Personal data"
 msgstr "Persönliche Daten"
+
+msgid "Personal info"
+msgstr "Persönliche Angaben"
 
 msgid "Phone contact"
 msgstr "Telefonischer Kontakt"
@@ -9309,11 +9327,6 @@ msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 "Möchten Sie die den registrierten Teilnehmern zugewiesenen Zeichen verwalten"
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Wenn angekreuzt: zeigt einen Link in der oberen Leiste, um alle Zeichen des "
-"Benutzers anzuzeigen"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Gibt an, ob der Rabatt für die Teilnehmer sichtbar und nutzbar ist"
 
@@ -9422,6 +9435,11 @@ msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Wenn angekreuzt: Für jede eingegangene Zahlung eine E-Mail an die "
 "Organisatoren senden"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Wenn aktiviert: Zeigt in der Seitenleiste einen Link an, über den du alle "
+"Charaktere des Nutzers anzeigen kannst"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
@@ -9612,12 +9630,6 @@ msgstr ""
 "die markierten Einträge zu überprüfen"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Wenn angekreuzt: zeigt einen Link in der oberen Leiste an, um alle "
-"Registrierungen des Benutzers zu sehen"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Liste der Benutzer, die sich nicht für eine zukünftige Sitzung der "
@@ -9741,6 +9753,12 @@ msgid ""
 msgstr ""
 "Wenn markiert: Sendet der Hauptmail eine Kopie aller an die Teilnehmer "
 "gesendeten Mails"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Wenn aktiviert: Zeigt in der Seitenleiste einen Link an, über den du alle "
+"Registrierungen des Benutzers anzeigen kannst"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

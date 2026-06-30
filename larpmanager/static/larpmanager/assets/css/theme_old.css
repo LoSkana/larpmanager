@@ -155,6 +155,14 @@ body {
   margin-top: var(--topbar-height);
 }
 
+#sidebar.topbar {
+  height: calc(100vh - var(--topbar-height));
+}
+
+#page-wrapper.sidebar header {
+  margin-left: 21ch;
+}
+
 #page-wrapper.topbar {
   overflow: auto;
   -ms-overflow-style: none;
@@ -304,19 +312,42 @@ body {
    --------------------------------------------------------------------------- */
 
 #sidebar {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 20ch;
   height: 100vh;
   position: fixed;
   top: 0;
   left: 0;
-  padding: 0 0.5em 3em 0.5em;
+  padding: 0 0.5em 0 0.5em;
   box-sizing: border-box;
   border-right: 2px solid rgba(var(--pri-rgb), 0.085);
   font-size: 100%;
-  overflow: scroll;
+  overflow: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
+}
+
+#sidebar .inner {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 3em;
+}
+
+#sidebar .inner::-webkit-scrollbar {
+  display: none;
+}
+
+#sidebar .new-menu {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 #sidebar:focus {
@@ -450,6 +481,13 @@ nav#sidebar-nav {
 #sidebar .new-menu .sidebar-start {
   padding: 0.2em 0;
   margin: 0;
+}
+
+#sidebar .new-menu .sidebar-footer,
+#sidebar .inner .sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid rgba(var(--pri-rgb), 0.1);
+  padding-top: 0.4em;
 }
 
 /* Mobile sidebar overlay */

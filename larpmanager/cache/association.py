@@ -141,6 +141,7 @@ def init_cache_association(a_slug: str) -> dict | None:
     for config in [
         "user_characters_shortcut",
         "user_registrations_shortcut",
+        "calendar_past_events",
     ]:
         association_dict[config] = get_association_config(
             association.id, config, default_value=False, context=temp_context

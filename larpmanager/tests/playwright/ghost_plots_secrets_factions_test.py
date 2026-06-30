@@ -43,7 +43,7 @@ from larpmanager.tests.utils import (
     login_user,
     save_modal,
     sidebar,
-    submit_confirm,
+    submit_confirm, topbar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -155,7 +155,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     # check secret factions
     login_user(page, live_server)
     go_to(page, live_server, "/")
-    page.get_by_role("link", name="Test Larp").click()
+    topbar(page, "Test Larp")
     page.get_by_role("link", name="Test Character").click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#wrapper"), "Presentation Test Teaser eefqq")

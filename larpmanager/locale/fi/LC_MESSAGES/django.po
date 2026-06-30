@@ -323,6 +323,9 @@ msgstr "käytetty"
 msgid "Actor"
 msgstr "Toimija"
 
+msgid "Admin"
+msgstr "Järjestelmänvalvoja"
+
 msgid "Album"
 msgstr "Albumi"
 
@@ -1126,6 +1129,9 @@ msgstr "Myönnetty"
 
 msgid "Auto buy"
 msgstr "Auto ostaa"
+
+msgid "Calendar"
+msgstr "Kalenteri"
 
 msgid "Campaign"
 msgstr "Kampanja"
@@ -2156,6 +2162,9 @@ msgstr "Pyyntö"
 msgid "Rotate left"
 msgstr "Käännä vasemmalle"
 
+msgid "Scroll left"
+msgstr "Vieritä vasemmalle"
+
 msgid "Secret link"
 msgstr "Salainen linkki"
 
@@ -2402,6 +2411,9 @@ msgstr "Vaatimukset"
 msgid "Rotate right"
 msgstr "Pyöritä oikealle"
 
+msgid "Scroll right"
+msgstr "Vieritä oikealle"
+
 msgid "See you soon"
 msgstr "Nähdään pian"
 
@@ -2410,6 +2422,9 @@ msgstr "Näytä historia"
 
 msgid "Subscription"
 msgstr "Tilaus"
+
+msgid "Tech Support"
+msgstr "Tekninen tuki"
 
 msgid "Tell me more"
 msgstr "Kerro lisää"
@@ -2659,6 +2674,9 @@ msgid "Personal code"
 msgstr "Henkilökohtainen koodi"
 
 msgid "Personal data"
+msgstr "Henkilötiedot"
+
+msgid "Personal info"
 msgstr "Henkilötiedot"
 
 msgid "Phone contact"
@@ -9046,11 +9064,6 @@ msgstr "Päivämäärä, jolloin järjestö on virallisesti hyväksynyt jäsenyy
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr "Haluatko hallita ilmoittautuneille osallistujille osoitettuja hahmoja"
 
-msgid "If checked: shows a link in the topbar to view all user's characters"
-msgstr ""
-"Jos valittuna: näyttää yläpalkissa linkin kaikkien käyttäjien "
-"hahmojentarkastelemiseksi"
-
 msgid "Indicates whether the discount is visible and usable by participants"
 msgstr "Ilmaisee, onko alennus näkyvissä ja osallistujien käytettävissä"
 
@@ -9145,6 +9158,11 @@ msgid "If checked: Send an email to the organisers for each payment received"
 msgstr ""
 "Jos valitaan: Lähetä sähköpostiviesti järjestäjille jokaisesta saadusta "
 "maksusta"
+
+msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgstr ""
+"Jos valinta on valittuna: sivupalkissa näkyy linkki, jonka kautta voi "
+"tarkastella käyttäjän kaikkia hahmoja"
 
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr "Jos haluat liittää tiedoston, ilmoita se tässä, muuten jätä tyhjäksi"
@@ -9319,12 +9337,6 @@ msgstr ""
 "merkinnät, jotka on merkitty"
 
 msgid ""
-"If checked: shows a link in the topbar to view all user's registrations"
-msgstr ""
-"Jos valittuna: näyttää yläpalkissa linkin kaikkien käyttäjien "
-"ilmoittautumiset"
-
-msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
 "Luettelo käyttäjistä, jotka eivät ole ilmoittautumiset tapahtuman tulevaan "
@@ -9443,6 +9455,12 @@ msgid ""
 msgstr ""
 "Jos valitaan: Lähettää pääpostiin kopion kaikista osallistujille "
 "lähetetyistä sähköpostiviesteistä"
+
+msgid ""
+"If checked: shows a link in the sidebar to view all user's registrations"
+msgstr ""
+"Jos valinta on valittuna: sivupalkissa näkyy linkki, jonka kautta voi "
+"tarkastella kaikkia käyttäjän rekisteröitymisiä"
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"

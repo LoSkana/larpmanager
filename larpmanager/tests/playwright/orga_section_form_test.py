@@ -32,7 +32,7 @@ from larpmanager.tests.utils import (just_wait, submit_register,
                                      go_to,
                                      login_orga,
                                      login_user,
-                                     expect_normalized, fill_tinymce, check_feature, sidebar, nav,
+                                     expect_normalized, fill_tinymce, check_feature, sidebar,
                                      get_modal_iframe, save_modal, _wait_lm_ready, char_dual_pick,
                                      )
 
@@ -312,7 +312,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # check it is visible
     go_to(page, live_server, "/test/register")
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     expect(page.get_by_role("cell", name="faaaaacc")).to_be_visible()
     expect_normalized(page, page.locator("#register_form"),
                       "ticket (*) standard depends your registration ticket faaaaacc needs preferences")

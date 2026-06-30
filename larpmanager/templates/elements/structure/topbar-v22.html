@@ -1,0 +1,124 @@
+{% load i18n static %}
+<div id="topbar" class="topbar_v22">
+    <button class="tv22-scroll-btn tv22-scroll-left"
+            aria-label="{% trans "Scroll left" %}">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <div class="tv22-pills-wrapper">
+        <div class="tv22-pills" id="tv22-user-pills">
+            {% if manage %}
+                {% if association_role %}
+                    <a class="tv22-pill{% if not run %} active{% endif %}"
+                       href="{% url 'manage' %}">
+                        {% if association.favicon %}<img class="tv22-pill-img" src="{{ association.favicon }}" alt="">{% endif %}
+                        {{ association.name }}
+                    </a>
+                {% endif %}
+                {% for id, open_run in open_runs.items %}
+                    <a class="tv22-pill{% if run and run.event.slug == open_run.event_slug and run.number == open_run.number %} active{% endif %}"
+                       href="{% url 'manage' open_run.slug %}">
+                        {% if open_run.cover_url %}<img class="tv22-pill-img" src="{{ open_run.cover_url }}" alt="">{% endif %}
+                        {{ open_run.label }}
+                    </a>
+                {% endfor %}
+            {% else %}
+                <a class="tv22-pill{% if not run and not is_profile_page %} active{% endif %}"
+                   href="{% url 'home' %}">
+                    {% if association.favicon %}
+                        <img class="tv22-pill-img" src="{{ association.favicon }}" alt="">
+                    {% else %}
+                        <i class="fa-solid fa-house"></i>
+                    {% endif %}
+                    <span>Home</span>
+                </a>
+                {% for vrun in visible_runs %}
+                    <a class="tv22-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
+                       href="{% url 'event_redirect' event_slug=vrun.slug %}">
+                        {% if vrun.cover_url %}<img class="tv22-pill-img" src="{{ vrun.cover_url }}" alt="">{% endif %}
+                        {{ vrun.name }}
+                    </a>
+                {% endfor %}
+                {% if user.is_authenticated %}
+                    <a class="tv22-pill tv22-pill-profile{% if not run and is_profile_page %} active{% endif %}"
+                       href="{% url 'profile' %}">
+                        {% if user.member.profile %}
+                            <img class="tv22-pill-img"
+                                 src="{{ user.member.profile_thumb.url }}"
+                                 alt="">
+                        {% else %}
+                            <i class="fa-solid fa-gear"></i>
+                        {% endif %}
+                        <span>{% trans "Profile" %}</span>
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <button class="tv22-scroll-btn tv22-scroll-right"
+            aria-label="{% trans "Scroll right" %}">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+    {% if topbar_admin %}
+        {% if manage %}
+            {% if run %}
+                {% url 'event_redirect' event_slug=run.get_slug as user_href %}
+            {% else %}
+                {% url 'home' as user_href %}
+            {% endif %}
+            <div class="tv22-switch">
+                <a class="tv22-switch-opt" href="{{ user_href }}">{% trans "User" %}</a>
+                <span class="tv22-switch-opt active">{% trans "Admin" %}</span>
+            </div>
+        {% else %}
+            {% if run %}
+                {% url 'manage' run.get_slug as admin_href %}
+            {% else %}
+                {% url 'manage' as admin_href %}
+            {% endif %}
+            <div class="tv22-switch">
+                <span class="tv22-switch-opt active">{% trans "User" %}</span>
+                <a class="tv22-switch-opt" href="{{ admin_href }}">{% trans "Admin" %}</a>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+<script>
+(function () {
+    var wrapper = document.querySelector('.tv22-pills-wrapper');
+    var btnLeft = document.querySelector('.tv22-scroll-left');
+    var btnRight = document.querySelector('.tv22-scroll-right');
+
+    function updateScrollBtns() {
+        if (!wrapper) return;
+        btnLeft.style.visibility = wrapper.scrollLeft > 0 ? 'visible' : 'hidden';
+        btnRight.style.visibility = wrapper.scrollLeft < wrapper.scrollWidth - wrapper.clientWidth - 1 ? 'visible' : 'hidden';
+    }
+
+    var scrollInterval;
+    function startScroll(dir) {
+        scrollInterval = setInterval(function () { wrapper.scrollLeft += dir * 200; updateScrollBtns(); }, 16);
+    }
+    function stopScroll() { clearInterval(scrollInterval); }
+
+    if (btnLeft) {
+        btnLeft.addEventListener('mousedown', function () { startScroll(-1); });
+        btnLeft.addEventListener('touchstart', function () { startScroll(-1); });
+        btnLeft.addEventListener('mouseup', stopScroll);
+        btnLeft.addEventListener('mouseleave', stopScroll);
+        btnLeft.addEventListener('touchend', stopScroll);
+    }
+    if (btnRight) {
+        btnRight.addEventListener('mousedown', function () { startScroll(1); });
+        btnRight.addEventListener('touchstart', function () { startScroll(1); });
+        btnRight.addEventListener('mouseup', stopScroll);
+        btnRight.addEventListener('mouseleave', stopScroll);
+        btnRight.addEventListener('touchend', stopScroll);
+    }
+
+    if (wrapper) {
+        wrapper.addEventListener('scroll', updateScrollBtns);
+        window.addEventListener('resize', updateScrollBtns);
+        updateScrollBtns();
+    }
+})();
+</script>

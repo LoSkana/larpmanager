@@ -276,6 +276,7 @@ from larpmanager.models.writing import (
     replace_character_names,
 )
 from larpmanager.utils.auth.permission import auto_assign_event_permission_number
+from larpmanager.utils.core.nav import invalidate_user_nav_entries
 from larpmanager.utils.io.pdf import (
     cleanup_character_pdfs_before_delete,
     cleanup_character_pdfs_on_save,
@@ -1523,6 +1524,10 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 
     # Reset event navigation links cache
     on_registration_post_save_reset_event_links(instance)
+
+    # Invalidate user nav entries cache
+    if instance.member_id:
+        invalidate_user_nav_entries(instance.member_id)
 
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)

@@ -31,7 +31,7 @@ import pytest
 
 from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
     submit_register, char_dual_pick, \
-    get_modal_iframe, save_modal, sidebar
+    get_modal_iframe, save_modal, sidebar, topbar
 
 pytestmark = pytest.mark.e2e
 
@@ -131,7 +131,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     # log out and log in as the test user
     login_user(page, live_server)
 
-    page.get_by_role("link", name="Test Larp").click()
+    topbar(page, "Test Larp")
     page.get_by_role("link", name="Test Character").click()
 
     # do transfers as a user

@@ -38,8 +38,7 @@ test_user = "user@test.it"
 
 
 def logout(page: Any) -> None:
-    page.locator("a#menu-open").first.click()
-    page.get_by_role("link", name="Logout").click()
+    sidebar(page, "Logout")
 
 
 def login_orga(page: Any, live_server: Any) -> None:
@@ -694,6 +693,8 @@ def get_modal_iframe(page):
             frame.wait_for_load_state("domcontentloaded")
     return FrameLocatorWithPage(iframe_locator.content_frame, page, iframe_locator)
 
+def topbar(page, link):
+    icon_link("#topbar", page, link)
 
 def sidebar(page, link):
     icon_link("#sidebar", page, link)
@@ -705,10 +706,6 @@ def icon_link(container, page, link):
     locator.wait_for(state="visible")
     locator.click()
     _wait_lm_ready(page)
-
-
-def nav(page, link):
-    icon_link(".nav", page, link)
 
 
 def _wait_select2_results(page):

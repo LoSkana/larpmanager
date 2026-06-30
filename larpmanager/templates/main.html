@@ -77,7 +77,7 @@
     {% else %}
         <!-- Header -->
         <header id="header"
-                class="alt {% if manage and is_sidebar_open %}sidebar{% endif %}">
+                class="alt {% if manage and is_sidebar_open %}sidebar{% endif %} no_v22">
             <h1>
                 <span>
                     {% block title %}
@@ -159,7 +159,7 @@
                             {{ association.footer | safe }}
                         </div>
                     {% endif %}
-                    <table class="mob ">
+                    <table class="mob no_v22">
                         <tr>
                             {% if 'help' in association.features %}
                                 <td>
@@ -183,7 +183,7 @@
                             </td>
                         </tr>
                     </table>
-                    <p>
+                    <p class="no_v22">
                         <!-- Please, do not remove! -->
                         Powered by <a href="https://{{ association.main_domain }}">{{ association.platform }}</a>
                     </p>
