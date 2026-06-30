@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, load_image, login_user, submit_confirm
+from larpmanager.tests.utils import go_to, load_image, login_user, submit_confirm, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -39,7 +39,7 @@ def test_user_ticket(pw_page: Any) -> None:
     go_to(page, live_server, "/")
 
     # no member
-    page.get_by_role("link", name="Technical Support").click()
+    sidebar(page, "Tech Support")
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("dudi")
     page.get_by_role("textbox", name="Email").press("Tab")
@@ -49,7 +49,7 @@ def test_user_ticket(pw_page: Any) -> None:
     submit_confirm(page)
 
     # no member - screenshot
-    page.get_by_role("link", name="Technical Support").click()
+    sidebar(page, "Tech Support")
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("sadsa@sadsa.itsad")
     page.get_by_role("textbox", name="Request").click()
@@ -61,7 +61,7 @@ def test_user_ticket(pw_page: Any) -> None:
     login_user(page, live_server)
 
     # user
-    page.get_by_role("link", name="Technical Support").click()
+    sidebar(page, "Tech Support")
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("wwww@ewew.itsa")
     page.get_by_role("textbox", name="Request").click()
@@ -69,7 +69,7 @@ def test_user_ticket(pw_page: Any) -> None:
     submit_confirm(page)
 
     # user - screenshot
-    page.get_by_role("link", name="Technical Support").click()
+    sidebar(page, "Tech Support")
     page.get_by_role("textbox", name="Email").click()
     page.get_by_role("textbox", name="Email").fill("eee@re.it")
     page.get_by_role("textbox", name="Email").press("Tab")
