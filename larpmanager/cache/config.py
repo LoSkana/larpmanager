@@ -30,6 +30,9 @@ from larpmanager.models.base import Config
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
 
+# Configs that must always read from the child event, never from the campaign parent.
+EVENT_CONFIGS_OWN_CHILD: frozenset[str] = frozenset({"payment_custom_reason"})
+
 
 def reset_element_configs(element: BaseModel) -> None:
     """Delete cached configs for the given element."""
@@ -220,8 +223,12 @@ def get_element_config(element: Any, config_name: str, default_value: Any, *, by
         cache (default) or directly from database (if bypass_cache=True).
 
     """
-    # If element is an Event with a parent, use parent's config directly
-    if element._meta.model_name.lower() == "event" and getattr(element, "parent_id", None):  # noqa: SLF001
+    # If element is an Event with a parent, use parent's config directly (except own-child configs)
+    if (
+        config_name not in EVENT_CONFIGS_OWN_CHILD
+        and element._meta.model_name.lower() == "event"  # noqa: SLF001
+        and getattr(element, "parent_id", None)
+    ):
         element = element.parent
 
     # Check if element already has cached configurations
@@ -322,12 +329,15 @@ def get_event_config(
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
-    """Get event configuration value; for campaign always using parent."""
+    """Get event configuration value; for campaign always using parent, except for EVENT_CONFIGS_OWN_CHILD."""
     if context is None:
         context = {}
 
-    parent_id = _get_event_parent_id(event_id, context)
-    lookup_id = parent_id if parent_id else event_id
+    if config_name in EVENT_CONFIGS_OWN_CHILD:
+        lookup_id = event_id
+    else:
+        parent_id = _get_event_parent_id(event_id, context)
+        lookup_id = parent_id if parent_id else event_id
 
     return _get_cached_config(
         lookup_id, "event", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
