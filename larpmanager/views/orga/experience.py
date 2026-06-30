@@ -20,18 +20,18 @@
 import contextlib
 import logging
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db.models import Q
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render
-from django.utils.translation import gettext_lazy as _
+from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import get_event_exp_cache, get_event_exp_systems
 from larpmanager.forms.experience import (
     OrgaDeliveryExpForm,
+    OrgaDeliveryExpLoadForm,
 )
 from larpmanager.models.event import Run
 from larpmanager.models.experience import (
@@ -103,63 +103,56 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new delivery of experience points.
 
-    If a run is selected via the auto_populate_run field, the form will be reloaded with characters
-    from that run's registrations pre-populated in the characters field.
+    If ?run_id=<id> is present on GET, characters from that run's registrations are pre-populated.
     """
-    # Check user permissions and get base context for the event
-    context = check_event_context(request, event_slug, "orga_exp_deliveries")
+    run_id = request.GET.get("run_id")
+    if request.method == "GET" and run_id:
+        context = check_event_context(request, event_slug, "orga_exp_deliveries")
+        try:
+            run = Run.objects.get(uuid=run_id, event__slug=event_slug)
+            character_ids = (
+                Registration.objects.filter(run=run, cancellation_date__isnull=True)
+                .values_list("characters__id", flat=True)
+                .distinct()
+            )
+            character_ids = [cid for cid in character_ids if cid is not None]
+            character_uuids = list(Character.objects.filter(id__in=character_ids).values_list("uuid", flat=True))
+            form = OrgaDeliveryExpForm(
+                instance=None,
+                context=context,
+                initial={"characters": [str(u) for u in character_uuids]},
+            )
+            context["form"] = form
+            context["num"] = None
+            context["add_another"] = True
+            context["continue_add"] = False
+            context["elementTyp"] = DeliveryExp
+            is_frame = request.GET.get("frame") == "1"
+            return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/edit.html")
+        except (ValueError, ObjectDoesNotExist) as err:
+            logger.warning("Pre-populate run failed: %s", err)
 
-    # Handle auto-population from run selection
-    if request.method == "POST":
-        run_id = request.POST.get("auto_populate_run")
-
-        # If a run was selected, get all characters from that run's registrations
-        if run_id:
-            try:
-                run = Run.objects.get(pk=run_id, event__slug=event_slug)
-
-                # Get all characters assigned to registrations for this run
-                character_ids = (
-                    Registration.objects.filter(run=run, cancellation_date__isnull=True)
-                    .values_list("characters__id", flat=True)
-                    .distinct()
-                )
-
-                # Filter registrations without characters
-                character_ids = [cid for cid in character_ids if cid is not None]
-
-                # Pass the POST data but override the characters field (use UUIDs for widget)
-                character_uuids = list(Character.objects.filter(id__in=character_ids).values_list("uuid", flat=True))
-                form_data = request.POST.copy()
-                form_data.setlist("characters", [str(u) for u in character_uuids])
-
-                # Create the form with pre-populated data
-                form = OrgaDeliveryExpForm(form_data, instance=None, context=context)
-
-                # Hide the auto_populate_run field now that characters are loaded
-                form.fields.pop("auto_populate_run", None)
-
-                # Set up context for rendering
-                context["form"] = form
-                context["num"] = "0"
-                context["add_another"] = True
-                context["continue_add"] = False
-                context["elementTyp"] = DeliveryExp
-
-                # Add success message to inform user
-                messages.info(
-                    request,
-                    _("Characters from event '{run}' have been loaded. Review and confirm to save.").format(run=run),
-                )
-
-                is_frame = request.POST.get("frame") == "1"
-                return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/edit.html")
-
-            except (ValueError, ObjectDoesNotExist) as err:
-                logger.warning("Auto populate run failed: %s", err)
-
-    # Use standard orga_edit for all other cases
     return orga_new(request, event_slug, OrgaAction.PX_DELIVERIES)
+
+
+@login_required
+def orga_exp_deliveries_load(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Show a modal form to select a run; on submit redirect to new delivery with characters pre-loaded."""
+    context = check_event_context(request, event_slug, "orga_exp_deliveries")
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    if request.method == "POST":
+        form = OrgaDeliveryExpLoadForm(request.POST, context=context)
+        if form.is_valid():
+            run = form.cleaned_data["run"]
+            new_url = reverse("orga_exp_deliveries_new", args=[event_slug]) + f"?run_id={run.uuid}&frame=1"
+            return redirect(new_url)
+        context["form"] = form
+    else:
+        context["form"] = OrgaDeliveryExpLoadForm(context=context)
+
+    context["elementTyp"] = DeliveryExp
+    return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/experience/deliveries_load.html")
 
 
 @login_required

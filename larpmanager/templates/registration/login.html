@@ -57,66 +57,36 @@
 {% endblock content %}
 {% block js %}
     <script>
-function isMobileNonChrome() {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-    // Check if the device is mobile
-    const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile|windows phone/i.test(userAgent);
-
-    // Check if the browser is Chrome
-    const isChrome = /chrome|crios|crmo/i.test(userAgent);
-
-    // Return true if the device is mobile and the browser is not Chrome
-    return isMobile && !isChrome;
-}
-
-window.addEventListener('DOMContentLoaded', function() {
-    $(function(){
-
-    {% if association.id != 0 %}
-
-       $('.allauth_signin a').each(function(index) {
-            var href = $(this).attr('href');
-            // console.log(href);
-
-            const domain = '{{ association.slug }}';
-            let url = new URL(href || window.location.pathname, 'https://{{ association.main_domain }}');
-
-            // build the "next" target, appending any existing next-path if present
-            const existingNext = url.searchParams.get('next');
-            const nextTarget = `https://{{ association.main_domain }}/after_login/${domain}`
-                             + (existingNext ? `/${existingNext}` : '');
-
-            url.searchParams.set('next', nextTarget);
-
-            // update the link
-            $(this).attr('href', url.toString());
-        });
-
-    {% endif %}
-
-        if (isMobileNonChrome()) {
-            $('.allauth_signin a').hide();
-            $('.allauth_signin').append('<p>To use Google Single Sign On, please use a Chrome browser</p>');
-
-        }
-
-    });
+$(function(){
 
     function isMobileNonChrome() {
         const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-
-        // Check if the device is mobile
         const isMobile = /android|iphone|ipad|ipod|opera mini|iemobile|mobile|windows phone/i.test(userAgent);
-
-        // Check if the browser is Chrome
         const isChrome = /chrome|crios|crmo/i.test(userAgent);
-
-        // Return true if the device is mobile and the browser is not Chrome
         return isMobile && !isChrome;
     }
 
-});
+    {% if association.id != 0 %}
 
+    $('.allauth_signin a').each(function() {
+        var href = $(this).attr('href');
+        const domain = '{{ association.slug }}';
+        let url = new URL(href || window.location.pathname, 'https://{{ association.main_domain }}');
+
+        // strip existing next to avoid double-encoding
+        url.searchParams.delete('next');
+        url.searchParams.set('next', 'https://{{ association.main_domain }}/after_login/' + domain + '/');
+
+        $(this).attr('href', url.toString());
+    });
+
+    {% endif %}
+
+    if (isMobileNonChrome()) {
+        $('.allauth_signin a').hide();
+        $('.allauth_signin').append('<p>To use Google Single Sign On, please use a Chrome browser</p>');
+    }
+
+});
     </script>
 {% endblock js %}

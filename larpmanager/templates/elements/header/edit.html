@@ -8,7 +8,7 @@
             </a>
         {% endif %}
         {% if extra_link_url %}
-            <a class="new button" href="{{ extra_link_url }}">
+            <a class="new button {{ extra_link_class }}" href="{{ extra_link_url }}">
                 {% if extra_link_icon %}<i class="{{ extra_link_icon }}"></i>{% endif %}
                 {{ extra_link_label }}
             </a>

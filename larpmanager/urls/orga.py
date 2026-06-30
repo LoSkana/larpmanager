@@ -1141,6 +1141,11 @@ urlpatterns = [
         name="orga_exp_deliveries_new",
     ),
     path(
+        "<slug:event_slug>/manage/experience/deliveries/load/",
+        views_ox.orga_exp_deliveries_load,
+        name="orga_exp_deliveries_load",
+    ),
+    path(
         "<slug:event_slug>/manage/experience/deliveries/<slug:delivery_uuid>/edit/",
         views_ox.orga_exp_deliveries_edit,
         name="orga_exp_deliveries_edit",

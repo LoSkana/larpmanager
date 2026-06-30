@@ -3103,9 +3103,6 @@ msgstr "Colore di evidenziazione"
 msgid "Invalid request"
 msgstr "Richiesta non valida"
 
-msgid "Load from event"
-msgstr "Carica dall'evento"
-
 msgid "Mail assignment"
 msgstr "Mail assegnazione"
 
@@ -3621,6 +3618,9 @@ msgstr "Selezione non valida"
 
 msgid "Invoice not found"
 msgstr "Invoice non trovato"
+
+msgid "Load participants"
+msgstr "Carica i partecipanti"
 
 msgid "Maximum available"
 msgstr "Massimo disponibile"
@@ -9915,13 +9915,6 @@ msgstr ""
 "Aggiungi un testo per personalizzare le e-mail e le pagine di registrazione "
 "della tua organizzazione"
 
-#, python-brace-format
-msgid ""
-"Characters from event '{run}' have been loaded. Review and confirm to save."
-msgstr ""
-"Sono stati caricati i personaggi dell'evento '{run}'. Rivedere e confermare "
-"per salvare."
-
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -10008,6 +10001,12 @@ msgid ""
 msgstr ""
 "Seleziona un partecipante e un evento di destinazione per avviare il "
 "trasferimento dell'iscrizione"
+
+msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Seleziona un evento per pre-caricare i partecipanti registrati in una nuova "
+"distribuzione"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -11172,6 +11171,13 @@ msgstr ""
 "%(currency)s</b> al più presto"
 
 msgid ""
+"All characters from this event's registrations will be pre-loaded into the "
+"new delivery"
+msgstr ""
+"Tutti i personaggi presenti nelle iscrizioni di questo evento saranno "
+"precaricati nella nuova consegna"
+
+msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
@@ -12151,13 +12157,6 @@ msgid ""
 msgstr ""
 "Se si seleziona, le opzioni non più disponibili nel modulo vengono nascoste,"
 " invece di essere visualizzate disattivate"
-
-msgid ""
-"If you select an event, all characters from that event's registrations will "
-"be automatically loaded"
-msgstr ""
-"Se si seleziona un evento, tutti i personaggi delle iscrizioni di "
-"quell'evento verranno caricati automaticamente"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

@@ -3103,9 +3103,6 @@ msgstr "Uthev farge"
 msgid "Invalid request"
 msgstr "Ugyldig forespørsel"
 
-msgid "Load from event"
-msgstr "Last inn fra hendelse"
-
 msgid "Mail assignment"
 msgstr "Tildeling av post"
 
@@ -3621,6 +3618,9 @@ msgstr "Ugyldig valg"
 
 msgid "Invoice not found"
 msgstr "Faktura ikke funnet"
+
+msgid "Load participants"
+msgstr "Last inn deltakere"
 
 msgid "Maximum available"
 msgstr "Maksimalt tilgjengelig"
@@ -9759,13 +9759,6 @@ msgstr ""
 "Legg til en tekst for å tilpasse e-poster og registreringssider for "
 "organisasjonen din"
 
-#, python-brace-format
-msgid ""
-"Characters from event '{run}' have been loaded. Review and confirm to save."
-msgstr ""
-"Tegn fra hendelsen '{run}' har blitt lastet inn. Gå gjennom og bekreft for å"
-" lagre."
-
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9843,6 +9836,12 @@ msgid ""
 "Select a participant and a target event to initiate a registration transfer"
 msgstr ""
 "Velg en deltaker og en målhendelse for å starte en overføring av påmeldingen"
+
+msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Velg et arrangement for å forhåndslaste de registrerte deltakerne inn i en "
+"ny utsendelse"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -10961,6 +10960,13 @@ msgstr ""
 " snart som mulig"
 
 msgid ""
+"All characters from this event's registrations will be pre-loaded into the "
+"new delivery"
+msgstr ""
+"Alle karakterer fra påmeldingene til dette arrangementet vil bli "
+"forhåndsinstallert i den nye utgaven"
+
+msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr ""
@@ -11937,13 +11943,6 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, skjules alternativer som ikke lenger er tilgjengelige i "
 "skjemaet, i stedet for å vises deaktivert"
-
-msgid ""
-"If you select an event, all characters from that event's registrations will "
-"be automatically loaded"
-msgstr ""
-"Hvis du velger et arrangement, lastes alle tegnene fra registreringene til "
-"dette arrangementet automatisk inn"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

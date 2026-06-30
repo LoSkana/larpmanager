@@ -3103,9 +3103,6 @@ msgstr "Korostusväri"
 msgid "Invalid request"
 msgstr "Virheellinen pyyntö"
 
-msgid "Load from event"
-msgstr "Lataa tapahtumasta"
-
 msgid "Mail assignment"
 msgstr "Postin osoittaminen"
 
@@ -3621,6 +3618,9 @@ msgstr "Virheellinen valinta"
 
 msgid "Invoice not found"
 msgstr "Laskua ei löydy"
+
+msgid "Load participants"
+msgstr "Lataa osallistujat"
 
 msgid "Maximum available"
 msgstr "Käytettävissä oleva enimmäismäärä"
@@ -9745,12 +9745,6 @@ msgstr ""
 "Lisää teksti, jolla voit mukauttaa organisaatiosi sähköposteja ja "
 "rekisteröintisivuja"
 
-#, python-brace-format
-msgid ""
-"Characters from event '{run}' have been loaded. Review and confirm to save."
-msgstr ""
-"Merkit tapahtumasta '{run}' on ladattu. Tarkista ja vahvista tallentaaksesi."
-
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -9831,6 +9825,12 @@ msgid ""
 msgstr ""
 "Valitse osallistuja ja kohdetapahtuma, jotta voit aloittaa ilmoittautumisen "
 "siirron"
+
+msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Valitse tapahtuma, jotta sen rekisteröityneet osallistujat ladataan "
+"etukäteen uuteen lähetykseen"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -10939,6 +10939,13 @@ msgstr ""
 "mahdollisimman pian"
 
 msgid ""
+"All characters from this event's registrations will be pre-loaded into the "
+"new delivery"
+msgstr ""
+"Kaikki tämän tapahtuman ilmoittautuneet hahmot ladataan valmiiksi uuteen "
+"toimitukseen"
+
+msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr "Huomio: toimenpide on lopullinen, tarkista tehtävät ennen lataamista"
@@ -11904,13 +11911,6 @@ msgid ""
 msgstr ""
 "Jos valittuna, vaihtoehdot, jotka eivät ole enää käytettävissä lomakkeessa, "
 "piilotetaan sen sijaan, että ne näytettäisiin pois käytöstä"
-
-msgid ""
-"If you select an event, all characters from that event's registrations will "
-"be automatically loaded"
-msgstr ""
-"Jos valitset tapahtuman, kaikki kyseisen tapahtuman ilmoittautuneiden "
-"hahmotladataan automaattisesti"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "
