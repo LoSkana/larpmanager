@@ -30,8 +30,8 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
-    sidebar, \
-    get_modal_iframe, save_modal
+    sidebar, just_wait, \
+    get_modal_iframe, save_modal, fill_date
 
 pytestmark = pytest.mark.e2e
 
@@ -61,7 +61,7 @@ def test_permanence_form(pw_page: Any) -> None:
 
     check_orga_visibility(page)
 
-    test_campaign_config_permanence(page, live_server)
+    _campaign_config_permanence(page, live_server)
 
 
 def check_orga_visibility(page: Any) -> None:
@@ -222,9 +222,7 @@ def check_exe_roles(page: Any) -> None:
     save_modal(page, edit_iframe)
 
 
-def test_campaign_config_permanence(page: Any, live_server: Any) -> None:
-    """Test campaign config saved to parent and readable from child."""
-
+def _campaign_config_permanence(page: Any, live_server: Any) -> None:
     # Enable campaign feature
     go_to(page, live_server, "/manage/features/campaign/on")
 
