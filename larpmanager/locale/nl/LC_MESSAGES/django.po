@@ -4525,6 +4525,9 @@ msgstr "Leeftijd (bij gebeurtenis)"
 msgid "Arrived safe and sound"
 msgstr "Veilig aangekomen"
 
+msgid "Browse upcoming events"
+msgstr "Bekijk de komende evenementen"
+
 msgid "Casting management for"
 msgstr "Castingbeheer voor"
 
@@ -5310,6 +5313,9 @@ msgstr "Bedankt voor uw deelname"
 msgid "Ticket name (keep it short)"
 msgstr "Ticketnaam (houd het kort)"
 
+msgid "View badges you have earned"
+msgstr "Bekijk de badges die je hebt verdiend"
+
 msgid "View limited ticket options"
 msgstr "Beperkte ticketopties bekijken"
 
@@ -5546,6 +5552,9 @@ msgstr "Character Inventory Pool Types"
 msgid "Choose the style for the event"
 msgstr "Kies de stijl voor het evenement"
 
+msgid "Choose your preferred language"
+msgstr "Kies de taal die je het liefst gebruikt"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Volledige betaling voor %(event)s"
@@ -5726,6 +5735,9 @@ msgstr "Om weer in te loggen met het account"
 
 msgid "Total of recorded money inflows"
 msgstr "Totaal van geregistreerde geldinstroom"
+
+msgid "View your private conversations"
+msgstr "Bekijk je privégesprekken"
 
 msgid "Where the event will take place"
 msgstr "Waar het evenement plaatsvindt"
@@ -6014,6 +6026,9 @@ msgstr "De registratietoeslagen beheren"
 msgid "Manage the type of event prologues"
 msgstr "Het type proloog beheren"
 
+msgid "Manage your association membership"
+msgstr "Beheer je lidmaatschap van de vereniging"
+
 msgid "Manages registration cancellations"
 msgstr "Beheert annuleringen van registraties"
 
@@ -6181,6 +6196,9 @@ msgstr "De naam van onze hobby, vier letters"
 
 msgid "Unique identifier for the event URL"
 msgstr "Unieke identifier voor de URL van het evenement"
+
+msgid "View the characters you are playing"
+msgstr "Bekijk de personages die je speelt"
 
 msgid "You can't send messages to yourself"
 msgstr "Je kunt geen berichten naar jezelf sturen"
@@ -7070,6 +7088,9 @@ msgstr "Goedkeuring %(user)s als %(role)s voor %(event)s"
 msgid "Authentication token (mark all permissions)"
 msgstr "Authenticatietoken (alle rechten markeren)"
 
+msgid "Browse events that have already taken place"
+msgstr "Bekijk evenementen die al hebben plaatsgevonden"
+
 msgid "Characters are only visible to participants"
 msgstr "Tekens zijn alleen zichtbaar voor deelnemers"
 
@@ -7130,6 +7151,9 @@ msgstr "Deze toegangslink is ongeldig of verlopen."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Niet-herkende bestanden in ZIP (worden overgeslagen)"
+
+msgid "Update your personal data and profile photo"
+msgstr "Werk je persoonlijke gegevens en profielfoto bij"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Upload een PDF-bestand of afbeelding (JPG, PNG, enz.)"
@@ -7244,6 +7268,9 @@ msgid "View all log entries recorded for this event"
 msgstr ""
 "Bekijk alle logboekvermeldingen die voor deze gebeurtenis zijn vastgelegd"
 
+msgid "View all your historical financial movements"
+msgstr "Bekijk al je financiële transacties uit het verleden"
+
 msgid "View the list of characters and participants"
 msgstr "Bekijk de lijst met personages en deelnemers"
 
@@ -7285,6 +7312,9 @@ msgstr "Badges beheren en toewijzen aan deelnemers"
 
 msgid "Manage the registration questions and options"
 msgstr "De registratievragen en -opties beheren"
+
+msgid "Manage users that you can act on their behalf"
+msgstr "Beheer gebruikers voor wie je bevoegd bent om namens hen te handelen"
 
 msgid "Member who used this token (if authenticated)"
 msgstr "Lid dat dit token heeft gebruikt (indien geverifieerd)"
@@ -7408,6 +7438,9 @@ msgstr "Gebruik de knop hierboven om je eerste hand-out toe te voegen"
 
 msgid "Use the button above to assign warehouse items"
 msgstr "Gebruik de knop hierboven om magazijnartikelen toe te wijzen"
+
+msgid "View the list of events you are registered for"
+msgstr "Bekijk de lijst met evenementen waarvoor je je hebt aangemeld"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Welkom op het dashboard van je organisatie!"
@@ -7728,6 +7761,9 @@ msgstr "De configuratie van de geactiveerde functies beheren"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "De voortgangsstappen voor de schrijfelementen beheren"
+
+msgid "Manage your password and two-factor authentication"
+msgstr "Beheer je wachtwoord en tweefactorauthenticatie"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede teken in de relatie (bestemming)"
@@ -8203,6 +8239,9 @@ msgid "Manage tags used to categorize and group warehouse items"
 msgstr ""
 "Beheer tags die worden gebruikt om magazijnartikelen te categoriseren en te "
 "groeperen"
+
+msgid "Manage which organizations can access your personal data"
+msgstr "Bepaal welke organisaties toegang hebben tot je persoonsgegevens"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Controleer het adres nogmaals, vooral het begin"

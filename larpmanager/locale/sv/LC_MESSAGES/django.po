@@ -4525,6 +4525,9 @@ msgstr "Ålder (vid händelsen)"
 msgid "Arrived safe and sound"
 msgstr "Anlände säkert"
 
+msgid "Browse upcoming events"
+msgstr "Se kommande evenemang"
+
 msgid "Casting management for"
 msgstr "Casting management för"
 
@@ -5310,6 +5313,9 @@ msgstr "Tack för din medverkan"
 msgid "Ticket name (keep it short)"
 msgstr "Biljettens namn (håll det kort)"
 
+msgid "View badges you have earned"
+msgstr "Visa de märken du har förtjänat"
+
 msgid "View limited ticket options"
 msgstr "Se begränsade biljettalternativ"
 
@@ -5546,6 +5552,9 @@ msgstr "Pooltyper för karaktärsinventering"
 msgid "Choose the style for the event"
 msgstr "Välj stil för evenemanget"
 
+msgid "Choose your preferred language"
+msgstr "Välj önskat språk"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Fullständig betalning för %(event)s"
@@ -5726,6 +5735,9 @@ msgstr "För att logga in igen med kontot"
 
 msgid "Total of recorded money inflows"
 msgstr "Totalt antal registrerade penninginflöden"
+
+msgid "View your private conversations"
+msgstr "Visa dina privata konversationer"
 
 msgid "Where the event will take place"
 msgstr "Var evenemanget kommer att äga rum"
@@ -6014,6 +6026,9 @@ msgstr "Hantera tilläggsavgifter för registrering"
 msgid "Manage the type of event prologues"
 msgstr "Hantera typen av prologer för evenemang"
 
+msgid "Manage your association membership"
+msgstr "Hantera ditt medlemskap i föreningen"
+
 msgid "Manages registration cancellations"
 msgstr "Hanterar avbokningar av registreringar"
 
@@ -6180,6 +6195,9 @@ msgstr "Namnet på vår hobby, fyra bokstäver"
 
 msgid "Unique identifier for the event URL"
 msgstr "Unik identifierare för evenemanget URL"
+
+msgid "View the characters you are playing"
+msgstr "Se vilka karaktärer du spelar"
 
 msgid "You can't send messages to yourself"
 msgstr "Du kan inte skicka meddelanden till dig själv"
@@ -7064,6 +7082,9 @@ msgstr "Godkännande av %(user)s som %(role)s för %(event)s"
 msgid "Authentication token (mark all permissions)"
 msgstr "Autentiseringstoken (markera alla behörigheter)"
 
+msgid "Browse events that have already taken place"
+msgstr "Se evenemang som redan har ägt rum"
+
 msgid "Characters are only visible to participants"
 msgstr "Tecknen är endast synliga för deltagarna"
 
@@ -7124,6 +7145,9 @@ msgstr "Denna länk är ogiltig eller har löpt ut."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Oigenkända filer i ZIP (kommer att hoppas över)"
+
+msgid "Update your personal data and profile photo"
+msgstr "Uppdatera dina personuppgifter och din profilbild"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Ladda upp en PDF-fil eller bild (JPG, PNG, etc.)"
@@ -7237,6 +7261,9 @@ msgstr "Använd knappen ovan för att lägga till en ny händelsetext"
 msgid "View all log entries recorded for this event"
 msgstr "Visa alla loggposter som registrerats för denna händelse"
 
+msgid "View all your historical financial movements"
+msgstr "Visa alla dina tidigare transaktioner"
+
 msgid "View the list of characters and participants"
 msgstr "Visa listan över karaktärer och deltagare"
 
@@ -7276,6 +7303,9 @@ msgstr "Hantera badges och tilldela dem till deltagare"
 
 msgid "Manage the registration questions and options"
 msgstr "Hantera frågor och alternativ för registrering"
+
+msgid "Manage users that you can act on their behalf"
+msgstr "Hantera användare som du kan agera å deras vägnar"
 
 msgid "Member who used this token (if authenticated)"
 msgstr "Medlem som använde denna token (om den är autentiserad)"
@@ -7398,6 +7428,9 @@ msgstr "Använd knappen ovan för att lägga till ditt första utdelningsmateria
 
 msgid "Use the button above to assign warehouse items"
 msgstr "Använd knappen ovan för att tilldela lagerartiklar"
+
+msgid "View the list of events you are registered for"
+msgstr "Se listan över de evenemang du har anmält dig till"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Välkommen till instrumentpanelen för din organisation!"
@@ -7714,6 +7747,9 @@ msgstr "Hantera konfigurationen av de aktiverade funktionerna"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Hantera framstegsstegen för skrivelementen"
+
+msgid "Manage your password and two-factor authentication"
+msgstr "Hantera ditt lösenord och tvåfaktorsautentisering"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i förhållandet (destination)"
@@ -8172,6 +8208,10 @@ msgstr "Hantera registreringar Rabatter tillgängliga för deltagare"
 msgid "Manage tags used to categorize and group warehouse items"
 msgstr ""
 "Hantera taggar som används för att kategorisera och gruppera lagerartiklar"
+
+msgid "Manage which organizations can access your personal data"
+msgstr ""
+"Ställ in vilka organisationer som får tillgång till dina personuppgifter"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Vänligen kontrollera adressen igen, särskilt dess början"

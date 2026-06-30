@@ -4525,6 +4525,9 @@ msgstr "Ikä (tapahtuman aikana)"
 msgid "Arrived safe and sound"
 msgstr "Saapui ehjänä ja terveenä"
 
+msgid "Browse upcoming events"
+msgstr "Selaa tulevia tapahtumia"
+
 msgid "Casting management for"
 msgstr "Hahmojaon hallinta:"
 
@@ -5310,6 +5313,9 @@ msgstr "Kiitos osallistumisesta"
 msgid "Ticket name (keep it short)"
 msgstr "Lipun nimi (pidä se lyhyenä)"
 
+msgid "View badges you have earned"
+msgstr "Tarkastele ansaitsemiasi merkkejä"
+
 msgid "View limited ticket options"
 msgstr "Katso rajoitetut lippuvaihtoehdot"
 
@@ -5546,6 +5552,9 @@ msgstr "Hahmon inventaarioallas-tyypit"
 msgid "Choose the style for the event"
 msgstr "Valitse tyyli tapahtumaa varten"
 
+msgid "Choose your preferred language"
+msgstr "Valitse haluamasi kieli"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Täydellinen maksu tapahtumaan %(event)s"
@@ -5726,6 +5735,9 @@ msgstr "Kirjautuminen takaisin sisään tilillä"
 
 msgid "Total of recorded money inflows"
 msgstr "Kirjatut rahantulot yhteensä"
+
+msgid "View your private conversations"
+msgstr "Tarkastele yksityisiä keskustelujasi"
 
 msgid "Where the event will take place"
 msgstr "Missä tapahtuma järjestetään"
@@ -6014,6 +6026,9 @@ msgstr "Ilmoittautumismaksujen hallinnointi"
 msgid "Manage the type of event prologues"
 msgstr "Tapahtuman prologien tyypin hallinta"
 
+msgid "Manage your association membership"
+msgstr "Hallinnoi yhdistyksen jäsenyyttäsi"
+
 msgid "Manages registration cancellations"
 msgstr "Hallinnoi ilmoittautumisten peruutuksia"
 
@@ -6180,6 +6195,9 @@ msgstr "Harrastuksemme nimi, neljä kirjainta"
 
 msgid "Unique identifier for the event URL"
 msgstr "Tapahtuman URL-osoitteen yksilöllinen tunniste"
+
+msgid "View the characters you are playing"
+msgstr "Katso hahmot, joita pelaat"
 
 msgid "You can't send messages to yourself"
 msgstr "Et voi lähettää viestejä itsellesi"
@@ -7062,6 +7080,9 @@ msgstr "Hyväksyntä %(user)s %(role)s %(event)s"
 msgid "Authentication token (mark all permissions)"
 msgstr "Tunnistusmerkki (merkitse kaikki oikeudet)"
 
+msgid "Browse events that have already taken place"
+msgstr "Selaa jo pidettyjä tapahtumia"
+
 msgid "Characters are only visible to participants"
 msgstr "Merkit näkyvät vain osallistujille"
 
@@ -7122,6 +7143,9 @@ msgstr "Tämä linkki ei ole voimassa tai sen voimassaolo on päättynyt."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Tunnistamattomat tiedostot ZIP:ssä (ohitetaan)"
+
+msgid "Update your personal data and profile photo"
+msgstr "Päivitä henkilötietosi ja profiilikuva"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Lataa PDF-tiedosto tai kuva (JPG, PNG jne.)"
@@ -7235,6 +7259,9 @@ msgstr "Lisää uusi tapahtuman teksti yllä olevan painikkeen avulla"
 msgid "View all log entries recorded for this event"
 msgstr "Näytä kaikki tästä tapahtumasta tallennetut lokimerkinnät"
 
+msgid "View all your historical financial movements"
+msgstr "Tarkastele kaikkia aiempia taloudellisia tapahtumiasi"
+
 msgid "View the list of characters and participants"
 msgstr "Näytä hahmojen ja osallistujien luettelo"
 
@@ -7273,6 +7300,9 @@ msgstr "Hallitse merkkejä ja määritä ne osallistujille"
 
 msgid "Manage the registration questions and options"
 msgstr "Ilmoittautumiskysymysten ja -vaihtoehtojen hallinta"
+
+msgid "Manage users that you can act on their behalf"
+msgstr "Hallinnoi käyttäjiä, joiden puolesta voit toimia"
 
 msgid "Member who used this token (if authenticated)"
 msgstr "Jäsen, joka on käyttänyt tätä tunnusta (jos se on todennettu)"
@@ -7394,6 +7424,9 @@ msgstr "Lisää ensimmäinen monisteesi yllä olevan painikkeen avulla"
 
 msgid "Use the button above to assign warehouse items"
 msgstr "Käytä yllä olevaa painiketta varastotuotteiden määrittämiseen"
+
+msgid "View the list of events you are registered for"
+msgstr "Tarkastele luetteloa tapahtumista, joihin olet ilmoittautunut"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Tervetuloa organisaatiosi kojelautaan!"
@@ -7709,6 +7742,9 @@ msgstr "Hallitse aktivoitujen ominaisuuksien konfigurointia"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Hallinnoi kirjoituselementtien edistymisvaiheita"
+
+msgid "Manage your password and two-factor authentication"
+msgstr "Hallitse salasanaasi ja kaksivaiheista todennusta"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Suhteen toinen hahmo (määränpää)"
@@ -8170,6 +8206,9 @@ msgid "Manage tags used to categorize and group warehouse items"
 msgstr ""
 "Hallitse varastotuotteiden luokitteluun ja ryhmittelyyn käytettäviä "
 "tunnisteita"
+
+msgid "Manage which organizations can access your personal data"
+msgstr "Hallitse, mitkä organisaatiot voivat käyttää henkilötietojasi"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Tarkista osoite uudelleen, erityisesti sen alku"

@@ -4525,6 +4525,9 @@ msgstr "Alder (ved hendelsen)"
 msgid "Arrived safe and sound"
 msgstr "Kom trygt frem"
 
+msgid "Browse upcoming events"
+msgstr "Se kommende arrangementer"
+
 msgid "Casting management for"
 msgstr "Casting management for"
 
@@ -5310,6 +5313,9 @@ msgstr "Takk for at du deltok"
 msgid "Ticket name (keep it short)"
 msgstr "Billettens navn (hold det kort)"
 
+msgid "View badges you have earned"
+msgstr "Se merker du har oppnådd"
+
 msgid "View limited ticket options"
 msgstr "Se begrensede billettalternativer"
 
@@ -5546,6 +5552,9 @@ msgstr "Typer karakterbeholdning"
 msgid "Choose the style for the event"
 msgstr "Velg stil for arrangementet"
 
+msgid "Choose your preferred language"
+msgstr "Velg hvilket språk du foretrekker"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Fullfør betaling for %(event)s"
@@ -5726,6 +5735,9 @@ msgstr "Slik logger du inn igjen med kontoen"
 
 msgid "Total of recorded money inflows"
 msgstr "Summen av registrerte pengestrømmer"
+
+msgid "View your private conversations"
+msgstr "Se dine private samtaler"
 
 msgid "Where the event will take place"
 msgstr "Hvor arrangementet vil finne sted"
@@ -6014,6 +6026,9 @@ msgstr "Administrer registreringstilleggsavgifter"
 msgid "Manage the type of event prologues"
 msgstr "Administrer typen hendelsesprologer"
 
+msgid "Manage your association membership"
+msgstr "Administrer ditt medlemskap i foreningen"
+
 msgid "Manages registration cancellations"
 msgstr "Håndterer avbestillinger av registreringer"
 
@@ -6179,6 +6194,9 @@ msgstr "Navnet på hobbyen vår, fire bokstaver"
 
 msgid "Unique identifier for the event URL"
 msgstr "Unik identifikator for hendelsens URL"
+
+msgid "View the characters you are playing"
+msgstr "Se karakterene du spiller som"
 
 msgid "You can't send messages to yourself"
 msgstr "Du kan ikke sende meldinger til deg selv"
@@ -7065,6 +7083,9 @@ msgstr "Godkjenning av %(user)s som %(role)s for %(event)s"
 msgid "Authentication token (mark all permissions)"
 msgstr "Autentiseringstoken (merk alle tillatelser)"
 
+msgid "Browse events that have already taken place"
+msgstr "Se gjennom arrangementer som allerede har funnet sted"
+
 msgid "Characters are only visible to participants"
 msgstr "Tegnene er bare synlige for deltakerne"
 
@@ -7125,6 +7146,9 @@ msgstr "Denne tilgangskoblingen er ugyldig eller har utløpt."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Ukjente filer i ZIP-filen (vil bli hoppet over)"
+
+msgid "Update your personal data and profile photo"
+msgstr "Oppdater dine personopplysninger og profilbildet ditt"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Last opp en PDF-fil eller et bilde (JPG, PNG osv.)"
@@ -7238,6 +7262,9 @@ msgstr "Bruk knappen ovenfor for å legge til en ny hendelsestekst"
 msgid "View all log entries recorded for this event"
 msgstr "Vis alle loggoppføringer som er registrert for denne hendelsen"
 
+msgid "View all your historical financial movements"
+msgstr "Se alle dine tidligere økonomiske transaksjoner"
+
 msgid "View the list of characters and participants"
 msgstr "Se listen over karakterer og deltakere"
 
@@ -7276,6 +7303,9 @@ msgstr "Administrer merker og tildel dem til deltakerne"
 
 msgid "Manage the registration questions and options"
 msgstr "Administrer registreringsspørsmål og -alternativer"
+
+msgid "Manage users that you can act on their behalf"
+msgstr "Administrer brukere som du kan handle på vegne av"
 
 msgid "Member who used this token (if authenticated)"
 msgstr "Medlem som brukte dette tokenet (hvis autentisert)"
@@ -7398,6 +7428,9 @@ msgstr "Bruk knappen ovenfor for å legge til ditt første utdelingsark"
 
 msgid "Use the button above to assign warehouse items"
 msgstr "Bruk knappen ovenfor for å tilordne varer til lageret"
+
+msgid "View the list of events you are registered for"
+msgstr "Se listen over arrangementer du er påmeldt til"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Velkommen til dashbordet i organisasjonen din!"
@@ -7714,6 +7747,9 @@ msgstr "Administrer konfigurasjonen av de aktiverte funksjonene"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Administrer fremdriftstrinnene for skriveelementene"
+
+msgid "Manage your password and two-factor authentication"
+msgstr "Administrer passordet ditt og tofaktorautentisering"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andre tegn i relasjonen (destinasjon)"
@@ -8183,6 +8219,10 @@ msgid "Manage tags used to categorize and group warehouse items"
 msgstr ""
 "Administrer tagger som brukes til å kategorisere og gruppere varer på "
 "lageret"
+
+msgid "Manage which organizations can access your personal data"
+msgstr ""
+"Bestem hvilke organisasjoner som skal ha tilgang til dine personopplysninger"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Vennligst sjekk adressen igjen, spesielt begynnelsen"

@@ -7147,6 +7147,9 @@ msgstr ""
 msgid "Use the button above to create a tag for categorizing items"
 msgstr ""
 
+msgid "View badges you have earned"
+msgstr ""
+
 msgid "leaderboard"
 msgstr ""
 
@@ -7154,6 +7157,9 @@ msgid "You think you should have an achievement"
 msgstr ""
 
 msgid "Tell us here"
+msgstr ""
+
+msgid "Browse upcoming events"
 msgstr ""
 
 msgid "upcoming events"
@@ -7187,6 +7193,9 @@ msgid "Next"
 msgstr ""
 
 msgid "Last"
+msgstr ""
+
+msgid "Browse events that have already taken place"
 msgstr ""
 
 msgid "These are our past events"
@@ -7470,6 +7479,9 @@ msgid "In creation"
 msgstr ""
 
 msgid "In revision"
+msgstr ""
+
+msgid "View all your historical financial movements"
 msgstr ""
 
 msgid "here the conditions of registration"
@@ -7762,10 +7774,16 @@ msgstr ""
 msgid "Please wait a moment"
 msgstr ""
 
+msgid "View the characters you are playing"
+msgstr ""
+
 msgid "Last Event"
 msgstr ""
 
 msgid "You don't have any characters yet"
+msgstr ""
+
+msgid "View your private conversations"
 msgstr ""
 
 msgid "Your messages"
@@ -7799,6 +7817,9 @@ msgid "Indicate your level of experience"
 msgstr ""
 
 msgid "Indicate precisely your field of experience"
+msgstr ""
+
+msgid "Manage users that you can act on their behalf"
 msgstr ""
 
 msgid "You are currently logged in with the"
@@ -7840,6 +7861,12 @@ msgid "Credits, tokens and refunds"
 msgstr ""
 
 msgid "Submit a new question"
+msgstr ""
+
+msgid "Choose your preferred language"
+msgstr ""
+
+msgid "Manage your association membership"
 msgstr ""
 
 msgid "We encountered a problem with the tax code you provided"
@@ -7957,6 +7984,9 @@ msgstr ""
 msgid "Did you check the required data properly"
 msgstr ""
 
+msgid "Manage which organizations can access your personal data"
+msgstr ""
+
 msgid ""
 "Your data will be saved in the system, which is used by several associations"
 msgstr ""
@@ -7985,6 +8015,9 @@ msgid "Remove consent"
 msgstr ""
 
 msgid "Personal info"
+msgstr ""
+
+msgid "Update your personal data and profile photo"
 msgstr ""
 
 msgid "You are logged in with an email address"
@@ -8022,6 +8055,12 @@ msgid "Attendance"
 msgstr ""
 
 msgid "Show all"
+msgstr ""
+
+msgid "View the list of events you are registered for"
+msgstr ""
+
+msgid "Manage your password and two-factor authentication"
 msgstr ""
 
 msgid "Two-Factor Authentication (TOTP)"

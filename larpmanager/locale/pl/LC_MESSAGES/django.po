@@ -4525,6 +4525,9 @@ msgstr "Wiek (podczas wydarzenia)"
 msgid "Arrived safe and sound"
 msgstr "Przybył cały i zdrowy"
 
+msgid "Browse upcoming events"
+msgstr "Zobacz nadchodzące wydarzenia"
+
 msgid "Casting management for"
 msgstr "Zarządzanie castingami dla"
 
@@ -5310,6 +5313,9 @@ msgstr "Dziękujemy za udział"
 msgid "Ticket name (keep it short)"
 msgstr "Nazwa biletu (krótka)"
 
+msgid "View badges you have earned"
+msgstr "Zobacz odznaki, które zdobyłeś"
+
 msgid "View limited ticket options"
 msgstr "Zobacz ograniczone opcje biletów"
 
@@ -5546,6 +5552,9 @@ msgstr "Typy puli zasobów postaci"
 msgid "Choose the style for the event"
 msgstr "Wybierz styl dla wydarzenia"
 
+msgid "Choose your preferred language"
+msgstr "Wybierz język, który wolisz"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Pełna płatność za %(event)s"
@@ -5726,6 +5735,9 @@ msgstr "Aby zalogować się ponownie przy użyciu konta"
 
 msgid "Total of recorded money inflows"
 msgstr "Suma zarejestrowanych wpływów pieniężnych"
+
+msgid "View your private conversations"
+msgstr "Zobacz swoje prywatne rozmowy"
 
 msgid "Where the event will take place"
 msgstr "Gdzie odbędzie się wydarzenie"
@@ -6014,6 +6026,9 @@ msgstr "Zarządzanie dopłatami rejestracyjnymi"
 msgid "Manage the type of event prologues"
 msgstr "Zarządzanie typem prologów wydarzeń"
 
+msgid "Manage your association membership"
+msgstr "Zarządzaj swoim członkostwem w stowarzyszeniu"
+
 msgid "Manages registration cancellations"
 msgstr "Zarządzanie anulowaniem rejestracji"
 
@@ -6179,6 +6194,9 @@ msgstr "Nazwa naszego hobby, cztery litery"
 
 msgid "Unique identifier for the event URL"
 msgstr "Unikalny identyfikator adresu URL zdarzenia"
+
+msgid "View the characters you are playing"
+msgstr "Zobacz postacie, którymi grasz"
 
 msgid "You can't send messages to yourself"
 msgstr "Nie możesz wysyłać wiadomości do siebie"
@@ -7066,6 +7084,9 @@ msgstr "Zatwierdzenie %(user)s jako %(role)s dla %(event)s"
 msgid "Authentication token (mark all permissions)"
 msgstr "Token uwierzytelniania (zaznacz wszystkie uprawnienia)"
 
+msgid "Browse events that have already taken place"
+msgstr "Przejrzyj wydarzenia, które już się odbyły"
+
 msgid "Characters are only visible to participants"
 msgstr "Postacie są widoczne tylko dla uczestników"
 
@@ -7126,6 +7147,9 @@ msgstr "To łącze dostępu jest nieprawidłowe lub wygasło."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Nierozpoznane pliki w ZIP (zostaną pominięte)"
+
+msgid "Update your personal data and profile photo"
+msgstr "Zaktualizuj swoje dane osobowe i zdjęcie profilowe"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Prześlij plik PDF lub obraz (JPG, PNG itp.)"
@@ -7239,6 +7263,9 @@ msgstr "Użyj przycisku powyżej, żeby dodać tekst nowego wydarzenia"
 msgid "View all log entries recorded for this event"
 msgstr "Wyświetl wszystkie wpisy dziennika zarejestrowane dla tego zdarzenia"
 
+msgid "View all your historical financial movements"
+msgstr "Zobacz wszystkie swoje dotychczasowe transakcje finansowe"
+
 msgid "View the list of characters and participants"
 msgstr "Wyświetl listę postaci i uczestników"
 
@@ -7277,6 +7304,10 @@ msgstr "Zarządzanie odznakami i przypisywanie ich do uczestników"
 
 msgid "Manage the registration questions and options"
 msgstr "Zarządzanie pytaniami i opcjami rejestracji"
+
+msgid "Manage users that you can act on their behalf"
+msgstr ""
+"Zarządzaj użytkownikami, w imieniu których możesz podejmować działania"
 
 msgid "Member who used this token (if authenticated)"
 msgstr "Członek, który użył tego tokena (jeśli jest uwierzytelniony)"
@@ -7400,6 +7431,9 @@ msgstr ""
 
 msgid "Use the button above to assign warehouse items"
 msgstr "Użyj przycisku powyżej, żeby przypisać pozycje magazynowe"
+
+msgid "View the list of events you are registered for"
+msgstr "Zobacz listę wydarzeń, na które się zapisałeś"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Witamy na pulpicie nawigacyjnym Twojej organizacji!"
@@ -7712,6 +7746,9 @@ msgstr "Zarządzanie konfiguracją aktywowanych funkcji"
 
 msgid "Manage the progress steps for the writing elements"
 msgstr "Zarządzanie krokami postępu dla elementów pisania"
+
+msgid "Manage your password and two-factor authentication"
+msgstr "Zarządzaj swoim hasłem i uwierzytelnianiem dwuskładnikowym"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Druga postać w związku (miejsce docelowe)"
@@ -8182,6 +8219,10 @@ msgid "Manage tags used to categorize and group warehouse items"
 msgstr ""
 "Zarządzaj tagami służącymi do kategoryzowania i grupowania pozycji "
 "magazynowych"
+
+msgid "Manage which organizations can access your personal data"
+msgstr ""
+"Zdecyduj, które organizacje mogą mieć dostęp do twoich danych osobowych"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Sprawdź ponownie adres, zwłaszcza jego początek"

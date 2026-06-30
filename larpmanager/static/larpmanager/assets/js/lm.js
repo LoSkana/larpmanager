@@ -2,6 +2,14 @@ $(".hide:visible").hide();
 
 window.addEventListener('DOMContentLoaded', function() {
 
+// Remove info bar / registration status blocks left empty by conditional template content, to avoid stray padding.
+$('#info_bar, .reg_status').each(function() {
+    if ($(this).text().trim() === '') {
+        $(this).next('hr').remove();
+        $(this).remove();
+    }
+});
+
 $.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
