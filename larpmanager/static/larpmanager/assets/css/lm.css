@@ -3982,8 +3982,6 @@ body.association.new_v22 .user_resize {
   right: 0;
   z-index: 200;
   height: var(--topbar-height);
-  background: var(--topbar-bg, rgba(var(--pri-rgb), 0.97));
-  border-bottom: 1px solid rgba(var(--pri-rgb), 0.15);
   gap: 0.25em;
   padding: 0 0.25em;
   border-radius: 0px 8px 8px 0px;
