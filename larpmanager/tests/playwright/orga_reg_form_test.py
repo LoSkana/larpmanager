@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, nav, \
+from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, \
     get_modal_iframe, save_modal, drag_reorder
 
 pytestmark = pytest.mark.e2e
@@ -178,7 +178,7 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
 
     # check form
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     expect_normalized(page,
         page.locator("#register_form"),
         """
@@ -202,7 +202,7 @@ def check_filler(page: Any, live_server: Any) -> None:
 
     # check filler is not there
     go_to(page, live_server, "test/")
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
         """
         - row "Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2":
@@ -221,7 +221,7 @@ def check_filler(page: Any, live_server: Any) -> None:
 
     # check filler is available
     go_to(page, live_server, "test/")
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
         """
         - row "Ticket (*) Standard 5€ sadsadsadsa Filler Your registration ticket2":

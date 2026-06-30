@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (submit_register, drag_reorder, \
                                      login_user,
                                      submit,
                                      submit_confirm,
-                                     expect_normalized, new_option, submit_option, nav, get_modal_iframe, save_modal,
+                                     expect_normalized, new_option, submit_option, sidebar, get_modal_iframe, save_modal,
                                      just_wait,
                                      )
 
@@ -216,7 +216,7 @@ def field_text(page: Any, live_server: Any) -> None:
     submit_register(page)
 
     go_to(page, live_server, "/test/register/")
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
     expect(page.locator("#id_que_u2")).to_contain_text("secondas")
 
