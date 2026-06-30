@@ -4266,3 +4266,7 @@ body.association.new_v22 .user_resize {
     grid-template-columns: 1fr;
   }
 }
+
+.run-card .acc_link {
+  display: none;
+}

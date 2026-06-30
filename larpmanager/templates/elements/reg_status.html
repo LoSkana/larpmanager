@@ -17,7 +17,9 @@
                 {{ run_status.text | safe }}
                 {% if features.payment and reg and reg.tot_iscr %}
                     {% with uuid=reg_uuid|default:reg.uuid %}
-                        (<a href="#" class="my_toggle" tog="reg_accounting_{{ uuid }}">{% trans "Accounting" %}</a>)
+                        <span class="acc_link">
+                            (<a href="#" class="my_toggle" tog="reg_accounting_{{ uuid }}">{% trans "Accounting" %}</a>)
+                        </span>
                     {% endwith %}
                 {% endif %}
             </span>
