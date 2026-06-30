@@ -3,11 +3,11 @@
         {% include "elements/structure/sidebar-anon.html" %}
     {% elif manage %}
         {% include "elements/structure/sidebar-manage.html" %}
-    {% elif request.resolver_match.url_name == 'home' %}
-        {% include "elements/structure/sidebar-home.html" %}
-    {% elif not run %}
-        {% include "elements/structure/sidebar-user.html" %}
-    {% else %}
+    {% elif run %}
         {% include "elements/structure/sidebar-event.html" %}
+    {% elif is_profile_page %}
+        {% include "elements/structure/sidebar-profile.html" %}
+    {% else %}
+        {% include "elements/structure/sidebar-home.html" %}
     {% endif %}
 {% endif %}

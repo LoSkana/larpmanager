@@ -1130,6 +1130,9 @@ msgstr "Przypisany"
 msgid "Auto buy"
 msgstr "Automatyczny zakup"
 
+msgid "Calendar"
+msgstr "Kalendarz"
+
 msgid "Campaign"
 msgstr "Kampania"
 

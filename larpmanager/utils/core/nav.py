@@ -353,7 +353,7 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
             "fa-solid fa-shield-halved",
             _("Privacy"),
             "",
-            active=active == "privacy",
+            active=active == "profile_privacy",
             home=False,
         ),
     ]
@@ -416,7 +416,9 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
         has_registrations = flags["has_registrations"]
         has_paid_registrations = flags["has_paid_registrations"]
 
-    items: list[dict[str, Any]] = []
+    items: list[dict[str, Any]] = [
+        _item(reverse("home"), "fa-solid fa-calendar", _("Calendar"), "", active=active == "calendar", home=True)
+    ]
 
     if request.association.get("user_characters_shortcut", False):
         items.append(

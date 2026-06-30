@@ -214,6 +214,27 @@ function initSidebar() {
     });
 
     show_sidebar_active();
+
+    var collapseBtn = document.getElementById('sidebar-collapse-btn');
+    if (collapseBtn) {
+        var sidebar = document.getElementById('sidebar');
+        var pageWrapper = document.getElementById('page-wrapper');
+        function applySidebarCollapse(collapsed) {
+            sidebar.classList.toggle('sidebar-collapsed', collapsed);
+            if (pageWrapper) {
+                pageWrapper.classList.toggle('sidebar-collapsed', collapsed);
+            }
+            document.body.classList.toggle('sidebar-collapsed', collapsed);
+        }
+        if (localStorage.getItem('sidebarCollapsed') === '1') {
+            applySidebarCollapse(true);
+        }
+        collapseBtn.addEventListener('click', function() {
+            var collapsed = !sidebar.classList.contains('sidebar-collapsed');
+            applySidebarCollapse(collapsed);
+            localStorage.setItem('sidebarCollapsed', collapsed ? '1' : '0');
+        });
+    }
 }
 
 // ========== Init: Dropdowns ==========

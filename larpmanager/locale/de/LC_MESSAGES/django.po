@@ -1130,6 +1130,9 @@ msgstr "Zuweisen"
 msgid "Auto buy"
 msgstr "Auto kaufen"
 
+msgid "Calendar"
+msgstr "Kalender"
+
 msgid "Campaign"
 msgstr "Kampagne"
 

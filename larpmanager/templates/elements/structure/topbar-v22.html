@@ -22,7 +22,7 @@
                     </a>
                 {% endfor %}
             {% else %}
-                <a class="tv22-pill{% if not run and not manage and request.resolver_match.url_name == 'home' %} active{% endif %}"
+                <a class="tv22-pill{% if not run and not is_profile_page %} active{% endif %}"
                    href="{% url 'home' %}">
                     {% if association.favicon %}
                         <img class="tv22-pill-img" src="{{ association.favicon }}" alt="">
@@ -39,7 +39,7 @@
                     </a>
                 {% endfor %}
                 {% if user.is_authenticated %}
-                    <a class="tv22-pill tv22-pill-profile{% if not run and not manage and request.resolver_match.url_name != 'home' %} active{% endif %}"
+                    <a class="tv22-pill tv22-pill-profile{% if not run and is_profile_page %} active{% endif %}"
                        href="{% url 'profile' %}">
                         {% if user.member.profile %}
                             <img class="tv22-pill-img"

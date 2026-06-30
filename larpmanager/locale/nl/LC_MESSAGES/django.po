@@ -1130,6 +1130,9 @@ msgstr "Toewijzen"
 msgid "Auto buy"
 msgstr "Auto kopen"
 
+msgid "Calendar"
+msgstr "Kalender"
+
 msgid "Campaign"
 msgstr "Campagne"
 

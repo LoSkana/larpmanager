@@ -68,7 +68,10 @@ def cache_association(request: HttpRequest) -> dict:
         context["languages"] = conf_settings.LANGUAGES
 
     # Add tracking and analytics configuration
-    context["profile_nav_items"] = build_profile_nav_items(request) + build_profile_home_nav_items(request)
+    profile_items = build_profile_nav_items(request)
+    home_items = build_profile_home_nav_items(request)
+    context["profile_nav_items"] = profile_items + home_items
+    context["is_profile_page"] = any(item["active"] for item in profile_items)
 
     context["google_tag"] = getattr(conf_settings, "GOOGLE_TAG", None)
     hotjar_siteid = getattr(conf_settings, "HOTJAR_SITEID", None)

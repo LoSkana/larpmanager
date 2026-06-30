@@ -10876,6 +10876,9 @@ msgstr ""
 msgid "Browse the presentation website"
 msgstr ""
 
+msgid "Calendar"
+msgstr ""
+
 #, python-format
 msgid "Your event '%(event_name)s' has been successfully created"
 msgstr ""

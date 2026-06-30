@@ -1130,6 +1130,9 @@ msgstr "Attribuer"
 msgid "Auto buy"
 msgstr "Achat d'automobiles"
 
+msgid "Calendar"
+msgstr "Agenda"
+
 msgid "Campaign"
 msgstr "Campagne"
 

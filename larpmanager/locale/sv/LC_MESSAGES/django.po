@@ -1130,6 +1130,9 @@ msgstr "Tilldela"
 msgid "Auto buy"
 msgstr "Köp av bil"
 
+msgid "Calendar"
+msgstr "Kalender"
+
 msgid "Campaign"
 msgstr "Kampanj"
 

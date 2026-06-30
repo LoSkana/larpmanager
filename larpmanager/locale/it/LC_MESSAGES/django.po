@@ -1130,6 +1130,9 @@ msgstr "Assegnamento"
 msgid "Auto buy"
 msgstr "Acquisto auto"
 
+msgid "Calendar"
+msgstr "Calendario"
+
 msgid "Campaign"
 msgstr "Campagna"
 

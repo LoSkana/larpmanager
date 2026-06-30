@@ -1130,6 +1130,9 @@ msgstr "Přiřaďte"
 msgid "Auto buy"
 msgstr "Automatický nákup"
 
+msgid "Calendar"
+msgstr "Kalendář"
+
 msgid "Campaign"
 msgstr "Kampaň"
 

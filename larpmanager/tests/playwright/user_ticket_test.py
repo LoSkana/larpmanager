@@ -79,7 +79,7 @@ def test_user_ticket(pw_page: Any) -> None:
     submit_confirm(page)
 
     # change email
-    topbar(page, "Settings")
+    topbar(page, "Profile")
     sidebar(page, "Personal info")
     page.get_by_role("link", name="Would you like to change it?").click()
     page.get_by_role("textbox", name="Email").click()

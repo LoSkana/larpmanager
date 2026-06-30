@@ -1130,6 +1130,9 @@ msgstr "Myönnetty"
 msgid "Auto buy"
 msgstr "Auto ostaa"
 
+msgid "Calendar"
+msgstr "Kalenteri"
+
 msgid "Campaign"
 msgstr "Kampanja"
 
