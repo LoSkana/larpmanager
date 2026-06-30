@@ -29,10 +29,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
+from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.gateway import (
     redsys_webhook,
     satispay_webhook,
@@ -81,6 +83,7 @@ from larpmanager.utils.core.common import (
 )
 from larpmanager.utils.core.exceptions import RedirectError, check_association_feature
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
+from larpmanager.utils.users.registration import _status_payment
 
 logger = logging.getLogger(__name__)
 
@@ -1119,6 +1122,63 @@ def accounting_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     # Return success response
     messages.success(request, _("Payment confirmed"))
     return redirect("home")
+
+
+@login_required
+def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Show payment details for a specific event registration."""
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
+    registration = context.get("registration")
+
+    if not registration or not registration.tot_iscr:
+        return redirect("gallery", event_slug=event_slug)
+
+    invoices = (
+        PaymentInvoice.objects.filter(
+            registration=registration,
+            hide=False,
+        )
+        .select_related("method")
+        .order_by("-created")
+    )
+
+    payment_items = (
+        AccountingItemPayment.objects.filter(
+            registration=registration,
+            hide=False,
+        )
+        .select_related("inv")
+        .order_by("created")
+    )
+
+    other_items = AccountingItemOther.objects.filter(
+        run=registration.run,
+        member=registration.member,
+        hide=False,
+    ).order_by("created")
+
+    remaining = registration.tot_iscr - registration.tot_payed
+
+    register_url = reverse("accounting_registration", kwargs={"registration_uuid": str(registration.uuid)})
+    is_provisional = is_registration_provisional(registration)
+
+    payment_invoices_dict = {registration.id: list(invoices)}
+    run_status: dict = {}
+    _status_payment(
+        register_url,
+        registration,
+        run_status,
+        context={"payment_invoices_dict": payment_invoices_dict},
+        is_provisional=is_provisional,
+    )
+
+    context["invoices"] = invoices
+    context["payment_items"] = payment_items
+    context["other_items"] = other_items
+    context["remaining"] = remaining
+    context["payment_run_status"] = run_status
+
+    return render(request, "larpmanager/member/event_payments.html", context)
 
 
 def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:

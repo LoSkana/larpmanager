@@ -1592,6 +1592,9 @@ msgstr "Mottaker"
 msgid "Recompute"
 msgstr "Beregne på nytt"
 
+msgid "Remaining"
+msgstr "Gjenværende"
+
 msgid "Reminders"
 msgstr "Påminnelser"
 
@@ -1639,6 +1642,9 @@ msgstr "Tilleggsavgift"
 
 msgid "Tolerance"
 msgstr "Toleranse"
+
+msgid "Total due"
+msgstr "Totalt beløp"
 
 msgid "Translate"
 msgstr "Oversett"
@@ -1927,6 +1933,9 @@ msgstr "For å overvinne"
 
 msgid "Token name"
 msgstr "Token-navn"
+
+msgid "Total paid"
+msgstr "Totalt utbetalt"
 
 msgid "Two quotas"
 msgstr "To kvoter"
@@ -3118,8 +3127,14 @@ msgstr "Foreldrekampanje"
 msgid "Payment Methods"
 msgstr "Betalingsmetoder"
 
+msgid "Payment history"
+msgstr "Betalingshistorikk"
+
 msgid "Payment methods"
 msgstr "Betalingsmetoder"
+
+msgid "Payment summary"
+msgstr "Betalingsoversikt"
 
 msgid "Pending invites"
 msgstr "Venter på invitasjoner"
@@ -3234,6 +3249,9 @@ msgstr "Ervervet evne"
 
 msgid "Activate feature"
 msgstr "Aktiver funksjonen"
+
+msgid "Amount breakdown"
+msgstr "Fordeling av beløp"
 
 msgid "Back to manifest"
 msgstr "Tilbake til manifest"
@@ -5181,6 +5199,9 @@ msgstr "Ta med en venn til %(event)s"
 msgid "Commit warehouse quantities"
 msgstr "Forplikte lagermengder"
 
+msgid "Credits, tokens and refunds"
+msgstr "Kreditt, poeng og refusjoner"
+
 msgid "Date of membership approval"
 msgstr "Dato for godkjenning av medlemskap"
 
@@ -6734,6 +6755,9 @@ msgstr "Bruk knappen ovenfor for å legge til en kvoteplan"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Verdien må være større enn eller lik 0"
+
+msgid "View your payment details for this event"
+msgstr "Se betalingsopplysningene for dette arrangementet"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Godt gjort, du har fullført alle modulene!"

@@ -7796,6 +7796,30 @@ msgid ""
 "relevant button"
 msgstr ""
 
+msgid "Payment summary"
+msgstr ""
+
+msgid "Total due"
+msgstr ""
+
+msgid "Total paid"
+msgstr ""
+
+msgid "Remaining"
+msgstr ""
+
+msgid "Amount breakdown"
+msgstr ""
+
+msgid "Payment history"
+msgstr ""
+
+msgid "Transaction"
+msgstr ""
+
+msgid "Credits, tokens and refunds"
+msgstr ""
+
 msgid "Submit a new question"
 msgstr ""
 
@@ -10785,6 +10809,9 @@ msgstr ""
 msgid "Update here the registration options"
 msgstr ""
 
+msgid "View your payment details for this event"
+msgstr ""
+
 msgid "Your character"
 msgstr ""
 
@@ -11409,9 +11436,6 @@ msgid "VAT (Ticket)"
 msgstr ""
 
 msgid "VAT (Options)"
-msgstr ""
-
-msgid "Transaction"
 msgstr ""
 
 msgid "Element approved"

@@ -1592,6 +1592,9 @@ msgstr "Empfänger"
 msgid "Recompute"
 msgstr "Neuberechnung"
 
+msgid "Remaining"
+msgstr "Verbleibend"
+
 msgid "Reminders"
 msgstr "Mahnungen"
 
@@ -1639,6 +1642,9 @@ msgstr "Aufpreis"
 
 msgid "Tolerance"
 msgstr "Toleranz"
+
+msgid "Total due"
+msgstr "Gesamtbetrag"
 
 msgid "Translate"
 msgstr "Übersetzen Sie"
@@ -1927,6 +1933,9 @@ msgstr "Zur Überwindung"
 
 msgid "Token name"
 msgstr "Token-Name"
+
+msgid "Total paid"
+msgstr "Gesamtbetrag"
 
 msgid "Two quotas"
 msgstr "Zwei Quoten"
@@ -3118,8 +3127,14 @@ msgstr "Kampagne der Eltern"
 msgid "Payment Methods"
 msgstr "Zahlungsarten"
 
+msgid "Payment history"
+msgstr "Zahlungsverlauf"
+
 msgid "Payment methods"
 msgstr "Zahlungsmöglichkeiten"
+
+msgid "Payment summary"
+msgstr "Zahlungsübersicht"
 
 msgid "Pending invites"
 msgstr "Ausstehende Einladungen"
@@ -3234,6 +3249,9 @@ msgstr "Erworbene Fähigkeit"
 
 msgid "Activate feature"
 msgstr "Funktion aktivieren"
+
+msgid "Amount breakdown"
+msgstr "Aufschlüsselung der Beträge"
 
 msgid "Back to manifest"
 msgstr "Zurück zu Manifest"
@@ -5181,6 +5199,9 @@ msgstr "Bringen Sie einen Freund zu %(event)s mit"
 msgid "Commit warehouse quantities"
 msgstr "Lagermengen binden"
 
+msgid "Credits, tokens and refunds"
+msgstr "Guthaben, Tokens und Rückerstattungen"
+
 msgid "Date of membership approval"
 msgstr "Datum der Genehmigung der Mitgliedschaft"
 
@@ -6740,6 +6761,9 @@ msgstr ""
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Wert muss größer als oder gleich 0 sein"
+
+msgid "View your payment details for this event"
+msgstr "Zeige deine Zahlungsdetails für diese Veranstaltung an"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Gut gemacht, Sie haben alle Module abgeschlossen!"

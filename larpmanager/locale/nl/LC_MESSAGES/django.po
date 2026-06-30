@@ -1592,6 +1592,9 @@ msgstr "Ontvanger"
 msgid "Recompute"
 msgstr "Herbereken"
 
+msgid "Remaining"
+msgstr "Resterend"
+
 msgid "Reminders"
 msgstr "Herinneringen"
 
@@ -1639,6 +1642,9 @@ msgstr "Toeslag"
 
 msgid "Tolerance"
 msgstr "Tolerantie"
+
+msgid "Total due"
+msgstr "Totaal te betalen"
 
 msgid "Translate"
 msgstr "Vertaal"
@@ -1927,6 +1933,9 @@ msgstr "Om te overwinnen"
 
 msgid "Token name"
 msgstr "Token naam"
+
+msgid "Total paid"
+msgstr "Totaal betaald"
 
 msgid "Two quotas"
 msgstr "Twee quota"
@@ -3118,8 +3127,14 @@ msgstr "Campagne voor ouders"
 msgid "Payment Methods"
 msgstr "Betaalmethoden"
 
+msgid "Payment history"
+msgstr "Betalingsgeschiedenis"
+
 msgid "Payment methods"
 msgstr "Betaalmethoden"
+
+msgid "Payment summary"
+msgstr "Betalingsoverzicht"
 
 msgid "Pending invites"
 msgstr "In afwachting van uitnodigingen"
@@ -3234,6 +3249,9 @@ msgstr "Verworven vermogen"
 
 msgid "Activate feature"
 msgstr "Functie activeren"
+
+msgid "Amount breakdown"
+msgstr "Uitsplitsing van de bedragen"
 
 msgid "Back to manifest"
 msgstr "Terug naar manifest"
@@ -5181,6 +5199,9 @@ msgstr "Neem een vriend(in) mee naar %(event)s"
 msgid "Commit warehouse quantities"
 msgstr "Vastleggen van magazijnhoeveelheden"
 
+msgid "Credits, tokens and refunds"
+msgstr "Credits, tokens en terugbetalingen"
+
 msgid "Date of membership approval"
 msgstr "Datum goedkeuring lidmaatschap"
 
@@ -6738,6 +6759,9 @@ msgstr "Gebruik de knop hierboven om een quota-abonnement toe te voegen"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Waarde moet groter dan of gelijk aan 0 zijn"
+
+msgid "View your payment details for this event"
+msgstr "Bekijk je betalingsgegevens voor dit evenement"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Goed gedaan, je hebt alle modules gehaald!"

@@ -1592,6 +1592,9 @@ msgstr "Destinatario"
 msgid "Recompute"
 msgstr "Ricalcola"
 
+msgid "Remaining"
+msgstr "Rimanenti"
+
 msgid "Reminders"
 msgstr "Promemoria"
 
@@ -1639,6 +1642,9 @@ msgstr "Sovrapprezzo"
 
 msgid "Tolerance"
 msgstr "Tolleranza"
+
+msgid "Total due"
+msgstr "Totale da pagare"
 
 msgid "Translate"
 msgstr "Traduci"
@@ -1927,6 +1933,9 @@ msgstr "Da superare"
 
 msgid "Token name"
 msgstr "Nome gettoni"
+
+msgid "Total paid"
+msgstr "Totale pagato"
 
 msgid "Two quotas"
 msgstr "Due quote"
@@ -3118,8 +3127,14 @@ msgstr "Campagna genitore"
 msgid "Payment Methods"
 msgstr "Metodi pagamento"
 
+msgid "Payment history"
+msgstr "Cronologia dei pagamenti"
+
 msgid "Payment methods"
 msgstr "Metodi pagamento"
+
+msgid "Payment summary"
+msgstr "Riepilogo dei pagamenti"
 
 msgid "Pending invites"
 msgstr "Inviti in attesa"
@@ -3234,6 +3249,9 @@ msgstr "Abilità acquisita"
 
 msgid "Activate feature"
 msgstr "Attiva feature"
+
+msgid "Amount breakdown"
+msgstr "Ripartizione degli importi"
 
 msgid "Back to manifest"
 msgstr "Torna al manifesto"
@@ -5181,6 +5199,9 @@ msgstr "Portate un amico a %(event)s"
 msgid "Commit warehouse quantities"
 msgstr "Impegnale quantità di magazzino"
 
+msgid "Credits, tokens and refunds"
+msgstr "Crediti, gettoni e rimborsi"
+
 msgid "Date of membership approval"
 msgstr "Data di approvazione dell'iscrizione"
 
@@ -6730,6 +6751,9 @@ msgstr "Usa il pulsante qui sopra per aggiungere un piano di quote"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Il valore deve essere maggiore o uguale a 0"
+
+msgid "View your payment details for this event"
+msgstr "Visualizza i dettagli del pagamento relativi a questo evento"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Complimenti, hai completato tutti i moduli!"
