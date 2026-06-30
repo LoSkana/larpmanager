@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% load i18n show_tags %}
+{% block title %}
+    {% trans "Payments" %} - {{ run }}
+{% endblock title %}
+{% block content %}
+    <div class="user_resize platform">
+        <h2>{% trans "Payment summary" %}</h2>
+        <table class="table">
+            <tr>
+                <th>{% trans "Total due" %}</th>
+                <td>
+                    {% if registration.tot_iscr %}
+                        {{ registration.tot_iscr|format_decimal }}
+                        {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans "Total paid" %}</th>
+                <td>
+                    {% if registration.tot_payed %}
+                        {{ registration.tot_payed|format_decimal }}
+                        {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>{% trans "Remaining" %}</th>
+                <td>
+                    {% if remaining %}
+                        {{ remaining|format_decimal }}
+                        {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                    {% else %}
+                        0
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+        {% if payment_run_status %}
+            {% with action=payment_run_status.action %}
+                {% if action.url %}
+                    <a href="{{ action.url }}" class="btn btn-primary">{{ action.label }}</a>
+                {% else %}
+                    <p class="text-warning">{{ action.label }}</p>
+                {% endif %}
+                {% if action.note %}<p class="text-muted">{{ action.note }}</p>{% endif %}
+            {% endwith %}
+        {% endif %}
+        <hr />
+        {% if payment_items %}
+            <h2>{% trans "Amount breakdown" %}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Info" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in payment_items %}
+                        <tr>
+                            <td>{{ item.get_pay_display }}</td>
+                            <td>{{ item.info|default:"" }}</td>
+                            <td>
+                                {% if item.value %}
+                                    {{ item.value|format_decimal }}
+                                    {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if invoices %}
+            <h2>{% trans "Payment history" %}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Date" %}</th>
+                        <th>{% trans "Method" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                        <th>{% trans "Fee" %}</th>
+                        <th>{% trans "Transaction" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for inv in invoices %}
+                        <tr>
+                            <td>{{ inv.created|date:"Y-m-d" }}</td>
+                            <td>{{ inv.method }}</td>
+                            <td>{{ inv.get_status_display }}</td>
+                            <td>
+                                {% if inv.mc_gross %}
+                                    {{ inv.mc_gross|format_decimal }}
+                                    {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if inv.mc_fee %}
+                                    {{ inv.mc_fee|format_decimal }}
+                                    {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>{{ inv.txn_id|default:"-" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+        {% if other_items %}
+            <h2>{% trans "Credits, tokens and refunds" %}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>{% trans "Type" %}</th>
+                        <th>{% trans "Description" %}</th>
+                        <th>{% trans "Amount" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in other_items %}
+                        <tr>
+                            <td>{{ item.get_oth_display }}</td>
+                            <td>{{ item.descr }}</td>
+                            <td>
+                                {{ item.value|format_decimal }}
+                                {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock content %}

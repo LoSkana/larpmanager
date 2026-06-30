@@ -1592,6 +1592,9 @@ msgstr "Mottagare"
 msgid "Recompute"
 msgstr "Återberäkna"
 
+msgid "Remaining"
+msgstr "Återstående"
+
 msgid "Reminders"
 msgstr "Påminnelser"
 
@@ -1639,6 +1642,9 @@ msgstr "Tilläggsavgift"
 
 msgid "Tolerance"
 msgstr "Tolerans"
+
+msgid "Total due"
+msgstr "Totalt belopp"
 
 msgid "Translate"
 msgstr "Översätt"
@@ -1927,6 +1933,9 @@ msgstr "Att övervinna"
 
 msgid "Token name"
 msgstr "Tokenens namn"
+
+msgid "Total paid"
+msgstr "Totalt utbetalt"
 
 msgid "Two quotas"
 msgstr "Två kvoter"
@@ -3121,8 +3130,14 @@ msgstr "Föräldrakampanj"
 msgid "Payment Methods"
 msgstr "Betalningsmetoder"
 
+msgid "Payment history"
+msgstr "Betalningshistorik"
+
 msgid "Payment methods"
 msgstr "Betalningsmetoder"
+
+msgid "Payment summary"
+msgstr "Betalningsöversikt"
 
 msgid "Pending invites"
 msgstr "Pågående inbjudningar"
@@ -3237,6 +3252,9 @@ msgstr "Förmåga förvärvad"
 
 msgid "Activate feature"
 msgstr "Aktivera funktion"
+
+msgid "Amount breakdown"
+msgstr "Fördelning av belopp"
 
 msgid "Back to manifest"
 msgstr "Tillbaka till manifest"
@@ -5181,6 +5199,9 @@ msgstr "Ta med en vän till %(event)s"
 msgid "Commit warehouse quantities"
 msgstr "Binda lagerkvantiteter"
 
+msgid "Credits, tokens and refunds"
+msgstr "Krediter, poäng och återbetalningar"
+
 msgid "Date of membership approval"
 msgstr "Datum för godkännande av medlemskap"
 
@@ -6733,6 +6754,9 @@ msgstr "Använd knappen ovan för att lägga till en kvotplan"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Värdet måste vara större än eller lika med 0"
+
+msgid "View your payment details for this event"
+msgstr "Se dina betalningsuppgifter för detta evenemang"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Bra jobbat, du har klarat alla moduler!"

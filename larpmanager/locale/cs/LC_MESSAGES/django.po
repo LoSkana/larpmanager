@@ -1592,6 +1592,9 @@ msgstr "Příjemce"
 msgid "Recompute"
 msgstr "Přepočítejte"
 
+msgid "Remaining"
+msgstr "Zbývající"
+
 msgid "Reminders"
 msgstr "Připomínky"
 
@@ -1639,6 +1642,9 @@ msgstr "Příplatek"
 
 msgid "Tolerance"
 msgstr "Tolerance"
+
+msgid "Total due"
+msgstr "Celková částka k úhradě"
 
 msgid "Translate"
 msgstr "Přeložit"
@@ -1927,6 +1933,9 @@ msgstr "Překonat"
 
 msgid "Token name"
 msgstr "Název tokenu"
+
+msgid "Total paid"
+msgstr "Celková zaplacená částka"
 
 msgid "Two quotas"
 msgstr "Dvě kvóty"
@@ -3121,8 +3130,14 @@ msgstr "Rodičovská kampaň"
 msgid "Payment Methods"
 msgstr "Způsoby platby"
 
+msgid "Payment history"
+msgstr "Historie plateb"
+
 msgid "Payment methods"
 msgstr "Platební metody"
+
+msgid "Payment summary"
+msgstr "Přehled plateb"
 
 msgid "Pending invites"
 msgstr "Pozvánky čekají na vyřízení"
@@ -3237,6 +3252,9 @@ msgstr "Získané schopnosti"
 
 msgid "Activate feature"
 msgstr "Aktivace funkce"
+
+msgid "Amount breakdown"
+msgstr "Rozpis částek"
 
 msgid "Back to manifest"
 msgstr "Zpět na seznam projevů"
@@ -5181,6 +5199,9 @@ msgstr "Přiveďte na %(event)s kamaráda"
 msgid "Commit warehouse quantities"
 msgstr "Závazné skladové množství"
 
+msgid "Credits, tokens and refunds"
+msgstr "Kredity, žetony a vrácení peněz"
+
 msgid "Date of membership approval"
 msgstr "Datum schválení členství"
 
@@ -6732,6 +6753,9 @@ msgstr "Pomocí tlačítka výše přidejte kvótní plán"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Hodnota musí být větší nebo rovna 0"
+
+msgid "View your payment details for this event"
+msgstr "Zobrazit podrobnosti o platbě za tuto akci"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Výborně, splnili jste všechny moduly!"
