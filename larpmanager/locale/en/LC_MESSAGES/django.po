@@ -2154,6 +2154,10 @@ msgid "Load participants"
 msgstr ""
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+
+msgid ""
 "All characters from this event's registrations will be pre-loaded into the "
 "new delivery"
 msgstr ""

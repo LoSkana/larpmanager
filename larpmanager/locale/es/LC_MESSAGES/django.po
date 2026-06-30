@@ -9960,6 +9960,12 @@ msgstr ""
 "transferencia de inscripción"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Elige un evento para cargar previamente los participantes inscritos en una "
+"nueva entrega"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Selecciona personajes, facciones y documentos para descargarlos en un "

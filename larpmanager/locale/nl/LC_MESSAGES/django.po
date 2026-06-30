@@ -9976,6 +9976,12 @@ msgstr ""
 "starten"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Kies een evenement om de geregistreerde deelnemers ervan vooraf in een "
+"nieuwe verzending te laden"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Kies personages, facties en hand-outs om als één groot ZIP-bestand met PDF’s"

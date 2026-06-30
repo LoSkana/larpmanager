@@ -113,6 +113,7 @@ class OrgaDeliveryExpLoadForm(BaseForm):
     """Form for selecting a run to pre-populate delivery characters."""
 
     page_title = _("Load participants")
+    page_info = _("Select an event to pre-load its registered participants into a new delivery")
 
     run = forms.ModelChoiceField(
         queryset=Run.objects.none(),

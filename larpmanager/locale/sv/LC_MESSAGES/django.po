@@ -9811,6 +9811,11 @@ msgstr ""
 "anmälan"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Välj ett evenemang för att förladda de anmälda deltagarna till en ny utskick"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Välj karaktärer, fraktioner och informationsblad som du vill ladda ner som "

@@ -9812,6 +9812,12 @@ msgstr ""
 "siirron"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Valitse tapahtuma, jotta sen rekisteröityneet osallistujat ladataan "
+"etukäteen uuteen lähetykseen"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Valitse hahmot, ryhmittymät ja taustatiedot, jotka haluat ladata yhtenä PDF-"

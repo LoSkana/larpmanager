@@ -9823,6 +9823,12 @@ msgstr ""
 "Velg en deltaker og en målhendelse for å starte en overføring av påmeldingen"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Velg et arrangement for å forhåndslaste de registrerte deltakerne inn i en "
+"ny utsendelse"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Velg figurer, fraksjoner og bakgrunnsmateriale som du vil laste ned som en "

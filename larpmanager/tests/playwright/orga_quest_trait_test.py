@@ -73,6 +73,7 @@ def test_quest_trait(pw_page: Any) -> None:
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
     _wait_lm_ready(page)
+    just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
         "your character is: test character player: user test torta - strudel saleee test character veronese torta - strudel test character player: admin test",

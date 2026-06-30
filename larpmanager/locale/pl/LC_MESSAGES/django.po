@@ -9864,6 +9864,12 @@ msgstr ""
 "rejestracji"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Wybierz wydarzenie, aby wstępnie załadować listę zarejestrowanych "
+"uczestników do nowej wysyłki"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Wybierz postacie, frakcje i materiały informacyjne, aby pobrać je w jednym "

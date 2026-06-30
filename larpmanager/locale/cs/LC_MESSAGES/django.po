@@ -9711,6 +9711,12 @@ msgstr ""
 "Vyberte účastníka a cílovou událost, abyste zahájili převod registrace"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Vyberte událost, abyste předem načtli její registrované účastníky do nového "
+"rozesílání"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Vyberte postavy, frakce a podklady a stáhněte si je jako hromadný soubor ZIP"

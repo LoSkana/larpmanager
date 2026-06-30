@@ -10116,6 +10116,12 @@ msgstr ""
 "d'inscription"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Sélectionne un événement pour précharger la liste de ses participants "
+"inscrits dans une nouvelle diffusion"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Sélectionne des personnages, des factions et des documents à télécharger "

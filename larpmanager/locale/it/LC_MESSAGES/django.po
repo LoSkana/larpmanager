@@ -9988,6 +9988,12 @@ msgstr ""
 "trasferimento dell'iscrizione"
 
 msgid ""
+"Select an event to pre-load its registered participants into a new delivery"
+msgstr ""
+"Seleziona un evento per pre-caricare i partecipanti registrati in una nuova "
+"distribuzione"
+
+msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Seleziona personaggi, fazioni e schede di gioco da scaricare in un unico "
