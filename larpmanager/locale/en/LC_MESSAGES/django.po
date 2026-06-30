@@ -5177,7 +5177,16 @@ msgstr ""
 msgid "Are you sure"
 msgstr ""
 
-msgid "Select ability"
+msgid "All"
+msgstr ""
+
+msgid "Show more"
+msgstr ""
+
+msgid "Show less"
+msgstr ""
+
+msgid "Requires"
 msgstr ""
 
 msgid "Are you sure you want to delete this element"
@@ -5883,6 +5892,12 @@ msgstr ""
 msgid "Obtain ability"
 msgstr ""
 
+msgid "Search abilities"
+msgstr ""
+
+msgid "No abilities found."
+msgstr ""
+
 msgid "Select the new ability to get"
 msgstr ""
 
@@ -6235,9 +6250,6 @@ msgid "Additional fields"
 msgstr ""
 
 msgid "None"
-msgstr ""
-
-msgid "All"
 msgstr ""
 
 msgid "Cancel your registration"
