@@ -3088,9 +3088,6 @@ msgstr "Barva zvýraznění"
 msgid "Invalid request"
 msgstr "Neplatný požadavek"
 
-msgid "Load from event"
-msgstr "Načtení z události"
-
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
 
@@ -3606,6 +3603,9 @@ msgstr "Neplatný výběr"
 
 msgid "Invoice not found"
 msgstr "Faktura nebyla nalezena"
+
+msgid "Load participants"
+msgstr "Načíst účastníky"
 
 msgid "Maximum available"
 msgstr "Maximální dostupný počet"
@@ -9630,12 +9630,6 @@ msgstr ""
 "Přidejte text a přizpůsobte tak e-maily a registrační stránky pro vaši "
 "organizaci"
 
-#, python-brace-format
-msgid ""
-"Characters from event '{run}' have been loaded. Review and confirm to save."
-msgstr ""
-"Byly načteny znaky z události '{run}'. Zkontrolujte a potvrďte uložení."
-
 msgid ""
 "Displays participants overdue for payment or other deadlines for all events"
 msgstr ""
@@ -10801,6 +10795,12 @@ msgstr ""
 " co nejdříve"
 
 msgid ""
+"All characters from this event's registrations will be pre-loaded into the "
+"new delivery"
+msgstr ""
+"Všechny postavy z registrací této akce budou předem načteny do nové verze"
+
+msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
 msgstr "Upozornění: operace je konečná, před odesláním zadání překontrolujte"
@@ -11760,13 +11760,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, možnosti, které již nejsou ve formuláři k dispozici, se"
 " skryjí, místo aby se zobrazily zakázané"
-
-msgid ""
-"If you select an event, all characters from that event's registrations will "
-"be automatically loaded"
-msgstr ""
-"Pokud vyberete událost, automaticky se načtou všechny znaky z registrací "
-"této události"
 
 msgid ""
 "Lets you define sections in the registration form, grouping questions to "

@@ -2150,12 +2150,12 @@ msgstr ""
 msgid "Manage experience point deliveries awarded to characters"
 msgstr ""
 
-msgid "Load from event"
+msgid "Load participants"
 msgstr ""
 
 msgid ""
-"If you select an event, all characters from that event's registrations will "
-"be automatically loaded"
+"All characters from this event's registrations will be pre-loaded into the "
+"new delivery"
 msgstr ""
 
 msgid "Ability Template"
@@ -11801,11 +11801,6 @@ msgid "Status updated"
 msgstr ""
 
 msgid "Registration settings updated"
-msgstr ""
-
-#, python-brace-format
-msgid ""
-"Characters from event '{run}' have been loaded. Review and confirm to save."
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"
