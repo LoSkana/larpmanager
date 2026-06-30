@@ -3918,6 +3918,7 @@ body.floating_iframe #wrapper {
   padding-bottom: 0.5em;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .new_v22 #banner h1 {
@@ -4175,8 +4176,8 @@ body.association.new_v22 .user_resize {
   height: 1.8em;
   border-radius: 50%;
   border: 1px solid var(--ter-clr);
-  background: var(--sec-clr);
-  color: var(--pri-clr);
+  background: var(--pri-clr);
+  color: rgba(var(--sec-rgb), 0.5);
   cursor: pointer;
   z-index: 2000;
   transition: transform 0.25s;

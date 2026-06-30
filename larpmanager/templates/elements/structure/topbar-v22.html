@@ -65,7 +65,7 @@
             {% else %}
                 {% url 'home' as user_href %}
             {% endif %}
-            <div class="tv22-switch">
+            <div id="tv22-switch" class="tv22-switch">
                 <a class="tv22-switch-opt" href="{{ user_href }}">{% trans "User" %}</a>
                 <span class="tv22-switch-opt active">{% trans "Admin" %}</span>
             </div>
