@@ -61,6 +61,8 @@ def test_permanence_form(pw_page: Any) -> None:
 
     check_orga_visibility(page)
 
+    test_campaign_config_permanence(page, live_server)
+
 
 def check_orga_visibility(page: Any) -> None:
     sidebar(page, "Event")
@@ -218,3 +220,59 @@ def check_exe_roles(page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     _check_checkboxes(checked, edit_iframe)
     save_modal(page, edit_iframe)
+
+
+def test_campaign_config_permanence(page: Any, live_server: Any) -> None:
+    """Test campaign config saved to parent and readable from child."""
+
+    # Enable campaign feature
+    go_to(page, live_server, "/manage/features/campaign/on")
+
+    # Create child campaign event with parent = Test Larp
+    go_to(page, live_server, "/manage/events")
+    page.get_by_role("link", name="New event").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").click()
+    edit_iframe.locator("#id_form1-name").fill("child campaign")
+    edit_iframe.locator("#id_form1-name").press("Tab")
+    edit_iframe.locator("#slug").fill("childcampaign")
+    just_wait(edit_iframe)
+    edit_iframe.locator("#select2-id_form1-parent-container").click()
+    edit_iframe.get_by_role("searchbox").fill("tes")
+    edit_iframe.get_by_role("option", name="Test Larp", exact=True).click()
+    fill_date(edit_iframe, "#id_form2-start", "2050-02-01")
+    fill_date(edit_iframe, "#id_form2-end", "2050-02-03")
+    save_modal(page, edit_iframe)
+
+    # Set config on child: check gallery_hide_login
+    go_to(page, live_server, "/childcampaign/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    page.locator("#id_gallery_hide_login").check()
+    submit_confirm(page)
+
+    # Verify config still visible on child (reads from parent)
+    go_to(page, live_server, "/childcampaign/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    expect(page.locator("#id_gallery_hide_login")).to_be_checked()
+
+    # Verify config visible on parent (saved to parent)
+    go_to(page, live_server, "/test/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    expect(page.locator("#id_gallery_hide_login")).to_be_checked()
+
+    # Enable Discount feature on child
+    go_to(page, live_server, "/childcampaign/manage/features")
+    check_feature(page, "Discount")
+    submit_confirm(page)
+
+    # Verify Discount feature checked on child
+    go_to(page, live_server, "/childcampaign/manage/features")
+    expect(
+        page.locator(".feature_checkbox").filter(has=page.get_by_text("Discount", exact=True)).get_by_role("checkbox")
+    ).to_be_checked()
+
+    # Verify Discount feature checked on parent
+    go_to(page, live_server, "/test/manage/features")
+    expect(
+        page.locator(".feature_checkbox").filter(has=page.get_by_text("Discount", exact=True)).get_by_role("checkbox")
+    ).to_be_checked()
