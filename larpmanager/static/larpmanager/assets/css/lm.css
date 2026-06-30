@@ -4170,11 +4170,15 @@ body.association.new_v22 .user_resize {
    --------------------------------------------------------------------------- */
 
 .run-card-grid {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.25rem;
   align-items: stretch;
   margin: 1em 0;
+}
+
+.new_v22 .run-card-grid {
+  display: grid;
 }
 
 .run-card {
@@ -4198,6 +4202,7 @@ body.association.new_v22 .user_resize {
 .run-card-cover-link {
   display: block;
   line-height: 0;
+  margin: 0;
 }
 
 .run-card-cover {
@@ -4224,10 +4229,11 @@ body.association.new_v22 .user_resize {
   padding: 0.85rem 1rem 0.5rem;
 }
 
-.run-card-title {
+.run-card h3.run-card-title {
   margin: 0 0 0.6em;
+  padding: 0;
   font-size: 1.05em;
-  text-align: left;
+  text-align: center;
 }
 
 .run-card-meta {
