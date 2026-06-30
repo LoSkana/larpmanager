@@ -1595,6 +1595,9 @@ msgstr "Vastaanottaja"
 msgid "Recompute"
 msgstr "Laske uudelleen"
 
+msgid "Remaining"
+msgstr "Jäljellä"
+
 msgid "Reminders"
 msgstr "Muistutukset"
 
@@ -1642,6 +1645,9 @@ msgstr "Lisämaksu"
 
 msgid "Tolerance"
 msgstr "Suvaitsevaisuus"
+
+msgid "Total due"
+msgstr "Maksettava kokonaissumma"
 
 msgid "Translate"
 msgstr "Käännä"
@@ -1930,6 +1936,9 @@ msgstr "Tehdään vielä"
 
 msgid "Token name"
 msgstr "Tokenin nimi"
+
+msgid "Total paid"
+msgstr "Maksettu yhteissumma"
 
 msgid "Two quotas"
 msgstr "Kaksi kiintiötä"
@@ -3133,8 +3142,14 @@ msgstr "Vanhempien kampanja"
 msgid "Payment Methods"
 msgstr "Maksutavat"
 
+msgid "Payment history"
+msgstr "Maksuhistoria"
+
 msgid "Payment methods"
 msgstr "Maksutavat"
+
+msgid "Payment summary"
+msgstr "Maksuyhteenveto"
 
 msgid "Pending invites"
 msgstr "Odottavat kutsut"
@@ -3249,6 +3264,9 @@ msgstr "Taito lisätty"
 
 msgid "Activate feature"
 msgstr "Aktivoi toiminto"
+
+msgid "Amount breakdown"
+msgstr "Summien erittely"
 
 msgid "Back to manifest"
 msgstr "Takaisin manifestiin"
@@ -5196,6 +5214,9 @@ msgstr "Tuo ystävä tapahtumaan %(event)s"
 msgid "Commit warehouse quantities"
 msgstr "Varastomäärien sitominen"
 
+msgid "Credits, tokens and refunds"
+msgstr "Pisteet, rahakkeet ja hyvitykset"
+
 msgid "Date of membership approval"
 msgstr "Jäsenyyden hyväksymispäivä"
 
@@ -6746,6 +6767,9 @@ msgstr "Lisää kiintiösuunnitelma yllä olevan painikkeen avulla"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "Arvon on oltava suurempi tai yhtä suuri kuin 0"
+
+msgid "View your payment details for this event"
+msgstr "Tarkista tämän tapahtuman maksutiedot"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Hyvin tehty, olet suorittanut kaikki moduulit!"

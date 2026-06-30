@@ -576,7 +576,7 @@ input,
 
 /* On mobile, the input cells stack full-width, then the drag handle and the
    saved/details/delete icons share one row below (instead of every cell stacking) */
-@media (max-width: 1000px) {
+@media (max-width: 800px) {
   .inline-options-table tr.inline-option {
     display: flex !important;
     flex-wrap: wrap;
@@ -3882,6 +3882,10 @@ body.floating_iframe #wrapper {
   margin: 0.5em !important;
   width: auto !important;
   max-width: initial !important;
+}
+
+#member-search {
+  margin-bottom: 0.5em;
 }
 
 /* ---------------------------------------------------------------------------

@@ -79,6 +79,16 @@ def _add_registration_items(
                 active=active == "register",
             )
         )
+        if registration.tot_iscr:
+            items.append(
+                _item(
+                    reverse("event_payments", args=[slug]),
+                    "fa-solid fa-receipt",
+                    _("Payments"),
+                    str(_("View your payment details for this event")) + "!",
+                    active=active == "event_payments",
+                )
+            )
         if getattr(registration, "character", None):
             items.append(
                 _item(

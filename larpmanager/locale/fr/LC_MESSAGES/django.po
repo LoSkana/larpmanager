@@ -1595,6 +1595,9 @@ msgstr "Bénéficiaire"
 msgid "Recompute"
 msgstr "Recalculer"
 
+msgid "Remaining"
+msgstr "Restant"
+
 msgid "Reminders"
 msgstr "Rappels"
 
@@ -1642,6 +1645,9 @@ msgstr "Supplément"
 
 msgid "Tolerance"
 msgstr "Tolérance"
+
+msgid "Total due"
+msgstr "Montant total à payer"
 
 msgid "Translate"
 msgstr "Traduire"
@@ -1930,6 +1936,9 @@ msgstr "Pour surmonter"
 
 msgid "Token name"
 msgstr "Nom du jeton"
+
+msgid "Total paid"
+msgstr "Total payé"
 
 msgid "Two quotas"
 msgstr "Deux quotas"
@@ -3133,8 +3142,14 @@ msgstr "Campagne pour les parents"
 msgid "Payment Methods"
 msgstr "Modes de paiement"
 
+msgid "Payment history"
+msgstr "Historique des paiements"
+
 msgid "Payment methods"
 msgstr "Modes de paiement"
+
+msgid "Payment summary"
+msgstr "Récapitulatif des paiements"
 
 msgid "Pending invites"
 msgstr "Invitations en attente"
@@ -3249,6 +3264,9 @@ msgstr "Capacité acquise"
 
 msgid "Activate feature"
 msgstr "Activer la fonction"
+
+msgid "Amount breakdown"
+msgstr "Répartition des montants"
 
 msgid "Back to manifest"
 msgstr "Retour au manifeste"
@@ -5196,6 +5214,9 @@ msgstr "Amenez un ami à %(event)s"
 msgid "Commit warehouse quantities"
 msgstr "Engager des quantités en entrepôt"
 
+msgid "Credits, tokens and refunds"
+msgstr "Crédits, jetons et remboursements"
+
 msgid "Date of membership approval"
 msgstr "Date d'approbation de l'adhésion"
 
@@ -6752,6 +6773,9 @@ msgstr "Clique sur le bouton ci-dessus pour ajouter un forfait"
 
 msgid "Value must be greater than or equal to 0"
 msgstr "La valeur doit être supérieure ou égale à 0"
+
+msgid "View your payment details for this event"
+msgstr "Consulte les détails de ton paiement pour cet événement"
 
 msgid "Well done, you've completed all modules!"
 msgstr "Bravo, vous avez terminé tous les modules !"

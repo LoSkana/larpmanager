@@ -22,6 +22,7 @@
 from django.urls import path
 
 from larpmanager.views.user import (
+    accounting as views_ua,
     casting as views_uca,
     character as views_uc,
     event as views_ue,
@@ -345,5 +346,10 @@ urlpatterns = [
         "<slug:event_slug>/show_char/",
         views_uc.show_char,
         name="show_char",
+    ),
+    path(
+        "<slug:event_slug>/payments/",
+        views_ua.event_payments,
+        name="event_payments",
     ),
 ]
