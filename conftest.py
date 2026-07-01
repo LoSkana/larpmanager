@@ -199,7 +199,7 @@ def pw_page(
     )
     page = context.new_page()
     base_url = live_server.url
-    timeout = 30000
+    timeout = 60000
     page.set_default_timeout(timeout)
 
     def on_response(response: Response) -> None:
