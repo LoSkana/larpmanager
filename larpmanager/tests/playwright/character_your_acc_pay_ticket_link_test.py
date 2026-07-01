@@ -39,7 +39,6 @@ from larpmanager.tests.utils import (
     fill_date,
     get_modal_iframe,
     go_to,
-    just_wait,
     login_orga,
     save_modal,
     sidebar,
@@ -120,10 +119,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
 
     page.get_by_role("link", name="Event").first.click()
     page.locator("#id_form2-registration_status").select_option("f")
-    page.locator("#id_form2-registration_open").fill("2099-12-31")
-    just_wait(page)
-    page.locator("#id_form2-registration_open").click()
-    just_wait(page)
+    fill_date(page, "#id_form2-registration_open", "2099-12-31")
     submit_confirm(page)
 
     # Verify normal registration is blocked

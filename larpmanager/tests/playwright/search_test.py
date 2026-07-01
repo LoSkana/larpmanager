@@ -28,7 +28,7 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized, just_wait, submit_confirm, new_option, \
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, new_option, \
     submit_option, sidebar, get_modal_iframe, save_modal, click_and_wait_question, _wait_lm_ready, \
     click_option
 
@@ -229,7 +229,6 @@ def characters(page: Any, live_server: Any) -> None:
     click_and_wait_question(page, "color")
     click_and_wait_question(page, "tag")
 
-    just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
         "Test Character Test Teaser Test Text fassione red zapyr another blue wunder | qerfi wheel fassione blue wunder",

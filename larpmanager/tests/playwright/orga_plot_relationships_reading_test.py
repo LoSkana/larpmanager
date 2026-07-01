@@ -30,8 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
-                                     check_feature,
+from larpmanager.tests.utils import (check_feature,
                                      fill_tinymce,
                                      get_modal_iframe,
                                      go_to,
@@ -152,14 +151,12 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text prova Test Character")
 
     # check in char
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
-    just_wait(page, big=True)
     expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
@@ -219,7 +216,6 @@ def plots(live_server: Any, page: Any) -> None:
 
     # change it
     fill_tinymce(edit_iframe, "id_char_role_1", "prova222", show=False)
-    just_wait(page)
     save_modal(page, edit_iframe)
 
     # check it
