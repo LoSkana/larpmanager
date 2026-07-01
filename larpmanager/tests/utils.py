@@ -161,11 +161,11 @@ def check_download(page: Any, link: str, locator: Any = None) -> None:
 
     while current_try < max_tries:
         try:
-            with page.expect_download(timeout=100_000) as download_info:
+            with page.expect_download(timeout=60_000) as download_info:
                 if locator is not None:
                     locator.click()
                 else:
-                    page.click(f"text={link}")
+                    page.get_by_role("link", name=link).click()
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
@@ -213,7 +213,7 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
                 if locator is not None:
                     locator.click()
                 else:
-                    page.click(f"text={link}")
+                    page.get_by_role("link", name=link).click()
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
