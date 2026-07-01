@@ -164,7 +164,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Verify normal registration redirects to external link (normal go_to to avoid lm check)
-    go_to(page, live_server, "/test/register/")
+    page.goto(live_server + "/test/register/")
 
     # Should be redirected to external site (we can't follow, so just check we're not on our site)
     expect(page).to_have_url(re.compile(r"google\.com"))
