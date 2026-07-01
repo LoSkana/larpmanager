@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm, expect_normalized, \
+from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm, expect_normalized, \
     submit_register, \
     get_modal_iframe, save_modal
 
@@ -110,12 +110,12 @@ def casting(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/casting")
     expect_normalized(page, page.locator(".change").first, "YES")
     page.locator(".change").first.click()
-    just_wait(page)
+    expect(page.locator(".change").first).to_have_text("NO")
 
     go_to(page, live_server, "/test/manage/casting")
     expect_normalized(page, page.locator(".change").first, "NO")
     page.locator(".change").first.click()
-    just_wait(page)
+    expect(page.locator(".change").first).to_have_text("YES")
 
     # perform casting
     page.get_by_role("button", name="Start algorithm").click()

@@ -26,6 +26,7 @@ area assignments, external item tracking, and historical movement records.
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm, \
     sidebar, get_modal_iframe, save_modal, _wait_select2_results, _wait_lm_ready
@@ -279,8 +280,7 @@ def edit_loaded_deployed(page: Any) -> None:
     loaded_icon = loaded_cell.locator("span.value")
     assert not loaded_icon.is_visible(), "Loaded should be off initially"
     loaded_cell.click()
-    just_wait(page)
-    assert loaded_icon.is_visible(), "Loaded check icon should be visible after click"
+    expect(loaded_icon).to_be_visible()
 
     # reload and verify loaded state persists
     page.reload()
@@ -292,16 +292,14 @@ def edit_loaded_deployed(page: Any) -> None:
 
     # toggle Loaded off
     loaded_cell.click()
-    just_wait(page)
-    assert not loaded_icon.is_visible(), "Loaded check icon should be hidden after second click"
+    expect(loaded_icon).not_to_be_visible()
 
     # toggle Deployed on: click the deployed cell and verify check icon appears
     deployed_cell = first_row.locator("td.ajax-toggle[tp='depl']")
     deployed_icon = deployed_cell.locator("span.value")
     assert not deployed_icon.is_visible(), "Deployed should be off initially"
     deployed_cell.click()
-    just_wait(page)
-    assert deployed_icon.is_visible(), "Deployed check icon should be visible after click"
+    expect(deployed_icon).to_be_visible()
 
     # reload and verify deployed state persists
     page.reload()
@@ -313,5 +311,4 @@ def edit_loaded_deployed(page: Any) -> None:
 
     # toggle Deployed off
     deployed_cell.click()
-    just_wait(page)
-    assert not deployed_icon.is_visible(), "Deployed check icon should be hidden after second click"
+    expect(deployed_icon).not_to_be_visible()

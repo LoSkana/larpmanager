@@ -51,7 +51,6 @@ from larpmanager.tests.utils import (submit_register,
                                      expect_normalized,
                                      get_modal_iframe,
                                      go_to,
-                                     just_wait,
                                      _wait_lm_ready,
                                      login_orga,
                                      login_user,
@@ -164,9 +163,9 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     expect(page.locator("#typ_t")).to_be_visible()
     page.locator("#typ_t").click()
     page.locator("#p_7").click()
-    just_wait(page)
 
     # Verify JS computed the correct token refund amount
+    expect(page.locator("#ref_token")).to_contain_text(str(USER_TOKEN_REFUND))
     expect_normalized(page, page.locator("#ref_token"), str(USER_TOKEN_REFUND))
 
     submit_confirm(page)
@@ -225,9 +224,9 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     expect(page.locator("#typ_c")).to_be_visible()
     page.locator("#typ_c").click()
     page.locator("#p_7").click()
-    just_wait(page)
 
     # Verify JS computed the correct split
+    expect(page.locator("#ref_token")).to_contain_text(str(ORGA_TOKEN_REFUND))
     expect_normalized(page, page.locator("#ref_token"), str(ORGA_TOKEN_REFUND))
     expect_normalized(page, page.locator("#ref_credit"), str(ORGA_CREDIT_REFUND))
 

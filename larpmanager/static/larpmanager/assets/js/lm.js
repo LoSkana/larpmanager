@@ -783,6 +783,9 @@ function refreshDatatables() {
         }
         resize_fields();
         window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
+    }).fail(function() {
+        console.error('refreshDatatables: failed to reload', window.location.href);
+        window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
     });
 }
 

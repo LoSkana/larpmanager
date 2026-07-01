@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_date, just_wait, check_feature, go_to, login_orga, submit_confirm, \
+from larpmanager.tests.utils import fill_date, check_feature, go_to, login_orga, submit_confirm, \
     expect_normalized, _checkboxes, fill_tinymce, get_modal_iframe, save_modal, click_and_wait_question, char_dual_pick
 
 pytestmark = pytest.mark.e2e
@@ -217,7 +217,7 @@ def campaign(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").fill("campaign")
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#slug").fill("campaign")
-    just_wait(edit_iframe)
+    expect(edit_iframe.locator("#slug")).to_have_value("campaign")
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.get_by_role("option", name="Test Larp", exact=True).click()

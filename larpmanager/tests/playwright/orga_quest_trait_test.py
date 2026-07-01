@@ -37,7 +37,6 @@ from larpmanager.tests.utils import (
     fill_tinymce,
     get_modal_iframe,
     go_to,
-    just_wait,
     login_orga,
     save_modal,
     sidebar,
@@ -236,24 +235,23 @@ def casting(page: Any, live_server: Any) -> None:
     # test toggle casting
     go_to(page, live_server, "/test/manage/casting")
     page.get_by_role("link", name="Lore").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator(".change").first, "YES")
     page.locator(".change").first.click()
-    just_wait(page)
+    expect(page.locator(".change").first).to_have_text("NO")
 
     go_to(page, live_server, "/test/manage/casting")
     page.get_by_role("link", name="Lore").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator(".change").first, "NO")
     page.locator(".change").first.click()
-    just_wait(page)
+    expect(page.locator(".change").first).to_have_text("YES")
 
     # make casting
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Casting")
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()
-    just_wait(page)
     page.get_by_role("button", name="Upload").click()
 
     # check signups

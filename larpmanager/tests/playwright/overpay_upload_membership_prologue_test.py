@@ -36,7 +36,6 @@ from larpmanager.tests.utils import (
     fill_tinymce,
     get_modal_iframe,
     go_to,
-    just_wait,
     load_image,
     login_orga,
     save_modal,
@@ -236,9 +235,8 @@ def upload_membership(page: Any, live_server: Any) -> None:
     page.locator("#id_date").fill("2024-06-11")
     load_image(page, "#id_request")
     load_image(page, "#id_document")
-    just_wait(page)
+    page.wait_for_load_state("networkidle")
     page.locator("#id_date").click()
-    just_wait(page)
     submit_confirm(page)
 
     # Try accessing member form
@@ -266,7 +264,7 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
-    just_wait(page)
+    page.locator("#id_wire_descr").wait_for(state="visible")
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("rwerewrwe")
     page.locator("#id_wire_fee").click()

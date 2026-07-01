@@ -27,6 +27,7 @@ import re
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (just_wait,
                                      check_feature,
@@ -93,7 +94,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     edit_iframe.get_by_role("searchbox").fill("tes")
     _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
-    just_wait(edit_iframe)
+    expect(editor).to_have_value(re.compile(r".*#\d+"))
     save_modal(page, edit_iframe)
 
     expect_normalized(page,
@@ -119,7 +120,7 @@ def excel(page: Any, live_server: Any) -> None:
     page.get_by_role("searchbox").fill("an")
     _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
-    just_wait(page)
+    expect(panel.locator("#id_text")).to_have_value(re.compile(r".*#\d+"))
     submit_inline_edit(page)
 
     # check by reload

@@ -36,7 +36,6 @@ from larpmanager.tests.utils import (
     fill_date,
     get_modal_iframe,
     go_to,
-    just_wait,
     login_orga,
     save_modal,
     sidebar,
@@ -70,7 +69,7 @@ def create_child_event(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").fill("child reorder")
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#slug").fill("childreorder")
-    just_wait(edit_iframe)
+    expect(edit_iframe.locator("#slug")).to_have_value("childreorder")
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.get_by_role("option", name="Test Larp", exact=True).click()

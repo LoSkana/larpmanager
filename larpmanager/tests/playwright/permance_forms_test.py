@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
-    sidebar, just_wait, \
+    sidebar, \
     get_modal_iframe, save_modal, fill_date
 
 pytestmark = pytest.mark.e2e
@@ -234,7 +234,7 @@ def _campaign_config_permanence(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_form1-name").fill("child campaign")
     edit_iframe.locator("#id_form1-name").press("Tab")
     edit_iframe.locator("#slug").fill("childcampaign")
-    just_wait(edit_iframe)
+    expect(edit_iframe.locator("#slug")).to_have_value("childcampaign")
     edit_iframe.locator("#select2-id_form1-parent-container").click()
     edit_iframe.get_by_role("searchbox").fill("tes")
     edit_iframe.get_by_role("option", name="Test Larp", exact=True).click()
