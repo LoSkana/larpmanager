@@ -2535,6 +2535,9 @@ msgstr "Bulk-Download"
 msgid "Cancellations"
 msgstr "Annullierungen"
 
+msgid "Close on date"
+msgstr "Fälligkeitsdatum"
+
 msgid "Comunications"
 msgstr "Kommunikation"
 
@@ -4271,6 +4274,9 @@ msgstr "Optionen für die Registrierung"
 msgid "Registration tickets"
 msgstr "Registrierungskarten"
 
+msgid "Registrations closed"
+msgstr "Die Anmeldung ist geschlossen"
+
 msgid "Registrations status"
 msgstr "Status der Registrierungen"
 
@@ -4524,6 +4530,9 @@ msgstr "Alter (zum Zeitpunkt des Ereignisses)"
 
 msgid "Arrived safe and sound"
 msgstr "Sicher angekommen"
+
+msgid "Browse upcoming events"
+msgstr "Kommende Veranstaltungen ansehen"
 
 msgid "Casting management for"
 msgstr "Casting-Management für"
@@ -5310,6 +5319,9 @@ msgstr "Vielen Dank für Ihre Teilnahme"
 msgid "Ticket name (keep it short)"
 msgstr "Ticketname (kurz halten)"
 
+msgid "View badges you have earned"
+msgstr "Deine verdienten Abzeichen anzeigen"
+
 msgid "View limited ticket options"
 msgstr "Begrenzte Ticketoptionen anzeigen"
 
@@ -5546,6 +5558,9 @@ msgstr "Charaktere Inventar-Pool-Typen"
 msgid "Choose the style for the event"
 msgstr "Wählen Sie den Stil für die Veranstaltung"
 
+msgid "Choose your preferred language"
+msgstr "Wähle deine bevorzugte Sprache aus"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Vollständige Zahlung für %(event)s"
@@ -5726,6 +5741,9 @@ msgstr "So melden Sie sich wieder mit dem Konto an"
 
 msgid "Total of recorded money inflows"
 msgstr "Summe der erfassten Geldzuflüsse"
+
+msgid "View your private conversations"
+msgstr "Deine privaten Unterhaltungen anzeigen"
 
 msgid "Where the event will take place"
 msgstr "Wo findet die Veranstaltung statt"
@@ -6014,6 +6032,9 @@ msgstr "Verwalten der Zulassungszuschläge"
 msgid "Manage the type of event prologues"
 msgstr "Verwalten Sie die Art der Ereignisprologe"
 
+msgid "Manage your association membership"
+msgstr "Verwalte deine Vereinsmitgliedschaft"
+
 msgid "Manages registration cancellations"
 msgstr "Verwaltet die Stornierungen von Anmeldungen"
 
@@ -6182,6 +6203,9 @@ msgstr "Der Name unseres Hobbys, vier Buchstaben"
 
 msgid "Unique identifier for the event URL"
 msgstr "Eindeutiger Bezeichner für die Ereignis-URL"
+
+msgid "View the characters you are playing"
+msgstr "Zeige die Charaktere an, die du spielst"
 
 msgid "You can't send messages to yourself"
 msgstr "Sie können keine Nachrichten an sich selbst senden"
@@ -7072,6 +7096,9 @@ msgstr "Freigabe %(user)s als %(role)s für %(event)s"
 msgid "Authentication token (mark all permissions)"
 msgstr "Authentifizierungstoken (alle Berechtigungen markieren)"
 
+msgid "Browse events that have already taken place"
+msgstr "Schau dir bereits stattgefundene Veranstaltungen an"
+
 msgid "Characters are only visible to participants"
 msgstr "Die Zeichen sind nur für die Teilnehmer sichtbar"
 
@@ -7136,6 +7163,9 @@ msgstr "Dieser Zugangslink ist ungültig oder abgelaufen."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Nicht erkannte Dateien im ZIP (werden übersprungen)"
+
+msgid "Update your personal data and profile photo"
+msgstr "Aktualisiere deine persönlichen Daten und dein Profilbild"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Hochladen einer PDF-Datei oder eines Bildes (JPG, PNG, usw.)"
@@ -7251,6 +7281,9 @@ msgstr ""
 msgid "View all log entries recorded for this event"
 msgstr "Alle zu diesem Ereignis aufgezeichneten Protokolleinträge anzeigen"
 
+msgid "View all your historical financial movements"
+msgstr "Alle deine bisherigen Finanzbewegungen anzeigen"
+
 msgid "View the list of characters and participants"
 msgstr "Die Liste der Personen und Teilnehmer anzeigen"
 
@@ -7291,6 +7324,9 @@ msgstr "Verwalten Sie Abzeichen und weisen Sie sie Teilnehmern zu"
 
 msgid "Manage the registration questions and options"
 msgstr "Verwalten Sie die Registrierungsfragen und -optionen"
+
+msgid "Manage users that you can act on their behalf"
+msgstr "Benutzer verwalten, für die du handeln kannst"
 
 msgid "Member who used this token (if authenticated)"
 msgstr "Mitglied, das dieses Token verwendet hat (falls authentifiziert)"
@@ -7419,6 +7455,10 @@ msgstr "Klicke auf die Schaltfläche oben, um dein erstes Handout hinzuzufügen"
 
 msgid "Use the button above to assign warehouse items"
 msgstr "Nutze die Schaltfläche oben, um Lagerartikel zuzuordnen"
+
+msgid "View the list of events you are registered for"
+msgstr ""
+"Die Liste der Veranstaltungen anzeigen, für die du dich angemeldet hast"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Willkommen auf dem Dashboard Ihrer Organisation!"
@@ -7748,6 +7788,9 @@ msgstr "Verwalten Sie die Konfiguration der aktivierten Funktionen"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Verwalten Sie die Fortschrittsschritte für die Schriftelemente"
 
+msgid "Manage your password and two-factor authentication"
+msgstr "Verwalte dein Passwort und die Zwei-Faktor-Authentifizierung"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Zweites Zeichen in der Beziehung (Ziel)"
 
@@ -8060,9 +8103,6 @@ msgstr ""
 "Die Kosten werden hier angezeigt, sobald die Veranstaltungen erstellt und "
 "durchgeführt wurden"
 
-msgid "Date and time when registrations open for participants"
-msgstr "Datum und Uhrzeit der Öffnung der Anmeldungen für Teilnehmer"
-
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Möchten Sie Nutzern die Möglichkeit geben, freiwillig zu spenden"
 
@@ -8264,6 +8304,11 @@ msgstr ""
 msgid "Manage tags used to categorize and group warehouse items"
 msgstr ""
 "Verwalte Tags, mit denen Lagerartikel kategorisiert und gruppiert werden"
+
+msgid "Manage which organizations can access your personal data"
+msgstr ""
+"Lege fest, welche Organisationen auf deine personenbezogenen Daten zugreifen"
+" dürfen"
 
 msgid "Please check the address again, especially its beginning"
 msgstr ""
@@ -9361,6 +9406,11 @@ msgstr ""
 msgid "Number of days within which the player must pay his next installment"
 msgstr ""
 "Anzahl der Tage, innerhalb derer der Spieler seine nächste Rate zahlen muss"
+
+msgid "Registrations are open and will close at the specified date and time"
+msgstr ""
+"Die Anmeldung ist jetzt möglich und endet zum angegebenen Datum und zur "
+"angegebenen Uhrzeit"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -11231,6 +11281,13 @@ msgid ""
 msgstr ""
 "Verfolge alle Artikelzuweisungen, gruppiert nach Bereich, und markiere jeden"
 " Artikel als geladen und bereitgestellt"
+
+msgid ""
+"Date and time when registrations open, or close, for participants depending "
+"on status"
+msgstr ""
+"Datum und Uhrzeit, zu denen die Anmeldung für Teilnehmer je nach Status "
+"beginnt oder endet"
 
 msgid ""
 "Edit event-specific translation overrides to customize terminology and "

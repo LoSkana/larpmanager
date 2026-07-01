@@ -3,10 +3,13 @@
 {% block title %}
     {% trans "Past events" %}
 {% endblock title %}
+{% block info %}
+    {% trans "Browse events that have already taken place" %}
+{% endblock info %}
 {% block robots %}
     {% include "elements/robots_show.html" %}
 {% endblock robots %}
 {% block content %}
-    <p style="text-align: center;">{% trans "These are our past events" %}</p>
+    <p class="c">{% trans "These are our past events" %}</p>
     {% include "elements/run_list.html" %}
 {% endblock content %}

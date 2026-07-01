@@ -4008,12 +4008,6 @@ body.association.new_v22 .user_resize {
   }
 }
 
-@media (max-width: 840px) {
-  #topbar.topbar_v22 {
-    display: none;
-  }
-}
-
 .tv22-pills-wrapper {
   flex: 1 1 0;
   min-width: 0;
@@ -4077,7 +4071,7 @@ body.association.new_v22 .user_resize {
   font-weight: 700;
 }
 
-#topbar .tv22-pill-img {
+.tv22-pill-img {
   width: 1.4em;
   height: 1.4em;
   border-radius: 50%;
@@ -4204,13 +4198,16 @@ body.association.new_v22 .user_resize {
 .new_v22 #topbar.topbar_v22 {
   transition:
     left 0.25s,
-    width 0.25s;
+    width 0.25s,
+    transform 0.25s;
 }
 
 .new_v22 #sidebar .inner {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+/**** Collapse sidebar desktop ****/
 
 .new_v22 #sidebar.sidebar-collapsed {
   width: 3.4em;
@@ -4272,6 +4269,179 @@ body.association.new_v22 .user_resize {
 
 .new_v22 .grid {
   padding: 0;
+}
+
+.new_v22 #banner .inner h1 {
+  text-align: left;
+  justify-content: flex-start;
+  padding-left: 0;
+}
+
+@media (max-width: 840px) {
+  .new_v22 #banner .inner h1 {
+    text-align: center;
+  }
+}
+
+.new_v22 #info_bar {
+  text-align: left;
+  font-size: 80%;
+  font-style: italic;
+  margin-left: 1em;
+}
+
+.new_v22 .staff-list {
+  text-align: left;
+}
+
+.new_v22 p,
+.new_v22 h1,
+.new_v22 h2,
+.new_v22 h3,
+.new_v22 h4 {
+  text-align: left;
+}
+
+.calendar h3 {
+  text-align: left;
+}
+
+.new_v22 .page_search .nav {
+  text-align: left;
+}
+
+.new_v22 .c {
+  text-align: left;
+}
+
+/**** Menu navigation mobile ****/
+
+@media (max-width: 840px) {
+  .new_v22 #sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.25s;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .new_v22 #sidebar.mobile-visible.hide {
+    display: block;
+  }
+
+  .new_v22 #sidebar.mobile-visible {
+    left: 0;
+    width: 70vw;
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    border-radius: 0 8px 8px 0;
+  }
+
+  #topbar.topbar_v22 {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    top: 0;
+    left: auto;
+    right: 0;
+    height: calc(100vh - var(--topbar-height) - 1.5em);
+    width: 70vw;
+    border-radius: 8px 0 0 8px;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(100%);
+    transition: transform 0.25s;
+    background-color: var(--sec-clr);
+  }
+
+  #topbar.topbar_v22.mobile-visible {
+    transform: translateX(0);
+    padding: 0.5em 1em;
+  }
+
+  #topbar.topbar_v22 .tv22-pills-wrapper {
+    flex: 0 1 auto;
+    width: auto;
+    overflow-x: visible;
+    overflow-y: auto;
+  }
+
+  #topbar.topbar_v22 .tv22-pills {
+    flex-direction: column;
+    align-items: stretch;
+    white-space: normal;
+    width: 100%;
+  }
+
+  #topbar.topbar_v22 .tv22-switch {
+    align-self: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin: 2em 1em 0em 1em;
+  }
+
+  #topbar.topbar_v22.mobile-visible .tv22-scroll-btn {
+    display: none;
+  }
+
+  .new_v22 #menu-mobile {
+    top: auto;
+    bottom: 3vw;
+    width: 94vw;
+    margin: 0 auto;
+    border-radius: 5vw;
+    height: auto;
+    border-top: 2px solid rgba(var(--pri-rgb), 0.085);
+    border-bottom: none;
+    padding: 0.5em 0.5em;
+    background-color: rgba(var(--sec-rgb), 0.95);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    right: 0;
+    left: 0;
+    vertical-align: middle;
+    z-index: 10;
+  }
+
+  .new_v22 #menu-mobile table {
+    display: table;
+    margin: 0;
+  }
+
+  .new_v22 #menu-mobile tr,
+  .new_v22 #menu-mobile td {
+    background: none;
+    border: none;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: revert;
+    text-align: center !important;
+  }
+
+  .new_v22 #menu-mobile a {
+    margin: 0;
+  }
+
+  .new_v22 #one .inner {
+    padding: 0em 0.5em !important;
+  }
+
+  .new_v22 #page-wrapper.topbar,
+  .new_v22 #page-wrapper.topbar header {
+    margin-bottom: calc(var(--topbar-height) + 1em);
+  }
 }
 
 /* ---------------------------------------------------------------------------

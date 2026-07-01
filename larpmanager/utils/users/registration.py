@@ -614,6 +614,14 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
             }
             return run_status
 
+    if run.registration_status == RegistrationStatus.CLOSING:
+        current_datetime = timezone.now()
+
+        if not run.registration_open or run.registration_open <= current_datetime:
+            run_status["open"] = False
+            run_status["text"] = run_status.get("text") or _("Registrations closed")
+            return run_status
+
     # signup open, not already signed in
     messages = {
         "primary": _("Registration is open!"),

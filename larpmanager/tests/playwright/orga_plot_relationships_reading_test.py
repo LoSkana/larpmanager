@@ -38,7 +38,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      submit_confirm,
                                      expect_normalized, sidebar, save_modal, click_and_wait_question,
-                                     _wait_select2_results, _wait_lm_ready, char_dual_pick,
+                                     _wait_select2_results, _wait_lm_ready, char_dual_pick, SHORT_TIMEOUT,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -169,7 +169,7 @@ def relationships(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("a.my_toggle[tog='f_u2_inverse']").scroll_into_view_if_needed()
     edit_iframe.locator("a.my_toggle[tog='f_u2_inverse']").click()
-    edit_iframe.locator(".f_u2_inverse").wait_for(state="visible", timeout=10000)
+    edit_iframe.locator(".f_u2_inverse").wait_for(state="visible", timeout=SHORT_TIMEOUT)
     expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery

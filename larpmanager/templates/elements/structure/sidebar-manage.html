@@ -1,9 +1,9 @@
 {% load static i18n %}
-<div id="sidebar"
-     class="{% if not is_sidebar_open %}hide{% endif %} topbar">
-    <div class="inner new-menu">
-        {% include "elements/structure/sidebar-header.html" %}
-        {% with effective_version|default:association.assoc_version as eff_ver %}
+{% with effective_version|default:association.assoc_version as eff_ver %}
+    <div id="sidebar"
+         class="{% if eff_ver < 22 and not is_sidebar_open %}hide{% endif %} topbar">
+        <div class="inner new-menu">
+            {% include "elements/structure/sidebar-header.html" %}
             {% if eff_ver < 19 %}
                 {% if run %}
                     <p>
@@ -224,6 +224,6 @@
                     {% include "elements/structure/sidebar-footer.html" %}
                 </div>
             {% endif %}
-        {% endwith %}
+        </div>
     </div>
-</div>
+{% endwith %}

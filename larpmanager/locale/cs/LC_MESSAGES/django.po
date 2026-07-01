@@ -2535,6 +2535,9 @@ msgstr "Hromadné stahování"
 msgid "Cancellations"
 msgstr "Storna"
 
+msgid "Close on date"
+msgstr "Datum uzavření"
+
 msgid "Comunications"
 msgstr "Komunikace"
 
@@ -4271,6 +4274,9 @@ msgstr "Možnosti registrace"
 msgid "Registration tickets"
 msgstr "Registrační lístky"
 
+msgid "Registrations closed"
+msgstr "Registrace byla ukončena"
+
 msgid "Registrations status"
 msgstr "Stav registrací"
 
@@ -4524,6 +4530,9 @@ msgstr "Věk (při události)"
 
 msgid "Arrived safe and sound"
 msgstr "Bezpečně dorazil"
+
+msgid "Browse upcoming events"
+msgstr "Prohlédněte si nadcházející akce"
 
 msgid "Casting management for"
 msgstr "Správa odlitků pro"
@@ -5310,6 +5319,9 @@ msgstr "Děkujeme za účast"
 msgid "Ticket name (keep it short)"
 msgstr "Název tipu (zkrácený)"
 
+msgid "View badges you have earned"
+msgstr "Zobrazit odznaky, které jste získali"
+
 msgid "View limited ticket options"
 msgstr "Zobrazit omezené možnosti vstupenek"
 
@@ -5546,6 +5558,9 @@ msgstr "Typy zásobníku postav"
 msgid "Choose the style for the event"
 msgstr "Zvolte styl události"
 
+msgid "Choose your preferred language"
+msgstr "Vyberte si preferovaný jazyk"
+
 #, python-format
 msgid "Complete payment for %(event)s"
 msgstr "Kompletní platba za %(event)s"
@@ -5726,6 +5741,9 @@ msgstr "Opětovné přihlášení pomocí účtu"
 
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
+
+msgid "View your private conversations"
+msgstr "Zobrazit soukromé konverzace"
 
 msgid "Where the event will take place"
 msgstr "Kde se akce koná"
@@ -6014,6 +6032,9 @@ msgstr "Správa registračních příplatků"
 msgid "Manage the type of event prologues"
 msgstr "Správa typu prologů událostí"
 
+msgid "Manage your association membership"
+msgstr "Spravujte své členství ve sdružení"
+
 msgid "Manages registration cancellations"
 msgstr "spravuje zrušení registrace"
 
@@ -6181,6 +6202,9 @@ msgstr "Název našeho koníčku, čtyři písmena"
 
 msgid "Unique identifier for the event URL"
 msgstr "Jedinečný identifikátor adresy URL události"
+
+msgid "View the characters you are playing"
+msgstr "Zobrazit postavy, za které hrajete"
 
 msgid "You can't send messages to yourself"
 msgstr "Nemůžete posílat zprávy sami sobě"
@@ -7063,6 +7087,9 @@ msgstr "Schválení %(user)s jako %(role)s pro %(event)s"
 msgid "Authentication token (mark all permissions)"
 msgstr "Ověřovací token (označte všechna oprávnění)"
 
+msgid "Browse events that have already taken place"
+msgstr "Prohlédněte si akce, které již proběhly"
+
 msgid "Characters are only visible to participants"
 msgstr "Znaky jsou viditelné pouze pro účastníky"
 
@@ -7123,6 +7150,9 @@ msgstr "Tento přístupový odkaz je neplatný nebo jeho platnost vypršela."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Nerozpoznané soubory v ZIP (budou přeskočeny)"
+
+msgid "Update your personal data and profile photo"
+msgstr "Aktualizujte své osobní údaje a profilovou fotku"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Nahrajte soubor PDF nebo obrázek (JPG, PNG atd.)"
@@ -7236,6 +7266,9 @@ msgstr "Pomocí tlačítka výše přidejte text nové události"
 msgid "View all log entries recorded for this event"
 msgstr "Zobrazit všechny záznamy v protokolu zaznamenané pro tuto událost"
 
+msgid "View all your historical financial movements"
+msgstr "Zobrazit všechny vaše dosavadní finanční transakce"
+
 msgid "View the list of characters and participants"
 msgstr "Zobrazit seznam postav a účastníků"
 
@@ -7274,6 +7307,9 @@ msgstr "Správa odznaků a jejich přiřazování účastníkům"
 
 msgid "Manage the registration questions and options"
 msgstr "Správa registračních otázek a možností"
+
+msgid "Manage users that you can act on their behalf"
+msgstr "Spravujte uživatele, za které můžete jednat"
 
 msgid "Member who used this token (if authenticated)"
 msgstr "Člen, který použil tento token (je-li ověřen)"
@@ -7395,6 +7431,9 @@ msgstr "Pomocí tlačítka výše přidejte svůj první pracovní list"
 
 msgid "Use the button above to assign warehouse items"
 msgstr "Pomocí tlačítka výše přiřaďte skladové položky"
+
+msgid "View the list of events you are registered for"
+msgstr "Zobrazit seznam akcí, na které jste se přihlásili"
 
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Vítejte na palubní desce vaší organizace!"
@@ -7708,6 +7747,9 @@ msgstr "Správa konfigurace aktivovaných funkcí"
 msgid "Manage the progress steps for the writing elements"
 msgstr "Správa kroků postupu pro prvky psaní"
 
+msgid "Manage your password and two-factor authentication"
+msgstr "Správa hesla a dvoufaktorového ověřování"
+
 msgid "Second character in the relationship (destination)"
 msgstr "Druhý znak ve vztahu (cílová destinace)"
 
@@ -7988,9 +8030,6 @@ msgstr "Konfigurace alespoň jedné platební metody pro účastníky"
 msgid "Costs will appear here once events are created and run"
 msgstr "Náklady se zde zobrazí, jakmile budou akce vytvořeny a uskutečněny"
 
-msgid "Date and time when registrations open for participants"
-msgstr "Datum a čas zahájení registrace účastníků"
-
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Chcete uživatelům umožnit dobrovolné dary"
 
@@ -8165,6 +8204,9 @@ msgstr "Správa slev pro účastníky při registraci"
 msgid "Manage tags used to categorize and group warehouse items"
 msgstr ""
 "Správa štítků používaných k kategorizaci a seskupování skladových položek"
+
+msgid "Manage which organizations can access your personal data"
+msgstr "Nastavte, které organizace mají přístup k vašim osobním údajům"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Zkontrolujte prosím znovu adresu, zejména její začátek"
@@ -9042,6 +9084,9 @@ msgstr ""
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Počet dní, během kterých musí hráč zaplatit další splátku"
+
+msgid "Registrations are open and will close at the specified date and time"
+msgstr "Registrace jsou otevřené a budou uzavřeny v uvedený den a čas"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -10706,6 +10751,13 @@ msgid ""
 msgstr ""
 "Sledujte všechna přiřazení položek seskupená podle oblastí a označujte "
 "jednotlivé položky jako naložené a nasazené"
+
+msgid ""
+"Date and time when registrations open, or close, for participants depending "
+"on status"
+msgstr ""
+"Datum a čas zahájení nebo ukončení registrace pro účastníky v závislosti na "
+"jejich statusu"
 
 msgid ""
 "Edit event-specific translation overrides to customize terminology and "

@@ -36,6 +36,8 @@ password = "banana"
 orga_user = "orga@test.it"
 test_user = "user@test.it"
 
+SHORT_TIMEOUT = 10_000
+LONG_TIMEOUT = 60_000
 
 def logout(page: Any) -> None:
     sidebar(page, "Logout")
@@ -94,26 +96,17 @@ def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
     page.wait_for_load_state("load", timeout=timeout)
     page.wait_for_load_state("domcontentloaded", timeout=timeout)
 
-    try:
-        page.wait_for_function("() => window._lmReady === true", timeout=timeout)
-    except Exception:
-        pass
+    page.wait_for_function("() => window._lmReady === true", timeout=timeout)
 
-    try:
-        page.wait_for_function(
-            "() => !window._datatablesInitPending || window._datatablesInitPending <= 0",
-            timeout=timeout,
-        )
-    except Exception:
-        pass
+    page.wait_for_function(
+        "() => !window._datatablesInitPending || window._datatablesInitPending <= 0",
+        timeout=timeout,
+    )
 
-    try:
-        page.wait_for_function(
-            "() => !window._questionLoadPending || window._questionLoadPending <= 0",
-            timeout=timeout,
-        )
-    except Exception:
-        pass
+    page.wait_for_function(
+        "() => !window._questionLoadPending || window._questionLoadPending <= 0",
+        timeout=timeout,
+    )
 
     ooops_check(page)
 
@@ -157,13 +150,18 @@ def check_download(page: Any, link: str, locator: Any = None) -> None:
     max_tries = 3
     current_try = 0
 
+    just_wait(page)
+
     while current_try < max_tries:
         try:
-            with page.expect_download(timeout=100_000) as download_info:
+            with page.expect_download(timeout=LONG_TIMEOUT) as download_info:
                 if locator is not None:
                     locator.click()
                 else:
-                    page.click(f"text={link}")
+                    target = page.get_by_role("link", name=link)
+                    if target.count() == 0:
+                        target = page.get_by_role("button", name=link)
+                    target.click()
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
@@ -207,11 +205,14 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
     current_try = 0
     while current_try < max_tries:
         try:
-            with page.expect_download(timeout=100_000) as download_info:
+            with page.expect_download(timeout=LONG_TIMEOUT) as download_info:
                 if locator is not None:
                     locator.click()
                 else:
-                    page.click(f"text={link}")
+                    target = page.get_by_role("link", name=link)
+                    if target.count() == 0:
+                        target = page.get_by_role("button", name=link)
+                    target.click()
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
@@ -267,7 +268,7 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     # Ensure any blocking loading screen is gone before searching for elements
     overlay = page.locator("#overlay")
     if overlay.is_visible():
-        expect(overlay).to_be_hidden(timeout=5000)
+        expect(overlay).to_be_hidden(timeout=SHORT_TIMEOUT)
 
     # Use a generic locator with a regex filter covering both text and role fallbacks
     submit_btn = (
@@ -279,18 +280,10 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
 
-    url_before = page.url
-
     # Click normally to ensure actionability, fallback to forced action if styling dictates
     submit_btn.click(force=True)
 
-    # If click triggered navigation, wait for URL change before checking load states
-    try:
-        page.wait_for_url(lambda url: url != url_before, timeout=1000)
-    except Exception:
-        pass
-
-    _wait_lm_ready(page, timeout=8000)
+    _wait_lm_ready(page, timeout=SHORT_TIMEOUT)
 
 
 def submit_register(page: Any) -> None:
@@ -298,14 +291,8 @@ def submit_register(page: Any) -> None:
     _wait_lm_ready(page)
     url_before = page.url
 
-    # Opening the summary can be undone by a late 'change' event; retry a few times
-    for _ in range(3):
-        page.get_by_role("button", name="Continue").click()
-        try:
-            page.locator("#riepilogo").wait_for(state="visible", timeout=3000)
-            break
-        except Exception:
-            continue
+    page.get_by_role("button", name="Continue").click()
+    page.locator("#riepilogo").wait_for(state="visible", timeout=SHORT_TIMEOUT)
 
     # Click the real submit button by id
     register_go = page.locator("#register_go")
@@ -314,13 +301,13 @@ def submit_register(page: Any) -> None:
     register_go.click()
 
     # Assert the navigation actually happened
-    page.wait_for_url(lambda url: url != url_before, timeout=10000)
+    page.wait_for_url(lambda url: url != url_before, timeout=SHORT_TIMEOUT)
     _wait_lm_ready(page)
     ooops_check(page)
 
 
 def wait_for_inline_edit(page: Any) -> Any:
-    page.wait_for_selector("#excel-edit.visible #form-excel", timeout=10000)
+    page.wait_for_selector("#excel-edit.visible #form-excel", timeout=SHORT_TIMEOUT)
     return page.locator("#excel-edit")
 
 
@@ -332,7 +319,7 @@ def submit_inline_edit(page: Any) -> None:
     submit_btn.click(force=True)
     page.wait_for_function(
         f"() => (window._datatablesRefreshCount || 0) > {count_before}",
-        timeout=30000,
+        timeout=LONG_TIMEOUT,
     )
 
 
@@ -345,7 +332,7 @@ def save_modal(page: any, frame: Any) -> None:
     submit_btn.click(force=True)
     page.wait_for_function(
         f"() => (window._datatablesRefreshCount || 0) > {count_before} || window.location.href !== {repr(url_before)}",
-        timeout=30000,
+        timeout=LONG_TIMEOUT,
     )
     page.locator("#lm-modal").wait_for(state="hidden")
 
@@ -406,7 +393,7 @@ def load_image_hidden(page: Any, element_id: str) -> None:
 def upload(page: Any, element_id: Any, image_path: Any) -> None:
     inp = page.locator(element_id)
     inp.scroll_into_view_if_needed()
-    expect(inp).to_be_visible(timeout=60000)
+    expect(inp).to_be_visible(timeout=LONG_TIMEOUT)
     inp.set_input_files(str(image_path))
 
 
@@ -448,7 +435,7 @@ def normalize_whitespace(text: str) -> str:
     return text.strip().lower()
 
 
-def expect_normalized(page, locator, expected: str, timeout=10000):
+def expect_normalized(page, locator, expected: str, timeout=SHORT_TIMEOUT):
     locator.wait_for(state="visible", timeout=timeout)
 
     page.wait_for_load_state("load")
@@ -565,10 +552,7 @@ def click_and_wait_question(page: Any, name: str) -> None:
         tog = toggle.get_attribute("tog")
         page.evaluate("window._tableToggleDone = null")
         toggle.click()
-        try:
-            page.wait_for_function(f"window._tableToggleDone === '{tog}'", timeout=3000)
-        except Exception:
-            pass  # column toggle is synchronous; proceed if signal missed
+        page.wait_for_function(f"window._tableToggleDone === '{tog}'", timeout=SHORT_TIMEOUT)
 
 
 def fill_date(locator, selector, value):
@@ -680,7 +664,7 @@ def submit_option(page, option):
     # The inline editor autosaves: blur the fields and wait for the row
     # to receive its uuid (i.e. for the server to confirm the save)
     page.keyboard.press("Tab")
-    expect(option.row).to_have_attribute("data-uuid", re.compile(".+"), timeout=10000)
+    expect(option.row).to_have_attribute("data-uuid", re.compile(".+"), timeout=SHORT_TIMEOUT)
 
 
 def get_modal_iframe(page):
@@ -733,6 +717,6 @@ def char_dual_pick(context, term, name):
     search.wait_for(state="visible")
     search.fill(term)
     item = context.locator(".char-dual-avail-list .char-dual-item").filter(has_text=name).first
-    item.wait_for(state="visible", timeout=10000)
+    item.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     item.click()
-    context.locator(".char-dual-sel-list .char-dual-item").filter(has_text=name).wait_for(state="visible", timeout=10000)
+    context.locator(".char-dual-sel-list .char-dual-item").filter(has_text=name).wait_for(state="visible", timeout=SHORT_TIMEOUT)

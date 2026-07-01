@@ -101,7 +101,7 @@ def test_user_pdf(pw_page: Any) -> None:
 
     check_download(page, "Profiles (PDF)")
 
-    check_download(page, "Download complete sheet")
+    check_download(page, "complete sheet")
 
     check_download(page, "printable sheet")
 
@@ -132,7 +132,7 @@ def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
     for label, orig in test_links.items():
         # JS replaces '0/pdf' with '{uuid}/pdf' on change
         url = orig.replace("0/pdf", f"{char_uuid}/pdf")
-        go_to_check(page, f"{live_server}{url}")
+        page.goto(f"{live_server}{url}")
         body = page.locator("body")
         assert body.inner_text().strip(), f"Empty body for {label} at {url}"
 

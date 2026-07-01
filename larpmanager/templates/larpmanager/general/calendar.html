@@ -16,6 +16,9 @@
 {% block title %}
     {{ association.name }}
 {% endblock title %}
+{% block info %}
+    {% trans "Browse upcoming events" %}
+{% endblock info %}
 {% block content %}
     <div class="calendar">
         <div class="clearer"></div>
@@ -23,16 +26,23 @@
             {{ custom_text | safe }}
             <hr />
         {% endif %}
-        {% if open %}
-            {% if future %}
-                <h2>{% trans "upcoming events" %}</h2>
+        <div class="only_v22">
+            {% if all_runs %}
+                {% include "elements/run_list.html" with list=all_runs %}
             {% endif %}
-            {% include "elements/run_list.html" with list=open %}
-        {% endif %}
-        {% if future %}
-            <h2>{% trans "Next events" %}</h2>
-            {% include "elements/run_list.html" with list=future %}
-        {% endif %}
+        </div>
+        <div class="no_v22">
+            {% if open %}
+                {% if future %}
+                    <h2>{% trans "upcoming events" %}</h2>
+                {% endif %}
+                {% include "elements/run_list.html" with list=open %}
+            {% endif %}
+            {% if future %}
+                <h2>{% trans "Next events" %}</h2>
+                {% include "elements/run_list.html" with list=future %}
+            {% endif %}
+        </div>
         {% if 'past_events' in association.features %}
             <div class="nav no_v22">
                 <a href="{% url 'calendar_past' %}">{% trans "Past events" %}</a>

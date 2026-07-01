@@ -140,6 +140,8 @@ def add_items(page: Any) -> None:
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
+    page.reload()
+
     # check items
     expect_normalized(page,
         page.locator("#one"), "item 1 sadsada box a electrical item 2 sdsadas boc b item 3sa dsad box a"

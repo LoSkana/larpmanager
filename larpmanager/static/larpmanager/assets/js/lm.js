@@ -2,6 +2,14 @@ $(".hide:visible").hide();
 
 window.addEventListener('DOMContentLoaded', function() {
 
+// Remove info bar / registration status blocks left empty by conditional template content, to avoid stray padding.
+$('#info_bar, .reg_status').each(function() {
+    if ($(this).text().trim() === '') {
+        $(this).next('hr').remove();
+        $(this).remove();
+    }
+});
+
 $.ajaxSetup({
      beforeSend: function(xhr, settings) {
          function getCookie(name) {
@@ -160,6 +168,16 @@ function sidebar_mobile() {
     $('#sidebar-mobile-close').toggle();
 }
 
+function sidebar_mobile_v22() {
+    $('#topbar').removeClass('mobile-visible');
+    $('#sidebar').toggleClass('mobile-visible');
+}
+
+function topbar_mobile_v22() {
+    $('#sidebar').removeClass('mobile-visible');
+    $('#topbar').toggleClass('mobile-visible');
+}
+
 const tinymceConfig = JSON.parse(document.getElementById('tinymce-config').textContent);
 
 // Initialize TinyMCE on matching textareas; resolves with the editor id once ready.
@@ -215,6 +233,7 @@ function initSidebar() {
 
     show_sidebar_active();
 
+    // collapse sidebar desktop
     var collapseBtn = document.getElementById('sidebar-collapse-btn');
     if (collapseBtn) {
         var sidebar = document.getElementById('sidebar');
@@ -235,6 +254,17 @@ function initSidebar() {
             localStorage.setItem('sidebarCollapsed', collapsed ? '1' : '0');
         });
     }
+
+    // open sidebar mobile
+    $('#sidebar-mobile-v22').on('click', function(event) {
+        sidebar_mobile_v22();
+    });
+
+    // open topbar mobile
+    $('#topbar-mobile-v22').on('click', function(event) {
+        topbar_mobile_v22();
+    });
+
 }
 
 // ========== Init: Dropdowns ==========
@@ -773,9 +803,10 @@ function setupConditionalFields() {
             $('[data-conditional-show]').each(function() {
                 var $field = $(this);
                 var showForValue = $field.attr('data-conditional-show');
+                var showForValues = showForValue ? showForValue.split(',') : [];
                 var $row = $field.closest('tr');
 
-                if (selectedValue === showForValue) {
+                if (showForValues.indexOf(selectedValue) !== -1) {
                     $row.show();
                 } else {
                     $row.hide();

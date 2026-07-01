@@ -32,7 +32,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import just_wait, get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
     submit_register, delete_modal, \
-    expect_normalized, save_modal, wait_accounting_load, _wait_lm_ready
+    expect_normalized, save_modal, wait_accounting_load, _wait_lm_ready, SHORT_TIMEOUT
 
 pytestmark = pytest.mark.e2e
 
@@ -59,7 +59,7 @@ def check_delete(live_server: Any, page: Any) -> None:
     # update signup - orga
     go_to(page, live_server, "/test/manage/registrations")
     page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector(".fa-edit", timeout=100)
+    page.wait_for_selector(".fa-edit", timeout=SHORT_TIMEOUT)
     page.locator(".fa-edit").click(force=True)
     edit_iframe = get_modal_iframe(page)
     save_modal(page, edit_iframe)
@@ -285,7 +285,7 @@ def setup_payment(live_server: Any, page: Any) -> None:
     # set ticket price
     go_to(page, live_server, "/test/manage/tickets")
     page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector(".fa-edit", timeout=10000)
+    page.wait_for_selector(".fa-edit", timeout=SHORT_TIMEOUT)
     page.locator(".fa-edit").click(force=True)
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()
