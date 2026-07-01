@@ -37,7 +37,6 @@ from larpmanager.tests.utils import (
     fill_date,
     get_modal_iframe,
     go_to,
-    just_wait,
     load_image,
     login_orga,
     sidebar,
@@ -184,7 +183,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     # Pay first event
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name="Accounting", exact=True).click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
     expect_normalized(page, page.locator("#one"), "Next payment: 120€ (Includes membership fee 2050: 20€)")
     page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
@@ -207,7 +206,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     # reg_status accounting section shows event fee paid 100 and membership fee 20
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name="Accounting", exact=True).click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
     expect_normalized(page, page.locator("#one"), "Total payments: 100")
     expect_normalized(page, page.locator("#one"), "Membership fee 2050: 20€ ")
@@ -234,7 +233,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     # reg_status for second event shows event fee 100 and membership fee 20 (already paid via first event)
     go_to(page, live_server, "/testsecond/register")
     page.get_by_role("link", name="Accounting", exact=True).click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Total registration fee: 70")
     expect_normalized(page, page.locator("#one"), "Total payments: 70")
     expect_normalized(page, page.locator("#one"), "Membership fee 2050: 20€ ")

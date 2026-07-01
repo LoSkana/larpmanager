@@ -204,7 +204,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
 
     # Checkout member data
     page.locator(".fa-eye").click()
-    just_wait(page)
+    page.locator("#lm-modal-content").wait_for(state="visible")
     expect_normalized(page, page.locator("#lm-modal-content"), "Admin Test Email: orga@test.it")
 
 
@@ -240,7 +240,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
-    just_wait(page)
+    page.locator("#id_wire_descr").wait_for(state="visible")
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("sadsadsa")
     page.locator("#id_wire_fee").click()
