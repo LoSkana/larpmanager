@@ -182,7 +182,7 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect_normalized(edit_iframe,
-        edit_iframe.locator("#test-larp"),
+        edit_iframe.locator("#test-orga"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )
 
@@ -198,6 +198,6 @@ def working_ticket_event(page: Any, server: Any, context: Any) -> None:
         timeout=LONG_TIMEOUT,
     )
     expect_normalized(page,
-        page.locator("#test-larp"),
+        page.locator("#test-orga"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )
