@@ -157,6 +157,8 @@ def check_download(page: Any, link: str, locator: Any = None) -> None:
     max_tries = 3
     current_try = 0
 
+    just_wait(page)
+
     while current_try < max_tries:
         try:
             with page.expect_download(timeout=100_000) as download_info:

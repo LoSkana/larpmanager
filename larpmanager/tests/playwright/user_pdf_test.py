@@ -101,7 +101,7 @@ def test_user_pdf(pw_page: Any) -> None:
 
     check_download(page, "Profiles (PDF)")
 
-    check_download(page, "Download complete sheet")
+    check_download(page, "complete sheet")
 
     check_download(page, "printable sheet")
 
