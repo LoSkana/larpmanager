@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import expect_normalized, fill_date, get_modal_iframe, go_to, just_wait, load_image, \
-    login_orga, submit, submit_confirm, save_modal
+    login_orga, submit, submit_confirm, save_modal, TESTS_TIMEOUT
 
 pytestmark = pytest.mark.e2e
 
@@ -152,7 +152,7 @@ def test_exe_join(pw_page: Any) -> None:
     just_wait(page)
 
     go_to(page, live_server, "manage/activation/")
-    expect(page.locator("tr", has_text="Prima iscrizione")).to_contain_text("Fatto", timeout=15000)
+    expect(page.locator("tr", has_text="Prima iscrizione")).to_contain_text("Fatto", timeout=TESTS_TIMEOUT)
 
     # Step 6: first character
 

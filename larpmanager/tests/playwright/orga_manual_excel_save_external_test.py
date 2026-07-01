@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      logout,
                                      submit_confirm, submit_inline_edit, wait_for_inline_edit,
-                                     get_modal_iframe, save_modal, sidebar, _wait_select2_results,
+                                     get_modal_iframe, save_modal, sidebar, _wait_select2_results, TESTS_TIMEOUT,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -195,7 +195,7 @@ def working_ticket_event(page: Any, server: Any, context: Any) -> None:
     page1.goto(server + "/test/manage/config")
     page.wait_for_function(
         "() => document.body.innerText.toLowerCase().includes('warning! other users are editing')",
-        timeout=15000,
+        timeout=TESTS_TIMEOUT,
     )
     expect_normalized(page,
         page.locator("#test-larp"),
