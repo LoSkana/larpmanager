@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
     submit_register, \
     submit_option, new_option, \
     get_modal_iframe, save_modal, _wait_lm_ready, sidebar
@@ -230,13 +230,11 @@ def verify_requirements_hidden(page: Any) -> None:
 
     # Select a different option ("rrrr", index 1) - both must still be hidden
     page.locator('label[for="id_que_u4_1"]').click()
-    just_wait(page)
     expect(label_14).to_be_hidden()
     expect(dep_b_radio).to_be_hidden()
 
     # Select "wwww" (index 2) - both must become visible
     page.locator('label[for="id_que_u4_2"]').click()
-    just_wait(page)
     expect(label_14).to_be_visible()
     expect(dep_b_radio).to_be_visible()
 

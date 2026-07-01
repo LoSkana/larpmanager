@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, just_wait, load_image, load_image_hidden, login_orga, submit, submit_confirm
+from larpmanager.tests.utils import fill_date, go_to, load_image, load_image_hidden, login_orga, submit, submit_confirm
 
 pytestmark = pytest.mark.e2e
 
@@ -62,12 +62,13 @@ def _fill_profile_form(page: Any, round_num: int) -> dict:
     image_input = page.locator("#id_image")
     if image_input.count() > 0 and round_num == 1:
         load_image_hidden(page, "#id_image")
-        just_wait(page)
+        # The avatar widget uploads via ajax: wait for the preview to appear
+        expect(page.locator("#profile")).to_be_visible()
+        expect(page.locator("#upload_spinner")).to_be_hidden()
 
     # Phone contact needs a syntactically valid phone number
     phone_input = page.locator("#id_phone_contact")
     if phone_input.count() > 0:
-        just_wait(page)
         phone_input.fill(phone_value)
         expected["id_phone_contact"] = phone_value
 
@@ -76,7 +77,6 @@ def _fill_profile_form(page: Any, round_num: int) -> dict:
     if country_select.count() > 0:
         country_options = country_select.locator("option")
         country_select.select_option(index=_pick_different_index(country_select, country_options, round_num))
-        just_wait(page)
         expected["id_residence_address_0"] = country_select.input_value()
 
         province_select = page.locator("#id_residence_address_1")
@@ -104,11 +104,13 @@ def _fill_profile_form(page: Any, round_num: int) -> dict:
                 el.check()
             checked.append(input_id)
             continue
-        value = date_value if input_type == "date_p" else text_value
-        el.fill(value)
-        expected[input_id] = value
-        just_wait(page)
-        el.click()
+        if input_type == "date_p":
+            # Set via JS to avoid the datetimepicker popup covering later fields
+            fill_date(page, f"#{input_id}", date_value)
+            expected[input_id] = date_value
+        else:
+            el.fill(text_value)
+            expected[input_id] = text_value
 
     # Textareas
     textareas = page.locator("table textarea")
