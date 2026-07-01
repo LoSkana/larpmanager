@@ -358,7 +358,7 @@ def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> No
             continue
         if link.endswith(("#", "#menu", "#sidebar", "print", ".jpg")):
             continue
-        if any(s in link for s in ["features", "pdf", "backup"]):
+        if any(s in link for s in ["features", "pdf", "backup", "guides", "privacy", "tutorials"]):
             continue
         if re.search(r"/manage/upload/[\w-]+/template/", link):
             continue
