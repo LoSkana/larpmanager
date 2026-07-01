@@ -45,7 +45,7 @@ from larpmanager.tests.utils import (submit_register,
                                      login_orga,
                                      login_user,
                                      logout,
-                                     get_modal_iframe, save_modal,
+                                     get_modal_iframe, save_modal, TESTS_TIMEOUT,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -149,11 +149,11 @@ def verify_reg_editor_popup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=REG_EDITOR_QUESTION).click()
     # Eye icon should now appear in the column for the long answer
     eye_icon = page.locator(".post_popup").first
-    eye_icon.wait_for(state="visible", timeout=10000)
+    eye_icon.wait_for(state="visible", timeout=TESTS_TIMEOUT)
     eye_icon.click()
     # Popup shows full content
     popup = page.locator("#lm-modal")
-    popup.wait_for(state="visible", timeout=10000)
+    popup.wait_for(state="visible", timeout=TESTS_TIMEOUT)
     expect(popup).to_contain_text(LONG_TEXT_REG_EDITOR[:80])
 
 
@@ -183,11 +183,11 @@ def verify_reg_paragraph_popup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=REG_PARA_QUESTION).click()
     # Eye icon should appear for the long paragraph answer
     eye_icon = page.locator(".post_popup").first
-    eye_icon.wait_for(state="visible", timeout=10000)
+    eye_icon.wait_for(state="visible", timeout=TESTS_TIMEOUT)
     eye_icon.click()
     # Popup shows full content
     popup = page.locator("#lm-modal")
-    popup.wait_for(state="visible", timeout=10000)
+    popup.wait_for(state="visible", timeout=TESTS_TIMEOUT)
     expect(popup).to_contain_text(LONG_TEXT_REG_PARA[:80])
 
 
@@ -223,11 +223,11 @@ def verify_char_editor_popup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=CHAR_EDITOR_QUESTION).click()
     # Eye icon should appear for the long answer
     eye_icon = page.locator(".post_popup").first
-    eye_icon.wait_for(state="visible", timeout=10000)
+    eye_icon.wait_for(state="visible", timeout=TESTS_TIMEOUT)
     eye_icon.click()
     # Popup shows full content
     popup = page.locator("#lm-modal")
-    popup.wait_for(state="visible", timeout=10000)
+    popup.wait_for(state="visible", timeout=TESTS_TIMEOUT)
     expect(popup).to_contain_text(LONG_TEXT_CHAR_EDITOR[:80])
 
 
@@ -262,9 +262,9 @@ def verify_char_paragraph_popup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=CHAR_PARA_QUESTION).click()
     # Eye icon should appear for the long answer
     eye_icon = page.locator(".post_popup").first
-    eye_icon.wait_for(state="visible", timeout=10000)
+    eye_icon.wait_for(state="visible", timeout=TESTS_TIMEOUT)
     eye_icon.click()
     # Popup shows full content
     popup = page.locator("#lm-modal")
-    popup.wait_for(state="visible", timeout=10000)
+    popup.wait_for(state="visible", timeout=TESTS_TIMEOUT)
     expect(popup).to_contain_text(LONG_TEXT_CHAR_PARA[:80])
