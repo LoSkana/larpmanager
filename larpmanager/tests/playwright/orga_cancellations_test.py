@@ -55,7 +55,7 @@ from larpmanager.tests.utils import (submit_register,
                                      _wait_lm_ready,
                                      login_orga,
                                      login_user,
-                                     submit_confirm, save_modal, TESTS_TIMEOUT,
+                                     submit_confirm, save_modal, SHORT_TIMEOUT,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -92,7 +92,7 @@ def setup(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/test/manage/tickets")
     page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector(".fa-edit", timeout=TESTS_TIMEOUT)
+    page.wait_for_selector(".fa-edit", timeout=SHORT_TIMEOUT)
     page.locator(".fa-edit").click(force=True)
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").fill("100.00")

@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      logout,
                                      submit_confirm, submit_inline_edit, wait_for_inline_edit,
-                                     get_modal_iframe, save_modal, sidebar, _wait_select2_results, TESTS_TIMEOUT,
+                                     get_modal_iframe, save_modal, sidebar, _wait_select2_results, LONG_TIMEOUT,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -182,7 +182,7 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect_normalized(edit_iframe,
-        edit_iframe.locator("#test-larp"),
+        edit_iframe.locator("#test-orga"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )
 
@@ -195,9 +195,9 @@ def working_ticket_event(page: Any, server: Any, context: Any) -> None:
     page1.goto(server + "/test/manage/config")
     page.wait_for_function(
         "() => document.body.innerText.toLowerCase().includes('warning! other users are editing')",
-        timeout=TESTS_TIMEOUT,
+        timeout=LONG_TIMEOUT,
     )
     expect_normalized(page,
-        page.locator("#test-larp"),
+        page.locator("#test-orga"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )
