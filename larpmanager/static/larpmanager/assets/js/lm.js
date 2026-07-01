@@ -844,7 +844,7 @@ function show_sidebar_active() {
     // scroll sidebar to center the active link
     var $active = $('.sidebar-link.select').first();
     if ($active.length) {
-      var $sidebar = $('#sidebar');
+      var $sidebar = $('#sidebar .inner');
       var sidebarScrollTop = $sidebar.scrollTop();
       var sidebarHeight = $sidebar.height();
       var itemTop = $active.offset().top - $sidebar.offset().top + sidebarScrollTop;
