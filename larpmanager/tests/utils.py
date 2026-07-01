@@ -165,7 +165,10 @@ def check_download(page: Any, link: str, locator: Any = None) -> None:
                 if locator is not None:
                     locator.click()
                 else:
-                    page.get_by_role("link", name=link).click()
+                    target = page.get_by_role("link", name=link)
+                    if target.count() == 0:
+                        target = page.get_by_role("button", name=link)
+                    target.click()
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
@@ -213,7 +216,10 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
                 if locator is not None:
                     locator.click()
                 else:
-                    page.get_by_role("link", name=link).click()
+                    target = page.get_by_role("link", name=link)
+                    if target.count() == 0:
+                        target = page.get_by_role("button", name=link)
+                    target.click()
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
