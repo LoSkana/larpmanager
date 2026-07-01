@@ -7525,6 +7525,9 @@ msgstr "Ora sei loggato con l'account delegato"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Sei stato reindirizzato alla dashboard dell'evento"
 
+msgid "Access the pages to manage each different aspect"
+msgstr "Accedi alle pagine per gestire ogni singolo aspetto"
+
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Accedi al tuo personaggio <a href='%(url)s'>qui</a>"
@@ -8085,10 +8088,6 @@ msgstr "Non sono ancora pervenute iscrizioni per questo evento"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Ora puoi aggiungere relazioni quando si modifica un personaggio"
-
-msgid "Open or close the sidebar to navigate management pages"
-msgstr ""
-"Apri o chiudi la barra laterale per navigare tra le pagine di gestione"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
