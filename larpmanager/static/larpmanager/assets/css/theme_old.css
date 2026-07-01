@@ -492,7 +492,7 @@ nav#sidebar-nav {
 
 /* Mobile sidebar overlay */
 @media (max-width: 768px) {
-  #sidebar {
+  body:not(.new_v22) #sidebar {
     padding: 1em 0em 3.5em 0em;
     -moz-align-items: center;
     -webkit-align-items: center;
@@ -541,28 +541,28 @@ nav#sidebar-nav {
     font-size: 90%;
   }
 
-  #sidebar h2,
-  #sidebar p {
+  body:not(.new_v22) #sidebar h2,
+  body:not(.new_v22) #sidebar p {
     display: inline;
   }
 
-  #sidebar .sidebar-section {
+  body:not(.new_v22) #sidebar .sidebar-section {
     margin: 0.5em;
   }
 
-  #sidebar .sidebar-section > p {
+  body:not(.new_v22) #sidebar .sidebar-section > p {
     margin: 0;
   }
 
-  #sidebar .sidebar-link-wrap {
+  body:not(.new_v22) #sidebar .sidebar-link-wrap {
     display: inline-flex;
   }
 
-  #sidebar .header {
+  body:not(.new_v22) #sidebar .header {
     display: none;
   }
 
-  #sidebar .inner {
+  body:not(.new_v22) #sidebar .inner {
     padding: 1em;
     -moz-transform: translateY(0.5em);
     -webkit-transform: translateY(0.5em);
@@ -595,7 +595,7 @@ nav#sidebar-nav {
     color: var(--pri-clr);
   }
 
-  #sidebar .close {
+  body:not(.new_v22) #sidebar .close {
     background-image: url("images/close.svg");
     background-position: 75% 25%;
     background-repeat: no-repeat;
@@ -613,20 +613,20 @@ nav#sidebar-nav {
     width: 4em;
   }
 
-  body.is-sidebar-visible #page-wrapper {
+  body.is-sidebar-visible:not(.new_v22) #page-wrapper {
     -moz-filter: blur(1.5px);
     -webkit-filter: blur(1.5px);
     -ms-filter: blur(1.5px);
     filter: blur(1.5px);
   }
 
-  body.is-sidebar-visible #sidebar {
+  body.is-sidebar-visible:not(.new_v22) #sidebar {
     pointer-events: auto;
     opacity: 1;
     visibility: visible;
   }
 
-  body.is-sidebar-visible #sidebar .inner {
+  body.is-sidebar-visible:not(.new_v22) #sidebar .inner {
     -moz-transform: translateY(0);
     -webkit-transform: translateY(0);
     -ms-transform: translateY(0);
@@ -634,12 +634,12 @@ nav#sidebar-nav {
     opacity: 1;
   }
 
-  #sidebar .new-menu {
+  body:not(.new_v22) #sidebar .new-menu {
     padding: 0;
     font-size: 90%;
   }
 
-  #sidebar .new-menu a {
+  body:not(.new_v22) #sidebar .new-menu a {
     display: flex;
   }
 }
