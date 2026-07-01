@@ -80,7 +80,7 @@
                 <li>
                     <a id="logout" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </li>
-                <form method="post" action="{% url 'logout' %}">
+                <form method="post" action="{% url 'logout' %}" class="hide">
                     {% csrf_token %}
                     <button type="submit" id="real_logout">logout</button>
                 </form>
