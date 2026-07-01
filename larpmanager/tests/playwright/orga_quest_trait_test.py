@@ -73,7 +73,6 @@ def test_quest_trait(pw_page: Any) -> None:
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
     _wait_lm_ready(page)
-    just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
         "your character is: test character player: user test torta - strudel saleee test character veronese torta - strudel test character player: admin test",
@@ -117,7 +116,6 @@ def quests(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Q1 Torta Lore zucchero saleee Q2 Pizza Lore mozzarella americano")
 
 
@@ -141,7 +139,6 @@ def traits(page: Any, live_server: Any) -> None:
     editor = edit_iframe.locator("#id_text")
     editor.press("#")
     _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "stru")
-    just_wait(page)
     expect(edit_iframe.locator("#id_text")).to_have_value(re.compile(r'.*#\d+'))
 
     save_modal(page, edit_iframe)
@@ -149,7 +146,6 @@ def traits(page: Any, live_server: Any) -> None:
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
     panel = wait_for_inline_edit(page)
-    just_wait(page)
     panel.locator("textarea").press("#")
     _select2_search_and_pick(page.get_by_role("searchbox"), page, "non")
     submit_inline_edit(page)

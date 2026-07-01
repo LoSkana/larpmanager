@@ -34,7 +34,6 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import (submit_register,
                                      expect_normalized,
                                      go_to,
-                                     just_wait,
                                      load_image_hidden,
                                      login_orga,
                                      login_user,
@@ -149,7 +148,6 @@ def fill_customization_form(page: Any, live_server: Any) -> None:
 
     # Wait for AJAX upload to complete
     page.wait_for_load_state("networkidle")
-    just_wait(page)
 
     # Verify image was uploaded by checking if profile image is visible
     expect(page.locator("#profile")).to_be_visible()
