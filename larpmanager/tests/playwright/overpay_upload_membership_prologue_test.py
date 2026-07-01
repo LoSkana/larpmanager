@@ -97,7 +97,6 @@ def check_overpay(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("cre")
     save_modal(page, edit_iframe)
-    just_wait(page)
 
     # Check signup accounting
     sidebar(page, "Registrations")
@@ -117,7 +116,6 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_value").fill("60")
     edit_iframe.locator("#id_descr").fill("www")
     save_modal(page, edit_iframe)
-    just_wait(page)
 
     # Check signup accounting
     sidebar(page, "Registrations")
@@ -137,7 +135,6 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_price").click()
     edit_iframe.locator("#id_price").fill("80.00")
     save_modal(page, edit_iframe)
-    just_wait(page)
 
     # Check accounting
     sidebar(page, "Registrations")

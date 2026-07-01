@@ -85,7 +85,6 @@ def test_user_pdf(pw_page: Any) -> None:
     edit_iframe.locator("#select2-new_rel_select-container").click()
     edit_iframe.get_by_role("searchbox").fill("pdf")
     edit_iframe.get_by_role("option", name="Pdf Rel Character").click()
-    just_wait(edit_iframe)
     fill_tinymce(edit_iframe, "rel_u2", "pdf relationship text")
     save_modal(page, edit_iframe)
 
@@ -144,7 +143,6 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     # Delete the orga-created character: this cascades the orga relationship deletion
     go_to(page, live_server, "/test/manage/characters")
     delete_modal(page, page.get_by_role("row", name="Pdf Rel Character").locator(".fa-trash"))
-    just_wait(page)
 
     # Create a new target character for the player relationship
     page.get_by_role("link", name="New").click()

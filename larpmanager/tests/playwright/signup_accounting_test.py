@@ -67,7 +67,6 @@ def check_delete(live_server: Any, page: Any) -> None:
     # cancel signup
     go_to(page, live_server, "/test/manage/registrations")
     delete_modal(page)
-    just_wait(page)
     expect(page.locator("#one")).not_to_contain_text("Admin Test")
 
     # delete payments

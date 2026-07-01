@@ -192,7 +192,6 @@ def test_user_profile_fields(pw_page: Any) -> None:
     page.locator("#slug").fill("profiletest")
     submit(page)
 
-    just_wait(page)
     go_to(page, live_server, "/debug/profiletest")
     expect(page.locator("#banner")).to_contain_text("Profile Test")
 

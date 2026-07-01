@@ -33,7 +33,6 @@ from larpmanager.tests.utils import (
     check_feature,
     fill_tinymce,
     go_to,
-    just_wait,
     login_orga,
     sidebar,
     submit_confirm,
@@ -142,11 +141,9 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").fill("Stats Test Plot")
 
     char_dual_pick(edit_iframe, "Test", "Test Character")
-    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_1", "important role")
 
     char_dual_pick(edit_iframe, "Minor", "Minor NPC")
-    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_2", "$unimportant minor role")
 
     save_modal(page, edit_iframe)

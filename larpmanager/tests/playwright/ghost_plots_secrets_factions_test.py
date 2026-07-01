@@ -38,7 +38,6 @@ from larpmanager.tests.utils import (
     fill_tinymce,
     get_modal_iframe,
     go_to,
-    just_wait,
     login_orga,
     login_user,
     save_modal,
@@ -101,7 +100,6 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("first")
     char_dual_pick(edit_iframe, "te", "Test Character")
-    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "ch_1", "prisdsa")
     save_modal(page, edit_iframe)
 
@@ -110,7 +108,6 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("qweeerr")
     char_dual_pick(edit_iframe, "te", "Test Character")
-    just_wait(page, big=True)
     fill_tinymce(edit_iframe, "ch_1", "poelea s")
     save_modal(page, edit_iframe)
 

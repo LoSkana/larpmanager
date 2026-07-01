@@ -216,7 +216,6 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testsecond/register")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "70")
-    just_wait(page)
     submit_confirm(page)
 
     # Second event: proceed to wire payment (total 70, no membership shown, single method auto-selected)
