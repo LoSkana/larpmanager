@@ -3209,6 +3209,16 @@ body.floating_iframe .inner {
   text-align: center;
 }
 
+.page_leaderboard .icon,
+.page_badges .icon {
+  padding-bottom: 0em;
+}
+
+.page_leaderboard .el,
+.page_badges .el {
+  margin-bottom: 1em;
+}
+
 .badge-selector {
   display: flex;
   align-items: center;
@@ -3897,11 +3907,11 @@ body.floating_iframe #wrapper {
 }
 
 .only_v22 {
-  display: none;
+  display: none !important;
 }
 
 .new_v22 .only_v22 {
-  display: initial;
+  display: initial !important;
 }
 
 .new_v22 #sidebar .inner {
@@ -3982,8 +3992,6 @@ body.association.new_v22 .user_resize {
   right: 0;
   z-index: 200;
   height: var(--topbar-height);
-  background: var(--topbar-bg, rgba(var(--pri-rgb), 0.97));
-  border-bottom: 1px solid rgba(var(--pri-rgb), 0.15);
   gap: 0.25em;
   padding: 0 0.25em;
   border-radius: 0px 8px 8px 0px;
@@ -4166,9 +4174,9 @@ body.association.new_v22 .user_resize {
   width: 1.8em;
   height: 1.8em;
   border-radius: 50%;
-  border: 1px solid rgba(var(--pri-rgb), 0.2);
-  background: var(--bg-color, #fff);
-  color: inherit;
+  border: 1px solid var(--ter-clr);
+  background: var(--sec-clr);
+  color: var(--pri-clr);
   cursor: pointer;
   z-index: 2000;
   transition: transform 0.25s;
