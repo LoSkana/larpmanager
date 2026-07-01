@@ -8,7 +8,8 @@
                 <span class="sidebar-link-wrap">
                     <a class="sidebar-link{% if item.active %} select{% endif %}"
                        href="{{ item.url }}"
-                       {% if item.target %}target="{{ item.target }}"{% endif %}>
+                       {% if item.target %}target="{{ item.target }}"{% endif %}
+                       {% if item.download %}download{% endif %}>
                         {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
                         <span>{{ item.label }}</span>
                     </a>
