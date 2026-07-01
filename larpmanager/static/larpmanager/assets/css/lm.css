@@ -4549,3 +4549,33 @@ body.association.new_v22 .user_resize {
 .run-card .acc_link {
   display: none;
 }
+
+/* 404 page */
+.not-found {
+  text-align: center;
+  padding: 3em 1em;
+}
+
+.not-found .not-found-icon {
+  font-size: 6em;
+  opacity: 0.6;
+  margin-bottom: 0.3em;
+  animation: not-found-float 3s ease-in-out infinite;
+}
+
+.not-found .exception-404 {
+  display: block;
+  margin-top: 2em;
+  font-size: 0.8em;
+  opacity: 0.5;
+}
+
+@keyframes not-found-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-0.4em);
+  }
+}

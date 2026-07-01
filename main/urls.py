@@ -30,6 +30,9 @@ from larpmanager.views import larpmanager as views_lm
 def redirect_register(request):
     return redirect('/register')
 
+handler404 = 'larpmanager.views.base.error_404'
+handler500 = 'larpmanager.views.base.error_500'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
