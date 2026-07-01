@@ -803,9 +803,10 @@ function setupConditionalFields() {
             $('[data-conditional-show]').each(function() {
                 var $field = $(this);
                 var showForValue = $field.attr('data-conditional-show');
+                var showForValues = showForValue ? showForValue.split(',') : [];
                 var $row = $field.closest('tr');
 
-                if (selectedValue === showForValue) {
+                if (showForValues.indexOf(selectedValue) !== -1) {
                     $row.show();
                 } else {
                     $row.hide();

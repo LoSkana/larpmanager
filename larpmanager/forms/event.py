@@ -1481,6 +1481,7 @@ class OrgaRunForm(ConfigForm):
             [
                 (RegistrationStatus.EXTERNAL.value, RegistrationStatus.EXTERNAL.label),
                 (RegistrationStatus.FUTURE.value, RegistrationStatus.FUTURE.label),
+                (RegistrationStatus.CLOSING.value, RegistrationStatus.CLOSING.label),
             ]
         )
 
@@ -1493,7 +1494,11 @@ class OrgaRunForm(ConfigForm):
             RegistrationStatus.PRE: _("Pre-registration is available"),
             RegistrationStatus.EXTERNAL: _("Redirects to an external registration link"),
             RegistrationStatus.FUTURE: _("Registrations will open at the specified date and time"),
+            RegistrationStatus.CLOSING: _("Registrations are open and will close at the specified date and time"),
         }
+
+        # Registrations are always open at the "date and time" set in the registration_open field:
+        # for FUTURE it marks the opening, for CLOSING it marks the closing.
 
         help_parts = []
         for value, label in choices:
@@ -1505,7 +1510,9 @@ class OrgaRunForm(ConfigForm):
         # Add data attributes for JavaScript conditional display
         self.fields["registration_status"].widget.attrs["data-conditional-controller"] = "registration_status"
         if "registration_open" in self.fields:
-            self.fields["registration_open"].widget.attrs["data-conditional-show"] = RegistrationStatus.FUTURE.value
+            self.fields["registration_open"].widget.attrs["data-conditional-show"] = (
+                f"{RegistrationStatus.FUTURE.value},{RegistrationStatus.CLOSING.value}"
+            )
             self.fields["registration_open"].custom_class = "hide"
             self.fields["registration_open"].custom_style = "display: none"
         if "register_link" in self.fields:
@@ -1639,6 +1646,11 @@ class OrgaRunForm(ConfigForm):
                 raise ValidationError({"register_link": _("Value required") + "!"})
 
         if registration_status == RegistrationStatus.FUTURE:
+            registration_open = cleaned_data.get("registration_open")
+            if not registration_open:
+                raise ValidationError({"registration_open": _("Value required") + "!"})
+
+        if registration_status == RegistrationStatus.CLOSING:
             registration_open = cleaned_data.get("registration_open")
             if not registration_open:
                 raise ValidationError({"registration_open": _("Value required") + "!"})

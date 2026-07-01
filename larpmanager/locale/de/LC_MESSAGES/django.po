@@ -2535,6 +2535,9 @@ msgstr "Bulk-Download"
 msgid "Cancellations"
 msgstr "Annullierungen"
 
+msgid "Close on date"
+msgstr "Fälligkeitsdatum"
+
 msgid "Comunications"
 msgstr "Kommunikation"
 
@@ -4270,6 +4273,9 @@ msgstr "Optionen für die Registrierung"
 
 msgid "Registration tickets"
 msgstr "Registrierungskarten"
+
+msgid "Registrations closed"
+msgstr "Die Anmeldung ist geschlossen"
 
 msgid "Registrations status"
 msgstr "Status der Registrierungen"
@@ -8097,9 +8103,6 @@ msgstr ""
 "Die Kosten werden hier angezeigt, sobald die Veranstaltungen erstellt und "
 "durchgeführt wurden"
 
-msgid "Date and time when registrations open for participants"
-msgstr "Datum und Uhrzeit der Öffnung der Anmeldungen für Teilnehmer"
-
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Möchten Sie Nutzern die Möglichkeit geben, freiwillig zu spenden"
 
@@ -9403,6 +9406,11 @@ msgstr ""
 msgid "Number of days within which the player must pay his next installment"
 msgstr ""
 "Anzahl der Tage, innerhalb derer der Spieler seine nächste Rate zahlen muss"
+
+msgid "Registrations are open and will close at the specified date and time"
+msgstr ""
+"Die Anmeldung ist jetzt möglich und endet zum angegebenen Datum und zur "
+"angegebenen Uhrzeit"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -11273,6 +11281,13 @@ msgid ""
 msgstr ""
 "Verfolge alle Artikelzuweisungen, gruppiert nach Bereich, und markiere jeden"
 " Artikel als geladen und bereitgestellt"
+
+msgid ""
+"Date and time when registrations open, or close, for participants depending "
+"on status"
+msgstr ""
+"Datum und Uhrzeit, zu denen die Anmeldung für Teilnehmer je nach Status "
+"beginnt oder endet"
 
 msgid ""
 "Edit event-specific translation overrides to customize terminology and "

@@ -2535,6 +2535,9 @@ msgstr "Téléchargement en masse"
 msgid "Cancellations"
 msgstr "Annulations"
 
+msgid "Close on date"
+msgstr "Date de clôture"
+
 msgid "Comunications"
 msgstr "Communications"
 
@@ -4270,6 +4273,9 @@ msgstr "Options d'inscription"
 
 msgid "Registration tickets"
 msgstr "Billets d'inscription"
+
+msgid "Registrations closed"
+msgstr "Les inscriptions sont closes"
 
 msgid "Registrations status"
 msgstr "Statut des enregistrements"
@@ -8086,9 +8092,6 @@ msgstr ""
 "Les coûts s'afficheront ici une fois que les événements auront été créés et "
 "organisés"
 
-msgid "Date and time when registrations open for participants"
-msgstr "Date et heure d'ouverture des inscriptions pour les participants"
-
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Voulez-vous permettre aux utilisateurs de faire des dons volontaires"
 
@@ -9364,6 +9367,11 @@ msgstr ""
 msgid "Number of days within which the player must pay his next installment"
 msgstr ""
 "Nombre de jours dans lesquels le joueur doit payer son prochain versement"
+
+msgid "Registrations are open and will close at the specified date and time"
+msgstr ""
+"Les inscriptions sont ouvertes et se termineront à la date et à l'heure "
+"indiquées"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -11225,6 +11233,13 @@ msgid ""
 msgstr ""
 "Suis toutes les affectations d'éléments regroupées par domaine, en indiquant"
 " pour chaque élément s'il a été chargé et déployé"
+
+msgid ""
+"Date and time when registrations open, or close, for participants depending "
+"on status"
+msgstr ""
+"Date et heure d'ouverture ou de clôture des inscriptions pour les "
+"participants, selon leur statut"
 
 msgid ""
 "Edit event-specific translation overrides to customize terminology and "

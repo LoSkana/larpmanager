@@ -2535,6 +2535,9 @@ msgstr "Joukkolataus"
 msgid "Cancellations"
 msgstr "Peruutukset"
 
+msgid "Close on date"
+msgstr "Määräpäivä"
+
 msgid "Comunications"
 msgstr "Viestintä"
 
@@ -4270,6 +4273,9 @@ msgstr "Ilmoittautumisvaihtoehdot"
 
 msgid "Registration tickets"
 msgstr "Rekisteröintiliput"
+
+msgid "Registrations closed"
+msgstr "Ilmoittautuminen on päättynyt"
 
 msgid "Registrations status"
 msgstr "Ilmoittautumisten tila"
@@ -8027,10 +8033,6 @@ msgstr "Määritä vähintään yksi maksutapa osallistujille"
 msgid "Costs will appear here once events are created and run"
 msgstr "Kustannukset näkyvät tässä, kun tapahtumat on luotu ja toteutettu"
 
-msgid "Date and time when registrations open for participants"
-msgstr ""
-"Päivämäärä ja kellonaika, jolloin ilmoittautuminen avautuu osallistujille"
-
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Haluatko antaa käyttäjien tehdä vapaaehtoisia lahjoituksia"
 
@@ -9134,6 +9136,11 @@ msgid "Number of days within which the player must pay his next installment"
 msgstr ""
 "Niiden päivien lukumäärä, joiden kuluessa pelaajan on maksettava seuraava "
 "maksuerä"
+
+msgid "Registrations are open and will close at the specified date and time"
+msgstr ""
+"Ilmoittautuminen on käynnissä ja päättyy ilmoitettuna päivänä ja "
+"kellonaikana"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -10866,6 +10873,13 @@ msgid ""
 msgstr ""
 "Seuraa kaikkia kohteiden osoituksia alueittain ryhmiteltynä ja merkitse "
 "kukin kohde ladatuksi ja käyttöönotetuksi"
+
+msgid ""
+"Date and time when registrations open, or close, for participants depending "
+"on status"
+msgstr ""
+"Päivämäärä ja kellonaika, jolloin ilmoittautuminen avautuu tai sulkeutuu "
+"osallistujille heidän tilansa mukaan"
 
 msgid ""
 "Edit event-specific translation overrides to customize terminology and "

@@ -1837,6 +1837,9 @@ msgstr ""
 msgid "Registrations will open at the specified date and time"
 msgstr ""
 
+msgid "Registrations are open and will close at the specified date and time"
+msgstr ""
+
 msgid ""
 "Selected fields will be displayed as follows: public fields visible to all "
 "participants, private fields visible only to assigned participants"
@@ -3992,6 +3995,9 @@ msgstr ""
 msgid "Open on date"
 msgstr ""
 
+msgid "Close on date"
+msgstr ""
+
 msgid "Start date"
 msgstr ""
 
@@ -4022,7 +4028,9 @@ msgstr ""
 msgid "Registration opening"
 msgstr ""
 
-msgid "Date and time when registrations open for participants"
+msgid ""
+"Date and time when registrations open, or close, for participants depending "
+"on status"
 msgstr ""
 
 msgid "External registration link"
@@ -11437,6 +11445,9 @@ msgstr ""
 
 #, python-format
 msgid "Opening at: %(date)s"
+msgstr ""
+
+msgid "Registrations closed"
 msgstr ""
 
 msgid "Sign up as a filler!"

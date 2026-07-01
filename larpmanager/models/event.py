@@ -625,6 +625,7 @@ class RegistrationStatus(models.TextChoices):
     OPEN = "o", _("Open")
     EXTERNAL = "e", _("External site")
     FUTURE = "f", _("Open on date")
+    CLOSING = "g", _("Close on date")
 
 
 class Run(MediaTokenMixin, UuidMixin, BaseModel):
@@ -674,7 +675,7 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Registration opening"),
-        help_text=_("Date and time when registrations open for participants"),
+        help_text=_("Date and time when registrations open, or close, for participants depending on status"),
     )
 
     register_link = models.URLField(

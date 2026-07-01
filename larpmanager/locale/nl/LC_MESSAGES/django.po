@@ -2535,6 +2535,9 @@ msgstr "Bulk downloaden"
 msgid "Cancellations"
 msgstr "Annuleringen"
 
+msgid "Close on date"
+msgstr "Vlak voor de datum"
+
 msgid "Comunications"
 msgstr "Communicatie"
 
@@ -4270,6 +4273,9 @@ msgstr "Registratieopties"
 
 msgid "Registration tickets"
 msgstr "Registratie tickets"
+
+msgid "Registrations closed"
+msgstr "De inschrijvingen zijn gesloten"
 
 msgid "Registrations status"
 msgstr "Status registraties"
@@ -8055,9 +8061,6 @@ msgstr ""
 "De kosten worden hier weergegeven zodra de evenementen zijn aangemaakt en "
 "plaatsvinden"
 
-msgid "Date and time when registrations open for participants"
-msgstr "Datum en tijd waarop de inschrijvingen voor deelnemers opengaan"
-
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Wil je gebruikers in staat stellen vrijwillig te doneren"
 
@@ -9250,6 +9253,10 @@ msgstr ""
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Aantal dagen waarbinnen de speler zijn volgende termijn moet betalen"
+
+msgid "Registrations are open and will close at the specified date and time"
+msgstr ""
+"De inschrijvingen zijn geopend en sluiten op de aangegeven datum en tijd"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -11073,6 +11080,13 @@ msgid ""
 msgstr ""
 "Houd alle toewijzingen van items bij, gegroepeerd per gebied, en markeer elk"
 " item als geladen en geïmplementeerd"
+
+msgid ""
+"Date and time when registrations open, or close, for participants depending "
+"on status"
+msgstr ""
+"Datum en tijdstip waarop de inschrijvingen voor deelnemers openen of "
+"sluiten, afhankelijk van hun status"
 
 msgid ""
 "Edit event-specific translation overrides to customize terminology and "
