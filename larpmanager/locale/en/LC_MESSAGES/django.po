@@ -5780,6 +5780,9 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
+msgid "Manage"
+msgstr ""
+
 msgid "No organization found"
 msgstr ""
 
@@ -8794,9 +8797,6 @@ msgid "Next quota"
 msgstr ""
 
 msgid "Owing"
-msgstr ""
-
-msgid "Manage"
 msgstr ""
 
 msgid "Amount of the next payment instalment required"

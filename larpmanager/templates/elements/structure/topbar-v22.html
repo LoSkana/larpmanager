@@ -29,12 +29,12 @@
                     {% else %}
                         <i class="fa-solid fa-house"></i>
                     {% endif %}
-                    <span>Home</span>
+                    <span>{{ association.name }}</span>
                 </a>
                 {% for vrun in visible_runs %}
                     <a class="tv22-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
                        href="{% url 'event_redirect' event_slug=vrun.slug %}">
-                        {% if vrun.cover_url %}<img class="tv22-pill-img" src="{{ vrun.cover_url }}" alt="">{% endif %}
+                        {% if vrun.get_cover_url %}<img class="tv22-pill-img" src="{{ vrun.get_cover_url }}" alt="">{% endif %}
                         {{ vrun.name }}
                     </a>
                 {% endfor %}
@@ -65,7 +65,7 @@
             {% else %}
                 {% url 'home' as user_href %}
             {% endif %}
-            <div class="tv22-switch">
+            <div id="tv22-switch" class="tv22-switch">
                 <a class="tv22-switch-opt" href="{{ user_href }}">{% trans "User" %}</a>
                 <span class="tv22-switch-opt active">{% trans "Admin" %}</span>
             </div>
@@ -81,6 +81,83 @@
             </div>
         {% endif %}
     {% endif %}
+</div>
+<div id="menu-mobile">
+    <table class="mobile">
+        <tr>
+            <td>
+                <div class="el">
+                    <a id="sidebar-mobile-v22" href="#" class="sidebar_tutorial"><i class="fa-solid fa-bars"></i></a>
+                </div>
+            </td>
+            <td>
+                <span class="el">
+                    {% if manage %}
+                        {% if association_role and not run %}
+                            <a href="{% url 'manage' %}">
+                                {% if association.favicon %}
+                                    <img class="tv22-pill-img" src="{{ association.favicon }}" alt="">
+                                {% else %}
+                                    <i class="fa-solid fa-building"></i>
+                                {% endif %}
+                                <span class="label">{{ association.name }}</span>
+                            </a>
+                        {% elif run %}
+                            <a href="{% url 'manage' run.get_slug %}">
+                                {% if run.get_cover_url %}
+                                    <img class="tv22-pill-img" src="{{ run.get_cover_url }}" alt="">
+                                {% else %}
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                {% endif %}
+                                <span class="label">{{ run }}</span>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'manage' %}">
+                                <i class="fa-solid fa-gauge"></i>
+                                <span class="label">{% trans "Manage" %}</span>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        {% if not run and is_profile_page %}
+                            <a href="{% url 'profile' %}">
+                                {% if user.member.profile %}
+                                    <img class="tv22-pill-img"
+                                         src="{{ user.member.profile_thumb.url }}"
+                                         alt="">
+                                {% else %}
+                                    <i class="fa-solid fa-user"></i>
+                                {% endif %}
+                                <span class="label">{% trans "Profile" %}</span>
+                            </a>
+                        {% elif run %}
+                            <a href="{% url 'event_redirect' event_slug=run.get_slug %}">
+                                {% if run.get_cover_url %}
+                                    <img class="tv22-pill-img" src="{{ run.get_cover_url }}" alt="">
+                                {% else %}
+                                    <i class="fa-solid fa-calendar-days"></i>
+                                {% endif %}
+                                <span class="label">{{ run }}</span>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'home' %}">
+                                {% if association.favicon %}
+                                    <img class="tv22-pill-img" src="{{ association.favicon }}" alt="">
+                                {% else %}
+                                    <i class="fa-solid fa-house"></i>
+                                {% endif %}
+                                <span class="label">{{ association.name }}</span>
+                            </a>
+                        {% endif %}
+                    {% endif %}
+                </span>
+            </td>
+            <td>
+                <div class="el">
+                    <a id="topbar-mobile-v22" href="#" class="sidebar_tutorial"><i class="fa-solid fa-layer-group"></i></a>
+                </div>
+            </td>
+        </tr>
+    </table>
 </div>
 <script>
 (function () {
