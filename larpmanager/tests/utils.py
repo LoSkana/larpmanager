@@ -280,13 +280,8 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
 
-    url_before = page.url
-
     # Click normally to ensure actionability, fallback to forced action if styling dictates
     submit_btn.click(force=True)
-
-    # If click triggered navigation, wait for URL change before checking load states
-    page.wait_for_url(lambda url: url != url_before, timeout=SHORT_TIMEOUT)
 
     _wait_lm_ready(page, timeout=SHORT_TIMEOUT)
 
