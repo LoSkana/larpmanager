@@ -63,9 +63,6 @@ urlpatterns = (
     ]
 )
 
-handler404 = "larpmanager.views.error_404"
-handler500 = "larpmanager.views.error_500"
-
 
 def walk_patterns(patterns: Any) -> set[str]:
     """Extract URL prefixes from Django URL patterns.

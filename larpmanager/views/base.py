@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import secrets
 import uuid
+from difflib import get_close_matches
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -32,12 +33,14 @@ from django.core.cache import cache
 from django.core.files.storage import default_storage
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.urls import Resolver404, resolve
 from django.utils import timezone
 from django.views.decorators.http import require_POST
 from django_otp import user_has_device
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
+from larpmanager.models.event import Event
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import welcome_user
 from larpmanager.utils.larpmanager.query import query_index
@@ -88,11 +91,56 @@ def home(request: HttpRequest, lang: str | None = None) -> HttpResponse:
     return check_centauri(request, context) or calendar(request, context, lang)
 
 
+def get_404_redirect(request: HttpRequest) -> str | None:
+    """Find the closest existing page for a 404 request path.
+
+    Matches the first path segment against the event slugs of the current
+    association and the known static URL prefixes, using fuzzy matching to
+    recover from typos. Returns a redirect target, or None if no close
+    match is found.
+    """
+    segments = [segment for segment in request.path.strip("/").split("/") if segment]
+    if not segments:
+        return None
+
+    first = segments[0].lower()
+    candidates: dict[str, str] = {}
+
+    # Event slugs of the current association (skip the default association)
+    assoc_id = request.association.get("id", 0)
+    if assoc_id:
+        for slug in Event.objects.filter(association_id=assoc_id).values_list("slug", flat=True):
+            candidates[slug] = f"/{slug}/"
+
+    # Known top-level URL prefixes (calendar, accounting, ...)
+    for prefix in getattr(settings, "STATIC_PREFIXES", set()):
+        candidates.setdefault(prefix, f"/{prefix}/")
+
+    # Exact event slug with a broken sub-page: send back to the event page
+    if first in candidates:
+        target = candidates[first]
+    else:
+        matches = get_close_matches(first, candidates.keys(), n=1, cutoff=0.6)
+        if not matches:
+            return None
+        target = candidates[matches[0]]
+
+    # Avoid redirect loops on paths that would 404 again
+    if target == request.path:
+        return None
+    try:
+        resolve(target)
+    except Resolver404:
+        return None
+    return target
+
+
 def error_404(request: HttpRequest, exception: Exception) -> HttpResponse:
-    """Handle 404 errors with custom template."""
-    # Render the custom 404 template with exception context
-    # The 'exe' variable provides exception details to the template
-    return render(request, "404.html", {"exe": exception})
+    """Handle 404 errors, redirecting to the closest matching page when possible."""
+    target = get_404_redirect(request)
+    if target:
+        return redirect(target)
+    return render(request, "404.html", {"exception": exception}, status=404)
 
 
 def error_500(request: HttpRequest) -> Any:

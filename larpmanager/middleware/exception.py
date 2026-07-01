@@ -46,6 +46,7 @@ from larpmanager.utils.core.exceptions import (
     UserPermissionError,
     WaitingError,
 )
+from larpmanager.views.base import get_404_redirect
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -84,10 +85,11 @@ class ExceptionHandlingMiddleware:
             (UserPermissionError, lambda _ex: render(request, "exception/permission.html")),
             (NotFoundError, lambda _ex: render(request, "exception/notfound.html")),
             (MembershipError, lambda ex: render(request, "exception/membership.html", {"assocs": ex.assocs})),
-            # Run-related errors - show available runs for the current association
+            # Run-related errors - redirect to the closest event, or show available runs
             (
                 UnknowRunError,
-                lambda _ex: render(
+                lambda _ex: self._handle_unknown_run(request)
+                or render(
                     request,
                     "exception/runs.html",
                     {
@@ -150,6 +152,14 @@ class ExceptionHandlingMiddleware:
                 return handler(exception)
 
         # Return None for unhandled exceptions to use Django's default handling
+        return None
+
+    @staticmethod
+    def _handle_unknown_run(request: HttpRequest) -> HttpResponse | None:
+        """Redirect to the closest matching event page for an unknown run, if any."""
+        target = get_404_redirect(request)
+        if target:
+            return redirect(target)
         return None
 
     @staticmethod
