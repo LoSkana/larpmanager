@@ -7525,6 +7525,9 @@ msgstr "Olet nyt kirjautunut sisään valtuutetun tilillä"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Sinut on ohjattu tapahtuman kojelaudalle"
 
+msgid "Access the pages to manage each different aspect"
+msgstr "Siirry sivuille hallinnoidaksesi kunkin eri osa-alueen"
+
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Pääset hahmoosi <a href='%(url)s'>täältä</a>"
@@ -8072,9 +8075,6 @@ msgstr "Tähän tapahtumaan ei ole vielä saatu ilmoittautumisia"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nyt voit lisätä suhteita hahmoa muokatessasi"
-
-msgid "Open or close the sidebar to navigate management pages"
-msgstr "Avaa tai sulje sivupalkki navigoidaksesi hallintasivujen välillä"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"

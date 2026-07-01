@@ -5223,7 +5223,7 @@ msgstr ""
 msgid "Toggle between administrative backend and public-facing pages"
 msgstr ""
 
-msgid "Open or close the sidebar to navigate management pages"
+msgid "Access the pages to manage each different aspect"
 msgstr ""
 
 msgid "Complete the setup to unlock full platform features"
