@@ -25,7 +25,7 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolTypeCI
+from larpmanager.models.inventory import Inventory, InventoryTransfer, InventoryType, PoolLabel, PoolType
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_element_event
@@ -65,7 +65,7 @@ def orga_ci_inventory_delete(request: HttpRequest, event_slug: str, inventory_uu
 def orga_ci_pool_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of pool types for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_pool_types")
-    context["list"] = context["event"].get_elements(PoolTypeCI).order_by("number")
+    context["list"] = context["event"].get_elements(PoolType).order_by("number")
     return render(request, "larpmanager/orga/ci/pool_types.html", context)
 
 
@@ -85,6 +85,58 @@ def orga_ci_pool_types_edit(request: HttpRequest, event_slug: str, pool_uuid: st
 def orga_ci_pool_types_delete(request: HttpRequest, event_slug: str, pool_uuid: str) -> HttpResponse:
     """Delete pool for event."""
     return orga_delete(request, event_slug, OrgaAction.CI_POOL_TYPES, pool_uuid)
+
+
+@login_required
+def orga_ci_inventory_types(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display list of inventory types for character inventory."""
+    context = check_event_context(request, event_slug, "orga_ci_inventory_types")
+    context["list"] = context["event"].get_elements(InventoryType).order_by("number")
+    return render(request, "larpmanager/orga/ci/inventory_types.html", context)
+
+
+@login_required
+def orga_ci_inventory_types_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create an inventory type."""
+    return orga_new(request, event_slug, OrgaAction.CI_INVENTORY_TYPES)
+
+
+@login_required
+def orga_ci_inventory_types_edit(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
+    """Edit an inventory type."""
+    return orga_edit(request, event_slug, OrgaAction.CI_INVENTORY_TYPES, type_uuid)
+
+
+@login_required
+def orga_ci_inventory_types_delete(request: HttpRequest, event_slug: str, type_uuid: str) -> HttpResponse:
+    """Delete an inventory type."""
+    return orga_delete(request, event_slug, OrgaAction.CI_INVENTORY_TYPES, type_uuid)
+
+
+@login_required
+def orga_ci_pool_labels(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display list of pool labels for character inventory."""
+    context = check_event_context(request, event_slug, "orga_ci_pool_labels")
+    context["list"] = context["event"].get_elements(PoolLabel).order_by("number")
+    return render(request, "larpmanager/orga/ci/pool_labels.html", context)
+
+
+@login_required
+def orga_ci_pool_labels_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a pool label."""
+    return orga_new(request, event_slug, OrgaAction.CI_POOL_LABELS)
+
+
+@login_required
+def orga_ci_pool_labels_edit(request: HttpRequest, event_slug: str, label_uuid: str) -> HttpResponse:
+    """Edit a pool label."""
+    return orga_edit(request, event_slug, OrgaAction.CI_POOL_LABELS, label_uuid)
+
+
+@login_required
+def orga_ci_pool_labels_delete(request: HttpRequest, event_slug: str, label_uuid: str) -> HttpResponse:
+    """Delete a pool label."""
+    return orga_delete(request, event_slug, OrgaAction.CI_POOL_LABELS, label_uuid)
 
 
 @login_required
@@ -147,7 +199,7 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
         return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), inventory_uuid=redirect_pk)
 
     # Get pool type and amount
-    pool_type = get_object_or_404(PoolTypeCI, uuid=request.POST.get("pool_type"))
+    pool_type = get_object_or_404(PoolType, uuid=request.POST.get("pool_type"))
     try:
         amount = int(request.POST.get("amount"))
     except (TypeError, ValueError):

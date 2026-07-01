@@ -960,6 +960,30 @@
     module: inventory
 - model: larpmanager.eventpermission
   fields:
+    name: Inventory Types
+    descr: Manage character inventory types and their pool restrictions
+    slug: orga_ci_inventory_types
+    number: 55
+    config: null
+    active_if: null
+    hidden: false
+    icon: layer-group
+    feature: inventory
+    module: inventory
+- model: larpmanager.eventpermission
+  fields:
+    name: Pool Labels
+    descr: Manage pool labels for grouping pools in character inventories
+    slug: orga_ci_pool_labels
+    number: 57
+    config: null
+    active_if: null
+    hidden: false
+    icon: tags
+    feature: inventory
+    module: inventory
+- model: larpmanager.eventpermission
+  fields:
     name: Activity Log
     descr: View detailed activity log of all changes made for this specific event
     slug: orga_log

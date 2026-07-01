@@ -42,6 +42,7 @@ from larpmanager.models.event import (
 )
 from larpmanager.models.experience import AbilityExp, AbilityTemplateExp, AbilityTypeExp, SystemExp
 from larpmanager.models.form import WritingOption, WritingQuestion, WritingQuestionType
+from larpmanager.models.inventory import PoolLabel, PoolType
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import WarehouseArea, WarehouseContainer, WarehouseItem, WarehouseTag
 from larpmanager.models.registration import (
@@ -679,6 +680,42 @@ class EventCharacterS2WidgetUuid(EventCharacterS2, s2forms.ModelSelect2Widget):
             "id": obj.uuid,
             "text": self.label_from_instance(obj),
         }
+
+
+class EventPoolLabelS2(s2forms.ModelSelect2MultipleWidget):
+    """Represents EventPoolLabelS2 model."""
+
+    search_fields: ClassVar[list] = ["name__icontains"]
+
+    def set_event(self, event: Event) -> None:
+        """Setter."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet:
+        """Getter."""
+        return self.event.get_elements(PoolLabel).order_by("number")
+
+
+class EventPoolLabelS2WidgetMulti(EventPoolLabelS2, s2forms.ModelSelect2MultipleWidget):
+    """Multi-select widget for pool labels scoped to an event."""
+
+
+class EventPoolTypeS2(s2forms.ModelSelect2MultipleWidget):
+    """Widget."""
+
+    search_fields: ClassVar[list] = ["name__icontains"]
+
+    def set_event(self, event: Event) -> None:
+        """Setter."""
+        self.event = event
+
+    def get_queryset(self) -> QuerySet:
+        """Getter."""
+        return self.event.get_elements(PoolType).order_by("number")
+
+
+class EventPoolTypeS2WidgetMulti(EventPoolTypeS2, s2forms.ModelSelect2MultipleWidget):
+    """Multi-select widget for pool types scoped to an event."""
 
 
 class RunCampaignS2:

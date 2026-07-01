@@ -1321,6 +1321,46 @@ urlpatterns = [
         name="orga_ci_pool_types_delete",
     ),
     path(
+        "<slug:event_slug>/manage/ci/inventory_types/",
+        views_ci.orga_ci_inventory_types,
+        name="orga_ci_inventory_types",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/inventory_types/new/",
+        views_ci.orga_ci_inventory_types_new,
+        name="orga_ci_inventory_types_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/inventory_types/<slug:type_uuid>/edit/",
+        views_ci.orga_ci_inventory_types_edit,
+        name="orga_ci_inventory_types_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/inventory_types/<slug:type_uuid>/delete/",
+        views_ci.orga_ci_inventory_types_delete,
+        name="orga_ci_inventory_types_delete",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/pool_labels/",
+        views_ci.orga_ci_pool_labels,
+        name="orga_ci_pool_labels",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/pool_labels/new/",
+        views_ci.orga_ci_pool_labels_new,
+        name="orga_ci_pool_labels_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/pool_labels/<slug:label_uuid>/edit/",
+        views_ci.orga_ci_pool_labels_edit,
+        name="orga_ci_pool_labels_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/ci/pool_labels/<slug:label_uuid>/delete/",
+        views_ci.orga_ci_pool_labels_delete,
+        name="orga_ci_pool_labels_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/experience/modifiers/",
         views_ox.orga_exp_modifiers,
         name="orga_exp_modifiers",

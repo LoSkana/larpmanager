@@ -61,7 +61,12 @@ from larpmanager.forms.experience import (
     OrgaRuleExpForm,
     OrgaSystemExpForm,
 )
-from larpmanager.forms.inventory import OrgaInventoryForm, OrgaPoolTypeForm
+from larpmanager.forms.inventory import (
+    OrgaInventoryForm,
+    OrgaInventoryTypeForm,
+    OrgaPoolLabelForm,
+    OrgaPoolTypeForm,
+)
 from larpmanager.forms.miscellanea import (
     OneTimeAccessTokenForm,
     OneTimeContentForm,
@@ -253,6 +258,8 @@ class OrgaAction(str, Enum):
     # Inventory
     CI_INVENTORY = ("orga_ci_inventory", {"form": OrgaInventoryForm})
     CI_POOL_TYPES = ("orga_ci_pool_types", {"form": OrgaPoolTypeForm})
+    CI_INVENTORY_TYPES = ("orga_ci_inventory_types", {"form": OrgaInventoryTypeForm})
+    CI_POOL_LABELS = ("orga_ci_pool_labels", {"form": OrgaPoolLabelForm})
 
     # Miscellaneous
     ALBUMS = ("orga_albums", {"form": OrgaAlbumForm})

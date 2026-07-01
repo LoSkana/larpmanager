@@ -226,7 +226,7 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.inventory import Inventory, PoolBalanceCI, PoolTypeCI
+from larpmanager.models.inventory import Inventory, PoolBalance, PoolType
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
     LarpManagerFaq,
@@ -851,8 +851,8 @@ def post_delete_delivery_exp(sender: type, instance: object, *args: Any, **kwarg
 def create_pools_for_inventory(sender: type, instance: Inventory, created: bool, **kwargs: Any) -> None:
     """Create pool balances for newly created character inventories based on event pool types."""
     if created:
-        for pool_type in PoolTypeCI.objects.filter(event=instance.event):
-            PoolBalanceCI.objects.create(
+        for pool_type in PoolType.objects.filter(event=instance.event):
+            PoolBalance.objects.create(
                 inventory=instance, event=instance.event, number=1, name=pool_type.name, pool_type=pool_type, amount=0
             )
 

@@ -19,11 +19,36 @@
 from typing import Any, ClassVar
 
 from django.db import models
+from django.db.models import QuerySet
 
 from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character
+
+
+class InventoryType(UuidMixin, BaseConceptModel):
+    """Inventory type for character inventories.
+
+    Defines which pool types are available for inventories of this type.
+    When restrict_pools is False (default), all pool types are shown regardless
+    of the pool_types M2M
+    """
+
+    restrict_pools = models.BooleanField(
+        default=False,
+        help_text="If enabled, only pool types belonging to the selected labels will appear in inventories of this type.",
+    )
+
+    labels = models.ManyToManyField(
+        "PoolLabel",
+        related_name="inventory_types",
+        blank=True,
+        help_text="Labels whose pool types are available to inventories of this type (only used when restrict_pools is enabled).",
+    )
+
+    class Meta(BaseConceptModel.Meta):
+        pass
 
 
 class Inventory(UuidMixin, BaseConceptModel):
@@ -33,21 +58,65 @@ class Inventory(UuidMixin, BaseConceptModel):
 
     owners = models.ManyToManyField(Character, related_name="inventory", blank=True)
 
-    def get_pool_balances(self) -> list[dict[str, Any]]:
-        """Return a list of dicts with PoolTypeCI and corresponding PoolBalanceCI.
+    inventory_type = models.ForeignKey(
+        InventoryType,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="inventories",
+        help_text="Optional type that controls which pool types are available. "
+        "If unset, all pool types are shown (backward compatible).",
+    )
 
-        Automatically creates a PoolBalanceCI if it doesn't exist.
+    def _get_active_pool_types(self) -> QuerySet:
+        """Return the queryset of pool types to show for this inventory.
+
+        Rules:
+        - No type assigned, all pool types for the event (legacy behaviour).
+        - Type assigned, restrict_pools=False, all pool types (safe default).
+        - Type assigned, restrict_pools=True, only the type's explicit pool_types.
+        """
+        all_pools = self.event.get_elements(PoolType).order_by("number")
+        if self.inventory_type_id is None:
+            return all_pools
+        if not self.inventory_type.restrict_pools:
+            return all_pools
+        allowed_ids = PoolType.objects.filter(labels__in=self.inventory_type.labels.all()).values_list("id", flat=True)
+        return all_pools.filter(id__in=allowed_ids)
+
+    def get_pool_balances(self) -> list[dict[str, Any]]:
+        """Return a list of dicts with PoolType and corresponding PoolBalance.
+
+        Automatically creates a PoolBalance if it doesn't exist.
         """
         pool_balances = []
-        for pool_type in self.event.get_elements(PoolTypeCI).order_by("number"):
+        for pool_type in self._get_active_pool_types():
             # Get or create the balance
-            balance, _created = PoolBalanceCI.objects.get_or_create(
+            balance, _created = PoolBalance.objects.get_or_create(
                 inventory=self,
                 pool_type=pool_type,
                 defaults={"amount": 0, "event": self.event, "number": 1},
             )
             pool_balances.append({"type": pool_type, "balance": balance})
         return pool_balances
+
+
+class PoolLabel(UuidMixin, BaseConceptModel):
+    """Label for grouping pool types within a character inventory view.
+
+    A pool type can belong to multiple labels. Labels are event-scoped
+    and used for collapsible grouping in the inventory UI.
+    """
+
+    pool_types = models.ManyToManyField(
+        "PoolType",
+        related_name="labels",
+        blank=True,
+        help_text="Pool types that belong to this label.",
+    )
+
+    class Meta(BaseConceptModel.Meta):
+        pass
 
 
 class PoolTypeCommon(UuidMixin, BaseConceptModel):
@@ -59,7 +128,7 @@ class PoolTypeCommon(UuidMixin, BaseConceptModel):
         abstract = True
 
 
-class PoolTypeCI(PoolTypeCommon):
+class PoolType(PoolTypeCommon):
     """Pool type model for character inventory resource types."""
 
 
@@ -72,12 +141,12 @@ class PoolBalanceCommon(UuidMixin, BaseConceptModel):
         abstract = True
 
 
-class PoolBalanceCI(PoolBalanceCommon):
+class PoolBalance(PoolBalanceCommon):
     """Pool balance model for tracking resources in character inventories."""
 
     inventory = models.ForeignKey("Inventory", on_delete=models.CASCADE, related_name="pools")
 
-    pool_type = models.ForeignKey(PoolTypeCI, on_delete=models.CASCADE, related_name="balances")
+    pool_type = models.ForeignKey(PoolType, on_delete=models.CASCADE, related_name="balances")
 
     class Meta(PoolBalanceCommon.Meta):
         unique_together = ("inventory", "pool_type")
@@ -94,7 +163,7 @@ class InventoryTransfer(BaseModel):
         "Inventory", on_delete=models.CASCADE, null=True, blank=True, related_name="incoming_transfers"
     )
 
-    pool_type = models.ForeignKey("PoolTypeCI", on_delete=models.CASCADE)
+    pool_type = models.ForeignKey("PoolType", on_delete=models.CASCADE)
 
     amount = models.IntegerField()
 

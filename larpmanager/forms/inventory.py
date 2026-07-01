@@ -24,8 +24,8 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.base import BaseModelForm, MultichoiceMixin
-from larpmanager.forms.utils import EventCharacterS2WidgetMulti
-from larpmanager.models.inventory import Inventory, PoolTypeCI
+from larpmanager.forms.utils import EventCharacterS2WidgetMulti, EventPoolLabelS2WidgetMulti, EventPoolTypeS2WidgetMulti
+from larpmanager.models.inventory import Inventory, InventoryType, PoolLabel, PoolType
 from larpmanager.models.writing import Character
 
 log = logging.getLogger(__name__)
@@ -59,22 +59,23 @@ class OrgaInventoryForm(MultichoiceMixin, InventoryBaseForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize the form and configure character selection based on event."""
+        """Initialize the form and configure character and inventory type selection."""
         super().__init__(*args, **kwargs)
 
-        # Resolve event from instance or params
         event = getattr(self.instance, "event", None) or self.params.get("event", None)
 
         if event:
-            # Configure field with event for security and functionality
             self.configure_field_event("owners", event)
-
-            # Set initial selection for existing instances
             if self.instance.pk:
                 self.fields["owners"].initial = self.instance.owners.all()
+
+            # Limit inventory_type choices to this event's types
+            self.fields["inventory_type"].queryset = InventoryType.objects.filter(event=event).order_by("number")
+            if self.instance.pk and self.instance.inventory_type_id:
+                self.fields["inventory_type"].initial = self.instance.inventory_type.uuid
         else:
-            # No event: empty queryset
             self.fields["owners"].queryset = Character.objects.none()
+            self.fields["inventory_type"].queryset = InventoryType.objects.none()
 
         run = self.params.get("run")
         if run:
@@ -93,8 +94,60 @@ class OrgaPoolTypeForm(BaseModelForm):
 
     page_title = _("Pool type")
 
-    page_info = _("Define the resource pool types available in character inventories for this event")
+    page_info = _("This page allows you to add or edit a ci pool type")
 
     class Meta:
-        model = PoolTypeCI
+        model = PoolType
         exclude = ("number",)
+
+
+class OrgaInventoryTypeForm(BaseModelForm):
+    """Form for managing character inventory types."""
+
+    page_title = _("Inventory type")
+    page_info = _("This page allows you to add or edit an inventory type")
+
+    class Meta:
+        model = InventoryType
+        exclude = ("number",)
+        widgets: ClassVar[dict[str, type]] = {
+            "labels": EventPoolLabelS2WidgetMulti,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Text to stop fighting the linter."""
+        super().__init__(*args, **kwargs)
+        event = getattr(self.instance, "event", None) or self.params.get("event", None)
+        if event:
+            self.configure_field_event("labels", event)
+            if self.instance.pk:
+                self.fields["labels"].initial = self.instance.labels.all()
+        else:
+            self.fields["labels"].queryset = PoolLabel.objects.none()
+
+
+class OrgaPoolLabelForm(BaseModelForm):
+    """Form for managing pool labels for character inventories."""
+
+    page_title = _("Pool label")
+    page_info = _("This page allows you to add or edit a pool label")
+
+    class Meta:
+        model = PoolLabel
+        exclude = ("number",)
+        widgets: ClassVar[dict[str, type]] = {
+            "pool_types": EventPoolTypeS2WidgetMulti,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize the form and configure pool type selection for this event."""
+        super().__init__(*args, **kwargs)
+
+        event = getattr(self.instance, "event", None) or self.params.get("event", None)
+
+        if event:
+            self.configure_field_event("pool_types", event)
+            if self.instance.pk:
+                self.fields["pool_types"].initial = self.instance.pool_types.all()
+        else:
+            self.fields["pool_types"].queryset = PoolType.objects.none()

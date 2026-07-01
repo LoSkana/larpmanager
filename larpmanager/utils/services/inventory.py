@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING
 from django.db import transaction
 
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolBalanceCI, PoolTypeCI
+from larpmanager.models.inventory import Inventory, InventoryTransfer, PoolBalance, PoolType
 
 if TYPE_CHECKING:
     from larpmanager.models.member import Member
@@ -32,7 +32,7 @@ if TYPE_CHECKING:
 
 def perform_transfer(
     actor: Member,
-    pool_type: PoolTypeCI,
+    pool_type: PoolType,
     amount: int,
     source: Inventory | None = None,
     target: Inventory | None = None,
@@ -58,7 +58,7 @@ def perform_transfer(
     with transaction.atomic():
         # Subtract from source (if not Bank)
         if source:
-            balance, _ = PoolBalanceCI.objects.select_for_update().get_or_create(
+            balance, _ = PoolBalance.objects.select_for_update().get_or_create(
                 inventory=source,
                 pool_type=pool_type,
                 defaults={"amount": 0, "event": source.event, "number": 1},
@@ -71,7 +71,7 @@ def perform_transfer(
 
         # Add to target (if not Bank)
         if target:
-            balance, _ = PoolBalanceCI.objects.select_for_update().get_or_create(
+            balance, _ = PoolBalance.objects.select_for_update().get_or_create(
                 inventory=target,
                 pool_type=pool_type,
                 defaults={"amount": 0, "event": target.event, "number": 1},
