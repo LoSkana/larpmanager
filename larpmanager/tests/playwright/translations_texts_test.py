@@ -63,17 +63,17 @@ def test_translations_text(pw_page: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("h")
     edit_iframe.locator("#id_default").uncheck()
     save_modal(page, edit_iframe)
-    expect_normalized(page, page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
+    expect_normalized(page, page.locator("body"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
 
     # test languages
     go_to(page, live_server, "/")
-    expect_normalized(page, page.locator("#one"), "Hello")
+    expect_normalized(page, page.locator("body"), "Hello")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Select Language").select_option("it")
     page.get_by_label("Select Language").click()
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "BUONGIORNO")
+    expect_normalized(page, page.locator("body"), "BUONGIORNO")
     topbar(page, "Profilo")
     expect_normalized(page, page.locator("#sidebar"), "Dati personali")
 
@@ -81,13 +81,13 @@ def test_translations_text(pw_page: Any) -> None:
     go_to(page, live_server, "/language")
     page.get_by_label("Seleziona la lingua").select_option("fr")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "bonjour")
+    expect_normalized(page, page.locator("body"), "bonjour")
     topbar(page, "Profil")
     expect_normalized(page, page.locator("#sidebar"), "Informations personnelles")
 
     go_to(page, live_server, "/language")
     page.get_by_label("Sélectionner la langue").select_option("de")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Hello")
+    expect_normalized(page, page.locator("body"), "Hello")
     topbar(page, "Profil")
     expect_normalized(page, page.locator("#sidebar"), "Persönliche Angaben")

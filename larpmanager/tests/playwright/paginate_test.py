@@ -85,13 +85,13 @@ def config(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register")
     submit_register(page)
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Provisional registration")
-    page.locator("#one").get_by_role("link", name="Accounting").click()
-    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("body"), "Provisional registration")
+    page.locator("body").get_by_role("link", name="Accounting").click()
+    expect_normalized(page, page.locator("body"), "100")
 
     # pay
     go_to(page, live_server, "/accounting/registration/u1/")
-    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("body"), "100")
     submit(page)
     page.get_by_role("checkbox", name="Payment confirmation:").check()
     submit(page)
@@ -106,7 +106,7 @@ def config(page: Any, live_server: Any) -> None:
 def check_paginate(page: Any, live_server: Any, path: str, descr: str) -> None:
     """Navigate to a paginate list page and verify item appears in the table."""
     go_to(page, live_server, path)
-    expect_normalized(page, page.locator("#one"), descr)
+    expect_normalized(page, page.locator("body"), descr)
 
     # try to change it
     page.locator(".fa-edit").first.click()
@@ -272,4 +272,4 @@ def orga_paginate_views(page: Any, live_server: Any) -> None:
     page.get_by_role("spinbutton", name="Value").click()
     page.get_by_role("spinbutton", name="Value").fill("20")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Requests open: asdsadsadsa (20.00)")
+    expect_normalized(page, page.locator("body"), "Requests open: asdsadsadsa (20.00)")

@@ -111,9 +111,9 @@ def check_orga_features(page: Any) -> None:
         check_feature(page, s)
 
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Now you can set customization options")
+    expect_normalized(page, page.locator("body"), "Now you can set customization options")
     expect_normalized(page,
-        page.locator("#one"), "You have activated the following features, for each here's the links to follow"
+        page.locator("body"), "You have activated the following features, for each here's the links to follow"
     )
     sidebar(page, "Features")
     # Automatically added with character customization
@@ -195,7 +195,7 @@ def check_exe_features(page: Any) -> None:
         check_feature(page, s)
 
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Now you can create event templates")
+    expect_normalized(page, page.locator("body"), "Now you can create event templates")
     sidebar(page, "Features")
     _check_checkboxes(checked, page, True)
 

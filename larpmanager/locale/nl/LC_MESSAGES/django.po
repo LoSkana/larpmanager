@@ -3769,9 +3769,6 @@ msgstr "Er kan nog niet gestemd worden"
 msgid "Your character is"
 msgstr "Je personage is"
 
-msgid "Your registration"
-msgstr "Je inschrijving"
-
 msgid "already delivered"
 msgstr "reeds geleverd"
 

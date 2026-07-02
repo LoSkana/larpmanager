@@ -3769,9 +3769,6 @@ msgstr "Avstemningen er ennå ikke åpnet"
 msgid "Your character is"
 msgstr "Karakteren din er"
 
-msgid "Your registration"
-msgstr "Din registrering"
-
 msgid "already delivered"
 msgstr "allerede levert"
 

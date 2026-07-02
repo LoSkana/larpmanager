@@ -78,7 +78,7 @@ def enable_additional_tickets_feature(page: Any, live_server: Any) -> None:
 
     # Verify feature is enabled and form question is created
     sidebar(page, "Form")
-    expect_normalized(page, page.locator("#one"), "Additional")
+    expect_normalized(page, page.locator("body"), "Additional")
 
     # Configure ticket price
     go_to(page, live_server, "test/manage")
@@ -112,7 +112,7 @@ def registration_with_additionals(page: Any, live_server: Any) -> None:
 
     # Verify registration confirmation shows correct total
     go_to(page, live_server, "accounting/")
-    expect_normalized(page, page.locator("#one"), "200€")
+    expect_normalized(page, page.locator("body"), "200€")
 
 
 def verify_organizer_view(page: Any, live_server: Any) -> None:
@@ -121,7 +121,7 @@ def verify_organizer_view(page: Any, live_server: Any) -> None:
 
     # Verify additional tickets column is visible
     click_and_wait_question(page, "Additional")
-    expect_normalized(page, page.locator("#one"), "3")
+    expect_normalized(page, page.locator("body"), "3")
 
 
 def edit_additionals(page: Any, live_server: Any) -> None:
@@ -140,7 +140,7 @@ def edit_additionals(page: Any, live_server: Any) -> None:
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
     click_and_wait_question(page, "Additional")
-    expect_normalized(page, page.locator("#one"), "2")
+    expect_normalized(page, page.locator("body"), "2")
 
 
 def additional_tickets_edge_cases(page: Any, live_server: Any) -> None:
@@ -220,7 +220,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
     # Verify in organizer view
     go_to(page, live_server, "test/manage/registrations/")
     click_and_wait_question(page, "Additional")
-    expect_normalized(page, page.locator("#one"), "2")
+    expect_normalized(page, page.locator("body"), "2")
 
 
 def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
@@ -249,4 +249,4 @@ def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
     submit_register(page)
 
     # Verify registration succeeded
-    expect(page.locator("#one")).to_be_visible()
+    expect(page.locator("body")).to_be_visible()

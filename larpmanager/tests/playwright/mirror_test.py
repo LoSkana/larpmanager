@@ -57,7 +57,7 @@ def test_orga_mirror(pw_page: Any) -> None:
 
     # check gallery
     go_to(page, live_server, "/test/")
-    expect_normalized(page, page.locator("#one"), "Test Character")
+    expect_normalized(page, page.locator("body"), "Test Character")
 
     # activate casting
     go_to(page, live_server, "/test/manage/features/casting/on")
@@ -79,8 +79,8 @@ def test_orga_mirror(pw_page: Any) -> None:
 
     # check gallery
     go_to(page, live_server, "/test/")
-    expect_normalized(page, page.locator("#one"), "Mirror")
-    expect_normalized(page, page.locator("#one"), "Test Character")
+    expect_normalized(page, page.locator("body"), "Mirror")
+    expect_normalized(page, page.locator("body"), "Test Character")
 
     casting(live_server, page)
 
@@ -125,8 +125,8 @@ def casting(live_server: Any, page: Any) -> None:
 
     # check assignment
     go_to(page, live_server, "/test/manage/registrations")
-    expect_normalized(page, page.locator("#one"), "Test Character")
+    expect_normalized(page, page.locator("body"), "Test Character")
 
     go_to(page, live_server, "/test")
-    expect_normalized(page, page.locator("#one"), "Test Character")
-    expect(page.locator("#one")).not_to_contain_text("Mirror")
+    expect_normalized(page, page.locator("body"), "Test Character")
+    expect(page.locator("body")).not_to_contain_text("Mirror")

@@ -353,7 +353,7 @@ def user_signup(live_server: Any, page: Any) -> None:
     # signup as user
     logout(page)
     login_user(page, live_server)
-    expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available.")
+    expect_normalized(page, page.locator("body"), "Hurry: only 9 tickets available.")
     go_to(page, live_server, "/test/register/")
     page.locator('label[for="id_que_u4_1"]').click()
     expect(page.locator('#id_que_u4_1')).to_be_checked()

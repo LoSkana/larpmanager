@@ -57,13 +57,13 @@ def feature_fields(page: Any) -> None:
 
     # reorder test
     sidebar(page, "Sheet")
-    expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page, page.locator("body"), "Name Name Presentation Presentation Text Sheet")
     drag_reorder(
         page,
         page.locator('tr[id="u3"] td.reorder-handle'),
         page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]"),
     )
-    expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation")
+    expect_normalized(page, page.locator("body"), "Name Name Text Sheet Presentation Presentation")
 
     # add config fields - title
     page.get_by_role("link", name="Configuration").first.click()
@@ -73,7 +73,7 @@ def feature_fields(page: Any) -> None:
 
     # check
     sidebar(page, "Sheet")
-    expect_normalized(page, page.locator("#one"), "Name Name Text Sheet Presentation Presentation Title Title Hidden")
+    expect_normalized(page, page.locator("body"), "Name Name Text Sheet Presentation Presentation Title Title Hidden")
 
     # add config fields - cover, assigned
     page.get_by_role("link", name="Configuration").first.click()
@@ -86,7 +86,7 @@ def feature_fields(page: Any) -> None:
     # check
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Cover Cover Hidden",
     )
 
@@ -104,7 +104,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # check
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
+        page.locator("body"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
     )
 
     # set experience point
@@ -133,7 +133,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # check it has not been deleted
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden comp Computed Private",
     )
 
@@ -145,7 +145,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # check
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
+        page.locator("body"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
     )
 
 
@@ -160,18 +160,18 @@ def form_other_writing(page: Any) -> None:
     # check
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden Faction Factions Hidden",
     )
     page.get_by_role("link", name="Plot", exact=True).click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Name Name Concept Presentation Text Sheet")
+    expect_normalized(page, page.locator("body"), "Name Name Concept Presentation Text Sheet")
     page.get_by_role("link", name="Faction", exact=True).click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
-    page.locator("#one").get_by_role("link", name="Quest").click()
+    expect_normalized(page, page.locator("body"), "Name Name Presentation Presentation Text Sheet")
+    page.locator("body").get_by_role("link", name="Quest").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page, page.locator("body"), "Name Name Presentation Presentation Text Sheet")
     page.get_by_role("link", name="Trait", exact=True).click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet")
+    expect_normalized(page, page.locator("body"), "Name Name Presentation Presentation Text Sheet")

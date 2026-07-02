@@ -91,7 +91,7 @@ def test_orga_character_form(pw_page: Any) -> None:
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="pinoloooooooooo").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test public: public Presentation baba")
+    expect_normalized(page, page.locator("body"), "Player: Admin Test public: public Presentation baba")
 
     create_second_char(live_server, page)
 
@@ -131,7 +131,7 @@ def create_second_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u9").fill("asda")
     submit_confirm(page)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "player: user test status: creation available text: all multiple text: many mandatory: asda presentation dsfdfsd text sdfdsfds",
     )
 
@@ -205,7 +205,7 @@ def recheck_char(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_que_u10")).to_have_count(0)
     expect_normalized(page, page.locator("#id_que_u10_tr"), "disabled")
     expect(page.locator("#id_que_u11")).to_have_count(0)
-    expect(page.locator("#one")).not_to_contain_text("Hidden")
+    expect(page.locator("body")).not_to_contain_text("Hidden")
     submit_confirm(page)
 
 

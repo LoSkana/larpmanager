@@ -77,7 +77,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
 
     # check by reload
     sidebar(page, "Characters")
-    expect_normalized(page, page.locator("#one"), "Test Character2 Test Teaser + 2 Test Text ff")
+    expect_normalized(page, page.locator("body"), "Test Character2 Test Teaser + 2 Test Text ff")
 
     # add new
     page.get_by_role("link", name="New").click()
@@ -97,7 +97,7 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Test Character2 Test Teaser + 2 Test Text ff Another good friends with #1",
     )
 
@@ -125,7 +125,7 @@ def excel(page: Any, live_server: Any) -> None:
     # check by reload
     sidebar(page, "Characters")
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1",
     )
 
@@ -143,7 +143,7 @@ def excel(page: Any, live_server: Any) -> None:
     # check by reload
     page.reload()
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Test Character2 Test Teaser + 2 Test Text ff kinda hate #2 Another good friends with #1 ciaoooo",
     )
 
@@ -169,7 +169,7 @@ def external(page: Any, live_server: Any) -> None:
     logout(page)
     go_to_check(page, live_server + url)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Presentation good friends with Test Character2 Text ciaoooo",
     )
 

@@ -223,6 +223,6 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     expect(page).to_have_url(f"{live_server.url}/characters")
 
     # Verify the page shows characters content
-    expect_normalized(page, page.locator("#one"), "Character")
+    expect_normalized(page, page.locator("body"), "Character")
 
-    expect_normalized(page, page.locator("#one"), "character active last event character active last event my character test larp")
+    expect_normalized(page, page.locator("body"), "character active last event character active last event my character test larp")

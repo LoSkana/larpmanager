@@ -133,12 +133,12 @@ def create_character(page: Any) -> None:
     submit_confirm(page)
 
     # check status, resubmit reg
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
+    expect_normalized(page, page.locator("body"), "Player: Admin Test choose: st Presentation sdsa")
     sidebar(page, "Registration")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
+    expect_normalized(page, page.locator("body"), "Player: Admin Test choose: st Presentation sdsa")
 
     # change ticket
     sidebar(page, "Registration")
@@ -147,8 +147,8 @@ def create_character(page: Any) -> None:
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
 
     # check previous option is not selected anymore
-    expect_normalized(page, page.locator("#one"), "The character have missing values in mandatory fields: choose")
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation sdsa Text asadas")
+    expect_normalized(page, page.locator("body"), "The character have missing values in mandatory fields: choose")
+    expect_normalized(page, page.locator("body"), "Player: Admin Test Presentation sdsa Text asadas")
     page.get_by_role("link", name="myyyy").click()
     page.get_by_role("link", name="Edit").click()
 
@@ -156,7 +156,7 @@ def create_character(page: Any) -> None:
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"\n- text: bmb')
     page.locator('label[for="id_que_u4_0"]').click()  # select "bmb" (only option)
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
+    expect_normalized(page, page.locator("body"), "Player: Admin Test choose: bmb Presentation sdsa")
 
     # check with registration resubmit
     sidebar(page, "Registration")
@@ -165,4 +165,4 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Edit").click()
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"')
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
+    expect_normalized(page, page.locator("body"), "Player: Admin Test choose: bmb Presentation sdsa")

@@ -23,13 +23,7 @@
                             {% else %}
                                 <i class="fa-solid fa-user-plus"></i>
                             {% endif %}
-                            {% if run_status.registration %}
-                                <span>{% trans "Your registration" %}
-                                    {% if run_status.registration.ticket %}({{ run_status.registration.ticket.name }}){% endif %}
-                                </span>
-                            {% else %}
-                                <span>{{ run_status.text|striptags }}</span>
-                            {% endif %}
+                            <span>{{ run_status.text|striptags }}</span>
                             {% if run_status.url %}
                             </a>
                         {% else %}

@@ -5747,9 +5747,6 @@ msgstr ""
 msgid "Password reset"
 msgstr ""
 
-msgid "Your registration"
-msgstr ""
-
 msgid "Tech Support"
 msgstr ""
 

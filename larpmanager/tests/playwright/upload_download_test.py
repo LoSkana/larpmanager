@@ -102,14 +102,14 @@ def abilities(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "Loading performed, see logs Proceed Logs OK - Created sword OK - Created shield OK - Created sneak",
     )
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "sword test 2 baba True shield test 3 bibi True sword sneak test 4 bubu True sword | shield trtr | rrrrrr",
     )
     check_download(page, "Download")
@@ -130,13 +130,13 @@ def relationships(page: Any) -> None:
     page.locator("#id_second").click()
     upload(page, "#id_second", get_path("relationships.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), " OK - Relationship characcter test character")
+    expect_normalized(page, page.locator("body"), " OK - Relationship characcter test character")
     page.get_by_role("link", name="Proceed").click()
     page.get_by_role("link", name="Relationships").click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "Test Character Test Teaser Test Text characcter trg poor ertd fewr Test Character",
     )
 
@@ -152,12 +152,12 @@ def plots(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "Loading performed, see logs Proceed Logs OK - Created plott OK - Plot role characcter plott",
     )
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "plott conceptt textt")
+    expect_normalized(page, page.locator("body"), "plott conceptt textt")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("cell", name="Show This text will be added").get_by_role("link").click()
@@ -183,20 +183,20 @@ def quest_trait(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("quest.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Loading performed, see logs Proceed Logs OK - Created questt")
+    expect_normalized(page, page.locator("body"), "Loading performed, see logs Proceed Logs OK - Created questt")
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Q1 questt bhbh presenttation ttext")
+    expect_normalized(page, page.locator("body"), "Q1 questt bhbh presenttation ttext")
     check_download(page, "Download")
     sidebar(page, "Traits")
     page.get_by_role("link", name="Upload").click()
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("trait.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Loading performed, see logs Proceed Logs OK - Created traitt")
+    expect_normalized(page, page.locator("body"), "Loading performed, see logs Proceed Logs OK - Created traitt")
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "T1 traitt Q1 questt ppresentation teeeext")
+    expect_normalized(page, page.locator("body"), "T1 traitt Q1 questt ppresentation teeeext")
     check_download(page, "Download")
 
 
@@ -206,10 +206,10 @@ def registrations(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("registration.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), " OK - Created User Test")
+    expect_normalized(page, page.locator("body"), " OK - Created User Test")
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "User Test characcter")
+    expect_normalized(page, page.locator("body"), "User Test characcter")
     check_download(page, "Download")
 
 
@@ -223,14 +223,14 @@ def reg_form(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "Loading performed, see logs Proceed Logs OK - Created tbmobw OK - Created qmhcuf OK - Created holdmf OK - Created lyucez OK - Created bamkzw OK - Created npyrxd OK - Created rdtbgg OK - Created qkcyjr OK - Created fjxkum",
     )
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "tbmobw npyrxd Multiple choice Optional npyrxd | rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr | fjxkum",
     )
     check_download(page, "Download")
@@ -242,11 +242,11 @@ def characters(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("character.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), " OK - Created characcter")
+    expect_normalized(page, page.locator("body"), " OK - Created characcter")
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
     expect_normalized(
-        page, page.locator("#one"), "Test Character Test Teaser Test Text characcter trg poor ertd fewr"
+        page, page.locator("body"), "Test Character Test Teaser Test Text characcter trg poor ertd fewr"
     )
     check_download(page, "Download")
 
@@ -257,10 +257,10 @@ def factions(page: Any) -> None:
     check_download(page, "Download example template")
     upload(page, "#id_first", get_path("faction.csv"))
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), " OK - Created facction")
+    expect_normalized(page, page.locator("body"), " OK - Created facction")
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "facction Primary gh asd oeir sdf")
+    expect_normalized(page, page.locator("body"), "facction Primary gh asd oeir sdf")
     check_download(page, "Download")
 
 
@@ -273,39 +273,39 @@ def char_form(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "Loading performed, see logs Proceed Logs OK - Created bibi OK - Created baba OK - Created wer OK - Created asd OK - Created poi OK - Created huhu OK - Created trtr OK - Created rrrrrr OK - Created tttttt",
     )
     page.get_by_role("link", name="Proceed").click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "Name Name Presentation Presentation Text Sheet Faction Factions Hidden bibi baba Multiple choice Searchable huhu | trtr",
     )
     check_download(page, "Download")
     page.get_by_role("link", name="Plot", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
-        page, page.locator("#one"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
+        page, page.locator("body"), "Name Name Concept Presentation Text Sheet wer fghj Single-line text Hidden"
     )
     page.get_by_role("link", name="Faction", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
-        page, page.locator("#one"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
+        page, page.locator("body"), "Name Name Presentation Presentation Text Sheet baba bebe Multi-line text Private"
     )
     page.get_by_role("link", name="Quest", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "Name Name Presentation Presentation Text Sheet asd kloi Advanced text editor Public",
     )
     page.get_by_role("link", name="Trait", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(
         page,
-        page.locator("#one"),
+        page.locator("body"),
         "Name Name Presentation Presentation Text Sheet poi rweerw Single choice Public rrrrrr | tttttt",
     )
 

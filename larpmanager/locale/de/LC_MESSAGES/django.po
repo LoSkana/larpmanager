@@ -3769,9 +3769,6 @@ msgstr "Die Stimmabgabe ist noch nicht eröffnet"
 msgid "Your character is"
 msgstr "Ihr Charakter ist"
 
-msgid "Your registration"
-msgstr "Deine Anmeldung"
-
 msgid "already delivered"
 msgstr "bereits geliefert"
 

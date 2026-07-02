@@ -180,14 +180,14 @@ def test_faction_all(pw_page: Any) -> None:
     sidebar(page, "Factions")
 
     # Verify PRIMARY and TRANSVERSAL factions are visible
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("body"),
 """Primary
         Name	Presentation	Characters
         Primary Faction 1
         PF1 teaser	Character Alpha | Character Beta
         Primary Faction 2
         PF2 teaser	Character Gamma""")
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("body"),
 """Transversal
         Name	Presentation	Characters
         Transversal Faction 1
@@ -199,13 +199,13 @@ def test_faction_all(pw_page: Any) -> None:
     """)
 
     # Verify SECRET factions are NOT visible
-    expect(page.locator("#one")).not_to_contain_text("Secret")
+    expect(page.locator("body")).not_to_contain_text("Secret")
 
     # Open Primary Faction 1 details
     page.get_by_role("link", name="Primary Faction 1").click()
 
     # Verify PUBLIC teaser is visible
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("body"),
         """
         PF1 teaser
         Public Faction Question: PF1 public answer
@@ -219,11 +219,11 @@ def test_faction_all(pw_page: Any) -> None:
         """)
 
     # Verify PRIVATE text is NOT visible
-    expect(page.locator("#one")).not_to_contain_text("PF1 private text")
+    expect(page.locator("body")).not_to_contain_text("PF1 private text")
 
     # Verify PRIVATE WritingQuestion is NOT visible
-    expect(page.locator("#one")).not_to_contain_text("Private Faction Question")
-    expect(page.locator("#one")).not_to_contain_text("PF1 private answer")
+    expect(page.locator("body")).not_to_contain_text("Private Faction Question")
+    expect(page.locator("body")).not_to_contain_text("PF1 private answer")
 
     # ========== SECTION 6: Reorder Factions (as Organizer) ==========
     logout(page)
@@ -281,7 +281,7 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("link", name="Character Alpha").first.click()
 
     # Verify character info are visible
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("body"),
   """
       Player: User Test
         Presentation
@@ -351,7 +351,7 @@ def test_faction_all(pw_page: Any) -> None:
     page.get_by_role("link", name="Character Beta").click()
 
     # Verify Beta TEASER is visible
-    expect_normalized(page, page.locator("#one"),
+    expect_normalized(page, page.locator("body"),
         """
         Presentation
         Beta teaser
@@ -364,7 +364,7 @@ def test_faction_all(pw_page: Any) -> None:
         """)
 
     # Verify Beta PRIVATE TEXT is NOT visible (not assigned)
-    expect(page.locator("#one")).not_to_contain_text("private")
+    expect(page.locator("body")).not_to_contain_text("private")
 
     # Verify that Secret Factions are never visible (except for Alpha)
     links = [
@@ -381,7 +381,7 @@ def test_faction_all(pw_page: Any) -> None:
     ]
     for link in links:
         go_to(page, live_server, link)
-        expect(page.locator("#one")).not_to_contain_text("Secret")
+        expect(page.locator("body")).not_to_contain_text("Secret")
 
     # Verify faction Primary 3, or secret ones, are not visible
     links = [

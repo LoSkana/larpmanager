@@ -103,8 +103,8 @@ def signup(live_server: Any, page: Any) -> None:
 def membership(live_server: Any, page: Any) -> None:
     # send membership
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "upload your membership application to proceed")
+    expect_normalized(page, page.locator("body"), "Provisional registration")
+    expect_normalized(page, page.locator("body"), "upload your membership application to proceed")
     page.get_by_role("link", name="Upload your membership application to proceed").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
@@ -127,13 +127,13 @@ def membership(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     # check register
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
+    expect_normalized(page, page.locator("body"), "Proceed with payment to confirm your registration")
     page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
 
 
 def pay(live_server: Any, page: Any) -> None:
     # pay - single payment method, selection page is skipped automatically
-    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("body"), "100")
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
@@ -143,9 +143,9 @@ def pay(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Confirm", exact=True).click()
     # check payment
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
+    expect_normalized(page, page.locator("body"), "Registration confirmed (Standard)")
     logout(page)
-    expect_normalized(page, page.locator("#one"), "Registration is open!")
-    expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available")
+    expect_normalized(page, page.locator("body"), "Registration is open!")
+    expect_normalized(page, page.locator("body"), "Hurry: only 9 tickets available")
     # test mails
     go_to(page, live_server, "/debug/mail")

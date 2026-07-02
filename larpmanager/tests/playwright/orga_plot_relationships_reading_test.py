@@ -92,7 +92,7 @@ def reading(live_server: Any, page: Any) -> None:
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     _wait_lm_ready(page)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         """
         Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character test teaser ciaaoooooo
         """,
@@ -114,14 +114,14 @@ def reading(live_server: Any, page: Any) -> None:
 
     # check faction main list
     click_and_wait_question(page, "Characters")
-    expect_normalized(page, page.locator("#one"), "only for testt Primary Test Character")
+    expect_normalized(page, page.locator("body"), "only for testt Primary Test Character")
 
     # check reading for prova
     sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
     _wait_lm_ready(page)
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character only for testt test teaser ciaaoooooo",
     )
 
@@ -129,7 +129,7 @@ def reading(live_server: Any, page: Any) -> None:
     sidebar(page, "Reading")
     page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
+    expect_normalized(page, page.locator("body"), "testona Text wwwww prova bruuuu")
 
 
 def relationships(live_server: Any, page: Any) -> None:
@@ -151,7 +151,7 @@ def relationships(live_server: Any, page: Any) -> None:
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text prova Test Character")
+    expect_normalized(page, page.locator("body"), "Test Character Test Teaser Test Text prova Test Character")
 
     # check in char
     page.locator('[id="u2"]').locator(".fa-edit").click()
@@ -172,7 +172,7 @@ def relationships(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Relationships Test Character test teaser ciaaoooooo")
+    expect_normalized(page, page.locator("body"), "Relationships Test Character test teaser ciaaoooooo")
 
 
 def plots(live_server: Any, page: Any) -> None:
@@ -203,7 +203,7 @@ def plots(live_server: Any, page: Any) -> None:
 
     # check in plot list - both characters should be there
     click_and_wait_question(page, "Characters")
-    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
+    expect_normalized(page, page.locator("body"), "testona asadsadas wwwww Test Character prova")
 
     # check it is the same
     page.locator(".fa-edit").click()
@@ -219,7 +219,7 @@ def plots(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check it
-    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww Test Character prova")
+    expect_normalized(page, page.locator("body"), "testona asadsadas wwwww Test Character prova")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     # Wait for the toggle element to be ready
@@ -233,7 +233,7 @@ def plots(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check
-    expect_normalized(page, page.locator("#one"), "testona asadsadas wwwww prova")
+    expect_normalized(page, page.locator("body"), "testona asadsadas wwwww prova")
 
     # set text
     page.locator(".fa-edit").click()
@@ -245,7 +245,7 @@ def plots(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "testona wwwww bruuuu")
+    expect_normalized(page, page.locator("body"), "testona wwwww bruuuu")
 
 
 def plots_character(live_server: Any, page: Any) -> None:

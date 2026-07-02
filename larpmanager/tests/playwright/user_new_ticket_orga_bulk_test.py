@@ -85,7 +85,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
     sidebar(page, "Characters")
     click_and_wait_question(page, "Faction")
     click_and_wait_question(page, "Plots")
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
+    expect_normalized(page, page.locator("body"), "Test Character Test Teaser Test Text")
 
     # set faction
     page.get_by_role("link", name="Bulk").click()
@@ -94,7 +94,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check result
     click_and_wait_question(page, "Faction")
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text faz")
+    expect_normalized(page, page.locator("body"), "Test Character Test Teaser Test Text faz")
 
     # remove faction
     page.get_by_role("link", name="Bulk").click()
@@ -104,7 +104,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check result
     click_and_wait_question(page, "Faction")
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
+    expect_normalized(page, page.locator("body"), "Test Character Test Teaser Test Text")
 
     # add plot
     page.get_by_role("link", name="Bulk").click()
@@ -114,7 +114,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check result
     click_and_wait_question(page, "Plots")
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text plot")
+    expect_normalized(page, page.locator("body"), "Test Character Test Teaser Test Text plot")
 
     # remove plot
     page.get_by_role("link", name="Bulk").click()
@@ -124,7 +124,7 @@ def bulk_writing(live_server: Any, page: Any) -> None:
 
     # check
     click_and_wait_question(page, "Plots")
-    expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text")
+    expect_normalized(page, page.locator("body"), "Test Character Test Teaser Test Text")
 
     # set quest type
     page.get_by_role("link", name="Quest type").click()
@@ -152,7 +152,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     # create second quest type
     page.get_by_role("link", name="Quest type").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "typ q1 q2")
+    expect_normalized(page, page.locator("body"), "typ q1 q2")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("t2")
@@ -163,7 +163,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u1"]').get_by_role("cell", name="typ").click()
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Q1 q1 t2 Q2 q2 typ")
+    expect_normalized(page, page.locator("body"), "Q1 q1 t2 Q2 q2 typ")
 
     # create traits
     sidebar(page, "Traits")
@@ -179,7 +179,7 @@ def bulk_questbuilder(live_server: Any, page: Any) -> None:
     page.locator(".writing_list td:nth-child(6)").click()
     page.locator("#objs_9").select_option("u2")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "T1 t1 Q2 q2")
+    expect_normalized(page, page.locator("body"), "T1 t1 Q2 q2")
 
 
 def bulk_exp(live_server: Any, page: Any) -> None:
@@ -211,7 +211,7 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator(".writing td:nth-child(5)").click()
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "swor 2 1")
+    expect_normalized(page, page.locator("body"), "swor 2 1")
 
     # test bulk change type
     page.reload()
@@ -219,7 +219,7 @@ def bulk_exp(live_server: Any, page: Any) -> None:
     page.locator(".writing td:nth-child(5)").click()
     page.locator("#objs_10").select_option("u1")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "swor t1 1")
+    expect_normalized(page, page.locator("body"), "swor t1 1")
 
 
 def bulk_warehouse(live_server: Any, page: Any) -> None:
@@ -289,9 +289,9 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     # bulk move to box
     page.get_by_role("link", name="Items").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "item1 box")
-    expect_normalized(page, page.locator("#one"), "item2 box")
-    expect_normalized(page, page.locator("#one"), "item3 box")
+    expect_normalized(page, page.locator("body"), "item1 box")
+    expect_normalized(page, page.locator("body"), "item2 box")
+    expect_normalized(page, page.locator("body"), "item3 box")
 
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u3"]').get_by_role("cell").nth(0).click()
@@ -299,9 +299,9 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator("#objs_1").select_option("u2")
     submit_confirm(page)
 
-    expect_normalized(page, page.locator("#one"), "item2 box")
-    expect_normalized(page, page.locator("#one"), "item1 box2")
-    expect_normalized(page, page.locator("#one"), "item3 box2")
+    expect_normalized(page, page.locator("body"), "item2 box")
+    expect_normalized(page, page.locator("body"), "item1 box2")
+    expect_normalized(page, page.locator("body"), "item3 box2")
 
     # bulk add tag
     page.get_by_role("link", name="Bulk").click()
@@ -310,9 +310,9 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator('[id="u1"]').get_by_role("cell").nth(0).click()
     submit_confirm(page)
 
-    expect_normalized(page, page.locator("#one"), "item3 box2")
-    expect_normalized(page, page.locator("#one"), "item2 box tag")
-    expect_normalized(page, page.locator("#one"), "item1 box2 tag")
+    expect_normalized(page, page.locator("body"), "item3 box2")
+    expect_normalized(page, page.locator("body"), "item2 box tag")
+    expect_normalized(page, page.locator("body"), "item1 box2 tag")
 
     # bulk remove tag
     page.get_by_role("link", name="Bulk").click()
@@ -320,9 +320,9 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.locator("#operation").select_option("3")
     submit_confirm(page)
 
-    expect_normalized(page, page.locator("#one"), "item3 box2")
-    expect_normalized(page, page.locator("#one"), "item2 box")
-    expect_normalized(page, page.locator("#one"), "item1 box2 tag")
+    expect_normalized(page, page.locator("body"), "item3 box2")
+    expect_normalized(page, page.locator("body"), "item2 box")
+    expect_normalized(page, page.locator("body"), "item1 box2 tag")
 
     # check link when bulk active
     page.get_by_role("link", name="Bulk").click()

@@ -14,7 +14,9 @@
                 {% elif run_status.status_type == "provisional" %}
                     <i class="fa-solid fa-hourglass-half"></i>
                 {% endif %}
-                {{ run_status.text | safe }}
+                <a href="{{ run_status.url }}">
+                    <span>{{ run_status.text|striptags }}</span>
+                </a>
                 {% if features.payment and reg and reg.tot_iscr %}
                     {% with uuid=reg_uuid|default:reg.uuid %}
                         <span class="acc_link">

@@ -101,7 +101,7 @@ def check_overpay(page: Any, live_server: Any) -> None:
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     wait_accounting_load(page)
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard 8 40 60 100 60")
+    expect_normalized(page, page.locator("body"), "Admin Test Standard 8 40 60 100 60")
 
 
 def check_overpay_2(page: Any, live_server: Any) -> None:
@@ -120,11 +120,11 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     wait_accounting_load(page)
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard 100 100 60 40")
+    expect_normalized(page, page.locator("body"), "Admin Test Standard 100 100 60 40")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
-    expect_normalized(page, page.locator("#one"), "Tokens Total: 20.00")
+    expect_normalized(page, page.locator("body"), "Tokens Total: 20.00")
 
     # Change ticket price
     go_to(page, live_server, "/test/manage/")
@@ -139,7 +139,7 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
     sidebar(page, "Registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     wait_accounting_load(page)
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard -20 100 80 20 40 40")
+    expect_normalized(page, page.locator("body"), "Admin Test Standard -20 100 80 20 40 40")
 
     # Perform save
     page.locator(".fa-edit").click()
@@ -151,17 +151,17 @@ def check_overpay_2(page: Any, live_server: Any) -> None:
 
     page.get_by_role("link", name="accounting", exact=True).click()
     wait_accounting_load(page)
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard 80 80 40 40")
+    expect_normalized(page, page.locator("body"), "Admin Test Standard 80 80 40 40")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Credits Total: 20.00€"
     )
 
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Tokens Total: 20.00"
     )
 
@@ -174,7 +174,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
     page.locator("#id_registration_reg_que_allowed").check()
     submit_confirm(page)
     sidebar(page, "Registrations")
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard")
+    expect_normalized(page, page.locator("body"), "Admin Test Standard")
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect_normalized(edit_iframe,
@@ -182,7 +182,7 @@ def check_special_cod(page: Any, live_server: Any) -> None:
         "Registration Member Admin Test - orga@test.it Admin Test - orga@test.it",
     )
     save_modal(page, edit_iframe)
-    expect_normalized(page, page.locator("#one"), "Admin Test Standard")
+    expect_normalized(page, page.locator("body"), "Admin Test Standard")
 
 
 def prologues(page: Any) -> None:
@@ -211,7 +211,7 @@ def prologues(page: Any) -> None:
 
     # check result
     click_and_wait_question(page, "Characters")
-    expect_normalized(page, page.locator("#one"), "P1 ffff (test) Test Character")
+    expect_normalized(page, page.locator("body"), "P1 ffff (test) Test Character")
 
 
 def upload_membership(page: Any, live_server: Any) -> None:
@@ -240,7 +240,7 @@ def upload_membership(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # Try accessing member form
-    expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Accepted 1")
+    expect_normalized(page, page.locator("body"), "Test Admin orga@test.it Accepted 1")
     page.locator(".fa-edit").click()
 
     # Check result
@@ -249,10 +249,10 @@ def upload_membership(page: Any, live_server: Any) -> None:
     submit_confirm(page)
     go_to(page, live_server, "/membership")
 
-    expect_normalized(page, page.locator("#one"), "You are a regular member of our Organization")
-    expect_normalized(page, page.locator("#one"), "In the membership book the number of your membership card is: 0001")
+    expect_normalized(page, page.locator("body"), "You are a regular member of our Organization")
+    expect_normalized(page, page.locator("body"), "In the membership book the number of your membership card is: 0001")
     expect_normalized(page,
-        page.locator("#one"), "The payment of your membership fee for this year has NOT been receive"
+        page.locator("body"), "The payment of your membership fee for this year has NOT been receive"
     )
 
 
@@ -284,4 +284,4 @@ def upload_membership_fee(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check
-    expect_normalized(page, page.locator("#one"), "Test Admin orga@test.it Payed 1")
+    expect_normalized(page, page.locator("body"), "Test Admin orga@test.it Payed 1")

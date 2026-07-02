@@ -3769,9 +3769,6 @@ msgstr "Omröstningen är ännu inte inledd"
 msgid "Your character is"
 msgstr "Din karaktär är"
 
-msgid "Your registration"
-msgstr "Din registrering"
-
 msgid "already delivered"
 msgstr "redan levererat"
 

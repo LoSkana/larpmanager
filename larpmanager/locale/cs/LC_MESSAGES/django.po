@@ -3769,9 +3769,6 @@ msgstr "Hlasování ještě není otevřeno"
 msgid "Your character is"
 msgstr "Vaše postava je"
 
-msgid "Your registration"
-msgstr "Vaše registrace"
-
 msgid "already delivered"
 msgstr "již dodané"
 

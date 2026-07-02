@@ -67,7 +67,7 @@ def check_delete(live_server: Any, page: Any) -> None:
     # cancel signup
     go_to(page, live_server, "/test/manage/registrations")
     delete_modal(page)
-    expect(page.locator("#one")).not_to_contain_text("Admin Test")
+    expect(page.locator("body")).not_to_contain_text("Admin Test")
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
@@ -90,9 +90,9 @@ def discount(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#regs_u1_Participant"), "100")
     expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
     go_to(page, live_server, "/test/register")
-    page.locator("#one").get_by_role("link", name="Accounting").click()
+    page.locator("body").get_by_role("link", name="Accounting").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Total payments: 100")
+    expect_normalized(page, page.locator("body"), "Total payments: 100")
 
     # update signup
     go_to(page, live_server, "/test/register")
@@ -136,11 +136,11 @@ def discount(live_server: Any, page: Any) -> None:
 def pay(live_server: Any, page: Any) -> None:
     # check accounting
     go_to(page, live_server, "/test/register")
-    page.locator("#one").get_by_role("link", name="Accounting").click()
+    page.locator("body").get_by_role("link", name="Accounting").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
-    expect_normalized(page, page.locator("#one"), "Total payments: 48")
-    expect_normalized(page, page.locator("#one"), "Next payment: 52")
+    expect_normalized(page, page.locator("body"), "Total registration fee: 100")
+    expect_normalized(page, page.locator("body"), "Total payments: 48")
+    expect_normalized(page, page.locator("body"), "Next payment: 52")
     go_to(page, live_server, "/test/manage/registrations")
     page.get_by_role("link", name="accounting", exact=True).click()
     # Check for registration accounting data in the table
@@ -151,15 +151,15 @@ def pay(live_server: Any, page: Any) -> None:
 
     # pay
     go_to(page, live_server, "/accounting/registration/u1/")
-    expect_normalized(page, page.locator("#one"), "100")
-    expect_normalized(page, page.locator("#one"), "48")
-    expect_normalized(page, page.locator("#one"), "52")
+    expect_normalized(page, page.locator("body"), "100")
+    expect_normalized(page, page.locator("body"), "48")
+    expect_normalized(page, page.locator("body"), "52")
     page.get_by_role("cell", name="Wire", exact=True).click()
     submit(page)
     load_image(page, "#id_invoice")
     page.get_by_role("checkbox", name="Payment confirmation:").check()
 
-    expect_normalized(page, page.locator("#one"), "52")
+    expect_normalized(page, page.locator("body"), "52")
     submit(page)
 
     # confirm payment
@@ -226,14 +226,14 @@ def signup_pay(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register")
     submit_register(page)
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Provisional registration")
-    page.locator("#one").get_by_role("link", name="Accounting").click()
+    expect_normalized(page, page.locator("body"), "Provisional registration")
+    page.locator("body").get_by_role("link", name="Accounting").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("body"), "100")
 
     # Check accounting
     go_to(page, live_server, "/accounting")
-    expect_normalized(page, page.locator("#one"), "100")
+    expect_normalized(page, page.locator("body"), "100")
 
     # check pay
     go_to(page, live_server, "/test/register")
@@ -241,9 +241,9 @@ def signup_pay(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)
-    expect_normalized(page, page.locator("#one"), "100")
-    expect_normalized(page, page.locator("#one"), "test beneficiary")
-    expect_normalized(page, page.locator("#one"), "test iban")
+    expect_normalized(page, page.locator("body"), "100")
+    expect_normalized(page, page.locator("body"), "test beneficiary")
+    expect_normalized(page, page.locator("body"), "test iban")
 
 
 def setup_payment(live_server: Any, page: Any) -> None:

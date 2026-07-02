@@ -3769,9 +3769,6 @@ msgstr "Äänestys ei ole vielä avoinna"
 msgid "Your character is"
 msgstr "Hahmosi on"
 
-msgid "Your registration"
-msgstr "Ilmoittautumisesi"
-
 msgid "already delivered"
 msgstr "jo jaettu"
 

@@ -3769,9 +3769,6 @@ msgstr "Głosowanie nie jest jeszcze otwarte"
 msgid "Your character is"
 msgstr "Twoja postać to"
 
-msgid "Your registration"
-msgstr "Twoja rejestracja"
-
 msgid "already delivered"
 msgstr "już dostarczony"
 

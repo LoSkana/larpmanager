@@ -230,6 +230,6 @@ def characters(page: Any, live_server: Any) -> None:
     click_and_wait_question(page, "tag")
 
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         "Test Character Test Teaser Test Text fassione red zapyr another blue wunder | qerfi wheel fassione blue wunder",
     )

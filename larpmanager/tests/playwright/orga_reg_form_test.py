@@ -53,7 +53,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/manage")
     # check initial reg form
     sidebar(page, "Form")
-    expect_normalized(page, page.locator("#one"), "Ticket Your registration ticket Ticket")
+    expect_normalized(page, page.locator("body"), "Ticket Your registration ticket Ticket")
 
     # Add features
     sidebar(page, "Features")
@@ -73,7 +73,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         """
             Ticket Your registration ticket2 Ticket Additional Reserve additional tickets beyond your
             own Additional Optional Pay what you want Freely indicate the amount of your donation Pay
@@ -81,7 +81,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
              """
                       )
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
     "Rate Optional Surcharge Registration surcharge Surcharge Optional",
     )
     drag_reorder(
@@ -95,14 +95,14 @@ def prepare_form(page: Any, live_server: Any) -> None:
         page.locator('tr[id="u2"]').locator("xpath=preceding-sibling::tr[1]"),
     )
     expect_normalized(page,
-        page.locator("#one"),
+        page.locator("body"),
         """
             Additional Reserve additional tickets beyond your own Additional Optional Ticket Your
             registration ticket2 Ticket Rate Number of installments to split the fee: payments
         """
     )
     expect_normalized(page,
-          page.locator("#one"),
+          page.locator("body"),
         """
             Rate Optional Pay what you want Freely indicate the amount of your donation Pay what you want
             Optional Surcharge Registration surcharge Surcharge Optional
@@ -173,7 +173,7 @@ def signup(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
 
-    expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
+    expect_normalized(page, page.locator("body"), "you are about to make a payment of: 29 €")
 
     # check form
     sidebar(page, "Registration")

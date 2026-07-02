@@ -66,4 +66,4 @@ def test_delete_modal(pw_page: Any) -> None:
     url_before = page.url
     delete_modal(page, page.locator('#u2 .fa-trash'), name="Disposable Role")
     assert page.url == url_before
-    expect(page.locator("#one")).not_to_contain_text("Disposable Role")
+    expect(page.locator("body")).not_to_contain_text("Disposable Role")
