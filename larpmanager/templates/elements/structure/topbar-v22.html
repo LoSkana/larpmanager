@@ -79,7 +79,7 @@
         {% else %}
             {% if run %}
                 {% with current_event_role=event_role|get:run.event.slug %}
-                    {% if association_role or current_event_role %}
+                    {% if current_event_role %}
                         {% url 'manage' run.get_slug as admin_href %}
                         <div class="tv22-switch">
                             <span class="tv22-switch-opt active">{% trans "User" %}</span>

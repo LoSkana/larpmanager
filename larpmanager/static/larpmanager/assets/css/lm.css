@@ -4402,7 +4402,8 @@ body.association.new_v22 .user_resize {
     top: 0;
     left: auto;
     right: 0;
-    height: 88vh;
+    height: 89vh;
+    height: 89dvh;
     width: 70vw;
     border-radius: 8px 0 0 8px;
     opacity: 1;
@@ -4450,6 +4451,7 @@ body.association.new_v22 .user_resize {
     margin: 0 auto;
     border-radius: 5vw;
     height: 7vh;
+    height: 7dvh;
     border-top: 2px solid rgba(var(--pri-rgb), 0.085);
     border-bottom: none;
     padding: 0.5em 0.5em;
@@ -4511,6 +4513,7 @@ body.association.new_v22 .user_resize {
   .new_v22 #page-wrapper.topbar header,
   .new_v22 #page-wrapper.sidebar {
     margin-bottom: calc(7vh + 1em);
+    margin-bottom: calc(7dvh + 1em);
   }
 }
 
