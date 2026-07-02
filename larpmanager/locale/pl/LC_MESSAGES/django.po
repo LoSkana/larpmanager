@@ -3289,9 +3289,6 @@ msgstr "Priorytet odlewania"
 msgid "Character Config"
 msgstr "Konfiguracja postaci"
 
-msgid "Character Number"
-msgstr "Numer postaci"
-
 msgid "Character review"
 msgstr "Przegląd postaci"
 

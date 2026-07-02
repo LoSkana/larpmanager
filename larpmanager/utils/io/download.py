@@ -404,7 +404,7 @@ def _row_header(  # noqa: C901, PLR0912
 
     # Add character number column if writing_number config is enabled
     if model == "character" and get_event_config(context["event"].id, "writing_number", default_value=False):
-        header_columns.append(_("Character Number"))
+        header_columns.append("number")
         row_values.append(el.number)
 
     # Add participant and email columns for registrations

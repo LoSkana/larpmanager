@@ -3289,9 +3289,6 @@ msgstr "Priorita obsazování"
 msgid "Character Config"
 msgstr "Konfigurace postavy"
 
-msgid "Character Number"
-msgstr "Číslo postavy"
-
 msgid "Character review"
 msgstr "Recenze postavy"
 

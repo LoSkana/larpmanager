@@ -3289,9 +3289,6 @@ msgstr "Voorrang bij het gieten"
 msgid "Character Config"
 msgstr "Karakter configureren"
 
-msgid "Character Number"
-msgstr "Teken nummer"
-
 msgid "Character review"
 msgstr "Karakter recensie"
 

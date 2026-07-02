@@ -3289,9 +3289,6 @@ msgstr "Priorität des Gießens"
 msgid "Character Config"
 msgstr "Zeichen-Konfiguration"
 
-msgid "Character Number"
-msgstr "Zeichenzahl"
-
 msgid "Character review"
 msgstr "Überprüfung des Charakters"
 

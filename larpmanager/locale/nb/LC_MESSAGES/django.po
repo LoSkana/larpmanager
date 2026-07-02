@@ -3289,9 +3289,6 @@ msgstr "Prioritet ved støping"
 msgid "Character Config"
 msgstr "Tegnkonfigurasjon"
 
-msgid "Character Number"
-msgstr "Tegnnummer"
-
 msgid "Character review"
 msgstr "Karaktergjennomgang"
 

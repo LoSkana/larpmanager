@@ -3289,9 +3289,6 @@ msgstr "Hahmojaon prioriteetti"
 msgid "Character Config"
 msgstr "Hahmon konfigurointi"
 
-msgid "Character Number"
-msgstr "Hahmon numero"
-
 msgid "Character review"
 msgstr "Hahmon tarkastelu"
 

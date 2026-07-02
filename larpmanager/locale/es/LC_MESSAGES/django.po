@@ -3289,9 +3289,6 @@ msgstr "Prioridad de asignación"
 msgid "Character Config"
 msgstr "Configuración de caracteres"
 
-msgid "Character Number"
-msgstr "Número de personaje"
-
 msgid "Character review"
 msgstr "Revisión de personajes"
 
