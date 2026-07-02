@@ -101,7 +101,7 @@ class OrgaInventoryTypeForm(BaseModelForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Text to stop fighting the linter."""
+        """Initialize the form and configure pool label selection for this event."""
         super().__init__(*args, **kwargs)
         event = getattr(self.instance, "event", None) or self.params.get("event", None)
         if event:

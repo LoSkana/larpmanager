@@ -757,17 +757,17 @@ class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
         }
 
 
-class EventPoolLabelS2(s2forms.ModelSelect2MultipleWidget):
-    """Represents EventPoolLabelS2 model."""
+class EventPoolLabelS2:
+    """Select2 mixin for pool labels scoped to an event."""
 
     search_fields: ClassVar[list] = ["name__icontains"]
 
     def set_event(self, event: Event) -> None:
-        """Setter."""
+        """Set the event for this instance."""
         self.event = event
 
     def get_queryset(self) -> QuerySet:
-        """Getter."""
+        """Return queryset of event pool labels ordered by number."""
         return self.event.get_elements(PoolLabel).order_by("number")
 
 
@@ -775,17 +775,17 @@ class EventPoolLabelS2WidgetMulti(EventPoolLabelS2, s2forms.ModelSelect2Multiple
     """Multi-select widget for pool labels scoped to an event."""
 
 
-class EventPoolTypeS2(s2forms.ModelSelect2MultipleWidget):
-    """Widget."""
+class EventPoolTypeS2:
+    """Select2 mixin for pool types scoped to an event."""
 
     search_fields: ClassVar[list] = ["name__icontains"]
 
     def set_event(self, event: Event) -> None:
-        """Setter."""
+        """Set the event for this instance."""
         self.event = event
 
     def get_queryset(self) -> QuerySet:
-        """Getter."""
+        """Return queryset of event pool types ordered by number."""
         return self.event.get_elements(PoolType).order_by("number")
 
 
