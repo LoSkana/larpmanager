@@ -7541,6 +7541,9 @@ msgstr "Je bent nu ingelogd met de account van de gedelegeerde"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Je bent doorgestuurd naar het Event Dashboard"
 
+msgid "Access the pages to manage each different aspect"
+msgstr "Ga naar de pagina’s om de verschillende aspecten te beheren"
+
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Krijg toegang tot je personage <a href='%(url)s'>hier</a>"
@@ -8100,9 +8103,6 @@ msgstr "Er zijn nog geen inschrijvingen ontvangen voor dit evenement"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kun je relaties toevoegen wanneer je een personage bewerkt"
-
-msgid "Open or close the sidebar to navigate management pages"
-msgstr "Open of sluit de zijbalk om door beheerpagina's te navigeren"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr ""

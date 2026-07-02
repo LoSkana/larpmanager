@@ -29,8 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
-                                     check_feature,
+from larpmanager.tests.utils import (check_feature,
                                      expect_normalized,
                                      fill_tinymce,
                                      go_to,
@@ -135,8 +134,11 @@ def excel(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     fill_tinymce(edit_iframe, "id_text", "ciaoooo")
 
-    page.locator('body').press("ControlOrMeta+s")
-    just_wait(page)
+    with page.expect_response(
+        lambda r: r.request.method == "POST" and "ajax=1" in (r.request.post_data or "")
+    ) as save_response:
+        page.locator('body').press("ControlOrMeta+s")
+    assert save_response.value.ok
 
     # check by reload
     page.reload()

@@ -4316,6 +4316,10 @@ body.association.new_v22 .user_resize {
 
 /**** Menu navigation mobile ****/
 
+.new_v22 #menu-mobile {
+  display: none;
+}
+
 @media (max-width: 840px) {
   .new_v22 #sidebar {
     display: flex;
@@ -4413,6 +4417,7 @@ body.association.new_v22 .user_resize {
     left: 0;
     vertical-align: middle;
     z-index: 10;
+    display: initial;
   }
 
   .new_v22 #menu-mobile table {

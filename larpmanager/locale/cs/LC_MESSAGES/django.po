@@ -7525,6 +7525,9 @@ msgstr "Nyní jste přihlášeni pomocí účtu delegáta"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Byli jste přesměrováni na panel událostí"
 
+msgid "Access the pages to manage each different aspect"
+msgstr "Otevřete stránky, kde můžete spravovat jednotlivé aspekty"
+
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>"
@@ -8068,10 +8071,6 @@ msgstr "Na tuto akci zatím nebyly přijaty žádné registrace"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nyní můžete při úpravě postavy přidávat vztahy"
-
-msgid "Open or close the sidebar to navigate management pages"
-msgstr ""
-"Otevření nebo zavření postranního panelu pro navigaci na stránky správy"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Sledování množství není pro tuto organizaci povoleno"

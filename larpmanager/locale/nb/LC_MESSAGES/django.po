@@ -7529,6 +7529,9 @@ msgstr "Du er nå logget inn med delegatkontoen"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Du har blitt videresendt til Event Dashboard"
 
+msgid "Access the pages to manage each different aspect"
+msgstr "Gå til sidene for å administrere de ulike områdene"
+
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "Få tilgang til karakteren din <a href='%(url)s'>her</a>"
@@ -8084,9 +8087,6 @@ msgstr "Ingen påmeldinger er mottatt til dette arrangementet ennå"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Nå kan du legge til relasjoner når du redigerer et tegn"
-
-msgid "Open or close the sidebar to navigate management pages"
-msgstr "Åpne eller lukk sidefeltet for å navigere på administrasjonssidene"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Mengdesporing er ikke aktivert for denne organisasjonen"

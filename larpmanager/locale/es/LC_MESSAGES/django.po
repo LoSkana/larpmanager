@@ -7536,6 +7536,10 @@ msgstr "Ahora ha iniciado sesión con la cuenta de delegado"
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Ha sido redirigido al Panel de Eventos"
 
+msgid "Access the pages to manage each different aspect"
+msgstr ""
+"Accede a las páginas para gestionar cada uno de los distintos aspectos"
+
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>"
 msgstr "¡Accede a tu personaje <a href='%(url)s'>aquí</a>"
@@ -8094,10 +8098,6 @@ msgstr "Aún no se han recibido inscripciones para este acto"
 
 msgid "Now you can add relationships when editing a character"
 msgstr "Ahora puedes añadir relaciones al editar un personaje"
-
-msgid "Open or close the sidebar to navigate management pages"
-msgstr ""
-"Abre o cierra la barra lateral para navegar por las páginas de gestión"
 
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "El seguimiento de cantidades no está activado para esta organización"
