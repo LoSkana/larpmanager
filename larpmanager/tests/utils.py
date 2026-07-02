@@ -92,8 +92,10 @@ def go_to(page: Any, live_server: Any, path: Any) -> None:
 
 
 def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
-    page.wait_for_load_state("networkidle", timeout=timeout)
-    page.wait_for_load_state("load", timeout=timeout)
+    # Playwright's click/goto already wait for initiated navigations to commit,
+    # so the readiness flags below always refer to the new document; the flags
+    # cover everything networkidle used to (datatables/question ajax) without
+    # its mandatory 500ms of network silence.
     page.wait_for_load_state("domcontentloaded", timeout=timeout)
 
     page.wait_for_function("() => window._lmReady === true", timeout=timeout)

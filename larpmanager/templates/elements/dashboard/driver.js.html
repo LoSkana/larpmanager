@@ -4,7 +4,7 @@
 {% trans "You have been redirected to the Event Dashboard" as first_event_intro %}
 {% trans "Switch between Organization and Events management" as select_workspace %}
 {% trans "Toggle between administrative backend and public-facing pages" as select_side %}
-{% trans "Open or close the sidebar to navigate management pages" as select_sidebar %}
+{% trans "Access the pages to manage each different aspect" as select_sidebar %}
 {% trans "Complete the setup to unlock full platform features" as lite_mode %}
 {% trans "The sidebar has expanded. New menus will continue to appear as you activate additional modules" as advanced_unlock %}
 {% trans "Enable specific features to add specialized functionalities to the platform" as features_sugg %}
@@ -48,10 +48,14 @@ window.addEventListener('DOMContentLoaded', function() {
     function driverFirstEvent() {
         const driver = window.driver.js.driver;
 
-        function visibleEl(desktopId, mobileId) {
-            if ($('#topbar-mobile').is(':visible'))
-                return '#' + mobileId;
-            return '#' + desktopId;
+        function ensureTopbarVisible(element) {
+            if ($('#topbar-mobile-v22').is(':visible') && !$('#topbar').hasClass('mobile-visible'))
+                $('#topbar-mobile-v22').trigger('click');
+        }
+
+        function ensureSidebarVisible(element) {
+            if ($('#sidebar-mobile-v22').is(':visible') && !$('#sidebar').hasClass('mobile-visible'))
+                $('#sidebar-mobile-v22').trigger('click');
         }
 
         let steps = [
@@ -62,7 +66,8 @@ window.addEventListener('DOMContentLoaded', function() {
             }
           },
           {
-            element: visibleEl('tv22-user-pills', 'select_workspace_mobile'),
+            element: '#tv22-user-pills',
+            onHighlightStarted: ensureTopbarVisible,
             popover: {
               title: '{% filter escapejs %}{% trans "Workspace selector" %}{% endfilter %}',
               description: '{{ select_workspace | escapejs }}',
@@ -71,7 +76,8 @@ window.addEventListener('DOMContentLoaded', function() {
             }
           },
           {
-            element: visibleEl('tv22-switch', 'select_side_mobile'),
+            element: '#tv22-switch',
+            onHighlightStarted: ensureTopbarVisible,
             popover: {
               title: '{% filter escapejs %}{% trans "View Selector" %}{% endfilter %}',
               description: '{{ select_side | escapejs }}',
@@ -79,21 +85,18 @@ window.addEventListener('DOMContentLoaded', function() {
               align: 'start'
             }
           },
-        ];
 
-        const sidebarEl = visibleEl('sidebar-open', 'sidebar-mobile-open');
-        const sidebarElObj = document.querySelector(sidebarEl);
-        if (sidebarElObj && sidebarElObj.offsetParent !== null) {
-            steps.push({
-                element: sidebarEl,
-                popover: {
-                    title: '{% filter escapejs %}{% trans "Sidebar" %}{% endfilter %}',
-                    description: '{{ select_sidebar | escapejs }}',
-                    side: 'bottom',
-                    align: 'start'
-                }
-            });
-        }
+          {
+            element: '#sidebar .inner',
+            onHighlightStarted: ensureSidebarVisible,
+            popover: {
+              title: '{% filter escapejs %}{% trans "Sidebar" %}{% endfilter %}',
+              description: '{{ select_sidebar | escapejs }}',
+              side: 'bottom',
+              align: 'start'
+            }
+          },
+        ];
 
         steps.push({
             element: '#lite-mode',
@@ -109,6 +112,9 @@ window.addEventListener('DOMContentLoaded', function() {
             allowClose: true,
             popoverClass: 'my-driverjs',
             doneBtnText: '{% filter escapejs %}{% trans "Done" %}{% endfilter %}',
+            onDestroyed: function() {
+                $('#sidebar, #topbar').removeClass('mobile-visible');
+            },
         });
 
         driverObj.drive();
