@@ -34,7 +34,7 @@
                 {% for vrun in visible_runs %}
                     <a class="tv22-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
                        href="{% url 'event_redirect' event_slug=vrun.slug %}">
-                        {% if vrun.get_cover_url %}<img class="tv22-pill-img" src="{{ vrun.get_cover_url }}" alt="">{% endif %}
+                        {% if vrun.cover_url %}<img class="tv22-pill-img" src="{{ vrun.cover_url }}" alt="">{% endif %}
                         {{ vrun.name }}
                     </a>
                 {% endfor %}
