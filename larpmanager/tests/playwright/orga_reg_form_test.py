@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, \
+from larpmanager.tests.utils import fill_date, go_to, login_orga, expect_normalized, submit_confirm, sidebar, \
     get_modal_iframe, save_modal, drag_reorder
 
 pytestmark = pytest.mark.e2e
@@ -134,9 +134,7 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("5")
-    edit_iframe.locator("#id_date").fill("2024-06-11")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_date").click()
+    fill_date(edit_iframe, "#id_date", "2024-06-11")
     save_modal(page, edit_iframe)
 
     # set up payments

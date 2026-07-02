@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (submit_register,
                                      get_modal_iframe,
                                      go_to,
                                      go_to_check,
-                                     just_wait,
+                                     _wait_lm_ready,
                                      login_orga,
                                      submit_confirm, save_modal,
                                      )
@@ -153,7 +153,7 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     # As player (orga user, who has Test Character assigned), add a player relationship
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name="Relationships").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_target-container").click()

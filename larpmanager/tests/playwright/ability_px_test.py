@@ -39,7 +39,6 @@ from larpmanager.tests.utils import (
     get_modal_iframe,
     get_request,
     go_to,
-    just_wait,
     login_orga,
     new_option,
     save_modal,
@@ -251,8 +250,8 @@ def rules(page: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("row", name="Abilities").get_by_role("link").click()
-    just_wait(page)
     btn = edit_iframe.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
+    btn.wait_for(state="attached")
     btn.evaluate("el => el.click()")
     save_modal(page, edit_iframe)
 

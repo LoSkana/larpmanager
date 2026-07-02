@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
+from larpmanager.tests.utils import get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
     submit_register, delete_modal, \
     expect_normalized, save_modal, wait_accounting_load, _wait_lm_ready, SHORT_TIMEOUT
 
@@ -123,7 +123,6 @@ def discount(live_server: Any, page: Any) -> None:
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
     page.locator("#discount_go").click()
-    just_wait(page)
     expect_normalized(page,
         page.locator("#discount_res"),
         "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed",
@@ -131,7 +130,6 @@ def discount(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#discount_tbl"), "20.00€")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 80€.")
-    just_wait(page)
     page.locator("#register_go").click()
 
 

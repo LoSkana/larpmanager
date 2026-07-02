@@ -28,10 +28,26 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm, \
+from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized, submit_confirm, \
     sidebar, get_modal_iframe, save_modal, _wait_select2_results, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
+
+
+def _expect_assignment_save(page: Any, idx: str = None):
+    """Wait for the debounced item-assignment autosave POST triggered by the wrapped action.
+
+    idx: optional row id to match against the posted payload, so a save from
+    another row edited just before does not satisfy the wait."""
+
+    def _is_save(response):
+        if response.request.method != "POST" or "assignment" not in response.url:
+            return False
+        if idx is not None and f"idx={idx}" not in (response.request.post_data or ""):
+            return False
+        return response.ok
+
+    return page.expect_response(_is_save)
 
 
 def test_warehouse(pw_page: Any) -> None:
@@ -221,12 +237,13 @@ def area_assigmenents(page: Any) -> None:
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
     page.locator(".selected").first.click()
     page.locator('[id="u3"]').get_by_role("textbox").click()
-    page.locator('[id="u3"]').get_by_role("textbox").fill("sss")
+    with _expect_assignment_save(page, "u3"):
+        page.locator('[id="u3"]').get_by_role("textbox").fill("sss")
     page.locator('[id="u1"] > .selected').click()
     page.locator('[id="u1"]').get_by_role("textbox").click()
-    page.locator('[id="u1"]').get_by_role("textbox").fill("ffff")
+    with _expect_assignment_save(page, "u1"):
+        page.locator('[id="u1"]').get_by_role("textbox").fill("ffff")
     page.get_by_role("cell", name="ffff").get_by_role("textbox").click()
-    just_wait(page)
 
     # check
     page.get_by_role("link", name="Area").click()
@@ -245,9 +262,10 @@ def area_assigmenents(page: Any) -> None:
     page.get_by_role("link", name="Area").click()
     page.locator('[id="u1"]').get_by_role("link", name="Item assignments").click()
     page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").click()
-    page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").fill("b")
-    page.locator('[id="u1"] > .selected').click()
-    just_wait(page)
+    with _expect_assignment_save(page):
+        page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").fill("b")
+    with _expect_assignment_save(page, "u1"):
+        page.locator('[id="u1"] > .selected').click()
 
 
 def checks(page: Any) -> None:
