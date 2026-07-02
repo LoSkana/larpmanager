@@ -175,9 +175,7 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Test Character's Crafting Inventory")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     edit_iframe.locator("#id_inventory_type").select_option(label="Crafting Type")
     save_modal(page, edit_iframe)
 
@@ -185,9 +183,7 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Test Character's Secrets")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     edit_iframe.locator("#id_inventory_type").select_option(label="Secrets Type")
     save_modal(page, edit_iframe)
 
