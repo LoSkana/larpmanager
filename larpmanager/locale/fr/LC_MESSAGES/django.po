@@ -3289,6 +3289,9 @@ msgstr "Priorité au casting"
 msgid "Character Config"
 msgstr "Configuration des caractères"
 
+msgid "Character Number"
+msgstr "Numéro de personnage"
+
 msgid "Character review"
 msgstr "Revue des personnages"
 

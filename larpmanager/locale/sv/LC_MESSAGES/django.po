@@ -3289,6 +3289,9 @@ msgstr "Prioritet för gjutning"
 msgid "Character Config"
 msgstr "Teckenkonfiguration"
 
+msgid "Character Number"
+msgstr "Teckenantal"
+
 msgid "Character review"
 msgstr "Karaktärsbedömning"
 

@@ -341,8 +341,8 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
         # Handle mapped question types (direct element attributes)
         if question["typ"] in question_type_mapping:
             cell_value = question_type_mapping[question["typ"]]()
-        # Handle text-based question types (paragraph, text, email)
-        elif question["typ"] in {"p", "t", "e"}:
+        # Handle text-based question types (paragraph, text, email, computed)
+        elif question["typ"] in {"p", "t", "e", "c"}:
             if element.id in question_answers.get(question["id"], {}):
                 cell_value = question_answers[question["id"]][element.id]
         # Handle choice-based question types (single, multiple)
@@ -360,7 +360,7 @@ def _get_applicable_row(context: dict, element: object, model: str, *, member_co
     return row_values, column_headers
 
 
-def _row_header(  # noqa: C901
+def _row_header(  # noqa: C901, PLR0912
     context: dict,
     el: object,
     header_columns: list,
@@ -401,6 +401,11 @@ def _row_header(  # noqa: C901
         if member and member.profile:
             profile_url = member.profile_thumb.url
         row_values.append(profile_url)
+
+    # Add character number column if writing_number config is enabled
+    if model == "character" and get_event_config(context["event"].id, "writing_number", default_value=False):
+        header_columns.append(_("Character Number"))
+        row_values.append(el.number)
 
     # Add participant and email columns for registrations
     if model in ["registration"]:

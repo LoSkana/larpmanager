@@ -11018,6 +11018,9 @@ msgid ""
 "multiple-choice question"
 msgstr ""
 
+msgid "Character Number"
+msgstr ""
+
 msgid "Options price"
 msgstr ""
 
