@@ -1,4 +1,5 @@
 {% load i18n static %}
+{% load show_tags %}
 <div id="topbar" class="topbar_v22">
     <button class="tv22-scroll-btn tv22-scroll-left"
             aria-label="{% trans "Scroll left" %}">
@@ -12,6 +13,12 @@
                        href="{% url 'manage' %}">
                         {% if association.favicon %}<img class="tv22-pill-img" src="{{ association.favicon }}" alt="">{% endif %}
                         {{ association.name }}
+                    </a>
+                {% endif %}
+                {% if run and run.id not in open_runs %}
+                    <a class="tv22-pill active" href="{% url 'manage' run.get_slug %}">
+                        {% if run.get_cover_url %}<img class="tv22-pill-img" src="{{ run.get_cover_url }}" alt="">{% endif %}
+                        {{ run }}
                     </a>
                 {% endif %}
                 {% for id, open_run in open_runs.items %}
@@ -71,14 +78,22 @@
             </div>
         {% else %}
             {% if run %}
-                {% url 'manage' run.get_slug as admin_href %}
-            {% else %}
+                {% with current_event_role=event_role|get:run.event.slug %}
+                    {% if association_role or current_event_role %}
+                        {% url 'manage' run.get_slug as admin_href %}
+                        <div class="tv22-switch">
+                            <span class="tv22-switch-opt active">{% trans "User" %}</span>
+                            <a class="tv22-switch-opt" href="{{ admin_href }}">{% trans "Admin" %}</a>
+                        </div>
+                    {% endif %}
+                {% endwith %}
+            {% elif association_role %}
                 {% url 'manage' as admin_href %}
+                <div class="tv22-switch">
+                    <span class="tv22-switch-opt active">{% trans "User" %}</span>
+                    <a class="tv22-switch-opt" href="{{ admin_href }}">{% trans "Admin" %}</a>
+                </div>
             {% endif %}
-            <div class="tv22-switch">
-                <span class="tv22-switch-opt active">{% trans "User" %}</span>
-                <a class="tv22-switch-opt" href="{{ admin_href }}">{% trans "Admin" %}</a>
-            </div>
         {% endif %}
     {% endif %}
 </div>
