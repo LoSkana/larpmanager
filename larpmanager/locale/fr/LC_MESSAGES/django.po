@@ -8555,11 +8555,6 @@ msgstr "Paiements déjà reçus : <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "Pourcentage de TVA à calculer sur le seul coût du billet"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr ""
-"Configuration de la création et de l'édition des personnages des "
-"participants"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr ""
 "La question de la visibilité aux participants, les valeurs autorisées sont"
@@ -8843,6 +8838,10 @@ msgstr ""
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Gérer l'attribution des badges aux participants de cet événement"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr ""
+"Nombre maximal de personnages que le joueur peut créer (par défaut = 1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -11085,13 +11084,6 @@ msgid ""
 msgstr ""
 "Dans l'événement <b>%(event)s</b>, le personnage suivant vous a été attribué"
 " : <b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Nombre maximum de personnages que le joueur peut créer (par défaut=0, aucune"
-" création autorisée)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "

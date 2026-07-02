@@ -735,6 +735,38 @@ th select {
   }
 }
 
+.new_v22 .discount_input_row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.5em;
+  margin: 1em 0;
+}
+
+.new_v22 .discount_input_row #id_discount {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 0.3em;
+}
+
+.new_v22 .discount_input_row #discount_go {
+  flex: 0 0 auto;
+  width: auto !important;
+  max-width: initial !important;
+}
+
+@media (max-width: 600px) {
+  .new_v22 .discount_input_row {
+    flex-wrap: wrap;
+  }
+
+  .new_v22 .discount_input_row input {
+    width: 100%;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    DataTables
    --------------------------------------------------------------------------- */

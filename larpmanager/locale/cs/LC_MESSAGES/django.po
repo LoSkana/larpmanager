@@ -8424,9 +8424,6 @@ msgstr "Již přijaté platby: <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "Procento DPH, které se vypočítá pouze z ceny letenky"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr "Nastavení konfigurace tvorby/úpravy postavy účastníka"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "Zviditelnění otázky pro účastníky, povolené hodnoty jsou"
 
@@ -8659,6 +8656,9 @@ msgstr "Uveďte své zákonné pohlaví, jak je uvedeno v úředních dokumentec
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Správa přidělení tokenů účastníkům této akce"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr "Maximální počet znaků, které může hráč vytvořit (výchozí hodnota = 1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Jména osob nebo týmů, které tuto akci organizují a řídí"
@@ -10613,13 +10613,6 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "V události <b>%(event)s</b> vám byla přiřazena postava: <b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Maximální počet postav, které může hráč vytvořit (výchozí=0, vytváření "
-"postav není povoleno)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "

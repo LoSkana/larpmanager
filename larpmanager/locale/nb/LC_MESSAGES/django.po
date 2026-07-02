@@ -8449,10 +8449,6 @@ msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr ""
 "Prosentandel av merverdiavgift som skal beregnes på billettprisen alene"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr ""
-"Konfigurer konfigurasjon for oppretting/redigering av deltakerkarakterer"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "Spørsmålet er synlig for deltakerne, tillatte verdier er"
 
@@ -8701,6 +8697,9 @@ msgstr "Oppgi ditt juridiske kjønn slik det fremgår av offisielle dokumenter"
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""
 "Administrer tildeling av adgangskoder til deltakerne på dette arrangementet"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr "Maksimalt antall tegn spilleren kan opprette (standard=1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -10752,13 +10751,6 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "I hendelsen <b>%(event)s</b> ble du tildelt tegnet: <b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Maksimalt antall karakterer spilleren kan opprette (standard=0, ingen "
-"opprettelse tillatt)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "

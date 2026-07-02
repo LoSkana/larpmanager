@@ -8429,9 +8429,6 @@ msgstr "Redan mottagna betalningar: <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "Procentandel av momsen som ska beräknas enbart på biljettpriset"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr "Konfigurera deltagarens karaktärsskapande/-redigering"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "Frågan synliggörs för deltagarna, tillåtna värden är"
 
@@ -8680,6 +8677,9 @@ msgstr "Ange ditt juridiska kön så som det framgår av officiella dokument"
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""
 "Hantera tilldelningen av deltagarkoder till deltagarna i detta evenemang"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr "Högsta antal tecken som spelaren kan skapa (standardvärde=1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Namn på de personer eller team som organiserar och driver evenemanget"
@@ -10741,13 +10741,6 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "I händelsen <b>%(event)s</b> tilldelades du karaktären: <b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Maximalt antal karaktärer som spelaren kan skapa (standard=0, ingen skapelse"
-" tillåten)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "

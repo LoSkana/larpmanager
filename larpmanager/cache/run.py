@@ -177,7 +177,7 @@ def init_cache_config_run(run: Run) -> dict:
     }
     configs = [
         ("limitations", "show_limitations", event_id, False),
-        ("user_character_max", "user_character_max", event_id, 0),
+        ("user_character_max", "user_character_max", event_id, 1),
         ("cover_orig", "cover_orig", event_id, False),
         ("exp_user", "exp_user", parent_id, False),
     ]

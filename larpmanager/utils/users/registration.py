@@ -754,7 +754,7 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
     current_character_count = characters.exclude(id__in=inactive_character_ids).count()
 
     # Get the maximum allowed characters from event configuration
-    maximum_characters_allowed = int(get_event_config(event.id, "user_character_max", default_value=0))
+    maximum_characters_allowed = int(get_event_config(event.id, "user_character_max", default_value=1))
 
     # Return whether limit is reached and the maximum allowed
     return current_character_count >= maximum_characters_allowed, maximum_characters_allowed
@@ -1056,7 +1056,7 @@ def check_assign_character(context: dict) -> None:
         return
 
     # Get the maximum number of characters a user can have assigned
-    user_character_max = max(1, int(get_event_config(context["event"].id, "user_character_max", default_value=0)))
+    user_character_max = max(1, int(get_event_config(context["event"].id, "user_character_max", default_value=1)))
 
     # Get currently assigned character IDs for this registration
     assigned_character_ids = set(registration.rcrs.values_list("character_id", flat=True))
