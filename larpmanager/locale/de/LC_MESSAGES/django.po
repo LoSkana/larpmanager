@@ -14,9 +14,6 @@ msgstr "Weiter"
 msgid "Hi"
 msgstr "Hallo"
 
-msgid "No"
-msgstr "Nein"
-
 msgid "To"
 msgstr "A"
 
@@ -82,9 +79,6 @@ msgstr "MEHRWERTSTEUER"
 
 msgid "Who"
 msgstr "Wer"
-
-msgid "Yes"
-msgstr "Ja"
 
 msgid "age"
 msgstr "Alter"
@@ -645,6 +639,9 @@ msgstr "einladen"
 
 msgid "Joined"
 msgstr "Beitritt"
+
+msgid "Labels"
+msgstr "Etiketten"
 
 msgid "Legend"
 msgstr "Legende"
@@ -2985,9 +2982,6 @@ msgstr "Erstattungsanträge"
 
 msgid "Request signed"
 msgstr "Unterzeichneter Antrag"
-
-msgid "Restrict pools"
-msgstr "Pools einschränken"
 
 msgid "Returning type"
 msgstr "Art der Rückgabe"

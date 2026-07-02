@@ -14,9 +14,6 @@ msgstr "Gå"
 msgid "Hi"
 msgstr "Hej"
 
-msgid "No"
-msgstr "Nej"
-
 msgid "To"
 msgstr "A"
 
@@ -82,9 +79,6 @@ msgstr "MOMS"
 
 msgid "Who"
 msgstr "Vem"
-
-msgid "Yes"
-msgstr "Ja"
 
 msgid "age"
 msgstr "ålder"
@@ -645,6 +639,9 @@ msgstr "Inbjudan"
 
 msgid "Joined"
 msgstr "Ansluten"
+
+msgid "Labels"
+msgstr "Etiketter"
 
 msgid "Legend"
 msgstr "Legend"
@@ -2985,9 +2982,6 @@ msgstr "Begäran om återbetalning"
 
 msgid "Request signed"
 msgstr "Undertecknad begäran"
-
-msgid "Restrict pools"
-msgstr "Begränsa pooler"
 
 msgid "Returning type"
 msgstr "Typ av retur"

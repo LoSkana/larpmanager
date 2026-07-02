@@ -31,20 +31,14 @@ class InventoryType(UuidMixin, BaseConceptModel):
     """Inventory type for character inventories.
 
     Defines which pool types are available for inventories of this type.
-    When restrict_pools is False (default), all pool types are shown regardless
-    of the pool_types M2M
+    When no labels are selected, all pool types are shown.
     """
-
-    restrict_pools = models.BooleanField(
-        default=False,
-        help_text="If enabled, only pool types belonging to the selected labels will appear in inventories of this type.",
-    )
 
     labels = models.ManyToManyField(
         "PoolLabel",
         related_name="inventory_types",
         blank=True,
-        help_text="Labels whose pool types are available to inventories of this type (only used when restrict_pools is enabled).",
+        help_text="Labels whose pool types are available to inventories of this type. If empty, all pool types are shown.",
     )
 
     class Meta(BaseConceptModel.Meta):
@@ -73,15 +67,16 @@ class Inventory(UuidMixin, BaseConceptModel):
 
         Rules:
         - No type assigned, all pool types for the event (legacy behaviour).
-        - Type assigned, restrict_pools=False, all pool types (safe default).
-        - Type assigned, restrict_pools=True, only the type's explicit pool_types.
+        - Type assigned, no labels selected, all pool types (safe default).
+        - Type assigned, labels selected, only pool types belonging to those labels.
         """
         all_pools = self.event.get_elements(PoolType).order_by("number")
         if self.inventory_type_id is None:
             return all_pools
-        if not self.inventory_type.restrict_pools:
+        labels = self.inventory_type.labels.all()
+        if not labels:
             return all_pools
-        allowed_ids = PoolType.objects.filter(labels__in=self.inventory_type.labels.all()).values_list("id", flat=True)
+        allowed_ids = PoolType.objects.filter(labels__in=labels).values_list("id", flat=True)
         return all_pools.filter(id__in=allowed_ids)
 
     def get_pool_balances(self) -> list[dict[str, Any]]:

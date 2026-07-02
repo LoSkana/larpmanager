@@ -14,9 +14,6 @@ msgstr "Vaya a"
 msgid "Hi"
 msgstr "Hola"
 
-msgid "No"
-msgstr "No"
-
 msgid "To"
 msgstr "A"
 
@@ -82,9 +79,6 @@ msgstr "IVA"
 
 msgid "Who"
 msgstr "Quién"
-
-msgid "Yes"
-msgstr "Sí"
 
 msgid "age"
 msgstr "edad"
@@ -645,6 +639,9 @@ msgstr "Invita a"
 
 msgid "Joined"
 msgstr "Se unió a"
+
+msgid "Labels"
+msgstr "Etiquetas"
 
 msgid "Legend"
 msgstr "Leyenda"
@@ -2985,9 +2982,6 @@ msgstr "Solicitudes de devolución"
 
 msgid "Request signed"
 msgstr "Solicitud firmada"
-
-msgid "Restrict pools"
-msgstr "Restringir grupos"
 
 msgid "Returning type"
 msgstr "Tipo de devolución"

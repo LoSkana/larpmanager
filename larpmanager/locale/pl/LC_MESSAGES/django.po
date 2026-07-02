@@ -14,9 +14,6 @@ msgstr "Idź"
 msgid "Hi"
 msgstr "Cześć"
 
-msgid "No"
-msgstr "Nie"
-
 msgid "To"
 msgstr "Do"
 
@@ -82,9 +79,6 @@ msgstr "VAT"
 
 msgid "Who"
 msgstr "Kto"
-
-msgid "Yes"
-msgstr "Tak"
 
 msgid "age"
 msgstr "wiek"
@@ -645,6 +639,9 @@ msgstr "Zaproszenie"
 
 msgid "Joined"
 msgstr "Połączony"
+
+msgid "Labels"
+msgstr "Etykiety"
 
 msgid "Legend"
 msgstr "Legenda"
@@ -2985,9 +2982,6 @@ msgstr "Żądanie zwrotu pieniędzy"
 
 msgid "Request signed"
 msgstr "Wniosek podpisany"
-
-msgid "Restrict pools"
-msgstr "Ogranicz puli"
 
 msgid "Returning type"
 msgstr "Typ zwrotu"

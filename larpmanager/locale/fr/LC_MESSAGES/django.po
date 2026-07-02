@@ -14,9 +14,6 @@ msgstr "Aller"
 msgid "Hi"
 msgstr "Bonjour"
 
-msgid "No"
-msgstr "Non"
-
 msgid "To"
 msgstr "A"
 
@@ -82,9 +79,6 @@ msgstr "TVA"
 
 msgid "Who"
 msgstr "Qui"
-
-msgid "Yes"
-msgstr "Oui"
 
 msgid "age"
 msgstr "âge"
@@ -645,6 +639,9 @@ msgstr "Invite"
 
 msgid "Joined"
 msgstr "Rejoint"
+
+msgid "Labels"
+msgstr "Étiquettes"
 
 msgid "Legend"
 msgstr "Légende "
@@ -2985,9 +2982,6 @@ msgstr "Demandes de remboursement"
 
 msgid "Request signed"
 msgstr "Demande signée"
-
-msgid "Restrict pools"
-msgstr "Limiter les groupes"
 
 msgid "Returning type"
 msgstr "Type de retour"

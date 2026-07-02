@@ -8490,13 +8490,7 @@ msgstr ""
 msgid "This page summarizes the types of character inventories"
 msgstr ""
 
-msgid "Restrict pools"
-msgstr ""
-
-msgid "Yes"
-msgstr ""
-
-msgid "No"
+msgid "Labels"
 msgstr ""
 
 msgid "Character Inventory Pool Labels"

@@ -14,9 +14,6 @@ msgstr "Přejít na"
 msgid "Hi"
 msgstr "Ahoj"
 
-msgid "No"
-msgstr "Ne"
-
 msgid "To"
 msgstr "A"
 
@@ -82,9 +79,6 @@ msgstr "DPH"
 
 msgid "Who"
 msgstr "Kdo"
-
-msgid "Yes"
-msgstr "Ano"
 
 msgid "age"
 msgstr "věk"
@@ -645,6 +639,9 @@ msgstr "Pozvánka"
 
 msgid "Joined"
 msgstr "Připojil se k"
+
+msgid "Labels"
+msgstr "Štítky"
 
 msgid "Legend"
 msgstr "Legenda"
@@ -2985,9 +2982,6 @@ msgstr "Žádosti o vrácení peněz"
 
 msgid "Request signed"
 msgstr "Podepsaná žádost"
-
-msgid "Restrict pools"
-msgstr "Omezit skupiny"
 
 msgid "Returning type"
 msgstr "Typ návratu"

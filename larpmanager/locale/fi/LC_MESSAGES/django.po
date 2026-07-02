@@ -14,9 +14,6 @@ msgstr "Mene"
 msgid "Hi"
 msgstr "Hei"
 
-msgid "No"
-msgstr "Ei"
-
 msgid "To"
 msgstr "Osoitteeseen"
 
@@ -82,9 +79,6 @@ msgstr "ALV"
 
 msgid "Who"
 msgstr "Kuka"
-
-msgid "Yes"
-msgstr "Kyllä"
 
 msgid "age"
 msgstr "ikä"
@@ -645,6 +639,9 @@ msgstr "Kutsu"
 
 msgid "Joined"
 msgstr "Liittynyt"
+
+msgid "Labels"
+msgstr "Tunnisteet"
 
 msgid "Legend"
 msgstr "Selite"
@@ -2985,9 +2982,6 @@ msgstr "Pyydä palautusta"
 
 msgid "Request signed"
 msgstr "Allekirjoitettu pyyntö"
-
-msgid "Restrict pools"
-msgstr "Rajoita uima-altaita"
 
 msgid "Returning type"
 msgstr "Palauttava tyyppi"

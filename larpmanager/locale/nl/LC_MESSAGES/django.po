@@ -14,9 +14,6 @@ msgstr "Ga naar"
 msgid "Hi"
 msgstr "Hoi"
 
-msgid "No"
-msgstr "Nee"
-
 msgid "To"
 msgstr "A"
 
@@ -82,9 +79,6 @@ msgstr "BTW"
 
 msgid "Who"
 msgstr "Wie"
-
-msgid "Yes"
-msgstr "Ja"
 
 msgid "age"
 msgstr "leeftijd"
@@ -645,6 +639,9 @@ msgstr "Uitnodigen"
 
 msgid "Joined"
 msgstr "Aangesloten bij"
+
+msgid "Labels"
+msgstr "Labels"
 
 msgid "Legend"
 msgstr "Legende"
@@ -2985,9 +2982,6 @@ msgstr "Restitutieverzoeken"
 
 msgid "Request signed"
 msgstr "Ondertekend verzoek"
-
-msgid "Restrict pools"
-msgstr "Zwembaden beperken"
 
 msgid "Returning type"
 msgstr "Type terugkeer"

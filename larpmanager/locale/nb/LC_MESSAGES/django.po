@@ -14,9 +14,6 @@ msgstr "Gå"
 msgid "Hi"
 msgstr "Hei"
 
-msgid "No"
-msgstr "Nei"
-
 msgid "To"
 msgstr "A"
 
@@ -82,9 +79,6 @@ msgstr "MVA"
 
 msgid "Who"
 msgstr "Hvem"
-
-msgid "Yes"
-msgstr "Ja"
 
 msgid "age"
 msgstr "alder"
@@ -645,6 +639,9 @@ msgstr "Invitasjon"
 
 msgid "Joined"
 msgstr "Ble med"
+
+msgid "Labels"
+msgstr "Etiketter"
 
 msgid "Legend"
 msgstr "Tegnforklaring"
@@ -2985,9 +2982,6 @@ msgstr "Forespørsler om refusjon"
 
 msgid "Request signed"
 msgstr "Signert forespørsel"
-
-msgid "Restrict pools"
-msgstr "Begrens bassenger"
 
 msgid "Returning type"
 msgstr "Avkastningstype"
