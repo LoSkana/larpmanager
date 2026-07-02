@@ -2,6 +2,75 @@
 <div id="sidebar" class="only_v22 topbar">
     <div class="inner new-menu">
         {% include "elements/structure/sidebar-header.html" %}
+        {% if run_status.text %}
+            <div class="sidebar-section">
+                <span class="sidebar-link-wrap">
+                    {% if run_status.url %}
+                        <a class="sidebar-link" href="{{ run_status.url }}">
+                        {% else %}
+                            <span class="sidebar-link">
+                            {% endif %}
+                            {% if run_status.status_type == "confirmed" %}
+                                <i class="fa-solid fa-circle-check"></i>
+                            {% elif run_status.status_type == "patron" %}
+                                <i class="fa-solid fa-star"></i>
+                            {% elif run_status.status_type == "pending" %}
+                                <i class="fa-solid fa-clock"></i>
+                            {% elif run_status.status_type == "action_needed" %}
+                                <i class="fa-solid fa-circle-exclamation"></i>
+                            {% elif run_status.status_type == "provisional" %}
+                                <i class="fa-solid fa-hourglass-half"></i>
+                            {% else %}
+                                <i class="fa-solid fa-user-plus"></i>
+                            {% endif %}
+                            {% if run_status.registration %}
+                                <span>{% trans "Your registration" %}
+                                    {% if run_status.registration.ticket %}({{ run_status.registration.ticket.name }}){% endif %}
+                                </span>
+                            {% else %}
+                                <span>{{ run_status.text|striptags }}</span>
+                            {% endif %}
+                            {% if run_status.url %}
+                            </a>
+                        {% else %}
+                        </span>
+                    {% endif %}
+                </span>
+                {% if run_status.action %}
+                    <span class="sidebar-link-wrap">
+                        {% if run_status.action.url %}
+                            <a class="sidebar-link" href="{{ run_status.action.url }}">
+                                <i class="fa-solid fa-arrow-right-to-bracket"></i> <span>{{ run_status.action.label }}</span>
+                            </a>
+                        {% else %}
+                            <span class="reg-action-info">{{ run_status.action.label }}</span>
+                        {% endif %}
+                    </span>
+                {% endif %}
+                {% if run_status.character_action %}
+                    <span class="sidebar-link-wrap">
+                        <a class="sidebar-link" href="{{ run_status.character_action.url }}">
+                            <i class="{{ run_status.character_action.icon }}"></i> <span>{{ run_status.character_action.label }}</span>
+                        </a>
+                    </span>
+                {% endif %}
+                {% if run_status.details and not run_status.characters and not run_status.character_action %}
+                    <p class="reg-status-details">{{ run_status.details | safe }}</p>
+                {% endif %}
+            </div>
+            {% for char in run_status.characters %}
+                <div class="sidebar-section sidebar-character">
+                    {% for link in char.links %}
+                        <span class="sidebar-link-wrap">
+                            <a class="sidebar-link" href="{{ link.url }}" title="{{ link.tooltip }}">
+                                <i class="{{ link.icon }}"></i>
+                                <span>{{ link.label }}</span>
+                            </a>
+                        </span>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% endif %}
         <div class="sidebar-section">
             {% for item in main_nav_items %}
                 <span class="sidebar-link-wrap">

@@ -5747,6 +5747,9 @@ msgstr ""
 msgid "Password reset"
 msgstr ""
 
+msgid "Your registration"
+msgstr ""
+
 msgid "Tech Support"
 msgstr ""
 
@@ -11400,7 +11403,7 @@ msgstr ""
 msgid " Hurry: only %(num)d tickets available"
 msgstr ""
 
-msgid "Pay the annual membership fee to attend the event"
+msgid "Pay the annual membership fee"
 msgstr ""
 
 msgid "Registration confirmed"
@@ -11409,16 +11412,16 @@ msgstr ""
 msgid "Provisional registration"
 msgstr ""
 
-msgid "Upload your membership application to proceed"
+msgid "Upload your membership application"
 msgstr ""
 
-msgid "Awaiting member approval to proceed with payment"
+msgid "Awaiting member approval"
 msgstr ""
 
-msgid "Please fill in your profile"
+msgid "Complete your profile"
 msgstr ""
 
-msgid "Proceed with payment to confirm your registration"
+msgid "Proceed with payment"
 msgstr ""
 
 msgid "Pending payment"
@@ -11427,12 +11430,13 @@ msgstr ""
 msgid "Payment submitted"
 msgstr ""
 
-msgid "Payment awaiting manual verification"
+msgid "Payment being verified"
 msgstr ""
 
-msgid ""
-"If you have made a wire transfer, please upload the receipt for it to be "
-"processed"
+msgid "Wire transfer done? Upload the receipt"
+msgstr ""
+
+msgid "Unpaid registrations may be cancelled"
 msgstr ""
 
 msgid "Registration is open!"

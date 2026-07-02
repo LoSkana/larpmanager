@@ -3769,6 +3769,9 @@ msgstr "Er kan nog niet gestemd worden"
 msgid "Your character is"
 msgstr "Je personage is"
 
+msgid "Your registration"
+msgstr "Je inschrijving"
+
 msgid "already delivered"
 msgstr "reeds geleverd"
 
@@ -4262,6 +4265,9 @@ msgstr "Plot-personage rollen"
 msgid "Preference not valid"
 msgstr "Ongeldige voorkeur"
 
+msgid "Proceed with payment"
+msgstr "Ga verder met de betaling"
+
 msgid "Registration history"
 msgstr "Geschiedenis"
 
@@ -4370,6 +4376,9 @@ msgstr "Collecties geleverd"
 
 msgid "Complete sheet (Test)"
 msgstr "Volledig blad (Test)"
+
+msgid "Complete your profile"
+msgstr "Vul je profiel aan"
 
 msgid "Create your character"
 msgstr "Creëer je personage"
@@ -4621,6 +4630,9 @@ msgstr "Aantal deelnemingen"
 msgid "One-Time Access Tokens"
 msgstr "Eenmalige toegangsmunten"
 
+msgid "Payment being verified"
+msgstr "De betaling wordt momenteel gecontroleerd"
+
 msgid "Payment membership fee"
 msgstr "Betaling lidmaatschapsgeld"
 
@@ -4845,6 +4857,9 @@ msgstr "Bedrag voor de operatie"
 
 msgid "Association Translations"
 msgstr "Vereniging Vertalingen"
+
+msgid "Awaiting member approval"
+msgstr "In afwachting van goedkeuring door de leden"
 
 msgid "Cancel your registration"
 msgstr "Afmelden"
@@ -5289,9 +5304,6 @@ msgstr "Er zijn geen fouten in de fiscale code gevonden"
 msgid "Now you can create outflows"
 msgstr "Nu kun je uitstromen maken"
 
-msgid "Please fill in your profile"
-msgstr "Vul je profiel in"
-
 msgid "Pre-registration cancelled!"
 msgstr "Voorinschrijving geannuleerd!"
 
@@ -5469,6 +5481,9 @@ msgstr "Aantal te trekken tickets"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Werking: OPTELLEN, SUB, MUL, DIV"
+
+msgid "Pay the annual membership fee"
+msgstr "Betaal de jaarlijkse contributie"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -6100,6 +6115,9 @@ msgstr "Type(n) accommodatie beschikbaar"
 msgid "Upload data directly from CSV file"
 msgstr "Gegevens rechtstreeks vanuit een CSV-bestand uploaden"
 
+msgid "Upload your membership application"
+msgstr "Upload je lidmaatschapsaanvraag"
+
 msgid "You are about to make a payment of"
 msgstr "Je staat op het punt een betaling te doen van"
 
@@ -6302,9 +6320,6 @@ msgstr "Nu kun je de ontvangstgegevens instellen"
 msgid "Only really important communications"
 msgstr "Alleen echt belangrijke communicatie"
 
-msgid "Payment awaiting manual verification"
-msgstr "Betaling in afwachting van handmatige verificatie"
-
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Questtypes zonder quests: %(list)s"
@@ -6463,6 +6478,9 @@ msgstr "Klik hier om eerdere vragen te bekijken"
 msgid "Total amount refunded to participants"
 msgstr "Totaalbedrag terugbetaald aan deelnemers"
 
+msgid "Unpaid registrations may be cancelled"
+msgstr "Niet-betaalde inschrijvingen kunnen worden geannuleerd"
+
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Gebruik %(credits)s per %(event)s"
@@ -6560,6 +6578,9 @@ msgstr "Ga naar de tutorial om de basis te leren"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "We vragen je om het resterende bedrag te betalen"
+
+msgid "Wire transfer done? Upload the receipt"
+msgstr "Is de overschrijving gedaan? Upload dan het betalingsbewijs"
 
 msgid "You already have an assigned character"
 msgstr "Je hebt al een toegewezen personage"
@@ -7350,9 +7371,6 @@ msgstr "Selecteer het evenement waarvoor je je wilt voorregistreren"
 msgid "The user has been assigned the specified role"
 msgstr "De gebruiker heeft de opgegeven rol toegewezen gekregen"
 
-msgid "Upload your membership application to proceed"
-msgstr "Upload je lidmaatschapsaanvraag om verder te gaan"
-
 msgid "Use the button above to add a volunteer entry"
 msgstr "Gebruik de knop hierboven om een vrijwilliger toe te voegen"
 
@@ -7554,9 +7572,6 @@ msgstr "Alle verzoeken van leden zijn beantwoord of afgesloten"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Weet je het zeker? De items kunnen misschien niet worden teruggehaald"
 
-msgid "Awaiting member approval to proceed with payment"
-msgstr "In afwachting van goedkeuring door leden om door te gaan met betaling"
-
 msgid "Complete all steps above to unlock advanced mode"
 msgstr ""
 "Voltooi alle bovenstaande stappen om de geavanceerde modus te ontgrendelen"
@@ -7670,13 +7685,6 @@ msgstr "Nu kun je de geldigheidscontrole van de fiscale code uitvoeren"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nu kunt u de instellingen voor de externe mailserver instellen"
-
-msgid "Pay the annual membership fee to attend the event"
-msgstr ""
-"Betaal de jaarlijkse lidmaatschapsbijdrage om het evenement bij te wonen"
-
-msgid "Proceed with payment to confirm your registration"
-msgstr "Ga verder met betalen om je registratie te bevestigen"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Grondstoffen, verbruiksgoederen en goederen"
@@ -10853,13 +10861,6 @@ msgid ""
 msgstr ""
 "Als je een gebruiker niet kunt vinden, kun je de rol opslaan en hem of haar "
 "vervolgens uitnodigen door op"
-
-msgid ""
-"If you have made a wire transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Als je een overschrijving hebt gedaan, upload dan het ontvangstbewijs zodat "
-"het verwerkt kan worden"
 
 msgid ""
 "Manage CSS layout templates that control the visual formatting of printed "

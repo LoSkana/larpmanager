@@ -451,7 +451,8 @@ nav#sidebar-nav {
   padding-top: 0.5em;
 }
 
-#sidebar .new-menu a {
+#sidebar .new-menu a,
+#sidebar .new-menu span.sidebar-link {
   padding: 0.15em 0.45em;
   display: block;
   display: flex;
@@ -459,7 +460,8 @@ nav#sidebar-nav {
   gap: 0.5em;
 }
 
-#sidebar .new-menu a i {
+#sidebar .new-menu a i,
+#sidebar .new-menu span.sidebar-link i {
   width: 1.1em;
   text-align: center;
   flex-shrink: 0;

@@ -3769,6 +3769,9 @@ msgstr "Omröstningen är ännu inte inledd"
 msgid "Your character is"
 msgstr "Din karaktär är"
 
+msgid "Your registration"
+msgstr "Din registrering"
+
 msgid "already delivered"
 msgstr "redan levererat"
 
@@ -4262,6 +4265,9 @@ msgstr "Roller mellan intrig och karaktärer"
 msgid "Preference not valid"
 msgstr "Ogiltig preferens"
 
+msgid "Proceed with payment"
+msgstr "Gå vidare med betalningen"
+
 msgid "Registration history"
 msgstr "Ingångshistoria"
 
@@ -4370,6 +4376,9 @@ msgstr "Levererade kollektioner"
 
 msgid "Complete sheet (Test)"
 msgstr "Komplett ark (Test)"
+
+msgid "Complete your profile"
+msgstr "Fyll i din profil"
 
 msgid "Create your character"
 msgstr "Skapa din karaktär"
@@ -4621,6 +4630,9 @@ msgstr "Antal andelar"
 msgid "One-Time Access Tokens"
 msgstr "Tokens för engångstillgång"
 
+msgid "Payment being verified"
+msgstr "Betalningen verifieras just nu"
+
 msgid "Payment membership fee"
 msgstr "Betalning av medlemsavgift"
 
@@ -4845,6 +4857,9 @@ msgstr "Belopp för åtgärden"
 
 msgid "Association Translations"
 msgstr "Översättningar av föreningar"
+
+msgid "Awaiting member approval"
+msgstr "Väntar på godkännande från medlemmarna"
 
 msgid "Cancel your registration"
 msgstr "Avsluta prenumeration"
@@ -5289,9 +5304,6 @@ msgstr "Inga fel i skattelagstiftningen har upptäckts"
 msgid "Now you can create outflows"
 msgstr "Nu kan du skapa utflöden"
 
-msgid "Please fill in your profile"
-msgstr "Vänligen fyll i din profil"
-
 msgid "Pre-registration cancelled!"
 msgstr "Förhandsregistreringen är inställd!"
 
@@ -5469,6 +5481,9 @@ msgstr "Antal biljetter som skall dras"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operation: ADD, SUB, MUL, DIV"
+
+msgid "Pay the annual membership fee"
+msgstr "Betala den årliga medlemsavgiften"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -6099,6 +6114,9 @@ msgstr "Typ(er) av tillgängligt boende"
 msgid "Upload data directly from CSV file"
 msgstr "Ladda upp data direkt från en CSV-fil"
 
+msgid "Upload your membership application"
+msgstr "Ladda upp din medlemsansökan"
+
 msgid "You are about to make a payment of"
 msgstr "Du är på väg att göra en betalning på"
 
@@ -6301,9 +6319,6 @@ msgstr "Nu kan du ställa in kvittodata"
 msgid "Only really important communications"
 msgstr "Endast riktigt viktig kommunikation"
 
-msgid "Payment awaiting manual verification"
-msgstr "Betalning väntar på manuell verifiering"
-
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Uppdragstyper utan uppdrag: %(list)s"
@@ -6462,6 +6477,9 @@ msgstr "Klicka här för att se tidigare frågor"
 msgid "Total amount refunded to participants"
 msgstr "Totalt belopp som återbetalas till deltagarna"
 
+msgid "Unpaid registrations may be cancelled"
+msgstr "Obetalda anmälningar kan komma att annulleras"
+
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Utnyttjande %(credits)s per %(event)s"
@@ -6555,6 +6573,9 @@ msgstr "Besök handledningen för att lära dig grunderna"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Vi ber dig att betala det återstående beloppet"
+
+msgid "Wire transfer done? Upload the receipt"
+msgstr "Är banköverföringen klar? Ladda upp kvittot"
 
 msgid "You already have an assigned character"
 msgstr "Du har redan en tilldelad karaktär"
@@ -7341,9 +7362,6 @@ msgstr "Välj det evenemang du vill föranmäla dig till"
 msgid "The user has been assigned the specified role"
 msgstr "Användaren har tilldelats den angivna rollen"
 
-msgid "Upload your membership application to proceed"
-msgstr "Ladda upp din medlemsansökan för att fortsätta"
-
 msgid "Use the button above to add a volunteer entry"
 msgstr "Använd knappen ovan för att lägga till en volontärpost"
 
@@ -7541,9 +7559,6 @@ msgstr "Alla medlemsförfrågningar har besvarats eller avslutats"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Är du säker på det? Föremålen kanske inte kan återställas"
 
-msgid "Awaiting member approval to proceed with payment"
-msgstr "Inväntar medlemsgodkännande för att fortsätta med betalningen"
-
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Genomför alla steg ovan för att låsa upp avancerat läge"
 
@@ -7658,12 +7673,6 @@ msgstr "Nu kan du göra en kontroll av skattekodens giltighet"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nu kan du ange inställningarna för den externa e-postservern"
-
-msgid "Pay the annual membership fee to attend the event"
-msgstr "Betala den årliga medlemsavgiften för att delta i evenemanget"
-
-msgid "Proceed with payment to confirm your registration"
-msgstr "Fortsätt med betalningen för att bekräfta din registrering"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Råvaror, förbrukningsmaterial och varor"
@@ -10665,13 +10674,6 @@ msgid ""
 msgstr ""
 "Om du inte hittar en användare kan du spara rollen och sedan bjuda in "
 "personen genom att klicka på"
-
-msgid ""
-"If you have made a wire transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Om du har gjort en banköverföring, vänligen ladda upp kvittot för att det "
-"ska behandlas"
 
 msgid ""
 "Manage CSS layout templates that control the visual formatting of printed "

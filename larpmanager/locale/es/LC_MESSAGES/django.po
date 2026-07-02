@@ -3769,6 +3769,9 @@ msgstr "La votación aún no está abierta"
 msgid "Your character is"
 msgstr "Tu personaje es"
 
+msgid "Your registration"
+msgstr "Tu inscripción"
+
 msgid "already delivered"
 msgstr "ya entregado"
 
@@ -4262,6 +4265,9 @@ msgstr "Papel de los personajes en la trama"
 msgid "Preference not valid"
 msgstr "Preferencia no válida"
 
+msgid "Proceed with payment"
+msgstr "Realizar el pago"
+
 msgid "Registration history"
 msgstr "Historial de inscripciones"
 
@@ -4370,6 +4376,9 @@ msgstr "Colecciones entregadas"
 
 msgid "Complete sheet (Test)"
 msgstr "Hoja completa (Test)"
+
+msgid "Complete your profile"
+msgstr "Completa tu perfil"
 
 msgid "Create your character"
 msgstr "Crea tu personaje"
@@ -4621,6 +4630,9 @@ msgstr "Número de participantes"
 msgid "One-Time Access Tokens"
 msgstr "Fichas de acceso único"
 
+msgid "Payment being verified"
+msgstr "Se está verificando el pago"
+
 msgid "Payment membership fee"
 msgstr "Pago de la cuota de afiliación"
 
@@ -4845,6 +4857,9 @@ msgstr "Importe de la operación"
 
 msgid "Association Translations"
 msgstr "Traducciones de asociaciones"
+
+msgid "Awaiting member approval"
+msgstr "A la espera de la aprobación de los miembros"
 
 msgid "Cancel your registration"
 msgstr "Cancelar inscripción"
@@ -5289,9 +5304,6 @@ msgstr "No se han encontrado errores en el código fiscal"
 msgid "Now you can create outflows"
 msgstr "Ahora puede crear salidas"
 
-msgid "Please fill in your profile"
-msgstr "Rellena tu perfil"
-
 msgid "Pre-registration cancelled!"
 msgstr "Preinscripción anulada"
 
@@ -5469,6 +5481,9 @@ msgstr "Número de entradas que se sortearán"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operación: ADD, SUB, MUL, DIV"
+
+msgid "Pay the annual membership fee"
+msgstr "Paga la cuota anual de socio"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -6100,6 +6115,9 @@ msgstr "Tipo(s) de alojamiento disponible(s)"
 msgid "Upload data directly from CSV file"
 msgstr "Subir datos directamente desde un archivo CSV"
 
+msgid "Upload your membership application"
+msgstr "Sube tu solicitud de afiliación"
+
 msgid "You are about to make a payment of"
 msgstr "Estás a punto de hacer un pago de"
 
@@ -6302,9 +6320,6 @@ msgstr "Ahora puedes configurar los datos de los recibos"
 msgid "Only really important communications"
 msgstr "Sólo las comunicaciones realmente importantes"
 
-msgid "Payment awaiting manual verification"
-msgstr "Pago pendiente de verificación manual"
-
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Tipos de misiones sin misiones: %(list)s"
@@ -6463,6 +6478,9 @@ msgstr "Para ver las preguntas anteriores, haz clic aquí"
 msgid "Total amount refunded to participants"
 msgstr "Importe total reembolsado a los participantes"
 
+msgid "Unpaid registrations may be cancelled"
+msgstr "Las inscripciones que no se hayan pagado podrían cancelarse"
+
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Utilización %(credits)s por %(event)s"
@@ -6554,6 +6572,9 @@ msgstr "Visita el tutorial para aprender lo básico"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Le pedimos que pague el importe restante"
+
+msgid "Wire transfer done? Upload the receipt"
+msgstr "¿Ya has hecho la transferencia? Sube el recibo"
 
 msgid "You already have an assigned character"
 msgstr "Ya tienes un personaje asignado"
@@ -7343,9 +7364,6 @@ msgstr "Selecciona el evento al que deseas preinscribirte"
 msgid "The user has been assigned the specified role"
 msgstr "Al usuario se le ha asignado el rol especificado"
 
-msgid "Upload your membership application to proceed"
-msgstr "Sube tu solicitud de afiliación para continuar"
-
 msgid "Use the button above to add a volunteer entry"
 msgstr "Usa el botón de arriba para añadir una inscripción de voluntario"
 
@@ -7550,9 +7568,6 @@ msgstr "Ya se han respondido o cerrado todas las solicitudes de los miembros"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "¿Está seguro? Los artículos podrían no ser recuperables"
 
-msgid "Awaiting member approval to proceed with payment"
-msgstr "A la espera de la aprobación de los miembros para proceder al pago"
-
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Completa todos los pasos anteriores para desbloquear el modo avanzado"
 
@@ -7670,12 +7685,6 @@ msgstr "Ahora puede realizar la comprobación de validez del código fiscal"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Ahora puede configurar el servidor de correo externo"
-
-msgid "Pay the annual membership fee to attend the event"
-msgstr "Pagar la cuota anual de afiliación para asistir al evento"
-
-msgid "Proceed with payment to confirm your registration"
-msgstr "Procede al pago para confirmar tu inscripción"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Materias primas, consumibles y otros productos"
@@ -10844,13 +10853,6 @@ msgid ""
 msgstr ""
 "Si no encuentras a un usuario, puedes guardar el rol y, a continuación, "
 "invitarlo haciendo clic en"
-
-msgid ""
-"If you have made a wire transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Si has realizado una transferencia bancaria, sube el justificante para que "
-"sea procesada"
 
 msgid ""
 "Manage CSS layout templates that control the visual formatting of printed "

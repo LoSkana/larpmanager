@@ -82,16 +82,21 @@ def _add_registration_items(
     registration: Any,
     context: dict[str, Any],
 ) -> None:
+    # From v22 the registration status block in the sidebar already links to the register page
+    sidebar_reg_status_version = 22
+    show_register_link = int(context.get("effective_version") or 0) < sidebar_reg_status_version
+
     if registration:
-        items.append(
-            _item(
-                reverse("register", args=[slug]),
-                "fa-solid fa-pen-to-square",
-                _("Registration"),
-                str(_("Update here the registration options")) + "!",
-                active=active == "register",
+        if show_register_link:
+            items.append(
+                _item(
+                    reverse("register", args=[slug]),
+                    "fa-solid fa-pen-to-square",
+                    _("Registration"),
+                    str(_("Update here the registration options")) + "!",
+                    active=active == "register",
+                )
             )
-        )
         if registration.tot_iscr:
             items.append(
                 _item(
@@ -127,7 +132,7 @@ def _add_registration_items(
                     active=active == "casting",
                 )
             )
-    else:
+    elif show_register_link:
         items.append(
             _item(
                 reverse("register", args=[slug]),

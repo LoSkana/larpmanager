@@ -3769,6 +3769,9 @@ msgstr "Äänestys ei ole vielä avoinna"
 msgid "Your character is"
 msgstr "Hahmosi on"
 
+msgid "Your registration"
+msgstr "Ilmoittautumisesi"
+
 msgid "already delivered"
 msgstr "jo jaettu"
 
@@ -4262,6 +4265,9 @@ msgstr "Juoni-hahmo roolit"
 msgid "Preference not valid"
 msgstr "Etusija ei ole voimassa"
 
+msgid "Proceed with payment"
+msgstr "Jatka maksamiseen"
+
 msgid "Registration history"
 msgstr "Ilmoittautumishistoria"
 
@@ -4370,6 +4376,9 @@ msgstr "Jaettu koonteina"
 
 msgid "Complete sheet (Test)"
 msgstr "Täydellinen lomake (testi)"
+
+msgid "Complete your profile"
+msgstr "Täydennä profiiliasi"
 
 msgid "Create your character"
 msgstr "Luo hahmosi"
@@ -4621,6 +4630,9 @@ msgstr "Osallistujien määrä"
 msgid "One-Time Access Tokens"
 msgstr "Kertakäyttökoodit"
 
+msgid "Payment being verified"
+msgstr "Maksua tarkistetaan"
+
 msgid "Payment membership fee"
 msgstr "Maksu jäsenmaksu"
 
@@ -4845,6 +4857,9 @@ msgstr "Toimenpiteen määrä"
 
 msgid "Association Translations"
 msgstr "Yhdistyksen käännökset"
+
+msgid "Awaiting member approval"
+msgstr "Odottaa jäsenten hyväksyntää"
 
 msgid "Cancel your registration"
 msgstr "Peruuta ilmoittautumisesi"
@@ -5289,9 +5304,6 @@ msgstr "Verokoodivirheitä ei löytynyt"
 msgid "Now you can create outflows"
 msgstr "Nyt voit luoda ulosvirtauksia"
 
-msgid "Please fill in your profile"
-msgstr "Täytä profiilisi"
-
 msgid "Pre-registration cancelled!"
 msgstr "EnnakkoIlmoittautuminen peruutettu!"
 
@@ -5469,6 +5481,9 @@ msgstr "Arvottavien lippujen lukumäärä"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Toiminta: ADD, SUB, MUL, DIV"
+
+msgid "Pay the annual membership fee"
+msgstr "Maksa vuotuinen jäsenmaksu"
 
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
@@ -6099,6 +6114,9 @@ msgstr "Saatavilla oleva(t) majoitustyyppi(t)"
 msgid "Upload data directly from CSV file"
 msgstr "Lataa tiedot suoraan CSV-tiedostosta"
 
+msgid "Upload your membership application"
+msgstr "Lähetä jäsenhakemuksesi"
+
 msgid "You are about to make a payment of"
 msgstr "Olet suorittamassa maksun, jonka suuruus on"
 
@@ -6301,9 +6319,6 @@ msgstr "Nyt voit määrittää kuittitiedot"
 msgid "Only really important communications"
 msgstr "Vain todella tärkeä viestintä"
 
-msgid "Payment awaiting manual verification"
-msgstr "Maksu odottaa manuaalista tarkistusta"
-
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Tehtävätyypit ilman tehtäviä: %(list)s"
@@ -6462,6 +6477,9 @@ msgstr "Voit tarkastella aiempia kysymyksiä napsauttamalla tätä"
 msgid "Total amount refunded to participants"
 msgstr "Osallistujille palautettu kokonaismäärä"
 
+msgid "Unpaid registrations may be cancelled"
+msgstr "Maksamattomat ilmoittautumiset voidaan peruuttaa"
+
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
 msgstr "Käytä %(credits)s tapahtumaan %(event)s"
@@ -6553,6 +6571,9 @@ msgstr "Vieraile opetusohjelmassa oppiaksesi perusteet"
 
 msgid "We ask you to pay the remaining amount"
 msgstr "Pyydämme sinua maksamaan jäljellä olevan summan"
+
+msgid "Wire transfer done? Upload the receipt"
+msgstr "Onko tilisiirto suoritettu? Lataa kuitti"
 
 msgid "You already have an assigned character"
 msgstr "Sinulle on jo määritetty hahmo"
@@ -7338,9 +7359,6 @@ msgstr "Valitse tapahtuma, johon haluat ilmoittautua ennakkoon"
 msgid "The user has been assigned the specified role"
 msgstr "Käyttäjälle on annettu määritetty rooli"
 
-msgid "Upload your membership application to proceed"
-msgstr "Lataa jäsenhakemuksesi jatkaaksesi"
-
 msgid "Use the button above to add a volunteer entry"
 msgstr "Lisää vapaaehtoistyöntekijän tiedot yllä olevan painikkeen avulla"
 
@@ -7538,9 +7556,6 @@ msgstr "Kaikki jäsenten pyynnöt on käsitelty tai suljettu"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Oletko varma? Kohteita ei ehkä voida palauttaa"
 
-msgid "Awaiting member approval to proceed with payment"
-msgstr "Odotetaan jäsenten hyväksyntää maksun suorittamiseksi"
-
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Suorita kaikki edellä mainitut vaiheet avataksesi edistyneen tilan"
 
@@ -7654,12 +7669,6 @@ msgstr "Nyt voit suorittaa verokoodin voimassaolon tarkistuksen"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nyt voit määrittää ulkoisen sähköpostipalvelimen asetukset"
-
-msgid "Pay the annual membership fee to attend the event"
-msgstr "Maksa vuosittainen jäsenmaksu osallistuaksesi tapahtumaan"
-
-msgid "Proceed with payment to confirm your registration"
-msgstr "Jatka maksua vahvistaaksesi rekisteröitymisesi"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Raaka-aineet, apuaineet, tarvikkeet ja tavarat"
@@ -10655,11 +10664,6 @@ msgid ""
 "clicking on"
 msgstr ""
 "Jos et löydä käyttäjää, voit tallentaa roolin ja kutsua hänet napsauttamalla"
-
-msgid ""
-"If you have made a wire transfer, please upload the receipt for it to be "
-"processed"
-msgstr "Jos olet tehnyt tilisiirron, lataa kuitti, jotta se voidaan käsitellä"
 
 msgid ""
 "Manage CSS layout templates that control the visual formatting of printed "

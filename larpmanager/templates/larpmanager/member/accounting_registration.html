@@ -4,6 +4,17 @@
     {% trans "Payment" %} - {{ registration.run }}
 {% endblock title %}
 {% block content %}
+    {% if quota %}
+        <div class="reg-payment-deadline{% if registration.deadline <= 0 %} overdue{% endif %}">
+            <i class="fa-solid fa-calendar-day"></i>
+            {% trans "Next payment" %}: <b>{{ quota|format_decimal }}{{ currency_symbol }}</b>
+            {% if registration.deadline > 0 %}
+                - {% trans "expected within" %} {{ registration.deadline }} {% trans "days" %}
+            {% elif registration.deadline < 0 %}
+                - {% trans "overdue by" %} {{ registration.deadline|abs_value }} {% trans "days" %}
+            {% endif %}
+        </div>
+    {% endif %}
     <div class="user_resize platform">
         {% if invoice %}
             {% if membership_fee_bundled %}

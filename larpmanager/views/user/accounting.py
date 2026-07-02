@@ -391,7 +391,7 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
 
     # Get event context and mark as accounting page
     registration = get_accounting_registration(request, context, registration_uuid)
-    context = get_event_context(request, registration.run.get_slug())
+    context = get_event_context(request, registration.run.get_slug(), include_status=True)
     context["show_accounting"] = True
     context["registration"] = registration
 
