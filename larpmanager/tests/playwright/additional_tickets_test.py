@@ -30,7 +30,8 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, login_orga, login_user, logout, submit_confirm, expect_normalized, \
-    sidebar, get_modal_iframe, save_modal, just_wait, click_and_wait_question
+    submit_register, \
+    sidebar, get_modal_iframe, save_modal, click_and_wait_question
 
 pytestmark = pytest.mark.e2e
 
@@ -138,7 +139,7 @@ def edit_additionals(page: Any, live_server: Any) -> None:
 
     # Verify new price: 50€ (base) + 100€ (2 additional) = 150€
     go_to(page, live_server, "test/manage/registrations/")
-    page.locator("#one").get_by_role("link", name="Additional").click()
+    click_and_wait_question(page, "Additional")
     expect_normalized(page, page.locator("#one"), "2")
 
 
@@ -218,7 +219,7 @@ def test_additional_tickets_with_other_options(pw_page: Any) -> None:
 
     # Verify in organizer view
     go_to(page, live_server, "test/manage/registrations/")
-    page.locator("#one").get_by_role("link", name="Additional").click()
+    click_and_wait_question(page, "Additional")
     expect_normalized(page, page.locator("#one"), "2")
 
 
@@ -245,8 +246,7 @@ def test_additional_tickets_disabled_without_feature(pw_page: Any) -> None:
     expect(page.locator("body")).not_to_contain_text("Additional")
 
     # Verify form can still be submitted
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Verify registration succeeded
     expect(page.locator("#one")).to_be_visible()

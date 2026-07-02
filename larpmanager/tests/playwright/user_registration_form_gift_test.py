@@ -30,14 +30,14 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (submit_register, drag_reorder, \
                                      go_to,
                                      load_image,
                                      login_orga,
                                      login_user,
                                      submit,
                                      submit_confirm,
-                                     expect_normalized, new_option, submit_option, nav, get_modal_iframe, save_modal,
+                                     expect_normalized, new_option, submit_option, sidebar, get_modal_iframe, save_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -164,10 +164,14 @@ def field_multiple(page: Any, live_server: Any) -> None:
     option_row.locator("#id_description").fill("sarrrr")
     submit_option(edit_iframe, option_row)
 
-    edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] .io-move-up').click()
-    just_wait(page)
+    src = edit_iframe.locator('#inline-options tr.inline-option[data-uuid="u4"] td.reorder-handle')
+    drag_reorder(page, src, edit_iframe.locator('tr.inline-option[data-uuid="u4"]').locator('xpath=preceding-sibling::tr[contains(@class,"inline-option")][1]'))
     save_modal(page, edit_iframe)
-    page.locator('[id="u3"]').locator(".fa-arrow-up").click()
+    drag_reorder(
+        page,
+        page.locator('tr[id="u3"] td.reorder-handle'),
+        page.locator('tr[id="u3"]').locator("xpath=preceding-sibling::tr[1]"),
+    )
 
 
 def field_text(page: Any, live_server: Any) -> None:
@@ -200,21 +204,20 @@ def field_text(page: Any, live_server: Any) -> None:
 
     # sign up
     go_to(page, live_server, "/test/register/")
-    page.get_by_text("twp (10€) - (Available 2)").click()
+    page.locator('label[for="id_que_u3_0"]').click()  # twp (10€, available 2)
     expect_normalized(page, page.locator("#register_form"), "options: 1 / 1")
-    page.get_by_label("choice").select_option("u2")
+    page.locator('label[for="id_que_u2_1"]').click()  # secondas
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("sadsadas")
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("sadsadsadsad")
     expect_normalized(page, page.locator("#register_form"), "text length: 12 / 100")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/register/")
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
-    expect(page.get_by_label("choice")).to_contain_text("secondas")
+    expect(page.locator("#id_que_u2")).to_contain_text("secondas")
 
 
 def gift(page: Any, live_server: Any) -> None:
@@ -230,13 +233,12 @@ def gift(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/gift/")
     page.get_by_role("link", name="Add new").click()
     page.locator("#id_que_u3").get_by_text("one").click()
-    page.get_by_label("choice").select_option("u1")
+    page.locator('label[for="id_que_u2_0"]').click()  # prima
     page.get_by_role("textbox", name="who").click()
     page.get_by_role("textbox", name="who").fill("wwww")
     page.get_by_role("textbox", name="when").click()
     page.get_by_role("textbox", name="when").fill("fffdsfs")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
     expect_normalized(page, page.locator("#one"), "( Standard ) wow - one | choice - prima (10.00€)")
     expect_normalized(page, page.locator("#one"), "10€ within 8 days")
 

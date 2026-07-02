@@ -1,0 +1,44 @@
+{% load i18n %}
+<div class="sidebar-footer sidebar-section">
+    {% if user.is_authenticated %}
+        <span class="sidebar-link-wrap">
+            <a class="sidebar-link" id="logout" href="{% url 'logout' %}">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </span>
+        <form method="post" action="{% url 'logout' %}" class="hide">
+            {% csrf_token %}
+            <button type="submit" id="real_logout">logout</button>
+        </form>
+    {% endif %}
+    {% if 'help' in association.features %}
+        <span class="sidebar-link-wrap">
+            <a class="sidebar-link"
+               href="{% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %}">
+                <i class="fa-solid fa-circle-question"></i>
+                <span>{% trans "Need help" %}?</span>
+            </a>
+        </span>
+    {% endif %}
+    <span class="sidebar-link-wrap">
+        <a class="sidebar-link" href="{% url 'ticket' %}">
+            <i class="fa-solid fa-headset"></i>
+            <span>{% trans "Tech Support" %}</span>
+        </a>
+    </span>
+    <span class="sidebar-link-wrap">
+        <a class="sidebar-link" href="{% url 'privacy' %}">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>{% trans "Privacy Policy" %}</span>
+        </a>
+    </span>
+    {% if 'legal_notice' in association.features %}
+        <span class="sidebar-link-wrap">
+            <a class="sidebar-link" href="{% url 'legal_notice' %}">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <span>{% trans "Legal Notice" %}</span>
+            </a>
+        </span>
+    {% endif %}
+</div>

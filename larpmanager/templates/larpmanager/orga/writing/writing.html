@@ -11,9 +11,6 @@
     {% endif %}
     - {{ form.page_title }} - {{ run.search }}
 {% endblock title %}
-{% block info %}
-    {% if not frame %}{{ form.page_info }}{% endif %}
-{% endblock info %}
 {% block content %}
     {% include "elements/form/main.html" %}
     {% include "elements/form/char_finder.html" %}
@@ -43,16 +40,12 @@ window.addEventListener('DOMContentLoaded', function() {
             $(this).text(v);
         });
 
-        setTimeout(function() {
-            $('.hide_later').each(function(){
-                $(this).hide();
-            })
-        },
-        500);
-
     });
 });
     </script>
+    {% if form.plot_reorder_url %}
+        {% include "elements/form/plot_reorder.js.html" %}
+    {% endif %}
     {% include "elements/working-ticket.js" with num=edit_uuid %}
     {% include "elements/auto-save.js" %}
     {% include "elements/helpers/iframe_resize.js" %}

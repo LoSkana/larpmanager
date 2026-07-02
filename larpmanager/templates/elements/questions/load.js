@@ -33,6 +33,8 @@ function load_question(el) {
 
     $( '.lq_{0}'.format(key) ).addClass('select');
 
+    window._questionLoadPending = (window._questionLoadPending || 0) + 1;
+
     request = $.ajax({
         url: url_load_questions,
         data: { q_uuid: key },
@@ -104,6 +106,7 @@ function load_question(el) {
         });
 
          done[q_uuid] = 1;
+         window._questionLoadPending = Math.max(0, (window._questionLoadPending || 0) - 1);
 
          if (spinner) {
             stop_spinner();
@@ -174,30 +177,33 @@ function reload_table() {
 
 regs = [];
 
-window.hideColumnsIndexMap = {};
-document.querySelectorAll('.que_load thead th').forEach(function(th) {
-    var realIndex = Array.from(th.parentNode.children).indexOf(th);
-    th.classList.forEach(function(cls) {
-        if (!window.hideColumnsIndexMap[cls]) {
-            window.hideColumnsIndexMap[cls] = [];
-        }
-        if (!window.hideColumnsIndexMap[cls].includes(realIndex)) {
-            window.hideColumnsIndexMap[cls].push(realIndex);
-        }
+window.buildHideColumnsIndexMap = function() {
+    window.hideColumnsIndexMap = {};
+    document.querySelectorAll('.que_load thead th').forEach(function(th) {
+        var realIndex = Array.from(th.parentNode.children).indexOf(th);
+        th.classList.forEach(function(cls) {
+            if (!window.hideColumnsIndexMap[cls]) {
+                window.hideColumnsIndexMap[cls] = [];
+            }
+            if (!window.hideColumnsIndexMap[cls].includes(realIndex)) {
+                window.hideColumnsIndexMap[cls].push(realIndex);
+            }
+        });
     });
-});
+};
+window.buildHideColumnsIndexMap();
 
 window.addEventListener('DOMContentLoaded', function() {
     $(function() {
 
         setTimeout(reload_table, 1000);
 
-        $('.load_que').on('click', function () {
+        $(document).on('click', '.load_que', function () {
             load_question($(this));
             return false;
         });
 
-        $('.load_email_que').on('click', function () {
+        $(document).on('click', '.load_email_que', function () {
             load_question_email($(this));
             return false;
         });
@@ -253,7 +259,7 @@ window.addEventListener('DOMContentLoaded', function() {
             });
         };
 
-        $('.table_toggle').on('click', function () {
+        $(document).on('click', '.table_toggle', function () {
             var tog = $(this).attr("tog");
             $(this).toggleClass('select');
 

@@ -84,12 +84,15 @@ from larpmanager.cache.experience import (
     on_ability_requirements_m2m_changed,
     on_ability_saved,
     on_character_saved,
+    on_criterion_prerequisites_m2m_changed,
+    on_criterion_requirements_m2m_changed,
     on_delivery_characters_m2m_changed,
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
     on_writing_option_saved,
+    refresh_criterion_relationships,
     refresh_delivery_relationships,
     refresh_modifier_relationships,
     refresh_modifier_rels_dirty_background,
@@ -120,6 +123,7 @@ from larpmanager.cache.registration import (
 )
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
+    mark_plot_character_rel_dirty,
     on_faction_characters_m2m_changed,
     on_plot_characters_m2m_changed,
     on_prologue_characters_m2m_changed,
@@ -218,7 +222,15 @@ from larpmanager.models.event import (
     Run,
     RunConfig,
 )
-from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTypeExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+    SystemExp,
+)
 from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
@@ -264,6 +276,7 @@ from larpmanager.models.writing import (
     replace_character_names,
 )
 from larpmanager.utils.auth.permission import auto_assign_event_permission_number
+from larpmanager.utils.core.nav import invalidate_user_nav_entries
 from larpmanager.utils.io.pdf import (
     cleanup_character_pdfs_before_delete,
     cleanup_character_pdfs_on_save,
@@ -295,7 +308,6 @@ from larpmanager.utils.services.association import (
 from larpmanager.utils.services.character import count_distinct_text_links, update_character_referenced_chars_background
 from larpmanager.utils.services.event import (
     assign_previous_campaign_character,
-    copy_parent_event_to_campaign,
     create_default_event_setup,
     on_event_features_m2m_changed,
     prepare_campaign_event_data,
@@ -884,10 +896,6 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     clear_event_cache_all_runs(instance)
     clear_event_features_cache(instance.id)
 
-    # Setup campaign inheritance if not explicitly skipped and not being deleted
-    if not getattr(instance, "_skip_campaign_setup", False) and instance.deleted is None:
-        copy_parent_event_to_campaign(instance)
-
     # Clear run and registration related caches
     clear_run_event_links_cache(instance)
 
@@ -1345,6 +1353,7 @@ def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, 
     """Recompute auto relationships when a plot-character relation changes."""
     if instance.plot_id:
         refresh_event_plot_relationships_background(instance.plot_id)
+        mark_plot_character_rel_dirty(instance.plot_id, instance.character_id)
     if instance.character_id:
         update_character_referenced_chars_background(instance.character_id)
 
@@ -1354,6 +1363,7 @@ def post_delete_plot_character_rel_refs(sender: type, instance: PlotCharacterRel
     """Recompute auto relationships when a plot-character relation is deleted."""
     if instance.plot_id:
         refresh_event_plot_relationships_background(instance.plot_id)
+        mark_plot_character_rel_dirty(instance.plot_id, instance.character_id)
     if instance.character_id:
         update_character_referenced_chars_background(instance.character_id)
 
@@ -1515,6 +1525,10 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Reset event navigation links cache
     on_registration_post_save_reset_event_links(instance)
 
+    # Invalidate user nav entries cache
+    if instance.member_id:
+        invalidate_user_nav_entries(instance.member_id)
+
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
@@ -1675,6 +1689,19 @@ def post_save_rule_exp(sender: type, instance: object, *args: Any, **kwargs: Any
 @receiver(post_delete, sender=RuleExp)
 def post_delete_rule_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a rule is deleted."""
+    _recalcuate_characters_experience_points(instance)
+
+
+@receiver(post_save, sender=CriterionExp)
+def post_save_criterion_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update character experience when a criterion is saved."""
+    _recalcuate_characters_experience_points(instance)
+    refresh_criterion_relationships(instance)
+
+
+@receiver(post_delete, sender=CriterionExp)
+def post_delete_criterion_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
+    """Update character experience when a criterion is deleted."""
     _recalcuate_characters_experience_points(instance)
 
 
@@ -1936,6 +1963,8 @@ m2m_changed.connect(on_modifier_abilities_m2m_changed_cache, sender=ModifierExp.
 m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierExp.prerequisites.through)
 m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierExp.requirements.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilities.through)
+m2m_changed.connect(on_criterion_prerequisites_m2m_changed, sender=CriterionExp.prerequisites.through)
+m2m_changed.connect(on_criterion_requirements_m2m_changed, sender=CriterionExp.requirements.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 

@@ -104,8 +104,9 @@ jobs:
       with:
         name: playwright-artifacts
         path: |
-          artifacts/playwright/**/*.zip
-          artifacts/playwright/**/*.png
+          test_screenshots/*.png
+          test_screenshots/*.html
+          test_screenshots/*.webm
         if-no-files-found: ignore
   deploy:
     name: CD

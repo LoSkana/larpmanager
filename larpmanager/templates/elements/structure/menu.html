@@ -25,7 +25,7 @@
                 {% endif %}
                 {% if 'chat' in association.features %}
                     <li>
-                        <a href="{% url 'chats' %}"><i class="fa-solid fa-message"></i> {% trans "Messages" %}</a>
+                        <a href="{% url 'messages' %}"><i class="fa-solid fa-message"></i> {% trans "Messages" %}</a>
                     </li>
                 {% endif %}
                 {% if 'badge' in association.features %}
@@ -34,7 +34,7 @@
                     </li>
                 {% endif %}
                 <li>
-                    <a href="{% url 'profile_otp' %}"><i class="fa-solid fa-lock"></i> {% trans "Security" %}</a>
+                    <a href="{% url 'security' %}"><i class="fa-solid fa-lock"></i> {% trans "Security" %}</a>
                 </li>
             {% endif %}
             {% if user.is_authenticated %}
@@ -80,7 +80,7 @@
                 <li>
                     <a id="logout" href="{% url 'logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
                 </li>
-                <form method="post" action="{% url 'logout' %}">
+                <form method="post" action="{% url 'logout' %}" class="hide">
                     {% csrf_token %}
                     <button type="submit" id="real_logout">logout</button>
                 </form>

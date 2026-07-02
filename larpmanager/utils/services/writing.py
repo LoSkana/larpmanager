@@ -348,6 +348,9 @@ def writing_list(  # noqa: C901 - Complex writing list building with feature-dep
     if "split_lists" not in context:
         context["split_lists"] = [{"title": "", "list": context["list"]}]
 
+    if check_field(writing_type, "order"):
+        context["reorder_model"] = f"orga_{template_name}s"
+
     # Render the appropriate template based on the name parameter
     return render(request, "larpmanager/orga/writing/" + template_name + "s.html", context)
 

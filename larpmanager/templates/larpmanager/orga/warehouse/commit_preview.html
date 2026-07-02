@@ -23,6 +23,7 @@
         <table class="go_datatable" id="preview_table">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Item" %}</th>
                     <th>{% trans "Container" %}</th>
                     <th>{% trans "Current quantity" %}</th>
@@ -34,6 +35,7 @@
             <tbody>
                 {% for item_data in preview_items %}
                     <tr {% if item_data.will_delete %}class="table-danger"{% endif %}>
+                        <td></td>
                         <td>{{ item_data.item.name }}</td>
                         <td>
                             {{ item_data.item.container }}
@@ -63,6 +65,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if preview_items %}
+            <p class="no-elements-available">{% trans "No items with assigned quantities were found for this event" %}.</p>
+        {% endif %}
         <div class="mt-4">
             <form method="post"
                   action="{% url 'orga_warehouse_commit_quantities' run.get_slug %}"

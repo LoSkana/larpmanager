@@ -31,18 +31,18 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    check_feature,
-    expect_normalized,
-    fill_date,
-    go_to,
-    just_wait,
-    login_orga,
-    login_user,
-    logout,
-    submit_confirm, sidebar,
-    get_modal_iframe, save_modal,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     delete_modal,
+                                     check_feature,
+                                     expect_normalized,
+                                     fill_date,
+                                     go_to,
+                                     login_orga,
+                                     login_user,
+                                     logout,
+                                     submit_confirm, sidebar,
+                                     get_modal_iframe, save_modal, _wait_lm_ready,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -69,7 +69,7 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     check_feature(page, "Payments")
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
-    just_wait(page)
+    page.locator("#id_wire_descr").wait_for(state="visible")
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("aaaa")
     page.locator("#id_wire_fee").click()
@@ -89,6 +89,7 @@ def check_user_fee(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     go_to(page, live_server, "/accounting/")
     page.get_by_role("link", name="follow this link").click()
+    _wait_lm_ready(page)
     expect_normalized(
         page,
         page.locator("#wrapper"),
@@ -175,8 +176,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Register the user to the event
     page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Now user is registered, they should be able to access the gallery
     go_to(page, live_server, "/testaccess/")
@@ -188,7 +188,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/testaccess/manage/")
     sidebar(page, "Registrations")
     # Find and delete the user's registration
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
 
     # Logout and login as user - now without registration
     logout(page)
@@ -225,8 +225,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Register again
     page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Now can access again
     go_to(page, live_server, "/testaccess/")
@@ -268,10 +267,12 @@ def reset_caches(live_server, page):
     go_to(page, live_server, "/test/manage/")
 
     page.get_by_role("link", name="Reset Cache").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#banner"), "Dashboard")
 
     # Test association-level cache reset
     go_to(page, live_server, "/manage/")
 
     page.get_by_role("link", name="Reset Cache").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#banner"),"Dashboard")

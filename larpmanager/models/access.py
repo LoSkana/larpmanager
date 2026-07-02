@@ -26,12 +26,12 @@ from django.db import models
 from django.db.models import Q, QuerySet, UniqueConstraint
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, UuidMixin
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event
 from larpmanager.models.member import Member
 
 
-class PermissionModule(BaseModel):
+class PermissionModule(OrderMixin, BaseModel):
     """Represents PermissionModule model."""
 
     name = models.CharField(max_length=100)
@@ -39,8 +39,6 @@ class PermissionModule(BaseModel):
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, unique=True)
 
     icon = models.CharField(max_length=100)
-
-    order = models.IntegerField()
 
 
 class AssociationPermission(BaseModel):

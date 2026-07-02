@@ -18,6 +18,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Quotas" %}</th>
                 <th>{% trans "Available days" %}</th>
                 <th>{% trans "Surcharge" %}</th>
@@ -27,6 +28,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         <a href="{% url 'orga_registration_quotas_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
@@ -45,4 +47,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No payment quota options have been defined for this event yet" %}. {% trans "Use the button above to add a quota plan" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

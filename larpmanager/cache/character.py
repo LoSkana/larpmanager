@@ -138,7 +138,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     assigned_character_ids = {rel.character_id for rel in context["assignments"].values()}
 
     # Process each character for the event cache
-    characters_query = context["event"].get_elements(Character).filter(hide=False).order_by("number")
+    characters_query = context["event"].get_elements(Character).filter(hide=False).order_by("order")
     for character in characters_query.prefetch_related("factions_list"):
         # Skip mirror characters that are already assigned
         if is_mirror_enabled and character.mirror_id in assigned_character_ids:

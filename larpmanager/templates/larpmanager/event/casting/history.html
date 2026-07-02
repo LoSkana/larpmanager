@@ -43,6 +43,7 @@
     <table id="preferences" class="go_datatable mob">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Player" %}</th>
                 {% with ""|center:casting_max as range %}
                     {% for _ in range %}<th>Preferenza {{ forloop.counter }}</th>{% endfor %}
@@ -52,6 +53,7 @@
         <tbody>
             {% for el in list %}
                 <tr>
+                    <td></td>
                     <td>
                         {% if staff %}
                             {{ el.member }}

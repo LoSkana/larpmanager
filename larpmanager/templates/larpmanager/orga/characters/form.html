@@ -4,6 +4,9 @@
     {% trans label_typ as name %}
     {{ name }} {% trans "Sheet" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
+{% block info %}
+    {{ page_info }}
+{% endblock info %}
 {% block content %}
     {% if available_typ|length > 1 %}
         <p>
@@ -20,9 +23,14 @@
         <hr />
     {% endif %}
     {% include "elements/header/edit.html" %}
-    <table id="character_questions" class="go_datatable writing ordering_arrow">
+    <table id="character_questions"
+           class="go_datatable writing row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="orga_character_form">
         <thead>
             <tr>
+                <th></th>
+                <th class="reorder-handle"></th>
                 <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Description" %}</th>
@@ -36,13 +44,15 @@
                 {% endif %}
                 <th>{% trans "Options" %}</th>
                 <th></th>
-                <th></th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
                     <td>
                         <a href="{% url 'orga_writing_form_edit' run.get_slug typ el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
@@ -70,20 +80,6 @@
                         {% endfor %}
                     </td>
                     <td>
-                        {% if not forloop.first %}
-                            <a href="{% url 'orga_writing_form_order' run.get_slug typ el.uuid 0 %}">
-                                <i class="fa-solid fa-arrow-up"></i>
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if not forloop.last %}
-                            <a href="{% url 'orga_writing_form_order' run.get_slug typ el.uuid 1 %}">
-                                <i class="fa-solid fa-arrow-down"></i>
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
                         {% if el.typ|length == 1 %}
                             <a href="{% url 'orga_writing_form_delete' run.get_slug typ el.uuid %}"
                                qtip="{% trans "Delete" %}"
@@ -94,4 +90,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No form fields defined yet" %}. {% trans "Add a field to collect information from players on their character sheet" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

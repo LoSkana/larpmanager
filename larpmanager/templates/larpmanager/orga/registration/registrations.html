@@ -95,6 +95,7 @@
                     <thead>
                         <tr>
                             <th></th>
+                            <th></th>
                             <th>{% trans "Participant" %}</th>
                             {% if registration_reg_que_age %}
                                 <th class="age">{% trans "Age (during the event)" %}</th>
@@ -146,6 +147,7 @@
                     <tbody>
                         {% for registration in dc.list %}
                             <tr id="{{ registration.uuid }}">
+                                <td></td>
                                 <td>
                                     <a href="{% url 'orga_registrations_edit' run.get_slug registration.uuid %}"
                                        qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
@@ -342,10 +344,10 @@
                 </a>
             </div>
         </div>
-        {% include "elements/registrations_list.html" %}
+        <div id="registrations_summary">{% include "elements/registrations_list.html" %}</div>
     {% else %}
         <br />
-        <p>
+        <p class="no-elements-available">
             <i>{% trans "No registrations have been received for this event yet" %}</i>
         </p>
     {% endif %}
@@ -457,7 +459,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
     $(function() {
 
-        $('#load_accounting').on('click', function () {
+        $(document).on('click', '#load_accounting', function () {
             load_accounting($(this));
             return false;
         });

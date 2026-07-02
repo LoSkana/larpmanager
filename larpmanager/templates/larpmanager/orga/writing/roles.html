@@ -10,6 +10,7 @@
     <table id="roles" class="go_datatable writing">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Character" %}</th>
                 <th>{% trans "Player" %}</th>
                 {% for rl in all_roles %}<th>{{ rl }}</th>{% endfor %}
@@ -18,6 +19,7 @@
         <tbody>
             {% for num, char in chars.items %}
                 <tr>
+                    <td></td>
                     <td>{{ char.name }}</td>
                     <td>{{ char.player_full }}</td>
                     {% for rl in all_roles %}
@@ -27,6 +29,11 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No characters have been created yet" %}. {% trans "Add characters to see their role assignments here" %}.
+        </p>
+    {% endif %}
     {% for el in roles_list %}
         <h3>{{ el.0 }}</h3>
         <table id="char_roles" class="go_datatable">
@@ -45,5 +52,8 @@
                 </tr>
             {% endfor %}
         </table>
+        {% if not roles_list %}
+            <p class="no-elements-available">{% trans "No characters have been assigned this role value yet" %}.</p>
+        {% endif %}
     {% endfor %}
 {% endblock content %}

@@ -28,6 +28,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.db.models import Max, Prefetch
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
+from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
@@ -691,6 +692,37 @@ def backend_delete(
     messages.success(request, _("Operation completed") + "!")
 
 
+def _element_display_name(element: BaseModel) -> str:
+    """Return a best-effort human-readable name for an element."""
+    for field_name in ("name", "title", "text"):
+        value = getattr(element, field_name, None)
+        if value:
+            return str(value)
+    return str(element)
+
+
+def backend_delete_frame(
+    request: HttpRequest,
+    context: dict,
+    model_type: BaseModel,
+    entity_uuid: str,
+    can_delete: Callable | None = None,
+) -> HttpResponse:
+    """Handle delete inside an iframe modal: confirm page on GET, delete on POST.
+
+    On GET, load the element and render a confirmation page showing its name.
+    On POST, perform the deletion and render the success page that signals the
+    parent window to close the modal and refresh the listing.
+    """
+    if request.method == "POST":
+        backend_delete(request, context, model_type, entity_uuid, can_delete)
+        return render(request, "elements/dashboard/form_success.html", context)
+
+    backend_get(context, model_type, entity_uuid, None)
+    context["el_name"] = _element_display_name(context["el"])
+    return render(request, "elements/dashboard/delete_confirm.html", context)
+
+
 def set_suggestion(context: dict, permission: str) -> None:
     """Set a suggestion flag for a given permission in the configuration.
 
@@ -921,3 +953,17 @@ def backend_order(
     current_element.save()
     adjacent_element.save()
     context["current"] = current_element
+
+
+def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> None:
+    """Bulk-set order field from a UUID list using index * 10 spacing."""
+    event = context["event"].get_class_parent(model_class)
+    objects = {str(obj.uuid): obj for obj in model_class.objects.filter(event=event, uuid__in=uuids)}
+    to_update = []
+    for i, uuid in enumerate(uuids):
+        obj = objects.get(uuid)
+        if obj:
+            obj.order = (i + 1) * 10
+            to_update.append(obj)
+    if to_update:
+        model_class.objects.bulk_update(to_update, ["order"])

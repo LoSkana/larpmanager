@@ -33,11 +33,10 @@ from larpmanager.tests.utils import (
     check_feature,
     fill_tinymce,
     go_to,
-    just_wait,
     login_orga,
     sidebar,
     submit_confirm,
-    get_modal_iframe, save_modal, click_and_wait_question,
+    get_modal_iframe, save_modal, click_and_wait_question, char_dual_pick,
 )
 
 pytestmark = pytest.mark.e2e
@@ -141,20 +140,10 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("Stats Test Plot")
 
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.fill("Test")
-    option = edit_iframe.get_by_role("option", name="Test Character")
-    option.wait_for(state="visible")
-    option.click()
-    just_wait(edit_iframe, big=True)
+    char_dual_pick(edit_iframe, "Test", "Test Character")
     fill_tinymce(edit_iframe, "ch_1", "important role")
 
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.fill("Minor")
-    option = edit_iframe.get_by_role("option", name="Minor NPC")
-    option.wait_for(state="visible")
-    option.click()
-    just_wait(edit_iframe, big=True)
+    char_dual_pick(edit_iframe, "Minor", "Minor NPC")
     fill_tinymce(edit_iframe, "ch_2", "$unimportant minor role")
 
     save_modal(page, edit_iframe)
@@ -169,14 +158,14 @@ def test_plot_unimportant_stats(pw_page: Any) -> None:
         page.locator("table.writing_list tbody tr")
         .nth(0)
         .locator("td")
-        .nth(8)
+        .nth(10)
         .inner_text()
     )
     important_text = (
         page.locator("table.writing_list tbody tr")
         .nth(0)
         .locator("td")
-        .nth(9)
+        .nth(11)
         .inner_text()
     )
 

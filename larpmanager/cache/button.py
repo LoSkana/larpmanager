@@ -33,7 +33,7 @@ def update_event_button(event_id: int) -> list[tuple[str, str, str, str]]:
     """Update event button cache from database."""
     return [
         (button.name, button.tooltip, button.link, button.icon)
-        for button in EventButton.objects.filter(event_id=event_id).order_by("number")
+        for button in EventButton.objects.filter(event_id=event_id).order_by("order")
         if button.link.startswith(("http://", "https://"))
     ]
 

@@ -10,6 +10,7 @@
     <table id="main_table" class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>
                     {% trans "Staff" %} <i class="fa fa-hashtag"></i>
@@ -24,6 +25,7 @@
         <tbody>
             {% for key, el in list.items %}
                 <tr>
+                    <td></td>
                     <td>
                         <a href="{% url 'exe_competences_member_detail' el.uuid %}">{{ el.name }}</a>
                     </td>
@@ -45,5 +47,8 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "No contributors with competences found in the organization" %}.</p>
+    {% endif %}
     {{ list | length }}
 {% endblock content %}

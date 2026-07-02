@@ -27,9 +27,9 @@ import re
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
-                                     check_feature,
+from larpmanager.tests.utils import (check_feature,
                                      expect_normalized,
                                      fill_tinymce,
                                      go_to,
@@ -37,7 +37,7 @@ from larpmanager.tests.utils import (just_wait,
                                      login_orga,
                                      logout,
                                      submit_confirm, submit_inline_edit, wait_for_inline_edit,
-                                     get_modal_iframe, save_modal, sidebar, click_and_wait_question,
+                                     get_modal_iframe, save_modal, sidebar, _wait_select2_results, LONG_TIMEOUT,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -91,8 +91,9 @@ def test_manual_excel_save_external(pw_page: Any) -> None:
     editor.press(" ")
     editor.press("#")
     edit_iframe.get_by_role("searchbox").fill("tes")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
-    just_wait(edit_iframe)
+    expect(editor).to_have_value(re.compile(r".*#\d+"))
     save_modal(page, edit_iframe)
 
     expect_normalized(page,
@@ -116,8 +117,9 @@ def excel(page: Any, live_server: Any) -> None:
     panel.locator("#id_text").fill("Test Text ff kinda hate ")
     panel.locator("#id_text").press("#")
     page.get_by_role("searchbox").fill("an")
+    _wait_select2_results(page)
     page.locator(".select2-results__option").first.click()
-    just_wait(page)
+    expect(panel.locator("#id_text")).to_have_value(re.compile(r".*#\d+"))
     submit_inline_edit(page)
 
     # check by reload
@@ -132,8 +134,11 @@ def excel(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     fill_tinymce(edit_iframe, "id_text", "ciaoooo")
 
-    page.locator('body').press("ControlOrMeta+s")
-    just_wait(page)
+    with page.expect_response(
+        lambda r: r.request.method == "POST" and "ajax=1" in (r.request.post_data or "")
+    ) as save_response:
+        page.locator('body').press("ControlOrMeta+s")
+    assert save_response.value.ok
 
     # check by reload
     page.reload()
@@ -180,7 +185,7 @@ def working_ticket(page: Any, server: Any, context: Any) -> None:
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     expect_normalized(edit_iframe,
-        edit_iframe.locator("#test-larp"),
+        edit_iframe.locator("#test-orga"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )
 
@@ -193,9 +198,9 @@ def working_ticket_event(page: Any, server: Any, context: Any) -> None:
     page1.goto(server + "/test/manage/config")
     page.wait_for_function(
         "() => document.body.innerText.toLowerCase().includes('warning! other users are editing')",
-        timeout=15000,
+        timeout=LONG_TIMEOUT,
     )
     expect_normalized(page,
-        page.locator("#test-larp"),
+        page.locator("#test-orga"),
         "Warning! Other users are editing this item. You cannot work on it at the same time: the work of one of you would be lost.",
     )

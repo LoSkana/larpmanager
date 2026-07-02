@@ -84,7 +84,7 @@
                 <tr>
                     <th>Page background</th>
                     <td>
-                        Make sure your image has size compatible with the chosen page size (for example ratio 1:√2 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
+                        Make sure your image has size compatible with the chosen page size (for example ratio 1:1.414 for A4). Then upload the image on the <a href="{% url 'orga_utils' run.get_slug %}">{% trans "Utils" %}</a>, copy the internal link, and place the following in the "PAGE CSS":
                         <br />
                         <hr />
                         <span class="code">@page { [... other stuff ...] background: url('#internal_link#'); }</span>

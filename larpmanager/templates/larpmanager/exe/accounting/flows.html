@@ -13,6 +13,7 @@
     <table class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Size" %}</th>
                 <th>{% trans "Description" %}</th>
@@ -23,6 +24,7 @@
         <tbody>
             {% for el in memberships %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created | date:"d/m/Y" }}</td>
                     <td>{{ el.value }}</td>
                     <td>{% trans "Organization fee" %} - {{ el.member }} - {{ el.year }}</td>
@@ -35,71 +37,27 @@
                     </td>
                 </tr>
             {% endfor %}
-        </tbody>
-        {% for el in donations %}
-            <tr>
-                <td>{{ el.created | date:"d/m/Y" }}</td>
-                <td>{{ el.value }}</td>
-                <td>
-                    {% if el.descr %}{{ el.descr }} -{% endif %}
-                    {{ el.member }}
-                </td>
-                <td>donation</td>
-                <td></td>
-                <td>
-                    {% if el.inv.invoice %}
-                        <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        {% for el in inflows %}
-            <tr>
-                <td>{{ el.created | date:"d/m/Y" }}</td>
-                <td>{{ el.value }}</td>
-                <td>{{ el.descr }}</td>
-                <td>inflow</td>
-                <td>
-                    {% if el.run %}{{ el.run }}{% endif %}
-                </td>
-                <td>
-                    {% if el.invoice %}
-                        <a href="{{ el.download }}">{% trans "Download" %}</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        {% for el in tickets %}
-            <tr>
-                <td>{{ el.created | date:"d/m/Y" }}</td>
-                <td>{{ el.value }}</td>
-                <td>{{ el.member }}</td>
-                <td>event</td>
-                <td>
-                    {% if el.registration %}{{ el.registration.run }}{% endif %}
-                </td>
-                <td>
-                    {% if el.inv.invoice %}
-                        <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    <h4>{% trans "Outflows" %}</h4>
-    <table class="go_datatable">
-        <thead>
-            <tr>
-                <th>{% trans "Date" %}</th>
-                <th>{% trans "Size" %}</th>
-                <th>{% trans "Description" %}</th>
-                <th>{% trans "Type" %}</th>
-                <th>{% trans "Event" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for el in outflows %}
+            {% for el in donations %}
                 <tr>
+                    <td></td>
+                    <td>{{ el.created | date:"d/m/Y" }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>
+                        {% if el.descr %}{{ el.descr }} -{% endif %}
+                        {{ el.member }}
+                    </td>
+                    <td>donation</td>
+                    <td></td>
+                    <td>
+                        {% if el.inv.invoice %}
+                            <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for el in inflows %}
+                <tr>
+                    <td></td>
                     <td>{{ el.created | date:"d/m/Y" }}</td>
                     <td>{{ el.value }}</td>
                     <td>{{ el.descr }}</td>
@@ -111,6 +69,62 @@
                         {% if el.invoice %}
                             <a href="{{ el.download }}">{% trans "Download" %}</a>
                         {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            {% for el in tickets %}
+                <tr>
+                    <td></td>
+                    <td>{{ el.created | date:"d/m/Y" }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>{{ el.member }}</td>
+                    <td>event</td>
+                    <td>
+                        {% if el.registration %}{{ el.registration.run }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.inv.invoice %}
+                            <a href="{{ el.inv.download }}">{% trans "Download" %}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h4>{% trans "Outflows" %}</h4>
+    <table class="go_datatable">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Date" %}</th>
+                <th>{% trans "Size" %}</th>
+                <th>{% trans "Description" %}</th>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "Event" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in outflows %}
+                <tr>
+                    <td></td>
+                    <td>{{ el.created | date:"d/m/Y" }}</td>
+                    <td>{{ el.value }}</td>
+                    <td>{{ el.descr }}</td>
+                    <td>inflow</td>
+                    <td>
+                        {% if el.run %}{{ el.run }}{% endif %}
+                    </td>
+                    <td>
+                        {% if el.invoice %}
+                            <a href="{{ el.download }}">{% trans "Download" %}</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td></td>
+                    <td colspan="100">
+                        <p class="no-elements-available">{% trans "No outflows recorded for the selected year" %}.</p>
                     </td>
                 </tr>
             {% endfor %}
@@ -136,6 +150,7 @@
     <table class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Member" %}</th>
                 <th>{% trans "Amount" %}</th>
             </tr>
@@ -143,16 +158,21 @@
         <tbody>
             {% for el in pos %}
                 <tr>
+                    <td></td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.credit }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% if not pos %}
+        <p class="no-elements-available">{% trans "No members with positive credits for the selected year" %}.</p>
+    {% endif %}
     <h4>{{ credits_name }} {% trans "negatives" %}</h4>
     <table class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Member" %}</th>
                 <th>{% trans "Amount" %}</th>
             </tr>
@@ -160,10 +180,14 @@
         <tbody>
             {% for el in neg %}
                 <tr>
+                    <td></td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.credit }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% if not neg %}
+        <p class="no-elements-available">{% trans "No members with negative credits for the selected year" %}.</p>
+    {% endif %}
 {% endblock content %}

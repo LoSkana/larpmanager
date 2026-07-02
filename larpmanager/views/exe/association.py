@@ -535,6 +535,7 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
 def exe_activation(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
     """Show activation checklist and allow unlocking advanced mode from lite/demo."""
     context = check_association_context(request, "exe_activation")
+    context["page_info"] = _("Check and complete your organization's activation checklist")
     association_id = context["association_id"]
 
     if request.method == "GET" and request.GET.get("slug"):

@@ -280,18 +280,18 @@ class OrgaFeatureForm(FeatureForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize form and features."""
         super().__init__(*args, **kwargs)
-        self._init_features(is_association=False)
+        source = self.instance.parent if self.instance.parent_id else self.instance
+        self._init_features(is_association=False, source=source)
 
     def save(self, commit: bool = True) -> Event:  # noqa: FBT001, FBT002, ARG002
         """Save the form instance and update event features cache."""
-        # Save form without committing to database yet
         instance: Event = super().save(commit=False)
 
-        # Update associated features for this event
-        self._save_features(instance)
+        # Save features to parent if campaign child, otherwise to self
+        target = instance.parent if instance.parent_id else instance
+        self._save_features(target)
 
-        # Invalidate cached event features
-        clear_event_features_cache(instance.id)
+        clear_event_features_cache(target.id)
 
         return instance
 
@@ -315,6 +315,19 @@ class OrgaConfigForm(ConfigForm):
         """Initialize form and prevent registration cancellation."""
         super().__init__(*args, **kwargs)
         self.prevent_canc = True
+
+    def _get_config_save_target(self, instance: Any) -> Any:
+        """Save configs to parent event if one exists, otherwise to the event itself."""
+        return instance.parent if instance.parent_id else instance
+
+    def _get_all_element_configs(self) -> dict[str, str]:
+        """Read configs from parent event if one exists, so displayed values match runtime behavior."""
+        source = self.instance.parent if self.instance.parent_id else self.instance
+        config_mapping = {}
+        if source.pk:
+            for config in source.configs.all():
+                config_mapping[config.name] = config.value
+        return config_mapping
 
     def set_configs(self) -> None:
         """Configure form fields for event settings and features."""
@@ -690,6 +703,10 @@ class OrgaConfigForm(ConfigForm):
             config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
             self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
 
+            config_label = _("Disable auto relationships")
+            config_help_text = _("If checked, auto-relationships from character references will not be created")
+            self.add_configs("writing_disable_auto_relationship", ConfigType.BOOL, config_label, config_help_text)
+
         config_label = _("Disable character finder")
         config_help_text = (
             _("Disable the system that finds the character number when a special reference symbol is written")
@@ -816,6 +833,14 @@ class OrgaConfigForm(ConfigForm):
                 "If checked, enables modifiers that can adjust ability costs based on prerequisites and requirements",
             )
             self.add_configs("exp_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
+
+            # Criterions configuration
+            criterions_label = _("Criterions")
+            criterions_help_text = _(
+                "If checked, enables criterions that conditionally modify experience point totals "
+                "based on prerequisites and requirements",
+            )
+            self.add_configs("exp_criterions", ConfigType.BOOL, criterions_label, criterions_help_text)
 
             # Auto buy configuration
             auto_buy_label = _("Auto buy")
@@ -1377,6 +1402,11 @@ class OrgaRunForm(ConfigForm):
 
         self.main_class = ""
 
+        if "start" in self.fields:
+            self.fields["start"].required = True
+        if "end" in self.fields:
+            self.fields["end"].required = True
+
         if "exe" not in self.params:
             self.prevent_canc = True
 
@@ -1451,6 +1481,7 @@ class OrgaRunForm(ConfigForm):
             [
                 (RegistrationStatus.EXTERNAL.value, RegistrationStatus.EXTERNAL.label),
                 (RegistrationStatus.FUTURE.value, RegistrationStatus.FUTURE.label),
+                (RegistrationStatus.CLOSING.value, RegistrationStatus.CLOSING.label),
             ]
         )
 
@@ -1463,7 +1494,11 @@ class OrgaRunForm(ConfigForm):
             RegistrationStatus.PRE: _("Pre-registration is available"),
             RegistrationStatus.EXTERNAL: _("Redirects to an external registration link"),
             RegistrationStatus.FUTURE: _("Registrations will open at the specified date and time"),
+            RegistrationStatus.CLOSING: _("Registrations are open and will close at the specified date and time"),
         }
+
+        # Registrations are always open at the "date and time" set in the registration_open field:
+        # for FUTURE it marks the opening, for CLOSING it marks the closing.
 
         help_parts = []
         for value, label in choices:
@@ -1475,7 +1510,9 @@ class OrgaRunForm(ConfigForm):
         # Add data attributes for JavaScript conditional display
         self.fields["registration_status"].widget.attrs["data-conditional-controller"] = "registration_status"
         if "registration_open" in self.fields:
-            self.fields["registration_open"].widget.attrs["data-conditional-show"] = RegistrationStatus.FUTURE.value
+            self.fields["registration_open"].widget.attrs["data-conditional-show"] = (
+                f"{RegistrationStatus.FUTURE.value},{RegistrationStatus.CLOSING.value}"
+            )
             self.fields["registration_open"].custom_class = "hide"
             self.fields["registration_open"].custom_style = "display: none"
         if "register_link" in self.fields:
@@ -1613,6 +1650,11 @@ class OrgaRunForm(ConfigForm):
             if not registration_open:
                 raise ValidationError({"registration_open": _("Value required") + "!"})
 
+        if registration_status == RegistrationStatus.CLOSING:
+            registration_open = cleaned_data.get("registration_open")
+            if not registration_open:
+                raise ValidationError({"registration_open": _("Value required") + "!"})
+
         return cleaned_data
 
 
@@ -1620,6 +1662,8 @@ class OrgaProgressStepForm(BaseModelForm):
     """Form for managing event progression steps."""
 
     page_title = _("Progression")
+
+    page_info = _("Manage the progression steps shown to participants during this event")
 
     class Meta:
         model = ProgressStep
@@ -1748,6 +1792,9 @@ class ExeEventForm(OrgaEventForm):
                 for feat_slug in template_features:
                     for config_name, config_value in _FEATURE_IMPLIED_CONFIGS.get(feat_slug, {}).items():
                         save_single_config(instance, config_name, config_value)
+
+                # Re-save so post_save default setup runs with the template features applied
+                instance.save()
 
         return instance
 

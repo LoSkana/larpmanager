@@ -27,9 +27,10 @@ date configuration, and event dashboard access.
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_date, just_wait, go_to, login_orga, submit_confirm, expect_normalized, \
-    get_modal_iframe, save_modal, fill_tinymce
+from larpmanager.tests.utils import fill_date, go_to, login_orga, submit_confirm, expect_normalized, \
+    get_modal_iframe, save_modal, fill_tinymce, _wait_select2_results
 
 pytestmark = pytest.mark.e2e
 
@@ -44,11 +45,11 @@ def test_exe_runs_new_session(pw_page: Any) -> None:
 
     # Select the existing event using the Select2 widget
     page.locator("#select2-id_event-container").click()
-    just_wait(page)
+    page.get_by_role("searchbox").last.wait_for(state="visible")
     page.get_by_role("searchbox").last.fill("Test")
-    just_wait(page)
+    _wait_select2_results(page)
     page.get_by_role("option", name="Test Larp").click()
-    just_wait(page)
+    expect(page.locator("#select2-id_event-container")).to_contain_text("Test Larp")
 
     fill_date(page, "#id_start", "2060-01-10")
     fill_date(page, "#id_end", "2060-01-12")

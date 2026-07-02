@@ -28,8 +28,9 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import go_to, login_orga, expect_normalized, just_wait, submit_confirm, new_option, \
-    submit_option, sidebar, nav, get_modal_iframe, save_modal, click_and_wait_question
+from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, new_option, \
+    submit_option, sidebar, get_modal_iframe, save_modal, click_and_wait_question, _wait_lm_ready, \
+    click_option
 
 pytestmark = pytest.mark.e2e
 
@@ -42,7 +43,7 @@ def test_user_search(pw_page: Any) -> None:
     characters(page, live_server)
 
     go_to(page, live_server, "/test/")
-    nav(page, "Search")
+    sidebar(page, "Search")
 
     filter_faction(page)
 
@@ -112,11 +113,13 @@ def filter_faction(page: Any) -> None:
     )
     page.get_by_role("link", name="Factions").nth(1).click()
     page.locator("#factions").get_by_role("link", name="fassione").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) Factions: fassione None Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser wheel Player: Absent color: blue tag: wunder Factions: fassione",
     )
     page.locator("#factions").get_by_role("link", name="fassione").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#search-results"),
         "You are including (at least one of these filters) You are excluding (none of these filters) All Factions: fassione another Player: Absent color: blue tag: wunder | qerfi",
@@ -198,35 +201,34 @@ def characters(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("fas")
     edit_iframe.get_by_role("option", name="fassione (P)").click()
-    edit_iframe.locator("#id_que_u8").select_option("u1")
-    edit_iframe.get_by_role("checkbox", name="zapyr").check()
+    edit_iframe.locator('label[for="id_que_u8_0"]').click()
+    edit_iframe.locator('label[for="id_que_u9_1"]').click()
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("another")
-    edit_iframe.locator("#id_que_u8").select_option("u2")
-    edit_iframe.locator("#id_que_u9 div").filter(has_text="qerfi").click()
-    edit_iframe.get_by_role("checkbox", name="wunder").check()
+    edit_iframe.locator('label[for="id_que_u8_1"]').click()
+    edit_iframe.locator('label[for="id_que_u9_2"]').click()
+    edit_iframe.locator('label[for="id_que_u9_0"]').click()
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("wheel")
-    edit_iframe.locator("#id_que_u8").select_option("u2")
+    edit_iframe.locator('label[for="id_que_u8_1"]').click()
     edit_iframe.get_by_role("searchbox").click()
     edit_iframe.get_by_role("searchbox").fill("fa")
     edit_iframe.get_by_role("option", name="fassione (P)").click()
-    edit_iframe.get_by_role("checkbox", name="wunder").check()
+    click_option(edit_iframe.get_by_role("checkbox", name="wunder"))
     save_modal(page, edit_iframe)
 
     click_and_wait_question(page, "Faction")
     click_and_wait_question(page, "color")
     click_and_wait_question(page, "tag")
 
-    just_wait(page)
     expect_normalized(page,
         page.locator("#one"),
         "Test Character Test Teaser Test Text fassione red zapyr another blue wunder | qerfi wheel fassione blue wunder",

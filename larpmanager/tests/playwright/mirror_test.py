@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, submit, submit_confirm, expect_normalized, \
+from larpmanager.tests.utils import go_to, login_orga, submit, submit_confirm, expect_normalized, \
+    submit_register, \
     get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
@@ -97,28 +98,24 @@ def casting(live_server: Any, page: Any) -> None:
 
     # sign up and fill preferences
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/casting")
-    page.locator("#faction0").select_option("all")
-    page.locator("#choice0").click()
-    expect_normalized(page, page.locator("#casting"), "Mirror")
-    expect_normalized(page, page.locator("#casting"), "Test Character")
-    just_wait(page, big=True)
-    page.locator("#choice0").select_option("u2")
+    expect_normalized(page, page.locator("#char-list"), "Mirror")
+    expect_normalized(page, page.locator("#char-list"), "Test Character")
+    page.locator("#char-list .char-card").filter(has_text="Mirror").click()
     submit(page)
 
     # test toggle casting
     go_to(page, live_server, "/test/manage/casting")
     expect_normalized(page, page.locator(".change").first, "YES")
     page.locator(".change").first.click()
-    just_wait(page)
+    expect(page.locator(".change").first).to_have_text("NO")
 
     go_to(page, live_server, "/test/manage/casting")
     expect_normalized(page, page.locator(".change").first, "NO")
     page.locator(".change").first.click()
-    just_wait(page)
+    expect(page.locator(".change").first).to_have_text("YES")
 
     # perform casting
     page.get_by_role("button", name="Start algorithm").click()

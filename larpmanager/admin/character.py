@@ -29,9 +29,11 @@ from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CriterionExp,
     DeliveryExp,
     ModifierExp,
     RuleExp,
+    SystemExp,
 )
 from larpmanager.models.form import (
     WritingAnswer,
@@ -160,6 +162,26 @@ class RelationshipAdmin(DefModelAdmin):
     list_display: ClassVar[tuple] = ("source", "target", "text")
     list_filter = (SourceFilter, TargetFilter)
     autocomplete_fields: ClassVar[list] = ["source", "target"]
+
+
+@admin.register(SystemExp)
+class SystemPxAdmin(DefModelAdmin):
+    """Admin interface for SystemExp model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "name", "hidden", "uuid")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+
+
+@admin.register(CriterionExp)
+class CriterionPxAdmin(DefModelAdmin):
+    """Admin interface for CriterionExp model."""
+
+    list_display: ClassVar[tuple] = ("id", "event", "name", "system", "operation", "amount", "uuid")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["event", "system", "prerequisites", "requirements"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
 @admin.register(AbilityTypeExp)

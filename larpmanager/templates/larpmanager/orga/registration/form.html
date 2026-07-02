@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Registration form" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
+{% block info %}
+    {{ page_info }}
+{% endblock info %}
 {% block content %}
     {% include "elements/header/edit.html" %}
     {% define "-1" as old_section %}
@@ -15,9 +18,13 @@
             </h1>
         {% endif %}
         <table id="registration_questions_{{ el.section | slugify }}"
-               class="go_datatable writing ordering_arrow">
+               class="go_datatable writing row_reorder"
+               data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+               data-reorder-model="orga_registration_form">
             <thead>
                 <tr>
+                    <th></th>
+                    <th class="reorder-handle"></th>
                     <th></th>
                     <th>{% trans "Name" %}</th>
                     <th>{% trans "Description" %}</th>
@@ -34,13 +41,16 @@
                         <th>{% trans "Tickets" %}</th>
                     {% endif %}
                     <th></th>
-                    <th></th>
-                    <th></th>
                 </tr>
             </thead>
             <tbody>
+                {% define el.section as old_section %}
             {% endif %}
             <tr id="{{ el.uuid }}">
+                <td></td>
+                <td class="reorder-handle">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                </td>
                 <td>
                     <a href="{% url 'orga_registration_form_edit' run.get_slug el.uuid %}">
                         <i class="fas fa-edit"></i>
@@ -80,22 +90,6 @@
                     </td>
                 {% endif %}
                 <td>
-                    {% if el.section != old_section %}
-                        {% define el.section as old_section %}
-                    {% else %}
-                        <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 0 %}">
-                            <i class="fa-solid fa-arrow-up"></i>
-                        </a>
-                    {% endif %}
-                </td>
-                <td>
-                    {% if not forloop.last %}
-                        <a href="{% url 'orga_registration_form_order' run.get_slug el.uuid 1 %}">
-                            <i class="fa-solid fa-arrow-down"></i>
-                        </a>
-                    {% endif %}
-                </td>
-                <td>
                     {% if el.typ|length == 1 %}
                         <a href="{% url 'orga_registration_form_delete' run.get_slug el.uuid %}"
                            qtip="{% trans "Delete" %}"
@@ -106,4 +100,9 @@
         {% endfor %}
     </tbody>
 </table>
+{% if not list %}
+    <p class="no-elements-available">
+        {% trans "No registration form questions have been created yet" %}. {% trans "Use the button above to add questions to the registration form" %}.
+    </p>
+{% endif %}
 {% endblock content %}

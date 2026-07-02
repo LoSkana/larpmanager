@@ -30,8 +30,9 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, \
-    submit_confirm, new_option, submit_option, sidebar, nav, get_modal_iframe, save_modal
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, submit_register, \
+    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, _wait_select2_results, \
+    _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
 
@@ -90,6 +91,7 @@ def prepare(page: Any) -> None:
     option_row.locator("#id_name").fill("st")
     option_row.get_by_role("searchbox").click()
     option_row.get_by_role("searchbox").fill("st")
+    _wait_select2_results(edit_iframe)
     option_row.locator(".select2-results__option").first.click()
     submit_option(edit_iframe, option_row)
 
@@ -99,6 +101,7 @@ def prepare(page: Any) -> None:
     option_row.locator("#id_name").fill("bmb")
     option_row.get_by_role("searchbox").click()
     option_row.get_by_role("searchbox").fill("bam")
+    _wait_select2_results(edit_iframe)
     option_row.locator(".select2-results__option").first.click()
     submit_option(edit_iframe, option_row)
 
@@ -109,9 +112,8 @@ def prepare(page: Any) -> None:
 def create_character(page: Any) -> None:
     # signup first ticket
     page.get_by_role("link", name="Register").click()
-    page.get_by_label("Ticket").select_option("u1")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    page.locator('label[for="id_ticket_0"]').click()
+    submit_register(page)
 
     # confirm profile
     page.get_by_role("checkbox", name="Authorisation").check()
@@ -120,7 +122,8 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Create your character!").click()
 
     # check only one option
-    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "st" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "st"\n- text: st')
+    page.locator('label[for="id_que_u4_0"]').click()  # select "st"
 
     # create player
     page.locator("#id_name").click()
@@ -131,14 +134,15 @@ def create_character(page: Any) -> None:
 
     # check status, resubmit reg
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
 
     # change ticket
-    nav(page, "Registration")
-    page.get_by_label("Ticket").select_option("u2")
+    sidebar(page, "Registration")
+    page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
 
@@ -149,15 +153,16 @@ def create_character(page: Any) -> None:
     page.get_by_role("link", name="Edit").click()
 
     # check only one option available
-    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"\n- text: bmb')
+    page.locator('label[for="id_que_u4_0"]').click()  # select "bmb" (only option)
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
 
     # check with registration resubmit
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     page.get_by_role("button", name="Continue").click()
     page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
     page.get_by_role("link", name="Edit").click()
-    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- combobox:\n  - option "bmb" [selected]')
+    expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"')
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")

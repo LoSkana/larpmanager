@@ -1492,6 +1492,19 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
+    name: Experience Criterions
+    descr: Pseudo-feature activated by exp_criterions configuration
+    slug: exp_criterions
+    overall: false
+    placeholder: true
+    order: 0
+    after_text: ''
+    after_link: ''
+    hidden: true
+    module: miscellany
+    dependencies: []
+- model: larpmanager.feature
+  fields:
     name: Experience Templates
     descr: Pseudo-feature activated by exp_templates configuration
     slug: exp_templates

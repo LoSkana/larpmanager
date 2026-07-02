@@ -31,6 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
+    drag_reorder,
     expect_normalized,
     fill_tinymce,
     get_modal_iframe,
@@ -38,7 +39,7 @@ from larpmanager.tests.utils import (
     login_orga,
     login_user,
     logout,
-    submit_confirm, sidebar, save_modal, just_wait,
+    submit_confirm, sidebar, save_modal, _wait_select2_results, topbar,
 )
 
 pytestmark = pytest.mark.e2e
@@ -149,7 +150,7 @@ def test_faction_all(pw_page: Any) -> None:
         for faction in faction_names:
             edit_iframe.get_by_role("searchbox").click()
             edit_iframe.get_by_role("searchbox").fill(faction[:5])  # Type first 5 chars
-            just_wait(edit_iframe)  # Wait for dropdown
+            _wait_select2_results(edit_iframe)
             edit_iframe.locator(".select2-results__option").filter(has_text=faction).first.click()
 
         save_modal(page, edit_iframe)
@@ -175,8 +176,8 @@ def test_faction_all(pw_page: Any) -> None:
     go_to(page, live_server, "/")
 
     # Navigate to factions gallery
-    page.get_by_role("link", name="Test Larp").click()
-    page.get_by_role("link", name="Factions").click()
+    topbar(page, "Test Larp")
+    sidebar(page, "Factions")
 
     # Verify PRIMARY and TRANSVERSAL factions are visible
     expect_normalized(page, page.locator("#one"),
@@ -233,10 +234,8 @@ def test_faction_all(pw_page: Any) -> None:
     first_row = page.locator(".writing_list tbody tr").first
     expect(first_row).to_contain_text("Primary Faction 1")
 
-    page.locator(".writing_list tbody tr").locator(".fa-arrow-up").first.click()
-
-    # Wait for page reload
-    page.wait_for_load_state("networkidle")
+    rows = page.locator(".writing_list tbody tr")
+    drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
 
     # Verify order changed - Primary Faction 2 should now be first
     go_to(page, live_server, "test/manage/factions")
@@ -278,7 +277,7 @@ def test_faction_all(pw_page: Any) -> None:
     go_to(page, live_server, "/")
 
     # Navigate to Character Alpha
-    page.get_by_role("link", name="Test Larp").click()
+    topbar(page, "Test Larp")
     page.get_by_role("link", name="Character Alpha").first.click()
 
     # Verify character info are visible

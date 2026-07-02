@@ -62,6 +62,7 @@ def orga_casting_preferences(request: HttpRequest, event_slug: str, casting_type
     """Handle casting preferences for characters or traits based on type."""
     # Check user permissions for casting preferences
     context = check_event_context(request, event_slug, "orga_casting_preferences")
+    context["page_info"] = _("Configure casting preferences for this event")
 
     # Get base casting details
     get_element(context, casting_type, "quest_type", QuestType)
@@ -91,6 +92,7 @@ def orga_casting_history(request: HttpRequest, event_slug: str, casting_type: st
     """
     # Check user permissions for casting history access
     context = check_event_context(request, event_slug, "orga_casting_history")
+    context["page_info"] = _("View casting history showing character and trait assignments across sessions")
 
     # Add casting details to context
     get_element(context, casting_type, "quest_type", QuestType)

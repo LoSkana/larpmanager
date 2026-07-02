@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (submit_register,
+                                     click_option, drag_reorder,
                                      fill_tinymce,
                                      go_to,
                                      login_orga,
@@ -38,8 +39,7 @@ from larpmanager.tests.utils import (just_wait,
                                      logout,
                                      submit_confirm,
                                      expect_normalized, new_option, submit_option, get_option,
-                                     get_modal_iframe, save_modal, _wait_lm_ready,
-                                     )
+                                     get_modal_iframe, save_modal, _wait_lm_ready, )
 
 pytestmark = pytest.mark.e2e
 
@@ -90,6 +90,7 @@ def test_orga_character_form(pw_page: Any) -> None:
 
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="pinoloooooooooo").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test public: public Presentation baba")
 
     create_second_char(live_server, page)
@@ -98,8 +99,7 @@ def test_orga_character_form(pw_page: Any) -> None:
 def create_second_char(live_server: Any, page: Any) -> None:
     login_user(page, live_server)
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Create your character!").click()
@@ -110,27 +110,29 @@ def create_second_char(live_server: Any, page: Any) -> None:
 
     fill_tinymce(page, "id_text", "sdfdsfds")
     expect(page.locator("#id_que_u6")).to_match_aria_snapshot(
-        '- combobox:\n  - option "-------" [disabled] [selected]\n  - option "all"\n  - option "few - (Available 1)"'
+        '- radio /all.*/\n- radio /few.*/'
     )
-    page.locator("#id_que_u6").select_option("u2")
-    page.locator("#id_que_u8").click()
-    page.locator("#id_que_u8").click()
+    click_option(page.locator("#id_que_u6_0"))
     expect(page.locator("#id_que_u8")).to_match_aria_snapshot(
-        '- combobox:\n  - option "-------" [disabled] [selected]\n  - option "only" [disabled]\n  - option "all"'
+        '- radio /only.*/\n- radio /all.*/'
     )
-    expect(page.locator("#id_que_u7")).to_match_aria_snapshot(
-        '- checkbox "all"\n- text: all\n- checkbox "many - (Available 1)"\n- text: many - (Available 1)\n- checkbox "few" [disabled]\n- text: few'
-    )
-    expect(page.get_by_role("checkbox", name="few")).to_be_disabled()
-    page.get_by_role("checkbox", name="many - (Available 1)").check()
-    just_wait(page)
+    expect(page.locator("#id_que_u7")).to_match_aria_snapshot("""
+      - checkbox "all all descr"
+      - text: all all descr
+      - checkbox "many many descr 1 available"
+      - text: many many descr 1 available
+      - checkbox "few few descr" [disabled]
+      - text: few few descr
+    """)
+    expect(page.locator("#id_que_u7_2")).to_be_disabled()
+    click_option(page.locator("#id_que_u7_1"))
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "options: 1 / 2")
     page.locator("#id_que_u9").click()
     page.locator("#id_que_u9").fill("asda")
     submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
-        "Player: User Test Status: Creation available text: few multiple text: many mandatory: asda Presentation dsfdfsd Text sdfdsfds",
+        "player: user test status: creation available text: all multiple text: many mandatory: asda presentation dsfdfsd text sdfdsfds",
     )
 
 
@@ -151,11 +153,10 @@ def check_first_char(page: Any, live_server: Any) -> None:
     expect(page.locator("#id_que_u4")).to_have_value("aaaaaaaaaa")
     page.get_by_text("bbbbbbbbbb").click()
     expect(page.get_by_text("bbbbbbbbbb")).to_have_value("bbbbbbbbbb")
-    expect(page.locator("#id_que_u6")).to_have_value("u1")
-    page.locator("#id_que_u8").click()
-    expect(page.locator("#id_que_u8")).to_have_value("u6")
+    expect(page.locator('input[name="que_u6"]:checked')).to_have_value("u1")
+    expect(page.locator('input[name="que_u8"]:checked')).to_have_value("u6")
     expect(page.locator("#id_que_u7")).to_match_aria_snapshot(
-        '- checkbox "all" [checked]\n- text: all\n- checkbox "many" [checked]\n- text: many\n- checkbox "few - (Available 1)" \n- text: few - (Available 1)'
+        '- checkbox /all.*/ [checked]\n- checkbox /many.*/ [checked]'
     )
     expect(page.locator("#id_que_u9")).to_have_value("fill mandatory")
     expect(page.locator("#id_que_u12")).to_have_value("public")
@@ -169,10 +170,10 @@ def check_first_char(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_que_u4").press("Tab")
     edit_iframe.get_by_text("bbbbbbbbbb").click()
     edit_iframe.get_by_text("bbbbbbbbbb").fill("dddddddddd")
-    edit_iframe.locator("#id_que_u6").select_option("u2")
-    edit_iframe.locator("#id_que_u8").select_option("u7")
-    edit_iframe.get_by_role("checkbox", name="all").uncheck()
-    edit_iframe.get_by_role("checkbox", name="few").check()
+    edit_iframe.locator('label[for="id_que_u6_1"]').click()
+    edit_iframe.locator('label[for="id_que_u8_0"]').click()
+    edit_iframe.locator('label[for="id_que_u7_0"]').click()
+    edit_iframe.locator('label[for="id_que_u7_2"]').click()
     edit_iframe.locator("#id_que_u10").fill("disabled")
     edit_iframe.locator("#id_que_u11").fill("hidden")
     edit_iframe.locator("#id_status").select_option("a")
@@ -181,23 +182,22 @@ def check_first_char(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     expect(edit_iframe.locator("#id_que_u4")).to_have_value("cccccccccc")
     expect(edit_iframe.get_by_text("dddddddddd")).to_have_value("dddddddddd")
-    expect(edit_iframe.locator("#id_que_u6")).to_have_value("u2")
-    expect(edit_iframe.locator("#id_que_u8")).to_have_value("u7")
-    expect_normalized(page, edit_iframe.locator("#lbl_id_que_u4"), "short text")
+    expect(edit_iframe.locator('input[name="que_u6"]:checked')).to_have_value("u2")
+    expect(edit_iframe.locator('input[name="que_u8"]:checked')).to_have_value("u7")
+    expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u4"), "short text")
     edit_iframe.get_by_role("cell", name="long text").dblclick()
-    expect_normalized(page, edit_iframe.locator("#lbl_id_que_u5"), "long text")
-    expect_normalized(page, edit_iframe.locator("#main_form"), "short descr")
+    expect_normalized(edit_iframe, edit_iframe.locator("#lbl_id_que_u5"), "long text")
+    expect_normalized(edit_iframe, edit_iframe.locator("#main_form"), "short descr")
     edit_iframe.get_by_text("long descr").click()
-
 
 def recheck_char(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     expect_normalized(page, edit_iframe.locator("#main_form"), "long descr")
     expect_normalized(page, edit_iframe.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, edit_iframe.locator("#main_form"), "restricted text only only descr all all descr")
+    expect_normalized(page, edit_iframe.locator("#main_form"), "only only descr all all descr choose one option - restricted text")
     expect_normalized(page, edit_iframe.locator('[id="id_que_u7_tr"]'), "multiple text")
     expect_normalized(page,
-        edit_iframe.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
+        edit_iframe.locator('[id="id_que_u7_tr"]'), "all all descr many many descr few few descr select one or more options - multiple descr"
     )
     save_modal(page, edit_iframe)
     go_to(page, live_server, "/test/character/list")
@@ -212,8 +212,7 @@ def recheck_char(live_server: Any, page: Any) -> None:
 def create_first_char(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Register").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/register/")
     page.get_by_role("link", name="Create your character!").click()
@@ -235,21 +234,17 @@ def create_first_char(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_que_u5")).to_have_value("bbbbbbbbbb")
     expect_normalized(page, page.locator("#main_form"), "long descr")
     expect_normalized(page, page.locator("#lbl_id_que_u6"), "available text")
-    expect_normalized(page, page.locator("#main_form"), "available descr all all few few descr")
-    page.locator("#id_que_u6").select_option("u1")
-    page.locator("#id_que_u8").select_option("u6")
+    expect_normalized(page, page.locator("#main_form"), "available text all all few few descr 2 available choose one option - available descr")
+    click_option(page.locator("#id_que_u6_0"))
+    click_option(page.locator("#id_que_u8_1"))
     expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, page.locator("#main_form"), "restricted text only only descr all all descr")
-    page.get_by_text("many - (Available 2)").click()
-    page.locator("#id_que_u7 div").filter(has_text="many - (Available 2)").click()
-    expect_normalized(page, page.locator("#id_que_u7"), "many - (Available 2)")
-    expect_normalized(page, page.locator("#id_que_u7"), "few - (Available 1)")
+    expect_normalized(page, page.locator("#main_form"), "restricted only only descr 1 available all all descr choose one option - restricted text")
+    click_option(page.locator("#id_que_u7_1"))
     expect_normalized(page,
-        page.locator('[id="id_que_u7_tr"]'), "multiple descr all all descr many many descr few few descr"
+        page.locator('[id="id_que_u7_tr"]'), "multiple text all all descr many many descr 2 available few few descr 1 available select one or more options - multiple descr options: 1 / 2"
     )
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
-    page.get_by_role("checkbox", name="all").check()
-    page.get_by_role("checkbox", name="many - (Available 2)").check()
+    click_option(page.locator("#id_que_u7_0"))
     page.locator("#id_que_u12").click()
     page.locator("#id_que_u12").fill("public")
     page.locator("#id_que_u12").press("Tab")
@@ -341,13 +336,16 @@ def add_field_restricted(page: Any) -> None:
 
     save_modal(page, edit_iframe)
 
-    page.locator('[id="u8"]').locator(".fa-arrow-up").click()
-    _wait_lm_ready(page)
+    drag_reorder(
+        page,
+        page.locator('tr[id="u8"] td.reorder-handle'),
+        page.locator('tr[id="u8"]').locator("xpath=preceding-sibling::tr[1]"),
+    )
     page.locator('[id="u8"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
 
-    edit_iframe.locator("#inline-options .io-move-up").nth(1).click()
-    just_wait(page)
+    opts = edit_iframe.locator("#inline-options .inline-option")
+    drag_reorder(page, opts.nth(1).locator("td.reorder-handle"), opts.nth(0))
     option_row = get_option(edit_iframe, "u7")
     option_row.locator("#id_name").click()
     option_row.locator("#id_name").fill("w")

@@ -223,7 +223,7 @@ def orga_workshop_modules(request: HttpRequest, event_slug: str) -> HttpResponse
     context = check_event_context(request, event_slug, "orga_workshop_modules")
 
     # Retrieve and order workshop modules
-    context["list"] = WorkshopModule.objects.filter(event=context["event"]).order_by("number")
+    context["list"] = WorkshopModule.objects.filter(event=context["event"]).order_by("order")
 
     return render(request, "larpmanager/orga/workshop/modules.html", context)
 
@@ -258,8 +258,8 @@ def orga_workshop_questions(request: HttpRequest, event_slug: str) -> HttpRespon
 
     # Retrieve and order workshop questions by module and question number
     context["list"] = WorkshopQuestion.objects.filter(module__event=context["event"]).order_by(
-        "module__number",
-        "number",
+        "module__order",
+        "order",
     )
 
     return render(request, "larpmanager/orga/workshop/questions.html", context)
@@ -304,8 +304,8 @@ def orga_workshop_options(request: HttpRequest, event_slug: str) -> HttpResponse
 
     # Fetch and order workshop options for the event
     context["list"] = WorkshopOption.objects.filter(question__module__event=context["event"]).order_by(
-        "question__module__number",
-        "question__number",
+        "question__module__order",
+        "question__order",
         "is_correct",
     )
 

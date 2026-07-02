@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Delegated users" %}
 {% endblock title %}
+{% block info %}
+    {% trans "Manage users that you can act on their behalf" %}
+{% endblock info %}
 {% block content %}
     <div class="user_resize platform">
         {% if request.user.member.parent %}

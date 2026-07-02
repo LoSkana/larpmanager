@@ -11,6 +11,7 @@
     <table id="votes" class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>Nome</th>
                 <th>Voti</th>
             </tr>
@@ -18,12 +19,18 @@
         <tbody>
             {% for idx, el in candidates.items %}
                 <tr>
+                    <td></td>
                     <td>{{ el }}</td>
                     <td>{{ el.votes }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No candidates registered yet" %}. {% trans "Candidates will appear here once they are added to the vote" %}.
+        </p>
+    {% endif %}
     <h3>{% trans "List of voters" %}</h3>
     <p>
         {% for el in voters %}

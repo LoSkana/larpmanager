@@ -29,8 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, \
-    new_option, submit_option, get_modal_iframe, save_modal, just_wait
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, \
+    new_option, submit_option, get_modal_iframe, save_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -101,8 +101,8 @@ def sign_up_pay(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    page.locator('label[for="id_que_u2_0"]').click()
+    submit_register(page)
 
     go_to(page, live_server, "/test/manage/payments/")
     page.get_by_role("link", name="New").click()
@@ -179,7 +179,6 @@ def add_orga(page: Any, live_server: Any) -> None:
     load_image(edit_iframe,"#id_invoice")
     save_modal(page, edit_iframe)
 
-    just_wait(page)
     # Check for the inflow with value 13.00 and description "asdsada"
     expect(page.get_by_role("row", name="Test Larp asdsada 13")).to_be_visible()
     # Check for the inflow with value 50.00 and description "ggg"

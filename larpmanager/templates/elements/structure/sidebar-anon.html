@@ -1,0 +1,27 @@
+{% load static i18n %}
+<div id="sidebar" class="only_v22 topbar">
+    <div class="inner new-menu">
+        {% include "elements/structure/sidebar-header.html" %}
+        <div class="sidebar-section">
+            <span class="sidebar-link-wrap">
+                <a class="sidebar-link" href="{% url 'login' %}">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span>Log In</span>
+                </a>
+            </span>
+            <span class="sidebar-link-wrap">
+                <a class="sidebar-link" href="{% url 'registration_register' %}">
+                    <i class="fa-solid fa-user-plus"></i>
+                    <span>{% trans "Register" %}</span>
+                </a>
+            </span>
+            <span class="sidebar-link-wrap">
+                <a class="sidebar-link" href="{% url 'password_reset' %}">
+                    <i class="fa-solid fa-key"></i>
+                    <span>{% trans "Password reset" %}</span>
+                </a>
+            </span>
+        </div>
+        {% include "elements/structure/sidebar-footer.html" %}
+    </div>
+</div>

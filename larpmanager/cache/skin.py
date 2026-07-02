@@ -23,6 +23,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.models.association import AssociationSkin
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 
 
 def clear_skin_cache(skin: AssociationSkin) -> None:
@@ -102,4 +103,6 @@ def init_cache_skin(domain: str) -> dict | None:
         # Domain and skin identification
         "base_domain": domain,
         "skin_id": association_skin.id,
+        "assoc_version": LATEST_AVAILABLE_VERSION,
+        "footer": "",
     }

@@ -379,7 +379,7 @@ def orga_texts_delete(request: HttpRequest, event_slug: str, text_uuid: str) -> 
 def orga_buttons(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display event buttons management page for organizers."""
     context = check_event_context(request, event_slug, "orga_buttons")
-    context["list"] = EventButton.objects.filter(event_id=context["event"].id).order_by("number")
+    context["list"] = EventButton.objects.filter(event_id=context["event"].id).order_by("order")
     return render(request, "larpmanager/orga/buttons.html", context)
 
 

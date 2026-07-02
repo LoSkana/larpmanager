@@ -7,11 +7,12 @@
     {% trans "Review data inconsistencies across member records, including fiscal code validation errors" %}
 {% endblock info %}
 {% block content %}
+    <h2>{% trans "Tax code check" %}</h2>
     {% if cf %}
-        <h2>{% trans "Tax code check" %}</h2>
         <table id="tax_code_check" class="go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Participant" %}</th>
                     <th>{% trans "Card" %}</th>
                     <th>{% trans "Email" %}</th>
@@ -33,5 +34,9 @@
                 </tr>
             {% endfor %}
         </table>
+    {% else %}
+        <p class="no-elements-available">
+            {% trans "No fiscal code errors found" %}. {% trans "All member records are consistent" %}.
+        </p>
     {% endif %}
 {% endblock content %}

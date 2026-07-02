@@ -24,13 +24,12 @@ Verifies activation of Credits feature, setting of readonly flag,
 and CRUD actions with flag active and inactive.
 """
 
-import re
 from typing import Any
 
 import pytest
-
-from larpmanager.tests.utils import get_modal_iframe, go_to, login_orga, submit_confirm, save_modal
 from playwright.sync_api import expect
+
+from larpmanager.tests.utils import get_modal_iframe, go_to, login_orga, save_modal
 
 pytestmark = pytest.mark.e2e
 

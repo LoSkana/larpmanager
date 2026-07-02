@@ -26,11 +26,28 @@ area assignments, external item tracking, and historical movement records.
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, load_image, login_orga, expect_normalized, submit_confirm, \
-    sidebar, get_modal_iframe, save_modal
+from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized, submit_confirm, \
+    sidebar, get_modal_iframe, save_modal, _wait_select2_results, _wait_lm_ready
 
 pytestmark = pytest.mark.e2e
+
+
+def _expect_assignment_save(page: Any, idx: str = None):
+    """Wait for the debounced item-assignment autosave POST triggered by the wrapped action.
+
+    idx: optional row id to match against the posted payload, so a save from
+    another row edited just before does not satisfy the wait."""
+
+    def _is_save(response):
+        if response.request.method != "POST" or "assignment" not in response.url:
+            return False
+        if idx is not None and f"idx={idx}" not in (response.request.post_data or ""):
+            return False
+        return response.ok
+
+    return page.expect_response(_is_save)
 
 
 def test_warehouse(pw_page: Any) -> None:
@@ -106,9 +123,11 @@ def add_items(page: Any) -> None:
     edit_iframe.locator("#id_description").fill("sadsada")
     edit_iframe.get_by_label("", exact=True).click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box A")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("ele")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     load_image(edit_iframe,"#id_photo")
     save_modal(page, edit_iframe)
@@ -122,6 +141,7 @@ def add_items(page: Any) -> None:
     edit_iframe.locator("#id_description").fill("sdsadas")
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("boc")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -133,8 +153,11 @@ def add_items(page: Any) -> None:
     edit_iframe.locator("#id_description").fill("dsad")
     edit_iframe.locator("#select2-id_container-container").click()
     edit_iframe.get_by_role("searchbox").nth(1).fill("box")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
+
+    page.reload()
 
     # check items
     expect_normalized(page,
@@ -214,12 +237,13 @@ def area_assigmenents(page: Any) -> None:
     page.locator('[id="u2"]').get_by_role("link", name="Item assignments").click()
     page.locator(".selected").first.click()
     page.locator('[id="u3"]').get_by_role("textbox").click()
-    page.locator('[id="u3"]').get_by_role("textbox").fill("sss")
+    with _expect_assignment_save(page, "u3"):
+        page.locator('[id="u3"]').get_by_role("textbox").fill("sss")
     page.locator('[id="u1"] > .selected').click()
     page.locator('[id="u1"]').get_by_role("textbox").click()
-    page.locator('[id="u1"]').get_by_role("textbox").fill("ffff")
+    with _expect_assignment_save(page, "u1"):
+        page.locator('[id="u1"]').get_by_role("textbox").fill("ffff")
     page.get_by_role("cell", name="ffff").get_by_role("textbox").click()
-    just_wait(page)
 
     # check
     page.get_by_role("link", name="Area").click()
@@ -238,22 +262,25 @@ def area_assigmenents(page: Any) -> None:
     page.get_by_role("link", name="Area").click()
     page.locator('[id="u1"]').get_by_role("link", name="Item assignments").click()
     page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").click()
-    page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").fill("b")
-    page.locator('[id="u1"] > .selected').click()
-    just_wait(page)
+    with _expect_assignment_save(page):
+        page.get_by_role("row", name="item 3sa dsad box a").get_by_role("textbox").fill("b")
+    with _expect_assignment_save(page, "u1"):
+        page.locator('[id="u1"] > .selected').click()
 
 
 def checks(page: Any) -> None:
     # check manifest
     page.get_by_role("link", name="Manifest").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "New Kitchen Position: ss Description: sds")
     expect_normalized(page,
-        page.locator("#one"), "Item 1 Boc B - dd Item 3sa Box A - bibi	 b sALOON Position: SDsad Description: saddsadsa "
+        page.locator("#one"), """Item 1 Boc B - dd Item 3sa Box A - bibi	 b no items have been assigned to this area yet. sALOON Position: SDsad Description: saddsadsa """
     )
     expect_normalized(page, page.locator("#one"), "Item 1 Boc B - dd ffff Item 3sa Box A - bibi	 sss")
 
     # check checks
     page.get_by_role("link", name="Checks").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Item 1 Description: sadsada Photo")
     expect_normalized(page, page.locator("#one"), "Kitchen sALOON ffff Item 3sa Description: dsad")
     expect_normalized(page, page.locator("#one"), "Kitchen b sALOON sss")
@@ -271,8 +298,7 @@ def edit_loaded_deployed(page: Any) -> None:
     loaded_icon = loaded_cell.locator("span.value")
     assert not loaded_icon.is_visible(), "Loaded should be off initially"
     loaded_cell.click()
-    just_wait(page)
-    assert loaded_icon.is_visible(), "Loaded check icon should be visible after click"
+    expect(loaded_icon).to_be_visible()
 
     # reload and verify loaded state persists
     page.reload()
@@ -284,16 +310,14 @@ def edit_loaded_deployed(page: Any) -> None:
 
     # toggle Loaded off
     loaded_cell.click()
-    just_wait(page)
-    assert not loaded_icon.is_visible(), "Loaded check icon should be hidden after second click"
+    expect(loaded_icon).not_to_be_visible()
 
     # toggle Deployed on: click the deployed cell and verify check icon appears
     deployed_cell = first_row.locator("td.ajax-toggle[tp='depl']")
     deployed_icon = deployed_cell.locator("span.value")
     assert not deployed_icon.is_visible(), "Deployed should be off initially"
     deployed_cell.click()
-    just_wait(page)
-    assert deployed_icon.is_visible(), "Deployed check icon should be visible after click"
+    expect(deployed_icon).to_be_visible()
 
     # reload and verify deployed state persists
     page.reload()
@@ -305,5 +329,4 @@ def edit_loaded_deployed(page: Any) -> None:
 
     # toggle Deployed off
     deployed_cell.click()
-    just_wait(page)
-    assert not deployed_icon.is_visible(), "Deployed check icon should be hidden after second click"
+    expect(deployed_icon).not_to_be_visible()

@@ -21,6 +21,7 @@
                 <table class="go_datatable">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>{% trans "Event" %}</th>
                             <th>{% trans "Date" %}</th>
                             <th>{% trans "Description" %}</th>
@@ -30,6 +31,7 @@
                     <tbody>
                         {% for el in given %}
                             <tr>
+                                <td></td>
                                 <td data-title="{% trans "Event" %}">
                                     {% if el.run %}{{ el.run }}{% endif %}
                                 </td>
@@ -48,6 +50,7 @@
                 <table class="go_datatable">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>{% trans "Event" %}</th>
                             <th>{% trans "Date" %}</th>
                             <th>{% trans "Amount" %}</th>
@@ -56,6 +59,7 @@
                     <tbody>
                         {% for el in used %}
                             <tr>
+                                <td></td>
                                 <td data-title="{% trans "Event" %}">{{ el.registration.run }}</td>
                                 <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
                                 <td data-title="{% trans "Amount" %}">{{ el.value }}</td>

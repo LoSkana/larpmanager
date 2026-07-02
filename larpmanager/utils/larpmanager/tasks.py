@@ -43,7 +43,7 @@ from larpmanager.mail.factory import EmailConnectionFactory
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member
+from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
@@ -143,6 +143,44 @@ def split_recipients(recipient_text: str) -> list:
     return [p.strip() for p in re.split(r"[,;\|\s]+", recipient_text) if p.strip()]
 
 
+def partition_shared_recipients(recipients: list, association_id: int | None) -> tuple[list, list]:
+    """Split recipients into those who shared their data with the association and those who did not.
+
+    A recipient is allowed if a Member with that email exists and has a Membership for the given
+    association whose status is not EMPTY (i.e. they shared their data). When association_id is
+    missing, no filtering is applied and every recipient is allowed.
+
+    Args:
+        recipients: List of recipient email addresses.
+        association_id: Association the email is sent on behalf of.
+
+    Returns:
+        Tuple (allowed, ignored) of email addresses, preserving input order.
+
+    """
+    if not association_id:
+        return list(recipients), []
+
+    shared_emails = {
+        email.lower()
+        for email in Membership.objects.filter(
+            association_id=association_id,
+        )
+        .exclude(status=MembershipStatus.EMPTY)
+        .values_list("member__email", flat=True)
+        if email
+    }
+
+    allowed = []
+    ignored = []
+    for email in recipients:
+        if email.strip().lower() in shared_emails:
+            allowed.append(email)
+        else:
+            ignored.append(email)
+    return allowed, ignored
+
+
 def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: dict) -> list:
     """Create EmailRecipient records for valid, unique addresses and return their PKs."""
     recipient_ids = []
@@ -203,14 +241,14 @@ def send_mail_exec(
     seen_emails = {}
 
     sender_context = None
-    # Determine sender context (Association or Run object, or LM )
-    if association_id:
-        sender_context = Association.objects.filter(pk=association_id).first()
-    elif run_id:
+    # Determine sender context: run wins over association
+    if run_id:
         sender_context = Run.objects.filter(pk=run_id).first()
         # Extract association_id from run if not provided
         if sender_context and not association_id:
             association_id = sender_context.event.association_id
+    elif association_id:
+        sender_context = Association.objects.filter(pk=association_id).first()
 
     if sender_context:
         # Add organization/run prefix to subject line

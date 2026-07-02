@@ -86,15 +86,17 @@ def _compute_registration_status_code(run: Run) -> tuple[str, Any]:
     if status in simple_status_map:
         return simple_status_map[status]
 
-    # Handle future status with opening time check
-    if status == RegistrationStatus.FUTURE:
+    # Handle future/closing status with opening time check
+    if status in (RegistrationStatus.FUTURE, RegistrationStatus.CLOSING):
         if not run.registration_open:
             return "not_set", None
         current_datetime = timezone.now()
-        if run.registration_open and run.registration_open > current_datetime:
+        if status == RegistrationStatus.FUTURE and run.registration_open > current_datetime:
             return "future", run.registration_open
+        if status == RegistrationStatus.CLOSING and run.registration_open <= current_datetime:
+            return "closed", None
 
-    # Check registration availability for OPEN or FUTURE with past opening time
+    # Check registration availability for OPEN, FUTURE with past opening time, or CLOSING before closing time
     run_status = {}
     registration_available(run, features, run_status)
 

@@ -4,10 +4,19 @@
     {% trans "Delivery" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
-    <table id="deliveries" class="go_datatable writing">
+    {% url 'orga_exp_deliveries_load' run.get_slug as load_url %}
+    {% trans "Load participants" as load_label %}
+    {% with extra_link_url=load_url extra_link_icon="fas fa-users" extra_link_label=load_label extra_link_class="form-new" %}
+        {% include "elements/header/edit.html" %}
+    {% endwith %}
+    <table id="deliveries"
+           class="go_datatable writing row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="orga_exp_deliveries">
         <thead>
             <tr>
+                <th></th>
+                <th class="reorder-handle"></th>
                 <th></th>
                 <th>{% trans "Name" %}</th>
                 {% if multiple_systems %}
@@ -21,6 +30,10 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
                     <td>
                         <a href="{% url 'orga_exp_deliveries_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
@@ -45,4 +58,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No deliveries defined yet" %}. {% trans "Use the button above to create the first delivery" %}.
+        </p>
+    {% endif %}
 {% endblock content %}

@@ -539,6 +539,10 @@ def exe_payments(request: HttpRequest) -> HttpResponse:
     # Check user permissions for accessing payments section
     context = check_association_context(request, "exe_payments")
 
+    # Hide "New" button when association has no registrations to attach a payment to
+    if not Registration.objects.filter(run__event__association_id=context["association_id"]).exists():
+        context["hide_new"] = True
+
     # Pending registration invoice approvals requiring confirmation
     context["pending_invoices"] = (
         PaymentInvoice.objects.filter(

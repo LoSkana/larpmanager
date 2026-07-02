@@ -17,7 +17,6 @@ from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, RegistrationTicket
 from larpmanager.models.writing import Character, Faction, Plot
 from larpmanager.views.orga.character import orga_characters_summary
-from larpmanager.views.orga.writing import orga_multichoice_available
 
 User = get_user_model()
 
@@ -133,25 +132,6 @@ class TestCrossAssociationIsolation:
         # Should raise Http404 when trying to access character from wrong association
         with pytest.raises(Exception):  # Will raise DoesNotExist wrapped in Http404
             orga_characters_summary(request, "event-a", str(data["character_b"].uuid))
-
-    def test_multichoice_available_cross_association_blocked(self, setup_two_associations):
-        """Test that orga_multichoice_available prevents access to other association's plots."""
-        data = setup_two_associations
-        factory = RequestFactory()
-
-        # Create POST request from user A trying to access plot B
-        request = factory.post(
-            "/orga/event-a/multichoice-available/",
-            {
-                "type": "plot",
-                "edit_uuid": str(data["plot_b"].uuid),
-            },
-        )
-        request.user = data["user_a"]
-
-        # Should raise Http404 or DoesNotExist when accessing plot from wrong association
-        with pytest.raises(Exception):  # Will raise DoesNotExist because of event filter
-            orga_multichoice_available(request, "event-a")
 
     def test_registration_ticket_cross_event_blocked(self, setup_two_associations):
         """Test that OrgaRegistrationForm validates ticket belongs to correct event."""

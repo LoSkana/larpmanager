@@ -77,7 +77,7 @@
     {% else %}
         <!-- Header -->
         <header id="header"
-                class="alt {% if manage and is_sidebar_open %}sidebar{% endif %}">
+                class="alt {% if manage and is_sidebar_open %}sidebar{% endif %} no_v22">
             <h1>
                 <span>
                     {% block title %}
@@ -100,25 +100,35 @@
                         {% block nav %}
                             {% include "larpmanager/manage/nav.html" %}
                         {% endblock nav %}
-                        <div id="info_bar" class="only_v20">
-                            {% block info %}
-                                {{ page_info }}
-                            {% endblock info %}
-                            {% if tutorial %}
-                                | <a href="#"
+                        {% if not request.GET.in_iframe and not request.GET.frame %}
+                            <div id="info_bar" class="only_v20">
+                                <span id="info">
+                                    {% block info %}
+                                        {% if not frame %}
+                                            {% if form %}
+                                                {{ form.page_info }}
+                                            {% else %}
+                                                {{ page_info }}
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endblock info %}
+                                </span>
+                                {% if tutorial %}
+                                    | <a href="#"
     class="feature_tutorial"
     tut="{{ tutorial }}"
     qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i> Tutorial</a>
-                            {% endif %}
-                            {% if config and not demo %}
-                                | <a href="{{ config }}"
+                                {% endif %}
+                                {% if config and not demo %}
+                                    | <a href="{{ config }}"
     class="action-link"
     data-modal-eligible="true"
     data-slug="config"
     qtip="Config"><i class="fa-solid fa-gear"></i> Config</a>
-                            {% endif %}
-                        </div>
-                        <div id="right_bar" class="info nav main_nav no_mobile no_v20">
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        <div id="right_bar" class="no_v20 info nav main_nav no_mobile">
                             {% if tutorial %}
                                 <a href="#"
                                    class="feature_tutorial"
@@ -149,7 +159,7 @@
                             {{ association.footer | safe }}
                         </div>
                     {% endif %}
-                    <table class="mob ">
+                    <table class="mob no_v22">
                         <tr>
                             {% if 'help' in association.features %}
                                 <td>
@@ -173,7 +183,7 @@
                             </td>
                         </tr>
                     </table>
-                    <p>
+                    <p class="no_v22">
                         <!-- Please, do not remove! -->
                         Powered by <a href="https://{{ association.main_domain }}">{{ association.platform }}</a>
                     </p>

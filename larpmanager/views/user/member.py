@@ -429,7 +429,7 @@ def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
         raise Http404(msg) from err
 
     # Redirect back to privacy settings page
-    return redirect("profile_privacy")
+    return redirect("privacy")
 
 
 @login_required
@@ -1197,7 +1197,7 @@ def _configs_character_rels(character_rels: list[RegistrationCharacterRel]) -> N
 
 
 @login_required
-def profile_otp(request: HttpRequest) -> HttpResponse:
+def security(request: HttpRequest) -> HttpResponse:
     """Manage TOTP device setup and deletion for the current user."""
     context = get_context(request)
 
@@ -1210,12 +1210,12 @@ def profile_otp(request: HttpRequest) -> HttpResponse:
             device_id = request.POST.get("device_id")
             TOTPDevice.objects.filter(pk=device_id, user=request.user).delete()
             messages.success(request, _("Authenticator device removed"))
-            return redirect("profile_otp")
+            return redirect("security")
 
         if action == "confirm":
             pending = TOTPDevice.objects.filter(user=request.user, confirmed=False).first()
             if pending is None:
-                return redirect("profile_otp")
+                return redirect("security")
             form = OTPConfirmForm(request.POST)
             if form.is_valid():
                 token = form.cleaned_data["token"]
@@ -1224,7 +1224,7 @@ def profile_otp(request: HttpRequest) -> HttpResponse:
                     pending.save()
                     otp_login(request, pending)
                     messages.success(request, _("Authenticator app configured successfully"))
-                    return redirect("profile_otp")
+                    return redirect("security")
                 messages.error(request, _("Invalid code, please try again"))
             context["confirm_form"] = form
         else:

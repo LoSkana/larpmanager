@@ -59,33 +59,33 @@
 {% else %}
     <td class="right">
         {% if user_characters_shortcut %}
-            <div class="el">
+            <div class="el no_v22">
             <a href="{% url 'characters' %}"><i class="fa-solid fa-users"></i>
             <span>{% trans "Characters" %}</span>
         </a>
     </div>
 {% endif %}
 {% if user_registrations_shortcut %}
-    <div class="el">
+    <div class="el no_v22">
     <a href="{% url 'registrations' %}"><i class="fa-solid fa-clipboard-list"></i>
     <span>{% trans "Registrations" %}</span>
 </a>
 </div>
 {% endif %}
-<div class="el">
+<div class="el no_v22">
     <a href="{% url 'accounting' %}">
         <i class="fa-solid fa-wallet"></i>
         <span>{% trans "Accounting" %}</span>
     </a>
 </div>
-<div class="el">
+<div class="el no_v22">
     <a href="{% url 'profile' %}">
         <i class="fa-solid fa-user-circle"></i>
         <span>{% trans "Profile" %}</span>
     </a>
 </div>
 {% if app_integration_redirect_url %}
-    <div class="el">
+    <div class="el no_v22">
         <a href="{% url 'app_integration_redirect' %}" target="_blank">
             <i class="fa-solid fa-arrow-up-right-from-square"></i>
             <span>{{ app_integration_button_text|default:"App" }}</span>

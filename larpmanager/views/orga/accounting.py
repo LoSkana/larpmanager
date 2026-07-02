@@ -20,7 +20,7 @@
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -45,13 +45,13 @@ from larpmanager.models.accounting import (
     PaymentType,
 )
 from larpmanager.models.member import LogOperationType
-from larpmanager.models.registration import Registration
 from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_get, save_log
+from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 
 
@@ -62,7 +62,7 @@ def orga_discounts(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_discounts")
 
     # Get all discounts for the event ordered by number
-    context["list"] = Discount.objects.filter(event=context["event"]).order_by("number")
+    context["list"] = Discount.objects.filter(event=context["event"]).order_by("order")
 
     return render(request, "larpmanager/orga/accounting/discounts.html", context)
 
@@ -119,6 +119,8 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Check user permissions and get event context
     context = check_event_context(request, event_slug, "orga_expenses_my")
 
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
     if request.method == "POST":
         # Process form submission with uploaded files
         form = OrgaPersonalExpenseForm(request.POST, request.FILES, context=context)
@@ -137,6 +139,9 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
             # Show success message to user
             messages.success(request, _("Reimbursement request item added"))
 
+            if is_frame:
+                return render(request, "elements/dashboard/form_success.html", context)
+
             # Redirect based on user's choice to continue or finish
             if "continue" in request.POST:
                 return redirect("orga_expenses_my_new", event_slug=context["run"].get_slug())
@@ -148,7 +153,7 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Add form to context and render template
     context["form"] = form
     context["add_another"] = True
-    return render(request, "larpmanager/orga/accounting/expenses_my_new.html", context)
+    return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/accounting/expenses_my_new.html")
 
 
 @login_required
@@ -516,17 +521,6 @@ def orga_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_payments_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new payment for an event."""
     return orga_new(request, event_slug, OrgaAction.PAYMENTS)
-
-
-@login_required
-def orga_payments_signups_available(request: HttpRequest, event_slug: str) -> JsonResponse | Http404:
-    """Return active signups for the current run as JSON for the multichoice popup."""
-    if request.method != "POST":
-        raise Http404
-    context = check_event_context(request, event_slug, "orga_payments")
-    signups = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).select_related("member")
-    res = [(str(s.uuid), str(s.member)) for s in signups]
-    return JsonResponse({"res": res})
 
 
 def payment_edit(

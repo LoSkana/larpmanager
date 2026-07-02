@@ -52,7 +52,7 @@ from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.cache.wwyltd import reset_orga_configs_cache
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
-from larpmanager.models.event import Event, EventConfig, EventText, Run
+from larpmanager.models.event import Event, EventText, Run
 from larpmanager.models.experience import SystemExp
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -67,7 +67,6 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.core.common import copy_class
 from larpmanager.utils.services.inventory import generate_base_inventories
 
 if TYPE_CHECKING:
@@ -181,28 +180,6 @@ def prepare_campaign_event_data(event_instance: Any) -> None:
             event_instance._old_parent_id = None  # noqa: SLF001  # Internal flag for parent change detection
     else:
         event_instance._old_parent_id = None  # noqa: SLF001  # Internal flag for parent change detection
-
-
-def copy_parent_event_to_campaign(event: Any) -> None:
-    """Set up campaign event by copying from parent.
-
-    Args:
-        event: Event instance that was saved
-
-    """
-    # noinspection PyProtectedMember
-    if event.parent_id and event._old_parent_id != event.parent_id:  # noqa: SLF001  # Internal flag for parent change detection
-        # copy config, texts, roles, features
-        copy_class(event.pk, event.parent_id, EventConfig)
-        copy_class(event.pk, event.parent_id, EventText)
-        copy_class(event.pk, event.parent_id, EventRole)
-        for feature in event.parent.features.all():
-            event.features.add(feature)
-
-            # Use flag to prevent recursion instead of disconnecting signal
-            event._skip_campaign_setup = True  # noqa: SLF001  # Internal flag to prevent recursion
-            event.save()
-            del event._skip_campaign_setup  # noqa: SLF001  # Internal flag to prevent recursion
 
 
 def create_default_event_setup(event: Any) -> None:

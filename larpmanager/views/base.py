@@ -124,6 +124,12 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
     if not user.is_authenticated:
         return redirect("/login/")
 
+    # In dev/test there is a single host serving every association: switch
+    # association via session instead of building a (non-resolvable) subdomain URL
+    if getattr(request, "enviro", None) in ("dev", "test"):
+        request.session["debug_slug"] = subdomain
+        return redirect(f"/{path}")
+
     # Generate secure random token for cross-subdomain authentication
     token = secrets.token_urlsafe(32)
 
@@ -133,19 +139,20 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
 
     # Build redirect URL with subdomain and token
     base_domain = get_base_domain(request)
-    return redirect(f"https://{subdomain}.{base_domain}/{path}?token={token}")
+    return redirect(f"{request.scheme}://{subdomain}.{base_domain}/{path}?token={token}")
 
 
 def get_base_domain(request: HttpRequest) -> str:
     """Extract the base domain from the request host."""
     host = request.get_host()
-    host_parts = host.split(".")
+    host_without_port, _, port = host.partition(":")
+    host_parts = host_without_port.split(".")
 
     # Use last 2 parts for base domain (domain.tld)
     minimum_parts_for_base_domain = 2
-    if len(host_parts) >= minimum_parts_for_base_domain:
-        return ".".join(host_parts[-2:])
-    return host
+    base_domain = ".".join(host_parts[-2:]) if len(host_parts) >= minimum_parts_for_base_domain else host_without_port
+
+    return f"{base_domain}:{port}" if port else base_domain
 
 
 @require_POST

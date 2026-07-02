@@ -30,12 +30,12 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (
-    just_wait,
     expect_normalized,
     fill_tinymce,
     go_to,
     login_orga,
-    submit_confirm, submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
+    submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
+    click_and_wait_question,
 )
 
 pytestmark = pytest.mark.e2e
@@ -159,9 +159,9 @@ def edit_first_character(page: Any, live_server: Any) -> None:
     # Fill all custom questions
     edit_iframe.locator("#id_que_u4").fill("Text value 1")
     edit_iframe.locator("#id_que_u5").fill("Paragraph value 1")
-    edit_iframe.locator("#id_que_u6").select_option("u1")  # Option A
-    edit_iframe.get_by_role("checkbox", name="Choice X").check()
-    edit_iframe.get_by_role("checkbox", name="Choice Y").check()
+    edit_iframe.locator('label[for="id_que_u6_0"]').click()  # Option A
+    edit_iframe.locator('label[for="id_que_u7_0"]').click()
+    edit_iframe.locator('label[for="id_que_u7_1"]').click()
     fill_tinymce(edit_iframe, "id_que_u8", "Advanced value 1")
 
     save_modal(page, edit_iframe)
@@ -208,7 +208,7 @@ def inline_editing_teaser(page: Any, live_server: Any) -> None:
 
     # Edit u2 teaser (empty cell - click on the cell in the teaser column)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(3).dblclick()
+    cells_u2.nth(5).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_teaser").fill("New Teaser 2")
     submit_inline_edit(page)
@@ -226,7 +226,7 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
 
     # Edit u2 text (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(4).dblclick()
+    cells_u2.nth(6).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_text").fill("New Text 2")
     submit_inline_edit(page)
@@ -236,7 +236,7 @@ def inline_editing_text(page: Any, live_server: Any) -> None:
 def inline_editing_text_question(page: Any, live_server: Any) -> None:
     """Test editing Text Question field inline for both characters."""
 
-    page.get_by_role("link", name="Text Question").click()
+    click_and_wait_question(page, "Text Question")
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Text value 1").dblclick()
@@ -247,7 +247,7 @@ def inline_editing_text_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell) - click on the appropriate column
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(5).dblclick()
+    cells_u2.nth(7).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u4").fill("Text value 2")
     submit_inline_edit(page)
@@ -257,7 +257,7 @@ def inline_editing_text_question(page: Any, live_server: Any) -> None:
 def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
     """Test editing Paragraph Question field inline for both characters."""
 
-    page.get_by_role("link", name="Paragraph Question").click()
+    click_and_wait_question(page, "Paragraph Question")
 
     # Edit u1 (existing value)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Paragraph value 1").dblclick()
@@ -268,7 +268,7 @@ def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(6).dblclick()
+    cells_u2.nth(8).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u5").fill("Paragraph value 2")
     submit_inline_edit(page)
@@ -278,20 +278,20 @@ def inline_editing_paragraph_question(page: Any, live_server: Any) -> None:
 def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     """Test editing Single Choice field inline for both characters."""
 
-    page.get_by_role("link", name="Single Choice").first.click()
+    click_and_wait_question(page, "Single Choice")
 
     # Edit u1 (existing value - Option A)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Option A").dblclick()
     panel = wait_for_inline_edit(page)
-    panel.locator("#id_que_u6").select_option("u2")  # Option B
+    panel.locator('label[for="id_que_u6_1"]').click()  # Option B
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Option B")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(7).dblclick()
+    cells_u2.nth(9).dblclick()
     panel = wait_for_inline_edit(page)
-    panel.locator("#id_que_u6").select_option("u3")  # Option C
+    panel.locator('label[for="id_que_u6_2"]').click()  # Option C
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Option C")
 
@@ -299,22 +299,22 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
 def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     """Test editing Multiple Choice field inline for both characters."""
 
-    page.get_by_role("link", name="Multiple Choice").first.click()
+    click_and_wait_question(page, "Multiple Choice")
 
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
     panel = wait_for_inline_edit(page)
-    panel.get_by_role("checkbox", name="Choice X").uncheck()
-    panel.get_by_role("checkbox", name="Choice Z").check()
+    panel.locator('label[for="id_que_u7_0"]').click()
+    panel.locator('label[for="id_que_u7_2"]').click()
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Y")
     expect_normalized(page, page.locator('[id="u1"]'), "Choice Z")
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(8).dblclick()
+    cells_u2.nth(10).dblclick()
     panel = wait_for_inline_edit(page)
-    panel.get_by_role("checkbox", name="Choice X").check()
+    panel.locator('label[for="id_que_u7_0"]').click()
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Choice X")
 
@@ -322,10 +322,11 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
 def inline_editing_text2_question(page: Any, live_server: Any) -> None:
     """Test editing Text Question 2 field inline for both characters."""
 
-    page.get_by_role("link", name="Advanced Question").click()
+    click_and_wait_question(page, "Advanced Question")
 
     # Edit u1 (existing value)
-    page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Advanced value 1").dblclick()
+    cells_u2 = page.locator('[id="u1"]').get_by_role("cell")
+    cells_u2.nth(11).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u8").fill("Text 2 modified")
     submit_inline_edit(page)
@@ -333,7 +334,7 @@ def inline_editing_text2_question(page: Any, live_server: Any) -> None:
 
     # Edit u2 (empty cell)
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
-    cells_u2.nth(9).dblclick()
+    cells_u2.nth(11).dblclick()
     panel = wait_for_inline_edit(page)
     panel.locator("#id_que_u8").fill("Text 2 value 2")
     submit_inline_edit(page)
@@ -344,11 +345,11 @@ def verify_after_refresh(page: Any, live_server: Any) -> None:
     """Refresh the page and verify all edited values are still correct."""
     go_to(page, live_server, "/test/manage/characters/")
 
-    page.get_by_role("link", name="Text Question").click()
-    page.get_by_role("link", name="Paragraph Question").click()
-    page.get_by_role("link", name="Single Choice").first.click()
-    page.get_by_role("link", name="Multiple Choice").first.click()
-    page.get_by_role("link", name="Advanced Question").click()
+    click_and_wait_question(page, "Text Question")
+    click_and_wait_question(page, "Paragraph Question")
+    click_and_wait_question(page, "Single Choice")
+    click_and_wait_question(page, "Multiple Choice")
+    click_and_wait_question(page, "Advanced Question")
 
 
     # Verify u1 values

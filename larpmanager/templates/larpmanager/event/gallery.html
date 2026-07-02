@@ -10,6 +10,11 @@
                 {% if f.characters %}
                     {% if f.name %}
                         <h1 class="title">
+                            {% if f.thumb %}
+                                <img class="faction-logo faction-logo-title"
+                                     src="{{ f.thumb }}"
+                                     alt="faction logo" />
+                            {% endif %}
                             {% if show_faction %}
                                 <a href="{% url 'faction' run.get_slug f.uuid %}">{{ f.name }}</a>
                             {% else %}

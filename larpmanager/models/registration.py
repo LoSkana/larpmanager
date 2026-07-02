@@ -31,7 +31,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from tinymce.models import HTMLField
 
-from larpmanager.models.base import BaseModel, UuidMixin
+from larpmanager.models.base import BaseModel, OrderMixin, UuidMixin
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename
@@ -71,7 +71,7 @@ class TicketTier(models.TextChoices):
         }
 
 
-class RegistrationTicket(UuidMixin, BaseModel):
+class RegistrationTicket(UuidMixin, OrderMixin, BaseModel):
     """Represents RegistrationTicket model."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -136,8 +136,6 @@ class RegistrationTicket(UuidMixin, BaseModel):
         help_text=_("Optional - Indicates whether the ticket can be gifted to other participants"),
     )
 
-    order = models.IntegerField(default=0, verbose_name=_("Order"), help_text=_("Display order"))
-
     def __str__(self) -> str:
         """Return ticket tier string representation with event, tier, name and price."""
         # noinspection PyUnresolvedReferences
@@ -161,7 +159,7 @@ class RegistrationTicket(UuidMixin, BaseModel):
         return self.price
 
 
-class RegistrationSection(UuidMixin, BaseModel):
+class RegistrationSection(UuidMixin, OrderMixin, BaseModel):
     """Represents RegistrationSection model."""
 
     search = models.CharField(max_length=1000, editable=False)
@@ -177,8 +175,6 @@ class RegistrationSection(UuidMixin, BaseModel):
         verbose_name=_("Description"),
         help_text=_("Description - will be displayed at the beginning of the section"),
     )
-
-    order = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         """Return string representation of the registration section."""
@@ -224,14 +220,12 @@ class RegistrationQuota(UuidMixin, BaseModel):
         return f"{self.quotas} {self.days_available} ({self.surcharge}€)"
 
 
-class RegistrationInstallment(UuidMixin, BaseModel):
+class RegistrationInstallment(UuidMixin, OrderMixin, BaseModel):
     """Represents RegistrationInstallment model."""
 
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name="installments")
 
     number = models.IntegerField()
-
-    order = models.IntegerField(help_text=_("Payment order"))
 
     amount = models.IntegerField(
         verbose_name=_("Amount"),

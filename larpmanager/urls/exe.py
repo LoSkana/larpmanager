@@ -168,11 +168,6 @@ urlpatterns = [
         name="exe_warehouse_movements_delete",
     ),
     path(
-        "manage/warehouse/available/",
-        views_ems.exe_warehouse_available,
-        name="exe_warehouse_available",
-    ),
-    path(
         "manage/badges/",
         views_em.exe_badges,
         name="exe_badges",
@@ -191,6 +186,16 @@ urlpatterns = [
         "manage/users/badges/<slug:badge_uuid>/delete/",
         views_em.exe_badges_delete,
         name="exe_badges_delete",
+    ),
+    path(
+        "manage/badges/assign/",
+        views_em.exe_badges_assign,
+        name="exe_badges_assign",
+    ),
+    path(
+        "manage/badges/toggle/",
+        views_em.exe_badges_toggle,
+        name="exe_badges_toggle",
     ),
     path(
         "manage/mail/send",

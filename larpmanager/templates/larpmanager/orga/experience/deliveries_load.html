@@ -1,0 +1,23 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Load participants" %} - {{ run.search | truncatechars:50 }}
+{% endblock title %}
+{% block content %}
+    {% include "elements/form/errors.html" %}
+    <form id="manage_form" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="frame" value="1">
+        <div class="form_container auto_resize">
+            <table>
+                {% include "elements/form/inner.html" %}
+            </table>
+        </div>
+        <div class="form-actions">
+            <input type="submit" value="{% trans "Confirm" %}" class="btn-save">
+        </div>
+    </form>
+{% endblock content %}
+{% block js2 %}
+    {% include "elements/helpers/iframe_resize.js" %}
+{% endblock js2 %}

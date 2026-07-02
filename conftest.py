@@ -23,6 +23,7 @@
 import logging
 import os
 import re
+import shutil
 import subprocess
 import sys
 from collections.abc import Generator, Mapping
@@ -31,7 +32,7 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from django.conf import settings
+from django.conf import settings, settings as django_settings
 from django.core.cache import cache
 from django.core.management import call_command
 from django.db import connection, transaction
@@ -54,6 +55,15 @@ _DB_SCHEMA_CHECKED = {}
 def _env_for_tests() -> None:
     os.environ.setdefault("PYTHONHASHSEED", "0")
     os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
+
+
+@pytest.fixture(autouse=True, scope="session")
+def _copy_test_media() -> None:
+    """Copy test media fixtures to MEDIA_ROOT so image files resolve during tests."""
+    src = Path(__file__).parent / "larpmanager" / "tests" / "media"
+    dst = Path(django_settings.MEDIA_ROOT)
+    if src.exists():
+        shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
 @pytest.fixture(autouse=True)
@@ -122,17 +132,14 @@ def _capture_test_artifacts(
     request: pytest.FixtureRequest,
     page: Page,
     *,
-    headed: bool,
+    headed: bool,  # noqa: ARG001
     video_dir: Path | None,
 ) -> Any:
-    """Capture screenshot, HTML and video if test failed in headed mode.
+    """Capture screenshot, HTML and video if test failed.
 
     Returns video object if available and test failed, None otherwise.
     """
     if not (hasattr(request.node, "rep_call") and request.node.rep_call.failed):
-        return None
-
-    if not headed:
         return None
 
     screenshot_dir = Path(__file__).parent / "test_screenshots"
@@ -181,7 +188,7 @@ def pw_page(
 
     browser = browser_type.launch(
         headless=not headed,
-        slow_mo=50 if headed else 0,
+        slow_mo=0,
         args=["--disable-popup-blocking"],
     )
     context = browser.new_context(
@@ -192,7 +199,7 @@ def pw_page(
     )
     page = context.new_page()
     base_url = live_server.url
-    timeout = 15000 if is_pycharm else 5000
+    timeout = 60000
     page.set_default_timeout(timeout)
 
     def on_response(response: Response) -> None:

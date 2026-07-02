@@ -594,6 +594,9 @@ def init_form_submitted(context: dict, form: object, request: HttpRequest, regis
     if "ticket" in context:
         context["submitted"]["ticket"] = context["ticket"]
 
+    if not context["submitted"].get("ticket") and hasattr(form, "initial") and form.initial.get("ticket"):
+        context["submitted"]["ticket"] = str(form.initial["ticket"])
+
 
 @login_required
 def register(

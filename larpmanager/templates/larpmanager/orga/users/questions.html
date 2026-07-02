@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Questions" %} - {{ run.search }}
 {% endblock title %}
+{% block info %}
+    {% trans "Manage help questions submitted by members: answer open requests or close those requiring no further action" %}
+{% endblock info %}
 {% block content %}
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show questions already answered" %}</a>
@@ -10,6 +13,7 @@
     <table id="questions_open" class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Participant" %}</th>
                 <th>{% trans "Question" %}</th>
@@ -21,6 +25,7 @@
         <tbody>
             {% for el in open %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created }}</td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.text }}</td>
@@ -39,11 +44,15 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not open %}
+        <p class="no-elements-available">{% trans "There are no open questions from participants at this time" %}.</p>
+    {% endif %}
     <div class="hide closed">
         <h2>Domande già risposte</h2>
         <table id="questions_closed" class="go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Date" %}</th>
                     <th>{% trans "Participant" %}</th>
                     <th>{% trans "Question" %}</th>
@@ -53,6 +62,7 @@
             <tbody>
                 {% for el in closed %}
                     <tr>
+                        <td></td>
                         <td>{{ el.created }}</td>
                         <td>{{ el.member }}</td>
                         <td>{{ el.text }}</td>
@@ -63,5 +73,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if not closed %}
+            <p class="no-elements-available">{% trans "No questions have been answered yet" %}.</p>
+        {% endif %}
     </div>
 {% endblock content %}

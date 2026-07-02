@@ -22,10 +22,9 @@ from typing import Any, ClassVar
 from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import Textarea
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.forms.base import BaseModelForm, MultichoiceMixin
+from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.miscellanea import _delete_optionals_warehouse
 from larpmanager.forms.utils import (
     WarehouseAreaS2Widget,
@@ -44,10 +43,8 @@ from larpmanager.models.miscellanea import (
 )
 
 
-class ExeWarehouseItemForm(MultichoiceMixin, BaseModelForm):
+class ExeWarehouseItemForm(BaseModelForm):
     """Form for ExeWarehouseItem."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_info = _("Manage all warehouse items, including their containers, tags, and quantities")
 
@@ -80,16 +77,6 @@ class ExeWarehouseItemForm(MultichoiceMixin, BaseModelForm):
         # Remove optional warehouse fields based on configuration
         _delete_optionals_warehouse(self)
 
-        if "tags" in self.fields:
-            self.add_multichoice_config(
-                field_id="tags",
-                link_id="tags_available",
-                label=str(_("Show available tags")),
-                url=reverse("exe_warehouse_available"),
-                data={"type": "tag"},
-                form_edit_uuid=True,
-            )
-
 
 class ExeWarehouseContainerForm(BaseModelForm):
     """Form for ExeWarehouseContainer."""
@@ -104,10 +91,8 @@ class ExeWarehouseContainerForm(BaseModelForm):
         widgets: ClassVar[dict] = {"description": Textarea(attrs={"rows": 5})}
 
 
-class ExeWarehouseTagForm(MultichoiceMixin, BaseModelForm):
+class ExeWarehouseTagForm(BaseModelForm):
     """Form for ExeWarehouseTag."""
-
-    load_js: ClassVar[list] = ["multichoice"]
 
     page_info = _("Manage tags used to categorize and group warehouse items")
 
@@ -138,15 +123,6 @@ class ExeWarehouseTagForm(MultichoiceMixin, BaseModelForm):
 
         # Configure widget with association context
         self.configure_field_association("items", self.params.get("association_id"))
-
-        self.add_multichoice_config(
-            field_id="items",
-            link_id="items_available",
-            label=str(_("Show available items")),
-            url=reverse("exe_warehouse_available"),
-            data={"type": "item"},
-            form_edit_uuid=True,
-        )
 
 
 class ExeWarehouseMovementForm(BaseModelForm):

@@ -46,16 +46,16 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    expect_normalized,
-    get_modal_iframe,
-    go_to,
-    just_wait,
-    _wait_lm_ready,
-    login_orga,
-    login_user,
-    submit_confirm, save_modal,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     delete_modal,
+                                     expect_normalized,
+                                     get_modal_iframe,
+                                     go_to,
+                                     _wait_lm_ready,
+                                     login_orga,
+                                     login_user,
+                                     submit_confirm, save_modal, SHORT_TIMEOUT,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -91,7 +91,7 @@ def setup(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/test/manage/tickets")
     page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector(".fa-edit", timeout=10000)
+    page.wait_for_selector(".fa-edit", timeout=SHORT_TIMEOUT)
     page.locator(".fa-edit").click(force=True)
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").fill("100.00")
@@ -127,7 +127,7 @@ def _add_event_credits(live_server: Any, page: Any, member_search: str, member_o
 def _cancel_first_active_registration(live_server: Any, page: Any) -> None:
     """Cancel the first active registration shown in the organizer panel."""
     go_to(page, live_server, "/test/manage/registrations")
-    page.locator("a:has(i.fas.fa-trash)").first.click(force=True)
+    delete_modal(page)
     _wait_lm_ready(page)
 
 
@@ -136,8 +136,7 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     # Register as user
     login_user(page, live_server)
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Login as orga and assign tokens/credits for user@test.it.
     login_orga(page, live_server)
@@ -164,9 +163,9 @@ def refund_with_tokens(live_server: Any, page: Any) -> None:
     expect(page.locator("#typ_t")).to_be_visible()
     page.locator("#typ_t").click()
     page.locator("#p_7").click()
-    just_wait(page)
 
     # Verify JS computed the correct token refund amount
+    expect(page.locator("#ref_token")).to_contain_text(str(USER_TOKEN_REFUND))
     expect_normalized(page, page.locator("#ref_token"), str(USER_TOKEN_REFUND))
 
     submit_confirm(page)
@@ -200,8 +199,7 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     """
     # Orga registers for the event as a participant
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Add tokens and credits for orga@test.it (now registered, visible in dropdown)
     _add_event_tokens(live_server, page, "org", "Admin Test - orga@test.it", ORGA_TOKENS)
@@ -226,9 +224,9 @@ def refund_with_credits(live_server: Any, page: Any) -> None:
     expect(page.locator("#typ_c")).to_be_visible()
     page.locator("#typ_c").click()
     page.locator("#p_7").click()
-    just_wait(page)
 
     # Verify JS computed the correct split
+    expect(page.locator("#ref_token")).to_contain_text(str(ORGA_TOKEN_REFUND))
     expect_normalized(page, page.locator("#ref_token"), str(ORGA_TOKEN_REFUND))
     expect_normalized(page, page.locator("#ref_credit"), str(ORGA_CREDIT_REFUND))
 

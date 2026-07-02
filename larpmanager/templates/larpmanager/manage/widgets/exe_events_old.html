@@ -6,6 +6,7 @@
     <table class="go_datatable" no_header_cols="all">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Event" %}</th>
                 <th>{% trans "Dates" %}</th>
                 <th>{% trans "Status" %}</th>
@@ -16,6 +17,7 @@
         <tbody>
             {% for run in ongoing_runs %}
                 <tr>
+                    <td></td>
                     <td>
                         <a href="{% url 'manage' run.slug %}" target="_blank">{{ run.name }}</a>
                     </td>

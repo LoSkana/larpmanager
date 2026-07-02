@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
-    get_modal_iframe, save_modal
+    submit_register, char_dual_pick, \
+    get_modal_iframe, save_modal, topbar
 
 pytestmark = pytest.mark.e2e
 
@@ -75,8 +76,7 @@ def setup(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     go_to(page, live_server, "/test/manage/quick/")
 
@@ -168,9 +168,7 @@ def character_inventory_pools(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("Test Character's Bank")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="New").click()
@@ -240,13 +238,12 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     # log out and log in as the test user
     login_user(page, live_server)
 
-    page.get_by_role("link", name="Test Larp").click()
+    topbar(page, "Test Larp")
     page.get_by_role("link", name="Test Character").click()
 
     # do transfers as a user
     page.get_by_role("link", name="View Details").first.click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # submit profile
     page.get_by_role("checkbox", name="Authorisation").check()

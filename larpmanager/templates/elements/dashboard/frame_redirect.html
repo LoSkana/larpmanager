@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+        <script>
+        if (window.parent && window.parent !== window) {
+            window.parent.postMessage({type: 'dashboard_form_saved', redirect_url: '{{ redirect_url|escapejs }}'}, '*');
+        } else {
+            window.location.href = '{{ redirect_url|escapejs }}';
+        }
+        </script>
+    </body>
+</html>

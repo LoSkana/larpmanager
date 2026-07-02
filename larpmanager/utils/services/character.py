@@ -797,6 +797,8 @@ def update_character_referenced_chars(character_id: int) -> None:
         character = Character.objects.select_related("event", "player").get(pk=character_id)
     except Character.DoesNotExist:
         return
+    if get_event_config(character.event_id, "writing_disable_auto_relationship", default_value=False):
+        return
     sources_map = _collect_sources_map(character)
     _persist_auto_relationships(character, sources_map)
 

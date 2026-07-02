@@ -39,7 +39,7 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association, AssociationPlan
-from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, MediaTokenMixin, UuidMixin
+from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.member import Member
 from larpmanager.models.utils import (
     UploadToPathAndRename,
@@ -327,6 +327,7 @@ class Event(UuidMixin, BaseModel):
             "ruleexp",
             "abilitytemplateexp",
             "modifierexp",
+            "criterionexp",
             "systemexp",
             "systemexppooltypeci",
             "writingquestion",
@@ -505,7 +506,7 @@ class BaseConceptModel(BaseModel):
         return self.name
 
 
-class EventButton(UuidMixin, BaseConceptModel):
+class EventButton(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents EventButton model."""
 
     tooltip = models.CharField(max_length=200)
@@ -585,10 +586,8 @@ class EventText(UuidMixin, BaseModel):
         ]
 
 
-class ProgressStep(UuidMixin, BaseConceptModel):
+class ProgressStep(UuidMixin, OrderMixin, BaseConceptModel):
     """Represents ProgressStep model."""
-
-    order = models.IntegerField(default=0)
 
     class Meta:
         indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
@@ -626,6 +625,7 @@ class RegistrationStatus(models.TextChoices):
     OPEN = "o", _("Open")
     EXTERNAL = "e", _("External site")
     FUTURE = "f", _("Open on date")
+    CLOSING = "g", _("Close on date")
 
 
 class Run(MediaTokenMixin, UuidMixin, BaseModel):
@@ -674,8 +674,8 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
     registration_open = models.DateTimeField(
         blank=True,
         null=True,
-        verbose_name=_("Registration opening"),
-        help_text=_("Date and time when registrations open for participants"),
+        verbose_name=_("Registration date"),
+        help_text=_("Date and time when registrations open, or close, for participants depending on status"),
     )
 
     register_link = models.URLField(
@@ -762,10 +762,9 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         # noinspection PyUnresolvedReferences
         return self.event.where
 
-    def get_cover_url(self) -> str:
+    def get_cover_url(self) -> str | None:
         """Return the thumbnail URL of the associated event's cover image."""
-        # noinspection PyUnresolvedReferences
-        return self.event.cover_thumb.url
+        return self.event.get_cover_thumb_url()
 
     def pretty_dates(self) -> str:
         """Format start and end dates into a human-readable string.

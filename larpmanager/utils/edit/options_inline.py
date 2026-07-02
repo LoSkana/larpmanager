@@ -72,7 +72,8 @@ def inline_options_config(context: dict, permission: str) -> dict[str, Any]:
         }
         if cfg["show_requirements"]:
             cfg["requirements_choices"] = (
-                WritingOption.objects.filter(event=context["event"])
+                context["event"]
+                .get_elements(WritingOption)
                 .select_related("question")
                 .order_by("question__order", "order")
             )
@@ -224,7 +225,7 @@ def options_inline_reorder(
     if not uuids:
         return JsonResponse({"success": False}, status=400)
 
-    options = list(option_model.objects.filter(event=context["event"], uuid__in=uuids))
+    options = list(context["event"].get_elements(option_model).filter(uuid__in=uuids))
     by_uuid = {str(opt.uuid): opt for opt in options}
 
     # All options must exist and belong to a single question

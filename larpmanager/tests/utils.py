@@ -28,7 +28,6 @@ from typing import Any, NoReturn
 from urllib.parse import urlparse
 
 import pandas as pd
-from django.utils import timezone
 from playwright.sync_api import expect
 
 logger = logging.getLogger(__name__)
@@ -37,10 +36,11 @@ password = "banana"
 orga_user = "orga@test.it"
 test_user = "user@test.it"
 
+SHORT_TIMEOUT = 10_000
+LONG_TIMEOUT = 60_000
 
 def logout(page: Any) -> None:
-    page.locator("a#menu-open").first.click()
-    page.get_by_role("link", name="Logout").click()
+    sidebar(page, "Logout")
 
 
 def login_orga(page: Any, live_server: Any) -> None:
@@ -90,15 +90,25 @@ def print_text(page: Any) -> None:
 def go_to(page: Any, live_server: Any, path: Any) -> None:
     go_to_check(page, f"{live_server}/{path.lstrip('/')}")
 
+
 def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
-    page.wait_for_load_state("networkidle", timeout=timeout)
-    page.wait_for_load_state("load", timeout=timeout)
+    # Playwright's click/goto already wait for initiated navigations to commit,
+    # so the readiness flags below always refer to the new document; the flags
+    # cover everything networkidle used to (datatables/question ajax) without
+    # its mandatory 500ms of network silence.
     page.wait_for_load_state("domcontentloaded", timeout=timeout)
 
-    try:
-        page.wait_for_function("() => window._lmReady === true", timeout=timeout)
-    except Exception:
-        pass
+    page.wait_for_function("() => window._lmReady === true", timeout=timeout)
+
+    page.wait_for_function(
+        "() => !window._datatablesInitPending || window._datatablesInitPending <= 0",
+        timeout=timeout,
+    )
+
+    page.wait_for_function(
+        "() => !window._questionLoadPending || window._questionLoadPending <= 0",
+        timeout=timeout,
+    )
 
     ooops_check(page)
 
@@ -106,12 +116,20 @@ def _wait_lm_ready(page: Any, timeout: int = 3000) -> None:
 def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     _wait_lm_ready(page)
+    body_class = page.locator("body").get_attribute("class") or ""
+    url_path = urlparse(page.url).path.rstrip("/")
+    if "manage" in body_class and not url_path.endswith("/manage"):
+        info = page.locator("#info_bar #info")
+        assert info.count() > 0, f"#info_bar #info missing on {page.url}"
+        assert info.inner_text().strip(), f"#info_bar #info empty on {page.url}"
+
 
 def get_request(page: Any, live_server: Any, path: Any) -> dict:
     api_context = page.request
     response = api_context.get(f"{live_server}/{path}")
     assert response.ok
     return response.json()
+
 
 def submit(page: Any) -> None:
     submit_confirm(page)
@@ -136,11 +154,14 @@ def check_download(page: Any, link: str, locator: Any = None) -> None:
 
     while current_try < max_tries:
         try:
-            with page.expect_download(timeout=100_000) as download_info:
+            with page.expect_download(timeout=LONG_TIMEOUT) as download_info:
                 if locator is not None:
                     locator.click()
                 else:
-                    page.click(f"text={link}")
+                    target = page.get_by_role("link", name=link)
+                    if target.count() == 0:
+                        target = page.get_by_role("button", name=link)
+                    target.click()
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
@@ -184,11 +205,14 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
     current_try = 0
     while current_try < max_tries:
         try:
-            with page.expect_download(timeout=100_000) as download_info:
+            with page.expect_download(timeout=LONG_TIMEOUT) as download_info:
                 if locator is not None:
                     locator.click()
                 else:
-                    page.click(f"text={link}")
+                    target = page.get_by_role("link", name=link)
+                    if target.count() == 0:
+                        target = page.get_by_role("button", name=link)
+                    target.click()
             download = download_info.value
             download_path = download.path()
             assert download_path is not None, "Download failed"
@@ -206,16 +230,18 @@ def check_pdf_zip_download(page: Any, link: str, locator: Any = None) -> None:
                 raise
 
 
-def fill_tinymce(page, iframe_id, text, show = True) -> None:
+def fill_tinymce(page, iframe_id, text, show=True) -> None:
     """In test setting tinymce is not rendered, just fill the textarea."""
+
+    input_element = page.locator(f"#{iframe_id}")
 
     if show:
         show_link_selector = f'a.my_toggle[tog="f_{iframe_id}"]'
         show_link = page.locator(show_link_selector)
         show_link.wait_for(state="visible")
         show_link.click()
+        input_element.wait_for(state="visible")
 
-    input_element = page.locator(f'#{iframe_id}')
     input_element.fill(f"<p>{text}</p>", force=True)
 
 
@@ -227,9 +253,9 @@ def _checkboxes(page: Any, check: Any = True) -> None:
         if checkbox.is_visible() and checkbox.is_enabled():
             if check:
                 if not checkbox.is_checked():
-                    checkbox.check()
+                    checkbox.check(force=True)
             elif checkbox.is_checked():
-                checkbox.uncheck()
+                checkbox.uncheck(force=True)
 
     submit_confirm(page)
 
@@ -242,49 +268,63 @@ def submit_confirm(page: Any, container_id: str = None) -> None:
     # Ensure any blocking loading screen is gone before searching for elements
     overlay = page.locator("#overlay")
     if overlay.is_visible():
-        expect(overlay).to_be_hidden(timeout=5000)
+        expect(overlay).to_be_hidden(timeout=SHORT_TIMEOUT)
 
     # Use a generic locator with a regex filter covering both text and role fallbacks
-    submit_btn = scope.locator("button, input[type='submit'], a").filter(
-        has_text=re.compile(r"^\s*(Confirm|Submit|Conferma|Execute)\s*$", re.IGNORECASE)
-    ).first
+    submit_btn = (
+        scope.locator("button, input[type='submit'], a")
+        .filter(has_text=re.compile(r"^\s*(Confirm|Submit|Conferma|Execute)\s*$", re.IGNORECASE))
+        .first
+    )
 
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
 
     # Click normally to ensure actionability, fallback to forced action if styling dictates
-    try:
-        submit_btn.click(timeout=2000)
-    except Exception:
-        submit_btn.click(force=True)
+    submit_btn.click(force=True)
 
-    _wait_lm_ready(page, timeout=8000)
+    _wait_lm_ready(page, timeout=SHORT_TIMEOUT)
+
+
+def submit_register(page: Any) -> None:
+    # Settle late init
+    _wait_lm_ready(page)
+    url_before = page.url
+
+    page.get_by_role("button", name="Continue").click()
+    page.locator("#riepilogo").wait_for(state="visible", timeout=SHORT_TIMEOUT)
+
+    # Click the real submit button by id
+    register_go = page.locator("#register_go")
+    register_go.scroll_into_view_if_needed()
+    expect(register_go).to_be_visible()
+    register_go.click()
+
+    # Assert the navigation actually happened
+    page.wait_for_url(lambda url: url != url_before, timeout=SHORT_TIMEOUT)
+    _wait_lm_ready(page)
+    ooops_check(page)
+
 
 def wait_for_inline_edit(page: Any) -> Any:
-    page.wait_for_selector("#excel-edit.visible", timeout=10000)
+    page.wait_for_selector("#excel-edit.visible #form-excel", timeout=SHORT_TIMEOUT)
     return page.locator("#excel-edit")
 
 
 def submit_inline_edit(page: Any) -> None:
-    submit_btn = page.get_by_role(
-        "button",
-        name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
-    )
+    submit_btn = page.get_by_role("button", name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE))
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     count_before = page.evaluate("() => window._datatablesRefreshCount || 0")
     submit_btn.click(force=True)
     page.wait_for_function(
         f"() => (window._datatablesRefreshCount || 0) > {count_before}",
-        timeout=10000,
+        timeout=LONG_TIMEOUT,
     )
 
 
 def save_modal(page: any, frame: Any) -> None:
-    submit_btn = frame.get_by_role(
-        "button",
-        name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)
-    )
+    submit_btn = frame.get_by_role("button", name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE))
     submit_btn.scroll_into_view_if_needed()
     expect(submit_btn).to_be_visible()
     url_before = page.url
@@ -292,8 +332,25 @@ def save_modal(page: any, frame: Any) -> None:
     submit_btn.click(force=True)
     page.wait_for_function(
         f"() => (window._datatablesRefreshCount || 0) > {count_before} || window.location.href !== {repr(url_before)}",
-        timeout=10000,
+        timeout=LONG_TIMEOUT,
     )
+    page.locator("#lm-modal").wait_for(state="hidden")
+
+
+def delete_modal(page: Any, trash_locator: Any = None, name: str = None) -> None:
+    """Open the v21 delete confirmation modal, optionally check the element name, and confirm.
+
+    Clicks the trash icon (the first one on the page when no locator is given), waits for the
+    iframe modal to appear, verifies the confirmation message contains the expected name when
+    provided, then clicks Confirm and waits for the listing to refresh and the modal to close.
+    """
+    if trash_locator is None:
+        trash_locator = page.locator("a:has(i.fa-trash)").first
+    trash_locator.click(force=True)
+    frame = get_modal_iframe(page)
+    if name is not None:
+        expect(frame.locator(".delete-confirm-message")).to_contain_text(name)
+    save_modal(page, frame)
 
 
 def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> None:
@@ -303,7 +360,7 @@ def add_links_to_visit(links_to_visit: Any, page: Any, visited_links: Any) -> No
             continue
         if link.endswith(("#", "#menu", "#sidebar", "print", ".jpg")):
             continue
-        if any(s in link for s in ["features", "pdf", "backup"]):
+        if any(s in link for s in ["features", "pdf", "backup", "guides", "privacy", "tutorials"]):
             continue
         if re.search(r"/manage/upload/[\w-]+/template/", link):
             continue
@@ -336,12 +393,14 @@ def load_image_hidden(page: Any, element_id: str) -> None:
 def upload(page: Any, element_id: Any, image_path: Any) -> None:
     inp = page.locator(element_id)
     inp.scroll_into_view_if_needed()
-    expect(inp).to_be_visible(timeout=60000)
+    expect(inp).to_be_visible(timeout=LONG_TIMEOUT)
     inp.set_input_files(str(image_path))
 
 
 def normalize_whitespace(text: str) -> str:
     """Normalize whitespace by removing newlines and collapsing multiple spaces."""
+
+    text = re.sub(r"<[^>]+>", "", text)
 
     lines = []
     for line in text.splitlines():
@@ -375,7 +434,8 @@ def normalize_whitespace(text: str) -> str:
     # Strip leading/trailing whitespace
     return text.strip().lower()
 
-def expect_normalized(page, locator, expected: str, timeout=10000):
+
+def expect_normalized(page, locator, expected: str, timeout=SHORT_TIMEOUT):
     locator.wait_for(state="visible", timeout=timeout)
 
     page.wait_for_load_state("load")
@@ -416,14 +476,50 @@ def expect_normalized(page, locator, expected: str, timeout=10000):
     exp = normalize_whitespace(expected)
 
     if exp not in actual:
-        raise AssertionError(
-            "Text mismatch\n\n"
-            f"EXPECTED:\n{exp}\n\n"
-            f"ACTUAL:\n{actual}"
-        )
+        raise AssertionError(f"Text mismatch\n\nEXPECTED:\n{exp}\n\nACTUAL:\n{actual}")
+
+
+def click_option(input_locator):
+    """Toggle a radio/checkbox whose native input is visually hidden by lm.css.
+
+    Inline registration/character options hide the native input with zero size
+    (see .reg-checkbox-class / .reg-radio-class in lm.css), so Playwright cannot
+    click it directly; click the wrapping label, which forwards the toggle."""
+    input_locator.locator("xpath=ancestor::label[1]").click()
+
+
+def drag_reorder(page, source, target):
+    """Drag a reorder handle onto a target row and persist the new order.
+
+    Both the DataTables ``rowReorder`` widget (mouse events) and the inline-option
+    editor (native HTML5 drag-and-drop) listen for a real pointer sequence. Playwright's
+    ``Locator.drag_to`` is flaky for the HTML5 path because Chromium only emits
+    ``dragstart``/``dragover`` after several intermediate moves. Drive the mouse manually
+    with the documented multi-move pattern instead so both mechanisms fire reliably.
+
+    source/target may be main-page or frame locators; ``bounding_box`` returns
+    main-viewport coordinates either way, so ``page.mouse`` works for both."""
+    source.scroll_into_view_if_needed()
+    src_box = source.bounding_box()
+    tgt_box = target.bounding_box()
+    sx = src_box["x"] + src_box["width"] / 2
+    sy = src_box["y"] + src_box["height"] / 2
+    tx = tgt_box["x"] + tgt_box["width"] / 2
+    ty = tgt_box["y"] + tgt_box["height"] / 2
+
+    page.mouse.move(sx, sy)
+    page.mouse.down()
+    # First move past the drag threshold to trigger dragstart, then onto the
+    # target so dragover/row-reorder fires; extra steps keep Chromium happy.
+    page.mouse.move(sx, sy + 8, steps=5)
+    page.mouse.move(tx, ty, steps=10)
+    page.mouse.move(tx, ty, steps=5)
+    page.mouse.up()
+    just_wait(page)
+
 
 def just_wait(page, big=False):
-    if not hasattr(page, 'wait_for_timeout'):
+    if not hasattr(page, "wait_for_timeout"):
         return
     wait = 2000 if big else 500
     page.wait_for_timeout(wait)
@@ -456,10 +552,7 @@ def click_and_wait_question(page: Any, name: str) -> None:
         tog = toggle.get_attribute("tog")
         page.evaluate("window._tableToggleDone = null")
         toggle.click()
-        try:
-            page.wait_for_function(f"window._tableToggleDone === '{tog}'", timeout=3000)
-        except Exception:
-            pass  # column toggle is synchronous; proceed if signal missed
+        page.wait_for_function(f"window._tableToggleDone === '{tog}'", timeout=SHORT_TIMEOUT)
 
 
 def fill_date(locator, selector, value):
@@ -474,9 +567,9 @@ class FrameLocatorWithPage:
     """Wraps a FrameLocator with the real Page so helpers can call keyboard/wait methods."""
 
     def __init__(self, frame_locator, page, iframe_locator=None):
-        object.__setattr__(self, '_frame', frame_locator)
-        object.__setattr__(self, '_real_page', page)
-        object.__setattr__(self, '_iframe_locator', iframe_locator)
+        object.__setattr__(self, "_frame", frame_locator)
+        object.__setattr__(self, "_real_page", page)
+        object.__setattr__(self, "_iframe_locator", iframe_locator)
 
     def _get_frame(self):
         """Return the actual Frame object for JS evaluation in this iframe's context."""
@@ -549,9 +642,7 @@ class InlineOptionRow:
     def searchbox(self, field):
         """Return the select2 search field of an M2M column (requirements / tickets)."""
         self._ensure_details()
-        container = self.details.locator(
-            f"select[name={field}] ~ .select2"
-        )
+        container = self.details.locator(f"select[name={field}] ~ .select2")
         return container.get_by_role("searchbox")
 
 
@@ -562,16 +653,18 @@ def new_option(page):
     row = page.locator("#inline-options-body tr.inline-option").last
     return InlineOptionRow(page, row)
 
+
 def get_option(page, uuid):
     """Return the inline editor row for an existing option."""
     row = page.locator(f'#inline-options-body tr.inline-option[data-uuid="{uuid}"]')
     return InlineOptionRow(page, row)
 
+
 def submit_option(page, option):
     # The inline editor autosaves: blur the fields and wait for the row
     # to receive its uuid (i.e. for the server to confirm the save)
     page.keyboard.press("Tab")
-    expect(option.row).to_have_attribute("data-uuid", re.compile(".+"), timeout=10000)
+    expect(option.row).to_have_attribute("data-uuid", re.compile(".+"), timeout=SHORT_TIMEOUT)
 
 
 def get_modal_iframe(page):
@@ -584,14 +677,46 @@ def get_modal_iframe(page):
             frame.wait_for_load_state("domcontentloaded")
     return FrameLocatorWithPage(iframe_locator.content_frame, page, iframe_locator)
 
+def topbar(page, link):
+    icon_link("#topbar", page, link)
 
 def sidebar(page, link):
     icon_link("#sidebar", page, link)
 
+
 def icon_link(container, page, link):
     pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
-    page.locator(container).get_by_role("link", name=pattern).click()
+    locator = page.locator(container).get_by_role("link", name=pattern)
+    locator.wait_for(state="visible")
+    locator.click()
     _wait_lm_ready(page)
 
-def nav(page, link):
-    icon_link(".nav", page, link)
+
+def _wait_select2_results(page):
+    page.locator(".select2-results__option").first.wait_for(state="visible")
+    expect(page.locator(".select2-results__option")).not_to_have_count(0)
+
+
+def _select2_search_and_pick(searchbox, iframe, value):
+    # fill() skips the "stable" check that click() requires, handling toggle animations
+    searchbox.fill(value)
+    iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    expect(iframe.locator(".select2-results__option")).not_to_have_count(0)
+    iframe.locator(".select2-results__option").first.click()
+    iframe.locator(".select2-dropdown").wait_for(state="hidden")
+
+
+def char_dual_pick(context, term, name):
+    """Select a character by name in a CharacterDualListWidget.
+
+    context: a Playwright Locator or Page scoped to the widget's container (e.g. edit_iframe).
+    term: search string to type in the available-side search box.
+    name: the character name text to match and click in the available list.
+    """
+    search = context.locator(".char-dual-available .char-dual-search").first
+    search.wait_for(state="visible")
+    search.fill(term)
+    item = context.locator(".char-dual-avail-list .char-dual-item").filter(has_text=name).first
+    item.wait_for(state="visible", timeout=SHORT_TIMEOUT)
+    item.click()
+    context.locator(".char-dual-sel-list .char-dual-item").filter(has_text=name).wait_for(state="visible", timeout=SHORT_TIMEOUT)

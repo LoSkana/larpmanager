@@ -27,12 +27,12 @@ from imagekit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import AlphanumericValidator, BaseModel, UuidMixin
+from larpmanager.models.base import AlphanumericValidator, BaseModel, OrderMixin, UuidMixin
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, show_thumb
 
 
-class LarpManagerTutorial(BaseModel):
+class LarpManagerTutorial(OrderMixin, BaseModel):
     """Model for managing LARP tutorials and guides.
 
     Represents educational content for LARP management,
@@ -44,8 +44,6 @@ class LarpManagerTutorial(BaseModel):
     slug = models.SlugField(max_length=100, validators=[AlphanumericValidator], db_index=True, blank=True)
 
     descr = HTMLField(blank=True, null=True)
-
-    order = models.IntegerField()
 
 
 class LarpManagerReview(BaseModel):
@@ -60,14 +58,12 @@ class LarpManagerReview(BaseModel):
     author = models.CharField(max_length=100)
 
 
-class LarpManagerFaqType(BaseModel):
+class LarpManagerFaqType(OrderMixin, BaseModel):
     """Model for categorizing FAQ entries.
 
     Provides organization structure for frequently
     asked questions with ordering and naming.
     """
-
-    order = models.IntegerField()
 
     name = models.CharField(max_length=100)
 
@@ -262,14 +258,12 @@ class LarpManagerProfiler(BaseModel):
         indexes: ClassVar[list] = [models.Index(fields=["domain", "view_func_name"])]
 
 
-class LarpManagerDiscover(BaseModel):
+class LarpManagerDiscover(OrderMixin, BaseModel):
     """Model for discovery/feature showcase content.
 
     Represents highlighted features or content for
     user discovery with ordering and visual elements.
     """
-
-    order = models.IntegerField()
 
     name = models.CharField(max_length=100)
 

@@ -672,6 +672,18 @@
     module: experience
 - model: larpmanager.eventpermission
   fields:
+    name: Criterions
+    descr: Manage experience criterions
+    slug: orga_exp_criterions
+    number: 95
+    config: experience
+    active_if: exp_criterions
+    hidden: false
+    icon: filter
+    feature: experience
+    module: experience
+- model: larpmanager.eventpermission
+  fields:
     name: Systems
     descr: Manage experience systems
     slug: orga_exp_systems

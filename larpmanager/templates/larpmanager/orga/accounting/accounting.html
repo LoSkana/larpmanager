@@ -41,6 +41,7 @@
     <table class="go_datatable ">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Item" %}</th>
                 <th>{% trans "Total" %}</th>
                 <th>{% trans "Number" %}</th>
@@ -50,6 +51,7 @@
         <tbody>
             {% for k, v in details.items %}
                 <tr>
+                    <td></td>
                     <td>{{ v.name }}</td>
                     <td>{{ v.tot }}</td>
                     <td>{{ v.num }}</td>
@@ -65,6 +67,7 @@
         <table class="go_datatable ">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Name" %}</th>
                     <th>{% trans "Total" %}</th>
                     <th>{% trans "Number" %}</th>
@@ -73,6 +76,7 @@
             <tbody>
                 {% for y, w in v.detail.items %}
                     <tr>
+                        <td></td>
                         <td>{{ w.name }}</td>
                         <td>{{ w.tot }}</td>
                         <td>{{ w.num }}</td>

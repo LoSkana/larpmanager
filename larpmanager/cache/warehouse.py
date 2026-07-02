@@ -47,7 +47,7 @@ def build_item_data(item: WarehouseItem) -> dict[str, Any]:
     return {
         "id": item.id,
         "name": item.name,
-        "tags": [(tag.id, tag.name) for tag in item.tags.all()],
+        "tags": [(tag.uuid, tag.name) for tag in item.tags.all()],
     }
 
 
@@ -66,7 +66,7 @@ def init_association_warehouse_cache(association_id: int) -> dict[int, dict[str,
             item_id: {
                 'id': item_id,
                 'name': item_name,
-                'tags': [(tag_id, tag_name), ...]
+                'tags': [(tag_uuid, tag_name), ...]
             }
         }
 

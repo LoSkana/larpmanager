@@ -22,6 +22,7 @@
                             <tr>
                                 <td>
                                     <h3>
+                                        {% if el.thumb %}<img class="faction-logo" src="{{ el.thumb }}" alt="faction logo" />{% endif %}
                                         <a href="{% url 'faction' run.get_slug el.uuid %}">{{ el.name }}</a>
                                     </h3>
                                 </td>
@@ -58,6 +59,7 @@
                             <tr>
                                 <td>
                                     <h3>
+                                        {% if el.thumb %}<img class="faction-logo" src="{{ el.thumb }}" alt="faction logo" />{% endif %}
                                         <a href="{% url 'faction' run.get_slug el.uuid %}">{{ el.name }}</a>
                                     </h3>
                                 </td>

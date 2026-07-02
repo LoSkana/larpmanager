@@ -819,11 +819,13 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
         # Create type entry if it doesn't exist
         if ability.typ.uuid not in context["available"]:
             context["available"][ability.typ.uuid] = {"name": ability.typ.name, "order": ability.typ.number, "list": {}}
-        # Include system name in label only when multiple systems are configured
-        label = f"{ability.name} - {ability.cost}"
-        if multiple_systems:
-            label += f" [{ability.system.name}]"
-        context["available"][ability.typ.uuid]["list"][str(ability.uuid)] = label
+        context["available"][ability.typ.uuid]["list"][str(ability.uuid)] = {
+            "name": ability.name,
+            "cost": ability.cost,
+            "descr": ability.get_description or "",
+            "prereqs": [p.name for p in ability.prerequisites.all()],
+            "system": ability.system.name if multiple_systems else "",
+        }
 
     # Build current character abilities organized by type name
     context["sheet_abilities"] = {}
@@ -843,9 +845,12 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
         return redirect(request.path_info)
 
     # Create ordered list of available types for template rendering
-    context["type_available"] = {
-        typ_id: data["name"] for typ_id, data in sorted(context["available"].items(), key=lambda x: x[1]["order"])
+    type_available_dict = {
+        str(typ_id): data["name"] for typ_id, data in sorted(context["available"].items(), key=lambda x: x[1]["order"])
     }
+    context["type_available"] = json.dumps(type_available_dict)
+    # Serialize available with string keys for safe JS embedding
+    context["available"] = json.dumps({str(k): v for k, v in context["available"].items()})
 
     # Add undo functionality for recent ability changes
     context["undo_abilities"] = get_undo_abilities(context, context["character"])

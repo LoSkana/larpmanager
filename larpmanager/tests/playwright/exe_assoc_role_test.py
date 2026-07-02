@@ -29,11 +29,11 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import (check_feature,
+                                     delete_modal,
                                      go_to,
                                      login_orga,
                                      login_user,
                                      logout,
-                                     submit_confirm,
                                      expect_normalized,
                                      get_modal_iframe, save_modal,
                                      )
@@ -75,7 +75,7 @@ def test_exe_association_role(pw_page: Any) -> None:
 
     # Delete the role
     go_to(page, live_server, "/manage/roles")
-    page.locator('#u2 .fa-trash').click()
+    delete_modal(page, page.locator('#u2 .fa-trash'))
 
     logout(page)
     login_user(page, live_server)

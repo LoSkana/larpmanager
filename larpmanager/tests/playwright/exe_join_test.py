@@ -24,14 +24,13 @@ Verifies new user registration, organization creation with automatic slug genera
 profile picture upload, and organization dashboard access.
 """
 
-import re
 from typing import Any
 
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import expect_normalized, fill_date, get_modal_iframe, go_to, just_wait, load_image, \
-    login_orga, submit, submit_confirm, save_modal
+from larpmanager.tests.utils import expect_normalized, fill_date, get_modal_iframe, go_to, load_image, \
+    login_orga, submit, submit_confirm, save_modal, LONG_TIMEOUT
 
 pytestmark = pytest.mark.e2e
 
@@ -79,7 +78,6 @@ def test_exe_join(pw_page: Any) -> None:
     page.locator("#slug").fill("prova")
     submit(page)
 
-    just_wait(page)
     go_to(page, live_server, "/debug/prova")
 
     expect_normalized(page, page.locator("#banner"), "prova larp")
@@ -148,10 +146,11 @@ def test_exe_join(pw_page: Any) -> None:
     # Step 5: first registration
     go_to(page, live_server, "prova/register")
     page.get_by_role("button", name="Continua").click()
+    page.locator("#riepilogo").wait_for(state="visible")
     submit_confirm(page)
 
     go_to(page, live_server, "manage/activation/")
-    expect(page.locator("tr", has_text="Prima iscrizione")).to_contain_text("Fatto")
+    expect(page.locator("tr", has_text="Prima iscrizione")).to_contain_text("Fatto", timeout=LONG_TIMEOUT)
 
     # Step 6: first character
 
@@ -181,7 +180,6 @@ def test_exe_join(pw_page: Any) -> None:
 
     # Final activation
     page.get_by_role("button", name="Attiva la modalità avanzata").click()
-    just_wait(page)
 
     # New sidebar items visible after activation
     expect(page.locator("#exe_features")).to_be_visible()

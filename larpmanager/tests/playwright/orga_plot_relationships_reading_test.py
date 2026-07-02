@@ -30,14 +30,14 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
-                                     check_feature,
+from larpmanager.tests.utils import (check_feature,
                                      fill_tinymce,
                                      get_modal_iframe,
                                      go_to,
                                      login_orga,
                                      submit_confirm,
                                      expect_normalized, sidebar, save_modal, click_and_wait_question,
+                                     _wait_select2_results, _wait_lm_ready, char_dual_pick, SHORT_TIMEOUT,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -90,6 +90,7 @@ def reading(live_server: Any, page: Any) -> None:
     # now read it
     sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         """
@@ -108,13 +109,7 @@ def reading(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("only for testt")
-    edit_iframe.get_by_role("listitem").click()
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.fill("te")
-    # Wait for the option to appear and click it
-    option = edit_iframe.get_by_role("option", name="Test Character")
-    option.wait_for(state="visible")
-    option.click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     # check faction main list
@@ -124,6 +119,7 @@ def reading(live_server: Any, page: Any) -> None:
     # check reading for prova
     sidebar(page, "Reading")
     page.locator('[id="character_u2"]').locator(".fa-book-open").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         "Presentation pppresssent Text totxeet testona wwwww bruuuu Relationships Test Character only for testt test teaser ciaaoooooo",
@@ -132,6 +128,7 @@ def reading(live_server: Any, page: Any) -> None:
     # check reading plot
     sidebar(page, "Reading")
     page.locator('[id="plot_u1"]').locator(".fa-book-open").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "testona Text wwwww prova bruuuu")
 
 
@@ -149,20 +146,17 @@ def relationships(live_server: Any, page: Any) -> None:
     option = edit_iframe.get_by_role("option", name="Test Character")
     option.wait_for(state="visible")
     option.click()
-    just_wait(edit_iframe, big=True)
     fill_tinymce(edit_iframe, "rel_u1", "ciaaoooooo")
     save_modal(page, edit_iframe)
 
     # check in main list
     page.get_by_role("link", name="Relationships").click()
-    just_wait(page)
     expect_normalized(page, page.locator("#one"), "Test Character Test Teaser Test Text prova Test Character")
 
     # check in char
     page.locator('[id="u2"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("row", name="Direct Show How the").get_by_role("link").click()
-    just_wait(page, big=True)
     expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
 
     # check in other char
@@ -171,12 +165,13 @@ def relationships(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("a.my_toggle[tog='f_u2_inverse']").scroll_into_view_if_needed()
     edit_iframe.locator("a.my_toggle[tog='f_u2_inverse']").click()
-    edit_iframe.locator(".f_u2_inverse").wait_for(state="visible", timeout=10000)
+    edit_iframe.locator(".f_u2_inverse").wait_for(state="visible", timeout=SHORT_TIMEOUT)
     expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Relationships Test Character test teaser ciaaoooooo")
 
 
@@ -197,23 +192,11 @@ def plots(live_server: Any, page: Any) -> None:
     fill_tinymce(edit_iframe, "id_text", "wwwww")
 
     # set first char role
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.click()
-    searchbox.fill("te")
-    # Wait for the option to appear and click it
-    option = edit_iframe.get_by_role("option", name="Test Character")
-    option.wait_for(state="visible")
-    option.click()
-    just_wait(page, big=True)
+    char_dual_pick(edit_iframe, "te", "Test Character")
     fill_tinymce(edit_iframe, "ch_1", "prova")
 
     # add second char role
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.fill("pro")
-    # Wait for the option to appear and click it
-    option = edit_iframe.get_by_role("option", name="prova")
-    option.wait_for(state="visible")
-    option.click()
+    char_dual_pick(edit_iframe, "pro", "prova")
     fill_tinymce(edit_iframe, "ch_2", "second char role")
 
     save_modal(page, edit_iframe)
@@ -229,7 +212,7 @@ def plots(live_server: Any, page: Any) -> None:
     locator = edit_iframe.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(edit_iframe, edit_iframe.locator("#one"), """<p>asadsadas</p> <p>wwwww</p> test character prova <p>prova</p> <p>second char role</p>""")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), """prova test character <p>prova</p> <p>second char role</p>""")
 
     # change it
     fill_tinymce(edit_iframe, "id_char_role_1", "prova222", show=False)
@@ -243,17 +226,10 @@ def plots(live_server: Any, page: Any) -> None:
     locator = edit_iframe.locator('a.my_toggle[tog="f_id_char_role_1"]')
     locator.wait_for(state="visible")
     locator.click()
-    expect_normalized(edit_iframe, edit_iframe.locator("#one"), """<p>asadsadas</p> <p>wwwww</p> test character prova <p>prova222</p> <p>second char role</p>""")
+    expect_normalized(edit_iframe, edit_iframe.locator("#one"), """prova test character <p>prova222</p> <p>second char role</p>""")
 
     # remove first char
-    edit_iframe.get_by_role("listitem", name="Test Character").locator("span").click()
-    # add another char
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.fill("pro")
-    # Wait for the option to appear and click it
-    option = edit_iframe.get_by_role("option", name="prova")
-    option.wait_for(state="visible")
-    option.click()
+    edit_iframe.locator(".char-dual-sel-list .char-dual-item").filter(has_text="Test Character").click()
     save_modal(page, edit_iframe)
 
     # check
@@ -268,6 +244,7 @@ def plots(live_server: Any, page: Any) -> None:
     # check in user
     go_to(page, live_server, "/test/")
     page.get_by_role("link", name="prova").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "testona wwwww bruuuu")
 
 
@@ -294,12 +271,12 @@ def plots_character(live_server: Any, page: Any) -> None:
     searchbox.click()
     searchbox.fill("gag")
     # Wait for search results to appear and click first option
-    edit_iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
 
     searchbox.fill("bibi")
     # Wait for search results to appear and click first option
-    edit_iframe.locator(".select2-results__option").first.wait_for(state="visible")
+    _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
     save_modal(page, edit_iframe)
 
@@ -386,12 +363,11 @@ def auto_relationships_setup(live_server: Any, page: Any) -> None:
         ("AutoPlotA", "u7", "manual plot text"),
     ):
         edit_iframe.locator("#select2-new_rel_select-container").click()
-        searchbox = edit_iframe.get_by_role("searchbox").nth(2)
+        searchbox = edit_iframe.locator(".select2-container--open .select2-search__field")
         searchbox.fill(name)
         option = edit_iframe.get_by_role("option", name=name)
         option.wait_for(state="visible")
         option.click()
-        just_wait(edit_iframe, big=True)
         fill_tinymce(edit_iframe, f"rel_{target_uuid}", manual_text)
 
     save_modal(page, edit_iframe)
@@ -406,12 +382,7 @@ def auto_relationships_faction(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("AutoFaction")
     fill_tinymce(edit_iframe, "id_text", "mentions @5 and @6")
-    edit_iframe.get_by_role("listitem").click()
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.fill("Test Char")
-    option = edit_iframe.get_by_role("option", name="Test Character")
-    option.wait_for(state="visible")
-    option.click()
+    char_dual_pick(edit_iframe, "Test Char", "Test Character")
     save_modal(page, edit_iframe)
 
 
@@ -423,13 +394,7 @@ def auto_relationships_plot(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("AutoPlot")
-    searchbox = edit_iframe.get_by_role("searchbox")
-    searchbox.click()
-    searchbox.fill("Test Char")
-    option = edit_iframe.get_by_role("option", name="Test Character")
-    option.wait_for(state="visible")
-    option.click()
-    just_wait(edit_iframe, big=True)
+    char_dual_pick(edit_iframe, "Test Char", "Test Character")
     fill_tinymce(edit_iframe, "ch_1", "mentions @7 and @8")
     save_modal(page, edit_iframe)
 

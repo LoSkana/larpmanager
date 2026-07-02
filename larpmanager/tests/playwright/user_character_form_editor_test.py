@@ -29,9 +29,10 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
+from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
+    submit_register, \
     submit_option, new_option, \
-    get_modal_iframe, save_modal, _wait_lm_ready
+    get_modal_iframe, save_modal, _wait_lm_ready, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -180,9 +181,9 @@ def field_text(page: Any, live_server: Any) -> None:
 
     fill_tinymce(edit_iframe, "id_text", "rrrr")
 
-    edit_iframe.locator("#id_que_u4").select_option("u3")
-    edit_iframe.locator("#id_que_u4").select_option("u1")
-    edit_iframe.get_by_role("checkbox", name="q2").check()
+    edit_iframe.locator('label[for="id_que_u4_2"]').click()  # wwww
+    edit_iframe.locator('label[for="id_que_u4_0"]').click()  # ff
+    edit_iframe.locator('label[for="id_que_u5_1"]').click()  # q2
     edit_iframe.locator("#id_que_u6").click()
     edit_iframe.locator("#id_que_u6").fill("sad")
     edit_iframe.locator("#id_que_u7").click()
@@ -216,33 +217,32 @@ def verify_requirements_hidden(page: Any) -> None:
 
     Tests both question types:
     - multiple-choice (checkbox): option "14" (u7) requires "wwww" (u3)
-    - single-choice (select): option "dep_b" (u9) in "single_req" (u8) requires "wwww" (u3)
+    - single-choice (radio): option "dep_b" (u9, index 1) in "single_req" (u8) requires "wwww" (u3)
     """
-    label_14 = page.locator('input[type="checkbox"][value="u7"]')
-    dep_b_option = page.locator('#id_que_u8 option[value="u9"]')
+    # the native inputs are visually hidden by lm.css (zero size); the dependency
+    # JS toggles the wrapping label, so assert visibility on the label instead
+    label_14 = page.locator('label:has(input[type="checkbox"][value="u7"])')
+    dep_b_radio = page.locator('label:has(input[type="radio"][value="u9"])')
 
     # Nothing selected yet in "single" - both dependent options must be hidden
     expect(label_14).to_be_hidden()
-    expect(dep_b_option).to_have_attribute("hidden", "")
+    expect(dep_b_radio).to_be_hidden()
 
-    # Select a different option ("rrrr") - both must still be hidden
-    page.locator("#id_que_u4").select_option("u2")
-    just_wait(page)
+    # Select a different option ("rrrr", index 1) - both must still be hidden
+    page.locator('label[for="id_que_u4_1"]').click()
     expect(label_14).to_be_hidden()
-    expect(dep_b_option).to_have_attribute("hidden", "")
+    expect(dep_b_radio).to_be_hidden()
 
-    # Select "wwww" - both must become visible
-    page.locator("#id_que_u4").select_option("u3")
-    just_wait(page)
+    # Select "wwww" (index 2) - both must become visible
+    page.locator('label[for="id_que_u4_2"]').click()
     expect(label_14).to_be_visible()
-    expect(dep_b_option).not_to_have_attribute("hidden", "")
+    expect(dep_b_radio).to_be_visible()
 
 
 def character(page: Any, live_server: Any) -> None:
     # signup, create char
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
@@ -260,9 +260,9 @@ def character(page: Any, live_server: Any) -> None:
 
     fill_tinymce(page, "id_text", "so braaaave")
 
-    page.locator("#id_que_u4").select_option("u1")
-    page.locator("#id_que_u4").select_option("u3")
-    page.get_by_role("checkbox", name="- (Available 3)").check()
+    page.locator('label[for="id_que_u4_0"]').click()  # ff
+    page.locator('label[for="id_que_u4_2"]').click()  # wwww
+    page.locator('label[for="id_que_u5_3"]').click()  # 14 (Available 3)
     page.locator("#id_que_u6").click()
     page.locator("#id_que_u6").fill("wow")
     page.locator("#id_que_u7").click()
@@ -306,12 +306,11 @@ def verify_characters_shortcut(page: Any, live_server: Any) -> None:
 
     # Verify the Characters link is visible in the topbar
     go_to(page, live_server, "/")
-    page.get_by_role("link", name=re.compile(" Characters$")).click()
+    sidebar(page, "Characters")
 
     # Verify the page shows characters content
     expect_normalized(page, page.locator("#one"), "character active last event character active last event my character test larp")
-
-    page.get_by_role("link", name=re.compile(" Registrations$")).click()
+    sidebar(page, "Registrations")
 
     expect_normalized(page, page.locator("#one"),
   "test larp 19 march 2050 registration confirmed (standard) your character is: my character")

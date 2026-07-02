@@ -10,7 +10,7 @@
     <h2>
         {% trans "Global balance" %}: <b>{{ global_sum }}</b>
     </h2>
-    <p>
+    <p class="info_bar">
         <i>({% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %})</i>
     </p>
     <table>
@@ -72,7 +72,7 @@
     <h2>
         {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
     </h2>
-    <p>
+    <p class="info_bar">
         <i>({% trans "This is the overall amount that should be held in the organization's bank and financial accounts" %})</i>
     </p>
     <table>
@@ -226,6 +226,9 @@
                     {% endif %}
                 {% endfor %}
             </table>
+            {% if not list %}
+                <p class="no-elements-available">{% trans "No participants have been issued tokens yet" %}.</p>
+            {% endif %}
         </div>
     {% endif %}
     {% if features.credits %}
@@ -251,6 +254,9 @@
                     {% endif %}
                 {% endfor %}
             </table>
+            {% if not list %}
+                <p class="no-elements-available">{% trans "No participants have been issued credits yet" %}.</p>
+            {% endif %}
         </div>
     {% endif %}
     <div class="hide runs">
@@ -258,6 +264,7 @@
         <table id="run_balance" class="go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Event" %}</th>
                     <th>{% trans "Balance" %}</th>
                     <th>{% trans "Close" %}</th>
@@ -266,6 +273,7 @@
             </thead>
             {% for el in runs %}
                 <tr>
+                    <td></td>
                     <td>
                         <a href="{% url 'exe_run_accounting' el.uuid %}">{{ el }}</a>
                     </td>
@@ -277,6 +285,9 @@
                 </tr>
             {% endfor %}
         </table>
+        {% if not runs %}
+            <p class="no-elements-available">{% trans "No event runs have been recorded yet" %}.</p>
+        {% endif %}
     </div>
 {% endblock content %}
 {% block js %}

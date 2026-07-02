@@ -15,9 +15,6 @@
     {{ form.page_title }}
     - {{ run.search | truncatechars:50 }}
 {% endblock title %}
-{% block info %}
-    {% if not frame %}{{ form.page_info }}{% endif %}
-{% endblock info %}
 {% block content %}
     <div class="user_resize platform">{% include "elements/form/main.html" %}</div>
 {% endblock content %}

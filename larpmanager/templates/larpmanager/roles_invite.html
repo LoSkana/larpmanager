@@ -31,6 +31,7 @@
         <table class="go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Email" %}</th>
                     <th>{% trans "Sent" %}</th>
                     <th>{% trans "Status" %}</th>
@@ -40,6 +41,7 @@
                 {% for inv in role.invites.all %}
                     {% if not inv.deleted %}
                         <tr>
+                            <td></td>
                             <td>{{ inv.email }}</td>
                             <td>{{ inv.created|date:"Y-m-d H:i" }}</td>
                             <td>

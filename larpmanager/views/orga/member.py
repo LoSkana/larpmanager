@@ -33,14 +33,14 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.models.access import get_event_staffers
-from larpmanager.models.event import PreRegistration
+from larpmanager.models.event import PreRegistration, Run
 from larpmanager.models.member import FirstAidChoices, Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import EmailRecipient, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member, get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
-from larpmanager.utils.larpmanager.tasks import send_mail_exec
+from larpmanager.utils.larpmanager.tasks import partition_shared_recipients, send_mail_exec, split_recipients
 from larpmanager.utils.users.member import get_mail
 
 if TYPE_CHECKING:
@@ -416,15 +416,44 @@ def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str
     return redirect("orga_questions", event_slug=event_slug)
 
 
-def send_mail_batch(request: HttpRequest, association_id: int | None = None, run_id: int | None = None) -> None:
-    """Send batch email to players with specified subject and body."""
+def send_mail_batch(
+    request: HttpRequest,
+    association_id: int | None = None,
+    run_id: int | None = None,
+) -> tuple[list, list]:
+    """Queue batch email, only for recipients who shared their data with the association.
+
+    Recipients without data sharing consent for the association are skipped.
+
+    Args:
+        request: The HTTP request carrying the POST data (players, subject, body).
+        association_id: Association sending the email (org-wide send).
+        run_id: Run sending the email (event send); association is derived from it.
+
+    Returns:
+        Tuple (added, ignored) of email addresses.
+
+    """
     # Extract email parameters from POST data
     player_ids = request.POST["players"]
     email_subject = request.POST["subject"]
     email_body = request.POST["body"]
 
-    # Execute the email sending operation
-    send_mail_exec(player_ids, email_subject, email_body, association_id, run_id)
+    # Resolve the association for the data sharing check (derive from run when needed)
+    if not association_id and run_id:
+        run = Run.objects.filter(pk=run_id).select_related("event").first()
+        if run:
+            association_id = run.event.association_id
+
+    # Keep only recipients who consented to share their data with the association
+    recipients = split_recipients(player_ids)
+    added, ignored = partition_shared_recipients(recipients, association_id)
+
+    # Execute the email sending operation for the allowed recipients
+    if added:
+        send_mail_exec(",".join(added), email_subject, email_body, association_id, run_id)
+
+    return added, ignored
 
 
 @login_required
@@ -449,10 +478,9 @@ def orga_send_mail(request: HttpRequest, event_slug: str) -> HttpResponse:
         # Process form submission for mail sending
         form = SendMailForm(request.POST)
         if form.is_valid():
-            # Queue mail for batch processing using current run
-            send_mail_batch(request, run_id=context["run"].id)
-            messages.success(request, _("Mail added to queue!"))
-            return redirect(request.path_info)
+            # Queue mail for batch processing using current run (only data-sharing recipients)
+            context["added"], context["ignored"] = send_mail_batch(request, run_id=context["run"].id)
+            return render(request, "larpmanager/exe/users/send_mail_result.html", context)
     else:
         # Display empty form for GET requests
         form = SendMailForm()

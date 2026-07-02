@@ -6,6 +6,7 @@
             <thead>
                 <tr>
                     <th></th>
+                    <th></th>
                     <th>{% trans "Member" %}</th>
                     <th>{% trans "Method" %}</th>
                     <th>{% trans "Amount" %}</th>
@@ -17,6 +18,7 @@
             <tbody>
                 {% for inv in pending_invoices %}
                     <tr>
+                        <td></td>
                         <td>
                             <a href="{% url 'orga_invoices_confirm' run.get_slug inv.uuid %}">
                                 <i class="fa-solid fa-check"></i>

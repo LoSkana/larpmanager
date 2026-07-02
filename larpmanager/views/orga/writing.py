@@ -26,18 +26,17 @@ from django.apps import apps
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, reset_event_cache_all
 from larpmanager.forms.utils import get_members_queryset
 from larpmanager.models.access import EventRole
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.form import _get_writing_mapping
-from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     Faction,
@@ -53,13 +52,11 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.common import get_handout
-from larpmanager.utils.edit.backend import backend_order
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     orga_delete,
     orga_edit,
     orga_new,
-    orga_order,
     orga_versions,
     orga_view,
 )
@@ -100,53 +97,37 @@ def orga_plots_delete(request: HttpRequest, event_slug: str, plot_uuid: str) -> 
 
 
 @login_required
-def orga_plots_order(request: HttpRequest, event_slug: str, plot_uuid: str, order: int) -> HttpResponse:
-    """Reorder plots in event's plot list."""
-    return orga_order(request, event_slug, OrgaAction.PLOTS, plot_uuid, order)
+def orga_plots_rels_reorder(request: HttpRequest, event_slug: str, character_uuid: str) -> JsonResponse:
+    """Reorder plot-character relationships via drag-and-drop."""
+    if request.method != "POST":
+        return JsonResponse({"error": "POST required"}, status=405)
 
-
-@login_required
-def orga_plots_rels_order(
-    request: HttpRequest, event_slug: str, plot_uuid: str, character_uuid: str, order: int
-) -> HttpResponse:
-    """Reorder plot character relationships for event organization.
-
-    Args:
-        request: HTTP request object containing user and session data
-        event_slug: Event slug identifier for URL routing
-        plot_uuid: UUID of the plot
-        character_uuid: UUID of the character
-        order: Direction of reordering ('up' or 'down')
-
-    Returns:
-        HttpResponse: Redirect to character edit page
-
-    Raises:
-        Http404: If plot relationship not found or belongs to wrong event
-
-    """
-    # Check user permissions for plot management
     context = check_event_context(request, event_slug, "orga_plots")
 
-    # Retrieve the specific plot-character relationship
     try:
-        rel = PlotCharacterRel.objects.get(plot__uuid=plot_uuid, character__uuid=character_uuid)
-    except ObjectDoesNotExist as err:
+        character = Character.objects.get(uuid=character_uuid)
+    except Character.DoesNotExist as err:
         raise Http404 from err
 
-    # Validate relationship belongs to current event
-    if rel.character.event != context["event"]:
-        msg = "plot rel wrong event"
+    if character.event != context["event"]:
+        msg = "character wrong event"
         raise Http404(msg)
 
-    # Get all relationships for the same character to reorder within
-    elements = PlotCharacterRel.objects.filter(character_id=rel.character_id)
+    plot_uuids = request.POST.getlist("plot_uuids")
+    rels = {
+        str(rel.plot.uuid): rel for rel in PlotCharacterRel.objects.filter(character=character).select_related("plot")
+    }
+    to_update = []
+    for i, puuid in enumerate(plot_uuids):
+        rel = rels.get(puuid)
+        if rel:
+            rel.order = (i + 1) * 10
+            to_update.append(rel)
+    if to_update:
+        PlotCharacterRel.objects.bulk_update(to_update, ["order"])
+        reset_event_cache_all(context["run"])
 
-    # Execute the order exchange operation
-    backend_order(context, PlotCharacterRel, rel, order, elements)
-
-    # Redirect back to character edit page
-    return redirect("orga_characters_edit", event_slug=context["run"].get_slug(), character_uuid=rel.character.uuid)
+    return JsonResponse({"ok": True})
 
 
 @login_required
@@ -185,12 +166,6 @@ def orga_factions_edit(request: HttpRequest, event_slug: str, faction_uuid: str)
 def orga_factions_delete(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Delete faction for event."""
     return orga_delete(request, event_slug, OrgaAction.FACTIONS, faction_uuid)
-
-
-@login_required
-def orga_factions_order(request: HttpRequest, event_slug: str, faction_uuid: str, order: int) -> HttpResponse:
-    """Reorder factions within an event run."""
-    return orga_order(request, event_slug, OrgaAction.FACTIONS, faction_uuid, order)
 
 
 @login_required
@@ -537,83 +512,6 @@ def orga_progress_steps_edit(request: HttpRequest, event_slug: str, step_uuid: s
 def orga_progress_steps_delete(request: HttpRequest, event_slug: str, step_uuid: str) -> HttpResponse:
     """Delete step for event."""
     return orga_delete(request, event_slug, OrgaAction.PROGRESS_STEPS, step_uuid)
-
-
-@login_required
-def orga_progress_steps_order(
-    request: HttpRequest,
-    event_slug: str,
-    step_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder progress steps for an event."""
-    return orga_order(request, event_slug, OrgaAction.PROGRESS_STEPS, step_uuid, order)
-
-
-@login_required
-def orga_multichoice_available(request: HttpRequest, event_slug: str) -> JsonResponse | Http404:
-    """Handle AJAX requests for available multichoice options for organizers.
-
-    This function processes POST requests to retrieve character options that are
-    available for selection, excluding those already taken based on the specified
-    type (registrations, abilities, etc.).
-
-    Args:
-        request: HTTP request object containing POST data with 'type' and optional 'eid'
-        event_slug: Event slug identifier
-
-    Returns:
-        JSON response containing available character options as list of tuples
-        with format: {"res": [(character_id, character_str), ...]}
-
-    Raises:
-        Http404, if request method is not POST
-
-    """
-    # Validate request method
-    if request.method != "POST":
-        return Http404()
-
-    # Extract class name from POST data
-    class_name = request.POST.get("type", "")
-    taken_characters = set()
-
-    # Handle registration-specific character filtering
-    if class_name == "registrations":
-        context = check_event_context(request, event_slug, "orga_registrations")
-        # Get characters already assigned to registrations in this run
-        taken_characters = RegistrationCharacterRel.objects.filter(registration__run_id=context["run"].id).values_list(
-            "character_id",
-            flat=True,
-        )
-    else:
-        # Handle other class types (abilities, etc.)
-        edit_uuid = request.POST.get("edit_uuid", "")
-        perms = {"abilitypx": "orga_exp_abilities", "deliverypx": "orga_exp_abilities"}
-
-        # Determine permission based on class name
-        perm = perms[class_name] if class_name in perms else "orga_" + class_name + "s"
-
-        # Check permissions for the event
-        context = check_event_context(request, event_slug, perm)
-
-        # Get characters already assigned to the specific entity
-        if edit_uuid:
-            model_class = apps.get_model("larpmanager", inflection.camelize(class_name))
-            # Get entity, check parent event to ensure entity belongs to this event
-            parent_event = context["event"].get_class_parent(model_class)
-            entity = model_class.objects.get(event=parent_event, uuid=edit_uuid)
-            taken_characters = entity.characters.values_list("id", flat=True)
-
-    # Get all characters for the event, ordered by number
-    context["list"] = context["event"].get_elements(Character).order_by("number")
-
-    # Exclude already taken characters
-    context["list"] = context["list"].exclude(pk__in=taken_characters)
-
-    # Format response as list of tuples (uuid, string representation)
-    res = [(str(el.uuid), str(el)) for el in context["list"]]
-    return JsonResponse({"res": res})
 
 
 @login_required

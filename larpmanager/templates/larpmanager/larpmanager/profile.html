@@ -8,6 +8,7 @@
     <table id="lm_profile" class="go_datatable mob">
         <thead>
             <tr>
+                <th></th>
                 <th>Domain</th>
                 <th>View</th>
                 <th>Avg Duration</th>
@@ -18,6 +19,7 @@
         <tbody>
             {% for el in res %}
                 <tr>
+                    <td></td>
                     <td>{{ el.domain }}</td>
                     <td>{{ el.view_func_name }}</td>
                     <td>{{ el.avg_duration | floatformat:2 }}</td>

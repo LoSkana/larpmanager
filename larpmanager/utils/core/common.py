@@ -820,7 +820,7 @@ def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_n
     missing_ids = set(ids) - found_ids
 
     if missing_ids:
-        logger.warning("%s IDs %s not found for cache refresh", model_name, missing_ids)
+        logger.info("%s IDs %s not found for cache refresh", model_name, missing_ids)
 
     return list(objects)
 

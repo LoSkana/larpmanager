@@ -31,7 +31,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import check_feature, go_to, login_orga, submit_confirm, expect_normalized, \
     sidebar, \
-    get_modal_iframe, save_modal
+    get_modal_iframe, save_modal, fill_date
 
 pytestmark = pytest.mark.e2e
 
@@ -61,9 +61,11 @@ def test_permanence_form(pw_page: Any) -> None:
 
     check_orga_visibility(page)
 
+    _campaign_config_permanence(page, live_server)
+
 
 def check_orga_visibility(page: Any) -> None:
-    page.get_by_role("link", name="Event").click()
+    sidebar(page, "Event")
     page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name=re.compile(r"^Characters")).click()
     page.locator("#id_writing_field_visibility").check()
@@ -79,11 +81,11 @@ def check_orga_visibility(page: Any) -> None:
 
 
 def check_orga_preferences(page: Any) -> None:
-    page.get_by_role("link", name="Preferences", exact=True).click()
+    sidebar(page, "Preferences")
     page.locator("#id_open_registration_1_0").check()
     page.locator("#id_open_registration_1_2").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Preferences", exact=True).click()
+    sidebar(page, "Preferences")
     expect(page.locator("#id_open_registration_1_0")).to_be_checked()
     expect(page.locator("#id_open_registration_1_1")).not_to_be_checked()
     expect(page.locator("#id_open_registration_1_2")).to_be_checked()
@@ -91,12 +93,12 @@ def check_orga_preferences(page: Any) -> None:
     sidebar(page, "Features")
     check_feature(page, "Characters")
     submit_confirm(page)
-    page.get_by_role("link", name="Preferences", exact=True).click()
+    sidebar(page, "Preferences")
     page.locator("#id_open_character_1_0").check()
     page.get_by_text("Stats").click()
     page.locator("#id_open_character_1_2").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Preferences", exact=True).click()
+    sidebar(page, "Preferences")
     expect(page.locator("#id_open_character_1_0")).to_be_checked()
     expect(page.locator("#id_open_character_1_1")).not_to_be_checked()
     expect(page.locator("#id_open_character_1_2")).to_be_checked()
@@ -218,3 +220,57 @@ def check_exe_roles(page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     _check_checkboxes(checked, edit_iframe)
     save_modal(page, edit_iframe)
+
+
+def _campaign_config_permanence(page: Any, live_server: Any) -> None:
+    # Enable campaign feature
+    go_to(page, live_server, "/manage/features/campaign/on")
+
+    # Create child campaign event with parent = Test Larp
+    go_to(page, live_server, "/manage/events")
+    page.get_by_role("link", name="New event").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").click()
+    edit_iframe.locator("#id_form1-name").fill("child campaign")
+    edit_iframe.locator("#id_form1-name").press("Tab")
+    edit_iframe.locator("#slug").fill("childcampaign")
+    expect(edit_iframe.locator("#slug")).to_have_value("childcampaign")
+    edit_iframe.locator("#select2-id_form1-parent-container").click()
+    edit_iframe.get_by_role("searchbox").fill("tes")
+    edit_iframe.get_by_role("option", name="Test Larp", exact=True).click()
+    fill_date(edit_iframe, "#id_form2-start", "2050-02-01")
+    fill_date(edit_iframe, "#id_form2-end", "2050-02-03")
+    save_modal(page, edit_iframe)
+
+    # Set config on child: check gallery_hide_login
+    go_to(page, live_server, "/childcampaign/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    page.locator("#id_gallery_hide_login").check()
+    submit_confirm(page)
+
+    # Verify config still visible on child (reads from parent)
+    go_to(page, live_server, "/childcampaign/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    expect(page.locator("#id_gallery_hide_login")).to_be_checked()
+
+    # Verify config visible on parent (saved to parent)
+    go_to(page, live_server, "/test/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    expect(page.locator("#id_gallery_hide_login")).to_be_checked()
+
+    # Enable Discount feature on child
+    go_to(page, live_server, "/childcampaign/manage/features")
+    check_feature(page, "Discount")
+    submit_confirm(page)
+
+    # Verify Discount feature checked on child
+    go_to(page, live_server, "/childcampaign/manage/features")
+    expect(
+        page.locator(".feature_checkbox").filter(has=page.get_by_text("Discount", exact=True)).get_by_role("checkbox")
+    ).to_be_checked()
+
+    # Verify Discount feature checked on parent
+    go_to(page, live_server, "/test/manage/features")
+    expect(
+        page.locator(".feature_checkbox").filter(has=page.get_by_text("Discount", exact=True)).get_by_role("checkbox")
+    ).to_be_checked()

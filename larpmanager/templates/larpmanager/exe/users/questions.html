@@ -13,6 +13,7 @@
     <table id="questions_open" class="go_datatable">
         <thead>
             <tr>
+                <th></th>
                 <th>{% trans "Date" %}</th>
                 <th>{% trans "Event" %}</th>
                 <th>{% trans "Participant" %}</th>
@@ -25,6 +26,7 @@
         <tbody>
             {% for el in open %}
                 <tr>
+                    <td></td>
                     <td>{{ el.created }}</td>
                     <td>
                         {% if el.run %}{{ el.run }}{% endif %}
@@ -46,10 +48,15 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No open questions at the moment" %}. {% trans "All member requests have been answered or closed" %}.
+        </p>
+    {% endif %}
     <div class="hide closed">
         <h2>Domande già risposte</h2>
         <p>
-            <i>{% trans "For your convenience, this page only shows questions from the last 3 months. To view previous questions click here" %}: </i>
+            <i>{% trans "This page only shows questions from the last 3 months" %}. {% trans "To view previous questions click here" %}: </i>
             <form action="{{ request.path }}" method="post">
                 {% csrf_token %}
                 <input type="submit" value="{% trans "Confirm" %}">
@@ -58,6 +65,7 @@
         <table id="questions_closed" class="go_datatable">
             <thead>
                 <tr>
+                    <th></th>
                     <th>{% trans "Date" %}</th>
                     <th>{% trans "Event" %}</th>
                     <th>{% trans "Participant" %}</th>
@@ -68,6 +76,7 @@
             <tbody>
                 {% for el in closed %}
                     <tr>
+                        <td></td>
                         <td>{{ el.created }}</td>
                         <td>
                             {% if el.run %}{{ el.run }}{% endif %}
@@ -81,5 +90,8 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% if not closed %}
+            <p class="no-elements-available">{% trans "No answered questions in the last 3 months" %}.</p>
+        {% endif %}
     </div>
 {% endblock content %}

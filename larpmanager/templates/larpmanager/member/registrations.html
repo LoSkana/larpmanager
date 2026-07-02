@@ -3,8 +3,11 @@
 {% block title %}
     {% trans "Registrations" %}
 {% endblock title %}
+{% block info %}
+    {% trans "View the list of events you are registered for" %}
+{% endblock info %}
 {% block content %}
-    {% include "larpmanager/member/profile_nav.html" with active="registrations" %}
+    {% include "larpmanager/member/profile_nav.html" %}
     <div class="user_resize platform">
         <hr class="no_v20" />
         {% include "elements/member/registration_list.html" with hide_cover=True %}

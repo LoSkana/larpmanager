@@ -201,15 +201,20 @@ class ConfigForm(BaseModelForm):
         for el in self.config_fields:
             self._get_custom_field(el, config_values)
 
-        # Save all collected configuration values to the instance
-        save_all_element_configs(instance, config_values)
+        # Save all collected configuration values to the config target
+        config_target = self._get_config_save_target(instance)
+        save_all_element_configs(config_target, config_values)
 
-        # Reset configuration cache for this instance
-        reset_element_configs(instance)
+        # Reset configuration cache for the config target
+        reset_element_configs(config_target)
 
         # Final save to persist all changes
         instance.save()
 
+        return instance
+
+    def _get_config_save_target(self, instance: BaseModel) -> BaseModel:
+        """Return the object configs should be saved to. Override to redirect."""
         return instance
 
     def _get_custom_field(self, field_definition: dict, result_dict: dict) -> None:

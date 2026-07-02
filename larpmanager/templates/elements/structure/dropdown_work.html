@@ -3,10 +3,10 @@
 </div>
 <div class="dropdown-menu">
     {% for rid, v in open_runs.items %}
-        {% if run and run.event.slug == v.e and run.number == v.r %}
+        {% if run and run.event.slug == v.event_slug and run.number == v.number %}
             <!-- skip -->
         {% else %}
-            <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days no_mobile"></i> {{ v.s }}</a>
+            <a href="{% url 'manage' v.slug %}" class="origin"><i class="fa-solid fa-calendar-days no_mobile"></i> {{ v.label }}</a>
         {% endif %}
     {% endfor %}
     {% if association_role %}

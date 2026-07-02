@@ -33,6 +33,7 @@ Covers:
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     go_to,
@@ -41,7 +42,6 @@ from larpmanager.tests.utils import (
     logout,
     submit_confirm,
 )
-from playwright.sync_api import expect
 
 pytestmark = pytest.mark.e2e
 

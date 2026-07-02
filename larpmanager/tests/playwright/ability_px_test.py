@@ -29,9 +29,24 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.playwright.exe_accounting_test import verify
-from larpmanager.tests.utils import expect_normalized, fill_tinymce, go_to, get_request, just_wait, login_orga, \
-    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, click_and_wait_question
+from larpmanager.tests.utils import (
+    _select2_search_and_pick,
+    _wait_lm_ready,
+    char_dual_pick,
+    click_and_wait_question,
+    expect_normalized,
+    fill_tinymce,
+    get_modal_iframe,
+    get_request,
+    go_to,
+    login_orga,
+    new_option,
+    save_modal,
+    sidebar,
+    submit_confirm,
+    submit_option,
+    submit_register,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -132,8 +147,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    edit_iframe.get_by_role("searchbox").nth(3).fill("base")
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "base")
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("standard")
     edit_iframe.locator("#id_cost").click()
@@ -147,15 +161,12 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    edit_iframe.get_by_role("searchbox").nth(3).fill("base")
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "base")
     edit_iframe.locator("#id_name").fill("double shield")
     edit_iframe.locator("#id_cost").click()
     edit_iframe.locator("#id_cost").fill("2")
     row = edit_iframe.get_by_role("row", name="Pre-requisites")
-    row.get_by_role("searchbox").click()
-    row.get_by_role("searchbox").fill("swo")
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(row.get_by_role("searchbox"), edit_iframe, "swo")
     save_modal(page, edit_iframe)
 
     page.get_by_role("link", name="Ability Template").click()
@@ -169,7 +180,7 @@ def ability(live_server: Any, page: Any) -> None:
     page.locator("[id='u2']").locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_text("---------").click()
-    edit_iframe.get_by_role("searchbox").nth(3).fill("test_template")
+    edit_iframe.locator(".select2-container--open .select2-search__field").fill("test_template")
     edit_iframe.get_by_role("option", name="test_template").click()
     save_modal(page, edit_iframe)
     sidebar(page, "Abilities")
@@ -184,9 +195,7 @@ def delivery(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_name").fill("first live")
     edit_iframe.locator("#id_name").press("Tab")
     edit_iframe.locator("#id_amount").fill("2")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     # check experience computation
@@ -199,10 +208,7 @@ def delivery(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     row = edit_iframe.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
-    row.get_by_role("searchbox").click()
-    row.get_by_role("searchbox").fill("swo")
-    just_wait(page)
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(row.get_by_role("searchbox"), edit_iframe, "swo")
     save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator('[id="u1"]'), "11")
@@ -217,8 +223,7 @@ def rules(page: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_field-container").click()
-    edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(1), edit_iframe, "Hit")
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("2")
     save_modal(page, edit_iframe)
@@ -226,13 +231,10 @@ def rules(page: Any) -> None:
     # create second rule - only for sword
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").first.fill("swor")
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").first, edit_iframe, "swor")
 
     edit_iframe.locator("#select2-id_field-container").click()
-    edit_iframe.get_by_role("searchbox").nth(1).fill("Hit")
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox").nth(1), edit_iframe, "Hit")
 
     edit_iframe.locator("#id_operation").select_option("MUL")
     edit_iframe.locator("#id_amount").click()
@@ -248,8 +250,8 @@ def rules(page: Any) -> None:
     page.locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.get_by_role("row", name="Abilities").get_by_role("link").click()
-    just_wait(page)
     btn = edit_iframe.locator(".select2-selection__choice:has-text('sword1') .select2-selection__choice__remove")
+    btn.wait_for(state="attached")
     btn.evaluate("el => el.click()")
     save_modal(page, edit_iframe)
 
@@ -261,9 +263,7 @@ def rules(page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     row = edit_iframe.get_by_role("row", name="Abilities")
     row.get_by_role("link").click()
-    row.get_by_role("searchbox").click()
-    row.get_by_role("searchbox").fill("swo")
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(row.get_by_role("searchbox"), edit_iframe, "swo")
     save_modal(page, edit_iframe)
 
 
@@ -271,8 +271,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     # signup
     go_to(page, live_server, "/")
     page.get_by_role("link", name="Registration is open!").click()
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Assign char
     go_to(page, live_server, "/test/manage/")
@@ -288,34 +287,40 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Abilities").click()
+    _wait_lm_ready(page)
+    expect(page.locator(".ability-cards-grid")).to_contain_text("double shield")
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
-        Experience points Total Used Available 12 1 11 Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All base ability double shield 2 This text should show Requires: sword1
+        select the new ability to get
+        Experience points 12 Total 1 Used 11 Available Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
 
     # get ability
-    page.locator("#ability_select").select_option("u2")
-    page.get_by_role("button", name="Submit", exact=True).click()
+    page.locator(".ability-card", has_text="double shield").click()
+    submit_confirm(page)
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
-        """Obtain ability Select the new ability to get --- Select ability
-        Experience points Total Used Available 12 3 9 Abilities base ability double shield (2)
-        This text should show sword1 (1) sdsfdsfds Deliveries first live (2) """,
+        """Obtain ability all No abilities found. Select the new ability to get
+        Experience points 12 Total 3 Used 9 Available Abilities base ability double shield (2)
+        This text should show sword1 (1) sdsfdsfds deliveries 2 first live """,
     )
-    expect(page.locator("#ability_select")).not_to_contain_text("double shield")
+    expect(page.locator(".ability-cards-grid")).not_to_contain_text("double shield")
 
     # remove ability
     page.get_by_role("heading", name=re.compile("^double shield")).get_by_role("link").click()
+    _wait_lm_ready(page)
+    expect(page.locator(".ability-cards-grid")).to_contain_text("double shield")
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
-        Experience points Total Used Available 12 1 11
-        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All base ability double shield 2 This text should show Requires: sword1
+        Select the new ability to get
+        Experience points 12 Total 1 Used 11 Available
+        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
-    expect_normalized(page, page.locator("#ability_select"), "--- Select ability double shield - 2")
 
 
 def modifiers(page: Any, live_server: Any) -> None:
@@ -337,39 +342,41 @@ def modifiers(page: Any, live_server: Any) -> None:
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
     page.get_by_role("link", name="Abilities").click()
 
-    # ability is not there
+    # ability is not bought
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
-        Experience points Total Used Available 12 1 11
-        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All base ability double shield 2
+        this text should show requires: sword1 Select the new ability to get
+        Experience points 12 Total 1 Used 11 Available
+        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
-    page.locator("#id_que_u5").select_option("u2")
+    page.locator('label[for="id_que_u5_1"]').click()
     submit_confirm(page)
     page.get_by_role("link", name="Abilities").click()
     # ability is there (i got the correct class)
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get --- Select ability
-        Experience points Total Used Available 12 1 11 Abilities base ability double shield (0)
-        This text should show sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All No abilities found. Select the new ability to get
+        Experience points 12 Total 1 Used 11 Available Abilities base ability double shield (0)
+        This text should show sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
-    page.locator("#id_que_u5").select_option("u1")
+    page.locator('label[for="id_que_u5_0"]').click()
     submit_confirm(page)
     page.get_by_role("link", name="Abilities").click()
     # ability is not there (changed class)
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get base ability --- Select ability double shield - 2
-        Experience points Total Used Available 12 1 11
-        Abilities base ability sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All base ability double shield 2
+        this text should show requires: sword1 Select the new ability to get
+        Experience points 12 Total 1 Used 11 Available
+        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
 
     # now test increase cost modifiers
@@ -389,40 +396,39 @@ def modifiers(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/test")
     page.locator("a").filter(has_text=re.compile(r"^Test Character$")).click()
+    page.get_by_role("link", name="Edit").click()
+    page.locator('label[for="id_que_u5_0"]').click()
+    submit_confirm(page)
     page.get_by_role("link", name="Abilities").click()
-    page.locator("#ability_select").select_option("u2")
+    page.locator(".ability-card", has_text="double shield").click()
     submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability Select the new ability to get --- Select ability
-        Experience points Total Used Available 12 4 8 Abilities base ability double shield (3)
-        This text should show sword1 (1) sdsfdsfds Deliveries first live (2)""",
+        Obtain ability All No abilities found. Select the new ability to get
+        Experience points 12 Total 4 Used 8 Available Abilities base ability double shield (3)
+        This text should show sword1 (1) sdsfdsfds deliveries 2 first live""",
     )
 
 
 def delivery_auto_populate(page: Any, live_server: Any) -> None:
-    """Test auto-populate delivery from run."""
-    # Go to deliveries page
+    """Test auto-populate delivery from run via Load participants button."""
+    # Go to deliveries page and click Load participants
     go_to(page, live_server, "/test/manage/experience/deliveries/")
-    page.get_by_role("link", name="New").click()
+    page.get_by_role("link", name="Load participants").click()
     edit_iframe = get_modal_iframe(page)
 
-    # Fill in delivery name and amount
-    edit_iframe.locator("#id_name").click()
-    edit_iframe.locator("#id_name").fill("auto populated delivery")
-    edit_iframe.locator("#id_amount").click()
-    edit_iframe.locator("#id_amount").fill("5")
+    # Select run in the load form
+    edit_iframe.locator("#select2-id_run-container").click()
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "tes")
 
-    # Select run in auto_populate_run field
-    edit_iframe.locator("#select2-id_auto_populate_run-container").click()
-    edit_iframe.get_by_role("searchbox").nth(1).fill("tes")
-    edit_iframe.get_by_role("option", name="Test Larp").click()
-
-    # Confirm the form
+    # Submit the load form - iframe redirects to new delivery form with characters pre-populated
     submit_confirm(edit_iframe)
+    edit_iframe = get_modal_iframe(page)
 
-    # Resubmit with auto-populated characters
+    # Fill in delivery name and amount inside the modal
+    edit_iframe.locator("#id_name").fill("auto populated delivery")
+    edit_iframe.locator("#id_amount").fill("5")
     save_modal(page, edit_iframe)
 
     expect_normalized(page, page.locator('[id="u2"]'), "5 Test Character")
@@ -434,8 +440,7 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#select2-id_typ-container").click()
-    edit_iframe.get_by_role("searchbox").nth(3).fill("base")
-    edit_iframe.locator(".select2-results__option").first.click()
+    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "base")
     edit_iframe.locator("#id_name").fill("hidden_zero")
     edit_iframe.locator("#id_cost").fill("0")
     edit_iframe.locator("#id_visible").uncheck()

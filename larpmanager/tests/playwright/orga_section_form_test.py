@@ -27,13 +27,13 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
+from larpmanager.tests.utils import (submit_register,
+                                     delete_modal, drag_reorder,
                                      go_to,
                                      login_orga,
                                      login_user,
-                                     submit_confirm,
-                                     expect_normalized, fill_tinymce, check_feature, sidebar, nav,
-                                     get_modal_iframe, save_modal,
+                                     expect_normalized, fill_tinymce, check_feature, sidebar,
+                                     get_modal_iframe, save_modal, _wait_lm_ready, char_dual_pick,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -72,7 +72,8 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Check reordering
     expect_normalized(page, page.locator("#registration_sections_wrapper"), "Preferences Needs")
-    page.locator(".fa-arrow-up").click()
+    rows = page.locator("#registration_sections tbody tr")
+    drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
     expect_normalized(page, page.locator("#one"), "Needs Preferences")
 
     # Add one question for each section
@@ -125,11 +126,13 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # Reorder sections, check they are updated
     sidebar(page, "Sections")
-    page.locator(".fa-arrow-up").click()
+    rows = page.locator("#registration_sections tbody tr")
+    drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
 
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name=re.compile(r"^Needs ")).click()
     page.get_by_role("link", name=re.compile(r"^Preferences ")).click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#register_form"),
     "Ticket (*) Standard Your registration ticket Preferences What you prefer Food fooood Needs What you need sleep sleeeep")
 
@@ -167,7 +170,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     expect(page.get_by_text("What you prefer Food fooood")).not_to_be_visible()
 
     # select ticket
-    page.get_by_label("Ticket (*)").select_option("u2")
+    page.locator('label[for="id_ticket_1"]').click()
 
     # section and field are visible
     expect(page.get_by_role("link", name=re.compile(r"^Preferences "))).to_be_visible()
@@ -176,7 +179,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     expect(page.get_by_text("What you prefer Food fooood")).to_be_visible()
 
     # signup
-    page.get_by_label("Ticket (*)").select_option("u2")
+    page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("textbox", name="Food").click()
     page.get_by_role("textbox", name="Food").fill("SADSA")
     page.get_by_role("link", name=re.compile(r"^Needs ")).click()
@@ -188,7 +191,8 @@ def test_orga_section_form(pw_page: Any) -> None:
     # check allowed
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Sections")
-    page.locator(".fa-arrow-up").click()
+    rows = page.locator("#registration_sections tbody tr")
+    drag_reorder(page, rows.nth(1).locator("td.reorder-handle"), rows.nth(0))
 
     sidebar(page, "Form")
     page.locator("#registration_questions_needs").locator(".fa-edit").click()
@@ -202,7 +206,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     sidebar(page, "Registrations")
     page.get_by_role("link", name="Food").click()
     page.get_by_role("link", name="sleep").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Depends WWWW SADSA")
     expect(page.get_by_role("link", name="Food")).to_be_visible()
     expect(page.get_by_role("link", name="sleep")).to_be_visible()
@@ -229,7 +233,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     expect(page.get_by_role("link", name="sleep")).not_to_be_visible()
 
     page.get_by_role("link", name="Food").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Admin Test Depends SADSA")
 
     page.locator(".fa-edit").click()
@@ -266,9 +270,7 @@ def test_orga_section_form(pw_page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("aaaaaccc")
-    edit_iframe.get_by_role("searchbox").click()
-    edit_iframe.get_by_role("searchbox").fill("te")
-    edit_iframe.get_by_role("option", name="Test Character").click()
+    char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
     # set up question
@@ -285,14 +287,13 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # delete sign up
     sidebar(page, "Registrations")
-    page.locator('.fa-trash').click()
+    delete_modal(page)
 
     # check does not show on new sign up
     go_to(page, live_server, "/test/register")
     expect(page.get_by_role("cell", name="faaaaacc")).not_to_be_visible()
-    page.get_by_label("Ticket (*)").select_option("u1")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    page.locator('label[for="id_ticket_0"]').click()
+    submit_register(page)
 
     # check does not show on sign up
     go_to(page, live_server, "/test/register")
@@ -311,7 +312,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # check it is visible
     go_to(page, live_server, "/test/register")
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     expect(page.get_by_role("cell", name="faaaaacc")).to_be_visible()
     expect_normalized(page, page.locator("#register_form"),
                       "ticket (*) standard depends your registration ticket faaaaacc needs preferences")

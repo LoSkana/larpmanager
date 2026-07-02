@@ -20,23 +20,25 @@
 import contextlib
 import logging
 
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.db.models import Q
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render
-from django.utils.translation import gettext_lazy as _
+from django.shortcuts import redirect, render
+from django.urls import reverse
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.experience import get_event_exp_cache
+from larpmanager.cache.experience import get_event_exp_cache, get_event_exp_systems
 from larpmanager.forms.experience import (
     OrgaDeliveryExpForm,
+    OrgaDeliveryExpLoadForm,
 )
 from larpmanager.models.event import Run
 from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
     AbilityTypeExp,
+    CriterionExp,
     DeliveryExp,
     ModifierExp,
     RuleExp,
@@ -45,9 +47,9 @@ from larpmanager.models.experience import (
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.core.exceptions import FeatureError, ReturnNowError, UserPermissionError
 from larpmanager.utils.edit.base import render_frame_or_fallback
-from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new, orga_order
+from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import export_abilities, export_modifiers, export_rules, zip_exports
 from larpmanager.utils.services.bulk import handle_bulk_ability
 
@@ -58,7 +60,7 @@ logger = logging.getLogger(__name__)
 def orga_exp_systems(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of experience systems for an event."""
     context = check_event_context(request, event_slug, "orga_exp_systems")
-    context["list"] = context["event"].get_elements(SystemExp).order_by("number")
+    context["list"] = context["event"].get_elements(SystemExp).order_by("order")
     return render(request, "larpmanager/orga/experience/systems.html", context)
 
 
@@ -81,10 +83,10 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_exp_deliveries")
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
 
     # Get all deliveries ordered by number
-    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("number").select_related("system"))
+    deliveries = list(context["event"].get_elements(DeliveryExp).order_by("order").select_related("system"))
 
     # Get cached EXP relationship data and enrich delivery objects
     px_cache = get_event_exp_cache(context["event"])
@@ -101,62 +103,56 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new delivery of experience points.
 
-    If a run is selected via the auto_populate_run field, the form will be reloaded with characters
-    from that run's registrations pre-populated in the characters field.
+    If ?run_id=<id> is present on GET, characters from that run's registrations are pre-populated.
     """
-    # Check user permissions and get base context for the event
-    context = check_event_context(request, event_slug, "orga_exp_deliveries")
+    run_id = request.GET.get("run_id")
+    if request.method == "GET" and run_id:
+        context = check_event_context(request, event_slug, "orga_exp_deliveries")
+        try:
+            run = Run.objects.get(uuid=run_id, event__slug=event_slug)
+            character_ids = (
+                Registration.objects.filter(run=run, cancellation_date__isnull=True)
+                .values_list("characters__id", flat=True)
+                .distinct()
+            )
+            character_ids = [cid for cid in character_ids if cid is not None]
+            character_uuids = list(Character.objects.filter(id__in=character_ids).values_list("uuid", flat=True))
+            form = OrgaDeliveryExpForm(
+                instance=None,
+                context=context,
+                initial={"characters": [str(u) for u in character_uuids]},
+            )
+            context["form"] = form
+            context["num"] = None
+            context["add_another"] = True
+            context["continue_add"] = False
+            context["elementTyp"] = DeliveryExp
+            is_frame = request.GET.get("frame") == "1"
+            return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/edit.html")
+        except (ValueError, ObjectDoesNotExist) as err:
+            logger.warning("Pre-populate run failed: %s", err)
 
-    # Handle auto-population from run selection
-    if request.method == "POST":
-        run_id = request.POST.get("auto_populate_run")
-
-        # If a run was selected, get all characters from that run's registrations
-        if run_id:
-            try:
-                run = Run.objects.get(pk=run_id, event__slug=event_slug)
-
-                # Get all characters assigned to registrations for this run
-                character_ids = (
-                    Registration.objects.filter(run=run, cancellation_date__isnull=True)
-                    .values_list("characters__id", flat=True)
-                    .distinct()
-                )
-
-                # Filter registrations without characters
-                character_ids = [cid for cid in character_ids if cid is not None]
-
-                # Pass the POST data but override the characters field
-                form_data = request.POST.copy()
-                form_data.setlist("characters", [str(cid) for cid in character_ids])
-
-                # Create the form with pre-populated data
-                form = OrgaDeliveryExpForm(form_data, instance=None, context=context)
-
-                # Hide the auto_populate_run field now that characters are loaded
-                form.fields.pop("auto_populate_run", None)
-
-                # Set up context for rendering
-                context["form"] = form
-                context["num"] = "0"
-                context["add_another"] = True
-                context["continue_add"] = False
-                context["elementTyp"] = DeliveryExp
-
-                # Add success message to inform user
-                messages.info(
-                    request,
-                    _("Characters from event '{run}' have been loaded. Review and confirm to save.").format(run=run),
-                )
-
-                is_frame = request.POST.get("frame") == "1"
-                return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/edit.html")
-
-            except (ValueError, ObjectDoesNotExist) as err:
-                logger.warning("Auto populate run failed: %s", err)
-
-    # Use standard orga_edit for all other cases
     return orga_new(request, event_slug, OrgaAction.PX_DELIVERIES)
+
+
+@login_required
+def orga_exp_deliveries_load(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Show a modal form to select a run; on submit redirect to new delivery with characters pre-loaded."""
+    context = check_event_context(request, event_slug, "orga_exp_deliveries")
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    if request.method == "POST":
+        form = OrgaDeliveryExpLoadForm(request.POST, context=context)
+        if form.is_valid():
+            run = form.cleaned_data["run"]
+            new_url = reverse("orga_exp_deliveries_new", args=[event_slug]) + f"?run_id={run.uuid}&frame=1"
+            return redirect(new_url)
+        context["form"] = form
+    else:
+        context["form"] = OrgaDeliveryExpLoadForm(context=context)
+
+    context["elementTyp"] = DeliveryExp
+    return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/experience/deliveries_load.html")
 
 
 @login_required
@@ -211,10 +207,10 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = context["event"].get_elements(SystemExp).count() > 1
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
 
     # Query and prepare abilities list with optimized database access
-    abilities = list(context["event"].get_elements(AbilityExp).order_by("number").select_related("typ", "system"))
+    abilities = list(context["event"].get_elements(AbilityExp).order_by("order").select_related("typ", "system"))
 
     # Get cached EXP relationship data and enrich ability objects
     px_cache = get_event_exp_cache(context["event"])
@@ -252,7 +248,7 @@ def orga_exp_ability_types(request: HttpRequest, event_slug: str) -> HttpRespons
     context = check_event_context(request, event_slug, "orga_exp_ability_types")
 
     # Retrieve and order ability types by number
-    context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("number")
+    context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("order")
 
     return render(request, "larpmanager/orga/experience/ability_types.html", context)
 
@@ -301,7 +297,7 @@ def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_exp_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of ability templates for an event."""
     context = check_event_context(request, event_slug, "orga_exp_ability_templates")
-    context["list"] = context["event"].get_elements(AbilityTemplateExp).order_by("number")
+    context["list"] = context["event"].get_elements(AbilityTemplateExp).order_by("order")
     return render(request, "larpmanager/orga/experience/ability_templates.html", context)
 
 
@@ -339,17 +335,6 @@ def orga_exp_rules_edit(request: HttpRequest, event_slug: str, rule_uuid: str) -
 def orga_exp_rules_delete(request: HttpRequest, event_slug: str, rule_uuid: str) -> HttpResponse:
     """Delete rule for event."""
     return orga_delete(request, event_slug, OrgaAction.PX_RULES, rule_uuid)
-
-
-@login_required
-def orga_exp_rules_order(
-    request: HttpRequest,
-    event_slug: str,
-    rule_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder EXP rules for an event."""
-    return orga_order(request, event_slug, OrgaAction.PX_RULES, rule_uuid, order)
 
 
 @login_required
@@ -397,14 +382,71 @@ def orga_exp_modifiers_delete(request: HttpRequest, event_slug: str, modifier_uu
 
 
 @login_required
-def orga_exp_modifiers_order(
-    request: HttpRequest,
-    event_slug: str,
-    modifier_uuid: str,
-    order: int,
-) -> HttpResponse:
-    """Reorder experience modifiers in the organizer interface."""
-    return orga_order(request, event_slug, OrgaAction.PX_MODIFIERS, modifier_uuid, order)
+def orga_exp_criterions(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display and manage experience criterions for an event."""
+    context = check_event_context(request, event_slug, "orga_exp_criterions")
+
+    criterions = list(context["event"].get_elements(CriterionExp).order_by("order").select_related("system"))
+
+    px_cache = get_event_exp_cache(context["event"])
+    for criterion in criterions:
+        if criterion.id in px_cache.get("criterions", {}):
+            criterion.cached_rels = px_cache["criterions"][criterion.id]
+
+    context["list"] = criterions
+    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
+
+    return render(request, "larpmanager/orga/experience/criterions.html", context)
+
+
+@login_required
+def orga_exp_criterions_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create experience criterion for an event."""
+    return orga_new(request, event_slug, OrgaAction.PX_CRITERIONS)
+
+
+@login_required
+def orga_exp_criterions_edit(request: HttpRequest, event_slug: str, criterion_uuid: str) -> HttpResponse:
+    """Edit experience criterion for an event."""
+    return orga_edit(request, event_slug, OrgaAction.PX_CRITERIONS, criterion_uuid)
+
+
+@login_required
+def orga_exp_criterions_delete(request: HttpRequest, event_slug: str, criterion_uuid: str) -> HttpResponse:
+    """Delete criterion for event."""
+    return orga_delete(request, event_slug, OrgaAction.PX_CRITERIONS, criterion_uuid)
+
+
+@login_required
+def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse:
+    """Return up to 25 characters matching a search term for the dual-list widget."""
+    if request.method != "POST":
+        return JsonResponse({"res": []})
+
+    try:
+        context = get_event_context(request, event_slug)
+    except (Http404, PermissionDenied, UserPermissionError, FeatureError):
+        return JsonResponse({"res": []}, status=403)
+
+    term = request.POST.get("term", "").strip()
+    exclude_raw = request.POST.get("exclude", "")
+    exclude_uuids = [u.strip() for u in exclude_raw.split(",") if u.strip()]
+
+    qs = context["event"].get_elements(Character).only("id", "uuid", "name", "number")
+
+    if term:
+        qs = qs.filter(
+            Q(number__icontains=term) | Q(name__icontains=term) | Q(teaser__icontains=term) | Q(title__icontains=term)
+        )
+
+    if exclude_uuids:
+        qs = qs.exclude(uuid__in=exclude_uuids)
+
+    show_number = get_event_config(context["event"].id, "writing_number", default_value=False, context=context)
+
+    qs = qs.order_by("name")[:25]
+    res = [(str(ch.uuid), f"#{ch.number} {ch.name}" if show_number else ch.name, ch.pk) for ch in qs]
+    return JsonResponse({"res": res})
 
 
 @login_required

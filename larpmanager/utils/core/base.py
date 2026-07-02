@@ -52,6 +52,7 @@ from larpmanager.utils.core.exceptions import (
     UserPermissionError,
     check_event_feature,
 )
+from larpmanager.utils.core.nav import build_main_nav_items
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
 
@@ -138,6 +139,9 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
                 association_id=context["association_id"],
                 name="intro_driver",
             ).delete()
+
+    # Set sidebar state from user session
+    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     return context
 
@@ -232,9 +236,8 @@ def check_association_context(request: HttpRequest, permission_slug: str | list[
     context["manage"] = 1
     context["exe_page"] = 1
 
-    # Load association permissions and sidebar state
+    # Load association permissions
     get_index_association_permissions(request, context, context["association_id"])
-    context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Add tutorial information if not already present
     if "tutorial" not in context:
@@ -435,10 +438,9 @@ def get_event_context(
     if include_status:
         context["run_status"] = registration_status(context, context["run"], context["member"])
 
-    # Configure user permissions and sidebar for authorized users
+    # Configure user permissions for authorized users
     if is_staff:
         get_index_event_permissions(request, context, event_slug)
-        context["is_sidebar_open"] = request.session.get("is_sidebar_open", True)
 
     # Set association slug from request or event object
     if hasattr(request, "association"):
@@ -451,14 +453,15 @@ def get_event_context(
 
     # Check character visibility restrictions if requested (skip for users with event permissions)
     if check_visibility and not is_staff:
-        event_url = reverse("register", kwargs={"event_slug": context["run"].get_slug()})
+        event_view = "register"
+        event_kwargs = {"event_slug": context["run"].get_slug()}
         # Check if gallery is hidden for non-authenticated users
         hide_gallery_for_non_login = get_event_config(
             context["event"].id, "gallery_hide_login", default_value=False, context=context
         )
         if hide_gallery_for_non_login and not request.user.is_authenticated:
             messages.warning(request, _("You must be logged in to view this page"))
-            raise RedirectError(event_url)
+            raise RedirectError(event_view, kwargs=event_kwargs)
 
         # Check if gallery is hidden for non-registered users
         hide_gallery_for_non_signup = get_event_config(
@@ -466,7 +469,7 @@ def get_event_context(
         )
         if hide_gallery_for_non_signup and not registration:
             messages.warning(request, _("You must be registered to view this page"))
-            raise RedirectError(event_url)
+            raise RedirectError(event_view, kwargs=event_kwargs)
 
     return context
 
@@ -513,6 +516,7 @@ def prepare_run(context: Any) -> None:
                 run_configuration[additional_config_name][additional_feature] = True
 
     context.update(run_configuration)
+    context["main_nav_items"] = build_main_nav_items(context)
 
 
 def get_run(context: Any, event_slug: Any) -> None:

@@ -2,7 +2,7 @@
 $(document).ready(function() {
     function sendHeight() {
         if (window.parent && window.parent !== window) {
-            const form = document.querySelector('form');
+            const form = document.querySelector('#wrapper form') || document.querySelector('form');
             const height = form ? form.scrollHeight : document.body.scrollHeight;
             window.parent.postMessage({
                 type: 'iframe_resize',
@@ -14,7 +14,7 @@ $(document).ready(function() {
     sendHeight();
 
     if (window.ResizeObserver) {
-        new ResizeObserver(sendHeight).observe(document.querySelector('form') || document.body);
+        new ResizeObserver(sendHeight).observe(document.querySelector('#wrapper form') || document.querySelector('form') || document.body);
     } else {
         setTimeout(sendHeight, 100);
         setTimeout(sendHeight, 500);

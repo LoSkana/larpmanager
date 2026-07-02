@@ -38,15 +38,15 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (
-    fill_tinymce,
-    go_to,
-    login_orga,
-    login_user,
-    logout,
-    submit_confirm,
-    get_modal_iframe, save_modal,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     delete_modal,
+                                     fill_tinymce,
+                                     go_to,
+                                     login_orga,
+                                     login_user,
+                                     logout,
+                                     get_modal_iframe, save_modal, SHORT_TIMEOUT,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -96,7 +96,7 @@ def test_orga_post_popup(pw_page: Any) -> None:
     verify_reg_editor_popup(page, live_server)
 
     go_to(page, live_server, "/test/manage/registrations/")
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
 
     # Registration: multiline paragraph question (p)
     create_reg_paragraph_question(page, live_server)
@@ -140,8 +140,7 @@ def register_with_long_editor_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     editor_id = _get_que_textarea_id(page)
     fill_tinymce(page, editor_id, LONG_HTML_REG_EDITOR)
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
 
 def verify_reg_editor_popup(page: Any, live_server: Any) -> None:
@@ -150,11 +149,11 @@ def verify_reg_editor_popup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=REG_EDITOR_QUESTION).click()
     # Eye icon should now appear in the column for the long answer
     eye_icon = page.locator(".post_popup").first
-    eye_icon.wait_for(state="visible", timeout=10000)
+    eye_icon.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     eye_icon.click()
     # Popup shows full content
     popup = page.locator("#lm-modal")
-    popup.wait_for(state="visible", timeout=10000)
+    popup.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     expect(popup).to_contain_text(LONG_TEXT_REG_EDITOR[:80])
 
 
@@ -175,8 +174,7 @@ def create_reg_paragraph_question(page: Any, live_server: Any) -> None:
 def register_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     page.get_by_role("textbox", name=REG_PARA_QUESTION).fill(LONG_TEXT_REG_PARA)
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
 
 def verify_reg_paragraph_popup(page: Any, live_server: Any) -> None:
@@ -185,11 +183,11 @@ def verify_reg_paragraph_popup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=REG_PARA_QUESTION).click()
     # Eye icon should appear for the long paragraph answer
     eye_icon = page.locator(".post_popup").first
-    eye_icon.wait_for(state="visible", timeout=10000)
+    eye_icon.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     eye_icon.click()
     # Popup shows full content
     popup = page.locator("#lm-modal")
-    popup.wait_for(state="visible", timeout=10000)
+    popup.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     expect(popup).to_contain_text(LONG_TEXT_REG_PARA[:80])
 
 
@@ -209,7 +207,7 @@ def create_char_editor_question(page: Any, live_server: Any) -> None:
 
 def create_character_with_long_editor_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("popup test character")
@@ -225,11 +223,11 @@ def verify_char_editor_popup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=CHAR_EDITOR_QUESTION).click()
     # Eye icon should appear for the long answer
     eye_icon = page.locator(".post_popup").first
-    eye_icon.wait_for(state="visible", timeout=10000)
+    eye_icon.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     eye_icon.click()
     # Popup shows full content
     popup = page.locator("#lm-modal")
-    popup.wait_for(state="visible", timeout=10000)
+    popup.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     expect(popup).to_contain_text(LONG_TEXT_CHAR_EDITOR[:80])
 
 
@@ -249,7 +247,7 @@ def create_char_paragraph_question(page: Any, live_server: Any) -> None:
 
 def fill_character_with_long_paragraph_answer(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters")
-    page.locator("a:has(i.fas.fa-trash)").click()
+    delete_modal(page)
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").fill("popup test character 2")
@@ -264,9 +262,9 @@ def verify_char_paragraph_popup(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name=CHAR_PARA_QUESTION).click()
     # Eye icon should appear for the long answer
     eye_icon = page.locator(".post_popup").first
-    eye_icon.wait_for(state="visible", timeout=10000)
+    eye_icon.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     eye_icon.click()
     # Popup shows full content
     popup = page.locator("#lm-modal")
-    popup.wait_for(state="visible", timeout=10000)
+    popup.wait_for(state="visible", timeout=SHORT_TIMEOUT)
     expect(popup).to_contain_text(LONG_TEXT_CHAR_PARA[:80])

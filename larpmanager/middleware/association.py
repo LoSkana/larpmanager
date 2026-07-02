@@ -155,7 +155,7 @@ class AssociationIdentifyMiddleware:
                 return cls.load_association(request, association_skin)
 
         # Allow admin panel access without association
-        if request.path.startswith("/admin"):
+        if request.path.startswith("/admin/"):
             return None
 
         # Handle larpmanager.com domain redirects to ensure HTTPS

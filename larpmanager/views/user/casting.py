@@ -268,40 +268,54 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
 
     # Process POST request with new casting preferences
     if request.method == "POST":
-        prefs = {}
-        valid_element_ids = context.get("valid_element_ids", set())
-        validation_error = None
-
-        # Extract preference choices from form data
-        for i in range(context["casting_max"]):
-            k = f"choice{i}"
-            if k not in request.POST:
-                continue
-            pref = str(request.POST[k])
-
-            # Validate element ID is in the allowed list (not hidden, etc.)
-            if pref not in valid_element_ids:
-                messages.error(request, _("Invalid selection detected, please select from the available options"))
-                validation_error = True
-                break
-
-            # Validate no duplicate preferences selected
-            if pref in prefs.values():
-                messages.warning(request, _("You have indicated more than one preferences towards the same element"))
-                validation_error = True
-                break
-            prefs[i] = pref
-
-        # Handle validation errors or save preferences
-        if validation_error:
-            return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
-
-        # Save preferences and redirect to refresh page
-        _casting_update(request, context, prefs)
-        return redirect(request.path_info)
+        return _process_casting_post(casting_type, context, request)
 
     # Render casting form for GET requests
     return render(request, red, context)
+
+
+def _process_casting_post(casting_type: str | None, context: dict, request: HttpRequest) -> HttpResponse:
+    """Validate and save POST casting preferences, returning a redirect.
+
+    Args:
+        casting_type: UUID of quest type, or None for character casting.
+        context: View context with run, member, and casting configuration.
+        request: HTTP request containing POST preference fields (choice0..choiceN).
+
+    Returns:
+        Redirect to casting page on validation error, or to current path on success.
+    """
+    prefs = {}
+    valid_element_ids = context.get("valid_element_ids", set())
+    validation_error = None
+
+    # Extract preference choices from form data
+    for i in range(context["casting_max"]):
+        k = f"choice{i}"
+        if k not in request.POST:
+            continue
+        pref = str(request.POST[k])
+
+        # Validate element ID is in the allowed list (not hidden, etc.)
+        if pref not in valid_element_ids:
+            messages.error(request, _("Invalid selection detected, please select from the available options"))
+            validation_error = True
+            break
+
+        # Validate no duplicate preferences selected
+        if pref in prefs.values():
+            messages.warning(request, _("You have indicated more than one preferences towards the same element"))
+            validation_error = True
+            break
+        prefs[i] = pref
+
+    # Handle validation errors or save preferences
+    if validation_error:
+        return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
+
+    # Save preferences and redirect to refresh page
+    _casting_update(request, context, prefs)
+    return redirect(request.path_info)
 
 
 def _get_previous(request: HttpRequest, context: dict) -> None:

@@ -175,6 +175,9 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
     # Add association-specific homepage text to context
     context["custom_text"] = get_association_text(context["association_id"], AssociationTextType.HOME)
 
+    # v22 layout does not distinguish open from future runs, show them together
+    context["all_runs"] = context["open"] + context["future"]
+
     return render(request, "larpmanager/general/calendar.html", context)
 
 

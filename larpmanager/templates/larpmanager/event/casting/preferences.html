@@ -54,6 +54,7 @@
     <table id="preferences" class="go_datatable mob">
         <thead>
             <tr>
+                <th></th>
                 <th>{{ cl_name }}</th>
                 <th>{{ el_name }}</th>
                 <th>{% trans "Total number" %}</th>
@@ -63,6 +64,7 @@
         <tbody>
             {% for el in list %}
                 <tr>
+                    <td></td>
                     <td>{{ el.group_dis }}</td>
                     <td>{{ el.name_dis }}</td>
                     <td>{{ el.pref.0 }}</td>

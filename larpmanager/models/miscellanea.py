@@ -33,7 +33,7 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.models.association import Association
-from larpmanager.models.base import BaseModel, UuidMixin
+from larpmanager.models.base import BaseModel, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, Run
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.registration import Registration
@@ -347,7 +347,7 @@ class CompetenceMemberRel(BaseModel):
         unique_together: ClassVar[list] = ["competence", "member", "deleted"]
 
 
-class WorkshopModule(UuidMixin, BaseModel):
+class WorkshopModule(UuidMixin, OrderMixin, BaseModel):
     """Model for managing workshop modules and member participation."""
 
     search = models.CharField(max_length=150, editable=False)
@@ -386,7 +386,7 @@ class WorkshopMemberRel(BaseModel):
         return f"{self.workshop} - {self.member}"
 
 
-class WorkshopQuestion(UuidMixin, BaseModel):
+class WorkshopQuestion(UuidMixin, OrderMixin, BaseModel):
     """Represents WorkshopQuestion model."""
 
     search = models.CharField(max_length=200, editable=False)
@@ -425,7 +425,7 @@ class WorkshopQuestion(UuidMixin, BaseModel):
         ]
 
 
-class WorkshopOption(UuidMixin, BaseModel):
+class WorkshopOption(UuidMixin, OrderMixin, BaseModel):
     """Represents WorkshopOption model."""
 
     search = models.CharField(max_length=500, editable=False)

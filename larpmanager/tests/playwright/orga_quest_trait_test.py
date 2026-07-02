@@ -27,16 +27,23 @@ import re
 from typing import Any
 
 import pytest
+from playwright.sync_api import expect
 
-from larpmanager.tests.utils import (just_wait,
-                                     check_feature,
-                                     fill_tinymce,
-                                     get_modal_iframe,
-                                     go_to,
-                                     login_orga,
-                                     submit_confirm, submit_inline_edit, wait_for_inline_edit,
-                                     expect_normalized, sidebar, save_modal, _wait_lm_ready,
-                                     )
+from larpmanager.tests.utils import (
+    _select2_search_and_pick,
+    _wait_lm_ready,
+    check_feature,
+    expect_normalized,
+    fill_tinymce,
+    get_modal_iframe,
+    go_to,
+    login_orga,
+    save_modal,
+    sidebar,
+    submit_confirm,
+    submit_inline_edit,
+    wait_for_inline_edit,
+)
 
 pytestmark = pytest.mark.e2e
 
@@ -57,17 +64,20 @@ def test_quest_trait(pw_page: Any) -> None:
     # check result
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Test Character").nth(1).click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         "player: admin test presentation test teaser text test text torta - nonna saleee aliame con another torta - nonna another player: user test",
     )
     go_to(page, live_server, "test/1/")
     page.get_by_role("link", name="Another").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
         "your character is: test character player: user test torta - strudel saleee test character veronese torta - strudel test character player: admin test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
+    _wait_lm_ready(page)
 
 
 def quests(page: Any, live_server: Any) -> None:
@@ -127,20 +137,16 @@ def traits(page: Any, live_server: Any) -> None:
     fill_tinymce(edit_iframe, "id_text", "aliame con ")
     editor = edit_iframe.locator("#id_text")
     editor.press("#")
-    edit_iframe.get_by_role("searchbox").fill("stru")
-    edit_iframe.locator(".select2-results__option").first.click()
-    just_wait(edit_iframe)
+    _select2_search_and_pick(edit_iframe.get_by_role("searchbox"), edit_iframe, "stru")
+    expect(edit_iframe.locator("#id_text")).to_have_value(re.compile(r'.*#\d+'))
 
     save_modal(page, edit_iframe)
 
     # excel char finder
     page.get_by_role("cell", name="veronese").dblclick()
     panel = wait_for_inline_edit(page)
-    just_wait(page)
     panel.locator("textarea").press("#")
-    page.get_by_role("searchbox").fill("non")
-    page.locator(".select2-results__option").first.click()
-    just_wait(page)
+    _select2_search_and_pick(page.get_by_role("searchbox"), page, "non")
     submit_inline_edit(page)
 
     page.get_by_role("link", name="New").click()
@@ -163,8 +169,10 @@ def traits(page: Any, live_server: Any) -> None:
     # check how they appear on user side
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Quest").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Name Quest Lore Torta | Pizza")
     page.get_by_role("link", name="Torta").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Presentation zucchero Traits Strudel - trentina Nonna - amelia")
 
 
@@ -218,40 +226,38 @@ def casting(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test")
     page.get_by_role("link", name="Casting").click()
     page.get_by_role("link", name="Lore").click()
-    page.locator("#faction0").select_option("Torta")
-    page.locator("#choice0").select_option("u2")
-    page.locator("#faction1").select_option("Torta")
-    page.locator("#choice1").select_option("u1")
-    page.locator("#faction2").select_option("Pizza")
-    page.locator("#choice2").select_option("u3")
+    _wait_lm_ready(page)
+    page.locator("#char-list .char-card").filter(has_text="Nonna").click()
+    page.locator("#char-list .char-card").filter(has_text="Strudel").click()
+    page.locator("#char-list .char-card").filter(has_text="Capriciossa").click()
     submit_confirm(page)
 
     # test toggle casting
     go_to(page, live_server, "/test/manage/casting")
     page.get_by_role("link", name="Lore").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator(".change").first, "YES")
     page.locator(".change").first.click()
-    just_wait(page)
+    expect(page.locator(".change").first).to_have_text("NO")
 
     go_to(page, live_server, "/test/manage/casting")
     page.get_by_role("link", name="Lore").click()
-    just_wait(page)
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator(".change").first, "NO")
     page.locator(".change").first.click()
-    just_wait(page)
+    expect(page.locator(".change").first).to_have_text("YES")
 
     # make casting
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Casting")
     page.get_by_role("link", name="Lore").click()
     page.get_by_role("button", name="Start algorithm").click()
-    just_wait(page)
     page.get_by_role("button", name="Upload").click()
 
     # check signups
     sidebar(page, "Registrations")
     page.get_by_role("link", name="Lore").click()
+    _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"), "User Test Another Standard "
     )

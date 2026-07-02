@@ -440,11 +440,11 @@ class ExeConfigForm(ConfigForm):
 
         if self.params.get("skin_id") == 1:
             field_label = _("Characters shortcut")
-            field_help_text = _("If checked: shows a link in the topbar to view all user's characters")
+            field_help_text = _("If checked: shows a link in the sidebar to view all user's characters")
             self.add_configs("user_characters_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
         field_label = _("Registrations shortcut")
-        field_help_text = _("If checked: shows a link in the topbar to view all user's registrations")
+        field_help_text = _("If checked: shows a link in the sidebar to view all user's registrations")
         self.add_configs("user_registrations_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
         website_label = _("Website")

@@ -30,8 +30,9 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
-    expect_normalized, save_modal, wait_accounting_load
+from larpmanager.tests.utils import get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
+    submit_register, delete_modal, \
+    expect_normalized, save_modal, wait_accounting_load, _wait_lm_ready, SHORT_TIMEOUT
 
 pytestmark = pytest.mark.e2e
 
@@ -58,26 +59,25 @@ def check_delete(live_server: Any, page: Any) -> None:
     # update signup - orga
     go_to(page, live_server, "/test/manage/registrations")
     page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector(".fa-edit", timeout=100)
+    page.wait_for_selector(".fa-edit", timeout=SHORT_TIMEOUT)
     page.locator(".fa-edit").click(force=True)
     edit_iframe = get_modal_iframe(page)
     save_modal(page, edit_iframe)
 
     # cancel signup
     go_to(page, live_server, "/test/manage/registrations")
-    page.locator("a:has(i.fas.fa-trash)").click(force=True)
-    just_wait(page)
+    delete_modal(page)
     expect(page.locator("#one")).not_to_contain_text("Admin Test")
 
     # delete payments
     go_to(page, live_server, "/test/manage/tokens")
-    page.get_by_role("row", name="Admin Test Test Larp teeest").locator('.fa-trash').click()
+    delete_modal(page, page.get_by_role("row", name="Admin Test Test Larp teeest").locator('.fa-trash'))
 
     go_to(page, live_server, "/test/manage/credits")
-    page.get_by_role("row", name="Admin Test Test Larp testet").locator('.fa-trash').click()
+    delete_modal(page, page.get_by_role("row", name="Admin Test Test Larp testet").locator('.fa-trash'))
 
     go_to(page, live_server, "/test/manage/payments")
-    page.get_by_role("row", name="Admin Test Wire Money").locator('.fa-trash').click()
+    delete_modal(page, page.get_by_role("row", name="Admin Test Wire Money").locator('.fa-trash'))
 
 
 
@@ -91,12 +91,12 @@ def discount(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Total payments: 100")
 
     # update signup
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # use discount
     go_to(page, live_server, "/test/manage/features/discount/on")
@@ -105,7 +105,7 @@ def discount(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("discount")
-    edit_iframe.get_by_role("checkbox", name="Test Larp").check()
+    edit_iframe.get_by_role("checkbox", name="Test Larp").check(force=True)
     edit_iframe.locator("#id_value").click()
     edit_iframe.locator("#id_value").press("Home")
     edit_iframe.locator("#id_value").fill("20")
@@ -123,7 +123,6 @@ def discount(live_server: Any, page: Any) -> None:
     page.locator("#id_discount").click()
     page.locator("#id_discount").fill("code")
     page.locator("#discount_go").click()
-    just_wait(page)
     expect_normalized(page,
         page.locator("#discount_res"),
         "The discount has been added! It has been reserved for you for 15 minutes, after which it will be removed",
@@ -131,7 +130,6 @@ def discount(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#discount_tbl"), "20.00€")
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 80€.")
-    just_wait(page)
     page.locator("#register_go").click()
 
 
@@ -139,6 +137,7 @@ def pay(live_server: Any, page: Any) -> None:
     # check accounting
     go_to(page, live_server, "/test/register")
     page.locator("#one").get_by_role("link", name="Accounting").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
     expect_normalized(page, page.locator("#one"), "Total payments: 48")
     expect_normalized(page, page.locator("#one"), "Next payment: 52")
@@ -225,11 +224,11 @@ def token_credits(live_server: Any, page: Any) -> None:
 def signup_pay(live_server: Any, page: Any) -> None:
     # Signup
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Provisional registration")
     page.locator("#one").get_by_role("link", name="Accounting").click()
+    _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "100")
 
     # Check accounting
@@ -283,7 +282,7 @@ def setup_payment(live_server: Any, page: Any) -> None:
     # set ticket price
     go_to(page, live_server, "/test/manage/tickets")
     page.wait_for_selector("table.go_datatable")
-    page.wait_for_selector(".fa-edit", timeout=10000)
+    page.wait_for_selector(".fa-edit", timeout=SHORT_TIMEOUT)
     page.locator(".fa-edit").click(force=True)
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_price").click()

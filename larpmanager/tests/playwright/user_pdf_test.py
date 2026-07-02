@@ -28,17 +28,17 @@ from typing import Any
 
 import pytest
 
-from larpmanager.tests.utils import (
-    check_download,
-    check_pdf_zip_download,
-    fill_tinymce,
-    get_modal_iframe,
-    go_to,
-    go_to_check,
-    just_wait,
-    login_orga,
-    submit_confirm, save_modal,
-)
+from larpmanager.tests.utils import (submit_register,
+                                     delete_modal,
+                                     check_download,
+                                     fill_tinymce,
+                                     get_modal_iframe,
+                                     go_to,
+                                     go_to_check,
+                                     _wait_lm_ready,
+                                     login_orga,
+                                     submit_confirm, save_modal,
+                                     )
 
 pytestmark = pytest.mark.e2e
 
@@ -59,8 +59,7 @@ def test_user_pdf(pw_page: Any) -> None:
 
     # signup
     go_to(page, live_server, "/test/register")
-    page.get_by_role("button", name="Continue").click()
-    submit_confirm(page)
+    submit_register(page)
 
     # Assign character
     go_to(page, live_server, "/test/manage/registrations")
@@ -86,7 +85,6 @@ def test_user_pdf(pw_page: Any) -> None:
     edit_iframe.locator("#select2-new_rel_select-container").click()
     edit_iframe.get_by_role("searchbox").fill("pdf")
     edit_iframe.get_by_role("option", name="Pdf Rel Character").click()
-    just_wait(edit_iframe)
     fill_tinymce(edit_iframe, "rel_u2", "pdf relationship text")
     save_modal(page, edit_iframe)
 
@@ -102,7 +100,7 @@ def test_user_pdf(pw_page: Any) -> None:
 
     check_download(page, "Profiles (PDF)")
 
-    check_download(page, "Download complete sheet")
+    check_download(page, "complete sheet")
 
     check_download(page, "printable sheet")
 
@@ -133,7 +131,7 @@ def orga_characters_pdf_test(page: Any, live_server: Any) -> None:
     for label, orig in test_links.items():
         # JS replaces '0/pdf' with '{uuid}/pdf' on change
         url = orig.replace("0/pdf", f"{char_uuid}/pdf")
-        go_to_check(page, f"{live_server}{url}")
+        page.goto(f"{live_server}{url}")
         body = page.locator("body")
         assert body.inner_text().strip(), f"Empty body for {label} at {url}"
 
@@ -144,8 +142,7 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
 
     # Delete the orga-created character: this cascades the orga relationship deletion
     go_to(page, live_server, "/test/manage/characters")
-    page.get_by_role("row", name="Pdf Rel Character").locator(".fa-trash").click()
-    just_wait(page)
+    delete_modal(page, page.get_by_role("row", name="Pdf Rel Character").locator(".fa-trash"))
 
     # Create a new target character for the player relationship
     page.get_by_role("link", name="New").click()
@@ -156,7 +153,7 @@ def player_relationship_pdf_test(page: Any, live_server: Any) -> None:
     # As player (orga user, who has Test Character assigned), add a player relationship
     go_to(page, live_server, "/test/register")
     page.get_by_role("link", name="Relationships").click()
-    just_wait(page)
+    _wait_lm_ready(page)
 
     page.get_by_role("link", name="New").click()
     page.locator("#select2-id_target-container").click()

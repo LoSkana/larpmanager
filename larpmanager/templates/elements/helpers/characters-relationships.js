@@ -39,7 +39,7 @@ window.addEventListener('DOMContentLoaded', function() {
                     <p>
                         <a href="#" class="my_toggle" tog="f_rel_{0}">{% trans "Show" %}</a>
                     </p>
-                    <div class="hide hide_later f_rel_{0}">
+                    <div class="hide  f_rel_{0}">
                         <textarea name="rel_{0}" id="rel_{0}"></textarea>
                         <div class="helptext">
                             {% trans "text length" %}: <span class="count"></span> / {{ form.relationship_max_length }}

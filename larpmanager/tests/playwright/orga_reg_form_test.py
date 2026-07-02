@@ -29,8 +29,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import just_wait, go_to, login_orga, expect_normalized, submit_confirm, sidebar, nav, \
-    get_modal_iframe, save_modal
+from larpmanager.tests.utils import fill_date, go_to, login_orga, expect_normalized, submit_confirm, sidebar, \
+    get_modal_iframe, save_modal, drag_reorder
 
 pytestmark = pytest.mark.e2e
 
@@ -84,8 +84,16 @@ def prepare_form(page: Any, live_server: Any) -> None:
         page.locator("#one"),
     "Rate Optional Surcharge Registration surcharge Surcharge Optional",
     )
-    page.locator('[id="u4"]').locator(".fa-arrow-up").click()
-    page.locator('[id="u2"]').locator(".fa-arrow-up").click()
+    drag_reorder(
+        page,
+        page.locator('tr[id="u4"] td.reorder-handle'),
+        page.locator('tr[id="u4"]').locator("xpath=preceding-sibling::tr[1]"),
+    )
+    drag_reorder(
+        page,
+        page.locator('tr[id="u2"] td.reorder-handle'),
+        page.locator('tr[id="u2"]').locator("xpath=preceding-sibling::tr[1]"),
+    )
     expect_normalized(page,
         page.locator("#one"),
         """
@@ -126,9 +134,7 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_amount").click()
     edit_iframe.locator("#id_amount").fill("5")
-    edit_iframe.locator("#id_date").fill("2024-06-11")
-    just_wait(edit_iframe)
-    edit_iframe.locator("#id_date").click()
+    fill_date(edit_iframe, "#id_date", "2024-06-11")
     save_modal(page, edit_iframe)
 
     # set up payments
@@ -137,7 +143,7 @@ def prepare_surcharge(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Payments", exact=True).check()
     submit_confirm(page)
     page.get_by_role("checkbox", name="Wire").check()
-    just_wait(page)
+    page.locator("#id_wire_descr").wait_for(state="visible")
     page.locator("#id_wire_descr").click()
     page.locator("#id_wire_descr").fill("dasdsadsa")
     page.locator("#id_wire_fee").click()
@@ -170,11 +176,13 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
 
     # check form
-    page.get_by_role("link", name="Event").click()
-    nav(page, "Registration")
+    sidebar(page, "Registration")
     expect_normalized(page,
         page.locator("#register_form"),
-        "(*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2 Ticket (*) Standard - 5€ Your registration ticket2 Standard: sadsadsadsa Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge",
+        """
+        (*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2
+        Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2
+        Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge""",
     )
 
 
@@ -184,17 +192,22 @@ def check_filler(page: Any, live_server: Any) -> None:
     sidebar(page, "Features")
     page.get_by_role("checkbox", name="Filler").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Event").click()
+
+    sidebar(page, "Event")
     page.locator("#id_form1-max_filler").click()
     page.locator("#id_form1-max_filler").fill("5")
     submit_confirm(page)
 
     # check filler is not there
     go_to(page, live_server, "test/")
-    nav(page, "Registration")
-    page.get_by_label("Ticket (*)").click()
-    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
-        '- combobox "Ticket (*)":\n  - option "Standard - 5€" [selected]'
+    sidebar(page, "Registration")
+    expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
+        """
+        - row "Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2":
+          - cell "Ticket (*)"
+          - cell "Standard 5€ sadsadsadsa Your registration ticket2":
+            - radio "Standard 5€ sadsadsadsa" [checked]
+        """
     )
 
     # enable config
@@ -204,10 +217,15 @@ def check_filler(page: Any, live_server: Any) -> None:
     page.locator("#id_filler_always").check()
     submit_confirm(page)
 
-    # check filler is not available
+    # check filler is available
     go_to(page, live_server, "test/")
-    nav(page, "Registration")
-    page.get_by_label("Ticket (*)").click()
-    expect(page.get_by_label("Ticket (*)")).to_match_aria_snapshot(
-        '- combobox "Ticket (*)":\n  - option "Standard - 5€" [selected]\n  - option "Filler"'
+    sidebar(page, "Registration")
+    expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
+        """
+        - row "Ticket (*) Standard 5€ sadsadsadsa Filler Your registration ticket2":
+          - cell "Ticket (*)"
+          - cell "Standard 5€ sadsadsadsa Filler Your registration ticket2":
+            - radio "Standard 5€ sadsadsadsa" [checked]
+            - radio "Filler"
+        """
     )

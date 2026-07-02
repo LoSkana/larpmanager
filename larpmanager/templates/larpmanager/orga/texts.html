@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th></th>
+                <th></th>
                 <th>{% trans "Type" %}</th>
                 <th>{% trans "Language" %}</th>
                 <th>{% trans "Default" %}</th>
@@ -19,6 +20,7 @@
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
+                    <td></td>
                     <td>
                         <a href="{% url 'orga_texts_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
@@ -38,4 +40,9 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No texts have been created yet" %}. {% trans "Use the button above to add a new event text" %}.
+        </p>
+    {% endif %}
 {% endblock content %}
