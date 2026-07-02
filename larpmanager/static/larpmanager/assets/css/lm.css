@@ -3997,6 +3997,7 @@ body.association.new_v22 .user_resize {
   padding: 0 0.25em;
   border-radius: 0px 8px 8px 0px;
   width: calc(100% - 1ch);
+  box-sizing: border-box;
 }
 
 @media (min-width: 1201px) {
@@ -4321,7 +4322,8 @@ body.association.new_v22 .user_resize {
 }
 
 @media (max-width: 840px) {
-  .new_v22 #sidebar {
+  .new_v22 #sidebar,
+  .new_v22 #sidebar.topbar {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -4329,12 +4331,14 @@ body.association.new_v22 .user_resize {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100%;
+    height: 88vh;
     transform: translateX(-100%);
     transition: transform 0.25s;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
+    z-index: 11;
+    margin: 0;
   }
 
   .new_v22 #sidebar.mobile-visible.hide {
@@ -4359,7 +4363,7 @@ body.association.new_v22 .user_resize {
     top: 0;
     left: auto;
     right: 0;
-    height: calc(100vh - var(--topbar-height) - 1.5em);
+    height: 88vh;
     width: 70vw;
     border-radius: 8px 0 0 8px;
     opacity: 1;
@@ -4367,7 +4371,7 @@ body.association.new_v22 .user_resize {
     pointer-events: auto;
     transform: translateX(100%);
     transition: transform 0.25s;
-    background-color: var(--sec-clr);
+    z-index: 300;
   }
 
   #topbar.topbar_v22.mobile-visible {
@@ -4406,23 +4410,44 @@ body.association.new_v22 .user_resize {
     width: 94vw;
     margin: 0 auto;
     border-radius: 5vw;
-    height: auto;
+    height: 7vh;
     border-top: 2px solid rgba(var(--pri-rgb), 0.085);
     border-bottom: none;
     padding: 0.5em 0.5em;
-    background-color: rgba(var(--sec-rgb), 0.95);
     backdrop-filter: blur(10px);
     position: fixed;
     right: 0;
     left: 0;
     vertical-align: middle;
-    z-index: 10;
-    display: initial;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+  }
+
+  .new_v22 #menu-mobile .tv22-pill-img {
+    width: 3.5vh;
+    height: 3.5vh;
+    vertical-align: middle;
+    margin-right: 0.5em;
+  }
+
+  .new_v22 #menu-mobile .el a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .new_v22 #menu-mobile,
+  .new_v22 #sidebar,
+  .new_v22 #topbar {
+    background-color: rgba(var(--sec-rgb), 0.8);
+    backdrop-filter: blur(10px);
   }
 
   .new_v22 #menu-mobile table {
     display: table;
-    margin: 0;
+    margin: 0 auto;
   }
 
   .new_v22 #menu-mobile tr,
