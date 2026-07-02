@@ -4310,17 +4310,24 @@ body.association.new_v22 .user_resize {
   padding-left: 0;
 }
 
-@media (max-width: 840px) {
-  .new_v22 #banner .inner h1 {
-    text-align: center;
-  }
-}
-
 .new_v22 #info_bar {
   text-align: left;
   font-size: 80%;
   font-style: italic;
   margin-left: 1em;
+}
+
+@media (max-width: 840px) {
+  .new_v22 #banner .inner h1 {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .new_v22 #info_bar {
+    text-align: center;
+    justify-content: center;
+    margin-left: 0;
+  }
 }
 
 .new_v22 .staff-list {
@@ -4501,8 +4508,9 @@ body.association.new_v22 .user_resize {
   }
 
   .new_v22 #page-wrapper.topbar,
-  .new_v22 #page-wrapper.topbar header {
-    margin-bottom: calc(var(--topbar-height) + 1em);
+  .new_v22 #page-wrapper.topbar header,
+  .new_v22 #page-wrapper.sidebar {
+    margin-bottom: calc(7vh + 1em);
   }
 }
 
