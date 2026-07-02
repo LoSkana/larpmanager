@@ -4360,6 +4360,10 @@ body.association.new_v22 .user_resize {
   display: none;
 }
 
+body.in-iframe #menu-mobile {
+  display: none !important;
+}
+
 @media (max-width: 840px) {
   .new_v22 #sidebar,
   .new_v22 #sidebar.topbar {
