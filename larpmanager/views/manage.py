@@ -655,18 +655,6 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
             "orga_features",
         )
 
-    # Check if user_character feature needs configuration
-    if (
-        "user_character" in features
-        and get_event_config(context["event"].id, "user_character_max", default_value="", context=context) == ""
-    ):
-        _add_priority(
-            context,
-            _("Set up participant character creation/editing configuration"),
-            "orga_character",
-            "config/user_character",
-        )
-
     # Check for features that depend on credits
     if "credits" not in features and set(features) & {"expense", "refund", "collection"}:
         _add_priority(

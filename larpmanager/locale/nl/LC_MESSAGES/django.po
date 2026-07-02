@@ -8478,9 +8478,6 @@ msgstr "Reeds ontvangen betalingen: <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "BTW-percentage dat alleen over de ticketprijs wordt berekend"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr "Deelnemers configureren voor het maken/bewerken van personages"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "De vraag zichtbaarheid aan deelnemers, toegestane waarden zijn"
 
@@ -8752,6 +8749,9 @@ msgid "Manage token assignments issued to participants for this event"
 msgstr ""
 "Beheer de token-toewijzingen die aan deelnemers voor dit evenement zijn "
 "verstrekt"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr "Maximaal aantal tekens dat de speler kan invoeren (standaard = 1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -10931,13 +10931,6 @@ msgid ""
 msgstr ""
 "In de gebeurtenis <b>%(event)s</b> kreeg je het personage toegewezen: "
 "<b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Maximum aantal karakters dat de speler kan creëren (standaard=0, geen "
-"creatie toegestaan)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "

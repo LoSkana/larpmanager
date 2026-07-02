@@ -1549,9 +1549,7 @@ msgstr ""
 msgid "Maximum number"
 msgstr ""
 
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
+msgid "Maximum number of characters the player can create (default=1)"
 msgstr ""
 
 msgid "Approval"
@@ -11725,9 +11723,6 @@ msgid "Create the first character of the event"
 msgstr ""
 
 msgid "Some features require 'Character', which is not active"
-msgstr ""
-
-msgid "Set up participant character creation/editing configuration"
 msgstr ""
 
 msgid "Some features require 'Credits', which is not active"

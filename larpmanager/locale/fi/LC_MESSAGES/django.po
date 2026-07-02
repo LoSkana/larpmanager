@@ -8430,9 +8430,6 @@ msgstr "Jo saadut maksut: <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "Pelkästään lipun hinnasta laskettava arvonlisäveroprosentti"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr "Osallistujan hahmonluonti/muokkausasetusten määrittäminen"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "Kysymyksen näkyvyys osallistujille, sallitut arvot ovat seuraavat"
 
@@ -8685,6 +8682,9 @@ msgstr ""
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Hallitse tapahtuman osallistujille myönnettyjä tunnuksia"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr "Pelaajan luomien hahmojen enimmäismäärä (oletusarvo = 1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Tapahtuman järjestäjien ja toteuttajien henkilöiden tai ryhmien nimet"
@@ -10728,13 +10728,6 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "Tapahtumassa <b>%(event)s</b> sinulle annettiin hahmo: <b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Hahmojen enimmäismäärä, jonka pelaaja voi luoda (oletus=0, luominen ei ole "
-"sallittua)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "

@@ -8558,11 +8558,6 @@ msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr ""
 "Der Prozentsatz der Mehrwertsteuer wird nur auf den Fahrpreis berechnet"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr ""
-"Konfiguration für die Erstellung/Bearbeitung von Teilnehmercharakteren "
-"einrichten"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "Die Sichtbarkeit der Frage für die Teilnehmer, zulässige Werte sind"
 
@@ -8863,6 +8858,11 @@ msgid "Manage token assignments issued to participants for this event"
 msgstr ""
 "Verwalte die an die Teilnehmer dieser Veranstaltung vergebenen "
 "Zugangsausweise"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr ""
+"Maximale Anzahl an Charakteren, die der Spieler erstellen kann (Standard = "
+"1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -11130,13 +11130,6 @@ msgid ""
 msgstr ""
 "In dem Ereignis <b>%(event)s</b> wurde dir das Zeichen <b>%(character)s</b> "
 "zugewiesen"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Maximale Anzahl von Charakteren, die der Spieler erstellen kann (Standard=0,"
-" keine Erstellung erlaubt)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "
