@@ -640,6 +640,9 @@ msgstr "Invite"
 msgid "Joined"
 msgstr "Rejoint"
 
+msgid "Labels"
+msgstr "Étiquettes"
+
 msgid "Legend"
 msgstr "Légende "
 
@@ -1865,6 +1868,12 @@ msgstr "Rôles de l'intrigue"
 msgid "Pool Types"
 msgstr "Types de piscines"
 
+msgid "Pool label"
+msgstr "Étiquette de piscine"
+
+msgid "Pool types"
+msgstr "Types de piscines"
+
 msgid "Preference"
 msgstr "Préférence"
 
@@ -2128,6 +2137,9 @@ msgstr "Événements passés"
 
 msgid "Please wait"
 msgstr "Veuillez patienter"
+
+msgid "Pool Labels"
+msgstr "Étiquettes pour piscine"
 
 msgid "Postal code"
 msgstr "Code postal"
@@ -2887,6 +2899,9 @@ msgstr "Modèles à distribuer"
 msgid "Help Questions"
 msgstr "Questions d'aide"
 
+msgid "Inventory type"
+msgstr "Type de stock"
+
 msgid "Invite to role"
 msgstr "Invite à jouer un rôle"
 
@@ -3117,6 +3132,9 @@ msgstr "Couleur de mise en évidence"
 
 msgid "Invalid request"
 msgstr "Demande non valide"
+
+msgid "Inventory Types"
+msgstr "Types de stock"
 
 msgid "Mail assignment"
 msgstr "Affectation du courrier"
@@ -3721,6 +3739,9 @@ msgstr "Rachat de la collection"
 msgid "Registration Form"
 msgstr "Formulaire d'inscription"
 
+msgid "Registration date"
+msgstr "Date d'inscription"
+
 msgid "Registration form"
 msgstr "Formulaire d'inscription"
 
@@ -4264,9 +4285,6 @@ msgstr "Préférence non valide"
 
 msgid "Registration history"
 msgstr "Historique de l'entrée"
-
-msgid "Registration opening"
-msgstr "Ouverture des inscriptions"
 
 msgid "Registration options"
 msgstr "Options d'inscription"
@@ -4982,6 +5000,9 @@ msgstr "vérifier les rapports moins"
 msgid "not visible at this time"
 msgstr "non visible pour l'instant"
 
+msgid "Character Inventory Types"
+msgstr "Types d'inventaire des personnages"
+
 msgid "Character sheet questions"
 msgstr "Questions sur la feuille de personnage"
 
@@ -5648,6 +5669,9 @@ msgstr "Après confirmation, ajoutez un autre"
 
 msgid "Browse the presentation website"
 msgstr "Parcourez le site de présentation"
+
+msgid "Character Inventory Pool Labels"
+msgstr "Étiquettes du pool d'inventaire des personnages"
 
 msgid "Choice available, click to lock"
 msgstr "Choix possible, cliquer pour verrouiller"
@@ -7617,6 +7641,9 @@ msgstr "Aucune nouvelle session n'est prévue pour le moment"
 msgid "This operation is permanent and cannot be undone"
 msgstr "Cette opération est permanente et ne peut être annulée"
 
+msgid "This page allows you to add or edit a pool label"
+msgstr "Cette page te permet d'ajouter ou de modifier le nom d'un pool"
+
 msgid "Use the button above to create the first ability"
 msgstr "Clique sur le bouton ci-dessus pour créer la première compétence"
 
@@ -7808,6 +7835,9 @@ msgstr "Merci d'avoir choisi de faire partie de notre communauté"
 
 msgid "The registration for this event has been cancelled"
 msgstr "L'inscription à l'événement a été annulée"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Cette page te permet d'ajouter ou de modifier un type de pool CI"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Total des frais de participation réduits par des remises"
@@ -8055,6 +8085,9 @@ msgstr "La date à laquelle votre document d'identification a été délivré"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Le nombre total de billets à tirer a été indiqué"
 
+msgid "This page allows you to add or edit an inventory type"
+msgstr "Cette page te permet d'ajouter ou de modifier un type d'inventaire"
+
 msgid "This page only shows questions from the last 3 months"
 msgstr ""
 "Cette page n'affiche que les questions posées au cours des 3 derniers mois"
@@ -8226,6 +8259,9 @@ msgstr "Mode d'affichage initial lors de l'ouverture de la page d'ensemble"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Le lien sera valable pendant le nombre de jours suivant "
+
+msgid "This page summarizes the types of character inventories"
+msgstr "Cette page présente les différents types d'inventaires de personnages"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Total de ce qui a déjà été payé à la date actuelle"
@@ -8627,6 +8663,10 @@ msgstr ""
 "Gérer toutes les attributions de jetons accordées aux membres lors des "
 "différents événements"
 
+msgid "Manage character inventory types and their pool restrictions"
+msgstr ""
+"Gérer les types d'inventaire des personnages et leurs restrictions de pool"
+
 msgid "Manage handout templates used to generate character handouts"
 msgstr ""
 "Gérer les modèles de fiches de personnage utilisés pour créer les fiches de "
@@ -8835,6 +8875,11 @@ msgstr ""
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr ""
 "Indiquez votre sexe légal tel qu'il apparaît sur les documents officiels"
+
+msgid "Manage pool labels for grouping pools in character inventories"
+msgstr ""
+"Gérer les étiquettes de groupes pour regrouper les groupes dans les "
+"inventaires de caractères"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Gérer l'attribution des badges aux participants de cet événement"
@@ -10756,13 +10801,6 @@ msgstr ""
 "%(deadline)d jours"
 
 msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
-msgstr ""
-"Définis les types de réserves de ressources disponibles dans les inventaires"
-" des personnages pour cet événement"
-
-msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10894,6 +10932,13 @@ msgid ""
 msgstr ""
 "Définit la fréquence d'envoi des courriels de rappel, en jours (si cette "
 "valeur n'est pas définie, aucun courriel n'est envoyé)"
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+"Cette page présente les étiquettes utilisées pour regrouper les pools dans "
+"les inventaires de caractères"
 
 msgid ""
 "Track a member's full event registration history with payment status for "

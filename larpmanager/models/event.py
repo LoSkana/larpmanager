@@ -674,7 +674,7 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
     registration_open = models.DateTimeField(
         blank=True,
         null=True,
-        verbose_name=_("Registration opening"),
+        verbose_name=_("Registration date"),
         help_text=_("Date and time when registrations open, or close, for participants depending on status"),
     )
 

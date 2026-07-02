@@ -640,6 +640,9 @@ msgstr "Inbjudan"
 msgid "Joined"
 msgstr "Ansluten"
 
+msgid "Labels"
+msgstr "Etiketter"
+
 msgid "Legend"
 msgstr "Legend"
 
@@ -1865,6 +1868,12 @@ msgstr "Roller i handlingen"
 msgid "Pool Types"
 msgstr "Pooltyper"
 
+msgid "Pool label"
+msgstr "Pooletikett"
+
+msgid "Pool types"
+msgstr "Pooltyper"
+
 msgid "Preference"
 msgstr "Preferens"
 
@@ -2128,6 +2137,9 @@ msgstr "Tidigare händelser"
 
 msgid "Please wait"
 msgstr "Vänligen vänta"
+
+msgid "Pool Labels"
+msgstr "Etiketter för pooler"
 
 msgid "Postal code"
 msgstr "Postnummer"
@@ -2887,6 +2899,9 @@ msgstr "Handout Modeller"
 msgid "Help Questions"
 msgstr "Hjälpfrågor"
 
+msgid "Inventory type"
+msgstr "Lagertyp"
+
 msgid "Invite to role"
 msgstr "Bjud in till roll"
 
@@ -3117,6 +3132,9 @@ msgstr "Markera färg"
 
 msgid "Invalid request"
 msgstr "Ogiltig begäran"
+
+msgid "Inventory Types"
+msgstr "Lagertyper"
 
 msgid "Mail assignment"
 msgstr "Tilldelning av post"
@@ -3721,6 +3739,9 @@ msgstr "Lös in kollektion"
 msgid "Registration Form"
 msgstr "Registreringsformulär"
 
+msgid "Registration date"
+msgstr "Registreringsdatum"
+
 msgid "Registration form"
 msgstr "Registreringsformulär"
 
@@ -4264,9 +4285,6 @@ msgstr "Ogiltig preferens"
 
 msgid "Registration history"
 msgstr "Ingångshistoria"
-
-msgid "Registration opening"
-msgstr "Öppnande av registrering"
 
 msgid "Registration options"
 msgstr "Alternativ för registrering"
@@ -4982,6 +5000,9 @@ msgstr "kontrollera rapporter mindre"
 msgid "not visible at this time"
 msgstr "inte synlig för närvarande"
 
+msgid "Character Inventory Types"
+msgstr "Typer av karaktärsinventarier"
+
 msgid "Character sheet questions"
 msgstr "Frågor om karaktärsblad"
 
@@ -5648,6 +5669,9 @@ msgstr "Efter bekräftelse, lägg till ytterligare en"
 
 msgid "Browse the presentation website"
 msgstr "Bläddra igenom presentationswebbplatsen"
+
+msgid "Character Inventory Pool Labels"
+msgstr "Etiketter för karaktärsförråd"
 
 msgid "Choice available, click to lock"
 msgstr "Val tillgängligt, klicka för att låsa"
@@ -7591,6 +7615,9 @@ msgstr "Det finns inga nya sessioner inplanerade för närvarande"
 msgid "This operation is permanent and cannot be undone"
 msgstr "Denna åtgärd är permanent och kan inte ångras"
 
+msgid "This page allows you to add or edit a pool label"
+msgstr "På den här sidan kan du lägga till eller redigera en pooletikett"
+
 msgid "Use the button above to create the first ability"
 msgstr "Använd knappen ovan för att skapa den första förmågan"
 
@@ -7774,6 +7801,9 @@ msgstr "Tack för att du väljer att vara en del av vår gemenskap"
 
 msgid "The registration for this event has been cancelled"
 msgstr "Anmälan till evenemanget avbröts"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "På den här sidan kan du lägga till eller redigera en CI-pooltyp"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
@@ -8000,6 +8030,9 @@ msgstr "Datum då din identitetshandling utfärdades"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
 
+msgid "This page allows you to add or edit an inventory type"
+msgstr "På den här sidan kan du lägga till eller redigera en lagertyp"
+
 msgid "This page only shows questions from the last 3 months"
 msgstr "På den här sidan visas endast frågor från de senaste 3 månaderna"
 
@@ -8151,6 +8184,9 @@ msgstr "Det första visningsläget när ensemblesidan öppnas"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Länken kommer att vara giltig under följande antal dagar"
+
+msgid "This page summarizes the types of character inventories"
+msgstr "På den här sidan sammanfattas olika typer av karaktärsregister"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summan av vad som redan har betalats på det aktuella datumet"
@@ -8491,6 +8527,9 @@ msgstr ""
 "Hantera alla tilldelningar av token som utfärdats till medlemmar vid olika "
 "evenemang"
 
+msgid "Manage character inventory types and their pool restrictions"
+msgstr "Hantera karaktärernas inventarietyper och deras poolbegränsningar"
+
 msgid "Manage handout templates used to generate character handouts"
 msgstr ""
 "Hantera mallar för karaktärsbeskrivningar som används för att skapa "
@@ -8673,6 +8712,9 @@ msgstr "Om du stöter på några problem, kontakta oss så hjälper vi dig"
 
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Ange ditt juridiska kön så som det framgår av officiella dokument"
+
+msgid "Manage pool labels for grouping pools in character inventories"
+msgstr "Hantera pooletiketter för att gruppera pooler i teckenförteckningar"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""
@@ -10419,13 +10461,6 @@ msgstr ""
 "dagar"
 
 msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
-msgstr ""
-"Ange vilka typer av resurspooler som finns tillgängliga i karaktärernas "
-"inventarier för detta evenemang"
-
-msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10556,6 +10591,13 @@ msgid ""
 msgstr ""
 "Anger hur ofta påminnelsemeddelanden ska skickas, i dagar (om inget anges "
 "skickas inga e-postmeddelanden)"
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+"På den här sidan sammanfattas de poolbeteckningar som används för att "
+"gruppera pooler i teckenförteckningar"
 
 msgid ""
 "Track a member's full event registration history with payment status for "

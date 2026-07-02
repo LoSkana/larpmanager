@@ -2225,9 +2225,19 @@ msgstr ""
 msgid "Pool type"
 msgstr ""
 
-msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
+msgid "This page allows you to add or edit a ci pool type"
+msgstr ""
+
+msgid "Inventory type"
+msgstr ""
+
+msgid "This page allows you to add or edit an inventory type"
+msgstr ""
+
+msgid "Pool label"
+msgstr ""
+
+msgid "This page allows you to add or edit a pool label"
 msgstr ""
 
 msgid "The name of our hobby, four letters"
@@ -4023,7 +4033,7 @@ msgstr ""
 msgid "Sequential number for this event"
 msgstr ""
 
-msgid "Registration opening"
+msgid "Registration date"
 msgstr ""
 
 msgid ""
@@ -8472,6 +8482,26 @@ msgstr ""
 msgid "No transfers yet"
 msgstr ""
 
+msgid "Character Inventory Types"
+msgstr ""
+
+msgid "This page summarizes the types of character inventories"
+msgstr ""
+
+msgid "Labels"
+msgstr ""
+
+msgid "Character Inventory Pool Labels"
+msgstr ""
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+
+msgid "Pool types"
+msgstr ""
+
 msgid "Character Inventory Pool Types"
 msgstr ""
 
@@ -10834,6 +10864,18 @@ msgid "Pool Types"
 msgstr ""
 
 msgid "Manage character inventory pool types"
+msgstr ""
+
+msgid "Inventory Types"
+msgstr ""
+
+msgid "Manage character inventory types and their pool restrictions"
+msgstr ""
+
+msgid "Pool Labels"
+msgstr ""
+
+msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
 
 msgid "View detailed activity log of all changes made for this specific event"

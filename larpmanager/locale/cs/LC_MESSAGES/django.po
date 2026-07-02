@@ -640,6 +640,9 @@ msgstr "Pozvánka"
 msgid "Joined"
 msgstr "Připojil se k"
 
+msgid "Labels"
+msgstr "Štítky"
+
 msgid "Legend"
 msgstr "Legenda"
 
@@ -1865,6 +1868,12 @@ msgstr "Role v zápletce"
 msgid "Pool Types"
 msgstr "Typy bazénů"
 
+msgid "Pool label"
+msgstr "Štítek na bazén"
+
+msgid "Pool types"
+msgstr "Typy bazénů"
+
 msgid "Preference"
 msgstr "Preference"
 
@@ -2128,6 +2137,9 @@ msgstr "Minulé události"
 
 msgid "Please wait"
 msgstr "Prosím, počkejte"
+
+msgid "Pool Labels"
+msgstr "Štítky na bazén"
 
 msgid "Postal code"
 msgstr "Poštovní směrovací číslo"
@@ -2887,6 +2899,9 @@ msgstr "Modely pro rozdávání"
 msgid "Help Questions"
 msgstr "Nápověda Otázky"
 
+msgid "Inventory type"
+msgstr "Typ zásob"
+
 msgid "Invite to role"
 msgstr "Pozvání do role"
 
@@ -3117,6 +3132,9 @@ msgstr "Barva zvýraznění"
 
 msgid "Invalid request"
 msgstr "Neplatný požadavek"
+
+msgid "Inventory Types"
+msgstr "Typy zásob"
 
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
@@ -3721,6 +3739,9 @@ msgstr "Sbírka Redeem"
 msgid "Registration Form"
 msgstr "Registrační formulář"
 
+msgid "Registration date"
+msgstr "Datum registrace"
+
 msgid "Registration form"
 msgstr "Registrační formulář"
 
@@ -4264,9 +4285,6 @@ msgstr "Neplatná předvolba"
 
 msgid "Registration history"
 msgstr "Historie vstupu"
-
-msgid "Registration opening"
-msgstr "Zahájení registrace"
 
 msgid "Registration options"
 msgstr "Možnosti registrace"
@@ -4982,6 +5000,9 @@ msgstr "méně kontrolních hlášení"
 msgid "not visible at this time"
 msgstr "v tuto chvíli není viditelný"
 
+msgid "Character Inventory Types"
+msgstr "Typy inventáře postav"
+
 msgid "Character sheet questions"
 msgstr "Otázky k listu postavy"
 
@@ -5648,6 +5669,9 @@ msgstr "Po potvrzení přidejte další"
 
 msgid "Browse the presentation website"
 msgstr "Prohlédněte si prezentační stránky"
+
+msgid "Character Inventory Pool Labels"
+msgstr "Štítky pro fond postav"
 
 msgid "Choice available, click to lock"
 msgstr "Možnost volby, klikněte pro uzamčení"
@@ -7588,6 +7612,9 @@ msgstr "V tuto chvíli nejsou naplánovány žádné nové schůzky"
 msgid "This operation is permanent and cannot be undone"
 msgstr "Tato operace je trvalá a nelze ji vrátit zpět"
 
+msgid "This page allows you to add or edit a pool label"
+msgstr "Na této stránce můžete přidat nebo upravit název skupiny"
+
 msgid "Use the button above to create the first ability"
 msgstr "Pomocí tlačítka výše vytvořte první schopnost"
 
@@ -7767,6 +7794,9 @@ msgstr "Děkujeme, že jste se rozhodli být součástí naší komunity"
 
 msgid "The registration for this event has been cancelled"
 msgstr "Registrace na akci byla zrušena"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Na této stránce můžete přidat nebo upravit typ fondu CI"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Celkové účastnické poplatky snížené díky slevám"
@@ -7997,6 +8027,9 @@ msgstr "Datum vydání vašeho dokladu totožnosti"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Byl uveden celkový počet losů, které budou vylosovány"
 
+msgid "This page allows you to add or edit an inventory type"
+msgstr "Na této stránce můžete přidat nebo upravit typ zásob"
+
 msgid "This page only shows questions from the last 3 months"
 msgstr "Na této stránce se zobrazují pouze otázky z posledních 3 měsíců"
 
@@ -8144,6 +8177,9 @@ msgstr "Počáteční režim zobrazení při otevření stránky souboru"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Odkaz bude platný po dobu následujících dnů"
+
+msgid "This page summarizes the types of character inventories"
+msgstr "Tato stránka shrnuje typy seznamů postav"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Součet toho, co již bylo vyplaceno k aktuálnímu datu"
@@ -8483,6 +8519,9 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Spravujte všechna přidělení tokenů vydaná členům v rámci jednotlivých akcí"
 
+msgid "Manage character inventory types and their pool restrictions"
+msgstr "Správa typů inventáře postav a omezení jejich zásob"
+
 msgid "Manage handout templates used to generate character handouts"
 msgstr ""
 "Správa šablon charakteristik postav používaných k vytváření charakteristik "
@@ -8653,6 +8692,9 @@ msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomů�
 
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Uveďte své zákonné pohlaví, jak je uvedeno v úředních dokumentech"
+
+msgid "Manage pool labels for grouping pools in character inventories"
+msgstr "Správa štítků skupin pro seskupování skupin v seznamech znaků"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Správa přidělení tokenů účastníkům této akce"
@@ -10306,13 +10348,6 @@ msgstr ""
 "Musíte zaplatit alespoň <b>%(amount).2f %(currency)s</b> do %(deadline)d dnů"
 
 msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
-msgstr ""
-"Definujte typy fondů zdrojů, které jsou pro tuto událost k dispozici v "
-"inventářích postav"
-
-msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10435,6 +10470,13 @@ msgid ""
 msgstr ""
 "Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
 "nastaveno, nejsou zasílány žádné e-maily)"
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+"Tato stránka obsahuje přehled označení skupin, která se používají ke "
+"seskupování skupin v seznamech znaků"
 
 msgid ""
 "Track a member's full event registration history with payment status for "
