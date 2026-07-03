@@ -180,7 +180,7 @@ class CriterionPxAdmin(DefModelAdmin):
 
     list_display: ClassVar[tuple] = ("id", "event", "name", "system", "operation", "amount", "uuid")
     list_filter: ClassVar[tuple] = (EventFilter,)
-    autocomplete_fields: ClassVar[list] = ["event", "system", "prerequisites", "requirements"]
+    autocomplete_fields: ClassVar[list] = ["event", "system", "prerequisites", "requirements", "factions"]
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
 
 
@@ -252,5 +252,6 @@ class ModifierPxAdmin(DefModelAdmin):
         "abilities",
         "prerequisites",
         "requirements",
+        "factions",
     ]
     list_filter: ClassVar[tuple] = (EventFilter,)

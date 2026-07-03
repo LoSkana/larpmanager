@@ -28,7 +28,7 @@ from tinymce.models import HTMLField
 from larpmanager.models.base import OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.form import WritingOption, WritingQuestion
-from larpmanager.models.writing import Character
+from larpmanager.models.writing import Character, Faction
 
 
 class SystemExp(UuidMixin, OrderMixin, BaseConceptModel):
@@ -249,7 +249,9 @@ class ModifierExp(UuidMixin, OrderMixin, BaseConceptModel):
         related_name="modifiers_prerequisites",
         blank=True,
         verbose_name=_("Pre-requisites"),
-        help_text=_("Indicate the prerequisite abilities"),
+        help_text=_(
+            "If you select one (or more) character abilities, this modifier applies only to characters with all of them"
+        ),
     )
 
     requirements = models.ManyToManyField(
@@ -257,7 +259,19 @@ class ModifierExp(UuidMixin, OrderMixin, BaseConceptModel):
         related_name="modifiers_requirements",
         blank=True,
         verbose_name=_("Requirements"),
-        help_text=_("Indicate the required character options"),
+        help_text=_(
+            "If you select one (or more) character options, this modifier applies only to characters with all of them"
+        ),
+    )
+
+    factions = models.ManyToManyField(
+        Faction,
+        related_name="modifiers_exp",
+        blank=True,
+        verbose_name=_("Faction list"),
+        help_text=_(
+            "If you select one (or more) factions, this modifier applies only to characters belonging to all of them"
+        ),
     )
 
     class Meta:
@@ -302,7 +316,9 @@ class CriterionExp(UuidMixin, OrderMixin, BaseConceptModel):
         related_name="criterion_prerequisites",
         blank=True,
         verbose_name=_("Pre-requisites"),
-        help_text=_("This criterion will apply only to characters owning all prerequisite abilities"),
+        help_text=_(
+            "If you select one (or more) abilities, this criterion applies only to characters with all of them"
+        ),
     )
 
     requirements = models.ManyToManyField(
@@ -310,7 +326,19 @@ class CriterionExp(UuidMixin, OrderMixin, BaseConceptModel):
         related_name="criterion_requirements",
         blank=True,
         verbose_name=_("Requirements"),
-        help_text=_("This criterion will apply only to characters with all required options"),
+        help_text=_(
+            "If you select one (or more) character options, this criterion applies only to characters with all of them"
+        ),
+    )
+
+    factions = models.ManyToManyField(
+        Faction,
+        related_name="criterions_exp",
+        blank=True,
+        verbose_name=_("Faction list"),
+        help_text=_(
+            "If you select one (or more) factions, this criterion applies only to characters belonging to all of them"
+        ),
     )
 
     class Meta:
