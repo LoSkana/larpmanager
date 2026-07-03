@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import math
+from decimal import Decimal
 from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist
@@ -500,8 +501,18 @@ def _status_payment(
         if wire_created_invoices:
             note = _("If you have made a wire transfer, please upload the receipt for it to be processed")
 
+        total_amount = registration.quota
+        if context.get("membership_fee") == "bundled" and context.get("membership_amount"):
+            membership_amount = Decimal(str(context["membership_amount"]))
+            total_amount = (total_amount or 0) + membership_amount
+            if note is None and registration.run.start:
+                note = (
+                    _("Includes membership fee")
+                    + f" {registration.run.start.year}: {_format_decimal(membership_amount)}{registration.run.event.association.get_currency_symbol()}"
+                )
+
         label_params = {
-            "amount": _format_decimal(registration.quota),
+            "amount": _format_decimal(total_amount),
             "currency": registration.run.event.association.get_currency_symbol(),
             "days": registration.deadline,
         }
@@ -608,8 +619,8 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
             return run_status
 
         if registration:
-            registration_status_signed(run, registration, member, features, register_url, run_status, context)
             _set_membership_context(context, run, member, registration)
+            registration_status_signed(run, registration, member, features, register_url, run_status, context)
             return run_status
 
     if run.end and get_time_diff_today(run.end) < 0:
@@ -928,7 +939,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
                 "url": reverse("character_abilities", args=[run.get_slug(), character_uuid]),
                 "label": _("Abilities"),
                 "tooltip": _("Buy abilities for your character"),
-                "icon": "fa-solid fa-graduation-cap",
+                "icon": "fa-solid fa-bolt",
             }
         )
 

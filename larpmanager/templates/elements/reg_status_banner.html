@@ -11,7 +11,7 @@
                     <i class="fa-solid fa-hourglass-half"></i>
                 {% endif %}
                 {% if run_status.action.url %}
-                    <a href="{{ run_status.action.url }}" class="reg-action-link">{{ run_status.action.label_long|default:run_status.action.label }}</a>
+                    <a href="{{ run_status.action.url }}" class="reg-action-link">{{ run_status.action.label_long|default:run_status.action.label }} <i class="fa-solid fa-chevron-right"></i></a>
                 {% else %}
                     <span class="reg-action-info">{{ run_status.action.label_long|default:run_status.action.label }}</span>
                 {% endif %}
@@ -24,7 +24,7 @@
     <div class="reg-banner only_v22 reg-action_needed">
         <span class="reg-action-main">
             <i class="{{ run_status.character_action.icon }}"></i>
-            <a href="{{ run_status.character_action.url }}" class="reg-action-link">{{ run_status.character_action.label_long|default:run_status.character_action.label }}</a>
+            <a href="{{ run_status.character_action.url }}" class="reg-action-link">{{ run_status.character_action.label_long|default:run_status.character_action.label }} <i class="fa-solid fa-chevron-right"></i></a>
         </span>
     </div>
 {% endif %}

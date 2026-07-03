@@ -2800,6 +2800,9 @@ msgstr "Vaše zprávy"
 msgid "for %(event)s"
 msgstr "pro %(event)s"
 
+msgid "has been paid"
+msgstr "byla uhrazena"
+
 msgid "items deleted"
 msgstr "odstraněné položky"
 
@@ -3924,6 +3927,9 @@ msgstr "Přezkoumání všech členů"
 
 msgid "Set up quest types"
 msgstr "Nastavení typů úkolů"
+
+msgid "The membership fee"
+msgstr "Členský příspěvek"
 
 msgid "The trash is empty"
 msgstr "Koš je prázdný"
@@ -8510,6 +8516,9 @@ msgstr ""
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "pojmenujte ji a vyplňte údaje o postavě a uložte ji"
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr "ještě zbývá zaplatit a bude připočítána k vaší příští platbě"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""

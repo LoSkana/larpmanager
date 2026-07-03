@@ -2800,6 +2800,9 @@ msgstr "I tuoi messaggi"
 msgid "for %(event)s"
 msgstr "per %(event)s"
 
+msgid "has been paid"
+msgstr "è stato pagato"
+
 msgid "items deleted"
 msgstr "elementi eliminati"
 
@@ -3924,6 +3927,9 @@ msgstr "Esamina tutti i membri"
 
 msgid "Set up quest types"
 msgstr "Imposta i tipi di missione"
+
+msgid "The membership fee"
+msgstr "La quota associativa"
 
 msgid "The trash is empty"
 msgstr "Il cestino è vuoto"
@@ -8565,6 +8571,9 @@ msgstr "Per accettare l'invito devi acconsentire alla condivisione dei dati."
 msgid "give it a name and fill in the character details, then save"
 msgstr ""
 "assegnagli un nome e inserisci i dettagli del personaggio, quindi salva"
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr "è ancora da pagare e verrà aggiunto al tuo prossimo pagamento"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""

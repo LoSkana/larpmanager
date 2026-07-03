@@ -2800,6 +2800,9 @@ msgstr "Uw berichten"
 msgid "for %(event)s"
 msgstr "voor %(event)s"
 
+msgid "has been paid"
+msgstr "is betaald"
+
 msgid "items deleted"
 msgstr "verwijderde items"
 
@@ -3924,6 +3927,9 @@ msgstr "Alle leden beoordelen"
 
 msgid "Set up quest types"
 msgstr "Zoektochttypes instellen"
+
+msgid "The membership fee"
+msgstr "De contributie"
 
 msgid "The trash is empty"
 msgstr "De prullenbak is leeg"
@@ -8569,6 +8575,9 @@ msgstr ""
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "geef het een naam en vul de karaktergegevens in, sla dan op"
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr "moet nog worden betaald en wordt bij je volgende betaling opgeteld"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""

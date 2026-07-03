@@ -41,6 +41,31 @@
                 </div>
             </div>
         </div>
+        {% if membership_fee == 'bundled' %}
+            <p class="payment-membership-info">
+                <i class="fa-solid fa-circle-info"></i>
+                {% trans "The membership fee" %}
+                {% if run.start %}{{ run.start.year }}{% endif %}
+                {% if membership_amount %}
+                    ({{ membership_amount|format_decimal }}
+                    {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                    )
+                {% endif %}
+                {% trans "is still to be paid, and will be added to your next payment" %}
+            </p>
+        {% elif membership_fee == 'done' %}
+            <p class="payment-membership-info">
+                <i class="fa-solid fa-circle-check"></i>
+                {% trans "The membership fee" %}
+                {% if run.start %}{{ run.start.year }}{% endif %}
+                {% trans "has been paid" %}
+                {% if membership_amount_paid %}
+                    ({{ membership_amount_paid|format_decimal }}
+                    {% if currency_symbol %}{{ currency_symbol }}{% endif %}
+                    )
+                {% endif %}
+            </p>
+        {% endif %}
         <hr />
         {% if payment_items %}
             <h2>{% trans "Amount breakdown" %}</h2>

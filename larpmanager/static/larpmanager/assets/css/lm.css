@@ -2143,6 +2143,10 @@ header.sec h1 {
   width: 8em;
 }
 
+.page_gallery {
+  margin-top: 0.5em;
+}
+
 .page_gallery .title {
   margin-bottom: 0.5em;
 }
@@ -4022,6 +4026,11 @@ body.floating_iframe #wrapper {
   font-weight: 600;
 }
 
+.reg-banner .reg-action-link i.fa-chevron-right {
+  font-size: 0.75em;
+  margin-left: 0.1em;
+}
+
 .reg-banner .reg-action-info {
   font-style: italic;
   opacity: 0.85;
@@ -4888,10 +4897,24 @@ body.in-iframe #menu-mobile {
 }
 
 .payment-summary-card-remaining {
-  background: #fff4e5;
-  border-color: #f0c896;
+  background: rgba(var(--ter-rgb), 0.1);
+  border-color: rgba(var(--ter-rgb), 0.4);
 }
 
 .payment-summary-card-remaining .payment-summary-value {
-  color: #d9822b;
+  color: var(--ter-clr);
+}
+
+.payment-membership-info {
+  margin: 0 0 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: solid 1px rgba(var(--ter-rgb), 0.4);
+  background: rgba(var(--ter-rgb), 0.1);
+  color: var(--ter-clr);
+  font-size: 0.9rem;
+}
+
+.payment-membership-info i {
+  margin-right: 0.4rem;
 }

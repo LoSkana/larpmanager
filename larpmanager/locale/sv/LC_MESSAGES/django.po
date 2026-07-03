@@ -2800,6 +2800,9 @@ msgstr "Dina meddelanden"
 msgid "for %(event)s"
 msgstr "för %(event)s"
 
+msgid "has been paid"
+msgstr "har betalats"
+
 msgid "items deleted"
 msgstr "objekt raderade"
 
@@ -3924,6 +3927,9 @@ msgstr "Granska alla medlemmar"
 
 msgid "Set up quest types"
 msgstr "Ange typer av uppdrag"
+
+msgid "The membership fee"
+msgstr "Medlemsavgiften"
 
 msgid "The trash is empty"
 msgstr "Papperskorgen är tom"
@@ -8514,6 +8520,9 @@ msgstr "Du måste samtycka till datadelning för att acceptera denna inbjudan."
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "ge den ett namn och fyll i karaktärsuppgifterna, spara sedan"
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr "återstår att betala och kommer att läggas till din nästa betalning"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""

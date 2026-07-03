@@ -285,7 +285,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
 
     # choose
     go_to(page, live_server, "/test/gallery/")
-    page.locator("#one a").filter(has_text=re.compile(r"^Test Character$")).click()
+    page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="Abilities").click()
     _wait_lm_ready(page)
     expect(page.locator(".ability-cards-grid")).to_contain_text("double shield")
@@ -339,7 +339,7 @@ def modifiers(page: Any, live_server: Any) -> None:
 
     # test out free ability
     go_to(page, live_server, "/test/gallery/")
-    page.locator("#one a").filter(has_text=re.compile(r"^Test Character$")).click()
+    page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="Abilities").click()
 
     # ability is not bought
@@ -395,7 +395,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/gallery/")
-    page.locator("#one a").filter(has_text=re.compile(r"^Test Character$")).click()
+    page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="Edit").click()
     page.locator('label[for="id_que_u5_0"]').click()
     submit_confirm(page)
@@ -454,7 +454,7 @@ def free_invisible_not_auto_assigned(page: Any, live_server: Any) -> None:
 
     # Verify hidden_zero is NOT in the character's abilities
     go_to(page, live_server, "/test/gallery/")
-    page.locator("#one a").filter(has_text=re.compile(r"^Test Character$")).click()
+    page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="Abilities").click()
     expect(page.locator("#one")).not_to_contain_text("hidden_zero")
 

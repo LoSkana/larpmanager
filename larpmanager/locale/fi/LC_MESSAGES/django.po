@@ -2800,6 +2800,9 @@ msgstr "Viestisi"
 msgid "for %(event)s"
 msgstr "%(event)s osalta"
 
+msgid "has been paid"
+msgstr "on maksettu"
+
 msgid "items deleted"
 msgstr "kohteet poistettu"
 
@@ -3924,6 +3927,9 @@ msgstr "Tarkista kaikki jäsenet"
 
 msgid "Set up quest types"
 msgstr "Määritä tehtävätyypit"
+
+msgid "The membership fee"
+msgstr "Jäsenmaksu"
 
 msgid "The trash is empty"
 msgstr "Roskakori on tyhjä"
@@ -8518,6 +8524,9 @@ msgstr ""
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "anna sille nimi ja täytä hahmon tiedot ja tallenna sitten"
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr "on vielä maksamatta, ja se lisätään seuraavaan maksusi"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""

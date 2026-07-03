@@ -31,7 +31,7 @@ import pytest
 
 from larpmanager.tests.utils import go_to, get_request, login_orga, login_user, submit_confirm, expect_normalized, \
     submit_register, char_dual_pick, \
-    get_modal_iframe, save_modal, topbar
+    get_modal_iframe, save_modal, topbar, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -233,6 +233,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     login_user(page, live_server)
 
     topbar(page, "Test Larp")
+    sidebar(page, "Gallery")
     page.get_by_role("link", name="Test Character").click()
 
     # do transfers as a user
@@ -244,6 +245,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     submit_confirm(page)
 
     go_to(page, live_server, "/test/")
+    sidebar(page, "Gallery")
     page.get_by_role("link", name="Test Character").nth(1).click()
     page.locator(".inventory-card").filter(has_text="Test Character's Bank").get_by_role("link",
                                                                                          name="View Details").click()
@@ -262,6 +264,7 @@ def character_inventory_transfer(live_server: Any, page: Any) -> None:
     expect_normalized(page, row2, "Admin Test	NPC	Test Character's Bank	Credits	3	test")
 
     go_to(page, live_server, "/test/")
+    sidebar(page, "Gallery")
     page.get_by_role("link", name="Test Character").nth(1).click()
     character_inventory_verify_user(page)
 

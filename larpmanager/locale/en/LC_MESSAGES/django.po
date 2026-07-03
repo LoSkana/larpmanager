@@ -7866,6 +7866,15 @@ msgstr ""
 msgid "Remaining"
 msgstr ""
 
+msgid "The membership fee"
+msgstr ""
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr ""
+
+msgid "has been paid"
+msgstr ""
+
 msgid "Amount breakdown"
 msgstr ""
 

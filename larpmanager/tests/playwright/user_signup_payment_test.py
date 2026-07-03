@@ -30,7 +30,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized, \
-    get_modal_iframe, save_modal
+    get_modal_iframe, save_modal, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -107,12 +107,11 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "Proceed with payment")
+    expect_normalized(page, page.locator("#one"), "Your registration is provisional")
 
     # pay
     go_to(page, live_server, "/test/register")
-    page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
+    page.get_by_role("link", name=re.compile(r"A payment of 100€ is due within 8 days to confirm your registration")).click()
     page.get_by_role("cell", name="Wire", exact=True).click()
     expect_normalized(page, page.locator("b"), "100")
     submit(page)
@@ -128,7 +127,8 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check reg status
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
+    sidebar(page, "Event")
+    expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed (Standard)")
 
 
 def characters(page: Any, live_server: Any) -> None:

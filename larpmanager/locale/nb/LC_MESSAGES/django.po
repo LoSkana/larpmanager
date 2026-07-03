@@ -2800,6 +2800,9 @@ msgstr "Dine meldinger"
 msgid "for %(event)s"
 msgstr "for %(event)s"
 
+msgid "has been paid"
+msgstr "er betalt"
+
 msgid "items deleted"
 msgstr "elementer slettet"
 
@@ -3924,6 +3927,9 @@ msgstr "Gjennomgå alle medlemmer"
 
 msgid "Set up quest types"
 msgstr "Sett opp oppdragstyper"
+
+msgid "The membership fee"
+msgstr "Medlemskontingenten"
 
 msgid "The trash is empty"
 msgstr "Søppelet er tomt"
@@ -8534,6 +8540,9 @@ msgstr "Du må samtykke til datadeling for å akseptere denne invitasjonen."
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "gi den et navn og fyll inn karakterdetaljene, og lagre deretter"
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr "er fortsatt utestående og vil bli lagt til din neste betaling"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr "bruk et rektangulært bilde, helst i forholdet 4:3 for best resultat"

@@ -2800,6 +2800,9 @@ msgstr "Última entrada"
 msgid "for %(event)s"
 msgstr "para %(event)s"
 
+msgid "has been paid"
+msgstr "ya se ha pagado"
+
 msgid "items deleted"
 msgstr "elementos eliminados"
 
@@ -3924,6 +3927,9 @@ msgstr "Revisar a todos los miembros"
 
 msgid "Set up quest types"
 msgstr "Establecer tipos de búsqueda"
+
+msgid "The membership fee"
+msgstr "La cuota de socio"
 
 msgid "The trash is empty"
 msgstr "La basura está vacía"
@@ -8568,6 +8574,9 @@ msgstr ""
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "dale un nombre y rellena los datos del personaje, luego guarda"
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr "aún queda por pagar y se añadirá a tu próximo pago"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""

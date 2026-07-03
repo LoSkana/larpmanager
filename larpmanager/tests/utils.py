@@ -526,9 +526,9 @@ def just_wait(page, big=False):
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
 
-
-def wait_accounting_load(page: Any) -> None:
+def click_and_wait_accounting(page):
     """Wait until the accounting AJAX call in registrations.html has completed."""
+    page.get_by_role("link", name="accounting", exact=True).click()
     page.locator("#load_accounting.select").wait_for()
 
 

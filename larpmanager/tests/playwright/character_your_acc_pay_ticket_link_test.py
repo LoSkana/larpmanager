@@ -111,7 +111,7 @@ def ticket_link_bypasses_not_visible(live_server, page):
     expect(new_page.locator("#id_ticket_1")).to_be_checked()
     submit_register(new_page)
     go_to(page, live_server, "/test/")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed (Staff)")
+    expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed (Staff)")
 
 
 def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
@@ -227,7 +227,8 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Complete your profile").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
-    page.get_by_role("link", name="Registration confirmed (Staff)").click()
+    sidebar(page, "Event")
+    expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed (Staff)").click()
     submit_register(page)
 
     # set up payments
@@ -255,7 +256,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
 
     # check payments
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
+    page.get_by_role("link", name=re.compile(r"A payment of 100€ is due within 8 days to confirm your registration")).click()
 
     go_to(page, live_server, "/accounting/pay/test/")
     expect_normalized(page, page.locator("#one"), "Choose the payment method: Wire sadsadsa")

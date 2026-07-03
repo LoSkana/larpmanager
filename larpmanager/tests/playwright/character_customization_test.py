@@ -116,7 +116,7 @@ def fill_customization_form(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/gallery/")
 
     # Access character customization
-    page.get_by_role("link", name="Test Character").first.click()
+    page.get_by_role("link", name="Test Character").nth(1).click()
     _wait_lm_ready(page)
 
     # Click customize button
