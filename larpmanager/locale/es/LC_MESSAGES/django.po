@@ -640,6 +640,9 @@ msgstr "Invita a"
 msgid "Joined"
 msgstr "Se unió a"
 
+msgid "Labels"
+msgstr "Etiquetas"
+
 msgid "Legend"
 msgstr "Leyenda"
 
@@ -1865,6 +1868,12 @@ msgstr "Funciones de la trama"
 msgid "Pool Types"
 msgstr "Tipos de piscinas"
 
+msgid "Pool label"
+msgstr "Etiqueta de la piscina"
+
+msgid "Pool types"
+msgstr "Tipos de piscinas"
+
 msgid "Preference"
 msgstr "Preferencia"
 
@@ -2131,6 +2140,9 @@ msgstr "Eventos pasados"
 
 msgid "Please wait"
 msgstr "Por favor, espera"
+
+msgid "Pool Labels"
+msgstr "Etiquetas para piscinas"
 
 msgid "Postal code"
 msgstr "Código postal"
@@ -2890,6 +2902,9 @@ msgstr "Modelos de folletos"
 msgid "Help Questions"
 msgstr "Preguntas de ayuda"
 
+msgid "Inventory type"
+msgstr "Tipo de inventario"
+
 msgid "Invite to role"
 msgstr "Invitar al papel"
 
@@ -3126,6 +3141,9 @@ msgstr "Color de realce"
 
 msgid "Invalid request"
 msgstr "Solicitud no válida"
+
+msgid "Inventory Types"
+msgstr "Tipos de inventario"
 
 msgid "Mail assignment"
 msgstr "Correo de asignación"
@@ -3724,6 +3742,9 @@ msgstr "Canjear colección"
 msgid "Registration Form"
 msgstr "Formulario de inscripción"
 
+msgid "Registration date"
+msgstr "Fecha de inscripción"
+
 msgid "Registration form"
 msgstr "Formulario de inscripción"
 
@@ -4290,9 +4311,6 @@ msgstr "Historial de inscripciones"
 
 msgid "Registration is open"
 msgstr "¡Inscripciones abiertas"
-
-msgid "Registration opening"
-msgstr "Apertura de inscripciones"
 
 msgid "Registration options"
 msgstr "Opciones de registro"
@@ -4998,6 +5016,9 @@ msgstr "comprobar falta de relaciones"
 msgid "not visible at this time"
 msgstr "no visible en este momento"
 
+msgid "Character Inventory Types"
+msgstr "Tipos de inventario de personajes"
+
 msgid "Character sheet questions"
 msgstr "Preguntas sobre la ficha de personaje"
 
@@ -5670,6 +5691,9 @@ msgstr "Tras la confirmación, añada otro"
 
 msgid "Browse the presentation website"
 msgstr "Navega por la web de presentación"
+
+msgid "Character Inventory Pool Labels"
+msgstr "Etiquetas del conjunto de recursos de personajes"
 
 msgid "Choice available, click to lock"
 msgstr "Elección disponible, haga clic para bloquear"
@@ -7622,6 +7646,9 @@ msgstr "No hay nuevas sesiones programadas en este momento"
 msgid "This operation is permanent and cannot be undone"
 msgstr "Esta operación es permanente y no puede deshacerse"
 
+msgid "This page allows you to add or edit a pool label"
+msgstr "En esta página puedes añadir o editar el nombre de un grupo"
+
 msgid "Use the button above to create the first ability"
 msgstr "Usa el botón de arriba para crear la primera habilidad"
 
@@ -7801,6 +7828,9 @@ msgstr "Gracias por elegir formar parte de nuestra comunidad"
 
 msgid "The registration for this event has been cancelled"
 msgstr "Se canceló la inscripción en el acto"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Esta página te permite añadir o editar un tipo de grupo de CI"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Cuotas de participación totales reducidas mediante descuentos"
@@ -8041,6 +8071,9 @@ msgstr "La fecha de expedición de su documento de identidad"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Se ha indicado el número total de entradas que se sortearán"
 
+msgid "This page allows you to add or edit an inventory type"
+msgstr "En esta página puedes añadir o editar un tipo de inventario"
+
 msgid "This page only shows questions from the last 3 months"
 msgstr "En esta página solo se muestran las preguntas de los últimos 3 meses"
 
@@ -8204,6 +8237,9 @@ msgstr "El modo de visualización inicial al abrir la página del conjunto"
 
 msgid "The link will be valid for the following number of days"
 msgstr "El enlace será válido durante el siguiente número de días"
+
+msgid "This page summarizes the types of character inventories"
+msgstr "En esta página se resumen los tipos de inventarios de personajes"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Total de lo que ya se ha pagado en la fecha actual"
@@ -8504,9 +8540,6 @@ msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr ""
 "Porcentaje de IVA que debe calcularse sólo sobre el precio de la entrada"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr "Configurar la creación/edición de personajes de los participantes"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr ""
 "La visibilidad de la pregunta para los participantes, los valores permitidos"
@@ -8576,6 +8609,11 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Gestiona todas las asignaciones de tokens realizadas a los miembros en todos"
 " los eventos"
+
+msgid "Manage character inventory types and their pool restrictions"
+msgstr ""
+"Gestionar los tipos de inventario de los personajes y sus restricciones de "
+"reserva"
 
 msgid "Manage handout templates used to generate character handouts"
 msgstr ""
@@ -8784,9 +8822,18 @@ msgstr ""
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Indique su sexo legal tal como aparece en los documentos oficiales"
 
+msgid "Manage pool labels for grouping pools in character inventories"
+msgstr ""
+"Gestionar las etiquetas de los grupos para agrupar los grupos en los "
+"inventarios de caracteres"
+
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""
 "Gestiona las asignaciones de tokens a los participantes de este evento"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr ""
+"Número máximo de personajes que puede crear el jugador (por defecto = 1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Nombres de las personas o equipos que organizan y dirigen este acto"
@@ -10367,7 +10414,8 @@ msgstr ""
 msgid ""
 "Fill in the missing information in your profile to complete your "
 "registration"
-msgstr "Rellena los datos que faltan en tu perfil para completar tu registro"
+msgstr ""
+"Rellena la información que falta en tu perfil para completar tu registro"
 
 msgid ""
 "If checked, it allows participants to customise the names of their "
@@ -10658,13 +10706,6 @@ msgstr ""
 "%(deadline)d días"
 
 msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
-msgstr ""
-"Define los tipos de grupos de recursos disponibles en los inventarios de los"
-" personajes para este evento"
-
-msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10794,6 +10835,13 @@ msgid ""
 msgstr ""
 "Establece la frecuencia de envío de los correos electrónicos recordatorios, "
 "en días (si no se establece, no se envía ningún correo electrónico)"
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+"En esta página se resumen las etiquetas de grupos que se usan para agrupar "
+"los grupos en los inventarios de personajes"
 
 msgid ""
 "Track a member's full event registration history with payment status for "
@@ -10982,13 +11030,6 @@ msgid ""
 msgstr ""
 "En el evento <b>%(event)s</b> se te asignó el personaje: "
 "<b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Número máximo de personajes que el jugador puede crear (por defecto=0, no se"
-" permite la creación)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "
@@ -11417,6 +11458,14 @@ msgstr ""
 "Gestiona el contenido de vídeo y audio protegido mediante tokens de acceso "
 "de un solo uso para este evento"
 
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
+"attend this event"
+msgstr ""
+"Tenga también en cuenta que se requiere el pago de la cuota anual %(year)d "
+"de afiliación (%(amount)s%(currency)s) para participar en los eventos"
+
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
@@ -11528,14 +11577,6 @@ msgid ""
 msgstr ""
 "Organiza las preguntas del formulario de inscripción en secciones con nombre"
 " para agrupar los campos relacionados"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s %(currency)s, required to "
-"attend this event"
-msgstr ""
-"Tenga también en cuenta que se requiere el pago de la cuota de afiliación de"
-" %(year)d (%(amount)s %(currency)s) para participar en los eventos"
 
 msgid ""
 "View newsletter subscriber email lists segmented by language and "
@@ -13130,6 +13171,14 @@ msgstr ""
 "Escanea este código QR con Google Authenticator, Authy o cualquier "
 "aplicación TOTP compatible e introduce el código de 6 dígitos para confirmar"
 
+#, python-format
+msgid ""
+"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
+"for your support, and for believing in us!"
+msgstr ""
+"Confirmamos que hemos recibido la donación de %(amount)d%(currency)s. ¡Te "
+"damos las gracias por tu apoyo y por creer en nosotros!"
+
 msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
@@ -13164,14 +13213,6 @@ msgid ""
 msgstr ""
 "Total de todos los gastos incurridos para el evento, tanto personales como "
 "de organización, incluidas las fichas y créditos emitidos"
-
-#, python-format
-msgid ""
-"We confirm we received the donation of %(amount)d %(currency)s. We thank you"
-" for your support, and for believing in us!"
-msgstr ""
-"Confirmamos que hemos recibido la donación de %(amount)d %(currency)s. "
-"Gracias por su apoyo y por creer en nosotros."
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "
@@ -13226,7 +13267,7 @@ msgid ""
 "%(currency)s) is required to participate in events."
 msgstr ""
 "Tenga también en cuenta que se requiere el pago de la cuota anual de "
-"afiliación (%(amount)d %(currency)s) para participar en los eventos."
+"afiliación (%(amount)d%(currency)s) para participar en los eventos."
 
 msgid ""
 "Run the lottery draw to randomly select participants from lottery-tier "
@@ -13312,8 +13353,8 @@ msgid ""
 "The payment deadline has passed: settle the outstanding "
 "%(amount)s%(currency)s as soon as possible to keep your registration"
 msgstr ""
-"El plazo de pago ya ha vencido: abona el %(amount)s %(currency)s pendiente "
-"lo antes posible para mantener tu inscripción"
+"El plazo de pago ya ha vencido: abona el %(amount)s%(currency)s pendiente lo"
+" antes posible para mantener tu inscripción"
 
 msgid ""
 "Enables a ticket-like system for issues during the event, where staff can "

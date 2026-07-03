@@ -640,6 +640,9 @@ msgstr "Pozvánka"
 msgid "Joined"
 msgstr "Připojil se k"
 
+msgid "Labels"
+msgstr "Štítky"
+
 msgid "Legend"
 msgstr "Legenda"
 
@@ -1865,6 +1868,12 @@ msgstr "Role v zápletce"
 msgid "Pool Types"
 msgstr "Typy bazénů"
 
+msgid "Pool label"
+msgstr "Štítek na bazén"
+
+msgid "Pool types"
+msgstr "Typy bazénů"
+
 msgid "Preference"
 msgstr "Preference"
 
@@ -2131,6 +2140,9 @@ msgstr "Minulé události"
 
 msgid "Please wait"
 msgstr "Prosím, počkejte"
+
+msgid "Pool Labels"
+msgstr "Štítky na bazén"
 
 msgid "Postal code"
 msgstr "Poštovní směrovací číslo"
@@ -2890,6 +2902,9 @@ msgstr "Modely pro rozdávání"
 msgid "Help Questions"
 msgstr "Nápověda Otázky"
 
+msgid "Inventory type"
+msgstr "Typ zásob"
+
 msgid "Invite to role"
 msgstr "Pozvání do role"
 
@@ -3126,6 +3141,9 @@ msgstr "Barva zvýraznění"
 
 msgid "Invalid request"
 msgstr "Neplatný požadavek"
+
+msgid "Inventory Types"
+msgstr "Typy zásob"
 
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
@@ -3724,6 +3742,9 @@ msgstr "Sbírka Redeem"
 msgid "Registration Form"
 msgstr "Registrační formulář"
 
+msgid "Registration date"
+msgstr "Datum registrace"
+
 msgid "Registration form"
 msgstr "Registrační formulář"
 
@@ -4290,9 +4311,6 @@ msgstr "Historie vstupu"
 
 msgid "Registration is open"
 msgstr "Registrace jsou otevřeny"
-
-msgid "Registration opening"
-msgstr "Zahájení registrace"
 
 msgid "Registration options"
 msgstr "Možnosti registrace"
@@ -4998,6 +5016,9 @@ msgstr "méně kontrolních hlášení"
 msgid "not visible at this time"
 msgstr "v tuto chvíli není viditelný"
 
+msgid "Character Inventory Types"
+msgstr "Typy inventáře postav"
+
 msgid "Character sheet questions"
 msgstr "Otázky k listu postavy"
 
@@ -5670,6 +5691,9 @@ msgstr "Po potvrzení přidejte další"
 
 msgid "Browse the presentation website"
 msgstr "Prohlédněte si prezentační stránky"
+
+msgid "Character Inventory Pool Labels"
+msgstr "Štítky pro fond postav"
 
 msgid "Choice available, click to lock"
 msgstr "Možnost volby, klikněte pro uzamčení"
@@ -7608,6 +7632,9 @@ msgstr "V tuto chvíli nejsou naplánovány žádné nové schůzky"
 msgid "This operation is permanent and cannot be undone"
 msgstr "Tato operace je trvalá a nelze ji vrátit zpět"
 
+msgid "This page allows you to add or edit a pool label"
+msgstr "Na této stránce můžete přidat nebo upravit název skupiny"
+
 msgid "Use the button above to create the first ability"
 msgstr "Pomocí tlačítka výše vytvořte první schopnost"
 
@@ -7784,6 +7811,9 @@ msgstr "Děkujeme, že jste se rozhodli být součástí naší komunity"
 
 msgid "The registration for this event has been cancelled"
 msgstr "Registrace na akci byla zrušena"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Na této stránce můžete přidat nebo upravit typ fondu CI"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Celkové účastnické poplatky snížené díky slevám"
@@ -8020,6 +8050,9 @@ msgstr "Datum vydání vašeho dokladu totožnosti"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Byl uveden celkový počet losů, které budou vylosovány"
 
+msgid "This page allows you to add or edit an inventory type"
+msgstr "Na této stránce můžete přidat nebo upravit typ zásob"
+
 msgid "This page only shows questions from the last 3 months"
 msgstr "Na této stránce se zobrazují pouze otázky z posledních 3 měsíců"
 
@@ -8170,6 +8203,9 @@ msgstr "Počáteční režim zobrazení při otevření stránky souboru"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Odkaz bude platný po dobu následujících dnů"
+
+msgid "This page summarizes the types of character inventories"
+msgstr "Tato stránka shrnuje typy seznamů postav"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Součet toho, co již bylo vyplaceno k aktuálnímu datu"
@@ -8451,9 +8487,6 @@ msgstr "Již přijaté platby: <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "Procento DPH, které se vypočítá pouze z ceny letenky"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr "Nastavení konfigurace tvorby/úpravy postavy účastníka"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "Zviditelnění otázky pro účastníky, povolené hodnoty jsou"
 
@@ -8512,6 +8545,9 @@ msgstr "V členské knize je vaše členské číslo"
 msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Spravujte všechna přidělení tokenů vydaná členům v rámci jednotlivých akcí"
+
+msgid "Manage character inventory types and their pool restrictions"
+msgstr "Správa typů inventáře postav a omezení jejich zásob"
 
 msgid "Manage handout templates used to generate character handouts"
 msgstr ""
@@ -8690,8 +8726,14 @@ msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomů�
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Uveďte své zákonné pohlaví, jak je uvedeno v úředních dokumentech"
 
+msgid "Manage pool labels for grouping pools in character inventories"
+msgstr "Správa štítků skupin pro seskupování skupin v seznamech znaků"
+
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Správa přidělení tokenů účastníkům této akce"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr "Maximální počet znaků, které může hráč vytvořit (výchozí hodnota = 1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Jména osob nebo týmů, které tuto akci organizují a řídí"
@@ -10334,7 +10376,7 @@ msgid ""
 "open"
 msgstr ""
 "Předběžné registrace jsou již otevřené: zaregistrujte se předem, abyste "
-"dostali upozornění, až se spustí registrace"
+"dostali upozornění, až se registrace spustí"
 
 msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
@@ -10362,13 +10404,6 @@ msgid ""
 "days"
 msgstr ""
 "Musíte zaplatit alespoň <b>%(amount).2f %(currency)s</b> do %(deadline)d dnů"
-
-msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
-msgstr ""
-"Definujte typy fondů zdrojů, které jsou pro tuto událost k dispozici v "
-"inventářích postav"
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
@@ -10493,6 +10528,13 @@ msgid ""
 msgstr ""
 "Nastavuje četnost zasílání e-mailů s připomenutím v dnech (pokud není "
 "nastaveno, nejsou zasílány žádné e-maily)"
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+"Tato stránka obsahuje přehled označení skupin, která se používají ke "
+"seskupování skupin v seznamech znaků"
 
 msgid ""
 "Track a member's full event registration history with payment status for "
@@ -10671,13 +10713,6 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "V události <b>%(event)s</b> vám byla přiřazena postava: <b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Maximální počet postav, které může hráč vytvořit (výchozí=0, vytváření "
-"postav není povoleno)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "
@@ -11085,6 +11120,14 @@ msgstr ""
 "Spravujte zabezpečený video a audio obsah chráněný jednorázovými "
 "přístupovými tokeny pro tuto událost"
 
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
+"attend this event"
+msgstr ""
+"Vezměte prosím na vědomí, že pro účast na akcích je nutné uhradit roční "
+"členský příspěvek (%(amount)s%(currency)s) %(year)d"
+
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
@@ -11195,14 +11238,6 @@ msgstr ""
 "Rozdělte otázky v registračním formuláři do pojmenovaných sekcí, abyste "
 "seskupili související pole dohromady"
 
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s %(currency)s, required to "
-"attend this event"
-msgstr ""
-"Vezměte prosím na vědomí, že pro účast na akcích je nutné uhradit členský "
-"příspěvek za rok %(year)d (%(amount)s %(currency)s)"
-
 msgid ""
 "View newsletter subscriber email lists segmented by language and "
 "communication preference"
@@ -11263,7 +11298,7 @@ msgid ""
 " spot frees up"
 msgstr ""
 "Akce je vyprodaná, ale můžete se zapsat na čekací listinu, abyste dostali "
-"upozornění, pokud se uvolní místo"
+"zprávu, pokud se uvolní místo"
 
 msgid ""
 "Track which registered participants have completed all required workshops in"
@@ -12774,6 +12809,14 @@ msgstr ""
 "Naskenujte tento QR kód pomocí aplikace Google Authenticator, Authy nebo "
 "jiné kompatibilní aplikace TOTP a poté zadejte šestimístný kód pro potvrzení"
 
+#, python-format
+msgid ""
+"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
+"for your support, and for believing in us!"
+msgstr ""
+"Potvrzujeme, že jsme obdrželi dar ve výši %(amount)d%(currency)s. Děkujeme "
+"vám za vaši podporu a za to, že v nás věříte!"
+
 msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
@@ -12808,14 +12851,6 @@ msgid ""
 msgstr ""
 "Součet všech výdajů vynaložených na akci, osobních i organizačních, včetně "
 "všech vydaných žetonů a kreditů"
-
-#, python-format
-msgid ""
-"We confirm we received the donation of %(amount)d %(currency)s. We thank you"
-" for your support, and for believing in us!"
-msgstr ""
-"Potvrzujeme, že jsme obdrželi dar ve výši %(amount)d %(currency)s. Děkujeme "
-"vám za vaši podporu a za to, že v nás věříte!"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "
@@ -12865,7 +12900,7 @@ msgid ""
 "%(currency)s) is required to participate in events."
 msgstr ""
 "Vezměte prosím na vědomí, že pro účast na akcích je nutné uhradit roční "
-"členský příspěvek (%(amount)d %(currency)s)."
+"členský příspěvek (%(amount)d%(currency)s)."
 
 msgid ""
 "Run the lottery draw to randomly select participants from lottery-tier "

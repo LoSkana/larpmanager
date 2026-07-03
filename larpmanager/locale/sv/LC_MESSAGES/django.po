@@ -640,6 +640,9 @@ msgstr "Inbjudan"
 msgid "Joined"
 msgstr "Ansluten"
 
+msgid "Labels"
+msgstr "Etiketter"
+
 msgid "Legend"
 msgstr "Legend"
 
@@ -1865,6 +1868,12 @@ msgstr "Roller i handlingen"
 msgid "Pool Types"
 msgstr "Pooltyper"
 
+msgid "Pool label"
+msgstr "Pooletikett"
+
+msgid "Pool types"
+msgstr "Pooltyper"
+
 msgid "Preference"
 msgstr "Preferens"
 
@@ -2131,6 +2140,9 @@ msgstr "Tidigare händelser"
 
 msgid "Please wait"
 msgstr "Vänligen vänta"
+
+msgid "Pool Labels"
+msgstr "Etiketter för pooler"
 
 msgid "Postal code"
 msgstr "Postnummer"
@@ -2890,6 +2902,9 @@ msgstr "Handout Modeller"
 msgid "Help Questions"
 msgstr "Hjälpfrågor"
 
+msgid "Inventory type"
+msgstr "Lagertyp"
+
 msgid "Invite to role"
 msgstr "Bjud in till roll"
 
@@ -3126,6 +3141,9 @@ msgstr "Markera färg"
 
 msgid "Invalid request"
 msgstr "Ogiltig begäran"
+
+msgid "Inventory Types"
+msgstr "Lagertyper"
 
 msgid "Mail assignment"
 msgstr "Tilldelning av post"
@@ -3724,6 +3742,9 @@ msgstr "Lös in kollektion"
 msgid "Registration Form"
 msgstr "Registreringsformulär"
 
+msgid "Registration date"
+msgstr "Registreringsdatum"
+
 msgid "Registration form"
 msgstr "Registreringsformulär"
 
@@ -4290,9 +4311,6 @@ msgstr "Ingångshistoria"
 
 msgid "Registration is open"
 msgstr "Registreringarna är öppna"
-
-msgid "Registration opening"
-msgstr "Öppnande av registrering"
 
 msgid "Registration options"
 msgstr "Alternativ för registrering"
@@ -4998,6 +5016,9 @@ msgstr "kontrollera rapporter mindre"
 msgid "not visible at this time"
 msgstr "inte synlig för närvarande"
 
+msgid "Character Inventory Types"
+msgstr "Typer av karaktärsinventarier"
+
 msgid "Character sheet questions"
 msgstr "Frågor om karaktärsblad"
 
@@ -5670,6 +5691,9 @@ msgstr "Efter bekräftelse, lägg till ytterligare en"
 
 msgid "Browse the presentation website"
 msgstr "Bläddra igenom presentationswebbplatsen"
+
+msgid "Character Inventory Pool Labels"
+msgstr "Etiketter för karaktärsförråd"
 
 msgid "Choice available, click to lock"
 msgstr "Val tillgängligt, klicka för att låsa"
@@ -7611,6 +7635,9 @@ msgstr "Det finns inga nya sessioner inplanerade för närvarande"
 msgid "This operation is permanent and cannot be undone"
 msgstr "Denna åtgärd är permanent och kan inte ångras"
 
+msgid "This page allows you to add or edit a pool label"
+msgstr "På den här sidan kan du lägga till eller redigera en pooletikett"
+
 msgid "Use the button above to create the first ability"
 msgstr "Använd knappen ovan för att skapa den första förmågan"
 
@@ -7791,6 +7818,9 @@ msgstr "Tack för att du väljer att vara en del av vår gemenskap"
 
 msgid "The registration for this event has been cancelled"
 msgstr "Anmälan till evenemanget avbröts"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "På den här sidan kan du lägga till eller redigera en CI-pooltyp"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totala deltagaravgifter reducerade genom rabatter"
@@ -8023,6 +8053,9 @@ msgstr "Datum då din identitetshandling utfärdades"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Det totala antalet lotter som skall dras har angetts"
 
+msgid "This page allows you to add or edit an inventory type"
+msgstr "På den här sidan kan du lägga till eller redigera en lagertyp"
+
 msgid "This page only shows questions from the last 3 months"
 msgstr "På den här sidan visas endast frågor från de senaste 3 månaderna"
 
@@ -8177,6 +8210,9 @@ msgstr "Det första visningsläget när ensemblesidan öppnas"
 
 msgid "The link will be valid for the following number of days"
 msgstr "Länken kommer att vara giltig under följande antal dagar"
+
+msgid "This page summarizes the types of character inventories"
+msgstr "På den här sidan sammanfattas olika typer av karaktärsregister"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summan av vad som redan har betalats på det aktuella datumet"
@@ -8456,9 +8492,6 @@ msgstr "Redan mottagna betalningar: <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "Procentandel av momsen som ska beräknas enbart på biljettpriset"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr "Konfigurera deltagarens karaktärsskapande/-redigering"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "Frågan synliggörs för deltagarna, tillåtna värden är"
 
@@ -8520,6 +8553,9 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Hantera alla tilldelningar av token som utfärdats till medlemmar vid olika "
 "evenemang"
+
+msgid "Manage character inventory types and their pool restrictions"
+msgstr "Hantera karaktärernas inventarietyper och deras poolbegränsningar"
 
 msgid "Manage handout templates used to generate character handouts"
 msgstr ""
@@ -8710,9 +8746,15 @@ msgstr "Om du stöter på några problem, kontakta oss så hjälper vi dig"
 msgid "Indicate your legal gender as it appears on official documents"
 msgstr "Ange ditt juridiska kön så som det framgår av officiella dokument"
 
+msgid "Manage pool labels for grouping pools in character inventories"
+msgstr "Hantera pooletiketter för att gruppera pooler i teckenförteckningar"
+
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""
 "Hantera tilldelningen av deltagarkoder till deltagarna i detta evenemang"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr "Högsta antal tecken som spelaren kan skapa (standardvärde=1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr "Namn på de personer eller team som organiserar och driver evenemanget"
@@ -10483,13 +10525,6 @@ msgstr ""
 "dagar"
 
 msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
-msgstr ""
-"Ange vilka typer av resurspooler som finns tillgängliga i karaktärernas "
-"inventarier för detta evenemang"
-
-msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10620,6 +10655,13 @@ msgid ""
 msgstr ""
 "Anger hur ofta påminnelsemeddelanden ska skickas, i dagar (om inget anges "
 "skickas inga e-postmeddelanden)"
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+"På den här sidan sammanfattas de poolbeteckningar som används för att "
+"gruppera pooler i teckenförteckningar"
 
 msgid ""
 "Track a member's full event registration history with payment status for "
@@ -10805,13 +10847,6 @@ msgid ""
 "<b>%(character)s</b>"
 msgstr ""
 "I händelsen <b>%(event)s</b> tilldelades du karaktären: <b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Maximalt antal karaktärer som spelaren kan skapa (standard=0, ingen skapelse"
-" tillåten)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "
@@ -11237,6 +11272,14 @@ msgstr ""
 "Hantera säkert video- och ljudinnehåll som skyddas av engångsbehörigheter "
 "för detta evenemang"
 
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
+"attend this event"
+msgstr ""
+"Observera också att betalning av den årliga medlemsavgiften (%(amount)s "
+"%(currency)s) krävs för att delta i evenemang %(year)d"
+
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
@@ -11348,14 +11391,6 @@ msgid ""
 msgstr ""
 "Ordna frågorna i registreringsformuläret i namngivna avsnitt för att "
 "gruppera relaterade fält tillsammans"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s %(currency)s, required to "
-"attend this event"
-msgstr ""
-"Observera också att betalning av den medlemsavgiften för %(year)d "
-"(%(amount)s %(currency)s) krävs för att delta i evenemang"
 
 msgid ""
 "View newsletter subscriber email lists segmented by language and "
@@ -12943,6 +12978,14 @@ msgstr ""
 "Skanna denna QR-kod med Google Authenticator, Authy eller någon kompatibel "
 "TOTP-app och ange sedan den 6-siffriga koden för att bekräfta"
 
+#, python-format
+msgid ""
+"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
+"for your support, and for believing in us!"
+msgstr ""
+"Vi bekräftar att vi har mottagit en donation på %(amount)d%(currency)s. Vi "
+"tackar dig för ditt stöd och för att du tror på oss!"
+
 msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
@@ -12977,14 +13020,6 @@ msgid ""
 msgstr ""
 "Totalsumman av alla kostnader för evenemanget, både personliga och "
 "organisatoriska, inklusive eventuella utfärdade polletter och krediter"
-
-#, python-format
-msgid ""
-"We confirm we received the donation of %(amount)d %(currency)s. We thank you"
-" for your support, and for believing in us!"
-msgstr ""
-"Vi bekräftar att vi tagit emot donationen på %(amount)d %(currency)s. Vi "
-"tackar dig för ditt stöd och för att du tror på oss!"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "

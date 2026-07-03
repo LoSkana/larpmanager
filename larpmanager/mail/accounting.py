@@ -452,7 +452,7 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
 
     # Build email body with donation amount and currency information
     email_body = _(
-        "We confirm we received the donation of %(amount)d %(currency)s. We thank you for your "
+        "We confirm we received the donation of %(amount)d%(currency)s. We thank you for your "
         "support, and for believing in us!",
     ) % {"amount": instance.value, "currency": instance.association.get_currency_symbol()}
 

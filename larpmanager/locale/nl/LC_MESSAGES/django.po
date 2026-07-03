@@ -640,6 +640,9 @@ msgstr "Uitnodigen"
 msgid "Joined"
 msgstr "Aangesloten bij"
 
+msgid "Labels"
+msgstr "Labels"
+
 msgid "Legend"
 msgstr "Legende"
 
@@ -1865,6 +1868,12 @@ msgstr "Plotrollen"
 msgid "Pool Types"
 msgstr "Soorten zwembaden"
 
+msgid "Pool label"
+msgstr "Pool-label"
+
+msgid "Pool types"
+msgstr "Soorten zwembaden"
+
 msgid "Preference"
 msgstr "Voorkeur"
 
@@ -2131,6 +2140,9 @@ msgstr "Gebeurtenissen in het verleden"
 
 msgid "Please wait"
 msgstr "Even geduld a.u.b"
+
+msgid "Pool Labels"
+msgstr "Zwembadlabels"
 
 msgid "Postal code"
 msgstr "Postcode"
@@ -2890,6 +2902,9 @@ msgstr "Handout Modellen"
 msgid "Help Questions"
 msgstr "Hulp Vragen"
 
+msgid "Inventory type"
+msgstr "Voorraadtype"
+
 msgid "Invite to role"
 msgstr "Uitnodigen voor rol"
 
@@ -3126,6 +3141,9 @@ msgstr "Kleur markeren"
 
 msgid "Invalid request"
 msgstr "Ongeldig verzoek"
+
+msgid "Inventory Types"
+msgstr "Voorraadsoorten"
 
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
@@ -3724,6 +3742,9 @@ msgstr "Verzameling inwisselen"
 msgid "Registration Form"
 msgstr "Registratieformulier"
 
+msgid "Registration date"
+msgstr "Registratiedatum"
+
 msgid "Registration form"
 msgstr "Registratieformulier"
 
@@ -4290,9 +4311,6 @@ msgstr "Geschiedenis"
 
 msgid "Registration is open"
 msgstr "Inschrijvingen zijn geopend"
-
-msgid "Registration opening"
-msgstr "Opening registratie"
 
 msgid "Registration options"
 msgstr "Registratieopties"
@@ -4998,6 +5016,9 @@ msgstr "controleer rapporten minder"
 msgid "not visible at this time"
 msgstr "momenteel niet zichtbaar"
 
+msgid "Character Inventory Types"
+msgstr "Soorten personage-inventaris"
+
 msgid "Character sheet questions"
 msgstr "Karakterblad vragen"
 
@@ -5670,6 +5691,9 @@ msgstr "Voeg na bevestiging nog een"
 
 msgid "Browse the presentation website"
 msgstr "Blader door de presentatiesite"
+
+msgid "Character Inventory Pool Labels"
+msgstr "Labels voor de personage-inventaris"
 
 msgid "Choice available, click to lock"
 msgstr "Keuze beschikbaar, klik om te vergrendelen"
@@ -7625,6 +7649,9 @@ msgstr "Er zijn op dit moment geen nieuwe sessies gepland"
 msgid "This operation is permanent and cannot be undone"
 msgstr "Deze operatie is permanent en kan niet ongedaan worden gemaakt"
 
+msgid "This page allows you to add or edit a pool label"
+msgstr "Op deze pagina kun je een pool-label toevoegen of bewerken"
+
 msgid "Use the button above to create the first ability"
 msgstr "Gebruik de knop hierboven om de eerste vaardigheid te maken"
 
@@ -7804,6 +7831,9 @@ msgstr "Bedankt dat je deel wilt uitmaken van onze gemeenschap"
 
 msgid "The registration for this event has been cancelled"
 msgstr "De registratie voor het evenement werd geannuleerd"
+
+msgid "This page allows you to add or edit a ci pool type"
+msgstr "Op deze pagina kun je een CI-pooltype toevoegen of bewerken"
 
 msgid "Total participation fees reduced through discounts"
 msgstr "Totale deelnamekosten verlaagd door kortingen"
@@ -8045,6 +8075,9 @@ msgstr "De datum waarop je identiteitsbewijs is uitgegeven"
 msgid "The total number of tickets to be drawn was indicated"
 msgstr "Het totale aantal te verloten tickets is aangegeven"
 
+msgid "This page allows you to add or edit an inventory type"
+msgstr "Op deze pagina kun je een voorraadtype toevoegen of bewerken"
+
 msgid "This page only shows questions from the last 3 months"
 msgstr "Op deze pagina staan alleen vragen van de afgelopen 3 maanden"
 
@@ -8203,6 +8236,11 @@ msgstr "De initiële weergavemodus bij het openen van de ensemblepagina"
 
 msgid "The link will be valid for the following number of days"
 msgstr "De link blijft het volgende aantal dagen geldig"
+
+msgid "This page summarizes the types of character inventories"
+msgstr ""
+"Op deze pagina vind je een overzicht van de verschillende soorten personage-"
+"inventarissen"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Totaal van wat al is betaald op de huidige datum"
@@ -8504,9 +8542,6 @@ msgstr "Reeds ontvangen betalingen: <b>%(amount).2f %(currency)s</b>"
 msgid "Percentage of VAT to be calculated on the ticket cost alone"
 msgstr "BTW-percentage dat alleen over de ticketprijs wordt berekend"
 
-msgid "Set up participant character creation/editing configuration"
-msgstr "Deelnemers configureren voor het maken/bewerken van personages"
-
 msgid "The question visibility to participants, allowed values are"
 msgstr "De vraag zichtbaarheid aan deelnemers, toegestane waarden zijn"
 
@@ -8574,6 +8609,10 @@ msgid "Manage all token assignments issued to members across events"
 msgstr ""
 "Beheer alle token-toewijzingen die aan leden zijn verstrekt voor alle "
 "evenementen"
+
+msgid "Manage character inventory types and their pool restrictions"
+msgstr ""
+"Beheer de soorten inventaris van personages en de bijbehorende limieten"
 
 msgid "Manage handout templates used to generate character handouts"
 msgstr ""
@@ -8780,10 +8819,16 @@ msgid "Indicate your legal gender as it appears on official documents"
 msgstr ""
 "Vermeld uw wettelijke geslacht zoals dat op officiële documenten staat"
 
+msgid "Manage pool labels for grouping pools in character inventories"
+msgstr "Beheer pool-labels om pools in tekenlijsten te groeperen"
+
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""
 "Beheer de token-toewijzingen die aan deelnemers voor dit evenement zijn "
 "verstrekt"
+
+msgid "Maximum number of characters the player can create (default=1)"
+msgstr "Maximaal aantal tekens dat de speler kan invoeren (standaard = 1)"
 
 msgid "Names of the people or teams organizing and running this event"
 msgstr ""
@@ -10670,13 +10715,6 @@ msgstr ""
 "%(deadline)d dagen"
 
 msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
-msgstr ""
-"Geef aan welke soorten grondstoffenpools er in de inventarissen van de "
-"personages beschikbaar zijn voor dit evenement"
-
-msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10805,6 +10843,13 @@ msgid ""
 msgstr ""
 "Stelt in hoe vaak herinneringsmails worden verzonden, in dagen (als dit niet"
 " is ingesteld, worden er geen e-mails verzonden)"
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+"Op deze pagina vind je een overzicht van de pool-labels die worden gebruikt "
+"om pools in tekenlijsten te groeperen"
 
 msgid ""
 "Track a member's full event registration history with payment status for "
@@ -10992,13 +11037,6 @@ msgid ""
 msgstr ""
 "In de gebeurtenis <b>%(event)s</b> kreeg je het personage toegewezen: "
 "<b>%(character)s</b>"
-
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
-msgstr ""
-"Maximum aantal karakters dat de speler kan creëren (standaard=0, geen "
-"creatie toegestaan)"
 
 msgid ""
 "Review the full breakdown of competences covered by each contributor for "
@@ -11429,6 +11467,15 @@ msgstr ""
 "Beheer beveiligde video- en audiocontent die voor dit evenement wordt "
 "beschermd door eenmalige toegangstokens"
 
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
+"attend this event"
+msgstr ""
+"Houd er ook rekening mee dat betaling van de jaarlijkse "
+"lidmaatschapsbijdrage (%(amount)s%(currency)s) vereist is om deel te nemen "
+"aan evenementen %(year)d"
+
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed"
@@ -11540,15 +11587,6 @@ msgid ""
 msgstr ""
 "Deel de vragen op het registratieformulier in in secties met een naam, zodat"
 " je verwante velden bij elkaar kunt groeperen"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s %(currency)s, required to "
-"attend this event"
-msgstr ""
-"Houd er ook rekening mee dat betaling van de jaarlijkse "
-"lidmaatschapsbijdrage voor %(year)d (%(amount)s %(currency)s) vereist is om "
-"deel te nemen aan evenementen"
 
 msgid ""
 "View newsletter subscriber email lists segmented by language and "
@@ -13141,6 +13179,14 @@ msgstr ""
 "Scan deze QR-code met Google Authenticator, Authy of een andere compatibele "
 "TOTP-app en voer de 6-cijferige code in om te bevestigen"
 
+#, python-format
+msgid ""
+"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
+"for your support, and for believing in us!"
+msgstr ""
+"We bevestigen dat we de donatie van %(amount)d%(currency)s hebben ontvangen."
+" We bedanken je voor je steun en voor je vertrouwen in ons!"
+
 msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
@@ -13176,14 +13222,6 @@ msgid ""
 msgstr ""
 "Totaal van alle gemaakte kosten voor het evenement, zowel persoonlijk als "
 "organisatorisch, inclusief eventuele uitgegeven tokens en credits"
-
-#, python-format
-msgid ""
-"We confirm we received the donation of %(amount)d %(currency)s. We thank you"
-" for your support, and for believing in us!"
-msgstr ""
-"We bevestigen dat we de donatie van %(amount)d %(currency)s hebben "
-"ontvangen. Wij danken u voor uw steun en voor uw geloof in ons!"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "
@@ -13237,7 +13275,7 @@ msgid ""
 "%(currency)s) is required to participate in events."
 msgstr ""
 "Houd er ook rekening mee dat betaling van de jaarlijkse "
-"lidmaatschapsbijdrage (%(amount)d %(currency)s) vereist is om deel te nemen "
+"lidmaatschapsbijdrage (%(amount)d%(currency)s) vereist is om deel te nemen "
 "aan evenementen."
 
 msgid ""

@@ -864,9 +864,7 @@ class OrgaConfigForm(ConfigForm):
 
             # Maximum character limit configuration
             max_characters_label = _("Maximum number")
-            max_characters_help_text = _(
-                "Maximum number of characters the player can create (default=0, no creation allowed)"
-            )
+            max_characters_help_text = _("Maximum number of characters the player can create (default=1)")
             self.add_configs("user_character_max", ConfigType.INT, max_characters_label, max_characters_help_text)
 
             # Character approval process configuration
@@ -2175,7 +2173,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
     def character_configs(self, extra_config_options: list) -> None:
         """Add configs relative to characters."""
         # Add player field if character limit is set
-        if get_event_config(self.params["event"].id, "user_character_max", default_value=0, context=self.params):
+        if get_event_config(self.params["event"].id, "user_character_max", default_value=1, context=self.params):
             extra_config_options.append(("player", _("Player")))
 
         # Add status field if character approval is enabled

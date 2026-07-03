@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# When run under pre-commit, stdout/stderr are captured and only shown on
+# failure; redirect to the terminal so progress is visible while it runs.
+if [ -e /dev/tty ] && [ -w /dev/tty ]; then
+  exec >/dev/tty 2>&1
+fi
+
 source ./scripts/venv.sh
 
 # Check code, skip if does not compile

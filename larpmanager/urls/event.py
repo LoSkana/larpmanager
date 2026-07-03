@@ -20,6 +20,7 @@
 
 
 from django.urls import path
+from django.views.generic import RedirectView
 
 from larpmanager.views.user import (
     accounting as views_ua,
@@ -36,6 +37,10 @@ urlpatterns = [
         "<slug:event_slug>/",
         views_ue.event,
         name="event",
+    ),
+    path(
+        "<slug:event_slug>/event/",
+        RedirectView.as_view(pattern_name="event", permanent=True),
     ),
     path(
         "<slug:event_slug>/gallery/",

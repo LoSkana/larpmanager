@@ -735,6 +735,38 @@ th select {
   }
 }
 
+.new_v22 .discount_input_row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.5em;
+  margin: 1em 0;
+}
+
+.new_v22 .discount_input_row #id_discount {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 0.3em;
+}
+
+.new_v22 .discount_input_row #discount_go {
+  flex: 0 0 auto;
+  width: auto !important;
+  max-width: initial !important;
+}
+
+@media (max-width: 600px) {
+  .new_v22 .discount_input_row {
+    flex-wrap: wrap;
+  }
+
+  .new_v22 .discount_input_row input {
+    width: 100%;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    DataTables
    --------------------------------------------------------------------------- */
@@ -4486,7 +4518,10 @@ body.in-iframe #menu-mobile {
     top: 0;
     left: auto;
     right: 0;
-    height: 88vh;
+    height: 89vh;
+    height: 89dvh;
+    max-height: 89vh;
+    max-height: 89dvh;
     width: 70vw;
     border-radius: 8px 0 0 8px;
     opacity: 1;
@@ -4534,6 +4569,7 @@ body.in-iframe #menu-mobile {
     margin: 0 auto;
     border-radius: 5vw;
     height: 7vh;
+    height: 7dvh;
     border-top: 2px solid rgba(var(--pri-rgb), 0.085);
     border-bottom: none;
     padding: 0.5em 0.5em;
@@ -4595,6 +4631,7 @@ body.in-iframe #menu-mobile {
   .new_v22 #page-wrapper.topbar header,
   .new_v22 #page-wrapper.sidebar {
     margin-bottom: calc(7vh + 1em);
+    margin-bottom: calc(7dvh + 1em);
   }
 }
 

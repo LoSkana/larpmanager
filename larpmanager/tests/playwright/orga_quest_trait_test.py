@@ -62,7 +62,7 @@ def test_quest_trait(pw_page: Any) -> None:
     casting(page, live_server)
 
     # check result
-    go_to(page, live_server, "/test")
+    go_to(page, live_server, "/test/gallery/")
     page.get_by_role("link", name="Test Character").nth(1).click()
     _wait_lm_ready(page)
     expect_normalized(page,

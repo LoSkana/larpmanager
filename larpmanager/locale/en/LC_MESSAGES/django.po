@@ -1549,9 +1549,7 @@ msgstr ""
 msgid "Maximum number"
 msgstr ""
 
-msgid ""
-"Maximum number of characters the player can create (default=0, no creation "
-"allowed)"
+msgid "Maximum number of characters the player can create (default=1)"
 msgstr ""
 
 msgid "Approval"
@@ -2227,9 +2225,19 @@ msgstr ""
 msgid "Pool type"
 msgstr ""
 
-msgid ""
-"Define the resource pool types available in character inventories for this "
-"event"
+msgid "This page allows you to add or edit a ci pool type"
+msgstr ""
+
+msgid "Inventory type"
+msgstr ""
+
+msgid "This page allows you to add or edit an inventory type"
+msgstr ""
+
+msgid "Pool label"
+msgstr ""
+
+msgid "This page allows you to add or edit a pool label"
 msgstr ""
 
 msgid "The name of our hobby, four letters"
@@ -2804,7 +2812,7 @@ msgstr ""
 
 #, python-format
 msgid ""
-"We confirm we received the donation of %(amount)d %(currency)s. We thank you "
+"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
 "for your support, and for believing in us!"
 msgstr ""
 
@@ -4025,7 +4033,7 @@ msgstr ""
 msgid "Sequential number for this event"
 msgstr ""
 
-msgid "Registration opening"
+msgid "Registration date"
 msgstr ""
 
 msgid ""
@@ -8473,6 +8481,26 @@ msgstr ""
 msgid "No transfers yet"
 msgstr ""
 
+msgid "Character Inventory Types"
+msgstr ""
+
+msgid "This page summarizes the types of character inventories"
+msgstr ""
+
+msgid "Labels"
+msgstr ""
+
+msgid "Character Inventory Pool Labels"
+msgstr ""
+
+msgid ""
+"This page summarizes the pool labels used to group pools in character "
+"inventories"
+msgstr ""
+
+msgid "Pool types"
+msgstr ""
+
 msgid "Character Inventory Pool Types"
 msgstr ""
 
@@ -10837,6 +10865,18 @@ msgstr ""
 msgid "Manage character inventory pool types"
 msgstr ""
 
+msgid "Inventory Types"
+msgstr ""
+
+msgid "Manage character inventory types and their pool restrictions"
+msgstr ""
+
+msgid "Pool Labels"
+msgstr ""
+
+msgid "Manage pool labels for grouping pools in character inventories"
+msgstr ""
+
 msgid "View detailed activity log of all changes made for this specific event"
 msgstr ""
 
@@ -11409,7 +11449,7 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Pay the %(year)d membership fee of %(amount)s %(currency)s, required to "
+"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
 "attend this event"
 msgstr ""
 
@@ -11824,9 +11864,6 @@ msgid "Create the first character of the event"
 msgstr ""
 
 msgid "Some features require 'Character', which is not active"
-msgstr ""
-
-msgid "Set up participant character creation/editing configuration"
 msgstr ""
 
 msgid "Some features require 'Credits', which is not active"
