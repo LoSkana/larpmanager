@@ -332,8 +332,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_abilities_tr").get_by_role("listitem").click()
     edit_iframe.locator("#id_abilities_tr").get_by_role("searchbox").fill("do")
     edit_iframe.get_by_role("option", name="double shield").click()
-    edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").click()
-    edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("ro")
+    edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").click()
+    edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").fill("ro")
     edit_iframe.get_by_role("option", name="Test Larp - Class Rogue").click()
     save_modal(page, edit_iframe)
 
@@ -389,8 +389,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="double shield").click()
     edit_iframe.locator("#id_abilities_tr").get_by_role("searchbox").press("Tab")
     edit_iframe.locator("#id_cost").fill("3")
-    edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").click()
-    edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("mage")
+    edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").click()
+    edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").fill("mage")
     edit_iframe.get_by_role("option", name="Test Larp - Class Mage").click()
     save_modal(page, edit_iframe)
 
