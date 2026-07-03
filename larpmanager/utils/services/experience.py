@@ -41,7 +41,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.writing import Character, CharacterConfig
+from larpmanager.models.writing import Character, CharacterConfig, Faction
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 _CRITERION_OPERATIONS = {
@@ -52,7 +52,14 @@ _CRITERION_OPERATIONS = {
 }
 
 
-def _build_exp_context(character: Any) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int]]]]]:
+def _get_character_faction_ids(character: Any) -> set[int]:
+    """Return the set of faction IDs the character belongs to."""
+    return set(character.factions_list.values_list("id", flat=True))
+
+
+def _build_exp_context(
+    character: Any,
+) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int], set[int]]]]]:
     """Build context for character experience point calculations.
 
     Gathers character abilities, choices, and modifiers with optimized queries
@@ -65,7 +72,7 @@ def _build_exp_context(character: Any) -> tuple[set[int], set[int], dict[int, li
         A tuple containing:
         - Set of ability IDs already learned by the character
         - Set of option IDs selected for the character
-        - Dictionary mapping ability IDs to lists of modifier tuples (cost, prerequisites, requirements)
+        - Dictionary mapping ability IDs to lists of modifier tuples (cost, prerequisites, requirements, factions)
 
     """
     # Get all abilities already learned by the character
@@ -92,14 +99,16 @@ def _build_exp_context(character: Any) -> tuple[set[int], set[int], dict[int, li
             Prefetch("abilities", queryset=AbilityExp.objects.only("id")),
             Prefetch("prerequisites", queryset=AbilityExp.objects.only("id")),
             Prefetch("requirements", queryset=WritingOption.objects.only("id", "question_id")),
+            Prefetch("factions", queryset=Faction.objects.only("id")),
         )
     )
 
-    # Build mapping for cost, prerequisites, and requirements by ability
+    # Build mapping for cost, prerequisites, requirements, and factions by ability
     modifiers_by_ability = defaultdict(list)
     for modifier in all_modifiers:
         ability_ids = [ability.id for ability in modifier.abilities.all()]
         prerequisite_ids = {ability.id for ability in modifier.prerequisites.all()}
+        faction_ids = {faction.id for faction in modifier.factions.all()}
 
         # Group requirements by question: AND between questions, OR within each question
         requirements_by_question: dict[int, set[int]] = defaultdict(set)
@@ -107,7 +116,7 @@ def _build_exp_context(character: Any) -> tuple[set[int], set[int], dict[int, li
             requirements_by_question[option.question_id].add(option.id)
 
         # Map each ability to its applicable modifiers
-        payload = (modifier.cost, prerequisite_ids, dict(requirements_by_question))
+        payload = (modifier.cost, prerequisite_ids, dict(requirements_by_question), faction_ids)
         for ability_id in ability_ids:
             modifiers_by_ability[ability_id].append(payload)
 
@@ -119,21 +128,26 @@ def _apply_modifier_cost(
     modifiers_by_ability_id: dict[int, list[tuple]],
     character_ability_ids: set[int],
     character_choice_ids: set[int],
+    character_faction_ids: set[int] | None = None,
 ) -> None:
     """Apply the first matching modifier cost to an ability.
 
     Iterates through modifiers for the given ability and applies the cost from
-    the first modifier whose prerequisites and requirements are satisfied.
+    the first modifier whose prerequisites, requirements and factions are satisfied.
 
     Args:
         ability: Ability object to modify.
-        modifiers_by_ability_id: Mapping of ability IDs to lists of (cost, prereq_ids, req_ids) tuples.
+        modifiers_by_ability_id: Mapping of ability IDs to lists of (cost, prereq_ids, req_ids, faction_ids) tuples.
         character_ability_ids: Set of ability IDs the character currently has.
         character_choice_ids: Set of choice IDs the character currently has.
+        character_faction_ids: Set of faction IDs the character currently belongs to.
 
     """
+    character_faction_ids = character_faction_ids or set()
     # Look only at modifiers for this specific ability
-    for cost, prerequisite_ability_ids, required_choice_ids in modifiers_by_ability_id.get(ability.id, ()):
+    for cost, prerequisite_ability_ids, required_choice_ids, required_faction_ids in modifiers_by_ability_id.get(
+        ability.id, ()
+    ):
         # Check if ability prerequisites are met
         if prerequisite_ability_ids and not prerequisite_ability_ids.issubset(character_ability_ids):
             continue
@@ -141,6 +155,9 @@ def _apply_modifier_cost(
         if required_choice_ids and not all(
             bool(option_ids & character_choice_ids) for option_ids in required_choice_ids.values()
         ):
+            continue
+        # Check if character is in all required factions (empty = applies to all)
+        if required_faction_ids and not required_faction_ids.issubset(character_faction_ids):
             continue
         # Apply the cost from the first valid modifier
         ability.cost = cost
@@ -168,9 +185,16 @@ def _get_current_abilities(
     abilities_queryset = (
         character.exp_ability_list.select_related("system").only("id", "cost", "system_id").order_by("name")
     )
+    character_faction_ids = _get_character_faction_ids(character)
     abilities_with_modified_costs = []
     for ability in abilities_queryset:
-        _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
+        _apply_modifier_cost(
+            ability,
+            modifiers_by_ability,
+            current_character_abilities,
+            current_character_choices,
+            character_faction_ids,
+        )
         abilities_with_modified_costs.append(ability)
     return abilities_with_modified_costs
 
@@ -210,11 +234,18 @@ def _get_available_abilities(
         )
     )
 
+    character_faction_ids = _get_character_faction_ids(char)
     available_abilities = []
     for ability in all_abilities:
         if not check_available_ability_exp(ability, current_character_abilities, current_character_choices):
             continue
-        _apply_modifier_cost(ability, modifiers_by_ability, current_character_abilities, current_character_choices)
+        _apply_modifier_cost(
+            ability,
+            modifiers_by_ability,
+            current_character_abilities,
+            current_character_choices,
+            character_faction_ids,
+        )
         if ability.cost > px_avail_by_system.get(ability.system_id, 0):
             continue
         available_abilities.append(ability)
@@ -290,6 +321,7 @@ def _fetch_criterions(character: Any) -> list:
         .prefetch_related(
             Prefetch("prerequisites", queryset=AbilityExp.objects.only("id")),
             Prefetch("requirements", queryset=WritingOption.objects.only("id", "question_id")),
+            Prefetch("factions", queryset=Faction.objects.only("id")),
         )
     )
 
@@ -310,9 +342,11 @@ def _apply_criterion_exp(
 
     ability_ids = current_character_abilities or set()
     choice_ids = current_character_choices or set()
+    faction_ids = _get_character_faction_ids(character)
 
     for criterion in criterions:
-        if not check_available_ability_exp(criterion, ability_ids, choice_ids):
+        required_faction_ids = {faction.id for faction in criterion.factions.all()}
+        if not check_available_ability_exp(criterion, ability_ids, choice_ids, faction_ids, required_faction_ids):
             continue
 
         system_id = criterion.system_id
@@ -580,12 +614,20 @@ def get_current_ability_exp(character: Character) -> list[AbilityExp]:
     )
 
 
-def check_available_ability_exp(ability: Any, current_char_abilities: Any, current_char_choices: Any) -> bool:
-    """Check if an ability is available based on prerequisites and requirements.
+def check_available_ability_exp(
+    ability: Any,
+    current_char_abilities: Any,
+    current_char_choices: Any,
+    current_char_factions: set[int] | None = None,
+    required_faction_ids: set[int] | None = None,
+) -> bool:
+    """Check if an ability is available based on prerequisites, requirements and factions.
 
     Prerequisites: all must be met (AND).
     Requirements: grouped by writing question field - all fields must be satisfied (AND between fields),
     but within each field at least one option must be selected (OR within field).
+    Factions: if required_faction_ids is provided and not empty, the character must be in all
+    of those factions (AND); empty or not provided means it applies to all factions.
     """
     # Check prerequisites: all must be in current abilities (AND)
     prerequisite_ids = {a.id for a in ability.prerequisites.all()}
@@ -597,7 +639,11 @@ def check_available_ability_exp(ability: Any, current_char_abilities: Any, curre
     for option in ability.requirements.all():
         requirements_by_question[option.question_id].add(option.id)
 
-    return all(bool(option_ids & current_char_choices) for option_ids in requirements_by_question.values())
+    if not all(bool(option_ids & current_char_choices) for option_ids in requirements_by_question.values()):
+        return False
+
+    # Check factions, if the caller supplied any to check against
+    return not required_faction_ids or required_faction_ids.issubset(current_char_factions or set())
 
 
 def get_available_ability_exp(char: Any, px_avail_by_system: dict[int, int] | None = None) -> list:

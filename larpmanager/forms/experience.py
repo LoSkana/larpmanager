@@ -31,6 +31,7 @@ from larpmanager.forms.utils import (
     CharacterDualListWidget,
     ComputedFieldS2Widget,
     EventWritingOptionS2WidgetMulti,
+    FactionS2WidgetMulti,
     RunCampaignS2Widget,
     SystemExpS2Widget,
     WritingTinyMCE,
@@ -252,6 +253,7 @@ class OrgaModifierExpForm(BaseModelForm):
             "abilities": AbilityS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
+            "factions": FactionS2WidgetMulti,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -260,7 +262,7 @@ class OrgaModifierExpForm(BaseModelForm):
         self.delete_field("name")
 
         # Configure event-specific widgets
-        for field in ["abilities", "prerequisites", "requirements"]:
+        for field in ["abilities", "prerequisites", "requirements", "factions"]:
             self.configure_field_event(field, self.params.get("event"))
 
 
@@ -280,6 +282,7 @@ class OrgaCriterionExpForm(ExpBaseForm):
             "system": SystemExpS2Widget,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
+            "factions": FactionS2WidgetMulti,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -295,7 +298,7 @@ class OrgaCriterionExpForm(ExpBaseForm):
         elif "system" in self.fields:
             self.configure_field_event("system", event)
 
-        for field in ["prerequisites", "requirements"]:
+        for field in ["prerequisites", "requirements", "factions"]:
             self.configure_field_event(field, event)
 
     def clean(self) -> dict:

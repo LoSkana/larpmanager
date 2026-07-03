@@ -4122,18 +4122,37 @@ msgstr ""
 msgid "The character field of computed type that will be updated"
 msgstr ""
 
-msgid "Indicate the prerequisite abilities"
-msgstr ""
-
-msgid "Indicate the required character options"
+msgid ""
+"If you select one (or more) character abilities, this modifier applies only "
+"to characters with all of them"
 msgstr ""
 
 msgid ""
-"This criterion will apply only to characters owning all prerequisite "
-"abilities"
+"If you select one (or more) character options, this modifier applies only to "
+"characters with all of them"
 msgstr ""
 
-msgid "This criterion will apply only to characters with all required options"
+msgid "Faction list"
+msgstr ""
+
+msgid ""
+"If you select one (or more) factions, this modifier applies only to "
+"characters belonging to all of them"
+msgstr ""
+
+msgid ""
+"If you select one (or more) abilities, this criterion applies only to "
+"characters with all of them"
+msgstr ""
+
+msgid ""
+"If you select one (or more) character options, this criterion applies only "
+"to characters with all of them"
+msgstr ""
+
+msgid ""
+"If you select one (or more) factions, this criterion applies only to "
+"characters belonging to all of them"
 msgstr ""
 
 msgid "Single choice"
@@ -4241,9 +4260,6 @@ msgstr ""
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "
 "options, maximum number of options (0 = no limit)"
-msgstr ""
-
-msgid "Faction list"
 msgstr ""
 
 msgid ""

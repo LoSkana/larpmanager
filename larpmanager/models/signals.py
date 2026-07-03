@@ -84,10 +84,12 @@ from larpmanager.cache.experience import (
     on_ability_requirements_m2m_changed,
     on_ability_saved,
     on_character_saved,
+    on_criterion_factions_m2m_changed,
     on_criterion_prerequisites_m2m_changed,
     on_criterion_requirements_m2m_changed,
     on_delivery_characters_m2m_changed,
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
+    on_modifier_factions_m2m_changed,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
@@ -1962,9 +1964,11 @@ m2m_changed.connect(on_delivery_characters_m2m_changed, sender=DeliveryExp.chara
 m2m_changed.connect(on_modifier_abilities_m2m_changed_cache, sender=ModifierExp.abilities.through)
 m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierExp.prerequisites.through)
 m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierExp.requirements.through)
+m2m_changed.connect(on_modifier_factions_m2m_changed, sender=ModifierExp.factions.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilities.through)
 m2m_changed.connect(on_criterion_prerequisites_m2m_changed, sender=CriterionExp.prerequisites.through)
 m2m_changed.connect(on_criterion_requirements_m2m_changed, sender=CriterionExp.requirements.through)
+m2m_changed.connect(on_criterion_factions_m2m_changed, sender=CriterionExp.factions.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 
