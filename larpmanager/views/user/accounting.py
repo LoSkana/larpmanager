@@ -650,7 +650,7 @@ def accounting_collection(request: HttpRequest) -> HttpResponse:
                 p.save()
 
             # Show success message and redirect to collection management
-            messages.success(request, _("The collection has been activated!"))
+            messages.success(request, _("The collection has been activated") + "!")
             return redirect("accounting_collection_manage", collection_code=p.contribute_code)
     else:
         # Initialize empty form for GET request
@@ -826,7 +826,7 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
             c.save()
 
         # Display success message and redirect to home
-        messages.success(request, _("The collection has been delivered!"))
+        messages.success(request, _("The collection has been delivered") + "!")
         return redirect("home")
 
     # For GET requests, prepare collection items list for display
@@ -989,7 +989,7 @@ def accounting_payed(request: HttpRequest, registration_uuid: str | None = None)
         inv = None
 
     # Set success message for payment completion
-    mes = _("You have completed the payment!")
+    mes = _("You have completed the payment") + "!"
 
     # Redirect to profile check with success message and invoice
     return accounting_profile_check(request, mes, inv)
@@ -1018,7 +1018,7 @@ def accounting_submit(request: HttpRequest, payment_method: str, invoice_uuid: s
     context = get_context(request)
     # Only allow POST requests for security
     if request.method != "POST":
-        messages.error(request, _("You can't access this way!"))
+        messages.error(request, _("You can't access this way") + "!")
         return redirect("accounting")
 
     # Check if receipt is required for manual payments

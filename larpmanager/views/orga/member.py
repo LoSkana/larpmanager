@@ -353,7 +353,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: st
             hp.save()
 
             # Show success message and redirect back to questions list
-            messages.success(request, _("Answer submitted!"))
+            messages.success(request, _("Answer submitted") + "!")
             return redirect("orga_questions", event_slug=event_slug)
     else:
         # Initialize empty form for GET requests

@@ -282,16 +282,20 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
 
     # Build base registration message with ticket info if available
     registration_message = _("Registration confirmed")
+    registration_message_long = _("Your registration for this event has been confirmed")
     is_provisional = is_registration_provisional(registration, features=features, event=run.event, context=context)
 
     # Update message for provisional registrations
     if is_provisional:
         registration_message = _("Provisional registration")
+        registration_message_long = _("Your registration is provisional, and will be confirmed once payment is made")
 
     # Append ticket name if ticket exists
     if registration.ticket:
         registration_message += f" ({registration.ticket.name})"
+        registration_message_long += f" ({registration.ticket.name})"
     registration_text = f"<a href='{register_url}'>{registration_message}</a>"
+    run_status["text_long"] = f"<a href='{register_url}'>{registration_message_long}</a>"
 
     # Handle membership feature requirements and status checks
     if "membership" in features:
@@ -393,9 +397,13 @@ def _status_payment(
 
     pending_message = _("Pending payment") + ticket_suffix
     pending_text = f"<a href='{register_url}'>{pending_message}</a>"
+    pending_message_long = _("Your registration is awaiting payment") + ticket_suffix
+    pending_text_long = f"<a href='{register_url}'>{pending_message_long}</a>"
 
     submitted_message = _("Payment submitted") + ticket_suffix
     submitted_text = f"<a href='{register_url}'>{submitted_message}</a>"
+    submitted_message_long = _("Your payment has been submitted, and is awaiting manual verification") + ticket_suffix
+    submitted_text_long = f"<a href='{register_url}'>{submitted_message_long}</a>"
 
     payment_invoices_dict = context.get("payment_invoices_dict")
 
@@ -441,6 +449,7 @@ def _status_payment(
     # Handle pending payment status
     if pending_invoices:
         run_status["text"] = submitted_text
+        run_status["text_long"] = submitted_text_long
         run_status["status_type"] = "pending"
         run_status["action"] = {"label": _("Payment awaiting manual verification")}
         context["pending_invoices"] = True
@@ -453,6 +462,7 @@ def _status_payment(
         # Handle wire transfer specific messaging
         if wire_created_invoices:
             run_status["text"] = pending_text
+            run_status["text_long"] = pending_text_long
             run_status["status_type"] = "action_needed"
             run_status["action"] = {
                 "url": payment_url,
@@ -464,6 +474,7 @@ def _status_payment(
         # Handle general payment alert with deadline warning
         if not is_provisional:
             run_status["text"] = pending_text
+            run_status["text_long"] = pending_text_long
         note = ""
         if registration.deadline < 0:
             note = _("If no payment is received, registration may be cancelled")
@@ -534,7 +545,15 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
     if context is None:
         context = {}
 
-    run_status = {"open": True, "details": "", "text": "", "additional": "", "can_pay": True, "registration": None}
+    run_status = {
+        "open": True,
+        "details": "",
+        "text": "",
+        "text_long": "",
+        "additional": "",
+        "can_pay": True,
+        "registration": None,
+    }
 
     # Find user's registration if not already provided
     cached_registrations = context.get("my_regs")
@@ -579,13 +598,16 @@ def _check_run_status(context: dict, run: Run, member: Member, run_status: dict,
     if status == RegistrationStatus.CLOSED:
         run_status["open"] = False
         run_status["text"] = _("Registration closed")
+        run_status["text_long"] = _("Registrations for this event are currently closed")
         return run_status
 
     # Handle external registration - redirect is handled in view layer
     if status == RegistrationStatus.EXTERNAL:
         run_status["open"] = True
-        msg = _("Registration is open!")
+        msg = _("Registration is open") + "!"
+        msg_long = _("Registrations are open: sign up now to secure your spot") + "!"
         run_status["text"] = f"<a href='{register_url}'>{msg}</a>"
+        run_status["text_long"] = f"<a href='{register_url}'>{msg_long}</a>"
         return run_status
 
     # Handle pre-registration status
@@ -604,11 +626,17 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
         if not run.registration_open:
             run_status["open"] = False
             run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+            run_status["text_long"] = run_status.get("text_long") or _(
+                "Registrations for this event have not opened yet"
+            )
             return run_status
 
         if run.registration_open > current_datetime:
             run_status["open"] = False
             run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+            run_status["text_long"] = run_status.get("text_long") or _(
+                "Registrations for this event have not opened yet"
+            )
             run_status["details"] = _("Opening at: %(date)s") % {
                 "date": run.registration_open.strftime(format_datetime),
             }
@@ -620,26 +648,40 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
         if not run.registration_open or run.registration_open <= current_datetime:
             run_status["open"] = False
             run_status["text"] = run_status.get("text") or _("Registrations closed")
+            run_status["text_long"] = run_status.get("text_long") or _(
+                "Registrations for this event are currently closed"
+            )
             return run_status
 
     # signup open, not already signed in
     messages = {
-        "primary": _("Registration is open!"),
-        "filler": _("Sign up as a filler!"),
-        "waiting": _("Join the waiting list!"),
+        "primary": _("Registration is open") + "!",
+        "filler": _("Sign up as a filler") + "!",
+        "waiting": _("Join the waiting list") + "!",
+    }
+    messages_long = {
+        "primary": _("Registrations are open: sign up now to secure your spot") + "!",
+        "filler": _("Primary spots are sold out, but you can still sign up as a filler") + "!",
+        "waiting": _("The event is sold out, but you can join the waiting list to be notified if a spot frees up")
+        + "!",
     }
 
     # pick the first matching message (or None)
-    selected_message = next((msg for key, msg in messages.items() if key in run_status), None)
+    selected_key = next((key for key in messages if key in run_status), None)
+    selected_message = messages.get(selected_key)
+    selected_message_long = messages_long.get(selected_key)
 
     # if it's a primary/filler, copy over the additional details
     if selected_message and any(key in run_status for key in ("primary", "filler")):
         run_status["details"] = run_status["additional"]
 
     # wrap in a link if we have a message, otherwise show closed
-    run_status["text"] = (
-        f"<a href='{register_url}'>{selected_message}</a>" if selected_message else _("Registration closed")
-    )
+    if selected_message:
+        run_status["text"] = f"<a href='{register_url}'>{selected_message}</a>"
+        run_status["text_long"] = f"<a href='{register_url}'>{selected_message_long}</a>"
+    else:
+        run_status["text"] = _("Registration closed")
+        run_status["text_long"] = _("Registrations for this event are currently closed")
 
     return run_status
 
@@ -674,12 +716,17 @@ def _status_preregister(run: Run, member: Member, run_status: dict, context: dic
     if has_pre_registration:
         status_message = _("Pre-registration confirmed") + "!"
         run_status["text"] = status_message
+        run_status["text_long"] = _(
+            "Your pre-registration has been confirmed: you will be notified when registrations open"
+        )
 
     else:
         # Create pre-registration link for unauthenticated or non-pre-registered users
         status_message = _("Pre-register to the event") + "!"
+        status_message_long = _("Pre-registrations are open: pre-register to be notified when registrations open") + "!"
         preregister_url = reverse("pre_register", args=[run.event.slug])
         run_status["text"] = f"<a href='{preregister_url}'>{status_message}</a>"
+        run_status["text_long"] = f"<a href='{preregister_url}'>{status_message_long}</a>"
 
     return run_status
 
@@ -791,9 +838,11 @@ def registration_status_characters(
         registration_character_rels = query.order_by("character__number").select_related("character")
 
     # Build list of character links with names and approval status
-    character_links = [
+    character_links_data = [
         _get_character_links(run, context, features, character_rel) for character_rel in registration_character_rels
     ]
+    run_status["character_links"] = character_links_data
+    character_links = [_character_links_html(character_entry) for character_entry in character_links_data]
 
     # Add character information to status details based on number of characters
     if len(character_links) == 1:
@@ -806,8 +855,8 @@ def registration_status_characters(
     _status_approval(run, registration, run_status, features, is_character_assigned=is_assigned)
 
 
-def _get_character_links(run: Run, context: dict, features: dict, character_rel: RegistrationCharacterRel) -> str:
-    """Builds list of links for the character quick access bar."""
+def _get_character_links(run: Run, context: dict, features: dict, character_rel: RegistrationCharacterRel) -> dict:
+    """Builds structured data with links for the character quick access bar."""
     character_url = reverse("character", args=[run.get_slug(), character_rel.character.uuid])
     character_name = character_rel.character.name
     character_uuid = character_rel.character.uuid
@@ -822,61 +871,78 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
         character_name += f" ({_(character_rel.character.get_status_display())})"
 
     # Create clickable link for character
-    character_links = [(character_url, character_name, _("Access you character sheet"))]
+    character_links = [
+        {
+            "url": character_url,
+            "label": character_name,
+            "tooltip": _("Access you character sheet"),
+            "icon": "fa-solid fa-person",
+        }
+    ]
 
     if "user_character" in features:
         character_links.append(
-            (
-                reverse("character_edit", args=[run.get_slug(), character_uuid]),
-                _("Edit"),
-                _("Edit your character's details"),
-            )
+            {
+                "url": reverse("character_edit", args=[run.get_slug(), character_uuid]),
+                "label": _("Edit"),
+                "tooltip": _("Edit your character's details"),
+                "icon": "fa-solid fa-pen-to-square",
+            }
         )
 
     if "experience" in features and get_event_config(run.event_id, "exp_user", default_value=False, context=context):
         character_links.append(
-            (
-                reverse("character_abilities", args=[run.get_slug(), character_uuid]),
-                _("Abilities"),
-                _("Buy abilities for your character"),
-            )
+            {
+                "url": reverse("character_abilities", args=[run.get_slug(), character_uuid]),
+                "label": _("Abilities"),
+                "tooltip": _("Buy abilities for your character"),
+                "icon": "fa-solid fa-graduation-cap",
+            }
         )
 
     if "custom_character" in features:
         character_links.append(
-            (
-                reverse("character_customize", args=[run.get_slug(), character_uuid]),
-                _("Customize"),
-                _("Modify the character details to make it yours"),
-            )
+            {
+                "url": reverse("character_customize", args=[run.get_slug(), character_uuid]),
+                "label": _("Customize"),
+                "tooltip": _("Modify the character details to make it yours"),
+                "icon": "fa-solid fa-palette",
+            }
         )
 
     if "player_relationships" in features:
         character_links.append(
-            (
-                reverse("character_relationships", args=[run.get_slug(), character_uuid]),
-                _("Relationships"),
-                _("Fill in your character's relationships"),
-            )
+            {
+                "url": reverse("character_relationships", args=[run.get_slug(), character_uuid]),
+                "label": _("Relationships"),
+                "tooltip": _("Fill in your character's relationships"),
+                "icon": "fa-solid fa-people-arrows",
+            }
         )
 
     if "help" in features:
         character_links.append(
-            (
-                reverse("help", args=[run.get_slug()]),
-                _("Questions"),
-                _("Write here questions about your character directly to the authors"),
-            )
+            {
+                "url": reverse("help", args=[run.get_slug()]),
+                "label": _("Questions"),
+                "tooltip": _("Write here questions about your character directly to the authors"),
+                "icon": "fa-solid fa-circle-question",
+            }
         )
 
+    return {"name": character_name, "links": character_links}
+
+
+def _character_links_html(character_entry: dict) -> str:
+    """Render the character quick access links as an HTML snippet."""
     character_link_snippets = [
         f"""
             <span class="lm_tooltip">
-             <a href='{link[0]}'>{link[1]}</a>
-             <span class="lm_tooltiptext">{link[2]}!</span>
+             <a href='{link["url"]}'>{link["label"]}</a>
+             <span class="lm_tooltiptext">{link["tooltip"]}!</span>
              </span>
          """
-        for link in character_links
+        for link in character_entry["links"]
     ]
 
     return " | ".join(character_link_snippets)
@@ -917,13 +983,19 @@ def _status_approval(
             run_status["details"] += " - "
         message = _("Create your character") + "!"
         run_status["details"] += f"<a href='{url}'>{message}</a>"
+        run_status["character_action"] = {
+            "url": url,
+            "label": _("Create your character"),
+            "tooltip": message,
+            "icon": "fa-solid fa-wand-magic-sparkles",
+        }
 
     # Show character selection link if no characters assigned but max chars available
     elif not is_character_assigned and maximum_characters:
         url = reverse("character_list", args=[run.get_slug()])
         if run_status["details"]:
             run_status["details"] += " - "
-        message = _("Select your character!")
+        message = _("Select your character") + "!"
         run_status["details"] += f"<a href='{url}'>{message}</a>"
 
 

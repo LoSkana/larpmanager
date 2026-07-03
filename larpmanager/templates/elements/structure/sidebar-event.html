@@ -3,6 +3,26 @@
     <div class="inner new-menu">
         {% include "elements/structure/sidebar-header.html" %}
         <div class="sidebar-section">
+            {% if run_status.character_action %}
+                <span class="sidebar-link-wrap">
+                    <a class="sidebar-link"
+                       href="{{ run_status.character_action.url }}"
+                       title="{{ run_status.character_action.tooltip }}">
+                        <i class="{{ run_status.character_action.icon }}"></i>
+                        <span>{{ run_status.character_action.label }}</span>
+                    </a>
+                </span>
+            {% endif %}
+            {% for character in run_status.character_links %}
+                {% for link in character.links %}
+                    <span class="sidebar-link-wrap">
+                        <a class="sidebar-link" href="{{ link.url }}" title="{{ link.tooltip }}">
+                            {% if link.icon %}<i class="{{ link.icon }}"></i>{% endif %}
+                            <span>{{ link.label }}</span>
+                        </a>
+                    </span>
+                {% endfor %}
+            {% endfor %}
             {% for item in main_nav_items %}
                 <span class="sidebar-link-wrap">
                     <a class="sidebar-link{% if item.active %} select{% endif %}"
@@ -11,10 +31,16 @@
                        {% if item.download %}download{% endif %}>
                         {% if item.icon %}<i class="{{ item.icon }}"></i>{% endif %}
                         <span>{{ item.label }}</span>
+                        {% if item.status_icon %}
+                            <i class="{{ item.status_icon }} sidebar-status-badge reg-{{ item.status_type }}"></i>
+                        {% endif %}
                     </a>
                 </span>
             {% endfor %}
         </div>
+        {% if not user.is_authenticated %}
+            {% include "elements/structure/sidebar-anon.html" %}
+        {% endif %}
         {% include "elements/structure/sidebar-footer.html" %}
     </div>
 </div>

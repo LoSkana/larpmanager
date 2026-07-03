@@ -14,7 +14,11 @@
                 {% elif run_status.status_type == "provisional" %}
                     <i class="fa-solid fa-hourglass-half"></i>
                 {% endif %}
-                {{ run_status.text | safe }}
+                {% if long_text and run_status.text_long %}
+                    {{ run_status.text_long | safe }}
+                {% else %}
+                    {{ run_status.text | safe }}
+                {% endif %}
                 {% if features.payment and reg and reg.tot_iscr %}
                     {% with uuid=reg_uuid|default:reg.uuid %}
                         <span class="acc_link">

@@ -488,7 +488,7 @@ def ticket(request: HttpRequest, reason: Any = "") -> Any:
             if context["member"]:
                 lm_ticket.member = context["member"]
             lm_ticket.save()
-            messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
+            messages.success(request, _("Your request has been sent, we will reply as soon as possible") + "!")
             return redirect("home")
     else:
         form = LarpManagerTicketForm(request=request, context=context)
@@ -553,7 +553,7 @@ def join(request: HttpRequest) -> Any:
     joined_association = _join_form(context, request)
     if joined_association:
         # send message
-        messages.success(request, _("Welcome to %(name)s!") % {"name": request.association["name"]})
+        messages.success(request, _("Welcome to %(name)s") % {"name": request.association["name"]} + "!")
         # send email
         if request.association["skin_id"] == 1:
             join_email(joined_association)
@@ -1041,7 +1041,7 @@ def lm_send(request: HttpRequest) -> Any:
             body = request.POST["body"]
             interval = int(request.POST.get("interval", 1))
             send_mail_exec(players, subj, body, interval=interval)
-            messages.success(request, _("Mail added to queue!"))
+            messages.success(request, _("Mail added to queue") + "!")
             return redirect(request.path_info)
     else:
         form = LmSendMailForm()

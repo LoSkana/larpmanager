@@ -446,7 +446,7 @@ def share(request: HttpRequest) -> Any:
     if request.method == "POST":
         el.status = MembershipStatus.JOINED
         el.save()
-        messages.success(request, _("You have granted data sharing with this organisation!"))
+        messages.success(request, _("You have granted data sharing with this organisation") + "!")
         return redirect("home")
 
     context["disable_join"] = True
@@ -771,7 +771,7 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["past"] = []
 
     # Get all runs for the event and set reference date (3 days ago)
-    runs = Run.objects.filter(event=context["event"])
+    runs = Run.objects.filter(event=context["event"]).exclude(id=context["run"].id)
     ref = timezone.now() - timedelta(days=3)
 
     # Prepare features mapping for registration status checking

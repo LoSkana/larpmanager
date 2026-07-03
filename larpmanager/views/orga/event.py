@@ -1103,7 +1103,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     reset_all_run(context["event"], context["run"])
 
     # Notify user of successful cache reset
-    messages.success(request, _("Cache reset!"))
+    messages.success(request, _("Cache reset") + "!")
     return redirect("manage", event_slug=context["run"].get_slug())
 
 

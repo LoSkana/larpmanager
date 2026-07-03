@@ -142,7 +142,7 @@ def ooops_check(page: Any) -> None:
     banner = page.locator("#banner")
     if banner.count() > 0:
         try:
-            expect(banner).not_to_contain_text("Oops!")
+            expect(banner).not_to_contain_text("Oops") + "!"
             expect(banner).not_to_contain_text("404")
         except AssertionError:
             raise Exception(f"Error on {page.url}: {banner.inner_text()}")

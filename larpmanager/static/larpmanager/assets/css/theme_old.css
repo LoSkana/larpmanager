@@ -160,7 +160,7 @@ body {
 }
 
 #page-wrapper.sidebar header {
-  margin-left: 21ch;
+  margin-left: 26ch;
 }
 
 #page-wrapper.topbar {
@@ -314,7 +314,7 @@ body {
 #sidebar {
   display: flex;
   flex-direction: column;
-  width: 20ch;
+  width: 25ch;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -384,8 +384,8 @@ body {
 }
 
 #page-wrapper.sidebar {
-  margin-left: 21ch;
-  width: calc(100% - 21ch);
+  margin-left: 26ch;
+  width: calc(100% - 26ch);
 }
 
 nav#sidebar-nav {
@@ -393,8 +393,8 @@ nav#sidebar-nav {
 }
 
 #header.sidebar {
-  margin-left: 20ch;
-  width: calc(100% - 20ch);
+  margin-left: 25ch;
+  width: calc(100% - 25ch);
 }
 
 @media (max-width: 800px) {

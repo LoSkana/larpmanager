@@ -15,6 +15,9 @@
                 {% endif %}
             {% endfor %}
         </div>
+        {% if not user.is_authenticated %}
+            {% include "elements/structure/sidebar-anon.html" %}
+        {% endif %}
         {% include "elements/structure/sidebar-footer.html" %}
     </div>
 </div>

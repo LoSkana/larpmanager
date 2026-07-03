@@ -56,7 +56,7 @@
                         {% for el in regs %}
                             <tr>
                                 <td>
-                                    <a href="{% url 'gallery' el.run.get_slug %}">{{ el.run }}</a>
+                                    <a href="{% url 'event' el.run.get_slug %}">{{ el.run }}</a>
                                 </td>
                                 <td>
                                     {% for uuid, name in el.chars.items %}

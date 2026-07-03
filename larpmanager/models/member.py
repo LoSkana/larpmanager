@@ -65,7 +65,7 @@ class FirstAidChoices(models.TextChoices):
 class NewsletterChoices(models.TextChoices):
     """Choices for NewsletterChoices."""
 
-    ALL = "a", _("Yes, keep me posted!")
+    ALL = "a", _("Yes, keep me posted") + "!"
     ONLY = "o", _("Only really important communications")
     NO = "n", _("No, I don't want updates")
 
@@ -186,7 +186,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
     phone_contact = PhoneNumberField(
         unique=True,
         verbose_name=_("Phone contact"),
-        help_text=_("Remember to put the prefix at the beginning!"),
+        help_text=_("Remember to put the prefix at the beginning") + "!",
         blank=True,
         null=True,
     )
@@ -328,7 +328,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
     presentation = models.CharField(
         max_length=500,
         verbose_name=_("Presentation"),
-        help_text=_("If you are a candidate for the Board, please write an introduction here!"),
+        help_text=_("If you are a candidate for the Board, please write an introduction here") + "!",
         null=True,
         blank=True,
     )
