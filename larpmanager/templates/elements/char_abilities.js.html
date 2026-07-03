@@ -85,7 +85,7 @@ window.addEventListener('DOMContentLoaded', function() {
         $header.append($('<span class="ability-cost-badge">').text(costLabel));
         $card.append($header);
         if (ab.descr) {
-            const stripped = ab.descr.replace(/<[^>]+>/g, '');
+            const stripped = new DOMParser().parseFromString(ab.descr, 'text/html').body.textContent || '';
             const preview = stripped.length > 100 ? stripped.slice(0, 120) + '...' : stripped;
             $card.append($('<p class="ability-card-descr">').text(preview));
         }
