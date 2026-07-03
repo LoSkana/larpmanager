@@ -1844,9 +1844,6 @@ msgstr "Newsletter"
 msgid "Next quota"
 msgstr "Nächste Quote"
 
-msgid "Next steps"
-msgstr "Nächste Schritte"
-
 msgid "No changes"
 msgstr "Keine Änderungen"
 
@@ -3172,9 +3169,6 @@ msgstr "Zahlungsübersicht"
 msgid "Pending invites"
 msgstr "Ausstehende Einladungen"
 
-msgid "Pending payment"
-msgstr "Ausstehende Zahlung"
-
 msgid "Portraits (PDF)"
 msgstr "Porträts (PDF)"
 
@@ -3871,6 +3865,9 @@ msgstr "Nicht mehr aktiv"
 msgid "Patron and Reduced"
 msgstr "Mäzen und Ermäßigt"
 
+msgid "Pay membership fee"
+msgstr "Mitgliedsbeitrag bezahlen"
+
 msgid "Pay the annual fee"
 msgstr "Bezahlen Sie die Jahresgebühr"
 
@@ -4163,6 +4160,10 @@ msgstr "Carousel Beschreibung"
 msgid "Close the collection"
 msgstr "Die Sammlung schließen"
 
+#, python-format
+msgid "Closing on: %(date)s"
+msgstr "Abschluss am: %(date)s"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Vollständiger Bogen (Pdf)"
 
@@ -4245,7 +4246,7 @@ msgid "Number of passengers"
 msgstr "Anzahl der Fahrgäste"
 
 #, python-format
-msgid "Opening at: %(date)s"
+msgid "Opening on: %(date)s"
 msgstr "Eröffnung am: %(date)s"
 
 msgid "Organization inflows"
@@ -4280,6 +4281,9 @@ msgstr "Rollen der Handlungscharaktere"
 
 msgid "Preference not valid"
 msgstr "Ungültige Präferenz"
+
+msgid "Proceed with payment"
+msgstr "Zur Zahlung weitergehen"
 
 msgid "Registration history"
 msgstr "Eintrag Geschichte"
@@ -4382,6 +4386,9 @@ msgstr "Gelieferte Sammlungen"
 
 msgid "Complete sheet (Test)"
 msgstr "Vollständiger Bogen (Test)"
+
+msgid "Complete your profile"
+msgstr "Vervollständige dein Profil"
 
 msgid "Create your character"
 msgstr "Erstellen Sie Ihren Charakter"
@@ -4855,6 +4862,9 @@ msgstr "Betrag für die Operation"
 msgid "Association Translations"
 msgstr "Assoziationsübersetzungen"
 
+msgid "Awaiting member approval"
+msgstr "Wartet auf die Zustimmung der Mitglieder"
+
 msgid "Cancel your registration"
 msgstr "Abbestellen"
 
@@ -5298,9 +5308,6 @@ msgstr "Es wurden keine Fehler im Steuerkodex gefunden"
 msgid "Now you can create outflows"
 msgstr "Jetzt können Sie Abflüsse erstellen"
 
-msgid "Please fill in your profile"
-msgstr "Bitte fülle dein Profil aus"
-
 msgid "Pre-registration not found."
 msgstr "Vorregistrierung nicht gefunden."
 
@@ -5476,6 +5483,9 @@ msgstr "Anzahl der zu ziehenden Lose"
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operation: ADD, SUB, MUL, DIV"
 
+msgid "Payment awaiting verification"
+msgstr "Zahlung wartet auf Überprüfung"
+
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Persönlicher Code: <b>%(cod)s</b>"
@@ -5539,6 +5549,9 @@ msgstr "Nicht umgewandelte Vorregistrierungen"
 #, python-format
 msgid "Unknown choice type: %(type)s"
 msgstr "Unbekannter Auswahltyp: %(type)s"
+
+msgid "Upload membership application"
+msgstr "Mitgliedsantrag hochladen"
 
 msgid "You're not allowed to sign up"
 msgstr "Du darfst dich nicht anmelden"
@@ -6319,9 +6332,6 @@ msgstr "Jetzt kannst du die Quittungsdaten einrichten"
 msgid "Only really important communications"
 msgstr "Nur wirklich wichtige Mitteilungen"
 
-msgid "Payment awaiting manual verification"
-msgstr "Zahlung wartet auf manuelle Überprüfung"
-
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Questtypen ohne Quests: %(list)s"
@@ -6476,9 +6486,6 @@ msgstr "Auslastung %(credits)s pro %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Schreiben Sie hier, was Sie tun möchten!"
-
-msgid "Your registration is awaiting payment"
-msgstr "Deine Anmeldung steht noch unter Vorbehalt der Zahlung"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -6675,6 +6682,10 @@ msgstr "Jetzt können Sie die Probleme der Veranstaltung überprüfen"
 
 msgid "Now you can se the special page options"
 msgstr "Jetzt können Sie die speziellen Seitenoptionen sehen"
+
+#, python-format
+msgid "Payment overdue: %(amount)s%(currency)s"
+msgstr "Überfällige Zahlung: %(amount)s%(currency)s"
 
 msgid "Perform checks on warehouse assignments"
 msgstr "Kontrollen der Lagerzuweisungen durchführen"
@@ -6950,6 +6961,9 @@ msgstr "Sie haben die maximale Textlänge überschritten"
 
 msgid "copy this link and give it to your friend"
 msgstr "Kopieren Sie diesen Link und geben Sie ihn an Ihren Freund weiter"
+
+msgid "no further action is needed at the moment"
+msgstr "Im Moment sind keine weiteren Maßnahmen erforderlich"
 
 msgid "A new version of the platform is available"
 msgstr "Eine neue Version der Plattform ist verfügbar"
@@ -7362,9 +7376,6 @@ msgstr "Wählen Sie die Veranstaltung, für die Sie sich anmelden möchten"
 msgid "The user has been assigned the specified role"
 msgstr "Dem Benutzer wurde die angegebene Rolle zugewiesen"
 
-msgid "Upload your membership application to proceed"
-msgstr "Lade deinen Mitgliedsantrag hoch, um fortzufahren"
-
 msgid "Use the button above to add a volunteer entry"
 msgstr ""
 "Klick auf die Schaltfläche oben, um einen Eintrag für einen Freiwilligen "
@@ -7573,15 +7584,13 @@ msgid "Are you sure? The items might be not recoverable"
 msgstr ""
 "Sind Sie sicher? Die Gegenstände sind möglicherweise nicht wiederherstellbar"
 
-msgid "Awaiting member approval to proceed with payment"
-msgstr ""
-"Wir warten auf die Zustimmung der Mitglieder, um mit der Zahlung "
-"fortzufahren"
-
 msgid "Complete all steps above to unlock advanced mode"
 msgstr ""
 "Schließen Sie alle oben genannten Schritte ab, um den erweiterten Modus "
 "freizuschalten"
+
+msgid "Create the character you will play in this event"
+msgstr "Erstelle den Charakter, den du bei diesem Event spielen wirst"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beschreiben Sie genau, welche Teilnehmer beteiligt sind"
@@ -7697,14 +7706,6 @@ msgstr "Jetzt können Sie die Gültigkeit der Steuernummer prüfen"
 msgid "Now you can set the external mail server settings"
 msgstr ""
 "Jetzt können Sie die Einstellungen für den externen Mailserver festlegen"
-
-msgid "Pay the annual membership fee to attend the event"
-msgstr ""
-"Entrichte den jährlichen Mitgliedsbeitrag für die Teilnahme an der "
-"Veranstaltung"
-
-msgid "Proceed with payment to confirm your registration"
-msgstr "Fahre mit der Zahlung fort, um deine Anmeldung zu bestätigen"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Rohstoffe, Verbrauchsgüter und Waren"
@@ -8327,6 +8328,10 @@ msgid "Manage which organizations can access your personal data"
 msgstr ""
 "Lege fest, welche Organisationen auf deine personenbezogenen Daten zugreifen"
 " dürfen"
+
+#, python-format
+msgid "Payment due: %(amount)s%(currency)s within %(days)d days"
+msgstr "Zahlungsfrist: %(amount)s%(currency)s innerhalb von %(days)d Tagen"
 
 msgid "Please check the address again, especially its beginning"
 msgstr ""
@@ -9665,6 +9670,10 @@ msgid "You can use the following fields, they will be filled in automatically"
 msgstr ""
 "Sie können die folgenden Felder verwenden, sie werden automatisch ausgefüllt"
 
+msgid "Your payment has been received and is being verified by the organizers"
+msgstr ""
+"Deine Zahlung ist eingegangen und wird gerade von den Veranstaltern geprüft"
+
 msgid "for example, ask for dietary requirements or emergency contact details"
 msgstr ""
 "zum Beispiel nach Essenswünschen oder Kontaktdaten für Notfälle fragen"
@@ -10295,6 +10304,12 @@ msgstr ""
 "persönlicher Ausgaben"
 
 msgid ""
+"Your registration is provisional: complete the payment to confirm your spot"
+msgstr ""
+"Deine Anmeldung ist vorläufig: Schließe die Zahlung ab, um deinen Platz zu "
+"bestätigen"
+
+msgid ""
 "only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "nur Kleinbuchstaben und Zahlen erlaubt, keine Leerzeichen oder Sonderzeichen"
@@ -10550,6 +10565,13 @@ msgid ""
 msgstr ""
 "Aktiviert das Feld 'Titel', ein kurzer Text (2-3 Wörter), der dem Namen des "
 "Charakters hinzugefügt wird"
+
+msgid ""
+"Fill in the missing information in your profile to complete your "
+"registration"
+msgstr ""
+"Vervollständige deine Registrierung, indem du die fehlenden Angaben in "
+"deinem Profil einträgst"
 
 msgid ""
 "If checked, it allows participants to customise the names of their "
@@ -11718,6 +11740,15 @@ msgstr ""
 "Ordne die Fragen im Anmeldeformular in benannte Abschnitte ein, um "
 "zusammengehörige Felder zu gruppieren"
 
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s %(currency)s, required to "
+"attend this event"
+msgstr ""
+"Bitte beachten Sie auch, dass für die Teilnahme an Veranstaltungen die "
+"Zahlung des Mitgliedsbeitrags für %(year)d (%(amount)s %(currency)s) "
+"erforderlich ist"
+
 msgid ""
 "View newsletter subscriber email lists segmented by language and "
 "communication preference"
@@ -11872,6 +11903,14 @@ msgid ""
 msgstr ""
 "Ein Maß für die Bevorzugung von Frühanmeldern (0=Standard deaktiviert, "
 "1=normal, 10=stark)"
+
+#, python-format
+msgid ""
+"A payment of %(amount)s%(currency)s is due within %(days)d days to confirm "
+"your registration"
+msgstr ""
+"Zur Bestätigung deiner Anmeldung ist innerhalb von %(days)d Tagen eine "
+"Zahlung in Höhe von %(amount)s%(currency)s fällig"
 
 msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
@@ -12147,6 +12186,13 @@ msgid ""
 msgstr ""
 "Konfiguriere datumsabhängige Zuschläge, durch die nach Ablauf einer "
 "bestimmten Frist zusätzliche Gebühren auf Anmeldungen erhoben werden"
+
+msgid ""
+"Fill in and upload your membership application, needed before you can pay "
+"for your registration"
+msgstr ""
+"Fülle deinen Mitgliedsantrag aus und lade ihn hoch – das ist nötig, bevor du"
+" deine Anmeldung bezahlen kannst"
 
 msgid ""
 "For each character added, a specific field will be available to add "
@@ -12868,6 +12914,14 @@ msgstr ""
 "Alle Informationen, die du für die Überweisung benötigst, findest du <a "
 "href='%(url)s'>auf der Zahlungsseite</a>"
 
+#, python-format
+msgid ""
+"Your registration is provisional, and will be confirmed once the payment of "
+"%(amount)s%(currency)s is made"
+msgstr ""
+"Deine Anmeldung ist vorläufig und wird bestätigt, sobald die Zahlung in Höhe"
+" von %(amount)s%(currency)s eingegangen ist"
+
 msgid ""
 "Manage help questions submitted by members: answer open requests or close "
 "those requiring no further action"
@@ -13023,6 +13077,13 @@ msgid ""
 msgstr ""
 "Richte Ratenzahlungspläne ein, bei denen die Ticketpreise in gleiche Raten "
 "aufgeteilt werden, die die Teilnehmer nach und nach bezahlen können"
+
+msgid ""
+"Your membership application is under review by the organization; payment "
+"will be available once it is approved"
+msgstr ""
+"Dein Mitgliedsantrag wird gerade von der Organisation geprüft; die "
+"Zahlungsmöglichkeit wird freigeschaltet, sobald er genehmigt ist"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -13467,6 +13528,15 @@ msgstr ""
 "Geben Sie Ihren individuellen Charakternamen an (je nach Veranstaltung "
 "können Sie den Namen wählen oder den Namen an das von Ihnen gewählte Genre "
 "anpassen)"
+
+#, python-format
+msgid ""
+"The payment deadline has passed: settle the outstanding "
+"%(amount)s%(currency)s as soon as possible to keep your registration"
+msgstr ""
+"Die Zahlungsfrist ist abgelaufen: Begleiche den ausstehenden Betrag von "
+"%(amount)s%(currency)s so schnell wie möglich, um deine Anmeldung "
+"aufrechtzuerhalten"
 
 msgid ""
 "Enables a ticket-like system for issues during the event, where staff can "

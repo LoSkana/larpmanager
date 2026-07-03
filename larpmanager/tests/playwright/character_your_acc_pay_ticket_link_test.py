@@ -224,7 +224,7 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="Please fill in your profile").click()
+    page.get_by_role("link", name="Complete your profile").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
     page.get_by_role("link", name="Registration confirmed (Staff)").click()

@@ -34,8 +34,6 @@ if TYPE_CHECKING:
 _USER_NAV_CACHE_TIMEOUT = 3600 * 24
 
 _STATUS_ICONS = {
-    "confirmed": "fa-solid fa-circle-check",
-    "patron": "fa-solid fa-star",
     "pending": "fa-solid fa-clock",
     "action_needed": "fa-solid fa-circle-exclamation",
     "provisional": "fa-solid fa-hourglass-half",
@@ -118,7 +116,7 @@ def _add_registration_items(
             items.append(
                 _item(
                     reverse("character_your", args=[slug]),
-                    "fa-solid fa-person",
+                    "fa-solid fa-user",
                     _("Your character"),
                     str(_("Access your character")) + "!",
                     active=active == "char",

@@ -34,7 +34,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.gateway import (
     redsys_webhook,
     satispay_webhook,
@@ -83,7 +82,7 @@ from larpmanager.utils.core.common import (
 )
 from larpmanager.utils.core.exceptions import RedirectError, check_association_feature
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.users.registration import _status_payment
+from larpmanager.utils.users.registration import _status_payment, registration_status
 
 logger = logging.getLogger(__name__)
 
@@ -394,6 +393,7 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     context = get_event_context(request, registration.run.get_slug())
     context["show_accounting"] = True
     context["registration"] = registration
+    context["run_status"] = registration_status(context, registration.run, registration.member)
 
     # Load membership status for permission checks
     registration.membership = get_user_membership(registration.member, context["association_id"])
@@ -1160,7 +1160,6 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     remaining = registration.tot_iscr - registration.tot_payed
 
     register_url = reverse("accounting_registration", kwargs={"registration_uuid": str(registration.uuid)})
-    is_provisional = is_registration_provisional(registration)
 
     payment_invoices_dict = {registration.id: list(invoices)}
     run_status: dict = {}
@@ -1169,7 +1168,6 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         registration,
         run_status,
         context={"payment_invoices_dict": payment_invoices_dict},
-        is_provisional=is_provisional,
     )
 
     context["invoices"] = invoices

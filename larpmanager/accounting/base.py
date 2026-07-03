@@ -23,6 +23,7 @@
 from __future__ import annotations
 
 import json
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -208,3 +209,33 @@ def handle_accounting_item_collection_post_save(instance: AccountingItemCollecti
     """Update collection total when items are added."""
     if instance.collection:
         instance.collection.save()
+
+
+def round_decimal(amount: Decimal) -> Decimal:
+    """Round decimal value."""
+    return amount.quantize(PRECISION, rounding=ROUND_HALF_UP)
+
+
+def round_to_nearest_cent(amount: float) -> float:
+    """Round a number to the nearest cent with tolerance for small differences."""
+    rounded_amount = round(amount * 100) / 100
+    rounding_tolerance = 0.03
+    if abs(float(amount) - rounded_amount) <= rounding_tolerance:
+        return rounded_amount
+    return float(amount)
+
+
+def _format_decimal(decimal_value: Decimal) -> str | Decimal:
+    """Format a decimal value for visualization."""
+    try:
+        rounded_value = round_to_nearest_cent(float(decimal_value))
+        if rounded_value == 0:
+            return ""
+        if rounded_value == int(rounded_value):
+            return str(int(rounded_value))
+        return f"{rounded_value:.2f}".rstrip("0").rstrip(".")
+    except (ValueError, TypeError):
+        return decimal_value
+
+
+PRECISION = Decimal("0.01")

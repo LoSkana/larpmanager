@@ -6,55 +6,45 @@
 {% block content %}
     <div class="user_resize platform">
         <h2>{% trans "Payment summary" %}</h2>
-        <table class="table">
-            <tr>
-                <th>{% trans "Total due" %}</th>
-                <td>
+        <div class="payment-summary-cards">
+            <div class="payment-summary-card">
+                <div class="payment-summary-label">{% trans "Total due" %}</div>
+                <div class="payment-summary-value">
                     {% if registration.tot_iscr %}
                         {{ registration.tot_iscr|format_decimal }}
                         {% if currency_symbol %}{{ currency_symbol }}{% endif %}
                     {% else %}
                         0
                     {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>{% trans "Total paid" %}</th>
-                <td>
+                </div>
+            </div>
+            <div class="payment-summary-card">
+                <div class="payment-summary-label">{% trans "Total paid" %}</div>
+                <div class="payment-summary-value">
                     {% if registration.tot_payed %}
                         {{ registration.tot_payed|format_decimal }}
                         {% if currency_symbol %}{{ currency_symbol }}{% endif %}
                     {% else %}
                         0
                     {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>{% trans "Remaining" %}</th>
-                <td>
+                </div>
+            </div>
+            <div class="payment-summary-card payment-summary-card-remaining">
+                <div class="payment-summary-label">{% trans "Remaining" %}</div>
+                <div class="payment-summary-value">
                     {% if remaining %}
                         {{ remaining|format_decimal }}
                         {% if currency_symbol %}{{ currency_symbol }}{% endif %}
                     {% else %}
                         0
                     {% endif %}
-                </td>
-            </tr>
-        </table>
-        {% if payment_run_status %}
-            {% with action=payment_run_status.action %}
-                {% if action.url %}
-                    <a href="{{ action.url }}" class="btn btn-primary">{{ action.label }}</a>
-                {% else %}
-                    <p class="text-warning">{{ action.label }}</p>
-                {% endif %}
-                {% if action.note %}<p class="text-muted">{{ action.note }}</p>{% endif %}
-            {% endwith %}
-        {% endif %}
+                </div>
+            </div>
+        </div>
         <hr />
         {% if payment_items %}
             <h2>{% trans "Amount breakdown" %}</h2>
-            <table class="table">
+            <table class="table mob">
                 <thead>
                     <tr>
                         <th>{% trans "Date" %}</th>
@@ -84,7 +74,7 @@
         {% endif %}
         {% if invoices %}
             <h2>{% trans "Payment history" %}</h2>
-            <table class="table">
+            <table class="table mob">
                 <thead>
                     <tr>
                         <th>{% trans "Date" %}</th>

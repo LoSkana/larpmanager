@@ -1844,9 +1844,6 @@ msgstr "Uutiskirje"
 msgid "Next quota"
 msgstr "Seuraava kiintiö"
 
-msgid "Next steps"
-msgstr "Seuraavat vaiheet"
-
 msgid "No changes"
 msgstr "Ei muutoksia"
 
@@ -3172,9 +3169,6 @@ msgstr "Maksuyhteenveto"
 msgid "Pending invites"
 msgstr "Odottavat kutsut"
 
-msgid "Pending payment"
-msgstr "Vireillä oleva maksu"
-
 msgid "Portraits (PDF)"
 msgstr "Muotokuvat (PDF)"
 
@@ -3871,6 +3865,9 @@ msgstr "Ei enää aktiivinen"
 msgid "Patron and Reduced"
 msgstr "Suojelija ja alennettu"
 
+msgid "Pay membership fee"
+msgstr "Maksa jäsenmaksu"
+
 msgid "Pay the annual fee"
 msgstr "Maksa vuosimaksu"
 
@@ -4163,6 +4160,10 @@ msgstr "Karusellin kuvaus"
 msgid "Close the collection"
 msgstr "Sulje kokoelma"
 
+#, python-format
+msgid "Closing on: %(date)s"
+msgstr "Päättyy: %(date)s"
+
 msgid "Complete sheet (Pdf)"
 msgstr "Täydellinen lomake (Pdf)"
 
@@ -4245,7 +4246,7 @@ msgid "Number of passengers"
 msgstr "Matkustajien määrä"
 
 #, python-format
-msgid "Opening at: %(date)s"
+msgid "Opening on: %(date)s"
 msgstr "Avautuu: %(date)s"
 
 msgid "Organization inflows"
@@ -4280,6 +4281,9 @@ msgstr "Juoni-hahmo roolit"
 
 msgid "Preference not valid"
 msgstr "Etusija ei ole voimassa"
+
+msgid "Proceed with payment"
+msgstr "Jatka maksamiseen"
 
 msgid "Registration history"
 msgstr "Ilmoittautumishistoria"
@@ -4382,6 +4386,9 @@ msgstr "Jaettu koonteina"
 
 msgid "Complete sheet (Test)"
 msgstr "Täydellinen lomake (testi)"
+
+msgid "Complete your profile"
+msgstr "Täydennä profiiliasi"
 
 msgid "Create your character"
 msgstr "Luo hahmosi"
@@ -4855,6 +4862,9 @@ msgstr "Toimenpiteen määrä"
 msgid "Association Translations"
 msgstr "Yhdistyksen käännökset"
 
+msgid "Awaiting member approval"
+msgstr "Odottaa jäsenten hyväksyntää"
+
 msgid "Cancel your registration"
 msgstr "Peruuta ilmoittautumisesi"
 
@@ -5298,9 +5308,6 @@ msgstr "Verokoodivirheitä ei löytynyt"
 msgid "Now you can create outflows"
 msgstr "Nyt voit luoda ulosvirtauksia"
 
-msgid "Please fill in your profile"
-msgstr "Täytä profiilisi"
-
 msgid "Pre-registration not found."
 msgstr "Ennakkorekisteröintiä ei löydy."
 
@@ -5476,6 +5483,9 @@ msgstr "Arvottavien lippujen lukumäärä"
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Toiminta: ADD, SUB, MUL, DIV"
 
+msgid "Payment awaiting verification"
+msgstr "Maksu odottaa vahvistusta"
+
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Henkilökohtainen koodi: <b>%(cod)s</b>"
@@ -5539,6 +5549,9 @@ msgstr "Muuntamattomat ennakkoilmoittautumiset"
 #, python-format
 msgid "Unknown choice type: %(type)s"
 msgstr "Tuntematon valintatyyppi: %(type)s"
+
+msgid "Upload membership application"
+msgstr "Lähetä jäsenhakemus"
 
 msgid "You're not allowed to sign up"
 msgstr "Et voi rekisteröityä"
@@ -6317,9 +6330,6 @@ msgstr "Nyt voit määrittää kuittitiedot"
 msgid "Only really important communications"
 msgstr "Vain todella tärkeä viestintä"
 
-msgid "Payment awaiting manual verification"
-msgstr "Maksu odottaa manuaalista tarkistusta"
-
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Tehtävätyypit ilman tehtäviä: %(list)s"
@@ -6474,9 +6484,6 @@ msgstr "Käytä %(credits)s tapahtumaan %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Kirjoita tähän, mitä haluaisit tehdä!"
-
-msgid "Your registration is awaiting payment"
-msgstr "Ilmoittautumisesi on odottamassa maksua"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -6667,6 +6674,10 @@ msgstr "Nyt voit tarkastella tapahtuman ongelmia"
 
 msgid "Now you can se the special page options"
 msgstr "Nyt voit nähdä erikoissivun vaihtoehdot"
+
+#, python-format
+msgid "Payment overdue: %(amount)s%(currency)s"
+msgstr "Maksun erääntyminen: %(amount)s%(currency)s"
 
 msgid "Perform checks on warehouse assignments"
 msgstr "Varastotehtävien tarkastaminen"
@@ -6941,6 +6952,9 @@ msgstr "Olet ylittänyt tekstin enimmäispituuden"
 
 msgid "copy this link and give it to your friend"
 msgstr "kopioi tämä linkki ja anna se ystävällesi"
+
+msgid "no further action is needed at the moment"
+msgstr "tällä hetkellä ei tarvita lisätoimenpiteitä"
 
 msgid "A new version of the platform is available"
 msgstr "Alustan uusi versio on saatavilla"
@@ -7344,9 +7358,6 @@ msgstr "Valitse tapahtuma, johon haluat ilmoittautua ennakkoon"
 msgid "The user has been assigned the specified role"
 msgstr "Käyttäjälle on annettu määritetty rooli"
 
-msgid "Upload your membership application to proceed"
-msgstr "Lataa jäsenhakemuksesi jatkaaksesi"
-
 msgid "Use the button above to add a volunteer entry"
 msgstr "Lisää vapaaehtoistyöntekijän tiedot yllä olevan painikkeen avulla"
 
@@ -7544,11 +7555,11 @@ msgstr "Kaikki jäsenten pyynnöt on käsitelty tai suljettu"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Oletko varma? Kohteita ei ehkä voida palauttaa"
 
-msgid "Awaiting member approval to proceed with payment"
-msgstr "Odotetaan jäsenten hyväksyntää maksun suorittamiseksi"
-
 msgid "Complete all steps above to unlock advanced mode"
 msgstr "Suorita kaikki edellä mainitut vaiheet avataksesi edistyneen tilan"
+
+msgid "Create the character you will play in this event"
+msgstr "Luo hahmo, jota aiot esittää tässä tapahtumassa"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Kuvaa tarkasti, ketkä osallistujat ovat mukana"
@@ -7663,12 +7674,6 @@ msgstr "Nyt voit suorittaa verokoodin voimassaolon tarkistuksen"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nyt voit määrittää ulkoisen sähköpostipalvelimen asetukset"
-
-msgid "Pay the annual membership fee to attend the event"
-msgstr "Maksa vuosittainen jäsenmaksu osallistuaksesi tapahtumaan"
-
-msgid "Proceed with payment to confirm your registration"
-msgstr "Jatka maksua vahvistaaksesi rekisteröitymisesi"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Raaka-aineet, apuaineet, tarvikkeet ja tavarat"
@@ -8229,6 +8234,10 @@ msgstr ""
 
 msgid "Manage which organizations can access your personal data"
 msgstr "Hallitse, mitkä organisaatiot voivat käyttää henkilötietojasi"
+
+#, python-format
+msgid "Payment due: %(amount)s%(currency)s within %(days)d days"
+msgstr "Maksun eräpäivä: %(amount)s%(currency)s %(days)d päivän kuluessa"
 
 msgid "Please check the address again, especially its beginning"
 msgstr "Tarkista osoite uudelleen, erityisesti sen alku"
@@ -9370,6 +9379,9 @@ msgstr ""
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Voit käyttää seuraavia kenttiä, ne täytetään automaattisesti"
 
+msgid "Your payment has been received and is being verified by the organizers"
+msgstr "Maksusi on vastaanotettu, ja järjestäjät tarkistavat sitä parhaillaan"
+
 msgid "for example, ask for dietary requirements or emergency contact details"
 msgstr ""
 "kysy esimerkiksi ruokavaliovaatimuksia tai hätätilanteen yhteystietoja"
@@ -9944,6 +9956,10 @@ msgstr ""
 "korvaushakemuksia"
 
 msgid ""
+"Your registration is provisional: complete the payment to confirm your spot"
+msgstr "Ilmoittautumisesi on alustava: vahvista paikkasi suorittamalla maksu"
+
+msgid ""
 "only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "vain pienet kirjaimet ja numerot sallittu, ei välilyöntejä tai "
@@ -10179,6 +10195,12 @@ msgid ""
 msgstr ""
 "Ottaa käyttöön kentän 'otsikko', lyhyt (2-3 sanaa) teksti, joka lisätään "
 "hahmon nimeen"
+
+msgid ""
+"Fill in the missing information in your profile to complete your "
+"registration"
+msgstr ""
+"Täytä profiilisi puuttuvat tiedot rekisteröitymisen loppuun saattamiseksi"
 
 msgid ""
 "If checked, it allows participants to customise the names of their "
@@ -11300,6 +11322,14 @@ msgstr ""
 "Järjestä ilmoittautumislomakkeen kysymykset nimettyihin osioihin, jotta "
 "toisiinsa liittyvät kentät voidaan ryhmitellä yhteen"
 
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s %(currency)s, required to "
+"attend this event"
+msgstr ""
+"Huomaa myös, että tapahtumiin osallistuminen edellyttää jäsenmaksun vuodelle"
+" %(year)d (%(amount)s %(currency)s) maksamista"
+
 msgid ""
 "View newsletter subscriber email lists segmented by language and "
 "communication preference"
@@ -11452,6 +11482,14 @@ msgid ""
 msgstr ""
 "Mittari, jolla mitataan, kuinka paljon suositaan aiempia ilmoittautuneita (0"
 " = oletusarvoisesti poistettu käytöstä, 1 = normaali, 10 = vahva)"
+
+#, python-format
+msgid ""
+"A payment of %(amount)s%(currency)s is due within %(days)d days to confirm "
+"your registration"
+msgstr ""
+"Ilmoittautumisen vahvistamiseksi on suoritettava %(amount)s%(currency)s:n "
+"suuruinen maksu %(days)d päivän kuluessa"
 
 msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
@@ -11724,6 +11762,13 @@ msgid ""
 msgstr ""
 "Määritä päivämäärään perustuvat lisämaksut, jotka lisäävät rekisteröinteihin"
 " lisämaksuja tietyn määräajan umpeuduttua"
+
+msgid ""
+"Fill in and upload your membership application, needed before you can pay "
+"for your registration"
+msgstr ""
+"Täytä ja lähetä jäsenhakemuksesi, joka on tehtävä ennen kuin voit maksaa "
+"ilmoittautumismaksun"
 
 msgid ""
 "For each character added, a specific field will be available to add "
@@ -12437,6 +12482,14 @@ msgstr ""
 "Löydät kaikki siirron suorittamiseen tarvittavat tiedot <a "
 "href='%(url)s'>maksusivulta</a>"
 
+#, python-format
+msgid ""
+"Your registration is provisional, and will be confirmed once the payment of "
+"%(amount)s%(currency)s is made"
+msgstr ""
+"Ilmoittautumisesi on toistaiseksi alustava, ja se vahvistetaan, kun "
+"%(amount)s%(currency)s on maksettu"
+
 msgid ""
 "Manage help questions submitted by members: answer open requests or close "
 "those requiring no further action"
@@ -12592,6 +12645,13 @@ msgid ""
 msgstr ""
 "Laaditaan maksueräsuunnitelmia, joissa lipun hinta jaetaan tasaisiin eriin, "
 "jotka osallistujat maksavat ajan mittaan"
+
+msgid ""
+"Your membership application is under review by the organization; payment "
+"will be available once it is approved"
+msgstr ""
+"Järjestö käsittelee parhaillaan jäsenhakemustasi; maksuvaihtoehto tulee "
+"näkyviin, kun hakemus on hyväksytty"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -13024,6 +13084,14 @@ msgid ""
 msgstr ""
 "Määritä hahmosi oma nimi (tapahtumasta riippuen voit valita nimen tai "
 "mukauttaa nimen valitsemaasi sukupuoleen)"
+
+#, python-format
+msgid ""
+"The payment deadline has passed: settle the outstanding "
+"%(amount)s%(currency)s as soon as possible to keep your registration"
+msgstr ""
+"Maksun eräpäivä on umpeutunut: maksa jäljellä oleva %(amount)s%(currency)s "
+"mahdollisimman pian, jotta rekisteröintisi säilyy voimassa"
 
 msgid ""
 "Enables a ticket-like system for issues during the event, where staff can "

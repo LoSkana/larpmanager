@@ -27,7 +27,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.base import is_registration_provisional
+from larpmanager.accounting.base import _format_decimal, is_registration_provisional
 from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.cache.accounting import clear_registration_accounting_cache
 from larpmanager.cache.config import get_association_config, get_event_config
@@ -239,7 +239,13 @@ def _status_membership_fee(
     run_status["status_type"] = "action_needed"
     run_status["action"] = {
         "url": membership_url,
-        "label": _("Pay the annual membership fee to attend the event"),
+        "label": _("Pay membership fee"),
+        "label_long": _("Pay the %(year)d membership fee of %(amount)s %(currency)s, required to attend this event")
+        % {
+            "year": current_year,
+            "amount": fee,
+            "currency": run.event.association.get_currency_symbol(),
+        },
     }
     return True
 
@@ -281,21 +287,18 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
     user_membership = get_user_membership(member, run.event.association_id)
 
     # Build base registration message with ticket info if available
-    registration_message = _("Registration confirmed")
-    registration_message_long = _("Your registration for this event has been confirmed")
     is_provisional = is_registration_provisional(registration, features=features, event=run.event, context=context)
-
-    # Update message for provisional registrations
-    if is_provisional:
-        registration_message = _("Provisional registration")
-        registration_message_long = _("Your registration is provisional, and will be confirmed once payment is made")
+    registration_message, registration_message_long = _registration_messages(
+        run, registration, is_provisional=is_provisional
+    )
 
     # Append ticket name if ticket exists
     if registration.ticket:
         registration_message += f" ({registration.ticket.name})"
         registration_message_long += f" ({registration.ticket.name})"
-    registration_text = f"<a href='{register_url}'>{registration_message}</a>"
-    run_status["text_long"] = f"<a href='{register_url}'>{registration_message_long}</a>"
+    registration_text = registration_message
+    run_status["text_long"] = registration_message_long
+    run_status["url"] = register_url
 
     # Handle membership feature requirements and status checks
     if "membership" in features:
@@ -310,7 +313,10 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
             run_status["status_type"] = "action_needed"
             run_status["action"] = {
                 "url": membership_url,
-                "label": _("Upload your membership application to proceed"),
+                "label": _("Upload membership application"),
+                "label_long": _(
+                    "Fill in and upload your membership application, needed before you can pay for your registration"
+                ),
             }
             run_status["can_pay"] = False
             return
@@ -319,7 +325,12 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         if user_membership.status in [MembershipStatus.SUBMITTED]:
             run_status["text"] = registration_text
             run_status["status_type"] = "pending"
-            run_status["action"] = {"label": _("Awaiting member approval to proceed with payment")}
+            run_status["action"] = {
+                "label": _("Awaiting member approval"),
+                "label_long": _(
+                    "Your membership application is under review by the organization; payment will be available once it is approved"
+                ),
+            }
             run_status["can_pay"] = False
             return
 
@@ -327,9 +338,7 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
     run_status["text"] = registration_text
 
     # Check payment status and return if payment handling is complete
-    if "payment" in features and _status_payment(
-        register_url, registration, run_status, context, is_provisional=is_provisional
-    ):
+    if "payment" in features and _status_payment(register_url, registration, run_status, context):
         return
 
     # Check for missing membership fee if membership feature is enabled
@@ -341,7 +350,11 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         profile_url = reverse("profile")
         run_status["text"] = registration_text
         run_status["status_type"] = "action_needed"
-        run_status["action"] = {"url": profile_url, "label": _("Please fill in your profile")}
+        run_status["action"] = {
+            "url": profile_url,
+            "label": _("Complete your profile"),
+            "label_long": _("Fill in the missing information in your profile to complete your registration"),
+        }
         return
 
     # Handle provisional registration status
@@ -351,17 +364,31 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
         run_status["status_type"] = "provisional"
         run_status["action"] = {
             "url": payment_url,
-            "label": _("Proceed with payment to confirm your registration"),
+            "label": _("Proceed with payment"),
+            "label_long": _("Your registration is provisional: complete the payment to confirm your spot"),
         }
         return
 
     # Set final confirmed registration status for completed registrations
     run_status["text"] = registration_text
-    run_status["status_type"] = "confirmed"
 
-    # Add patron appreciation message for patron tier tickets
-    if registration.ticket and registration.ticket.tier == TicketTier.PATRON:
-        run_status["status_type"] = "patron"
+
+def _registration_messages(run: Run, registration: Registration, *, is_provisional: bool) -> tuple[str, str]:
+    """Build the short and long registration status messages."""
+    if not is_provisional:
+        return _("Registration confirmed"), _("Your registration for this event has been confirmed")
+
+    registration_message = _("Provisional registration")
+    registration_message_long = _("Your registration is provisional, and will be confirmed once payment is made")
+    remaining_amount = (registration.tot_iscr or 0) - (registration.tot_payed or 0)
+    if remaining_amount > 0:
+        registration_message_long = _(
+            "Your registration is provisional, and will be confirmed once the payment of %(amount)s%(currency)s is made"
+        ) % {
+            "amount": _format_decimal(remaining_amount),
+            "currency": run.event.association.get_currency_symbol(),
+        }
+    return registration_message, registration_message_long
 
 
 def _status_payment(
@@ -369,8 +396,6 @@ def _status_payment(
     registration: Registration,
     run_status: dict,
     context: dict | None = None,
-    *,
-    is_provisional: bool = False,
 ) -> bool:
     """Check payment status and update registration status text accordingly.
 
@@ -383,7 +408,6 @@ def _status_payment(
         run_status: Dictionary with run status
         context: Optional context dictionary containing cached data:
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
-        is_provisional: Whether the registration is still provisional (no payment made yet)
 
     Returns:
         True if payment status was processed and status text updated, False otherwise
@@ -395,15 +419,10 @@ def _status_payment(
 
     ticket_suffix = f" ({registration.ticket.name})" if registration.ticket else ""
 
-    pending_message = _("Pending payment") + ticket_suffix
-    pending_text = f"<a href='{register_url}'>{pending_message}</a>"
-    pending_message_long = _("Your registration is awaiting payment") + ticket_suffix
-    pending_text_long = f"<a href='{register_url}'>{pending_message_long}</a>"
+    submitted_text = _("Payment submitted") + ticket_suffix
+    submitted_text_long = _("Your payment has been submitted, and is awaiting manual verification") + ticket_suffix
 
-    submitted_message = _("Payment submitted") + ticket_suffix
-    submitted_text = f"<a href='{register_url}'>{submitted_message}</a>"
-    submitted_message_long = _("Your payment has been submitted, and is awaiting manual verification") + ticket_suffix
-    submitted_text_long = f"<a href='{register_url}'>{submitted_message_long}</a>"
+    run_status["url"] = register_url
 
     payment_invoices_dict = context.get("payment_invoices_dict")
 
@@ -451,7 +470,12 @@ def _status_payment(
         run_status["text"] = submitted_text
         run_status["text_long"] = submitted_text_long
         run_status["status_type"] = "pending"
-        run_status["action"] = {"label": _("Payment awaiting manual verification")}
+        run_status["action"] = {
+            "label": _("Payment awaiting verification"),
+            "label_long": _("Your payment has been received and is being verified by the organizers")
+            + "; "
+            + _("no further action is needed at the moment"),
+        }
         context["pending_invoices"] = True
         return True
 
@@ -459,31 +483,36 @@ def _status_payment(
     if registration.alert:
         payment_url = reverse("accounting_registration", args=[registration.uuid])
 
-        # Handle wire transfer specific messaging
-        if wire_created_invoices:
-            run_status["text"] = pending_text
-            run_status["text_long"] = pending_text_long
-            run_status["status_type"] = "action_needed"
-            run_status["action"] = {
-                "url": payment_url,
-                "label": _("Proceed with payment to confirm your registration"),
-                "note": _("If you have made a wire transfer, please upload the receipt for it to be processed"),
-            }
-            return True
-
-        # Handle general payment alert with deadline warning
-        if not is_provisional:
-            run_status["text"] = pending_text
-            run_status["text_long"] = pending_text_long
-        note = ""
+        label = ""
+        label_long = ""
         if registration.deadline < 0:
-            note = _("If no payment is received, registration may be cancelled")
+            label = _("Payment overdue: %(amount)s%(currency)s")
+            label_long = _(
+                "The payment deadline has passed: settle the outstanding %(amount)s%(currency)s as soon as possible to keep your registration"
+            )
+        elif registration.quota and registration.deadline > 0:
+            label = _("Payment due: %(amount)s%(currency)s within %(days)d days")
+            label_long = _(
+                "A payment of %(amount)s%(currency)s is due within %(days)d days to confirm your registration"
+            )
+
+        note = None
+        if wire_created_invoices:
+            note = _("If you have made a wire transfer, please upload the receipt for it to be processed")
+
+        label_params = {
+            "amount": _format_decimal(registration.quota),
+            "currency": registration.run.event.association.get_currency_symbol(),
+            "days": registration.deadline,
+        }
         run_status["status_type"] = "action_needed"
         run_status["action"] = {
             "url": payment_url,
-            "label": _("Proceed with payment to confirm your registration"),
+            "label": label % label_params,
+            "label_long": label_long % label_params,
             "note": note,
         }
+
         return True
 
     return False
@@ -604,10 +633,9 @@ def _check_run_status(context: dict, run: Run, member: Member, run_status: dict,
     # Handle external registration - redirect is handled in view layer
     if status == RegistrationStatus.EXTERNAL:
         run_status["open"] = True
-        msg = _("Registration is open") + "!"
-        msg_long = _("Registrations are open: sign up now to secure your spot") + "!"
-        run_status["text"] = f"<a href='{register_url}'>{msg}</a>"
-        run_status["text_long"] = f"<a href='{register_url}'>{msg_long}</a>"
+        run_status["text"] = _("Registration is open") + "!"
+        run_status["text_long"] = _("Registrations are open: sign up now to secure your spot") + "!"
+        run_status["url"] = register_url
         return run_status
 
     # Handle pre-registration status
@@ -623,21 +651,15 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
     if run.registration_status == RegistrationStatus.FUTURE:
         current_datetime = timezone.now()
 
+        run_status["open"] = False
+        run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+        run_status["text_long"] = run_status.get("text_long") or _("Registrations for this event have not opened yet")
+
         if not run.registration_open:
-            run_status["open"] = False
-            run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
-            run_status["text_long"] = run_status.get("text_long") or _(
-                "Registrations for this event have not opened yet"
-            )
             return run_status
 
         if run.registration_open > current_datetime:
-            run_status["open"] = False
-            run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
-            run_status["text_long"] = run_status.get("text_long") or _(
-                "Registrations for this event have not opened yet"
-            )
-            run_status["details"] = _("Opening at: %(date)s") % {
+            run_status["details"] = _("Opening on: %(date)s") % {
                 "date": run.registration_open.strftime(format_datetime),
             }
             return run_status
@@ -645,7 +667,7 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
     if run.registration_status == RegistrationStatus.CLOSING:
         current_datetime = timezone.now()
 
-        if not run.registration_open or run.registration_open <= current_datetime:
+        if run.registration_open and run.registration_open < current_datetime:
             run_status["open"] = False
             run_status["text"] = run_status.get("text") or _("Registrations closed")
             run_status["text_long"] = run_status.get("text_long") or _(
@@ -677,8 +699,17 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
 
     # wrap in a link if we have a message, otherwise show closed
     if selected_message:
-        run_status["text"] = f"<a href='{register_url}'>{selected_message}</a>"
-        run_status["text_long"] = f"<a href='{register_url}'>{selected_message_long}</a>"
+        run_status["text"] = selected_message
+        run_status["text_long"] = selected_message_long
+        run_status["url"] = register_url
+        if run.registration_status == RegistrationStatus.CLOSING and run.registration_open:
+            closing_details = _("Closing on: %(date)s") % {
+                "date": run.registration_open.strftime(format_datetime),
+            }
+            if run_status.get("details"):
+                run_status["details"] += " - " + closing_details
+            else:
+                run_status["details"] = closing_details
     else:
         run_status["text"] = _("Registration closed")
         run_status["text_long"] = _("Registrations for this event are currently closed")
@@ -725,8 +756,9 @@ def _status_preregister(run: Run, member: Member, run_status: dict, context: dic
         status_message = _("Pre-register to the event") + "!"
         status_message_long = _("Pre-registrations are open: pre-register to be notified when registrations open") + "!"
         preregister_url = reverse("pre_register", args=[run.event.slug])
-        run_status["text"] = f"<a href='{preregister_url}'>{status_message}</a>"
-        run_status["text_long"] = f"<a href='{preregister_url}'>{status_message_long}</a>"
+        run_status["text"] = status_message
+        run_status["text_long"] = status_message_long
+        run_status["url"] = preregister_url
 
     return run_status
 
@@ -846,9 +878,9 @@ def registration_status_characters(
 
     # Add character information to status details based on number of characters
     if len(character_links) == 1:
-        run_status["details"] += _("Your character is") + ": " + character_links[0]
+        run_status["details_characters"] = _("Your character is") + ": " + character_links[0]
     elif len(character_links) > 1:
-        run_status["details"] += _("Your characters are") + ": " + " • ".join(character_links)
+        run_status["details_characters"] = _("Your characters are") + ": " + " • ".join(character_links)
 
     is_assigned = len(character_links) > 0
 
@@ -976,17 +1008,14 @@ def _status_approval(
     # Get character creation limits for this user and event
     can_create_character, maximum_characters = check_character_maximum(run.event, registration.member)
 
-    # Show character creation link if user can create more characters
+    # Show character creation action if user can create more characters
     if not can_create_character:
         url = reverse("character_create", args=[run.get_slug()])
-        if run_status["details"]:
-            run_status["details"] += " - "
-        message = _("Create your character") + "!"
-        run_status["details"] += f"<a href='{url}'>{message}</a>"
         run_status["character_action"] = {
             "url": url,
             "label": _("Create your character"),
-            "tooltip": message,
+            "label_long": _("Create the character you will play in this event") + "!",
+            "tooltip": _("Create your character") + "!",
             "icon": "fa-solid fa-wand-magic-sparkles",
         }
 

@@ -1,0 +1,30 @@
+{% load i18n %}
+{% if run_status.status_type == "action_needed" or run_status.status_type == "provisional" or run_status.status_type == "pending" %}
+    {% if run_status.action %}
+        <div class="reg-banner only_v22 reg-{{ run_status.status_type }}">
+            <span class="reg-action-main">
+                {% if run_status.status_type == "pending" %}
+                    <i class="fa-solid fa-clock"></i>
+                {% elif run_status.status_type == "action_needed" %}
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                {% elif run_status.status_type == "provisional" %}
+                    <i class="fa-solid fa-hourglass-half"></i>
+                {% endif %}
+                {% if run_status.action.url %}
+                    <a href="{{ run_status.action.url }}" class="reg-action-link">{{ run_status.action.label_long|default:run_status.action.label }}</a>
+                {% else %}
+                    <span class="reg-action-info">{{ run_status.action.label_long|default:run_status.action.label }}</span>
+                {% endif %}
+            </span>
+            {% if run_status.action.note %}<span class="reg-action-note">{{ run_status.action.note }}</span>{% endif %}
+        </div>
+    {% endif %}
+{% endif %}
+{% if run_status.character_action %}
+    <div class="reg-banner only_v22 reg-action_needed">
+        <span class="reg-action-main">
+            <i class="{{ run_status.character_action.icon }}"></i>
+            <a href="{{ run_status.character_action.url }}" class="reg-action-link">{{ run_status.character_action.label_long|default:run_status.character_action.label }}</a>
+        </span>
+    </div>
+{% endif %}

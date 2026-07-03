@@ -5994,9 +5994,6 @@ msgstr ""
 msgid "No characters available"
 msgstr ""
 
-msgid "Next steps"
-msgstr ""
-
 msgid "Discover the web site"
 msgstr ""
 
@@ -11407,7 +11404,43 @@ msgstr ""
 msgid " Hurry: only %(num)d tickets available"
 msgstr ""
 
-msgid "Pay the annual membership fee to attend the event"
+msgid "Pay membership fee"
+msgstr ""
+
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s %(currency)s, required to "
+"attend this event"
+msgstr ""
+
+msgid "Upload membership application"
+msgstr ""
+
+msgid ""
+"Fill in and upload your membership application, needed before you can pay "
+"for your registration"
+msgstr ""
+
+msgid "Awaiting member approval"
+msgstr ""
+
+msgid ""
+"Your membership application is under review by the organization; payment "
+"will be available once it is approved"
+msgstr ""
+
+msgid "Complete your profile"
+msgstr ""
+
+msgid ""
+"Fill in the missing information in your profile to complete your registration"
+msgstr ""
+
+msgid "Proceed with payment"
+msgstr ""
+
+msgid ""
+"Your registration is provisional: complete the payment to confirm your spot"
 msgstr ""
 
 msgid "Registration confirmed"
@@ -11423,22 +11456,10 @@ msgid ""
 "Your registration is provisional, and will be confirmed once payment is made"
 msgstr ""
 
-msgid "Upload your membership application to proceed"
-msgstr ""
-
-msgid "Awaiting member approval to proceed with payment"
-msgstr ""
-
-msgid "Please fill in your profile"
-msgstr ""
-
-msgid "Proceed with payment to confirm your registration"
-msgstr ""
-
-msgid "Pending payment"
-msgstr ""
-
-msgid "Your registration is awaiting payment"
+#, python-format
+msgid ""
+"Your registration is provisional, and will be confirmed once the payment of "
+"%(amount)s%(currency)s is made"
 msgstr ""
 
 msgid "Payment submitted"
@@ -11447,7 +11468,33 @@ msgstr ""
 msgid "Your payment has been submitted, and is awaiting manual verification"
 msgstr ""
 
-msgid "Payment awaiting manual verification"
+msgid "Payment awaiting verification"
+msgstr ""
+
+msgid "Your payment has been received and is being verified by the organizers"
+msgstr ""
+
+msgid "no further action is needed at the moment"
+msgstr ""
+
+#, python-format
+msgid "Payment overdue: %(amount)s%(currency)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The payment deadline has passed: settle the outstanding "
+"%(amount)s%(currency)s as soon as possible to keep your registration"
+msgstr ""
+
+#, python-format
+msgid "Payment due: %(amount)s%(currency)s within %(days)d days"
+msgstr ""
+
+#, python-format
+msgid ""
+"A payment of %(amount)s%(currency)s is due within %(days)d days to confirm "
+"your registration"
 msgstr ""
 
 msgid ""
@@ -11471,7 +11518,7 @@ msgid "Registrations for this event have not opened yet"
 msgstr ""
 
 #, python-format
-msgid "Opening at: %(date)s"
+msgid "Opening on: %(date)s"
 msgstr ""
 
 msgid "Registrations closed"
@@ -11489,6 +11536,10 @@ msgstr ""
 msgid ""
 "The event is sold out, but you can join the waiting list to be notified if a "
 "spot frees up"
+msgstr ""
+
+#, python-format
+msgid "Closing on: %(date)s"
 msgstr ""
 
 msgid "Pre-registration confirmed"
@@ -11535,6 +11586,9 @@ msgid "Write here questions about your character directly to the authors"
 msgstr ""
 
 msgid "Create your character"
+msgstr ""
+
+msgid "Create the character you will play in this event"
 msgstr ""
 
 msgid "Select your character"

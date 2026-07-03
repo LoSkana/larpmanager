@@ -14,10 +14,20 @@
                 {% elif run_status.status_type == "provisional" %}
                     <i class="fa-solid fa-hourglass-half"></i>
                 {% endif %}
-                {% if long_text and run_status.text_long %}
-                    {{ run_status.text_long | safe }}
+                {% if run_status.url %}
+                    <a href="{{ run_status.url }}">
+                        {% if long_text and run_status.text_long %}
+                            {{ run_status.text_long }}
+                        {% else %}
+                            {{ run_status.text }}
+                        {% endif %}
+                    </a>
                 {% else %}
-                    {{ run_status.text | safe }}
+                    {% if long_text and run_status.text_long %}
+                        {{ run_status.text_long }}
+                    {% else %}
+                        {{ run_status.text }}
+                    {% endif %}
                 {% endif %}
                 {% if features.payment and reg and reg.tot_iscr %}
                     {% with uuid=reg_uuid|default:reg.uuid %}
@@ -76,7 +86,12 @@
                 </span>
             {% endwith %}
         {% endif %}
-        {% if run_status.details %}<p class="reg-status-details">{{ run_status.details | safe }}</p>{% endif %}
+        {% if run_status.details or run_status.details_characters %}
+            <p class="reg-status-details">
+                {{ run_status.details }}
+                {% if run_status.details_characters %}{{ run_status.details_characters }}{% endif %}
+            </p>
+        {% endif %}
     </div>
 {% endif %}
 {% endwith %}

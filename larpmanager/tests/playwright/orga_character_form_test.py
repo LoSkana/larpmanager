@@ -102,7 +102,7 @@ def create_second_char(live_server: Any, page: Any) -> None:
     submit_register(page)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("link", name="Create your character!").click()
+    page.get_by_role("link", name="Create your character").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("olivaaaa")
 
@@ -215,7 +215,7 @@ def create_first_char(live_server: Any, page: Any) -> None:
     submit_register(page)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("link", name="Create your character!").click()
+    page.get_by_role("link", name="Create your character").click()
     page.locator("#id_name").click()
     page.locator("#id_name").fill("pinoloooooooooo")
 

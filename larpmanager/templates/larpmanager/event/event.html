@@ -36,9 +36,42 @@
                     </h3>
                     <p class="reg-{{ run_status.status_type }}">
                         {% firstof run_status.text_long run_status.text as status_text %}
-                        {{ status_text | safe }}
+                        {% if run_status.url %}
+                            <a href="{{ run_status.url }}">{{ status_text }}</a>
+                        {% else %}
+                            {{ status_text }}
+                        {% endif %}
+                        {% if run_status.details %}<p>{{ run_status.details }}</p>{% endif %}
+                        {% if run_status.details_characters and effective_version < 22 %}<p>{{ run_status.details_characters }}</p>{% endif %}
                     </p>
                 </div>
+                {% for char_entry in run_status.character_links %}
+                    <div class="event-card event-card-char">
+                        <h3>
+                            <i class="fa-solid fa-user"></i> {% trans "Character" %}: {{ char_entry.name }}
+                        </h3>
+                        <p class="char-entry-links">
+                            {% for link in char_entry.links %}
+                                <a href="{{ link.url }}" title="{{ link.tooltip }}">
+                                    <i class="{{ link.icon }}"></i> {{ link.label }}
+                                </a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                {% endfor %}
+                {% if run_status.character_action %}
+                    <div class="event-card event-card-char">
+                        <h3>
+                            <i class="fa-solid fa-user"></i> {% trans "Character" %}
+                        </h3>
+                        <p>
+                            <a href="{{ run_status.character_action.url }}"
+                               title="{{ run_status.character_action.tooltip }}">
+                                <i class="{{ run_status.character_action.icon }}"></i> {{ run_status.character_action.label }}
+                            </a>
+                        </p>
+                    </div>
+                {% endif %}
                 {% if run_status.registration %}
                     {% if features.payment and run_status.registration.tot_iscr %}
                         {% with reg=run_status.registration %}
@@ -72,22 +105,6 @@
                             </div>
                         {% endwith %}
                     {% endif %}
-                    {% if run_status.details %}
-                        <div class="event-card event-card-chars">
-                            <h3>
-                                <i class="fa-solid fa-user"></i> {% trans "Characters" %}
-                            </h3>
-                            <p>{{ run_status.details | safe }}</p>
-                        </div>
-                    {% endif %}
-                    {% if run_status.action and run_status.status_type in "action_needed provisional pending" %}
-                        <div class="event-card event-card-actions">
-                            <h3>
-                                <i class="fa-solid fa-list-check"></i> {% trans "Next steps" %}
-                            </h3>
-                            {% include "elements/reg_status_banner.html" with run_status=run_status %}
-                        </div>
-                    {% endif %}
                 {% endif %}
                 <div class="event-info event-card">
                     {% if event.tagline %}<p class="event-tagline">{{ event.tagline }}</p>{% endif %}
@@ -96,7 +113,6 @@
                             <i>{{ event.keywords }}</i>
                         </p>
                     {% endif %}
-                    {% if event.description %}<div class="event-description">{{ event.description | safe }}</div>{% endif %}
                     {% if event.authors %}
                         <p>
                             <i class="fa-solid fa-pen-nib"></i> <b>{% trans "Authors" %}:</b> {{ event.authors }}
@@ -108,6 +124,7 @@
                         </p>
                     {% endif %}
                 </div>
+                {% if event.description %}<div class="event-card">{{ event.description | safe }}</div>{% endif %}
             </div>
             {% if event.cover %}
                 <div class="event-side">

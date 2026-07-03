@@ -140,7 +140,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Accounting", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
-    page.get_by_role("link", name="Upload your membership application to proceed").click()
+    page.get_by_role("link", name="Upload membership application").click()
 
     # Confirm profile
     page.get_by_role("checkbox", name="Authorisation").check()
@@ -168,7 +168,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
 
     # Go to payment page: single method auto-selected, verify total 120 includes membership fee of 20
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
+    expect_normalized(page, page.locator("#one"), "Proceed with payment")
     page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "The total registration fee is: 100")
@@ -219,7 +219,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
 
     # Second event: proceed to wire payment (total 70, no membership shown, single method auto-selected)
     go_to(page, live_server, "/testsecond/register")
-    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
+    expect_normalized(page, page.locator("#one"), "Proceed with payment")
     page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "70 EUR")

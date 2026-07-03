@@ -104,8 +104,8 @@ def membership(live_server: Any, page: Any) -> None:
     # send membership
     go_to(page, live_server, "/test/register")
     expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "upload your membership application to proceed")
-    page.get_by_role("link", name="Upload your membership application to proceed").click()
+    expect_normalized(page, page.locator("#one"), "upload membership application")
+    page.get_by_role("link", name="Upload membership application").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
     # compile request
@@ -127,7 +127,7 @@ def membership(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     # check register
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
+    expect_normalized(page, page.locator("#one"), "Proceed with payment")
     page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
 
 

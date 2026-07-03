@@ -36,7 +36,7 @@ from django.utils.html import escape, format_html, mark_safe
 from django.utils.http import urlencode
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.accounting.registration import round_to_nearest_cent
+from larpmanager.accounting.base import _format_decimal
 from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
 from larpmanager.models.utils import get_option_form_text
@@ -844,15 +844,7 @@ def get_character_field(value: Any, options: Any) -> Any:
 @register.filter
 def format_decimal(decimal_value: Any) -> Any:
     """Template filter to format decimal values for display."""
-    try:
-        rounded_value = round_to_nearest_cent(float(decimal_value))
-        if rounded_value == 0:
-            return ""
-        if rounded_value == int(rounded_value):
-            return str(int(rounded_value))
-        return f"{rounded_value:.2f}".rstrip("0").rstrip(".")
-    except (ValueError, TypeError):
-        return decimal_value
+    return _format_decimal(decimal_value)
 
 
 @register.filter

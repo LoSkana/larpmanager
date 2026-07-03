@@ -3961,54 +3961,74 @@ body.floating_iframe #wrapper {
 }
 
 /* Slim registration action banner (v22, only when action pending) */
-.reg-banner {
-  display: flex;
+.new_v22 .reg-banner {
+  display: flex !important;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.6em;
   width: fit-content;
   max-width: 100%;
   padding: 0.45em 0.75em;
-  margin: 0 auto 1em 0;
+  margin: 0;
   border-radius: 5px;
   border-left: 4px solid #ccc;
   background: rgba(0, 0, 0, 0.03);
   text-align: left;
 }
+
+.new_v22 .reg-banner a {
+  margin: 0;
+}
+
+.reg-banner .reg-action-main {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+
 .reg-banner .reg-action-link {
   font-weight: 600;
 }
+
 .reg-banner .reg-action-info {
   font-style: italic;
   opacity: 0.85;
 }
+
 .reg-banner .reg-action-note {
   font-size: 0.88em;
   opacity: 0.75;
   font-style: italic;
 }
+
 .reg-banner.reg-action_needed {
   border-left-color: #e67e22;
   background: rgba(230, 126, 34, 0.07);
 }
-.reg-banner.reg-action_needed > i {
+
+.reg-banner.reg-action_needed .reg-action-main i {
   color: #e67e22;
 }
+
 .reg-banner.reg-action_needed .reg-action-link {
   color: #c0392b;
 }
+
 .reg-banner.reg-pending {
   border-left-color: #f0ad4e;
   background: rgba(240, 173, 78, 0.07);
 }
-.reg-banner.reg-pending > i {
+
+.reg-banner.reg-pending .reg-action-main i {
   color: #c89900;
 }
+
 .reg-banner.reg-provisional {
   border-left-color: #5bc0de;
   background: rgba(91, 192, 222, 0.07);
 }
-.reg-banner.reg-provisional > i {
+
+.reg-banner.reg-provisional .reg-action-main i {
   color: #31b0d5;
 }
 
@@ -4688,9 +4708,9 @@ body.in-iframe #menu-mobile {
 
 .event-layout {
   display: flex;
-  gap: 2em;
+  gap: 1em;
   align-items: flex-start;
-  margin-bottom: 2em;
+  margin: 0.5em 0;
 }
 
 .event-main {
@@ -4723,6 +4743,10 @@ body.in-iframe #menu-mobile {
   margin-bottom: 1em;
 }
 
+.event-main .event-card:last-child {
+  margin-bottom: 0;
+}
+
 .event-card h3 {
   margin: 0 0 0.5em;
   font-size: 1.05em;
@@ -4741,8 +4765,14 @@ body.in-iframe #menu-mobile {
   margin-bottom: 0;
 }
 
-.event-card .reg-banner {
-  margin: 0;
+.event-card .char-entry-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em 1.2em;
+}
+
+.event-card .char-entry-links a {
+  white-space: nowrap;
 }
 
 .event-info .event-tagline {
@@ -4791,4 +4821,40 @@ body.in-iframe #menu-mobile {
 
 .event-card .reg-action_needed i {
   color: #e67e22;
+}
+
+.payment-summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.payment-summary-card {
+  flex: 1 1 200px;
+  padding: 1rem 1.25rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+  text-align: center;
+}
+
+.payment-summary-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.4rem;
+}
+
+.payment-summary-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.payment-summary-card-remaining {
+  background: #fff4e5;
+  border-color: #f0c896;
+}
+
+.payment-summary-card-remaining .payment-summary-value {
+  color: #d9822b;
 }
