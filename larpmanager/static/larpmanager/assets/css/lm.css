@@ -4408,6 +4408,8 @@ body.in-iframe #menu-mobile {
     right: 0;
     height: 89vh;
     height: 89dvh;
+    max-height: 89vh;
+    max-height: 89dvh;
     width: 70vw;
     border-radius: 8px 0 0 8px;
     opacity: 1;
