@@ -10,6 +10,9 @@
                        title="{{ run_status.character_action.tooltip }}">
                         <i class="{{ run_status.character_action.icon }}"></i>
                         <span>{{ run_status.character_action.label }}</span>
+                        {% if run_status.character_action.status_icon %}
+                            <i class="{{ run_status.character_action.status_icon }} sidebar-status-badge reg-{{ run_status.character_action.status_type }}"></i>
+                        {% endif %}
                     </a>
                 </span>
             </div>

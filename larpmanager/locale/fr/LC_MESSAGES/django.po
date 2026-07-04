@@ -5138,6 +5138,9 @@ msgstr "Voici nos événements passés"
 msgid "Two-Factor Authentication"
 msgstr "Authentification à deux facteurs"
 
+msgid "Update your personal data"
+msgstr "Mets à jour tes données personnelles"
+
 msgid "Upload of photo and video"
 msgstr "Téléchargement de photos et de vidéos"
 
@@ -7216,9 +7219,6 @@ msgstr "Ce lien d'accès n'est pas valide ou a expiré."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Fichiers non reconnus dans le ZIP (seront ignorés)"
-
-msgid "Update your personal data and profile photo"
-msgstr "Mets à jour tes données personnelles et ta photo de profil"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Télécharger un fichier PDF ou une image (JPG, PNG, etc.)"

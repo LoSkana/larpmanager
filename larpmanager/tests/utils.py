@@ -685,8 +685,7 @@ def sidebar(page, link):
 
 
 def icon_link(container, page, link):
-    pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
-    locator = page.locator(container).get_by_role("link", name=pattern)
+    locator = page.locator(container).locator("a").filter(has=page.locator("span", has_text=link))
     locator.wait_for(state="visible")
     locator.click()
     _wait_lm_ready(page)

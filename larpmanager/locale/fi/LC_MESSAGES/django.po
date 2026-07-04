@@ -5138,6 +5138,9 @@ msgstr "Nämä ovat aiemmat tapahtumamme"
 msgid "Two-Factor Authentication"
 msgstr "Kahden tekijän todennus"
 
+msgid "Update your personal data"
+msgstr "Päivitä henkilötietosi"
+
 msgid "Upload of photo and video"
 msgstr "Valokuvan ja videon lataaminen"
 
@@ -7205,9 +7208,6 @@ msgstr "Tämä linkki ei ole voimassa tai sen voimassaolo on päättynyt."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Tunnistamattomat tiedostot ZIP:ssä (ohitetaan)"
-
-msgid "Update your personal data and profile photo"
-msgstr "Päivitä henkilötietosi ja profiilikuva"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Lataa PDF-tiedosto tai kuva (JPG, PNG jne.)"

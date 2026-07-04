@@ -37,6 +37,7 @@ _STATUS_ICONS = {
     "pending": "fa-solid fa-clock",
     "action_needed": "fa-solid fa-circle-exclamation",
     "provisional": "fa-solid fa-hourglass-half",
+    "todo": "fa-solid fa-list-check",
 }
 
 

@@ -5138,6 +5138,9 @@ msgstr "Toto jsou naše minulé akce"
 msgid "Two-Factor Authentication"
 msgstr "Dvoufaktorové ověřování"
 
+msgid "Update your personal data"
+msgstr "Aktualizujte své osobní údaje"
+
 msgid "Upload of photo and video"
 msgstr "Nahrávání fotografií a videí"
 
@@ -7206,9 +7209,6 @@ msgstr "Tento přístupový odkaz je neplatný nebo jeho platnost vypršela."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Nerozpoznané soubory v ZIP (budou přeskočeny)"
-
-msgid "Update your personal data and profile photo"
-msgstr "Aktualizujte své osobní údaje a profilovou fotku"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Nahrajte soubor PDF nebo obrázek (JPG, PNG atd.)"

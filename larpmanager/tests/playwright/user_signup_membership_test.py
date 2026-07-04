@@ -105,9 +105,9 @@ def membership(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/")
     expect_normalized(page, page.locator("#one"), "Your registration is provisional")
     page.get_by_role("link", name="Fill in and upload your membership application").click()
-    page.get_by_role("link", name="Upload membership application").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
+
     # compile request
     load_image(page, "#id_request")
     load_image(page, "#id_document")

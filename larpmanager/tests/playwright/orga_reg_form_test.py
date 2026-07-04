@@ -176,7 +176,7 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "you are about to make a payment of: 29 €")
 
     # check form
-    sidebar(page, "Registration")
+    sidebar(page, "Your registration")
     expect_normalized(page,
         page.locator("#register_form"),
         """
@@ -200,7 +200,7 @@ def check_filler(page: Any, live_server: Any) -> None:
 
     # check filler is not there
     go_to(page, live_server, "test/")
-    sidebar(page, "Registration")
+    sidebar(page, "Your registration")
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
         """
         - row "Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2":
@@ -219,7 +219,7 @@ def check_filler(page: Any, live_server: Any) -> None:
 
     # check filler is available
     go_to(page, live_server, "test/")
-    sidebar(page, "Registration")
+    sidebar(page, "Your registration")
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
         """
         - row "Ticket (*) Standard 5€ sadsadsadsa Filler Your registration ticket2":

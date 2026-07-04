@@ -32,7 +32,11 @@
                 </div>
                 <div class="event-card event-card-reg">
                     <h3>
-                        <i class="fa-solid fa-ticket"></i> {% trans "Registration" %}
+                        {% if run_status.url %}
+                            <a href="{{ run_status.url }}"><i class="fa-solid fa-ticket"></i> {% trans "Registration" %}</a>
+                        {% else %}
+                            <i class="fa-solid fa-ticket"></i> {% trans "Registration" %}
+                        {% endif %}
                     </h3>
                     <p class="reg-{{ run_status.status_type }}">
                         {% firstof run_status.text_long run_status.text as status_text %}
@@ -48,7 +52,13 @@
                 {% for char_entry in run_status.character_links %}
                     <div class="event-card event-card-char">
                         <h3>
-                            <i class="fa-solid fa-user"></i> {% trans "Character" %}: {{ char_entry.name }}
+                            {% with char_entry.links|first as first_link %}
+                                {% if first_link %}
+                                    <a href="{{ first_link.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}: {{ char_entry.name }}</a>
+                                {% else %}
+                                    <i class="fa-solid fa-user"></i> {% trans "Character" %}: {{ char_entry.name }}
+                                {% endif %}
+                            {% endwith %}
                         </h3>
                         <p class="char-entry-links">
                             {% for link in char_entry.links %}
@@ -62,7 +72,7 @@
                 {% if run_status.character_action %}
                     <div class="event-card event-card-char">
                         <h3>
-                            <i class="fa-solid fa-user"></i> {% trans "Character" %}
+                            <a href="{{ run_status.character_action.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}</a>
                         </h3>
                         <p>
                             <a href="{{ run_status.character_action.url }}"
@@ -77,7 +87,7 @@
                         {% with reg=run_status.registration %}
                             <div class="event-card event-card-acc">
                                 <h3>
-                                    <i class="fa-solid fa-coins"></i> {% trans "Accounting" %}
+                                    <a href="{% url 'accounting_registration' reg.uuid %}"><i class="fa-solid fa-coins"></i> {% trans "Accounting" %}</a>
                                 </h3>
                                 <p>
                                     {% trans "Total registration fee" %}: {{ reg.tot_iscr|format_decimal }}{{ currency_symbol }}

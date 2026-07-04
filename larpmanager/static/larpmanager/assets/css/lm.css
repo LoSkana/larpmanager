@@ -3995,6 +3995,9 @@ body.floating_iframe #wrapper {
 .sidebar-status-badge.reg-provisional {
   color: #31b0d5;
 }
+.sidebar-status-badge.reg-todo {
+  color: #6c757d;
+}
 
 /* Slim registration action banner (v22, only when action pending) */
 .new_v22 .reg-banner {

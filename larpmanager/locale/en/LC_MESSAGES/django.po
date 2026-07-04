@@ -8044,7 +8044,7 @@ msgstr ""
 msgid "Personal info"
 msgstr ""
 
-msgid "Update your personal data and profile photo"
+msgid "Update your personal data"
 msgstr ""
 
 msgid "You are logged in with an email address"

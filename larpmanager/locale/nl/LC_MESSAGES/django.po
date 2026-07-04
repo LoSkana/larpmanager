@@ -5138,6 +5138,9 @@ msgstr "Dit zijn onze evenementen uit het verleden"
 msgid "Two-Factor Authentication"
 msgstr "Authenticatie met twee factoren"
 
+msgid "Update your personal data"
+msgstr "Werk je persoonlijke gegevens bij"
+
 msgid "Upload of photo and video"
 msgstr "Foto's en video's uploaden"
 
@@ -7213,9 +7216,6 @@ msgstr "Deze toegangslink is ongeldig of verlopen."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Niet-herkende bestanden in ZIP (worden overgeslagen)"
-
-msgid "Update your personal data and profile photo"
-msgstr "Werk je persoonlijke gegevens en profielfoto bij"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Upload een PDF-bestand of afbeelding (JPG, PNG, enz.)"

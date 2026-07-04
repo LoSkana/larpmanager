@@ -1028,6 +1028,8 @@ def _status_approval(
             "label_long": _("Create the character you will play in this event") + "!",
             "tooltip": _("Create your character") + "!",
             "icon": "fa-solid fa-wand-magic-sparkles",
+            "status_type": "todo",
+            "status_icon": "fa-solid fa-list-check",
         }
 
     # Show character selection link if no characters assigned but max chars available

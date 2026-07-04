@@ -5138,6 +5138,9 @@ msgstr "Oto nasze poprzednie wydarzenia"
 msgid "Two-Factor Authentication"
 msgstr "Uwierzytelnianie dwuskładnikowe"
 
+msgid "Update your personal data"
+msgstr "Zaktualizuj swoje dane osobowe"
+
 msgid "Upload of photo and video"
 msgstr "Przesyłanie zdjęć i filmów"
 
@@ -7209,9 +7212,6 @@ msgstr "To łącze dostępu jest nieprawidłowe lub wygasło."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Nierozpoznane pliki w ZIP (zostaną pominięte)"
-
-msgid "Update your personal data and profile photo"
-msgstr "Zaktualizuj swoje dane osobowe i zdjęcie profilowe"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Prześlij plik PDF lub obraz (JPG, PNG itp.)"

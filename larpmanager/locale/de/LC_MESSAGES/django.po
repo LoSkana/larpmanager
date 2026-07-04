@@ -5138,6 +5138,9 @@ msgstr "Dies sind unsere vergangenen Veranstaltungen"
 msgid "Two-Factor Authentication"
 msgstr "Zwei-Faktoren-Authentifizierung"
 
+msgid "Update your personal data"
+msgstr "Aktualisiere deine persönlichen Daten"
+
 msgid "Upload of photo and video"
 msgstr "Hochladen von Fotos und Videos"
 
@@ -7219,9 +7222,6 @@ msgstr "Dieser Zugangslink ist ungültig oder abgelaufen."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Nicht erkannte Dateien im ZIP (werden übersprungen)"
-
-msgid "Update your personal data and profile photo"
-msgstr "Aktualisiere deine persönlichen Daten und dein Profilbild"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Hochladen einer PDF-Datei oder eines Bildes (JPG, PNG, usw.)"

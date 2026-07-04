@@ -5138,6 +5138,9 @@ msgstr "Detta är våra tidigare evenemang"
 msgid "Two-Factor Authentication"
 msgstr "Tvåfaktorsautentisering"
 
+msgid "Update your personal data"
+msgstr "Uppdatera dina personuppgifter"
+
 msgid "Upload of photo and video"
 msgstr "Ladda upp foton och videor"
 
@@ -7207,9 +7210,6 @@ msgstr "Denna länk är ogiltig eller har löpt ut."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Oigenkända filer i ZIP (kommer att hoppas över)"
-
-msgid "Update your personal data and profile photo"
-msgstr "Uppdatera dina personuppgifter och din profilbild"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Ladda upp en PDF-fil eller bild (JPG, PNG, etc.)"
