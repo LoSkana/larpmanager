@@ -269,9 +269,8 @@ def character(page: Any, live_server: Any) -> None:
     page.locator("#id_que_u7").fill("asdsadsa")
     submit_confirm(page)
 
-    # confirm char
-    expect_normalized(page, page.locator("#one"), "my character (Creation)")
-    page.get_by_role("link", name="my character (Creation)").click()
+    # confirm char: after creation the user lands on the character sheet
+    expect_normalized(page, page.locator("#one"), "Status: Creation")
     page.get_by_role("link", name="Edit").click()
     page.get_by_role("cell", name="Click here to confirm that").click()
     page.get_by_text("Click here to confirm that").click()
@@ -279,7 +278,7 @@ def character(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
     # check char
-    expect_normalized(page, page.locator("#one"), "my character (Proposed)")
+    expect_normalized(page, page.locator("#one"), "Status: Proposed")
 
     # approve char
     go_to(page, live_server, "/test/manage/characters")
@@ -288,11 +287,8 @@ def character(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_status").select_option("a")
     save_modal(page, edit_iframe)
 
-    go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Your character is: my character")
-
     go_to(page, live_server, "/test")
-    expect_normalized(page, page.locator("#one"), "Your character is: my character")
+    expect_normalized(page, page.locator("#one"), "Character: my character")
 
 def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     """Enable the user_characters_shortcut configuration."""

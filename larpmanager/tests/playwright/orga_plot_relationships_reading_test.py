@@ -169,8 +169,8 @@ def relationships(live_server: Any, page: Any) -> None:
     expect_normalized(page, edit_iframe.locator("#form_relationships"), "ciaaoooooo")
 
     # check in gallery
-    go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="prova").click()
+    go_to(page, live_server, "/test/gallery/")
+    page.get_by_role("link", name="prova").first.click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Relationships Test Character test teaser ciaaoooooo")
 
@@ -242,8 +242,8 @@ def plots(live_server: Any, page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check in user
-    go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="prova").click()
+    go_to(page, live_server, "/test/gallery/")
+    page.get_by_role("link", name="prova").first.click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "testona wwwww bruuuu")
 
@@ -401,7 +401,7 @@ def auto_relationships_plot(live_server: Any, page: Any) -> None:
 
 def auto_relationships_check(live_server: Any, page: Any) -> None:
     # check the test character shows 6 relationships: 3 manual + 3 auto
-    go_to(page, live_server, "/test/")
+    go_to(page, live_server, "/test/gallery/")
     page.get_by_role("link", name="Test Character").first.click()
     relationships = page.locator(".gallery.single.relationships")
     expect(relationships).to_have_count(6)

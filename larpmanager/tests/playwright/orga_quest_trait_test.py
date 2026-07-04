@@ -69,12 +69,12 @@ def test_quest_trait(pw_page: Any) -> None:
         page.locator("#one"),
         "player: admin test presentation test teaser text test text torta - nonna saleee aliame con another torta - nonna another player: user test",
     )
-    go_to(page, live_server, "test/1/")
-    page.get_by_role("link", name="Another").click()
+    go_to(page, live_server, "/test/gallery/")
+    page.get_by_role("link", name="Another").first.click()
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#one"),
-        "your character is: test character player: user test torta - strudel saleee test character veronese torta - strudel test character player: admin test",
+        "player: user test torta - strudel saleee test character veronese torta - strudel test character player: admin test",
     )
     page.get_by_role("heading", name="Torta - Strudel").first.click()
     _wait_lm_ready(page)

@@ -12,20 +12,20 @@
                     <a class="tv22-pill{% if not run %} active{% endif %}"
                        href="{% url 'manage' %}">
                         {% if association.favicon %}<img class="tv22-pill-img" src="{{ association.favicon }}" alt="">{% endif %}
-                        {{ association.name }}
+                        <span>{{ association.name }}</span>
                     </a>
                 {% endif %}
                 {% if run and run.id not in open_runs %}
                     <a class="tv22-pill active" href="{% url 'manage' run.get_slug %}">
                         {% if run.get_cover_url %}<img class="tv22-pill-img" src="{{ run.get_cover_url }}" alt="">{% endif %}
-                        {{ run }}
+                        <span>{{ run }}</span>
                     </a>
                 {% endif %}
                 {% for id, open_run in open_runs.items %}
                     <a class="tv22-pill{% if run and run.event.slug == open_run.event_slug and run.number == open_run.number %} active{% endif %}"
                        href="{% url 'manage' open_run.slug %}">
                         {% if open_run.cover_url %}<img class="tv22-pill-img" src="{{ open_run.cover_url }}" alt="">{% endif %}
-                        {{ open_run.label }}
+                        <span>{{ open_run.label }}</span>
                     </a>
                 {% endfor %}
             {% else %}
@@ -42,7 +42,7 @@
                     <a class="tv22-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
                        href="{% url 'event_redirect' event_slug=vrun.slug %}">
                         {% if vrun.cover_url %}<img class="tv22-pill-img" src="{{ vrun.cover_url }}" alt="">{% endif %}
-                        {{ vrun.name }}
+                        <span>{{ vrun.name }}</span>
                     </a>
                 {% endfor %}
                 {% if user.is_authenticated %}

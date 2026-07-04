@@ -3996,7 +3996,7 @@ body.floating_iframe #wrapper {
   color: #31b0d5;
 }
 .sidebar-status-badge.reg-todo {
-  color: #6c757d;
+  color: #28a745;
 }
 
 /* Slim registration action banner (v22, only when action pending) */
@@ -4464,6 +4464,10 @@ body.association.new_v22 .user_resize {
 .new_v22 h3,
 .new_v22 h4 {
   text-align: left;
+}
+
+.new_v22 .icon-name p {
+  text-align: center;
 }
 
 .calendar h3 {

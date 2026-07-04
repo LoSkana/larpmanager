@@ -136,7 +136,7 @@ def create_character(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
     sidebar(page, "Your registration")
     page.get_by_role("button", name="Continue").click()
-    page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
+    page.get_by_role("link", name="myyyy", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
 
@@ -144,7 +144,7 @@ def create_character(page: Any) -> None:
     sidebar(page, "Your registration")
     page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("button", name="Continue").click()
-    page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
+    page.get_by_role("link", name="myyyy", exact=True).click()
 
     # check previous option is not selected anymore
     expect_normalized(page, page.locator("#one"), "The character have missing values in mandatory fields: choose")
@@ -161,7 +161,7 @@ def create_character(page: Any) -> None:
     # check with registration resubmit
     sidebar(page, "Your registration")
     page.get_by_role("button", name="Continue").click()
-    page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
+    page.get_by_role("link", name="myyyy", exact=True).click()
     page.get_by_role("link", name="Edit").click()
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"')
     submit_confirm(page)

@@ -32,7 +32,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
     submit_register, delete_modal, \
-    expect_normalized, save_modal, wait_accounting_load, _wait_lm_ready, SHORT_TIMEOUT, sidebar, \
+    expect_normalized, save_modal, _wait_lm_ready, SHORT_TIMEOUT, sidebar, \
     click_and_wait_accounting
 
 pytestmark = pytest.mark.e2e

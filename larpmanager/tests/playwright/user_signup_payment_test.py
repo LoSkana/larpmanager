@@ -106,7 +106,7 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("b"), "100")
 
     # check reg status
-    go_to(page, live_server, "/test/register")
+    go_to(page, live_server, "/test/")
     expect_normalized(page, page.locator("#one"), "Your registration is provisional")
 
     # pay

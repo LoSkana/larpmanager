@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING, Any
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import _format_decimal, is_registration_provisional
@@ -889,9 +890,13 @@ def registration_status_characters(
 
     # Add character information to status details based on number of characters
     if len(character_links) == 1:
-        run_status["details_characters"] = _("Your character is") + ": " + character_links[0]
+        run_status["details_characters"] = format_html("{}: {}", _("Your character is"), character_links[0])
     elif len(character_links) > 1:
-        run_status["details_characters"] = _("Your characters are") + ": " + " • ".join(character_links)
+        run_status["details_characters"] = format_html(
+            "{}: {}",
+            _("Your characters are"),
+            format_html_join(" - ", "{}", ((link,) for link in character_links)),
+        )
 
     is_assigned = len(character_links) > 0
 
@@ -979,16 +984,16 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
 def _character_links_html(character_entry: dict) -> str:
     """Render the character quick access links as an HTML snippet."""
     character_link_snippets = [
-        f"""
-            <span class="lm_tooltip">
-             <a href='{link["url"]}'>{link["label"]}</a>
-             <span class="lm_tooltiptext">{link["tooltip"]}!</span>
-             </span>
-         """
+        format_html(
+            '<span class="lm_tooltip"><a href="{}">{}</a><span class="lm_tooltiptext">{}!</span></span>',
+            link["url"],
+            link["label"],
+            link["tooltip"],
+        )
         for link in character_entry["links"]
     ]
 
-    return " | ".join(character_link_snippets)
+    return format_html_join(" | ", "{}", ((snippet,) for snippet in character_link_snippets))
 
 
 def _status_approval(

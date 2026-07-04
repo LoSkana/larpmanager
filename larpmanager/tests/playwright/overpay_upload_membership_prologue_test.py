@@ -42,7 +42,7 @@ from larpmanager.tests.utils import (
     sidebar,
     submit_confirm,
     submit_register,
-    wait_accounting_load, click_and_wait_accounting,
+    click_and_wait_accounting,
 )
 
 pytestmark = pytest.mark.e2e
