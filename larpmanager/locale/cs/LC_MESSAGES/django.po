@@ -2700,9 +2700,6 @@ msgstr "Osobní údaje"
 msgid "Phone contact"
 msgstr "Telefonní kontakt"
 
-msgid "Player editor"
-msgstr "Editor hráčů"
-
 msgid "Prerequisites"
 msgstr "Předpoklady"
 
@@ -3831,6 +3828,9 @@ msgstr "Přidělená postava"
 
 msgid "Available versions"
 msgstr "Dostupné verze"
+
+msgid "Character creation"
+msgstr "Vytvoření postavy"
 
 msgid "Character portrait"
 msgstr "Portrét postavy"
@@ -7183,9 +7183,6 @@ msgstr "Zatím nebyly vytvořeny žádné otázky k workshopu"
 msgid "Now you can create milestones for the event"
 msgstr "Nyní můžete pro událost vytvořit milníky"
 
-msgid "Now you can set the player editing settings"
-msgstr "Nyní můžete nastavit úpravy přehrávače"
-
 msgid "Please review and submit it for publication"
 msgstr "Prosíme, zkontrolujte ji a předložte ke zveřejnění"
 
@@ -8414,6 +8411,9 @@ msgid "No contributors with competences found in the organization"
 msgstr ""
 "V organizaci nebyli nalezeni žádní spolupracovníci s příslušnými "
 "kompetencemi"
+
+msgid "Now you can set settings for character creation by players"
+msgstr "Nyní můžete nastavit parametry pro vytváření postav hráči"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"

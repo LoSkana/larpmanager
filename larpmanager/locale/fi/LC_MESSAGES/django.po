@@ -2700,9 +2700,6 @@ msgstr "Henkilötiedot"
 msgid "Phone contact"
 msgstr "Puhelinyhteys"
 
-msgid "Player editor"
-msgstr "Pelaajan editori"
-
 msgid "Prerequisites"
 msgstr "Edellytykset"
 
@@ -3831,6 +3828,9 @@ msgstr "Annettu hahmo"
 
 msgid "Available versions"
 msgstr "Saatavilla olevat versiot"
+
+msgid "Character creation"
+msgstr "Hahmon luominen"
 
 msgid "Character portrait"
 msgstr "Hahmon muotokuva"
@@ -7182,9 +7182,6 @@ msgstr "Työpajakysymyksiä ei ole vielä luotu"
 msgid "Now you can create milestones for the event"
 msgstr "Nyt voit luoda virstanpylväitä tapahtumalle"
 
-msgid "Now you can set the player editing settings"
-msgstr "Nyt voit määrittää soittimen muokkausasetukset"
-
 msgid "Please review and submit it for publication"
 msgstr "Tarkista ja lähetä se julkaistavaksi"
 
@@ -8418,6 +8415,9 @@ msgstr "Hallitse työpajan kysymyksiin tarjolla olevia vastausvaihtoehtoja"
 
 msgid "No contributors with competences found in the organization"
 msgstr "Organisaatiosta ei löytynyt päteviä tekijöitä"
+
+msgid "Now you can set settings for character creation by players"
+msgstr "Nyt voit määrittää pelaajien hahmojen luomiseen liittyvät asetukset"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Vaihtoehdon nimi, joka näkyy kysymyksessä (pidä se lyhyenä)"

@@ -860,7 +860,7 @@ class OrgaConfigForm(ConfigForm):
 
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
-            self.set_section("user_character", _("Player editor"))
+            self.set_section("user_character", _("Character creation"))
 
             # Maximum character limit configuration
             max_characters_label = _("Maximum number")
@@ -1892,7 +1892,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     ),
                     "user_character": (
                         True,
-                        _("Player editor"),
+                        _("Character creation"),
                         _("Do you want to allow participants to create their own characters"),
                     ),
                     "experience": (

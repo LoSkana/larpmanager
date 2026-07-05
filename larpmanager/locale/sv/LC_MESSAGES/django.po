@@ -2700,9 +2700,6 @@ msgstr "Personuppgifter"
 msgid "Phone contact"
 msgstr "Telefonkontakt"
 
-msgid "Player editor"
-msgstr "Spelarredaktör"
-
 msgid "Prerequisites"
 msgstr "Förkunskapskrav"
 
@@ -3831,6 +3828,9 @@ msgstr "Tilldelad karaktär"
 
 msgid "Available versions"
 msgstr "Tillgängliga versioner"
+
+msgid "Character creation"
+msgstr "Karaktärsskapande"
 
 msgid "Character portrait"
 msgstr "Porträtt av karaktären"
@@ -7184,9 +7184,6 @@ msgstr "Det har ännu inte skapats några frågor till workshopen"
 msgid "Now you can create milestones for the event"
 msgstr "Nu kan du skapa milstolpar för evenemanget"
 
-msgid "Now you can set the player editing settings"
-msgstr "Nu kan du ställa in spelarens redigeringsinställningar"
-
 msgid "Please review and submit it for publication"
 msgstr "Vänligen granska och skicka in den för publicering"
 
@@ -8417,6 +8414,9 @@ msgstr ""
 
 msgid "No contributors with competences found in the organization"
 msgstr "Inga medarbetare med relevant kompetens hittades inom organisationen"
+
+msgid "Now you can set settings for character creation by players"
+msgstr "Nu kan du ställa in inställningarna för spelarnas karaktärsskapande"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets namn, visas i frågan (håll det kort)"

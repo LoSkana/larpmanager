@@ -79,7 +79,7 @@ def setup(live_server: Any, page: Any) -> None:
     # activate features
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Features")
-    page.get_by_role("checkbox", name="Player editor").check()
+    page.get_by_role("checkbox", name="Character creation").check()
     page.get_by_role("checkbox", name="Experience points").check()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
@@ -96,7 +96,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_exp_rules").check()
     page.locator("#id_exp_modifiers").check()
 
-    page.get_by_role("link", name=re.compile(r"^Player editor\s.+")).click()
+    page.get_by_role("link", name=re.compile(r"^Character creation\s.+")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     submit_confirm(page)

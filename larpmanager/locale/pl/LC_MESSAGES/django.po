@@ -2700,9 +2700,6 @@ msgstr "Dane osobowe"
 msgid "Phone contact"
 msgstr "Kontakt telefoniczny"
 
-msgid "Player editor"
-msgstr "Edytor gracza"
-
 msgid "Prerequisites"
 msgstr "Wymagania wstępne"
 
@@ -3831,6 +3828,9 @@ msgstr "Przydzielona postać"
 
 msgid "Available versions"
 msgstr "Dostępne wersje"
+
+msgid "Character creation"
+msgstr "Tworzenie postaci"
 
 msgid "Character portrait"
 msgstr "Portret postaci"
@@ -7186,9 +7186,6 @@ msgstr "Nie dodano jeszcze żadnych pytań dotyczących warsztatów"
 msgid "Now you can create milestones for the event"
 msgstr "Teraz możesz tworzyć kamienie milowe dla wydarzenia"
 
-msgid "Now you can set the player editing settings"
-msgstr "Teraz możesz skonfigurować ustawienia edycji odtwarzacza"
-
 msgid "Please review and submit it for publication"
 msgstr "Prosimy o przejrzenie i przesłanie go do publikacji"
 
@@ -8439,6 +8436,9 @@ msgid "No contributors with competences found in the organization"
 msgstr ""
 "W organizacji nie znaleziono żadnych pracowników o odpowiednich "
 "kompetencjach"
+
+msgid "Now you can set settings for character creation by players"
+msgstr "Teraz możesz skonfigurować opcje tworzenia postaci przez graczy"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nazwa opcji wyświetlana w pytaniu (powinna być krótka)"

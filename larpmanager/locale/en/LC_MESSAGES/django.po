@@ -1543,7 +1543,7 @@ msgid ""
 "ability and delivery can be assigned to a specific system."
 msgstr ""
 
-msgid "Player editor"
+msgid "Character creation"
 msgstr ""
 
 msgid "Maximum number"
@@ -10232,7 +10232,7 @@ msgstr ""
 msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 
-msgid "Now you can set the player editing settings"
+msgid "Now you can set settings for character creation by players"
 msgstr ""
 
 msgid "Player relationships"

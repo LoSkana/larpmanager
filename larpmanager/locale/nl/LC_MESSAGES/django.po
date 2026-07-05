@@ -2700,9 +2700,6 @@ msgstr "Persoonlijke gegevens"
 msgid "Phone contact"
 msgstr "Telefonisch contact"
 
-msgid "Player editor"
-msgstr "Spelerseditor"
-
 msgid "Prerequisites"
 msgstr "Vereisten"
 
@@ -3831,6 +3828,9 @@ msgstr "Karakter toegewezen"
 
 msgid "Available versions"
 msgstr "Beschikbare versies"
+
+msgid "Character creation"
+msgstr "Het maken van een personage"
 
 msgid "Character portrait"
 msgstr "Karakterportret"
@@ -7190,9 +7190,6 @@ msgstr "Er zijn nog geen vragen voor de workshop aangemaakt"
 msgid "Now you can create milestones for the event"
 msgstr "Nu kun je mijlpalen voor het evenement aanmaken"
 
-msgid "Now you can set the player editing settings"
-msgstr "Nu kun je de instellingen voor het bewerken van de speler instellen"
-
 msgid "Please review and submit it for publication"
 msgstr "Bekijk het en stuur het in voor publicatie"
 
@@ -8465,6 +8462,10 @@ msgid "No contributors with competences found in the organization"
 msgstr ""
 "Er zijn geen medewerkers met de benodigde vaardigheden gevonden binnen de "
 "organisatie"
+
+msgid "Now you can set settings for character creation by players"
+msgstr ""
+"Nu kun je instellingen aanpassen voor het maken van personages door spelers"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
