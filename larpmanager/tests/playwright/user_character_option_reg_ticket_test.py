@@ -58,12 +58,12 @@ def test_user_character_option_reg_ticket(pw_page: Any) -> None:
 def prepare(page: Any) -> None:
     # configure event
     sidebar(page, "Features")
-    page.get_by_role("checkbox", name="Player editor").check()
+    page.get_by_role("checkbox", name="Character creation").check()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
 
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
+    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()

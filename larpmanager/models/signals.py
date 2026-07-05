@@ -1564,7 +1564,7 @@ def post_save_registration_character_rel_savereg(
     # Clear deadline widget cache (casting requirements)
     reset_widgets(instance.registration)
 
-    # Auto-assign player if player editor is active and character has no player
+    # Auto-assign player if character creation is active and character has no player
     features = get_event_features(instance.character.event_id)
     if "user_character" in features and not instance.character.player:
         instance.character.player = instance.registration.member

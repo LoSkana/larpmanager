@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 """
-Test: Character form creation with complex field types and player editor.
+Test: Character form creation with complex field types and character creation.
 Verifies text/paragraph fields, single/multiple choice with availability limits,
 restricted/mandatory/hidden/disabled fields, character creation/approval workflow, and field visibility.
 """
@@ -52,12 +52,12 @@ def test_orga_character_form(pw_page: Any) -> None:
     # activate characters
     go_to(page, live_server, "/test/manage/features/character/on")
 
-    # activate player editor
+    # activate character creation
     go_to(page, live_server, "/test/manage/features/user_character/on")
 
     # set config
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
+    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.locator("#id_user_character_approval").check()
