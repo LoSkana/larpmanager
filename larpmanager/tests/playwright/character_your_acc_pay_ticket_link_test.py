@@ -96,7 +96,7 @@ def check_direct_ticket_link(page: Any, live_server: Any) -> None:
 def ticket_link_bypasses_not_visible(live_server, page):
     # Test signup (shouldn't be visible)
     go_to(page, live_server, "/test/")
-    page.get_by_role("link", name="Registration is open!").first.click()
+    page.get_by_role("link", name=re.compile(r"Registrations? (is|are) open")).first.click()
 
     page.locator('label[for="id_ticket_0"]').click()
     expect(page.locator("#id_ticket_0")).to_be_checked()
@@ -153,7 +153,8 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     """Test that NPC/Staff ticket links bypass external registration link redirect."""
 
     # Set an external registration link
-    sidebar(page, "Event")
+    go_to(page, live_server, "/test/manage/")
+    page.get_by_role("link", name="Event").first.click()
     page.locator("#id_form2-registration_status").select_option("e")
     page.locator("#id_form2-register_link").click()
     page.locator("#id_form2-register_link").fill("https://google.com")
@@ -181,7 +182,8 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     new_page.close()
 
     # Clean up: disable external registration link
-    sidebar(page, "Event")
+    go_to(page, live_server, "/test/manage/")
+    page.get_by_role("link", name="Event").first.click()
     page.locator("#id_form2-registration_status").select_option("o")
     submit_confirm(page)
 
@@ -227,8 +229,9 @@ def check_accounting_pay_link(page: Any, live_server: Any) -> None:
     page.get_by_role("link", name="Fill in the missing information in your profile").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
-    sidebar(page, "Event")
-    expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed (Staff)").click()
+    go_to(page, live_server, "/test/")
+    expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed (Staff)")
+    go_to(page, live_server, "/test/register/")
     submit_register(page)
 
     # set up payments

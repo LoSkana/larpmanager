@@ -152,7 +152,7 @@ def _test_character_hide(page: Any, live_server: Any, char_counter: list) -> Non
     # As user: gallery shows VisibleChar but not HiddenChar
     logout(page)
     login_user(page, live_server)
-    go_to(page, live_server, "test/")
+    go_to(page, live_server, "test/gallery/")
     expect(page.locator("#one")).to_contain_text("VisibleChar")
     expect(page.locator("#one")).not_to_contain_text("HiddenChar")
 
@@ -182,7 +182,7 @@ def _test_character_locked(page: Any, live_server: Any, char_counter: list) -> N
     # As user: character visible in gallery
     logout(page)
     login_user(page, live_server)
-    go_to(page, live_server, "test/")
+    go_to(page, live_server, "test/gallery/")
     expect(page.locator("#one")).to_contain_text("LockedChar")
 
     # Character page shows public teaser but NOT private text
@@ -240,7 +240,7 @@ def _test_faction_hide(page: Any, live_server: Any, char_counter: list, faction_
     # As user: character not visible in gallery
     logout(page)
     login_user(page, live_server)
-    go_to(page, live_server, "test/")
+    go_to(page, live_server, "test/gallery/")
     expect(page.locator("#one")).not_to_contain_text("FactionHiddenChar")
 
     # Direct URL shows "not found"
@@ -281,7 +281,7 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     # As user: character visible in gallery
     logout(page)
     login_user(page, live_server)
-    go_to(page, live_server, "test/")
+    go_to(page, live_server, "test/gallery/")
     expect(page.locator("#one")).to_contain_text("FactionLockedChar")
 
     # Character page shows public teaser but NOT private text

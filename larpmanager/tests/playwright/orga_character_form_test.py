@@ -88,7 +88,7 @@ def test_orga_character_form(pw_page: Any) -> None:
 
     logout(page)
 
-    go_to(page, live_server, "/test/")
+    go_to(page, live_server, "/test/gallery/")
     page.get_by_role("link", name="pinoloooooooooo").click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test public: public Presentation baba")

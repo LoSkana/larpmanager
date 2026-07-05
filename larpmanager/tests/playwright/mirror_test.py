@@ -56,7 +56,7 @@ def test_orga_mirror(pw_page: Any) -> None:
     submit_confirm(page)
 
     # check gallery
-    go_to(page, live_server, "/test/")
+    go_to(page, live_server, "/test/gallery/")
     expect_normalized(page, page.locator("#one"), "Test Character")
 
     # activate casting
@@ -78,7 +78,7 @@ def test_orga_mirror(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     # check gallery
-    go_to(page, live_server, "/test/")
+    go_to(page, live_server, "/test/gallery/")
     expect_normalized(page, page.locator("#one"), "Mirror")
     expect_normalized(page, page.locator("#one"), "Test Character")
 

@@ -2147,6 +2147,11 @@ header.sec h1 {
   margin-top: 0.5em;
 }
 
+/* Contain the floated .el children so ancestors keep their height */
+.gallery {
+  display: flow-root;
+}
+
 .page_gallery .title {
   margin-bottom: 0.5em;
 }

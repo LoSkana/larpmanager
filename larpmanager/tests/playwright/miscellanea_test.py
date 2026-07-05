@@ -131,7 +131,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Test 1: Gallery should be visible without any restrictions
     logout(page)
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
     expect_normalized(page, page.locator("body"), "Test Gallery Character")
 
     # Test 2: Enable gallery_hide_login and verify non-authenticated users cannot access
@@ -144,7 +144,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Logout and try to access gallery - should be redirected
     logout(page)
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
 
     # Should be redirected to register page with warning message
     expect_normalized(page, page.locator("body"), "Login")
@@ -152,7 +152,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Login as regular user and verify access is now allowed
     login_user(page, live_server)
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
     expect_normalized(page, page.locator("body"), "Test Gallery Character")
 
     # Test 3: Enable gallery_hide_signup and verify non-registered users cannot access
@@ -168,7 +168,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     # Logout and login as regular user who is NOT registered
     logout(page)
     login_user(page, live_server)
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
 
     # Should be redirected with warning message
     expect_normalized(page, page.locator("body"), "Register")
@@ -179,7 +179,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     submit_register(page)
 
     # Now user is registered, they should be able to access the gallery
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
     expect_normalized(page, page.locator("body"), "Test Gallery Character")
 
     # Delete registration and verify access is denied again
@@ -193,7 +193,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     # Logout and login as user - now without registration
     logout(page)
     login_user(page, live_server)
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
 
     # Should be redirected because user is no longer registered
     expect_normalized(page, page.locator("body"), "Register")
@@ -211,13 +211,13 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
 
     # Logout and try to access - should be blocked (not logged in)
     logout(page)
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
     expect_normalized(page, page.locator("body"), "Login")
     expect(page.locator("#one")).not_to_contain_text("Test Gallery Character")
 
     # login as user - now without registration
     login_user(page, live_server)
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
 
     # Should be redirected because user is no longer registered
     expect_normalized(page, page.locator("body"), "Register")
@@ -228,7 +228,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     submit_register(page)
 
     # Now can access again
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
     expect_normalized(page, page.locator("body"), "Test Gallery Character")
 
     # Test 5: Orga can access even with both configs enabled and without being registered
@@ -248,7 +248,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     expect(page.locator("#one")).not_to_contain_text("Admin Test")
 
     # Now go to gallery - orga should have access even without being registered
-    go_to(page, live_server, "/testaccess/")
+    go_to(page, live_server, "/testaccess/gallery/")
     expect_normalized(page, page.locator("body"), "Test Gallery Character")
 
     # Cleanup: Disable both configs
