@@ -31,6 +31,26 @@
                         Bulk
                     </a>
                 {% endif %}
+                {% if bulk %}
+                    <div id="main_bulk" class="hide bulk">
+                        <p>
+                            <i>{% trans "Select the table rows and choose the operation to apply" %}</i>
+                        </p>
+                        <select id="operation" class="bulk-el">
+                            {% for el in bulk %}<option value="{{ el.idx }}">{{ el.label }}</option>{% endfor %}
+                        </select>
+                        {% for el in bulk %}
+                            <select id="objs_{{ el.idx }}"
+                                    class="bulk-el objs {% if not forloop.first %}hide{% endif %}">
+                                {% for obj in el.objs %}<option value="{{ obj.uuid }}">{{ obj.name }}</option>{% endfor %}
+                            </select>
+                        {% endfor %}
+                        <a id="exec" class="new button my_toggle bulk-el" href="#">
+                            <i class="fas fa-play"></i>
+                            {% trans "Execute" %}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     {% endif %}

@@ -4,7 +4,64 @@
     {% trans "Registrations" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/table/header.html" %}
+    <div class="table-header-row">
+        {% include "elements/table/header.html" %}
+        {% if reg_all %}
+            <div class="staff-list">
+                <div class="nav">
+                    <b>{% trans "Columns" %}</b>:
+                    <a href="#" id="load_accounting">{% trans "accounting" %}</a>
+                    <a href="#" class="table_toggle hide" tog='acc'>hidden</a>
+                    <a href="#" class="table_toggle" tog='email'>{% trans "email" %}</a>
+                    {% if registration_reg_que_age %}
+                        <a href="#" class="table_toggle" tog='age'>{% trans "age" %}</a>
+                    {% endif %}
+                    {% if features.gift %}
+                        <a href="#" class="table_toggle" tog='gift'>{% trans "gift" %}</a>
+                    {% endif %}
+                    {% if features.membership %}
+                        <a href="#" class="table_toggle" tog='membership'>{% trans "member" %}</a>
+                    {% endif %}
+                    {% if features.faction %}
+                        <a href="#" class="table_toggle" tog='factions'>{% trans "factions" %}</a>
+                    {% endif %}
+                    {% if features.custom_character %}
+                        <a href="#" class="table_toggle" tog='custom'>{% trans "customisations" %}</a>
+                    {% endif %}
+                    {% if features.discount %}
+                        <a href="#" class="table_toggle" tog='disc'>{% trans "Discounts" %}</a>
+                    {% endif %}
+                    <a href="#" class="table_toggle" tog='date'>{% trans "chronology" %}</a>
+                </div>
+            </div>
+            {% if reg_questions %}
+                <div class="staff-list">
+                    <div class="nav">
+                        {% trans "Questions" %}:
+                        {% for key, que in reg_questions.items %}
+                            {% if que.typ == 'e' or que.typ == 'p' %}
+                                <a href="#" class="table_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>
+                            {% else %}
+                                <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
+                                <a href="#" class="table_toggle hide no_jump" tog='q_{{ key }}'>hidden</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+            {% if features.questbuilder and quest_types %}
+                <div class="staff-list">
+                    <div class="nav">
+                        Questbuilder:
+                        {% for key, qt in quest_types.items %}
+                            {% include "elements/comma.html" %}
+                            <a href="#" class="table_toggle" tog='qt_{{ qt.uuid }}'>{{ qt.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
     {% if reg_all %}
         <div id="overlay">
             <div class="lds-roller">
@@ -34,59 +91,6 @@
                 </div>
             </div>
         </div>
-        <div class="staff-list">
-            <div class="nav">
-                <b>{% trans "Columns" %}</b>:
-                <a href="#" id="load_accounting">{% trans "accounting" %}</a>
-                <a href="#" class="table_toggle hide" tog='acc'>hidden</a>
-                <a href="#" class="table_toggle" tog='email'>{% trans "email" %}</a>
-                {% if registration_reg_que_age %}
-                    <a href="#" class="table_toggle" tog='age'>{% trans "age" %}</a>
-                {% endif %}
-                {% if features.gift %}
-                    <a href="#" class="table_toggle" tog='gift'>{% trans "gift" %}</a>
-                {% endif %}
-                {% if features.membership %}
-                    <a href="#" class="table_toggle" tog='membership'>{% trans "member" %}</a>
-                {% endif %}
-                {% if features.faction %}
-                    <a href="#" class="table_toggle" tog='factions'>{% trans "factions" %}</a>
-                {% endif %}
-                {% if features.custom_character %}
-                    <a href="#" class="table_toggle" tog='custom'>{% trans "customisations" %}</a>
-                {% endif %}
-                {% if features.discount %}
-                    <a href="#" class="table_toggle" tog='disc'>{% trans "Discounts" %}</a>
-                {% endif %}
-                <a href="#" class="table_toggle" tog='date'>{% trans "chronology" %}</a>
-            </div>
-        </div>
-        {% if reg_questions %}
-            <div class="staff-list">
-                <div class="nav">
-                    {% trans "Questions" %}:
-                    {% for key, que in reg_questions.items %}
-                        {% if que.typ == 'e' or que.typ == 'p' %}
-                            <a href="#" class="table_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>
-                        {% else %}
-                            <a href="#" class="load_que lq_{{ key }}"  key="{{ key }}">{{ que.name | truncatechars:25 }}</a>
-                            <a href="#" class="table_toggle hide no_jump" tog='q_{{ key }}'>hidden</a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
-        {% if features.questbuilder and quest_types %}
-            <div class="staff-list">
-                <div class="nav">
-                    Questbuilder:
-                    {% for key, qt in quest_types.items %}
-                        {% include "elements/comma.html" %}
-                        <a href="#" class="table_toggle" tog='qt_{{ qt.uuid }}'>{{ qt.name }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endif %}
         {% for key, dc in reg_all %}
             {% if dc.list %}
                 <h2>{{ dc.type }} ({{ dc.count }})</h2>
@@ -339,21 +343,23 @@
             <i>{% trans "No registrations have been received for this event yet" %}</i>
         </p>
     {% endif %}
-    {% include "elements/table/footer.html" %}
-    {% if not demo %}
-        <div class="staff-list">
-            <div class="orga-buttons">
-                <a class="new button"
-                   href="{% url 'orga_registration_transfer' run.get_slug %}">
-                    <i class="fas fa-exchange-alt"></i> {% trans "Transfer" %}
-                </a>
-                <a class="new button"
-                   href="{% url 'orga_registrations_reload' run.get_slug %}">
-                    <i class="fas fa-arrow-rotate-right"></i> {% trans "Recompute" %}
-                </a>
+    <div class="table-footer-row">
+        {% include "elements/table/footer.html" %}
+        {% if not demo %}
+            <div class="staff-list">
+                <div class="orga-buttons">
+                    <a class="new button"
+                       href="{% url 'orga_registration_transfer' run.get_slug %}">
+                        <i class="fas fa-exchange-alt"></i> {% trans "Transfer" %}
+                    </a>
+                    <a class="new button"
+                       href="{% url 'orga_registrations_reload' run.get_slug %}">
+                        <i class="fas fa-arrow-rotate-right"></i> {% trans "Recompute" %}
+                    </a>
+                </div>
             </div>
-        </div>
-    {% endif %}
+        {% endif %}
+    </div>
 {% endblock content %}
 {% block js %}
     <script>

@@ -64,7 +64,7 @@
             {% endif %}
         {% endif %}
     </div>
-    {% if bulk %}
+    {% if bulk and effective_version < 22 %}
         <div id="main_bulk" class="hide bulk">
             <p>
                 <i>{% trans "Select the table rows and choose the operation to apply" %}</i>

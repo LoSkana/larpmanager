@@ -10,12 +10,14 @@
     <meta name="csrf-token" content="{{ csrf_token }}">
 {% endblock meta %}
 {% block content %}
-    {% include "elements/table/header.html" with writing_header=True %}
-    <div class="nav fields">
-        <b>{% trans "Fields" %}</b>:
-        {% block nav_fields %}
-        {% endblock nav_fields %}
-        <a href="#" class="table_toggle" tog='stats'>Stats</a>
+    <div class="table-header-row">
+        {% include "elements/table/header.html" with writing_header=True %}
+        <div class="nav fields">
+            <b>{% trans "Fields" %}</b>:
+            {% block nav_fields %}
+            {% endblock nav_fields %}
+            <a href="#" class="table_toggle" tog='stats'>Stats</a>
+        </div>
     </div>
     {% for item in split_lists %}
         {% if item.title and item.list %}
