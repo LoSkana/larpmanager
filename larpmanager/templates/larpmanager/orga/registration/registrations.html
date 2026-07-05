@@ -4,7 +4,7 @@
     {% trans "Registrations" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     {% if reg_all %}
         <div id="overlay">
             <div class="lds-roller">
@@ -332,6 +332,15 @@
                 </table>
             {% endif %}
         {% endfor %}
+        <div id="registrations_summary">{% include "elements/registrations_list.html" %}</div>
+    {% else %}
+        <br />
+        <p class="no-elements-available">
+            <i>{% trans "No registrations have been received for this event yet" %}</i>
+        </p>
+    {% endif %}
+    {% include "elements/table/footer.html" %}
+    {% if not demo %}
         <div class="staff-list">
             <div class="orga-buttons">
                 <a class="new button"
@@ -344,12 +353,6 @@
                 </a>
             </div>
         </div>
-        <div id="registrations_summary">{% include "elements/registrations_list.html" %}</div>
-    {% else %}
-        <br />
-        <p class="no-elements-available">
-            <i>{% trans "No registrations have been received for this event yet" %}</i>
-        </p>
     {% endif %}
 {% endblock content %}
 {% block js %}

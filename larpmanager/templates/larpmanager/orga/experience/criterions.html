@@ -4,7 +4,7 @@
     {% trans "Criterions" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="criterions"
            class="go_datatable writing row_reorder"
            data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
@@ -66,4 +66,5 @@
             {% trans "No criterions defined yet" %}. {% trans "Use the button above to create the first criterion" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

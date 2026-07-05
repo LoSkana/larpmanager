@@ -4,7 +4,7 @@
     {% trans "Problems" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <p>
         <a href="#" class="my_toggle" tog='closed'>{% trans "Show closed" %}</a>
     </p>
@@ -53,4 +53,5 @@
             {% trans "No problems have been reported for this event yet" %}. {% trans "Use the button above to add a new problem" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

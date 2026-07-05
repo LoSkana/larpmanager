@@ -3946,6 +3946,10 @@ body.floating_iframe #wrapper {
   display: initial !important;
 }
 
+.new_v22 .table-footer.only_v22 {
+  display: block !important;
+}
+
 .new_v22 #sidebar .inner {
   padding-bottom: 0.5em;
   display: flex;

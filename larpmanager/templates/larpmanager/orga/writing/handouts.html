@@ -7,7 +7,7 @@
     {% trans "Manage all handouts for this event" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="handouts"
            class="writing go_datatable writing row_reorder"
            data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
@@ -79,4 +79,5 @@
             {% trans "No handouts have been created yet" %}. {% trans "Use the button above to add your first handout" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

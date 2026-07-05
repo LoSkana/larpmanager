@@ -14,13 +14,14 @@
             </a>
         {% endif %}
         {% if upload %}
-            <a class="new button" href="{% url 'orga_upload' run.get_slug upload %}">
+            <a class="new button no_v22"
+               href="{% url 'orga_upload' run.get_slug upload %}">
                 <i class="fas fa-upload"></i>
                 {% trans "Upload" %}
             </a>
         {% endif %}
         {% if download %}
-            <form action="{{ request.path }}" method="post" class="inline">
+            <form action="{{ request.path }}" method="post" class="inline no_v22">
                 {% csrf_token %}
                 <input type="hidden" name="download" value="1">
                 <button type="submit" name="submit" value="1">
@@ -30,13 +31,14 @@
             </form>
         {% endif %}
         {% if export %}
-            <a class="new button" href="{% url 'orga_export' run.get_slug export %}">
+            <a class="new button no_v22"
+               href="{% url 'orga_export' run.get_slug export %}">
                 <i class="fas fa-file-export"></i>
                 {% trans "Export" %}
             </a>
         {% endif %}
         {% if bulk %}
-            <a class="new button my_toggle" tog='bulk' href="#">
+            <a class="new button my_toggle no_v22" tog='bulk' href="#">
                 <i class="fas fa-tasks"></i>
                 Bulk
             </a>
