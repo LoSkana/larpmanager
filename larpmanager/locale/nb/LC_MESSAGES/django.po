@@ -2697,9 +2697,6 @@ msgstr "Personopplysninger"
 msgid "Phone contact"
 msgstr "Kontakt per telefon"
 
-msgid "Player editor"
-msgstr "Spilleredaktør"
-
 msgid "Prerequisites"
 msgstr "Forutsetninger"
 
@@ -3819,6 +3816,9 @@ msgstr "Godkjent karakter"
 
 msgid "Available versions"
 msgstr "Tilgjengelige versjoner"
+
+msgid "Character creation"
+msgstr "Karakteropprettelse"
 
 msgid "Character portrait"
 msgstr "Portrett av en person"
@@ -7153,9 +7153,6 @@ msgstr "Det er foreløpig ikke opprettet noen spørsmål til workshopen"
 msgid "Now you can create milestones for the event"
 msgstr "Nå kan du opprette milepæler for arrangementet"
 
-msgid "Now you can set the player editing settings"
-msgstr "Nå kan du angi innstillinger for spillerredigering"
-
 msgid "Please review and submit it for publication"
 msgstr "Vennligst les gjennom og send den inn for publisering"
 
@@ -8403,6 +8400,9 @@ msgid "No contributors with competences found in the organization"
 msgstr ""
 "Det ble ikke funnet noen medarbeidere med den aktuelle kompetansen i "
 "organisasjonen"
+
+msgid "Now you can set settings for character creation by players"
+msgstr "Nå kan du angi innstillinger for spillernes karakteropprettelse"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets navn, vises i spørsmålet (hold det kort)"

@@ -197,7 +197,7 @@ Comprehensive payment management system supporting multiple gateways (PayPal, St
 
 Generates professional PDF exports for characters, factions, and event materials. Provides bulk PDF generation with configurable options, individual character sheets (full and friendly versions), relationship sheets, faction sheets, handouts, character gallery, and profile pages. Supports batch regeneration for future event runs, PDF preview/test modes, and ZIP download of multiple PDFs. Organizers configure PDF settings per event including layout, fonts, and included sections. Essential for preparing printed materials for in-person LARP events.
 
-### Player Editor Feature
+### Character Creation Feature
 
 Player-driven character creation and editing system enabling participants to build characters freely within organizer-defined constraints. Supports custom forms, character sheets, element fields, relationships, and ability selections. Organizers configure editing permissions, approval requirements, visibility rules, and external access tokens. Integrates with experience points (PX) system for ability purchases. Provides full character sheet access with contextual data based on permissions.
 

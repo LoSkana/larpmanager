@@ -2697,9 +2697,6 @@ msgstr "Dati personali"
 msgid "Phone contact"
 msgstr "Contatto telefonico"
 
-msgid "Player editor"
-msgstr "Giocatore editor"
-
 msgid "Prerequisites"
 msgstr "Prerequisiti"
 
@@ -3819,6 +3816,9 @@ msgstr "Personaggio approvato"
 
 msgid "Available versions"
 msgstr "Versioni disponibili"
+
+msgid "Character creation"
+msgstr "Creazione del personaggio"
 
 msgid "Character portrait"
 msgstr "Ritratto personaggio"
@@ -7149,9 +7149,6 @@ msgstr "Non sono ancora state create domande relative al workshop"
 msgid "Now you can create milestones for the event"
 msgstr "Ora è possibile creare delle pietre miliari per l'evento"
 
-msgid "Now you can set the player editing settings"
-msgstr "Ora puoi impostare le impostazioni di modifica del lettore"
-
 msgid "Please review and submit it for publication"
 msgstr "Si prega di esaminare il testo e di inviarlo per la pubblicazione"
 
@@ -8426,6 +8423,11 @@ msgid "No contributors with competences found in the organization"
 msgstr ""
 "Non sono stati trovati collaboratori con le competenze richieste all'interno"
 " dell'organizzazione"
+
+msgid "Now you can set settings for character creation by players"
+msgstr ""
+"Ora puoi configurare le impostazioni per la creazione dei personaggi da "
+"parte dei giocatori"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr ""

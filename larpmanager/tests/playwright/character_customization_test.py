@@ -69,7 +69,7 @@ def activate_customization(page: Any, live_server: Any) -> None:
 
     go_to(page, live_server, "/test/manage/features/user_character/on")
 
-    # Activate user character (player editor)
+    # Activate user character (character creation)
     go_to(page, live_server, "/test/manage/features/custom_character/on")
 
 
