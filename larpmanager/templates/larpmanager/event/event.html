@@ -95,22 +95,24 @@
                                         | {% trans "Total payments" %}: {{ reg.tot_payed|format_decimal }}{{ currency_symbol }}
                                     {% endif %}
                                 </p>
-                                {% if reg.quota %}
-                                    <p>
-                                        <a href="{% url 'accounting_registration' reg.uuid %}">
-                                            {% trans "Next payment" %}: {{ reg.quota|format_decimal }}{{ currency_symbol }},
-                                            {% if reg.deadline > 0 %}
-                                                {% trans "expected within" %} {{ reg.deadline }} {% trans "days" %}
-                                            {% else %}
-                                                {% trans "overdue by" %} {{ reg.deadline|abs_value }} {% trans "days" %}
-                                            {% endif %}
-                                        </a>
-                                    </p>
-                                {% elif reg.tot_iscr > reg.tot_payed and run_status.can_pay %}
-                                    <p>
-                                        {% trans "No additional payments are required at this time" %},
-                                        <a href="{% url 'accounting_registration' reg.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
-                                    </p>
+                                {% if not run_status.payment_pending %}
+                                    {% if reg.quota %}
+                                        <p>
+                                            <a href="{% url 'accounting_registration' reg.uuid %}">
+                                                {% trans "Next payment" %}: {{ reg.quota|format_decimal }}{{ currency_symbol }},
+                                                {% if reg.deadline > 0 %}
+                                                    {% trans "expected within" %} {{ reg.deadline }} {% trans "days" %}
+                                                {% else %}
+                                                    {% trans "overdue by" %} {{ reg.deadline|abs_value }} {% trans "days" %}
+                                                {% endif %}
+                                            </a>
+                                        </p>
+                                    {% elif reg.tot_iscr > reg.tot_payed and run_status.can_pay %}
+                                        <p>
+                                            {% trans "No additional payments are required at this time" %},
+                                            <a href="{% url 'accounting_registration' reg.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+                                        </p>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         {% endwith %}

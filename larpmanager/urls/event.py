@@ -357,4 +357,14 @@ urlpatterns = [
         views_ua.event_payments,
         name="event_payments",
     ),
+    path(
+        "<slug:event_slug>/payments/<slug:registration_uuid>/",
+        views_ua.event_payments_registration,
+        name="event_payments_registration",
+    ),
+    path(
+        "<slug:event_slug>/payments/<slug:registration_uuid>/<slug:method>/",
+        views_ua.event_payments_registration,
+        name="event_payments_registration",
+    ),
 ]
