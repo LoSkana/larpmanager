@@ -24,7 +24,7 @@
     icon: ticket
 - model: larpmanager.permissionmodule
   fields:
-    name: Casting
+    name: Assignments
     slug: casting
     order: 60
     icon: scroll

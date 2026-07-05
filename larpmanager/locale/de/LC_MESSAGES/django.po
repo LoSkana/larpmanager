@@ -3568,9 +3568,6 @@ msgstr "Zur Genehmigung anstehend"
 msgid "Cancellation date"
 msgstr "Datum der Abmeldung"
 
-msgid "Casting algorithm"
-msgstr "Casting-Algorithmus"
-
 msgid "Character profile"
 msgstr "Profil des Charakters"
 
@@ -4361,6 +4358,9 @@ msgstr "Erstattung genehmigen"
 
 msgid "Assigned staff member"
 msgstr "Zugewiesener Mitarbeiter"
+
+msgid "Assignments algorithm"
+msgstr "Algorithmus für die Zuordnung"
 
 msgid "Category of the event"
 msgstr "Kategorie der Veranstaltung"
@@ -8453,9 +8453,6 @@ msgstr ""
 "Kontaktieren Sie die Organisatoren, wenn Sie später einen neuen Zugangslink "
 "benötigen"
 
-msgid "Do you want to assign characters using a casting algorithm"
-msgstr "Möchten Sie Zeichen mit Hilfe eines Casting-Algorithmus zuweisen"
-
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
 msgstr "Hallo! Ihre Anmeldung zu <b>%(event)s</b> wurde aktualisiert"
@@ -8972,6 +8969,9 @@ msgid "Displays full lists of usual participants not already signed up"
 msgstr ""
 "Zeigt vollständige Listen der üblichen Teilnehmer an, die noch nicht "
 "angemeldet sind"
+
+msgid "Do you want to assign characters using an assignments algorithm"
+msgstr "Möchtest du Zeichen mithilfe eines Zuordnungsalgorithmus zuweisen"
 
 msgid "Do you want users to join events only after an approval process"
 msgstr ""

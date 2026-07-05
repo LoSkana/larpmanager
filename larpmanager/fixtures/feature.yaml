@@ -168,7 +168,7 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Casting algorithm
+    name: Assignments algorithm
     descr: Lets participants submit character preferences, then finds the optimal
       overall match
     slug: casting

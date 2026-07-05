@@ -3568,9 +3568,6 @@ msgstr "Avvaktar godkännande"
 msgid "Cancellation date"
 msgstr "Datum för avregistrering"
 
-msgid "Casting algorithm"
-msgstr "Algoritm för gjutning"
-
 msgid "Character profile"
 msgstr "Karaktärsprofil"
 
@@ -4361,6 +4358,9 @@ msgstr "Godkänna återbetalning"
 
 msgid "Assigned staff member"
 msgstr "Utsedd tjänsteman"
+
+msgid "Assignments algorithm"
+msgstr "Algoritm för tilldelning"
 
 msgid "Category of the event"
 msgstr "Kategori för evenemanget"
@@ -8339,9 +8339,6 @@ msgstr "Så snart det är godkänt kommer din bokföring att uppdateras"
 msgid "Contact the organizers if you need a new access link later"
 msgstr "Kontakta arrangörerna om du behöver en ny accesslänk senare"
 
-msgid "Do you want to assign characters using a casting algorithm"
-msgstr "Vill du tilldela tecken med hjälp av en casting-algoritm"
-
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
 msgstr "Hej! Din anmälan till <b>%(event)s</b> har uppdaterats"
@@ -8770,6 +8767,9 @@ msgid "Displays full lists of usual participants not already signed up"
 msgstr ""
 "Visar fullständiga listor över vanliga deltagare som inte redan har anmält "
 "sig"
+
+msgid "Do you want to assign characters using an assignments algorithm"
+msgstr "Vill du tilldela tecken med hjälp av en tilldelningsalgoritm"
 
 msgid "Do you want users to join events only after an approval process"
 msgstr ""

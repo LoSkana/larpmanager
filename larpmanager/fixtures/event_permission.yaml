@@ -84,7 +84,7 @@
     module: miscellany
 - model: larpmanager.eventpermission
   fields:
-    name: Casting
+    name: Assignments
     descr: Assign the characters following the participants' preferences
     slug: orga_casting
     number: 11

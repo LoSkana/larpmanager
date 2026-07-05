@@ -85,7 +85,7 @@ def quests(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Features")
     check_feature(page, "Characters")
-    check_feature(page, "Casting algorithm")
+    check_feature(page, "Assignments algorithm")
     check_feature(page, "Quests and Traits")
     submit_confirm(page)
 

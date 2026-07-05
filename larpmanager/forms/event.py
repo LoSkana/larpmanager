@@ -1887,8 +1887,8 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     ),
                     "casting": (
                         True,
-                        _("Casting algorithm"),
-                        _("Do you want to assign characters using a casting algorithm"),
+                        _("Assignments algorithm"),
+                        _("Do you want to assign characters using an assignments algorithm"),
                     ),
                     "user_character": (
                         True,

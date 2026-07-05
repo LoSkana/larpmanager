@@ -3568,9 +3568,6 @@ msgstr "Čeká se na schválení"
 msgid "Cancellation date"
 msgstr "Datum zrušení předplatného"
 
-msgid "Casting algorithm"
-msgstr "Algoritmus obsazování"
-
 msgid "Character profile"
 msgstr "Profil postavy"
 
@@ -4361,6 +4358,9 @@ msgstr "Schválit vrácení peněz"
 
 msgid "Assigned staff member"
 msgstr "Přidělený zaměstnanec"
+
+msgid "Assignments algorithm"
+msgstr "Algoritmus přiřazování úkolů"
 
 msgid "Category of the event"
 msgstr "Kategorie události"
@@ -8334,9 +8334,6 @@ msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 "Pokud potřebujete nový přístupový odkaz později, kontaktujte organizátory"
 
-msgid "Do you want to assign characters using a casting algorithm"
-msgstr "Chcete přiřadit znaky pomocí algoritmu obsazování"
-
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
 msgstr "Ahoj! Vaše registrace do <b>%(event)s</b> byla aktualizována"
@@ -8746,6 +8743,9 @@ msgstr "Popis - zobrazí se na začátku sekce"
 msgid "Displays full lists of usual participants not already signed up"
 msgstr ""
 "Zobrazí úplné seznamy obvyklých účastníků, kteří ještě nejsou přihlášeni"
+
+msgid "Do you want to assign characters using an assignments algorithm"
+msgstr "Chcete přiřadit znaky pomocí algoritmu přiřazování"
 
 msgid "Do you want users to join events only after an approval process"
 msgstr "Chcete, aby se uživatelé připojovali k událostem až po schválení"

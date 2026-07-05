@@ -3568,9 +3568,6 @@ msgstr "In afwachting van goedkeuring"
 msgid "Cancellation date"
 msgstr "Uitschrijfdatum"
 
-msgid "Casting algorithm"
-msgstr "Gietalgoritme"
-
 msgid "Character profile"
 msgstr "Karakterprofiel"
 
@@ -4361,6 +4358,9 @@ msgstr "Terugbetaling goedkeuren"
 
 msgid "Assigned staff member"
 msgstr "Toegewezen medewerker"
+
+msgid "Assignments algorithm"
+msgstr "Algoritme voor opdrachten"
 
 msgid "Category of the event"
 msgstr "Categorie van het evenement"
@@ -8382,9 +8382,6 @@ msgstr ""
 "Neem contact op met de organisatoren als je later een nieuwe toegangslink "
 "nodig hebt"
 
-msgid "Do you want to assign characters using a casting algorithm"
-msgstr "Wil je tekens toewijzen met een gietalgoritme"
-
 #, python-format
 msgid "Hi! Your registration to <b>%(event)s</b> has been updated"
 msgstr "Je registratie voor <b>%(event)s</b> is bijgewerkt"
@@ -8852,6 +8849,9 @@ msgid "Displays full lists of usual participants not already signed up"
 msgstr ""
 "Toont volledige lijsten van gebruikelijke deelnemers die nog niet zijn "
 "aangemeld"
+
+msgid "Do you want to assign characters using an assignments algorithm"
+msgstr "Wil je personages toewijzen met behulp van een toewijzingsalgoritme"
 
 msgid "Do you want users to join events only after an approval process"
 msgstr ""

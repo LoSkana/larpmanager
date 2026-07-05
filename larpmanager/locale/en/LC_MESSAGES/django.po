@@ -1942,10 +1942,10 @@ msgstr ""
 msgid "Do you want to manage characters assigned to registered participants"
 msgstr ""
 
-msgid "Casting algorithm"
+msgid "Assignments algorithm"
 msgstr ""
 
-msgid "Do you want to assign characters using a casting algorithm"
+msgid "Do you want to assign characters using an assignments algorithm"
 msgstr ""
 
 msgid "Do you want to allow participants to create their own characters"
