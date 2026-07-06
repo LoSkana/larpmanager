@@ -5951,6 +5951,9 @@ msgstr "Nom descriptif de cette clé API"
 msgid "Descriptive name for this content"
 msgstr "Nom descriptif de ce contenu"
 
+msgid "Discover the factions of the game"
+msgstr "Découvre les factions du jeu"
+
 msgid "Discover what this event is about"
 msgstr "Découvrez en quoi consiste cet événement"
 
@@ -6056,6 +6059,9 @@ msgstr "Date d'expiration du document"
 
 msgid "Delay in organization registration"
 msgstr "Retard dans l'enregistrement de l'organisation"
+
+msgid "Discover the details of this event"
+msgstr "Découvre tous les détails de cet événement"
 
 msgid "Empty relationship check (no text)"
 msgstr "Vérification du rapport vide (pas de texte)"
@@ -6377,6 +6383,9 @@ msgstr "Mettez à jour vos options d'adhésion"
 msgid "Utilisation %(tokens)s per %(event)s"
 msgstr "Utilisation %(tokens)s par %(event)s"
 
+msgid "View photos and media from the event"
+msgstr "Découvre les photos et les vidéos de l'événement"
+
 msgid "View the complete list of our events"
 msgstr "Consultez la liste complète de nos événements"
 
@@ -6396,6 +6405,9 @@ msgstr "<b>%(number)s</b> dépenses à approuver"
 #, python-format
 msgid "<b>%(number)s</b> questions to answer"
 msgstr "<b>%(number)s</b> questions à répondre"
+
+msgid "Access your characters for this event"
+msgstr "Accède à tes personnages pour cet événement"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Ajouté au bas de tous les courriers envoyés"
@@ -6902,6 +6914,9 @@ msgstr "Afficher les données de tous les participants sous forme de registre"
 msgid "Donation amount chosen by the participant"
 msgstr "Montant du don choisi par le participant"
 
+msgid "Explore the quests available in the event"
+msgstr "Découvre les quêtes disponibles dans cet événement"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Je le fais régulièrement, j'ai une bonne expérience"
 
@@ -7369,6 +7384,9 @@ msgstr "Lieu de naissance ne figurant pas dans la liste ISTAT"
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Entrée mise à jour en %(event)s par %(user)s"
 
+msgid "Search and filter the characters of the event"
+msgstr "Rechercher et filtrer les personnages de l'événement"
+
 msgid "Select the event you wish to pre-register for"
 msgstr "Sélectionnez l'événement pour lequel vous souhaitez vous pré-inscrire"
 
@@ -7501,6 +7519,12 @@ msgid "Email sent with instructions for password reset"
 msgstr ""
 "Envoi d'un courriel contenant les instructions de réinitialisation du mot de"
 " passe"
+
+msgid "Fill out the preparation workshops of the event"
+msgstr "Participe aux ateliers de préparation de l'événement"
+
+msgid "Get to know all the characters before the event"
+msgstr "Découvre tous les personnages avant l'événement"
 
 msgid "If checked: Add a field to track items quantity"
 msgstr "Si coché : Ajouter un champ pour suivre la quantité des articles"
@@ -7861,6 +7885,9 @@ msgstr "Une affectation pour ce poste et ce domaine existe déjà"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Attribué %(amount).2f %(elements)s pour '%(reason)s'"
 
+msgid "Browse the characters and participants of the event"
+msgstr "Découvre les personnages et les participants de l'événement"
+
 msgid "Complete the setup to unlock full platform features"
 msgstr ""
 "Complétez l'installation pour débloquer toutes les fonctionnalités de la "
@@ -8097,6 +8124,9 @@ msgstr "Cette page s'actualisera automatiquement toutes les 10 secondes"
 msgid "Use the button above to create the first ability type"
 msgstr "Utilise le bouton ci-dessus pour créer le premier type de capacité"
 
+msgid "View your payments and pending amounts for this event"
+msgstr "Consulte tes paiements et les montants en attente pour cet événement"
+
 msgid "Warehouse quantities already committed for this event"
 msgstr "Quantités d'entrepôt déjà engagées pour cet événement"
 
@@ -8220,6 +8250,9 @@ msgstr ""
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Créer au moins un type de billet pour les inscriptions aux événements"
+
+msgid "Give a registration to this event as a gift to a friend"
+msgstr "Offre une inscription à cet événement à un ami"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
@@ -8525,6 +8558,9 @@ msgstr "Nom de l'option, affiché dans la question (soyez bref)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Probabilité d'afficher la page spéciale (sur des milliers)"
+
+msgid "Sign up for the event, or update your registration options"
+msgstr "Inscris-toi à l'événement ou modifie tes options d'inscription"
 
 msgid "There are no open questions from participants at this time"
 msgstr "Pour l'instant, aucun participant n'a posé de question"
@@ -9146,6 +9182,9 @@ msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
 "Erreur de chargement. Format de fichier non valide - nous n'acceptons que "
 "les pdf et les images"
+
+msgid "Express your preferences on the characters you would like to play"
+msgstr "Dis-nous quels personnages tu aimerais incarner"
 
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""

@@ -5951,6 +5951,9 @@ msgstr "Popisný název tohoto klíče API"
 msgid "Descriptive name for this content"
 msgstr "Popisný název tohoto obsahu"
 
+msgid "Discover the factions of the game"
+msgstr "Seznamte se s frakcemi ve hře"
+
 msgid "Discover what this event is about"
 msgstr "Zjistěte, o čem tato akce je"
 
@@ -6056,6 +6059,9 @@ msgstr "Datum ukončení platnosti dokladu"
 
 msgid "Delay in organization registration"
 msgstr "Zpoždění při registraci organizace"
+
+msgid "Discover the details of this event"
+msgstr "Zjistěte více o této akci"
 
 msgid "Empty relationship check (no text)"
 msgstr "Kontrola prázdného hlášení (bez textu)"
@@ -6377,6 +6383,9 @@ msgstr "Aktualizujte své možnosti členství"
 msgid "Utilisation %(tokens)s per %(event)s"
 msgstr "Využití %(tokens)s na %(event)s"
 
+msgid "View photos and media from the event"
+msgstr "Prohlédněte si fotografie a další materiály z akce"
+
 msgid "View the complete list of our events"
 msgstr "Prohlédněte si kompletní seznam našich akcí"
 
@@ -6396,6 +6405,9 @@ msgstr "<b>%(number)s</b> výdaje ke schválení"
 #, python-format
 msgid "<b>%(number)s</b> questions to answer"
 msgstr "<b>%(number)s</b> otázky k zodpovězení"
+
+msgid "Access your characters for this event"
+msgstr "Zobrazit své postavy pro tuto akci"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Přidáno na konec všech odeslaných e-mailů"
@@ -6895,6 +6907,9 @@ msgstr "Zobrazení všech údajů účastníků jako rejstřík"
 msgid "Donation amount chosen by the participant"
 msgstr "Výše příspěvku zvolená účastníkem"
 
+msgid "Explore the quests available in the event"
+msgstr "Prozkoumejte úkoly dostupné v rámci této akce"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Dělám to pravidelně, mám dobré zkušenosti"
 
@@ -7353,6 +7368,9 @@ msgstr "Místo narození neuvedené v seznamu ISTAT"
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Aktualizované zadání %(event)s podle %(user)s"
 
+msgid "Search and filter the characters of the event"
+msgstr "Vyhledávání a filtrování postav dané události"
+
 msgid "Select the event you wish to pre-register for"
 msgstr "Vyberte událost, na kterou se chcete předběžně zaregistrovat"
 
@@ -7476,6 +7494,12 @@ msgstr "Darování %(user)s, s důvodem: '%(reason)s"
 
 msgid "Email sent with instructions for password reset"
 msgstr "Odeslání e-mailu s pokyny pro obnovení hesla"
+
+msgid "Fill out the preparation workshops of the event"
+msgstr "Vyplňte formulář týkající se přípravných workshopů v rámci této akce"
+
+msgid "Get to know all the characters before the event"
+msgstr "Seznamte se se všemi postavami ještě před začátkem akce"
 
 msgid "If checked: Add a field to track items quantity"
 msgstr "Pokud je zaškrtnuto: Přidat pole pro sledování množství položek"
@@ -7820,6 +7844,9 @@ msgstr "Pro tuto položku a oblast již existuje přiřazení"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Přiřazeno %(amount).2f %(elements)s pro '%(reason)s'"
 
+msgid "Browse the characters and participants of the event"
+msgstr "Prohlédněte si postavy a účastníky akce"
+
 msgid "Complete the setup to unlock full platform features"
 msgstr "Dokončením nastavení odemknete všechny funkce platformy"
 
@@ -8038,6 +8065,9 @@ msgstr "Tato stránka se bude automaticky aktualizovat každých 10 sekund"
 msgid "Use the button above to create the first ability type"
 msgstr "Pomocí tlačítka výše vytvořte první typ schopnosti"
 
+msgid "View your payments and pending amounts for this event"
+msgstr "Zobrazit platby a částky k úhradě za tuto akci"
+
 msgid "Warehouse quantities already committed for this event"
 msgstr "Množství skladových zásob, které již bylo pro tuto akci přiděleno"
 
@@ -8145,6 +8175,9 @@ msgstr "Obsah žádosti o členství vyplněný údaji uživatele"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Vytvoření alespoň jednoho typu vstupenky pro registrace na událost"
+
+msgid "Give a registration to this event as a gift to a friend"
+msgstr "Darujte příteli registraci na tuto akci"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Pokud je zaškrtnuto: zobrazí v kalendáři odkaz na minulé události"
@@ -8396,6 +8429,9 @@ msgstr "Název možnosti, který se zobrazí v otázce (musí být krátký)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Pravděpodobnost zobrazení speciální stránky (z tisíce)"
+
+msgid "Sign up for the event, or update your registration options"
+msgstr "Zaregistrujte se na akci nebo upravte své registrační možnosti"
 
 msgid "There are no open questions from participants at this time"
 msgstr "V tuto chvíli nemáme žádné otevřené otázky od účastníků"
@@ -8911,6 +8947,9 @@ msgstr "Aktuální stav žádosti o členství a schvalovacího procesu"
 msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
 "Chybné načítání. Nesprávný formát souboru - přijímáme pouze pdf a obrázky"
+
+msgid "Express your preferences on the characters you would like to play"
+msgstr "Uveďte, za které postavy byste si přáli hrát"
 
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""

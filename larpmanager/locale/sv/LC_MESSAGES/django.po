@@ -5951,6 +5951,9 @@ msgstr "Beskrivande namn för denna API-nyckel"
 msgid "Descriptive name for this content"
 msgstr "Beskrivande namn för detta innehåll"
 
+msgid "Discover the factions of the game"
+msgstr "Upptäck spelets fraktioner"
+
 msgid "Discover what this event is about"
 msgstr "Ta reda på vad detta evenemang handlar om"
 
@@ -6056,6 +6059,9 @@ msgstr "Datum då dokumentet upphör att gälla"
 
 msgid "Delay in organization registration"
 msgstr "Försening i registrering av organisation"
+
+msgid "Discover the details of this event"
+msgstr "Läs mer om detta evenemang"
 
 msgid "Empty relationship check (no text)"
 msgstr "Kontroll av tom rapport (ingen text)"
@@ -6376,6 +6382,9 @@ msgstr "Uppdatera dina medlemsalternativ"
 msgid "Utilisation %(tokens)s per %(event)s"
 msgstr "Utnyttjande %(tokens)s per %(event)s"
 
+msgid "View photos and media from the event"
+msgstr "Se bilder och media från evenemanget"
+
 msgid "View the complete list of our events"
 msgstr "Se den fullständiga listan över våra evenemang"
 
@@ -6395,6 +6404,9 @@ msgstr "<b>%(number)s</b> kostnader att godkänna"
 #, python-format
 msgid "<b>%(number)s</b> questions to answer"
 msgstr "<b>%(number)s</b> frågor att besvara"
+
+msgid "Access your characters for this event"
+msgstr "Ta fram dina karaktärer inför det här evenemanget"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Läggs till längst ner i alla utskickade mail"
@@ -6896,6 +6908,9 @@ msgstr "Visa alla deltagares data som register"
 msgid "Donation amount chosen by the participant"
 msgstr "Donationsbelopp valt av deltagaren"
 
+msgid "Explore the quests available in the event"
+msgstr "Upptäck de uppdrag som finns tillgängliga i evenemanget"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Jag gör det regelbundet, jag har god erfarenhet"
 
@@ -7355,6 +7370,9 @@ msgstr "Födelseort som inte finns med i ISTAT:s förteckning"
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Uppdaterad registrering av %(event)s av %(user)s"
 
+msgid "Search and filter the characters of the event"
+msgstr "Sök och filtrera efter karaktärerna i evenemanget"
+
 msgid "Select the event you wish to pre-register for"
 msgstr "Välj det evenemang du vill föranmäla dig till"
 
@@ -7479,6 +7497,12 @@ msgstr "Donation av %(user)s, med anledning: '%(reason)s'"
 
 msgid "Email sent with instructions for password reset"
 msgstr "E-post skickas med instruktioner för återställning av lösenord"
+
+msgid "Fill out the preparation workshops of the event"
+msgstr "Fyll i uppgifterna om evenemangets förberedelseworkshops"
+
+msgid "Get to know all the characters before the event"
+msgstr "Lär känna alla karaktärer innan evenemanget"
 
 msgid "If checked: Add a field to track items quantity"
 msgstr "Om markerad: Lägg till ett fält för att spåra antal artiklar"
@@ -7826,6 +7850,9 @@ msgstr "Ett uppdrag för detta objekt och område finns redan"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tilldelad %(amount).2f %(elements)s för '%(reason)s'"
 
+msgid "Browse the characters and participants of the event"
+msgstr "Se över evenemangets karaktärer och deltagare"
+
 msgid "Complete the setup to unlock full platform features"
 msgstr "Slutför installationen för att låsa upp alla plattformsfunktioner"
 
@@ -8041,6 +8068,9 @@ msgstr "Denna sida uppdateras automatiskt var 10:e sekund"
 msgid "Use the button above to create the first ability type"
 msgstr "Använd knappen ovan för att skapa den första förmågetypen"
 
+msgid "View your payments and pending amounts for this event"
+msgstr "Se dina betalningar och utestående belopp för detta evenemang"
+
 msgid "Warehouse quantities already committed for this event"
 msgstr "Lagerkvantiteter som redan åtagits för detta evenemang"
 
@@ -8153,6 +8183,9 @@ msgstr "Innehållet i medlemsförfrågan fylld med användardata"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Skapa minst en biljettyp för registrering av evenemang"
+
+msgid "Give a registration to this event as a gift to a friend"
+msgstr "Ge bort en anmälan till det här evenemanget som present till en vän"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr "Om markerad: visar en länk i kalendern till tidigare evenemang"
@@ -8399,6 +8432,9 @@ msgstr "Alternativets namn, visas i frågan (håll det kort)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Sannolikhet att visa den särskilda sidan (av tusentals)"
+
+msgid "Sign up for the event, or update your registration options"
+msgstr "Anmäl dig till evenemanget eller uppdatera dina anmälningsalternativ"
 
 msgid "There are no open questions from participants at this time"
 msgstr "Det finns för närvarande inga frågor från deltagarna"
@@ -8945,6 +8981,9 @@ msgstr ""
 msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
 "Fel vid inläsning. Ogiltigt filformat - vi accepterar endast pdf och bilder"
+
+msgid "Express your preferences on the characters you would like to play"
+msgstr "Ange vilka karaktärer du helst vill spela"
 
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""

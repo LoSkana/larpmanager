@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Preferences" %} - {{ run.search }}
 {% endblock title %}
+{% block info %}
+    {% trans "Express your preferences on the characters you would like to play" %}
+{% endblock info %}
 {% block content %}
     {% if features.questbuilder %}
         {% if staff %}
