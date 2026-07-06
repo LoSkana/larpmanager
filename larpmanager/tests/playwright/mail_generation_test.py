@@ -74,7 +74,6 @@ def expense(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/test/manage/expenses")
     page.get_by_role("link", name="Approve").click()
-    confirm_modal(page)
 
 
 def resubmit_membership(live_server: Any, page: Any) -> None:
