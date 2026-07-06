@@ -110,7 +110,7 @@ def _add_registration_items(
                     "fa-solid fa-receipt",
                     _("Payments"),
                     str(_("View your payment details for this event")) + "!",
-                    active=active == "event_payments",
+                    active=active in ("event_payments", "event_payments_registration"),
                 )
             )
         if getattr(registration, "character", None):

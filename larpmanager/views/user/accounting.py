@@ -344,28 +344,41 @@ def accounting_payment(request: HttpRequest, event_slug: str, method: str | None
             _("We cannot find your registration for this event. Are you logged in as the correct user") + "?",
         )
         return redirect("accounting")
-    registration = context["registration"]
 
-    # Validate fiscal code if feature is enabled for this association
-    if "fiscal_code_check" in context["features"]:
-        result = calculate_fiscal_code(context["member"])
-        # Redirect to profile if fiscal code has validation errors
-        if "error_cf" in result:
-            # Redirect to profile page if fiscal code has errors
-            messages.warning(
-                request,
-                _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"],
-            )
-            return redirect("profile")
-
-    # Redirect to payment processing with or without specific method
-    if method:
-        return redirect("accounting_registration", registration_uuid=registration.uuid, method=method)
-    return redirect("accounting_registration", registration_uuid=registration.uuid)
+    return _redirect_registration_payment(event_slug, context["registration"].uuid, method)
 
 
 @login_required
 def accounting_registration(request: HttpRequest, registration_uuid: str, method: str | None = None) -> HttpResponse:
+    """Redirect legacy registration payment URL to the event-scoped payment page.
+
+    Args:
+        request: HTTP request object with authenticated user
+        registration_uuid: Registration UUID
+        method: Optional payment method slug to pre-select
+
+    Returns:
+        HttpResponse: Redirect to the event payment registration page
+
+    """
+    context = get_context(request)
+    registration = get_accounting_registration(request, context, registration_uuid)
+    return _redirect_registration_payment(registration.run.get_slug(), registration_uuid, method)
+
+
+def _redirect_registration_payment(event_slug: str, registration_uuid: str, method: str | None) -> HttpResponse:
+    """Redirect to the event-scoped registration payment page."""
+    if method:
+        return redirect(
+            "event_payments_registration", event_slug=event_slug, registration_uuid=registration_uuid, method=method
+        )
+    return redirect("event_payments_registration", event_slug=event_slug, registration_uuid=registration_uuid)
+
+
+@login_required
+def event_payments_registration(
+    request: HttpRequest, event_slug: str, registration_uuid: str, method: str | None = None
+) -> HttpResponse:
     """Handle registration payment processing for event registrations.
 
     Manages payment flows, fee calculations, and transaction recording
@@ -374,6 +387,7 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
 
     Args:
         request: HTTP request object with authenticated user
+        event_slug: Event slug of the registration run
         registration_uuid: Registration UUID
         method: Optional payment method slug to pre-select
 
@@ -390,6 +404,8 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
 
     # Get event context and mark as accounting page
     registration = get_accounting_registration(request, context, registration_uuid)
+    if registration.run.get_slug() != event_slug:
+        return _redirect_registration_payment(registration.run.get_slug(), registration_uuid, method)
     context = get_event_context(request, registration.run.get_slug())
     context["show_accounting"] = True
     context["registration"] = registration
@@ -398,30 +414,10 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     # Load membership status for permission checks
     registration.membership = get_user_membership(registration.member, context["association_id"])
 
-    # Check if registration is already fully paid
-    if registration.tot_iscr == registration.tot_payed:
-        messages.success(request, _("Everything is in order about the payment of this event") + "!")
-        return redirect("event", event_slug=registration.run.get_slug())
-
-    # Check for pending payment verification
-    pending = (
-        PaymentInvoice.objects.filter(
-            idx=registration.id,
-            member_id=registration.member_id,
-            status=PaymentStatus.SUBMITTED,
-            typ=PaymentType.REGISTRATION,
-        ).count()
-        > 0
-    )
-    if pending:
-        messages.success(request, _("You have already sent a payment pending verification"))
-        return redirect("event", event_slug=registration.run.get_slug())
-
-    # Verify membership approval if membership feature is enabled
-    if "membership" in context["features"] and not registration.membership.date:
-        mes = _("To be able to pay, your membership application must be approved") + "."
-        messages.warning(request, mes)
-        return redirect("event", event_slug=registration.run.get_slug())
+    # Check payment preconditions (already paid, pending verification, membership approval)
+    precondition_redirect = _check_registration_payment_preconditions(request, context, registration)
+    if precondition_redirect:
+        return precondition_redirect
 
     # Calculate payment quota - use installment quota if set, otherwise full balance
     if registration.quota:
@@ -468,6 +464,48 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
         context["form"] = PaymentForm(registration=registration, context=context)
 
     return render(request, "larpmanager/member/accounting_registration.html", context)
+
+
+def _check_registration_payment_preconditions(
+    request: HttpRequest, context: dict, registration: Registration
+) -> HttpResponse | None:
+    """Return a redirect response if the registration cannot be paid, otherwise None."""
+    # Validate fiscal code if feature is enabled for this association
+    if "fiscal_code_check" in context["features"]:
+        result = calculate_fiscal_code(context["member"])
+        if "error_cf" in result:
+            messages.warning(
+                request,
+                _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"],
+            )
+            return redirect("profile")
+
+    # Check if registration is already fully paid
+    if registration.tot_iscr == registration.tot_payed:
+        messages.success(request, _("Everything is in order about the payment of this event") + "!")
+        return redirect("event_payments", event_slug=registration.run.get_slug())
+
+    # Check for pending payment verification
+    pending = (
+        PaymentInvoice.objects.filter(
+            idx=registration.id,
+            member_id=registration.member_id,
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.REGISTRATION,
+        ).count()
+        > 0
+    )
+    if pending:
+        messages.success(request, _("You have already sent a payment pending verification"))
+        return redirect("event_payments", event_slug=registration.run.get_slug())
+
+    # Verify membership approval if membership feature is enabled
+    if "membership" in context["features"] and not registration.membership.date:
+        mes = _("To be able to pay, your membership application must be approved") + "."
+        messages.warning(request, mes)
+        return redirect("event_payments", event_slug=registration.run.get_slug())
+
+    return None
 
 
 def get_accounting_registration(request: HttpRequest, context: dict, registration_uuid: str) -> Registration:
