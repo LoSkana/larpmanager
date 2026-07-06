@@ -5268,6 +5268,9 @@ msgstr "krátký a poutavý"
 msgid "(click on image to enlarge)"
 msgstr "(kliknutím na obrázek jej zvětšíte)"
 
+msgid "Ability no longer available"
+msgstr "Tato funkce již není k dispozici"
+
 msgid "Activate new event features"
 msgstr "Aktivace nových funkcí události"
 

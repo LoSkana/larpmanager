@@ -54,8 +54,8 @@ logger = logging.getLogger(__name__)
 
 
 def generate_id(id_length: Any) -> Any:
-    """Generate random alphanumeric ID string."""
-    return "".join(random.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))  # noqa: S311
+    """Generate a cryptographically secure random alphanumeric ID string."""
+    return "".join(secrets.choice(string.ascii_lowercase + string.digits) for _ in range(id_length))
 
 
 def decimal_to_str(decimal_value: Decimal) -> str:

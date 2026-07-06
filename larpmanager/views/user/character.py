@@ -1021,8 +1021,16 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
     ability = get_element_event(context, selected_uuid, AbilityExp)
 
     with transaction.atomic():
-        context["character"].exp_ability_list.add(ability)
-        context["character"].save()
+        # Lock the character and recompute affordability under the lock
+        char = Character.objects.select_for_update().get(pk=context["character"].pk)
+        exp_avail = build_exp_avail_by_system_from_addit(char)
+        available_uuids = {str(available.uuid) for available in get_available_ability_exp(char, exp_avail)}
+        if str(ability.uuid) not in available_uuids:
+            messages.error(request, _("Ability no longer available"))
+            return
+        char.exp_ability_list.add(ability)
+        char.save()
+        context["character"] = char
     messages.success(request, _("Ability acquired") + "!")
 
     get_undo_abilities(context, context["character"], ability)

@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Max
 from django.http import Http404
 from django.utils import timezone
@@ -256,12 +257,13 @@ def process_membership_status_updates(membership: Membership) -> None:
     if membership.status == MembershipStatus.ACCEPTED:
         # Assign next available card number if not already set
         if not membership.card_number:
-            max_card_number = Membership.objects.filter(association=membership.association).aggregate(
-                Max("card_number"),
-            )["card_number__max"]
-            if not max_card_number:
-                max_card_number = 0
-            membership.card_number = max_card_number + 1
+            with transaction.atomic():
+                max_card_number = (
+                    Membership.objects.select_for_update()
+                    .filter(association=membership.association)
+                    .aggregate(Max("card_number"))["card_number__max"]
+                )
+                membership.card_number = (max_card_number or 0) + 1
 
         # Set current date if not already set
         if not membership.date:

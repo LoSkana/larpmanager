@@ -5268,6 +5268,9 @@ msgstr "kurz und fesselnd halten"
 msgid "(click on image to enlarge)"
 msgstr "(zum Vergrößern auf das Bild klicken)"
 
+msgid "Ability no longer available"
+msgstr "Fähigkeit ist nicht mehr verfügbar"
+
 msgid "Activate new event features"
 msgstr "Aktivieren Sie neue Veranstaltungsfunktionen"
 

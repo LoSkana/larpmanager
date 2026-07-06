@@ -638,8 +638,9 @@ class RefundRequestForm(BaseModelForm):
         # Extract member from kwargs and initialize parent form
         super().__init__(*args, **kwargs)
 
-        # Set value field with max value constraint from member's credit
+        # Set value field with min/max constraints from member's credit
         self.fields["value"] = forms.DecimalField(
+            min_value=Decimal("0.01"),
             max_value=self.params["membership"].credit,
             max_digits=10,
             decimal_places=2,

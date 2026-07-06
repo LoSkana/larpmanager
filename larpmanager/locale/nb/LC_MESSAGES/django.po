@@ -5268,6 +5268,9 @@ msgstr "hold det kort og engasjerende"
 msgid "(click on image to enlarge)"
 msgstr "(klikk på bildet for å forstørre)"
 
+msgid "Ability no longer available"
+msgstr "Funksjonen er ikke lenger tilgjengelig"
+
 msgid "Activate new event features"
 msgstr "Aktiver nye arrangementsfunksjoner"
 

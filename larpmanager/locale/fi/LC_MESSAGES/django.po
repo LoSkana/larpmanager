@@ -5268,6 +5268,9 @@ msgstr "Pidä se lyhyenä ja mukaansatempaavana"
 msgid "(click on image to enlarge)"
 msgstr "(klikkaa kuvaa suurentaaksesi)"
 
+msgid "Ability no longer available"
+msgstr "Toiminto ei ole enää käytettävissä"
+
 msgid "Activate new event features"
 msgstr "Aktivoi uudet tapahtumaominaisuudet"
 
