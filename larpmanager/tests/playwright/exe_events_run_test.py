@@ -74,8 +74,8 @@ def test_exe_events_run(pw_page: Any) -> None:
     fill_tinymce(edit_iframe, "id_form1-description", "sadsadasdsaas", False)
     edit_iframe.locator("#id_form1-max_pg").click()
     edit_iframe.locator("#id_form1-max_pg").fill("10")
-    edit_iframe.locator("#id_form2-development_1").check()
-    edit_iframe.locator("#id_form2-registration_status_1").check()
+    edit_iframe.locator('label[for="id_form2-development_1"]').click();
+    edit_iframe.locator('label[for="id_form2-registration_status_1"]').click()
     fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
     fill_date(edit_iframe, "#id_form2-end", "2055-06-13")
     save_modal(page, edit_iframe)
