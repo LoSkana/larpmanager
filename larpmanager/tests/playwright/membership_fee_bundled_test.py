@@ -96,7 +96,7 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_form1-name").fill("Test Second")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator('label[for="id_form2-development_1"]').click();
+    edit_iframe.locator('label[for="id_form2-development_1"]').click()
     edit_iframe.locator('label[for="id_form2-registration_status_1"]').click()
     fill_date(edit_iframe, "#id_form2-start", "2050-06-11")
     fill_date(edit_iframe, "#id_form2-end", "2050-06-13")

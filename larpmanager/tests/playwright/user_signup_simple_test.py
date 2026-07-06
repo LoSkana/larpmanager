@@ -127,7 +127,7 @@ def pre_register(live_server: Any, page: Any) -> None:
 
     # Set registration_status to PRE (Pre-registration)
     go_to(page, live_server, "/test/manage/run")
-    page.locator("#id_registration_status").select_option("p")
+    page.locator('label[for="id_registration_status_2"]').click()
     submit_confirm(page)
 
     go_to(page, live_server, "/")
@@ -144,5 +144,5 @@ def pre_register(live_server: Any, page: Any) -> None:
 
     # Change registration_status to OPEN for normal registration
     go_to(page, live_server, "/test/manage/run")
-    page.locator("#id_registration_status").select_option("o")
+    page.locator('label[for="id_registration_status_1"]').click()
     submit_confirm(page)

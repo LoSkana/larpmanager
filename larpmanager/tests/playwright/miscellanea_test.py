@@ -107,7 +107,7 @@ def gallery_hide_configs(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("Test Access")
-    edit_iframe.locator('label[for="id_form2-development_1"]').click();
+    edit_iframe.locator('label[for="id_form2-development_1"]').click()
     edit_iframe.locator('label[for="id_form2-registration_status_1"]').click()
     fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
     fill_date(edit_iframe, "#id_form2-end", "2055-06-13")

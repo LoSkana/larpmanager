@@ -118,7 +118,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     """Test that direct ticket link works when registration is not yet open."""
 
     page.get_by_role("link", name="Event").first.click()
-    page.locator("#id_form2-registration_status").select_option("f")
+    page.locator('label[for="id_form2-registration_status_3"]').click()
     fill_date(page, "#id_form2-registration_open", "2099-12-31")
     submit_confirm(page)
 
@@ -144,7 +144,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     # Reset registration open date
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Event").first.click()
-    page.locator("#id_form2-registration_status").select_option("o")
+    page.locator('label[for="id_form2-registration_status_1"]').click()
     submit_confirm(page)
 
 
@@ -155,7 +155,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     # Set an external registration link
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Event").first.click()
-    page.locator("#id_form2-registration_status").select_option("e")
+    page.locator('label[for="id_form2-registration_status_2"]').click()
     page.locator("#id_form2-register_link").click()
     page.locator("#id_form2-register_link").fill("https://google.com")
     submit_confirm(page)
@@ -184,7 +184,7 @@ def ticket_link_bypasses_external_link(page: Any, live_server: Any) -> None:
     # Clean up: disable external registration link
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Event").first.click()
-    page.locator("#id_form2-registration_status").select_option("o")
+    page.locator('label[for="id_form2-registration_status_1"]').click()
     submit_confirm(page)
 
 
