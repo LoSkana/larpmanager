@@ -161,6 +161,8 @@ def pay(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/invoices")
     expect(page.get_by_role("row", name="Admin Test Wire registration")).to_contain_text("52")
     page.get_by_role("link", name="Confirm", exact=True).click()
+    # Confirm the CSRF-protection interstitial
+    page.get_by_role("button", name="Confirm").click()
 
 
 def token_credits(live_server: Any, page: Any) -> None:

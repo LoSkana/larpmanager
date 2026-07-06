@@ -7448,6 +7448,9 @@ msgstr "Valfritt - Bild som visas i frågan"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Valfri bild för karusell/bildspel på startsidan"
 
+msgid "Please confirm you want to perform this action"
+msgstr "Bekräfta att du vill utföra den här åtgärden"
+
 msgid "Please select both a registration and an event"
 msgstr "Vänligen välj både en registrering och ett evenemang"
 

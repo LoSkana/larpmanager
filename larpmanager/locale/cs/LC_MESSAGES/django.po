@@ -7446,6 +7446,9 @@ msgstr "Nepovinné - Obrázek zobrazený v rámci otázky"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Volitelný obrázek pro karuselovou prezentaci na domovské stránce"
 
+msgid "Please confirm you want to perform this action"
+msgstr "Potvrďte prosím, že chcete tuto akci provést"
+
 msgid "Please select both a registration and an event"
 msgstr "Vyberte prosím registraci i událost"
 

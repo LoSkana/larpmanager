@@ -7465,6 +7465,9 @@ msgstr "Facultatif - Image affichée dans la question"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Image facultative pour le carrousel/diaporama de la page d'accueil"
 
+msgid "Please confirm you want to perform this action"
+msgstr "Confirme que tu veux vraiment faire ça"
+
 msgid "Please select both a registration and an event"
 msgstr "Veuillez sélectionner à la fois une inscription et un événement"
 

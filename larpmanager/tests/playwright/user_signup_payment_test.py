@@ -124,6 +124,8 @@ def signup(page: Any, live_server: Any) -> None:
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
+    # Confirm the CSRF-protection interstitial
+    page.get_by_role("button", name="Confirm").click()
 
     # check reg status
     go_to(page, live_server, "/test/register")

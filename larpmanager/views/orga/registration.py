@@ -88,6 +88,7 @@ from larpmanager.utils.core.common import (
 )
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _orga_registrations_acc, download
+from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.views.orga.member import member_field_correct
 
 if TYPE_CHECKING:
@@ -1063,6 +1064,7 @@ def orga_registration_discounts(request: HttpRequest, event_slug: str, registrat
 
 
 @login_required
+@confirm_post
 def orga_registration_discount_add(
     request: HttpRequest, event_slug: str, registration_uuid: str, discount_uuid: str
 ) -> Any:
@@ -1097,6 +1099,7 @@ def orga_registration_discount_add(
 
 
 @login_required
+@confirm_post
 def orga_registration_discount_del(
     request: HttpRequest, event_slug: str, registration_uuid: str, discount_uuid: str
 ) -> HttpResponse:

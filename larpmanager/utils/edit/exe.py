@@ -63,7 +63,14 @@ from larpmanager.forms.warehouse import (
     ExeWarehouseTagForm,
 )
 from larpmanager.utils.core.base import check_association_context
-from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_edit, set_suggestion
+from larpmanager.utils.edit.backend import (
+    _element_display_name,
+    backend_delete,
+    backend_delete_frame,
+    backend_edit,
+    backend_get,
+    set_suggestion,
+)
 from larpmanager.utils.edit.base import Action, render_frame_or_fallback
 
 if TYPE_CHECKING:
@@ -180,6 +187,11 @@ def _exe_actions(
         if is_frame:
             context["frame"] = True
             return backend_delete_frame(request, context, model_type, element_uuid, action_data.get("can_delete"))
+        # Non-frame direct access: confirm on GET, delete only on POST
+        if request.method != "POST":
+            backend_get(context, model_type, element_uuid, None)
+            context["el_name"] = _element_display_name(context["el"])
+            return render(request, "elements/confirm_action.html", context)
         backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
         return redirect(permission)
 

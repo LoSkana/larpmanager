@@ -68,6 +68,7 @@ from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
 from larpmanager.utils.edit.backend import backend_get
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
+from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.views.orga.accounting import payment_edit
 
 
@@ -500,6 +501,7 @@ def exe_expenses_delete(request: HttpRequest, expense_uuid: str) -> HttpResponse
 
 
 @login_required
+@confirm_post
 def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpResponse:
     """Approve an expense request for the current organization."""
     # Check user has permission to manage expenses
@@ -1264,6 +1266,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
 
 
 @login_required
+@confirm_post
 def exe_verification_manual(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Manually verify a payment invoice for an organization.
 

@@ -53,6 +53,7 @@ from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_get, save_log
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
+from larpmanager.utils.security.confirm import confirm_post
 
 
 @login_required
@@ -199,6 +200,7 @@ def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
+@confirm_post
 def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Confirm a payment invoice for an organization event.
 
@@ -248,6 +250,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 
 
 @login_required
+@confirm_post
 def orga_invoices_delete(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Delete a payment invoice and redirect to payments."""
     context = check_event_context(request, event_slug, ["orga_payments", "orga_invoices"])
@@ -819,6 +822,7 @@ def orga_expenses_delete(request: HttpRequest, event_slug: str, expense_uuid: st
 
 
 @login_required
+@confirm_post
 def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponseRedirect:
     """Approve an expense request for an event.
 

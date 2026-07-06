@@ -140,6 +140,8 @@ def pay(live_server: Any, page: Any) -> None:
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
+    # Confirm the CSRF-protection interstitial
+    page.get_by_role("button", name="Confirm").click()
     # check payment
     go_to(page, live_server, "/test/register")
     sidebar(page, "Event")

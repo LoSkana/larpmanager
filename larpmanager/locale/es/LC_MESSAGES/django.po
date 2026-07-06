@@ -7452,6 +7452,9 @@ msgstr ""
 "Imagen opcional para el carrusel/presentación de diapositivas de la página "
 "de inicio"
 
+msgid "Please confirm you want to perform this action"
+msgstr "Confirma que quieres realizar esta acción"
+
 msgid "Please select both a registration and an event"
 msgstr "Seleccione una inscripción y un acto"
 
