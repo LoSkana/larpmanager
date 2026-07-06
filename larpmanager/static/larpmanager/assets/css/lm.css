@@ -379,12 +379,23 @@ input[type="number"] {
   cursor: pointer;
 }
 
+.opt-body {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+}
+
+.opt-name {
+  display: block;
+}
+
 .opt-desc {
   display: block;
   color: #888;
   font-size: 0.85em;
-  margin-left: 1.6em;
   margin-top: 0.1em;
+  overflow-wrap: break-word;
 }
 
 .my-checkbox-class label,
@@ -4955,4 +4966,15 @@ body.in-iframe #menu-mobile {
 
 .payment-membership-info i {
   margin-right: 0.4rem;
+}
+
+#lm_join input,
+#lm_join select {
+  max-width: 100% !important;
+  text-align: left !important;
+}
+
+#lm_join th,
+#lm_join label {
+  text-align: left !important;
 }

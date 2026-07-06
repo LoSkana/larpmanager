@@ -3613,6 +3613,9 @@ msgstr "Stáhnout dokument"
 msgid "Elements uploaded"
 msgstr "Prvky jsou načteny"
 
+msgid "Event public page"
+msgstr "Veřejná stránka události"
+
 msgid "Experience System"
 msgstr "Zážitkový systém"
 
@@ -3882,9 +3885,6 @@ msgstr "Název typu úkolu"
 
 msgid "New refund request"
 msgstr "Nová žádost o vrácení peněz"
-
-msgid "Not active anymore"
-msgstr "Již není aktivní"
 
 msgid "Patron and Reduced"
 msgstr "Patron a snížené"
@@ -4263,9 +4263,6 @@ msgstr "Zatím nejsou definovány žádné role"
 msgid "Not available, kiddo"
 msgstr "Není k dispozici, chlapče"
 
-msgid "Not visible to users"
-msgstr "Není viditelný pro uživatele"
-
 msgid "Notifications digest"
 msgstr "Sborník oznámení"
 
@@ -4589,9 +4586,6 @@ msgstr "Správa odlitků pro"
 msgid "Character Relationship"
 msgstr "Vztah postav"
 
-msgid "Concluded and archived"
-msgstr "Uzavřeno a archivováno"
-
 msgid "Confirm password reset"
 msgstr "Potvrzení obnovení hesla"
 
@@ -4867,9 +4861,6 @@ msgstr "E-mail účastníka"
 
 msgid "Update your data in the"
 msgstr "Aktualizujte data v"
-
-msgid "Visible in the homepage"
-msgstr "Viditelné na domovské stránce"
 
 msgid "What are you doing here"
 msgstr "Co tady ještě děláš"
@@ -5530,9 +5521,6 @@ msgstr "Hráči čekají na postavu"
 msgid "Pre-registration at %(event)s"
 msgstr "Předběžná registrace na %(event)s"
 
-msgid "Pre-registration is available"
-msgstr "Předběžná registrace je k dispozici"
-
 msgid "Preferred navigation language"
 msgstr "Preferovaný jazyk navigace"
 
@@ -5760,9 +5748,6 @@ msgstr "Opravte prosím níže uvedené chyby"
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Úkoly bez vlastností: %(list)s"
-
-msgid "Registrations are not available"
-msgstr "Registrace nejsou k dispozici"
 
 msgid "Relationships of your character"
 msgstr "Odkazy vaší postavy"
@@ -6720,9 +6705,6 @@ msgstr "Použijte prosím odkaz z nedávného e-mailu"
 msgid "Registration cancellation for %(event)s"
 msgstr "Odhlášení odběru %(event)s"
 
-msgid "Registrations are open for participants"
-msgstr "Registrace účastníků jsou otevřeny"
-
 msgid "Set the experience points configuration"
 msgstr "Nastavení konfigurace zkušenostních bodů"
 
@@ -7074,9 +7056,6 @@ msgstr "Účastníci, kteří NEZASLALI preference"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Připomenutí sestavení profilu pro %(event)s"
-
-msgid "Redirects to an external registration link"
-msgstr "Přesměrování na externí registrační odkaz"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Rezervace dalších vstupenek nad rámec vlastních"
@@ -8125,9 +8104,6 @@ msgstr "Nyní můžete při úpravě postavy přidávat vztahy"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Sledování množství není pro tuto organizaci povoleno"
 
-msgid "Registrations will open at the specified date and time"
-msgstr "Registrace budou otevřeny v uvedeném termínu a čase"
-
 msgid "Restore session expired, please upload the file again."
 msgstr "Platnost relace obnovení vypršela, nahrajte prosím soubor znovu."
 
@@ -8790,6 +8766,11 @@ msgstr "Chcete, aby se uživatelé připojovali k událostem až po schválení"
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Dobrý den! Vaše registrace na <b>%(event)s</b> byla potvrzena"
 
+msgid "Here you can review the event details and visit its public page"
+msgstr ""
+"Zde si můžete prohlédnout podrobnosti o akci a navštívit její veřejnou "
+"stránku"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou při zadávání této události použity žádné žetony"
@@ -8957,6 +8938,11 @@ msgstr "Nová účast na sbírce pro %(recipient)s od %(user)s"
 
 msgid "Now you can review the diet information submitted by participants"
 msgstr "Nyní si můžete prohlédnout informace o stravě poskytnuté účastníky"
+
+msgid "Participants can sign up right away through the registration form"
+msgstr ""
+"Účastníci se mohou přihlásit hned teď prostřednictvím registračního "
+"formuláře"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Uveďte prosím, při jaké příležitosti si přejete dar poskytnout"
@@ -9160,9 +9146,6 @@ msgstr ""
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Počet dní, během kterých musí hráč zaplatit další splátku"
-
-msgid "Registrations are open and will close at the specified date and time"
-msgstr "Registrace jsou otevřené a budou uzavřeny v uvedený den a čas"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -10179,6 +10162,13 @@ msgstr ""
 "'zobrazit prezentaci'"
 
 msgid ""
+"The event will not take place: hidden from users and excluded from "
+"accounting"
+msgstr ""
+"Událost se neuskuteční: bude skrytá před uživateli a nebude zahrnuta do "
+"výkaznictví"
+
+msgid ""
 "Track and manage event milestones with status, deadline, and staff "
 "assignment"
 msgstr ""
@@ -10363,6 +10353,13 @@ msgstr ""
 "žádné dodatečné náklady)"
 
 msgid ""
+"Participants cannot sign up: the event page shows that registrations are "
+"closed"
+msgstr ""
+"Účastníci se nemohou přihlásit: na stránce akce je uvedeno, že registrace "
+"jsou uzavřeny"
+
+msgid ""
 "Pre-registrations are open: pre-register to be notified when registrations "
 "open"
 msgstr ""
@@ -10374,6 +10371,12 @@ msgid ""
 "form"
 msgstr ""
 "Podmínky registrace uvedené na stránce s odkazem v registračním formuláři"
+
+msgid ""
+"The event has taken place: archived among past events, registrations are "
+"frozen"
+msgstr ""
+"Akce již proběhla: je zařazena mezi minulé akce, registrace jsou uzavřeny"
 
 msgid ""
 "This content can only be accessed once. Please read carefully before "
@@ -10521,6 +10524,13 @@ msgstr ""
 "nastaveno, nejsou zasílány žádné e-maily)"
 
 msgid ""
+"The event is published: listed in the homepage and calendar, visible to all "
+"users"
+msgstr ""
+"Událost je zveřejněna: je uvedena na úvodní stránce a v kalendáři, je "
+"viditelná pro všechny uživatele"
+
+msgid ""
 "This page summarizes the pool labels used to group pools in character "
 "inventories"
 msgstr ""
@@ -10666,6 +10676,13 @@ msgstr ""
 " klíčové funkce pro tuto událost"
 
 msgid ""
+"Registrations are open until the date and time set below, then close "
+"automatically"
+msgstr ""
+"Registrace jsou otevřené až do níže uvedeného data a času, poté se "
+"automaticky uzavřou"
+
+msgid ""
 "Theoretical total of income due to participation fees selected by the "
 "participants"
 msgstr "Teoretický celkový příjem z účastnických poplatků vybraných účastníky"
@@ -10803,6 +10820,13 @@ msgid ""
 " always)"
 msgstr ""
 "Minimální počet dní před událostí, pro kterou je k dispozici (0 = vždy)"
+
+msgid ""
+"Registrations stay closed until the date and time set below, then open "
+"automatically"
+msgstr ""
+"Registrace zůstávají uzavřené až do níže uvedeného data a času, poté se "
+"automaticky otevřou"
 
 msgid ""
 "Requires Executive Committee approval of membership before participating in "
@@ -12095,6 +12119,13 @@ msgstr ""
 "registrační stránky, podle jednotlivých jazyků"
 
 msgid ""
+"Registrations are managed on another site: participants are redirected to "
+"the external link set below"
+msgstr ""
+"Registrace se provádějí na jiné stránce: účastníci jsou přesměrováni na "
+"externí odkaz uvedený níže"
+
+msgid ""
 "The character has been added to the faction, but in the faction text the "
 "character is never mentioned"
 msgstr ""
@@ -12786,6 +12817,13 @@ msgstr ""
 "použít jako výchozí bod pro jiné události"
 
 msgid ""
+"Participants cannot sign up yet, but can pre-register to show their interest"
+" and be notified when registrations open"
+msgstr ""
+"Účastníci se zatím nemohou přihlásit, mohou se však předběžně zaregistrovat,"
+" aby projevili svůj zájem a byli informováni, až se registrace otevře"
+
+msgid ""
 "The collection is active! To participate click on the following link, or "
 "copy it to whoever you want to get involved"
 msgstr ""
@@ -13085,6 +13123,13 @@ msgid ""
 msgstr ""
 "Mějte prosím na paměti, že informace na této stránce byly poskytnuty s "
 "důvěrou, že s nimi bude nakládáno s maximální péčí"
+
+msgid ""
+"The event is in preparation: hidden from the homepage and calendar, only "
+"staff and already registered participants can access it"
+msgstr ""
+"Akce je ve fázi přípravy: není zobrazena na úvodní stránce ani v kalendáři, "
+"přístup k ní mají pouze zaměstnanci a již zaregistrovaní účastníci"
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have"

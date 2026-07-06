@@ -3613,6 +3613,9 @@ msgstr "Ladda ner dokument"
 msgid "Elements uploaded"
 msgstr "Elementen är laddade"
 
+msgid "Event public page"
+msgstr "Offentlig evenemangssida"
+
 msgid "Experience System"
 msgstr "System för upplevelser"
 
@@ -3882,9 +3885,6 @@ msgstr "Namn på uppdragstyp"
 
 msgid "New refund request"
 msgstr "Ny begäran om återbetalning"
-
-msgid "Not active anymore"
-msgstr "Inte aktiv längre"
 
 msgid "Patron and Reduced"
 msgstr "Beskyddare och reducerad"
@@ -4263,9 +4263,6 @@ msgstr "Inga roller har definierats ännu"
 msgid "Not available, kiddo"
 msgstr "Inte tillgänglig, grabben"
 
-msgid "Not visible to users"
-msgstr "Inte synligt för användare"
-
 msgid "Notifications digest"
 msgstr "Sammanställning av meddelanden"
 
@@ -4589,9 +4586,6 @@ msgstr "Casting management för"
 msgid "Character Relationship"
 msgstr "Relation mellan karaktärer"
 
-msgid "Concluded and archived"
-msgstr "Avslutad och arkiverad"
-
 msgid "Confirm password reset"
 msgstr "Återställning av lösenord bekräftad"
 
@@ -4867,9 +4861,6 @@ msgstr "Deltagarens e-postadress"
 
 msgid "Update your data in the"
 msgstr "Uppdatera dina uppgifter i"
-
-msgid "Visible in the homepage"
-msgstr "Synlig på startsidan"
 
 msgid "What are you doing here"
 msgstr "Vad gör du fortfarande här"
@@ -5530,9 +5521,6 @@ msgstr "Spelare som väntar på karaktär"
 msgid "Pre-registration at %(event)s"
 msgstr "Förhandsregistrering på %(event)s"
 
-msgid "Pre-registration is available"
-msgstr "Förhandsanmälan är tillgänglig"
-
 msgid "Preferred navigation language"
 msgstr "Förvalt navigationsspråk"
 
@@ -5760,9 +5748,6 @@ msgstr "Vänligen korrigera felen nedan"
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Uppdrag utan egenskaper: %(list)s"
-
-msgid "Registrations are not available"
-msgstr "Registreringar är inte tillgängliga"
 
 msgid "Relationships of your character"
 msgstr "Länkar till din karaktär"
@@ -6721,9 +6706,6 @@ msgstr "Använd länken från ett nyligen skickat e-postmeddelande"
 msgid "Registration cancellation for %(event)s"
 msgstr "Avsluta prenumerationen på %(event)s"
 
-msgid "Registrations are open for participants"
-msgstr "Anmälan är öppen för deltagare"
-
 msgid "Set the experience points configuration"
 msgstr "Ställ in konfigurationen för erfarenhetspoäng"
 
@@ -7075,9 +7057,6 @@ msgstr "Deltagare som INTE skickade preferenser"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Påminnelse om sammanställning av profiler för %(event)s"
-
-msgid "Redirects to an external registration link"
-msgstr "Omdirigeringar till en extern registreringslänk"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reservera ytterligare biljetter utöver din egen"
@@ -8133,9 +8112,6 @@ msgstr "Nu kan du lägga till relationer när du redigerar en karaktär"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
 
-msgid "Registrations will open at the specified date and time"
-msgstr "Registreringen öppnar på angivet datum och klockslag"
-
 msgid "Restore session expired, please upload the file again."
 msgstr "Återställningssessionen har löpt ut, vänligen ladda upp filen igen."
 
@@ -8816,6 +8792,9 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Hallå där! Din anmälan till <b>%(event)s</b> har bekräftats"
 
+msgid "Here you can review the event details and visit its public page"
+msgstr "Här kan du läsa mer om evenemanget och besöka dess offentliga sida"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Om markerat, kommer inga polletter att användas i anmälningarna till detta "
@@ -8994,6 +8973,9 @@ msgstr "Nytt deltagande i insamlingen för %(recipient)s av %(user)s"
 
 msgid "Now you can review the diet information submitted by participants"
 msgstr "Nu kan du granska den kostinformation som deltagarna har lämnat in"
+
+msgid "Participants can sign up right away through the registration form"
+msgstr "Deltagarna kan anmäla sig direkt via anmälningsformuläret"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Ange för vilket tillfälle du vill göra en donation"
@@ -9214,9 +9196,6 @@ msgstr "Nu kan deltagare skapa återbetalningsbegäran och du kan granska dem"
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Antal dagar inom vilka spelaren måste betala sin nästa delbetalning"
-
-msgid "Registrations are open and will close at the specified date and time"
-msgstr "Anmälan är öppen och stängs vid angivet datum och klockslag"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -10293,6 +10272,13 @@ msgstr ""
 "Presentation synlig för alla deltagare, när 'visa presentation' är markerat"
 
 msgid ""
+"The event will not take place: hidden from users and excluded from "
+"accounting"
+msgstr ""
+"Evenemanget kommer inte att äga rum: det döljs för användarna och tas inte "
+"med i redovisningen"
+
+msgid ""
 "Track and manage event milestones with status, deadline, and staff "
 "assignment"
 msgstr ""
@@ -10482,6 +10468,13 @@ msgstr ""
 "ingen extra kostnad)"
 
 msgid ""
+"Participants cannot sign up: the event page shows that registrations are "
+"closed"
+msgstr ""
+"Deltagare kan inte anmäla sig: på evenemangssidan framgår det att "
+"anmälningarna är stängda"
+
+msgid ""
 "Pre-registrations are open: pre-register to be notified when registrations "
 "open"
 msgstr ""
@@ -10494,6 +10487,13 @@ msgid ""
 msgstr ""
 "Villkor för registrering, som visas på en sida som är länkad i "
 "registreringsformuläret"
+
+msgid ""
+"The event has taken place: archived among past events, registrations are "
+"frozen"
+msgstr ""
+"Evenemanget har ägt rum: det finns nu i arkivet bland tidigare evenemang, "
+"och anmälningarna är stängda"
 
 msgid ""
 "This content can only be accessed once. Please read carefully before "
@@ -10648,6 +10648,13 @@ msgstr ""
 "skickas inga e-postmeddelanden)"
 
 msgid ""
+"The event is published: listed in the homepage and calendar, visible to all "
+"users"
+msgstr ""
+"Evenemanget har publicerats: det visas på startsidan och i kalendern och är "
+"synligt för alla användare"
+
+msgid ""
 "This page summarizes the pool labels used to group pools in character "
 "inventories"
 msgstr ""
@@ -10799,6 +10806,13 @@ msgstr ""
 "hjälp av en förenklad checklista"
 
 msgid ""
+"Registrations are open until the date and time set below, then close "
+"automatically"
+msgstr ""
+"Anmälningarna är öppna fram till det datum och den tidpunkt som anges nedan,"
+" varefter de stängs automatiskt"
+
+msgid ""
 "Theoretical total of income due to participation fees selected by the "
 "participants"
 msgstr ""
@@ -10942,6 +10956,13 @@ msgid ""
 msgstr ""
 "Minsta antal dagar före det evenemang för vilket det görs tillgängligt (0 = "
 "alltid)"
+
+msgid ""
+"Registrations stay closed until the date and time set below, then open "
+"automatically"
+msgstr ""
+"Anmälningarna förblir stängda fram till det datum och den tidpunkt som anges"
+" nedan, varefter de öppnas automatiskt"
 
 msgid ""
 "Requires Executive Committee approval of membership before participating in "
@@ -12262,6 +12283,13 @@ msgstr ""
 "i e-postmeddelanden och på registreringssidor, per språk"
 
 msgid ""
+"Registrations are managed on another site: participants are redirected to "
+"the external link set below"
+msgstr ""
+"Anmälningarna hanteras på en annan webbplats: deltagarna omdirigeras till "
+"den externa länken nedan"
+
+msgid ""
 "The character has been added to the faction, but in the faction text the "
 "character is never mentioned"
 msgstr ""
@@ -12955,6 +12983,13 @@ msgstr ""
 "användas som utgångspunkt för andra händelser"
 
 msgid ""
+"Participants cannot sign up yet, but can pre-register to show their interest"
+" and be notified when registrations open"
+msgstr ""
+"Deltagarna kan inte anmäla sig ännu, men kan förhandsregistrera sig för att "
+"visa sitt intresse och få besked när anmälan öppnar"
+
+msgid ""
 "The collection is active! To participate click on the following link, or "
 "copy it to whoever you want to get involved"
 msgstr ""
@@ -13257,6 +13292,14 @@ msgid ""
 msgstr ""
 "Kom ihåg att informationen på denna sida har lämnats med det underförstådda "
 "förtroendet att den kommer att behandlas med största försiktighet"
+
+msgid ""
+"The event is in preparation: hidden from the homepage and calendar, only "
+"staff and already registered participants can access it"
+msgstr ""
+"Evenemanget är under förberedelse: det syns inte på startsidan eller i "
+"kalendern, och endast personal och redan anmälda deltagare har tillgång till"
+" det"
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have"

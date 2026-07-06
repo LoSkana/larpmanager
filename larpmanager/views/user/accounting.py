@@ -1169,7 +1169,7 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     registration = context.get("registration")
 
     if not registration or not registration.tot_iscr:
-        return redirect("gallery", event_slug=event_slug)
+        return redirect("event", event_slug=event_slug)
 
     invoices = (
         PaymentInvoice.objects.filter(

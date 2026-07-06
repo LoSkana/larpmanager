@@ -3613,6 +3613,9 @@ msgstr "Descargar documento"
 msgid "Elements uploaded"
 msgstr "¡Elementos subidos"
 
+msgid "Event public page"
+msgstr "Página pública del evento"
+
 msgid "Experience System"
 msgstr "Sistema de experiencia"
 
@@ -3882,9 +3885,6 @@ msgstr "Nombre del tipo de búsqueda"
 
 msgid "New refund request"
 msgstr "Nueva solicitud de devolución"
-
-msgid "Not active anymore"
-msgstr "Ya no está activo"
 
 msgid "Patron and Reduced"
 msgstr "Patrón y Reducido"
@@ -4263,9 +4263,6 @@ msgstr "Aún no hay roles definidos"
 msgid "Not available, kiddo"
 msgstr "No disponible, chaval"
 
-msgid "Not visible to users"
-msgstr "No visible para los usuarios"
-
 msgid "Notifications digest"
 msgstr "Resumen de notificaciones"
 
@@ -4589,9 +4586,6 @@ msgstr "Gestión de la asignación para"
 msgid "Character Relationship"
 msgstr "Relación con el personaje"
 
-msgid "Concluded and archived"
-msgstr "Concluido y archivado"
-
 msgid "Confirm password reset"
 msgstr "Restablecimiento de contraseña confirmado"
 
@@ -4867,9 +4861,6 @@ msgstr "Correo electrónico del participante"
 
 msgid "Update your data in the"
 msgstr "Actualice sus datos en"
-
-msgid "Visible in the homepage"
-msgstr "Visible en la página de inicio"
 
 msgid "What are you doing here"
 msgstr "¿Qué haces aquí todavía"
@@ -5530,9 +5521,6 @@ msgstr "Jugadores en espera de personaje"
 msgid "Pre-registration at %(event)s"
 msgstr "Preinscripción en %(event)s"
 
-msgid "Pre-registration is available"
-msgstr "Preinscripción disponible"
-
 msgid "Preferred navigation language"
 msgstr "Idioma de navegación preferido"
 
@@ -5760,9 +5748,6 @@ msgstr "Por favor, corrige los errores que aparecen a continuación"
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Misiones sin rasgos: %(list)s"
-
-msgid "Registrations are not available"
-msgstr "Las inscripciones no están disponibles"
 
 msgid "Relationships of your character"
 msgstr "Enlaces de su personaje"
@@ -6720,9 +6705,6 @@ msgstr "Utiliza el enlace de un correo electrónico reciente"
 msgid "Registration cancellation for %(event)s"
 msgstr "Darse de baja de %(event)s"
 
-msgid "Registrations are open for participants"
-msgstr "Las inscripciones están abiertas para los participantes"
-
 msgid "Set the experience points configuration"
 msgstr "Establecer la configuración de los puntos de experiencia"
 
@@ -7074,9 +7056,6 @@ msgstr "Participantes que NO enviaron preferencias"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Recordatorio de compilación de perfiles para %(event)s"
-
-msgid "Redirects to an external registration link"
-msgstr "Redirige a un enlace de registro externo"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reservar entradas adicionales"
@@ -8152,9 +8131,6 @@ msgstr "Ahora puedes añadir relaciones al editar un personaje"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "El seguimiento de cantidades no está activado para esta organización"
 
-msgid "Registrations will open at the specified date and time"
-msgstr "Las inscripciones se abrirán en la fecha y hora especificadas"
-
 msgid "Restore session expired, please upload the file again."
 msgstr ""
 "La sesión de restauración ha expirado, por favor, vuelva a cargar el "
@@ -8898,6 +8874,10 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "¡Hola! ¡Tu inscripción en <b>%(event)s</b> ha sido confirmada"
 
+msgid "Here you can review the event details and visit its public page"
+msgstr ""
+"Aquí puedes consultar los detalles del evento y visitar su página pública"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Si está marcada, no se utilizarán tokens en las entradas de este evento"
@@ -9092,6 +9072,11 @@ msgid "Now you can review the diet information submitted by participants"
 msgstr ""
 "Ahora puede revisar la información sobre la dieta enviada por los "
 "participantes"
+
+msgid "Participants can sign up right away through the registration form"
+msgstr ""
+"Los participantes pueden inscribirse ya mismo a través del formulario de "
+"inscripción"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Por favor, indica el motivo por el que quieres realizar la donación"
@@ -9330,11 +9315,6 @@ msgstr ""
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Número de días en los que el jugador debe pagar su siguiente cuota"
-
-msgid "Registrations are open and will close at the specified date and time"
-msgstr ""
-"Las inscripciones ya están abiertas y se cerrarán en la fecha y hora "
-"indicadas"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -10467,6 +10447,13 @@ msgstr ""
 "presentación'"
 
 msgid ""
+"The event will not take place: hidden from users and excluded from "
+"accounting"
+msgstr ""
+"El evento no se celebrará: no se mostrará a los usuarios y no se tendrá en "
+"cuenta en la contabilidad"
+
+msgid ""
 "Track and manage event milestones with status, deadline, and staff "
 "assignment"
 msgstr ""
@@ -10663,6 +10650,13 @@ msgstr ""
 "sin coste adicional)"
 
 msgid ""
+"Participants cannot sign up: the event page shows that registrations are "
+"closed"
+msgstr ""
+"Los participantes no pueden inscribirse: en la página del evento se indica "
+"que el plazo de inscripción ya ha finalizado"
+
+msgid ""
 "Pre-registrations are open: pre-register to be notified when registrations "
 "open"
 msgstr ""
@@ -10675,6 +10669,13 @@ msgid ""
 msgstr ""
 "Términos y condiciones de inscripción, mostrados en una página enlazada en "
 "el formulario de inscripción"
+
+msgid ""
+"The event has taken place: archived among past events, registrations are "
+"frozen"
+msgstr ""
+"El evento ya se ha celebrado: está archivado entre los eventos anteriores y "
+"las inscripciones ya no están activas"
 
 msgid ""
 "This content can only be accessed once. Please read carefully before "
@@ -10830,6 +10831,13 @@ msgstr ""
 "en días (si no se establece, no se envía ningún correo electrónico)"
 
 msgid ""
+"The event is published: listed in the homepage and calendar, visible to all "
+"users"
+msgstr ""
+"El evento está publicado: aparece en la página de inicio y en el calendario,"
+" y lo pueden ver todos los usuarios"
+
+msgid ""
 "This page summarizes the pool labels used to group pools in character "
 "inventories"
 msgstr ""
@@ -10982,6 +10990,13 @@ msgstr ""
 "mediante una lista de verificación simplificada"
 
 msgid ""
+"Registrations are open until the date and time set below, then close "
+"automatically"
+msgstr ""
+"Las inscripciones están abiertas hasta la fecha y hora que se indican a "
+"continuación; después se cerrarán automáticamente"
+
+msgid ""
 "Theoretical total of income due to participation fees selected by the "
 "participants"
 msgstr ""
@@ -11130,6 +11145,13 @@ msgid ""
 msgstr ""
 "Número mínimo de días antes del evento para que esté disponible (0 = "
 "siempre)"
+
+msgid ""
+"Registrations stay closed until the date and time set below, then open "
+"automatically"
+msgstr ""
+"Las inscripciones permanecerán cerradas hasta la fecha y hora que se indican"
+" a continuación, y luego se abrirán automáticamente"
 
 msgid ""
 "Requires Executive Committee approval of membership before participating in "
@@ -12452,6 +12474,13 @@ msgstr ""
 " correos electrónicos y páginas de registro, por idioma"
 
 msgid ""
+"Registrations are managed on another site: participants are redirected to "
+"the external link set below"
+msgstr ""
+"Las inscripciones se gestionan en otra página web: se redirige a los "
+"participantes al enlace externo que aparece a continuación"
+
+msgid ""
 "The character has been added to the faction, but in the faction text the "
 "character is never mentioned"
 msgstr ""
@@ -13150,6 +13179,13 @@ msgstr ""
 "utilizarse como punto de partida para otros eventos"
 
 msgid ""
+"Participants cannot sign up yet, but can pre-register to show their interest"
+" and be notified when registrations open"
+msgstr ""
+"Los participantes aún no pueden inscribirse, pero pueden preinscribirse para"
+" mostrar su interés y que se les avise cuando se abran las inscripciones"
+
+msgid ""
 "The collection is active! To participate click on the following link, or "
 "copy it to whoever you want to get involved"
 msgstr ""
@@ -13456,6 +13492,14 @@ msgid ""
 msgstr ""
 "Recuerde que la información contenida en esta página se ha proporcionado con"
 " la confianza implícita de que será tratada con el máximo cuidado"
+
+msgid ""
+"The event is in preparation: hidden from the homepage and calendar, only "
+"staff and already registered participants can access it"
+msgstr ""
+"El evento está en fase de preparación: no aparece en la página de inicio ni "
+"en el calendario, y solo el personal y los participantes que ya se han "
+"inscrito pueden acceder a él"
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have"

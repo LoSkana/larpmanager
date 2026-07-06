@@ -99,8 +99,6 @@ def test_exe_join(pw_page: Any) -> None:
     edit_iframe.locator("#id_form1-name").fill("Prova Event")
     edit_iframe.locator("#slug").fill("prova")
     edit_iframe.locator("#id_form1-max_pg").fill("10")
-    edit_iframe.locator("#id_form2-development").select_option("1")
-    edit_iframe.locator("#id_form2-registration_status").select_option("o")
     fill_date(edit_iframe, "#id_form2-start", "2055-06-11")
     fill_date(edit_iframe, "#id_form2-end", "2055-06-13")
     save_modal(page, edit_iframe)

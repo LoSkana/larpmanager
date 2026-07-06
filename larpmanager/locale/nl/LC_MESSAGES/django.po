@@ -3613,6 +3613,9 @@ msgstr "Document downloaden"
 msgid "Elements uploaded"
 msgstr "Elementen geladen"
 
+msgid "Event public page"
+msgstr "Openbare pagina van het evenement"
+
 msgid "Experience System"
 msgstr "Ervaringssysteem"
 
@@ -3882,9 +3885,6 @@ msgstr "Naam van type zoektocht"
 
 msgid "New refund request"
 msgstr "Nieuw verzoek om terugbetaling"
-
-msgid "Not active anymore"
-msgstr "Niet meer actief"
 
 msgid "Patron and Reduced"
 msgstr "Beschermheer en Verminderd"
@@ -4263,9 +4263,6 @@ msgstr "Er zijn nog geen rollen gedefinieerd"
 msgid "Not available, kiddo"
 msgstr "Niet beschikbaar, kiddo"
 
-msgid "Not visible to users"
-msgstr "Niet zichtbaar voor gebruikers"
-
 msgid "Notifications digest"
 msgstr "Overzicht meldingen"
 
@@ -4589,9 +4586,6 @@ msgstr "Castingbeheer voor"
 msgid "Character Relationship"
 msgstr "Karakterrelatie"
 
-msgid "Concluded and archived"
-msgstr "Afgesloten en gearchiveerd"
-
 msgid "Confirm password reset"
 msgstr "Wachtwoord opnieuw instellen bevestigd"
 
@@ -4867,9 +4861,6 @@ msgstr "E-mailadres van de deelnemer"
 
 msgid "Update your data in the"
 msgstr "Werk uw gegevens bij in de"
-
-msgid "Visible in the homepage"
-msgstr "Zichtbaar op de homepage"
 
 msgid "What are you doing here"
 msgstr "Wat doe je hier nog steeds"
@@ -5530,9 +5521,6 @@ msgstr "Spelers wachten op personage"
 msgid "Pre-registration at %(event)s"
 msgstr "Voorinschrijving bij %(event)s"
 
-msgid "Pre-registration is available"
-msgstr "Voorinschrijving is beschikbaar"
-
 msgid "Preferred navigation language"
 msgstr "Gewenste navigatietaal"
 
@@ -5760,9 +5748,6 @@ msgstr "Corrigeer de fouten hieronder"
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Quests zonder eigenschappen: %(list)s"
-
-msgid "Registrations are not available"
-msgstr "Registraties zijn niet beschikbaar"
 
 msgid "Relationships of your character"
 msgstr "Links van je personage"
@@ -6726,9 +6711,6 @@ msgstr "Gebruik de link uit een recente e-mail"
 msgid "Registration cancellation for %(event)s"
 msgstr "Uitschrijven op %(event)s"
 
-msgid "Registrations are open for participants"
-msgstr "Inschrijvingen zijn geopend voor deelnemers"
-
 msgid "Set the experience points configuration"
 msgstr "Stel de configuratie van de ervaringspunten in"
 
@@ -7081,9 +7063,6 @@ msgstr "Deelnemers die GEEN voorkeuren hebben verzonden"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Herinnering profielcompilatie voor %(event)s"
-
-msgid "Redirects to an external registration link"
-msgstr "Leidt door naar een externe registratielink"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reserveer extra tickets naast je eigen tickets"
@@ -8156,9 +8135,6 @@ msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
 "Het bijhouden van hoeveelheden is niet ingeschakeld voor deze organisatie"
 
-msgid "Registrations will open at the specified date and time"
-msgstr "De inschrijvingen gaan open op de aangegeven datum en tijd"
-
 msgid "Restore session expired, please upload the file again."
 msgstr "Herstelsessie verlopen, upload het bestand opnieuw."
 
@@ -8898,6 +8874,11 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Hallo! Je inschrijving bij <b>%(event)s</b> is bevestigd"
 
+msgid "Here you can review the event details and visit its public page"
+msgstr ""
+"Hier kun je de details van het evenement bekijken en de openbare pagina "
+"ervan bezoeken"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Als deze optie is aangevinkt, worden er geen tokens gebruikt bij de invoer "
@@ -9097,6 +9078,9 @@ msgstr "Nieuwe deelname aan de inzameling voor %(recipient)s door %(user)s"
 
 msgid "Now you can review the diet information submitted by participants"
 msgstr "Nu kunt u de dieetinformatie bekijken die deelnemers hebben ingediend"
+
+msgid "Participants can sign up right away through the registration form"
+msgstr "Deelnemers kunnen zich meteen aanmelden via het aanmeldingsformulier"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Vul de gelegenheid in waarvoor je de donatie wilt doen"
@@ -9333,10 +9317,6 @@ msgstr ""
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Aantal dagen waarbinnen de speler zijn volgende termijn moet betalen"
-
-msgid "Registrations are open and will close at the specified date and time"
-msgstr ""
-"De inschrijvingen zijn geopend en sluiten op de aangegeven datum en tijd"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -10479,6 +10459,13 @@ msgstr ""
 "aangevinkt"
 
 msgid ""
+"The event will not take place: hidden from users and excluded from "
+"accounting"
+msgstr ""
+"Het evenement gaat niet door: het wordt voor gebruikers verborgen gehouden "
+"en niet meegeteld in de boekhouding"
+
+msgid ""
 "Track and manage event milestones with status, deadline, and staff "
 "assignment"
 msgstr ""
@@ -10671,6 +10658,13 @@ msgstr ""
 "(0 = geen extra kosten)"
 
 msgid ""
+"Participants cannot sign up: the event page shows that registrations are "
+"closed"
+msgstr ""
+"Deelnemers kunnen zich niet meer aanmelden: op de evenementpagina staat dat "
+"de inschrijvingen gesloten zijn"
+
+msgid ""
 "Pre-registrations are open: pre-register to be notified when registrations "
 "open"
 msgstr ""
@@ -10683,6 +10677,13 @@ msgid ""
 msgstr ""
 "Inschrijvingsvoorwaarden, weergegeven op een pagina waarnaar wordt verwezen "
 "in het inschrijvingsformulier"
+
+msgid ""
+"The event has taken place: archived among past events, registrations are "
+"frozen"
+msgstr ""
+"Het evenement heeft plaatsgevonden: het staat nu in het archief bij eerdere "
+"evenementen en de inschrijvingen zijn gesloten"
 
 msgid ""
 "This content can only be accessed once. Please read carefully before "
@@ -10837,6 +10838,13 @@ msgstr ""
 " is ingesteld, worden er geen e-mails verzonden)"
 
 msgid ""
+"The event is published: listed in the homepage and calendar, visible to all "
+"users"
+msgstr ""
+"Het evenement is gepubliceerd: het staat op de startpagina en in de agenda, "
+"en is zichtbaar voor alle gebruikers"
+
+msgid ""
 "This page summarizes the pool labels used to group pools in character "
 "inventories"
 msgstr ""
@@ -10988,6 +10996,13 @@ msgstr ""
 "behulp van een handige checklist"
 
 msgid ""
+"Registrations are open until the date and time set below, then close "
+"automatically"
+msgstr ""
+"Je kunt je aanmelden tot de hieronder aangegeven datum en tijd; daarna sluit"
+" de inschrijving automatisch"
+
+msgid ""
 "Theoretical total of income due to participation fees selected by the "
 "participants"
 msgstr ""
@@ -11136,6 +11151,13 @@ msgid ""
 msgstr ""
 "Minimumaantal dagen vóór het evenement waarvoor het beschikbaar wordt "
 "gesteld (0 = altijd)"
+
+msgid ""
+"Registrations stay closed until the date and time set below, then open "
+"automatically"
+msgstr ""
+"De inschrijvingen blijven gesloten tot de hieronder aangegeven datum en "
+"tijd, en gaan daarna automatisch open"
 
 msgid ""
 "Requires Executive Committee approval of membership before participating in "
@@ -12460,6 +12482,13 @@ msgstr ""
 " zoals e-mails en registratiepagina’s, per taal"
 
 msgid ""
+"Registrations are managed on another site: participants are redirected to "
+"the external link set below"
+msgstr ""
+"De inschrijvingen worden op een andere site afgehandeld: deelnemers worden "
+"doorgestuurd naar de onderstaande externe link"
+
+msgid ""
 "The character has been added to the faction, but in the faction text the "
 "character is never mentioned"
 msgstr ""
@@ -13156,6 +13185,14 @@ msgstr ""
 "instellingen kunnen worden gebruikt als uitgangspunt voor andere evenementen"
 
 msgid ""
+"Participants cannot sign up yet, but can pre-register to show their interest"
+" and be notified when registrations open"
+msgstr ""
+"Deelnemers kunnen zich nog niet aanmelden, maar kunnen zich wel vooraf "
+"registreren om hun interesse kenbaar te maken en een bericht te krijgen "
+"zodra de inschrijvingen open zijn"
+
+msgid ""
 "The collection is active! To participate click on the following link, or "
 "copy it to whoever you want to get involved"
 msgstr ""
@@ -13466,6 +13503,14 @@ msgstr ""
 "Onthoud dat de informatie op deze pagina is gegeven in het impliciete "
 "vertrouwen dat deze met de grootst mogelijke zorgvuldigheid zal worden "
 "behandeld"
+
+msgid ""
+"The event is in preparation: hidden from the homepage and calendar, only "
+"staff and already registered participants can access it"
+msgstr ""
+"Het evenement is nog in voorbereiding: het is niet zichtbaar op de "
+"startpagina en in de agenda; alleen medewerkers en deelnemers die zich al "
+"hebben aangemeld, hebben er toegang toe"
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have"

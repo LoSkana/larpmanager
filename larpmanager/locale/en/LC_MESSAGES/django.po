@@ -1808,34 +1808,51 @@ msgid ""
 "Edit the dates, status, and registration settings for this event session"
 msgstr ""
 
-msgid "Not visible to users"
+msgid ""
+"The event is in preparation: hidden from the homepage and calendar, only "
+"staff and already registered participants can access it"
 msgstr ""
 
-msgid "Visible in the homepage"
+msgid ""
+"The event is published: listed in the homepage and calendar, visible to all "
+"users"
 msgstr ""
 
-msgid "Concluded and archived"
+msgid ""
+"The event has taken place: archived among past events, registrations are "
+"frozen"
 msgstr ""
 
-msgid "Not active anymore"
+msgid ""
+"The event will not take place: hidden from users and excluded from accounting"
 msgstr ""
 
-msgid "Registrations are not available"
+msgid ""
+"Participants cannot sign up: the event page shows that registrations are "
+"closed"
 msgstr ""
 
-msgid "Registrations are open for participants"
+msgid "Participants can sign up right away through the registration form"
 msgstr ""
 
-msgid "Pre-registration is available"
+msgid ""
+"Participants cannot sign up yet, but can pre-register to show their interest "
+"and be notified when registrations open"
 msgstr ""
 
-msgid "Redirects to an external registration link"
+msgid ""
+"Registrations are managed on another site: participants are redirected to "
+"the external link set below"
 msgstr ""
 
-msgid "Registrations will open at the specified date and time"
+msgid ""
+"Registrations stay closed until the date and time set below, then open "
+"automatically"
 msgstr ""
 
-msgid "Registrations are open and will close at the specified date and time"
+msgid ""
+"Registrations are open until the date and time set below, then close "
+"automatically"
 msgstr ""
 
 msgid ""
@@ -5252,6 +5269,9 @@ msgstr ""
 msgid "Complete the setup to unlock full platform features"
 msgstr ""
 
+msgid "Here you can review the event details and visit its public page"
+msgstr ""
+
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
 "additional modules"
@@ -5280,6 +5300,9 @@ msgid "View Selector"
 msgstr ""
 
 msgid "Sidebar"
+msgstr ""
+
+msgid "Event public page"
 msgstr ""
 
 msgid "Lite Mode active"

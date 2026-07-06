@@ -235,7 +235,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
     registration = context.get("registration")
     if not registration:
         messages.success(request, _("You must signed up in order to select your preferences") + "!")
-        return redirect("gallery", event_slug=context["run"].get_slug())
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Check if user is on waiting list (cannot set preferences)
     if registration.ticket and registration.ticket.tier == TicketTier.WAITING:
@@ -246,7 +246,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
                 "able to select your preferences!",
             ),
         )
-        return redirect("gallery", event_slug=context["run"].get_slug())
+        return redirect("event", event_slug=context["run"].get_slug())
 
     get_element(context, casting_type, "quest_type", QuestType)
 

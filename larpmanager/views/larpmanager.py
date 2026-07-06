@@ -395,8 +395,8 @@ def activate_feature_event(
         view_name = first_permission.slug
         return redirect(reverse(view_name, kwargs={"event_slug": event_slug}))
 
-    # If no event permissions exist, redirect to event gallery
-    return redirect("gallery", event_slug=event_slug)
+    # If no event permissions exist, redirect to event page
+    return redirect("event", event_slug=event_slug)
 
 
 @login_required
