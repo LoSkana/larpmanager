@@ -4,7 +4,7 @@
     {% trans "One-Time Access Tokens" %} - {{ event.name }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="onetimes_tokens" class="go_datatable writing">
         <thead>
             <tr>
@@ -70,4 +70,5 @@
             {% trans "No access tokens generated yet" %}. {% trans "Create one-time content items first, then generate tokens for distribution" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

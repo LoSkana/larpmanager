@@ -5436,15 +5436,6 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-msgid "Download"
-msgstr ""
-
-msgid "Select the table rows and choose the operation to apply"
-msgstr ""
-
-msgid "Execute"
-msgstr ""
-
 msgid "Instructions"
 msgstr ""
 
@@ -5502,6 +5493,9 @@ msgid "Utils"
 msgstr ""
 
 msgid "Application to be given to them to sign and then upload"
+msgstr ""
+
+msgid "Download"
 msgstr ""
 
 msgid ""
@@ -5812,6 +5806,12 @@ msgid "Admin"
 msgstr ""
 
 msgid "Manage"
+msgstr ""
+
+msgid "Select the table rows and choose the operation to apply"
+msgstr ""
+
+msgid "Execute"
 msgstr ""
 
 msgid "No organization found"
@@ -8887,10 +8887,10 @@ msgstr ""
 msgid "Sum of payments received through"
 msgstr ""
 
-msgid "Recompute"
+msgid "No registrations have been received for this event yet"
 msgstr ""
 
-msgid "No registrations have been received for this event yet"
+msgid "Recompute"
 msgstr ""
 
 msgid "Registration sections"

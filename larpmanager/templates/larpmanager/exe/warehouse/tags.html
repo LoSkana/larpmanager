@@ -4,7 +4,7 @@
     {% trans "Warehouse tags" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="inv_tags" class="go_datatable dot_links">
         <thead>
             <tr>
@@ -45,4 +45,5 @@
             {% trans "No warehouse tags defined yet" %}. {% trans "Use the button above to create a tag for categorizing items" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

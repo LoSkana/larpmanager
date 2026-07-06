@@ -7,7 +7,7 @@
     {% trans "Review the quantity changes that will be applied to warehouse stock before confirming the commit" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     {% if preview_items %}
         <div class="alert alert-warning" role="alert">
             <i class="fas fa-exclamation-triangle"></i>
@@ -93,6 +93,7 @@
             <i class="fas fa-arrow-left"></i> {% trans "Back to manifest" %}
         </a>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js %}
     <script>

@@ -7,7 +7,7 @@
     {% url 'exe_badges_assign' as assign_url %}
     {% trans "Assign members" as assign_label %}
     {% with extra_link_url=assign_url extra_link_icon="fas fa-user-tag" extra_link_label=assign_label %}
-        {% include "elements/header/edit.html" %}
+        {% include "elements/table/header.html" %}
     {% endwith %}
     <table id="badges" class="go_datatable">
         <thead>
@@ -50,4 +50,5 @@
             {% trans "No badges have been created yet" %}. {% trans "Use the button above to add a new badge" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

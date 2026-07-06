@@ -10,7 +10,7 @@
         Ricorda di applicare firma digitale, e salvarlo in un sistema di storage adeguato.
     </p>
     <hr />
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="volunteers" class="go_datatable">
         <thead>
             <tr>
@@ -47,4 +47,5 @@
             {% trans "No volunteers registered yet" %}. {% trans "Use the button above to add a volunteer entry" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}
