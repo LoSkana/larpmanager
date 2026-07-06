@@ -517,6 +517,12 @@ def role_invite_redeem(request: HttpRequest, token: str) -> HttpResponse:
 
     role = invite.role()
     member = request.user.member
+
+    # Bind the invite to its intended recipient
+    if invite.email and member.email.lower() != invite.email.lower():
+        messages.error(request, _("This invitation was sent to a different email address."))
+        return redirect("home")
+
     membership = get_user_membership(member, invite.association_id)
     needs_consent = membership.status == MembershipStatus.EMPTY
 

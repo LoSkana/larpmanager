@@ -53,11 +53,12 @@ from larpmanager.models.registration import RegistrationCharacterRel, Registrati
 from larpmanager.models.writing import Character, CharacterConfig, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.core.common import check_field
 from larpmanager.utils.edit.backend import _get_values_mapping
+from larpmanager.utils.security.csv_validation import SanitizingCsvWriter, sanitize_dataframe
 
 
 def _temp_csv_file(column_headers: Any, data_rows: Any) -> Any:
     """Create CSV content from keys and values."""
-    df = pd.DataFrame(data_rows, columns=column_headers)
+    df = sanitize_dataframe(pd.DataFrame(data_rows, columns=column_headers))
     buffer = io.StringIO()
     df.to_csv(buffer, index=False)
     buffer.seek(0)
@@ -707,7 +708,7 @@ def get_writer(context: dict, nm: str) -> tuple[HttpResponse, csv.writer]:
     )
 
     # Initialize CSV writer with tab delimiter
-    writer = csv.writer(response, delimiter="\t")
+    writer = SanitizingCsvWriter(csv.writer(response, delimiter="\t"))
     return response, writer
 
 

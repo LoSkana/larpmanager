@@ -8172,6 +8172,9 @@ msgstr "Användaren har bekräftat sin anmälan till detta evenemang"
 msgid "The user has updated their registration for this event"
 msgstr "Användaren har uppdaterat sin registrering för detta evenemang"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Denna inbjudan skickades till en annan e-postadress."
+
 msgid "Whether this content is currently available for access"
 msgstr "Om detta innehåll för närvarande är tillgängligt för åtkomst"
 

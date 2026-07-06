@@ -30,7 +30,6 @@ import logging
 import math
 import re
 from decimal import Decimal
-from pprint import pformat
 from typing import Any, ClassVar
 
 import requests
@@ -1033,25 +1032,8 @@ class RedSysClient:
         normalized_computed_sig = computed_signature.decode().replace("-", "+").replace("_", "/")
 
         # Verify signature matches to ensure payment authenticity
-        if normalized_received_sig != normalized_computed_sig:
-            # Debug information for signature mismatch
-            debug_info = f"""
-                Signature Verification Failed:
-                - Received signature (original): {signature}
-                - Computed signature (original): {computed_signature.decode()}
-                - Received signature (normalized): {normalized_received_sig}
-                - Computed signature (normalized): {normalized_computed_sig}
-                - Order number: {order_number}
-                - Order length: {len(order_number)}
-                - Encrypted order (hex): {encrypted_order.hex()}
-                - Base64 params (first 100 chars): {b64_merchant_parameters[:100]}...
-                - Merchant parameters: {pformat(merchant_parameters)}
-                """
-            error_message = (
-                f"Redsys Security Alert: Signature Verification Failed - {signature} vs {computed_signature.decode()}"
-            )
-            error_message += debug_info
-            logger.error(error_message)
+        if not hmac.compare_digest(normalized_received_sig, normalized_computed_sig):
+            logger.error("Redsys Security Alert: Signature Verification Failed for order %s", order_number)
             return None
 
         # Return order number for successful payment processing

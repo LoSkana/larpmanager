@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import logging
-import time
+import secrets
 import traceback
 from datetime import timedelta
 from typing import Any
@@ -769,11 +769,10 @@ def _check_redirect_registration(request: HttpRequest, context: dict, secret_cod
 
     # Validate secret code if secret registration is enabled
     if "registration_secret" in context["features"] and secret_code:
-        if context["run"].registration_secret != secret_code:
+        # Constant-time compare to avoid leaking the code via timing
+        if not secrets.compare_digest(str(context["run"].registration_secret or ""), str(secret_code)):
             msg = _("The registration code is not active at the moment")
             messages.warning(request, msg)
-            # Delay to discourage brute force attacks
-            time.sleep(2)
             return redirect("register", event_slug=context["event"].slug)
         # Secret code is correct, allow registration bypassing other checks
         return None
@@ -960,7 +959,9 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
     try:
         disc = Discount.objects.filter(runs__in=[context["run"]], cod=cod).distinct().get()
     except ObjectDoesNotExist:
-        logger.warning("Discount code not found: %s", cod)
+        # Strip CR/LF from the user-supplied code before logging
+        safe_cod = str(cod).replace("\r", "").replace("\n", "") if cod else cod
+        logger.warning("Discount code not found: %s", safe_cod)
         logger.debug(traceback.format_exc())
         return error(_("Discount code not valid"))
 

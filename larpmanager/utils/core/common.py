@@ -25,7 +25,6 @@ import logging
 import random
 import re
 import string
-import time
 import unicodedata
 from datetime import UTC, date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
@@ -148,8 +147,6 @@ def get_object_uuid(
     try:
         return queryset.get(uuid=identifier, **filters)
     except (ObjectDoesNotExist, ValueError, AttributeError) as err:
-        # Wait 2 seconds before raising 404 to handle race conditions
-        time.sleep(2)
         msg = f"{model_class.__name__} does not exist"
         raise Http404(msg) from err
 
