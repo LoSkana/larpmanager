@@ -2132,9 +2132,6 @@ msgstr "Neue Sitzung"
 msgid "Next events"
 msgstr "Kommende Veranstaltungen"
 
-msgid "No template"
-msgstr "Keine Vorlage"
-
 msgid "Participant"
 msgstr "Teilnehmer"
 

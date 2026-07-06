@@ -2132,9 +2132,6 @@ msgstr "Nové zasedání"
 msgid "Next events"
 msgstr "Nadcházející události"
 
-msgid "No template"
-msgstr "Žádná šablona"
-
 msgid "Participant"
 msgstr "Účastník"
 

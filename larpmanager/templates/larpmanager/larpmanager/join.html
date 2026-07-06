@@ -8,20 +8,22 @@
     <meta name="description" content="{{ texts.join_meta_description }}">
 {% endblock meta %}
 {% block content %}
-    {% include "elements/member/my_hub.html" %}
-    {{ texts.join_content | safe }}
-    <form action="{{ request.path }}"
-          enctype="multipart/form-data"
-          method="post">
-        {% csrf_token %}
-        <div class="form_container user_resize">
-            <table>
-                {{ form.as_table }}
-            </table>
-            <input type="submit" id="id_submit" value="{% trans "Submit" %}">
-        </div>
-    </form>
-    {{ texts.desktop_recommendation | safe }}
+    <div id="lm_join">
+        {% include "elements/member/my_hub.html" %}
+        {{ texts.join_content | safe }}
+        <form action="{{ request.path }}"
+              enctype="multipart/form-data"
+              method="post">
+            {% csrf_token %}
+            <div class="form_container user_resize">
+                <table>
+                    {{ form.as_table }}
+                </table>
+                <input type="submit" id="id_submit" value="{% trans "Submit" %}">
+            </div>
+        </form>
+        {{ texts.desktop_recommendation | safe }}
+    </div>
 {% endblock content %}
 {% block js %}
     <script> const base_domain = ".{{ association.base_domain }}"; </script>

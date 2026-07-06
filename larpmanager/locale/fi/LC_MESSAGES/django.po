@@ -2132,9 +2132,6 @@ msgstr "Uusi istunto"
 msgid "Next events"
 msgstr "Seuraavat tapahtumat"
 
-msgid "No template"
-msgstr "Ei mallia"
-
 msgid "Participant"
 msgstr "Osallistuja"
 

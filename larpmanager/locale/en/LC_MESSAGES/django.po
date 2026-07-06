@@ -1943,9 +1943,6 @@ msgid ""
 "configurations will be copied"
 msgstr ""
 
-msgid "No template"
-msgstr ""
-
 msgid "Event Template"
 msgstr ""
 

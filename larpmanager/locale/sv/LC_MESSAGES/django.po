@@ -2132,9 +2132,6 @@ msgstr "Ny session"
 msgid "Next events"
 msgstr "Kommande evenemang"
 
-msgid "No template"
-msgstr "Ingen mall"
-
 msgid "Participant"
 msgstr "Deltagare"
 

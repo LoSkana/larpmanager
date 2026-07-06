@@ -2132,9 +2132,6 @@ msgstr "Ny økt"
 msgid "Next events"
 msgstr "Kommende arrangementer"
 
-msgid "No template"
-msgstr "Ingen mal"
-
 msgid "Participant"
 msgstr "Deltaker"
 

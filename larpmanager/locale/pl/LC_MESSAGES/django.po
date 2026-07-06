@@ -2132,9 +2132,6 @@ msgstr "Nowa sesja"
 msgid "Next events"
 msgstr "Następne wydarzenia"
 
-msgid "No template"
-msgstr "Brak szablonu"
-
 msgid "Participant"
 msgstr "Uczestnik"
 

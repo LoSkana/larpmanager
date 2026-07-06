@@ -2132,9 +2132,6 @@ msgstr "Nieuwe sessie"
 msgid "Next events"
 msgstr "Komende evenementen"
 
-msgid "No template"
-msgstr "Geen sjabloon"
-
 msgid "Participant"
 msgstr "Deelnemer"
 
