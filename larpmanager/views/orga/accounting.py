@@ -50,7 +50,7 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.core.paginate import orga_paginate
-from larpmanager.utils.edit.backend import backend_get, save_log
+from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 
@@ -230,6 +230,14 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
         msg = "i'm sorry, what?"
         raise Http404(msg)
 
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    # In iframe mode, show a confirmation page before applying the change
+    if is_frame and request.method != "POST":
+        context["frame"] = True
+        context["el_name"] = str(context["el"])
+        return render(request, "elements/dashboard/approve_confirm.html", context)
+
     # Check if invoice can be confirmed (must be CREATED or SUBMITTED)
     if context["el"].status == PaymentStatus.CREATED or context["el"].status == PaymentStatus.SUBMITTED:
         # Update status to confirmed and save
@@ -237,6 +245,8 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
     else:
         # Invoice already processed - show warning and redirect
         messages.warning(request, _("Receipt already confirmed") + ".")
+        if is_frame:
+            return render(request, "elements/dashboard/form_success.html", context)
         return redirect("orga_payments", event_slug=context["run"].get_slug())
 
     # Save the updated invoice status
@@ -244,6 +254,8 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 
     # Show success message and redirect to invoices list
     messages.success(request, _("Element approved") + "!")
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
     return redirect("orga_payments", event_slug=context["run"].get_slug())
 
 
@@ -251,9 +263,10 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 def orga_invoices_delete(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Delete a payment invoice and redirect to payments."""
     context = check_event_context(request, event_slug, ["orga_payments", "orga_invoices"])
-    backend_get(context, PaymentInvoice, invoice_uuid)
-    context["el"].delete()
-    messages.success(request, _("Operation completed") + "!")
+    if request.GET.get("frame") == "1" or request.POST.get("frame") == "1":
+        context["frame"] = True
+        return backend_delete_frame(request, context, PaymentInvoice, invoice_uuid)
+    backend_delete(request, context, PaymentInvoice, invoice_uuid)
     return redirect("orga_payments", event_slug=context["run"].get_slug())
 
 

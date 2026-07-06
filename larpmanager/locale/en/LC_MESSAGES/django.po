@@ -5242,10 +5242,13 @@ msgstr ""
 msgid "Requires"
 msgstr ""
 
-msgid "Are you sure you want to delete this element"
+msgid "Confirm"
 msgstr ""
 
-msgid "Confirm"
+msgid "Are you sure you want to approve this element"
+msgstr ""
+
+msgid "Are you sure you want to delete this element"
 msgstr ""
 
 msgid "Your organization has been created"

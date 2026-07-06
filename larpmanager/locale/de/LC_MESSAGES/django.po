@@ -7318,6 +7318,9 @@ msgstr "Der Betrag muss für die Divisionskriterien ungleich Null sein"
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Das Upgrade auf die gesamte Organisation anwenden?"
 
+msgid "Are you sure you want to approve this element"
+msgstr "Bist du sicher, dass du dieses Element freigeben möchtest"
+
 msgid "Complete the checklist to unlock all features"
 msgstr ""
 "Schließen Sie die Einrichtung ab, um alle Funktionen der Plattform "

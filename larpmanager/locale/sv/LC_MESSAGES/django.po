@@ -7306,6 +7306,9 @@ msgstr ""
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Tillämpa uppgraderingen på hela organisationen?"
 
+msgid "Are you sure you want to approve this element"
+msgstr "Är du säker på att du vill godkänna detta element"
+
 msgid "Complete the checklist to unlock all features"
 msgstr "Slutför installationen för att låsa upp alla plattformsfunktioner"
 

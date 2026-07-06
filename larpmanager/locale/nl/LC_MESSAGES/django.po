@@ -7314,6 +7314,9 @@ msgstr ""
 msgid "Apply the upgrade to the entire organization?"
 msgstr "De upgrade toepassen op de hele organisatie?"
 
+msgid "Are you sure you want to approve this element"
+msgstr "Weet je zeker dat je dit element wilt goedkeuren"
+
 msgid "Complete the checklist to unlock all features"
 msgstr ""
 "Voltooi de installatie om alle functies van het platform te ontgrendelen"

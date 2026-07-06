@@ -7302,6 +7302,9 @@ msgstr "L'importo deve essere diverso da zero per i criteri di divisione"
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Applica l'aggiornamento all'intera organizzazione?"
 
+msgid "Are you sure you want to approve this element"
+msgstr "Sei sicuro di voler approvare questo elemento"
+
 msgid "Complete the checklist to unlock all features"
 msgstr ""
 "Completa la configurazione per sbloccare tutte le funzioni della piattaforma"
