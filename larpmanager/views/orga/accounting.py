@@ -793,7 +793,7 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
                 # Generate download link for expense statement documents
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 # Show approval link only for unapproved items when approval is enabled
-                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}'>{approve}</a>"
+                "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}' class='frame-confirm'>{approve}</a>"
                 if not el.is_approved and not context["disable_approval"]
                 else "",
                 # Display human-readable expense type from model choices
@@ -870,10 +870,20 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
         msg = "not your orga"
         raise Http404(msg)
 
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    # In iframe mode, show a confirmation page before applying the change
+    if is_frame and request.method != "POST":
+        context["frame"] = True
+        context["el_name"] = str(exp)
+        return render(request, "elements/dashboard/approve_confirm.html", context)
+
     # Update expense approval status and save to database
     exp.is_approved = True
     exp.save()
 
     # Display success message and redirect to expenses list
     messages.success(request, _("Request approved"))
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
     return redirect("orga_expenses", event_slug=context["run"].get_slug())
