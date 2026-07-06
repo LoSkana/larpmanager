@@ -31,7 +31,7 @@ import pytest
 
 from larpmanager.tests.utils import check_download, fill_tinymce, get_modal_iframe, go_to, load_image, submit_register, \
     login_orga, submit, \
-    submit_confirm, save_modal
+    submit_confirm, save_modal, confirm_modal
 
 pytestmark = pytest.mark.e2e
 

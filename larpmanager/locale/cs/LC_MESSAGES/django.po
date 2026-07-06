@@ -7319,6 +7319,9 @@ msgstr "Hodnota musí být nenulová, aby splňovala kritéria pro dělení"
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Použít upgrade pro celou organizaci?"
 
+msgid "Are you sure you want to approve this element"
+msgstr "Opravdu chcete tento prvek schválit"
+
 msgid "Complete the checklist to unlock all features"
 msgstr "Dokončením nastavení odemknete všechny funkce platformy"
 

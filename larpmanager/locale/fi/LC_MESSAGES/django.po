@@ -7318,6 +7318,9 @@ msgstr "Jakokriteerien osalta summan on oltava eri kuin nolla"
 msgid "Apply the upgrade to the entire organization?"
 msgstr "Sovelletaanko päivitystä koko organisaatioon?"
 
+msgid "Are you sure you want to approve this element"
+msgstr "Haluatko varmasti hyväksyä tämän elementin"
+
 msgid "Complete the checklist to unlock all features"
 msgstr "Täytä tarkistuslista avataksesi kaikki ominaisuudet"
 

@@ -7321,6 +7321,9 @@ msgstr ""
 msgid "Apply the upgrade to the entire organization?"
 msgstr "¿Aplicar la actualización a toda la organización?"
 
+msgid "Are you sure you want to approve this element"
+msgstr "¿Estás seguro de que quieres aprobar este elemento"
+
 msgid "Complete the checklist to unlock all features"
 msgstr ""
 "Completa la configuración para desbloquear todas las funciones de la "

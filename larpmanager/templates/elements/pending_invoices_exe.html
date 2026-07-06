@@ -20,7 +20,8 @@
                     <tr>
                         <td></td>
                         <td>
-                            <a href="{% url 'exe_invoices_confirm' inv.uuid %}">
+                            <a href="{% url 'exe_invoices_confirm' inv.uuid %}"
+                               class="frame-confirm">
                                 <i class="fa-solid fa-check"></i>
                                 {% trans "Confirm" %}
                             </a>

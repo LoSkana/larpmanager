@@ -664,6 +664,13 @@ function replaceNewUrl() {
             openIframeModal(this.href + '?frame=1', 'popup_delete', refreshDatatables);
             return false;
         });
+
+        $(document).on('click', 'a.frame-confirm', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openIframeModal(this.href + '?frame=1', 'popup_delete', refreshDatatables);
+            return false;
+        });
     }
 }
 
