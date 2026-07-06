@@ -337,6 +337,11 @@ def save_modal(page: any, frame: Any) -> None:
     )
     page.locator("#lm-modal").wait_for(state="hidden")
 
+def confirm_modal(page: Any) -> None:
+    """Open the confirmation modal and confirm."""
+    frame = get_modal_iframe(page)
+    save_modal(page, frame)
+
 
 def delete_modal(page: Any, trash_locator: Any = None, name: str = None) -> None:
     """Open the v21 delete confirmation modal, optionally check the element name, and confirm.

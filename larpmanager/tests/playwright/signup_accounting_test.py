@@ -33,7 +33,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
     submit_register, delete_modal, \
     expect_normalized, save_modal, SHORT_TIMEOUT, sidebar, \
-    click_and_wait_accounting
+    click_and_wait_accounting, confirm_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -161,6 +161,7 @@ def pay(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/invoices")
     expect(page.get_by_role("row", name="Admin Test Wire registration")).to_contain_text("52")
     page.get_by_role("link", name="Confirm", exact=True).click()
+    confirm_modal(page)
 
 
 def token_credits(live_server: Any, page: Any) -> None:
