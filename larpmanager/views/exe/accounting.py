@@ -461,7 +461,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Render statement as downloadable link
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 # Show approve button only for non-approved expenses
-                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}'>{approve}</a>"
+                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}' class='frame-confirm'>{approve}</a>"
                 if not el.is_approved
                 else "",
                 # Display human-readable expense type
@@ -513,12 +513,22 @@ def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpRespons
         msg = "not your orga"
         raise Http404(msg)
 
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    # In iframe mode, show a confirmation page before applying the change
+    if is_frame and request.method != "POST":
+        context["frame"] = True
+        context["el_name"] = str(exp)
+        return render(request, "elements/dashboard/approve_confirm.html", context)
+
     # Mark expense as approved and save changes
     exp.is_approved = True
     exp.save()
 
     # Show success message and redirect to expenses list
     messages.success(request, _("Request approved"))
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
     return redirect("exe_expenses")
 
 
