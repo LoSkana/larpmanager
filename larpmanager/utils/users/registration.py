@@ -479,6 +479,7 @@ def _status_payment(
             + _("no further action is needed at the moment"),
         }
         context["pending_invoices"] = True
+        run_status["payment_pending"] = True
         return True
 
     # Process payment alerts for unpaid registrations
