@@ -138,7 +138,7 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     # Check if characters are visible to regular users (non-staff)
     if "check" not in context and not context["show_character"]:
         messages.warning(request, _("Characters are not visible at the moment"))
-        return redirect("gallery", event_slug=context["run"].get_slug())
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Verify individual character visibility settings
     if "check" not in context and context["char"]["hide"]:

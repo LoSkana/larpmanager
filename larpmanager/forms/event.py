@@ -55,6 +55,7 @@ from larpmanager.forms.utils import (
     remove_choice,
     save_permissions_role,
 )
+from larpmanager.forms.widgets import DescriptionRadioSelect
 from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
@@ -1410,6 +1411,10 @@ class OrgaRunForm(ConfigForm):
 
         dl = []
 
+        # First event of the association: hide status fields, defaults are forced on save
+        if self.params.get("first_event"):
+            dl.extend(["development", "registration_status", "registration_open", "register_link"])
+
         if not self.params.get("is_creation", False) and (not self.instance.pk or not self.instance.event):
             event_field = forms.ChoiceField(
                 required=True,
@@ -1438,15 +1443,26 @@ class OrgaRunForm(ConfigForm):
                     if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
                 ]
             status_text = {
-                DevelopStatus.START: _("Not visible to users"),
-                DevelopStatus.SHOW: _("Visible in the homepage"),
-                DevelopStatus.DONE: _("Concluded and archived"),
-                DevelopStatus.CANC: _("Not active anymore"),
+                DevelopStatus.START: _(
+                    "The event is in preparation: hidden from the homepage and calendar, "
+                    "only staff and already registered participants can access it"
+                ),
+                DevelopStatus.SHOW: _(
+                    "The event is published: listed in the homepage and calendar, visible to all users"
+                ),
+                DevelopStatus.DONE: _(
+                    "The event has taken place: archived among past events, registrations are frozen"
+                ),
+                DevelopStatus.CANC: _("The event will not take place: hidden from users and excluded from accounting"),
             }
-            self.fields["development"].help_text = ", ".join(
-                f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
-                for value, label in self.fields["development"].choices
+            development_choices = list(self.fields["development"].choices)
+            self.fields["development"].widget = DescriptionRadioSelect(
+                attrs={"class": "my-radio-class"},
+                descriptions={
+                    str(value): str(status_text[DevelopStatus(value)]) for value, _label in development_choices
+                },
             )
+            self.fields["development"].choices = development_choices
 
         # Configure registration_status field
         self._configure_registration_status()
@@ -1483,30 +1499,36 @@ class OrgaRunForm(ConfigForm):
             ]
         )
 
-        self.fields["registration_status"].choices = choices
-
-        # Build help text explaining each status
+        # Describe each status inline below its option
         status_help = {
-            RegistrationStatus.CLOSED: _("Registrations are not available"),
-            RegistrationStatus.OPEN: _("Registrations are open for participants"),
-            RegistrationStatus.PRE: _("Pre-registration is available"),
-            RegistrationStatus.EXTERNAL: _("Redirects to an external registration link"),
-            RegistrationStatus.FUTURE: _("Registrations will open at the specified date and time"),
-            RegistrationStatus.CLOSING: _("Registrations are open and will close at the specified date and time"),
+            RegistrationStatus.CLOSED: _(
+                "Participants cannot sign up: the event page shows that registrations are closed"
+            ),
+            RegistrationStatus.OPEN: _("Participants can sign up right away through the registration form"),
+            RegistrationStatus.PRE: _(
+                "Participants cannot sign up yet, but can pre-register to show their interest "
+                "and be notified when registrations open"
+            ),
+            RegistrationStatus.EXTERNAL: _(
+                "Registrations are managed on another site: participants are redirected to the external link set below"
+            ),
+            RegistrationStatus.FUTURE: _(
+                "Registrations stay closed until the date and time set below, then open automatically"
+            ),
+            RegistrationStatus.CLOSING: _(
+                "Registrations are open until the date and time set below, then close automatically"
+            ),
         }
 
         # Registrations are always open at the "date and time" set in the registration_open field:
         # for FUTURE it marks the opening, for CLOSING it marks the closing.
 
-        help_parts = []
-        for value, label in choices:
-            status_enum = RegistrationStatus(value)
-            help_parts.append(f"<b>{label}</b>: {status_help[status_enum]}")
-
-        self.fields["registration_status"].help_text = ", ".join(help_parts)
-
         # Add data attributes for JavaScript conditional display
-        self.fields["registration_status"].widget.attrs["data-conditional-controller"] = "registration_status"
+        self.fields["registration_status"].widget = DescriptionRadioSelect(
+            attrs={"class": "my-radio-class", "data-conditional-controller": "registration_status"},
+            descriptions={str(value): str(status_help[RegistrationStatus(value)]) for value, _label in choices},
+        )
+        self.fields["registration_status"].choices = choices
         if "registration_open" in self.fields:
             self.fields["registration_open"].widget.attrs["data-conditional-show"] = (
                 f"{RegistrationStatus.FUTURE.value},{RegistrationStatus.CLOSING.value}"
@@ -1653,7 +1675,18 @@ class OrgaRunForm(ConfigForm):
             if not registration_open:
                 raise ValidationError({"registration_open": _("Value required") + "!"})
 
+        self._apply_first_event_defaults(cleaned_data)
+
         return cleaned_data
+
+    def _apply_first_event_defaults(self, cleaned_data: dict[str, Any]) -> None:
+        """Force visible status and open registrations for the first event of the association."""
+        if not self.params.get("first_event"):
+            return
+        cleaned_data["development"] = DevelopStatus.SHOW
+        cleaned_data["registration_status"] = RegistrationStatus.OPEN
+        self.instance.development = DevelopStatus.SHOW
+        self.instance.registration_status = RegistrationStatus.OPEN
 
 
 class OrgaProgressStepForm(BaseModelForm):
@@ -1727,14 +1760,17 @@ class ExeEventForm(OrgaEventForm):
                     self.initial["template_event"] = qs.first()
             elif self.params.get("skin_id") == 1:
                 template_descriptions = {slug: (label, desc) for slug, label, desc, _f in _EVENT_TEMPLATES if slug}
-                template_choices = [("", "---")] + [(slug, label) for slug, label, _d, _f in _EVENT_TEMPLATES]
+                template_choices = [("", _("No template"))] + [
+                    (slug, label) for slug, label, _d, _f in _EVENT_TEMPLATES
+                ]
                 self.fields["event_template"] = forms.ChoiceField(
                     choices=template_choices,
                     label=_("Template"),
                     required=False,
                     initial="",
-                    help_text=", ".join(
-                        f"<b>{label}</b>: {desc}" for slug, (label, desc) in template_descriptions.items()
+                    widget=DescriptionRadioSelect(
+                        attrs={"class": "my-radio-class"},
+                        descriptions={slug: str(desc) for slug, (_label, desc) in template_descriptions.items()},
                     ),
                 )
 

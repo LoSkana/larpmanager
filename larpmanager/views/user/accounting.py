@@ -401,7 +401,7 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     # Check if registration is already fully paid
     if registration.tot_iscr == registration.tot_payed:
         messages.success(request, _("Everything is in order about the payment of this event") + "!")
-        return redirect("gallery", event_slug=registration.run.get_slug())
+        return redirect("event", event_slug=registration.run.get_slug())
 
     # Check for pending payment verification
     pending = (
@@ -415,13 +415,13 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     )
     if pending:
         messages.success(request, _("You have already sent a payment pending verification"))
-        return redirect("gallery", event_slug=registration.run.get_slug())
+        return redirect("event", event_slug=registration.run.get_slug())
 
     # Verify membership approval if membership feature is enabled
     if "membership" in context["features"] and not registration.membership.date:
         mes = _("To be able to pay, your membership application must be approved") + "."
         messages.warning(request, mes)
-        return redirect("gallery", event_slug=registration.run.get_slug())
+        return redirect("event", event_slug=registration.run.get_slug())
 
     # Calculate payment quota - use installment quota if set, otherwise full balance
     if registration.quota:
@@ -935,10 +935,10 @@ def accounting_profile_check(request: HttpRequest, success_message: str, invoice
 
 def accounting_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
     """Redirect to appropriate page after payment based on invoice type."""
-    # Redirect to run gallery if invoice is for registration
+    # Redirect to event page if invoice is for registration
     if invoice.typ == PaymentType.REGISTRATION:
         registration = Registration.objects.get(id=invoice.idx)
-        return redirect("gallery", event_slug=registration.run.get_slug())
+        return redirect("event", event_slug=registration.run.get_slug())
 
     # Redirect after membership fee payment confirmation
     if invoice.typ == PaymentType.MEMBERSHIP:
@@ -1131,7 +1131,7 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     registration = context.get("registration")
 
     if not registration or not registration.tot_iscr:
-        return redirect("gallery", event_slug=event_slug)
+        return redirect("event", event_slug=event_slug)
 
     invoices = (
         PaymentInvoice.objects.filter(

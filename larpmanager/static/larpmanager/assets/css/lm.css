@@ -379,12 +379,23 @@ input[type="number"] {
   cursor: pointer;
 }
 
+.opt-body {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  white-space: normal;
+}
+
+.opt-name {
+  display: block;
+}
+
 .opt-desc {
   display: block;
   color: #888;
   font-size: 0.85em;
-  margin-left: 1.6em;
   margin-top: 0.1em;
+  overflow-wrap: break-word;
 }
 
 .my-checkbox-class label,

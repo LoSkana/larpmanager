@@ -802,12 +802,24 @@ function refreshDatatables() {
  * with data-conditional-show that match the controller's value.
  */
 function setupConditionalFields() {
+    var initializedControllers = {};
     $('[data-conditional-controller]').each(function() {
         var $controller = $(this);
         var controllerName = $controller.attr('data-conditional-controller');
 
+        // Radio widgets repeat the attribute on every input: bind the group once
+        if (initializedControllers[controllerName]) {
+            return;
+        }
+        initializedControllers[controllerName] = true;
+
+        var isRadio = $controller.is(':radio');
+        var $group = isRadio
+            ? $('input[type="radio"][data-conditional-controller="' + controllerName + '"]')
+            : $controller;
+
         function updateVisibility() {
-            var selectedValue = $controller.val();
+            var selectedValue = isRadio ? $group.filter(':checked').val() : $controller.val();
 
             // Find all fields that depend on this controller
             $('[data-conditional-show]').each(function() {
@@ -828,7 +840,7 @@ function setupConditionalFields() {
         updateVisibility();
 
         // Update on change
-        $controller.on('change', updateVisibility);
+        $group.on('change', updateVisibility);
     });
 }
 

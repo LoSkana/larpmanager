@@ -2132,6 +2132,9 @@ msgstr "Uusi istunto"
 msgid "Next events"
 msgstr "Seuraavat tapahtumat"
 
+msgid "No template"
+msgstr "Ei mallia"
+
 msgid "Participant"
 msgstr "Osallistuja"
 
@@ -3613,6 +3616,9 @@ msgstr "Lataa asiakirja"
 msgid "Elements uploaded"
 msgstr "Ladatut elementit"
 
+msgid "Event public page"
+msgstr "Tapahtuman julkinen sivu"
+
 msgid "Experience System"
 msgstr "Kokemusjärjestelmä"
 
@@ -3882,9 +3888,6 @@ msgstr "Tehtävätyypin nimi"
 
 msgid "New refund request"
 msgstr "Uusi tukihakemus"
-
-msgid "Not active anymore"
-msgstr "Ei enää aktiivinen"
 
 msgid "Patron and Reduced"
 msgstr "Suojelija ja alennettu"
@@ -4263,9 +4266,6 @@ msgstr "Roolia ei ole vielä määritelty"
 msgid "Not available, kiddo"
 msgstr "Ei saatavilla, poika"
 
-msgid "Not visible to users"
-msgstr "Ei näy käyttäjille"
-
 msgid "Notifications digest"
 msgstr "Ilmoitusten yhteenveto"
 
@@ -4589,9 +4589,6 @@ msgstr "Hahmojaon hallinta:"
 msgid "Character Relationship"
 msgstr "Hahmon suhde"
 
-msgid "Concluded and archived"
-msgstr "Päätetty ja arkistoitu"
-
 msgid "Confirm password reset"
 msgstr "Vahvista salasanan palautus"
 
@@ -4867,9 +4864,6 @@ msgstr "Osallistujan sähköpostiosoite"
 
 msgid "Update your data in the"
 msgstr "Päivitä tiedot"
-
-msgid "Visible in the homepage"
-msgstr "Näkyy etusivulla"
 
 msgid "What are you doing here"
 msgstr "Mitä teet täällä"
@@ -5530,9 +5524,6 @@ msgstr "Pelaajat odottavat hahmoa"
 msgid "Pre-registration at %(event)s"
 msgstr "Ennakkoilmoittautuminen tapahtumaan %(event)s"
 
-msgid "Pre-registration is available"
-msgstr "EnnakkoIlmoittautuminen on mahdollista"
-
 msgid "Preferred navigation language"
 msgstr "Suositeltava navigointikieli"
 
@@ -5760,9 +5751,6 @@ msgstr "Korjatkaa alla olevat virheet"
 #, python-format
 msgid "Quests without traits: %(list)s"
 msgstr "Tehtävät ilman ominaisuuksia: %(list)s"
-
-msgid "Registrations are not available"
-msgstr "Ilmoittautumiset eivät ole saatavilla"
 
 msgid "Relationships of your character"
 msgstr "Hahmosi suhteet"
@@ -6719,9 +6707,6 @@ msgstr "Käytä hiljattain lähetetyn sähköpostin linkkiä"
 msgid "Registration cancellation for %(event)s"
 msgstr "Ilmoittautumisen peruutus: %(event)s"
 
-msgid "Registrations are open for participants"
-msgstr "Osallistujien ilmoittautuminen on avoinna"
-
 msgid "Set the experience points configuration"
 msgstr "Kokemuspisteiden asetukset"
 
@@ -7073,9 +7058,6 @@ msgstr "Osallistujat, jotka EIVÄT lähettäneet mieltymyksiä"
 #, python-format
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Muistutus profiilin laatimisesta tapahtumaan %(event)s"
-
-msgid "Redirects to an external registration link"
-msgstr "Ohjaa ulkoiseen ilmoittautumislinkkiin"
 
 msgid "Reserve additional tickets beyond your own"
 msgstr "Varaa lisää lippuja omien lippujesi lisäksi"
@@ -8129,9 +8111,6 @@ msgstr "Nyt voit lisätä suhteita hahmoa muokatessasi"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"
 
-msgid "Registrations will open at the specified date and time"
-msgstr "Ilmoittautumiset avataan tiettynä päivänä ja kellonaikana"
-
 msgid "Restore session expired, please upload the file again."
 msgstr "Palautusistunto päättyi, lataa tiedosto uudelleen."
 
@@ -8825,6 +8804,11 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Hei! Ilmoittautumisesi tapahtumaan <b>%(event)s</b> on vahvistettu"
 
+msgid "Here you can review the event details and visit its public page"
+msgstr ""
+"Täällä voit tarkastella tapahtuman tietoja ja vierailla sen julkisella "
+"sivulla"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr "Jos valittuna, tämän tapahtuman merkinnöissä ei käytetä tokeneita"
 
@@ -9005,6 +8989,9 @@ msgstr ""
 
 msgid "Now you can review the diet information submitted by participants"
 msgstr "Nyt voit tarkastella osallistujien lähettämiä ruokavaliotietoja"
+
+msgid "Participants can sign up right away through the registration form"
+msgstr "Osallistujat voivat ilmoittautua heti ilmoittautumislomakkeen kautta"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Kirjoita tilaisuus, jonka vuoksi haluat tehdä lahjoituksen"
@@ -9215,11 +9202,6 @@ msgid "Number of days within which the player must pay his next installment"
 msgstr ""
 "Niiden päivien lukumäärä, joiden kuluessa pelaajan on maksettava seuraava "
 "maksuerä"
-
-msgid "Registrations are open and will close at the specified date and time"
-msgstr ""
-"Ilmoittautuminen on käynnissä ja päättyy ilmoitettuna päivänä ja "
-"kellonaikana"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -10290,6 +10272,13 @@ msgid ""
 msgstr "Esitys näkyy kaikille osallistujille, kun 'näytä esitys' on valittuna"
 
 msgid ""
+"The event will not take place: hidden from users and excluded from "
+"accounting"
+msgstr ""
+"Tapahtumaa ei järjestetä: se piilotetaan käyttäjiltä ja jätetään kirjanpidon"
+" ulkopuolelle"
+
+msgid ""
 "Track and manage event milestones with status, deadline, and staff "
 "assignment"
 msgstr ""
@@ -10477,6 +10466,13 @@ msgstr ""
 "lisäkustannuksia)"
 
 msgid ""
+"Participants cannot sign up: the event page shows that registrations are "
+"closed"
+msgstr ""
+"Osallistujat eivät voi ilmoittautua: tapahtumasivulla ilmoitetaan, että "
+"ilmoittautuminen on päättynyt"
+
+msgid ""
 "Pre-registrations are open: pre-register to be notified when registrations "
 "open"
 msgstr ""
@@ -10489,6 +10485,13 @@ msgid ""
 msgstr ""
 "Ilmoittautumisen ehdot, jotka näkyvät ilmoittautumislomakkeessa linkitetyllä"
 " sivulla"
+
+msgid ""
+"The event has taken place: archived among past events, registrations are "
+"frozen"
+msgstr ""
+"Tapahtuma on jo pidetty: se on arkistoitu aiempien tapahtumien joukkoon, ja "
+"ilmoittautumiset on suljettu"
 
 msgid ""
 "This content can only be accessed once. Please read carefully before "
@@ -10641,6 +10644,13 @@ msgstr ""
 "ei ole asetettu, sähköposteja ei lähetetä)"
 
 msgid ""
+"The event is published: listed in the homepage and calendar, visible to all "
+"users"
+msgstr ""
+"Tapahtuma on julkaistu: se näkyy etusivulla ja kalenterissa, ja se on "
+"kaikkien käyttäjien nähtävissä"
+
+msgid ""
 "This page summarizes the pool labels used to group pools in character "
 "inventories"
 msgstr ""
@@ -10786,6 +10796,13 @@ msgstr ""
 " käytöstä yksinkertaistetun tarkistuslistan avulla"
 
 msgid ""
+"Registrations are open until the date and time set below, then close "
+"automatically"
+msgstr ""
+"Ilmoittautuminen on avoinna alla mainittuun päivämäärään ja kellonaikaan "
+"asti, minkä jälkeen se sulkeutuu automaattisesti"
+
+msgid ""
 "Theoretical total of income due to participation fees selected by the "
 "participants"
 msgstr ""
@@ -10928,6 +10945,13 @@ msgid ""
 msgstr ""
 "Vähimmäismäärä päiviä ennen tapahtumaa, jolloin se on käytettävissä (0 = "
 "aina)"
+
+msgid ""
+"Registrations stay closed until the date and time set below, then open "
+"automatically"
+msgstr ""
+"Ilmoittautuminen pysyy suljettuna alla mainittuun päivämäärään ja "
+"kellonaikaan asti, minkä jälkeen se avautuu automaattisesti"
 
 msgid ""
 "Requires Executive Committee approval of membership before participating in "
@@ -12234,6 +12258,13 @@ msgstr ""
 "sähköposteja ja rekisteröintisivuja, kielikohtaisesti"
 
 msgid ""
+"Registrations are managed on another site: participants are redirected to "
+"the external link set below"
+msgstr ""
+"Ilmoittautumiset hoidetaan toisella sivustolla: osallistujat ohjataan alla "
+"olevaan ulkoiseen linkkiin"
+
+msgid ""
 "The character has been added to the faction, but in the faction text the "
 "character is never mentioned"
 msgstr ""
@@ -12927,6 +12958,14 @@ msgstr ""
 "käyttää lähtökohtana muille tapahtumille"
 
 msgid ""
+"Participants cannot sign up yet, but can pre-register to show their interest"
+" and be notified when registrations open"
+msgstr ""
+"Osallistujat eivät voi vielä ilmoittautua, mutta he voivat tehdä "
+"ennakkoilmoittautumisen osoittaakseen kiinnostuksensa ja saadakseen "
+"ilmoituksen, kun ilmoittautuminen avautuu"
+
+msgid ""
 "The collection is active! To participate click on the following link, or "
 "copy it to whoever you want to get involved"
 msgstr ""
@@ -13233,6 +13272,13 @@ msgid ""
 msgstr ""
 "Muistathan, että tällä sivulla olevat tiedot on annettu luottaen siihen, "
 "että niitä käsitellään äärimmäisen huolellisesti"
+
+msgid ""
+"The event is in preparation: hidden from the homepage and calendar, only "
+"staff and already registered participants can access it"
+msgstr ""
+"Tapahtuma on valmisteluvaiheessa: se ei näy etusivulla eikä kalenterissa, ja"
+" vain henkilökunta sekä jo ilmoittautuneet osallistujat pääsevät siihen"
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have"

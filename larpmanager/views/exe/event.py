@@ -85,6 +85,9 @@ def exe_events_new(request: HttpRequest) -> HttpResponse:
     context["exe"] = True
     context["creation"] = True
 
+    # First event of the association: hide status fields, default to visible with open registrations
+    context["first_event"] = not Event.objects.filter(association_id=context["association_id"]).exists()
+
     # Define callback for post-creation operations
     def on_created(created_event: Event) -> None:
         """Post-creation callback for setting up organizer role and sticky message."""

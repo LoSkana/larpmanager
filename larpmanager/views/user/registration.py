@@ -451,7 +451,7 @@ def registration_redirect(
         messages.success(request, message)
         return redirect("accounting_registration", registration_uuid=registration.uuid)
 
-    # All requirements satisfied - show success message and redirect to event gallery
+    # All requirements satisfied - show success message and redirect to event page
     context = {"event": run}
     if is_new_registration:
         # Success message for new registration
@@ -461,7 +461,7 @@ def registration_redirect(
         message = _("Registration updated to %(event)s") % context + "!"
 
     messages.success(request, message)
-    return redirect("gallery", event_slug=registration.run.get_slug())
+    return redirect("event", event_slug=registration.run.get_slug())
 
 
 def save_registration_bring_friend(context: dict, form: object, registration: Registration) -> None:
@@ -638,7 +638,7 @@ def register(
         else:
             msg += _("This event has been cancelled")
         messages.warning(request, msg)
-        return redirect("gallery", event_slug=current_run.get_slug())
+        return redirect("event", event_slug=current_run.get_slug())
 
     # Set up registration context for the current run
     registration = context.get("registration")
@@ -1353,7 +1353,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
 
     Returns:
         HttpResponse: Either renders the redemption form template for GET requests
-                     or redirects to the gallery page after successful redemption
+                     or redirects to the event page after successful redemption
 
     Raises:
         Http404: When no valid registration is found matching the provided code
@@ -1366,7 +1366,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
     # Check if user is already registered for this event
     if context["registration"]:
         messages.success(request, _("You cannot redeem a membership, you are already a member") + "!")
-        return redirect("gallery", event_slug=context["run"].get_slug())
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Attempt to find valid registration with the provided redemption code
     try:
@@ -1387,9 +1387,9 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
             registration.redeem_code = None
             registration.save()
 
-        # Notify user of successful redemption and redirect to event gallery
+        # Notify user of successful redemption and redirect to event page
         messages.success(request, _("Your gifted registration has been redeemed") + "!")
-        return redirect("gallery", event_slug=context["run"].get_slug())
+        return redirect("event", event_slug=context["run"].get_slug())
 
     # Add registration object to context for template rendering
     context["registration"] = registration
