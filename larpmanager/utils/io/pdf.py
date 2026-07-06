@@ -164,19 +164,26 @@ def link_callback(uri: str, rel: str) -> str:  # noqa: ARG001
 
     # Check if URI is a media URL and build corresponding file path
     if uri.startswith(m_url):
-        path = str(Path(m_root) / uri.replace(m_url, ""))
+        root = Path(m_root)
+        resolved = (root / uri.replace(m_url, "")).resolve()
     # Check if URI is a static URL and build corresponding file path
     elif uri.startswith(s_url):
-        path = str(Path(s_root) / uri.replace(s_url, ""))
+        root = Path(s_root)
+        resolved = (root / uri.replace(s_url, "")).resolve()
     # Return empty string for unrecognized URI patterns
     else:
         return ""
 
-    # Verify the file actually exists on the filesystem
-    if not Path(path).is_file():
+    # Confine to the media/static root: org-authored HTML must not reach
+    # arbitrary filesystem paths via "../" traversal
+    if not resolved.is_relative_to(root.resolve()):
         return ""
 
-    return path
+    # Verify the file actually exists on the filesystem
+    if not resolved.is_file():
+        return ""
+
+    return str(resolved)
 
 
 _REL_IMAGE_SIZE = 400
@@ -324,9 +331,10 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
         # Convert HTML to PDF using xhtml2pdf library
         pdf_result = pisa.CreatePDF(html_content, dest=pdf_file, link_callback=link_callback)
 
-        # Check for PDF generation errors and raise with diagnostic information
+        # Check for PDF generation errors; log details, don't leak rendered HTML
         if pdf_result.err:
-            msg = "We had some errors <pre>" + html_content + "</pre>"
+            logger.error("PDF generation failed for %s", output_filename)
+            msg = "We had some errors generating the PDF"
             raise Http404(msg)
 
 
@@ -335,8 +343,11 @@ def get_membership_request(context: dict, member: Member) -> HttpResponse:
     # Get the file path for the member's request document
     file_path = member.get_request_filepath()
 
-    # Prepare template context with member data
-    template_context = {"member": member}
+    # Prepare template context with member data as plain strings
+    member_data = {field.name: str(getattr(member, field.name) or "") for field in member._meta.fields}  # noqa: SLF001
+    member_data["display_member"] = member.display_member()
+    member_data["display_real"] = member.display_real()
+    template_context = {"member": member_data}
 
     # Retrieve association-specific membership template text
     template = get_association_text(context["association_id"], AssociationTextType.MEMBERSHIP)

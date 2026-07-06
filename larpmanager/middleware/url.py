@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import re
 from collections.abc import Callable
 from urllib.parse import urlparse, urlunparse
 
@@ -58,7 +59,8 @@ class CorrectUrlMiddleware:
         # Fix double slashes in URLs, but preserve Google OAuth callback URLs
         # which legitimately contain double slashes in their structure
         if "//" in path and "accounts/google/login/" not in path:
-            return redirect(path.replace("//", "/"))
+            # Collapse every run of slashes in one pass
+            return redirect(re.sub(r"/{2,}", "/", path))
 
         # Handle "undefined" suffixes commonly added by JavaScript redirects
         # Parse the URL to safely manipulate path components

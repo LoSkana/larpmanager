@@ -1,8 +1,5 @@
-<div class="plot" style="text-align: left !important;">
-    {% if widget.value %}
-        {% autoescape off %}
-            {{ widget.value }}
-        {% endautoescape %}
-    {% endif %}
+{% load show_tags %}
+<div class="plot">
+    {% if widget.value %}{{ widget.value|sanitize_html }}{% endif %}
 </div>
 <input type="hidden" name="{{ widget.name }}" value="{{ widget.value }}" />
