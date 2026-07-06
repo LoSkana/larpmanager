@@ -12093,6 +12093,9 @@ msgstr ""
 msgid "Target session not found"
 msgstr ""
 
+msgid "Transfer is not possible"
+msgstr ""
+
 msgid "moved"
 msgstr ""
 

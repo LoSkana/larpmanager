@@ -4995,6 +4995,9 @@ msgstr "Måløkten ble ikke funnet"
 msgid "This event has concluded"
 msgstr "Dette arrangementet er avsluttet"
 
+msgid "Transfer is not possible"
+msgstr "Overføring er ikke mulig"
+
 msgid "Try the sheet generation"
 msgstr "Prøv kortgenerering"
 

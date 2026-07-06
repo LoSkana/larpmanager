@@ -4995,6 +4995,9 @@ msgstr "Målsessionen hittades inte"
 msgid "This event has concluded"
 msgstr "Denna händelse har avslutats"
 
+msgid "Transfer is not possible"
+msgstr "Överföring är inte möjlig"
+
 msgid "Try the sheet generation"
 msgstr "Försök med kortgenerering"
 

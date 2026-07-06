@@ -4995,6 +4995,9 @@ msgstr "Kohdeistuntoa ei löydy"
 msgid "This event has concluded"
 msgstr "Tämä tapahtuma on päättynyt"
 
+msgid "Transfer is not possible"
+msgstr "Siirto ei ole mahdollista"
+
 msgid "Try the sheet generation"
 msgstr "Kokeile lomakkeen generointia"
 

@@ -86,9 +86,11 @@ def orga_registration_transfer_preview(request: HttpRequest, event_slug: str) ->
         messages.error(request, _("Registration not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
-    # Get the target run
+    # Get the target run, scoped to the current association
     try:
-        target_run = Run.objects.select_related("event").get(pk=target_run_id)
+        target_run = Run.objects.select_related("event").get(
+            pk=target_run_id, event__association_id=context["association_id"]
+        )
     except ObjectDoesNotExist:
         messages.error(request, _("Target event not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
@@ -139,11 +141,19 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
         messages.error(request, _("Registration not found"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
-    # Get the target run
+    # Get the target run, scoped to the current association
     try:
-        target_run = Run.objects.select_related("event").get(pk=target_run_id)
+        target_run = Run.objects.select_related("event").get(
+            pk=target_run_id, event__association_id=context["association_id"]
+        )
     except ObjectDoesNotExist:
         messages.error(request, _("Target session not found"))
+        return redirect("orga_registration_transfer", event_slug=event_slug)
+
+    # Re-validate feasibility before executing
+    validation_result = validate_transfer_feasibility(registration, target_run)
+    if validation_result.get("errors"):
+        messages.error(request, _("Transfer is not possible"))
         return redirect("orga_registration_transfer", event_slug=event_slug)
 
     # Execute the transfer

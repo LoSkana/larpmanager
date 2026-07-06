@@ -4995,6 +4995,9 @@ msgstr "Cílová relace nebyla nalezena"
 msgid "This event has concluded"
 msgstr "Tato akce byla ukončena"
 
+msgid "Transfer is not possible"
+msgstr "Převod není možný"
+
 msgid "Try the sheet generation"
 msgstr "Vyzkoušejte generování karet"
 
