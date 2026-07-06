@@ -4820,11 +4820,9 @@ body.in-iframe #menu-mobile {
 }
 
 .event-cover-side {
+  display: block;
   width: 100%;
-  aspect-ratio: 3 / 4;
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
+  height: auto;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(var(--pri-rgb), 0.15);
 }
@@ -4892,10 +4890,6 @@ body.in-iframe #menu-mobile {
   .event-side {
     position: static;
     width: 100%;
-  }
-
-  .event-cover-side {
-    aspect-ratio: 16 / 9;
   }
 }
 

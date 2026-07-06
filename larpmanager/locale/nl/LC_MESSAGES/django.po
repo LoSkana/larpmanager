@@ -5951,6 +5951,9 @@ msgstr "Beschrijvende naam voor deze API-sleutel"
 msgid "Descriptive name for this content"
 msgstr "Beschrijvende naam voor deze inhoud"
 
+msgid "Discover the factions of the game"
+msgstr "Ontdek de facties in het spel"
+
 msgid "Discover what this event is about"
 msgstr "Ontdek waar dit evenement over gaat"
 
@@ -6056,6 +6059,9 @@ msgstr "Vervaldatum van het document"
 
 msgid "Delay in organization registration"
 msgstr "Vertraging in de registratie van organisaties"
+
+msgid "Discover the details of this event"
+msgstr "Ontdek alle details van dit evenement"
 
 msgid "Empty relationship check (no text)"
 msgstr "Leeg rapport (geen tekst)"
@@ -6377,6 +6383,9 @@ msgstr "Update je lidmaatschapsopties"
 msgid "Utilisation %(tokens)s per %(event)s"
 msgstr "Gebruik %(tokens)s per %(event)s"
 
+msgid "View photos and media from the event"
+msgstr "Bekijk foto’s en media van het evenement"
+
 msgid "View the complete list of our events"
 msgstr "Bekijk de volledige lijst van onze evenementen"
 
@@ -6396,6 +6405,9 @@ msgstr "<b>%(number)s</b> goed te keuren uitgaven"
 #, python-format
 msgid "<b>%(number)s</b> questions to answer"
 msgstr "<b>%(number)s</b> vragen om te beantwoorden"
+
+msgid "Access your characters for this event"
+msgstr "Bekijk je personages voor dit evenement"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
@@ -6901,6 +6913,9 @@ msgstr "Alle deelnemersgegevens weergeven als register"
 msgid "Donation amount chosen by the participant"
 msgstr "Donatiebedrag gekozen door de deelnemer"
 
+msgid "Explore the quests available in the event"
+msgstr "Ontdek de missies die je tijdens het evenement kunt doen"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
 
@@ -7364,6 +7379,9 @@ msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Bijgewerkte invoer van %(event)s door %(user)s"
 
+msgid "Search and filter the characters of the event"
+msgstr "Zoek en filter de personages van het evenement"
+
 msgid "Select the event you wish to pre-register for"
 msgstr "Selecteer het evenement waarvoor je je wilt voorregistreren"
 
@@ -7491,6 +7509,12 @@ msgid "Email sent with instructions for password reset"
 msgstr ""
 "E-mail verzonden met instructies voor het opnieuw instellen van het "
 "wachtwoord"
+
+msgid "Fill out the preparation workshops of the event"
+msgstr "Vul de voorbereidingsworkshops voor het evenement in"
+
+msgid "Get to know all the characters before the event"
+msgstr "Leer alle personages alvast kennen voor het evenement"
 
 msgid "If checked: Add a field to track items quantity"
 msgstr ""
@@ -7841,6 +7865,9 @@ msgstr "Er bestaat al een opdracht voor dit item en gebied"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
 
+msgid "Browse the characters and participants of the event"
+msgstr "Bekijk de personages en deelnemers van het evenement"
+
 msgid "Complete the setup to unlock full platform features"
 msgstr ""
 "Voltooi de installatie om alle functies van het platform te ontgrendelen"
@@ -8063,6 +8090,9 @@ msgstr "Deze pagina wordt elke 10 seconden automatisch vernieuwd"
 msgid "Use the button above to create the first ability type"
 msgstr "Gebruik de knop hierboven om het eerste vaardigheidstype aan te maken"
 
+msgid "View your payments and pending amounts for this event"
+msgstr "Bekijk je betalingen en openstaande bedragen voor dit evenement"
+
 msgid "Warehouse quantities already committed for this event"
 msgstr "Reeds vastgelegde magazijnhoeveelheden voor dit evenement"
 
@@ -8176,6 +8206,9 @@ msgstr "Inhoud van de lidmaatschapsaanvraag gevuld met gebruikersgegevens"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Maak ten minste één type ticket voor evenementregistraties"
+
+msgid "Give a registration to this event as a gift to a friend"
+msgstr "Geef een inschrijving voor dit evenement cadeau aan een vriend(in)"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
@@ -8449,6 +8482,9 @@ msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
 msgid "Probability of showing the special page (out of thousands)"
 msgstr ""
 "Waarschijnlijkheid dat de speciale pagina wordt weergegeven (uit duizenden)"
+
+msgid "Sign up for the event, or update your registration options"
+msgstr "Schrijf je in voor het evenement, of pas je inschrijvingsopties aan"
 
 msgid "There are no open questions from participants at this time"
 msgstr "Er zijn op dit moment geen open vragen van deelnemers"
@@ -9048,6 +9084,9 @@ msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr ""
 "Fout bij het laden. Ongeldig bestandsformaat - we accepteren alleen pdf en "
 "afbeeldingen"
+
+msgid "Express your preferences on the characters you would like to play"
+msgstr "Laat weten welke personages je het liefst zou willen spelen"
 
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""

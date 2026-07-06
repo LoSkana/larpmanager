@@ -5951,6 +5951,9 @@ msgstr "Beskrivende navn for denne API-nøkkelen"
 msgid "Descriptive name for this content"
 msgstr "Beskrivende navn for dette innholdet"
 
+msgid "Discover the factions of the game"
+msgstr "Oppdag fraksjonene i spillet"
+
 msgid "Discover what this event is about"
 msgstr "Finn ut hva dette arrangementet handler om"
 
@@ -6056,6 +6059,9 @@ msgstr "Dokumentets utløpsdato"
 
 msgid "Delay in organization registration"
 msgstr "Forsinkelse i organisasjonsregistrering"
+
+msgid "Discover the details of this event"
+msgstr "Les mer om dette arrangementet"
 
 msgid "Empty relationship check (no text)"
 msgstr "Tom rapportkontroll (ingen tekst)"
@@ -6375,6 +6381,9 @@ msgstr "Oppdater alternativene for medlemskap"
 msgid "Utilisation %(tokens)s per %(event)s"
 msgstr "Utnyttelse %(tokens)s per %(event)s"
 
+msgid "View photos and media from the event"
+msgstr "Se bilder og annet mediemateriale fra arrangementet"
+
 msgid "View the complete list of our events"
 msgstr "Se den komplette listen over arrangementene våre"
 
@@ -6394,6 +6403,9 @@ msgstr "<b>%(number)s</b> utgifter som skal godkjennes"
 #, python-format
 msgid "<b>%(number)s</b> questions to answer"
 msgstr "<b>%(number)s</b> spørsmål som skal besvares"
+
+msgid "Access your characters for this event"
+msgstr "Få tilgang til karakterene dine for dette arrangementet"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Lagt til nederst i alle e-poster som sendes"
@@ -6897,6 +6909,9 @@ msgstr "Vis alle deltakernes data som register"
 msgid "Donation amount chosen by the participant"
 msgstr "Donasjonsbeløp valgt av deltakeren"
 
+msgid "Explore the quests available in the event"
+msgstr "Utforsk oppdragene som er tilgjengelige i arrangementet"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Jeg gjør det regelmessig, jeg har god erfaring"
 
@@ -7355,6 +7370,9 @@ msgstr "Fødested ikke inkludert i ISTAT-listen"
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Oppdatert oppføring av %(event)s etter %(user)s"
 
+msgid "Search and filter the characters of the event"
+msgstr "Søk etter og filtrer karakterene i arrangementet"
+
 msgid "Select the event you wish to pre-register for"
 msgstr "Velg arrangementet du ønsker å forhåndsregistrere deg til"
 
@@ -7479,6 +7497,12 @@ msgstr "Donasjon av %(user)s, med årsak: '%(reason)s'"
 
 msgid "Email sent with instructions for password reset"
 msgstr "E-post sendt med instruksjoner for tilbakestilling av passord"
+
+msgid "Fill out the preparation workshops of the event"
+msgstr "Fyll ut skjemaet for forberedelsesverkstedene til arrangementet"
+
+msgid "Get to know all the characters before the event"
+msgstr "Bli kjent med alle karakterene før arrangementet"
 
 msgid "If checked: Add a field to track items quantity"
 msgstr "Hvis avkrysset: Legg til et felt for å spore antall varer"
@@ -7827,6 +7851,9 @@ msgstr "Det finnes allerede et oppdrag for dette elementet og området"
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Tildelt %(amount).2f %(elements)s for '%(reason)s'"
 
+msgid "Browse the characters and participants of the event"
+msgstr "Se gjennom karakterene og deltakerne på arrangementet"
+
 msgid "Complete the setup to unlock full platform features"
 msgstr "Fullfør oppsettet for å låse opp alle plattformfunksjonene"
 
@@ -8049,6 +8076,9 @@ msgstr "Denne siden oppdateres automatisk hvert 10. sekund"
 msgid "Use the button above to create the first ability type"
 msgstr "Bruk knappen ovenfor for å opprette den første evnetypen"
 
+msgid "View your payments and pending amounts for this event"
+msgstr "Se dine betalinger og utestående beløp for dette arrangementet"
+
 msgid "Warehouse quantities already committed for this event"
 msgstr "Lagermengder som allerede er forpliktet for dette arrangementet"
 
@@ -8161,6 +8191,9 @@ msgstr "Innholdet i medlemsforespørselen fylles med brukerdata"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Opprett minst én billettype for arrangementspåmeldinger"
+
+msgid "Give a registration to this event as a gift to a friend"
+msgstr "Gi en påmelding til dette arrangementet i gave til en venn"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
@@ -8418,6 +8451,10 @@ msgstr "Alternativets navn, vises i spørsmålet (hold det kort)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr "Sannsynlighet for å vise spesialsiden (av tusen)"
+
+msgid "Sign up for the event, or update your registration options"
+msgstr ""
+"Meld deg på arrangementet, eller oppdater dine påmeldingsinnstillinger"
 
 msgid "There are no open questions from participants at this time"
 msgstr "Det er foreløpig ingen ubesvarte spørsmål fra deltakerne"
@@ -8973,6 +9010,9 @@ msgstr "Status for søknads- og godkjenningsprosessen for medlemskap"
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)"
 msgstr "Feil ved innlasting. Ugyldig filformat - vi godtar kun pdf og bilder"
+
+msgid "Express your preferences on the characters you would like to play"
+msgstr "Fortell oss hvilke karakterer du helst vil spille"
 
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""

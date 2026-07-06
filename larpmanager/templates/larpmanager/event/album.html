@@ -3,6 +3,9 @@
 {% block title %}
     {{ name }}
 {% endblock title %}
+{% block info %}
+    {% trans "View photos and media from the event" %}
+{% endblock info %}
 {% block css %}
     <link rel="stylesheet"
           href="{% static 'larpmanager/pswipe/photoswipe.css' %}">

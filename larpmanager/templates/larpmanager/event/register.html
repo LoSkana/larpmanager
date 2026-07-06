@@ -8,6 +8,9 @@
     {% endif %}
     - {{ run.search }}
 {% endblock title %}
+{% block info %}
+    {% trans "Sign up for the event, or update your registration options" %}
+{% endblock info %}
 {% block content %}
     <div class="form_container user_resize">
         {% if registration and not registration.provisional and features.bring_friend %}
