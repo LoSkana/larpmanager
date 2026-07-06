@@ -350,7 +350,8 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
     # Add instructions for sharing the code and friend's discount amount
     email_body += (
         "<br /><br />"
-        + _("Copy this code and share it with friends!")
+        + _("Copy this code and share it with friends")
+        + "!"
         + " "
         + _(
             "Every friend who signs up and uses this code in the 'Discounts' field will "

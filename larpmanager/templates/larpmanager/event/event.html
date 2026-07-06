@@ -14,79 +14,162 @@
 {% endblock media %}
 {% block content %}
     <div class="user_resize">
-        {% if event.cover %}
-            <div id="aspect-ratio">
-                <div id="event_cover"
-                     class="nav"
-                     style="background-image: url({{ event.cover_full.url }})"></div>
+        <div class="event-layout{% if not event.cover %} no-cover{% endif %}">
+            <div class="event-main">
+                <div class="event-card">
+                    <p>
+                        <i>{{ run.pretty_dates }}</i>
+                        {% if run.event.maps_url %}
+                            -
+                            <a href="{{ run.event.maps_url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"><i class="fa-solid fa-map-location-dot"></i> {{ event.where }}</a>
+                        {% elif event.where %}
+                            -
+                            <i class="fa-solid fa-location-dot"></i> {{ event.where }}
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="event-card event-card-reg">
+                    <h3>
+                        {% if run_status.url %}
+                            <a href="{{ run_status.url }}"><i class="fa-solid fa-ticket"></i> {% trans "Registration" %}</a>
+                        {% else %}
+                            <i class="fa-solid fa-ticket"></i> {% trans "Registration" %}
+                        {% endif %}
+                    </h3>
+                    <p class="reg-{{ run_status.status_type }}">
+                        {% firstof run_status.text_long run_status.text as status_text %}
+                        {% if run_status.url %}
+                            <a href="{{ run_status.url }}">{{ status_text }}</a>
+                        {% else %}
+                            {{ status_text }}
+                        {% endif %}
+                        {% if run_status.details %}<p>{{ run_status.details }}</p>{% endif %}
+                        {% if run_status.details_characters and effective_version < 22 %}<p>{{ run_status.details_characters }}</p>{% endif %}
+                    </p>
+                </div>
+                {% for char_entry in run_status.character_links %}
+                    <div class="event-card event-card-char">
+                        <h3>
+                            {% with char_entry.links|first as first_link %}
+                                {% if first_link %}
+                                    <a href="{{ first_link.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}: {{ char_entry.name }}</a>
+                                {% else %}
+                                    <i class="fa-solid fa-user"></i> {% trans "Character" %}: {{ char_entry.name }}
+                                {% endif %}
+                            {% endwith %}
+                        </h3>
+                        <p class="char-entry-links">
+                            {% for link in char_entry.links %}
+                                <a href="{{ link.url }}" title="{{ link.tooltip }}">
+                                    <i class="{{ link.icon }}"></i> {{ link.label }}
+                                </a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                {% endfor %}
+                {% if run_status.character_action %}
+                    <div class="event-card event-card-char">
+                        <h3>
+                            <a href="{{ run_status.character_action.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}</a>
+                        </h3>
+                        <p>
+                            <a href="{{ run_status.character_action.url }}"
+                               title="{{ run_status.character_action.tooltip }}">
+                                <i class="{{ run_status.character_action.icon }}"></i> {{ run_status.character_action.label }}
+                            </a>
+                        </p>
+                    </div>
+                {% endif %}
+                {% if run_status.registration %}
+                    {% if features.payment and run_status.registration.tot_iscr %}
+                        {% with reg=run_status.registration %}
+                            <div class="event-card event-card-acc">
+                                <h3>
+                                    <a href="{% url 'accounting_registration' reg.uuid %}"><i class="fa-solid fa-coins"></i> {% trans "Accounting" %}</a>
+                                </h3>
+                                <p>
+                                    {% trans "Total registration fee" %}: {{ reg.tot_iscr|format_decimal }}{{ currency_symbol }}
+                                    {% if reg.tot_payed %}
+                                        | {% trans "Total payments" %}: {{ reg.tot_payed|format_decimal }}{{ currency_symbol }}
+                                    {% endif %}
+                                </p>
+                                {% if reg.quota %}
+                                    <p>
+                                        <a href="{% url 'accounting_registration' reg.uuid %}">
+                                            {% trans "Next payment" %}: {{ reg.quota|format_decimal }}{{ currency_symbol }},
+                                            {% if reg.deadline > 0 %}
+                                                {% trans "expected within" %} {{ reg.deadline }} {% trans "days" %}
+                                            {% else %}
+                                                {% trans "overdue by" %} {{ reg.deadline|abs_value }} {% trans "days" %}
+                                            {% endif %}
+                                        </a>
+                                    </p>
+                                {% elif reg.tot_iscr > reg.tot_payed and run_status.can_pay %}
+                                    <p>
+                                        {% trans "No additional payments are required at this time" %},
+                                        <a href="{% url 'accounting_registration' reg.uuid %}">{% trans "you can still pay the remaining amount if you wish" %}</a>
+                                    </p>
+                                {% endif %}
+                            </div>
+                        {% endwith %}
+                    {% endif %}
+                {% endif %}
+                <div class="event-info event-card">
+                    {% if event.tagline %}<p class="event-tagline">{{ event.tagline }}</p>{% endif %}
+                    {% if event.keywords %}
+                        <p class="event-keywords">
+                            <i>{{ event.keywords }}</i>
+                        </p>
+                    {% endif %}
+                    {% if event.authors %}
+                        <p>
+                            <i class="fa-solid fa-pen-nib"></i> <b>{% trans "Authors" %}:</b> {{ event.authors }}
+                        </p>
+                    {% endif %}
+                    {% if event.website %}
+                        <p>
+                            <a href="{{ event.website }}" class="button primary" target="_blank">{% trans "Discover the web site" %}!</a>
+                        </p>
+                    {% endif %}
+                </div>
+                {% if event.description %}<div class="event-card">{{ event.description | safe }}</div>{% endif %}
             </div>
-        {% endif %}
-        <!--<h1 class="major">{{ name }}</h1> -->
-        {% if event.tagline %}
-            <p>
-                <b>{{ event.tagline }}</b>
-            </p>
-            <hr />
-        {% endif %}
-        {% if event.keywords %}
-            <p>
-                <i>{{ event.keywords }}</i>
-            </p>
-            <hr />
-        {% endif %}
-        {% if event.description %}
-            <p>{{ event.description | safe }}</p>
-            <hr />
-        {% endif %}
-        {% if event.where %}
-            <p>
-                <b>{% trans "Where" %}:</b> {{ event.where }}
-            </p>
-            <hr />
-        {% endif %}
-        {% if event.authors %}
-            <p>
-                <b>{% trans "Authors" %}:</b> {{ event.authors }}
-            </p>
-            <hr />
-        {% endif %}
-        {% if event.website %}
-            <p>
-                <a href="{{ event.website }}" class="button primary" target="_blank">{% trans "Discover the web site" %}!</a>
-            </p>
-            <hr />
-        {% endif %}
-        <h2>{% trans "Next sessions" %}</h2>
+            {% if event.cover %}
+                <div class="event-side">
+                    <div class="event-cover-side"
+                         style="background-image: url({{ event.cover_full.url }})"></div>
+                </div>
+            {% endif %}
+        </div>
         {% if coming %}
+            <h2>{% trans "Next sessions" %}</h2>
             <div class="calendar">
                 <table class="mob">
                     {% for run in coming %}
                         <tr>
                             <td>
                                 <h3>
-                                    <a href="{% url 'gallery' run.get_slug %}">{{ run.search }}</a>
+                                    <a href="{% url 'event' run.get_slug %}">{{ run.search }}</a>
                                 </h3>
                             </td>
                             <td>
                                 <i>{{ run.pretty_dates }} </i>
                             </td>
-                            <td>{% include "elements/reg_status.html" with run_status=run.status registration=run.status.registration %}</td>
+                            <td>
+                                {% include "elements/reg_status.html" with run_status=run_status registration=run_status.registration long_text=1 %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </table>
             </div>
-        {% else %}
-            <table class="mob">
-                <tr>
-                    <th>
-                        {% trans "There are no new sessions scheduled at this time" %}.
-                        {% if features.pre_register %}
-                            <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here" %}!</a>
-                            {% trans "You will be notified when a new session is organized, and you will have fast-track on registration" %}!
-                        </th>
-                    </tr>
-                {% endif %}
-            </table>
+        {% elif features.pre_register %}
+            <p>
+                {% trans "There are no new sessions scheduled at this time" %}.
+                <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here" %}!</a>
+                {% trans "You will be notified when a new session is organized, and you will have fast-track on registration" %}!
+            </p>
         {% endif %}
         {% if past %}
             <br />
@@ -112,7 +195,7 @@
                                 <i>{{ run.pretty_dates }} </i>
                             </td>
                             <td data-title="{% trans "Link" %}">
-                                <a href="{% url 'gallery' run.get_slug %}">{% trans "Gallery" %}</a>
+                                <a href="{% url 'event' run.get_slug %}">{% trans "Gallery" %}</a>
                             </td>
                             <td data-title="{% trans "Character" %}">
                                 {% if registration and registration.character %}

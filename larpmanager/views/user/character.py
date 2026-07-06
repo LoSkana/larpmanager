@@ -762,7 +762,7 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     else:
         character_id = _get_character_cache_id(context)
         RegistrationCharacterRel.objects.create(registration_id=context["registration"].id, character_id=character_id)
-        messages.success(request, _("Assigned character!"))
+        messages.success(request, _("Assigned character") + "!")
 
     return redirect("character_list", event_slug=event_slug)
 

@@ -2143,6 +2143,15 @@ header.sec h1 {
   width: 8em;
 }
 
+.page_gallery {
+  margin-top: 0.5em;
+}
+
+/* Contain the floated .el children so ancestors keep their height */
+.gallery {
+  display: flow-root;
+}
+
 .page_gallery .title {
   margin-bottom: 0.5em;
 }
@@ -3964,6 +3973,114 @@ body.floating_iframe #wrapper {
   display: inline;
 }
 
+#sidebar .sidebar-link span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Registration status badge on sidebar link */
+.sidebar-status-badge {
+  margin-left: auto;
+  font-size: 0.85em;
+  flex-shrink: 0;
+}
+.sidebar-status-badge.reg-confirmed {
+  color: #28a745;
+}
+.sidebar-status-badge.reg-patron {
+  color: #d4a017;
+}
+.sidebar-status-badge.reg-pending {
+  color: #c89900;
+}
+.sidebar-status-badge.reg-action_needed {
+  color: #e67e22;
+}
+.sidebar-status-badge.reg-provisional {
+  color: #31b0d5;
+}
+.sidebar-status-badge.reg-todo {
+  color: #28a745;
+}
+
+/* Slim registration action banner (v22, only when action pending) */
+.new_v22 .reg-banner {
+  display: flex !important;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6em;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.45em 0.75em;
+  margin: 0;
+  border-radius: 5px;
+  border-left: 4px solid #ccc;
+  background: rgba(0, 0, 0, 0.03);
+  text-align: left;
+}
+
+.new_v22 .reg-banner a {
+  margin: 0;
+}
+
+.reg-banner .reg-action-main {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5em;
+}
+
+.reg-banner .reg-action-link {
+  font-weight: 600;
+}
+
+.reg-banner .reg-action-link i.fa-chevron-right {
+  font-size: 0.75em;
+  margin-left: 0.1em;
+}
+
+.reg-banner .reg-action-info {
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.reg-banner .reg-action-note {
+  font-size: 0.88em;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+.reg-banner.reg-action_needed {
+  border-left-color: #e67e22;
+  background: rgba(230, 126, 34, 0.07);
+}
+
+.reg-banner.reg-action_needed .reg-action-main i {
+  color: #e67e22;
+}
+
+.reg-banner.reg-action_needed .reg-action-link {
+  color: #c0392b;
+}
+
+.reg-banner.reg-pending {
+  border-left-color: #f0ad4e;
+  background: rgba(240, 173, 78, 0.07);
+}
+
+.reg-banner.reg-pending .reg-action-main i {
+  color: #c89900;
+}
+
+.reg-banner.reg-provisional {
+  border-left-color: #5bc0de;
+  background: rgba(91, 192, 222, 0.07);
+}
+
+.reg-banner.reg-provisional .reg-action-main i {
+  color: #31b0d5;
+}
+
 .sidebar-logo {
   width: 1.4em;
   height: 1.4em;
@@ -4034,9 +4151,9 @@ body.association.new_v22 .user_resize {
 
 @media (min-width: 1201px) {
   #topbar.topbar_v22 {
-    left: 20ch;
+    left: 25ch;
     border-left: 1px solid rgba(var(--pri-rgb), 0.085);
-    width: calc(100% - 22ch);
+    width: calc(100% - 27ch);
     border-radius: 0px 8px 8px 0px;
   }
 }
@@ -4274,6 +4391,18 @@ body.association.new_v22 .user_resize {
   flex-shrink: 0;
 }
 
+.new_v22 #sidebar.sidebar-collapsed .sidebar-link-wrap .sidebar-link {
+  position: relative;
+}
+
+.new_v22 #sidebar.sidebar-collapsed .sidebar-status-badge {
+  position: absolute;
+  top: 0.1em;
+  right: 0.1em;
+  width: auto;
+  font-size: 0.6em;
+}
+
 .new_v22 #page-wrapper.sidebar.sidebar-collapsed {
   margin-left: 3.4em;
   width: calc(100% - 3.4em);
@@ -4340,6 +4469,10 @@ body.association.new_v22 .user_resize {
 .new_v22 h3,
 .new_v22 h4 {
   text-align: left;
+}
+
+.new_v22 .icon-name p {
+  text-align: center;
 }
 
 .calendar h3 {
@@ -4627,4 +4760,173 @@ body.in-iframe #menu-mobile {
 
 .run-card .acc_link {
   display: none;
+}
+
+/* Event page layout: content left (2/3), cover right (1/3) */
+
+.event-layout {
+  display: flex;
+  gap: 1em;
+  align-items: flex-start;
+  margin: 0.5em 0;
+}
+
+.event-main {
+  flex: 2;
+  min-width: 0;
+}
+
+.event-side {
+  flex: 1;
+  position: sticky;
+  top: 1em;
+}
+
+.event-cover-side {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(var(--pri-rgb), 0.15);
+}
+
+.event-card {
+  border-radius: 8px;
+  border: 1px solid rgba(var(--pri-rgb), 0.15);
+  background: rgba(var(--pri-rgb), 0.03);
+  box-shadow: 0 2px 8px rgba(var(--pri-rgb), 0.06);
+  padding: 1em 1.25em;
+  margin-bottom: 1em;
+}
+
+.event-main .event-card:last-child {
+  margin-bottom: 0;
+}
+
+.event-card h3 {
+  margin: 0 0 0.5em;
+  font-size: 1.05em;
+}
+
+.event-card h3 i {
+  margin-right: 0.4em;
+  opacity: 0.7;
+}
+
+.event-card p {
+  margin: 0 0 0.4em;
+}
+
+.event-card p:last-child {
+  margin-bottom: 0;
+}
+
+.event-card .char-entry-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em 1.2em;
+}
+
+.event-card .char-entry-links a {
+  white-space: nowrap;
+}
+
+.event-info .event-tagline {
+  font-size: 1.15em;
+  font-weight: bold;
+}
+
+.event-info .event-keywords {
+  opacity: 0.8;
+}
+
+.event-info p i.fa-solid {
+  margin-right: 0.3em;
+  opacity: 0.7;
+}
+
+@media (max-width: 840px) {
+  .event-layout {
+    flex-direction: column-reverse;
+  }
+
+  .event-side {
+    position: static;
+    width: 100%;
+  }
+
+  .event-cover-side {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.event-card .reg-action-link {
+  font-weight: 600;
+}
+
+.event-card .reg-action-info {
+  font-style: italic;
+  opacity: 0.85;
+}
+
+.event-card .reg-action-note {
+  font-size: 0.88em;
+  opacity: 0.75;
+  font-style: italic;
+}
+
+.event-card .reg-action_needed i {
+  color: #e67e22;
+}
+
+.payment-summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.payment-summary-card {
+  flex: 1 1 200px;
+  padding: 1rem 1.25rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+  text-align: center;
+}
+
+.payment-summary-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.4rem;
+}
+
+.payment-summary-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.payment-summary-card-remaining {
+  background: rgba(var(--ter-rgb), 0.1);
+  border-color: rgba(var(--ter-rgb), 0.4);
+}
+
+.payment-summary-card-remaining .payment-summary-value {
+  color: var(--ter-clr);
+}
+
+.payment-membership-info {
+  margin: 0 0 1rem;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: solid 1px rgba(var(--ter-rgb), 0.4);
+  background: rgba(var(--ter-rgb), 0.1);
+  color: var(--ter-clr);
+  font-size: 0.9rem;
+}
+
+.payment-membership-info i {
+  margin-right: 0.4rem;
 }

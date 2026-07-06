@@ -346,7 +346,7 @@ def test_faction_all(pw_page: Any) -> None:
 
     # Go back to character list
     go_to(page, live_server, "/test/")
-
+    sidebar(page, "Gallery")
     # Try to access Character Beta (NOT assigned to user)
     page.get_by_role("link", name="Character Beta").click()
 

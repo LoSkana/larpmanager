@@ -215,7 +215,7 @@ def field_text(page: Any, live_server: Any) -> None:
     submit_register(page)
 
     go_to(page, live_server, "/test/register/")
-    sidebar(page, "Registration")
+    sidebar(page, "Your registration")
     expect(page.get_by_label("when")).to_contain_text("sadsadsadsad")
     expect(page.locator("#id_que_u2")).to_contain_text("secondas")
 
@@ -269,4 +269,5 @@ def gift(page: Any, live_server: Any) -> None:
     go_to(page, live_server, href)
     expect_normalized(page, page.locator("#banner"), "Redeem registration")
     submit_confirm(page)
-    expect_normalized(page, page.locator("#one"), "Registration confirmed")
+    sidebar(page, "Event")
+    expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed")

@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, delete_modal
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, \
+    delete_modal, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -66,10 +67,11 @@ def signup(live_server: Any, page: Any) -> None:
     submit_register(page)
 
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed")
-    expect_normalized(page, page.locator("#one"), "please fill in your profile")
+    sidebar(page, "Event")
+    expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed")
+    expect_normalized(page, page.locator("#one"), "Fill in the missing information in your profile")
 
-    page.locator("#one").get_by_role("link", name="Please fill in your profile").click()
+    page.locator("#one").get_by_role("link", name="Fill in the missing information in your profile").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")

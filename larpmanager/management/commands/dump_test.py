@@ -179,4 +179,4 @@ class Command(BaseCommand):
             with sql_file.open("a", encoding="utf-8") as f:
                 f.write(f"\n-- LARPMANAGER_SCHEMA_VERSION: {latest_migration}\n")
 
-        self.stdout.write(self.style.SUCCESS("All done!"))
+        self.stdout.write(self.style.SUCCESS("All done") + "!")

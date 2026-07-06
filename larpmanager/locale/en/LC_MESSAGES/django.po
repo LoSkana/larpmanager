@@ -1878,13 +1878,13 @@ msgid ""
 "underscores."
 msgstr ""
 
-msgid "You need to define the end date!"
+msgid "You need to define the end date"
 msgstr ""
 
-msgid "You need to define the start date!"
+msgid "You need to define the start date"
 msgstr ""
 
-msgid "End date cannot be before start date!"
+msgid "End date cannot be before start date"
 msgstr ""
 
 msgid "Value required"
@@ -2534,7 +2534,7 @@ msgstr ""
 msgid "The number of payments to split the fee"
 msgstr ""
 
-msgid "User already has a registration for this event!"
+msgid "User already has a registration for this event"
 msgstr ""
 
 msgid ""
@@ -2812,7 +2812,7 @@ msgstr ""
 
 #, python-format
 msgid ""
-"We confirm we received the donation of %(amount)d %(currency)s. We thank you "
+"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
 "for your support, and for believing in us!"
 msgstr ""
 
@@ -2886,7 +2886,7 @@ msgstr ""
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr ""
 
-msgid "Copy this code and share it with friends!"
+msgid "Copy this code and share it with friends"
 msgstr ""
 
 #, python-format
@@ -4369,7 +4369,7 @@ msgstr ""
 msgid "Female"
 msgstr ""
 
-msgid "Yes, keep me posted!"
+msgid "Yes, keep me posted"
 msgstr ""
 
 msgid "Only really important communications"
@@ -4450,7 +4450,7 @@ msgstr ""
 msgid "Phone contact"
 msgstr ""
 
-msgid "Remember to put the prefix at the beginning!"
+msgid "Remember to put the prefix at the beginning"
 msgstr ""
 
 msgid "Contact"
@@ -4554,8 +4554,7 @@ msgstr ""
 msgid "Do you wish to be always updated on our events"
 msgstr ""
 
-msgid ""
-"If you are a candidate for the Board, please write an introduction here!"
+msgid "If you are a candidate for the Board, please write an introduction here"
 msgstr ""
 
 msgid "Inactive"
@@ -4681,7 +4680,7 @@ msgid "Text"
 msgstr ""
 
 msgid ""
-"Write your question, request or concern here. We will be happy to answer you!"
+"Write your question, request or concern here. We will be happy to answer you"
 msgstr ""
 
 msgid "Attachment"
@@ -5062,7 +5061,7 @@ msgstr ""
 
 msgid ""
 "Optional: upload a photo of yourself associated with your character "
-"specifically for this event!"
+"specifically for this event"
 msgstr ""
 
 msgid "Only lowercase characters and numbers are allowed, no spaces or symbols"
@@ -6191,9 +6190,6 @@ msgstr ""
 msgid "Personal code"
 msgstr ""
 
-msgid "Copy this code and share it with friends"
-msgstr ""
-
 msgid ""
 "Every friend who registers and uses this code will receive the following "
 "discount directly on their ticket"
@@ -6642,6 +6638,9 @@ msgid "End"
 msgstr ""
 
 msgid "Copy link to clipboard"
+msgstr ""
+
+msgid "Public page"
 msgstr ""
 
 msgid "No events yet"
@@ -7883,6 +7882,15 @@ msgstr ""
 msgid "Remaining"
 msgstr ""
 
+msgid "The membership fee"
+msgstr ""
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr ""
+
+msgid "has been paid"
+msgstr ""
+
 msgid "Amount breakdown"
 msgstr ""
 
@@ -8052,7 +8060,7 @@ msgstr ""
 msgid "Personal info"
 msgstr ""
 
-msgid "Update your personal data and profile photo"
+msgid "Update your personal data"
 msgstr ""
 
 msgid "You are logged in with an email address"
@@ -10925,6 +10933,9 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
+msgid "Your registration"
+msgstr ""
+
 msgid "Update here the registration options"
 msgstr ""
 
@@ -11458,34 +11469,97 @@ msgstr ""
 msgid " Hurry: only %(num)d tickets available"
 msgstr ""
 
-msgid "Pay the annual membership fee to attend the event"
+msgid "Pay membership fee"
+msgstr ""
+
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
+"attend this event"
+msgstr ""
+
+msgid "Upload membership application"
+msgstr ""
+
+msgid ""
+"Fill in and upload your membership application, needed before you can pay "
+"for your registration"
+msgstr ""
+
+msgid "Awaiting member approval"
+msgstr ""
+
+msgid ""
+"Your membership application is under review by the organization; payment "
+"will be available once it is approved"
+msgstr ""
+
+msgid "Complete your profile"
+msgstr ""
+
+msgid ""
+"Fill in the missing information in your profile to complete your registration"
+msgstr ""
+
+msgid "Proceed with payment"
+msgstr ""
+
+msgid ""
+"Your registration is provisional: complete the payment to confirm your spot"
 msgstr ""
 
 msgid "Registration confirmed"
 msgstr ""
 
+msgid "Your registration for this event has been confirmed"
+msgstr ""
+
 msgid "Provisional registration"
 msgstr ""
 
-msgid "Upload your membership application to proceed"
+msgid ""
+"Your registration is provisional, and will be confirmed once payment is made"
 msgstr ""
 
-msgid "Awaiting member approval to proceed with payment"
-msgstr ""
-
-msgid "Please fill in your profile"
-msgstr ""
-
-msgid "Proceed with payment to confirm your registration"
-msgstr ""
-
-msgid "Pending payment"
+#, python-format
+msgid ""
+"Your registration is provisional, and will be confirmed once the payment of "
+"%(amount)s%(currency)s is made"
 msgstr ""
 
 msgid "Payment submitted"
 msgstr ""
 
-msgid "Payment awaiting manual verification"
+msgid "Your payment has been submitted, and is awaiting manual verification"
+msgstr ""
+
+msgid "Payment awaiting verification"
+msgstr ""
+
+msgid "Your payment has been received and is being verified by the organizers"
+msgstr ""
+
+msgid "no further action is needed at the moment"
+msgstr ""
+
+#, python-format
+msgid "Payment overdue: %(amount)s%(currency)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"The payment deadline has passed: settle the outstanding "
+"%(amount)s%(currency)s as soon as possible to keep your registration"
+msgstr ""
+
+#, python-format
+msgid "Payment due: %(amount)s%(currency)s within %(days)d days"
+msgstr ""
+
+#, python-format
+msgid ""
+"A payment of %(amount)s%(currency)s is due within %(days)d days to confirm "
+"your registration"
 msgstr ""
 
 msgid ""
@@ -11493,29 +11567,60 @@ msgid ""
 "processed"
 msgstr ""
 
-msgid "Registration is open!"
+msgid "Registrations for this event are currently closed"
+msgstr ""
+
+msgid "Registration is open"
+msgstr ""
+
+msgid "Registrations are open: sign up now to secure your spot"
 msgstr ""
 
 msgid "Registrations not open"
 msgstr ""
 
+msgid "Registrations for this event have not opened yet"
+msgstr ""
+
 #, python-format
-msgid "Opening at: %(date)s"
+msgid "Opening on: %(date)s"
 msgstr ""
 
 msgid "Registrations closed"
 msgstr ""
 
-msgid "Sign up as a filler!"
+msgid "Sign up as a filler"
 msgstr ""
 
-msgid "Join the waiting list!"
+msgid "Join the waiting list"
+msgstr ""
+
+msgid "Primary spots are sold out, but you can still sign up as a filler"
+msgstr ""
+
+msgid ""
+"The event is sold out, but you can join the waiting list to be notified if a "
+"spot frees up"
+msgstr ""
+
+#, python-format
+msgid "Closing on: %(date)s"
 msgstr ""
 
 msgid "Pre-registration confirmed"
 msgstr ""
 
+msgid ""
+"Your pre-registration has been confirmed: you will be notified when "
+"registrations open"
+msgstr ""
+
 msgid "Pre-register to the event"
+msgstr ""
+
+msgid ""
+"Pre-registrations are open: pre-register to be notified when registrations "
+"open"
 msgstr ""
 
 msgid "Your character is"
@@ -11548,10 +11653,13 @@ msgstr ""
 msgid "Create your character"
 msgstr ""
 
-msgid "Select your character!"
+msgid "Create the character you will play in this event"
 msgstr ""
 
-msgid "Registration completed successfully!"
+msgid "Select your character"
+msgstr ""
+
+msgid "Registration completed successfully"
 msgstr ""
 
 msgid "Request approved"
@@ -11629,7 +11737,7 @@ msgstr ""
 msgid "Please wait before retrying."
 msgstr ""
 
-msgid "Cache reset!"
+msgid "Cache reset"
 msgstr ""
 
 msgid "Check and complete your organization's activation checklist"
@@ -11650,10 +11758,10 @@ msgstr ""
 msgid "we'll let you know as soon as possible"
 msgstr ""
 
-msgid "Member approved!"
+msgid "Member approved"
 msgstr ""
 
-msgid "Member refused!"
+msgid "Member refused"
 msgstr ""
 
 msgid "Profile updated"
@@ -11662,17 +11770,17 @@ msgstr ""
 msgid "Membership fee of"
 msgstr ""
 
-msgid "Answer submitted!"
+msgid "Answer submitted"
 msgstr ""
 
 msgid "Element"
 msgstr ""
 
-msgid "Your request has been sent, we will reply as soon as possible!"
+msgid "Your request has been sent, we will reply as soon as possible"
 msgstr ""
 
 #, python-format
-msgid "Welcome to %(name)s!"
+msgid "Welcome to %(name)s"
 msgstr ""
 
 msgid "New organization created"
@@ -11682,7 +11790,7 @@ msgstr ""
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
 msgstr ""
 
-msgid "Mail added to queue!"
+msgid "Mail added to queue"
 msgstr ""
 
 msgid "No events are present, create one"
@@ -12046,13 +12154,13 @@ msgstr ""
 msgid "You have already paid this year's membership fee"
 msgstr ""
 
-msgid "The collection has been activated!"
+msgid "The collection has been activated"
 msgstr ""
 
 msgid "Collection closed"
 msgstr ""
 
-msgid "The collection has been delivered!"
+msgid "The collection has been delivered"
 msgstr ""
 
 msgid "The payment has not been completed"
@@ -12064,10 +12172,10 @@ msgstr ""
 msgid "As a final step, we ask you to complete your profile"
 msgstr ""
 
-msgid "You have completed the payment!"
+msgid "You have completed the payment"
 msgstr ""
 
-msgid "You can't access this way!"
+msgid "You can't access this way"
 msgstr ""
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)"
@@ -12102,7 +12210,7 @@ msgstr ""
 msgid "You have indicated more than one preferences towards the same element"
 msgstr ""
 
-msgid "Preferences saved!"
+msgid "Preferences saved"
 msgstr ""
 
 msgid "Characters are not visible at the moment"
@@ -12137,7 +12245,7 @@ msgstr ""
 msgid "This character is inactive and cannot be assigned to players"
 msgstr ""
 
-msgid "Assigned character!"
+msgid "Assigned character"
 msgstr ""
 
 msgid ""
@@ -12167,7 +12275,7 @@ msgstr ""
 msgid "You have already granted data sharing with this organisation"
 msgstr ""
 
-msgid "You have granted data sharing with this organisation!"
+msgid "You have granted data sharing with this organisation"
 msgstr ""
 
 msgid "Personal data updated"
@@ -12182,19 +12290,19 @@ msgstr ""
 msgid "Data share removed successfully"
 msgstr ""
 
-msgid "Your membership application was successfully submitted!"
+msgid "Your membership application was successfully submitted"
 msgstr ""
 
 msgid "You can't send messages to yourself"
 msgstr ""
 
-msgid "Message sent!"
+msgid "Message sent"
 msgstr ""
 
 msgid "You must be an approved member to vote"
 msgstr ""
 
-msgid "You must complete payment of membership dues in order to vote!"
+msgid "You must complete payment of membership dues in order to vote"
 msgstr ""
 
 msgid "You are now logged in with your main account"
@@ -12203,7 +12311,7 @@ msgstr ""
 msgid "You are now logged in with the delegate account"
 msgstr ""
 
-msgid "New delegate user added!"
+msgid "New delegate user added"
 msgstr ""
 
 msgid "Authenticator device removed"
@@ -12215,17 +12323,17 @@ msgstr ""
 msgid "Invalid code, please try again"
 msgstr ""
 
-msgid "Question saved!"
+msgid "Question saved"
 msgstr ""
 
-msgid "Workshop already done!"
+msgid "Workshop already done"
 msgstr ""
 
 #, python-brace-format
 msgid "Completed module. Remaining: {number:d}"
 msgstr ""
 
-msgid "Well done, you've completed all modules!"
+msgid "Well done, you've completed all modules"
 msgstr ""
 
 msgid "New shuttle request"
@@ -12277,7 +12385,7 @@ msgstr ""
 msgid "Pre-registrations saved"
 msgstr ""
 
-msgid "Pre-registration cancelled!"
+msgid "Pre-registration cancelled"
 msgstr ""
 
 msgid "Pre-registration not found."
@@ -12291,11 +12399,11 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Registration confirmed at %(event)s!"
+msgid "Registration confirmed at %(event)s"
 msgstr ""
 
 #, python-format
-msgid "Registration updated to %(event)s!"
+msgid "Registration updated to %(event)s"
 msgstr ""
 
 msgid "You have use a friend code"
@@ -12364,11 +12472,8 @@ msgstr ""
 msgid "Your registration to %(event)s has been cancelled"
 msgstr ""
 
-msgid "Registrations not open!"
+msgid "You cannot redeem a membership, you are already a member"
 msgstr ""
 
-msgid "You cannot redeem a membership, you are already a member!"
-msgstr ""
-
-msgid "Your gifted registration has been redeemed!"
+msgid "Your gifted registration has been redeemed"
 msgstr ""

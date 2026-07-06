@@ -1279,13 +1279,13 @@ class OrgaEventTextForm(BaseModelForm):
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
             # Ensure the existing default is not the current instance being edited
             if res.count() > 0 and res.first().pk != self.instance.pk:
-                self.add_error("default", "There is already a language set as default!")
+                self.add_error("default", "There is already a language set as default") + "!"
 
         # Validate language-type combination uniqueness
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
         # Ensure the existing combination is not the current instance being edited
         if res.count() > 0 and res.first().pk != self.instance.pk:
-            self.add_error("language", "There is already a language of this type!")
+            self.add_error("language", "There is already a language of this type") + "!"
 
         return cleaned_data
 
@@ -1624,16 +1624,16 @@ class OrgaRunForm(ConfigForm):
         # Validate end date is present
         end = cleaned_data.get("end")
         if "end" in self.fields and not end:
-            raise ValidationError({"end": _("You need to define the end date!")})
+            raise ValidationError({"end": _("You need to define the end date") + "!"})
 
         # Validate start date is present
         start = cleaned_data.get("start")
         if "start" in self.fields and not start:
-            raise ValidationError({"start": _("You need to define the start date!")})
+            raise ValidationError({"start": _("You need to define the start date") + "!"})
 
         # Ensure end date is not before start date
         if start and end and end < start:
-            raise ValidationError({"end": _("End date cannot be before start date!")})
+            raise ValidationError({"end": _("End date cannot be before start date") + "!"})
 
         # Validate registration status requirements
         registration_status = cleaned_data.get("registration_status")

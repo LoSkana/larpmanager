@@ -114,7 +114,7 @@ def user_help(request: HttpRequest, event_slug: str | None = None) -> HttpRespon
 
             # Save question and redirect to prevent form resubmission
             hp.save()
-            messages.success(request, _("Question saved!"))
+            messages.success(request, _("Question saved") + "!")
             return redirect(request.path_info)
     else:
         # Display empty form for GET requests
@@ -328,7 +328,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, module_uuid: str) -> 
     # Check if user has already completed this workshop module
     completed = [el.pk for el in context["member"].workshops.select_related().all()]
     if context["workshop"].pk in completed:
-        messages.success(request, _("Workshop already done!"))
+        messages.success(request, _("Workshop already done") + "!")
         return redirect("workshops", event_slug=context["run"].get_slug())
 
     # Build list of questions for the current workshop module
@@ -362,7 +362,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, module_uuid: str) -> 
             )
 
         # All modules completed - redirect to workshops overview
-        messages.success(request, _("Well done, you've completed all modules!"))
+        messages.success(request, _("Well done, you've completed all modules") + "!")
         return redirect("workshops", event_slug=context["run"].get_slug())
 
     # Invalid answers - show failure page

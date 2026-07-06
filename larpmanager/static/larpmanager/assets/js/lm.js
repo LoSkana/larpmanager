@@ -588,6 +588,13 @@ function initMisc() {
     if ($pageInfo.length && !$pageInfo.attr('qtip').trim()) {
         $pageInfo.remove();
     }
+
+    // remove empty event-card blocks left by conditional template content
+    $('.event-card').each(function() {
+        if ($(this).text().trim() === '') {
+            $(this).remove();
+        }
+    });
 }
 
 $(document).ready(function() {

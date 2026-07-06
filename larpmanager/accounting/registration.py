@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import logging
 import math
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
 from django.conf import settings as conf_settings
@@ -33,7 +33,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models, transaction
 from django.utils import timezone
 
-from larpmanager.accounting.base import is_registration_provisional
+from larpmanager.accounting.base import is_registration_provisional, round_to_nearest_cent
 from larpmanager.accounting.token_credit import handle_tokes_credits
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
@@ -69,8 +69,6 @@ if TYPE_CHECKING:
     from django.db.models import QuerySet
 
 logger = logging.getLogger(__name__)
-
-PRECISION = Decimal("0.01")
 
 
 def get_registration_iscr(registration: Registration) -> int:
@@ -570,20 +568,6 @@ def cancel_reg(registration: Registration) -> None:
 
     # Reset event links
     reset_event_links(registration.member_id, registration.run.event.association_id)
-
-
-def round_decimal(amount: Decimal) -> Decimal:
-    """Round decimal value."""
-    return amount.quantize(PRECISION, rounding=ROUND_HALF_UP)
-
-
-def round_to_nearest_cent(amount: float) -> float:
-    """Round a number to the nearest cent with tolerance for small differences."""
-    rounded_amount = round(amount * 100) / 100
-    rounding_tolerance = 0.03
-    if abs(float(amount) - rounded_amount) <= rounding_tolerance:
-        return rounded_amount
-    return float(amount)
 
 
 def process_registration_pre_save(registration: Registration) -> None:

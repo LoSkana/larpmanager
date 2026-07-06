@@ -119,7 +119,7 @@ def create_character(page: Any) -> None:
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
 
-    page.get_by_role("link", name="Create your character!").click()
+    page.get_by_role("link", name="Create your character").click()
 
     # check only one option
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "st"\n- text: st')
@@ -134,17 +134,17 @@ def create_character(page: Any) -> None:
 
     # check status, resubmit reg
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
-    sidebar(page, "Registration")
+    sidebar(page, "Your registration")
     page.get_by_role("button", name="Continue").click()
-    page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
+    page.get_by_role("link", name="myyyy", exact=True).click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
 
     # change ticket
-    sidebar(page, "Registration")
+    sidebar(page, "Your registration")
     page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("button", name="Continue").click()
-    page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
+    page.get_by_role("link", name="myyyy", exact=True).click()
 
     # check previous option is not selected anymore
     expect_normalized(page, page.locator("#one"), "The character have missing values in mandatory fields: choose")
@@ -159,9 +159,9 @@ def create_character(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")
 
     # check with registration resubmit
-    sidebar(page, "Registration")
+    sidebar(page, "Your registration")
     page.get_by_role("button", name="Continue").click()
-    page.locator("a").filter(has_text=re.compile(r"^myyyy$")).click()
+    page.get_by_role("link", name="myyyy", exact=True).click()
     page.get_by_role("link", name="Edit").click()
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"')
     submit_confirm(page)

@@ -33,6 +33,13 @@ if TYPE_CHECKING:
 
 _USER_NAV_CACHE_TIMEOUT = 3600 * 24
 
+_STATUS_ICONS = {
+    "pending": "fa-solid fa-clock",
+    "action_needed": "fa-solid fa-circle-exclamation",
+    "provisional": "fa-solid fa-hourglass-half",
+    "todo": "fa-solid fa-list-check",
+}
+
 
 def _user_nav_cache_key(member_id: int) -> str:
     return f"user_nav_entries_{member_id}"
@@ -83,15 +90,19 @@ def _add_registration_items(
     context: dict[str, Any],
 ) -> None:
     if registration:
-        items.append(
-            _item(
-                reverse("register", args=[slug]),
-                "fa-solid fa-pen-to-square",
-                _("Registration"),
-                str(_("Update here the registration options")) + "!",
-                active=active == "register",
-            )
+        entry = _item(
+            reverse("register", args=[slug]),
+            "fa-solid fa-pen-to-square",
+            _("Your registration"),
+            str(_("Update here the registration options")) + "!",
+            active=active == "register",
         )
+        run_status = context.get("run_status") or {}
+        status_type = run_status.get("status_type")
+        if status_type in _STATUS_ICONS:
+            entry["status_type"] = status_type
+            entry["status_icon"] = _STATUS_ICONS[status_type]
+        items.append(entry)
         if registration.tot_iscr:
             items.append(
                 _item(
@@ -106,7 +117,7 @@ def _add_registration_items(
             items.append(
                 _item(
                     reverse("character_your", args=[slug]),
-                    "fa-solid fa-person",
+                    "fa-solid fa-user",
                     _("Your character"),
                     str(_("Access your character")) + "!",
                     active=active == "char",
