@@ -22,13 +22,14 @@ import io
 import logging
 import os
 import re
+import time
 import zipfile
 from pathlib import Path
 from typing import Any, NoReturn
 from urllib.parse import urlparse
 
 import pandas as pd
-from playwright.sync_api import expect
+from playwright.sync_api import Error as PlaywrightError, expect
 
 logger = logging.getLogger(__name__)
 
@@ -142,7 +143,7 @@ def ooops_check(page: Any) -> None:
     banner = page.locator("#banner")
     if banner.count() > 0:
         try:
-            expect(banner).not_to_contain_text("Oops!")
+            expect(banner).not_to_contain_text("Oops")
             expect(banner).not_to_contain_text("404")
         except AssertionError:
             raise Exception(f"Error on {page.url}: {banner.inner_text()}")
@@ -435,12 +436,9 @@ def normalize_whitespace(text: str) -> str:
     return text.strip().lower()
 
 
-def expect_normalized(page, locator, expected: str, timeout=SHORT_TIMEOUT):
-    locator.wait_for(state="visible", timeout=timeout)
-
-    page.wait_for_load_state("load")
-    page.wait_for_load_state("domcontentloaded")
-
+def _normalized_snapshot(locator) -> str:
+    """Collect the normalized visible text of a locator, including form field values
+    and same-origin iframe bodies."""
     raw_parts = []
 
     # main text element
@@ -470,13 +468,31 @@ def expect_normalized(page, locator, expected: str, timeout=SHORT_TIMEOUT):
         except:
             pass  # iframe non accessibile / cross-origin
 
-    raw = "\n".join(raw_parts)
+    return normalize_whitespace("\n".join(raw_parts))
 
-    actual = normalize_whitespace(raw)
+
+def expect_normalized(page, locator, expected: str, timeout=SHORT_TIMEOUT):
+    """Assert that the normalized text of a locator contains the expected string.
+
+    Polls until the timeout, since content may still be filled in asynchronously
+    (e.g. DataTables ajax rows) after the page load event."""
+    locator.wait_for(state="visible", timeout=timeout)
+
+    page.wait_for_load_state("load")
+    page.wait_for_load_state("domcontentloaded")
+
     exp = normalize_whitespace(expected)
-
-    if exp not in actual:
-        raise AssertionError(f"Text mismatch\n\nEXPECTED:\n{exp}\n\nACTUAL:\n{actual}")
+    deadline = time.monotonic() + timeout / 1000
+    while True:
+        try:
+            actual = _normalized_snapshot(locator)
+        except PlaywrightError:
+            actual = ""
+        if exp in actual:
+            return
+        if time.monotonic() >= deadline:
+            raise AssertionError(f"Text mismatch\n\nEXPECTED:\n{exp}\n\nACTUAL:\n{actual}")
+        page.wait_for_timeout(250)
 
 
 def click_option(input_locator):
@@ -526,9 +542,9 @@ def just_wait(page, big=False):
     page.wait_for_load_state("load")
     page.wait_for_load_state("domcontentloaded")
 
-
-def wait_accounting_load(page: Any) -> None:
+def click_and_wait_accounting(page):
     """Wait until the accounting AJAX call in registrations.html has completed."""
+    page.get_by_role("link", name="accounting", exact=True).click()
     page.locator("#load_accounting.select").wait_for()
 
 
@@ -540,19 +556,50 @@ def wait_question_load(page: Any, key: str) -> None:
     page.wait_for_function(f"typeof window.done !== 'undefined' && ('{key}' in window.done)")
 
 
+def wait_questions_page_ready(page: Any) -> None:
+    """Wait until any pending navigation settled and load.js finished initializing.
+
+    Retries because a navigation started just before (e.g. a form submit) can
+    destroy the execution context mid-wait.
+    """
+    last_error = None
+    for _attempt in range(3):
+        try:
+            page.wait_for_load_state("load")
+            page.wait_for_function("window._questionsPageReady === true", timeout=SHORT_TIMEOUT)
+            return
+        except PlaywrightError as exc:
+            last_error = exc
+    raise last_error
+
+
 def click_and_wait_question(page: Any, name: str) -> None:
-    """Click a question column link and wait if it triggers AJAX."""
-    load_que = page.locator("a.load_que", has_text=name)
-    if load_que.count() > 0:
-        key = load_que.get_attribute("key")
-        load_que.click()
-        wait_question_load(page, key)
-    else:
-        toggle = page.locator("a.table_toggle", has_text=name)
-        tog = toggle.get_attribute("tog")
-        page.evaluate("window._tableToggleDone = null")
-        toggle.click()
-        page.wait_for_function(f"window._tableToggleDone === '{tog}'", timeout=SHORT_TIMEOUT)
+    """Click a question column link and wait if it triggers AJAX.
+
+    Retried as a whole: if called right after a form submit, the readiness checks
+    can pass on the old page and the click gets lost when navigation completes,
+    so on timeout the click is attempted again on the settled page.
+    """
+    last_error = None
+    for _attempt in range(3):
+        try:
+            wait_questions_page_ready(page)
+            load_que = page.locator("a.load_que", has_text=name)
+            if load_que.count() > 0:
+                key = load_que.get_attribute("key")
+                load_que.click()
+                wait_question_load(page, key)
+            else:
+                toggle = page.locator("a.table_toggle", has_text=name)
+                tog = toggle.get_attribute("tog")
+                page.evaluate("window._tableToggleDone = null")
+                toggle.click()
+                just_wait(page)
+                page.wait_for_function(f"window._tableToggleDone === '{tog}'", timeout=SHORT_TIMEOUT)
+            return
+        except PlaywrightError as exc:
+            last_error = exc
+    raise last_error
 
 
 def fill_date(locator, selector, value):
@@ -685,8 +732,14 @@ def sidebar(page, link):
 
 
 def icon_link(container, page, link):
-    pattern = re.compile(re.escape(link) + "$", re.IGNORECASE)
-    locator = page.locator(container).get_by_role("link", name=pattern)
+    exact_pattern = re.compile(f"^{re.escape(link)}$", re.IGNORECASE)
+
+    locator = (
+        page.locator(container)
+        .locator("a")
+        .filter(has=page.locator("span", has_text=exact_pattern))
+    )
+
     locator.wait_for(state="visible")
     locator.click()
     _wait_lm_ready(page)

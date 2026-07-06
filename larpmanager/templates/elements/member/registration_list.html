@@ -8,7 +8,7 @@
                         {% if show_association %}<td>{{ registration.run.event.association.name }}</td>{% endif %}
                         <td>
                             <b>
-                                <a href="{% url 'gallery' registration.run.get_slug %}">{{ registration.run }}</a>
+                                <a href="{% url 'event' registration.run.get_slug %}">{{ registration.run }}</a>
                             </b>
                         </td>
                         {% if not hide_cover %}

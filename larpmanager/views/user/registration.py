@@ -199,7 +199,7 @@ def pre_register_remove(request: HttpRequest, event_slug: str) -> Any:
     element = PreRegistration.objects.filter(member=context["member"], event=context["event"]).first()
     if element:
         element.delete()
-        messages.success(request, _("Pre-registration cancelled!"))
+        messages.success(request, _("Pre-registration cancelled") + "!")
     else:
         messages.warning(request, _("Pre-registration not found."))
     return redirect("pre_register")
@@ -455,10 +455,10 @@ def registration_redirect(
     context = {"event": run}
     if is_new_registration:
         # Success message for new registration
-        message = _("Registration confirmed at %(event)s!") % context
+        message = _("Registration confirmed at %(event)s") % context + "!"
     else:
         # Success message for registration update
-        message = _("Registration updated to %(event)s!") % context
+        message = _("Registration updated to %(event)s") % context + "!"
 
     messages.success(request, message)
     return redirect("gallery", event_slug=registration.run.get_slug())
@@ -1238,7 +1238,7 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
 def check_registration_open(context: dict, request: HttpRequest) -> None:
     """Check if registrations are open, redirect to home if closed."""
     if not context.get("run_status", {})["open"]:
-        messages.warning(request, _("Registrations not open!"))
+        messages.warning(request, _("Registrations not open") + "!")
         msg = "home"
         raise RedirectError(msg)
 
@@ -1365,7 +1365,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
 
     # Check if user is already registered for this event
     if context["registration"]:
-        messages.success(request, _("You cannot redeem a membership, you are already a member!"))
+        messages.success(request, _("You cannot redeem a membership, you are already a member") + "!")
         return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Attempt to find valid registration with the provided redemption code
@@ -1388,7 +1388,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
             registration.save()
 
         # Notify user of successful redemption and redirect to event gallery
-        messages.success(request, _("Your gifted registration has been redeemed!"))
+        messages.success(request, _("Your gifted registration has been redeemed") + "!")
         return redirect("gallery", event_slug=context["run"].get_slug())
 
     # Add registration object to context for template rendering

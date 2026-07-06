@@ -37,8 +37,8 @@ from larpmanager.accounting.registration import (
     installment_check,
     quota_check,
     registration_payments_status,
-    round_to_nearest_cent,
 )
+from larpmanager.accounting.base import round_to_nearest_cent
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemMembership,

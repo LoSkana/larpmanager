@@ -34,6 +34,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.accounting.base import round_decimal
 from larpmanager.accounting.gateway import (
     get_paypal_form,
     get_redsys_form,
@@ -45,9 +46,6 @@ from larpmanager.accounting.member import (
     get_membership_fee_for_reg,
     membership_fee_pending_config_name,
     set_membership_fee_pending,
-)
-from larpmanager.accounting.registration import (
-    round_decimal,
 )
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features

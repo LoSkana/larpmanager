@@ -501,7 +501,8 @@ class RegistrationCharacterRel(BaseModel):
         max_length=500,
         upload_to=UploadToPathAndRename("registration/"),
         verbose_name=_("Character portrait"),
-        help_text=_("Optional: upload a photo of yourself associated with your character specifically for this event!"),
+        help_text=_("Optional: upload a photo of yourself associated with your character specifically for this event")
+        + "!",
         null=True,
         blank=True,
     )

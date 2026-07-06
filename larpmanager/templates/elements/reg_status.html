@@ -14,7 +14,21 @@
                 {% elif run_status.status_type == "provisional" %}
                     <i class="fa-solid fa-hourglass-half"></i>
                 {% endif %}
-                {{ run_status.text | safe }}
+                {% if run_status.url %}
+                    <a href="{{ run_status.url }}">
+                        {% if long_text and run_status.text_long %}
+                            {{ run_status.text_long }}
+                        {% else %}
+                            {{ run_status.text }}
+                        {% endif %}
+                    </a>
+                {% else %}
+                    {% if long_text and run_status.text_long %}
+                        {{ run_status.text_long }}
+                    {% else %}
+                        {{ run_status.text }}
+                    {% endif %}
+                {% endif %}
                 {% if features.payment and reg and reg.tot_iscr %}
                     {% with uuid=reg_uuid|default:reg.uuid %}
                         <span class="acc_link">
@@ -33,6 +47,20 @@
                         <span class="reg-action-info">{{ run_status.action.label }}</span>
                     {% endif %}
                     {% if run_status.action.note %}<div class="reg-action-note">{{ run_status.action.note }}</div>{% endif %}
+                </div>
+            {% endif %}
+            {% if run_status.character_action %}
+                <div class="reg-action{% if run_status.character_action.status_type %} reg-{{ run_status.character_action.status_type }}{% endif %}">
+                    <a href="{{ run_status.character_action.url }}"
+                       class="reg-action-link"
+                       title="{{ run_status.character_action.tooltip }}">
+                        <i class="{{ run_status.character_action.icon }}"></i>
+                        {% if long_text and run_status.character_action.label_long %}
+                            {{ run_status.character_action.label_long }}
+                        {% else %}
+                            {{ run_status.character_action.label }}
+                        {% endif %}
+                    </a>
                 </div>
             {% endif %}
             {% if features.payment and reg and reg.tot_iscr %}
@@ -72,7 +100,12 @@
                 </span>
             {% endwith %}
         {% endif %}
-        {% if run_status.details %}<p class="reg-status-details">{{ run_status.details | safe }}</p>{% endif %}
+        {% if run_status.details or run_status.details_characters %}
+            <p class="reg-status-details">
+                {{ run_status.details }}
+                {% if run_status.details_characters %}{{ run_status.details_characters }}{% endif %}
+            </p>
+        {% endif %}
     </div>
 {% endif %}
 {% endwith %}

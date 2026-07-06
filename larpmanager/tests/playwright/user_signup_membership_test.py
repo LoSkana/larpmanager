@@ -36,7 +36,7 @@ from larpmanager.tests.utils import (check_download,
                                      login_orga,
                                      submit,
                                      submit_confirm,
-                                     expect_normalized, logout, save_modal,
+                                     expect_normalized, logout, save_modal, sidebar,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -102,12 +102,12 @@ def signup(live_server: Any, page: Any) -> None:
 
 def membership(live_server: Any, page: Any) -> None:
     # send membership
-    go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Provisional registration")
-    expect_normalized(page, page.locator("#one"), "upload your membership application to proceed")
-    page.get_by_role("link", name="Upload your membership application to proceed").click()
+    go_to(page, live_server, "/test/")
+    expect_normalized(page, page.locator("#one"), "Your registration is provisional")
+    page.get_by_role("link", name="Fill in and upload your membership application").click()
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
+
     # compile request
     load_image(page, "#id_request")
     load_image(page, "#id_document")
@@ -127,8 +127,7 @@ def membership(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     # check register
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Proceed with payment to confirm your registration")
-    page.get_by_role("link", name=re.compile(r"Proceed with payment")).click()
+    page.get_by_role("link", name=re.compile(r"A payment of 100€ is due within 8 days to confirm your registration")).click()
 
 
 def pay(live_server: Any, page: Any) -> None:
@@ -143,7 +142,8 @@ def pay(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Confirm", exact=True).click()
     # check payment
     go_to(page, live_server, "/test/register")
-    expect_normalized(page, page.locator("#one"), "Registration confirmed (Standard)")
+    sidebar(page, "Event")
+    expect_normalized(page, page.locator("#one"), "Your registration for this event has been confirmed (Standard)")
     logout(page)
     expect_normalized(page, page.locator("#one"), "Registration is open!")
     expect_normalized(page, page.locator("#one"), "Hurry: only 9 tickets available")

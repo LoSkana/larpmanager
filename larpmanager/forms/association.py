@@ -222,7 +222,7 @@ class ExeAssociationTextForm(BaseModelForm):
             )
             # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
-                self.add_error("default", "There is already a language set as default!")
+                self.add_error("default", "There is already a language set as default") + "!"
 
         # Check for duplicate language-type combination
         res = AssociationText.objects.filter(
@@ -232,7 +232,7 @@ class ExeAssociationTextForm(BaseModelForm):
             first = res.first()
             # Ensure we're not comparing against the current instance
             if first.pk != self.instance.pk:
-                self.add_error("language", "There is already a language of this type!")
+                self.add_error("language", "There is already a language of this type") + "!"
 
         return cleaned_data
 

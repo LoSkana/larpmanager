@@ -113,10 +113,10 @@ def create_and_assign_character(page: Any, live_server: Any) -> None:
 
 def fill_customization_form(page: Any, live_server: Any) -> None:
     """Fill all customization form fields including image upload."""
-    go_to(page, live_server, "/test")
+    go_to(page, live_server, "/test/gallery/")
 
     # Access character customization
-    page.get_by_role("link", name="Test Character").first.click()
+    page.get_by_role("link", name="Test Character").nth(1).click()
     _wait_lm_ready(page)
 
     # Click customize button
@@ -179,7 +179,7 @@ def verify_field_visibility(page: Any, live_server: Any) -> None:
 
     # Now logout to check visibility
     logout(page)
-    go_to(page, live_server, "/test")
+    go_to(page, live_server, "/test/gallery/")
     page.get_by_text("My Custom Name").click()
 
     # Verify public field is visible to other users, but not private
@@ -188,7 +188,7 @@ def verify_field_visibility(page: Any, live_server: Any) -> None:
 
     # Verify orga can see private field (as staff)
     login_orga(page, live_server)
-    go_to(page, live_server, "/test/")
+    go_to(page, live_server, "/test/gallery/")
 
     # Find and view character
     page.get_by_text("My Custom Name").click()

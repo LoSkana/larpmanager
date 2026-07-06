@@ -527,7 +527,7 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     _reset_all_association(association_id, association_slug)
 
     # Notify user of successful cache reset
-    messages.success(request, _("Cache reset!"))
+    messages.success(request, _("Cache reset") + "!")
     return redirect("manage")
 
 

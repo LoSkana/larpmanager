@@ -1,7 +1,5 @@
 {% if not iframe %}
-    {% if not user.is_authenticated %}
-        {% include "elements/structure/sidebar-anon.html" %}
-    {% elif manage %}
+    {% if manage %}
         {% include "elements/structure/sidebar-manage.html" %}
     {% elif run %}
         {% include "elements/structure/sidebar-event.html" %}

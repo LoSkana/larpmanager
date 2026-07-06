@@ -301,6 +301,8 @@ window.addEventListener('DOMContentLoaded', function() {
             return false;
         });
 
+        window._questionsPageReady = true;
+
     });
 
 });

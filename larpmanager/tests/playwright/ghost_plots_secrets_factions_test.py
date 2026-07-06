@@ -153,6 +153,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     login_user(page, live_server)
     go_to(page, live_server, "/")
     topbar(page, "Test Larp")
+    sidebar(page, "Gallery")
     page.get_by_role("link", name="Test Character").click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#wrapper"), "Presentation Test Teaser eefqq")

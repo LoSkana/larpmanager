@@ -2036,6 +2036,9 @@ msgstr "Bulk verwijderen"
 msgid "Button text"
 msgstr "Knoptekst"
 
+msgid "Cache reset"
+msgstr "Cache opnieuw ingesteld"
+
 msgid "Carbon copy"
 msgstr "Kopie"
 
@@ -2155,6 +2158,9 @@ msgstr "Progressie"
 
 msgid "Provisional"
 msgstr "Voorlopig"
+
+msgid "Public page"
+msgstr "Openbare pagina"
 
 msgid "Quest types"
 msgstr "Typen zoektochten"
@@ -2276,9 +2282,6 @@ msgstr "Weet u zeker dat"
 msgid "Bank address"
 msgstr "Adres bank"
 
-msgid "Cache reset!"
-msgstr "Cache opnieuw ingesteld!"
-
 msgid "Cancellation"
 msgstr "Annulering"
 
@@ -2353,6 +2356,9 @@ msgstr "Wettelijke kennisgeving"
 
 msgid "Members list"
 msgstr "Ledenlijst"
+
+msgid "Message sent"
+msgstr "Bericht verzonden"
 
 msgid "More details"
 msgstr "Meer informatie"
@@ -2646,9 +2652,6 @@ msgstr "Evenementen beheren"
 msgid "Maximum votes"
 msgstr "Maximaal aantal stemmen"
 
-msgid "Message sent!"
-msgstr "Bericht verzonden!"
-
 msgid "Minimum votes"
 msgstr "Minimum aantal stemmen"
 
@@ -2794,6 +2797,9 @@ msgstr "Uw berichten"
 msgid "for %(event)s"
 msgstr "voor %(event)s"
 
+msgid "has been paid"
+msgstr "is betaald"
+
 msgid "items deleted"
 msgstr "verwijderde items"
 
@@ -2917,6 +2923,9 @@ msgstr "Maximale lengte"
 msgid "Maximum number"
 msgstr "Maximaal aantal"
 
+msgid "Member refused"
+msgstr "Lid geweigerd"
+
 msgid "Member revoked"
 msgstr "Partner herroepen"
 
@@ -2967,6 +2976,9 @@ msgstr "Stappen"
 
 msgid "Prologues type"
 msgstr "Soort prologen"
+
+msgid "Question saved"
+msgstr "Onderdanige vraag"
 
 msgid "Recipient Code"
 msgstr "Ontvanger Code"
@@ -3139,8 +3151,8 @@ msgstr "Mail toewijzing"
 msgid "Maximum fillers"
 msgstr "Maximale vulstoffen"
 
-msgid "Member refused!"
-msgstr "Lid geweigerd!"
+msgid "Member approved"
+msgstr "Lid goedgekeurd"
 
 msgid "Membership fees"
 msgstr "Verenigingskosten"
@@ -3175,9 +3187,6 @@ msgstr "Betalingsoverzicht"
 msgid "Pending invites"
 msgstr "In afwachting van uitnodigingen"
 
-msgid "Pending payment"
-msgstr "In afwachting van betaling"
-
 msgid "Portraits (PDF)"
 msgstr "Portretten (PDF)"
 
@@ -3195,9 +3204,6 @@ msgstr "Vooruitgang"
 
 msgid "Publish players"
 msgstr "Spelers publiceren"
-
-msgid "Question saved!"
-msgstr "Onderdanige vraag!"
 
 msgid "Refund Requests"
 msgstr "Verzoeken om terugbetaling"
@@ -3288,6 +3294,9 @@ msgstr "Functie activeren"
 
 msgid "Amount breakdown"
 msgstr "Uitsplitsing van de bedragen"
+
+msgid "Answer submitted"
+msgstr "Onderdanig antwoord"
 
 msgid "Back to manifest"
 msgstr "Terug naar manifest"
@@ -3381,9 +3390,6 @@ msgstr "Lite-modus actief"
 
 msgid "May the best win"
 msgstr "Moge de beste winnen"
-
-msgid "Member approved!"
-msgstr "Lid goedgekeurd!"
 
 msgid "Missing question"
 msgstr "Ontbrekende vraag"
@@ -3553,9 +3559,6 @@ msgstr "Alle communicatie"
 msgid "An error occurred"
 msgstr "Er is een fout opgetreden"
 
-msgid "Answer submitted!"
-msgstr "Onderdanig antwoord!"
-
 msgid "Assigned quantity"
 msgstr "Toegewezen hoeveelheid"
 
@@ -3718,6 +3721,9 @@ msgstr "Voorinschrijvingen"
 msgid "Pre-register here"
 msgstr "Pre-registreer hier"
 
+msgid "Preferences saved"
+msgstr "Voorkeuren opgeslagen"
+
 msgid "Preview activated"
 msgstr "Voorbeeld geactiveerd"
 
@@ -3787,6 +3793,9 @@ msgstr "Er kan nog niet gestemd worden"
 msgid "Your character is"
 msgstr "Je personage is"
 
+msgid "Your registration"
+msgstr "Je inschrijving"
+
 msgid "already delivered"
 msgstr "reeds geleverd"
 
@@ -3813,6 +3822,9 @@ msgstr "Toegestane waarden zijn"
 
 msgid "Approved character"
 msgstr "Goedgekeurd karakter"
+
+msgid "Assigned character"
+msgstr "Karakter toegewezen"
 
 msgid "Available versions"
 msgstr "Beschikbare versies"
@@ -3877,6 +3889,9 @@ msgstr "Niet meer actief"
 msgid "Patron and Reduced"
 msgstr "Beschermheer en Verminderd"
 
+msgid "Pay membership fee"
+msgstr "Lidmaatschapsbijdrage betalen"
+
 msgid "Pay the annual fee"
 msgstr "Betaal de jaarlijkse bijdrage"
 
@@ -3885,9 +3900,6 @@ msgstr "Betalingsverwerking"
 
 msgid "Perform extraction"
 msgstr "Extractie uitvoeren"
-
-msgid "Preferences saved!"
-msgstr "Voorkeuren opgeslagen!"
 
 msgid "Previewing version"
 msgstr "Voorbeeldversie"
@@ -3915,6 +3927,9 @@ msgstr "Alle leden beoordelen"
 
 msgid "Set up quest types"
 msgstr "Zoektochttypes instellen"
+
+msgid "The membership fee"
+msgstr "De contributie"
 
 msgid "The trash is empty"
 msgstr "De prullenbak is leeg"
@@ -3975,9 +3990,6 @@ msgstr "Activering voltooid"
 
 msgid "Are you really sure"
 msgstr "Weet je het echt zeker"
-
-msgid "Assigned character!"
-msgstr "Karakter toegewezen!"
 
 msgid "Cancel registration"
 msgstr "Registratie annuleren"
@@ -4048,6 +4060,9 @@ msgstr "Niet geïnteresseerd"
 msgid "List of other users"
 msgstr "Lijst van andere gebruikers"
 
+msgid "Mail added to queue"
+msgstr "Mail toegevoegd aan wachtrij"
+
 msgid "Manage url shortner"
 msgstr "Beheer url shortner"
 
@@ -4108,6 +4123,9 @@ msgstr "Verwijderen uit factie"
 msgid "Results not present"
 msgstr "Resultaten niet aanwezig"
 
+msgid "Sign up as a filler"
+msgstr "Meld je aan als vuller"
+
 msgid "Signup cancellation"
 msgstr "Abonnement opzeggen"
 
@@ -4123,8 +4141,15 @@ msgstr "Gebruikersnaam account"
 msgid "Warehouse movements"
 msgstr "Magazijnbewegingen"
 
+#, python-format
+msgid "Welcome to %(name)s"
+msgstr "Welkom bij %(name)s"
+
 msgid "Where it is located"
 msgstr "Waar het zich bevindt"
+
+msgid "Yes, keep me posted"
+msgstr "Ja, hou me op de hoogte"
 
 msgid "Your characters are"
 msgstr "Je personages zijn"
@@ -4161,6 +4186,10 @@ msgstr "Carrousel beschrijving"
 
 msgid "Close the collection"
 msgstr "Sluit de verzameling"
+
+#, python-format
+msgid "Closing on: %(date)s"
+msgstr "Afsluiting op: %(date)s"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Volledig blad (Pdf)"
@@ -4210,9 +4239,6 @@ msgstr "Verleend Terugbetaling"
 msgid "Last membership date"
 msgstr "Laatste lidmaatschapsdatum"
 
-msgid "Mail added to queue!"
-msgstr "Mail toegevoegd aan wachtrij!"
-
 msgid "Make the request now"
 msgstr "Solliciteer nu"
 
@@ -4247,7 +4273,7 @@ msgid "Number of passengers"
 msgstr "Aantal passagiers"
 
 #, python-format
-msgid "Opening at: %(date)s"
+msgid "Opening on: %(date)s"
 msgstr "Opening op: %(date)s"
 
 msgid "Organization inflows"
@@ -4283,8 +4309,14 @@ msgstr "Plot-personage rollen"
 msgid "Preference not valid"
 msgstr "Ongeldige voorkeur"
 
+msgid "Proceed with payment"
+msgstr "Ga verder met betalen"
+
 msgid "Registration history"
 msgstr "Geschiedenis"
+
+msgid "Registration is open"
+msgstr "Inschrijvingen zijn geopend"
 
 msgid "Registration options"
 msgstr "Registratieopties"
@@ -4313,9 +4345,6 @@ msgstr "Tekenstatus instellen"
 msgid "Set up ability types"
 msgstr "Typen vaardigheden instellen"
 
-msgid "Sign up as a filler!"
-msgstr "Meld je aan als vuller!"
-
 msgid "Terms and Conditions"
 msgstr "Algemene voorwaarden"
 
@@ -4331,15 +4360,8 @@ msgstr "De belastingcode komt overeen"
 msgid "Warehouse containers"
 msgstr "Containers voor magazijnen"
 
-#, python-format
-msgid "Welcome to %(name)s!"
-msgstr "Welkom bij %(name)s!"
-
 msgid "What you will unlock"
 msgstr "Wat je zult ontgrendelen"
-
-msgid "Yes, keep me posted!"
-msgstr "Ja, hou me op de hoogte!"
 
 msgid "You are logged in as"
 msgstr "U bent aangemeld als"
@@ -4389,6 +4411,9 @@ msgstr "Collecties geleverd"
 msgid "Complete sheet (Test)"
 msgstr "Volledig blad (Test)"
 
+msgid "Complete your profile"
+msgstr "Maak je profiel compleet"
+
 msgid "Create your character"
 msgstr "Creëer je personage"
 
@@ -4424,6 +4449,9 @@ msgstr "Indien afwezig, geef 0 aan"
 
 msgid "Invalid choice format"
 msgstr "Ongeldig keuzeformaat"
+
+msgid "Join the waiting list"
+msgstr "Meld je aan voor de wachtlijst"
 
 msgid "Manage warehouse tags"
 msgstr "Magazijnlabels beheren"
@@ -4483,9 +4511,6 @@ msgstr "Meld je aan voor het evenement"
 msgid "Registration complete"
 msgstr "Volledige registratie"
 
-msgid "Registration is open!"
-msgstr "Inschrijvingen zijn geopend!"
-
 msgid "Registration not open"
 msgstr "Registratie niet geopend"
 
@@ -4494,6 +4519,9 @@ msgstr "Voorrang bij registratie"
 
 msgid "Registration sections"
 msgstr "Lidmaatschap secties"
+
+msgid "Select your character"
+msgstr "Selecteer je personage"
 
 msgid "Submit a new question"
 msgstr "Een nieuwe vraag indienen"
@@ -4524,6 +4552,9 @@ msgstr "Verificatie betalingen"
 
 msgid "Warehouse assignments"
 msgstr "Magazijn opdrachten"
+
+msgid "Workshop already done"
+msgstr "Workshop al geslaagd"
 
 msgid "You have already paid"
 msgstr "U hebt al betaald"
@@ -4600,9 +4631,6 @@ msgstr "Hoe kunnen we contact met u opnemen"
 msgid "Invalid request method"
 msgstr "Ongeldige aanvraagmethode"
 
-msgid "Join the waiting list!"
-msgstr "Meld je aan voor de wachtlijst!"
-
 msgid "Link to participate in"
 msgstr "Links om deel te nemen"
 
@@ -4670,9 +4698,6 @@ msgstr "Vergoeding goedgekeurd"
 msgid "Role approval %(role)s"
 msgstr "Rolgoedkeuring %(role)s"
 
-msgid "Select your character!"
-msgstr "Selecteer je personage!"
-
 msgid "Set up payment methods"
 msgstr "Betaalmethoden instellen"
 
@@ -4702,9 +4727,6 @@ msgstr "Onbekende fout bij uploaden"
 
 msgid "Welcome to LarpManager"
 msgstr "Welkom bij LarpManager"
-
-msgid "Workshop already done!"
-msgstr "Workshop al geslaagd!"
 
 msgid "give them this address"
 msgstr "geef ze dit adres"
@@ -4792,6 +4814,9 @@ msgstr "Minimum aantal stemmen"
 msgid "Move registration event"
 msgstr "Verhuis registratie evenement"
 
+msgid "New delegate user added"
+msgstr "Nieuwe gedelegeerde gebruiker toegevoegd"
+
 msgid "No characters available"
 msgstr "Geen tekens beschikbaar"
 
@@ -4821,9 +4846,6 @@ msgstr "Verwijderde objecten herstellen"
 
 msgid "Registration conditions"
 msgstr "Voorwaarden"
-
-msgid "Registrations not open!"
-msgstr "De inschrijving is nog niet geopend!"
 
 msgid "Reminder membership fee"
 msgstr "Herinnering lidmaatschapsgeld"
@@ -4863,6 +4885,9 @@ msgstr "Bedrag voor de operatie"
 
 msgid "Association Translations"
 msgstr "Vereniging Vertalingen"
+
+msgid "Awaiting member approval"
+msgstr "In afwachting van goedkeuring door de leden"
 
 msgid "Cancel your registration"
 msgstr "Afmelden"
@@ -4920,9 +4945,6 @@ msgstr "Beheert de kosten van het evenement"
 
 msgid "Membership approval date"
 msgstr "Datum goedkeuring lidmaatschap"
-
-msgid "New delegate user added!"
-msgstr "Nieuwe gedelegeerde gebruiker toegevoegd!"
 
 msgid "New organization created"
 msgstr "Nieuwe vereniging aangemaakt"
@@ -5116,6 +5138,9 @@ msgstr "Dit zijn onze evenementen uit het verleden"
 msgid "Two-Factor Authentication"
 msgstr "Authenticatie met twee factoren"
 
+msgid "Update your personal data"
+msgstr "Werk je persoonlijke gegevens bij"
+
 msgid "Upload of photo and video"
 msgstr "Foto's en video's uploaden"
 
@@ -5127,6 +5152,9 @@ msgstr "Gebruik van activa van derden"
 
 msgid "We're sorry to see you go"
 msgstr "We vinden het jammer dat je weggaat"
+
+msgid "You can't access this way"
+msgstr "Zo kun je niet inloggen"
 
 msgid "choice value not provided"
 msgstr "keuzewaarde niet opgegeven"
@@ -5186,6 +5214,9 @@ msgstr "Nu kun je instromen maken"
 msgid "Option no longer available"
 msgstr "Optie niet langer beschikbaar"
 
+msgid "Pre-registration cancelled"
+msgstr "Voorinschrijving geannuleerd"
+
 msgid "Pre-registration confirmed"
 msgstr "Voorinschrijving bevestigd"
 
@@ -5224,9 +5255,6 @@ msgstr "Wat zou je willen doen?"
 
 msgid "Wrong number of characters"
 msgstr "Verkeerd aantal tekens"
-
-msgid "You can't access this way!"
-msgstr "Zo kun je niet inloggen!"
 
 msgid "You have use a friend code"
 msgstr "Je hebt een vriendencode gebruikt"
@@ -5309,12 +5337,6 @@ msgstr "Er zijn geen fouten in de fiscale code gevonden"
 
 msgid "Now you can create outflows"
 msgstr "Nu kun je uitstromen maken"
-
-msgid "Please fill in your profile"
-msgstr "Vul je profiel in"
-
-msgid "Pre-registration cancelled!"
-msgstr "Voorinschrijving geannuleerd!"
 
 msgid "Pre-registration not found."
 msgstr "Voorinschrijving niet gevonden."
@@ -5491,6 +5513,9 @@ msgstr "Aantal te trekken tickets"
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Werking: OPTELLEN, SUB, MUL, DIV"
 
+msgid "Payment awaiting verification"
+msgstr "Betaling wacht op verificatie"
+
 #, python-format
 msgid "Personal code: <b>%(cod)s</b>"
 msgstr "Persoonlijke code: <b>%(cod)s</b>"
@@ -5554,6 +5579,9 @@ msgstr "Niet omgezette voorregistraties"
 #, python-format
 msgid "Unknown choice type: %(type)s"
 msgstr "Type keuze onbekend: %(type)s"
+
+msgid "Upload membership application"
+msgstr "Lidmaatschapsaanvraag uploaden"
 
 msgid "You're not allowed to sign up"
 msgstr "Je mag je niet aanmelden"
@@ -5645,6 +5673,9 @@ msgstr "Bestanden rechtstreeks uploaden en hosten"
 
 msgid "We are processing your payment"
 msgstr "We verwerken je betaling"
+
+msgid "You have completed the payment"
+msgstr "Je hebt de storting voltooid"
 
 msgid "Your friend code has been used"
 msgstr "Uw vriendencode is gebruikt"
@@ -5772,8 +5803,8 @@ msgstr "Bekijk je privégesprekken"
 msgid "Where the event will take place"
 msgstr "Waar het evenement plaatsvindt"
 
-msgid "You have completed the payment!"
-msgstr "Je hebt de storting voltooid!"
+msgid "You need to define the end date"
+msgstr "Je moet de einddatum definiëren"
 
 msgid "Your question has been answered"
 msgstr "Je vraag is beantwoord"
@@ -5899,9 +5930,6 @@ msgstr "We proberen zo goed mogelijk te helpen"
 msgid "Whether this token has been used"
 msgstr "Of dit token is gebruikt"
 
-msgid "You need to define the end date!"
-msgstr "Je moet de einddatum definiëren!"
-
 msgid "(Optional) The cost of the ticket"
 msgstr "(Optioneel) De kosten van het ticket"
 
@@ -5993,8 +6021,18 @@ msgstr "Aantal extra deelnemers"
 msgid "Publish to ILDB: <b>%(list)s</b>."
 msgstr "Publiceren naar ILDB: <b>%(list)s</b>."
 
+#, python-format
+msgid "Registration updated to %(event)s"
+msgstr "Registratie bijgewerkt tot %(event)s"
+
 msgid "Set the registration opening date"
 msgstr "Stel de openingsdatum van de registratie in"
+
+msgid "The collection has been activated"
+msgstr "De collectie is geactiveerd"
+
+msgid "The collection has been delivered"
+msgstr "De collectie is afgeleverd"
 
 msgid "The event this content belongs to"
 msgstr "Het evenement waartoe deze inhoud behoort"
@@ -6010,6 +6048,9 @@ msgstr "Handmatig goedgekeurde betalingen verifiëren"
 
 msgid "You don't have any characters yet"
 msgstr "Je hebt nog geen personages"
+
+msgid "You need to define the start date"
+msgstr "Je moet de begindatum bepalen"
 
 #, python-format
 msgid "you are now viewing version %(v)s"
@@ -6084,10 +6125,6 @@ msgid "Registration updated for %(event)s"
 msgstr "Bijgewerkte invoer voor %(event)s"
 
 #, python-format
-msgid "Registration updated to %(event)s!"
-msgstr "Registratie bijgewerkt tot %(event)s!"
-
-#, python-format
 msgid "Registrations opening at: %(date)s"
 msgstr "Registraties openen op: %(date)s"
 
@@ -6106,12 +6143,6 @@ msgstr "De externe link voor registratie instellen"
 msgid "Set up the membership request text"
 msgstr "De tekst voor de lidmaatschapsaanvraag instellen"
 
-msgid "The collection has been activated!"
-msgstr "De collectie is geactiveerd!"
-
-msgid "The collection has been delivered!"
-msgstr "De collectie is afgeleverd!"
-
 msgid "The form is saved every 30 seconds"
 msgstr "Het formulier wordt elke 30 seconden opgeslagen"
 
@@ -6126,9 +6157,6 @@ msgstr "Gegevens rechtstreeks vanuit een CSV-bestand uploaden"
 
 msgid "You are about to make a payment of"
 msgstr "Je staat op het punt een betaling te doen van"
-
-msgid "You need to define the start date!"
-msgstr "Je moet de begindatum bepalen!"
 
 msgid "Your organization has been created"
 msgstr "Je organisatie is opgericht"
@@ -6202,6 +6230,13 @@ msgstr "Optionele beschrijving van de inhoud"
 msgid "Payments pending delegated accounts"
 msgstr "Betalingen in afwachting van gedelegeerde rekeningen"
 
+msgid "Registration completed successfully"
+msgstr "Registratie succesvol afgerond"
+
+#, python-format
+msgid "Registration confirmed at %(event)s"
+msgstr "Registratie bevestigd bij %(event)s"
+
 msgid "Registrations status for this event"
 msgstr "Registratiestatus voor dit evenement"
 
@@ -6255,6 +6290,9 @@ msgstr "Bevestiging van registratieaanvraag"
 
 msgid "Create a character by clicking 'New'"
 msgstr "Maak een personage door op 'Nieuw' te klikken"
+
+msgid "End date cannot be before start date"
+msgstr "Einddatum kan niet voor startdatum liggen"
 
 msgid "Error processing payment, contact us"
 msgstr "Fout bij het verwerken van betaling, neem contact met ons op"
@@ -6323,9 +6361,6 @@ msgstr "Nu kun je de ontvangstgegevens instellen"
 msgid "Only really important communications"
 msgstr "Alleen echt belangrijke communicatie"
 
-msgid "Payment awaiting manual verification"
-msgstr "Betaling in afwachting van handmatige verificatie"
-
 #, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Questtypes zonder quests: %(list)s"
@@ -6336,13 +6371,6 @@ msgstr "Regenereren (herschept alle pdf: langzaam)"
 #, python-format
 msgid "Registration cancelled for %(event)s"
 msgstr "Uitschrijven op %(event)s"
-
-msgid "Registration completed successfully!"
-msgstr "Registratie succesvol afgerond!"
-
-#, python-format
-msgid "Registration confirmed at %(event)s!"
-msgstr "Registratie bevestigd bij %(event)s!"
 
 #, python-format
 msgid "Role approval %(role)s per %(event)s"
@@ -6395,9 +6423,6 @@ msgstr "Controleer de geldigheid van de fiscale code"
 
 msgid "Edit the basic settings of this event"
 msgstr "Pas de basisinstellingen van dit evenement aan"
-
-msgid "End date cannot be before start date!"
-msgstr "Einddatum kan niet voor startdatum liggen!"
 
 msgid "Hide participants without a character"
 msgstr "Deelnemers zonder teken verbergen"
@@ -6684,6 +6709,10 @@ msgstr "Nu kunt u de problemen van het evenement bekijken"
 msgid "Now you can se the special page options"
 msgstr "Nu kun je de speciale pagina-opties zien"
 
+#, python-format
+msgid "Payment overdue: %(amount)s%(currency)s"
+msgstr "Achterstallige betaling: %(amount)s%(currency)s"
+
 msgid "Perform checks on warehouse assignments"
 msgstr "Controles uitvoeren op magazijnopdrachten"
 
@@ -6726,6 +6755,9 @@ msgstr "Gebruik de knop hierboven om een container toe te voegen"
 
 msgid "Use the button above to add a new badge"
 msgstr "Gebruik de knop hierboven om een nieuwe badge toe te voegen"
+
+msgid "Well done, you've completed all modules"
+msgstr "Goed gedaan, je hebt alle modules gehaald"
 
 msgid "You are logged in with an email address"
 msgstr "U bent aangemeld met een e-mailadres"
@@ -6823,9 +6855,6 @@ msgstr "Waarde moet groter dan of gelijk aan 0 zijn"
 msgid "View your payment details for this event"
 msgstr "Bekijk je betalingsgegevens voor dit evenement"
 
-msgid "Well done, you've completed all modules!"
-msgstr "Goed gedaan, je hebt alle modules gehaald!"
-
 msgid "Who takes it upon themselves to solve it"
 msgstr "Wie neemt de leiding om het op te lossen"
 
@@ -6880,9 +6909,6 @@ msgstr "Browser user agent string van de toegang"
 
 msgid "Choice locked, click to make it available"
 msgstr "Keuze vergrendeld, klik om deze beschikbaar te maken"
-
-msgid "Copy this code and share it with friends!"
-msgstr "Kopieer deze code en deel hem met vrienden!"
 
 msgid "Describe exactly at which point it occurs"
 msgstr "Beschrijf precies waar het zich voordoet"
@@ -6960,6 +6986,9 @@ msgstr "U hebt de maximale tekstlengte overschreden"
 
 msgid "copy this link and give it to your friend"
 msgstr "kopieer deze link en geef hem aan je vriend(in)"
+
+msgid "no further action is needed at the moment"
+msgstr "er hoeven op dit moment geen verdere stappen te worden ondernomen"
 
 msgid "A new version of the platform is available"
 msgstr "Er is een nieuwe versie van het platform beschikbaar"
@@ -7093,6 +7122,9 @@ msgstr "Waarschuwing! Andere gebruikers bewerken dit item"
 msgid "Your first name as you prefer to be called"
 msgstr "Je voornaam zoals je liever genoemd wilt worden"
 
+msgid "Your gifted registration has been redeemed"
+msgstr "Je geschonken registratie is verzilverd"
+
 msgid "main grouping / affiliation for characters"
 msgstr "hoofdgroepering / affiliatie voor personages"
 
@@ -7161,6 +7193,9 @@ msgstr "Nu kun je mijlpalen voor het evenement aanmaken"
 msgid "Please review and submit it for publication"
 msgstr "Bekijk het en stuur het in voor publicatie"
 
+msgid "Remember to put the prefix at the beginning"
+msgstr "Vergeet niet het voorvoegsel aan het begin te zetten"
+
 msgid "Text displayed alongside the carousel image"
 msgstr "Tekst die naast de carrouselafbeelding wordt weergegeven"
 
@@ -7172,9 +7207,6 @@ msgstr "Deze toegangslink is ongeldig of verlopen."
 
 msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr "Niet-herkende bestanden in ZIP (worden overgeslagen)"
-
-msgid "Update your personal data and profile photo"
-msgstr "Werk je persoonlijke gegevens en profielfoto bij"
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Upload een PDF-bestand of afbeelding (JPG, PNG, enz.)"
@@ -7188,9 +7220,6 @@ msgstr "Je bent uitgenodigd voor de rol: %(role)s"
 
 msgid "You will no longer receive messages from us"
 msgstr "Je zult niet langer berichten van ons ontvangen"
-
-msgid "Your gifted registration has been redeemed!"
-msgstr "Je geschonken registratie is verzilverd!"
 
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Optioneel) Maximaal aantal beschikbare plaatsen"
@@ -7266,9 +7295,6 @@ msgstr "Nu kun je de geheime link voor registratie instellen"
 
 msgid "Oops! You gave one or more incorrect answers"
 msgstr "Oeps! Je hebt een of meer foute antwoorden gegeven"
-
-msgid "Remember to put the prefix at the beginning!"
-msgstr "Vergeet niet het voorvoegsel aan het begin te zetten!"
 
 msgid "Select a character to add a new relationship"
 msgstr "Selecteer een personage om een nieuwe relatie toe te voegen"
@@ -7365,9 +7391,6 @@ msgstr "Selecteer het evenement waarvoor je je wilt voorregistreren"
 msgid "The user has been assigned the specified role"
 msgstr "De gebruiker heeft de opgegeven rol toegewezen gekregen"
 
-msgid "Upload your membership application to proceed"
-msgstr "Upload je lidmaatschapsaanvraag om verder te gaan"
-
 msgid "Use the button above to add a volunteer entry"
 msgstr "Gebruik de knop hierboven om een vrijwilliger toe te voegen"
 
@@ -7460,6 +7483,9 @@ msgstr "Gebruik de knop hierboven om je eerste hand-out toe te voegen"
 msgid "Use the button above to assign warehouse items"
 msgstr "Gebruik de knop hierboven om magazijnartikelen toe te wijzen"
 
+msgid "User already has a registration for this event"
+msgstr "Gebruiker heeft al een registratie voor dit evenement"
+
 msgid "View the list of events you are registered for"
 msgstr "Bekijk de lijst met evenementen waarvoor je je hebt aangemeld"
 
@@ -7544,9 +7570,6 @@ msgstr "Gebruik de knop hierboven om de eerste mijlpaal toe te voegen"
 msgid "Use the button above to create the first system"
 msgstr "Gebruik de knop hierboven om het eerste systeem aan te maken"
 
-msgid "User already has a registration for this event!"
-msgstr "Gebruiker heeft al een registratie voor dit evenement!"
-
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
 
@@ -7569,12 +7592,12 @@ msgstr "Alle verzoeken van leden zijn beantwoord of afgesloten"
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Weet je het zeker? De items kunnen misschien niet worden teruggehaald"
 
-msgid "Awaiting member approval to proceed with payment"
-msgstr "In afwachting van goedkeuring door leden om door te gaan met betaling"
-
 msgid "Complete all steps above to unlock advanced mode"
 msgstr ""
 "Voltooi alle bovenstaande stappen om de geavanceerde modus te ontgrendelen"
+
+msgid "Create the character you will play in this event"
+msgstr "Maak het personage waarmee je aan dit evenement gaat meedoen"
 
 msgid "Describe exactly which participants are involved"
 msgstr "Beschrijf precies welke deelnemers betrokken zijn"
@@ -7607,6 +7630,9 @@ msgstr "Uitschrijven op %(event)s door %(user)s"
 #, python-format
 msgid "Registration questions without options: %(list)s"
 msgstr "Registratievragen zonder opties: %(list)s"
+
+msgid "Registrations for this event have not opened yet"
+msgstr "De inschrijvingen voor dit evenement zijn nog niet geopend"
 
 msgid "Review participants' safety-related informations"
 msgstr "Veiligheidsgerelateerde informatie van deelnemers beoordelen"
@@ -7689,15 +7715,11 @@ msgstr "Nu kun je de geldigheidscontrole van de fiscale code uitvoeren"
 msgid "Now you can set the external mail server settings"
 msgstr "Nu kunt u de instellingen voor de externe mailserver instellen"
 
-msgid "Pay the annual membership fee to attend the event"
-msgstr ""
-"Betaal de jaarlijkse lidmaatschapsbijdrage om het evenement bij te wonen"
-
-msgid "Proceed with payment to confirm your registration"
-msgstr "Ga verder met betalen om je registratie te bevestigen"
-
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Grondstoffen, verbruiksgoederen en goederen"
+
+msgid "Registrations for this event are currently closed"
+msgstr "De inschrijvingen voor dit evenement zijn momenteel gesloten"
 
 #, python-format
 msgid "Reminder payment of membership fees for %(event)s"
@@ -7869,6 +7891,9 @@ msgstr "Geselecteerd evenement behoort niet tot deze organisatie"
 msgid "Short guides to help you learn how the system works"
 msgstr "Korte gidsen om te leren hoe het systeem werkt"
 
+msgid "Your registration for this event has been confirmed"
+msgstr "Je aanmelding voor dit evenement is bevestigd"
+
 msgid "set the name, price, and availability, then save it"
 msgstr "stel de naam, prijs en beschikbaarheid in en sla het op"
 
@@ -7964,6 +7989,10 @@ msgstr ""
 
 msgid "You have already sent a payment pending verification"
 msgstr "Je hebt al een betaling verzonden in afwachting van verificatie"
+
+msgid "You have granted data sharing with this organisation"
+msgstr ""
+"Je hebt toestemming gegeven voor het delen van gegevens met deze organisatie"
 
 msgid "You will have our eternal thanks for believing in us"
 msgstr "We zijn je eeuwig dankbaar dat je in ons gelooft"
@@ -8061,11 +8090,6 @@ msgstr "Reeds vastgelegde magazijnhoeveelheden voor dit evenement"
 msgid "You have been gifted a registration to this event, by"
 msgstr "Je hebt toegang gekregen tot dit evenement, door"
 
-msgid "You have granted data sharing with this organisation!"
-msgstr ""
-"Je hebt toestemming gegeven voor het delen van gegevens met deze "
-"organisatie!"
-
 msgid "fill in the name, dates, and basic details, then save"
 msgstr "vul de naam, data en basisgegevens in en sla op"
 
@@ -8162,6 +8186,9 @@ msgstr "Je hebt het minimumaantal voorkeuren niet bereikt om aan te geven"
 msgid "You must signed up in order to select your preferences"
 msgstr "Je moet geregistreerd zijn om je voorkeuren te kunnen selecteren"
 
+msgid "Your membership application was successfully submitted"
+msgstr "Je lidmaatschapsaanvraag is succesvol ingediend"
+
 msgid "Your tax code has a problem that we ask you to correct"
 msgstr "Je belastingcode heeft een probleem dat we je vragen te corrigeren"
 
@@ -8190,6 +8217,10 @@ msgstr "De laad- en inzetstatus van magazijnitems beheren"
 
 msgid "Manage payments performed by participants on all events"
 msgstr "Beheer betalingen door deelnemers aan alle evenementen"
+
+msgid "Registrations are open: sign up now to secure your spot"
+msgstr ""
+"De inschrijvingen zijn geopend: schrijf je nu in om je plek te reserveren"
 
 msgid "Review the users that are missing the event's deadlines"
 msgstr "Bekijk de gebruikers die de deadlines van het evenement missen"
@@ -8227,9 +8258,6 @@ msgstr ""
 
 msgid "When you want to close the collection, follow this link"
 msgstr "Als je de verzameling wilt sluiten, volg dan deze link"
-
-msgid "Your membership application was successfully submitted!"
-msgstr "Je lidmaatschapsaanvraag is succesvol ingediend!"
 
 msgid "A member must be selected to mark the collection as paid"
 msgstr ""
@@ -8275,6 +8303,10 @@ msgstr ""
 msgid "Manage which organizations can access your personal data"
 msgstr "Bepaal welke organisaties toegang hebben tot je persoonsgegevens"
 
+#, python-format
+msgid "Payment due: %(amount)s%(currency)s within %(days)d days"
+msgstr "Betalingstermijn: %(amount)s%(currency)s binnen %(days)d dagen"
+
 msgid "Please check the address again, especially its beginning"
 msgstr "Controleer het adres nogmaals, vooral het begin"
 
@@ -8297,6 +8329,9 @@ msgstr ""
 
 msgid "Warning: Neither tokens nor credits features are enabled"
 msgstr "Waarschuwing: De functies tokens en credits zijn niet ingeschakeld"
+
+msgid "You cannot redeem a membership, you are already a member"
+msgstr "Je kunt geen lidmaatschap inwisselen, je bent al lid"
 
 msgid "You must select at least one ticket for this installment"
 msgstr "Je moet minstens één ticket voor deze aflevering selecteren"
@@ -8355,9 +8390,6 @@ msgstr ""
 msgid "Unique code used to generate the secret registration link"
 msgstr ""
 "Unieke code die wordt gebruikt om de geheime registratielink te genereren"
-
-msgid "You cannot redeem a membership, you are already a member!"
-msgstr "Je kunt geen lidmaatschap inwisselen, je bent al lid!"
 
 #, python-format
 msgid "Your event '%(event_name)s' has been successfully created"
@@ -8538,6 +8570,9 @@ msgstr ""
 
 msgid "give it a name and fill in the character details, then save"
 msgstr "geef het een naam en vul de karaktergegevens in, sla dan op"
+
+msgid "is still to be paid, and will be added to your next payment"
+msgstr "moet nog worden betaald en wordt bij je volgende betaling opgeteld"
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
@@ -8727,6 +8762,12 @@ msgstr ""
 "Bekijk de volledige inhoud van een gearchiveerde e-mail die door het systeem"
 " is verzonden"
 
+msgid "You must complete payment of membership dues in order to vote"
+msgstr "Je moet je lidmaatschapsgeld betalen om te kunnen stemmen"
+
+msgid "Your request has been sent, we will reply as soon as possible"
+msgstr "Je verzoek is verzonden, we zullen zo snel mogelijk antwoorden"
+
 msgid "for no relationship, only to display the other character name"
 msgstr "voor geen relatie, alleen om de andere karakternaam weer te geven"
 
@@ -8831,12 +8872,6 @@ msgstr ""
 
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Je bent uitgeschreven voor de nieuwsbrief van deze organisatie"
-
-msgid "You must complete payment of membership dues in order to vote!"
-msgstr "Je moet je lidmaatschapsgeld betalen om te kunnen stemmen!"
-
-msgid "Your request has been sent, we will reply as soon as possible!"
-msgstr "Je verzoek is verzonden, we zullen zo snel mogelijk antwoorden!"
 
 msgid "All payments have been verified or none have been submitted yet"
 msgstr ""
@@ -9065,6 +9100,11 @@ msgstr "Nu kunt u de dieetinformatie bekijken die deelnemers hebben ingediend"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Vul de gelegenheid in waarvoor je de donatie wilt doen"
+
+msgid "Primary spots are sold out, but you can still sign up as a filler"
+msgstr ""
+"De reguliere plaatsen zijn uitverkocht, maar je kunt je nog steeds aanmelden"
+" als invaller"
 
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
@@ -9328,6 +9368,9 @@ msgstr ""
 msgid "You must create at least one quest type before you can create quests"
 msgstr "Je moet minstens één questtype maken voordat je quests kunt maken"
 
+msgid "Your payment has been submitted, and is awaiting manual verification"
+msgstr "Je betaling is verzonden en wordt nu handmatig gecontroleerd"
+
 msgid "Your user does not have the required permissions to access this page"
 msgstr "Uw gebruiker heeft niet de vereiste rechten om deze pagina te openen"
 
@@ -9501,6 +9544,11 @@ msgstr ""
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Je kunt de volgende velden gebruiken, ze worden automatisch ingevuld"
 
+msgid "Your payment has been received and is being verified by the organizers"
+msgstr ""
+"Je betaling is ontvangen en wordt momenteel door de organisatoren "
+"gecontroleerd"
+
 msgid "for example, ask for dietary requirements or emergency contact details"
 msgstr ""
 "bijvoorbeeld vragen naar dieetwensen of contactgegevens voor noodgevallen"
@@ -9538,6 +9586,11 @@ msgid ""
 msgstr ""
 "Vraag deze gegevens op bij de bank of gelijkwaardig, om de gemarkeerde "
 "boekingen te verifiëren"
+
+msgid ""
+"If you are a candidate for the Board, please write an introduction here"
+msgstr ""
+"Als je kandidaat bent voor het bestuur, schrijf dan hier een introductie"
 
 msgid ""
 "List of users who have not registered for a future session of the event"
@@ -9674,11 +9727,6 @@ msgid ""
 msgstr ""
 "Indien aangevinkt: het systeem stuurt zelfs herinneringen op dagen waarop "
 "feestdagen vallen"
-
-msgid ""
-"If you are a candidate for the Board, please write an introduction here!"
-msgstr ""
-"Als je kandidaat bent voor het bestuur, schrijf dan hier een introductie!"
 
 msgid ""
 "Manage the selectable options available for a registration form question"
@@ -10117,6 +10165,11 @@ msgstr ""
 "evenement hebt ingediend"
 
 msgid ""
+"Your registration is provisional: complete the payment to confirm your spot"
+msgstr ""
+"Je inschrijving is voorlopig: rond de betaling af om je plek te bevestigen"
+
+msgid ""
 "only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "alleen kleine letters en cijfers toegestaan, geen spaties of speciale tekens"
@@ -10281,6 +10334,12 @@ msgstr ""
 "misschien is het een van deze"
 
 msgid ""
+"Write your question, request or concern here. We will be happy to answer you"
+msgstr ""
+"Schrijf hier je vraag, verzoek of twijfel. We zullen je met plezier "
+"antwoorden"
+
+msgid ""
 "You cannot work on it at the same time: the work of one of you would be lost"
 msgstr ""
 "Je kunt er niet tegelijkertijd aan werken: het werk van een van jullie zou "
@@ -10297,6 +10356,11 @@ msgid ""
 msgstr ""
 "Je gegevens worden opgeslagen in het systeem, dat door verschillende "
 "verenigingen wordt gebruikt"
+
+msgid ""
+"Your registration is provisional, and will be confirmed once payment is made"
+msgstr ""
+"Je inschrijving is voorlopig en wordt bevestigd zodra de betaling is voldaan"
 
 msgid ""
 "upload any size, it will be automatically optimized; square images work best"
@@ -10358,6 +10422,12 @@ msgid ""
 msgstr ""
 "Maakt veld 'titel' mogelijk, een korte (2-3 woorden) tekst toegevoegd aan de"
 " naam van het personage"
+
+msgid ""
+"Fill in the missing information in your profile to complete your "
+"registration"
+msgstr ""
+"Vul de ontbrekende gegevens in je profiel in om je registratie af te ronden"
 
 msgid ""
 "If checked, it allows participants to customise the names of their "
@@ -10428,13 +10498,6 @@ msgid ""
 msgstr ""
 "Gebruik de knop hierboven om een rol aan te maken en rechten toe te wijzen "
 "aan medewerkers"
-
-msgid ""
-"Write your question, request or concern here. We will be happy to answer "
-"you!"
-msgstr ""
-"Schrijf hier je vraag, verzoek of twijfel. We zullen je met plezier "
-"antwoorden!"
 
 msgid ""
 "You can check and edit the list of organizations that can access your data "
@@ -10606,6 +10669,13 @@ msgid ""
 msgstr ""
 "Optioneel - Bedrag toegevoegd aan de registratiekosten indien geselecteerd "
 "(0 = geen extra kosten)"
+
+msgid ""
+"Pre-registrations are open: pre-register to be notified when registrations "
+"open"
+msgstr ""
+"De voorinschrijvingen zijn geopend: schrijf je vooraf in om een bericht te "
+"krijgen zodra de inschrijvingen van start gaan"
 
 msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
@@ -11234,6 +11304,13 @@ msgstr ""
 "Klik op de link die je per e-mail is toegestuurd om je account te activeren"
 
 msgid ""
+"Your pre-registration has been confirmed: you will be notified when "
+"registrations open"
+msgstr ""
+"Je voorinschrijving is bevestigd: je krijgt een bericht zodra de "
+"inschrijvingen van start gaan"
+
+msgid ""
 "non-registered users will be redirected here, while registered users get "
 "normal access"
 msgstr ""
@@ -11381,6 +11458,15 @@ msgid ""
 msgstr ""
 "Beheer beveiligde video- en audiocontent die voor dit evenement wordt "
 "beschermd door eenmalige toegangstokens"
+
+#, python-format
+msgid ""
+"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
+"attend this event"
+msgstr ""
+"Houd er ook rekening mee dat betaling van de jaarlijkse "
+"lidmaatschapsbijdrage (%(amount)s%(currency)s) vereist is om deel te nemen "
+"aan evenementen %(year)d"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -11551,6 +11637,13 @@ msgstr ""
 "SSO-authenticatie met de externe applicatie"
 
 msgid ""
+"The event is sold out, but you can join the waiting list to be notified if a"
+" spot frees up"
+msgstr ""
+"Het evenement is uitverkocht, maar je kunt je op de wachtlijst laten zetten "
+"om een bericht te krijgen als er een plek vrijkomt"
+
+msgid ""
 "Track which registered participants have completed all required workshops in"
 " the past year"
 msgstr ""
@@ -11641,6 +11734,14 @@ msgid ""
 msgstr ""
 "Een maatstaf voor de mate waarin eerdere inschrijvers worden bevoordeeld "
 "(0=standaard uitgeschakeld, 1=normaal, 10=sterk)"
+
+#, python-format
+msgid ""
+"A payment of %(amount)s%(currency)s is due within %(days)d days to confirm "
+"your registration"
+msgstr ""
+"Je moet binnen %(days)d dagen een bedrag van %(amount)s%(currency)s betalen "
+"om je inschrijving te bevestigen"
 
 msgid ""
 "Allows you to generate discount codes that participants can use to reduce "
@@ -11918,6 +12019,13 @@ msgstr ""
 "toevoegen na een bepaalde deadline"
 
 msgid ""
+"Fill in and upload your membership application, needed before you can pay "
+"for your registration"
+msgstr ""
+"Vul je lidmaatschapsaanvraag in en upload deze; dit is nodig voordat je je "
+"inschrijving kunt betalen"
+
+msgid ""
 "For each character added, a specific field will be available to add "
 "additional plot information"
 msgstr ""
@@ -11938,6 +12046,13 @@ msgid ""
 msgstr ""
 "Voor elk van hen ontvang je de volgende korting op de registratie voor je "
 "lidmaatschapsevenement"
+
+msgid ""
+"Optional: upload a photo of yourself associated with your character "
+"specifically for this event"
+msgstr ""
+"Optioneel: upload een foto van jezelf in combinatie met je personage "
+"speciaal voor dit evenement"
 
 #, python-format
 msgid ""
@@ -12031,13 +12146,6 @@ msgid ""
 msgstr ""
 "Eenmaal gedownload moet je het afdrukken, ondertekenen, een digitale scan "
 "maken en uploaden naar onderstaand formulier"
-
-msgid ""
-"Optional: upload a photo of yourself associated with your character "
-"specifically for this event!"
-msgstr ""
-"Optioneel: upload een foto van jezelf in combinatie met je personage "
-"speciaal voor dit evenement!"
 
 msgid ""
 "Review the quantity changes that will be applied to warehouse stock before "
@@ -12675,6 +12783,14 @@ msgstr ""
 "Je vindt alle informatie die je nodig hebt om de overschrijving te voltooien"
 " <a href='%(url)s'>op de betaalpagina</a>"
 
+#, python-format
+msgid ""
+"Your registration is provisional, and will be confirmed once the payment of "
+"%(amount)s%(currency)s is made"
+msgstr ""
+"Je inschrijving is voorlopig en wordt bevestigd zodra de betaling van "
+"%(amount)s%(currency)s is voldaan"
+
 msgid ""
 "Manage help questions submitted by members: answer open requests or close "
 "those requiring no further action"
@@ -12830,6 +12946,13 @@ msgid ""
 msgstr ""
 "Zet betalingsregelingen op waarbij de ticketprijs in gelijke termijnen wordt"
 " verdeeld, zodat deelnemers deze in de loop van de tijd kunnen betalen"
+
+msgid ""
+"Your membership application is under review by the organization; payment "
+"will be available once it is approved"
+msgstr ""
+"Je lidmaatschapsaanvraag wordt momenteel door de organisatie beoordeeld; "
+"zodra deze is goedgekeurd, kun je betalen"
 
 msgid ""
 "Browse all contributors across the organization and track which competences "
@@ -13090,6 +13213,14 @@ msgstr ""
 "Scan deze QR-code met Google Authenticator, Authy of een andere compatibele "
 "TOTP-app en voer de 6-cijferige code in om te bevestigen"
 
+#, python-format
+msgid ""
+"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
+"for your support, and for believing in us!"
+msgstr ""
+"We bevestigen dat we de donatie van %(amount)d%(currency)s hebben ontvangen."
+" We bedanken je voor je steun en voor je vertrouwen in ons!"
+
 msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
@@ -13125,14 +13256,6 @@ msgid ""
 msgstr ""
 "Totaal van alle gemaakte kosten voor het evenement, zowel persoonlijk als "
 "organisatorisch, inclusief eventuele uitgegeven tokens en credits"
-
-#, python-format
-msgid ""
-"We confirm we received the donation of %(amount)d %(currency)s. We thank you"
-" for your support, and for believing in us!"
-msgstr ""
-"We bevestigen dat we de donatie van %(amount)d %(currency)s hebben "
-"ontvangen. Wij danken u voor uw steun en voor uw geloof in ons!"
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "
@@ -13186,7 +13309,7 @@ msgid ""
 "%(currency)s) is required to participate in events."
 msgstr ""
 "Houd er ook rekening mee dat betaling van de jaarlijkse "
-"lidmaatschapsbijdrage (%(amount)d %(currency)s) vereist is om deel te nemen "
+"lidmaatschapsbijdrage (%(amount)d%(currency)s) vereist is om deel te nemen "
 "aan evenementen."
 
 msgid ""
@@ -13269,6 +13392,14 @@ msgid ""
 msgstr ""
 "Geef je aangepaste karakternaam aan (afhankelijk van het evenement kun je de"
 " naam kiezen of de naam aanpassen aan het gekozen genre)"
+
+#, python-format
+msgid ""
+"The payment deadline has passed: settle the outstanding "
+"%(amount)s%(currency)s as soon as possible to keep your registration"
+msgstr ""
+"De betalingstermijn is verstreken: betaal het openstaande "
+"%(amount)s%(currency)s zo snel mogelijk om je inschrijving te behouden"
 
 msgid ""
 "Enables a ticket-like system for issues during the event, where staff can "

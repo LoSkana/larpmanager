@@ -312,7 +312,7 @@ def test_orga_section_form(pw_page: Any) -> None:
 
     # check it is visible
     go_to(page, live_server, "/test/register")
-    sidebar(page, "Registration")
+    sidebar(page, "Your registration")
     expect(page.get_by_role("cell", name="faaaaacc")).to_be_visible()
     expect_normalized(page, page.locator("#register_form"),
                       "ticket (*) standard depends your registration ticket faaaaacc needs preferences")

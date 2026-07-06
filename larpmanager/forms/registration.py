@@ -1039,7 +1039,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
-                msg = _("User already has a registration for this event!")
+                msg = _("User already has a registration for this event") + "!"
                 raise ValidationError(msg)
 
         return form_data

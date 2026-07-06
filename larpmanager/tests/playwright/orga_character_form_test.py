@@ -39,7 +39,7 @@ from larpmanager.tests.utils import (submit_register,
                                      logout,
                                      submit_confirm,
                                      expect_normalized, new_option, submit_option, get_option,
-                                     get_modal_iframe, save_modal, _wait_lm_ready, )
+                                     get_modal_iframe, save_modal, _wait_lm_ready, sidebar, )
 
 pytestmark = pytest.mark.e2e
 
@@ -88,7 +88,7 @@ def test_orga_character_form(pw_page: Any) -> None:
 
     logout(page)
 
-    go_to(page, live_server, "/test/")
+    go_to(page, live_server, "/test/gallery/")
     page.get_by_role("link", name="pinoloooooooooo").click()
     _wait_lm_ready(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test public: public Presentation baba")
@@ -102,7 +102,7 @@ def create_second_char(live_server: Any, page: Any) -> None:
     submit_register(page)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("link", name="Create your character!").click()
+    sidebar(page, "Create your character")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("olivaaaa")
 
@@ -215,7 +215,7 @@ def create_first_char(live_server: Any, page: Any) -> None:
     submit_register(page)
 
     go_to(page, live_server, "/test/register/")
-    page.get_by_role("link", name="Create your character!").click()
+    sidebar(page, "Create your character")
     page.locator("#id_name").click()
     page.locator("#id_name").fill("pinoloooooooooo")
 

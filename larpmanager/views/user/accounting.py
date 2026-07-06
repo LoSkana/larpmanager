@@ -34,7 +34,6 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.gateway import (
     redsys_webhook,
     satispay_webhook,
@@ -83,7 +82,7 @@ from larpmanager.utils.core.common import (
 )
 from larpmanager.utils.core.exceptions import RedirectError, check_association_feature
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.users.registration import _status_payment
+from larpmanager.utils.users.registration import _status_payment, registration_status
 
 logger = logging.getLogger(__name__)
 
@@ -394,6 +393,7 @@ def accounting_registration(request: HttpRequest, registration_uuid: str, method
     context = get_event_context(request, registration.run.get_slug())
     context["show_accounting"] = True
     context["registration"] = registration
+    context["run_status"] = registration_status(context, registration.run, registration.member)
 
     # Load membership status for permission checks
     registration.membership = get_user_membership(registration.member, context["association_id"])
@@ -650,7 +650,7 @@ def accounting_collection(request: HttpRequest) -> HttpResponse:
                 p.save()
 
             # Show success message and redirect to collection management
-            messages.success(request, _("The collection has been activated!"))
+            messages.success(request, _("The collection has been activated") + "!")
             return redirect("accounting_collection_manage", collection_code=p.contribute_code)
     else:
         # Initialize empty form for GET request
@@ -826,7 +826,7 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
             c.save()
 
         # Display success message and redirect to home
-        messages.success(request, _("The collection has been delivered!"))
+        messages.success(request, _("The collection has been delivered") + "!")
         return redirect("home")
 
     # For GET requests, prepare collection items list for display
@@ -989,7 +989,7 @@ def accounting_payed(request: HttpRequest, registration_uuid: str | None = None)
         inv = None
 
     # Set success message for payment completion
-    mes = _("You have completed the payment!")
+    mes = _("You have completed the payment") + "!"
 
     # Redirect to profile check with success message and invoice
     return accounting_profile_check(request, mes, inv)
@@ -1018,7 +1018,7 @@ def accounting_submit(request: HttpRequest, payment_method: str, invoice_uuid: s
     context = get_context(request)
     # Only allow POST requests for security
     if request.method != "POST":
-        messages.error(request, _("You can't access this way!"))
+        messages.error(request, _("You can't access this way") + "!")
         return redirect("accounting")
 
     # Check if receipt is required for manual payments
@@ -1160,7 +1160,6 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     remaining = registration.tot_iscr - registration.tot_payed
 
     register_url = reverse("accounting_registration", kwargs={"registration_uuid": str(registration.uuid)})
-    is_provisional = is_registration_provisional(registration)
 
     payment_invoices_dict = {registration.id: list(invoices)}
     run_status: dict = {}
@@ -1169,7 +1168,6 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
         registration,
         run_status,
         context={"payment_invoices_dict": payment_invoices_dict},
-        is_provisional=is_provisional,
     )
 
     context["invoices"] = invoices

@@ -18,7 +18,10 @@
             </div>
             <hr class="no_v20" />
             {% if run_status %}
-                <div class="reg_status">{% include "elements/reg_status.html" with registration=registration reg_uuid="_main" %}</div>
+                <div class="reg_status no_v22">
+                    {% include "elements/reg_status.html" with registration=registration reg_uuid="_main" %}
+                </div>
+                {% include "elements/reg_status_banner.html" %}
                 <hr class="no_v20" />
             {% endif %}
         {% else %}
@@ -26,7 +29,7 @@
                 <div class="nav main_nav middlebar">
                     <a href="{% url 'home' %}"><i class="fa-solid fa-house"></i> <span class="nav-label">Home</span></a>
                     {% for slug, name in reg_menu %}
-                        <a href="{% url 'gallery' slug %}"><i class="fa-solid fa-calendar-days"></i> <span class="nav-label">{{ name }}</span></a>
+                        <a href="{% url 'event' slug %}"><i class="fa-solid fa-calendar-days"></i> <span class="nav-label">{{ name }}</span></a>
                     {% endfor %}
                     <hr class="main_nav" />
                 </div>
