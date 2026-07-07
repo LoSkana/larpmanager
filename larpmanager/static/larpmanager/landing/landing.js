@@ -95,4 +95,6 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    window._lmReady = true;
+
 });
