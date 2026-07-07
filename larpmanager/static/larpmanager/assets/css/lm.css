@@ -2221,8 +2221,45 @@ header.sec h1 {
 }
 
 .rel-img {
-  width: 100%;
-  max-width: 8em;
+  width: 8em;
+  max-width: 100%;
+}
+
+@media (max-width: 768px) {
+  #player_relationships thead {
+    display: none;
+  }
+
+  #player_relationships,
+  #player_relationships tbody,
+  #player_relationships tr {
+    display: block;
+    width: 100%;
+  }
+
+  #player_relationships tr {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1em;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 0.3em;
+    padding: 0.5em;
+  }
+
+  #player_relationships td {
+    display: block;
+    border: none;
+  }
+
+  #player_relationships tr td:nth-child(1),
+  #player_relationships tr td:nth-child(2) {
+    width: auto;
+  }
+
+  #player_relationships tr td:nth-child(3),
+  #player_relationships tr td:nth-child(4) {
+    width: 100%;
+  }
 }
 
 .vote-profile {
