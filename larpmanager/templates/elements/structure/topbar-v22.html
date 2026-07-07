@@ -38,6 +38,13 @@
                     {% endif %}
                     <span>{{ association.name }}</span>
                 </a>
+                {% if run and run.get_slug not in visible_runs_slugs %}
+                    <a class="tv22-pill active"
+                       href="{% url 'event_redirect' event_slug=run.get_slug %}">
+                        {% if run.get_cover_url %}<img class="tv22-pill-img" src="{{ run.get_cover_url }}" alt="">{% endif %}
+                        <span>{{ run }}</span>
+                    </a>
+                {% endif %}
                 {% for vrun in visible_runs %}
                     <a class="tv22-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
                        href="{% url 'event_redirect' event_slug=vrun.slug %}">
