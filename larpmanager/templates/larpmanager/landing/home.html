@@ -118,28 +118,38 @@
             <p class="chaos-note">{{ texts.chaos_note | safe }}</p>
         </div>
     </section>
-    <!-- Native concepts -->
-    <section class="land native">
-        <div class="wrap">
-            <p class="eyebrow">{{ texts.native_eye }}</p>
-            <h2>{{ texts.native_title }}</h2>
-            <p class="native-lead">{{ texts.native_lead }}</p>
-            <ul class="check-grid">
-                <li>Characters</li>
-                <li>Relationships</li>
-                <li>XP systems</li>
-                <li>Factions</li>
-                <li>Casting</li>
-                <li>Plots</li>
-                <li>NPC management</li>
-                <li>Campaign progression</li>
-                <li>Downtime</li>
-                <li>Player communication</li>
-                <li>Ticketing &amp; payments</li>
-                <li>Volunteer permissions</li>
-            </ul>
-        </div>
-    </section>
+    {% if partners %}
+        <!-- Partners -->
+        <section class="land partners">
+            <div class="wrap">
+                <h2 class="promoters-title">{% trans "Partners" %}</h2>
+                <div class="strip" id="partnerStrip">
+                    {% for el in partners %}
+                        {% if el.url %}
+                            <a href="{{ el.url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="partner-card">
+                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
+                                <span>
+                                    <span class="partner-name">{{ el.name }}</span>
+                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
+                                </span>
+                            </a>
+                        {% else %}
+                            <div class="partner-card">
+                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
+                                <span>
+                                    <span class="partner-name">{{ el.name }}</span>
+                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
+                                </span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
     {% if highlights %}
         <!-- Games gallery -->
         <section class="land games">
@@ -257,36 +267,4 @@
             <a class="btn btn-primary" href="{% url 'join' %}" title="Free trial">Start your first event</a>
         </div>
     </section>
-    {% if partners %}
-        <!-- Partners -->
-        <section class="land partners">
-            <div class="wrap">
-                <h2 class="promoters-title">{% trans "Partners" %}</h2>
-                <div class="strip" id="partnerStrip">
-                    {% for el in partners %}
-                        {% if el.url %}
-                            <a href="{{ el.url }}"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="partner-card">
-                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
-                                <span>
-                                    <span class="partner-name">{{ el.name }}</span>
-                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
-                                </span>
-                            </a>
-                        {% else %}
-                            <div class="partner-card">
-                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
-                                <span>
-                                    <span class="partner-name">{{ el.name }}</span>
-                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
-                                </span>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-    {% endif %}
 {% endblock landing_body %}
