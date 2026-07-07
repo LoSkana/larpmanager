@@ -100,14 +100,14 @@ def lm_home(request: HttpRequest) -> Any:
     random.shuffle(template_context["reviews"])
     random.shuffle(template_context["partners"])
 
-    return render(request, "larpmanager/larpmanager/home.html", template_context)
+    return render(request, "larpmanager/landing/home.html", template_context)
 
 
 def ludomanager(template_context: Any, http_request: Any) -> Any:
     """Render the LudoManager skin version of the home page."""
     template_context["association_skin"] = "LudoManager"
     template_context["platform"] = "LudoManager"
-    return render(http_request, "larpmanager/larpmanager/skin/ludomanager.html", template_context)
+    return render(http_request, "larpmanager/landing/skin/ludomanager.html", template_context)
 
 
 def contact(request: HttpRequest) -> Any:
@@ -140,7 +140,7 @@ def contact(request: HttpRequest) -> Any:
     if not done:
         context["form"] = form
 
-    return render(request, "larpmanager/larpmanager/contact.html", context)
+    return render(request, "larpmanager/landing/contact.html", context)
 
 
 def go_redirect(
@@ -175,7 +175,7 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
 
     """
     if len(association_slugs) == 0:
-        return render(request, "larpmanager/larpmanager/na_assoc.html")
+        return render(request, "larpmanager/landing/na_assoc.html")
     if len(association_slugs) == 1:
         return go_redirect(request, association_slugs[0], redirect_path, hint_slug=hint_slug)
     # show page to choose them
@@ -189,7 +189,7 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
         form = RedirectForm(slugs=association_slugs)
     return render(
         request,
-        "larpmanager/larpmanager/redirect.html",
+        "larpmanager/landing/redirect.html",
         {"form": form, "name": "association"},
     )
 
@@ -225,7 +225,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_sl
         run_display_names.append(f"{run.search} - {run.event.association.slug}")
 
     if len(run_display_names) == 0:
-        return render(request, "larpmanager/larpmanager/na_event.html")
+        return render(request, "larpmanager/landing/na_event.html")
     if len(run_display_names) == 1:
         return go_redirect_run(request, available_runs[0], redirect_path, hint_slug=hint_slug)
 
@@ -240,7 +240,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_sl
         form = RedirectForm(slugs=run_display_names)
     return render(
         request,
-        "larpmanager/larpmanager/redirect.html",
+        "larpmanager/landing/redirect.html",
         {"form": form, "name": "event"},
     )
 
@@ -528,7 +528,7 @@ def discord(request: HttpRequest) -> Any:
     else:
         form = LarpManagerCheck(request=request)
     context = {"form": form}
-    return render(request, "larpmanager/larpmanager/discord.html", context)
+    return render(request, "larpmanager/landing/discord.html", context)
 
 
 @login_required
@@ -564,7 +564,7 @@ def join(request: HttpRequest) -> Any:
     get_personal_area(context)
 
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/larpmanager/join.html", context)
+    return render(request, "larpmanager/landing/join.html", context)
 
 
 def _join_form(context: dict, request: HttpRequest) -> Association | None:
@@ -638,7 +638,7 @@ def discover(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["index"] = True
     context["discover"] = LarpManagerDiscover.objects.order_by("order")
-    return render(request, "larpmanager/larpmanager/discover.html", context)
+    return render(request, "larpmanager/landing/discover.html", context)
 
 
 @override("en")
@@ -704,7 +704,7 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
         for membership in member.memberships.filter(association__demo=True).select_related("association"):
             save_single_config(membership.association, "exe_tutorial_suggestion", value=True)
 
-    return render(request, "larpmanager/larpmanager/tutorials.html", context)
+    return render(request, "larpmanager/landing/tutorials.html", context)
 
 
 @cache_page(60 * 15)
@@ -715,7 +715,7 @@ def guides(request: HttpRequest) -> Any:
     context["index"] = True
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/larpmanager/guides.html", context)
+    return render(request, "larpmanager/landing/guides.html", context)
 
 
 def guide(request: HttpRequest, slug: Any) -> Any:
@@ -746,7 +746,7 @@ def guide(request: HttpRequest, slug: Any) -> Any:
     context["og_description"] = f"{context['guide'].description} - LarpManager"
     context["iframe"] = request.GET.get("in_iframe") == "1"
 
-    return render(request, "larpmanager/larpmanager/guide.html", context)
+    return render(request, "larpmanager/landing/guide.html", context)
 
 
 def blog(request: HttpRequest, slug: Any) -> Any:
@@ -778,7 +778,7 @@ def blog(request: HttpRequest, slug: Any) -> Any:
     context["og_title"] = f"{context['blog'].title} - LarpManager"
     context["og_description"] = f"{context['blog'].description} - LarpManager"
 
-    return render(request, "larpmanager/larpmanager/blog.html", context)
+    return render(request, "larpmanager/landing/blog.html", context)
 
 
 @cache_page(60 * 15)
@@ -786,7 +786,7 @@ def privacy(request: HttpRequest) -> Any:
     """Display privacy policy page."""
     context = get_lm_contact(request)
     context.update({"text": get_association_text(context["association_id"], AssociationTextType.PRIVACY)})
-    return render(request, "larpmanager/larpmanager/privacy.html", context)
+    return render(request, "larpmanager/landing/privacy.html", context)
 
 
 @cache_page(60 * 15)
@@ -795,7 +795,7 @@ def usage(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["index"] = True
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/larpmanager/usage.html", context)
+    return render(request, "larpmanager/landing/usage.html", context)
 
 
 @cache_page(60 * 15)
@@ -804,7 +804,7 @@ def about_us(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["index"] = True
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/larpmanager/about_us.html", context)
+    return render(request, "larpmanager/landing/about_us.html", context)
 
 
 def get_lm_contact(request: HttpRequest) -> Any:
@@ -1206,7 +1206,7 @@ def donate(request: HttpRequest) -> Any:
         form = LarpManagerCheck(request=request)
 
     context["form"] = form
-    return render(request, "larpmanager/larpmanager/donate.html", context)
+    return render(request, "larpmanager/landing/donate.html", context)
 
 
 def debug_user(request: HttpRequest, member_id: Any) -> HttpResponse:
@@ -1243,7 +1243,7 @@ def demo(request: HttpRequest) -> Any:
     else:
         form = LarpManagerCheck(request=request)
     context = {"form": form, "texts": get_larpmanager_texts()}
-    return render(request, "larpmanager/larpmanager/demo.html", context)
+    return render(request, "larpmanager/landing/demo.html", context)
 
 
 def _create_demo(request: HttpRequest) -> HttpResponseRedirect:

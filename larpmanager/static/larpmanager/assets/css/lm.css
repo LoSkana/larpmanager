@@ -454,10 +454,6 @@ input[type="number"] {
   display: block;
 }
 
-.platform input#id_submit {
-  background-color: #737373 !important;
-}
-
 @media (max-width: 1000px) {
   form th {
     max-width: 100%;
@@ -1253,8 +1249,7 @@ dialog::backdrop {
   background: rgba(0, 0, 0, 0.7);
 }
 
-.popup_tutorial img,
-#tutorials img {
+.popup_tutorial img {
   max-width: 70%;
   margin: auto;
   height: auto;
@@ -1489,42 +1484,7 @@ dialog::backdrop {
   border-bottom: solid 0.2em #a5dee5;
 }
 
-.key-numbers-container {
-  display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-
-.key-number {
-  padding: 1em;
-  flex: 1;
-  text-align: center;
-}
-
-.key-number-value {
-  font-size: 2.5em;
-  font-weight: bold;
-  margin-left: 0.5em;
-}
-
-.key-number-label {
-  margin-top: 0.5em;
-  font-size: 1.5em;
-}
-
-.key-numbers-container > *:not(:first-child) {
-  border-left: 0.2em solid #a5dee5;
-}
-
 @media screen and (max-width: 840px) {
-  .key-numbers-container > * {
-    padding: 0.5em;
-  }
-
-  .key-number-label {
-    margin: 0;
-  }
-
   #main h3 {
     font-size: 1.3em !important;
   }
@@ -1536,112 +1496,6 @@ dialog::backdrop {
   header.major {
     padding: 0 0.5em;
   }
-}
-
-@media screen and (max-width: 1000px) {
-  .key-number-value {
-    font-size: 2em;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Hero CTA buttons
-   --------------------------------------------------------------------------- */
-
-.hero-cta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
-  justify-content: center;
-  margin: 1.5em 0;
-}
-
-.hero-cta .button {
-  flex: 1 1 auto;
-  min-width: 140px;
-  max-width: 220px;
-  text-align: center;
-}
-
-@media screen and (max-width: 480px) {
-  .hero-cta .button {
-    max-width: 100%;
-    width: 100%;
-  }
-}
-
-/* ---------------------------------------------------------------------------
-   Tutorials
-   --------------------------------------------------------------------------- */
-
-#tutorials {
-  display: flex;
-}
-
-#tutorials .column {
-  border-right: 0.2em solid #a5dee5;
-  padding-right: 0.5em;
-  margin-right: 0.5em;
-}
-
-#tutorials .column a {
-  display: block;
-  margin: 1.5em 0.5em 0 0;
-}
-
-#tutorials .column a.select {
-  display: block;
-  color: black;
-}
-
-#tutorials .feature {
-  max-width: 100%;
-  width: 100%;
-  padding-left: 0.5em;
-}
-
-@media screen and (max-width: 736px) {
-  #tutorials .column {
-    display: none;
-  }
-}
-
-#tutorials .navig td {
-  width: 33%;
-}
-
-#tutorial-descr {
-  text-align: left !important;
-}
-
-#tutorial-descr h2 {
-  text-align: center !important;
-}
-
-#tutorial-descr hr {
-  margin: 1em 0;
-}
-
-#tutorial-descr p {
-  text-align: left !important;
-  margin: 0.5em 0;
-}
-
-#tutorial-descr ul,
-#tutorial-descr ol {
-  text-align: left !important;
-  list-style-position: outside !important;
-  padding-left: 1.5em !important;
-  margin: 0.5em 0;
-}
-
-#tutorial-descr li {
-  padding: 0.5em;
-}
-
-#tutorial-descr img {
-  display: block !important;
-  margin: 0 auto !important;
 }
 
 /* ---------------------------------------------------------------------------
@@ -1671,10 +1525,6 @@ header.sec h1 {
     font-size: 100%;
     margin: 1em !important;
   }
-
-  h1.home .subtitle_pre {
-    display: block;
-  }
 }
 
 @media (max-width: 736px) {
@@ -1693,33 +1543,7 @@ header.sec h1 {
   }
 }
 
-#article {
-  text-align: left;
-}
-
-#article ul {
-  text-align: left;
-  list-style-position: initial;
-}
-
-@media screen and (max-width: 1000px) {
-  #article p,
-  #tutorials p {
-    margin-bottom: 1em;
-  }
-}
-
 @media screen and (max-width: 736px) {
-  #article p,
-  #tutorials p {
-    margin-bottom: 0.5em;
-  }
-
-  #article img {
-    width: 100%;
-    height: auto;
-  }
-
   #lm-modal img {
     max-width: 95%;
     display: block;
@@ -1748,185 +1572,6 @@ header.sec h1 {
   .inner h2 {
     font-size: 1.2em;
   }
-}
-
-#discover h2 {
-  font-weight: 700;
-}
-
-#discover strong,
-#discover em {
-  color: #319caa;
-}
-
-#discover .left,
-#discover .right {
-  width: 25%;
-  border-radius: 10%;
-}
-
-#discover .left {
-  float: left;
-  margin: 0 2em 2em 0;
-}
-
-#discover .right {
-  float: right;
-  margin: 0 0em 2em 2em;
-}
-
-#discover hr {
-  clear: both;
-}
-
-@media (max-width: 1000px) {
-  #discover .left,
-  #discover .right {
-    display: none;
-  }
-}
-
-.showcase {
-  display: flex;
-  flex-direction: column;
-}
-
-.showcase .section {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.showcase .section:nth-child(even) {
-  flex-direction: row-reverse;
-}
-
-.showcase .text {
-  flex: 1 1 60%;
-  padding: 1rem 0;
-  font-size: 1.3em;
-  line-height: 1.5;
-  text-align: left;
-}
-
-.showcase .section:nth-child(even) .text {
-  padding-left: 2rem;
-}
-
-.showcase .section:nth-child(odd) .text {
-  padding-right: 2rem;
-}
-
-.showcase .sc_content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0px;
-  width: fit-content;
-  margin: 0;
-}
-
-.showcase .sc_content p {
-  width: fit-content;
-  margin: 0.5em 0;
-  font-size: 0.85em;
-}
-
-.showcase .button {
-  margin-top: 0.5em;
-}
-
-.showcase .fas {
-  color: #a5dee5;
-  margin-right: 0.4em;
-  width: 1.1em;
-  text-align: center;
-}
-
-.showcase .text h4 {
-  font-size: 1.2em;
-  line-height: 1.4;
-  color: #47787e;
-}
-
-.showcase .text h4 a {
-  color: #47787e;
-  text-decoration: none !important;
-  border: 0;
-}
-
-.showcase .text h4 a:hover {
-  text-decoration: underline;
-}
-
-@media screen and (max-width: 840px) {
-  .showcase .text {
-    width: 100%;
-    padding: 0.5em !important;
-  }
-  .showcase .sc_content p {
-    font-size: 80%;
-  }
-  .showcase .sc_content {
-    margin: 0;
-  }
-}
-
-.showcase .image-container {
-  flex: 1 1 40%;
-  padding: 1rem 0;
-  width: 100%;
-  overflow: hidden;
-}
-
-.showcase .image-wrapper {
-  position: relative;
-  width: 100%;
-  padding-top: 56.25%;
-  overflow: hidden;
-  border-radius: 10px;
-}
-
-.showcase .image-wrapper img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-}
-
-.showcase .image-caption {
-  text-align: center;
-  margin-top: 0.2rem;
-  font-size: calc(0.2vw + 10px);
-  color: #555;
-}
-
-@media (max-width: 768px) {
-  .showcase .section,
-  .showcase .section:nth-child(even) {
-    flex-direction: column;
-    margin-bottom: 0rem;
-  }
-
-  .showcase .text {
-    margin-top: 0;
-  }
-
-  .showcase .text,
-  .showcase .image-container {
-    flex: 1 1 100%;
-    padding: 0.5rem;
-  }
-}
-
-.showcase strong,
-.showcase em {
-  color: #319caa;
 }
 
 .section-image {
@@ -2043,11 +1688,6 @@ header.sec h1 {
   margin-top: 10px;
 }
 
-#usage b {
-  color: #319caa;
-  font-weight: 700;
-}
-
 /* ---------------------------------------------------------------------------
    Guide & Article
    --------------------------------------------------------------------------- */
@@ -2129,14 +1769,6 @@ header.sec h1 {
 /* ---------------------------------------------------------------------------
    FAQ
    --------------------------------------------------------------------------- */
-
-.faq .que {
-  font-weight: bold;
-}
-
-.faq li {
-  padding: 0.5em;
-}
 
 /* ---------------------------------------------------------------------------
    Application - Registration
@@ -4966,15 +4598,4 @@ body.in-iframe #menu-mobile {
 
 .payment-membership-info i {
   margin-right: 0.4rem;
-}
-
-#lm_join input,
-#lm_join select {
-  max-width: 100% !important;
-  text-align: left !important;
-}
-
-#lm_join th,
-#lm_join label {
-  text-align: left !important;
 }

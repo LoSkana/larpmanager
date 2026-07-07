@@ -1,0 +1,13 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load static i18n %}
+{% block maintitle %}
+    Honeypot
+{% endblock maintitle %}
+{% block landing_title %}
+    Honeypot
+{% endblock landing_title %}
+{% block landing_content %}
+    Ciao, {{ ip }}!
+    <br />
+    Nel caso te lo stia chiedendo: sì, sei stato sgamato :P
+{% endblock landing_content %}

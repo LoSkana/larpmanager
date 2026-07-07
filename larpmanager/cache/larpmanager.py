@@ -105,8 +105,14 @@ def update_cache_lm_home() -> dict[str, int | list]:
     context["showcase"] = _get_showcases()
     context["reviews"] = _get_reviews()
     context["partners"] = _get_partners()
+    context["highlights"] = _get_highlights()
 
     return context
+
+
+def _get_highlights() -> list[dict]:
+    """Get all LarpManager highlights as dictionaries."""
+    return [highlight.as_dict() for highlight in LarpManagerHighlight.objects.all()]
 
 
 def _get_reviews() -> list[dict]:

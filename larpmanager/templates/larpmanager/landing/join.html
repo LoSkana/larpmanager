@@ -1,0 +1,36 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ texts.join_page_title }}
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="keywords" content="{{ texts.join_meta_keywords }}">
+    <meta name="description" content="{{ texts.join_meta_description }}">
+{% endblock meta %}
+{% block landing_eyebrow %}
+    Get started
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {{ texts.join_title }}
+{% endblock landing_title %}
+{% block landing_content %}
+    <div id="lm_join">
+        {% include "elements/member/my_hub.html" %}
+        <div class="about-prose landing-prose">{{ texts.join_content | safe }}</div>
+        <form class="contact-form"
+              action="{{ request.path }}"
+              enctype="multipart/form-data"
+              method="post">
+            {% csrf_token %}
+            {{ form.as_div }}
+            <input class="btn btn-primary"
+                   type="submit"
+                   id="id_submit"
+                   value="{% trans "Submit" %}">
+        </form>
+        <div class="contact-alt">{{ texts.desktop_recommendation | safe }}</div>
+    </div>
+{% endblock landing_content %}
+{% block js2 %}
+    <script> window.base_domain = ".{{ association.base_domain }}"; </script>
+{% endblock js2 %}
