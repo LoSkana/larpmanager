@@ -362,7 +362,6 @@ body.landing .steps-head h2 {
 }
 
 body.landing .steps-head p {
-  color: var(--text-dim);
   margin: 1rem auto 0;
   max-width: 52ch;
 }
@@ -457,6 +456,25 @@ body.landing .prob-card {
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+body.landing .prob-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--teal-deep);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.landing .prob-card {
+    transition: border-color 0.15s ease;
+  }
+  body.landing .prob-card:hover {
+    transform: none;
+  }
 }
 
 body.landing .prob-card h3 {
@@ -1024,6 +1042,81 @@ body.landing .sol-cta a.guide-link:hover {
 
 .my_hub {
   max-width: 62ch;
+  margin: 0 auto 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.my_hub .hub-greeting {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-dim);
+}
+
+.my_hub .hub-greeting i {
+  font-size: 1.5rem;
+  color: var(--teal-deep);
+}
+
+.my_hub .hub-greeting b {
+  color: var(--text);
+}
+
+.my_hub .hub-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.1rem 1.3rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.my_hub .hub-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.9rem;
+  font-size: 1.05rem;
+  color: var(--teal-dark);
+}
+
+.my_hub .hub-card h3 i {
+  color: var(--teal-deep);
+}
+
+.my_hub .hub-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.my_hub .hub-chip {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--teal-deep);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.my_hub .hub-chip:hover {
+  background: var(--teal-deep);
+  border-color: var(--teal-deep);
+  color: var(--card);
+}
+
+.my_hub .hub-card .calendar {
+  margin: 0;
 }
 
 /* ---------- About page ---------- */

@@ -9,6 +9,9 @@
 {% block landing_title %}
     {{ texts.demo_title }}
 {% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>{{ texts.demo_sub }}</p>
+{% endblock landing_subtitle %}
 {% block landing_content %}
     <div class="about-prose landing-prose">{{ texts.demo_content | safe }}</div>
     <form class="contact-form"

@@ -13,6 +13,9 @@
 {% block landing_title %}
     {{ texts.join_title }}
 {% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>{{ texts.join_sub | safe }}</p>
+{% endblock landing_subtitle %}
 {% block landing_content %}
     <div id="lm_join">
         {% include "elements/member/my_hub.html" %}

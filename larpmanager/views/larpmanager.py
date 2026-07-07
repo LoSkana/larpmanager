@@ -96,7 +96,7 @@ def lm_home(request: HttpRequest) -> Any:
 
     template_context.update(get_cache_lm_home())
     template_context["texts"] = get_larpmanager_texts()
-    random.shuffle(template_context["promoters"])
+    # random.shuffle(template_context["promoters"]) # noqa: ERA001
     random.shuffle(template_context["reviews"])
     random.shuffle(template_context["partners"])
 
