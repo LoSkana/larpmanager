@@ -32,6 +32,8 @@ body.landing {
   font-size: 17px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
 }
 
 body.landing h1,
@@ -1018,6 +1020,10 @@ body.landing .sol-cta a.guide-link {
 
 body.landing .sol-cta a.guide-link:hover {
   text-decoration: underline;
+}
+
+.my_hub {
+  max-width: 62ch;
 }
 
 /* ---------- About page ---------- */

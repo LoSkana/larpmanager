@@ -62,7 +62,11 @@ window.addEventListener('DOMContentLoaded', function () {
         };
 
         var cleanSlug = function (value) {
-            return value.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return value
+                .normalize('NFKD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(/[^a-z0-9]/g, '');
         };
 
         slugInput.addEventListener('input', function () {
