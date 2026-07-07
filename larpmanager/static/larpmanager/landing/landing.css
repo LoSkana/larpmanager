@@ -1194,6 +1194,8 @@ body.landing .contact-form input:not([type="submit"]):not([type="checkbox"]),
 body.landing .contact-form textarea,
 body.landing .contact-form select {
   width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 body.landing .contact-form .helptext {
@@ -1231,6 +1233,67 @@ body.landing .hide {
   display: none;
 }
 
+/* Auth forms (login / register) rendered via form.as_table on the main site */
+body.landing .contact-form .login,
+body.landing .contact-form .form_container {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+body.landing .contact-form table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+body.landing .contact-form table th,
+body.landing .contact-form table td {
+  padding: 0.35rem 0;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.9rem;
+}
+
+body.landing .contact-form table th {
+  font-weight: 600;
+  padding-right: 0.9rem;
+}
+
+body.landing .contact-form .allauth_signin {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+body.landing .contact-form .allauth_signin img {
+  max-width: 100%;
+  height: auto;
+}
+
+body.landing .contact-form .registration_register,
+body.landing .contact-form .password_reset {
+  margin: 0.8rem 0 0;
+  font-size: 0.9rem;
+}
+
+body.landing .contact-form .registration_register a,
+body.landing .contact-form .password_reset a {
+  color: var(--teal-deep);
+}
+
+@media (max-width: 560px) {
+  body.landing .contact-form table,
+  body.landing .contact-form table tbody,
+  body.landing .contact-form table tr,
+  body.landing .contact-form table th,
+  body.landing .contact-form table td {
+    display: block;
+    width: 100%;
+  }
+
+  body.landing .contact-form table th {
+    padding: 0.35rem 0 0.1rem;
+  }
+}
+
 /* Contact form include (form.as_p with class="contact") */
 body.landing form.contact {
   max-width: 520px;
@@ -1256,6 +1319,8 @@ body.landing form.contact select {
   background: var(--card);
   color: var(--text);
   width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 body.landing form.contact input:focus,
@@ -1708,6 +1773,10 @@ body.landing #iframe-indicator {
   body.landing .site-nav .btn {
     flex: 0 0 auto;
     margin-top: -0.1rem;
+  }
+
+  body.landing .wrap {
+    padding: 1em;
   }
 }
 

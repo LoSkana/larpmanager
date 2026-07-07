@@ -54,9 +54,15 @@ class AssocVersionMixin:
     """Injects effective_version into template context for unauthenticated views."""
 
     def get_context_data(self, **kwargs: Any) -> dict:
-        """Inject effective_version from association config."""
+        """Inject effective_version and the parent template for unauthenticated views."""
         context = super().get_context_data(**kwargs)
         context["effective_version"] = self.request.association.get("assoc_version", LATEST_AVAILABLE_VERSION)
+        # On the main site (association id 0) there is no org chrome/topbar: render
+        # these forms inside the landing layout instead of the org base template.
+        if self.request.association["id"] == 0:
+            context["parent_template"] = "larpmanager/landing/form_base.html"
+        else:
+            context["parent_template"] = "base.html"
         return context
 
 
