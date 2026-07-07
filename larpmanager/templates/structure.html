@@ -84,8 +84,7 @@
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
-                {% firstof effective_version association.assoc_version 0 as eff_ver %}
-                {% if eff_ver >= 22 %}
+                {% if effective_version >= 22 %}
                     {% include "elements/structure/topbar-v22.html" %}
                 {% elif user.is_authenticated %}
                     {% if topbar_admin %}
@@ -100,7 +99,7 @@
             {% endif %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% firstof effective_version association.assoc_version 0 as wrapper_eff_ver %} {% if wrapper_eff_ver >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %} ">
+                 class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% if effective_version >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %} ">
                 {% block main %}
                 {% endblock main %}
             </div>
