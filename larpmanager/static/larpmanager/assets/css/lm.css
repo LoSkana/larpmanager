@@ -4924,7 +4924,7 @@ body.in-iframe #menu-mobile {
   padding: 1rem 1.25rem;
   border: 1px solid #ddd;
   border-radius: 8px;
-  background: #f9f9f9;
+  background: rgba(var(--sec-rgb), 0.3);
   text-align: center;
 }
 
