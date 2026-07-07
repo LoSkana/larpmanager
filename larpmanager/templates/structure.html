@@ -185,20 +185,6 @@ window['icon_texts'] = {
             document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         }
 
-        var down_all = false;
-
-        function start_spinner() {
-            $('#overlay').fadeIn(200);
-            $('body').addClass('noscroll');
-        }
-
-        function stop_spinner() {
-            if (down_all) return;
-
-            $('#overlay').fadeOut(200);
-            $('body').removeClass('noscroll');
-        }
-
         function sidebar() {
             $('#sidebar').toggle();
             $('#header').toggleClass('sidebar');

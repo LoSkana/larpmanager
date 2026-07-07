@@ -118,38 +118,6 @@
             <p class="chaos-note">{{ texts.chaos_note | safe }}</p>
         </div>
     </section>
-    {% if partners %}
-        <!-- Partners -->
-        <section class="land partners">
-            <div class="wrap">
-                <h2 class="promoters-title">{% trans "Partners" %}</h2>
-                <div class="strip" id="partnerStrip">
-                    {% for el in partners %}
-                        {% if el.url %}
-                            <a href="{{ el.url }}"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="partner-card">
-                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
-                                <span>
-                                    <span class="partner-name">{{ el.name }}</span>
-                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
-                                </span>
-                            </a>
-                        {% else %}
-                            <div class="partner-card">
-                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
-                                <span>
-                                    <span class="partner-name">{{ el.name }}</span>
-                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
-                                </span>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-    {% endif %}
     {% if highlights %}
         <!-- Games gallery -->
         <section class="land games">
@@ -212,6 +180,38 @@
                             <p>{{ el.text }}</p>
                             <cite>{{ el.author }}</cite>
                         </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    {% if partners %}
+        <!-- Partners -->
+        <section class="land partners">
+            <div class="wrap">
+                <h2 class="promoters-title">{% trans "Partners" %}</h2>
+                <div class="strip" id="partnerStrip">
+                    {% for el in partners %}
+                        {% if el.url %}
+                            <a href="{{ el.url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="partner-card">
+                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
+                                <span>
+                                    <span class="partner-name">{{ el.name }}</span>
+                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
+                                </span>
+                            </a>
+                        {% else %}
+                            <div class="partner-card">
+                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
+                                <span>
+                                    <span class="partner-name">{{ el.name }}</span>
+                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
+                                </span>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             </div>

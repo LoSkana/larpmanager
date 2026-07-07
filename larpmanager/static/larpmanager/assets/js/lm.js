@@ -1,5 +1,21 @@
 $(".hide:visible").hide();
 
+var down_all = false;
+
+// Show the full-page loading overlay and lock body scroll.
+function start_spinner() {
+    $('#overlay').fadeIn(200);
+    $('body').addClass('noscroll');
+}
+
+// Hide the loading overlay and restore scroll, unless a full download is in progress.
+function stop_spinner() {
+    if (down_all) return;
+
+    $('#overlay').fadeOut(200);
+    $('body').removeClass('noscroll');
+}
+
 window.addEventListener('DOMContentLoaded', function() {
 
 // Remove info bar / registration status blocks left empty by conditional template content, to avoid stray padding.

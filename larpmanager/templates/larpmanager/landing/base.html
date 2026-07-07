@@ -66,7 +66,6 @@
             <!-- End Google Tag Manager (noscript) -->
         {% endif %}
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
-        {% if iframe or request.GET.in_iframe %}<div id="iframe-indicator">iframe mode active</div>{% endif %}
         {% if not iframe and not request.GET.in_iframe %}
             <nav class="site-nav">
                 <div class="wrap">
