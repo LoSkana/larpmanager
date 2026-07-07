@@ -66,7 +66,7 @@ body.landing .wrap {
 }
 
 body.landing section.land {
-  padding: 5rem 0;
+  padding: 2rem 0;
   margin: 0;
 }
 
@@ -1713,4 +1713,9 @@ body.landing #iframe-indicator {
 
 body.landing section.native .eyebrow {
   color: var(--teal-bright);
+}
+
+body.landing .games,
+body.landing .partners {
+  background: var(--paper-soft);
 }

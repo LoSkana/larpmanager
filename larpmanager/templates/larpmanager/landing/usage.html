@@ -60,6 +60,6 @@
                target="_blank"
                rel="noopener noreferrer">View on GitHub</a>
         </div>
+        {% if texts.usage_content %}{{ texts.usage_content | safe }}{% endif %}
     </div>
-    {% if texts.usage_content %}<div class="about-prose landing-prose">{{ texts.usage_content | safe }}</div>{% endif %}
 {% endblock landing_content %}
