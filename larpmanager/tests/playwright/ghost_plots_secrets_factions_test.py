@@ -74,7 +74,7 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("ggggg")
     save_modal(page, edit_iframe)
-    sidebar(page, "Deliveries")
+    sidebar(page, "Awards")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
