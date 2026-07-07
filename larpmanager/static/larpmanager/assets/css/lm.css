@@ -2222,7 +2222,7 @@ header.sec h1 {
 
 .rel-img {
   width: 8em;
-  max-width: 100%;
+  border-radius: 1em;
 }
 
 @media (max-width: 768px) {

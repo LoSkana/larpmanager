@@ -97,9 +97,6 @@
             <div id="wrapper">
                 <div id="one" class="wrapper">
                     <div class="inner">
-                        {% block nav %}
-                            {% include "larpmanager/manage/nav.html" %}
-                        {% endblock nav %}
                         {% if not request.GET.in_iframe and not request.GET.frame %}
                             <div id="info_bar" class="only_v20">
                                 <span id="info">
@@ -128,6 +125,9 @@
                                 {% endif %}
                             </div>
                         {% endif %}
+                        {% block nav %}
+                            {% include "larpmanager/manage/nav.html" %}
+                        {% endblock nav %}
                         <div id="right_bar" class="no_v20 info nav main_nav no_mobile">
                             {% if tutorial %}
                                 <a href="#"
