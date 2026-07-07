@@ -332,7 +332,7 @@ def orga_roles_invite(request: HttpRequest, event_slug: str, role_uuid: str) -> 
         return redirect("orga_roles", event_slug=event_slug)
     context["role"] = role
     context["back_url"] = reverse("orga_roles", kwargs={"event_slug": event_slug})
-    return render(request, "larpmanager/roles_invite.html", context)
+    return render(request, "larpmanager/manage/roles_invite.html", context)
 
 
 @login_required

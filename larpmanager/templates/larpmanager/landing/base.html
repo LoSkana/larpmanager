@@ -1,0 +1,165 @@
+{% load i18n static compress %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>
+            {% block maintitle %}
+                {{ texts.page_title }}
+            {% endblock maintitle %}
+        </title>
+        {% block meta %}
+            <meta name="keywords" content="{{ texts.meta_keywords }}">
+            <meta name="description" content="{{ texts.meta_description }}">
+        {% endblock meta %}
+        {% block robots %}
+            {% if staging or not index %}<meta name="robots" content="noindex, nofollow" />{% endif %}
+        {% endblock robots %}
+        <link rel="icon" href="{% static 'lm_logo.png' %}">
+        {% if google_tag %}
+            <!-- Google Tag Manager -->
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','{{ google_tag }}');
+            </script>
+            <!-- End Google Tag Manager -->
+        {% endif %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Karla:wght@400;500;600;700&display=swap"
+              rel="stylesheet">
+        <link rel="preload"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+              as="style"
+              onload="this.onload=null;this.rel='stylesheet'">
+        <noscript>
+            <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+        </noscript>
+        <style>
+            @font-face {
+                font-family: 'future_light';
+                src: url('{% static "fonts/future_light/Future_Light.otf" %}'),
+                url('{% static "fonts/future_light/Future_Light.ttf" %}');
+                font-display: swap;
+            }
+        </style>
+        {% compress css %}
+            <link rel="stylesheet"
+                  href="{% static 'larpmanager/landing/landing.css' %}" />
+        {% endcompress %}
+        {{ form.media }}
+    </head>
+    <body class="landing">
+        {% if google_tag %}
+            <!-- Google Tag Manager (noscript) -->
+            <noscript>
+                <iframe src="https://www.googletagmanager.com/ns.html?id={{ google_tag }}"
+                        height="0"
+                        width="0"
+                        class="gtagmanager">
+                </iframe>
+            </noscript>
+            <!-- End Google Tag Manager (noscript) -->
+        {% endif %}
+        {% if staging %}<div id="staging">STAGING</div>{% endif %}
+        {% if iframe or request.GET.in_iframe %}<div id="iframe-indicator">iframe mode active</div>{% endif %}
+        {% if not iframe and not request.GET.in_iframe %}
+            <nav class="site-nav">
+                <div class="wrap">
+                    <a class="nav-brand" href="{% url 'home' %}">
+                        <img src="{% static 'lm_logo.png' %}" alt="" width="28" height="28">
+                        {{ association.platform|default:"LarpManager" }}
+                    </a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'guides' %}active{% endif %}"
+                       href="{% url 'guides' %}"
+                       title="See practical examples of the system">Guides</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'usage' %}active{% endif %}"
+                       href="{% url 'usage' %}"
+                       title="Understand how to use it">Pricing</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'demo' %}active{% endif %}"
+                       href="{% url 'demo' %}"
+                       title="Test freely the system">Demo</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
+                       href="{% url 'contact' %}"
+                       title="Contact us">Contact</a>
+                    <a class="btn btn-primary" href="{% url 'join' %}" title="Get Started">Get Started</a>
+                </div>
+            </nav>
+        {% endif %}
+        {% if messages %}
+            <div class="landing-messages wrap">
+                {% for message in messages %}<div class="landing-message {{ message.tags }}">{{ message }}</div>{% endfor %}
+            </div>
+        {% endif %}
+        {% block landing_body %}
+            <div class="page-head wrap">
+                <p class="eyebrow">
+                    {% block landing_eyebrow %}
+                    {% endblock landing_eyebrow %}
+                </p>
+                <h1>
+                    {% block landing_title %}
+                    {% endblock landing_title %}
+                </h1>
+                {% block landing_subtitle %}
+                {% endblock landing_subtitle %}
+            </div>
+            <section class="land">
+                <div class="wrap">
+                    {% block landing_content %}
+                    {% endblock landing_content %}
+                </div>
+            </section>
+            {% block landing_final %}
+                {% if not iframe and not request.GET.in_iframe and texts.cta_title %}
+                    <section class="final">
+                        <div class="wrap">
+                            <h2>{{ texts.cta_title }}</h2>
+                            <p>{{ texts.cta_description | safe }}</p>
+                            <a class="btn btn-primary" href="{% url 'join' %}" title="Free trial">Start your first event</a>
+                        </div>
+                    </section>
+                {% endif %}
+            {% endblock landing_final %}
+        {% endblock landing_body %}
+        {% if not iframe and not request.GET.in_iframe %}
+            <footer class="site-footer">
+                <div class="wrap">
+                    <div class="footer-links">
+                        <a href="{% url 'about_us' %}">About us</a>
+                        <a href="{% url 'guides' %}">Guides</a>
+                        <a href="{% url 'usage' %}">Pricing</a>
+                        <a href="{% url 'contact' %}">Contact</a>
+                        <a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a>
+                    </div>
+                    <p>
+                        <!-- Please, do not remove! -->
+                        Powered by <a href="https://{{ association.main_domain }}">{{ association.platform }}</a>
+                    </p>
+                </div>
+            </footer>
+        {% endif %}
+        {% if hotjar_siteid %}
+            <!-- Hotjar -->
+            <script>
+            (function(h,o,t,j,a,r){
+                h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+                h._hjSettings={hjid:{{ hotjar_siteid }},hjsv:6};
+                a=o.getElementsByTagName('head')[0];
+                r=o.createElement('script');r.async=1;
+                r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+                a.appendChild(r);
+            })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+            </script>
+        {% endif %}
+        {% compress js %}
+            <script defer src="{% static 'larpmanager/landing/landing.js' %}"></script>
+        {% endcompress %}
+        {% block js2 %}
+        {% endblock js2 %}
+    </body>
+</html>

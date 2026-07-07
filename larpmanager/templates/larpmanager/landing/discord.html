@@ -1,0 +1,27 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    Just a quick check
+{% endblock maintitle %}
+{% block landing_eyebrow %}
+    Discord
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    Just a quick check
+{% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>Please confirm you're not a bot before joining our Discord server!</p>
+{% endblock landing_subtitle %}
+{% block landing_content %}
+    <form class="contact-form"
+          action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <input class="btn btn-primary"
+               type="submit"
+               id="id_submit"
+               value="{% trans "Confirm" %}">
+    </form>
+{% endblock landing_content %}

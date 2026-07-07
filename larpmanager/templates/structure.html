@@ -24,57 +24,20 @@
             }
         </style>
         {% if testing %}<script>window.lmTesting = true;</script>{% endif %}
-        {% if association.id == 0 %}
-            {% if google_tag %}
-                <!-- Google Tag Manager -->
-                <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-                })(window,document,'script','dataLayer','{{ google_tag }}');
-                </script>
-                <!-- End Google Tag Manager -->
-            {% endif %}
-            <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
-            <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
-            <meta property="og:site_name" content="{{ association.platform }}">
-            {% if og_title %}<meta property="og:title" content="{{ og_title }}">{% endif %}
-            {% if og_image %}
-                <meta property="og:image" content="{{ og_image }}">
-                <meta name="thumbnail" content="{{ og_image }}">
-            {% else %}
-                <meta property="og:image"
-                      content="https://larpmanager.com/static/thumbnail.png">
-                <meta name="thumbnail"
-                      content="https://larpmanager.com/static/thumbnail.png">
-            {% endif %}
-            {% if og_description %}<meta property="og:description" content="{{ og_description }}">{% endif %}
-            <!--
-             <PageMap>
-                <DataObject type="thumbnail">
-                  <Attribute name="src" value="https://larpmanager.com/static/thumbnail.png" />
-                  <Attribute name="width" value="523" />
-                  <Attribute name="height" value="455" />
-                </DataObject>
-              </PageMap>
-              -->
-        {% else %}
+        {% if association.favicon %}
             <link rel="icon" type="image/png" href="{{ association.favicon }}">
             <link rel="apple-touch-icon" href="{{ association.favicon }}">
-            <meta name="thumbnail" content="{{ association.logo }}">
-            <meta property="og:site_name"
-                  content="{{ association.name }} - {{ association.platform }}">
             <meta property="og:image" content="{{ association.favicon }}">
-            <!--
-             <PageMap>
-                <DataObject type="thumbnail">
-                  <Attribute name="src" value="{{ association.logo }}" />
-                  <Attribute name="width" value="200" />
-                  <Attribute name="height" value="200" />
-                </DataObject>
-              </PageMap>
-              -->
+        {% else %}
+            <link rel="icon" type="image/png" href="{% static 'lm_fav_new.png' %}">
+            <link rel="apple-touch-icon" href="{% static 'lm_fav_new.png' %}">
+            <meta property="og:image"
+                  content="https://larpmanager.com/static/thumbnail.png">
         {% endif %}
+        <meta name="thumbnail"
+              content="{{ association.logo|default:'https://larpmanager.com/static/thumbnail.png' }}">
+        <meta property="og:site_name"
+              content="{{ association.name }} - {{ association.platform }}">
         {% block css-req %}
         {% endblock css-req %}
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -92,65 +55,51 @@
         {{ form.media }}
         {% block css %}
         {% endblock css %}
-        {% if association.id == 0 %}
-            {% compress css %}
-                <link rel="stylesheet" href="{% static 'alpha/assets/css/main.css' %}" />
-                <link rel="stylesheet"
-                      href="{% static 'larpmanager/assets/css/alpha.css' %}" />
-                <link rel="stylesheet"
-                      href="{% static 'larpmanager/assets/css/theme_old.css' %}" />
-                <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
-                <link rel="stylesheet"
-                      href="{% static 'larpmanager/assets/css/skins.css' %}" />
-            {% endcompress %}
-        {% else %}
-            {% compress css %}
-                <link rel="stylesheet"
-                      href="{% static 'solid_state/assets/css/main.css' %}" />
-                <link rel="stylesheet"
-                      href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
-                <link rel="stylesheet"
-                      href="{% static 'larpmanager/assets/css/theme_old.css' %}" />
-                <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
-            {% endcompress %}
-            {% if association.skin_css %}<style>{{ association.skin_css }}</style>{% endif %}
-            {% if association.css_code %}
-                <link rel="stylesheet"
-                      href="{% get_media_prefix %}/css/{{ association.slug }}_{{ association.css_code }}.css" />
-            {% endif %}
-            {% if event and event.css_code %}
-                <link rel="stylesheet"
-                      href="{% get_media_prefix %}/css/{{ association.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
-            {% endif %}
+        {% compress css %}
+            <link rel="stylesheet"
+                  href="{% static 'solid_state/assets/css/main.css' %}" />
+            <link rel="stylesheet"
+                  href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
+            <link rel="stylesheet"
+                  href="{% static 'larpmanager/assets/css/theme_old.css' %}" />
+            <link rel="stylesheet" href="{% static 'larpmanager/assets/css/lm.css' %}" />
+        {% endcompress %}
+        {% if association.skin_css %}<style>{{ association.skin_css }}</style>{% endif %}
+        {% if association.css_code %}
+            <link rel="stylesheet"
+                  href="{% get_media_prefix %}/css/{{ association.slug }}_{{ association.css_code }}.css" />
+        {% endif %}
+        {% if event and event.css_code %}
+            <link rel="stylesheet"
+                  href="{% get_media_prefix %}/css/{{ association.slug }}_{{ event.slug }}_{{ event.css_code }}.css" />
         {% endif %}
         <noscript>
             <link rel="stylesheet"
                   href="{% static 'larpmanager/assets/css/noscript.css' %}" />
         </noscript>
     </head>
+    {% firstof effective_version association.assoc_version 0 as body_eff_ver %}
     <body id="{{ association.name | slugify }}"
-          class="is-preload {% block body_class %} {% endblock body_class %} {% if association.id == 0 %} platform{% else %} association {% if manage %}manage{% endif %} {{ effective_version|default:association.assoc_version|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %}{% endif %} {% if request.GET.in_iframe or request.GET.frame %}in-iframe{% endif %}">
+          class="is-preload {% block body_class %} {% endblock body_class %} association {% if manage %}manage{% endif %} {{ body_eff_ver|version_body_classes }} {% if member_theme %}theme-{{ member_theme }}{% elif page_theme %}theme-{{ page_theme }}{% endif %} {% if request.GET.in_iframe or request.GET.frame %}in-iframe{% endif %}">
         {% if staging %}<div id="staging">STAGING</div>{% endif %}
         <div id="page-container">
             {% if not frame and association.id != 0 %}
-                {% with effective_version|default:association.assoc_version as eff_ver %}
-                    {% if eff_ver >= 22 %}
-                        {% include "elements/structure/topbar-v22.html" %}
-                    {% elif user.is_authenticated %}
-                        {% if topbar_admin %}
-                            {% include "elements/structure/topbar-admin.html" %}
-                        {% else %}
-                            {% include "elements/structure/topbar-user.html" %}
-                        {% endif %}
+                {% if effective_version >= 22 %}
+                    {% include "elements/structure/topbar-v22.html" %}
+                {% elif user.is_authenticated %}
+                    {% if topbar_admin %}
+                        {% include "elements/structure/topbar-admin.html" %}
                     {% else %}
-                        {% include "elements/structure/topbar.html" %}
+                        {% include "elements/structure/topbar-user.html" %}
                     {% endif %}
-                    {% include "elements/structure/sidebar.html" %}
-                {% endwith %}
+                {% else %}
+                    {% include "elements/structure/topbar.html" %}
+                {% endif %}
+                {% include "elements/structure/sidebar.html" %}
             {% endif %}
             <!-- Page Wrapper -->
             <div id="page-wrapper"
-                 class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% with effective_version|default:association.assoc_version as eff_ver %} {% if eff_ver >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} {% endwith %} topbar{% endif %} ">
+                 class="{% if not frame and association.id != 0 %} {% if manage %}manage{% endif %} {% if effective_version >= 22 %} {% if is_sidebar_open != False %}sidebar{% endif %} {% else %} {% if manage and is_sidebar_open %}sidebar{% endif %} {% endif %} topbar{% endif %} ">
                 {% block main %}
                 {% endblock main %}
             </div>
@@ -190,31 +139,11 @@ window['icon_texts'] = {
             <script src="{% static 'admin/js/vendor/select2/select2.full.min.js' %}"></script>
             {% include "elements/dashboard/wwyltd.js.html" %}
         {% endif %}
-        {% if association.id == 0 %}
-            {% if google_tag %}
-                <!-- Google Tag Manager (noscript) -->
-                <noscript>
-                    <iframe src="https://www.googletagmanager.com/ns.html?id={{ google_tag }}"
-                            height="0"
-                            width="0"
-                            class="gtagmanager">
-                    </iframe>
-                </noscript>
-                <!-- End Google Tag Manager (noscript) -->
-            {% endif %}
-            {% compress js %}
-                <script defer src="{% static 'alpha/assets/js/jquery.dropotron.min.js' %}"></script>
-                <script defer src="{% static 'alpha/assets/js/util.js' %}"></script>
-                <script defer src="{% static 'alpha/assets/js/main.js' %}"></script>
-                <script defer src="{% static 'larpmanager/assets/js/lm.js' %}"></script>
-            {% endcompress %}
-        {% else %}
-            {% compress js %}
-                <script defer src="{% static 'solid_state/assets/js/util.js' %}"></script>
-                <script defer src="{% static 'solid_state/assets/js/main.js' %}"></script>
-                <script defer src="{% static 'larpmanager/assets/js/lm.js' %}"></script>
-            {% endcompress %}
-        {% endif %}
+        {% compress js %}
+            <script defer src="{% static 'solid_state/assets/js/util.js' %}"></script>
+            <script defer src="{% static 'solid_state/assets/js/main.js' %}"></script>
+            <script defer src="{% static 'larpmanager/assets/js/lm.js' %}"></script>
+        {% endcompress %}
         {% block js %}
         {% endblock js %}
         {% block js2 %}

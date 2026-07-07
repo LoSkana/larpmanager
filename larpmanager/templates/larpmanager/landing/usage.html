@@ -1,0 +1,65 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ texts.usage_page_title }}
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="keywords" content="{{ texts.usage_meta_keywords }}">
+    <meta name="description" content="{{ texts.usage_meta_description }}">
+{% endblock meta %}
+{% block landing_eyebrow %}
+    Pricing
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {{ texts.usage_title }}
+{% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>{{ texts.usage_sub }}</p>
+{% endblock landing_subtitle %}
+{% block landing_content %}
+    <div class="plan-grid">
+        <div class="plan">
+            <h3>Free</h3>
+            <p class="price">0 €</p>
+            <p class="price-note">forever</p>
+            <ul>
+                <li>Unlimited events</li>
+                <li>Unlimited players</li>
+                <li>Unlimited registrations</li>
+                <li>Full feature access</li>
+                <li>Community support</li>
+            </ul>
+            <a class="btn btn-primary" href="{% url 'join' %}" title="Get Started">Get started</a>
+        </div>
+        <div class="plan featured">
+            <h3>Support</h3>
+            <p class="price">1 € / registration</p>
+            <p class="price-note">or 1% on tickets sold, whichever you prefer: no monthly fees, no surprises</p>
+            <ul>
+                <li>Everything in Free</li>
+                <li>Priority technical support</li>
+                <li>Guaranteed SLAs</li>
+                <li>24/7 infrastructure monitoring</li>
+                <li>Custom feature development</li>
+            </ul>
+            <a class="btn btn-primary" href="{% url 'contact' %}" title="Contact us">Talk to us</a>
+        </div>
+        <div class="plan">
+            <h3>Self-host</h3>
+            <p class="price">Free</p>
+            <p class="price-note">open source, AGPL</p>
+            <ul>
+                <li>Everything in Free</li>
+                <li>Full source code on GitHub</li>
+                <li>Host on your own servers</li>
+                <li>No data leaves your infrastructure</li>
+                <li>Self-managed setup, no guaranteed SLA</li>
+            </ul>
+            <a class="btn btn-outline"
+               href="https://github.com/LoSkana/larpmanager"
+               target="_blank"
+               rel="noopener noreferrer">View on GitHub</a>
+        </div>
+    </div>
+    {% if texts.usage_content %}<div class="about-prose landing-prose">{{ texts.usage_content | safe }}</div>{% endif %}
+{% endblock landing_content %}

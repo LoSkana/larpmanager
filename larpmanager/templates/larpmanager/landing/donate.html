@@ -1,0 +1,30 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    LarpManager Donation
+{% endblock maintitle %}
+{% block landing_eyebrow %}
+    Donate
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    Thank you so much!
+{% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>
+        Your support helps us sustain and improve the LarpManager project, allowing us to keep building tools for the community.
+    </p>
+    <p>To proceed, simply click the confirmation button and you will be redirected to PayPal to complete your donation.</p>
+{% endblock landing_subtitle %}
+{% block landing_content %}
+    <form class="contact-form"
+          action="{{ request.path }}"
+          method="post"
+          enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <input class="btn btn-primary"
+               type="submit"
+               id="id_submit"
+               value="{% trans "Confirm" %}">
+    </form>
+{% endblock landing_content %}

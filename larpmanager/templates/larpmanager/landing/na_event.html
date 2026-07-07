@@ -1,0 +1,25 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    Event not found
+{% endblock maintitle %}
+{% block landing_title %}
+    Event not found
+{% endblock landing_title %}
+{% block landing_content %}
+    <div class="about-prose">
+        <p>Heya! You requested an advanced feature of the larpmanager, but we couldn't find an event that you manage.</p>
+        <p>
+            Maybe someone already created the event? In this case ask them to add you to one of the roles in order to help them manage it!
+        </p>
+        <p>
+            If the event does not exists yet, <a href="{% url 'exe_events' %}">click here to create one</a>.
+        </p>
+        <p>
+            <i>Need help? <span class="contact-mail"></span></i>
+        </p>
+    </div>
+{% endblock landing_content %}
+{% block js2 %}
+    {% include "elements/contact-mail.js" %}
+{% endblock js2 %}

@@ -7406,15 +7406,15 @@ msgstr ""
 msgid "Partners"
 msgstr ""
 
-msgid "Show inactive"
-msgstr ""
-
 msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr ""
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you "
 "most"
+msgstr ""
+
+msgid "Show inactive"
 msgstr ""
 
 msgid ""
@@ -7462,6 +7462,62 @@ msgstr ""
 msgid ""
 "You have activated the following features, for each here's the links to "
 "follow"
+msgstr ""
+
+msgid "Accept role invitation"
+msgstr ""
+
+msgid ""
+"Accept your role invitation to gain access to the associated event or "
+"organization"
+msgstr ""
+
+msgid "Role invitation"
+msgstr ""
+
+msgid "You have been invited to join the role"
+msgstr ""
+
+msgid "for event"
+msgstr ""
+
+msgid "in the organization"
+msgstr ""
+
+msgid ""
+"By accepting this invitation, your profile data (name, email, and other "
+"information you have provided) will be shared with this organization through "
+"the LarpManager platform"
+msgstr ""
+
+msgid "I authorize sharing my data with this organization"
+msgstr ""
+
+msgid "Accept invitation"
+msgstr ""
+
+msgid "Invite to role"
+msgstr ""
+
+msgid "Invite a user by email to join this role"
+msgstr ""
+
+msgid "Email address"
+msgstr ""
+
+msgid "Enter email address"
+msgstr ""
+
+msgid "Send invitation"
+msgstr ""
+
+msgid "Sent invitations"
+msgstr ""
+
+msgid "Sent"
+msgstr ""
+
+msgid "Redeemed"
 msgstr ""
 
 #, python-format
@@ -9720,62 +9776,6 @@ msgstr ""
 
 msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
-msgstr ""
-
-msgid "Accept role invitation"
-msgstr ""
-
-msgid ""
-"Accept your role invitation to gain access to the associated event or "
-"organization"
-msgstr ""
-
-msgid "Role invitation"
-msgstr ""
-
-msgid "You have been invited to join the role"
-msgstr ""
-
-msgid "for event"
-msgstr ""
-
-msgid "in the organization"
-msgstr ""
-
-msgid ""
-"By accepting this invitation, your profile data (name, email, and other "
-"information you have provided) will be shared with this organization through "
-"the LarpManager platform"
-msgstr ""
-
-msgid "I authorize sharing my data with this organization"
-msgstr ""
-
-msgid "Accept invitation"
-msgstr ""
-
-msgid "Invite to role"
-msgstr ""
-
-msgid "Invite a user by email to join this role"
-msgstr ""
-
-msgid "Email address"
-msgstr ""
-
-msgid "Enter email address"
-msgstr ""
-
-msgid "Send invitation"
-msgstr ""
-
-msgid "Sent invitations"
-msgstr ""
-
-msgid "Sent"
-msgstr ""
-
-msgid "Redeemed"
 msgstr ""
 
 msgid "Please correct the error below"
