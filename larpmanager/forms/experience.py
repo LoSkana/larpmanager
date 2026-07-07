@@ -32,11 +32,9 @@ from larpmanager.forms.utils import (
     ComputedFieldS2Widget,
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
-    RunCampaignS2Widget,
     SystemExpS2Widget,
     WritingTinyMCE,
 )
-from larpmanager.models.event import Run
 from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
@@ -87,9 +85,9 @@ class ExpBaseForm(BaseModelForm):
 class OrgaDeliveryExpForm(ExpBaseForm):
     """Form for OrgaDeliveryExp."""
 
-    page_title = _("Delivery")
+    page_title = _("Award")
 
-    page_info = _("Manage experience point deliveries awarded to characters")
+    page_info = _("Manage experience point awarded to characters")
 
     class Meta:
         model = DeliveryExp
@@ -108,27 +106,6 @@ class OrgaDeliveryExpForm(ExpBaseForm):
             self.instance._default_system = systems[0]  # noqa: SLF001
         elif "system" in self.fields:
             self.configure_field_event("system", event)
-
-
-class OrgaDeliveryExpLoadForm(BaseForm):
-    """Form for selecting a run to pre-populate delivery characters."""
-
-    page_title = _("Load participants")
-    page_info = _("Select an event to pre-load its registered participants into a new delivery")
-
-    run = forms.ModelChoiceField(
-        queryset=Run.objects.none(),
-        required=True,
-        label=_("Event"),
-        help_text=_("All characters from this event's registrations will be pre-loaded into the new delivery"),
-        widget=RunCampaignS2Widget,
-    )
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with event-scoped run queryset."""
-        self.params = kwargs.pop("context", {})
-        super().__init__(*args, **kwargs)
-        self.configure_field_event("run", self.params.get("event"))
 
 
 class OrgaAbilityTemplateExpForm(BaseModelForm):

@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends parent_template|default:"base.html" %}
 {% load static i18n show_tags socialaccount %}
 {% block title %}
     Login

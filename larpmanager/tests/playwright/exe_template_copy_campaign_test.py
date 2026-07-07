@@ -152,8 +152,8 @@ def setup(live_server: Any, page: Any) -> None:
     char_dual_pick(edit_iframe, "te", "Test Character")
     save_modal(page, edit_iframe)
 
-    # give delivery xp
-    go_to(page, live_server, "/test/manage/experience/deliveries/")
+    # give award xp
+    go_to(page, live_server, "/test/manage/experience/awards/")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()

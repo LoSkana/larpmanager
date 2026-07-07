@@ -178,7 +178,7 @@ def get_delivery_rels(delivery: DeliveryExp) -> dict[str, Any]:
         relationships["character_rels"] = build_relationship_dict(character_list)
 
     except Exception:
-        logger.exception("Error getting relationships for delivery %s", delivery.id)
+        logger.exception("Error getting relationships for award %s", delivery.id)
         relationships = {}
 
     return relationships

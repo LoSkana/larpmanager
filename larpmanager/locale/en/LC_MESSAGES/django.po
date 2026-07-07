@@ -1047,7 +1047,7 @@ msgstr ""
 msgid "Abilities"
 msgstr ""
 
-msgid "Delivery"
+msgid "Award"
 msgstr ""
 
 msgid "Manage the questions displayed in the character writing form"
@@ -1540,7 +1540,7 @@ msgstr ""
 
 msgid ""
 "If checked, enables managing multiple experience systems for the event. Each "
-"ability and delivery can be assigned to a specific system."
+"ability and award can be assigned to a specific system."
 msgstr ""
 
 msgid "Character creation"
@@ -2166,19 +2166,7 @@ msgstr ""
 msgid "Manage the experience point systems available for this event"
 msgstr ""
 
-msgid "Manage experience point deliveries awarded to characters"
-msgstr ""
-
-msgid "Load participants"
-msgstr ""
-
-msgid ""
-"Select an event to pre-load its registered participants into a new delivery"
-msgstr ""
-
-msgid ""
-"All characters from this event's registrations will be pre-loaded into the "
-"new delivery"
+msgid "Manage experience point awarded to characters"
 msgstr ""
 
 msgid "Ability Template"
@@ -5727,7 +5715,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-msgid "Deliveries"
+msgid "Awards"
 msgstr ""
 
 msgid "View Details"
@@ -8718,10 +8706,13 @@ msgstr ""
 msgid "Use the button above to create the first criterion"
 msgstr ""
 
-msgid "No deliveries defined yet"
+msgid "Load participants"
 msgstr ""
 
-msgid "Use the button above to create the first delivery"
+msgid "No awards defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first award of experience points"
 msgstr ""
 
 msgid "New cost"
@@ -10849,7 +10840,7 @@ msgstr ""
 msgid "Manage the character abilities purchaseable with experience"
 msgstr ""
 
-msgid "Manage experience distributions for character abilities purchases."
+msgid "Manage experience awarded to characters"
 msgstr ""
 
 msgid "Manage templates for experience abilities"
@@ -11462,10 +11453,10 @@ msgstr ""
 msgid "Set ability type"
 msgstr ""
 
-msgid "Add to xp delivery"
+msgid "Add to xp award"
 msgstr ""
 
-msgid "Remove from xp delivery"
+msgid "Remove from xp award"
 msgstr ""
 
 msgid "Add prologue"
@@ -11995,7 +11986,7 @@ msgstr ""
 msgid "Ability types without abilities: %(list)s"
 msgstr ""
 
-msgid "Set up delivery for experience points"
+msgid "Set up award for experience points"
 msgstr ""
 
 msgid "Fixed and dynamic installments cannot be used together; deactivate one"
@@ -12124,6 +12115,9 @@ msgid "Status updated"
 msgstr ""
 
 msgid "Registration settings updated"
+msgstr ""
+
+msgid "Partecipation to"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"

@@ -855,7 +855,7 @@ class OrgaConfigForm(ConfigForm):
             multiple_systems_label = _("Multiple systems")
             multiple_systems_help_text = _(
                 "If checked, enables managing multiple experience systems for the event. "
-                "Each ability and delivery can be assigned to a specific system.",
+                "Each ability and award can be assigned to a specific system.",
             )
             self.add_configs("exp_systems", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
 
