@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Delivery" %} - {{ run.search | truncatechars:50 }}
+    {% trans "Awards" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
     {% url 'orga_exp_deliveries_load' run.get_slug as load_url %}
@@ -60,7 +60,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No deliveries defined yet" %}. {% trans "Use the button above to create the first delivery" %}.
+            {% trans "No awards defined yet" %}. {% trans "Use the button above to create the first award of experience points" %}.
         </p>
     {% endif %}
     {% include "elements/table/footer.html" %}

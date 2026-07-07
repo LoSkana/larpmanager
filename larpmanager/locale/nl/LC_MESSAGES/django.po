@@ -341,6 +341,9 @@ msgstr "Audio"
 msgid "Avoid"
 msgstr "Vermijd"
 
+msgid "Award"
+msgstr "Prijs"
+
 msgid "Badge"
 msgstr "Badges"
 
@@ -552,6 +555,9 @@ msgstr "Som"
 
 msgid "Answer"
 msgstr "Antwoord"
+
+msgid "Awards"
+msgstr "Onderscheidingen"
 
 msgid "Badges"
 msgstr "Badges"
@@ -1166,9 +1172,6 @@ msgstr "Schepping"
 msgid "Deadline"
 msgstr "Deadline"
 
-msgid "Delivery"
-msgstr "Uitbetalingen"
-
 msgid "Deployed"
 msgstr "Ingezet"
 
@@ -1756,9 +1759,6 @@ msgstr "Criteria"
 
 msgid "Deleted on"
 msgstr "Verwijderd op"
-
-msgid "Deliveries"
-msgstr "Leveringen"
 
 msgid "Easter egg"
 msgstr "Paasei"
@@ -3064,6 +3064,9 @@ msgstr "Vermogen ontbreekt"
 msgid "Ability removed"
 msgstr "Vermogen verwijderd"
 
+msgid "Add to xp award"
+msgstr "Toevoegen aan xp-beloning"
+
 msgid "App Integration"
 msgstr "App integratie"
 
@@ -3429,6 +3432,9 @@ msgstr "Lidmaatschap"
 
 msgid "Organization tax"
 msgstr "Lidmaatschap"
+
+msgid "Partecipation to"
+msgstr "Deelname aan"
 
 msgid "Password changed"
 msgstr "Wachtwoord gewijzigd"
@@ -3810,9 +3816,6 @@ msgstr "Toegang tot de geschiedenis"
 
 msgid "Account activation"
 msgstr "Account activeren"
-
-msgid "Add to xp delivery"
-msgstr "Toevoegen aan xp levering"
 
 msgid "Added to the queue"
 msgstr "Mail toegevoegd aan wachtrij"
@@ -4327,6 +4330,9 @@ msgstr "De inschrijvingen zijn gesloten"
 msgid "Registrations status"
 msgstr "Status registraties"
 
+msgid "Remove from xp award"
+msgstr "Verwijder uit de XP-beloning"
+
 msgid "Require registration"
 msgstr "Registratie verplichten"
 
@@ -4464,6 +4470,9 @@ msgstr "Nieuwe voorinschrijving"
 
 msgid "No albums created yet"
 msgstr "Er zijn nog geen albums aangemaakt"
+
+msgid "No awards defined yet"
+msgstr "Er zijn nog geen prijzen vastgesteld"
 
 msgid "No organization found"
 msgstr "Geen organisatie gevonden"
@@ -4844,9 +4853,6 @@ msgstr "Voorwaarden"
 msgid "Reminder membership fee"
 msgstr "Herinnering lidmaatschapsgeld"
 
-msgid "Remove from xp delivery"
-msgstr "Verwijderen uit xp-levering"
-
 msgid "Separate membership fee"
 msgstr "Apart lidmaatschapsgeld"
 
@@ -5064,9 +5070,6 @@ msgstr "Nieuw bericht van %(user)s"
 
 msgid "No criterions defined yet"
 msgstr "Er zijn nog geen criteria vastgesteld"
-
-msgid "No deliveries defined yet"
-msgstr "Er zijn nog geen leveringen gedefinieerd"
 
 msgid "No expenses submitted yet"
 msgstr "Onderdanig antwoord"
@@ -6131,6 +6134,9 @@ msgstr "Secretariaat - briefpapier, drukwerk"
 msgid "Set the registration external link"
 msgstr "De externe link voor registratie instellen"
 
+msgid "Set up award for experience points"
+msgstr "Stel een beloning in voor ervaringspunten"
+
 msgid "Set up the membership request text"
 msgstr "De tekst voor de lidmaatschapsaanvraag instellen"
 
@@ -6491,9 +6497,6 @@ msgstr "Selecteer de organisatie om verder te gaan"
 msgid "Set the organization payment currency"
 msgstr "De betalingsvaluta van de organisatie instellen"
 
-msgid "Set up delivery for experience points"
-msgstr "Leveringen voor ervaringspunten instellen"
-
 msgid "The question type, allowed values are"
 msgstr "Het vraagtype, toegestane waarden zijn"
 
@@ -6671,6 +6674,9 @@ msgstr "Koppeling naar een extern registratiesysteem"
 
 msgid "MIME type of the file (e.g., video/mp4)"
 msgstr "MIME-type van het bestand (bijv. video/mp4)"
+
+msgid "Manage experience awarded to characters"
+msgstr "De ervaring van personages beheren"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Taken beheren en toewijzen aan personages"
@@ -7354,6 +7360,9 @@ msgstr "Geeft het gewenste terugbetalingsbedrag aan"
 msgid "Manage badges and assign them to participants"
 msgstr "Badges beheren en toewijzen aan deelnemers"
 
+msgid "Manage experience point awarded to characters"
+msgstr "Beheer de ervaringspunten die aan personages worden toegekend"
+
 msgid "Manage the registration questions and options"
 msgstr "De registratievragen en -opties beheren"
 
@@ -7755,9 +7764,6 @@ msgstr "Dit lid heeft zich nog niet voor evenementen aangemeld"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerantie overschreden, doorgaan met annuleren"
-
-msgid "Use the button above to create the first delivery"
-msgstr "Gebruik de knop hierboven om de eerste levering aan te maken"
 
 msgid "Use the button above to create the first modifier"
 msgstr "Gebruik de knop hierboven om de eerste modifier aan te maken"
@@ -8300,9 +8306,6 @@ msgstr "Als je een gratis donatie aan de vereniging wilt doen"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Geef aan of het veld wordt afgedrukt in PDF-generaties"
-
-msgid "Manage experience point deliveries awarded to characters"
-msgstr "Beheer de toekenning van ervaringspunten aan personages"
 
 msgid "Manage registrations discounts available to participants"
 msgstr "Beheer registraties kortingen beschikbaar voor deelnemers"
@@ -9191,11 +9194,6 @@ msgstr ""
 "Geeft medewerkers toegang tot de veiligheidsinformatie die deelnemers hebben"
 " ingediend"
 
-msgid "Manage experience distributions for character abilities purchases."
-msgstr ""
-"Beheer ervaringsverdelingen voor de aankoop van vaardigheden voor "
-"personages."
-
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Beheert de kredieten die deelnemers gebruiken om het inschrijfgeld te dekken"
@@ -9304,6 +9302,11 @@ msgid "Use the button above to add a prologue type to group your prologues"
 msgstr ""
 "Gebruik de knop hierboven om een proloogtype toe te voegen en je "
 "proloogteksten te groeperen"
+
+msgid "Use the button above to create the first award of experience points"
+msgstr ""
+"Gebruik de knop hierboven om de eerste beloning in de vorm van "
+"ervaringspunten te verdienen"
 
 msgid "View all event information, and any specifics tickets costs, in its"
 msgstr ""
@@ -10167,12 +10170,6 @@ msgid ""
 msgstr ""
 "Kies een deelnemer en een evenement om de overdracht van de inschrijving te "
 "starten"
-
-msgid ""
-"Select an event to pre-load its registered participants into a new delivery"
-msgstr ""
-"Kies een evenement om de geregistreerde deelnemers ervan vooraf in een "
-"nieuwe verzending te laden"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -11388,13 +11385,6 @@ msgid ""
 msgstr ""
 "<i>Betaling te laat</i>: Betaal <b>%(amount).2f %(currency)s</b> zo snel "
 "mogelijk"
-
-msgid ""
-"All characters from this event's registrations will be pre-loaded into the "
-"new delivery"
-msgstr ""
-"Alle personages uit de registraties voor dit evenement worden vooraf in de "
-"nieuwe versie geladen"
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
@@ -13616,6 +13606,14 @@ msgstr ""
 "pagina te openen. Wil je inloggen met een ander account?"
 
 msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and award can be assigned to a specific system."
+msgstr ""
+"Als dit aangevinkt is, kun je meerdere ervaringssystemen voor het evenement "
+"beheren. Elke vaardigheid en elke beloning kan aan een specifiek systeem "
+"worden toegewezen."
+
+msgid ""
 "If checked, participants may add abilities themselves, by selecting from "
 "those that are visible, and whose pre-requisites they meet."
 msgstr ""
@@ -13703,14 +13701,6 @@ msgid ""
 msgstr ""
 "Geeft, gegeven een betalingstermijn, het aantal dagen aan waarbinnen het de "
 "deelnemer op de hoogte stelt om door te gaan met de betaling. Standaard 30."
-
-msgid ""
-"If checked, enables managing multiple experience systems for the event. Each"
-" ability and delivery can be assigned to a specific system."
-msgstr ""
-"Als deze optie is aangevinkt, kunnen meerdere belevingssystemen voor het "
-"evenement worden beheerd. Elke mogelijkheid en levering kan worden "
-"toegewezen aan een specifiek systeem."
 
 #, python-format
 msgid ""

@@ -845,7 +845,7 @@ def _orga_exp_actions(context: dict, enabled_features: dict, actions_data: dict)
     if not actions_data.get("has_delivery_px", False):
         _add_priority(
             context,
-            _("Set up delivery for experience points"),
+            _("Set up award for experience points"),
             "orga_exp_deliveries",
         )
 

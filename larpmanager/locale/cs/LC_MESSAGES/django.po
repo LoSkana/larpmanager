@@ -341,6 +341,9 @@ msgstr "Audio"
 msgid "Avoid"
 msgstr "Vyhněte se"
 
+msgid "Award"
+msgstr "Ocenění"
+
 msgid "Badge"
 msgstr "Odznaky"
 
@@ -552,6 +555,9 @@ msgstr "Součet"
 
 msgid "Answer"
 msgstr "Odpověď"
+
+msgid "Awards"
+msgstr "Ocenění"
 
 msgid "Badges"
 msgstr "Odznaky"
@@ -1166,9 +1172,6 @@ msgstr "Vytvoření"
 msgid "Deadline"
 msgstr "Termín"
 
-msgid "Delivery"
-msgstr "Výplaty"
-
 msgid "Deployed"
 msgstr "Nasazení"
 
@@ -1756,9 +1759,6 @@ msgstr "Kritéria"
 
 msgid "Deleted on"
 msgstr "Odstraněno dne"
-
-msgid "Deliveries"
-msgstr "Dodávky"
 
 msgid "Easter egg"
 msgstr "Velikonoční vajíčko"
@@ -3064,6 +3064,9 @@ msgstr "Chybějící schopnost"
 msgid "Ability removed"
 msgstr "Odstranění schopnosti"
 
+msgid "Add to xp award"
+msgstr "Přidat k ocenění XP"
+
 msgid "App Integration"
 msgstr "Integrace aplikací"
 
@@ -3429,6 +3432,9 @@ msgstr "Členský poplatek"
 
 msgid "Organization tax"
 msgstr "Členský poplatek"
+
+msgid "Partecipation to"
+msgstr "Účast na"
 
 msgid "Password changed"
 msgstr "Změna hesla"
@@ -3810,9 +3816,6 @@ msgstr "Přístup k historii"
 
 msgid "Account activation"
 msgstr "Aktivace účtu"
-
-msgid "Add to xp delivery"
-msgstr "Přidat do dodávky xp"
 
 msgid "Added to the queue"
 msgstr "Mail přidán do fronty"
@@ -4327,6 +4330,9 @@ msgstr "Registrace byla ukončena"
 msgid "Registrations status"
 msgstr "Stav registrací"
 
+msgid "Remove from xp award"
+msgstr "Odstranit z ocenění XP"
+
 msgid "Require registration"
 msgstr "Vyžadovat registraci"
 
@@ -4464,6 +4470,9 @@ msgstr "Nová předběžná registrace"
 
 msgid "No albums created yet"
 msgstr "Zatím nebyla vytvořena žádná alba"
+
+msgid "No awards defined yet"
+msgstr "Zatím nejsou definovány žádné ceny"
 
 msgid "No organization found"
 msgstr "Nebyla nalezena žádná organizace"
@@ -4844,9 +4853,6 @@ msgstr "Vstupní podmínky"
 msgid "Reminder membership fee"
 msgstr "Připomenutí členského poplatku"
 
-msgid "Remove from xp delivery"
-msgstr "Odstranění z dodávky xp"
-
 msgid "Separate membership fee"
 msgstr "Samostatný členský poplatek"
 
@@ -5064,9 +5070,6 @@ msgstr "Nová zpráva od %(user)s"
 
 msgid "No criterions defined yet"
 msgstr "Zatím nebyla definována žádná kritéria"
-
-msgid "No deliveries defined yet"
-msgstr "Zatím nejsou definovány žádné dodávky"
 
 msgid "No expenses submitted yet"
 msgstr "Submisivní odpověď"
@@ -6131,6 +6134,9 @@ msgstr "Sekretářské služby - kancelářské potřeby, tisk"
 msgid "Set the registration external link"
 msgstr "Nastavení externího odkazu pro registraci"
 
+msgid "Set up award for experience points"
+msgstr "Nastavit odměnu za zkušenostní body"
+
 msgid "Set up the membership request text"
 msgstr "Nastavení textu žádosti o členství"
 
@@ -6491,9 +6497,6 @@ msgstr "Vyberte organizaci, na kterou chcete přejít"
 msgid "Set the organization payment currency"
 msgstr "Nastavení měny platby organizace"
 
-msgid "Set up delivery for experience points"
-msgstr "Nastavení doručování zkušenostních bodů"
-
 msgid "The question type, allowed values are"
 msgstr "Typ otázky, povolené hodnoty jsou"
 
@@ -6665,6 +6668,9 @@ msgstr "Odkaz na externí registrační systém"
 
 msgid "MIME type of the file (e.g., video/mp4)"
 msgstr "Typ MIME souboru (např. video/mp4)"
+
+msgid "Manage experience awarded to characters"
+msgstr "Správa zkušeností přidělených postavám"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Správa a přidělování úkolů postavám"
@@ -7343,6 +7349,9 @@ msgstr "Uvádí požadovanou výši úhrady"
 msgid "Manage badges and assign them to participants"
 msgstr "Správa odznaků a jejich přiřazování účastníkům"
 
+msgid "Manage experience point awarded to characters"
+msgstr "Správa zkušenostních bodů přidělených postavám"
+
 msgid "Manage the registration questions and options"
 msgstr "Správa registračních otázek a možností"
 
@@ -7738,9 +7747,6 @@ msgstr "Tento člen se zatím nepřihlásil na žádnou akci"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Překročení tolerance, pokračujte ve zrušení"
-
-msgid "Use the button above to create the first delivery"
-msgstr "Pomocí tlačítka výše vytvořte první zásilku"
 
 msgid "Use the button above to create the first modifier"
 msgstr "Pomocí tlačítka výše vytvořte první modifikátor"
@@ -8261,9 +8267,6 @@ msgstr "Pokud chcete sdružení bezplatně přispět"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Uveďte, zda se pole tiskne v generacích PDF"
-
-msgid "Manage experience point deliveries awarded to characters"
-msgstr "Správa přidělování zkušenostních bodů postavám"
 
 msgid "Manage registrations discounts available to participants"
 msgstr "Správa slev pro účastníky při registraci"
@@ -9043,9 +9046,6 @@ msgstr ""
 "Umožňuje pracovníkům přístup k bezpečnostním informacím předloženým "
 "účastníky"
 
-msgid "Manage experience distributions for character abilities purchases."
-msgstr "Správa distribuce zkušeností pro nákup schopností postavy."
-
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "spravuje kredity, které účastníci využívají k úhradě registračního poplatku"
@@ -9137,6 +9137,9 @@ msgstr "Pomocí tlačítka výše přidejte šablonu rozvržení CSS pro své po
 msgid "Use the button above to add a prologue type to group your prologues"
 msgstr ""
 "Pomocí tlačítka výše přidejte typ prologu, abyste své prology seskupili"
+
+msgid "Use the button above to create the first award of experience points"
+msgstr "Pomocí tlačítka výše udělejte první přidělení zkušenostních bodů"
 
 msgid "View all event information, and any specifics tickets costs, in its"
 msgstr ""
@@ -9898,12 +9901,6 @@ msgid ""
 "Select a participant and a target event to initiate a registration transfer"
 msgstr ""
 "Vyberte účastníka a cílovou událost, abyste zahájili převod registrace"
-
-msgid ""
-"Select an event to pre-load its registered participants into a new delivery"
-msgstr ""
-"Vyberte událost, abyste předem načtli její registrované účastníky do nového "
-"rozesílání"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -11049,12 +11046,6 @@ msgid ""
 msgstr ""
 "<i>Platba po splatnosti</i>: <b>%(amount).2f %(currency)s</b> uhraďte prosím"
 " co nejdříve"
-
-msgid ""
-"All characters from this event's registrations will be pre-loaded into the "
-"new delivery"
-msgstr ""
-"Všechny postavy z registrací této akce budou předem načteny do nové verze"
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
@@ -13231,6 +13222,14 @@ msgstr ""
 "stránku. Chcete se přihlásit k jinému účtu?"
 
 msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and award can be assigned to a specific system."
+msgstr ""
+"Je-li tato možnost zaškrtnuta, umožní to spravovat více systémů zážitků pro "
+"danou událost. Každou schopnost a odměnu lze přiřadit ke konkrétnímu "
+"systému."
+
+msgid ""
 "If checked, participants may add abilities themselves, by selecting from "
 "those that are visible, and whose pre-requisites they meet."
 msgstr ""
@@ -13313,13 +13312,6 @@ msgid ""
 msgstr ""
 "Vzhledem k termínu platby uvede počet dní, do kterých oznámí účastníkovi, "
 "aby platbu provedl. Výchozí hodnota 30."
-
-msgid ""
-"If checked, enables managing multiple experience systems for the event. Each"
-" ability and delivery can be assigned to a specific system."
-msgstr ""
-"Pokud je zaškrtnuto, umožňuje správu více systémů zážitků pro danou událost."
-" Každou schopnost a dodávku lze přiřadit k určitému systému."
 
 #, python-format
 msgid ""

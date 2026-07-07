@@ -30,7 +30,6 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
-    _select2_search_and_pick,
     _wait_lm_ready,
     char_dual_pick,
     click_and_wait_question,
