@@ -1,11 +1,10 @@
-/*** GENERAL (from solid_state.css) ***/
+/*** GENERAL ***/
 
 body {
   background: #3b3b3b;
 
   background-attachment: fixed;
   background-size: cover;
-  height: 100%;
 }
 
 .inner h2 {
@@ -30,17 +29,9 @@ body {
   line-height: 1.2;
   margin-bottom: 0em;
   font-size: 1.8em;
-  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-@media screen and (max-width: 736px) {
-  #banner h1 {
-    font-size: 1.3em;
-    height: 2.5em;
-  }
 }
 
 body.new_v20 #banner {
@@ -59,6 +50,8 @@ body.new_v20 #banner h1 span {
 #footer {
   margin-top: 3em;
   padding: 0 0 1em 0;
+  background: none;
+  margin: 0 auto;
 }
 
 #footer .inner {
@@ -74,11 +67,6 @@ body.new_v20 #banner h1 span {
 #banner,
 #one {
   background: none;
-}
-
-#footer {
-  background: none;
-  margin: 0 auto;
 }
 
 #banner .inner,
@@ -117,7 +105,7 @@ body.new_v20 #banner h1 span {
   margin: 0;
 }
 
-/*** MOBILE (from solid_state.css) ***/
+/*** MOBILE ***/
 
 @media screen and (max-width: 770px) {
   #banner {
@@ -139,20 +127,15 @@ body.new_v20 #banner h1 span {
   #one .inner,
   #footer .inner {
     width: 100%;
-    padding: 0 0.5em;
+    padding: 0 0.3em;
   }
 
   #banner h1 {
+    height: 2.5em;
     padding: 0.2em 2em;
     font-size: 1.2em;
     line-height: 1.1;
     min-height: 2em;
-  }
-
-  #banner .inner,
-  #one .inner,
-  #footer .inner {
-    padding: 0 0.3em;
   }
 }
 

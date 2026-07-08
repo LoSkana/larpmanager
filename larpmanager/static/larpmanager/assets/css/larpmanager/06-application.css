@@ -1,4 +1,4 @@
-/*** GENERAL (from solid_state.css) ***/
+/*** GENERAL ***/
 
 .home {
   text-align: center;
@@ -13,7 +13,7 @@
   border-radius: 1em;
 }
 
-/*** show_char (from solid_state.css) ***/
+/*** show_char ***/
 
 .has_show_char {
   display: inline-block;
@@ -59,7 +59,7 @@
   border-radius: 10%;
 }
 
-/*** GALLERY (from solid_state.css) ***/
+/*** GALLERY ***/
 
 .title {
   font-size: 200%;
@@ -204,7 +204,7 @@
   padding: 0 1em;
 }
 
-/*** plot (from solid_state.css) ***/
+/*** plot ***/
 
 .plot {
   text-align: left !important;
@@ -246,7 +246,7 @@ form .plot {
   color: var(--sec-clr);
 }
 
-/*** MISCELLANEA - workshop (from solid_state.css) ***/
+/*** MISCELLANEA - workshop ***/
 
 .workshop {
   text-align: center;
@@ -297,17 +297,13 @@ form .plot {
   font-weight: bolder;
 }
 
-/*** OTHER (from solid_state.css) ***/
+/*** OTHER ***/
 
 .membership_document {
   width: 80%;
 }
 
-.membership_request {
-  width: 100%;
-}
-
-/*** misc (from solid_state.css) ***/
+/*** misc ***/
 
 #player_relationships .teas {
   font-size: 80%;
@@ -345,18 +341,6 @@ form .plot {
   min-width: 10em;
 }
 
-#sheet_pdf textarea {
-  width: 100%;
-}
-
-#sheet_pdf th {
-  font-size: 150%;
-}
-
-#sheet_pdf .code {
-  font-style: italic;
-}
-
 #payment_form {
   width: auto;
 }
@@ -369,11 +353,7 @@ form .plot {
   width: auto;
 }
 
-.paginate select {
-  display: inline-block;
-}
-
-/*** MOBILE (from solid_state.css) ***/
+/*** MOBILE ***/
 
 @media screen and (max-width: 1400px) {
   .gallery .el {
@@ -403,18 +383,15 @@ form .plot {
   .gallery .text {
     margin: 0 !important;
     padding: 0 !important;
+    width: 100%;
+    margin: 0 auo;
+    padding-right: 1em;
   }
 
   .gallery .el {
     width: 100%;
     float: none;
     margin: 1em auto;
-  }
-
-  .gallery .text {
-    width: 100%;
-    margin: 0 auo;
-    padding-right: 1em;
   }
 
   .gallery .badge .icon-name {
@@ -444,6 +421,15 @@ form .plot {
   display: none;
 }
 
+.reg-links {
+  text-align: center !important;
+}
+
+.reg-links span + span::before {
+  content: " | ";
+  opacity: 0.4;
+}
+
 .reg_profile {
   width: 8em;
 }
@@ -459,6 +445,41 @@ form .plot {
 
 .page_gallery .title {
   margin-bottom: 0.5em;
+}
+
+.page_gallery h1.title {
+  text-align: center;
+}
+
+#first_event h1 {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Calendar
+   --------------------------------------------------------------------------- */
+
+.calendar h3 {
+  font-size: 150%;
+  text-align: left;
+}
+
+@media (max-width: 840px) {
+  .calendar table,
+  .calendar tr,
+  .calendar td,
+  .calendar th {
+    text-align: center !important;
+    width: auto;
+  }
+
+  .calendar td {
+    padding: 0.2em !important;
+  }
+
+  .calendar .gall h3 {
+    text-align: center;
+  }
 }
 
 .cover-container {
@@ -571,6 +592,7 @@ form .plot {
    --------------------------------------------------------------------------- */
 
 .membership_request {
+  width: 100%;
   width: 50%;
 }
 
@@ -589,6 +611,11 @@ form .plot {
 .accounting_record {
   height: 500px;
   width: 100%;
+}
+
+.causal {
+  color: rgba(var(--ter-rgb), 0.9);
+  font-style: italic;
 }
 
 .inv_photo {
@@ -622,10 +649,6 @@ form .plot {
 /* ---------------------------------------------------------------------------
    Application - Casting
    --------------------------------------------------------------------------- */
-
-#main_casting hr {
-  margin: 1em 0;
-}
 
 /* ---------------------------------------------------------------------------
    Application - Features & Permissions
@@ -678,10 +701,6 @@ form .plot {
   color: red;
 }
 
-#not_chosen {
-  color: red;
-}
-
 .editable {
   cursor: cell;
 }
@@ -690,20 +709,16 @@ form .plot {
   cursor: pointer;
 }
 
-.bulk-el {
-  display: inline-block;
-}
-
 .paginate input {
   max-width: 100% !important;
 }
 
-#search {
-  margin-top: 0.5em;
+.paginate select {
+  display: inline-block;
 }
 
-#reading .post_popup {
-  display: none;
+#search {
+  margin-top: 0.5em;
 }
 
 .progress_done {
@@ -740,7 +755,6 @@ form .plot {
   margin: 0;
 }
 
-.new_v18 .abilities th,
 .new_v18 .abilities th {
   padding: 0.5em;
 }

@@ -1,4 +1,4 @@
-/*** graphite (from solid_state.css) ***/
+/*** graphite ***/
 
 .graphite-container,
 .graphite-column-label {
@@ -36,7 +36,6 @@
   appearance: none;
   background: rgba(var(--sec-rgb), 0.5);
   border-radius: 5px;
-  border: none;
   border: solid 2px rgba(var(--sec-rgb), 0.25);
   color: inherit;
   outline: 0;
@@ -82,17 +81,17 @@ div.dt-container .dt-paging .dt-paging-button {
   border: 0 !important;
 }
 
+.dt-paging-button:active {
+  box-shadow: none !important;
+  border: 0px !important;
+}
+
 div.dt-container .dt-length,
 div.dt-container .dt-search,
 div.dt-container .dt-info,
 div.dt-container .dt-processing,
 div.dt-container .dt-paging {
   color: rgba(var(--ter-rgb), 0.8) !important;
-}
-
-.dt-paging-button:active {
-  box-shadow: none !important;
-  border: 0px !important;
 }
 
 .dataTables_wrapper ::-webkit-scrollbar {
@@ -137,6 +136,11 @@ table.dataTable td.dt-type-date div.dt-column-footer {
   box-shadow: none;
 }
 
+.dt-button {
+  border: 0 !important;
+  background: 0 !important;
+}
+
 .dt-layout-row select,
 .dtcc-dropdown select,
 .dtcc-dropdown input {
@@ -171,8 +175,7 @@ div.dtcc-dropdown div.dtcc-search {
   font-size: 100%;
 }
 
-div.dtcc-dropdown div.dtcc-search > div div svg,
-div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
+div.dtcc-dropdown div.dtcc-search > div div svg {
   color: rgba(var(--pri-rgb), 1) !important;
 }
 
@@ -187,11 +190,7 @@ div.dtcc-dropdown div.dtcc-search > div input option {
 }
 
 div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
+  color: rgba(var(--pri-rgb), 1) !important;
   right: 1.3em;
   bottom: 0.4em;
-}
-
-.dt-button {
-  border: 0 !important;
-  background: 0 !important;
 }

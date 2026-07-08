@@ -1,4 +1,4 @@
-/*** CALENDARIO (from solid_state.css) ***/
+/*** CALENDARIO ***/
 
 .run_list hr {
   margin: 1em 0;
@@ -54,7 +54,7 @@
   }
 }
 
-/*** GENERAL (from solid_state.css) ***/
+/*** GENERAL ***/
 
 .reveal {
   display: none;
@@ -65,18 +65,14 @@
   border-radius: 1em;
 }
 
-/*** MISCELLANEA (from solid_state.css) ***/
+/*** MISCELLANEA ***/
 
 .my_pagination td {
   width: 33.3%;
   text-align: center;
 }
 
-.calendar h3 {
-  font-size: 150%;
-}
-
-/*** event cover (from solid_state.css) ***/
+/*** event cover ***/
 
 #event_cover {
   height: 25em;
@@ -274,10 +270,6 @@ body.association.new_v22 .user_resize {
 
 .new_v22 .icon-name p {
   text-align: center;
-}
-
-.calendar h3 {
-  text-align: left;
 }
 
 .new_v22 .page_search .nav {

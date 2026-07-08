@@ -1,4 +1,4 @@
-/*** tooltip (from solid_state.css) ***/
+/*** tooltip ***/
 
 .lm_tooltip .staff {
   color: var(--sec-clr);
@@ -36,51 +36,6 @@ div.ui-lm_tooltip {
 
 .qtip-char {
   width: 250px;
-}
-
-.popup_text {
-  display: none;
-}
-
-.popup {
-  border-radius: 2em;
-  background-color: rgba(var(--sec-rgb), 0.9);
-  width: 50em;
-  height: 30em;
-  padding: 1em;
-  -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
-  overflow: scroll;
-
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  text-align: center;
-}
-
-@media (max-width: 840px) {
-  .popup {
-    width: 20em;
-  }
-}
-
-.popup h2 {
-  margin: 1em;
-}
-
-.popup::-webkit-scrollbar {
-  display: none;
-}
-
-.reg_profile {
-  width: 8em;
-}
-
-.popup .reg_profile {
-  width: auto;
-  height: 90%;
-  margin: auto;
 }
 
 /* ---------------------------------------------------------------------------
@@ -250,6 +205,36 @@ div.ui-lm_tooltip {
   text-align: left;
 }
 
+.popup {
+  width: 50em;
+  height: 30em;
+  -ms-overflow-style: none;
+}
+
+@media (max-width: 840px) {
+  .popup {
+    width: 20em;
+  }
+}
+
+.popup h2 {
+  margin: 1em;
+}
+
+.popup::-webkit-scrollbar {
+  display: none;
+}
+
+.reg_profile {
+  width: 8em;
+}
+
+.popup .reg_profile {
+  width: auto;
+  height: 90%;
+  margin: auto;
+}
+
 .popup_small {
   width: fit-content;
   max-width: 50vw;
@@ -278,6 +263,36 @@ div.ui-lm_tooltip {
 .popup_delete .frame-container iframe {
   height: 200px;
   min-height: 200px;
+}
+
+#lm-modal {
+  padding: 1em;
+}
+
+#lm-modal-content {
+  height: 100%;
+}
+
+#lm-modal,
+#lm-modal-content,
+.frame-container {
+  overflow: hidden;
+}
+
+.frame-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.frame-container iframe {
+  transition: height 0.2s ease;
+  height: 100%;
+}
+
+body.floating_iframe #wrapper {
+  overflow-x: hidden;
+  padding-right: 0.5em;
 }
 
 @media (max-width: 800px) {

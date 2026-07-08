@@ -1,7 +1,8 @@
-/*** GENERAL (from solid_state.css) ***/
+/*** GENERAL ***/
 
 #menu .inner {
   background-color: #62c4c9;
+  padding: 1em;
 }
 
 #menu .inner,
@@ -38,16 +39,12 @@
   padding: 0.3em;
 }
 
-#menu .inner {
-  padding: 1em;
-}
-
 #menu .links li a {
   margin: 0em;
   font-size: 90%;
 }
 
-/*** MENU (from solid_state.css) ***/
+/*** MENU ***/
 
 #menu ul {
   -moz-user-select: none;
@@ -182,6 +179,7 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+  padding-top: 0.5em;
 }
 
 #sidebar:focus {
@@ -206,9 +204,9 @@
 
 #sidebar h2 {
   font-size: 90%;
+  text-align: left;
 }
 
-#sidebar h2,
 #sidebar p {
   text-align: left;
 }
@@ -286,10 +284,6 @@ nav#sidebar-nav {
   width: 100%;
 }
 
-#sidebar .new-menu {
-  padding-top: 0.5em;
-}
-
 #sidebar .new-menu a {
   padding: 0.15em 0.45em;
   display: block;
@@ -320,6 +314,7 @@ nav#sidebar-nav {
 #sidebar .new-menu .sidebar-start {
   padding: 0.2em 0;
   margin: 0;
+  padding-bottom: 0.5em;
 }
 
 #sidebar .new-menu .sidebar-footer,
@@ -579,10 +574,6 @@ nav#sidebar-nav {
   flex-shrink: 0;
 }
 
-.new_v22 #sidebar .inner .sidebar-footer {
-  margin-top: auto;
-}
-
 .new_v22 #sidebar .sidebar-context-selector {
   padding: 0.5em 0.75em;
   border-bottom: 1px solid rgba(var(--pri-rgb), 0.15);
@@ -618,10 +609,6 @@ nav#sidebar-nav {
     height: calc(100vh - 1em);
     margin-top: 0;
   }
-}
-
-#sidebar .new-menu .sidebar-start {
-  padding-bottom: 0.5em;
 }
 
 /* ---------------------------------------------------------------------------
@@ -684,16 +671,13 @@ nav#sidebar-nav {
   width: auto;
   padding: 0.45em;
   justify-content: center;
+  position: relative;
 }
 
 .new_v22 #sidebar.sidebar-collapsed .sidebar-link-wrap .sidebar-link i {
   width: 1.1em;
   font-size: 1em;
   flex-shrink: 0;
-}
-
-.new_v22 #sidebar.sidebar-collapsed .sidebar-link-wrap .sidebar-link {
-  position: relative;
 }
 
 .new_v22 #sidebar.sidebar-collapsed .sidebar-status-badge {
@@ -749,6 +733,15 @@ body.in-iframe #menu-mobile {
     pointer-events: auto;
     z-index: 11;
     margin: 0;
+    display: flex;
+    height: 89vh;
+    height: 89dvh;
+    max-height: 89vh;
+    max-height: 89dvh;
+    width: 70vw;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
   }
 
   .new_v22 #sidebar.mobile-visible.hide {
@@ -763,19 +756,6 @@ body.in-iframe #menu-mobile {
     visibility: visible;
     pointer-events: auto;
     border-radius: 0 8px 8px 0;
-  }
-
-  .new_v22 #sidebar,
-  .new_v22 #sidebar.topbar {
-    display: flex;
-    height: 89vh;
-    height: 89dvh;
-    max-height: 89vh;
-    max-height: 89dvh;
-    width: 70vw;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
   }
 
   .new_v22 #menu-mobile {

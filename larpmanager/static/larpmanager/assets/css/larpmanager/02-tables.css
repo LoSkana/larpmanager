@@ -1,4 +1,4 @@
-/*** GENERAL (from solid_state.css) ***/
+/*** GENERAL ***/
 
 th,
 td {
@@ -10,15 +10,11 @@ td {
 .writing th,
 .writing td {
   word-wrap: break-word;
+  padding: 1em;
 }
 
 .writing .name {
   font-size: large;
-}
-
-.writing th,
-.writing td {
-  padding: 1em;
 }
 
 #id_discount {
@@ -104,9 +100,6 @@ td {
     white-space: nowrap;
     text-align: left;
     font-weight: bold;
-  }
-
-  .no-more-tables td:before {
     content: attr(data-title);
   }
 }

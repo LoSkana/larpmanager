@@ -1,4 +1,4 @@
-/*** show_char (from solid_state.css) ***/
+/*** show_char ***/
 
 #main_grid select {
   width: auto;
@@ -26,6 +26,14 @@
 #main_casting .CH {
   font-weight: bold;
   color: green;
+}
+
+#main_casting hr {
+  margin: 1em 0;
+}
+
+#not_chosen {
+  color: red;
 }
 
 #main_grid .sel {
@@ -192,6 +200,9 @@
   border-color: rgba(var(--ter-rgb), 0.8);
   box-shadow: 0 0 0 2px rgba(var(--ter-rgb), 0.3);
 }
+.pref-item.clickable {
+  cursor: pointer;
+}
 .pref-rank {
   font-weight: bold;
   color: rgba(var(--ter-rgb), 0.9);
@@ -298,10 +309,6 @@
 #badge-empty {
   margin-top: 1rem;
   color: rgba(var(--pri-rgb), 0.5);
-}
-
-.pref-item.clickable {
-  cursor: pointer;
 }
 
 .badge-thumb-img {

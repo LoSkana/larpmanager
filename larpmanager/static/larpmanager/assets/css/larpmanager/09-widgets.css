@@ -1,4 +1,4 @@
-/*** FULLSCREEN (from solid_state.css) ***/
+/*** FULLSCREEN ***/
 
 #fullscreen {
   position: absolute;
@@ -30,7 +30,8 @@
   text-align: center;
 }
 
-#fullscreen .tagline {
+#fullscreen .tagline,
+#fullscreen .authors {
   margin: 0.5em;
   font-style: italic;
   text-align: center;
@@ -49,13 +50,7 @@
   text-align: center;
 }
 
-#fullscreen .authors {
-  margin: 0.5em;
-  font-style: italic;
-  text-align: center;
-}
-
-/*** CAROUSEL (from solid_state.css) ***/
+/*** CAROUSEL ***/
 
 #bgk {
   top: 0px;
@@ -153,7 +148,7 @@
   height: 100%;
 }
 
-/*** COVER (from solid_state.css) ***/
+/*** COVER ***/
 
 #aspect-ratio {
   position: relative;
@@ -251,10 +246,6 @@ body.manage.new_v20 #one .inner {
   text-align: left;
 }
 
-.page_gallery h1.title {
-  text-align: center;
-}
-
 .new_v20 .manage h1 {
   margin-left: 2em;
 }
@@ -279,20 +270,20 @@ body.manage.new_v20 #one .inner {
   border-color: rgba(var(--sec-rgb), 0.85) !important;
 }
 
-.new_v20 textarea {
-  margin: 0;
-}
-
-.new_v20 #payment_form {
-  width: 100%;
-}
-
 .new_v20 input[type="submit"],
 .new_v20 input[type="reset"],
 .new_v20 input[type="button"],
 .new_v20 input[type="confirm"] {
   display: block;
   margin: 0.5em auto;
+}
+
+.new_v20 textarea {
+  margin: 0;
+}
+
+.new_v20 #payment_form {
+  width: 100%;
 }
 
 body.association.new_v20 .user_resize {
@@ -415,25 +406,6 @@ body.association.new_v20 .user_resize {
   display: none;
 }
 
-#lm-modal {
-  padding: 1em;
-}
-
-#lm-modal,
-#lm-modal-content,
-.frame-container {
-  overflow: hidden;
-}
-
-body.floating_iframe #wrapper {
-  overflow-x: hidden;
-  padding-right: 0.5em;
-}
-
-#first_event h1 {
-  margin: 0;
-}
-
 /* ---------------------------------------------------------------------------
    Ability selector
    --------------------------------------------------------------------------- */
@@ -444,6 +416,7 @@ body.floating_iframe #wrapper {
 
 .ability-submit-row {
   text-align: left;
+  margin-top: 1em;
 }
 
 .ability-submit-row input[type="submit"] {
@@ -618,10 +591,6 @@ body.floating_iframe #wrapper {
   opacity: 0.6;
   font-style: italic;
   padding: 1em 0;
-}
-
-.ability-submit-row {
-  margin-top: 1em;
 }
 
 /* Experience points summary */
