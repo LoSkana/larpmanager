@@ -1,0 +1,120 @@
+/* ---------------------------------------------------------------------------
+   Navigation Links
+   --------------------------------------------------------------------------- */
+
+.links a {
+  margin: 0.5em 1em;
+  display: inline-block;
+}
+
+.nav {
+  align-items: center;
+  justify-content: center;
+  line-height: 300%;
+}
+
+.load_list.fields a + a:not(.hide)::before {
+  content: " | ";
+}
+
+@media screen and (max-width: 736px) {
+  .nav .nav-label {
+    display: none;
+  }
+}
+
+.nav p {
+  line-height: 200%;
+}
+
+.nav .select {
+  color: var(--ter-clr);
+  background-color: rgba(var(--sec-rgb), 0.35);
+  border: solid 1px rgba(var(--sec-rgb), 0.35);
+}
+
+.sheet {
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------------
+   Login & Auth
+   --------------------------------------------------------------------------- */
+
+.allauth_signin {
+  text-align: center;
+  margin-top: 0.5em;
+}
+
+.allauth_signin a {
+  border: 0;
+}
+
+.allauth_signin a img {
+  width: 15em;
+}
+
+.login {
+  max-width: 700px;
+  margin: 0 auto;
+  padding-bottom: 2em !important;
+}
+
+.login table tbody tr {
+  background-color: transparent;
+  border: 0;
+}
+
+@media (max-width: 840px) {
+  .login {
+    max-width: 100%;
+  }
+}
+
+.login th {
+  display: none;
+}
+
+.login input {
+  text-align: center;
+  width: 90%;
+}
+
+.login input[type="submit"] {
+  width: auto;
+}
+
+@media screen and (max-width: 1000px) {
+  .login input[type="submit"] {
+    width: 80% !important;
+  }
+
+  .login .registration_register,
+  .login .password_reset {
+    text-align: center;
+  }
+}
+
+.password_reset {
+  float: right;
+}
+
+.registration_register {
+  float: left;
+}
+
+@media (max-width: 480px) {
+  .password_reset,
+  .registration_register {
+    float: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .password_reset,
+  .registration_register {
+    float: none;
+    margin: 0 0 2em 0;
+  }
+}
+

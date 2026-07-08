@@ -341,6 +341,9 @@ msgstr "Audio"
 msgid "Avoid"
 msgstr "Evitare"
 
+msgid "Award"
+msgstr "Assegnazione"
+
 msgid "Badge"
 msgstr "Badge"
 
@@ -552,6 +555,9 @@ msgstr "Somma"
 
 msgid "Answer"
 msgstr "Rispondi"
+
+msgid "Awards"
+msgstr "Assegnazioni"
 
 msgid "Badges"
 msgstr "Distintivi"
@@ -1166,9 +1172,6 @@ msgstr "Creazione"
 msgid "Deadline"
 msgstr "Scadenza"
 
-msgid "Delivery"
-msgstr "Erogazioni"
-
 msgid "Deployed"
 msgstr "Schierato"
 
@@ -1756,9 +1759,6 @@ msgstr "Criteri"
 
 msgid "Deleted on"
 msgstr "Cancellato il"
-
-msgid "Deliveries"
-msgstr "Consegne"
 
 msgid "Easter egg"
 msgstr "Uovo di Pasqua"
@@ -3064,6 +3064,9 @@ msgstr "Abilità mancante"
 msgid "Ability removed"
 msgstr "Abilità rimossa"
 
+msgid "Add to xp award"
+msgstr "Aggiungi all'assegnazione XP"
+
 msgid "App Integration"
 msgstr "Integrazione delle app"
 
@@ -3429,6 +3432,9 @@ msgstr "Quota associativa"
 
 msgid "Organization tax"
 msgstr "Tassa associativa"
+
+msgid "Partecipation to"
+msgstr "Partecipazione a"
 
 msgid "Password changed"
 msgstr "Password cambiata"
@@ -3810,9 +3816,6 @@ msgstr "Accedi allo storico"
 
 msgid "Account activation"
 msgstr "Attivazione del conto"
-
-msgid "Add to xp delivery"
-msgstr "Aggiungi alla consegna xp"
 
 msgid "Added to the queue"
 msgstr "Mail aggiunta alla coda"
@@ -4327,6 +4330,9 @@ msgstr "Le iscrizioni sono chiuse"
 msgid "Registrations status"
 msgstr "Stato delle iscrizioni"
 
+msgid "Remove from xp award"
+msgstr "Rimuovi da assegnazione XP"
+
 msgid "Require registration"
 msgstr "Richiedi iscrizione"
 
@@ -4464,6 +4470,9 @@ msgstr "Nuova pre-iscrizione"
 
 msgid "No albums created yet"
 msgstr "Non ci sono ancora album creati"
+
+msgid "No awards defined yet"
+msgstr "Non ci sono ancora assegnazioni definiti"
 
 msgid "No organization found"
 msgstr "Nessuna organizzazione trovata"
@@ -4844,9 +4853,6 @@ msgstr "Condizioni iscrizione"
 msgid "Reminder membership fee"
 msgstr "Promemoria quota associativa"
 
-msgid "Remove from xp delivery"
-msgstr "Rimuovi dalla consegna di xp"
-
 msgid "Separate membership fee"
 msgstr "Quota associativa separata"
 
@@ -5064,9 +5070,6 @@ msgstr "Nuovo messaggio da %(user)s"
 
 msgid "No criterions defined yet"
 msgstr "Non ci sono ancora criteri definiti"
-
-msgid "No deliveries defined yet"
-msgstr "Non ci sono ancora consegne definite"
 
 msgid "No expenses submitted yet"
 msgstr "Non ci sono ancora voci di spese inviate"
@@ -6129,6 +6132,9 @@ msgstr "Segreteria - cancelleria, stampe"
 msgid "Set the registration external link"
 msgstr "Imposta il link esterno di registrazione"
 
+msgid "Set up award for experience points"
+msgstr "Imposta assegnazione di punti esperienza"
+
 msgid "Set up the membership request text"
 msgstr "Imposta il testo della richiesta di adesione"
 
@@ -6489,9 +6495,6 @@ msgstr "Seleziona l'organizzazione verso cui procedere"
 msgid "Set the organization payment currency"
 msgstr "Imposta la valuta di pagamento dell'organizzazione"
 
-msgid "Set up delivery for experience points"
-msgstr "Imposta la consegna dei punti esperienza"
-
 msgid "The question type, allowed values are"
 msgstr "Il tipo di domanda, i valori ammessi sono"
 
@@ -6663,6 +6666,9 @@ msgstr "Collegamento a un sistema di iscrizione esterno"
 
 msgid "MIME type of the file (e.g., video/mp4)"
 msgstr "Tipo MIME del file (ad esempio, video/mp4)"
+
+msgid "Manage experience awarded to characters"
+msgstr "Gestisci l'esperienza assegnata ai personaggi"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Gestisci e assegna compiti ai personaggi"
@@ -7343,6 +7349,9 @@ msgstr "Indica l'entità del rimborso desiderato"
 msgid "Manage badges and assign them to participants"
 msgstr "Gestisci i badge e assegnali ai partecipanti"
 
+msgid "Manage experience point awarded to characters"
+msgstr "Gestisci i punti esperienza assegnati ai personaggi"
+
 msgid "Manage the registration questions and options"
 msgstr "Gestisci le domande e le opzioni di iscrizione"
 
@@ -7743,9 +7752,6 @@ msgstr "Questo utente non si è ancora iscritto a nessun evento"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolleranza superata, procedere all'annullamento"
-
-msgid "Use the button above to create the first delivery"
-msgstr "Usa il pulsante qui sopra per creare la prima consegna"
 
 msgid "Use the button above to create the first modifier"
 msgstr "Usa il pulsante qui sopra per creare il primo modificatore"
@@ -8299,9 +8305,6 @@ msgstr "Se vuoi eseguire una libera donazione all'Associazione"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Indica se il campo viene stampato nelle generazioni PDF"
-
-msgid "Manage experience point deliveries awarded to characters"
-msgstr "Gestisci l'assegnazione dei punti esperienza ai personaggi"
 
 msgid "Manage registrations discounts available to participants"
 msgstr "Gestisci le iscrizioni e gli sconti disponibili per i partecipanti"
@@ -9199,11 +9202,6 @@ msgstr ""
 "Consente allo staff di accedere alle informazioni sulla sicurezza fornite "
 "dai partecipanti"
 
-msgid "Manage experience distributions for character abilities purchases."
-msgstr ""
-"Gestire la distribuzione dell'esperienza per l'acquisto delle abilità dei "
-"personaggi."
-
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Gestisce i crediti utilizzati dai partecipanti a copertura della quota di "
@@ -9311,6 +9309,9 @@ msgid "Use the button above to add a prologue type to group your prologues"
 msgstr ""
 "Usa il pulsante qui sopra per aggiungere un tipo di prologo e raggruppare i "
 "tuoi prologhi"
+
+msgid "Use the button above to create the first award of experience points"
+msgstr "Usa il pulsante qui sopra per assegnare i primi punti esperienza"
 
 msgid "View all event information, and any specifics tickets costs, in its"
 msgstr ""
@@ -10188,12 +10189,6 @@ msgid ""
 msgstr ""
 "Seleziona un partecipante e un evento di destinazione per avviare il "
 "trasferimento dell'iscrizione"
-
-msgid ""
-"Select an event to pre-load its registered participants into a new delivery"
-msgstr ""
-"Seleziona un evento per pre-caricare i partecipanti registrati in una nuova "
-"distribuzione"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -11423,13 +11418,6 @@ msgid ""
 msgstr ""
 "<i>Pagamento in ritardo</i>: Ti preghiamo di pagare <b>%(amount).2f "
 "%(currency)s</b> al più presto"
-
-msgid ""
-"All characters from this event's registrations will be pre-loaded into the "
-"new delivery"
-msgstr ""
-"Tutti i personaggi presenti nelle iscrizioni di questo evento saranno "
-"precaricati nella nuova consegna"
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
@@ -13640,6 +13628,14 @@ msgstr ""
 "questa pagina. Vuoi accedere con un altro account?"
 
 msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and award can be assigned to a specific system."
+msgstr ""
+"Se selezionato, permette di gestire più sistemi di esperienza per l'evento. "
+"Ogni abilità e ogni assegnazione possono essere impostati a un sistema "
+"specifico."
+
+msgid ""
 "If checked, participants may add abilities themselves, by selecting from "
 "those that are visible, and whose pre-requisites they meet."
 msgstr ""
@@ -13724,13 +13720,6 @@ msgid ""
 msgstr ""
 "Data una scadenza di pagamento, indica il numero di giorni entro i quali si "
 "comunica al partecipante di procedere con il pagamento. Predefinito 30."
-
-msgid ""
-"If checked, enables managing multiple experience systems for the event. Each"
-" ability and delivery can be assigned to a specific system."
-msgstr ""
-"Se selezionata, consente di gestire più sistemi di esperienza per l'evento. "
-"Ogni abilità e consegna può essere assegnata a un sistema specifico."
 
 #, python-format
 msgid ""

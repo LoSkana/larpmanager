@@ -341,6 +341,9 @@ msgstr "Ljud"
 msgid "Avoid"
 msgstr "Undvik"
 
+msgid "Award"
+msgstr "Utmärkelse"
+
 msgid "Badge"
 msgstr "Märken"
 
@@ -552,6 +555,9 @@ msgstr "Summa"
 
 msgid "Answer"
 msgstr "Svar"
+
+msgid "Awards"
+msgstr "Utmärkelser"
 
 msgid "Badges"
 msgstr "Badges"
@@ -1166,9 +1172,6 @@ msgstr "Skapande"
 msgid "Deadline"
 msgstr "Tidsfrist"
 
-msgid "Delivery"
-msgstr "Utbetalningar"
-
 msgid "Deployed"
 msgstr "Utplacerad"
 
@@ -1756,9 +1759,6 @@ msgstr "Kriterier"
 
 msgid "Deleted on"
 msgstr "Raderad på"
-
-msgid "Deliveries"
-msgstr "Leveranser"
 
 msgid "Easter egg"
 msgstr "Påskägg"
@@ -3064,6 +3064,9 @@ msgstr "Förmåga saknas"
 msgid "Ability removed"
 msgstr "Förmåga borttagen"
 
+msgid "Add to xp award"
+msgstr "Lägg till i XP-poäng"
+
 msgid "App Integration"
 msgstr "App-integration"
 
@@ -3429,6 +3432,9 @@ msgstr "Medlemsavgift"
 
 msgid "Organization tax"
 msgstr "Medlemsavgift"
+
+msgid "Partecipation to"
+msgstr "Deltagande i"
 
 msgid "Password changed"
 msgstr "Lösenordet har ändrats"
@@ -3810,9 +3816,6 @@ msgstr "Få tillgång till historiken"
 
 msgid "Account activation"
 msgstr "Aktivering av konto"
-
-msgid "Add to xp delivery"
-msgstr "Lägg till i xp-leverans"
 
 msgid "Added to the queue"
 msgstr "Mail läggs till i kön"
@@ -4327,6 +4330,9 @@ msgstr "Anmälan är stängd"
 msgid "Registrations status"
 msgstr "Status för registreringar"
 
+msgid "Remove from xp award"
+msgstr "Ta bort från XP-utmärkelsen"
+
 msgid "Require registration"
 msgstr "Kräver registrering"
 
@@ -4464,6 +4470,9 @@ msgstr "Ny förhandsregistrering"
 
 msgid "No albums created yet"
 msgstr "Inga album har skapats ännu"
+
+msgid "No awards defined yet"
+msgstr "Inga utmärkelser har fastställts ännu"
 
 msgid "No organization found"
 msgstr "Ingen organisation hittades"
@@ -4844,9 +4853,6 @@ msgstr "Villkor för tillträde"
 msgid "Reminder membership fee"
 msgstr "Påminnelse medlemsavgift"
 
-msgid "Remove from xp delivery"
-msgstr "Ta bort från xp-leverans"
-
 msgid "Separate membership fee"
 msgstr "Separat medlemsavgift"
 
@@ -5064,9 +5070,6 @@ msgstr "Nytt meddelande från %(user)s"
 
 msgid "No criterions defined yet"
 msgstr "Inga kriterier har fastställts ännu"
-
-msgid "No deliveries defined yet"
-msgstr "Inga leveranser har angetts ännu"
 
 msgid "No expenses submitted yet"
 msgstr "Underkastande svar"
@@ -6130,6 +6133,9 @@ msgstr "Sekretariat - brevpapper, tryckning"
 msgid "Set the registration external link"
 msgstr "Ange den externa länken för registrering"
 
+msgid "Set up award for experience points"
+msgstr "Ställ in belöning för erfarenhetspoäng"
+
 msgid "Set up the membership request text"
 msgstr "Skapa en text för medlemsförfrågan"
 
@@ -6490,9 +6496,6 @@ msgstr "Välj den organisation som du vill gå vidare till"
 msgid "Set the organization payment currency"
 msgstr "Ange organisationens betalningsvaluta"
 
-msgid "Set up delivery for experience points"
-msgstr "Ställ in leverans för erfarenhetspoäng"
-
 msgid "The question type, allowed values are"
 msgstr "Frågetyp, tillåtna värden är"
 
@@ -6666,6 +6669,9 @@ msgstr "Länk till ett externt registreringssystem"
 
 msgid "MIME type of the file (e.g., video/mp4)"
 msgstr "Filens MIME-typ (t.ex. video/mp4)"
+
+msgid "Manage experience awarded to characters"
+msgstr "Hantera erfarenhetspoäng som tilldelas karaktärer"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Hanterar och fördelar arbetsuppgifter till medarbetare"
@@ -7345,6 +7351,9 @@ msgstr "Anger önskat belopp för återbetalning"
 msgid "Manage badges and assign them to participants"
 msgstr "Hantera badges och tilldela dem till deltagare"
 
+msgid "Manage experience point awarded to characters"
+msgstr "Hantera erfarenhetspoäng som tilldelas karaktärer"
+
 msgid "Manage the registration questions and options"
 msgstr "Hantera frågor och alternativ för registrering"
 
@@ -7743,9 +7752,6 @@ msgstr "Den här medlemmen har ännu inte anmält sig till några evenemang"
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleransen överskriden, fortsätt med annulleringen"
-
-msgid "Use the button above to create the first delivery"
-msgstr "Använd knappen ovan för att skapa den första leveransen"
 
 msgid "Use the button above to create the first modifier"
 msgstr "Använd knappen ovan för att skapa den första modifieraren"
@@ -8268,9 +8274,6 @@ msgstr "Om du vill göra en kostnadsfri donation till föreningen"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Ange om fältet ska skrivas ut i PDF-versioner"
-
-msgid "Manage experience point deliveries awarded to characters"
-msgstr "Hantera tilldelningen av erfarenhetspoäng till karaktärer"
 
 msgid "Manage registrations discounts available to participants"
 msgstr "Hantera registreringar Rabatter tillgängliga för deltagare"
@@ -9079,9 +9082,6 @@ msgstr ""
 "Ger personalen tillgång till den säkerhetsinformation som deltagarna har "
 "lämnat"
 
-msgid "Manage experience distributions for character abilities purchases."
-msgstr "Hantera erfarenhetsfördelningar för köp av karaktärsförmågor."
-
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Hanterar krediter som används av deltagarna för att täcka "
@@ -9188,6 +9188,9 @@ msgid "Use the button above to add a prologue type to group your prologues"
 msgstr ""
 "Använd knappen ovan för att lägga till en prologtyp och gruppera dina "
 "prologer"
+
+msgid "Use the button above to create the first award of experience points"
+msgstr "Använd knappen ovan för att tilldela de första erfarenhetspoängen"
 
 msgid "View all event information, and any specifics tickets costs, in its"
 msgstr ""
@@ -9997,11 +10000,6 @@ msgid ""
 msgstr ""
 "Välj en deltagare och ett målehändelse för att påbörja en överföring av "
 "anmälan"
-
-msgid ""
-"Select an event to pre-load its registered participants into a new delivery"
-msgstr ""
-"Välj ett evenemang för att förladda de anmälda deltagarna till en ny utskick"
 
 msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
@@ -11193,13 +11191,6 @@ msgid ""
 msgstr ""
 "<i> Betalning försenad</i>: Vänligen betala <b>%(amount).2f %(currency)s</b>"
 " så snart som möjligt"
-
-msgid ""
-"All characters from this event's registrations will be pre-loaded into the "
-"new delivery"
-msgstr ""
-"Alla karaktärer från anmälningarna till detta evenemang kommer att "
-"förinstalleras i den nya leveransen"
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
@@ -13402,6 +13393,14 @@ msgstr ""
 "den här sidan. Vill du logga in på ett annat konto?"
 
 msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and award can be assigned to a specific system."
+msgstr ""
+"Om denna ruta är markerad kan man hantera flera upplevelsesystem för "
+"evenemanget. Varje förmåga och utmärkelse kan tilldelas ett specifikt "
+"system."
+
+msgid ""
 "If checked, participants may add abilities themselves, by selecting from "
 "those that are visible, and whose pre-requisites they meet."
 msgstr ""
@@ -13487,13 +13486,6 @@ msgid ""
 msgstr ""
 "Vid en betalningsfrist anges det antal dagar under vilka deltagaren ska "
 "underrättas om att betalningen ska genomföras. Standardvärde 30."
-
-msgid ""
-"If checked, enables managing multiple experience systems for the event. Each"
-" ability and delivery can be assigned to a specific system."
-msgstr ""
-"Om markerad gör det möjligt att hantera flera upplevelsesystem för "
-"evenemanget. Varje förmåga och leverans kan tilldelas ett specifikt system."
 
 #, python-format
 msgid ""

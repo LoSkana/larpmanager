@@ -40,9 +40,11 @@
 {% endblock content %}
 {% block js %}
     {{ block.super }}
+    {{ badges_data|json_script:"badges-data" }}
+    {{ members_data|json_script:"members-data" }}
     <script>
-    var all_badges = {{ badges_json|safe }};
-    var all_members = {{ members_json|safe }};
+    var all_badges = JSON.parse(document.getElementById('badges-data').textContent);
+    var all_members = JSON.parse(document.getElementById('members-data').textContent);
     var toggle_url = "{% url 'exe_badges_toggle' %}";
     var csrf_token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 

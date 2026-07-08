@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 import csv
-import json
 import logging
 from collections import defaultdict
 from datetime import UTC, datetime
@@ -944,8 +943,8 @@ def exe_badges_assign(request: HttpRequest) -> HttpResponse:
     )
     members_data = [{"uuid": str(m.uuid), "name": str(m)} for m in members_qs]
 
-    context["badges_json"] = json.dumps(badges_data)
-    context["members_json"] = json.dumps(members_data)
+    context["badges_data"] = badges_data
+    context["members_data"] = members_data
 
     return render(request, "larpmanager/exe/users/badges_assign.html", context)
 

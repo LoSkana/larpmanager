@@ -611,7 +611,7 @@ class OrgaCharacterForm(CharacterForm):
 
         # delivery list
         self.fields["exp_delivery_list"] = forms.ModelMultipleChoiceField(
-            label=_("Delivery"),
+            label=_("Award"),
             queryset=self.params["run"].event.get_elements(DeliveryExp),
             widget=S2WidgetMulti(search_fields=["name__icontains"]),
             required=False,

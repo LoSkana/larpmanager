@@ -1,0 +1,213 @@
+/* ---------------------------------------------------------------------------
+   Global Utilities
+   --------------------------------------------------------------------------- */
+
+i.fa,
+i.fas {
+  font-size: 20px;
+}
+
+.user_resize p,
+.user_resize ul,
+.user_resize li {
+  text-align: left;
+}
+
+.user_resize {
+  max-width: 850px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.hide-screen {
+  display: none;
+}
+
+.hide-screen {
+  display: none;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.nope {
+  display: none !important;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.exception-404 {
+  display: none;
+}
+
+.gtagmanager {
+  display: none;
+  visibility: hidden;
+}
+
+.inline {
+  display: inline;
+}
+
+.clearer {
+  clear: both;
+}
+
+.smaller {
+  font-size: 70%;
+}
+
+.no-clear {
+  clear: none;
+}
+
+.max_width {
+  max-width: 100% !important;
+}
+
+.centerized {
+  text-align: center;
+}
+
+ul.no-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Base Elements
+   --------------------------------------------------------------------------- */
+
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button,
+.button {
+  font-family: inherit;
+}
+
+label {
+  display: inline-block;
+}
+
+select {
+  padding-right: 3.5em;
+}
+
+ul,
+ol {
+  list-style-position: inside;
+}
+
+table {
+  margin-bottom: 1.5em;
+}
+
+form {
+  text-align: center;
+}
+
+form table tr td br {
+  display: none;
+}
+
+form table tr td br.show {
+  display: inline;
+}
+
+/* ---------------------------------------------------------------------------
+   Typography & Text Helpers
+   --------------------------------------------------------------------------- */
+
+td label {
+  font-size: 0.8em;
+  white-space: nowrap;
+}
+
+.causal {
+  color: rgba(var(--ter-rgb), 0.9);
+  font-style: italic;
+}
+
+.show_tooltip {
+  font-size: 150%;
+  font-weight: bold;
+  line-height: 1.5;
+}
+
+.helptext,
+.slug_pre {
+  color: rgba(var(--pri-rgb), 0.7);
+  font-size: 80%;
+  padding: 1em 0 0 0;
+  width: 100%;
+  display: inline-block;
+}
+
+.helptext-checkbox {
+  display: inline;
+}
+
+.slug_pre {
+  padding: 0 0 1em 0;
+  margin: 0;
+}
+
+.slug_war {
+  padding: 1em 3em 0 3em;
+  margin: 0;
+}
+
+.errorlist {
+  font-weight: 700;
+  color: red;
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0.1em auto;
+}
+
+a label {
+  color: inherit;
+}
+
+a label:hover {
+  cursor: pointer;
+}
+
+.redderized {
+  color: red;
+}
+
+.greenized {
+  color: green;
+}
+
+.section-link {
+  color: var(--ter-clr);
+}
+
+.dot_links a {
+  border-bottom: dotted 1px rgba(var(--pri-rgb), 0.35);
+}
+
+.reg-links {
+  text-align: center !important;
+}
+
+.reg-links span + span::before {
+  content: " | ";
+  opacity: 0.4;
+}
+

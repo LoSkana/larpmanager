@@ -122,7 +122,7 @@
                                 {% else %}
                                     <i class="fa-solid fa-building"></i>
                                 {% endif %}
-                                <span class="label">{{ association.name }}</span>
+                                <span class="label orga-label">{{ association.name }}</span>
                             </a>
                         {% elif run %}
                             <a href="{% url 'manage' run.get_slug %}">

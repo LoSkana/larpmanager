@@ -275,16 +275,6 @@ urlpatterns = [
         name="accounting_wait",
     ),
     path(
-        "accounting/webhook/paypal/",
-        views_ua.accounting_webhook_paypal,
-        name="accounting_webhook_paypal",
-    ),
-    path(
-        "accounting/webhook/paypal/<slug:event_slug>/",
-        views_ua.accounting_webhook_paypal,
-        name="accounting_webhook_paypal",
-    ),
-    path(
         "accounting/webhook/satispay",
         views_ua.accounting_webhook_satispay,
         name="accounting_webhook_satispay",

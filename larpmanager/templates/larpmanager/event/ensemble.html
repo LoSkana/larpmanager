@@ -73,7 +73,7 @@
                                 {% endfor %}
                             </p>
                         {% endif %}
-                        {% if ch.teaser %}<div class="ens-teaser">{{ ch.teaser|safe }}</div>{% endif %}
+                        {% if ch.teaser %}<div class="ens-teaser">{{ ch.teaser|sanitize_html }}</div>{% endif %}
                         {% for field in ch.display_fields %}
                             <div class="ens-field">
                                 <span class="ens-field-name">{{ field.name }}:</span>
@@ -127,13 +127,13 @@
                         {% endfor %}
                         {% if ch.teaser %}
                             <hr class="ens-card-divider-screen">
-                            <div class="ens-card-teaser">{{ ch.teaser|safe|truncatechars_html:300 }}</div>
+                            <div class="ens-card-teaser">{{ ch.teaser|sanitize_html|truncatechars_html:300 }}</div>
                         {% endif %}
                     </div>
                     {% if ch.teaser %}
                         <div class="ens-card-teaser-print">
                             <hr class="ens-card-divider-print">
-                            <div class="ens-card-teaser">{{ ch.teaser|safe|truncatechars_html:300 }}</div>
+                            <div class="ens-card-teaser">{{ ch.teaser|sanitize_html|truncatechars_html:300 }}</div>
                         </div>
                     {% endif %}
                 </div>

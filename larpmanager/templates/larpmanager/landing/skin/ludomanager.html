@@ -1,0 +1,30 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    LudoManager - Il gestionale di FederLudo
+{% endblock maintitle %}
+{% block landing_body %}
+    <header class="hero">
+        <div class="wrap">
+            <div class="hero-brand">LudoManager</div>
+            <h1>
+                Il gestionale di <em>FederLudo</em>
+            </h1>
+            <p class="hero-sub">
+                Un sistema gestionale in convenzione ad uso gratuito per le FederAssociate, per gestire iscrizioni, pagamenti, registro sociale, bilanci, e molto altro!
+            </p>
+            <div class="cta-row">
+                <a class="btn btn-primary" href="{% url 'join' %}">Andiamo!</a>
+            </div>
+        </div>
+    </header>
+    <section class="land">
+        <div class="wrap federlogo">
+            <p>
+                <img src="{% static 'larpmanager/assets/img/federludo.png' %}"
+                     alt="federludo logo" />
+            </p>
+            <p>Clicca qui sopra per iniziare ad usarlo per la tua associazione, è facilissimo!</p>
+        </div>
+    </section>
+{% endblock landing_body %}
