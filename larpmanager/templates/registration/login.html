@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends parent_template|default:"base.html" %}
 {% load static i18n show_tags socialaccount %}
 {% block title %}
     Login
@@ -24,7 +24,7 @@
         {% endif %}
         {% if request.enviro == "prod" %}
             <div class="allauth_signin">
-                <a href="{% get_login_url 'google' %}">
+                <a href="{% get_social_login_url 'google' %}">
                     <img src="{% static 'larpmanager/assets/' %}google_signin.png"
                          alt="social login" />
                 </a>
@@ -65,22 +65,6 @@ $(function(){
         const isChrome = /chrome|crios|crmo/i.test(userAgent);
         return isMobile && !isChrome;
     }
-
-    {% if association.id != 0 %}
-
-    $('.allauth_signin a').each(function() {
-        var href = $(this).attr('href');
-        const domain = '{{ association.slug }}';
-        let url = new URL(href || window.location.pathname, 'https://{{ association.main_domain }}');
-
-        // strip existing next to avoid double-encoding
-        url.searchParams.delete('next');
-        url.searchParams.set('next', 'https://{{ association.main_domain }}/after_login/' + domain + '/');
-
-        $(this).attr('href', url.toString());
-    });
-
-    {% endif %}
 
     if (isMobileNonChrome()) {
         $('.allauth_signin a').hide();

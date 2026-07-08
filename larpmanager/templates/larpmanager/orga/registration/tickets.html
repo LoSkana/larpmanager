@@ -4,7 +4,7 @@
     {% trans "Tickets" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="registration_tickets"
            class="go_datatable writing row_reorder"
            data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
@@ -82,4 +82,5 @@
             {% trans "No tickets have been created for this event yet" %}. {% trans "Use the button above to add a ticket type that participants can choose when registering" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

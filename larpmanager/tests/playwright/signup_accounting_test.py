@@ -33,7 +33,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import get_modal_iframe, go_to, load_image, login_orga, submit, submit_confirm, \
     submit_register, delete_modal, \
     expect_normalized, save_modal, SHORT_TIMEOUT, sidebar, \
-    click_and_wait_accounting
+    click_and_wait_accounting, confirm_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -90,7 +90,7 @@ def discount(live_server: Any, page: Any) -> None:
     expect_normalized(page, page.locator("#regs_u1_Participant"), "100")
     expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
     go_to(page, live_server, "/test/")
-    expect_normalized(page, page.locator("#one"), "Total paid 100")
+    expect_normalized(page, page.locator("#one"), "Total payments: 100€")
 
     # update signup
     go_to(page, live_server, "/test/register")
@@ -134,9 +134,9 @@ def discount(live_server: Any, page: Any) -> None:
 def pay(live_server: Any, page: Any) -> None:
     # check accounting
     go_to(page, live_server, "/test/")
-    expect_normalized(page, page.locator("#one"), "Total due  100")
-    expect_normalized(page, page.locator("#one"), "Total paid 48")
-    expect_normalized(page, page.locator("#one"), "Remaining 52")
+    expect_normalized(page, page.locator("#one"), "Total registration fee: 100")
+    expect_normalized(page, page.locator("#one"), "Total payments: 48€")
+    expect_normalized(page, page.locator("#one"), "Next payment: 52€, expected within 8 days")
     go_to(page, live_server, "/test/manage/registrations")
     # Check for registration accounting data in the table
     click_and_wait_accounting(page)
@@ -161,6 +161,7 @@ def pay(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/invoices")
     expect(page.get_by_role("row", name="Admin Test Wire registration")).to_contain_text("52")
     page.get_by_role("link", name="Confirm", exact=True).click()
+    confirm_modal(page)
 
 
 def token_credits(live_server: Any, page: Any) -> None:

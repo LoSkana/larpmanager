@@ -4,7 +4,7 @@
     {% trans "Url Shortner" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="url_shortner" class="go_datatable">
         <thead>
             <tr>
@@ -45,4 +45,5 @@
             {% trans "No shortened URLs defined yet" %}. {% trans "Create a short URL to share easy-to-remember links for your events" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

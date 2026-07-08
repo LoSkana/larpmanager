@@ -4,7 +4,7 @@
     {% trans "Roles" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="roles" class="go_datatable">
         <thead>
             <tr>
@@ -59,4 +59,5 @@
             {% trans "No roles defined yet" %}. {% trans "Create a role to assign permissions and invite staff members to your organization" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

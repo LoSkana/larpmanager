@@ -1,0 +1,74 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    FAQs
+{% endblock maintitle %}
+{% block landing_eyebrow %}
+    FAQs
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    Frequently asked questions
+{% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>Find detailed instructions to the most common questions!</p>
+    <p>
+        <i>(you can write a search keyword to filter them, then click on the question to see the answer)</i>
+    </p>
+{% endblock landing_subtitle %}
+{% block landing_content %}
+    <div class="contact-form">
+        <input type="text" name="search" id="search" placeholder="Search" />
+    </div>
+    <div class="anchor-nav">
+        {% for mod in types %}
+            {% if mod.faqs.all %}<a href="#mod_{{ mod.id }}" class="sh_{{ mod.id }}">{{ mod.name }}</a>{% endif %}
+        {% endfor %}
+    </div>
+    {% for mod in types %}
+        {% if mod.faqs.all %}
+            <div class="sh_{{ mod.id }} faq-mod" mod="{{ mod.id }}">
+                <hr />
+                <h2 id="mod_{{ mod.id }}">{{ mod.name }}</h2>
+                {% for el in mod.faqs.all %}
+                    <div class="faq">
+                        <p class="que">
+                            <a href="#" class="my_toggle" tog='q_{{ el.id }}'>{{ el.question }}</a>
+                        </p>
+                        <div class="hide q_{{ el.id }}">
+                            {{ el.answer | safe }}
+                            <hr />
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endblock landing_content %}
+{% block js2 %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+
+    var searchInput = document.getElementById('search');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function () {
+        var key = searchInput.value.toLowerCase();
+
+        document.querySelectorAll('.faq').forEach(function (faq) {
+            var visible = faq.textContent.toLowerCase().includes(key);
+            faq.style.display = visible ? '' : 'none';
+            faq.classList.toggle('visib', visible);
+        });
+
+        document.querySelectorAll('.faq-mod').forEach(function (mod) {
+            var any = mod.querySelector('.faq.visib') !== null;
+            mod.style.display = any ? '' : 'none';
+            document.querySelectorAll('.anchor-nav .sh_' + mod.getAttribute('mod')).forEach(function (link) {
+                link.style.display = any ? '' : 'none';
+            });
+        });
+    });
+
+});
+    </script>
+{% endblock js2 %}

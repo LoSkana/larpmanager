@@ -632,7 +632,7 @@ class TestModelSignals(BaseTestCase):
         from larpmanager.models.base import Feature
 
         user_character_feature, _ = Feature.objects.get_or_create(
-            slug="user_character", defaults={"name": "Player editor", "order": 1}
+            slug="user_character", defaults={"name": "Character creation", "order": 1}
         )
         event.features.add(user_character_feature)
 
@@ -669,7 +669,7 @@ class TestModelSignals(BaseTestCase):
         from larpmanager.models.base import Feature
 
         user_character_feature, _ = Feature.objects.get_or_create(
-            slug="user_character", defaults={"name": "Player editor", "order": 1}
+            slug="user_character", defaults={"name": "Character creation", "order": 1}
         )
         # Ensure the feature is not in the event's features (if it was added by setup)
         event.features.remove(user_character_feature) if user_character_feature in event.features.all() else None
@@ -732,7 +732,7 @@ class TestModelSignals(BaseTestCase):
         from larpmanager.models.base import Feature
 
         user_character_feature, _ = Feature.objects.get_or_create(
-            slug="user_character", defaults={"name": "Player editor", "order": 1}
+            slug="user_character", defaults={"name": "Character creation", "order": 1}
         )
         event.features.add(user_character_feature)
 

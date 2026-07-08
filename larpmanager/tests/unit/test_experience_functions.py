@@ -198,7 +198,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.cost = 100
 
         # Modifier: cost 50, no prereqs, no reqs
-        mods_by_ability = {1: [(50, set(), {})]}
+        mods_by_ability = {1: [(50, set(), {}, set())]}
 
         _apply_modifier_cost(ability, mods_by_ability, set(), set())
 
@@ -212,7 +212,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.cost = 100
 
         # Modifier requires prerequisite ability 5
-        mods_by_ability = {1: [(50, {5}, {})]}
+        mods_by_ability = {1: [(50, {5}, {}, set())]}
         current_abilities = {1, 2, 3}
 
         _apply_modifier_cost(ability, mods_by_ability, current_abilities, set())
@@ -227,7 +227,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.cost = 100
 
         # Modifier requires prerequisite ability 5
-        mods_by_ability = {1: [(50, {5}, {})]}
+        mods_by_ability = {1: [(50, {5}, {}, set())]}
         current_abilities = {1, 2, 3, 5}
 
         _apply_modifier_cost(ability, mods_by_ability, current_abilities, set())
@@ -242,7 +242,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.cost = 100
 
         # Modifier requires choice option 10 from field (question) 1
-        mods_by_ability = {1: [(50, set(), {1: {10}})]}
+        mods_by_ability = {1: [(50, set(), {1: {10}}, set())]}
         current_choices = {5, 6, 7}
 
         _apply_modifier_cost(ability, mods_by_ability, set(), current_choices)
@@ -257,7 +257,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.cost = 100
 
         # Modifier requires choice option 10 from field (question) 1
-        mods_by_ability = {1: [(50, set(), {1: {10}})]}
+        mods_by_ability = {1: [(50, set(), {1: {10}}, set())]}
         current_choices = {5, 6, 7, 10}
 
         _apply_modifier_cost(ability, mods_by_ability, set(), current_choices)
@@ -272,7 +272,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.cost = 100
 
         # Multiple modifiers, first one is valid
-        mods_by_ability = {1: [(30, set(), {}), (50, set(), {}), (70, set(), {})]}
+        mods_by_ability = {1: [(30, set(), {}, set()), (50, set(), {}, set()), (70, set(), {}, set())]}
 
         _apply_modifier_cost(ability, mods_by_ability, set(), set())
 
@@ -286,7 +286,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.cost = 100
 
         # First modifier has unmet prereq, second is valid
-        mods_by_ability = {1: [(30, {99}, {}), (50, set(), {}), (70, set(), {})]}
+        mods_by_ability = {1: [(30, {99}, {}, set()), (50, set(), {}, set()), (70, set(), {}, set())]}
         current_abilities = {1, 2, 3}
 
         _apply_modifier_cost(ability, mods_by_ability, current_abilities, set())
@@ -301,7 +301,7 @@ class TestExperienceUtilityFunctions(BaseTestCase):
         ability.cost = 100
 
         # Modifier requires both prereqs and reqs (options 10 and 20 from different fields)
-        mods_by_ability = {1: [(50, {2, 3}, {1: {10}, 2: {20}})]}
+        mods_by_ability = {1: [(50, {2, 3}, {1: {10}, 2: {20}}, set())]}
         current_abilities = {1, 2, 3, 4}
         current_choices = {10, 20, 30}
 

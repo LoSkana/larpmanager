@@ -4,7 +4,7 @@
     {% trans "Warehouse items" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="inv_items"
            class="go_datatable dot_links"
            no_header_cols="{{ no_header_cols }}">
@@ -75,6 +75,7 @@
     <div id="imagePopup">
         <img id="popupImg" src="" alt="popup image" />
     </div>
+    {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js2 %}
     <script>

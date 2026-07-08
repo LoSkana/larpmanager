@@ -7,7 +7,7 @@
     {% trans "Manage quest categories, each with a presentation text and associated quests" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="quest_types"
            class="go_datatable writing row_reorder"
            data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
@@ -63,4 +63,5 @@
             {% trans "No quest categories have been created yet" %}. {% trans "Use the button above to add a quest type to organize your quests" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

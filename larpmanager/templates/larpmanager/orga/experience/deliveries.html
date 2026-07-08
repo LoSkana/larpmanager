@@ -1,13 +1,13 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Delivery" %} - {{ run.search | truncatechars:50 }}
+    {% trans "Awards" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
     {% url 'orga_exp_deliveries_load' run.get_slug as load_url %}
     {% trans "Load participants" as load_label %}
     {% with extra_link_url=load_url extra_link_icon="fas fa-users" extra_link_label=load_label extra_link_class="form-new" %}
-        {% include "elements/header/edit.html" %}
+        {% include "elements/table/header.html" %}
     {% endwith %}
     <table id="deliveries"
            class="go_datatable writing row_reorder"
@@ -60,7 +60,8 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No deliveries defined yet" %}. {% trans "Use the button above to create the first delivery" %}.
+            {% trans "No awards defined yet" %}. {% trans "Use the button above to create the first award of experience points" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

@@ -4,7 +4,7 @@
     {% trans "Album" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <br />
     <br />
     <table id="albums" class="go_datatable writing">
@@ -48,4 +48,5 @@
             {% trans "No albums created yet" %}. {% trans "Add an album to organize and share photos for this event" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

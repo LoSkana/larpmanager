@@ -1,196 +1,121 @@
 {% extends "structure.html" %}
 {% load i18n static show_tags %}
 {% block main %}
-    {% if association.id == 0 %}
-        {% block header %}
-            <!-- Header -->
-            <header id="header"
-                    {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
-                <!--
-            <a href="{% url 'home' %}" class="main" aria-label="LarpManager">
-                <span class="logo"><img src="{% static 'lm_logo.png' %}" alt="Logo" /></span>
-                LarpManager
-            </a>
--->
-                <nav id="nav">
-                    <ul>
-                        <li>
-                            <a href="{% url 'home' %}" title="Home">Home</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'guides' %}"
-                               title="See practical examples of the system"
-                               {% if request.resolver_match.url_name == "guides" %}class="sel"{% endif %}>Guides</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'usage' %}"
-                               title="Understand how to use it"
-                               {% if request.resolver_match.url_name == "usage" %}class="sel"{% endif %}>Pricing</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'demo' %}"
-                               title="Test freely the system"
-                               {% if request.resolver_match.url_name == "demo" %}class="sel"{% endif %}>Demo</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'contact' %}"
-                               title="Contact us"
-                               {% if request.resolver_match.url_name == "contact" %}class="sel"{% endif %}>Contact</a>
-                        </li>
-                        <li>
-                            <a id="join"
-                               href="{% url 'join' %}"
-                               title="Get Started"
-                               class="button"
-                               {% if request.resolver_match.url_name == "join" %}class="sel"{% endif %}>Get Started</a>
-                        </li>
-                    </ul>
-                </nav>
-            </header>
-        {% endblock header %}
-        {% block alpha %}
-        {% endblock alpha %}
-        <!-- Footer -->
-        <footer id="footer"
-                {% if manage and is_sidebar_open %}class="sidebar"{% endif %}>
-            {% if contact_form %}
-                <h3>Contact us</h3>
-                {% include "elements/structure/contact_form.html" %}
-                {% if contact_form.errors %}
-                    <script>
-            window.addEventListener('DOMContentLoaded', function() {
-                $( function() {
-                    var el = document.getElementById("cnt-form");
-                    const yOffset = -80;
-                    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                    window.scrollTo({top: y, behavior: 'smooth'});
-                });
-            });
-                    </script>
-                {% endif %}
-            {% endif %}
-            <hr />
-            <h3>
-                <a href="{% url 'privacy' %}">Privacy policy</a>
-            </h3>
-        </footer>
-    {% else %}
-        <!-- Header -->
-        <header id="header"
-                class="alt {% if manage and is_sidebar_open %}sidebar{% endif %} no_v22">
-            <h1>
-                <span>
-                    {% block title %}
-                    {% endblock title %}
-                </span>
-            </h1>
-        </header>
-        <!-- Menu -->
-        {% include "elements/structure/menu.html" %}
-        {% block wrapper %}
-            <!-- Main -->
-            <div id="banner">
-                {% block banner %}
-                {% endblock banner %}
-            </div>
-            <!-- Wrapper -->
-            <div id="wrapper">
-                <div id="one" class="wrapper">
-                    <div class="inner">
-                        {% block nav %}
-                            {% include "larpmanager/manage/nav.html" %}
-                        {% endblock nav %}
-                        {% if not request.GET.in_iframe and not request.GET.frame %}
-                            <div id="info_bar" class="only_v20">
-                                <span id="info">
-                                    {% block info %}
-                                        {% if not frame %}
-                                            {% if form %}
-                                                {{ form.page_info }}
-                                            {% else %}
-                                                {{ page_info }}
-                                            {% endif %}
+    <!-- Header -->
+    <header id="header"
+            class="alt {% if manage and is_sidebar_open %}sidebar{% endif %} no_v22">
+        <h1>
+            <span>
+                {% block title %}
+                {% endblock title %}
+            </span>
+        </h1>
+    </header>
+    <!-- Menu -->
+    {% include "elements/structure/menu.html" %}
+    {% block wrapper %}
+        <!-- Main -->
+        <div id="banner">
+            {% block banner %}
+            {% endblock banner %}
+        </div>
+        <!-- Wrapper -->
+        <div id="wrapper">
+            <div id="one" class="wrapper">
+                <div class="inner">
+                    {% if not request.GET.in_iframe and not request.GET.frame %}
+                        <div id="info_bar" class="only_v20">
+                            <span id="info">
+                                {% block info %}
+                                    {% if not frame %}
+                                        {% if form %}
+                                            {{ form.page_info }}
+                                        {% else %}
+                                            {{ page_info }}
                                         {% endif %}
-                                    {% endblock info %}
-                                </span>
-                                {% if tutorial %}
-                                    | <a href="#"
+                                    {% endif %}
+                                {% endblock info %}
+                            </span>
+                            {% if tutorial %}
+                                | <a href="#"
     class="feature_tutorial"
     tut="{{ tutorial }}"
     qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i> Tutorial</a>
-                                {% endif %}
-                                {% if config and not demo %}
-                                    | <a href="{{ config }}"
+                            {% endif %}
+                            {% if config and not demo %}
+                                | <a href="{{ config }}"
     class="action-link"
     data-modal-eligible="true"
     data-slug="config"
     qtip="Config"><i class="fa-solid fa-gear"></i> Config</a>
-                                {% endif %}
-                            </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    <div id="right_bar" class="no_v20 info nav main_nav no_mobile">
+                        {% if tutorial %}
+                            <a href="#"
+                               class="feature_tutorial"
+                               tut="{{ tutorial }}"
+                               qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i></a>
                         {% endif %}
-                        <div id="right_bar" class="no_v20 info nav main_nav no_mobile">
-                            {% if tutorial %}
-                                <a href="#"
-                                   class="feature_tutorial"
-                                   tut="{{ tutorial }}"
-                                   qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i></a>
-                            {% endif %}
-                            {% if config and not demo %}
-                                <a href="{{ config }}"
-                                   class="action-link"
-                                   data-modal-eligible="true"
-                                   data-slug="config"
-                                   qtip="Config"><i class="fa-solid fa-gear"></i></a>
-                            {% endif %}
-                        </div>
-                        <div class="page_{{ request_func_name }} {% block special %}{% endblock special %}">
-                            {% block content %}
-                            {% endblock content %}
-                        </div>
+                        {% if config and not demo %}
+                            <a href="{{ config }}"
+                               class="action-link"
+                               data-modal-eligible="true"
+                               data-slug="config"
+                               qtip="Config"><i class="fa-solid fa-gear"></i></a>
+                        {% endif %}
+                    </div>
+                    {% block nav %}
+                        {% include "larpmanager/manage/nav.html" %}
+                    {% endblock nav %}
+                    <div class="page_{{ request_func_name }} {% block special %}{% endblock special %}">
+                        {% block content %}
+                        {% endblock content %}
                     </div>
                 </div>
             </div>
-            <div id="footer"
-                 class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
-                <div class="inner">
-                    {% if association.footer %}
-                        <div class="footer-text">
-                            <hr />
-                            {{ association.footer | safe }}
-                        </div>
-                    {% endif %}
-                    <table class="mob no_v22">
-                        <tr>
-                            {% if 'help' in association.features %}
-                                <td>
-                                    <p>
-                                        <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help" %}?</a>
-                                    </p>
-                                </td>
-                            {% endif %}
+        </div>
+        <div id="footer"
+             class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
+            <div class="inner">
+                {% if association.footer %}
+                    <div class="footer-text">
+                        <hr />
+                        {{ association.footer | safe }}
+                    </div>
+                {% endif %}
+                <table class="mob no_v22">
+                    <tr>
+                        {% if 'help' in association.features %}
                             <td>
                                 <p>
-                                    <a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a>
+                                    <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help" %}?</a>
                                 </p>
                             </td>
-                            {% if 'legal_notice' in association.features %}
-                                <td>
-                                    <a href="{% url 'legal_notice' %}">{% trans "Legal Notice" %}</a>
-                                </td>
-                            {% endif %}
+                        {% endif %}
+                        <td>
+                            <p>
+                                <a href="{% url 'privacy' %}">{% trans "Privacy Policy" %}</a>
+                            </p>
+                        </td>
+                        {% if 'legal_notice' in association.features %}
                             <td>
-                                <a href="{% url 'ticket' %}">{% trans "Technical Support" %}</a>
+                                <a href="{% url 'legal_notice' %}">{% trans "Legal Notice" %}</a>
                             </td>
-                        </tr>
-                    </table>
-                    <p class="no_v22">
-                        <!-- Please, do not remove! -->
-                        Powered by <a href="https://{{ association.main_domain }}">{{ association.platform }}</a>
-                    </p>
-                </div>
+                        {% endif %}
+                        <td>
+                            <a href="{% url 'ticket' %}">{% trans "Technical Support" %}</a>
+                        </td>
+                    </tr>
+                </table>
+                <p class="no_v22">
+                    <!-- Please, do not remove! -->
+                    Powered by <a href="https://{{ association.main_domain }}">{{ association.platform }}</a>
+                </p>
             </div>
-        {% endblock wrapper %}
-    {% endif %}
+        </div>
+    {% endblock wrapper %}
 {% endblock main %}
 {% block css-req %}
     <style>
@@ -231,25 +156,6 @@
           referrerpolicy="no-referrer" />
     <link rel="stylesheet"
           href="//cdn.datatables.net/2.3.2/css/dataTables.dataTables.min.css" />
-    {% if association.id == 0 %}
-        <style>
-            @font-face {
-                font-family: 'future_light';
-                src: url('{% static "fonts/future_light/Future_Light.otf" %}'),
-                url('{% static "fonts/future_light/Future_Light.ttf" %}');
-
-                font-display: swap;
-            }
-        </style>
-        <link rel="preload"
-              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
-              as="style"
-              onload="this.onload=null;this.rel='stylesheet'">
-        <noscript>
-            <link rel="stylesheet"
-                  href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-        </noscript>
-    {% endif %}
 {% endblock css-req %}
 {% block js-req %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
@@ -265,13 +171,8 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
             defer></script>
-    {% if association.id == 0 %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
-                defer></script>
-    {% else %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
-                defer></script>
-    {% endif %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+            defer></script>
     {% if hotjar_siteid %}
         <!-- Hotjar -->
         <script>

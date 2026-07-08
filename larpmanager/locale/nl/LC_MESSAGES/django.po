@@ -341,6 +341,9 @@ msgstr "Audio"
 msgid "Avoid"
 msgstr "Vermijd"
 
+msgid "Award"
+msgstr "Prijs"
+
 msgid "Badge"
 msgstr "Badges"
 
@@ -552,6 +555,9 @@ msgstr "Som"
 
 msgid "Answer"
 msgstr "Antwoord"
+
+msgid "Awards"
+msgstr "Onderscheidingen"
 
 msgid "Badges"
 msgstr "Badges"
@@ -1166,9 +1172,6 @@ msgstr "Schepping"
 msgid "Deadline"
 msgstr "Deadline"
 
-msgid "Delivery"
-msgstr "Uitbetalingen"
-
 msgid "Deployed"
 msgstr "Ingezet"
 
@@ -1756,9 +1759,6 @@ msgstr "Criteria"
 
 msgid "Deleted on"
 msgstr "Verwijderd op"
-
-msgid "Deliveries"
-msgstr "Leveringen"
 
 msgid "Easter egg"
 msgstr "Paasei"
@@ -2700,9 +2700,6 @@ msgstr "Persoonlijke gegevens"
 msgid "Phone contact"
 msgstr "Telefonisch contact"
 
-msgid "Player editor"
-msgstr "Spelerseditor"
-
 msgid "Prerequisites"
 msgstr "Vereisten"
 
@@ -3066,6 +3063,9 @@ msgstr "Vermogen ontbreekt"
 
 msgid "Ability removed"
 msgstr "Vermogen verwijderd"
+
+msgid "Add to xp award"
+msgstr "Toevoegen aan xp-beloning"
 
 msgid "App Integration"
 msgstr "App integratie"
@@ -3433,6 +3433,9 @@ msgstr "Lidmaatschap"
 msgid "Organization tax"
 msgstr "Lidmaatschap"
 
+msgid "Partecipation to"
+msgstr "Deelname aan"
+
 msgid "Password changed"
 msgstr "Wachtwoord gewijzigd"
 
@@ -3615,6 +3618,9 @@ msgstr "Document downloaden"
 
 msgid "Elements uploaded"
 msgstr "Elementen geladen"
+
+msgid "Event public page"
+msgstr "Openbare pagina van het evenement"
 
 msgid "Experience System"
 msgstr "Ervaringssysteem"
@@ -3811,9 +3817,6 @@ msgstr "Toegang tot de geschiedenis"
 msgid "Account activation"
 msgstr "Account activeren"
 
-msgid "Add to xp delivery"
-msgstr "Toevoegen aan xp levering"
-
 msgid "Added to the queue"
 msgstr "Mail toegevoegd aan wachtrij"
 
@@ -3831,6 +3834,9 @@ msgstr "Karakter toegewezen"
 
 msgid "Available versions"
 msgstr "Beschikbare versies"
+
+msgid "Character creation"
+msgstr "Het maken van een personage"
 
 msgid "Character portrait"
 msgstr "Karakterportret"
@@ -3882,9 +3888,6 @@ msgstr "Naam van type zoektocht"
 
 msgid "New refund request"
 msgstr "Nieuw verzoek om terugbetaling"
-
-msgid "Not active anymore"
-msgstr "Niet meer actief"
 
 msgid "Patron and Reduced"
 msgstr "Beschermheer en Verminderd"
@@ -4263,9 +4266,6 @@ msgstr "Er zijn nog geen rollen gedefinieerd"
 msgid "Not available, kiddo"
 msgstr "Niet beschikbaar, kiddo"
 
-msgid "Not visible to users"
-msgstr "Niet zichtbaar voor gebruikers"
-
 msgid "Notifications digest"
 msgstr "Overzicht meldingen"
 
@@ -4329,6 +4329,9 @@ msgstr "De inschrijvingen zijn gesloten"
 
 msgid "Registrations status"
 msgstr "Status registraties"
+
+msgid "Remove from xp award"
+msgstr "Verwijder uit de XP-beloning"
 
 msgid "Require registration"
 msgstr "Registratie verplichten"
@@ -4468,6 +4471,9 @@ msgstr "Nieuwe voorinschrijving"
 msgid "No albums created yet"
 msgstr "Er zijn nog geen albums aangemaakt"
 
+msgid "No awards defined yet"
+msgstr "Er zijn nog geen prijzen vastgesteld"
+
 msgid "No organization found"
 msgstr "Geen organisatie gevonden"
 
@@ -4588,9 +4594,6 @@ msgstr "Castingbeheer voor"
 
 msgid "Character Relationship"
 msgstr "Karakterrelatie"
-
-msgid "Concluded and archived"
-msgstr "Afgesloten en gearchiveerd"
 
 msgid "Confirm password reset"
 msgstr "Wachtwoord opnieuw instellen bevestigd"
@@ -4850,9 +4853,6 @@ msgstr "Voorwaarden"
 msgid "Reminder membership fee"
 msgstr "Herinnering lidmaatschapsgeld"
 
-msgid "Remove from xp delivery"
-msgstr "Verwijderen uit xp-levering"
-
 msgid "Separate membership fee"
 msgstr "Apart lidmaatschapsgeld"
 
@@ -4867,9 +4867,6 @@ msgstr "E-mailadres van de deelnemer"
 
 msgid "Update your data in the"
 msgstr "Werk uw gegevens bij in de"
-
-msgid "Visible in the homepage"
-msgstr "Zichtbaar op de homepage"
 
 msgid "What are you doing here"
 msgstr "Wat doe je hier nog steeds"
@@ -5076,9 +5073,6 @@ msgstr "Nieuw bericht van %(user)s"
 
 msgid "No criterions defined yet"
 msgstr "Er zijn nog geen criteria vastgesteld"
-
-msgid "No deliveries defined yet"
-msgstr "Er zijn nog geen leveringen gedefinieerd"
 
 msgid "No expenses submitted yet"
 msgstr "Onderdanig antwoord"
@@ -5533,9 +5527,6 @@ msgstr "Spelers wachten op personage"
 msgid "Pre-registration at %(event)s"
 msgstr "Voorinschrijving bij %(event)s"
 
-msgid "Pre-registration is available"
-msgstr "Voorinschrijving is beschikbaar"
-
 msgid "Preferred navigation language"
 msgstr "Gewenste navigatietaal"
 
@@ -5764,9 +5755,6 @@ msgstr "Corrigeer de fouten hieronder"
 msgid "Quests without traits: %(list)s"
 msgstr "Quests zonder eigenschappen: %(list)s"
 
-msgid "Registrations are not available"
-msgstr "Registraties zijn niet beschikbaar"
-
 msgid "Relationships of your character"
 msgstr "Links van je personage"
 
@@ -5969,6 +5957,9 @@ msgstr "Beschrijvende naam voor deze API-sleutel"
 msgid "Descriptive name for this content"
 msgstr "Beschrijvende naam voor deze inhoud"
 
+msgid "Discover the factions of the game"
+msgstr "Ontdek de facties in het spel"
+
 msgid "Discover what this event is about"
 msgstr "Ontdek waar dit evenement over gaat"
 
@@ -6075,6 +6066,9 @@ msgstr "Vervaldatum van het document"
 msgid "Delay in organization registration"
 msgstr "Vertraging in de registratie van organisaties"
 
+msgid "Discover the details of this event"
+msgstr "Ontdek alle details van dit evenement"
+
 msgid "Empty relationship check (no text)"
 msgstr "Leeg rapport (geen tekst)"
 
@@ -6143,6 +6137,9 @@ msgstr "Secretariaat - briefpapier, drukwerk"
 msgid "Set the registration external link"
 msgstr "De externe link voor registratie instellen"
 
+msgid "Set up award for experience points"
+msgstr "Stel een beloning in voor ervaringspunten"
+
 msgid "Set up the membership request text"
 msgstr "De tekst voor de lidmaatschapsaanvraag instellen"
 
@@ -6179,9 +6176,6 @@ msgstr "(Optioneel) De beschrijving van het ticket"
 
 msgid "Choose individual features yourself"
 msgstr "Kies zelf individuele functies"
-
-msgid "Indicate the prerequisite abilities"
-msgstr "Vermeld de vereiste vaardigheden"
 
 msgid "Insert the html code for the footer"
 msgstr "Voer de html-code in om de voettekst te vullen met"
@@ -6398,6 +6392,9 @@ msgstr "Update je lidmaatschapsopties"
 msgid "Utilisation %(tokens)s per %(event)s"
 msgstr "Gebruik %(tokens)s per %(event)s"
 
+msgid "View photos and media from the event"
+msgstr "Bekijk foto’s en media van het evenement"
+
 msgid "View the complete list of our events"
 msgstr "Bekijk de volledige lijst van onze evenementen"
 
@@ -6417,6 +6414,9 @@ msgstr "<b>%(number)s</b> goed te keuren uitgaven"
 #, python-format
 msgid "<b>%(number)s</b> questions to answer"
 msgstr "<b>%(number)s</b> vragen om te beantwoorden"
+
+msgid "Access your characters for this event"
+msgstr "Bekijk je personages voor dit evenement"
 
 msgid "Added to the bottom of all mails sent"
 msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
@@ -6499,9 +6499,6 @@ msgstr "Selecteer de organisatie om verder te gaan"
 
 msgid "Set the organization payment currency"
 msgstr "De betalingsvaluta van de organisatie instellen"
-
-msgid "Set up delivery for experience points"
-msgstr "Leveringen voor ervaringspunten instellen"
 
 msgid "The question type, allowed values are"
 msgstr "Het vraagtype, toegestane waarden zijn"
@@ -6675,14 +6672,14 @@ msgstr "Maakt gratis voorregistratie voor evenementen mogelijk"
 msgid "If you need help, remember to check out"
 msgstr "Als je hulp nodig hebt, ga dan naar"
 
-msgid "Indicate the required character options"
-msgstr "Geef de vereiste tekenopties aan"
-
 msgid "Link to an external registration system"
 msgstr "Koppeling naar een extern registratiesysteem"
 
 msgid "MIME type of the file (e.g., video/mp4)"
 msgstr "MIME-type van het bestand (bijv. video/mp4)"
+
+msgid "Manage experience awarded to characters"
+msgstr "De ervaring van personages beheren"
 
 msgid "Manages and assigns tasks to characters"
 msgstr "Taken beheren en toewijzen aan personages"
@@ -6734,9 +6731,6 @@ msgstr "Gebruik de link uit een recente e-mail"
 #, python-format
 msgid "Registration cancellation for %(event)s"
 msgstr "Uitschrijven op %(event)s"
-
-msgid "Registrations are open for participants"
-msgstr "Inschrijvingen zijn geopend voor deelnemers"
 
 msgid "Set the experience points configuration"
 msgstr "Stel de configuratie van de ervaringspunten in"
@@ -6928,6 +6922,9 @@ msgstr "Alle deelnemersgegevens weergeven als register"
 msgid "Donation amount chosen by the participant"
 msgstr "Donatiebedrag gekozen door de deelnemer"
 
+msgid "Explore the quests available in the event"
+msgstr "Ontdek de missies die je tijdens het evenement kunt doen"
+
 msgid "I do it routinely, I have good experience"
 msgstr "Ik doe het regelmatig, ik heb goede ervaring"
 
@@ -7091,9 +7088,6 @@ msgstr "Deelnemers die GEEN voorkeuren hebben verzonden"
 msgid "Profile compilation reminder for %(event)s"
 msgstr "Herinnering profielcompilatie voor %(event)s"
 
-msgid "Redirects to an external registration link"
-msgstr "Leidt door naar een externe registratielink"
-
 msgid "Reserve additional tickets beyond your own"
 msgstr "Reserveer extra tickets naast je eigen tickets"
 
@@ -7198,9 +7192,6 @@ msgstr "Er zijn nog geen vragen voor de workshop aangemaakt"
 
 msgid "Now you can create milestones for the event"
 msgstr "Nu kun je mijlpalen voor het evenement aanmaken"
-
-msgid "Now you can set the player editing settings"
-msgstr "Nu kun je de instellingen voor het bewerken van de speler instellen"
 
 msgid "Please review and submit it for publication"
 msgstr "Bekijk het en stuur het in voor publicatie"
@@ -7347,6 +7338,9 @@ msgstr ""
 msgid "Apply the upgrade to the entire organization?"
 msgstr "De upgrade toepassen op de hele organisatie?"
 
+msgid "Are you sure you want to approve this element"
+msgstr "Weet je zeker dat je dit element wilt goedkeuren"
+
 msgid "Complete the checklist to unlock all features"
 msgstr ""
 "Voltooi de installatie om alle functies van het platform te ontgrendelen"
@@ -7368,6 +7362,9 @@ msgstr "Geeft het gewenste terugbetalingsbedrag aan"
 
 msgid "Manage badges and assign them to participants"
 msgstr "Badges beheren en toewijzen aan deelnemers"
+
+msgid "Manage experience point awarded to characters"
+msgstr "Beheer de ervaringspunten die aan personages worden toegekend"
 
 msgid "Manage the registration questions and options"
 msgstr "De registratievragen en -opties beheren"
@@ -7396,6 +7393,9 @@ msgstr "Geboorteplaats niet opgenomen in de ISTAT-lijst"
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
 msgstr "Bijgewerkte invoer van %(event)s door %(user)s"
+
+msgid "Search and filter the characters of the event"
+msgstr "Zoek en filter de personages van het evenement"
 
 msgid "Select the event you wish to pre-register for"
 msgstr "Selecteer het evenement waarvoor je je wilt voorregistreren"
@@ -7524,6 +7524,12 @@ msgid "Email sent with instructions for password reset"
 msgstr ""
 "E-mail verzonden met instructies voor het opnieuw instellen van het "
 "wachtwoord"
+
+msgid "Fill out the preparation workshops of the event"
+msgstr "Vul de voorbereidingsworkshops voor het evenement in"
+
+msgid "Get to know all the characters before the event"
+msgstr "Leer alle personages alvast kennen voor het evenement"
 
 msgid "If checked: Add a field to track items quantity"
 msgstr ""
@@ -7762,9 +7768,6 @@ msgstr "Dit lid heeft zich nog niet voor evenementen aangemeld"
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerantie overschreden, doorgaan met annuleren"
 
-msgid "Use the button above to create the first delivery"
-msgstr "Gebruik de knop hierboven om de eerste levering aan te maken"
-
 msgid "Use the button above to create the first modifier"
 msgstr "Gebruik de knop hierboven om de eerste modifier aan te maken"
 
@@ -7873,6 +7876,9 @@ msgstr "Er bestaat al een opdracht voor dit item en gebied"
 #, python-format
 msgid "Assigned %(amount).2f %(elements)s for '%(reason)s'"
 msgstr "Toegewezen %(amount).2f %(elements)s voor '%(reason)s'"
+
+msgid "Browse the characters and participants of the event"
+msgstr "Bekijk de personages en deelnemers van het evenement"
 
 msgid "Complete the setup to unlock full platform features"
 msgstr ""
@@ -8096,6 +8102,9 @@ msgstr "Deze pagina wordt elke 10 seconden automatisch vernieuwd"
 msgid "Use the button above to create the first ability type"
 msgstr "Gebruik de knop hierboven om het eerste vaardigheidstype aan te maken"
 
+msgid "View your payments and pending amounts for this event"
+msgstr "Bekijk je betalingen en openstaande bedragen voor dit evenement"
+
 msgid "Warehouse quantities already committed for this event"
 msgstr "Reeds vastgelegde magazijnhoeveelheden voor dit evenement"
 
@@ -8168,9 +8177,6 @@ msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
 "Het bijhouden van hoeveelheden is niet ingeschakeld voor deze organisatie"
 
-msgid "Registrations will open at the specified date and time"
-msgstr "De inschrijvingen gaan open op de aangegeven datum en tijd"
-
 msgid "Restore session expired, please upload the file again."
 msgstr "Herstelsessie verlopen, upload het bestand opnieuw."
 
@@ -8212,6 +8218,9 @@ msgstr "Inhoud van de lidmaatschapsaanvraag gevuld met gebruikersgegevens"
 
 msgid "Create at least one ticket type for event registrations"
 msgstr "Maak ten minste één type ticket voor evenementregistraties"
+
+msgid "Give a registration to this event as a gift to a friend"
+msgstr "Geef een inschrijving voor dit evenement cadeau aan een vriend(in)"
 
 msgid "If checked: shows a link in the calendar to past events"
 msgstr ""
@@ -8300,9 +8309,6 @@ msgstr "Als je een gratis donatie aan de vereniging wilt doen"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Geef aan of het veld wordt afgedrukt in PDF-generaties"
-
-msgid "Manage experience point deliveries awarded to characters"
-msgstr "Beheer de toekenning van ervaringspunten aan personages"
 
 msgid "Manage registrations discounts available to participants"
 msgstr "Beheer registraties kortingen beschikbaar voor deelnemers"
@@ -8475,12 +8481,19 @@ msgstr ""
 "Er zijn geen medewerkers met de benodigde vaardigheden gevonden binnen de "
 "organisatie"
 
+msgid "Now you can set settings for character creation by players"
+msgstr ""
+"Nu kun je instellingen aanpassen voor het maken van personages door spelers"
+
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"
 
 msgid "Probability of showing the special page (out of thousands)"
 msgstr ""
 "Waarschijnlijkheid dat de speciale pagina wordt weergegeven (uit duizenden)"
+
+msgid "Sign up for the event, or update your registration options"
+msgstr "Schrijf je in voor het evenement, of pas je inschrijvingsopties aan"
 
 msgid "There are no open questions from participants at this time"
 msgstr "Er zijn op dit moment geen open vragen van deelnemers"
@@ -8906,6 +8919,11 @@ msgstr ""
 msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed"
 msgstr "Hallo! Je inschrijving bij <b>%(event)s</b> is bevestigd"
 
+msgid "Here you can review the event details and visit its public page"
+msgstr ""
+"Hier kun je de details van het evenement bekijken en de openbare pagina "
+"ervan bezoeken"
+
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Als deze optie is aangevinkt, worden er geen tokens gebruikt bij de invoer "
@@ -9076,6 +9094,9 @@ msgstr ""
 "Fout bij het laden. Ongeldig bestandsformaat - we accepteren alleen pdf en "
 "afbeeldingen"
 
+msgid "Express your preferences on the characters you would like to play"
+msgstr "Laat weten welke personages je het liefst zou willen spelen"
+
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Als deze optie is aangevinkt, worden er geen credits gebruikt bij de invoer "
@@ -9105,6 +9126,9 @@ msgstr "Nieuwe deelname aan de inzameling voor %(recipient)s door %(user)s"
 
 msgid "Now you can review the diet information submitted by participants"
 msgstr "Nu kunt u de dieetinformatie bekijken die deelnemers hebben ingediend"
+
+msgid "Participants can sign up right away through the registration form"
+msgstr "Deelnemers kunnen zich meteen aanmelden via het aanmeldingsformulier"
 
 msgid "Please enter the occasion for which you wish to make the donation"
 msgstr "Vul de gelegenheid in waarvoor je de donatie wilt doen"
@@ -9172,11 +9196,6 @@ msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Geeft medewerkers toegang tot de veiligheidsinformatie die deelnemers hebben"
 " ingediend"
-
-msgid "Manage experience distributions for character abilities purchases."
-msgstr ""
-"Beheer ervaringsverdelingen voor de aankoop van vaardigheden voor "
-"personages."
 
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
@@ -9287,6 +9306,11 @@ msgstr ""
 "Gebruik de knop hierboven om een proloogtype toe te voegen en je "
 "proloogteksten te groeperen"
 
+msgid "Use the button above to create the first award of experience points"
+msgstr ""
+"Gebruik de knop hierboven om de eerste beloning in de vorm van "
+"ervaringspunten te verdienen"
+
 msgid "View all event information, and any specifics tickets costs, in its"
 msgstr ""
 "Bekijk alle informatie over het evenement en alle bijzonderheden over de "
@@ -9341,10 +9365,6 @@ msgstr ""
 
 msgid "Number of days within which the player must pay his next installment"
 msgstr "Aantal dagen waarbinnen de speler zijn volgende termijn moet betalen"
-
-msgid "Registrations are open and will close at the specified date and time"
-msgstr ""
-"De inschrijvingen zijn geopend en sluiten op de aangegeven datum en tijd"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8)"
 msgstr ""
@@ -9528,11 +9548,6 @@ msgstr ""
 
 msgid "These are the event registrations for which you have to make a payment"
 msgstr "Dit zijn de evenementregistraties waarvoor je moet betalen"
-
-msgid "This criterion will apply only to characters with all required options"
-msgstr ""
-"Dit criterium geldt alleen voor personages die aan alle vereiste opties "
-"voldoen"
 
 msgid "This discount code is already used in one or more of the selected runs"
 msgstr ""
@@ -10160,12 +10175,6 @@ msgstr ""
 "starten"
 
 msgid ""
-"Select an event to pre-load its registered participants into a new delivery"
-msgstr ""
-"Kies een evenement om de geregistreerde deelnemers ervan vooraf in een "
-"nieuwe verzending te laden"
-
-msgid ""
 "Select characters, factions, and handouts to download as a bulk ZIP of PDFs"
 msgstr ""
 "Kies personages, facties en hand-outs om als één groot ZIP-bestand met PDF’s"
@@ -10492,6 +10501,13 @@ msgstr ""
 "aangevinkt"
 
 msgid ""
+"The event will not take place: hidden from users and excluded from "
+"accounting"
+msgstr ""
+"Het evenement gaat niet door: het wordt voor gebruikers verborgen gehouden "
+"en niet meegeteld in de boekhouding"
+
+msgid ""
 "Track and manage event milestones with status, deadline, and staff "
 "assignment"
 msgstr ""
@@ -10600,13 +10616,6 @@ msgid ""
 "payment"
 msgstr "Dit zijn gedelegeerde accountregistraties waarvoor je moet betalen"
 
-msgid ""
-"This criterion will apply only to characters owning all prerequisite "
-"abilities"
-msgstr ""
-"Dit criterium geldt alleen voor personages die over alle vereiste "
-"vaardigheden beschikken"
-
 #, python-format
 msgid ""
 "To confirm it, please pay the following amount as soon as possible: "
@@ -10691,6 +10700,13 @@ msgstr ""
 "(0 = geen extra kosten)"
 
 msgid ""
+"Participants cannot sign up: the event page shows that registrations are "
+"closed"
+msgstr ""
+"Deelnemers kunnen zich niet meer aanmelden: op de evenementpagina staat dat "
+"de inschrijvingen gesloten zijn"
+
+msgid ""
 "Pre-registrations are open: pre-register to be notified when registrations "
 "open"
 msgstr ""
@@ -10703,6 +10719,13 @@ msgid ""
 msgstr ""
 "Inschrijvingsvoorwaarden, weergegeven op een pagina waarnaar wordt verwezen "
 "in het inschrijvingsformulier"
+
+msgid ""
+"The event has taken place: archived among past events, registrations are "
+"frozen"
+msgstr ""
+"Het evenement heeft plaatsgevonden: het staat nu in het archief bij eerdere "
+"evenementen en de inschrijvingen zijn gesloten"
 
 msgid ""
 "This content can only be accessed once. Please read carefully before "
@@ -10857,6 +10880,13 @@ msgstr ""
 " is ingesteld, worden er geen e-mails verzonden)"
 
 msgid ""
+"The event is published: listed in the homepage and calendar, visible to all "
+"users"
+msgstr ""
+"Het evenement is gepubliceerd: het staat op de startpagina en in de agenda, "
+"en is zichtbaar voor alle gebruikers"
+
+msgid ""
 "This page summarizes the pool labels used to group pools in character "
 "inventories"
 msgstr ""
@@ -11008,6 +11038,13 @@ msgstr ""
 "behulp van een handige checklist"
 
 msgid ""
+"Registrations are open until the date and time set below, then close "
+"automatically"
+msgstr ""
+"Je kunt je aanmelden tot de hieronder aangegeven datum en tijd; daarna sluit"
+" de inschrijving automatisch"
+
+msgid ""
 "Theoretical total of income due to participation fees selected by the "
 "participants"
 msgstr ""
@@ -11156,6 +11193,13 @@ msgid ""
 msgstr ""
 "Minimumaantal dagen vóór het evenement waarvoor het beschikbaar wordt "
 "gesteld (0 = altijd)"
+
+msgid ""
+"Registrations stay closed until the date and time set below, then open "
+"automatically"
+msgstr ""
+"De inschrijvingen blijven gesloten tot de hieronder aangegeven datum en "
+"tijd, en gaan daarna automatisch open"
 
 msgid ""
 "Requires Executive Committee approval of membership before participating in "
@@ -11344,13 +11388,6 @@ msgid ""
 msgstr ""
 "<i>Betaling te laat</i>: Betaal <b>%(amount).2f %(currency)s</b> zo snel "
 "mogelijk"
-
-msgid ""
-"All characters from this event's registrations will be pre-loaded into the "
-"new delivery"
-msgstr ""
-"Alle personages uit de registraties voor dit evenement worden vooraf in de "
-"nieuwe versie geladen"
 
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
@@ -12231,6 +12268,13 @@ msgstr ""
 "weergegeven in plaats van gescheiden per type"
 
 msgid ""
+"If you select one (or more) abilities, this criterion applies only to "
+"characters with all of them"
+msgstr ""
+"Als je één (of meer) vaardigheden selecteert, geldt dit criterium alleen "
+"voor personages die ze allemaal hebben"
+
+msgid ""
 "Manage participant-initiated collections by assigning recipients and "
 "tracking contributed amounts"
 msgstr ""
@@ -12473,6 +12517,13 @@ msgstr ""
 " zoals e-mails en registratiepagina’s, per taal"
 
 msgid ""
+"Registrations are managed on another site: participants are redirected to "
+"the external link set below"
+msgstr ""
+"De inschrijvingen worden op een andere site afgehandeld: deelnemers worden "
+"doorgestuurd naar de onderstaande externe link"
+
+msgid ""
 "The character has been added to the faction, but in the faction text the "
 "character is never mentioned"
 msgstr ""
@@ -12564,6 +12615,13 @@ msgstr ""
 "persoonlijke e-mailadressen te onthullen"
 
 msgid ""
+"If you select one (or more) factions, this modifier applies only to "
+"characters belonging to all of them"
+msgstr ""
+"Als je één (of meer) facties selecteert, geldt deze modificator alleen voor "
+"personages die tot al die facties behoren"
+
+msgid ""
 "Introduces a new way to display past and upcoming events, inspired by "
 "popular streaming-service layouts"
 msgstr ""
@@ -12627,6 +12685,20 @@ msgstr ""
 " zichtbaar op basis van het geselecteerde registratieticket."
 
 msgid ""
+"If you select one (or more) character options, this modifier applies only to"
+" characters with all of them"
+msgstr ""
+"Als je één (of meer) tekenopties selecteert, geldt deze aanpassing alleen "
+"voor tekens die aan al deze opties voldoen"
+
+msgid ""
+"If you select one (or more) factions, this criterion applies only to "
+"characters belonging to all of them"
+msgstr ""
+"Als je één (of meer) facties selecteert, geldt dit criterium alleen voor "
+"personages die tot al die facties behoren"
+
+msgid ""
 "In particular, they will only be made visible to the organisers of the "
 "events you decide to register for"
 msgstr ""
@@ -12660,6 +12732,13 @@ msgid ""
 msgstr ""
 "Voegt 'Patron'- en 'Gereduceerd'-kaartjestypes toe. Elk gekocht ticket voor "
 "een Patron maakt één gereduceerd ticket beschikbaar"
+
+msgid ""
+"If you select one (or more) character options, this criterion applies only "
+"to characters with all of them"
+msgstr ""
+"Als je één (of meer) tekenopties selecteert, geldt dit criterium alleen voor"
+" tekens die aan al deze opties voldoen"
 
 msgid ""
 "Manage association badges: view, create, edit, and track how many members "
@@ -12717,6 +12796,13 @@ msgid ""
 msgstr ""
 "Elke vriend die zich registreert en deze code gebruikt, ontvangt direct de "
 "volgende korting op zijn of haar ticket"
+
+msgid ""
+"If you select one (or more) character abilities, this modifier applies only "
+"to characters with all of them"
+msgstr ""
+"Als je één (of meer) personagevaardigheden kiest, geldt deze aanpassing "
+"alleen voor personages die ze allemaal hebben"
 
 msgid ""
 "Indicates useful information to passengers, such as color of your car, time "
@@ -13134,6 +13220,14 @@ msgstr ""
 "instellingen kunnen worden gebruikt als uitgangspunt voor andere evenementen"
 
 msgid ""
+"Participants cannot sign up yet, but can pre-register to show their interest"
+" and be notified when registrations open"
+msgstr ""
+"Deelnemers kunnen zich nog niet aanmelden, maar kunnen zich wel vooraf "
+"registreren om hun interesse kenbaar te maken en een bericht te krijgen "
+"zodra de inschrijvingen open zijn"
+
+msgid ""
 "The collection is active! To participate click on the following link, or "
 "copy it to whoever you want to get involved"
 msgstr ""
@@ -13446,6 +13540,14 @@ msgstr ""
 "behandeld"
 
 msgid ""
+"The event is in preparation: hidden from the homepage and calendar, only "
+"staff and already registered participants can access it"
+msgstr ""
+"Het evenement is nog in voorbereiding: het is niet zichtbaar op de "
+"startpagina en in de agenda; alleen medewerkers en deelnemers die zich al "
+"hebben aangemeld, hebben er toegang toe"
+
+msgid ""
 "The payment of your membership fee for this year has been received. You have"
 " the right to participate to the organization events"
 msgstr ""
@@ -13505,6 +13607,14 @@ msgid ""
 msgstr ""
 "Je bent geverifieerd als %(username)s, maar je hebt geen rechten om deze "
 "pagina te openen. Wil je inloggen met een ander account?"
+
+msgid ""
+"If checked, enables managing multiple experience systems for the event. Each"
+" ability and award can be assigned to a specific system."
+msgstr ""
+"Als dit aangevinkt is, kun je meerdere ervaringssystemen voor het evenement "
+"beheren. Elke vaardigheid en elke beloning kan aan een specifiek systeem "
+"worden toegewezen."
 
 msgid ""
 "If checked, participants may add abilities themselves, by selecting from "
@@ -13594,14 +13704,6 @@ msgid ""
 msgstr ""
 "Geeft, gegeven een betalingstermijn, het aantal dagen aan waarbinnen het de "
 "deelnemer op de hoogte stelt om door te gaan met de betaling. Standaard 30."
-
-msgid ""
-"If checked, enables managing multiple experience systems for the event. Each"
-" ability and delivery can be assigned to a specific system."
-msgstr ""
-"Als deze optie is aangevinkt, kunnen meerdere belevingssystemen voor het "
-"evenement worden beheerd. Elke mogelijkheid en levering kan worden "
-"toegewezen aan een specifiek systeem."
 
 #, python-format
 msgid ""

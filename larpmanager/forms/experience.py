@@ -31,11 +31,10 @@ from larpmanager.forms.utils import (
     CharacterDualListWidget,
     ComputedFieldS2Widget,
     EventWritingOptionS2WidgetMulti,
-    RunCampaignS2Widget,
+    FactionS2WidgetMulti,
     SystemExpS2Widget,
     WritingTinyMCE,
 )
-from larpmanager.models.event import Run
 from larpmanager.models.experience import (
     AbilityExp,
     AbilityTemplateExp,
@@ -86,9 +85,9 @@ class ExpBaseForm(BaseModelForm):
 class OrgaDeliveryExpForm(ExpBaseForm):
     """Form for OrgaDeliveryExp."""
 
-    page_title = _("Delivery")
+    page_title = _("Award")
 
-    page_info = _("Manage experience point deliveries awarded to characters")
+    page_info = _("Manage experience point awarded to characters")
 
     class Meta:
         model = DeliveryExp
@@ -107,27 +106,6 @@ class OrgaDeliveryExpForm(ExpBaseForm):
             self.instance._default_system = systems[0]  # noqa: SLF001
         elif "system" in self.fields:
             self.configure_field_event("system", event)
-
-
-class OrgaDeliveryExpLoadForm(BaseForm):
-    """Form for selecting a run to pre-populate delivery characters."""
-
-    page_title = _("Load participants")
-    page_info = _("Select an event to pre-load its registered participants into a new delivery")
-
-    run = forms.ModelChoiceField(
-        queryset=Run.objects.none(),
-        required=True,
-        label=_("Event"),
-        help_text=_("All characters from this event's registrations will be pre-loaded into the new delivery"),
-        widget=RunCampaignS2Widget,
-    )
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Initialize form with event-scoped run queryset."""
-        self.params = kwargs.pop("context", {})
-        super().__init__(*args, **kwargs)
-        self.configure_field_event("run", self.params.get("event"))
 
 
 class OrgaAbilityTemplateExpForm(BaseModelForm):
@@ -252,6 +230,7 @@ class OrgaModifierExpForm(BaseModelForm):
             "abilities": AbilityS2WidgetMulti,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
+            "factions": FactionS2WidgetMulti,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -260,7 +239,7 @@ class OrgaModifierExpForm(BaseModelForm):
         self.delete_field("name")
 
         # Configure event-specific widgets
-        for field in ["abilities", "prerequisites", "requirements"]:
+        for field in ["abilities", "prerequisites", "requirements", "factions"]:
             self.configure_field_event(field, self.params.get("event"))
 
 
@@ -280,6 +259,7 @@ class OrgaCriterionExpForm(ExpBaseForm):
             "system": SystemExpS2Widget,
             "prerequisites": AbilityS2WidgetMulti,
             "requirements": EventWritingOptionS2WidgetMulti,
+            "factions": FactionS2WidgetMulti,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -295,7 +275,7 @@ class OrgaCriterionExpForm(ExpBaseForm):
         elif "system" in self.fields:
             self.configure_field_event("system", event)
 
-        for field in ["prerequisites", "requirements"]:
+        for field in ["prerequisites", "requirements", "factions"]:
             self.configure_field_event(field, event)
 
     def clean(self) -> dict:

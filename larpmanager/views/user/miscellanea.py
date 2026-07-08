@@ -545,4 +545,4 @@ def role_invite_redeem(request: HttpRequest, token: str) -> HttpResponse:
             invite.association_id, AssociationTextType.PRIVACY, member.language
         )
 
-    return render(request, "larpmanager/role_invite_redeem.html", context)
+    return render(request, "larpmanager/manage/role_invite_redeem.html", context)

@@ -624,14 +624,14 @@
     module: experience
 - model: larpmanager.eventpermission
   fields:
-    name: Deliveries
-    descr: Manage experience distributions for character abilities purchases.
+    name: Awards
+    descr: Manage experience awarded to characters
     slug: orga_exp_deliveries
     number: 61
     config: experience
     active_if: null
     hidden: false
-    icon: truck
+    icon: award
     feature: experience
     module: experience
 - model: larpmanager.eventpermission

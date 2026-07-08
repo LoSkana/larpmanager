@@ -4,7 +4,7 @@
     {% trans "Character Inventory Pool Types" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="pool_types" class="go_datatable writing">
         <thead>
             <tr>
@@ -39,4 +39,5 @@
             {% trans "No inventory pool types defined yet" %}. {% trans "Add a pool type to categorize items available in character inventories" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

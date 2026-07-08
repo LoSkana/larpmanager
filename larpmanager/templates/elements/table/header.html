@@ -1,0 +1,162 @@
+{% load show_tags i18n %}
+<div class="staff-list">
+    <div class="orga-buttons">
+        {% if not readonly_event and not hide_new %}
+            <a class="new button form-new" href="#">
+                <i class="fas fa-plus"></i>
+                {% trans "New" %}
+            </a>
+        {% endif %}
+        {% if extra_link_url %}
+            <a class="new button {{ extra_link_class }}" href="{{ extra_link_url }}">
+                {% if extra_link_icon %}<i class="{{ extra_link_icon }}"></i>{% endif %}
+                {{ extra_link_label }}
+            </a>
+        {% endif %}
+        {% if upload %}
+            <a class="new button no_v22"
+               href="{% url 'orga_upload' run.get_slug upload %}">
+                <i class="fas fa-upload"></i>
+                {% trans "Upload" %}
+            </a>
+        {% endif %}
+        {% if download %}
+            <form action="{{ request.path }}" method="post" class="inline no_v22">
+                {% csrf_token %}
+                <input type="hidden" name="download" value="1">
+                <button type="submit" name="submit" value="1">
+                    <i class="fas fa-download"></i>
+                    {% trans "Download" %}
+                </button>
+            </form>
+        {% endif %}
+        {% if export %}
+            <a class="new button no_v22"
+               href="{% url 'orga_export' run.get_slug export %}">
+                <i class="fas fa-file-export"></i>
+                {% trans "Export" %}
+            </a>
+        {% endif %}
+        {% if bulk %}
+            <a class="new button my_toggle no_v22" tog='bulk' href="#">
+                <i class="fas fa-tasks"></i>
+                Bulk
+            </a>
+        {% endif %}
+        {% if writing_header %}
+            {% if features.progress %}
+                <a class="new button my_toggle" tog='progress-table' href="#">
+                    <i class="fas fa-chart-line"></i>
+                    {% trans "Progress" %}
+                </a>
+            {% endif %}
+            {% if features.assigned %}
+                <a class="new button my_toggle" tog='assigned-table' href="#">
+                    <i class="fas fa-user-check"></i>
+                    {% trans "Assignments" %}
+                </a>
+            {% endif %}
+            {% if features.progress and features.assigned %}
+                <a class="new button my_toggle" tog='progress-assigned-table' href="#">
+                    <i class="fas fa-chart-line"></i>
+                    {% trans "Progress" %} - {% trans "Assignments" %}
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+    {% if bulk and effective_version < 22 %}
+        <div id="main_bulk" class="hide bulk">
+            <p>
+                <i>{% trans "Select the table rows and choose the operation to apply" %}</i>
+            </p>
+            <select id="operation" class="bulk-el">
+                {% for el in bulk %}<option value="{{ el.idx }}">{{ el.label }}</option>{% endfor %}
+            </select>
+            {% for el in bulk %}
+                <select id="objs_{{ el.idx }}"
+                        class="bulk-el objs {% if not forloop.first %}hide{% endif %}">
+                    {% for obj in el.objs %}<option value="{{ obj.uuid }}">{{ obj.name }}</option>{% endfor %}
+                </select>
+            {% endfor %}
+            <a id="exec" class="new button my_toggle bulk-el" href="#">
+                <i class="fas fa-play"></i>
+                {% trans "Execute" %}
+            </a>
+        </div>
+    {% endif %}
+    {% if writing_header %}
+        {% if features.progress %}
+            <div class="hide progress-table">
+                <table>
+                    {% for k, el in progress_steps.items %}
+                        <tr>
+                            <th>{{ el }}</th>
+                            <td>{% key progress_steps_map k %}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <hr />
+            </div>
+        {% endif %}
+        {% if features.assigned %}
+            <div class="hide assigned-table">
+                <table>
+                    {% for k, el in assigned.items %}
+                        <tr>
+                            <th>{{ el }}</th>
+                            <td>{% key assigned_map k %}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <hr />
+            </div>
+        {% endif %}
+        {% if features.progress and features.assigned %}
+            <div class="hide progress-assigned-table">
+                <table class="mob">
+                    <tr>
+                        <th></th>
+                        {% for k, el in progress_steps.items %}<th>{{ el }}</th>{% endfor %}
+                    </tr>
+                    {% for k, el in assigned.items %}
+                        <tr>
+                            <th>{{ el }}</th>
+                            {% for kk, elel in progress_steps.items %}
+                                <td>{% key progress_assigned_map kk k %}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                <hr />
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+<div id="overlay">
+    <div class="lds-roller">
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+        <div>
+            <!-- spinner -->
+        </div>
+    </div>
+</div>

@@ -30,7 +30,6 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.http import Http404
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
-from django_select2 import forms as s2forms
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
@@ -45,6 +44,7 @@ from larpmanager.forms.utils import (
     EventWritingOptionS2WidgetMulti,
     FactionS2WidgetMulti,
     RunStaffS2Widget,
+    S2WidgetMulti,
     TicketS2WidgetMulti,
     WritingTinyMCE,
 )
@@ -257,7 +257,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
-            widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
+            widget=S2WidgetMulti(search_fields=["name__icontains"]),
             required=False,
             label=_("Factions"),
         )
@@ -602,7 +602,7 @@ class OrgaCharacterForm(CharacterForm):
         self.fields["exp_ability_list"] = forms.ModelMultipleChoiceField(
             label=_("Abilities"),
             queryset=self.params["run"].event.get_elements(AbilityExp),
-            widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
+            widget=S2WidgetMulti(search_fields=["name__icontains"]),
             required=False,
         )
 
@@ -611,9 +611,9 @@ class OrgaCharacterForm(CharacterForm):
 
         # delivery list
         self.fields["exp_delivery_list"] = forms.ModelMultipleChoiceField(
-            label=_("Delivery"),
+            label=_("Award"),
             queryset=self.params["run"].event.get_elements(DeliveryExp),
-            widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains"]),
+            widget=S2WidgetMulti(search_fields=["name__icontains"]),
             required=False,
         )
 

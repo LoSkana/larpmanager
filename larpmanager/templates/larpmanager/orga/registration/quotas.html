@@ -4,7 +4,7 @@
     {% trans "Quotas" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <p>
         <i>{% trans "The ticket will be divided equally in the number of quotas indicated" %}.</i>
     </p>
@@ -52,4 +52,5 @@
             {% trans "No payment quota options have been defined for this event yet" %}. {% trans "Use the button above to add a quota plan" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

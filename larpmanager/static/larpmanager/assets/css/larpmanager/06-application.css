@@ -1,0 +1,313 @@
+/* ---------------------------------------------------------------------------
+   Application - Registration
+   --------------------------------------------------------------------------- */
+
+.reg_status {
+  text-align: center;
+}
+
+.reg_status br {
+  display: none;
+}
+
+.reg_profile {
+  width: 8em;
+}
+
+.page_gallery {
+  margin-top: 0.5em;
+}
+
+/* Contain the floated .el children so ancestors keep their height */
+.gallery {
+  display: flow-root;
+}
+
+.page_gallery .title {
+  margin-bottom: 0.5em;
+}
+
+.cover-container {
+  width: 25%;
+}
+
+.cover-container img {
+  width: 100%;
+  vertical-align: middle;
+  max-height: 100%;
+}
+
+@media screen and (max-width: 1000px) {
+  .cover-container img {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+
+#one .inner {
+  padding-bottom: 2em !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Character & Profile
+   --------------------------------------------------------------------------- */
+
+.character-cover {
+  width: 5em;
+}
+
+.character-name {
+  font-size: 130%;
+}
+
+.private-header {
+  font-size: 250%;
+}
+
+.char_profile {
+  max-width: 700px;
+  margin: auto;
+}
+
+.char_intro,
+.char_intro p,
+.char_intro img {
+  max-width: 100%;
+  text-align: center;
+}
+
+.rel-description {
+  font-size: 80%;
+}
+
+.rel-img {
+  width: 8em;
+  border-radius: 1em;
+}
+
+@media (max-width: 768px) {
+  #player_relationships thead {
+    display: none;
+  }
+
+  #player_relationships,
+  #player_relationships tbody,
+  #player_relationships tr {
+    display: block;
+    width: 100%;
+  }
+
+  #player_relationships tr {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1em;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 0.3em;
+    padding: 0.5em;
+  }
+
+  #player_relationships td {
+    display: block;
+    border: none;
+  }
+
+  #player_relationships tr td:nth-child(1),
+  #player_relationships tr td:nth-child(2) {
+    width: auto;
+  }
+
+  #player_relationships tr td:nth-child(3),
+  #player_relationships tr td:nth-child(4) {
+    width: 100%;
+  }
+}
+
+.vote-profile {
+  width: 7em;
+  height: 7em;
+}
+
+.avatar_help {
+  max-width: 700px;
+  margin: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Membership
+   --------------------------------------------------------------------------- */
+
+.membership_request {
+  width: 50%;
+}
+
+#membership_cf .warning {
+  color: red;
+}
+
+#membership_cf .success {
+  color: green;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Accounting & Payment
+   --------------------------------------------------------------------------- */
+
+.accounting_record {
+  height: 500px;
+  width: 100%;
+}
+
+.inv_photo {
+  height: 5em;
+}
+
+.satispay-button {
+  height: 50px;
+  cursor: pointer;
+}
+
+#smart-button-container {
+  margin-top: 2em;
+  text-align: center;
+}
+
+#paypal-buttons {
+  max-width: 300px;
+  margin: auto;
+}
+
+#paypal-me-img {
+  width: 50%;
+  max-width: 600px;
+}
+
+.payment-logo {
+  width: 2em;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Casting
+   --------------------------------------------------------------------------- */
+
+#main_casting hr {
+  margin: 1em 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Features & Permissions
+   --------------------------------------------------------------------------- */
+
+#id_members_info div,
+#id_Core div,
+#id_Structure div,
+#id_Appearance div,
+#id_Registration div,
+#id_Accounting div,
+#id_Users div,
+#id_Writing div,
+#id_Casting div,
+#id_Miscellanea div {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+.feature_checkbox {
+  display: inline-block;
+  padding: 0.5em;
+}
+
+.feature_checkbox label {
+  display: inline-block;
+  text-transform: initial;
+  font-weight: initial;
+  font-size: revert;
+  letter-spacing: revert;
+}
+
+.explain-icon,
+.feature_checkbox a {
+  font-size: 0.7em;
+  vertical-align: top;
+  cursor: pointer;
+  position: relative;
+}
+
+.feature_checkbox a {
+  margin-left: 0.5em;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Misc
+   --------------------------------------------------------------------------- */
+
+#err {
+  color: red;
+}
+
+#not_chosen {
+  color: red;
+}
+
+.editable {
+  cursor: cell;
+}
+
+.ajax-toggle {
+  cursor: pointer;
+}
+
+.bulk-el {
+  display: inline-block;
+}
+
+.paginate input {
+  max-width: 100% !important;
+}
+
+#search {
+  margin-top: 0.5em;
+}
+
+#reading .post_popup {
+  display: none;
+}
+
+.progress_done {
+  color: green;
+}
+
+.progress_not_done {
+  color: gray;
+}
+
+.button.big {
+  font-size: 1.2em;
+  padding: 0.8em 1.6em;
+  margin-top: 1em;
+  display: inline-block;
+  white-space: normal;
+}
+
+#id_payment_methods div {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+.overdue {
+  color: red;
+}
+
+.abilities h4 {
+  margin: 0;
+  font-size: 1.1em;
+}
+
+.abilities p {
+  margin: 0;
+}
+
+.new_v18 .abilities th,
+.new_v18 .abilities th {
+  padding: 0.5em;
+}
+

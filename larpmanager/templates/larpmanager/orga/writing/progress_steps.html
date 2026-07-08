@@ -7,7 +7,7 @@
     {% trans "Manage the progress steps that track the completion status of writing elements" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="progress_steps"
            class="go_datatable writing row_reorder"
            data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
@@ -47,4 +47,5 @@
             {% trans "No progress steps have been defined yet" %}. {% trans "Use the button above to add steps for tracking the completion status of writing elements" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

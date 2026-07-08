@@ -4,7 +4,7 @@
     {% trans "Warehouse containers" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="inv_containers" class="go_datatable dot_links">
         <thead>
             <tr>
@@ -41,4 +41,5 @@
             {% trans "No warehouse containers defined yet" %}. {% trans "Use the button above to add a container" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

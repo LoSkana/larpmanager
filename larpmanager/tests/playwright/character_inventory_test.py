@@ -63,14 +63,14 @@ def setup(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/")
     page.get_by_role("link", name="Features").first.click()
     # Event
-    page.get_by_role("checkbox", name="Player editor").check()
+    page.get_by_role("checkbox", name="Character creation").check()
     page.get_by_role("checkbox", name="Character inventory").check()
     # Writing
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/config/")
-    page.get_by_role("link", name=re.compile(r"^Player editor\s.+")).click()
+    page.get_by_role("link", name=re.compile(r"^Character creation\s.+")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     submit_confirm(page)

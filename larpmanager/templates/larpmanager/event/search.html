@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Search" %} - {{ run.search }}
 {% endblock title %}
+{% block info %}
+    {% trans "Search and filter the characters of the event" %}
+{% endblock info %}
 {% block content %}
     {% if hide_login %}
         <p>

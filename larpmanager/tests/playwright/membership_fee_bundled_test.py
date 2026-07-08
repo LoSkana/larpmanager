@@ -41,7 +41,7 @@ from larpmanager.tests.utils import (
     login_orga,
     sidebar,
     submit,
-    submit_confirm, save_modal, _wait_lm_ready,
+    submit_confirm, save_modal, _wait_lm_ready, confirm_modal,
 )
 
 pytestmark = pytest.mark.e2e
@@ -96,8 +96,8 @@ def setup(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_form1-name").fill("Test Second")
     edit_iframe.locator("#id_form1-name").press("Tab")
-    edit_iframe.locator("#id_form2-development").select_option("1")
-    edit_iframe.locator("#id_form2-registration_status").select_option("o")
+    edit_iframe.locator('label[for="id_form2-development_1"]').click()
+    edit_iframe.locator('label[for="id_form2-registration_status_1"]').click()
     fill_date(edit_iframe, "#id_form2-start", "2050-06-11")
     fill_date(edit_iframe, "#id_form2-end", "2050-06-13")
     save_modal(page, edit_iframe)
@@ -197,6 +197,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     # Approve first event payment
     go_to(page, live_server, "/test/manage/payments")
     page.get_by_role("link", name="Confirm").click()
+    confirm_modal(page)
 
     # First event registration is confirmed
     go_to(page, live_server, "/test/register")
@@ -228,6 +229,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     # Approve second event payment
     go_to(page, live_server, "/testsecond/manage/payments")
     page.get_by_role("link", name="Confirm").click()
+    confirm_modal(page)
 
     # reg_status for second event shows event fee 100 and membership fee 20 (already paid via first event)
     go_to(page, live_server, "/testsecond/register")

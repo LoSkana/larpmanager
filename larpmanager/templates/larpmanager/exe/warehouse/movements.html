@@ -4,7 +4,7 @@
     {% trans "Warehouse assignments" %}  - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="inv_movements" class="go_datatable dot_links">
         <thead>
             <tr>
@@ -62,6 +62,7 @@
     <div id="imagePopup">
         <img id="popupImg" src="" alt="popup image" />
     </div>
+    {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js %}
     <script>
