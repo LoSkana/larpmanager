@@ -394,4 +394,4 @@ def test_faction_all(pw_page: Any) -> None:
         page.goto(f"{live_server}{link}")
         banner = page.locator("#banner")
         if banner.count() > 0:
-            expect_normalized(page, page.locator("body"), "404")
+            expect_normalized(page, page.locator("body"), "we couldn't find the page")
