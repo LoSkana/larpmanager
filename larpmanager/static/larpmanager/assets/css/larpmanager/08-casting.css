@@ -1,3 +1,37 @@
+/*** show_char (from solid_state.css) ***/
+
+#main_grid select {
+  width: auto;
+  background-size: 0.5em;
+  height: auto;
+  padding-right: 0.5em;
+  display: inline;
+  margin: 0 0.5em 0 0;
+}
+
+#main_casting .NO {
+  color: red;
+}
+
+#main_casting .MR {
+  font-weight: bold;
+  color: blue;
+}
+
+#main_casting .EP {
+  font-weight: bold;
+  color: yellow;
+}
+
+#main_casting .CH {
+  font-weight: bold;
+  color: green;
+}
+
+#main_grid .sel {
+  color: orange;
+}
+
 /* ---------------------------------------------------------------------------
    Casting - choose characters
    --------------------------------------------------------------------------- */
@@ -282,4 +316,3 @@
   margin-left: auto;
   color: #4caf50;
 }
-

@@ -1,3 +1,174 @@
+/*** FULLSCREEN (from solid_state.css) ***/
+
+#fullscreen {
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+  width: 90%;
+  background-color: rgba(var(--sec-rgb), 0.8);
+  border-radius: 5px;
+  padding: 1em;
+}
+
+@media (max-width: 600px) {
+  #fullscreen {
+    position: absolute;
+    bottom: 1%;
+    left: 1%;
+    width: 98%;
+    font-size: 80%;
+  }
+}
+
+#fullscreen div {
+  margin: 1em;
+}
+
+#fullscreen h1 {
+  font-size: 150%;
+  margin: 0;
+  text-align: center;
+}
+
+#fullscreen .tagline {
+  margin: 0.5em;
+  font-style: italic;
+  text-align: center;
+}
+
+#fullscreen .primary {
+  margin-left: 2em;
+  border-color: rgba(var(--ter-rgb), 0.35) !important;
+  border-width: 2px !important;
+  box-shadow: inset 0 0 0 2px rgba(var(--pri-rgb), 0.75);
+  color: var(--pri-clr);
+  background-color: rgba(var(--sec-rgb), 0.35);
+}
+
+#fullscreen .buttons {
+  text-align: center;
+}
+
+#fullscreen .authors {
+  margin: 0.5em;
+  font-style: italic;
+  text-align: center;
+}
+
+/*** CAROUSEL (from solid_state.css) ***/
+
+#bgk {
+  top: 0px;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-size: auto, cover;
+  background-attachment: fixed, fixed;
+  background-position: center, center;
+}
+
+@media (max-width: 600px) {
+  #bgk {
+    background-size: 50em;
+    background-position: top left;
+    background-repeat: no-repeat;
+  }
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 2% 0 0 0;
+  opacity: 0;
+
+  &.animation-reveal {
+    animation: reveal 1s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  @keyframes reveal {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}
+
+.card {
+  margin: 0 1rem;
+  overflow: hidden;
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 35, 0.25);
+  border-radius: 8px;
+  height: 6em;
+  width: 8em;
+  display: block;
+  position: relative;
+  background-position: 50%;
+  background-size: cover;
+  cursor: pointer;
+  transition:
+    width 0.16s ease-in-out,
+    height 0.16s ease-in-out;
+}
+
+.card.is-custom-selected {
+  width: 10em;
+  height: 7.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-bg {
+  height: 100%;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.flickity-enabled {
+  position: relative;
+}
+
+.flickity-enabled:focus {
+  outline: none;
+}
+
+.flickity-viewport {
+  position: relative;
+  height: 100%;
+}
+
+.flickity-slider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/*** COVER (from solid_state.css) ***/
+
+#aspect-ratio {
+  position: relative;
+  width: 100%;
+  padding-bottom: 40%;
+}
+
+#aspect-ratio div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
 /* ---------------------------------------------------------------------------
    DataTables Responsive - inline expand control
    --------------------------------------------------------------------------- */
@@ -640,4 +811,3 @@ body.floating_iframe #wrapper {
 #member-search {
   margin-bottom: 0.5em;
 }
-

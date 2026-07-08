@@ -1,3 +1,88 @@
+/*** tooltip (from solid_state.css) ***/
+
+.lm_tooltip .staff {
+  color: var(--sec-clr);
+  background-color: rgba(var(--pri-rgb), 0.42);
+  border: solid 1px rgba(var(--pri-rgb), 0.42);
+}
+
+.lm_tooltip .orga {
+  color: var(--sec-clr);
+  background-color: rgba(var(--pri-rgb), 0.5);
+  border: solid 1px rgba(var(--pri-rgb), 0.5);
+}
+
+.lm_tooltip {
+  position: relative;
+  display: inline;
+}
+
+.lm_tooltiptext {
+  display: none;
+}
+
+.qtip.qtip-lm .qtip-content {
+  font-size: 1.3em;
+  line-height: 1.1;
+}
+
+.subl {
+  text-decoration: underline;
+}
+
+div.ui-lm_tooltip {
+  max-width: 90%;
+}
+
+.qtip-char {
+  width: 250px;
+}
+
+.popup_text {
+  display: none;
+}
+
+.popup {
+  border-radius: 2em;
+  background-color: rgba(var(--sec-rgb), 0.9);
+  width: 50em;
+  height: 30em;
+  padding: 1em;
+  -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  overflow: scroll;
+
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  text-align: center;
+}
+
+@media (max-width: 840px) {
+  .popup {
+    width: 20em;
+  }
+}
+
+.popup h2 {
+  margin: 1em;
+}
+
+.popup::-webkit-scrollbar {
+  display: none;
+}
+
+.reg_profile {
+  width: 8em;
+}
+
+.popup .reg_profile {
+  width: auto;
+  height: 90%;
+  margin: auto;
+}
+
 /* ---------------------------------------------------------------------------
    Spinner / Loading
    --------------------------------------------------------------------------- */
@@ -392,4 +477,3 @@ dialog::backdrop {
   max-width: 90%;
   max-height: 90%;
 }
-

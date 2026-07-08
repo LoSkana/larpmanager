@@ -1,3 +1,437 @@
+/*** GENERAL (from solid_state.css) ***/
+
+.home {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.home a {
+  font-size: 120%;
+  padding: 1em;
+  background-color: rgba(var(--pri-rgb), 0.25);
+  border: solid 1px rgba(var(--pri-rgb), 0.25);
+  border-radius: 1em;
+}
+
+/*** show_char (from solid_state.css) ***/
+
+.has_show_char {
+  display: inline-block;
+}
+
+.has_show_char a {
+  color: var(--ter-clr);
+}
+
+.show_char {
+  line-height: 1;
+}
+
+.show_char b {
+  color: white;
+}
+
+.show_char span {
+  margin: 0.2em;
+  padding: 0.2em;
+  display: block;
+}
+
+.show_char .teaser {
+  font-size: 85%;
+  line-height: 1;
+  display: block;
+}
+
+.show_char .name {
+  font-size: 140%;
+}
+
+.show_char .title {
+  font-size: 120%;
+}
+
+.show_char img {
+  float: right;
+  height: 8em;
+  width: 8em;
+  margin-left: 1em;
+  border-radius: 10%;
+}
+
+/*** GALLERY (from solid_state.css) ***/
+
+.title {
+  font-size: 200%;
+  text-align: center;
+  clear: both;
+  margin: 0em 0.5em 0em 0em;
+}
+
+.gallery {
+  width: 100%;
+}
+
+.gallery .el {
+  width: 20%;
+  float: left;
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.single .el {
+  float: right;
+  margin: 0 1em 1em;
+  width: 15em;
+}
+
+.gallery .badge {
+  width: 25%;
+  margin: 0.5em 0;
+}
+
+.single .badge {
+  float: left;
+}
+
+.gallery .icon {
+  padding: 0.5em;
+  background-color: rgba(var(--pri-rgb), 0.025);
+  border: solid 1px rgba(var(--pri-rgb), 0.125);
+  border-radius: 5%;
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+  width: 95%;
+}
+
+.gallery .album-icon {
+  height: 6em;
+}
+
+.gallery .badge .icon {
+  width: 90%;
+  height: auto;
+  font-size: 110%;
+  white-space: normal;
+}
+
+.gallery .icon .icon-name {
+  position: absolute;
+  bottom: 0em;
+  right: 0;
+  left: 0;
+  font-size: 140%;
+  font-weight: bold;
+}
+
+.icon-name p {
+  padding: 0.3em;
+  background-color: rgba(var(--sec-rgb), 0.7);
+  border: solid 1px rgba(var(--pri-rgb), 0.125);
+  border-radius: 0.5em;
+  margin: 2em;
+  color: var(--pri-clr);
+}
+
+.gallery .icon .icon-name p {
+  margin: 1.5em;
+}
+
+.gallery .icon img {
+  width: 100%;
+  border-radius: 10%;
+  height: 100%;
+}
+
+.el .icon a {
+  border: none;
+}
+
+.gallery .icon .empty {
+  border-radius: 1em;
+  background-color: rgba(var(--pri-rgb), 0.1);
+  margin-bottom: 0.3em;
+}
+
+#album .el {
+  width: 21%;
+  margin: 2%;
+}
+
+#album .photo {
+  width: 100%;
+  height: 10em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.relationships {
+  display: flex;
+}
+
+.relationships .el {
+  text-align: right;
+  align-self: center;
+  width: 8em !important;
+  margin: 0 2em;
+}
+
+.relationships .icon {
+  width: 8em;
+  height: 8em;
+  padding: 0em;
+}
+
+.list .el {
+  width: 11em;
+}
+
+.list .icon {
+  width: 11em;
+  height: 11em;
+}
+
+.clear {
+  clear: both;
+  margin: 0.5em;
+}
+
+.gallery .text {
+  width: 100%;
+  text-align: left;
+  padding: 0 1em;
+}
+
+/*** plot (from solid_state.css) ***/
+
+.plot {
+  text-align: left !important;
+  border-radius: 1em;
+  background-color: rgba(var(--pri-rgb), 0.1);
+  border: solid 1px rgba(var(--pri-rgb), 0.125);
+  max-height: 30em;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+form .plot {
+  padding: 0.5em;
+  margin: 2%;
+  width: 96%;
+  max-height: 10em;
+}
+
+.sheet .plot {
+  padding: 1em;
+}
+
+.plot-cont {
+  position: relative;
+  height: 8em;
+}
+
+.plot p {
+  margin: 0.5em 0;
+  line-height: 1.3;
+}
+
+.diff-version {
+  background-color: rgba(var(--pri-rgb), 0.8);
+  border: solid 1px rgba(var(--pri-rgb), 0.2);
+  padding: 0.5em;
+  border-radius: 1em;
+  color: var(--sec-clr);
+}
+
+/*** MISCELLANEA - workshop (from solid_state.css) ***/
+
+.workshop {
+  text-align: center;
+}
+
+.workshop p {
+  text-align: center;
+}
+
+.workshop h2 {
+  font-size: 150%;
+}
+
+.plot.question {
+  padding: 1em;
+  width: auto;
+  margin-left: 30%;
+  margin-top: 1em;
+}
+
+.workshop input[type="checkbox"] {
+  display: inline-block;
+}
+
+.workshop .question {
+  padding: 1em;
+}
+
+.workshop .option {
+  float: left;
+  padding: 1em;
+  width: 100%;
+  background-color: rgba(var(--pri-rgb), 0.2);
+  border: 1px solid rgba(var(--pri-rgb), 0.5);
+}
+
+.workshop .c {
+  padding: 1em;
+}
+
+.workshop .fail {
+  color: red;
+  font-weight: bolder;
+}
+
+.workshop .correct {
+  color: green;
+  font-weight: bolder;
+}
+
+/*** OTHER (from solid_state.css) ***/
+
+.membership_document {
+  width: 80%;
+}
+
+.membership_request {
+  width: 100%;
+}
+
+/*** misc (from solid_state.css) ***/
+
+#player_relationships .teas {
+  font-size: 80%;
+  display: inline-block;
+  line-height: 1;
+}
+
+#player_relationships td {
+  padding: 1em;
+  height: 100%;
+  position: relative;
+}
+
+#player_relationships textarea {
+  width: 90% !important;
+  max-width: 90% !important;
+  height: 90%;
+  resize: none;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+
+.img_cover {
+  width: 100%;
+  padding-bottom: 100%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 10%;
+}
+
+.member_cover {
+  width: 10em;
+  min-width: 10em;
+}
+
+#sheet_pdf textarea {
+  width: 100%;
+}
+
+#sheet_pdf th {
+  font-size: 150%;
+}
+
+#sheet_pdf .code {
+  font-style: italic;
+}
+
+#payment_form {
+  width: auto;
+}
+
+#payment_form .sel {
+  background-color: rgba(var(--pri-rgb), 0.35);
+}
+
+.paypal input {
+  width: auto;
+}
+
+.paginate select {
+  display: inline-block;
+}
+
+/*** MOBILE (from solid_state.css) ***/
+
+@media screen and (max-width: 1400px) {
+  .gallery .el {
+    width: 25%;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .gallery .el {
+    width: 33.3%;
+  }
+}
+
+@media screen and (max-width: 770px) {
+  .gallery .el {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .plot {
+    padding: 0.5em;
+    background: none;
+    border: none;
+  }
+
+  .gallery .text {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .gallery .el {
+    width: 100%;
+    float: none;
+    margin: 1em auto;
+  }
+
+  .gallery .text {
+    width: 100%;
+    margin: 0 auo;
+    padding-right: 1em;
+  }
+
+  .gallery .badge .icon-name {
+    font-size: 120%;
+    bottom: auto;
+    top: 1em;
+  }
+
+  .relationships {
+    display: block;
+  }
+
+  .workshop .option {
+    width: 100% !important;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Application - Registration
    --------------------------------------------------------------------------- */
@@ -310,4 +744,3 @@
 .new_v18 .abilities th {
   padding: 0.5em;
 }
-

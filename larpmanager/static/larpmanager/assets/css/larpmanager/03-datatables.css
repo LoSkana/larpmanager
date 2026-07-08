@@ -1,3 +1,14 @@
+/*** graphite (from solid_state.css) ***/
+
+.graphite-container,
+.graphite-column-label {
+  color: var(--pri-clr) !important;
+}
+
+.graphite-container hr {
+  margin: 0 !important;
+}
+
 /* ---------------------------------------------------------------------------
    DataTables
    --------------------------------------------------------------------------- */
@@ -184,4 +195,3 @@ div.dtcc-dropdown div.dtcc-search > div span.dtcc-search-clear {
   border: 0 !important;
   background: 0 !important;
 }
-

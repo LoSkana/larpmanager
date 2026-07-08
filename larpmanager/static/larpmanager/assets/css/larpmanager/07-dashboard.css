@@ -1,3 +1,67 @@
+/*** GENERAL (from solid_state.css) ***/
+
+.staff form {
+  margin: 0;
+}
+
+.staff .links th {
+  text-align: right !important;
+}
+
+.staff .links h3 {
+  margin-right: 2em;
+}
+
+/*** MISCELLANEA (from solid_state.css) ***/
+
+.user {
+  margin-left: 0 !important;
+  margin-right: 30%;
+  background-color: rgba(var(--pri-rgb), 0.2);
+}
+
+.active a {
+  background-color: rgba(var(--pri-rgb), 0.25);
+  pointer-events: none;
+}
+
+.staff-list {
+  text-align: center;
+  margin: 0;
+  padding: 0.3em;
+}
+
+.staff-list button,
+.staff-list .button {
+  padding: 0.8em 1.6em;
+  margin: 0.5em 0.5em;
+}
+
+.staff-list .hide {
+  margin: 0em;
+}
+
+.staff-list .hide hr {
+  margin: 0.5em;
+}
+
+/*** MOBILE (from solid_state.css) ***/
+
+@media screen and (max-width: 1000px) {
+  .staff .links h3 {
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .staff .links td {
+    text-align: center !important;
+  }
+
+  #profile {
+    width: 90%;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Dashboard & Manage
    --------------------------------------------------------------------------- */
@@ -723,4 +787,11 @@ body.floating_iframe .inner {
 
 .grid .grid-item div.dt-container div.dt-layout-row {
   margin: 0em;
+}
+
+/* Mobile responsive tables: staff-list hide spacing inside .mob tables */
+@media (max-width: 1000px) {
+  .staff-list .hide {
+    margin-top: 1em;
+  }
 }
