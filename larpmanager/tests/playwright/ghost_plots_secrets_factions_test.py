@@ -169,4 +169,4 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     page.goto(f"{live_server}/test/faction/u2/")
     banner = page.locator("#banner")
     if banner.count() > 0:
-        expect_normalized(page, banner, "404")
+        expect_normalized(page, page.locator("body"), "we couldn't find the page")
