@@ -23,9 +23,6 @@
         <div id="wrapper">
             <div id="one" class="wrapper">
                 <div class="inner">
-                    {% block nav %}
-                        {% include "larpmanager/manage/nav.html" %}
-                    {% endblock nav %}
                     {% if not request.GET.in_iframe and not request.GET.frame %}
                         <div id="info_bar" class="only_v20">
                             <span id="info">
@@ -69,6 +66,9 @@
                                qtip="Config"><i class="fa-solid fa-gear"></i></a>
                         {% endif %}
                     </div>
+                    {% block nav %}
+                        {% include "larpmanager/manage/nav.html" %}
+                    {% endblock nav %}
                     <div class="page_{{ request_func_name }} {% block special %}{% endblock special %}">
                         {% block content %}
                         {% endblock content %}
