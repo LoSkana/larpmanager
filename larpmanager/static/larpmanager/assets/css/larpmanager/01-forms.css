@@ -352,3 +352,200 @@ input,
   z-index: 10000 !important;
 }
 
+/* ---------------------------------------------------------------------------
+   New Form Layout
+   --------------------------------------------------------------------------- */
+
+.form_container input[type="slug"],
+.form_container input[type="text"],
+.form_container input[type="password"],
+.form_container input[type="email"],
+.form_container input[type="number"],
+.form_container input[type="tel"],
+.form_container input[type="date"],
+.form_container input[type="date_p"],
+.form_container input[type="datetime_p"],
+.form_container input[type="time_p"],
+.form_container input[type="url"],
+.form_container select,
+.form_container textarea {
+  background-color: rgba(var(--sec-rgb), 0.3) !important;
+}
+
+.form_container .select2-container--default,
+.form_container .select2-search--inline,
+.form_container .select2-search__field,
+.form_container input[type="file"] {
+  background: transparent !important;
+}
+
+.form_container p,
+.form_container ol,
+.form_container form,
+.form_container ul {
+  text-align: left;
+}
+
+.button.learn {
+  background-color: #a5dee5 !important;
+}
+
+body:not(.new_v18) .only_new_v18 {
+  display: none;
+}
+
+.new_v18 .no_new_v18 {
+  display: none;
+}
+
+.new_v18 .auto_resize {
+  width: 70%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1200px) {
+  .new_v18 .auto_resize {
+    width: 80%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .new_v18 .auto_resize {
+    width: 90%;
+  }
+}
+
+.new_v18 .auto_resize table {
+  width: 100%;
+}
+
+.new_v18 .form_container {
+  border-collapse: collapse;
+  margin: 1rem auto;
+}
+
+@media (max-width: 1200px) {
+  .new_v18 .form_container {
+    width: 90%;
+  }
+
+  .new_v20 .form_container {
+    width: 100% !important;
+  }
+}
+
+.new_v18 .form_container table {
+  width: 100%;
+}
+
+.new_v18 th,
+.new_v18 td {
+  padding: 1rem;
+  text-align: left !important;
+}
+
+.new_v18 th label {
+  text-align: left !important;
+}
+
+@media (max-width: 840px) {
+  .calendar table,
+  .calendar tr,
+  .calendar td,
+  .calendar th {
+    text-align: center !important;
+    width: auto;
+  }
+
+  .calendar td {
+    padding: 0.2em !important;
+  }
+}
+
+.new_v18 .form_container table input {
+  width: 100% !important;
+  padding: 0.4rem;
+  box-sizing: border-box;
+}
+
+.new_v18 .form_container table select {
+  width: 100% !important;
+}
+
+.new_v18 .form_container table textarea {
+  width: 100% !important;
+  height: 8em;
+}
+
+.new_v18 .form_container table input[type="checkbox"],
+.new_v18 .form_container table input[type="radio"] {
+  width: 1em !important;
+}
+
+.new_v18 .select2-container {
+  width: 100% !important;
+}
+
+.new_v18 .form_container table th {
+  width: 25%;
+}
+
+.new_v18 .grid .grid-item th {
+  width: auto;
+}
+
+.new_v18 .grid .grid-item p {
+  text-align: left;
+}
+
+.new_v18 form.form_container {
+  text-align: left;
+}
+
+.new_v18 #search {
+  text-align: left;
+}
+
+.new_v18 .form_container table input,
+.new_v18 .form_container table select,
+.new_v18 .form_container table .tox-tinymce,
+.new_v18 .form_container table .select2-container,
+.new_v18 .form_container table textarea {
+  margin: 0 !important;
+  max-width: 100% !important;
+  text-align: left;
+}
+
+.new_v18 .form_container table .old_delete {
+  max-width: min-content !important;
+  margin: 0 auto !important;
+}
+
+@media (max-width: 800px) {
+  .new_v18 .form_container {
+    width: 100%;
+  }
+
+  .new_v18 .form_container table,
+  .new_v18 .form_container table tbody,
+  .new_v18 .form_container table tr,
+  .new_v18 .form_container table td,
+  .new_v18 .form_container table th {
+    display: block;
+    width: 100%;
+  }
+
+  .new_v18 .form_container table th {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    font-weight: 600;
+  }
+
+  .new_v18 .form_container table td {
+    margin-bottom: 0;
+  }
+
+  .new_v18 .form_container table .tox-tinymce {
+    width: 100% !important;
+  }
+}

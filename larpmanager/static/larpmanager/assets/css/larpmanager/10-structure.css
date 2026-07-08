@@ -1,0 +1,188 @@
+/* ---------------------------------------------------------------------------
+   Base Layout
+   --------------------------------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#page-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#wrapper {
+  flex: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Staging Banner
+   --------------------------------------------------------------------------- */
+
+#staging {
+  padding: 1em;
+  width: 100%;
+  font-size: 100%;
+  color: red;
+  text-align: center;
+  position: fixed;
+}
+
+/* ---------------------------------------------------------------------------
+   Header
+   --------------------------------------------------------------------------- */
+
+#header h1 {
+  padding: 0.3em 6em 0.3em 7.5em;
+  height: 2em;
+  line-height: 1.2;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 736px) {
+  #header h1 {
+    height: 2em;
+    padding: 0;
+    margin: 0.2em 0 0 0;
+    width: 100%;
+  }
+
+  #header {
+    height: 2em;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Page-wrapper / topbar integration
+   --------------------------------------------------------------------------- */
+
+#page-wrapper.topbar,
+#page-wrapper.topbar header {
+  margin-top: var(--topbar-height);
+}
+
+#page-wrapper.sidebar header {
+  margin-left: 26ch;
+}
+
+#page-wrapper.topbar {
+  overflow: auto;
+  -ms-overflow-style: none;
+  flex: 1;
+}
+
+.popup #page-wrapper.topbar {
+  margin-top: 0;
+}
+
+#page-wrapper.topbar #header h1 {
+  padding: 1em;
+}
+
+#page-wrapper.topbar #banner h1 {
+  padding: 0.5em;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------------------- */
+
+#footer.lm {
+  flex-shrink: 0;
+  display: flex;
+  background: none;
+  width: 100%;
+}
+
+#footer td {
+  text-align: center !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Structural Inner Visibility Overrides
+   --------------------------------------------------------------------------- */
+
+#one .inner,
+#topbar .inner,
+#sidebar .inner,
+#footer.lm .inner {
+  display: none;
+}
+
+.only_mobile {
+  display: none;
+}
+
+@media (max-width: 840px) {
+  .only_mobile {
+    display: initial;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Version 22 structure overrides
+   --------------------------------------------------------------------------- */
+
+.new_v22 #banner h1 {
+  text-align: left;
+}
+
+.new_v22 #banner .inner {
+  margin: 0;
+  padding: 0 0.5em;
+}
+
+.new_v22 #banner .inner h1 {
+  text-align: left;
+  justify-content: flex-start;
+  padding-left: 0;
+}
+
+@media (max-width: 840px) {
+  .new_v22 #banner .inner h1 {
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+.new_v22 #one .inner {
+  padding: 0em 1em 0em 0.5em !important;
+}
+
+.new_v22 #page-wrapper {
+  transition:
+    margin-left 0.25s,
+    width 0.25s;
+}
+
+.new_v22 #page-wrapper header {
+  transition: margin-left 0.25s;
+}
+
+@media (max-width: 840px) {
+  .new_v22 #one .inner {
+    padding: 0em 0.5em !important;
+  }
+
+  .new_v22 #page-wrapper.topbar,
+  .new_v22 #page-wrapper.topbar header,
+  .new_v22 #page-wrapper.sidebar {
+    margin-bottom: calc(7vh + 1em);
+    margin-bottom: calc(7dvh + 1em);
+  }
+}
