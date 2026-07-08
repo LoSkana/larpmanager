@@ -75,16 +75,9 @@
                 // console.log(data);
                 // console.log(data.orderID);
                 return actions.order.capture().then(function (details) {
-                    const responsePromise = fetch('{% url "accounting_webhook_paypal" %}/{{ invoice.cod }}');
-                    responsePromise.then(function (responseFromServer) {
-                        // console.log(responseFromServer)
-                        if(responseFromServer.status === 200) {
-                            location.href = '{% url "accounting_wait" %}';
-                        } else {
-                             location.href = '{% url "accounting_cancelled" %}';
-                            }
-                        })
-
+                    // Payment confirmation happens server-side via the PayPal
+                    // IPN handler; here we only send the user to the wait page
+                    location.href = '{% url "accounting_wait" %}';
                     });
                 }
             }).render("#paypal-buttons");

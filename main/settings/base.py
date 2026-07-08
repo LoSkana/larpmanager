@@ -63,6 +63,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     # Security middleware
     'django.middleware.security.SecurityMiddleware',
+    # Content-Security-Policy headers
+    'csp.middleware.CSPMiddleware',
     # Session middleware needed by auth
     'django.contrib.sessions.middleware.SessionMiddleware',
     # Axes: rate limiting on login
@@ -227,6 +229,60 @@ TINYMCE_DEFAULT_CONFIG = {
 TINYMCE_COMPRESSOR = False
 
 SECURE_REFERRER_POLICY = 'origin'
+
+# Prevent browser MIME-sniffing of served content (esp. user uploads in /media/)
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Content-Security-Policy (django-csp). Inline scripts/styles are still used
+# throughout the templates, so 'unsafe-inline' stays for now; the policy still
+# restricts script/style loading to self plus the known CDNs and blocks
+# object/base injection as defense-in-depth against stored XSS.
+_CSP_CDN_HOSTS = [
+    'https://cdnjs.cloudflare.com',
+    'https://cdn.jsdelivr.net',
+    'https://cdn.datatables.net',
+    'https://code.jquery.com',
+    'https://unpkg.com',
+    'https://cdn.canvasjs.com',
+]
+
+CONTENT_SECURITY_POLICY = {
+    'DIRECTIVES': {
+        'default-src': ["'self'"],
+        'script-src': [
+            "'self'",
+            "'unsafe-inline'",
+            "'unsafe-eval'",
+            *_CSP_CDN_HOSTS,
+            'https://*.paypal.com',
+            'https://gateway.sumup.com',
+            'https://www.googletagmanager.com',
+            'https://www.google.com',
+            'https://www.gstatic.com',
+        ],
+        'style-src': ["'self'", "'unsafe-inline'", *_CSP_CDN_HOSTS],
+        'font-src': ["'self'", 'data:', *_CSP_CDN_HOSTS],
+        'img-src': ["'self'", 'data:', 'blob:', 'https:'],
+        'media-src': ["'self'", 'data:', 'blob:', 'https:'],
+        'connect-src': [
+            "'self'",
+            'https://*.paypal.com',
+            'https://gateway.sumup.com',
+            'https://www.google-analytics.com',
+        ],
+        'frame-src': [
+            "'self'",
+            'https://*.paypal.com',
+            'https://gateway.sumup.com',
+            'https://www.youtube.com',
+            'https://www.google.com',
+            'https://www.googletagmanager.com',
+        ],
+        'object-src': ["'none'"],
+        'base-uri': ["'self'"],
+        'frame-ancestors': ["'self'"],
+    },
+}
 
 # Session and CSRF cookie security
 SESSION_COOKIE_HTTPONLY = True

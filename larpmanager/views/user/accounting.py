@@ -40,7 +40,6 @@ from larpmanager.accounting.gateway import (
     stripe_webhook,
     sumup_webhook,
 )
-from larpmanager.accounting.invoice import invoice_received_money
 from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting
 from larpmanager.accounting.payment import auto_process_single_method, get_payment_form
 from larpmanager.cache.association_text import get_association_text
@@ -875,14 +874,6 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
 
     # Render the redemption template with collection data
     return render(request, "larpmanager/member/accounting_collection_redeem.html", context)
-
-
-def accounting_webhook_paypal(request: HttpRequest, s: str) -> JsonResponse | None:  # noqa: ARG001
-    """Handle PayPal webhook for invoice payment confirmation."""
-    # Temporary fix until PayPal fees are better understood
-    if invoice_received_money(s):
-        return JsonResponse({"res": "ok"})
-    return None
 
 
 @csrf_exempt

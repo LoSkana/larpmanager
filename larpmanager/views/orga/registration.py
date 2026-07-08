@@ -1442,9 +1442,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
         return JsonResponse({"k": 0})
 
     # Verify member has registration for this event
-    try:
-        Registration.objects.filter(member=member, run=context["run"]).first()
-    except ObjectDoesNotExist:
+    if not Registration.objects.filter(member=member, run=context["run"]).exists():
         return JsonResponse({"k": 0})
 
     # Build member information HTML starting with name and profile

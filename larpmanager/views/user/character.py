@@ -1179,7 +1179,11 @@ def show_char(request: HttpRequest, event_slug: str) -> JsonResponse:
         raise Http404(msg)
 
     # Parse numeric character ID from search string
-    character_id = int(search_text[1:])
+    try:
+        character_id = int(search_text[1:])
+    except ValueError as err:
+        msg = f"not valid search {search_text}"
+        raise Http404(msg) from err
     if not character_id:
         msg = f"not valid search {character_id}"
         raise Http404(msg)
@@ -1191,5 +1195,10 @@ def show_char(request: HttpRequest, event_slug: str) -> JsonResponse:
 
     # Generate tooltip content and return JSON response
     character = context["chars"][character_id]
+
+    # Respect character visibility: hidden characters get no tooltip for non-staff users
+    if "check" not in context and character.get("hide"):
+        msg = f"not visible char number {character_id}"
+        raise Http404(msg)
     tooltip_content = get_tooltip(context, character)
     return JsonResponse({"content": f"<div class='show_char'>{tooltip_content}</div>"})

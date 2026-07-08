@@ -96,6 +96,19 @@ function debug(data) {
 }
 
 /**
+ * Escapes HTML special characters in user-provided data (player names,
+ * emails, character names) before it is concatenated into HTML strings
+ * passed to jQuery .append(), which parses them as HTML.
+ * @param {*} s - Value to escape
+ * @returns {string} HTML-safe string
+ */
+function esc_html(s) {
+    return String(s).replace(/[&<>"']/g, function(c) {
+        return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c];
+    });
+}
+
+/**
  * String format polyfill - adds Python-style string formatting to String prototype
  * Usage: "Hello {0}, you are {1} years old".format("John", 30)
  */
@@ -125,7 +138,7 @@ function load_grid() {
     if (not_chosen.length > 0) {
         $('#not_chosen').append(trads['ne']);
         for (var ix = 0; ix < not_chosen.length; ix++) {
-            $('#not_chosen').append(' / ' + choices[not_chosen[ix]]);
+            $('#not_chosen').append(' / ' + esc_html(choices[not_chosen[ix]]));
         }
     }
 
@@ -133,12 +146,12 @@ function load_grid() {
     if (didnt_choose.length > 0) {
         $('#didnt_choose').append(trads['ge']);
         for (var ix = 0; ix < didnt_choose.length; ix++) {
-            $('#didnt_choose').append(' - ' + players[didnt_choose[ix]]['name']);
+            $('#didnt_choose').append(' - ' + esc_html(players[didnt_choose[ix]]['name']));
         }
         $('#didnt_choose').append(' - ' + trads['le'] + ': ');
         for (var ix = 0; ix < didnt_choose.length; ix++) {
             if (ix > 0) $('#didnt_choose').append(', ');
-            $('#didnt_choose').append(players[didnt_choose[ix]]['email']);
+            $('#didnt_choose').append(esc_html(players[didnt_choose[ix]]['email']));
         }
     }
 
@@ -199,9 +212,9 @@ function load_grid() {
         if (key in avoids) av = avoids[key];
 
         // Start building row: checkbox, player name, priority
-        aux = '<tr class="p_{1}"><td class="include"><input type=checkbox></td><td>{0}</td><td>{2}</td>'.format(players[key]['name'], key, players[key]['prior']);
+        aux = '<tr class="p_{1}"><td class="include"><input type=checkbox></td><td>{0}</td><td>{2}</td>'.format(esc_html(players[key]['name']), key, players[key]['prior']);
         if (casting_avoid)
-            aux += '<td>{0}</td>'.format(av)  // Add avoid column if enabled
+            aux += '<td>{0}</td>'.format(esc_html(av))  // Add avoid column if enabled
 
         // Build cells for each character preference
         for (var ix = 0; ix < Math.min(num_pref, preferences[key].length); ix++) {
@@ -228,7 +241,7 @@ function load_grid() {
                 // Available choice - show toggle button and character name
                 tgl = '<a class="dis change" pid="{0}" oid="{1}">YES</a>'.format(key, k);
                 var nm_choice = 'EMPTY';
-                if (k != '') nm_choice = choices[k];
+                if (k != '') nm_choice = esc_html(choices[k]);
                 aux += '</select><br /><span class="c_{0}">{1}</span> - {2}</td>'.format(k, nm_choice, tgl);
             }
         }
@@ -463,9 +476,9 @@ function exec_assigner() {
 
                 // Build assignment string (handle mirrored characters)
                 if (mirrors[ch] !== undefined) {
-                    ass[mirrors[ch]] = '{2} - {0} [-> {1}]'.format(players[key]['name'], choices[ch], choices[mirrors[ch]]);
+                    ass[mirrors[ch]] = '{2} - {0} [-> {1}]'.format(esc_html(players[key]['name']), esc_html(choices[ch]), esc_html(choices[mirrors[ch]]));
                 } else {
-                    ass[ch] = '{1} - {0}'.format(players[key]['name'], choices[ch]);
+                    ass[ch] = '{1} - {0}'.format(esc_html(players[key]['name']), esc_html(choices[ch]));
                 }
 
             }

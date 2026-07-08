@@ -104,8 +104,11 @@ class BrokenLinkEmailsMiddleware:
         # Handle domain redirection for larpmanager.com with $ separator
         if domain == "larpmanager.com" and "$" in path:
             path_parts = path.split("$")
-            url = "https://" + path_parts[1] + ".larpmanager.com/" + path_parts[0]
-            return HttpResponseRedirect(url)
+            # accept only a bare DNS label for the subdomain
+            if re.fullmatch(r"[a-z0-9-]+", path_parts[1]):
+                url = "https://" + path_parts[1] + ".larpmanager.com/" + path_parts[0]
+                return HttpResponseRedirect(url)
+            # Invalid subdomain part: fall through to normal 404 handling
 
         # Skip ignorable 404 paths (common crawlers, assets, etc.)
         if self.is_ignorable_404(path):

@@ -583,6 +583,24 @@ _ALLOWED_HTML_ATTRS: dict[str, set[str]] = {
 
 _DANGEROUS_CSS_PATTERN = re.compile(r"javascript:|expression\s*\(|url\s*\(", re.IGNORECASE)
 
+_SAFE_URL_SCHEMES = {"http", "https", "mailto", "tel"}
+
+
+def _is_safe_url(value: str) -> bool:
+    r"""Check a href/src value against a scheme allowlist.
+
+    Normalizes out whitespace and control characters (browsers strip them
+    inside schemes, e.g. "jav\tascript:") before extracting the scheme.
+    Relative URLs and fragment anchors are allowed.
+    """
+    cleaned = re.sub(r"[\x00-\x20]+", "", value).lower()
+    scheme, sep, _rest = cleaned.partition(":")
+    if not sep:
+        return True
+    if any(ch in scheme for ch in "/?#"):
+        return True
+    return scheme in _SAFE_URL_SCHEMES
+
 
 class _HtmlSanitizer(HTMLParser):
     """HTML sanitizer that strips dangerous tags and attributes to prevent XSS."""
@@ -599,7 +617,7 @@ class _HtmlSanitizer(HTMLParser):
         for attr, val in attrs:
             if attr not in allowed or val is None:
                 continue
-            if attr in ("href", "src") and re.match(r"^\s*javascript:", val, re.IGNORECASE):
+            if attr in ("href", "src") and not _is_safe_url(val):
                 continue
             if attr == "style" and _DANGEROUS_CSS_PATTERN.search(val):
                 continue
