@@ -293,9 +293,10 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     # PDF denied
     page.goto(f"{live_server}/test/character/{char_uuid}/pdf/sheet/")
     page.wait_for_load_state("domcontentloaded")
-    expect(page.locator("#banner")).to_contain_text("404")
+    expect(page.locator("body")).to_contain_text("404")
 
     # As orga: full sheet with private text visible
+    go_to(page, live_server, "/")
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, f"test/character/{char_uuid}/")
