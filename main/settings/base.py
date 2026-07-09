@@ -283,7 +283,7 @@ CONTENT_SECURITY_POLICY = {
         ],
         'object-src': ["'none'"],
         'base-uri': ["'self'"],
-        'frame-ancestors': ["'self'"],
+        'frame-ancestors': ["'self'", 'https://larpmanager.com', 'https://*.larpmanager.com'],
     },
 }
 

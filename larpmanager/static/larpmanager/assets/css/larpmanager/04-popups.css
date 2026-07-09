@@ -225,10 +225,6 @@ div.ui-lm_tooltip {
   display: none;
 }
 
-.reg_profile {
-  width: 8em;
-}
-
 .popup .reg_profile {
   width: auto;
   height: 90%;
