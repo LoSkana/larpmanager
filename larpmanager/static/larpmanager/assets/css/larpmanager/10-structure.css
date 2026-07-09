@@ -1,0 +1,299 @@
+/*** GENERAL ***/
+
+body {
+  background: #3b3b3b;
+
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.inner h2 {
+  margin: 0.5em 0 0.5em 0;
+  font-size: 1.5em;
+}
+
+.inner h3 {
+  margin: 0.5em 0 0.25em 0;
+  font-size: 1.3em;
+}
+
+#banner {
+  margin: 0;
+  padding: 0 0 0.2em 0;
+}
+
+#banner h1 {
+  padding: 0.5em 5em 0.5em 6em;
+  height: 2.2em;
+  text-align: center;
+  line-height: 1.2;
+  margin-bottom: 0em;
+  font-size: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.new_v20 #banner {
+  padding-bottom: 0em;
+}
+
+body.new_v20 #banner h1 {
+  border-bottom: 0;
+}
+
+body.new_v20 #banner h1 span {
+  border-bottom: solid 2px rgba(var(--ter-rgb), 0.2);
+  padding-bottom: 0.15em;
+}
+
+#footer {
+  margin-top: 3em;
+  padding: 0 0 1em 0;
+  background: none;
+  margin: 0 auto;
+}
+
+#footer .inner {
+  text-align: center;
+}
+
+#footer h2 {
+  margin: 0 0 0.2em 0;
+  padding: 0;
+  border: 0;
+}
+
+#banner,
+#one {
+  background: none;
+}
+
+#banner .inner,
+#one .inner,
+#footer .inner {
+  background: none;
+  width: 100%;
+  padding: 0 1em;
+}
+
+.wrapper {
+  margin: 0 auto;
+}
+
+.wrapper:before,
+.wrapper:after {
+  height: 0em !important;
+}
+
+.wrapper .inner {
+  padding: 0;
+  text-align: center;
+}
+
+.footer-text {
+  margin-bottom: 1em;
+}
+
+@media (max-width: 840px) {
+  .footer-text {
+    margin-bottom: 0.5em;
+  }
+}
+
+.footer-text p {
+  margin: 0;
+}
+
+/*** MOBILE ***/
+
+@media screen and (max-width: 770px) {
+  #banner {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 736px) {
+  html,
+  body,
+  #page-wrapper,
+  #banner,
+  #one,
+  #footer {
+    width: 100%;
+  }
+
+  #banner .inner,
+  #one .inner,
+  #footer .inner {
+    width: 100%;
+    padding: 0 0.3em;
+  }
+
+  #banner h1 {
+    height: 2.5em;
+    padding: 0.2em 2em;
+    font-size: 1.2em;
+    line-height: 1.1;
+    min-height: 2em;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Base Layout
+   --------------------------------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+#page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#page-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#wrapper {
+  flex: 1;
+}
+
+/* ---------------------------------------------------------------------------
+   Staging Banner
+   --------------------------------------------------------------------------- */
+
+#staging {
+  padding: 1em;
+  width: 100%;
+  font-size: 100%;
+  color: red;
+  text-align: center;
+  position: fixed;
+}
+
+/* ---------------------------------------------------------------------------
+   Page-wrapper / topbar integration
+   --------------------------------------------------------------------------- */
+
+#page-wrapper.topbar,
+#page-wrapper.topbar header {
+  margin-top: var(--topbar-height);
+}
+
+#page-wrapper.sidebar header {
+  margin-left: 26ch;
+}
+
+#page-wrapper.topbar {
+  overflow: auto;
+  -ms-overflow-style: none;
+  flex: 1;
+}
+
+.popup #page-wrapper.topbar {
+  margin-top: 0;
+}
+
+#page-wrapper.topbar #header h1 {
+  padding: 1em;
+}
+
+#page-wrapper.topbar #banner h1 {
+  padding: 0.5em;
+}
+
+/* ---------------------------------------------------------------------------
+   Footer
+   --------------------------------------------------------------------------- */
+
+#footer.lm {
+  flex-shrink: 0;
+  display: flex;
+  background: none;
+  width: 100%;
+}
+
+#footer td {
+  text-align: center !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Structural Inner Visibility Overrides
+   --------------------------------------------------------------------------- */
+
+#one .inner,
+#topbar .inner,
+#sidebar .inner,
+#footer.lm .inner {
+  display: none;
+}
+
+.only_mobile {
+  display: none;
+}
+
+@media (max-width: 840px) {
+  .only_mobile {
+    display: initial;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Version 22 structure overrides
+   --------------------------------------------------------------------------- */
+
+.new_v22 #banner h1 {
+  text-align: left;
+}
+
+.new_v22 #banner .inner {
+  margin: 0;
+  padding: 0 0.5em;
+}
+
+.new_v22 #banner .inner h1 {
+  text-align: left;
+  justify-content: flex-start;
+  padding-left: 0;
+}
+
+@media (max-width: 840px) {
+  .new_v22 #banner .inner h1 {
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+.new_v22 #one .inner {
+  padding: 0em 1em 0em 0.5em !important;
+}
+
+.new_v22 #page-wrapper {
+  transition:
+    margin-left 0.25s,
+    width 0.25s;
+}
+
+.new_v22 #page-wrapper header {
+  transition: margin-left 0.25s;
+}
+
+@media (max-width: 840px) {
+  .new_v22 #one .inner {
+    padding: 0em 0.5em !important;
+  }
+
+  .new_v22 #page-wrapper.topbar,
+  .new_v22 #page-wrapper.topbar header,
+  .new_v22 #page-wrapper.sidebar {
+    margin-bottom: calc(7vh + 1em);
+    margin-bottom: calc(7dvh + 1em);
+  }
+}

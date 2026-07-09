@@ -58,10 +58,6 @@
         {% compress css %}
             <link rel="stylesheet"
                   href="{% static 'solid_state/assets/css/main.css' %}" />
-            <link rel="stylesheet"
-                  href="{% static 'larpmanager/assets/css/solid_state.css' %}" />
-            <link rel="stylesheet"
-                  href="{% static 'larpmanager/assets/css/theme_old.css' %}" />
             {% include "elements/structure/css-larpmanager.html" %}
         {% endcompress %}
         {% if association.skin_css %}<style>{{ association.skin_css }}</style>{% endif %}
