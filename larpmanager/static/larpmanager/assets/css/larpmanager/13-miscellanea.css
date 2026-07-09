@@ -1,3 +1,103 @@
+/*** CALENDARIO ***/
+
+.run_list hr {
+  margin: 1em 0;
+}
+
+.run_list .descr {
+  padding-left: 2em;
+}
+
+.event {
+  border-bottom: solid 1px rgba(var(--pri-rgb), 0.125);
+  padding: 0.5em 1em;
+  display: flex;
+}
+
+.calendar .helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.event .img {
+  width: 35%;
+  text-align: center;
+  background: center center no-repeat;
+  background-size: contain;
+}
+
+.event .text {
+  padding-left: 1em;
+  float: right;
+  width: 69%;
+  text-align: center;
+}
+.event:nth-child(odd) {
+  background-color: rgba(var(--pri-rgb), 0.025);
+}
+
+@media screen and (max-width: 480px) {
+  .calendar .event {
+    display: block;
+  }
+
+  .event .img {
+    height: 10em;
+  }
+
+  .event .img,
+  .event .text {
+    float: none;
+    width: 100%;
+    display: inline-block;
+  }
+}
+
+/*** GENERAL ***/
+
+.reveal {
+  display: none;
+  margin: 1em;
+  padding: 1em;
+  background-color: rgba(var(--pri-rgb), 0.025);
+  border: solid 1px rgba(var(--pri-rgb), 0.125);
+  border-radius: 1em;
+}
+
+/*** MISCELLANEA ***/
+
+.my_pagination td {
+  width: 33.3%;
+  text-align: center;
+}
+
+/*** event cover ***/
+
+#event_cover {
+  height: 25em;
+  background-position: center center;
+  background-size: cover;
+  width: 100%;
+  background-repeat: no-repeat;
+}
+
+@media (max-width: 480px) {
+  #event_cover {
+    height: 15em;
+  }
+}
+
+#event_cover a {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 1em;
+  border-radius: 0.5em;
+  color: var(--pri-clr);
+  font-size: 120%;
+  position: relative;
+  top: 8em;
+}
+
 /* ---------------------------------------------------------------------------
    Version 22 miscellanea
    --------------------------------------------------------------------------- */
@@ -170,10 +270,6 @@ body.association.new_v22 .user_resize {
 
 .new_v22 .icon-name p {
   text-align: center;
-}
-
-.calendar h3 {
-  text-align: left;
 }
 
 .new_v22 .page_search .nav {

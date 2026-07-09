@@ -1,9 +1,217 @@
+/*** GENERAL ***/
+
+form button {
+  color: var(--ter-clr);
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  text-align: center;
+}
+
+form {
+  margin: 0 auto 1em;
+}
+
+.selector {
+  width: 100% !important;
+}
+
+.selector-available,
+.selector-chosen {
+  width: 48% !important;
+}
+
+.selector select {
+  width: 100% !important;
+}
+
+form ul {
+  margin: 0em;
+}
+
+form ul li {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+form ul li input[type="checkbox"] {
+  display: inline-block;
+}
+
+.tox button {
+  color: black !important;
+}
+
+input[type="slug"],
+input[type="number"],
+input[type="date_p"],
+input[type="time_p"],
+input[type="datetime_p"] {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  appearance: none;
+  background: rgba(var(--pri-rgb), 0.025);
+  border-radius: 5px;
+  border: none;
+  border: solid 2px rgba(var(--pri-rgb), 0.125);
+  color: inherit;
+  padding: 0 1em;
+  text-decoration: none;
+  display: block;
+  margin: 0 auto;
+}
+
+input[type="slug"]:invalid,
+input[type="number"]:invalid,
+input[type="date_p"]:invalid,
+input[type="time_p"]:invalid,
+input[type="datetime_p"]:invalid {
+  box-shadow: none;
+}
+
+input[type="slug"]:focus,
+input[type="number"]:focus,
+input[type="date_p"]:focus,
+input[type="time_p"]:focus,
+input[type="datetime_p"]:focus {
+  border-color: #5b6ba6;
+}
+
+input[type="number"] {
+  padding: 0.5em;
+  width: 8ch !important;
+  margin: 0 auto;
+}
+
+select {
+  width: auto;
+  margin: 0 auto;
+}
+
+@media (max-width: 480px) {
+  #register_form img {
+    width: 100%;
+  }
+}
+
+.xdsoft_datepicker {
+  width: 290px !important;
+}
+
+.select2-container--default .select2-results__option {
+  color: var(--pri-clr) !important;
+}
+
+.select2-container--default
+  .select2-results__option--highlighted[aria-selected] {
+  color: rgba(var(--pri-rgb), 0.6) !important;
+}
+
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
+  color: var(--pri-clr) !important;
+  padding: 0.5em;
+}
+
+.select2-container .selection .select2-selection--single {
+  background: rgba(var(--sec-rgb), 0.5) !important;
+  color: var(--pri-clr) !important;
+  height: 2.5em;
+}
+
+.select2-container .select2-search--dropdown .select2-search__field {
+  background: rgba(var(--sec-rgb), 0.9) !important;
+}
+
+.select2-results__option {
+  background: rgba(var(--sec-rgb), 0.95) !important;
+}
+
+.select2-results__message {
+  background: rgba(var(--sec-rgb), 0.8) !important;
+}
+
+input {
+  width: 50%;
+}
+
+@media (max-width: 1280px) {
+  input {
+    width: 75%;
+  }
+
+  input[type="submit"],
+  input[type="reset"],
+  input[type="button"],
+  button,
+  .button {
+    padding: 0.75em 2em;
+  }
+}
+
+@media (max-width: 736px) {
+  input {
+    width: 100%;
+  }
+}
+
+input[type="slug"],
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+input[type="date"],
+input[type="date_p"],
+input[type="datetime_p"],
+input[type="time_p"],
+input[type="url"],
+select,
+textarea {
+  border-color: rgba(var(--ter-rgb), 0.35) !important;
+  border-width: 2px !important;
+}
+
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button,
+.button {
+  width: auto;
+  padding: 1em 3em;
+
+  border-color: rgba(var(--ter-rgb), 0.35) !important;
+  border-width: 2px !important;
+}
+
+@media (max-width: 600px) {
+  input {
+    width: 100% !important;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    width: auto !important;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Form Elements
    --------------------------------------------------------------------------- */
 
 input[type="checkbox"],
 input[type="radio"] {
+  -moz-appearance: checkbox;
+  -webkit-appearance: checkbox;
+  -ms-appearance: checkbox;
+  appearance: checkbox;
+  opacity: 1;
+  z-index: -1;
   width: 1em;
   height: 1em;
   border-radius: 0.2em;
@@ -15,10 +223,6 @@ input[type="radio"] {
 
 input[type="checkbox"].checkbox_single {
   display: block;
-}
-
-input[type="number"] {
-  width: 8ch !important;
 }
 
 .select2-container--default .select2-selection--multiple,
@@ -63,16 +267,25 @@ input[type="number"] {
   }
 }
 
-.form_error {
+.form_error,
+.payment-form-error {
   color: red;
   margin: 2em;
   font-style: italic;
 }
 
-.payment-form-error {
-  color: red;
-  margin: 2em;
-  font-style: italic;
+.slug_pre {
+  color: rgba(var(--pri-rgb), 0.7);
+  font-size: 80%;
+  padding: 0 0 1em 0;
+  width: 100%;
+  display: inline-block;
+  margin: 0;
+}
+
+.slug_war {
+  padding: 1em 3em 0 3em;
+  margin: 0;
 }
 
 .g-recaptcha {
@@ -161,11 +374,6 @@ input[type="number"] {
   color: rgba(var(--ter-rgb), 0.9);
 }
 
-.reg-checkbox-class label,
-.reg-radio-class label {
-  cursor: pointer;
-}
-
 .opt-body {
   display: block;
   flex: 1;
@@ -192,6 +400,11 @@ input[type="number"] {
   display: flex;
   align-items: flex-start;
   gap: 0.4em;
+}
+
+.reg-checkbox-class label,
+.reg-radio-class label {
+  cursor: pointer;
 }
 
 .opt-card-body {
@@ -310,19 +523,6 @@ input,
   background-color: rgba(var(--sec-rgb), 0.9) !important;
   color: rgba(var(--pri-rgb), 0.9) !important;
 }
-
-/*
-.select2-container, .select2-search--dropdown, .select2-search__field {
-    max-width: 100% !important;
-    width: 100% !important;
-}
-
-
-
-.select2-container--default, .select2-selection--multiple, .select2-selection__choice {
-    background-color: rgba(var(--sec-rgb), 0.9) !important;
-    color: rgba(var(--pri-rgb), 0.9) !important;
-} */
 
 /* ---------------------------------------------------------------------------
    TinyMCE
@@ -448,18 +648,9 @@ body:not(.new_v18) .only_new_v18 {
   text-align: left !important;
 }
 
-@media (max-width: 840px) {
-  .calendar table,
-  .calendar tr,
-  .calendar td,
-  .calendar th {
-    text-align: center !important;
-    width: auto;
-  }
-
-  .calendar td {
-    padding: 0.2em !important;
-  }
+.new_v20 .form_container table input[type="checkbox"],
+.new_v20 .form_container table input[type="radio"] {
+  margin-top: 0.2em !important;
 }
 
 .new_v18 .form_container table input {

@@ -1,3 +1,59 @@
+/*** GENERAL ***/
+
+.nav a {
+  padding: 0.3em 0.5em;
+  margin: 0.2em;
+  color: var(--pri-clr);
+  background-color: rgba(var(--sec-rgb), 0.35);
+  border: solid 1px rgba(var(--sec-rgb), 0.35);
+  border-radius: 0.5em;
+  white-space: nowrap;
+  line-height: normal;
+  display: inline-block;
+}
+
+.nav a.sel,
+.nav a.nsel {
+  color: var(--ter-clr);
+  background-color: rgba(var(--sec-rgb), 0.35);
+  border: solid 1px rgba(var(--sec-rgb), 0.35);
+}
+
+.nav2 a {
+  background: none;
+  border: none;
+  margin: 0.1em;
+  padding: 0.1em;
+}
+
+.gall .lang {
+  border-radius: 50%;
+  width: 2em;
+}
+
+.nav2 .lang {
+  border-radius: 50%;
+  width: 1.5em;
+  vertical-align: middle;
+}
+
+.nav2 a:hover img,
+.nav2 a.sss img {
+  box-shadow: 0px 0px 20px #fff;
+}
+
+.nav2 a:hover.sss img {
+  box-shadow: 0px 0px 0px #fff;
+}
+
+/* Mobile responsive tables: compact nav pills inside .mob tables */
+@media (max-width: 1000px) {
+  .nav a {
+    padding: 0.2em 0.5em;
+    margin: 0em 0.1em;
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Navigation Links
    --------------------------------------------------------------------------- */
@@ -117,4 +173,3 @@
     margin: 0 0 2em 0;
   }
 }
-
