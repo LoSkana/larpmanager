@@ -25,6 +25,7 @@ from __future__ import annotations
 import csv
 import logging
 import math
+import re
 from decimal import Decimal
 from io import StringIO
 from typing import TYPE_CHECKING
@@ -39,6 +40,111 @@ if TYPE_CHECKING:
     from django.core.files.uploadedfile import InMemoryUploadedFile
 
 logger = logging.getLogger(__name__)
+
+
+def parse_payment_amount(value: str) -> float | None:
+    """Parse a monetary amount string into a float.
+
+    Handles both decimal separator conventions, thousands separators,
+    currency symbols and surrounding whitespace:
+    "1.234,56" -> 1234.56, "1,234.56" -> 1234.56, "1234.56" -> 1234.56,
+    "1234,56" -> 1234.56, "EUR 12,50" -> 12.5, "1.234" -> 1234.0 (thousands).
+
+    Args:
+        value: Raw amount string from the CSV
+
+    Returns:
+        Parsed amount, or None if the string contains no valid number
+
+    """
+    cleaned = re.sub(r"[^\d,.\-]", "", value)
+    if not cleaned:
+        return None
+
+    last_dot = cleaned.rfind(".")
+    last_comma = cleaned.rfind(",")
+    if last_comma > last_dot:
+        # Comma is the decimal separator unless it matches a pure thousands
+        # grouping pattern like "1,000" or "1,234,567" (no dot present)
+        cleaned = cleaned.replace(".", "")
+        if re.fullmatch(r"-?\d{1,3}(,\d{3})+", cleaned):
+            cleaned = cleaned.replace(",", "")
+        else:
+            cleaned = cleaned.replace(",", ".")
+    elif last_dot > last_comma:
+        # Dot is the decimal separator unless it matches a pure thousands
+        # grouping pattern like "1.234" or "1.234.567" (no comma present)
+        cleaned = cleaned.replace(",", "")
+        if re.fullmatch(r"-?\d{1,3}(\.\d{3})+", cleaned):
+            cleaned = cleaned.replace(".", "")
+    try:
+        return float(cleaned)
+    except ValueError:
+        return None
+
+
+def _extract_row_payment(row: list[str]) -> tuple[str, float] | None:
+    """Extract causal and amount from a CSV row.
+
+    Args:
+        row: CSV row with format [amount, causal, ...]
+
+    Returns:
+        Tuple of (causal, amount), or None if the row is malformed,
+        missing the causal, or the amount is unparsable (e.g. header rows)
+
+    """
+    min_columns = 2
+    if len(row) < min_columns:
+        return None
+
+    payment_causal = row[1]
+    payment_amount = parse_payment_amount(row[0])
+    if not payment_causal or payment_amount is None:
+        return None
+
+    return payment_causal, payment_amount
+
+
+def _invoice_matches(pending_invoice: PaymentInvoice, payment_causal: str) -> bool:
+    """Check whether a CSV payment causal matches a pending invoice.
+
+    All comparisons go through clean(), which lowercases and strips symbols,
+    spaces and accents, so formatting differences in the bank statement
+    (punctuation, casing, extra whitespace) do not prevent a match.
+
+    Args:
+        pending_invoice: Pending invoice to match against
+        payment_causal: Causal text from the bank CSV row
+
+    Returns:
+        True if the payment causal matches the invoice by causal text,
+        causal without the special code prefix, invoice code
+        or transaction ID
+
+    """
+    cleaned_payment: str = clean(payment_causal)
+
+    # Try to match causal text directly
+    if clean(pending_invoice.causal) in cleaned_payment:
+        return True
+
+    # With the payment_special_code setting the causal is prefixed with
+    # "{cod} - "; also try the causal without the code, since payers
+    # often omit it in the bank transfer reason
+    special_code_prefix: str = f"{pending_invoice.cod} - "
+    if pending_invoice.causal.startswith(special_code_prefix):
+        causal_without_code = pending_invoice.causal[len(special_code_prefix) :]
+        if clean(causal_without_code) in cleaned_payment:
+            return True
+
+    # Try matching the invoice code, communicated to the payer in the
+    # wire transfer instructions
+    if pending_invoice.cod and clean(pending_invoice.cod) in cleaned_payment:
+        return True
+
+    # Try matching transaction ID if available
+    return bool(pending_invoice.txn_id and clean(pending_invoice.txn_id) in cleaned_payment)
 
 
 def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
@@ -72,12 +178,12 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
 
     # Process each row in the CSV file
     for row in csv_data:
-        payment_causal: str = row[1]
-        payment_amount_string: str = row[0].replace(".", "").replace(",", ".")
-
-        # Skip rows with missing causal or amount data
-        if not payment_causal or not payment_amount_string:
+        # Skip malformed rows, missing causal or unparsable amount (e.g. header rows)
+        row_payment = _extract_row_payment(row)
+        if row_payment is None:
             continue
+
+        payment_causal, payment_amount = row_payment
 
         # Check payment against all pending invoices
         for pending_invoice in context["todo"]:
@@ -85,31 +191,13 @@ def invoice_verify(context: dict, csv_upload: InMemoryUploadedFile) -> int:
             if pending_invoice.verified:
                 continue
 
-            # Try to match causal code directly
-            causal_match_found: bool = clean(pending_invoice.causal) in clean(payment_causal)
-            causal_parts = pending_invoice.causal.split()
-            causal_code: str = causal_parts[0] if causal_parts else ""
-
-            # Check for random causal codes (16 characters)
-            random_causal_length: int = 16
-            if not causal_match_found and len(causal_code) == random_causal_length:
-                causal_match_found = causal_code in clean(payment_causal)
-
-            # Try matching registration code if available
-            if not causal_match_found and pending_invoice.reg_cod:
-                causal_match_found = clean(pending_invoice.reg_cod) in clean(payment_causal)
-
-            # Try matching transaction ID if available
-            if not causal_match_found and pending_invoice.txn_id:
-                causal_match_found = clean(pending_invoice.txn_id) in clean(payment_causal)
-
             # Skip if no match found
-            if not causal_match_found:
+            if not _invoice_matches(pending_invoice, payment_causal):
                 continue
 
             # Verify payment amount is sufficient (rounded up)
             # amount_difference > 0 means overpayment (ok), < 0 means underpayment (skip)
-            amount_difference: float = math.ceil(float(payment_amount_string)) - math.ceil(
+            amount_difference: float = math.ceil(payment_amount) - math.ceil(
                 float(pending_invoice.mc_gross),
             )
             if amount_difference < 0:
