@@ -574,6 +574,21 @@ nav#sidebar-nav {
   flex-shrink: 0;
 }
 
+/* Pending-work count badge on management sidebar links */
+.sidebar-count-badge {
+  margin-left: auto;
+  flex-shrink: 0;
+  min-width: 1.5em;
+  padding: 0 0.4em;
+  border-radius: 0.75em;
+  font-size: 0.72em;
+  font-weight: 700;
+  line-height: 1.5em;
+  text-align: center;
+  background: rgba(var(--pri-rgb), 0.12);
+  color: rgba(var(--pri-rgb), 0.9);
+}
+
 .new_v22 #sidebar .sidebar-context-selector {
   padding: 0.5em 0.75em;
   border-bottom: 1px solid rgba(var(--pri-rgb), 0.15);
@@ -686,6 +701,17 @@ nav#sidebar-nav {
   right: 0.1em;
   width: auto;
   font-size: 0.6em;
+}
+
+.new_v22 #sidebar.sidebar-collapsed .sidebar-count-badge {
+  position: absolute;
+  top: 0.1em;
+  right: 0.1em;
+  min-width: 0;
+  margin-left: 0;
+  padding: 0 0.3em;
+  font-size: 0.6em;
+  line-height: 1.3em;
 }
 
 .new_v22 #page-wrapper.sidebar.sidebar-collapsed {

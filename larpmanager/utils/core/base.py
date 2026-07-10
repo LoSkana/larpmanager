@@ -255,6 +255,13 @@ def check_association_context(request: HttpRequest, permission_slug: str | list[
         if action and "form" in action.config and hasattr(action.config["form"], "page_info"):
             context["page_info"] = action.config["form"].page_info
 
+    # Compute pending-work counts shown as badges on the sidebar links
+    # Lazy import: set_sidebar_badges transitively imports base, so a module-level
+    # import here would create a circular import
+    from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
+
+    set_sidebar_badges(request, context)
+
     return context
 
 
@@ -326,6 +333,13 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
     # Set management page flags
     context["orga_page"] = 1
     context["manage"] = 1
+
+    # Compute pending-work counts shown as badges on the sidebar links
+    # Lazy import: set_sidebar_badges transitively imports base, so a module-level
+    # import here would create a circular import
+    from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
+
+    set_sidebar_badges(request, context)
 
     return context
 
