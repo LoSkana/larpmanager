@@ -11849,12 +11849,6 @@ msgstr ""
 msgid "Mail added to queue"
 msgstr ""
 
-msgid "No events are present, create one"
-msgstr ""
-
-msgid "A new version of the platform is available"
-msgstr ""
-
 msgid "Define roles to grant organization management access"
 msgstr ""
 
@@ -12041,6 +12035,12 @@ msgid "Activate new event features"
 msgstr ""
 
 msgid "Configure event feature settings"
+msgstr ""
+
+msgid "No events are present, create one"
+msgstr ""
+
+msgid "A new version of the platform is available"
 msgstr ""
 
 msgid "Dashboard"
