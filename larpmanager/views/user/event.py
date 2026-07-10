@@ -792,6 +792,9 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
         else:
             context["past"].append(run)
 
+    # Whether the run being viewed is itself still scheduled to happen
+    context["run_upcoming"] = not context["run"].end or context["run"].end >= timezone.now().date()
+
     # Refresh event object to ensure latest data
     context["event"] = Event.objects.get(pk=context["event"].pk)
 

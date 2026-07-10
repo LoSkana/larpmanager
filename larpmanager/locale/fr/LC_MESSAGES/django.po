@@ -6307,9 +6307,6 @@ msgstr "Tu as oublié ton mot de passe ou ton nom d'utilisateur ?"
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Si la case est cochée, autoriser le niveau de ticket : Personnel"
 
-msgid "Indicate the amount of your donation"
-msgstr "Indiquez le montant de votre don"
-
 msgid "Indicates the details of the request"
 msgstr "Indique les détails de la demande"
 
@@ -9229,10 +9226,6 @@ msgid "Participants can sign up right away through the registration form"
 msgstr ""
 "Les participants peuvent s'inscrire dès maintenant via le formulaire "
 "d'inscription"
-
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr ""
-"Veuillez indiquer l'occasion pour laquelle vous souhaitez faire le don"
 
 msgid "Primary spots are sold out, but you can still sign up as a filler"
 msgstr ""

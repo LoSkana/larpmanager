@@ -4,7 +4,7 @@
     {% trans "Join the collection for" %} {{ coll.display_member }}
 {% endblock title %}
 {% block content %}
-    <div class="user_resize platform">
+    <div class="user_resize platform form_container">
         {% if invoice %}
             {% include "elements/payment_go.html" %}
         {% else %}

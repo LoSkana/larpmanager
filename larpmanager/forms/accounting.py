@@ -455,7 +455,7 @@ class DonateForm(MembershipForm):
     """Form for Donate."""
 
     amount = forms.DecimalField(min_value=0.01, max_value=1000, decimal_places=2)
-    descr = forms.CharField(max_length=1000, widget=forms.Textarea(attrs={"rows": 2}))
+    descr = forms.CharField(max_length=1000, widget=forms.Textarea(attrs={"rows": 2}), label=_("Description"))
 
 
 class CollectionForm(BaseAccForm):

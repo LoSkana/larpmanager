@@ -285,6 +285,10 @@ body {
   transition: margin-left 0.25s;
 }
 
+.v22_only_mobile {
+  display: none;
+}
+
 @media (max-width: 840px) {
   .new_v22 #one .inner {
     padding: 0em 0.5em !important;
@@ -295,5 +299,9 @@ body {
   .new_v22 #page-wrapper.sidebar {
     margin-bottom: calc(7vh + 1em);
     margin-bottom: calc(7dvh + 1em);
+  }
+
+  .v22_only_mobile {
+    display: inherit;
   }
 }
