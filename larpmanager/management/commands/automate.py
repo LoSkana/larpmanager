@@ -53,6 +53,7 @@ from larpmanager.models.accounting import (
     PaymentType,
 )
 from larpmanager.models.association import Association, AssociationConfig
+from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.miscellanea import Log
@@ -127,6 +128,7 @@ class Command(BaseCommand):
         self.check_password_reset()
         self.check_payment_not_approved()
         self.check_old_payments()
+        self.check_gateway_payments()
 
         # Send daily organizer summaries for events with digest mode enabled
         self.send_organizer_summaries()
@@ -328,6 +330,41 @@ class Command(BaseCommand):
         # Bulk delete old payment invoices in a single query
         reference_date = timezone.now() - timedelta(days=60)
         PaymentInvoice.objects.filter(status=PaymentStatus.CREATED, created__lte=reference_date).delete()
+
+    _GATEWAY_STUCK_RATIO_THRESHOLD = 0.5
+    _NON_GATEWAY_METHOD_SLUGS = ("wire", "paypal_nf", "any")
+
+    @staticmethod
+    def check_gateway_payments() -> None:
+        """Notify admins if a payment gateway looks broken.
+
+        For each payment method with an actual gateway (excludes the ones
+        which are manually confirmed), compares the number of
+        invoices left in CREATED status against the number that reached
+        CHECKED status over the last 3 days. A high ratio of created-but-
+        never-checked invoices points to a gateway integration failure.
+        """
+        reference_date = timezone.now() - timedelta(days=3)
+        gateway_methods = PaymentMethod.objects.exclude(slug__in=Command._NON_GATEWAY_METHOD_SLUGS)
+
+        for method in gateway_methods:
+            created_count = PaymentInvoice.objects.filter(
+                method=method, status=PaymentStatus.CREATED, created__gte=reference_date
+            ).count()
+            checked_count = PaymentInvoice.objects.filter(
+                method=method, status=PaymentStatus.CHECKED, created__gte=reference_date
+            ).count()
+
+            if created_count == 0:
+                continue
+
+            ratio = created_count / (checked_count or 1)
+            if ratio > Command._GATEWAY_STUCK_RATIO_THRESHOLD:
+                notify_admins(
+                    "Gateway payment issue",
+                    f"Method '{method.slug}': {created_count} created vs {checked_count} checked "
+                    f"in last 3 days (ratio {ratio:.2f})",
+                )
 
     @staticmethod
     def check_payment_not_approved() -> None:
