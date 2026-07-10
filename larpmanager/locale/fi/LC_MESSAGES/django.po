@@ -6306,9 +6306,6 @@ msgstr "Unohditko salasanasi tai käyttäjätunnuksesi?"
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Jos valittuna, salli lipputaso: Henkilökunta"
 
-msgid "Indicate the amount of your donation"
-msgstr "Ilmoita lahjoituksesi määrä"
-
 msgid "Indicates the details of the request"
 msgstr "Ilmoittaa pyynnön yksityiskohdat"
 
@@ -9034,9 +9031,6 @@ msgstr "Nyt voit tarkastella osallistujien lähettämiä ruokavaliotietoja"
 
 msgid "Participants can sign up right away through the registration form"
 msgstr "Osallistujat voivat ilmoittautua heti ilmoittautumislomakkeen kautta"
-
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr "Kirjoita tilaisuus, jonka vuoksi haluat tehdä lahjoituksen"
 
 msgid "Primary spots are sold out, but you can still sign up as a filler"
 msgstr ""

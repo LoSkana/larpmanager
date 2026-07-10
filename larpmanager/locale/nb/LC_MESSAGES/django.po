@@ -6305,9 +6305,6 @@ msgstr "Har du glemt passordet eller brukernavnet ditt?"
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Hvis avkrysset, tillat billettnivå: Staff"
 
-msgid "Indicate the amount of your donation"
-msgstr "Angi beløpet for donasjonen din"
-
 msgid "Indicates the details of the request"
 msgstr "Angir detaljene i kravet"
 
@@ -9054,9 +9051,6 @@ msgstr ""
 
 msgid "Participants can sign up right away through the registration form"
 msgstr "Deltakerne kan melde seg på med en gang via påmeldingsskjemaet"
-
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr "Vennligst oppgi anledningen du ønsker å donere til"
 
 msgid "Primary spots are sold out, but you can still sign up as a filler"
 msgstr ""

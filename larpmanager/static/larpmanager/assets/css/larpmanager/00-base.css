@@ -405,3 +405,8 @@ body.theme-nebula #sidebar {
 body.theme-nebula #sidebar .new-menu a.select {
   background-color: rgba(var(--pri-rgb), 0.8);
 }
+
+body.theme-halo.new_v22 #topbar,
+body.theme-halo.new_v22 #sidebar {
+  background-color: rgba(var(--sec-rgb), 0.8);
+}
