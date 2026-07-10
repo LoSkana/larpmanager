@@ -47,7 +47,7 @@
 }
 
 /* Mobile responsive tables: compact nav pills inside .mob tables */
-@media (max-width: 1000px) {
+@media (max-width: 840px) {
   .nav a {
     padding: 0.2em 0.5em;
     margin: 0em 0.1em;
@@ -73,7 +73,7 @@
   content: " | ";
 }
 
-@media screen and (max-width: 736px) {
+@media screen and (max-width: 840px) {
   .nav .nav-label {
     display: none;
   }
@@ -140,7 +140,7 @@
   width: auto;
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 840px) {
   .login input[type="submit"] {
     width: 80% !important;
   }
@@ -159,7 +159,7 @@
   float: left;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .password_reset,
   .registration_register {
     float: none;

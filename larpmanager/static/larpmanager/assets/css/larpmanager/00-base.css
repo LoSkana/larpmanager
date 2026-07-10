@@ -1,8 +1,14 @@
 /*** GENERAL ***/
 
+/* Breakpoint tiers (use ONLY these values in media queries):
+   mobile        max-width: 600px
+   small window  max-width: 840px
+   medium window max-width: 1200px
+   large window  everything above (or min-width: 841px / 1201px) */
+
 html,
 body {
-  font-family: easyreading;
+  font-family: easyreading, "Helvetica Neue", Arial, sans-serif;
   font-size: 18px;
   color: var(--pri-clr);
 }

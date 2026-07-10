@@ -107,13 +107,13 @@ body.new_v20 #banner h1 span {
 
 /*** MOBILE ***/
 
-@media screen and (max-width: 770px) {
+@media screen and (max-width: 840px) {
   #banner {
     margin-bottom: 0;
   }
 }
 
-@media screen and (max-width: 736px) {
+@media screen and (max-width: 840px) {
   html,
   body,
   #page-wrapper,
