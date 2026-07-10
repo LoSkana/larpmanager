@@ -20,6 +20,7 @@
 
 from typing import Any, ClassVar
 
+from colorfield.fields import ColorField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -434,15 +435,42 @@ class LarpManagerDemoType(UuidMixin, OrderMixin, BaseModel):
 
     icon = models.CharField(max_length=50, blank=True, help_text="FontAwesome icon class shown on the button")
 
+    color = ColorField(
+        verbose_name=_("Color"),
+        null=True,
+        blank=True,
+        help_text="Accent color shown on the demo card in the get started page",
+    )
+
     descr = models.CharField(max_length=500, blank=True)
 
     template_association = models.ForeignKey(Association, on_delete=models.PROTECT, related_name="demo_types")
 
     active = models.BooleanField(default=True)
 
+    allowed_sidebar = models.TextField(
+        blank=True,
+        help_text="Comma separated list of event/association permission slugs allowed in the sidebar "
+        "for this demo type. Empty means no restriction.",
+    )
+
+    allowed_config = models.TextField(
+        blank=True,
+        help_text="Comma separated list of config section slugs allowed to be shown (and auto-opened) "
+        "in the association/event configuration forms for this demo type. Empty means no restriction.",
+    )
+
     def __str__(self) -> str:
         """Return string representation of the demo type."""
         return self.name
+
+    def get_allowed_sidebar_list(self) -> list[str]:
+        """Return the list of allowed sidebar permission slugs, or an empty list for no restriction."""
+        return [slug.strip() for slug in self.allowed_sidebar.split(",") if slug.strip()]
+
+    def get_allowed_config_list(self) -> list[str]:
+        """Return the list of allowed config section slugs, or an empty list for no restriction."""
+        return [slug.strip() for slug in self.allowed_config.split(",") if slug.strip()]
 
 
 class LarpManagerDemoHint(UuidMixin, OrderMixin, BaseModel):

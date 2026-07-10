@@ -50,6 +50,10 @@ body.landing .display {
   color: inherit;
 }
 
+body.landing h2 {
+  text-align: center;
+}
+
 body.landing .eyebrow {
   font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   font-size: 0.72rem;
@@ -1812,6 +1816,7 @@ body.landing .get-started-card {
   background: var(--teal-bright);
   color: #0a1418;
   border: none;
+  border-top: 4px solid transparent;
   border-radius: 12px;
   cursor: pointer;
   text-align: center;
@@ -1853,4 +1858,14 @@ body.landing .get-started-skip {
 
 body.landing #get-started-real.hide {
   display: none;
+}
+
+#lm_get_started h2 {
+  text-align: center;
+}
+
+.get-started-chaos {
+  max-width: 52ch;
+  margin: 0 auto 2.5rem;
+  text-align: center;
 }

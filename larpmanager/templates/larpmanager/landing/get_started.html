@@ -22,7 +22,7 @@
         {% if demo_types %}
             <div class="get-started-demo">
                 <h2>{% trans "Try it now with a demo" %}</h2>
-                <p>
+                <p class="get-started-chaos">
                     {% trans "Explore our interactive demos to see specific features in action. Get your hands dirty and break things! No signup required." %}
                 </p>
                 <div class="get-started-grid">
@@ -30,7 +30,9 @@
                         <form action="{% url 'get_started' %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="demo_uuid" value="{{ demo_type.uuid }}">
-                            <button type="submit" class="get-started-card">
+                            <button type="submit"
+                                    class="get-started-card"
+                                    {% if demo_type.color %}style="border-top-color: {{ demo_type.color }};"{% endif %}>
                                 {% if demo_type.icon %}<i class="{{ demo_type.icon }}"></i>{% endif %}
                                 <span class="get-started-card-name">{{ demo_type.name }}</span>
                                 {% if demo_type.descr %}<span class="get-started-card-descr">{{ demo_type.descr }}</span>{% endif %}
@@ -51,12 +53,14 @@
             <h2>{% trans "Create your organization" %}</h2>
             <div class="about-prose landing-prose">{{ texts.join_content | safe }}</div>
             {% if request.user.is_authenticated %}
-                <form class="join-form"
+                <form class="contact-form"
                       action="{% url 'get_started' %}"
                       enctype="multipart/form-data"
                       method="post">
                     {% csrf_token %}
-                    {{ form.as_div }}
+                    <table>
+                        {{ form.as_div }}
+                    </table>
                     <input class="btn btn-primary"
                            type="submit"
                            id="id_submit"

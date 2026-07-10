@@ -23,7 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Never name a variable `_`** - use a descriptive name or a more specific throwaway like `_unused`.
 - **Never use non-ascii characters** - if a symbol is needed, use a font-awesone icon.
 - **Never put css style inline** - always put the css in lm.css.
-
+- **One migration for branch** - in case there is more changes to be done to the model, first make the new migration, execute it to update db, the join the code of the new migration with the other one, and remove the newer
 ## Package Management
 
 The project uses **uv** for fast and reliable Python package management. All dependencies are defined in `pyproject.toml`.

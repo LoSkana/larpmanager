@@ -767,21 +767,27 @@ body.floating_iframe .inner {
   justify-content: center;
   align-items: center;
   gap: 0.5em;
-  padding: 0.5em 1em;
-  background: rgba(var(--ter-rgb), 0.12);
-  border-bottom: 1px solid rgba(var(--ter-rgb), 0.4);
+  padding: 0.6em 1em;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(var(--ter-rgb), 0.95);
+  color: rgb(var(--sec-rgb));
+  border-top: 1px solid rgba(var(--ter-rgb), 0.4);
   text-align: center;
-  margin-right: 2ch;
 }
 
 .demo-banner a {
   font-weight: 700;
   margin: 0;
+  color: rgb(var(--sec-rgb));
 }
 
 .demo-hint-toggle {
   position: fixed;
-  bottom: 1.2em;
+  bottom: 4.2em;
   right: 1.2em;
   z-index: 1000;
   width: 2.6em;
@@ -803,7 +809,7 @@ body.floating_iframe .inner {
 .demo-hint-panel {
   display: none;
   position: fixed;
-  bottom: 4.5em;
+  bottom: 7.5em;
   right: 1.2em;
   z-index: 1000;
   max-width: 22em;

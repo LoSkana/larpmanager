@@ -49,7 +49,7 @@ from larpmanager.models.larpmanager import (
 class LarpManagerDemoTypeAdmin(DefModelAdmin):
     """Admin interface for LarpManagerDemoType model."""
 
-    list_display = ("name", "slug", "icon", "template_association", "order", "active")
+    list_display = ("name", "slug", "icon", "color", "template_association", "order", "active")
     list_filter = ("active",)
     search_fields: ClassVar[list] = ["name", "slug"]
     raw_id_fields: ClassVar[list] = ["template_association"]

@@ -4363,6 +4363,9 @@ msgstr ""
 msgid "Analysis"
 msgstr ""
 
+msgid "Color"
+msgstr ""
+
 msgid ""
 "It will only be used for internal bureaucratic purposes, and will NEVER be "
 "displayed to other participants"
@@ -5125,9 +5128,6 @@ msgid "Faction logo"
 msgstr ""
 
 msgid "Indicates whether it can be selected by participants"
-msgstr ""
-
-msgid "Color"
 msgstr ""
 
 msgid "By"

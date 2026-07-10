@@ -44,11 +44,23 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.association import Association, AssociationConfig, AssociationText
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, ProgressStep, Run
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTypeExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    RuleExp,
+    SystemExp,
+)
 from larpmanager.models.form import (
+    QuestionApplicable,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
+    WritingAnswer,
+    WritingChoice,
     WritingOption,
     WritingQuestion,
 )
@@ -321,6 +333,44 @@ def _clone_event_children(clone_context: CloneContext, event_pk: int) -> None:
         _copy_row(clone_context, plot_rel)
     for relationship_row in Relationship.objects.filter(source__event_id=event_pk):
         _copy_row(clone_context, relationship_row)
+
+    _clone_writing_choices(clone_context, event_pk)
+    _clone_experience(clone_context, event_pk)
+
+
+def _clone_writing_choices(clone_context: CloneContext, event_pk: int) -> None:
+    """Clone character/faction/plot/prologue option choices and free-text answers.
+
+    ``element_id`` is a plain int, not a real FK, so it is remapped by hand via the
+    model class its question applies to; rows whose target element was not cloned
+    (e.g. quest/trait, not part of this clone graph) are skipped.
+    """
+
+    def remapped_element_id(source_row: Any) -> int | None:
+        model_class = QuestionApplicable.get_applicable_inverse(source_row.question.applicable)
+        return clone_context.mapped(model_class, source_row.element_id)
+
+    for choice in WritingChoice.objects.filter(question__event_id=event_pk).select_related("question"):
+        new_element_id = remapped_element_id(choice)
+        if new_element_id is not None:
+            _copy_row(clone_context, choice, overrides={"element_id": new_element_id})
+
+    for answer in WritingAnswer.objects.filter(question__event_id=event_pk).select_related("question"):
+        new_element_id = remapped_element_id(answer)
+        if new_element_id is not None:
+            _copy_row(clone_context, answer, overrides={"element_id": new_element_id})
+
+
+def _clone_experience(clone_context: CloneContext, event_pk: int) -> None:
+    """Clone the Experience feature graph: systems, ability types, abilities and their rules."""
+    event_filter = {"event_id": event_pk}
+    _copy_all(clone_context, SystemExp, event_filter)
+    _copy_all(clone_context, AbilityTypeExp, event_filter)
+    _copy_all(clone_context, AbilityExp, event_filter)
+    _copy_all(clone_context, ModifierExp, event_filter)
+    _copy_all(clone_context, CriterionExp, event_filter)
+    _copy_all(clone_context, RuleExp, event_filter)
+    _copy_all(clone_context, DeliveryExp, event_filter)
 
 
 def _clone_registrations(clone_context: CloneContext) -> None:

@@ -16,12 +16,6 @@
     {% block wrapper %}
         <!-- Main -->
         <div id="banner">
-            {% if association.demo %}
-                <div class="demo-banner">
-                    <span>{% trans "You are exploring a demo organization" %}.</span>
-                    <a href="//{{ association.main_domain }}/get-started/">{% trans "Ready for the real thing? Create your organization" %} <i class="fa-solid fa-arrow-right"></i></a>
-                </div>
-            {% endif %}
             {% block banner %}
             {% endblock banner %}
         </div>
@@ -83,6 +77,10 @@
             </div>
         </div>
         {% if association.demo %}
+            <div class="demo-banner">
+                <span>{% trans "You are exploring a demo organization" %}.</span>
+                <a href="//{{ association.main_domain }}/get-started/">{% trans "Ready for the real thing? Create your organization" %} <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
             {% include "elements/demo_hint.html" %}
         {% endif %}
         <div id="footer"

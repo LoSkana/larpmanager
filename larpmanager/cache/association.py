@@ -100,6 +100,9 @@ def init_cache_association(a_slug: str) -> dict | None:
 
     # Derived flag: an association is a demo instance if it follows a demo type
     association_dict["demo"] = association.demo_type_id is not None
+    if association.demo_type_id:
+        association_dict["demo_allowed_sidebar"] = association.demo_type.get_allowed_sidebar_list()
+        association_dict["demo_allowed_config"] = association.demo_type.get_allowed_config_list()
 
     # Initialize payment configuration and member field settings
     _init_payments(association, association_dict)
