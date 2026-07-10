@@ -122,7 +122,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </span>
-                            {% if not demo %}
+                            {% if not lite_mode %}
                                 <span class="sidebar-link-wrap">
                                     <a class="sidebar-link" href="{% url 'orga_preferences' run.get_slug %}">
                                         <i class="fa-solid fa-sliders"></i>
@@ -160,7 +160,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </span>
-                            {% if not demo %}
+                            {% if not lite_mode %}
                                 <span class="sidebar-link-wrap">
                                     <a class="sidebar-link" href="{% url 'exe_preferences' %}">
                                         <i class="fa-solid fa-sliders"></i>

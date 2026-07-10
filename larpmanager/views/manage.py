@@ -275,7 +275,7 @@ def _exe_suggestions(context: dict) -> None:
         "exe_roles": _("Define roles to grant organization management access"),
     }
 
-    if not context.get("demo"):
+    if not context.get("lite_mode"):
         suggestions.update(
             {
                 "exe_appearance": _("Customize organization pages appearance"),
@@ -312,7 +312,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         association_features = get_association_features(context["association_id"])
 
     # Add prompt to complete checklist and activate advanced mode when in demo/lite mode
-    if context.get("demo"):
+    if context.get("lite_mode"):
         _checklist, context["progress"] = get_activation_checklist(context["association_id"])
 
     # Check if currency configuration suggestion has been dismissed
@@ -385,7 +385,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         "exe_methods": _("Set up payment methods for participants"),
         "exe_profile": _("Define the data collected in the user profile form"),
     }
-    if not context.get("demo"):
+    if not context.get("lite_mode"):
         actions["exe_quick"] = _("Select and activate key features")
 
     for permission_key, suggestion_text in actions.items():
@@ -456,7 +456,7 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
         enabled_features: Set of enabled features for the association
 
     """
-    if context.get("demo"):
+    if context.get("lite_mode"):
         return
 
     if "payment" in enabled_features and not context.get("methods", ""):
@@ -601,7 +601,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         action lists for the organizer dashboard
 
     """
-    if context.get("demo"):
+    if context.get("lite_mode"):
         return
 
     # Get cached actions data
@@ -970,7 +970,7 @@ def _orga_suggestions(context: dict) -> None:
     actions = {
         "orga_registration_tickets": _("Set up registration tickets"),
     }
-    if not context.get("demo"):
+    if not context.get("lite_mode"):
         actions["orga_quick"] = _("Select and activate key features")
 
     for permission_slug, suggestion_text in actions.items():
@@ -983,7 +983,7 @@ def _orga_suggestions(context: dict) -> None:
         "orga_roles": _("Define roles to grant event management access"),
     }
 
-    if not context.get("demo"):
+    if not context.get("lite_mode"):
         suggestions.update(
             {
                 "orga_appearance": _("Customize event pages appearance"),
@@ -1126,7 +1126,7 @@ def _get_perm_link(context: dict, permission: str, view_name: str) -> str:
 def _compile(request: HttpRequest, context: dict) -> None:  # noqa: C901, PLR0912 - Complex dashboard compilation with feature-dependent sections
     """Compile management dashboard with suggestions, actions, and priorities."""
     section_names = ["priorities"]
-    if not context.get("demo"):
+    if not context.get("lite_mode"):
         section_names.extend(["suggestions", "actions"])
     all_sections_empty = True
     for section_name in section_names:

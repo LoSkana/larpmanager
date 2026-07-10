@@ -16,6 +16,12 @@
     {% block wrapper %}
         <!-- Main -->
         <div id="banner">
+            {% if association.demo %}
+                <div class="demo-banner">
+                    <span>{% trans "You are exploring a demo organization" %}.</span>
+                    <a href="//{{ association.main_domain }}/get-started/">{% trans "Ready for the real thing? Create your organization" %} <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            {% endif %}
             {% block banner %}
             {% endblock banner %}
         </div>
@@ -42,7 +48,7 @@
     tut="{{ tutorial }}"
     qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i> Tutorial</a>
                             {% endif %}
-                            {% if config and not demo %}
+                            {% if config and not lite_mode %}
                                 | <a href="{{ config }}"
     class="action-link"
     data-modal-eligible="true"
@@ -58,7 +64,7 @@
                                tut="{{ tutorial }}"
                                qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i></a>
                         {% endif %}
-                        {% if config and not demo %}
+                        {% if config and not lite_mode %}
                             <a href="{{ config }}"
                                class="action-link"
                                data-modal-eligible="true"
@@ -76,6 +82,9 @@
                 </div>
             </div>
         </div>
+        {% if association.demo %}
+            {% include "elements/demo_hint.html" %}
+        {% endif %}
         <div id="footer"
              class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
             <div class="inner">

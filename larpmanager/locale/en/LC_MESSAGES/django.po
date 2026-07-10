@@ -5359,6 +5359,12 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
+msgid "Show hint"
+msgstr ""
+
+msgid "Don't open automatically again"
+msgstr ""
+
 msgid "Input an element name to insert their reference code"
 msgstr ""
 
@@ -7389,6 +7395,23 @@ msgid ""
 "Below you will find all the features available; you can write a search "
 "keyword to filter them. Then click on 'Video', and you will see the video "
 "directly"
+msgstr ""
+
+msgid "Try it now with a demo"
+msgstr ""
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+
+msgid "Skip the demo, start your adventure from scratch"
+msgstr ""
+
+msgid "Create your organization"
+msgstr ""
+
+msgid "Log in to create your organization"
 msgstr ""
 
 msgid "Partners"
@@ -9767,6 +9790,12 @@ msgstr ""
 
 msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
+msgstr ""
+
+msgid "You are exploring a demo organization"
+msgstr ""
+
+msgid "Ready for the real thing? Create your organization"
 msgstr ""
 
 msgid "Please correct the error below"

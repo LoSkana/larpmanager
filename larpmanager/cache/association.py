@@ -98,6 +98,9 @@ def init_cache_association(a_slug: str) -> dict | None:
     # Convert association to dictionary for cache storage
     association_dict = association.as_dict()
 
+    # Derived flag: an association is a demo instance if it follows a demo type
+    association_dict["demo"] = association.demo_type_id is not None
+
     # Initialize payment configuration and member field settings
     _init_payments(association, association_dict)
     _init_member_fields(association, association_dict)

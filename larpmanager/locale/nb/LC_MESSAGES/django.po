@@ -1625,6 +1625,9 @@ msgstr "Sett oppdrag"
 msgid "Short url"
 msgstr "Kort nettadresse"
 
+msgid "Show hint"
+msgstr "Vis hint"
+
 msgid "Show less"
 msgstr "Vis mindre"
 
@@ -4722,6 +4725,9 @@ msgstr "Total registreringsavgift"
 msgid "Track event milestones"
 msgstr "Spor milepæler i arrangementet"
 
+msgid "Try it now with a demo"
+msgstr "Prøv det nå med en demo"
+
 msgid "Type to search members"
 msgstr "Skriv inn for å søke etter medlemmer"
 
@@ -4906,6 +4912,9 @@ msgstr "Kode for esken eller hyllen"
 
 msgid "Code two capital letters"
 msgstr "Kode to store bokstaver"
+
+msgid "Create your organization"
+msgstr "Opprett din organisasjon"
 
 msgid "Current platform version"
 msgstr "Gjeldende plattformversjon"
@@ -5608,6 +5617,9 @@ msgstr "Fullfør betaling for %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Forsinkelse i årlig medlemsavgift"
 
+msgid "Don't open automatically again"
+msgstr "Ikke åpne automatisk igjen"
+
 msgid "Duration in seconds (optional)"
 msgstr "Varighet i sekunder (valgfritt)"
 
@@ -6082,6 +6094,9 @@ msgstr "Oppdag de tilgjengelige oppdragene"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Hvis avkrysset, tillat billettnivå: NPC"
 
+msgid "Log in to create your organization"
+msgstr "Logg inn for å opprette organisasjonen din"
+
 msgid "Manage all handouts for this event"
 msgstr "Administrer alle utdelingsmaterialene for dette arrangementet"
 
@@ -6513,6 +6528,9 @@ msgstr "Utnyttelse %(credits)s per %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Skriv her hva du ønsker å gjøre!"
+
+msgid "You are exploring a demo organization"
+msgstr "Du utforsker en demo-organisasjon"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -7639,6 +7657,9 @@ msgstr "Påmeldingen til dette arrangementet har ikke åpnet ennå"
 msgid "Review participants' safety-related informations"
 msgstr "Gjennomgå deltakernes sikkerhetsrelaterte informasjon"
 
+msgid "Skip the demo, start your adventure from scratch"
+msgstr "Hopp over demoen, og start eventyret ditt helt fra begynnelsen"
+
 msgid "The subscription plan associated with this event"
 msgstr "Valgfri mal knyttet til denne evnen"
 
@@ -7812,6 +7833,9 @@ msgstr "Administrer fremdriftstrinnene for skriveelementene"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Administrer passordet ditt og tofaktorautentisering"
+
+msgid "Ready for the real thing? Create your organization"
+msgstr "Er du klar for det virkelige livet? Opprett din egen organisasjon"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andre tegn i relasjonen (destinasjon)"
@@ -13243,6 +13267,14 @@ msgid ""
 msgstr ""
 "Hver venn som registrerer seg og bruker denne koden i feltet 'Rabatter', vil"
 " få %(amount_to)s %(currency)s rabatt på billetten"
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+"Utforsk våre interaktive demoer for å se hvordan de ulike funksjonene "
+"fungerer i praksis. Prøv deg frem og prøv å ødelegge ting! Ingen påmelding "
+"nødvendig."
 
 msgid ""
 "Manage association memberships: review applicants, approve or reject "

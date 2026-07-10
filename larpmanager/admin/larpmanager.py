@@ -26,6 +26,9 @@ from larpmanager.admin.base import CSRFTinyMCEModelAdmin, DefModelAdmin
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
+    LarpManagerDemoHint,
+    LarpManagerDemoHintDismissal,
+    LarpManagerDemoType,
     LarpManagerDiscover,
     LarpManagerFaq,
     LarpManagerFaqType,
@@ -40,6 +43,34 @@ from larpmanager.models.larpmanager import (
     LarpManagerTicket,
     LarpManagerTutorial,
 )
+
+
+@admin.register(LarpManagerDemoType)
+class LarpManagerDemoTypeAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerDemoType model."""
+
+    list_display = ("name", "slug", "icon", "template_association", "order", "active")
+    list_filter = ("active",)
+    search_fields: ClassVar[list] = ["name", "slug"]
+    raw_id_fields: ClassVar[list] = ["template_association"]
+
+
+@admin.register(LarpManagerDemoHint)
+class LarpManagerDemoHintAdmin(CSRFTinyMCEModelAdmin):
+    """Admin interface for LarpManagerDemoHint model."""
+
+    list_display = ("key", "view_name", "demo_type", "title", "order", "active")
+    list_filter = ("active", "demo_type")
+    search_fields: ClassVar[list] = ["key", "view_name", "title"]
+    autocomplete_fields: ClassVar[list] = ["demo_type"]
+
+
+@admin.register(LarpManagerDemoHintDismissal)
+class LarpManagerDemoHintDismissalAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerDemoHintDismissal model."""
+
+    list_display = ("member", "hint", "created")
+    raw_id_fields: ClassVar[list] = ["member", "hint"]
 
 
 @admin.register(LarpManagerFaq)

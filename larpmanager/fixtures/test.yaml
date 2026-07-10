@@ -233,7 +233,7 @@
     payment_methods: []
     skin: 1
     uuid: u1
-    demo: false
+    lite_mode: false
 - model: larpmanager.associationrole
   pk: 1
   fields:

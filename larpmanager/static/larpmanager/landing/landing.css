@@ -1041,7 +1041,6 @@ body.landing .sol-cta a.guide-link:hover {
 }
 
 .my_hub {
-  max-width: 62ch;
   margin: 0 auto 2.5rem;
   display: flex;
   flex-direction: column;
@@ -1787,4 +1786,71 @@ body.landing section.native .eyebrow {
 body.landing .games,
 body.landing .partners {
   background: var(--paper-soft);
+}
+
+/* ============ Get started funnel ============ */
+
+body.landing .get-started-demo h2,
+body.landing #get-started-real h2 {
+  margin-bottom: 0.5rem;
+}
+
+body.landing .get-started-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+body.landing .get-started-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1.5rem 1rem;
+  background: var(--teal-bright);
+  color: #0a1418;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1rem;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+body.landing .get-started-card:hover {
+  background: #56b3d1;
+  transform: translateY(-2px);
+}
+
+body.landing .get-started-card i {
+  font-size: 2rem;
+}
+
+body.landing .get-started-card-name {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+body.landing .get-started-card-descr {
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+body.landing .get-started-divider {
+  margin: 2rem 0;
+  text-align: center;
+}
+
+body.landing .get-started-skip {
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  text-decoration: underline;
+}
+
+body.landing #get-started-real.hide {
+  display: none;
 }

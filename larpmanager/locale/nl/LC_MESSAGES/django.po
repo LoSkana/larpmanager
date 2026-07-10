@@ -1625,6 +1625,9 @@ msgstr "Zoektocht instellen"
 msgid "Short url"
 msgstr "Korte url"
 
+msgid "Show hint"
+msgstr "Hint weergeven"
+
 msgid "Show less"
 msgstr "Minder weergeven"
 
@@ -4722,6 +4725,9 @@ msgstr "Totale registratiekosten"
 msgid "Track event milestones"
 msgstr "Volg mijlpalen van evenementen"
 
+msgid "Try it now with a demo"
+msgstr "Probeer het nu met een demo"
+
 msgid "Type to search members"
 msgstr "Typ hier om leden te zoeken"
 
@@ -4906,6 +4912,9 @@ msgstr "Code van de doos of plank"
 
 msgid "Code two capital letters"
 msgstr "Codeer twee hoofdletters"
+
+msgid "Create your organization"
+msgstr "Maak je organisatie aan"
 
 msgid "Current platform version"
 msgstr "Huidige platformversie"
@@ -5608,6 +5617,9 @@ msgstr "Volledige betaling voor %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Uitstel van jaarlijkse contributie"
 
+msgid "Don't open automatically again"
+msgstr "Niet weer automatisch openen"
+
 msgid "Duration in seconds (optional)"
 msgstr "Duur in seconden (optioneel)"
 
@@ -6082,6 +6094,9 @@ msgstr "Ontdek de beschikbare quests"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Indien aangevinkt, ticketniveau toestaan: NPC"
 
+msgid "Log in to create your organization"
+msgstr "Log in om je organisatie aan te maken"
+
 msgid "Manage all handouts for this event"
 msgstr "Beheer alle hand-outs voor dit evenement"
 
@@ -6515,6 +6530,9 @@ msgstr "Gebruik %(credits)s per %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Schrijf hier wat je graag zou willen!"
+
+msgid "You are exploring a demo organization"
+msgstr "Je bekijkt een demo-organisatie"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -7652,6 +7670,9 @@ msgstr "De inschrijvingen voor dit evenement zijn nog niet geopend"
 msgid "Review participants' safety-related informations"
 msgstr "Veiligheidsgerelateerde informatie van deelnemers beoordelen"
 
+msgid "Skip the demo, start your adventure from scratch"
+msgstr "Sla de demo over en begin je avontuur helemaal opnieuw"
+
 msgid "The subscription plan associated with this event"
 msgstr "Optioneel sjabloon voor deze vaardigheid"
 
@@ -7825,6 +7846,9 @@ msgstr "De voortgangsstappen voor de schrijfelementen beheren"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Beheer je wachtwoord en tweefactorauthenticatie"
+
+msgid "Ready for the real thing? Create your organization"
+msgstr "Klaar voor het echte werk? Zet je organisatie op"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede teken in de relatie (bestemming)"
@@ -13446,6 +13470,14 @@ msgid ""
 msgstr ""
 "Elke vriend die zich inschrijft en deze code in het veld 'Kortingen' "
 "gebruikt, krijgt %(amount_to)s %(currency)s korting op het ticket"
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+"Bekijk onze interactieve demo’s om specifieke functies in de praktijk te "
+"zien. Ga er gewoon mee aan de slag en experimenteer erop los! Je hoeft je "
+"niet aan te melden."
 
 msgid ""
 "Manage association memberships: review applicants, approve or reject "

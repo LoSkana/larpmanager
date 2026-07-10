@@ -1625,6 +1625,9 @@ msgstr "Zestaw zadań"
 msgid "Short url"
 msgstr "Krótki adres URL"
 
+msgid "Show hint"
+msgstr "Pokaż podpowiedź"
+
 msgid "Show less"
 msgstr "Pokaż mniej"
 
@@ -4722,6 +4725,9 @@ msgstr "Całkowita opłata rejestracyjna"
 msgid "Track event milestones"
 msgstr "Śledzenie kamieni milowych wydarzenia"
 
+msgid "Try it now with a demo"
+msgstr "Wypróbuj to już teraz w wersji demo"
+
 msgid "Type to search members"
 msgstr "Wpisz, żeby wyszukać członków"
 
@@ -4906,6 +4912,9 @@ msgstr "Kod pudełka lub półki"
 
 msgid "Code two capital letters"
 msgstr "Zakoduj dwie duże litery"
+
+msgid "Create your organization"
+msgstr "Załóż swoją organizację"
 
 msgid "Current platform version"
 msgstr "Aktualna wersja platformy"
@@ -5608,6 +5617,9 @@ msgstr "Pełna płatność za %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Opóźnienie rocznej opłaty członkowskiej"
 
+msgid "Don't open automatically again"
+msgstr "Nie otwieraj już automatycznie"
+
 msgid "Duration in seconds (optional)"
 msgstr "Czas trwania w sekundach (opcjonalnie)"
 
@@ -6082,6 +6094,9 @@ msgstr "Dowiedz się, jakie zadania są dostępne"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Jeśli zaznaczone, zezwala na poziom biletów: NPC"
 
+msgid "Log in to create your organization"
+msgstr "Zaloguj się, żeby utworzyć swoją organizację"
+
 msgid "Manage all handouts for this event"
 msgstr "Zarządzaj wszystkimi materiałami informacyjnymi na to wydarzenie"
 
@@ -6513,6 +6528,9 @@ msgstr "Wykorzystanie %(credits)s na %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Napisz tutaj, co chciałbyś zrobić!"
+
+msgid "You are exploring a demo organization"
+msgstr "Przeglądasz organizację demonstracyjną"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -7642,6 +7660,9 @@ msgstr "Rejestracja na to wydarzenie jeszcze się nie rozpoczęła"
 msgid "Review participants' safety-related informations"
 msgstr "Przegląd informacji dotyczących bezpieczeństwa uczestników"
 
+msgid "Skip the demo, start your adventure from scratch"
+msgstr "Pomiń wersję demo i zacznij swoją przygodę od zera"
+
 msgid "The subscription plan associated with this event"
 msgstr "Opcjonalny szablon powiązany z tą umiejętnością"
 
@@ -7812,6 +7833,9 @@ msgstr "Zarządzanie krokami postępu dla elementów pisania"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Zarządzaj swoim hasłem i uwierzytelnianiem dwuskładnikowym"
+
+msgid "Ready for the real thing? Create your organization"
+msgstr "Gotowy na prawdziwą akcję? Stwórz swoją organizację"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Druga postać w związku (miejsce docelowe)"
@@ -13323,6 +13347,14 @@ msgid ""
 msgstr ""
 "Każdy znajomy, który zarejestruje się i użyje tego kodu w polu 'Zniżki', "
 "otrzyma %(amount_to)s %(currency)s zniżki na bilet"
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+"Zapoznaj się z naszymi interaktywnymi prezentacjami, żeby zobaczyć konkretne"
+" funkcje w akcji. Nie bój się eksperymentować i trochę namieszaj! Nie musisz"
+" się rejestrować."
 
 msgid ""
 "Manage association memberships: review applicants, approve or reject "
