@@ -58,14 +58,14 @@ urlpatterns = [
         name="event_register",
     ),
     path(
-        "<slug:event_slug>/character/list/",
-        views_uc.character_list,
-        name="character_list",
-    ),
-    path(
         "<slug:event_slug>/character/list/json/",
         views_uc.character_list_json,
         name="character_list_json",
+    ),
+    path(
+        "<slug:event_slug>/character/list/",
+        views_uc.character_list,
+        name="character_list",
     ),
     path(
         "<slug:event_slug>/character/create/",
@@ -113,14 +113,14 @@ urlpatterns = [
         name="character_profile_upload",
     ),
     path(
-        "<slug:event_slug>/character/<slug:character_uuid>/abilities/",
-        views_uc.character_abilities,
-        name="character_abilities",
-    ),
-    path(
         "<slug:event_slug>/character/<slug:character_uuid>/abilities/json/",
         views_uc.character_abilities_json,
         name="character_abilities_json",
+    ),
+    path(
+        "<slug:event_slug>/character/<slug:character_uuid>/abilities/",
+        views_uc.character_abilities,
+        name="character_abilities",
     ),
     path(
         "<slug:event_slug>/character/<slug:character_uuid>/abilities/<slug:ability_uuid>/",

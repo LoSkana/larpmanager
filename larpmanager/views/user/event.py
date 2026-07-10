@@ -336,7 +336,7 @@ def get_pre_registrations_dict(association_id: int, member: Any) -> dict:
     return event_id_to_pre_registration
 
 
-def home_json(request: HttpRequest, lang: str = "it") -> object:
+def api_json(request: HttpRequest, lang: str = "it") -> object:
     """Return JSON response with upcoming events for the association.
 
     Args:
