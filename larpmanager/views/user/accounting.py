@@ -957,28 +957,13 @@ def accounting_profile_check(request: HttpRequest, success_message: str, invoice
         messages.success(request, success_message)
         return redirect("profile")
 
-    # Profile is complete - show success message and proceed to accounting
+    # Profile is complete - show success message and proceed
     messages.success(request, success_message)
-    return accounting_redirect(invoice)
 
-
-def accounting_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
-    """Redirect to appropriate page after payment based on invoice type."""
     # Redirect to event page if invoice is for registration
     if invoice.typ == PaymentType.REGISTRATION:
         registration = Registration.objects.get(id=invoice.idx)
         return redirect("event", event_slug=registration.run.get_slug())
-
-    # Redirect after membership fee payment confirmation
-    if invoice.typ == PaymentType.MEMBERSHIP:
-        return redirect("exe_membership")
-
-    # Redirect after collection payment confirmation
-    if invoice.typ == PaymentType.COLLECTION:
-        return redirect("exe_collections")
-
-    if invoice.typ == PaymentType.DONATE:
-        return redirect("exe_donations")
 
     # Default redirect to accounting page
     return redirect("accounting")
