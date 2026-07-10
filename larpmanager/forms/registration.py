@@ -1302,7 +1302,8 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         already_used_types = list({question["typ"] for question in registration_questions})
 
         if self.instance.pk and self.instance.typ:
-            already_used_types.remove(self.instance.typ)
+            if self.instance.typ in already_used_types:
+                already_used_types.remove(self.instance.typ)
             # prevent cancellation if one of the default types
             self.prevent_canc = len(self.instance.typ) > 1
 
