@@ -227,7 +227,6 @@
 
 body.association.new_v22 .user_resize {
   padding: 0.5em 1em;
-  margin: 0 auto;
   border-radius: 8px;
   background-color: rgba(var(--pri-rgb), 0.04);
   max-width: 100%;

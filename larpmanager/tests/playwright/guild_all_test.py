@@ -32,7 +32,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
-    expect_normalized,
+    _select2_search_and_pick,
     get_modal_iframe,
     go_to,
     login_orga,
@@ -63,8 +63,9 @@ def test_guild_all(pw_page: Any) -> None:
 
     # ========== SECTION 1: Setup & Feature Activation ==========
     login_orga(page, live_server)
-    go_to(page, live_server, "/test/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/user_character/on")
     go_to(page, live_server, "/test/manage/features/guild/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
 
     # ========== SECTION 2: Orga creates two characters, both owned by user@test.it ==========
     create_and_assign_character(page, live_server, "Guild Founder")
@@ -81,7 +82,7 @@ def test_guild_all(pw_page: Any) -> None:
     page.locator("#id_name").fill("The Silver Hand")
     page.locator("#form_submit").click()
 
-    expect(page).to_have_url(re.compile(r"/guild/"))
+    expect(page).to_have_url(re.compile(r"/guilds/u1"))
 
     # ========== SECTION 5: Guild appears in the public list ==========
     go_to(page, live_server, "/test/guilds/")
@@ -93,7 +94,8 @@ def test_guild_all(pw_page: Any) -> None:
     expect(page.get_by_role("heading", name="Invite a character")).to_be_visible()
 
     # ========== SECTION 7: Invite "Guild Recruit" ==========
-    page.locator("select[name='character_uuid']").select_option(label="Guild Recruit")
+    page.locator("#select2-guild-invite-select-container").click()
+    _select2_search_and_pick(page.get_by_role("searchbox"), page, "Guild Recruit")
     page.get_by_role("button", name="Invite").click()
 
     # ========== SECTION 8: Accept the pending invite ==========
@@ -104,24 +106,19 @@ def test_guild_all(pw_page: Any) -> None:
     # ========== SECTION 9: Verify Guild Recruit is now a member ==========
     go_to(page, live_server, "/test/guilds/")
     page.get_by_role("link", name="The Silver Hand").click()
-    expect_normalized(
-        page,
-        page.locator("table.mob"),
-        """
-        Character	Role
-        Guild Founder	Admin
-        Guild Recruit	Member
-        """,
-    )
+    founder_row = page.locator("#guild-members tr").filter(has_text="Guild Founder")
+    expect(founder_row).to_contain_text("Admin")
+    recruit_row = page.locator("#guild-members tr").filter(has_text="Guild Recruit")
+    expect(recruit_row).to_contain_text("Member")
 
     # ========== SECTION 10: Promote Guild Recruit to admin ==========
-    rows = page.locator("table.mob tbody tr, table.mob tr")
+    rows = page.locator("#guild-members")
     recruit_row = rows.filter(has_text="Guild Recruit")
     recruit_row.get_by_role("button", name="Promote").click()
 
     go_to(page, live_server, "/test/guilds/")
     page.get_by_role("link", name="The Silver Hand").click()
-    recruit_row = page.locator("tr").filter(has_text="Guild Recruit")
+    recruit_row = page.locator("#guild-members tr").filter(has_text="Guild Recruit")
     expect(recruit_row).to_contain_text("Admin")
 
     # ========== SECTION 11: Demote Guild Recruit back to member ==========
@@ -129,7 +126,7 @@ def test_guild_all(pw_page: Any) -> None:
 
     go_to(page, live_server, "/test/guilds/")
     page.get_by_role("link", name="The Silver Hand").click()
-    recruit_row = page.locator("tr").filter(has_text="Guild Recruit")
+    recruit_row = page.locator("#guild-members tr").filter(has_text="Guild Recruit")
     expect(recruit_row).to_contain_text("Member")
 
     # ========== SECTION 12: Kick Guild Recruit ==========
@@ -137,10 +134,10 @@ def test_guild_all(pw_page: Any) -> None:
 
     go_to(page, live_server, "/test/guilds/")
     page.get_by_role("link", name="The Silver Hand").click()
-    expect(page.locator("table.mob")).not_to_contain_text("Guild Recruit")
+    expect(page.locator("#guild-members")).not_to_contain_text("Guild Recruit")
 
     # ========== SECTION 13: Last-admin protection blocks leaving ==========
-    page.locator("form[action*='/leave/'] input[type=submit]").click()
-    expect(page.locator("#one, .messages, body")).to_contain_text("last admin")
+    page.locator("form[action*='/leave/'] button[type=submit]").click()
+    expect(page.locator(".jq-toast-single")).to_contain_text("last admin")
 
     logout(page)
