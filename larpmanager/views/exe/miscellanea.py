@@ -254,9 +254,16 @@ def exe_trash(request: HttpRequest) -> HttpResponse:
         uuid = request.POST.get("uuid", "")
         if model_type in RECOVERABLE_MODELS and uuid:
             model_class = RECOVERABLE_MODELS[model_type]
-            restore_object(model_class, uuid)
-            obj = model_class.objects.get(uuid=uuid)
-            save_log(context, model_class, obj, operation_type=LogOperationType.RESTORE)
+            # Scope the restore to the current association
+            has_event = any(f.name == "event" for f in model_class._meta.get_fields())  # noqa: SLF001
+            if has_event:
+                scope = {"event__association_id": context["association_id"]}
+            else:
+                scope = {"association_id": context["association_id"]}
+            if model_class.all_objects.filter(uuid=uuid, deleted__isnull=False, **scope).exists():
+                restore_object(model_class, uuid)
+                obj = model_class.objects.get(uuid=uuid)
+                save_log(context, model_class, obj, operation_type=LogOperationType.RESTORE)
         return redirect(request.path)
 
     association_id = context["association_id"]

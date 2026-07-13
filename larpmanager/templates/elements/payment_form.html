@@ -16,14 +16,22 @@
                    id="id_invoice_key"
                    value="{{ invoice_key }}" />
         {% endif %}
-        {% if amount %}
-            <input type="hidden" name="amount" id="id_amount" value="{{ amount }}" />
-        {% else %}
-            <div class="form_amount">{{ form.amount }}</div>
-        {% endif %}
-        {% if donate %}
-            <p>{% trans "Please enter the occasion for which you wish to make the donation" %}</p>
-            {{ form.descr }}
+        {% if amount %}<input type="hidden" name="amount" id="id_amount" value="{{ amount }}" />{% endif %}
+        {% if not amount or donate %}
+            <table id="payment_form_fields">
+                {% if not amount %}
+                    <tr>
+                        <th>{{ form.amount.label_tag }}</th>
+                        <td>{{ form.amount }}</td>
+                    </tr>
+                {% endif %}
+                {% if donate %}
+                    <tr>
+                        <th>{{ form.descr.label_tag }}</th>
+                        <td>{{ form.descr }}</td>
+                    </tr>
+                {% endif %}
+            </table>
         {% endif %}
         <p>{% trans "Choose the payment method" %}:</p>
         <table id="payment_form">

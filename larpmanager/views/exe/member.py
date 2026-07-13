@@ -75,7 +75,8 @@ from larpmanager.utils.core.common import (
     _get_help_questions,
     ensure_timezone_aware,
     format_email_body,
-    get_member,
+    get_assoc_member,
+    get_help_question_member,
     get_object_uuid,
     normalize_string,
 )
@@ -282,7 +283,7 @@ def exe_membership_evaluation(request: HttpRequest, member_uuid: str) -> HttpRes
 def exe_membership_request(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """Handle membership request display for organization executives."""
     context = check_association_context(request, "exe_membership")
-    member_request = get_member(member_uuid)
+    member_request = get_assoc_member(member_uuid, context["association_id"])
     return get_membership_request(context, member_request)
 
 
@@ -367,7 +368,7 @@ def exe_member(request: HttpRequest, member_uuid: str) -> HttpResponse:
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
-    context["member_edit"] = get_member(member_uuid)
+    context["member_edit"] = get_assoc_member(member_uuid, context["association_id"])
 
     # Handle form submission for member profile updates
     if request.method == "POST":
@@ -419,7 +420,7 @@ def exe_member_accounting(request: HttpRequest, member_uuid: str) -> HttpRespons
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
-    context["member_edit"] = get_member(member_uuid)
+    context["member_edit"] = get_assoc_member(member_uuid, context["association_id"])
 
     # Add accounting payment items to context
     member_add_accountingitempayment(context, context["member_edit"])
@@ -460,7 +461,7 @@ def exe_member_registrations(request: HttpRequest, member_uuid: str) -> HttpResp
     """
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
-    context["member_edit"] = get_member(member_uuid)
+    context["member_edit"] = get_assoc_member(member_uuid, context["association_id"])
 
     # Get member registrations for current association events
     context["regs"] = Registration.objects.filter(
@@ -525,7 +526,7 @@ def exe_membership_status(request: HttpRequest, member_uuid: str) -> HttpRespons
 
     """
     context = check_association_context(request, "exe_membership")
-    context["member_edit"] = get_member(member_uuid)
+    context["member_edit"] = get_assoc_member(member_uuid, context["association_id"])
     context["membership_edit"] = get_object_or_404(
         Membership,
         member_id=context["member_edit"].id,
@@ -1116,7 +1117,7 @@ def exe_questions_answer(request: HttpRequest, member_uuid: str) -> HttpResponse
     context = check_association_context(request, "exe_questions")
 
     # Retrieve the member and their question history
-    context["member_edit"] = get_member(member_uuid)
+    context["member_edit"] = get_help_question_member(member_uuid, context["association_id"])
     context["list"] = HelpQuestion.objects.filter(
         member=context["member_edit"],
         association_id=context["association_id"],
@@ -1162,7 +1163,7 @@ def exe_questions_close(request: HttpRequest, member_uuid: str) -> HttpResponse:
     context = check_association_context(request, "exe_questions")
 
     # Get the member and their most recent help question
-    member = get_member(member_uuid)
+    member = get_help_question_member(member_uuid, context["association_id"])
     h = (
         HelpQuestion.objects.filter(member=member, association_id=context["association_id"])
         .order_by("-created")

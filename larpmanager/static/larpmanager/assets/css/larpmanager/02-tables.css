@@ -38,7 +38,7 @@ td {
   margin-left: 0.5em;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   #lm tbody {
     display: grid;
   }
@@ -58,7 +58,7 @@ td {
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 600px) {
   .no-more-tables table,
   .no-more-tables thead,
   .no-more-tables tbody,
@@ -126,7 +126,7 @@ td {
 
 /* On mobile, the input cells stack full-width, then the drag handle and the
    saved/details/delete icons share one row below (instead of every cell stacking) */
-@media (max-width: 800px) {
+@media (max-width: 840px) {
   .inline-options-table tr.inline-option {
     display: flex !important;
     flex-wrap: wrap;
@@ -194,7 +194,7 @@ th select {
 }
 
 /* Mobile responsive tables */
-@media (max-width: 1000px) {
+@media (max-width: 840px) {
   table.mob {
     display: block;
     width: 100%;

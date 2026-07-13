@@ -80,16 +80,6 @@ urlpatterns = [
         name="help_attachment",
     ),
     path(
-        "home/json/",
-        views_ue.home_json,
-        name="home_json",
-    ),
-    path(
-        "home/json/<slug:lang>/",
-        views_ue.home_json,
-        name="home_json",
-    ),
-    path(
         "language/",
         views_um.language,
         name="language",
@@ -448,5 +438,15 @@ urlpatterns = [
         "invite/role/<str:token>/",
         views_ums.role_invite_redeem,
         name="role_invite_redeem",
+    ),
+    path(
+        "api/json/",
+        views_ue.api_json,
+        name="api_json",
+    ),
+    path(
+        "api/json/<slug:lang>/",
+        views_ue.api_json,
+        name="api_json",
     ),
 ]

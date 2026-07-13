@@ -213,6 +213,20 @@ class Operations(models.IntegerChoices):
     SET_FACT_ASSIGNED = 26, _("Set assigned staff member")
 
 
+def _scoped_bulk_queryset(context: dict, model_class: type, object_uuids: list[str]) -> QuerySet:
+    """Return the given UUIDs scoped to the current tenant.
+
+    WarehouseItem is association-scoped; all other bulk models are
+    event-scoped via Event.get_elements. Scoping here prevents cross-tenant
+    reads/deletes from raw POST UUIDs.
+    """
+    if model_class is WarehouseItem:
+        base = WarehouseItem.objects.filter(association_id=context["association_id"])
+    else:
+        base = context["event"].get_elements(model_class)
+    return base.filter(uuid__in=object_uuids)
+
+
 def _create_bulk_logs(
     context: dict,
     operation_name: int,
@@ -221,7 +235,7 @@ def _create_bulk_logs(
     model_class: BaseModel,
 ) -> None:
     """Create individual log entries for each element in a bulk operation."""
-    objects = model_class.objects.filter(uuid__in=object_uuids)
+    objects = _scoped_bulk_queryset(context, model_class, object_uuids)
     label = Operations(operation_name).label
     log_info = f"{label}: {target_name}" if target_name else label
     for obj in objects:
@@ -260,7 +274,7 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict, mode
         _check_bulk_delete_enabled(context)
         try:
             _create_bulk_logs(context, operation_name, None, object_uuids, model_class)
-            model_class.objects.filter(uuid__in=object_uuids).delete()
+            _scoped_bulk_queryset(context, model_class, object_uuids).delete()
         except ObjectDoesNotExist:
             return JsonResponse({"error": "not found"}, status=400)
         return JsonResponse({"res": "ok"})

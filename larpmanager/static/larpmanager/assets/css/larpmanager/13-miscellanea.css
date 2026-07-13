@@ -30,14 +30,14 @@
 .event .text {
   padding-left: 1em;
   float: right;
-  width: 69%;
+  width: 65%;
   text-align: center;
 }
 .event:nth-child(odd) {
   background-color: rgba(var(--pri-rgb), 0.025);
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 600px) {
   .calendar .event {
     display: block;
   }
@@ -82,7 +82,7 @@
   background-repeat: no-repeat;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   #event_cover {
     height: 15em;
   }
@@ -227,7 +227,7 @@
 
 body.association.new_v22 .user_resize {
   padding: 0.5em 1em;
-  margin: 0auto;
+  margin: 0 auto;
   border-radius: 8px;
   background-color: rgba(var(--pri-rgb), 0.04);
   max-width: 100%;
@@ -370,13 +370,13 @@ body.association.new_v22 .user_resize {
   font-size: 0.9em;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 840px) {
   .run-card-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 600px) {
   .run-card-grid {
     grid-template-columns: 1fr;
   }

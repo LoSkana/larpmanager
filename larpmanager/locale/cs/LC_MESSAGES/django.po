@@ -5088,6 +5088,9 @@ msgstr "Cílová relace nebyla nalezena"
 msgid "This event has concluded"
 msgstr "Tato akce byla ukončena"
 
+msgid "Transfer is not possible"
+msgstr "Převod není možný"
+
 msgid "Try the sheet generation"
 msgstr "Vyzkoušejte generování karet"
 
@@ -6411,9 +6414,6 @@ msgstr "Zapomněli jste heslo nebo uživatelské jméno?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Staff"
-
-msgid "Indicate the amount of your donation"
-msgstr "Uveďte výši svého daru"
 
 msgid "Indicates the details of the request"
 msgstr "Uvádí podrobnosti o nároku"
@@ -9127,9 +9127,6 @@ msgid "Participants can sign up right away through the registration form"
 msgstr ""
 "Účastníci se mohou přihlásit hned teď prostřednictvím registračního "
 "formuláře"
-
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr "Uveďte prosím, při jaké příležitosti si přejete dar poskytnout"
 
 msgid "Primary spots are sold out, but you can still sign up as a filler"
 msgstr ""

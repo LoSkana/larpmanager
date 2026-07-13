@@ -336,7 +336,7 @@ def get_pre_registrations_dict(association_id: int, member: Any) -> dict:
     return event_id_to_pre_registration
 
 
-def home_json(request: HttpRequest, lang: str = "it") -> object:
+def api_json(request: HttpRequest, lang: str = "it") -> object:
     """Return JSON response with upcoming events for the association.
 
     Args:
@@ -791,6 +791,9 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
             context["coming"].append(run)
         else:
             context["past"].append(run)
+
+    # Whether the run being viewed is itself still scheduled to happen
+    context["run_upcoming"] = not context["run"].end or context["run"].end >= timezone.now().date()
 
     # Refresh event object to ensure latest data
     context["event"] = Event.objects.get(pk=context["event"].pk)
