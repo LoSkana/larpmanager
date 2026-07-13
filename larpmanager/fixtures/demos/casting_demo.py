@@ -67,24 +67,91 @@ def _make_member(username: str, name: str, surname: str, association: Associatio
 
 def _build_characters(event: Event) -> dict[str, Character]:
     roster = [
-        ("duke", "The Duke of Ashworth", "<p>Wealthiest bachelor of the season, guarding a scandal of his own.</p>"),
-        ("dowager", "The Dowager Countess", "<p>Matriarch who decides whose reputation lives or dies this season.</p>"),
-        ("heiress", "Miss Eleanor Faircliffe", "<p>An heiress determined to marry for love, not fortune.</p>"),
-        ("rake", "Lord Bramwell", "<p>A notorious rake with a secret debt to the Duke.</p>"),
-        ("chaperone", "Mrs. Hartley", "<p>A chaperone who trades secrets as freely as she trades gossip.</p>"),
-        ("captain", "Captain Osei", "<p>A war hero of new money, eager to be accepted by the old families.</p>"),
-        ("debutante", "Miss Clara Whitmore", "<p>A debutante hiding a talent for forgery behind her fan.</p>"),
+        (
+            "duke",
+            "The Duke of Ashworth",
+            "<p>Wealthiest bachelor of the season, guarding a scandal of his own.</p>",
+            "<p>Your late father gambled away half the estate before he died. You have "
+            "quietly rebuilt the fortune through shipping investments, but if the ton "
+            "learns the Ashworth name was ever in debt, no family will let you near "
+            "their daughters.</p>",
+        ),
+        (
+            "dowager",
+            "The Dowager Countess",
+            "<p>Matriarch who decides whose reputation lives or dies this season.</p>",
+            "<p>You know Lord Bramwell owes the Duke a debt of honor, and you intend "
+            "to use that knowledge to force a match between his family and yours "
+            "before the season ends.</p>",
+        ),
+        (
+            "heiress",
+            "Miss Eleanor Faircliffe",
+            "<p>An heiress determined to marry for love, not fortune.</p>",
+            "<p>You have fallen for Captain Osei despite your guardians pushing you "
+            "toward the Duke. You are prepared to elope if no one will bless the "
+            "match.</p>",
+        ),
+        (
+            "rake",
+            "Lord Bramwell",
+            "<p>A notorious rake with a secret debt to the Duke.</p>",
+            "<p>You owe the Duke of Ashworth a sum you cannot repay. You have been "
+            "courting Miss Whitmore's favor not from affection but because her "
+            "dowry would clear the debt.</p>",
+        ),
+        (
+            "chaperone",
+            "Mrs. Hartley",
+            "<p>A chaperone who trades secrets as freely as she trades gossip.</p>",
+            "<p>You sell what you overhear belowstairs and in the ballroom alike. "
+            "Mr. Reed is your best source, and you pay him in coin he thinks is "
+            "generous and you know is a pittance.</p>",
+        ),
+        (
+            "captain",
+            "Captain Osei",
+            "<p>A war hero of new money, eager to be accepted by the old families.</p>",
+            "<p>Your fortune was earned, not inherited, and the old families never "
+            "let you forget it. You love Miss Faircliffe and mean to prove yourself "
+            "worthy of her regardless of what the Ashworth Set thinks.</p>",
+        ),
+        (
+            "debutante",
+            "Miss Clara Whitmore",
+            "<p>A debutante hiding a talent for forgery behind her fan.</p>",
+            "<p>You have been forging letters of introduction for a fee, and Lord "
+            "Bramwell has guessed as much. If he exposes you, your season is over "
+            "before it begins.</p>",
+        ),
         (
             "vicar",
             "The Reverend Mr. Pryce",
             "<p>A vicar who hears every confession this season and keeps none private.</p>",
+            "<p>You have heard the Dowager Countess confess her scheme against Lord "
+            "Bramwell's family, and you are deciding whether silence or disclosure "
+            "serves you better.</p>",
         ),
-        ("widow", "Lady Seraphina Vance", "<p>A young widow whose late husband's fortune is being contested.</p>"),
-        ("valet", "Mr. Thomas Reed", "<p>A gentleman's valet who knows every secret belowstairs.</p>"),
+        (
+            "widow",
+            "Lady Seraphina Vance",
+            "<p>A young widow whose late husband's fortune is being contested.</p>",
+            "<p>Your husband's will is being challenged by his brother. Mr. Reed, "
+            "who served the household for years, holds evidence that could settle "
+            "the matter in your favor, if he chooses to give it.</p>",
+        ),
+        (
+            "valet",
+            "Mr. Thomas Reed",
+            "<p>A gentleman's valet who knows every secret belowstairs.</p>",
+            "<p>You hold papers that would resolve Lady Vance's inheritance dispute "
+            "in her favor. You have not decided whether loyalty or profit will "
+            "guide you when Mrs. Hartley comes asking.</p>",
+        ),
     ]
     chars: dict[str, Character] = {}
-    for key, name, teaser in roster:
-        chars[key] = Character.objects.create(event=event, name=name, teaser=teaser)
+    for key, name, teaser, text in roster:
+        chars[key] = Character.objects.create(event=event, name=name, teaser=teaser, text=text)
     return chars
 
 

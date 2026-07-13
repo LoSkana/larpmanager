@@ -112,11 +112,55 @@ def _build_events(association: Association) -> dict[str, Event]:
 
 
 def _build_characters(chapter_1: Event) -> dict[str, Character]:
-    lucian = Character.objects.create(event=chapter_1, name="Lucian Thorne")
-    mireille = Character.objects.create(event=chapter_1, name="Mireille Duskwood")
-    aurelio = Character.objects.create(event=chapter_1, name="Aurelio Vance")
-    ysolde = Character.objects.create(event=chapter_1, name="Ysolde Marrow")
-    corvin = Character.objects.create(event=chapter_1, name="Corvin Ashe")
+    lucian = Character.objects.create(
+        event=chapter_1,
+        name="Lucian Thorne",
+        teaser="<p>Elder of the Ashblood Court, holding the throne by will alone.</p>",
+        text=(
+            "<p>You have ruled the Ashblood Court for three centuries. Aurelio "
+            "believes it is time you stepped aside, and you are not certain he "
+            "is wrong.</p>"
+        ),
+    )
+    mireille = Character.objects.create(
+        event=chapter_1,
+        name="Mireille Duskwood",
+        teaser="<p>Voice of the Silver Veil, who trades in secrets rather than blood.</p>",
+        text=(
+            "<p>You know Lucian's grip on the Ashblood Court is weakening, and you "
+            "intend to broker a peace before Aurelio's ambition drags both courts "
+            "into open war.</p>"
+        ),
+    )
+    aurelio = Character.objects.create(
+        event=chapter_1,
+        name="Aurelio Vance",
+        teaser="<p>Ambitious knight of the Ashblood Court, hungry for the throne.</p>",
+        text=(
+            "<p>You have spent a decade proving your loyalty to Lucian, all while "
+            "quietly gathering the support you will need the night you finally "
+            "challenge him.</p>"
+        ),
+    )
+    ysolde = Character.objects.create(
+        event=chapter_1,
+        name="Ysolde Marrow",
+        teaser="<p>A Silver Veil seer whose visions unsettle even the elders.</p>",
+        text=(
+            "<p>Your visions have shown you Aurelio's coup before it happens. You "
+            "have not decided whether warning Lucian would prevent it or simply "
+            "hasten it.</p>"
+        ),
+    )
+    corvin = Character.objects.create(
+        event=chapter_1,
+        name="Corvin Ashe",
+        teaser="<p>A mortal on the verge of the Embrace, caught between two courts.</p>",
+        text=(
+            "<p>Aurelio promised to Embrace you if you helped him against Lucian. "
+            "You are only now learning what that promise will actually cost you.</p>"
+        ),
+    )
 
     ashblood_court = Faction.objects.create(event=chapter_1, name="The Ashblood Court")
     ashblood_court.characters.set([lucian, aurelio, corvin])

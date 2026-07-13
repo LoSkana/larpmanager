@@ -7764,6 +7764,9 @@ msgstr "Seznam e-mailových adres příjemce oddělených čárkou"
 msgid "No additional payments are required at this time"
 msgstr "V tuto chvíli nejsou vyžadovány žádné další platby"
 
+msgid "Only some of the platform features are activated"
+msgstr "Jsou aktivovány pouze některé funkce platformy"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Zrušení odběru %(event)s pomocí %(user)s"
@@ -9373,6 +9376,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Zobrazení podrobného protokolu aktivit všech změn provedených pro tuto "
 "organizaci"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"Chcete si vyzkoušet další ukázky, nebo jste připraveni založit svou "
+"organizaci?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Po provedení změny vám zašleme potvrzující e-mail"
@@ -11376,13 +11384,6 @@ msgid ""
 msgstr ""
 "Pomocí tlačítka výše můžete přidat kroky pro sledování stavu dokončení "
 "jednotlivých částí textu"
-
-msgid ""
-"Wanna try other demos, or are you ready for the real thing, to create your "
-"organization?"
-msgstr ""
-"Chcete vyzkoušet další ukázky, nebo jste připraveni na to opravdové – na "
-"založení vlastní organizace?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

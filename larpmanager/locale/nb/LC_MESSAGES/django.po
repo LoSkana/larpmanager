@@ -7768,6 +7768,9 @@ msgstr "Liste over mottakerens e-postadresse, kommaseparert"
 msgid "No additional payments are required at this time"
 msgstr "Ingen ytterligere innbetalinger er påkrevd på dette tidspunktet"
 
+msgid "Only some of the platform features are activated"
+msgstr "Bare noen av plattformens funksjoner er aktivert"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Avslutte abonnementet på %(event)s av %(user)s"
@@ -9462,6 +9465,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Se detaljert aktivitetslogg over alle endringer som er gjort for denne "
 "organisasjonen"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"Vil du prøve andre demoer, eller er du klar til å opprette din egen "
+"organisasjon?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Vi sender deg en bekreftelse på e-post når endringen er gjennomført"
@@ -11535,13 +11543,6 @@ msgid ""
 msgstr ""
 "Bruk knappen ovenfor for å legge til trinn for å spore fullføringsstatusen "
 "for skriveelementene"
-
-msgid ""
-"Wanna try other demos, or are you ready for the real thing, to create your "
-"organization?"
-msgstr ""
-"Vil du prøve andre demoer, eller er du klar for å gå i gang for alvor og "
-"opprette din egen organisasjon?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

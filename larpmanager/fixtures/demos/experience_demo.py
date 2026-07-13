@@ -250,17 +250,54 @@ def _build_rules(event: Event, opt: dict[str, Any], ab: dict) -> None:
 
 
 def _build_characters(event: Event, opt: dict[str, Any]) -> dict[str, Character]:
-    def make_character(name: str, race_opt: WritingOption, class_opt: WritingOption) -> Character:
-        char = Character.objects.create(event=event, name=name)
+    def make_character(
+        name: str, race_opt: WritingOption, class_opt: WritingOption, teaser: str, text: str
+    ) -> Character:
+        char = Character.objects.create(event=event, name=name, teaser=teaser, text=text)
         WritingChoice.objects.create(element_id=char.id, question=opt["race_question"], option=race_opt)
         WritingChoice.objects.create(element_id=char.id, question=opt["class_question"], option=class_opt)
         return char
 
-    bram = make_character("Bram Ironfist", opt["race_dwarf"], opt["class_fighter"])
-    sera = make_character("Sera Nightblade", opt["race_human"], opt["class_rogue"])
-    elowen = make_character("Elowen Starweaver", opt["race_elf"], opt["class_mage"])
-    grom = make_character("Grom Stonehide", opt["race_dwarf"], opt["class_fighter"])
-    finn = make_character("Finn Quickstep", opt["race_human"], opt["class_rogue"])
+    bram = make_character(
+        "Bram Ironfist",
+        opt["race_dwarf"],
+        opt["class_fighter"],
+        "<p>A dwarven shield-bearer of the Ashen Company, sworn to hold the line.</p>",
+        "<p>Your clan cast you out for a duel you did not start. Sera knows the "
+        "truth of what happened, and you are not sure whether to trust her with it.</p>",
+    )
+    sera = make_character(
+        "Sera Nightblade",
+        opt["race_human"],
+        opt["class_rogue"],
+        "<p>A sharp-tongued rogue of the Ashen Company, loyal to no cause but coin.</p>",
+        "<p>You witnessed the duel that got Bram exiled from his clan, and you have "
+        "kept the secret only because it is worth more unspoken than sold.</p>",
+    )
+    elowen = make_character(
+        "Elowen Starweaver",
+        opt["race_elf"],
+        opt["class_mage"],
+        "<p>An elven mage of the Ashen Company, chasing a ritual her order forbade.</p>",
+        "<p>You are pursuing forbidden ritual knowledge your order stripped from its "
+        "archives. Grom's people are rumored to guard the last surviving copy.</p>",
+    )
+    grom = make_character(
+        "Grom Stonehide",
+        opt["race_dwarf"],
+        opt["class_fighter"],
+        "<p>A dwarven veteran of Hollow Road, guarding secrets older than the company.</p>",
+        "<p>Your hold keeps the last copy of a ritual text the elves have hunted for "
+        "generations. You have not decided whether Elowen deserves to know it exists.</p>",
+    )
+    finn = make_character(
+        "Finn Quickstep",
+        opt["race_human"],
+        opt["class_rogue"],
+        "<p>A quick-fingered scout of Hollow Road, always first through the door.</p>",
+        "<p>You have been skimming a cut off every job Hollow Road runs, and Grom is "
+        "starting to notice the numbers do not add up.</p>",
+    )
 
     ashen_company = Faction.objects.create(event=event, name="The Ashen Company")
     ashen_company.characters.set([bram, sera, elowen])

@@ -496,7 +496,8 @@ body.floating_iframe #menu,
 body.floating_iframe #banner,
 body.floating_iframe #topbar,
 body.floating_iframe #staging,
-body.floating_iframe .info {
+body.floating_iframe .info,
+body.floating_iframe .demo-banner {
   display: none !important;
 }
 

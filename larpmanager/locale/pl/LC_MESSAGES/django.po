@@ -7771,6 +7771,9 @@ msgstr "Lista adresów e-mail odbiorców, oddzielonych przecinkami"
 msgid "No additional payments are required at this time"
 msgstr "Obecnie nie są wymagane żadne dodatkowe płatności"
 
+msgid "Only some of the platform features are activated"
+msgstr "Aktywowane są tylko niektóre funkcje platformy"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Rejestracja anulowana dla %(event)s przez %(user)s"
@@ -9479,6 +9482,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Wyświetl szczegółowy dziennik aktywności wszystkich zmian wprowadzonych dla "
 "tej organizacji"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"Chcesz wypróbować inne wersje demonstracyjne, czy może jesteś już gotowy, "
+"żeby założyć swoją organizację?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Po dokonaniu zmiany wyślemy wiadomość e-mail z potwierdzeniem"
@@ -11607,13 +11615,6 @@ msgid ""
 msgstr ""
 "Użyj przycisku powyżej, żeby dodać etapy służące do śledzenia postępów w "
 "tworzeniu poszczególnych elementów tekstu"
-
-msgid ""
-"Wanna try other demos, or are you ready for the real thing, to create your "
-"organization?"
-msgstr ""
-"Chcesz wypróbować inne wersje demonstracyjne, czy może jesteś już gotowy na "
-"prawdziwą akcję i chcesz założyć swoją organizację?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

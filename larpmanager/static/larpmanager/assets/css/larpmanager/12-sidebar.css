@@ -321,6 +321,10 @@ nav#sidebar-nav {
   padding-top: 0.4em;
 }
 
+#sidebar .new-menu .sidebar-body {
+  display: contents;
+}
+
 /* Mobile sidebar overlay */
 @media (max-width: 840px) {
   body:not(.new_v22) #sidebar {

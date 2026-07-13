@@ -7781,6 +7781,9 @@ msgstr "Lijst met e-mailadressen van ontvangers, door komma's gescheiden"
 msgid "No additional payments are required at this time"
 msgstr "Op dit moment zijn geen extra betalingen vereist"
 
+msgid "Only some of the platform features are activated"
+msgstr "Slechts een deel van de functies van het platform is geactiveerd"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Uitschrijven op %(event)s door %(user)s"
@@ -9546,6 +9549,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Gedetailleerd activiteitenlogboek bekijken van alle wijzigingen die voor "
 "deze organisatie zijn gemaakt"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"Wil je nog andere demo’s uitproberen, of ben je klaar om je organisatie aan "
+"te maken?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
@@ -11722,13 +11730,6 @@ msgid ""
 msgstr ""
 "Gebruik de knop hierboven om stappen toe te voegen waarmee je kunt bijhouden"
 " of de verschillende onderdelen al af zijn"
-
-msgid ""
-"Wanna try other demos, or are you ready for the real thing, to create your "
-"organization?"
-msgstr ""
-"Wil je nog andere demo’s uitproberen, of ben je er al klaar voor om het echt"
-" te gaan doen en je eigen organisatie op te zetten?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

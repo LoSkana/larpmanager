@@ -7778,6 +7778,9 @@ msgstr ""
 msgid "No additional payments are required at this time"
 msgstr "No se requieren pagos adicionales en este momento"
 
+msgid "Only some of the platform features are activated"
+msgstr "Solo están activadas algunas de las funciones de la plataforma"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Inscripción cancelada para %(event)s por %(user)s"
@@ -9545,6 +9548,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Ver el registro de actividad detallado de todos los cambios realizados para "
 "esta organización"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"¿Quieres probar otras demostraciones o ya estás listo para crear tu "
+"organización?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
@@ -11713,13 +11721,6 @@ msgid ""
 msgstr ""
 "Usa el botón de arriba para añadir pasos y hacer un seguimiento del estado "
 "de finalización de los elementos de redacción"
-
-msgid ""
-"Wanna try other demos, or are you ready for the real thing, to create your "
-"organization?"
-msgstr ""
-"¿Quieres probar otras demos o ya estás listo para dar el paso de verdad y "
-"crear tu organización?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

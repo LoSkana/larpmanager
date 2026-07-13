@@ -142,7 +142,14 @@ def _build_players_and_characters(
 ) -> tuple[dict[str, Any], dict[str, Character]]:
     def make_character(spec: dict[str, Any]) -> tuple[Any, Character]:
         member = _make_member(spec["username"], spec["first_name"], spec["surname"], association)
-        char = Character.objects.create(event=event, name=spec["char_name"], player=member, status=spec["status"])
+        char = Character.objects.create(
+            event=event,
+            name=spec["char_name"],
+            player=member,
+            status=spec["status"],
+            teaser=f"<p>{spec['appearance']}</p>",
+            text=f"<p>{spec['backstory']}</p>",
+        )
         WritingChoice.objects.create(element_id=char.id, question=opt["origin_question"], option=spec["origin"])
         WritingChoice.objects.create(element_id=char.id, question=opt["mutation_question"], option=spec["mutation"])
         for skill in spec["skills"]:
@@ -150,9 +157,7 @@ def _build_players_and_characters(
         for item in spec["gear"]:
             WritingChoice.objects.create(element_id=char.id, question=opt["gear_question"], option=item)
         WritingAnswer.objects.create(element_id=char.id, question=opt["callsign_question"], text=spec["callsign"])
-        WritingAnswer.objects.create(
-            element_id=char.id, question=opt["appearance_question"], text=spec["appearance"]
-        )
+        WritingAnswer.objects.create(element_id=char.id, question=opt["appearance_question"], text=spec["appearance"])
         WritingAnswer.objects.create(element_id=char.id, question=opt["backstory_question"], text=spec["backstory"])
         return member, char
 
@@ -264,9 +269,7 @@ def _build_players_and_characters(
     return members, chars
 
 
-def _build_registrations(
-    event: Event, members: dict[str, Any], chars: dict[str, Character]
-) -> dict[str, Registration]:
+def _build_registrations(event: Event, members: dict[str, Any], chars: dict[str, Character]) -> dict[str, Registration]:
     run = event.runs.first()
     ticket = event.tickets.get(tier=TicketTier.STANDARD)
     registrations: dict[str, Registration] = {}

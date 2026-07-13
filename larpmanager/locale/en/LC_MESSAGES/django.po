@@ -9883,9 +9883,10 @@ msgstr ""
 msgid "You are exploring a demo organization"
 msgstr ""
 
-msgid ""
-"Wanna try other demos, or are you ready for the real thing, to create your "
-"organization?"
+msgid "Only some of the platform features are activated"
+msgstr ""
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
 msgstr ""
 
 msgid "Please correct the error below"
