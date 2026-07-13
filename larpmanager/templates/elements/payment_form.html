@@ -10,6 +10,12 @@
     {% endif %}
     <form action="{{ request.path }}" method="post">
         {% csrf_token %}
+        {% if invoice_key %}
+            <input type="hidden"
+                   name="invoice_key"
+                   id="id_invoice_key"
+                   value="{{ invoice_key }}" />
+        {% endif %}
         {% if amount %}
             <input type="hidden" name="amount" id="id_amount" value="{{ amount }}" />
         {% else %}

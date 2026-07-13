@@ -1638,3 +1638,18 @@
     hidden: true
     module: null
     dependencies: []
+- model: larpmanager.feature
+  fields:
+    name: Guilds
+    descr: Enables 'Guilds', player-created groups of characters with a self-managed
+      admin, invite and text
+    slug: guild
+    overall: false
+    placeholder: false
+    order: 125
+    after_text: Now players can create guilds for the event
+    after_link: orga_guilds
+    hidden: false
+    module: writing
+    dependencies:
+    - character

@@ -186,6 +186,7 @@ class QuestionApplicable(models.TextChoices):
     QUEST = "q", "quest"
     TRAIT = "t", "trait"
     PROLOGUE = "r", "prologue"
+    GUILD = "g", "guild"
 
     @classmethod
     def get_applicable(cls, model_name: str) -> str | None:
@@ -783,6 +784,7 @@ def _get_writing_elements() -> list[tuple[str, str, QuestionApplicable]]:
     return [
         ("character", _("Characters"), QuestionApplicable.CHARACTER),
         ("faction", _("Factions"), QuestionApplicable.FACTION),
+        ("guild", _("Guilds"), QuestionApplicable.GUILD),
         ("plot", _("Plots"), QuestionApplicable.PLOT),
         ("quest", _("Quests"), QuestionApplicable.QUEST),
         ("trait", _("Traits"), QuestionApplicable.TRAIT),
@@ -801,6 +803,7 @@ def _get_writing_mapping() -> dict[str, str]:
     return {
         "character": "character",
         "faction": "faction",
+        "guild": "guild",
         "plot": "plot",
         "quest": "questbuilder",
         "trait": "questbuilder",

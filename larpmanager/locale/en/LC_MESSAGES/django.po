@@ -1558,6 +1558,18 @@ msgstr ""
 msgid "If checked, activates a staff-managed approval process for characters"
 msgstr ""
 
+msgid "Guilds"
+msgstr ""
+
+msgid "Maximum number of guilds players can create (0 = no limit)"
+msgstr ""
+
+msgid "Maximum members"
+msgstr ""
+
+msgid "Maximum number of accepted members per guild (0 = no limit)"
+msgstr ""
+
 msgid "Character customisation"
 msgstr ""
 
@@ -2721,6 +2733,12 @@ msgid "Secret"
 msgstr ""
 
 msgid "hidden faction visible only to assigned characters"
+msgstr ""
+
+msgid "Guild"
+msgstr ""
+
+msgid "Manage all guilds of the event"
 msgstr ""
 
 msgid "Quest type"
@@ -5130,6 +5148,21 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
+msgid "Admin"
+msgstr ""
+
+msgid "Invited"
+msgstr ""
+
+msgid "Guild cover"
+msgstr ""
+
+msgid "Guild logo"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
 msgid "By"
 msgstr ""
 
@@ -5500,6 +5533,12 @@ msgid ""
 "if the character does NOT belong to this element, but is only referenced"
 msgstr ""
 
+msgid ""
+"Select from the drop-down list the characters to be added to the guild. "
+"Players can also create guilds themselves, invite characters and manage "
+"membership from the event page"
+msgstr ""
+
 msgid "Template instructions"
 msgstr ""
 
@@ -5801,9 +5840,6 @@ msgstr ""
 msgid "Access the organization dashboard"
 msgstr ""
 
-msgid "Role"
-msgstr ""
-
 msgid "Hi"
 msgstr ""
 
@@ -5814,9 +5850,6 @@ msgid "Scroll right"
 msgstr ""
 
 msgid "User"
-msgstr ""
-
-msgid "Admin"
 msgstr ""
 
 msgid "Manage"
@@ -6138,6 +6171,66 @@ msgstr ""
 msgid ""
 "By pressing confirm, this registration will be assigned to you, and you will "
 "then be duly registered"
+msgstr ""
+
+msgid "Edit guild"
+msgstr ""
+
+msgid "Invite a character"
+msgstr ""
+
+msgid "Invite"
+msgstr ""
+
+msgid "Manage members"
+msgstr ""
+
+msgid "Demote"
+msgstr ""
+
+msgid "Promote"
+msgstr ""
+
+msgid "Kick"
+msgstr ""
+
+msgid "Leave guild"
+msgstr ""
+
+msgid "New guild"
+msgstr ""
+
+msgid ""
+"Choose which of your characters will found this guild and become its first "
+"admin"
+msgstr ""
+
+msgid "Founding character"
+msgstr ""
+
+msgid "My guild invites"
+msgstr ""
+
+msgid "You have no pending guild invites"
+msgstr ""
+
+#, python-format
+msgid "Invited with character %(character)s"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Decline"
+msgstr ""
+
+msgid "Discover the guilds of the game"
+msgstr ""
+
+msgid "Create a new guild"
+msgstr ""
+
+msgid "My pending invites"
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
@@ -6751,9 +6844,6 @@ msgstr ""
 msgid ""
 "Pre-registrations will appear here once participants sign up for upcoming "
 "events"
-msgstr ""
-
-msgid "Invite"
 msgstr ""
 
 msgid "Pending invites"
@@ -10503,6 +10593,14 @@ msgstr ""
 msgid "Now you can configure the ensemble page"
 msgstr ""
 
+msgid ""
+"Enables 'Guilds', player-created groups of characters with a self-managed "
+"admin, invite and text"
+msgstr ""
+
+msgid "Now players can create guilds for the event"
+msgstr ""
+
 msgid "Manage the organization main settings"
 msgstr ""
 
@@ -10965,6 +11063,9 @@ msgid ""
 "Track and manage event milestones with status, deadline, and staff assignment"
 msgstr ""
 
+msgid "Manage the event guilds"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
@@ -11020,6 +11121,9 @@ msgid "Learn all characters before the event"
 msgstr ""
 
 msgid "Discover the game factions"
+msgstr ""
+
+msgid "Discover the game guilds"
 msgstr ""
 
 msgid "Find out what quests are available"
@@ -12335,6 +12439,67 @@ msgid "You have already granted data sharing with this organisation"
 msgstr ""
 
 msgid "You have granted data sharing with this organisation"
+msgstr ""
+
+msgid "You need a character to create a guild"
+msgstr ""
+
+msgid "The maximum number of guilds for this event has been reached"
+msgstr ""
+
+msgid "Select a valid character"
+msgstr ""
+
+msgid "Guild created"
+msgstr ""
+
+msgid "Guild updated"
+msgstr ""
+
+msgid "This character is already a member or has a pending invite"
+msgstr ""
+
+#, python-format
+msgid ""
+"You have been invited to join the guild %(guild)s with your character "
+"%(character)s"
+msgstr ""
+
+msgid "Invite sent"
+msgstr ""
+
+msgid "This guild has reached its maximum number of members"
+msgstr ""
+
+msgid "You joined the guild"
+msgstr ""
+
+msgid "Invite declined"
+msgstr ""
+
+msgid "Cannot kick the last admin of the guild"
+msgstr ""
+
+#, python-format
+msgid "Your character %(character)s has been removed from the guild %(guild)s"
+msgstr ""
+
+msgid "Member removed"
+msgstr ""
+
+msgid "You are the last admin: promote another member before leaving"
+msgstr ""
+
+msgid "You left the guild"
+msgstr ""
+
+msgid "Member promoted to admin"
+msgstr ""
+
+msgid "Cannot demote the last admin of the guild"
+msgstr ""
+
+msgid "Member demoted"
 msgstr ""
 
 msgid "Personal data updated"

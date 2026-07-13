@@ -1018,3 +1018,15 @@
     icon: flag
     feature: milestones
     module: miscellany
+- model: larpmanager.eventpermission
+  fields:
+    name: Guilds
+    descr: Manage the event guilds
+    slug: orga_guilds
+    number: 52
+    config: null
+    active_if: null
+    hidden: false
+    icon: users
+    feature: guild
+    module: writing

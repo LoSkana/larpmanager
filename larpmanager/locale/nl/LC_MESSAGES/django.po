@@ -170,6 +170,9 @@ msgstr "Info"
 msgid "Item"
 msgstr "Ingang"
 
+msgid "Kick"
+msgstr "Kick"
+
 msgid "LAOG"
 msgstr "LAOG"
 
@@ -399,6 +402,9 @@ msgstr "Grafiek"
 msgid "Gross"
 msgstr "Bruto"
 
+msgid "Guild"
+msgstr "Gilde"
+
 msgid "Hotel"
 msgstr "Hotel"
 
@@ -544,6 +550,9 @@ msgstr "snel"
 msgid "Absent"
 msgstr "Afwezig"
 
+msgid "Accept"
+msgstr "Accepteren"
+
 msgid "Action"
 msgstr "Actie"
 
@@ -586,6 +595,9 @@ msgstr "Maak"
 msgid "Delete"
 msgstr "Verwijder"
 
+msgid "Demote"
+msgstr "Terugzetten"
+
 msgid "Detail"
 msgstr "Detail"
 
@@ -627,6 +639,9 @@ msgstr "Vriend"
 
 msgid "Gender"
 msgstr "Genre"
+
+msgid "Guilds"
+msgstr "Gilden"
 
 msgid "Header"
 msgstr "Kop"
@@ -874,6 +889,9 @@ msgstr "Gemaakt"
 msgid "Credits"
 msgstr "Credits"
 
+msgid "Decline"
+msgstr "Afname"
+
 msgid "Default"
 msgstr "Standaard"
 
@@ -915,6 +933,9 @@ msgstr "Inkomsten"
 
 msgid "Inverse"
 msgstr "Omgekeerd"
+
+msgid "Invited"
+msgstr "Uitgenodigd"
 
 msgid "Invoice"
 msgstr "Factuur"
@@ -981,6 +1002,9 @@ msgstr "Ga verder"
 
 msgid "Profile"
 msgstr "Profiel"
+
+msgid "Promote"
+msgstr "Promoten"
 
 msgid "Pronoun"
 msgstr "Voornaamwoord"
@@ -1556,6 +1580,9 @@ msgstr "Hulp nodig"
 msgid "New event"
 msgstr "Nieuw evenement"
 
+msgid "New guild"
+msgstr "Nieuwe gilde"
+
 msgid "No ticket"
 msgstr "Geen ticket"
 
@@ -1766,6 +1793,9 @@ msgstr "Paasei"
 msgid "Edit dates"
 msgstr "Data bewerken"
 
+msgid "Edit guild"
+msgstr "Gilde bewerken"
+
 msgid "Email list"
 msgstr "e-maillijst"
 
@@ -1780,6 +1810,9 @@ msgstr "Type evenement"
 
 msgid "Experience"
 msgstr "Ervaring"
+
+msgid "Guild logo"
+msgstr "Gildelogo"
 
 msgid "Historical"
 msgstr "Historisch"
@@ -2090,6 +2123,9 @@ msgstr "Vier quota"
 msgid "Gallery Pdf"
 msgstr "Pdf Galerij"
 
+msgid "Guild cover"
+msgstr "Omslag van Guild"
+
 msgid "In Progress"
 msgstr "In uitvoering"
 
@@ -2108,8 +2144,14 @@ msgstr "Termijn"
 msgid "Inventories"
 msgstr "Voorraden"
 
+msgid "Invite sent"
+msgstr "Uitnodiging verzonden"
+
 msgid "Last change"
 msgstr "Laatst gewijzigd"
+
+msgid "Leave guild"
+msgstr "De gilde verlaten"
 
 msgid "Lightweight"
 msgstr "Lichtgewicht"
@@ -2628,6 +2670,12 @@ msgstr "Fiscale begroting"
 msgid "Free donation"
 msgstr "Gratis donatie"
 
+msgid "Guild created"
+msgstr "Gilde aangemaakt"
+
+msgid "Guild updated"
+msgstr "Gilde bijgewerkt"
+
 msgid "Inflows total"
 msgstr "Totale inkomsten"
 
@@ -2917,14 +2965,23 @@ msgstr "Handtekening mail"
 msgid "Manage it here"
 msgstr "Beheer het hier"
 
+msgid "Manage members"
+msgstr "Leden beheren"
+
 msgid "Maximum length"
 msgstr "Maximale lengte"
 
 msgid "Maximum number"
 msgstr "Maximaal aantal"
 
+msgid "Member demoted"
+msgstr "Lid gedegradeerd"
+
 msgid "Member refused"
 msgstr "Lid geweigerd"
+
+msgid "Member removed"
+msgstr "Lid verwijderd"
 
 msgid "Member revoked"
 msgstr "Partner herroepen"
@@ -3148,11 +3205,17 @@ msgstr "Ongeldig verzoek"
 msgid "Inventory Types"
 msgstr "Voorraadsoorten"
 
+msgid "Invite declined"
+msgstr "Uitnodiging geweigerd"
+
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
 
 msgid "Maximum fillers"
 msgstr "Maximale vulstoffen"
+
+msgid "Maximum members"
+msgstr "Maximaal aantal leden"
 
 msgid "Member approved"
 msgstr "Lid goedgekeurd"
@@ -3399,6 +3462,9 @@ msgstr "Ontbrekende vraag"
 
 msgid "Multiple systems"
 msgstr "Meerdere systemen"
+
+msgid "My guild invites"
+msgstr "Mijn gilde nodigt je uit"
 
 msgid "Name of the plot"
 msgstr "Naam van het perceel"
@@ -3847,6 +3913,9 @@ msgstr "Evenement vaardigheden"
 msgid "Competences member"
 msgstr "Persoonlijke vaardigheden"
 
+msgid "Create a new guild"
+msgstr "Maak een nieuwe gilde aan"
+
 msgid "Delegated accounts"
 msgstr "Gedelegeerde accounts"
 
@@ -3865,6 +3934,9 @@ msgstr "Ervaringssystemen"
 msgid "First registration"
 msgstr "Eerste registratie"
 
+msgid "Founding character"
+msgstr "Hoofdpersonage"
+
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
@@ -3874,11 +3946,17 @@ msgstr "Historisch verblijf"
 msgid "Informations saved"
 msgstr "Informatie opgeslagen"
 
+msgid "Invite a character"
+msgstr "Nodig een personage uit"
+
 msgid "Member Data Checks"
 msgstr "Gegevens van leden controleren"
 
 msgid "Membership request"
 msgstr "Lidmaatschap aanvragen"
+
+msgid "My pending invites"
+msgstr "Mijn uitstaande uitnodigingen"
 
 msgid "Name of event area"
 msgstr "Naam evenementgebied"
@@ -3963,6 +4041,9 @@ msgstr "Vrijwilligers Register"
 
 msgid "Workspace selector"
 msgstr "Werkruimte selecteren"
+
+msgid "You left the guild"
+msgstr "Je bent uit het gilde gestapt"
 
 msgid "Your Organizations"
 msgstr "Uw organisaties"
@@ -4368,6 +4449,9 @@ msgstr "Wat je zult ontgrendelen"
 
 msgid "You are logged in as"
 msgstr "U bent aangemeld als"
+
+msgid "You joined the guild"
+msgstr "Je bent lid geworden van het gilde"
 
 msgid "Access your character"
 msgstr "Toegang tot je personage"
@@ -4801,6 +4885,9 @@ msgstr "De boekhouding van evenementen beheren"
 msgid "Manage experience rules"
 msgstr "Beheer ervaringsregels"
 
+msgid "Manage the event guilds"
+msgstr "Beheer de evenementengilden"
+
 msgid "Manage the event quests"
 msgstr "Beheer de event quests"
 
@@ -4913,6 +5000,9 @@ msgstr "Huidige platformversie"
 msgid "Disable character finder"
 msgstr "Tekenzoeker uitschakelen"
 
+msgid "Discover the game guilds"
+msgstr "Ontdek de gamegilden"
+
 msgid "Display all sent e-mails"
 msgstr "Alle verzonden e-mails weergeven"
 
@@ -4939,6 +5029,9 @@ msgstr "Gebied van het evenement beheren"
 
 msgid "Manages event's expenses"
 msgstr "Beheert de kosten van het evenement"
+
+msgid "Member promoted to admin"
+msgstr "Lid gepromoveerd tot beheerder"
 
 msgid "Membership approval date"
 msgstr "Datum goedkeuring lidmaatschap"
@@ -4985,6 +5078,9 @@ msgstr "Geheime registratiecode"
 
 msgid "Secret registration link"
 msgstr "Geheime registratie link"
+
+msgid "Select a valid character"
+msgstr "Kies een geldig teken"
 
 msgid "Target session not found"
 msgstr "Doelsessie niet gevonden"
@@ -5614,6 +5710,9 @@ msgstr "Duur in seconden (optioneel)"
 msgid "Invalid code, please try again"
 msgstr "Ongeldige code, probeer het opnieuw"
 
+msgid "Manage all guilds of the event"
+msgstr "Beheer alle gilden van het evenement"
+
 msgid "Manage characters of the event"
 msgstr "Beheer de personages van het evenement"
 
@@ -5706,6 +5805,9 @@ msgstr "Heb je dit gecontroleerd en klopt het"
 
 msgid "Discover the coming soon events"
 msgstr "Ontdek de evenementen die op stapel staan"
+
+msgid "Discover the guilds of the game"
+msgstr "Ontdek de gilden in het spel"
 
 msgid "Filter or search the characters"
 msgstr "Filter of zoek de tekens"
@@ -6040,6 +6142,9 @@ msgstr "Handmatig goedgekeurde betalingen verifiëren"
 msgid "You don't have any characters yet"
 msgstr "Je hebt nog geen personages"
 
+msgid "You have no pending guild invites"
+msgstr "Je hebt geen openstaande uitnodigingen voor gilden"
+
 msgid "You need to define the start date"
 msgstr "Je moet de begindatum bepalen"
 
@@ -6312,6 +6417,10 @@ msgstr "Vermeld het bedrag van je donatie"
 
 msgid "Indicates the details of the request"
 msgstr "Geeft de details van de claim aan"
+
+#, python-format
+msgid "Invited with character %(character)s"
+msgstr "Uitgenodigd met personage %(character)s"
 
 msgid "Manage prologue types for this event"
 msgstr "Beheer de proloogtypes voor dit evenement"
@@ -6619,6 +6728,9 @@ msgstr "Je bent uitgenodigd voor de functie"
 msgid "You must be an approved member to vote"
 msgstr "Je moet je lidmaatschapsgeld betalen om te kunnen stemmen"
 
+msgid "You need a character to create a guild"
+msgstr "Je hebt een personage nodig om een gilde op te richten"
+
 msgid "click on the icon to open the tutorial"
 msgstr "klik op het pictogram om de zelfstudie te openen"
 
@@ -6637,6 +6749,9 @@ msgstr "<b>%(number)s</b> tekens om goed te keuren"
 
 msgid "A description of the abilities involved"
 msgstr "Een beschrijving van de betrokken vaardigheden"
+
+msgid "Cannot kick the last admin of the guild"
+msgstr "Ik kan de laatste beheerder van de gilde niet eruit gooien"
 
 msgid "Character are not visible at the moment"
 msgstr "Karakters zijn momenteel niet zichtbaar"
@@ -6906,6 +7021,9 @@ msgstr "Authenticator-app succesvol geconfigureerd"
 
 msgid "Browser user agent string from the access"
 msgstr "Browser user agent string van de toegang"
+
+msgid "Cannot demote the last admin of the guild"
+msgstr "De laatste beheerder van het gilde kan niet worden gedegradeerd"
 
 msgid "Choice locked, click to make it available"
 msgstr "Keuze vergrendeld, klik om deze beschikbaar te maken"
@@ -7186,6 +7304,9 @@ msgstr "Er zijn nog geen tokens uitgegeven aan deelnemers"
 
 msgid "No workshop questions have been created yet"
 msgstr "Er zijn nog geen vragen voor de workshop aangemaakt"
+
+msgid "Now players can create guilds for the event"
+msgstr "Spelers kunnen nu gilden aanmaken voor het evenement"
 
 msgid "Now you can create milestones for the event"
 msgstr "Nu kun je mijlpalen voor het evenement aanmaken"
@@ -7997,6 +8118,9 @@ msgstr "Sommige functies vereisen 'Credits', die niet actief zijn"
 msgid "The first column the amount, the second the receipts"
 msgstr "De eerste kolom het bedrag, de tweede de ontvangsten"
 
+msgid "This guild has reached its maximum number of members"
+msgstr "Deze gilde heeft het maximale aantal leden bereikt"
+
 msgid "WARNING: deleted items might not be full recoverable"
 msgstr ""
 "WAARSCHUWING: verwijderde items kunnen mogelijk niet volledig worden "
@@ -8473,6 +8597,9 @@ msgstr ""
 msgid "Manage the answer options available for workshop questions"
 msgstr "De antwoordopties voor workshopvragen beheren"
 
+msgid "Maximum number of guilds players can create (0 = no limit)"
+msgstr "Maximaal aantal gilden dat spelers kunnen aanmaken (0 = geen limiet)"
+
 msgid "No contributors with competences found in the organization"
 msgstr ""
 "Er zijn geen medewerkers met de benodigde vaardigheden gevonden binnen de "
@@ -8494,6 +8621,9 @@ msgstr "Schrijf je in voor het evenement, of pas je inschrijvingsopties aan"
 
 msgid "There are no open questions from participants at this time"
 msgstr "Er zijn op dit moment geen open vragen van deelnemers"
+
+msgid "This character is already a member or has a pending invite"
+msgstr "Dit personage is al lid of er hangt een uitnodiging open"
 
 msgid "This contributor has not self-assessed any competences yet"
 msgstr "Deze medewerker heeft nog geen competenties zelf beoordeeld"
@@ -8542,6 +8672,9 @@ msgstr ""
 
 msgid "Manage the selectable options for a character form question"
 msgstr "De beschikbare opties voor een meerkeuzevraag beheren"
+
+msgid "Maximum number of accepted members per guild (0 = no limit)"
+msgstr "Maximaal aantal toegelaten leden per gilde (0 = geen limiet)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -8661,6 +8794,9 @@ msgstr "Er zijn voor dit evenement nog geen afbetalingsplannen ingesteld"
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr "De onkostendeclaraties van medewerkers controleren en goedkeuren"
 
+msgid "The maximum number of guilds for this event has been reached"
+msgstr "Het maximum aantal gilden voor dit evenement is bereikt"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Dit personage is inactief en kan niet worden toegewezen aan spelers"
 
@@ -8779,6 +8915,9 @@ msgid "View the full content of an archived email sent by the system"
 msgstr ""
 "Bekijk de volledige inhoud van een gearchiveerde e-mail die door het systeem"
 " is verzonden"
+
+msgid "You are the last admin: promote another member before leaving"
+msgstr "Jij bent de laatste beheerder: benoem nog een lid voordat je vertrekt"
 
 msgid "You must complete payment of membership dues in order to vote"
 msgstr "Je moet je lidmaatschapsgeld betalen om te kunnen stemmen"
@@ -9568,6 +9707,10 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Je kunt de volgende velden gebruiken, ze worden automatisch ingevuld"
+
+#, python-format
+msgid "Your character %(character)s has been removed from the guild %(guild)s"
+msgstr "Je personage %(character)s is uit het gilde %(guild)s verwijderd"
 
 msgid "Your payment has been received and is being verified by the organizers"
 msgstr ""
@@ -10747,6 +10890,13 @@ msgstr ""
 "%(deadline)d dagen"
 
 msgid ""
+"Choose which of your characters will found this guild and become its first "
+"admin"
+msgstr ""
+"Kies welk personage van jou dit gilde gaat oprichten en de eerste beheerder "
+"wordt"
+
+msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -11097,6 +11247,14 @@ msgid ""
 msgstr ""
 "Bewijs afgegeven door de bank als bewijs van de overschrijving (als pdf-"
 "bestand)"
+
+#, python-format
+msgid ""
+"You have been invited to join the guild %(guild)s with your character "
+"%(character)s"
+msgstr ""
+"Je bent uitgenodigd om met je personage %(character)s lid te worden van het "
+"gilde %(guild)s"
 
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
@@ -12164,6 +12322,13 @@ msgid ""
 msgstr ""
 "Hiermee kun je een 'belastingpercentage' op evenementeninkomsten instellen "
 "dat opzij moet worden gezet voor de organisatie"
+
+msgid ""
+"Enables 'Guilds', player-created groups of characters with a self-managed "
+"admin, invite and text"
+msgstr ""
+"Schakelt ‘Gilden’ in: door spelers opgerichte groepen personages met een "
+"eigen beheerder, uitnodigingsfunctie en chat"
 
 #, python-format
 msgid ""
@@ -14098,6 +14263,15 @@ msgstr ""
 "Door deze uitnodiging te accepteren, worden je profielgegevens (naam, e-mail"
 " en andere informatie die je hebt verstrekt) gedeeld met deze organisatie "
 "via het LarpManager platform"
+
+msgid ""
+"Select from the drop-down list the characters to be added to the guild. "
+"Players can also create guilds themselves, invite characters and manage "
+"membership from the event page"
+msgstr ""
+"Kies uit de vervolgkeuzelijst de personages die je aan de gilde wilt "
+"toevoegen. Spelers kunnen ook zelf gildes aanmaken, personages uitnodigen en"
+" het lidmaatschap beheren via de evenementpagina"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

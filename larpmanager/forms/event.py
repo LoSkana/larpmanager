@@ -349,6 +349,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_char_form()
         self.set_config_custom()
         self.set_config_casting()
+        self.set_config_guild()
 
         # 5. Miscellanea
         self.set_config_accounting()
@@ -877,6 +878,19 @@ class OrgaConfigForm(ConfigForm):
                 character_approval_label,
                 character_approval_help_text,
             )
+
+    def set_config_guild(self) -> None:
+        """Configure guild-related form fields for event settings."""
+        if "guild" in self.params["features"]:
+            self.set_section("guild", _("Guilds"))
+
+            max_number_label = _("Maximum number")
+            max_number_help_text = _("Maximum number of guilds players can create (0 = no limit)")
+            self.add_configs("guild_max_number", ConfigType.INT, max_number_label, max_number_help_text)
+
+            max_members_label = _("Maximum members")
+            max_members_help_text = _("Maximum number of accepted members per guild (0 = no limit)")
+            self.add_configs("guild_max_members", ConfigType.INT, max_members_label, max_members_help_text)
 
     def set_config_custom(self) -> None:
         """Configure character customization form fields for event settings."""
@@ -2176,7 +2190,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             self.character_configs(extra_config_options)
 
         # Add characters field for faction and plot sections
-        elif writing_section[0] in ["faction", "plot"]:
+        elif writing_section[0] in ["faction", "guild", "plot"]:
             extra_config_options.append(("characters", _("Characters")))
 
         # Add traits field for quest and trait sections

@@ -726,6 +726,36 @@ urlpatterns = [
         name="orga_factions_versions",
     ),
     path(
+        "<slug:event_slug>/manage/guilds/",
+        views_ow.orga_guilds,
+        name="orga_guilds",
+    ),
+    path(
+        "<slug:event_slug>/manage/guilds/<slug:guild_uuid>/view/",
+        views_ow.orga_guilds_view,
+        name="orga_guilds_view",
+    ),
+    path(
+        "<slug:event_slug>/manage/guilds/new/",
+        views_ow.orga_guilds_new,
+        name="orga_guilds_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/guilds/<slug:guild_uuid>/edit/",
+        views_ow.orga_guilds_edit,
+        name="orga_guilds_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/guilds/<slug:guild_uuid>/delete/",
+        views_ow.orga_guilds_delete,
+        name="orga_guilds_delete",
+    ),
+    path(
+        "<slug:event_slug>/manage/guilds/<slug:guild_uuid>/versions/",
+        views_ow.orga_guilds_versions,
+        name="orga_guilds_versions",
+    ),
+    path(
         "<slug:event_slug>/manage/factions/<slug:faction_uuid>/pdf/sheet/",
         views_op.orga_factions_sheet_pdf,
         name="orga_factions_sheet_pdf",

@@ -170,6 +170,9 @@ msgstr "Info"
 msgid "Item"
 msgstr "Kohde"
 
+msgid "Kick"
+msgstr "Potku"
+
 msgid "LAOG"
 msgstr "LAOG"
 
@@ -399,6 +402,9 @@ msgstr "Kaavio"
 msgid "Gross"
 msgstr "Brutto"
 
+msgid "Guild"
+msgstr "Kilta"
+
 msgid "Hotel"
 msgstr "Hotelli"
 
@@ -544,6 +550,9 @@ msgstr "nopea"
 msgid "Absent"
 msgstr "Poissa"
 
+msgid "Accept"
+msgstr "Hyväksy"
+
 msgid "Action"
 msgstr "Toiminta"
 
@@ -586,6 +595,9 @@ msgstr "Luo"
 msgid "Delete"
 msgstr "Poista"
 
+msgid "Demote"
+msgstr "Alentaa"
+
 msgid "Detail"
 msgstr "Yksityiskohta"
 
@@ -627,6 +639,9 @@ msgstr "Ystävä"
 
 msgid "Gender"
 msgstr "Sukupuoli"
+
+msgid "Guilds"
+msgstr "Killat"
 
 msgid "Header"
 msgstr "Otsikko"
@@ -874,6 +889,9 @@ msgstr "Luotu"
 msgid "Credits"
 msgstr "Krediitit"
 
+msgid "Decline"
+msgstr "Lasku"
+
 msgid "Default"
 msgstr "Oletusarvo"
 
@@ -915,6 +933,9 @@ msgstr "Tulot"
 
 msgid "Inverse"
 msgstr "Käänteinen"
+
+msgid "Invited"
+msgstr "Kutsuttu"
 
 msgid "Invoice"
 msgstr "Lasku"
@@ -981,6 +1002,9 @@ msgstr "Jatka"
 
 msgid "Profile"
 msgstr "Profiili"
+
+msgid "Promote"
+msgstr "Mainosta"
 
 msgid "Pronoun"
 msgstr "Pronomini"
@@ -1556,6 +1580,9 @@ msgstr "Tarvitsen apua"
 msgid "New event"
 msgstr "Uusi tapahtuma"
 
+msgid "New guild"
+msgstr "Uusi kilta"
+
 msgid "No ticket"
 msgstr "Ei lippua"
 
@@ -1766,6 +1793,9 @@ msgstr "Pääsiäismuna"
 msgid "Edit dates"
 msgstr "Muokkaa päivämääriä"
 
+msgid "Edit guild"
+msgstr "Muokkaa kiltaa"
+
 msgid "Email list"
 msgstr "Sähköpostilista"
 
@@ -1780,6 +1810,9 @@ msgstr "Tapahtuman tyyppi"
 
 msgid "Experience"
 msgstr "Kokemus"
+
+msgid "Guild logo"
+msgstr "Killan logo"
 
 msgid "Historical"
 msgstr "Historiallinen"
@@ -2090,6 +2123,9 @@ msgstr "Neljä kiintiötä"
 msgid "Gallery Pdf"
 msgstr "Galleria Pdf"
 
+msgid "Guild cover"
+msgstr "Killan kansikuva"
+
 msgid "In Progress"
 msgstr "Käynnissä"
 
@@ -2108,8 +2144,14 @@ msgstr "Osamaksu"
 msgid "Inventories"
 msgstr "Vaihto-omaisuus"
 
+msgid "Invite sent"
+msgstr "Kutsu lähetetty"
+
 msgid "Last change"
 msgstr "Viimeisin muutos"
+
+msgid "Leave guild"
+msgstr "Poistu kilta"
 
 msgid "Lightweight"
 msgstr "Kevyt"
@@ -2628,6 +2670,12 @@ msgstr "Talousarvio"
 msgid "Free donation"
 msgstr "Ilmainen lahjoitus"
 
+msgid "Guild created"
+msgstr "Kilta perustettu"
+
+msgid "Guild updated"
+msgstr "Killan tiedot päivitetty"
+
 msgid "Inflows total"
 msgstr "Tulot yhteensä"
 
@@ -2917,14 +2965,23 @@ msgstr "Postin allekirjoitus"
 msgid "Manage it here"
 msgstr "Hallitse sitä täällä"
 
+msgid "Manage members"
+msgstr "Jäsenten hallinta"
+
 msgid "Maximum length"
 msgstr "Enimmäispituus"
 
 msgid "Maximum number"
 msgstr "Enimmäismäärä"
 
+msgid "Member demoted"
+msgstr "Jäsen alennettiin"
+
 msgid "Member refused"
 msgstr "Jäsen kieltäytyi"
+
+msgid "Member removed"
+msgstr "Jäsen poistettu"
 
 msgid "Member revoked"
 msgstr "Jäsenyys peruutettu"
@@ -3148,11 +3205,17 @@ msgstr "Virheellinen pyyntö"
 msgid "Inventory Types"
 msgstr "Varastotyypit"
 
+msgid "Invite declined"
+msgstr "Kutsu hylätty"
+
 msgid "Mail assignment"
 msgstr "Postin osoittaminen"
 
 msgid "Maximum fillers"
 msgstr "Suurin mahdollinen määrä täytehahmoja"
+
+msgid "Maximum members"
+msgstr "Jäsenten enimmäismäärä"
 
 msgid "Member approved"
 msgstr "Jäsen hyväksytty"
@@ -3399,6 +3462,9 @@ msgstr "Puuttuva kysymys"
 
 msgid "Multiple systems"
 msgstr "Useita järjestelmiä"
+
+msgid "My guild invites"
+msgstr "Killani lähettää kutsuja"
 
 msgid "Name of the plot"
 msgstr "Juonen nimi"
@@ -3847,6 +3913,9 @@ msgstr "Osaamistapahtumat"
 msgid "Competences member"
 msgstr "Toimivaltainen jäsen"
 
+msgid "Create a new guild"
+msgstr "Luo uusi kilta"
+
 msgid "Delegated accounts"
 msgstr "Valtuutetut tilit"
 
@@ -3865,6 +3934,9 @@ msgstr "Kokemusjärjestelmät"
 msgid "First registration"
 msgstr "Ensimmäinen rekisteröinti"
 
+msgid "Founding character"
+msgstr "Perustajahahmo"
+
 msgid "Hide not available"
 msgstr "Piilota ei saatavilla"
 
@@ -3874,11 +3946,17 @@ msgstr "Historiallinen asuinpaikka"
 msgid "Informations saved"
 msgstr "Tallennetut tiedot"
 
+msgid "Invite a character"
+msgstr "Kutsu hahmo"
+
 msgid "Member Data Checks"
 msgstr "Jäsentietojen tarkistukset"
 
 msgid "Membership request"
 msgstr "Jäsenyyspyyntö"
+
+msgid "My pending invites"
+msgstr "Odottavat kutsuni"
 
 msgid "Name of event area"
 msgstr "Tapahtuma-alueen nimi"
@@ -3963,6 +4041,9 @@ msgstr "Vapaaehtoisten rekisteri"
 
 msgid "Workspace selector"
 msgstr "Työtilan valitsin"
+
+msgid "You left the guild"
+msgstr "Poistuit kilta"
 
 msgid "Your Organizations"
 msgstr "Organisaationne"
@@ -4368,6 +4449,9 @@ msgstr "Mitä avaat"
 
 msgid "You are logged in as"
 msgstr "Olet kirjautunut sisään nimellä"
+
+msgid "You joined the guild"
+msgstr "Liityit kiltaan"
 
 msgid "Access your character"
 msgstr "Pääset hahmoosi"
@@ -4801,6 +4885,9 @@ msgstr "Hallitse tapahtuman kirjanpitoa"
 msgid "Manage experience rules"
 msgstr "Hallitse kokemussääntöjä"
 
+msgid "Manage the event guilds"
+msgstr "Hallinnoi tapahtumagildejä"
+
 msgid "Manage the event quests"
 msgstr "Hallitse tapahtuman tehtäviä"
 
@@ -4913,6 +5000,9 @@ msgstr "Nykyinen alustaversio"
 msgid "Disable character finder"
 msgstr "Poista hahmonetsintä käytöstä"
 
+msgid "Discover the game guilds"
+msgstr "Tutustu pelikiltoihin"
+
 msgid "Display all sent e-mails"
 msgstr "Näytä kaikki lähetetyt sähköpostit"
 
@@ -4939,6 +5029,9 @@ msgstr "Tapahtuma-alueen hallinta"
 
 msgid "Manages event's expenses"
 msgstr "Hallinnoi tapahtuman kuluja"
+
+msgid "Member promoted to admin"
+msgstr "Jäsen ylennettiin ylläpitäjäksi"
 
 msgid "Membership approval date"
 msgstr "Jäsenyyden hyväksymispäivä"
@@ -4985,6 +5078,9 @@ msgstr "Salainen ilmoittautumiskoodi"
 
 msgid "Secret registration link"
 msgstr "Salainen ilmoittautumislinkki"
+
+msgid "Select a valid character"
+msgstr "Valitse kelvollinen merkki"
 
 msgid "Target session not found"
 msgstr "Kohdeistuntoa ei löydy"
@@ -5614,6 +5710,9 @@ msgstr "Kesto sekunteina (valinnainen)"
 msgid "Invalid code, please try again"
 msgstr "Virheellinen koodi, yritä uudelleen"
 
+msgid "Manage all guilds of the event"
+msgstr "Hallinnoi kaikkia tapahtuman kiltoja"
+
 msgid "Manage characters of the event"
 msgstr "Hallitse tapahtuman hahmoja"
 
@@ -5706,6 +5805,9 @@ msgstr "Tarkistitko ja onko se oikein"
 
 msgid "Discover the coming soon events"
 msgstr "Tutustu tuleviin tapahtumiin"
+
+msgid "Discover the guilds of the game"
+msgstr "Tutustu pelin kiltoihin"
 
 msgid "Filter or search the characters"
 msgstr "Suodata tai etsiä merkkejä"
@@ -6040,6 +6142,9 @@ msgstr "Tarkista manuaalisesti hyväksytyt maksut"
 msgid "You don't have any characters yet"
 msgstr "Sinulla ei ole vielä yhtään hahmoa"
 
+msgid "You have no pending guild invites"
+msgstr "Sinulla ei ole odottavia kilta-kutsuja"
+
 msgid "You need to define the start date"
 msgstr "Sinun on määriteltävä aloituspäivä"
 
@@ -6311,6 +6416,10 @@ msgstr "Ilmoita lahjoituksesi määrä"
 
 msgid "Indicates the details of the request"
 msgstr "Ilmoittaa pyynnön yksityiskohdat"
+
+#, python-format
+msgid "Invited with character %(character)s"
+msgstr "Kutsuttu hahmon %(character)s kanssa"
 
 msgid "Manage prologue types for this event"
 msgstr "Hallitse tämän tapahtuman prologityyppejä"
@@ -6612,6 +6721,9 @@ msgstr "Sinut on kutsuttu tehtävään"
 msgid "You must be an approved member to vote"
 msgstr "Sinun on maksettava jäsenmaksusi, jotta voit äänestää"
 
+msgid "You need a character to create a guild"
+msgstr "Killan perustamiseen tarvitaan hahmo"
+
 msgid "click on the icon to open the tutorial"
 msgstr "klikkaa kuvaketta avataksesi opetusohjelman"
 
@@ -6630,6 +6742,9 @@ msgstr "<b>%(number)s</b> hyväksyttävät merkit"
 
 msgid "A description of the abilities involved"
 msgstr "Kuvaus kyseessä olevista kyvyistä"
+
+msgid "Cannot kick the last admin of the guild"
+msgstr "Killan viimeistä ylläpitäjää ei voi poistaa"
 
 msgid "Character are not visible at the moment"
 msgstr "Hahmot eivät näy tällä hetkellä"
@@ -6899,6 +7014,9 @@ msgstr "Todentajasovellus määritetty onnistuneesti"
 
 msgid "Browser user agent string from the access"
 msgstr "Selaimen käyttäjäagentti merkkijono käyttöoikeudesta"
+
+msgid "Cannot demote the last admin of the guild"
+msgstr "Killan viimeistä ylläpitäjää ei voi alentaa alemmalle tasolle"
 
 msgid "Choice locked, click to make it available"
 msgstr "Valinta lukittu, klikkaa saadaksesi sen käyttöön"
@@ -7178,6 +7296,9 @@ msgstr "Osallistujille ei ole vielä jaettu poletteja"
 
 msgid "No workshop questions have been created yet"
 msgstr "Työpajakysymyksiä ei ole vielä luotu"
+
+msgid "Now players can create guilds for the event"
+msgstr "Nyt pelaajat voivat perustaa kiltoja tapahtumaa varten"
 
 msgid "Now you can create milestones for the event"
 msgstr "Nyt voit luoda virstanpylväitä tapahtumalle"
@@ -7976,6 +8097,9 @@ msgstr "Jotkin ominaisuudet vaativat 'Credits', joka ei ole aktiivinen"
 msgid "The first column the amount, the second the receipts"
 msgstr "Ensimmäisessä sarakkeessa määrä, toisessa kuitit"
 
+msgid "This guild has reached its maximum number of members"
+msgstr "Tämän kilta on saavuttanut jäsenmäärän ylärajan"
+
 msgid "WARNING: deleted items might not be full recoverable"
 msgstr "VAROITUS: poistettuja kohteita ei ehkä voida palauttaa kokonaan"
 
@@ -8428,6 +8552,9 @@ msgstr "Hallinnoi tapahtuman aikana osallistujien ilmoittamia ongelmia"
 msgid "Manage the answer options available for workshop questions"
 msgstr "Hallitse työpajan kysymyksiin tarjolla olevia vastausvaihtoehtoja"
 
+msgid "Maximum number of guilds players can create (0 = no limit)"
+msgstr "Pelaajien luotavien kiltojen enimmäismäärä (0 = ei rajoitusta)"
+
 msgid "No contributors with competences found in the organization"
 msgstr "Organisaatiosta ei löytynyt päteviä tekijöitä"
 
@@ -8445,6 +8572,9 @@ msgstr "Ilmoittaudu tapahtumaan tai päivitä ilmoittautumisasetuksesi"
 
 msgid "There are no open questions from participants at this time"
 msgstr "Tällä hetkellä osallistujilta ei ole esitetty avoimia kysymyksiä"
+
+msgid "This character is already a member or has a pending invite"
+msgstr "Tämä hahmo on jo jäsen tai hänellä on odottava kutsu"
 
 msgid "This contributor has not self-assessed any competences yet"
 msgstr ""
@@ -8491,6 +8621,10 @@ msgstr "Tapahtuma-asetusten hallinta: nimi, kuvaus, päivämäärät, tila"
 
 msgid "Manage the selectable options for a character form question"
 msgstr "Hallitse valittavia vaihtoehtoja hahmomuotoisessa kysymyksessä"
+
+msgid "Maximum number of accepted members per guild (0 = no limit)"
+msgstr ""
+"Kunkin kiltaan hyväksyttävien jäsenten enimmäismäärä (0 = ei rajoitusta)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -8607,6 +8741,9 @@ msgstr ""
 "Yhteistyökumppaneiden toimittamien kulukorvaushakemusten tarkastaminen ja "
 "hyväksyminen"
 
+msgid "The maximum number of guilds for this event has been reached"
+msgstr "Tämän tapahtuman kiltojen enimmäismäärä on saavutettu"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tämä hahmo on inaktiivinen, eikä sitä voi antaa pelaajille"
 
@@ -8716,6 +8853,11 @@ msgid "View the full content of an archived email sent by the system"
 msgstr ""
 "Tarkastele järjestelmän lähettämän arkistoidun sähköpostiviestin koko "
 "sisältöä"
+
+msgid "You are the last admin: promote another member before leaving"
+msgstr ""
+"Olet viimeinen järjestelmänvalvoja: nimeä toinen jäsen "
+"järjestelmänvalvojaksi ennen poistumistasi"
 
 msgid "You must complete payment of membership dues in order to vote"
 msgstr "Sinun on maksettava jäsenmaksusi, jotta voit äänestää"
@@ -9445,6 +9587,10 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Voit käyttää seuraavia kenttiä, ne täytetään automaattisesti"
+
+#, python-format
+msgid "Your character %(character)s has been removed from the guild %(guild)s"
+msgstr "Hahmosi %(character)s on poistettu kilta %(guild)s:sta"
 
 msgid "Your payment has been received and is being verified by the organizers"
 msgstr "Maksusi on vastaanotettu, ja järjestäjät tarkistavat sitä parhaillaan"
@@ -10551,6 +10697,13 @@ msgstr ""
 "päivän kuluessa"
 
 msgid ""
+"Choose which of your characters will found this guild and become its first "
+"admin"
+msgstr ""
+"Valitse, kuka hahmoistasi perustaa tämän kilta ja tulee sen ensimmäiseksi "
+"ylläpitäjäksi"
+
+msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10891,6 +11044,13 @@ msgid ""
 "pdf file)"
 msgstr ""
 "Pankin antama tiliote todisteena tilisiirron myöntämisestä (pdf-tiedostona)"
+
+#, python-format
+msgid ""
+"You have been invited to join the guild %(guild)s with your character "
+"%(character)s"
+msgstr ""
+"Sinut on kutsuttu liittymään %(guild)s-kiltaan hahmollasi %(character)s"
 
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
@@ -11940,6 +12100,13 @@ msgid ""
 msgstr ""
 "Voit asettaa tapahtuman tuloista veroprosentin, joka on varattava "
 "organisaatiolle"
+
+msgid ""
+"Enables 'Guilds', player-created groups of characters with a self-managed "
+"admin, invite and text"
+msgstr ""
+"Ottaa käyttöön ”kilat” eli pelaajien luomat hahmoryhmät, joilla on oma "
+"hallinnoija sekä kutsu- ja viestitoiminnot"
 
 #, python-format
 msgid ""
@@ -13842,6 +14009,15 @@ msgstr ""
 "Hyväksymällä tämän kutsun profiilitietosi (nimi, sähköpostiosoite ja muut "
 "antamasi tiedot) jaetaan tämän organisaation kanssa LarpManager-alustan "
 "kautta"
+
+msgid ""
+"Select from the drop-down list the characters to be added to the guild. "
+"Players can also create guilds themselves, invite characters and manage "
+"membership from the event page"
+msgstr ""
+"Valitse avattavasta luettelosta hahmot, jotka haluat lisätä kiltaan. "
+"Pelaajat voivat myös perustaa itse kiltoja, kutsua hahmoja ja hallinnoida "
+"jäsenyyttä tapahtumasivulta"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

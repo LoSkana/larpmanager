@@ -27,6 +27,8 @@ from larpmanager.admin.character import PlotFilter
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.writing import (
     Faction,
+    Guild,
+    GuildMembership,
     Handout,
     HandoutTemplate,
     Plot,
@@ -76,6 +78,26 @@ class FactionAdmin(DefModelAdmin):
     list_filter: ClassVar[tuple] = (EventFilter,)
     autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]
     search_fields: ClassVar[list] = ["id", "name", "uuid"]
+
+
+@admin.register(Guild)
+class GuildAdmin(DefModelAdmin):
+    """Admin interface for Guild model."""
+
+    list_display: ClassVar[tuple] = ("id", "name", "event", "number", "uuid")
+    list_filter: ClassVar[tuple] = (EventFilter,)
+    autocomplete_fields: ClassVar[list] = ["characters", "event", "progress", "assigned"]
+    search_fields: ClassVar[list] = ["id", "name", "uuid"]
+
+
+@admin.register(GuildMembership)
+class GuildMembershipAdmin(DefModelAdmin):
+    """Admin interface for GuildMembership model."""
+
+    list_display: ClassVar[tuple] = ("id", "guild", "character", "role", "status")
+    list_filter: ClassVar[tuple] = ("role", "status")
+    autocomplete_fields: ClassVar[list] = ["guild", "character"]
+    search_fields: ClassVar[list] = ["id", "guild__name", "character__name"]
 
 
 @admin.register(Trait)
