@@ -44,7 +44,14 @@ from larpmanager.models.form import (
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.utils import strip_tags
-from larpmanager.models.writing import Character, FactionType, PlotCharacterRel, Relationship
+from larpmanager.models.writing import (
+    Character,
+    FactionType,
+    Guild,
+    GuildMembershipStatus,
+    PlotCharacterRel,
+    Relationship,
+)
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.core.exceptions import NotFoundError
@@ -257,6 +264,8 @@ def get_character_sheet(context: dict) -> None:
     get_character_sheet_fields(context)
 
     get_character_sheet_factions(context)
+
+    get_character_sheet_guilds(context)
 
     get_character_sheet_plots(context)
 
@@ -525,6 +534,96 @@ def _get_factions_answers_choices(context: dict, fields_data: dict, faction_ids:
                 faction_answers_map[faction_id][question__uuid] = []
             faction_answers_map[faction_id][question__uuid].append(option_id)
     return faction_answers_map
+
+
+def get_character_sheet_guilds(context: dict, *, only_visible: bool = False) -> None:
+    """Retrieve and process guild data for character sheet display.
+
+    Fetches guilds the character has an accepted membership in, along with
+    their writing answers and choices, then adds the processed data to the
+    context for rendering.
+
+    Args:
+        context: Context dictionary containing character, event, features, and other
+             rendering data. Modified in-place to add 'sheet_guilds' key.
+        only_visible: Whether to include only visible fields. Defaults to False.
+
+    Returns:
+        None: Function modifies context dictionary in-place.
+
+    """
+    if "guild" not in context["features"]:
+        return
+
+    guild_event = context["event"].get_class_parent("guild")
+    all_guilds = {}
+    accepted_guilds = (
+        Guild.objects.filter(
+            event=guild_event,
+            memberships__character=context["character"],
+            memberships__status=GuildMembershipStatus.ACCEPTED,
+        )
+        .order_by("order")
+        .distinct()
+    )
+    for guild in accepted_guilds:
+        all_guilds[guild.id] = guild.show_complete()
+
+    context["sheet_guilds"] = []
+
+    fields_data = visible_writing_fields(context, QuestionApplicable.GUILD, only_visible=only_visible)
+
+    guild_ids = list(all_guilds.keys())
+    guild_answers_map = _get_guilds_answers_choices(context, fields_data, guild_ids)
+
+    for guild_id, guild_data in all_guilds.items():
+        if not guild_data:
+            continue
+
+        guild_writing_fields = guild_answers_map.get(guild_id, {})
+        questions = fields_data.get("questions", {})
+        guild_data.update(
+            {
+                "questions": questions,
+                "options": fields_data.get("options", {}),
+                "fields": guild_writing_fields,
+                "only_text": not any(q.get("typ") == "e" for q in questions.values()),
+            },
+        )
+
+        context["sheet_guilds"].append(guild_data)
+
+
+def _get_guilds_answers_choices(context: dict, fields_data: dict, guild_ids: list) -> dict:
+    """Build comprehensive answer mapping: guild_id -> {question_id -> text/choices}."""
+    visible_question_ids = []
+    if "questions" in fields_data:
+        for question_id in fields_data["questions"]:
+            question_config_key = str(question_id)
+            if "show_all" not in context and question_config_key not in context.get("show_guild", {}):
+                continue
+            visible_question_ids.append(question_id)
+
+    guild_answers_map = {}
+    if visible_question_ids:
+        for guild_id, question__uuid, answer_text in WritingAnswer.objects.filter(
+            element_id__in=guild_ids,
+            question__uuid__in=visible_question_ids,
+        ).values_list("element_id", "question__uuid", "text"):
+            if guild_id not in guild_answers_map:
+                guild_answers_map[guild_id] = {}
+            guild_answers_map[guild_id][question__uuid] = answer_text
+
+        for guild_id, question__uuid, option_id in WritingChoice.objects.filter(
+            element_id__in=guild_ids,
+            question__uuid__in=visible_question_ids,
+        ).values_list("element_id", "question__uuid", "option_id"):
+            if guild_id not in guild_answers_map:
+                guild_answers_map[guild_id] = {}
+            if question__uuid not in guild_answers_map[guild_id]:
+                guild_answers_map[guild_id][question__uuid] = []
+            guild_answers_map[guild_id][question__uuid].append(option_id)
+    return guild_answers_map
 
 
 def get_character_sheet_fields(context: dict) -> None:

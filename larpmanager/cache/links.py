@@ -118,6 +118,7 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
 
     # Visible runs for v22 topbar (public upcoming events)
     navigation_context["visible_runs"] = _get_visible_runs(association_id)
+    navigation_context["visible_runs_slugs"] = {vrun["slug"] for vrun in navigation_context["visible_runs"]}
 
     return navigation_context
 

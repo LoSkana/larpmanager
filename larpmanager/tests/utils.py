@@ -26,7 +26,7 @@ import time
 import zipfile
 from pathlib import Path
 from typing import Any, NoReturn
-from urllib.parse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 import pandas as pd
 from playwright.sync_api import Error as PlaywrightError, expect
@@ -118,8 +118,10 @@ def go_to_check(page: Any, path: Any) -> None:
     page.goto(path)
     _wait_lm_ready(page)
     body_class = page.locator("body").get_attribute("class") or ""
-    url_path = urlparse(page.url).path.rstrip("/")
-    if "manage" in body_class and not url_path.endswith("/manage"):
+    parsed = urlparse(page.url)
+    url_path = parsed.path.rstrip("/")
+    has_frame = "frame" in parse_qs(parsed.query)
+    if "manage" in body_class and not url_path.endswith("/manage") and not has_frame:
         info = page.locator("#info_bar #info")
         assert info.count() > 0, f"#info_bar #info missing on {page.url}"
         assert info.inner_text().strip(), f"#info_bar #info empty on {page.url}"
@@ -336,6 +338,11 @@ def save_modal(page: any, frame: Any) -> None:
         timeout=LONG_TIMEOUT,
     )
     page.locator("#lm-modal").wait_for(state="hidden")
+
+def confirm_modal(page: Any) -> None:
+    """Open the confirmation modal and confirm."""
+    frame = get_modal_iframe(page)
+    save_modal(page, frame)
 
 
 def delete_modal(page: Any, trash_locator: Any = None, name: str = None) -> None:

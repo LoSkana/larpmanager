@@ -1,0 +1,20 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    Please choose
+{% endblock maintitle %}
+{% block landing_title %}
+    Please choose
+{% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>
+        <i>Please choose the {{ name }} you'd like to be redirected to</i>
+    </p>
+{% endblock landing_subtitle %}
+{% block landing_content %}
+    <form class="contact-form" action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <input class="btn btn-primary" type="submit" id="id_submit" value="Confirm">
+    </form>
+{% endblock landing_content %}

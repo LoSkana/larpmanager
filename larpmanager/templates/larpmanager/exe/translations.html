@@ -4,7 +4,7 @@
     {% trans "Translations" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="text" class="go_datatable">
         <thead>
             <tr>
@@ -45,4 +45,5 @@
             {% trans "No custom translations defined yet" %}. {% trans "Add a translation to override default interface strings for a specific language" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

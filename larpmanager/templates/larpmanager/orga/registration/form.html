@@ -7,7 +7,7 @@
     {{ page_info }}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     {% define "-1" as old_section %}
     {% for el in list %}
         {% if el.section != old_section %}
@@ -105,4 +105,5 @@
         {% trans "No registration form questions have been created yet" %}. {% trans "Use the button above to add questions to the registration form" %}.
     </p>
 {% endif %}
+{% include "elements/table/footer.html" %}
 {% endblock content %}

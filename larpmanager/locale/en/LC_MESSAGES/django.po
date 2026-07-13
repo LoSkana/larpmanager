@@ -188,6 +188,9 @@ msgstr ""
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
 
+msgid "Description"
+msgstr ""
+
 msgid "Collections"
 msgstr ""
 
@@ -239,9 +242,6 @@ msgstr ""
 msgid ""
 "Percentage to be retained by the payment system - enter the value as a "
 "number, without the percentage symbol"
-msgstr ""
-
-msgid "Description"
 msgstr ""
 
 msgid "Fee"
@@ -1047,7 +1047,7 @@ msgstr ""
 msgid "Abilities"
 msgstr ""
 
-msgid "Delivery"
+msgid "Award"
 msgstr ""
 
 msgid "Manage the questions displayed in the character writing form"
@@ -1540,10 +1540,10 @@ msgstr ""
 
 msgid ""
 "If checked, enables managing multiple experience systems for the event. Each "
-"ability and delivery can be assigned to a specific system."
+"ability and award can be assigned to a specific system."
 msgstr ""
 
-msgid "Player editor"
+msgid "Character creation"
 msgstr ""
 
 msgid "Maximum number"
@@ -1556,6 +1556,18 @@ msgid "Approval"
 msgstr ""
 
 msgid "If checked, activates a staff-managed approval process for characters"
+msgstr ""
+
+msgid "Guilds"
+msgstr ""
+
+msgid "Maximum number of guilds players can create (0 = no limit)"
+msgstr ""
+
+msgid "Maximum members"
+msgstr ""
+
+msgid "Maximum number of accepted members per guild (0 = no limit)"
 msgstr ""
 
 msgid "Character customisation"
@@ -1808,34 +1820,51 @@ msgid ""
 "Edit the dates, status, and registration settings for this event session"
 msgstr ""
 
-msgid "Not visible to users"
+msgid ""
+"The event is in preparation: hidden from the homepage and calendar, only "
+"staff and already registered participants can access it"
 msgstr ""
 
-msgid "Visible in the homepage"
+msgid ""
+"The event is published: listed in the homepage and calendar, visible to all "
+"users"
 msgstr ""
 
-msgid "Concluded and archived"
+msgid ""
+"The event has taken place: archived among past events, registrations are "
+"frozen"
 msgstr ""
 
-msgid "Not active anymore"
+msgid ""
+"The event will not take place: hidden from users and excluded from accounting"
 msgstr ""
 
-msgid "Registrations are not available"
+msgid ""
+"Participants cannot sign up: the event page shows that registrations are "
+"closed"
 msgstr ""
 
-msgid "Registrations are open for participants"
+msgid "Participants can sign up right away through the registration form"
 msgstr ""
 
-msgid "Pre-registration is available"
+msgid ""
+"Participants cannot sign up yet, but can pre-register to show their interest "
+"and be notified when registrations open"
 msgstr ""
 
-msgid "Redirects to an external registration link"
+msgid ""
+"Registrations are managed on another site: participants are redirected to "
+"the external link set below"
 msgstr ""
 
-msgid "Registrations will open at the specified date and time"
+msgid ""
+"Registrations stay closed until the date and time set below, then open "
+"automatically"
 msgstr ""
 
-msgid "Registrations are open and will close at the specified date and time"
+msgid ""
+"Registrations are open until the date and time set below, then close "
+"automatically"
 msgstr ""
 
 msgid ""
@@ -2149,19 +2178,7 @@ msgstr ""
 msgid "Manage the experience point systems available for this event"
 msgstr ""
 
-msgid "Manage experience point deliveries awarded to characters"
-msgstr ""
-
-msgid "Load participants"
-msgstr ""
-
-msgid ""
-"Select an event to pre-load its registered participants into a new delivery"
-msgstr ""
-
-msgid ""
-"All characters from this event's registrations will be pre-loaded into the "
-"new delivery"
+msgid "Manage experience point awarded to characters"
 msgstr ""
 
 msgid "Ability Template"
@@ -2716,6 +2733,12 @@ msgid "Secret"
 msgstr ""
 
 msgid "hidden faction visible only to assigned characters"
+msgstr ""
+
+msgid "Guild"
+msgstr ""
+
+msgid "Manage all guilds of the event"
 msgstr ""
 
 msgid "Quest type"
@@ -4122,18 +4145,37 @@ msgstr ""
 msgid "The character field of computed type that will be updated"
 msgstr ""
 
-msgid "Indicate the prerequisite abilities"
-msgstr ""
-
-msgid "Indicate the required character options"
+msgid ""
+"If you select one (or more) character abilities, this modifier applies only "
+"to characters with all of them"
 msgstr ""
 
 msgid ""
-"This criterion will apply only to characters owning all prerequisite "
-"abilities"
+"If you select one (or more) character options, this modifier applies only to "
+"characters with all of them"
 msgstr ""
 
-msgid "This criterion will apply only to characters with all required options"
+msgid "Faction list"
+msgstr ""
+
+msgid ""
+"If you select one (or more) factions, this modifier applies only to "
+"characters belonging to all of them"
+msgstr ""
+
+msgid ""
+"If you select one (or more) abilities, this criterion applies only to "
+"characters with all of them"
+msgstr ""
+
+msgid ""
+"If you select one (or more) character options, this criterion applies only "
+"to characters with all of them"
+msgstr ""
+
+msgid ""
+"If you select one (or more) factions, this criterion applies only to "
+"characters belonging to all of them"
 msgstr ""
 
 msgid "Single choice"
@@ -4241,9 +4283,6 @@ msgstr ""
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "
 "options, maximum number of options (0 = no limit)"
-msgstr ""
-
-msgid "Faction list"
 msgstr ""
 
 msgid ""
@@ -5109,6 +5148,21 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
+msgid "Admin"
+msgstr ""
+
+msgid "Invited"
+msgstr ""
+
+msgid "Guild cover"
+msgstr ""
+
+msgid "Guild logo"
+msgstr ""
+
+msgid "Role"
+msgstr ""
+
 msgid "By"
 msgstr ""
 
@@ -5218,6 +5272,9 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+msgid "Are you sure you want to approve this element"
+msgstr ""
+
 msgid "Are you sure you want to delete this element"
 msgstr ""
 
@@ -5240,6 +5297,9 @@ msgid "Access the pages to manage each different aspect"
 msgstr ""
 
 msgid "Complete the setup to unlock full platform features"
+msgstr ""
+
+msgid "Here you can review the event details and visit its public page"
 msgstr ""
 
 msgid ""
@@ -5270,6 +5330,9 @@ msgid "View Selector"
 msgstr ""
 
 msgid "Sidebar"
+msgstr ""
+
+msgid "Event public page"
 msgstr ""
 
 msgid "Lite Mode active"
@@ -5426,15 +5489,6 @@ msgstr ""
 msgid "Select"
 msgstr ""
 
-msgid "Download"
-msgstr ""
-
-msgid "Select the table rows and choose the operation to apply"
-msgstr ""
-
-msgid "Execute"
-msgstr ""
-
 msgid "Instructions"
 msgstr ""
 
@@ -5485,6 +5539,12 @@ msgid ""
 "if the character does NOT belong to this element, but is only referenced"
 msgstr ""
 
+msgid ""
+"Select from the drop-down list the characters to be added to the guild. "
+"Players can also create guilds themselves, invite characters and manage "
+"membership from the event page"
+msgstr ""
+
 msgid "Template instructions"
 msgstr ""
 
@@ -5492,6 +5552,9 @@ msgid "Utils"
 msgstr ""
 
 msgid "Application to be given to them to sign and then upload"
+msgstr ""
+
+msgid "Download"
 msgstr ""
 
 msgid ""
@@ -5569,9 +5632,6 @@ msgid "An error occurred while deleting"
 msgstr ""
 
 msgid "Warning. The form contains errors to the fields"
-msgstr ""
-
-msgid "Please enter the occasion for which you wish to make the donation"
 msgstr ""
 
 msgid "Choose the payment method"
@@ -5697,7 +5757,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-msgid "Deliveries"
+msgid "Awards"
 msgstr ""
 
 msgid "View Details"
@@ -5783,9 +5843,6 @@ msgstr ""
 msgid "Access the organization dashboard"
 msgstr ""
 
-msgid "Role"
-msgstr ""
-
 msgid "Hi"
 msgstr ""
 
@@ -5798,10 +5855,13 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-msgid "Admin"
+msgid "Manage"
 msgstr ""
 
-msgid "Manage"
+msgid "Select the table rows and choose the operation to apply"
+msgstr ""
+
+msgid "Execute"
 msgstr ""
 
 msgid "No organization found"
@@ -5879,6 +5939,9 @@ msgstr ""
 msgid "Filter selected"
 msgstr ""
 
+msgid "View photos and media from the event"
+msgstr ""
+
 msgid "Go to the casting for"
 msgstr ""
 
@@ -5928,6 +5991,9 @@ msgid "characters"
 msgstr ""
 
 msgid "Historical"
+msgstr ""
+
+msgid "Express your preferences on the characters you would like to play"
 msgstr ""
 
 msgid "Go to the preferences for"
@@ -5990,6 +6056,9 @@ msgstr ""
 msgid "Relationship"
 msgstr ""
 
+msgid "Access your characters for this event"
+msgstr ""
+
 msgid "Select which of your characters you want to access"
 msgstr ""
 
@@ -5999,6 +6068,9 @@ msgstr ""
 msgid "are closed"
 msgstr ""
 
+msgid "Get to know all the characters before the event"
+msgstr ""
+
 msgid "Print current view"
 msgstr ""
 
@@ -6006,6 +6078,9 @@ msgid "Print"
 msgstr ""
 
 msgid "No characters available"
+msgstr ""
+
+msgid "Discover the details of this event"
 msgstr ""
 
 msgid "Discover the web site"
@@ -6031,7 +6106,16 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
+msgid "Discover the factions of the game"
+msgstr ""
+
+msgid "Browse the characters and participants of the event"
+msgstr ""
+
 msgid "Registered"
+msgstr ""
+
+msgid "Give a registration to this event as a gift to a friend"
 msgstr ""
 
 msgid ""
@@ -6090,6 +6174,66 @@ msgstr ""
 msgid ""
 "By pressing confirm, this registration will be assigned to you, and you will "
 "then be duly registered"
+msgstr ""
+
+msgid "Edit guild"
+msgstr ""
+
+msgid "Invite a character"
+msgstr ""
+
+msgid "Invite"
+msgstr ""
+
+msgid "Manage members"
+msgstr ""
+
+msgid "Demote"
+msgstr ""
+
+msgid "Promote"
+msgstr ""
+
+msgid "Kick"
+msgstr ""
+
+msgid "Leave guild"
+msgstr ""
+
+msgid "New guild"
+msgstr ""
+
+msgid ""
+"Choose which of your characters will found this guild and become its first "
+"admin"
+msgstr ""
+
+msgid "Founding character"
+msgstr ""
+
+msgid "My guild invites"
+msgstr ""
+
+msgid "You have no pending guild invites"
+msgstr ""
+
+#, python-format
+msgid "Invited with character %(character)s"
+msgstr ""
+
+msgid "Accept"
+msgstr ""
+
+msgid "Decline"
+msgstr ""
+
+msgid "Discover the guilds of the game"
+msgstr ""
+
+msgid "Create a new guild"
+msgstr ""
+
+msgid "My pending invites"
 msgstr ""
 
 msgid "Here are the sign up options with limited number"
@@ -6171,7 +6315,13 @@ msgstr ""
 msgid "This content is protected and cannot be downloaded or recorded"
 msgstr ""
 
+msgid "Explore the quests available in the event"
+msgstr ""
+
 msgid "Change registration"
+msgstr ""
+
+msgid "Sign up for the event, or update your registration options"
 msgstr ""
 
 msgid "Personal code"
@@ -6230,6 +6380,9 @@ msgid "Registration conditions"
 msgstr ""
 
 msgid "Conditions of"
+msgstr ""
+
+msgid "Search and filter the characters of the event"
 msgstr ""
 
 msgid "Characters are only visible to logged in users"
@@ -6343,6 +6496,9 @@ msgid "Correct"
 msgstr ""
 
 msgid "Workshops"
+msgstr ""
+
+msgid "Fill out the preparation workshops of the event"
 msgstr ""
 
 msgid "These are the workshops you must complete before you can play"
@@ -6688,9 +6844,6 @@ msgstr ""
 msgid ""
 "Pre-registrations will appear here once participants sign up for upcoming "
 "events"
-msgstr ""
-
-msgid "Invite"
 msgstr ""
 
 msgid "Pending invites"
@@ -7331,15 +7484,15 @@ msgstr ""
 msgid "Partners"
 msgstr ""
 
-msgid "Show inactive"
-msgstr ""
-
 msgid "With these tutorials, you can learn how to use the tool in no time"
 msgstr ""
 
 msgid ""
 "You can read them in order, or scroll directly to the one that interests you "
 "most"
+msgstr ""
+
+msgid "Show inactive"
 msgstr ""
 
 msgid ""
@@ -7387,6 +7540,62 @@ msgstr ""
 msgid ""
 "You have activated the following features, for each here's the links to "
 "follow"
+msgstr ""
+
+msgid "Accept role invitation"
+msgstr ""
+
+msgid ""
+"Accept your role invitation to gain access to the associated event or "
+"organization"
+msgstr ""
+
+msgid "Role invitation"
+msgstr ""
+
+msgid "You have been invited to join the role"
+msgstr ""
+
+msgid "for event"
+msgstr ""
+
+msgid "in the organization"
+msgstr ""
+
+msgid ""
+"By accepting this invitation, your profile data (name, email, and other "
+"information you have provided) will be shared with this organization through "
+"the LarpManager platform"
+msgstr ""
+
+msgid "I authorize sharing my data with this organization"
+msgstr ""
+
+msgid "Accept invitation"
+msgstr ""
+
+msgid "Invite to role"
+msgstr ""
+
+msgid "Invite a user by email to join this role"
+msgstr ""
+
+msgid "Email address"
+msgstr ""
+
+msgid "Enter email address"
+msgstr ""
+
+msgid "Send invitation"
+msgstr ""
+
+msgid "Sent invitations"
+msgstr ""
+
+msgid "Sent"
+msgstr ""
+
+msgid "Redeemed"
 msgstr ""
 
 #, python-format
@@ -7759,9 +7968,6 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
-msgid "Indicate the amount of your donation"
-msgstr ""
-
 msgid "Indicates the details of the request"
 msgstr ""
 
@@ -7855,6 +8061,9 @@ msgstr ""
 msgid ""
 "You can create new delegate accounts, or log in with them by pressing the "
 "relevant button"
+msgstr ""
+
+msgid "View your payments and pending amounts for this event"
 msgstr ""
 
 msgid "Payment summary"
@@ -8584,10 +8793,13 @@ msgstr ""
 msgid "Use the button above to create the first criterion"
 msgstr ""
 
-msgid "No deliveries defined yet"
+msgid "Load participants"
 msgstr ""
 
-msgid "Use the button above to create the first delivery"
+msgid "No awards defined yet"
+msgstr ""
+
+msgid "Use the button above to create the first award of experience points"
 msgstr ""
 
 msgid "New cost"
@@ -8874,10 +9086,10 @@ msgstr ""
 msgid "Sum of payments received through"
 msgstr ""
 
-msgid "Recompute"
+msgid "No registrations have been received for this event yet"
 msgstr ""
 
-msgid "No registrations have been received for this event yet"
+msgid "Recompute"
 msgstr ""
 
 msgid "Registration sections"
@@ -9644,62 +9856,6 @@ msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
 msgstr ""
 
-msgid "Accept role invitation"
-msgstr ""
-
-msgid ""
-"Accept your role invitation to gain access to the associated event or "
-"organization"
-msgstr ""
-
-msgid "Role invitation"
-msgstr ""
-
-msgid "You have been invited to join the role"
-msgstr ""
-
-msgid "for event"
-msgstr ""
-
-msgid "in the organization"
-msgstr ""
-
-msgid ""
-"By accepting this invitation, your profile data (name, email, and other "
-"information you have provided) will be shared with this organization through "
-"the LarpManager platform"
-msgstr ""
-
-msgid "I authorize sharing my data with this organization"
-msgstr ""
-
-msgid "Accept invitation"
-msgstr ""
-
-msgid "Invite to role"
-msgstr ""
-
-msgid "Invite a user by email to join this role"
-msgstr ""
-
-msgid "Email address"
-msgstr ""
-
-msgid "Enter email address"
-msgstr ""
-
-msgid "Send invitation"
-msgstr ""
-
-msgid "Sent invitations"
-msgstr ""
-
-msgid "Sent"
-msgstr ""
-
-msgid "Redeemed"
-msgstr ""
-
 msgid "Please correct the error below"
 msgstr ""
 
@@ -10219,7 +10375,7 @@ msgstr ""
 msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 
-msgid "Now you can set the player editing settings"
+msgid "Now you can set settings for character creation by players"
 msgstr ""
 
 msgid "Player relationships"
@@ -10432,6 +10588,14 @@ msgid ""
 msgstr ""
 
 msgid "Now you can configure the ensemble page"
+msgstr ""
+
+msgid ""
+"Enables 'Guilds', player-created groups of characters with a self-managed "
+"admin, invite and text"
+msgstr ""
+
+msgid "Now players can create guilds for the event"
 msgstr ""
 
 msgid "Manage the organization main settings"
@@ -10771,7 +10935,7 @@ msgstr ""
 msgid "Manage the character abilities purchaseable with experience"
 msgstr ""
 
-msgid "Manage experience distributions for character abilities purchases."
+msgid "Manage experience awarded to characters"
 msgstr ""
 
 msgid "Manage templates for experience abilities"
@@ -10896,6 +11060,9 @@ msgid ""
 "Track and manage event milestones with status, deadline, and staff assignment"
 msgstr ""
 
+msgid "Manage the event guilds"
+msgstr ""
+
 msgid "Communications"
 msgstr ""
 
@@ -10951,6 +11118,9 @@ msgid "Learn all characters before the event"
 msgstr ""
 
 msgid "Discover the game factions"
+msgstr ""
+
+msgid "Discover the game guilds"
 msgstr ""
 
 msgid "Find out what quests are available"
@@ -11384,10 +11554,10 @@ msgstr ""
 msgid "Set ability type"
 msgstr ""
 
-msgid "Add to xp delivery"
+msgid "Add to xp award"
 msgstr ""
 
-msgid "Remove from xp delivery"
+msgid "Remove from xp award"
 msgstr ""
 
 msgid "Add prologue"
@@ -11780,12 +11950,6 @@ msgstr ""
 msgid "Mail added to queue"
 msgstr ""
 
-msgid "No events are present, create one"
-msgstr ""
-
-msgid "A new version of the platform is available"
-msgstr ""
-
 msgid "Define roles to grant organization management access"
 msgstr ""
 
@@ -11917,7 +12081,7 @@ msgstr ""
 msgid "Ability types without abilities: %(list)s"
 msgstr ""
 
-msgid "Set up delivery for experience points"
+msgid "Set up award for experience points"
 msgstr ""
 
 msgid "Fixed and dynamic installments cannot be used together; deactivate one"
@@ -11972,6 +12136,12 @@ msgid "Activate new event features"
 msgstr ""
 
 msgid "Configure event feature settings"
+msgstr ""
+
+msgid "No events are present, create one"
+msgstr ""
+
+msgid "A new version of the platform is available"
 msgstr ""
 
 msgid "Dashboard"
@@ -12046,6 +12216,9 @@ msgid "Status updated"
 msgstr ""
 
 msgid "Registration settings updated"
+msgstr ""
+
+msgid "Partecipation to"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded"
@@ -12266,6 +12439,67 @@ msgid "You have already granted data sharing with this organisation"
 msgstr ""
 
 msgid "You have granted data sharing with this organisation"
+msgstr ""
+
+msgid "You need a character to create a guild"
+msgstr ""
+
+msgid "The maximum number of guilds for this event has been reached"
+msgstr ""
+
+msgid "Select a valid character"
+msgstr ""
+
+msgid "Guild created"
+msgstr ""
+
+msgid "Guild updated"
+msgstr ""
+
+msgid "This character is already a member or has a pending invite"
+msgstr ""
+
+#, python-format
+msgid ""
+"You have been invited to join the guild %(guild)s with your character "
+"%(character)s"
+msgstr ""
+
+msgid "Invite sent"
+msgstr ""
+
+msgid "This guild has reached its maximum number of members"
+msgstr ""
+
+msgid "You joined the guild"
+msgstr ""
+
+msgid "Invite declined"
+msgstr ""
+
+msgid "Cannot kick the last admin of the guild"
+msgstr ""
+
+#, python-format
+msgid "Your character %(character)s has been removed from the guild %(guild)s"
+msgstr ""
+
+msgid "Member removed"
+msgstr ""
+
+msgid "You are the last admin: promote another member before leaving"
+msgstr ""
+
+msgid "You left the guild"
+msgstr ""
+
+msgid "Member promoted to admin"
+msgstr ""
+
+msgid "Cannot demote the last admin of the guild"
+msgstr ""
+
+msgid "Member demoted"
 msgstr ""
 
 msgid "Personal data updated"

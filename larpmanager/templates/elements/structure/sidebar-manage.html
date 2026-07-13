@@ -1,4 +1,4 @@
-{% load static i18n %}
+{% load static i18n show_tags %}
 {% with effective_version|default:association.assoc_version as eff_ver %}
     <div id="sidebar"
          class="{% if eff_ver < 22 and not is_sidebar_open %}hide{% endif %} topbar">
@@ -141,7 +141,11 @@
                                                    class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
                                                    href="{% url ap.slug run.get_slug %}">
                                                     <i class="fa-solid fa-{{ ap.icon }}"></i>
-                                                    <span>{% trans ap.name %}</span></a>
+                                                    <span>{% trans ap.name %}</span>
+                                                    {% with badge=sidebar_badges|get:ap.slug %}
+                                                        {% if badge %}<span class="sidebar-count-badge only_v22">{{ badge }}</span>{% endif %}
+                                                    {% endwith %}
+                                                </a>
                                             </span>
                                         {% endif %}
                                     {% endfor %}
@@ -175,7 +179,11 @@
                                                    class="sidebar-link{% if sidebar_active == ap.slug %} select{% endif %}"
                                                    href="{% url ap.slug %}">
                                                     <i class="fa-solid fa-{{ ap.icon }}"></i>
-                                                    <span>{% trans ap.name %}</span></a>
+                                                    <span>{% trans ap.name %}</span>
+                                                    {% with badge=sidebar_badges|get:ap.slug %}
+                                                        {% if badge %}<span class="sidebar-count-badge only_v22">{{ badge }}</span>{% endif %}
+                                                    {% endwith %}
+                                                </a>
                                             </span>
                                         {% endif %}
                                     {% endfor %}

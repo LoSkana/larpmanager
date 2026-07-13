@@ -55,6 +55,7 @@ from larpmanager.forms.utils import (
     remove_choice,
     save_permissions_role,
 )
+from larpmanager.forms.widgets import DescriptionRadioSelect
 from larpmanager.models.access import EventPermission, EventRole
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
@@ -348,6 +349,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_char_form()
         self.set_config_custom()
         self.set_config_casting()
+        self.set_config_guild()
 
         # 5. Miscellanea
         self.set_config_accounting()
@@ -854,13 +856,13 @@ class OrgaConfigForm(ConfigForm):
             multiple_systems_label = _("Multiple systems")
             multiple_systems_help_text = _(
                 "If checked, enables managing multiple experience systems for the event. "
-                "Each ability and delivery can be assigned to a specific system.",
+                "Each ability and award can be assigned to a specific system.",
             )
             self.add_configs("exp_systems", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
 
         # Configure player character editor if user_character feature is enabled
         if "user_character" in self.params["features"]:
-            self.set_section("user_character", _("Player editor"))
+            self.set_section("user_character", _("Character creation"))
 
             # Maximum character limit configuration
             max_characters_label = _("Maximum number")
@@ -876,6 +878,19 @@ class OrgaConfigForm(ConfigForm):
                 character_approval_label,
                 character_approval_help_text,
             )
+
+    def set_config_guild(self) -> None:
+        """Configure guild-related form fields for event settings."""
+        if "guild" in self.params["features"]:
+            self.set_section("guild", _("Guilds"))
+
+            max_number_label = _("Maximum number")
+            max_number_help_text = _("Maximum number of guilds players can create (0 = no limit)")
+            self.add_configs("guild_max_number", ConfigType.INT, max_number_label, max_number_help_text)
+
+            max_members_label = _("Maximum members")
+            max_members_help_text = _("Maximum number of accepted members per guild (0 = no limit)")
+            self.add_configs("guild_max_members", ConfigType.INT, max_members_label, max_members_help_text)
 
     def set_config_custom(self) -> None:
         """Configure character customization form fields for event settings."""
@@ -1429,27 +1444,16 @@ class OrgaRunForm(ConfigForm):
             self.page_info = _("Edit the dates, status, and registration settings for this event session")
             self.delete_field("event")
 
-        # do not show cancelled or done options for development if date are not set
-        if "development" in self.fields:
-            if not self.instance.pk or not self.instance.start or not self.instance.end:
-                self.fields["development"].choices = [
-                    (choice.value, choice.label)
-                    for choice in DevelopStatus
-                    if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
-                ]
-            status_text = {
-                DevelopStatus.START: _("Not visible to users"),
-                DevelopStatus.SHOW: _("Visible in the homepage"),
-                DevelopStatus.DONE: _("Concluded and archived"),
-                DevelopStatus.CANC: _("Not active anymore"),
-            }
-            self.fields["development"].help_text = ", ".join(
-                f"<b>{label}</b>: {status_text[DevelopStatus(value)]}"
-                for value, label in self.fields["development"].choices
-            )
+        self.configure_development()
 
         # Configure registration_status field
-        self._configure_registration_status()
+        if "registration_status" in self.fields:
+            if self.params.get("first_event"):
+                self.fields["registration_status"].widget = forms.HiddenInput()
+                self.initial["registration_status"] = RegistrationStatus.OPEN
+                dl.extend(["registration_open", "register_link"])
+            else:
+                self._configure_registration_status()
 
         # Handle registration_secret visibility
         if not self.instance.pk or not self.instance.event or "registration_secret" not in self.params["features"]:
@@ -1460,11 +1464,40 @@ class OrgaRunForm(ConfigForm):
 
         self.show_sections = True
 
-    def _configure_registration_status(self) -> None:
-        """Configure registration_status field with dynamic choices and help text."""
-        if "registration_status" not in self.fields:
+    def configure_development(self) -> None:
+        """Configure development field with dynamic choices and help text."""
+        if "development" not in self.fields:
             return
 
+        if self.params.get("first_event"):
+            self.fields["development"].widget = forms.HiddenInput()
+            self.initial["development"] = DevelopStatus.SHOW
+            return
+
+        if not self.instance.pk or not self.instance.start or not self.instance.end:
+            self.fields["development"].choices = [
+                (choice.value, choice.label)
+                for choice in DevelopStatus
+                if choice not in [DevelopStatus.CANC, DevelopStatus.DONE]
+            ]
+        status_text = {
+            DevelopStatus.START: _(
+                "The event is in preparation: hidden from the homepage and calendar, "
+                "only staff and already registered participants can access it"
+            ),
+            DevelopStatus.SHOW: _("The event is published: listed in the homepage and calendar, visible to all users"),
+            DevelopStatus.DONE: _("The event has taken place: archived among past events, registrations are frozen"),
+            DevelopStatus.CANC: _("The event will not take place: hidden from users and excluded from accounting"),
+        }
+        development_choices = list(self.fields["development"].choices)
+        self.fields["development"].widget = DescriptionRadioSelect(
+            attrs={"class": "my-radio-class"},
+            descriptions={str(value): str(status_text[DevelopStatus(value)]) for value, _label in development_choices},
+        )
+        self.fields["development"].choices = development_choices
+
+    def _configure_registration_status(self) -> None:
+        """Configure registration_status field with dynamic choices and help text."""
         # Build choices - PRE only available if pre_register feature is active globally
         choices = [
             (RegistrationStatus.CLOSED.value, RegistrationStatus.CLOSED.label),
@@ -1483,30 +1516,36 @@ class OrgaRunForm(ConfigForm):
             ]
         )
 
-        self.fields["registration_status"].choices = choices
-
-        # Build help text explaining each status
+        # Describe each status inline below its option
         status_help = {
-            RegistrationStatus.CLOSED: _("Registrations are not available"),
-            RegistrationStatus.OPEN: _("Registrations are open for participants"),
-            RegistrationStatus.PRE: _("Pre-registration is available"),
-            RegistrationStatus.EXTERNAL: _("Redirects to an external registration link"),
-            RegistrationStatus.FUTURE: _("Registrations will open at the specified date and time"),
-            RegistrationStatus.CLOSING: _("Registrations are open and will close at the specified date and time"),
+            RegistrationStatus.CLOSED: _(
+                "Participants cannot sign up: the event page shows that registrations are closed"
+            ),
+            RegistrationStatus.OPEN: _("Participants can sign up right away through the registration form"),
+            RegistrationStatus.PRE: _(
+                "Participants cannot sign up yet, but can pre-register to show their interest "
+                "and be notified when registrations open"
+            ),
+            RegistrationStatus.EXTERNAL: _(
+                "Registrations are managed on another site: participants are redirected to the external link set below"
+            ),
+            RegistrationStatus.FUTURE: _(
+                "Registrations stay closed until the date and time set below, then open automatically"
+            ),
+            RegistrationStatus.CLOSING: _(
+                "Registrations are open until the date and time set below, then close automatically"
+            ),
         }
 
         # Registrations are always open at the "date and time" set in the registration_open field:
         # for FUTURE it marks the opening, for CLOSING it marks the closing.
 
-        help_parts = []
-        for value, label in choices:
-            status_enum = RegistrationStatus(value)
-            help_parts.append(f"<b>{label}</b>: {status_help[status_enum]}")
-
-        self.fields["registration_status"].help_text = ", ".join(help_parts)
-
         # Add data attributes for JavaScript conditional display
-        self.fields["registration_status"].widget.attrs["data-conditional-controller"] = "registration_status"
+        self.fields["registration_status"].widget = DescriptionRadioSelect(
+            attrs={"class": "my-radio-class", "data-conditional-controller": "registration_status"},
+            descriptions={str(value): str(status_help[RegistrationStatus(value)]) for value, _label in choices},
+        )
+        self.fields["registration_status"].choices = choices
         if "registration_open" in self.fields:
             self.fields["registration_open"].widget.attrs["data-conditional-show"] = (
                 f"{RegistrationStatus.FUTURE.value},{RegistrationStatus.CLOSING.value}"
@@ -1727,14 +1766,14 @@ class ExeEventForm(OrgaEventForm):
                     self.initial["template_event"] = qs.first()
             elif self.params.get("skin_id") == 1:
                 template_descriptions = {slug: (label, desc) for slug, label, desc, _f in _EVENT_TEMPLATES if slug}
-                template_choices = [("", "---")] + [(slug, label) for slug, label, _d, _f in _EVENT_TEMPLATES]
+                template_choices = [(slug, label) for slug, label, _d, _f in _EVENT_TEMPLATES]
                 self.fields["event_template"] = forms.ChoiceField(
                     choices=template_choices,
                     label=_("Template"),
                     required=False,
-                    initial="",
-                    help_text=", ".join(
-                        f"<b>{label}</b>: {desc}" for slug, (label, desc) in template_descriptions.items()
+                    widget=DescriptionRadioSelect(
+                        attrs={"class": "my-radio-class"},
+                        descriptions={slug: str(desc) for slug, (_label, desc) in template_descriptions.items()},
                     ),
                 )
 
@@ -1892,7 +1931,7 @@ class OrgaQuickSetupForm(QuickSetupForm):
                     ),
                     "user_character": (
                         True,
-                        _("Player editor"),
+                        _("Character creation"),
                         _("Do you want to allow participants to create their own characters"),
                     ),
                     "experience": (
@@ -2151,7 +2190,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             self.character_configs(extra_config_options)
 
         # Add characters field for faction and plot sections
-        elif writing_section[0] in ["faction", "plot"]:
+        elif writing_section[0] in ["faction", "guild", "plot"]:
             extra_config_options.append(("characters", _("Characters")))
 
         # Add traits field for quest and trait sections

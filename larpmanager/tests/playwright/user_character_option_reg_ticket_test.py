@@ -31,8 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, submit_register, \
-    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, _wait_select2_results, \
-    _wait_lm_ready
+    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, _wait_select2_results
 
 pytestmark = pytest.mark.e2e
 
@@ -58,12 +57,12 @@ def test_user_character_option_reg_ticket(pw_page: Any) -> None:
 def prepare(page: Any) -> None:
     # configure event
     sidebar(page, "Features")
-    page.get_by_role("checkbox", name="Player editor").check()
+    page.get_by_role("checkbox", name="Character creation").check()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
 
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
+    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     page.get_by_role("link", name=re.compile(r"^Character Sheet")).click()
@@ -136,21 +135,19 @@ def create_character(page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
     sidebar(page, "Your registration")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("link", name="myyyy", exact=True).click()
-    _wait_lm_ready(page)
+    sidebar(page, "myyyy")
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: st Presentation sdsa")
 
     # change ticket
     sidebar(page, "Your registration")
     page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("link", name="myyyy", exact=True).click()
+    sidebar(page, "myyyy")
 
     # check previous option is not selected anymore
     expect_normalized(page, page.locator("#one"), "The character have missing values in mandatory fields: choose")
     expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation sdsa Text asadas")
-    page.get_by_role("link", name="myyyy").click()
-    page.get_by_role("link", name="Edit").click()
+    sidebar(page, "Edit")
 
     # check only one option available
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"\n- text: bmb')
@@ -161,8 +158,8 @@ def create_character(page: Any) -> None:
     # check with registration resubmit
     sidebar(page, "Your registration")
     page.get_by_role("button", name="Continue").click()
-    page.get_by_role("link", name="myyyy", exact=True).click()
-    page.get_by_role("link", name="Edit").click()
+
+    sidebar(page, "Edit")
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"')
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Player: Admin Test choose: bmb Presentation sdsa")

@@ -1,0 +1,1800 @@
+/* Landing pages theme (platform marketing pages).
+   All rules scoped under body.landing, set via the body_class block
+   in larpmanager/larpmanager/landing.html */
+
+body.landing {
+  --pri-rgb: 30, 30, 30;
+  --sec-rgb: 245, 245, 250;
+  --ter-rgb: 0, 100, 128;
+  --ink: rgb(var(--pri-rgb));
+  --ink-soft: #2a2a2e;
+  --paper: rgb(var(--sec-rgb));
+  --paper-soft: #eaeaf0;
+  --text: #26262a;
+  --text-dim: #5c5f6b;
+  --teal-bright: #a5dee5;
+  --teal-deep: rgb(var(--ter-rgb));
+  --teal-dark: #0b4a5c;
+  --line: #d6d6e0;
+  --card: #ffffff;
+  --hero-bg: var(--ink);
+  --hero-text: rgb(var(--sec-rgb));
+  --hero-dim: #9a9aa5;
+  background: var(--paper);
+  color: var(--text);
+  font-family:
+    "Karla",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+}
+
+body.landing h1,
+body.landing h2,
+body.landing h3,
+body.landing .display {
+  font-family: "Fraunces", "Palatino Linotype", Palatino, Georgia, serif;
+  font-weight: 600;
+  line-height: 1.15;
+  text-wrap: balance;
+  margin: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  color: inherit;
+}
+
+body.landing .eyebrow {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+  margin: 0 0 1rem;
+}
+
+body.landing .wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+body.landing section.land {
+  padding: 2rem 0;
+  margin: 0;
+}
+
+body.landing a:focus-visible,
+body.landing button:focus-visible {
+  outline: 2px solid var(--teal-bright);
+  outline-offset: 3px;
+}
+
+/* ---------- Site nav ---------- */
+body.landing .site-nav {
+  background: var(--ink);
+  border-bottom: 1px solid rgba(245, 245, 250, 0.1);
+}
+
+body.landing .site-nav .wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  min-height: 58px;
+  flex-wrap: wrap;
+}
+
+body.landing .nav-brand {
+  font-family: "future_light", ui-monospace, "SF Mono", Menlo, Consolas,
+    monospace;
+  font-size: 1.3rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal-bright);
+  text-decoration: none;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+body.landing .nav-brand img {
+  display: block;
+}
+
+body.landing .site-nav a.nav-link {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(245, 245, 250, 0.75);
+  text-decoration: none;
+  font-size: 0.9rem;
+  line-height: 1;
+  padding: 0.4rem 0;
+  border-top: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+}
+
+body.landing .site-nav a.nav-link:hover {
+  color: var(--teal-bright);
+}
+
+body.landing .site-nav a.nav-link.active {
+  color: var(--hero-text);
+  border-bottom-color: var(--teal-bright);
+}
+
+body.landing .site-nav .btn {
+  padding: 0.45rem 1.1rem;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+/* ---------- Footer ---------- */
+body.landing .site-footer {
+  border-top: 1px solid var(--line);
+  padding: 2rem 0;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+body.landing .site-footer a {
+  color: var(--text-dim);
+}
+
+body.landing .footer-links {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+  flex-wrap: wrap;
+}
+
+body.landing .footer-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+body.landing .footer-links a:hover {
+  color: var(--teal-deep);
+}
+
+/* ---------- Messages / staging ---------- */
+body.landing .landing-messages {
+  padding-top: 1.5rem;
+}
+
+body.landing .landing-message {
+  border: 1px solid var(--teal-deep);
+  border-left-width: 4px;
+  background: rgba(0, 100, 128, 0.06);
+  border-radius: 4px;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 0.6rem;
+}
+
+body.landing .landing-message.error {
+  border-color: #a33;
+  background: rgba(170, 51, 51, 0.06);
+}
+
+body.landing #staging {
+  background: #a33;
+  color: #fff;
+  text-align: center;
+  padding: 0.3rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+/* ---------- Buttons ---------- */
+body.landing .btn {
+  display: inline-block;
+  padding: 0.8rem 1.7rem;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+  height: auto;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+body.landing .btn-primary {
+  background: var(--teal-bright);
+  color: #0a1418;
+}
+
+body.landing .btn-primary:hover {
+  background: #56b3d1;
+  color: #0a1418;
+  transform: translateY(-1px);
+}
+
+body.landing .btn-ghost {
+  border-color: rgba(245, 245, 250, 0.3);
+  color: var(--hero-text);
+}
+
+body.landing .btn-ghost:hover {
+  border-color: var(--teal-bright);
+  color: var(--teal-bright);
+}
+
+body.landing .btn-outline {
+  border: 1px solid var(--teal-deep);
+  color: var(--teal-deep);
+}
+
+body.landing .btn-outline:hover {
+  background: rgba(0, 100, 128, 0.08);
+}
+
+/* ---------- Hero ---------- */
+body.landing .hero {
+  background: var(--hero-bg);
+  color: var(--hero-text);
+  padding: 6.5rem 0 5.5rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+body.landing .hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 12%,
+    rgba(61, 159, 191, 0.06) 26%,
+    rgba(61, 159, 191, 0.18) 38%,
+    rgba(61, 159, 191, 0.05) 50%,
+    transparent 62%
+  );
+  pointer-events: none;
+}
+
+body.landing .hero .wrap {
+  position: relative;
+  width: 100%;
+}
+
+body.landing .hero-brand {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--teal-bright);
+  margin-bottom: 3.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+body.landing .hero-brand::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(61, 159, 191, 0.5), transparent);
+}
+
+body.landing .hero h1 {
+  font-size: clamp(2.4rem, 5.5vw, 4rem);
+  max-width: 16ch;
+  color: var(--hero-text);
+}
+
+body.landing .hero h1 em {
+  font-style: italic;
+  color: var(--teal-bright);
+}
+
+body.landing .hero-sub {
+  max-width: 58ch;
+  color: var(--hero-dim);
+  font-size: 1.1rem;
+  margin: 1.5rem 0 2.5rem;
+}
+
+body.landing .cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+}
+
+body.landing .stats {
+  margin-top: 3.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.5rem 3.5rem;
+  border-top: 1px solid rgba(245, 245, 250, 0.15);
+  padding-top: 2rem;
+}
+
+body.landing .stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+body.landing .stat b {
+  font-family: "Fraunces", Palatino, Georgia, serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--teal-bright);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+body.landing .stat span {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--hero-dim);
+}
+
+/* ---------- Steps ---------- */
+body.landing .steps-head {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 4rem;
+}
+
+body.landing .steps-head h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+}
+
+body.landing .steps-head p {
+  margin: 1rem auto 0;
+  max-width: 52ch;
+}
+
+body.landing .steps-head p.eyebrow {
+  margin: 1rem auto;
+}
+
+body.landing .steps {
+  position: relative;
+  max-width: 620px;
+  margin: 0 auto;
+  padding-left: 2.4rem;
+}
+
+body.landing .steps::before {
+  content: "";
+  position: absolute;
+  left: 0.55rem;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    var(--teal-bright) 0%,
+    var(--teal-dark) 100%
+  );
+  opacity: 0.55;
+}
+
+body.landing .step {
+  position: relative;
+  padding: 0 0 2.2rem;
+}
+
+body.landing .step:last-child {
+  padding-bottom: 0;
+}
+
+body.landing .step::before {
+  content: "";
+  position: absolute;
+  left: -2.28rem;
+  top: 0.45rem;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--teal-bright);
+}
+
+body.landing .step h3 {
+  font-size: 1.15rem;
+}
+
+body.landing .step p {
+  margin: 0.3rem 0 0;
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  max-width: 52ch;
+}
+
+body.landing .steps-note {
+  text-align: center;
+  margin-top: 3rem;
+  font-family: "Fraunces", Palatino, Georgia, serif;
+  font-style: italic;
+  font-size: 1.2rem;
+}
+
+/* ---------- Problems / showcase cards ---------- */
+body.landing .problems {
+  background: var(--paper-soft);
+}
+
+body.landing .problems h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  margin-bottom: 3rem;
+  text-align: center;
+}
+
+body.landing .prob-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+
+body.landing .prob-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+body.landing .prob-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--teal-deep);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.landing .prob-card {
+    transition: border-color 0.15s ease;
+  }
+  body.landing .prob-card:hover {
+    transform: none;
+  }
+}
+
+body.landing .prob-card h3 {
+  font-size: 1.15rem;
+}
+
+body.landing .prob-card .prob-text {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.93rem;
+  flex: 1;
+}
+
+body.landing .prob-card .prob-text p {
+  margin: 0 0 0.6rem;
+}
+
+body.landing .prob-card a.prob-link {
+  color: var(--teal-deep);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+body.landing .prob-card a.prob-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Chaos ---------- */
+body.landing .chaos {
+  text-align: center;
+}
+
+body.landing .chaos h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  margin-bottom: 1rem;
+}
+
+body.landing .chaos-sub {
+  color: var(--text-dim);
+  max-width: 52ch;
+  margin: 0 auto 2.5rem;
+}
+
+body.landing .chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  max-width: 560px;
+  margin: 0 auto 2rem;
+}
+
+body.landing .chip {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-decoration: line-through;
+  text-decoration-color: var(--teal-dark);
+  text-decoration-thickness: 1.5px;
+}
+
+body.landing .chaos-arrow {
+  color: var(--teal-deep);
+  font-size: 1.4rem;
+  line-height: 1;
+  margin-bottom: 1.5rem;
+}
+
+body.landing .chip-one {
+  display: inline-block;
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--teal-bright);
+  font-weight: 600;
+  font-size: 1rem;
+  border: 1px solid var(--teal-bright);
+}
+
+body.landing .chaos-note {
+  margin: 2.5rem auto 0;
+  max-width: 620px;
+  padding: 1.1rem 1.6rem;
+  border: 1px solid rgba(0, 100, 128, 0.3);
+  border-left: 4px solid var(--teal-deep);
+  background: rgba(0, 100, 128, 0.06);
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 1.05rem;
+  text-align: left;
+}
+
+body.landing .chaos-note strong {
+  color: var(--teal-deep);
+}
+
+/* ---------- Native concepts ---------- */
+body.landing .native {
+  background: var(--hero-bg);
+  color: var(--hero-text);
+}
+
+body.landing .native h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  color: var(--hero-text);
+}
+
+body.landing .native-lead {
+  color: var(--hero-dim);
+  max-width: 54ch;
+  margin: 1rem 0 2.5rem;
+}
+
+body.landing .check-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  padding: 0;
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+body.landing .check-grid li {
+  list-style: none;
+  border: 1px solid rgba(245, 245, 250, 0.25);
+  padding: 0.35rem 0.9rem;
+  color: var(--hero-text);
+}
+
+body.landing .check-grid li:hover {
+  border-color: var(--teal-bright);
+  color: var(--teal-bright);
+}
+
+/* ---------- Scroll strips (games, quotes, promoters, partners) ---------- */
+body.landing .strip-nav {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 1.2rem;
+}
+
+body.landing .strip-nav button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--teal-deep);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+  padding: 0;
+}
+
+body.landing .strip-nav button:hover {
+  border-color: var(--teal-deep);
+}
+
+body.landing .strip {
+  display: flex;
+  gap: 1.2rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 0.8rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--teal-deep) transparent;
+}
+
+body.landing .strip > * {
+  scroll-snap-align: start;
+}
+
+/* ---------- Games gallery ---------- */
+body.landing .games h2 {
+  text-align: center;
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+}
+
+body.landing .games-sub {
+  text-align: center;
+  color: var(--text-dim);
+  max-width: 54ch;
+  margin: 1rem auto 3rem;
+}
+
+body.landing .games .eyebrow {
+  text-align: center;
+}
+
+body.landing .game-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 min(380px, 82vw);
+}
+
+body.landing .game-photo {
+  aspect-ratio: 3 / 2;
+  position: relative;
+  overflow: hidden;
+  background: var(--ink-soft);
+}
+
+body.landing .game-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+body.landing .game-meta {
+  padding: 0.9rem 1.1rem 1rem;
+}
+
+body.landing .game-meta small {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  opacity: 0.8;
+}
+
+/* ---------- Quotes ---------- */
+body.landing .quotes h2 {
+  text-align: center;
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+  margin-bottom: 3rem;
+}
+
+body.landing .quotes .eyebrow {
+  text-align: center;
+}
+
+body.landing .quote {
+  flex: 0 0 min(320px, 78vw);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 2rem 0.4rem 0.4rem 0;
+}
+
+body.landing .quote::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.4rem;
+  left: -0.3rem;
+  font-family: "Fraunces", Palatino, Georgia, serif;
+  font-size: 3.4rem;
+  line-height: 1;
+  color: var(--teal-deep);
+  opacity: 0.45;
+}
+
+body.landing .quote p {
+  flex: 1;
+  font-family: "Fraunces", Palatino, Georgia, serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  margin: 0 0 0.6rem;
+}
+
+body.landing .quote cite {
+  font-style: normal;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+/* ---------- Promoters / partners strips ---------- */
+body.landing .promoters-title {
+  text-align: center;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  margin-bottom: 2.5rem;
+}
+
+body.landing .promoter-card {
+  flex: 0 0 min(180px, 40vw);
+  aspect-ratio: 1 / 1;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid var(--line);
+  background-color: var(--card);
+}
+
+body.landing .partner-card {
+  flex: 0 0 min(420px, 85vw);
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 1.2rem 1.4rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+body.landing .partner-card img {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+body.landing .partner-card .partner-name {
+  display: block;
+  font-weight: 700;
+}
+
+body.landing .partner-card .partner-text {
+  display: block;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+}
+
+/* ---------- Video ---------- */
+body.landing .video-section {
+  text-align: center;
+}
+
+body.landing .video-section .starter {
+  color: var(--text-dim);
+  max-width: 54ch;
+  margin: 0 auto 2.5rem;
+}
+
+body.landing .guide-container {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+body.landing .guide-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 8px;
+}
+
+/* ---------- Open / migration ---------- */
+body.landing .open {
+  background: var(--paper-soft);
+}
+
+body.landing .open .wrap {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
+}
+
+body.landing .open h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.6rem;
+}
+
+body.landing .open p {
+  color: var(--text-dim);
+  margin: 0;
+  font-size: 0.95rem;
+  max-width: 48ch;
+}
+
+/* ---------- Final CTA ---------- */
+body.landing .final {
+  text-align: center;
+  padding: 6rem 0;
+}
+
+body.landing .final h2 {
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  max-width: 22ch;
+  margin: 0 auto 0.5rem;
+}
+
+body.landing .final h2 em {
+  font-style: italic;
+  color: var(--teal-deep);
+}
+
+body.landing .final p {
+  color: var(--text-dim);
+  margin: 1rem 0 2.2rem;
+}
+
+body.landing .final .btn-primary {
+  font-size: 1.05rem;
+  padding: 0.95rem 2.2rem;
+}
+
+/* ---------- Inner pages ---------- */
+body.landing .page-head {
+  padding: 4.5rem 0 0;
+  text-align: center;
+}
+
+body.landing .page-head h1 {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  max-width: 22ch;
+  margin: 0 auto;
+}
+
+body.landing .page-head p {
+  color: var(--text-dim);
+  max-width: 56ch;
+  margin: 1rem auto 0;
+}
+
+body.landing .page-head p.eyebrow {
+  color: var(--teal-deep);
+  margin: 0 auto 1rem auto;
+}
+
+body.landing .plan-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+  align-items: stretch;
+}
+
+body.landing .plan {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 2rem 1.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+body.landing .plan.featured {
+  border-color: var(--teal-deep);
+  border-width: 2px;
+}
+
+body.landing .plan h3 {
+  font-size: 1.3rem;
+}
+
+body.landing .plan .price {
+  font-family: "Fraunces", Palatino, Georgia, serif;
+  font-size: 1.9rem;
+  color: var(--teal-deep);
+  margin: 0.4rem 0 0.1rem;
+  font-variant-numeric: tabular-nums;
+}
+
+body.landing .plan .price-note {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin: 0 0 1rem;
+}
+
+body.landing .plan ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  flex: 1;
+}
+
+body.landing .plan li {
+  padding: 0.35rem 0;
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  display: flex;
+  gap: 0.6rem;
+}
+
+body.landing .plan li::before {
+  content: "\2713";
+  color: var(--teal-deep);
+  font-weight: 700;
+}
+
+body.landing .plan .btn {
+  text-align: center;
+}
+
+body.landing .compare-note {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-top: 2rem;
+}
+
+body.landing .guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+body.landing .guide-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 1.6rem 1.7rem;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: border-color 0.15s ease;
+}
+
+body.landing .guide-card:hover {
+  border-color: var(--teal-deep);
+}
+
+body.landing .guide-card h3 {
+  font-size: 1.15rem;
+}
+
+body.landing .guide-card p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  flex: 1;
+}
+
+body.landing .guide-card span {
+  color: var(--teal-deep);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* ---------- Feature grids / solution pages ---------- */
+body.landing .feat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 2rem;
+  margin-top: 3.5rem;
+}
+
+body.landing .feat h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.4rem;
+}
+
+body.landing .feat p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.93rem;
+}
+
+body.landing .sol-cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 3.5rem;
+}
+
+body.landing .sol-cta a.guide-link {
+  color: var(--teal-deep);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+body.landing .sol-cta a.guide-link:hover {
+  text-decoration: underline;
+}
+
+.my_hub {
+  max-width: 62ch;
+  margin: 0 auto 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.my_hub .hub-greeting {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-dim);
+}
+
+.my_hub .hub-greeting i {
+  font-size: 1.5rem;
+  color: var(--teal-deep);
+}
+
+.my_hub .hub-greeting b {
+  color: var(--text);
+}
+
+.my_hub .hub-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.1rem 1.3rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.my_hub .hub-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.9rem;
+  font-size: 1.05rem;
+  color: var(--teal-dark);
+}
+
+.my_hub .hub-card h3 i {
+  color: var(--teal-deep);
+}
+
+.my_hub .hub-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.my_hub .hub-chip {
+  display: inline-block;
+  padding: 0.4rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--teal-deep);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.my_hub .hub-chip:hover {
+  background: var(--teal-deep);
+  border-color: var(--teal-deep);
+  color: var(--card);
+}
+
+.my_hub .hub-card .calendar {
+  margin: 0;
+}
+
+/* ---------- About page ---------- */
+body.landing .about-prose {
+  max-width: 62ch;
+  margin: 0 auto;
+  font-size: 1.05rem;
+}
+
+body.landing .about-prose p {
+  margin: 0 0 1.4rem;
+}
+
+body.landing .about-quote {
+  font-family: "Fraunces", Palatino, Georgia, serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  margin: 2.5rem 0;
+  text-align: center;
+  color: var(--teal-deep);
+}
+
+/* ---------- Contact / join forms ---------- */
+body.landing .contact-form {
+  max-width: 520px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+body.landing .contact-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+body.landing .contact-form input,
+body.landing .contact-form textarea,
+body.landing .contact-form select {
+  font: inherit;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--card);
+  color: var(--text);
+}
+
+body.landing .contact-form input:focus,
+body.landing .contact-form textarea:focus,
+body.landing .contact-form select:focus {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 1px;
+  border-color: var(--teal-deep);
+}
+
+body.landing .contact-alt {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin-top: 2.5rem;
+}
+
+body.landing .contact-alt a {
+  color: var(--teal-deep);
+}
+
+body.landing .contact-form label {
+  width: 100%;
+}
+
+body.landing .contact-form input:not([type="submit"]):not([type="checkbox"]),
+body.landing .contact-form textarea,
+body.landing .contact-form select {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+body.landing .contact-form .helptext {
+  font-weight: 400;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+body.landing .contact-form .errorlist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  color: #a33;
+  font-size: 0.85rem;
+}
+
+body.landing .slug_pre {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  background: var(--paper-soft);
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  padding: 0.5rem 0.8rem;
+  margin: 0;
+}
+
+body.landing .slug_war {
+  font-size: 0.78rem;
+  color: #a33;
+  margin: 0;
+}
+
+body.landing .hide {
+  display: none;
+}
+
+/* Auth forms (login / register) rendered via form.as_table on the main site */
+body.landing .contact-form .login,
+body.landing .contact-form .form_container {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+body.landing .contact-form table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+body.landing .contact-form table th,
+body.landing .contact-form table td {
+  padding: 0.35rem 0;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.9rem;
+}
+
+body.landing .contact-form table th {
+  font-weight: 600;
+  padding-right: 0.9rem;
+}
+
+body.landing .contact-form .allauth_signin {
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+body.landing .contact-form .allauth_signin img {
+  max-width: 100%;
+  height: auto;
+}
+
+body.landing .contact-form .login_go {
+  display: block;
+  margin: 1rem auto 0;
+}
+
+body.landing .contact-form .registration_register,
+body.landing .contact-form .password_reset {
+  margin: 0.8rem 0 0;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.allauth_signin a img {
+  width: 15em;
+}
+
+body.landing .contact-form .registration_register a,
+body.landing .contact-form .password_reset a {
+  color: var(--teal-deep);
+}
+
+@media (max-width: 560px) {
+  body.landing .contact-form table,
+  body.landing .contact-form table tbody,
+  body.landing .contact-form table tr,
+  body.landing .contact-form table th,
+  body.landing .contact-form table td {
+    display: block;
+    width: 100%;
+  }
+
+  body.landing .contact-form table th {
+    padding: 0.35rem 0 0.1rem;
+  }
+}
+
+/* Contact form include (form.as_p with class="contact") */
+body.landing form.contact {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+body.landing form.contact p {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+body.landing form.contact input:not([type="submit"]):not([type="checkbox"]),
+body.landing form.contact textarea,
+body.landing form.contact select {
+  font: inherit;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--card);
+  color: var(--text);
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+body.landing form.contact input:focus,
+body.landing form.contact textarea:focus {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 1px;
+  border-color: var(--teal-deep);
+}
+
+body.landing form input[type="submit"] {
+  display: inline-block;
+  padding: 0.8rem 1.7rem;
+  border-radius: 3px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  background: var(--teal-bright);
+  color: #0a1418;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+
+body.landing form input[type="submit"]:hover {
+  background: #56b3d1;
+  transform: translateY(-1px);
+}
+
+/* ---------- Articles (blog, guide) ---------- */
+body.landing #article {
+  text-align: left;
+}
+
+body.landing #article h2,
+body.landing .about-prose h2 {
+  font-size: 1.5rem;
+  margin: 2rem 0 0.8rem;
+}
+
+body.landing #article h3,
+body.landing .about-prose h3 {
+  font-size: 1.2rem;
+  margin: 1.5rem 0 0.6rem;
+}
+
+body.landing #article img,
+body.landing .article-image img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+body.landing .article-image {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+body.landing .section-image {
+  text-align: center;
+  margin: 2rem auto;
+}
+
+body.landing .section-image .image-wrapper {
+  position: relative;
+  max-width: 70%;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+body.landing .section-image .image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+body.landing .image-caption {
+  text-align: center;
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+
+/* ---------- Anchor nav (discover, faqs) ---------- */
+body.landing .anchor-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 2rem auto;
+}
+
+body.landing .anchor-nav a {
+  padding: 0.35rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  text-decoration: none;
+}
+
+body.landing .anchor-nav a:hover {
+  border-color: var(--teal-deep);
+  color: var(--teal-deep);
+}
+
+/* ---------- Discover ---------- */
+body.landing #discover {
+  text-align: left;
+}
+
+body.landing #discover h2 {
+  font-size: 1.4rem;
+  margin: 1.5rem 0 0.8rem;
+}
+
+body.landing #discover strong,
+body.landing #discover em {
+  color: var(--teal-deep);
+}
+
+body.landing #discover .left,
+body.landing #discover .right {
+  width: 25%;
+  border-radius: 10%;
+}
+
+body.landing #discover .left {
+  float: left;
+  margin: 0 2rem 2rem 0;
+}
+
+body.landing #discover .right {
+  float: right;
+  margin: 0 0 2rem 2rem;
+}
+
+body.landing #discover hr {
+  clear: both;
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2rem 0;
+}
+
+@media (max-width: 1000px) {
+  body.landing #discover .left,
+  body.landing #discover .right {
+    display: none;
+  }
+}
+
+/* ---------- FAQs ---------- */
+body.landing .faq {
+  text-align: left;
+}
+
+body.landing .faq .que a {
+  color: var(--teal-deep);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+body.landing .faq .que a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Features ---------- */
+body.landing .feature-mod {
+  text-align: left;
+  margin-top: 1.5rem;
+}
+
+body.landing .feature-mod h3 a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+body.landing .feature-mod h3 a:hover {
+  color: var(--teal-deep);
+}
+
+body.landing .feature-mod h3 .fa-chevron-down {
+  color: var(--teal-deep);
+  font-size: 0.8em;
+}
+
+body.landing .feature-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+body.landing .feature-table th,
+body.landing .feature-table td {
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+body.landing .feature-table thead th {
+  background: var(--paper-soft);
+}
+
+body.landing .feature-table a {
+  color: var(--teal-deep);
+}
+
+/* ---------- Tutorials ---------- */
+body.landing #tutorials {
+  display: flex;
+  gap: 1.5rem;
+  text-align: left;
+}
+
+body.landing #tutorials .column {
+  flex: 0 0 220px;
+  border-right: 1px solid var(--line);
+  padding-right: 1rem;
+}
+
+body.landing #tutorials .column a {
+  display: block;
+  margin: 0 0 0.8rem;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+body.landing #tutorials .column a:hover {
+  color: var(--teal-deep);
+}
+
+body.landing #tutorials .column a.select {
+  color: var(--text);
+  font-weight: 700;
+}
+
+body.landing #tutorials .feature {
+  flex: 1;
+  min-width: 0;
+}
+
+body.landing #tutorials .feature img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+body.landing #tutorials .anchor-nav {
+  justify-content: flex-start;
+  margin: 1rem 0;
+}
+
+body.landing #tutorials .navig {
+  width: 100%;
+  margin-top: 2rem;
+  border-top: 1px solid var(--line);
+}
+
+body.landing #tutorials .navig td {
+  padding: 0.8rem 0;
+}
+
+body.landing #tutorials .navig td:last-child {
+  text-align: right;
+}
+
+body.landing #tutorials .navig a {
+  color: var(--teal-deep);
+}
+
+body.landing #tutorial-descr h2 {
+  text-align: center;
+  margin: 1.5rem 0 0.8rem;
+}
+
+body.landing #tutorial-descr hr {
+  margin: 1rem 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+body.landing #tutorial-descr p {
+  margin: 0.5rem 0;
+}
+
+body.landing #tutorial-descr ul,
+body.landing #tutorial-descr ol {
+  list-style-position: outside;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+body.landing #tutorial-descr li {
+  padding: 0.3rem 0;
+}
+
+body.landing #tutorial-descr img {
+  display: block;
+  margin: 1rem auto;
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+}
+
+@media (max-width: 736px) {
+  body.landing #tutorials {
+    flex-direction: column;
+  }
+
+  body.landing #tutorials .column {
+    flex: 1;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0 0 1rem;
+  }
+}
+
+/* ---------- LudoManager skin ---------- */
+body.landing .federlogo {
+  text-align: center;
+}
+
+body.landing .federlogo img {
+  max-width: 260px;
+  height: auto;
+}
+
+/* ---------- Prose blocks / misc ---------- */
+body.landing .landing-prose {
+  margin: 2.5rem auto;
+}
+
+body.landing #lm_join table,
+body.landing #lm_join th,
+body.landing #lm_join td {
+  border: 0;
+  text-align: left;
+  padding: 0.35rem 0.6rem;
+}
+
+body.landing #iframe-indicator {
+  background: #e0f0ff;
+  border-bottom: 1px solid #90c0e0;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #336;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.landing .btn {
+    transition: none;
+  }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 640px) {
+  body.landing {
+    font-size: 16px;
+  }
+
+  body.landing .wrap {
+    padding: 0 1.1rem;
+  }
+
+  body.landing section.land {
+    padding: 3rem 0;
+  }
+
+  body.landing .hero {
+    padding: 3.5rem 0 3rem;
+    min-height: 0;
+  }
+
+  body.landing .hero-brand {
+    margin-bottom: 2rem;
+    font-size: 0.7rem;
+  }
+
+  body.landing .stats {
+    gap: 1.6rem 2rem;
+    margin-top: 2.2rem;
+    padding-top: 1.4rem;
+  }
+
+  body.landing .cta-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  body.landing .cta-row .btn {
+    text-align: center;
+  }
+
+  body.landing .steps-head {
+    margin-bottom: 2.6rem;
+  }
+
+  body.landing .steps {
+    padding-left: 1.7rem;
+  }
+
+  body.landing .step::before {
+    left: -1.6rem;
+  }
+
+  body.landing .prob-grid,
+  body.landing .feat-grid,
+  body.landing .guide-grid,
+  body.landing .plan-grid {
+    grid-template-columns: 1fr;
+  }
+
+  body.landing .open .wrap {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  body.landing .final {
+    padding: 3.5rem 0;
+  }
+
+  body.landing .page-head {
+    padding: 3rem 0 0;
+  }
+
+  body.landing .site-nav .wrap {
+    gap: 0.7rem 0.9rem;
+    min-height: auto;
+    padding: 0.9rem 1.1rem;
+    justify-content: center;
+  }
+
+  body.landing .nav-brand {
+    flex: 1 0 100%;
+    margin-right: 0;
+    justify-content: center;
+    margin-bottom: 0.2rem;
+  }
+
+  body.landing .site-nav a.nav-link {
+    font-size: 0.82rem;
+  }
+
+  body.landing .site-nav .btn {
+    flex: 0 0 auto;
+    margin-top: -0.1rem;
+  }
+
+  body.landing .wrap {
+    padding: 1em;
+  }
+}
+
+body.landing section.native .eyebrow {
+  color: var(--teal-bright);
+}
+
+body.landing .games,
+body.landing .partners {
+  background: var(--paper-soft);
+}

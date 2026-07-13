@@ -41,32 +41,17 @@ logger = logging.getLogger(__name__)
 def _get_redirect_url_with_subdomain_support(request: HttpRequest) -> str | None:
     """Get redirect URL with organization subdomain support.
 
-    This helper method handles the common redirect logic for both login and signup:
-    1. On org subdomain: Returns "/" to stay on same subdomain
-    2. On main domain with 'next' parameter: Returns the next URL (for after_login flow)
-    3. On main domain without 'next': Returns None (use default behavior)
-
-    The 'next' parameter is set by JavaScript in login.html when users initiate
-    OAuth from an organization page, pointing to: /after_login/{slug}/
-
-    Args:
-        request: Django HTTP request object
+    The OAuth provider callback is only ever reached on the main domain (Google's
+    redirect URI is registered there, not per-subdomain), so `request.association`
+    is always the main-domain association at this point - it cannot be used here to
+    detect the subdomain the login started from. That information instead travels
+    through the 'next' parameter, set server-side by `get_social_login_url` in
+    show_tags.py, pointing to: /after_login/{slug}/
 
     Returns:
         str: Redirect URL path, or None to use default behavior
 
     """
-    # Get the association from request context (set by AssociationIdentifyMiddleware)
-    association_data = getattr(request, "association", {})
-    association_id = association_data.get("id", 0)
-
-    # If on organization subdomain (association ID != 0), stay on same subdomain
-    if association_id != 0:
-        return "/"
-
-    # On main domain - check for 'next' parameter pointing to after_login
-    # The 'next' parameter is set by JavaScript in login template when users
-    # initiate OAuth from an organization page
     next_url = request.GET.get("next") or request.POST.get("next")
 
     if next_url:

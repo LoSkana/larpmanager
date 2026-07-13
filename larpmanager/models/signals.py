@@ -84,10 +84,12 @@ from larpmanager.cache.experience import (
     on_ability_requirements_m2m_changed,
     on_ability_saved,
     on_character_saved,
+    on_criterion_factions_m2m_changed,
     on_criterion_prerequisites_m2m_changed,
     on_criterion_requirements_m2m_changed,
     on_delivery_characters_m2m_changed,
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
+    on_modifier_factions_m2m_changed,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
@@ -1562,7 +1564,7 @@ def post_save_registration_character_rel_savereg(
     # Clear deadline widget cache (casting requirements)
     reset_widgets(instance.registration)
 
-    # Auto-assign player if player editor is active and character has no player
+    # Auto-assign player if character creation is active and character has no player
     features = get_event_features(instance.character.event_id)
     if "user_character" in features and not instance.character.player:
         instance.character.player = instance.registration.member
@@ -1962,9 +1964,11 @@ m2m_changed.connect(on_delivery_characters_m2m_changed, sender=DeliveryExp.chara
 m2m_changed.connect(on_modifier_abilities_m2m_changed_cache, sender=ModifierExp.abilities.through)
 m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierExp.prerequisites.through)
 m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierExp.requirements.through)
+m2m_changed.connect(on_modifier_factions_m2m_changed, sender=ModifierExp.factions.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilities.through)
 m2m_changed.connect(on_criterion_prerequisites_m2m_changed, sender=CriterionExp.prerequisites.through)
 m2m_changed.connect(on_criterion_requirements_m2m_changed, sender=CriterionExp.requirements.through)
+m2m_changed.connect(on_criterion_factions_m2m_changed, sender=CriterionExp.factions.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 

@@ -29,7 +29,7 @@ from typing import Any
 import pytest
 
 from larpmanager.tests.utils import expect_normalized, get_modal_iframe, go_to, load_image, login_orga, submit_register, \
-    submit_confirm, submit, save_modal, sidebar
+    submit_confirm, submit, save_modal, sidebar, confirm_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -99,8 +99,7 @@ def config(page: Any, live_server: Any) -> None:
     # confirm payment
     go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
-    # Confirm the CSRF-protection interstitial
-    page.get_by_role("button", name="Confirm").click()
+    confirm_modal(page)
 
 
 

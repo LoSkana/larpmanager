@@ -773,13 +773,13 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Player editor
+    name: Character creation
     descr: Allows participants to create and modify their own characters freely
     slug: user_character
     overall: false
     placeholder: false
     order: 30
-    after_text: Now you can set the player editing settings
+    after_text: Now you can set settings for character creation by players
     after_link: config/user_character
     hidden: false
     module: event
@@ -1638,3 +1638,18 @@
     hidden: true
     module: null
     dependencies: []
+- model: larpmanager.feature
+  fields:
+    name: Guilds
+    descr: Enables 'Guilds', player-created groups of characters with a self-managed
+      admin, invite and text
+    slug: guild
+    overall: false
+    placeholder: false
+    order: 125
+    after_text: Now players can create guilds for the event
+    after_link: orga_guilds
+    hidden: false
+    module: writing
+    dependencies:
+    - character

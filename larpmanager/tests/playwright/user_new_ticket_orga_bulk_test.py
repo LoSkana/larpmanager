@@ -366,8 +366,8 @@ def new_ticket(live_server: Any, page: Any) -> None:
     edit_iframe.locator("#id_form1-name").click()
     edit_iframe.locator("#id_form1-name").fill("Electric Boogaloo")
     # don't set slug, let it be auto filled
-    edit_iframe.locator("#id_form2-development").select_option("1")
-    edit_iframe.locator("#id_form2-registration_status").select_option("o")
+    edit_iframe.locator('label[for="id_form2-development_1"]').click()
+    edit_iframe.locator('label[for="id_form2-registration_status_1"]').click()
     fill_date(edit_iframe, "#id_form2-start", "2045-06-11")
     fill_date(edit_iframe, "#id_form2-end", "2045-06-13")
     save_modal(page, edit_iframe)

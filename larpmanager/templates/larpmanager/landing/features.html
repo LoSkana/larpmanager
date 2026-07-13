@@ -1,0 +1,103 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static show_tags %}
+{% block maintitle %}
+    Features
+{% endblock maintitle %}
+{% block landing_eyebrow %}
+    Features
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    Features
+{% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>
+        {% trans "The larpmanager has a over 100 different features. There is one for every single aspect of event organising: signups, accounting, writing, logistics" %}.
+    </p>
+    <p>
+        <i>{% trans "Below you will find all the features available; you can write a search keyword to filter them. Then click on 'Video', and you will see the video directly" %}.</i>
+    </p>
+{% endblock landing_subtitle %}
+{% block landing_content %}
+    <div class="contact-form">
+        <input type="text" name="search" id="search" placeholder="Search" />
+    </div>
+    {% for mod in modules %}
+        <div class="feature-mod" mod="{{ mod.id }}">
+            <h3 id="mod_{{ mod.id }}">
+                <a href="#" class="my_toggle section-link" tog='feat_{{ mod.id }}'>
+                    {{ mod.name|template_trans }} <i class="fa-solid fa-chevron-down"></i>
+                </a>
+            </h3>
+            <div class="hide feat_{{ mod.id }}">
+                <p>
+                    <i>{{ mod.descr|template_trans }}</i>
+                </p>
+                <table class="feature-table">
+                    <thead>
+                        <tr>
+                            <th>{% trans "Name" %}</th>
+                            <th></th>
+                            <th></th>
+                            <th>{% trans "Description" %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for el in mod.features.all %}
+                            <tr id="{{ el.uuid }}" class="fea">
+                                <th>{{ el.name|template_trans }}</th>
+                                <td>
+                                    {% if el.tutorial %}
+                                        <a href="{% url 'tutorials' %}{{ el.tutorial }}" target="_blank">Tutorial</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if el.link %}
+                                        <a href="{{ el.link }}" target="_blank">{% trans "Video" %}</a>
+                                    {% endif %}
+                                </td>
+                                <td class="descr">{{ el.descr|template_trans }}</td>
+                                <td>
+                                    {% if el.overall %}
+                                        {% trans "Organization" %}
+                                    {% else %}
+                                        {% trans "Event" %}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock landing_content %}
+{% block js2 %}
+    <script>
+window.addEventListener('DOMContentLoaded', function() {
+
+    var searchInput = document.getElementById('search');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', function () {
+        var key = searchInput.value.toLowerCase();
+
+        document.querySelectorAll('.fea').forEach(function (row) {
+            var visible = row.textContent.toLowerCase().includes(key);
+            row.style.display = visible ? '' : 'none';
+            row.classList.toggle('visib', visible);
+        });
+
+        document.querySelectorAll('.feature-mod').forEach(function (mod) {
+            var any = mod.querySelector('.fea.visib') !== null;
+            mod.style.display = any ? '' : 'none';
+            var panel = mod.querySelector('div[class*="feat_"]');
+            if (key && any && panel) {
+                panel.classList.remove('hide');
+            }
+        });
+    });
+
+});
+    </script>
+{% endblock js2 %}

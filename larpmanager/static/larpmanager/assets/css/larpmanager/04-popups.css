@@ -1,0 +1,490 @@
+/*** tooltip ***/
+
+.lm_tooltip .staff {
+  color: var(--sec-clr);
+  background-color: rgba(var(--pri-rgb), 0.42);
+  border: solid 1px rgba(var(--pri-rgb), 0.42);
+}
+
+.lm_tooltip .orga {
+  color: var(--sec-clr);
+  background-color: rgba(var(--pri-rgb), 0.5);
+  border: solid 1px rgba(var(--pri-rgb), 0.5);
+}
+
+.lm_tooltip {
+  position: relative;
+  display: inline;
+}
+
+.lm_tooltiptext {
+  display: none;
+}
+
+.qtip.qtip-lm .qtip-content {
+  font-size: 1.3em;
+  line-height: 1.1;
+}
+
+.subl {
+  text-decoration: underline;
+}
+
+div.ui-lm_tooltip {
+  max-width: 90%;
+}
+
+.qtip-char {
+  width: 250px;
+}
+
+/* ---------------------------------------------------------------------------
+   Spinner / Loading
+   --------------------------------------------------------------------------- */
+
+.noscroll {
+  overflow: hidden;
+}
+
+#overlay {
+  display: none;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: black;
+  opacity: 0.5;
+}
+
+.lds-roller,
+.lds-roller div,
+.lds-roller div:after {
+  box-sizing: border-box;
+}
+
+.lds-roller {
+  display: inline-block;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -40px;
+  margin-left: -40px;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7.2px;
+  height: 7.2px;
+  border-radius: 50%;
+  background: white;
+  margin: -3.6px 0 0 -3.6px;
+}
+
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.lds-roller div:nth-child(1):after {
+  top: 62.62742px;
+  left: 62.62742px;
+}
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 67.71281px;
+  left: 56px;
+}
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 70.90963px;
+  left: 48.28221px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 70.90963px;
+  left: 31.71779px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 67.71281px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 62.62742px;
+  left: 17.37258px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12.28719px;
+}
+
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Toast Notifications
+   --------------------------------------------------------------------------- */
+
+.jq-toast-wrap {
+  width: 33%;
+}
+
+@media screen and (max-width: 840px) {
+  .jq-toast-wrap {
+    width: 80%;
+  }
+}
+
+.jq-toast-single {
+  font-family: easyreading, "Helvetica Neue", Arial, sans-serif;
+  font-size: 1.3em;
+  padding: 0.5em 0.5em 0.5em 1.5em !important;
+  line-height: 1.1;
+}
+
+/* ---------------------------------------------------------------------------
+   Popups & Modals
+   --------------------------------------------------------------------------- */
+
+.popup_text {
+  display: none;
+}
+
+.popup,
+.popup_small,
+.popup_tutorial,
+.popup_dashboard,
+.popup_delete,
+.popup_edit {
+  border-radius: 2em;
+  background-color: var(--sec-clr);
+  color: var(--pri-clr) !important;
+  padding: 0 1em;
+  -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--ter-rgb), 0.5) rgba(var(--pri-rgb), 0.1);
+  overflow-x: hidden;
+  text-align: left;
+}
+
+.popup {
+  width: 50em;
+  height: 30em;
+  -ms-overflow-style: none;
+}
+
+@media (max-width: 840px) {
+  .popup {
+    width: 20em;
+  }
+}
+
+.popup h2 {
+  margin: 1em;
+}
+
+.popup::-webkit-scrollbar {
+  display: none;
+}
+
+.popup .reg_profile {
+  width: auto;
+  height: 90%;
+  margin: auto;
+}
+
+.popup_small {
+  width: fit-content;
+  max-width: 50vw;
+  max-height: 60vh;
+}
+
+.popup_edit {
+  width: 70vw;
+  height: 80vh;
+}
+
+.popup_delete {
+  width: fit-content;
+  min-width: 400px;
+  max-width: 40vw;
+  height: fit-content;
+  min-height: 300px;
+  max-height: 50vh;
+}
+
+.popup_delete #lm-modal-content,
+.popup_delete .frame-container {
+  height: auto;
+}
+
+.popup_delete .frame-container iframe {
+  height: 200px;
+  min-height: 200px;
+}
+
+#lm-modal {
+  padding: 1em;
+}
+
+#lm-modal-content {
+  height: 100%;
+}
+
+#lm-modal,
+#lm-modal-content,
+.frame-container {
+  overflow: hidden;
+}
+
+.frame-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.frame-container iframe {
+  transition: height 0.2s ease;
+  height: 100%;
+}
+
+body.floating_iframe #wrapper {
+  overflow-x: hidden;
+  padding-right: 0.5em;
+}
+
+@media (max-width: 840px) {
+  .popup_delete {
+    max-width: 90vw;
+  }
+}
+
+.popup_dashboard {
+  width: 60vw;
+  height: 60vh;
+  min-height: 200px;
+  max-height: 85vh;
+}
+
+@media (max-width: 1200px) {
+  .popup_dashboard,
+  .popup_edit {
+    width: 80vw;
+  }
+}
+
+@media (max-width: 840px) {
+  .popup_dashboard,
+  .popup_edit {
+    width: 90vw;
+  }
+}
+
+.popup_tutorial {
+  width: 80vw;
+  height: 80vh;
+}
+
+.popup_tutorial iframe {
+  height: calc(80vh - 2em) !important;
+  overflow-y: auto;
+}
+
+.popup_query {
+  width: 90vw;
+  max-height: 90vh;
+  border-radius: 2em;
+  background-color: rgba(18, 18, 18, 0.95);
+  color: white !important;
+  padding: 1em;
+  -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.85);
+  -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.85);
+  box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.85);
+  overflow: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  text-align: center;
+  font-size: 80%;
+}
+
+@media (max-width: 840px) {
+  .popup,
+  .popup_tutorial,
+  .popup_query,
+  .popup_dashboard,
+  .popup_edit {
+    width: 95vw;
+  }
+}
+
+@media (max-width: 840px) {
+  #tutorial_query {
+    width: 60% !important;
+  }
+
+  #tutorial_query_go {
+    width: auto !important;
+  }
+
+  .popup_tutorial {
+    width: 95% !important;
+  }
+}
+
+/* Dialog modal system */
+dialog {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: none;
+  max-height: none;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.popup_tutorial img {
+  max-width: 70%;
+  margin: auto;
+  height: auto;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+#tutorial_query {
+  display: inline-block;
+}
+
+#tutorial_query_go {
+  padding: 0.7em 1em;
+}
+
+#char-finder-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(var(--sec-rgb), 0.95);
+  padding: 3em;
+  border-radius: 10px;
+  min-width: 320px;
+  z-index: 1000;
+}
+
+#char-finder-close {
+  position: absolute;
+  top: 0.5em;
+  right: 1em;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+#excel-edit {
+  max-width: 90vw;
+  max-height: 90vh;
+  min-width: 80vw;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 3em;
+  border-radius: 2em;
+  background-color: rgba(var(--sec-rgb), 0.9);
+  -webkit-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 39px 12px rgba(0, 0, 0, 0.75);
+  overflow: scroll;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  transition-delay: 0.1s;
+  pointer-events: none;
+  z-index: 99;
+}
+
+#excel-edit iframe {
+  max-height: 100%;
+  width: 100%;
+}
+
+#excel-edit textarea {
+  width: 100%;
+}
+
+#excel-edit.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#excel-edit .close {
+  position: absolute;
+  top: 0.5em;
+  right: 1em;
+  z-index: 1;
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+}
+
+#imagePopup {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#popupImg {
+  max-width: 90%;
+  max-height: 90%;
+}

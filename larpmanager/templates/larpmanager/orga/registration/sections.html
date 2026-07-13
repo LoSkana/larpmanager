@@ -4,7 +4,7 @@
     {% trans "Registration sections" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="registration_sections"
            class="go_datatable writing row_reorder"
            data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
@@ -52,4 +52,5 @@
             {% trans "No registration form sections have been created yet" %}. {% trans "Use the button above to add a section to organize your registration questions" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

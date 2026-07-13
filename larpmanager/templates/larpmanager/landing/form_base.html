@@ -1,0 +1,19 @@
+{% extends "larpmanager/landing/base.html" %}
+{% comment %}
+Bridge base so org auth templates (login, register, password reset) can render
+inside the landing layout on the main site. Maps the org block names
+(title, content) onto the landing blocks.
+{% endcomment %}
+{% block landing_eyebrow %}
+    Account
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {% block title %}
+    {% endblock title %}
+{% endblock landing_title %}
+{% block landing_content %}
+    <div class="contact-form">
+        {% block content %}
+        {% endblock content %}
+    </div>
+{% endblock landing_content %}

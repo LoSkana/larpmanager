@@ -123,7 +123,7 @@ def exe_roles_invite(request: HttpRequest, role_uuid: str) -> HttpResponse:
         return redirect("exe_roles")
     context["role"] = role
     context["back_url"] = reverse("exe_roles")
-    return render(request, "larpmanager/roles_invite.html", context)
+    return render(request, "larpmanager/manage/roles_invite.html", context)
 
 
 @login_required

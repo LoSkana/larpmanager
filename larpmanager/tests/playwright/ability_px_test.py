@@ -18,8 +18,8 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
-"""Test: Experience points system with abilities, deliveries, rules, and modifiers.
-Verifies ability creation with prerequisites, XP delivery, computed field rules,
+"""Test: Experience points system with abilities, awards, rules, and modifiers.
+Verifies ability creation with prerequisites, XP award, computed field rules,
 player ability selection with undo functionality, and conditional ability modifiers.
 """
 
@@ -60,7 +60,7 @@ def test_exp(pw_page: Any) -> None:
 
     ability(live_server, page)
 
-    delivery(live_server, page)
+    award(live_server, page)
 
     rules(page)
 
@@ -68,7 +68,7 @@ def test_exp(pw_page: Any) -> None:
 
     modifiers(page, live_server)
 
-    delivery_auto_populate(page, live_server)
+    award_auto_populate(page, live_server)
 
     free_invisible_not_auto_assigned(page, live_server)
 
@@ -79,7 +79,7 @@ def setup(live_server: Any, page: Any) -> None:
     # activate features
     go_to(page, live_server, "/test/manage/")
     sidebar(page, "Features")
-    page.get_by_role("checkbox", name="Player editor").check()
+    page.get_by_role("checkbox", name="Character creation").check()
     page.get_by_role("checkbox", name="Experience points").check()
     page.get_by_role("checkbox", name="Characters").check()
     submit_confirm(page)
@@ -96,7 +96,7 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_exp_rules").check()
     page.locator("#id_exp_modifiers").check()
 
-    page.get_by_role("link", name=re.compile(r"^Player editor\s.+")).click()
+    page.get_by_role("link", name=re.compile(r"^Character creation\s.+")).click()
     page.locator("#id_user_character_max").click()
     page.locator("#id_user_character_max").fill("1")
     submit_confirm(page)
@@ -187,8 +187,8 @@ def ability(live_server: Any, page: Any) -> None:
     page.get_by_role("cell", name="test_template").click()
 
 
-def delivery(live_server: Any, page: Any) -> None:
-    go_to(page, live_server, "/test/manage/experience/deliveries/")
+def award(live_server: Any, page: Any) -> None:
+    go_to(page, live_server, "/test/manage/experience/awards/")
     page.get_by_role("link", name="New").click()
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
@@ -294,7 +294,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
         """
         Obtain ability All base ability double shield 2 This text should show Requires: sword1
         select the new ability to get
-        Experience points 12 Total 1 Used 11 Available Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
+        Experience points 12 Total 1 Used 11 Available Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
     )
 
     # get ability
@@ -305,7 +305,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
         page.locator("#one"),
         """Obtain ability all No abilities found. Select the new ability to get
         Experience points 12 Total 3 Used 9 Available Abilities base ability double shield (2)
-        This text should show sword1 (1) sdsfdsfds deliveries 2 first live """,
+        This text should show sword1 (1) sdsfdsfds awards 2 first live """,
     )
     expect(page.locator(".ability-cards-grid")).not_to_contain_text("double shield")
 
@@ -319,7 +319,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
         Obtain ability All base ability double shield 2 This text should show Requires: sword1
         Select the new ability to get
         Experience points 12 Total 1 Used 11 Available
-        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
+        Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
     )
 
 
@@ -332,8 +332,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_abilities_tr").get_by_role("listitem").click()
     edit_iframe.locator("#id_abilities_tr").get_by_role("searchbox").fill("do")
     edit_iframe.get_by_role("option", name="double shield").click()
-    edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").click()
-    edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("ro")
+    edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").click()
+    edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").fill("ro")
     edit_iframe.get_by_role("option", name="Test Larp - Class Rogue").click()
     save_modal(page, edit_iframe)
 
@@ -349,7 +349,7 @@ def modifiers(page: Any, live_server: Any) -> None:
         Obtain ability All base ability double shield 2
         this text should show requires: sword1 Select the new ability to get
         Experience points 12 Total 1 Used 11 Available
-        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
+        Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -362,7 +362,7 @@ def modifiers(page: Any, live_server: Any) -> None:
         """
         Obtain ability All No abilities found. Select the new ability to get
         Experience points 12 Total 1 Used 11 Available Abilities base ability double shield (0)
-        This text should show sword1 (1) sdsfdsfds deliveries 2 first live""",
+        This text should show sword1 (1) sdsfdsfds awards 2 first live""",
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
@@ -376,7 +376,7 @@ def modifiers(page: Any, live_server: Any) -> None:
         Obtain ability All base ability double shield 2
         this text should show requires: sword1 Select the new ability to get
         Experience points 12 Total 1 Used 11 Available
-        Abilities base ability sword1 (1) sdsfdsfds deliveries 2 first live""",
+        Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
     )
 
     # now test increase cost modifiers
@@ -389,8 +389,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("option", name="double shield").click()
     edit_iframe.locator("#id_abilities_tr").get_by_role("searchbox").press("Tab")
     edit_iframe.locator("#id_cost").fill("3")
-    edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").click()
-    edit_iframe.get_by_role("cell", name="Indicate the required").get_by_role("searchbox").fill("mage")
+    edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").click()
+    edit_iframe.get_by_role("cell", name="If you select one (or more) character options").get_by_role("searchbox").fill("mage")
     edit_iframe.get_by_role("option", name="Test Larp - Class Mage").click()
     save_modal(page, edit_iframe)
 
@@ -407,27 +407,20 @@ def modifiers(page: Any, live_server: Any) -> None:
         """
         Obtain ability All No abilities found. Select the new ability to get
         Experience points 12 Total 4 Used 8 Available Abilities base ability double shield (3)
-        This text should show sword1 (1) sdsfdsfds deliveries 2 first live""",
+        This text should show sword1 (1) sdsfdsfds awards 2 first live""",
     )
 
 
-def delivery_auto_populate(page: Any, live_server: Any) -> None:
-    """Test auto-populate delivery from run via Load participants button."""
-    # Go to deliveries page and click Load participants
-    go_to(page, live_server, "/test/manage/experience/deliveries/")
+def award_auto_populate(page: Any, live_server: Any) -> None:
+    """Test auto-populate award from run via Load participants button."""
+    # Go to awards page and click Load participants
+    go_to(page, live_server, "/test/manage/experience/awards/")
     page.get_by_role("link", name="Load participants").click()
     edit_iframe = get_modal_iframe(page)
 
-    # Select run in the load form
-    edit_iframe.locator("#select2-id_run-container").click()
-    _select2_search_and_pick(edit_iframe.locator(".select2-container--open .select2-search__field"), edit_iframe, "tes")
-
-    # Submit the load form - iframe redirects to new delivery form with characters pre-populated
-    submit_confirm(edit_iframe)
-    edit_iframe = get_modal_iframe(page)
-
-    # Fill in delivery name and amount inside the modal
-    edit_iframe.locator("#id_name").fill("auto populated delivery")
+    # Fill in award name and amount inside the modal
+    expect(edit_iframe.locator("#id_name")).to_have_value("Partecipation to Test Larp")
+    edit_iframe.locator("#id_name").fill("auto populated award")
     edit_iframe.locator("#id_amount").fill("5")
     save_modal(page, edit_iframe)
 

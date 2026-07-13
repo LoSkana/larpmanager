@@ -30,7 +30,8 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
-from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized
+from larpmanager.tests.utils import go_to, load_image, login_orga, submit, submit_confirm, expect_normalized, \
+    confirm_modal
 
 pytestmark = pytest.mark.e2e
 
@@ -109,6 +110,7 @@ def donation(page: Any, live_server: Any) -> None:
     # Check for donation invoice in the table
     expect(page.get_by_role("row", name="Admin Test Wire donation")).to_be_visible()
     page.get_by_role("link", name="Confirm").click()
+    confirm_modal(page)
 
     go_to(page, live_server, "/accounting")
     expect_normalized(page, page.locator("#one"), "Donations done")
@@ -167,6 +169,7 @@ def membership_fees(page: Any, live_server: Any) -> None:
     # Check for membership fee invoice in the table
     expect(page.get_by_role("row", name="Admin Test Wire membership")).to_be_visible()
     page.get_by_role("link", name="Confirm").click()
+    confirm_modal(page)
 
     go_to(page, live_server, "/accounting")
     expect(page.locator("#one")).not_to_contain_text("Payment membership fee")
@@ -199,6 +202,7 @@ def collections(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/manage/invoices")
     expect_normalized(page, page.locator("#one"), "Collected contribution of Admin Test for User")
     page.get_by_role("link", name="Confirm").click()
+    confirm_modal(page)
 
     go_to(page, live_server, "/accounting")
     page.get_by_role("link", name="Manage it here!").click()

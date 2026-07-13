@@ -1,0 +1,270 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ texts.page_title }}
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="description" content="{{ texts.meta_description }}">
+    <meta name="keywords" content="{{ texts.meta_keywords }}">
+    <meta property="og:title" content="LarpManager">
+{% endblock meta %}
+{% block landing_body %}
+    <!-- Hero -->
+    <header class="hero">
+        <div class="wrap">
+            <div class="hero-brand">{{ texts.hero_brand }}</div>
+            <h1>
+                {{ texts.hero_title }} <em>{{ texts.hero_title_em }}</em>
+            </h1>
+            <p class="hero-sub">{{ texts.hero_description }}</p>
+            <div class="cta-row">
+                <a class="btn btn-primary" href="{% url 'join' %}" title="Free trial">Start for free</a>
+                <a class="btn btn-ghost" href="{% url 'demo' %}" title="Live demo">Live Demo</a>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <b class="key-number-value" data-target="{{ cnt_run }}">{{ cnt_run }}+</b>
+                    <span>Events</span>
+                </div>
+                <div class="stat">
+                    <b class="key-number-value" data-target="{{ cnt_character }}">{{ cnt_character }}+</b>
+                    <span>Characters</span>
+                </div>
+                <div class="stat">
+                    <b class="key-number-value" data-target="{{ cnt_registration }}">{{ cnt_registration }}+</b>
+                    <span>Registrations</span>
+                </div>
+                <div class="stat">
+                    <b class="key-number-value" data-target="{{ cnt_paymentinvoice }}">{{ cnt_paymentinvoice }}+</b>
+                    <span>Payments</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Steps -->
+    <section class="land">
+        <div class="wrap">
+            <div class="steps-head">
+                <p class="eyebrow">{{ texts.steps_eye }}</p>
+                <h2>{{ texts.steps_title }}</h2>
+                <p>{{ texts.steps_sub }}</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <h3>{{ texts.step1_title }}</h3>
+                    <p>{{ texts.step1_text }}</p>
+                </div>
+                <div class="step">
+                    <h3>{{ texts.step2_title }}</h3>
+                    <p>{{ texts.step2_text }}</p>
+                </div>
+                <div class="step">
+                    <h3>{{ texts.step3_title }}</h3>
+                    <p>{{ texts.step3_text }}</p>
+                </div>
+                <div class="step">
+                    <h3>{{ texts.step4_title }}</h3>
+                    <p>{{ texts.step4_text }}</p>
+                </div>
+                <div class="step">
+                    <h3>{{ texts.step5_title }}</h3>
+                    <p>{{ texts.step5_text }}</p>
+                </div>
+                <div class="step">
+                    <h3>{{ texts.step6_title }}</h3>
+                    <p>{{ texts.step6_text }}</p>
+                </div>
+            </div>
+            <p class="steps-note">{{ texts.steps_note }}</p>
+        </div>
+    </section>
+    <!-- Problems / showcase -->
+    <section class="land problems">
+        <div class="wrap">
+            <h2>{{ texts.showcase_intro }}</h2>
+            <div class="prob-grid">
+                {% for el in showcase %}
+                    <div class="prob-card">
+                        <h3>{{ el.title }}</h3>
+                        <div class="prob-text">{{ el.text | safe }}</div>
+                        {% if el.blog %}
+                            <a class="prob-link" href="{% url 'blog' el.blog.slug %}">{{ texts.learn_more }} <i class="fa-solid fa-arrow-right"></i></a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- Chaos -->
+    <section class="land chaos">
+        <div class="wrap">
+            <p class="eyebrow">{{ texts.chaos_eye }}</p>
+            <h2>{{ texts.chaos_title }}</h2>
+            <p class="chaos-sub">{{ texts.chaos_sub }}</p>
+            <div class="chips">
+                <span class="chip">Google Forms</span>
+                <span class="chip">Excel</span>
+                <span class="chip">Discord</span>
+                <span class="chip">PayPal</span>
+                <span class="chip">PDFs</span>
+                <span class="chip">Word documents</span>
+                <span class="chip">Email</span>
+                <span class="chip">Another spreadsheet</span>
+            </div>
+            <div class="chaos-arrow">
+                <i class="fa-solid fa-arrow-down"></i>
+            </div>
+            <span class="chip-one">LarpManager</span>
+            <p class="chaos-note">{{ texts.chaos_note | safe }}</p>
+        </div>
+    </section>
+    {% if highlights %}
+        <!-- Games gallery -->
+        <section class="land games">
+            <div class="wrap">
+                <p class="eyebrow">{{ texts.games_eye }}</p>
+                <h2>{{ texts.games_title }}</h2>
+                <p class="games-sub">{{ texts.games_sub }}</p>
+                <div class="strip-nav">
+                    <button type="button"
+                            aria-label="Previous photos"
+                            data-strip="gameStrip"
+                            data-dir="-1">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button type="button"
+                            aria-label="Next photos"
+                            data-strip="gameStrip"
+                            data-dir="1">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="strip" id="gameStrip">
+                    {% for el in highlights %}
+                        <div class="game-card">
+                            <div class="game-photo">
+                                {% if el.reduced_url %}<img src="{{ el.reduced_url }}" alt="{{ el.info }}" loading="lazy">{% endif %}
+                            </div>
+                            <div class="game-meta">
+                                <small>{{ el.info }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    {% if reviews %}
+        <!-- Quotes -->
+        <section class="land quotes">
+            <div class="wrap">
+                <p class="eyebrow">{{ texts.quotes_eye }}</p>
+                <h2>{{ texts.quotes_title }}</h2>
+                <div class="strip-nav">
+                    <button type="button"
+                            aria-label="Previous testimonials"
+                            data-strip="quoteStrip"
+                            data-dir="-1">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button type="button"
+                            aria-label="Next testimonials"
+                            data-strip="quoteStrip"
+                            data-dir="1">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="strip" id="quoteStrip">
+                    {% for el in reviews %}
+                        <div class="quote">
+                            <p>{{ el.text }}</p>
+                            <cite>{{ el.author }}</cite>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    {% if partners %}
+        <!-- Partners -->
+        <section class="land partners">
+            <div class="wrap">
+                <h2 class="promoters-title">{% trans "Partners" %}</h2>
+                <div class="strip" id="partnerStrip">
+                    {% for el in partners %}
+                        {% if el.url %}
+                            <a href="{{ el.url }}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="partner-card">
+                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
+                                <span>
+                                    <span class="partner-name">{{ el.name }}</span>
+                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
+                                </span>
+                            </a>
+                        {% else %}
+                            <div class="partner-card">
+                                {% if el.profile_thumb_url %}<img src="{{ el.profile_thumb_url }}" alt="{{ el.name }}">{% endif %}
+                                <span>
+                                    <span class="partner-name">{{ el.name }}</span>
+                                    {% if el.text %}<span class="partner-text">{{ el.text }}</span>{% endif %}
+                                </span>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    {% if promoters %}
+        <!-- Promoters -->
+        <section class="land promoters">
+            <div class="wrap">
+                <h2 class="promoters-title">{{ texts.associations_list }}</h2>
+                <div class="strip" id="promoterStrip">
+                    {% for el in promoters %}
+                        <div class="promoter-card"
+                             style="background-image: url('{{ el.promoter_url }}')"
+                             aria-label="{{ el.name }}"></div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endif %}
+    <!-- Video -->
+    <section class="land video-section">
+        <div class="wrap">
+            <p class="starter">{{ texts.video_intro }}</p>
+            <div class="guide-container">
+                <iframe class="guide-video"
+                        src="https://www.youtube.com/embed/ygiZq2UPl1Y"
+                        allowfullscreen="allowfullscreen">
+                </iframe>
+            </div>
+        </div>
+    </section>
+    <!-- Open / self-host -->
+    <section class="land open">
+        <div class="wrap">
+            <div>
+                <p class="eyebrow">{{ texts.open_hosted_eye }}</p>
+                <h3>{{ texts.open_hosted_title }}</h3>
+                <p>{{ texts.open_hosted_text }}</p>
+            </div>
+            <div>
+                <p class="eyebrow">{{ texts.open_selfhost_eye }}</p>
+                <h3>{{ texts.open_selfhost_title }}</h3>
+                <p>{{ texts.open_selfhost_text }}</p>
+            </div>
+        </div>
+    </section>
+    <!-- Final CTA -->
+    <section class="final">
+        <div class="wrap">
+            <h2>{{ texts.cta_title }}</h2>
+            <p>{{ texts.cta_description | safe }}</p>
+            <a class="btn btn-primary" href="{% url 'join' %}" title="Free trial">Start your first event</a>
+        </div>
+    </section>
+{% endblock landing_body %}

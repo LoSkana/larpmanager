@@ -3,6 +3,9 @@
 {% block title %}
     {% trans "Payments" %} - {{ run }}
 {% endblock title %}
+{% block info %}
+    {% trans "View your payments and pending amounts for this event" %}
+{% endblock info %}
 {% block content %}
     <div class="user_resize platform">
         <h2>{% trans "Payment summary" %}</h2>
@@ -46,11 +49,7 @@
                 <i class="fa-solid fa-circle-info"></i>
                 {% trans "The membership fee" %}
                 {% if run.start %}{{ run.start.year }}{% endif %}
-                {% if membership_amount %}
-                    ({{ membership_amount|format_decimal }}
-                    {% if currency_symbol %}{{ currency_symbol }}{% endif %}
-                    )
-                {% endif %}
+                {% if membership_amount_display %}{{ membership_amount_display }}{% endif %}
                 {% trans "is still to be paid, and will be added to your next payment" %}
             </p>
         {% elif membership_fee == 'done' %}
@@ -59,11 +58,7 @@
                 {% trans "The membership fee" %}
                 {% if run.start %}{{ run.start.year }}{% endif %}
                 {% trans "has been paid" %}
-                {% if membership_amount_paid %}
-                    ({{ membership_amount_paid|format_decimal }}
-                    {% if currency_symbol %}{{ currency_symbol }}{% endif %}
-                    )
-                {% endif %}
+                {% if membership_amount_paid_display %}{{ membership_amount_paid_display }}{% endif %}
             </p>
         {% endif %}
         <hr />
