@@ -1271,10 +1271,20 @@ body.landing .contact-form .allauth_signin img {
   height: auto;
 }
 
+body.landing .contact-form .login_go {
+  display: block;
+  margin: 1rem auto 0;
+}
+
 body.landing .contact-form .registration_register,
 body.landing .contact-form .password_reset {
   margin: 0.8rem 0 0;
   font-size: 0.9rem;
+  text-align: center;
+}
+
+.allauth_signin a img {
+  width: 15em;
 }
 
 body.landing .contact-form .registration_register a,

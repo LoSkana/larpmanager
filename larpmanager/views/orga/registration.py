@@ -1108,8 +1108,12 @@ def orga_registration_discount_del(
     get_registration(context, registration_uuid)
     get_discount(context, discount_uuid)
 
-    # Delete the discount and save registration
-    AccountingItemDiscount.objects.get(pk=context["discount"].id).delete()
+    # Delete the discount accounting item for this member/run and save registration
+    AccountingItemDiscount.objects.filter(
+        disc=context["discount"],
+        member=context["registration"].member,
+        run=context["run"],
+    ).delete()
     context["registration"].save()
 
     # Redirect to registration discounts page

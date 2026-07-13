@@ -933,6 +933,11 @@ function show_sidebar_active() {
 // Initialize client-side (go_datatable) and server-side (pagin_datatable) DataTables,
 // applying sort/visibility config, row reorder, tooltips, and saved state.
 function data_tables() {
+    // DataTables assets are loaded only on pages that need them
+    if (typeof DataTable === 'undefined') {
+        return;
+    }
+
     window.datatables = window.datatables || {};
 
     $('table.go_datatable').each(function() {
@@ -1154,7 +1159,7 @@ function data_tables() {
             },
             columnDefs: [
                 { orderable: false, targets: disable_sort_columns },
-                { searcheable: false, targets: disable_sort_columns },
+                { searchable: false, targets: disable_sort_columns },
                 { columnControl: [], targets: disable_sort_columns }
             ],
             layout: { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } },

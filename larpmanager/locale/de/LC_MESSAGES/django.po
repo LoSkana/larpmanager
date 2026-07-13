@@ -5001,6 +5001,9 @@ msgstr "Zielsitzung nicht gefunden"
 msgid "This event has concluded"
 msgstr "Diese Veranstaltung ist abgeschlossen"
 
+msgid "Transfer is not possible"
+msgstr "Eine Übertragung ist nicht möglich"
+
 msgid "Try the sheet generation"
 msgstr "Kartenerstellung ausprobieren"
 
@@ -6322,9 +6325,6 @@ msgstr "Hast du dein Passwort oder deinen Benutzernamen vergessen?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Wenn angekreuzt, Ticketstufe zulassen: Personal"
-
-msgid "Indicate the amount of your donation"
-msgstr "Geben Sie den Betrag Ihrer Spende an"
 
 msgid "Indicates the details of the request"
 msgstr "Gibt die Einzelheiten der Forderung an"
@@ -9288,9 +9288,6 @@ msgstr ""
 
 msgid "Participants can sign up right away through the registration form"
 msgstr "Teilnehmer können sich direkt über das Anmeldeformular anmelden"
-
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr "Bitte geben Sie den Anlass an, für den Sie die Spende leisten möchten"
 
 msgid "Primary spots are sold out, but you can still sign up as a filler"
 msgstr ""

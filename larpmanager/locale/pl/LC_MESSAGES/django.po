@@ -5001,6 +5001,9 @@ msgstr "Nie znaleziono sesji docelowej"
 msgid "This event has concluded"
 msgstr "To wydarzenie zostało zakończone"
 
+msgid "Transfer is not possible"
+msgstr "Przeniesienie nie jest możliwe"
+
 msgid "Try the sheet generation"
 msgstr "Wypróbuj generowanie arkuszy"
 
@@ -6319,9 +6322,6 @@ msgstr "Nie pamiętasz hasła lub nazwy użytkownika?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Jeśli zaznaczone, zezwól na poziom biletu: Personel"
-
-msgid "Indicate the amount of your donation"
-msgstr "Wskaż kwotę darowizny"
 
 msgid "Indicates the details of the request"
 msgstr "Wskazuje szczegóły żądania"
@@ -9097,9 +9097,6 @@ msgstr ""
 msgid "Participants can sign up right away through the registration form"
 msgstr ""
 "Uczestnicy mogą się zapisać od razu, wypełniając formularz rejestracyjny"
-
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr "Wprowadź okazję, na którą chcesz przekazać darowiznę"
 
 msgid "Primary spots are sold out, but you can still sign up as a filler"
 msgstr ""

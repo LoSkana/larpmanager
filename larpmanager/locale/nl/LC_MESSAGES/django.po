@@ -5001,6 +5001,9 @@ msgstr "Doelsessie niet gevonden"
 msgid "This event has concluded"
 msgstr "Dit evenement is afgesloten"
 
+msgid "Transfer is not possible"
+msgstr "Een overdracht is niet mogelijk"
+
 msgid "Try the sheet generation"
 msgstr "Probeer kaarten te genereren"
 
@@ -6321,9 +6324,6 @@ msgstr "Wachtwoord of gebruikersnaam vergeten?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Indien aangevinkt, ticketniveau toestaan: Personeel"
-
-msgid "Indicate the amount of your donation"
-msgstr "Vermeld het bedrag van je donatie"
 
 msgid "Indicates the details of the request"
 msgstr "Geeft de details van de claim aan"
@@ -9151,9 +9151,6 @@ msgstr "Nu kunt u de dieetinformatie bekijken die deelnemers hebben ingediend"
 
 msgid "Participants can sign up right away through the registration form"
 msgstr "Deelnemers kunnen zich meteen aanmelden via het aanmeldingsformulier"
-
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr "Vul de gelegenheid in waarvoor je de donatie wilt doen"
 
 msgid "Primary spots are sold out, but you can still sign up as a filler"
 msgstr ""

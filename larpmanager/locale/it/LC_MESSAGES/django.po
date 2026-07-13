@@ -5001,6 +5001,9 @@ msgstr "Sessione di destinazione non trovata"
 msgid "This event has concluded"
 msgstr "Questo evento si è concluso"
 
+msgid "Transfer is not possible"
+msgstr "Il trasferimento non è possibile"
+
 msgid "Try the sheet generation"
 msgstr "Prova la generazione schede"
 
@@ -6319,9 +6322,6 @@ msgstr "Hai dimenticato la password o il nome utente?"
 
 msgid "If checked, allow ticket tier: Staff"
 msgstr "Se selezionata, abilita il livello di biglietto: Staff"
-
-msgid "Indicate the amount of your donation"
-msgstr "Indica la cifra della tua donazione"
 
 msgid "Indicates the details of the request"
 msgstr "Indica i dettagli della richiesta di rimborso"
@@ -9160,9 +9160,6 @@ msgstr ""
 msgid "Participants can sign up right away through the registration form"
 msgstr ""
 "I partecipanti possono iscriversi subito tramite il modulo di iscrizione"
-
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr "Inserisci la occasione per cui vuoi eseguire la donazione"
 
 msgid "Primary spots are sold out, but you can still sign up as a filler"
 msgstr ""

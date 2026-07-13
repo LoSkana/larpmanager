@@ -47,7 +47,7 @@
 
 /*** MOBILE ***/
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 840px) {
   .staff .links h3 {
     margin: 0 auto;
     text-align: center;
@@ -258,7 +258,7 @@
   font-size: 22px !important;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 840px) {
   .my-driverjs {
     max-width: 80vw;
   }
@@ -434,7 +434,7 @@
   object-fit: contain;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 840px) {
   .onetime-header h1 {
     font-size: 1.5em;
   }
@@ -714,14 +714,14 @@ body.floating_iframe .inner {
 }
 
 /* Mobile: 1 column */
-@media (max-width: 768px) {
+@media (max-width: 840px) {
   .grid {
     columns: 1;
   }
 }
 
 /* Tablet: 2 columns */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 841px) and (max-width: 1200px) {
   .grid {
     columns: 2;
   }

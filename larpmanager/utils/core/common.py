@@ -175,6 +175,18 @@ def get_member(member_uuid: str) -> Member:
     return get_object_uuid(Member, member_uuid)
 
 
+def get_assoc_member(member_uuid: str, association_id: int) -> Member:
+    """Get a member by UUID, scoped to those with a Membership in the association."""
+    queryset = Member.objects.filter(memberships__association_id=association_id).distinct()
+    return get_object_uuid(Member, member_uuid, queryset_base=queryset)
+
+
+def get_help_question_member(member_uuid: str, association_id: int) -> Member:
+    """Get a member by UUID, scoped to those with a HelpQuestion in the association."""
+    queryset = Member.objects.filter(questions__association_id=association_id).distinct()
+    return get_object_uuid(Member, member_uuid, queryset_base=queryset)
+
+
 def get_contact(member_id: int, other_member_id: int) -> object | None:
     """Get contact relationship between two members."""
     try:
@@ -208,13 +220,26 @@ def get_registration(context: dict, registration_uuid: str) -> None:
 
 
 def get_discount(context: dict, discount_uuid: str) -> None:
-    """Get discount by ID and add to context."""
-    add_context_by_uuid(context, "discount", Discount, discount_uuid, set_name=True)
+    """Get discount by ID and add to context, scoped to the current run."""
+    add_context_by_uuid(
+        context,
+        "discount",
+        Discount,
+        discount_uuid,
+        set_name=True,
+        runs=context["run"],
+    )
 
 
 def get_album(context: dict, album_uuid: str) -> None:
-    """Get album by ID and add to context."""
-    add_context_by_uuid(context, "album", Album, album_uuid)
+    """Get album by ID and add to context, scoped to the current association."""
+    add_context_by_uuid(
+        context,
+        "album",
+        Album,
+        album_uuid,
+        association_id=context["association_id"],
+    )
 
 
 def get_album_cod(context: dict, album_code: str) -> None:

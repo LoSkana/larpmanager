@@ -5,7 +5,7 @@
   right: 1.5em;
 }
 
-@media screen and (max-width: 736px) {
+@media screen and (max-width: 840px) {
   #header nav {
     top: 0.25em;
     right: 1em;
@@ -51,7 +51,7 @@
 
 /*** MOBILE ***/
 
-@media screen and (max-width: 736px) {
+@media screen and (max-width: 840px) {
   #header {
     height: 2em;
     padding: 0;

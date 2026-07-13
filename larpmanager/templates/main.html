@@ -211,11 +211,11 @@
               return $(this).children().length === 0 && $.trim($(this).text()) === '';
             }).hide();
 
-            $('#real_logout').parent().hide();
+            $('.logout-form').hide();
 
-            $('#logout').on( "click", function(event) {
+            $('.logout-link').on( "click", function(event) {
                 event.preventDefault();
-                $('#real_logout').click();
+                $(this).closest('span, li').siblings('.logout-form').submit();
                 return false;
             });
 

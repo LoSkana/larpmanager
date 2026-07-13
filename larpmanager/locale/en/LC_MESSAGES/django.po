@@ -188,6 +188,9 @@ msgstr ""
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
 
+msgid "Description"
+msgstr ""
+
 msgid "Collections"
 msgstr ""
 
@@ -239,9 +242,6 @@ msgstr ""
 msgid ""
 "Percentage to be retained by the payment system - enter the value as a "
 "number, without the percentage symbol"
-msgstr ""
-
-msgid "Description"
 msgstr ""
 
 msgid "Fee"
@@ -5595,9 +5595,6 @@ msgstr ""
 msgid "Warning. The form contains errors to the fields"
 msgstr ""
 
-msgid "Please enter the occasion for which you wish to make the donation"
-msgstr ""
-
 msgid "Choose the payment method"
 msgstr ""
 
@@ -7899,9 +7896,6 @@ msgid "Returned"
 msgstr ""
 
 msgid "Run"
-msgstr ""
-
-msgid "Indicate the amount of your donation"
 msgstr ""
 
 msgid "Indicates the details of the request"
@@ -12201,6 +12195,9 @@ msgid "Target event not found"
 msgstr ""
 
 msgid "Target session not found"
+msgstr ""
+
+msgid "Transfer is not possible"
 msgstr ""
 
 msgid "moved"

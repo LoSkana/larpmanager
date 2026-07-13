@@ -193,7 +193,6 @@ class UploadElementsForm(BaseForm):
 
     def __init__(self, *args: Any, only_one: bool = False, **kwargs: Any) -> None:
         """Initialize form, optionally removing the 'second' field."""
-        only_one = kwargs.pop("only_one", False)
         super().__init__(*args, **kwargs)
 
         # Remove 'second' field when only_one is True

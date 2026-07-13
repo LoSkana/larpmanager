@@ -253,14 +253,14 @@
   margin-top: 0.75rem;
   min-height: 1.2em;
 }
-@media (max-width: 680px) {
+@media (max-width: 840px) {
   .casting-layout {
     grid-template-columns: 1fr;
   }
 }
 
 #char-search,
-#castig-info {
+#casting-info {
   margin-bottom: 1em;
 }
 
