@@ -42,6 +42,7 @@ from pytest_django.fixtures import SettingsWrapper
 
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationSkin
+from larpmanager.models.base import Feature
 
 logging.getLogger("faker.factory").setLevel(logging.ERROR)
 logging.getLogger("faker.providers").setLevel(logging.ERROR)
@@ -290,7 +291,7 @@ def clean_db(host: str, env: Mapping[str, str], name: str, user: str) -> None:
 
 
 def _database_has_tables() -> bool:
-    """Check if database has any application tables."""
+    """Check if database has application tables populated with fixture data."""
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT COUNT(*)
@@ -301,7 +302,10 @@ def _database_has_tables() -> bool:
               AND c.relname NOT LIKE 'django_%'
         """)
         count = cursor.fetchone()[0]
-        return count > 0
+        if count == 0:
+            return False
+
+    return Feature.objects.exists()
 
 
 def _get_dump_schema_version() -> str | None:
