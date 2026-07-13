@@ -91,6 +91,7 @@ from larpmanager.forms.registration import (
 from larpmanager.forms.warehouse import OrgaWarehouseAreaForm, OrgaWarehouseItemAssignmentForm
 from larpmanager.forms.writing import (
     OrgaFactionForm,
+    OrgaGuildForm,
     OrgaHandoutForm,
     OrgaHandoutTemplateForm,
     OrgaPlotForm,
@@ -223,6 +224,7 @@ class OrgaAction(str, Enum):
     # Writing elements
     PLOTS = ("orga_plots", {"form": OrgaPlotForm, "writing": TextVersionChoices.PLOT})
     FACTIONS = ("orga_factions", {"form": OrgaFactionForm, "writing": TextVersionChoices.FACTION})
+    GUILDS = ("orga_guilds", {"form": OrgaGuildForm, "writing": TextVersionChoices.GUILD})
     QUEST_TYPES = ("orga_quest_types", {"form": OrgaQuestTypeForm, "writing": TextVersionChoices.QUEST_TYPE})
     QUESTS = ("orga_quests", {"form": OrgaQuestForm, "writing": TextVersionChoices.QUEST, "check": validate_quest})
     TRAITS = ("orga_traits", {"form": OrgaTraitForm, "writing": TextVersionChoices.TRAIT, "check": validate_trait})

@@ -326,9 +326,9 @@ class Command(BaseCommand):
 
     @staticmethod
     def check_old_payments() -> None:
-        """Delete payment invoices older than 60 days with CREATED status."""
+        """Delete payment invoices older than 365 days with CREATED status."""
         # Bulk delete old payment invoices in a single query
-        reference_date = timezone.now() - timedelta(days=60)
+        reference_date = timezone.now() - timedelta(days=365)
         PaymentInvoice.objects.filter(status=PaymentStatus.CREATED, created__lte=reference_date).delete()
 
     _GATEWAY_STUCK_RATIO_THRESHOLD = 0.5

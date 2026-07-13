@@ -170,6 +170,9 @@ msgstr "Informace"
 msgid "Item"
 msgstr "Vstup"
 
+msgid "Kick"
+msgstr "Kop"
+
 msgid "LAOG"
 msgstr "LAOG"
 
@@ -399,6 +402,9 @@ msgstr "Graf"
 msgid "Gross"
 msgstr "Hrubý"
 
+msgid "Guild"
+msgstr "Cech"
+
 msgid "Hotel"
 msgstr "Hotel"
 
@@ -544,6 +550,9 @@ msgstr "rychlý"
 msgid "Absent"
 msgstr "Nepřítomný"
 
+msgid "Accept"
+msgstr "Přijmout"
+
 msgid "Action"
 msgstr "Akce"
 
@@ -586,6 +595,9 @@ msgstr "Vytvořit"
 msgid "Delete"
 msgstr "Odstranit"
 
+msgid "Demote"
+msgstr "Snížit hodnost"
+
 msgid "Detail"
 msgstr "Detail"
 
@@ -627,6 +639,9 @@ msgstr "Přítel"
 
 msgid "Gender"
 msgstr "Žánr"
+
+msgid "Guilds"
+msgstr "Cechy"
 
 msgid "Header"
 msgstr "Záhlaví"
@@ -874,6 +889,9 @@ msgstr "Vytvořeno"
 msgid "Credits"
 msgstr "Kredity"
 
+msgid "Decline"
+msgstr "Pokles"
+
 msgid "Default"
 msgstr "Výchozí"
 
@@ -915,6 +933,9 @@ msgstr "Příjmy"
 
 msgid "Inverse"
 msgstr "Inverzní"
+
+msgid "Invited"
+msgstr "Pozvaný"
 
 msgid "Invoice"
 msgstr "Faktura"
@@ -981,6 +1002,9 @@ msgstr "Postupujte podle"
 
 msgid "Profile"
 msgstr "Profil"
+
+msgid "Promote"
+msgstr "Propagovat"
 
 msgid "Pronoun"
 msgstr "Zájmena"
@@ -1556,6 +1580,9 @@ msgstr "Potřebujete pomoc"
 msgid "New event"
 msgstr "Nová událost"
 
+msgid "New guild"
+msgstr "Nová gilda"
+
 msgid "No ticket"
 msgstr "Žádná jízdenka"
 
@@ -1766,6 +1793,9 @@ msgstr "Velikonoční vajíčko"
 msgid "Edit dates"
 msgstr "Upravit data"
 
+msgid "Edit guild"
+msgstr "Upravit cech"
+
 msgid "Email list"
 msgstr "e-mailový seznam"
 
@@ -1780,6 +1810,9 @@ msgstr "Typ události"
 
 msgid "Experience"
 msgstr "Zkušenosti"
+
+msgid "Guild logo"
+msgstr "Logo cechu"
 
 msgid "Historical"
 msgstr "Historické stránky"
@@ -2090,6 +2123,9 @@ msgstr "Čtyři kvóty"
 msgid "Gallery Pdf"
 msgstr "Galerie Pdf"
 
+msgid "Guild cover"
+msgstr "Obálka Guildu"
+
 msgid "In Progress"
 msgstr "Probíhá"
 
@@ -2108,8 +2144,14 @@ msgstr "Splátky"
 msgid "Inventories"
 msgstr "Zásoby"
 
+msgid "Invite sent"
+msgstr "Pozvánka odeslána"
+
 msgid "Last change"
 msgstr "Naposledy upraveno"
+
+msgid "Leave guild"
+msgstr "Opustit cech"
 
 msgid "Lightweight"
 msgstr "Lehké"
@@ -2628,6 +2670,12 @@ msgstr "Fiskální rozpočet"
 msgid "Free donation"
 msgstr "Bezplatný příspěvek"
 
+msgid "Guild created"
+msgstr "Cech byl založen"
+
+msgid "Guild updated"
+msgstr "Aktualizace cechu"
+
 msgid "Inflows total"
 msgstr "Celkové příjmy"
 
@@ -2917,14 +2965,23 @@ msgstr "Podpis pošty"
 msgid "Manage it here"
 msgstr "Spravujte ji zde"
 
+msgid "Manage members"
+msgstr "Správa členů"
+
 msgid "Maximum length"
 msgstr "Maximální délka"
 
 msgid "Maximum number"
 msgstr "Maximální počet"
 
+msgid "Member demoted"
+msgstr "Člen byl degradován"
+
 msgid "Member refused"
 msgstr "Člen odmítl"
+
+msgid "Member removed"
+msgstr "Člen byl odstraněn"
 
 msgid "Member revoked"
 msgstr "Odvolání partnera"
@@ -3148,11 +3205,17 @@ msgstr "Neplatný požadavek"
 msgid "Inventory Types"
 msgstr "Typy zásob"
 
+msgid "Invite declined"
+msgstr "Pozvánka byla odmítnuta"
+
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
 
 msgid "Maximum fillers"
 msgstr "Maximální množství výplní"
+
+msgid "Maximum members"
+msgstr "Maximální počet členů"
 
 msgid "Member approved"
 msgstr "Člen schválen"
@@ -3399,6 +3462,9 @@ msgstr "Chybějící otázka"
 
 msgid "Multiple systems"
 msgstr "Více systémů"
+
+msgid "My guild invites"
+msgstr "Pozvánky do mé gildy"
 
 msgid "Name of the plot"
 msgstr "Název pozemku"
@@ -3847,6 +3913,9 @@ msgstr "Dovednosti v oblasti událostí"
 msgid "Competences member"
 msgstr "Osobní dovednosti"
 
+msgid "Create a new guild"
+msgstr "Vytvořit nový cech"
+
 msgid "Delegated accounts"
 msgstr "Delegované účty"
 
@@ -3865,6 +3934,9 @@ msgstr "Zkušenostní systémy"
 msgid "First registration"
 msgstr "První registrace"
 
+msgid "Founding character"
+msgstr "Zakladatelská postava"
+
 msgid "Hide not available"
 msgstr "Skrýt není k dispozici"
 
@@ -3874,11 +3946,17 @@ msgstr "Historická rezidence"
 msgid "Informations saved"
 msgstr "Informace uloženy"
 
+msgid "Invite a character"
+msgstr "Pozvi postavu"
+
 msgid "Member Data Checks"
 msgstr "Kontroly členských údajů"
 
 msgid "Membership request"
 msgstr "Žádost o členství"
+
+msgid "My pending invites"
+msgstr "Moje nevyřízené pozvánky"
 
 msgid "Name of event area"
 msgstr "Název oblasti události"
@@ -3963,6 +4041,9 @@ msgstr "Registr dobrovolníků"
 
 msgid "Workspace selector"
 msgstr "Výběr pracovního prostoru"
+
+msgid "You left the guild"
+msgstr "Opustil jsi cech"
 
 msgid "Your Organizations"
 msgstr "Vaše organizace"
@@ -4368,6 +4449,9 @@ msgstr "Co odemknete"
 
 msgid "You are logged in as"
 msgstr "Jste přihlášeni jako"
+
+msgid "You joined the guild"
+msgstr "Stal ses členem cechu"
 
 msgid "Access your character"
 msgstr "Získejte přístup ke své postavě"
@@ -4801,6 +4885,9 @@ msgstr "Správa účtování událostí"
 msgid "Manage experience rules"
 msgstr "Správa pravidel zkušeností"
 
+msgid "Manage the event guilds"
+msgstr "Správa cechů pro danou událost"
+
 msgid "Manage the event quests"
 msgstr "Správa úkolů událostí"
 
@@ -4913,6 +5000,9 @@ msgstr "Aktuální verze platformy"
 msgid "Disable character finder"
 msgstr "Zakázat vyhledávač znaků"
 
+msgid "Discover the game guilds"
+msgstr "Objevte herní gildy"
+
 msgid "Display all sent e-mails"
 msgstr "Zobrazení všech odeslaných e-mailů"
 
@@ -4939,6 +5029,9 @@ msgstr "Správa oblasti události"
 
 msgid "Manages event's expenses"
 msgstr "Spravuje výdaje na událost"
+
+msgid "Member promoted to admin"
+msgstr "Člen povýšen na správce"
 
 msgid "Membership approval date"
 msgstr "Datum schválení členství"
@@ -4985,6 +5078,9 @@ msgstr "Tajný registrační kód"
 
 msgid "Secret registration link"
 msgstr "Tajný registrační odkaz"
+
+msgid "Select a valid character"
+msgstr "Zadejte platný znak"
 
 msgid "Target session not found"
 msgstr "Cílová relace nebyla nalezena"
@@ -5617,6 +5713,9 @@ msgstr "Doba trvání v sekundách (nepovinné)"
 msgid "Invalid code, please try again"
 msgstr "Neplatný kód, zkuste to prosím znovu"
 
+msgid "Manage all guilds of the event"
+msgstr "Spravovat všechny cechy v rámci této akce"
+
 msgid "Manage characters of the event"
 msgstr "Správa postav v rámci akce"
 
@@ -5709,6 +5808,9 @@ msgstr "Zkontrolovali jste to a je to správně"
 
 msgid "Discover the coming soon events"
 msgstr "Objevte připravované akce"
+
+msgid "Discover the guilds of the game"
+msgstr "Objevte cechy ve hře"
 
 msgid "Filter or search the characters"
 msgstr "Filtrujte nebo vyhledávejte postavy"
@@ -6043,6 +6145,9 @@ msgstr "Ověřování ručně schválených plateb"
 msgid "You don't have any characters yet"
 msgstr "Zatím nemáte žádné postavy"
 
+msgid "You have no pending guild invites"
+msgstr "Nemáte žádné nevyřízené pozvánky do cechu"
+
 msgid "You need to define the start date"
 msgstr "Je třeba určit datum zahájení"
 
@@ -6312,6 +6417,10 @@ msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: Staff"
 
 msgid "Indicates the details of the request"
 msgstr "Uvádí podrobnosti o nároku"
+
+#, python-format
+msgid "Invited with character %(character)s"
+msgstr "Pozván s postavou %(character)s"
 
 msgid "Manage prologue types for this event"
 msgstr "Správa typů prologů pro tuto událost"
@@ -6613,6 +6722,9 @@ msgstr "Byli jste pozváni, abyste se zapojili do této role"
 msgid "You must be an approved member to vote"
 msgstr "Abyste mohli hlasovat, musíte uhradit členský poplatek"
 
+msgid "You need a character to create a guild"
+msgstr "K založení cechu potřebujete postavu"
+
 msgid "click on the icon to open the tutorial"
 msgstr "kliknutím na ikonu otevřete výukový program"
 
@@ -6631,6 +6743,9 @@ msgstr "<b>%(number)s</b> znaky ke schválení"
 
 msgid "A description of the abilities involved"
 msgstr "Popis příslušných schopností"
+
+msgid "Cannot kick the last admin of the guild"
+msgstr "Nelze vyloučit posledního správce cechu"
 
 msgid "Character are not visible at the moment"
 msgstr "Znaky nejsou v tuto chvíli viditelné"
@@ -6900,6 +7015,9 @@ msgstr "Úspěšná konfigurace aplikace Authenticator"
 
 msgid "Browser user agent string from the access"
 msgstr "Řetězec user agent prohlížeče z přístupu"
+
+msgid "Cannot demote the last admin of the guild"
+msgstr "Nelze snížit oprávnění posledního správce cechu"
 
 msgid "Choice locked, click to make it available"
 msgstr "Volba uzamčena, kliknutím ji zpřístupníte"
@@ -7179,6 +7297,9 @@ msgstr "Žádnému z účastníků zatím nebyly vydány žetony"
 
 msgid "No workshop questions have been created yet"
 msgstr "Zatím nebyly vytvořeny žádné otázky k workshopu"
+
+msgid "Now players can create guilds for the event"
+msgstr "Hráči nyní mohou v rámci této akce zakládat gildy"
 
 msgid "Now you can create milestones for the event"
 msgstr "Nyní můžete pro událost vytvořit milníky"
@@ -7975,6 +8096,9 @@ msgstr "Některé funkce vyžadují \"Kredity\", které nejsou aktivní"
 msgid "The first column the amount, the second the receipts"
 msgstr "V prvním sloupci je částka, ve druhém příjem"
 
+msgid "This guild has reached its maximum number of members"
+msgstr "Tento cech dosáhl maximálního počtu členů"
+
 msgid "WARNING: deleted items might not be full recoverable"
 msgstr "UPOZORNĚNÍ: smazané položky nemusí být plně obnovitelné"
 
@@ -8422,6 +8546,9 @@ msgstr "Řešení problémů nahlášených účastníky během této akce"
 msgid "Manage the answer options available for workshop questions"
 msgstr "Správa možností odpovědí dostupných pro otázky v rámci workshopu"
 
+msgid "Maximum number of guilds players can create (0 = no limit)"
+msgstr "Maximální počet cechů, které mohou hráči založit (0 = bez omezení)"
+
 msgid "No contributors with competences found in the organization"
 msgstr ""
 "V organizaci nebyli nalezeni žádní spolupracovníci s příslušnými "
@@ -8441,6 +8568,9 @@ msgstr "Zaregistrujte se na akci nebo upravte své registrační možnosti"
 
 msgid "There are no open questions from participants at this time"
 msgstr "V tuto chvíli nemáme žádné otevřené otázky od účastníků"
+
+msgid "This character is already a member or has a pending invite"
+msgstr "Tato postava je již členem nebo má nevyřízenou pozvánku"
 
 msgid "This contributor has not self-assessed any competences yet"
 msgstr ""
@@ -8486,6 +8616,9 @@ msgstr "Správa nastavení události: název, popis, data, stav"
 
 msgid "Manage the selectable options for a character form question"
 msgstr "Správa volitelných možností u otázek s výběrem z nabídky"
+
+msgid "Maximum number of accepted members per guild (0 = no limit)"
+msgstr "Maximální počet přijatých členů v každém cechu (0 = bez omezení)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -8595,6 +8728,9 @@ msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
 "Prověřit a schválit žádosti o proplacení výdajů předložené spolupracovníky"
 
+msgid "The maximum number of guilds for this event has been reached"
+msgstr "Byl dosažen maximální počet cechů pro tuto akci"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"
 
@@ -8695,6 +8831,9 @@ msgstr ""
 
 msgid "View the full content of an archived email sent by the system"
 msgstr "Zobrazit celý obsah archivovaného e-mailu odeslaného systémem"
+
+msgid "You are the last admin: promote another member before leaving"
+msgstr "Jste posledním správcem: před odchodem povýšte jiného člena"
 
 msgid "You must complete payment of membership dues in order to vote"
 msgstr "Abyste mohli hlasovat, musíte uhradit členský poplatek"
@@ -9370,6 +9509,10 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Můžete použít následující pole, která se vyplní automaticky"
+
+#, python-format
+msgid "Your character %(character)s has been removed from the guild %(guild)s"
+msgstr "Vaše postava %(character)s byla odstraněna z cechu %(guild)s"
 
 msgid "Your payment has been received and is being verified by the organizers"
 msgstr "Vaše platba byla přijata a organizátoři ji právě ověřují"
@@ -10436,6 +10579,13 @@ msgstr ""
 "Musíte zaplatit alespoň <b>%(amount).2f %(currency)s</b> do %(deadline)d dnů"
 
 msgid ""
+"Choose which of your characters will found this guild and become its first "
+"admin"
+msgstr ""
+"Vyber si, která z tvých postav založí tento cech a stane se jeho prvním "
+"správcem"
+
+msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10769,6 +10919,14 @@ msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr "Doklad vystavený bankou jako důkaz o převodu (ve formátu pdf)"
+
+#, python-format
+msgid ""
+"You have been invited to join the guild %(guild)s with your character "
+"%(character)s"
+msgstr ""
+"Byli jste pozváni, abyste se se svou postavou %(character)s připojili k "
+"cechu %(guild)s"
 
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
@@ -11800,6 +11958,13 @@ msgid ""
 msgstr ""
 "Umožňuje nastavit procento 'daně' z příjmu z akce, které musí být odloženo "
 "pro organizaci"
+
+msgid ""
+"Enables 'Guilds', player-created groups of characters with a self-managed "
+"admin, invite and text"
+msgstr ""
+"Umožňuje vytváření „gild“ – skupin postav založených hráči, které mají "
+"vlastního správce, možnost pozvat členy a posílat zprávy"
 
 #, python-format
 msgid ""
@@ -13681,6 +13846,15 @@ msgstr ""
 "Přijetím této pozvánky budou vaše profilové údaje (jméno, e-mail a další "
 "vámi poskytnuté informace) sdíleny s touto organizací prostřednictvím "
 "platformy LarpManager"
+
+msgid ""
+"Select from the drop-down list the characters to be added to the guild. "
+"Players can also create guilds themselves, invite characters and manage "
+"membership from the event page"
+msgstr ""
+"Z rozevíracího seznamu vyberte postavy, které chcete přidat do cechu. Hráči "
+"si také mohou sami zakládat cechy, zvát do nich postavy a spravovat členství"
+" na stránce události"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

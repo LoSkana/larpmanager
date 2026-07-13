@@ -40,6 +40,7 @@ from larpmanager.models.form import _get_writing_mapping
 from larpmanager.models.writing import (
     Character,
     Faction,
+    Guild,
     Handout,
     HandoutTemplate,
     Plot,
@@ -172,6 +173,43 @@ def orga_factions_delete(request: HttpRequest, event_slug: str, faction_uuid: st
 def orga_factions_versions(request: HttpRequest, event_slug: str, faction_uuid: str) -> HttpResponse:
     """Display version history for a faction's description."""
     return orga_versions(request, event_slug, OrgaAction.FACTIONS, faction_uuid)
+
+
+@login_required
+def orga_guilds(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Delegate guild management to writing_list view in event context."""
+    context = check_event_context(request, event_slug, "orga_guilds")
+    return writing_list(request, context, Guild, "guild")
+
+
+@login_required
+def orga_guilds_view(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpResponse:
+    """View displaying a specific guild for organizers."""
+    return orga_view(request, event_slug, OrgaAction.GUILDS, guild_uuid)
+
+
+@login_required
+def orga_guilds_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Handle guild creation for event organizers."""
+    return orga_new(request, event_slug, OrgaAction.GUILDS)
+
+
+@login_required
+def orga_guilds_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpResponse:
+    """Handle guild editing for event organizers."""
+    return orga_edit(request, event_slug, OrgaAction.GUILDS, guild_uuid)
+
+
+@login_required
+def orga_guilds_delete(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpResponse:
+    """Delete guild for event."""
+    return orga_delete(request, event_slug, OrgaAction.GUILDS, guild_uuid)
+
+
+@login_required
+def orga_guilds_versions(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpResponse:
+    """Display version history for a guild's description."""
+    return orga_versions(request, event_slug, OrgaAction.GUILDS, guild_uuid)
 
 
 @login_required

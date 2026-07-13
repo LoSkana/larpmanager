@@ -170,6 +170,9 @@ msgstr "Informasjon"
 msgid "Item"
 msgstr "Inngang"
 
+msgid "Kick"
+msgstr "Spark"
+
 msgid "LAOG"
 msgstr "LAOG"
 
@@ -399,6 +402,9 @@ msgstr "Graf"
 msgid "Gross"
 msgstr "Brutto"
 
+msgid "Guild"
+msgstr "Gilde"
+
 msgid "Hotel"
 msgstr "Hotell"
 
@@ -544,6 +550,9 @@ msgstr "raskt"
 msgid "Absent"
 msgstr "Fraværende"
 
+msgid "Accept"
+msgstr "Godta"
+
 msgid "Action"
 msgstr "Handling"
 
@@ -586,6 +595,9 @@ msgstr "Opprett"
 msgid "Delete"
 msgstr "Slett"
 
+msgid "Demote"
+msgstr "Nedgradere"
+
 msgid "Detail"
 msgstr "Detaljer"
 
@@ -627,6 +639,9 @@ msgstr "Venn"
 
 msgid "Gender"
 msgstr "Sjanger"
+
+msgid "Guilds"
+msgstr "Gilder"
 
 msgid "Header"
 msgstr "Overskrift"
@@ -874,6 +889,9 @@ msgstr "Opprettet"
 msgid "Credits"
 msgstr "Studiepoeng"
 
+msgid "Decline"
+msgstr "Nedgang"
+
 msgid "Default"
 msgstr "Standardinnstilling"
 
@@ -915,6 +933,9 @@ msgstr "Inntekter"
 
 msgid "Inverse"
 msgstr "Invers"
+
+msgid "Invited"
+msgstr "Invitert"
 
 msgid "Invoice"
 msgstr "Faktura"
@@ -981,6 +1002,9 @@ msgstr "Gå videre"
 
 msgid "Profile"
 msgstr "Profil"
+
+msgid "Promote"
+msgstr "Markedsføre"
 
 msgid "Pronoun"
 msgstr "Pronomen"
@@ -1556,6 +1580,9 @@ msgstr "Trenger du hjelp"
 msgid "New event"
 msgstr "Nytt arrangement"
 
+msgid "New guild"
+msgstr "Nytt laug"
+
 msgid "No ticket"
 msgstr "Ingen billett"
 
@@ -1766,6 +1793,9 @@ msgstr "Påskeegg"
 msgid "Edit dates"
 msgstr "Rediger datoer"
 
+msgid "Edit guild"
+msgstr "Rediger klan"
+
 msgid "Email list"
 msgstr "e-postliste"
 
@@ -1780,6 +1810,9 @@ msgstr "Type hendelse"
 
 msgid "Experience"
 msgstr "Erfaring"
+
+msgid "Guild logo"
+msgstr "Gildelogo"
 
 msgid "Historical"
 msgstr "Historisk"
@@ -2090,6 +2123,9 @@ msgstr "Fire kvoter"
 msgid "Gallery Pdf"
 msgstr "Pdf-galleri"
 
+msgid "Guild cover"
+msgstr "Omslag til «Guild»"
+
 msgid "In Progress"
 msgstr "Pågående"
 
@@ -2108,8 +2144,14 @@ msgstr "Avbetaling"
 msgid "Inventories"
 msgstr "Varelager"
 
+msgid "Invite sent"
+msgstr "Invitasjon sendt"
+
 msgid "Last change"
 msgstr "Sist endret"
+
+msgid "Leave guild"
+msgstr "Forlate klanen"
 
 msgid "Lightweight"
 msgstr "Lettvekt"
@@ -2628,6 +2670,12 @@ msgstr "Statsbudsjettet"
 msgid "Free donation"
 msgstr "Gratis donasjon"
 
+msgid "Guild created"
+msgstr "Gilde opprettet"
+
+msgid "Guild updated"
+msgstr "Guilden er oppdatert"
+
 msgid "Inflows total"
 msgstr "Totale inntekter"
 
@@ -2917,14 +2965,23 @@ msgstr "Mail-signatur"
 msgid "Manage it here"
 msgstr "Administrer det her"
 
+msgid "Manage members"
+msgstr "Administrer medlemmer"
+
 msgid "Maximum length"
 msgstr "Maksimal lengde"
 
 msgid "Maximum number"
 msgstr "Maksimalt antall"
 
+msgid "Member demoted"
+msgstr "Medlem degradert"
+
 msgid "Member refused"
 msgstr "Medlem nektet"
+
+msgid "Member removed"
+msgstr "Medlem fjernet"
 
 msgid "Member revoked"
 msgstr "Partner tilbakekalt"
@@ -3148,11 +3205,17 @@ msgstr "Ugyldig forespørsel"
 msgid "Inventory Types"
 msgstr "Lagertyper"
 
+msgid "Invite declined"
+msgstr "Invitasjonen ble avvist"
+
 msgid "Mail assignment"
 msgstr "Tildeling av post"
 
 msgid "Maximum fillers"
 msgstr "Maksimalt antall fyllstoffer"
+
+msgid "Maximum members"
+msgstr "Maksimalt antall medlemmer"
 
 msgid "Member approved"
 msgstr "Medlem godkjent"
@@ -3399,6 +3462,9 @@ msgstr "Manglende spørsmål"
 
 msgid "Multiple systems"
 msgstr "Flere systemer"
+
+msgid "My guild invites"
+msgstr "Min klan inviterer"
 
 msgid "Name of the plot"
 msgstr "Navn på tomten"
@@ -3847,6 +3913,9 @@ msgstr "Ferdigheter i forbindelse med arrangementer"
 msgid "Competences member"
 msgstr "Personlige ferdigheter"
 
+msgid "Create a new guild"
+msgstr "Opprett et nytt laug"
+
 msgid "Delegated accounts"
 msgstr "Delegerte kontoer"
 
@@ -3865,6 +3934,9 @@ msgstr "Opplevelsessystemer"
 msgid "First registration"
 msgstr "Første registrering"
 
+msgid "Founding character"
+msgstr "Grunnlegger"
+
 msgid "Hide not available"
 msgstr "Skjul ikke tilgjengelig"
 
@@ -3874,11 +3946,17 @@ msgstr "Historisk bolig"
 msgid "Informations saved"
 msgstr "Informasjon lagret"
 
+msgid "Invite a character"
+msgstr "Inviter en karakter"
+
 msgid "Member Data Checks"
 msgstr "Kontroll av medlemsdata"
 
 msgid "Membership request"
 msgstr "Anmodning om medlemskap"
+
+msgid "My pending invites"
+msgstr "Mine ventende invitasjoner"
 
 msgid "Name of event area"
 msgstr "Navn på arrangementsområdet"
@@ -3963,6 +4041,9 @@ msgstr "Frivillighetsregisteret"
 
 msgid "Workspace selector"
 msgstr "Velger av arbeidsområde"
+
+msgid "You left the guild"
+msgstr "Du har forlatt klanen"
 
 msgid "Your Organizations"
 msgstr "Organisasjonene dine"
@@ -4368,6 +4449,9 @@ msgstr "Hva du vil låse opp"
 
 msgid "You are logged in as"
 msgstr "Du er logget inn som"
+
+msgid "You joined the guild"
+msgstr "Du har blitt medlem av klanen"
 
 msgid "Access your character"
 msgstr "Få tilgang til karakteren din"
@@ -4801,6 +4885,9 @@ msgstr "Administrer regnskap for arrangementer"
 msgid "Manage experience rules"
 msgstr "Administrer erfaringsregler"
 
+msgid "Manage the event guilds"
+msgstr "Administrer arrangementets klaner"
+
 msgid "Manage the event quests"
 msgstr "Administrer hendelsesoppdragene"
 
@@ -4913,6 +5000,9 @@ msgstr "Gjeldende plattformversjon"
 msgid "Disable character finder"
 msgstr "Deaktiver tegnfinner"
 
+msgid "Discover the game guilds"
+msgstr "Oppdag spillklanene"
+
 msgid "Display all sent e-mails"
 msgstr "Vis alle sendte e-poster"
 
@@ -4939,6 +5029,9 @@ msgstr "Administrer området for arrangementet"
 
 msgid "Manages event's expenses"
 msgstr "Administrerer arrangementets utgifter"
+
+msgid "Member promoted to admin"
+msgstr "Medlem forfremmet til administrator"
 
 msgid "Membership approval date"
 msgstr "Dato for godkjenning av medlemskap"
@@ -4985,6 +5078,9 @@ msgstr "Hemmelig registreringskode"
 
 msgid "Secret registration link"
 msgstr "Hemmelig registreringslenke"
+
+msgid "Select a valid character"
+msgstr "Velg et gyldig tegn"
 
 msgid "Target session not found"
 msgstr "Måløkten ble ikke funnet"
@@ -5617,6 +5713,9 @@ msgstr "Varighet i sekunder (valgfritt)"
 msgid "Invalid code, please try again"
 msgstr "Ugyldig kode, vennligst prøv igjen"
 
+msgid "Manage all guilds of the event"
+msgstr "Administrer alle klanene i arrangementet"
+
 msgid "Manage characters of the event"
 msgstr "Administrer karakterene i arrangementet"
 
@@ -5709,6 +5808,9 @@ msgstr "Har du sjekket, og er det riktig"
 
 msgid "Discover the coming soon events"
 msgstr "Se hvilke arrangementer som er på trappene"
+
+msgid "Discover the guilds of the game"
+msgstr "Oppdag spillets guilder"
 
 msgid "Filter or search the characters"
 msgstr "Filtrer eller søk i tegnene"
@@ -6043,6 +6145,9 @@ msgstr "Bekreft manuelt godkjente betalinger"
 msgid "You don't have any characters yet"
 msgstr "Du har ingen tegn ennå"
 
+msgid "You have no pending guild invites"
+msgstr "Du har ingen ventende invitasjoner til klaner"
+
 msgid "You need to define the start date"
 msgstr "Du må definere startdatoen"
 
@@ -6310,6 +6415,10 @@ msgstr "Hvis avkrysset, tillat billettnivå: Staff"
 
 msgid "Indicates the details of the request"
 msgstr "Angir detaljene i kravet"
+
+#, python-format
+msgid "Invited with character %(character)s"
+msgstr "Invitert med karakteren %(character)s"
 
 msgid "Manage prologue types for this event"
 msgstr "Administrer prologtyper for denne begivenheten"
@@ -6615,6 +6724,9 @@ msgstr "Du har blitt invitert til å bli med i rollen"
 msgid "You must be an approved member to vote"
 msgstr "Du må fullføre betalingen av medlemskontingenten for å kunne stemme"
 
+msgid "You need a character to create a guild"
+msgstr "Du må ha en karakter for å opprette et klan"
+
 msgid "click on the icon to open the tutorial"
 msgstr "klikk på ikonet for å åpne veiledningen"
 
@@ -6633,6 +6745,9 @@ msgstr "<b>%(number)s</b> tegn som skal godkjennes"
 
 msgid "A description of the abilities involved"
 msgstr "En beskrivelse av de involverte evnene"
+
+msgid "Cannot kick the last admin of the guild"
+msgstr "Det er ikke mulig å ekskludere den siste administratoren i klanen"
 
 msgid "Character are not visible at the moment"
 msgstr "Tegnene er ikke synlige for øyeblikket"
@@ -6902,6 +7017,9 @@ msgstr "Autentiseringsappen er konfigurert med suksess"
 
 msgid "Browser user agent string from the access"
 msgstr "Nettleserens brukeragentstreng fra tilgangen"
+
+msgid "Cannot demote the last admin of the guild"
+msgstr "Det er ikke mulig å nedgradere klanens siste administrator"
 
 msgid "Choice locked, click to make it available"
 msgstr "Valget er låst, klikk for å gjøre det tilgjengelig"
@@ -7181,6 +7299,9 @@ msgstr "Det er foreløpig ikke utstedt noen tokens til deltakerne"
 
 msgid "No workshop questions have been created yet"
 msgstr "Det er foreløpig ikke opprettet noen spørsmål til workshopen"
+
+msgid "Now players can create guilds for the event"
+msgstr "Nå kan spillerne opprette klaner for arrangementet"
 
 msgid "Now you can create milestones for the event"
 msgstr "Nå kan du opprette milepæler for arrangementet"
@@ -7982,6 +8103,9 @@ msgstr "Noen funksjoner krever \"Credits\", som ikke er aktive"
 msgid "The first column the amount, the second the receipts"
 msgstr "Den første kolonnen beløpet, den andre inntektene"
 
+msgid "This guild has reached its maximum number of members"
+msgstr "Dette laget har nådd sitt maksimale antall medlemmer"
+
 msgid "WARNING: deleted items might not be full recoverable"
 msgstr ""
 "ADVARSEL: Det er ikke sikkert at slettede elementer kan gjenopprettes i sin "
@@ -8444,6 +8568,10 @@ msgstr ""
 "Administrer svaralternativene som er tilgjengelige for spørsmålene i "
 "workshopen"
 
+msgid "Maximum number of guilds players can create (0 = no limit)"
+msgstr ""
+"Maksimalt antall klaner som spillere kan opprette (0 = ingen begrensning)"
+
 msgid "No contributors with competences found in the organization"
 msgstr ""
 "Det ble ikke funnet noen medarbeidere med den aktuelle kompetansen i "
@@ -8464,6 +8592,11 @@ msgstr ""
 
 msgid "There are no open questions from participants at this time"
 msgstr "Det er foreløpig ingen ubesvarte spørsmål fra deltakerne"
+
+msgid "This character is already a member or has a pending invite"
+msgstr ""
+"Denne brukeren er allerede medlem eller har en invitasjon som venter på "
+"godkjenning"
 
 msgid "This contributor has not self-assessed any competences yet"
 msgstr "Denne bidragsyteren har ennå ikke vurdert sine egne kompetanser"
@@ -8511,6 +8644,9 @@ msgstr ""
 msgid "Manage the selectable options for a character form question"
 msgstr ""
 "Administrer de valgbare alternativene for et spørsmål med karakterform"
+
+msgid "Maximum number of accepted members per guild (0 = no limit)"
+msgstr "Maksimalt antall godkjente medlemmer per klan (0 = ingen begrensning)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -8627,6 +8763,9 @@ msgstr ""
 "Gjennomgå og godkjenn utgiftsrapporter som er sendt inn av "
 "samarbeidspartnere"
 
+msgid "The maximum number of guilds for this event has been reached"
+msgstr "Det maksimale antallet klaner for dette arrangementet er nådd"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Denne karakteren er inaktiv og kan ikke tildeles spillere"
 
@@ -8735,6 +8874,11 @@ msgstr "Last opp en zip-fil med bilder og videoer for å fylle dette albumet"
 
 msgid "View the full content of an archived email sent by the system"
 msgstr "Vis hele innholdet i en arkivert e-post som er sendt av systemet"
+
+msgid "You are the last admin: promote another member before leaving"
+msgstr ""
+"Du er den siste administratoren: utnevne et annet medlem før du forlater "
+"gruppen"
 
 msgid "You must complete payment of membership dues in order to vote"
 msgstr "Du må fullføre betalingen av medlemskontingenten for å kunne stemme"
@@ -9461,6 +9605,10 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Du kan bruke følgende felter, de fylles ut automatisk"
+
+#, python-format
+msgid "Your character %(character)s has been removed from the guild %(guild)s"
+msgstr "Karakteren din, %(character)s, er blitt fjernet fra klanen %(guild)s"
 
 msgid "Your payment has been received and is being verified by the organizers"
 msgstr "Betalingen din er mottatt og blir nå sjekket av arrangørene"
@@ -10567,6 +10715,13 @@ msgstr ""
 "Du må betale minst <b>%(amount).2f %(currency)s</b> innen %(deadline)d dager"
 
 msgid ""
+"Choose which of your characters will found this guild and become its first "
+"admin"
+msgstr ""
+"Velg hvilken av karakterene dine som skal stifte denne klanen og bli dens "
+"første administrator"
+
+msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -10912,6 +11067,14 @@ msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr "Bevis utstedt av banken som bevis på overføringen (som pdf-fil)"
+
+#, python-format
+msgid ""
+"You have been invited to join the guild %(guild)s with your character "
+"%(character)s"
+msgstr ""
+"Du har blitt invitert til å bli medlem av klanen %(guild)s med karakteren "
+"din %(character)s"
 
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
@@ -11967,6 +12130,13 @@ msgid ""
 msgstr ""
 "Gjør det mulig å angi en 'skatteprosent' på arrangementsinntektene som må "
 "settes av til organisasjonen"
+
+msgid ""
+"Enables 'Guilds', player-created groups of characters with a self-managed "
+"admin, invite and text"
+msgstr ""
+"Aktiverer «Guilds» – spilleropprettede grupper av karakterer med en "
+"selvstyrt administrator, invitasjonsfunksjon og tekstfunksjon"
 
 #, python-format
 msgid ""
@@ -13870,6 +14040,15 @@ msgstr ""
 "Når du godtar denne invitasjonen, vil profildataene dine (navn, "
 "e-postadresse og annen informasjon du har oppgitt) bli delt med denne "
 "organisasjonen via LarpManager-plattformen"
+
+msgid ""
+"Select from the drop-down list the characters to be added to the guild. "
+"Players can also create guilds themselves, invite characters and manage "
+"membership from the event page"
+msgstr ""
+"Velg karakterene som skal legges til i klanen fra rullegardinlisten. "
+"Spillere kan også opprette klaner selv, invitere karakterer og administrere "
+"medlemskap fra arrangementssiden"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

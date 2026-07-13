@@ -196,6 +196,14 @@ def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member
             messages.success(request, message)
             return redirect("accounting_registration", registration_uuid=alert_registrations.first().uuid)
 
+    # Redirect to first registration with a pending action (e.g. create your character)
+    my_regs = get_member_registrations(member, context["association_id"])
+    for registration in build_registration_list(member, my_regs, context["association_id"], membership):
+        character_action = registration.run.status.get("character_action")
+        if character_action and character_action.get("status_type") == "todo":
+            messages.success(request, message)
+            return redirect(character_action["url"])
+
     messages.success(request, message)
     return redirect("home")
 

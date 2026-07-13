@@ -27,6 +27,7 @@ from larpmanager.views.user import (
     casting as views_uca,
     character as views_uc,
     event as views_ue,
+    guild as views_ug,
     miscellanea as views_ums,
     pdf as views_up,
     registration as views_ur,
@@ -231,6 +232,66 @@ urlpatterns = [
         "<slug:event_slug>/faction/<slug:faction_uuid>/",
         views_ue.faction,
         name="faction",
+    ),
+    path(
+        "<slug:event_slug>/guilds/",
+        views_ug.guilds,
+        name="guilds",
+    ),
+    path(
+        "<slug:event_slug>/guilds/new/",
+        views_ug.guild_create,
+        name="guild_create",
+    ),
+    path(
+        "<slug:event_slug>/guilds/invites/",
+        views_ug.guild_invites,
+        name="guild_invites",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/",
+        views_ug.guild,
+        name="guild",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/edit/",
+        views_ug.guild_edit,
+        name="guild_edit",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/invite/",
+        views_ug.guild_invite,
+        name="guild_invite",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/invite/<slug:character_uuid>/accept/",
+        views_ug.guild_invite_accept,
+        name="guild_invite_accept",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/invite/<slug:character_uuid>/decline/",
+        views_ug.guild_invite_decline,
+        name="guild_invite_decline",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/kick/<slug:character_uuid>/",
+        views_ug.guild_kick,
+        name="guild_kick",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/leave/",
+        views_ug.guild_leave,
+        name="guild_leave",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/promote/<slug:character_uuid>/",
+        views_ug.guild_promote,
+        name="guild_promote",
+    ),
+    path(
+        "<slug:event_slug>/guilds/<slug:guild_uuid>/demote/<slug:character_uuid>/",
+        views_ug.guild_demote,
+        name="guild_demote",
     ),
     path(
         "<slug:event_slug>/quests/",

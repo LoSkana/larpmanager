@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% if guild %}
+        {{ guild.name }} - {% trans "Edit" %} -
+    {% else %}
+        {% trans "New guild" %} -
+    {% endif %}
+    {{ run.search }}
+{% endblock title %}
+{% block content %}
+    <div class="user_resize platform">
+        {% if not guild %}
+            <p>{% trans "Choose which of your characters will found this guild and become its first admin" %}.</p>
+            <table>
+                <tr>
+                    <td>
+                        <label for="founder_character">{% trans "Founding character" %}</label>
+                    </td>
+                    <td>
+                        <select name="founder_character" id="founder_character" form="main_form">
+                            {% for ch in my_characters %}<option value="{{ ch.uuid }}">{{ ch.name }}</option>{% endfor %}
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+        {% include "elements/form/main.html" %}
+    </div>
+{% endblock content %}
