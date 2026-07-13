@@ -124,6 +124,11 @@ class Migration(migrations.Migration):
             name='allowed_sidebar',
             field=models.TextField(blank=True, help_text='Comma separated list of event/association permission slugs allowed in the sidebar for this demo type. Empty means no restriction.'),
         ),
+        migrations.AddField(
+            model_name='larpmanagerdemotype',
+            name='is_campaign',
+            field=models.BooleanField(default=False, help_text='Template association has multiple events under one campaign: grant the demo user an association-wide role and land on the association dashboard, instead of organizer of the first event.'),
+        ),
         migrations.RunPython(clear_association_caches, migrations.RunPython.noop),
         migrations.AlterField(
             model_name='association',

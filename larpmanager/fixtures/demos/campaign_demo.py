@@ -271,6 +271,7 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
         ),
         template_association=association,
         allowed_sidebar="orga_characters,orga_character_form,orga_exp_abilities,orga_copy",
+        is_campaign=True,
     )
 
     hints = [

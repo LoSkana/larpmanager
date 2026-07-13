@@ -1323,10 +1323,23 @@ def _create_demo(request: HttpRequest, demo_type: LarpManagerDemoType | None = N
     # Welcome message
     save_single_config(demo_association, "intro_driver", "welcome")
 
-    # Create admin role and assign member with full permissions
-    (admin_role, _created) = AssociationRole.objects.get_or_create(association=demo_association, number=1, name="Admin")
-    admin_role.members.add(demo_member)
-    admin_role.save()
+    first_event = None
+    if demo_type and not demo_type.is_campaign:
+        # Cloned instance already has events: place the demo user as organizer of the first one
+        first_event = Event.objects.filter(association=demo_association).order_by("pk").first()
+        (organizer_role, _created) = EventRole.objects.get_or_create(event=first_event, number=1)
+        if not organizer_role.name:
+            organizer_role.name = "Organizer"
+        organizer_role.members.add(demo_member)
+        organizer_role.save()
+    else:
+        # Empty demo association, or a campaign demo type (multiple events under one
+        # campaign): assign the assoc-wide exe/admin role instead of a single event
+        (admin_role, _created) = AssociationRole.objects.get_or_create(
+            association=demo_association, number=1, name="Admin"
+        )
+        admin_role.members.add(demo_member)
+        admin_role.save()
 
     # Set membership status to active/joined
     membership_element = get_user_membership(demo_member, demo_association.id)
@@ -1336,7 +1349,10 @@ def _create_demo(request: HttpRequest, demo_type: LarpManagerDemoType | None = N
     # Authenticate and log in the demo user
     login(request, demo_user, backend=get_user_backend())
 
-    return redirect("after_login", subdomain=demo_association.slug, path="manage")
+    # Non-campaign demo types land the user directly on their event's dashboard;
+    # empty demos and campaign demo types (multiple events) land on the assoc dashboard
+    redirect_path = f"{first_event.slug}/manage" if first_event else "manage"
+    return redirect("after_login", subdomain=demo_association.slug, path=redirect_path)
 
 
 _MD_MEDIA_TAGS = frozenset({"img", "video", "audio", "iframe", "source", "picture", "figure", "figcaption"})

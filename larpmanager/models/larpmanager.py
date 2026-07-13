@@ -460,6 +460,12 @@ class LarpManagerDemoType(UuidMixin, OrderMixin, BaseModel):
         "in the association/event configuration forms for this demo type. Empty means no restriction.",
     )
 
+    is_campaign = models.BooleanField(
+        default=False,
+        help_text="Template association has multiple events under one campaign: grant the demo user an "
+        "association-wide role and land on the association dashboard, instead of organizer of the first event.",
+    )
+
     def __str__(self) -> str:
         """Return string representation of the demo type."""
         return self.name
