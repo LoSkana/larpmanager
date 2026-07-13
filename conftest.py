@@ -42,7 +42,6 @@ from pytest_django.fixtures import SettingsWrapper
 
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationSkin
-from larpmanager.models.base import Feature
 
 logging.getLogger("faker.factory").setLevel(logging.ERROR)
 logging.getLogger("faker.providers").setLevel(logging.ERROR)
@@ -305,7 +304,7 @@ def _database_has_tables() -> bool:
         if count == 0:
             return False
 
-    return Feature.objects.exists()
+    return True
 
 
 def _get_dump_schema_version() -> str | None:
