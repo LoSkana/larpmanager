@@ -6536,6 +6536,10 @@ msgid "You are exploring a demo organization"
 msgstr "Tu explores une organisation de démonstration"
 
 #, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr "Tu es en train de découvrir la démo « %(name)s »"
+
+#, python-format
 msgid " Hurry: only %(num)d tickets available"
 msgstr " Dépêchez-vous : il ne reste que %(num)d billets disponibles"
 
@@ -7867,9 +7871,6 @@ msgstr "Gérer les étapes de progression des éléments d'écriture"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Gère ton mot de passe et l'authentification à deux facteurs"
-
-msgid "Ready for the real thing? Create your organization"
-msgstr "Prêt à passer à la pratique ? Crée ton organisation"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Deuxième personnage de la relation (destination)"
@@ -11723,6 +11724,13 @@ msgid ""
 msgstr ""
 "Utilise le bouton ci-dessus pour ajouter des étapes permettant de suivre "
 "l'avancement de la rédaction des différents éléments"
+
+msgid ""
+"Wanna try other demos, or are you ready for the real thing, to create your "
+"organization?"
+msgstr ""
+"Tu veux essayer d'autres démos, ou tu es prêt à passer à l'action et à créer"
+" ton organisation ?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

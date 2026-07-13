@@ -6535,6 +6535,10 @@ msgid "You are exploring a demo organization"
 msgstr "Je bekijkt een demo-organisatie"
 
 #, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr "Je bekijkt de demo \"%(name)s\""
+
+#, python-format
 msgid " Hurry: only %(num)d tickets available"
 msgstr " Haast je: er zijn nog maar %(num)d tickets beschikbaar"
 
@@ -7846,9 +7850,6 @@ msgstr "De voortgangsstappen voor de schrijfelementen beheren"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Beheer je wachtwoord en tweefactorauthenticatie"
-
-msgid "Ready for the real thing? Create your organization"
-msgstr "Klaar voor het echte werk? Zet je organisatie op"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede teken in de relatie (bestemming)"
@@ -11566,6 +11567,13 @@ msgid ""
 msgstr ""
 "Gebruik de knop hierboven om stappen toe te voegen waarmee je kunt bijhouden"
 " of de verschillende onderdelen al af zijn"
+
+msgid ""
+"Wanna try other demos, or are you ready for the real thing, to create your "
+"organization?"
+msgstr ""
+"Wil je nog andere demo’s uitproberen, of ben je er al klaar voor om het echt"
+" te gaan doen en je eigen organisatie op te zetten?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

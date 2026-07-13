@@ -21,8 +21,18 @@
 
 from __future__ import annotations
 
+from larpmanager.fixtures.demos.accounting_demo import build_accounting_demo
+from larpmanager.fixtures.demos.campaign_demo import build_campaign_demo
+from larpmanager.fixtures.demos.casting_demo import build_casting_demo
 from larpmanager.fixtures.demos.experience_demo import build_experience_demo
+from larpmanager.fixtures.demos.player_characters_demo import build_player_characters_demo
+from larpmanager.fixtures.demos.writing_demo import build_writing_demo
 
 DEMO_BUILDERS = [
     build_experience_demo,
+    build_writing_demo,
+    build_casting_demo,
+    build_accounting_demo,
+    build_player_characters_demo,
+    build_campaign_demo,
 ]

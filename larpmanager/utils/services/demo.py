@@ -79,6 +79,8 @@ from larpmanager.models.utils import my_uuid, my_uuid_short
 from larpmanager.models.writing import (
     Character,
     Faction,
+    Handout,
+    HandoutTemplate,
     Plot,
     PlotCharacterRel,
     Prologue,
@@ -213,6 +215,8 @@ def _reset_generated_fields(source_object: Any) -> None:
         source_object.media_token = ""
     if hasattr(source_object, "access_token"):
         source_object.access_token = my_uuid_short()
+    if hasattr(source_object, "cod"):
+        source_object.cod = my_uuid()
 
 
 def _copy_all(
@@ -327,6 +331,8 @@ def _clone_event_children(clone_context: CloneContext, event_pk: int) -> None:
     _copy_all(clone_context, Plot, event_filter)
     _copy_all(clone_context, Prologue, event_filter)
     _copy_all(clone_context, SpeedLarp, event_filter)
+    _copy_all(clone_context, HandoutTemplate, event_filter)
+    _copy_all(clone_context, Handout, event_filter)
 
     # Through models between writing elements
     for plot_rel in PlotCharacterRel.objects.filter(plot__event_id=event_pk):

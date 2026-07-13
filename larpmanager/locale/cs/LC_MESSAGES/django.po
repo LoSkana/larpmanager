@@ -6535,6 +6535,10 @@ msgid "You are exploring a demo organization"
 msgstr "Prohlížíte si ukázkovou organizaci"
 
 #, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr "Prohlížíte si ukázku „%(name)s“"
+
+#, python-format
 msgid " Hurry: only %(num)d tickets available"
 msgstr " Pospěšte si: k dispozici jsou už jen %(num)d vstupenek"
 
@@ -7826,9 +7830,6 @@ msgstr "Správa kroků postupu pro prvky psaní"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Správa hesla a dvoufaktorového ověřování"
-
-msgid "Ready for the real thing? Create your organization"
-msgstr "Jste připraveni na to opravdové? Vytvořte si svou organizaci"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Druhý znak ve vztahu (cílová destinace)"
@@ -11220,6 +11221,13 @@ msgid ""
 msgstr ""
 "Pomocí tlačítka výše můžete přidat kroky pro sledování stavu dokončení "
 "jednotlivých částí textu"
+
+msgid ""
+"Wanna try other demos, or are you ready for the real thing, to create your "
+"organization?"
+msgstr ""
+"Chcete vyzkoušet další ukázky, nebo jste připraveni na to opravdové – na "
+"založení vlastní organizace?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

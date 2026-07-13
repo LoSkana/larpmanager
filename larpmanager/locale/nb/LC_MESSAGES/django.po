@@ -6533,6 +6533,10 @@ msgid "You are exploring a demo organization"
 msgstr "Du utforsker en demo-organisasjon"
 
 #, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr "Du utforsker demoen «%(name)s»"
+
+#, python-format
 msgid " Hurry: only %(num)d tickets available"
 msgstr " Skynd deg: det er bare %(num)d billetter igjen"
 
@@ -7833,9 +7837,6 @@ msgstr "Administrer fremdriftstrinnene for skriveelementene"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Administrer passordet ditt og tofaktorautentisering"
-
-msgid "Ready for the real thing? Create your organization"
-msgstr "Er du klar for det virkelige livet? Opprett din egen organisasjon"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andre tegn i relasjonen (destinasjon)"
@@ -11374,6 +11375,13 @@ msgid ""
 msgstr ""
 "Bruk knappen ovenfor for å legge til trinn for å spore fullføringsstatusen "
 "for skriveelementene"
+
+msgid ""
+"Wanna try other demos, or are you ready for the real thing, to create your "
+"organization?"
+msgstr ""
+"Vil du prøve andre demoer, eller er du klar for å gå i gang for alvor og "
+"opprette din egen organisasjon?"
 
 msgid ""
 "We inform you that your membership of the Association has not been accepted "

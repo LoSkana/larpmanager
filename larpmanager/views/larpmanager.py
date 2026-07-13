@@ -1404,4 +1404,12 @@ def llms_full(_request: HttpRequest) -> HttpResponse:
                 lines.append(f"*{g.description}*\n")
             lines.append(_html_to_markdown(g.text or ""))
 
+    demo_types = LarpManagerDemoType.objects.filter(active=True).order_by("order")
+    if demo_types.exists():
+        lines.append("\n\n---\n\n## Interactive Demos\n")
+        for d in demo_types:
+            lines.append(f"\n### {d.name}\n")
+            if d.descr:
+                lines.append(f"{d.descr}\n")
+
     return HttpResponse("".join(lines), content_type="text/plain; charset=utf-8")

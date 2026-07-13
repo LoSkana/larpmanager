@@ -9792,10 +9792,16 @@ msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
 msgstr ""
 
+#, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr ""
+
 msgid "You are exploring a demo organization"
 msgstr ""
 
-msgid "Ready for the real thing? Create your organization"
+msgid ""
+"Wanna try other demos, or are you ready for the real thing, to create your "
+"organization?"
 msgstr ""
 
 msgid "Please correct the error below"
