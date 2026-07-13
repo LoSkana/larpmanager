@@ -750,3 +750,34 @@ form .plot {
 .new_v18 .abilities th {
   padding: 0.5em;
 }
+
+/*** guild ***/
+
+.guild-edit-btn {
+  display: inline-block;
+  font-size: 120%;
+  padding: 0.6em 1.2em;
+  margin-bottom: 1em;
+  background-color: rgba(var(--pri-rgb), 0.6);
+  color: white;
+  border-radius: 0.3em;
+}
+
+.guild-edit-btn:hover {
+  background-color: rgba(var(--pri-rgb), 0.9);
+  color: white;
+}
+
+.guild-edit-btn i {
+  margin-right: 0.4em;
+}
+
+.guild-invite-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.guild-invite-form .select2-container {
+  min-width: 200px;
+}

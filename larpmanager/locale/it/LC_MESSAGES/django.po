@@ -170,6 +170,9 @@ msgstr "Info"
 msgid "Item"
 msgstr "Voce"
 
+msgid "Kick"
+msgstr "Calcio"
+
 msgid "LAOG"
 msgstr "LAOG"
 
@@ -399,6 +402,9 @@ msgstr "Grafico"
 msgid "Gross"
 msgstr "Lordo"
 
+msgid "Guild"
+msgstr "Gilda"
+
 msgid "Hotel"
 msgstr "Albergo"
 
@@ -544,6 +550,9 @@ msgstr "veloce"
 msgid "Absent"
 msgstr "Assente"
 
+msgid "Accept"
+msgstr "Accetta"
+
 msgid "Action"
 msgstr "Azione"
 
@@ -586,6 +595,9 @@ msgstr "Crea"
 msgid "Delete"
 msgstr "Elimina"
 
+msgid "Demote"
+msgstr "Retrocedi"
+
 msgid "Detail"
 msgstr "Dettaglio"
 
@@ -627,6 +639,9 @@ msgstr "Amico"
 
 msgid "Gender"
 msgstr "Genere"
+
+msgid "Guilds"
+msgstr "Gilde"
 
 msgid "Header"
 msgstr "Intestazione"
@@ -874,6 +889,9 @@ msgstr "Creato"
 msgid "Credits"
 msgstr "Crediti"
 
+msgid "Decline"
+msgstr "Declino"
+
 msgid "Default"
 msgstr "Default"
 
@@ -915,6 +933,9 @@ msgstr "Entrate"
 
 msgid "Inverse"
 msgstr "Inverso"
+
+msgid "Invited"
+msgstr "Invitato"
 
 msgid "Invoice"
 msgstr "Invoice"
@@ -981,6 +1002,9 @@ msgstr "Procedi"
 
 msgid "Profile"
 msgstr "Profilo"
+
+msgid "Promote"
+msgstr "Promuovi"
 
 msgid "Pronoun"
 msgstr "Pronome"
@@ -1556,6 +1580,9 @@ msgstr "Ti serve aiuto"
 msgid "New event"
 msgstr "Nuovo evento"
 
+msgid "New guild"
+msgstr "Nuova gilda"
+
 msgid "No ticket"
 msgstr "Nessun biglietto"
 
@@ -1769,6 +1796,9 @@ msgstr "Uovo di Pasqua"
 msgid "Edit dates"
 msgstr "Modifica date"
 
+msgid "Edit guild"
+msgstr "Modifica gilda"
+
 msgid "Email list"
 msgstr "lista email"
 
@@ -1783,6 +1813,9 @@ msgstr "Tipo di evento"
 
 msgid "Experience"
 msgstr "Esperienza"
+
+msgid "Guild logo"
+msgstr "Logo della gilda"
 
 msgid "Historical"
 msgstr "Storico"
@@ -2093,6 +2126,9 @@ msgstr "Quattro quote"
 msgid "Gallery Pdf"
 msgstr "Galleria Pdf"
 
+msgid "Guild cover"
+msgstr "Copertina della gilda"
+
 msgid "In Progress"
 msgstr "In corso"
 
@@ -2111,8 +2147,14 @@ msgstr "Rata"
 msgid "Inventories"
 msgstr "Inventari"
 
+msgid "Invite sent"
+msgstr "Invito inviato"
+
 msgid "Last change"
 msgstr "Ultima modifica"
+
+msgid "Leave guild"
+msgstr "Lascia la gilda"
 
 msgid "Lightweight"
 msgstr "Leggero"
@@ -2631,6 +2673,12 @@ msgstr "Bilancio fiscale"
 msgid "Free donation"
 msgstr "Donazione libera"
 
+msgid "Guild created"
+msgstr "Gilda creata"
+
+msgid "Guild updated"
+msgstr "Aggiornamento della gilda"
+
 msgid "Inflows total"
 msgstr "Entrate totali"
 
@@ -2920,14 +2968,23 @@ msgstr "Mail signature"
 msgid "Manage it here"
 msgstr "Gestiscila qui"
 
+msgid "Manage members"
+msgstr "Gestisci i membri"
+
 msgid "Maximum length"
 msgstr "Lunghezza massima"
 
 msgid "Maximum number"
 msgstr "Numero massimo"
 
+msgid "Member demoted"
+msgstr "Membro retrocesso"
+
 msgid "Member refused"
 msgstr "Membro rifiutato"
+
+msgid "Member removed"
+msgstr "Membro rimosso"
 
 msgid "Member revoked"
 msgstr "Socio revocato"
@@ -3151,11 +3208,17 @@ msgstr "Richiesta non valida"
 msgid "Inventory Types"
 msgstr "Tipi di inventario"
 
+msgid "Invite declined"
+msgstr "Invito rifiutato"
+
 msgid "Mail assignment"
 msgstr "Mail assegnazione"
 
 msgid "Maximum fillers"
 msgstr "Filler massimi"
+
+msgid "Maximum members"
+msgstr "Numero massimo di membri"
 
 msgid "Member approved"
 msgstr "Membro approvato"
@@ -3402,6 +3465,9 @@ msgstr "Domanda mancante"
 
 msgid "Multiple systems"
 msgstr "Sistemi multipli"
+
+msgid "My guild invites"
+msgstr "Inviti della mia gilda"
 
 msgid "Name of the plot"
 msgstr "Nome della missione"
@@ -3850,6 +3916,9 @@ msgstr "Competenze eventi"
 msgid "Competences member"
 msgstr "Competenze persona"
 
+msgid "Create a new guild"
+msgstr "Crea una nuova gilda"
+
 msgid "Delegated accounts"
 msgstr "Account delegati"
 
@@ -3868,6 +3937,9 @@ msgstr "Sistemi di esperienza"
 msgid "First registration"
 msgstr "Prima iscrizione"
 
+msgid "Founding character"
+msgstr "Personaggio fondatore"
+
 msgid "Hide not available"
 msgstr "Nascondi non disponibili"
 
@@ -3877,11 +3949,17 @@ msgstr "Residenza storica"
 msgid "Informations saved"
 msgstr "Informazioni salvate"
 
+msgid "Invite a character"
+msgstr "Invita un personaggio"
+
 msgid "Member Data Checks"
 msgstr "Controlli dati soci"
 
 msgid "Membership request"
 msgstr "Richiesta di iscrizione"
+
+msgid "My pending invites"
+msgstr "I miei inviti in sospeso"
 
 msgid "Name of event area"
 msgstr "Nome dell'area dell'evento"
@@ -3966,6 +4044,9 @@ msgstr "Registro Volontari"
 
 msgid "Workspace selector"
 msgstr "Selettore dello spazio di lavoro"
+
+msgid "You left the guild"
+msgstr "Hai lasciato la gilda"
 
 msgid "Your Organizations"
 msgstr "Le tue organizzazioni"
@@ -4371,6 +4452,9 @@ msgstr "Cosa sbloccherai"
 
 msgid "You are logged in as"
 msgstr "Hai effettuato l'accesso come"
+
+msgid "You joined the guild"
+msgstr "Ti sei unito alla gilda"
 
 msgid "Access your character"
 msgstr "Accedi al tuo personaggio"
@@ -4807,6 +4891,9 @@ msgstr "Gestisci la contabilità dell'evento"
 msgid "Manage experience rules"
 msgstr "Gestire le regole dell'esperienza"
 
+msgid "Manage the event guilds"
+msgstr "Gestisci le gilde degli eventi"
+
 msgid "Manage the event quests"
 msgstr "Gestisci le missioni dell'evento"
 
@@ -4922,6 +5009,9 @@ msgstr "Versione attuale della piattaforma"
 msgid "Disable character finder"
 msgstr "Disattiva il cercatore di personaggi"
 
+msgid "Discover the game guilds"
+msgstr "Scopri le gilde del gioco"
+
 msgid "Display all sent e-mails"
 msgstr "Visualizza tutte le e-mail inviate"
 
@@ -4948,6 +5038,9 @@ msgstr "Gestione dell'area dell'evento"
 
 msgid "Manages event's expenses"
 msgstr "Gestisci le spese dell'evento"
+
+msgid "Member promoted to admin"
+msgstr "Membro promosso ad amministratore"
 
 msgid "Membership approval date"
 msgstr "Data di approvazione dell'adesione"
@@ -4994,6 +5087,9 @@ msgstr "Codice di iscrizione segreto"
 
 msgid "Secret registration link"
 msgstr "Link iscrizione segreto"
+
+msgid "Select a valid character"
+msgstr "Scegli un carattere valido"
 
 msgid "Target session not found"
 msgstr "Sessione di destinazione non trovata"
@@ -5629,6 +5725,9 @@ msgstr "Durata in secondi (opzionale)"
 msgid "Invalid code, please try again"
 msgstr "Codice non valido, riprova"
 
+msgid "Manage all guilds of the event"
+msgstr "Gestisci tutte le gilde dell'evento"
+
 msgid "Manage characters of the event"
 msgstr "Gestisci i personaggi dell'evento"
 
@@ -5721,6 +5820,9 @@ msgstr "Hai controllato ed è corretto"
 
 msgid "Discover the coming soon events"
 msgstr "Scopri gli eventi in lavorazione"
+
+msgid "Discover the guilds of the game"
+msgstr "Scopri le gilde del gioco"
 
 msgid "Filter or search the characters"
 msgstr "Filtrao cercai personaggi"
@@ -6055,6 +6157,9 @@ msgstr "Verifica i pagamenti approvati manualmente"
 msgid "You don't have any characters yet"
 msgstr "Non hai ancora nessun personaggio"
 
+msgid "You have no pending guild invites"
+msgstr "Non hai inviti alla gilda in sospeso"
+
 msgid "You need to define the start date"
 msgstr "È necessario definire la data di inizio"
 
@@ -6325,6 +6430,10 @@ msgstr "Se selezionata, abilita il livello di biglietto: Staff"
 
 msgid "Indicates the details of the request"
 msgstr "Indica i dettagli della richiesta di rimborso"
+
+#, python-format
+msgid "Invited with character %(character)s"
+msgstr "Invitato con il personaggio %(character)s"
 
 msgid "Manage prologue types for this event"
 msgstr "Gestisci i tipi di prologo per questo evento"
@@ -6633,6 +6742,9 @@ msgstr "Sei stato invitato a partecipare al ruolo"
 msgid "You must be an approved member to vote"
 msgstr "Devi completare il pagamento della quota sociale per poter votare"
 
+msgid "You need a character to create a guild"
+msgstr "Per creare una gilda ti serve un personaggio"
+
 msgid "click on the icon to open the tutorial"
 msgstr "fai clic sull'icona per aprire l'esercitazione"
 
@@ -6651,6 +6763,9 @@ msgstr "<b>%(number)s</b> personaggi da approvare"
 
 msgid "A description of the abilities involved"
 msgstr "Una descrizione delle abilità coinvolte"
+
+msgid "Cannot kick the last admin of the guild"
+msgstr "Non riesco a espellere l'ultimo amministratore della gilda"
 
 msgid "Character are not visible at the moment"
 msgstr "I personaggi non sono visibili al momento"
@@ -6920,6 +7035,9 @@ msgstr "L'app Authenticator è stata configurata correttamente"
 
 msgid "Browser user agent string from the access"
 msgstr "Stringa dell'agente utente del browser dall'accesso"
+
+msgid "Cannot demote the last admin of the guild"
+msgstr "Non riesco a rimuovere l'ultimo amministratore della gilda"
 
 msgid "Choice locked, click to make it available"
 msgstr "Scelta bloccata, clicca per renderla disponibile"
@@ -7199,6 +7317,9 @@ msgstr "Non sono ancora stati assegnati token a nessun partecipante"
 
 msgid "No workshop questions have been created yet"
 msgstr "Non sono ancora state create domande relative al workshop"
+
+msgid "Now players can create guilds for the event"
+msgstr "Ora i giocatori possono creare gilde per l'evento"
 
 msgid "Now you can create milestones for the event"
 msgstr "Ora è possibile creare delle pietre miliari per l'evento"
@@ -8009,6 +8130,9 @@ msgstr "Alcune funzioni richiedono i \"Crediti\", che non sono attivi"
 msgid "The first column the amount, the second the receipts"
 msgstr "La prima colonna indica l'importo, la seconda gli incassi"
 
+msgid "This guild has reached its maximum number of members"
+msgstr "Questa gilda ha raggiunto il numero massimo di membri"
+
 msgid "WARNING: deleted items might not be full recoverable"
 msgstr ""
 "ATTENZIONE: gli elementi eliminati potrebbero non essere completamente "
@@ -8494,6 +8618,10 @@ msgid "Manage the answer options available for workshop questions"
 msgstr ""
 "Gestisci le opzioni di risposta disponibili per le domande del workshop"
 
+msgid "Maximum number of guilds players can create (0 = no limit)"
+msgstr ""
+"Numero massimo di gilde che i giocatori possono creare (0 = nessun limite)"
+
 msgid "No contributors with competences found in the organization"
 msgstr ""
 "Non sono stati trovati collaboratori con le competenze richieste all'interno"
@@ -8516,6 +8644,9 @@ msgstr "Iscriviti all'evento oppure aggiorna le tue opzioni di registrazione"
 
 msgid "There are no open questions from participants at this time"
 msgstr "Al momento non ci sono domande da parte dei partecipanti"
+
+msgid "This character is already a member or has a pending invite"
+msgstr "Questo personaggio è già membro o ha un invito in sospeso"
 
 msgid "This contributor has not self-assessed any competences yet"
 msgstr ""
@@ -8566,6 +8697,9 @@ msgstr "Gestisci le impostazioni dell'evento: nome, descrizione, date, stato"
 
 msgid "Manage the selectable options for a character form question"
 msgstr "Gestisci le opzioni selezionabili per una domanda a risposta multipla"
+
+msgid "Maximum number of accepted members per guild (0 = no limit)"
+msgstr "Numero massimo di membri ammessi per gilda (0 = nessun limite)"
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
@@ -8694,6 +8828,9 @@ msgstr ""
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr "Esamina e approva le note spese presentate dai collaboratori"
 
+msgid "The maximum number of guilds for this event has been reached"
+msgstr "È stato raggiunto il numero massimo di gilde per questo evento"
+
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Questo personaggio è inattivo e non può essere assegnato"
 
@@ -8811,6 +8948,10 @@ msgstr "Carica un file zip contenente foto e video per riempire questo album"
 msgid "View the full content of an archived email sent by the system"
 msgstr ""
 "Visualizza il contenuto completo di un'e-mail archiviata inviata dal sistema"
+
+msgid "You are the last admin: promote another member before leaving"
+msgstr ""
+"Sei l'ultimo amministratore: nomina un altro membro prima di andartene"
 
 msgid "You must complete payment of membership dues in order to vote"
 msgstr "Devi completare il pagamento della quota sociale per poter votare"
@@ -9606,6 +9747,11 @@ msgstr ""
 
 msgid "You can use the following fields, they will be filled in automatically"
 msgstr "Puoi usare i seguenti campi, verranno compilati in automatico"
+
+#, python-format
+msgid "Your character %(character)s has been removed from the guild %(guild)s"
+msgstr ""
+"Il tuo personaggio %(character)s è stato rimosso dalla gilda %(guild)s"
 
 msgid "Your payment has been received and is being verified by the organizers"
 msgstr ""
@@ -10796,6 +10942,13 @@ msgstr ""
 "giorni"
 
 msgid ""
+"Choose which of your characters will found this guild and become its first "
+"admin"
+msgstr ""
+"Scegli quale dei tuoi personaggi fonderà questa gilda e ne diventerà il "
+"primo amministratore"
+
+msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
 "users"
 msgstr ""
@@ -11150,6 +11303,14 @@ msgid ""
 msgstr ""
 "Giustificativo emesso dalla banca come riprova dell'emissione del bonifico "
 "(come file pdf)"
+
+#, python-format
+msgid ""
+"You have been invited to join the guild %(guild)s with your character "
+"%(character)s"
+msgstr ""
+"Sei stato invitato a entrare nella gilda %(guild)s con il tuo personaggio "
+"%(character)s"
 
 msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
@@ -12223,6 +12384,13 @@ msgid ""
 msgstr ""
 "Permette di impostare una percentuale di 'tassa' sul reddito dell'evento che"
 " deve essere accantonata per l'organizzazione"
+
+msgid ""
+"Enables 'Guilds', player-created groups of characters with a self-managed "
+"admin, invite and text"
+msgstr ""
+"Abilita le \"Gilde\", gruppi di personaggi creati dai giocatori con un "
+"amministratore autonomo, inviti e messaggi"
 
 #, python-format
 msgid ""
@@ -14157,6 +14325,15 @@ msgstr ""
 "Accettando questo invito, i dati del tuo profilo (nome, email e altre "
 "informazioni che hai fornito) saranno condivisi con questa organizzazione "
 "attraverso la piattaforma LarpManager"
+
+msgid ""
+"Select from the drop-down list the characters to be added to the guild. "
+"Players can also create guilds themselves, invite characters and manage "
+"membership from the event page"
+msgstr ""
+"Seleziona dall'elenco a tendina i personaggi da aggiungere alla gilda. I "
+"giocatori possono anche creare gilde da soli, invitare personaggi e gestire "
+"l'appartenenza alla gilda dalla pagina dell'evento"
 
 msgid ""
 "Enables dynamic installment management: the total fee is evenly split into "

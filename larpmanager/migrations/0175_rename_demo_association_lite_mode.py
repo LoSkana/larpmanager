@@ -21,7 +21,7 @@ def clear_association_caches(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0173_criterionexp_factions_modifierexp_factions_and_more'),
+        ('larpmanager', '0174_add_guild'),
     ]
 
     operations = [

@@ -46,6 +46,10 @@ from larpmanager.models.form import (
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.writing import (
     Faction,
+    Guild,
+    GuildMembership,
+    GuildMembershipStatus,
+    GuildRole,
     Handout,
     HandoutTemplate,
     Plot,
@@ -431,6 +435,137 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
             _("Secret"): _("hidden faction visible only to assigned characters"),
         }
         self.fields["typ"].help_text = ", ".join([f"<b>{key}</b>: {value}" for key, value in help_texts.items()])
+
+
+class OrgaGuildForm(WritingForm, BaseWritingForm):
+    """Form for Guild (organizer side, full control)."""
+
+    load_templates: ClassVar[list] = ["guild"]
+
+    page_title = _("Guild")
+
+    page_info = _("Manage all guilds of the event")
+
+    class Meta:
+        model = Guild
+
+        exclude = ("number", "temp", "order")
+
+        widgets: ClassVar[dict] = {
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
+            "characters": CharacterDualListWidget,
+            "assigned": RunStaffS2Widget,
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize guild form with character membership and dynamic fields."""
+        super().__init__(*args, **kwargs)
+
+        self.init_orga_fields()
+        self.reorder_field("characters")
+
+        self.chars_id = set()
+
+        if self.instance.pk:
+            self.init_characters = list(
+                self.instance.memberships.filter(status=GuildMembershipStatus.ACCEPTED).values_list(
+                    "character_id", flat=True
+                ),
+            )
+        else:
+            self.init_characters = []
+
+        self.initial["characters"] = self.init_characters
+
+        self._init_special_fields()
+
+    def _save_multi(self, field: str, instance: Guild) -> None:  # noqa: ARG002
+        """Delete guild memberships for unselected characters."""
+        self.chars_id = set(self.cleaned_data["characters"].values_list("pk", flat=True))
+
+        GuildMembership.objects.filter(
+            guild_id=instance.pk,
+            status=GuildMembershipStatus.ACCEPTED,
+        ).exclude(character_id__in=self.chars_id).delete()
+
+    def save(self, commit: bool = True) -> Guild:  # noqa: FBT001, FBT002
+        """Save the guild instance and update its accepted memberships."""
+        instance = super().save(commit=commit)
+
+        if not commit:
+            return instance
+
+        existing = dict(
+            GuildMembership.objects.filter(guild_id=instance.pk, character_id__in=self.chars_id).values_list(
+                "character_id", "status"
+            ),
+        )
+
+        to_create = [
+            GuildMembership(
+                guild_id=instance.pk,
+                character_id=ch_id,
+                status=GuildMembershipStatus.ACCEPTED,
+                role=GuildRole.MEMBER,
+            )
+            for ch_id in self.chars_id
+            if ch_id not in existing
+        ]
+        if to_create:
+            GuildMembership.objects.bulk_create(to_create)
+
+        stale_ids = [ch_id for ch_id, status in existing.items() if status != GuildMembershipStatus.ACCEPTED]
+        if stale_ids:
+            GuildMembership.objects.filter(guild_id=instance.pk, character_id__in=stale_ids).update(
+                status=GuildMembershipStatus.ACCEPTED,
+            )
+
+        return instance
+
+
+class GuildForm(WritingForm, BaseWritingForm):
+    """Form for Guild (player side, restricted to guild admins)."""
+
+    orga = False
+
+    page_title = _("Guild")
+
+    class Meta:
+        model = Guild
+
+        fields: ClassVar[list] = ["name", "teaser", "text", "cover"]
+
+        widgets: ClassVar[dict] = {
+            "teaser": WritingTinyMCE(),
+            "text": WritingTinyMCE(),
+        }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize player guild form with custom question fields."""
+        super().__init__(*args, **kwargs)
+
+        self._init_custom_fields()
+
+    def _init_custom_fields(self) -> None:
+        """Add custom WritingQuestion fields applicable to guilds, gated by QuestionStatus."""
+        event = self.params["event"]
+        if not self.instance.pk:
+            self.instance.event = event
+        self._init_registration_question(self.instance, event)
+
+        fields_default = {"name", "teaser", "text", "cover"}
+        fields_custom = set()
+
+        for question in self.questions:
+            field_key = self._init_field(question, is_organizer=self.orga)
+            if not field_key:
+                continue
+            fields_custom.add(field_key)
+
+        all_fields = set(self.fields.keys()) - fields_default
+        for field_label in all_fields - fields_custom:
+            self.delete_field(field_label)
 
 
 class OrgaQuestTypeForm(WritingForm):

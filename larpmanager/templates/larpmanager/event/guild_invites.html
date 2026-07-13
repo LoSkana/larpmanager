@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "My guild invites" %} - {{ run.search }}
+{% endblock title %}
+{% block content %}
+    <div class="user_resize">
+        {% if not invites %}
+            <p>{% trans "You have no pending guild invites" %}.</p>
+        {% endif %}
+        {% for invite in invites %}
+            <div class="gallery single relationships">
+                <div class="text">
+                    <h3>
+                        <a href="{% url 'guild' run.get_slug invite.guild.uuid %}">{{ invite.guild.name }}</a>
+                    </h3>
+                    <p>{% blocktrans with character=invite.character.name %}Invited with character {{ character }}{% endblocktrans %}</p>
+                    <form action="{% url 'guild_invite_accept' run.get_slug invite.guild.uuid invite.character.uuid %}"
+                          method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="{% trans "Accept" %}">
+                    </form>
+                    <form action="{% url 'guild_invite_decline' run.get_slug invite.guild.uuid invite.character.uuid %}"
+                          method="post">
+                        {% csrf_token %}
+                        <input type="submit" value="{% trans "Decline" %}">
+                    </form>
+                </div>
+            </div>
+            <hr class="clear" />
+        {% endfor %}
+    </div>
+{% endblock content %}
