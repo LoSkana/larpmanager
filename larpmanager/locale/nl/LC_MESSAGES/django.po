@@ -4992,6 +4992,9 @@ msgstr "Doelsessie niet gevonden"
 msgid "This event has concluded"
 msgstr "Dit evenement is afgesloten"
 
+msgid "Transfer is not possible"
+msgstr "Een overdracht is niet mogelijk"
+
 msgid "Try the sheet generation"
 msgstr "Probeer kaarten te genereren"
 

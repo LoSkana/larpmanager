@@ -4992,6 +4992,9 @@ msgstr "Sesión objetivo no encontrada"
 msgid "This event has concluded"
 msgstr "Este acto ha concluido"
 
+msgid "Transfer is not possible"
+msgstr "No se puede hacer la transferencia"
+
 msgid "Try the sheet generation"
 msgstr "Probar la generación de hojas"
 

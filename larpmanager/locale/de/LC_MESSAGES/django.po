@@ -4992,6 +4992,9 @@ msgstr "Zielsitzung nicht gefunden"
 msgid "This event has concluded"
 msgstr "Diese Veranstaltung ist abgeschlossen"
 
+msgid "Transfer is not possible"
+msgstr "Eine Übertragung ist nicht möglich"
+
 msgid "Try the sheet generation"
 msgstr "Kartenerstellung ausprobieren"
 

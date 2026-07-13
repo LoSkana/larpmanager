@@ -4992,6 +4992,9 @@ msgstr "Nie znaleziono sesji docelowej"
 msgid "This event has concluded"
 msgstr "To wydarzenie zostało zakończone"
 
+msgid "Transfer is not possible"
+msgstr "Przeniesienie nie jest możliwe"
+
 msgid "Try the sheet generation"
 msgstr "Wypróbuj generowanie arkuszy"
 

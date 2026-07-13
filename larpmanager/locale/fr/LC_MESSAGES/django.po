@@ -4992,6 +4992,9 @@ msgstr "Session cible non trouvée"
 msgid "This event has concluded"
 msgstr "Cet événement est terminé"
 
+msgid "Transfer is not possible"
+msgstr "Le transfert n'est pas possible"
+
 msgid "Try the sheet generation"
 msgstr "Essayer la génération de cartes"
 
