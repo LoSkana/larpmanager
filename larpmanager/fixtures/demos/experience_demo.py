@@ -338,7 +338,10 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
         slug=DEMO_TYPE_SLUG,
         descr="Races, classes, abilities, prerequisites, modifiers, criteria and computed rules.",
         template_association=association,
-        allowed_sidebar="orga_characters,orga_character_form,orga_exp_abilities",
+        allowed_sidebar=(
+            "orga_characters,orga_character_form,orga_exp_abilities,orga_exp_ability_types,"
+            "orga_exp_modifiers,orga_exp_criterions,orga_exp_rules,orga_exp_deliveries"
+        ),
     )
 
     hints = [
@@ -362,6 +365,39 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "Manage experience",
             "<p>As organizer, this is where abilities, modifiers, criteria and rules are configured.</p>",
         ),
+        (
+            "experience-demo-ability-types",
+            "orga_exp_ability_types",
+            "Ability types",
+            "<p>Group abilities into types, like Combat, Magic, Skill or General, to organize the catalog.</p>",
+        ),
+        (
+            "experience-demo-modifiers",
+            "orga_exp_modifiers",
+            "Modifiers",
+            "<p>Here we add some rules to make abilities easier to get for a race, or difficult "
+            "(or even blocked) for another, by changing their cost.</p>",
+        ),
+        (
+            "experience-demo-criterions",
+            "orga_exp_criterions",
+            "Criteria",
+            "<p>Criteria grant bonus experience points to characters that match a condition, "
+            "for example extra points for a specific race.</p>",
+        ),
+        (
+            "experience-demo-rules",
+            "orga_exp_rules",
+            "Rules",
+            "<p>Rules compute derived stats from the abilities a character owns, for example Hit Points and Mana.</p>",
+        ),
+        (
+            "experience-demo-deliveries",
+            "orga_exp_deliveries",
+            "Deliveries",
+            "<p>Deliveries award extra experience points directly to specific characters, "
+            "for example as a story reward.</p>",
+        ),
     ]
     for key, view_name, title, content in hints:
         LarpManagerDemoHint.objects.get_or_create(
@@ -384,6 +420,7 @@ def build_experience_demo() -> LarpManagerDemoType:
 
     EventConfig.objects.create(event=event, name="exp_modifiers", value="True")
     EventConfig.objects.create(event=event, name="exp_criterions", value="True")
+    EventConfig.objects.create(event=event, name="exp_rules", value="True")
 
     system = SystemExp.objects.create(event=event, name="XP")
     opt = _build_character_options(event)
