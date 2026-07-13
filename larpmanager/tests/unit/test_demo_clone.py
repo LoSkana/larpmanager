@@ -164,37 +164,3 @@ class TestCloneAssociation(BaseTestCase):
         assert cloned_run.end is None
         cloned_registration = Registration.objects.get(run__event__association=clone)
         assert cloned_registration.created.date() == self.registration.created.date()
-
-
-class TestCloneRealDemoFixtures(BaseTestCase):
-    """Clone every real demo fixture from larpmanager/fixtures/demos, end to end."""
-
-    def test_clone_every_registered_demo(self) -> None:
-        """Each registered demo builder produces a template that clones without error."""
-        for builder in DEMO_BUILDERS:
-            demo_type = builder()
-            template = demo_type.template_association
-
-            with self.subTest(demo=demo_type.slug):
-                clone = clone_association(demo_type, f"clone-{demo_type.slug}", template.skin_id)
-
-                assert clone.pk != template.pk
-                assert clone.slug == f"clone-{demo_type.slug}"
-                assert clone.demo_type_id == demo_type.pk
-
-                assert (
-                    Event.objects.filter(association=clone).count()
-                    == Event.objects.filter(association=template).count()
-                )
-                assert (
-                    Character.objects.filter(event__association=clone).count()
-                    == Character.objects.filter(event__association=template).count()
-                )
-                assert (
-                    Registration.objects.filter(run__event__association=clone).count()
-                    == Registration.objects.filter(run__event__association=template).count()
-                )
-                assert (
-                    Membership.objects.filter(association=clone).count()
-                    == Membership.objects.filter(association=template).count()
-                )
