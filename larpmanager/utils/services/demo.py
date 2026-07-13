@@ -216,7 +216,7 @@ def _reset_generated_fields(source_object: Any) -> None:
     if hasattr(source_object, "access_token"):
         source_object.access_token = my_uuid_short()
     if hasattr(source_object, "cod"):
-        source_object.cod = my_uuid()
+        source_object.cod = my_uuid_short()
 
 
 def _copy_all(

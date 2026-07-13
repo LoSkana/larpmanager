@@ -112,7 +112,7 @@ class Association(UuidMixin, BaseModel):
     )
 
     slug = models.CharField(
-        max_length=20,
+        max_length=50,
         verbose_name=_("Subdomain"),
         help_text=_("Your organization's unique subdomain in the platform")
         + " ("

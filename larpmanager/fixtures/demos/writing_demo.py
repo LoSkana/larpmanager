@@ -178,9 +178,7 @@ def _build_factions(event: Event, chars: dict[str, Character]) -> dict[str, Fact
     return {"zenith_dynamics": zenith_dynamics, "undercroft": undercroft, "ghost_chorus": ghost_chorus}
 
 
-def _build_plots(
-    event: Event, chars: dict[str, Character], progress: dict[str, ProgressStep]
-) -> dict[str, Plot]:
+def _build_plots(event: Event, chars: dict[str, Character], progress: dict[str, ProgressStep]) -> dict[str, Plot]:
     debt_plot = Plot.objects.create(
         event=event,
         name="The Zenith Backdoor",
@@ -302,11 +300,15 @@ def _build_relationships(event: Event, chars: dict[str, Character]) -> None:  # 
         ("priya", "vex", "The one who does the real work of the Chorus, unseen."),
     ]
     for source_key, target_key, text in edges:
-        Relationship.objects.create(
+        relationship, created = Relationship.objects.get_or_create(
             source=chars[source_key],
             target=chars[target_key],
-            text=f"<p>{text}</p>",
+            defaults={"text": f"<p>{text}</p>"},
         )
+        if not created:
+            relationship.auto = False
+            relationship.text = f"<p>{text}</p>"
+            relationship.save()
 
 
 def _build_registrations(event: Event, association: Association, chars: dict[str, Character]) -> None:

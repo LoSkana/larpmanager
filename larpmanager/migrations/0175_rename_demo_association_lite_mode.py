@@ -125,4 +125,23 @@ class Migration(migrations.Migration):
             field=models.TextField(blank=True, help_text='Comma separated list of event/association permission slugs allowed in the sidebar for this demo type. Empty means no restriction.'),
         ),
         migrations.RunPython(clear_association_caches, migrations.RunPython.noop),
+        migrations.AlterField(
+            model_name='association',
+            name='slug',
+            field=models.CharField(db_index=True,
+                                   help_text="Your organization's unique subdomain in the platform (Only lowercase letters and numbers allowed, no spaces or special characters)",
+                                   max_length=50, validators=[django.core.validators.RegexValidator('^[0-9a-z_-]*$',
+                                                                                                    'Only characters allowed are: 0-9, a-z, _, -.')],
+                                   verbose_name='Subdomain'),
+        ),
+        migrations.AlterField(
+            model_name='event',
+            name='slug',
+            field=models.CharField(blank=True, db_index=True,
+                                   help_text='Unique identifier for the event URL (only lowercase letters and numbers allowed, no spaces or special characters)',
+                                   max_length=50, null=True, validators=[
+                    django.core.validators.RegexValidator('^[0-9a-z_-]*$',
+                                                          'Only characters allowed are: 0-9, a-z, _, -.')],
+                                   verbose_name='URL identifier'),
+        ),
     ]

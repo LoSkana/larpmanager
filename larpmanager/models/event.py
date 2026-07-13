@@ -56,7 +56,7 @@ class Event(UuidMixin, BaseModel):
     """Represents Event model."""
 
     slug = models.CharField(
-        max_length=30,
+        max_length=50,
         validators=[AlphanumericValidator],
         db_index=True,
         blank=True,
