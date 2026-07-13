@@ -948,13 +948,9 @@ def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]
 
     # Extract available question fields from context
     question_column_keys = list(context["columns"][0].keys())
-    question_sample_values = []
 
-    # Build values list matching available fields
-    for field_name, sample_value in sample_question_data.items():
-        if field_name not in question_column_keys:
-            continue
-        question_sample_values.append(sample_value)
+    # Build values list matching available fields, preserving column order
+    question_sample_values = [sample_question_data.get(field_name, "") for field_name in question_column_keys]
 
     # Add questions template to exports
     template_exports.append(("questions", question_column_keys, [question_sample_values]))
@@ -966,17 +962,14 @@ def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]
         "description": "Option description",
         "max_available": "2",
         "price": "10",
+        "requirements": "Other Option Name",
     }
 
     # Extract available option fields from context
     option_column_keys = list(context["columns"][1].keys())
-    option_sample_values = []
 
-    # Build values list matching available fields
-    for field_name, sample_value in sample_option_data.items():
-        if field_name not in option_column_keys:
-            continue
-        option_sample_values.append(sample_value)
+    # Build values list matching available fields, preserving column order
+    option_sample_values = [sample_option_data.get(field_name, "") for field_name in option_column_keys]
 
     # Add options template to exports
     template_exports.append(("options", option_column_keys, [option_sample_values]))
