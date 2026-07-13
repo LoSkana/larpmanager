@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% load show_tags i18n %}
+{% block datatables_css %}
+    {% include "elements/structure/datatables-css.html" %}
+{% endblock datatables_css %}
+{% block datatables_js %}
+    {% include "elements/structure/datatables-js.html" %}
+{% endblock datatables_js %}
 {% block title %}
     {% trans "Your characters" %} - {{ run.search }}
 {% endblock title %}

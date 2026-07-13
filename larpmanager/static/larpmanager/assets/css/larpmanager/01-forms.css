@@ -92,7 +92,7 @@ select {
   margin: 0 auto;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   #register_form img {
     width: 100%;
   }
@@ -140,7 +140,7 @@ input {
   width: 50%;
 }
 
-@media (max-width: 1280px) {
+@media (max-width: 1200px) {
   input {
     width: 75%;
   }
@@ -154,7 +154,7 @@ input {
   }
 }
 
-@media (max-width: 736px) {
+@media (max-width: 840px) {
   input {
     width: 100%;
   }
@@ -211,7 +211,6 @@ input[type="radio"] {
   -ms-appearance: checkbox;
   appearance: checkbox;
   opacity: 1;
-  z-index: -1;
   width: 1em;
   height: 1em;
   border-radius: 0.2em;
@@ -257,7 +256,7 @@ input[type="checkbox"].checkbox_single {
   padding: 1em;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 840px) {
   #register_form table td {
     padding: 0.25em 0 0.5em 0;
   }
@@ -314,7 +313,7 @@ input[type="checkbox"].checkbox_single {
   padding: 0.2em;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 840px) {
   .residence-container .row-md-6 {
     flex-direction: column;
   }
@@ -454,7 +453,7 @@ input[type="checkbox"].checkbox_single {
   display: block;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 840px) {
   form th {
     max-width: 100%;
   }
@@ -492,7 +491,7 @@ input,
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 840px) {
   .select2-container,
   select,
   textarea,
@@ -609,7 +608,7 @@ body:not(.new_v18) .only_new_v18 {
   }
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 840px) {
   .new_v18 .auto_resize {
     width: 90%;
   }
@@ -712,7 +711,7 @@ body:not(.new_v18) .only_new_v18 {
   margin: 0 auto !important;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 840px) {
   .new_v18 .form_container {
     width: 100%;
   }

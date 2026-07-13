@@ -293,7 +293,7 @@ body.association.new_v20 .user_resize {
   background-color: rgba(var(--pri-rgb), 0.04);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 840px) {
   body.association.new_v20 .user_resize {
     padding: 0em 0em;
     margin: 0.2em auto;
@@ -435,7 +435,7 @@ body.association.new_v20 .user_resize {
   min-width: 180px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 841px) {
   .ability-top-row {
     flex-direction: row;
     align-items: flex-start;
@@ -757,7 +757,7 @@ body.association.new_v20 .user_resize {
   white-space: nowrap;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 840px) {
   .char-dual {
     flex-direction: column;
   }
