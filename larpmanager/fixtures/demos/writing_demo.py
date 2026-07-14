@@ -25,6 +25,8 @@ relationships, handouts, editorial progress and PDF sheet generation.
 
 from __future__ import annotations
 
+import datetime
+from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -405,6 +407,10 @@ def build_writing_demo() -> LarpManagerDemoType:
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Story Writing Demo")
     event = Event.objects.create(association=association, name="The Neon Gala", slug=EVENT_SLUG)
+    run = event.runs.first()
+    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
+    run.end = run.start + datetime.timedelta(days=2)
+    run.save()
     _enable_features(
         event,
         ["character", "user_character", "plot", "faction", "relationships", "handout", "progress", "print_pdf"],

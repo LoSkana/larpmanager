@@ -196,13 +196,15 @@ class Command(BaseCommand):
         """
         now = timezone.now()
 
-        # Delete test associations older than 1 week
+        # Delete test associations older than 1 week (demo templates are never cleaned up)
         cutoff = now - timedelta(days=7)
-        Association.objects.filter(slug__startswith=Command._TEST_SLUG_PREFIX, created__lte=cutoff).delete()
+        Association.objects.filter(
+            slug__startswith=Command._TEST_SLUG_PREFIX, created__lte=cutoff, demo_types__isnull=True
+        ).delete()
 
         # Process inactive non-test associations
         log_cutoff = now - timedelta(days=Command._INACTIVE_LOG_DAYS)
-        for association in Association.objects.filter(created__lte=log_cutoff):
+        for association in Association.objects.filter(created__lte=log_cutoff, demo_types__isnull=True):
             # Skip associations explicitly protected from deletion
             if AssociationConfig.objects.filter(association=association, name=Command._NO_DELETE_KEY).exists():
                 continue

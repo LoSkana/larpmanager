@@ -24,6 +24,8 @@ Races, classes, abilities, prerequisites, modifiers, criteria and computed rules
 
 from __future__ import annotations
 
+import datetime
+from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -416,6 +418,10 @@ def build_experience_demo() -> LarpManagerDemoType:
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Experience Demo")
     event = Event.objects.create(association=association, name="Trial of Ebonreach", slug=EVENT_SLUG)
+    run = event.runs.first()
+    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
+    run.end = run.start + datetime.timedelta(days=2)
+    run.save()
     _enable_features(event, ["character", "user_character", "experience"])
 
     EventConfig.objects.create(event=event, name="exp_modifiers", value="True")
