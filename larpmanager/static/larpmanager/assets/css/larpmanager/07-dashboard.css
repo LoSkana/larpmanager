@@ -679,7 +679,7 @@ body.floating_iframe .inner {
 .grid {
   columns: 3;
   column-gap: 20px;
-  margin: 0 auto;
+  margin: 0.5em auto;
   padding: 0.5em;
   clear: both;
 }
@@ -855,4 +855,15 @@ body.floating_iframe .inner {
 #demo-hint-permanent {
   width: 0.5em;
   height: 0.5em;
+}
+
+/* Mobile: do not show */
+@media (max-width: 840px) {
+  .demo-banner {
+    display: none;
+  }
+
+  .demo-hint-panel {
+    font-size: 80%;
+  }
 }
