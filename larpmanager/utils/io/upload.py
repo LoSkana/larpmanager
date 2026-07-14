@@ -161,6 +161,22 @@ def _strip_number_prefix(name: str) -> str:
     return re.sub(r"^#\d+\s+", "", name)
 
 
+_HTML_TAG_RE = re.compile(r"<[a-zA-Z][^>]*>")
+
+
+def _text_to_html_paragraphs(value: str) -> str:
+    """Wrap plain-text lines in <p> tags so line breaks render in HTML fields.
+
+    Lines that already contain HTML markup are left untouched, since uploaders
+    sometimes paste pre-formatted HTML for some lines but not others.
+    """
+    text = str(value).strip()
+    if not text:
+        return text
+    lines = [line.strip() for line in text.splitlines() if line.strip()]
+    return "".join(line if _HTML_TAG_RE.search(line) else f"<p>{line}</p>" for line in lines)
+
+
 def go_upload(context: dict, upload_form_data: Any) -> Any:
     """Route uploaded files to appropriate processing functions.
 
@@ -219,8 +235,8 @@ def _read_uploaded_csv(uploaded_file: Any) -> pd.DataFrame | None:
 
     # Define encoding priority list - most common first
     encodings = [
-        "utf-8",
         "utf-8-sig",
+        "utf-8",
         "latin1",
         "windows-1252",
         "utf-16",
@@ -801,7 +817,7 @@ def _plot_rels_load(row: dict, chars: dict[str, int], plots: dict[str, int]) -> 
     plot_character_relationship, _ = PlotCharacterRel.objects.get_or_create(character_id=character_id, plot_id=plot_id)
 
     # Update relationship text and save to database
-    plot_character_relationship.text = row.get("text")
+    plot_character_relationship.text = _text_to_html_paragraphs(row.get("text") or "")
     plot_character_relationship.save()
     return f"OK - Plot role {character_name} {plot_name}"
 
@@ -835,7 +851,7 @@ def _relationships_load(row: dict, chars: dict) -> str:
 
     # Create or retrieve relationship and update text
     relationship, _ = Relationship.objects.get_or_create(source_id=source_character_id, target_id=target_character_id)
-    relationship.text = row.get("text")
+    relationship.text = _text_to_html_paragraphs(row.get("text") or "")
     relationship.save()
     return f"OK - Relationship {source_character_name} {target_character_name}"
 
@@ -854,6 +870,28 @@ def _get_questions(questions_queryset: QuerySet) -> dict:
             "options": options_by_name,
         }
     return questions_by_name
+
+
+def _assign_text_answer(
+    target_element: Registration | Character,
+    question: dict[str, Any],
+    field_value: str,
+    *,
+    is_registration: bool,
+) -> None:
+    """Create or update a text/paragraph/editor answer, converting plain text to HTML paragraphs."""
+    if is_registration:
+        answer, _ = RegistrationAnswer.objects.get_or_create(
+            registration_id=target_element.id, question_id=question["id"]
+        )
+    else:
+        answer, _ = WritingAnswer.objects.get_or_create(element_id=target_element.id, question_id=question["id"])
+
+    if question["typ"] in [BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
+        answer.text = _text_to_html_paragraphs(field_value)
+    else:
+        answer.text = field_value
+    answer.save()
 
 
 def _assign_choice_answer(
@@ -878,14 +916,7 @@ def _assign_choice_answer(
 
     # check if answer
     if question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
-        if is_registration:
-            answer, _ = RegistrationAnswer.objects.get_or_create(
-                registration_id=target_element.id, question_id=question["id"]
-            )
-        else:
-            answer, _ = WritingAnswer.objects.get_or_create(element_id=target_element.id, question_id=question["id"])
-        answer.text = field_value
-        answer.save()
+        _assign_text_answer(target_element, question, field_value, is_registration=is_registration)
 
     # check if choice
     else:
@@ -1038,8 +1069,12 @@ def _writing_load_field(
     if field_type in [WritingQuestionType.NAME, "skip"]:
         return
 
-    # Convert multiline text to HTML break tags and strip whitespace
-    html_formatted_value = "<br />".join(str(value).strip().split("\n"))
+    # Wrap plain multiline text in HTML paragraphs so line breaks render correctly.
+    # Single-line fields (e.g. title) are stripped only, not paragraph-wrapped.
+    if field_type == WritingQuestionType.TITLE:
+        html_formatted_value = str(value).strip()
+    else:
+        html_formatted_value = _text_to_html_paragraphs(value)
     if not html_formatted_value:
         return
 
