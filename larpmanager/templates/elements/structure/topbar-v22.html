@@ -218,6 +218,13 @@
         wrapper.addEventListener('scroll', updateScrollBtns);
         window.addEventListener('resize', updateScrollBtns);
         updateScrollBtns();
+
+        var activePill = wrapper.querySelector('.tv22-pill.active');
+        if (activePill) {
+            var target = activePill.offsetLeft - (wrapper.clientWidth - activePill.offsetWidth) / 2;
+            wrapper.scrollLeft = Math.max(0, target);
+            updateScrollBtns();
+        }
     }
 })();
 </script>
