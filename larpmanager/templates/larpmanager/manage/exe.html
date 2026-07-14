@@ -37,7 +37,7 @@
                     {% include "larpmanager/manage/widgets/helpers.html" %}
                 {% endwith %}
             </div>
-            {% if not demo and is_admin %}
+            {% if not lite_mode and is_admin %}
                 <div class="staff-list">
                     <div class="orga-buttons">
                         <a class="new button" href="{% url 'exe_reload_cache' %}">

@@ -1,0 +1,29 @@
+{% load show_tags i18n %}
+{% if guild.cover %}
+    <img class="faction-logo-cover"
+         src="{{ guild.cover.url }}"
+         alt="guild logo" />
+{% endif %}
+{% if show_guild.teaser %}
+    <p>{% show_char guild.teaser run 1 %}</p>
+{% endif %}
+{% include "elements/sheet/fields.html" with char=fields %}
+<h2>{% trans "Characters" %}</h2>
+{% for membership in memberships %}
+    <div class="gallery single relationships">
+        <div class="el">
+            <div class="icon">
+                <img src="{% get_char_profile membership.char %}" alt="character profile" />
+            </div>
+        </div>
+        <div class="text">
+            <h3>
+                <a href="{% url 'character' run.get_slug membership.character.uuid %}">{{ membership.character.name }}</a>
+                {% if membership.role == 'a' %}
+                    <i class="fa-solid fa-star" title="{% trans "Admin" %}"></i>
+                {% endif %}
+            </h3>
+        </div>
+    </div>
+    <hr class="clear" />
+{% endfor %}

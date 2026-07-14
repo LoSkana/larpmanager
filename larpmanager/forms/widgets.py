@@ -32,7 +32,7 @@ def _inject_description(option: dict, label: Any, desc: str) -> None:
     if not desc:
         return
     option["label"] = format_html(
-        '<span class="opt-name">{}</span><small class="opt-desc">{}</small>',
+        '<span class="opt-body"><span class="opt-name">{}</span><small class="opt-desc">{}</small></span>',
         label,
         desc,
     )

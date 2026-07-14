@@ -123,7 +123,7 @@ def exe_roles_invite(request: HttpRequest, role_uuid: str) -> HttpResponse:
         return redirect("exe_roles")
     context["role"] = role
     context["back_url"] = reverse("exe_roles")
-    return render(request, "larpmanager/roles_invite.html", context)
+    return render(request, "larpmanager/manage/roles_invite.html", context)
 
 
 @login_required
@@ -287,8 +287,8 @@ def exe_features_go(request: HttpRequest, slug: str, *, to_active: bool = True) 
     context = check_association_context(request, "exe_features")
     get_feature(context, slug)
 
-    # Block feature activation in lite/demo mode
-    if to_active and context.get("demo"):
+    # Block feature activation in lite mode
+    if to_active and context.get("lite_mode"):
         messages.error(request, _("Features cannot be activated in lite mode, complete the activation checklist first"))
         msg = "manage"
         raise RedirectError(msg)
@@ -559,8 +559,8 @@ def exe_activation(request: HttpRequest) -> HttpResponse | HttpResponseRedirect:
 
     if request.method == "POST" and all_done:
         association = Association.objects.get(pk=association_id)
-        association.demo = False
-        association.save(update_fields=["demo"])
+        association.lite_mode = False
+        association.save(update_fields=["lite_mode"])
         save_single_config(association, "intro_driver", "advanced_unlock")
         messages.success(request, _("Advanced mode activated! All features are now available."))
         return redirect("manage")

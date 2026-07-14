@@ -26,13 +26,11 @@ from django.db.models import Q
 from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import get_event_exp_cache, get_event_exp_systems
-from larpmanager.forms.experience import (
-    OrgaDeliveryExpForm,
-    OrgaDeliveryExpLoadForm,
-)
+from larpmanager.forms.experience import OrgaDeliveryExpForm
 from larpmanager.models.event import Run
 from larpmanager.models.experience import (
     AbilityExp,
@@ -120,7 +118,10 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
             form = OrgaDeliveryExpForm(
                 instance=None,
                 context=context,
-                initial={"characters": [str(u) for u in character_uuids]},
+                initial={
+                    "characters": [str(u) for u in character_uuids],
+                    "name": _("Partecipation to") + f" {run.search}",
+                },
             )
             context["form"] = form
             context["num"] = None
@@ -137,22 +138,11 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
 
 @login_required
 def orga_exp_deliveries_load(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Show a modal form to select a run; on submit redirect to new delivery with characters pre-loaded."""
+    """Redirect to load delivery with characters pre-loaded."""
     context = check_event_context(request, event_slug, "orga_exp_deliveries")
-    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
-
-    if request.method == "POST":
-        form = OrgaDeliveryExpLoadForm(request.POST, context=context)
-        if form.is_valid():
-            run = form.cleaned_data["run"]
-            new_url = reverse("orga_exp_deliveries_new", args=[event_slug]) + f"?run_id={run.uuid}&frame=1"
-            return redirect(new_url)
-        context["form"] = form
-    else:
-        context["form"] = OrgaDeliveryExpLoadForm(context=context)
-
-    context["elementTyp"] = DeliveryExp
-    return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/experience/deliveries_load.html")
+    run_uuid = context["run"].uuid
+    new_url = reverse("orga_exp_deliveries_new", args=[event_slug]) + f"?run_id={run_uuid}&frame=1"
+    return redirect(new_url)
 
 
 @login_required

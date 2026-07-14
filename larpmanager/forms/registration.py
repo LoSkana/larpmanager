@@ -25,7 +25,6 @@ from typing import TYPE_CHECKING, Any, ClassVar
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.utils.translation import gettext_lazy as _
-from django_select2 import forms as s2forms
 
 from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
@@ -40,6 +39,7 @@ from larpmanager.forms.utils import (
     FactionS2WidgetMulti,
     RegistrationSectionS2Widget,
     RunRegS2Widget,
+    S2WidgetMulti,
     TicketS2WidgetMulti,
     TransferTargetRunS2Widget,
     WritingTinyMCE,
@@ -882,7 +882,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields["characters_new"] = forms.ModelMultipleChoiceField(
             label=_("Characters"),
             queryset=self.params["run"].event.get_elements(Character).exclude(pk__in=taken_characters),
-            widget=s2forms.ModelSelect2MultipleWidget(search_fields=["name__icontains", "number__icontains"]),
+            widget=S2WidgetMulti(search_fields=["name__icontains", "number__icontains"]),
             required=False,
         )
         self.sections["id_characters_new"] = char_section
@@ -1302,7 +1302,8 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         already_used_types = list({question["typ"] for question in registration_questions})
 
         if self.instance.pk and self.instance.typ:
-            already_used_types.remove(self.instance.typ)
+            if self.instance.typ in already_used_types:
+                already_used_types.remove(self.instance.typ)
             # prevent cancellation if one of the default types
             self.prevent_canc = len(self.instance.typ) > 1
 

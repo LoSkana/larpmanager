@@ -4,7 +4,7 @@
     {% trans "Competences" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="main_table" class="go_datatable">
         <thead>
             <tr>
@@ -39,4 +39,5 @@
             {% trans "No competences have been defined yet" %}. {% trans "Add one to get started" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

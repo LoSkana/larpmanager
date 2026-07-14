@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load tz show_tags static i18n %}
+{% block title %}
+    {{ guild.name }} - {{ run.search }}
+{% endblock title %}
+{% block content %}
+    <div class="user_resize">
+        {% include "elements/sheet/guild.html" %}
+        {% if my_admin_membership %}
+            <a href="{% url 'guild_edit' run.get_slug guild.uuid %}"
+               class="guild-edit-btn button">
+                <i class="fa-solid fa-pen-to-square"></i>
+                {% trans "Edit guild" %}
+            </a>
+            <h2>{% trans "Invite a character" %}</h2>
+            <form class="guild-invite-form"
+                  action="{% url 'guild_invite' run.get_slug guild.uuid %}"
+                  method="post">
+                {% csrf_token %}
+                {{ guild_invite_widget }}
+                <button type="submit">
+                    <i class="fa-solid fa-user-plus"></i> {% trans "Invite" %}
+                </button>
+            </form>
+            <h2>{% trans "Manage members" %}</h2>
+            <table id="guild-members" class="mob">
+                <thead>
+                    <tr>
+                        <th>{% trans "Character" %}</th>
+                        <th>{% trans "Role" %}</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                {% for membership in memberships %}
+                    <tr>
+                        <td>{{ membership.character.name }}</td>
+                        <td>{{ membership.get_role_display }}</td>
+                        <td>
+                            {% if membership.role == 'a' %}
+                                <form action="{% url 'guild_demote' run.get_slug guild.uuid membership.character.uuid %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <button type="submit">
+                                        <i class="fa-solid fa-arrow-down"></i> {% trans "Demote" %}
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form action="{% url 'guild_promote' run.get_slug guild.uuid membership.character.uuid %}"
+                                      method="post">
+                                    {% csrf_token %}
+                                    <button type="submit">
+                                        <i class="fa-solid fa-arrow-up"></i> {% trans "Promote" %}
+                                    </button>
+                                </form>
+                            {% endif %}
+                            <form action="{% url 'guild_kick' run.get_slug guild.uuid membership.character.uuid %}"
+                                  method="post">
+                                {% csrf_token %}
+                                <button type="submit">
+                                    <i class="fa-solid fa-user-xmark"></i> {% trans "Kick" %}
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+        {% if my_membership and my_membership.status == 'a' %}
+            <form action="{% url 'guild_leave' run.get_slug guild.uuid %}"
+                  method="post">
+                {% csrf_token %}
+                <input type="hidden"
+                       name="character_uuid"
+                       value="{{ my_membership.character.uuid }}">
+                <button type="submit">
+                    <i class="fa-solid fa-right-from-bracket"></i> {% trans "Leave guild" %}
+                </button>
+            </form>
+        {% endif %}
+    </div>
+{% endblock content %}
+{% block css %}
+    {{ block.super }}
+    {{ guild_invite_media.css }}
+{% endblock css %}
+{% block js %}
+    {{ block.super }}
+    {{ guild_invite_media.js }}
+{% endblock js %}

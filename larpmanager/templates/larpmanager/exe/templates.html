@@ -4,7 +4,7 @@
     {% trans "Template" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="events" class="go_datatable writing gall ">
         <thead>
             <tr>
@@ -52,4 +52,5 @@
             {% trans "No templates defined yet" %}. {% trans "Create a template to reuse event configurations and role assignments across events" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

@@ -84,10 +84,12 @@ from larpmanager.cache.experience import (
     on_ability_requirements_m2m_changed,
     on_ability_saved,
     on_character_saved,
+    on_criterion_factions_m2m_changed,
     on_criterion_prerequisites_m2m_changed,
     on_criterion_requirements_m2m_changed,
     on_delivery_characters_m2m_changed,
     on_modifier_abilities_m2m_changed as on_modifier_abilities_m2m_changed_cache,
+    on_modifier_factions_m2m_changed,
     on_modifier_prerequisites_m2m_changed,
     on_modifier_requirements_m2m_changed,
     on_rule_abilities_m2m_changed as on_rule_abilities_m2m_changed_cache,
@@ -276,6 +278,7 @@ from larpmanager.models.writing import (
     replace_character_names,
 )
 from larpmanager.utils.auth.permission import auto_assign_event_permission_number
+from larpmanager.utils.core.clone_guard import is_clone_active
 from larpmanager.utils.core.nav import invalidate_user_nav_entries
 from larpmanager.utils.io.pdf import (
     cleanup_character_pdfs_before_delete,
@@ -362,7 +365,9 @@ RESET_WIDGETS_TYPES = (
 def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Handle pre-save operations for all models."""
     # Auto-assign sequential numbers for models with number/order fields
-    auto_assign_sequential_numbers(instance)
+    # (skipped during bulk clones, which preserve the source numbering)
+    if not is_clone_active():
+        auto_assign_sequential_numbers(instance)
 
     # Update search fields for models that implement search functionality
     update_model_search_field(instance)
@@ -450,6 +455,9 @@ def post_save_discount_accounting_cache(
     sender: type, instance: AccountingItemDiscount, created: bool, **kwargs: Any
 ) -> None:
     """Update accounting caches when a discount is saved."""
+    if is_clone_active():
+        return
+
     # Process discount changes in accounting system
     process_accounting_discount_post_save(instance)
 
@@ -494,6 +502,8 @@ def pre_save_accounting_item_membership(sender: type, instance: AccountingItem, 
 @receiver(pre_save, sender=AccountingItemOther)
 def pre_save_accounting_item_other(sender: type, instance: AccountingItemOther, **kwargs: Any) -> None:
     """Send token credit notification email when accounting item is saved."""
+    if is_clone_active():
+        return
     send_token_credit_notification_email(instance)
 
 
@@ -505,6 +515,9 @@ def post_save_other_accounting_cache(
     **kwargs: Any,
 ) -> None:
     """Update token credit and member accounting cache after OtherAccounting save."""
+    if is_clone_active():
+        return
+
     # Update token credit based on the OtherAccounting instance
     update_token_credit_on_other_save(instance)
 
@@ -512,6 +525,8 @@ def post_save_other_accounting_cache(
 @receiver(pre_save, sender=AccountingItemPayment)
 def pre_save_accounting_item_payment(sender: type, instance: AccountingItemPayment, **kwargs: Any) -> None:
     """Send payment confirmation and handle pre-save operations."""
+    if is_clone_active():
+        return
     handle_accounting_item_payment_pre_save(instance)
 
 
@@ -520,6 +535,9 @@ def post_save_payment_accounting_cache(
     sender: type, instance: AccountingItemPayment, created: bool, **kwargs: Any
 ) -> None:
     """Update accounting caches and process payment-related calculations after payment save."""
+    if is_clone_active():
+        return
+
     # Send confirmation payment
     send_payment_confirmation_email(instance)
 
@@ -717,6 +735,9 @@ def post_save_association_skin_reset_cache(sender: type, instance: Association, 
 @receiver(pre_save, sender=Character)
 def pre_save_character_update_status(sender: type, instance: Character, **kwargs: Any) -> None:
     """Update character status and cache before saving."""
+    if is_clone_active():
+        return
+
     # Send email notification for character status changes
     send_character_status_update_email(instance)
 
@@ -730,7 +751,7 @@ def pre_save_character_update_status(sender: type, instance: Character, **kwargs
 @receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
 def post_character_update_exp(sender: type, instance: Character, *args: Any, **kwargs: Any) -> None:
     """Calculate experience points for character after update."""
-    if instance.deleted:
+    if instance.deleted or is_clone_active():
         return
     calculate_character_experience_points(instance)
 
@@ -743,6 +764,9 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     instance is saved, including PDF cleanup, cache updates, and relationship
     refreshes to maintain data consistency across the application.
     """
+    if is_clone_active():
+        return
+
     # Clean up any outdated PDF files associated with this character
     cleanup_character_pdfs_on_save(instance)
 
@@ -872,6 +896,8 @@ def create_pools_for_inventory(sender: type, instance: Inventory, created: bool,
 @receiver(pre_save, sender=Event)
 def pre_save_event(sender: type, instance: Event, **kwargs: Any) -> None:
     """Invalidate cache and prepare campaign data before saving an Event."""
+    if is_clone_active():
+        return
     on_event_pre_save_invalidate_cache(instance)
     prepare_campaign_event_data(instance)
 
@@ -892,6 +918,10 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
         None
 
     """
+    # Skip auto setup and cache churn during bulk clones (runs/tickets are cloned explicitly)
+    if is_clone_active():
+        return
+
     # Clear event-related caches to ensure fresh data
     clear_event_cache_all_runs(instance)
     clear_event_features_cache(instance.id)
@@ -1029,6 +1059,8 @@ def post_save_event_text(sender: type, instance: EventText, created: bool, **kwa
 @receiver(pre_save, sender=Faction)
 def pre_save_faction(sender: type, instance: Faction, *args: Any, **kwargs: Any) -> None:
     """Signal handler that updates faction before saving."""
+    if is_clone_active():
+        return
     replace_character_names(instance)
     on_faction_pre_save_update_cache(instance)
     if instance.pk:
@@ -1050,6 +1082,9 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
         **kwargs: Additional keyword arguments from the signal
 
     """
+    if is_clone_active():
+        return
+
     # Update faction cache for event relationships
     refresh_event_faction_relationships_background(instance.id)
 
@@ -1278,6 +1313,8 @@ def post_delete_reset_member_config(sender: type, instance: Any, **kwargs: Any) 
 @receiver(pre_save, sender=Membership)
 def pre_save_membership(sender: type, instance: Membership, **kwargs: Any) -> None:
     """Process membership status updates before save."""
+    if is_clone_active():
+        return
     process_membership_status_updates(instance)
 
 
@@ -1297,6 +1334,8 @@ def post_delete_modifier_exp(sender: type, instance: object, *args: Any, **kwarg
 @receiver(pre_save, sender=PaymentInvoice)
 def pre_save_payment_invoice(sender: type[PaymentInvoice], instance: PaymentInvoice, **kwargs: Any) -> None:
     """Process payment invoice status changes before saving."""
+    if is_clone_active():
+        return
     process_payment_invoice_status_change(instance)
 
 
@@ -1329,6 +1368,9 @@ def pre_save_plot(sender: type, instance: object, *args: Any, **kwargs: Any) -> 
 @receiver(post_save, sender=Plot)
 def post_save_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> None:
     """Update plot and character relationship caches after plot save."""
+    if is_clone_active():
+        return
+
     # Update plot cache
     refresh_event_plot_relationships_background(instance.id)
 
@@ -1351,6 +1393,8 @@ def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> 
 @receiver(post_save, sender=PlotCharacterRel)
 def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
     """Recompute auto relationships when a plot-character relation changes."""
+    if is_clone_active():
+        return
     if instance.plot_id:
         refresh_event_plot_relationships_background(instance.plot_id)
         mark_plot_character_rel_dirty(instance.plot_id, instance.character_id)
@@ -1383,6 +1427,9 @@ def pre_save_prologue(sender: type, instance: object, *args: Any, **kwargs: Any)
 @receiver(post_save, sender=Prologue)
 def post_save_prologue_reset_rels(sender: type, instance: Prologue, **kwargs: Any) -> None:
     """Reset relationship cache for prologue and associated characters."""
+    if is_clone_active():
+        return
+
     # Update prologue cache
     refresh_event_prologue_relationships_background(instance.id)
 
@@ -1483,6 +1530,9 @@ def pre_save_refund_request(sender: type, instance: Any, **kwargs: Any) -> None:
 @receiver(pre_save, sender=Registration)
 def pre_save_registration_switch_event(sender: type, instance: Registration, **kwargs: Any) -> None:
     """Handle registration updates when switching events."""
+    if is_clone_active():
+        return
+
     # Process event change logic
     process_registration_event_change(instance)
 
@@ -1510,6 +1560,10 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
         None
 
     """
+    # Skip emails and accounting recompute during bulk clones (values are copied verbatim)
+    if is_clone_active():
+        return
+
     # Assign character from previous campaign if applicable
     assign_previous_campaign_character(instance)
 
@@ -1557,12 +1611,15 @@ def post_save_registration_character_rel_savereg(
     **kwargs: Any,
 ) -> None:
     """Reset character cache and send assignment email notification."""
+    if is_clone_active():
+        return
+
     reset_character_registration_cache(instance)
 
     # Clear deadline widget cache (casting requirements)
     reset_widgets(instance.registration)
 
-    # Auto-assign player if player editor is active and character has no player
+    # Auto-assign player if character creation is active and character has no player
     features = get_event_features(instance.character.event_id)
     if "user_character" in features and not instance.character.player:
         instance.character.player = instance.registration.member
@@ -1634,6 +1691,9 @@ def post_save_ticket_accounting_cache(
     **kwargs: Any,
 ) -> None:
     """Clear cache for all runs when a ticket is saved."""
+    if is_clone_active():
+        return
+
     log_registration_ticket_saved(instance)
     reset_registration_ticket(instance)
     clear_registration_tickets_cache(instance.event_id)
@@ -1660,6 +1720,9 @@ def pre_delete_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
 @receiver(post_save, sender=Relationship)
 def post_save_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
     """Update cached relationships and delete PDF files after saving a relationship."""
+    if is_clone_active():
+        return
+
     refresh_character_relationships(instance.source)
     delete_character_pdf_files(instance.source)
 
@@ -1708,6 +1771,8 @@ def post_delete_criterion_exp(sender: type, instance: object, *args: Any, **kwar
 @receiver(pre_save, sender=Run)
 def pre_save_run(sender: type, instance: Any, **kwargs: Any) -> None:
     """Invalidate cache on run pre-save signal."""
+    if is_clone_active():
+        return
     on_run_pre_save_invalidate_cache(instance)
 
 
@@ -1725,6 +1790,9 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
         **kwargs: Additional keyword arguments from the signal
 
     """
+    if is_clone_active():
+        return
+
     # Clear registration-related caches for this run
     clear_registration_counts_cache(instance.id)
 
@@ -1962,9 +2030,11 @@ m2m_changed.connect(on_delivery_characters_m2m_changed, sender=DeliveryExp.chara
 m2m_changed.connect(on_modifier_abilities_m2m_changed_cache, sender=ModifierExp.abilities.through)
 m2m_changed.connect(on_modifier_prerequisites_m2m_changed, sender=ModifierExp.prerequisites.through)
 m2m_changed.connect(on_modifier_requirements_m2m_changed, sender=ModifierExp.requirements.through)
+m2m_changed.connect(on_modifier_factions_m2m_changed, sender=ModifierExp.factions.through)
 m2m_changed.connect(on_rule_abilities_m2m_changed_cache, sender=RuleExp.abilities.through)
 m2m_changed.connect(on_criterion_prerequisites_m2m_changed, sender=CriterionExp.prerequisites.through)
 m2m_changed.connect(on_criterion_requirements_m2m_changed, sender=CriterionExp.requirements.through)
+m2m_changed.connect(on_criterion_factions_m2m_changed, sender=CriterionExp.factions.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
 

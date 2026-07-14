@@ -332,7 +332,7 @@ def orga_roles_invite(request: HttpRequest, event_slug: str, role_uuid: str) -> 
         return redirect("orga_roles", event_slug=event_slug)
     context["role"] = role
     context["back_url"] = reverse("orga_roles", kwargs={"event_slug": event_slug})
-    return render(request, "larpmanager/roles_invite.html", context)
+    return render(request, "larpmanager/manage/roles_invite.html", context)
 
 
 @login_required
@@ -474,7 +474,7 @@ def orga_features_go(request: HttpRequest, event_slug: str, slug: str, *, to_act
     context = check_event_context(request, event_slug, "orga_features")
 
     # Block feature activation in lite/demo mode
-    if to_active and context.get("demo"):
+    if to_active and context.get("lite_mode"):
         messages.error(request, _("Features cannot be activated in lite mode, complete the activation checklist first"))
         msg = "manage"
         raise RedirectError(msg, kwargs={"event_slug": event_slug})
@@ -948,13 +948,9 @@ def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]
 
     # Extract available question fields from context
     question_column_keys = list(context["columns"][0].keys())
-    question_sample_values = []
 
-    # Build values list matching available fields
-    for field_name, sample_value in sample_question_data.items():
-        if field_name not in question_column_keys:
-            continue
-        question_sample_values.append(sample_value)
+    # Build values list matching available fields, preserving column order
+    question_sample_values = [sample_question_data.get(field_name, "") for field_name in question_column_keys]
 
     # Add questions template to exports
     template_exports.append(("questions", question_column_keys, [question_sample_values]))
@@ -966,17 +962,14 @@ def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]
         "description": "Option description",
         "max_available": "2",
         "price": "10",
+        "requirements": "Other Option Name",
     }
 
     # Extract available option fields from context
     option_column_keys = list(context["columns"][1].keys())
-    option_sample_values = []
 
-    # Build values list matching available fields
-    for field_name, sample_value in sample_option_data.items():
-        if field_name not in option_column_keys:
-            continue
-        option_sample_values.append(sample_value)
+    # Build values list matching available fields, preserving column order
+    option_sample_values = [sample_option_data.get(field_name, "") for field_name in option_column_keys]
 
     # Add options template to exports
     template_exports.append(("options", option_column_keys, [option_sample_values]))

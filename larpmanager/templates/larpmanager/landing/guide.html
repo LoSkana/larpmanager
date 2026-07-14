@@ -1,0 +1,27 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ guide.title }} - LarpManager
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="keywords" content="{{ guide.keywords }}">
+    <meta name="description" content="{{ guide.description }}">
+{% endblock meta %}
+{% block landing_eyebrow %}
+    Guide
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {{ guide.title }}
+{% endblock landing_title %}
+{% block landing_content %}
+    <div id="article" class="about-prose">
+        {% if guide.photo %}
+            <div class="article-image">
+                <img src="{{ guide.photo.url }}"
+                     alt="{{ guide.title }}"
+                     class="img-responsive" />
+            </div>
+        {% endif %}
+        <div class="article-content">{{ guide.text | safe }}</div>
+    </div>
+{% endblock landing_content %}

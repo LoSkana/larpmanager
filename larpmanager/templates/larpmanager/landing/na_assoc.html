@@ -1,0 +1,27 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    Organization not found
+{% endblock maintitle %}
+{% block landing_title %}
+    Organization not found
+{% endblock landing_title %}
+{% block landing_content %}
+    <div class="about-prose">
+        <p>
+            Heya! You requested an advanced feature of the larpmanager, but we couldn't find an existing LARP Organization that you manage.
+        </p>
+        <p>
+            Maybe someone already created the organization? In this case ask them to add you to one of the roles in order to help them manage it!
+        </p>
+        <p>
+            If the organization does not yet exists, <a href="{% url 'get_started' %}">create it now,</a> it's super easy!
+        </p>
+        <p>
+            <i>Need help? <span class="contact-mail"></span></i>
+        </p>
+    </div>
+{% endblock landing_content %}
+{% block js2 %}
+    {% include "elements/contact-mail.js" %}
+{% endblock js2 %}

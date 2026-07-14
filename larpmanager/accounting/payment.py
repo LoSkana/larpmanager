@@ -413,7 +413,12 @@ def get_payment_form(
     invoice: PaymentInvoice | None = None
     if invoice_key is not None:
         try:
-            invoice = PaymentInvoice.objects.get(key=invoice_key, status=PaymentStatus.CREATED)
+            invoice = PaymentInvoice.objects.get(
+                key=invoice_key,
+                status=PaymentStatus.CREATED,
+                member=context["member"],
+                association_id=association_id,
+            )
         except ObjectDoesNotExist as e:
             # Invoice not found or invalid, will create new one
             logger.debug("Invoice %s not found or invalid: %s", invoice_key, e)

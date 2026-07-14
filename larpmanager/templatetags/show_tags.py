@@ -839,6 +839,26 @@ def get_login_url(context: dict, provider: str, **params: Any) -> str:
     return url + "?" + urlencode(query)
 
 
+@register.simple_tag(takes_context=True)
+def get_social_login_url(context: dict, provider: str) -> str:
+    """Build the OAuth login URL, routing subdomain logins through the main domain.
+
+    Google's OAuth redirect URI is only registered for the main domain, so a login
+    started on an association subdomain must begin on the main domain instead,
+    carrying a 'next' pointing back to /after_login/<slug>/ to return afterwards.
+    This must be resolved server-side (not via client JS) so it can't race with
+    the page load and silently fall back to a same-domain login.
+    """
+    association = context.get("association") or {}
+    if not association.get("id"):
+        return get_login_url(context, provider)
+
+    main_domain = association["main_domain"]
+    next_url = f"https://{main_domain}/after_login/{association['slug']}/"
+    url = reverse(provider + "_login")
+    return f"https://{main_domain}{url}?{urlencode({REDIRECT_FIELD_NAME: next_url})}"
+
+
 @register.filter
 def replace_underscore(value: Any) -> Any:
     """Template filter to replace underscores with spaces."""

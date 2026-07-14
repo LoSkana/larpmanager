@@ -104,7 +104,15 @@ class FeatureCheckboxWidget(forms.CheckboxSelectMultiple):
         # Use format_html_join to safely generate the HTML
         return format_html_join(
             "\n",
-            '<div class="feature_checkbox lm_tooltip"><span class="hide lm_tooltiptext">{} ({})</span><input type="checkbox" name="{}" value="{}" id="{}" {}> <label for="{}">{}</label> <a href="#" feat="{}"><i class="fas fa-question-circle"></i></a></div>',
+            """
+            <div class="feature_checkbox">
+                <input type="checkbox" name="{2}" value="{3}" id="{4}" {5}>
+                <span class="lm_tooltip">
+                <span class="hide lm_tooltiptext">{0} ({1})</span>
+                <label for="{6}">{7}</label>
+                <a href="#" feat="{8}"><i class="fas fa-question-circle"></i></a>
+                </span>
+            </div>""",
             checkbox_elements,
         )
 

@@ -424,7 +424,7 @@ def _row_header(  # noqa: C901, PLR0912
             email_address = member.email
         row_values.append(email_address)
 
-    # Add player email column for characters if player editor is active
+    # Add player email column for characters if character creation is active
     elif model == "character" and "user_character" in context.get("features", {}):
         header_columns.append("player")
         player_email = ""

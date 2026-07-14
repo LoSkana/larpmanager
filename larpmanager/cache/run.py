@@ -186,7 +186,7 @@ def init_cache_config_run(run: Run) -> dict:
 
     # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()
-    for config_name in ["character", "faction", "quest", "trait"]:
+    for config_name in ["character", "faction", "guild", "quest", "trait"]:
         # Skip if this writing feature is not enabled for the event
         if mapping[config_name] not in event_features:
             continue

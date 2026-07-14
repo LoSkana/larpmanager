@@ -1,0 +1,31 @@
+{% load show_tags i18n %}
+{% for guild in sheet_guilds %}
+    <h2 class="c">{{ guild.name }}</h2>
+    {% for idx, question in guild.questions.items %}
+        {% if question.typ == 'e' %}
+            {% with guild.fields|get:idx as field %}
+                {% if field %}
+                    {% if screen or question.printable %}
+                        <h2 class="c title">{{ question.name }}</h2>
+                        <div class="plot text">{% show_char field run 1 %}</div>
+                    {% endif %}
+                {% endif %}
+            {% endwith %}
+        {% elif question.typ == 'text' %}
+            {% if guild.text and show_guild.text %}
+                {% if not guild.only_text %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
+                <div class="plot text">{% show_char guild.text run 1 %}</div>
+            {% endif %}
+        {% else %}
+            {% with guild.fields|get:idx as field %}
+                {% if field %}
+                    {% if screen or question.printable %}
+                        <div class="go-inline">
+                            <b>{{ question.name }}:&nbsp;</b>{% get_character_field field options %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    {% endfor %}
+{% endfor %}

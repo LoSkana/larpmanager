@@ -24,12 +24,12 @@ from decimal import Decimal
 from typing import Any
 from unittest.mock import patch
 
+from larpmanager.accounting.base import round_to_nearest_cent
 from larpmanager.accounting.registration import (
     get_registration_iscr,
     get_registration_payments,
     update_registration_accounting,
 )
-from larpmanager.accounting.base import round_to_nearest_cent
 from larpmanager.accounting.token_credit import (
     registration_tokens_credits_overpay,
     registration_tokens_credits_use,

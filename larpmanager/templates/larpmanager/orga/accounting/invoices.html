@@ -42,7 +42,8 @@
                     <td>{{ el.created | date:"d/m/Y h:m" }}</td>
                     <td>
                         {% if el.status == 'r' or el.status == 's' %}
-                            <a href="{% url 'orga_invoices_confirm' run.get_slug el.uuid %}">{% trans "Confirm" %}</a>
+                            <a href="{% url 'orga_invoices_confirm' run.get_slug el.uuid %}"
+                               class="frame-confirm">{% trans "Confirm" %}</a>
                         {% endif %}
                     </td>
                 </tr>

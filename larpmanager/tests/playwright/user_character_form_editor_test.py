@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 """
-Test: Character form editor with player editor feature.
+Test: Character form editor with character creation feature.
 Verifies dynamic character form creation with single/multiple choice fields, text fields,
 prerequisites, availability limits, and player character creation/approval workflow.
 """
@@ -63,11 +63,11 @@ def prepare(page: Any, live_server: Any) -> None:
     # Activate characters
     go_to(page, live_server, "/test/manage/features/character/on")
 
-    # Activate player editor
+    # Activate character creation
     go_to(page, live_server, "/test/manage/features/user_character/on")
 
     go_to(page, live_server, "/test/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Player editor ")).click()
+    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
     page.locator("#id_user_character_approval").check()
     page.get_by_role("cell", name="Maximum number of characters").click()
     page.locator("#id_user_character_max").fill("1")
@@ -247,9 +247,9 @@ def character(page: Any, live_server: Any) -> None:
     page.get_by_role("checkbox", name="Authorisation").check()
     submit_confirm(page)
 
-    expect_normalized(page, page.locator("#one"), "Create your character")
-    page.get_by_role("link", name="Create your character").click()
+    # confirming the profile redirects straight to the pending character creation action
     _wait_lm_ready(page)
+    expect(page).to_have_url(re.compile(r"/character/create/"))
 
     verify_requirements_hidden(page)
 

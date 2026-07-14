@@ -1,0 +1,309 @@
+/*** GENERAL ***/
+
+th,
+td {
+  vertical-align: middle;
+  padding: 0.8em;
+  text-align: center !important;
+}
+
+.writing th,
+.writing td {
+  word-wrap: break-word;
+  padding: 1em;
+}
+
+.writing .name {
+  font-size: large;
+}
+
+#id_discount {
+  width: 50%;
+  display: inline;
+  margin: 0 2em;
+}
+
+.discount_wrp br {
+  display: block;
+}
+
+#lm table td {
+  padding: 1em !important;
+  width: 33%;
+}
+
+#lm .fa-icon {
+  font-family: "Font Awesome 6 Free";
+  font-size: 1.5em;
+  margin-left: 0.5em;
+}
+
+@media (max-width: 600px) {
+  #lm tbody {
+    display: grid;
+  }
+  #lm table tr {
+    display: contents;
+  }
+  #lm table td {
+    display: block;
+    padding: 0.5em !important;
+    width: 100%;
+    border: solid 1px rgba(var(--pri-rgb), 0.5);
+    border-left: 0;
+    border-right: 0;
+  }
+  #lm table tr td + td {
+    order: 1;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .no-more-tables table,
+  .no-more-tables thead,
+  .no-more-tables tbody,
+  .no-more-tables th,
+  .no-more-tables td,
+  .no-more-tables tr {
+    display: block;
+  }
+
+  .no-more-tables thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .no-more-tables tr {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .no-more-tables td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align: left;
+    padding: 0.5em 0 0 5em !important;
+  }
+
+  .no-more-tables td.simple {
+    padding: 0.5em !important;
+  }
+
+  .no-more-tables td:before {
+    position: absolute;
+    top: 0.5em;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: bold;
+    content: attr(data-title);
+  }
+}
+
+.go_table {
+  margin-top: 2em;
+}
+
+/* ---------------------------------------------------------------------------
+   Tables
+   --------------------------------------------------------------------------- */
+
+/* Inline options editor: override global input width caps so cells stay aligned in one row */
+.inline-options-table input[type="text"],
+.inline-options-table input[type="number"] {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Keep the details row collapsed when toggled shut, even nested inside a .mob form table on mobile */
+.inline-option-details.hide {
+  display: none !important;
+}
+
+/* On mobile, the input cells stack full-width, then the drag handle and the
+   saved/details/delete icons share one row below (instead of every cell stacking) */
+@media (max-width: 840px) {
+  .inline-options-table tr.inline-option {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .inline-options-table tr.inline-option > td {
+    display: inline-block !important;
+    width: auto !important;
+  }
+
+  .inline-options-table tr.inline-option > td:not([class]) {
+    order: 0;
+    flex: 1 1 100%;
+  }
+
+  .inline-options-table tr.inline-option > td.io-order {
+    order: 1;
+  }
+
+  .inline-options-table tr.inline-option > td.io-col-saved {
+    order: 2;
+  }
+
+  .inline-options-table tr.inline-option > td.io-col-details {
+    order: 3;
+  }
+
+  .inline-options-table tr.inline-option > td.io-col-delete {
+    order: 4;
+  }
+}
+
+table.fixed {
+  table-layout: fixed;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th select {
+  max-width: 100% !important;
+  width: 100%;
+  padding-right: 1.5em;
+}
+
+.fea th {
+  font-size: 120%;
+  width: 20%;
+}
+
+.fea .descr {
+  width: 70%;
+}
+
+#discount_tbl {
+  margin-bottom: 2em;
+}
+
+/* Mobile responsive tables */
+@media (max-width: 840px) {
+  table.mob {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0 0 0.5em 0;
+  }
+
+  .mob tbody,
+  .mob th,
+  .mob tr,
+  .mob td {
+    display: block;
+    width: 100% !important;
+    height: auto;
+  }
+
+  .mob tr {
+    padding: 0;
+  }
+
+  .mob th,
+  .mob td {
+    padding: 0.2em;
+  }
+
+  .login .mob th,
+  .login .mob td {
+    padding: 0.5em;
+  }
+
+  .mob td label {
+    white-space: normal;
+  }
+
+  .mob th label {
+    font-size: 1.4em;
+    margin: 0;
+  }
+
+  .mob td a img {
+    width: 100%;
+  }
+
+  .calendar thead {
+    display: none;
+  }
+
+  .mob thead {
+    display: none !important;
+  }
+
+  hr {
+    margin: 0.2em 0;
+  }
+
+  p {
+    margin: 0.2em 0em;
+  }
+
+  #id_discount {
+    display: inline-block;
+  }
+
+  .discount_input_row {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1em 0;
+  }
+
+  @media (max-width: 600px) {
+    .discount_input_row {
+      flex-wrap: wrap;
+    }
+    .discount_input_row input {
+      width: 100%;
+    }
+  }
+}
+
+.new_v22 .discount_input_row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 0.5em;
+  margin: 1em 0;
+}
+
+.new_v22 .discount_input_row #id_discount {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 0.3em;
+}
+
+.new_v22 .discount_input_row #discount_go {
+  flex: 0 0 auto;
+  width: auto !important;
+  max-width: initial !important;
+}
+
+@media (max-width: 600px) {
+  .new_v22 .discount_input_row {
+    flex-wrap: wrap;
+  }
+
+  .new_v22 .discount_input_row input {
+    width: 100%;
+  }
+}

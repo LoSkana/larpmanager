@@ -204,29 +204,14 @@ class TestSocialAuthAdapter:
         assert member.name == existing_name
         assert member.surname == existing_surname
 
-    def test_get_login_redirect_url_preserves_subdomain(self) -> None:
-        """Test that login redirect preserves organization subdomain.
-
-        When users log in via social auth on an organization subdomain,
-        they should stay on that subdomain instead of being redirected
-        to the main platform. This is especially important for first-time logins.
-        """
-        # Create a mock request with organization association context
-        request = RequestFactory().get("/accounts/google/login/callback/")
-        request.association = {"id": 123, "slug": "test-org", "name": "Test Organization"}
-
-        # Execute get_login_redirect_url
-        adapter = MySocialAccountAdapter()
-        redirect_url = adapter.get_login_redirect_url(request)
-
-        # Verify it returns a relative path (stays on same subdomain)
-        assert redirect_url == "/"
-
     def test_get_login_redirect_url_main_domain_with_next_parameter(self) -> None:
-        """Test that login redirect on main domain respects 'next' parameter.
+        """Test that login redirect respects the 'next' parameter, not request.association.
 
-        When users log in on the main platform with a 'next' parameter pointing
-        to after_login, the adapter should use that URL to redirect to the org subdomain.
+        The OAuth callback always lands on the main domain (Google's redirect URI is
+        only registered there), so request.association is always the main-domain
+        association at this point - it must NOT be used to decide the redirect.
+        The originating subdomain travels exclusively via the 'next' parameter,
+        set server-side by get_social_login_url in show_tags.py.
         """
         # Create a mock request with main domain and 'next' parameter
         request = RequestFactory().get(
@@ -268,29 +253,11 @@ class TestSocialAuthAdapter:
 class TestAccountAdapter:
     """Test custom account adapter functionality for signup redirects."""
 
-    def test_get_signup_redirect_url_preserves_subdomain(self) -> None:
-        """Test that signup redirect preserves organization subdomain.
-
-        When users sign up via social auth on an organization subdomain (first-time login),
-        they should stay on that subdomain instead of being redirected to the main platform.
-        """
-        # Create a mock request with organization association context
-        request = RequestFactory().get("/accounts/google/login/callback/")
-        request.association = {"id": 123, "slug": "test-org", "name": "Test Organization"}
-
-        # Execute get_signup_redirect_url
-        adapter = MyAccountAdapter()
-        redirect_url = adapter.get_signup_redirect_url(request)
-
-        # Verify it returns a relative path (stays on same subdomain)
-        assert redirect_url == "/"
-
     def test_get_signup_redirect_url_main_domain_with_next_parameter(self) -> None:
-        """Test that signup redirect on main domain respects 'next' parameter.
+        """Test that signup redirect respects the 'next' parameter, not request.association.
 
-        When users sign up on the main platform with a 'next' parameter pointing to
-        after_login (first-time OAuth from org page), the adapter should use that URL
-        to redirect to the organization via after_login with token.
+        Same reasoning as the login case: the OAuth callback always lands on the main
+        domain, so request.association can't identify the originating subdomain there.
         """
         # Create a mock request with main domain and 'next' parameter
         request = RequestFactory().get(

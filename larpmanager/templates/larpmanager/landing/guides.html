@@ -1,0 +1,35 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ texts.guides_page_title }}
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="keywords" content="{{ texts.guides_meta_keywords }}">
+    <meta name="description" content="{{ texts.guides_meta_description }}">
+{% endblock meta %}
+{% block landing_eyebrow %}
+    Guides
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {{ texts.guides_title }}
+{% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>{{ texts.guides_sub }}</p>
+{% endblock landing_subtitle %}
+{% block landing_content %}
+    {% if list %}
+        <div class="guide-grid">
+            {% for post in list %}
+                <a class="guide-card"
+                   href="{% url 'guide' post.slug %}{% if iframe %}?in_iframe=1{% endif %}">
+                    <h3>
+                        {% if post.icon %}<i class="fa-solid fa-{{ post.icon }}"></i>{% endif %}
+                        {{ post.title }}
+                    </h3>
+                    {% if post.description %}<p>{{ post.description }}</p>{% endif %}
+                    <span>Read the guide <i class="fa-solid fa-arrow-right"></i></span>
+                </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock landing_content %}

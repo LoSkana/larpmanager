@@ -239,7 +239,7 @@ def prepare_permissions_role(form: BaseModelForm, typ: type) -> None:
     )
 
     # Hide demo-restricted permissions when in demo mode
-    if form.params.get("demo", False):
+    if form.params.get("lite_mode", False):
         base_queryset = base_queryset.filter(slug__in=LITE_PERMISSIONS)
 
     # Group permissions by module for organized display
@@ -755,6 +755,24 @@ class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
             "id": obj.uuid,
             "text": self.label_from_instance(obj),
         }
+
+
+class GuildInviteS2Widget(EventCharacterS2WidgetUuid):
+    """Select2 widget for inviting characters to a guild.
+
+    Excludes hidden characters and characters already in the guild.
+    """
+
+    def set_guild(self, guild: Any) -> None:
+        """Set the guild for this instance."""
+        self.guild = guild
+
+    def get_queryset(self) -> QuerySet[Character]:
+        """Return event characters that are visible and not already in the guild."""
+        queryset = super().get_queryset().filter(hide=False)
+        if hasattr(self, "guild"):
+            queryset = queryset.exclude(guild_memberships__guild=self.guild)
+        return queryset
 
 
 class EventPoolLabelS2:
