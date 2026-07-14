@@ -351,7 +351,18 @@ def build_player_characters_demo() -> LarpManagerDemoType:
         return existing
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Player Character Creation Demo")
-    event = Event.objects.create(association=association, name="Ashfall", slug=EVENT_SLUG)
+    event = Event.objects.create(
+        association=association,
+        name="Ashfall",
+        slug=EVENT_SLUG,
+        tagline="Bring your own survivor. The wasteland doesn't hand out backstories.",
+        description=(
+            "<p>A post-apocalyptic sandbox where every character is player-written from scratch. "
+            "Pick an Origin, a Mutation Path branching off it, Skills and Gear that chain off "
+            "both, then write your own Callsign, Appearance and Backstory. Submitted characters "
+            "queue for organizer review before they hit the wasteland.</p>"
+        ),
+    )
     run = event.runs.first()
     run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
     run.end = run.start + datetime.timedelta(days=2)

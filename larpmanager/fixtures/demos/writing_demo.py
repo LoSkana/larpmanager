@@ -406,7 +406,19 @@ def build_writing_demo() -> LarpManagerDemoType:
         return existing
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Story Writing Demo")
-    event = Event.objects.create(association=association, name="The Neon Gala", slug=EVENT_SLUG)
+    event = Event.objects.create(
+        association=association,
+        name="The Neon Gala",
+        slug=EVENT_SLUG,
+        tagline="One night, one gala, and secrets enough to burn the city down.",
+        description=(
+            "<p>Zenith Dynamics is throwing its annual gala, and every faction in the city has "
+            "a reason to be there. An executive with a debt he cannot repay, a security chief "
+            "feeding secrets to the Undercroft, and a hidden cult wearing Zenith's own colors: "
+            "eight characters, three interlocking plots, and a faction map with more going on "
+            "under the surface than above it.</p>"
+        ),
+    )
     run = event.runs.first()
     run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
     run.end = run.start + datetime.timedelta(days=2)
