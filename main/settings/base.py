@@ -270,6 +270,7 @@ CONTENT_SECURITY_POLICY = {
             'https://*.paypal.com',
             'https://gateway.sumup.com',
             'https://www.google-analytics.com',
+            'https://api.thecatapi.com',
         ],
         'frame-src': [
             "'self'",
