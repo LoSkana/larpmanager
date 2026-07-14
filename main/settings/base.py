@@ -260,6 +260,8 @@ CONTENT_SECURITY_POLICY = {
             'https://www.googletagmanager.com',
             'https://www.google.com',
             'https://www.gstatic.com',
+            'https://static.hotjar.com',
+            'https://script.hotjar.com',
         ],
         'style-src': ["'self'", "'unsafe-inline'", *_CSP_CDN_HOSTS],
         'font-src': ["'self'", 'data:', *_CSP_CDN_HOSTS],
@@ -271,6 +273,8 @@ CONTENT_SECURITY_POLICY = {
             'https://gateway.sumup.com',
             'https://www.google-analytics.com',
             'https://api.thecatapi.com',
+            'https://*.hotjar.com',
+            'https://*.hotjar.io',
         ],
         'frame-src': [
             "'self'",
