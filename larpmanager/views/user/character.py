@@ -1023,6 +1023,7 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
     with transaction.atomic():
         # Lock the character and recompute affordability under the lock
         char = Character.objects.select_for_update().get(pk=context["character"].pk)
+        add_char_addit(char)
         exp_avail = build_exp_avail_by_system_from_addit(char)
         available_uuids = {str(available.uuid) for available in get_available_ability_exp(char, exp_avail)}
         if str(ability.uuid) not in available_uuids:
