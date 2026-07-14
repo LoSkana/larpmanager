@@ -1070,8 +1070,8 @@ def _writing_load_field(
         return
 
     # Wrap plain multiline text in HTML paragraphs so line breaks render correctly.
-    # Single-line fields (e.g. title) are stripped only, not paragraph-wrapped.
-    if field_type == WritingQuestionType.TITLE:
+    # Single-line fields (e.g. title, teaser) are stripped only, not paragraph-wrapped.
+    if field_type in [WritingQuestionType.TITLE, WritingQuestionType.TEASER]:
         html_formatted_value = str(value).strip()
     else:
         html_formatted_value = _text_to_html_paragraphs(value)

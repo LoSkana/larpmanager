@@ -67,7 +67,7 @@ def delete_all_in_path(path: str) -> None:
 
 def get_event_cache_all_key(event_run: Run) -> str:
     """Generate cache key for event data."""
-    return f"event_factions_characters_{event_run.event.slug}_{event_run.number}"
+    return f"event_factions_characters_{event_run.id}"
 
 
 def init_event_cache_all(context: dict) -> dict:
