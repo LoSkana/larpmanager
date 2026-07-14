@@ -764,6 +764,7 @@ def get_fake_request(association_slug: str) -> HttpRequest | None:
     if request.association is None:
         return None
     request.user = AnonymousUser()
+    request.session = {}
     return request
 
 

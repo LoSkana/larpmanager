@@ -178,7 +178,7 @@ def get_delivery_rels(delivery: DeliveryExp) -> dict[str, Any]:
         relationships["character_rels"] = build_relationship_dict(character_list)
 
     except Exception:
-        logger.exception("Error getting relationships for delivery %s", delivery.id)
+        logger.exception("Error getting relationships for award %s", delivery.id)
         relationships = {}
 
     return relationships
@@ -225,6 +225,11 @@ def get_modifier_rels(modifier: ModifierExp) -> dict[str, Any]:
         requirements = modifier.requirements.all()
         requirement_list = [(req.uuid, req.name) for req in requirements]
         relationships["requirement_rels"] = build_relationship_dict(requirement_list)
+
+        # Get all applicable factions
+        factions = modifier.factions.all()
+        faction_list = [(faction.uuid, faction.name) for faction in factions]
+        relationships["faction_rels"] = build_relationship_dict(faction_list)
 
     except Exception:
         logger.exception("Error getting relationships for modifier %s", modifier.id)
@@ -863,6 +868,62 @@ def on_modifier_requirements_m2m_changed(
     refresh_modifier_rels_dirty_background(modifier_ids)
 
 
+def on_modifier_factions_m2m_changed(
+    sender: type,  # noqa: ARG001
+    instance: ModifierExp,
+    action: str,
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
+    **kwargs: object,  # noqa: ARG001
+) -> None:
+    """Handle modifier-faction relationship changes.
+
+    Updates modifier cache when factions are added or removed.
+
+    Args:
+        sender: The M2M through model
+        instance: The ModifierExp (if reverse=False) or Faction (if reverse=True)
+        action: The M2M action (pre_add, post_add, etc.)
+        pk_set: Set of related object IDs
+        reverse: True if signal was triggered from Faction side
+        **kwargs: Additional keyword arguments
+
+    """
+    store_key = f"{instance.pk}_modifier_factions"
+
+    if reverse and action == "pre_clear":
+        rows = list(ModifierExp.objects.filter(factions=instance).values("id", "event_id"))
+        setattr(_pre_clear_modifier_ids, store_key, rows)
+        return
+
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+
+    if reverse:
+        # Signal came from Faction - instance is a Faction, which is itself event-scoped
+        # pk_set contains modifier IDs, so refresh each modifier
+        if pk_set:
+            modifier_ids = list(pk_set)
+        elif action == "post_clear":
+            rows = getattr(_pre_clear_modifier_ids, store_key, [])
+            with contextlib.suppress(AttributeError):
+                delattr(_pre_clear_modifier_ids, store_key)
+            modifier_ids = [r["id"] for r in rows]
+        else:
+            modifier_ids = []
+        event_id = instance.event_id
+    else:
+        # Signal came from ModifierExp.factions - instance is a ModifierExp
+        modifier_ids = [instance.id]
+        event_id = instance.event_id
+
+    if not modifier_ids:
+        return
+
+    _mark_exp_dirty("modifiers", modifier_ids, event_id)
+    refresh_modifier_rels_dirty_background(modifier_ids)
+
+
 def on_rule_abilities_m2m_changed(
     sender: type,  # noqa: ARG001
     instance: RuleExp,
@@ -928,6 +989,10 @@ def get_criterion_rels(criterion: CriterionExp) -> dict[str, Any]:
         requirements = criterion.requirements.all()
         requirement_list = [(req.uuid, req.name) for req in requirements]
         relationships["requirement_rels"] = build_relationship_dict(requirement_list)
+
+        factions = criterion.factions.all()
+        faction_list = [(faction.uuid, faction.name) for faction in factions]
+        relationships["faction_rels"] = build_relationship_dict(faction_list)
 
     except Exception:
         logger.exception("Error getting relationships for criterion %s", criterion.id)
@@ -1019,3 +1084,15 @@ def on_criterion_requirements_m2m_changed(
 ) -> None:
     """Handle criterion-requirement relationship changes."""
     _on_criterion_m2m_changed(instance, action, pk_set, reverse, "requirements")
+
+
+def on_criterion_factions_m2m_changed(
+    sender: type,  # noqa: ARG001
+    instance: CriterionExp,
+    action: str,
+    pk_set: set[int] | None,
+    reverse: bool = False,  # noqa: FBT001, FBT002
+    **kwargs: object,  # noqa: ARG001
+) -> None:
+    """Handle criterion-faction relationship changes."""
+    _on_criterion_m2m_changed(instance, action, pk_set, reverse, "factions")

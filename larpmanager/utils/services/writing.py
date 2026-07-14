@@ -50,6 +50,9 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     Faction,
+    Guild,
+    GuildMembership,
+    GuildMembershipStatus,
     Plot,
     Prologue,
     SpeedLarp,
@@ -259,7 +262,7 @@ def writing_post(request: HttpRequest, context: dict, writing_element_type: Any,
         raise ReturnNowError(writing_popup(request, context, writing_element_type))
 
 
-def writing_list(  # noqa: C901 - Complex writing list building with feature-dependent filtering
+def writing_list(  # noqa: C901, PLR0912 - Complex writing list building with feature-dependent filtering
     request: HttpRequest,
     context: dict,
     writing_type: type[Model],
@@ -306,6 +309,9 @@ def writing_list(  # noqa: C901 - Complex writing list building with feature-dep
 
     if issubclass(writing_type, Faction):
         writing_list_faction(context)
+
+    if issubclass(writing_type, Guild):
+        writing_list_guild(context)
 
     # Handle speed LARP specific context setup
     if issubclass(writing_type, SpeedLarp):
@@ -511,6 +517,26 @@ def writing_list_faction(context: dict) -> None:
     # Attach character relationships to each faction in the list
     for faction in context["list"]:
         faction.character_rels = faction_relationships.get(faction.id, {}).get("character_rels", [])
+
+
+def writing_list_guild(context: dict) -> None:
+    """Attach accepted character memberships to each guild in the list."""
+    guild_ids = [guild.id for guild in context["list"]]
+    memberships = (
+        GuildMembership.objects.filter(guild_id__in=guild_ids, status=GuildMembershipStatus.ACCEPTED)
+        .select_related("character")
+        .order_by("character__number")
+    )
+
+    rels_by_guild: dict[int, list] = {}
+    for membership in memberships:
+        rels_by_guild.setdefault(membership.guild_id, []).append(
+            (membership.character.uuid, membership.character.name),
+        )
+
+    for guild in context["list"]:
+        char_rels = rels_by_guild.get(guild.id, [])
+        guild.character_rels = {"list": char_rels, "count": len(char_rels)}
 
 
 def writing_list_speedlarp(context: dict) -> None:

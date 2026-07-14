@@ -37,7 +37,16 @@ def is_lm_admin(request: HttpRequest) -> bool:
 
 
 def check_lm_admin(request: HttpRequest) -> dict[str, Any]:
-    """Verify user is LM admin and return admin context."""
+    """Verify user is LM admin and return admin context.
+
+    Admin pages are only served on the main domain; requests from
+    association subdomains get a 404.
+    """
+    # Admin pages live on the main domain only
+    if request.association["id"] != 0:
+        msg = "Not main domain"
+        raise Http404(msg)
+
     # Check if the current user has LM administrator privileges
     if not is_lm_admin(request):
         msg = "Not lm admin"

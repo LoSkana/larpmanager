@@ -3,6 +3,9 @@
 {% block title %}
     {{ run }}
 {% endblock title %}
+{% block info %}
+    {% trans "Browse the characters and participants of the event" %}
+{% endblock info %}
 {% block content %}
     {% if factions %}
         {% for fnum in factions_typ.s %}

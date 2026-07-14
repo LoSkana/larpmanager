@@ -7,7 +7,7 @@
     {% trans "List of personal expenses submitted for this event" %}. {% trans "Upload receipts and track approval status" %}.
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="expenses" class="go_datatable mob">
         <thead>
             <tr>
@@ -39,4 +39,5 @@
             {% trans "No expenses submitted yet" %}. {% trans "Use the button above to add a new expense with a receipt" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

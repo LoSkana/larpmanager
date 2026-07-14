@@ -538,6 +538,11 @@ def _set_membership_context(context: dict, run: Run, member: Member, registratio
     association_id = run.event.association_id
     event_year = run.start.year
     context["membership_amount"] = get_association_config(association_id, "membership_fee", default_value=0)
+    currency_symbol = run.event.association.get_currency_symbol()
+    context["membership_amount_display"] = ""
+    if context["membership_amount"]:
+        amount = Decimal(str(context["membership_amount"]))
+        context["membership_amount_display"] = f"({_format_decimal(amount)}{currency_symbol})"
 
     paid_item = AccountingItemMembership.objects.filter(
         year=event_year,
@@ -548,6 +553,9 @@ def _set_membership_context(context: dict, run: Run, member: Member, registratio
     if paid_item:
         context["membership_fee"] = "done"
         context["membership_amount_paid"] = paid_item.value
+        context["membership_amount_paid_display"] = ""
+        if paid_item.value:
+            context["membership_amount_paid_display"] = f"({_format_decimal(paid_item.value)}{currency_symbol})"
         return
 
     membership_fee_separated = get_association_config(association_id, "membership_fee_separated", default_value=True)

@@ -1,0 +1,18 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ texts.team_page_title }}
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="keywords" content="{{ texts.team_meta_keywords }}">
+    <meta name="description" content="{{ texts.team_meta_description }}">
+{% endblock meta %}
+{% block landing_eyebrow %}
+    About us
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {{ texts.team_title }}
+{% endblock landing_title %}
+{% block landing_content %}
+    <div class="about-prose">{{ texts.team_content | safe }}</div>
+{% endblock landing_content %}

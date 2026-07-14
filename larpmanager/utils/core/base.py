@@ -54,6 +54,7 @@ from larpmanager.utils.core.exceptions import (
 )
 from larpmanager.utils.core.nav import build_main_nav_items
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
+from larpmanager.utils.services.demo import add_demo_hint_context
 from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
 
 # Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
@@ -129,6 +130,10 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     # Add current request function name for debugging/analytics
     if request and request.resolver_match:
         context["request_func_name"] = request.resolver_match.func.__name__
+
+    # Contextual hint for demo instances, bound to the current view
+    if context.get("demo") and context.get("request_func_name"):
+        add_demo_hint_context(request, context)
 
     # Check if intro driver tutorial should be shown for this association
     if context["member"] and context["association_id"]:
@@ -255,6 +260,13 @@ def check_association_context(request: HttpRequest, permission_slug: str | list[
         if action and "form" in action.config and hasattr(action.config["form"], "page_info"):
             context["page_info"] = action.config["form"].page_info
 
+    # Compute pending-work counts shown as badges on the sidebar links
+    # Lazy import: set_sidebar_badges transitively imports base, so a module-level
+    # import here would create a circular import
+    from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
+
+    set_sidebar_badges(request, context)
+
     return context
 
 
@@ -326,6 +338,13 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
     # Set management page flags
     context["orga_page"] = 1
     context["manage"] = 1
+
+    # Compute pending-work counts shown as badges on the sidebar links
+    # Lazy import: set_sidebar_badges transitively imports base, so a module-level
+    # import here would create a circular import
+    from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
+
+    set_sidebar_badges(request, context)
 
     return context
 
@@ -508,12 +527,12 @@ def prepare_run(context: Any) -> None:
                 run_configuration[visibility_config_name] = {}
             run_configuration[visibility_config_name].update({"name": 1, "teaser": 1, "text": 1})
 
-        for additional_feature in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
-            additional_config_name = "show_addit"
-            if additional_config_name not in run_configuration:
-                run_configuration[additional_config_name] = {}
-            if additional_feature in context["features"]:
-                run_configuration[additional_config_name][additional_feature] = True
+    for additional_feature in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
+        additional_config_name = "show_addit"
+        if additional_config_name not in run_configuration:
+            run_configuration[additional_config_name] = {}
+        if additional_feature in context["features"]:
+            run_configuration[additional_config_name][additional_feature] = True
 
     context.update(run_configuration)
     context["main_nav_items"] = build_main_nav_items(context)

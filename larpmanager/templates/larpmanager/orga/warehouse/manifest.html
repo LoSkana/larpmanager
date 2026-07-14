@@ -7,7 +7,7 @@
     {% trans "Track all item assignments grouped by area, marking each item as loaded and deployed" %}
 {% endblock info %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     {% if optionals.quantity and not warehouse_committed %}
         <div class="alert alert-info" role="alert">
             <i class="fas fa-info-circle"></i>
@@ -108,6 +108,7 @@
     <div id="imagePopup">
         <img id="popupImg" src="" alt="popup image" />
     </div>
+    {% include "elements/table/footer.html" %}
 {% endblock content %}
 {% block js %}
     <script>

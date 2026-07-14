@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load tz show_tags static i18n %}
+{% block title %}
+    {% trans "Guilds" %} - {{ run.search }}
+{% endblock title %}
+{% block info %}
+    {% trans "Discover the guilds of the game" %}
+{% endblock info %}
+{% block content %}
+    <div class="user_resize">
+        {% if can_create_guild %}
+            <p>
+                <a href="{% url 'guild_create' run.get_slug %}" class="btn">{% trans "Create a new guild" %}</a>
+            </p>
+        {% endif %}
+        <p>
+            <a href="{% url 'guild_invites' run.get_slug %}">{% trans "My pending invites" %}</a>
+        </p>
+        <div>
+            <table class="mob">
+                <thead>
+                    <tr>
+                        <th>{% trans "Name" %}</th>
+                        <th>{% trans "Presentation" %}</th>
+                        <th>{% trans "Characters" %}</th>
+                    </tr>
+                </thead>
+                {% for el in list %}
+                    <tr>
+                        <td>
+                            <h3>
+                                {% if el.thumb %}<img class="faction-logo" src="{{ el.thumb.url }}" alt="guild logo" />{% endif %}
+                                <a href="{% url 'guild' run.get_slug el.uuid %}">{{ el.name }}</a>
+                            </h3>
+                        </td>
+                        <td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>
+                        <td>
+                            {% for ch in el.accepted_members %}
+                                {% include "elements/comma.html" %}
+                                <a href="{% url 'character' run.get_slug ch.uuid %}">{{ ch.name }}</a>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock content %}

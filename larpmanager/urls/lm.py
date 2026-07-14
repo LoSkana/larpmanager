@@ -19,13 +19,19 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 
 from django.urls import path
+from django.views.generic.base import RedirectView
 
 from larpmanager.views import larpmanager as views_lm
 
 urlpatterns = [
     path(
+        "get-started/",
+        views_lm.get_started,
+        name="get_started",
+    ),
+    path(
         "join/",
-        views_lm.join,
+        RedirectView.as_view(pattern_name="get_started", permanent=True),
         name="join",
     ),
     path(
@@ -65,7 +71,7 @@ urlpatterns = [
     ),
     path(
         "demo/",
-        views_lm.demo,
+        RedirectView.as_view(pattern_name="get_started", permanent=True),
         name="demo",
     ),
     path(
@@ -147,6 +153,11 @@ urlpatterns = [
         "toggle_sidebar/",
         views_lm.toggle_sidebar,
         name="toggle_sidebar",
+    ),
+    path(
+        "demo/hint/dismiss/",
+        views_lm.demo_hint_dismiss,
+        name="demo_hint_dismiss",
     ),
     path(
         "discord/",

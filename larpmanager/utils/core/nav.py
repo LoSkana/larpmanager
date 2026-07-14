@@ -216,6 +216,16 @@ def _add_writing_items(
                 active=active == "factions",
             )
         )
+    if "guild" in features:
+        items.append(
+            _item(
+                reverse("guilds", args=[slug]),
+                "fa-solid fa-users",
+                _("Guilds"),
+                str(_("Discover the game guilds")) + "!",
+                active=active == "guilds",
+            )
+        )
     if "questbuilder" in features and context.get("show_quest"):
         items.append(
             _item(

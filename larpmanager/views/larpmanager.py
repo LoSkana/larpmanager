@@ -32,7 +32,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg, Count, Min, Sum
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseForbidden, HttpResponseRedirect, JsonResponse
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponseForbidden,
+    HttpResponseNotAllowed,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -58,6 +66,9 @@ from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
+    LarpManagerDemoHint,
+    LarpManagerDemoHintDismissal,
+    LarpManagerDemoType,
     LarpManagerDiscover,
     LarpManagerGuide,
     LarpManagerNewsletter,
@@ -74,6 +85,7 @@ from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.tasks import delete_association_task, delete_run_task, my_send_mail, send_mail_exec
 from larpmanager.utils.services.association import _reset_all_association
+from larpmanager.utils.services.demo import clone_association, schedule_demo_cleanup
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
 from larpmanager.views.user.member import get_user_backend
 
@@ -96,18 +108,18 @@ def lm_home(request: HttpRequest) -> Any:
 
     template_context.update(get_cache_lm_home())
     template_context["texts"] = get_larpmanager_texts()
-    random.shuffle(template_context["promoters"])
+    # random.shuffle(template_context["promoters"]) # noqa: ERA001
     random.shuffle(template_context["reviews"])
     random.shuffle(template_context["partners"])
 
-    return render(request, "larpmanager/larpmanager/home.html", template_context)
+    return render(request, "larpmanager/landing/home.html", template_context)
 
 
 def ludomanager(template_context: Any, http_request: Any) -> Any:
     """Render the LudoManager skin version of the home page."""
     template_context["association_skin"] = "LudoManager"
     template_context["platform"] = "LudoManager"
-    return render(http_request, "larpmanager/larpmanager/skin/ludomanager.html", template_context)
+    return render(http_request, "larpmanager/landing/skin/ludomanager.html", template_context)
 
 
 def contact(request: HttpRequest) -> Any:
@@ -140,7 +152,7 @@ def contact(request: HttpRequest) -> Any:
     if not done:
         context["form"] = form
 
-    return render(request, "larpmanager/larpmanager/contact.html", context)
+    return render(request, "larpmanager/landing/contact.html", context)
 
 
 def go_redirect(
@@ -175,7 +187,7 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
 
     """
     if len(association_slugs) == 0:
-        return render(request, "larpmanager/larpmanager/na_assoc.html")
+        return render(request, "larpmanager/landing/na_assoc.html")
     if len(association_slugs) == 1:
         return go_redirect(request, association_slugs[0], redirect_path, hint_slug=hint_slug)
     # show page to choose them
@@ -189,7 +201,7 @@ def choose_association(request: HttpRequest, redirect_path: Any, association_slu
         form = RedirectForm(slugs=association_slugs)
     return render(
         request,
-        "larpmanager/larpmanager/redirect.html",
+        "larpmanager/landing/redirect.html",
         {"form": form, "name": "association"},
     )
 
@@ -225,7 +237,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_sl
         run_display_names.append(f"{run.search} - {run.event.association.slug}")
 
     if len(run_display_names) == 0:
-        return render(request, "larpmanager/larpmanager/na_event.html")
+        return render(request, "larpmanager/landing/na_event.html")
     if len(run_display_names) == 1:
         return go_redirect_run(request, available_runs[0], redirect_path, hint_slug=hint_slug)
 
@@ -240,7 +252,7 @@ def choose_run(request: HttpRequest, redirect_path: Any, event_ids: Any, hint_sl
         form = RedirectForm(slugs=run_display_names)
     return render(
         request,
-        "larpmanager/larpmanager/redirect.html",
+        "larpmanager/landing/redirect.html",
         {"form": form, "name": "event"},
     )
 
@@ -395,8 +407,8 @@ def activate_feature_event(
         view_name = first_permission.slug
         return redirect(reverse(view_name, kwargs={"event_slug": event_slug}))
 
-    # If no event permissions exist, redirect to event gallery
-    return redirect("gallery", event_slug=event_slug)
+    # If no event permissions exist, redirect to event page
+    return redirect("event", event_slug=event_slug)
 
 
 @login_required
@@ -528,43 +540,54 @@ def discord(request: HttpRequest) -> Any:
     else:
         form = LarpManagerCheck(request=request)
     context = {"form": form}
-    return render(request, "larpmanager/larpmanager/discord.html", context)
+    return render(request, "larpmanager/landing/discord.html", context)
 
 
-@login_required
-def join(request: HttpRequest) -> Any:
-    """Handle user joining an association.
+@ratelimit(key="ip", rate="5/m", method="POST", block=True)
+def get_started(request: HttpRequest) -> Any:
+    """Show the entry funnel: start a pre-populated demo or create a real association.
 
-    Processes association joining form and sends welcome messages
-    and emails upon successful joining.
+    The primary call to action is launching a demo instance cloned from a
+    demo type's template association; creating an empty real association
+    is offered as a secondary path.
 
     Args:
-        request: Django HTTP request object (must be authenticated)
+        request: Django HTTP request object
 
     Returns:
-        HttpResponse: Rendered join form or redirect after successful joining
+        HttpResponse: Rendered get started page or redirect after creation
 
     """
     context = get_lm_contact(request)
     if "red" in context:
         return redirect(context["red"])
 
-    # Prepares form to join
-    joined_association = _join_form(context, request)
-    if joined_association:
-        # send message
-        messages.success(request, _("Welcome to %(name)s") % {"name": request.association["name"]} + "!")
-        # send email
-        if request.association["skin_id"] == 1:
-            join_email(joined_association)
-        # redirect
-        return redirect("after_login", subdomain=joined_association.slug, path="manage")
+    # Primary path: launch a demo instance of the chosen type
+    if request.method == "POST" and request.POST.get("demo_uuid"):
+        user_agent = request.META.get("HTTP_USER_AGENT", "")
+        if is_suspicious_user_agent(user_agent):
+            return HttpResponseForbidden("Bots not allowed.")
+        demo_type = get_object_or_404(LarpManagerDemoType, uuid=request.POST["demo_uuid"], active=True)
+        return _create_demo(request, demo_type)
 
-    # Retrive personal registration, managed events / orgas (if the user is looking for that)
-    get_personal_area(context)
+    # Secondary path: create a real empty association (requires login)
+    if request.user.is_authenticated:
+        joined_association = _join_form(context, request)
+        if joined_association:
+            # send message
+            messages.success(request, _("Welcome to %(name)s") % {"name": request.association["name"]} + "!")
+            # send email
+            if request.association["skin_id"] == 1:
+                join_email(joined_association)
+            # redirect
+            return redirect("after_login", subdomain=joined_association.slug, path="manage")
 
+        # Retrive personal registration, managed events / orgas (if the user is looking for that)
+        get_personal_area(context)
+
+    context["demo_types"] = LarpManagerDemoType.objects.filter(active=True).order_by("order")
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/larpmanager/join.html", context)
+    return render(request, "larpmanager/landing/get_started.html", context)
 
 
 def _join_form(context: dict, request: HttpRequest) -> Association | None:
@@ -593,6 +616,7 @@ def _join_form(context: dict, request: HttpRequest) -> Association | None:
             # Create association with inherited skin from request context
             new_association: Association = form.save(commit=False)
             new_association.skin_id = request.association["skin_id"]
+            new_association.lite_mode = True
             new_association.save()
 
             save_single_config(new_association, "intro_driver", "welcome")
@@ -638,7 +662,7 @@ def discover(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["index"] = True
     context["discover"] = LarpManagerDiscover.objects.order_by("order")
-    return render(request, "larpmanager/larpmanager/discover.html", context)
+    return render(request, "larpmanager/landing/discover.html", context)
 
 
 @override("en")
@@ -701,10 +725,10 @@ def tutorials(request: HttpRequest, slug: str | None = None) -> HttpResponse:
     # Track tutorial visit for activation checklist
     member = context.get("member")
     if member:
-        for membership in member.memberships.filter(association__demo=True).select_related("association"):
+        for membership in member.memberships.filter(association__lite_mode=True).select_related("association"):
             save_single_config(membership.association, "exe_tutorial_suggestion", value=True)
 
-    return render(request, "larpmanager/larpmanager/tutorials.html", context)
+    return render(request, "larpmanager/landing/tutorials.html", context)
 
 
 @cache_page(60 * 15)
@@ -715,7 +739,7 @@ def guides(request: HttpRequest) -> Any:
     context["index"] = True
     context["iframe"] = request.GET.get("in_iframe") == "1"
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/larpmanager/guides.html", context)
+    return render(request, "larpmanager/landing/guides.html", context)
 
 
 def guide(request: HttpRequest, slug: Any) -> Any:
@@ -746,7 +770,7 @@ def guide(request: HttpRequest, slug: Any) -> Any:
     context["og_description"] = f"{context['guide'].description} - LarpManager"
     context["iframe"] = request.GET.get("in_iframe") == "1"
 
-    return render(request, "larpmanager/larpmanager/guide.html", context)
+    return render(request, "larpmanager/landing/guide.html", context)
 
 
 def blog(request: HttpRequest, slug: Any) -> Any:
@@ -778,7 +802,7 @@ def blog(request: HttpRequest, slug: Any) -> Any:
     context["og_title"] = f"{context['blog'].title} - LarpManager"
     context["og_description"] = f"{context['blog'].description} - LarpManager"
 
-    return render(request, "larpmanager/larpmanager/blog.html", context)
+    return render(request, "larpmanager/landing/blog.html", context)
 
 
 @cache_page(60 * 15)
@@ -786,7 +810,7 @@ def privacy(request: HttpRequest) -> Any:
     """Display privacy policy page."""
     context = get_lm_contact(request)
     context.update({"text": get_association_text(context["association_id"], AssociationTextType.PRIVACY)})
-    return render(request, "larpmanager/larpmanager/privacy.html", context)
+    return render(request, "larpmanager/landing/privacy.html", context)
 
 
 @cache_page(60 * 15)
@@ -795,7 +819,7 @@ def usage(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["index"] = True
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/larpmanager/usage.html", context)
+    return render(request, "larpmanager/landing/usage.html", context)
 
 
 @cache_page(60 * 15)
@@ -804,7 +828,7 @@ def about_us(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["index"] = True
     context["texts"] = get_larpmanager_texts()
-    return render(request, "larpmanager/larpmanager/about_us.html", context)
+    return render(request, "larpmanager/landing/about_us.html", context)
 
 
 def get_lm_contact(request: HttpRequest) -> Any:
@@ -1206,7 +1230,7 @@ def donate(request: HttpRequest) -> Any:
         form = LarpManagerCheck(request=request)
 
     context["form"] = form
-    return render(request, "larpmanager/larpmanager/donate.html", context)
+    return render(request, "larpmanager/landing/donate.html", context)
 
 
 def debug_user(request: HttpRequest, member_id: Any) -> HttpResponse:
@@ -1217,45 +1241,43 @@ def debug_user(request: HttpRequest, member_id: Any) -> HttpResponse:
     return redirect("/")
 
 
-@ratelimit(key="ip", rate="5/m", block=True)
-def demo(request: HttpRequest) -> Any:
-    """Handle demo organization creation with bot protection.
+@login_required
+def demo_hint_dismiss(request: HttpRequest) -> HttpResponse:
+    """Close a demo hint panel, optionally disabling its auto-open permanently.
 
-    Rate-limited endpoint that blocks bots and creates
-    demo organizations for testing purposes.
+    POST parameters:
+        hint: uuid of the LarpManagerDemoHint being closed
+        permanent: "true" to persist the dismissal, anything else removes it
 
-    Args:
-        request: Django HTTP request object
-
-    Returns:
-        HttpResponse: Rendered demo form or redirect to created demo
-        HttpResponseForbidden: If bot detected
-
+    The hint itself stays reachable through its toggle button; dismissals
+    only control whether the panel opens automatically on page load.
     """
-    user_agent = request.META.get("HTTP_USER_AGENT", "")
-    if is_suspicious_user_agent(user_agent):
-        return HttpResponseForbidden("Bots not allowed.")
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
 
-    if request.POST:
-        form = LarpManagerCheck(request.POST, request=request)
-        if form.is_valid():
-            return _create_demo(request)
+    hint = get_object_or_404(LarpManagerDemoHint, uuid=request.POST.get("hint"))
+    permanent = request.POST.get("permanent") == "true"
+
+    if permanent:
+        LarpManagerDemoHintDismissal.objects.get_or_create(member=request.user.member, hint=hint)
     else:
-        form = LarpManagerCheck(request=request)
-    context = {"form": form, "texts": get_larpmanager_texts()}
-    return render(request, "larpmanager/larpmanager/demo.html", context)
+        LarpManagerDemoHintDismissal.objects.filter(member=request.user.member, hint=hint).delete()
+
+    return JsonResponse({"status": "ok"})
 
 
-def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
+def _create_demo(request: HttpRequest, demo_type: LarpManagerDemoType | None = None) -> HttpResponseRedirect:
     """Create a demo organization with test user.
 
     Creates a new demo association with a test admin user and logs the user
-    in automatically. The demo organization is created with a unique slug
-    and configured with default settings for testing purposes.
+    in automatically. When a demo type is given, the association is cloned
+    from the type's template association (events, registrations, characters);
+    otherwise an empty lite-mode organization is created.
 
     Args:
         request: Django HTTP request object containing user session data
             and association context information.
+        demo_type: Optional LarpManagerDemoType to clone the instance from.
 
     Returns:
         HttpResponseRedirect: Redirect response to the demo organization's
@@ -1270,13 +1292,19 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     # Generate unique primary key for new association
     new_uuid = my_uuid_short()
 
-    # Create demo association with unique slug and inherited skin
-    demo_association = Association.objects.create(
-        slug=f"test-{new_uuid}",
-        name="Demo Organization",
-        skin_id=request.association["skin_id"],
-        demo=True,
-    )
+    if demo_type:
+        # Clone the full data graph of the demo type's template association
+        demo_association = clone_association(demo_type, f"test-{new_uuid}", request.association["skin_id"])
+        schedule_demo_cleanup(demo_association)
+        request.session["demo_guided"] = True
+    else:
+        # Create empty demo association with unique slug and inherited skin
+        demo_association = Association.objects.create(
+            slug=f"test-{new_uuid}",
+            name="Demo Organization",
+            skin_id=request.association["skin_id"],
+            lite_mode=True,
+        )
 
     # Create test admin user with demo credentials
     (demo_user, _created) = User.objects.get_or_create(
@@ -1295,10 +1323,23 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     # Welcome message
     save_single_config(demo_association, "intro_driver", "welcome")
 
-    # Create admin role and assign member with full permissions
-    (admin_role, _created) = AssociationRole.objects.get_or_create(association=demo_association, number=1, name="Admin")
-    admin_role.members.add(demo_member)
-    admin_role.save()
+    first_event = None
+    if demo_type and not demo_type.is_campaign:
+        # Cloned instance already has events: place the demo user as organizer of the first one
+        first_event = Event.objects.filter(association=demo_association).order_by("pk").first()
+        (organizer_role, _created) = EventRole.objects.get_or_create(event=first_event, number=1)
+        if not organizer_role.name:
+            organizer_role.name = "Organizer"
+        organizer_role.members.add(demo_member)
+        organizer_role.save()
+    else:
+        # Empty demo association, or a campaign demo type (multiple events under one
+        # campaign): assign the assoc-wide exe/admin role instead of a single event
+        (admin_role, _created) = AssociationRole.objects.get_or_create(
+            association=demo_association, number=1, name="Admin"
+        )
+        admin_role.members.add(demo_member)
+        admin_role.save()
 
     # Set membership status to active/joined
     membership_element = get_user_membership(demo_member, demo_association.id)
@@ -1308,7 +1349,10 @@ def _create_demo(request: HttpRequest) -> HttpResponseRedirect:
     # Authenticate and log in the demo user
     login(request, demo_user, backend=get_user_backend())
 
-    return redirect("after_login", subdomain=demo_association.slug, path="manage")
+    # Non-campaign demo types land the user directly on their event's dashboard;
+    # empty demos and campaign demo types (multiple events) land on the assoc dashboard
+    redirect_path = f"{first_event.slug}/manage" if first_event else "manage"
+    return redirect("after_login", subdomain=demo_association.slug, path=redirect_path)
 
 
 _MD_MEDIA_TAGS = frozenset({"img", "video", "audio", "iframe", "source", "picture", "figure", "figcaption"})
@@ -1375,5 +1419,13 @@ def llms_full(_request: HttpRequest) -> HttpResponse:
             if g.description:
                 lines.append(f"*{g.description}*\n")
             lines.append(_html_to_markdown(g.text or ""))
+
+    demo_types = LarpManagerDemoType.objects.filter(active=True).order_by("order")
+    if demo_types.exists():
+        lines.append("\n\n---\n\n## Interactive Demos\n")
+        for d in demo_types:
+            lines.append(f"\n### {d.name}\n")
+            if d.descr:
+                lines.append(f"{d.descr}\n")
 
     return HttpResponse("".join(lines), content_type="text/plain; charset=utf-8")

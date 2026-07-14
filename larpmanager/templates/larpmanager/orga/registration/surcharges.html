@@ -4,7 +4,7 @@
     {% trans "Surcharges" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="registration_surcharges" class="go_datatable writing">
         <thead>
             <tr>
@@ -39,4 +39,5 @@
             {% trans "No surcharges have been configured for this event yet" %}. {% trans "Use the button above to add a surcharge with its applicable date" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

@@ -1,0 +1,37 @@
+{% load i18n %}
+{% if demo_hint %}
+    <button type="button"
+            class="demo-hint-toggle"
+            id="demo-hint-toggle"
+            qtip="{% trans "Show hint" %}">
+        <i class="fa-solid fa-circle-question"></i>
+    </button>
+    <div class="demo-hint-panel {% if demo_hint_open %}open{% endif %}"
+         id="demo-hint-panel"
+         data-hint-uuid="{{ demo_hint.uuid }}">
+        <p class="demo-hint-title">
+            <strong>{{ demo_hint.title }}</strong>
+        </p>
+        <div class="demo-hint-content">{{ demo_hint.content | safe }}</div>
+        <label class="demo-hint-dismiss-label">
+            <input type="checkbox" id="demo-hint-permanent">
+            {% trans "Don't open automatically again" %}
+        </label>
+        <button type="button" class="demo-hint-close" id="demo-hint-close">{% trans "Close" %}</button>
+    </div>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            var panel = document.getElementById('demo-hint-panel');
+            document.getElementById('demo-hint-toggle').addEventListener('click', function() {
+                panel.classList.add('open');
+            });
+            document.getElementById('demo-hint-close').addEventListener('click', function() {
+                panel.classList.remove('open');
+                $.post("{% url 'demo_hint_dismiss' %}", {
+                    hint: panel.dataset.hintUuid,
+                    permanent: document.getElementById('demo-hint-permanent').checked ? 'true' : 'false'
+                });
+            });
+        });
+    </script>
+{% endif %}

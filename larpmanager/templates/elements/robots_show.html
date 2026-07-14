@@ -1,2 +1,4 @@
 {% load i18n static %}
-{% if staging or association.demo or no_robots %}<meta name="robots" content="noindex, nofollow" />{% endif %}
+{% if staging or association.lite_mode or association.demo or no_robots %}
+    <meta name="robots" content="noindex, nofollow" />
+{% endif %}

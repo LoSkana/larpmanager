@@ -570,6 +570,96 @@ class Faction(Writing):
         ]
 
 
+class GuildRole(models.TextChoices):
+    """Represents GuildRole model."""
+
+    ADMIN = "a", _("Admin")
+    MEMBER = "m", _("Member")
+
+
+class GuildMembershipStatus(models.TextChoices):
+    """Represents GuildMembershipStatus model."""
+
+    INVITED = "i", _("Invited")
+    ACCEPTED = "a", _("Accepted")
+
+
+class Guild(Writing):
+    """Represents Guild model."""
+
+    cover = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("guild/cover/"),
+        verbose_name=_("Guild cover"),
+        help_text=_("Guild logo"),
+        null=True,
+        blank=True,
+    )
+
+    thumb = ImageSpecField(
+        source="cover",
+        processors=[ResizeToFit(500, 500)],
+        format="JPEG",
+        options={"quality": 90},
+    )
+
+    characters = models.ManyToManyField(Character, through="GuildMembership", related_name="guilds_list", blank=True)
+
+    def show_red(self) -> dict:
+        """Update JavaScript response with 'teaser' and cover attributes."""
+        js = super().show_red()
+
+        self.upd_js_attr(js, "teaser")
+
+        if self.cover:
+            # noinspection PyUnresolvedReferences
+            js["cover"] = self.cover.url
+            # noinspection PyUnresolvedReferences
+            js["thumb"] = self.thumb.url
+
+        return js
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return self.name
+
+    class Meta:
+        indexes: ClassVar[list] = [
+            models.Index(fields=["number", "event", "order"]),
+            models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="gui_evt_act"),
+        ]
+
+
+class GuildMembership(models.Model):
+    """Represents GuildMembership model."""
+
+    guild = models.ForeignKey(Guild, on_delete=models.CASCADE, related_name="memberships")
+
+    character = models.ForeignKey(Character, on_delete=models.CASCADE, related_name="guild_memberships")
+
+    role = models.CharField(max_length=1, choices=GuildRole.choices, default=GuildRole.MEMBER, verbose_name=_("Role"))
+
+    status = models.CharField(
+        max_length=1,
+        choices=GuildMembershipStatus.choices,
+        default=GuildMembershipStatus.INVITED,
+        verbose_name=_("Status"),
+    )
+
+    created = models.DateTimeField(auto_now_add=True)
+
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints: ClassVar[list] = [
+            UniqueConstraint(fields=["guild", "character"], name="unique_guild_character"),
+        ]
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.character} - {self.guild} ({self.get_role_display()}, {self.get_status_display()})"
+
+
 class PrologueType(Writing):
     """Represents PrologueType model."""
 
@@ -686,6 +776,7 @@ class TextVersionChoices(models.TextChoices):
     PLOT = "p", "Plot"
     CHARACTER = "c", "Character"
     FACTION = "h", "Faction"
+    GUILD = "u", "Guild"
     QUEST = "q", "Quest"
     TRAIT = "t", "Trait"
     ARTICLE = "a", "Article"

@@ -66,7 +66,7 @@ from larpmanager.templatetags.show_tags import format_decimal
 from larpmanager.utils.core.base import check_association_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.paginate import exe_paginate
-from larpmanager.utils.edit.backend import backend_get
+from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.views.orga.accounting import payment_edit
@@ -462,7 +462,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 # Render statement as downloadable link
                 "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
                 # Show approve button only for non-approved expenses
-                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}'>{approve}</a>"
+                "action": lambda el: f"<a href='{reverse('exe_expenses_approve', args=[el.uuid])}' class='frame-confirm'>{approve}</a>"
                 if not el.is_approved
                 else "",
                 # Display human-readable expense type
@@ -515,12 +515,22 @@ def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpRespons
         msg = "not your orga"
         raise Http404(msg)
 
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    # In iframe mode, show a confirmation page before applying the change
+    if is_frame and request.method != "POST":
+        context["frame"] = True
+        context["el_name"] = str(exp)
+        return render(request, "elements/dashboard/approve_confirm.html", context)
+
     # Mark expense as approved and save changes
     exp.is_approved = True
     exp.save()
 
     # Show success message and redirect to expenses list
     messages.success(request, _("Request approved"))
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
     return redirect("exe_expenses")
 
 
@@ -683,7 +693,7 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
                 "causal": lambda el: el.causal,
                 "details": lambda el: el.get_details(),
                 # Show confirm action only for submitted invoices
-                "action": lambda el: f"<a href='{reverse('exe_invoices_confirm', args=[el.uuid])}'>{confirm}</a>"
+                "action": lambda el: f"<a href='{reverse('exe_invoices_confirm', args=[el.uuid])}' class='frame-confirm'>{confirm}</a>"
                 if el.status == PaymentStatus.SUBMITTED
                 else "",
             },
@@ -717,9 +727,10 @@ def exe_invoices_edit(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
 def exe_invoices_delete(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Delete a payment invoice and redirect to payments."""
     context = check_association_context(request, ["exe_payments", "exe_invoices"])
-    backend_get(context, PaymentInvoice, invoice_uuid)
-    context["el"].delete()
-    messages.success(request, _("Operation completed") + "!")
+    if request.GET.get("frame") == "1" or request.POST.get("frame") == "1":
+        context["frame"] = True
+        return backend_delete_frame(request, context, PaymentInvoice, invoice_uuid)
+    backend_delete(request, context, PaymentInvoice, invoice_uuid)
     return redirect("exe_payments")
 
 
@@ -747,6 +758,14 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
     # Retrieve the specific invoice by number
     backend_get(context, PaymentInvoice, invoice_uuid)
 
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    # In iframe mode, show a confirmation page before applying the change
+    if is_frame and request.method != "POST":
+        context["frame"] = True
+        context["el_name"] = str(context["el"])
+        return render(request, "elements/dashboard/approve_confirm.html", context)
+
     # Validate current status allows confirmation
     if context["el"].status == PaymentStatus.CREATED or context["el"].status == PaymentStatus.SUBMITTED:
         # Update status to confirmed
@@ -761,6 +780,8 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
 
     # Show success message and redirect to invoice list
     messages.success(request, _("Element approved") + "!")
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
     return redirect("exe_payments")
 
 

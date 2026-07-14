@@ -42,14 +42,14 @@ from larpmanager.models.association import (
 class AssociationAdmin(DefModelAdmin):
     """Admin interface for LARP organizations and associations."""
 
-    list_display = ("id", "name", "slug", "main_mail", "uuid", "demo")
+    list_display = ("id", "name", "slug", "main_mail", "uuid", "lite_mode")
     search_fields: ClassVar[tuple] = ("id", "name", "uuid")
 
     autocomplete_fields: ClassVar[list] = ["payment_methods", "features", "maintainers"]
 
     def has_delete_permission(self, request: Any, obj: Any | None = None) -> bool:
         """Prevent delete if not demo."""
-        if obj is not None and not obj.demo:
+        if obj is not None and not obj.lite_mode:
             return False
         return super().has_delete_permission(request, obj)
 

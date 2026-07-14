@@ -92,10 +92,14 @@ class ConfigForm(BaseModelForm):
         # Initialize configuration attributes
         self.config_fields = []
         self._section = None
+        self._section_slug = None
         self.jump_section = None
 
         # Set up initial configurations
         self.set_configs()
+
+        # Restrict sections to a demo type's allow-list, if any, and auto-open them
+        self._filter_fields_by_demo_type()
 
         # Get all element configurations and add custom fields
         res = self._get_all_element_configs()
@@ -147,8 +151,17 @@ class ConfigForm(BaseModelForm):
     def set_section(self, section_slug: str, section_name: str) -> None:
         """Set the current section for grouping configuration fields."""
         self._section = section_name
+        self._section_slug = section_slug
         if self.params.get("jump_section", "") == section_slug:
             self.jump_section = section_name
+
+    def _filter_fields_by_demo_type(self) -> None:
+        """Restrict config sections to a demo type's allow-list, if any, and auto-open them."""
+        allowed_config = self.params.get("demo_allowed_config")
+        if not allowed_config:
+            return
+        self.config_fields = [cf for cf in self.config_fields if cf["section_slug"] in allowed_config]
+        self.show_sections = True
 
     def add_configs(
         self,
@@ -176,6 +189,7 @@ class ConfigForm(BaseModelForm):
                 "key": configuration_key,
                 "type": config_type,
                 "section": self._section,
+                "section_slug": self._section_slug,
                 "label": field_label,
                 "help_text": field_help_text,
                 "extra": extra_data,

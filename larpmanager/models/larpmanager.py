@@ -20,6 +20,7 @@
 
 from typing import Any, ClassVar
 
+from colorfield.fields import ColorField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
@@ -419,6 +420,111 @@ class NewsletterStatus(models.TextChoices):
     ACTIVE = "a", "Active"
     NON_ACTIVE = "n", "Non active"
     UNSUBSCRIBED = "u", "Unsubscribed"
+
+
+class LarpManagerDemoType(UuidMixin, OrderMixin, BaseModel):
+    """Model for demo instance types offered on the get started page.
+
+    Each type points to a template association whose whole data graph
+    (events, registrations, characters) is cloned into a new demo instance.
+    """
+
+    name = models.CharField(max_length=100)
+
+    slug = models.SlugField(max_length=100, unique=True, validators=[AlphanumericValidator], db_index=True)
+
+    icon = models.CharField(max_length=50, blank=True, help_text="FontAwesome icon class shown on the button")
+
+    color = ColorField(
+        verbose_name=_("Color"),
+        null=True,
+        blank=True,
+        help_text="Accent color shown on the demo card in the get started page",
+    )
+
+    descr = models.CharField(max_length=500, blank=True)
+
+    template_association = models.ForeignKey(Association, on_delete=models.PROTECT, related_name="demo_types")
+
+    active = models.BooleanField(default=True)
+
+    allowed_sidebar = models.TextField(
+        blank=True,
+        help_text="Comma separated list of event/association permission slugs allowed in the sidebar "
+        "for this demo type. Empty means no restriction.",
+    )
+
+    allowed_config = models.TextField(
+        blank=True,
+        help_text="Comma separated list of config section slugs allowed to be shown (and auto-opened) "
+        "in the association/event configuration forms for this demo type. Empty means no restriction.",
+    )
+
+    is_campaign = models.BooleanField(
+        default=False,
+        help_text="Template association has multiple events under one campaign: grant the demo user an "
+        "association-wide role and land on the association dashboard, instead of organizer of the first event.",
+    )
+
+    def __str__(self) -> str:
+        """Return string representation of the demo type."""
+        return self.name
+
+    def get_allowed_sidebar_list(self) -> list[str]:
+        """Return the list of allowed sidebar permission slugs, or an empty list for no restriction."""
+        return [slug.strip() for slug in self.allowed_sidebar.split(",") if slug.strip()]
+
+    def get_allowed_config_list(self) -> list[str]:
+        """Return the list of allowed config section slugs, or an empty list for no restriction."""
+        return [slug.strip() for slug in self.allowed_config.split(",") if slug.strip()]
+
+
+class LarpManagerDemoHint(UuidMixin, OrderMixin, BaseModel):
+    """Model for contextual hints shown while using a demo instance.
+
+    Each hint is bound to a view name and optionally to a specific demo
+    type; a null demo type means the hint applies to every demo instance.
+    """
+
+    key = models.SlugField(max_length=100, unique=True, db_index=True)
+
+    demo_type = models.ForeignKey(
+        LarpManagerDemoType,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="hints",
+    )
+
+    view_name = models.CharField(max_length=255)
+
+    title = models.CharField(max_length=200)
+
+    content = HTMLField()
+
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        indexes: ClassVar[list] = [models.Index(fields=["view_name", "active"])]
+
+    def __str__(self) -> str:
+        """Return string representation of the demo hint."""
+        return f"{self.key} ({self.view_name})"
+
+
+class LarpManagerDemoHintDismissal(BaseModel):
+    """Model tracking hints a member chose to no longer auto-open."""
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="demo_hint_dismissals")
+
+    hint = models.ForeignKey(LarpManagerDemoHint, on_delete=models.CASCADE, related_name="dismissals")
+
+    class Meta:
+        unique_together = ("member", "hint")
+
+    def __str__(self) -> str:
+        """Return string representation of the dismissal."""
+        return f"{self.member} - {self.hint_id}"
 
 
 class LarpManagerNewsletter(BaseModel):

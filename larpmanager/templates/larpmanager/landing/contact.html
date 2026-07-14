@@ -1,0 +1,32 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {% if form %}
+        Contact us
+    {% else %}
+        Thanks!
+    {% endif %}
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="keywords"
+          content="contact larpmanager, larp support, larp help, event management support, larpmanager contact form">
+    <meta name="description"
+          content="Get in touch with the LarpManager team. We're here to help with questions, support, and feedback about our LARP event management platform.">
+{% endblock meta %}
+{% block landing_eyebrow %}
+    Contact
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {% if form %}
+        Contact us
+    {% else %}
+        Thanks!
+    {% endif %}
+{% endblock landing_title %}
+{% block landing_content %}
+    {% if form %}
+        {% include "elements/structure/contact_form.html" with contact_form=form %}
+    {% else %}
+        <p class="contact-alt">Thank you for getting in touch with us, we'll contact you very soon!</p>
+    {% endif %}
+{% endblock landing_content %}

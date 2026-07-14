@@ -1,0 +1,57 @@
+{% load i18n %}
+{% if not lite_mode %}
+    {% if upload or download or export or bulk %}
+        <div class="staff-list table-footer only_v22">
+            <div class="orga-buttons">
+                {% if upload %}
+                    <a class="new button" href="{% url 'orga_upload' run.get_slug upload %}">
+                        <i class="fas fa-upload"></i>
+                        {% trans "Upload" %}
+                    </a>
+                {% endif %}
+                {% if download %}
+                    <form action="{{ request.path }}" method="post" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="download" value="1">
+                        <button type="submit" name="submit" value="1">
+                            <i class="fas fa-download"></i>
+                            {% trans "Download" %}
+                        </button>
+                    </form>
+                {% endif %}
+                {% if export %}
+                    <a class="new button" href="{% url 'orga_export' run.get_slug export %}">
+                        <i class="fas fa-file-export"></i>
+                        {% trans "Export" %}
+                    </a>
+                {% endif %}
+                {% if bulk %}
+                    <a class="new button my_toggle" tog='bulk' href="#">
+                        <i class="fas fa-tasks"></i>
+                        Bulk
+                    </a>
+                {% endif %}
+                {% if bulk %}
+                    <div id="main_bulk" class="hide bulk">
+                        <p>
+                            <i>{% trans "Select the table rows and choose the operation to apply" %}</i>
+                        </p>
+                        <select id="operation" class="bulk-el">
+                            {% for el in bulk %}<option value="{{ el.idx }}">{{ el.label }}</option>{% endfor %}
+                        </select>
+                        {% for el in bulk %}
+                            <select id="objs_{{ el.idx }}"
+                                    class="bulk-el objs {% if not forloop.first %}hide{% endif %}">
+                                {% for obj in el.objs %}<option value="{{ obj.uuid }}">{{ obj.name }}</option>{% endfor %}
+                            </select>
+                        {% endfor %}
+                        <a id="exec" class="new button my_toggle bulk-el" href="#">
+                            <i class="fas fa-play"></i>
+                            {% trans "Execute" %}
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endif %}

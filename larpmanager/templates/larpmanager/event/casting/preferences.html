@@ -1,8 +1,17 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% block datatables_css %}
+    {% include "elements/structure/datatables-css.html" %}
+{% endblock datatables_css %}
+{% block datatables_js %}
+    {% include "elements/structure/datatables-js.html" %}
+{% endblock datatables_js %}
 {% block title %}
     {% trans "Preferences" %} - {{ run.search }}
 {% endblock title %}
+{% block info %}
+    {% trans "Express your preferences on the characters you would like to play" %}
+{% endblock info %}
 {% block content %}
     {% if features.questbuilder %}
         {% if staff %}

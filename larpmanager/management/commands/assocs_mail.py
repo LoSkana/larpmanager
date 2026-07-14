@@ -34,7 +34,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
         """Print email mappings for associations and admin."""
         # Get associations with valid email addresses, excluding demo accounts
-        lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(demo=True)
+        lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(lite_mode=True)
 
         # Output association slug and email mappings
         for el in lst.order_by("slug").values_list("slug", "main_mail"):

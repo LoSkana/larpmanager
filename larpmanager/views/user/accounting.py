@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import logging
+import uuid
 from typing import Any
 
 from django.contrib import messages
@@ -584,6 +585,20 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
     context["year"] = year
     key = f"{context['member'].id}_{year}"
 
+    # Check for pending payment verification
+    pending = (
+        PaymentInvoice.objects.filter(
+            key=key,
+            member_id=context["member"].id,
+            status=PaymentStatus.SUBMITTED,
+            typ=PaymentType.MEMBERSHIP,
+        ).count()
+        > 0
+    )
+    if pending:
+        messages.success(request, _("You have already sent a payment pending verification"))
+        return redirect("accounting")
+
     # Set default payment method if provided
     if method:
         context["def_method"] = method
@@ -634,17 +649,22 @@ def accounting_donate(request: HttpRequest) -> HttpResponse:
 
     # Process form submission for donation payment
     if request.method == "POST":
+        # Reuse the key from a resubmitted page (double-click, back button, retry)
+        # so it maps to the same invoice instead of minting a new one
+        key = request.POST.get("invoice_key") or uuid.uuid4().hex
         form = DonateForm(request.POST, context=context)
         if form.is_valid():
             # Generate payment form for valid donation request
-            get_payment_form(request, form, PaymentType.DONATE, context)
+            get_payment_form(request, form, PaymentType.DONATE, context, key)
     else:
         # Display empty donation form for GET requests
         form = DonateForm(context=context)
+        key = uuid.uuid4().hex
 
     # Add form and donation flag to template context
     context["form"] = form
     context["donate"] = 1
+    context["invoice_key"] = key
 
     return render(request, "larpmanager/member/accounting_donate.html", context)
 
@@ -770,16 +790,21 @@ def accounting_collection_participate(request: HttpRequest, collection_code: str
 
     # Handle form submission for collection participation
     if request.method == "POST":
+        # Reuse the key from a resubmitted page (double-click, back button, retry)
+        # so it maps to the same invoice instead of minting a new one
+        key = request.POST.get("invoice_key") or uuid.uuid4().hex
         form = CollectionForm(request.POST, context=context)
         # Process valid form and setup payment gateway
         if form.is_valid():
-            get_payment_form(request, form, PaymentType.COLLECTION, context)
+            get_payment_form(request, form, PaymentType.COLLECTION, context, key)
     else:
         # Initialize empty form for GET requests
         form = CollectionForm(context=context)
+        key = uuid.uuid4().hex
 
     # Add form to context and render participation template
     context["form"] = form
+    context["invoice_key"] = key
     return render(request, "larpmanager/member/accounting_collection_participate.html", context)
 
 
@@ -961,28 +986,13 @@ def accounting_profile_check(request: HttpRequest, success_message: str, invoice
         messages.success(request, success_message)
         return redirect("profile")
 
-    # Profile is complete - show success message and proceed to accounting
+    # Profile is complete - show success message and proceed
     messages.success(request, success_message)
-    return accounting_redirect(invoice)
 
-
-def accounting_redirect(invoice: PaymentInvoice) -> HttpResponseRedirect:
-    """Redirect to appropriate page after payment based on invoice type."""
     # Redirect to event page if invoice is for registration
     if invoice.typ == PaymentType.REGISTRATION:
         registration = Registration.objects.get(id=invoice.idx)
         return redirect("event", event_slug=registration.run.get_slug())
-
-    # Redirect after membership fee payment confirmation
-    if invoice.typ == PaymentType.MEMBERSHIP:
-        return redirect("exe_membership")
-
-    # Redirect after collection payment confirmation
-    if invoice.typ == PaymentType.COLLECTION:
-        return redirect("exe_collections")
-
-    if invoice.typ == PaymentType.DONATE:
-        return redirect("exe_donations")
 
     # Default redirect to accounting page
     return redirect("accounting")
@@ -1164,7 +1174,7 @@ def event_payments(request: HttpRequest, event_slug: str) -> HttpResponse:
     registration = context.get("registration")
 
     if not registration or not registration.tot_iscr:
-        return redirect("gallery", event_slug=event_slug)
+        return redirect("event", event_slug=event_slug)
 
     invoices = (
         PaymentInvoice.objects.filter(

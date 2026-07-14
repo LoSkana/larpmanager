@@ -4,7 +4,7 @@
     {% trans "Character Inventories" %}
 {% endblock title %}
 {% block content %}
-    {% include "elements/header/edit.html" %}
+    {% include "elements/table/header.html" %}
     <table id="pool_types" class="go_datatable writing">
         <thead>
             <tr>
@@ -42,4 +42,5 @@
             {% trans "No character inventories created yet" %}. {% trans "Add an inventory to track items assigned to characters" %}.
         </p>
     {% endif %}
+    {% include "elements/table/footer.html" %}
 {% endblock content %}

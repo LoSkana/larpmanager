@@ -1,0 +1,783 @@
+/*** GENERAL ***/
+
+.home {
+  text-align: center;
+  margin-bottom: 2em;
+}
+
+.home a {
+  font-size: 120%;
+  padding: 1em;
+  background-color: rgba(var(--pri-rgb), 0.25);
+  border: solid 1px rgba(var(--pri-rgb), 0.25);
+  border-radius: 1em;
+}
+
+/*** show_char ***/
+
+.has_show_char {
+  display: inline-block;
+}
+
+.has_show_char a {
+  color: var(--ter-clr);
+}
+
+.show_char {
+  line-height: 1;
+}
+
+.show_char b {
+  color: white;
+}
+
+.show_char span {
+  margin: 0.2em;
+  padding: 0.2em;
+  display: block;
+}
+
+.show_char .teaser {
+  font-size: 85%;
+  line-height: 1;
+  display: block;
+}
+
+.show_char .name {
+  font-size: 140%;
+}
+
+.show_char .title {
+  font-size: 120%;
+}
+
+.show_char img {
+  float: right;
+  height: 8em;
+  width: 8em;
+  margin-left: 1em;
+  border-radius: 10%;
+}
+
+/*** GALLERY ***/
+
+.title {
+  font-size: 200%;
+  text-align: center;
+  clear: both;
+  margin: 0em 0.5em 0em 0em;
+}
+
+.gallery {
+  width: 100%;
+}
+
+.gallery .el {
+  width: 20%;
+  float: left;
+  margin-bottom: 2em;
+  text-align: center;
+}
+
+.single .el {
+  float: right;
+  margin: 0 1em 1em;
+  width: 15em;
+}
+
+.gallery .badge {
+  width: 25%;
+  margin: 0.5em 0;
+}
+
+.single .badge {
+  float: left;
+}
+
+.gallery .icon {
+  padding: 0.5em;
+  background-color: rgba(var(--pri-rgb), 0.025);
+  border: solid 1px rgba(var(--pri-rgb), 0.125);
+  border-radius: 5%;
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+  width: 95%;
+}
+
+.gallery .album-icon {
+  height: 6em;
+}
+
+.gallery .badge .icon {
+  width: 90%;
+  height: auto;
+  font-size: 110%;
+  white-space: normal;
+}
+
+.gallery .icon .icon-name {
+  position: absolute;
+  bottom: 0em;
+  right: 0;
+  left: 0;
+  font-size: 140%;
+  font-weight: bold;
+}
+
+.icon-name p {
+  padding: 0.3em;
+  background-color: rgba(var(--sec-rgb), 0.7);
+  border: solid 1px rgba(var(--pri-rgb), 0.125);
+  border-radius: 0.5em;
+  margin: 2em;
+  color: var(--pri-clr);
+}
+
+.gallery .icon .icon-name p {
+  margin: 1.5em;
+}
+
+.gallery .icon img {
+  width: 100%;
+  border-radius: 10%;
+  height: 100%;
+}
+
+.el .icon a {
+  border: none;
+}
+
+.gallery .icon .empty {
+  border-radius: 1em;
+  background-color: rgba(var(--pri-rgb), 0.1);
+  margin-bottom: 0.3em;
+}
+
+#album .el {
+  width: 21%;
+  margin: 2%;
+}
+
+#album .photo {
+  width: 100%;
+  height: 10em;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.relationships {
+  display: flex;
+}
+
+.relationships .el {
+  text-align: right;
+  align-self: center;
+  width: 8em !important;
+  margin: 0 2em;
+}
+
+.relationships .icon {
+  width: 8em;
+  height: 8em;
+  padding: 0em;
+}
+
+.list .el {
+  width: 11em;
+}
+
+.list .icon {
+  width: 11em;
+  height: 11em;
+}
+
+.clear {
+  clear: both;
+  margin: 0.5em;
+}
+
+.gallery .text {
+  width: 100%;
+  text-align: left;
+  padding: 0 1em;
+}
+
+/*** plot ***/
+
+.plot {
+  text-align: left !important;
+  border-radius: 1em;
+  background-color: rgba(var(--pri-rgb), 0.1);
+  border: solid 1px rgba(var(--pri-rgb), 0.125);
+  max-height: 30em;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+form .plot {
+  padding: 0.5em;
+  margin: 2%;
+  width: 96%;
+  max-height: 10em;
+}
+
+.sheet .plot {
+  padding: 1em;
+}
+
+.plot-cont {
+  position: relative;
+  height: 8em;
+}
+
+.plot p {
+  margin: 0.5em 0;
+  line-height: 1.3;
+}
+
+.diff-version {
+  background-color: rgba(var(--pri-rgb), 0.8);
+  border: solid 1px rgba(var(--pri-rgb), 0.2);
+  padding: 0.5em;
+  border-radius: 1em;
+  color: var(--sec-clr);
+}
+
+/*** MISCELLANEA - workshop ***/
+
+.workshop {
+  text-align: center;
+}
+
+.workshop p {
+  text-align: center;
+}
+
+.workshop h2 {
+  font-size: 150%;
+}
+
+.plot.question {
+  padding: 1em;
+  width: auto;
+  margin-left: 30%;
+  margin-top: 1em;
+}
+
+.workshop input[type="checkbox"] {
+  display: inline-block;
+}
+
+.workshop .question {
+  padding: 1em;
+}
+
+.workshop .option {
+  float: left;
+  padding: 1em;
+  width: 100%;
+  background-color: rgba(var(--pri-rgb), 0.2);
+  border: 1px solid rgba(var(--pri-rgb), 0.5);
+}
+
+.workshop .c {
+  padding: 1em;
+}
+
+.workshop .fail {
+  color: red;
+  font-weight: bolder;
+}
+
+.workshop .correct {
+  color: green;
+  font-weight: bolder;
+}
+
+/*** OTHER ***/
+
+.membership_document {
+  width: 80%;
+}
+
+/*** misc ***/
+
+#player_relationships .teas {
+  font-size: 80%;
+  display: inline-block;
+  line-height: 1;
+}
+
+#player_relationships td {
+  padding: 1em;
+  height: 100%;
+  position: relative;
+}
+
+#player_relationships textarea {
+  width: 90% !important;
+  max-width: 90% !important;
+  height: 90%;
+  resize: none;
+  position: absolute;
+  top: 5%;
+  left: 5%;
+}
+
+.img_cover {
+  width: 100%;
+  padding-bottom: 100%;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  border-radius: 10%;
+}
+
+.member_cover {
+  width: 10em;
+  min-width: 10em;
+}
+
+#payment_form {
+  width: auto;
+}
+
+#payment_form .sel {
+  background-color: rgba(var(--pri-rgb), 0.35);
+}
+
+.paypal input {
+  width: auto;
+}
+
+/*** MOBILE ***/
+
+@media screen and (max-width: 1200px) {
+  .gallery .el {
+    width: 25%;
+  }
+}
+
+@media screen and (max-width: 840px) {
+  .gallery .el {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .plot {
+    padding: 0.5em;
+    background: none;
+    border: none;
+  }
+
+  .gallery .text {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100%;
+    padding-right: 1em;
+  }
+
+  .gallery .el {
+    width: 100%;
+    float: none;
+    margin: 1em auto;
+  }
+
+  .gallery .badge .icon-name {
+    font-size: 120%;
+    bottom: auto;
+    top: 1em;
+  }
+
+  .relationships {
+    display: block;
+  }
+
+  .workshop .option {
+    width: 100% !important;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Registration
+   --------------------------------------------------------------------------- */
+
+.reg_status {
+  text-align: center;
+}
+
+.reg_status br {
+  display: none;
+}
+
+.reg-links {
+  text-align: center !important;
+}
+
+.reg-links span + span::before {
+  content: " | ";
+  opacity: 0.4;
+}
+
+.reg_profile {
+  width: 8em;
+}
+
+.page_gallery {
+  margin-top: 0.5em;
+}
+
+/* Contain the floated .el children so ancestors keep their height */
+.gallery {
+  display: flow-root;
+}
+
+.page_gallery .title {
+  margin-bottom: 0.5em;
+}
+
+.page_gallery h1.title {
+  text-align: center;
+}
+
+#first_event h1 {
+  margin: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Calendar
+   --------------------------------------------------------------------------- */
+
+.calendar h3 {
+  font-size: 150%;
+  text-align: left;
+}
+
+@media (max-width: 840px) {
+  .calendar table,
+  .calendar tr,
+  .calendar td,
+  .calendar th {
+    text-align: center !important;
+    width: auto;
+  }
+
+  .calendar td {
+    padding: 0.2em !important;
+  }
+
+  .calendar .gall h3 {
+    text-align: center;
+  }
+}
+
+.cover-container {
+  width: 25%;
+}
+
+.cover-container img {
+  width: 100%;
+  vertical-align: middle;
+  max-height: 100%;
+}
+
+@media screen and (max-width: 840px) {
+  .cover-container img {
+    width: 80%;
+    margin: 0 auto;
+  }
+}
+
+#one .inner {
+  padding-bottom: 2em !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Character & Profile
+   --------------------------------------------------------------------------- */
+
+.character-cover {
+  width: 5em;
+}
+
+.character-name {
+  font-size: 130%;
+}
+
+.private-header {
+  font-size: 250%;
+}
+
+.char_profile {
+  max-width: 700px;
+  margin: auto;
+}
+
+.char_intro,
+.char_intro p,
+.char_intro img {
+  max-width: 100%;
+  text-align: center;
+}
+
+.rel-description {
+  font-size: 80%;
+}
+
+.rel-img {
+  width: 8em;
+  border-radius: 1em;
+}
+
+@media (max-width: 840px) {
+  #player_relationships thead {
+    display: none;
+  }
+
+  #player_relationships,
+  #player_relationships tbody,
+  #player_relationships tr {
+    display: block;
+    width: 100%;
+  }
+
+  #player_relationships tr {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 1em;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 0.3em;
+    padding: 0.5em;
+  }
+
+  #player_relationships td {
+    display: block;
+    border: none;
+  }
+
+  #player_relationships tr td:nth-child(1),
+  #player_relationships tr td:nth-child(2) {
+    width: auto;
+  }
+
+  #player_relationships tr td:nth-child(3),
+  #player_relationships tr td:nth-child(4) {
+    width: 100%;
+  }
+}
+
+.vote-profile {
+  width: 7em;
+  height: 7em;
+}
+
+.avatar_help {
+  max-width: 700px;
+  margin: auto;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Membership
+   --------------------------------------------------------------------------- */
+
+.membership_request {
+  width: 50%;
+}
+
+#membership_cf .warning {
+  color: red;
+}
+
+#membership_cf .success {
+  color: green;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Accounting & Payment
+   --------------------------------------------------------------------------- */
+
+.accounting_record {
+  height: 500px;
+  width: 100%;
+}
+
+.causal {
+  color: rgba(var(--ter-rgb), 0.9);
+  font-style: italic;
+}
+
+.inv_photo {
+  height: 5em;
+}
+
+.satispay-button {
+  height: 50px;
+  cursor: pointer;
+}
+
+#smart-button-container {
+  margin-top: 2em;
+  text-align: center;
+}
+
+#paypal-buttons {
+  max-width: 300px;
+  margin: auto;
+}
+
+#paypal-me-img {
+  width: 50%;
+  max-width: 600px;
+}
+
+.payment-logo {
+  width: 2em;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Casting
+   --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   Application - Features & Permissions
+   --------------------------------------------------------------------------- */
+
+#id_members_info div,
+#id_Core div,
+#id_Structure div,
+#id_Appearance div,
+#id_Registration div,
+#id_Accounting div,
+#id_Users div,
+#id_Writing div,
+#id_Casting div,
+#id_Miscellanea div {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+.feature_checkbox {
+  display: inline-block;
+  padding: 0.5em;
+}
+
+.feature_checkbox label {
+  display: inline-block;
+  text-transform: initial;
+  font-weight: initial;
+  font-size: revert;
+  letter-spacing: revert;
+}
+
+.explain-icon,
+.feature_checkbox a {
+  font-size: 0.7em;
+  vertical-align: top;
+  cursor: pointer;
+  position: relative;
+}
+
+.feature_checkbox a {
+  margin-left: 0.5em;
+}
+
+/* ---------------------------------------------------------------------------
+   Application - Misc
+   --------------------------------------------------------------------------- */
+
+#err {
+  color: red;
+}
+
+.editable {
+  cursor: cell;
+}
+
+.ajax-toggle {
+  cursor: pointer;
+}
+
+.paginate input {
+  max-width: 100% !important;
+}
+
+.paginate select {
+  display: inline-block;
+}
+
+#search {
+  margin-top: 0.5em;
+}
+
+.progress_done {
+  color: green;
+}
+
+.progress_not_done {
+  color: gray;
+}
+
+.button.big {
+  font-size: 1.2em;
+  padding: 0.8em 1.6em;
+  margin-top: 1em;
+  display: inline-block;
+  white-space: normal;
+}
+
+#id_payment_methods div {
+  display: inline-block;
+  margin: 0.5em;
+}
+
+.overdue {
+  color: red;
+}
+
+.abilities h4 {
+  margin: 0;
+  font-size: 1.1em;
+}
+
+.abilities p {
+  margin: 0;
+}
+
+.new_v18 .abilities th {
+  padding: 0.5em;
+}
+
+/*** guild ***/
+
+.guild-edit-btn {
+  display: inline-block;
+  font-size: 120%;
+  padding: 0.6em 1.2em;
+  margin-bottom: 1em;
+  background-color: rgba(var(--pri-rgb), 0.6);
+  color: white;
+  border-radius: 0.3em;
+}
+
+.guild-edit-btn:hover {
+  background-color: rgba(var(--pri-rgb), 0.9);
+  color: white;
+}
+
+.guild-edit-btn i {
+  margin-right: 0.4em;
+}
+
+.guild-invite-form {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.guild-invite-form .select2-container {
+  min-width: 200px;
+}

@@ -1,0 +1,40 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ blog.title }} - LarpManager
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="keywords" content="{{ blog.keywords }}">
+    <meta name="description" content="{{ blog.description }}">
+{% endblock meta %}
+{% block landing_eyebrow %}
+    Blog
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {{ blog.title }}
+{% endblock landing_title %}
+{% block landing_content %}
+    <div id="article" class="about-prose">
+        <div class="article-content">
+            {% for section in sections %}
+                <{{ section.heading_level }}>{{ section.heading }}</{{ section.heading_level }}>
+                <div class="section-content">{{ section.content | safe }}</div>
+                {% if section.image %}
+                    <div class="section-image">
+                        <div class="image-wrapper">
+                            <img src="{{ section.image.reduced_url }}"
+                                 alt="{{ section.image.info }}"
+                                 class="img-responsive">
+                        </div>
+                        <div class="image-caption">{{ section.image.info }}</div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <hr />
+        <p>
+            Manage LARP events, tickets, registrations, payments, and characters in one place.
+            You can start using <a href="https://larpmanager.com" target="_blank" rel="noopener">LarpManager</a> today with no costs, no setup, and no limits.
+        </p>
+    </div>
+{% endblock landing_content %}

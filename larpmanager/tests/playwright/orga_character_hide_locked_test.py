@@ -193,9 +193,10 @@ def _test_character_locked(page: Any, live_server: Any, char_counter: list) -> N
     # PDF denied (Http404)
     page.goto(f"{live_server}/test/character/{locked_uuid}/pdf/sheet/")
     page.wait_for_load_state("domcontentloaded")
-    expect(page.locator("#banner")).to_contain_text("404")
+    expect(page.locator("body")).to_contain_text("we couldn't find the page")
 
     # As orga: full sheet visible including private text
+    go_to(page, live_server, "/")
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, f"test/character/{locked_uuid}/")
@@ -292,9 +293,10 @@ def _test_faction_locked(page: Any, live_server: Any, char_counter: list, factio
     # PDF denied
     page.goto(f"{live_server}/test/character/{char_uuid}/pdf/sheet/")
     page.wait_for_load_state("domcontentloaded")
-    expect(page.locator("#banner")).to_contain_text("404")
+    expect(page.locator("body")).to_contain_text("we couldn't find the page")
 
     # As orga: full sheet with private text visible
+    go_to(page, live_server, "/")
     logout(page)
     login_orga(page, live_server)
     go_to(page, live_server, f"test/character/{char_uuid}/")

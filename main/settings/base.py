@@ -244,6 +244,7 @@ _CSP_CDN_HOSTS = [
     'https://code.jquery.com',
     'https://unpkg.com',
     'https://cdn.canvasjs.com',
+    'https://static.cloudflareinsights.com/'
 ]
 
 CONTENT_SECURITY_POLICY = {
@@ -277,10 +278,12 @@ CONTENT_SECURITY_POLICY = {
             'https://www.youtube.com',
             'https://www.google.com',
             'https://www.googletagmanager.com',
+            'https://larpmanager.com',
+            'https://*.larpmanager.com',
         ],
         'object-src': ["'none'"],
         'base-uri': ["'self'"],
-        'frame-ancestors': ["'self'"],
+        'frame-ancestors': ["'self'", 'https://larpmanager.com', 'https://*.larpmanager.com'],
     },
 }
 

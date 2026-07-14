@@ -37,7 +37,8 @@ from larpmanager.tests.utils import (submit_register, drag_reorder, \
                                      login_user,
                                      submit,
                                      submit_confirm,
-                                     expect_normalized, new_option, submit_option, sidebar, get_modal_iframe, save_modal,
+                                     expect_normalized, new_option, submit_option, sidebar, get_modal_iframe,
+                                     save_modal, confirm_modal,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -259,8 +260,7 @@ def gift(page: Any, live_server: Any) -> None:
     # approve payment
     go_to(page, live_server, "/test/manage/invoices")
     page.get_by_role("link", name="Confirm", exact=True).click()
-    # Confirm the CSRF-protection interstitial
-    page.get_by_role("button", name="Confirm").click()
+    confirm_modal(page)
 
     # redeem
     go_to(page, live_server, "/test/gift/")
