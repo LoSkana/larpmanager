@@ -92,13 +92,15 @@
                     <a class="nav-link {% if request.resolver_match.url_name == 'usage' %}active{% endif %}"
                        href="{% url 'usage' %}"
                        title="Understand how to use it">Pricing</a>
-                    <a class="nav-link {% if request.resolver_match.url_name == 'demo' %}active{% endif %}"
-                       href="{% url 'demo' %}"
-                       title="Test freely the system">Demo</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'about_us' %}active{% endif %}"
+                       href="{% url 'about_us' %}"
+                       title="Learn about the project">About us</a>
                     <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
                        href="{% url 'contact' %}"
                        title="Contact us">Contact</a>
-                    <a class="btn btn-primary" href="{% url 'join' %}" title="Get Started">Get Started</a>
+                    <a class="btn btn-primary"
+                       href="{% url 'get_started' %}"
+                       title="Get Started">Get Started</a>
                 </div>
             </nav>
         {% endif %}
@@ -132,7 +134,9 @@
                         <div class="wrap">
                             <h2>{{ texts.cta_title }}</h2>
                             <p>{{ texts.cta_description | safe }}</p>
-                            <a class="btn btn-primary" href="{% url 'join' %}" title="Free trial">Start your first event</a>
+                            <a class="btn btn-primary"
+                               href="{% url 'get_started' %}"
+                               title="Free trial">Try LarpManager now</a>
                         </div>
                     </section>
                 {% endif %}

@@ -4381,6 +4381,9 @@ msgstr ""
 msgid "Analysis"
 msgstr ""
 
+msgid "Color"
+msgstr ""
+
 msgid ""
 "It will only be used for internal bureaucratic purposes, and will NEVER be "
 "displayed to other participants"
@@ -5145,9 +5148,6 @@ msgstr ""
 msgid "Indicates whether it can be selected by participants"
 msgstr ""
 
-msgid "Color"
-msgstr ""
-
 msgid "Admin"
 msgstr ""
 
@@ -5390,6 +5390,12 @@ msgid "Delay in profile"
 msgstr ""
 
 msgid "Missing casting preferences"
+msgstr ""
+
+msgid "Show hint"
+msgstr ""
+
+msgid "Don't open automatically again"
 msgstr ""
 
 msgid "Input an element name to insert their reference code"
@@ -7476,6 +7482,23 @@ msgid ""
 "Below you will find all the features available; you can write a search "
 "keyword to filter them. Then click on 'Video', and you will see the video "
 "directly"
+msgstr ""
+
+msgid "Try it now with a demo"
+msgstr ""
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+
+msgid "Skip the demo, start your adventure from scratch"
+msgstr ""
+
+msgid "Create your organization"
+msgstr ""
+
+msgid "Log in to create your organization"
 msgstr ""
 
 msgid "Partners"
@@ -9851,6 +9874,19 @@ msgstr ""
 
 msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
+msgstr ""
+
+#, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr ""
+
+msgid "You are exploring a demo organization"
+msgstr ""
+
+msgid "Only some of the platform features are activated"
+msgstr ""
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
 msgstr ""
 
 msgid "Please correct the error below"

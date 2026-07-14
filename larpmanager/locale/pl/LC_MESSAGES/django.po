@@ -1652,6 +1652,9 @@ msgstr "Zestaw zadań"
 msgid "Short url"
 msgstr "Krótki adres URL"
 
+msgid "Show hint"
+msgstr "Pokaż podpowiedź"
+
 msgid "Show less"
 msgstr "Pokaż mniej"
 
@@ -4806,6 +4809,9 @@ msgstr "Całkowita opłata rejestracyjna"
 msgid "Track event milestones"
 msgstr "Śledzenie kamieni milowych wydarzenia"
 
+msgid "Try it now with a demo"
+msgstr "Wypróbuj to już teraz w wersji demo"
+
 msgid "Type to search members"
 msgstr "Wpisz, żeby wyszukać członków"
 
@@ -4993,6 +4999,9 @@ msgstr "Kod pudełka lub półki"
 
 msgid "Code two capital letters"
 msgstr "Zakoduj dwie duże litery"
+
+msgid "Create your organization"
+msgstr "Załóż swoją organizację"
 
 msgid "Current platform version"
 msgstr "Aktualna wersja platformy"
@@ -5707,6 +5716,9 @@ msgstr "Pełna płatność za %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Opóźnienie rocznej opłaty członkowskiej"
 
+msgid "Don't open automatically again"
+msgstr "Nie otwieraj już automatycznie"
+
 msgid "Duration in seconds (optional)"
 msgstr "Czas trwania w sekundach (opcjonalnie)"
 
@@ -6190,6 +6202,9 @@ msgstr "Dowiedz się, jakie zadania są dostępne"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Jeśli zaznaczone, zezwala na poziom biletów: NPC"
 
+msgid "Log in to create your organization"
+msgstr "Zaloguj się, żeby utworzyć swoją organizację"
+
 msgid "Manage all handouts for this event"
 msgstr "Zarządzaj wszystkimi materiałami informacyjnymi na to wydarzenie"
 
@@ -6622,6 +6637,13 @@ msgstr "Wykorzystanie %(credits)s na %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Napisz tutaj, co chciałbyś zrobić!"
+
+msgid "You are exploring a demo organization"
+msgstr "Przeglądasz organizację demonstracyjną"
+
+#, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr "Przeglądasz wersję demonstracyjną „%(name)s”"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -7749,6 +7771,9 @@ msgstr "Lista adresów e-mail odbiorców, oddzielonych przecinkami"
 msgid "No additional payments are required at this time"
 msgstr "Obecnie nie są wymagane żadne dodatkowe płatności"
 
+msgid "Only some of the platform features are activated"
+msgstr "Aktywowane są tylko niektóre funkcje platformy"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Rejestracja anulowana dla %(event)s przez %(user)s"
@@ -7762,6 +7787,9 @@ msgstr "Rejestracja na to wydarzenie jeszcze się nie rozpoczęła"
 
 msgid "Review participants' safety-related informations"
 msgstr "Przegląd informacji dotyczących bezpieczeństwa uczestników"
+
+msgid "Skip the demo, start your adventure from scratch"
+msgstr "Pomiń wersję demo i zacznij swoją przygodę od zera"
 
 msgid "The subscription plan associated with this event"
 msgstr "Opcjonalny szablon powiązany z tą umiejętnością"
@@ -9454,6 +9482,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Wyświetl szczegółowy dziennik aktywności wszystkich zmian wprowadzonych dla "
 "tej organizacji"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"Chcesz wypróbować inne wersje demonstracyjne, czy może jesteś już gotowy, "
+"żeby założyć swoją organizację?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Po dokonaniu zmiany wyślemy wiadomość e-mail z potwierdzeniem"
@@ -13487,6 +13520,14 @@ msgid ""
 msgstr ""
 "Każdy znajomy, który zarejestruje się i użyje tego kodu w polu 'Zniżki', "
 "otrzyma %(amount_to)s %(currency)s zniżki na bilet"
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+"Zapoznaj się z naszymi interaktywnymi prezentacjami, żeby zobaczyć konkretne"
+" funkcje w akcji. Nie bój się eksperymentować i trochę namieszaj! Nie musisz"
+" się rejestrować."
 
 msgid ""
 "Manage association memberships: review applicants, approve or reject "

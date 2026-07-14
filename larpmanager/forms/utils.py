@@ -239,7 +239,7 @@ def prepare_permissions_role(form: BaseModelForm, typ: type) -> None:
     )
 
     # Hide demo-restricted permissions when in demo mode
-    if form.params.get("demo", False):
+    if form.params.get("lite_mode", False):
         base_queryset = base_queryset.filter(slug__in=LITE_PERMISSIONS)
 
     # Group permissions by module for organized display

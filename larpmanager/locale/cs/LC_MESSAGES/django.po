@@ -1652,6 +1652,9 @@ msgstr "Zadání úkolu"
 msgid "Short url"
 msgstr "Krátká url adresa"
 
+msgid "Show hint"
+msgstr "Zobrazit nápovědu"
+
 msgid "Show less"
 msgstr "Zobrazit méně"
 
@@ -4806,6 +4809,9 @@ msgstr "Celkový registrační poplatek"
 msgid "Track event milestones"
 msgstr "Sledování milníků události"
 
+msgid "Try it now with a demo"
+msgstr "Vyzkoušejte si to hned v demo verzi"
+
 msgid "Type to search members"
 msgstr "Zadejte text pro vyhledání členů"
 
@@ -4993,6 +4999,9 @@ msgstr "Kód krabice nebo police"
 
 msgid "Code two capital letters"
 msgstr "Kód dvě velká písmena"
+
+msgid "Create your organization"
+msgstr "Vytvořte svou organizaci"
 
 msgid "Current platform version"
 msgstr "Aktuální verze platformy"
@@ -5707,6 +5716,9 @@ msgstr "Kompletní platba za %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Zpoždění ročního členského poplatku"
 
+msgid "Don't open automatically again"
+msgstr "Už se automaticky neotevírejte"
+
 msgid "Duration in seconds (optional)"
 msgstr "Doba trvání v sekundách (nepovinné)"
 
@@ -6190,6 +6202,9 @@ msgstr "Objevte dostupné úkoly"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Pokud je zaškrtnuto, povolte úroveň tipu: NPC"
 
+msgid "Log in to create your organization"
+msgstr "Přihlaste se a vytvořte svou organizaci"
+
 msgid "Manage all handouts for this event"
 msgstr "Spravovat všechny podklady k této akci"
 
@@ -6624,6 +6639,13 @@ msgstr "Využití %(credits)s na %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Napište sem, co byste chtěli!"
+
+msgid "You are exploring a demo organization"
+msgstr "Prohlížíte si ukázkovou organizaci"
+
+#, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr "Prohlížíte si ukázku „%(name)s“"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -7742,6 +7764,9 @@ msgstr "Seznam e-mailových adres příjemce oddělených čárkou"
 msgid "No additional payments are required at this time"
 msgstr "V tuto chvíli nejsou vyžadovány žádné další platby"
 
+msgid "Only some of the platform features are activated"
+msgstr "Jsou aktivovány pouze některé funkce platformy"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Zrušení odběru %(event)s pomocí %(user)s"
@@ -7755,6 +7780,9 @@ msgstr "Registrace na tuto akci ještě nebyla zahájena"
 
 msgid "Review participants' safety-related informations"
 msgstr "Přezkoumání informací o bezpečnosti účastníků"
+
+msgid "Skip the demo, start your adventure from scratch"
+msgstr "Přeskočte demo a začněte své dobrodružství úplně od začátku"
 
 msgid "The subscription plan associated with this event"
 msgstr "Volitelná šablona spojená s touto schopností"
@@ -9348,6 +9376,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Zobrazení podrobného protokolu aktivit všech změn provedených pro tuto "
 "organizaci"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"Chcete si vyzkoušet další ukázky, nebo jste připraveni založit svou "
+"organizaci?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Po provedení změny vám zašleme potvrzující e-mail"
@@ -13231,6 +13264,14 @@ msgid ""
 msgstr ""
 "Každý přítel, který se zaregistruje a použije tento kód v poli 'Slevy', "
 "obdrží %(amount_to)s %(currency)s ze vstupenky"
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+"Prohlédněte si naše interaktivní ukázky a podívejte se, jak konkrétní funkce"
+" fungují v praxi. Vyzkoušejte si to na vlastní kůži a klidně něco rozbijte! "
+"Registrace není nutná."
 
 msgid ""
 "Manage association memberships: review applicants, approve or reject "

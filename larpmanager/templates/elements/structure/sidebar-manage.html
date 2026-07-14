@@ -113,7 +113,7 @@
                     </p>
                 </div>
             {% else %}
-                <div>
+                <div class="sidebar-body">
                     {% if run %}
                         <div class="sidebar-section">
                             <span class="sidebar-link-wrap">
@@ -122,7 +122,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </span>
-                            {% if not demo %}
+                            {% if not lite_mode and not demo %}
                                 <span class="sidebar-link-wrap">
                                     <a class="sidebar-link" href="{% url 'orga_preferences' run.get_slug %}">
                                         <i class="fa-solid fa-sliders"></i>
@@ -160,7 +160,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </span>
-                            {% if not demo %}
+                            {% if not lite_mode %}
                                 <span class="sidebar-link-wrap">
                                     <a class="sidebar-link" href="{% url 'exe_preferences' %}">
                                         <i class="fa-solid fa-sliders"></i>
@@ -191,44 +191,46 @@
                             {% endif %}
                         {% endfor %}
                     {% endif %}
-                    <hr />
-                    {% if role_names %}
-                        <div class="roles">
-                            <i>{% trans "Role" %}:
-                                {% for rn in role_names %}
-                                    {% include "elements/comma.html" %}
-                                    {{ rn }}
-                                {% endfor %}
-                            </i>
-                        </div>
-                    {% endif %}
-                    {% if association.skin_id == 1 %}
+                    {% if not association.lite_mode and not association.demo %}
+                        <hr />
+                        {% if role_names %}
+                            <div class="roles">
+                                <i>{% trans "Role" %}:
+                                    {% for rn in role_names %}
+                                        {% include "elements/comma.html" %}
+                                        {{ rn }}
+                                    {% endfor %}
+                                </i>
+                            </div>
+                        {% endif %}
+                        {% if association.skin_id == 1 %}
+                            <span class="sidebar-link-wrap">
+                                <a href="https://discord.gg/C4KuyQbuft"
+                                   class="sidebar-link"
+                                   target="_blank"
+                                   rel="noopener noreferrer">
+                                    <i class="fa-brands fa-discord"></i>
+                                    <span>Discord</span>
+                                </a>
+                            </span>
+                            <span class="sidebar-link-wrap">
+                                <a href="{% url 'guides' %}"
+                                   class="sidebar-link popup-iframe-link"
+                                   data-iframe-url="{% url 'guides' %}?in_iframe=1">
+                                    <i class="fa-solid fa-book-open"></i>
+                                    <span>Guides</span>
+                                </a>
+                            </span>
+                        {% endif %}
                         <span class="sidebar-link-wrap">
-                            <a href="https://discord.gg/C4KuyQbuft"
-                               class="sidebar-link"
-                               target="_blank"
-                               rel="noopener noreferrer">
-                                <i class="fa-brands fa-discord"></i>
-                                <span>Discord</span>
-                            </a>
-                        </span>
-                        <span class="sidebar-link-wrap">
-                            <a href="{% url 'guides' %}"
+                            <a href="{% url 'tutorials' %}"
                                class="sidebar-link popup-iframe-link"
-                               data-iframe-url="{% url 'guides' %}?in_iframe=1">
-                                <i class="fa-solid fa-book-open"></i>
-                                <span>Guides</span>
+                               data-iframe-url="{% url 'tutorials' %}?in_iframe=1">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <span>Tutorials</span>
                             </a>
                         </span>
                     {% endif %}
-                    <span class="sidebar-link-wrap">
-                        <a href="{% url 'tutorials' %}"
-                           class="sidebar-link popup-iframe-link"
-                           data-iframe-url="{% url 'tutorials' %}?in_iframe=1">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                            <span>Tutorials</span>
-                        </a>
-                    </span>
                     {% include "elements/structure/sidebar-footer.html" %}
                 </div>
             {% endif %}

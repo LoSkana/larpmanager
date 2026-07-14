@@ -1652,6 +1652,9 @@ msgstr "Ställ in uppdrag"
 msgid "Short url"
 msgstr "Kort url"
 
+msgid "Show hint"
+msgstr "Visa ledtråd"
+
 msgid "Show less"
 msgstr "Visa mindre"
 
@@ -4806,6 +4809,9 @@ msgstr "Total registreringsavgift"
 msgid "Track event milestones"
 msgstr "Spåra milstolpar i evenemanget"
 
+msgid "Try it now with a demo"
+msgstr "Prova det nu med en demoversion"
+
 msgid "Type to search members"
 msgstr "Skriv in sökord för att söka efter medlemmar"
 
@@ -4993,6 +4999,9 @@ msgstr "Kod för lådan eller hyllan"
 
 msgid "Code two capital letters"
 msgstr "Kod två stora bokstäver"
+
+msgid "Create your organization"
+msgstr "Skapa din organisation"
 
 msgid "Current platform version"
 msgstr "Aktuell plattformsversion"
@@ -5707,6 +5716,9 @@ msgstr "Fullständig betalning för %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Försening av årlig medlemsavgift"
 
+msgid "Don't open automatically again"
+msgstr "Öppna inte automatiskt igen"
+
 msgid "Duration in seconds (optional)"
 msgstr "Varaktighet i sekunder (valfritt)"
 
@@ -6190,6 +6202,9 @@ msgstr "Upptäck de tillgängliga uppdragen"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Om markerad, tillåt biljettnivå: NPC"
 
+msgid "Log in to create your organization"
+msgstr "Logga in för att skapa din organisation"
+
 msgid "Manage all handouts for this event"
 msgstr "Hantera alla utdelningsmaterial för detta evenemang"
 
@@ -6623,6 +6638,13 @@ msgstr "Utnyttjande %(credits)s per %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Skriv här vad du vill att vi ska göra!"
+
+msgid "You are exploring a demo organization"
+msgstr "Du utforskar en demoorganisation"
+
+#, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr "Du utforskar demonstrationen ”%(name)s”"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -7745,6 +7767,9 @@ msgstr "Lista över mottagarens e-postadresser, kommaseparerade"
 msgid "No additional payments are required at this time"
 msgstr "Inga ytterligare betalningar krävs för närvarande"
 
+msgid "Only some of the platform features are activated"
+msgstr "Endast vissa av plattformens funktioner är aktiverade"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Avprenumerera på %(event)s av %(user)s"
@@ -7758,6 +7783,9 @@ msgstr "Anmälan till detta evenemang har ännu inte öppnats"
 
 msgid "Review participants' safety-related informations"
 msgstr "Granska deltagarnas säkerhetsrelaterade information"
+
+msgid "Skip the demo, start your adventure from scratch"
+msgstr "Hoppa över demoversionen och börja ditt äventyr från början"
 
 msgid "The subscription plan associated with this event"
 msgstr "Valfri mall som associeras med denna förmåga"
@@ -9399,6 +9427,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Visa detaljerad aktivitetslogg över alla ändringar som gjorts för den här "
 "organisationen"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"Vill du prova andra demoversioner, eller är du redo att skapa din "
+"organisation?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr ""
@@ -13401,6 +13434,14 @@ msgid ""
 msgstr ""
 "Varje vän som registrerar sig och använder den här koden i fältet 'Rabatter'"
 " får %(amount_to)s %(currency)s rabatt på biljetten"
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+"Utforska våra interaktiva demonstrationer för att se hur vissa funktioner "
+"fungerar i praktiken. Prova själv och testa gränserna! Ingen registrering "
+"krävs."
 
 msgid ""
 "Manage association memberships: review applicants, approve or reject "

@@ -496,7 +496,8 @@ body.floating_iframe #menu,
 body.floating_iframe #banner,
 body.floating_iframe #topbar,
 body.floating_iframe #staging,
-body.floating_iframe .info {
+body.floating_iframe .info,
+body.floating_iframe .demo-banner {
   display: none !important;
 }
 
@@ -757,4 +758,101 @@ body.floating_iframe .inner {
 
 .grid .grid-item div.dt-container div.dt-layout-row {
   margin: 0em;
+}
+
+/* ============ Demo mode: banner + contextual hints ============ */
+
+.demo-banner {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 1em;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  background: rgba(var(--ter-rgb), 0.95);
+  color: rgb(var(--sec-rgb));
+  border-top: 1px solid rgba(var(--ter-rgb), 0.4);
+  text-align: center;
+}
+
+.demo-banner a {
+  font-weight: 700;
+  margin: 0;
+  color: rgb(var(--sec-rgb));
+}
+
+.demo-hint-toggle {
+  position: fixed;
+  bottom: 4.2em;
+  right: 1.2em;
+  z-index: 1000;
+  width: 2.6em;
+  height: 2.6em;
+  border: none;
+  border-radius: 50%;
+  background: rgba(var(--ter-rgb), 1);
+  color: rgb(var(--sec-rgb));
+  font-size: 1.1em;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  padding: 0;
+}
+
+.demo-hint-toggle:hover {
+  background: rgba(var(--ter-rgb), 0.85);
+}
+
+.demo-hint-panel {
+  display: none;
+  position: fixed;
+  bottom: 7.5em;
+  right: 1.2em;
+  z-index: 1000;
+  max-width: 22em;
+  padding: 1em;
+  background: rgb(var(--sec-rgb));
+  color: rgb(var(--pri-rgb));
+  border: 1px solid rgba(var(--pri-rgb), 0.25);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.demo-hint-panel.open {
+  display: block;
+}
+
+.demo-hint-panel .demo-hint-title {
+  margin: 0 0 0.5em;
+}
+
+.demo-hint-panel .demo-hint-content {
+  margin-bottom: 0.8em;
+}
+
+.demo-hint-panel .demo-hint-dismiss-label {
+  display: block;
+  font-size: 0.5em;
+  margin-bottom: 0.8em;
+  cursor: pointer;
+}
+
+.demo-hint-panel .demo-hint-close {
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .demo-hint-panel {
+    left: 1.2em;
+    max-width: none;
+  }
+}
+
+#demo-hint-permanent {
+  width: 0.5em;
+  height: 0.5em;
 }

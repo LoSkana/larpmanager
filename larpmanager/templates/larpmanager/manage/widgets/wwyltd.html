@@ -1,5 +1,5 @@
 {% load i18n %}
-{% if manage and not demo %}
+{% if manage and not lite_mode %}
     <div id="wwyltd">
         <form method="post">
             {% csrf_token %}

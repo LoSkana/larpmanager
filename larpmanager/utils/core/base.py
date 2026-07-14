@@ -54,6 +54,7 @@ from larpmanager.utils.core.exceptions import (
 )
 from larpmanager.utils.core.nav import build_main_nav_items
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
+from larpmanager.utils.services.demo import add_demo_hint_context
 from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
 
 # Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
@@ -129,6 +130,10 @@ def get_context(request: HttpRequest, *, check_main_site: bool = False) -> dict:
     # Add current request function name for debugging/analytics
     if request and request.resolver_match:
         context["request_func_name"] = request.resolver_match.func.__name__
+
+    # Contextual hint for demo instances, bound to the current view
+    if context.get("demo") and context.get("request_func_name"):
+        add_demo_hint_context(request, context)
 
     # Check if intro driver tutorial should be shown for this association
     if context["member"] and context["association_id"]:

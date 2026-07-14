@@ -474,7 +474,7 @@ def orga_features_go(request: HttpRequest, event_slug: str, slug: str, *, to_act
     context = check_event_context(request, event_slug, "orga_features")
 
     # Block feature activation in lite/demo mode
-    if to_active and context.get("demo"):
+    if to_active and context.get("lite_mode"):
         messages.error(request, _("Features cannot be activated in lite mode, complete the activation checklist first"))
         msg = "manage"
         raise RedirectError(msg, kwargs={"event_slug": event_slug})

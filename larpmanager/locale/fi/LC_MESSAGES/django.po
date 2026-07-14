@@ -1652,6 +1652,9 @@ msgstr "Aseta tehtävä"
 msgid "Short url"
 msgstr "Lyhyt url"
 
+msgid "Show hint"
+msgstr "Näytä vihje"
+
 msgid "Show less"
 msgstr "Näytä vähemmän"
 
@@ -4806,6 +4809,9 @@ msgstr "Ilmoittautumismaksu yhteensä"
 msgid "Track event milestones"
 msgstr "Seuraa tapahtuman virstanpylväitä"
 
+msgid "Try it now with a demo"
+msgstr "Kokeile sitä nyt demoversion avulla"
+
 msgid "Type to search members"
 msgstr "Kirjoita hakusana jäsenten hakua varten"
 
@@ -4993,6 +4999,9 @@ msgstr "Laatikon tai hyllyn koodi"
 
 msgid "Code two capital letters"
 msgstr "Koodi kaksi isoa kirjainta"
+
+msgid "Create your organization"
+msgstr "Luo organisaatiosi"
 
 msgid "Current platform version"
 msgstr "Nykyinen alustaversio"
@@ -5707,6 +5716,9 @@ msgstr "Täydellinen maksu tapahtumaan %(event)s"
 msgid "Delay in yearly membership fee"
 msgstr "Vuosittaisen jäsenmaksun viivästyminen"
 
+msgid "Don't open automatically again"
+msgstr "Älä avaa enää automaattisesti"
+
 msgid "Duration in seconds (optional)"
 msgstr "Kesto sekunteina (valinnainen)"
 
@@ -6190,6 +6202,9 @@ msgstr "Selvitä, mitä tehtäviä on saatavilla"
 msgid "If checked, allow ticket tier: NPC"
 msgstr "Jos valittuna, salli lippuluokka: NPC"
 
+msgid "Log in to create your organization"
+msgstr "Kirjaudu sisään luodaksesi organisaatiosi"
+
 msgid "Manage all handouts for this event"
 msgstr "Hallinnoi kaikkia tämän tapahtuman esitteitä"
 
@@ -6623,6 +6638,13 @@ msgstr "Käytä %(credits)s tapahtumaan %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Kirjoita tähän, mitä haluaisit tehdä!"
+
+msgid "You are exploring a demo organization"
+msgstr "Tutustut esittelyorganisaatioon"
+
+#, python-format
+msgid "You are exploring the \"%(name)s\" demo"
+msgstr "Tutustut parhaillaan ”%(name)s”-esittelyyn"
 
 #, python-format
 msgid " Hurry: only %(num)d tickets available"
@@ -7742,6 +7764,9 @@ msgstr "Luettelo vastaanottajan sähköpostiosoitteista, pilkulla erotettuna"
 msgid "No additional payments are required at this time"
 msgstr "Tällä hetkellä ei vaadita lisämaksuja"
 
+msgid "Only some of the platform features are activated"
+msgstr "Vain osa alustan ominaisuuksista on käytössä"
+
 #, python-format
 msgid "Registration cancelled for %(event)s by %(user)s"
 msgstr "Ilmoittautuminen peruutettu: %(event)s / %(user)s"
@@ -7755,6 +7780,9 @@ msgstr "Ilmoittautuminen tähän tapahtumaan ei ole vielä alkanut"
 
 msgid "Review participants' safety-related informations"
 msgstr "Tarkastellaan osallistujien turvallisuuteen liittyviä tietoja"
+
+msgid "Skip the demo, start your adventure from scratch"
+msgstr "Ohita esittely ja aloita seikkailusi alusta"
 
 msgid "The subscription plan associated with this event"
 msgstr "Tähän tapahtumaan liittyvä tilaussuunnitelma"
@@ -9405,6 +9433,11 @@ msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
 "Tarkastele yksityiskohtaista toimintalokia kaikista tämän organisaation "
 "osalta tehdyistä muutoksista"
+
+msgid "Wanna try other demos, or are you ready to create your organization?"
+msgstr ""
+"Haluatko kokeilla muita esittelyversioita, vai oletko valmis luomaan oman "
+"organisaatiosi?"
 
 msgid "We will send you a confirmation e-mail when the change has been made"
 msgstr "Lähetämme sinulle vahvistussähköpostin, kun muutos on tehty"
@@ -13376,6 +13409,14 @@ msgid ""
 msgstr ""
 "Jokainen ystävä, joka ilmoittautuu ja käyttää tätä koodia 'Alennukset' "
 "-kentässä, saa %(amount_to)s %(currency)s alennuksen lipusta"
+
+msgid ""
+"Explore our interactive demos to see specific features in action. Get your "
+"hands dirty and break things! No signup required."
+msgstr ""
+"Tutustu interaktiivisiin esittelyihimme ja katso, miten eri ominaisuudet "
+"toimivat käytännössä. Kokeile itse ja riko juttuja! Rekisteröitymistä ei "
+"tarvita."
 
 msgid ""
 "Manage association memberships: review applicants, approve or reject "

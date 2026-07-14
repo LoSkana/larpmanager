@@ -1,0 +1,81 @@
+{% extends "larpmanager/landing/base.html" %}
+{% load i18n static %}
+{% block maintitle %}
+    {{ texts.join_page_title }}
+{% endblock maintitle %}
+{% block meta %}
+    <meta name="keywords" content="{{ texts.join_meta_keywords }}">
+    <meta name="description" content="{{ texts.join_meta_description }}">
+{% endblock meta %}
+{% block landing_eyebrow %}
+    Get started
+{% endblock landing_eyebrow %}
+{% block landing_title %}
+    {{ texts.join_title }}
+{% endblock landing_title %}
+{% block landing_subtitle %}
+    <p>{{ texts.join_sub | safe }}</p>
+{% endblock landing_subtitle %}
+{% block landing_content %}
+    <div id="lm_get_started">
+        {% include "elements/member/my_hub.html" %}
+        {% if demo_types %}
+            <div class="get-started-demo">
+                <h2>{% trans "Try it now with a demo" %}</h2>
+                <p class="get-started-chaos">
+                    {% trans "Explore our interactive demos to see specific features in action. Get your hands dirty and break things! No signup required." %}
+                </p>
+                <div class="get-started-grid">
+                    {% for demo_type in demo_types %}
+                        <form action="{% url 'get_started' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="demo_uuid" value="{{ demo_type.uuid }}">
+                            <button type="submit"
+                                    class="get-started-card"
+                                    {% if demo_type.color %}style="border-top-color: {{ demo_type.color }};"{% endif %}>
+                                {% if demo_type.icon %}<i class="{{ demo_type.icon }}"></i>{% endif %}
+                                <span class="get-started-card-name">{{ demo_type.name }}</span>
+                                {% if demo_type.descr %}<span class="get-started-card-descr">{{ demo_type.descr }}</span>{% endif %}
+                            </button>
+                        </form>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="get-started-divider">
+                <a href="#get-started-real"
+                   class="get-started-skip"
+                   onclick="document.getElementById('get-started-real').classList.remove('hide');">
+                    {% trans "Skip the demo, start your adventure from scratch" %} <i class="fa-solid fa-arrow-down"></i>
+                </a>
+            </div>
+        {% endif %}
+        <div id="get-started-real" class="{% if demo_types %}hide{% endif %}">
+            <h2>{% trans "Create your organization" %}</h2>
+            <div class="about-prose landing-prose">{{ texts.join_content | safe }}</div>
+            {% if request.user.is_authenticated %}
+                <form class="contact-form"
+                      action="{% url 'get_started' %}"
+                      enctype="multipart/form-data"
+                      method="post">
+                    {% csrf_token %}
+                    <table>
+                        {{ form.as_div }}
+                    </table>
+                    <input class="btn btn-primary"
+                           type="submit"
+                           id="id_submit"
+                           value="{% trans "Submit" %}">
+                </form>
+            {% else %}
+                <p>
+                    <a class="btn btn-primary"
+                       href="{% url 'login' %}?next={% url 'get_started' %}">{% trans "Log in to create your organization" %}</a>
+                </p>
+            {% endif %}
+            <div class="contact-alt">{{ texts.desktop_recommendation | safe }}</div>
+        </div>
+    </div>
+{% endblock landing_content %}
+{% block js2 %}
+    <script> window.base_domain = ".{{ association.base_domain }}"; </script>
+{% endblock js2 %}

@@ -97,7 +97,7 @@ def _organization_sitemap(association_id: Any) -> list[str]:
     # Get organization and check if it's a demo instance
     organization = Association.objects.get(pk=association_id)
     organization_cache = get_cache_association(organization.slug)
-    if organization_cache.get("demo", False):
+    if organization_cache.get("lite_mode", False) or organization_cache.get("demo", False):
         return []
 
     # Build base organization URL

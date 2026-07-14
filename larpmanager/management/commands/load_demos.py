@@ -17,31 +17,27 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
 
 from typing import Any
 
-from django.conf import settings as conf_settings
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
-from larpmanager.models.association import Association
+from larpmanager.fixtures.demos import DEMO_BUILDERS
+from larpmanager.management.commands.utils import check_virtualenv
 
 
 class Command(BaseCommand):
     """Django management command."""
 
-    help = "List of all assocs mails"
+    help = "Create (or fetch) the template associations used by LarpManagerDemoType, from larpmanager/fixtures/demos"
 
     def handle(self, *args: Any, **options: Any) -> None:  # noqa: ARG002
-        """Print email mappings for associations and admin."""
-        # Get associations with valid email addresses, excluding demo accounts
-        lst = Association.objects.filter(main_mail__isnull=False).exclude(main_mail="").exclude(lite_mode=True)
+        """Run every registered demo builder inside a transaction, idempotently."""
+        check_virtualenv()
 
-        # Output association slug and email mappings
-        for el in lst.order_by("slug").values_list("slug", "main_mail"):
-            if el[1]:
-                self.stdout.write(f"{el[0]}@larpmanager.com {el[1]}")
-
-        # Output admin email mapping
-        if conf_settings.ADMINS:
-            _name, email = conf_settings.ADMINS[0]
-            self.stdout.write(f"@larpmanager.com {email}")
+        for builder in DEMO_BUILDERS:
+            with transaction.atomic():
+                demo_type = builder()
+            self.stdout.write(self.style.SUCCESS(f"Demo type ready: {demo_type.slug}"))

@@ -380,7 +380,7 @@ LITE_PERMISSIONS: frozenset[str] = frozenset(
 )
 
 
-def get_index_permissions(  # noqa: C901
+def get_index_permissions(  # noqa: C901, PLR0912
     context: dict,
     features: dict,
     permissions: dict,
@@ -407,7 +407,7 @@ def get_index_permissions(  # noqa: C901
 
     """
     permissions_by_module = {}
-    is_demo = context.get("demo", False)
+    is_lite_mode = context.get("lite_mode", False)
 
     # Get cached permissions for the specified type
     for permission in get_cache_index_permission(permission_type):
@@ -415,8 +415,13 @@ def get_index_permissions(  # noqa: C901
         if permission["hidden"]:
             continue
 
-        # In lite/demo mode, only show essential permissions
-        if is_demo and permission["slug"] not in LITE_PERMISSIONS:
+        # In lite mode, only show essential permissions
+        if is_lite_mode and permission["slug"] not in LITE_PERMISSIONS:
+            continue
+
+        # In a demo instance restricted to specific sidebar entries, hide the rest
+        allowed_sidebar = context.get("demo_allowed_sidebar")
+        if allowed_sidebar and permission["slug"] not in allowed_sidebar:
             continue
 
         # Check if permission is allowed in current context

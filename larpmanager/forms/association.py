@@ -78,7 +78,7 @@ class ExeAssociationForm(BaseModelForm):
             "images_shared",
             "plan",
             "skin",
-            "demo",
+            "lite_mode",
             "maintainers",
         )
 

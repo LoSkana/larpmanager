@@ -42,7 +42,7 @@
     tut="{{ tutorial }}"
     qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i> Tutorial</a>
                             {% endif %}
-                            {% if config and not demo %}
+                            {% if config and not lite_mode %}
                                 | <a href="{{ config }}"
     class="action-link"
     data-modal-eligible="true"
@@ -58,7 +58,7 @@
                                tut="{{ tutorial }}"
                                qtip="Tutorial"><i class="fa-solid fa-graduation-cap"></i></a>
                         {% endif %}
-                        {% if config and not demo %}
+                        {% if config and not lite_mode %}
                             <a href="{{ config }}"
                                class="action-link"
                                data-modal-eligible="true"
@@ -76,6 +76,20 @@
                 </div>
             </div>
         </div>
+        {% if association.demo %}
+            <div class="demo-banner">
+                <span>
+                    {% if association.demo_type %}
+                        {% blocktrans with name=association.demo_type.name %}You are exploring the "{{ name }}" demo{% endblocktrans %}.
+                    {% else %}
+                        {% trans "You are exploring a demo organization" %}.
+                    {% endif %}
+                    {% trans "Only some of the platform features are activated" %}.
+                </span>
+                <a href="//{{ association.main_domain }}/get-started/">{% trans "Wanna try other demos, or are you ready to create your organization?" %} <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            {% include "elements/demo_hint.html" %}
+        {% endif %}
         <div id="footer"
              class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
             <div class="inner">
