@@ -80,7 +80,20 @@ def _make_member(username: str, name: str, surname: str, association: Associatio
 def _build_events(association: Association) -> dict[str, Event]:
     today = datetime.datetime.now(tz=UTC).date()
 
-    chapter_1 = Event.objects.create(association=association, name="Vaelmoor: The Sundering", slug=CHAPTER_1_SLUG)
+    chapter_1 = Event.objects.create(
+        association=association,
+        name="Vaelmoor: The Sundering",
+        slug=CHAPTER_1_SLUG,
+        tagline="The Ashblood Court chooses its heir, or breaks trying.",
+        description=(
+            "<p>For three centuries Lucian Thorne has held the Ashblood Court by will alone. "
+            "Tonight the succession comes to a head: a knight hungry for the throne, a seer who "
+            "has already glimpsed the coup, and a voice from the rival Silver Veil offering a "
+            "peace no one asked for.</p><p>The first chapter of the Vaelmoor Chronicle, a "
+            "vampire-court campaign played across three linked chapters with one persistent "
+            "cast of characters.</p>"
+        ),
+    )
     run_1 = chapter_1.runs.first()
     run_1.start = today - datetime.timedelta(days=180)
     run_1.end = run_1.start + datetime.timedelta(days=2)
@@ -89,7 +102,17 @@ def _build_events(association: Association) -> dict[str, Event]:
     run_1.save()
 
     chapter_2 = Event.objects.create(
-        association=association, name="Vaelmoor: The Ashen Court", slug=CHAPTER_2_SLUG, parent=chapter_1
+        association=association,
+        name="Vaelmoor: The Ashen Court",
+        slug=CHAPTER_2_SLUG,
+        parent=chapter_1,
+        tagline="The Sundering left scars. The court still has to rule.",
+        description=(
+            "<p>Second chapter of the Vaelmoor Chronicle. The same cast returns, carrying the "
+            "consequences of the Sundering with them, as a newly Embraced player joins the "
+            "table and the balance between the Ashblood Court and the Silver Veil is tested "
+            "again.</p>"
+        ),
     )
     run_2 = chapter_2.runs.first()
     run_2.start = today - datetime.timedelta(days=60)
@@ -99,7 +122,16 @@ def _build_events(association: Association) -> dict[str, Event]:
     run_2.save()
 
     chapter_3 = Event.objects.create(
-        association=association, name="Vaelmoor: The Last Vigil", slug=CHAPTER_3_SLUG, parent=chapter_1
+        association=association,
+        name="Vaelmoor: The Last Vigil",
+        slug=CHAPTER_3_SLUG,
+        parent=chapter_1,
+        tagline="One more night for the Ashblood Court to decide what it is.",
+        description=(
+            "<p>The upcoming third chapter of the Vaelmoor Chronicle. Registration is open now; "
+            "its ticket and form setup was duplicated from Chapter 2 with the Copy feature "
+            "rather than rebuilt from scratch.</p>"
+        ),
     )
     run_3 = chapter_3.runs.first()
     run_3.start = today + datetime.timedelta(days=45)

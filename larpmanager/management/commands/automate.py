@@ -178,7 +178,6 @@ class Command(BaseCommand):
 
     _DELETION_WARNING_KEY = "deletion_warning_sent"
     _NO_DELETE_KEY = "no_delete"
-    _TEST_SLUG_PREFIX = "test-"
     _INACTIVE_SIGNUP_THRESHOLD = 10
     _INACTIVE_LOG_DAYS = 360
     _WARNING_GRACE_DAYS = 30
@@ -195,12 +194,6 @@ class Command(BaseCommand):
         Admins receive a notice 7 days before an association is deleted.
         """
         now = timezone.now()
-
-        # Delete test associations older than 1 week (demo templates are never cleaned up)
-        cutoff = now - timedelta(days=7)
-        Association.objects.filter(
-            slug__startswith=Command._TEST_SLUG_PREFIX, created__lte=cutoff, demo_types__isnull=True
-        ).delete()
 
         # Process inactive non-test associations
         log_cutoff = now - timedelta(days=Command._INACTIVE_LOG_DAYS)
