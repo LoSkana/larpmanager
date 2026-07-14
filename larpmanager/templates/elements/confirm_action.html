@@ -1,0 +1,31 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Confirm" %}
+{% endblock title %}
+{% block content %}
+    <form method="post" class="confirm_action_form">
+        {% csrf_token %}
+        <div class="form_container">
+            <p class="delete-confirm-message">
+                {% trans "Please confirm you want to perform this action" %}.
+                {% if el_name %}{{ el_name }}{% endif %}
+            </p>
+            <div class="form-actions">
+                <input type="submit" value="{% trans "Confirm" %}" class="btn-save">
+                <a href="#" id="confirm_action_cancel" class="btn-cancel">{% trans "Cancel" %}</a>
+            </div>
+        </div>
+    </form>
+{% endblock content %}
+{% block js %}
+    {{ block.super }}
+    <script>
+    $(document).ready(function() {
+        $('#confirm_action_cancel').on('click', function(e) {
+            e.preventDefault();
+            history.back();
+        });
+    });
+    </script>
+{% endblock js %}

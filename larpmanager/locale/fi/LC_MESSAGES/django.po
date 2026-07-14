@@ -7585,6 +7585,9 @@ msgstr "Valinnainen - Kysymyksessä näkyvä kuva"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Valinnainen kuva kotisivun karusellia/diashow'ta varten"
 
+msgid "Please confirm you want to perform this action"
+msgstr "Vahvista, että haluat suorittaa tämän toiminnon"
+
 msgid "Please select both a registration and an event"
 msgstr "Valitse sekä ilmoittautuminen että tapahtuma"
 

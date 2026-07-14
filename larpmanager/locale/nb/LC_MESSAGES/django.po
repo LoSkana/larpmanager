@@ -7588,6 +7588,9 @@ msgstr "Valgfritt - Bilde som vises i spørsmålet"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Valgfritt bilde for karusell/bildefremvisning på hjemmesiden"
 
+msgid "Please confirm you want to perform this action"
+msgstr "Bekreft at du ønsker å utføre denne handlingen"
+
 msgid "Please select both a registration and an event"
 msgstr "Vennligst velg både en registrering og et arrangement"
 

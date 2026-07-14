@@ -7597,6 +7597,9 @@ msgstr "Optioneel - Afbeelding weergegeven in de vraag"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Optionele afbeelding voor homepage carrousel/slideshow"
 
+msgid "Please confirm you want to perform this action"
+msgstr "Bevestig dat je deze actie wilt uitvoeren"
+
 msgid "Please select both a registration and an event"
 msgstr "Selecteer zowel een registratie als een evenement"
 

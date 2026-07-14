@@ -41,6 +41,7 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member, get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.larpmanager.tasks import partition_shared_recipients, send_mail_exec, split_recipients
+from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.utils.users.member import get_mail
 
 if TYPE_CHECKING:
@@ -393,6 +394,7 @@ def orga_questions_answer(request: HttpRequest, event_slug: str, member_uuid: st
 
 
 @login_required
+@confirm_post
 def orga_questions_close(request: HttpRequest, event_slug: str, member_uuid: str) -> HttpResponse:
     """Close a help question for an organization event."""
     context = check_event_context(request, event_slug, "orga_questions")

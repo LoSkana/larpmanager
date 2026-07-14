@@ -119,6 +119,7 @@ from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import compute_diff, get_element
 from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.edit.backend import (
+    _element_display_name,
     backend_delete,
     backend_delete_frame,
     backend_edit,
@@ -437,6 +438,11 @@ def _action_redirect(
         if is_frame:
             context["frame"] = True
             return backend_delete_frame(request, context, model_type, element_uuid, action_data.get("can_delete"))
+        # Non-frame direct access: confirm on GET, delete only on POST
+        if request.method != "POST":
+            backend_get(context, model_type, element_uuid, None)
+            context["el_name"] = _element_display_name(context["el"])
+            return render(request, "elements/confirm_action.html", context)
         backend_delete(request, context, model_type, element_uuid, action_data.get("can_delete"))
 
     # Redirect to success page with event slug

@@ -5266,6 +5266,12 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
+msgid "Please confirm you want to perform this action"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
 msgid "Are you sure you want to approve this element"
 msgstr ""
 
@@ -6310,9 +6316,6 @@ msgid "Contact the organizers if you need a new access link later"
 msgstr ""
 
 msgid "I Understand - Access Content"
-msgstr ""
-
-msgid "Cancel"
 msgstr ""
 
 msgid "This content is protected and cannot be downloaded or recorded"
