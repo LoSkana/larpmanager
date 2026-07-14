@@ -26,7 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import get_language
 
-from larpmanager.models.event import EventText
+from larpmanager.models.event import EventText, EventTextType
 
 logger = logging.getLogger(__name__)
 
@@ -159,3 +159,11 @@ def reset_event_text(instance: EventText) -> None:
     # Clear default cache entry if this was the default text
     if instance.default:
         cache.delete(event_text_key_def(instance.event_id, instance.typ))
+
+
+def clear_event_text_cache(event_id: int) -> None:
+    """Clear all event text cache entries for an event, for every type and language."""
+    for text_type in EventTextType.values:
+        cache.delete(event_text_key_def(event_id, text_type))
+        for language_code, _label in conf_settings.LANGUAGES:
+            cache.delete(event_text_key(event_id, text_type, language_code))

@@ -1,36 +1,25 @@
 {% extends "utils.html" %}
 {% load i18n show_tags %}
+{% block body_class %}
+    {% if frame %}floating_iframe{% endif %}
+{% endblock body_class %}
 {% block title %}
     {{ member_edit }} - {% trans "Participant" %}
 {% endblock title %}
 {% block content %}
     <p>Email: {{ member_edit.email }}</p>
-    <p>
-        <a href="{% url 'exe_member_registrations' member_edit.uuid %}"
-           qtip="{% trans "View registrations" %}">
-            <i class="fas fa-calendar-check"></i> {% trans "Registrations" %}
-        </a>
-        |
-        <a href="{% url 'exe_member_accounting' member_edit.uuid %}"
-           qtip="{% trans "View accounting" %}">
-            <i class="fas fa-file-invoice-dollar"></i> {% trans "Accounting" %}
-        </a>
-        |
-        <a href="{% url 'exe_membership_status' member_edit.uuid %}"
-           qtip="{% trans "Edit membership" %}">
-            <i class="fas fa-id-card"></i> {% trans "Membership" %}
-        </a>
-    </p>
     {% include "elements/membership_cf.html" %}
     <h2>{% trans "Personal data" %}</h2>
     <form action="{{ request.path }}"
           method="post"
           enctype="multipart/form-data">
         {% csrf_token %}
-        <table class="mob  ">
-            {{ form.as_table }}
-        </table>
-        <input type="submit" value="Submit">
+        <div class="form_container auto_resize">
+            <table class="mob  ">
+                {{ form.as_table }}
+            </table>
+            <input type="submit" value="Submit">
+        </div>
     </form>
     <hr class="c" />
     {% if '.pdf' in doc_path %}

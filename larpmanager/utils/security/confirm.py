@@ -34,6 +34,8 @@ from typing import TYPE_CHECKING
 
 from django.shortcuts import render
 
+from larpmanager.utils.core.base import get_context
+
 if TYPE_CHECKING:
     from collections.abc import Callable
 
@@ -52,6 +54,6 @@ def confirm_post(view_func: Callable[..., HttpResponse]) -> Callable[..., HttpRe
     def _wrapped(request: HttpRequest, *args: object, **kwargs: object) -> HttpResponse:
         if request.method == "POST":
             return view_func(request, *args, **kwargs)
-        return render(request, "elements/confirm_action.html", {})
+        return render(request, "elements/confirm_action.html", get_context(request))
 
     return _wrapped
