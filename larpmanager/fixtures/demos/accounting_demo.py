@@ -639,7 +639,18 @@ def build_accounting_demo() -> LarpManagerDemoType:
         return existing
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Accounting Demo")
-    event = Event.objects.create(association=association, name="Midwinter Fair", slug=EVENT_SLUG)
+    event = Event.objects.create(
+        association=association,
+        name="Midwinter Fair",
+        slug=EVENT_SLUG,
+        tagline="A weekend fair with tiered tickets, priced extras, and a waiting list already forming.",
+        description=(
+            "<p>A three-day outdoor fair with something for every budget: a Patron tier with a "
+            "VIP dinner, a New Player tier with its own orientation session, and a Standard tier "
+            "nearly sold out. Pick your transport, sleeping arrangement and gear, then pay in "
+            "full, in installments, or whatever you can with the pay-what-you-want ticket.</p>"
+        ),
+    )
     run = event.runs.first()
     run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
     run.end = run.start + datetime.timedelta(days=2)
