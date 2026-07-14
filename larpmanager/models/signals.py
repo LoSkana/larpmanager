@@ -1044,9 +1044,9 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
         publish_event_role(instance.id)
 
 
-@receiver(pre_delete, sender=EventText)
-def pre_delete_event_text(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear event text cache before deletion."""
+@receiver(post_delete, sender=EventText)
+def post_delete_event_text(sender: type, instance: Any, **kwargs: Any) -> None:
+    """Clear event text cache after deletion."""
     reset_event_text(instance)
 
 

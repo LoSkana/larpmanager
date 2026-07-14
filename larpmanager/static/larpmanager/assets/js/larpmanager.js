@@ -168,7 +168,6 @@ window.openIframeModal = function(iframeUrl, modalClass, onClose) {
         e.preventDefault();
         window.closeLmModal();
         restoreTitle();
-        if (typeof onClose === 'function') onClose();
     });
 
     dialog.addEventListener('close', function() {

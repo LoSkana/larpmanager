@@ -6993,15 +6993,6 @@ msgid ""
 "Members will appear here once they have completed their yearly enrollment"
 msgstr ""
 
-msgid "View registrations"
-msgstr ""
-
-msgid "View accounting"
-msgstr ""
-
-msgid "Edit membership"
-msgstr ""
-
 msgid "Personal data"
 msgstr ""
 
@@ -7037,6 +7028,15 @@ msgid "Total members"
 msgstr ""
 
 msgid "Paid current year"
+msgstr ""
+
+msgid "Edit membership"
+msgstr ""
+
+msgid "View accounting"
+msgstr ""
+
+msgid "View registrations"
 msgstr ""
 
 msgid "Members will appear here once they have submitted a membership request"
