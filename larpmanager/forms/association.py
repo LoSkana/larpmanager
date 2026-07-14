@@ -80,6 +80,7 @@ class ExeAssociationForm(BaseModelForm):
             "skin",
             "lite_mode",
             "maintainers",
+            "demo_type",
         )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
