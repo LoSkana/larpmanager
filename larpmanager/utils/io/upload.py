@@ -1070,11 +1070,12 @@ def _writing_load_field(
         return
 
     # Wrap plain multiline text in HTML paragraphs so line breaks render correctly.
-    # Single-line fields (e.g. title, teaser) are stripped only, not paragraph-wrapped.
-    if field_type in [WritingQuestionType.TITLE, WritingQuestionType.TEASER]:
-        html_formatted_value = str(value).strip()
-    else:
+    # Only free-text fields need this; factions, choices, and other lookup-based
+    # fields must keep their raw value so name matching against the DB still works.
+    if field_type in [WritingQuestionType.SHEET, *BaseQuestionType.get_answer_types()]:
         html_formatted_value = _text_to_html_paragraphs(value)
+    else:
+        html_formatted_value = str(value).strip()
     if not html_formatted_value:
         return
 

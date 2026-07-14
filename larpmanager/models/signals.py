@@ -1711,6 +1711,14 @@ def post_delete_registration_quota(sender: type, instance: RegistrationQuota, **
     clear_registration_tickets_cache(instance.event_id)
 
 
+@receiver(pre_save, sender=Relationship)
+def pre_save_relationship_replace_names(sender: type, instance: Relationship, **kwargs: Any) -> None:
+    """Replace character name placeholders in relationship text before saving."""
+    if is_clone_active():
+        return
+    replace_character_names(instance)
+
+
 @receiver(pre_delete, sender=Relationship)
 def pre_delete_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
     """Delete character PDF files before relationship deletion."""
