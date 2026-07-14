@@ -243,6 +243,7 @@ from larpmanager.models.form import (
 from larpmanager.models.inventory import Inventory, PoolBalance, PoolType
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
+    LarpManagerDemoType,
     LarpManagerFaq,
     LarpManagerGuide,
     LarpManagerHighlight,
@@ -730,6 +731,18 @@ def post_delete_reset_association_config(sender: type, instance: object, **kwarg
 def post_save_association_skin_reset_cache(sender: type, instance: Association, **kwargs: Any) -> None:
     """Clear skin cache when association is saved."""
     clear_skin_cache(instance.domain)
+
+
+@receiver(post_save, sender=LarpManagerDemoType)
+def post_save_demo_type_reset_association_cache(sender: type, instance: LarpManagerDemoType, **kwargs: Any) -> None:
+    """Clear cache of every association cloned from this demo type.
+
+    The association cache snapshots demo_type name/allowed lists at clone time
+    (see init_cache_association), so editing the demo type here would otherwise
+    leave already-cloned demo instances showing stale data until the 1-day TTL expires.
+    """
+    for association_slug in Association.objects.filter(demo_type=instance).values_list("slug", flat=True):
+        clear_association_cache(association_slug)
 
 
 @receiver(pre_save, sender=Character)
