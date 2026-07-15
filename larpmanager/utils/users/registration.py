@@ -48,7 +48,7 @@ from larpmanager.models.form import (
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
-from larpmanager.utils.core.common import format_datetime, get_time_diff_today
+from larpmanager.utils.core.common import feature_visible, format_datetime, get_time_diff_today
 from larpmanager.utils.core.exceptions import RewokedMembershipError, SignupError, WaitingError
 
 if TYPE_CHECKING:
@@ -937,7 +937,9 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
         }
     ]
 
-    if "user_character" in features:
+    allowed_sidebar = context.get("demo_allowed_sidebar")
+
+    if feature_visible("user_character", features, allowed_sidebar):
         character_links.append(
             {
                 "url": reverse("character_edit", args=[run.get_slug(), character_uuid]),
@@ -947,7 +949,9 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             }
         )
 
-    if "experience" in features and get_event_config(run.event_id, "exp_user", default_value=False, context=context):
+    if feature_visible("experience", features, allowed_sidebar) and get_event_config(
+        run.event_id, "exp_user", default_value=False, context=context
+    ):
         character_links.append(
             {
                 "url": reverse("character_abilities", args=[run.get_slug(), character_uuid]),
@@ -957,7 +961,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             }
         )
 
-    if "custom_character" in features:
+    if feature_visible("custom_character", features, allowed_sidebar):
         character_links.append(
             {
                 "url": reverse("character_customize", args=[run.get_slug(), character_uuid]),
@@ -967,7 +971,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             }
         )
 
-    if "player_relationships" in features:
+    if feature_visible("player_relationships", features, allowed_sidebar):
         character_links.append(
             {
                 "url": reverse("character_relationships", args=[run.get_slug(), character_uuid]),
@@ -977,7 +981,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             }
         )
 
-    if "help" in features:
+    if feature_visible("help", features, allowed_sidebar):
         character_links.append(
             {
                 "url": reverse("help", args=[run.get_slug()]),

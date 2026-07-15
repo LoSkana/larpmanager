@@ -341,7 +341,8 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "editorial progress and PDF sheets."
         ),
         template_association=association,
-        allowed_sidebar="orga_characters,orga_plots,orga_factions,orga_handouts,orga_progress_steps",
+        allowed_sidebar="orga_characters,orga_plots,orga_factions,orga_handouts,orga_progress_steps,"
+        "faction,print_pdf,user_character",
     )
 
     hints = [

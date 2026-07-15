@@ -450,8 +450,9 @@ class LarpManagerDemoType(UuidMixin, OrderMixin, BaseModel):
 
     allowed_sidebar = models.TextField(
         blank=True,
-        help_text="Comma separated list of event/association permission slugs allowed in the sidebar "
-        "for this demo type. Empty means no restriction.",
+        help_text="Comma separated list of event/association permission slugs allowed in the sidebar, "
+        "and feature slugs allowed in the player-facing navigation, for this demo type. "
+        "Empty means no restriction.",
     )
 
     allowed_config = models.TextField(
