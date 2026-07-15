@@ -23,14 +23,16 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
+from pathlib import Path
 from typing import Any
 
 from background_task import background
 from dateutil.relativedelta import relativedelta
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.db import transaction
-from django.db.models import Min, Q
+from django.db.models import Count, Min, Q
 from django.utils import timezone
 
 from larpmanager.cache.association import clear_association_cache
@@ -273,6 +275,12 @@ def _clone_members(clone_context: CloneContext, new_association: Association, ne
         for profile_field in ["name", "surname", "nickname", "pronoun", "gender", "language", "presentation", "diet"]:
             setattr(cloned_member, profile_field, getattr(template_member, profile_field))
         cloned_member.save()
+        if template_member.profile:
+            cloned_member.profile.save(
+                Path(template_member.profile.name).name,
+                ContentFile(template_member.profile.read()),
+                save=True,
+            )
         clone_context.id_map[(Member, template_member.pk)] = cloned_member.pk
 
         _copy_row(clone_context, membership_row, overrides={"association_id": new_association.pk})
@@ -469,14 +477,28 @@ def add_demo_hint_context(request: Any, context: dict) -> None:
 
 @background(queue="demo")
 def deferred_delete_demo(association_id: int) -> None:
-    """Delete a demo association once its lifetime has expired."""
+    """Delete a demo association once its lifetime has expired.
+
+    Clean also demo members created for this association, whose *sole*
+    membership is this demo association are deleted.
+    """
     try:
         demo_association = Association.objects.get(pk=association_id)
     except Association.DoesNotExist:
         return
     if demo_association.demo_type_id is None:
         return
+    demo_member_user_ids = Membership.objects.filter(association=demo_association).values_list(
+        "member__user_id", flat=True
+    )
+    demo_user_ids = list(
+        User.objects.filter(pk__in=demo_member_user_ids)
+        .annotate(membership_count=Count("member__memberships"))
+        .filter(membership_count=1)
+        .values_list("pk", flat=True)
+    )
     demo_association.delete()
+    User.objects.filter(pk__in=demo_user_ids).delete()
     clear_association_cache(demo_association.slug)
 
 
