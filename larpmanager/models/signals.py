@@ -827,6 +827,9 @@ def pre_delete_character_reset(sender: type, instance: Character, **kwargs: Any)
 @receiver(post_delete, sender=Character)
 def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs: Any) -> None:
     """Clear caches for deleted character and update related relationships."""
+    if is_clone_active():
+        return
+
     # Update all related caches
     refresh_character_related_caches(instance)
 
@@ -1126,6 +1129,9 @@ def pre_delete_faction(sender: type, instance: Faction, **kwargs: dict) -> None:
 @receiver(post_delete, sender=Faction)
 def post_delete_faction_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
     """Reset character relationships when a faction is deleted."""
+    if is_clone_active():
+        return
+
     # Update cache for all characters that were in this faction
     for char in instance.characters.all():
         refresh_character_relationships_background(char.id)
@@ -1612,6 +1618,9 @@ def pre_delete_registration(sender: type, instance: Registration, *args: Any, **
 @receiver(post_delete, sender=Registration)
 def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear accounting cache for the associated run after registration deletion, and sync published data."""
+    if is_clone_active():
+        return
+
     clear_registration_accounting_cache(instance.run_id)
     publish_registration(instance.id, instance.run_id)
 
@@ -1686,6 +1695,9 @@ def post_delete_registration_question(sender: type, instance: RegistrationTicket
 @receiver(post_save, sender=RegistrationOption)
 def post_save_registration_option(sender: type, instance: RegistrationOption, **kwargs: dict) -> None:
     """Process registration option post-save signal."""
+    if is_clone_active():
+        return
+
     process_registration_option_post_save(instance)
     clear_registration_questions_cache(instance.question.event_id)
 

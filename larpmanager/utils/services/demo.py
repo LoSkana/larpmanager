@@ -497,8 +497,9 @@ def deferred_delete_demo(association_id: int) -> None:
         .filter(membership_count=1)
         .values_list("pk", flat=True)
     )
-    demo_association.delete()
-    User.objects.filter(pk__in=demo_user_ids).delete()
+    with transaction.atomic(), clone_signals_suppressed():
+        User.objects.filter(pk__in=demo_user_ids).delete()
+        demo_association.delete()
     clear_association_cache(demo_association.slug)
 
 
