@@ -72,6 +72,11 @@ class DelimiterNotFoundError(ValueError):
     """Raised when CSV delimiter cannot be detected."""
 
 
+def feature_visible(feature_slug: str, features: dict | set, allowed_sidebar: list[str] | None) -> bool:
+    """Check whether a feature is enabled and not excluded by a demo's allowed sidebar restriction."""
+    return feature_slug in features and (not allowed_sidebar or feature_slug in allowed_sidebar)
+
+
 logger = logging.getLogger(__name__)
 
 format_date = "%d/%m/%y"

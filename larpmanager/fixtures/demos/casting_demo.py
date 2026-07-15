@@ -250,7 +250,7 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "casting assignment, resolving deliberately conflicting picks."
         ),
         template_association=association,
-        allowed_sidebar="orga_characters,orga_factions,orga_casting_preferences,orga_casting",
+        allowed_sidebar="orga_characters,orga_factions,orga_casting_preferences,orga_casting,casting,faction",
     )
 
     hints = [

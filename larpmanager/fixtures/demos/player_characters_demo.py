@@ -307,7 +307,7 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "form with conditional options, then submit them for organizer approval."
         ),
         template_association=association,
-        allowed_sidebar="orga_characters,orga_character_form",
+        allowed_sidebar="orga_characters,orga_character_form,user_character,player_relationships",
     )
 
     hints = [

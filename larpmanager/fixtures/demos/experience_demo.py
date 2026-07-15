@@ -342,7 +342,7 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
         template_association=association,
         allowed_sidebar=(
             "orga_characters,orga_character_form,orga_exp_abilities,orga_exp_ability_types,"
-            "orga_exp_modifiers,orga_exp_criterions,orga_exp_rules,orga_exp_deliveries"
+            "orga_exp_modifiers,orga_exp_criterions,orga_exp_rules,orga_exp_deliveries,experience"
         ),
     )
 
