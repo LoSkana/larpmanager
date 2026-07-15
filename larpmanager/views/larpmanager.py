@@ -1342,9 +1342,10 @@ def _create_demo(request: HttpRequest, demo_type: LarpManagerDemoType | None = N
         admin_role.members.add(demo_member)
         admin_role.save()
 
-    # Set membership status to active/joined
+    # Set membership status to active/joined, profile already completed
     membership_element = get_user_membership(demo_member, demo_association.id)
     membership_element.status = MembershipStatus.JOINED
+    membership_element.compiled = True
     membership_element.save()
 
     # Authenticate and log in the demo user
