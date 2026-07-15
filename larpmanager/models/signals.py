@@ -1854,12 +1854,14 @@ def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
 def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset run config cache when related instance is saved."""
     reset_element_configs(instance.run)
+    reset_cache_config_run(instance.run)
 
 
 @receiver(post_delete, sender=RunConfig)
 def post_delete_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear configuration cache after Run deletion."""
     reset_element_configs(instance.run)
+    reset_cache_config_run(instance.run)
 
 
 @receiver(pre_save, sender=SpeedLarp)

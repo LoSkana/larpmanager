@@ -46,7 +46,7 @@ from larpmanager.cache.registration import (
 )
 from larpmanager.cache.rels import clear_event_relationships_cache
 from larpmanager.cache.role import remove_event_role_cache
-from larpmanager.cache.run import reset_cache_run
+from larpmanager.cache.run import reset_cache_config_run, reset_cache_run
 from larpmanager.cache.text_fields import reset_text_fields_cache
 from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.cache.wwyltd import reset_orga_configs_cache
@@ -642,6 +642,7 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear run config cache
     reset_element_configs(run)
+    reset_cache_config_run(run)
 
     # Clear question cache
     clear_writing_questions_cache(run.event_id)
