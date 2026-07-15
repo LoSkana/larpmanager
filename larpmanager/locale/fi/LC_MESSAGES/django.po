@@ -3946,6 +3946,9 @@ msgstr "Ota asetukset käyttöön"
 msgid "Experience Systems"
 msgstr "Kokemusjärjestelmät"
 
+msgid "Faction preference"
+msgstr "Ryhmämieltymys"
+
 msgid "First registration"
 msgstr "Ensimmäinen rekisteröinti"
 
@@ -9369,6 +9372,10 @@ msgstr "Yhdistysveroa varten pidätettävän nettovoiton vähimmäismäärä"
 
 msgid "Now you can review the safety information submitted by participants"
 msgstr "Nyt voit tarkastella osallistujien toimittamia turvallisuustietoja"
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+"Järjestä ryhmät suosituimmasta (ylhäältä) vähiten suosittuun (alhaalta)"
 
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""

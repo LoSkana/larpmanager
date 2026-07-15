@@ -3946,6 +3946,9 @@ msgstr "Activar preferencias"
 msgid "Experience Systems"
 msgstr "Sistemas de experiencia"
 
+msgid "Faction preference"
+msgstr "Preferencia de facción"
+
 msgid "First registration"
 msgstr "Primera inscripción"
 
@@ -9478,6 +9481,11 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Ahora puede revisar la información sobre seguridad enviada por los "
 "participantes"
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+"Ordena las facciones de la que más te gusta (arriba) a la que menos te gusta"
+" (abajo)"
 
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""

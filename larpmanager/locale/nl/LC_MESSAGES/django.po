@@ -3946,6 +3946,9 @@ msgstr "Voorkeuren inschakelen"
 msgid "Experience Systems"
 msgstr "Ervaringssystemen"
 
+msgid "Faction preference"
+msgstr "Voorkeur voor een factie"
+
 msgid "First registration"
 msgstr "Eerste registratie"
 
@@ -9473,6 +9476,11 @@ msgstr ""
 msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "U kunt nu de veiligheidsinformatie bekijken die deelnemers hebben ingediend"
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+"Zet de facties op volgorde van je grootste (bovenaan) naar je minste "
+"(onderaan) voorkeur"
 
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""

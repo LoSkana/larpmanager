@@ -135,6 +135,7 @@ RegistrationQuestionType = extend_textchoices(
         ("PWYW", "pay_what_you_want", _("Pay what you want")),
         ("QUOTA", "reg_quotas", _("Rate")),
         ("SURCHARGE", "reg_surcharges", _("Surcharge")),
+        ("FACTION_PREFERENCE", "faction_preference", _("Faction preference")),
     ],
 )
 

@@ -19,4 +19,9 @@ class Migration(migrations.Migration):
             model_name='registrationquestion',
             index=models.Index(condition=models.Q(('deleted__isnull', True)), fields=['event', 'applicable'], name='rq_evt_app_act'),
         ),
+        migrations.AlterField(
+            model_name='registrationquestion',
+            name='typ',
+            field=models.CharField(choices=[('s', 'Single choice'), ('m', 'Multiple choice'), ('t', 'Single-line text'), ('p', 'Multi-line text'), ('e', 'Advanced text editor'), ('ticket', 'Ticket'), ('additional_tickets', 'Additional'), ('pay_what_you_want', 'Pay what you want'), ('reg_quotas', 'Rate'), ('reg_surcharges', 'Surcharge'), ('faction_preference', 'Faction preference')], default='s', help_text='Question type', max_length=50, verbose_name='Type'),
+        ),
     ]

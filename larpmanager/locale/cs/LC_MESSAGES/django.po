@@ -3946,6 +3946,9 @@ msgstr "Povolení předvoleb"
 msgid "Experience Systems"
 msgstr "Zkušenostní systémy"
 
+msgid "Faction preference"
+msgstr "Preference frakce"
+
 msgid "First registration"
 msgstr "První registrace"
 
@@ -9317,6 +9320,11 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Nyní si můžete prohlédnout bezpečnostní informace, které účastníci "
 "předložili"
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+"Seřaďte frakce od té, kterou preferujete nejvíce (nahoře), po tu, kterou "
+"preferujete nejméně (dole)"
 
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""

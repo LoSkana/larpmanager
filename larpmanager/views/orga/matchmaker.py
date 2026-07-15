@@ -32,8 +32,10 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestionApplicable,
+    RegistrationQuestionType,
 )
 from larpmanager.models.registration import Registration
+from larpmanager.models.writing import Faction
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.views.orga.form import get_ordered_registration_questions
 
@@ -74,6 +76,10 @@ def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpRespon
             choice.option.name
         )
 
+    faction_names_by_uuid = {
+        str(uuid): name for uuid, name in context["event"].get_elements(Faction).values_list("uuid", "name")
+    }
+
     rows = []
     for registration in registrations:
         cells = []
@@ -81,6 +87,10 @@ def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpRespon
         for question in questions:
             if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
                 value = ", ".join(choices_by_registration.get(registration.id, {}).get(question.id, []))
+            elif question.typ == RegistrationQuestionType.FACTION_PREFERENCE:
+                raw = answers_by_registration.get(registration.id, {}).get(question.id, "")
+                names = [faction_names_by_uuid[uuid] for uuid in raw.split(",") if uuid in faction_names_by_uuid]
+                value = ", ".join(f"{i}. {name}" for i, name in enumerate(names, start=1))
             else:
                 value = answers_by_registration.get(registration.id, {}).get(question.id, "")
             if value:

@@ -3946,6 +3946,9 @@ msgstr "Abilita le preferenze"
 msgid "Experience Systems"
 msgstr "Sistemi di esperienza"
 
+msgid "Faction preference"
+msgstr "Preferenza di fazione"
+
 msgid "First registration"
 msgstr "Prima iscrizione"
 
@@ -9485,6 +9488,11 @@ msgstr "Importo minimo dell'utile netto da lasciare come tassa organizzativa"
 msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Ora puoi esaminare le informazioni sulla sicurezza fornite dai partecipanti"
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+"Ordina le fazioni dalla tua preferita (in alto) a quella che ti piace di "
+"meno (in basso)"
 
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""

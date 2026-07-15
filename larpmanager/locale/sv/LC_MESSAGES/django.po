@@ -3946,6 +3946,9 @@ msgstr "Aktivera inställningar"
 msgid "Experience Systems"
 msgstr "System för upplevelser"
 
+msgid "Faction preference"
+msgstr "Faktionsval"
+
 msgid "First registration"
 msgstr "Första registrering"
 
@@ -9365,6 +9368,11 @@ msgstr "Minsta belopp av nettovinsten som ska behållas för föreningsskatten"
 msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Nu kan du granska den säkerhetsinformation som deltagarna har lämnat in"
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+"Rangordna fraktionerna från den du föredrar mest (högst upp) till den du "
+"föredrar minst (längst ner)"
 
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""

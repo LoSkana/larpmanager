@@ -4208,6 +4208,9 @@ msgstr ""
 msgid "Rate"
 msgstr ""
 
+msgid "Faction preference"
+msgstr ""
+
 msgid "Mandatory"
 msgstr ""
 
@@ -11670,6 +11673,9 @@ msgstr ""
 msgid ""
 "Number of installments to split the fee: payments and deadlines will be "
 "equally divided from the registration date"
+msgstr ""
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
 msgstr ""
 
 msgid "Not participating"

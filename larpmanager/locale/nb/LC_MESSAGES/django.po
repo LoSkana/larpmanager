@@ -3946,6 +3946,9 @@ msgstr "Aktiver innstillinger"
 msgid "Experience Systems"
 msgstr "Opplevelsessystemer"
 
+msgid "Faction preference"
+msgstr "Fraksjonspreferanse"
+
 msgid "First registration"
 msgstr "Første registrering"
 
@@ -9402,6 +9405,11 @@ msgstr ""
 msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Nå kan du gå gjennom sikkerhetsinformasjonen som deltakerne har sendt inn"
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+"Ranger fraksjonene fra den du foretrekker mest (øverst) til den du "
+"foretrekker minst (nederst)"
 
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""

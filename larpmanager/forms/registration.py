@@ -1367,24 +1367,36 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             # prevent cancellation if one of the default types
             self.prevent_canc = len(self.instance.typ) > 1
 
-        available_choices = []
-        for choice in RegistrationQuestionType.choices:
-            # if it is related to a feature
-            if len(choice[0]) > 1:
-                # reserved system types (ticket, pwyw, quotas, ...) only apply to the standard registration form
-                if registration_typ != RegistrationQuestionApplicable.REGISTRATION:
-                    continue
-
-                # check it is not already present
-                if choice[0] in already_used_types:
-                    continue
-
-                # check the feature is active
-                if choice[0] not in ["ticket"] and choice[0] not in self.params["features"]:
-                    continue
-
-            available_choices.append(choice)
+        available_choices = [
+            choice
+            for choice in RegistrationQuestionType.choices
+            if self._is_type_choice_available(choice, registration_typ, already_used_types)
+        ]
         self.fields["typ"].choices = available_choices
+
+    def _is_type_choice_available(
+        self, choice: tuple[str, str], registration_typ: str, already_used_types: list[str]
+    ) -> bool:
+        """Return whether a RegistrationQuestionType choice should be offered in the type dropdown."""
+        # faction preference is reserved for the matchmaker form only, and only once
+        if choice[0] == RegistrationQuestionType.FACTION_PREFERENCE:
+            return registration_typ == RegistrationQuestionApplicable.MATCHMAKER and choice[0] not in already_used_types
+
+        # if it is related to a feature
+        if len(choice[0]) > 1:
+            # reserved system types (ticket, pwyw, quotas, ...) only apply to the standard registration form
+            if registration_typ != RegistrationQuestionApplicable.REGISTRATION:
+                return False
+
+            # check it is not already present
+            if choice[0] in already_used_types:
+                return False
+
+            # check the feature is active
+            if choice[0] not in ["ticket"] and choice[0] not in self.params["features"]:
+                return False
+
+        return True
 
     def save(self, commit: bool = True) -> RegistrationQuestion:  # noqa: FBT001, FBT002
         """Save the instance, enforcing OPTIONAL status and clearing M2M for system types."""

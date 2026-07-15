@@ -780,3 +780,33 @@ body.association.new_v20 .user_resize {
 #member-search {
   margin-bottom: 0.5em;
 }
+
+/* ---------------------------------------------------------------------------
+   Faction preference drag-reorder list
+   --------------------------------------------------------------------------- */
+
+.faction-pref-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.faction-pref-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.3em 0;
+  padding: 0.5em 0.75em;
+  border-radius: 6px;
+  border: 1px solid rgba(var(--pri-rgb), 0.15);
+  background: rgba(var(--pri-rgb), 0.04);
+  cursor: grab;
+}
+
+.faction-pref-item.faction-pref-dragging {
+  opacity: 0.4;
+}
+
+.faction-pref-handle {
+  color: rgba(var(--ter-rgb), 0.6);
+}
