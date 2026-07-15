@@ -24,7 +24,7 @@ body {
 
 #banner h1 {
   padding: 0.5em 5em 0.5em 6em;
-  height: 2.2em;
+  min-height: 2.2em;
   text-align: center;
   line-height: 1.2;
   margin-bottom: 0em;
