@@ -183,6 +183,19 @@
     - character
 - model: larpmanager.feature
   fields:
+    name: Matchmaker
+    descr: Lets organizers define custom questions on the characters participants would like to play, and assign them with a grid system
+    slug: matchmaker
+    overall: false
+    placeholder: false
+    order: 91
+    after_text: Now you can set the matchmaker form
+    after_link: form/matchmaker/
+    hidden: false
+    module: event
+    dependencies: []
+- model: larpmanager.feature
+  fields:
     name: Help
     descr: Allows participants to submit questions, and organizers to review and organize
       them

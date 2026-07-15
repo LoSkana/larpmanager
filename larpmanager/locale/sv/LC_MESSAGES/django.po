@@ -251,6 +251,9 @@ msgstr "Roll"
 msgid "Rule"
 msgstr "Regel"
 
+msgid "Save"
+msgstr "Spara"
+
 msgid "Sent"
 msgstr "Skickad"
 
@@ -310,6 +313,9 @@ msgstr "När"
 
 msgid "days"
 msgstr "dagar"
+
+msgid "form"
+msgstr "formulär"
 
 msgid "free"
 msgstr "fri"
@@ -1841,6 +1847,9 @@ msgstr "Juridiskt namn"
 msgid "Link color"
 msgstr "Länkens färg"
 
+msgid "Matchmaker"
+msgstr "Äktenskapsförmedlare"
+
 msgid "Media file"
 msgstr "Mediefil"
 
@@ -2579,6 +2588,9 @@ msgstr "Lägg till karaktär"
 
 msgid "Age selection"
 msgstr "Val av ålder"
+
+msgid "Answers saved"
+msgstr "Sparade svar"
 
 msgid "Apply Upgrade"
 msgstr "Ansök om uppgradering"
@@ -3951,6 +3963,9 @@ msgstr "Information sparad"
 
 msgid "Invite a character"
 msgstr "Bjud in en karaktär"
+
+msgid "Matchmaker answers"
+msgstr "Svar från matchmakaren"
 
 msgid "Member Data Checks"
 msgstr "Kontroll av medlemsuppgifter"
@@ -5576,6 +5591,9 @@ msgstr "Godkännande av %(user)s som %(role)s"
 msgid "Bundle generation in progress"
 msgstr "Paketgenerering pågår"
 
+msgid "Configure the matchmaker form"
+msgstr "Konfigurera formuläret för matchmaker"
+
 msgid "Confirm and commit quantities"
 msgstr "Bekräftelse och åtagande av kvantiteter"
 
@@ -5904,6 +5922,9 @@ msgstr "För att logga in igen med kontot"
 
 msgid "Total of recorded money inflows"
 msgstr "Totalt antal registrerade penninginflöden"
+
+msgid "Use the button above to add one"
+msgstr "Använd knappen ovan för att lägga till en"
 
 msgid "View your private conversations"
 msgstr "Visa dina privata konversationer"
@@ -6345,6 +6366,9 @@ msgstr "Ställ nu in konfigurationen för tokens"
 
 msgid "Now you can set the casting options"
 msgstr "Nu kan du ställa in casting-alternativen"
+
+msgid "Now you can set the matchmaker form"
+msgstr "Nu kan du ställa in formuläret för matchmakern"
 
 msgid "Optional description of the content"
 msgstr "Valfri beskrivning av innehållet"
@@ -7231,6 +7255,9 @@ msgstr "Välj en grupp ovan för att hantera dess medlemmar"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Välj slumpmässigt lotter för att uppgradera"
 
+msgid "Select which form this question belongs to"
+msgstr "Välj vilken typ av fråga detta är"
+
 msgid "Tax identification code of the association"
 msgstr "Föreningens skatteregistreringsnummer"
 
@@ -7512,6 +7539,9 @@ msgstr "Medlem som använde denna token (om den är autentiserad)"
 msgid "Modify the character details to make it yours"
 msgstr "Modifiera karaktärsdetaljerna för att göra den till din egen"
 
+msgid "No matchmaker questions have been created yet"
+msgstr "Det har ännu inte skapats några frågor om äktenskapsförmedlare"
+
 msgid "No roles have been defined for this event yet"
 msgstr "Det har ännu inte definierats några roller för detta evenemang"
 
@@ -7773,6 +7803,9 @@ msgstr "Lista över mottagarens e-postadresser, kommaseparerade"
 msgid "No additional payments are required at this time"
 msgstr "Inga ytterligare betalningar krävs för närvarande"
 
+msgid "No questions have been created yet for this form"
+msgstr "Det har ännu inte skapats några frågor för detta formulär"
+
 msgid "Only some of the platform features are activated"
 msgstr "Endast vissa av plattformens funktioner är aktiverade"
 
@@ -7927,6 +7960,9 @@ msgstr "Ditt konto skyddas av en autentiseringsapp"
 msgid "Your registration to %(event)s has been cancelled"
 msgstr "Din anmälan till %(event)s har avbrutits"
 
+msgid "Answer questions to help match you with characters"
+msgstr "Svara på frågorna så att vi kan hitta karaktärer som passar dig"
+
 msgid "Browse all financial movements for a selected year"
 msgstr "Visa alla transaktioner för ett valt år"
 
@@ -8029,6 +8065,9 @@ msgstr "Jag har gjort det några gånger, jag har grundläggande erfarenhet"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Gå med i vår Discord för hjälp, idéer eller för att rapportera buggar"
 
+msgid "No participant has answered the matchmaker form yet"
+msgstr "Ingen deltagare har ännu fyllt i formuläret för matchmaking"
+
 msgid "No registration form sections have been created yet"
 msgstr "Inga avsnitt i registreringsformuläret har skapats ännu"
 
@@ -8108,9 +8147,6 @@ msgstr "Inga karaktärer har ännu tilldelats denna fraktion"
 msgid "No characters or handouts available to export as PDF"
 msgstr ""
 "Det finns inga tecken eller utdelningsmaterial som kan exporteras som PDF"
-
-msgid "No registration form questions have been created yet"
-msgstr "Det har ännu inte skapats några frågor i registreringsformuläret"
 
 msgid "No writing elements are available for this event yet"
 msgstr "Det finns ännu inga skrivelement tillgängliga för detta evenemang"
@@ -8311,6 +8347,9 @@ msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
 
 msgid "Restore session expired, please upload the file again."
 msgstr "Återställningssessionen har löpt ut, vänligen ladda upp filen igen."
+
+msgid "Review participant answers to the matchmaker questions"
+msgstr "Granska deltagarnas svar på matchmaker-frågorna"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Vissa funktioner kräver \"Character\", som inte är aktiv"
@@ -8667,6 +8706,11 @@ msgstr "Namn: %(name)s, slug: %(slug)s, skapare: %(user)s %(email)s"
 msgid "No items with assigned quantities were found for this event"
 msgstr "Inga artiklar med tilldelade kvantiteter hittades för detta evenemang"
 
+msgid "No matchmaker questions have been set up for this event yet"
+msgstr ""
+"Det har ännu inte ställts några frågor från matchmakern inför detta "
+"evenemang"
+
 msgid "Now you can start creating workshops, starting from modules"
 msgstr "Nu kan du börja skapa workshops med utgångspunkt från moduler"
 
@@ -8968,9 +9012,6 @@ msgstr "Detta innehåll är skyddat och kan inte laddas ner eller spelas in"
 
 msgid "Use the bank details below to make the transfer from your bank"
 msgstr "Använd bankuppgifterna nedan för att göra överföringen från din bank"
-
-msgid "Use the button above to add questions to the registration form"
-msgstr "Använd knappen ovan för att lägga till frågor i anmälningsformuläret"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Vi ber dig att betala det belopp som begärs för nästa delbetalning"
@@ -9991,6 +10032,11 @@ msgstr "Vi har fyllt i ansökan baserat på de uppgifter du har lämnat till oss
 msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr "Du måste skapa minst en förmågetyp innan du kan skapa förmågor"
+
+msgid ""
+"You must register for the event before answering the matchmaker questions"
+msgstr ""
+"Du måste anmäla dig till evenemanget innan du besvarar matchmaker-frågorna"
 
 msgid ""
 "Added at the bottom of mail notifying participants of character assignment"
@@ -13478,6 +13524,13 @@ msgstr ""
 "Möjliggör ett biljettliknande system för frågor under evenemanget, där "
 "personalen kan logga frågor, tilldela allvarlighetsgrad / brådska och spåra "
 "dem"
+
+msgid ""
+"Lets organizers define custom questions on the characters participants would"
+" like to play, and assign them with a grid system"
+msgstr ""
+"Gör det möjligt för arrangörerna att definiera egna frågor om de karaktärer "
+"som deltagarna vill spela och tilldela dem via ett rutnätssystem"
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "

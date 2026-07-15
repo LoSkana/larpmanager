@@ -30,6 +30,12 @@
     icon: scroll
 - model: larpmanager.permissionmodule
   fields:
+    name: Matchmaker
+    slug: matchmaker
+    order: 65
+    icon: people-arrows
+- model: larpmanager.permissionmodule
+  fields:
     name: Appearance
     slug: appearance
     order: 20

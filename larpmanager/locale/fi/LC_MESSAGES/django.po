@@ -251,6 +251,9 @@ msgstr "Rooli"
 msgid "Rule"
 msgstr "Sääntö"
 
+msgid "Save"
+msgstr "Tallenna"
+
 msgid "Sent"
 msgstr "Lähetetty"
 
@@ -310,6 +313,9 @@ msgstr "Kun"
 
 msgid "days"
 msgstr "päivää"
+
+msgid "form"
+msgstr "lomake"
 
 msgid "free"
 msgstr "ilmainen"
@@ -1841,6 +1847,9 @@ msgstr "Oikeushenkilön nimi"
 msgid "Link color"
 msgstr "Linkin väri"
 
+msgid "Matchmaker"
+msgstr "Naimakauppias"
+
 msgid "Media file"
 msgstr "Mediatiedosto"
 
@@ -2579,6 +2588,9 @@ msgstr "Lisää hahmo"
 
 msgid "Age selection"
 msgstr "Iän valinta"
+
+msgid "Answers saved"
+msgstr "Tallennetut vastaukset"
 
 msgid "Apply Upgrade"
 msgstr "Hae päivitystä"
@@ -3951,6 +3963,9 @@ msgstr "Tallennetut tiedot"
 
 msgid "Invite a character"
 msgstr "Kutsu hahmo"
+
+msgid "Matchmaker answers"
+msgstr "Matchmakerin vastaukset"
 
 msgid "Member Data Checks"
 msgstr "Jäsentietojen tarkistukset"
@@ -5576,6 +5591,9 @@ msgstr "Hyväksyntä %(user)s kuin %(role)s"
 msgid "Bundle generation in progress"
 msgstr "Paketin luominen käynnissä"
 
+msgid "Configure the matchmaker form"
+msgstr "Määritä Matchmaker-lomake"
+
 msgid "Confirm and commit quantities"
 msgstr "Vahvistetaan ja varmennetaan määrät"
 
@@ -5904,6 +5922,9 @@ msgstr "Kirjautuminen takaisin sisään tilillä"
 
 msgid "Total of recorded money inflows"
 msgstr "Kirjatut rahantulot yhteensä"
+
+msgid "Use the button above to add one"
+msgstr "Lisää yksi painamalla yllä olevaa painiketta"
 
 msgid "View your private conversations"
 msgstr "Tarkastele yksityisiä keskustelujasi"
@@ -6345,6 +6366,9 @@ msgstr "Määritä nyt tunnusten konfiguraatio"
 
 msgid "Now you can set the casting options"
 msgstr "Nyt voit asettaa hahmojaon asetukset"
+
+msgid "Now you can set the matchmaker form"
+msgstr "Nyt voit määrittää parinvalintalomakkeen"
 
 msgid "Optional description of the content"
 msgstr "Valinnainen sisällön kuvaus"
@@ -7229,6 +7253,9 @@ msgstr "Valitse yllä oleva tunnus hallitaksesi sen jäseniä"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Valitse satunnaisesti lottokuponkeja päivittää"
 
+msgid "Select which form this question belongs to"
+msgstr "Valitse, mihin lomakkeeseen tämä kysymys kuuluu"
+
 msgid "Tax identification code of the association"
 msgstr "Yhdistyksen verotunnus"
 
@@ -7509,6 +7536,9 @@ msgstr "Jäsen, joka on käyttänyt tätä tunnusta (jos se on todennettu)"
 msgid "Modify the character details to make it yours"
 msgstr "Muokkaa hahmon yksityiskohtia, jotta se olisi omasi"
 
+msgid "No matchmaker questions have been created yet"
+msgstr "Naimakauppakysymyksiä ei ole vielä luotu"
+
 msgid "No roles have been defined for this event yet"
 msgstr "Tälle tapahtumalle ei ole vielä määritelty rooleja"
 
@@ -7770,6 +7800,9 @@ msgstr "Luettelo vastaanottajan sähköpostiosoitteista, pilkulla erotettuna"
 msgid "No additional payments are required at this time"
 msgstr "Tällä hetkellä ei vaadita lisämaksuja"
 
+msgid "No questions have been created yet for this form"
+msgstr "Tälle lomakkeelle ei ole vielä luotu kysymyksiä"
+
 msgid "Only some of the platform features are activated"
 msgstr "Vain osa alustan ominaisuuksista on käytössä"
 
@@ -7923,6 +7956,9 @@ msgstr "Tilisi on suojattu autentikointisovelluksella"
 msgid "Your registration to %(event)s has been cancelled"
 msgstr "Ilmoittautumisesi %(event)s on peruutettu"
 
+msgid "Answer questions to help match you with characters"
+msgstr "Vastaa kysymyksiin, jotta voimme löytää sinulle sopivia hahmoja"
+
 msgid "Browse all financial movements for a selected year"
 msgstr "Tarkastele valitun vuoden kaikkia taloudellisia tapahtumia"
 
@@ -8026,6 +8062,9 @@ msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr ""
 "Liity Discordiin saadaksesi apua, ideoita tai ilmoittaaksesi virheistä"
 
+msgid "No participant has answered the matchmaker form yet"
+msgstr "Kukaan osallistuja ei ole vielä täyttänyt parinvalintalomaketta"
+
 msgid "No registration form sections have been created yet"
 msgstr "Rekisteröintilomakkeen osioita ei ole vielä luotu"
 
@@ -8106,9 +8145,6 @@ msgstr "Tälle ryhmittymälle ei ole vielä määritetty hahmoja"
 
 msgid "No characters or handouts available to export as PDF"
 msgstr "Hahmoja tai monisteita ei ole saatavilla vietyksi PDF-tiedostoksi"
-
-msgid "No registration form questions have been created yet"
-msgstr "Rekisteröintilomakkeen kysymyksiä ei ole vielä luotu"
 
 msgid "No writing elements are available for this event yet"
 msgstr "Tälle tapahtumalle ei ole vielä kirjoituselementtejä saatavilla"
@@ -8307,6 +8343,9 @@ msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"
 
 msgid "Restore session expired, please upload the file again."
 msgstr "Palautusistunto päättyi, lataa tiedosto uudelleen."
+
+msgid "Review participant answers to the matchmaker questions"
+msgstr "Tarkista osallistujien vastaukset parinvalintakysymyksiin"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Jotkin ominaisuudet edellyttävät 'Merkkiä', joka ei ole aktiivinen"
@@ -8669,6 +8708,10 @@ msgstr ""
 "Tälle tapahtumalle ei löytynyt yhtään kohdetta, jolle olisi määritetty "
 "määriä"
 
+msgid "No matchmaker questions have been set up for this event yet"
+msgstr ""
+"Tälle tapahtumalle ei ole vielä määritetty yhtään matchmaker-kysymystä"
+
 msgid "Now you can start creating workshops, starting from modules"
 msgstr "Nyt voit aloittaa työpajojen luomisen moduuleista alkaen"
 
@@ -8979,11 +9022,6 @@ msgstr "Tämä sisältö on suojattu, eikä sitä voi ladata tai tallentaa"
 
 msgid "Use the bank details below to make the transfer from your bank"
 msgstr "Käytä alla olevia pankkitietoja tehdäksesi siirron pankistasi"
-
-msgid "Use the button above to add questions to the registration form"
-msgstr ""
-"Käytä yllä olevaa painiketta lisätäksesi kysymyksiä "
-"ilmoittautumislomakkeeseen"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Pyydämme sinua maksamaan pyydetyn summan seuraavaa maksuerää varten"
@@ -10001,6 +10039,12 @@ msgid ""
 "You must create at least one ability type before you can create abilities"
 msgstr ""
 "Sinun on luotava vähintään yksi taitotyyppi ennen kuin voit luoda taitoja"
+
+msgid ""
+"You must register for the event before answering the matchmaker questions"
+msgstr ""
+"Sinun on rekisteröidyttävä tapahtumaan ennen kuin voit vastata "
+"parinvalintakysymyksiin"
 
 msgid ""
 "Added at the bottom of mail notifying participants of character assignment"
@@ -13453,6 +13497,14 @@ msgstr ""
 "Mahdollistaa tapahtuman aikana ongelmien tikettien kaltaisen järjestelmän, "
 "jossa henkilökunta voi kirjata ongelmat, määrittää niiden "
 "vakavuuden/kiireellisyyden ja seurata niitä"
+
+msgid ""
+"Lets organizers define custom questions on the characters participants would"
+" like to play, and assign them with a grid system"
+msgstr ""
+"Antaa järjestäjille mahdollisuuden määritellä omia kysymyksiä hahmoista, "
+"joita osallistujat haluaisivat esittää, ja sijoittaa ne "
+"ruudukkojärjestelmään"
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "

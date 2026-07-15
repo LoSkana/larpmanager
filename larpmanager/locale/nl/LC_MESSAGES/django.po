@@ -251,6 +251,9 @@ msgstr "Rol"
 msgid "Rule"
 msgstr "Regel"
 
+msgid "Save"
+msgstr "Opslaan"
+
 msgid "Sent"
 msgstr "Verzonden"
 
@@ -310,6 +313,9 @@ msgstr "Wanneer"
 
 msgid "days"
 msgstr "dagen"
+
+msgid "form"
+msgstr "formulier"
 
 msgid "free"
 msgstr "gratis"
@@ -1841,6 +1847,9 @@ msgstr "Juridische naam"
 msgid "Link color"
 msgstr "Link kleur"
 
+msgid "Matchmaker"
+msgstr "Koppelaar"
+
 msgid "Media file"
 msgstr "Mediabestand"
 
@@ -2579,6 +2588,9 @@ msgstr "Karakter toevoegen"
 
 msgid "Age selection"
 msgstr "Leeftijdselectie"
+
+msgid "Answers saved"
+msgstr "Opgeslagen antwoorden"
 
 msgid "Apply Upgrade"
 msgstr "Upgrade toepassen"
@@ -3951,6 +3963,9 @@ msgstr "Informatie opgeslagen"
 
 msgid "Invite a character"
 msgstr "Nodig een personage uit"
+
+msgid "Matchmaker answers"
+msgstr "Antwoorden van de koppelaar"
 
 msgid "Member Data Checks"
 msgstr "Gegevens van leden controleren"
@@ -5576,6 +5591,9 @@ msgstr "Goedkeuring %(user)s als %(role)s"
 msgid "Bundle generation in progress"
 msgstr "Er wordt een bundel samengesteld"
 
+msgid "Configure the matchmaker form"
+msgstr "Stel het Matchmaker-formulier in"
+
 msgid "Confirm and commit quantities"
 msgstr "Hoeveelheden bevestigen en vastleggen"
 
@@ -5904,6 +5922,9 @@ msgstr "Om weer in te loggen met het account"
 
 msgid "Total of recorded money inflows"
 msgstr "Totaal van geregistreerde geldinstroom"
+
+msgid "Use the button above to add one"
+msgstr "Gebruik de knop hierboven om er één toe te voegen"
 
 msgid "View your private conversations"
 msgstr "Bekijk je privégesprekken"
@@ -6346,6 +6367,9 @@ msgstr "Stel nu de tokens-configuratie in"
 
 msgid "Now you can set the casting options"
 msgstr "Nu kun je de gietopties instellen"
+
+msgid "Now you can set the matchmaker form"
+msgstr "Nu kun je het formulier voor de matchmaker instellen"
 
 msgid "Optional description of the content"
 msgstr "Optionele beschrijving van de inhoud"
@@ -7237,6 +7261,9 @@ msgstr "Kies hierboven een badge om de leden ervan te beheren"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Selecteer willekeurig loten om te upgraden"
 
+msgid "Select which form this question belongs to"
+msgstr "Kies bij welk formulier deze vraag hoort"
+
 msgid "Tax identification code of the association"
 msgstr "Fiscale identificatiecode van de vereniging"
 
@@ -7521,6 +7548,9 @@ msgstr "Lid dat dit token heeft gebruikt (indien geverifieerd)"
 msgid "Modify the character details to make it yours"
 msgstr "Pas de details van het personage aan om het van jou te maken"
 
+msgid "No matchmaker questions have been created yet"
+msgstr "Er zijn nog geen vragen voor de matchmaker aangemaakt"
+
 msgid "No roles have been defined for this event yet"
 msgstr "Er zijn nog geen rollen gedefinieerd voor dit evenement"
 
@@ -7787,6 +7817,9 @@ msgstr "Lijst met e-mailadressen van ontvangers, door komma's gescheiden"
 msgid "No additional payments are required at this time"
 msgstr "Op dit moment zijn geen extra betalingen vereist"
 
+msgid "No questions have been created yet for this form"
+msgstr "Er zijn nog geen vragen aangemaakt voor dit formulier"
+
 msgid "Only some of the platform features are activated"
 msgstr "Slechts een deel van de functies van het platform is geactiveerd"
 
@@ -7939,6 +7972,9 @@ msgstr "Je account wordt beschermd door een authenticatie-app"
 msgid "Your registration to %(event)s has been cancelled"
 msgstr "Je registratie voor %(event)s is geannuleerd"
 
+msgid "Answer questions to help match you with characters"
+msgstr "Beantwoord de vragen om te zien welke personages bij je passen"
+
 msgid "Browse all financial movements for a selected year"
 msgstr "Bekijk alle financiële transacties voor een geselecteerd jaar"
 
@@ -8046,6 +8082,9 @@ msgstr "Ik heb het een paar keer gedaan, ik heb basiservaring"
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Word lid van onze Discord voor hulp, ideeën of om bugs te melden"
 
+msgid "No participant has answered the matchmaker form yet"
+msgstr "Er heeft nog geen enkele deelnemer het koppelingsformulier ingevuld"
+
 msgid "No registration form sections have been created yet"
 msgstr "Er zijn nog geen onderdelen van het registratieformulier aangemaakt"
 
@@ -8127,9 +8166,6 @@ msgstr "Er zijn nog geen personages aan deze factie toegewezen"
 msgid "No characters or handouts available to export as PDF"
 msgstr ""
 "Er zijn geen personages of hand-outs beschikbaar om als PDF te exporteren"
-
-msgid "No registration form questions have been created yet"
-msgstr "Er zijn nog geen vragen voor het registratieformulier aangemaakt"
 
 msgid "No writing elements are available for this event yet"
 msgstr "Er zijn nog geen schrijfelementen beschikbaar voor dit evenement"
@@ -8334,6 +8370,9 @@ msgstr ""
 
 msgid "Restore session expired, please upload the file again."
 msgstr "Herstelsessie verlopen, upload het bestand opnieuw."
+
+msgid "Review participant answers to the matchmaker questions"
+msgstr "Bekijk de antwoorden van de deelnemers op de ‘matchmaker’-vragen"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Sommige functies vereisen 'Character', dat niet actief is"
@@ -8718,6 +8757,9 @@ msgid "No items with assigned quantities were found for this event"
 msgstr ""
 "Er zijn geen items met toegewezen hoeveelheden gevonden voor dit evenement"
 
+msgid "No matchmaker questions have been set up for this event yet"
+msgstr "Er zijn voor dit evenement nog geen matchmaker-vragen ingesteld"
+
 msgid "Now you can start creating workshops, starting from modules"
 msgstr "Nu kun je beginnen met het maken van workshops, vanaf modules"
 
@@ -9048,11 +9090,6 @@ msgid "Use the bank details below to make the transfer from your bank"
 msgstr ""
 "Gebruik de onderstaande bankgegevens om de overschrijving van je bank uit te"
 " voeren"
-
-msgid "Use the button above to add questions to the registration form"
-msgstr ""
-"Gebruik de knop hierboven om vragen aan het registratieformulier toe te "
-"voegen"
 
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "We vragen u het gevraagde bedrag voor de volgende termijn te betalen"
@@ -10152,6 +10189,12 @@ msgid ""
 msgstr ""
 "Je moet minstens één type vaardigheid maken voordat je vaardigheden kunt "
 "maken"
+
+msgid ""
+"You must register for the event before answering the matchmaker questions"
+msgstr ""
+"Je moet je eerst aanmelden voor het evenement voordat je de vragen van de "
+"matchmaker kunt beantwoorden"
 
 msgid ""
 "Added at the bottom of mail notifying participants of character assignment"
@@ -13686,6 +13729,14 @@ msgstr ""
 "Maakt een ticketachtig systeem mogelijk voor problemen tijdens het "
 "evenement, waar medewerkers problemen kunnen aanmelden, ernst/urgentie "
 "kunnen toekennen en bijhouden"
+
+msgid ""
+"Lets organizers define custom questions on the characters participants would"
+" like to play, and assign them with a grid system"
+msgstr ""
+"Hiermee kunnen organisatoren aangepaste vragen opstellen over de personages "
+"die deelnemers graag zouden willen spelen, en deze via een rastersysteem "
+"toewijzen"
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "

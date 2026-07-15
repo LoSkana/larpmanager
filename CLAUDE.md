@@ -66,6 +66,7 @@ For pytest and scripts, use `source <venv>/bin/activate` or `./scripts/test.sh`.
 ### Common Development Tasks
 - **Run all tests**: `./scripts/test.sh [workers]` (default: 6 workers)
 - **Run specific test**: `pytest larpmanager/tests/specific_test.py`
+- **If tests fail to run (DB/schema errors, stale test DB)**: run `./scripts/clean_test.sh [workers]` first — it regenerates the test dump via `manage.py dump_test` if its schema version is stale, then drops/recreates the test databases (same cleanup `./scripts/test.sh` does). Run it once, then retry the test.
 - **Run unit tests only**: `./scripts/test_unit.sh`
 - **Run playwright tests only**: `./scripts/test_playwright.sh`
 - **Create migrations**: `python manage.py makemigrations`

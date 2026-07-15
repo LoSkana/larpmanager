@@ -138,6 +138,16 @@ def _add_registration_items(
                     active=active == "casting",
                 )
             )
+        if "matchmaker" in features:
+            items.append(
+                _item(
+                    reverse("matchmaker", args=[slug]),
+                    "fa-solid fa-people-arrows",
+                    _("Matchmaker"),
+                    str(_("Answer questions to help match you with characters")) + "!",
+                    active=active == "matchmaker",
+                )
+            )
     else:
         items.append(
             _item(

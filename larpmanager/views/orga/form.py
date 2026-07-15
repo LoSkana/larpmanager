@@ -24,7 +24,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.db.models import F, Prefetch, QuerySet
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
 from larpmanager.cache.button import clear_event_button_cache
@@ -32,7 +32,7 @@ from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
 from larpmanager.cache.registration import clear_registration_tickets_cache, get_registration_tickets
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
-from larpmanager.models.form import RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import REGISTRATION_APPLICABLE_TO_TYPE, RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationQuota,
@@ -51,6 +51,7 @@ from larpmanager.utils.edit.options_inline import (
 )
 from larpmanager.utils.edit.orga import (
     OrgaAction,
+    check_registration_form_type,
     form_edit_handler,
     options_edit_handler,
     orga_delete,
@@ -143,14 +144,22 @@ def orga_registration_sections_delete(request: HttpRequest, event_slug: str, sec
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid)
 
 
-def get_ordered_registration_questions(context: dict) -> QuerySet[RegistrationQuestion]:
-    """Get registration questions ordered by section and question order."""
+def get_ordered_registration_questions(context: dict, applicable: str | None = None) -> QuerySet[RegistrationQuestion]:
+    """Get registration questions ordered by section and question order.
+
+    Args:
+        context: View context (must contain "event")
+        applicable: Optional RegistrationQuestionApplicable value to filter by. Unfiltered when None.
+
+    """
     questions = context["event"].get_elements(RegistrationQuestion)
+    if applicable is not None:
+        questions = questions.filter(applicable=applicable)
     return questions.order_by(F("section__order").asc(nulls_first=True), "order")
 
 
 @login_required
-def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_registration_form(request: HttpRequest, event_slug: str, registration_type: str | None = None) -> HttpResponse:
     """Handle the organization registration form view.
 
     Displays the registration form configuration page for event organizers,
@@ -159,13 +168,20 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
     Args:
         request: The HTTP request object containing user and POST data
         event_slug: Event identifier string for permission checking
+        registration_type: Form type to display; defaults to "registration"
 
     Returns:
         HttpResponse: Rendered registration form page or download response
 
     """
+    if registration_type is None:
+        return redirect("orga_registration_form", event_slug=event_slug, registration_type="registration")
+
     # Check if user has permission to access the registration form management
     context = check_event_context(request, event_slug, "orga_registration_form")
+
+    # Validate the registration form type parameter and add to context
+    check_registration_form_type(context, registration_type)
 
     # Handle download request for registration form data
     if request.method == "POST" and request.POST.get("download") == "1":
@@ -175,38 +191,54 @@ def orga_registration_form(request: HttpRequest, event_slug: str) -> HttpRespons
     context["upload"] = "registration_form"
     context["download"] = 1
 
-    # Fetch ordered registration questions with their options
-    context["list"] = get_ordered_registration_questions(context).prefetch_related(
-        Prefetch("options", queryset=RegistrationOption.objects.order_by("order"))
-    )
+    # Fetch ordered registration questions with their options, scoped to the current form type
+    context["list"] = get_ordered_registration_questions(
+        context, applicable=context["registration_typ"]
+    ).prefetch_related(Prefetch("options", queryset=RegistrationOption.objects.order_by("order")))
 
     return render(request, "larpmanager/orga/registration/form.html", context)
 
 
 @login_required
-def orga_registration_form_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+def orga_registration_form_new(
+    request: HttpRequest, event_slug: str, registration_type: str | None = None
+) -> HttpResponse:
     """Create a new registration form question."""
     return form_edit_handler(
         request,
         event_slug,
         "orga_registration_form",
         None,
+        extra_context=_registration_form_extra_context(registration_type),
     )
 
 
 @login_required
-def orga_registration_form_edit(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
+def orga_registration_form_edit(
+    request: HttpRequest, event_slug: str, question_uuid: str, registration_type: str | None = None
+) -> HttpResponse:
     """Edit registration form question for organizers."""
     return form_edit_handler(
         request,
         event_slug,
         "orga_registration_form",
         question_uuid,
+        extra_context=_registration_form_extra_context(registration_type),
     )
 
 
+def _registration_form_extra_context(registration_type: str | None) -> dict:
+    """Build extra_context for form_edit_handler, defaulting to the "registration" type."""
+    return {"registration_type": registration_type or "registration"}
+
+
 @login_required
-def orga_registration_form_delete(request: HttpRequest, event_slug: str, question_uuid: str) -> HttpResponse:
+def orga_registration_form_delete(
+    request: HttpRequest,
+    event_slug: str,
+    question_uuid: str,
+    registration_type: str | None = None,  # noqa: ARG001
+) -> HttpResponse:
     """Delete question for event."""
     return orga_delete(
         request,
@@ -258,6 +290,7 @@ def orga_registration_options_order(
         "orga_registration_form_edit",
         kwargs={
             "event_slug": context["run"].get_slug(),
+            "registration_type": REGISTRATION_APPLICABLE_TO_TYPE[context["current"].question.applicable],
             "question_uuid": context["current"].question.uuid,
         },
     )
