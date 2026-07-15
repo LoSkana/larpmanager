@@ -1424,6 +1424,8 @@ def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, 
 @receiver(post_delete, sender=PlotCharacterRel)
 def post_delete_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
     """Recompute auto relationships when a plot-character relation is deleted."""
+    if is_clone_active():
+        return
     if instance.plot_id:
         refresh_event_plot_relationships_background(instance.plot_id)
         mark_plot_character_rel_dirty(instance.plot_id, instance.character_id)
@@ -1612,6 +1614,8 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 @receiver(pre_delete, sender=Registration)
 def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
     """Send email notification before registration is deleted."""
+    if is_clone_active():
+        return
     send_registration_deletion_email(instance)
 
 
@@ -1659,6 +1663,9 @@ def post_delete_registration_character_rel_savereg(
     sender: type, instance: RegistrationCharacterRel, **kwargs: Any
 ) -> None:
     """Reset character registration cache after relationship deletion."""
+    if is_clone_active():
+        return
+
     reset_character_registration_cache(instance)
 
     # Clear deadline widget cache (casting requirements)
@@ -1950,12 +1957,16 @@ def pre_save_warehouse_item(sender: type[WarehouseItem], instance: WarehouseItem
 @receiver(post_save, sender=WritingAnswer)
 def post_save_writing_answer_refs(sender: type, instance: WritingAnswer, **kwargs: Any) -> None:
     """Recompute auto relationships when a character writing answer changes."""
+    if is_clone_active():
+        return
     update_character_referenced_chars_background(instance.element_id)
 
 
 @receiver(post_delete, sender=WritingAnswer)
 def post_delete_writing_answer_refs(sender: type, instance: WritingAnswer, **kwargs: Any) -> None:
     """Recompute auto relationships when a character writing answer is deleted."""
+    if is_clone_active():
+        return
     update_character_referenced_chars_background(instance.element_id)
 
 
