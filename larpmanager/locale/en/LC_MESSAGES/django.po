@@ -12468,6 +12468,9 @@ msgstr ""
 msgid "Invalid selection"
 msgstr ""
 
+msgid "Ability no longer available"
+msgstr ""
+
 msgid "Ability acquired"
 msgstr ""
 

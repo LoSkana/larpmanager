@@ -847,4 +847,8 @@ body.in-iframe #menu-mobile {
   .new_v22 #menu-mobile a {
     margin: 0;
   }
+
+  .new_v22 #menu-mobile .label {
+    margin-left: 0.3em;
+  }
 }

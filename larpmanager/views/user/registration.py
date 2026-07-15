@@ -211,6 +211,53 @@ def register_exclusive(request: HttpRequest, event_slug: str, secret_code: Any =
     return register(request, event_slug, secret_code, discount_code)
 
 
+# Non-player tiers that do not consume a max_pg slot
+_NON_PLAYER_TIERS = {
+    TicketTier.STAFF,
+    TicketTier.WAITING,
+    TicketTier.FILLER,
+    TicketTier.SELLER,
+    TicketTier.LOTTERY,
+    TicketTier.NPC,
+    TicketTier.COLLABORATOR,
+}
+
+
+def _enforce_capacity_under_lock(run: Run, registration: Registration) -> None:
+    """Re-check event and per-ticket capacity under the held run lock.
+
+    Must be called inside the transaction that locked the run row. Raises
+    PermissionDenied if adding this registration would exceed the event's
+    max_pg or the chosen ticket's max_available (closes oversell TOCTOU races
+    left open by the pre-lock, form-level validation).
+    """
+    # Event-wide player cap
+    if run.event.max_pg > 0 and registration.ticket and registration.ticket.tier not in _NON_PLAYER_TIERS:
+        player_count = (
+            Registration.objects.filter(run=run, cancellation_date__isnull=True)
+            .exclude(ticket__tier__in=_NON_PLAYER_TIERS)
+            .exclude(pk=registration.pk)
+            .count()
+        )
+        if player_count >= run.event.max_pg:
+            raise PermissionDenied
+
+    # Per-ticket availability cap
+    if registration.ticket and registration.ticket.max_available > 0:
+        other_seats = (
+            Registration.objects.filter(
+                run=run,
+                ticket=registration.ticket,
+                cancellation_date__isnull=True,
+            )
+            .exclude(pk=registration.pk)
+            .aggregate(total=models.Sum(1 + models.F("additionals")))["total"]
+            or 0
+        )
+        if other_seats >= registration.ticket.max_available:
+            raise PermissionDenied
+
+
 def save_registration(
     context: dict,
     form: object,  # Registration form instance
@@ -243,21 +290,10 @@ def save_registration(
     """
     is_new = not registration
 
-    # Non-player tiers that do not consume a max_pg slot
-    _non_player_tiers = {
-        TicketTier.STAFF,
-        TicketTier.WAITING,
-        TicketTier.FILLER,
-        TicketTier.SELLER,
-        TicketTier.LOTTERY,
-        TicketTier.NPC,
-        TicketTier.COLLABORATOR,
-    }
-
     # Create or update registration within atomic transaction
     with transaction.atomic():
         # Lock the run row to serialise concurrent new registrations
-        if is_new and run.event.max_pg > 0:
+        if is_new:
             Run.objects.select_for_update().get(pk=run.pk)
 
         # Initialize new registration if none provided
@@ -276,21 +312,9 @@ def save_registration(
         # Save standard registration fields and data
         save_registration_standard(context, event, form, registration, gifted=gifted, provisional=provisional)
 
-        # Enforce max_pg atomically after the ticket tier is known
-        if (
-            is_new
-            and run.event.max_pg > 0
-            and registration.ticket
-            and registration.ticket.tier not in _non_player_tiers
-        ):
-            player_count = (
-                Registration.objects.filter(run=run, cancellation_date__isnull=True)
-                .exclude(ticket__tier__in=_non_player_tiers)
-                .exclude(pk=registration.pk)
-                .count()
-            )
-            if player_count >= run.event.max_pg:
-                raise PermissionDenied
+        # Enforce max_pg and per-ticket availability atomically under the run lock
+        if is_new:
+            _enforce_capacity_under_lock(run, registration)
 
         # Process and save registration-specific questions
         form.save_registration_questions(registration, is_organizer=False)

@@ -616,6 +616,12 @@ class Membership(BaseModel):
                 condition=Q(deleted=None),
                 name="unique_membership_number_without_optional",
             ),
+            # Card numbers are an official per-association identifier
+            UniqueConstraint(
+                fields=["association", "card_number"],
+                condition=Q(card_number__isnull=False, deleted=None),
+                name="unique_membership_card_number",
+            ),
         ]
 
     def __str__(self) -> str:

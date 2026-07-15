@@ -969,6 +969,16 @@ class Relationship(BaseModel):
 
     auto = models.BooleanField(default=False)
 
+    @property
+    def event(self) -> Any:
+        """Return the event of the source character, for character name substitution."""
+        return self.source.event
+
+    @property
+    def event_id(self) -> Any:
+        """Return the event id of the source character, for character name substitution."""
+        return self.source.event_id
+
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.source} {self.target}"

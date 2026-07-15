@@ -883,9 +883,13 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
     if request.method == "POST":
         # Use atomic transaction to ensure data consistency
         with transaction.atomic():
-            c.member = context["member"]
-            c.status = CollectionStatus.PAYED
-            c.save()
+            locked = Collection.objects.select_for_update().get(pk=c.pk)
+            if locked.status != CollectionStatus.DONE:
+                msg = "Collection not found"
+                raise Http404(msg)
+            locked.member = context["member"]
+            locked.status = CollectionStatus.PAYED
+            locked.save()
 
         # Display success message and redirect to home
         messages.success(request, _("The collection has been delivered") + "!")

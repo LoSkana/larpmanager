@@ -1320,8 +1320,9 @@ def _create_demo(request: HttpRequest, demo_type: LarpManagerDemoType | None = N
     demo_member.surname = "Admin"
     demo_member.save()
 
-    # Welcome message
-    save_single_config(demo_association, "intro_driver", "welcome")
+    # Welcome message (skip for cloned demos, which already have their own content)
+    if not demo_type:
+        save_single_config(demo_association, "intro_driver", "welcome")
 
     first_event = None
     if demo_type and not demo_type.is_campaign:

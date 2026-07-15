@@ -828,6 +828,7 @@ class RefundRequest(UuidMixin, BaseModel):
         default=0,
         verbose_name=_("Refund"),
         help_text=_("Indicates the amount of reimbursement desired"),
+        validators=[MinValueValidator(Decimal("0.01"))],
     )
 
     hide = models.BooleanField(default=False)
