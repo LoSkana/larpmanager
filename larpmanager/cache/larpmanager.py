@@ -111,8 +111,10 @@ def update_cache_lm_home() -> dict[str, int | list]:
 
 
 def _get_highlights() -> list[dict]:
-    """Get all LarpManager highlights as dictionaries."""
-    return [highlight.as_dict() for highlight in LarpManagerHighlight.objects.all()]
+    """Get all LarpManager highlights as dictionaries, in random order."""
+    highlights = list(LarpManagerHighlight.objects.all())
+    random.shuffle(highlights)
+    return [highlight.as_dict() for highlight in highlights]
 
 
 def _get_reviews() -> list[dict]:
