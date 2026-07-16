@@ -292,7 +292,7 @@ def exe_deadlines(request: HttpRequest) -> HttpResponse:
     context = check_association_context(request, "exe_deadlines")
 
     # Get upcoming runs and check their deadlines
-    runs = get_coming_runs(context["association_id"])
+    runs = get_coming_runs(context["association_id"], include_hidden=True)
     context["list"] = check_run_deadlines(runs)
 
     return render(request, "larpmanager/exe/deadlines.html", context)
