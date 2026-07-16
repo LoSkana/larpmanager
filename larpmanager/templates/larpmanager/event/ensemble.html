@@ -73,6 +73,17 @@
                                 {% endfor %}
                             </p>
                         {% endif %}
+                        {% if ch.guilds %}
+                            <p class="ens-guilds">
+                                <b>{% trans "Guilds" %}:</b>
+                                {% for g in ch.guilds %}
+                                    {% if g.name %}
+                                        <span class="ens-guild-tag"
+                                              {% if g.color %}style="background-color:{{ g.color }}; color: white"{% endif %}>{{ g.name }}</span>
+                                    {% endif %}
+                                {% endfor %}
+                            </p>
+                        {% endif %}
                         {% if ch.teaser %}<div class="ens-teaser">{{ ch.teaser|sanitize_html }}</div>{% endif %}
                         {% for field in ch.display_fields %}
                             <div class="ens-field">
@@ -99,6 +110,16 @@
                             {% endfor %}
                         </div>
                     {% endif %}
+                    {% if ch.guild_colors %}
+                        <div class="ens-guild-bar">
+                            {% for g in ch.guild_colors %}<div style="flex:1;background-color:{{ g.color }};"></div>{% endfor %}
+                        </div>
+                        <div class="ens-card-guilds-print">
+                            {% for g in ch.guilds %}
+                                {% if g.name %}<span class="ens-guild-tag-print">{{ g.name }}</span>{% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                     <div class="ens-card-portrait">
                         {% get_char_profile ch as profile_url %}
                         <img src="{{ profile_url }}" alt="{{ ch.name }}">
@@ -116,6 +137,13 @@
                             <div class="ens-card-factions-screen">
                                 {% for f in ch.factions %}
                                     {% if f.name %}<span class="ens-faction-tag" style="background-color:{{ f.color }};">{{ f.name }}</span>{% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if ch.guilds %}
+                            <div class="ens-card-guilds-screen">
+                                {% for g in ch.guilds %}
+                                    {% if g.name %}<span class="ens-guild-tag" style="background-color:{{ g.color }};">{{ g.name }}</span>{% endif %}
                                 {% endfor %}
                             </div>
                         {% endif %}
@@ -149,6 +177,9 @@
                         {% if char_list.0.factions %}
                             <th>{% trans "Factions" %}</th>
                         {% endif %}
+                        {% if char_list.0.guilds %}
+                            <th>{% trans "Guilds" %}</th>
+                        {% endif %}
                         {% if ensemble_show_player %}
                             <th class="sortable" data-col="3">{% trans "Player" %}</th>
                         {% endif %}
@@ -172,6 +203,17 @@
                                     {% endfor %}
                                 </td>
                             {% elif char_list.0.factions %}
+                                <td></td>
+                            {% endif %}
+                            {% if ch.guilds %}
+                                <td>
+                                    {% for g in ch.guilds %}
+                                        {{ g.name }}
+                                        {% if g.color %}<span class="ens-compact-color" style="background-color:{{ g.color }};"></span>{% endif %}
+                                        {% if not forloop.last %}|{% endif %}
+                                    {% endfor %}
+                                </td>
+                            {% elif char_list.0.guilds %}
                                 <td></td>
                             {% endif %}
                             {% if ensemble_show_player %}<td>{{ ch.player_name|default:"" }}</td>{% endif %}
@@ -240,6 +282,14 @@
             border-radius: 2px;
             overflow: hidden;
         }
+        /* Guild color bar */
+        .ens-guild-bar {
+            display: flex;
+            width: 100%;
+            height: 5px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
         /* Book mode */
         .ens-book-entry {
             display: flex;
@@ -263,6 +313,14 @@
         .ens-card-name { color: #666; font-weight: normal; }
         .ens-player { color: #888; font-size: 0.85rem; margin: 0 0 0.3rem; }
         .ens-faction-tag {
+            display: inline-block;
+            background: #eee;
+            border-radius: 3px;
+            padding: 0.1rem 0.45rem;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+        }
+        .ens-guild-tag {
             display: inline-block;
             background: #eee;
             border-radius: 3px;
@@ -303,6 +361,8 @@
         .ens-card-mini-portrait { display: none; }
         .ens-card-factions-print { display: none; }
         .ens-card-factions-screen { margin: 0.25rem 0 0.4rem; }
+        .ens-card-guilds-print { display: none; }
+        .ens-card-guilds-screen { margin: 0.25rem 0 0.4rem; }
         .ens-card-teaser-print { display: none; }
         .ens-card-divider-screen { border: none; border-top: 1px solid #e0e0e0; margin: 0.5rem 0; }
         /* Compact mode */
@@ -321,6 +381,7 @@
         .ens-table tr:hover td { background: rgba(var(--sec-rgb), 0.3) !important; }
         .ens-empty { color: #888; padding: 2rem 0; text-align: center; }
         .ens-card-factions-screen .ens-faction-tag { color: white; }
+        .ens-card-guilds-screen .ens-guild-tag { color: white; }
         .ens-compact-color {
             display: inline-block;
             width: 30px;
@@ -445,6 +506,9 @@
                 flex: 1;
             }
             #ensemble-cards.active .ens-card-factions-screen { display: none !important; }
+            #ensemble-cards.active .ens-guild-bar { display: none !important; }
+            #ensemble-cards.active .ens-card-guilds-print { display: none !important; }
+            #ensemble-cards.active .ens-card-guilds-screen { display: none !important; }
             #ensemble-cards.active .ens-card-divider-screen { display: none !important; }
             #ensemble-cards.active .ens-card-content {
                 position: absolute !important;
@@ -519,6 +583,11 @@
             #ensemble-book.active .ens-book-name { font-size: 12pt !important; margin: 0 0 1mm !important; }
             #ensemble-book.active .ens-player { font-size: 8pt !important; color: #555 !important; margin: 0 0 1mm !important; }
             #ensemble-book.active .ens-faction-tag {
+                padding: 0.3mm 1.5mm !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            #ensemble-book.active .ens-guild-tag {
                 padding: 0.3mm 1.5mm !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;

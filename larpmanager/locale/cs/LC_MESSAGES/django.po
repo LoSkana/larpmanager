@@ -4946,6 +4946,9 @@ msgstr "Vstupní podmínky"
 msgid "Reminder membership fee"
 msgstr "Připomenutí členského poplatku"
 
+msgid "Select your preferences"
+msgstr "Vyberte si své preference"
+
 msgid "Separate membership fee"
 msgstr "Samostatný členský poplatek"
 
@@ -5881,6 +5884,9 @@ msgstr "Přezkoumání výroční zprávy o rozpočtu"
 msgid "Select only one primary faction"
 msgstr "Vyberte pouze jednu primární frakci"
 
+msgid "Select your casting preferences"
+msgstr "Vyberte si, jaké typy rolí preferujete"
+
 msgid "Set design - staging, materials"
 msgstr "Scénografie - kování, materiály"
 
@@ -6726,6 +6732,9 @@ msgstr "Nyní můžete začít vytvářet speed-larpy"
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organizace aktualizována na verzi %(v)s"
 
+msgid "Please select your casting preferences"
+msgstr "Vyberte prosím své preference ohledně obsazení"
+
 msgid "The following registrations were drawn"
 msgstr "Byly vylosovány tyto položky"
 
@@ -7097,6 +7106,9 @@ msgstr "Nastavení konfigurace daně z příjmu organizace"
 
 msgid "The modifier's number (unique identifier)"
 msgstr "Číslo modifikátoru (jedinečný identifikátor)"
+
+msgid "This collection has already been redeemed"
+msgstr "Toto pozvání již bylo vykoupeno"
 
 msgid "Total amount paid for platform management"
 msgstr "Celková částka zaplacená za správu platformy"

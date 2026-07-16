@@ -465,6 +465,12 @@ class OrgaGuildForm(WritingForm, BaseWritingForm):
         self.init_orga_fields()
         self.reorder_field("characters")
 
+        # Handle color field based on ensemble feature
+        if "ensemble" not in self.params.get("features"):
+            self.delete_field("color")
+        else:
+            self.reorder_field("color")
+
         self.chars_id = set()
 
         if self.instance.pk:

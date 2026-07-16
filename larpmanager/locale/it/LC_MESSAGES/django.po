@@ -4946,6 +4946,9 @@ msgstr "Condizioni iscrizione"
 msgid "Reminder membership fee"
 msgstr "Promemoria quota associativa"
 
+msgid "Select your preferences"
+msgstr "Scegli le tue preferenze"
+
 msgid "Separate membership fee"
 msgstr "Quota associativa separata"
 
@@ -5881,6 +5884,9 @@ msgstr "Esamina la relazione annuale sul bilancio"
 msgid "Select only one primary faction"
 msgstr "Seleziona una sola fazione primaria"
 
+msgid "Select your casting preferences"
+msgstr "Scegli le tue preferenze di casting"
+
 msgid "Set design - staging, materials"
 msgstr "Scenografia - allestimenti, materiali"
 
@@ -6724,6 +6730,9 @@ msgstr "Ora puoi iniziare a creare speed-larps"
 msgid "Organization upgraded to version %(v)s"
 msgstr "L'organizzazione è passata alla versione %(v)s"
 
+msgid "Please select your casting preferences"
+msgstr "Seleziona le tue preferenze di casting"
+
 msgid "The following registrations were drawn"
 msgstr "Sono stati estratte le seguenti iscrizioni"
 
@@ -7095,6 +7104,9 @@ msgstr "Configura la tassa organizzativa"
 
 msgid "The modifier's number (unique identifier)"
 msgstr "Il numero del modificatore (identificatore univoco)"
+
+msgid "This collection has already been redeemed"
+msgstr "Questo invito è già stato riscattato"
 
 msgid "Total amount paid for platform management"
 msgstr "Importo totale pagato per la gestione della piattaforma"

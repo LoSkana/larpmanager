@@ -51,6 +51,48 @@
             {% endwith %}
         {% endfor %}
     {% endif %}
+    {% if guilds %}
+        {% for gnum, g in guilds.items %}
+            {% if g.characters %}
+                {% if g.name %}
+                    <h1 class="title">
+                        {% if g.thumb %}
+                            <img class="faction-logo faction-logo-title"
+                                 src="{{ g.thumb }}"
+                                 alt="guild logo" />
+                        {% endif %}
+                        {% if show_guild %}
+                            <a href="{% url 'guild' run.get_slug g.uuid %}">{{ g.name }}</a>
+                        {% else %}
+                            {{ g.name }}
+                        {% endif %}
+                    </h1>
+                {% endif %}
+                <div class="gallery">
+                    {% for chnum in g.characters %}
+                        {% with chars|get:chnum as ch %}
+                            {% if not ch.hide %}
+                                <div class="el">
+                                    <div class="icon">
+                                        <a href="{% url 'character' run.get_slug ch.uuid %}">
+                                            <div class="img_cover"
+                                                 style="background-image:url('{% get_char_profile ch %}')"></div>
+                                            <div class="icon-name">
+                                                <p>
+                                                    {{ ch.name }}
+                                                    {% if ch.title %}- {{ ch.title }}{% endif %}
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     {% if registration_list %}
         <h1 class="title">{% trans "Registered" %}</h1>
         {% include "elements/gallery.html" with list=registration_list %}

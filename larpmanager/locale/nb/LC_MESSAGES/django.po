@@ -4946,6 +4946,9 @@ msgstr "Opptaksvilkår"
 msgid "Reminder membership fee"
 msgstr "Påminnelse om medlemsavgift"
 
+msgid "Select your preferences"
+msgstr "Velg dine innstillinger"
+
 msgid "Separate membership fee"
 msgstr "Egen medlemsavgift"
 
@@ -5881,6 +5884,9 @@ msgstr "Gjennomgå den årlige budsjettrapporten"
 msgid "Select only one primary faction"
 msgstr "Velg bare én primær fraksjon"
 
+msgid "Select your casting preferences"
+msgstr "Velg dine preferanser for rollebesetningen"
+
 msgid "Set design - staging, materials"
 msgstr "Scenografi - innredning, materialer"
 
@@ -6728,6 +6734,9 @@ msgstr "Nå kan du begynne å lage speed-larps"
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organisasjonen oppgraderte til versjon %(v)s"
 
+msgid "Please select your casting preferences"
+msgstr "Vennligst velg hvilke rollefordelinger du foretrekker"
+
 msgid "The following registrations were drawn"
 msgstr "Følgende bidrag ble trukket ut"
 
@@ -7099,6 +7108,9 @@ msgstr "Konfigurer organisasjonens skattekonfigurasjon"
 
 msgid "The modifier's number (unique identifier)"
 msgstr "Modifikatorens nummer (unik identifikator)"
+
+msgid "This collection has already been redeemed"
+msgstr "Denne invitasjonen har allerede blitt innløst"
 
 msgid "Total amount paid for platform management"
 msgstr "Totalt beløp betalt for plattformforvaltning"

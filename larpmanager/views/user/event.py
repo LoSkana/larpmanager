@@ -702,6 +702,7 @@ def ensemble(request: HttpRequest, event_slug: str) -> HttpResponse:
     char_questions = sorted(fields_data.get("questions", {}).items(), key=lambda x: x[1]["order"])
 
     _get_faction_colors(context)
+    _get_guild_colors(context)
 
     # Pre-process human-readable display fields for each character
     for ch_data in context.get("chars", {}).values():
@@ -746,6 +747,19 @@ def _get_faction_colors(context: dict) -> None:
                 faction_objs.append(fac)
         ch_data["factions"] = faction_objs
         ch_data["faction_colors"] = [f for f in faction_objs if f.get("color")][:3]
+
+
+def _get_guild_colors(context: dict) -> None:
+    """Resolve guild numbers to guild dicts; collect colors for the color bar (up to 3, in order)."""
+    guilds_cache = context.get("guilds", {})
+    for ch_data in context.get("chars", {}).values():
+        guild_objs = []
+        for guild_num in ch_data.get("guilds", []):
+            guild = guilds_cache.get(guild_num)
+            if guild:
+                guild_objs.append(guild)
+        ch_data["guilds"] = guild_objs
+        ch_data["guild_colors"] = [g for g in guild_objs if g.get("color")][:3]
 
 
 def event(request: HttpRequest, event_slug: str) -> HttpResponse:
