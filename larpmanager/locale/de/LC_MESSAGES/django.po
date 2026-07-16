@@ -4946,6 +4946,9 @@ msgstr "Zulassungsbedingungen"
 msgid "Reminder membership fee"
 msgstr "Erinnerung an den Mitgliedsbeitrag"
 
+msgid "Select your preferences"
+msgstr "Wähle deine Einstellungen aus"
+
 msgid "Separate membership fee"
 msgstr "Separater Mitgliedsbeitrag"
 
@@ -5881,6 +5884,9 @@ msgstr "Überprüfung des jährlichen Haushaltsberichts"
 msgid "Select only one primary faction"
 msgstr "Wählen Sie nur eine Hauptfraktion"
 
+msgid "Select your casting preferences"
+msgstr "Wähle deine Casting-Präferenzen aus"
+
 msgid "Set design - staging, materials"
 msgstr "Bühnenbild - Ausstattung, Materialien"
 
@@ -6731,6 +6737,9 @@ msgstr "Jetzt können Sie mit der Erstellung von Speed-Larps beginnen"
 #, python-format
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organisation hat auf Version %(v)s aktualisiert"
+
+msgid "Please select your casting preferences"
+msgstr "Bitte wähle deine Casting-Präferenzen aus"
 
 msgid "The following registrations were drawn"
 msgstr "Die folgenden Beiträge wurden ausgelost"

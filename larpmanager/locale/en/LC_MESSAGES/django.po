@@ -11852,6 +11852,12 @@ msgstr ""
 msgid "Select your character"
 msgstr ""
 
+msgid "Select your preferences"
+msgstr ""
+
+msgid "Select your casting preferences"
+msgstr ""
+
 msgid "Registration completed successfully"
 msgstr ""
 
@@ -12662,6 +12668,9 @@ msgstr ""
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association"
+msgstr ""
+
+msgid "Please select your casting preferences"
 msgstr ""
 
 #, python-format

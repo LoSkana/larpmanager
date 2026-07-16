@@ -4946,6 +4946,9 @@ msgstr "Conditions d'entrée"
 msgid "Reminder membership fee"
 msgstr "Rappel cotisation"
 
+msgid "Select your preferences"
+msgstr "Choisis tes préférences"
+
 msgid "Separate membership fee"
 msgstr "Frais d'adhésion distincts"
 
@@ -5881,6 +5884,9 @@ msgstr "Examiner le rapport budgétaire annuel"
 msgid "Select only one primary faction"
 msgstr "Ne sélectionnez qu'une seule faction primaire"
 
+msgid "Select your casting preferences"
+msgstr "Choisis tes préférences de casting"
+
 msgid "Set design - staging, materials"
 msgstr "Conception des décors - équipements, matériaux"
 
@@ -6729,6 +6735,9 @@ msgstr "Vous pouvez maintenant commencer à créer des ralentisseurs de vitesse"
 #, python-format
 msgid "Organization upgraded to version %(v)s"
 msgstr "L'organisation est passée à la version %(v)s"
+
+msgid "Please select your casting preferences"
+msgstr "Choisis tes préférences de casting"
 
 msgid "The following registrations were drawn"
 msgstr "Les participations suivantes ont été tirées au sort"

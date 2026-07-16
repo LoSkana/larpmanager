@@ -4946,6 +4946,9 @@ msgstr "Warunki rejestracji"
 msgid "Reminder membership fee"
 msgstr "Przypomnienie o składce członkowskiej"
 
+msgid "Select your preferences"
+msgstr "Wybierz swoje preferencje"
+
 msgid "Separate membership fee"
 msgstr "Oddzielna opłata członkowska"
 
@@ -5881,6 +5884,9 @@ msgstr "Przegląd rocznego sprawozdania budżetowego"
 msgid "Select only one primary faction"
 msgstr "Wybierz tylko jedną podstawową frakcję"
 
+msgid "Select your casting preferences"
+msgstr "Wybierz swoje preferencje dotyczące obsady"
+
 msgid "Set design - staging, materials"
 msgstr "Scenografia - inscenizacja, materiały"
 
@@ -6726,6 +6732,9 @@ msgstr "Teraz możesz zacząć tworzyć speed-larpy"
 #, python-format
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organizacja dokonała aktualizacji do wersji %(v)s"
+
+msgid "Please select your casting preferences"
+msgstr "Wybierz, jak chcesz, żeby to zagrano"
 
 msgid "The following registrations were drawn"
 msgstr "Wylosowano następujące rejestracje"

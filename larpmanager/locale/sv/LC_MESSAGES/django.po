@@ -4946,6 +4946,9 @@ msgstr "Villkor för tillträde"
 msgid "Reminder membership fee"
 msgstr "Påminnelse medlemsavgift"
 
+msgid "Select your preferences"
+msgstr "Välj dina inställningar"
+
 msgid "Separate membership fee"
 msgstr "Separat medlemsavgift"
 
@@ -5881,6 +5884,9 @@ msgstr "Granska den årliga budgetrapporten"
 msgid "Select only one primary faction"
 msgstr "Välj endast en primär fraktion"
 
+msgid "Select your casting preferences"
+msgstr "Välj dina önskemål för rollbesättningen"
+
 msgid "Set design - staging, materials"
 msgstr "Scenografi - inredning, material"
 
@@ -6726,6 +6732,9 @@ msgstr "Nu kan du börja skapa speed-larps"
 #, python-format
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organisationen uppgraderad till version %(v)s"
+
+msgid "Please select your casting preferences"
+msgstr "Välj gärna dina önskemål för rollbesättningen"
 
 msgid "The following registrations were drawn"
 msgstr "Följande bidrag lottades ut"
