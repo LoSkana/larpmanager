@@ -44,6 +44,7 @@ from larpmanager.models.association import Association, AssociationText
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.utils.core.clone_guard import is_clone_active
 from larpmanager.utils.services.event import reset_all_run
 
 
@@ -140,6 +141,10 @@ def apply_skin_features_to_association(association: Association) -> None:
     """
     # Check if the association is marked for skin feature updates
     if not hasattr(association, "_update_skin_features"):
+        return
+
+    # Skip during bulk clones: the clone engine copies the template's actual features
+    if is_clone_active():
         return
 
     # Define the feature update operation to run after transaction commit
