@@ -38,7 +38,10 @@ from django.utils import timezone
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
+    AccountingItemExpense,
+    AccountingItemInflow,
     AccountingItemOther,
+    AccountingItemOutflow,
     AccountingItemPayment,
     AccountingItemTransaction,
     Discount,
@@ -245,6 +248,7 @@ def _clone_association_row(clone_context: CloneContext, demo_type: Any, new_slug
             "demo_type": demo_type,
             "key": None,
             "css_code": "",
+            "name": template.name.replace(" Template", ""),
         },
     )
 
@@ -292,7 +296,15 @@ def _clone_events(clone_context: CloneContext) -> None:
     for template_event in template_events:
         event_pk = template_event.pk
         # Defer the campaign parent FK: the parent event may not be cloned yet
-        _copy_row(clone_context, template_event, overrides={"parent_id": None, "css_code": ""})
+        _copy_row(
+            clone_context,
+            template_event,
+            overrides={
+                "parent_id": None,
+                "css_code": "",
+                "name": template_event.name.replace(" Template", ""),
+            },
+        )
         _clone_event_children(clone_context, event_pk)
 
 
@@ -421,6 +433,9 @@ def _clone_accounting(clone_context: CloneContext) -> None:
         AccountingItemTransaction,
         AccountingItemOther,
         AccountingItemDiscount,
+        AccountingItemExpense,
+        AccountingItemOutflow,
+        AccountingItemInflow,
     ]:
         _copy_all(clone_context, accounting_class, {"association": template}, item_overrides)
 
