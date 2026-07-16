@@ -71,6 +71,11 @@ class DelimiterNotFoundError(ValueError):
     """Raised when CSV delimiter cannot be detected."""
 
 
+def feature_visible(feature_slug: str, features: dict | set, allowed_sidebar: list[str] | None) -> bool:
+    """Check whether a feature is enabled and not excluded by a demo's allowed sidebar restriction."""
+    return feature_slug in features and (not allowed_sidebar or feature_slug in allowed_sidebar)
+
+
 logger = logging.getLogger(__name__)
 
 format_date = "%d/%m/%y"
@@ -771,12 +776,13 @@ def get_display_choice(choices: list[tuple[str, str]], key: str) -> str:
     return ""
 
 
-def get_coming_runs(association_id: int | None, *, future: bool = True) -> QuerySet[Run]:
+def get_coming_runs(association_id: int | None, *, future: bool = True, include_hidden: bool = False) -> QuerySet[Run]:
     """Get upcoming or past runs for an association.
 
     Args:
         association_id: Association ID to filter by. If None, returns runs for all associations.
         future: If True, get future runs; if False, get past runs. Defaults to True.
+        include_hidden: If True, keep runs in development status Hidden. Defaults to False.
 
     Returns:
         QuerySet of Run objects, ordered by end date.
@@ -785,6 +791,8 @@ def get_coming_runs(association_id: int | None, *, future: bool = True) -> Query
     """
     # Base queryset: exclude cancelled runs and invisible events, optimize with select_related
     runs = Run.objects.exclude(development=DevelopStatus.CANC).exclude(event__visible=False).select_related("event")
+    if not include_hidden:
+        runs = runs.exclude(development=DevelopStatus.START)
 
     # Filter by association if specified
     if association_id:

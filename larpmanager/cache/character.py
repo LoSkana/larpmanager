@@ -41,7 +41,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, Faction, FactionType
+from larpmanager.models.writing import Character, Faction, FactionType, Guild
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -67,7 +67,7 @@ def delete_all_in_path(path: str) -> None:
 
 def get_event_cache_all_key(event_run: Run) -> str:
     """Generate cache key for event data."""
-    return f"event_factions_characters_{event_run.event.slug}_{event_run.number}"
+    return f"event_factions_characters_{event_run.id}"
 
 
 def init_event_cache_all(context: dict) -> dict:
@@ -93,6 +93,9 @@ def init_event_cache_all(context: dict) -> dict:
 
     # Load faction data into cache
     get_event_cache_factions(context, cached_event_data)
+
+    # Load guild data into cache
+    get_event_cache_guilds(context, cached_event_data)
 
     # Conditionally load traits if questbuilder feature is available
     if "questbuilder" in context["features"]:
@@ -139,7 +142,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
     # Process each character for the event cache
     characters_query = context["event"].get_elements(Character).filter(hide=False).order_by("order")
-    for character in characters_query.prefetch_related("factions_list"):
+    for character in characters_query.prefetch_related("factions_list", "guild_memberships__guild"):
         # Skip mirror characters that are already assigned
         if is_mirror_enabled and character.mirror_id in assigned_character_ids:
             continue
@@ -453,6 +456,49 @@ def _process_faction_cache(faction: Faction, result: dict) -> None:
         result["factions_typ"][faction.typ] = []
     result["factions_typ"][faction.typ].append(faction.number)
     result["fac_mapping"][faction.number] = faction.id
+
+
+def get_event_cache_guilds(context: dict, result: dict) -> None:
+    """Build cached guild data for events.
+
+    Creates guild-character mappings for the event cache, skipping guilds
+    with no accepted members.
+
+    Args:
+        context: Context dictionary containing event information with 'event' key
+        result: Result dictionary to be populated with guild data, modified in-place
+
+    Returns:
+        None: Function modifies result in-place, adding 'guilds' key
+
+    """
+    result["guilds"] = {}
+    result["guild_mapping"] = {}
+
+    if "guild" not in get_event_features(context["event"].id):
+        return
+
+    for guild in context["event"].get_elements(Guild).order_by("order"):
+        _process_guild_cache(guild, result)
+
+
+def _process_guild_cache(guild: Guild, result: dict) -> None:
+    """Process a guild adding its values into the result cache."""
+    guild_data = guild.show_red()
+    guild_data["characters"] = []
+    for character_number, character_data in result["chars"].items():
+        if character_data["hide"]:
+            continue
+
+        if guild_data["number"] in character_data.get("guilds", []):
+            guild_data["characters"].append(character_number)
+
+    # Skip guilds with no accepted members
+    if not guild_data["characters"]:
+        return
+
+    result["guilds"][guild.number] = guild_data
+    result["guild_mapping"][guild.number] = guild.id
 
 
 def _build_trait_relationships(event: Event) -> dict:

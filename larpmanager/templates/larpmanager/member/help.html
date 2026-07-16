@@ -5,7 +5,7 @@
     {% if run %}- {{ run.search | truncatechars:50 }}{% endif %}
 {% endblock title %}
 {% block content %}
-    <div class="user_resize platform">
+    <div class="form_container user_resize platform">
         <h2>{% trans "Submit a new question" %}</h2>
         <br />
         <form action="{{ request.path }}"

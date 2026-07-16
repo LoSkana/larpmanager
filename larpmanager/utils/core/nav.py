@@ -62,10 +62,19 @@ def _item(
     tooltip: Any,
     *,
     active: bool = False,
-    target: str | None = None,
-    download: bool = False,
+    link_mode: str | None = None,
     home: bool = False,
-) -> dict[str, Any]:
+    sidebar_gate: tuple[str, list[str] | None] | None = None,
+) -> dict[str, Any] | None:
+    """Build a nav entry dict, or None if `sidebar_gate` slug is excluded by the demo's allowed sidebar list.
+
+    `link_mode` is either "_blank" (open in new tab) or "download" (downloadable link).
+    """
+    if sidebar_gate:
+        slug, allowed_sidebar = sidebar_gate
+        if allowed_sidebar and slug not in allowed_sidebar:
+            return None
+
     entry: dict[str, Any] = {
         "url": url,
         "icon": icon,
@@ -74,11 +83,16 @@ def _item(
         "active": active,
         "home": home,
     }
-    if target:
-        entry["target"] = target
-    if download:
+    if link_mode == "download":
         entry["download"] = True
+    elif link_mode:
+        entry["target"] = link_mode
     return entry
+
+
+def _append(items: list[dict[str, Any]], entry: dict[str, Any] | None) -> None:
+    if entry is not None:
+        items.append(entry)
 
 
 def _add_registration_items(
@@ -89,6 +103,7 @@ def _add_registration_items(
     registration: Any,
     context: dict[str, Any],
 ) -> None:
+    allowed_sidebar = context.get("demo_allowed_sidebar")
     if registration:
         entry = _item(
             reverse("register", args=[slug]),
@@ -129,14 +144,16 @@ def _add_registration_items(
             and registration.ticket
             and registration.ticket.tier != "w"
         ):
-            items.append(
+            _append(
+                items,
                 _item(
                     reverse("casting", args=[slug]),
                     "fa-solid fa-masks-theater",
                     _("Casting"),
                     str(_("Select your preferences on the characters to play")) + "!",
                     active=active == "casting",
-                )
+                    sidebar_gate=("casting", allowed_sidebar),
+                ),
             )
     else:
         items.append(
@@ -155,6 +172,7 @@ def _add_character_items(
     slug: str,
     active: str,
     features: set[str],
+    allowed_sidebar: list[str] | None,
 ) -> None:
     items.append(
         _item(
@@ -175,14 +193,16 @@ def _add_character_items(
         )
     )
     if "ensemble" in features:
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("ensemble", args=[slug]),
                 "fa-solid fa-people-group",
                 _("Ensemble"),
                 str(_("Learn all characters before the event")) + "!",
                 active=active == "ensemble",
-            )
+                sidebar_gate=("ensemble", allowed_sidebar),
+            ),
         )
 
 
@@ -193,48 +213,57 @@ def _add_writing_items(
     features: set[str],
     context: dict[str, Any],
 ) -> None:
+    allowed_sidebar = context.get("demo_allowed_sidebar")
     show_addit = context.get("show_addit", {})
     if "workshop" in features and show_addit.get("workshop"):
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("workshops", args=[slug]),
                 "fa-solid fa-hammer",
                 _("Workshop"),
                 str(_("Fill out the event prep questions")) + "!",
                 active=active == "workshops",
-            )
+                sidebar_gate=("workshop", allowed_sidebar),
+            ),
         )
     if "character" in features:
-        _add_character_items(items, slug, active, features)
+        _add_character_items(items, slug, active, features, allowed_sidebar)
     if "faction" in features and context.get("show_faction") and context.get("has_visible_factions"):
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("factions", args=[slug]),
                 "fa-solid fa-flag",
                 _("Factions"),
                 str(_("Discover the game factions")) + "!",
                 active=active == "factions",
-            )
+                sidebar_gate=("faction", allowed_sidebar),
+            ),
         )
     if "guild" in features:
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("guilds", args=[slug]),
                 "fa-solid fa-users",
                 _("Guilds"),
                 str(_("Discover the game guilds")) + "!",
                 active=active == "guilds",
-            )
+                sidebar_gate=("guild", allowed_sidebar),
+            ),
         )
     if "questbuilder" in features and context.get("show_quest"):
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("quests", args=[slug]),
                 "fa-solid fa-scroll",
                 _("Quest"),
                 str(_("Find out what quests are available")) + "!",
                 active=active == "quests",
-            )
+                sidebar_gate=("questbuilder", allowed_sidebar),
+            ),
         )
 
 
@@ -246,23 +275,28 @@ def _add_extra_items(
     registration: Any,
     run: Any,
 ) -> None:
+    allowed_sidebar = context.get("demo_allowed_sidebar")
     if "album" in features and run.albums.exists():
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("album", args=[slug]),
                 "fa-solid fa-camera",
                 _("Album"),
                 str(_("View photos from the event")) + "!",
-            )
+                sidebar_gate=("album", allowed_sidebar),
+            ),
         )
     if "gift" in features:
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("gift", args=[slug]),
                 "fa-solid fa-gift",
                 _("Gift"),
                 str(_("Give a card to your friend")),
-            )
+                sidebar_gate=("gift", allowed_sidebar),
+            ),
         )
     for el in context.get("buttons", []):
         entry: dict[str, Any] = {"url": el[2], "label": el[0], "tooltip": el[1], "active": False}
@@ -271,23 +305,27 @@ def _add_extra_items(
         items.append(entry)
     if registration and "print_pdf" in features and context.get("show_character"):
         pdf_tooltip = str(_("Download the list of characters with their interpreters' profile images")) + "!"
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("portraits", args=[slug]),
                 "fa-solid fa-id-badge",
                 _("Portraits (PDF)"),
                 pdf_tooltip,
-                download=True,
-            )
+                link_mode="download",
+                sidebar_gate=("print_pdf", allowed_sidebar),
+            ),
         )
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("profiles", args=[slug]),
                 "fa-solid fa-address-card",
                 _("Profiles (PDF)"),
                 pdf_tooltip,
-                download=True,
-            )
+                link_mode="download",
+                sidebar_gate=("print_pdf", allowed_sidebar),
+            ),
         )
 
 
@@ -348,7 +386,7 @@ def build_main_nav_items(context: dict[str, Any]) -> list[dict[str, Any]]:
                 "fa-solid fa-globe",
                 _("Website"),
                 str(_("Browse the presentation website")) + "!",
-                target="_blank",
+                link_mode="_blank",
             )
         )
 
@@ -365,6 +403,7 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
         return []
 
     features = request.association.get("features", set())
+    allowed_sidebar = request.association.get("demo_allowed_sidebar")
     active = request.resolver_match.url_name if request.resolver_match else ""
 
     items: list[dict[str, Any]] = [
@@ -380,7 +419,8 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
     ]
 
     if "membership" in features:
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("membership"),
                 "fa-solid fa-id-card",
@@ -388,11 +428,13 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
                 "",
                 active=active == "membership",
                 home=False,
-            )
+                sidebar_gate=("membership", allowed_sidebar),
+            ),
         )
 
     if "delegated_members" in features:
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("delegated"),
                 "fa-solid fa-user-shield",
@@ -400,7 +442,8 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
                 "",
                 active=active == "delegated",
                 home=False,
-            )
+                sidebar_gate=("delegated_members", allowed_sidebar),
+            ),
         )
 
     items.append(
@@ -419,6 +462,7 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
         return []
 
     features = request.association.get("features", set())
+    allowed_sidebar = request.association.get("demo_allowed_sidebar")
     active = request.resolver_match.url_name if request.resolver_match else ""
 
     member = getattr(getattr(request, "user", None), "member", None)
@@ -478,7 +522,8 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
         )
 
     if has_registrations and "past_events" in features and request.association.get("calendar_past_events", False):
-        items.append(
+        _append(
+            items,
             _item(
                 reverse("calendar_past"),
                 "fa-solid fa-clock-rotate-left",
@@ -486,17 +531,36 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
                 "",
                 active=active == "calendar_past",
                 home=True,
-            )
+                sidebar_gate=("past_events", allowed_sidebar),
+            ),
         )
 
     if "badge" in features:
-        items.append(
-            _item(reverse("badges"), "fa-solid fa-trophy", _("Badges"), "", active=active == "badges", home=True)
+        _append(
+            items,
+            _item(
+                reverse("badges"),
+                "fa-solid fa-trophy",
+                _("Badges"),
+                "",
+                active=active == "badges",
+                home=True,
+                sidebar_gate=("badge", allowed_sidebar),
+            ),
         )
 
     if "chat" in features:
-        items.append(
-            _item(reverse("messages"), "fa-solid fa-message", _("Messages"), "", active=active == "messages", home=True)
+        _append(
+            items,
+            _item(
+                reverse("messages"),
+                "fa-solid fa-message",
+                _("Messages"),
+                "",
+                active=active == "messages",
+                home=True,
+                sidebar_gate=("chat", allowed_sidebar),
+            ),
         )
 
     return items

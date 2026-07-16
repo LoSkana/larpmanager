@@ -283,8 +283,31 @@ class Character(Writing):
 
         if run:
             self.show_factions(run.event, js)
+            self.show_guilds(run.event, js)
 
         return js
+
+    def show_guilds(self, event: Event | None, js: dict) -> None:
+        """Add guild information to the JavaScript data structure.
+
+        Populates the 'guilds' list in the js dictionary with numbers of guilds
+        the character belongs to, restricted to accepted memberships.
+
+        Args:
+            event: Event object to get guilds from. If None, uses self.event.
+            js: Dictionary to populate with guild data.
+
+        """
+        js["guilds"] = []
+
+        guild_event = event.get_class_parent("guild") if event else self.event.get_class_parent("guild")
+
+        # noinspection PyUnresolvedReferences
+        query = self.guild_memberships.filter(
+            status=GuildMembershipStatus.ACCEPTED, guild__event=guild_event, guild__deleted__isnull=True
+        ).select_related("guild")
+        for membership in query.order_by("guild__order"):
+            js["guilds"].append(membership.guild.number)
 
     def show_factions(self, event: Event | None, js: dict) -> None:
         """Add faction information to the JavaScript data structure.
@@ -605,11 +628,18 @@ class Guild(Writing):
 
     characters = models.ManyToManyField(Character, through="GuildMembership", related_name="guilds_list", blank=True)
 
+    color = ColorField(
+        verbose_name=_("Color"),
+        null=True,
+        blank=True,
+    )
+
     def show_red(self) -> dict:
         """Update JavaScript response with 'teaser' and cover attributes."""
         js = super().show_red()
 
-        self.upd_js_attr(js, "teaser")
+        for s in ["teaser", "color"]:
+            self.upd_js_attr(js, s)
 
         if self.cover:
             # noinspection PyUnresolvedReferences
@@ -968,6 +998,16 @@ class Relationship(BaseModel):
     text = HTMLField(blank=True)
 
     auto = models.BooleanField(default=False)
+
+    @property
+    def event(self) -> Any:
+        """Return the event of the source character, for character name substitution."""
+        return self.source.event
+
+    @property
+    def event_id(self) -> Any:
+        """Return the event id of the source character, for character name substitution."""
+        return self.source.event_id
 
     def __str__(self) -> str:
         """Return string representation."""

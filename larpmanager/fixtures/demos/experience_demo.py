@@ -24,6 +24,8 @@ Races, classes, abilities, prerequisites, modifiers, criteria and computed rules
 
 from __future__ import annotations
 
+import datetime
+from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -340,7 +342,7 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
         template_association=association,
         allowed_sidebar=(
             "orga_characters,orga_character_form,orga_exp_abilities,orga_exp_ability_types,"
-            "orga_exp_modifiers,orga_exp_criterions,orga_exp_rules,orga_exp_deliveries"
+            "orga_exp_modifiers,orga_exp_criterions,orga_exp_rules,orga_exp_deliveries,experience"
         ),
     )
 
@@ -415,7 +417,22 @@ def build_experience_demo() -> LarpManagerDemoType:
         return existing
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Experience Demo")
-    event = Event.objects.create(association=association, name="Trial of Ebonreach", slug=EVENT_SLUG)
+    event = Event.objects.create(
+        association=association,
+        name="Trial of Ebonreach",
+        slug=EVENT_SLUG,
+        tagline="Two companies, one hoard, and a ritual text worth killing for.",
+        description=(
+            "<p>The Ashen Company and the warband of Hollow Road cross paths at the ruins of "
+            "Ebonreach, each carrying a secret the other wants. Pick a race and a class, then "
+            "spend experience on a chain of abilities gated by prerequisites, class and race, "
+            "and watch your Hit Points and Mana grow with every purchase.</p>"
+        ),
+    )
+    run = event.runs.first()
+    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
+    run.end = run.start + datetime.timedelta(days=2)
+    run.save()
     _enable_features(event, ["character", "user_character", "experience"])
 
     EventConfig.objects.create(event=event, name="exp_modifiers", value="True")

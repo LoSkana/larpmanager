@@ -30,7 +30,7 @@ from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
 from larpmanager.cache.config import reset_element_configs
-from larpmanager.cache.event_text import reset_event_text
+from larpmanager.cache.event_text import clear_event_text_cache
 from larpmanager.cache.experience import clear_event_exp_cache, get_exp_effective_event_id
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
 from larpmanager.cache.fields import clear_event_fields_cache
@@ -46,13 +46,13 @@ from larpmanager.cache.registration import (
 )
 from larpmanager.cache.rels import clear_event_relationships_cache
 from larpmanager.cache.role import remove_event_role_cache
-from larpmanager.cache.run import reset_cache_run
+from larpmanager.cache.run import reset_cache_config_run, reset_cache_run
 from larpmanager.cache.text_fields import reset_text_fields_cache
 from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.cache.wwyltd import reset_orga_configs_cache
 from larpmanager.models.access import EventRole, get_event_organizers
 from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
-from larpmanager.models.event import Event, EventText, Run
+from larpmanager.models.event import Event, Run
 from larpmanager.models.experience import SystemExp
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -642,6 +642,7 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear run config cache
     reset_element_configs(run)
+    reset_cache_config_run(run)
 
     # Clear question cache
     clear_writing_questions_cache(run.event_id)
@@ -655,9 +656,8 @@ def reset_all_run(event: Event, run: Run) -> None:
     clear_event_exp_cache(get_exp_effective_event_id(event))
     clear_registration_tickets_cache(event.id)
 
-    # Clear event text caches for all EventText instances
-    for event_text in EventText.objects.filter(event_id=event.id):
-        reset_event_text(event_text)
+    # Clear event text caches for every type/language
+    clear_event_text_cache(event.id)
 
     # Clear event role caches
     for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):

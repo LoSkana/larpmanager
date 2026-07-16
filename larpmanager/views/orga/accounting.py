@@ -53,7 +53,6 @@ from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_delete, backend_delete_frame, backend_get, save_log
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
-from larpmanager.utils.security.confirm import confirm_post
 
 
 @login_required
@@ -200,7 +199,6 @@ def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-@confirm_post
 def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Confirm a payment invoice for an organization event.
 
@@ -234,11 +232,13 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
-    # In iframe mode, show a confirmation page before applying the change
-    if is_frame and request.method != "POST":
-        context["frame"] = True
+    # Show a confirmation page before applying the change: bare frame popup when
+    # opened via the iframe modal, full-chrome confirm page on a direct GET otherwise
+    if request.method != "POST":
+        context["frame"] = is_frame
         context["el_name"] = str(context["el"])
-        return render(request, "elements/dashboard/approve_confirm.html", context)
+        template = "elements/dashboard/approve_confirm.html" if is_frame else "elements/confirm_action.html"
+        return render(request, template, context)
 
     # Check if invoice can be confirmed (must be CREATED or SUBMITTED)
     if context["el"].status == PaymentStatus.CREATED or context["el"].status == PaymentStatus.SUBMITTED:
@@ -262,13 +262,16 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 
 
 @login_required
-@confirm_post
 def orga_invoices_delete(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Delete a payment invoice and redirect to payments."""
     context = check_event_context(request, event_slug, ["orga_payments", "orga_invoices"])
     if request.GET.get("frame") == "1" or request.POST.get("frame") == "1":
         context["frame"] = True
         return backend_delete_frame(request, context, PaymentInvoice, invoice_uuid)
+    if request.method != "POST":
+        backend_get(context, PaymentInvoice, invoice_uuid)
+        context["el_name"] = str(context["el"])
+        return render(request, "elements/confirm_action.html", context)
     backend_delete(request, context, PaymentInvoice, invoice_uuid)
     return redirect("orga_payments", event_slug=context["run"].get_slug())
 
@@ -644,7 +647,7 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
             # Define custom display callbacks for specific fields
             "callbacks": {
                 # Create download link for statement documents
-                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "statement": lambda el: f"<a href='{el.download()}' target='_blank' download>Download</a>",
                 # Display human-readable type labels
                 "type": lambda el: el.get_exp_display(),
             },
@@ -713,7 +716,7 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
             ],
             # Define custom callback functions for rendering specific table cells
             "callbacks": {
-                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "statement": lambda el: f"<a href='{el.download()}' target='_blank' download>Download</a>",
             },
             "delete_view": "orga_inflows_delete",
         },
@@ -784,17 +787,17 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
             "fields": [
                 ("member", _("Member")),
                 ("type", _("Type")),
+                ("action", _("Action")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
+                ("statement", _("Statement")),
                 ("value", _("Value")),
                 ("created", _("Date")),
-                ("statement", _("Statement")),
-                ("action", _("Action")),
             ],
             # Define callback functions for custom column rendering
             "callbacks": {
                 # Generate download link for expense statement documents
-                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "statement": lambda el: f"<a href='{el.download()}' target='_blank' download>Download</a>",
                 # Show approval link only for unapproved items when approval is enabled
                 "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}' class='frame-confirm'>{approve}</a>"
                 if not el.is_approved and not context["disable_approval"]
@@ -835,7 +838,6 @@ def orga_expenses_delete(request: HttpRequest, event_slug: str, expense_uuid: st
 
 
 @login_required
-@confirm_post
 def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: str) -> HttpResponseRedirect:
     """Approve an expense request for an event.
 
@@ -876,11 +878,13 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
 
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
-    # In iframe mode, show a confirmation page before applying the change
-    if is_frame and request.method != "POST":
-        context["frame"] = True
+    # Show a confirmation page before applying the change: bare frame popup when
+    # opened via the iframe modal, full-chrome confirm page on a direct GET otherwise
+    if request.method != "POST":
+        context["frame"] = is_frame
         context["el_name"] = str(exp)
-        return render(request, "elements/dashboard/approve_confirm.html", context)
+        template = "elements/dashboard/approve_confirm.html" if is_frame else "elements/confirm_action.html"
+        return render(request, template, context)
 
     # Update expense approval status and save to database
     exp.is_approved = True

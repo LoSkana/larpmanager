@@ -25,6 +25,8 @@ relationships, handouts, editorial progress and PDF sheet generation.
 
 from __future__ import annotations
 
+import datetime
+from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -339,7 +341,8 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "editorial progress and PDF sheets."
         ),
         template_association=association,
-        allowed_sidebar="orga_characters,orga_plots,orga_factions,orga_handouts,orga_progress_steps",
+        allowed_sidebar="orga_characters,orga_plots,orga_factions,orga_handouts,orga_progress_steps,"
+        "faction,print_pdf,user_character",
     )
 
     hints = [
@@ -404,7 +407,23 @@ def build_writing_demo() -> LarpManagerDemoType:
         return existing
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Story Writing Demo")
-    event = Event.objects.create(association=association, name="The Neon Gala", slug=EVENT_SLUG)
+    event = Event.objects.create(
+        association=association,
+        name="The Neon Gala",
+        slug=EVENT_SLUG,
+        tagline="One night, one gala, and secrets enough to burn the city down.",
+        description=(
+            "<p>Zenith Dynamics is throwing its annual gala, and every faction in the city has "
+            "a reason to be there. An executive with a debt he cannot repay, a security chief "
+            "feeding secrets to the Undercroft, and a hidden cult wearing Zenith's own colors: "
+            "eight characters, three interlocking plots, and a faction map with more going on "
+            "under the surface than above it.</p>"
+        ),
+    )
+    run = event.runs.first()
+    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
+    run.end = run.start + datetime.timedelta(days=2)
+    run.save()
     _enable_features(
         event,
         ["character", "user_character", "plot", "faction", "relationships", "handout", "progress", "print_pdf"],

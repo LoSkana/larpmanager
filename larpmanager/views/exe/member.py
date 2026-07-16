@@ -370,6 +370,7 @@ def exe_member(request: HttpRequest, member_uuid: str) -> HttpResponse:
     # Check user permissions and get association context
     context = check_association_context(request, "exe_membership")
     context["member_edit"] = get_assoc_member(member_uuid, context["association_id"])
+    context["frame"] = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
     # Handle form submission for member profile updates
     if request.method == "POST":

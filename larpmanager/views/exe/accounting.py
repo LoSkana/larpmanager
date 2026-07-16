@@ -450,12 +450,12 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
             "fields": [
                 ("member", _("Member")),
                 ("type", _("Type")),
+                ("action", _("Action")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
+                ("statement", _("Statement")),
                 ("value", _("Value")),
                 ("created", _("Date")),
-                ("statement", _("Statement")),
-                ("action", _("Action")),
             ],
             # Define custom rendering callbacks for specific fields
             "callbacks": {
@@ -501,7 +501,6 @@ def exe_expenses_delete(request: HttpRequest, expense_uuid: str) -> HttpResponse
 
 
 @login_required
-@confirm_post
 def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpResponse:
     """Approve an expense request for the current organization."""
     # Check user has permission to manage expenses
@@ -517,11 +516,13 @@ def exe_expenses_approve(request: HttpRequest, expense_uuid: str) -> HttpRespons
 
     is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
 
-    # In iframe mode, show a confirmation page before applying the change
-    if is_frame and request.method != "POST":
-        context["frame"] = True
+    # Show a confirmation page before applying the change: bare frame popup when
+    # opened via the iframe modal, full-chrome confirm page on a direct GET otherwise
+    if request.method != "POST":
+        context["frame"] = is_frame
         context["el_name"] = str(exp)
-        return render(request, "elements/dashboard/approve_confirm.html", context)
+        template = "elements/dashboard/approve_confirm.html" if is_frame else "elements/confirm_action.html"
+        return render(request, template, context)
 
     # Mark expense as approved and save changes
     exp.is_approved = True

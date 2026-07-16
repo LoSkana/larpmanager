@@ -25,6 +25,8 @@ conflicts, and organizer-side casting assignment.
 
 from __future__ import annotations
 
+import datetime
+from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -248,7 +250,7 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "casting assignment, resolving deliberately conflicting picks."
         ),
         template_association=association,
-        allowed_sidebar="orga_characters,orga_factions,orga_casting_preferences,orga_casting",
+        allowed_sidebar="orga_characters,orga_factions,orga_casting_preferences,orga_casting,casting,faction",
     )
 
     hints = [
@@ -319,7 +321,23 @@ def build_casting_demo() -> LarpManagerDemoType:
         return existing
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Casting Demo")
-    event = Event.objects.create(association=association, name="The Regency Ball", slug=EVENT_SLUG)
+    event = Event.objects.create(
+        association=association,
+        name="The Regency Ball",
+        slug=EVENT_SLUG,
+        tagline="Ten guests, three factions, and a season's worth of scandal in one ballroom.",
+        description=(
+            "<p>A season of debts, elopements, forgery and blackmail collides in one ballroom. "
+            "Ten pre-written characters split across old money, new fortunes and the servants "
+            "belowstairs who know everyone's business. Submit your ranked preferences, then "
+            "watch the organizer's casting algorithm untangle who gets the Duke and who gets "
+            "left with the Vicar nobody wanted.</p>"
+        ),
+    )
+    run = event.runs.first()
+    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
+    run.end = run.start + datetime.timedelta(days=2)
+    run.save()
     _enable_features(event, ["character", "user_character", "casting", "custom_character", "faction"])
 
     _build_casting_config(event)

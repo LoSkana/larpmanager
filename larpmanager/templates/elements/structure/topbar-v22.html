@@ -52,7 +52,7 @@
                         <span>{{ vrun.name }}</span>
                     </a>
                 {% endfor %}
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and not association.demo_type_name %}
                     <a class="tv22-pill tv22-pill-profile{% if not run and is_profile_page %} active{% endif %}"
                        href="{% url 'profile' %}">
                         {% if user.member.profile %}
@@ -140,7 +140,7 @@
                             </a>
                         {% endif %}
                     {% else %}
-                        {% if not run and is_profile_page %}
+                        {% if not run and is_profile_page and not association.demo_type_name %}
                             <a href="{% url 'profile' %}">
                                 {% if user.member.profile %}
                                     <img class="tv22-pill-img"
@@ -218,6 +218,13 @@
         wrapper.addEventListener('scroll', updateScrollBtns);
         window.addEventListener('resize', updateScrollBtns);
         updateScrollBtns();
+
+        var activePill = wrapper.querySelector('.tv22-pill.active');
+        if (activePill) {
+            var target = activePill.offsetLeft - (wrapper.clientWidth - activePill.offsetWidth) / 2;
+            wrapper.scrollLeft = Math.max(0, target);
+            updateScrollBtns();
+        }
     }
 })();
 </script>

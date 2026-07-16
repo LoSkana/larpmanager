@@ -4946,6 +4946,9 @@ msgstr "Voorwaarden"
 msgid "Reminder membership fee"
 msgstr "Herinnering lidmaatschapsgeld"
 
+msgid "Select your preferences"
+msgstr "Kies je voorkeuren"
+
 msgid "Separate membership fee"
 msgstr "Apart lidmaatschapsgeld"
 
@@ -5881,6 +5884,9 @@ msgstr "Het jaarlijkse begrotingsverslag beoordelen"
 msgid "Select only one primary faction"
 msgstr "Selecteer slechts één primaire factie"
 
+msgid "Select your casting preferences"
+msgstr "Kies je voorkeuren voor de casting"
+
 msgid "Set design - staging, materials"
 msgstr "Decorontwerp - inrichting, materialen"
 
@@ -6732,6 +6738,9 @@ msgstr "Nu kun je beginnen met het maken van speed-larps"
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organisatie geüpgraded naar versie %(v)s"
 
+msgid "Please select your casting preferences"
+msgstr "Geef even aan wat je voorkeuren zijn voor de rolverdeling"
+
 msgid "The following registrations were drawn"
 msgstr "De volgende inzendingen zijn getrokken"
 
@@ -7103,6 +7112,9 @@ msgstr "De configuratie van de organisatiebelasting instellen"
 
 msgid "The modifier's number (unique identifier)"
 msgstr "Het nummer van de modificator (unieke identificatie)"
+
+msgid "This collection has already been redeemed"
+msgstr "Deze uitnodiging is al ingewisseld"
 
 msgid "Total amount paid for platform management"
 msgstr "Totaal bedrag betaald voor platformbeheer"

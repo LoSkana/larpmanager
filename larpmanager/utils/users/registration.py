@@ -37,6 +37,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
 from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
+from larpmanager.models.casting import Casting
 from larpmanager.models.event import Event, PreRegistration, RegistrationStatus, Run
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -48,7 +49,7 @@ from larpmanager.models.form import (
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
-from larpmanager.utils.core.common import format_datetime, get_time_diff_today
+from larpmanager.utils.core.common import feature_visible, format_datetime, get_time_diff_today
 from larpmanager.utils.core.exceptions import RewokedMembershipError, SignupError, WaitingError
 
 if TYPE_CHECKING:
@@ -910,6 +911,7 @@ def registration_status_characters(
     is_assigned = len(character_links) > 0
 
     _status_approval(run, registration, run_status, features, is_character_assigned=is_assigned)
+    _status_casting(run, registration, run_status, features, context, is_character_assigned=is_assigned)
 
 
 def _get_character_links(run: Run, context: dict, features: dict, character_rel: RegistrationCharacterRel) -> dict:
@@ -937,7 +939,9 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
         }
     ]
 
-    if "user_character" in features:
+    allowed_sidebar = context.get("demo_allowed_sidebar")
+
+    if feature_visible("user_character", features, allowed_sidebar):
         character_links.append(
             {
                 "url": reverse("character_edit", args=[run.get_slug(), character_uuid]),
@@ -947,7 +951,9 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             }
         )
 
-    if "experience" in features and get_event_config(run.event_id, "exp_user", default_value=False, context=context):
+    if feature_visible("experience", features, allowed_sidebar) and get_event_config(
+        run.event_id, "exp_user", default_value=False, context=context
+    ):
         character_links.append(
             {
                 "url": reverse("character_abilities", args=[run.get_slug(), character_uuid]),
@@ -957,7 +963,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             }
         )
 
-    if "custom_character" in features:
+    if feature_visible("custom_character", features, allowed_sidebar):
         character_links.append(
             {
                 "url": reverse("character_customize", args=[run.get_slug(), character_uuid]),
@@ -967,7 +973,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             }
         )
 
-    if "player_relationships" in features:
+    if feature_visible("player_relationships", features, allowed_sidebar):
         character_links.append(
             {
                 "url": reverse("character_relationships", args=[run.get_slug(), character_uuid]),
@@ -977,7 +983,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             }
         )
 
-    if "help" in features:
+    if feature_visible("help", features, allowed_sidebar):
         character_links.append(
             {
                 "url": reverse("help", args=[run.get_slug()]),
@@ -1053,6 +1059,59 @@ def _status_approval(
             run_status["details"] += " - "
         message = _("Select your character") + "!"
         run_status["details"] += f"<a href='{url}'>{message}</a>"
+
+
+def casting_preferences_pending(
+    run: Run,
+    registration: Registration,
+    features: dict,
+    context: dict | None = None,
+    *,
+    is_character_assigned: bool = False,
+) -> bool:
+    """Return True if casting is active and the member still needs to submit preferences.
+
+    Skipped once the character is assigned (casting already happened), once the
+    member has already submitted preferences for this run, if the ticket is on
+    the waiting list, or if characters aren't visible to players yet.
+    """
+    if "casting" not in features:
+        return False
+
+    if registration.ticket and registration.ticket.tier == TicketTier.WAITING:
+        return False
+
+    if is_character_assigned:
+        return False
+
+    field_visibility = get_event_config(run.event_id, "writing_field_visibility", default_value=False, context=context)
+    if field_visibility and not (context or {}).get("show_character"):
+        return False
+
+    return not Casting.objects.filter(run=run, member=registration.member, typ=0).exists()
+
+
+def _status_casting(
+    run: Run,
+    registration: Registration,
+    run_status: dict,
+    features: dict,
+    context: dict | None = None,
+    *,
+    is_character_assigned: bool,
+) -> None:
+    """Add a reminder link to submit casting preferences, if not already done."""
+    if not casting_preferences_pending(
+        run, registration, features, context, is_character_assigned=is_character_assigned
+    ):
+        return
+
+    run_status["casting_action"] = {
+        "url": reverse("casting", args=[run.get_slug()]),
+        "label": _("Select your preferences"),
+        "label_long": _("Select your casting preferences") + "!",
+        "icon": "fa-solid fa-people-arrows",
+    }
 
 
 def get_registration_options(instance: object) -> list[tuple[str, str]]:

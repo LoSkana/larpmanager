@@ -23,26 +23,32 @@ from __future__ import annotations
 
 import logging
 from datetime import timedelta
+from pathlib import Path
 from typing import Any
 
 from background_task import background
 from dateutil.relativedelta import relativedelta
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
+from django.core.files.base import ContentFile
 from django.db import transaction
-from django.db.models import Min, Q
+from django.db.models import Count, Min, Q
 from django.utils import timezone
 
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
+    AccountingItemExpense,
+    AccountingItemInflow,
     AccountingItemOther,
+    AccountingItemOutflow,
     AccountingItemPayment,
     AccountingItemTransaction,
     Discount,
     PaymentInvoice,
 )
 from larpmanager.models.association import Association, AssociationConfig, AssociationText
+from larpmanager.models.casting import Casting, CastingAvoid
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, ProgressStep, Run
 from larpmanager.models.experience import (
     AbilityExp,
@@ -66,6 +72,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.larpmanager import LarpManagerDemoHint, LarpManagerDemoHintDismissal
 from larpmanager.models.member import Member, Membership
+from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -141,6 +148,7 @@ def clone_association(demo_type: Any, new_slug: str, skin_id: int) -> Associatio
         new_association = _clone_association_row(clone_context, demo_type, new_slug, skin_id)
         _clone_members(clone_context, new_association, new_slug)
         _clone_events(clone_context)
+        _clone_castings(clone_context)
         _clone_registrations(clone_context)
         _clone_accounting(clone_context)
         _fix_deferred_self_references(clone_context)
@@ -243,6 +251,7 @@ def _clone_association_row(clone_context: CloneContext, demo_type: Any, new_slug
             "demo_type": demo_type,
             "key": None,
             "css_code": "",
+            "name": template.name.replace(" Template", ""),
         },
     )
 
@@ -273,6 +282,12 @@ def _clone_members(clone_context: CloneContext, new_association: Association, ne
         for profile_field in ["name", "surname", "nickname", "pronoun", "gender", "language", "presentation", "diet"]:
             setattr(cloned_member, profile_field, getattr(template_member, profile_field))
         cloned_member.save()
+        if template_member.profile:
+            cloned_member.profile.save(
+                Path(template_member.profile.name).name,
+                ContentFile(template_member.profile.read()),
+                save=True,
+            )
         clone_context.id_map[(Member, template_member.pk)] = cloned_member.pk
 
         _copy_row(clone_context, membership_row, overrides={"association_id": new_association.pk})
@@ -284,7 +299,15 @@ def _clone_events(clone_context: CloneContext) -> None:
     for template_event in template_events:
         event_pk = template_event.pk
         # Defer the campaign parent FK: the parent event may not be cloned yet
-        _copy_row(clone_context, template_event, overrides={"parent_id": None, "css_code": ""})
+        _copy_row(
+            clone_context,
+            template_event,
+            overrides={
+                "parent_id": None,
+                "css_code": "",
+                "name": template_event.name.replace(" Template", ""),
+            },
+        )
         _clone_event_children(clone_context, event_pk)
 
 
@@ -379,6 +402,27 @@ def _clone_experience(clone_context: CloneContext, event_pk: int) -> None:
     _copy_all(clone_context, DeliveryExp, event_filter)
 
 
+def _clone_castings(clone_context: CloneContext) -> None:
+    """Clone character casting preferences (typ=0) for runs of the template association.
+
+    ``element`` stores the preferred Character's uuid as plain text, not a real FK, so it
+    is remapped by hand; rows preferring a quest/trait (not part of this clone graph) are
+    skipped, matching the pattern used for writing choices/answers.
+    """
+    template = clone_context.template
+    for casting_row in Casting.objects.filter(run__event__association=template, typ=0):
+        template_character = Character.objects.filter(uuid=casting_row.element, event__association=template).first()
+        if not template_character:
+            continue
+        new_character_pk = clone_context.mapped(Character, template_character.pk)
+        if new_character_pk is None:
+            continue
+        new_element = Character.objects.get(pk=new_character_pk).uuid
+        _copy_row(clone_context, casting_row, overrides={"element": str(new_element)})
+
+    _copy_all(clone_context, CastingAvoid, {"run__event__association": template})
+
+
 def _clone_registrations(clone_context: CloneContext) -> None:
     """Clone registrations with their choices, answers and character assignments."""
     delta = clone_context.delta
@@ -393,6 +437,7 @@ def _clone_registrations(clone_context: CloneContext) -> None:
     _copy_all(
         clone_context, RegistrationCharacterRel, {"registration__run__event__association": clone_context.template}
     )
+    _copy_all(clone_context, PlayerRelationship, {"registration__run__event__association": clone_context.template})
 
 
 def _clone_accounting(clone_context: CloneContext) -> None:
@@ -413,6 +458,9 @@ def _clone_accounting(clone_context: CloneContext) -> None:
         AccountingItemTransaction,
         AccountingItemOther,
         AccountingItemDiscount,
+        AccountingItemExpense,
+        AccountingItemOutflow,
+        AccountingItemInflow,
     ]:
         _copy_all(clone_context, accounting_class, {"association": template}, item_overrides)
 
@@ -469,14 +517,29 @@ def add_demo_hint_context(request: Any, context: dict) -> None:
 
 @background(queue="demo")
 def deferred_delete_demo(association_id: int) -> None:
-    """Delete a demo association once its lifetime has expired."""
+    """Delete a demo association once its lifetime has expired.
+
+    Clean also demo members created for this association, whose *sole*
+    membership is this demo association are deleted.
+    """
     try:
         demo_association = Association.objects.get(pk=association_id)
     except Association.DoesNotExist:
         return
     if demo_association.demo_type_id is None:
         return
-    demo_association.delete()
+    demo_member_user_ids = Membership.objects.filter(association=demo_association).values_list(
+        "member__user_id", flat=True
+    )
+    demo_user_ids = list(
+        User.objects.filter(pk__in=demo_member_user_ids)
+        .annotate(membership_count=Count("member__memberships"))
+        .filter(membership_count=1)
+        .values_list("pk", flat=True)
+    )
+    with transaction.atomic(), clone_signals_suppressed():
+        User.objects.filter(pk__in=demo_user_ids).delete()
+        demo_association.delete()
     clear_association_cache(demo_association.slug)
 
 

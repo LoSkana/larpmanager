@@ -1000,6 +1000,9 @@ def _orga_suggestions(context: dict) -> None:
 
 def _exe_build_lists(request: HttpRequest, context: dict, features: dict) -> None:
     """Populate priorities, actions and suggestions lists for the executive dashboard."""
+    if context.get("demo"):
+        return
+
     if "ongoing_runs" not in context:
         actions_data_exe = get_exe_widget_cache(context["association_id"], "actions")
         context["ongoing_runs"] = actions_data_exe.get("ongoing_runs", [])
@@ -1026,6 +1029,9 @@ def _exe_build_lists(request: HttpRequest, context: dict, features: dict) -> Non
 
 def _orga_build_lists(request: HttpRequest, context: dict, features: dict) -> None:
     """Populate priorities, actions and suggestions lists for the organizer dashboard."""
+    if context.get("demo"):
+        return
+
     # Reuse the executive checks for association-level priorities, but drop the
     # executive actions which are not relevant on the organizer dashboard
     _exe_actions(request, context)

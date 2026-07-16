@@ -88,6 +88,7 @@ from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.registration import (
     _set_membership_context,
+    casting_preferences_pending,
     check_assign_character,
     get_reduced_available_count,
 )
@@ -474,6 +475,12 @@ def registration_redirect(
         message = _("To confirm your registration, please pay the amount indicated") + "."
         messages.success(request, message)
         return redirect("accounting_registration", registration_uuid=registration.uuid)
+
+    # Redirect to casting page if casting is active and preferences not sent yet
+    if casting_preferences_pending(run, registration, context["features"], context):
+        message = _("Please select your casting preferences")
+        messages.success(request, message)
+        return redirect("casting", event_slug=run.get_slug())
 
     # All requirements satisfied - show success message and redirect to event page
     context = {"event": run}

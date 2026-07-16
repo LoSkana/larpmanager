@@ -462,6 +462,7 @@ function search(key) {
                 for (j = 0; j < el['factions'].length; j++) {
                     var fnum = el['factions'][j];
                     var fac = facs[fnum];
+                    if (!fac) continue;                 // Skip unknown/missing faction
                     if (fac.number == 0) continue;      // Skip faction 0
                     if (fac.typ == 'g') continue;       // Skip groups
                     if (j != 0) gr += ", ";

@@ -751,9 +751,9 @@ def cleanup_pdfs_on_trait_assignment(assignment_trait_instance: Any) -> None:
 # ## TASKS
 
 
-def print_handout_go(context: dict, handout_id: int) -> HttpResponse:
+def print_handout_go(context: dict, handout_uuid: str) -> HttpResponse:
     """Retrieve handout and generate printable version."""
-    get_handout(context, handout_id)
+    get_handout(context, handout_uuid)
     return print_handout(context)
 
 
@@ -769,13 +769,13 @@ def get_fake_request(association_slug: str) -> HttpRequest | None:
 
 
 @background_auto(queue="pdf", skip_duplicates=True)
-def print_handout_bkg(association_slug: str, event_slug: str, handout_id: int) -> None:
+def print_handout_bkg(association_slug: str, event_slug: str, handout_uuid: str) -> None:
     """Print handout by creating a fake request and delegating to print_handout_go."""
     request = get_fake_request(association_slug)
     if request is None:
         return
     context = get_event_context(request, event_slug, check_visibility=False)
-    print_handout_go(context, handout_id)
+    print_handout_go(context, handout_uuid)
 
 
 def print_character_go(context: dict, character_uuid: str) -> None:
@@ -826,12 +826,12 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
     print_profiles(context)
 
     # Print individual character sheets for all characters in the event
-    for character_number in context["run"].event.get_elements(Character).values_list("number", flat=True):
-        print_character_go(context, character_number)
+    for character_uuid in context["run"].event.get_elements(Character).values_list("uuid", flat=True):
+        print_character_go(context, character_uuid)
 
     # Print all handouts associated with the event
-    for handout_number in context["run"].event.get_elements(Handout).values_list("number", flat=True):
-        print_handout_go(context, handout_number)
+    for handout_uuid in context["run"].event.get_elements(Handout).values_list("uuid", flat=True):
+        print_handout_go(context, handout_uuid)
 
 
 def clean_tag(tag: Any) -> Any:
