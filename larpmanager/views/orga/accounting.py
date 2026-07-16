@@ -647,7 +647,7 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
             # Define custom display callbacks for specific fields
             "callbacks": {
                 # Create download link for statement documents
-                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "statement": lambda el: f"<a href='{el.download()}' target='_blank' download>Download</a>",
                 # Display human-readable type labels
                 "type": lambda el: el.get_exp_display(),
             },
@@ -716,7 +716,7 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
             ],
             # Define custom callback functions for rendering specific table cells
             "callbacks": {
-                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "statement": lambda el: f"<a href='{el.download()}' target='_blank' download>Download</a>",
             },
             "delete_view": "orga_inflows_delete",
         },
@@ -797,7 +797,7 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
             # Define callback functions for custom column rendering
             "callbacks": {
                 # Generate download link for expense statement documents
-                "statement": lambda el: f"<a href='{el.download()}'>Download</a>",
+                "statement": lambda el: f"<a href='{el.download()}' target='_blank' download>Download</a>",
                 # Show approval link only for unapproved items when approval is enabled
                 "action": lambda el: f"<a href='{reverse('orga_expenses_approve', args=[context['run'].get_slug(), el.uuid])}' class='frame-confirm'>{approve}</a>"
                 if not el.is_approved and not context["disable_approval"]
