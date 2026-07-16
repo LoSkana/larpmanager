@@ -7106,6 +7106,9 @@ msgstr "Configuration de la taxe d'organisation"
 msgid "The modifier's number (unique identifier)"
 msgstr "Le numéro du modificateur (identifiant unique)"
 
+msgid "This collection has already been redeemed"
+msgstr "Cette invitation a déjà été rachetée"
+
 msgid "Total amount paid for platform management"
 msgstr "Montant total payé pour la gestion de la plateforme"
 

@@ -7099,6 +7099,9 @@ msgstr "Ställ in organisationens skattekonfiguration"
 msgid "The modifier's number (unique identifier)"
 msgstr "Modifierarens nummer (unik identifierare)"
 
+msgid "This collection has already been redeemed"
+msgstr "Denna inbjudan har redan lösts in"
+
 msgid "Total amount paid for platform management"
 msgstr "Totalt belopp som betalats för plattformshantering"
 

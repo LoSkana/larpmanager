@@ -7100,6 +7100,9 @@ msgstr "Konfigurer organisasjonens skattekonfigurasjon"
 msgid "The modifier's number (unique identifier)"
 msgstr "Modifikatorens nummer (unik identifikator)"
 
+msgid "This collection has already been redeemed"
+msgstr "Denne invitasjonen har allerede blitt innløst"
+
 msgid "Total amount paid for platform management"
 msgstr "Totalt beløp betalt for plattformforvaltning"
 

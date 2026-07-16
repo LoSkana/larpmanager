@@ -7104,6 +7104,9 @@ msgstr "De configuratie van de organisatiebelasting instellen"
 msgid "The modifier's number (unique identifier)"
 msgstr "Het nummer van de modificator (unieke identificatie)"
 
+msgid "This collection has already been redeemed"
+msgstr "Deze uitnodiging is al ingewisseld"
+
 msgid "Total amount paid for platform management"
 msgstr "Totaal bedrag betaald voor platformbeheer"
 

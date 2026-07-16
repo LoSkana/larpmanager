@@ -7098,6 +7098,9 @@ msgstr "Establecer la configuración fiscal de la organización"
 msgid "The modifier's number (unique identifier)"
 msgstr "El número del modificador (identificador único)"
 
+msgid "This collection has already been redeemed"
+msgstr "Esta invitación ya ha sido redimida"
+
 msgid "Total amount paid for platform management"
 msgstr "Importe total pagado por la gestión de la plataforma"
 

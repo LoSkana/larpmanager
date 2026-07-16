@@ -876,8 +876,8 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
 
     # Verify collection is in the correct status for redemption
     if c.status != CollectionStatus.DONE:
-        msg = "Collection not found"
-        raise Http404(msg)
+        messages.info(request, _("This collection has already been redeemed"))
+        return redirect("home")
 
     # Handle POST request for collection redemption
     if request.method == "POST":
@@ -885,8 +885,8 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
         with transaction.atomic():
             locked = Collection.objects.select_for_update().get(pk=c.pk)
             if locked.status != CollectionStatus.DONE:
-                msg = "Collection not found"
-                raise Http404(msg)
+                messages.info(request, _("This collection has already been redeemed"))
+                return redirect("home")
             locked.member = context["member"]
             locked.status = CollectionStatus.PAYED
             locked.save()

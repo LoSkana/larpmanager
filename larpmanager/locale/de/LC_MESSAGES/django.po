@@ -7106,6 +7106,9 @@ msgstr "Einrichten der Konfiguration der Organisationssteuer"
 msgid "The modifier's number (unique identifier)"
 msgstr "Die Nummer des Modifikators (eindeutiger Bezeichner)"
 
+msgid "This collection has already been redeemed"
+msgstr "Diese Einladung ist bereits eingelöst worden"
+
 msgid "Total amount paid for platform management"
 msgstr "Gesamtbetrag für die Plattformverwaltung"
 

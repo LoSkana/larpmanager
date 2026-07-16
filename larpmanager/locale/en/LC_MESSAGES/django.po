@@ -12359,6 +12359,9 @@ msgstr ""
 msgid "Collection closed"
 msgstr ""
 
+msgid "This collection has already been redeemed"
+msgstr ""
+
 msgid "The collection has been delivered"
 msgstr ""
 

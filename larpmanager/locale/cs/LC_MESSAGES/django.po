@@ -7098,6 +7098,9 @@ msgstr "Nastavení konfigurace daně z příjmu organizace"
 msgid "The modifier's number (unique identifier)"
 msgstr "Číslo modifikátoru (jedinečný identifikátor)"
 
+msgid "This collection has already been redeemed"
+msgstr "Toto pozvání již bylo vykoupeno"
+
 msgid "Total amount paid for platform management"
 msgstr "Celková částka zaplacená za správu platformy"
 

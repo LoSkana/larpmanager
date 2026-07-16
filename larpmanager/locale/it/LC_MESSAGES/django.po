@@ -7096,6 +7096,9 @@ msgstr "Configura la tassa organizzativa"
 msgid "The modifier's number (unique identifier)"
 msgstr "Il numero del modificatore (identificatore univoco)"
 
+msgid "This collection has already been redeemed"
+msgstr "Questo invito è già stato riscattato"
+
 msgid "Total amount paid for platform management"
 msgstr "Importo totale pagato per la gestione della piattaforma"
 
