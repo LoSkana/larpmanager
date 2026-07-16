@@ -37,7 +37,6 @@ from larpmanager.forms.utils import (
     RunMemberS2Widget,
     RunRegS2Widget,
     RunS2Widget,
-    get_run_choices,
 )
 from larpmanager.models.accounting import (
     AccountingItemDonation,
@@ -378,8 +377,7 @@ class ExeCreditForm(BaseModelForm):
         # Set page title with credit name
         self.page_title = _("Assignment") + f" {self.params['credits_name']}"
 
-        # Configure run choices and association widgets
-        get_run_choices(self)
+        # Configure run and member widgets with association context
         self.configure_field_association("member", self.params.get("association_id"))
         self.configure_field_association("run", self.params.get("association_id"))
         self.fields["member"].required = True
@@ -410,8 +408,7 @@ class ExeTokenForm(BaseModelForm):
         # Set page title and info with token name
         self.page_title = _("Assignment") + f" {self.params['tokens_name']}"
 
-        # Configure run choices and association filtering
-        get_run_choices(self)
+        # Configure run and member widgets with association context
         self.configure_field_association("member", self.params.get("association_id"))
         self.configure_field_association("run", self.params.get("association_id"))
         self.fields["member"].required = True
@@ -441,8 +438,7 @@ class ExeExpenseForm(BaseModelForm):
         """Initialize form with run choices and association-specific widget configuration."""
         super().__init__(*args, **kwargs)
 
-        # Configure run choices and set association context for widgets
-        get_run_choices(self)
+        # Configure run and member widgets with association context
         self.configure_field_association("member", self.params.get("association_id"))
         self.configure_field_association("run", self.params["association_id"])
 
