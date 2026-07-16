@@ -105,8 +105,9 @@ def prepare_association_skin_features(instance: Association) -> None:
     except ObjectDoesNotExist:
         return
 
-    # Mark instance for skin feature updates
-    instance._update_skin_features = True  # noqa: SLF001  # Internal flag for skin feature updates
+    # Mark instance for skin feature updates, keeping track of whether the
+    # association is brand new or switched to a different skin
+    instance._update_skin_features = "new" if not instance.pk else "changed"  # noqa: SLF001
 
     # Apply skin defaults only to empty/unset fields
     # Set default nationality if not already specified
@@ -140,7 +141,8 @@ def apply_skin_features_to_association(association: Association) -> None:
 
     """
     # Check if the association is marked for skin feature updates
-    if not hasattr(association, "_update_skin_features"):
+    update_mode = getattr(association, "_update_skin_features", None)
+    if not update_mode:
         return
 
     # Skip during bulk clones: the clone engine copies the template's actual features
@@ -149,8 +151,16 @@ def apply_skin_features_to_association(association: Association) -> None:
 
     # Define the feature update operation to run after transaction commit
     def update_features() -> None:
-        """Replace all features with the skin's default features."""
-        association.features.set(association.skin.default_features.all())
+        """Apply the skin's default features.
+
+        A skin change replaces the whole feature set; a new association only
+        adds the defaults, preserving features enabled in the same transaction.
+        """
+        default_features = association.skin.default_features.all()
+        if update_mode == "changed":
+            association.features.set(default_features)
+        else:
+            association.features.add(*default_features)
 
     # Schedule the feature update to run after the current transaction commits
     transaction.on_commit(update_features)
