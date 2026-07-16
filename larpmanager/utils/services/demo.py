@@ -48,6 +48,7 @@ from larpmanager.models.accounting import (
     PaymentInvoice,
 )
 from larpmanager.models.association import Association, AssociationConfig, AssociationText
+from larpmanager.models.casting import Casting, CastingAvoid
 from larpmanager.models.event import Event, EventButton, EventConfig, EventText, ProgressStep, Run
 from larpmanager.models.experience import (
     AbilityExp,
@@ -71,6 +72,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.larpmanager import LarpManagerDemoHint, LarpManagerDemoHintDismissal
 from larpmanager.models.member import Member, Membership
+from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -146,6 +148,7 @@ def clone_association(demo_type: Any, new_slug: str, skin_id: int) -> Associatio
         new_association = _clone_association_row(clone_context, demo_type, new_slug, skin_id)
         _clone_members(clone_context, new_association, new_slug)
         _clone_events(clone_context)
+        _clone_castings(clone_context)
         _clone_registrations(clone_context)
         _clone_accounting(clone_context)
         _fix_deferred_self_references(clone_context)
@@ -399,6 +402,27 @@ def _clone_experience(clone_context: CloneContext, event_pk: int) -> None:
     _copy_all(clone_context, DeliveryExp, event_filter)
 
 
+def _clone_castings(clone_context: CloneContext) -> None:
+    """Clone character casting preferences (typ=0) for runs of the template association.
+
+    ``element`` stores the preferred Character's uuid as plain text, not a real FK, so it
+    is remapped by hand; rows preferring a quest/trait (not part of this clone graph) are
+    skipped, matching the pattern used for writing choices/answers.
+    """
+    template = clone_context.template
+    for casting_row in Casting.objects.filter(run__event__association=template, typ=0):
+        template_character = Character.objects.filter(uuid=casting_row.element, event__association=template).first()
+        if not template_character:
+            continue
+        new_character_pk = clone_context.mapped(Character, template_character.pk)
+        if new_character_pk is None:
+            continue
+        new_element = Character.objects.get(pk=new_character_pk).uuid
+        _copy_row(clone_context, casting_row, overrides={"element": str(new_element)})
+
+    _copy_all(clone_context, CastingAvoid, {"run__event__association": template})
+
+
 def _clone_registrations(clone_context: CloneContext) -> None:
     """Clone registrations with their choices, answers and character assignments."""
     delta = clone_context.delta
@@ -413,6 +437,7 @@ def _clone_registrations(clone_context: CloneContext) -> None:
     _copy_all(
         clone_context, RegistrationCharacterRel, {"registration__run__event__association": clone_context.template}
     )
+    _copy_all(clone_context, PlayerRelationship, {"registration__run__event__association": clone_context.template})
 
 
 def _clone_accounting(clone_context: CloneContext) -> None:
