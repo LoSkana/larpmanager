@@ -65,7 +65,7 @@
         <p>
             <i>{% trans "Note that existing abilities with the same name, will be overwritten with the uploaded data" %}.</i>
         </p>
-    {% elif typ == 'registration_form' %}
+    {% elif typ == 'registration_form' or typ == 'matchmaker_form' %}
         <h2>{% trans "Questions" %}</h2>
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below" %}:</p>
         <table>
@@ -188,7 +188,7 @@
                     <td>{{ form.first }}</td>
                 </tr>
             </table>
-        {% elif typ == 'registration_form' or typ == 'character_form' %}
+        {% elif typ == 'registration_form' or typ == 'matchmaker_form' or typ == 'character_form' %}
             <table>
                 <tr>
                     <th>{% trans "Questions" %}</th>

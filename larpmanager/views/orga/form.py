@@ -188,7 +188,7 @@ def orga_registration_form(request: HttpRequest, event_slug: str, registration_t
         return orga_registration_form_download(context)
 
     # Configure context for template rendering
-    context["upload"] = "registration_form"
+    context["upload"] = f"{context['typ']}_form"
     context["download"] = 1
 
     # Fetch ordered registration questions with their options, scoped to the current form type

@@ -50,6 +50,7 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
+    RegistrationQuestionApplicable,
     WritingAnswer,
     WritingChoice,
     WritingOption,
@@ -193,7 +194,12 @@ def go_upload(context: dict, upload_form_data: Any) -> Any:
     upload_type = context["typ"]
 
     dispatch = {
-        "registration_form": lambda: form_load(context, upload_form_data, is_registration=True),
+        "registration_form": lambda: form_load(
+            context, upload_form_data, is_registration=True, applicable=RegistrationQuestionApplicable.REGISTRATION
+        ),
+        "matchmaker_form": lambda: form_load(
+            context, upload_form_data, is_registration=True, applicable=RegistrationQuestionApplicable.MATCHMAKER
+        ),
         "character_form": lambda: form_load(context, upload_form_data, is_registration=False),
         "registration": lambda: registrations_load(context, upload_form_data),
         "exp_abilitie": lambda: abilities_load(context, upload_form_data),
@@ -1187,7 +1193,13 @@ def _assign_faction(context: dict, element: Character, value: str, logs: list[st
             logs.append(f"Faction not found: {faction_name}")
 
 
-def form_load(context: dict, form: Form, *, is_registration: bool = True) -> list[str]:
+def form_load(
+    context: dict,
+    form: Form,
+    *,
+    is_registration: bool = True,
+    applicable: str = RegistrationQuestionApplicable.REGISTRATION,
+) -> list[str]:
     """Load form questions and options from uploaded files.
 
     Processes uploaded CSV/Excel files to create form questions and their
@@ -1198,6 +1210,8 @@ def form_load(context: dict, form: Form, *, is_registration: bool = True) -> lis
         form: Upload form instance with cleaned file data
         is_registration: Flag indicating whether to load registration questions
             (True) or writing questions (False). Defaults to True.
+        applicable: For registration questions, which form they belong to
+            (RegistrationQuestionApplicable). Ignored for writing questions.
 
     Returns:
         List of log messages generated during the upload processing operations.
@@ -1220,7 +1234,9 @@ def form_load(context: dict, form: Form, *, is_registration: bool = True) -> lis
                 return [f"ERR - File too large: {len(questions_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
             # Create question objects from each row in the DataFrame
             for question_row in questions_dataframe.to_dict(orient="records"):
-                log_messages.append(_questions_load(context, question_row, is_registration=is_registration))
+                log_messages.append(
+                    _questions_load(context, question_row, is_registration=is_registration, applicable=applicable)
+                )
 
     # Process options file upload
     options_file = form.cleaned_data.get("second", None)
@@ -1230,13 +1246,14 @@ def form_load(context: dict, form: Form, *, is_registration: bool = True) -> lis
         if options_dataframe is not None:
             # Determine question model class based on registration type
             question_model_class = WritingQuestion
+            questions_lookup = context["event"].get_elements(question_model_class)
             if is_registration:
                 question_model_class = RegistrationQuestion
+                questions_lookup = context["event"].get_elements(question_model_class).filter(applicable=applicable)
 
             # Build lookup dictionary mapping question names to IDs
             questions_by_name = {
-                question["name"].lower(): question["id"]
-                for question in context["event"].get_elements(question_model_class).values("id", "name")
+                question["name"].lower(): question["id"] for question in questions_lookup.values("id", "name")
             }
 
             # Create option objects for each row, linking to existing questions
@@ -1256,12 +1273,17 @@ def invert_dict(dictionary: dict[str, str]) -> dict[str, str]:
     return {value.lower().strip(): key for key, value in dictionary.items()}
 
 
-def _get_or_create_registration_question(context: dict, question_name: str) -> tuple[RegistrationQuestion, bool]:
+def _get_or_create_registration_question(
+    context: dict, question_name: str, applicable: str = RegistrationQuestionApplicable.REGISTRATION
+) -> tuple[RegistrationQuestion, bool]:
     """Get or create a registration question instance.
 
     Args:
         context: Context dictionary containing event information
         question_name: Name of the question to create or retrieve
+        applicable: Which form the question belongs to (RegistrationQuestionApplicable);
+            scopes both the lookup and the value set on creation, so uploading to one
+            form never matches or edits a same-named question of the other form
 
     Returns:
         Tuple of (question_instance, was_created)
@@ -1270,6 +1292,7 @@ def _get_or_create_registration_question(context: dict, question_name: str) -> t
     matching_questions = RegistrationQuestion.objects.filter(
         event=context["event"],
         name__iexact=question_name,
+        applicable=applicable,
     )
     if matching_questions.exists():
         return matching_questions.first(), False
@@ -1278,6 +1301,7 @@ def _get_or_create_registration_question(context: dict, question_name: str) -> t
         RegistrationQuestion.objects.create(
             event=context["event"],
             name=question_name,
+            applicable=applicable,
         ),
         True,
     )
@@ -1380,7 +1404,13 @@ def _process_question_field(
     return None
 
 
-def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> str:
+def _questions_load(
+    context: dict,
+    row_data: dict,
+    *,
+    is_registration: bool,
+    applicable: str = RegistrationQuestionApplicable.REGISTRATION,
+) -> str:
     """Load and validate question data from upload files.
 
     Processes question configurations for registration or character forms,
@@ -1391,6 +1421,8 @@ def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> 
         context: Context dictionary containing event and processing information
         row_data: Data row from upload file containing question configuration
         is_registration: True for registration questions, False for writing questions
+        applicable: For registration questions, which form they belong to
+            (RegistrationQuestionApplicable). Ignored for writing questions.
 
     Returns:
         Status message indicating success or error details
@@ -1406,7 +1438,7 @@ def _questions_load(context: dict, row_data: dict, *, is_registration: bool) -> 
 
     # Get or create the question instance
     if is_registration:
-        question_instance, was_created = _get_or_create_registration_question(context, question_name)
+        question_instance, was_created = _get_or_create_registration_question(context, question_name, applicable)
     else:
         result = _get_or_create_writing_question(context, question_name, row_data, field_mappings)
         if isinstance(result, str):
