@@ -76,20 +76,6 @@
                 </div>
             </div>
         </div>
-        {% if association.demo %}
-            <div class="demo-banner">
-                <span>
-                    {% if association.demo_type_name %}
-                        {% blocktrans with name=association.demo_type_name %}You are exploring the "{{ name }}" demo{% endblocktrans %}.
-                    {% else %}
-                        {% trans "You are exploring a demo organization" %}.
-                    {% endif %}
-                    {% trans "Only some of the platform features are activated" %}.
-                </span>
-                <a href="//{{ association.main_domain }}/get-started/">{% trans "Wanna try other demos, or are you ready to create your organization?" %} <i class="fa-solid fa-arrow-right"></i></a>
-            </div>
-            {% include "elements/demo_hint.html" %}
-        {% endif %}
         <div id="footer"
              class="lm {% if manage and is_sidebar_open %}sidebar{% endif %}">
             <div class="inner">
@@ -129,6 +115,20 @@
                 </p>
             </div>
         </div>
+        {% if association.demo %}
+            <div class="demo-footer">
+                <span>
+                    {% if association.demo_type_name %}
+                        {% blocktrans with name=association.demo_type_name %}You are exploring the "{{ name }}" demo{% endblocktrans %}.
+                    {% else %}
+                        {% trans "You are exploring a demo organization" %}.
+                    {% endif %}
+                    {% trans "Only some of the platform features are activated" %}.
+                </span>
+                <a href="//{{ association.main_domain }}/get-started/">{% trans "Wanna try other demos, or are you ready to create your organization?" %} <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+            {% include "elements/demo_hint.html" %}
+        {% endif %}
     {% endblock wrapper %}
 {% endblock main %}
 {% block css-req %}
