@@ -279,7 +279,6 @@ body.error-page #header,
 body.error-page #footer,
 body.error-page #nav,
 body.error-page #menu,
-body.error-page #banner,
 body.error-page #staging,
 body.error-page .info {
   display: none !important;
