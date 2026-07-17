@@ -52,7 +52,12 @@ from django_ratelimit.decorators import ratelimit
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home, get_larpmanager_texts
+from larpmanager.cache.larpmanager import (
+    get_blog_content_with_images,
+    get_cache_lm_collaborators,
+    get_cache_lm_home,
+    get_larpmanager_texts,
+)
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import LmSendMailForm
@@ -828,6 +833,7 @@ def about_us(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["index"] = True
     context["texts"] = get_larpmanager_texts()
+    context["collaborators"] = get_cache_lm_collaborators()
     return render(request, "larpmanager/landing/about_us.html", context)
 
 

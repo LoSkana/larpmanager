@@ -31,6 +31,7 @@ from larpmanager.models.accounting import PaymentInvoice
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.larpmanager import (
+    LarpManagerCollaborator,
     LarpManagerHighlight,
     LarpManagerPartner,
     LarpManagerReview,
@@ -308,3 +309,32 @@ def get_larpmanager_texts() -> dict[str, str]:
 def clear_larpmanager_texts_cache() -> None:
     """Clear the cached larpmanager texts."""
     cache.delete(cache_larpmanager_texts_key())
+
+
+def cache_larpmanager_collaborators_key() -> str:
+    """Generate cache key for larpmanager collaborators."""
+    return "cache_lm_collaborators"
+
+
+def get_cache_lm_collaborators() -> list[dict]:
+    """Get cached LarpManager collaborators, in shuffled order.
+
+    Returns:
+        Cached or freshly computed list of collaborator dictionaries.
+
+    """
+    cache_key = cache_larpmanager_collaborators_key()
+    cached_data = cache.get(cache_key)
+
+    if cached_data is None:
+        collaborators = list(LarpManagerCollaborator.objects.all())
+        random.shuffle(collaborators)
+        cached_data = [collaborator.as_dict() for collaborator in collaborators]
+        cache.set(cache_key, cached_data, timeout=300)
+
+    return cached_data
+
+
+def clear_larpmanager_collaborators_cache() -> None:
+    """Clear the cached larpmanager collaborators."""
+    cache.delete(cache_larpmanager_collaborators_key())

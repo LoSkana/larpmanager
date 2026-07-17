@@ -15,4 +15,17 @@
 {% endblock landing_title %}
 {% block landing_content %}
     <div class="about-prose">{{ texts.team_content | safe }}</div>
+    {% if collaborators %}
+        {% if texts.team_collaborators_content %}
+            <div class="about-prose collaborators-intro">{{ texts.team_collaborators_content | safe }}</div>
+        {% endif %}
+        <div class="collaborators">
+            {% for el in collaborators %}
+                <div class="collaborator-card">
+                    {% if el.thumb_url %}<img src="{{ el.thumb_url }}" alt="{{ el.name }}">{% endif %}
+                    <span class="collaborator-name">{{ el.name }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock landing_content %}
