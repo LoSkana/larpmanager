@@ -34,6 +34,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerHighlight,
     LarpManagerPartner,
     LarpManagerReview,
+    LarpManagerScreenshot,
     LarpManagerShowcase,
     LarpManagerText,
 )
@@ -106,6 +107,7 @@ def update_cache_lm_home() -> dict[str, int | list]:
     context["reviews"] = _get_reviews()
     context["partners"] = _get_partners()
     context["highlights"] = _get_highlights()
+    context["screenshots"] = _get_screenshots()
 
     return context
 
@@ -115,6 +117,11 @@ def _get_highlights() -> list[dict]:
     highlights = list(LarpManagerHighlight.objects.all())
     random.shuffle(highlights)
     return [highlight.as_dict() for highlight in highlights]
+
+
+def _get_screenshots() -> list[dict]:
+    """Get all LarpManager screenshots as dictionaries, in display order."""
+    return [screenshot.as_dict() for screenshot in LarpManagerScreenshot.objects.order_by("order")]
 
 
 def _get_reviews() -> list[dict]:

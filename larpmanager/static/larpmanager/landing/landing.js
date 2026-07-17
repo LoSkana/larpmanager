@@ -36,6 +36,18 @@ window.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Who-is-this-for tabs: switch the visible description per game style
+    document.querySelectorAll('.whofor-tabs button[data-whofor]').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.whofor-tabs button[data-whofor]').forEach(function (other) {
+                other.setAttribute('aria-pressed', other === tab ? 'true' : 'false');
+            });
+            document.querySelectorAll('.whofor-desc').forEach(function (desc) {
+                desc.classList.toggle('active', desc.dataset.whofor === tab.dataset.whofor);
+            });
+        });
+    });
+
     // Toggle helpers: a.my_toggle shows/hides elements carrying the class in its tog attribute
     document.querySelectorAll('a.my_toggle').forEach(function (toggle) {
         toggle.addEventListener('click', function (event) {
