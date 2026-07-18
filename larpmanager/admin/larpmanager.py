@@ -38,6 +38,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerPartner,
     LarpManagerProfiler,
     LarpManagerReview,
+    LarpManagerScreenshot,
     LarpManagerShowcase,
     LarpManagerText,
     LarpManagerTicket,
@@ -136,6 +137,14 @@ class LarpManagerHighlightAdmin(DefModelAdmin):
 
     list_display = ("info", "show_reduced")
     search_fields: ClassVar[list] = ["id", "info"]
+
+
+@admin.register(LarpManagerScreenshot)
+class LarpManagerScreenshotAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerScreenshot model."""
+
+    list_display = ("caption", "order", "show_reduced")
+    search_fields: ClassVar[list] = ["id", "caption"]
 
 
 @admin.register(LarpManagerShowcase)

@@ -128,6 +128,43 @@ class LarpManagerHighlight(BaseModel):
         return result_dict
 
 
+class LarpManagerScreenshot(OrderMixin, BaseModel):
+    """Model for storing interface screenshots shown on the home page."""
+
+    caption = models.CharField(max_length=1000)
+
+    photo = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("screenshot/"),
+        verbose_name=_("Photo"),
+    )
+
+    reduced = ImageSpecField(
+        source="photo",
+        processors=[ResizeToFit(1200)],
+        format="JPEG",
+        options={"quality": 80},
+    )
+
+    def show_reduced(self) -> Any:
+        """Generate HTML for displaying reduced-size image."""
+        if self.reduced:
+            # noinspection PyUnresolvedReferences
+            return show_thumb(100, self.reduced.url)
+        return ""
+
+    def as_dict(self, *, many_to_many: bool = True) -> dict:
+        """Convert model instance to dictionary with image URL."""
+        result_dict = super().as_dict(many_to_many=many_to_many)
+
+        # Add reduced image URL if available
+        if self.reduced:
+            # noinspection PyUnresolvedReferences
+            result_dict["reduced_url"] = self.reduced.url
+
+        return result_dict
+
+
 class LarpManagerShowcase(BaseModel):
     """Model for displaying showcase items with photos."""
 

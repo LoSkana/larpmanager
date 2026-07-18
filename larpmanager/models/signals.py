@@ -249,6 +249,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerHighlight,
     LarpManagerNewsletter,
     LarpManagerPartner,
+    LarpManagerScreenshot,
     LarpManagerShowcase,
     LarpManagerText,
     LarpManagerTicket,
@@ -1284,6 +1285,18 @@ def post_save_reset_lm_home_cache_highlight(sender: type, instance: object, **kw
 @receiver(post_delete, sender=LarpManagerHighlight)
 def post_delete_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
     """Reset home cache after highlight deletion."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_save, sender=LarpManagerScreenshot)
+def post_save_reset_lm_home_cache_screenshot(sender: type, instance: object, **kwargs: dict) -> None:
+    """Signal handler to reset home cache when screenshot content changes."""
+    clear_larpmanager_home_cache()
+
+
+@receiver(post_delete, sender=LarpManagerScreenshot)
+def post_delete_reset_lm_home_cache_screenshot(sender: type, instance: object, **kwargs: dict) -> None:
+    """Reset home cache after screenshot deletion."""
     clear_larpmanager_home_cache()
 
 

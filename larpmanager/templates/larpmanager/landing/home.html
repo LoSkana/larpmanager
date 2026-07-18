@@ -20,10 +20,7 @@
             <div class="cta-row">
                 <a class="btn btn-primary"
                    href="{% url 'get_started' %}"
-                   title="Free trial">Start for free</a>
-                <a class="btn btn-ghost"
-                   href="{% url 'get_started' %}"
-                   title="Live demo">Live Demo</a>
+                   title="Get started">Get started</a>
             </div>
             <div class="stats">
                 <div class="stat">
@@ -45,6 +42,33 @@
             </div>
         </div>
     </header>
+    {% if texts.whofor_title %}
+        <!-- Who is this for -->
+        <section class="land whofor">
+            <div class="wrap">
+                <div class="steps-head">
+                    <p class="eyebrow">{{ texts.whofor_eye }}</p>
+                    <h2>{{ texts.whofor_title }}</h2>
+                    <p>{{ texts.whofor_sub }}</p>
+                </div>
+                <div class="whofor-board">
+                    <div class="whofor-tabs" role="group" aria-label="{{ texts.whofor_eye }}">
+                        <button type="button" data-whofor="1" aria-pressed="false">{{ texts.whofor1_tab }}</button>
+                        <button type="button" data-whofor="2" aria-pressed="true">{{ texts.whofor2_tab }}</button>
+                        <button type="button" data-whofor="3" aria-pressed="false">{{ texts.whofor3_tab }}</button>
+                        <button type="button" data-whofor="4" aria-pressed="false">{{ texts.whofor4_tab }}</button>
+                    </div>
+                    <div class="whofor-descs" aria-live="polite">
+                        <div class="whofor-desc" data-whofor="1">{{ texts.whofor1_text | safe }}</div>
+                        <div class="whofor-desc active" data-whofor="2">{{ texts.whofor2_text | safe }}</div>
+                        <div class="whofor-desc" data-whofor="3">{{ texts.whofor3_text | safe }}</div>
+                        <div class="whofor-desc" data-whofor="4">{{ texts.whofor4_text | safe }}</div>
+                    </div>
+                </div>
+                <p class="whofor-note">{{ texts.whofor_note | safe }}</p>
+            </div>
+        </section>
+    {% endif %}
     <!-- Steps -->
     <section class="land">
         <div class="wrap">
@@ -236,18 +260,42 @@
             </div>
         </section>
     {% endif %}
-    <!-- Video -->
-    <section class="land video-section">
-        <div class="wrap">
-            <p class="starter">{{ texts.video_intro }}</p>
-            <div class="guide-container">
-                <iframe class="guide-video"
-                        src="https://www.youtube.com/embed/ygiZq2UPl1Y"
-                        allowfullscreen="allowfullscreen">
-                </iframe>
+    {% if screenshots %}
+        <!-- Screenshots -->
+        <section class="land screens">
+            <div class="wrap">
+                <p class="eyebrow">{{ texts.screens_eye }}</p>
+                <h2>{{ texts.screens_title }}</h2>
+                <p class="screens-sub">{{ texts.screens_sub }}</p>
+                <div class="strip-nav">
+                    <button type="button"
+                            aria-label="Previous screenshots"
+                            data-strip="screenStrip"
+                            data-dir="-1">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <button type="button"
+                            aria-label="Next screenshots"
+                            data-strip="screenStrip"
+                            data-dir="1">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="strip" id="screenStrip">
+                    {% for el in screenshots %}
+                        <div class="screen-card">
+                            <div class="screen-photo">
+                                {% if el.reduced_url %}<img src="{{ el.reduced_url }}" alt="{{ el.caption }}" loading="lazy">{% endif %}
+                            </div>
+                            <div class="screen-meta">
+                                <small>{{ el.caption }}</small>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+    {% endif %}
     <!-- Open / self-host -->
     <section class="land open">
         <div class="wrap">

@@ -1296,6 +1296,7 @@ def _create_demo(request: HttpRequest, demo_type: LarpManagerDemoType | None = N
         # Clone the full data graph of the demo type's template association
         demo_association = clone_association(demo_type, f"test-{new_uuid}", request.association["skin_id"])
         schedule_demo_cleanup(demo_association)
+        _reset_all_association(demo_association.id, demo_association.slug)
         request.session["demo_guided"] = True
     else:
         # Create empty demo association with unique slug and inherited skin
