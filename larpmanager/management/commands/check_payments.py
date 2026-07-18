@@ -23,7 +23,7 @@ from typing import Any
 
 from django.core.management.base import BaseCommand
 
-from larpmanager.accounting.gateway import satispay_verify
+from larpmanager.accounting.gateway.satispay import satispay_verify
 from larpmanager.models.accounting import PaymentInvoice, PaymentStatus
 from larpmanager.utils.larpmanager.tasks import notify_admins
 
