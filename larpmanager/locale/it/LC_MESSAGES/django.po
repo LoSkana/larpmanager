@@ -2866,6 +2866,9 @@ msgstr "Dispositivi attivi"
 msgid "Add to faction"
 msgstr "Aggiungi alla fazione"
 
+msgid "Ask a question"
+msgstr "Fai una domanda"
+
 msgid "Assign members"
 msgstr "Assegna i membri"
 
@@ -3132,6 +3135,9 @@ msgstr "Aggiungi all'assegnazione XP"
 
 msgid "App Integration"
 msgstr "Integrazione delle app"
+
+msgid "Ask LarpManager"
+msgstr "Chiedi a LarpManager"
 
 msgid "Attachment Name"
 msgstr "Nome dell'allegato"
@@ -4637,6 +4643,9 @@ msgstr "Token non inizializzato"
 msgid "Transfer registration"
 msgstr "Trasferisci iscrizione"
 
+msgid "Type your question..."
+msgstr "Scrivi la tua domanda..."
+
 msgid "Updated Registrations"
 msgstr "Iscrizioni aggiornate"
 
@@ -4930,6 +4939,9 @@ msgstr "Forma del personaggio del giocatore"
 
 msgid "Please check them below"
 msgstr "Controllali qui di seguito"
+
+msgid "Please write a question"
+msgstr "Scrivi una domanda, per favore"
 
 msgid "Pre registrations total"
 msgstr "Preiscrizioni totali"
@@ -5523,6 +5535,9 @@ msgstr "Se selezionato: i membri possono votare"
 msgid "Invitation sent to %(email)s"
 msgstr "Invito inviato a %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "La chat live non è configurata."
+
 msgid "Manage experience criterions"
 msgstr "Gestisci i criteri relativi all'esperienza"
 
@@ -6091,6 +6106,9 @@ msgstr "Scopri di cosa parla questo evento"
 
 msgid "Fill out the event prep questions"
 msgstr "Compila le domande preparatorie all'evento"
+
+msgid "For best results, ask in English."
+msgstr "Per ottenere risultati migliori, chiedi in inglese."
 
 msgid "For more information, write to us"
 msgstr "Per maggiori informazioni, scrivici"
@@ -9333,6 +9351,9 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Ad alcuni biglietti manca una rata finale (importo 0): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr "L'assistente è temporaneamente non disponibile, riprova più tardi."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -12976,6 +12997,13 @@ msgid ""
 msgstr ""
 "Aggiunge i tipi di biglietto 'Patrono' e 'Ridotto'. Per ogni biglietto di "
 "tipo Patron acquistato è disponibile un biglietto di tipo Reduced"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"Non sono riuscito a trovare nulla di pertinente nella documentazione. Prova "
+"a chiedere in inglese oppure apri un ticket di assistenza."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "

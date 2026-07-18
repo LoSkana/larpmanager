@@ -74,11 +74,15 @@
     </button>
     {% if topbar_admin %}
         {% if manage %}
-            {% if not lite_mode %}
+            {% if not association.demo and not lite_mode %}
                 <button id="wwyltd-open"
                         class="tv22-wwyltd-btn wwyltd-open-trigger"
                         aria-label="{% trans "What would you like to do?" %}">
                     <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button class="tv22-wwyltd-btn chat-widget-open-trigger"
+                        aria-label="{% trans "Ask a question" %}">
+                    <i class="fa-solid fa-comment-dots"></i>
                 </button>
             {% endif %}
             {% if run %}
@@ -184,6 +188,11 @@
                 <td>
                     <div class="el">
                         <a id="wwyltd-open-mobile" href="#" class="wwyltd-open-trigger"><i class="fa-solid fa-magnifying-glass"></i></a>
+                    </div>
+                </td>
+                <td>
+                    <div class="el">
+                        <a href="#" class="chat-widget-open-trigger"><i class="fa-solid fa-comment-dots"></i></a>
                     </div>
                 </td>
             {% endif %}

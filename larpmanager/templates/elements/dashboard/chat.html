@@ -1,0 +1,25 @@
+{% load i18n %}
+{% if user.is_authenticated %}
+    <button type="button"
+            id="chat-widget-trigger"
+            class="chat-widget-open-trigger"
+            title="{% trans "Ask a question" %}">
+        <i class="fa-solid fa-comment-dots"></i>
+    </button>
+    <dialog id="chat-widget-dialog">
+        <a href="#" id="chat-widget-close"><i class="fa-solid fa-xmark"></i></a>
+        <h2>{% trans "Ask LarpManager" %}</h2>
+        <div id="chat-widget-messages"></div>
+        <p id="chat-widget-hint">{% trans "For best results, ask in English." %}</p>
+        <form id="chat-widget-form" autocomplete="off">
+            {% csrf_token %}
+            <input type="text"
+                   id="chat-widget-input"
+                   name="question"
+                   placeholder="{% trans "Type your question..." %}">
+            <button type="submit">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </form>
+    </dialog>
+{% endif %}
