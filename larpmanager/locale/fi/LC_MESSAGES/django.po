@@ -1886,6 +1886,9 @@ msgstr "Seuraava kiintiö"
 msgid "No changes"
 msgstr "Ei muutoksia"
 
+msgid "No results"
+msgstr "Ei tuloksia"
+
 msgid "Organizers"
 msgstr "Järjestäjät"
 

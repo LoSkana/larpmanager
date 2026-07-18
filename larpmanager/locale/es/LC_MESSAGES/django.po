@@ -1886,6 +1886,9 @@ msgstr "Próximo pago"
 msgid "No changes"
 msgstr "Sin cambios"
 
+msgid "No results"
+msgstr "No hay resultados"
+
 msgid "Organizers"
 msgstr "Organizadores"
 

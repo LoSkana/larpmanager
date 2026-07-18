@@ -1886,6 +1886,9 @@ msgstr "Prossima quota"
 msgid "No changes"
 msgstr "Nessuna modifica"
 
+msgid "No results"
+msgstr "Nessun risultato"
+
 msgid "Organizers"
 msgstr "Organizzatori"
 

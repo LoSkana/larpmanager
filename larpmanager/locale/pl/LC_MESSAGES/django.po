@@ -1886,6 +1886,9 @@ msgstr "Następny limit"
 msgid "No changes"
 msgstr "Bez zmian"
 
+msgid "No results"
+msgstr "Brak wyników"
+
 msgid "Organizers"
 msgstr "Organizatorzy"
 

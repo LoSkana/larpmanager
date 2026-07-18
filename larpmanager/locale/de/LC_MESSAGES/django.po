@@ -1886,6 +1886,9 @@ msgstr "Nächste Quote"
 msgid "No changes"
 msgstr "Keine Änderungen"
 
+msgid "No results"
+msgstr "Keine Ergebnisse"
+
 msgid "Organizers"
 msgstr "Veranstalter"
 

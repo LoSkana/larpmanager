@@ -1886,6 +1886,9 @@ msgstr "Neste kvote"
 msgid "No changes"
 msgstr "Ingen endringer"
 
+msgid "No results"
+msgstr "Ingen resultater"
+
 msgid "Organizers"
 msgstr "Arrangører"
 

@@ -1886,6 +1886,9 @@ msgstr "Volgende quota"
 msgid "No changes"
 msgstr "Geen wijzigingen"
 
+msgid "No results"
+msgstr "Geen resultaten"
+
 msgid "Organizers"
 msgstr "Organisatoren"
 

@@ -1886,6 +1886,9 @@ msgstr "Další kvóta"
 msgid "No changes"
 msgstr "Žádné změny"
 
+msgid "No results"
+msgstr "Žádné výsledky"
+
 msgid "Organizers"
 msgstr "Organizátoři"
 

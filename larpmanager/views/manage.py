@@ -1449,7 +1449,7 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
 
 @login_required
 def wwyltd_choices_ajax(request: HttpRequest, event_slug: str = None) -> JsonResponse:
-    """AJAX endpoint that returns wwyltd choices for lazy Select2 loading.
+    """AJAX endpoint that returns wwyltd choices matching a search query.
 
     Args:
         request: HTTP request object
@@ -1468,9 +1468,15 @@ def wwyltd_choices_ajax(request: HttpRequest, event_slug: str = None) -> JsonRes
         get_index_association_permissions(request, context, context["association_id"])
         context["exe_page"] = 1
 
+    query = request.GET.get("q", "").strip().lower()
+
     form = WhatWouldYouLikeForm(context=context)
-    results = [{"id": value, "text": label} for value, label in form.fields["wwyltd"].choices if value]
-    return JsonResponse({"results": results})
+    results = [
+        {"id": value, "text": label}
+        for value, label in form.fields["wwyltd"].choices
+        if value and query in label.lower()
+    ]
+    return JsonResponse({"results": results[:30]})
 
 
 @login_required
