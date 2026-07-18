@@ -47,6 +47,14 @@ class LarpManagerTutorial(OrderMixin, BaseModel):
     descr = HTMLField(blank=True, null=True)
 
 
+class LarpManagerChatLog(BaseModel):
+    """Log of questions asked through the wwyltd and ask-larpmanager chat widgets."""
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+
+    question = models.TextField()
+
+
 class LarpManagerReview(BaseModel):
     """Model for storing user reviews and testimonials.
 

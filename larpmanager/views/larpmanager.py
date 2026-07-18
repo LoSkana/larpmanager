@@ -66,6 +66,7 @@ from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
+    LarpManagerChatLog,
     LarpManagerDemoHint,
     LarpManagerDemoHintDismissal,
     LarpManagerDemoType,
@@ -494,9 +495,14 @@ def chat_ask(request: HttpRequest) -> Any:
     if request.method != "POST":
         return JsonResponse({"error": _("Invalid request method")}, status=405)
 
+    if request.association.get("main_domain") != "larpmanager.com":
+        raise Http404
+
     question = request.POST.get("question", "").strip()
     if not question:
         return JsonResponse({"error": _("Please write a question")}, status=400)
+
+    LarpManagerChatLog.objects.create(member=request.user.member, question=question)
 
     answer = get_chat_answer(question)
     return JsonResponse({"answer": answer})

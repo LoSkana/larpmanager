@@ -74,7 +74,7 @@
     </button>
     {% if topbar_admin %}
         {% if manage %}
-            {% if not association.demo and not lite_mode %}
+            {% if is_larpmanager_skin and not association.demo and not lite_mode %}
                 <button id="wwyltd-open"
                         class="tv22-wwyltd-btn wwyltd-open-trigger"
                         aria-label="{% trans "What would you like to do?" %}">
@@ -184,7 +184,7 @@
                     {% endif %}
                 </span>
             </td>
-            {% if manage and not lite_mode %}
+            {% if is_larpmanager_skin and manage and not lite_mode %}
                 <td>
                     <div class="el">
                         <a id="wwyltd-open-mobile" href="#" class="wwyltd-open-trigger"><i class="fa-solid fa-magnifying-glass"></i></a>
@@ -204,7 +204,7 @@
         </tr>
     </table>
 </div>
-{% if manage and not lite_mode %}
+{% if is_larpmanager_skin and manage and not lite_mode %}
     <dialog id="wwyltd-modal" class="popup_small">
         {% include "larpmanager/manage/widgets/wwyltd.html" %}
     </dialog>

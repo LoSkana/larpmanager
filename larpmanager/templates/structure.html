@@ -98,7 +98,7 @@
                 {% endblock main %}
             </div>
         </div>
-        {% if not frame %}
+        {% if not frame and is_larpmanager_skin %}
             {% include "elements/dashboard/chat.html" %}
         {% endif %}
         <script>

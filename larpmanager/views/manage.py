@@ -25,7 +25,14 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import ChoiceField, Form
-from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect, JsonResponse
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponsePermanentRedirect,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -1459,6 +1466,9 @@ def wwyltd_choices_ajax(request: HttpRequest, event_slug: str = None) -> JsonRes
         JsonResponse: {"results": [{"id": "...", "text": "..."}, ...]}
 
     """
+    if request.association.get("main_domain") != "larpmanager.com":
+        raise Http404
+
     context = get_context(request)
     if event_slug:
         context = get_event_context(request, event_slug)
@@ -1495,6 +1505,9 @@ def wwyltd_ajax(request: HttpRequest, event_slug: str = None) -> JsonResponse:
     """
     if request.method != "POST":
         return JsonResponse({"success": False, "error": _("Invalid request method")}, status=405)
+
+    if request.association.get("main_domain") != "larpmanager.com":
+        raise Http404
 
     # Get context based on request path
     context = get_context(request)

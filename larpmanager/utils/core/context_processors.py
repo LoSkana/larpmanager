@@ -54,6 +54,7 @@ def cache_association(request: HttpRequest) -> dict:
         context["association"] = request.association
         association_id = request.association["id"]
         context["page_theme"] = get_association_config(association_id, "theme") or "nebula"
+        context["is_larpmanager_skin"] = request.association.get("main_domain") == "larpmanager.com"
 
     # Set staging flag for staging environment
     if request.enviro == "staging":
