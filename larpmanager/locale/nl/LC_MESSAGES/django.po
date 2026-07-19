@@ -2,29 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "e"
-msgstr "e"
-
-msgid "By"
-msgstr "Door"
-
 msgid "Go"
 msgstr "Ga naar"
 
 msgid "Hi"
 msgstr "Hoi"
 
-msgid "To"
-msgstr "A"
-
 msgid "XP"
 msgstr "px"
-
-msgid "by"
-msgstr "door"
-
-msgid "of"
-msgstr "door"
 
 msgid "Add"
 msgstr "Voeg  toe"
@@ -34,15 +19,6 @@ msgstr "Leeftijd"
 
 msgid "All"
 msgstr "Alle"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "CSS"
-msgstr "CSS"
-
-msgid "Cap"
-msgstr "Cap"
 
 msgid "End"
 msgstr "Einde"
@@ -65,12 +41,6 @@ msgstr "Nieuw"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Pdf"
-msgstr "Pdf"
-
-msgid "Run"
-msgstr "Run"
-
 msgid "Tot"
 msgstr "Tot"
 
@@ -85,9 +55,6 @@ msgstr "leeftijd"
 
 msgid "and"
 msgstr "en"
-
-msgid "for"
-msgstr "voor"
 
 msgid "tot"
 msgstr "tot"
@@ -140,9 +107,6 @@ msgstr "Formulier"
 msgid "Free"
 msgstr "Gratis"
 
-msgid "From"
-msgstr "Van"
-
 msgid "Gift"
 msgstr "Cadeau"
 
@@ -155,12 +119,6 @@ msgstr "Verberg"
 msgid "High"
 msgstr "Hoog"
 
-msgid "Home"
-msgstr "Home"
-
-msgid "IBAN"
-msgstr "IBAN"
-
 msgid "Icon"
 msgstr "Pictogram"
 
@@ -169,9 +127,6 @@ msgstr "Info"
 
 msgid "Item"
 msgstr "Ingang"
-
-msgid "Kick"
-msgstr "Kick"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -374,6 +329,9 @@ msgstr "Data"
 msgid "Email"
 msgstr "E-mail"
 
+msgid "Entry"
+msgstr "Invoer"
+
 msgid "Error"
 msgstr "Fout"
 
@@ -486,9 +444,6 @@ msgstr "Start"
 msgctxt "event"
 msgid "Style"
 msgstr "Stijl"
-
-msgid "Swift"
-msgstr "Snel"
 
 msgid "Taxes"
 msgstr "Belastingen"
@@ -757,6 +712,9 @@ msgstr "Selecteer"
 msgid "Seller"
 msgstr "Verkoper"
 
+msgid "Source"
+msgstr "Bron"
+
 msgid "Status"
 msgstr "Status"
 
@@ -768,6 +726,9 @@ msgstr "Stuur"
 
 msgid "System"
 msgstr "Systeem"
+
+msgid "Target"
+msgstr "Doel"
 
 msgid "Ticket"
 msgstr "Ticket"
@@ -2101,6 +2062,9 @@ msgstr "Afbeelding omslag"
 
 msgid "Description"
 msgstr "Beschrijving"
+
+msgid "Destination"
+msgstr "Bestemming"
 
 msgid "Direct link"
 msgstr "Directe link"
@@ -6005,6 +5969,10 @@ msgstr "Nu kunt u de stemopties instellen"
 msgid "Now you can verify wire payments"
 msgstr "Je kunt nu betalingen per bankoverschrijving verifiëren"
 
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
+msgstr "Pagina %(number)s van %(num_pages)s"
+
 msgid "Please upload your profile photo"
 msgstr "Upload je profielfoto"
 
@@ -7612,6 +7580,10 @@ msgstr "Optioneel - Afbeelding weergegeven in de vraag"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Optionele afbeelding voor homepage carrousel/slideshow"
 
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
+msgstr "Betaal %(amount)s %(currency)s zo snel mogelijk"
+
 msgid "Please confirm you want to perform this action"
 msgstr "Bevestig dat je deze actie wilt uitvoeren"
 
@@ -7992,6 +7964,10 @@ msgstr "De voortgangsstappen voor de schrijfelementen beheren"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Beheer je wachtwoord en tweefactorauthenticatie"
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr "Betaal %(amount)s %(currency)s binnen %(counter)s dagen"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede teken in de relatie (bestemming)"

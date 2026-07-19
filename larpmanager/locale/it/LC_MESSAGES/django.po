@@ -2,29 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "e"
-msgstr "e"
-
-msgid "By"
-msgstr "Da"
-
 msgid "Go"
 msgstr "Vai"
 
 msgid "Hi"
 msgstr "Ciao"
 
-msgid "To"
-msgstr "A"
-
 msgid "XP"
 msgstr "px"
-
-msgid "by"
-msgstr "entro"
-
-msgid "of"
-msgstr "di"
 
 msgid "Add"
 msgstr "Aggiungi"
@@ -34,15 +19,6 @@ msgstr "Età"
 
 msgid "All"
 msgstr "All"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "CSS"
-msgstr "CSS"
-
-msgid "Cap"
-msgstr "Cap"
 
 msgid "End"
 msgstr "Fine"
@@ -65,12 +41,6 @@ msgstr "Nuovo"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Pdf"
-msgstr "Pdf"
-
-msgid "Run"
-msgstr "Run"
-
 msgid "Tot"
 msgstr "Tot"
 
@@ -85,9 +55,6 @@ msgstr "età"
 
 msgid "and"
 msgstr "e"
-
-msgid "for"
-msgstr "per"
 
 msgid "tot"
 msgstr "tot"
@@ -123,7 +90,7 @@ msgid "Date"
 msgstr "Data"
 
 msgid "Diet"
-msgstr "Diet"
+msgstr "Dieta"
 
 msgid "Done"
 msgstr "Fatto"
@@ -140,9 +107,6 @@ msgstr "Form"
 msgid "Free"
 msgstr "Free"
 
-msgid "From"
-msgstr "Da"
-
 msgid "Gift"
 msgstr "Regalo"
 
@@ -155,12 +119,6 @@ msgstr "Nascondi"
 msgid "High"
 msgstr "Alto"
 
-msgid "Home"
-msgstr "Home"
-
-msgid "IBAN"
-msgstr "IBAN"
-
 msgid "Icon"
 msgstr "Icona"
 
@@ -168,10 +126,7 @@ msgid "Info"
 msgstr "Info"
 
 msgid "Item"
-msgstr "Voce"
-
-msgid "Kick"
-msgstr "Calcio"
+msgstr "Articolo"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -374,6 +329,9 @@ msgstr "Date"
 msgid "Email"
 msgstr "Email"
 
+msgid "Entry"
+msgstr "Voce"
+
 msgid "Error"
 msgstr "Errore"
 
@@ -486,9 +444,6 @@ msgstr "Inizio"
 msgctxt "event"
 msgid "Style"
 msgstr "Stile"
-
-msgid "Swift"
-msgstr "Swift"
 
 msgid "Taxes"
 msgstr "Tasse"
@@ -757,6 +712,9 @@ msgstr "Seleziona"
 msgid "Seller"
 msgstr "Venditore"
 
+msgid "Source"
+msgstr "Fonte"
+
 msgid "Status"
 msgstr "Stato"
 
@@ -768,6 +726,9 @@ msgstr "Invia"
 
 msgid "System"
 msgstr "Sistema"
+
+msgid "Target"
+msgstr "Obiettivo"
 
 msgid "Ticket"
 msgstr "Biglietto"
@@ -2101,6 +2062,9 @@ msgstr "Immagine di copertina"
 
 msgid "Description"
 msgstr "Descrizione"
+
+msgid "Destination"
+msgstr "Destinazione"
 
 msgid "Direct link"
 msgstr "Link diretto"
@@ -6005,6 +5969,10 @@ msgstr "Ora puoi impostare le opzioni di voto"
 msgid "Now you can verify wire payments"
 msgstr "Ora puoi verificare i pagamenti tramite bonifico"
 
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
+msgstr "Pagina %(number)s di %(num_pages)s"
+
 msgid "Please upload your profile photo"
 msgstr "Per favore carica la tua foto profilo"
 
@@ -7601,6 +7569,10 @@ msgstr "Opzionale - Immagine visualizzata all'interno della domanda"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Immagine opzionale per il carosello/slideshow della homepage"
 
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
+msgstr "Paga %(amount)s%(currency)s il prima possibile"
+
 msgid "Please confirm you want to perform this action"
 msgstr "Conferma che vuoi eseguire questa operazione"
 
@@ -7978,6 +7950,10 @@ msgstr "Gestisci le fasi di avanzamento degli elementi di scrittura"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Gestisci la tua password e l'autenticazione a due fattori"
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr "Paga %(amount)s %(currency)s entro %(counter)s giorni"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Secondo personaggio della relazione (destinazione)"

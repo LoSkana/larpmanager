@@ -863,9 +863,6 @@ msgstr ""
 msgid "House number"
 msgstr ""
 
-msgid "Cap"
-msgstr ""
-
 msgid "Municipality"
 msgstr ""
 
@@ -1890,9 +1887,6 @@ msgstr ""
 msgid "Workshop"
 msgstr ""
 
-msgid "PDF"
-msgstr ""
-
 msgid "Relationships"
 msgstr ""
 
@@ -2786,7 +2780,8 @@ msgstr ""
 msgid "Reimbursement approved"
 msgstr ""
 
-msgid "for"
+#, python-format
+msgid "for %(event)s"
 msgstr ""
 
 #, python-format
@@ -3092,10 +3087,6 @@ msgid "Motivation"
 msgstr ""
 
 msgid "For more information, write to us"
-msgstr ""
-
-#, python-format
-msgid "for %(event)s"
 msgstr ""
 
 #, python-format
@@ -3758,7 +3749,7 @@ msgstr ""
 msgid "Staff members who will receive and manage support tickets"
 msgstr ""
 
-msgid "Home"
+msgid "Calendar"
 msgstr ""
 
 msgid "Registration mail"
@@ -5163,9 +5154,6 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-msgid "By"
-msgstr ""
-
 msgid "Activation failed"
 msgstr ""
 
@@ -5666,15 +5654,6 @@ msgid "Use the bank details below to make the transfer from your bank"
 msgstr ""
 
 msgid "Copy the causal exactly as shown (in coloured text)"
-msgstr ""
-
-msgid "IBAN"
-msgstr ""
-
-msgid "BIC"
-msgstr ""
-
-msgid "Swift"
 msgstr ""
 
 msgid "Bank address"
@@ -6198,9 +6177,6 @@ msgid "Demote"
 msgstr ""
 
 msgid "Promote"
-msgstr ""
-
-msgid "Kick"
 msgstr ""
 
 msgid "Leave guild"
@@ -7366,7 +7342,8 @@ msgstr ""
 msgid "Prev"
 msgstr ""
 
-msgid "of"
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
 msgstr ""
 
 msgid "Next"
@@ -7768,7 +7745,12 @@ msgid ""
 "payment"
 msgstr ""
 
-msgid "by"
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr ""
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
 msgstr ""
 
 msgid "Do you wish to be reimbursed? Open a new one"
@@ -7986,9 +7968,6 @@ msgid "Consumed"
 msgstr ""
 
 msgid "Returned"
-msgstr ""
-
-msgid "Run"
 msgstr ""
 
 msgid "Indicates the details of the request"
@@ -8386,6 +8365,9 @@ msgid ""
 "and balance"
 msgstr ""
 
+msgid "Entry"
+msgstr ""
+
 msgid "Refund for"
 msgstr ""
 
@@ -8424,7 +8406,7 @@ msgstr ""
 msgid "Only"
 msgstr ""
 
-msgid "e"
+msgid "and"
 msgstr ""
 
 msgid "Returning percentage"
@@ -8601,9 +8583,6 @@ msgid ""
 "Add a field to collect information from players on their character sheet"
 msgstr ""
 
-msgid "Pdf"
-msgstr ""
-
 msgid ""
 "Configure PDF template settings and preview or download character sheets"
 msgstr ""
@@ -8713,10 +8692,10 @@ msgstr ""
 msgid "Actor"
 msgstr ""
 
-msgid "From"
+msgid "Source"
 msgstr ""
 
-msgid "To"
+msgid "Destination"
 msgstr ""
 
 msgid "Resource"
@@ -9233,9 +9212,6 @@ msgid "Unrecognized files in ZIP (will be skipped)"
 msgstr ""
 
 msgid "Create"
-msgstr ""
-
-msgid "and"
 msgstr ""
 
 msgid "more"
@@ -9774,9 +9750,6 @@ msgid ""
 "handouts"
 msgstr ""
 
-msgid "CSS"
-msgstr ""
-
 msgid "Handouts"
 msgstr ""
 
@@ -9839,6 +9812,9 @@ msgstr ""
 
 msgid ""
 "View and edit all directed relationships between characters in this event"
+msgstr ""
+
+msgid "Target"
 msgstr ""
 
 msgid "No relationships have been defined yet"
@@ -10953,6 +10929,9 @@ msgstr ""
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr ""
 
+msgid "PDF"
+msgstr ""
+
 msgid "Set the options for the automatic PDF generation of characters sheets"
 msgstr ""
 
@@ -11181,9 +11160,6 @@ msgid "Discover what this event is about"
 msgstr ""
 
 msgid "Browse the presentation website"
-msgstr ""
-
-msgid "Calendar"
 msgstr ""
 
 #, python-format

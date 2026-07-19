@@ -2,29 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "e"
-msgstr "e"
-
-msgid "By"
-msgstr "Por"
-
 msgid "Go"
 msgstr "Vaya a"
 
 msgid "Hi"
 msgstr "Hola"
 
-msgid "To"
-msgstr "A"
-
 msgid "XP"
 msgstr "PX"
-
-msgid "by"
-msgstr "por"
-
-msgid "of"
-msgstr "de"
 
 msgid "Add"
 msgstr "Añadir"
@@ -34,15 +19,6 @@ msgstr "Edad"
 
 msgid "All"
 msgstr "Todos"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "CSS"
-msgstr "CSS"
-
-msgid "Cap"
-msgstr "Gorra"
 
 msgid "End"
 msgstr "Fin"
@@ -65,12 +41,6 @@ msgstr "Nuevo"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Pdf"
-msgstr "Pdf"
-
-msgid "Run"
-msgstr "Pase"
-
 msgid "Tot"
 msgstr "Tot"
 
@@ -85,9 +55,6 @@ msgstr "edad"
 
 msgid "and"
 msgstr "y"
-
-msgid "for"
-msgstr "para"
 
 msgid "tot"
 msgstr "tot"
@@ -140,9 +107,6 @@ msgstr "Formulario"
 msgid "Free"
 msgstr "Gratis"
 
-msgid "From"
-msgstr "De"
-
 msgid "Gift"
 msgstr "Regalo"
 
@@ -155,12 +119,6 @@ msgstr "Ocultar"
 msgid "High"
 msgstr "Alta"
 
-msgid "Home"
-msgstr "Inicio"
-
-msgid "IBAN"
-msgstr "IBAN"
-
 msgid "Icon"
 msgstr "Icono"
 
@@ -169,9 +127,6 @@ msgstr "Información"
 
 msgid "Item"
 msgstr "Elemento"
-
-msgid "Kick"
-msgstr "Patear"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -374,6 +329,9 @@ msgstr "Fechas"
 msgid "Email"
 msgstr "Correo electrónico"
 
+msgid "Entry"
+msgstr "Entrada"
+
 msgid "Error"
 msgstr "Error"
 
@@ -486,9 +444,6 @@ msgstr "Inicio"
 msgctxt "event"
 msgid "Style"
 msgstr "Estilo"
-
-msgid "Swift"
-msgstr "Swift"
 
 msgid "Taxes"
 msgstr "Impuestos"
@@ -757,6 +712,9 @@ msgstr "Seleccionar"
 msgid "Seller"
 msgstr "Vendedor"
 
+msgid "Source"
+msgstr "Fuente"
+
 msgid "Status"
 msgstr "Estado"
 
@@ -768,6 +726,9 @@ msgstr "Enviar"
 
 msgid "System"
 msgstr "Sistema"
+
+msgid "Target"
+msgstr "Objetivo"
 
 msgid "Ticket"
 msgstr "Billete"
@@ -2101,6 +2062,9 @@ msgstr "Imagen de portada"
 
 msgid "Description"
 msgstr "Descripción"
+
+msgid "Destination"
+msgstr "Destino"
 
 msgid "Direct link"
 msgstr "Enlace directo"
@@ -6005,6 +5969,10 @@ msgstr "Ahora puedes configurar las opciones de voto"
 msgid "Now you can verify wire payments"
 msgstr "Ahora puede verificar los pagos por transferencia"
 
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
+msgstr "Página %(number)s de %(num_pages)s"
+
 msgid "Please upload your profile photo"
 msgstr "Sube tu foto de perfil"
 
@@ -7607,6 +7575,10 @@ msgstr ""
 "Imagen opcional para el carrusel/presentación de diapositivas de la página "
 "de inicio"
 
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
+msgstr "Paga %(amount)s%(currency)s lo antes posible"
+
 msgid "Please confirm you want to perform this action"
 msgstr "Confirma que quieres realizar esta acción"
 
@@ -7989,6 +7961,10 @@ msgstr "Gestionar las etapas de progreso de los elementos de escritura"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Gestiona tu contraseña y la autenticación de dos factores"
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr "Paga %(amount)s %(currency)s en un plazo de %(counter)s días"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Segundo personaje de la relación (destino)"

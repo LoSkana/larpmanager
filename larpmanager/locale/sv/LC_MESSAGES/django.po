@@ -2,29 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "e"
-msgstr "e"
-
-msgid "By"
-msgstr "Av"
-
 msgid "Go"
 msgstr "Gå"
 
 msgid "Hi"
 msgstr "Hej"
 
-msgid "To"
-msgstr "A"
-
 msgid "XP"
 msgstr "px"
-
-msgid "by"
-msgstr "av"
-
-msgid "of"
-msgstr "av"
 
 msgid "Add"
 msgstr "Lägg till"
@@ -34,15 +19,6 @@ msgstr "Ålder"
 
 msgid "All"
 msgstr "Alla"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "CSS"
-msgstr "CSS"
-
-msgid "Cap"
-msgstr "Kåpa"
 
 msgid "End"
 msgstr "Slut"
@@ -65,12 +41,6 @@ msgstr "Nya"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Pdf"
-msgstr "Pdf"
-
-msgid "Run"
-msgstr "Run"
-
 msgid "Tot"
 msgstr "Tot"
 
@@ -85,9 +55,6 @@ msgstr "ålder"
 
 msgid "and"
 msgstr "och"
-
-msgid "for"
-msgstr "för"
 
 msgid "tot"
 msgstr "tot"
@@ -140,9 +107,6 @@ msgstr "Form"
 msgid "Free"
 msgstr "Gratis"
 
-msgid "From"
-msgstr "Från"
-
 msgid "Gift"
 msgstr "Gåva"
 
@@ -155,12 +119,6 @@ msgstr "Dölj"
 msgid "High"
 msgstr "Hög"
 
-msgid "Home"
-msgstr "Hem"
-
-msgid "IBAN"
-msgstr "IBAN"
-
 msgid "Icon"
 msgstr "Ikon"
 
@@ -169,9 +127,6 @@ msgstr "Info"
 
 msgid "Item"
 msgstr "Ingång"
-
-msgid "Kick"
-msgstr "Spark"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -374,6 +329,9 @@ msgstr "Datum"
 msgid "Email"
 msgstr "E-post"
 
+msgid "Entry"
+msgstr "Inlägg"
+
 msgid "Error"
 msgstr "Fel"
 
@@ -486,9 +444,6 @@ msgstr "Start"
 msgctxt "event"
 msgid "Style"
 msgstr "Stil"
-
-msgid "Swift"
-msgstr "Swift"
 
 msgid "Taxes"
 msgstr "Skatter"
@@ -757,6 +712,9 @@ msgstr "Välj"
 msgid "Seller"
 msgstr "Säljare"
 
+msgid "Source"
+msgstr "Källa"
+
 msgid "Status"
 msgstr "Status"
 
@@ -768,6 +726,9 @@ msgstr "Skicka"
 
 msgid "System"
 msgstr "System"
+
+msgid "Target"
+msgstr "Mål"
 
 msgid "Ticket"
 msgstr "Biljett"
@@ -2101,6 +2062,9 @@ msgstr "Omslagsbild"
 
 msgid "Description"
 msgstr "Beskrivning"
+
+msgid "Destination"
+msgstr "Resmål"
 
 msgid "Direct link"
 msgstr "Direkt länk"
@@ -6005,6 +5969,10 @@ msgstr "Nu kan du ställa in röstningsalternativen"
 msgid "Now you can verify wire payments"
 msgstr "Nu kan du verifiera banköverföringar"
 
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
+msgstr "Sida %(number)s av %(num_pages)s"
+
 msgid "Please upload your profile photo"
 msgstr "Vänligen ladda upp ditt profilfoto"
 
@@ -7603,6 +7571,10 @@ msgstr "Valfritt - Bild som visas i frågan"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Valfri bild för karusell/bildspel på startsidan"
 
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
+msgstr "Betala %(amount)s%(currency)s så snart som möjligt"
+
 msgid "Please confirm you want to perform this action"
 msgstr "Bekräfta att du vill utföra den här åtgärden"
 
@@ -7979,6 +7951,10 @@ msgstr "Hantera framstegsstegen för skrivelementen"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Hantera ditt lösenord och tvåfaktorsautentisering"
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr "Betala %(amount)s %(currency)s inom %(counter)s dagar"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i förhållandet (destination)"

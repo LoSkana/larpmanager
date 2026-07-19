@@ -237,7 +237,7 @@ def get_credit_email(credits_name: str, instance: AccountingItemOther) -> tuple[
 
     # Append run information to subject if available
     if instance.run:
-        subject += " " + _("for") + " " + str(instance.run)
+        subject += " " + _("for %(event)s") % {"event": instance.run}
 
     # Create formatted body message with credit details
     body = (
@@ -262,7 +262,7 @@ def get_token_email(instance: AccountingItemOther, tokens_name: str) -> tuple[st
 
     # Append run information to subject if available
     if instance.run:
-        email_subject += " " + _("for") + " " + str(instance.run)
+        email_subject += " " + _("for %(event)s") % {"event": instance.run}
 
     # Create detailed body message with amount, token type, and reason
     email_body = (

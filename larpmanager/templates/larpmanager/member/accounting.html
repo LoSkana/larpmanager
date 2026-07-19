@@ -58,8 +58,12 @@
                 {% for del in delegated %}
                     {% for registration in del.context.payments_todo %}
                         {% include "elements/comma.html" %}
-                        <b>{{ registration.run }}</b> ({{ del }}) - {{ registration.quota|format_decimal }}{{ currency_symbol }}
-                        {% trans "by" %} {{ registration.deadline }} {% trans "days" %}
+                        <b>{{ registration.run }}</b> ({{ del }}) -
+                        {% if registration.deadline > 1 %}
+                            {% blocktrans count counter=registration.deadline with amount=registration.quota|format_decimal currency=currency_symbol %}Pay {{ amount }}{{ currency }} within {{ counter }} days{% endblocktrans %}
+                        {% else %}
+                            {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol %}Pay {{ amount }}{{ currency }} as soon as possible{% endblocktrans %}
+                        {% endif %}
                     {% endfor %}
                 {% endfor %}
             </p>

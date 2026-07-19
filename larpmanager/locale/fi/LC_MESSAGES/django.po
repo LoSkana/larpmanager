@@ -2,29 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "e"
-msgstr "e"
-
-msgid "By"
-msgstr "By"
-
 msgid "Go"
 msgstr "Mene"
 
 msgid "Hi"
 msgstr "Hei"
 
-msgid "To"
-msgstr "Osoitteeseen"
-
 msgid "XP"
 msgstr "XP"
-
-msgid "by"
-msgstr "by"
-
-msgid "of"
-msgstr "/"
 
 msgid "Add"
 msgstr "Lisää"
@@ -34,15 +19,6 @@ msgstr "Ikä"
 
 msgid "All"
 msgstr "Kaikki"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "CSS"
-msgstr "CSS"
-
-msgid "Cap"
-msgstr "Korkki"
 
 msgid "End"
 msgstr "End"
@@ -65,12 +41,6 @@ msgstr "Uusi"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Pdf"
-msgstr "Pdf"
-
-msgid "Run"
-msgstr "Suorita"
-
 msgid "Tot"
 msgstr "Tot"
 
@@ -85,9 +55,6 @@ msgstr "ikä"
 
 msgid "and"
 msgstr "ja"
-
-msgid "for"
-msgstr "osoitteessa"
 
 msgid "tot"
 msgstr "tot"
@@ -140,9 +107,6 @@ msgstr "Lomake"
 msgid "Free"
 msgstr "Vapaa"
 
-msgid "From"
-msgstr "Osoitteesta"
-
 msgid "Gift"
 msgstr "Lahja"
 
@@ -155,12 +119,6 @@ msgstr "Piilota"
 msgid "High"
 msgstr "Korkea"
 
-msgid "Home"
-msgstr "Etusivu"
-
-msgid "IBAN"
-msgstr "IBAN"
-
 msgid "Icon"
 msgstr "Kuvake"
 
@@ -169,9 +127,6 @@ msgstr "Info"
 
 msgid "Item"
 msgstr "Kohde"
-
-msgid "Kick"
-msgstr "Potku"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -374,6 +329,9 @@ msgstr "Päivämäärä"
 msgid "Email"
 msgstr "Sähköposti"
 
+msgid "Entry"
+msgstr "Merkintä"
+
 msgid "Error"
 msgstr "Virhe"
 
@@ -486,9 +444,6 @@ msgstr "Aloita"
 msgctxt "event"
 msgid "Style"
 msgstr "Tyyli"
-
-msgid "Swift"
-msgstr "Swift"
 
 msgid "Taxes"
 msgstr "Verot"
@@ -757,6 +712,9 @@ msgstr "Valitse"
 msgid "Seller"
 msgstr "Myyjä"
 
+msgid "Source"
+msgstr "Lähde"
+
 msgid "Status"
 msgstr "Tila"
 
@@ -768,6 +726,9 @@ msgstr "Tallenna"
 
 msgid "System"
 msgstr "Järjestelmä"
+
+msgid "Target"
+msgstr "Kohde"
 
 msgid "Ticket"
 msgstr "Lippu"
@@ -2101,6 +2062,9 @@ msgstr "Kannen kuva"
 
 msgid "Description"
 msgstr "Kuvaus"
+
+msgid "Destination"
+msgstr "Kohde"
 
 msgid "Direct link"
 msgstr "Suora linkki"
@@ -6005,6 +5969,10 @@ msgstr "Nyt voit asettaa äänestysvaihtoehdot"
 msgid "Now you can verify wire payments"
 msgstr "Nyt voit tarkistaa tilisiirtomaksut"
 
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
+msgstr "Sivu %(number)s / %(num_pages)s"
+
 msgid "Please upload your profile photo"
 msgstr "Lataa profiilikuvasi"
 
@@ -7600,6 +7568,10 @@ msgstr "Valinnainen - Kysymyksessä näkyvä kuva"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Valinnainen kuva kotisivun karusellia/diashow'ta varten"
 
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
+msgstr "Maksakaa %(amount)s%(currency)s mahdollisimman pian"
+
 msgid "Please confirm you want to perform this action"
 msgstr "Vahvista, että haluat suorittaa tämän toiminnon"
 
@@ -7974,6 +7946,10 @@ msgstr "Hallinnoi kirjoituselementtien edistymisvaiheita"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Hallitse salasanaasi ja kaksivaiheista todennusta"
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr "Maksakaa %(amount)s %(currency)s %(counter)s päivän kuluessa"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Suhteen toinen hahmo (määränpää)"

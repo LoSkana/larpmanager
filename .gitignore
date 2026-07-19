@@ -49,6 +49,10 @@ local_settings.py
 
 venv/
 db.sqlite3
+scripts/translation_review.sqlite3
+scripts/translation_review_chunk.json
+scripts/translation_review_chunk_state.json
+scripts/translation_review_result.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -2,29 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "e"
-msgstr "e"
-
-msgid "By"
-msgstr "Av"
-
 msgid "Go"
 msgstr "Gå"
 
 msgid "Hi"
 msgstr "Hei"
 
-msgid "To"
-msgstr "A"
-
 msgid "XP"
 msgstr "px"
-
-msgid "by"
-msgstr "av"
-
-msgid "of"
-msgstr "av"
 
 msgid "Add"
 msgstr "Legg til"
@@ -34,15 +19,6 @@ msgstr "Alder"
 
 msgid "All"
 msgstr "Alle"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "CSS"
-msgstr "CSS"
-
-msgid "Cap"
-msgstr "Cap"
 
 msgid "End"
 msgstr "Slutt"
@@ -65,12 +41,6 @@ msgstr "Ny"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Pdf"
-msgstr "Pdf"
-
-msgid "Run"
-msgstr "Run"
-
 msgid "Tot"
 msgstr "Tot"
 
@@ -85,9 +55,6 @@ msgstr "alder"
 
 msgid "and"
 msgstr "og"
-
-msgid "for"
-msgstr "for"
 
 msgid "tot"
 msgstr "tot"
@@ -140,9 +107,6 @@ msgstr "Skjema"
 msgid "Free"
 msgstr "Gratis"
 
-msgid "From"
-msgstr "Fra"
-
 msgid "Gift"
 msgstr "Gave"
 
@@ -155,12 +119,6 @@ msgstr "Skjul"
 msgid "High"
 msgstr "Høy"
 
-msgid "Home"
-msgstr "Hjem"
-
-msgid "IBAN"
-msgstr "IBAN"
-
 msgid "Icon"
 msgstr "Ikon"
 
@@ -169,9 +127,6 @@ msgstr "Informasjon"
 
 msgid "Item"
 msgstr "Inngang"
-
-msgid "Kick"
-msgstr "Spark"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -374,6 +329,9 @@ msgstr "Datoer"
 msgid "Email"
 msgstr "E-post"
 
+msgid "Entry"
+msgstr "Oppføring"
+
 msgid "Error"
 msgstr "Feil"
 
@@ -486,9 +444,6 @@ msgstr "Start"
 msgctxt "event"
 msgid "Style"
 msgstr "Stil"
-
-msgid "Swift"
-msgstr "Hurtig"
 
 msgid "Taxes"
 msgstr "Skatter og avgifter"
@@ -757,6 +712,9 @@ msgstr "Velg"
 msgid "Seller"
 msgstr "Selger"
 
+msgid "Source"
+msgstr "Kilde"
+
 msgid "Status"
 msgstr "Status"
 
@@ -768,6 +726,9 @@ msgstr "Send"
 
 msgid "System"
 msgstr "System"
+
+msgid "Target"
+msgstr "Mål"
 
 msgid "Ticket"
 msgstr "Billett"
@@ -2101,6 +2062,9 @@ msgstr "Forsidebilde"
 
 msgid "Description"
 msgstr "Beskrivelse"
+
+msgid "Destination"
+msgstr "Reisemål"
 
 msgid "Direct link"
 msgstr "Direkte lenke"
@@ -6005,6 +5969,10 @@ msgstr "Nå kan du angi stemmealternativene"
 msgid "Now you can verify wire payments"
 msgstr "Nå kan du verifisere bankoverføringer"
 
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
+msgstr "Side %(number)s av %(num_pages)s"
+
 msgid "Please upload your profile photo"
 msgstr "Vennligst last opp profilbildet ditt"
 
@@ -7603,6 +7571,10 @@ msgstr "Valgfritt - Bilde som vises i spørsmålet"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Valgfritt bilde for karusell/bildefremvisning på hjemmesiden"
 
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
+msgstr "Betal %(amount)s%(currency)s så snart som mulig"
+
 msgid "Please confirm you want to perform this action"
 msgstr "Bekreft at du ønsker å utføre denne handlingen"
 
@@ -7979,6 +7951,10 @@ msgstr "Administrer fremdriftstrinnene for skriveelementene"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Administrer passordet ditt og tofaktorautentisering"
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr "Betal %(amount)s %(currency)s innen %(counter)s dager"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andre tegn i relasjonen (destinasjon)"

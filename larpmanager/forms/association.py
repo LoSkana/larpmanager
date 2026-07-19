@@ -976,7 +976,7 @@ class ExeConfigForm(ConfigForm):
         field_help_text = ""
         self.add_configs("einvoice_numerocivico", ConfigType.CHAR, field_label, field_help_text)
 
-        field_label = _("Cap")
+        field_label = "CAP"
         field_help_text = ""
         self.add_configs("einvoice_cap", ConfigType.CHAR, field_label, field_help_text)
 

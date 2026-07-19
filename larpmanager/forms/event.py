@@ -1613,7 +1613,7 @@ class OrgaRunForm(ConfigForm):
             "speedlarp": _("Speedlarp"),
             "prologue": _("Prologues"),
             "workshop": _("Workshop"),
-            "print_pdf": _("PDF"),
+            "print_pdf": "PDF",
         }
 
         additional_choices = [("relationships", _("Relationships"))]
