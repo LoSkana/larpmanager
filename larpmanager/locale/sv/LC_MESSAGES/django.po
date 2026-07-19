@@ -1004,7 +1004,7 @@ msgid "Profile"
 msgstr "Profil"
 
 msgid "Promote"
-msgstr "Marknadsföra"
+msgstr "Främja"
 
 msgid "Pronoun"
 msgstr "Pronomen"
@@ -2779,7 +2779,7 @@ msgid "Registrations"
 msgstr "Registrering"
 
 msgid "Relationships"
-msgstr "Slipsar"
+msgstr "Relationer"
 
 msgid "Requests open"
 msgstr "Öppna förfrågningar"
