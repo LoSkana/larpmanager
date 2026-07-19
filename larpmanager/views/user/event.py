@@ -743,7 +743,7 @@ def _get_faction_colors(context: dict) -> None:
         faction_objs = []
         for fac_num in ch_data.get("factions", []):
             fac = factions_cache.get(fac_num)
-            if fac:
+            if fac and fac.get("name") and fac.get("typ") != FactionType.SECRET:
                 faction_objs.append(fac)
         ch_data["factions"] = faction_objs
         ch_data["faction_colors"] = [f for f in faction_objs if f.get("color")][:3]
