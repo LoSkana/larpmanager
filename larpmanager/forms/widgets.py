@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, ClassVar
 
 from django import forms
 from django.utils.html import format_html
@@ -116,3 +116,29 @@ class DescriptionCheckboxSelectMultiple(_DescriptionOptionsMixin, forms.Checkbox
         super().__init__(*args, **kwargs)
         self.attrs.setdefault("class", "")
         self.attrs["class"] = (self.attrs["class"] + " reg-checkbox-class").strip()
+
+
+class FactionPreferenceWidget(forms.Widget):
+    """Drag-reorder list of factions, backed by a hidden comma-separated UUID input.
+
+    ``value`` is the comma-separated ordered UUID string (matches what's stored in
+    ``RegistrationAnswer.text``); ``factions`` is the ordered list of ``(uuid, name)``
+    tuples to render as draggable rows. Self-contained: dropped into a form field's
+    widget, it renders its full UI wherever ``{{ field }}`` is called.
+    """
+
+    template_name = "forms/widgets/faction_preference.html"
+
+    class Media:
+        js: ClassVar[list] = ["larpmanager/assets/js/faction-preference.js"]
+
+    def __init__(self, *args: Any, factions: list[tuple[str, str]] | None = None, **kwargs: Any) -> None:
+        """Store the ordered (uuid, name) faction list to render."""
+        super().__init__(*args, **kwargs)
+        self.factions = factions or []
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Build template context for the drag-reorder widget."""
+        ctx = super().get_context(name, value, attrs)
+        ctx["widget"]["factions"] = self.factions
+        return ctx

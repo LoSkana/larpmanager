@@ -178,7 +178,7 @@ def _build_guides_cache() -> list[dict]:
         {
             "slug": published_guide.slug,
             "title": published_guide.title,
-            "content_preview": _get_content_preview(published_guide.text, 100),
+            "content_preview": get_content_preview(published_guide.text, 100),
         }
         for published_guide in LarpManagerGuide.objects.filter(published=True).order_by("number")
     ]
@@ -197,7 +197,7 @@ def _build_tutorials_cache() -> list[dict]:
                 {
                     "slug": tutorial.slug,
                     "title": tutorial.name,
-                    "content_preview": _get_content_preview(section_content, 100),
+                    "content_preview": get_content_preview(section_content, 100),
                     "section_slug": section_slug,
                     "section_title": section_title,
                 },
@@ -322,7 +322,7 @@ def _extract_config_fields(form_class: type, features: set) -> list[dict]:
     return form.config_fields
 
 
-def _get_content_preview(html_content: str, maximum_preview_length: int = 200) -> str:
+def get_content_preview(html_content: str, maximum_preview_length: int = 200) -> str:
     """Get text preview from HTML content.
 
     Args:

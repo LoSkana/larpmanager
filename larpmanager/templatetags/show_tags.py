@@ -614,6 +614,7 @@ class _HtmlSanitizer(HTMLParser):
             return
         allowed = _ALLOWED_HTML_ATTRS.get("*", set()) | _ALLOWED_HTML_ATTRS.get(tag, set())
         safe_attrs = []
+        has_target = False
         for attr, val in attrs:
             if attr not in allowed or val is None:
                 continue
@@ -621,7 +622,12 @@ class _HtmlSanitizer(HTMLParser):
                 continue
             if attr == "style" and _DANGEROUS_CSS_PATTERN.search(val):
                 continue
+            if tag == "a" and attr == "target":
+                has_target = True
             safe_attrs.append(f' {attr}="{escape(val)}"')
+        # Prevent reverse tabnabbing
+        if tag == "a" and has_target:
+            safe_attrs.append(' rel="noopener noreferrer"')
         self._parts.append(f"<{tag}{''.join(safe_attrs)}>")
 
     def handle_endtag(self, tag: str) -> None:

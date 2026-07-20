@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Matchmaker" %} - {{ run.search }}
+{% endblock title %}
+{% block content %}
+    <div class="form_container user_resize platform">
+        {% if not form.questions %}
+            <p>{% trans "No matchmaker questions have been set up for this event yet" %}.</p>
+        {% else %}
+            <form id="matchmaker" action="{{ request.path }}" method="post" novalidate>
+                {% csrf_token %}
+                <div>{% include "elements/form/register.html" %}</div>
+                <input type="submit" value="{% trans "Save" %}" id="matchmaker_go">
+            </form>
+        {% endif %}
+    </div>
+{% endblock content %}

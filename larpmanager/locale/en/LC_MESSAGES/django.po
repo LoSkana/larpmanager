@@ -4208,6 +4208,9 @@ msgstr ""
 msgid "Rate"
 msgstr ""
 
+msgid "Faction preference"
+msgstr ""
+
 msgid "Mandatory"
 msgstr ""
 
@@ -4321,6 +4324,9 @@ msgid "Giftable"
 msgstr ""
 
 msgid "Indicates whether the option can be included in the gifted signups"
+msgstr ""
+
+msgid "Select which form this question belongs to"
 msgstr ""
 
 msgid "Price"
@@ -5275,6 +5281,21 @@ msgstr ""
 msgid "Are you sure you want to approve this element"
 msgstr ""
 
+msgid "Ask a question"
+msgstr ""
+
+msgid "Ask LarpManager"
+msgstr ""
+
+msgid "For best results, ask in English."
+msgstr ""
+
+msgid "Type your question..."
+msgstr ""
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+
 msgid "Are you sure you want to delete this element"
 msgstr ""
 
@@ -5347,7 +5368,7 @@ msgstr ""
 msgid "Need help"
 msgstr ""
 
-msgid "What would you like to do?"
+msgid "No results"
 msgstr ""
 
 msgid "An error occurred"
@@ -5858,6 +5879,9 @@ msgstr ""
 msgid "Scroll right"
 msgstr ""
 
+msgid "What would you like to do?"
+msgstr ""
+
 msgid "User"
 msgstr ""
 
@@ -6246,6 +6270,15 @@ msgid "Here are the sign up options with limited number"
 msgstr ""
 
 msgid "Question"
+msgstr ""
+
+msgid "Matchmaker"
+msgstr ""
+
+msgid "No matchmaker questions have been set up for this event yet"
+msgstr ""
+
+msgid "Save"
 msgstr ""
 
 msgid "Registration not open"
@@ -8855,6 +8888,18 @@ msgstr ""
 msgid "View all log entries recorded for this event"
 msgstr ""
 
+msgid "Matchmaker answers"
+msgstr ""
+
+msgid "No matchmaker questions have been created yet"
+msgstr ""
+
+msgid "Configure the matchmaker form"
+msgstr ""
+
+msgid "No participant has answered the matchmaker form yet"
+msgstr ""
+
 msgid "Manage event milestones and track their deadlines and completion status"
 msgstr ""
 
@@ -8951,10 +8996,13 @@ msgstr ""
 msgid "Discounts available"
 msgstr ""
 
-msgid "No registration form questions have been created yet"
+msgid "form"
 msgstr ""
 
-msgid "Use the button above to add questions to the registration form"
+msgid "No questions have been created yet for this form"
+msgstr ""
+
+msgid "Use the button above to add one"
 msgstr ""
 
 msgid "Installments"
@@ -10058,6 +10106,14 @@ msgid "Now you can set the casting options"
 msgstr ""
 
 msgid ""
+"Lets organizers define custom questions on the characters participants would "
+"like to play, and assign them with a grid system"
+msgstr ""
+
+msgid "Now you can set the matchmaker form"
+msgstr ""
+
+msgid ""
 "Allows participants to submit questions, and organizers to review and "
 "organize them"
 msgstr ""
@@ -10914,6 +10970,9 @@ msgstr ""
 msgid "Manage the registration questions and options"
 msgstr ""
 
+msgid "Review participant answers to the matchmaker questions"
+msgstr ""
+
 msgid "Manage the registration surcharges"
 msgstr ""
 
@@ -11139,6 +11198,9 @@ msgid "Access your character"
 msgstr ""
 
 msgid "Select your preferences on the characters to play"
+msgstr ""
+
+msgid "Answer questions to help match you with characters"
 msgstr ""
 
 msgid "Register to the event"
@@ -11461,6 +11523,14 @@ msgstr ""
 msgid "Plot Roles"
 msgstr ""
 
+msgid "Live chat is not configured."
+msgstr ""
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+
 msgid "Event added to ILDB"
 msgstr ""
 
@@ -11629,6 +11699,9 @@ msgstr ""
 msgid ""
 "Number of installments to split the fee: payments and deadlines will be "
 "equally divided from the registration date"
+msgstr ""
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
 msgstr ""
 
 msgid "Not participating"
@@ -11975,6 +12048,12 @@ msgstr ""
 msgid "Element"
 msgstr ""
 
+msgid "Invalid request method"
+msgstr ""
+
+msgid "Please write a question"
+msgstr ""
+
 msgid "Your request has been sent, we will reply as soon as possible"
 msgstr ""
 
@@ -12187,9 +12266,6 @@ msgid "A new version of the platform is available"
 msgstr ""
 
 msgid "Dashboard"
-msgstr ""
-
-msgid "Invalid request method"
 msgstr ""
 
 msgid "Invalid choice format"
@@ -12489,6 +12565,13 @@ msgstr ""
 msgid "You have granted data sharing with this organisation"
 msgstr ""
 
+msgid ""
+"You must register for the event before answering the matchmaker questions"
+msgstr ""
+
+msgid "Answers saved"
+msgstr ""
+
 msgid "You need a character to create a guild"
 msgstr ""
 
@@ -12618,6 +12701,9 @@ msgid "This invitation has already been redeemed."
 msgstr ""
 
 msgid "This invitation has expired."
+msgstr ""
+
+msgid "This invitation was sent to a different email address."
 msgstr ""
 
 msgid "You must consent to data sharing to accept this invitation."

@@ -469,6 +469,27 @@
   background: rgba(var(--pri-rgb), 0.1);
 }
 
+.tv22-wwyltd-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  margin-left: 0.5em;
+  border: 1px solid rgba(var(--pri-rgb), 0.3);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font-size: 0.8em;
+  padding: 1em 1.5em;
+}
+
+.tv22-wwyltd-btn:hover {
+  background: rgba(var(--pri-rgb), 0.1);
+}
+
 .new_v22 #topbar.topbar_v22 {
   transition:
     left 0.25s,

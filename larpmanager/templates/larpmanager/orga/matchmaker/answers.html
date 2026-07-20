@@ -1,0 +1,35 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Matchmaker answers" %} - {{ run.search | truncatechars:50 }}
+{% endblock title %}
+{% block info %}
+    {{ page_info }}
+{% endblock info %}
+{% block content %}
+    {% if not questions %}
+        <p class="no-elements-available">
+            {% trans "No matchmaker questions have been created yet" %}.
+            <a href="{% url 'orga_registration_form' run.get_slug "matchmaker" %}">{% trans "Configure the matchmaker form" %}</a>.
+        </p>
+    {% elif not rows %}
+        <p class="no-elements-available">{% trans "No participant has answered the matchmaker form yet" %}.</p>
+    {% else %}
+        <table id="matchmaker_answers" class="go_datatable writing">
+            <thead>
+                <tr>
+                    <th>{% trans "Participant" %}</th>
+                    {% for question in questions %}<th>{{ question.name }}</th>{% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr id="{{ row.registration.uuid }}">
+                        <td>{{ row.registration.member }}</td>
+                        {% for cell in row.cells %}<td>{{ cell }}</td>{% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock content %}

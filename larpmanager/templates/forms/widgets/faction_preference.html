@@ -1,0 +1,15 @@
+{% load i18n %}
+<div class="faction-pref" data-field-id="{{ widget.attrs.id }}">
+    <ul class="faction-pref-list">
+        {% for uuid, name in widget.factions %}
+            <li class="faction-pref-item" draggable="true" data-uuid="{{ uuid }}">
+                <i class="fa-solid fa-grip-vertical faction-pref-handle"></i>
+                <span>{{ name }}</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <input type="hidden"
+           name="{{ widget.name }}"
+           id="{{ widget.attrs.id }}"
+           value="{{ widget.value|default:'' }}" />
+</div>

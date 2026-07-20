@@ -4,7 +4,7 @@
          src="{{ guild.cover.url }}"
          alt="guild logo" />
 {% endif %}
-{% if show_guild.teaser %}
+{% if guild.teaser %}
     <p>{% show_char guild.teaser run 1 %}</p>
 {% endif %}
 {% include "elements/sheet/fields.html" with char=fields %}

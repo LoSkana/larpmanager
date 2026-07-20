@@ -36,7 +36,7 @@ from django_select2 import forms as s2forms
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.utils import CharacterDualListWidget, ReadOnlyWidget, WritingTinyMCE, css_delimeter
-from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect
+from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect, FactionPreferenceWidget
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import (
@@ -46,6 +46,7 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
+    RegistrationQuestionType,
     WritingQuestionType,
     get_writing_max_length,
 )
@@ -57,6 +58,7 @@ from larpmanager.models.utils import (
     get_option_form_text as util_get_option_form_text,
     strip_tags,
 )
+from larpmanager.models.writing import Faction
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -1004,6 +1006,10 @@ class BaseRegistrationForm(BaseModelFormRun):
         elif question["typ"] == BaseQuestionType.EDITOR:
             self.init_editor(field_key, question, is_required=is_required, is_field_active=is_field_active)
 
+        # Handle faction preference drag-reorder fields
+        elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
+            self.init_faction_preference(field_key, question, is_required=is_required)
+
         # Handle special question types (custom implementations)
         else:
             field_key = self.init_special(question, is_required=is_required)
@@ -1160,6 +1166,39 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Set initial value if answer exists
         if form_question["id"] in self.answers:
             self.initial[field_key] = self.answers[form_question["id"]].text
+
+    def init_faction_preference(self, field_key: str, form_question: dict, *, is_required: bool) -> None:
+        """Initialize a faction-preference drag-reorder field.
+
+        The submitted value is a comma-separated ordered list of faction UUIDs, stored
+        in ``RegistrationAnswer.text`` like a plain text answer.
+        """
+        event = self.params["run"].event
+        visible_factions = list(event.get_elements(Faction).filter(hide=False).order_by("order"))
+        visible_uuids = {str(faction.uuid): faction for faction in visible_factions}
+
+        # Start from the previously saved order, dropping factions no longer visible
+        ordered_uuids: list[str] = []
+        if form_question["id"] in self.answers:
+            saved_order = self.answers[form_question["id"]].text.split(",")
+            ordered_uuids = [uuid for uuid in saved_order if uuid in visible_uuids]
+
+        # Append any visible factions not yet ranked (new factions, or first-time fill-in)
+        for faction in visible_factions:
+            faction_uuid = str(faction.uuid)
+            if faction_uuid not in ordered_uuids:
+                ordered_uuids.append(faction_uuid)
+
+        self.fields[field_key] = forms.CharField(
+            required=is_required,
+            widget=FactionPreferenceWidget(
+                factions=[(uuid, visible_uuids[uuid].name) for uuid in ordered_uuids],
+            ),
+            label=form_question["name"],
+            help_text=form_question["description"],
+        )
+
+        self.initial[field_key] = ",".join(ordered_uuids)
 
     def init_single(
         self,
@@ -1333,6 +1372,27 @@ class BaseRegistrationForm(BaseModelFormRun):
                 self.save_registration_single(instance, oid, question)
             elif question["typ"] in [BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR]:
                 self.save_registration_text(instance, oid, question)
+            elif question["typ"] == RegistrationQuestionType.FACTION_PREFERENCE:
+                self.save_registration_faction_preference(instance, oid, question)
+
+    def save_registration_faction_preference(self, instance: Any, value: str | None, question: dict) -> None:
+        """Sanitize and save the submitted faction ordering.
+
+        Strips out any UUID that doesn't belong to a currently visible faction of the
+        event, so a tampered hidden-field value can't smuggle in arbitrary data.
+        """
+        event = self.params["run"].event
+        visible_faction_uuids = [
+            str(uuid)
+            for uuid in event.get_elements(Faction).filter(hide=False).order_by("order").values_list("uuid", flat=True)
+        ]
+        submitted = (value or "").split(",")
+        sanitized = [uuid for uuid in submitted if uuid in visible_faction_uuids]
+        # append any visible faction the client dropped, so every faction is always ranked
+        for faction_uuid in visible_faction_uuids:
+            if faction_uuid not in sanitized:
+                sanitized.append(faction_uuid)
+        self.save_registration_text(instance, ",".join(sanitized), question)
 
     def save_registration_text(
         self,

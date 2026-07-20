@@ -432,6 +432,18 @@
     module: registration
 - model: larpmanager.eventpermission
   fields:
+    name: Matchmaker answers
+    descr: Review participant answers to the matchmaker questions
+    slug: orga_matchmaker_answers
+    number: 10
+    config: null
+    active_if: null
+    hidden: false
+    icon: users
+    feature: matchmaker
+    module: matchmaker
+- model: larpmanager.eventpermission
+  fields:
     name: Surcharges
     descr: Manage the registration surcharges
     slug: orga_registration_surcharges

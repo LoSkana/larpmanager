@@ -105,12 +105,14 @@ from larpmanager.forms.writing import (
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.experience import AbilityTypeExp
 from larpmanager.models.form import (
+    REGISTRATION_TYPE_TO_APPLICABLE,
     BaseQuestionType,
     QuestionApplicable,
     RegistrationOption,
     RegistrationQuestion,
     WritingOption,
     WritingQuestion,
+    _get_registration_mapping,
     _get_writing_mapping,
 )
 from larpmanager.models.registration import Registration
@@ -689,6 +691,10 @@ def form_edit_handler(
     if writing_type:
         # Validate the writing form type exists and is allowed
         check_writing_form_type(context, writing_type)
+    else:
+        registration_type = extra_context.get("registration_type") if extra_context else None
+        # Validate the registration form type exists and is allowed (defaults to "registration")
+        check_registration_form_type(context, registration_type or "registration")
 
     # Check if this is an AJAX request
     is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
@@ -866,3 +872,37 @@ def check_writing_form_type(context: dict, form_type: str) -> None:
     context["writing_typ"] = available_types[form_type]
     context["label_typ"] = form_type.capitalize()
     context["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
+
+
+def check_registration_form_type(context: dict, form_type: str) -> None:
+    """Validate registration form type and update context with type information.
+
+    "registration" is always available, other types require their gating feature to be
+    active on the event.
+
+    Args:
+        context: Context dictionary to update with type information
+        form_type: Registration form type to validate (e.g. "registration", "matchmaker")
+
+    Raises:
+        Http404: If the registration form type is not available
+
+    """
+    form_type = form_type.lower()
+    registration_type_mapping = _get_registration_mapping()
+
+    # Build available types from those whose gating feature (if any) is active
+    available_types = [
+        key for key, feature in registration_type_mapping.items() if feature is None or feature in context["features"]
+    ]
+
+    # Validate the requested type is available
+    if form_type not in available_types:
+        msg = f"unknown registration form type: {form_type}"
+        raise Http404(msg)
+
+    # Update context with type information
+    context["typ"] = form_type
+    context["registration_typ"] = REGISTRATION_TYPE_TO_APPLICABLE[form_type]
+    context["label_typ"] = form_type.capitalize()
+    context["available_typ"] = {key.capitalize(): key for key in available_types}

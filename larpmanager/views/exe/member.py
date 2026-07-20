@@ -88,6 +88,7 @@ from larpmanager.utils.io.pdf import (
     print_volunteer_registry,
     return_pdf,
 )
+from larpmanager.utils.security.csv_validation import SanitizingCsvWriter
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_mail
 from larpmanager.views.orga.member import send_mail_batch
@@ -1237,7 +1238,7 @@ def exe_newsletter_csv(request: HttpRequest, lang: str) -> HttpResponse:
         content_type="text/csv",
         headers={"Content-Disposition": f'attachment; filename="Newsletter-{lang}.csv"'},
     )
-    writer = csv.writer(response)
+    writer = SanitizingCsvWriter(csv.writer(response))
 
     # Iterate through all memberships for the current association
     for el in Membership.objects.filter(association_id=context["association_id"]).select_related("member"):

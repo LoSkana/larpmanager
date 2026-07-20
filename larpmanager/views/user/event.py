@@ -46,6 +46,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_writing_field_names
 from larpmanager.cache.registration import get_registration_counts, get_registration_tickets
+from larpmanager.forms.registration import MatchmakerForm
 from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
@@ -743,7 +744,7 @@ def _get_faction_colors(context: dict) -> None:
         faction_objs = []
         for fac_num in ch_data.get("factions", []):
             fac = factions_cache.get(fac_num)
-            if fac:
+            if fac and fac.get("name") and fac.get("typ") != FactionType.SECRET:
                 faction_objs.append(fac)
         ch_data["factions"] = faction_objs
         ch_data["faction_colors"] = [f for f in faction_objs if f.get("color")][:3]
@@ -1198,3 +1199,27 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     for el in lst:
         aux[el.number] = el.show(context["run"])
     return JsonResponse(aux)
+
+
+@login_required
+def matchmaker(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Player-facing page to answer the matchmaker questions for an existing registration."""
+    context = get_event_context(request, event_slug, "matchmaker")
+
+    registration = context.get("registration")
+    if not registration:
+        messages.warning(request, _("You must register for the event before answering the matchmaker questions"))
+        return redirect("register", event_slug=context["run"].get_slug())
+
+    if request.method == "POST":
+        form = MatchmakerForm(request.POST, request.FILES, instance=registration, context=context)
+        if form.is_valid():
+            form.save()
+            messages.success(request, _("Answers saved") + "!")
+            return redirect("matchmaker", event_slug=context["run"].get_slug())
+    else:
+        form = MatchmakerForm(instance=registration, context=context)
+
+    context["form"] = form
+
+    return render(request, "larpmanager/event/matchmaker.html", context)

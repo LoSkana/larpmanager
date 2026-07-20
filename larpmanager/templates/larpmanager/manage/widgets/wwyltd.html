@@ -1,9 +1,16 @@
 {% load i18n %}
 {% if manage and not lite_mode %}
     <div id="wwyltd">
-        <form method="post">
+        <form method="post" autocomplete="off">
             {% csrf_token %}
-            <select id="id_wwyltd" name="wwyltd"></select>
+            <div class="wwyltd-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text"
+                       id="id_wwyltd_search"
+                       placeholder="{% trans "What would you like to do?" %}">
+                <input type="hidden" id="id_wwyltd" name="wwyltd" value="">
+            </div>
+            <div id="wwyltd-results" class="wwyltd-results"></div>
         </form>
     </div>
 {% endif %}

@@ -31,6 +31,7 @@ from larpmanager.views.orga import (
     experience as views_ox,
     form as views_of,
     inventory as views_ci,
+    matchmaker as views_omm,
     member as views_om,
     miscellanea as views_oms,
     pdf as views_op,
@@ -216,21 +217,6 @@ urlpatterns = [
         name="orga_registration_form",
     ),
     path(
-        "<slug:event_slug>/manage/form/new/",
-        views_of.orga_registration_form_new,
-        name="orga_registration_form_new",
-    ),
-    path(
-        "<slug:event_slug>/manage/form/<slug:question_uuid>/edit/",
-        views_of.orga_registration_form_edit,
-        name="orga_registration_form_edit",
-    ),
-    path(
-        "<slug:event_slug>/manage/form/<slug:question_uuid>/delete/",
-        views_of.orga_registration_form_delete,
-        name="orga_registration_form_delete",
-    ),
-    path(
         "<slug:event_slug>/manage/form/list/",
         views_or.orga_registration_form_list,
         name="orga_registration_form_list",
@@ -239,6 +225,26 @@ urlpatterns = [
         "<slug:event_slug>/manage/form/email/",
         views_or.orga_registration_form_email,
         name="orga_registration_form_email",
+    ),
+    path(
+        "<slug:event_slug>/manage/form/<slug:registration_type>/",
+        views_of.orga_registration_form,
+        name="orga_registration_form",
+    ),
+    path(
+        "<slug:event_slug>/manage/form/<slug:registration_type>/new/",
+        views_of.orga_registration_form_new,
+        name="orga_registration_form_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/form/<slug:registration_type>/<slug:question_uuid>/edit/",
+        views_of.orga_registration_form_edit,
+        name="orga_registration_form_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/form/<slug:registration_type>/<slug:question_uuid>/delete/",
+        views_of.orga_registration_form_delete,
+        name="orga_registration_form_delete",
     ),
     path(
         "<slug:event_slug>/manage/options/new/",
@@ -1439,6 +1445,11 @@ urlpatterns = [
         "<slug:event_slug>/manage/casting/<str:casting_type>/<slug:ticket>/",
         views_oca.orga_casting,
         name="orga_casting",
+    ),
+    path(
+        "<slug:event_slug>/manage/matchmaker/",
+        views_omm.orga_matchmaker_answers,
+        name="orga_matchmaker_answers",
     ),
     path(
         "<slug:event_slug>/manage/accounting/",
