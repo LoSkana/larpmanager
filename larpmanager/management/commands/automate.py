@@ -55,6 +55,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.larpmanager import LarpManagerChatLog
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.miscellanea import Log
 from larpmanager.models.registration import Registration, TicketTier
@@ -132,6 +133,9 @@ class Command(BaseCommand):
 
         # Send daily organizer summaries for events with digest mode enabled
         self.send_organizer_summaries()
+
+        # Send weekly recap of ask-larpmanager chat questions to admins
+        self.send_chat_log_recap()
 
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing
@@ -974,3 +978,22 @@ class Command(BaseCommand):
     def send_organizer_summaries() -> None:
         """Send daily summary emails to organizers for events with digest mode enabled."""
         send_daily_organizer_summaries()
+
+    @staticmethod
+    def send_chat_log_recap() -> None:
+        """Send admins a weekly recap of questions asked through the ask-larpmanager chat widget."""
+        # Only run once a week
+        if timezone.now().weekday() != 0:
+            return
+
+        week_ago = timezone.now() - timedelta(days=7)
+        chat_logs = (
+            LarpManagerChatLog.objects.filter(created__gte=week_ago).select_related("member").order_by("created")
+        )
+        if not chat_logs:
+            return
+
+        body = "<br /><br />".join(
+            f"{chat_log.created:%Y-%m-%d %H:%M} - {chat_log.member} - {chat_log.question}" for chat_log in chat_logs
+        )
+        notify_admins("Weekly ask-larpmanager questions recap", body)

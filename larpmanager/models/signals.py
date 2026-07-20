@@ -33,7 +33,7 @@ from larpmanager.accounting.base import (
     handle_accounting_item_payment_pre_save,
     handle_collection_pre_save,
 )
-from larpmanager.accounting.gateway import handle_invalid_paypal_ipn, handle_valid_paypal_ipn
+from larpmanager.accounting.gateway.paypal import handle_invalid_paypal_ipn, handle_valid_paypal_ipn
 from larpmanager.accounting.payment import (
     cleanup_membership_fee_reservation,
     process_collection_status_change,

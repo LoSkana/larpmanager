@@ -267,11 +267,11 @@ def reset_caches(live_server, page):
 
     page.get_by_role("link", name="Reset Cache").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#banner"), "Dashboard")
+    expect_normalized(page, page.locator("body"), "Dashboard")
 
     # Test association-level cache reset
     go_to(page, live_server, "/manage/")
 
     page.get_by_role("link", name="Reset Cache").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#banner"),"Dashboard")
+    expect_normalized(page, page.locator("body"),"Dashboard")

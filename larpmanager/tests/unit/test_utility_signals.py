@@ -26,6 +26,7 @@ from unittest.mock import patch
 
 # Import signals module to register signal handlers
 import larpmanager.models.signals  # noqa: F401
+from larpmanager.cache.experience import get_event_exp_cache
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     AccountingItemOther,
@@ -34,6 +35,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import AssociationText
 from larpmanager.models.event import EventText
 from larpmanager.models.experience import AbilityExp, DeliveryExp, ModifierExp
+from larpmanager.models.form import WritingOption, WritingQuestion
 from larpmanager.models.writing import Faction, Handout, HandoutTemplate
 from larpmanager.tests.unit.base import BaseTestCase
 
@@ -99,6 +101,31 @@ class TestUtilitySignals(BaseTestCase):
         # Verify modifier was created successfully
         self.assertIsNotNone(modifier_px.id)
         self.assertEqual(modifier_px.name, "Test Modifier")
+
+    def test_writing_option_save_updates_modifier_rels_cache(self) -> None:
+        """Renaming a CharacterOption (WritingOption) must refresh cached
+        requirement_rels of every ModifierExp that requires it."""
+        event = self.get_event()
+        question = WritingQuestion.objects.create(event=event, name="test_question", description="Test")
+        option = WritingOption.objects.create(event=event, question=question, name="Original Name")
+
+        modifier_px = ModifierExp.objects.create(name="Test Modifier", cost=8, event=event)
+        modifier_px.requirements.add(option)
+
+        # Populate cache with the original option name
+        cached = get_event_exp_cache(event)
+        rels = cached["modifiers"][modifier_px.id]["requirement_rels"]["list"]
+        self.assertIn((option.uuid, "Original Name"), rels)
+
+        # Rename the option, mimicking the inline option editor's form.save()
+        option.name = "Renamed"
+        option.save()
+
+        cached_after = get_event_exp_cache(event)
+        rels_after = cached_after["modifiers"][modifier_px.id]["requirement_rels"]["list"]
+        names_after = [name for _uuid, name in rels_after]
+        self.assertIn("Renamed", names_after, f"modifier requirement_rels not refreshed after option save: {rels_after}")
+        self.assertNotIn("Original Name", names_after)
 
     def test_character_pre_save_updates_writing(self) -> None:
         """Test that Character pre_save signal updates character writing"""

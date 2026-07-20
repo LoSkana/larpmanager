@@ -500,16 +500,15 @@ def on_character_saved(character_id: int, event_id: int) -> None:
 
 
 def on_writing_option_saved(option: WritingOption, event_id: int) -> None:
-    """Refresh ability caches that list this option in their requirement_rels.
+    """Refresh ability, modifier, and criterion caches that list this option as a requirement.
 
     Called from post_save signal on WritingOption so that renaming an option propagates
-    to the cached_rels of every ability that has this option as a requirement.
+    to the cached_rels of every ability, modifier, and criterion that requires it.
     """
     ability_ids = list(AbilityExp.objects.filter(requirements__id=option.id).values_list("id", flat=True))
-    if not ability_ids:
-        return
-    _mark_exp_dirty("abilities", ability_ids, event_id)
-    refresh_ability_character_rels_background(ability_ids)
+    if ability_ids:
+        _mark_exp_dirty("abilities", ability_ids, event_id)
+        refresh_ability_character_rels_background(ability_ids)
 
     modifier_ids = list(ModifierExp.objects.filter(requirements=option).values_list("id", flat=True))
     if modifier_ids:

@@ -23,6 +23,7 @@ import subprocess
 from pathlib import Path
 
 from django.core.management import BaseCommand, call_command
+from django.db import connection
 
 from larpmanager.management.commands.utils import check_branch, check_virtualenv
 
@@ -109,10 +110,11 @@ class Command(BaseCommand):
         # Reset database to clean state and apply all migrations
         call_command("reset", verbosity=0)
 
-        # Configure environment for PostgreSQL authentication
+        # Configure environment for PostgreSQL authentication, matching active Django settings
         self.stdout.write("Dumping database to test_db.sql...")
+        db_settings = connection.settings_dict
         env = os.environ.copy()
-        env["PGPASSWORD"] = "larpmanager"
+        env["PGPASSWORD"] = db_settings["PASSWORD"]
 
         sql_file = Path("larpmanager/tests/test_db.sql")
 
@@ -120,11 +122,11 @@ class Command(BaseCommand):
         dump_cmd = [
             "pg_dump",
             "-U",
-            "larpmanager",
+            db_settings["USER"],
             "-h",
-            "localhost",
+            db_settings["HOST"] or "localhost",
             "-d",
-            "larpmanager",
+            db_settings["NAME"],
             "--inserts",  # Use INSERT statements instead of COPY
             "--no-owner",  # Skip ownership commands
             "--no-privileges",  # Skip privilege commands

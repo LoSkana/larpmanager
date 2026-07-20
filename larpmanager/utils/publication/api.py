@@ -114,8 +114,11 @@ def validate_api_key(request: HttpRequest) -> tuple[PublisherApiKey | None, Json
         None: All exceptions are handled internally and returned as error responses
 
     """
-    # Extract API key from GET parameters
-    api_key_string = request.GET.get("api_key")
+    # Get api_key from Bearer
+    api_key_string = ""
+    auth_header = request.META.get("HTTP_AUTHORIZATION", "")
+    if auth_header.startswith("Bearer "):
+        api_key_string = auth_header[len("Bearer ") :].strip()
     if not api_key_string:
         return None, JsonResponse({"error": "API key required"}, status=401)
 

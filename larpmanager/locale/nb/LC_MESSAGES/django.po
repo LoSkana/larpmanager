@@ -1886,6 +1886,9 @@ msgstr "Neste kvote"
 msgid "No changes"
 msgstr "Ingen endringer"
 
+msgid "No results"
+msgstr "Ingen resultater"
+
 msgid "Organizers"
 msgstr "Arrangører"
 
@@ -2863,6 +2866,9 @@ msgstr "Aktive enheter"
 msgid "Add to faction"
 msgstr "Legg til i fraksjon"
 
+msgid "Ask a question"
+msgstr "Still et spørsmål"
+
 msgid "Assign members"
 msgstr "Tildel medlemmer"
 
@@ -3129,6 +3135,9 @@ msgstr "Legg til i XP-poeng"
 
 msgid "App Integration"
 msgstr "App-integrasjon"
+
+msgid "Ask LarpManager"
+msgstr "Spør LarpManager"
 
 msgid "Attachment Name"
 msgstr "Navn på vedlegg"
@@ -4634,6 +4643,9 @@ msgstr "Token ikke initialisert"
 msgid "Transfer registration"
 msgstr "Registrering av overføring"
 
+msgid "Type your question..."
+msgstr "Skriv inn spørsmålet ditt..."
+
 msgid "Updated Registrations"
 msgstr "Oppdaterte registreringer"
 
@@ -4927,6 +4939,9 @@ msgstr "Spillerens karakterskjema"
 
 msgid "Please check them below"
 msgstr "Vennligst sjekk dem nedenfor"
+
+msgid "Please write a question"
+msgstr "Skriv gjerne et spørsmål"
 
 msgid "Pre registrations total"
 msgstr "Totalt antall forhåndsregistreringer"
@@ -5520,6 +5535,9 @@ msgstr "Hvis avkrysset: medlemmene kan stemme"
 msgid "Invitation sent to %(email)s"
 msgstr "Invitasjon sendt til %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "Live-chatten er ikke konfigurert."
+
 msgid "Manage experience criterions"
 msgstr "Administrer opplevelseskriterier"
 
@@ -6088,6 +6106,9 @@ msgstr "Finn ut hva dette arrangementet handler om"
 
 msgid "Fill out the event prep questions"
 msgstr "Fyll ut de forberedende spørsmålene til arrangementet"
+
+msgid "For best results, ask in English."
+msgstr "For å få best mulig resultat, spør på engelsk."
 
 msgid "For more information, write to us"
 msgstr "For mer informasjon, skriv til oss"
@@ -8347,6 +8368,9 @@ msgstr "Brukeren har bekreftet sin påmelding til dette arrangementet"
 msgid "The user has updated their registration for this event"
 msgstr "Brukeren har oppdatert sin påmelding til dette arrangementet"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Denne invitasjonen ble sendt til en annen e-postadresse."
+
 msgid "Whether this content is currently available for access"
 msgstr "Om dette innholdet for øyeblikket er tilgjengelig for tilgang"
 
@@ -9252,6 +9276,10 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Noen billetter mangler en siste delbetaling (0 beløp): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"Assistenten er midlertidig utilgjengelig. Vennligst prøv igjen senere."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -12753,6 +12781,13 @@ msgid ""
 msgstr ""
 "Legger til billettyperne 'Patron' og 'Reduced'. Hver Patron-billett som "
 "kjøpes, gjør én Reduced-billett tilgjengelig"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"Jeg fant ikke noe relevant i dokumentasjonen. Prøv å stille spørsmålet på "
+"engelsk, eller opprett en supportforespørsel."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "

@@ -1886,6 +1886,9 @@ msgstr "Volgende quota"
 msgid "No changes"
 msgstr "Geen wijzigingen"
 
+msgid "No results"
+msgstr "Geen resultaten"
+
 msgid "Organizers"
 msgstr "Organisatoren"
 
@@ -2863,6 +2866,9 @@ msgstr "Actieve apparaten"
 msgid "Add to faction"
 msgstr "Toevoegen aan factie"
 
+msgid "Ask a question"
+msgstr "Stel een vraag"
+
 msgid "Assign members"
 msgstr "Leden toewijzen"
 
@@ -3129,6 +3135,9 @@ msgstr "Toevoegen aan xp-beloning"
 
 msgid "App Integration"
 msgstr "App integratie"
+
+msgid "Ask LarpManager"
+msgstr "Vraag het aan LarpManager"
 
 msgid "Attachment Name"
 msgstr "Naam bijlage"
@@ -4634,6 +4643,9 @@ msgstr "Token niet geïnitialiseerd"
 msgid "Transfer registration"
 msgstr "Registratie overdragen"
 
+msgid "Type your question..."
+msgstr "Typ je vraag..."
+
 msgid "Updated Registrations"
 msgstr "Bijgewerkte registraties"
 
@@ -4927,6 +4939,9 @@ msgstr "Spelersfiguur vorm"
 
 msgid "Please check them below"
 msgstr "Bekijk ze hieronder"
+
+msgid "Please write a question"
+msgstr "Stel een vraag"
 
 msgid "Pre registrations total"
 msgstr "Totaal voorregistraties"
@@ -5520,6 +5535,9 @@ msgstr "Indien aangevinkt: leden kunnen stemmen"
 msgid "Invitation sent to %(email)s"
 msgstr "Uitnodiging verstuurd naar %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "De livechat is niet ingesteld."
+
 msgid "Manage experience criterions"
 msgstr "Ervaringscriteria beheren"
 
@@ -6088,6 +6106,10 @@ msgstr "Ontdek waar dit evenement over gaat"
 
 msgid "Fill out the event prep questions"
 msgstr "Vul de voorbereidende vragen voor het evenement in"
+
+msgid "For best results, ask in English."
+msgstr ""
+"Voor het beste resultaat kun je je vraag het beste in het Engels stellen."
 
 msgid "For more information, write to us"
 msgstr "Schrijf ons voor meer informatie"
@@ -8362,6 +8384,9 @@ msgstr "De gebruiker heeft zijn registratie voor dit evenement bevestigd"
 msgid "The user has updated their registration for this event"
 msgstr "De gebruiker heeft zijn registratie voor dit evenement bijgewerkt"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Deze uitnodiging is naar een ander e-mailadres gestuurd."
+
 msgid "Whether this content is currently available for access"
 msgstr "Of deze inhoud momenteel beschikbaar is voor toegang"
 
@@ -9320,6 +9345,10 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Sommige tickets missen een laatste termijn (0 bedrag): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"De assistent is tijdelijk niet beschikbaar. Probeer het later nog eens."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -12942,6 +12971,13 @@ msgid ""
 msgstr ""
 "Voegt 'Patron'- en 'Gereduceerd'-kaartjestypes toe. Elk gekocht ticket voor "
 "een Patron maakt één gereduceerd ticket beschikbaar"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"Ik kon niets relevants vinden in de documentatie. Probeer het eens in het "
+"Engels te vragen, of open een supportticket."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "

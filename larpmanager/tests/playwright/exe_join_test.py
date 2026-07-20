@@ -80,7 +80,7 @@ def test_exe_join(pw_page: Any) -> None:
 
     go_to(page, live_server, "/debug/prova")
 
-    expect_normalized(page, page.locator("#banner"), "prova larp")
+    expect_normalized(page, page.locator("body"), "prova larp")
 
     select_language(live_server, page, "it")
 

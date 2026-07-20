@@ -350,6 +350,9 @@ AWS_SES_ACCESS_KEY_ID = None
 AWS_SES_SECRET_ACCESS_KEY = None
 AWS_SES_REGION_NAME = 'us-east-1'
 
+# Anthropic API key for the live chat assistant (optional - chat is disabled if unset)
+ANTHROPIC_API_KEY = None
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'

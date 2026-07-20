@@ -1886,6 +1886,9 @@ msgstr "Seuraava kiintiö"
 msgid "No changes"
 msgstr "Ei muutoksia"
 
+msgid "No results"
+msgstr "Ei tuloksia"
+
 msgid "Organizers"
 msgstr "Järjestäjät"
 
@@ -2863,6 +2866,9 @@ msgstr "Aktiiviset laitteet"
 msgid "Add to faction"
 msgstr "Lisää ryhmittymään"
 
+msgid "Ask a question"
+msgstr "Esitä kysymys"
+
 msgid "Assign members"
 msgstr "Jäsenten nimittäminen"
 
@@ -3129,6 +3135,9 @@ msgstr "Lisää xp-palkintoon"
 
 msgid "App Integration"
 msgstr "Sovelluksen integrointi"
+
+msgid "Ask LarpManager"
+msgstr "Kysy LarpManagerilta"
 
 msgid "Attachment Name"
 msgstr "Liitteen nimi"
@@ -4634,6 +4643,9 @@ msgstr "Tokenia ei ole alustettu"
 msgid "Transfer registration"
 msgstr "Siirrä ilmoittautumienn"
 
+msgid "Type your question..."
+msgstr "Kirjoita kysymyksesi..."
+
 msgid "Updated Registrations"
 msgstr "Päivitetyt ilmoittautumiset"
 
@@ -4927,6 +4939,9 @@ msgstr "Pelaajan hahmomuoto"
 
 msgid "Please check them below"
 msgstr "Tarkista ne alta"
+
+msgid "Please write a question"
+msgstr "Kirjoita kysymys"
 
 msgid "Pre registrations total"
 msgstr "Ennakkoilmoittautumiset yhteensä"
@@ -5520,6 +5535,9 @@ msgstr "Jos valitaan: jäsenet voivat äänestää"
 msgid "Invitation sent to %(email)s"
 msgstr "Kutsu lähetetään %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "Live-chat-toimintoa ei ole määritetty."
+
 msgid "Manage experience criterions"
 msgstr "Kokemuskriteerien hallinta"
 
@@ -6088,6 +6106,9 @@ msgstr "Tutustu tämän tapahtuman sisältöön"
 
 msgid "Fill out the event prep questions"
 msgstr "Täytä tapahtuman valmistelukysymykset"
+
+msgid "For best results, ask in English."
+msgstr "Parhaan tuloksen saat, kun kysyt englanniksi."
 
 msgid "For more information, write to us"
 msgstr "Lisätietoja saat kirjoittamalla meille"
@@ -8335,6 +8356,9 @@ msgstr "Käyttäjä on vahvistanut ilmoittautumisensa tähän tapahtumaan"
 msgid "The user has updated their registration for this event"
 msgstr "Käyttäjä on päivittänyt ilmoittautumisensa tähän tapahtumaan"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Tämä kutsu lähetettiin eri sähköpostiosoitteeseen."
+
 msgid "Whether this content is currently available for access"
 msgstr "Onko tämä sisältö tällä hetkellä saatavilla"
 
@@ -9231,6 +9255,10 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Joistakin lipuista puuttuu viimeinen erä (0-määrä): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"Avustaja ei ole tällä hetkellä käytettävissä. Yritä myöhemmin uudelleen."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -12717,6 +12745,13 @@ msgid ""
 msgstr ""
 "Lisää 'Patron' ja 'Reduced' lipputyypit. Jokainen ostettu Patron-lippu "
 "vapauttaa yhden alennetun lipun"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"En löytänyt dokumentaatiosta mitään asiaan liittyvää. Kokeile kysyä "
+"englanniksi tai avaa tukipyyntö."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "

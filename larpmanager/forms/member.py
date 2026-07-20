@@ -780,7 +780,8 @@ class ExeMemberForm(BaseProfileForm):
 
     class Meta:
         model = Member
-        fields = "__all__"
+        # Exclude the linking FKs from this admin form
+        exclude = ("user", "parent")
         widgets: ClassVar[dict] = {
             "birth_date": DatePickerInput,
         }

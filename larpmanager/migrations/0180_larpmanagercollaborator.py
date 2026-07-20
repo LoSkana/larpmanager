@@ -9,7 +9,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0178_larpmanagerscreenshot'),
+        ('larpmanager', '0179_larpmanagerchatlog'),
     ]
 
     operations = [

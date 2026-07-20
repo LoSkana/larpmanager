@@ -173,17 +173,17 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, signup=True)
     actor = request.user.member
 
-    # Get source inventory
+    # Get source inventory, scoped to the current event
     source_inventory_uuid = request.POST.get("source_inventory")
     source_inventory = None
     if source_inventory_uuid:
-        source_inventory = get_object_or_404(Inventory, uuid=source_inventory_uuid)
+        source_inventory = get_object_or_404(Inventory, uuid=source_inventory_uuid, event=context["event"])
 
-    # Get target inventory
+    # Get target inventory, scoped to the current event
     target_inventory_uuid = request.POST.get("target_inventory")
     target_inventory = None
     if target_inventory_uuid:
-        target_inventory = get_object_or_404(Inventory, uuid=target_inventory_uuid)
+        target_inventory = get_object_or_404(Inventory, uuid=target_inventory_uuid, event=context["event"])
 
     # Permission enforcement
     if source_inventory:
@@ -198,8 +198,8 @@ def orga_ci_transfer(request: HttpRequest, event_slug: str) -> HttpResponse:
         redirect_pk = target_inventory.uuid if target_inventory else ""
         return redirect("orga_ci_inventory_view", event_slug=context["run"].get_slug(), inventory_uuid=redirect_pk)
 
-    # Get pool type and amount
-    pool_type = get_object_or_404(PoolType, uuid=request.POST.get("pool_type"))
+    # Get pool type (scoped to the current event) and amount
+    pool_type = get_object_or_404(PoolType, uuid=request.POST.get("pool_type"), event=context["event"])
     try:
         amount = int(request.POST.get("amount"))
     except (TypeError, ValueError):
