@@ -568,9 +568,6 @@ msgstr "Žena"
 msgid "Fields"
 msgstr "Pole"
 
-msgid "Filler"
-msgstr "Výplň"
-
 msgid "Footer"
 msgstr "Zápatí"
 
@@ -4132,9 +4129,6 @@ msgstr "Odstranění z frakce"
 msgid "Results not present"
 msgstr "Výsledky nejsou k dispozici"
 
-msgid "Sign up as a filler"
-msgstr "Zaregistrujte se jako výplň"
-
 msgid "Signup cancellation"
 msgstr "Zrušení předplatného"
 
@@ -4359,6 +4353,9 @@ msgstr "Nastavení typů schopností"
 
 msgid "Show the leaderboard"
 msgstr "Zobrazit žebříček"
+
+msgid "Sign up as a reserve"
+msgstr "Zaregistrujte se jako náhradník"
 
 msgid "Terms and Conditions"
 msgstr "Podmínky a pravidla"
@@ -6444,9 +6441,6 @@ msgstr "Nyní nastavte konfigurace propagace"
 msgid "Now set up the credits configuration"
 msgstr "Nyní nastavte konfiguraci kreditů"
 
-msgid "Now you can create the filler ticket"
-msgstr "Nyní můžete vytvořit výplňový lístek"
-
 msgid "Now you can set the discount options"
 msgstr "Nyní můžete nastavit možnosti slev"
 
@@ -7187,6 +7181,9 @@ msgstr "Nyní můžete vytvářet registrační příplatky"
 
 msgid "Now you can create the \"new player\" ticket"
 msgstr "Nyní můžete vytvořit tip \"nový hráč\""
+
+msgid "Now you can create the ticket for reserves"
+msgstr "Nyní můžete vytvořit lístek pro rezervace"
 
 msgid "Now you can review participants' questions"
 msgstr "Nyní si můžete prohlédnout otázky účastníků"
@@ -9175,11 +9172,6 @@ msgstr ""
 "Účastníci se mohou přihlásit hned teď prostřednictvím registračního "
 "formuláře"
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
-msgstr ""
-"Místa v první kategorii jsou vyprodána, ale stále se můžete přihlásit jako "
-"náhradník"
-
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "U některých tipů chybí poslední splátka (částka 0): %(list)s"
@@ -9235,6 +9227,11 @@ msgstr ""
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "spravuje kredity, které účastníci využívají k úhradě registračního poplatku"
+
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
+msgstr ""
+"Místa v první kategorii jsou již vyprodána, ale stále se můžete zapsat na "
+"čekací listinu"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Vyberte typy prvků psaní, kterých se tato otázka týká"
@@ -13671,14 +13668,6 @@ msgstr ""
 "účet a bude automaticky použita při registraci na některou z našich akcí"
 
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
-"participants who are ready to replacing last-minute dropout of main "
-"characters."
-msgstr ""
-"Umožňuje 'výplňové' postavy: jednodušší listy postav, přidělené účastníkům, "
-"kteří jsou připraveni na poslední chvíli nahradit vypadnutí hlavních postav."
-
-msgid ""
 "If checked: show two separate tables on the characters page, one for "
 "characters participating in this run and one for non-participating "
 "characters"
@@ -13700,6 +13689,15 @@ msgid ""
 msgstr ""
 "Pokud je tato možnost povolena, systém automaticky připočte poplatky "
 "platební brány k ceně vstupenky, takže je hradí účastník místo organizace"
+
+msgid ""
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
+"participants who are ready to replacing last-minute dropout of main "
+"characters."
+msgstr ""
+"Povoluje postavy typu „náhradník“: jednodušší charakteristiky postav, určené"
+" pro účastníky, kteří jsou připraveni nahradit hlavní postavy v případě, že "
+"by se na poslední chvíli odhlásily."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

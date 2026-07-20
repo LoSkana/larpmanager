@@ -10144,16 +10144,13 @@ msgstr ""
 msgid "Now you can create the lottery ticket"
 msgstr ""
 
-msgid "Filler"
-msgstr ""
-
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
 "participants who are ready to replacing last-minute dropout of main "
 "characters."
 msgstr ""
 
-msgid "Now you can create the filler ticket"
+msgid "Now you can create the ticket for reserves"
 msgstr ""
 
 msgid "Chat"
@@ -11776,13 +11773,13 @@ msgstr ""
 msgid "Registrations closed"
 msgstr ""
 
-msgid "Sign up as a filler"
+msgid "Sign up as a reserve"
 msgstr ""
 
 msgid "Join the waiting list"
 msgstr ""
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
 msgstr ""
 
 msgid ""

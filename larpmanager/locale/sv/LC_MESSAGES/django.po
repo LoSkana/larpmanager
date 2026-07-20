@@ -568,9 +568,6 @@ msgstr "Kvinna"
 msgid "Fields"
 msgstr "Fält"
 
-msgid "Filler"
-msgstr "Buffé"
-
 msgid "Footer"
 msgstr "Sidfot"
 
@@ -4132,9 +4129,6 @@ msgstr "Ta bort från fraktionen"
 msgid "Results not present"
 msgstr "Resultat ej presenterade"
 
-msgid "Sign up as a filler"
-msgstr "Registrera dig som utfyllare"
-
 msgid "Signup cancellation"
 msgstr "Uppsägning av prenumeration"
 
@@ -4359,6 +4353,9 @@ msgstr "Ställ in förmågetyper"
 
 msgid "Show the leaderboard"
 msgstr "Visa resultatlistan"
+
+msgid "Sign up as a reserve"
+msgstr "Anmäl dig som reserv"
 
 msgid "Terms and Conditions"
 msgstr "Villkor och anvisningar"
@@ -6443,9 +6440,6 @@ msgstr "Ställ nu in kampanjkonfigurationerna"
 msgid "Now set up the credits configuration"
 msgstr "Ställ nu in konfigurationen för krediter"
 
-msgid "Now you can create the filler ticket"
-msgstr "Nu kan du skapa fyllnadsbiljetten"
-
 msgid "Now you can set the discount options"
 msgstr "Nu kan du ställa in rabattalternativen"
 
@@ -7188,6 +7182,9 @@ msgstr "Nu kan du skapa tilläggsavgifter för registrering"
 
 msgid "Now you can create the \"new player\" ticket"
 msgstr "Nu kan du skapa biljetten för \"ny spelare\""
+
+msgid "Now you can create the ticket for reserves"
+msgstr "Nu kan du skapa en biljett för reserver"
 
 msgid "Now you can review participants' questions"
 msgstr "Nu kan du gå igenom deltagarnas frågor"
@@ -9211,11 +9208,6 @@ msgstr "Nu kan du granska den kostinformation som deltagarna har lämnat in"
 msgid "Participants can sign up right away through the registration form"
 msgstr "Deltagarna kan anmäla sig direkt via anmälningsformuläret"
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
-msgstr ""
-"De ordinarie platserna är slutsålda, men du kan fortfarande anmäla dig som "
-"reserv"
-
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Vissa biljetter saknar en sista delbetalning (0 belopp): %(list)s"
@@ -9276,6 +9268,11 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Hanterar krediter som används av deltagarna för att täcka "
 "registreringsavgiften"
+
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
+msgstr ""
+"De ordinarie platserna är slutsålda, men du kan fortfarande anmäla dig som "
+"reserv"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Välj de typer av skrivelement som den här frågan gäller"
@@ -13851,15 +13848,6 @@ msgstr ""
 " används automatiskt när du anmäler dig till något av våra evenemang"
 
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
-"participants who are ready to replacing last-minute dropout of main "
-"characters."
-msgstr ""
-"Möjliggör 'Filler'-karaktärer: enklare karaktärsformulär som tilldelas "
-"deltagare som är redo att ersätta huvudkaraktärer som hoppar av i sista "
-"minuten."
-
-msgid ""
 "If checked: show two separate tables on the characters page, one for "
 "characters participating in this run and one for non-participating "
 "characters"
@@ -13882,6 +13870,14 @@ msgstr ""
 "Om det är aktiverat lägger systemet automatiskt till avgifter för "
 "betalningsgateway till biljettpriset, så att deltagaren betalar dem istället"
 " för organisationen"
+
+msgid ""
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
+"participants who are ready to replacing last-minute dropout of main "
+"characters."
+msgstr ""
+"Aktiverar ”reservkaraktärer”: enklare karaktärsblad som tilldelas deltagare "
+"som är beredda att ersätta huvudkaraktärer som faller bort i sista minuten."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

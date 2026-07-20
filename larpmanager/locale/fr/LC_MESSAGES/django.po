@@ -568,9 +568,6 @@ msgstr "Féminin"
 msgid "Fields"
 msgstr "Champs"
 
-msgid "Filler"
-msgstr "Remplisseur"
-
 msgid "Footer"
 msgstr "Pied de page"
 
@@ -4132,9 +4129,6 @@ msgstr "Retirer de la faction"
 msgid "Results not present"
 msgstr "Résultats non disponibles"
 
-msgid "Sign up as a filler"
-msgstr "Inscrivez-vous comme remplisseur "
-
 msgid "Signup cancellation"
 msgstr "Annulation de l'abonnement"
 
@@ -4359,6 +4353,9 @@ msgstr "Configurer les types d'aptitudes"
 
 msgid "Show the leaderboard"
 msgstr "Afficher le classement"
+
+msgid "Sign up as a reserve"
+msgstr "Inscris-toi comme réserviste"
 
 msgid "Terms and Conditions"
 msgstr "Conditions générales d'utilisation"
@@ -6445,9 +6442,6 @@ msgstr "Définis maintenant les configurations de la promotion"
 msgid "Now set up the credits configuration"
 msgstr "Configurez maintenant les crédits"
 
-msgid "Now you can create the filler ticket"
-msgstr "Vous pouvez maintenant créer le ticket de remplissage"
-
 msgid "Now you can set the discount options"
 msgstr "Vous pouvez maintenant définir les options de remise"
 
@@ -7197,6 +7191,9 @@ msgstr "Vous pouvez désormais créer des surtaxes d'enregistrement"
 
 msgid "Now you can create the \"new player\" ticket"
 msgstr "Vous pouvez maintenant créer le ticket \"nouveau joueur\""
+
+msgid "Now you can create the ticket for reserves"
+msgstr "Tu peux désormais créer le billet pour les réservations"
 
 msgid "Now you can review participants' questions"
 msgstr "Vous pouvez maintenant passer en revue les questions des participants"
@@ -9422,11 +9419,6 @@ msgstr ""
 "Les participants peuvent s'inscrire dès maintenant via le formulaire "
 "d'inscription"
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
-msgstr ""
-"Les places principales sont complètes, mais tu peux toujours t'inscrire en "
-"tant que remplaçant"
-
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr ""
@@ -9497,6 +9489,11 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Gestion des crédits utilisés par les participants pour couvrir les frais "
 "d'inscription"
+
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
+msgstr ""
+"Les places principales sont complètes, mais tu peux toujours t'inscrire sur "
+"liste d'attente"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
@@ -14254,15 +14251,6 @@ msgstr ""
 " nos événements"
 
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
-"participants who are ready to replacing last-minute dropout of main "
-"characters."
-msgstr ""
-"Permet d'avoir des personnages 'bouche-trous' : des fiches de personnages "
-"plus simples, attribuées aux participants qui sont prêts à remplacer des "
-"personnages principaux qui se sont désistés à la dernière minute."
-
-msgid ""
 "If checked: show two separate tables on the characters page, one for "
 "characters participating in this run and one for non-participating "
 "characters"
@@ -14287,6 +14275,15 @@ msgstr ""
 "Si cette option est activée, le système ajoutera automatiquement les frais "
 "de la passerelle de paiement au prix du billet, afin que le participant les "
 "paie à la place de l'organisation"
+
+msgid ""
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
+"participants who are ready to replacing last-minute dropout of main "
+"characters."
+msgstr ""
+"Active les personnages « de réserve » : des fiches de personnage plus "
+"simples, attribuées aux participants prêts à remplacer au pied levé un "
+"personnage principal en cas d'absence de dernière minute."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

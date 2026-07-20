@@ -568,9 +568,6 @@ msgstr "Nainen"
 msgid "Fields"
 msgstr "Kentät"
 
-msgid "Filler"
-msgstr "Täytehahmo"
-
 msgid "Footer"
 msgstr "Alatunniste"
 
@@ -4132,9 +4129,6 @@ msgstr "Poista ryhmästä"
 msgid "Results not present"
 msgstr "Tuloksia ei ole"
 
-msgid "Sign up as a filler"
-msgstr "Ilmoittaudu täytehahmoksi"
-
 msgid "Signup cancellation"
 msgstr "Rekisteröitymisen peruutus"
 
@@ -4359,6 +4353,9 @@ msgstr "Määritä taitojen tyypit"
 
 msgid "Show the leaderboard"
 msgstr "Näytä tulostaulukko"
+
+msgid "Sign up as a reserve"
+msgstr "Ilmoittaudu varamieheksi"
 
 msgid "Terms and Conditions"
 msgstr "Ehdot ja edellytykset"
@@ -6443,9 +6440,6 @@ msgstr "Aseta nyt myynninedistämiskokoonpanot"
 msgid "Now set up the credits configuration"
 msgstr "Määritä nyt luottojen kokoonpano"
 
-msgid "Now you can create the filler ticket"
-msgstr "Nyt voit luoda täytehahmolipun"
-
 msgid "Now you can set the discount options"
 msgstr "Nyt voit asettaa alennusasetukset"
 
@@ -7186,6 +7180,9 @@ msgstr "Nyt voit luoda ilmoittautumislisiä"
 
 msgid "Now you can create the \"new player\" ticket"
 msgstr "Nyt voit luoda \"uuden pelaajan\" lipun"
+
+msgid "Now you can create the ticket for reserves"
+msgstr "Nyt voit luoda lipun varauksiin"
 
 msgid "Now you can review participants' questions"
 msgstr "Nyt voit tarkastella osallistujien kysymyksiä"
@@ -9224,11 +9221,6 @@ msgstr "Nyt voit tarkastella osallistujien lähettämiä ruokavaliotietoja"
 msgid "Participants can sign up right away through the registration form"
 msgstr "Osallistujat voivat ilmoittautua heti ilmoittautumislomakkeen kautta"
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
-msgstr ""
-"Ensisijaiset paikat ovat loppuunmyytyjä, mutta voit silti ilmoittautua "
-"varasijalle"
-
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Joistakin lipuista puuttuu viimeinen erä (0-määrä): %(list)s"
@@ -9290,6 +9282,11 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Hallinnoi osallistujien käyttämiä hyvityksiä ilmoittautumismaksun "
 "kattamiseksi"
+
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
+msgstr ""
+"Ensisijaiset paikat ovat loppuunmyytyjä, mutta voit silti ilmoittautua "
+"varasijalle"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
@@ -13829,15 +13826,6 @@ msgstr ""
 "käytetään automaattisesti, kun ilmoittaudut johonkin tapahtumaamme"
 
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
-"participants who are ready to replacing last-minute dropout of main "
-"characters."
-msgstr ""
-"Mahdollistaa 'täytehahmot': yksinkertaisemmat hahmolomakkeet, jotka annetaan"
-" osallistujille, jotka ovat valmiita korvaamaan päähenkilöiden viime hetken "
-"poisjäännit."
-
-msgid ""
 "If checked: show two separate tables on the characters page, one for "
 "characters participating in this run and one for non-participating "
 "characters"
@@ -13860,6 +13848,15 @@ msgid ""
 msgstr ""
 "Jos tämä on käytössä, järjestelmä lisää automaattisesti maksuporttimaksut "
 "lipun hintaan, jolloin osallistuja maksaa ne organisaation sijaan"
+
+msgid ""
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
+"participants who are ready to replacing last-minute dropout of main "
+"characters."
+msgstr ""
+"Mahdollistaa ”varahahmojen” käytön: yksinkertaisemmat hahmoluettelot, jotka "
+"on osoitettu osallistujille, jotka ovat valmiita korvaamaan päähenkilöiden "
+"viime hetken peruutukset."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

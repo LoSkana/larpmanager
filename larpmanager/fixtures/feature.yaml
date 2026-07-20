@@ -351,14 +351,14 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Filler
-    descr: 'Enables ''Filler'' characters: simpler character sheets, assigned to participants
+    name: Reserve
+    descr: 'Enables ''Reserve'' characters: simpler character sheets, assigned to participants
       who are ready to replacing last-minute dropout of main characters.'
     slug: filler
     overall: false
     placeholder: false
     order: 70
-    after_text: Now you can create the filler ticket
+    after_text: Now you can create the ticket for reserves
     after_link: orga_registration_tickets
     hidden: false
     module: registration

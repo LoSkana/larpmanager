@@ -568,9 +568,6 @@ msgstr "Vrouw"
 msgid "Fields"
 msgstr "Velden"
 
-msgid "Filler"
-msgstr "Figuur or Bijpersonage"
-
 msgid "Footer"
 msgstr "Voettekst"
 
@@ -4132,9 +4129,6 @@ msgstr "Verwijderen uit factie"
 msgid "Results not present"
 msgstr "Resultaten niet aanwezig"
 
-msgid "Sign up as a filler"
-msgstr "Meld je aan als vuller"
-
 msgid "Signup cancellation"
 msgstr "Abonnement opzeggen"
 
@@ -4359,6 +4353,9 @@ msgstr "Typen vaardigheden instellen"
 
 msgid "Show the leaderboard"
 msgstr "Laat het klassement zien"
+
+msgid "Sign up as a reserve"
+msgstr "Meld je aan als reserve"
 
 msgid "Terms and Conditions"
 msgstr "Algemene voorwaarden"
@@ -6445,9 +6442,6 @@ msgstr "Stel nu de promotieconfiguraties in"
 msgid "Now set up the credits configuration"
 msgstr "Stel nu de credits configuratie in"
 
-msgid "Now you can create the filler ticket"
-msgstr "Nu kun je het vulkaartje maken"
-
 msgid "Now you can set the discount options"
 msgstr "Nu kun je de kortingsopties instellen"
 
@@ -7195,6 +7189,9 @@ msgstr "Nu kun je registratietoeslagen maken"
 
 msgid "Now you can create the \"new player\" ticket"
 msgstr "Nu kun je het \"nieuwe speler\"-ticket aanmaken"
+
+msgid "Now you can create the ticket for reserves"
+msgstr "Nu kun je het ticket voor de reserves aanmaken"
 
 msgid "Now you can review participants' questions"
 msgstr "Nu kunt u de vragen van de deelnemers bekijken"
@@ -9312,11 +9309,6 @@ msgstr "Nu kunt u de dieetinformatie bekijken die deelnemers hebben ingediend"
 msgid "Participants can sign up right away through the registration form"
 msgstr "Deelnemers kunnen zich meteen aanmelden via het aanmeldingsformulier"
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
-msgstr ""
-"De reguliere plaatsen zijn uitverkocht, maar je kunt je nog steeds aanmelden"
-" als invaller"
-
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Sommige tickets missen een laatste termijn (0 bedrag): %(list)s"
@@ -9383,6 +9375,11 @@ msgstr ""
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Beheert de kredieten die deelnemers gebruiken om het inschrijfgeld te dekken"
+
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
+msgstr ""
+"De reguliere plaatsen zijn uitverkocht, maar je kunt je nog steeds aanmelden"
+" als reserveling"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
@@ -14071,14 +14068,6 @@ msgstr ""
 "voor een van onze evenementen"
 
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
-"participants who are ready to replacing last-minute dropout of main "
-"characters."
-msgstr ""
-"Maakt 'opvul'-personages mogelijk: eenvoudigere personagebladen, toegewezen "
-"aan deelnemers die op het laatste moment hoofdpersonages willen vervangen."
-
-msgid ""
 "If checked: show two separate tables on the characters page, one for "
 "characters participating in this run and one for non-participating "
 "characters"
@@ -14102,6 +14091,15 @@ msgstr ""
 "Als deze optie is ingeschakeld, voegt het systeem automatisch "
 "betalingskosten toe aan de ticketprijs, zodat de deelnemer deze betaalt in "
 "plaats van de organisatie"
+
+msgid ""
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
+"participants who are ready to replacing last-minute dropout of main "
+"characters."
+msgstr ""
+"Schakelt 'Reserve'-personages in: eenvoudigere personagebeschrijvingen, "
+"bedoeld voor deelnemers die klaar staan om op het laatste moment in te "
+"vallen voor hoofdpersonages die afhaken."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

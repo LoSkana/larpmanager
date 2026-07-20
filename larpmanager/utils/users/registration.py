@@ -700,12 +700,12 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
     # signup open, not already signed in
     messages = {
         "primary": _("Registration is open") + "!",
-        "filler": _("Sign up as a filler") + "!",
+        "filler": _("Sign up as a reserve") + "!",
         "waiting": _("Join the waiting list") + "!",
     }
     messages_long = {
         "primary": _("Registrations are open: sign up now to secure your spot") + "!",
-        "filler": _("Primary spots are sold out, but you can still sign up as a filler") + "!",
+        "filler": _("Primary spots are sold out, but you can still sign up as a reserve") + "!",
         "waiting": _("The event is sold out, but you can join the waiting list to be notified if a spot frees up")
         + "!",
     }

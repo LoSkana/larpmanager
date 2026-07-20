@@ -55,7 +55,7 @@ simply chosen a different (still valid) reading. Distinguish these
 two cases explicitly. When msgstr_it is empty, judge solely against
 msgid.
 
-Specific LARP terms (to be kept in english): Filler
+Specific LARP terms: Award (refers to awarding XP), Badges (in the context of achievements),
 
 Categories (status field):
 - "ok": translation is accurate and natural
