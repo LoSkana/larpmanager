@@ -231,7 +231,7 @@ def save_event_tickets(features: Any, instance: object) -> None:
     tickets = [
         ("", TicketTier.STANDARD, "Standard"),
         ("waiting", TicketTier.WAITING, "Waiting"),
-        ("filler", TicketTier.FILLER, "Filler"),
+        ("filler", TicketTier.FILLER, "Reserve"),
     ]
 
     existing_tiers = {t["tier"] for t in get_registration_tickets(instance.id)}
