@@ -680,7 +680,7 @@ def get_char_check(
         raise NotFoundError
 
     is_orga = bypass_access_checks or has_event_permission(request, context, context["event"].slug, "orga_characters")
-    is_player = request.user.is_authenticated and has_access_character(request, context)
+    is_player = request and request.user.is_authenticated and has_access_character(request, context)
 
     if not is_orga:
         if not is_player:
