@@ -1132,12 +1132,12 @@ def accounting_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
     try:
         inv = PaymentInvoice.objects.get(cod=invoice_cod, association_id=context["association_id"])
     except ObjectDoesNotExist:
-        messages.error(request, _("Invoice not found"))
+        messages.error(request, _("Payment not found"))
         return redirect("home")
 
     # Check if invoice is in submittable status
     if inv.status != PaymentStatus.SUBMITTED:
-        messages.error(request, _("Invoice already confirmed"))
+        messages.error(request, _("Payment already confirmed"))
         return redirect("home")
 
     # Authorization check: verify user permissions

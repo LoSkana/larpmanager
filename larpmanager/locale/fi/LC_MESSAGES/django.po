@@ -481,9 +481,6 @@ msgstr "Missä"
 msgid "email"
 msgstr "sähköpostiosoite"
 
-msgid "moved"
-msgstr "siirretty"
-
 msgid "quick"
 msgstr "nopea"
 
@@ -744,9 +741,6 @@ msgstr "Äänestys"
 
 msgid "XP tot"
 msgstr "XP tot"
-
-msgid "copied"
-msgstr "kopioitu"
 
 msgid "issued"
 msgstr "myönnetty"
@@ -2255,6 +2249,9 @@ msgstr "Sisällön nimi"
 msgid "Content type"
 msgstr "Sisältötyyppi"
 
+msgid "Contributors"
+msgstr "Tekijät"
+
 msgid "Credits name"
 msgstr "Krediittien nimi"
 
@@ -2335,9 +2332,6 @@ msgstr "Organisaatio"
 
 msgid "PDF Profiles"
 msgstr "PDF-profiilit"
-
-msgid "Parent empty"
-msgstr "Vanhempi tyhjä"
 
 msgid "Participants"
 msgstr "Osallistujat"
@@ -2537,9 +2531,6 @@ msgstr "Päivien määräaika"
 
 msgid "Deadline date"
 msgstr "Määräpäivä"
-
-msgid "Discount back"
-msgstr "Alennus takaisin"
 
 msgid "Document type"
 msgstr "Asiakirjan tyyppi"
@@ -3313,9 +3304,6 @@ msgstr "Maksun viivästyminen"
 msgid "Delay in profile"
 msgstr "Viive profiilissa"
 
-msgid "Desalt thumbnail"
-msgstr "Desaltin pikkukuva"
-
 msgid "Disable grouping"
 msgstr "Poista ryhmittely käytöstä"
 
@@ -3354,9 +3342,6 @@ msgstr "Kentän näkyvyys"
 
 msgid "First assignment"
 msgstr "Ensimmäinen tehtävä"
-
-msgid "Forward discount"
-msgstr "Myöhemmin myönnettävä alennus"
 
 msgid "Handout template"
 msgstr "Käsilehden malli"
@@ -3652,9 +3637,6 @@ msgstr "Sisäinen ateriapalvelu"
 msgid "Invalid selection"
 msgstr "Virheellinen valinta"
 
-msgid "Invoice not found"
-msgstr "Laskua ei löydy"
-
 msgid "Load participants"
 msgstr "Lataa osallistujat"
 
@@ -3669,9 +3651,6 @@ msgstr "Jäsenyyden tila"
 
 msgid "Module Activation"
 msgstr "Moduulin aktivointi"
-
-msgid "Months free quota"
-msgstr "Kuukausien vapaa kiintiö"
 
 msgid "Move to container"
 msgstr "Siirry säiliöön"
@@ -3696,6 +3675,9 @@ msgstr "Maksa mitä haluat"
 
 msgid "Payment confirmed"
 msgstr "Maksu vahvistettu"
+
+msgid "Payment not found"
+msgstr "Maksua ei löytynyt"
 
 msgid "Payment submitted"
 msgstr "Toimitettu maksu"
@@ -4138,6 +4120,9 @@ msgstr "Tuki ylläpitäjille"
 msgid "Treasury appointees"
 msgstr "Valtiovarainministeriön nimittämät henkilöt"
 
+msgid "Use full-size image"
+msgstr "Käytä täysikokoista kuvaa"
+
 msgid "Username of account"
 msgstr "Tilin käyttäjätunnus"
 
@@ -4259,6 +4244,9 @@ msgstr "Jäsenyyden ID-numero"
 
 msgid "Name - international"
 msgstr "Nimi - kansainvälinen"
+
+msgid "New pre-registration"
+msgstr "Uusi ennakkorekisteröinti"
 
 msgid "No roles defined yet"
 msgstr "Roolia ei ole vielä määritelty"
@@ -4474,9 +4462,6 @@ msgstr "Hahmon nimi"
 msgid "New character created"
 msgstr "Uusi hahmo luotu"
 
-msgid "New pre-registrations"
-msgstr "Uudet ennakkoilmoittautumiset"
-
 msgid "No albums created yet"
 msgstr "Albumeita ei ole vielä luotu"
 
@@ -4500,9 +4485,6 @@ msgstr "Toiminta ei ole sallittua"
 
 msgid "Participant questions"
 msgstr "Osallistujien kysymykset"
-
-msgid "Participants included"
-msgstr "Osallistujia olivat"
 
 #, python-format
 msgid "Payment for %(event)s"
@@ -4998,6 +4980,12 @@ msgstr "Valinnainen tilausnumero"
 msgid "Provisional registration"
 msgstr "Väliaikainen Ilmoittautuminen"
 
+msgid "Referred Friend Discount"
+msgstr "Ystävän suosittelualennus"
+
+msgid "Referrer Reward Discount"
+msgstr "Viittauspalkkioalennus"
+
 msgid "Regeneration pdf started"
 msgstr "Uudistaminen pdf aloitettu"
 
@@ -5079,9 +5067,6 @@ msgstr "Alkuperäiset kokemuspisteet"
 msgid "Intermediary channel code"
 msgstr "Välityskanavan koodi"
 
-msgid "Invoice already confirmed"
-msgstr "Lasku on jo vahvistettu"
-
 msgid "Kitchen - food, tableware"
 msgstr "Keittiö - ruoka, astiat"
 
@@ -5125,8 +5110,8 @@ msgstr "Vaihtoehto tallennettu onnistuneesti"
 msgid "Payment already confirmed"
 msgstr "Maksu on jo vahvistettu"
 
-msgid "Pending invoice approvals"
-msgstr "Vireillä olevat laskujen hyväksynnät"
+msgid "Payments pending approval"
+msgstr "Hyväksyntää odottavat maksut"
 
 msgid "Pre-register to the event"
 msgstr "EnnakkoIlmoittaudu tapahtumaan"
@@ -5158,6 +5143,9 @@ msgstr "Näytä käytettävissä olevat merkit"
 
 msgid "Size of the file in bytes"
 msgstr "Tiedoston koko tavuina"
+
+msgid "Standalone Payment Window"
+msgstr "Erillinen maksuikkuna"
 
 msgid "These are our past events"
 msgstr "Nämä ovat aiemmat tapahtumamme"
@@ -5220,9 +5208,6 @@ msgstr "Anna kortti ystävällesi"
 msgid "Hide unassigned characters"
 msgstr "Piilota määrittämättömät merkit"
 
-msgid "Invoices Awaiting Approval"
-msgstr "Hyväksyntää odottavat laskut"
-
 msgid "Manage the event prologues"
 msgstr "Hallitse tapahtuman prologeja"
 
@@ -5240,6 +5225,9 @@ msgstr "Nyt voit luoda tulovirrat"
 
 msgid "Option no longer available"
 msgstr "Vaihtoehto ei ole enää saatavilla"
+
+msgid "Payments Awaiting Approval"
+msgstr "Hyväksyntää odottavat maksut"
 
 msgid "Pre-registration cancelled"
 msgstr "EnnakkoIlmoittautuminen peruutettu"
@@ -6527,6 +6515,9 @@ msgstr "Peilityyppinen merkki, ei valittavissa"
 msgid "No one-time content items defined yet"
 msgstr "Kertaluonteisia sisältökohteita ei ole vielä määritelty"
 
+msgid "No value has been selected for parent"
+msgstr "Yläkohteelle ei ole valittu arvoa"
+
 msgid "Now you can create fixed installments"
 msgstr "Nyt voit luoda kiinteitä maksueriä"
 
@@ -7542,6 +7533,11 @@ msgstr "Vahvista, että haluat suorittaa tämän toiminnon"
 msgid "Please select both a registration and an event"
 msgstr "Valitse sekä ilmoittautuminen että tapahtuma"
 
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
+msgstr ""
+"%(member)s -jäsenten ilmoittautuminen siirrettiin %(event)s -tapahtumaan"
+
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Määritä suojelijan ja alennetun lipun kokoonpano"
 
@@ -7641,6 +7637,10 @@ msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 "Varoitus: Merkit ja hyvitykset eivät ole käytössä. Palautuksia ei voida "
 "käsitellä virtuaalivaluuttana"
+
+#, python-format
+msgid "Registration for %(member)s copied to %(event)s"
+msgstr "Ilmoittautuminen %(member)s on kopioitu %(event)s"
 
 msgid "Selected elements will be shown to participants"
 msgstr "Valitut elementit näytetään osallistujille"
@@ -9063,10 +9063,6 @@ msgstr "Kun siirto on vahvistettu, lataa alla oleva maksukuitti"
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Osa ilmoittautumismaksusta on peräisin ainoastaan valitusta lipusta"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Pelaajan %(member)s %(action)s tapahtumaan %(event)s onnistui"
-
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Tarkista kaikki peruutetut ilmoittautumiset ja seuraa niiden hyvitysten "
@@ -9419,6 +9415,11 @@ msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 "Kuvaile ongelma alla olevaan kenttään, niin korjaamme sen mahdollisimman "
 "pian"
+
+msgid "Discount amount applied to a new user signing up with a referral code"
+msgstr ""
+"Uudelle käyttäjälle, joka rekisteröityy suosittelukoodilla, myönnettävä "
+"alennus"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "Haluatko jakaa ilmoittautumismaksun dynaamisiin maksukiintiöihin"
@@ -10201,11 +10202,6 @@ msgid ""
 msgstr ""
 "Jos tämä valinta on valittuna, hahmoviittauksista ei luoda automaattisia "
 "suhteita"
-
-msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-"Jos valittuna, kansikuva näyttää alkuperäisen kuvan, ei pikkukuvaversiota"
 
 msgid ""
 "If checked: Send an email notification to the organisers for updated signups"
@@ -11001,6 +10997,13 @@ msgstr ""
 "ja järjestää niitä"
 
 msgid ""
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
+msgstr ""
+"Alennus, joka myönnetään jo mukana olevalle osallistujalle, kun ystävä "
+"rekisteröityy hänen koodillaan"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore"
 msgstr ""
@@ -11012,6 +11015,13 @@ msgid ""
 " ticket"
 msgstr ""
 "Jos valittuna, vaihtoehto näkyy vain osallistujille, joilla on valittu lippu"
+
+msgid ""
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
+msgstr ""
+"Jos tämä asetus on käytössä, näytetään alkuperäinen täysikokoinen kuva "
+"pikkukuvan sijaan"
 
 #, python-format
 msgid ""
@@ -11060,14 +11070,6 @@ msgid ""
 msgstr ""
 "Kopioi valitut kohteet toisesta tapahtumasta tähän tapahtumaan ja korvaa "
 "olemassa olevat tiedot"
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-"Tiedostotyyppi '%(detected_type)s' ei ole sallittu.Sallitut tiedostotyypit "
-"ovat: '%(allowed_types)s'."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
@@ -11795,13 +11797,6 @@ msgstr ""
 "Anna heille tämä linkki: %(url)s"
 
 msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
-msgstr ""
-"Alennuksen arvo ystävälle, joka ilmoittautuu ilmoittautuneen osallistujan "
-"koodilla"
-
-msgid ""
 "You can indicate a template event from which functionality and "
 "configurations will be copied"
 msgstr ""
@@ -12096,14 +12091,6 @@ msgstr ""
 "Ottaa käyttöön ”kilat” eli pelaajien luomat hahmoryhmät, joilla on oma "
 "hallinnoija sekä kutsu- ja viestitoiminnot"
 
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-"Tiedoston laajennus '%(extension)s' ei ole sallittu. Sallitut laajennukset "
-"ovat: '%(allowed_extensions)s'."
-
 msgid ""
 "Indicates public information about your character, which will be shown to "
 "all other participants"
@@ -12150,13 +12137,6 @@ msgid ""
 msgstr ""
 "Seuraa taustalla luotavan tulostettavan hahmolomakkeen ZIP-paketin "
 "valmistumista"
-
-msgid ""
-"Value of the discount for the registered participant who gives the code to a"
-" friend who signs up"
-msgstr ""
-"Alennuksen arvo ilmoittautuneelle osallistujalle, joka antaa koodin "
-"ilmoittautuvalle ystävälleen"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -13121,13 +13101,6 @@ msgstr ""
 "tapahtumakuluja että henkilöstölle palautettavaa summaa"
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-"Kuukausien lukumäärä jäsenyysvuoden alusta alkaen, joilta jäsenmaksu on "
-"maksettava maksutta"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -13176,14 +13149,6 @@ msgid ""
 msgstr ""
 "<strong>Lite Mode</strong> on yksinkertaistettu ympäristö, joka on "
 "suunniteltu auttamaan sinua hallitsemaan alustan perusmekaniikat"
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
-msgstr ""
-"Sallittu tyyppi '%(allowed_type)s' ei ole kelvollinen tyyppi.Katso "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
@@ -13280,6 +13245,14 @@ msgid ""
 msgstr ""
 "Täytä tapahtuman ulkoisessa markkinoinnissa käytettävät julkiset metatiedot,"
 " kuten kieli, tyyppi, ympäristö, sijainti ja tyyli"
+
+msgid ""
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
+msgstr ""
+"Vuoden alussa niiden kuukausien lukumäärä, joiden aikana vuosimaksun "
+"maksaminen on sallittua ilman, että vaaditaan aktiivista "
+"tapahtumailmoittautumista."
 
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"

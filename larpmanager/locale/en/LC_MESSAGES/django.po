@@ -642,12 +642,12 @@ msgstr ""
 msgid "Enter a valid date in DD-MM format"
 msgstr ""
 
-msgid "Months free quota"
+msgid "Standalone Payment Window"
 msgstr ""
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
 msgstr ""
 
 msgid "Separate membership fee"
@@ -1094,11 +1094,12 @@ msgstr ""
 msgid "Character cover"
 msgstr ""
 
-msgid "Desalt thumbnail"
+msgid "Use full-size image"
 msgstr ""
 
 msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
 msgstr ""
 
 msgid "Disable assignment"
@@ -1699,20 +1700,18 @@ msgstr ""
 msgid "Bring a friend"
 msgstr ""
 
-msgid "Forward discount"
+msgid "Referrer Reward Discount"
 msgstr ""
 
 msgid ""
-"Value of the discount for the registered participant who gives the code to a "
-"friend who signs up"
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
 msgstr ""
 
-msgid "Discount back"
+msgid "Referred Friend Discount"
 msgstr ""
 
-msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
+msgid "Discount amount applied to a new user signing up with a referral code"
 msgstr ""
 
 msgid "Event Appearance"
@@ -2930,7 +2929,7 @@ msgstr ""
 msgid "Go to event dashboard"
 msgstr ""
 
-msgid "Invoices Awaiting Approval"
+msgid "Payments Awaiting Approval"
 msgstr ""
 
 msgid "Approve"
@@ -5670,7 +5669,7 @@ msgid ""
 "be processed"
 msgstr ""
 
-msgid "Pending invoice approvals"
+msgid "Payments pending approval"
 msgstr ""
 
 msgid "Total registration fee"
@@ -7345,7 +7344,7 @@ msgid ""
 "priority when registration opens"
 msgstr ""
 
-msgid "New pre-registrations"
+msgid "New pre-registration"
 msgstr ""
 
 msgid "Do you want to tell us something"
@@ -7912,7 +7911,7 @@ msgstr ""
 msgid "Total collection"
 msgstr ""
 
-msgid "Participants included"
+msgid "Contributors"
 msgstr ""
 
 msgid "Join the collection for"
@@ -11149,24 +11148,6 @@ msgid ""
 "In this page you'll find a list of actions and suggestions on the next steps"
 msgstr ""
 
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See https://www.iana.org/"
-"assignments/media-types/media-types.xhtml"
-msgstr ""
-
 msgid "Operation completed"
 msgstr ""
 
@@ -12164,7 +12145,7 @@ msgstr ""
 msgid "Results not present"
 msgstr ""
 
-msgid "Parent empty"
+msgid "No value has been selected for parent"
 msgstr ""
 
 msgid "Can't copy from same event"
@@ -12254,14 +12235,12 @@ msgstr ""
 msgid "Transfer is not possible"
 msgstr ""
 
-msgid "moved"
-msgstr ""
-
-msgid "copied"
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
 msgstr ""
 
 #, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
+msgid "Registration for %(member)s copied to %(event)s"
 msgstr ""
 
 msgid ""
@@ -12338,10 +12317,7 @@ msgstr ""
 msgid "As soon as it is approved, your accounting will be updated"
 msgstr ""
 
-msgid "Invoice not found"
-msgstr ""
-
-msgid "Invoice already confirmed"
+msgid "Payment not found"
 msgstr ""
 
 msgid "You must signed up in order to select your preferences"

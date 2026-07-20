@@ -481,9 +481,6 @@ msgstr "Kde"
 msgid "email"
 msgstr "e-mail"
 
-msgid "moved"
-msgstr "přesunut"
-
 msgid "quick"
 msgstr "rychlý"
 
@@ -744,9 +741,6 @@ msgstr "Hlasování"
 
 msgid "XP tot"
 msgstr "Px Tot"
-
-msgid "copied"
-msgstr "zkopírováno"
 
 msgid "issued"
 msgstr "vydáno"
@@ -2255,6 +2249,9 @@ msgstr "Název obsahu"
 msgid "Content type"
 msgstr "Typ obsahu"
 
+msgid "Contributors"
+msgstr "Autoři"
+
 msgid "Credits name"
 msgstr "Název úvěru"
 
@@ -2335,9 +2332,6 @@ msgstr "Sdružení"
 
 msgid "PDF Profiles"
 msgstr "Pdf profily"
-
-msgid "Parent empty"
-msgstr "Rodič prázdný"
 
 msgid "Participants"
 msgstr "Účastníci"
@@ -2537,9 +2531,6 @@ msgstr "Lhůta dnů"
 
 msgid "Deadline date"
 msgstr "Datum uzávěrky"
-
-msgid "Discount back"
-msgstr "Sleva zpět"
 
 msgid "Document type"
 msgstr "Typ dokumentu"
@@ -3313,9 +3304,6 @@ msgstr "Zpoždění platby"
 msgid "Delay in profile"
 msgstr "Zpoždění v profilu"
 
-msgid "Desalt thumbnail"
-msgstr "Miniatura Desalt"
-
 msgid "Disable grouping"
 msgstr "Zakázat seskupování"
 
@@ -3354,9 +3342,6 @@ msgstr "Viditelnost v terénu"
 
 msgid "First assignment"
 msgstr "První úkol"
-
-msgid "Forward discount"
-msgstr "Forwardová sleva"
 
 msgid "Handout template"
 msgstr "Šablona letáku"
@@ -3652,9 +3637,6 @@ msgstr "Interní stravování"
 msgid "Invalid selection"
 msgstr "Neplatný výběr"
 
-msgid "Invoice not found"
-msgstr "Faktura nebyla nalezena"
-
 msgid "Load participants"
 msgstr "Načíst účastníky"
 
@@ -3669,9 +3651,6 @@ msgstr "Stav členství"
 
 msgid "Module Activation"
 msgstr "Aktivace modulu"
-
-msgid "Months free quota"
-msgstr "Měsíční volná kvóta"
 
 msgid "Move to container"
 msgstr "Přesun do kontejneru"
@@ -3696,6 +3675,9 @@ msgstr "Zaplaťte, kolik chcete"
 
 msgid "Payment confirmed"
 msgstr "Platba potvrzena"
+
+msgid "Payment not found"
+msgstr "Platba nebyla nalezena"
 
 msgid "Payment submitted"
 msgstr "Předložená platba"
@@ -4138,6 +4120,9 @@ msgstr "Správci podpory"
 msgid "Treasury appointees"
 msgstr "Úředníci ministerstva financí"
 
+msgid "Use full-size image"
+msgstr "Zobrazit obrázek v plné velikosti"
+
 msgid "Username of account"
 msgstr "Uživatelské jméno účtu"
 
@@ -4259,6 +4244,9 @@ msgstr "Identifikační číslo členství"
 
 msgid "Name - international"
 msgstr "Anglický název"
+
+msgid "New pre-registration"
+msgstr "Nová předběžná registrace"
 
 msgid "No roles defined yet"
 msgstr "Zatím nejsou definovány žádné role"
@@ -4474,9 +4462,6 @@ msgstr "Jméno postavy"
 msgid "New character created"
 msgstr "Vytvořena nová postava"
 
-msgid "New pre-registrations"
-msgstr "Nová předběžná registrace"
-
 msgid "No albums created yet"
 msgstr "Zatím nebyla vytvořena žádná alba"
 
@@ -4500,9 +4485,6 @@ msgstr "Operace není povolena"
 
 msgid "Participant questions"
 msgstr "Otázky účastníků"
-
-msgid "Participants included"
-msgstr "Zúčastnili se"
 
 #, python-format
 msgid "Payment for %(event)s"
@@ -4998,6 +4980,12 @@ msgstr "Volitelné objednací číslo"
 msgid "Provisional registration"
 msgstr "Prozatímní registrace"
 
+msgid "Referred Friend Discount"
+msgstr "Sleva za doporučení přítele"
+
+msgid "Referrer Reward Discount"
+msgstr "Sleva za doporučení"
+
 msgid "Regeneration pdf started"
 msgstr "pdf regenerace zahájena"
 
@@ -5079,9 +5067,6 @@ msgstr "Počáteční zkušenostní body"
 msgid "Intermediary channel code"
 msgstr "Kód zprostředkujícího kanálu"
 
-msgid "Invoice already confirmed"
-msgstr "Faktura již potvrzena"
-
 msgid "Kitchen - food, tableware"
 msgstr "Kuchyně - potraviny, nádobí"
 
@@ -5125,8 +5110,8 @@ msgstr "Možnost úspěšně uložena"
 msgid "Payment already confirmed"
 msgstr "Platba již potvrzena"
 
-msgid "Pending invoice approvals"
-msgstr "Schválení faktur v očekávání"
+msgid "Payments pending approval"
+msgstr "Platby čekající na schválení"
 
 msgid "Pre-register to the event"
 msgstr "Zapište se na seznam předběžných registrací"
@@ -5158,6 +5143,9 @@ msgstr "Zobrazit dostupné znaky"
 
 msgid "Size of the file in bytes"
 msgstr "Velikost souboru v bytech"
+
+msgid "Standalone Payment Window"
+msgstr "Samostatné platební okno"
 
 msgid "These are our past events"
 msgstr "Toto jsou naše minulé akce"
@@ -5220,9 +5208,6 @@ msgstr "Dejte přání svému příteli"
 msgid "Hide unassigned characters"
 msgstr "Skrytí nepřiřazených znaků"
 
-msgid "Invoices Awaiting Approval"
-msgstr "Faktury čekající na schválení"
-
 msgid "Manage the event prologues"
 msgstr "Správa prologů událostí"
 
@@ -5240,6 +5225,9 @@ msgstr "Nyní můžete vytvářet přítoky"
 
 msgid "Option no longer available"
 msgstr "Možnost již není k dispozici"
+
+msgid "Payments Awaiting Approval"
+msgstr "Platby čekající na schválení"
 
 msgid "Pre-registration cancelled"
 msgstr "Předběžná registrace zrušena"
@@ -6528,6 +6516,9 @@ msgstr "Zrcadlový typ znaku, nelze vybrat"
 msgid "No one-time content items defined yet"
 msgstr "Zatím nebyly definovány žádné jednorázové položky obsahu"
 
+msgid "No value has been selected for parent"
+msgstr "Pro nadřazený prvek nebyla vybrána žádná hodnota"
+
 msgid "Now you can create fixed installments"
 msgstr "Nyní můžete vytvořit pevné splátky"
 
@@ -7543,6 +7534,10 @@ msgstr "Potvrďte prosím, že chcete tuto akci provést"
 msgid "Please select both a registration and an event"
 msgstr "Vyberte prosím registraci i událost"
 
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
+msgstr "Registrace pro %(member)s byla přesunuta na %(event)s"
+
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Nastavení konfigurace Patrona a Zvýhodněného tipu"
 
@@ -7641,6 +7636,10 @@ msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 "Varování: Funkce žetonů ani kreditů nejsou povoleny. Náhrady nelze zpracovat"
 " jako virtuální měnu"
+
+#, python-format
+msgid "Registration for %(member)s copied to %(event)s"
+msgstr "Registrace %(member)s byla zkopírována do %(event)s"
 
 msgid "Selected elements will be shown to participants"
 msgstr "Vybrané prvky budou účastníkům předvedeny"
@@ -9022,10 +9021,6 @@ msgstr "Po potvrzení převodu nahrajte níže uvedený doklad o platbě"
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Část registračního poplatku odvozená pouze od vybrané vstupenky"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Registrace %(member)s úspěšně %(action)s na %(event)s"
-
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Zkontrolujte všechny zrušené registrace a sledujte stav jejich vrácení peněz"
@@ -9359,6 +9354,11 @@ msgstr ""
 
 msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr "Popište ji do pole níže a my ji co nejdříve opravíme"
+
+msgid "Discount amount applied to a new user signing up with a referral code"
+msgstr ""
+"Výše slevy poskytnuté novému uživateli, který se zaregistruje pomocí "
+"referral kódu"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "Chcete rozdělit registrační poplatek na dynamické platební kvóty"
@@ -10096,12 +10096,6 @@ msgid ""
 msgstr ""
 "Je-li tato možnost zaškrtnuta, nebudou se automaticky vytvářet vztahy na "
 "základě odkazů na postavy"
-
-msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-"Pokud je zaškrtnuto, zobrazí se na obálce původní obrázek, nikoli jeho "
-"zmenšenina"
 
 msgid ""
 "If checked: Send an email notification to the organisers for updated signups"
@@ -10879,6 +10873,13 @@ msgstr ""
 "uspořádat"
 
 msgid ""
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
+msgstr ""
+"Sleva přiznaná stávajícímu účastníkovi, když se jeho přítel zaregistruje "
+"pomocí jeho kódu"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore"
 msgstr ""
@@ -10891,6 +10892,13 @@ msgid ""
 msgstr ""
 "Pokud je tato možnost zaškrtnuta, umožňuje, aby byla viditelná pouze pro "
 "účastníky s vybraným tipem"
+
+msgid ""
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
+msgstr ""
+"Je-li tato možnost zapnutá, zobrazí se původní obrázek v plné velikosti "
+"namísto miniatury"
 
 #, python-format
 msgid ""
@@ -10937,14 +10945,6 @@ msgid ""
 msgstr ""
 "Zkopírujte vybrané prvky z jiné události do této události a přepište tak "
 "stávající data"
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-"Typ souboru '%(detected_type)s' není povolen.Povolené typy jsou: "
-"'%(allowed_types)s'."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
@@ -11657,13 +11657,6 @@ msgstr ""
 "odkaz: %(url)s"
 
 msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
-msgstr ""
-"Hodnota slevy pro přítele, který se zaregistruje pomocí kódu registrovaného "
-"účastníka"
-
-msgid ""
 "You can indicate a template event from which functionality and "
 "configurations will be copied"
 msgstr ""
@@ -11957,14 +11950,6 @@ msgstr ""
 "Umožňuje vytváření „gild“ – skupin postav založených hráči, které mají "
 "vlastního správce, možnost pozvat členy a posílat zprávy"
 
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-"Přípona souboru '%(extension)s' není povolena.Povolené přípony jsou: "
-"'%(allowed_extensions)s'."
-
 msgid ""
 "Indicates public information about your character, which will be shown to "
 "all other participants"
@@ -12013,13 +11998,6 @@ msgid ""
 msgstr ""
 "Sledujte průběh generování balíčku ZIP s tisknutelnými charakteristikami "
 "postav, který se právě vytváří na pozadí"
-
-msgid ""
-"Value of the discount for the registered participant who gives the code to a"
-" friend who signs up"
-msgstr ""
-"Hodnota slevy pro registrovaného účastníka, který předá kód příteli, který "
-"se zaregistruje"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -12982,13 +12960,6 @@ msgstr ""
 "výdaje na událost, tak částku, která má být zaměstnancům vrácena"
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-"Počet měsíců, počínaje začátkem členského roku, za které lze zaplatit "
-"členský příspěvek zdarma"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -13036,14 +13007,6 @@ msgid ""
 msgstr ""
 "<strong>Lite Mode</strong> je zjednodušené prostředí, které vám pomůže "
 "zvládnout základní mechanismy platformy"
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
-msgstr ""
-"Povolený typ '%(allowed_type)s' není platný typ.Viz "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
@@ -13136,6 +13099,13 @@ msgid ""
 msgstr ""
 "Vyplňte veřejná metadata, která slouží k externí propagaci této akce, včetně"
 " jazyka, typu, prostředí, místa konání a stylu"
+
+msgid ""
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
+msgstr ""
+"Počet měsíců na začátku roku, během nichž je možné uhradit roční poplatek, "
+"aniž by bylo nutné mít aktivní registraci na nějakou akci."
 
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"

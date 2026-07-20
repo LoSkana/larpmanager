@@ -174,12 +174,15 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
             info=f"transfer to run {target_run.id}",
         )
 
-        action = _("moved") if move_registration else _("copied")
+        label = (
+            _("Registration for %(member)s moved to %(event)s")
+            if move_registration
+            else _("Registration for %(member)s copied to %(event)s")
+        )
         member_name = registration.member.display_member(context)
         messages.success(
             request,
-            _("Registration for %(member)s successfully %(action)s to %(event)s")
-            % {"member": member_name, "action": action, "event": target_run},
+            label % {"member": member_name, "event": target_run},
         )
 
         # Clear all relevant caches for both source and target runs

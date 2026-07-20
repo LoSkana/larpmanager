@@ -481,9 +481,6 @@ msgstr "Dónde"
 msgid "email"
 msgstr "correo electrónico"
 
-msgid "moved"
-msgstr "movido"
-
 msgid "quick"
 msgstr "rápido"
 
@@ -744,9 +741,6 @@ msgstr "Votación"
 
 msgid "XP tot"
 msgstr "Px Tot"
-
-msgid "copied"
-msgstr "copiado"
 
 msgid "issued"
 msgstr "emitido"
@@ -2255,6 +2249,9 @@ msgstr "Nombre del contenido"
 msgid "Content type"
 msgstr "Tipo de contenido"
 
+msgid "Contributors"
+msgstr "Colaboradores"
+
 msgid "Credits name"
 msgstr "Nombre de créditos"
 
@@ -2335,9 +2332,6 @@ msgstr "Asociación"
 
 msgid "PDF Profiles"
 msgstr "Perfiles PDF"
-
-msgid "Parent empty"
-msgstr "Padre vacío"
 
 msgid "Participants"
 msgstr "Participantes"
@@ -2537,9 +2531,6 @@ msgstr "Días límite"
 
 msgid "Deadline date"
 msgstr "Fecha límite"
-
-msgid "Discount back"
-msgstr "Descuento"
 
 msgid "Document type"
 msgstr "Tipo de documento"
@@ -3313,9 +3304,6 @@ msgstr "Retraso en el pago"
 msgid "Delay in profile"
 msgstr "Retraso en el perfil"
 
-msgid "Desalt thumbnail"
-msgstr "Desalt thumbnail"
-
 msgid "Disable grouping"
 msgstr "Desactivar la agrupación"
 
@@ -3354,9 +3342,6 @@ msgstr "Visibilidad del campo"
 
 msgid "First assignment"
 msgstr "Primera misión"
-
-msgid "Forward discount"
-msgstr "Descuento a plazo"
 
 msgid "Handout template"
 msgstr "Plantilla de documento"
@@ -3652,9 +3637,6 @@ msgstr "Restauración interna"
 msgid "Invalid selection"
 msgstr "Selección no válida"
 
-msgid "Invoice not found"
-msgstr "Factura no encontrada"
-
 msgid "Load participants"
 msgstr "Cargar participantes"
 
@@ -3669,9 +3651,6 @@ msgstr "Condición de miembro"
 
 msgid "Module Activation"
 msgstr "Activación de módulos"
-
-msgid "Months free quota"
-msgstr "Meses de cuota libre"
 
 msgid "Move to container"
 msgstr "Pasar a contenedor"
@@ -3696,6 +3675,9 @@ msgstr "Pague lo que quiera"
 
 msgid "Payment confirmed"
 msgstr "Pago confirmado"
+
+msgid "Payment not found"
+msgstr "No se ha encontrado el pago"
 
 msgid "Payment submitted"
 msgstr "Pago presentado"
@@ -4138,6 +4120,9 @@ msgstr "Apoyo a los mantenedores"
 msgid "Treasury appointees"
 msgstr "Encargados de tesorería"
 
+msgid "Use full-size image"
+msgstr "Ver la imagen a tamaño completo"
+
 msgid "Username of account"
 msgstr "Nombre de usuario de la cuenta"
 
@@ -4259,6 +4244,9 @@ msgstr "Número de identificación de socio"
 
 msgid "Name - international"
 msgstr "Nombre internacional"
+
+msgid "New pre-registration"
+msgstr "Nueva preinscripción"
 
 msgid "No roles defined yet"
 msgstr "Aún no hay roles definidos"
@@ -4474,9 +4462,6 @@ msgstr "Nombre del personaje"
 msgid "New character created"
 msgstr "¡Nuevo personaje creado"
 
-msgid "New pre-registrations"
-msgstr "Nuevas preinscripciones"
-
 msgid "No albums created yet"
 msgstr "Aún no se ha creado ningún álbum"
 
@@ -4500,9 +4485,6 @@ msgstr "Operación no permitida"
 
 msgid "Participant questions"
 msgstr "Preguntas de los participantes"
-
-msgid "Participants included"
-msgstr "Participantes incluidos"
 
 #, python-format
 msgid "Payment for %(event)s"
@@ -4998,6 +4980,12 @@ msgstr "Referencia opcional"
 msgid "Provisional registration"
 msgstr "Registro provisional"
 
+msgid "Referred Friend Discount"
+msgstr "Descuento por recomendar a un amigo"
+
+msgid "Referrer Reward Discount"
+msgstr "Descuento por recomendar a un amigo"
+
 msgid "Regeneration pdf started"
 msgstr "¡Regeneración de pdf iniciada"
 
@@ -5079,9 +5067,6 @@ msgstr "Puntos de experiencia iniciales"
 msgid "Intermediary channel code"
 msgstr "Código del canal intermediario"
 
-msgid "Invoice already confirmed"
-msgstr "Factura ya confirmada"
-
 msgid "Kitchen - food, tableware"
 msgstr "Cocina - alimentos, vajilla"
 
@@ -5125,8 +5110,8 @@ msgstr "Opción guardada correctamente"
 msgid "Payment already confirmed"
 msgstr "Pago ya confirmado"
 
-msgid "Pending invoice approvals"
-msgstr "Aprobación de facturas pendientes"
+msgid "Payments pending approval"
+msgstr "Pagos pendientes de aprobación"
 
 msgid "Pre-register to the event"
 msgstr "¡Preinscríbete al evento"
@@ -5158,6 +5143,9 @@ msgstr "Mostrar caracteres disponibles"
 
 msgid "Size of the file in bytes"
 msgstr "Tamaño del archivo en bytes"
+
+msgid "Standalone Payment Window"
+msgstr "Ventana de pago independiente"
 
 msgid "These are our past events"
 msgstr "Estos son nuestros eventos anteriores"
@@ -5220,9 +5208,6 @@ msgstr "Regala una tarjeta a tu amigo"
 msgid "Hide unassigned characters"
 msgstr "Ocultar caracteres no asignados"
 
-msgid "Invoices Awaiting Approval"
-msgstr "Facturas pendientes de aprobación"
-
 msgid "Manage the event prologues"
 msgstr "Gestionar los prólogos de los actos"
 
@@ -5240,6 +5225,9 @@ msgstr "Ahora puede crear flujos de entrada"
 
 msgid "Option no longer available"
 msgstr "Opción ya no disponible"
+
+msgid "Payments Awaiting Approval"
+msgstr "Pagos pendientes de aprobación"
 
 msgid "Pre-registration cancelled"
 msgstr "Se ha cancelado la preinscripción"
@@ -6528,6 +6516,9 @@ msgstr "Personaje reflejo, no seleccionable"
 msgid "No one-time content items defined yet"
 msgstr "Aún no se han definido elementos de contenido puntuales"
 
+msgid "No value has been selected for parent"
+msgstr "No se ha seleccionado ningún valor para el elemento principal"
+
 msgid "Now you can create fixed installments"
 msgstr "Ahora puedes crear cuotas fijas"
 
@@ -7549,6 +7540,10 @@ msgstr "Confirma que quieres realizar esta acción"
 msgid "Please select both a registration and an event"
 msgstr "Seleccione una inscripción y un acto"
 
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
+msgstr "La inscripción de %(member)s se ha trasladado a %(event)s"
+
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr ""
 "Establecer la configuración de las entradas reducidas y de los usuarios"
@@ -7651,6 +7646,10 @@ msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 "Atención: No están habilitadas las funciones de tokens ni de créditos. Los "
 "reembolsos no se pueden procesar como moneda virtual"
+
+#, python-format
+msgid "Registration for %(member)s copied to %(event)s"
+msgstr "Inscripción de %(member)s en %(event)s"
 
 msgid "Selected elements will be shown to participants"
 msgstr "Los elementos seleccionados se mostrarán a los participantes"
@@ -9145,10 +9144,6 @@ msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr ""
 "Parte de la cuota de inscripción derivada únicamente del billete elegido"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Inscripción de %(member)s con éxito %(action)s a %(event)s"
-
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Revisa todas las inscripciones canceladas y comprueba el estado de sus "
@@ -9534,6 +9529,11 @@ msgstr ""
 
 msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr "Descríbelo en el campo de abajo y lo solucionaremos lo antes posible"
+
+msgid "Discount amount applied to a new user signing up with a referral code"
+msgstr ""
+"Importe del descuento que se aplica a un nuevo usuario que se registre con "
+"un código de recomendación"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "¿Desea dividir la cuota de inscripción en cuotas de pago dinámicas"
@@ -10359,12 +10359,6 @@ msgid ""
 msgstr ""
 "Si se marca esta casilla, no se crearán relaciones automáticas a partir de "
 "las referencias de los personajes"
-
-msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-"Si está marcada, muestra la imagen original en la portada, no la versión en "
-"miniatura"
 
 msgid ""
 "If checked: Send an email notification to the organisers for updated signups"
@@ -11196,6 +11190,13 @@ msgstr ""
 "revisarlas y organizarlas"
 
 msgid ""
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
+msgstr ""
+"Descuento que se le da a un participante que ya está registrado cuando un "
+"amigo se inscribe usando su código"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore"
 msgstr ""
@@ -11208,6 +11209,13 @@ msgid ""
 msgstr ""
 "Si está marcada, permite que una opción sólo sea visible para los "
 "participantes con la entrada seleccionada"
+
+msgid ""
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
+msgstr ""
+"Si está activada, muestra la imagen original a tamaño completo en lugar de "
+"la miniatura"
 
 #, python-format
 msgid ""
@@ -11258,14 +11266,6 @@ msgid ""
 msgstr ""
 "Copia los elementos seleccionados de otro evento a este, sobrescribiendo los"
 " datos existentes"
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-"El tipo de archivo '%(detected_type)s' no está permitido. Los tipos "
-"permitidos son: '%(allowed_types)s'."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
@@ -12007,13 +12007,6 @@ msgstr ""
 "Dale este enlace: %(url)s"
 
 msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
-msgstr ""
-"Valor del descuento para el amigo que se inscriba utilizando el código de un"
-" participante inscrito"
-
-msgid ""
 "You can indicate a template event from which functionality and "
 "configurations will be copied"
 msgstr ""
@@ -12311,14 +12304,6 @@ msgstr ""
 "administrador que los gestiona por su cuenta, invitaciones y mensajes de "
 "texto"
 
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-"La extensión de archivo '%(extension)s' no está permitida. Las extensiones "
-"permitidas son: '%(allowed_extensions)s'."
-
 msgid ""
 "Indicates public information about your character, which will be shown to "
 "all other participants"
@@ -12367,13 +12352,6 @@ msgid ""
 msgstr ""
 "Sigue el progreso de la creación del paquete ZIP con las hojas de personaje "
 "imprimibles que se está generando en segundo plano"
-
-msgid ""
-"Value of the discount for the registered participant who gives the code to a"
-" friend who signs up"
-msgstr ""
-"Valor del descuento para el participante inscrito que dé el código a un "
-"amigo que se inscriba"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -13344,13 +13322,6 @@ msgstr ""
 "personal"
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-"Número de meses, a partir del comienzo del año de afiliación, durante los "
-"cuales la cuota de afiliación puede pagarse libremente"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -13398,14 +13369,6 @@ msgid ""
 msgstr ""
 "<strong>Modo Lite</strong> es un entorno simplificado diseñado para ayudarte"
 " a dominar la mecánica básica de la plataforma"
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
-msgstr ""
-"El tipo permitido '%(allowed_type)s' no es un tipo válido.Ver "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
@@ -13501,6 +13464,13 @@ msgstr ""
 "Rellena los metadatos públicos que se usan para promocionar este evento "
 "fuera de la plataforma, incluyendo el idioma, el tipo, el entorno, la "
 "ubicación y el estilo"
+
+msgid ""
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
+msgstr ""
+"Número de meses a principios de año en los que se puede pagar la cuota anual"
+" sin necesidad de estar inscrito en ningún evento activo."
 
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"

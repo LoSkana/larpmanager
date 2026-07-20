@@ -481,9 +481,6 @@ msgstr "Wo"
 msgid "email"
 msgstr "E-Mail"
 
-msgid "moved"
-msgstr "umgezogen"
-
 msgid "quick"
 msgstr "schnell"
 
@@ -744,9 +741,6 @@ msgstr "Abstimmen"
 
 msgid "XP tot"
 msgstr "Px Tot"
-
-msgid "copied"
-msgstr "kopiert"
 
 msgid "issued"
 msgstr "ausgestellt"
@@ -2255,6 +2249,9 @@ msgstr "Name des Inhalts"
 msgid "Content type"
 msgstr "Art des Inhalts"
 
+msgid "Contributors"
+msgstr "Mitwirkende"
+
 msgid "Credits name"
 msgstr "Name der Credits"
 
@@ -2335,9 +2332,6 @@ msgstr "Verein"
 
 msgid "PDF Profiles"
 msgstr "Pdf-Profile"
-
-msgid "Parent empty"
-msgstr "Elternteil leer"
 
 msgid "Participants"
 msgstr "Teilnehmer"
@@ -2537,9 +2531,6 @@ msgstr "Tage Frist"
 
 msgid "Deadline date"
 msgstr "Datum der Frist"
-
-msgid "Discount back"
-msgstr "Rabatt zurück"
 
 msgid "Document type"
 msgstr "Art des Dokuments"
@@ -3313,9 +3304,6 @@ msgstr "Verzögerung der Zahlung"
 msgid "Delay in profile"
 msgstr "Verzögerung im Profil"
 
-msgid "Desalt thumbnail"
-msgstr "Vorschaubild entsalzen"
-
 msgid "Disable grouping"
 msgstr "Gruppierung deaktivieren"
 
@@ -3354,9 +3342,6 @@ msgstr "Sichtbarkeit im Feld"
 
 msgid "First assignment"
 msgstr "Erster Auftrag"
-
-msgid "Forward discount"
-msgstr "Terminrabatt"
 
 msgid "Handout template"
 msgstr "Handout-Vorlage"
@@ -3652,9 +3637,6 @@ msgstr "Interne Verpflegung"
 msgid "Invalid selection"
 msgstr "Ungültige Auswahl"
 
-msgid "Invoice not found"
-msgstr "Rechnung nicht gefunden"
-
 msgid "Load participants"
 msgstr "Teilnehmer laden"
 
@@ -3669,9 +3651,6 @@ msgstr "Status der Mitgliedschaft"
 
 msgid "Module Activation"
 msgstr "Modul-Aktivierung"
-
-msgid "Months free quota"
-msgstr "Monate freies Kontingent"
 
 msgid "Move to container"
 msgstr "Umzug in den Container"
@@ -3696,6 +3675,9 @@ msgstr "Zahlen Sie, was Sie wollen"
 
 msgid "Payment confirmed"
 msgstr "Zahlung bestätigt"
+
+msgid "Payment not found"
+msgstr "Zahlung nicht gefunden"
 
 msgid "Payment submitted"
 msgstr "Zahlung eingereicht"
@@ -4138,6 +4120,9 @@ msgstr "Unterstützung der Betreuer"
 msgid "Treasury appointees"
 msgstr "Finanzbeamte"
 
+msgid "Use full-size image"
+msgstr "Bild in voller Größe anzeigen"
+
 msgid "Username of account"
 msgstr "Konto-Benutzername"
 
@@ -4259,6 +4244,9 @@ msgstr "ID-Nummer der Mitgliedschaft"
 
 msgid "Name - international"
 msgstr "Englischer Name"
+
+msgid "New pre-registration"
+msgstr "Neue Voranmeldung"
 
 msgid "No roles defined yet"
 msgstr "Es wurden noch keine Rollen definiert"
@@ -4474,9 +4462,6 @@ msgstr "Name des Zeichens"
 msgid "New character created"
 msgstr "Neuer Charakter erstellt"
 
-msgid "New pre-registrations"
-msgstr "Neue Vorregistrierung"
-
 msgid "No albums created yet"
 msgstr "Es wurden noch keine Alben erstellt"
 
@@ -4500,9 +4485,6 @@ msgstr "Betrieb nicht erlaubt"
 
 msgid "Participant questions"
 msgstr "Fragen der Teilnehmer"
-
-msgid "Participants included"
-msgstr "Sie nahmen teil"
 
 #, python-format
 msgid "Payment for %(event)s"
@@ -4998,6 +4980,12 @@ msgstr "Optionale Bestellnummer"
 msgid "Provisional registration"
 msgstr "Vorläufige Registrierung"
 
+msgid "Referred Friend Discount"
+msgstr "Rabatt für geworbene Freunde"
+
+msgid "Referrer Reward Discount"
+msgstr "Empfehlungsrabatt"
+
 msgid "Regeneration pdf started"
 msgstr "pdf Regeneration gestartet"
 
@@ -5079,9 +5067,6 @@ msgstr "Erste Erfahrungspunkte"
 msgid "Intermediary channel code"
 msgstr "Code des Vermittlungskanals"
 
-msgid "Invoice already confirmed"
-msgstr "Rechnung bereits bestätigt"
-
 msgid "Kitchen - food, tableware"
 msgstr "Küche - Lebensmittel, Geschirr"
 
@@ -5125,8 +5110,8 @@ msgstr "Option erfolgreich gespeichert"
 msgid "Payment already confirmed"
 msgstr "Zahlung bereits bestätigt"
 
-msgid "Pending invoice approvals"
-msgstr "Ausstehende Rechnungsfreigaben"
+msgid "Payments pending approval"
+msgstr "Zur Genehmigung anstehende Zahlungen"
 
 msgid "Pre-register to the event"
 msgstr "Tragen Sie sich in die Vorregistrierungsliste ein"
@@ -5158,6 +5143,9 @@ msgstr "Verfügbare Zeichen anzeigen"
 
 msgid "Size of the file in bytes"
 msgstr "Größe der Datei in Bytes"
+
+msgid "Standalone Payment Window"
+msgstr "Eigenständiges Zahlungsfenster"
 
 msgid "These are our past events"
 msgstr "Dies sind unsere vergangenen Veranstaltungen"
@@ -5220,9 +5208,6 @@ msgstr "Schenken Sie Ihrem Freund eine Karte"
 msgid "Hide unassigned characters"
 msgstr "Nicht zugewiesene Zeichen ausblenden"
 
-msgid "Invoices Awaiting Approval"
-msgstr "Zur Genehmigung anstehende Rechnungen"
-
 msgid "Manage the event prologues"
 msgstr "Verwalten der Ereignisprologe"
 
@@ -5240,6 +5225,9 @@ msgstr "Jetzt können Sie Zuflüsse erstellen"
 
 msgid "Option no longer available"
 msgstr "Option nicht mehr verfügbar"
+
+msgid "Payments Awaiting Approval"
+msgstr "Zur Genehmigung anstehende Zahlungen"
 
 msgid "Pre-registration cancelled"
 msgstr "Vorregistrierung storniert"
@@ -6529,6 +6517,9 @@ msgstr "Zeichen vom Typ 'Spiegel', nicht wählbar"
 msgid "No one-time content items defined yet"
 msgstr "Es wurden noch keine einmaligen Inhalte definiert"
 
+msgid "No value has been selected for parent"
+msgstr "Für das übergeordnete Element wurde kein Wert ausgewählt"
+
 msgid "Now you can create fixed installments"
 msgstr "Jetzt können Sie feste Raten erstellen"
 
@@ -7562,6 +7553,10 @@ msgid "Please select both a registration and an event"
 msgstr ""
 "Bitte wählen Sie sowohl eine Anmeldung als auch eine Veranstaltung aus"
 
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
+msgstr "Die Anmeldung für %(member)s wurde auf %(event)s verschoben"
+
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Konfiguration von Patron und ermäßigten Tickets einrichten"
 
@@ -7665,6 +7660,10 @@ msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 "Warnung: Weder die Token- noch die Kreditfunktionen sind aktiviert. "
 "Erstattungen können nicht als virtuelle Währung verarbeitet werden"
+
+#, python-format
+msgid "Registration for %(member)s copied to %(event)s"
+msgstr "Die Anmeldung von %(member)s wurde an %(event)s weitergeleitet"
 
 msgid "Selected elements will be shown to participants"
 msgstr "Ausgewählte Elemente werden den Teilnehmern gezeigt"
@@ -9280,10 +9279,6 @@ msgstr ""
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Ein Teil der Anmeldegebühr stammt nur aus dem gewählten Ticket"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Anmeldung für %(member)s erfolgreich %(action)s zu %(event)s"
-
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Überprüfe alle stornierten Anmeldungen und verfolge den Stand der "
@@ -9702,6 +9697,11 @@ msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 "Beschreiben Sie das Problem in dem unten stehenden Feld und wir werden es so"
 " schnell wie möglich beheben"
+
+msgid "Discount amount applied to a new user signing up with a referral code"
+msgstr ""
+"Rabattbetrag, der einem neuen Nutzer gewährt wird, der sich mit einem "
+"Empfehlungscode anmeldet"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr ""
@@ -10565,12 +10565,6 @@ msgstr ""
 "Verknüpfungen aus Charakterreferenzen erstellt"
 
 msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-"Wenn diese Option aktiviert ist, wird das Originalbild auf dem Cover "
-"angezeigt, nicht die Miniaturversion"
-
-msgid ""
 "If checked: Send an email notification to the organisers for updated signups"
 msgstr ""
 "Wenn angekreuzt: Eine E-Mail-Benachrichtigung an die Organisatoren für "
@@ -11407,6 +11401,13 @@ msgstr ""
 "diese zu überprüfen und zu organisieren"
 
 msgid ""
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
+msgstr ""
+"Rabatt, den ein bestehender Teilnehmer erhält, wenn sich ein Freund mit "
+"seinem Code anmeldet"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore"
 msgstr ""
@@ -11419,6 +11420,13 @@ msgid ""
 msgstr ""
 "Wenn diese Option markiert ist, kann sie nur für Teilnehmer mit einem "
 "ausgewählten Ticket sichtbar sein"
+
+msgid ""
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
+msgstr ""
+"Wenn diese Option aktiviert ist, wird das Originalbild in voller Größe "
+"anstelle der Miniaturansicht angezeigt"
 
 #, python-format
 msgid ""
@@ -11470,14 +11478,6 @@ msgid ""
 msgstr ""
 "Wähle Elemente aus einem anderen Ereignis aus und füge sie in dieses "
 "Ereignis ein, wobei vorhandene Daten überschrieben werden"
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-"Der Dateityp '%(detected_type)s' ist nicht erlaubt, erlaubt sind: "
-"'%(allowed_types)s'."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
@@ -12223,13 +12223,6 @@ msgstr ""
 "abgeschlossen. Geben Sie ihm diesen Link: %(url)s"
 
 msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
-msgstr ""
-"Wert des Rabatts für den Freund, der sich mit dem Code eines registrierten "
-"Teilnehmers anmeldet"
-
-msgid ""
 "You can indicate a template event from which functionality and "
 "configurations will be copied"
 msgstr ""
@@ -12525,14 +12518,6 @@ msgstr ""
 "Aktiviert „Gilden“ – von Spielern gegründete Charaktergruppen mit einem "
 "selbstverwalteten Administrator, Einladungsfunktion und Chat"
 
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-"Die Dateierweiterung '%(extension)s' ist nicht erlaubt, erlaubt sind: "
-"'%(allowed_extensions)s'."
-
 msgid ""
 "Indicates public information about your character, which will be shown to "
 "all other participants"
@@ -12581,13 +12566,6 @@ msgid ""
 msgstr ""
 "Verfolge den Fortschritt der Erstellung des ZIP-Pakets mit den ausdruckbaren"
 " Charakterbögen, das gerade im Hintergrund generiert wird"
-
-msgid ""
-"Value of the discount for the registered participant who gives the code to a"
-" friend who signs up"
-msgstr ""
-"Wert des Rabatts für den registrierten Teilnehmer, der den Code an einen "
-"Freund weitergibt, der sich anmeldet"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -13559,13 +13537,6 @@ msgstr ""
 "den Mitarbeitern erstattet wird, zu verfolgen"
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-"Anzahl der Monate ab Beginn des Mitgliedsjahres, für die der "
-"Mitgliedsbeitrag gebührenfrei gezahlt werden kann"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -13615,14 +13586,6 @@ msgid ""
 msgstr ""
 "Der <strong>Lite Mode</strong> ist eine vereinfachte Umgebung, die Ihnen "
 "helfen soll, die Grundmechanismen der Plattform zu beherrschen"
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
-msgstr ""
-"Erlaubter Typ '%(allowed_type)s' ist kein gültiger Typ, siehe "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
@@ -13724,6 +13687,14 @@ msgid ""
 msgstr ""
 "Gib die öffentlichen Metadaten ein, die zur externen Werbung für diese "
 "Veranstaltung verwendet werden, darunter Sprache, Art, Rahmen, Ort und Stil"
+
+msgid ""
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
+msgstr ""
+"Anzahl der Monate zu Beginn des Jahres, in denen die Jahresgebühr bezahlt "
+"werden darf, ohne dass eine aktive Anmeldung zu einer Veranstaltung "
+"erforderlich ist."
 
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"

@@ -37,7 +37,7 @@ result_path=$("$PYTHON" -c "import json;print(json.load(open('$CONFIG'))['result
 
 system_prompt=$("$PYTHON" -c "
 import importlib.util
-spec = importlib.util.spec_from_file_location('tr', '$SCRIPT_DIR/translation_review.py')
+spec = importlib.util.spec_from_file_location('tr', '$SCRIPT_DIR/review.py')
 m = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(m)
 print(m.SYSTEM_PROMPT)

@@ -481,9 +481,6 @@ msgstr "Hvor"
 msgid "email"
 msgstr "e-post"
 
-msgid "moved"
-msgstr "flyttet"
-
 msgid "quick"
 msgstr "raskt"
 
@@ -744,9 +741,6 @@ msgstr "Stemmegivning"
 
 msgid "XP tot"
 msgstr "Px Tot"
-
-msgid "copied"
-msgstr "kopiert"
 
 msgid "issued"
 msgstr "utstedt"
@@ -2255,6 +2249,9 @@ msgstr "Navn på innhold"
 msgid "Content type"
 msgstr "Innholdstype"
 
+msgid "Contributors"
+msgstr "Medarbeidere"
+
 msgid "Credits name"
 msgstr "Kreditter navn"
 
@@ -2335,9 +2332,6 @@ msgstr "Forening"
 
 msgid "PDF Profiles"
 msgstr "Pdf-profiler"
-
-msgid "Parent empty"
-msgstr "Foreldre tom"
 
 msgid "Participants"
 msgstr "Deltakere"
@@ -2537,9 +2531,6 @@ msgstr "Dager frist"
 
 msgid "Deadline date"
 msgstr "Frist"
-
-msgid "Discount back"
-msgstr "Rabatt tilbake"
 
 msgid "Document type"
 msgstr "Dokumenttype"
@@ -3313,9 +3304,6 @@ msgstr "Forsinket betaling"
 msgid "Delay in profile"
 msgstr "Forsinkelse i profil"
 
-msgid "Desalt thumbnail"
-msgstr "Desalt miniatyrbilde"
-
 msgid "Disable grouping"
 msgstr "Deaktiver gruppering"
 
@@ -3354,9 +3342,6 @@ msgstr "Synlighet i felt"
 
 msgid "First assignment"
 msgstr "Første oppdrag"
-
-msgid "Forward discount"
-msgstr "Terminrabatt"
 
 msgid "Handout template"
 msgstr "Mal for utdeling"
@@ -3652,9 +3637,6 @@ msgstr "Intern catering"
 msgid "Invalid selection"
 msgstr "Ugyldig valg"
 
-msgid "Invoice not found"
-msgstr "Faktura ikke funnet"
-
 msgid "Load participants"
 msgstr "Last inn deltakere"
 
@@ -3669,9 +3651,6 @@ msgstr "Status for medlemskap"
 
 msgid "Module Activation"
 msgstr "Modulaktivering"
-
-msgid "Months free quota"
-msgstr "Måneder fri kvote"
 
 msgid "Move to container"
 msgstr "Flytt til container"
@@ -3696,6 +3675,9 @@ msgstr "Betal det du vil"
 
 msgid "Payment confirmed"
 msgstr "Betaling bekreftet"
+
+msgid "Payment not found"
+msgstr "Betaling ikke funnet"
 
 msgid "Payment submitted"
 msgstr "Innlevert betaling"
@@ -4138,6 +4120,9 @@ msgstr "Støtte vedlikeholdere"
 msgid "Treasury appointees"
 msgstr "Finansdepartementet"
 
+msgid "Use full-size image"
+msgstr "Bruk bildet i full størrelse"
+
 msgid "Username of account"
 msgstr "Brukernavn for konto"
 
@@ -4259,6 +4244,9 @@ msgstr "Medlemskapets ID-nummer"
 
 msgid "Name - international"
 msgstr "Engelsk navn"
+
+msgid "New pre-registration"
+msgstr "Ny forhåndsregistrering"
 
 msgid "No roles defined yet"
 msgstr "Ingen roller er definert ennå"
@@ -4474,9 +4462,6 @@ msgstr "Navnet på karakteren"
 msgid "New character created"
 msgstr "Ny karakter opprettet"
 
-msgid "New pre-registrations"
-msgstr "Ny forhåndsregistrering"
-
 msgid "No albums created yet"
 msgstr "Det er ikke opprettet noen album ennå"
 
@@ -4500,9 +4485,6 @@ msgstr "Operasjon ikke tillatt"
 
 msgid "Participant questions"
 msgstr "Spørsmål fra deltakerne"
-
-msgid "Participants included"
-msgstr "De deltok i"
 
 #, python-format
 msgid "Payment for %(event)s"
@@ -4998,6 +4980,12 @@ msgstr "Valgfritt bestillingsnummer"
 msgid "Provisional registration"
 msgstr "Foreløpig registrering"
 
+msgid "Referred Friend Discount"
+msgstr "Rabatt for henviste venner"
+
+msgid "Referrer Reward Discount"
+msgstr "Rabatt for henvisning"
+
 msgid "Regeneration pdf started"
 msgstr "pdf regenerering startet"
 
@@ -5079,9 +5067,6 @@ msgstr "Innledende erfaringspoeng"
 msgid "Intermediary channel code"
 msgstr "Kode for mellomliggende kanal"
 
-msgid "Invoice already confirmed"
-msgstr "Fakturaen er allerede bekreftet"
-
 msgid "Kitchen - food, tableware"
 msgstr "Kjøkken - mat, servise"
 
@@ -5125,8 +5110,8 @@ msgstr "Alternativet ble lagret"
 msgid "Payment already confirmed"
 msgstr "Betaling allerede bekreftet"
 
-msgid "Pending invoice approvals"
-msgstr "Venter på godkjenning av fakturaer"
+msgid "Payments pending approval"
+msgstr "Betalinger som venter på godkjenning"
 
 msgid "Pre-register to the event"
 msgstr "Sett deg selv på forhåndsregistreringslisten"
@@ -5158,6 +5143,9 @@ msgstr "Vis tilgjengelige tegn"
 
 msgid "Size of the file in bytes"
 msgstr "Filens størrelse i byte"
+
+msgid "Standalone Payment Window"
+msgstr "Frittstående betalingsvindu"
 
 msgid "These are our past events"
 msgstr "Dette er våre tidligere arrangementer"
@@ -5220,9 +5208,6 @@ msgstr "Gi et kort til vennen din"
 msgid "Hide unassigned characters"
 msgstr "Skjul tegn som ikke er tilordnet"
 
-msgid "Invoices Awaiting Approval"
-msgstr "Fakturaer som venter på godkjenning"
-
 msgid "Manage the event prologues"
 msgstr "Administrer prologene til arrangementet"
 
@@ -5240,6 +5225,9 @@ msgstr "Nå kan du opprette innstrømninger"
 
 msgid "Option no longer available"
 msgstr "Alternativet er ikke lenger tilgjengelig"
+
+msgid "Payments Awaiting Approval"
+msgstr "Betalinger som venter på godkjenning"
 
 msgid "Pre-registration cancelled"
 msgstr "Forhåndsregistrering avlyst"
@@ -6526,6 +6514,9 @@ msgstr "Tegn av speiltype, kan ikke velges"
 msgid "No one-time content items defined yet"
 msgstr "Det er foreløpig ikke definert noen engangsinnholdselementer"
 
+msgid "No value has been selected for parent"
+msgstr "Det er ikke valgt noen verdi for overordnet element"
+
 msgid "Now you can create fixed installments"
 msgstr "Nå kan du opprette faste avdrag"
 
@@ -7545,6 +7536,10 @@ msgstr "Bekreft at du ønsker å utføre denne handlingen"
 msgid "Please select both a registration and an event"
 msgstr "Vennligst velg både en registrering og et arrangement"
 
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
+msgstr "Påmeldingen for %(member)s er flyttet til %(event)s"
+
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Konfigurer konfigurasjon av Patron og Reduced ticket"
 
@@ -7645,6 +7640,10 @@ msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 "Advarsel: Verken tokens- eller kredittfunksjoner er aktivert. Refusjoner kan"
 " ikke behandles som virtuell valuta"
+
+#, python-format
+msgid "Registration for %(member)s copied to %(event)s"
+msgstr "Påmelding for %(member)s er kopiert til %(event)s"
 
 msgid "Selected elements will be shown to participants"
 msgstr "Utvalgte elementer vil bli vist til deltakerne"
@@ -9089,10 +9088,6 @@ msgstr ""
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "En del av registreringsavgiften stammer kun fra den valgte billetten"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Registrering for %(member)s vellykket %(action)s til %(event)s"
-
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Gjennomgå alle kansellerte registreringer og følg med på statusen for "
@@ -9450,6 +9445,11 @@ msgstr ""
 
 msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr "Beskriv det i feltet nedenfor, så ordner vi det så snart som mulig"
+
+msgid "Discount amount applied to a new user signing up with a referral code"
+msgstr ""
+"Rabattbeløp som gis til en ny bruker som registrerer seg med en "
+"henvisningskode"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr ""
@@ -10219,11 +10219,6 @@ msgid ""
 msgstr ""
 "Hvis dette feltet er merket av, vil det ikke opprettes automatiske "
 "relasjoner fra karakterreferanser"
-
-msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-"Hvis avkrysset, vises originalbildet i omslaget, ikke miniatyrversjonen"
 
 msgid ""
 "If checked: Send an email notification to the organisers for updated signups"
@@ -11027,6 +11022,13 @@ msgstr ""
 "gjennom og organisere dem"
 
 msgid ""
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
+msgstr ""
+"Rabatt som gis til en eksisterende deltaker når en venn melder seg på ved "
+"hjelp av vedkommendes kode"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore"
 msgstr ""
@@ -11039,6 +11041,13 @@ msgid ""
 msgstr ""
 "Hvis avkrysset, kan et alternativ bare være synlig for deltakere med valgt "
 "billett"
+
+msgid ""
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
+msgstr ""
+"Hvis denne funksjonen er aktivert, vises det opprinnelige bildet i full "
+"størrelse i stedet for miniatyrbildet"
 
 #, python-format
 msgid ""
@@ -11087,14 +11096,6 @@ msgid ""
 msgstr ""
 "Kopier valgte elementer fra en annen hendelse til denne hendelsen, og "
 "overskriv eksisterende data"
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-"Filtypen '%(detected_type)s' er ikke tillatt. Tillatte typer er: "
-"'%(allowed_types)s'."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
@@ -11827,13 +11828,6 @@ msgstr ""
 "denne lenken: %(url)s"
 
 msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
-msgstr ""
-"Verdien av rabatten for en venn som registrerer seg med koden til en "
-"registrert deltaker"
-
-msgid ""
 "You can indicate a template event from which functionality and "
 "configurations will be copied"
 msgstr ""
@@ -12129,14 +12123,6 @@ msgstr ""
 "Aktiverer «Guilds» – spilleropprettede grupper av karakterer med en "
 "selvstyrt administrator, invitasjonsfunksjon og tekstfunksjon"
 
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-"Filtypen '%(extension)s' er ikke tillatt. Tillatte filtyper er: "
-"'%(allowed_extensions)s'."
-
 msgid ""
 "Indicates public information about your character, which will be shown to "
 "all other participants"
@@ -12185,13 +12171,6 @@ msgid ""
 msgstr ""
 "Følg med på fremdriften for ZIP-pakken med utskrivbare karakterark som "
 "genereres i bakgrunnen"
-
-msgid ""
-"Value of the discount for the registered participant who gives the code to a"
-" friend who signs up"
-msgstr ""
-"Verdien av rabatten for den registrerte deltakeren som gir koden til en venn"
-" som registrerer seg"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -13155,13 +13134,6 @@ msgstr ""
 "ansatte"
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-"Antall måneder, regnet fra begynnelsen av medlemsåret, hvor "
-"medlemskontingenten kan betales gratis"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -13209,14 +13181,6 @@ msgid ""
 msgstr ""
 "<strong>Lite Mode</strong> er et forenklet miljø som er utviklet for å "
 "hjelpe deg med å mestre plattformens kjernemekanikk"
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
-msgstr ""
-"Tillatt type '%(allowed_type)s' er ikke en gyldig type. Se "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
@@ -13312,6 +13276,13 @@ msgid ""
 msgstr ""
 "Fyll ut de offentlige metadataene som brukes til å markedsføre dette "
 "arrangementet eksternt, inkludert språk, type, ramme, sted og stil"
+
+msgid ""
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
+msgstr ""
+"Antall måneder ved årets begynnelse hvor det er tillatt å betale årsavgiften"
+" uten at man må ha en aktiv påmelding til et arrangement."
 
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"
