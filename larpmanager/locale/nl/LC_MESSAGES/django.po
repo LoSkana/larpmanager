@@ -550,9 +550,6 @@ msgstr "Maak"
 msgid "Delete"
 msgstr "Verwijder"
 
-msgid "Demote"
-msgstr "Terugzetten"
-
 msgid "Detail"
 msgstr "Detail"
 
@@ -963,9 +960,6 @@ msgstr "Ga verder"
 
 msgid "Profile"
 msgstr "Profiel"
-
-msgid "Promote"
-msgstr "Promoten"
 
 msgid "Pronoun"
 msgstr "Voornaamwoord"
@@ -2423,6 +2417,9 @@ msgstr "Registratie"
 msgid "Relationship"
 msgstr "Link"
 
+msgid "Remove admin"
+msgstr "Beheerder verwijderen"
+
 msgid "Rensponsable"
 msgstr "Verantwoordelijk"
 
@@ -3496,6 +3493,9 @@ msgstr "Speler selectie"
 msgid "Pre-registration"
 msgstr "Voorinschrijving"
 
+msgid "Promote to admin"
+msgstr "Bevorder tot beheerder"
+
 msgid "Realized revenue"
 msgstr "Gerealiseerde omzet"
 
@@ -3798,6 +3798,9 @@ msgstr "Registratie e-mail"
 
 msgid "Remaining credits"
 msgstr "Resterende credits"
+
+msgid "Remove from guild"
+msgstr "Uit het gilde verwijderen"
 
 msgid "Request submitted"
 msgstr "Onderdanig verzoek"

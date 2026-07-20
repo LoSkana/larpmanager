@@ -550,9 +550,6 @@ msgstr "Opprett"
 msgid "Delete"
 msgstr "Slett"
 
-msgid "Demote"
-msgstr "Nedgradere"
-
 msgid "Detail"
 msgstr "Detaljer"
 
@@ -963,9 +960,6 @@ msgstr "Gå videre"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Promote"
-msgstr "Markedsføre"
 
 msgid "Pronoun"
 msgstr "Pronomen"
@@ -2423,6 +2417,9 @@ msgstr "Registrering"
 msgid "Relationship"
 msgstr "Lenke"
 
+msgid "Remove admin"
+msgstr "Fjern administrator"
+
 msgid "Rensponsable"
 msgstr "Ansvarlig"
 
@@ -3496,6 +3493,9 @@ msgstr "Valg av spiller"
 msgid "Pre-registration"
 msgstr "Forhåndsregistrering"
 
+msgid "Promote to admin"
+msgstr "Oppgrader til administrator"
+
 msgid "Realized revenue"
 msgstr "Realiserte inntekter"
 
@@ -3798,6 +3798,9 @@ msgstr "Registreringspost"
 
 msgid "Remaining credits"
 msgstr "Gjenværende studiepoeng"
+
+msgid "Remove from guild"
+msgstr "Fjern fra klanen"
 
 msgid "Request submitted"
 msgstr "Underdanig forespørsel"

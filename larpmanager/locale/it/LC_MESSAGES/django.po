@@ -550,9 +550,6 @@ msgstr "Crea"
 msgid "Delete"
 msgstr "Elimina"
 
-msgid "Demote"
-msgstr "Retrocedi"
-
 msgid "Detail"
 msgstr "Dettaglio"
 
@@ -963,9 +960,6 @@ msgstr "Procedi"
 
 msgid "Profile"
 msgstr "Profilo"
-
-msgid "Promote"
-msgstr "Promuovi"
 
 msgid "Pronoun"
 msgstr "Pronome"
@@ -2423,6 +2417,9 @@ msgstr "Iscrizione"
 msgid "Relationship"
 msgstr "Legame"
 
+msgid "Remove admin"
+msgstr "Rimuovi amministratore"
+
 msgid "Rensponsable"
 msgstr "Responsabile"
 
@@ -3496,6 +3493,9 @@ msgstr "Scelta giocatore"
 msgid "Pre-registration"
 msgstr "Pre-iscrizione"
 
+msgid "Promote to admin"
+msgstr "Promuovi ad amministratore"
+
 msgid "Realized revenue"
 msgstr "Ricavi realizzati"
 
@@ -3798,6 +3798,9 @@ msgstr "Mail iscrizione"
 
 msgid "Remaining credits"
 msgstr "Crediti rimanenti"
+
+msgid "Remove from guild"
+msgstr "Rimuovi dalla gilda"
 
 msgid "Request submitted"
 msgstr "Richiesta sottomessa"

@@ -550,9 +550,6 @@ msgstr "Utwórz"
 msgid "Delete"
 msgstr "Usuń"
 
-msgid "Demote"
-msgstr "Obniżyć rangę"
-
 msgid "Detail"
 msgstr "Szczegóły"
 
@@ -963,9 +960,6 @@ msgstr "Kontynuować"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Promote"
-msgstr "Promuj"
 
 msgid "Pronoun"
 msgstr "Zaimek"
@@ -2423,6 +2417,9 @@ msgstr "Rejestracja"
 msgid "Relationship"
 msgstr "Związek"
 
+msgid "Remove admin"
+msgstr "Usuń uprawnienia administratora"
+
 msgid "Rensponsable"
 msgstr "Rensponsable"
 
@@ -3496,6 +3493,9 @@ msgstr "Wybór gracza"
 msgid "Pre-registration"
 msgstr "Rejestracja wstępna"
 
+msgid "Promote to admin"
+msgstr "Awansuj na administratora"
+
 msgid "Realized revenue"
 msgstr "Zrealizowane przychody"
 
@@ -3798,6 +3798,9 @@ msgstr "Poczta rejestracyjna"
 
 msgid "Remaining credits"
 msgstr "Pozostałe kredyty"
+
+msgid "Remove from guild"
+msgstr "Wyjdź z gildii"
 
 msgid "Request submitted"
 msgstr "Złożony wniosek"

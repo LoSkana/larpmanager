@@ -550,9 +550,6 @@ msgstr "Luo"
 msgid "Delete"
 msgstr "Poista"
 
-msgid "Demote"
-msgstr "Alentaa"
-
 msgid "Detail"
 msgstr "Yksityiskohta"
 
@@ -963,9 +960,6 @@ msgstr "Jatka"
 
 msgid "Profile"
 msgstr "Profiili"
-
-msgid "Promote"
-msgstr "Mainosta"
 
 msgid "Pronoun"
 msgstr "Pronomini"
@@ -2423,6 +2417,9 @@ msgstr "Ilmoittautuminen"
 msgid "Relationship"
 msgstr "Suhde"
 
+msgid "Remove admin"
+msgstr "Poista järjestelmänvalvoja"
+
 msgid "Rensponsable"
 msgstr "Rensponsable"
 
@@ -3496,6 +3493,9 @@ msgstr "Pelaajien valinta"
 msgid "Pre-registration"
 msgstr "Ennakkoilmoittauduttu"
 
+msgid "Promote to admin"
+msgstr "Nosta järjestelmänvalvojaksi"
+
 msgid "Realized revenue"
 msgstr "Toteutuneet tulot"
 
@@ -3798,6 +3798,9 @@ msgstr "Ilmoittautumissähköposti"
 
 msgid "Remaining credits"
 msgstr "Jäljellä olevat opintopisteet"
+
+msgid "Remove from guild"
+msgstr "Poista kilta"
 
 msgid "Request submitted"
 msgstr "Jätetty pyyntö"

@@ -550,9 +550,6 @@ msgstr "Skapa"
 msgid "Delete"
 msgstr "Radera"
 
-msgid "Demote"
-msgstr "Nedgradera"
-
 msgid "Detail"
 msgstr "Detalj"
 
@@ -963,9 +960,6 @@ msgstr "Fortsätt"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Promote"
-msgstr "Marknadsföra"
 
 msgid "Pronoun"
 msgstr "Pronomen"
@@ -2423,6 +2417,9 @@ msgstr "Registrering"
 msgid "Relationship"
 msgstr "Länk"
 
+msgid "Remove admin"
+msgstr "Ta bort administratör"
+
 msgid "Rensponsable"
 msgstr "Ansvarig"
 
@@ -3496,6 +3493,9 @@ msgstr "Val av spelare"
 msgid "Pre-registration"
 msgstr "Förhandsanmälan"
 
+msgid "Promote to admin"
+msgstr "Befordra till administratör"
+
 msgid "Realized revenue"
 msgstr "Realiserade intäkter"
 
@@ -3798,6 +3798,9 @@ msgstr "Registreringsbrev"
 
 msgid "Remaining credits"
 msgstr "Återstående krediter"
+
+msgid "Remove from guild"
+msgstr "Ta bort från guilden"
 
 msgid "Request submitted"
 msgstr "Undergiven begäran"

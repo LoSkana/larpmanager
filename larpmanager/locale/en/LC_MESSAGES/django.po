@@ -6173,10 +6173,13 @@ msgstr ""
 msgid "Manage members"
 msgstr ""
 
-msgid "Demote"
+msgid "Remove admin"
 msgstr ""
 
-msgid "Promote"
+msgid "Promote to admin"
+msgstr ""
+
+msgid "Remove from guild"
 msgstr ""
 
 msgid "Leave guild"

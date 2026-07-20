@@ -550,9 +550,6 @@ msgstr "Vytvořit"
 msgid "Delete"
 msgstr "Odstranit"
 
-msgid "Demote"
-msgstr "Snížit hodnost"
-
 msgid "Detail"
 msgstr "Detail"
 
@@ -963,9 +960,6 @@ msgstr "Postupujte podle"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Promote"
-msgstr "Propagovat"
 
 msgid "Pronoun"
 msgstr "Zájmena"
@@ -2423,6 +2417,9 @@ msgstr "Registrace"
 msgid "Relationship"
 msgstr "Odkaz"
 
+msgid "Remove admin"
+msgstr "Odstranit správce"
+
 msgid "Rensponsable"
 msgstr "Zodpovědný"
 
@@ -3496,6 +3493,9 @@ msgstr "Výběr hráčů"
 msgid "Pre-registration"
 msgstr "Předběžná registrace"
 
+msgid "Promote to admin"
+msgstr "Povýšit na správce"
+
 msgid "Realized revenue"
 msgstr "Realizované příjmy"
 
@@ -3798,6 +3798,9 @@ msgstr "Registrační pošta"
 
 msgid "Remaining credits"
 msgstr "Zbývající kredity"
+
+msgid "Remove from guild"
+msgstr "Vyloučit z cechu"
 
 msgid "Request submitted"
 msgstr "Submisivní žádost"

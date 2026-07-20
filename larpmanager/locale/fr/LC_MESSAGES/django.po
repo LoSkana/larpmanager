@@ -550,9 +550,6 @@ msgstr "Créer"
 msgid "Delete"
 msgstr "Supprimer"
 
-msgid "Demote"
-msgstr "Rétrograder"
-
 msgid "Detail"
 msgstr "Détail"
 
@@ -963,9 +960,6 @@ msgstr "Procéder"
 
 msgid "Profile"
 msgstr "Profil"
-
-msgid "Promote"
-msgstr "Faire la promo de"
 
 msgid "Pronoun"
 msgstr "Pronom"
@@ -2423,6 +2417,9 @@ msgstr "Inscription"
 msgid "Relationship"
 msgstr "Lien"
 
+msgid "Remove admin"
+msgstr "Supprimer l'administrateur"
+
 msgid "Rensponsable"
 msgstr "Responsable"
 
@@ -3496,6 +3493,9 @@ msgstr "Sélection des joueurs"
 msgid "Pre-registration"
 msgstr "Préinscription"
 
+msgid "Promote to admin"
+msgstr "Promouvoir au rang d'administrateur"
+
 msgid "Realized revenue"
 msgstr "Recettes réalisées"
 
@@ -3798,6 +3798,9 @@ msgstr "Courrier d'inscription"
 
 msgid "Remaining credits"
 msgstr "Crédits restants"
+
+msgid "Remove from guild"
+msgstr "Me retirer de la guilde"
 
 msgid "Request submitted"
 msgstr "Demande de soumission"
