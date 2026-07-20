@@ -351,7 +351,7 @@ class OrgaPaymentForm(ExePaymentForm):
 class ExeInvoiceForm(BaseModelForm):
     """Form for ExeInvoice."""
 
-    page_title = _("Invoices")
+    page_title = _("Payments")
 
     page_info = _("Browse all payment invoices and confirm submitted ones to update their status")
 

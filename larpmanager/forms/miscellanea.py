@@ -60,7 +60,7 @@ from larpmanager.models.writing import Faction, FactionType
 from larpmanager.utils.core.validators import FileTypeValidator
 
 PAY_CHOICES = (
-    ("t", _("Over")),
+    ("t", _("Overpaid")),
     ("c", _("Complete")),
     ("p", _("Partial")),
     ("n", _("Nothing")),

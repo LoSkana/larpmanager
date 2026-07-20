@@ -58,7 +58,11 @@
                             {% for registration in el.context.payments_todo %}
                                 {% include "elements/comma.html" %}
                                 <b>{{ registration.run }} </b> -
-                                {{ registration.quota|format_decimal }}{{ currency_symbol }} {% trans "by" %} {{ registration.deadline }} {% trans "days" %}
+                                {% if registration.deadline > 1 %}
+                                    {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol counter=registration.deadline %}Pay {{ amount }}{{ currency }} within {{ counter }} days{% endblocktrans %}
+                                {% else %}
+                                    {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol %}Pay {{ amount }}{{ currency }} as soon as possible{% endblocktrans %}
+                                {% endif %}
                             {% endfor %}
                         </td>
                         <td>

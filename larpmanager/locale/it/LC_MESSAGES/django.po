@@ -2,29 +2,14 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
-msgid "e"
-msgstr "e"
-
-msgid "By"
-msgstr "Da"
-
 msgid "Go"
 msgstr "Vai"
 
 msgid "Hi"
 msgstr "Ciao"
 
-msgid "To"
-msgstr "A"
-
 msgid "XP"
-msgstr "px"
-
-msgid "by"
-msgstr "entro"
-
-msgid "of"
-msgstr "di"
+msgstr "XP"
 
 msgid "Add"
 msgstr "Aggiungi"
@@ -33,16 +18,7 @@ msgid "Age"
 msgstr "Età"
 
 msgid "All"
-msgstr "All"
-
-msgid "BIC"
-msgstr "BIC"
-
-msgid "CSS"
-msgstr "CSS"
-
-msgid "Cap"
-msgstr "Cap"
+msgstr "Tutti"
 
 msgid "End"
 msgstr "Fine"
@@ -65,14 +41,8 @@ msgstr "Nuovo"
 msgid "PDF"
 msgstr "PDF"
 
-msgid "Pdf"
-msgstr "Pdf"
-
-msgid "Run"
-msgstr "Run"
-
 msgid "Tot"
-msgstr "Tot"
+msgstr "Totale"
 
 msgid "VAT"
 msgstr "IVA"
@@ -86,11 +56,8 @@ msgstr "età"
 msgid "and"
 msgstr "e"
 
-msgid "for"
-msgstr "per"
-
 msgid "tot"
-msgstr "tot"
+msgstr "totale"
 
 msgid "Area"
 msgstr "Area"
@@ -123,7 +90,7 @@ msgid "Date"
 msgstr "Data"
 
 msgid "Diet"
-msgstr "Diet"
+msgstr "Dieta"
 
 msgid "Done"
 msgstr "Fatto"
@@ -138,10 +105,7 @@ msgid "Form"
 msgstr "Form"
 
 msgid "Free"
-msgstr "Free"
-
-msgid "From"
-msgstr "Da"
+msgstr "Gratuito"
 
 msgid "Gift"
 msgstr "Regalo"
@@ -155,12 +119,6 @@ msgstr "Nascondi"
 msgid "High"
 msgstr "Alto"
 
-msgid "Home"
-msgstr "Home"
-
-msgid "IBAN"
-msgstr "IBAN"
-
 msgid "Icon"
 msgstr "Icona"
 
@@ -168,10 +126,7 @@ msgid "Info"
 msgstr "Info"
 
 msgid "Item"
-msgstr "Voce"
-
-msgid "Kick"
-msgstr "Calcio"
+msgstr "Articolo"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -204,7 +159,7 @@ msgid "Name"
 msgstr "Nome"
 
 msgid "Next"
-msgstr "Next"
+msgstr "Successivo"
 
 msgid "None"
 msgstr "Nessuno"
@@ -218,9 +173,6 @@ msgstr "Solo"
 msgid "Open"
 msgstr "Aperto"
 
-msgid "Over"
-msgstr "Over"
-
 msgid "Page"
 msgstr "Pagina"
 
@@ -230,17 +182,11 @@ msgstr "Pagato"
 msgid "Plot"
 msgstr "Trama"
 
-msgid "Pool"
-msgstr "Pool"
-
 msgid "Port"
-msgstr "Porta di connessione"
+msgstr "Porta"
 
 msgid "Prev"
-msgstr "Prev"
-
-msgid "Rate"
-msgstr "Quote"
+msgstr "Precedente"
 
 msgid "Read"
 msgstr "Leggi"
@@ -300,7 +246,7 @@ msgid "User"
 msgstr "Utente"
 
 msgid "View"
-msgstr "Accedi"
+msgstr "Visualizza"
 
 msgid "Vote"
 msgstr "Voto"
@@ -360,7 +306,7 @@ msgid "Cards"
 msgstr "Carte"
 
 msgid "Check"
-msgstr "Check"
+msgstr "Verifica"
 
 msgid "Close"
 msgstr "Chiudi"
@@ -380,6 +326,9 @@ msgstr "Date"
 msgid "Email"
 msgstr "Email"
 
+msgid "Entry"
+msgstr "Voce"
+
 msgid "Error"
 msgstr "Errore"
 
@@ -398,9 +347,6 @@ msgstr "Primo"
 msgctxt "event"
 msgid "Genre"
 msgstr "Genere"
-
-msgid "Given"
-msgstr "Dato"
 
 msgid "Graph"
 msgstr "Grafico"
@@ -493,9 +439,6 @@ msgctxt "event"
 msgid "Style"
 msgstr "Stile"
 
-msgid "Swift"
-msgstr "Swift"
-
 msgid "Taxes"
 msgstr "Tasse"
 
@@ -518,7 +461,7 @@ msgid "Token"
 msgstr "Gettone"
 
 msgid "Total"
-msgstr "Totali"
+msgstr "Totale"
 
 msgid "Trait"
 msgstr "Tratto"
@@ -541,9 +484,6 @@ msgstr "Video"
 msgid "Where"
 msgstr "Dove"
 
-msgid "avail"
-msgstr "avvalersi"
-
 msgid "email"
 msgstr "email"
 
@@ -552,6 +492,9 @@ msgstr "spostato"
 
 msgid "quick"
 msgstr "veloce"
+
+msgid "total"
+msgstr "totale"
 
 msgid "Absent"
 msgstr "Assente"
@@ -572,7 +515,7 @@ msgid "Answer"
 msgstr "Rispondi"
 
 msgid "Awards"
-msgstr "Assegnazioni"
+msgstr "Premi"
 
 msgid "Badges"
 msgstr "Distintivi"
@@ -600,9 +543,6 @@ msgstr "Crea"
 
 msgid "Delete"
 msgstr "Elimina"
-
-msgid "Demote"
-msgstr "Retrocedi"
 
 msgid "Detail"
 msgstr "Dettaglio"
@@ -689,7 +629,7 @@ msgid "Marked"
 msgstr "Segnati"
 
 msgid "Master"
-msgstr "Padre"
+msgstr "Maestro"
 
 msgid "Medium"
 msgstr "Medio"
@@ -708,9 +648,6 @@ msgstr "Modulo"
 
 msgid "Nation"
 msgstr "Nazione"
-
-msgid "Nature"
-msgstr "Natura"
 
 msgid "Number"
 msgstr "Numero"
@@ -763,6 +700,9 @@ msgstr "Seleziona"
 msgid "Seller"
 msgstr "Venditore"
 
+msgid "Source"
+msgstr "Fonte"
+
 msgid "Status"
 msgstr "Stato"
 
@@ -774,6 +714,9 @@ msgstr "Invia"
 
 msgid "System"
 msgstr "Sistema"
+
+msgid "Target"
+msgstr "Obiettivo"
 
 msgid "Ticket"
 msgstr "Biglietto"
@@ -799,9 +742,6 @@ msgstr "Aggiorna"
 msgid "Upload"
 msgstr "Carica"
 
-msgid "VAT No"
-msgstr "Partita IVA"
-
 msgid "Verify"
 msgstr "Verifica"
 
@@ -809,7 +749,7 @@ msgid "Voting"
 msgstr "Votazioni"
 
 msgid "XP tot"
-msgstr "Px Tot"
+msgstr "XP Tot"
 
 msgid "copied"
 msgstr "copiato"
@@ -884,7 +824,7 @@ msgid "Context"
 msgstr "Contesto"
 
 msgid "Correct"
-msgstr "Corretta"
+msgstr "Corretto"
 
 msgid "Country"
 msgstr "Paese"
@@ -896,7 +836,7 @@ msgid "Credits"
 msgstr "Crediti"
 
 msgid "Decline"
-msgstr "Declino"
+msgstr "Rifiuta"
 
 msgid "Default"
 msgstr "Default"
@@ -942,9 +882,6 @@ msgstr "Inverso"
 
 msgid "Invited"
 msgstr "Invitato"
-
-msgid "Invoice"
-msgstr "Invoice"
 
 msgid "Lottery"
 msgstr "Lotteria"
@@ -1009,9 +946,6 @@ msgstr "Procedi"
 msgid "Profile"
 msgstr "Profilo"
 
-msgid "Promote"
-msgstr "Promuovi"
-
 msgid "Pronoun"
 msgstr "Pronome"
 
@@ -1019,7 +953,7 @@ msgid "Reading"
 msgstr "Lettura"
 
 msgid "Receipt"
-msgstr "Receipt"
+msgstr "Ricevuta"
 
 msgid "Reduced"
 msgstr "Ridotto"
@@ -1035,9 +969,6 @@ msgstr "Ripristino"
 
 msgid "Section"
 msgstr "Sezione"
-
-msgid "Sent At"
-msgstr "Inviato a"
 
 msgid "Session"
 msgstr "Sessione"
@@ -1100,11 +1031,8 @@ msgstr "Usato a"
 msgid "Used By"
 msgstr "Usato da"
 
-msgid "Used at"
-msgstr "Usato a"
-
 msgid "Used by"
-msgstr "Utilizzato da"
+msgstr "Usato da"
 
 msgid "Utility"
 msgstr "Utilità"
@@ -1116,10 +1044,10 @@ msgid "Visible"
 msgstr "Visibile"
 
 msgid "Waiting"
-msgstr "Waiting"
+msgstr "In attesa"
 
 msgid "Warning"
-msgstr "Avvertenze"
+msgstr "Avvertenza"
 
 msgid "Website"
 msgstr "Website"
@@ -1164,7 +1092,7 @@ msgid "Approved"
 msgstr "Approvato"
 
 msgid "Assigned"
-msgstr "Assegnamento"
+msgstr "Assegnato"
 
 msgid "Auto buy"
 msgstr "Acquisto auto"
@@ -1256,9 +1184,6 @@ msgstr "Regalabile"
 msgid "Handouts"
 msgstr "Handouts"
 
-msgid "Holidays"
-msgstr "Festività"
-
 msgid "Inactive"
 msgstr "Inattivo"
 
@@ -1266,7 +1191,7 @@ msgid "Included"
 msgstr "Incluso"
 
 msgid "Invoices"
-msgstr "Versamenti"
+msgstr "Fatture"
 
 msgid "Language"
 msgstr "Lingua"
@@ -1309,6 +1234,9 @@ msgstr "Originale"
 
 msgid "Outflows"
 msgstr "Uscite"
+
+msgid "Overpaid"
+msgstr "Pagato più del dovuto"
 
 msgid "Partners"
 msgstr "Partner"
@@ -1388,9 +1316,6 @@ msgstr "Rispondi a"
 msgid "Required"
 msgstr "Richiesto"
 
-msgid "Requires"
-msgstr "Requisiti"
-
 msgid "Resource"
 msgstr "Risorse"
 
@@ -1424,9 +1349,6 @@ msgstr "Gravità"
 msgid "Show all"
 msgstr "Visualizza tutti"
 
-msgid "Show the"
-msgstr "Visualizza lo"
-
 msgid "Standard"
 msgstr "Standard"
 
@@ -1448,9 +1370,6 @@ msgstr "Tutorial"
 msgid "Used on:"
 msgstr "Utilizzato su:"
 
-msgid "VAT rate"
-msgstr "Aliquota IVA"
-
 msgid "Versions"
 msgstr "Versioni"
 
@@ -1461,7 +1380,7 @@ msgid "Workshop"
 msgstr "Workshop"
 
 msgid "XP avail"
-msgstr "Px Avail"
+msgstr "Px Disponibili"
 
 msgid "download"
 msgstr "scarica"
@@ -1525,9 +1444,6 @@ msgstr "Scadenze"
 
 msgid "Delivered"
 msgstr "Erogato"
-
-msgid "Dimension"
-msgstr "Dimensione"
 
 msgid "Discounts"
 msgstr "Agevolazioni"
@@ -1608,7 +1524,7 @@ msgid "Portraits"
 msgstr "Ritratti"
 
 msgid "Preaching"
-msgstr "Predicare"
+msgstr "Predicazione"
 
 msgid "Printable"
 msgstr "Stampabile"
@@ -1621,9 +1537,6 @@ msgstr "Prologhi"
 
 msgid "Promotion"
 msgstr "Promozione"
-
-msgid "Publisher"
-msgstr "Pubblicazione"
 
 msgid "Questions"
 msgstr "Domande"
@@ -1674,7 +1587,7 @@ msgid "Speedlarp"
 msgstr "Speedlarp"
 
 msgid "Start day"
-msgstr "Giorno inizio"
+msgstr "Giorno di inizio"
 
 msgid "Statement"
 msgstr "Giustificativo"
@@ -1806,7 +1719,7 @@ msgid "Edit guild"
 msgstr "Modifica gilda"
 
 msgid "Email list"
-msgstr "lista email"
+msgstr "Lista email"
 
 msgid "Event area"
 msgstr "Area eventi"
@@ -1982,17 +1895,11 @@ msgstr "Statistiche"
 msgid "Surcharges"
 msgstr "Sovrapprezzi"
 
-msgid "Table list"
-msgstr "Lista tabella"
-
-msgid "Tax regime"
-msgstr "Regime fiscale"
-
 msgid "Text color"
 msgstr "Colore del testo"
 
 msgid "To be done"
-msgstr "Da superare"
+msgstr "Da completare"
 
 msgid "Token name"
 msgstr "Nome gettoni"
@@ -2060,6 +1967,9 @@ msgstr "Aggiunte"
 msgid "Agritourism"
 msgstr "Agriturismo"
 
+msgid "Amount Paid"
+msgstr "Importo pagato"
+
 msgid "Amount paid"
 msgstr "Importo pagato"
 
@@ -2113,6 +2023,9 @@ msgstr "Immagine di copertina"
 
 msgid "Description"
 msgstr "Descrizione"
+
+msgid "Destination"
+msgstr "Destinazione"
 
 msgid "Direct link"
 msgstr "Link diretto"
@@ -2261,9 +2174,6 @@ msgstr "Mostra chiusi"
 msgid "Signup link"
 msgstr "Link per l'iscrizione"
 
-msgid "Simple list"
-msgstr "Lista semplice"
-
 msgid "Start here:"
 msgstr "Inizia da qui:"
 
@@ -2311,9 +2221,6 @@ msgstr "collezioni"
 
 msgid "immediately"
 msgstr "immediatamente"
-
-msgid "leaderboard"
-msgstr "classifica"
 
 msgid "text length"
 msgstr "lunghezza del testo"
@@ -2470,6 +2377,9 @@ msgstr "Iscrizione"
 
 msgid "Relationship"
 msgstr "Legame"
+
+msgid "Remove admin"
+msgstr "Rimuovi amministratore"
 
 msgid "Rensponsable"
 msgstr "Responsabile"
@@ -2890,6 +2800,9 @@ msgstr "Giorni disponibili"
 msgid "Back to badges"
 msgstr "Torna ai badge"
 
+msgid "Bank Statement"
+msgstr "Estratto conto bancario"
+
 msgid "Bring a friend"
 msgstr "Porta un amico"
 
@@ -3057,9 +2970,6 @@ msgstr "Tipo di prologo"
 
 msgid "Question saved"
 msgstr "Domanda salvata"
-
-msgid "Recipient Code"
-msgstr "Codice Destinatario"
 
 msgid "Remove consent"
 msgstr "Rimuovi consenso"
@@ -3291,6 +3201,9 @@ msgstr "Socio aggiornato"
 
 msgid "Progress status"
 msgstr "Stato di avanzamento"
+
+msgid "Public Holidays"
+msgstr "Giorni festivi"
 
 msgid "Publish players"
 msgstr "Pubblicare i giocatori"
@@ -3552,6 +3465,9 @@ msgstr "Scelta giocatore"
 
 msgid "Pre-registration"
 msgstr "Pre-iscrizione"
+
+msgid "Promote to admin"
+msgstr "Promuovi ad amministratore"
 
 msgid "Realized revenue"
 msgstr "Ricavi realizzati"
@@ -3856,6 +3772,9 @@ msgstr "Mail iscrizione"
 msgid "Remaining credits"
 msgstr "Crediti rimanenti"
 
+msgid "Remove from guild"
+msgstr "Rimuovi dalla gilda"
+
 msgid "Request submitted"
 msgstr "Richiesta sottomessa"
 
@@ -4083,9 +4002,6 @@ msgstr "Data di nascita"
 
 msgid "by the deadline of"
 msgstr "entro la scadenza di"
-
-msgid "global preferences"
-msgstr "preferenze globali"
 
 msgid "Access Confirmation"
 msgstr "Conferma di accesso"
@@ -4459,6 +4375,9 @@ msgstr "Imposta lo stato dei personaggi"
 msgid "Set up ability types"
 msgstr "Imposta i tipi di abilità"
 
+msgid "Show the leaderboard"
+msgstr "Mostra la classifica"
+
 msgid "Terms and Conditions"
 msgstr "Terms and Conditions"
 
@@ -4470,6 +4389,9 @@ msgstr "La collezione cresce"
 
 msgid "The tax code matches"
 msgstr "Il codice fiscale corrisponde"
+
+msgid "Time And Date Of Use"
+msgstr "Data e ora di utilizzo"
 
 msgid "Warehouse containers"
 msgstr "Contenitori di magazzino"
@@ -4854,9 +4776,6 @@ msgstr "Benvenuto su LarpManager"
 msgid "give them this address"
 msgstr "dai loro questo indirizzo"
 
-msgid "history of preferences"
-msgstr "storico delle preferenze"
-
 #, python-format
 msgid "Assignment %(elements)s"
 msgstr "Assegnazione %(elements)s"
@@ -5132,6 +5051,9 @@ msgstr "Sessione di destinazione non trovata"
 
 msgid "This event has concluded"
 msgstr "Questo evento si è concluso"
+
+msgid "Time And Date Of Sending"
+msgstr "Ora e data di invio"
 
 msgid "Transfer is not possible"
 msgstr "Il trasferimento non è possibile"
@@ -5496,6 +5418,9 @@ msgstr "Imposta le rate dinamiche"
 
 msgid "Set up registration tickets"
 msgstr "Imposta i biglietti di registrazione"
+
+msgid "Show the global preferences"
+msgstr "Mostra le preferenze generali"
 
 msgid "Thank you for participating"
 msgstr "Grazie per la partecipazione"
@@ -5935,6 +5860,9 @@ msgstr "Imposta la configurazione di voto"
 msgid "Show questions already answered"
 msgstr "Mostra domande già risposte"
 
+msgid "Show the history of preferences"
+msgstr "Mostra la cronologia delle preferenze"
+
 msgid "So far you have paid a total of"
 msgstr "Finora hai versato un totale di"
 
@@ -6046,6 +5974,10 @@ msgstr "Ora puoi impostare le opzioni di voto"
 
 msgid "Now you can verify wire payments"
 msgstr "Ora puoi verificare i pagamenti tramite bonifico"
+
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
+msgstr "Pagina %(number)s di %(num_pages)s"
 
 msgid "Please upload your profile photo"
 msgstr "Per favore carica la tua foto profilo"
@@ -7655,6 +7587,10 @@ msgstr "Opzionale - Immagine visualizzata all'interno della domanda"
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Immagine opzionale per il carosello/slideshow della homepage"
 
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
+msgstr "Paga %(amount)s%(currency)s il prima possibile"
+
 msgid "Please confirm you want to perform this action"
 msgstr "Conferma che vuoi eseguire questa operazione"
 
@@ -8038,6 +7974,10 @@ msgstr "Gestisci le fasi di avanzamento degli elementi di scrittura"
 
 msgid "Manage your password and two-factor authentication"
 msgstr "Gestisci la tua password e l'autenticazione a due fattori"
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr "Paga %(amount)s %(currency)s entro %(counter)s giorni"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Secondo personaggio della relazione (destinazione)"

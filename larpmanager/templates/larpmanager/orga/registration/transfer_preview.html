@@ -13,11 +13,11 @@
             <td>{{ registration.member.display_member }}</td>
         </tr>
         <tr>
-            <th>{% trans "From" %}</th>
+            <th>{% trans "Source" %}</th>
             <td>{{ registration.run }}</td>
         </tr>
         <tr>
-            <th>{% trans "To" %}</th>
+            <th>{% trans "Destination" %}</th>
             <td>{{ target_run }} ({{ target_run.event.name }})</td>
         </tr>
         {% if registration.ticket %}

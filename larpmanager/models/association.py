@@ -379,7 +379,7 @@ class AssociationTextType(models.TextChoices):
     """Represents AssociationTextType model."""
 
     PROFILE = "p", _("Profile")
-    HOME = "h", _("Home")
+    HOME = "h", _("Calendar")
     SIGNUP = "u", _("Registration mail")
     MEMBERSHIP = "m", _("Membership")
     STATUTE = "s", _("Statute")

@@ -169,9 +169,6 @@ msgstr ""
 msgid "Donations"
 msgstr ""
 
-msgid "Invoices"
-msgstr ""
-
 msgid ""
 "Browse all payment invoices and confirm submitted ones to update their status"
 msgstr ""
@@ -612,7 +609,7 @@ msgstr ""
 msgid "Sets how often reminder emails are sent, in days (default: 5)"
 msgstr ""
 
-msgid "Holidays"
+msgid "Public Holidays"
 msgstr ""
 
 msgid ""
@@ -836,34 +833,10 @@ msgstr ""
 msgid "Electronic invoice"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
-msgid "VAT No"
-msgstr ""
-
-msgid "Tax regime"
-msgstr ""
-
-msgid "VAT rate"
-msgstr ""
-
 msgid "If absent, indicate 0"
 msgstr ""
 
-msgid "Nature"
-msgstr ""
-
 msgid "Indicate only if rate 0"
-msgstr ""
-
-msgid "Address"
-msgstr ""
-
-msgid "House number"
-msgstr ""
-
-msgid "Cap"
 msgstr ""
 
 msgid "Municipality"
@@ -876,9 +849,6 @@ msgid "Code two capital letters"
 msgstr ""
 
 msgid "Nation"
-msgstr ""
-
-msgid "Recipient Code"
 msgstr ""
 
 msgid "Intermediary channel code"
@@ -895,9 +865,6 @@ msgstr ""
 msgid ""
 "Do you want to manage campaigns, a series of events that share the same "
 "characters"
-msgstr ""
-
-msgid "Publisher"
 msgstr ""
 
 msgid ""
@@ -1344,7 +1311,7 @@ msgstr ""
 msgid "Enables field 'number', an unique numerical ID to reference it"
 msgstr ""
 
-msgid "Cover"
+msgid "Cover image"
 msgstr ""
 
 msgid ""
@@ -1365,9 +1332,6 @@ msgstr ""
 msgid ""
 "Enables field 'locked', to prevent players from viewing the full character "
 "sheet even when assigned"
-msgstr ""
-
-msgid "Assigned"
 msgstr ""
 
 msgid ""
@@ -1571,6 +1535,9 @@ msgid "Maximum number of accepted members per guild (0 = no limit)"
 msgstr ""
 
 msgid "Character customisation"
+msgstr ""
+
+msgid "Name"
 msgstr ""
 
 msgid ""
@@ -1888,9 +1855,6 @@ msgid "Prologues"
 msgstr ""
 
 msgid "Workshop"
-msgstr ""
-
-msgid "PDF"
 msgstr ""
 
 msgid "Relationships"
@@ -2300,6 +2264,9 @@ msgstr ""
 msgid "Street"
 msgstr ""
 
+msgid "House number"
+msgstr ""
+
 msgid "Character not allowed"
 msgstr ""
 
@@ -2367,7 +2334,7 @@ msgstr ""
 msgid "Upload membership fee"
 msgstr ""
 
-msgid "Invoice"
+msgid "Receipt"
 msgstr ""
 
 msgid "Method"
@@ -2418,7 +2385,7 @@ msgstr ""
 msgid "6-digit code from your authenticator app"
 msgstr ""
 
-msgid "Over"
+msgid "Overpaid"
 msgstr ""
 
 msgid "Partial"
@@ -2786,7 +2753,8 @@ msgstr ""
 msgid "Reimbursement approved"
 msgstr ""
 
-msgid "for"
+#, python-format
+msgid "for %(event)s"
 msgstr ""
 
 #, python-format
@@ -3092,10 +3060,6 @@ msgid "Motivation"
 msgstr ""
 
 msgid "For more information, write to us"
-msgstr ""
-
-#, python-format
-msgid "for %(event)s"
 msgstr ""
 
 #, python-format
@@ -3475,7 +3439,7 @@ msgstr ""
 msgid "You're not allowed to sign up"
 msgstr ""
 
-msgid "Statement"
+msgid "Bank Statement"
 msgstr ""
 
 msgid ""
@@ -3758,7 +3722,7 @@ msgstr ""
 msgid "Staff members who will receive and manage support tickets"
 msgstr ""
 
-msgid "Home"
+msgid "Calendar"
 msgstr ""
 
 msgid "Registration mail"
@@ -3771,9 +3735,6 @@ msgid "Legal notice"
 msgstr ""
 
 msgid "Terms and Conditions"
-msgstr ""
-
-msgid "Receipt"
 msgstr ""
 
 msgid "Mail signature"
@@ -3898,9 +3859,6 @@ msgid "will be displayed on the main event page"
 msgstr ""
 
 msgid "The genre of your event"
-msgstr ""
-
-msgid "Cover image"
 msgstr ""
 
 msgid "Main event image displayed on your organization's homepage"
@@ -4196,6 +4154,9 @@ msgstr ""
 msgid "Presentation"
 msgstr ""
 
+msgid "Cover"
+msgstr ""
+
 msgid "Progress"
 msgstr ""
 
@@ -4205,7 +4166,7 @@ msgstr ""
 msgid "Pay what you want"
 msgstr ""
 
-msgid "Rate"
+msgid "Installments"
 msgstr ""
 
 msgid "Faction preference"
@@ -4760,6 +4721,9 @@ msgstr ""
 msgid "Indicates how many passengers require transportation"
 msgstr ""
 
+msgid "Address"
+msgstr ""
+
 msgid "Indicate as precisely as possible where to pick you up"
 msgstr ""
 
@@ -4850,7 +4814,7 @@ msgstr ""
 msgid "Recipient"
 msgstr ""
 
-msgid "Sent At"
+msgid "Time And Date Of Sending"
 msgstr ""
 
 msgid "Language Code"
@@ -4916,7 +4880,7 @@ msgstr ""
 msgid "Whether this token has been used"
 msgstr ""
 
-msgid "Used at"
+msgid "Time And Date Of Use"
 msgstr ""
 
 msgid "When this token was used"
@@ -5169,9 +5133,6 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-msgid "By"
-msgstr ""
-
 msgid "Activation failed"
 msgstr ""
 
@@ -5264,9 +5225,6 @@ msgid "Show more"
 msgstr ""
 
 msgid "Show less"
-msgstr ""
-
-msgid "Requires"
 msgstr ""
 
 msgid "Confirm"
@@ -5689,15 +5647,6 @@ msgstr ""
 msgid "Copy the causal exactly as shown (in coloured text)"
 msgstr ""
 
-msgid "IBAN"
-msgstr ""
-
-msgid "BIC"
-msgstr ""
-
-msgid "Swift"
-msgstr ""
-
 msgid "Bank address"
 msgstr ""
 
@@ -5975,16 +5924,16 @@ msgstr ""
 msgid "Go to the casting for"
 msgstr ""
 
-msgid "Show the"
+msgid "Show the history of preferences"
 msgstr ""
 
-msgid "history of preferences"
+msgid "Assigned"
 msgstr ""
 
 msgid "Enter your preferences here"
 msgstr ""
 
-msgid "global preferences"
+msgid "Show the global preferences"
 msgstr ""
 
 msgid "Available characters"
@@ -6068,13 +6017,10 @@ msgstr ""
 msgid "Create new character"
 msgstr ""
 
-msgid "tot"
+msgid "total"
 msgstr ""
 
 msgid "used"
-msgstr ""
-
-msgid "avail"
 msgstr ""
 
 msgid "Character relationships"
@@ -6218,13 +6164,13 @@ msgstr ""
 msgid "Manage members"
 msgstr ""
 
-msgid "Demote"
+msgid "Remove admin"
 msgstr ""
 
-msgid "Promote"
+msgid "Promote to admin"
 msgstr ""
 
-msgid "Kick"
+msgid "Remove from guild"
 msgstr ""
 
 msgid "Leave guild"
@@ -6671,6 +6617,9 @@ msgstr ""
 msgid "No members with negative credits for the selected year"
 msgstr ""
 
+msgid "Invoices"
+msgstr ""
+
 msgid ""
 "Review and process member refund requests, tracking their status and marking "
 "them as paid once completed"
@@ -7042,7 +6991,7 @@ msgid ""
 "each run"
 msgstr ""
 
-msgid "Given"
+msgid "Amount Paid"
 msgstr ""
 
 msgid "Paid"
@@ -7285,6 +7234,9 @@ msgstr ""
 msgid "Verification"
 msgstr ""
 
+msgid "Statement"
+msgstr ""
+
 msgid "No payments pending verification"
 msgstr ""
 
@@ -7363,7 +7315,7 @@ msgstr ""
 msgid "View badges you have earned"
 msgstr ""
 
-msgid "leaderboard"
+msgid "Show the leaderboard"
 msgstr ""
 
 msgid "You think you should have an achievement"
@@ -7399,7 +7351,8 @@ msgstr ""
 msgid "Prev"
 msgstr ""
 
-msgid "of"
+#, python-format
+msgid "Page %(number)s of %(num_pages)s"
 msgstr ""
 
 msgid "Next"
@@ -7801,7 +7754,12 @@ msgid ""
 "payment"
 msgstr ""
 
-msgid "by"
+#, python-format
+msgid "Pay %(amount)s%(currency)s within %(counter)s days"
+msgstr ""
+
+#, python-format
+msgid "Pay %(amount)s%(currency)s as soon as possible"
 msgstr ""
 
 msgid "Do you wish to be reimbursed? Open a new one"
@@ -8019,9 +7977,6 @@ msgid "Consumed"
 msgstr ""
 
 msgid "Returned"
-msgstr ""
-
-msgid "Run"
 msgstr ""
 
 msgid "Indicates the details of the request"
@@ -8419,6 +8374,9 @@ msgid ""
 "and balance"
 msgstr ""
 
+msgid "Entry"
+msgstr ""
+
 msgid "Refund for"
 msgstr ""
 
@@ -8457,7 +8415,7 @@ msgstr ""
 msgid "Only"
 msgstr ""
 
-msgid "e"
+msgid "and"
 msgstr ""
 
 msgid "Returning percentage"
@@ -8634,9 +8592,6 @@ msgid ""
 "Add a field to collect information from players on their character sheet"
 msgstr ""
 
-msgid "Pdf"
-msgstr ""
-
 msgid ""
 "Configure PDF template settings and preview or download character sheets"
 msgstr ""
@@ -8746,10 +8701,10 @@ msgstr ""
 msgid "Actor"
 msgstr ""
 
-msgid "From"
+msgid "Source"
 msgstr ""
 
-msgid "To"
+msgid "Destination"
 msgstr ""
 
 msgid "Resource"
@@ -8779,9 +8734,6 @@ msgid "Pool types"
 msgstr ""
 
 msgid "Character Inventory Pool Types"
-msgstr ""
-
-msgid "Pool"
 msgstr ""
 
 msgid "No inventory pool types defined yet"
@@ -9003,9 +8955,6 @@ msgid "No questions have been created yet for this form"
 msgstr ""
 
 msgid "Use the button above to add one"
-msgstr ""
-
-msgid "Installments"
 msgstr ""
 
 msgid "Installment"
@@ -9283,9 +9232,6 @@ msgstr ""
 msgid "Create"
 msgstr ""
 
-msgid "and"
-msgstr ""
-
 msgid "more"
 msgstr ""
 
@@ -9415,12 +9361,6 @@ msgid ""
 "communications"
 msgstr ""
 
-msgid "Simple list"
-msgstr ""
-
-msgid "Table list"
-msgstr ""
-
 msgid "Preaching"
 msgstr ""
 
@@ -9477,9 +9417,6 @@ msgid "List of newsletter subscribers who have not yet played this event"
 msgstr ""
 
 msgid "Manage uploaded resource files available to participants for this event"
-msgstr ""
-
-msgid "Dimension"
 msgstr ""
 
 msgid "Internal link"
@@ -9689,6 +9626,9 @@ msgstr ""
 msgid "Attending"
 msgstr ""
 
+msgid "tot"
+msgstr ""
+
 msgid "free"
 msgstr ""
 
@@ -9822,9 +9762,6 @@ msgid ""
 "handouts"
 msgstr ""
 
-msgid "CSS"
-msgstr ""
-
 msgid "Handouts"
 msgstr ""
 
@@ -9887,6 +9824,9 @@ msgstr ""
 
 msgid ""
 "View and edit all directed relationships between characters in this event"
+msgstr ""
+
+msgid "Target"
 msgstr ""
 
 msgid "No relationships have been defined yet"
@@ -11012,6 +10952,9 @@ msgstr ""
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr ""
 
+msgid "PDF"
+msgstr ""
+
 msgid "Set the options for the automatic PDF generation of characters sheets"
 msgstr ""
 
@@ -11243,9 +11186,6 @@ msgid "Discover what this event is about"
 msgstr ""
 
 msgid "Browse the presentation website"
-msgstr ""
-
-msgid "Calendar"
 msgstr ""
 
 #, python-format

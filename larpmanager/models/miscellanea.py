@@ -854,7 +854,7 @@ class EmailRecipient(UuidMixin, BaseModel):
 
     recipient = models.CharField(max_length=170, verbose_name=_("Recipient"))
 
-    sent = models.DateTimeField(blank=True, null=True, verbose_name=_("Sent At"))
+    sent = models.DateTimeField(blank=True, null=True, verbose_name=_("Time And Date Of Sending"))
 
     language_code = models.CharField(max_length=10, blank=True, null=True, verbose_name=_("Language Code"))
 
@@ -1046,7 +1046,7 @@ class OneTimeAccessToken(UuidMixin, BaseModel):
     used_at = models.DateTimeField(
         blank=True,
         null=True,
-        verbose_name=_("Used at"),
+        verbose_name=_("Time And Date Of Use"),
         help_text=_("When this token was used"),
     )
 

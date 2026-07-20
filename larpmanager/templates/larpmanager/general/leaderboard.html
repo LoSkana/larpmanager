@@ -19,7 +19,7 @@
                     <a href="{% url 'leaderboard' previous_page_number %}">{% trans "Prev" %}</a>
                 {% endif %}
             </td>
-            <td>{% trans "Page" %} {{ number }} {% trans "of" %} {{ num_pages }}</td>
+            <td>{% blocktrans %}Page {{ number }} of {{ num_pages }}{% endblocktrans %}</td>
             <td>
                 {% if number != num_pages %}
                     <a href="{% url 'leaderboard' next_page_number %}">{% trans "Next" %}</a>

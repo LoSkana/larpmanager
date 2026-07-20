@@ -41,7 +41,7 @@
                                       method="post">
                                     {% csrf_token %}
                                     <button type="submit">
-                                        <i class="fa-solid fa-arrow-down"></i> {% trans "Demote" %}
+                                        <i class="fa-solid fa-arrow-down"></i> {% trans "Remove admin" %}
                                     </button>
                                 </form>
                             {% else %}
@@ -49,7 +49,7 @@
                                       method="post">
                                     {% csrf_token %}
                                     <button type="submit">
-                                        <i class="fa-solid fa-arrow-up"></i> {% trans "Promote" %}
+                                        <i class="fa-solid fa-arrow-up"></i> {% trans "Promote to admin" %}
                                     </button>
                                 </form>
                             {% endif %}
@@ -57,7 +57,7 @@
                                   method="post">
                                 {% csrf_token %}
                                 <button type="submit">
-                                    <i class="fa-solid fa-user-xmark"></i> {% trans "Kick" %}
+                                    <i class="fa-solid fa-user-xmark"></i> {% trans "Remove from guild" %}
                                 </button>
                             </form>
                         </td>

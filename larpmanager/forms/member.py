@@ -832,7 +832,7 @@ class ExeMembershipFeeForm(BaseForm):
 
     invoice = forms.FileField(
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
-        label=_("Invoice"),
+        label=_("Receipt"),
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

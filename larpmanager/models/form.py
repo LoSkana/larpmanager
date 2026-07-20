@@ -97,7 +97,7 @@ WritingQuestionType = extend_textchoices(
         ("HIDE", "hide", _("Hide")),
         ("LOCKED", "locked", _("Locked")),
         ("PROGRESS", "progress", _("Progress")),
-        ("ASSIGNED", "assigned", _("Assigned")),
+        ("ASSIGNED", "assigned", _("Assignment")),
         ("COMPUTED", "c", _("Computed")),
     ],
 )
@@ -133,7 +133,7 @@ RegistrationQuestionType = extend_textchoices(
         ("TICKET", "ticket", _("Ticket")),
         ("ADDITIONAL", "additional_tickets", _("Additional")),
         ("PWYW", "pay_what_you_want", _("Pay what you want")),
-        ("QUOTA", "reg_quotas", _("Rate")),
+        ("QUOTA", "reg_quotas", _("Installments")),
         ("SURCHARGE", "reg_surcharges", _("Surcharge")),
         ("FACTION_PREFERENCE", "faction_preference", _("Faction preference")),
     ],

@@ -652,7 +652,7 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("remind_days", ConfigType.INT, field_label, field_help_text)
 
             # Holiday scheduling for reminder emails
-            field_label = _("Holidays")
+            field_label = _("Public Holidays")
             field_help_text = _("If checked: the system will send reminds the days on which holidays fall")
             self.add_configs("remind_holidays", ConfigType.BOOL, field_label, field_help_text)
 
@@ -942,41 +942,41 @@ class ExeConfigForm(ConfigForm):
         self.set_section("einvoice", _("Electronic invoice"))
 
         # Basic company information fields
-        field_label = _("Name")
+        field_label = "Denominazione"
         field_help_text = ""
         self.add_configs("einvoice_denominazione", ConfigType.CHAR, field_label, field_help_text)
 
-        field_label = _("Fiscal code")
+        field_label = "Id codice"
         field_help_text = ""
         self.add_configs("einvoice_idcodice", ConfigType.CHAR, field_label, field_help_text)
 
-        field_label = _("VAT No")
+        field_label = "Partita Iva"
         field_help_text = ""
         self.add_configs("einvoice_partitaiva", ConfigType.CHAR, field_label, field_help_text)
 
         # Tax regime and VAT configuration
-        field_label = _("Tax regime")
+        field_label = "Regime Fiscale"
         field_help_text = "RF19: forfettario, RF01: ordinario, RF05: agevolato, RF07: commerciale"
         self.add_configs("einvoice_regimefiscale", ConfigType.CHAR, field_label, field_help_text)
 
-        field_label = _("VAT rate")
+        field_label = "Aliquota Iva"
         field_help_text = _("If absent, indicate 0")
         self.add_configs("einvoice_aliquotaiva", ConfigType.CHAR, field_label, field_help_text)
 
-        field_label = _("Nature")
+        field_label = "Natura"
         field_help_text = _("Indicate only if rate 0")
         self.add_configs("einvoice_natura", ConfigType.CHAR, field_label, field_help_text)
 
         # Company address information
-        field_label = _("Address")
+        field_label = "Indirizzo"
         field_help_text = ""
         self.add_configs("einvoice_indirizzo", ConfigType.CHAR, field_label, field_help_text)
 
-        field_label = _("House number")
+        field_label = "Numero civico"
         field_help_text = ""
         self.add_configs("einvoice_numerocivico", ConfigType.CHAR, field_label, field_help_text)
 
-        field_label = _("Cap")
+        field_label = "CAP"
         field_help_text = ""
         self.add_configs("einvoice_cap", ConfigType.CHAR, field_label, field_help_text)
 
@@ -994,7 +994,7 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("einvoice_nazione", ConfigType.CHAR, field_label, field_help_text)
 
         # Electronic invoice routing configuration
-        field_label = _("Recipient Code")
+        field_label = "Codice Destinatario"
         field_help_text = _("Intermediary channel code")
         self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, field_label, field_help_text)
 
@@ -1073,7 +1073,7 @@ class ExeQuickSetupForm(QuickSetupForm):
             {
                 "publisher": (
                     True,
-                    _("Publisher"),
+                    _("Promotion"),
                     _("Do you want to make your upcoming events visible to external sites through a public API"),
                 ),
                 "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),

@@ -1,0 +1,9 @@
+{
+  "db_path": "scripts/translation/review.sqlite3",
+  "chunk_path": "scripts/translation/review_chunk.json",
+  "state_path": "scripts/translation/review_chunk_state.json",
+  "result_path": "scripts/translation/review_result.json",
+  "model": "claude-code",
+  "chunk_size": 120,
+  "reference_lang": "it"
+}

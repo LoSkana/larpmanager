@@ -91,7 +91,7 @@ window.addEventListener('DOMContentLoaded', function() {
         }
         if (ab.prereqs && ab.prereqs.length > 0) {
             const $prereq = $('<p class="ability-card-prereqs">');
-            $prereq.text('{% filter escapejs %}{% trans "Requires" %}{% endfilter %}: ' + ab.prereqs.join(', '));
+            $prereq.text('{% filter escapejs %}{% trans "Requirements" %}{% endfilter %}: ' + ab.prereqs.join(', '));
             $card.append($prereq);
         }
         $card.on('click', function() {

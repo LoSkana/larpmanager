@@ -1030,7 +1030,7 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
         {
             "selrel": ("email_content",),
             "fields": [
-                ("run", _("Run")),
+                ("run", _("Event")),
                 ("recipient", _("Recipient")),
                 ("subj", _("Subject")),
                 ("body", _("Body")),

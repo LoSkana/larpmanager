@@ -123,7 +123,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     # Build email subject with optional run information
     email_subject = hdr(expense_item) + _("Reimbursement approved")
     if expense_item.run:
-        email_subject += " " + _("for") + f" {expense_item.run}"
+        email_subject += " " + _("for %(event)s") % {"event": expense_item.run}
 
     # Create base email body with approval details
     email_body = (

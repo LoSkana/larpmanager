@@ -292,7 +292,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2 This text should show Requires: sword1
+        Obtain ability All base ability double shield 2 This text should show requirements: sword1
         select the new ability to get
         Experience points 12 Total 1 Used 11 Available Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
     )
@@ -316,7 +316,7 @@ def player_choice_undo(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#one"),
         """
-        Obtain ability All base ability double shield 2 This text should show Requires: sword1
+        Obtain ability All base ability double shield 2 This text should show requirements: sword1
         Select the new ability to get
         Experience points 12 Total 1 Used 11 Available
         Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
@@ -347,7 +347,7 @@ def modifiers(page: Any, live_server: Any) -> None:
         page.locator("#one"),
         """
         Obtain ability All base ability double shield 2
-        this text should show requires: sword1 Select the new ability to get
+        this text should show requirements: sword1 Select the new ability to get
         Experience points 12 Total 1 Used 11 Available
         Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
     )
@@ -374,7 +374,7 @@ def modifiers(page: Any, live_server: Any) -> None:
         page.locator("#one"),
         """
         Obtain ability All base ability double shield 2
-        this text should show requires: sword1 Select the new ability to get
+        this text should show requirements: sword1 Select the new ability to get
         Experience points 12 Total 1 Used 11 Available
         Abilities base ability sword1 (1) sdsfdsfds awards 2 first live""",
     )

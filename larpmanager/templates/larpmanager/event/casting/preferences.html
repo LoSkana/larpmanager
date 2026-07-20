@@ -52,11 +52,10 @@
     {% endif %}
     {% if casting_history %}
         <p>
-            {% trans "Show the" %}
             {% if typ %}
-                <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "history of preferences" %}.</a>
+                <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "Show the history of preferences" %}.</a>
             {% else %}
-                <a href="{% url 'casting_history' run.get_slug %}">{% trans "history of preferences" %}.</a>
+                <a href="{% url 'casting_history' run.get_slug %}">{% trans "Show the history of preferences" %}.</a>
             {% endif %}
         </p>
     {% endif %}

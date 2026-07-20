@@ -3,6 +3,15 @@
 echo "Git pull main repository..."
 git pull
 
+pip install .
+python manage.py compilemessages
+python manage.py migrate
+python manage.py import_features
+
+python manage.py collectstatic --noinput
+python manage.py compress
+python manage.py reset_cache
+
 echo "Stop tasks..."
 pkill -f process_tasks
 

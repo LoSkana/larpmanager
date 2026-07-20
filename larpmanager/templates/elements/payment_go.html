@@ -125,16 +125,16 @@
             <b>{% trans "Beneficiary" %}</b>: {{ wire_payee }}
         </li>
         <li>
-            <b>{% trans "IBAN" %}</b>: {{ wire_iban }}
+            <b>IBAN</b>: {{ wire_iban }}
         </li>
         {% if wire_bic %}
             <li>
-                <b>{% trans "BIC" %}</b>: {{ wire_bic }}
+                <b>BIC</b>: {{ wire_bic }}
             </li>
         {% endif %}
         {% if wire_swift %}
             <li>
-                <b>{% trans "Swift" %}</b>: {{ wire_swift }}
+                <b>SWIFT</b>: {{ wire_swift }}
             </li>
         {% endif %}
         {% if wire_bank_address %}

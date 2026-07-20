@@ -93,7 +93,7 @@
                     <thead>
                         <tr>
                             <th></th>
-                            <th>{% trans "Run" %}</th>
+                            <th>{% trans "Event" %}</th>
                             <th>{% trans "Date" %}</th>
                             <th>{% trans "Description" %}</th>
                             <th>{% trans "Type" %}</th>
@@ -104,7 +104,7 @@
                         {% for el in exp %}
                             <tr>
                                 <td></td>
-                                <td data-title="{% trans "Run" %}">
+                                <td data-title="{% trans "Event" %}">
                                     {% if el.run %}{{ el.run }}{% endif %}
                                 </td>
                                 <td data-title="{% trans "Date" %}">{{ el.created |date:'Y-m-d' }}</td>
