@@ -82,7 +82,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
                       )
     expect_normalized(page,
         page.locator("#one"),
-    "Rate Optional Surcharge Registration surcharge Surcharge Optional",
+    "Installments Optional Surcharge Registration surcharge Surcharge Optional",
     )
     drag_reorder(
         page,
@@ -104,7 +104,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
     expect_normalized(page,
           page.locator("#one"),
         """
-            Rate Optional Pay what you want Freely indicate the amount of your donation Pay what you want
+            Installments Optional Pay what you want Freely indicate the amount of your donation Pay what you want
             Optional Surcharge Registration surcharge Surcharge Optional
         """,
     )
