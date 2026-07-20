@@ -5281,6 +5281,21 @@ msgstr ""
 msgid "Are you sure you want to approve this element"
 msgstr ""
 
+msgid "Ask a question"
+msgstr ""
+
+msgid "Ask LarpManager"
+msgstr ""
+
+msgid "For best results, ask in English."
+msgstr ""
+
+msgid "Type your question..."
+msgstr ""
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+
 msgid "Are you sure you want to delete this element"
 msgstr ""
 
@@ -5353,7 +5368,7 @@ msgstr ""
 msgid "Need help"
 msgstr ""
 
-msgid "What would you like to do?"
+msgid "No results"
 msgstr ""
 
 msgid "An error occurred"
@@ -5862,6 +5877,9 @@ msgid "Scroll left"
 msgstr ""
 
 msgid "Scroll right"
+msgstr ""
+
+msgid "What would you like to do?"
 msgstr ""
 
 msgid "User"
@@ -7008,15 +7026,6 @@ msgid ""
 "Members will appear here once they have completed their yearly enrollment"
 msgstr ""
 
-msgid "View registrations"
-msgstr ""
-
-msgid "View accounting"
-msgstr ""
-
-msgid "Edit membership"
-msgstr ""
-
 msgid "Personal data"
 msgstr ""
 
@@ -7052,6 +7061,15 @@ msgid "Total members"
 msgstr ""
 
 msgid "Paid current year"
+msgstr ""
+
+msgid "Edit membership"
+msgstr ""
+
+msgid "View accounting"
+msgstr ""
+
+msgid "View registrations"
 msgstr ""
 
 msgid "Members will appear here once they have submitted a membership request"
@@ -11505,6 +11523,14 @@ msgstr ""
 msgid "Plot Roles"
 msgstr ""
 
+msgid "Live chat is not configured."
+msgstr ""
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+
 msgid "Event added to ILDB"
 msgstr ""
 
@@ -11899,6 +11925,12 @@ msgstr ""
 msgid "Select your character"
 msgstr ""
 
+msgid "Select your preferences"
+msgstr ""
+
+msgid "Select your casting preferences"
+msgstr ""
+
 msgid "Registration completed successfully"
 msgstr ""
 
@@ -12014,6 +12046,12 @@ msgid "Answer submitted"
 msgstr ""
 
 msgid "Element"
+msgstr ""
+
+msgid "Invalid request method"
+msgstr ""
+
+msgid "Please write a question"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible"
@@ -12230,9 +12268,6 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-msgid "Invalid request method"
-msgstr ""
-
 msgid "Invalid choice format"
 msgstr ""
 
@@ -12404,6 +12439,9 @@ msgid "The collection has been activated"
 msgstr ""
 
 msgid "Collection closed"
+msgstr ""
+
+msgid "This collection has already been redeemed"
 msgstr ""
 
 msgid "The collection has been delivered"
@@ -12665,6 +12703,9 @@ msgstr ""
 msgid "This invitation has expired."
 msgstr ""
 
+msgid "This invitation was sent to a different email address."
+msgstr ""
+
 msgid "You must consent to data sharing to accept this invitation."
 msgstr ""
 
@@ -12713,6 +12754,9 @@ msgstr ""
 
 msgid ""
 "To confirm your registration, apply to become a member of the Association"
+msgstr ""
+
+msgid "Please select your casting preferences"
 msgstr ""
 
 #, python-format

@@ -698,7 +698,8 @@ body.association.new_v20 .user_resize {
 }
 
 .char-dual-search {
-  width: 100%;
+  width: 100% !important;
+  max-width: 100% !important;
   box-sizing: border-box;
   padding: 0.35em 0.5em;
   border: none;
@@ -764,6 +765,7 @@ body.association.new_v20 .user_resize {
 
   .char-dual-col {
     width: 100%;
+    flex: 1 1 auto;
   }
 
   .char-dual-list {

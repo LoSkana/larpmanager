@@ -55,6 +55,7 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.base import PaymentMethod
 from larpmanager.models.event import DevelopStatus, Event, Run
+from larpmanager.models.larpmanager import LarpManagerChatLog
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.miscellanea import Log
 from larpmanager.models.registration import Registration, TicketTier
@@ -133,6 +134,9 @@ class Command(BaseCommand):
         # Send daily organizer summaries for events with digest mode enabled
         self.send_organizer_summaries()
 
+        # Send weekly recap of ask-larpmanager chat questions to admins
+        self.send_chat_log_recap()
+
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing
         for run in Run.objects.exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC]):
@@ -178,7 +182,6 @@ class Command(BaseCommand):
 
     _DELETION_WARNING_KEY = "deletion_warning_sent"
     _NO_DELETE_KEY = "no_delete"
-    _TEST_SLUG_PREFIX = "test-"
     _INACTIVE_SIGNUP_THRESHOLD = 10
     _INACTIVE_LOG_DAYS = 360
     _WARNING_GRACE_DAYS = 30
@@ -196,13 +199,9 @@ class Command(BaseCommand):
         """
         now = timezone.now()
 
-        # Delete test associations older than 1 week
-        cutoff = now - timedelta(days=7)
-        Association.objects.filter(slug__startswith=Command._TEST_SLUG_PREFIX, created__lte=cutoff).delete()
-
         # Process inactive non-test associations
         log_cutoff = now - timedelta(days=Command._INACTIVE_LOG_DAYS)
-        for association in Association.objects.filter(created__lte=log_cutoff):
+        for association in Association.objects.filter(created__lte=log_cutoff, demo_types__isnull=True):
             # Skip associations explicitly protected from deletion
             if AssociationConfig.objects.filter(association=association, name=Command._NO_DELETE_KEY).exists():
                 continue
@@ -979,3 +978,22 @@ class Command(BaseCommand):
     def send_organizer_summaries() -> None:
         """Send daily summary emails to organizers for events with digest mode enabled."""
         send_daily_organizer_summaries()
+
+    @staticmethod
+    def send_chat_log_recap() -> None:
+        """Send admins a weekly recap of questions asked through the ask-larpmanager chat widget."""
+        # Only run once a week
+        if timezone.now().weekday() != 0:
+            return
+
+        week_ago = timezone.now() - timedelta(days=7)
+        chat_logs = (
+            LarpManagerChatLog.objects.filter(created__gte=week_ago).select_related("member").order_by("created")
+        )
+        if not chat_logs:
+            return
+
+        body = "<br /><br />".join(
+            f"{chat_log.created:%Y-%m-%d %H:%M} - {chat_log.member} - {chat_log.question}" for chat_log in chat_logs
+        )
+        notify_admins("Weekly ask-larpmanager questions recap", body)

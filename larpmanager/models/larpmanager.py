@@ -47,6 +47,14 @@ class LarpManagerTutorial(OrderMixin, BaseModel):
     descr = HTMLField(blank=True, null=True)
 
 
+class LarpManagerChatLog(BaseModel):
+    """Log of questions asked through the wwyltd and ask-larpmanager chat widgets."""
+
+    member = models.ForeignKey(Member, on_delete=models.CASCADE)
+
+    question = models.TextField()
+
+
 class LarpManagerReview(BaseModel):
     """Model for storing user reviews and testimonials.
 
@@ -105,6 +113,43 @@ class LarpManagerHighlight(BaseModel):
     reduced = ImageSpecField(
         source="photo",
         processors=[ResizeToFit(1000)],
+        format="JPEG",
+        options={"quality": 80},
+    )
+
+    def show_reduced(self) -> Any:
+        """Generate HTML for displaying reduced-size image."""
+        if self.reduced:
+            # noinspection PyUnresolvedReferences
+            return show_thumb(100, self.reduced.url)
+        return ""
+
+    def as_dict(self, *, many_to_many: bool = True) -> dict:
+        """Convert model instance to dictionary with image URL."""
+        result_dict = super().as_dict(many_to_many=many_to_many)
+
+        # Add reduced image URL if available
+        if self.reduced:
+            # noinspection PyUnresolvedReferences
+            result_dict["reduced_url"] = self.reduced.url
+
+        return result_dict
+
+
+class LarpManagerScreenshot(OrderMixin, BaseModel):
+    """Model for storing interface screenshots shown on the home page."""
+
+    caption = models.CharField(max_length=1000)
+
+    photo = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("screenshot/"),
+        verbose_name=_("Photo"),
+    )
+
+    reduced = ImageSpecField(
+        source="photo",
+        processors=[ResizeToFit(1200)],
         format="JPEG",
         options={"quality": 80},
     )
@@ -322,6 +367,42 @@ class LarpManagerPartner(BaseModel):
         return result_dict
 
 
+class LarpManagerCollaborator(BaseModel):
+    """Model for displaying project collaborators on the about us page."""
+
+    name = models.CharField(max_length=200)
+
+    photo = models.ImageField(
+        max_length=500,
+        upload_to=UploadToPathAndRename("collaborators/"),
+        verbose_name=_("Photo"),
+    )
+
+    thumb = ImageSpecField(
+        source="photo",
+        processors=[ResizeToFill(300, 300)],
+        format="JPEG",
+        options={"quality": 85},
+    )
+
+    def show_thumb(self) -> Any:
+        """Generate HTML for displaying thumbnail image."""
+        if self.thumb:
+            # noinspection PyUnresolvedReferences
+            return show_thumb(100, self.thumb.url)
+        return ""
+
+    def as_dict(self, *, many_to_many: bool = True) -> dict:
+        """Convert model instance to dictionary with image URL."""
+        result_dict = super().as_dict(many_to_many=many_to_many)
+
+        if self.thumb:
+            # noinspection PyUnresolvedReferences
+            result_dict["thumb_url"] = self.thumb.url
+
+        return result_dict
+
+
 class TicketStatus(models.TextChoices):
     """Status choices for LarpManagerTicket."""
 
@@ -450,8 +531,9 @@ class LarpManagerDemoType(UuidMixin, OrderMixin, BaseModel):
 
     allowed_sidebar = models.TextField(
         blank=True,
-        help_text="Comma separated list of event/association permission slugs allowed in the sidebar "
-        "for this demo type. Empty means no restriction.",
+        help_text="Comma separated list of event/association permission slugs allowed in the sidebar, "
+        "and feature slugs allowed in the player-facing navigation, for this demo type. "
+        "Empty means no restriction.",
     )
 
     allowed_config = models.TextField(

@@ -35,12 +35,10 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from larpmanager.accounting.gateway import (
-    redsys_webhook,
-    satispay_webhook,
-    stripe_webhook,
-    sumup_webhook,
-)
+from larpmanager.accounting.gateway.redsys import redsys_webhook
+from larpmanager.accounting.gateway.satispay import satispay_webhook
+from larpmanager.accounting.gateway.stripe import stripe_webhook
+from larpmanager.accounting.gateway.sumup import sumup_webhook
 from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting
 from larpmanager.accounting.payment import auto_process_single_method, get_payment_form
 from larpmanager.cache.association_text import get_association_text
@@ -876,8 +874,8 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
 
     # Verify collection is in the correct status for redemption
     if c.status != CollectionStatus.DONE:
-        msg = "Collection not found"
-        raise Http404(msg)
+        messages.info(request, _("This collection has already been redeemed"))
+        return redirect("home")
 
     # Handle POST request for collection redemption
     if request.method == "POST":
@@ -885,8 +883,8 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
         with transaction.atomic():
             locked = Collection.objects.select_for_update().get(pk=c.pk)
             if locked.status != CollectionStatus.DONE:
-                msg = "Collection not found"
-                raise Http404(msg)
+                messages.info(request, _("This collection has already been redeemed"))
+                return redirect("home")
             locked.member = context["member"]
             locked.status = CollectionStatus.PAYED
             locked.save()

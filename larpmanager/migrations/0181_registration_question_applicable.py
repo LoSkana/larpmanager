@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('larpmanager', '0176_alter_refundrequest_value_and_more'),
+        ('larpmanager', '0180_larpmanagercollaborator'),
     ]
 
     operations = [

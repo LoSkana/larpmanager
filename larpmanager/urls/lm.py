@@ -170,6 +170,11 @@ urlpatterns = [
         name="donate",
     ),
     path(
+        "assistant/ask/",
+        views_lm.chat_ask,
+        name="chat_ask",
+    ),
+    path(
         "ticket/",
         views_lm.ticket,
         name="ticket",

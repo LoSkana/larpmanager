@@ -354,6 +354,107 @@ body.landing .stat span {
   color: var(--hero-dim);
 }
 
+/* ---------- Who is this for ---------- */
+body.landing .whofor {
+  background: var(--paper-soft);
+}
+
+body.landing .whofor-board {
+  max-width: 760px;
+  margin: 0 auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+body.landing .whofor-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+}
+
+body.landing .whofor-tabs button {
+  flex: 1 1 auto;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: var(--paper-soft);
+  color: var(--text-dim);
+  border: none;
+  border-right: 1px solid var(--line);
+  border-radius: 0;
+  padding: 0.9rem 0.8rem;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+body.landing .whofor-tabs button:last-child {
+  border-right: none;
+}
+
+body.landing .whofor-tabs button:hover {
+  color: var(--teal-deep);
+}
+
+body.landing .whofor-tabs button[aria-pressed="true"] {
+  background: var(--card);
+  color: var(--teal-deep);
+  font-weight: 700;
+  box-shadow: inset 0 -3px 0 var(--teal-deep);
+}
+
+body.landing .whofor-tabs button:focus-visible {
+  outline: 2px solid var(--teal-bright);
+  outline-offset: -4px;
+}
+
+body.landing .whofor-descs {
+  display: grid;
+  padding: 1.6rem 1.8rem 1.8rem;
+  min-height: 4.2em;
+}
+
+body.landing .whofor-desc {
+  grid-area: 1 / 1;
+  margin: 0;
+  font-family: "Fraunces", Palatino, Georgia, serif;
+  font-style: italic;
+  font-size: 1.08rem;
+  color: var(--text);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease;
+}
+
+body.landing .whofor-desc.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+body.landing .whofor-desc p {
+  margin: 0;
+}
+
+body.landing .whofor-note {
+  text-align: center;
+  margin: 2.5rem auto 0;
+  max-width: 56ch;
+  font-family: "Fraunces", Palatino, Georgia, serif;
+  font-style: italic;
+  font-size: 1.2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.landing .whofor-tabs button,
+  body.landing .whofor-desc {
+    transition: none;
+  }
+}
+
 /* ---------- Steps ---------- */
 body.landing .steps-head {
   text-align: center;
@@ -799,34 +900,58 @@ body.landing .partner-card .partner-text {
   color: var(--text-dim);
 }
 
-/* ---------- Video ---------- */
-body.landing .video-section {
+/* ---------- Screenshots ---------- */
+body.landing .screens {
   text-align: center;
 }
 
-body.landing .video-section .starter {
+body.landing .screens h2 {
+  font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+}
+
+body.landing .screens-sub {
   color: var(--text-dim);
   max-width: 54ch;
-  margin: 0 auto 2.5rem;
+  margin: 0.8rem auto 2rem;
 }
 
-body.landing .guide-container {
-  max-width: 760px;
-  margin: 0 auto;
+body.landing .screen-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 min(560px, 86vw);
+  text-align: left;
 }
 
-body.landing .guide-video {
+body.landing .screen-photo {
+  aspect-ratio: 16 / 10;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+body.landing .screen-photo img {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  border: 0;
-  border-radius: 8px;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+  display: block;
+}
+
+body.landing .screen-meta {
+  padding: 0.9rem 1.1rem 1rem;
+  border-top: 1px solid var(--line);
+}
+
+body.landing .screen-meta small {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-dim);
 }
 
 /* ---------- Open / migration ---------- */
-body.landing .open {
-  background: var(--paper-soft);
-}
-
 body.landing .open .wrap {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1131,6 +1256,39 @@ body.landing .about-prose {
 
 body.landing .about-prose p {
   margin: 0 0 1.4rem;
+}
+
+body.landing .collaborators-intro {
+  margin-top: 2.5rem;
+}
+
+body.landing .collaborators {
+  max-width: 62ch;
+  margin: 2.5rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.4rem;
+}
+
+body.landing .collaborator-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 140px;
+  text-align: center;
+}
+
+body.landing .collaborator-card img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+body.landing .collaborator-name {
+  font-weight: 700;
 }
 
 body.landing .about-quote {
@@ -1798,7 +1956,9 @@ body.landing section.native .eyebrow {
 }
 
 body.landing .games,
-body.landing .partners {
+body.landing .partners,
+body.landing .open,
+body.landing .site-footer {
   background: var(--paper-soft);
 }
 

@@ -24,6 +24,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Never use non-ascii characters** - if a symbol is needed, use a font-awesone icon.
 - **Never put css style inline** - always put the css in lm.css.
 - **One migration for branch** - in case there is more changes to be done to the model, first make the new migration, execute it to update db, the join the code of the new migration with the other one, and remove the newer
+- **Concise pydocs** - Use concise pydocs and comments, that shouldn't talk about the current change, only of the function overall behaviour.
 ## Package Management
 
 The project uses **uv** for fast and reliable Python package management. All dependencies are defined in `pyproject.toml`.

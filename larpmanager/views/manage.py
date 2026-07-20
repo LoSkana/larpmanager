@@ -25,7 +25,14 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.forms import ChoiceField, Form
-from django.http import HttpRequest, HttpResponse, HttpResponsePermanentRedirect, HttpResponseRedirect, JsonResponse
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponsePermanentRedirect,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -1000,6 +1007,9 @@ def _orga_suggestions(context: dict) -> None:
 
 def _exe_build_lists(request: HttpRequest, context: dict, features: dict) -> None:
     """Populate priorities, actions and suggestions lists for the executive dashboard."""
+    if context.get("demo"):
+        return
+
     if "ongoing_runs" not in context:
         actions_data_exe = get_exe_widget_cache(context["association_id"], "actions")
         context["ongoing_runs"] = actions_data_exe.get("ongoing_runs", [])
@@ -1026,6 +1036,9 @@ def _exe_build_lists(request: HttpRequest, context: dict, features: dict) -> Non
 
 def _orga_build_lists(request: HttpRequest, context: dict, features: dict) -> None:
     """Populate priorities, actions and suggestions lists for the organizer dashboard."""
+    if context.get("demo"):
+        return
+
     # Reuse the executive checks for association-level priorities, but drop the
     # executive actions which are not relevant on the organizer dashboard
     _exe_actions(request, context)
@@ -1443,7 +1456,7 @@ def what_would_you_like(context: dict, request: HttpRequest) -> None:
 
 @login_required
 def wwyltd_choices_ajax(request: HttpRequest, event_slug: str = None) -> JsonResponse:
-    """AJAX endpoint that returns wwyltd choices for lazy Select2 loading.
+    """AJAX endpoint that returns wwyltd choices matching a search query.
 
     Args:
         request: HTTP request object
@@ -1453,6 +1466,9 @@ def wwyltd_choices_ajax(request: HttpRequest, event_slug: str = None) -> JsonRes
         JsonResponse: {"results": [{"id": "...", "text": "..."}, ...]}
 
     """
+    if request.association.get("main_domain") != "larpmanager.com":
+        raise Http404
+
     context = get_context(request)
     if event_slug:
         context = get_event_context(request, event_slug)
@@ -1462,9 +1478,15 @@ def wwyltd_choices_ajax(request: HttpRequest, event_slug: str = None) -> JsonRes
         get_index_association_permissions(request, context, context["association_id"])
         context["exe_page"] = 1
 
+    query = request.GET.get("q", "").strip().lower()
+
     form = WhatWouldYouLikeForm(context=context)
-    results = [{"id": value, "text": label} for value, label in form.fields["wwyltd"].choices if value]
-    return JsonResponse({"results": results})
+    results = [
+        {"id": value, "text": label}
+        for value, label in form.fields["wwyltd"].choices
+        if value and query in label.lower()
+    ]
+    return JsonResponse({"results": results[:30]})
 
 
 @login_required
@@ -1483,6 +1505,9 @@ def wwyltd_ajax(request: HttpRequest, event_slug: str = None) -> JsonResponse:
     """
     if request.method != "POST":
         return JsonResponse({"success": False, "error": _("Invalid request method")}, status=405)
+
+    if request.association.get("main_domain") != "larpmanager.com":
+        raise Http404
 
     # Get context based on request path
     context = get_context(request)

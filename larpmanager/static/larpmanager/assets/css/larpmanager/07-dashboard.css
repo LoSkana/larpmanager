@@ -107,79 +107,6 @@
   float: right;
 }
 
-#topbar #wwyltd {
-  display: inline-block;
-  vertical-align: middle;
-  min-width: 240px;
-  width: 50%;
-  margin: 0 0 0 1.5em;
-  padding: 0;
-  text-align: left;
-}
-
-#topbar #wwyltd form {
-  margin: 0;
-}
-
-#topbar #wwyltd form select {
-  width: 100% !important;
-  max-width: 100% !important;
-  height: 2.1em !important;
-}
-
-#topbar #wwyltd .select2-selection--single {
-  height: 2em;
-  line-height: 2em;
-  padding: 0;
-  border-radius: 4px;
-}
-
-#topbar #wwyltd .select2-selection__rendered {
-  line-height: 2em;
-  padding: 0 0.5em 0 2.2em;
-}
-
-#topbar #wwyltd .select2-selection__arrow {
-  display: none;
-}
-
-#topbar #wwyltd .select2-container {
-  position: relative;
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-#topbar #wwyltd .select2-container::before {
-  content: "\f002";
-  font-family: "Font Awesome 5 Free";
-  font-weight: 900;
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  color: #999;
-}
-
-#select2-id_wwyltd-container {
-  text-align: left;
-  padding-left: 40px;
-}
-
-#select2-id_wwyltd-results {
-  text-align: left;
-}
-
-#select2-id_wwyltd-results li {
-  padding: 0.5em 1em;
-}
-
-@media (max-width: 840px) {
-  #topbar #wwyltd {
-    display: none;
-  }
-}
-
 /* ---------------------------------------------------------------------------
    Option Edit Popup
    --------------------------------------------------------------------------- */
@@ -497,7 +424,7 @@ body.floating_iframe #banner,
 body.floating_iframe #topbar,
 body.floating_iframe #staging,
 body.floating_iframe .info,
-body.floating_iframe .demo-banner {
+body.floating_iframe .demo-footer {
   display: none !important;
 }
 
@@ -505,36 +432,6 @@ body.floating_iframe #page-container {
   background: transparent !important;
   padding: 0 !important;
   margin: 0 !important;
-}
-
-body.error-page #header,
-body.error-page #footer,
-body.error-page #sidebar,
-body.error-page #nav,
-body.error-page #menu,
-body.error-page #banner,
-body.error-page #topbar,
-body.error-page #menu-mobile,
-body.error-page #staging,
-body.error-page .info {
-  display: none !important;
-}
-
-body.error-page #page-wrapper,
-body.error-page #page-wrapper.topbar,
-body.error-page #page-wrapper.sidebar {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-body.error-page #main {
-  width: 100%;
-  text-align: center;
 }
 
 body.floating_iframe.outer_delete #wrapper {
@@ -679,7 +576,7 @@ body.floating_iframe .inner {
 .grid {
   columns: 3;
   column-gap: 20px;
-  margin: 0 auto;
+  margin: 0.5em auto;
   padding: 0.5em;
   clear: both;
 }
@@ -760,27 +657,22 @@ body.floating_iframe .inner {
   margin: 0em;
 }
 
-/* ============ Demo mode: banner + contextual hints ============ */
+/* ============ Demo mode: footer + contextual hints ============ */
 
-.demo-banner {
+.demo-footer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 0.5em;
   padding: 0.6em 1em;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
   background: rgba(var(--ter-rgb), 0.95);
   color: rgb(var(--sec-rgb));
   border-top: 1px solid rgba(var(--ter-rgb), 0.4);
   text-align: center;
 }
 
-.demo-banner a {
+.demo-footer a {
   font-weight: 700;
   margin: 0;
   color: rgb(var(--sec-rgb));
@@ -788,7 +680,7 @@ body.floating_iframe .inner {
 
 .demo-hint-toggle {
   position: fixed;
-  bottom: 4.2em;
+  bottom: 1.2em;
   right: 1.2em;
   z-index: 1000;
   width: 2.6em;
@@ -810,7 +702,7 @@ body.floating_iframe .inner {
 .demo-hint-panel {
   display: none;
   position: fixed;
-  bottom: 7.5em;
+  bottom: 4.5em;
   right: 1.2em;
   z-index: 1000;
   max-width: 22em;
@@ -855,4 +747,15 @@ body.floating_iframe .inner {
 #demo-hint-permanent {
   width: 0.5em;
   height: 0.5em;
+}
+
+/* Mobile: do not show */
+@media (max-width: 840px) {
+  .demo-footer {
+    display: none;
+  }
+
+  .demo-hint-panel {
+    font-size: 80%;
+  }
 }

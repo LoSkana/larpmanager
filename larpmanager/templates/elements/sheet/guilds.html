@@ -1,6 +1,9 @@
 {% load show_tags i18n %}
 {% for guild in sheet_guilds %}
     <h2 class="c">{{ guild.name }}</h2>
+    {% if guild.teaser %}
+        <p>{% show_char guild.teaser run 1 %}</p>
+    {% endif %}
     {% for idx, question in guild.questions.items %}
         {% if question.typ == 'e' %}
             {% with guild.fields|get:idx as field %}

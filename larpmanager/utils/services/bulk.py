@@ -289,8 +289,8 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict, mode
 
         # Create log entries for each affected element
         _create_bulk_logs(context, operation_name, target_name, object_uuids, model_class)
-    except ObjectDoesNotExist:
-        # Handle case where target objects don't exist
+    except (ObjectDoesNotExist, ValueError):
+        # Target object missing, or an invalid target value (e.g. bad status)
         return JsonResponse({"error": "not found"}, status=400)
 
     # Return success response
@@ -439,9 +439,14 @@ def exec_set_plot_progress(context: dict, target: str, uuids: list[str]) -> str:
     return progress_step.name
 
 
+def _get_assoc_member(context: dict, target: str) -> Member:
+    """Fetch a member by UUID, scoped to the current association."""
+    return Member.objects.filter(memberships__association_id=context["association_id"]).distinct().get(uuid=target)
+
+
 def exec_set_plot_assigned(context: dict, target: str, uuids: list[str]) -> str:
     """Assign selected plots to a staff member."""
-    member = Member.objects.get(uuid=target)
+    member = _get_assoc_member(context, target)
     context["event"].get_elements(Plot).filter(uuid__in=uuids).update(assigned=member)
     return member.name
 
@@ -495,13 +500,17 @@ def exec_set_char_progress(
 
 def exec_set_char_assigned(context: dict, target: str, uuids: list[str]) -> str:
     """Assign characters to a member."""
-    member = Member.objects.get(uuid=target)
+    member = _get_assoc_member(context, target)
     context["event"].get_elements(Character).filter(uuid__in=uuids).update(assigned=member)
     return member.name
 
 
 def exec_set_char_status(context: dict, target: str, uuids: list[str]) -> str:
     """Update character status for specified characters in the event."""
+    # Validate the status against the allowed choices before writing raw POST
+    if target not in CharacterStatus.values:
+        msg = "invalid character status"
+        raise ValueError(msg)
     context["event"].get_elements(Character).filter(uuid__in=uuids).update(status=target)
     return dict(CharacterStatus.choices).get(target, target)
 
@@ -665,7 +674,7 @@ def exec_set_faction_progress(context: dict, target: str, uuids: list[str]) -> s
 
 def exec_set_faction_assigned(context: dict, target: str, uuids: list[str]) -> str:
     """Assign selected factions to a staff member."""
-    member = Member.objects.get(uuid=target)
+    member = _get_assoc_member(context, target)
     context["event"].get_elements(Faction).filter(uuid__in=uuids).update(assigned=member)
     return member.name
 

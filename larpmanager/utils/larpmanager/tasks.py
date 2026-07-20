@@ -244,11 +244,17 @@ def send_mail_exec(
     # Determine sender context: run wins over association
     if run_id:
         sender_context = Run.objects.filter(pk=run_id).first()
+        if not sender_context:
+            # Run was deleted since this task was scheduled; drop the dead FK
+            run_id = None
         # Extract association_id from run if not provided
-        if sender_context and not association_id:
+        elif not association_id:
             association_id = sender_context.event.association_id
     elif association_id:
         sender_context = Association.objects.filter(pk=association_id).first()
+        if not sender_context:
+            # Association was deleted since this task was scheduled; drop the dead FK
+            association_id = None
 
     if sender_context:
         # Add organization/run prefix to subject line

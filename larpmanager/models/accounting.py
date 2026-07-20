@@ -411,7 +411,7 @@ class AccountingItemOther(AccountingItem):
 
     oth = models.CharField(max_length=1, choices=OtherChoices.choices)
 
-    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Event"))
 
     descr = models.CharField(max_length=150)
 
@@ -479,7 +479,7 @@ class AccountingItemExpense(AccountingItem):
 
     invoice = models.FileField(upload_to=UploadToPathAndRename("invoice/"))
 
-    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Event"))
 
     descr = models.CharField(max_length=150)
 
@@ -513,7 +513,7 @@ class AccountingItemFlow(AccountingItem):
     class Meta:
         abstract = True
 
-    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True)
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, blank=True, verbose_name=_("Event"))
 
     descr = models.CharField(max_length=500, verbose_name=_("Description"))
 
@@ -679,11 +679,7 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
 class AccountingItemDiscount(AccountingItem):
     """Represents AccountingItemDiscount model."""
 
-    run = models.ForeignKey(
-        Run,
-        on_delete=models.CASCADE,
-        null=True,
-    )
+    run = models.ForeignKey(Run, on_delete=models.CASCADE, null=True, verbose_name=_("Event"))
 
     disc = models.ForeignKey(Discount, on_delete=models.CASCADE, related_name="accounting_items")
 
@@ -733,11 +729,7 @@ class Collection(UuidMixin, BaseModel):
     )
 
     run = models.ForeignKey(
-        Run,
-        on_delete=models.CASCADE,
-        related_name="collections_runs",
-        null=True,
-        blank=True,
+        Run, on_delete=models.CASCADE, related_name="collections_runs", null=True, blank=True, verbose_name=_("Event")
     )
 
     organizer = models.ForeignKey(Member, on_delete=models.CASCADE, related_name="collections_created")
@@ -845,7 +837,9 @@ class RefundRequest(UuidMixin, BaseModel):
 class RecordAccounting(BaseModel):
     """Represents RecordAccounting model."""
 
-    run = models.ForeignKey(Run, on_delete=models.CASCADE, related_name="rec_accs", null=True, blank=True)
+    run = models.ForeignKey(
+        Run, on_delete=models.CASCADE, related_name="rec_accs", null=True, blank=True, verbose_name=_("Event")
+    )
 
     association = models.ForeignKey(Association, on_delete=models.CASCADE, related_name="rec_accs")
 

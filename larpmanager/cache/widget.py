@@ -281,7 +281,7 @@ def _init_exe_accounting_widget_cache(association_id: int) -> dict:
 def _init_exe_deadline_widget_cache(association_id: int) -> dict:
     """Compute association deadline statistics for widget cache (aggregates all upcoming runs)."""
     # Get all upcoming runs for the association
-    runs = get_coming_runs(association_id, future=True)
+    runs = get_coming_runs(association_id, future=True, include_hidden=True)
 
     # Initialize aggregated counts
     total_counts = {}

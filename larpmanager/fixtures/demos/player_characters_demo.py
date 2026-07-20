@@ -26,6 +26,8 @@ queue, and player-authored relationships.
 
 from __future__ import annotations
 
+import datetime
+from datetime import UTC
 from typing import Any
 
 from django.contrib.auth.models import User
@@ -68,20 +70,57 @@ def _make_member(username: str, name: str, surname: str, association: Associatio
 
 
 def _build_character_form(event: Event) -> dict[str, Any]:
-    origin_question = WritingQuestion.objects.create(event=event, name="Origin", typ=WritingQuestionType.SINGLE)
-    mutation_question = WritingQuestion.objects.create(
-        event=event, name="Mutation Path", typ=WritingQuestionType.SINGLE
+    origin_question = WritingQuestion.objects.create(
+        event=event,
+        name="Origin",
+        typ=WritingQuestionType.SINGLE,
+        description="Where your character comes from. This shapes what Mutation Path, Skills and Gear you can pick.",
+        editable=CharacterStatus.CREATION,
     )
-    skills_question = WritingQuestion.objects.create(event=event, name="Skills", typ=WritingQuestionType.MULTIPLE)
-    gear_question = WritingQuestion.objects.create(event=event, name="Gear Loadout", typ=WritingQuestionType.MULTIPLE)
+    mutation_question = WritingQuestion.objects.create(
+        event=event,
+        name="Mutation Path",
+        typ=WritingQuestionType.SINGLE,
+        description="Whether the wasteland (or the bunker) has changed your character, and how. Some options depend on your Origin.",
+        editable=CharacterStatus.CREATION,
+    )
+    skills_question = WritingQuestion.objects.create(
+        event=event,
+        name="Skills",
+        typ=WritingQuestionType.MULTIPLE,
+        description="What your character is trained or gifted to do. Some skills only unlock once you have chosen a matching Origin or Mutation Path.",
+        editable=f"{CharacterStatus.CREATION},{CharacterStatus.PROPOSED}",
+    )
+    gear_question = WritingQuestion.objects.create(
+        event=event,
+        name="Gear Loadout",
+        typ=WritingQuestionType.MULTIPLE,
+        description="Equipment your character carries. Gear chains off your chosen Skills or Mutation Path.",
+        editable=f"{CharacterStatus.CREATION},{CharacterStatus.PROPOSED}",
+    )
     callsign_question = WritingQuestion.objects.create(
-        event=event, name="Callsign", typ=WritingQuestionType.TEXT, max_length=50
+        event=event,
+        name="Callsign",
+        typ=WritingQuestionType.TEXT,
+        max_length=50,
+        description="A short nickname other survivors use to refer to your character.",
+        editable=f"{CharacterStatus.CREATION},{CharacterStatus.PROPOSED},{CharacterStatus.REVIEW}",
     )
     appearance_question = WritingQuestion.objects.create(
-        event=event, name="Appearance", typ=WritingQuestionType.PARAGRAPH, max_length=800
+        event=event,
+        name="Appearance",
+        typ=WritingQuestionType.PARAGRAPH,
+        max_length=800,
+        description="A short paragraph describing how your character looks.",
+        editable=f"{CharacterStatus.CREATION},{CharacterStatus.PROPOSED},{CharacterStatus.REVIEW}",
     )
     backstory_question = WritingQuestion.objects.create(
-        event=event, name="Backstory", typ=WritingQuestionType.EDITOR, max_length=5000
+        event=event,
+        name="Backstory",
+        typ=WritingQuestionType.EDITOR,
+        max_length=5000,
+        description="Your character's full history: where they are from, what they have lived through, and why they are here.",
+        editable=f"{CharacterStatus.CREATION},{CharacterStatus.PROPOSED},{CharacterStatus.REVIEW}",
     )
 
     def option(question: WritingQuestion, name: str, requirements: list[WritingOption] = ()) -> WritingOption:
@@ -305,7 +344,7 @@ def _build_demo_type_and_hints(association: Association) -> LarpManagerDemoType:
             "form with conditional options, then submit them for organizer approval."
         ),
         template_association=association,
-        allowed_sidebar="orga_characters,orga_character_form",
+        allowed_sidebar="orga_characters,orga_character_form,user_character,player_relationships",
     )
 
     hints = [
@@ -349,7 +388,22 @@ def build_player_characters_demo() -> LarpManagerDemoType:
         return existing
 
     association = Association.objects.create(slug=ASSOCIATION_SLUG, name="Player Character Creation Demo")
-    event = Event.objects.create(association=association, name="Ashfall", slug=EVENT_SLUG)
+    event = Event.objects.create(
+        association=association,
+        name="Ashfall",
+        slug=EVENT_SLUG,
+        tagline="Bring your own survivor. The wasteland doesn't hand out backstories.",
+        description=(
+            "<p>A post-apocalyptic sandbox where every character is player-written from scratch. "
+            "Pick an Origin, a Mutation Path branching off it, Skills and Gear that chain off "
+            "both, then write your own Callsign, Appearance and Backstory. Submitted characters "
+            "queue for organizer review before they hit the wasteland.</p>"
+        ),
+    )
+    run = event.runs.first()
+    run.start = datetime.datetime.now(tz=UTC).date() + datetime.timedelta(days=60)
+    run.end = run.start + datetime.timedelta(days=2)
+    run.save()
     _enable_features(event, ["character", "user_character", "player_relationships"])
 
     EventConfig.objects.create(event=event, name="user_character_approval", value="True")

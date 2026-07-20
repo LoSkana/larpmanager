@@ -1895,6 +1895,9 @@ msgstr "Nächste Quote"
 msgid "No changes"
 msgstr "Keine Änderungen"
 
+msgid "No results"
+msgstr "Keine Ergebnisse"
+
 msgid "Organizers"
 msgstr "Veranstalter"
 
@@ -2875,6 +2878,9 @@ msgstr "Aktive Geräte"
 msgid "Add to faction"
 msgstr "Zur Fraktion hinzufügen"
 
+msgid "Ask a question"
+msgstr "Stell eine Frage"
+
 msgid "Assign members"
 msgstr "Mitglieder zuweisen"
 
@@ -3141,6 +3147,9 @@ msgstr "Zum XP-Punktestand hinzufügen"
 
 msgid "App Integration"
 msgstr "App-Integration"
+
+msgid "Ask LarpManager"
+msgstr "Frag LarpManager"
 
 msgid "Attachment Name"
 msgstr "Anhang Name"
@@ -4652,6 +4661,9 @@ msgstr "Token nicht initialisiert"
 msgid "Transfer registration"
 msgstr "Registrierung übertragen"
 
+msgid "Type your question..."
+msgstr "Gib deine Frage ein..."
+
 msgid "Updated Registrations"
 msgstr "Aktualisierte Registrierungen"
 
@@ -4946,6 +4958,9 @@ msgstr "Charakterform des Spielers"
 msgid "Please check them below"
 msgstr "Bitte prüfen Sie sie unten"
 
+msgid "Please write a question"
+msgstr "Bitte schreib eine Frage"
+
 msgid "Pre registrations total"
 msgstr "Vorregistrierungen insgesamt"
 
@@ -4963,6 +4978,9 @@ msgstr "Zulassungsbedingungen"
 
 msgid "Reminder membership fee"
 msgstr "Erinnerung an den Mitgliedsbeitrag"
+
+msgid "Select your preferences"
+msgstr "Wähle deine Einstellungen aus"
 
 msgid "Separate membership fee"
 msgstr "Separater Mitgliedsbeitrag"
@@ -5535,6 +5553,9 @@ msgstr "Wenn angekreuzt: Mitglieder können abstimmen"
 msgid "Invitation sent to %(email)s"
 msgstr "Einladung an %(email)s gesendet"
 
+msgid "Live chat is not configured."
+msgstr "Der Live-Chat ist nicht eingerichtet."
+
 msgid "Manage experience criterions"
 msgstr "Erfahrungskriterien verwalten"
 
@@ -5902,6 +5923,9 @@ msgstr "Überprüfung des jährlichen Haushaltsberichts"
 msgid "Select only one primary faction"
 msgstr "Wählen Sie nur eine Hauptfraktion"
 
+msgid "Select your casting preferences"
+msgstr "Wähle deine Casting-Präferenzen aus"
+
 msgid "Set design - staging, materials"
 msgstr "Bühnenbild - Ausstattung, Materialien"
 
@@ -6106,6 +6130,9 @@ msgstr "Finden Sie heraus, worum es bei dieser Veranstaltung geht"
 
 msgid "Fill out the event prep questions"
 msgstr "Füllen Sie die vorbereitenden Fragen für die Veranstaltung aus"
+
+msgid "For best results, ask in English."
+msgstr "Für beste Ergebnisse frag bitte auf Englisch."
 
 msgid "For more information, write to us"
 msgstr "Für weitere Informationen, schreiben Sie uns"
@@ -6759,6 +6786,9 @@ msgstr "Jetzt können Sie mit der Erstellung von Speed-Larps beginnen"
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organisation hat auf Version %(v)s aktualisiert"
 
+msgid "Please select your casting preferences"
+msgstr "Bitte wähle deine Casting-Präferenzen aus"
+
 msgid "The following registrations were drawn"
 msgstr "Die folgenden Beiträge wurden ausgelost"
 
@@ -7132,6 +7162,9 @@ msgstr "Einrichten der Konfiguration der Organisationssteuer"
 
 msgid "The modifier's number (unique identifier)"
 msgstr "Die Nummer des Modifikators (eindeutiger Bezeichner)"
+
+msgid "This collection has already been redeemed"
+msgstr "Diese Einladung ist bereits eingelöst worden"
 
 msgid "Total amount paid for platform management"
 msgstr "Gesamtbetrag für die Plattformverwaltung"
@@ -8442,6 +8475,9 @@ msgstr "Der Benutzer hat seine Anmeldung für diese Veranstaltung bestätigt"
 msgid "The user has updated their registration for this event"
 msgstr "Der Benutzer hat seine Anmeldung für diese Veranstaltung aktualisiert"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Diese Einladung wurde an eine andere E-Mail-Adresse gesendet."
+
 msgid "Whether this content is currently available for access"
 msgstr "ob dieser Inhalt derzeit für den Zugriff verfügbar ist"
 
@@ -9495,6 +9531,11 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Bei einigen Tickets fehlt eine letzte Rate (0 Betrag): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"Der Assistent ist gerade nicht verfügbar. Bitte versuch es später noch "
+"einmal."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -13197,6 +13238,13 @@ msgid ""
 msgstr ""
 "Fügt die Ticketarten 'Gönner' und 'Ermäßigt' hinzu. Jedes gekaufte "
 "Gönnerticket macht ein ermäßigtes Ticket verfügbar"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"Ich konnte in der Dokumentation nichts Passendes finden. Versuch’s mal auf "
+"Englisch zu fragen oder eröffne ein Support-Ticket."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "

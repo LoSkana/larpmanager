@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import re
 import secrets
 import uuid
 from pathlib import Path
@@ -282,6 +283,11 @@ def upload_media(request: HttpRequest) -> JsonResponse:
     return JsonResponse({"location": default_storage.url(path)})
 
 
+# Member-config keys are UI flags (slug-shaped); constrain to a safe charset/length
+_MEMBER_CONFIG_NAME_RE = re.compile(r"[a-z0-9_-]{1,60}")
+_MEMBER_CONFIG_VALUE_MAX = 200
+
+
 @require_POST
 @login_required
 def set_member_config(request: HttpRequest) -> JsonResponse:
@@ -308,13 +314,13 @@ def set_member_config(request: HttpRequest) -> JsonResponse:
     """
     # Extract and validate configuration name parameter
     config_name = request.POST.get("name", "").lower()
-    if not config_name:
-        return JsonResponse({"res": "ko", "msg": "empty name"})
+    if not config_name or not _MEMBER_CONFIG_NAME_RE.fullmatch(config_name):
+        return JsonResponse({"res": "ko", "msg": "invalid name"})
 
     # Extract and validate configuration value parameter
     value = request.POST.get("value", "").lower()
-    if not value:
-        return JsonResponse({"res": "ko", "msg": "empty value"})
+    if not value or len(value) > _MEMBER_CONFIG_VALUE_MAX:
+        return JsonResponse({"res": "ko", "msg": "invalid value"})
 
     # Convert string boolean values to actual boolean types
     if value == "true":

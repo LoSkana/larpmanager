@@ -28,3 +28,11 @@
         </span>
     </div>
 {% endif %}
+{% if run_status.casting_action %}
+    <div class="reg-banner only_v22 reg-action_needed">
+        <span class="reg-action-main">
+            <i class="{{ run_status.casting_action.icon }}"></i>
+            <a href="{{ run_status.casting_action.url }}" class="reg-action-link">{{ run_status.casting_action.label_long|default:run_status.casting_action.label }} <i class="fa-solid fa-chevron-right"></i></a>
+        </span>
+    </div>
+{% endif %}

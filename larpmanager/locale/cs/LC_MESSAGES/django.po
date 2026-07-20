@@ -1895,6 +1895,9 @@ msgstr "Další kvóta"
 msgid "No changes"
 msgstr "Žádné změny"
 
+msgid "No results"
+msgstr "Žádné výsledky"
+
 msgid "Organizers"
 msgstr "Organizátoři"
 
@@ -2875,6 +2878,9 @@ msgstr "Aktivní zařízení"
 msgid "Add to faction"
 msgstr "Přidat do frakce"
 
+msgid "Ask a question"
+msgstr "Zeptejte se"
+
 msgid "Assign members"
 msgstr "Přiřadit členy"
 
@@ -3141,6 +3147,9 @@ msgstr "Přidat k ocenění XP"
 
 msgid "App Integration"
 msgstr "Integrace aplikací"
+
+msgid "Ask LarpManager"
+msgstr "Zeptejte se LarpManageru"
 
 msgid "Attachment Name"
 msgstr "Název přílohy"
@@ -4652,6 +4661,9 @@ msgstr "Token nebyl inicializován"
 msgid "Transfer registration"
 msgstr "Registrace převodu"
 
+msgid "Type your question..."
+msgstr "Zadejte svůj dotaz..."
+
 msgid "Updated Registrations"
 msgstr "Aktualizované registrace"
 
@@ -4946,6 +4958,9 @@ msgstr "Formulář postavy hráče"
 msgid "Please check them below"
 msgstr "Podívejte se na ně níže"
 
+msgid "Please write a question"
+msgstr "Zadejte prosím otázku"
+
 msgid "Pre registrations total"
 msgstr "Celkový počet předběžných registrací"
 
@@ -4963,6 +4978,9 @@ msgstr "Vstupní podmínky"
 
 msgid "Reminder membership fee"
 msgstr "Připomenutí členského poplatku"
+
+msgid "Select your preferences"
+msgstr "Vyberte si své preference"
 
 msgid "Separate membership fee"
 msgstr "Samostatný členský poplatek"
@@ -5535,6 +5553,9 @@ msgstr "Pokud je zaškrtnuto: členové mohou hlasovat"
 msgid "Invitation sent to %(email)s"
 msgstr "Pozvánka zaslaná na %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "Živý chat není nastaven."
+
 msgid "Manage experience criterions"
 msgstr "Správa kritérií uživatelského zážitku"
 
@@ -5902,6 +5923,9 @@ msgstr "Přezkoumání výroční zprávy o rozpočtu"
 msgid "Select only one primary faction"
 msgstr "Vyberte pouze jednu primární frakci"
 
+msgid "Select your casting preferences"
+msgstr "Vyberte si, jaké typy rolí preferujete"
+
 msgid "Set design - staging, materials"
 msgstr "Scénografie - kování, materiály"
 
@@ -6106,6 +6130,9 @@ msgstr "Zjistěte, o čem tato akce je"
 
 msgid "Fill out the event prep questions"
 msgstr "Vyplňte přípravné otázky k události"
+
+msgid "For best results, ask in English."
+msgstr "Chcete-li dosáhnout nejlepších výsledků, zeptejte se v angličtině."
 
 msgid "For more information, write to us"
 msgstr "Pro více informací nám napište"
@@ -6753,6 +6780,9 @@ msgstr "Nyní můžete začít vytvářet speed-larpy"
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organizace aktualizována na verzi %(v)s"
 
+msgid "Please select your casting preferences"
+msgstr "Vyberte prosím své preference ohledně obsazení"
+
 msgid "The following registrations were drawn"
 msgstr "Byly vylosovány tyto položky"
 
@@ -7124,6 +7154,9 @@ msgstr "Nastavení konfigurace daně z příjmu organizace"
 
 msgid "The modifier's number (unique identifier)"
 msgstr "Číslo modifikátoru (jedinečný identifikátor)"
+
+msgid "This collection has already been redeemed"
+msgstr "Toto pozvání již bylo vykoupeno"
 
 msgid "Total amount paid for platform management"
 msgstr "Celková částka zaplacená za správu platformy"
@@ -8361,6 +8394,9 @@ msgstr "Uživatel potvrdil svou registraci na tuto událost"
 msgid "The user has updated their registration for this event"
 msgstr "Uživatel aktualizoval svou registraci na tuto událost"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Tato pozvánka byla odeslána na jinou e-mailovou adresu."
+
 msgid "Whether this content is currently available for access"
 msgstr "Zda je tento obsah aktuálně k dispozici pro přístup"
 
@@ -9212,6 +9248,9 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "U některých tipů chybí poslední splátka (částka 0): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr "Asistent je momentálně nedostupný, zkuste to prosím později."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -12620,6 +12659,13 @@ msgid ""
 msgstr ""
 "Přidává typy vstupenek 'Patron' a 'Snížené'. Každá zakoupená vstupenka "
 "'Patron' zpřístupní jednu vstupenku 'Reduced'"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"V dokumentaci jsem nenašel nic relevantního. Zkuste se zeptat v angličtině "
+"nebo otevřete žádost o podporu."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "

@@ -1010,7 +1010,7 @@ msgid "Profile"
 msgstr "Profil"
 
 msgid "Promote"
-msgstr "Marknadsföra"
+msgstr "Främja"
 
 msgid "Pronoun"
 msgstr "Pronomen"
@@ -1894,6 +1894,9 @@ msgstr "Nästa kvot"
 
 msgid "No changes"
 msgstr "Inga förändringar"
+
+msgid "No results"
+msgstr "Inga resultat"
 
 msgid "Organizers"
 msgstr "Arrangörer"
@@ -2791,7 +2794,7 @@ msgid "Registrations"
 msgstr "Registrering"
 
 msgid "Relationships"
-msgstr "Slipsar"
+msgstr "Relationer"
 
 msgid "Requests open"
 msgstr "Öppna förfrågningar"
@@ -2874,6 +2877,9 @@ msgstr "Aktiva enheter"
 
 msgid "Add to faction"
 msgstr "Lägg till i fraktion"
+
+msgid "Ask a question"
+msgstr "Ställ en fråga"
 
 msgid "Assign members"
 msgstr "Utse medlemmar"
@@ -3141,6 +3147,9 @@ msgstr "Lägg till i XP-poäng"
 
 msgid "App Integration"
 msgstr "App-integration"
+
+msgid "Ask LarpManager"
+msgstr "Fråga LarpManager"
 
 msgid "Attachment Name"
 msgstr "Namn på bifogad fil"
@@ -4652,6 +4661,9 @@ msgstr "Token inte initialiserad"
 msgid "Transfer registration"
 msgstr "Registrering av överföring"
 
+msgid "Type your question..."
+msgstr "Skriv din fråga..."
+
 msgid "Updated Registrations"
 msgstr "Uppdaterade registreringar"
 
@@ -4946,6 +4958,9 @@ msgstr "Spelarens karaktärsform"
 msgid "Please check them below"
 msgstr "Vänligen kontrollera dem nedan"
 
+msgid "Please write a question"
+msgstr "Skriv gärna en fråga"
+
 msgid "Pre registrations total"
 msgstr "Totalt antal förhandsregistreringar"
 
@@ -4963,6 +4978,9 @@ msgstr "Villkor för tillträde"
 
 msgid "Reminder membership fee"
 msgstr "Påminnelse medlemsavgift"
+
+msgid "Select your preferences"
+msgstr "Välj dina inställningar"
 
 msgid "Separate membership fee"
 msgstr "Separat medlemsavgift"
@@ -5535,6 +5553,9 @@ msgstr "Om markerat: medlemmar kan rösta"
 msgid "Invitation sent to %(email)s"
 msgstr "Inbjudan skickad till %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "Livechatten är inte konfigurerad."
+
 msgid "Manage experience criterions"
 msgstr "Hantera kriterier för användarupplevelsen"
 
@@ -5902,6 +5923,9 @@ msgstr "Granska den årliga budgetrapporten"
 msgid "Select only one primary faction"
 msgstr "Välj endast en primär fraktion"
 
+msgid "Select your casting preferences"
+msgstr "Välj dina önskemål för rollbesättningen"
+
 msgid "Set design - staging, materials"
 msgstr "Scenografi - inredning, material"
 
@@ -6106,6 +6130,9 @@ msgstr "Ta reda på vad detta evenemang handlar om"
 
 msgid "Fill out the event prep questions"
 msgstr "Fyll i de förberedande frågorna för evenemanget"
+
+msgid "For best results, ask in English."
+msgstr "För bästa resultat, ställ frågan på engelska."
 
 msgid "For more information, write to us"
 msgstr "För mer information, skriv till oss"
@@ -6754,6 +6781,9 @@ msgstr "Nu kan du börja skapa speed-larps"
 msgid "Organization upgraded to version %(v)s"
 msgstr "Organisationen uppgraderad till version %(v)s"
 
+msgid "Please select your casting preferences"
+msgstr "Välj gärna dina önskemål för rollbesättningen"
+
 msgid "The following registrations were drawn"
 msgstr "Följande bidrag lottades ut"
 
@@ -7125,6 +7155,9 @@ msgstr "Ställ in organisationens skattekonfiguration"
 
 msgid "The modifier's number (unique identifier)"
 msgstr "Modifierarens nummer (unik identifierare)"
+
+msgid "This collection has already been redeemed"
+msgstr "Denna inbjudan har redan lösts in"
 
 msgid "Total amount paid for platform management"
 msgstr "Totalt belopp som betalats för plattformshantering"
@@ -8369,6 +8402,9 @@ msgstr "Användaren har bekräftat sin anmälan till detta evenemang"
 msgid "The user has updated their registration for this event"
 msgstr "Användaren har uppdaterat sin registrering för detta evenemang"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Denna inbjudan skickades till en annan e-postadress."
+
 msgid "Whether this content is currently available for access"
 msgstr "Om detta innehåll för närvarande är tillgängligt för åtkomst"
 
@@ -9248,6 +9284,10 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Vissa biljetter saknar en sista delbetalning (0 belopp): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"Assistenten är tillfälligt inte tillgänglig. Vänligen försök igen senare."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -12787,6 +12827,13 @@ msgid ""
 msgstr ""
 "Lägger till biljettyperna 'Patron' och 'Reduced'. Varje Patron-biljett som "
 "köps gör en Reduced-biljett tillgänglig"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"Jag kunde inte hitta något relevant i dokumentationen. Försök att ställa "
+"frågan på engelska, eller skapa ett supportärende."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "

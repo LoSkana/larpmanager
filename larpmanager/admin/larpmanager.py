@@ -26,6 +26,7 @@ from larpmanager.admin.base import CSRFTinyMCEModelAdmin, DefModelAdmin
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
+    LarpManagerCollaborator,
     LarpManagerDemoHint,
     LarpManagerDemoHintDismissal,
     LarpManagerDemoType,
@@ -38,6 +39,7 @@ from larpmanager.models.larpmanager import (
     LarpManagerPartner,
     LarpManagerProfiler,
     LarpManagerReview,
+    LarpManagerScreenshot,
     LarpManagerShowcase,
     LarpManagerText,
     LarpManagerTicket,
@@ -138,6 +140,14 @@ class LarpManagerHighlightAdmin(DefModelAdmin):
     search_fields: ClassVar[list] = ["id", "info"]
 
 
+@admin.register(LarpManagerScreenshot)
+class LarpManagerScreenshotAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerScreenshot model."""
+
+    list_display = ("caption", "order", "show_reduced")
+    search_fields: ClassVar[list] = ["id", "caption"]
+
+
 @admin.register(LarpManagerShowcase)
 class LarpManagerShowcaseAdmin(CSRFTinyMCEModelAdmin):
     """Admin interface for LarpManagerShowcase model."""
@@ -222,3 +232,11 @@ class LarpManagerPartnerAdmin(DefModelAdmin):
     """Admin interface for LarpManagerPartner model."""
 
     list_display = ("name", "url", "show_thumb")
+
+
+@admin.register(LarpManagerCollaborator)
+class LarpManagerCollaboratorAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerCollaborator model."""
+
+    list_display = ("name", "show_thumb")
+    search_fields: ClassVar[list] = ["id", "name"]

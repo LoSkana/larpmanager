@@ -52,7 +52,7 @@
                         <span>{{ vrun.name }}</span>
                     </a>
                 {% endfor %}
-                {% if user.is_authenticated %}
+                {% if user.is_authenticated and not association.demo_type_name %}
                     <a class="tv22-pill tv22-pill-profile{% if not run and is_profile_page %} active{% endif %}"
                        href="{% url 'profile' %}">
                         {% if user.member.profile %}
@@ -74,6 +74,17 @@
     </button>
     {% if topbar_admin %}
         {% if manage %}
+            {% if is_larpmanager_skin and not association.demo and not lite_mode %}
+                <button id="wwyltd-open"
+                        class="tv22-wwyltd-btn wwyltd-open-trigger"
+                        aria-label="{% trans "What would you like to do?" %}">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <button class="tv22-wwyltd-btn chat-widget-open-trigger"
+                        aria-label="{% trans "Ask a question" %}">
+                    <i class="fa-solid fa-comment-dots"></i>
+                </button>
+            {% endif %}
             {% if run %}
                 {% url 'event_redirect' event_slug=run.get_slug as user_href %}
             {% else %}
@@ -140,7 +151,7 @@
                             </a>
                         {% endif %}
                     {% else %}
-                        {% if not run and is_profile_page %}
+                        {% if not run and is_profile_page and not association.demo_type_name %}
                             <a href="{% url 'profile' %}">
                                 {% if user.member.profile %}
                                     <img class="tv22-pill-img"
@@ -173,6 +184,18 @@
                     {% endif %}
                 </span>
             </td>
+            {% if is_larpmanager_skin and manage and not lite_mode %}
+                <td>
+                    <div class="el">
+                        <a id="wwyltd-open-mobile" href="#" class="wwyltd-open-trigger"><i class="fa-solid fa-magnifying-glass"></i></a>
+                    </div>
+                </td>
+                <td>
+                    <div class="el">
+                        <a href="#" class="chat-widget-open-trigger"><i class="fa-solid fa-comment-dots"></i></a>
+                    </div>
+                </td>
+            {% endif %}
             <td>
                 <div class="el">
                     <a id="topbar-mobile-v22" href="#" class="sidebar_tutorial"><i class="fa-solid fa-layer-group"></i></a>
@@ -181,6 +204,11 @@
         </tr>
     </table>
 </div>
+{% if is_larpmanager_skin and manage and not lite_mode %}
+    <dialog id="wwyltd-modal" class="popup_small">
+        {% include "larpmanager/manage/widgets/wwyltd.html" %}
+    </dialog>
+{% endif %}
 <script>
 (function () {
     var wrapper = document.querySelector('.tv22-pills-wrapper');
@@ -218,6 +246,13 @@
         wrapper.addEventListener('scroll', updateScrollBtns);
         window.addEventListener('resize', updateScrollBtns);
         updateScrollBtns();
+
+        var activePill = wrapper.querySelector('.tv22-pill.active');
+        if (activePill) {
+            var target = activePill.offsetLeft - (wrapper.clientWidth - activePill.offsetWidth) / 2;
+            wrapper.scrollLeft = Math.max(0, target);
+            updateScrollBtns();
+        }
     }
 })();
 </script>

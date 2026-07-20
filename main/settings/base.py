@@ -260,6 +260,8 @@ CONTENT_SECURITY_POLICY = {
             'https://www.googletagmanager.com',
             'https://www.google.com',
             'https://www.gstatic.com',
+            'https://static.hotjar.com',
+            'https://script.hotjar.com',
         ],
         'style-src': ["'self'", "'unsafe-inline'", *_CSP_CDN_HOSTS],
         'font-src': ["'self'", 'data:', *_CSP_CDN_HOSTS],
@@ -270,6 +272,9 @@ CONTENT_SECURITY_POLICY = {
             'https://*.paypal.com',
             'https://gateway.sumup.com',
             'https://www.google-analytics.com',
+            'https://api.thecatapi.com',
+            'https://*.hotjar.com',
+            'https://*.hotjar.io',
         ],
         'frame-src': [
             "'self'",
@@ -344,6 +349,9 @@ MAIL_MAX_RECIPIENTS = 2000
 AWS_SES_ACCESS_KEY_ID = None
 AWS_SES_SECRET_ACCESS_KEY = None
 AWS_SES_REGION_NAME = 'us-east-1'
+
+# Anthropic API key for the live chat assistant (optional - chat is disabled if unset)
+ANTHROPIC_API_KEY = None
 
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 

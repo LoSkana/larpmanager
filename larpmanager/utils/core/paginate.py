@@ -259,7 +259,11 @@ def _set_filtering(
 
     # Process each filter condition from the request
     for index, filter_value in column_filters.items():
-        column_index = int(index)
+        # Client-supplied column index: skip non-numeric values
+        try:
+            column_index = int(index)
+        except (TypeError, ValueError):
+            continue
 
         # Column 0 is empty column for responsive expand, column 1 is the edit link; data starts at 2
         field_idx = column_index - 2
@@ -319,8 +323,11 @@ def _get_ordering(context: dict, column_order: list) -> list[str]:
     field_map = _get_field_map()
 
     for column_index in column_order:
-        # Convert column index to integer, skip if invalid
-        column_index_int = int(column_index)
+        # Convert client-supplied column index to integer, skip if invalid
+        try:
+            column_index_int = int(column_index)
+        except (TypeError, ValueError):
+            continue
         if not column_index_int:
             continue
 

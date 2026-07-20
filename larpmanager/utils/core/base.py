@@ -340,8 +340,6 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
     context["manage"] = 1
 
     # Compute pending-work counts shown as badges on the sidebar links
-    # Lazy import: set_sidebar_badges transitively imports base, so a module-level
-    # import here would create a circular import
     from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
 
     set_sidebar_badges(request, context)
@@ -527,12 +525,12 @@ def prepare_run(context: Any) -> None:
                 run_configuration[visibility_config_name] = {}
             run_configuration[visibility_config_name].update({"name": 1, "teaser": 1, "text": 1})
 
-    for additional_feature in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
-        additional_config_name = "show_addit"
-        if additional_config_name not in run_configuration:
-            run_configuration[additional_config_name] = {}
-        if additional_feature in context["features"]:
-            run_configuration[additional_config_name][additional_feature] = True
+        for additional_feature in ["plot", "relationships", "speedlarp", "prologue", "workshop", "print_pdf"]:
+            additional_config_name = "show_addit"
+            if additional_config_name not in run_configuration:
+                run_configuration[additional_config_name] = {}
+            if additional_feature in context["features"]:
+                run_configuration[additional_config_name][additional_feature] = True
 
     context.update(run_configuration)
     context["main_nav_items"] = build_main_nav_items(context)

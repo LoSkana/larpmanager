@@ -20,7 +20,7 @@
 from __future__ import annotations
 
 import logging
-import time
+import secrets
 import traceback
 from datetime import timedelta
 from typing import Any
@@ -88,6 +88,7 @@ from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.registration import (
     _set_membership_context,
+    casting_preferences_pending,
     check_assign_character,
     get_reduced_available_count,
 )
@@ -475,6 +476,12 @@ def registration_redirect(
         messages.success(request, message)
         return redirect("accounting_registration", registration_uuid=registration.uuid)
 
+    # Redirect to casting page if casting is active and preferences not sent yet
+    if casting_preferences_pending(run, registration, context["features"], context):
+        message = _("Please select your casting preferences")
+        messages.success(request, message)
+        return redirect("casting", event_slug=run.get_slug())
+
     # All requirements satisfied - show success message and redirect to event page
     context = {"event": run}
     if is_new_registration:
@@ -769,11 +776,10 @@ def _check_redirect_registration(request: HttpRequest, context: dict, secret_cod
 
     # Validate secret code if secret registration is enabled
     if "registration_secret" in context["features"] and secret_code:
-        if context["run"].registration_secret != secret_code:
+        # Constant-time compare to avoid leaking the code via timing
+        if not secrets.compare_digest(str(context["run"].registration_secret or ""), str(secret_code)):
             msg = _("The registration code is not active at the moment")
             messages.warning(request, msg)
-            # Delay to discourage brute force attacks
-            time.sleep(2)
             return redirect("register", event_slug=context["event"].slug)
         # Secret code is correct, allow registration bypassing other checks
         return None
@@ -960,7 +966,9 @@ def discount(request: HttpRequest, event_slug: str) -> JsonResponse:
     try:
         disc = Discount.objects.filter(runs__in=[context["run"]], cod=cod).distinct().get()
     except ObjectDoesNotExist:
-        logger.warning("Discount code not found: %s", cod)
+        # Strip CR/LF from the user-supplied code before logging
+        safe_cod = str(cod).replace("\r", "").replace("\n", "") if cod else cod
+        logger.warning("Discount code not found: %s", safe_cod)
         logger.debug(traceback.format_exc())
         return error(_("Discount code not valid"))
 

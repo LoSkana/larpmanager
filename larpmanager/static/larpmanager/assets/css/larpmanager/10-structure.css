@@ -24,7 +24,7 @@ body {
 
 #banner h1 {
   padding: 0.5em 5em 0.5em 6em;
-  height: 2.2em;
+  min-height: 2.2em;
   text-align: center;
   line-height: 1.2;
   margin-bottom: 0em;
@@ -269,6 +269,58 @@ body {
     text-align: center;
     justify-content: center;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Error pages (400/403/404/500)
+   --------------------------------------------------------------------------- */
+
+body.error-page #header,
+body.error-page #footer,
+body.error-page #nav,
+body.error-page #menu,
+body.error-page #staging,
+body.error-page .info {
+  display: none !important;
+}
+
+/* Version 22 keeps its topbar/sidebar chrome on error pages (subdomains only;
+   the landing site never renders them regardless of version). */
+body.error-page:not(.new_v22) #topbar,
+body.error-page:not(.new_v22) #sidebar,
+body.error-page:not(.new_v22) #menu-mobile {
+  display: none !important;
+}
+
+body.error-page:not(.new_v22) #page-wrapper,
+body.error-page:not(.new_v22) #page-wrapper.topbar,
+body.error-page:not(.new_v22) #page-wrapper.sidebar {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.error-page #main {
+  width: 100%;
+  text-align: center;
+  color: black;
+}
+
+body.error-page .container {
+  width: 30em;
+  margin: 0 auto;
+  text-align: center;
+}
+
+body.error-page .container img {
+  width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  margin: 0 auto;
 }
 
 .new_v22 #one .inner {

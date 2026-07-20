@@ -1895,6 +1895,9 @@ msgstr "Prochain quota"
 msgid "No changes"
 msgstr "Pas de changement"
 
+msgid "No results"
+msgstr "Aucun résultat"
+
 msgid "Organizers"
 msgstr "Organisateurs"
 
@@ -2875,6 +2878,9 @@ msgstr "Dispositifs actifs"
 msgid "Add to faction"
 msgstr "Ajouter à la faction"
 
+msgid "Ask a question"
+msgstr "Pose une question"
+
 msgid "Assign members"
 msgstr "Affecter des membres"
 
@@ -3141,6 +3147,9 @@ msgstr "Ajouter au compteur d'XP"
 
 msgid "App Integration"
 msgstr "Intégration des applications"
+
+msgid "Ask LarpManager"
+msgstr "Demande à LarpManager"
 
 msgid "Attachment Name"
 msgstr "Nom de la pièce jointe"
@@ -4652,6 +4661,9 @@ msgstr "Jeton non initialisé"
 msgid "Transfer registration"
 msgstr "Transfert d'inscription"
 
+msgid "Type your question..."
+msgstr "Écris ta question..."
+
 msgid "Updated Registrations"
 msgstr "Enregistrements mis à jour"
 
@@ -4946,6 +4958,9 @@ msgstr "Forme du personnage du joueur"
 msgid "Please check them below"
 msgstr "Veuillez les consulter ci-dessous"
 
+msgid "Please write a question"
+msgstr "Écris une question, s'il te plaît"
+
 msgid "Pre registrations total"
 msgstr "Total des pré-inscriptions"
 
@@ -4963,6 +4978,9 @@ msgstr "Conditions d'entrée"
 
 msgid "Reminder membership fee"
 msgstr "Rappel cotisation"
+
+msgid "Select your preferences"
+msgstr "Choisis tes préférences"
 
 msgid "Separate membership fee"
 msgstr "Frais d'adhésion distincts"
@@ -5535,6 +5553,9 @@ msgstr "Si coché : les membres peuvent voter"
 msgid "Invitation sent to %(email)s"
 msgstr "Invitation envoyée à %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "Le chat en direct n'est pas configuré."
+
 msgid "Manage experience criterions"
 msgstr "Gérer les critères d'expérience"
 
@@ -5902,6 +5923,9 @@ msgstr "Examiner le rapport budgétaire annuel"
 msgid "Select only one primary faction"
 msgstr "Ne sélectionnez qu'une seule faction primaire"
 
+msgid "Select your casting preferences"
+msgstr "Choisis tes préférences de casting"
+
 msgid "Set design - staging, materials"
 msgstr "Conception des décors - équipements, matériaux"
 
@@ -6106,6 +6130,9 @@ msgstr "Découvrez en quoi consiste cet événement"
 
 msgid "Fill out the event prep questions"
 msgstr "Remplissez les questions préparatoires à l'événement"
+
+msgid "For best results, ask in English."
+msgstr "Pour un résultat optimal, pose ta question en anglais."
 
 msgid "For more information, write to us"
 msgstr "Pour plus d'informations, écrivez-nous"
@@ -6758,6 +6785,9 @@ msgstr "Vous pouvez maintenant commencer à créer des ralentisseurs de vitesse"
 msgid "Organization upgraded to version %(v)s"
 msgstr "L'organisation est passée à la version %(v)s"
 
+msgid "Please select your casting preferences"
+msgstr "Choisis tes préférences de casting"
+
 msgid "The following registrations were drawn"
 msgstr "Les participations suivantes ont été tirées au sort"
 
@@ -7133,6 +7163,9 @@ msgstr "Configuration de la taxe d'organisation"
 
 msgid "The modifier's number (unique identifier)"
 msgstr "Le numéro du modificateur (identifiant unique)"
+
+msgid "This collection has already been redeemed"
+msgstr "Cette invitation a déjà été rachetée"
 
 msgid "Total amount paid for platform management"
 msgstr "Montant total payé pour la gestion de la plateforme"
@@ -8439,6 +8472,9 @@ msgstr "L'utilisateur a confirmé son inscription à cet événement"
 msgid "The user has updated their registration for this event"
 msgstr "L'utilisateur a mis à jour son inscription à cet événement"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Cette invitation a été envoyée à une autre adresse e-mail."
+
 msgid "Whether this content is currently available for access"
 msgstr "Si ce contenu est actuellement disponible pour l'accès"
 
@@ -9460,6 +9496,10 @@ msgstr ""
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr ""
 "Il manque un dernier versement à certains tickets (0 montant) : %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"L'assistant est temporairement indisponible, essaie à nouveau plus tard."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -13151,6 +13191,13 @@ msgid ""
 msgstr ""
 "Ajoute les types de billets 'Patron' et 'Réduit'. Chaque billet de type "
 "'Patron' acheté permet d'obtenir un billet de type 'Réduit'"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"Je n'ai rien trouvé de pertinent dans la documentation. Essaie de poser ta "
+"question en anglais, ou ouvre un ticket d'assistance."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "
