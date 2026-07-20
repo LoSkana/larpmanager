@@ -21,7 +21,7 @@ msgid "All"
 msgstr "Kaikki"
 
 msgid "End"
-msgstr "End"
+msgstr "Loppu"
 
 msgid "Fee"
 msgstr "Maksu"
@@ -33,7 +33,7 @@ msgid "NPC"
 msgstr "NPC"
 
 msgid "Net"
-msgstr "Net"
+msgstr "Netto"
 
 msgid "New"
 msgstr "Uusi"
@@ -150,10 +150,10 @@ msgid "Mail"
 msgstr "Posti"
 
 msgid "Main"
-msgstr "Main"
+msgstr "Pää"
 
 msgid "Male"
-msgstr "Mies"
+msgstr "Miespuolinen"
 
 msgid "Name"
 msgstr "Nimi"
@@ -162,7 +162,7 @@ msgid "Next"
 msgstr "Seuraava"
 
 msgid "None"
-msgstr "Ei ole"
+msgstr "Ei mitään"
 
 msgid "Note"
 msgstr "Huomautus"
@@ -173,9 +173,6 @@ msgstr "Vain"
 msgid "Open"
 msgstr "Avaa"
 
-msgid "Over"
-msgstr "Over"
-
 msgid "Page"
 msgstr "Sivu"
 
@@ -185,17 +182,11 @@ msgstr "Maksettu"
 msgid "Plot"
 msgstr "Juoni"
 
-msgid "Pool"
-msgstr "Pooli"
-
 msgid "Port"
 msgstr "Portti"
 
 msgid "Prev"
 msgstr "Edellinen"
-
-msgid "Rate"
-msgstr "Arvioi"
 
 msgid "Read"
 msgstr "Lue"
@@ -255,7 +246,7 @@ msgid "View"
 msgstr "Näytä"
 
 msgid "Vote"
-msgstr "Äänestä"
+msgstr "Ääni"
 
 msgid "What"
 msgstr "Mikä"
@@ -318,7 +309,7 @@ msgid "Color"
 msgstr "Väri"
 
 msgid "Count"
-msgstr "Count"
+msgstr "Lukumäärä"
 
 msgid "Cover"
 msgstr "Kansikuva"
@@ -351,9 +342,6 @@ msgctxt "event"
 msgid "Genre"
 msgstr "Genre"
 
-msgid "Given"
-msgstr "Annettu"
-
 msgid "Graph"
 msgstr "Kaavio"
 
@@ -373,7 +361,7 @@ msgid "Italy"
 msgstr "Italia"
 
 msgid "Items"
-msgstr "Tuotteet"
+msgstr "Nimikkeet"
 
 msgid "Login"
 msgstr "Kirjaudu sisään"
@@ -394,7 +382,7 @@ msgid "Notes"
 msgstr "Huomautukset"
 
 msgid "Order"
-msgstr "Tilaa"
+msgstr "Tilaus"
 
 msgid "Other"
 msgstr "Muu"
@@ -461,7 +449,7 @@ msgid "Title"
 msgstr "Otsikko"
 
 msgid "To Do"
-msgstr "To Do"
+msgstr "Tehtäväluettelo"
 
 msgid "Token"
 msgstr "Merkki"
@@ -490,9 +478,6 @@ msgstr "Video"
 msgid "Where"
 msgstr "Missä"
 
-msgid "avail"
-msgstr "avail"
-
 msgid "email"
 msgstr "sähköpostiosoite"
 
@@ -501,6 +486,9 @@ msgstr "siirretty"
 
 msgid "quick"
 msgstr "nopea"
+
+msgid "total"
+msgstr "yhteensä"
 
 msgid "Absent"
 msgstr "Poissa"
@@ -524,7 +512,7 @@ msgid "Awards"
 msgstr "Palkinnot"
 
 msgid "Badges"
-msgstr "Nimilaput"
+msgstr "Merkit"
 
 msgid "Cancel"
 msgstr "Peruuta"
@@ -542,7 +530,7 @@ msgid "Copied"
 msgstr "Kopioitu"
 
 msgid "Counts"
-msgstr "Laskee"
+msgstr "Lukumäärät"
 
 msgid "Create"
 msgstr "Luo"
@@ -635,10 +623,10 @@ msgid "Marked"
 msgstr "Merkitty"
 
 msgid "Master"
-msgstr "Master"
+msgstr "Mestari"
 
 msgid "Medium"
-msgstr "Medium"
+msgstr "Keskisuuri"
 
 msgid "Member"
 msgstr "Jäsen"
@@ -653,10 +641,7 @@ msgid "Module"
 msgstr "Moduuli"
 
 msgid "Nation"
-msgstr "Nation"
-
-msgid "Nature"
-msgstr "Luonto"
+msgstr "Kansa"
 
 msgid "Number"
 msgstr "Numero"
@@ -665,7 +650,7 @@ msgid "Option"
 msgstr "Vaihtoehto"
 
 msgid "Patron"
-msgstr "Patron"
+msgstr "Sponsori"
 
 msgid "Player"
 msgstr "Pelaaja"
@@ -716,10 +701,10 @@ msgid "Status"
 msgstr "Tila"
 
 msgid "Street"
-msgstr "Street"
+msgstr "Katu"
 
 msgid "Submit"
-msgstr "Tallenna"
+msgstr "Lähetä"
 
 msgid "System"
 msgstr "Järjestelmä"
@@ -751,9 +736,6 @@ msgstr "Päivitys"
 msgid "Upload"
 msgstr "Lataa"
 
-msgid "VAT No"
-msgstr "ALV-numero"
-
 msgid "Verify"
 msgstr "Tarkista"
 
@@ -773,7 +755,7 @@ msgid "member"
 msgstr "jäsen"
 
 msgid "within"
-msgstr "osoitteessa"
+msgstr "sisällä"
 
 msgid "Ability"
 msgstr "Taidot"
@@ -809,7 +791,7 @@ msgid "Average"
 msgstr "Keskimääräinen"
 
 msgid "Balance"
-msgstr "Balance"
+msgstr "Saldo"
 
 msgid "Camping"
 msgstr "Leirintäalue"
@@ -848,7 +830,7 @@ msgid "Credits"
 msgstr "Krediitit"
 
 msgid "Decline"
-msgstr "Lasku"
+msgstr "Hylkäys"
 
 msgid "Default"
 msgstr "Oletusarvo"
@@ -895,11 +877,8 @@ msgstr "Käänteinen"
 msgid "Invited"
 msgstr "Kutsuttu"
 
-msgid "Invoice"
-msgstr "Lasku"
-
 msgid "Lottery"
-msgstr "Lottery"
+msgstr "Arvonta"
 
 msgid "Maximum"
 msgstr "Enimmäismäärä"
@@ -985,9 +964,6 @@ msgstr "Palauta"
 msgid "Section"
 msgstr "Osio"
 
-msgid "Sent At"
-msgstr "Lähetetty osoitteessa"
-
 msgid "Session"
 msgstr "Istunto"
 
@@ -1044,16 +1020,13 @@ msgid "Use TLD"
 msgstr "Käytä TLD:tä"
 
 msgid "Used At"
-msgstr "Käytetty"
+msgstr "Käytetty:"
 
 msgid "Used By"
-msgstr "Käytetty"
-
-msgid "Used at"
-msgstr "Käytetään osoitteessa"
+msgstr "Käytetty käyttäjä:"
 
 msgid "Used by"
-msgstr "Käytössä"
+msgstr "Käyttäjä:"
 
 msgid "Utility"
 msgstr "Apuohjelma"
@@ -1155,7 +1128,7 @@ msgid "Deployed"
 msgstr "Käytössä"
 
 msgid "Disabled"
-msgstr "Vammaiset"
+msgstr "Poistettu käytöstä"
 
 msgid "Discount"
 msgstr "Alennus"
@@ -1205,9 +1178,6 @@ msgstr "Lahjaksi"
 msgid "Handouts"
 msgstr "Esitteitä"
 
-msgid "Holidays"
-msgstr "Lomat"
-
 msgid "Inactive"
 msgstr "Inaktiivinen"
 
@@ -1230,7 +1200,7 @@ msgid "Manifest"
 msgstr "Manifest"
 
 msgid "Max uses"
-msgstr "Max käyttötarkoitukset"
+msgstr "Enimmäiskäyttökerrat"
 
 msgid "Messages"
 msgstr "Viestit"
@@ -1259,6 +1229,9 @@ msgstr "Alkuperäinen"
 msgid "Outflows"
 msgstr "Ulosvirtaukset"
 
+msgid "Overpaid"
+msgstr "Liikaa maksettu"
+
 msgid "Partners"
 msgstr "Kumppanit"
 
@@ -1269,7 +1242,7 @@ msgid "Payments"
 msgstr "Maksut"
 
 msgid "Pdf bulk"
-msgstr "Pdf irtotavarana"
+msgstr "Pdf massina"
 
 msgid "Personal"
 msgstr "Henkilökohtainen"
@@ -1337,9 +1310,6 @@ msgstr "Reply To"
 msgid "Required"
 msgstr "Vaadittu"
 
-msgid "Requires"
-msgstr "Vaatii"
-
 msgid "Resource"
 msgstr "Resurssit"
 
@@ -1373,14 +1343,11 @@ msgstr "Vakavuusaste"
 msgid "Show all"
 msgstr "Näytä kaikki"
 
-msgid "Show the"
-msgstr "Näytä"
-
 msgid "Standard"
 msgstr "Standardi"
 
 msgid "Supplied"
-msgstr "Toimitetaan osoitteessa"
+msgstr "Toimitettu"
 
 msgid "Template"
 msgstr "Malli"
@@ -1389,16 +1356,13 @@ msgid "Transfer"
 msgstr "Siirto"
 
 msgid "Treasury"
-msgstr "Valtiovarainministeriö"
+msgstr "Kassanhallinto"
 
 msgid "Tutorial"
 msgstr "Tutorial"
 
 msgid "Used on:"
 msgstr "Käytetty:"
-
-msgid "VAT rate"
-msgstr "Arvonlisäverokanta"
 
 msgid "Versions"
 msgstr "Versiot"
@@ -1452,13 +1416,13 @@ msgid "Completed"
 msgstr "Valmistunut"
 
 msgid "Concluded"
-msgstr "Päätelmät"
+msgstr "Päätetty"
 
 msgid "Container"
 msgstr "Kontti"
 
 msgid "Copy done"
-msgstr "Kopioitu valmis"
+msgstr "Kopiointi valmis"
 
 msgid "Criterion"
 msgstr "Peruste"
@@ -1474,9 +1438,6 @@ msgstr "Määräajat"
 
 msgid "Delivered"
 msgstr "Jaettu"
-
-msgid "Dimension"
-msgstr "Mitta"
 
 msgid "Discounts"
 msgstr "Alennukset"
@@ -1524,7 +1485,7 @@ msgid "Modifiers"
 msgstr "Muuntimet"
 
 msgid "Move down"
-msgstr "Siirry alaspäin"
+msgstr "Siirrä alaspäin"
 
 msgid "Movements"
 msgstr "Liikkeet"
@@ -1569,10 +1530,7 @@ msgid "Prologues"
 msgstr "Prologit"
 
 msgid "Promotion"
-msgstr "Myynninedistäminen"
-
-msgid "Publisher"
-msgstr "Julkaisija"
+msgstr "Promootio"
 
 msgid "Questions"
 msgstr "Kysymykset"
@@ -1596,10 +1554,10 @@ msgid "Residence"
 msgstr "Asuinpaikka"
 
 msgid "Retention"
-msgstr "Säilyttäminen"
+msgstr "Säilytys"
 
 msgid "Returning"
-msgstr "Paluu"
+msgstr "Palautus"
 
 msgid "Set quest"
 msgstr "Aseta tehtävä"
@@ -1638,7 +1596,7 @@ msgid "Surcharge"
 msgstr "Lisämaksu"
 
 msgid "Tolerance"
-msgstr "Suvaitsevaisuus"
+msgstr "Toleranssi"
 
 msgid "Total due"
 msgstr "Maksettava kokonaissumma"
@@ -1791,7 +1749,7 @@ msgid "Last Event"
 msgstr "Viimeisin tapahtuma"
 
 msgid "Legal name"
-msgstr "Oikeushenkilön nimi"
+msgstr "Laillinen nimi"
 
 msgid "Link color"
 msgstr "Linkin väri"
@@ -1857,13 +1815,13 @@ msgid "Plot Roles"
 msgstr "Juoniroolit"
 
 msgid "Pool Types"
-msgstr "Allastyypit"
+msgstr "Poolityypit"
 
 msgid "Pool label"
-msgstr "Uima-altaan etiketti"
+msgstr "Poolin etiketti"
 
 msgid "Pool types"
-msgstr "Uima-altaiden tyypit"
+msgstr "Poolityypit"
 
 msgid "Preference"
 msgstr "Etusija"
@@ -1925,12 +1883,6 @@ msgstr "Tilastot"
 msgid "Surcharges"
 msgstr "Lisämaksut"
 
-msgid "Table list"
-msgstr "Taulukkoluettelo"
-
-msgid "Tax regime"
-msgstr "Verojärjestelmä"
-
 msgid "Text color"
 msgstr "Tekstin väri"
 
@@ -1965,10 +1917,10 @@ msgid "accounting"
 msgstr "kirjanpito"
 
 msgid "are closed"
-msgstr "on suljettu"
+msgstr "ovat suljettu"
 
 msgid "characters"
-msgstr "merkit"
+msgstr "hahmot"
 
 msgid "chronology"
 msgstr "kronologia"
@@ -1992,22 +1944,25 @@ msgid "Access link"
 msgstr "Pääsylinkki"
 
 msgid "Actual paid"
-msgstr "Todellinen maksettu"
+msgstr "Tosiasiallisesti maksettu"
 
 msgid "Add to plot"
 msgstr "Lisää juoneen"
 
 msgid "Additionals"
-msgstr "Lisäaineet"
+msgstr "Lisät"
 
 msgid "Agritourism"
 msgstr "Maatilamatkailu"
+
+msgid "Amount Paid"
+msgstr "Maksettu summa"
 
 msgid "Amount paid"
 msgstr "Maksettu määrä"
 
 msgid "Assigned to"
-msgstr "Nimetty"
+msgstr "Määrätty"
 
 msgid "Assignments"
 msgstr "Tehtävät"
@@ -2037,7 +1992,7 @@ msgid "Card number"
 msgstr "Kortin numero"
 
 msgid "Change gift"
-msgstr "Vaihtolahja"
+msgstr "Muuta lahja"
 
 msgid "Collections"
 msgstr "Kokoelmat"
@@ -2112,7 +2067,7 @@ msgid "Last change"
 msgstr "Viimeisin muutos"
 
 msgid "Leave guild"
-msgstr "Poistu kilta"
+msgstr "Poistu killasta"
 
 msgid "Lightweight"
 msgstr "Kevyt"
@@ -2145,13 +2100,13 @@ msgid "Please wait"
 msgstr "Odota hetki"
 
 msgid "Pool Labels"
-msgstr "Uima-altaan tarrat"
+msgstr "Poolin tarrat"
 
 msgid "Postal code"
 msgstr "Postinumero"
 
 msgid "Preferences"
-msgstr "Asetukset"
+msgstr "Mieltymykset"
 
 msgid "Probability"
 msgstr "Todennäköisyys"
@@ -2175,10 +2130,10 @@ msgid "Redeem link"
 msgstr "Lunastuslinkki"
 
 msgid "Register to"
-msgstr "ilmoittaudu"
+msgstr "Ilmoittaudu"
 
 msgid "Request for"
-msgstr "Pyyntö"
+msgstr "Pyyntö kohteelle"
 
 msgid "Rotate left"
 msgstr "Käännä vasemmalle"
@@ -2199,16 +2154,13 @@ msgid "Send emails"
 msgstr "Lähetä sähköposteja"
 
 msgid "Shorten URL"
-msgstr "URL-osoitteen lyhentäminen"
+msgstr "Lyhennä URL-osoitetta"
 
 msgid "Show closed"
 msgstr "Näytä suljettu"
 
 msgid "Signup link"
 msgstr "Ilmoittautumislinkki"
-
-msgid "Simple list"
-msgstr "Yksinkertainen luettelo"
 
 msgid "Start here:"
 msgstr "Aloita tästä:"
@@ -2257,9 +2209,6 @@ msgstr "kokoelmat"
 
 msgid "immediately"
 msgstr "välittömästi"
-
-msgid "leaderboard"
-msgstr "tulostaulu"
 
 msgid "text length"
 msgstr "tekstin pituus"
@@ -2313,7 +2262,7 @@ msgid "Event hidden"
 msgstr "Tapahtuma piilotettu"
 
 msgid "Exit Preview"
-msgstr "Poistumisen esikatselu"
+msgstr "Poistu esikatselusta"
 
 msgid "Experimental"
 msgstr "Kokeellinen"
@@ -2328,7 +2277,7 @@ msgid "Form section"
 msgstr "Lomake-osio"
 
 msgid "Full payment"
-msgstr "Maksettu"
+msgstr "Koko maksu"
 
 msgid "Host Address"
 msgstr "Isännän osoite"
@@ -2406,7 +2355,7 @@ msgid "Questions WS"
 msgstr "Kysymykset WS"
 
 msgid "Redirect URL"
-msgstr "Ohjaa URL-osoite uudelleen"
+msgstr "URL-uudelleenohjaus"
 
 msgid "Refund given"
 msgstr "Palautus annettu"
@@ -2421,7 +2370,7 @@ msgid "Remove admin"
 msgstr "Poista järjestelmänvalvoja"
 
 msgid "Rensponsable"
-msgstr "Rensponsable"
+msgstr "Vastuuhenkilö"
 
 msgid "Request date"
 msgstr "Pyynnön päivämäärä"
@@ -2487,7 +2436,7 @@ msgid "Type of text"
 msgstr "Tekstityyppi"
 
 msgid "Url Shortner"
-msgstr "Url Shortner"
+msgstr "URL-lyhentäjä"
 
 msgid "VAT (Ticket)"
 msgstr "Arvonlisävero (lippu)"
@@ -2521,7 +2470,7 @@ msgstr "käyttäjäprofiili"
 
 #, python-format
 msgid " for %(user)s"
-msgstr " %(user)s osalta"
+msgstr " %(user)s:lle"
 
 msgid "Ability types"
 msgstr "Taitotyypit"
@@ -2833,6 +2782,9 @@ msgstr "Käytettävissä olevat päivät"
 msgid "Back to badges"
 msgstr "Takaisin merkkeihin"
 
+msgid "Bank Statement"
+msgstr "Pankkitiliote"
+
 msgid "Bring a friend"
 msgstr "Ota ystävä mukaan"
 
@@ -3000,9 +2952,6 @@ msgstr "Prologien tyyppi"
 
 msgid "Question saved"
 msgstr "Kysymys pelastettu"
-
-msgid "Recipient Code"
-msgstr "Vastaanottajan koodi"
 
 msgid "Remove consent"
 msgstr "Suostumuksen poistaminen"
@@ -3231,6 +3180,9 @@ msgstr "Profiili päivitetty"
 
 msgid "Progress status"
 msgstr "Edistymisen tila"
+
+msgid "Public Holidays"
+msgstr "Vapaapäivät"
 
 msgid "Publish players"
 msgstr "Julkaise pelaajat"
@@ -4024,9 +3976,6 @@ msgstr "Syntymäaikasi"
 msgid "by the deadline of"
 msgstr "määräaikaan mennessä"
 
-msgid "global preferences"
-msgstr "yleiset mieltymykset"
-
 msgid "Access Confirmation"
 msgstr "Pääsyn vahvistus"
 
@@ -4399,6 +4348,9 @@ msgstr "Aseta merkin tila"
 msgid "Set up ability types"
 msgstr "Määritä taitojen tyypit"
 
+msgid "Show the leaderboard"
+msgstr "Näytä tulostaulukko"
+
 msgid "Terms and Conditions"
 msgstr "Ehdot ja edellytykset"
 
@@ -4410,6 +4362,9 @@ msgstr "Kokoelma kasvaa"
 
 msgid "The tax code matches"
 msgstr "Verolainsäädäntö vastaa"
+
+msgid "Time And Date Of Use"
+msgstr "Käyttöaika ja -päivämäärä"
 
 msgid "Warehouse containers"
 msgstr "Varastokontit"
@@ -4791,9 +4746,6 @@ msgstr "Tervetuloa LarpManageriin"
 msgid "give them this address"
 msgstr "anna heille tämä osoite"
 
-msgid "history of preferences"
-msgstr "mieltymysten historia"
-
 #, python-format
 msgid "Assignment %(elements)s"
 msgstr "Määritys %(elements)s"
@@ -5066,6 +5018,9 @@ msgstr "Kohdeistuntoa ei löydy"
 
 msgid "This event has concluded"
 msgstr "Tämä tapahtuma on päättynyt"
+
+msgid "Time And Date Of Sending"
+msgstr "Lähetyspäivä ja -aika"
 
 msgid "Transfer is not possible"
 msgstr "Siirto ei ole mahdollista"
@@ -5430,6 +5385,9 @@ msgstr "Määritä dynaamiset erät"
 
 msgid "Set up registration tickets"
 msgstr "Määritä rekisteröintiliput"
+
+msgid "Show the global preferences"
+msgstr "Näytä yleiset asetukset"
 
 msgid "Thank you for participating"
 msgstr "Kiitos osallistumisesta"
@@ -5862,6 +5820,9 @@ msgstr "Äänestysasetusten määrittäminen"
 
 msgid "Show questions already answered"
 msgstr "Näytä jo vastatut kysymykset"
+
+msgid "Show the history of preferences"
+msgstr "Näytä asetusten historia"
 
 msgid "So far you have paid a total of"
 msgstr "Tähän mennessä olet maksanut yhteensä"

@@ -12,7 +12,7 @@ msgid "XP"
 msgstr "px"
 
 msgid "Add"
-msgstr "Voeg  toe"
+msgstr "Voeg toe"
 
 msgid "Age"
 msgstr "Leeftijd"
@@ -93,7 +93,7 @@ msgid "Diet"
 msgstr "Dieet"
 
 msgid "Done"
-msgstr "Turnarounds"
+msgstr "Klaar"
 
 msgid "Edit"
 msgstr "Bewerk"
@@ -126,7 +126,7 @@ msgid "Info"
 msgstr "Info"
 
 msgid "Item"
-msgstr "Ingang"
+msgstr "Item"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -173,9 +173,6 @@ msgstr "Alleen"
 msgid "Open"
 msgstr "Open"
 
-msgid "Over"
-msgstr "Meer dan"
-
 msgid "Page"
 msgstr "Pagina"
 
@@ -185,17 +182,11 @@ msgstr "Betaald"
 msgid "Plot"
 msgstr "Plot"
 
-msgid "Pool"
-msgstr "Zwembad"
-
 msgid "Port"
 msgstr "Aansluitpoort"
 
 msgid "Prev"
 msgstr "Prev"
-
-msgid "Rate"
-msgstr "Prijs"
 
 msgid "Read"
 msgstr "Lees"
@@ -213,7 +204,7 @@ msgid "Show"
 msgstr "Toon"
 
 msgid "Size"
-msgstr "Entiteiten"
+msgstr "Grootte"
 
 msgid "Skip"
 msgstr "Skip"
@@ -237,10 +228,10 @@ msgid "Tier"
 msgstr "Niveau"
 
 msgid "Time"
-msgstr "Nu"
+msgstr "Tijd"
 
 msgid "Tipo"
-msgstr "Tipo"
+msgstr "Type"
 
 msgid "Type"
 msgstr "Type"
@@ -285,7 +276,7 @@ msgid "Admin"
 msgstr "Beheerder"
 
 msgid "Album"
-msgstr "Albums"
+msgstr "Album"
 
 msgid "Alert"
 msgstr "Waarschuwing"
@@ -303,7 +294,7 @@ msgid "Award"
 msgstr "Prijs"
 
 msgid "Badge"
-msgstr "Badges"
+msgstr "Badge"
 
 msgid "Cards"
 msgstr "Kaarten"
@@ -312,25 +303,25 @@ msgid "Check"
 msgstr "Controleer"
 
 msgid "Close"
-msgstr "Gesloten"
+msgstr "Sluit"
 
 msgid "Color"
 msgstr "Kleur"
 
 msgid "Count"
-msgstr "Graaf"
+msgstr "Aantal"
 
 msgid "Cover"
 msgstr "Omslag"
 
 msgid "Dates"
-msgstr "Data"
+msgstr "Datums"
 
 msgid "Email"
 msgstr "E-mail"
 
 msgid "Entry"
-msgstr "Invoer"
+msgstr "Vermelding"
 
 msgid "Error"
 msgstr "Fout"
@@ -350,9 +341,6 @@ msgstr "Eerste"
 msgctxt "event"
 msgid "Genre"
 msgstr "Genre"
-
-msgid "Given"
-msgstr "Gegevens"
 
 msgid "Graph"
 msgstr "Grafiek"
@@ -394,10 +382,10 @@ msgid "Notes"
 msgstr "Opmerkingen"
 
 msgid "Order"
-msgstr "Bestel"
+msgstr "Bestelling"
 
 msgid "Other"
-msgstr "Meer"
+msgstr "Ander or Andere"
 
 msgid "Owing"
 msgstr "Te betalen"
@@ -406,10 +394,10 @@ msgid "Payed"
 msgstr "Betaald"
 
 msgid "Photo"
-msgstr "Foto's"
+msgstr "Foto"
 
 msgid "Plots"
-msgstr "Percelen"
+msgstr "Verhaallijnen"
 
 msgid "Price"
 msgstr "Prijs"
@@ -433,7 +421,7 @@ msgid "Rules"
 msgstr "Regels"
 
 msgid "Sheet"
-msgstr "Fiche"
+msgstr "Vel or Blad"
 
 msgid "Staff"
 msgstr "Personeel"
@@ -461,13 +449,13 @@ msgid "Title"
 msgstr "Titel"
 
 msgid "To Do"
-msgstr "Doen"
+msgstr "Taak or Te doen"
 
 msgid "Token"
 msgstr "Penning"
 
 msgid "Total"
-msgstr "Totalen"
+msgstr "Totaal"
 
 msgid "Trait"
 msgstr "Trek"
@@ -490,9 +478,6 @@ msgstr "Video"
 msgid "Where"
 msgstr "Waar"
 
-msgid "avail"
-msgstr "beschikbaar"
-
 msgid "email"
 msgstr "e-mail"
 
@@ -501,6 +486,9 @@ msgstr "Verplaatst"
 
 msgid "quick"
 msgstr "snel"
+
+msgid "total"
+msgstr "totaal"
 
 msgid "Absent"
 msgstr "Afwezig"
@@ -542,7 +530,7 @@ msgid "Copied"
 msgstr "Gekopieerd"
 
 msgid "Counts"
-msgstr "Telt"
+msgstr "Aantallen"
 
 msgid "Create"
 msgstr "Maak"
@@ -578,7 +566,7 @@ msgid "Fields"
 msgstr "Velden"
 
 msgid "Filler"
-msgstr "Vulstof"
+msgstr "Figuur or Bijpersonage"
 
 msgid "Footer"
 msgstr "Voettekst"
@@ -590,7 +578,7 @@ msgid "Friend"
 msgstr "Vriend"
 
 msgid "Gender"
-msgstr "Genre"
+msgstr "Geslacht"
 
 msgid "Guilds"
 msgstr "Gilden"
@@ -602,10 +590,10 @@ msgid "Hidden"
 msgstr "Verborgen"
 
 msgid "Income"
-msgstr "Inleidingen"
+msgstr "Inkomsten"
 
 msgid "Insert"
-msgstr "Ga naar"
+msgstr "Invoegen"
 
 msgid "Invite"
 msgstr "Uitnodigen"
@@ -623,7 +611,7 @@ msgid "Loaded"
 msgstr "Geladen"
 
 msgid "Locked"
-msgstr "Gesloten"
+msgstr "Vergrendeld"
 
 msgid "Log in"
 msgstr "Inloggen"
@@ -632,10 +620,10 @@ msgid "Manage"
 msgstr "Beheer"
 
 msgid "Marked"
-msgstr "Mark"
+msgstr "Gemarkeerd or Aangevinkt"
 
 msgid "Master"
-msgstr "Vader"
+msgstr "Meester"
 
 msgid "Medium"
 msgstr "Medium"
@@ -654,9 +642,6 @@ msgstr "Module"
 
 msgid "Nation"
 msgstr "Natie"
-
-msgid "Nature"
-msgstr "Natuur"
 
 msgid "Number"
 msgstr "Aantal"
@@ -677,7 +662,7 @@ msgid "Quests"
 msgstr "Zoektochten"
 
 msgid "Quotas"
-msgstr "Citaat"
+msgstr "Quota's"
 
 msgid "Reason"
 msgstr "Reden"
@@ -749,10 +734,7 @@ msgid "Update"
 msgstr "Update"
 
 msgid "Upload"
-msgstr "Laad"
-
-msgid "VAT No"
-msgstr "BTW-nr"
+msgstr "Uploaden"
 
 msgid "Verify"
 msgstr "Controleer"
@@ -776,13 +758,13 @@ msgid "within"
 msgstr "binnen"
 
 msgid "Ability"
-msgstr "Vaardigheden"
+msgstr "Vaardigheid"
 
 msgid "Actions"
 msgstr "Acties"
 
 msgid "Add new"
-msgstr "Nieuw toevoegen"
+msgstr "Voeg nieuw toe"
 
 msgid "Add tag"
 msgstr "Label toevoegen"
@@ -809,13 +791,13 @@ msgid "Average"
 msgstr "Media"
 
 msgid "Balance"
-msgstr "Soldeer"
+msgstr "Saldo"
 
 msgid "Camping"
 msgstr "Camping"
 
 msgid "Casting"
-msgstr "Gieten"
+msgstr "Rolverdeeling"
 
 msgid "Closing"
 msgstr "Sluiting"
@@ -824,10 +806,10 @@ msgid "Columns"
 msgstr "Kolommen"
 
 msgid "Confirm"
-msgstr "Toepassen"
+msgstr "Bevestigen"
 
 msgid "Contact"
-msgstr "Neem contact op met"
+msgstr "Contact"
 
 msgid "Content"
 msgstr "Inhoud"
@@ -848,7 +830,7 @@ msgid "Credits"
 msgstr "Credits"
 
 msgid "Decline"
-msgstr "Afname"
+msgstr "Afslaan"
 
 msgid "Default"
 msgstr "Standaard"
@@ -869,7 +851,7 @@ msgid "Execute"
 msgstr "Uitvoeren"
 
 msgid "Faction"
-msgstr "Groep"
+msgstr "Factie"
 
 msgid "Gallery"
 msgstr "Galerij"
@@ -878,7 +860,7 @@ msgid "Handout"
 msgstr "Handout"
 
 msgid "History"
-msgstr "Historisch"
+msgstr "Geschiedenis"
 
 msgid "ID Card"
 msgstr "Identiteitskaart"
@@ -895,14 +877,11 @@ msgstr "Omgekeerd"
 msgid "Invited"
 msgstr "Uitgenodigd"
 
-msgid "Invoice"
-msgstr "Factuur"
-
 msgid "Lottery"
 msgstr "Loterij"
 
 msgid "Maximum"
-msgstr "Massimo"
+msgstr "Maximum"
 
 msgid "Members"
 msgstr "Leden"
@@ -914,7 +893,7 @@ msgid "Modules"
 msgstr "Modules"
 
 msgid "Move up"
-msgstr "Omhoog"
+msgstr "Omhoog verplaatsen"
 
 msgid "No step"
 msgstr "Geen stap"
@@ -941,7 +920,7 @@ msgid "Players"
 msgstr "Spelers"
 
 msgid "Preview"
-msgstr "Voorbeeld"
+msgstr "Voorvertoning"
 
 msgid "Primary"
 msgstr "Primair"
@@ -984,9 +963,6 @@ msgstr "Herstel"
 
 msgid "Section"
 msgstr "Sectie"
-
-msgid "Sent At"
-msgstr "Verzonden op"
 
 msgid "Session"
 msgstr "Sessie"
@@ -1049,9 +1025,6 @@ msgstr "Gebruikt Bij"
 msgid "Used By"
 msgstr "Gebruikt door"
 
-msgid "Used at"
-msgstr "Gebruikt bij"
-
 msgid "Used by"
 msgstr "Gebruikt door"
 
@@ -1113,7 +1086,7 @@ msgid "Approved"
 msgstr "Goedgekeurd"
 
 msgid "Assigned"
-msgstr "Toewijzen"
+msgstr "Toegewezen"
 
 msgid "Auto buy"
 msgstr "Auto kopen"
@@ -1140,13 +1113,13 @@ msgid "Consumed"
 msgstr "Verbruikt"
 
 msgid "Continue"
-msgstr "Vervolg"
+msgstr "Doorgaan"
 
 msgid "Copy URL"
 msgstr "URL kopiëren"
 
 msgid "Creation"
-msgstr "Schepping"
+msgstr "Aanmaak"
 
 msgid "Deadline"
 msgstr "Deadline"
@@ -1185,7 +1158,7 @@ msgid "Ensemble"
 msgstr "Ensemble"
 
 msgid "Excluded"
-msgstr "Exclusief"
+msgstr "Uitgesloten"
 
 msgid "Expected"
 msgstr "Verwacht"
@@ -1197,7 +1170,7 @@ msgid "Factions"
 msgstr "Facties"
 
 msgid "Features"
-msgstr "Kenmerken"
+msgstr "Functies"
 
 msgid "Giftable"
 msgstr "Cadeaubaar"
@@ -1205,14 +1178,11 @@ msgstr "Cadeaubaar"
 msgid "Handouts"
 msgstr "Handouts"
 
-msgid "Holidays"
-msgstr "Vakantie"
-
 msgid "Inactive"
 msgstr "Inactief"
 
 msgid "Included"
-msgstr "Inclusief"
+msgstr "Inbegrepen"
 
 msgid "Invoices"
 msgstr "Facturen"
@@ -1233,10 +1203,10 @@ msgid "Max uses"
 msgstr "Maximaal gebruik"
 
 msgid "Messages"
-msgstr "Bericht verzonden"
+msgstr "Berichten"
 
 msgid "New cost"
-msgstr "Nieuwe kosten"
+msgstr "Nieuwe kost"
 
 msgid "New gift"
 msgstr "Nieuw cadeau"
@@ -1257,7 +1227,10 @@ msgid "Original"
 msgstr "Origineel"
 
 msgid "Outflows"
-msgstr "Uitgangen"
+msgstr "Uitgaven"
+
+msgid "Overpaid"
+msgstr "Te veel betaald"
 
 msgid "Partners"
 msgstr "Partners"
@@ -1272,7 +1245,7 @@ msgid "Pdf bulk"
 msgstr "Pdf bulk"
 
 msgid "Personal"
-msgstr "Personeel"
+msgstr "Persoonlijk"
 
 msgid "Portrait"
 msgstr "Fotoportret"
@@ -1281,7 +1254,7 @@ msgid "Position"
 msgstr "Positie"
 
 msgid "Priority"
-msgstr "Prioriteiten"
+msgstr "Prioriteit"
 
 msgid "Problems"
 msgstr "Problemen"
@@ -1314,10 +1287,10 @@ msgid "Receipts"
 msgstr "Ontvangsten"
 
 msgid "Redeemed"
-msgstr "Verlost"
+msgstr "Ingewisseld"
 
 msgid "Redirect"
-msgstr "omleiden"
+msgstr "Omleiding"
 
 msgid "Refunded"
 msgstr "Terugbetaald"
@@ -1326,7 +1299,7 @@ msgid "Register"
 msgstr "Registreer"
 
 msgid "Registry"
-msgstr "Registreer"
+msgstr "Register"
 
 msgid "Reminder"
 msgstr "Herinnering"
@@ -1335,9 +1308,6 @@ msgid "Reply To"
 msgstr "Antwoord op"
 
 msgid "Required"
-msgstr "Vereist"
-
-msgid "Requires"
 msgstr "Vereist"
 
 msgid "Resource"
@@ -1368,13 +1338,10 @@ msgid "Settings"
 msgstr "Instellingen"
 
 msgid "Severity"
-msgstr "Zwaartekracht"
+msgstr "Ernst"
 
 msgid "Show all"
 msgstr "Bekijk alle"
-
-msgid "Show the"
-msgstr "Bekijk de"
 
 msgid "Standard"
 msgstr "Standaard"
@@ -1396,9 +1363,6 @@ msgstr "Les"
 
 msgid "Used on:"
 msgstr "Gebruikt op:"
-
-msgid "VAT rate"
-msgstr "BTW-tarief"
 
 msgid "Versions"
 msgstr "Versies"
@@ -1437,7 +1401,7 @@ msgid "Approvals"
 msgstr "Goedkeuringen"
 
 msgid "Attending"
-msgstr "Naar"
+msgstr "Aanwezig"
 
 msgid "Available"
 msgstr "Beschikbaar"
@@ -1458,13 +1422,13 @@ msgid "Container"
 msgstr "Container"
 
 msgid "Copy done"
-msgstr "Uitgevoerd exemplaar"
+msgstr "Kopie voltooid"
 
 msgid "Criterion"
 msgstr "Criterium"
 
 msgid "Customize"
-msgstr "aanpassen"
+msgstr "Aanpassen"
 
 msgid "Dashboard"
 msgstr "Dashboard"
@@ -1475,11 +1439,8 @@ msgstr "Deadlines"
 msgid "Delivered"
 msgstr "Geleverd"
 
-msgid "Dimension"
-msgstr "Maat"
-
 msgid "Discounts"
-msgstr "Faciliteiten"
+msgstr "Kortingen"
 
 msgid "Donations"
 msgstr "Donaties"
@@ -1551,7 +1512,7 @@ msgid "Organizer"
 msgstr "Organisator"
 
 msgid "Pool type"
-msgstr "Type zwembad"
+msgstr "Pooltype"
 
 msgid "Portraits"
 msgstr "Portretten"
@@ -1570,9 +1531,6 @@ msgstr "Prologen"
 
 msgid "Promotion"
 msgstr "Promotie"
-
-msgid "Publisher"
-msgstr "Uitgever"
 
 msgid "Questions"
 msgstr "Vragen"
@@ -1599,7 +1557,7 @@ msgid "Retention"
 msgstr "Inhouding"
 
 msgid "Returning"
-msgstr "Stuur  terug"
+msgstr "Stuur terug"
 
 msgid "Set quest"
 msgstr "Zoektocht instellen"
@@ -1632,7 +1590,7 @@ msgid "Subdomain"
 msgstr "Subdomein"
 
 msgid "Submitted"
-msgstr "Onderdanig"
+msgstr "Ingediend"
 
 msgid "Surcharge"
 msgstr "Toeslag"
@@ -1695,7 +1653,7 @@ msgid "Applicable"
 msgstr "Toepasselijk"
 
 msgid "Appointees"
-msgstr "Benoemingen"
+msgstr "Benoemde"
 
 msgid "Approve it"
 msgstr "Goedkeuren"
@@ -1728,7 +1686,7 @@ msgid "Chronology"
 msgstr "Chronologie"
 
 msgid "Collection"
-msgstr "Verzamel"
+msgstr "Verzameling"
 
 msgid "Components"
 msgstr "Onderdelen"
@@ -1830,7 +1788,7 @@ msgid "New player"
 msgstr "Nieuwe speler"
 
 msgid "New signup"
-msgstr "Nieuwe inzendingen"
+msgstr "Nieuwe inschrijvingen"
 
 msgid "Newsletter"
 msgstr "Nieuwsbrief"
@@ -1857,13 +1815,13 @@ msgid "Plot Roles"
 msgstr "Plotrollen"
 
 msgid "Pool Types"
-msgstr "Soorten zwembaden"
+msgstr "Soorten pools"
 
 msgid "Pool label"
 msgstr "Pool-label"
 
 msgid "Pool types"
-msgstr "Soorten zwembaden"
+msgstr "Soorten pools"
 
 msgid "Preference"
 msgstr "Voorkeur"
@@ -1884,7 +1842,7 @@ msgid "Refund for"
 msgstr "Vergoeding voor"
 
 msgid "Registered"
-msgstr "Met inscriptie"
+msgstr "Geregistreerd"
 
 msgid "Remove tag"
 msgstr "Tag verwijderen"
@@ -1924,12 +1882,6 @@ msgstr "Statistieken"
 
 msgid "Surcharges"
 msgstr "Toeslagen"
-
-msgid "Table list"
-msgstr "Lijst tabel"
-
-msgid "Tax regime"
-msgstr "Belastingstelsel"
 
 msgid "Text color"
 msgstr "Kleur tekst"
@@ -1989,19 +1941,22 @@ msgid "Access Link"
 msgstr "Toegang Link"
 
 msgid "Access link"
-msgstr "Link openen"
+msgstr "Toegangslink"
 
 msgid "Actual paid"
 msgstr "Werkelijk betaald"
 
 msgid "Add to plot"
-msgstr "Toevoegen aan perceel"
+msgstr "Toevoegen aan trama"
 
 msgid "Additionals"
 msgstr "Toevoegingen"
 
 msgid "Agritourism"
 msgstr "Agrotoerisme"
+
+msgid "Amount Paid"
+msgstr "Betaald bedrag"
 
 msgid "Amount paid"
 msgstr "Betaald bedrag"
@@ -2085,13 +2040,13 @@ msgid "Gallery Pdf"
 msgstr "Pdf Galerij"
 
 msgid "Guild cover"
-msgstr "Omslag van Guild"
+msgstr "Omslag van gilde"
 
 msgid "In Progress"
 msgstr "In uitvoering"
 
 msgid "In creation"
-msgstr "In de schepping"
+msgstr "In creatie"
 
 msgid "In revision"
 msgstr "In revisie"
@@ -2145,7 +2100,7 @@ msgid "Please wait"
 msgstr "Even geduld a.u.b"
 
 msgid "Pool Labels"
-msgstr "Zwembadlabels"
+msgstr "Pool-labels"
 
 msgid "Postal code"
 msgstr "Postcode"
@@ -2181,7 +2136,7 @@ msgid "Request for"
 msgstr "Verzoek om"
 
 msgid "Rotate left"
-msgstr "Linker wiel"
+msgstr "Linksom draaien"
 
 msgid "Scroll left"
 msgstr "Scroll naar links"
@@ -2196,7 +2151,7 @@ msgid "Send e-mail"
 msgstr "Stuur e-mail"
 
 msgid "Send emails"
-msgstr "Stuur e-mail"
+msgstr "Stuur e-mails"
 
 msgid "Shorten URL"
 msgstr "URL verkorten"
@@ -2206,9 +2161,6 @@ msgstr "Toon gesloten"
 
 msgid "Signup link"
 msgstr "Link aanmelden"
-
-msgid "Simple list"
-msgstr "Eenvoudige lijst"
 
 msgid "Start here:"
 msgstr "Begin hier:"
@@ -2250,16 +2202,13 @@ msgid "Where it is"
 msgstr "Waar het is"
 
 msgid "Your Events"
-msgstr "Uw evenementen"
+msgstr "Je evenementen"
 
 msgid "collections"
 msgstr "collecties"
 
 msgid "immediately"
 msgstr "onmiddellijk"
-
-msgid "leaderboard"
-msgstr "ranking"
 
 msgid "text length"
 msgstr "tekstlengte"
@@ -2280,7 +2229,7 @@ msgid "Archive mail"
 msgstr "Archief mail"
 
 msgid "Are you sure"
-msgstr "Weet u zeker dat"
+msgstr "Weet je zeker"
 
 msgid "Bank address"
 msgstr "Adres bank"
@@ -2292,7 +2241,7 @@ msgid "City / Place"
 msgstr "Stad / Plaats"
 
 msgid "Collaborator"
-msgstr "Deelnemer"
+msgstr "Medewerker"
 
 msgid "Compact list"
 msgstr "Compacte lijst"
@@ -2313,7 +2262,7 @@ msgid "Event hidden"
 msgstr "Gebeurtenis verborgen"
 
 msgid "Exit Preview"
-msgstr "Voorbeeld uitgang"
+msgstr "Voorbeeld verlaten"
 
 msgid "Experimental"
 msgstr "Experimenteel"
@@ -2322,7 +2271,7 @@ msgid "Faction list"
 msgstr "Factielijst"
 
 msgid "Faction logo"
-msgstr "Een groepslogo"
+msgstr "Factiologolo"
 
 msgid "Form section"
 msgstr "Formulier sectie"
@@ -2331,7 +2280,7 @@ msgid "Full payment"
 msgstr "Volledige betaling"
 
 msgid "Host Address"
-msgstr "Adres"
+msgstr "Hostadres"
 
 msgid "House number"
 msgstr "Huisnummer"
@@ -2340,7 +2289,7 @@ msgid "Informations"
 msgstr "Informatie"
 
 msgid "Installments"
-msgstr "Prijs"
+msgstr "Termijnen"
 
 msgid "Instructions"
 msgstr "Instructies"
@@ -2433,7 +2382,7 @@ msgid "Requirements"
 msgstr "Vereisten"
 
 msgid "Rotate right"
-msgstr "Rechter wiel"
+msgstr "Rechtsom draaien"
 
 msgid "Scroll right"
 msgstr "Scroll naar rechts"
@@ -2442,7 +2391,7 @@ msgid "See you soon"
 msgstr "We wachten op je"
 
 msgid "Show history"
-msgstr "Historische tentoonstelling"
+msgstr "Toon geschiedenis"
 
 msgid "Subscription"
 msgstr "Abonnement"
@@ -2499,7 +2448,7 @@ msgid "View Details"
 msgstr "Details bekijken"
 
 msgid "Waiting list"
-msgstr "Wachten"
+msgstr "Wachtlijst"
 
 msgid "We're coming"
 msgstr "We komen eraan"
@@ -2508,7 +2457,7 @@ msgid "Will open at"
 msgstr "Ze gaan open op"
 
 msgid "You must pay"
-msgstr "U moet betalen"
+msgstr "Je moet betalen"
 
 msgid "Your team ID"
 msgstr "Je team-ID"
@@ -2833,6 +2782,9 @@ msgstr "Beschikbare dagen"
 msgid "Back to badges"
 msgstr "Terug naar de badges"
 
+msgid "Bank Statement"
+msgstr "Bankafschrift"
+
 msgid "Bring a friend"
 msgstr "Breng een vriend mee"
 
@@ -3000,9 +2952,6 @@ msgstr "Soort prologen"
 
 msgid "Question saved"
 msgstr "Onderdanige vraag"
-
-msgid "Recipient Code"
-msgstr "Ontvanger Code"
 
 msgid "Remove consent"
 msgstr "Toestemming verwijderen"
@@ -3231,6 +3180,9 @@ msgstr "Bijgewerkt lidmaatschap"
 
 msgid "Progress status"
 msgstr "Vooruitgang"
+
+msgid "Public Holidays"
+msgstr "Feestdagen"
 
 msgid "Publish players"
 msgstr "Spelers publiceren"
@@ -4024,9 +3976,6 @@ msgstr "Je geboortedatum"
 msgid "by the deadline of"
 msgstr "voor de deadline van"
 
-msgid "global preferences"
-msgstr "globale voorkeuren"
-
 msgid "Access Confirmation"
 msgstr "Toegangsbevestiging"
 
@@ -4399,6 +4348,9 @@ msgstr "Tekenstatus instellen"
 msgid "Set up ability types"
 msgstr "Typen vaardigheden instellen"
 
+msgid "Show the leaderboard"
+msgstr "Laat het klassement zien"
+
 msgid "Terms and Conditions"
 msgstr "Algemene voorwaarden"
 
@@ -4410,6 +4362,9 @@ msgstr "De collectie groeit"
 
 msgid "The tax code matches"
 msgstr "De belastingcode komt overeen"
+
+msgid "Time And Date Of Use"
+msgstr "Tijdstip en datum van gebruik"
 
 msgid "Warehouse containers"
 msgstr "Containers voor magazijnen"
@@ -4791,9 +4746,6 @@ msgstr "Welkom bij LarpManager"
 msgid "give them this address"
 msgstr "geef ze dit adres"
 
-msgid "history of preferences"
-msgstr "voorkeursgeschiedenis"
-
 #, python-format
 msgid "Assignment %(elements)s"
 msgstr "Toewijzing %(elements)s"
@@ -5066,6 +5018,9 @@ msgstr "Doelsessie niet gevonden"
 
 msgid "This event has concluded"
 msgstr "Dit evenement is afgesloten"
+
+msgid "Time And Date Of Sending"
+msgstr "Tijdstip en datum van verzending"
 
 msgid "Transfer is not possible"
 msgstr "Een overdracht is niet mogelijk"
@@ -5430,6 +5385,9 @@ msgstr "Dynamische afbetalingen instellen"
 
 msgid "Set up registration tickets"
 msgstr "Registratietickets instellen"
+
+msgid "Show the global preferences"
+msgstr "Toon de algemene instellingen"
 
 msgid "Thank you for participating"
 msgstr "Bedankt voor uw deelname"
@@ -5862,6 +5820,9 @@ msgstr "De stemconfiguratie instellen"
 
 msgid "Show questions already answered"
 msgstr "Toon reeds beantwoorde vragen"
+
+msgid "Show the history of preferences"
+msgstr "De geschiedenis van je voorkeuren weergeven"
 
 msgid "So far you have paid a total of"
 msgstr "Tot nu toe heb je in totaal"

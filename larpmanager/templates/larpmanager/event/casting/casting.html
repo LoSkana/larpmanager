@@ -24,11 +24,10 @@
         {% endif %}
         {% if casting_history %}
             <p>
-                {% trans "Show the" %}
                 {% if typ %}
-                    <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "history of preferences" %}.</a>
+                    <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "Show the history of preferences" %}.</a>
                 {% else %}
-                    <a href="{% url 'casting_history' run.get_slug %}">{% trans "history of preferences" %}.</a>
+                    <a href="{% url 'casting_history' run.get_slug %}">{% trans "Show the history of preferences" %}.</a>
                 {% endif %}
             </p>
         {% endif %}
@@ -40,11 +39,10 @@
             <p>{% trans "Enter your preferences here" %}!</p>
             {% if casting_show_pref %}
                 <p>
-                    {% trans "Show the" %}
                     {% if typ %}
-                        <a href="{% url 'casting_preferences' run.get_slug typ %}">{% trans "global preferences" %}.</a>
+                        <a href="{% url 'casting_preferences' run.get_slug typ %}">{% trans "Show the global preferences" %}.</a>
                     {% else %}
-                        <a href="{% url 'casting_preferences' run.get_slug %}">{% trans "global preferences" %}.</a>
+                        <a href="{% url 'casting_preferences' run.get_slug %}">{% trans "Show the global preferences" %}.</a>
                     {% endif %}
                 </p>
             {% endif %}

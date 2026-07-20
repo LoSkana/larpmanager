@@ -668,7 +668,7 @@ class OrgaConfigForm(ConfigForm):
         config_help_text = _("Enables field 'number', an unique numerical ID to reference it")
         self.add_configs("writing_number", ConfigType.BOOL, config_label, config_help_text)
 
-        config_label = _("Cover")
+        config_label = _("Cover image")
         config_help_text = _(
             "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant",
         )
@@ -684,7 +684,7 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("writing_locked", ConfigType.BOOL, config_label, config_help_text)
 
-        config_label = _("Assigned")
+        config_label = _("Assignment")
         config_help_text = _(
             "Enables field 'assigned', to track which staff member is responsible for each writing element",
         )

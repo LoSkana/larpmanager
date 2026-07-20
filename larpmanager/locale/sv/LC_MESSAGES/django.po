@@ -9,7 +9,7 @@ msgid "Hi"
 msgstr "Hej"
 
 msgid "XP"
-msgstr "px"
+msgstr "XP"
 
 msgid "Add"
 msgstr "Lägg till"
@@ -24,7 +24,7 @@ msgid "End"
 msgstr "Slut"
 
 msgid "Fee"
-msgstr "Kommissionen"
+msgstr "Kommission"
 
 msgid "Low"
 msgstr "Låg"
@@ -90,10 +90,10 @@ msgid "Date"
 msgstr "Datum"
 
 msgid "Diet"
-msgstr "Diet"
+msgstr "Diät"
 
 msgid "Done"
-msgstr "Vändningar"
+msgstr "Gjord"
 
 msgid "Edit"
 msgstr "Redigera"
@@ -126,7 +126,7 @@ msgid "Info"
 msgstr "Info"
 
 msgid "Item"
-msgstr "Ingång"
+msgstr "Objekt"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -165,7 +165,7 @@ msgid "None"
 msgstr "Ingen"
 
 msgid "Note"
-msgstr "Noter"
+msgstr "Not"
 
 msgid "Only"
 msgstr "Endast"
@@ -173,29 +173,20 @@ msgstr "Endast"
 msgid "Open"
 msgstr "Öppna"
 
-msgid "Over"
-msgstr "Över"
-
 msgid "Page"
 msgstr "Sida"
 
 msgid "Paid"
-msgstr "Betalade"
+msgstr "Betald"
 
 msgid "Plot"
-msgstr "Tomt"
-
-msgid "Pool"
-msgstr "Pool"
+msgstr "Intrig"
 
 msgid "Port"
 msgstr "Anslutningsport"
 
 msgid "Prev"
 msgstr "Före"
-
-msgid "Rate"
-msgstr "Pris"
 
 msgid "Read"
 msgstr "Läs"
@@ -213,7 +204,7 @@ msgid "Show"
 msgstr "Visa"
 
 msgid "Size"
-msgstr "Enheter"
+msgstr "Storlek"
 
 msgid "Skip"
 msgstr "Hoppa över"
@@ -237,7 +228,7 @@ msgid "Tier"
 msgstr "Nivå"
 
 msgid "Time"
-msgstr "nu"
+msgstr "Tid"
 
 msgid "Tipo"
 msgstr "Tipo"
@@ -258,7 +249,7 @@ msgid "Vote"
 msgstr "Omröstning"
 
 msgid "What"
-msgstr "Vad är det"
+msgstr "Vad"
 
 msgid "When"
 msgstr "När"
@@ -318,10 +309,10 @@ msgid "Color"
 msgstr "Färg"
 
 msgid "Count"
-msgstr "Räkna"
+msgstr "Antal"
 
 msgid "Cover"
-msgstr "Skydd"
+msgstr "Omslag"
 
 msgid "Dates"
 msgstr "Datum"
@@ -351,9 +342,6 @@ msgctxt "event"
 msgid "Genre"
 msgstr "Genre"
 
-msgid "Given"
-msgstr "Data"
-
 msgid "Graph"
 msgstr "Graf"
 
@@ -364,7 +352,7 @@ msgid "Guild"
 msgstr "Gille"
 
 msgid "Hotel"
-msgstr "Hotellet"
+msgstr "Hotel"
 
 msgid "Image"
 msgstr "Bild"
@@ -397,16 +385,16 @@ msgid "Order"
 msgstr "Order"
 
 msgid "Other"
-msgstr "mer"
+msgstr "Annat"
 
 msgid "Owing"
-msgstr "Betalas senare"
+msgstr "Skyldigt"
 
 msgid "Payed"
 msgstr "Betald"
 
 msgid "Photo"
-msgstr "Foton"
+msgstr "Foto"
 
 msgid "Plots"
 msgstr "Tomter"
@@ -433,7 +421,7 @@ msgid "Rules"
 msgstr "Regler"
 
 msgid "Sheet"
-msgstr "Fiche"
+msgstr "Ark"
 
 msgid "Staff"
 msgstr "Personal"
@@ -470,7 +458,7 @@ msgid "Total"
 msgstr "Totalt"
 
 msgid "Trait"
-msgstr "Trakt"
+msgstr "Drag"
 
 msgid "Trash"
 msgstr "Skräp"
@@ -490,9 +478,6 @@ msgstr "Video"
 msgid "Where"
 msgstr "Var"
 
-msgid "avail"
-msgstr "utnyttja"
-
 msgid "email"
 msgstr "e-post"
 
@@ -502,6 +487,9 @@ msgstr "flyttade"
 msgid "quick"
 msgstr "snabb"
 
+msgid "total"
+msgstr "totalt"
+
 msgid "Absent"
 msgstr "Frånvarande"
 
@@ -509,7 +497,7 @@ msgid "Accept"
 msgstr "Godkänn"
 
 msgid "Action"
-msgstr "Åtgärder"
+msgstr "Åtgärd"
 
 msgid "Active"
 msgstr "Aktiv"
@@ -530,7 +518,7 @@ msgid "Cancel"
 msgstr "Avbryt"
 
 msgid "Causal"
-msgstr "Causale"
+msgstr "Orsak"
 
 msgid "Checks"
 msgstr "Kontroller"
@@ -578,7 +566,7 @@ msgid "Fields"
 msgstr "Fält"
 
 msgid "Filler"
-msgstr "Fyllmedel"
+msgstr "Buffé"
 
 msgid "Footer"
 msgstr "Sidfot"
@@ -590,19 +578,19 @@ msgid "Friend"
 msgstr "Vän"
 
 msgid "Gender"
-msgstr "Genre"
+msgstr "Kön"
 
 msgid "Guilds"
 msgstr "Gillen"
 
 msgid "Header"
-msgstr "Huvud"
+msgstr "Sidhuvud"
 
 msgid "Hidden"
-msgstr "Dolda"
+msgstr "Dold"
 
 msgid "Income"
-msgstr "Inledning"
+msgstr "Inkomst"
 
 msgid "Insert"
 msgstr "Ange"
@@ -632,10 +620,10 @@ msgid "Manage"
 msgstr "Hantera"
 
 msgid "Marked"
-msgstr "Mark"
+msgstr "Märkt"
 
 msgid "Master"
-msgstr "Fader"
+msgstr "Mästare"
 
 msgid "Medium"
 msgstr "Medium"
@@ -654,9 +642,6 @@ msgstr "Modul"
 
 msgid "Nation"
 msgstr "Nation"
-
-msgid "Nature"
-msgstr "Natur"
 
 msgid "Number"
 msgstr "Antal"
@@ -677,7 +662,7 @@ msgid "Quests"
 msgstr "Uppdrag"
 
 msgid "Quotas"
-msgstr "Citat"
+msgstr "Kvoter"
 
 msgid "Reason"
 msgstr "Anledning"
@@ -749,10 +734,7 @@ msgid "Update"
 msgstr "Uppdatering"
 
 msgid "Upload"
-msgstr "Avgift"
-
-msgid "VAT No"
-msgstr "Moms nr"
+msgstr "Ladda upp"
 
 msgid "Verify"
 msgstr "Verifiera"
@@ -809,22 +791,22 @@ msgid "Average"
 msgstr "Media"
 
 msgid "Balance"
-msgstr "Lödning"
+msgstr "Saldo"
 
 msgid "Camping"
 msgstr "Camping"
 
 msgid "Casting"
-msgstr "Gjutning"
+msgstr "Casting"
 
 msgid "Closing"
-msgstr "Avslutar"
+msgstr "Avslutning"
 
 msgid "Columns"
 msgstr "Kolumner"
 
 msgid "Confirm"
-msgstr "Tillämpa"
+msgstr "Bekräfta"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -848,7 +830,7 @@ msgid "Credits"
 msgstr "Krediter"
 
 msgid "Decline"
-msgstr "Minskning"
+msgstr "Avslag"
 
 msgid "Default"
 msgstr "Standard"
@@ -869,7 +851,7 @@ msgid "Execute"
 msgstr "Utför"
 
 msgid "Faction"
-msgstr "Grupp"
+msgstr "Fraktion"
 
 msgid "Gallery"
 msgstr "Galleri"
@@ -878,7 +860,7 @@ msgid "Handout"
 msgstr "Handout"
 
 msgid "History"
-msgstr "Historisk"
+msgstr "Historia"
 
 msgid "ID Card"
 msgstr "Identitetskort"
@@ -894,9 +876,6 @@ msgstr "Invers"
 
 msgid "Invited"
 msgstr "Inbjuden"
-
-msgid "Invoice"
-msgstr "Faktura"
 
 msgid "Lottery"
 msgstr "Lotteri"
@@ -985,9 +964,6 @@ msgstr "Återställ"
 msgid "Section"
 msgstr "Sektion"
 
-msgid "Sent At"
-msgstr "Skickat till"
-
 msgid "Session"
 msgstr "Session"
 
@@ -1049,9 +1025,6 @@ msgstr "Används på"
 msgid "Used By"
 msgstr "Används av"
 
-msgid "Used at"
-msgstr "Används vid"
-
 msgid "Used by"
 msgstr "Används av"
 
@@ -1083,7 +1056,7 @@ msgid "Writing"
 msgstr "Skrivande"
 
 msgid "XP used"
-msgstr "Px används"
+msgstr "Px använda"
 
 msgid "maximum"
 msgstr "högsta"
@@ -1113,10 +1086,10 @@ msgid "Approved"
 msgstr "Godkänd"
 
 msgid "Assigned"
-msgstr "Tilldela"
+msgstr "Tilldelad"
 
 msgid "Auto buy"
-msgstr "Köp av bil"
+msgstr "Köp automatiskt"
 
 msgid "Calendar"
 msgstr "Kalender"
@@ -1140,7 +1113,7 @@ msgid "Consumed"
 msgstr "Förbrukad"
 
 msgid "Continue"
-msgstr "Fortsättning"
+msgstr "Fortsätt"
 
 msgid "Copy URL"
 msgstr "Kopiera URL"
@@ -1167,7 +1140,7 @@ msgid "Donation"
 msgstr "Donation"
 
 msgid "Download"
-msgstr "Nedladdning"
+msgstr "Ladda ned"
 
 msgid "Duration"
 msgstr "Varaktighet"
@@ -1185,7 +1158,7 @@ msgid "Ensemble"
 msgstr "Ensemble"
 
 msgid "Excluded"
-msgstr "Exklusive"
+msgstr "Exkluderad"
 
 msgid "Expected"
 msgstr "Förväntad"
@@ -1200,19 +1173,16 @@ msgid "Features"
 msgstr "Funktioner"
 
 msgid "Giftable"
-msgstr "Gåva"
+msgstr "Gåvbar"
 
 msgid "Handouts"
-msgstr "Handlingar"
-
-msgid "Holidays"
-msgstr "Semester"
+msgstr "Handouts"
 
 msgid "Inactive"
 msgstr "Inaktiv"
 
 msgid "Included"
-msgstr "Inklusive"
+msgstr "Inkluderad"
 
 msgid "Invoices"
 msgstr "Fakturor"
@@ -1233,7 +1203,7 @@ msgid "Max uses"
 msgstr "Maximal användning"
 
 msgid "Messages"
-msgstr "Meddelande skickat"
+msgstr "Meddelanden"
 
 msgid "New cost"
 msgstr "Ny kostnad"
@@ -1248,7 +1218,7 @@ msgid "One-Time"
 msgstr "En gång"
 
 msgid "One-shot"
-msgstr "Ett skott"
+msgstr "One-shot"
 
 msgid "Optional"
 msgstr "Valfritt"
@@ -1258,6 +1228,9 @@ msgstr "Original"
 
 msgid "Outflows"
 msgstr "Utgångar"
+
+msgid "Overpaid"
+msgstr "För mycket betalt"
 
 msgid "Partners"
 msgstr "Partner"
@@ -1323,10 +1296,10 @@ msgid "Refunded"
 msgstr "Återbetalda"
 
 msgid "Register"
-msgstr "Registrera"
+msgstr "Registrering"
 
 msgid "Registry"
-msgstr "Registrera"
+msgstr "Register"
 
 msgid "Reminder"
 msgstr "Påminnelse"
@@ -1337,14 +1310,11 @@ msgstr "Svara på"
 msgid "Required"
 msgstr "Krävs"
 
-msgid "Requires"
-msgstr "Kräver"
-
 msgid "Resource"
 msgstr "Resurs"
 
 msgid "Returned"
-msgstr "Återvände"
+msgstr "Återlämnad"
 
 msgid "Revision"
 msgstr "Revision"
@@ -1368,13 +1338,10 @@ msgid "Settings"
 msgstr "Inställningar"
 
 msgid "Severity"
-msgstr "Gravitation"
+msgstr "Allvarlighetsgrad"
 
 msgid "Show all"
 msgstr "Visa alla"
-
-msgid "Show the"
-msgstr "Se den"
 
 msgid "Standard"
 msgstr "Standard"
@@ -1389,16 +1356,13 @@ msgid "Transfer"
 msgstr "Överföring"
 
 msgid "Treasury"
-msgstr "Finansdepartementet"
+msgstr "Skattekammare"
 
 msgid "Tutorial"
 msgstr "Handledning"
 
 msgid "Used on:"
 msgstr "Används på:"
-
-msgid "VAT rate"
-msgstr "Momssats"
 
 msgid "Versions"
 msgstr "Versioner"
@@ -1407,19 +1371,19 @@ msgid "Warnings"
 msgstr "Varningar"
 
 msgid "Workshop"
-msgstr "Verkstad"
+msgstr "Seminarium"
 
 msgid "XP avail"
 msgstr "Px Tillgänglig"
 
 msgid "download"
-msgstr "nedladdning"
+msgstr "ladda ned"
 
 msgid "factions"
-msgstr "Fraktioner"
+msgstr "fraktioner"
 
 msgid "payments"
-msgstr "Betalningar"
+msgstr "betalningar"
 
 msgid "positive"
 msgstr "positiv"
@@ -1452,7 +1416,7 @@ msgid "Completed"
 msgstr "Färdigställd"
 
 msgid "Concluded"
-msgstr "Avslutning"
+msgstr "Avslutad"
 
 msgid "Container"
 msgstr "Behållare"
@@ -1474,9 +1438,6 @@ msgstr "Tidsfrister"
 
 msgid "Delivered"
 msgstr "Levererad"
-
-msgid "Dimension"
-msgstr "Storlek"
 
 msgid "Discounts"
 msgstr "Faciliteter"
@@ -1570,9 +1531,6 @@ msgstr "Prologer"
 
 msgid "Promotion"
 msgstr "Marknadsföring"
-
-msgid "Publisher"
-msgstr "Utgivare"
 
 msgid "Questions"
 msgstr "Frågor"
@@ -1925,12 +1883,6 @@ msgstr "Statistik"
 msgid "Surcharges"
 msgstr "Tilläggsavgifter"
 
-msgid "Table list"
-msgstr "Lista över tabeller"
-
-msgid "Tax regime"
-msgstr "Skattesystem"
-
 msgid "Text color"
 msgstr "Textfärg"
 
@@ -2002,6 +1954,9 @@ msgstr "Tilläggsaktier"
 
 msgid "Agritourism"
 msgstr "Agriturism"
+
+msgid "Amount Paid"
+msgstr "Betalt belopp"
 
 msgid "Amount paid"
 msgstr "Utbetalt belopp"
@@ -2207,9 +2162,6 @@ msgstr "Visa stängd"
 msgid "Signup link"
 msgstr "Länk för registrering"
 
-msgid "Simple list"
-msgstr "Enkel lista"
-
 msgid "Start here:"
 msgstr "Börja här:"
 
@@ -2257,9 +2209,6 @@ msgstr "samlingar"
 
 msgid "immediately"
 msgstr "omedelbart"
-
-msgid "leaderboard"
-msgstr "ranking"
 
 msgid "text length"
 msgstr "textlängd"
@@ -2833,6 +2782,9 @@ msgstr "Tillgängliga dagar"
 msgid "Back to badges"
 msgstr "Tillbaka till märkena"
 
+msgid "Bank Statement"
+msgstr "Kontoutdrag"
+
 msgid "Bring a friend"
 msgstr "Ta med en vän"
 
@@ -3000,9 +2952,6 @@ msgstr "Prologer typ"
 
 msgid "Question saved"
 msgstr "Undergiven fråga"
-
-msgid "Recipient Code"
-msgstr "Mottagarens kod"
 
 msgid "Remove consent"
 msgstr "Ta bort samtycke"
@@ -3231,6 +3180,9 @@ msgstr "Uppdaterat medlemskap"
 
 msgid "Progress status"
 msgstr "Framsteg"
+
+msgid "Public Holidays"
+msgstr "Helgdagar"
 
 msgid "Publish players"
 msgstr "Publicera spelare"
@@ -4024,9 +3976,6 @@ msgstr "Ditt födelsedatum"
 msgid "by the deadline of"
 msgstr "senast den sista"
 
-msgid "global preferences"
-msgstr "globala preferenser"
-
 msgid "Access Confirmation"
 msgstr "Bekräftelse av åtkomst"
 
@@ -4399,6 +4348,9 @@ msgstr "Ange teckenstatus"
 msgid "Set up ability types"
 msgstr "Ställ in förmågetyper"
 
+msgid "Show the leaderboard"
+msgstr "Visa resultatlistan"
+
 msgid "Terms and Conditions"
 msgstr "Villkor och anvisningar"
 
@@ -4410,6 +4362,9 @@ msgstr "Samlingen växer"
 
 msgid "The tax code matches"
 msgstr "Skattelagstiftningen stämmer överens"
+
+msgid "Time And Date Of Use"
+msgstr "Tid och datum för användning"
 
 msgid "Warehouse containers"
 msgstr "Lagercontainrar"
@@ -4791,9 +4746,6 @@ msgstr "Välkommen till LarpManager"
 msgid "give them this address"
 msgstr "ge dem denna adress"
 
-msgid "history of preferences"
-msgstr "Preferenshistorik"
-
 #, python-format
 msgid "Assignment %(elements)s"
 msgstr "Tilldelning %(elements)s"
@@ -5066,6 +5018,9 @@ msgstr "Målsessionen hittades inte"
 
 msgid "This event has concluded"
 msgstr "Denna händelse har avslutats"
+
+msgid "Time And Date Of Sending"
+msgstr "Tid och datum för avsändning"
 
 msgid "Transfer is not possible"
 msgstr "Överföring är inte möjlig"
@@ -5430,6 +5385,9 @@ msgstr "Ställ in dynamiska delbetalningar"
 
 msgid "Set up registration tickets"
 msgstr "Sätt upp registreringsbiljetter"
+
+msgid "Show the global preferences"
+msgstr "Visa de allmänna inställningarna"
 
 msgid "Thank you for participating"
 msgstr "Tack för din medverkan"
@@ -5862,6 +5820,9 @@ msgstr "Ställ in röstningskonfigurationen"
 
 msgid "Show questions already answered"
 msgstr "Visa redan besvarade frågor"
+
+msgid "Show the history of preferences"
+msgstr "Visa inställningarnas historik"
 
 msgid "So far you have paid a total of"
 msgstr "Hittills har du betalat totalt"

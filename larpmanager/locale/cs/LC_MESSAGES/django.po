@@ -33,7 +33,7 @@ msgid "NPC"
 msgstr "NPC"
 
 msgid "Net"
-msgstr "Net"
+msgstr "Netto"
 
 msgid "New"
 msgstr "Nový"
@@ -93,7 +93,7 @@ msgid "Diet"
 msgstr "Dieta"
 
 msgid "Done"
-msgstr "Obraty"
+msgstr "Hotovo"
 
 msgid "Edit"
 msgstr "Upravit"
@@ -126,7 +126,7 @@ msgid "Info"
 msgstr "Informace"
 
 msgid "Item"
-msgstr "Vstup"
+msgstr "Položka"
 
 msgid "LAOG"
 msgstr "LAOG"
@@ -153,7 +153,7 @@ msgid "Main"
 msgstr "Hlavní stránka"
 
 msgid "Male"
-msgstr "Muži"
+msgstr "Muž"
 
 msgid "Name"
 msgstr "Název"
@@ -173,9 +173,6 @@ msgstr "Pouze"
 msgid "Open"
 msgstr "Otevřít"
 
-msgid "Over"
-msgstr "Více než"
-
 msgid "Page"
 msgstr "Stránka"
 
@@ -183,19 +180,13 @@ msgid "Paid"
 msgstr "Placené"
 
 msgid "Plot"
-msgstr "Pozemek"
-
-msgid "Pool"
-msgstr "Bazén"
+msgstr "Zápletka"
 
 msgid "Port"
 msgstr "Připojovací port"
 
 msgid "Prev"
 msgstr "Předchozí"
-
-msgid "Rate"
-msgstr "Hodnotit"
 
 msgid "Read"
 msgstr "Přečtěte si"
@@ -213,7 +204,7 @@ msgid "Show"
 msgstr "Zobrazit"
 
 msgid "Size"
-msgstr "Subjekty"
+msgstr "Velikost"
 
 msgid "Skip"
 msgstr "Přeskočit"
@@ -237,7 +228,7 @@ msgid "Tier"
 msgstr "Úroveň"
 
 msgid "Time"
-msgstr "Nyní"
+msgstr "Čas"
 
 msgid "Tipo"
 msgstr "Tipo"
@@ -309,7 +300,7 @@ msgid "Cards"
 msgstr "Karty"
 
 msgid "Check"
-msgstr "Podívejte se na stránky"
+msgstr "Zkontrolovat"
 
 msgid "Close"
 msgstr "Uzavřeno"
@@ -318,7 +309,7 @@ msgid "Color"
 msgstr "Barva"
 
 msgid "Count"
-msgstr "Hrabě"
+msgstr "Počet"
 
 msgid "Cover"
 msgstr "Obálka"
@@ -350,9 +341,6 @@ msgstr "První"
 msgctxt "event"
 msgid "Genre"
 msgstr "Žánr"
-
-msgid "Given"
-msgstr "Data"
 
 msgid "Graph"
 msgstr "Graf"
@@ -397,10 +385,10 @@ msgid "Order"
 msgstr "Objednávka"
 
 msgid "Other"
-msgstr "Více na"
+msgstr "Ostatní"
 
 msgid "Owing"
-msgstr "Bude vyplaceno"
+msgstr "Dluženo"
 
 msgid "Payed"
 msgstr "Placené"
@@ -409,7 +397,7 @@ msgid "Photo"
 msgstr "Fotografie"
 
 msgid "Plots"
-msgstr "Pozemky"
+msgstr "Zápletky"
 
 msgid "Price"
 msgstr "Cena"
@@ -424,7 +412,7 @@ msgid "Quota"
 msgstr "Kvóta"
 
 msgid "Retry"
-msgstr "Zkuste to znovu"
+msgstr "Opakovat"
 
 msgid "Roles"
 msgstr "Role"
@@ -433,7 +421,7 @@ msgid "Rules"
 msgstr "Pravidla"
 
 msgid "Sheet"
-msgstr "Fiche"
+msgstr "List"
 
 msgid "Staff"
 msgstr "Zaměstnanci"
@@ -461,16 +449,16 @@ msgid "Title"
 msgstr "Název"
 
 msgid "To Do"
-msgstr "Co je třeba udělat"
+msgstr "Úkol"
 
 msgid "Token"
 msgstr "Token"
 
 msgid "Total"
-msgstr "Celkové součty"
+msgstr "Celkem"
 
 msgid "Trait"
-msgstr "Trať"
+msgstr "Vlastnost"
 
 msgid "Trash"
 msgstr "Odpadkový koš"
@@ -490,9 +478,6 @@ msgstr "Video"
 msgid "Where"
 msgstr "Kde"
 
-msgid "avail"
-msgstr "k dispozici"
-
 msgid "email"
 msgstr "e-mail"
 
@@ -501,6 +486,9 @@ msgstr "přesunut"
 
 msgid "quick"
 msgstr "rychlý"
+
+msgid "total"
+msgstr "celkem"
 
 msgid "Absent"
 msgstr "Nepřítomný"
@@ -542,7 +530,7 @@ msgid "Copied"
 msgstr "Zkopírováno"
 
 msgid "Counts"
-msgstr "Počítá"
+msgstr "Počty"
 
 msgid "Create"
 msgstr "Vytvořit"
@@ -572,7 +560,7 @@ msgid "Export"
 msgstr "Export"
 
 msgid "Female"
-msgstr "Samice"
+msgstr "Žena"
 
 msgid "Fields"
 msgstr "Pole"
@@ -590,7 +578,7 @@ msgid "Friend"
 msgstr "Přítel"
 
 msgid "Gender"
-msgstr "Žánr"
+msgstr "Pohlaví"
 
 msgid "Guilds"
 msgstr "Cechy"
@@ -599,13 +587,13 @@ msgid "Header"
 msgstr "Záhlaví"
 
 msgid "Hidden"
-msgstr "Skryté stránky"
+msgstr "Skryté"
 
 msgid "Income"
-msgstr "Představení"
+msgstr "Příjmy"
 
 msgid "Insert"
-msgstr "Vstupte na"
+msgstr "Vložit"
 
 msgid "Invite"
 msgstr "Pozvánka"
@@ -623,7 +611,7 @@ msgid "Loaded"
 msgstr "Načteno"
 
 msgid "Locked"
-msgstr "Uzamčené stránky"
+msgstr "Uzamčeno"
 
 msgid "Log in"
 msgstr "Přihlášení"
@@ -632,10 +620,10 @@ msgid "Manage"
 msgstr "Správa"
 
 msgid "Marked"
-msgstr "Mark"
+msgstr "Označeno"
 
 msgid "Master"
-msgstr "Otec"
+msgstr "Mistr"
 
 msgid "Medium"
 msgstr "Střední"
@@ -655,9 +643,6 @@ msgstr "Modul"
 msgid "Nation"
 msgstr "Národ"
 
-msgid "Nature"
-msgstr "Příroda"
-
 msgid "Number"
 msgstr "Číslo"
 
@@ -665,19 +650,19 @@ msgid "Option"
 msgstr "Možnost"
 
 msgid "Patron"
-msgstr "Patron"
+msgstr "Sponzor"
 
 msgid "Player"
 msgstr "Hráč"
 
 msgid "Public"
-msgstr "Veřejnost"
+msgstr "Veřejné"
 
 msgid "Quests"
 msgstr "Úkoly"
 
 msgid "Quotas"
-msgstr "Citace"
+msgstr "Kvóty"
 
 msgid "Reason"
 msgstr "Důvod"
@@ -686,10 +671,10 @@ msgid "Refund"
 msgstr "Vrácení peněz"
 
 msgid "Remove"
-msgstr "Odstranění adresy"
+msgstr "Odstranit"
 
 msgid "Review"
-msgstr "Recenze"
+msgstr "Přezkoumání"
 
 msgid "Safety"
 msgstr "Bezpečnost"
@@ -749,10 +734,7 @@ msgid "Update"
 msgstr "Aktualizace"
 
 msgid "Upload"
-msgstr "Nabíjení"
-
-msgid "VAT No"
-msgstr "Číslo DPH"
+msgstr "Nahrání"
 
 msgid "Verify"
 msgstr "Ověřit"
@@ -806,10 +788,10 @@ msgid "Authors"
 msgstr "Autoři"
 
 msgid "Average"
-msgstr "Média"
+msgstr "Průměr"
 
 msgid "Balance"
-msgstr "Pájka"
+msgstr "Zůstatek"
 
 msgid "Camping"
 msgstr "Kempování"
@@ -824,7 +806,7 @@ msgid "Columns"
 msgstr "Sloupce"
 
 msgid "Confirm"
-msgstr "Použít"
+msgstr "Potvrdit"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -854,7 +836,7 @@ msgid "Default"
 msgstr "Výchozí"
 
 msgid "Details"
-msgstr "Podrobnosti na"
+msgstr "Podrobnosti"
 
 msgid "Display"
 msgstr "Zobrazit"
@@ -875,10 +857,10 @@ msgid "Gallery"
 msgstr "Galerie"
 
 msgid "Handout"
-msgstr "Materiál pro rozdávání"
+msgstr "Podklady"
 
 msgid "History"
-msgstr "Historické stránky"
+msgstr "Historie"
 
 msgid "ID Card"
 msgstr "Průkaz totožnosti"
@@ -895,14 +877,11 @@ msgstr "Inverzní"
 msgid "Invited"
 msgstr "Pozvaný"
 
-msgid "Invoice"
-msgstr "Faktura"
-
 msgid "Lottery"
 msgstr "Loterie"
 
 msgid "Maximum"
-msgstr "Massimo"
+msgstr "Maximální"
 
 msgid "Members"
 msgstr "Členové"
@@ -929,13 +908,13 @@ msgid "Overdue"
 msgstr "Zpoždění"
 
 msgid "Partial"
-msgstr "Částečně"
+msgstr "Částečné"
 
 msgid "Payment"
 msgstr "Platba"
 
 msgid "Pending"
-msgstr "Čeká se na"
+msgstr "Čekající"
 
 msgid "Players"
 msgstr "Hráči"
@@ -947,7 +926,7 @@ msgid "Primary"
 msgstr "Primární"
 
 msgid "Privacy"
-msgstr "Ochrana osobních údajů"
+msgstr "Soukromí"
 
 msgid "Private"
 msgstr "Soukromé"
@@ -956,7 +935,7 @@ msgid "Problem"
 msgstr "Problém"
 
 msgid "Proceed"
-msgstr "Postupujte podle"
+msgstr "Pokračovat"
 
 msgid "Profile"
 msgstr "Profil"
@@ -971,7 +950,7 @@ msgid "Receipt"
 msgstr "Příjem"
 
 msgid "Reduced"
-msgstr "Snížení"
+msgstr "Snížené"
 
 msgid "Refunds"
 msgstr "Náhrady"
@@ -984,9 +963,6 @@ msgstr "Obnovení"
 
 msgid "Section"
 msgstr "Sekce"
-
-msgid "Sent At"
-msgstr "Odesláno na"
 
 msgid "Session"
 msgstr "Relace"
@@ -1035,7 +1011,7 @@ msgid "Tickets"
 msgstr "Vstupenky"
 
 msgid "Tooltip"
-msgstr "Nápověda k nástrojům"
+msgstr "Tip"
 
 msgid "Updated"
 msgstr "Aktualizováno"
@@ -1047,13 +1023,10 @@ msgid "Used At"
 msgstr "Použité na"
 
 msgid "Used By"
-msgstr "Používá se do"
-
-msgid "Used at"
-msgstr "Používá se v"
+msgstr "Používáno"
 
 msgid "Used by"
-msgstr "Používá"
+msgstr "Používáno"
 
 msgid "Utility"
 msgstr "Utility"
@@ -1074,10 +1047,10 @@ msgid "Website"
 msgstr "Webové stránky"
 
 msgid "Welcome"
-msgstr "Vítejte na"
+msgstr "Vítejte"
 
 msgid "Working"
-msgstr "Pracovní stránky"
+msgstr "Zpracování"
 
 msgid "Writing"
 msgstr "Psaní"
@@ -1098,7 +1071,7 @@ msgid "Accepted"
 msgstr "Přijato"
 
 msgid "Activate"
-msgstr "Aktivace"
+msgstr "Aktivovat"
 
 msgid "Addition"
 msgstr "Dodatek"
@@ -1113,7 +1086,7 @@ msgid "Approved"
 msgstr "Schváleno"
 
 msgid "Assigned"
-msgstr "Přiřaďte"
+msgstr "Přiřazeno"
 
 msgid "Auto buy"
 msgstr "Automatický nákup"
@@ -1140,7 +1113,7 @@ msgid "Consumed"
 msgstr "Spotřebováno"
 
 msgid "Continue"
-msgstr "Pokračování"
+msgstr "Pokračovat"
 
 msgid "Copy URL"
 msgstr "Kopírovat adresu URL"
@@ -1152,10 +1125,10 @@ msgid "Deadline"
 msgstr "Termín"
 
 msgid "Deployed"
-msgstr "Nasazení"
+msgstr "Nasazeno"
 
 msgid "Disabled"
-msgstr "Bezbariérový"
+msgstr "Zakázáno"
 
 msgid "Discount"
 msgstr "Sleva"
@@ -1164,7 +1137,7 @@ msgid "Division"
 msgstr "Divize"
 
 msgid "Donation"
-msgstr "Dary"
+msgstr "Dar"
 
 msgid "Download"
 msgstr "Stáhnout"
@@ -1205,9 +1178,6 @@ msgstr "Dárkové"
 msgid "Handouts"
 msgstr "Handouts"
 
-msgid "Holidays"
-msgstr "Dovolená"
-
 msgid "Inactive"
 msgstr "Neaktivní"
 
@@ -1233,7 +1203,7 @@ msgid "Max uses"
 msgstr "Maximální použití"
 
 msgid "Messages"
-msgstr "Zpráva odeslána"
+msgstr "Zprávy"
 
 msgid "New cost"
 msgstr "Nové náklady"
@@ -1251,13 +1221,16 @@ msgid "One-shot"
 msgstr "Jednorázový záběr"
 
 msgid "Optional"
-msgstr "Volitelně"
+msgstr "Volitelný"
 
 msgid "Original"
 msgstr "Originál"
 
 msgid "Outflows"
 msgstr "Výstupy"
+
+msgid "Overpaid"
+msgstr "Přeplatek"
 
 msgid "Partners"
 msgstr "Partneři"
@@ -1272,7 +1245,7 @@ msgid "Pdf bulk"
 msgstr "Pdf ve velkém"
 
 msgid "Personal"
-msgstr "Zaměstnanci"
+msgstr "Personál"
 
 msgid "Portrait"
 msgstr "Fotografický portrét"
@@ -1299,7 +1272,7 @@ msgid "Pronouns"
 msgstr "Zájmena"
 
 msgid "Proposed"
-msgstr "Navrhované stránky"
+msgstr "Navrhované"
 
 msgid "Province"
 msgstr "Provincie"
@@ -1311,7 +1284,7 @@ msgid "Question"
 msgstr "Otázka"
 
 msgid "Receipts"
-msgstr "Příjmy"
+msgstr "Příjmové doklady"
 
 msgid "Redeemed"
 msgstr "Vykoupeno"
@@ -1337,9 +1310,6 @@ msgstr "Odpovědět na"
 msgid "Required"
 msgstr "Požadované"
 
-msgid "Requires"
-msgstr "Vyžaduje"
-
 msgid "Resource"
 msgstr "Zdroje"
 
@@ -1356,7 +1326,7 @@ msgid "Security"
 msgstr "Zabezpečení"
 
 msgid "Selected"
-msgstr "Vybrané stránky"
+msgstr "Vybrané"
 
 msgid "Services"
 msgstr "Služby"
@@ -1368,19 +1338,16 @@ msgid "Settings"
 msgstr "Nastavení"
 
 msgid "Severity"
-msgstr "Gravitace"
+msgstr "Závažnost"
 
 msgid "Show all"
 msgstr "Zobrazit všechny"
-
-msgid "Show the"
-msgstr "Zobrazit"
 
 msgid "Standard"
 msgstr "Standardní"
 
 msgid "Supplied"
-msgstr "Dodává se na adrese"
+msgstr "Dodáno"
 
 msgid "Template"
 msgstr "Šablona"
@@ -1397,9 +1364,6 @@ msgstr "Výukový program"
 msgid "Used on:"
 msgstr "Používá se na:"
 
-msgid "VAT rate"
-msgstr "Sazba DPH"
-
 msgid "Versions"
 msgstr "Verze"
 
@@ -1413,7 +1377,7 @@ msgid "XP avail"
 msgstr "Px k dispozici"
 
 msgid "download"
-msgstr "ke stažení"
+msgstr "Stáhnout"
 
 msgid "factions"
 msgstr "frakce"
@@ -1440,7 +1404,7 @@ msgid "Attending"
 msgstr "Účast na"
 
 msgid "Available"
-msgstr "Dostupné na"
+msgstr "Dostupné"
 
 msgid "Cancelled"
 msgstr "Zrušeno"
@@ -1458,34 +1422,31 @@ msgid "Container"
 msgstr "Kontejner"
 
 msgid "Copy done"
-msgstr "Provedená kopie"
+msgstr "Kopírování hotovo"
 
 msgid "Criterion"
 msgstr "Kritérium"
 
 msgid "Customize"
-msgstr "Přizpůsobení"
+msgstr "Přizpůsobit"
 
 msgid "Dashboard"
-msgstr "Přístrojová deska"
+msgstr "Ovládací panel"
 
 msgid "Deadlines"
 msgstr "Termíny"
 
 msgid "Delivered"
-msgstr "Doručeno na"
-
-msgid "Dimension"
-msgstr "Velikost"
+msgstr "Doručeno"
 
 msgid "Discounts"
-msgstr "Zařízení"
+msgstr "Slevy"
 
 msgid "Donations"
 msgstr "Dary"
 
 msgid "Enrolment"
-msgstr "Zápis na"
+msgstr "Zápis"
 
 msgid "File size"
 msgstr "Velikost souboru"
@@ -1524,7 +1485,7 @@ msgid "Modifiers"
 msgstr "Modifikátory"
 
 msgid "Move down"
-msgstr "Přesun dolů"
+msgstr "Přesunout dolů"
 
 msgid "Movements"
 msgstr "Pohyby"
@@ -1566,13 +1527,10 @@ msgid "Profiling"
 msgstr "Profilování"
 
 msgid "Prologues"
-msgstr "Prology"
+msgstr "Prologi"
 
 msgid "Promotion"
 msgstr "Propagace"
-
-msgid "Publisher"
-msgstr "Vydavatel"
 
 msgid "Questions"
 msgstr "Otázky"
@@ -1599,7 +1557,7 @@ msgid "Retention"
 msgstr "Zadržení"
 
 msgid "Returning"
-msgstr "Návrat na"
+msgstr "Návrat"
 
 msgid "Set quest"
 msgstr "Zadání úkolu"
@@ -1632,7 +1590,7 @@ msgid "Subdomain"
 msgstr "Subdoména"
 
 msgid "Submitted"
-msgstr "Submisivní"
+msgstr "Odesláno"
 
 msgid "Surcharge"
 msgstr "Příplatek"
@@ -1659,7 +1617,7 @@ msgid "Workshops"
 msgstr "Workshopy"
 
 msgid "available"
-msgstr "k dispozici na"
+msgstr "k dispozici"
 
 msgid "donations"
 msgstr "dary"
@@ -1698,7 +1656,7 @@ msgid "Appointees"
 msgstr "Jmenovaní"
 
 msgid "Approve it"
-msgstr "Schválit ji"
+msgstr "Schválit"
 
 msgid "Assignment"
 msgstr "Zadání"
@@ -1722,13 +1680,13 @@ msgid "Characters"
 msgstr "Postavy"
 
 msgid "Check data"
-msgstr "Kontrola údajů"
+msgstr "Zkontrolovat data"
 
 msgid "Chronology"
 msgstr "Chronologie"
 
 msgid "Collection"
-msgstr "Sbírejte"
+msgstr "Sbírka"
 
 msgid "Components"
 msgstr "Komponenty"
@@ -1767,13 +1725,13 @@ msgid "Event type"
 msgstr "Typ události"
 
 msgid "Experience"
-msgstr "Zkušenosti"
+msgstr "Zkušenost"
 
 msgid "Guild logo"
 msgstr "Logo cechu"
 
 msgid "Historical"
-msgstr "Historické stránky"
+msgstr "Historické"
 
 msgid "IP Address"
 msgstr "IP adresa"
@@ -1785,7 +1743,7 @@ msgid "Influencer"
 msgstr "Influencer"
 
 msgid "Kicked out"
-msgstr "Hunted"
+msgstr "Vyhozen"
 
 msgid "Last Event"
 msgstr "Poslední událost"
@@ -1830,7 +1788,7 @@ msgid "New player"
 msgstr "Nový hráč"
 
 msgid "New signup"
-msgstr "Nové položky"
+msgstr "Nové registrace"
 
 msgid "Newsletter"
 msgstr "Zpravodaj"
@@ -1884,7 +1842,7 @@ msgid "Refund for"
 msgstr "Úhrada za"
 
 msgid "Registered"
-msgstr "S nápisem"
+msgstr "Registrovaní"
 
 msgid "Remove tag"
 msgstr "Odstranění štítku"
@@ -1902,7 +1860,7 @@ msgid "Screenshot"
 msgstr "Snímek obrazovky"
 
 msgid "Searchable"
-msgstr "Vyhledávání na"
+msgstr "Vyhledávací"
 
 msgid "Selectable"
 msgstr "Volitelný"
@@ -1925,17 +1883,11 @@ msgstr "Statistiky"
 msgid "Surcharges"
 msgstr "Příplatky"
 
-msgid "Table list"
-msgstr "Tabulka seznamu"
-
-msgid "Tax regime"
-msgstr "Daňový režim"
-
 msgid "Text color"
 msgstr "Barva textu"
 
 msgid "To be done"
-msgstr "Překonat"
+msgstr "Ke splnění"
 
 msgid "Token name"
 msgstr "Název tokenu"
@@ -1968,7 +1920,7 @@ msgid "are closed"
 msgstr "jsou uzavřeny"
 
 msgid "characters"
-msgstr "znaky"
+msgstr "postavy"
 
 msgid "chronology"
 msgstr "chronologie"
@@ -1995,13 +1947,16 @@ msgid "Actual paid"
 msgstr "Skutečně vyplacené"
 
 msgid "Add to plot"
-msgstr "Přidat do pozemku"
+msgstr "Přidat do zápletky"
 
 msgid "Additionals"
 msgstr "Dodatky"
 
 msgid "Agritourism"
 msgstr "Agroturistika"
+
+msgid "Amount Paid"
+msgstr "Vyplacená částka"
 
 msgid "Amount paid"
 msgstr "Vyplacená částka"
@@ -2037,10 +1992,10 @@ msgid "Card number"
 msgstr "Číslo karty"
 
 msgid "Change gift"
-msgstr "Dárek ke změně"
+msgstr "Změnit dárek"
 
 msgid "Collections"
-msgstr "Collette"
+msgstr "Sbírky"
 
 msgid "Coming soon"
 msgstr "Již brzy"
@@ -2073,7 +2028,7 @@ msgid "Event texts"
 msgstr "Texty událostí"
 
 msgid "Fiscal code"
-msgstr "Daňový zákoník"
+msgstr "DIČ"
 
 msgid "Five quotas"
 msgstr "Pět kvót"
@@ -2127,7 +2082,7 @@ msgid "Nationality"
 msgstr "Státní příslušnost"
 
 msgid "Need a ride"
-msgstr "Potřebujete odvézt"
+msgstr "Potřebujete si nechat odvézt"
 
 msgid "New session"
 msgstr "Nové zasedání"
@@ -2181,7 +2136,7 @@ msgid "Request for"
 msgstr "Žádost o"
 
 msgid "Rotate left"
-msgstr "Levé kolo"
+msgstr "Otočit vlevo"
 
 msgid "Scroll left"
 msgstr "Posunout doleva"
@@ -2199,16 +2154,13 @@ msgid "Send emails"
 msgstr "Odeslat e-mail"
 
 msgid "Shorten URL"
-msgstr "Zkrácení adresy URL"
+msgstr "Zkrátit URL"
 
 msgid "Show closed"
 msgstr "Zobrazit uzavřeno"
 
 msgid "Signup link"
 msgstr "Odkaz na registraci"
-
-msgid "Simple list"
-msgstr "Jednoduchý seznam"
 
 msgid "Start here:"
 msgstr "Začněte zde:"
@@ -2258,9 +2210,6 @@ msgstr "sbírky"
 msgid "immediately"
 msgstr "okamžitě"
 
-msgid "leaderboard"
-msgstr "žebříčku"
-
 msgid "text length"
 msgstr "délka textu"
 
@@ -2274,7 +2223,7 @@ msgid "Add from NPC"
 msgstr "Přidat z NPC"
 
 msgid "Add prologue"
-msgstr "Přidání prologu"
+msgstr "Přidat prolog"
 
 msgid "Archive mail"
 msgstr "Archivovat poštu"
@@ -2313,7 +2262,7 @@ msgid "Event hidden"
 msgstr "Skrytá událost"
 
 msgid "Exit Preview"
-msgstr "Náhled výstupu"
+msgstr "Ukončit náhled"
 
 msgid "Experimental"
 msgstr "Experimentální"
@@ -2340,7 +2289,7 @@ msgid "Informations"
 msgstr "Informace"
 
 msgid "Installments"
-msgstr "Hodnotit"
+msgstr "Splátky"
 
 msgid "Instructions"
 msgstr "Pokyny"
@@ -2415,7 +2364,7 @@ msgid "Registration"
 msgstr "Registrace"
 
 msgid "Relationship"
-msgstr "Odkaz"
+msgstr "Vztah"
 
 msgid "Remove admin"
 msgstr "Odstranit správce"
@@ -2424,16 +2373,16 @@ msgid "Rensponsable"
 msgstr "Zodpovědný"
 
 msgid "Request date"
-msgstr "Požadované datum"
+msgstr "Datum požadavku"
 
 msgid "Request time"
-msgstr "Požadovaný čas"
+msgstr "Čas požadavku"
 
 msgid "Requirements"
 msgstr "Požadavky"
 
 msgid "Rotate right"
-msgstr "Pravé kolo"
+msgstr "Otočit vpravo"
 
 msgid "Scroll right"
 msgstr "Posuňte doprava"
@@ -2442,7 +2391,7 @@ msgid "See you soon"
 msgstr "Čekáme na vás"
 
 msgid "Show history"
-msgstr "Historická výstava"
+msgstr "Zobrazit historii"
 
 msgid "Subscription"
 msgstr "Předplatné"
@@ -2499,7 +2448,7 @@ msgid "View Details"
 msgstr "Zobrazit podrobnosti"
 
 msgid "Waiting list"
-msgstr "Čekání"
+msgstr "Seznam čekajících"
 
 msgid "We're coming"
 msgstr "Přicházíme"
@@ -2514,7 +2463,7 @@ msgid "Your team ID"
 msgstr "ID vašeho týmu"
 
 msgid "already used"
-msgstr "již použity"
+msgstr "již použito"
 
 msgid "user profile"
 msgstr "profil uživatele"
@@ -2536,7 +2485,7 @@ msgid "Accommodation"
 msgstr "Ubytování"
 
 msgid "Add character"
-msgstr "Přidat znak"
+msgstr "Přidat postavu"
 
 msgid "Age selection"
 msgstr "Výběr věku"
@@ -2632,7 +2581,7 @@ msgid "Fiscal Budget"
 msgstr "Fiskální rozpočet"
 
 msgid "Free donation"
-msgstr "Bezplatný příspěvek"
+msgstr "Dobrovolný příspěvek"
 
 msgid "Guild created"
 msgstr "Cech byl založen"
@@ -2692,7 +2641,7 @@ msgid "Original text"
 msgstr "Původní text"
 
 msgid "Passages made"
-msgstr "Přijaté kroky"
+msgstr "Absolvované pasáže"
 
 msgid "Past sessions"
 msgstr "Minulá zasedání"
@@ -2725,7 +2674,7 @@ msgid "Profile image"
 msgstr "Profilová fotka"
 
 msgid "Progress step"
-msgstr "Krok vpřed"
+msgstr "Krok pokroku"
 
 msgid "Prologue type"
 msgstr "Typ prologu"
@@ -2740,7 +2689,7 @@ msgid "Registrations"
 msgstr "Registrace"
 
 msgid "Relationships"
-msgstr "Kravaty"
+msgstr "Vztahy"
 
 msgid "Requests open"
 msgstr "Otevřené dotazy"
@@ -2832,6 +2781,9 @@ msgstr "Dostupné dny"
 
 msgid "Back to badges"
 msgstr "Zpět na odznaky"
+
+msgid "Bank Statement"
+msgstr "Výpis z bankovního účtu"
 
 msgid "Bring a friend"
 msgstr "Přiveďte kamaráda"
@@ -3000,9 +2952,6 @@ msgstr "Typ prologů"
 
 msgid "Question saved"
 msgstr "Submisivní otázka"
-
-msgid "Recipient Code"
-msgstr "Kód příjemce"
 
 msgid "Remove consent"
 msgstr "Odstranění souhlasu"
@@ -3231,6 +3180,9 @@ msgstr "Aktualizované členství"
 
 msgid "Progress status"
 msgstr "Progress"
+
+msgid "Public Holidays"
+msgstr "Státní svátky"
 
 msgid "Publish players"
 msgstr "Zveřejnit hráče"
@@ -4024,9 +3976,6 @@ msgstr "Vaše datum narození"
 msgid "by the deadline of"
 msgstr "do termínu"
 
-msgid "global preferences"
-msgstr "globální preference"
-
 msgid "Access Confirmation"
 msgstr "Potvrzení přístupu"
 
@@ -4399,6 +4348,9 @@ msgstr "Nastavení stavu znaku"
 msgid "Set up ability types"
 msgstr "Nastavení typů schopností"
 
+msgid "Show the leaderboard"
+msgstr "Zobrazit žebříček"
+
 msgid "Terms and Conditions"
 msgstr "Podmínky a pravidla"
 
@@ -4410,6 +4362,9 @@ msgstr "Sbírka se rozrůstá"
 
 msgid "The tax code matches"
 msgstr "Daňový zákoník odpovídá"
+
+msgid "Time And Date Of Use"
+msgstr "Čas a datum použití"
 
 msgid "Warehouse containers"
 msgstr "Skladové kontejnery"
@@ -4791,9 +4746,6 @@ msgstr "Vítejte v LarpManageru"
 msgid "give them this address"
 msgstr "předejte jim tuto adresu"
 
-msgid "history of preferences"
-msgstr "historie preferencí"
-
 #, python-format
 msgid "Assignment %(elements)s"
 msgstr "Přiřazení %(elements)s"
@@ -5066,6 +5018,9 @@ msgstr "Cílová relace nebyla nalezena"
 
 msgid "This event has concluded"
 msgstr "Tato akce byla ukončena"
+
+msgid "Time And Date Of Sending"
+msgstr "Čas a datum odeslání"
 
 msgid "Transfer is not possible"
 msgstr "Převod není možný"
@@ -5430,6 +5385,9 @@ msgstr "Nastavení dynamických splátek"
 
 msgid "Set up registration tickets"
 msgstr "Nastavení registračních lístků"
+
+msgid "Show the global preferences"
+msgstr "Zobrazit globální nastavení"
 
 msgid "Thank you for participating"
 msgstr "Děkujeme za účast"
@@ -5862,6 +5820,9 @@ msgstr "Nastavení konfigurace hlasování"
 
 msgid "Show questions already answered"
 msgstr "Zobrazit již zodpovězené otázky"
+
+msgid "Show the history of preferences"
+msgstr "Zobrazit historii nastavení"
 
 msgid "So far you have paid a total of"
 msgstr "Dosud jste zaplatili celkem"

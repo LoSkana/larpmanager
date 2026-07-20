@@ -67,7 +67,7 @@ class PaymentInvoice(UuidMixin, BaseModel):
         upload_to=UploadToPathAndRename("wire/"),
         null=True,
         blank=True,
-        verbose_name=_("Statement"),
+        verbose_name=_("Bank Statement"),
         help_text=_("Statement issued by the bank as proof of the issuance of the transfer (as pdf file)"),
     )
 
