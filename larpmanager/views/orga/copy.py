@@ -611,7 +611,7 @@ def copy(
     """
     # Validate parent event exists
     if not parent_event:
-        return messages.error(request, _("Parent empty"))
+        return messages.error(request, _("No value has been selected for parent"))
 
     # Extract event IDs for copying operations
     parent_event_id = parent_event.id

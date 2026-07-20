@@ -383,8 +383,8 @@ class OrgaConfigForm(ConfigForm):
         """Configure character cover image settings."""
         if "cover" in self.params.get("features"):
             self.set_section("cover", _("Character cover"))
-            field_label = _("Desalt thumbnail")
-            field_help_text = _("If checked, shows the original image in the cover, not the thumbnail version")
+            field_label = _("Use full-size image")
+            field_help_text = _("If enabled, displays the original full-sized image instead of the thumbnail version")
             self.add_configs("cover_orig", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_email(self) -> None:
@@ -475,11 +475,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("reduced_ratio", ConfigType.INT, reduced_ratio_label, reduced_ratio_help_text)
 
         if "filler" in self.params["features"]:
-            self.set_section("filler", _("Ticket Filler"))
-            filler_free_registration_label = _("Free registration")
+            self.set_section("filler", _("Reserve"))
+            filler_free_registration_label = _("Allow reserve signup anytime")
             filler_free_registration_help_text = _(
-                "If checked, participants may sign up as fillers at any time; otherwise, they may only "
-                "do so if the stipulated number of characters has been reached",
+                "If enabled, participants can sign up for the reserve list at any time. "
+                "If disabled, reserve signups open only after the event capacity is reached."
             )
             self.add_configs(
                 "filler_always",
@@ -1083,9 +1083,9 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("bring_friend", _("Bring a friend"))
 
             # Discount amount for the referring participant
-            referrer_discount_label = _("Forward discount")
+            referrer_discount_label = _("Referrer Reward Discount")
             referrer_discount_help_text = _(
-                "Value of the discount for the registered participant who gives the code to a friend who signs up",
+                "Discount awarded to an existing participant when a friend signs up using their code"
             )
             self.add_configs(
                 "bring_friend_discount_to",
@@ -1095,10 +1095,8 @@ class OrgaConfigForm(ConfigForm):
             )
 
             # Discount amount for the referred friend
-            referred_discount_label = _("Discount back")
-            referred_discount_help_text = _(
-                "Value of the discount for the friend who signs up using the code of a registered participant",
-            )
+            referred_discount_label = _("Referred Friend Discount")
+            referred_discount_help_text = _("Discount amount applied to a new user signing up with a referral code")
             self.add_configs(
                 "bring_friend_discount_from",
                 ConfigType.INT,

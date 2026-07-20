@@ -30,7 +30,7 @@
         </p>
         {% if list %}
             <p>
-                {% trans "Participants included" %}:
+                {% trans "Contributors" %}:
                 {% for el in list %}
                     {% include "elements/comma.html" %}
                     {{ el.member.display_member }}

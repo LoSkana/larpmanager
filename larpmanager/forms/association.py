@@ -679,10 +679,10 @@ class ExeConfigForm(ConfigForm):
         )
         self.add_configs("membership_day", ConfigType.CHAR, field_label, field_help_text, [day_validator])
 
-        field_label = _("Months free quota")
+        field_label = _("Standalone Payment Window")
         field_help_text = _(
-            "Number of months, starting from the beginning of the membership year, for which "
-            "to make free membership fee payment",
+            "Number of months at the start of the year when paying the annual fee "
+            "is allowed without requiring an active event signup."
         )
         self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
 

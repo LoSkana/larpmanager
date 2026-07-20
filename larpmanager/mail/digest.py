@@ -405,7 +405,7 @@ def _digest_organize_notifications(notifications: list) -> dict:
 
 def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, currency_symbol: str) -> str:
     """Generate email content for digest invoice to approve."""
-    email_body += "<h4>" + _("Invoices Awaiting Approval") + f": {len(invoice_approvals)}" + "</h4>"
+    email_body += "<h4>" + _("Payments Awaiting Approval") + f": {len(invoice_approvals)}" + "</h4>"
     email_body += "<ul>"
     invoice_ids = [notification.object_id for notification in invoice_approvals]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=event.association_id):
@@ -579,7 +579,7 @@ def digest_refund_request(association: Association, refund_requests: list[Notifi
 
 def digest_invoice_approvals(association: Association, invoice_approvals: list[NotificationQueue]) -> str:
     """Handles invoice approvals digest summary emails."""
-    content = "<h4>" + _("Invoices Awaiting Approval") + f": ({len(invoice_approvals)})" + "</h4>"
+    content = "<h4>" + _("Payments Awaiting Approval") + f": ({len(invoice_approvals)})" + "</h4>"
     content += "<ul>"
     invoice_ids = [notification.object_id for notification in invoice_approvals]
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):

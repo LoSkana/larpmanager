@@ -2,7 +2,7 @@
 
 Parses .po files into a sqlite db, then hands chunks to Claude Code
 itself for review against the curated Italian reference (no separate
-API key/billing — runs on Claude Code's own session), and stores
+API key/billing - runs on Claude Code's own session), and stores
 verdicts back in the db for reporting.
 
 Usage (inside a Claude Code session):
@@ -21,20 +21,6 @@ scripts/review_config.json, override with --config.
 # Claude Code reads chunk_path, reviews per SYSTEM_PROMPT (in the script), writes result_path
 .venv/bin/python scripts/translation/review.py ingest               # loads result_path into db, deletes chunk state
 .venv/bin/python scripts/translation/review.py report --lang fr
-
-
-example of review_config.json
-
-{
-  "db_path": "translation_review.sqlite3",
-  "chunk_path": "translation_review_chunk.json",
-  "state_path": "translation_review_chunk_state.json",
-  "result_path": "translation_review_result.json",
-  "model": "claude-code",
-  "chunk_size": 120,
-  "reference_lang": "it"
-}
-
 """
 
 import argparse
@@ -52,10 +38,10 @@ SYSTEM_PROMPT = """You are a translation quality reviewer for a Django web appli
 receive, you are given three strings:
 
 - msgid: the original English source string
-- msgstr_it: an Italian translation, curated by a native speaker —
+- msgstr_it: an Italian translation, curated by a native speaker -
   treat this as a reliable reference, not just another translation.
   This field is empty when msgstr_target IS the Italian translation
-  itself (Italian has no separate reference to check against) — in
+  itself (Italian has no separate reference to check against) - in
   that case judge msgstr_target against msgid alone.
 - msgstr_target: the translation in the target language, which you
   must review
@@ -64,10 +50,12 @@ Your job is to classify each entry and flag problems. Use both the
 English source AND the Italian reference to judge meaning: if the
 target translation differs from both, it is likely a real error. If
 the English and Italian references themselves diverge in meaning or
-implication, the source string is ambiguous — the target may have
+implication, the source string is ambiguous - the target may have
 simply chosen a different (still valid) reading. Distinguish these
 two cases explicitly. When msgstr_it is empty, judge solely against
 msgid.
+
+Specific LARP terms: Award (refers to awarding XP), Badges (in the context of achievements),
 
 Categories (status field):
 - "ok": translation is accurate and natural
@@ -89,10 +77,10 @@ Rules:
   affected.
 - Preserve UI tone: LarpManager strings are for event organizers and
   players, generally informal-professional, not bureaucratic.
-- Do not translate or alter any string yourself — only review.
+- Do not translate or alter any string yourself - only review.
 
 Output: return ONLY a JSON array, no prose before or after, no
-markdown code fences. Omit entries whose status is "ok" entirely —
+markdown code fences. Omit entries whose status is "ok" entirely -
 do not include them in the array. Include only entries with a
 problem, one object each:
 
@@ -105,7 +93,7 @@ problem, one object each:
 }
 
 Any msgid from the input not present in your output array is assumed
-"ok" — this is how you skip the "ok" cases.
+"ok" - this is how you skip the "ok" cases.
 """
 
 SEVERITY_ORDER = {
@@ -204,8 +192,16 @@ def cmd_sync(config: dict) -> None:
     print(f"sync: inserted={inserted} reset_to_pending={reset} unchanged={updated}")
 
 
+def _estimate_tokens(row) -> int:
+    """Rough token estimate for an entry (~4 chars/token) plus JSON field overhead."""
+    _id, msgid, msgstr_it, msgstr_target = row
+    chars = len(msgid or "") + len(msgstr_it or "") + len(msgstr_target or "")
+    return chars // 4 + 12
+
+
 def cmd_next_chunk(config: dict, lang: str | None) -> None:
-    """Write the next pending batch to chunk_path, plus a state file mapping msgid -> row id for ingest."""
+    """Write next pending batch to chunk_path, sized to fill target_tokens (capped at
+    max_chunk_size entries), plus a state file mapping msgid -> row id for ingest."""
     conn = get_db(config)
     query = "SELECT lang, po_file FROM entries WHERE status='pending'"
     params: list = []
@@ -220,12 +216,26 @@ def cmd_next_chunk(config: dict, lang: str | None) -> None:
         return
 
     group_lang, po_file = group
-    rows = conn.execute(
+    max_chunk_size = config.get("max_chunk_size", config["chunk_size"])
+    target_tokens = config.get("target_tokens")
+    candidates = conn.execute(
         "SELECT id, msgid, msgstr_it, msgstr_target FROM entries "
         "WHERE lang=? AND po_file=? AND status='pending' ORDER BY id LIMIT ?",
-        (group_lang, po_file, config["chunk_size"]),
+        (group_lang, po_file, max_chunk_size),
     ).fetchall()
     conn.close()
+
+    if target_tokens:
+        rows = []
+        used = 0
+        for row in candidates:
+            row_tokens = _estimate_tokens(row)
+            if rows and used + row_tokens > target_tokens:
+                break
+            rows.append(row)
+            used += row_tokens
+    else:
+        rows = candidates[: config["chunk_size"]]
 
     payload = [{"msgid": r[1], "msgstr_it": r[2], "msgstr_target": r[3], "lang": group_lang} for r in rows]
     Path(config["chunk_path"]).write_text(json.dumps(payload, ensure_ascii=False, indent=2))
@@ -305,7 +315,7 @@ def cmd_report(config: dict, lang: str | None, out: str | None) -> None:
     lines = [f"# Translation review report ({len(rows)} issues)\n"]
     for r in rows:
         lang_, po_file, msgid, msgstr_it, msgstr_target, status, note, suggested_fix = r
-        lines.append(f"## [{status}] {lang_} — {po_file}")
+        lines.append(f"## [{status}] {lang_} - {po_file}")
         lines.append(f"- msgid: `{msgid}`")
         lines.append(f"- it: `{msgstr_it}`")
         lines.append(f"- target: `{msgstr_target}`")

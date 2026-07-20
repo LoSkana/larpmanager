@@ -487,9 +487,6 @@ msgstr "Waar"
 msgid "email"
 msgstr "e-mail"
 
-msgid "moved"
-msgstr "Verplaatst"
-
 msgid "quick"
 msgstr "snel"
 
@@ -570,9 +567,6 @@ msgstr "Vrouw"
 
 msgid "Fields"
 msgstr "Velden"
-
-msgid "Filler"
-msgstr "Figuur or Bijpersonage"
 
 msgid "Footer"
 msgstr "Voettekst"
@@ -750,9 +744,6 @@ msgstr "Stemmen"
 
 msgid "XP tot"
 msgstr "Px Tot"
-
-msgid "copied"
-msgstr "gekopieerd"
 
 msgid "issued"
 msgstr "uitgegeven"
@@ -963,6 +954,9 @@ msgstr "Terugbetalingen"
 
 msgid "Request"
 msgstr "Verzoek"
+
+msgid "Reserve"
+msgstr "Reserve"
 
 msgid "Restore"
 msgstr "Herstel"
@@ -2267,6 +2261,9 @@ msgstr "Naam inhoud"
 msgid "Content type"
 msgstr "Type inhoud"
 
+msgid "Contributors"
+msgstr "Bijdragers"
+
 msgid "Credits name"
 msgstr "Naam Credits"
 
@@ -2347,9 +2344,6 @@ msgstr "Vereniging"
 
 msgid "PDF Profiles"
 msgstr "Pdf profielen"
-
-msgid "Parent empty"
-msgstr "Ouder leeg"
 
 msgid "Participants"
 msgstr "Deelnemers"
@@ -2553,9 +2547,6 @@ msgstr "Dagen deadline"
 msgid "Deadline date"
 msgstr "Uiterste datum"
 
-msgid "Discount back"
-msgstr "Korting terug"
-
 msgid "Document type"
 msgstr "Type document"
 
@@ -2735,9 +2726,6 @@ msgstr "Naam sjabloon"
 
 msgid "Text language"
 msgstr "Taal van de tekst"
-
-msgid "Ticket Filler"
-msgstr "Ticketvuller"
 
 msgid "Ticket chosen"
 msgstr "Geselecteerd ticket"
@@ -3145,9 +3133,6 @@ msgstr "Uitnodiging geweigerd"
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
 
-msgid "Maximum fillers"
-msgstr "Maximale vulstoffen"
-
 msgid "Maximum members"
 msgstr "Maximaal aantal leden"
 
@@ -3334,9 +3319,6 @@ msgstr "Vertraging in betaling"
 msgid "Delay in profile"
 msgstr "Vertraging in profiel"
 
-msgid "Desalt thumbnail"
-msgstr "Miniatuurafbeelding verwijderen"
-
 msgid "Disable grouping"
 msgstr "Groepering uitschakelen"
 
@@ -3376,9 +3358,6 @@ msgstr "Zichtbaarheid in het veld"
 msgid "First assignment"
 msgstr "Eerste opdracht"
 
-msgid "Forward discount"
-msgstr "Termijnkorting"
-
 msgid "Handout template"
 msgstr "Sjabloon voor hand-outs"
 
@@ -3390,6 +3369,9 @@ msgstr "Item toewijzingen"
 
 msgid "Lite Mode active"
 msgstr "Lite-modus actief"
+
+msgid "Maximum reserves"
+msgstr "Maximale reserves"
 
 msgid "May the best win"
 msgstr "Moge de beste winnen"
@@ -3649,9 +3631,6 @@ msgstr "Fiscale code controle"
 msgid "Fixed instalments"
 msgstr "Vaste termijnen"
 
-msgid "Free registration"
-msgstr "Gratis toegang"
-
 msgid "Generating Bundle"
 msgstr "Bundel genereren"
 
@@ -3673,9 +3652,6 @@ msgstr "Interne catering"
 msgid "Invalid selection"
 msgstr "Ongeldige selectie"
 
-msgid "Invoice not found"
-msgstr "Factuur niet gevonden"
-
 msgid "Load participants"
 msgstr "Deelnemers laden"
 
@@ -3690,9 +3666,6 @@ msgstr "Lidmaatschap"
 
 msgid "Module Activation"
 msgstr "Module Activering"
-
-msgid "Months free quota"
-msgstr "Maanden vrij quotum"
 
 msgid "Move to container"
 msgstr "Verplaats naar container"
@@ -3717,6 +3690,9 @@ msgstr "Betaal wat je wilt"
 
 msgid "Payment confirmed"
 msgstr "Betaling bevestigd"
+
+msgid "Payment not found"
+msgstr "Betaling niet gevonden"
 
 msgid "Payment submitted"
 msgstr "Betaling ingediend"
@@ -4153,9 +4129,6 @@ msgstr "Verwijderen uit factie"
 msgid "Results not present"
 msgstr "Resultaten niet aanwezig"
 
-msgid "Sign up as a filler"
-msgstr "Meld je aan als vuller"
-
 msgid "Signup cancellation"
 msgstr "Abonnement opzeggen"
 
@@ -4164,6 +4137,9 @@ msgstr "Ondersteunende beheerders"
 
 msgid "Treasury appointees"
 msgstr "Schatkistbeambten"
+
+msgid "Use full-size image"
+msgstr "Gebruik de afbeelding op volledige grootte"
 
 msgid "Username of account"
 msgstr "Gebruikersnaam account"
@@ -4257,9 +4233,6 @@ msgstr "Externe mailserver"
 msgid "Field for exclusions"
 msgstr "Veld voor uitsluitingen"
 
-msgid "Filler registrations"
-msgstr "Filler-registraties"
-
 msgid "Independent factions"
 msgstr "Onafhankelijke facties"
 
@@ -4286,6 +4259,9 @@ msgstr "ID-nummer lidmaatschap"
 
 msgid "Name - international"
 msgstr "Engelse naam"
+
+msgid "New pre-registration"
+msgstr "Nieuwe voorinschrijving"
 
 msgid "No roles defined yet"
 msgstr "Er zijn nog geen rollen gedefinieerd"
@@ -4377,6 +4353,9 @@ msgstr "Typen vaardigheden instellen"
 
 msgid "Show the leaderboard"
 msgstr "Laat het klassement zien"
+
+msgid "Sign up as a reserve"
+msgstr "Meld je aan als reserve"
 
 msgid "Terms and Conditions"
 msgstr "Algemene voorwaarden"
@@ -4501,9 +4480,6 @@ msgstr "Naam van het personage"
 msgid "New character created"
 msgstr "Nieuw personage gemaakt"
 
-msgid "New pre-registrations"
-msgstr "Nieuwe voorinschrijving"
-
 msgid "No albums created yet"
 msgstr "Er zijn nog geen albums aangemaakt"
 
@@ -4527,9 +4503,6 @@ msgstr "Bediening niet toegestaan"
 
 msgid "Participant questions"
 msgstr "Vragen van deelnemers"
-
-msgid "Participants included"
-msgstr "Ze namen deel"
 
 #, python-format
 msgid "Payment for %(event)s"
@@ -4561,6 +4534,9 @@ msgstr "Voorrang bij registratie"
 
 msgid "Registration sections"
 msgstr "Lidmaatschap secties"
+
+msgid "Reserve registrations"
+msgstr "Reserveringsregistraties"
 
 msgid "Select your character"
 msgstr "Selecteer je personage"
@@ -5031,6 +5007,12 @@ msgstr "Optioneel bestelnummer"
 msgid "Provisional registration"
 msgstr "Voorlopige registratie"
 
+msgid "Referred Friend Discount"
+msgstr "Korting voor doorverwezen vrienden"
+
+msgid "Referrer Reward Discount"
+msgstr "Korting voor het aanbrengen van nieuwe klanten"
+
 msgid "Regeneration pdf started"
 msgstr "pdf regeneratie gestart"
 
@@ -5112,9 +5094,6 @@ msgstr "Eerste ervaringspunten"
 msgid "Intermediary channel code"
 msgstr "Intermediaire kanaalcode"
 
-msgid "Invoice already confirmed"
-msgstr "Factuur al bevestigd"
-
 msgid "Kitchen - food, tableware"
 msgstr "Keuken - eten, servies"
 
@@ -5158,8 +5137,8 @@ msgstr "Optie succesvol opgeslagen"
 msgid "Payment already confirmed"
 msgstr "Betaling al bevestigd"
 
-msgid "Pending invoice approvals"
-msgstr "In afwachting van factuurgoedkeuringen"
+msgid "Payments pending approval"
+msgstr "Betalingen die nog moeten worden goedgekeurd"
 
 msgid "Pre-register to the event"
 msgstr "Schrijf je in op de voorinschrijvingslijst"
@@ -5191,6 +5170,9 @@ msgstr "Beschikbare tekens tonen"
 
 msgid "Size of the file in bytes"
 msgstr "Grootte van het bestand in bytes"
+
+msgid "Standalone Payment Window"
+msgstr "Zelfstandig betalingsvenster"
 
 msgid "These are our past events"
 msgstr "Dit zijn onze evenementen uit het verleden"
@@ -5253,9 +5235,6 @@ msgstr "Geef een kaart aan je vriend(in)"
 msgid "Hide unassigned characters"
 msgstr "Niet-toegewezen tekens verbergen"
 
-msgid "Invoices Awaiting Approval"
-msgstr "Facturen die wachten op goedkeuring"
-
 msgid "Manage the event prologues"
 msgstr "De prologen van evenementen beheren"
 
@@ -5273,6 +5252,9 @@ msgstr "Nu kun je instromen maken"
 
 msgid "Option no longer available"
 msgstr "Optie niet langer beschikbaar"
+
+msgid "Payments Awaiting Approval"
+msgstr "Betalingen die nog moeten worden goedgekeurd"
 
 msgid "Pre-registration cancelled"
 msgstr "Voorinschrijving geannuleerd"
@@ -5442,6 +5424,9 @@ msgstr "Wil je het veranderen"
 
 msgid "Your organization's country"
 msgstr "Het land van je organisatie"
+
+msgid "Allow reserve signup anytime"
+msgstr "Je kunt je op elk moment aanmelden voor de reserveringslijst"
 
 msgid "Authenticator device removed"
 msgstr "Authenticatieapparaat verwijderd"
@@ -6457,9 +6442,6 @@ msgstr "Stel nu de promotieconfiguraties in"
 msgid "Now set up the credits configuration"
 msgstr "Stel nu de credits configuratie in"
 
-msgid "Now you can create the filler ticket"
-msgstr "Nu kun je het vulkaartje maken"
-
 msgid "Now you can set the discount options"
 msgstr "Nu kun je de kortingsopties instellen"
 
@@ -6576,6 +6558,9 @@ msgstr "Spiegeltype teken, niet selecteerbaar"
 
 msgid "No one-time content items defined yet"
 msgstr "Er zijn nog geen eenmalige inhoudsitems gedefinieerd"
+
+msgid "No value has been selected for parent"
+msgstr "Er is geen waarde geselecteerd voor 'parent'"
 
 msgid "Now you can create fixed installments"
 msgstr "Nu kun je vaste afbetalingen maken"
@@ -7205,6 +7190,9 @@ msgstr "Nu kun je registratietoeslagen maken"
 msgid "Now you can create the \"new player\" ticket"
 msgstr "Nu kun je het \"nieuwe speler\"-ticket aanmaken"
 
+msgid "Now you can create the ticket for reserves"
+msgstr "Nu kun je het ticket voor de reserves aanmaken"
+
 msgid "Now you can review participants' questions"
 msgstr "Nu kunt u de vragen van de deelnemers bekijken"
 
@@ -7609,6 +7597,10 @@ msgstr "Bevestig dat je deze actie wilt uitvoeren"
 msgid "Please select both a registration and an event"
 msgstr "Selecteer zowel een registratie als een evenement"
 
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
+msgstr "De inschrijving voor %(member)s is verplaatst naar %(event)s"
+
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Patron en gereduceerd ticket configureren"
 
@@ -7712,6 +7704,10 @@ msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 "Waarschuwing: De functies tokens en credits zijn niet ingeschakeld. "
 "Restituties kunnen niet worden verwerkt als virtuele valuta"
+
+#, python-format
+msgid "Registration for %(member)s copied to %(event)s"
+msgstr "De aanmeldingen voor %(member)s zijn doorgestuurd naar %(event)s"
 
 msgid "Selected elements will be shown to participants"
 msgstr "Geselecteerde elementen worden aan de deelnemers getoond"
@@ -9209,10 +9205,6 @@ msgstr ""
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Deel van het inschrijvingsgeld alleen afgeleid van het gekozen ticket"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Registratie voor %(member)s met succes %(action)s naar %(event)s"
-
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Bekijk alle geannuleerde aanmeldingen en houd de status van de terugbetaling"
@@ -9317,11 +9309,6 @@ msgstr "Nu kunt u de dieetinformatie bekijken die deelnemers hebben ingediend"
 msgid "Participants can sign up right away through the registration form"
 msgstr "Deelnemers kunnen zich meteen aanmelden via het aanmeldingsformulier"
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
-msgstr ""
-"De reguliere plaatsen zijn uitverkocht, maar je kunt je nog steeds aanmelden"
-" als invaller"
-
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Sommige tickets missen een laatste termijn (0 bedrag): %(list)s"
@@ -9388,6 +9375,11 @@ msgstr ""
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Beheert de kredieten die deelnemers gebruiken om het inschrijfgeld te dekken"
+
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
+msgstr ""
+"De reguliere plaatsen zijn uitverkocht, maar je kunt je nog steeds aanmelden"
+" als reserveling"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
@@ -9609,6 +9601,11 @@ msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 "Beschrijf het in het onderstaande veld en we zullen het zo snel mogelijk "
 "oplossen"
+
+msgid "Discount amount applied to a new user signing up with a referral code"
+msgstr ""
+"Kortingsbedrag dat wordt toegepast op een nieuwe gebruiker die zich aanmeldt"
+" met een verwijzingscode"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "Wil je de registratiekosten opsplitsen in dynamische betalingsquota"
@@ -10354,12 +10351,6 @@ msgstr ""
 "weergegeven"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Maximum aantal beschikbare slots voor opvulpersonages (ingesteld op 0 voor "
-"onbeperkt)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Alleen kleine letters en cijfers toegestaan, geen spaties of speciale tekens"
@@ -10452,12 +10443,6 @@ msgstr ""
 "basis van personagereferenties"
 
 msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-"Als deze optie is aangevinkt, wordt de originele afbeelding in de omslag "
-"getoond, niet de miniatuurversie"
-
-msgid ""
 "If checked: Send an email notification to the organisers for updated signups"
 msgstr ""
 "Indien aangevinkt: Stuur een e-mailmelding naar de organisatoren voor "
@@ -10502,6 +10487,12 @@ msgid ""
 msgstr ""
 "Beheer speed-larp-scènes, hun locatie, de tekst op de kaarten en de "
 "toegewezen personages"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Maximaal aantal beschikbare plaatsen voor reservekarakters (stel dit in op 0"
+" voor onbeperkt)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -11281,6 +11272,13 @@ msgstr ""
 "organiseren"
 
 msgid ""
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
+msgstr ""
+"Korting die een bestaande deelnemer krijgt als een vriend zich aanmeldt met "
+"zijn of haar code"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore"
 msgstr ""
@@ -11293,6 +11291,13 @@ msgid ""
 msgstr ""
 "Als deze optie is aangevinkt, is deze alleen zichtbaar voor deelnemers met "
 "een geselecteerd ticket"
+
+msgid ""
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
+msgstr ""
+"Als deze optie is ingeschakeld, wordt de originele afbeelding op volledige "
+"grootte weergegeven in plaats van de miniatuurversie"
 
 #, python-format
 msgid ""
@@ -11344,14 +11349,6 @@ msgid ""
 msgstr ""
 "Kopieer de geselecteerde elementen uit een ander evenement naar dit "
 "evenement, waarbij bestaande gegevens worden overschreven"
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-"Bestandstype '%(detected_type)s' is niet toegestaan.Toegestane types zijn: "
-"'%(allowed_types)s'."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
@@ -12096,13 +12093,6 @@ msgstr ""
 "ze deze link: %(url)s"
 
 msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
-msgstr ""
-"Waarde van de korting voor de vriend die zich inschrijft met de code van een"
-" geregistreerde deelnemer"
-
-msgid ""
 "You can indicate a template event from which functionality and "
 "configurations will be copied"
 msgstr ""
@@ -12398,14 +12388,6 @@ msgstr ""
 "Schakelt ‘Gilden’ in: door spelers opgerichte groepen personages met een "
 "eigen beheerder, uitnodigingsfunctie en chat"
 
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-"Bestandsextensie '%(extension)s' is niet toegestaan.Toegestane extensies "
-"zijn: '%(allowed_extensions)s'."
-
 msgid ""
 "Indicates public information about your character, which will be shown to "
 "all other participants"
@@ -12454,13 +12436,6 @@ msgid ""
 msgstr ""
 "Volg de voortgang van het ZIP-pakket met afdrukbare personagefiches dat op "
 "de achtergrond wordt samengesteld"
-
-msgid ""
-"Value of the discount for the registered participant who gives the code to a"
-" friend who signs up"
-msgstr ""
-"Waarde van de korting voor de geregistreerde deelnemer die de code doorgeeft"
-" aan een vriend die zich inschrijft"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -13436,13 +13411,6 @@ msgstr ""
 "terugbetalen"
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-"Aantal maanden, vanaf het begin van het lidmaatschapsjaar, waarvoor de "
-"lidmaatschapsbijdrage gratis kan worden betaald"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -13492,14 +13460,6 @@ msgstr ""
 "<strong>Lite Mode</strong> is een vereenvoudigde omgeving die is ontworpen "
 "om je te helpen de basismechanismen van het platform onder de knie te "
 "krijgen"
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
-msgstr ""
-"Toegestaan type '%(allowed_type)s' is geen geldig type. Zie "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
@@ -13596,6 +13556,14 @@ msgid ""
 msgstr ""
 "Vul de openbare metadata in die worden gebruikt om dit evenement extern te "
 "promoten, zoals taal, type, setting, locatie en stijl"
+
+msgid ""
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
+msgstr ""
+"Het aantal maanden aan het begin van het jaar waarin je de jaarlijkse "
+"bijdrage mag betalen zonder dat je je voor een evenement hoeft in te "
+"schrijven."
 
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"
@@ -14100,14 +14068,6 @@ msgstr ""
 "voor een van onze evenementen"
 
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
-"participants who are ready to replacing last-minute dropout of main "
-"characters."
-msgstr ""
-"Maakt 'opvul'-personages mogelijk: eenvoudigere personagebladen, toegewezen "
-"aan deelnemers die op het laatste moment hoofdpersonages willen vervangen."
-
-msgid ""
 "If checked: show two separate tables on the characters page, one for "
 "characters participating in this run and one for non-participating "
 "characters"
@@ -14115,6 +14075,14 @@ msgstr ""
 "Indien aangevinkt: toon twee aparte tabellen op de personagepagina, één voor"
 " personages die deelnemen aan deze run en één voor niet-deelnemende "
 "personages"
+
+msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Als deze optie is ingeschakeld, kunnen deelnemers zich op elk moment op de "
+"reservelijst inschrijven. Als deze optie is uitgeschakeld, kun je je pas op "
+"de reservelijst inschrijven als de capaciteit van het evenement is bereikt."
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
@@ -14125,12 +14093,13 @@ msgstr ""
 "plaats van de organisatie"
 
 msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
+"participants who are ready to replacing last-minute dropout of main "
+"characters."
 msgstr ""
-"Als deze optie is aangevinkt, kunnen deelnemers zich te allen tijde "
-"aanmelden als invuller; anders kan dit alleen als het vastgestelde aantal "
-"tekens is bereikt"
+"Schakelt 'Reserve'-personages in: eenvoudigere personagebeschrijvingen, "
+"bedoeld voor deelnemers die klaar staan om op het laatste moment in te "
+"vallen voor hoofdpersonages die afhaken."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

@@ -21,7 +21,7 @@
 """
 Test: Registration form with multiple features and surcharges.
 Verifies registration form configuration with additional tickets, dynamic rates,
-surcharges, pay what you want, and filler tickets.
+surcharges, pay what you want, and reserve tickets.
 """
 import re
 from typing import Any
@@ -46,7 +46,7 @@ def test_orga_registration_form(pw_page: Any) -> None:
 
     signup(page, live_server)
 
-    check_filler(page, live_server)
+    check_reserve(page, live_server)
 
 
 def prepare_form(page: Any, live_server: Any) -> None:
@@ -186,11 +186,11 @@ def signup(page: Any, live_server: Any) -> None:
     )
 
 
-def check_filler(page: Any, live_server: Any) -> None:
-    # set up filler
+def check_reserve(page: Any, live_server: Any) -> None:
+    # set up reserve
     go_to(page, live_server, "test/manage")
     sidebar(page, "Features")
-    page.get_by_role("checkbox", name="Filler").check()
+    page.get_by_role("checkbox", name="Reserve").check()
     submit_confirm(page)
 
     sidebar(page, "Event")
@@ -198,7 +198,7 @@ def check_filler(page: Any, live_server: Any) -> None:
     page.locator("#id_form1-max_filler").fill("5")
     submit_confirm(page)
 
-    # check filler is not there
+    # check reserve is not there
     go_to(page, live_server, "test/")
     sidebar(page, "Your registration")
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
@@ -213,7 +213,7 @@ def check_filler(page: Any, live_server: Any) -> None:
     # enable config
     go_to(page, live_server, "test/manage")
     page.get_by_role("link", name="Configuration").first.click()
-    page.get_by_role("link", name=re.compile(r"^Ticket Filler ")).click()
+    page.get_by_role("link", name=re.compile(r"^Reserve ")).click()
     page.locator("#id_filler_always").check()
     submit_confirm(page)
 
@@ -222,10 +222,10 @@ def check_filler(page: Any, live_server: Any) -> None:
     sidebar(page, "Your registration")
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
         """
-        - row "Ticket (*) Standard 5€ sadsadsadsa Filler Your registration ticket2":
+        - row "Ticket (*) Standard 5€ sadsadsadsa Reserve Your registration ticket2":
           - cell "Ticket (*)"
-          - cell "Standard 5€ sadsadsadsa Filler Your registration ticket2":
+          - cell "Standard 5€ sadsadsadsa Reserve Your registration ticket2":
             - radio "Standard 5€ sadsadsadsa" [checked]
-            - radio "Filler"
+            - radio "Reserve"
         """
     )

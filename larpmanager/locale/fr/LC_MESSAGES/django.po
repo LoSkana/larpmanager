@@ -487,9 +487,6 @@ msgstr "Où"
 msgid "email"
 msgstr "courriel"
 
-msgid "moved"
-msgstr "déplacé"
-
 msgid "quick"
 msgstr "rapide"
 
@@ -570,9 +567,6 @@ msgstr "Féminin"
 
 msgid "Fields"
 msgstr "Champs"
-
-msgid "Filler"
-msgstr "Remplisseur"
 
 msgid "Footer"
 msgstr "Pied de page"
@@ -750,9 +744,6 @@ msgstr "Vote"
 
 msgid "XP tot"
 msgstr "Px Tot"
-
-msgid "copied"
-msgstr "copié"
 
 msgid "issued"
 msgstr "émis"
@@ -963,6 +954,9 @@ msgstr "Remboursements"
 
 msgid "Request"
 msgstr "Demande"
+
+msgid "Reserve"
+msgstr "Réserve"
 
 msgid "Restore"
 msgstr "Restaurer"
@@ -2267,6 +2261,9 @@ msgstr "Nom du contenu"
 msgid "Content type"
 msgstr "Type de contenu"
 
+msgid "Contributors"
+msgstr "Contributeurs"
+
 msgid "Credits name"
 msgstr "Nom des crédits"
 
@@ -2347,9 +2344,6 @@ msgstr "Association"
 
 msgid "PDF Profiles"
 msgstr "Profils Pdf"
-
-msgid "Parent empty"
-msgstr "Parent vide"
 
 msgid "Participants"
 msgstr "Les participants"
@@ -2553,9 +2547,6 @@ msgstr "Délai en jours"
 msgid "Deadline date"
 msgstr "Date limite"
 
-msgid "Discount back"
-msgstr "Remise"
-
 msgid "Document type"
 msgstr "Type de document"
 
@@ -2735,9 +2726,6 @@ msgstr "Nom du modèle"
 
 msgid "Text language"
 msgstr "Langue du texte"
-
-msgid "Ticket Filler"
-msgstr "Remplisseur de tickets"
 
 msgid "Ticket chosen"
 msgstr "Billet sélectionné"
@@ -3145,9 +3133,6 @@ msgstr "Invitation refusée"
 msgid "Mail assignment"
 msgstr "Affectation du courrier"
 
-msgid "Maximum fillers"
-msgstr "Remplissage maximal"
-
 msgid "Maximum members"
 msgstr "Nombre maximum de membres"
 
@@ -3334,9 +3319,6 @@ msgstr "Retard de paiement"
 msgid "Delay in profile"
 msgstr "Retard dans le profil"
 
-msgid "Desalt thumbnail"
-msgstr "Miniature de désaltération"
-
 msgid "Disable grouping"
 msgstr "Désactiver le regroupement"
 
@@ -3376,9 +3358,6 @@ msgstr "Visibilité sur le terrain"
 msgid "First assignment"
 msgstr "Première mission"
 
-msgid "Forward discount"
-msgstr "Escompte à terme"
-
 msgid "Handout template"
 msgstr "Modèle de document"
 
@@ -3390,6 +3369,9 @@ msgstr "Affectation des postes"
 
 msgid "Lite Mode active"
 msgstr "Mode \"Lite\" actif"
+
+msgid "Maximum reserves"
+msgstr "Réserves maximales"
 
 msgid "May the best win"
 msgstr "Que le meilleur gagne"
@@ -3649,9 +3631,6 @@ msgstr "Contrôle du code fiscal"
 msgid "Fixed instalments"
 msgstr "Versements fixes"
 
-msgid "Free registration"
-msgstr "Entrée gratuite"
-
 msgid "Generating Bundle"
 msgstr "Création d'un bundle"
 
@@ -3673,9 +3652,6 @@ msgstr "Restauration interne"
 msgid "Invalid selection"
 msgstr "Sélection non valide"
 
-msgid "Invoice not found"
-msgstr "Facture non trouvée"
-
 msgid "Load participants"
 msgstr "Charger les participants"
 
@@ -3690,9 +3666,6 @@ msgstr "Statut des membres"
 
 msgid "Module Activation"
 msgstr "Activation du module"
-
-msgid "Months free quota"
-msgstr "Mois de quota libre"
 
 msgid "Move to container"
 msgstr "Déplacer vers le conteneur"
@@ -3717,6 +3690,9 @@ msgstr "Payer ce que l'on veut"
 
 msgid "Payment confirmed"
 msgstr "Paiement confirmé"
+
+msgid "Payment not found"
+msgstr "Paiement introuvable"
 
 msgid "Payment submitted"
 msgstr "Paiement soumis"
@@ -4153,9 +4129,6 @@ msgstr "Retirer de la faction"
 msgid "Results not present"
 msgstr "Résultats non disponibles"
 
-msgid "Sign up as a filler"
-msgstr "Inscrivez-vous comme remplisseur "
-
 msgid "Signup cancellation"
 msgstr "Annulation de l'abonnement"
 
@@ -4164,6 +4137,9 @@ msgstr "Soutenir les mainteneurs"
 
 msgid "Treasury appointees"
 msgstr "Agents du Trésor"
+
+msgid "Use full-size image"
+msgstr "Afficher l'image en taille réelle"
 
 msgid "Username of account"
 msgstr "Nom d'utilisateur du compte"
@@ -4257,9 +4233,6 @@ msgstr "Serveur de messagerie externe"
 msgid "Field for exclusions"
 msgstr "Champ d'exclusion"
 
-msgid "Filler registrations"
-msgstr "Enregistrements de remplissage"
-
 msgid "Independent factions"
 msgstr "Les factions indépendantes"
 
@@ -4286,6 +4259,9 @@ msgstr "Numéro d'identification de l'adhérent"
 
 msgid "Name - international"
 msgstr "Nom anglais"
+
+msgid "New pre-registration"
+msgstr "Nouvelle préinscription"
 
 msgid "No roles defined yet"
 msgstr "Aucun rôle n'a encore été défini"
@@ -4377,6 +4353,9 @@ msgstr "Configurer les types d'aptitudes"
 
 msgid "Show the leaderboard"
 msgstr "Afficher le classement"
+
+msgid "Sign up as a reserve"
+msgstr "Inscris-toi comme réserviste"
 
 msgid "Terms and Conditions"
 msgstr "Conditions générales d'utilisation"
@@ -4501,9 +4480,6 @@ msgstr "Nom du personnage"
 msgid "New character created"
 msgstr "Nouveau personnage créé"
 
-msgid "New pre-registrations"
-msgstr "Nouvelle préinscription"
-
 msgid "No albums created yet"
 msgstr "Aucun album n'a encore été créé"
 
@@ -4527,9 +4503,6 @@ msgstr "Opération non autorisée"
 
 msgid "Participant questions"
 msgstr "Questions des participants"
-
-msgid "Participants included"
-msgstr "Ils ont participé"
 
 #, python-format
 msgid "Payment for %(event)s"
@@ -4561,6 +4534,9 @@ msgstr "Priorité d'inscription"
 
 msgid "Registration sections"
 msgstr "Sections des membres"
+
+msgid "Reserve registrations"
+msgstr "Inscriptions à la réserve"
 
 msgid "Select your character"
 msgstr "Sélectionnez votre personnage "
@@ -5031,6 +5007,12 @@ msgstr "Numéro de commande optionnel"
 msgid "Provisional registration"
 msgstr "Enregistrement provisoire"
 
+msgid "Referred Friend Discount"
+msgstr "Réduction pour parrainage d'un ami"
+
+msgid "Referrer Reward Discount"
+msgstr "Réduction « Récompense de parrainage »"
+
 msgid "Regeneration pdf started"
 msgstr "pdf régénération démarrée"
 
@@ -5112,9 +5094,6 @@ msgstr "Points d'expérience initiaux"
 msgid "Intermediary channel code"
 msgstr "Code du canal intermédiaire"
 
-msgid "Invoice already confirmed"
-msgstr "Facture déjà confirmée"
-
 msgid "Kitchen - food, tableware"
 msgstr "Cuisine - nourriture, vaisselle"
 
@@ -5158,8 +5137,8 @@ msgstr "Option sauvegardée avec succès"
 msgid "Payment already confirmed"
 msgstr "Paiement déjà confirmé"
 
-msgid "Pending invoice approvals"
-msgstr "Approbation des factures en attente"
+msgid "Payments pending approval"
+msgstr "Paiements en attente de validation"
 
 msgid "Pre-register to the event"
 msgstr "Inscrivez vous sur la liste de pré-inscription "
@@ -5191,6 +5170,9 @@ msgstr "Afficher les caractères disponibles"
 
 msgid "Size of the file in bytes"
 msgstr "Taille du fichier en octets"
+
+msgid "Standalone Payment Window"
+msgstr "Fenêtre de paiement autonome"
 
 msgid "These are our past events"
 msgstr "Voici nos événements passés"
@@ -5253,9 +5235,6 @@ msgstr "Offrez une carte à votre ami(e)"
 msgid "Hide unassigned characters"
 msgstr "Masquer les caractères non attribués"
 
-msgid "Invoices Awaiting Approval"
-msgstr "Factures en attente d'approbation"
-
 msgid "Manage the event prologues"
 msgstr "Gérer les prologues des événements"
 
@@ -5273,6 +5252,9 @@ msgstr "Vous pouvez maintenant créer des flux entrants"
 
 msgid "Option no longer available"
 msgstr "L'option n'est plus disponible"
+
+msgid "Payments Awaiting Approval"
+msgstr "Paiements en attente de validation"
 
 msgid "Pre-registration cancelled"
 msgstr "Préinscription annulée "
@@ -5442,6 +5424,9 @@ msgstr "Souhaitez-vous le modifier"
 
 msgid "Your organization's country"
 msgstr "Pays de votre organisation"
+
+msgid "Allow reserve signup anytime"
+msgstr "Permettre l'inscription sur liste d'attente à tout moment"
 
 msgid "Authenticator device removed"
 msgstr "Dispositif d'authentification retiré"
@@ -6457,9 +6442,6 @@ msgstr "Définis maintenant les configurations de la promotion"
 msgid "Now set up the credits configuration"
 msgstr "Configurez maintenant les crédits"
 
-msgid "Now you can create the filler ticket"
-msgstr "Vous pouvez maintenant créer le ticket de remplissage"
-
 msgid "Now you can set the discount options"
 msgstr "Vous pouvez maintenant définir les options de remise"
 
@@ -6576,6 +6558,9 @@ msgstr "Caractère de type miroir, non sélectionnable"
 
 msgid "No one-time content items defined yet"
 msgstr "Aucun élément de contenu ponctuel n'a encore été défini"
+
+msgid "No value has been selected for parent"
+msgstr "Aucune valeur n'a été sélectionnée pour le parent"
 
 msgid "Now you can create fixed installments"
 msgstr "Vous pouvez désormais créer des versements fixes"
@@ -7207,6 +7192,9 @@ msgstr "Vous pouvez désormais créer des surtaxes d'enregistrement"
 msgid "Now you can create the \"new player\" ticket"
 msgstr "Vous pouvez maintenant créer le ticket \"nouveau joueur\""
 
+msgid "Now you can create the ticket for reserves"
+msgstr "Tu peux désormais créer le billet pour les réservations"
+
 msgid "Now you can review participants' questions"
 msgstr "Vous pouvez maintenant passer en revue les questions des participants"
 
@@ -7618,6 +7606,10 @@ msgstr "Confirme que tu veux vraiment faire ça"
 msgid "Please select both a registration and an event"
 msgstr "Veuillez sélectionner à la fois une inscription et un événement"
 
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
+msgstr "L'inscription des %(member)s a été reportée à %(event)s"
+
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr ""
 "Configuration des billets pour les usagers et les billets à tarif réduit"
@@ -7722,6 +7714,10 @@ msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 "Avertissement : Les fonctions de jetons et de crédits ne sont pas activées. "
 "Les remboursements ne peuvent pas être traités en monnaie virtuelle"
+
+#, python-format
+msgid "Registration for %(member)s copied to %(event)s"
+msgstr "Inscription de %(member)s à %(event)s"
 
 msgid "Selected elements will be shown to participants"
 msgstr "Les éléments sélectionnés seront montrés aux participants"
@@ -9316,10 +9312,6 @@ msgstr ""
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Partie des droits d'inscription provenant uniquement du billet choisi"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Inscription des %(member)s avec succès %(action)s aux %(event)s"
-
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Passe en revue toutes les inscriptions annulées et vérifie l'état "
@@ -9427,11 +9419,6 @@ msgstr ""
 "Les participants peuvent s'inscrire dès maintenant via le formulaire "
 "d'inscription"
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
-msgstr ""
-"Les places principales sont complètes, mais tu peux toujours t'inscrire en "
-"tant que remplaçant"
-
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr ""
@@ -9502,6 +9489,11 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Gestion des crédits utilisés par les participants pour couvrir les frais "
 "d'inscription"
+
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
+msgstr ""
+"Les places principales sont complètes, mais tu peux toujours t'inscrire sur "
+"liste d'attente"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
@@ -9736,6 +9728,11 @@ msgstr ""
 msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr ""
 "Décrivez-le dans le champ ci-dessous et nous le corrigerons dès que possible"
+
+msgid "Discount amount applied to a new user signing up with a referral code"
+msgstr ""
+"Montant de la réduction accordée à un nouvel utilisateur qui s'inscrit avec "
+"un code de parrainage"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr ""
@@ -10505,12 +10502,6 @@ msgstr ""
 "Indiquez le titre du personnage - il sera affiché en même temps que le nom"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Nombre maximum d'emplacements disponibles pour les personnages de "
-"remplissage (0 pour un nombre illimité)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Seules les lettres minuscules et les chiffres sont autorisés, sans espaces "
@@ -10603,12 +10594,6 @@ msgstr ""
 "de personnages ne seront pas créées"
 
 msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr ""
-"Si cette case est cochée, l'image originale est affichée dans la couverture,"
-" et non la version miniature"
-
-msgid ""
 "If checked: Send an email notification to the organisers for updated signups"
 msgstr ""
 "Si coché : Envoyer une notification par courrier électronique aux "
@@ -10655,6 +10640,12 @@ msgid ""
 msgstr ""
 "Gérer les scènes de speed-larp, leur emplacement, le texte des fiches et les"
 " personnages attribués"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Nombre maximal d'emplacements de personnages de réserve disponibles (règle-"
+"le sur 0 pour un nombre illimité)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -11448,6 +11439,13 @@ msgstr ""
 "les examiner et de les organiser"
 
 msgid ""
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
+msgstr ""
+"Réduction accordée à un participant déjà inscrit lorsqu'un ami s'inscrit en "
+"utilisant son code"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore"
 msgstr ""
@@ -11460,6 +11458,13 @@ msgid ""
 msgstr ""
 "Si la case est cochée, l'option n'est visible que pour les participants "
 "ayant le billet sélectionné"
+
+msgid ""
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
+msgstr ""
+"Si cette option est activée, ça affiche l'image originale en taille réelle "
+"au lieu de la vignette"
 
 #, python-format
 msgid ""
@@ -11509,14 +11514,6 @@ msgid ""
 msgstr ""
 "Copier les éléments sélectionnés d'un autre événement dans cet événement, en"
 " écrasant les données existantes"
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-"Le type de fichier '%(detected_type)s' n'est pas autorisé. Les types "
-"autorisés sont : '%(allowed_types)s'."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
@@ -12258,13 +12255,6 @@ msgstr ""
 " pas terminée. Donnez-lui ce lien : %(url)s"
 
 msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
-msgstr ""
-"Valeur de la réduction pour l'ami qui s'inscrit en utilisant le code d'un "
-"participant inscrit"
-
-msgid ""
 "You can indicate a template event from which functionality and "
 "configurations will be copied"
 msgstr ""
@@ -12563,14 +12553,6 @@ msgstr ""
 "dotés d'un administrateur autonome, d'une fonctionnalité d'invitation et "
 "d'un système de messagerie"
 
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-"L'extension de fichier '%(extension)s' n'est pas autorisée. Les extensions "
-"autorisées sont : '%(allowed_extensions)s'."
-
 msgid ""
 "Indicates public information about your character, which will be shown to "
 "all other participants"
@@ -12619,13 +12601,6 @@ msgid ""
 msgstr ""
 "Suis l'avancement de la création du pack ZIP de fiches de personnage "
 "imprimables qui se génère en arrière-plan"
-
-msgid ""
-"Value of the discount for the registered participant who gives the code to a"
-" friend who signs up"
-msgstr ""
-"Valeur de la réduction pour le participant inscrit qui donne le code à un "
-"ami qui s'inscrit"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -13611,13 +13586,6 @@ msgstr ""
 "montant à rembourser au personnel"
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-"Nombre de mois, à partir du début de l'année d'adhésion, pour lesquels la "
-"cotisation peut être payée gratuitement"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -13667,14 +13635,6 @@ msgid ""
 msgstr ""
 "<strong>Lite Mode</strong> est un environnement simplifié conçu pour vous "
 "aider à maîtriser les mécanismes de base de la plate-forme"
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
-msgstr ""
-"Le type autorisé '%(allowed_type)s' n'est pas un type valide.Voir "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
@@ -13771,6 +13731,13 @@ msgid ""
 msgstr ""
 "Remplis les métadonnées publiques utilisées pour promouvoir cet événement à "
 "l'extérieur, notamment la langue, le type, le cadre, le lieu et le style"
+
+msgid ""
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
+msgstr ""
+"Nombre de mois au début de l'année pendant lesquels tu peux payer ta "
+"cotisation annuelle sans avoir à t'inscrire à un événement."
 
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"
@@ -14284,15 +14251,6 @@ msgstr ""
 " nos événements"
 
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
-"participants who are ready to replacing last-minute dropout of main "
-"characters."
-msgstr ""
-"Permet d'avoir des personnages 'bouche-trous' : des fiches de personnages "
-"plus simples, attribuées aux participants qui sont prêts à remplacer des "
-"personnages principaux qui se sont désistés à la dernière minute."
-
-msgid ""
 "If checked: show two separate tables on the characters page, one for "
 "characters participating in this run and one for non-participating "
 "characters"
@@ -14300,6 +14258,15 @@ msgstr ""
 "Si coché : afficher deux tableaux distincts sur la page des personnages, "
 "l'un pour les personnages participant à cette course et l'autre pour les "
 "personnages ne participant pas à la course"
+
+msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Si cette option est activée, les participants peuvent s'inscrire sur la "
+"liste d'attente à tout moment. Si elle est désactivée, les inscriptions sur "
+"la liste d'attente ne s'ouvrent qu'une fois que la capacité maximale de "
+"l'événement est atteinte."
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
@@ -14310,12 +14277,13 @@ msgstr ""
 "paie à la place de l'organisation"
 
 msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
+"participants who are ready to replacing last-minute dropout of main "
+"characters."
 msgstr ""
-"Si la case est cochée, les participants peuvent s'inscrire comme remplaçants"
-" à tout moment ; sinon, ils ne peuvent le faire que si le nombre de "
-"caractères stipulé est atteint"
+"Active les personnages « de réserve » : des fiches de personnage plus "
+"simples, attribuées aux participants prêts à remplacer au pied levé un "
+"personnage principal en cas d'absence de dernière minute."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

@@ -487,9 +487,6 @@ msgstr "Var"
 msgid "email"
 msgstr "e-post"
 
-msgid "moved"
-msgstr "flyttade"
-
 msgid "quick"
 msgstr "snabb"
 
@@ -570,9 +567,6 @@ msgstr "Kvinna"
 
 msgid "Fields"
 msgstr "Fält"
-
-msgid "Filler"
-msgstr "Buffé"
 
 msgid "Footer"
 msgstr "Sidfot"
@@ -750,9 +744,6 @@ msgstr "Omröstning"
 
 msgid "XP tot"
 msgstr "Px Tot"
-
-msgid "copied"
-msgstr "kopierad"
 
 msgid "issued"
 msgstr "utfärdade"
@@ -963,6 +954,9 @@ msgstr "Återbetalningar"
 
 msgid "Request"
 msgstr "Begäran"
+
+msgid "Reserve"
+msgstr "Reserv"
 
 msgid "Restore"
 msgstr "Återställ"
@@ -2267,6 +2261,9 @@ msgstr "Innehållets namn"
 msgid "Content type"
 msgstr "Typ av innehåll"
 
+msgid "Contributors"
+msgstr "Medverkande"
+
 msgid "Credits name"
 msgstr "Credits namn"
 
@@ -2347,9 +2344,6 @@ msgstr "Förening"
 
 msgid "PDF Profiles"
 msgstr "Pdf-profiler"
-
-msgid "Parent empty"
-msgstr "Förälder tom"
 
 msgid "Participants"
 msgstr "Deltagare"
@@ -2553,9 +2547,6 @@ msgstr "Dagar tidsfrist"
 msgid "Deadline date"
 msgstr "Sista inlämningsdag"
 
-msgid "Discount back"
-msgstr "Rabatt tillbaka"
-
 msgid "Document type"
 msgstr "Typ av dokument"
 
@@ -2735,9 +2726,6 @@ msgstr "Mallens namn"
 
 msgid "Text language"
 msgstr "Textens språk"
-
-msgid "Ticket Filler"
-msgstr "Biljettfyllare"
 
 msgid "Ticket chosen"
 msgstr "Biljett vald"
@@ -3145,9 +3133,6 @@ msgstr "Inbjudan avvisad"
 msgid "Mail assignment"
 msgstr "Tilldelning av post"
 
-msgid "Maximum fillers"
-msgstr "Maximala fyllmedel"
-
 msgid "Maximum members"
 msgstr "Maximalt antal medlemmar"
 
@@ -3334,9 +3319,6 @@ msgstr "Försenad betalning"
 msgid "Delay in profile"
 msgstr "Fördröjning i profil"
 
-msgid "Desalt thumbnail"
-msgstr "Avlägsna miniatyrbild"
-
 msgid "Disable grouping"
 msgstr "Avaktivera gruppering"
 
@@ -3376,9 +3358,6 @@ msgstr "Synlighet i fält"
 msgid "First assignment"
 msgstr "Första uppdraget"
 
-msgid "Forward discount"
-msgstr "Terminsrabatt"
-
 msgid "Handout template"
 msgstr "Mall för handout"
 
@@ -3390,6 +3369,9 @@ msgstr "Tilldelning av objekt"
 
 msgid "Lite Mode active"
 msgstr "Lite-läge aktivt"
+
+msgid "Maximum reserves"
+msgstr "Maximala reserver"
 
 msgid "May the best win"
 msgstr "Må den bästa mannen vinna"
@@ -3649,9 +3631,6 @@ msgstr "Kontroll av skattekod"
 msgid "Fixed instalments"
 msgstr "Fasta avbetalningar"
 
-msgid "Free registration"
-msgstr "Fri entré"
-
 msgid "Generating Bundle"
 msgstr "Skapa paket"
 
@@ -3673,9 +3652,6 @@ msgstr "Intern catering"
 msgid "Invalid selection"
 msgstr "Ogiltigt val"
 
-msgid "Invoice not found"
-msgstr "Fakturan hittades inte"
-
 msgid "Load participants"
 msgstr "Ladda deltagare"
 
@@ -3690,9 +3666,6 @@ msgstr "Medlemskapets status"
 
 msgid "Module Activation"
 msgstr "Aktivering av modul"
-
-msgid "Months free quota"
-msgstr "Månader fri kvot"
 
 msgid "Move to container"
 msgstr "Flytta till container"
@@ -3717,6 +3690,9 @@ msgstr "Betala vad du vill"
 
 msgid "Payment confirmed"
 msgstr "Betalning bekräftad"
+
+msgid "Payment not found"
+msgstr "Betalningen hittades inte"
 
 msgid "Payment submitted"
 msgstr "Inlämnad betalning"
@@ -4153,9 +4129,6 @@ msgstr "Ta bort från fraktionen"
 msgid "Results not present"
 msgstr "Resultat ej presenterade"
 
-msgid "Sign up as a filler"
-msgstr "Registrera dig som utfyllare"
-
 msgid "Signup cancellation"
 msgstr "Uppsägning av prenumeration"
 
@@ -4164,6 +4137,9 @@ msgstr "Stödja underhållare"
 
 msgid "Treasury appointees"
 msgstr "Kassaförvaltare"
+
+msgid "Use full-size image"
+msgstr "Visa bilden i full storlek"
 
 msgid "Username of account"
 msgstr "Användarnamn för konto"
@@ -4257,9 +4233,6 @@ msgstr "Extern e-postserver"
 msgid "Field for exclusions"
 msgstr "Fält för undantag"
 
-msgid "Filler registrations"
-msgstr "Registreringar av fyllnadsmaterial"
-
 msgid "Independent factions"
 msgstr "Oberoende fraktioner"
 
@@ -4286,6 +4259,9 @@ msgstr "Medlemskapets ID-nummer"
 
 msgid "Name - international"
 msgstr "Engelskt namn"
+
+msgid "New pre-registration"
+msgstr "Ny förhandsregistrering"
 
 msgid "No roles defined yet"
 msgstr "Inga roller har definierats ännu"
@@ -4377,6 +4353,9 @@ msgstr "Ställ in förmågetyper"
 
 msgid "Show the leaderboard"
 msgstr "Visa resultatlistan"
+
+msgid "Sign up as a reserve"
+msgstr "Anmäl dig som reserv"
 
 msgid "Terms and Conditions"
 msgstr "Villkor och anvisningar"
@@ -4501,9 +4480,6 @@ msgstr "Namn på karaktären"
 msgid "New character created"
 msgstr "Ny karaktär skapad"
 
-msgid "New pre-registrations"
-msgstr "Ny förhandsregistrering"
-
 msgid "No albums created yet"
 msgstr "Inga album har skapats ännu"
 
@@ -4527,9 +4503,6 @@ msgstr "Drift inte tillåten"
 
 msgid "Participant questions"
 msgstr "Frågor från deltagarna"
-
-msgid "Participants included"
-msgstr "De deltog i"
 
 #, python-format
 msgid "Payment for %(event)s"
@@ -4561,6 +4534,9 @@ msgstr "Prioritet vid registrering"
 
 msgid "Registration sections"
 msgstr "Medlemskapets sektioner"
+
+msgid "Reserve registrations"
+msgstr "Förhandsanmälningar"
 
 msgid "Select your character"
 msgstr "Välj din karaktär"
@@ -5031,6 +5007,12 @@ msgstr "Valfritt beställningsnummer"
 msgid "Provisional registration"
 msgstr "Provisorisk registrering"
 
+msgid "Referred Friend Discount"
+msgstr "Rabatt för värvade vänner"
+
+msgid "Referrer Reward Discount"
+msgstr "Rabatt för rekommendation"
+
 msgid "Regeneration pdf started"
 msgstr "pdf förnyelse påbörjad"
 
@@ -5112,9 +5094,6 @@ msgstr "Initiala erfarenhetspoäng"
 msgid "Intermediary channel code"
 msgstr "Kod för förmedlingskanal"
 
-msgid "Invoice already confirmed"
-msgstr "Fakturan är redan bekräftad"
-
 msgid "Kitchen - food, tableware"
 msgstr "Kök - mat, porslin"
 
@@ -5158,8 +5137,8 @@ msgstr "Alternativet sparades framgångsrikt"
 msgid "Payment already confirmed"
 msgstr "Betalning redan bekräftad"
 
-msgid "Pending invoice approvals"
-msgstr "Väntande fakturagodkännanden"
+msgid "Payments pending approval"
+msgstr "Betalningar som väntar på godkännande"
 
 msgid "Pre-register to the event"
 msgstr "Skriv upp dig på föranmälningslistan"
@@ -5191,6 +5170,9 @@ msgstr "Visa tillgängliga tecken"
 
 msgid "Size of the file in bytes"
 msgstr "Filens storlek i byte"
+
+msgid "Standalone Payment Window"
+msgstr "Fristående betalningsfönster"
 
 msgid "These are our past events"
 msgstr "Detta är våra tidigare evenemang"
@@ -5253,9 +5235,6 @@ msgstr "Ge ett kort till din vän"
 msgid "Hide unassigned characters"
 msgstr "Dölj icke tilldelade tecken"
 
-msgid "Invoices Awaiting Approval"
-msgstr "Fakturor som väntar på godkännande"
-
 msgid "Manage the event prologues"
 msgstr "Hantera evenemangets prologer"
 
@@ -5273,6 +5252,9 @@ msgstr "Nu kan du skapa inflöden"
 
 msgid "Option no longer available"
 msgstr "Alternativet är inte längre tillgängligt"
+
+msgid "Payments Awaiting Approval"
+msgstr "Betalningar som väntar på godkännande"
 
 msgid "Pre-registration cancelled"
 msgstr "Förhandsregistreringen är inställd"
@@ -5442,6 +5424,9 @@ msgstr "Skulle du vilja ändra det"
 
 msgid "Your organization's country"
 msgstr "Din organisations land"
+
+msgid "Allow reserve signup anytime"
+msgstr "Tillåt anmälan till reservlistan när som helst"
 
 msgid "Authenticator device removed"
 msgstr "Autentiseringsenhet borttagen"
@@ -6455,9 +6440,6 @@ msgstr "Ställ nu in kampanjkonfigurationerna"
 msgid "Now set up the credits configuration"
 msgstr "Ställ nu in konfigurationen för krediter"
 
-msgid "Now you can create the filler ticket"
-msgstr "Nu kan du skapa fyllnadsbiljetten"
-
 msgid "Now you can set the discount options"
 msgstr "Nu kan du ställa in rabattalternativen"
 
@@ -6574,6 +6556,9 @@ msgstr "Spegelkaraktär, inte valbar"
 
 msgid "No one-time content items defined yet"
 msgstr "Inga engångsinnehållsobjekt har definierats ännu"
+
+msgid "No value has been selected for parent"
+msgstr "Inget värde har valts för överordnad"
 
 msgid "Now you can create fixed installments"
 msgstr "Nu kan du skapa fasta delbetalningar"
@@ -7198,6 +7183,9 @@ msgstr "Nu kan du skapa tilläggsavgifter för registrering"
 msgid "Now you can create the \"new player\" ticket"
 msgstr "Nu kan du skapa biljetten för \"ny spelare\""
 
+msgid "Now you can create the ticket for reserves"
+msgstr "Nu kan du skapa en biljett för reserver"
+
 msgid "Now you can review participants' questions"
 msgstr "Nu kan du gå igenom deltagarnas frågor"
 
@@ -7599,6 +7587,10 @@ msgstr "Bekräfta att du vill utföra den här åtgärden"
 msgid "Please select both a registration and an event"
 msgstr "Vänligen välj både en registrering och ett evenemang"
 
+#, python-format
+msgid "Registration for %(member)s moved to %(event)s"
+msgstr "Anmälan för %(member)s har flyttats till %(event)s"
+
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Konfigurera biljettkonfigurationen för Patron och Reduced"
 
@@ -7698,6 +7690,10 @@ msgid "Refunds cannot be processed as virtual currency"
 msgstr ""
 "Varning för att Varken tokens eller credits-funktioner är aktiverade. "
 "Återbetalningar kan inte behandlas som virtuell valuta"
+
+#, python-format
+msgid "Registration for %(member)s copied to %(event)s"
+msgstr "Anmälningar för %(member)s har kopierats till %(event)s"
 
 msgid "Selected elements will be shown to participants"
 msgstr "Utvalda element kommer att visas för deltagarna"
@@ -9124,10 +9120,6 @@ msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr ""
 "Del av registreringsavgiften som endast härrör från den valda biljetten"
 
-#, python-format
-msgid "Registration for %(member)s successfully %(action)s to %(event)s"
-msgstr "Registrering för %(member)s framgångsrikt %(action)s till %(event)s"
-
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 "Granska alla avbokade anmälningar och följ upp återbetalningsstatusen för "
@@ -9216,11 +9208,6 @@ msgstr "Nu kan du granska den kostinformation som deltagarna har lämnat in"
 msgid "Participants can sign up right away through the registration form"
 msgstr "Deltagarna kan anmäla sig direkt via anmälningsformuläret"
 
-msgid "Primary spots are sold out, but you can still sign up as a filler"
-msgstr ""
-"De ordinarie platserna är slutsålda, men du kan fortfarande anmäla dig som "
-"reserv"
-
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Vissa biljetter saknar en sista delbetalning (0 belopp): %(list)s"
@@ -9281,6 +9268,11 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Hanterar krediter som används av deltagarna för att täcka "
 "registreringsavgiften"
+
+msgid "Primary spots are sold out, but you can still sign up as a reserve"
+msgstr ""
+"De ordinarie platserna är slutsålda, men du kan fortfarande anmäla dig som "
+"reserv"
 
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Välj de typer av skrivelement som den här frågan gäller"
@@ -9490,6 +9482,11 @@ msgstr ""
 
 msgid "Describe it in the field below and we will fix it as soon as possible"
 msgstr "Beskriv det i fältet nedan så åtgärdar vi det så snart som möjligt"
+
+msgid "Discount amount applied to a new user signing up with a referral code"
+msgstr ""
+"Rabattbelopp som tillämpas för en ny användare som registrerar sig med en "
+"rekommendationskod"
 
 msgid "Do you want to split the registration fee into dynamic payment quotas"
 msgstr "Vill du dela upp registreringsavgiften i dynamiska betalningskvoter"
@@ -10189,12 +10186,6 @@ msgstr ""
 "Ange rollpersonens titel - den kommer att visas tillsammans med namnet"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Maximalt antal tillgängliga platser för fyllnadstecken (inställt på 0 för "
-"obegränsat antal)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Endast gemena bokstäver och siffror tillåtna, inga mellanslag eller "
@@ -10283,10 +10274,6 @@ msgstr ""
 "karaktärsreferenser att skapas"
 
 msgid ""
-"If checked, shows the original image in the cover, not the thumbnail version"
-msgstr "Om markerad, visas originalbilden i omslaget, inte miniatyrversionen"
-
-msgid ""
 "If checked: Send an email notification to the organisers for updated signups"
 msgstr ""
 "Om markerat: Skicka ett e-postmeddelande till arrangörerna för uppdaterade "
@@ -10330,6 +10317,12 @@ msgid ""
 msgstr ""
 "Hantera scener i snabblarp, deras stationer, rollbeskrivningar och "
 "tilldelade karaktärer"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Maximalt antal tillgängliga platser för reservkaraktärer (ställ in på 0 för "
+"obegränsat antal)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -11094,6 +11087,13 @@ msgstr ""
 "att granska och organisera dem"
 
 msgid ""
+"Discount awarded to an existing participant when a friend signs up using "
+"their code"
+msgstr ""
+"Rabatt som beviljas en befintlig deltagare när en vän registrerar sig med "
+"dennes kod"
+
+msgid ""
 "Enables 'Handouts,' pre-written texts that provide information about a plot "
 "or lore"
 msgstr ""
@@ -11106,6 +11106,13 @@ msgid ""
 msgstr ""
 "Om den är markerad kan ett alternativ endast vara synligt för deltagare med "
 "vald biljett"
+
+msgid ""
+"If enabled, displays the original full-sized image instead of the thumbnail "
+"version"
+msgstr ""
+"Om denna funktion är aktiverad visas den ursprungliga bilden i full storlek "
+"istället för miniatyrversionen"
 
 #, python-format
 msgid ""
@@ -11154,14 +11161,6 @@ msgid ""
 msgstr ""
 "Kopiera valda objekt från ett annat evenemang till det här evenemanget och "
 "skriv över befintliga uppgifter"
-
-#, python-format
-msgid ""
-"File type '%(detected_type)s' is not allowed.Allowed types are: "
-"'%(allowed_types)s'."
-msgstr ""
-"Filtypen '%(detected_type)s' är inte tillåten. Tillåtna typer är: "
-"'%(allowed_types)s'."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
@@ -11901,13 +11900,6 @@ msgstr ""
 "dem den här länken: %(url)s"
 
 msgid ""
-"Value of the discount for the friend who signs up using the code of a "
-"registered participant"
-msgstr ""
-"Värdet av rabatten för den vän som anmäler sig med en registrerad deltagares"
-" kod"
-
-msgid ""
 "You can indicate a template event from which functionality and "
 "configurations will be copied"
 msgstr ""
@@ -12203,14 +12195,6 @@ msgstr ""
 "Aktiverar ”Guilds” – spelarstyrda grupper av karaktärer med en egen "
 "administratör, inbjudningsfunktion och chatt"
 
-#, python-format
-msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
-msgstr ""
-"Filändelsen '%(extension)s' är inte tillåten. Tillåtna filändelser är: "
-"'%(allowed_extensions)s'."
-
 msgid ""
 "Indicates public information about your character, which will be shown to "
 "all other participants"
@@ -12259,13 +12243,6 @@ msgid ""
 msgstr ""
 "Följ hur det går med det utskrivbara karaktärsarket i ZIP-paketet som "
 "genereras i bakgrunden"
-
-msgid ""
-"Value of the discount for the registered participant who gives the code to a"
-" friend who signs up"
-msgstr ""
-"Värdet av rabatten för den registrerade deltagaren som ger koden till en vän"
-" som anmäler sig"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -13238,13 +13215,6 @@ msgstr ""
 "evenemangskostnaderna och det belopp som ska återbetalas till personalen"
 
 msgid ""
-"Number of months, starting from the beginning of the membership year, for "
-"which to make free membership fee payment"
-msgstr ""
-"Antal månader, med början från början av medlemsåret, för vilka "
-"medlemsavgiften kan betalas kostnadsfritt"
-
-msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -13292,14 +13262,6 @@ msgid ""
 msgstr ""
 "<strong>Lite Mode</strong> är en förenklad miljö som är utformad för att "
 "hjälpa dig att behärska plattformens kärnmekanik"
-
-#, python-format
-msgid ""
-"Allowed type '%(allowed_type)s' is not a valid type.See "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
-msgstr ""
-"Tillåten typ '%(allowed_type)s' är inte en giltig typ. Se "
-"https://www.iana.org/assignments/media-types/media-types.xhtml"
 
 msgid ""
 "Enables \"Prologues\", short introductory paragraphs for each act of the "
@@ -13392,6 +13354,13 @@ msgid ""
 msgstr ""
 "Fyll i de offentliga metadata som används för att marknadsföra detta "
 "evenemang externt, inklusive språk, typ, miljö, plats och stil"
+
+msgid ""
+"Number of months at the start of the year when paying the annual fee is "
+"allowed without requiring an active event signup."
+msgstr ""
+"Antal månader vid årets början under vilka det är tillåtet att betala "
+"årsavgiften utan att man behöver ha en aktiv anmälan till ett evenemang."
 
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"
@@ -13879,21 +13848,20 @@ msgstr ""
 " används automatiskt när du anmäler dig till något av våra evenemang"
 
 msgid ""
-"Enables 'Filler' characters: simpler character sheets, assigned to "
-"participants who are ready to replacing last-minute dropout of main "
-"characters."
-msgstr ""
-"Möjliggör 'Filler'-karaktärer: enklare karaktärsformulär som tilldelas "
-"deltagare som är redo att ersätta huvudkaraktärer som hoppar av i sista "
-"minuten."
-
-msgid ""
 "If checked: show two separate tables on the characters page, one for "
 "characters participating in this run and one for non-participating "
 "characters"
 msgstr ""
 "Om markerat: visa två separata tabeller på karaktärssidan, en för karaktärer"
 " som deltar i denna körning och en för icke-deltagande karaktärer"
+
+msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Om funktionen är aktiverad kan deltagarna anmäla sig till väntelistan när "
+"som helst. Om funktionen är inaktiverad öppnas anmälningarna till "
+"väntelistan först när evenemangets kapacitet har uppnåtts."
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
@@ -13904,12 +13872,12 @@ msgstr ""
 " för organisationen"
 
 msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
+"Enables 'Reserve' characters: simpler character sheets, assigned to "
+"participants who are ready to replacing last-minute dropout of main "
+"characters."
 msgstr ""
-"Om detta är markerat kan deltagarna när som helst anmäla sig som "
-"utfyllnadspersoner; i annat fall kan de endast göra det om det stipulerade "
-"antalet karaktärer har uppnåtts"
+"Aktiverar ”reservkaraktärer”: enklare karaktärsblad som tilldelas deltagare "
+"som är beredda att ersätta huvudkaraktärer som faller bort i sista minuten."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

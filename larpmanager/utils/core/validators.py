@@ -24,7 +24,6 @@ from typing import Any
 import magic
 from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
-from django.utils.translation import gettext_lazy as _
 
 READ_SIZE = 2048
 
@@ -40,16 +39,16 @@ class FileTypeValidator:
 
     """
 
-    type_message = _("File type '%(detected_type)s' is not allowed.Allowed types are: '%(allowed_types)s'.")
+    type_message = "File type '%(detected_type)s' is not allowed.Allowed types are: '%(allowed_types)s'."
 
-    extension_message = _(
+    extension_message = (
         "File extension '%(extension)s' is not allowed. Allowed extensions are: '%(allowed_extensions)s'.",
     )
 
-    invalid_message = _(
-        "Allowed type '%(allowed_type)s' is not a valid type.See "
-        "https://www.iana.org/assignments/media-types/media-types.xhtml",
-    )
+    invalid_message = """
+        Allowed type '%(allowed_type)s' is not a valid type.See
+        https://www.iana.org/assignments/media-types/media-types.xhtml
+    """
 
     def __init__(self, allowed_types: list[str], allowed_extensions: tuple[str, ...] = ()) -> None:
         """Initialize validator with allowed MIME types and file extensions."""

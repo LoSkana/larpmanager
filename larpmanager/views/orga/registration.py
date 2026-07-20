@@ -150,7 +150,7 @@ def _orga_registrations_traits(registration: Any, context: dict) -> None:
 
 
 _TICKET_TIER_TYPES = {
-    TicketTier.FILLER: ("2", _("Filler")),
+    TicketTier.FILLER: ("2", _("Reserve")),
     TicketTier.WAITING: ("3", _("Waiting")),
     TicketTier.LOTTERY: ("4", _("Lottery")),
     TicketTier.NPC: ("5", _("NPC")),

@@ -182,8 +182,8 @@ class Event(UuidMixin, BaseModel):
     max_filler = models.IntegerField(
         default=0,
         validators=[MinValueValidator(0)],
-        verbose_name=_("Maximum fillers"),
-        help_text=_("Maximum number of filler character slots available (set to 0 for unlimited)"),
+        verbose_name=_("Maximum reserves"),
+        help_text=_("Maximum number of reserve character slots available (set to 0 for unlimited)"),
     )
 
     max_waiting = models.IntegerField(

@@ -32,9 +32,7 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 
     $dialog.on('click', function(e) {
-        var rect = $dialog[0].getBoundingClientRect();
-        if (e.clientX < rect.left || e.clientX > rect.right ||
-            e.clientY < rect.top || e.clientY > rect.bottom) {
+        if (e.target === $dialog[0]) {
             $dialog[0].close();
         }
     });
