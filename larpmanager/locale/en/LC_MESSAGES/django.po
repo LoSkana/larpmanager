@@ -5239,9 +5239,6 @@ msgstr ""
 msgid "Are you sure you want to approve this element"
 msgstr ""
 
-msgid "Ask a question"
-msgstr ""
-
 msgid "Ask LarpManager"
 msgstr ""
 
@@ -5829,6 +5826,9 @@ msgid "Scroll right"
 msgstr ""
 
 msgid "What would you like to do?"
+msgstr ""
+
+msgid "Ask a question"
 msgstr ""
 
 msgid "User"

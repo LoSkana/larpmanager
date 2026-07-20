@@ -176,6 +176,9 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (res.k == 0) return;
                 $('#excel-edit').empty().append(res.v);
 
+                // Initialize select2 on dynamically inserted django-select2 fields
+                $('#excel-edit').find('.django-select2').djangoSelect2();
+
                 // Start working ticket updates every 1 second
                 if (workingTicketInterval) {
                     clearInterval(workingTicketInterval);
