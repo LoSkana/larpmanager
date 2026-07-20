@@ -168,7 +168,7 @@ class TestDigestFunctions(BaseTestCase):
         email_content = generate_summary_email(self.event, [notification])
 
 
-        self.assertIn("Invoices Awaiting Approval", email_content)
+        self.assertIn("Payments Awaiting Approval", email_content)
         self.assertIn(str(self.member), email_content)
         self.assertIn("Approve", email_content)
 
@@ -259,7 +259,7 @@ class TestDigestFunctions(BaseTestCase):
         email_content = generate_association_summary_email(self.association, [notification])
 
 
-        self.assertIn("Invoices Awaiting Approval", email_content)
+        self.assertIn("Payments Awaiting Approval", email_content)
         self.assertIn(str(self.member), email_content)
         self.assertIn("Approve", email_content)
 
@@ -373,7 +373,7 @@ class TestDigestFunctions(BaseTestCase):
 
 
         self.assertIn("Help Questions", email_content)
-        self.assertIn("Invoices Awaiting Approval", email_content)
+        self.assertIn("Payments Awaiting Approval", email_content)
 
     def test_digest_help_questions_generates_correct_content(self) -> None:
         """Test that digest_help_questions generates correct HTML content"""
@@ -425,7 +425,7 @@ class TestDigestFunctions(BaseTestCase):
 
         content = digest_invoice_approvals(self.association, [notification])
 
-        self.assertIn("Invoices Awaiting Approval", content)
+        self.assertIn("Payments Awaiting Approval", content)
         self.assertIn("(1)", content)
         self.assertIn(str(self.member), content)
         self.assertIn("Approve", content)
