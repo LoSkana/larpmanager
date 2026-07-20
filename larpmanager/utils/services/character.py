@@ -312,8 +312,10 @@ def get_character_sheet_exp(context: dict) -> None:
 
     # Group abilities by their type name
     for ability in context["character"].exp_ability_list.select_related("typ").all():
+        if not ability.typ or not ability.typ.name:
+            continue
         # Ensure ability has valid type and name before processing
-        if ability.typ and ability.typ.name and ability.typ.name not in context["sheet_abilities"]:
+        if ability.typ.name not in context["sheet_abilities"]:
             context["sheet_abilities"][ability.typ.name] = []
         context["sheet_abilities"][ability.typ.name].append(ability)
 

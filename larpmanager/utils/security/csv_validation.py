@@ -87,5 +87,26 @@ def sanitize_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     return df.map(sanitize_csv_value)
 
 
+class SanitizingCsvWriter:
+    """csv.writer wrapper that sanitizes every cell against formula injection.
+
+    Drop-in for a csv.writer: exposes writerow/writerows and escapes any cell
+    that would be interpreted as a formula by a spreadsheet application.
+    """
+
+    def __init__(self, writer: Any) -> None:
+        """Wrap an existing csv.writer-like object."""
+        self._writer = writer
+
+    def writerow(self, row: Any) -> Any:
+        """Write a single sanitized row."""
+        return self._writer.writerow([sanitize_csv_value(cell) for cell in row])
+
+    def writerows(self, rows: Any) -> None:
+        """Write multiple sanitized rows."""
+        for row in rows:
+            self.writerow(row)
+
+
 class CsvSecurityError(Exception):
     """Raised when CSV file fails security validation."""

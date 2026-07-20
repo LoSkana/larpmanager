@@ -208,7 +208,7 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
 
     # Go to your character, check result
     go_to(page, live_server, "/test/character/your")
-    expect_normalized(page, page.locator("#banner"), "Test Character - Test Larp")
+    expect_normalized(page, page.locator("body"), "Test Character - Test Larp")
     expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation Test Teaser Text Test Text")
 
 

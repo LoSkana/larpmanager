@@ -232,6 +232,12 @@ body.association.new_v22 .user_resize {
   max-width: 100%;
 }
 
+@media (max-width: 840px) {
+  body.association.new_v22 .user_resize {
+    padding: 0.5em;
+  }
+}
+
 .new_v22 .reg-links {
   text-align: left !important;
 }
@@ -476,6 +482,10 @@ body.association.new_v22 .user_resize {
   .event-side {
     position: static;
     width: 100%;
+  }
+
+  .event-card {
+    padding: 0.5em;
   }
 }
 

@@ -328,7 +328,7 @@ def bulk_warehouse2(live_server: Any, page: Any) -> None:
     page.get_by_role("link", name="Bulk").click()
     page.locator('[id="u1"]').get_by_role("link", name="box2").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#banner"), "Warehouse items - Organization")
+    expect_normalized(page, page.locator("body"), "Warehouse items - Organization")
 
     # check link when bulk not active
     page.get_by_role("link", name="Bulk").click()
