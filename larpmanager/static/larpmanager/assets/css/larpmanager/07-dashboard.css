@@ -434,36 +434,6 @@ body.floating_iframe #page-container {
   margin: 0 !important;
 }
 
-body.error-page #header,
-body.error-page #footer,
-body.error-page #sidebar,
-body.error-page #nav,
-body.error-page #menu,
-body.error-page #banner,
-body.error-page #topbar,
-body.error-page #menu-mobile,
-body.error-page #staging,
-body.error-page .info {
-  display: none !important;
-}
-
-body.error-page #page-wrapper,
-body.error-page #page-wrapper.topbar,
-body.error-page #page-wrapper.sidebar {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 100%;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-body.error-page #main {
-  width: 100%;
-  text-align: center;
-}
-
 body.floating_iframe.outer_delete #wrapper {
   overflow-y: hidden !important;
 }

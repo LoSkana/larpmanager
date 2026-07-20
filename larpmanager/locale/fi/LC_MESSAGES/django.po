@@ -8356,6 +8356,9 @@ msgstr "Käyttäjä on vahvistanut ilmoittautumisensa tähän tapahtumaan"
 msgid "The user has updated their registration for this event"
 msgstr "Käyttäjä on päivittänyt ilmoittautumisensa tähän tapahtumaan"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Tämä kutsu lähetettiin eri sähköpostiosoitteeseen."
+
 msgid "Whether this content is currently available for access"
 msgstr "Onko tämä sisältö tällä hetkellä saatavilla"
 

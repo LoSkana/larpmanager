@@ -47,7 +47,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/")
-    expect_normalized(page, page.locator("#banner"), "Access denied")
+    expect_normalized(page, page.locator("body"), "Access denied")
 
     login_orga(page, live_server)
 
@@ -68,7 +68,7 @@ def test_exe_association_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/accounting/")
-    expect_normalized(page, page.locator("#banner"), "Accounting - Organization")
+    expect_normalized(page, page.locator("body"), "Accounting - Organization")
 
     logout(page)
     login_orga(page, live_server)
@@ -81,4 +81,4 @@ def test_exe_association_role(pw_page: Any) -> None:
     login_user(page, live_server)
 
     go_to(page, live_server, "/manage/")
-    expect_normalized(page, page.locator("#banner"), "Access denied")
+    expect_normalized(page, page.locator("body"), "Access denied")

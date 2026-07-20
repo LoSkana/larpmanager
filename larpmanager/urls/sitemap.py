@@ -110,6 +110,7 @@ def _organization_sitemap(association_id: Any) -> list[str]:
     # Query active runs for future events
     runs = (
         Run.objects.exclude(development__in=[DevelopStatus.START, DevelopStatus.CANC])
+        .exclude(event__visible=False)
         .filter(event__association_id=association_id)
         .filter(end__gte=timezone.now())
         .select_related("event", "event__association")
