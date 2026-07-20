@@ -89,7 +89,7 @@ def test_exe_join(pw_page: Any) -> None:
     expect(page.get_by_role("cell", name="Creazione eventi")).to_be_visible()
     expect(page.get_by_role("cell", name="Metodi pagamento")).to_be_visible()
     expect(page.get_by_role("cell", name="Biglietti di iscrizione")).to_be_visible()
-    expect(page.get_by_role("cell", name="Form iscrizione")).to_be_visible()
+    expect(page.get_by_role("cell", name="Modulo iscrizione")).to_be_visible()
     expect(page.get_by_role("cell", name="Prima iscrizione")).to_be_visible()
 
     # Step 1: create event
@@ -139,7 +139,7 @@ def test_exe_join(pw_page: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "manage/activation/")
-    expect(page.locator("tr", has_text="Form iscrizione")).to_contain_text("Fatto")
+    expect(page.locator("tr", has_text="Modulo iscrizione")).to_contain_text("Fatto")
 
     # Step 5: first registration
     go_to(page, live_server, "prova/register")
