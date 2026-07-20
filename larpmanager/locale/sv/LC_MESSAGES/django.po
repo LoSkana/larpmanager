@@ -1886,6 +1886,9 @@ msgstr "Nästa kvot"
 msgid "No changes"
 msgstr "Inga förändringar"
 
+msgid "No results"
+msgstr "Inga resultat"
+
 msgid "Organizers"
 msgstr "Arrangörer"
 
@@ -2863,6 +2866,9 @@ msgstr "Aktiva enheter"
 msgid "Add to faction"
 msgstr "Lägg till i fraktion"
 
+msgid "Ask a question"
+msgstr "Ställ en fråga"
+
 msgid "Assign members"
 msgstr "Utse medlemmar"
 
@@ -3129,6 +3135,9 @@ msgstr "Lägg till i XP-poäng"
 
 msgid "App Integration"
 msgstr "App-integration"
+
+msgid "Ask LarpManager"
+msgstr "Fråga LarpManager"
 
 msgid "Attachment Name"
 msgstr "Namn på bifogad fil"
@@ -4634,6 +4643,9 @@ msgstr "Token inte initialiserad"
 msgid "Transfer registration"
 msgstr "Registrering av överföring"
 
+msgid "Type your question..."
+msgstr "Skriv din fråga..."
+
 msgid "Updated Registrations"
 msgstr "Uppdaterade registreringar"
 
@@ -4927,6 +4939,9 @@ msgstr "Spelarens karaktärsform"
 
 msgid "Please check them below"
 msgstr "Vänligen kontrollera dem nedan"
+
+msgid "Please write a question"
+msgstr "Skriv gärna en fråga"
 
 msgid "Pre registrations total"
 msgstr "Totalt antal förhandsregistreringar"
@@ -5520,6 +5535,9 @@ msgstr "Om markerat: medlemmar kan rösta"
 msgid "Invitation sent to %(email)s"
 msgstr "Inbjudan skickad till %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "Livechatten är inte konfigurerad."
+
 msgid "Manage experience criterions"
 msgstr "Hantera kriterier för användarupplevelsen"
 
@@ -6088,6 +6106,9 @@ msgstr "Ta reda på vad detta evenemang handlar om"
 
 msgid "Fill out the event prep questions"
 msgstr "Fyll i de förberedande frågorna för evenemanget"
+
+msgid "For best results, ask in English."
+msgstr "För bästa resultat, ställ frågan på engelska."
 
 msgid "For more information, write to us"
 msgstr "För mer information, skriv till oss"
@@ -9219,6 +9240,10 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Vissa biljetter saknar en sista delbetalning (0 belopp): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"Assistenten är tillfälligt inte tillgänglig. Vänligen försök igen senare."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -12748,6 +12773,13 @@ msgid ""
 msgstr ""
 "Lägger till biljettyperna 'Patron' och 'Reduced'. Varje Patron-biljett som "
 "köps gör en Reduced-biljett tillgänglig"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"Jag kunde inte hitta något relevant i dokumentationen. Försök att ställa "
+"frågan på engelska, eller skapa ett supportärende."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "

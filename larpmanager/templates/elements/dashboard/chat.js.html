@@ -1,0 +1,78 @@
+{% load i18n %}
+<script>
+window.addEventListener('DOMContentLoaded', function() {
+    var $trigger = $('.chat-widget-open-trigger');
+    if (!$trigger.length) return;
+
+    var $dialog = $('#chat-widget-dialog');
+    var $close = $('#chat-widget-close');
+    var $messages = $('#chat-widget-messages');
+    var $form = $('#chat-widget-form');
+    var $input = $('#chat-widget-input');
+
+    var askUrl = '{% url "chat_ask" %}';
+    var errorText = '{% filter escapejs %}{% trans "The assistant is temporarily unavailable, please try again later." %}{% endfilter %}';
+    var sending = false;
+
+    function addMessage(text, role) {
+        var $msg = $('<div class="chat-widget-message"></div>').addClass(role).text(text);
+        $messages.append($msg);
+        $messages.scrollTop($messages[0].scrollHeight);
+        return $msg;
+    }
+
+    $trigger.on('click', function() {
+        $dialog[0].showModal();
+        $input.trigger('focus');
+    });
+
+    $close.on('click', function(e) {
+        e.preventDefault();
+        $dialog[0].close();
+    });
+
+    $dialog.on('click', function(e) {
+        var rect = $dialog[0].getBoundingClientRect();
+        if (e.clientX < rect.left || e.clientX > rect.right ||
+            e.clientY < rect.top || e.clientY > rect.bottom) {
+            $dialog[0].close();
+        }
+    });
+
+    $form.on('submit', function(e) {
+        e.preventDefault();
+        if (sending) return;
+
+        var question = $input.val().trim();
+        if (!question) return;
+
+        addMessage(question, 'chat-widget-user');
+        $input.val('');
+
+        var $pending = addMessage('...', 'chat-widget-bot chat-widget-pending');
+
+        var formData = new FormData();
+        formData.append('csrfmiddlewaretoken', $form.find('input[name=csrfmiddlewaretoken]').val());
+        formData.append('question', question);
+
+        sending = true;
+        $.ajax({
+            url: askUrl,
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                $pending.removeClass('chat-widget-pending').text(response.answer || errorText);
+            },
+            error: function() {
+                $pending.removeClass('chat-widget-pending').text(errorText);
+            },
+            complete: function() {
+                sending = false;
+                $messages.scrollTop($messages[0].scrollHeight);
+            },
+        });
+    });
+});
+</script>

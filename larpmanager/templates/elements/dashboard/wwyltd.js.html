@@ -1,8 +1,13 @@
 {% load i18n static %}
 <script>
 window.addEventListener('DOMContentLoaded', function() {
-    var $sel = $('#id_wwyltd');
-    if (!$sel.length) return;
+    var $wrap = $('#wwyltd');
+    if (!$wrap.length) return;
+
+    var $search = $('#id_wwyltd_search');
+    var $hidden = $('#id_wwyltd');
+    var $results = $('#wwyltd-results');
+    var $modal = $('#wwyltd-modal');
 
     {% if run %}
     var choicesUrl = '{% url "wwyltd_choices_ajax" run.get_slug %}';
@@ -12,29 +17,59 @@ window.addEventListener('DOMContentLoaded', function() {
     var ajaxUrl    = '{% url "wwyltd_ajax" %}';
     {% endif %}
 
-    var choicesLoaded = false;
+    var debounceTimer = null;
+    var activeIndex = -1;
+    var currentItems = [];
+    var noResultsText = '{% filter escapejs %}{% trans "No results" %}{% endfilter %}';
 
-    $sel.select2({
-        placeholder: '{% filter escapejs %}{% trans "What would you like to do?" %}{% endfilter %}',
-        allowClear: false,
-    });
+    function closeResults() {
+        $results.empty().hide();
+        currentItems = [];
+        activeIndex = -1;
+    }
 
-    $sel.on('select2:opening', function(e) {
-        if (choicesLoaded) return;
-        e.preventDefault();
-        $.getJSON(choicesUrl, function(data) {
-            choicesLoaded = true;
-            data.results.forEach(function(item) {
-                $sel.append(new Option(item.text, item.id));
-            });
-            $sel.select2('open');
+    function renderResults(items) {
+        currentItems = items;
+        activeIndex = -1;
+        $results.empty();
+
+        if (!items.length) {
+            $results.append($('<div class="wwyltd-no-results"></div>').text(noResultsText));
+            $results.show();
+            return;
+        }
+
+        items.forEach(function(item, idx) {
+            var $item = $('<div class="wwyltd-result-item"></div>')
+                .attr('data-index', idx)
+                .attr('data-id', item.id)
+                .text(item.text);
+            $results.append($item);
         });
-    });
+        $results.show();
+    }
 
-    $sel.on('change', function() {
-        if (!this.value) return;
+    function highlightActive() {
+        $results.children('.wwyltd-result-item').removeClass('active');
+        if (activeIndex >= 0) {
+            var $active = $results.children('.wwyltd-result-item').eq(activeIndex);
+            $active.addClass('active');
+            var el = $active.get(0);
+            if (el) el.scrollIntoView({ block: 'nearest' });
+        }
+    }
 
-        var $form = $(this).closest('form');
+    function fetchResults(query) {
+        $.getJSON(choicesUrl, { q: query }, function(data) {
+            renderResults(data.results || []);
+        });
+    }
+
+    function submitChoice() {
+        var value = $hidden.val();
+        if (!value) return;
+
+        var $form = $search.closest('form');
         var formData = new FormData($form[0]);
         {% if run %}
         formData.append('event_slug', '{{ run.get_slug }}');
@@ -49,7 +84,10 @@ window.addEventListener('DOMContentLoaded', function() {
             success: function(response) {
                 if (response.success && response.url) {
                     window.open(response.url, '_blank');
-                    $sel.val(null).trigger('change');
+                    $search.val('');
+                    $hidden.val('');
+                    closeResults();
+                    if ($modal.length && $modal[0].open) $modal[0].close();
                 } else {
                     console.error('Invalid response:', response);
                     if (!window.lmTesting) alert('{% filter escapejs %}{% trans "An error occurred" %}{% endfilter %}');
@@ -65,6 +103,80 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (!window.lmTesting) alert(msg);
             },
         });
+    }
+
+    function selectChoice(id, text) {
+        if (!id) return;
+        $hidden.val(id);
+        $search.val(text);
+        submitChoice();
+    }
+
+    $search.on('input', function() {
+        var query = $(this).val();
+        $hidden.val('');
+        clearTimeout(debounceTimer);
+
+        if (!query) {
+            closeResults();
+            return;
+        }
+
+        debounceTimer = setTimeout(function() {
+            fetchResults(query);
+        }, 250);
     });
+
+    $search.on('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeResults();
+            if ($modal.length && $modal[0].open) $modal[0].close();
+            return;
+        }
+
+        if (!currentItems.length) return;
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            activeIndex = Math.min(activeIndex + 1, currentItems.length - 1);
+            highlightActive();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            activeIndex = Math.max(activeIndex - 1, 0);
+            highlightActive();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (activeIndex >= 0 && currentItems[activeIndex]) {
+                selectChoice(currentItems[activeIndex].id, currentItems[activeIndex].text);
+            }
+        }
+    });
+
+    $results.on('click', '.wwyltd-result-item', function() {
+        selectChoice($(this).data('id'), $(this).text());
+    });
+
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('#wwyltd').length) {
+            closeResults();
+        }
+    });
+
+    if ($modal.length) {
+        $('.wwyltd-open-trigger').on('click', function(e) {
+            e.preventDefault();
+            $modal[0].showModal();
+            closeResults();
+            $search.val('').trigger('focus');
+        });
+
+        $modal.on('click', function(e) {
+            var rect = $modal[0].getBoundingClientRect();
+            if (e.clientX < rect.left || e.clientX > rect.right ||
+                e.clientY < rect.top || e.clientY > rect.bottom) {
+                $modal[0].close();
+            }
+        });
+    }
 });
 </script>

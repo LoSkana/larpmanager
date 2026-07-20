@@ -98,6 +98,9 @@
                 {% endblock main %}
             </div>
         </div>
+        {% if not frame and is_larpmanager_skin %}
+            {% include "elements/dashboard/chat.html" %}
+        {% endif %}
         <script>
     var set_language_url = "{% url 'set_language' %}";
     var set_internaz = {{ set_internaz | default:"null" }};
@@ -124,6 +127,7 @@ window['icon_texts'] = {
             let url_tutorials = "{% url 'tutorials' %}";
         </script>
         {% include "elements/dashboard/modal.js.html" %}
+        {% include "elements/dashboard/chat.js.html" %}
         {% if manage %}
             <link rel="stylesheet"
                   href="{% static 'admin/css/vendor/select2/select2.min.css' %}">

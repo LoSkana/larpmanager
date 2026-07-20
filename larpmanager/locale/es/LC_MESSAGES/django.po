@@ -1886,6 +1886,9 @@ msgstr "Próximo pago"
 msgid "No changes"
 msgstr "Sin cambios"
 
+msgid "No results"
+msgstr "No hay resultados"
+
 msgid "Organizers"
 msgstr "Organizadores"
 
@@ -2863,6 +2866,9 @@ msgstr "Dispositivos activos"
 msgid "Add to faction"
 msgstr "Añadir a la facción"
 
+msgid "Ask a question"
+msgstr "Haz una pregunta"
+
 msgid "Assign members"
 msgstr "Asignar miembros"
 
@@ -3129,6 +3135,9 @@ msgstr "Añadir a los puntos de experiencia"
 
 msgid "App Integration"
 msgstr "Integración de aplicaciones"
+
+msgid "Ask LarpManager"
+msgstr "Pregúntale a LarpManager"
 
 msgid "Attachment Name"
 msgstr "Nombre del archivo adjunto"
@@ -4634,6 +4643,9 @@ msgstr "Ficha no inicializada"
 msgid "Transfer registration"
 msgstr "Registro de transferencias"
 
+msgid "Type your question..."
+msgstr "Escribe tu pregunta..."
+
 msgid "Updated Registrations"
 msgstr "Registros actualizados"
 
@@ -4927,6 +4939,9 @@ msgstr "Formulario de personaje del jugador"
 
 msgid "Please check them below"
 msgstr "Compruébelos a continuación"
+
+msgid "Please write a question"
+msgstr "Escribe una pregunta, por favor"
 
 msgid "Pre registrations total"
 msgstr "Total de preinscripciones"
@@ -5520,6 +5535,9 @@ msgstr "Si está marcada: los miembros pueden votar"
 msgid "Invitation sent to %(email)s"
 msgstr "Invitación enviada a %(email)s"
 
+msgid "Live chat is not configured."
+msgstr "El chat en vivo no está configurado."
+
 msgid "Manage experience criterions"
 msgstr "Gestionar criterios de experiencia"
 
@@ -6088,6 +6106,9 @@ msgstr "¡Descubre de qué trata este evento"
 
 msgid "Fill out the event prep questions"
 msgstr "Rellena las preguntas preparatorias del evento"
+
+msgid "For best results, ask in English."
+msgstr "Para obtener mejores resultados, pregunta en inglés."
 
 msgid "For more information, write to us"
 msgstr "Si desea más información, escríbanos"
@@ -9320,6 +9341,11 @@ msgstr ""
 #, python-format
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "A algunos billetes les falta un último plazo (importe 0): %(list)s"
+
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"El asistente no está disponible por el momento; por favor, vuelve a "
+"intentarlo más tarde."
 
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
@@ -12938,6 +12964,13 @@ msgid ""
 msgstr ""
 "Añade los tipos de entradas 'Patrocinador' y 'Reducida'. Por cada entrada de"
 " patrocinador que se compre, habrá disponible una entrada reducida"
+
+msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"No he encontrado nada relevante en la documentación. Prueba a preguntar en "
+"inglés o abre un ticket de soporte."
 
 msgid ""
 "If you select one (or more) character options, this criterion applies only "
