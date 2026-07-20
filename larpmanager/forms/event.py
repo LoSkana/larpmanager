@@ -475,11 +475,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("reduced_ratio", ConfigType.INT, reduced_ratio_label, reduced_ratio_help_text)
 
         if "filler" in self.params["features"]:
-            self.set_section("filler", _("Ticket Filler"))
-            filler_free_registration_label = _("Free registration")
+            self.set_section("filler", _("Reserve"))
+            filler_free_registration_label = _("Allow reserve signup anytime")
             filler_free_registration_help_text = _(
-                "If checked, participants may sign up as fillers at any time; otherwise, they may only "
-                "do so if the stipulated number of characters has been reached",
+                "If enabled, participants can sign up for the reserve list at any time. "
+                "If disabled, reserve signups open only after the event capacity is reached."
             )
             self.add_configs(
                 "filler_always",

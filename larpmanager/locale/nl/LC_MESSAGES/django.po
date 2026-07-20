@@ -958,6 +958,9 @@ msgstr "Terugbetalingen"
 msgid "Request"
 msgstr "Verzoek"
 
+msgid "Reserve"
+msgstr "Reserve"
+
 msgid "Restore"
 msgstr "Herstel"
 
@@ -2727,9 +2730,6 @@ msgstr "Naam sjabloon"
 msgid "Text language"
 msgstr "Taal van de tekst"
 
-msgid "Ticket Filler"
-msgstr "Ticketvuller"
-
 msgid "Ticket chosen"
 msgstr "Geselecteerd ticket"
 
@@ -3136,9 +3136,6 @@ msgstr "Uitnodiging geweigerd"
 msgid "Mail assignment"
 msgstr "Mail toewijzing"
 
-msgid "Maximum fillers"
-msgstr "Maximale vulstoffen"
-
 msgid "Maximum members"
 msgstr "Maximaal aantal leden"
 
@@ -3375,6 +3372,9 @@ msgstr "Item toewijzingen"
 
 msgid "Lite Mode active"
 msgstr "Lite-modus actief"
+
+msgid "Maximum reserves"
+msgstr "Maximale reserves"
 
 msgid "May the best win"
 msgstr "Moge de beste winnen"
@@ -3633,9 +3633,6 @@ msgstr "Fiscale code controle"
 
 msgid "Fixed instalments"
 msgstr "Vaste termijnen"
-
-msgid "Free registration"
-msgstr "Gratis toegang"
 
 msgid "Generating Bundle"
 msgstr "Bundel genereren"
@@ -4242,9 +4239,6 @@ msgstr "Externe mailserver"
 msgid "Field for exclusions"
 msgstr "Veld voor uitsluitingen"
 
-msgid "Filler registrations"
-msgstr "Filler-registraties"
-
 msgid "Independent factions"
 msgstr "Onafhankelijke facties"
 
@@ -4543,6 +4537,9 @@ msgstr "Voorrang bij registratie"
 
 msgid "Registration sections"
 msgstr "Lidmaatschap secties"
+
+msgid "Reserve registrations"
+msgstr "Reserveringsregistraties"
 
 msgid "Select your character"
 msgstr "Selecteer je personage"
@@ -5430,6 +5427,9 @@ msgstr "Wil je het veranderen"
 
 msgid "Your organization's country"
 msgstr "Het land van je organisatie"
+
+msgid "Allow reserve signup anytime"
+msgstr "Je kunt je op elk moment aanmelden voor de reserveringslijst"
 
 msgid "Authenticator device removed"
 msgstr "Authenticatieapparaat verwijderd"
@@ -10354,12 +10354,6 @@ msgstr ""
 "weergegeven"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Maximum aantal beschikbare slots voor opvulpersonages (ingesteld op 0 voor "
-"onbeperkt)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Alleen kleine letters en cijfers toegestaan, geen spaties of speciale tekens"
@@ -10496,6 +10490,12 @@ msgid ""
 msgstr ""
 "Beheer speed-larp-scènes, hun locatie, de tekst op de kaarten en de "
 "toegewezen personages"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Maximaal aantal beschikbare plaatsen voor reservekarakters (stel dit in op 0"
+" voor onbeperkt)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -14088,20 +14088,20 @@ msgstr ""
 "personages"
 
 msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Als deze optie is ingeschakeld, kunnen deelnemers zich op elk moment op de "
+"reservelijst inschrijven. Als deze optie is uitgeschakeld, kun je je pas op "
+"de reservelijst inschrijven als de capaciteit van het evenement is bereikt."
+
+msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
 "ticket price, so the participant covers them instead of the organization"
 msgstr ""
 "Als deze optie is ingeschakeld, voegt het systeem automatisch "
 "betalingskosten toe aan de ticketprijs, zodat de deelnemer deze betaalt in "
 "plaats van de organisatie"
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
-msgstr ""
-"Als deze optie is aangevinkt, kunnen deelnemers zich te allen tijde "
-"aanmelden als invuller; anders kan dit alleen als het vastgestelde aantal "
-"tekens is bereikt"
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

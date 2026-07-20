@@ -958,6 +958,9 @@ msgstr "Rimborsi"
 msgid "Request"
 msgstr "Richiesta"
 
+msgid "Reserve"
+msgstr "Riserva"
+
 msgid "Restore"
 msgstr "Ripristino"
 
@@ -2727,9 +2730,6 @@ msgstr "Nome del modello"
 msgid "Text language"
 msgstr "Lingua del testo"
 
-msgid "Ticket Filler"
-msgstr "Biglietto Filler"
-
 msgid "Ticket chosen"
 msgstr "Biglietto selezionato"
 
@@ -2912,7 +2912,7 @@ msgid "Member revoked"
 msgstr "Socio revocato"
 
 msgid "Membership fee"
-msgstr "Quote sociali"
+msgstr "Quota associativa"
 
 msgid "Multiplication"
 msgstr "Moltiplicazione"
@@ -3136,9 +3136,6 @@ msgstr "Invito rifiutato"
 msgid "Mail assignment"
 msgstr "Assegnazione via email"
 
-msgid "Maximum fillers"
-msgstr "Filler massimi"
-
 msgid "Maximum members"
 msgstr "Numero massimo di membri"
 
@@ -3146,7 +3143,7 @@ msgid "Member approved"
 msgstr "Membro approvato"
 
 msgid "Membership fees"
-msgstr "Quote associazione"
+msgstr "Quote associative"
 
 msgid "Multi-line text"
 msgstr "Testo multilinea"
@@ -3375,6 +3372,9 @@ msgstr "Assegnazione degli articoli"
 
 msgid "Lite Mode active"
 msgstr "Modalità Lite attiva"
+
+msgid "Maximum reserves"
+msgstr "Riserve massime"
 
 msgid "May the best win"
 msgstr "Che vinca il migliore"
@@ -3634,9 +3634,6 @@ msgstr "Controllo del codice fiscale"
 msgid "Fixed instalments"
 msgstr "Rate fisse"
 
-msgid "Free registration"
-msgstr "Iscrizione libera"
-
 msgid "Generating Bundle"
 msgstr "Creazione del pacchetto"
 
@@ -3884,7 +3881,7 @@ msgid "Member Data Checks"
 msgstr "Controlli dati soci"
 
 msgid "Membership request"
-msgstr "Richiesta di iscrizione"
+msgstr "Richiesta di associazione"
 
 msgid "My pending invites"
 msgstr "I miei inviti in sospeso"
@@ -4082,7 +4079,7 @@ msgid "Maximum preferences"
 msgstr "Massimo preferenze"
 
 msgid "Membership requests"
-msgstr "Richieste iscrizione"
+msgstr "Richieste di associazione"
 
 msgid "Minimum preferences"
 msgstr "Minimo preferenze"
@@ -4242,9 +4239,6 @@ msgstr "Server di posta esterno"
 msgid "Field for exclusions"
 msgstr "Campo per esclusioni"
 
-msgid "Filler registrations"
-msgstr "Iscrizioni filler"
-
 msgid "Independent factions"
 msgstr "Fazioni indipendenti"
 
@@ -4267,7 +4261,7 @@ msgid "Maximum waiting list"
 msgstr "Lista d'attesa massima"
 
 msgid "Membership ID number"
-msgstr "Numero iscrizione socio"
+msgstr "Numero socio"
 
 msgid "Name - international"
 msgstr "Nome - internazionale"
@@ -4544,6 +4538,9 @@ msgstr "Priorità di iscrizione"
 msgid "Registration sections"
 msgstr "Sezioni di iscrizione"
 
+msgid "Reserve registrations"
+msgstr "Iscrizioni di riserva"
+
 msgid "Select your character"
 msgstr "Seleziona il tuo personaggio"
 
@@ -4671,7 +4668,7 @@ msgid "Manages event revenues"
 msgstr "Gestisce i ricavi dell'evento"
 
 msgid "Membership card number"
-msgstr "Numero di tessera associativa"
+msgstr "Numero tessera socio"
 
 msgid "Modify shuttle request"
 msgstr "Modifica richiesta shuttle"
@@ -4980,7 +4977,7 @@ msgid "Member promoted to admin"
 msgstr "Membro promosso ad amministratore"
 
 msgid "Membership approval date"
-msgstr "Data di approvazione dell'adesione"
+msgstr "Data di ammissione a socio"
 
 msgid "New organization created"
 msgstr "Nuova associazione creata"
@@ -5372,7 +5369,7 @@ msgid "Members of the Organization"
 msgstr "Soci dell'Associazione"
 
 msgid "Membership fees in approval"
-msgstr "Quota sociale in approvazione"
+msgstr "Quota associativa in approvazione"
 
 msgid "Missing casting preferences"
 msgstr "Preferenze di casting mancanti"
@@ -5431,6 +5428,9 @@ msgstr "Desideri cambiarlo"
 msgid "Your organization's country"
 msgstr "Il paese della tua organizzazione"
 
+msgid "Allow reserve signup anytime"
+msgstr "Consenti l'iscrizione in riserva in qualsiasi momento"
+
 msgid "Authenticator device removed"
 msgstr "Dispositivo di autenticazione rimosso"
 
@@ -5476,7 +5476,7 @@ msgid "Manage the event speed-larps"
 msgstr "Gestisci gli eventi speed-larps"
 
 msgid "Membership request submitted"
-msgstr "Richiesta Socio sottomessa"
+msgstr "Richiesta di associazione inviata"
 
 msgid "No ability types defined yet"
 msgstr "Non sono ancora stati definiti tipi di abilità"
@@ -5802,7 +5802,7 @@ msgstr "Gestisci il tipo di missioni evento"
 
 #, python-format
 msgid "Membership fee payment %(year)s"
-msgstr "Versamento quota sociale %(year)s"
+msgstr "Versamento quota associativa %(year)s"
 
 msgid "Name to be displayed for tokens"
 msgstr "Nome da visualizzare per i gettoni"
@@ -5937,7 +5937,7 @@ msgid "Manage the registration sections"
 msgstr "Gestisci le sezioni di iscrizione"
 
 msgid "Membership request not submitted"
-msgstr "Richiesta Socio non sottomessa"
+msgstr "Richiesta di associazione non inviata"
 
 msgid "Miscellaneous operating expenses"
 msgstr "Uscite diverse di gestione"
@@ -6287,7 +6287,7 @@ msgstr "Segna come completato: <b>%(list)s</b>."
 
 #, python-format
 msgid "Membership registration of %(user)s"
-msgstr "Iscrizione associativa di %(user)s"
+msgstr "Ammissione a socio di %(user)s"
 
 msgid "Message sent, thanks for writing us"
 msgstr "Messaggio inviato, grazie per averci scritto"
@@ -6680,7 +6680,7 @@ msgid "Manage workshop modules for this event"
 msgstr "Gestisci i moduli dei workshop per questo evento"
 
 msgid "Membership of the Organization refused"
-msgstr "Iscrizione all'Associazione rifiutata"
+msgstr "Richiesta di socio dell'Associazione rifiutata"
 
 msgid "No events with LarpManager costs found"
 msgstr "Non sono stati trovati eventi con costi gestiti da LarpManager"
@@ -6801,10 +6801,10 @@ msgstr "Gestisci le entrate degli eventi o dell'organizzazione"
 
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
-msgstr "Quota sociale di %(user)s per %(year)s"
+msgstr "Quota associativa di %(user)s per %(year)s"
 
 msgid "Membership of the Organization accepted"
-msgstr "Iscrizione all'Associazione accettata"
+msgstr "Richiesta di socio dell'Associazione accettata"
 
 msgid "No answer options have been defined yet"
 msgstr "Non sono state ancora definite opzioni di risposta"
@@ -10374,12 +10374,6 @@ msgid ""
 msgstr "Indica il titolo del personaggio - verrà mostrato insieme al nome"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Numero massimo di slot per personaggi filler disponibili (impostato su 0 per"
-" essere illimitato)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Sono ammessi solo lettere minuscole e numeri, senza spazi o caratteri "
@@ -10521,6 +10515,12 @@ msgid ""
 msgstr ""
 "Gestisci le scene di speed-larp, le relative postazioni, i testi delle "
 "schede e i personaggi assegnati"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Numero massimo di slot disponibili per i personaggi di riserva (imposta su 0"
+" per un numero illimitato)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -14107,20 +14107,21 @@ msgstr ""
 " partecipanti"
 
 msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Se questa opzione è abilitata, i partecipanti possono iscriversi come "
+"riserva in qualsiasi momento. Se è disabilitata, le iscrizioni come riserva "
+"si aprono solo dopo che è stato raggiunto il numero massimo di partecipanti "
+"all'evento."
+
+msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
 "ticket price, so the participant covers them instead of the organization"
 msgstr ""
 "Se abilitato, il sistema aggiungerà automaticamente le commissioni del "
 "gateway di pagamento al prezzo del biglietto, in modo che il partecipante le"
 " copra al posto dell'organizzazione"
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
-msgstr ""
-"Se la casella è selezionata, i partecipanti possono iscriversi come "
-"riempitivi in qualsiasi momento; altrimenti, possono farlo solo se è stato "
-"raggiunto il numero di personaggi stabilito"
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

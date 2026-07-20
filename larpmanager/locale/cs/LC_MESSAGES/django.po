@@ -958,6 +958,9 @@ msgstr "Náhrady"
 msgid "Request"
 msgstr "Žádost"
 
+msgid "Reserve"
+msgstr "Rezerva"
+
 msgid "Restore"
 msgstr "Obnovení"
 
@@ -2727,9 +2730,6 @@ msgstr "Název šablony"
 msgid "Text language"
 msgstr "Jazyk textu"
 
-msgid "Ticket Filler"
-msgstr "Výplň vstupenek"
-
 msgid "Ticket chosen"
 msgstr "Vybraná vstupenka"
 
@@ -3136,9 +3136,6 @@ msgstr "Pozvánka byla odmítnuta"
 msgid "Mail assignment"
 msgstr "Přiřazení pošty"
 
-msgid "Maximum fillers"
-msgstr "Maximální množství výplní"
-
 msgid "Maximum members"
 msgstr "Maximální počet členů"
 
@@ -3375,6 +3372,9 @@ msgstr "Přiřazení položek"
 
 msgid "Lite Mode active"
 msgstr "Režim Lite je aktivní"
+
+msgid "Maximum reserves"
+msgstr "Maximální rezervy"
 
 msgid "May the best win"
 msgstr "Ať vyhraje ten nejlepší"
@@ -3633,9 +3633,6 @@ msgstr "Kontrola daňového kódu"
 
 msgid "Fixed instalments"
 msgstr "Pevné splátky"
-
-msgid "Free registration"
-msgstr "Vstup zdarma"
 
 msgid "Generating Bundle"
 msgstr "Vytvoření balíčku"
@@ -4242,9 +4239,6 @@ msgstr "Externí poštovní server"
 msgid "Field for exclusions"
 msgstr "Pole pro vyloučení"
 
-msgid "Filler registrations"
-msgstr "Výplňové registrace"
-
 msgid "Independent factions"
 msgstr "Nezávislé frakce"
 
@@ -4543,6 +4537,9 @@ msgstr "Přednostní registrace"
 
 msgid "Registration sections"
 msgstr "Sekce členství"
+
+msgid "Reserve registrations"
+msgstr "Rezervace registrací"
 
 msgid "Select your character"
 msgstr "Vyberte si svou postavu"
@@ -5430,6 +5427,9 @@ msgstr "Chcete to změnit"
 
 msgid "Your organization's country"
 msgstr "Země vaší organizace"
+
+msgid "Allow reserve signup anytime"
+msgstr "Umožnit registraci do rezervy kdykoli"
 
 msgid "Authenticator device removed"
 msgstr "Odstranění autentizačního zařízení"
@@ -10089,12 +10089,6 @@ msgid ""
 msgstr "Uveďte název postavy - zobrazí se společně se jménem"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Maximální počet dostupných slotů pro výplňové znaky (pro neomezený počet "
-"nastavte na 0)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Povolena jsou pouze malá písmena a číslice, bez mezer a speciálních znaků"
@@ -10218,6 +10212,12 @@ msgid ""
 msgstr ""
 "Správa scén speed-larpu, jejich stanovišť, textů v listech a přidělených "
 "postav"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Maximální počet dostupných rezervních slotů pro postavy (nastavte na 0 pro "
+"neomezený počet)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -13687,19 +13687,19 @@ msgstr ""
 " pro postavy účastnící se tohoto běhu a druhou pro nezúčastněné postavy"
 
 msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Je-li tato funkce zapnutá, mohou se účastníci kdykoli zapsat na čekací "
+"listinu. Je-li vypnutá, registrace na čekací listinu se otevře až po "
+"naplnění kapacity akce."
+
+msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
 "ticket price, so the participant covers them instead of the organization"
 msgstr ""
 "Pokud je tato možnost povolena, systém automaticky připočte poplatky "
 "platební brány k ceně vstupenky, takže je hradí účastník místo organizace"
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
-msgstr ""
-"Pokud je zaškrtnuto, mohou se účastníci kdykoli přihlásit jako vyplňovatelé;"
-" v opačném případě tak mohou učinit pouze v případě, že bylo dosaženo "
-"stanoveného počtu znaků"
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

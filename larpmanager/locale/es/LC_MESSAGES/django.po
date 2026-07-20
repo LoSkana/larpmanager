@@ -958,6 +958,9 @@ msgstr "Reembolsos"
 msgid "Request"
 msgstr "Solicitud"
 
+msgid "Reserve"
+msgstr "Reserva"
+
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -2727,9 +2730,6 @@ msgstr "Nombre de la plantilla"
 msgid "Text language"
 msgstr "Idioma del texto"
 
-msgid "Ticket Filler"
-msgstr "Entrada de relleno"
-
 msgid "Ticket chosen"
 msgstr "Entrada seleccionada"
 
@@ -3136,9 +3136,6 @@ msgstr "Invitación rechazada"
 msgid "Mail assignment"
 msgstr "Correo de asignación"
 
-msgid "Maximum fillers"
-msgstr "Relleno máximo"
-
 msgid "Maximum members"
 msgstr "Número máximo de miembros"
 
@@ -3375,6 +3372,9 @@ msgstr "Asignación de artículos"
 
 msgid "Lite Mode active"
 msgstr "Modo Lite activo"
+
+msgid "Maximum reserves"
+msgstr "Reservas máximas"
 
 msgid "May the best win"
 msgstr "¡Que gane el mejor"
@@ -3633,9 +3633,6 @@ msgstr "Comprobación del código fiscal"
 
 msgid "Fixed instalments"
 msgstr "Plazos fijos"
-
-msgid "Free registration"
-msgstr "Entrada gratuita"
 
 msgid "Generating Bundle"
 msgstr "Generando paquete"
@@ -4242,9 +4239,6 @@ msgstr "Servidor de correo externo"
 msgid "Field for exclusions"
 msgstr "Campo para exclusiones"
 
-msgid "Filler registrations"
-msgstr "Registros de relleno"
-
 msgid "Independent factions"
 msgstr "Facciones independientes"
 
@@ -4543,6 +4537,9 @@ msgstr "Prioridad de inscripción"
 
 msgid "Registration sections"
 msgstr "Secciones de inscripción"
+
+msgid "Reserve registrations"
+msgstr "Inscripciones en lista de espera"
 
 msgid "Select your character"
 msgstr "Elige tu personaje"
@@ -5430,6 +5427,9 @@ msgstr "¿Quiere cambiarlo"
 
 msgid "Your organization's country"
 msgstr "País de su organización"
+
+msgid "Allow reserve signup anytime"
+msgstr "Permite que te apunten en la lista de reserva en cualquier momento"
 
 msgid "Authenticator device removed"
 msgstr "Dispositivo autenticador retirado"
@@ -10350,12 +10350,6 @@ msgid ""
 msgstr "Indica el título del personaje - se mostrará junto con el nombre"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Número máximo de espacios disponibles para personajes de relleno (0 para "
-"ilimitado)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Sólo se admiten letras minúsculas y números, sin espacios ni caracteres "
@@ -10492,6 +10486,12 @@ msgid ""
 msgstr ""
 "Gestiona las escenas de speed-larp, su ubicación, el texto de las fichas y "
 "los personajes asignados"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Número máximo de espacios disponibles para personajes de reserva (ponlo en 0"
+" si quieres que sea ilimitado)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -14079,20 +14079,20 @@ msgstr ""
 "una para los personajes que participan en esta tirada y otra para los que no"
 
 msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Si está activada, los participantes pueden apuntarse a la lista de reserva "
+"en cualquier momento. Si está desactivada, las inscripciones en la lista de "
+"reserva solo se abren cuando se alcanza el aforo del evento."
+
+msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
 "ticket price, so the participant covers them instead of the organization"
 msgstr ""
 "Si esta opción está activada, el sistema añadirá automáticamente las "
 "comisiones de la pasarela de pago al precio de la entrada, de modo que las "
 "pague el participante en lugar de la organización"
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
-msgstr ""
-"Si la casilla está marcada, los participantes podrán inscribirse como "
-"rellenadores en cualquier momento; en caso contrario, sólo podrán hacerlo si"
-" se ha alcanzado el número de caracteres estipulado"
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

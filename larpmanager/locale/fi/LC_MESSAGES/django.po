@@ -958,6 +958,9 @@ msgstr "Palautukset"
 msgid "Request"
 msgstr "Pyyntö"
 
+msgid "Reserve"
+msgstr "Varaus"
+
 msgid "Restore"
 msgstr "Palauta"
 
@@ -2727,9 +2730,6 @@ msgstr "Mallin nimi"
 msgid "Text language"
 msgstr "Tekstin kieli"
 
-msgid "Ticket Filler"
-msgstr "Lippujen täytehahmo"
-
 msgid "Ticket chosen"
 msgstr "Valittu lippu"
 
@@ -3136,9 +3136,6 @@ msgstr "Kutsu hylätty"
 msgid "Mail assignment"
 msgstr "Postin osoittaminen"
 
-msgid "Maximum fillers"
-msgstr "Suurin mahdollinen määrä täytehahmoja"
-
 msgid "Maximum members"
 msgstr "Jäsenten enimmäismäärä"
 
@@ -3375,6 +3372,9 @@ msgstr "Kohteen määritykset"
 
 msgid "Lite Mode active"
 msgstr "Lite-tila aktiivinen"
+
+msgid "Maximum reserves"
+msgstr "Enimmäisvarannot"
 
 msgid "May the best win"
 msgstr "Paras voittakoon"
@@ -3633,9 +3633,6 @@ msgstr "Verokoodin tarkistus"
 
 msgid "Fixed instalments"
 msgstr "Kiinteät erät"
-
-msgid "Free registration"
-msgstr "Ilmainen ilmoittautuminen"
 
 msgid "Generating Bundle"
 msgstr "Paketin luominen"
@@ -4242,9 +4239,6 @@ msgstr "Ulkoinen sähköpostipalvelin"
 msgid "Field for exclusions"
 msgstr "Kenttä poissulkemista varten"
 
-msgid "Filler registrations"
-msgstr "Täytehahmojen ilmoittautumiset"
-
 msgid "Independent factions"
 msgstr "Riippumattomat ryhmittymät"
 
@@ -4543,6 +4537,9 @@ msgstr "Ilmoittautumisjärjestys"
 
 msgid "Registration sections"
 msgstr "Ilmoittautumisosiot"
+
+msgid "Reserve registrations"
+msgstr "Varausilmoitukset"
 
 msgid "Select your character"
 msgstr "Valitse hahmosi"
@@ -5430,6 +5427,9 @@ msgstr "Haluaisitko muuttaa sen"
 
 msgid "Your organization's country"
 msgstr "Organisaationne maa"
+
+msgid "Allow reserve signup anytime"
+msgstr "Salli varausilmoittautuminen milloin tahansa"
 
 msgid "Authenticator device removed"
 msgstr "Tunnistuslaite poistettu"
@@ -10192,12 +10192,6 @@ msgid ""
 msgstr "Ilmaisee hahmon otsikon - se näytetään yhdessä nimen kanssa"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Käytettävissä olevien täytehahmopaikkojen enimmäismäärä (0 tarkoittaa "
-"rajoittamatonta määrää)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Vain pienet kirjaimet ja numerot sallittu, ei välilyöntejä tai "
@@ -10326,6 +10320,12 @@ msgid ""
 msgstr ""
 "Hallitse speed-larp-kohtauksia, niiden sijoituspaikkoja, roolilehtien "
 "tekstejä ja jaettuja rooleja"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Käytettävissä olevien varamerkkipaikkojen enimmäismäärä (aseta arvoksi 0, "
+"jos paikkoja halutaan rajattomasti)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -13846,19 +13846,20 @@ msgstr ""
 "ajoon osallistuville hahmoille ja toinen ei-osallistuville hahmoille"
 
 msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Jos tämä asetus on käytössä, osallistujat voivat ilmoittautua "
+"varasijalistalle milloin tahansa. Jos asetus on pois käytöstä, "
+"varasijailmoittautuminen avautuu vasta, kun tapahtuman osallistujamäärä on "
+"täynnä."
+
+msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
 "ticket price, so the participant covers them instead of the organization"
 msgstr ""
 "Jos tämä on käytössä, järjestelmä lisää automaattisesti maksuporttimaksut "
 "lipun hintaan, jolloin osallistuja maksaa ne organisaation sijaan"
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
-msgstr ""
-"Jos valittu, osallistujat voivat ilmoittautua täytehahmoiksi milloin "
-"tahansa; muussa tapauksessa he voivat ilmoittautua täytehahmoiksi vasta, kun"
-" määrätty hahmomäärä on saavutettu"
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

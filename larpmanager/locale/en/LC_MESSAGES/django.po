@@ -94,7 +94,7 @@ msgstr ""
 msgid "Registrations open"
 msgstr ""
 
-msgid "Filler registrations"
+msgid "Reserve registrations"
 msgstr ""
 
 msgid "Waiting list registrations"
@@ -116,7 +116,7 @@ msgstr ""
 msgid "Staff"
 msgstr ""
 
-msgid "Filler"
+msgid "Reserve"
 msgstr ""
 
 msgid "Seller"
@@ -1158,15 +1158,12 @@ msgid ""
 "for 1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
 msgstr ""
 
-msgid "Ticket Filler"
-msgstr ""
-
-msgid "Free registration"
+msgid "Allow reserve signup anytime"
 msgstr ""
 
 msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they "
-"may only do so if the stipulated number of characters has been reached"
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
 msgstr ""
 
 msgid "Number of extractions"
@@ -3896,11 +3893,11 @@ msgstr ""
 msgid "Maximum number of participant slots available (set to 0 for unlimited)"
 msgstr ""
 
-msgid "Maximum fillers"
+msgid "Maximum reserves"
 msgstr ""
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
 msgstr ""
 
 msgid "Maximum waiting list"
@@ -10145,6 +10142,9 @@ msgid ""
 msgstr ""
 
 msgid "Now you can create the lottery ticket"
+msgstr ""
+
+msgid "Filler"
 msgstr ""
 
 msgid ""

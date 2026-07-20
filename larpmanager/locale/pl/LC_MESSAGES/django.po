@@ -958,6 +958,9 @@ msgstr "Zwroty kosztów"
 msgid "Request"
 msgstr "Żądanie"
 
+msgid "Reserve"
+msgstr "Rezerwa"
+
 msgid "Restore"
 msgstr "Przywracanie"
 
@@ -2727,9 +2730,6 @@ msgstr "Nazwa szablonu"
 msgid "Text language"
 msgstr "Język tekstu"
 
-msgid "Ticket Filler"
-msgstr "Wypełniacz biletów"
-
 msgid "Ticket chosen"
 msgstr "Wybrany bilet"
 
@@ -3136,9 +3136,6 @@ msgstr "Zaproszenie odrzucone"
 msgid "Mail assignment"
 msgstr "Przydział poczty"
 
-msgid "Maximum fillers"
-msgstr "Maksymalna ilość wypełniaczy"
-
 msgid "Maximum members"
 msgstr "Maksymalna liczba członków"
 
@@ -3375,6 +3372,9 @@ msgstr "Przypisania przedmiotów"
 
 msgid "Lite Mode active"
 msgstr "Aktywny tryb Lite"
+
+msgid "Maximum reserves"
+msgstr "Maksymalne rezerwy"
 
 msgid "May the best win"
 msgstr "Niech wygra najlepszy"
@@ -3633,9 +3633,6 @@ msgstr "Kontrola kodu fiskalnego"
 
 msgid "Fixed instalments"
 msgstr "Stałe raty"
-
-msgid "Free registration"
-msgstr "Bezpłatna rejestracja"
 
 msgid "Generating Bundle"
 msgstr "Tworzenie pakietu"
@@ -4242,9 +4239,6 @@ msgstr "Zewnętrzny serwer pocztowy"
 msgid "Field for exclusions"
 msgstr "Pole wykluczeń"
 
-msgid "Filler registrations"
-msgstr "Rejestracje wypełniaczy"
-
 msgid "Independent factions"
 msgstr "Niezależne frakcje"
 
@@ -4543,6 +4537,9 @@ msgstr "Pierwszeństwo rejestracji"
 
 msgid "Registration sections"
 msgstr "Sekcje rejestracji"
+
+msgid "Reserve registrations"
+msgstr "Rejestracja rezerwowa"
 
 msgid "Select your character"
 msgstr "Wybierz swoją postać"
@@ -5430,6 +5427,9 @@ msgstr "Czy chciałbyś to zmienić"
 
 msgid "Your organization's country"
 msgstr "Kraj organizacji użytkownika"
+
+msgid "Allow reserve signup anytime"
+msgstr "Zezwól na rejestrację w rezerwie w dowolnym momencie"
 
 msgid "Authenticator device removed"
 msgstr "Usunięto urządzenie uwierzytelniające"
@@ -10253,12 +10253,6 @@ msgid ""
 msgstr "Wskazuje tytuł postaci - będzie on wyświetlany wraz z imieniem"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Maksymalna liczba dostępnych miejsc na znaki wypełniające (ustawiona na 0 "
-"dla nieograniczonej liczby)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Dozwolone są tylko małe litery i cyfry, bez spacji i znaków specjalnych"
@@ -10393,6 +10387,12 @@ msgid ""
 msgstr ""
 "Zarządzaj scenami speed-larpu, ich lokalizacją, tekstami kart postaci oraz "
 "przypisanymi postaciami"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Maksymalna liczba dostępnych miejsc na postacie rezerwowe (ustaw na 0, żeby "
+"nie było ograniczeń)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -13957,20 +13957,20 @@ msgstr ""
 "postaci uczestniczących w tym biegu, a drugą dla postaci nieuczestniczących"
 
 msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Jeśli ta opcja jest włączona, uczestnicy mogą zapisać się na listę rezerwową"
+" w dowolnym momencie. Jeśli jest wyłączona, zapisy na listę rezerwową "
+"otwierają się dopiero po wyczerpaniu limitu miejsc na wydarzeniu."
+
+msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
 "ticket price, so the participant covers them instead of the organization"
 msgstr ""
 "Jeśli opcja ta jest włączona, system automatycznie doda opłaty za bramkę "
 "płatności do ceny biletu, dzięki czemu uczestnik pokryje je zamiast "
 "organizacji"
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
-msgstr ""
-"Jeśli opcja jest zaznaczona, uczestnicy mogą zarejestrować się jako "
-"wypełniający w dowolnym momencie; w przeciwnym razie mogą to zrobić tylko po"
-" osiągnięciu określonej liczby znaków"
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

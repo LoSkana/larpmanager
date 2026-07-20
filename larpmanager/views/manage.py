@@ -170,7 +170,7 @@ def _get_registration_status(run: Run) -> str:
         "preregister": _("Pre-registration active"),
         "not_set": _("Registrations opening not set"),
         "primary": _("Registrations open"),
-        "filler": _("Filler registrations"),
+        "filler": _("Reserve registrations"),
         "waiting": _("Waiting list registrations"),
         "closed": _("Registration closed"),
     }

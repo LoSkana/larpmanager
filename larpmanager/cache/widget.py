@@ -125,7 +125,7 @@ def _compute_registration_status(run: Run) -> str:
         "preregister": _("Pre-registration active"),
         "not_set": _("Registrations opening not set"),
         "primary": _("Registrations open"),
-        "filler": _("Filler registrations"),
+        "filler": _("Reserve registrations"),
         "waiting": _("Waiting list registrations"),
         "closed": _("Registration closed"),
     }
@@ -151,7 +151,7 @@ def _compute_registration_counts(run: Run) -> dict:
         ("count_player", _("Player")),
         ("count_wait", _("Waiting")),
         ("count_staff", _("Staff")),
-        ("count_fill", _("Filler")),
+        ("count_fill", _("Reserve")),
         ("count_seller", _("Seller")),
         ("count_lottery", _("Lottery")),
         ("count_npc", _("NPC")),

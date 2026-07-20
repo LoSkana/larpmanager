@@ -45,7 +45,7 @@ class TicketTier(models.TextChoices):
     NEW_PLAYER = "y", _("New player")
     LOTTERY = "l", _("Lottery")
     WAITING = "w", _("Waiting")
-    FILLER = "f", _("Filler")
+    FILLER = "f", _("Reserve")
     REDUCED = "r", _("Reduced")
     PATRON = "p", _("Patron")
     STAFF = "t", _("Staff")
@@ -61,7 +61,7 @@ class TicketTier(models.TextChoices):
             TicketTier.NEW_PLAYER: "New player",
             TicketTier.LOTTERY: "Lottery",
             TicketTier.WAITING: "Waiting",
-            TicketTier.FILLER: "Filler",
+            TicketTier.FILLER: "Reserve",
             TicketTier.REDUCED: "Reduced",
             TicketTier.PATRON: "Patron",
             TicketTier.STAFF: "Staff",

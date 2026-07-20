@@ -958,6 +958,9 @@ msgstr "Refusjon"
 msgid "Request"
 msgstr "Forespørsel"
 
+msgid "Reserve"
+msgstr "Reserve"
+
 msgid "Restore"
 msgstr "Gjenopprett"
 
@@ -2727,9 +2730,6 @@ msgstr "Navn på mal"
 msgid "Text language"
 msgstr "Tekstens språk"
 
-msgid "Ticket Filler"
-msgstr "Billettfyller"
-
 msgid "Ticket chosen"
 msgstr "Billett valgt"
 
@@ -3136,9 +3136,6 @@ msgstr "Invitasjonen ble avvist"
 msgid "Mail assignment"
 msgstr "Tildeling av post"
 
-msgid "Maximum fillers"
-msgstr "Maksimalt antall fyllstoffer"
-
 msgid "Maximum members"
 msgstr "Maksimalt antall medlemmer"
 
@@ -3375,6 +3372,9 @@ msgstr "Tildeling av varer"
 
 msgid "Lite Mode active"
 msgstr "Lite-modus aktiv"
+
+msgid "Maximum reserves"
+msgstr "Maksimale reserver"
 
 msgid "May the best win"
 msgstr "Måtte den beste vinne"
@@ -3633,9 +3633,6 @@ msgstr "Kontroll av skattekode"
 
 msgid "Fixed instalments"
 msgstr "Faste avdrag"
-
-msgid "Free registration"
-msgstr "Gratis inngang"
 
 msgid "Generating Bundle"
 msgstr "Opprette pakke"
@@ -4242,9 +4239,6 @@ msgstr "Ekstern e-postserver"
 msgid "Field for exclusions"
 msgstr "Felt for utelukkelser"
 
-msgid "Filler registrations"
-msgstr "Fyllstoffregistreringer"
-
 msgid "Independent factions"
 msgstr "Uavhengige fraksjoner"
 
@@ -4543,6 +4537,9 @@ msgstr "Prioritet ved registrering"
 
 msgid "Registration sections"
 msgstr "Seksjonene for medlemskap"
+
+msgid "Reserve registrations"
+msgstr "Reserveregistreringer"
 
 msgid "Select your character"
 msgstr "Velg din karakter"
@@ -5430,6 +5427,9 @@ msgstr "Ønsker du å endre det"
 
 msgid "Your organization's country"
 msgstr "Organisasjonens land"
+
+msgid "Allow reserve signup anytime"
+msgstr "Tillat påmelding til reservelisten når som helst"
 
 msgid "Authenticator device removed"
 msgstr "Autentiseringsenhet fjernet"
@@ -10213,12 +10213,6 @@ msgid ""
 msgstr "Angi karakterens tittel - den vises sammen med navnet"
 
 msgid ""
-"Maximum number of filler character slots available (set to 0 for unlimited)"
-msgstr ""
-"Maksimalt antall tilgjengelige plasser for utfyllingstegn (sett til 0 for "
-"ubegrenset)"
-
-msgid ""
 "Only lowercase letters and numbers allowed, no spaces or special characters"
 msgstr ""
 "Kun små bokstaver og tall er tillatt, ingen mellomrom eller spesialtegn"
@@ -10347,6 +10341,12 @@ msgid ""
 msgstr ""
 "Administrer scener i hurtig-larp, deres stasjon, tekst i karakterarkene og "
 "tildelte karakterer"
+
+msgid ""
+"Maximum number of reserve character slots available (set to 0 for unlimited)"
+msgstr ""
+"Maksimalt antall tilgjengelige plasser for reservekarakterer (sett til 0 for"
+" ubegrenset antall)"
 
 msgid ""
 "Net profit of the event, difference between realized revenue and total costs"
@@ -13877,20 +13877,20 @@ msgstr ""
 " som deltar i denne kjøringen, og én for karakterer som ikke deltar"
 
 msgid ""
+"If enabled, participants can sign up for the reserve list at any time. If "
+"disabled, reserve signups open only after the event capacity is reached."
+msgstr ""
+"Hvis denne funksjonen er aktivert, kan deltakerne melde seg på reservelisten"
+" når som helst. Hvis den er deaktivert, åpnes påmeldingen til reservelisten "
+"først når arrangementets kapasitet er oppnådd."
+
+msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
 "ticket price, so the participant covers them instead of the organization"
 msgstr ""
 "Hvis denne funksjonen er aktivert, vil systemet automatisk legge til gebyrer"
 " for betalingsgateway til billettprisen, slik at deltakeren dekker dem i "
 "stedet for organisasjonen"
-
-msgid ""
-"If checked, participants may sign up as fillers at any time; otherwise, they"
-" may only do so if the stipulated number of characters has been reached"
-msgstr ""
-"Hvis det er krysset av for dette, kan deltakerne når som helst melde seg som"
-" utfyllere, ellers kan de bare gjøre det hvis det fastsatte antallet tegn er"
-" nådd"
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
