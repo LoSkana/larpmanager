@@ -24,7 +24,7 @@ msgid "End"
 msgstr "Slut"
 
 msgid "Fee"
-msgstr "Kommission"
+msgstr "Avgift"
 
 msgid "Low"
 msgstr "Låg"
@@ -36,7 +36,7 @@ msgid "Net"
 msgstr "Netto"
 
 msgid "New"
-msgstr "Nya"
+msgstr "Ny"
 
 msgid "PDF"
 msgstr "PDF"
@@ -90,10 +90,10 @@ msgid "Date"
 msgstr "Datum"
 
 msgid "Diet"
-msgstr "Diät"
+msgstr "Diet"
 
 msgid "Done"
-msgstr "Gjord"
+msgstr "Avslutad"
 
 msgid "Edit"
 msgstr "Redigera"
@@ -102,7 +102,7 @@ msgid "File"
 msgstr "Fil"
 
 msgid "Form"
-msgstr "Form"
+msgstr "Formulär"
 
 msgid "Free"
 msgstr "Gratis"
@@ -300,7 +300,7 @@ msgid "Award"
 msgstr "Utmärkelse"
 
 msgid "Badge"
-msgstr "Märken"
+msgstr "Märke"
 
 msgid "Cards"
 msgstr "Kort"
@@ -309,7 +309,7 @@ msgid "Check"
 msgstr "Kontrollera"
 
 msgid "Close"
-msgstr "Stängt"
+msgstr "Stäng"
 
 msgid "Color"
 msgstr "Färg"
@@ -358,7 +358,7 @@ msgid "Guild"
 msgstr "Gille"
 
 msgid "Hotel"
-msgstr "Hotel"
+msgstr "Hotell"
 
 msgid "Image"
 msgstr "Bild"
@@ -403,7 +403,7 @@ msgid "Photo"
 msgstr "Foto"
 
 msgid "Plots"
-msgstr "Tomter"
+msgstr "Intriger"
 
 msgid "Price"
 msgstr "Pris"
@@ -488,7 +488,7 @@ msgid "email"
 msgstr "e-post"
 
 msgid "moved"
-msgstr "flyttade"
+msgstr "flyttad"
 
 msgid "quick"
 msgstr "snabb"
@@ -518,7 +518,7 @@ msgid "Awards"
 msgstr "Utmärkelser"
 
 msgid "Badges"
-msgstr "Badges"
+msgstr "Märken"
 
 msgid "Cancel"
 msgstr "Avbryt"
@@ -536,7 +536,7 @@ msgid "Copied"
 msgstr "Kopierad"
 
 msgid "Counts"
-msgstr "Räkningar"
+msgstr "Antal"
 
 msgid "Create"
 msgstr "Skapa"
@@ -563,7 +563,7 @@ msgid "Events"
 msgstr "Händelser"
 
 msgid "Export"
-msgstr "Export"
+msgstr "Exportera"
 
 msgid "Female"
 msgstr "Kvinna"
@@ -572,7 +572,7 @@ msgid "Fields"
 msgstr "Fält"
 
 msgid "Filler"
-msgstr "Buffé"
+msgstr "Bikaraktär"
 
 msgid "Footer"
 msgstr "Sidfot"
@@ -611,7 +611,7 @@ msgid "Labels"
 msgstr "Etiketter"
 
 msgid "Legend"
-msgstr "Legend"
+msgstr "Teckenförklaring"
 
 msgid "Loaded"
 msgstr "Laddad"
@@ -635,7 +635,7 @@ msgid "Medium"
 msgstr "Medium"
 
 msgid "Member"
-msgstr "Ledamot"
+msgstr "Medlem"
 
 msgid "Method"
 msgstr "Metod"
@@ -749,7 +749,7 @@ msgid "Voting"
 msgstr "Omröstning"
 
 msgid "XP tot"
-msgstr "Px Tot"
+msgstr "XP Tot"
 
 msgid "copied"
 msgstr "kopierad"
@@ -794,7 +794,7 @@ msgid "Authors"
 msgstr "Författare"
 
 msgid "Average"
-msgstr "Media"
+msgstr "Medel"
 
 msgid "Balance"
 msgstr "Saldo"
@@ -806,7 +806,7 @@ msgid "Casting"
 msgstr "Casting"
 
 msgid "Closing"
-msgstr "Avslutning"
+msgstr "Stänger"
 
 msgid "Columns"
 msgstr "Kolumner"
@@ -845,7 +845,7 @@ msgid "Details"
 msgstr "Detaljer"
 
 msgid "Display"
-msgstr "Display"
+msgstr "Visa"
 
 msgid "Element"
 msgstr "Element"
@@ -887,7 +887,7 @@ msgid "Lottery"
 msgstr "Lotteri"
 
 msgid "Maximum"
-msgstr "Massimo"
+msgstr "Max"
 
 msgid "Members"
 msgstr "Medlemmar"
@@ -920,7 +920,7 @@ msgid "Payment"
 msgstr "Betalning"
 
 msgid "Pending"
-msgstr "Avvaktande"
+msgstr "Pågående"
 
 msgid "Players"
 msgstr "Spelare"
@@ -1002,7 +1002,7 @@ msgid "Summary"
 msgstr "Sammanfattning"
 
 msgid "Support"
-msgstr "Stöd"
+msgstr "Support"
 
 msgid "Surname"
 msgstr "Efternamn"
@@ -1017,7 +1017,7 @@ msgid "Tickets"
 msgstr "Biljetter"
 
 msgid "Tooltip"
-msgstr "Verktygstips"
+msgstr "Tooltip"
 
 msgid "Updated"
 msgstr "Uppdaterad"
@@ -1062,10 +1062,10 @@ msgid "Writing"
 msgstr "Skrivande"
 
 msgid "XP used"
-msgstr "Px använda"
+msgstr "XP använt"
 
 msgid "maximum"
-msgstr "högsta"
+msgstr "max"
 
 msgid "options"
 msgstr "alternativ"
@@ -1128,7 +1128,7 @@ msgid "Creation"
 msgstr "Skapande"
 
 msgid "Deadline"
-msgstr "Tidsfrist"
+msgstr "Deadline"
 
 msgid "Deployed"
 msgstr "Utplacerad"
@@ -1233,7 +1233,7 @@ msgid "Original"
 msgstr "Original"
 
 msgid "Outflows"
-msgstr "Utgångar"
+msgstr "Utgifter"
 
 msgid "Overpaid"
 msgstr "För mycket betalt"
@@ -1251,7 +1251,7 @@ msgid "Pdf bulk"
 msgstr "Pdf bulk"
 
 msgid "Personal"
-msgstr "Personal"
+msgstr "Personlig"
 
 msgid "Portrait"
 msgstr "Porträttfoto"
@@ -1260,7 +1260,7 @@ msgid "Position"
 msgstr "Position"
 
 msgid "Priority"
-msgstr "Prioriteringar"
+msgstr "Prioritet"
 
 msgid "Problems"
 msgstr "Problem"
@@ -1380,7 +1380,7 @@ msgid "Workshop"
 msgstr "Seminarium"
 
 msgid "XP avail"
-msgstr "Px Tillgänglig"
+msgstr "XP Tillgänglig"
 
 msgid "download"
 msgstr "ladda ned"
@@ -1413,7 +1413,7 @@ msgid "Available"
 msgstr "Tillgänglig"
 
 msgid "Cancelled"
-msgstr "Avbokad"
+msgstr "Inställt"
 
 msgid "Character"
 msgstr "Karaktär"
@@ -1428,7 +1428,7 @@ msgid "Container"
 msgstr "Behållare"
 
 msgid "Copy done"
-msgstr "Utförd kopia"
+msgstr "Kopiering utförd"
 
 msgid "Criterion"
 msgstr "Kriterium"
@@ -1440,13 +1440,13 @@ msgid "Dashboard"
 msgstr "Instrumentpanel"
 
 msgid "Deadlines"
-msgstr "Tidsfrister"
+msgstr "Deadlines"
 
 msgid "Delivered"
 msgstr "Levererad"
 
 msgid "Discounts"
-msgstr "Faciliteter"
+msgstr "Rabatter"
 
 msgid "Donations"
 msgstr "Donationer"
@@ -1503,7 +1503,7 @@ msgid "New event"
 msgstr "Nytt evenemang"
 
 msgid "New guild"
-msgstr "Ny klan"
+msgstr "Nytt gille"
 
 msgid "No ticket"
 msgstr "Ingen biljett"
@@ -1587,7 +1587,7 @@ msgid "Speedlarp"
 msgstr "Speedlarp"
 
 msgid "Start day"
-msgstr "Start dag"
+msgstr "Starta dag"
 
 msgid "Statement"
 msgstr "Motivering"
@@ -1596,7 +1596,7 @@ msgid "Subdomain"
 msgstr "Underdomän"
 
 msgid "Submitted"
-msgstr "Undergiven"
+msgstr "Inlämnad"
 
 msgid "Surcharge"
 msgstr "Tilläggsavgift"
@@ -1614,7 +1614,7 @@ msgid "Treasurer"
 msgstr "Kassör"
 
 msgid "Uploading"
-msgstr "Uppladdning"
+msgstr "Laddar upp"
 
 msgid "Warehouse"
 msgstr "Lagerlokal"
@@ -1659,10 +1659,10 @@ msgid "Applicable"
 msgstr "Tillämplig"
 
 msgid "Appointees"
-msgstr "Utnämningar"
+msgstr "Utnämnda"
 
 msgid "Approve it"
-msgstr "Godkänna det"
+msgstr "Godkänn"
 
 msgid "Assignment"
 msgstr "Uppdrag"
@@ -1692,7 +1692,7 @@ msgid "Chronology"
 msgstr "Kronologi"
 
 msgid "Collection"
-msgstr "Samla"
+msgstr "Samling"
 
 msgid "Components"
 msgstr "Komponenter"
@@ -1707,7 +1707,7 @@ msgid "Criterions"
 msgstr "Kriterier"
 
 msgid "Deleted on"
-msgstr "Raderad på"
+msgstr "Raderad den"
 
 msgid "Easter egg"
 msgstr "Påskägg"
@@ -1734,7 +1734,7 @@ msgid "Experience"
 msgstr "Erfarenhet"
 
 msgid "Guild logo"
-msgstr "Gildets logotyp"
+msgstr "Gillets logotyp"
 
 msgid "Historical"
 msgstr "Historisk"
@@ -1749,7 +1749,7 @@ msgid "Influencer"
 msgstr "Influencer"
 
 msgid "Kicked out"
-msgstr "Jagad"
+msgstr "Utsparkad"
 
 msgid "Last Event"
 msgstr "Senaste händelse"
@@ -1818,7 +1818,7 @@ msgid "Passengers"
 msgstr "Passagerare"
 
 msgid "Percentage"
-msgstr "Procentuell andel"
+msgstr "Procent"
 
 msgid "Play Again"
 msgstr "Spela igen"
@@ -1881,10 +1881,10 @@ msgid "Short name"
 msgstr "Kort namn"
 
 msgid "Speed Larp"
-msgstr "Hastighet Larp"
+msgstr "Snabb Larp"
 
 msgid "Speed larp"
-msgstr "Hastighet larp"
+msgstr "Snabb larp"
 
 msgid "Start date"
 msgstr "Startdatum"
@@ -1899,7 +1899,7 @@ msgid "Text color"
 msgstr "Textfärg"
 
 msgid "To be done"
-msgstr "Att övervinna"
+msgstr "Att färdigställas"
 
 msgid "Token name"
 msgstr "Tokenens namn"
@@ -2007,7 +2007,7 @@ msgid "Change gift"
 msgstr "Ändra gåva"
 
 msgid "Collections"
-msgstr "Collette"
+msgstr "Samlingar"
 
 msgid "Coming soon"
 msgstr "Kommer snart"
@@ -2058,10 +2058,10 @@ msgid "In Progress"
 msgstr "Pågående"
 
 msgid "In creation"
-msgstr "I skapelsen"
+msgstr "Skapas"
 
 msgid "In revision"
-msgstr "I revision"
+msgstr "Revideras"
 
 msgid "Information"
 msgstr "Information om"
@@ -2079,7 +2079,7 @@ msgid "Last change"
 msgstr "Senast ändrad"
 
 msgid "Leave guild"
-msgstr "Lämna guilden"
+msgstr "Lämna gille"
 
 msgid "Lightweight"
 msgstr "Lättvikt"
@@ -2094,7 +2094,7 @@ msgid "Nationality"
 msgstr "Nationalitet"
 
 msgid "Need a ride"
-msgstr "Behöver du ett lyft"
+msgstr "Behöver du lift"
 
 msgid "New session"
 msgstr "Ny session"
@@ -2148,7 +2148,7 @@ msgid "Request for"
 msgstr "Begäran om"
 
 msgid "Rotate left"
-msgstr "Vänster hjul"
+msgstr "Rotera vänster"
 
 msgid "Scroll left"
 msgstr "Bläddra åt vänster"
@@ -2274,7 +2274,7 @@ msgid "Event hidden"
 msgstr "Dold händelse"
 
 msgid "Exit Preview"
-msgstr "Förhandsgranskning av utgång"
+msgstr "Avsluta Förhandsgranskning"
 
 msgid "Experimental"
 msgstr "Experimentell"
@@ -2301,7 +2301,7 @@ msgid "Informations"
 msgstr "Information"
 
 msgid "Installments"
-msgstr "Pris"
+msgstr "Delbetalningar"
 
 msgid "Instructions"
 msgstr "Instruktioner"
@@ -2313,7 +2313,7 @@ msgid "Legal Gender"
 msgstr "Juridiskt kön"
 
 msgid "Legal Notice"
-msgstr "Rättsligt meddelande"
+msgstr "Juridiskt meddelande"
 
 msgid "Legal notice"
 msgstr "Juridiskt meddelande"
@@ -2370,7 +2370,7 @@ msgid "Redirect URL"
 msgstr "URL för omdirigering"
 
 msgid "Refund given"
-msgstr "Utfärdade återbetalningar"
+msgstr "Utfärdad återbetalning"
 
 msgid "Registration"
 msgstr "Registrering"
@@ -2394,7 +2394,7 @@ msgid "Requirements"
 msgstr "Krav och önskemål"
 
 msgid "Rotate right"
-msgstr "Höger hjul"
+msgstr "Rotera höger"
 
 msgid "Scroll right"
 msgstr "Bläddra åt höger"
@@ -2403,7 +2403,7 @@ msgid "See you soon"
 msgstr "Vi väntar på dig"
 
 msgid "Show history"
-msgstr "Historisk utställning"
+msgstr "Visa historik"
 
 msgid "Subscription"
 msgstr "Prenumeration"
@@ -2430,7 +2430,7 @@ msgid "Ticket tiers"
 msgstr "Biljettnivåer"
 
 msgid "Total issued"
-msgstr "Totalt emitterat"
+msgstr "Totalt Utfärdat"
 
 msgid "Total number"
 msgstr "Totalt antal"
@@ -2448,7 +2448,7 @@ msgid "Type of text"
 msgstr "Typ av text"
 
 msgid "Url Shortner"
-msgstr "Kortare URL"
+msgstr "URL Förkortare"
 
 msgid "VAT (Ticket)"
 msgstr "Moms (biljett)"
@@ -2460,7 +2460,7 @@ msgid "View Details"
 msgstr "Visa detaljer"
 
 msgid "Waiting list"
-msgstr "Väntar"
+msgstr "väntelista"
 
 msgid "We're coming"
 msgstr "Vi är på väg"
@@ -2503,10 +2503,10 @@ msgid "Age selection"
 msgstr "Val av ålder"
 
 msgid "Answers saved"
-msgstr "Sparade svar"
+msgstr "Svar sparade"
 
 msgid "Apply Upgrade"
-msgstr "Ansök om uppgradering"
+msgstr "Tillämpa uppgradering"
 
 msgid "Assign Badges"
 msgstr "Tilldela märken"
@@ -2542,13 +2542,13 @@ msgid "Daily Summary"
 msgstr "Daglig sammanfattning"
 
 msgid "Date deadline"
-msgstr "Datum tidsfrist"
+msgstr "Datum för deadline"
 
 msgid "Dates updated"
 msgstr "Uppdaterade datum"
 
 msgid "Days deadline"
-msgstr "Dagar tidsfrist"
+msgstr "Dagars deadline"
 
 msgid "Deadline date"
 msgstr "Sista inlämningsdag"
@@ -2590,7 +2590,7 @@ msgid "External site"
 msgstr "Extern webbplats"
 
 msgid "Faction cover"
-msgstr "Gruppens täckning"
+msgstr "Omslag till Fraktion"
 
 msgid "Fiscal Budget"
 msgstr "Finanspolitisk budget"
@@ -2602,7 +2602,7 @@ msgid "Guild created"
 msgstr "Gillet har skapats"
 
 msgid "Guild updated"
-msgstr "Guilden har uppdaterats"
+msgstr "Gillet har uppdaterats"
 
 msgid "Inflows total"
 msgstr "Totala intäkter"
@@ -2629,7 +2629,7 @@ msgid "Maximum votes"
 msgstr "Högsta antal röster"
 
 msgid "Minimum votes"
-msgstr "Minimiantal röster"
+msgstr "Minsta antal röster"
 
 msgid "Name of quest"
 msgstr "Namn på uppdraget"
@@ -2638,7 +2638,7 @@ msgid "New character"
 msgstr "Ny karaktär"
 
 msgid "Next sessions"
-msgstr "Nästa session"
+msgstr "Nästa sessioner"
 
 msgid "No events yet"
 msgstr "Inga evenemang ännu"
@@ -2933,13 +2933,13 @@ msgid "One-time token"
 msgstr "Engångsbelopp"
 
 msgid "Outflows total"
-msgstr "Summa kostnader"
+msgstr "Summa utgifter"
 
 msgid "PDF generation"
 msgstr "PDF-generering"
 
 msgid "Password reset"
-msgstr "Lösenord glömt"
+msgstr "Lösenords återställning"
 
 msgid "Payment quotas"
 msgstr "Betalningskvoter"
@@ -2969,7 +2969,7 @@ msgid "Prologues type"
 msgstr "Prologer typ"
 
 msgid "Question saved"
-msgstr "Undergiven fråga"
+msgstr "Fråga sparad"
 
 msgid "Remove consent"
 msgstr "Ta bort samtycke"
@@ -3017,7 +3017,7 @@ msgid "Type of ticket"
 msgstr "Typ av biljett"
 
 msgid "Type prologues"
-msgstr "Typ av prolog"
+msgstr "Typ av prologer"
 
 msgid "URL identifier"
 msgstr "Idenominativ URL"
@@ -3074,7 +3074,7 @@ msgid "Bundle is ready"
 msgstr "Paketet är klart"
 
 msgid "Change password"
-msgstr "Återställning av lösenord"
+msgstr "Lösenordsbyte"
 
 msgid "Character Sheet"
 msgstr "Karaktärsblad"
@@ -3098,10 +3098,10 @@ msgid "Confirm Restore"
 msgstr "Bekräfta återställning"
 
 msgid "Deadline (date)"
-msgstr "Tidsfrist (datum)"
+msgstr "Deadline (datum)"
 
 msgid "Deadline (days)"
-msgstr "Tidsfrist (dagar)"
+msgstr "Deadline (dagar)"
 
 msgid "Delegated users"
 msgstr "Delegerade användare"
@@ -3152,10 +3152,10 @@ msgid "Maximum members"
 msgstr "Maximalt antal medlemmar"
 
 msgid "Member approved"
-msgstr "Godkänd av medlem"
+msgstr "Medlem godkänd"
 
 msgid "Membership fees"
-msgstr "Föreningens avgifter"
+msgstr "Medlemsavgift"
 
 msgid "Multi-line text"
 msgstr "Text på flera rader"
@@ -3311,10 +3311,10 @@ msgid "Background image"
 msgstr "Bakgrundsbild"
 
 msgid "Casting priority"
-msgstr "Prioritet för gjutning"
+msgstr "Prioritet för rollbesättning"
 
 msgid "Character Config"
-msgstr "Teckenkonfiguration"
+msgstr "Karaktärskonfiguration"
 
 msgid "Character review"
 msgstr "Karaktärsbedömning"
@@ -3392,7 +3392,7 @@ msgid "Lite Mode active"
 msgstr "Lite-läge aktivt"
 
 msgid "May the best win"
-msgstr "Må den bästa mannen vinna"
+msgstr "Må den bästa vinna"
 
 msgid "Missing question"
 msgstr "Frågan saknas"
@@ -3404,7 +3404,7 @@ msgid "My guild invites"
 msgstr "Min klan bjuder in"
 
 msgid "Name of the plot"
-msgstr "Tomtens namn"
+msgstr "Intrigens namn"
 
 msgid "No comunications"
 msgstr "Ingen kommunikation"
@@ -3485,10 +3485,10 @@ msgid "Reminder profile"
 msgstr "Påminnelseprofil"
 
 msgid "Remove character"
-msgstr "Ta bort tecken"
+msgstr "Ta bort karaktär"
 
 msgid "Remove from plot"
-msgstr "Ta bort från tomten"
+msgstr "Ta bort intrig"
 
 msgid "Request approved"
 msgstr "Begäran godkänd"
@@ -3581,7 +3581,7 @@ msgid "Cancellation date"
 msgstr "Datum för avregistrering"
 
 msgid "Casting algorithm"
-msgstr "Algoritm för gjutning"
+msgstr "Algoritm för rollbesättning"
 
 msgid "Character profile"
 msgstr "Karaktärsprofil"
@@ -3611,7 +3611,7 @@ msgid "Custom title font"
 msgstr "Anpassat teckensnitt för titel"
 
 msgid "Days before event"
-msgstr "Några dagar före evenemanget"
+msgstr "Dagar före evenemanget"
 
 msgid "Default view mode"
 msgstr "Standardläge för visning"
@@ -3623,13 +3623,13 @@ msgid "Download document"
 msgstr "Ladda ner dokument"
 
 msgid "Elements uploaded"
-msgstr "Elementen är laddade"
+msgstr "Elementen är uppladdade"
 
 msgid "Event public page"
 msgstr "Offentlig evenemangssida"
 
 msgid "Experience System"
-msgstr "System för upplevelser"
+msgstr "System för erfarenhet"
 
 msgid "Experience points"
 msgstr "Erfarenhetspoäng"
@@ -3650,7 +3650,7 @@ msgid "Fixed instalments"
 msgstr "Fasta avbetalningar"
 
 msgid "Free registration"
-msgstr "Fri entré"
+msgstr "Gratis entré"
 
 msgid "Generating Bundle"
 msgstr "Skapa paket"
@@ -3773,10 +3773,10 @@ msgid "Remaining credits"
 msgstr "Återstående krediter"
 
 msgid "Remove from guild"
-msgstr "Ta bort från guilden"
+msgstr "Ta bort från gille"
 
 msgid "Request submitted"
-msgstr "Undergiven begäran"
+msgstr "begäran inlämnad"
 
 msgid "Residence address"
 msgstr "Bostadsadress"
@@ -3791,13 +3791,13 @@ msgid "Technical Support"
 msgstr "Teknisk support"
 
 msgid "The question name"
-msgstr "Undergiven fråga"
+msgstr "Frågas namn"
 
 msgid "The ticket's name"
 msgstr "Biljettens namn"
 
 msgid "Tokens assignment"
-msgstr "Tilldelning av symboler"
+msgstr "Tilldelning av tokens"
 
 msgid "Use these formats"
 msgstr "Använd dessa format"
@@ -3827,7 +3827,7 @@ msgid "Account activation"
 msgstr "Aktivering av konto"
 
 msgid "Added to the queue"
-msgstr "Mail läggs till i kön"
+msgstr "Tillagd i kön"
 
 msgid "Additional tickets"
 msgstr "Ytterligare biljetter"
@@ -3872,10 +3872,10 @@ msgid "Enable preferences"
 msgstr "Aktivera inställningar"
 
 msgid "Experience Systems"
-msgstr "System för upplevelser"
+msgstr "System för erfarenhet"
 
 msgid "Faction preference"
-msgstr "Faktionsval"
+msgstr "Fraktionsval"
 
 msgid "First registration"
 msgstr "Första registrering"
@@ -3992,7 +3992,7 @@ msgid "Workspace selector"
 msgstr "Väljare för arbetsyta"
 
 msgid "You left the guild"
-msgstr "Du har lämnat guilden"
+msgstr "Du har lämnat gillet"
 
 msgid "Your Organizations"
 msgstr "Dina organisationer"
@@ -7181,7 +7181,7 @@ msgid "No handout templates have been created yet"
 msgstr "Det har ännu inte skapats några mallar för informationsblad"
 
 msgid "No outflows recorded for the selected year"
-msgstr "Inga utflöden har registrerats för det valda året"
+msgstr "Inga utgifter har registrerats för det valda året"
 
 msgid "No speed-larp scenes have been created yet"
 msgstr "Det har ännu inte skapats några speed-larp-scener"
