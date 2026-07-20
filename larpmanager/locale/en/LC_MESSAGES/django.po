@@ -12620,6 +12620,9 @@ msgstr ""
 msgid "This invitation has expired."
 msgstr ""
 
+msgid "This invitation was sent to a different email address."
+msgstr ""
+
 msgid "You must consent to data sharing to accept this invitation."
 msgstr ""
 

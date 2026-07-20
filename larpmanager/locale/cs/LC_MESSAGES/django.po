@@ -8331,6 +8331,9 @@ msgstr "Uživatel potvrdil svou registraci na tuto událost"
 msgid "The user has updated their registration for this event"
 msgstr "Uživatel aktualizoval svou registraci na tuto událost"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Tato pozvánka byla odeslána na jinou e-mailovou adresu."
+
 msgid "Whether this content is currently available for access"
 msgstr "Zda je tento obsah aktuálně k dispozici pro přístup"
 

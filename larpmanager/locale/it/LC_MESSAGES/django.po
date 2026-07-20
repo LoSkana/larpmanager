@@ -8354,6 +8354,9 @@ msgstr "L'utente ha confermato la sua iscrizione a questo evento"
 msgid "The user has updated their registration for this event"
 msgstr "L'utente ha aggiornato la sua iscrizione a questo evento"
 
+msgid "This invitation was sent to a different email address."
+msgstr "Questo invito è stato inviato a un indirizzo e-mail diverso."
+
 msgid "Whether this content is currently available for access"
 msgstr "Se il contenuto è attualmente disponibile per l'accesso"
 
