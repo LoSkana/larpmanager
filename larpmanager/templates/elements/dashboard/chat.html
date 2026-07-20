@@ -1,11 +1,5 @@
 {% load i18n %}
 {% if user.is_authenticated %}
-    <button type="button"
-            id="chat-widget-trigger"
-            class="chat-widget-open-trigger"
-            title="{% trans "Ask a question" %}">
-        <i class="fa-solid fa-comment-dots"></i>
-    </button>
     <dialog id="chat-widget-dialog">
         <a href="#" id="chat-widget-close"><i class="fa-solid fa-xmark"></i></a>
         <h2>{% trans "Ask LarpManager" %}</h2>

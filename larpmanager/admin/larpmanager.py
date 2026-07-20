@@ -26,6 +26,7 @@ from larpmanager.admin.base import CSRFTinyMCEModelAdmin, DefModelAdmin
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
+    LarpManagerChatLog,
     LarpManagerCollaborator,
     LarpManagerDemoHint,
     LarpManagerDemoHintDismissal,
@@ -240,3 +241,11 @@ class LarpManagerCollaboratorAdmin(DefModelAdmin):
 
     list_display = ("name", "show_thumb")
     search_fields: ClassVar[list] = ["id", "name"]
+
+
+@admin.register(LarpManagerChatLog)
+class LarpManagerChatLogAdmin(DefModelAdmin):
+    """Admin interface for LarpManagerCollaborator model."""
+
+    list_display = ("member", "question")
+    search_fields: ClassVar[list] = ["id", "question"]
