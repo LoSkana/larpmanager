@@ -192,8 +192,16 @@ def cmd_sync(config: dict) -> None:
     print(f"sync: inserted={inserted} reset_to_pending={reset} unchanged={updated}")
 
 
+def _estimate_tokens(row) -> int:
+    """Rough token estimate for an entry (~4 chars/token) plus JSON field overhead."""
+    _id, msgid, msgstr_it, msgstr_target = row
+    chars = len(msgid or "") + len(msgstr_it or "") + len(msgstr_target or "")
+    return chars // 4 + 12
+
+
 def cmd_next_chunk(config: dict, lang: str | None) -> None:
-    """Write the next pending batch to chunk_path, plus a state file mapping msgid -> row id for ingest."""
+    """Write next pending batch to chunk_path, sized to fill target_tokens (capped at
+    max_chunk_size entries), plus a state file mapping msgid -> row id for ingest."""
     conn = get_db(config)
     query = "SELECT lang, po_file FROM entries WHERE status='pending'"
     params: list = []
@@ -208,12 +216,26 @@ def cmd_next_chunk(config: dict, lang: str | None) -> None:
         return
 
     group_lang, po_file = group
-    rows = conn.execute(
+    max_chunk_size = config.get("max_chunk_size", config["chunk_size"])
+    target_tokens = config.get("target_tokens")
+    candidates = conn.execute(
         "SELECT id, msgid, msgstr_it, msgstr_target FROM entries "
         "WHERE lang=? AND po_file=? AND status='pending' ORDER BY id LIMIT ?",
-        (group_lang, po_file, config["chunk_size"]),
+        (group_lang, po_file, max_chunk_size),
     ).fetchall()
     conn.close()
+
+    if target_tokens:
+        rows = []
+        used = 0
+        for row in candidates:
+            row_tokens = _estimate_tokens(row)
+            if rows and used + row_tokens > target_tokens:
+                break
+            rows.append(row)
+            used += row_tokens
+    else:
+        rows = candidates[: config["chunk_size"]]
 
     payload = [{"msgid": r[1], "msgstr_it": r[2], "msgstr_target": r[3], "lang": group_lang} for r in rows]
     Path(config["chunk_path"]).write_text(json.dumps(payload, ensure_ascii=False, indent=2))
