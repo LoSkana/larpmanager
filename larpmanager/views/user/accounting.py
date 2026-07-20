@@ -35,12 +35,10 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
 
-from larpmanager.accounting.gateway import (
-    redsys_webhook,
-    satispay_webhook,
-    stripe_webhook,
-    sumup_webhook,
-)
+from larpmanager.accounting.gateway.redsys import redsys_webhook
+from larpmanager.accounting.gateway.satispay import satispay_webhook
+from larpmanager.accounting.gateway.stripe import stripe_webhook
+from larpmanager.accounting.gateway.sumup import sumup_webhook
 from larpmanager.accounting.member import get_membership_fee_for_reg, info_accounting
 from larpmanager.accounting.payment import auto_process_single_method, get_payment_form
 from larpmanager.cache.association_text import get_association_text
