@@ -41,6 +41,7 @@ from larpmanager.models.experience import AbilityExp, AbilityTemplateExp, Abilit
 from larpmanager.models.form import (
     RegistrationOption,
     RegistrationQuestion,
+    RegistrationQuestionApplicable,
     WritingAnswer,
     WritingChoice,
     WritingOption,
@@ -715,8 +716,7 @@ def copy_registration(source_event_id: int, targets: list[str], target_event_id:
 
     Args:
         source_event_id: Source event ID to copy from
-        targets: List of registration component types to copy ('ticket', 'question',
-                'discount', 'quota', 'installment', 'surcharge')
+        targets: List of registration component types to copy
         target_event_id: Target event ID to copy to
 
     """
@@ -724,11 +724,24 @@ def copy_registration(source_event_id: int, targets: list[str], target_event_id:
     if "ticket" in targets:
         copy_class(source_event_id, target_event_id, RegistrationTicket)
 
-    # Copy registration questions and their options, then fix relationships
+    # Copy registration questions and their options (scoped to the selected form types),
+    # then fix relationships
+    question_applicables = []
     if "question" in targets:
+        question_applicables.append(RegistrationQuestionApplicable.REGISTRATION)
+    if "matchmaker_question" in targets:
+        question_applicables.append(RegistrationQuestionApplicable.MATCHMAKER)
+
+    if question_applicables:
         copy_class(source_event_id, target_event_id, RegistrationSection)
-        copy_class(source_event_id, target_event_id, RegistrationQuestion)
-        copy_class(source_event_id, target_event_id, RegistrationOption)
+        for applicable in question_applicables:
+            copy_class(source_event_id, target_event_id, RegistrationQuestion, extra_filter={"applicable": applicable})
+            copy_class(
+                source_event_id,
+                target_event_id,
+                RegistrationOption,
+                extra_filter={"question__applicable": applicable},
+            )
         correct_rels(source_event_id, target_event_id, RegistrationSection, RegistrationQuestion, "section", "name")
         correct_rels(source_event_id, target_event_id, RegistrationQuestion, RegistrationOption, "question", "name")
         correct_rels_many(target_event_id, RegistrationTicket, RegistrationQuestion, "tickets", "name")

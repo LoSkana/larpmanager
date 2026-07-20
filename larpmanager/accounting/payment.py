@@ -35,13 +35,11 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import round_decimal
-from larpmanager.accounting.gateway import (
-    get_paypal_form,
-    get_redsys_form,
-    get_satispay_form,
-    get_stripe_form,
-    get_sumup_form,
-)
+from larpmanager.accounting.gateway.paypal import get_paypal_form
+from larpmanager.accounting.gateway.redsys import get_redsys_form
+from larpmanager.accounting.gateway.satispay import get_satispay_form
+from larpmanager.accounting.gateway.stripe import get_stripe_form
+from larpmanager.accounting.gateway.sumup import get_sumup_form
 from larpmanager.accounting.member import (
     get_membership_fee_for_reg,
     membership_fee_pending_config_name,
@@ -73,6 +71,7 @@ from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationQuestion,
+    RegistrationQuestionApplicable,
 )
 from larpmanager.models.member import MemberConfig
 from larpmanager.models.registration import Registration
@@ -252,6 +251,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             registration_question = RegistrationQuestion.objects.get(
                 event=context["registration"].run.event,
                 name__iexact=question_name,
+                applicable=RegistrationQuestionApplicable.REGISTRATION,
             )
 
             # Handle single/multiple choice questions

@@ -114,7 +114,7 @@ def test_guild_all(pw_page: Any) -> None:
     # ========== SECTION 10: Promote Guild Recruit to admin ==========
     rows = page.locator("#guild-members")
     recruit_row = rows.filter(has_text="Guild Recruit")
-    recruit_row.get_by_role("button", name="Promote").click()
+    recruit_row.get_by_role("button", name="Promote to admin").click()
 
     go_to(page, live_server, "/test/guilds/")
     page.get_by_role("link", name="The Silver Hand").click()
@@ -122,7 +122,7 @@ def test_guild_all(pw_page: Any) -> None:
     expect(recruit_row).to_contain_text("Admin")
 
     # ========== SECTION 11: Demote Guild Recruit back to member ==========
-    recruit_row.get_by_role("button", name="Demote").click()
+    recruit_row.get_by_role("button", name="Remove admin").click()
 
     go_to(page, live_server, "/test/guilds/")
     page.get_by_role("link", name="The Silver Hand").click()
@@ -130,7 +130,7 @@ def test_guild_all(pw_page: Any) -> None:
     expect(recruit_row).to_contain_text("Member")
 
     # ========== SECTION 12: Kick Guild Recruit ==========
-    recruit_row.get_by_role("button", name="Kick").click()
+    recruit_row.get_by_role("button", name="Remove from guild").click()
 
     go_to(page, live_server, "/test/guilds/")
     page.get_by_role("link", name="The Silver Hand").click()

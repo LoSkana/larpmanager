@@ -500,6 +500,9 @@ class OrgaCopyForm(BaseForm):
             ("workshop", "Workshops"),
         ]
 
+        if "matchmaker" in self.params["features"]:
+            cho.insert(cho.index(("question", "Registration Form")) + 1, ("matchmaker_question", "Matchmaker Form"))
+
         self.fields["target"] = forms.MultipleChoiceField(
             required=True,
             choices=cho,

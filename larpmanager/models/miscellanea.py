@@ -24,7 +24,7 @@ import secrets
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, ClassVar
 
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q, UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -1090,30 +1090,49 @@ class OneTimeAccessToken(UuidMixin, BaseModel):
             self.token = secrets.token_urlsafe(48)
         super().save(*args, **kwargs)
 
-    def mark_as_used(self, http_request: Any = None, authenticated_member: Any = None) -> None:
-        """Mark this token as used and record access information.
+    def mark_as_used(self, http_request: Any = None, authenticated_member: Any = None) -> bool:
+        """Atomically mark this token as used and record access information.
+
+        Locks the row and re-checks the used flag inside the transaction so a
+        token cannot be consumed more than once by concurrent requests.
 
         Args:
             http_request: Django HttpRequest object to extract metadata
             authenticated_member: Member object if user is authenticated
 
+        Returns:
+            True if this call consumed the token, False if it was already used.
+
         """
-        self.used = True
-        self.used_at = timezone.now()
-        self.used_by = authenticated_member
+        with transaction.atomic():
+            locked = OneTimeAccessToken.objects.select_for_update().get(pk=self.pk)
+            if locked.used:
+                return False
 
-        if http_request:
-            # Extract IP address
-            forwarded_for_header = http_request.META.get("HTTP_X_FORWARDED_FOR")
-            if forwarded_for_header:
-                self.ip_address = forwarded_for_header.split(",")[0].strip()
-            else:
-                self.ip_address = http_request.META.get("REMOTE_ADDR")
+            locked.used = True
+            locked.used_at = timezone.now()
+            locked.used_by = authenticated_member
 
-            # Extract user agent
-            self.user_agent = http_request.META.get("HTTP_USER_AGENT", "")[:500]
+            if http_request:
+                # Extract IP address
+                forwarded_for_header = http_request.META.get("HTTP_X_FORWARDED_FOR")
+                if forwarded_for_header:
+                    locked.ip_address = forwarded_for_header.split(",")[0].strip()
+                else:
+                    locked.ip_address = http_request.META.get("REMOTE_ADDR")
 
-        self.save()
+                # Extract user agent
+                locked.user_agent = http_request.META.get("HTTP_USER_AGENT", "")[:500]
+
+            locked.save()
+
+        # Reflect the persisted state on the in-memory instance
+        self.used = locked.used
+        self.used_at = locked.used_at
+        self.used_by = locked.used_by
+        self.ip_address = locked.ip_address
+        self.user_agent = locked.user_agent
+        return True
 
 
 class Log(BaseModel):

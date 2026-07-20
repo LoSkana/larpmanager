@@ -1,12 +1,27 @@
 {% extends "utils.html" %}
 {% load i18n tz show_tags static %}
 {% block title %}
-    {% trans "Registration form" %} - {{ run.search | truncatechars:50 }}
+    {% trans label_typ as name %}
+    {{ name }} {% trans "form" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {{ page_info }}
 {% endblock info %}
 {% block content %}
+    {% if available_typ|length > 1 %}
+        <p>
+            {% trans "Configure form" %}:
+            {% for nm in available_typ.keys %}
+                {% include "elements/comma.html" %}
+                {% if nm == label_typ %}
+                    <b>{% trans nm as name %}{{ name }}</b>
+                {% else %}
+                    <a href="{% url 'orga_registration_form' run.get_slug nm %}">{% trans nm as name %}{{ name }}</a>
+                {% endif %}
+            {% endfor %}
+        </p>
+        <hr />
+    {% endif %}
     {% include "elements/table/header.html" %}
     {% define "-1" as old_section %}
     {% for el in list %}
@@ -52,9 +67,8 @@
                     <i class="fa-solid fa-grip-vertical"></i>
                 </td>
                 <td>
-                    <a href="{% url 'orga_registration_form_edit' run.get_slug el.uuid %}">
-                        <i class="fas fa-edit"></i>
-                    </a>
+                    <a href="{% url 'orga_registration_form_edit' run.get_slug typ el.uuid %}"
+                       qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                 </td>
                 <td>{{ el.name }}</td>
                 <td>{{ el.description | truncatechars:50 }}</td>
@@ -91,7 +105,7 @@
                 {% endif %}
                 <td>
                     {% if el.typ|length == 1 %}
-                        <a href="{% url 'orga_registration_form_delete' run.get_slug el.uuid %}"
+                        <a href="{% url 'orga_registration_form_delete' run.get_slug typ el.uuid %}"
                            qtip="{% trans "Delete" %}"
                            class="only_new_v18"><i class="fas fa-trash"></i></a>
                     {% endif %}
@@ -102,7 +116,7 @@
 </table>
 {% if not list %}
     <p class="no-elements-available">
-        {% trans "No registration form questions have been created yet" %}. {% trans "Use the button above to add questions to the registration form" %}.
+        {% trans "No questions have been created yet for this form" %}. {% trans "Use the button above to add one" %}.
     </p>
 {% endif %}
 {% include "elements/table/footer.html" %}

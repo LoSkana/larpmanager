@@ -78,9 +78,9 @@ class EmailOrUsernameModelBackend(ModelBackend):
         )
 
         # Test password against each matching user record
-        # Return the first user with valid credentials
+        # Return the first user with valid credentials that is allowed to log in
         for candidate_user in matching_users:
-            if candidate_user.check_password(password):
+            if candidate_user.check_password(password) and self.user_can_authenticate(candidate_user):
                 return candidate_user
 
         # Timing attack protection: run password hasher even when no users found

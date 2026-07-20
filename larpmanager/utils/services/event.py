@@ -60,6 +60,7 @@ from larpmanager.models.form import (
     QuestionStatus,
     QuestionVisibility,
     RegistrationQuestion,
+    RegistrationQuestionApplicable,
     RegistrationQuestionType,
     WritingQuestion,
     WritingQuestionType,
@@ -475,6 +476,8 @@ def save_event_registration_form(features: dict, instance: object) -> None:
     choices = dict(RegistrationQuestionType.choices)
     all_types = choices.keys()
     all_types -= basic_tps
+    # Faction preference is matchmaker-only and handled separately below
+    all_types -= {RegistrationQuestionType.FACTION_PREFERENCE}
 
     # Create default question types if they don't exist
     for el in def_tps:
@@ -515,6 +518,22 @@ def save_event_registration_form(features: dict, instance: object) -> None:
         # Remove question if feature is disabled but question exists
         if el not in features and el in types:
             RegistrationQuestion.objects.filter(event=instance, typ=el).delete()
+
+    # Default matchmaker question: when the matchmaker feature is active and the
+    # event has no matchmaker-applicable question yet, add a faction preference one
+    if "matchmaker" in features:
+        matchmaker_questions = instance.get_elements(RegistrationQuestion).filter(
+            applicable=RegistrationQuestionApplicable.MATCHMAKER,
+        )
+        if not matchmaker_questions.exists():
+            RegistrationQuestion.objects.create(
+                event=instance,
+                typ=RegistrationQuestionType.FACTION_PREFERENCE,
+                applicable=RegistrationQuestionApplicable.MATCHMAKER,
+                name=_("Faction preference"),
+                description=_("Order the factions from your most (top) to least (bottom) preferred"),
+                status=QuestionStatus.OPTIONAL,
+            )
 
 
 def _activate_orga_lang(instance: Event) -> None:

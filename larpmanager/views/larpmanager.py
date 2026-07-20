@@ -52,7 +52,12 @@ from django_ratelimit.decorators import ratelimit
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_association_features, get_event_features
-from larpmanager.cache.larpmanager import get_blog_content_with_images, get_cache_lm_home, get_larpmanager_texts
+from larpmanager.cache.larpmanager import (
+    get_blog_content_with_images,
+    get_cache_lm_collaborators,
+    get_cache_lm_home,
+    get_larpmanager_texts,
+)
 from larpmanager.forms.association import FirstAssociationForm
 from larpmanager.forms.larpmanager import LarpManagerCheck, LarpManagerContact, LarpManagerTicketForm
 from larpmanager.forms.miscellanea import LmSendMailForm
@@ -66,6 +71,7 @@ from larpmanager.models.base import Feature
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.larpmanager import (
     LarpManagerBlog,
+    LarpManagerChatLog,
     LarpManagerDemoHint,
     LarpManagerDemoHintDismissal,
     LarpManagerDemoType,
@@ -83,6 +89,7 @@ from larpmanager.utils.auth.admin import check_lm_admin
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
+from larpmanager.utils.larpmanager.chat import get_chat_answer
 from larpmanager.utils.larpmanager.tasks import delete_association_task, delete_run_task, my_send_mail, send_mail_exec
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.utils.services.demo import clone_association, schedule_demo_cleanup
@@ -474,6 +481,38 @@ def debug_slug(request: HttpRequest, association_slug: Any = "") -> Any:
     return redirect("home")
 
 
+@login_required
+@ratelimit(key="ip", rate="20/m", method="POST", block=True)
+@ratelimit(key="user", rate="10/m", method="POST", block=True)
+def chat_ask(request: HttpRequest) -> Any:
+    """AJAX endpoint for the live chat assistant.
+
+    Answers are grounded in the guides/tutorials cache and cached per question, so the
+    Anthropic API is only called for new, matchable questions.
+
+    Args:
+        request: HTTP request object, expects POST with "question".
+
+    Returns:
+        JsonResponse: {"answer": "..."}
+
+    """
+    if request.method != "POST":
+        return JsonResponse({"error": _("Invalid request method")}, status=405)
+
+    if request.association.get("main_domain") != "larpmanager.com":
+        raise Http404
+
+    question = request.POST.get("question", "").strip()
+    if not question:
+        return JsonResponse({"error": _("Please write a question")}, status=400)
+
+    LarpManagerChatLog.objects.create(member=request.user.member, question=question)
+
+    answer = get_chat_answer(question)
+    return JsonResponse({"answer": answer})
+
+
 def ticket(request: HttpRequest, reason: Any = "") -> Any:
     """Handle support ticket creation and submission.
 
@@ -543,7 +582,8 @@ def discord(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/discord.html", context)
 
 
-@ratelimit(key="ip", rate="5/m", method="POST", block=True)
+@ratelimit(key="ip", rate="5/m", method="POST", block=False, group="demo_clone_burst")
+@ratelimit(key="ip", rate="10/d", method="POST", block=False, group="demo_clone")
 def get_started(request: HttpRequest) -> Any:
     """Show the entry funnel: start a pre-populated demo or create a real association.
 
@@ -564,6 +604,9 @@ def get_started(request: HttpRequest) -> Any:
 
     # Primary path: launch a demo instance of the chosen type
     if request.method == "POST" and request.POST.get("demo_uuid"):
+        if getattr(request, "limited", False):
+            messages.error(request, "whoah, whoah, slow down buddy")
+            return redirect("get_started")
         user_agent = request.META.get("HTTP_USER_AGENT", "")
         if is_suspicious_user_agent(user_agent):
             return HttpResponseForbidden("Bots not allowed.")
@@ -828,6 +871,7 @@ def about_us(request: HttpRequest) -> Any:
     context = get_lm_contact(request)
     context["index"] = True
     context["texts"] = get_larpmanager_texts()
+    context["collaborators"] = get_cache_lm_collaborators()
     return render(request, "larpmanager/landing/about_us.html", context)
 
 

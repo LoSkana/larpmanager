@@ -25,7 +25,6 @@ import logging
 import random
 import re
 import string
-import time
 import unicodedata
 from datetime import UTC, date, datetime, timedelta
 from decimal import ROUND_DOWN, Decimal
@@ -153,8 +152,6 @@ def get_object_uuid(
     try:
         return queryset.get(uuid=identifier, **filters)
     except (ObjectDoesNotExist, ValueError, AttributeError) as err:
-        # Wait 2 seconds before raising 404 to handle race conditions
-        time.sleep(2)
         msg = f"{model_class.__name__} does not exist"
         raise Http404(msg) from err
 
@@ -527,18 +524,29 @@ def normalize_string(input_string: str) -> str:
     )
 
 
-def copy_class(target_event_id: int, source_event_id: int, model_class: type) -> None:
-    """Copy all objects of a given class from source event to target event.
+def copy_class(
+    target_event_id: int, source_event_id: int, model_class: type, extra_filter: dict[str, Any] | None = None
+) -> None:
+    """Copy objects of a given class from source event to target event.
 
     Args:
         target_event_id: Target event ID to copy objects to
         source_event_id: Source event ID to copy objects from
         model_class: Django model class to copy instances of
+        extra_filter: Optional additional filter kwargs restricting which objects are
+            deleted from the target and copied from the source (e.g. to scope the copy
+            to a subset of rows sharing the same event)
 
     """
-    model_class.objects.filter(event_id=target_event_id).delete()
+    delete_queryset = model_class.objects.filter(event_id=target_event_id)
+    source_queryset = model_class.objects.filter(event_id=source_event_id)
+    if extra_filter:
+        delete_queryset = delete_queryset.filter(**extra_filter)
+        source_queryset = source_queryset.filter(**extra_filter)
 
-    for source_object in model_class.objects.filter(event_id=source_event_id):
+    delete_queryset.delete()
+
+    for source_object in source_queryset:
         try:
             # save a copy of m2m relations
             many_to_many_data = {}

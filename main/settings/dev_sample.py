@@ -15,6 +15,8 @@ DEBUG_TOOLBAR = False
 
 DEEPL_API_KEY = '???'
 
+ANTHROPIC_API_KEY = '???'
+
 # To enable Amazon SES for email sending (optional):
 # AWS_SES_ACCESS_KEY_ID = 'your-access-key-id'
 # AWS_SES_SECRET_ACCESS_KEY = 'your-secret-access-key'

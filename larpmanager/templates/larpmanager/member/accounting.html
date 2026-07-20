@@ -60,7 +60,7 @@
                         {% include "elements/comma.html" %}
                         <b>{{ registration.run }}</b> ({{ del }}) -
                         {% if registration.deadline > 1 %}
-                            {% blocktrans count counter=registration.deadline with amount=registration.quota|format_decimal currency=currency_symbol %}Pay {{ amount }}{{ currency }} within {{ counter }} days{% endblocktrans %}
+                            {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol counter=registration.deadline %}Pay {{ amount }}{{ currency }} within {{ counter }} days{% endblocktrans %}
                         {% else %}
                             {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol %}Pay {{ amount }}{{ currency }} as soon as possible{% endblocktrans %}
                         {% endif %}

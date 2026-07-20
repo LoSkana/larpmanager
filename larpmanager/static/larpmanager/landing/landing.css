@@ -902,7 +902,6 @@ body.landing .partner-card .partner-text {
 
 /* ---------- Screenshots ---------- */
 body.landing .screens {
-  background: var(--paper-soft);
   text-align: center;
 }
 
@@ -975,7 +974,6 @@ body.landing .open p {
 body.landing .final {
   text-align: center;
   padding: 6rem 0;
-  background: var(--paper-soft);
 }
 
 body.landing .final h2 {
@@ -1258,6 +1256,39 @@ body.landing .about-prose {
 
 body.landing .about-prose p {
   margin: 0 0 1.4rem;
+}
+
+body.landing .collaborators-intro {
+  margin-top: 2.5rem;
+}
+
+body.landing .collaborators {
+  max-width: 62ch;
+  margin: 2.5rem auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.4rem;
+}
+
+body.landing .collaborator-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  width: 140px;
+  text-align: center;
+}
+
+body.landing .collaborator-card img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+body.landing .collaborator-name {
+  font-weight: 700;
 }
 
 body.landing .about-quote {
@@ -1925,7 +1956,9 @@ body.landing section.native .eyebrow {
 }
 
 body.landing .games,
-body.landing .partners {
+body.landing .partners,
+body.landing .open,
+body.landing .site-footer {
   background: var(--paper-soft);
 }
 

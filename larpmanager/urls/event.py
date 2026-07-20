@@ -224,6 +224,11 @@ urlpatterns = [
         name="casting_history",
     ),
     path(
+        "<slug:event_slug>/matchmaker/",
+        views_ue.matchmaker,
+        name="matchmaker",
+    ),
+    path(
         "<slug:event_slug>/factions/",
         views_ue.factions,
         name="factions",

@@ -155,6 +155,16 @@ def _add_registration_items(
                     sidebar_gate=("casting", allowed_sidebar),
                 ),
             )
+        if "matchmaker" in features:
+            items.append(
+                _item(
+                    reverse("matchmaker", args=[slug]),
+                    "fa-solid fa-people-arrows",
+                    _("Matchmaker"),
+                    str(_("Answer questions to help match you with characters")) + "!",
+                    active=active == "matchmaker",
+                )
+            )
     else:
         items.append(
             _item(

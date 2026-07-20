@@ -63,7 +63,7 @@ def test_translations_text(pw_page: Any) -> None:
     edit_iframe.locator("#id_typ").select_option("h")
     edit_iframe.locator("#id_default").uncheck()
     save_modal(page, edit_iframe)
-    expect_normalized(page, page.locator("#one"), "Home fr bonjour Home it BUONGIORNO Home en Hello")
+    expect_normalized(page, page.locator("#one"), "Calendar fr bonjour Calendar it BUONGIORNO Calendar en Hello")
 
     # test languages
     go_to(page, live_server, "/")

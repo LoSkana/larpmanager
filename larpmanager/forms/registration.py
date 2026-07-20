@@ -51,6 +51,7 @@ from larpmanager.models.form import (
     QuestionStatus,
     RegistrationOption,
     RegistrationQuestion,
+    RegistrationQuestionApplicable,
     RegistrationQuestionType,
 )
 from larpmanager.models.registration import (
@@ -649,6 +650,60 @@ class RegistrationGiftForm(RegistrationForm):
         self.has_mandatory = len(self.mandatory) > 0
 
 
+class MatchmakerForm(BaseRegistrationForm):
+    """Player-facing form for the matchmaker questions (e.g. "what would you like to play").
+
+    Bound to an existing Registration; fully separate from the standard RegistrationForm
+    and from the casting (preference/ranking) feature - only handles questions with
+    applicable=RegistrationQuestionApplicable.MATCHMAKER, reusing the same
+    answer/choice save machinery as the standard registration form.
+    """
+
+    class Meta:
+        model = Registration
+        fields = ()
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with the matchmaker questions for the current event."""
+        super().__init__(*args, **kwargs)
+
+        self.questions = []
+        self.sections = {}
+        self.section_descriptions = {}
+        self.profiles = {}
+
+        event = self.params["run"].event
+        self._init_registration_question(self.instance, event)
+        for question in self.questions:
+            self._init_matchmaker_field(question)
+
+    def _init_questions(self, event: Event) -> None:
+        """Load only the matchmaker-applicable registration questions."""
+        self.questions = get_cached_registration_questions(event, applicable=RegistrationQuestionApplicable.MATCHMAKER)
+
+    def _init_matchmaker_field(self, question: dict) -> None:
+        """Initialize a single matchmaker question field (mirrors RegistrationForm.init_question)."""
+        if skip_registration_question(question, self.instance, self.params["features"]):
+            return
+
+        field_key = self._init_field(question, registration_counts=None, is_organizer=False)
+        if not field_key:
+            return
+
+        if question.get("profile_thumb_url"):
+            self.profiles["id_" + field_key] = question["profile_thumb_url"]
+
+        if question.get("section_name"):
+            self.sections["id_" + field_key] = question["section_name"]
+            if question.get("section_description"):
+                self.section_descriptions[question["section_name"]] = question["section_description"]
+
+    def save(self, commit: bool = True) -> Registration:  # noqa: FBT001, FBT002, ARG002
+        """Save answers/choices for the matchmaker questions onto the bound registration."""
+        self.save_registration_questions(self.instance, is_organizer=False)
+        return self.instance
+
+
 class OrgaRegistrationForm(BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
@@ -1209,7 +1264,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
 
     class Meta:
         model = RegistrationQuestion
-        exclude: ClassVar[list] = ["order"]
+        exclude: ClassVar[list] = ["order", "applicable"]
 
         widgets: ClassVar[dict] = {
             "factions": FactionS2WidgetMulti,
@@ -1245,7 +1300,9 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         features = self.params["features"]
         event = self.params["event"]
 
-        if "reg_que_sections" not in features:
+        # Sections only make sense for the standard registration form
+        registration_typ = self.params.get("registration_typ", RegistrationQuestionApplicable.REGISTRATION)
+        if registration_typ != RegistrationQuestionApplicable.REGISTRATION or "reg_que_sections" not in features:
             self.delete_field("section")
         else:
             self.configure_field_event("section", event)
@@ -1297,8 +1354,11 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
 
         Filters question types based on existing usage and prevents duplicates.
         """
-        # Add type of registration question to the available types
-        registration_questions = get_cached_registration_questions(self.params["event"])
+        registration_typ = self.params.get("registration_typ", RegistrationQuestionApplicable.REGISTRATION)
+
+        # Add type of registration question to the available types, scoped to the current form
+        # (the special reserved types below only make sense for the standard registration form)
+        registration_questions = get_cached_registration_questions(self.params["event"], applicable=registration_typ)
         already_used_types = list({question["typ"] for question in registration_questions})
 
         if self.instance.pk and self.instance.typ:
@@ -1307,24 +1367,42 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             # prevent cancellation if one of the default types
             self.prevent_canc = len(self.instance.typ) > 1
 
-        available_choices = []
-        for choice in RegistrationQuestionType.choices:
-            # if it is related to a feature
-            if len(choice[0]) > 1:
-                # check it is not already present
-                if choice[0] in already_used_types:
-                    continue
-
-                # check the feature is active
-                if choice[0] not in ["ticket"] and choice[0] not in self.params["features"]:
-                    continue
-
-            available_choices.append(choice)
+        available_choices = [
+            choice
+            for choice in RegistrationQuestionType.choices
+            if self._is_type_choice_available(choice, registration_typ, already_used_types)
+        ]
         self.fields["typ"].choices = available_choices
+
+    def _is_type_choice_available(
+        self, choice: tuple[str, str], registration_typ: str, already_used_types: list[str]
+    ) -> bool:
+        """Return whether a RegistrationQuestionType choice should be offered in the type dropdown."""
+        # faction preference is reserved for the matchmaker form only, and only once
+        if choice[0] == RegistrationQuestionType.FACTION_PREFERENCE:
+            return registration_typ == RegistrationQuestionApplicable.MATCHMAKER and choice[0] not in already_used_types
+
+        # if it is related to a feature
+        if len(choice[0]) > 1:
+            # reserved system types (ticket, pwyw, quotas, ...) only apply to the standard registration form
+            if registration_typ != RegistrationQuestionApplicable.REGISTRATION:
+                return False
+
+            # check it is not already present
+            if choice[0] in already_used_types:
+                return False
+
+            # check the feature is active
+            if choice[0] not in ["ticket"] and choice[0] not in self.params["features"]:
+                return False
+
+        return True
 
     def save(self, commit: bool = True) -> RegistrationQuestion:  # noqa: FBT001, FBT002
         """Save the instance, enforcing OPTIONAL status and clearing M2M for system types."""
         instance = super().save(commit=False)
+        if not instance.pk and "registration_typ" in self.params:
+            instance.applicable = self.params["registration_typ"]
         if len(instance.typ) > 1 and instance.typ != RegistrationQuestionType.TICKET:
             instance.status = QuestionStatus.OPTIONAL
         if commit:
@@ -1353,6 +1431,11 @@ class OrgaRegistrationOptionForm(BaseModelForm):
         for field in ("price", "max_available"):
             if field in self.fields:
                 self.fields[field].required = False
+
+        # Price only makes sense for the standard registration form
+        question = self.params.get("question")
+        if question and question.applicable != RegistrationQuestionApplicable.REGISTRATION:
+            self.delete_field("price")
 
     def clean_price(self) -> Any:
         """Treat blank price as 0."""

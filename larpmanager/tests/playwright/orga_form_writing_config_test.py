@@ -87,7 +87,7 @@ def feature_fields(page: Any) -> None:
     sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
-        "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Cover Cover Hidden",
+        "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Cover Cover Hidden",
     )
 
 
@@ -104,7 +104,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # check
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
+        page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden"
     )
 
     # set experience point
@@ -134,7 +134,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
-        "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden comp Computed Private",
+        "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden comp Computed Private",
     )
 
     # remove experience
@@ -145,7 +145,7 @@ def feature_fields2(page: Any, live_server: Any) -> None:
     # check
     sidebar(page, "Sheet")
     expect_normalized(page,
-        page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden"
+        page.locator("#one"), "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden"
     )
 
 
@@ -161,7 +161,7 @@ def form_other_writing(page: Any) -> None:
     sidebar(page, "Sheet")
     expect_normalized(page,
         page.locator("#one"),
-        "Name Name Text Sheet Presentation Presentation Assigned Assigned Hidden Hide Hide Hidden Faction Factions Hidden",
+        "Name Name Text Sheet Presentation Presentation Assigned Assignment Hidden Hide Hide Hidden Faction Factions Hidden",
     )
     page.get_by_role("link", name="Plot", exact=True).click()
     _wait_lm_ready(page)

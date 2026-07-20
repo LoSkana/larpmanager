@@ -197,6 +197,9 @@ msgstr "Rolle"
 msgid "Rule"
 msgstr "Regel"
 
+msgid "Save"
+msgstr "Speichern"
+
 msgid "Sent"
 msgstr "Gesendet"
 
@@ -256,6 +259,9 @@ msgstr "Wenn"
 
 msgid "days"
 msgstr "Tage"
+
+msgid "form"
+msgstr "Formular"
 
 msgid "free"
 msgstr "kostenlos"
@@ -1748,6 +1754,9 @@ msgstr "Juristischer Name"
 msgid "Link color"
 msgstr "Link Farbe"
 
+msgid "Matchmaker"
+msgstr "Partnervermittlung"
+
 msgid "Media file"
 msgstr "Medien-Datei"
 
@@ -1792,6 +1801,9 @@ msgstr "Nächste Quote"
 
 msgid "No changes"
 msgstr "Keine Änderungen"
+
+msgid "No results"
+msgstr "Keine Ergebnisse"
 
 msgid "Organizers"
 msgstr "Veranstalter"
@@ -2484,6 +2496,9 @@ msgstr "Zeichen hinzufügen"
 msgid "Age selection"
 msgstr "Auswahl des Alters"
 
+msgid "Answers saved"
+msgstr "Gespeicherte Antworten"
+
 msgid "Apply Upgrade"
 msgstr "Upgrade anwenden"
 
@@ -2764,6 +2779,9 @@ msgstr "Aktive Geräte"
 msgid "Add to faction"
 msgstr "Zur Fraktion hinzufügen"
 
+msgid "Ask a question"
+msgstr "Stell eine Frage"
+
 msgid "Assign members"
 msgstr "Mitglieder zuweisen"
 
@@ -3030,6 +3048,9 @@ msgstr "Zum XP-Punktestand hinzufügen"
 
 msgid "App Integration"
 msgstr "App-Integration"
+
+msgid "Ask LarpManager"
+msgstr "Frag LarpManager"
 
 msgid "Attachment Name"
 msgstr "Anhang Name"
@@ -3835,6 +3856,9 @@ msgstr "Einstellungen aktivieren"
 msgid "Experience Systems"
 msgstr "Systeme erleben"
 
+msgid "Faction preference"
+msgstr "Fraktionspräferenz"
+
 msgid "First registration"
 msgstr "Erste Registrierung"
 
@@ -3852,6 +3876,9 @@ msgstr "Informationen gespeichert"
 
 msgid "Invite a character"
 msgstr "Eine Figur einladen"
+
+msgid "Matchmaker answers"
+msgstr "Antworten des Partnervermittlers"
 
 msgid "Member Data Checks"
 msgstr "Überprüfung der Mitgliederdaten"
@@ -4538,6 +4565,9 @@ msgstr "Token nicht initialisiert"
 msgid "Transfer registration"
 msgstr "Registrierung übertragen"
 
+msgid "Type your question..."
+msgstr "Gib deine Frage ein..."
+
 msgid "Updated Registrations"
 msgstr "Aktualisierte Registrierungen"
 
@@ -4828,6 +4858,9 @@ msgstr "Charakterform des Spielers"
 
 msgid "Please check them below"
 msgstr "Bitte prüfen Sie sie unten"
+
+msgid "Please write a question"
+msgstr "Bitte schreib eine Frage"
 
 msgid "Pre registrations total"
 msgstr "Vorregistrierungen insgesamt"
@@ -5433,6 +5466,9 @@ msgstr "Wenn angekreuzt: Mitglieder können abstimmen"
 msgid "Invitation sent to %(email)s"
 msgstr "Einladung an %(email)s gesendet"
 
+msgid "Live chat is not configured."
+msgstr "Der Live-Chat ist nicht eingerichtet."
+
 msgid "Manage experience criterions"
 msgstr "Erfahrungskriterien verwalten"
 
@@ -5491,6 +5527,9 @@ msgstr "Genehmigung %(user)s als %(role)s"
 
 msgid "Bundle generation in progress"
 msgstr "Bundle wird gerade erstellt"
+
+msgid "Configure the matchmaker form"
+msgstr "Das Matchmaker-Formular konfigurieren"
 
 msgid "Confirm and commit quantities"
 msgstr "Bestätigen und Festlegen von Mengen"
@@ -5827,6 +5866,9 @@ msgstr "So melden Sie sich wieder mit dem Konto an"
 msgid "Total of recorded money inflows"
 msgstr "Summe der erfassten Geldzuflüsse"
 
+msgid "Use the button above to add one"
+msgstr "Klick auf den Button oben, um einen hinzuzufügen"
+
 msgid "View your private conversations"
 msgstr "Deine privaten Unterhaltungen anzeigen"
 
@@ -6008,6 +6050,9 @@ msgstr "Finden Sie heraus, worum es bei dieser Veranstaltung geht"
 
 msgid "Fill out the event prep questions"
 msgstr "Füllen Sie die vorbereitenden Fragen für die Veranstaltung aus"
+
+msgid "For best results, ask in English."
+msgstr "Für beste Ergebnisse frag bitte auf Englisch."
 
 msgid "For more information, write to us"
 msgstr "Für weitere Informationen, schreiben Sie uns"
@@ -6273,6 +6318,9 @@ msgstr "Richten Sie nun die Konfiguration der Token ein"
 
 msgid "Now you can set the casting options"
 msgstr "Jetzt können Sie die Casting-Optionen einstellen"
+
+msgid "Now you can set the matchmaker form"
+msgstr "Jetzt kannst du das Matchmaker-Formular einrichten"
 
 msgid "Optional description of the content"
 msgstr "Optionale Beschreibung des Inhalts"
@@ -7174,6 +7222,9 @@ msgstr "Wähle oben ein Abzeichen aus, um dessen Mitglieder zu verwalten"
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Wählen Sie nach dem Zufallsprinzip Lotterielose zum Aufwerten aus"
 
+msgid "Select which form this question belongs to"
+msgstr "Wähle aus, zu welchem Formular diese Frage gehört"
+
 msgid "Tax identification code of the association"
 msgstr "Steueridentifikationsnummer der Vereinigung"
 
@@ -7461,6 +7512,9 @@ msgstr "Mitglied, das dieses Token verwendet hat (falls authentifiziert)"
 msgid "Modify the character details to make it yours"
 msgstr "Ändere die Details des Charakters, um ihn zu deinem zu machen"
 
+msgid "No matchmaker questions have been created yet"
+msgstr "Es wurden noch keine Fragen zum Thema Partnervermittlung erstellt"
+
 msgid "No roles have been defined for this event yet"
 msgstr "Für diese Veranstaltung wurden noch keine Rollen definiert"
 
@@ -7747,6 +7801,9 @@ msgstr "Liste der Empfänger-E-Mail-Adressen, durch Komma getrennt"
 msgid "No additional payments are required at this time"
 msgstr "Zu diesem Zeitpunkt sind keine weiteren Zahlungen erforderlich"
 
+msgid "No questions have been created yet for this form"
+msgstr "Für dieses Formular wurden noch keine Fragen erstellt"
+
 msgid "Only some of the platform features are activated"
 msgstr "Nur einige der Plattformfunktionen sind aktiviert"
 
@@ -7903,6 +7960,11 @@ msgstr "Ihr Konto ist durch eine Authentifizierungs-App geschützt"
 msgid "Your registration to %(event)s has been cancelled"
 msgstr "Deine Anmeldung zu %(event)s wurde storniert"
 
+msgid "Answer questions to help match you with characters"
+msgstr ""
+"Beantworte ein paar Fragen, damit wir die passenden Charaktere für dich "
+"finden können"
+
 msgid "Browse all financial movements for a selected year"
 msgstr "Alle Finanzbewegungen für ein ausgewähltes Jahr anzeigen"
 
@@ -8019,6 +8081,10 @@ msgstr ""
 "Treten Sie unserem Discord bei, um Hilfe und Ideen zu erhalten oder um "
 "Fehler zu melden"
 
+msgid "No participant has answered the matchmaker form yet"
+msgstr ""
+"Bisher hat noch kein Teilnehmer das Partnervermittlungsformular ausgefüllt"
+
 msgid "No registration form sections have been created yet"
 msgstr "Es wurden noch keine Abschnitte für das Anmeldeformular erstellt"
 
@@ -8106,9 +8172,6 @@ msgstr "Dieser Fraktion wurden noch keine Charaktere zugewiesen"
 msgid "No characters or handouts available to export as PDF"
 msgstr ""
 "Es stehen keine Figuren oder Handouts zum Exportieren als PDF zur Verfügung"
-
-msgid "No registration form questions have been created yet"
-msgstr "Es wurden noch keine Fragen für das Anmeldeformular erstellt"
 
 msgid "No writing elements are available for this event yet"
 msgstr "Für diese Veranstaltung sind noch keine Textelemente verfügbar"
@@ -8333,6 +8396,9 @@ msgstr ""
 "Die Wiederherstellungssitzung ist abgelaufen, bitte laden Sie die Datei "
 "erneut hoch."
 
+msgid "Review participant answers to the matchmaker questions"
+msgstr "Schau dir die Antworten der Teilnehmer auf die Matchmaker-Fragen an"
+
 msgid "Some features require 'Character', which is not active"
 msgstr "Einige Funktionen erfordern \"Charakter\", der nicht aktiv ist"
 
@@ -8347,6 +8413,9 @@ msgstr "Der Benutzer hat seine Anmeldung für diese Veranstaltung bestätigt"
 
 msgid "The user has updated their registration for this event"
 msgstr "Der Benutzer hat seine Anmeldung für diese Veranstaltung aktualisiert"
+
+msgid "This invitation was sent to a different email address."
+msgstr "Diese Einladung wurde an eine andere E-Mail-Adresse gesendet."
 
 msgid "Whether this content is currently available for access"
 msgstr "ob dieser Inhalt derzeit für den Zugriff verfügbar ist"
@@ -8751,6 +8820,10 @@ msgstr ""
 "Für diese Veranstaltung wurden keine Artikel mit zugewiesenen Mengen "
 "gefunden"
 
+msgid "No matchmaker questions have been set up for this event yet"
+msgstr ""
+"Für diese Veranstaltung wurden noch keine Matchmaker-Fragen eingerichtet"
+
 msgid "Now you can start creating workshops, starting from modules"
 msgstr ""
 "Jetzt können Sie mit der Erstellung von Workshops beginnen, ausgehend von "
@@ -9124,10 +9197,6 @@ msgstr ""
 "Verwende die unten stehenden Bankdaten, um die Überweisung von deiner Bank "
 "aus zu tätigen"
 
-msgid "Use the button above to add questions to the registration form"
-msgstr ""
-"Nutze die Schaltfläche oben, um Fragen zum Anmeldeformular hinzuzufügen"
-
 msgid "We ask you to pay the amount requested for the next instalment"
 msgstr ""
 "Wir bitten Sie, den angeforderten Betrag für die nächste Rate zu zahlen"
@@ -9398,6 +9467,11 @@ msgstr ""
 msgid "Some tickets are missing a final installment (0 amount): %(list)s"
 msgstr "Bei einigen Tickets fehlt eine letzte Rate (0 Betrag): %(list)s"
 
+msgid "The assistant is temporarily unavailable, please try again later."
+msgstr ""
+"Der Assistent ist gerade nicht verfügbar. Bitte versuch es später noch "
+"einmal."
+
 msgid "There are no signups for this event, so no payment can be created"
 msgstr ""
 "Für diese Veranstaltung gibt es keine Anmeldungen, daher kann auch keine "
@@ -9532,6 +9606,11 @@ msgid "Now you can review the safety information submitted by participants"
 msgstr ""
 "Jetzt können Sie die von den Teilnehmern eingereichten "
 "Sicherheitsinformationen einsehen"
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+"Ordne die Fraktionen nach deiner Präferenz – von der höchsten (oben) bis zur"
+" geringsten (unten) – an"
 
 msgid "Show detailed activity log on entities created, updated or deleted."
 msgstr ""
@@ -10289,6 +10368,12 @@ msgid ""
 msgstr ""
 "Sie müssen mindestens einen Fähigkeitstyp erstellen, bevor Sie Fähigkeiten "
 "erstellen können"
+
+msgid ""
+"You must register for the event before answering the matchmaker questions"
+msgstr ""
+"Du musst dich für die Veranstaltung anmelden, bevor du die Fragen des "
+"Matchmakers beantworten kannst"
 
 msgid ""
 "Added at the bottom of mail notifying participants of character assignment"
@@ -13073,6 +13158,13 @@ msgstr ""
 "Gönnerticket macht ein ermäßigtes Ticket verfügbar"
 
 msgid ""
+"I could not find anything relevant in the documentation. Try asking in "
+"English, or open a support ticket."
+msgstr ""
+"Ich konnte in der Dokumentation nichts Passendes finden. Versuch’s mal auf "
+"Englisch zu fragen oder eröffne ein Support-Ticket."
+
+msgid ""
 "If you select one (or more) character options, this criterion applies only "
 "to characters with all of them"
 msgstr ""
@@ -13826,6 +13918,14 @@ msgstr ""
 "Ermöglicht ein Ticket-ähnliches System für Probleme während der "
 "Veranstaltung, in dem Mitarbeiter Probleme protokollieren, "
 "Schwere/Dringlichkeit zuordnen und verfolgen können"
+
+msgid ""
+"Lets organizers define custom questions on the characters participants would"
+" like to play, and assign them with a grid system"
+msgstr ""
+"Ermöglicht es den Organisatoren, eigene Fragen zu den Charakteren zu "
+"definieren, die die Teilnehmer gerne spielen möchten, und diese mithilfe "
+"eines Rastersystems zuzuordnen"
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
