@@ -71,6 +71,7 @@ from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationQuestion,
+    RegistrationQuestionApplicable,
 )
 from larpmanager.models.member import MemberConfig
 from larpmanager.models.registration import Registration
@@ -250,6 +251,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
             registration_question = RegistrationQuestion.objects.get(
                 event=context["registration"].run.event,
                 name__iexact=question_name,
+                applicable=RegistrationQuestionApplicable.REGISTRATION,
             )
 
             # Handle single/multiple choice questions

@@ -33,6 +33,33 @@ if TYPE_CHECKING:
 # Configs that must always read from the child event, never from the campaign parent (matched as prefixes)
 EVENT_CONFIGS_OWN_CHILD: frozenset[str] = frozenset({"payment_custom_reason", "theme", "pub_"})
 
+# Sentinel distinguishing "no default_value passed" from "default_value=None explicitly passed"
+CONFIG_UNSET: Any = object()
+
+# Centralized config defaults, used when a caller does not pass an explicit default_value.
+# Exact-name match first, then prefix, then suffix; falls back to False if nowhere matched.
+CONFIG_DEFAULTS: dict[str, Any] = {
+    "user_character_approval": False,
+    "payment_custom_reason": "",
+    "theme": "",
+    "intro_driver": "",
+}
+CONFIG_DEFAULT_PREFIXES: list[tuple[str, Any]] = []
+CONFIG_DEFAULT_SUFFIXES: list[tuple[str, Any]] = []
+
+
+def get_config_default(config_name: str) -> Any:
+    """Look up the centralized default for a config name (exact, then prefix, then suffix)."""
+    if config_name in CONFIG_DEFAULTS:
+        return CONFIG_DEFAULTS[config_name]
+    for prefix, default in CONFIG_DEFAULT_PREFIXES:
+        if config_name.startswith(prefix):
+            return default
+    for suffix, default in CONFIG_DEFAULT_SUFFIXES:
+        if config_name.endswith(suffix):
+            return default
+    return False
+
 
 def reset_element_configs(element: BaseModel) -> None:
     """Delete cached configs for the given element."""
@@ -199,7 +226,9 @@ def _get_fkey_config(model_instance: object) -> str | None:
     return foreign_key_field_map.get(model_class_name)
 
 
-def get_element_config(element: Any, config_name: str, default_value: Any, *, bypass_cache: bool = False) -> Any:
+def get_element_config(
+    element: Any, config_name: str, default_value: Any = CONFIG_UNSET, *, bypass_cache: bool = False
+) -> Any:
     """Get configuration value with type conversion and default fallback.
 
     Retrieves a configuration value from an element's aux_configs, handling
@@ -240,6 +269,10 @@ def get_element_config(element: Any, config_name: str, default_value: Any, *, by
             # Use cached configurations for better performance
             element.aux_configs = get_configs(element)
 
+    # Resolve centralized default when caller did not pass an explicit one
+    if default_value is CONFIG_UNSET:
+        default_value = get_config_default(config_name)
+
     # Evaluate and return the configuration value with type conversion
     return evaluate_config(element.aux_configs, config_name, default_value)
 
@@ -249,7 +282,7 @@ def _get_cached_config(
     element_type: str,
     config_name: str,
     *,
-    default_value: any | None = None,
+    default_value: any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> any:
@@ -270,6 +303,9 @@ def _get_cached_config(
             element_configs = get_element_configs(element_id, element_type)
         context[cache_key][element_id] = element_configs
 
+    if default_value is CONFIG_UNSET:
+        default_value = get_config_default(config_name)
+
     return evaluate_config(element_configs, config_name, default_value)
 
 
@@ -277,7 +313,7 @@ def get_association_config(
     association_id: int,
     config_name: str,
     *,
-    default_value: Any = None,
+    default_value: Any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
@@ -325,7 +361,7 @@ def get_event_config(
     event_id: int,
     config_name: str,
     *,
-    default_value: Any = None,
+    default_value: Any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
@@ -348,7 +384,7 @@ def get_member_config(
     member_id: int,
     config_name: str,
     *,
-    default_value: Any = None,
+    default_value: Any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
@@ -356,6 +392,48 @@ def get_member_config(
     return _get_cached_config(
         member_id, "member", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
     )
+
+
+def _is_config_set_cached(
+    element_id: int,
+    element_type: str,
+    config_name: str,
+    *,
+    context: dict | None = None,
+    bypass_cache: bool = False,
+) -> bool:
+    """Check whether a config has been explicitly set, without applying evaluate_config type coercion."""
+    cache_key = f"{element_type}_configs"
+
+    if context is None:
+        context = {}
+    if cache_key not in context:
+        context[cache_key] = {}
+
+    element_configs = context[cache_key].get(element_id, None)
+    if element_configs is None:
+        if bypass_cache:
+            element_configs = update_configs(element_id, element_type)
+        else:
+            element_configs = get_element_configs(element_id, element_type)
+        context[cache_key][element_id] = element_configs
+
+    raw_value = element_configs.get(config_name)
+    return bool(raw_value) and raw_value != "None"
+
+
+def is_association_config_set(
+    association_id: int, config_name: str, *, context: dict | None = None, bypass_cache: bool = False
+) -> bool:
+    """Check whether a config has been explicitly set for association."""
+    return _is_config_set_cached(association_id, "association", config_name, context=context, bypass_cache=bypass_cache)
+
+
+def is_event_config_set(
+    event_id: int, config_name: str, *, context: dict | None = None, bypass_cache: bool = False
+) -> bool:
+    """Check whether a config has been explicitly set for event."""
+    return _is_config_set_cached(event_id, "event", config_name, context=context, bypass_cache=bypass_cache)
 
 
 _GLOBAL_CONFIG_CACHE_PREFIX = "global_config_"

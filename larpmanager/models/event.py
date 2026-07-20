@@ -37,7 +37,7 @@ from imagekit.processors import ResizeToFit
 from safedelete.models import SOFT_DELETE, SOFT_DELETE_CASCADE
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import get_element_config
+from larpmanager.cache.config import CONFIG_UNSET, get_element_config
 from larpmanager.models.association import Association, AssociationPlan
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.member import Member
@@ -435,7 +435,7 @@ class Event(UuidMixin, BaseModel):
         Path(pdf_directory_path).mkdir(parents=True, exist_ok=True)
         return pdf_directory_path
 
-    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
         """Get configuration value for this event."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 
@@ -819,7 +819,7 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         """Return the file path for the profiles PDF."""
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, name: str, *, default_value: Any = None, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
         """Get configuration value for this run."""
         return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
 

@@ -44,6 +44,7 @@ from larpmanager.models.form import (
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
+    RegistrationQuestionApplicable,
     WritingAnswer,
     WritingChoice,
     WritingOption,
@@ -714,10 +715,13 @@ def get_writer(context: dict, nm: str) -> tuple[HttpResponse, csv.writer]:
 
 def orga_registration_form_download(context: dict) -> HttpResponse:
     """Download registration form data as a ZIP archive."""
-    return zip_exports(context, export_registration_form(context), "Registration form")
+    applicable = context.get("registration_typ", RegistrationQuestionApplicable.REGISTRATION)
+    return zip_exports(context, export_registration_form(context, applicable), "Registration form")
 
 
-def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
+def export_registration_form(
+    context: dict, applicable: str = RegistrationQuestionApplicable.REGISTRATION
+) -> list[tuple[str, list, list]]:
     """Export registration data to Excel format.
 
     Extracts registration questions and options from the event context and formats
@@ -726,6 +730,8 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
     Args:
         context: Context dictionary containing event and form data. Must include
             'event' key with an Event object that has get_elements method.
+        applicable: RegistrationQuestionApplicable value scoping which questions/options
+            are exported (registration vs matchmaker form).
 
     Returns:
         List of tuples where each tuple contains:
@@ -746,7 +752,7 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
 
     # Extract registration questions data
     column_headers = context["columns"][0].keys()
-    questions = get_cached_registration_questions(context["event"])
+    questions = get_cached_registration_questions(context["event"], applicable=applicable)
     question_values = _extract_values(column_headers, questions, mappings)
 
     # Initialize exports list with registration questions sheet
@@ -757,8 +763,10 @@ def export_registration_form(context: dict) -> list[tuple[str, list, list]]:
     modified_option_headers = option_headers.copy()
     modified_option_headers[0] = f"{modified_option_headers[0]}__name"
 
-    # Query registration options ordered by question order and option order
+    # Query registration options ordered by question order and option order, scoped to the
+    # same form type as the questions above
     options_queryset = context["event"].get_elements(RegistrationOption).select_related("question")
+    options_queryset = options_queryset.filter(question__applicable=applicable)
     options_queryset = options_queryset.order_by(F("question__order"), "order")
     option_values = _extract_values(modified_option_headers, options_queryset, mappings)
 
@@ -983,8 +991,9 @@ def _get_column_names(context: dict) -> None:
         ]
         context["name"] = "Modifier"
 
-    # Handle registration form (questions + options) export
-    elif context["typ"] == "registration_form":
+    # Handle registration form (questions + options) export; matchmaker questions share
+    # the same RegistrationQuestion fields, just scoped to a different "applicable" value
+    elif context["typ"] in ("registration_form", "matchmaker_form"):
         # First dict: Question definitions with name, type, status
         # Second dict: Option definitions linked to questions
         context["columns"] = [
@@ -1012,6 +1021,10 @@ def _get_column_names(context: dict) -> None:
                 ),
             },
         ]
+
+        # Matchmaker options carry no registration fee, drop the irrelevant column
+        if context["typ"] == "matchmaker_form":
+            del context["columns"][1]["price"]
 
     # Handle character/writing form (questions + options) export
     elif context["typ"] == "character_form":

@@ -135,6 +135,7 @@ RegistrationQuestionType = extend_textchoices(
         ("PWYW", "pay_what_you_want", _("Pay what you want")),
         ("QUOTA", "reg_quotas", _("Rate")),
         ("SURCHARGE", "reg_surcharges", _("Surcharge")),
+        ("FACTION_PREFERENCE", "faction_preference", _("Faction preference")),
     ],
 )
 
@@ -210,6 +211,29 @@ class QuestionApplicable(models.TextChoices):
     def get_mapping(cls) -> Any:
         """Return mapping of type values to labels."""
         return dict(cls.choices)
+
+
+class RegistrationQuestionApplicable(models.TextChoices):
+    """Defines which form a registration question belongs to."""
+
+    REGISTRATION = "r", "registration"
+    MATCHMAKER = "m", "matchmaker"
+
+
+def _get_registration_mapping() -> dict[str, str | None]:
+    """Return mapping of registration form types to their gating feature (None = always available)."""
+    return {
+        "registration": None,
+        "matchmaker": "matchmaker",
+    }
+
+
+REGISTRATION_TYPE_TO_APPLICABLE = {
+    "registration": RegistrationQuestionApplicable.REGISTRATION,
+    "matchmaker": RegistrationQuestionApplicable.MATCHMAKER,
+}
+
+REGISTRATION_APPLICABLE_TO_TYPE = {value: key for key, value in REGISTRATION_TYPE_TO_APPLICABLE.items()}
 
 
 class WritingQuestion(UuidMixin, OrderMixin, BaseModel):
@@ -599,6 +623,14 @@ class RegistrationQuestion(UuidMixin, OrderMixin, BaseModel):
         help_text=_("Indicates whether the option can be included in the gifted signups"),
     )
 
+    applicable = models.CharField(
+        max_length=1,
+        choices=RegistrationQuestionApplicable.choices,
+        default=RegistrationQuestionApplicable.REGISTRATION,
+        verbose_name=_("Applicable"),
+        help_text=_("Select which form this question belongs to"),
+    )
+
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.event} - {self.name[:30]}"
@@ -645,6 +677,7 @@ class RegistrationQuestion(UuidMixin, OrderMixin, BaseModel):
         indexes: ClassVar[list] = [
             models.Index(fields=["event"], condition=Q(deleted__isnull=True), name="rq_evt_act"),
             models.Index(fields=["event", "status"], condition=Q(deleted__isnull=True), name="rq_evt_stat_act"),
+            models.Index(fields=["event", "applicable"], condition=Q(deleted__isnull=True), name="rq_evt_app_act"),
         ]
 
 

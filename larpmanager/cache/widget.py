@@ -47,7 +47,12 @@ from larpmanager.models.accounting import (
 from larpmanager.models.casting import Casting, Quest, QuestType
 from larpmanager.models.event import DevelopStatus, Event, ProgressStep, RegistrationStatus, Run
 from larpmanager.models.experience import AbilityTypeExp, DeliveryExp
-from larpmanager.models.form import BaseQuestionType, RegistrationQuestion, WritingQuestion
+from larpmanager.models.form import (
+    BaseQuestionType,
+    RegistrationQuestion,
+    RegistrationQuestionApplicable,
+    WritingQuestion,
+)
 from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
 from larpmanager.models.miscellanea import HelpQuestion, Log, Milestone, MilestoneStatus
 from larpmanager.models.registration import (
@@ -479,6 +484,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
     # Registration questions without options
     registration_questions_without_options = list(
         run.event.get_elements(RegistrationQuestion)
+        .filter(applicable=RegistrationQuestionApplicable.REGISTRATION)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)

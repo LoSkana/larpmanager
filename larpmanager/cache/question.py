@@ -32,6 +32,7 @@ from larpmanager.models.form import (
     QuestionStatus,
     RegistrationOption,
     RegistrationQuestion,
+    RegistrationQuestionApplicable,
     WritingOption,
     WritingQuestion,
     get_def_writing_types,
@@ -225,8 +226,15 @@ def get_cached_writing_questions(event: Event, applicable: str) -> list:
     return sorted(questions, key=lambda q: q["order"])
 
 
-def get_cached_registration_questions(event: Event) -> list:
+def get_cached_registration_questions(
+    event: Event, applicable: str = RegistrationQuestionApplicable.REGISTRATION
+) -> list:
     """Get cached registration questions.
+
+    Args:
+        event: Event instance
+        applicable: RegistrationQuestionApplicable value to filter by (defaults to the
+            standard "registration" form, e.g. excludes "matchmaker" questions).
 
     Returns:
         list: List of question dicts ordered by section order (nulls first) then by question order.
@@ -244,7 +252,8 @@ def get_cached_registration_questions(event: Event) -> list:
         cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     # Explicitly sort to ensure order is preserved after cache deserialization
-    return sorted(cached_data, key=lambda q: (q.get("section_order") or -1, q["order"]))
+    questions = [q for q in cached_data if q["applicable"] == applicable]
+    return sorted(questions, key=lambda q: (q.get("section_order") or -1, q["order"]))
 
 
 def get_writing_field_names(event: Event, applicable: str) -> dict:
