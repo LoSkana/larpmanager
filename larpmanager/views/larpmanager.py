@@ -543,7 +543,8 @@ def discord(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/discord.html", context)
 
 
-@ratelimit(key="ip", rate="5/m", method="POST", block=True)
+@ratelimit(key="ip", rate="5/m", method="POST", block=False, group="demo_clone_burst")
+@ratelimit(key="ip", rate="10/d", method="POST", block=False, group="demo_clone")
 def get_started(request: HttpRequest) -> Any:
     """Show the entry funnel: start a pre-populated demo or create a real association.
 
@@ -564,6 +565,9 @@ def get_started(request: HttpRequest) -> Any:
 
     # Primary path: launch a demo instance of the chosen type
     if request.method == "POST" and request.POST.get("demo_uuid"):
+        if getattr(request, "limited", False):
+            messages.error(request, "whoah, whoah, slow down buddy")
+            return redirect("get_started")
         user_agent = request.META.get("HTTP_USER_AGENT", "")
         if is_suspicious_user_agent(user_agent):
             return HttpResponseForbidden("Bots not allowed.")
