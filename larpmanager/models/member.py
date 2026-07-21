@@ -489,7 +489,7 @@ class MembershipStatus(models.TextChoices):
     UPLOADED = "u", _("Inactive") + " (U)"
     SUBMITTED = "s", _("Review")
     ACCEPTED = "a", _("Accepted")
-    REWOKED = "r", _("Kicked out")
+    REWOKED = "r", _("Removed")
 
 
 class Membership(BaseModel):

@@ -157,7 +157,7 @@ from larpmanager.cache.run import (
 )
 from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
-from larpmanager.cache.warehouse import on_warehouse_item_tags_m2m_changed
+from larpmanager.cache.warehouse import on_warehouse_item_assignment_changed, on_warehouse_item_tags_m2m_changed
 from larpmanager.cache.widget import reset_widgets
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
@@ -263,7 +263,14 @@ from larpmanager.models.larpmanager import (
     NewsletterStatus,
 )
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership
-from larpmanager.models.miscellanea import ChatMessage, HelpQuestion, Log, PlayerRelationship, WarehouseItem
+from larpmanager.models.miscellanea import (
+    ChatMessage,
+    HelpQuestion,
+    Log,
+    PlayerRelationship,
+    WarehouseItem,
+    WarehouseItemAssignment,
+)
 from larpmanager.models.registration import (
     Registration,
     RegistrationCharacterRel,
@@ -2098,6 +2105,9 @@ m2m_changed.connect(_on_event_role_members_pub, sender=EventRole.members.through
 m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
 
 m2m_changed.connect(on_warehouse_item_tags_m2m_changed, sender=WarehouseItem.tags.through)
+
+post_save.connect(on_warehouse_item_assignment_changed, sender=WarehouseItemAssignment)
+post_delete.connect(on_warehouse_item_assignment_changed, sender=WarehouseItemAssignment)
 
 
 m2m_changed.connect(on_ability_characters_m2m_changed, sender=AbilityExp.characters.through)

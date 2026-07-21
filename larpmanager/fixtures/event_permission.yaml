@@ -912,6 +912,18 @@
     module: warehouse
 - model: larpmanager.eventpermission
   fields:
+    name: Items
+    descr: Assign warehouse items to one or more areas of the event, item by item
+    slug: orga_warehouse_items
+    number: 21
+    config: warehouse
+    active_if: null
+    hidden: false
+    icon: boxes-stacked
+    feature: warehouse
+    module: warehouse
+- model: larpmanager.eventpermission
+  fields:
     name: Checks
     descr: Perform checks on warehouse assignments
     slug: orga_warehouse_checks

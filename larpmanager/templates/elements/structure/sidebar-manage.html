@@ -78,16 +78,6 @@
                     {% endfor %}
                 {% endif %}
                 <hr />
-                {% if role_names %}
-                    <div class="roles">
-                        <i>{% trans "Role" %}:
-                            {% for rn in role_names %}
-                                {% include "elements/comma.html" %}
-                                {{ rn }}
-                            {% endfor %}
-                        </i>
-                    </div>
-                {% endif %}
                 {% if association.skin_id == 1 %}
                     <div>
                         <p class="centerized">

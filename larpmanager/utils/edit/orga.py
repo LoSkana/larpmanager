@@ -88,7 +88,11 @@ from larpmanager.forms.registration import (
     OrgaRegistrationSurchargeForm,
     OrgaRegistrationTicketForm,
 )
-from larpmanager.forms.warehouse import OrgaWarehouseAreaForm, OrgaWarehouseItemAssignmentForm
+from larpmanager.forms.warehouse import (
+    OrgaWarehouseAreaForm,
+    OrgaWarehouseItemAreasForm,
+    OrgaWarehouseItemAssignmentForm,
+)
 from larpmanager.forms.writing import (
     OrgaFactionForm,
     OrgaGuildForm,
@@ -282,6 +286,7 @@ class OrgaAction(str, Enum):
     WAREHOUSE_AREA = ("orga_warehouse_area", {"form": OrgaWarehouseAreaForm})
     WAREHOUSE_MANIFEST = ("orga_warehouse_manifest", {"form": OrgaWarehouseItemAssignmentForm})
     WAREHOUSE_ASSIGNMENT_ITEM = ("orga_warehouse_manifest", {})
+    WAREHOUSE_ITEM_AREAS = ("orga_warehouse_items", {"form": OrgaWarehouseItemAreasForm})
 
     # One-time content
     ONETIMES = ("orga_onetimes", {"form": OneTimeContentForm})

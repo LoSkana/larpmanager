@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Warehouse assignments" %}  - {{ run.search | truncatechars:50 }}
+    {% trans "Warehouse assignments" %} - {% trans "Organization" %}
 {% endblock title %}
 {% block content %}
     {% include "elements/table/header.html" %}
@@ -56,7 +56,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No items have been assigned to this run yet" %}. {% trans "Use the button above to assign warehouse items" %}.
+            {% trans "No external item movements have been created yet" %}. {% trans "Use the button above to assign warehouse items" %}.
         </p>
     {% endif %}
     <div id="imagePopup">

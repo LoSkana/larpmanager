@@ -21,9 +21,12 @@ from typing import Any, ClassVar
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.db.models import Sum
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.warehouse import update_warehouse_item_cache
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.miscellanea import _delete_optionals_warehouse
 from larpmanager.forms.utils import (
@@ -128,7 +131,7 @@ class ExeWarehouseTagForm(BaseModelForm):
 class ExeWarehouseMovementForm(BaseModelForm):
     """Form for ExeWarehouseMovement."""
 
-    page_info = _("Track the assignment of warehouse items to event areas for each run")
+    page_info = _("Manage outgoing inventory movements excluded from event preparation")
 
     page_title = _("Warehouse movements")
 
@@ -231,3 +234,141 @@ class OrgaWarehouseItemAssignmentForm(BaseModelForm):
             raise ValidationError({"area": _("An assignment for this item and area already exists")})
 
         return cleaned
+
+
+class OrgaWarehouseItemAreasForm(BaseModelForm):
+    """Form to assign a single warehouse item to several areas of an event at once."""
+
+    page_info = _("Assign this warehouse item to one or more areas of the event, setting a quantity for each")
+
+    page_title = _("Item area assignments")
+
+    class Meta:
+        model = WarehouseItem
+        fields: ClassVar[list] = []
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Build the item field (new only) and one quantity field per event area."""
+        super().__init__(*args, **kwargs)
+
+        event = self.params.get("event")
+        self.event = event
+        association_id = self.params.get("association_id")
+        editing = bool(self.instance and self.instance.pk)
+
+        if editing:
+            self.fields["item"] = forms.ModelChoiceField(
+                queryset=WarehouseItem.objects.filter(pk=self.instance.pk),
+                initial=self.instance.pk,
+                widget=forms.HiddenInput,
+                required=True,
+            )
+            # Fixed, non-editable display of the item name (the real value is
+            # carried by the hidden "item" field above).
+            self.fields["item_display"] = forms.CharField(
+                label=_("Item"),
+                initial=str(self.instance),
+                required=False,
+                disabled=True,
+            )
+        else:
+            assigned_item_ids = WarehouseItemAssignment.objects.filter(area__event=event).values_list(
+                "item_id",
+                flat=True,
+            )
+            self.fields["item"] = forms.ModelChoiceField(
+                queryset=WarehouseItem.objects.filter(association_id=association_id),
+                label=_("Item"),
+                widget=WarehouseItemS2Widget,
+                required=True,
+            )
+            self.configure_field_association("item", association_id)
+            self.fields["item"].widget.set_exclude_ids(list(assigned_item_ids))
+            self.fields["item"].queryset = self.fields["item"].queryset.exclude(id__in=assigned_item_ids)
+
+        existing_quantities = {}
+        self.other_event_assignments: list[WarehouseItemAssignment] = []
+        if editing:
+            existing_quantities = {
+                assignment.area_id: assignment.quantity
+                for assignment in WarehouseItemAssignment.objects.filter(item=self.instance, event=event)
+            }
+            self.other_event_assignments = list(
+                WarehouseItemAssignment.objects.filter(item=self.instance)
+                .exclude(event=event)
+                .select_related("area", "event"),
+            )
+
+        # Field names use the area's uuid
+        self.area_fields: dict[str, int] = {}
+        for area in event.get_elements(WarehouseArea).order_by("name"):
+            field_name = f"area_{area.uuid}"
+            self.area_fields[field_name] = area.id
+            self.fields[field_name] = forms.IntegerField(
+                label=area.name,
+                required=False,
+                min_value=0,
+                initial=existing_quantities.get(area.id),
+            )
+
+    def clean(self) -> dict:
+        """Validate that total assigned quantity does not exceed available stock.
+
+        Available stock is the item's total quantity minus whatever is already
+        assigned to areas of other events (the item pool is shared association-wide).
+        """
+        cleaned = super().clean()
+
+        item = cleaned.get("item") or (self.instance if self.instance.pk else None)
+        if not item:
+            return cleaned
+
+        if item.quantity is not None:
+            other_events_total = (
+                WarehouseItemAssignment.objects.filter(item=item)
+                .exclude(event=self.event)
+                .aggregate(total=Sum("quantity"))["total"]
+                or 0
+            )
+            current_event_total = sum(cleaned.get(field_name) or 0 for field_name in self.area_fields)
+
+            if other_events_total + current_event_total > item.quantity:
+                available = max(item.quantity - other_events_total, 0)
+                message = _("Total assigned quantity (%(total)s) exceeds available stock (%(available)s)") % {
+                    "total": current_event_total,
+                    "available": available,
+                }
+                # Attach to a visible area field: the generic edit template only
+                # renders errors for form.visible_fields, so a plain non-field
+                # ValidationError would never reach the user.
+                self.add_error(next(iter(self.area_fields)), message)
+
+        return cleaned
+
+    def save(self, commit: bool = True) -> WarehouseItem:  # noqa: FBT001, FBT002, ARG002
+        """Create, update or delete the WarehouseItemAssignment rows for this item/event."""
+        item = self.cleaned_data.get("item") or self.instance
+
+        with transaction.atomic():
+            item = WarehouseItem.objects.select_for_update().get(pk=item.pk)
+            for field_name, area_id in self.area_fields.items():
+                quantity = self.cleaned_data.get(field_name) or 0
+                assignment = WarehouseItemAssignment.objects.filter(
+                    item=item,
+                    area_id=area_id,
+                    event=self.event,
+                ).first()
+
+                if quantity <= 0:
+                    if assignment:
+                        assignment.delete()
+                    continue
+
+                if not assignment:
+                    assignment = WarehouseItemAssignment(item=item, area_id=area_id, event=self.event)
+                assignment.quantity = quantity
+                assignment.save()
+
+        update_warehouse_item_cache(item)
+        self.instance = item
+        return item

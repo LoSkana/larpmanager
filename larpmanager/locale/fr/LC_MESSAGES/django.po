@@ -354,6 +354,9 @@ msgstr "Graphique"
 msgid "Gross"
 msgstr "Brut"
 
+msgid "Guide"
+msgstr "Guide"
+
 msgid "Guild"
 msgstr "Guilde"
 
@@ -603,9 +606,6 @@ msgstr "Rejoint"
 
 msgid "Labels"
 msgstr "Étiquettes"
-
-msgid "Legend"
-msgstr "Légende "
 
 msgid "Loaded"
 msgstr "Chargé"
@@ -951,6 +951,9 @@ msgstr "Réduit"
 
 msgid "Refunds"
 msgstr "Remboursements"
+
+msgid "Removed"
+msgstr "Supprimé"
 
 msgid "Request"
 msgstr "Demande"
@@ -1741,9 +1744,6 @@ msgstr "Adresse IP"
 
 msgid "Influencer"
 msgstr "Influenceur"
-
-msgid "Kicked out"
-msgstr "Chassé"
 
 msgid "Last Event"
 msgstr "Dernier événement"
@@ -4468,6 +4468,9 @@ msgstr "En cas d'absence, indiquer 0"
 msgid "Invalid choice format"
 msgstr "Format de choix non valide"
 
+msgid "Item area assignments"
+msgstr "Affectations des zones d'articles"
+
 msgid "Join the waiting list"
 msgstr "Rejoignez la liste d'attente "
 
@@ -6246,6 +6249,9 @@ msgstr "Type(s) de logement disponible(s)"
 msgid "Upload data directly from CSV file"
 msgstr "Importer des données directement depuis un fichier CSV"
 
+msgid "Use the button above to assign one"
+msgstr "Utilise le bouton ci-dessus pour en attribuer un"
+
 msgid "You are about to make a payment of"
 msgstr "Vous êtes sur le point d'effectuer un paiement de"
 
@@ -7309,9 +7315,6 @@ msgid "Manage fields that track participants' data"
 msgstr ""
 "Gérer les champs qui permettent de suivre les données des participants"
 
-msgid "No items have been assigned to this run yet"
-msgstr "Aucun élément n'a encore été attribué à cette exécution"
-
 msgid "No participants have been issued tokens yet"
 msgstr "Aucun participant n'a encore reçu de jetons"
 
@@ -7798,6 +7801,9 @@ msgstr ""
 
 msgid "No additional payments are required at this time"
 msgstr "Aucun paiement supplémentaire n'est requis pour le moment"
+
+msgid "No external item movements have been created yet"
+msgstr "Aucun mouvement de stock externe n'a encore été créé"
 
 msgid "No questions have been created yet for this form"
 msgstr "Aucune question n'a encore été créée pour ce formulaire"
@@ -9490,6 +9496,10 @@ msgstr ""
 "Gestion des crédits utilisés par les participants pour couvrir les frais "
 "d'inscription"
 
+msgid "No warehouse items have been assigned to an area of this event yet"
+msgstr ""
+"Aucun article en stock n'a encore été attribué à une zone de cet événement"
+
 msgid "Primary spots are sold out, but you can still sign up as a reserve"
 msgstr ""
 "Les places principales sont complètes, mais tu peux toujours t'inscrire sur "
@@ -9560,6 +9570,11 @@ msgstr ""
 "Gère les inventaires des personnages et consulte leur contenu pour cet "
 "événement"
 
+msgid "Manage outgoing inventory movements excluded from event preparation"
+msgstr ""
+"Gérer les mouvements de stock sortants exclus de la préparation des "
+"événements"
+
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 "Montant minimum du bénéfice net à conserver pour l'impôt de l'association"
@@ -9593,11 +9608,6 @@ msgstr ""
 
 msgid "This access link has already been used and cannot be accessed again"
 msgstr "Ce lien d'accès a déjà été utilisé et n'est plus accessible"
-
-msgid "Track the assignment of warehouse items to event areas for each run"
-msgstr ""
-"Suivre l'affectation des articles de l'entrepôt aux zones d'événement pour "
-"chaque cycle"
 
 msgid "Use the button above to add a CSS layout template for your handouts"
 msgstr ""
@@ -9809,6 +9819,11 @@ msgid "Add a pool type to categorize items available in character inventories"
 msgstr ""
 "Ajoute un type de pool pour classer les objets disponibles dans les "
 "inventaires des personnages"
+
+msgid "Assign warehouse items to one or more areas of the event, item by item"
+msgstr ""
+"Attribue les articles de stock à une ou plusieurs zones de l'événement, un "
+"par un"
 
 msgid "Cannot process refund: Neither tokens nor credits features are enabled"
 msgstr ""
@@ -10529,6 +10544,13 @@ msgid ""
 msgstr ""
 "Sélectionne des personnages, des factions et des documents à télécharger "
 "sous forme d'un fichier ZIP contenant tous les PDF"
+
+#, python-format
+msgid ""
+"Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
+msgstr ""
+"La quantité totale attribuée (%(total)s) dépasse le stock disponible "
+"(%(available)s)"
 
 msgid ""
 "Track your personal expense reimbursement requests submitted for this event"
@@ -11955,6 +11977,13 @@ msgid ""
 msgstr ""
 "Permet de gérer des jetons, que les participants peuvent utiliser à la place"
 " de l'argent pour payer les frais d'inscription"
+
+msgid ""
+"Assign this warehouse item to one or more areas of the event, setting a "
+"quantity for each"
+msgstr ""
+"Attribue cet article d'entrepôt à une ou plusieurs zones de l'événement, en "
+"indiquant une quantité pour chacune d'entre elles"
 
 msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"
