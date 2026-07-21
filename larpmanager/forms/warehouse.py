@@ -287,17 +287,11 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
             self.fields["item"].queryset = self.fields["item"].queryset.exclude(id__in=assigned_item_ids)
 
         existing_quantities = {}
-        self.other_event_assignments: list[WarehouseItemAssignment] = []
         if editing:
             existing_quantities = {
                 assignment.area_id: assignment.quantity
                 for assignment in WarehouseItemAssignment.objects.filter(item=self.instance, event=event)
             }
-            self.other_event_assignments = list(
-                WarehouseItemAssignment.objects.filter(item=self.instance)
-                .exclude(event=event)
-                .select_related("area", "event"),
-            )
 
         # Field names use the area's uuid
         self.area_fields: dict[str, int] = {}
@@ -311,11 +305,36 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
                 initial=existing_quantities.get(area.id),
             )
 
-    def clean(self) -> dict:
-        """Validate that total assigned quantity does not exceed available stock.
+    def _check_available_stock(self, item: WarehouseItem, current_event_total: int) -> None:
+        """Raise ValidationError if current_event_total plus other events' assignments exceeds stock.
 
         Available stock is the item's total quantity minus whatever is already
         assigned to areas of other events (the item pool is shared association-wide).
+        """
+        if item.quantity is None:
+            return
+
+        other_events_total = (
+            WarehouseItemAssignment.objects.filter(item=item)
+            .exclude(event=self.event)
+            .aggregate(total=Sum("quantity"))["total"]
+            or 0
+        )
+
+        if other_events_total + current_event_total > item.quantity:
+            available = max(item.quantity - other_events_total, 0)
+            message = _("Total assigned quantity (%(total)s) exceeds available stock (%(available)s)") % {
+                "total": current_event_total,
+                "available": available,
+            }
+            raise ValidationError(message)
+
+    def clean(self) -> dict:
+        """Validate that total assigned quantity does not exceed available stock.
+
+        Best-effort check for immediate user feedback; the authoritative check
+        happens again under lock in save() to close the race between concurrent
+        submissions for the same item across different events.
         """
         cleaned = super().clean()
 
@@ -323,25 +342,14 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
         if not item:
             return cleaned
 
-        if item.quantity is not None:
-            other_events_total = (
-                WarehouseItemAssignment.objects.filter(item=item)
-                .exclude(event=self.event)
-                .aggregate(total=Sum("quantity"))["total"]
-                or 0
-            )
-            current_event_total = sum(cleaned.get(field_name) or 0 for field_name in self.area_fields)
-
-            if other_events_total + current_event_total > item.quantity:
-                available = max(item.quantity - other_events_total, 0)
-                message = _("Total assigned quantity (%(total)s) exceeds available stock (%(available)s)") % {
-                    "total": current_event_total,
-                    "available": available,
-                }
-                # Attach to a visible area field: the generic edit template only
-                # renders errors for form.visible_fields, so a plain non-field
-                # ValidationError would never reach the user.
-                self.add_error(next(iter(self.area_fields)), message)
+        current_event_total = sum(cleaned.get(field_name) or 0 for field_name in self.area_fields)
+        try:
+            self._check_available_stock(item, current_event_total)
+        except ValidationError as error:
+            # Attach to a visible area field: the generic edit template only
+            # renders errors for form.visible_fields, so a plain non-field
+            # ValidationError would never reach the user.
+            self.add_error(next(iter(self.area_fields)), error)
 
         return cleaned
 
@@ -351,6 +359,11 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
 
         with transaction.atomic():
             item = WarehouseItem.objects.select_for_update().get(pk=item.pk)
+
+            # Re-validate under the lock, to avoid conflicting assignments another transaction
+            current_event_total = sum(self.cleaned_data.get(field_name) or 0 for field_name in self.area_fields)
+            self._check_available_stock(item, current_event_total)
+
             for field_name, area_id in self.area_fields.items():
                 quantity = self.cleaned_data.get(field_name) or 0
                 assignment = WarehouseItemAssignment.objects.filter(
