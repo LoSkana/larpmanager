@@ -666,15 +666,15 @@ def orga_restore(request: HttpRequest, event_slug: str) -> HttpResponse:
             temp_key = request.POST.get("temp_key", "")
             zip_bytes = load_restore_temp(temp_key)
             if zip_bytes is None:
-                messages.error(request, _("Restore session expired, please upload the file again."))
+                messages.error(request, _("Session expired, please upload the file again"))
                 return render(request, "larpmanager/orga/restore.html", context)
             try:
                 context["logs"] = execute_restore(context, zip_bytes)
-                messages.success(request, _("Restore completed" + "!"))
+                messages.success(request, _("Completed") + "!")
                 return render(request, "larpmanager/orga/uploads.html", context)
             except Exception as exc:
                 logger.exception("Restore execute error")
-                messages.error(request, _("Restore error") + f": {exc}")
+                messages.error(request, _("Error") + f": {exc}")
                 return render(request, "larpmanager/orga/restore.html", context)
 
         elif "zip_file" in request.FILES:

@@ -120,12 +120,12 @@
             </p>
             {% if fee_payed %}
                 <p>
-                    {% trans "The payment of your membership fee for this year has been received. You have the right to participate to the organization events" %}.
+                    {% trans "The payment of your membership fee for this year has been received. You have the right to take part in the organization's events" %}.
                 </p>
             {% else %}
                 <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
                 <p>
-                    {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                    {% trans "The payment of your membership fee for this year has NOT been received: it is required to take part in events and the organization's meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
                 </p>
             {% endif %}
         {% endif %}

@@ -297,7 +297,7 @@ msgid "Avoid"
 msgstr "Evitare"
 
 msgid "Award"
-msgstr "Assegnazione"
+msgstr "Premio"
 
 msgid "Badge"
 msgstr "Badge"
@@ -515,7 +515,7 @@ msgid "Answer"
 msgstr "Rispondi"
 
 msgid "Awards"
-msgstr "Assegnazioni"
+msgstr "Premi"
 
 msgid "Badges"
 msgstr "Distintivi"
@@ -1646,9 +1646,6 @@ msgstr "Ulteriori"
 msgid "Annual fee"
 msgstr "Quota annuale"
 
-msgid "Answers WS"
-msgstr "Risposte WS"
-
 msgid "Appearance"
 msgstr "Aspetto"
 
@@ -1771,9 +1768,6 @@ msgstr "Miscellanea"
 
 msgid "Modifiable"
 msgstr "Modificabile"
-
-msgid "Modules WS"
-msgstr "Moduli WS"
 
 msgid "Motivation"
 msgstr "Motivazione"
@@ -2703,9 +2697,6 @@ msgstr "Richieste aperte"
 msgid "Require login"
 msgstr "Richiedi il login"
 
-msgid "Restore error"
-msgstr "Errore di ripristino"
-
 msgid "Self-catering"
 msgstr "Sistemazione autonoma"
 
@@ -3514,6 +3505,9 @@ msgstr "Commissioni di transazione"
 msgid "Transfer preview"
 msgstr "Anteprima dei trasferimenti"
 
+msgid "Workshop Modules"
+msgstr "Moduli del workshop"
+
 msgid "Your preferences"
 msgstr "Le tue preferenze"
 
@@ -3591,9 +3585,6 @@ msgstr "Assegnazione dei crediti"
 
 msgid "Custom title font"
 msgstr "Font del titolo personalizzato"
-
-msgid "Days before event"
-msgstr "Giorni dall'evento"
 
 msgid "Default view mode"
 msgstr "Modalità di visualizzazione predefinita"
@@ -3924,9 +3915,6 @@ msgstr "Motivo del pagamento"
 
 msgid "Registrations open"
 msgstr "Le iscrizioni sono aperte"
-
-msgid "Restore completed!"
-msgstr "Ripristino completato!"
 
 msgid "Review all members"
 msgstr "Esamina tutti i membri"
@@ -4752,6 +4740,9 @@ msgstr "Errore sconosciuto durante il caricamento"
 msgid "Welcome to LarpManager"
 msgstr "Benvenuto su LarpManager"
 
+msgid "Workshop option answer"
+msgstr "Risposta sull'opzione \"Workshop\""
+
 msgid "give them this address"
 msgstr "dai loro questo indirizzo"
 
@@ -5330,7 +5321,7 @@ msgid "Date of membership approval"
 msgstr "Data di approvazione dell'iscrizione"
 
 msgid "Description - international"
-msgstr "Descrizione internazionale"
+msgstr "Descrizione - internazionale"
 
 msgid "Enter a valid numeric value"
 msgstr "Inserisci un valore numerico valido"
@@ -6363,9 +6354,6 @@ msgstr "Guarda i personaggi che stai interpretando"
 msgid "You can't send messages to yourself"
 msgstr "Non puoi inviare messaggi a te stesso"
 
-msgid "here the conditions of registration"
-msgstr "qui le condizioni di iscrizione"
-
 msgid "leave empty to start a new campaign"
 msgstr "lascia vuoto per avviare una nuova campagna"
 
@@ -6770,7 +6758,7 @@ msgid "Customize organization pages appearance"
 msgstr "Personalizza l'aspetto delle pagine dell'organizzazione"
 
 msgid "Date from when the surcharge is applied"
-msgstr "Data oltre la quale si applica il sovrapprezzo"
+msgstr "Data a partire dalla quale si applica il sovrapprezzo"
 
 msgid "Electronics - computers, hitech, lights"
 msgstr "Elettronica - computer, hitech, luci"
@@ -7520,6 +7508,9 @@ msgstr "Cerca e filtra i personaggi dell'evento"
 
 msgid "Select the event you wish to pre-register for"
 msgstr "Seleziona l'evento per cui ti vuoi pre-iscrivere"
+
+msgid "Session expired, please upload the file again"
+msgstr "La sessione di ripristino è scaduta, caricare nuovamente il file"
 
 msgid "The user has been assigned the specified role"
 msgstr "All'utente è stato assegnato il ruolo specificato"
@@ -8340,9 +8331,6 @@ msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
 "Il monitoraggio della quantità non è abilitato per questa organizzazione"
 
-msgid "Restore session expired, please upload the file again."
-msgstr "La sessione di ripristino è scaduta, caricare nuovamente il file."
-
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Esamina le risposte dei partecipanti alle domande del matchmaker"
 
@@ -8698,10 +8686,6 @@ msgstr "Sei stato cancellato dalle comunicazioni di LarpManager"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Hai superato il numero massimo di opzioni selezionabili"
-
-msgid "(Optional) Required character option names, comma-separated"
-msgstr ""
-"(Facoltativo) Nomi di opzioni personaggio richieste, separati da virgole"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -10777,6 +10761,14 @@ msgid ""
 msgstr ""
 "Puoi controllare e modificare l'elenco delle organizzazioni che possono "
 "accedere ai tuoi dati su"
+
+#, python-format
+msgid ""
+"You can consult the <a href=\"%(conditions_url)s\">registration "
+"conditions</a>."
+msgstr ""
+"Puoi consultare le <a href=\"%(conditions_url)s\">condizioni di "
+"registrazione</a>."
 
 msgid ""
 "Define reusable ability templates that can be assigned to individual "
@@ -13817,10 +13809,10 @@ msgstr ""
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have"
-" the right to participate to the organization events"
+" the right to take part in the organization's events"
 msgstr ""
-"Il pagamento della tua quota sociale per quest'anno è stato ricevuto. Hai "
-"diritto a partecipare agli eventi dell'associazione"
+"Abbiamo ricevuto il pagamento della tua quota associativa per quest'anno. "
+"Hai il diritto di partecipare agli eventi dell'organizzazione"
 
 msgid ""
 "View and edit a member's profile, including personal data, membership "
@@ -14065,6 +14057,14 @@ msgstr ""
 "assegnati"
 
 msgid ""
+"The payment of your membership fee for this year has NOT been received: it "
+"is required to take part in events and the organization's meetings"
+msgstr ""
+"Non abbiamo ancora ricevuto il pagamento della tua quota associativa per "
+"quest'anno: è necessaria per partecipare agli eventi e alle riunioni "
+"dell'organizzazione"
+
+msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "
 "experience, and finally indicate precisely your field of experience"
 msgstr ""
@@ -14273,14 +14273,6 @@ msgstr ""
 "commenti"
 
 msgid ""
-"The payment of your membership fee for this year has NOT been received: it "
-"is necessary in order to participate to the events, and the organization "
-"meetings"
-msgstr ""
-"Non hai ancora versato la quota sociale: essa è necessaria per poter "
-"partecipare agli eventi, e per votare alla Assemblea associativa"
-
-msgid ""
 "Indicates a way for other participants to contact you. It can be an email, a"
 " social profile, whatever you want. It will be made public to others "
 "participants"
@@ -14297,6 +14289,15 @@ msgstr ""
 "Indica come potervi riconoscere, se vi farete trovare vicino qualche punto "
 "specifico, se avete molti bagagli: tutte le informazioni che ci potrebbero "
 "aiutare"
+
+msgid ""
+"The payment of your membership fee for this year has NOT been received: it "
+"is required to take part in events and to vote at the association's assembly"
+" meetings"
+msgstr ""
+"Non abbiamo ancora ricevuto il pagamento della tua quota associativa per "
+"quest'anno: è necessaria per partecipare agli eventi e per votare alle "
+"assemblee dell'associazione"
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

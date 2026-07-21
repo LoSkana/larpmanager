@@ -972,7 +972,7 @@ msgstr "Istunto"
 
 msgctxt "event"
 msgid "Setting"
-msgstr "Asetukset"
+msgstr "Asetus"
 
 msgid "Sharing"
 msgstr "Jakaminen"
@@ -1023,7 +1023,7 @@ msgid "Use TLD"
 msgstr "Käytä TLD:tä"
 
 msgid "Used At"
-msgstr "Käytetty:"
+msgstr "Käytetty osoitteessa:"
 
 msgid "Used By"
 msgstr "Käytetty käyttäjä:"
@@ -1308,7 +1308,7 @@ msgid "Reminder"
 msgstr "Muistutus"
 
 msgid "Reply To"
-msgstr "Reply To"
+msgstr "Vastaa"
 
 msgid "Required"
 msgstr "Vaadittu"
@@ -1365,7 +1365,7 @@ msgid "Tutorial"
 msgstr "Tutorial"
 
 msgid "Used on:"
-msgstr "Käytetty:"
+msgstr "Käytetty kohteessa:"
 
 msgid "Versions"
 msgstr "Versiot"
@@ -1646,9 +1646,6 @@ msgstr "Lisätiedot"
 msgid "Annual fee"
 msgstr "Vuosimaksu"
 
-msgid "Answers WS"
-msgstr "Vastaukset WS"
-
 msgid "Appearance"
 msgstr "Ulkonäkö"
 
@@ -1771,9 +1768,6 @@ msgstr "Sekalaista"
 
 msgid "Modifiable"
 msgstr "Muutettavissa"
-
-msgid "Modules WS"
-msgstr "Moduulit WS"
 
 msgid "Motivation"
 msgstr "Motivaatio"
@@ -2703,11 +2697,8 @@ msgstr "Pyynnöt avoinna"
 msgid "Require login"
 msgstr "Vaadi kirjautuminen"
 
-msgid "Restore error"
-msgstr "Palauta virhe"
-
 msgid "Self-catering"
-msgstr "Self-catering"
+msgstr "Omavarainen"
 
 msgid "Shared secret"
 msgstr "Jaettu salaisuus"
@@ -3116,7 +3107,7 @@ msgid "Filter selected"
 msgstr "Suodatin valittu"
 
 msgid "First character"
-msgstr "Ensimmäinen merkki"
+msgstr "Ensimmäinen hahmo"
 
 msgid "Highlight color"
 msgstr "Korostusväri"
@@ -3254,7 +3245,7 @@ msgid "Writing options"
 msgstr "Kirjoitusvaihtoehdot"
 
 msgid "You can consult"
-msgstr "Voit kuulla"
+msgstr "Voit tutustua"
 
 msgid "Your characters"
 msgstr "Hahmosi"
@@ -3514,6 +3505,9 @@ msgstr "Transaktiomaksut"
 msgid "Transfer preview"
 msgstr "Siirtojen esikatselu"
 
+msgid "Workshop Modules"
+msgstr "Työpajamoduulit"
+
 msgid "Your preferences"
 msgstr "Asetuksesi"
 
@@ -3591,9 +3585,6 @@ msgstr "Luottotehtävä"
 
 msgid "Custom title font"
 msgstr "Mukautettu otsikon fontti"
-
-msgid "Days before event"
-msgstr "Tapahtumaa edeltävät päivät"
 
 msgid "Default view mode"
 msgstr "Oletusnäkymätila"
@@ -3746,7 +3737,7 @@ msgid "Registration mail"
 msgstr "Ilmoittautumissähköposti"
 
 msgid "Remaining credits"
-msgstr "Jäljellä olevat opintopisteet"
+msgstr "Jäljellä olevat pisteet"
 
 msgid "Remove from guild"
 msgstr "Poista kilta"
@@ -3830,7 +3821,7 @@ msgid "Competences events"
 msgstr "Osaamistapahtumat"
 
 msgid "Competences member"
-msgstr "Toimivaltainen jäsen"
+msgstr "Jäsenen osaaminen"
 
 msgid "Create a new guild"
 msgstr "Luo uusi kilta"
@@ -3905,7 +3896,7 @@ msgid "Payment processing"
 msgstr "Maksujen käsittely"
 
 msgid "Perform extraction"
-msgstr "Suorita louhinta"
+msgstr "Suorita poiminta"
 
 msgid "Previewing version"
 msgstr "Esikatseluversio"
@@ -3924,9 +3915,6 @@ msgstr "Maksun syy"
 
 msgid "Registrations open"
 msgstr "Ilmoittautuminen avoinna"
-
-msgid "Restore completed!"
-msgstr "Palautus suoritettu!"
 
 msgid "Review all members"
 msgstr "Tarkista kaikki jäsenet"
@@ -4085,7 +4073,7 @@ msgid "Navigation language"
 msgstr "Navigointikieli"
 
 msgid "New shuttle request"
-msgstr "Uusi sukkulapyyntö"
+msgstr "Uusi kuljetuspyyntö"
 
 msgid "No abilities found."
 msgstr "Kykyjä ei löytynyt."
@@ -4136,7 +4124,7 @@ msgid "Support maintainers"
 msgstr "Tuki ylläpitäjille"
 
 msgid "Treasury appointees"
-msgstr "Valtiovarainministeriön nimittämät henkilöt"
+msgstr "Rahastonhoitajat"
 
 msgid "Use full-size image"
 msgstr "Käytä täysikokoista kuvaa"
@@ -4295,7 +4283,7 @@ msgid "Payment installments"
 msgstr "Maksuerät"
 
 msgid "Payments in approval"
-msgstr "Hyväksytyt maksut"
+msgstr "Hyväksyttävät maksut"
 
 msgid "Personal preferences"
 msgstr "Henkilökohtaiset mieltymykset"
@@ -4367,7 +4355,7 @@ msgid "The collection grows"
 msgstr "Kokoelma kasvaa"
 
 msgid "The tax code matches"
-msgstr "Verolainsäädäntö vastaa"
+msgstr "Verokoodi vastaa"
 
 msgid "Time And Date Of Use"
 msgstr "Käyttöaika ja -päivämäärä"
@@ -4530,7 +4518,7 @@ msgid "Registration complete"
 msgstr "Ilmoittautuminen valmis"
 
 msgid "Registration not open"
-msgstr "Ilmoittautumienn ei ole avoinna"
+msgstr "Ilmoittautuminen ei ole avoinna"
 
 msgid "Registration priority"
 msgstr "Ilmoittautumisjärjestys"
@@ -4560,7 +4548,7 @@ msgid "Token not initialized"
 msgstr "Tokenia ei ole alustettu"
 
 msgid "Transfer registration"
-msgstr "Siirrä ilmoittautumienn"
+msgstr "Siirrä ilmoittautuminen"
 
 msgid "Type your question..."
 msgstr "Kirjoita kysymyksesi..."
@@ -4671,7 +4659,7 @@ msgid "Membership card number"
 msgstr "Jäsenkortin numero"
 
 msgid "Modify shuttle request"
-msgstr "Muokkaa sukkulapyyntöä"
+msgstr "Muokkaa kuljetuspyyntöä"
 
 msgid "Newsletter preferences"
 msgstr "Uutiskirjeen asetukset"
@@ -4752,6 +4740,9 @@ msgstr "Tietämätön virhe latauksessa"
 msgid "Welcome to LarpManager"
 msgstr "Tervetuloa LarpManageriin"
 
+msgid "Workshop option answer"
+msgstr "Työpajavaihtoehdon vastaus"
+
 msgid "give them this address"
 msgstr "anna heille tämä osoite"
 
@@ -4778,10 +4769,10 @@ msgid "Character relationships"
 msgstr "Hahmosuhteet"
 
 msgid "Character sheet options"
-msgstr "Hahmolistan vaihtoehdot"
+msgstr "Hahmolomakkeen vaihtoehdot"
 
 msgid "Collection participated"
-msgstr "Kokoelma osallistui"
+msgstr "Osallistuneet kokoelmat"
 
 msgid "Create a new collection"
 msgstr "Luo uusi kokoelma"
@@ -4796,7 +4787,7 @@ msgid "Early registration link"
 msgstr "Varhaisen ilmoittautumisen linkki"
 
 msgid "Failed to add character"
-msgstr "Merkin lisääminen epäonnistui"
+msgstr "Hahmon lisääminen epäonnistui"
 
 msgid "Includes membership fee"
 msgstr "Sisältää jäsenmaksun"
@@ -4854,7 +4845,7 @@ msgid "Player's character form"
 msgstr "Pelaajan hahmomuoto"
 
 msgid "Please check them below"
-msgstr "Tarkista ne alta"
+msgstr "Tarkista ne alla"
 
 msgid "Please write a question"
 msgstr "Kirjoita kysymys"
@@ -4863,7 +4854,7 @@ msgid "Pre registrations total"
 msgstr "Ennakkoilmoittautumiset yhteensä"
 
 msgid "Pre-registration active"
-msgstr "EnnakkoIlmoittautuminen aktiivinen"
+msgstr "Ennakkoilmoittautuminen aktiivinen"
 
 msgid "Pre-registrations saved"
 msgstr "Tallennetut ennakkoilmoittautumiset"
@@ -4920,7 +4911,7 @@ msgid "Character configurations"
 msgstr "Merkin kokoonpanot"
 
 msgid "Check double speed larps"
-msgstr "Tarkista speed-larpit"
+msgstr "Tarkista kaksois speed-larpit"
 
 msgid "Check missing speed larp"
 msgstr "Tarkista puuttuva speed-larp"
@@ -4984,7 +4975,7 @@ msgstr "Uusi organisaatio luotu"
 
 #, python-format
 msgid "New question by %(user)s"
-msgstr "Uusi kysymys %(user)s"
+msgstr "Uusi kysymys käyttäjältä %(user)s"
 
 msgid "No abilities defined yet"
 msgstr "Kykyjä ei ole vielä määritelty"
@@ -5029,7 +5020,7 @@ msgid "Secret registration link"
 msgstr "Salainen ilmoittautumislinkki"
 
 msgid "Select a valid character"
-msgstr "Valitse kelvollinen merkki"
+msgstr "Valitse kelvollinen hahmo"
 
 msgid "Target session not found"
 msgstr "Kohdeistuntoa ei löydy"
@@ -5074,7 +5065,7 @@ msgid "Character Inventory Types"
 msgstr "Hahmojen varustetyypit"
 
 msgid "Character sheet questions"
-msgstr "Hahmo arkki kysymyksiä"
+msgstr "Hahmon lomakkeen kysymykset"
 
 msgid "Choose the payment method"
 msgstr "Valitse maksutapa"
@@ -5114,13 +5105,13 @@ msgstr "Vapaaehtoisten rekisterin hallinnointi"
 
 #, python-format
 msgid "New message from %(user)s"
-msgstr "Uusi viesti %(user)s"
+msgstr "Uusi viesti käyttäjältä %(user)s"
 
 msgid "No criterions defined yet"
 msgstr "Kriteerejä ei ole vielä määritelty"
 
 msgid "No expenses submitted yet"
-msgstr "Vastaus toimitettu"
+msgstr "Kuluja ei ole vielä toimitettu"
 
 msgid "No items will be modified"
 msgstr "Mitään kohteita ei muuteta"
@@ -5144,7 +5135,7 @@ msgid "Payments pending approval"
 msgstr "Hyväksyntää odottavat maksut"
 
 msgid "Pre-register to the event"
-msgstr "EnnakkoIlmoittaudu tapahtumaan"
+msgstr "Ennakkoilmoittaudu tapahtumaan"
 
 msgid "Read the writing elements"
 msgstr "Lue kirjoituselementit"
@@ -5233,7 +5224,7 @@ msgid "Feature %(name)s activated"
 msgstr "Ominaisuus %(name)s aktivoitu"
 
 msgid "Give a card to your friend"
-msgstr "Anna kortti ystävällesi"
+msgstr "Anna lippu ystävällesi"
 
 msgid "Hide unassigned characters"
 msgstr "Piilota määrittämättömät merkit"
@@ -5260,10 +5251,10 @@ msgid "Payments Awaiting Approval"
 msgstr "Hyväksyntää odottavat maksut"
 
 msgid "Pre-registration cancelled"
-msgstr "EnnakkoIlmoittautuminen peruutettu"
+msgstr "Ennakkoilmoittautuminen peruutettu"
 
 msgid "Pre-registration confirmed"
-msgstr "EnnakkoIlmoittautuminen vahvistettu"
+msgstr "Ennakkoilmoittautuminen vahvistettu"
 
 msgid "Select one or more options"
 msgstr "Valitse yksi tai useampi vaihtoehto"
@@ -5272,7 +5263,7 @@ msgid "Short name - international"
 msgstr "Lyhyt nimi - kansainvälinen"
 
 msgid "The following will be used"
-msgstr "Käytetään seuraavia menetelmiä"
+msgstr "Käytetään seuraavaa"
 
 msgid "The name of the competence"
 msgstr "Toimivaltuuden nimi"
@@ -5302,7 +5293,7 @@ msgid "Wrong number of characters"
 msgstr "Väärä määrä merkkejä"
 
 msgid "You have use a friend code"
-msgstr "Sinun on käytettävä kaverikoodia"
+msgstr "Olet käyttänyt kaverikoodia"
 
 msgid "keep it short and engaging"
 msgstr "Pidä se lyhyenä ja mukaansatempaavana"
@@ -5321,7 +5312,7 @@ msgid "Bring a friend to %(event)s"
 msgstr "Tuo ystävä tapahtumaan %(event)s"
 
 msgid "Commit warehouse quantities"
-msgstr "Varastomäärien sitominen"
+msgstr "Vahvista varastomäärät"
 
 msgid "Credits, tokens and refunds"
 msgstr "Pisteet, rahakkeet ja hyvitykset"
@@ -5369,7 +5360,7 @@ msgid "Members of the Organization"
 msgstr "Järjestön jäsenet"
 
 msgid "Membership fees in approval"
-msgstr "Hyväksytyt jäsenmaksut"
+msgstr "Jäsenmaksut hyväksyttäväksi"
 
 msgid "Missing casting preferences"
 msgstr "Puuttuvat hahmojaon asetukset"
@@ -5464,7 +5455,7 @@ msgstr "Jos valitaan: jäsenet voivat äänestää"
 
 #, python-format
 msgid "Invitation sent to %(email)s"
-msgstr "Kutsu lähetetään %(email)s"
+msgstr "Kutsu lähetetty %(email)s"
 
 msgid "Live chat is not configured."
 msgstr "Live-chat-toimintoa ei ole määritetty."
@@ -5607,7 +5598,7 @@ msgstr "Ilmoittautumisen aukeamista ei ole asetettu"
 
 #, python-format
 msgid "Request refund from: %(user)s"
-msgstr "Palautuspyyntö: %(user)s"
+msgstr "Palautuspyyntö kohteelta: %(user)s"
 
 msgid "Result of the bulk email send"
 msgstr "Massapostituksen tulos"
@@ -5708,7 +5699,7 @@ msgid "No texts have been created yet"
 msgstr "Tekstejä ei ole vielä luotu"
 
 msgid "Password reset request url for"
-msgstr "Salasanan palautuspyynnön url for"
+msgstr "Salasanan palautuspyynnön osoite"
 
 msgid "Please correct the error below"
 msgstr "Korjaa alla oleva virhe"
@@ -5747,7 +5738,7 @@ msgid "commit quantities to warehouse"
 msgstr "sitovat määriä varastoon"
 
 msgid "please wait for their response"
-msgstr "Odota ennen kuin yrität uudelleen"
+msgstr "Odota heidän vastaustaan"
 
 msgid "(Optional) The number of quotas"
 msgstr "(Valinnainen) Kiintiöiden määrä"
@@ -5821,7 +5812,7 @@ msgid "Password reset of user %(user)s"
 msgstr "Käyttäjän %(user)s salasanan palautus"
 
 msgid "Please correct the errors below"
-msgstr "Korjatkaa alla olevat virheet"
+msgstr "Korjaa alla olevat virheet"
 
 #, python-format
 msgid "Quests without traits: %(list)s"
@@ -5904,7 +5895,7 @@ msgid "Character assigned for %(event)s"
 msgstr "Hahmo asetettu tapahtumaan %(event)s"
 
 msgid "Choose the setting for the event"
-msgstr "Valitse tapahtuman asetukset"
+msgstr "Valitse tapahtuman ympäristö"
 
 msgid "Configure event feature settings"
 msgstr "Tapahtumaominaisuuden asetusten määrittäminen"
@@ -6076,7 +6067,7 @@ msgid "No activation steps are available"
 msgstr "Aktivointivaiheita ei ole saatavilla"
 
 msgid "No address was added to the queue"
-msgstr "Posti lisätty jonoon"
+msgstr "Mitään osoitetta ei lisätty jonoon"
 
 msgid "No character found for this event"
 msgstr "Tälle tapahtumalle ei löytynyt merkkiä"
@@ -6139,7 +6130,7 @@ msgstr "Sinun on määriteltävä aloituspäivä"
 
 #, python-format
 msgid "you are now viewing version %(v)s"
-msgstr "Esikatselu aktivoitu. Katselet nyt versiota %(v)s"
+msgstr "Katselet nyt versiota %(v)s"
 
 msgid "(Optional) The ability description"
 msgstr "(Valinnainen) Taidon kuvaus"
@@ -6207,8 +6198,7 @@ msgid "Now you can set membership options"
 msgstr "Nyt voit asettaa jäsenyysasetukset"
 
 msgid "Please retry or use a smaller file"
-msgstr ""
-"Virhe kuvan lataamisessa. Yritä uudelleen tai käytä pienempää tiedostoa"
+msgstr "Yritä uudelleen tai käytä pienempää tiedostoa"
 
 #, python-format
 msgid "Registration updated for %(event)s"
@@ -6262,7 +6252,7 @@ msgstr "Päivitetty ilmoittautumisten kokonaismäärä on"
 
 #, python-format
 msgid "(<a href='%(url)s'>answer here</a>)"
-msgstr "(<a href='%(url)s'>vastaukset täällä</a>))"
+msgstr "(<a href='%(url)s'>vastaukset täällä</a>)"
 
 msgid "(Optional) Cost (0 = auto assigned)"
 msgstr "(Valinnainen) Kustannukset (0 = automaattisesti määritetty)"
@@ -6364,9 +6354,6 @@ msgstr "Katso hahmot, joita pelaat"
 msgid "You can't send messages to yourself"
 msgstr "Et voi lähettää viestejä itsellesi"
 
-msgid "here the conditions of registration"
-msgstr "tässä ilmoittautumista koskevat ehdot"
-
 msgid "leave empty to start a new campaign"
 msgstr "jätä tyhjäksi aloittaaksesi uuden kampanjan"
 
@@ -6376,7 +6363,7 @@ msgstr "<b>%(number)s</b> hyväksyttävät jäsenet"
 
 #, python-format
 msgid "<b>%(number)s</b> refunds to deliver"
-msgstr "<b>%(number)s</b> toimitettavat tuet"
+msgstr "<b>%(number)s</b> toimitettavat palautukset"
 
 msgid "Cast your vote for the new Executive"
 msgstr "Äänestä uutta johtokuntaa"
@@ -6426,7 +6413,7 @@ msgid "No character inventories created yet"
 msgstr "Hahmoluetteloita ei ole vielä luotu"
 
 msgid "No collections have been created yet"
-msgstr "Kokoelma on aktivoitu"
+msgstr "Kokoelmia ei ole vielä luotu"
 
 msgid "No competences have been defined yet"
 msgstr "Toimivaltaa ei ole vielä määritelty"
@@ -6487,7 +6474,7 @@ msgstr "Päivitä tässä ilmoittautumisvaihtoehdot"
 
 #, python-format
 msgid "Utilisation %(tokens)s per %(event)s"
-msgstr "Käytä %(tokens)s tapahtumaan %(event)s"
+msgstr "Käyttö %(tokens)s tapahtumaan %(event)s"
 
 msgid "View photos and media from the event"
 msgstr "Katso tapahtuman valokuvia ja mediaa"
@@ -6614,7 +6601,7 @@ msgstr "Osallistujille palautettu kokonaismäärä"
 
 #, python-format
 msgid "Utilisation %(credits)s per %(event)s"
-msgstr "Käytä %(credits)s tapahtumaan %(event)s"
+msgstr "Käyttö %(credits)s tapahtumaan %(event)s"
 
 msgid "Write here what you would like to to!"
 msgstr "Kirjoita tähän, mitä haluaisit tehdä!"
@@ -6645,7 +6632,7 @@ msgid "Activation failed. Mail us the details"
 msgstr "Aktivointi epäonnistui. Lähetä meille tiedot sähköpostitse"
 
 msgid "Attention, the tax code does not match"
-msgstr "Huomio, verolainsäädäntö ei vastaa"
+msgstr "Huomio, verokoodi ei vastaa"
 
 msgid "Charge transaction fees to participant"
 msgstr "veloittaa osallistujalta transaktiomaksuja"
@@ -6724,7 +6711,7 @@ msgid "You have been invited to join the role"
 msgstr "Sinut on kutsuttu tehtävään"
 
 msgid "You must be an approved member to vote"
-msgstr "Sinun on maksettava jäsenmaksusi, jotta voit äänestää"
+msgstr "Sinun on oltava hyväksytty jäsen äänestääksesi"
 
 msgid "You need a character to create a guild"
 msgstr "Killan perustamiseen tarvitaan hahmo"
@@ -6849,7 +6836,7 @@ msgid "Set up payment methods for participants"
 msgstr "Määritä maksutavat osallistujille"
 
 msgid "Sum of the signup fee, total to be paid"
-msgstr "Kirjautumismaksun summa, maksettava kokonaismäärä"
+msgstr "Ilmoittautumismaksun summa, maksettava kokonaismäärä"
 
 msgid "The number of payments to split the fee"
 msgstr "Maksun jakamiseen käytettävien maksujen määrä"
@@ -6861,7 +6848,7 @@ msgid "This text will be added to the sheet of"
 msgstr "Tämä teksti lisätään lomakkeelle: "
 
 msgid "To process the cancellation, click here"
-msgstr "Jos haluat käsitellä peruutuksen, klikkaa tästä"
+msgstr "Käsittele peruutus klikkaamalla tästä"
 
 msgid "Use the button above to add a container"
 msgstr "Lisää säiliö yläpuolella olevan painikkeen avulla"
@@ -6888,7 +6875,7 @@ msgid "Copy this code and share it with friends"
 msgstr "Kopioi tämä koodi ja jaa se ystävien kanssa"
 
 msgid "Current financial balance for this event"
-msgstr "Tämän tapahtuman tämänhetkinen rahoitussaldo"
+msgstr "Tämän tapahtuman nykyinen taloudellinen saldo"
 
 msgid "Describe exactly what condition it is in"
 msgstr "Kuvaile tarkalleen, missä kunnossa se on"
@@ -6912,7 +6899,7 @@ msgid "Invite a user by email to join this role"
 msgstr "Kutsu käyttäjä sähköpostitse tähän rooliin"
 
 msgid "Manage character handouts for this event"
-msgstr "Hallinnoi tämän tapahtuman hahmojen taustatietoja"
+msgstr "Hallinnoi tämän tapahtuman hahmolomakkeita"
 
 msgid "Manage collections participated by users"
 msgstr "Käyttäjien osallistuneiden kokoelmien hallinta"
@@ -6945,10 +6932,10 @@ msgid "Seconds to wait between each email batch"
 msgstr "Odotettavat sekunnit jokaisen sähköpostierän välillä"
 
 msgid "Set casting options in the configuration"
-msgstr "Aseta valuasetukset kokoonpanossa"
+msgstr "Aseta kastauksiasetukset kokoonpanossa"
 
 msgid "The collection was delivered to the user"
-msgstr "Koonti jaettiin käyttäjälle"
+msgstr "Keräys jaettiin käyttäjälle"
 
 msgid "This content is currently not available."
 msgstr "Tämä sisältö ei ole tällä hetkellä saatavilla."
@@ -7018,7 +7005,7 @@ msgid "Authenticator app configured successfully"
 msgstr "Todentajasovellus määritetty onnistuneesti"
 
 msgid "Browser user agent string from the access"
-msgstr "Selaimen käyttäjäagentti merkkijono käyttöoikeudesta"
+msgstr "Selaimen käyttäjäagentin merkkijono käytöstä"
 
 msgid "Cannot demote the last admin of the guild"
 msgstr "Killan viimeistä ylläpitäjää ei voi alentaa alemmalle tasolle"
@@ -7051,7 +7038,7 @@ msgid "Manage templates for experience abilities"
 msgstr "Hallitse kokemustaitojen malleja"
 
 msgid "Manage the pre-registration of all events"
-msgstr "hallinnoida kaikkien tapahtumien ennakkoilmoittautumista"
+msgstr "Hallinnoida kaikkien tapahtumien ennakkoilmoittautumista"
 
 msgid "Name as will appear on the receipt header"
 msgstr "Nimi sellaisena kuin se näkyy kuitin otsakkeessa"
@@ -7078,7 +7065,7 @@ msgid "The modifier's number (unique identifier)"
 msgstr "Muunnoksen numero (yksilöllinen tunniste)"
 
 msgid "This collection has already been redeemed"
-msgstr "Tämä kutsu on jo lunastettu"
+msgstr "Tämä keräys on jo lunastettu"
 
 msgid "Total amount paid for platform management"
 msgstr "Alustan hallinnoinnista maksettu kokonaismäärä"
@@ -7093,7 +7080,7 @@ msgid "Use the button above to create a new area"
 msgstr "Luo uusi alue yllä olevan painikkeen avulla"
 
 msgid "You are excluding (none of these filters)"
-msgstr "Et ole mukana (mikään näistä suodattimista)"
+msgstr "Suljet pois (mitään näistä suodattimista)"
 
 #, python-format
 msgid "You have been added to the role: %(role)s"
@@ -7122,7 +7109,7 @@ msgid "Assign selected characters to participants"
 msgstr "Valittujen hahmojen osoittaminen osallistujille"
 
 msgid "Character already assigned, not selectable"
-msgstr "Hahmo on jo jaettu, ei valittavissa"
+msgstr "Hahmo on jo määritetty, ei valittavissa"
 
 msgid "Click on a name to go and view it directly"
 msgstr "Klikkaa nimeä siirtyäksesi katsomaan sitä suoraan"
@@ -7213,7 +7200,7 @@ msgid "Select a badge above to manage its members"
 msgstr "Valitse yllä oleva tunnus hallitaksesi sen jäseniä"
 
 msgid "Select randomly lottery tickets to upgrade"
-msgstr "Valitse satunnaisesti lottokuponkeja päivittää"
+msgstr "Valitse satunnaisesti lottoliput päivitettäväksi"
 
 msgid "Select which form this question belongs to"
 msgstr "Valitse, mihin lomakkeeseen tämä kysymys kuuluu"
@@ -7263,16 +7250,16 @@ msgstr "Mahdollistaa ilmoittautumisen siirtämisen tapahtumien välillä"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
-msgstr "Hyväksyntä %(user)s %(role)s %(event)s"
+msgstr "Hyväksyntä %(user)s %(role)s:nä %(event)s:ssa"
 
 msgid "Authentication token (mark all permissions)"
-msgstr "Tunnistusmerkki (merkitse kaikki oikeudet)"
+msgstr "Todentamistunnus (merkitse kaikki oikeudet)"
 
 msgid "Browse events that have already taken place"
 msgstr "Selaa jo pidettyjä tapahtumia"
 
 msgid "Characters are only visible to participants"
-msgstr "Merkit näkyvät vain osallistujille"
+msgstr "Hahmot näkyvät vain osallistujille"
 
 #, python-format
 msgid "Collection participation for: %(recipient)s"
@@ -7294,7 +7281,7 @@ msgid "If there are wrong data you can update your"
 msgstr "Jos tietoja on väärin, voit päivittää"
 
 msgid "Indicate precisely your field of experience"
-msgstr "Ilmoittakaa tarkalleen, millä alalla teillä on kokemusta"
+msgstr "Ilmoittakaa tarkalleen, millä alalla sinulla on kokemusta"
 
 msgid "Indicate the tickets for which it is active"
 msgstr "Ilmoita liput, joiden osalta se on aktiivinen"
@@ -7303,7 +7290,7 @@ msgid "Manage fields that track participants' data"
 msgstr "Hallitse kenttiä, joilla seurataan osallistujien tietoja"
 
 msgid "No participants have been issued tokens yet"
-msgstr "Osallistujille ei ole vielä jaettu poletteja"
+msgstr "Osallistujille ei ole vielä jaettu tunnuksia"
 
 msgid "No workshop questions have been created yet"
 msgstr "Työpajakysymyksiä ei ole vielä luotu"
@@ -7336,7 +7323,7 @@ msgid "Upload a PDF file or image (JPG, PNG, etc.)"
 msgstr "Lataa PDF-tiedosto tai kuva (JPG, PNG jne.)"
 
 msgid "Warehouse quantities committed successfully"
-msgstr "Onnistuneesti sidotut varastomäärät"
+msgstr "Varastomäärät sidottu onnistuneesti"
 
 #, python-format
 msgid "You have been invited to the role: %(role)s"
@@ -7355,13 +7342,13 @@ msgid "Cancellation for missing profile compilation"
 msgstr "Peruutus puuttuvan profiilin laatimisen vuoksi"
 
 msgid "Configure casting preferences for this event"
-msgstr "Määritä tämän tapahtuman lähetysasetukset"
+msgstr "Määritä tämän tapahtuman kastauksiasetukset"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Mukauta tapahtuman ulkoasua"
 
 msgid "Do you wish to be reimbursed? Open a new one"
-msgstr "Haluatteko korvauksen? Avaa uusi"
+msgstr "Haluatko korvauksen? Avaa uusi"
 
 msgid "Edit the core settings for your organization"
 msgstr "Muokkaa organisaatiosi perusasetuksia"
@@ -7397,7 +7384,7 @@ msgid "No items have been assigned to this area yet"
 msgstr "Tälle alueelle ei ole vielä määritetty yhtään kohdetta"
 
 msgid "No participants have been issued credits yet"
-msgstr "Osallistujille ei ole vielä myönnetty opintopisteitä"
+msgstr "Osallistujille ei ole vielä myönnetty pisteitä"
 
 msgid "No prologue categories have been created yet"
 msgstr "Prologi-luokkia ei ole vielä luotu"
@@ -7439,7 +7426,7 @@ msgid "View all log entries recorded for this event"
 msgstr "Näytä kaikki tästä tapahtumasta tallennetut lokimerkinnät"
 
 msgid "View all your historical financial movements"
-msgstr "Tarkastele kaikkia aiempia taloudellisia tapahtumiasi"
+msgstr "Tarkastele kaikkia aiempia taloudellisia liikkeitäsi"
 
 msgid "View the list of characters and participants"
 msgstr "Näytä hahmojen ja osallistujien luettelo"
@@ -7496,7 +7483,7 @@ msgid "Modify the character details to make it yours"
 msgstr "Muokkaa hahmon yksityiskohtia, jotta se olisi omasi"
 
 msgid "No matchmaker questions have been created yet"
-msgstr "Naimakauppakysymyksiä ei ole vielä luotu"
+msgstr "Yhteensoviuskysymyksiä ei ole vielä luotu"
 
 msgid "No roles have been defined for this event yet"
 msgstr "Tälle tapahtumalle ei ole vielä määritelty rooleja"
@@ -7512,7 +7499,7 @@ msgstr "Syntymäpaikka ei sisälly ISTAT-luetteloon"
 
 #, python-format
 msgid "Registration updated to %(event)s by %(user)s"
-msgstr "Ilmoittautuminen päivitetty: %(event)s / %(user)s"
+msgstr "Ilmoittautuminen päivitetty %(event)s:aan käyttäjän %(user)s toimesta"
 
 msgid "Search and filter the characters of the event"
 msgstr "Hae ja suodata tapahtuman hahmoja"
@@ -7520,11 +7507,14 @@ msgstr "Hae ja suodata tapahtuman hahmoja"
 msgid "Select the event you wish to pre-register for"
 msgstr "Valitse tapahtuma, johon haluat ilmoittautua ennakkoon"
 
+msgid "Session expired, please upload the file again"
+msgstr "Palautusistunto päättyi, lataa tiedosto uudelleen"
+
 msgid "The user has been assigned the specified role"
 msgstr "Käyttäjälle on annettu määritetty rooli"
 
 msgid "Use the button above to add a volunteer entry"
-msgstr "Lisää vapaaehtoistyöntekijän tiedot yllä olevan painikkeen avulla"
+msgstr "Lisää vapaaehtoinen yllä olevan painikkeen avulla"
 
 msgid "Use the button above to create the first rule"
 msgstr "Luo ensimmäinen sääntö yllä olevan painikkeen avulla"
@@ -7533,7 +7523,7 @@ msgid "Use the button above to upload the first item"
 msgstr "Lataa ensimmäinen kohde yllä olevan painikkeen avulla"
 
 msgid "keep the auto-generated value or customize it"
-msgstr "pitää automaattisesti luodun arvon tai muokata sitä"
+msgstr "pidä automaattisesti luotu arvo tai muokkaa sitä"
 
 msgid "Amount of the next payment instalment required"
 msgstr "Seuraavan vaaditun maksuerän määrä"
@@ -7548,7 +7538,7 @@ msgid "Cancellation for missing yearly membership fee"
 msgstr "Peruuttaminen puuttuvan vuosittaisen jäsenmaksun vuoksi"
 
 msgid "Characters are only visible to logged in users"
-msgstr "Merkit näkyvät vain kirjautuneille käyttäjille"
+msgstr "Hahmot näkyvät vain kirjautuneille käyttäjille"
 
 msgid "Create your first event using the button above"
 msgstr "Luo ensimmäinen tapahtumasi yllä olevan painikkeen avulla"
@@ -7589,8 +7579,7 @@ msgstr "Valitse sekä ilmoittautuminen että tapahtuma"
 
 #, python-format
 msgid "Registration for %(member)s moved to %(event)s"
-msgstr ""
-"%(member)s -jäsenten ilmoittautuminen siirrettiin %(event)s -tapahtumaan"
+msgstr "%(member)s:n ilmoittautuminen siirrettiin %(event)s:iin"
 
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Määritä suojelijan ja alennetun lipun kokoonpano"
@@ -7644,7 +7633,7 @@ msgid "Click a character to add it to your preferences"
 msgstr "Napsauta hahmoa lisätäksesi sen suosikkeihisi"
 
 msgid "Customize specific texts on the event interface"
-msgstr "Tapahtuman käyttöliittymän erityisten tekstien mukauttaminen"
+msgstr "Mukauta tapahtuman käyttöliittymän erityisiä tekstejä"
 
 #, python-format
 msgid "Donation of %(user)s, with reason: '%(reason)s'"
@@ -7664,7 +7653,7 @@ msgid "If checked: Add a field to track items quantity"
 msgstr "Jos valitaan: Lisää kenttä kohteiden määrän seuraamiseen"
 
 msgid "Indicate the country of which you are a citizen"
-msgstr "Ilmoittakaa maa, jonka kansalainen olette"
+msgstr "Ilmoita maa, jonka kansalainen olet"
 
 msgid "Manage the traits available in the event quests"
 msgstr "Hallitse tapahtumatehtävissä saatavilla olevia ominaisuuksia"
@@ -7688,9 +7677,7 @@ msgid "Optional template associated with this ability."
 msgstr "Tähän taitoon liittyvä valinnainen pohja."
 
 msgid "Refunds cannot be processed as virtual currency"
-msgstr ""
-"Varoitus: Merkit ja hyvitykset eivät ole käytössä. Palautuksia ei voida "
-"käsitellä virtuaalivaluuttana"
+msgstr "Palautuksia ei voida käsitellä virtuaalivaluuttana"
 
 #, python-format
 msgid "Registration for %(member)s copied to %(event)s"
@@ -7793,7 +7780,7 @@ msgid "Registrations for this event have not opened yet"
 msgstr "Ilmoittautuminen tähän tapahtumaan ei ole vielä alkanut"
 
 msgid "Review participants' safety-related informations"
-msgstr "Tarkastellaan osallistujien turvallisuuteen liittyviä tietoja"
+msgstr "Tarkastele osallistujien turvallisuuteen liittyviä tietoja"
 
 msgid "Skip the demo, start your adventure from scratch"
 msgstr "Ohita esittely ja aloita seikkailusi alusta"
@@ -7808,7 +7795,7 @@ msgid "This operation is permanent and cannot be undone"
 msgstr "Tämä toimenpide on pysyvä eikä sitä voi peruuttaa"
 
 msgid "This page allows you to add or edit a pool label"
-msgstr "Tällä sivulla voit lisätä tai muokata uima-altaan nimeä"
+msgstr "Tällä sivulla voit lisätä tai muokata pool-merkinnän nimeä"
 
 msgid "Use the button above to create the first ability"
 msgstr "Luo ensimmäinen kyky yllä olevan painikkeen avulla"
@@ -7860,7 +7847,7 @@ msgid "Full event description with all important details"
 msgstr "Täydellinen tapahtumakuvaus kaikkine tärkeine yksityiskohtineen"
 
 msgid "Insert the css code to customize the pdf printing"
-msgstr "Lisää css-koodi mukauttaa pdf-tulostusta"
+msgstr "Lisää css-koodi mukauttaaksesi pdf-tulostusta"
 
 msgid "Minimum age of members (leave empty for no limit)"
 msgstr "Jäsenten vähimmäisikä (jätetään tyhjäksi, jos ei ole rajoitusta)"
@@ -7919,7 +7906,7 @@ msgid "Use the button above to create the first template"
 msgstr "Luo ensimmäinen malli yllä olevan painikkeen avulla"
 
 msgid "You are including (at least one of these filters)"
-msgstr "Sisältää (vähintään yhden näistä suodattimista)"
+msgstr "Sisällytät (vähintään yhden näistä suodattimista)"
 
 msgid "You cannot create a relationship towards yourself"
 msgstr "Et voi luoda suhdetta itseesi"
@@ -7953,7 +7940,7 @@ msgid "Fill in this field if you have accessibility needs"
 msgstr "Täytä tämä kenttä, jos sinulla on esteettömyystarpeita"
 
 msgid "I authorize sharing my data with this organization"
-msgstr "Olet antanut luvan tietojen jakamiseen tämän organisaation kanssa"
+msgstr "Annan luvan tietojen jakamiseen tämän organisaation kanssa"
 
 msgid "If checked, do not use the parent event's factions"
 msgstr "Jos valitaan, älä käytä vanhemman tapahtuman ryhmittymiä"
@@ -8081,7 +8068,7 @@ msgstr "Osallistujien henkilötietojen johdonmukaisuuden tarkistaminen"
 
 #, python-format
 msgid "Collected contribution of %(user)s for %(recipient)s"
-msgstr "%(user)s kerätty rahoitusosuus %(recipient)s"
+msgstr "Käyttäjän %(user)s keräämä rahoitusosuus %(recipient)s:lle"
 
 msgid "Configure payment methods available for participants"
 msgstr "Määritä osallistujien käytettävissä olevat maksutavat"
@@ -8105,7 +8092,7 @@ msgid "Indicates whether it can be selected by participants"
 msgstr "Osoittaa, voivatko osallistujat valita sen"
 
 msgid "Initialize the platform by creating your first event"
-msgstr "Alusta alustan alustaminen luomalla ensimmäinen tapahtuma"
+msgstr "Alusta alusta luomalla ensimmäinen tapahtuma"
 
 msgid "Input an element name to insert their reference code"
 msgstr "Syötä elementin nimi lisätäksesi sen viitekoodin"
@@ -8129,7 +8116,7 @@ msgid "No writing elements are available for this event yet"
 msgstr "Tälle tapahtumalle ei ole vielä kirjoituselementtejä saatavilla"
 
 msgid "Optional - A screenshot of the error / bug / problem"
-msgstr "Valinnainen - Kuvakaappaus virheestä/virheestä/ongelmasta"
+msgstr "Valinnainen - Kuvakaappaus virheestä/bugista/ongelmasta"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Tarkista hahmolomakkeiden johdonmukaisuus"
@@ -8147,7 +8134,7 @@ msgid "The first column the amount, the second the receipts"
 msgstr "Ensimmäisessä sarakkeessa määrä, toisessa kuitit"
 
 msgid "This guild has reached its maximum number of members"
-msgstr "Tämän kilta on saavuttanut jäsenmäärän ylärajan"
+msgstr "Tämä kilta on saavuttanut jäsenmäärän ylärajan"
 
 msgid "WARNING: deleted items might not be full recoverable"
 msgstr "VAROITUS: poistettuja kohteita ei ehkä voida palauttaa kokonaan"
@@ -8159,7 +8146,7 @@ msgid "You have granted data sharing with this organisation"
 msgstr "Olet antanut luvan tietojen jakamiseen tämän organisaation kanssa"
 
 msgid "You will have our eternal thanks for believing in us"
-msgstr "Saatte ikuisen kiitoksemme siitä, että uskoitte meihin, -"
+msgstr "Saatte ikuisen kiitoksemme siitä, että uskoitte meihin"
 
 msgid "Your cancellation request has been sent to the staff"
 msgstr "Peruutuspyyntösi on lähetetty henkilökunnalle"
@@ -8199,7 +8186,7 @@ msgid "Initial value of experience points for all characters"
 msgstr "Kaikkien hahmojen kokemuspisteiden alkuarvo"
 
 msgid "Manage dynamic installment payments for registrations"
-msgstr "Ilmoittautumisten dynaamisten osamaksujen hallinta"
+msgstr "Hallinnoi ilmoittautumisten dynaamisia osamaksuja"
 
 msgid "Manage photo and video albums uploaded for this event"
 msgstr "Hallitse tähän tapahtumaan ladattuja valokuva- ja videoalbumeita"
@@ -8290,7 +8277,7 @@ msgid "Indicate as precisely as possible where to pick you up"
 msgstr "Ilmoita mahdollisimman tarkasti, mistä sinut noudetaan"
 
 msgid "Indicate how spending is allocated at the budget level"
-msgstr "Ilmoittakaa, miten menot kohdennetaan talousarviotasolla"
+msgstr "Ilmoita, miten menot kohdennetaan talousarviotasolla"
 
 msgid "Indicate the sessions for which the discount is active"
 msgstr "Ilmoita istunnot, joiden osalta alennus on voimassa"
@@ -8320,9 +8307,6 @@ msgstr "Nyt voit lisätä suhteita hahmoa muokatessasi"
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"
 
-msgid "Restore session expired, please upload the file again."
-msgstr "Palautusistunto päättyi, lataa tiedosto uudelleen."
-
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Tarkista osallistujien vastaukset parinvalintakysymyksiin"
 
@@ -8351,7 +8335,7 @@ msgid "You have not reached the minimum number of preferences"
 msgstr "Et ole saavuttanut vähimmäismäärää preferenssejä"
 
 msgid "You must signed up in order to select your preferences"
-msgstr "Sinun on kirjauduttava, jotta voit valita mieltymyksesi"
+msgstr "Sinun on oltava ilmoittautunut, jotta voit valita mieltymyksesi"
 
 msgid "Your membership application was successfully submitted"
 msgstr "Jäsenhakemuksesi lähetettiin onnistuneesti"
@@ -8446,7 +8430,7 @@ msgid "If no payment is received, registration may be cancelled"
 msgstr "Jos maksua ei ole suoritettu, ilmoittautuminen voidaan peruuttaa"
 
 msgid "If you would like to make a donation to the Organization"
-msgstr "Jos haluatte tehdä lahjoituksen järjestölle"
+msgstr "Jos haluat tehdä lahjoituksen järjestölle"
 
 msgid "Indicate whether the field is printed in PDF generations"
 msgstr "Ilmoita, tulostetaanko kenttä PDF-sukupolvissa"
@@ -8485,8 +8469,7 @@ msgid "Use the button above to add a new expense with a receipt"
 msgstr "Lisää uusi kuitilla varmennettu meno yllä olevan painikkeen avulla"
 
 msgid "Warning: Neither tokens nor credits features are enabled"
-msgstr ""
-"Varoitus: Ei poletteja eikä krediittejä -ominaisuuksia ei ole käytössä"
+msgstr "Varoitus: Poletteja eikä krediittejä ei ole käytössä"
 
 msgid "You cannot redeem a membership, you are already a member"
 msgstr "Et voi lunastaa jäsenyyttä, olet jo jäsen"
@@ -8523,7 +8506,8 @@ msgstr "Nyt voit tarkastella historiallisia kirjanpitotietoja"
 
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr ""
-"Valinnainen - Muut vaatimukset täyttävät vaihtoehdot, pilkulla eroteltuina"
+"Valinnainen - Muut vaatimuksiksi käytettävät vaihtoehdot, pilkulla "
+"eroteltuina"
 
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Henkilöstön jäsenet, jotka vastaanottavat ja hallinnoivat tukilippuja"
@@ -8633,7 +8617,7 @@ msgstr "Tämä hahmo on jo jäsen tai hänellä on odottava kutsu"
 
 msgid "This contributor has not self-assessed any competences yet"
 msgstr ""
-"Tämä kirjoittaja ei ole vielä arvioinut itseään minkään osaamisalueen osalta"
+"Tämä osallistuja ei ole vielä arvioinut itseään minkään osaamisalueen osalta"
 
 msgid "To stop those, you would need to cancel your registrations"
 msgstr "Jos haluat lopettaa nämä, sinun on peruutettava rekisteröinnit"
@@ -8650,10 +8634,6 @@ msgstr "Sinut on poistettu LarpManagerin viestinnän tilauksesta"
 
 msgid "You have exceeded the maximum number of selectable options"
 msgstr "Olet ylittänyt valittavissa olevien vaihtoehtojen enimmäismäärän"
-
-msgid "(Optional) Required character option names, comma-separated"
-msgstr ""
-"(Valinnainen) Tarvittavat merkkivaihtoehtojen nimet, pilkulla erotetut"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>"
@@ -8683,7 +8663,7 @@ msgstr ""
 
 #, python-format
 msgid "Name: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
-msgstr "Nimi: %(name)s, slug: %(slug)s, creator: %(user)s %(email)s"
+msgstr "Nimi: %(name)s, slug: %(slug)s, luoja: %(user)s %(email)s"
 
 msgid "No items with assigned quantities were found for this event"
 msgstr ""
@@ -8760,8 +8740,7 @@ msgid "Displays statistics on participant preferences on characters"
 msgstr "Näyttää tilastoja osallistujien mieltymyksistä hahmojen osalta"
 
 msgid "If you wish to upload a new scan of your application instead"
-msgstr ""
-"Jos haluat ladata hakemuksen uuden skannauksen sen sijaan, että lähetät"
+msgstr "Jos haluat ladata hakemuksen uuden skannauksen sen sijaan"
 
 msgid "In the membership book the number of your membership card is"
 msgstr "Jäsenkirjassa jäsenkorttisi numero on seuraava"
@@ -8844,7 +8823,7 @@ msgid "Do you want to manage character progression through abilities"
 msgstr "Haluatko hallita hahmon etenemistä kykyjen avulla"
 
 msgid "If checked, an option can be chosen a maximum number of times"
-msgstr "Jos valittuna, vaihtoehto voidaan valita enintään kerran"
+msgstr "Jos valittuna, vaihtoehtoa voidaan valita enintään X kertaa"
 
 msgid "If checked, shows the player's name alongside their character"
 msgstr ""
@@ -8855,14 +8834,14 @@ msgstr ""
 "Jos valitaan: osallistujat eivät voi peruuttaa omaa ilmoittautumistaan"
 
 msgid "Indicate here any element you wish to avoid in the assignment"
-msgstr "Ilmoita tässä kaikki elementit, joita haluat välttää tehtävässä"
+msgstr ""
+"Ilmoita tässä joita tahansa elementtejä, joita haluat välttää määrityksessä"
 
 msgid "Link to an external website with additional event information"
 msgstr "Linkki ulkoiselle verkkosivustolle, jossa on lisätietoja tapahtumasta"
 
 msgid "Manage all credit assignments issued to members across events"
-msgstr ""
-"Hallinnoi kaikkia jäsenille eri tapahtumissa myönnettyjä luottokiintiöitä"
+msgstr "Hallinnoi kaikkia jäsenille eri tapahtumissa myönnettyjä krediittejä"
 
 msgid "Manage all payments received from participants for this event"
 msgstr "Hallinnoi kaikkia tapahtuman osallistujilta saatuja maksuja"
@@ -8882,7 +8861,7 @@ msgid "No payment quota options have been defined for this event yet"
 msgstr "Tälle tapahtumalle ei ole vielä määritelty maksukiintiövaihtoehtoja"
 
 msgid "Note that if the cost is 0, it will be automatically assigned"
-msgstr "Huomaa, että jos hinta on 0, hahmo saa taidon automaattisesti"
+msgstr "Huomaa, että jos hinta on 0, se määritetään automaattisesti"
 
 msgid "Now participants can submit donation, and you can review them"
 msgstr ""
@@ -9009,7 +8988,7 @@ msgid "We ask you to pay the amount requested for the next instalment"
 msgstr "Pyydämme sinua maksamaan pyydetyn summan seuraavaa maksuerää varten"
 
 msgid "You can give a preference to play it, as with other characters"
-msgstr "Voit antaa etusija pelata sitä, kuten muidenkin hahmojen kanssa"
+msgstr "Voit antaa etusijan pelata sitä, kuten muidenkin hahmojen kohdalla"
 
 msgid "You have been unsubscribed from this organization's newsletter"
 msgstr "Sinut on poistettu tämän organisaation uutiskirjeestä"
@@ -9169,7 +9148,8 @@ msgstr ""
 "Suoratoistettava video- tai äänitiedosto (suositellaan: MP4, WebM, MP3)"
 
 msgid "You still have active event registrations with this organization"
-msgstr "Olet antanut luvan tietojen jakamiseen tämän organisaation kanssa"
+msgstr ""
+"Sinulla on vielä aktiivisia ilmoittautumisia tämän organisaation tapahtumiin"
 
 msgid "Your request will be considered at the next meeting of the Board"
 msgstr "Pyyntösi käsitellään seuraavassa hallintoneuvoston kokouksessa"
@@ -9219,7 +9199,7 @@ msgstr ""
 #, python-format
 msgid "New participation in the collection for %(recipient)s by %(user)s"
 msgstr ""
-"Uusi osallistuminen keräykseen %(recipient)s toimesta %(user)s toimesta"
+"Uusi osallistuminen keräykseen %(recipient)s -henkilölle %(user)s:n toimesta"
 
 msgid "Now you can review the diet information submitted by participants"
 msgstr "Nyt voit tarkastella osallistujien lähettämiä ruokavaliotietoja"
@@ -9277,7 +9257,7 @@ msgstr ""
 
 msgid "Indicates whether the option can be included in the gifted signups"
 msgstr ""
-"Ilmaisee, voidaanko vaihtoehto sisällyttää lahjoitettujen allekirjoitusten "
+"Ilmaisee, voidaanko vaihtoehto sisällyttää lahjoitettujen ilmoittautumisten "
 "joukkoon"
 
 msgid "Lets staff access the safety information submitted by participants"
@@ -9567,7 +9547,7 @@ msgstr "onko hahmo EI ole tietoinen toisen ominaisuuden henkilöllisyydestä"
 
 msgid "Add a pool type to categorize items available in character inventories"
 msgstr ""
-"Lisää uima-allastyyppi hahmojen inventaarioissa olevien esineiden "
+"Lisää pool-tyyppi hahmojen inventaarioissa olevien esineiden "
 "luokittelemiseksi"
 
 msgid "Assign warehouse items to one or more areas of the event, item by item"
@@ -9580,8 +9560,7 @@ msgstr ""
 "Palautusta ei voida käsitellä: Ei ole käytössä poletteja eikä hyvityksiä"
 
 msgid "Day of the year from which the membership year begins, in DD-MM format"
-msgstr ""
-"Sen vuoden päivä, josta jäsenyysvuosi alkaa, päivämäärän muodossa pp.kk.a.v"
+msgstr "Sen vuoden päivä, josta jäsenyysvuosi alkaa, muodossa pp-kk"
 
 #, python-format
 msgid "Display your achievements in your <a href= %(url)s'>public profile</a>"
@@ -9712,7 +9691,7 @@ msgstr "Jos olet ehdokkaana hallitukseen, kirjoita esittelysi tänne"
 msgid ""
 "List of users who have not registered for a future session of the event"
 msgstr ""
-"Luettelo käyttäjistä, jotka eivät ole ilmoittautumiset tapahtuman tulevaan "
+"Luettelo käyttäjistä, jotka eivät ole ilmoittautuneet tapahtuman tulevaan "
 "istuntoon"
 
 msgid ""
@@ -9811,7 +9790,9 @@ msgstr ""
 
 msgid ""
 "Edit the dates, status, and registration settings for this event session"
-msgstr "Käyttäjällä on jo rekisteröityminen tähän tapahtumaan"
+msgstr ""
+"Muokkaa tämän tapahtuman istunnon päivämääriä, tilaa ja "
+"rekisteröintiasetuksia"
 
 msgid ""
 "How the relationship is described from the other character's perspective"
@@ -9837,7 +9818,7 @@ msgstr ""
 
 msgid ""
 "If checked: the system will send reminds the days on which holidays fall"
-msgstr "Jos valittuna: järjestelmä lähettää muistutukset lomapäivistä"
+msgstr "Jos valittuna: järjestelmä lähettää muistutukset juhlapäivistä"
 
 msgid ""
 "Manage the selectable options available for a registration form question"
@@ -10026,7 +10007,9 @@ msgstr ""
 #, python-format
 msgid ""
 "We confirm that you have successfully pre-registered for <b>%(event)s</b>"
-msgstr "Olet onnistuneesti ennakkoilmoittautunut tapahtumaan <b>%(event)s</b>"
+msgstr ""
+"Vahvistamme, että olet onnistuneesti ennakkoilmoittautunut tapahtumaan "
+"<b>%(event)s</b>"
 
 msgid ""
 "We have pre-filled the application form based on the data you provided us"
@@ -10102,8 +10085,8 @@ msgstr "Jäsenet näkyvät tässä, kun heidät on hyväksytty yhdistyksen jäse
 msgid ""
 "No registered participants have completed any workshops for this event yet"
 msgstr ""
-"Tähän tapahtumaan ei ole vielä ilmoittautunut yhtään osallistujaa, joka "
-"olisi suorittanut työpajoja"
+"Yhtään ilmoittautunut osallistuja ei ole vielä suorittanut työpajoja tälle "
+"tapahtumalle"
 
 msgid ""
 "On this page you can filter characters and directly view their information"
@@ -10261,7 +10244,9 @@ msgstr "Tutustu kunkin tapahtuman henkilökuntaan ja heidän osaamiseensa"
 
 msgid ""
 "Content of mail notifying participants of their character in approved status"
-msgstr "Osallistujien hyväksymisestä ilmoittavan sähköpostiviestin sisältö"
+msgstr ""
+"Osallistujien ilmoittavan sähköpostiviestin sisältö, jossa kerrotaan heidän "
+"hyväksytystä hahmostaan"
 
 msgid ""
 "Content of mail notifying participants of their character in proposed status"
@@ -10357,7 +10342,7 @@ msgstr ""
 
 msgid ""
 "Please upload the payment receipt on that page once the transfer is complete"
-msgstr "Lataa maksukuitti kyseiselle sivulle, kun siirto on suoritettu"
+msgstr "Lähetä maksukuitti kyseiselle sivulle, kun siirto on suoritettu"
 
 msgid ""
 "Preview the factions and plots linked to this character as a compact summary"
@@ -10568,6 +10553,12 @@ msgstr ""
 "Voit tarkistaa ja muokata luetteloa organisaatioista, jotka voivat käyttää "
 "tietojasi osoitteessa"
 
+#, python-format
+msgid ""
+"You can consult the <a href=\"%(conditions_url)s\">registration "
+"conditions</a>."
+msgstr "Voit tutustua <a href=\"%(conditions_url)s\">ilmoittautumisehtoihin</a>."
+
 msgid ""
 "Define reusable ability templates that can be assigned to individual "
 "abilities"
@@ -10703,8 +10694,8 @@ msgid ""
 "Either no items have assigned quantities, or all assignments have zero "
 "quantity"
 msgstr ""
-"Mitään kohteita ei muuteta. Joko yhdellekään nimikkeelle ei ole määritetty "
-"määriä tai kaikille nimikkeille on määritetty nollamäärä"
+"Joko yhdellekään nimikkeelle ei ole määritetty määriä tai kaikille "
+"nimikkeille on määritetty nollamäärä"
 
 msgid ""
 "If set, this payment method is only available for organizations of this "
@@ -10854,7 +10845,7 @@ msgid ""
 "refunds"
 msgstr ""
 "Tästä tapahtumasta saatujen varojen kokonaismäärä, josta on vähennetty "
-"palkkiopalkkiot ja palautukset"
+"palkkiot ja palautukset"
 
 msgid ""
 "Where you find a button like this, you can press it to perform filtering "
@@ -11191,7 +11182,8 @@ msgid ""
 "It only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out "
 "the form"
 msgstr ""
-"Se vie vain 5 minuuttia - täytä lomake <a href='%(url)s'>klikkaa tästä</a>"
+"Se vie vain 5 minuuttia - <a href='%(url)s'>klikkaa tästä</a> täyttääksesi "
+"lomakkeen"
 
 msgid ""
 "Lets participants submit character preferences, then finds the optimal "
@@ -11424,7 +11416,9 @@ msgstr ""
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading"
-msgstr "Huomio: toimenpide on lopullinen, tarkista tehtävät ennen lataamista"
+msgstr ""
+"Huomio: toimenpide on lopullinen, tarkista huolella tehtävät ennen "
+"lataamista"
 
 msgid ""
 "Do you want to make your upcoming events visible to external sites through a"
@@ -11452,7 +11446,7 @@ msgid ""
 "Lets participants cast votes for the election of the organisation's "
 "Executive Committee"
 msgstr ""
-"antaa osallistujien äänestää järjestön toimeenpanevan komitean valintaa "
+"Antaa osallistujien äänestää järjestön toimeenpanevan komitean valintaa "
 "varten"
 
 msgid ""
@@ -11480,7 +11474,7 @@ msgid ""
 "registration"
 msgstr ""
 "Käsittele osallistujan, joka on peruuttanut ilmoittautumisensa, maksutunnus-"
-" tai luottokorttipalautus"
+" tai opintokredittipalautus"
 
 msgid ""
 "Use the button above to add a ticket type that participants can choose when "
@@ -11521,7 +11515,7 @@ msgid ""
 "Indicate the prerequisite abilities, which must be possessed before one can "
 "acquire this"
 msgstr ""
-"Ilmoita edellytykset, jotka on täytettävä, ennen kuin voi hankkia tämän "
+"Ilmoita edellytystaidot, jotka on täytettävä, ennen kuin voi hankkia tämän "
 "taidon"
 
 msgid ""
@@ -11548,9 +11542,8 @@ msgid ""
 "Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
 "attend this event"
 msgstr ""
-"Huomaa myös, että tapahtumiin osallistuminen edellyttää vuosittaisen Tenga "
-"también en cuenta que se requiere el pago de la cuota anual %(year)d de "
-"jäsenmaksun (%(amount)s%(currency)s) maksamista "
+"Maksa %(year)d vuoden jäsenmaksu %(amount)s%(currency)s, jota vaaditaan "
+"tähän tapahtumaan osallistumiseksi"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -11630,8 +11623,8 @@ msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "
 "current credits)"
 msgstr ""
-"Ilmoittaa halutun korvauksen määrän (ei voi olla suurempi kuin nykyiset "
-"opintopisteesi)"
+"Ilmoittaa halutun korvauksen määrän (ei voi olla suurempi kuin nykyinen "
+"saldosi)"
 
 msgid ""
 "Items marked in red will be deleted because their final quantity will be "
@@ -11768,7 +11761,7 @@ msgid ""
 "Optional - Maximum number of times it can be selected across all characters "
 "(0 = unlimited)"
 msgstr ""
-"Valinnainen - Enimmäismäärä, jonka se voidaan valita kaikissa merkeissä (0 ="
+"Valinnainen - Enimmäismäärä, jonka se voidaan valita kaikissa hahmoissa (0 ="
 " rajoittamaton)"
 
 msgid ""
@@ -11847,8 +11840,8 @@ msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
 "transversal or secret"
 msgstr ""
-"Mahdollistaa 'ryhmittymien' järjestämisen hahmojen ryhmiin, joko näkyviin, "
-"poikittaisiin tai salaisiin ryhmiin"
+"Mahdollistaa hahmojen järjestämisen 'ryhmittymiin', joko näkyviin, "
+"poikittaisiin tai salaisiin"
 
 msgid ""
 "If checked, allows a registration form question to be visible based on the "
@@ -11868,8 +11861,8 @@ msgid ""
 "If checked, does not show participants in the gallery who have not been "
 "assigned a character"
 msgstr ""
-"Josvalittuna, galleriassa ei näytetä osallistujia, joille ei ole määritetty "
-"hahmoa"
+"Jos valittuna, galleriassa ei näytetä osallistujia, joille ei ole määritetty"
+" hahmoa"
 
 msgid ""
 "In order to subscribe to the Organization's events you must apply to be "
@@ -12815,15 +12808,15 @@ msgid ""
 "If you select one (or more) character abilities, this modifier applies only "
 "to characters with all of them"
 msgstr ""
-"Jos valitset yhden (tai useamman) hahm kyvyn, tämä kerroin koskee vain niitä"
-" hahmoja, joilla on kaikki nämä kyvyt"
+"Jos valitset yhden (tai useamman) hahmon kyvyn, tämä kerroin koskee vain "
+"niitä hahmoja, joilla on kaikki nämä kyvyt"
 
 msgid ""
 "Indicates useful information to passengers, such as color of your car, time "
 "estimated time of your arrival"
 msgstr ""
-"Ilmoittaa matkustajille hyödyllisiä tietoja, kuten auton värin, arvioidun "
-"saapumisajan ja saapumisajan"
+"Ilmoittaa matkustajille hyödyllisiä tietoja, kuten auton värin ja arvioidun "
+"saapumisajan"
 
 msgid ""
 "It will only be used for internal bureaucratic purposes, and will NEVER be "
@@ -12836,7 +12829,7 @@ msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
-"pitää päivittäin kirjaa organisaation ja tapahtumien taloudellisesta "
+"Pitää päivittäin kirjaa organisaation ja tapahtumien taloudellisesta "
 "tilanteesta ja esittää ajan mittaan kehityssuuntauksia kuvaavia kaavioita"
 
 msgid ""
@@ -13207,7 +13200,7 @@ msgid ""
 "Lets staff upload receipts for event expenses, tracking both the event "
 "expenses, and the amount to refund the staff"
 msgstr ""
-"Henkilöstö voi ladata kuitteja tapahtumakuluista, jolloin seurataan sekä "
+"Henkilöstö voi lähettää kuitteja tapahtumakuluista, jolloin seurataan sekä "
 "tapahtumakuluja että henkilöstölle palautettavaa summaa"
 
 msgid ""
@@ -13384,7 +13377,7 @@ msgid ""
 "%(currency)s) is required to participate in events."
 msgstr ""
 "Huomaa myös, että tapahtumiin osallistuminen edellyttää vuosittaisen "
-"jäsenmaksun (%(amount)d%(currency)s) maksamista."
+"jäsenmaksun (%(amount)d %(currency)s) maksamista."
 
 msgid ""
 "Run the lottery draw to randomly select participants from lottery-tier "
@@ -13565,9 +13558,9 @@ msgstr ""
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have"
-" the right to participate to the organization events"
+" the right to take part in the organization's events"
 msgstr ""
-"Tämän vuoden jäsenmaksunne on maksettu. Sinulla on oikeus osallistua "
+"Tämän vuoden jäsenmaksusi on vastaanotettu. Sinulla on oikeus osallistua "
 "järjestön tapahtumiin"
 
 msgid ""
@@ -13632,8 +13625,8 @@ msgid ""
 "If checked, participants may add abilities themselves, by selecting from "
 "those that are visible, and whose pre-requisites they meet."
 msgstr ""
-"Jos valittuna, osallistujat voivat itse lisätä taitojavalitsemalla näkyvissä"
-" olevista taidoista ne, joiden ennakkoedellytykset he täyttävät."
+"Jos valittuna, osallistujat voivat itse lisätä taitoja valitsemalla "
+"näkyvissä olevista taidoista ne, joiden ennakkoedellytykset he täyttävät."
 
 msgid ""
 "Select from the drop-down list the characters to be added to the faction. "
@@ -13668,7 +13661,7 @@ msgid ""
 "Please indicate below the exact method of payment you made. Remember to "
 "submit the form, otherwise your payment will not be processed"
 msgstr ""
-"Ilmoittakaa alla tarkka maksutapa, jolla maksoitte. Muista lähettää lomake, "
+"Ilmoita alla tarkka maksutapa, jolla maksoitte. Muista lähettää lomake, "
 "muuten maksuasi ei käsitellä"
 
 msgid ""
@@ -13697,8 +13690,9 @@ msgid ""
 "Notes: Try to group as many passengers per request as possible; if you "
 "notice any delays, write us directly, do not enter new requests"
 msgstr ""
-"Huomautuksia: Jos huomaat viivästyksiä, kirjoita meille suoraan, älä "
-"kirjoita uusia pyyntöjä"
+"Huomautuksia: Yritä ryhmitellä mahdollisimman monta matkustajaa per pyyntö; "
+"jos huomaat viivästyksiä, kirjoita meille suoraan, älä kirjoita uusia "
+"pyyntöjä"
 
 msgid ""
 "This is the associative positive operating margin, taking into account the "
@@ -13721,7 +13715,7 @@ msgid ""
 "assigned the trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>."
 msgstr ""
 "Tapahtumassa <b>%(event)s</b>, johon olet ilmoittautunut, sinulle on annettu"
-" ominaisuus: <b>%(trait)s</b> tehtävä: <b>%(quest)s</b>."
+" ominaisuus: <b>%(trait)s</b> tehtävästä: <b>%(quest)s</b>."
 
 msgid ""
 "Optional - If you select one (or more) factions, the question will only be "
@@ -13744,7 +13738,7 @@ msgid ""
 " for participating in the democratic life of the Organization"
 msgstr ""
 "Vahvistamme, että äänesi on rekisteröity oikein järjestelmään! Kiitos, että "
-"osallistutte järjestön demokraattiseen elämään"
+"osallistuit järjestön demokraattiseen elämään"
 
 msgid ""
 "When the text is displayed to the participant, the number is automatically "
@@ -13805,6 +13799,13 @@ msgid ""
 msgstr ""
 "Valitut kentät näytetään seuraavasti: julkiset kentät näkyvät kaikille "
 "osallistujille, yksityiset kentät näkyvät vain määritetyille osallistujille"
+
+msgid ""
+"The payment of your membership fee for this year has NOT been received: it "
+"is required to take part in events and the organization's meetings"
+msgstr ""
+"Tämän vuoden jäsenmaksuasi EI ole vielä saapunut: se on pakollinen, jotta "
+"voit osallistua tapahtumiin ja järjestön kokouksiin"
 
 msgid ""
 "Click on the roles you'd like to collaborate on, then enter your degree of "
@@ -14003,14 +14004,6 @@ msgstr ""
 " kun merkitään CLOSED, ilmoitetaan kommentteihin showd."
 
 msgid ""
-"The payment of your membership fee for this year has NOT been received: it "
-"is necessary in order to participate to the events, and the organization "
-"meetings"
-msgstr ""
-"Jäsenmaksua tälle vuodelle EI ole maksettu: se on välttämätöntä, jotta voit "
-"osallistua tapahtumiin ja järjestön kokouksiin"
-
-msgid ""
 "Indicates a way for other participants to contact you. It can be an email, a"
 " social profile, whatever you want. It will be made public to others "
 "participants"
@@ -14027,6 +14020,14 @@ msgstr ""
 "Ilmoittaa, miten sinut voidaan tunnistaa, jos sinut löydetään jostain "
 "tietystä kohdasta, jos sinulla on paljon matkatavaroita: kaikki tiedot, "
 "jotka voivat auttaa meitä auttamaan sinua"
+
+msgid ""
+"The payment of your membership fee for this year has NOT been received: it "
+"is required to take part in events and to vote at the association's assembly"
+" meetings"
+msgstr ""
+"Tämän vuoden jäsenmaksuasi EI ole vielä saapunut: se on välttämätön, jotta "
+"voit osallistua tapahtumiin ja äänestää yhdistyksen yleiskokouksissa"
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "
@@ -14076,7 +14077,7 @@ msgid ""
 "member of the Association. The procedure will automatically take you through"
 " the required steps"
 msgstr ""
-"ilmoittautumisen vahvistamiseksi sinun on pyydettävä rekisteröitymistä "
+"Ilmoittautumisen vahvistamiseksi sinun on pyydettävä rekisteröitymistä "
 "yhdistyksen jäseneksi. Menettely vie sinut automaattisesti vaadittujen "
 "vaiheiden läpi"
 
@@ -14322,6 +14323,8 @@ msgstr ""
 "käsitellään ehdottoman luottamuksellisina: vain rajoitettu osa järjestäjistä"
 " pääsee vastauksiin käsiksi, eikä niitä välitetä missään muodossa. Nämä "
 "tiedot voivat koskea: fyysisiä terveysongelmia, epilepsiaa, "
-"Mielenterveysongelmia tai triggeröiviä aiheita ('emme voi luvata, ettet "
-"törmää niihin tapahtumassa, mutta yritämme välttää niitä). Jätä tyhjäksi, "
-"jos sinulla ei ole raportoitavaa!"
+"mielenterveysongelmia (esimerkiksi neuroosi, kaksisuuntainen mielialahäiriö,"
+" ahdistuneisuushäiriöt, erilaiset fobiat), triggeröiviä aiheita ('lineet ja "
+"verhot' – emme voi luvata, ettei törmää niihin tapahtumassa, mutta "
+"varmistamme, ettei ne ole osa päätehtäviäsi). Jätä tyhjäksi, jos sinulla ei "
+"ole raportoitavaa!"
