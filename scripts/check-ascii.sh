@@ -14,7 +14,7 @@ fi
 
 # Files and patterns to exclude
 EXCLUDE_PATTERNS=(
-    "larpmanager/forms/utils.py"
+    "CLAUDE.md"
     "*.pyc"
     "*.mo"
     "*.po"

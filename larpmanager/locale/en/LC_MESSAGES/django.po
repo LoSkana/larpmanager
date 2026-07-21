@@ -2630,7 +2630,7 @@ msgstr ""
 msgid "Items"
 msgstr ""
 
-msgid "Track the assignment of warehouse items to event areas for each run"
+msgid "Manage outgoing inventory movements excluded from event preparation"
 msgstr ""
 
 msgid "Warehouse movements"
@@ -2651,6 +2651,22 @@ msgid "Warehouse assignments"
 msgstr ""
 
 msgid "An assignment for this item and area already exists"
+msgstr ""
+
+msgid ""
+"Assign this warehouse item to one or more areas of the event, setting a "
+"quantity for each"
+msgstr ""
+
+msgid "Item area assignments"
+msgstr ""
+
+msgid "Item"
+msgstr ""
+
+#, python-format
+msgid ""
+"Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
 msgstr ""
 
 msgid "available"
@@ -3579,7 +3595,7 @@ msgstr ""
 msgid "Open"
 msgstr ""
 
-msgid "Close"
+msgid "Closed"
 msgstr ""
 
 msgid "Delivered"
@@ -3969,9 +3985,6 @@ msgid "Cancelled"
 msgstr ""
 
 msgid "Concluded"
-msgstr ""
-
-msgid "Closed"
 msgstr ""
 
 msgid "External site"
@@ -4552,7 +4565,7 @@ msgstr ""
 msgid "Review"
 msgstr ""
 
-msgid "Kicked out"
+msgid "Removed"
 msgstr ""
 
 msgid "The member associated with this membership"
@@ -5374,6 +5387,9 @@ msgid "Show hint"
 msgstr ""
 
 msgid "Don't open automatically again"
+msgstr ""
+
+msgid "Close"
 msgstr ""
 
 msgid "Input an element name to insert their reference code"
@@ -7290,13 +7306,10 @@ msgstr ""
 msgid "Use the button above to add a new item to the inventory"
 msgstr ""
 
-msgid "Item"
-msgstr ""
-
 msgid "Notes"
 msgstr ""
 
-msgid "No items have been assigned to this run yet"
+msgid "No external item movements have been created yet"
 msgstr ""
 
 msgid "Use the button above to assign warehouse items"
@@ -8537,7 +8550,7 @@ msgid ""
 "as many times as you like before final loading"
 msgstr ""
 
-msgid "Legend"
+msgid "Guide"
 msgstr ""
 
 msgid "Choice available, click to lock"
@@ -9514,6 +9527,15 @@ msgid ""
 msgstr ""
 
 msgid "Back to manifest"
+msgstr ""
+
+msgid "Assign warehouse items to one or more areas of the event, item by item"
+msgstr ""
+
+msgid "No warehouse items have been assigned to an area of this event yet"
+msgstr ""
+
+msgid "Use the button above to assign one"
 msgstr ""
 
 msgid "Cargo manifest"

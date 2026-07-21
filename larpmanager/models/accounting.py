@@ -705,7 +705,7 @@ class CollectionStatus(models.TextChoices):
     """Represents CollectionStatus model."""
 
     OPEN = "o", _("Open")
-    DONE = "d", _("Close")
+    DONE = "d", _("Closed")
     PAYED = "p", _("Delivered")
 
 

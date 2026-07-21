@@ -354,6 +354,9 @@ msgstr "Graf"
 msgid "Gross"
 msgstr "Brutto"
 
+msgid "Guide"
+msgstr "Veiledning"
+
 msgid "Guild"
 msgstr "Gilde"
 
@@ -603,9 +606,6 @@ msgstr "Ble med"
 
 msgid "Labels"
 msgstr "Etiketter"
-
-msgid "Legend"
-msgstr "Tegnforklaring"
 
 msgid "Loaded"
 msgstr "Lastet"
@@ -951,6 +951,9 @@ msgstr "Redusert"
 
 msgid "Refunds"
 msgstr "Refusjon"
+
+msgid "Removed"
+msgstr "Fjernet"
 
 msgid "Request"
 msgstr "Forespørsel"
@@ -1741,9 +1744,6 @@ msgstr "IP-adresse"
 
 msgid "Influencer"
 msgstr "Påvirker"
-
-msgid "Kicked out"
-msgstr "Kastet ut"
 
 msgid "Last Event"
 msgstr "Siste hendelse"
@@ -4468,6 +4468,9 @@ msgstr "Hvis fraværende, angi 0"
 msgid "Invalid choice format"
 msgstr "Ugyldig valgformat"
 
+msgid "Item area assignments"
+msgstr "Tildeling av varer til områder"
+
 msgid "Join the waiting list"
 msgstr "Sett deg på venteliste"
 
@@ -6244,6 +6247,9 @@ msgstr "Type(r) tilgjengelig(e) innkvartering(er)"
 msgid "Upload data directly from CSV file"
 msgstr "Last opp data direkte fra en CSV-fil"
 
+msgid "Use the button above to assign one"
+msgstr "Bruk knappen ovenfor for å tildele en"
+
 msgid "You are about to make a payment of"
 msgstr "Du er i ferd med å foreta en betaling på"
 
@@ -7299,9 +7305,6 @@ msgstr "Angi hvilke billetter den er aktiv for"
 msgid "Manage fields that track participants' data"
 msgstr "Administrer felt som sporer deltakernes data"
 
-msgid "No items have been assigned to this run yet"
-msgstr "Det er foreløpig ikke tilordnet noen oppgaver til denne kjøringen"
-
 msgid "No participants have been issued tokens yet"
 msgstr "Det er foreløpig ikke utstedt noen tokens til deltakerne"
 
@@ -7771,6 +7774,9 @@ msgstr "Liste over mottakerens e-postadresse, kommaseparert"
 
 msgid "No additional payments are required at this time"
 msgstr "Ingen ytterligere innbetalinger er påkrevd på dette tidspunktet"
+
+msgid "No external item movements have been created yet"
+msgstr "Det er foreløpig ikke opprettet noen eksterne varebevegelser"
 
 msgid "No questions have been created yet for this form"
 msgstr "Det er foreløpig ikke opprettet noen spørsmål for dette skjemaet"
@@ -9309,6 +9315,11 @@ msgstr ""
 "Administrerer studiepoeng som deltakerne bruker for å dekke "
 "registreringsavgiften"
 
+msgid "No warehouse items have been assigned to an area of this event yet"
+msgstr ""
+"Det er foreløpig ikke tilordnet noen lagervarer til et område i dette "
+"arrangementet"
+
 msgid "Primary spots are sold out, but you can still sign up as a reserve"
 msgstr ""
 "De vanlige plassene er utsolgt, men du kan fortsatt melde deg på som "
@@ -9371,6 +9382,11 @@ msgstr ""
 "Administrer karakterenes inventar og se innholdet i det for dette "
 "arrangementet"
 
+msgid "Manage outgoing inventory movements excluded from event preparation"
+msgstr ""
+"Administrer utgående lagerbevegelser som er unntatt fra forberedelsene til "
+"hendelsen"
+
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr ""
 "Minimumsbeløp av nettoresultatet som skal tilbakeholdes til foreningsskatt"
@@ -9402,11 +9418,6 @@ msgstr "De vil ikke bli kommunisert, delt eller behandlet på noen annen måte"
 msgid "This access link has already been used and cannot be accessed again"
 msgstr ""
 "Denne tilgangskoblingen har allerede blitt brukt og kan ikke brukes igjen"
-
-msgid "Track the assignment of warehouse items to event areas for each run"
-msgstr ""
-"Spor tildelingen av lagerartikler til arrangementområder for hvert "
-"gjennomløp"
 
 msgid "Use the button above to add a CSS layout template for your handouts"
 msgstr ""
@@ -9589,6 +9600,11 @@ msgid "Add a pool type to categorize items available in character inventories"
 msgstr ""
 "Legg til en bassengtype for å kategorisere gjenstander som finnes i "
 "karakterenes inventar"
+
+msgid "Assign warehouse items to one or more areas of the event, item by item"
+msgstr ""
+"Tilordne lagerartikler til ett eller flere områder på arrangementet, én "
+"artikkel om gangen"
 
 msgid "Cannot process refund: Neither tokens nor credits features are enabled"
 msgstr ""
@@ -10233,6 +10249,13 @@ msgid ""
 msgstr ""
 "Velg figurer, fraksjoner og bakgrunnsmateriale som du vil laste ned som en "
 "samlet ZIP-fil med PDF-filer"
+
+#, python-format
+msgid ""
+"Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
+msgstr ""
+"Den totale tildelte mengden (%(total)s) overstiger tilgjengelig "
+"lagerbeholdning (%(available)s)"
 
 msgid ""
 "Track your personal expense reimbursement requests submitted for this event"
@@ -11611,6 +11634,13 @@ msgid ""
 msgstr ""
 "Tillater administrasjon av Tokens, som deltakerne kan bruke i stedet for "
 "penger til registreringsavgifter"
+
+msgid ""
+"Assign this warehouse item to one or more areas of the event, setting a "
+"quantity for each"
+msgstr ""
+"Tilordne denne lagervaren til ett eller flere områder av arrangementet, og "
+"angi et antall for hvert område"
 
 msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"

@@ -1132,9 +1132,16 @@ class WarehouseItemS2(S2Widget):
         """Set the association ID for this widget."""
         self.association_id = association_id
 
+    def set_exclude_ids(self, exclude_ids: Any) -> None:
+        """Set item IDs to exclude from the queryset."""
+        self.exclude_ids = exclude_ids
+
     def get_queryset(self) -> QuerySet[WarehouseItem]:
-        """Return warehouse items filtered by association."""
-        return WarehouseItem.objects.filter(association_id=self.association_id)
+        """Return warehouse items filtered by association, optionally excluding some IDs."""
+        queryset = WarehouseItem.objects.filter(association_id=self.association_id)
+        if getattr(self, "exclude_ids", None):
+            queryset = queryset.exclude(id__in=self.exclude_ids)
+        return queryset
 
 
 class WarehouseItemS2WidgetMulti(WarehouseItemS2, S2WidgetMulti):

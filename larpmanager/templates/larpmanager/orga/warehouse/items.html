@@ -1,0 +1,47 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Warehouse items" %} - {{ run.search }}
+{% endblock title %}
+{% block info %}
+    {% trans "Assign warehouse items to one or more areas of the event, item by item" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/table/header.html" %}
+    <table id="inv_items" class="go_datatable dot_links">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>{% trans "Item" %}</th>
+                <th>{% trans "Container" %}</th>
+                <th>{% trans "Assigned to" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.uuid }}">
+                    <td></td>
+                    <td>
+                        <a href="{% url 'orga_warehouse_items_edit' run.get_slug el.uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>{{ el.container }}</td>
+                    <td>
+                        {% for area_uuid, area_name, quantity in el.areas_cached %}
+                            {% include "elements/comma.html" %}
+                            {{ area_name }} ({{ quantity }})
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No warehouse items have been assigned to an area of this event yet" %}. {% trans "Use the button above to assign one" %}.
+        </p>
+    {% endif %}
+    {% include "elements/table/footer.html" %}
+{% endblock content %}

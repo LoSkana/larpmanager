@@ -354,6 +354,9 @@ msgstr "Graf"
 msgid "Gross"
 msgstr "Brutto"
 
+msgid "Guide"
+msgstr "Guide"
+
 msgid "Guild"
 msgstr "Gille"
 
@@ -603,9 +606,6 @@ msgstr "Ansluten"
 
 msgid "Labels"
 msgstr "Etiketter"
-
-msgid "Legend"
-msgstr "Legend"
 
 msgid "Loaded"
 msgstr "Laddad"
@@ -951,6 +951,9 @@ msgstr "Reducerad"
 
 msgid "Refunds"
 msgstr "Återbetalningar"
+
+msgid "Removed"
+msgstr "Borttagen"
 
 msgid "Request"
 msgstr "Begäran"
@@ -1741,9 +1744,6 @@ msgstr "IP-adress"
 
 msgid "Influencer"
 msgstr "Influencer"
-
-msgid "Kicked out"
-msgstr "Jagad"
 
 msgid "Last Event"
 msgstr "Senaste händelse"
@@ -4468,6 +4468,9 @@ msgstr "Om frånvarande, ange 0"
 msgid "Invalid choice format"
 msgstr "Ogiltigt valformat"
 
+msgid "Item area assignments"
+msgstr "Tilldelningar av artikelområden"
+
 msgid "Join the waiting list"
 msgstr "Skriv upp dig på väntelistan"
 
@@ -6245,6 +6248,9 @@ msgstr "Typ(er) av tillgängligt boende"
 msgid "Upload data directly from CSV file"
 msgstr "Ladda upp data direkt från en CSV-fil"
 
+msgid "Use the button above to assign one"
+msgstr "Använd knappen ovan för att tilldela en"
+
 msgid "You are about to make a payment of"
 msgstr "Du är på väg att göra en betalning på"
 
@@ -7298,9 +7304,6 @@ msgstr "Ange de biljetter för vilka den är aktiv"
 msgid "Manage fields that track participants' data"
 msgstr "Hantera fält som spårar deltagarnas data"
 
-msgid "No items have been assigned to this run yet"
-msgstr "Inga poster har ännu tilldelats detta körningspass"
-
 msgid "No participants have been issued tokens yet"
 msgstr "Inga deltagare har fått några tokens ännu"
 
@@ -7770,6 +7773,9 @@ msgstr "Lista över mottagarens e-postadresser, kommaseparerade"
 
 msgid "No additional payments are required at this time"
 msgstr "Inga ytterligare betalningar krävs för närvarande"
+
+msgid "No external item movements have been created yet"
+msgstr "Det har ännu inte skapats några externa varuförflyttningar"
 
 msgid "No questions have been created yet for this form"
 msgstr "Det har ännu inte skapats några frågor för detta formulär"
@@ -9269,6 +9275,10 @@ msgstr ""
 "Hanterar krediter som används av deltagarna för att täcka "
 "registreringsavgiften"
 
+msgid "No warehouse items have been assigned to an area of this event yet"
+msgstr ""
+"Inga lagerartiklar har ännu tilldelats något område för detta evenemang"
+
 msgid "Primary spots are sold out, but you can still sign up as a reserve"
 msgstr ""
 "De ordinarie platserna är slutsålda, men du kan fortfarande anmäla dig som "
@@ -9334,6 +9344,11 @@ msgstr ""
 "Hantera karaktärernas inventarier och visa deras innehåll för detta "
 "evenemang"
 
+msgid "Manage outgoing inventory movements excluded from event preparation"
+msgstr ""
+"Hantera utgående lagerrörelser som inte ingår i förberedelserna inför "
+"evenemanget"
+
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr "Minsta belopp av nettovinsten som ska behållas för föreningsskatten"
 
@@ -9365,11 +9380,6 @@ msgstr ""
 
 msgid "This access link has already been used and cannot be accessed again"
 msgstr "Denna åtkomstlänk har redan använts och kan inte användas igen"
-
-msgid "Track the assignment of warehouse items to event areas for each run"
-msgstr ""
-"Spåra tilldelningen av lagerartiklar till evenemangsområden för varje "
-"körning"
 
 msgid "Use the button above to add a CSS layout template for your handouts"
 msgstr ""
@@ -9553,6 +9563,11 @@ msgid "Add a pool type to categorize items available in character inventories"
 msgstr ""
 "Lägg till en pooltyp för att kategorisera föremål som finns i karaktärernas "
 "inventarier"
+
+msgid "Assign warehouse items to one or more areas of the event, item by item"
+msgstr ""
+"Tilldela lagerartiklar till ett eller flera områden inom evenemanget, "
+"artikel för artikel"
 
 msgid "Cannot process refund: Neither tokens nor credits features are enabled"
 msgstr ""
@@ -10211,6 +10226,13 @@ msgid ""
 msgstr ""
 "Välj karaktärer, fraktioner och informationsblad som du vill ladda ner som "
 "en samlad ZIP-fil med PDF-filer"
+
+#, python-format
+msgid ""
+"Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
+msgstr ""
+"Den totala tilldelade kvantiteten (%(total)s) överstiger det tillgängliga "
+"lagret (%(available)s)"
 
 msgid ""
 "Track your personal expense reimbursement requests submitted for this event"
@@ -11601,6 +11623,13 @@ msgid ""
 msgstr ""
 "Tillåter hantering av Tokens, som deltagare kan använda istället för pengar "
 "för registreringsavgifter"
+
+msgid ""
+"Assign this warehouse item to one or more areas of the event, setting a "
+"quantity for each"
+msgstr ""
+"Tilldela denna lagerartikel till ett eller flera områden inom evenemanget "
+"och ange en kvantitet för varje område"
 
 msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"

@@ -28,6 +28,7 @@ from typing import Any
 import pytest
 from playwright.sync_api import expect
 
+from larpmanager.models.miscellanea import WarehouseItem
 from larpmanager.tests.utils import go_to, load_image, login_orga, expect_normalized, submit_confirm, \
     sidebar, get_modal_iframe, save_modal, _wait_select2_results, _wait_lm_ready
 
@@ -63,6 +64,7 @@ def test_warehouse(pw_page: Any) -> None:
     area_assigmenents(page)
     checks(page)
     edit_loaded_deployed(page)
+    item_areas(page)
 
 
 def prepare(page: Any) -> None:
@@ -330,3 +332,57 @@ def edit_loaded_deployed(page: Any) -> None:
     # toggle Deployed off
     deployed_cell.click()
     expect(deployed_icon).not_to_be_visible()
+
+
+def item_areas(page: Any) -> None:
+    # Give Item 2 a finite stock so quantity-exceeds-stock validation can be
+    # exercised; Item 2 has no area assignment yet (untouched by the previous
+    # area/manifest steps, unlike Item 1 and Item 3sa).
+    WarehouseItem.objects.filter(name="Item 2").update(quantity=5)
+
+    sidebar(page, "Items")
+
+    # Item 2 not assigned to any area of this event yet, so it must not appear
+    expect(page.locator("#one").get_by_text("Item 2", exact=True)).to_have_count(0)
+
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#select2-id_item-container").click()
+    edit_iframe.get_by_role("searchbox").first.fill("Item")
+    _wait_select2_results(edit_iframe)
+
+    # Item 1 / Item 3sa are already assigned in this event: the picker must
+    # only offer items that are not yet assigned here
+    expect(edit_iframe.locator(".select2-results__option", has_text="Item 1")).to_have_count(0)
+    expect(edit_iframe.locator(".select2-results__option", has_text="Item 3sa")).to_have_count(0)
+    edit_iframe.get_by_role("option", name="Item 2").click()
+
+    def area_input(frame: Any, area_name: str) -> Any:
+        return frame.locator("tr", has_text=area_name).locator("input")
+
+    # 3 + 4 = 7 exceeds the item's stock of 5: submitting must be rejected
+    area_input(edit_iframe, "Kitchen").fill("3")
+    area_input(edit_iframe, "sALOON").fill("4")
+    submit_btn = edit_iframe.get_by_role("button", name="Confirm")
+    submit_btn.click(force=True)
+    expect(edit_iframe.get_by_text("exceeds available stock").first).to_be_visible()
+
+    # 2 + 3 = 5, exactly the available stock: this must succeed
+    area_input(edit_iframe, "Kitchen").fill("2")
+    area_input(edit_iframe, "sALOON").fill("3")
+    save_modal(page, edit_iframe)
+
+    expect_normalized(page, page.locator("#one"), "Item 2 Boc B Kitchen (2) sALOON (3)")
+
+    # edit again: quantities must be preloaded from the existing assignments
+    page.get_by_role("row", name="Item 2").get_by_role("link").first.click()
+    edit_iframe = get_modal_iframe(page)
+    assert area_input(edit_iframe, "Kitchen").input_value() == "2"
+    assert area_input(edit_iframe, "sALOON").input_value() == "3"
+
+    # zeroing out every area removes the item's assignments for this event
+    area_input(edit_iframe, "Kitchen").fill("0")
+    area_input(edit_iframe, "sALOON").fill("0")
+    save_modal(page, edit_iframe)
+
+    expect(page.locator("#one").get_by_text("Item 2", exact=True)).to_have_count(0)

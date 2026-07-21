@@ -1837,6 +1837,21 @@ urlpatterns = [
         name="orga_warehouse_area_assignments",
     ),
     path(
+        "<slug:event_slug>/manage/warehouse/items/",
+        views_oms.orga_warehouse_items,
+        name="orga_warehouse_items",
+    ),
+    path(
+        "<slug:event_slug>/manage/warehouse/items/new/",
+        views_oms.orga_warehouse_items_new,
+        name="orga_warehouse_items_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/warehouse/items/<slug:item_uuid>/edit/",
+        views_oms.orga_warehouse_items_edit,
+        name="orga_warehouse_items_edit",
+    ),
+    path(
         "<slug:event_slug>/manage/warehouse/checks/",
         views_oms.orga_warehouse_checks,
         name="orga_warehouse_checks",

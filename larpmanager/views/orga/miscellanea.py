@@ -31,7 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from larpmanager.cache.config import save_single_config
-from larpmanager.cache.warehouse import get_association_warehouse_cache
+from larpmanager.cache.warehouse import get_association_warehouse_cache, get_event_warehouse_assignments_cache
 from larpmanager.forms.miscellanea import (
     UploadAlbumsForm,
 )
@@ -389,6 +389,40 @@ def orga_warehouse_area_edit(request: HttpRequest, event_slug: str, area_uuid: s
 def orga_warehouse_area_delete(request: HttpRequest, event_slug: str, area_uuid: str) -> HttpResponse:
     """Delete area for event."""
     return orga_delete(request, event_slug, OrgaAction.WAREHOUSE_AREA, area_uuid)
+
+
+@login_required
+def orga_warehouse_items(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """List warehouse items assigned to at least one area of this event.
+
+    Each row shows, via the cached per-event assignment summary, which areas
+    the item is sent to and in what quantity (e.g. "Kitchen (3)").
+    """
+    context = check_event_context(request, event_slug, "orga_warehouse_items")
+
+    assignments_cache = get_event_warehouse_assignments_cache(context["event"])
+
+    context["list"] = []
+    for item in WarehouseItem.objects.filter(
+        association_id=context["association_id"],
+        id__in=assignments_cache.keys(),
+    ).select_related("container"):
+        item.areas_cached = assignments_cache[item.id]["list"]
+        context["list"].append(item)
+
+    return render(request, "larpmanager/orga/warehouse/items.html", context)
+
+
+@login_required
+def orga_warehouse_items_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Assign a not-yet-assigned warehouse item to areas of this event."""
+    return orga_new(request, event_slug, OrgaAction.WAREHOUSE_ITEM_AREAS)
+
+
+@login_required
+def orga_warehouse_items_edit(request: HttpRequest, event_slug: str, item_uuid: str) -> HttpResponse:
+    """Edit a warehouse item's area assignments for this event."""
+    return orga_edit(request, event_slug, OrgaAction.WAREHOUSE_ITEM_AREAS, item_uuid)
 
 
 @login_required

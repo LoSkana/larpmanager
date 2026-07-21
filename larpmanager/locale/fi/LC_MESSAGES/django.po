@@ -354,6 +354,9 @@ msgstr "Kaavio"
 msgid "Gross"
 msgstr "Brutto"
 
+msgid "Guide"
+msgstr "Opas"
+
 msgid "Guild"
 msgstr "Kilta"
 
@@ -603,9 +606,6 @@ msgstr "Liittynyt"
 
 msgid "Labels"
 msgstr "Tunnisteet"
-
-msgid "Legend"
-msgstr "Selite"
 
 msgid "Loaded"
 msgstr "Ladattu"
@@ -951,6 +951,9 @@ msgstr "Vähennetty"
 
 msgid "Refunds"
 msgstr "Palautukset"
+
+msgid "Removed"
+msgstr "Poistettu"
 
 msgid "Request"
 msgstr "Pyyntö"
@@ -1741,9 +1744,6 @@ msgstr "IP-osoite"
 
 msgid "Influencer"
 msgstr "Vaikuttaja"
-
-msgid "Kicked out"
-msgstr "Potkittiin ulos"
 
 msgid "Last Event"
 msgstr "Viimeisin tapahtuma"
@@ -4468,6 +4468,9 @@ msgstr "Jos ei ole, merkitään 0"
 msgid "Invalid choice format"
 msgstr "Virheellinen valintaformaatti"
 
+msgid "Item area assignments"
+msgstr "Tuotteiden alueiden määrittelyt"
+
 msgid "Join the waiting list"
 msgstr "Liity jonotuslistalle"
 
@@ -6245,6 +6248,9 @@ msgstr "Saatavilla oleva(t) majoitustyyppi(t)"
 msgid "Upload data directly from CSV file"
 msgstr "Lataa tiedot suoraan CSV-tiedostosta"
 
+msgid "Use the button above to assign one"
+msgstr "Määritä yksi valitsemalla yllä oleva painike"
+
 msgid "You are about to make a payment of"
 msgstr "Olet suorittamassa maksun, jonka suuruus on"
 
@@ -7296,9 +7302,6 @@ msgstr "Ilmoita liput, joiden osalta se on aktiivinen"
 msgid "Manage fields that track participants' data"
 msgstr "Hallitse kenttiä, joilla seurataan osallistujien tietoja"
 
-msgid "No items have been assigned to this run yet"
-msgstr "Tähän ajokertaan ei ole vielä määritetty yhtään kohdetta"
-
 msgid "No participants have been issued tokens yet"
 msgstr "Osallistujille ei ole vielä jaettu poletteja"
 
@@ -7768,6 +7771,9 @@ msgstr "Luettelo vastaanottajan sähköpostiosoitteista, pilkulla erotettuna"
 
 msgid "No additional payments are required at this time"
 msgstr "Tällä hetkellä ei vaadita lisämaksuja"
+
+msgid "No external item movements have been created yet"
+msgstr "Ulkoisia tavaraliikkeitä ei ole vielä luotu"
 
 msgid "No questions have been created yet for this form"
 msgstr "Tälle lomakkeelle ei ole vielä luotu kysymyksiä"
@@ -9283,6 +9289,9 @@ msgstr ""
 "Hallinnoi osallistujien käyttämiä hyvityksiä ilmoittautumismaksun "
 "kattamiseksi"
 
+msgid "No warehouse items have been assigned to an area of this event yet"
+msgstr "Tämän tapahtuman alueelle ei ole vielä määritetty varastotuotteita"
+
 msgid "Primary spots are sold out, but you can still sign up as a reserve"
 msgstr ""
 "Ensisijaiset paikat ovat loppuunmyytyjä, mutta voit silti ilmoittautua "
@@ -9340,6 +9349,10 @@ msgstr ""
 "Hallitse hahmojen varusteita ja tarkastele niiden sisältöä tässä "
 "tapahtumassa"
 
+msgid "Manage outgoing inventory movements excluded from event preparation"
+msgstr ""
+"Hallitse tapahtuman valmistelusta pois jätettyjä lähteviä varastoliikkeitä"
+
 msgid "Minimum amount of net profit to be retained for the association tax"
 msgstr "Yhdistysveroa varten pidätettävän nettovoiton vähimmäismäärä"
 
@@ -9366,11 +9379,6 @@ msgstr "Niitä ei välitetä, jaeta tai käsitellä millään muulla tavalla"
 
 msgid "This access link has already been used and cannot be accessed again"
 msgstr "Tämä linkki on jo käytetty, eikä sitä voi käyttää uudelleen"
-
-msgid "Track the assignment of warehouse items to event areas for each run"
-msgstr ""
-"Seuraa varastotuotteiden kohdentamista tapahtuma-alueille jokaisen "
-"kierroksen osalta"
 
 msgid "Use the button above to add a CSS layout template for your handouts"
 msgstr ""
@@ -9561,6 +9569,11 @@ msgid "Add a pool type to categorize items available in character inventories"
 msgstr ""
 "Lisää uima-allastyyppi hahmojen inventaarioissa olevien esineiden "
 "luokittelemiseksi"
+
+msgid "Assign warehouse items to one or more areas of the event, item by item"
+msgstr ""
+"Määritä varastotuotteet tapahtuman yhdelle tai useammalle alueelle tuote "
+"kerrallaan"
 
 msgid "Cannot process refund: Neither tokens nor credits features are enabled"
 msgstr ""
@@ -10214,6 +10227,13 @@ msgid ""
 msgstr ""
 "Valitse hahmot, ryhmittymät ja taustatiedot, jotka haluat ladata yhtenä PDF-"
 "tiedostojen ZIP-pakettina"
+
+#, python-format
+msgid ""
+"Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
+msgstr ""
+"Määritetty kokonaismäärä (%(total)s) ylittää käytettävissä olevan "
+"varastosaldon (%(available)s)"
 
 msgid ""
 "Track your personal expense reimbursement requests submitted for this event"
@@ -11578,6 +11598,13 @@ msgid ""
 msgstr ""
 "Mahdollistaa tokenien hallinnan, joita osallistujat voivat käyttää rahan "
 "sijasta ilmoittautumismaksuihin"
+
+msgid ""
+"Assign this warehouse item to one or more areas of the event, setting a "
+"quantity for each"
+msgstr ""
+"Määritä tämä varastotuote yhdelle tai useammalle tapahtuman alueelle ja "
+"aseta kullekin määrä"
 
 msgid ""
 "If checked: Adds a unique code to each payment, which helps in being able to"
