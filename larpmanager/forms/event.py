@@ -402,19 +402,19 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("custom_mail_server", _("Customised mail server"))
             field_help_text = ""
 
-            field_label = _("Use TLD")
+            field_label = "TLD"
             self.add_configs("mail_server_use_tls", ConfigType.BOOL, field_label, field_help_text)
 
-            field_label = _("Host Address")
+            field_label = "Host Address"
             self.add_configs("mail_server_host", ConfigType.CHAR, field_label, field_help_text)
 
-            field_label = _("Port")
+            field_label = "Port"
             self.add_configs("mail_server_port", ConfigType.INT, field_label, field_help_text)
 
-            field_label = _("Username of account")
+            field_label = "Username"
             self.add_configs("mail_server_host_user", ConfigType.CHAR, field_label, field_help_text)
 
-            field_label = _("Password of account")
+            field_label = "Password"
             self.add_configs("mail_server_host_password", ConfigType.CHAR, field_label, field_help_text)
 
     def set_config_ensemble(self) -> None:

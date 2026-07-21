@@ -1107,9 +1107,6 @@ msgid ""
 "character is assigned"
 msgstr ""
 
-msgid "Use TLD"
-msgstr ""
-
 msgid "Ensemble"
 msgstr ""
 
@@ -9647,21 +9644,6 @@ msgid "No characters have been assigned to this faction yet"
 msgstr ""
 
 msgid "Attending"
-msgstr ""
-
-msgid "tot"
-msgstr ""
-
-msgid "free"
-msgstr ""
-
-msgid "XP tot"
-msgstr ""
-
-msgid "XP used"
-msgstr ""
-
-msgid "XP avail"
 msgstr ""
 
 msgid "Important"

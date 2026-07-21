@@ -56,9 +56,6 @@ msgstr "leeftijd"
 msgid "and"
 msgstr "en"
 
-msgid "tot"
-msgstr "tot"
-
 msgid "Area"
 msgstr "Gebied"
 
@@ -262,9 +259,6 @@ msgstr "dagen"
 
 msgid "form"
 msgstr "formulier"
-
-msgid "free"
-msgstr "gratis"
 
 msgid "gift"
 msgstr "cadeau"
@@ -742,9 +736,6 @@ msgstr "Controleer"
 msgid "Voting"
 msgstr "Stemmen"
 
-msgid "XP tot"
-msgstr "XP Tot"
-
 msgid "issued"
 msgstr "uitgegeven"
 
@@ -1019,9 +1010,6 @@ msgstr "Tooltip"
 msgid "Updated"
 msgstr "Bijgewerkt"
 
-msgid "Use TLD"
-msgstr "TLD gebruiken"
-
 msgid "Used At"
 msgstr "Gebruikt Bij"
 
@@ -1057,9 +1045,6 @@ msgstr "Werken"
 
 msgid "Writing"
 msgstr "Schrijven"
-
-msgid "XP used"
-msgstr "Gebruikte XP"
 
 msgid "maximum"
 msgstr "maximaal"
@@ -1375,9 +1360,6 @@ msgstr "Waarschuwingen"
 
 msgid "Workshop"
 msgstr "Workshop"
-
-msgid "XP avail"
-msgstr "XP Beschikbaar"
 
 msgid "download"
 msgstr "downloaden"

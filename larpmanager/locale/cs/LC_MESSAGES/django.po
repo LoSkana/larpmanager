@@ -56,9 +56,6 @@ msgstr "věk"
 msgid "and"
 msgstr "a"
 
-msgid "tot"
-msgstr "tot"
-
 msgid "Area"
 msgstr "Oblast"
 
@@ -262,9 +259,6 @@ msgstr "dny"
 
 msgid "form"
 msgstr "formulář"
-
-msgid "free"
-msgstr "zdarma"
 
 msgid "gift"
 msgstr "dárek"
@@ -742,9 +736,6 @@ msgstr "Ověřit"
 msgid "Voting"
 msgstr "Hlasování"
 
-msgid "XP tot"
-msgstr "XP Tot"
-
 msgid "issued"
 msgstr "vydáno"
 
@@ -1019,9 +1010,6 @@ msgstr "Tip"
 msgid "Updated"
 msgstr "Aktualizováno"
 
-msgid "Use TLD"
-msgstr "Použití TLD"
-
 msgid "Used At"
 msgstr "Použité na"
 
@@ -1057,9 +1045,6 @@ msgstr "Zpracování"
 
 msgid "Writing"
 msgstr "Psaní"
-
-msgid "XP used"
-msgstr "Použité XP"
 
 msgid "maximum"
 msgstr "maximální"
@@ -1375,9 +1360,6 @@ msgstr "Varování"
 
 msgid "Workshop"
 msgstr "Workshop"
-
-msgid "XP avail"
-msgstr "XP k dispozici"
 
 msgid "download"
 msgstr "Stáhnout"

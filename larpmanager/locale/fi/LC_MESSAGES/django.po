@@ -56,9 +56,6 @@ msgstr "ikä"
 msgid "and"
 msgstr "ja"
 
-msgid "tot"
-msgstr "tot"
-
 msgid "Area"
 msgstr "Alue"
 
@@ -262,9 +259,6 @@ msgstr "päivää"
 
 msgid "form"
 msgstr "lomake"
-
-msgid "free"
-msgstr "ilmainen"
 
 msgid "gift"
 msgstr "lahja"
@@ -742,9 +736,6 @@ msgstr "Tarkista"
 msgid "Voting"
 msgstr "Äänestys"
 
-msgid "XP tot"
-msgstr "XP tot"
-
 msgid "issued"
 msgstr "myönnetty"
 
@@ -1019,9 +1010,6 @@ msgstr "Työkaluvihje"
 msgid "Updated"
 msgstr "Päivitetty"
 
-msgid "Use TLD"
-msgstr "Käytä TLD:tä"
-
 msgid "Used At"
 msgstr "Käytetty osoitteessa:"
 
@@ -1057,9 +1045,6 @@ msgstr "Työskentely"
 
 msgid "Writing"
 msgstr "Kirjoittaminen"
-
-msgid "XP used"
-msgstr "Käytetty XP"
 
 msgid "maximum"
 msgstr "enimmäismäärä"
@@ -1375,9 +1360,6 @@ msgstr "Varoitukset"
 
 msgid "Workshop"
 msgstr "Työpaja"
-
-msgid "XP avail"
-msgstr "XP käytettävissä"
 
 msgid "download"
 msgstr "lataa"

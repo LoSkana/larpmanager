@@ -50,17 +50,11 @@
         <th class="status">{% trans "Status" %}</th>
     {% endif %}
     {% if features.experience %}
-        {% if exp_systems %}
-            {% for sys in exp_systems %}
-                <th class="px">{{ sys.name }} {% trans "tot" %}</th>
-                <th class="px">{{ sys.name }} {% trans "used" %}</th>
-                <th class="px">{{ sys.name }} {% trans "free" %}</th>
-            {% endfor %}
-        {% else %}
-            <th class="px">{% trans "XP tot" %}</th>
-            <th class="px">{% trans "XP used" %}</th>
-            <th class="px">{% trans "XP avail" %}</th>
-        {% endif %}
+        {% for sys in exp_systems %}
+            <th class="px">{{ sys.name }} {% trans "total" %}</th>
+            <th class="px">{{ sys.name }} {% trans "used" %}</th>
+            <th class="px">{{ sys.name }} {% trans "available" %}</th>
+        {% endfor %}
     {% endif %}
     {% include "elements/writing/questions_header.html" %}
     {% if features.plot %}

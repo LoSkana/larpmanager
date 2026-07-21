@@ -56,9 +56,6 @@ msgstr "Alter"
 msgid "and"
 msgstr "und"
 
-msgid "tot"
-msgstr "tot"
-
 msgid "Area"
 msgstr "Bereich"
 
@@ -262,9 +259,6 @@ msgstr "Tage"
 
 msgid "form"
 msgstr "formular"
-
-msgid "free"
-msgstr "kostenlos"
 
 msgid "gift"
 msgstr "geschenk"
@@ -742,9 +736,6 @@ msgstr "Überprüfen"
 msgid "Voting"
 msgstr "Abstimmen"
 
-msgid "XP tot"
-msgstr "XP Ges"
-
 msgid "issued"
 msgstr "ausgestellt"
 
@@ -1019,9 +1010,6 @@ msgstr "QuickInfo"
 msgid "Updated"
 msgstr "Aktualisiert"
 
-msgid "Use TLD"
-msgstr "TLD verwenden"
-
 msgid "Used At"
 msgstr "Benutzt am"
 
@@ -1057,9 +1045,6 @@ msgstr "Arbeiten"
 
 msgid "Writing"
 msgstr "Schreiben"
-
-msgid "XP used"
-msgstr "XP verwendet"
 
 msgid "maximum"
 msgstr "maximal"
@@ -1375,9 +1360,6 @@ msgstr "Warnungen"
 
 msgid "Workshop"
 msgstr "Workshop"
-
-msgid "XP avail"
-msgstr "Px Vorhanden"
 
 msgid "download"
 msgstr "herunterladen"

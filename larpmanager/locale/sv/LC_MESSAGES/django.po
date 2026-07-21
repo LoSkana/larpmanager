@@ -56,9 +56,6 @@ msgstr "ålder"
 msgid "and"
 msgstr "och"
 
-msgid "tot"
-msgstr "tot"
-
 msgid "Area"
 msgstr "Område"
 
@@ -262,9 +259,6 @@ msgstr "dagar"
 
 msgid "form"
 msgstr "formulär"
-
-msgid "free"
-msgstr "fri"
 
 msgid "gift"
 msgstr "gåva"
@@ -742,9 +736,6 @@ msgstr "Verifiera"
 msgid "Voting"
 msgstr "Omröstning"
 
-msgid "XP tot"
-msgstr "XP Tot"
-
 msgid "issued"
 msgstr "utfärdade"
 
@@ -1019,9 +1010,6 @@ msgstr "Verktygstips"
 msgid "Updated"
 msgstr "Uppdaterad"
 
-msgid "Use TLD"
-msgstr "Använd TLD"
-
 msgid "Used At"
 msgstr "Används på"
 
@@ -1057,9 +1045,6 @@ msgstr "Arbetar"
 
 msgid "Writing"
 msgstr "Skrivande"
-
-msgid "XP used"
-msgstr "XP använda"
 
 msgid "maximum"
 msgstr "högsta"
@@ -1375,9 +1360,6 @@ msgstr "Varningar"
 
 msgid "Workshop"
 msgstr "Seminarium"
-
-msgid "XP avail"
-msgstr "XP Tillgänglig"
 
 msgid "download"
 msgstr "ladda ned"
