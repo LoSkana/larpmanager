@@ -523,7 +523,7 @@ class ExeConfigForm(ConfigForm):
             self.set_section("custom_mail_server", _("Customised mail server"))
             empty_help_text = ""
 
-            use_tls_label = _("Use TLD")
+            use_tls_label = "TLD"
             self.add_configs("mail_server_use_tls", ConfigType.BOOL, use_tls_label, empty_help_text)
 
             host_address_label = _("Host Address")

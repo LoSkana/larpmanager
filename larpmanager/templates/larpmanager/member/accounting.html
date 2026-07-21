@@ -12,7 +12,8 @@
         <hr class="no_v20" />
         {% if association_terms_conditions %}
             <p>
-                {% trans "You can consult" %} <a href="{% url 'register_conditions' %}">{% trans "here the conditions of registration" %}.</a>
+                {% url 'register_conditions' as conditions_url %}
+                {% blocktrans %}You can consult the <a href="{{ conditions_url }}">registration conditions</a>.{% endblocktrans %}
             </p>
             <hr />
         {% endif %}
@@ -126,13 +127,13 @@
                     {% elif 'vote' in association.features and association.voting_open %}
                         <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
                         <p>
-                            {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                            {% trans "The payment of your membership fee for this year has NOT been received: it is required to take part in events and to vote at the association's assembly meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
                         </p>
                         <hr />
                     {% elif grazing %}
                         <h2>{% trans "Payment membership fee" %}: {{ year }}</h2>
                         <p>
-                            {% trans "The payment of your membership fee for this year has NOT been received: it is necessary in order to participate to the events, and the organization meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
+                            {% trans "The payment of your membership fee for this year has NOT been received: it is required to take part in events and to vote at the association's assembly meetings" %}. <a href="{% url 'accounting_membership' %}">{% trans "Pay the annual fee" %} {{ year }}</a>
                         </p>
                         <hr />
                     {% endif %}

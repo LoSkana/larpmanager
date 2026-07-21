@@ -20,7 +20,6 @@
                 {% if features.info %}
                     <th>{% trans "Info" %}</th>
                 {% endif %}
-                <th>{% trans "Days before event" %}</th>
                 <th>{% trans "Cancellation date" %}</th>
                 {% if features.credits or features.tokens %}
                     <th>{% trans "Refunded" %}</th>
@@ -54,8 +53,7 @@
                     </td>
                     <td>{{ el.member.email }}</td>
                     {% if features.info %}<td>{{ el.info }}</td>{% endif %}
-                    <td>{{ el.days }}</td>
-                    <td>{{ el.cancellation_date }}</td>
+                    <td>{{ el.cancellation_date|date:"Y-m-d" }}</td>
                     {% if features.credits or features.tokens %}
                         <td>
                             {% if el.refunded %}

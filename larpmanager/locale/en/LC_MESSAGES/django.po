@@ -479,9 +479,6 @@ msgstr ""
 msgid "Customised mail server"
 msgstr ""
 
-msgid "Use TLD"
-msgstr ""
-
 msgid "Host Address"
 msgstr ""
 
@@ -1108,6 +1105,9 @@ msgstr ""
 msgid ""
 "If checked: Does not send communication to the participant when the "
 "character is assigned"
+msgstr ""
+
+msgid "Use TLD"
 msgstr ""
 
 msgid "Ensemble"
@@ -7732,7 +7732,10 @@ msgstr ""
 msgid "View all your historical financial movements"
 msgstr ""
 
-msgid "here the conditions of registration"
+#, python-format
+msgid ""
+"You can consult the <a href=\"%(conditions_url)s\">registration conditions</"
+"a>."
 msgstr ""
 
 msgid "Payments in approval"
@@ -7808,7 +7811,7 @@ msgstr ""
 
 msgid ""
 "The payment of your membership fee for this year has NOT been received: it "
-"is necessary in order to participate to the events, and the organization "
+"is required to take part in events and to vote at the association's assembly "
 "meetings"
 msgstr ""
 
@@ -8237,7 +8240,12 @@ msgstr ""
 
 msgid ""
 "The payment of your membership fee for this year has been received. You have "
-"the right to participate to the organization events"
+"the right to take part in the organization's events"
+msgstr ""
+
+msgid ""
+"The payment of your membership fee for this year has NOT been received: it "
+"is required to take part in events and the organization's meetings"
 msgstr ""
 
 msgid "Did you check the required data properly"
@@ -8440,9 +8448,6 @@ msgid "Cancellations"
 msgstr ""
 
 msgid "Review all cancelled registrations and track their refund status"
-msgstr ""
-
-msgid "Days before event"
 msgstr ""
 
 msgid "Cancellation date"
@@ -9566,7 +9571,7 @@ msgstr ""
 msgid "No items have been assigned to this area yet"
 msgstr ""
 
-msgid "Modules WS"
+msgid "Workshop Modules"
 msgstr ""
 
 msgid ""
@@ -9580,7 +9585,7 @@ msgstr ""
 msgid "Use the button above to add a new module"
 msgstr ""
 
-msgid "Answers WS"
+msgid "Workshop option answer"
 msgstr ""
 
 msgid ""
@@ -11344,9 +11349,6 @@ msgstr ""
 msgid "(Optional) Prerequisite ability names, comma-separated"
 msgstr ""
 
-msgid "(Optional) Required character option names, comma-separated"
-msgstr ""
-
 msgid "The question name"
 msgstr ""
 
@@ -12249,13 +12251,7 @@ msgstr ""
 msgid "Copy done"
 msgstr ""
 
-msgid "Restore session expired, please upload the file again."
-msgstr ""
-
-msgid "Restore completed!"
-msgstr ""
-
-msgid "Restore error"
+msgid "Session expired, please upload the file again"
 msgstr ""
 
 msgid "Error reading backup file"

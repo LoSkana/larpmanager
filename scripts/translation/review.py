@@ -56,7 +56,7 @@ two cases explicitly. When msgstr_it is empty, judge solely against
 msgid.
 
 Specific LARP terms: Award (refers to awarding XP), Badges (in the context of achievements),
-Casting (assigning characters / roles to players / participants)
+Casting (assigning characters / roles to players / participants), Pools (character/resource pools), Plot (quest/mission/storyline), Handout (setting/world-building knowledge)
 
 Categories (status field):
 - "ok": translation is accurate and natural

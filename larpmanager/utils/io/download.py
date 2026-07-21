@@ -985,7 +985,7 @@ def _get_column_names(context: dict) -> None:
                 "abilities": _("(Optional) Ability names, comma-separated"),
                 "cost": _("(Optional) Cost (0 = auto assigned)"),
                 "prerequisites": _("(Optional) Prerequisite ability names, comma-separated"),
-                "requirements": _("(Optional) Required character option names, comma-separated"),
+                "requirements": _("(Optional) Character options as requirements, comma-separated"),
                 "order": _("(Optional) Display order"),
             },
         ]
