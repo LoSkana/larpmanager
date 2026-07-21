@@ -94,7 +94,7 @@
         {% for key, dc in reg_all %}
             {% if dc.list %}
                 <h2>{{ dc.type }} ({{ dc.count }})</h2>
-                <table id="regs_{{ run.uuid }}_{{ dc.type }}"
+                <table id="regs_{{ run.uuid }}_{{ key }}"
                        class="que_load go_datatable registration_list">
                     <thead>
                         <tr>

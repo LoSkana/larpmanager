@@ -87,8 +87,8 @@ def discount(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations")
     click_and_wait_accounting(page)
     # Check for registration data with discount applied
-    expect_normalized(page, page.locator("#regs_u1_Participant"), "100")
-    expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
+    expect_normalized(page, page.locator("#regs_u1_1"), "100")
+    expect_normalized(page, page.locator("#regs_u1_1"), "52")
     go_to(page, live_server, "/test/")
     expect_normalized(page, page.locator("#one"), "Total payments: 100€")
 
@@ -140,9 +140,9 @@ def pay(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/manage/registrations")
     # Check for registration accounting data in the table
     click_and_wait_accounting(page)
-    expect_normalized(page, page.locator("#regs_u1_Participant"), "52")
-    expect_normalized(page, page.locator("#regs_u1_Participant"), "48")
-    expect_normalized(page, page.locator("#regs_u1_Participant"), "100")
+    expect_normalized(page, page.locator("#regs_u1_1"), "52")
+    expect_normalized(page, page.locator("#regs_u1_1"), "48")
+    expect_normalized(page, page.locator("#regs_u1_1"), "100")
 
     # pay
     go_to(page, live_server, "/accounting/registration/u1/")
