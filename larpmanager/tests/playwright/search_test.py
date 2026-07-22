@@ -58,25 +58,25 @@ def filter_multi(page: Any) -> None:
     page.get_by_role("link", name="wunder").click()
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder None another Player: Absent color: blue tag: wunder | qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder None another  color: blue tag: wunder | qerfi wheel  color: blue tag: wunder Factions: fassione",
     )
     page.get_by_role("link", name="qerfi").click()
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder | qerfi None another Player: Absent color: blue tag: wunder | qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) tag: wunder | qerfi None another  color: blue tag: wunder | qerfi wheel  color: blue tag: wunder Factions: fassione",
     )
     page.get_by_role("link", name="wunder").click()
     page.get_by_role("link", name="zapyr").click()
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) tag: qerfi | zapyr tag: wunder Test Character Player: Absent color: red tag: zapyr Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) tag: qerfi | zapyr tag: wunder Test Character  color: red tag: zapyr Factions: fassione",
     )
     page.get_by_role("link", name="qerfi").click()
     page.get_by_role("link", name="zapyr").click()
     page.get_by_role("link", name="zapyr").click()
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) All tag: wunder | qerfi Test Character Player: Absent color: red tag: zapyr Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) All tag: wunder | qerfi Test Character  color: red tag: zapyr Factions: fassione",
     )
     page.get_by_role("link", name="qerfi").click()
     page.get_by_role("link", name="wunder").click()
@@ -84,7 +84,7 @@ def filter_multi(page: Any) -> None:
     page.get_by_role("link", name="qerfi").click()
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) All tag: qerfi Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser wheel Player: Absent color: blue tag: wunder Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) All tag: qerfi Test Character  color: red tag: zapyr Factions: fassione Test Teaser wheel  color: blue tag: wunder Factions: fassione",
     )
 
 
@@ -94,12 +94,12 @@ def filter_single(page: Any) -> None:
     page.get_by_role("link", name="red").click()
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) color: red None Test Character Player: Absent color: red tag: zapyr Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) color: red None Test Character  color: red tag: zapyr Factions: fassione",
     )
     page.get_by_role("link", name="red").click()
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) All color: red another Player: Absent color: blue tag: wunder | qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) All color: red another  color: blue tag: wunder | qerfi wheel  color: blue tag: wunder Factions: fassione",
     )
     page.get_by_role("link", name="red").click()
     page.get_by_role("link", name="color").click()
@@ -109,20 +109,20 @@ def filter_faction(page: Any) -> None:
     # filter factions
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) All None Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser another Player: Absent color: blue tag: wunder | qerfi wheel Player: Absent color: blue tag: wunder Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) All None Test Character  color: red tag: zapyr Factions: fassione Test Teaser another  color: blue tag: wunder | qerfi wheel  color: blue tag: wunder Factions: fassione",
     )
     page.get_by_role("link", name="Factions").nth(1).click()
     page.locator("#factions").get_by_role("link", name="fassione").click()
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) Factions: fassione None Test Character Player: Absent color: red tag: zapyr Factions: fassione Test Teaser wheel Player: Absent color: blue tag: wunder Factions: fassione",
+        "You are including (at least one of these filters) You are excluding (none of these filters) Factions: fassione None Test Character  color: red tag: zapyr Factions: fassione Test Teaser wheel  color: blue tag: wunder Factions: fassione",
     )
     page.locator("#factions").get_by_role("link", name="fassione").click()
     _wait_lm_ready(page)
     expect_normalized(page,
         page.locator("#search-results"),
-        "You are including (at least one of these filters) You are excluding (none of these filters) All Factions: fassione another Player: Absent color: blue tag: wunder | qerfi",
+        "You are including (at least one of these filters) You are excluding (none of these filters) All Factions: fassione another  color: blue tag: wunder | qerfi",
     )
     page.get_by_role("link", name="fassione").click()
     page.get_by_role("link", name="Factions").nth(1).click()

@@ -5,7 +5,7 @@
   "result_path": "scripts/translation/review_result.json",
   "model": "claude-code",
   "chunk_size": 120,
-  "target_tokens": 12000,
-  "max_chunk_size": 600,
+  "target_tokens": 6000,
+  "max_chunk_size": 250,
   "reference_lang": "it"
 }
