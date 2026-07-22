@@ -1766,6 +1766,9 @@ msgstr "Nästa kvot"
 msgid "No changes"
 msgstr "Inga förändringar"
 
+msgid "No faction"
+msgstr "Ingen fraktion"
+
 msgid "No results"
 msgstr "Inga resultat"
 

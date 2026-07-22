@@ -1766,6 +1766,9 @@ msgstr "Seuraava kiintiö"
 msgid "No changes"
 msgstr "Ei muutoksia"
 
+msgid "No faction"
+msgstr "Ei ryhmittymää"
+
 msgid "No results"
 msgstr "Ei tuloksia"
 
