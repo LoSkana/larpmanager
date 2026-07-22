@@ -308,6 +308,9 @@ class ExeCompetenceForm(BaseModelForm):
         }
 
 
+NO_FACTION_KEY = "no_faction"
+
+
 class OrganizerCastingOptionsForm(BaseForm):
     """Form for OrganizerCastingOptions."""
 
@@ -367,12 +370,14 @@ class OrganizerCastingOptionsForm(BaseForm):
                 .values_list("uuid", "name")
             )
 
-            # Create faction selection field with primary factions
+            # Create faction selection field with primary factions, plus a pseudo-choice
+            # for characters that have no primary faction assigned
+            faction_choices = [*factions, (NO_FACTION_KEY, _("No faction"))]
             self.fields["factions"] = forms.MultipleChoiceField(
-                choices=factions,
+                choices=faction_choices,
                 widget=forms.CheckboxSelectMultiple(attrs={"class": "my-checkbox-class"}),
             )
-            self.fields["factions"].initial = [str(el[0]) for el in factions]
+            self.fields["factions"].initial = [str(el[0]) for el in faction_choices]
 
     def get_data(self) -> dict[str, list]:
         """Get form data, either cleaned or initial values.

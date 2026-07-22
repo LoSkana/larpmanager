@@ -1766,6 +1766,9 @@ msgstr "Volgende quota"
 msgid "No changes"
 msgstr "Geen wijzigingen"
 
+msgid "No faction"
+msgstr "Geen factie"
+
 msgid "No results"
 msgstr "Geen resultaten"
 

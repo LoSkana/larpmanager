@@ -34,7 +34,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.cache.config import get_event_config
-from larpmanager.forms.miscellanea import OrganizerCastingOptionsForm
+from larpmanager.forms.miscellanea import NO_FACTION_KEY, OrganizerCastingOptionsForm
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.member import Member, Membership
 from larpmanager.models.registration import (
@@ -216,12 +216,22 @@ def get_casting_choices_characters(
     if "faction" in context["features"]:
         # Get primary factions for the event
         primary_factions_query = context["event"].get_elements(Faction).filter(typ=FactionType.PRIM)
+        factioned_character_uuids = set()
         for faction_element in primary_factions_query.order_by("number"):
+            faction_char_uuids = [str(char.uuid) for char in faction_element.characters.all()]
+            factioned_character_uuids.update(faction_char_uuids)
             # Skip factions not in the allowed filtering_options
             if str(faction_element.uuid) not in filtering_options["factions"]:
                 continue
             # Add all characters from this faction to allowed list
-            allowed_character_uuids.extend([str(char.uuid) for char in faction_element.characters.all()])
+            allowed_character_uuids.extend(faction_char_uuids)
+
+        # Include characters with no primary faction if the "no faction" pseudo-choice is selected
+        if NO_FACTION_KEY in filtering_options["factions"]:
+            all_character_uuids = {
+                str(char.uuid) for char in context["event"].get_elements(Character).exclude(hide=True)
+            }
+            allowed_character_uuids.extend(all_character_uuids - factioned_character_uuids)
 
     # Get characters that are already registered for this run
     registered_character_ids = set(

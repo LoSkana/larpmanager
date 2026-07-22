@@ -1766,6 +1766,9 @@ msgstr "Nächste Quote"
 msgid "No changes"
 msgstr "Keine Änderungen"
 
+msgid "No faction"
+msgstr "Keine Fraktion"
+
 msgid "No results"
 msgstr "Keine Ergebnisse"
 

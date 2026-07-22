@@ -1766,6 +1766,9 @@ msgstr "Próxima cuota"
 msgid "No changes"
 msgstr "Sin cambios"
 
+msgid "No faction"
+msgstr "Sin facción"
+
 msgid "No results"
 msgstr "No hay resultados"
 

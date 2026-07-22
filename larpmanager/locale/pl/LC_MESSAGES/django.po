@@ -1766,6 +1766,9 @@ msgstr "Następna kwota"
 msgid "No changes"
 msgstr "Bez zmian"
 
+msgid "No faction"
+msgstr "Żadna frakcja"
+
 msgid "No results"
 msgstr "Brak wyników"
 
