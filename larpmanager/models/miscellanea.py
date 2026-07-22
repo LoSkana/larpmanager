@@ -689,12 +689,6 @@ class Problem(UuidMixin, BaseModel):
         choices=ProblemSeverity.choices,
         default=ProblemSeverity.GREEN,
         verbose_name=_("Severity"),
-        help_text=_(
-            "Indicate severity: RED (risks ruining the event for more than half of the "
-            "participants), ORANGE (risks ruining the event for more than ten participants),  YELLOW "
-            "(risks ruining the event for a few participants), GREEN (more than  problems, finesses "
-            "to be fixed)",
-        ),
     )
 
     status = models.CharField(
@@ -702,34 +696,26 @@ class Problem(UuidMixin, BaseModel):
         choices=ProblemStatus.choices,
         default=ProblemStatus.OPEN,
         verbose_name=_("Status"),
-        help_text=_(
-            "When putting in WORKING, indicate in the comments the specific actions that  are "
-            "being performed; when putting in CLOSED, indicate showd in the  comments.",
-        ),
         db_index=True,
     )
 
     where = models.TextField(
         verbose_name=_("Where"),
-        help_text=_("Describe exactly at which point it occurs"),
     )
 
     when = models.TextField(
         verbose_name=_("When"),
-        help_text=_("Describe exactly what condition it is in"),
     )
 
     what = models.TextField(
         verbose_name=_("What"),
-        help_text=_("Describe exactly what risks it poses to the event"),
     )
 
     who = models.TextField(
         verbose_name=_("Who"),
-        help_text=_("Describe exactly which participants are involved"),
     )
 
-    assigned = models.CharField(max_length=100, help_text=_("Who takes it upon themselves to solve it"))
+    assigned = models.CharField(max_length=100)
 
     comments = models.TextField(blank=True)
 

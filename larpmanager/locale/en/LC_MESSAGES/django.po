@@ -4755,40 +4755,13 @@ msgstr ""
 msgid "Severity"
 msgstr ""
 
-msgid ""
-"Indicate severity: RED (risks ruining the event for more than half of the "
-"participants), ORANGE (risks ruining the event for more than ten "
-"participants),  YELLOW (risks ruining the event for a few participants), "
-"GREEN (more than  problems, finesses to be fixed)"
-msgstr ""
-
-msgid ""
-"When putting in WORKING, indicate in the comments the specific actions that  "
-"are being performed; when putting in CLOSED, indicate showd in the  comments."
-msgstr ""
-
-msgid "Describe exactly at which point it occurs"
-msgstr ""
-
 msgid "When"
-msgstr ""
-
-msgid "Describe exactly what condition it is in"
 msgstr ""
 
 msgid "What"
 msgstr ""
 
-msgid "Describe exactly what risks it poses to the event"
-msgstr ""
-
 msgid "Who"
-msgstr ""
-
-msgid "Describe exactly which participants are involved"
-msgstr ""
-
-msgid "Who takes it upon themselves to solve it"
 msgstr ""
 
 msgid "Subject"

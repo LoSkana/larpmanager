@@ -421,8 +421,8 @@ function search(key) {
                     pf = el['thumb'];  // Use thumbnail otherwise
             }
 
-            // Build player assignment text and link
-            var player = window['texts']['abs'];  // Default "absent" text
+            // Build player assignment text and link, only if assigned
+            var player = '';
             if (el['player_uuid'] && el['player_uuid'] !== null) {
                 player = '<a href="{0}">{1}</a>'.format(prof_url.replace("/0", "/"+el['player_uuid']), escapeHtml(el['player']))
                 if (el['player_prof'])
@@ -433,7 +433,8 @@ function search(key) {
             characters += '<div class="gallery single list" id="char{0}">'.format(el['uuid']);
             characters += '<div class="el"><div class="icon"><img src="{0}" /></div></div>'.format(pf);
             characters += '<div class="text"><h3><a href="{0}">{1}</a></h3>'.format(char_url.replace("/0", "/"+el['uuid']), name);
-            characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
+            if (player)
+                characters += '<div class="go-inline"><b>{1}:</b> {0}</div>'.format(player, window['texts']['pl']);
 
             // Add custom field values sorted by order
             // Convert questions object to array and sort by order field
