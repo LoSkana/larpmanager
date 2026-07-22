@@ -960,11 +960,11 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("einvoice_regimefiscale", ConfigType.CHAR, field_label, field_help_text)
 
         field_label = "Aliquota Iva"
-        field_help_text = _("If absent, indicate 0")
+        field_help_text = "Se assente, indicare 0"
         self.add_configs("einvoice_aliquotaiva", ConfigType.CHAR, field_label, field_help_text)
 
         field_label = "Natura"
-        field_help_text = _("Indicate only if rate 0")
+        field_help_text = "Indicare solo se rata 0"
         self.add_configs("einvoice_natura", ConfigType.CHAR, field_label, field_help_text)
 
         # Company address information
@@ -986,16 +986,16 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("einvoice_comune", ConfigType.CHAR, field_label, field_help_text)
 
         field_label = _("Province")
-        field_help_text = _("Code two capital letters")
+        field_help_text = "Due lettere maiuscole"
         self.add_configs("einvoice_provincia", ConfigType.CHAR, field_label, field_help_text)
 
         field_label = _("Nation")
-        field_help_text = _("Code two capital letters")
+        field_help_text = "Due lettere maiuscole"
         self.add_configs("einvoice_nazione", ConfigType.CHAR, field_label, field_help_text)
 
         # Electronic invoice routing configuration
         field_label = "Codice Destinatario"
-        field_help_text = _("Intermediary channel code")
+        field_help_text = "Codice canala intermediario"
         self.add_configs("einvoice_codicedestinatario", ConfigType.CHAR, field_label, field_help_text)
 
 

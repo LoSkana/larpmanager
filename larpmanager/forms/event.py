@@ -2105,7 +2105,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             ("", "#load_accounting", _("Accounting")),
             ("", "email", _("Email")),
             ("", "date", _("Chronology")),
-            ("additional_tickets", "additionals", _("Additional")),
+            ("additional_tickets", "additionals", _("Additionals")),
             ("gift", "gift", _("Gift")),
             ("membership", "membership", _("Member")),
             ("faction", "factions", _("Factions")),

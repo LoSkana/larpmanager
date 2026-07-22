@@ -5,7 +5,7 @@
 {% endblock title %}
 {% block content %}
     {% if event_text %}
-        <h2>{% trans "Conditions of" %} {{ event }}</h2>
+        <h2>{% blocktrans %}Conditions of {{ event }}{% endblocktrans %}</h2>
         {{ event_text | safe }}
         <br />
     {% endif %}

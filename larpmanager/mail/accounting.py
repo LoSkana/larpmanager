@@ -150,8 +150,8 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
         email_body += (
             " "
             + _(
-                "Alternatively, you can request to receive it with a formal request in the <a "
-                "href='%(url)s'>your accounting.</a>.",
+                "Alternatively, you can request a payout of your balance on <a "
+                "href='%(url)s'>your accounting page</a>.",
             )
             % {"url": get_url("accounting", expense_item)}
             + "</i>"

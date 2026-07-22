@@ -102,7 +102,7 @@
         {% elif member.membership.status == 's' %}
             <h3>{% trans "Request sent for approval" %}</h3>
             <p>
-                {% trans "Your request will be approved at the next Board meeting. You will receive confirmation of the outcome of its evaluation very soon" %}.
+                {% trans "Your request will be evaluated at the next Board meeting. You will receive confirmation of the outcome of its evaluation very soon" %}.
             </p>
             <p>
                 {% trans "Request submitted" %}: <a href="{{ member.membership.get_request_filepath }}" download>{% trans "download it here" %}</a>.

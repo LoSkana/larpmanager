@@ -830,25 +830,13 @@ msgstr ""
 msgid "Electronic invoice"
 msgstr ""
 
-msgid "If absent, indicate 0"
-msgstr ""
-
-msgid "Indicate only if rate 0"
-msgstr ""
-
 msgid "Municipality"
 msgstr ""
 
 msgid "Province"
 msgstr ""
 
-msgid "Code two capital letters"
-msgstr ""
-
 msgid "Nation"
-msgstr ""
-
-msgid "Intermediary channel code"
 msgstr ""
 
 msgid "Quick Setup"
@@ -1984,7 +1972,7 @@ msgstr ""
 msgid "Chronology"
 msgstr ""
 
-msgid "Additional"
+msgid "Additionals"
 msgstr ""
 
 msgid "Gift"
@@ -2781,8 +2769,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Alternatively, you can request to receive it with a formal request in the <a "
-"href='%(url)s'>your accounting.</a>."
+"Alternatively, you can request a payout of your balance on <a "
+"href='%(url)s'>your accounting page</a>."
 msgstr ""
 
 msgid "Issued Reimbursement"
@@ -3923,9 +3911,7 @@ msgstr ""
 msgid "Parent campaign"
 msgstr ""
 
-msgid ""
-"Link this event to another event to create a campaign series where "
-"characters are shared"
+msgid "Selecting an event joins its campaign and shares characters with it"
 msgstr ""
 
 msgid "leave empty to start a new campaign"
@@ -4167,6 +4153,9 @@ msgid "Progress"
 msgstr ""
 
 msgid "Computed"
+msgstr ""
+
+msgid "Additional"
 msgstr ""
 
 msgid "Pay what you want"
@@ -5020,9 +5009,6 @@ msgid "Date"
 msgstr ""
 
 msgid "Date from when the surcharge is applied"
-msgstr ""
-
-msgid "Additionals"
 msgstr ""
 
 msgid "Number of additional participants"
@@ -6373,7 +6359,8 @@ msgstr ""
 msgid "Registration conditions"
 msgstr ""
 
-msgid "Conditions of"
+#, python-format
+msgid "Conditions of %(event)s"
 msgstr ""
 
 msgid "Search and filter the characters of the event"
@@ -8214,7 +8201,7 @@ msgid "Request sent for approval"
 msgstr ""
 
 msgid ""
-"Your request will be approved at the next Board meeting. You will receive "
+"Your request will be evaluated at the next Board meeting. You will receive "
 "confirmation of the outcome of its evaluation very soon"
 msgstr ""
 
@@ -8896,13 +8883,7 @@ msgstr ""
 msgid "Access Link"
 msgstr ""
 
-msgid "Used At"
-msgstr ""
-
-msgid "Used By"
-msgstr ""
-
-msgid "IP Address"
+msgid "Usage date"
 msgstr ""
 
 msgid "Open Link"
@@ -9751,9 +9732,6 @@ msgid "Check double speed larps"
 msgstr ""
 
 msgid "Check missing speed larp"
-msgstr ""
-
-msgid "Tipo"
 msgstr ""
 
 msgid "Selectable"
