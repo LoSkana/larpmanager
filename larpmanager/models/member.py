@@ -321,7 +321,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         choices=NewsletterChoices.choices,
         default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
-        help_text=_("Do you wish to be always updated on our events") + "?",
+        help_text=_("Would you like to receive updates about our upcoming events") + "?",
         null=True,
     )
 

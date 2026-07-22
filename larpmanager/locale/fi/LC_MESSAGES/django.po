@@ -4583,9 +4583,6 @@ msgstr "Valuutat ja materiaalit"
 msgid "Customised mail server"
 msgstr "Mukautettu sähköpostipalvelin"
 
-msgid "Disable event approval"
-msgstr "Tapahtuman hyväksynnän poistaminen käytöstä"
-
 msgid "Display all users data"
 msgstr "Näytä kaikkien käyttäjien tiedot"
 
@@ -5407,6 +5404,9 @@ msgstr "Viive profiilin laatimisessa"
 
 msgid "Describe how we can help you"
 msgstr "Kuvaile, miten voimme auttaa sinua"
+
+msgid "Disable event-level approval"
+msgstr "Poista tapahtumakohtainen hyväksyntä käytöstä"
 
 #, python-format
 msgid "Feature %(name)s deactivated"
@@ -6885,7 +6885,7 @@ msgid "Now you can set the dynamic installments"
 msgstr "Nyt voit asettaa dynaamiset erät"
 
 msgid "One character more or less than expected"
-msgstr "Yksi hahmo enemmän tai vähemmän kuin odotettu"
+msgstr "Yksi merkki enemmän tai vähemmän kuin odotettu"
 
 msgid "Payment currently in review by the staff"
 msgstr "Maksu on parhaillaan henkilöstön tarkasteltavana"
@@ -7105,9 +7105,6 @@ msgstr "Hallinnoi osallistujien tekemiä lahjoituksia"
 
 msgid "Manage questions asked by the participants"
 msgstr "Hallitse osallistujien esittämiä kysymyksiä"
-
-msgid "No answered questions in the last 3 months"
-msgstr "Viimeisten 3 kuukauden aikana ei ole vastattuja kysymyksiä"
 
 msgid "No handout templates have been created yet"
 msgstr "Mallipohjia ei ole vielä luotu"
@@ -7499,9 +7496,6 @@ msgstr "Hahmot näkyvät vain kirjautuneille käyttäjille"
 msgid "Create your first event using the button above"
 msgstr "Luo ensimmäinen tapahtumasi yllä olevan painikkeen avulla"
 
-msgid "Do you wish to be always updated on our events"
-msgstr "Haluatko olla aina ajan tasalla tapahtumistamme"
-
 msgid "Hint: The correct answers to this question are"
 msgstr "Vihje: Oikeat vastaukset tähän kysymykseen ovat seuraavat"
 
@@ -7813,6 +7807,9 @@ msgstr "Nyt voit suorittaa verokoodin voimassaolon tarkistuksen"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nyt voit määrittää ulkoisen sähköpostipalvelimen asetukset"
+
+msgid "Payment for this event is complete and up to date"
+msgstr "Tämän tapahtuman maksu on suoritettu ja ajan tasalla"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Raaka-aineet, apuaineet, tarvikkeet ja tavarat"
@@ -8219,9 +8216,6 @@ msgstr "Kustannukset näkyvät tässä, kun tapahtumat on luotu ja toteutettu"
 msgid "Do you want to allow users to make voluntary donations"
 msgstr ""
 "Haluatko antaa käyttäjille mahdollisuuden tehdä vapaaehtoisia lahjoituksia"
-
-msgid "Everything is in order about the payment of this event"
-msgstr "Kaikki on kunnossa tämän tapahtuman maksun osalta"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Ilmoita kappale, jonka haluat omistaa hahmollesi"
@@ -8653,6 +8647,9 @@ msgstr ""
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Mihin se on sijoitettu? Milloin sen odotetaan palaavan?"
 
+msgid "Would you like to receive updates about our upcoming events"
+msgstr "Haluaisitko saada tietoa tulevista tapahtumistamme"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Voit suorittaa maksun <a href='%(url)s'>tältä sivulta</a>"
@@ -8728,6 +8725,11 @@ msgstr ""
 
 msgid "No installment plans have been configured for this event yet"
 msgstr "Tälle tapahtumalle ei ole vielä määritetty maksusuunnitelmia"
+
+msgid "No pending questions have been answered in the last 3 months"
+msgstr ""
+"Viimeisten kolmen kuukauden aikana ei ole vastattu mihinkään avoimiin "
+"kysymyksiin"
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
@@ -10965,13 +10967,6 @@ msgstr ""
 "tarkistuslista ensin"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Jos valittuna, kulujen hyväksyntä voidaan suorittaa vain "
-"organisaatiopaneelista käsin"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11090,6 +11085,13 @@ msgid ""
 "pdf file)"
 msgstr ""
 "Pankin antama tiliote todisteena tilisiirron myöntämisestä (pdf-tiedostona)"
+
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Kun tämä toiminto on käytössä, kulujen hyväksyntöjä voidaan hallita "
+"ainoastaan organisaation hallintapaneelista"
 
 #, python-format
 msgid ""
@@ -11490,14 +11492,6 @@ msgid ""
 msgstr ""
 "Hallitse tämän tapahtuman turvallista video- ja äänisisältöä, joka on "
 "suojattu kertakäyttöisillä pääsytunnuksilla"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Maksa %(year)d vuoden jäsenmaksu %(amount)s%(currency)s, jota vaaditaan "
-"tähän tapahtumaan osallistumiseksi"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -12028,6 +12022,13 @@ msgstr ""
 "toimeksiantoihin perustuen"
 
 msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
+msgstr ""
+"Saat ilmoituksen, kun uusi istunto on aikataulutettu, ja sinulle annetaan "
+"etuoikeus ilmoittautumiseen"
+
+msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -12076,6 +12077,15 @@ msgid ""
 msgstr ""
 "Valinnainen: lataa kuva itsestäsi ja hahmostasi erityisesti tätä tapahtumaa "
 "varten"
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Maksa %(year)d:n vuotuinen jäsenmaksu, jonka suuruus on "
+"%(amount)s%(currency)s. Jäsenmaksu on välttämätön tämän tapahtuman "
+"osallistumiseksi"
 
 #, python-format
 msgid ""
@@ -12301,13 +12311,6 @@ msgid ""
 msgstr ""
 "Pyydämme vain hetken aikaa, jotta voimme tarkistaa lataamasi asiakirjat, "
 "eikä siihen mene kauan"
-
-msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration"
-msgstr ""
-"Sinulle ilmoitetaan, kun uusi istunto järjestetään, ja sinulla on etusija "
-"ilmoittautumisen avautuessa"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "

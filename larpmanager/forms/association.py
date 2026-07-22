@@ -835,9 +835,9 @@ class ExeConfigForm(ConfigForm):
         # Configure expense approval workflow settings
         if "expense" in self.params["features"]:
             self.set_section("expense", _("Expenses"))
-            label_disable_event_approval = _("Disable event approval")
+            label_disable_event_approval = _("Disable event-level approval")
             help_text_disable_event_approval = _(
-                "If checked, approval of expenses can be performed only from the organization panel",
+                "When enabled, expense approvals can only be managed from the organization dashboard",
             )
             self.add_configs(
                 "expense_disable_orga",

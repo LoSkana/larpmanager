@@ -4583,9 +4583,6 @@ msgstr "Měny a materiály"
 msgid "Customised mail server"
 msgstr "Přizpůsobený poštovní server"
 
-msgid "Disable event approval"
-msgstr "Zakázat schvalování událostí"
-
 msgid "Display all users data"
 msgstr "Zobrazení údajů všech uživatelů"
 
@@ -5407,6 +5404,9 @@ msgstr "Zpoždění při sestavování profilu"
 
 msgid "Describe how we can help you"
 msgstr "Popište, jak vám můžeme pomoci"
+
+msgid "Disable event-level approval"
+msgstr "Zakázat schvalování na úrovni událostí"
 
 #, python-format
 msgid "Feature %(name)s deactivated"
@@ -7106,9 +7106,6 @@ msgstr "Správa darů provedených účastníky"
 msgid "Manage questions asked by the participants"
 msgstr "Správa otázek účastníků"
 
-msgid "No answered questions in the last 3 months"
-msgstr "Za poslední 3 měsíce nebyly zodpovězeny žádné otázky"
-
 msgid "No handout templates have been created yet"
 msgstr "Zatím nebyly vytvořeny žádné šablony letáků"
 
@@ -7499,9 +7496,6 @@ msgstr "Postavy jsou viditelné pouze pro přihlášené uživatele"
 msgid "Create your first event using the button above"
 msgstr "Vytvořte svou první událost pomocí tlačítka výše"
 
-msgid "Do you wish to be always updated on our events"
-msgstr "Chcete být informováni o našich akcích"
-
 msgid "Hint: The correct answers to this question are"
 msgstr "Nápověda: Správné odpovědi na tuto otázku jsou tyto"
 
@@ -7811,6 +7805,9 @@ msgstr "Nyní můžete provést kontrolu platnosti fiskálního kódu"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nyní můžete nastavit externí poštovní server"
+
+msgid "Payment for this event is complete and up to date"
+msgstr "Platba za tuto akci byla uhrazena a je v pořádku"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Suroviny, pomocné látky, spotřební materiál a zboží"
@@ -8211,9 +8208,6 @@ msgstr "Náklady se zde zobrazí, jakmile budou akce vytvořeny a uskutečněny"
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Chcete uživatelům umožnit dobrovolné dary"
-
-msgid "Everything is in order about the payment of this event"
-msgstr "Vše je v pořádku s platbou tohoto případu"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Uveďte píseň, kterou chcete věnovat své postavě"
@@ -8640,6 +8634,9 @@ msgstr ""
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Kde byl umístěn? Kdy se očekává jeho návrat?"
 
+msgid "Would you like to receive updates about our upcoming events"
+msgstr "Chtěli byste dostávat informace o našich nadcházejících akcích"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Platbu můžete provést <a href='%(url)s'>na této stránce</a>"
@@ -8712,6 +8709,9 @@ msgstr "Řídit hlasování o přidělování rolí v organizaci"
 
 msgid "No installment plans have been configured for this event yet"
 msgstr "Pro tuto akci zatím nebyly nastaveny žádné splátkové plány"
+
+msgid "No pending questions have been answered in the last 3 months"
+msgstr "Za poslední 3 měsíce nebyla zodpovězena žádná z otevřených otázek"
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
@@ -10835,13 +10835,6 @@ msgstr ""
 "aktivaci"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Pokud je zaškrtnuto, schvalování výdajů lze provádět pouze z panelu "
-"organizace"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -10961,6 +10954,13 @@ msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr "Doklad vystavený bankou jako důkaz o převodu (ve formátu pdf)"
+
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Je-li tato funkce zapnutá, lze schvalování výdajů spravovat pouze z řídicího"
+" panelu organizace"
 
 #, python-format
 msgid ""
@@ -11352,14 +11352,6 @@ msgid ""
 msgstr ""
 "Spravujte zabezpečený video a audio obsah chráněný jednorázovými "
 "přístupovými tokeny pro tuto událost"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Uhraďte prosím roční členský příspěvek roku %(year)d ve výši "
-"%(amount)s%(currency)s, který je vyžadován pro účast na této akci"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -11885,6 +11877,13 @@ msgstr ""
 "přiřazení této události"
 
 msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
+msgstr ""
+"Jakmile bude naplánována nová relace, budete o tom informováni a získáte "
+"přednostní přístup k registraci"
+
+msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -11932,6 +11931,14 @@ msgid ""
 msgstr ""
 "Nepovinné: nahrajte svou fotografii spojenou s vaší postavou speciálně pro "
 "tuto událost"
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Zaplaťte roční členský příspěvek ve výši %(year)d, tj. "
+"%(amount)s%(currency)s, který je nutný k účasti na této akci"
 
 #, python-format
 msgid ""
@@ -12159,13 +12166,6 @@ msgid ""
 msgstr ""
 "Žádáme vás pouze o chvilku času na kontrolu nahraných dokumentů, nebude to "
 "trvat dlouho"
-
-msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration"
-msgstr ""
-"Budete informováni o konání nového zasedání a budete mít možnost zrychlené "
-"registrace"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "

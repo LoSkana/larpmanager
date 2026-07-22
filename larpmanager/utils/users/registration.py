@@ -243,7 +243,9 @@ def _status_membership_fee(
     run_status["action"] = {
         "url": membership_url,
         "label": _("Pay membership fee"),
-        "label_long": _("Pay the %(year)d membership fee of %(amount)s%(currency)s, required to attend this event")
+        "label_long": _(
+            "Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required to attend this event"
+        )
         % {
             "year": current_year,
             "amount": fee,

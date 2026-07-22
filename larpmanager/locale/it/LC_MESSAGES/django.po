@@ -4583,9 +4583,6 @@ msgstr "Valute e materiali"
 msgid "Customised mail server"
 msgstr "Server mail personalizzato"
 
-msgid "Disable event approval"
-msgstr "Disattiva l'approvazione lato eventi"
-
 msgid "Display all users data"
 msgstr "Visualizza i dati di tutti gli utenti"
 
@@ -5407,6 +5404,9 @@ msgstr "Ritardo nella compilazione del profilo"
 
 msgid "Describe how we can help you"
 msgstr "Descrivi come possiamo aiutarti"
+
+msgid "Disable event-level approval"
+msgstr "Disattiva l'approvazione a livello di evento"
 
 #, python-format
 msgid "Feature %(name)s deactivated"
@@ -6931,7 +6931,7 @@ msgid "You must be registered to view this page"
 msgstr "Per visualizzare questa pagina è necessario essere registrati"
 
 msgid "You think you should have an achievement"
-msgstr "Pensi di aver diritto a un badge"
+msgstr "Pensi di aver diritto a un achievement"
 
 #, python-format
 msgid "Your card number is: <b>%(number)03d</b>"
@@ -7105,9 +7105,6 @@ msgstr "Gestisci le donazioni effettuate dai partecipanti"
 
 msgid "Manage questions asked by the participants"
 msgstr "Gestisci le domande dei partecipanti"
-
-msgid "No answered questions in the last 3 months"
-msgstr "Nessuna domanda a cui hai risposto negli ultimi 3 mesi"
 
 msgid "No handout templates have been created yet"
 msgstr "Non sono stati ancora creati modelli di dispense"
@@ -7502,9 +7499,6 @@ msgstr "I personaggi sono visibili solo agli utenti loggati"
 msgid "Create your first event using the button above"
 msgstr "Crea il tuo primo evento cliccando sul pulsante qui sopra"
 
-msgid "Do you wish to be always updated on our events"
-msgstr "Desideri rimanere aggiornato sui nostri eventi"
-
 msgid "Hint: The correct answers to this question are"
 msgstr "Suggerimento: Le risposte corrette a questa domanda sono"
 
@@ -7821,6 +7815,9 @@ msgstr "Ora puoi effettuare il controllo della validità del codice fiscale"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Ora puoi impostare le impostazioni del server di posta esterno"
+
+msgid "Payment for this event is complete and up to date"
+msgstr "Il pagamento per questo evento è stato effettuato ed è in regola"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Materie prime, ausiliarie, di consumo e di merci"
@@ -8239,9 +8236,6 @@ msgstr ""
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Vuoi consentire agli utenti di effettuare donazioni volontarie"
 
-msgid "Everything is in order about the payment of this event"
-msgstr "Tutto ci risulta in regola per il pagamento di questo evento"
-
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Indica una canzone che vuoi dedicare al tuo personaggio"
 
@@ -8331,7 +8325,7 @@ msgid "Give a registration to this event as a gift to a friend"
 msgstr "Regala a un amico l'iscrizione a questo evento"
 
 msgid "If checked: shows a link in the calendar to past events"
-msgstr "Se selezionata: mostra un link al calendario degli eventi passati"
+msgstr "Se selezionata: mostra un link nel calendario agli eventi passati"
 
 msgid "Manage event utilities and QR code tools for this event"
 msgstr ""
@@ -8705,6 +8699,9 @@ msgstr ""
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Dove è stato collocato? Quando si prevede che tornerà?"
 
+msgid "Would you like to receive updates about our upcoming events"
+msgstr "Ti va di ricevere aggiornamenti sui nostri prossimi eventi"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr ""
@@ -8794,6 +8791,10 @@ msgid "No installment plans have been configured for this event yet"
 msgstr ""
 "Per questo evento non sono ancora stati configurati piani di pagamento "
 "rateale"
+
+msgid "No pending questions have been answered in the last 3 months"
+msgstr ""
+"Negli ultimi 3 mesi non è stata data risposta a nessuna domanda in sospeso"
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr "Esamina e approva le note spese presentate dai collaboratori"
@@ -11187,13 +11188,6 @@ msgstr ""
 " la lista di controllo per l'attivazione"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Se selezionata, l'approvazione delle spese può essere effettuata solo dal "
-"pannello dell'organizzazione"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11318,6 +11312,13 @@ msgid ""
 msgstr ""
 "Giustificativo emesso dalla banca come riprova dell'emissione del bonifico "
 "(come file pdf)"
+
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Quando è abilitata, l'approvazione delle spese può essere gestita solo dalla"
+" dashboard dell'organizzazione"
 
 #, python-format
 msgid ""
@@ -11726,14 +11727,6 @@ msgid ""
 msgstr ""
 "Gestisci i contenuti video e audio protetti da token di accesso monouso per "
 "questo evento"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Paga la quota associativa annuale %(year)d di %(amount)s%(currency)s, "
-"necessaria per partecipare a questo evento"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -12272,6 +12265,13 @@ msgstr ""
 "in base alle assegnazioni di questo evento"
 
 msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
+msgstr ""
+"Riceverai una notifica quando verrà programmata una nuova sessione e avrai "
+"accesso prioritario alla registrazione"
+
+msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -12320,6 +12320,14 @@ msgid ""
 msgstr ""
 "Opzionale: carica una tua foto associata al tuo personaggio specifica per "
 "questo evento"
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Paga la quota associativa annuale di %(year)d pari a %(amount)s%(currency)s,"
+" necessaria per partecipare a questo evento"
 
 #, python-format
 msgid ""
@@ -12547,13 +12555,6 @@ msgid ""
 msgstr ""
 "Ti chiediamo solo un attimo del tuo tempo per controllare i documenti che "
 "hai caricato, ci vorrà pochissimo"
-
-msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration"
-msgstr ""
-"Sarai avvisato quando verrà organizzata una nuova sessione e avrai la "
-"priorità all'apertura delle iscrizioni"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "

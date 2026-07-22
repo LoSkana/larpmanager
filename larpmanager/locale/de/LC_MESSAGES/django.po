@@ -4583,9 +4583,6 @@ msgstr "Währungen und Materialien"
 msgid "Customised mail server"
 msgstr "Kundenspezifischer Mail-Server"
 
-msgid "Disable event approval"
-msgstr "Ereignisgenehmigung deaktivieren"
-
 msgid "Display all users data"
 msgstr "Alle Benutzerdaten anzeigen"
 
@@ -5407,6 +5404,9 @@ msgstr "Verzögerung bei der Profilerstellung"
 
 msgid "Describe how we can help you"
 msgstr "Beschreiben Sie, wie wir Ihnen helfen können"
+
+msgid "Disable event-level approval"
+msgstr "Genehmigung auf Ereignisebene deaktivieren"
 
 #, python-format
 msgid "Feature %(name)s deactivated"
@@ -7114,9 +7114,6 @@ msgstr "Verwaltung der von den Teilnehmern getätigten Spenden"
 msgid "Manage questions asked by the participants"
 msgstr "Verwaltung der von den Teilnehmern gestellten Fragen"
 
-msgid "No answered questions in the last 3 months"
-msgstr "In den letzten 3 Monaten hast du keine Fragen beantwortet"
-
 msgid "No handout templates have been created yet"
 msgstr "Es wurden noch keine Vorlagen für Handouts erstellt"
 
@@ -7516,9 +7513,6 @@ msgstr "Charaktere sind nur für eingeloggte Benutzer sichtbar"
 msgid "Create your first event using the button above"
 msgstr "Erstelle deine erste Veranstaltung über die Schaltfläche oben"
 
-msgid "Do you wish to be always updated on our events"
-msgstr "Möchten Sie über unsere Veranstaltungen auf dem Laufenden bleiben"
-
 msgid "Hint: The correct answers to this question are"
 msgstr "Hinweis: Die richtigen Antworten auf diese Frage sind"
 
@@ -7843,6 +7837,11 @@ msgstr "Jetzt können Sie die Gültigkeit der Steuernummer prüfen"
 msgid "Now you can set the external mail server settings"
 msgstr ""
 "Jetzt können Sie die Einstellungen für den externen Mailserver festlegen"
+
+msgid "Payment for this event is complete and up to date"
+msgstr ""
+"Die Bezahlung für diese Veranstaltung ist abgeschlossen und auf dem neuesten"
+" Stand"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Rohstoffe, Hilfsstoffe, Verbrauchsgüter und Waren"
@@ -8285,9 +8284,6 @@ msgstr ""
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Möchten Sie Nutzern die Möglichkeit geben, freiwillig zu spenden"
-
-msgid "Everything is in order about the payment of this event"
-msgstr "Alles ist in Ordnung bezüglich der Zahlung für diese Veranstaltung"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Gib einen Song an, den du deiner Figur widmen möchtest"
@@ -8783,6 +8779,10 @@ msgstr ""
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Wo wurde sie platziert? Wann wird sie voraussichtlich zurückkommen?"
 
+msgid "Would you like to receive updates about our upcoming events"
+msgstr ""
+"Möchtest du über unsere kommenden Veranstaltungen auf dem Laufenden bleiben"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr ""
@@ -8871,6 +8871,9 @@ msgstr ""
 msgid "No installment plans have been configured for this event yet"
 msgstr ""
 "Für diese Veranstaltung wurden noch keine Ratenzahlungspläne eingerichtet"
+
+msgid "No pending questions have been answered in the last 3 months"
+msgstr "In den letzten drei Monaten wurden keine offenen Fragen beantwortet"
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
@@ -11367,13 +11370,6 @@ msgstr ""
 "zuerst die Aktivierungs-Checkliste aus"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Wenn diese Option aktiviert ist, kann die Genehmigung von Ausgaben nur über "
-"das Organisationspanel erfolgen"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11499,6 +11495,13 @@ msgid ""
 msgstr ""
 "Von der Bank ausgestellter Beleg als Nachweis der Überweisung (als pdf-"
 "Datei)"
+
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Wenn diese Funktion aktiviert ist, können Spesenabrechnungen nur über das "
+"Organisations-Dashboard verwaltet werden"
 
 #, python-format
 msgid ""
@@ -11909,15 +11912,6 @@ msgid ""
 msgstr ""
 "Verwalte sichere Video- und Audioinhalte, die durch Einmal-Zugriffstoken für"
 " diese Veranstaltung geschützt sind"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Zahlen Sie die Mitgliedschaftsgebühr für %(year)d in Höhe von "
-"%(amount)s%(currency)s, die für die Teilnahme an dieser Veranstaltung "
-"erforderlich ist"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -12457,6 +12451,13 @@ msgstr ""
 "dieses Ereignisses dauerhaft zu aktualisieren"
 
 msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
+msgstr ""
+"Du wirst benachrichtigt, sobald ein neuer Termin angesetzt wird, und "
+"erhältst vorrangigen Zugang zur Anmeldung"
+
+msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -12505,6 +12506,15 @@ msgid ""
 msgstr ""
 "Optional: Laden Sie ein Foto von sich selbst hoch, das mit Ihrem Charakter "
 "speziell für dieses Ereignis verbunden ist"
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Zahle den jährlichen Mitgliedsbeitrag von %(year)d in Höhe von "
+"%(amount)s%(currency)s, der für die Teilnahme an dieser Veranstaltung "
+"erforderlich ist"
 
 #, python-format
 msgid ""
@@ -12732,13 +12742,6 @@ msgid ""
 msgstr ""
 "Wir bitten Sie nur um einen Moment Zeit, um die von Ihnen hochgeladenen "
 "Dokumente zu prüfen, es dauert nicht lange"
-
-msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration"
-msgstr ""
-"Du wirst benachrichtigt, wenn eine neue Sitzung organisiert wird, und du "
-"hast Vorrang bei der Anmeldung"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "

@@ -4583,9 +4583,6 @@ msgstr "Valutaer og materialer"
 msgid "Customised mail server"
 msgstr "Skreddersydd e-postserver"
 
-msgid "Disable event approval"
-msgstr "Deaktiver godkjenning av hendelser"
-
 msgid "Display all users data"
 msgstr "Vis alle brukerdata"
 
@@ -5407,6 +5404,9 @@ msgstr "Forsinkelse i profilkompilering"
 
 msgid "Describe how we can help you"
 msgstr "Beskriv hvordan vi kan hjelpe deg"
+
+msgid "Disable event-level approval"
+msgstr "Deaktiver godkjenning på hendelsesnivå"
 
 #, python-format
 msgid "Feature %(name)s deactivated"
@@ -7108,9 +7108,6 @@ msgstr "Administrere donasjoner utført av deltakerne"
 msgid "Manage questions asked by the participants"
 msgstr "Håndtere spørsmål fra deltakerne"
 
-msgid "No answered questions in the last 3 months"
-msgstr "Ingen besvarte spørsmål de siste 3 månedene"
-
 msgid "No handout templates have been created yet"
 msgstr "Det er foreløpig ikke laget noen maler for utdelingsark"
 
@@ -7501,9 +7498,6 @@ msgstr "Karakterene er bare synlige for innloggede brukere"
 msgid "Create your first event using the button above"
 msgstr "Opprett ditt første arrangement ved å bruke knappen ovenfor"
 
-msgid "Do you wish to be always updated on our events"
-msgstr "Vil du holde deg oppdatert om arrangementene våre"
-
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De riktige svarene på dette spørsmålet er"
 
@@ -7817,6 +7811,9 @@ msgstr "Nå kan du utføre gyldighetskontrollen av skattekoden"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nå kan du angi innstillingene for den eksterne e-postserveren"
+
+msgid "Payment for this event is complete and up to date"
+msgstr "Betalingen for dette arrangementet er fullført og oppdatert"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Råvarer, hjelpemidler, forbruksvarer og varer"
@@ -8227,9 +8224,6 @@ msgstr ""
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Ønsker du å gi brukerne mulighet til å gi frivillige donasjoner"
-
-msgid "Everything is in order about the payment of this event"
-msgstr "Alt er i orden for at vi skal kunne betale for dette arrangementet"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Angi en sang du ønsker å dedikere til karakteren din"
@@ -8669,6 +8663,9 @@ msgstr ""
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Hvor har den blitt plassert? Når forventes den å komme tilbake?"
 
+msgid "Would you like to receive updates about our upcoming events"
+msgstr "Vil du motta oppdateringer om våre kommende arrangementer"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Du kan foreta betalingen <a href='%(url)s'>på denne siden</a>"
@@ -8744,6 +8741,9 @@ msgid "No installment plans have been configured for this event yet"
 msgstr ""
 "Det er foreløpig ikke opprettet noen avbetalingsordninger for dette "
 "arrangementet"
+
+msgid "No pending questions have been answered in the last 3 months"
+msgstr "Det er ikke blitt besvart noen ubesvarte spørsmål de siste 3 månedene"
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
@@ -10987,13 +10987,6 @@ msgstr ""
 "først"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Hvis dette alternativet er krysset av, kan utgiftene kun godkjennes fra "
-"organisasjonspanelet"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11115,6 +11108,13 @@ msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr "Bevis utstedt av banken som bevis på overføringen (som pdf-fil)"
+
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Når denne funksjonen er aktivert, kan godkjenning av utgifter kun håndteres "
+"fra organisasjonens oversiktsside"
 
 #, python-format
 msgid ""
@@ -11515,14 +11515,6 @@ msgid ""
 msgstr ""
 "Administrer sikkert video- og lydinnhold beskyttet av engangstilgangstokener"
 " for dette arrangementet"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Betal den %(year)d medlemsavgiften på %(amount)s%(currency)s, som kreves for"
-" å delta i dette arrangementet"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -12060,6 +12052,13 @@ msgstr ""
 "hendelsens oppgaver"
 
 msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
+msgstr ""
+"Du vil få beskjed når en ny sesjon blir planlagt, og du vil få fortrinnsrett"
+" til påmelding"
+
+msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -12108,6 +12107,14 @@ msgid ""
 msgstr ""
 "Valgfritt: Last opp et bilde av deg selv i forbindelse med karakteren din "
 "spesielt for dette arrangementet"
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Betal det årlige medlemskontingentet på %(year)d på %(amount)s%(currency)s, "
+"som kreves for å kunne delta på dette arrangementet"
 
 #, python-format
 msgid ""
@@ -12335,13 +12342,6 @@ msgid ""
 msgstr ""
 "Vi ber bare om et øyeblikk av din tid til å sjekke dokumentene du har lastet"
 " opp, det tar ikke lang tid"
-
-msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration"
-msgstr ""
-"Du vil bli varslet når en ny sesjon arrangeres, og du vil få "
-"hurtigregistrering"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "

@@ -4583,9 +4583,6 @@ msgstr "Valuta & materialen"
 msgid "Customised mail server"
 msgstr "Aangepaste mailserver"
 
-msgid "Disable event approval"
-msgstr "Goedkeuring van gebeurtenissen uitschakelen"
-
 msgid "Display all users data"
 msgstr "Alle gebruikersgegevens weergeven"
 
@@ -5407,6 +5404,9 @@ msgstr "Vertraging in profielcompilatie"
 
 msgid "Describe how we can help you"
 msgstr "Beschrijf hoe we je kunnen helpen"
+
+msgid "Disable event-level approval"
+msgstr "Goedkeuring op gebeurtenisniveau uitschakelen"
 
 #, python-format
 msgid "Feature %(name)s deactivated"
@@ -7109,9 +7109,6 @@ msgstr "Beheer donaties uitgevoerd door deelnemers"
 msgid "Manage questions asked by the participants"
 msgstr "Vragen van de deelnemers beheren"
 
-msgid "No answered questions in the last 3 months"
-msgstr "Geen beantwoorde vragen in de afgelopen 3 maanden"
-
 msgid "No handout templates have been created yet"
 msgstr "Er zijn nog geen sjablonen voor hand-outs gemaakt"
 
@@ -7507,9 +7504,6 @@ msgstr "Tekens zijn alleen zichtbaar voor ingelogde gebruikers"
 msgid "Create your first event using the button above"
 msgstr "Maak je eerste evenement aan via de knop hierboven"
 
-msgid "Do you wish to be always updated on our events"
-msgstr "Wil je op de hoogte blijven van onze evenementen"
-
 msgid "Hint: The correct answers to this question are"
 msgstr "Hint: De juiste antwoorden op deze vraag zijn"
 
@@ -7825,6 +7819,9 @@ msgstr "Nu kun je de geldigheidscontrole van de fiscale code uitvoeren"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nu kun je de instellingen voor de externe mailserver instellen"
+
+msgid "Payment for this event is complete and up to date"
+msgstr "De betaling voor dit evenement is voltooid en up-to-date"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Grondstoffen, hulpmiddelen, verbruiksgoederen en goederen"
@@ -8235,9 +8232,6 @@ msgstr ""
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Wil je gebruikers in staat stellen vrijwillig te doneren"
-
-msgid "Everything is in order about the payment of this event"
-msgstr "Alles is in orde met de betaling van dit evenement"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Geef een liedje aan dat je aan je personage wilt opdragen"
@@ -8690,6 +8684,9 @@ msgstr ""
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Waar is het geplaatst? Wanneer wordt het terug verwacht?"
 
+msgid "Would you like to receive updates about our upcoming events"
+msgstr "Wil je op de hoogte blijven van onze komende evenementen"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Je kunt de betaling doen <a href='%(url)s'>op deze pagina</a>"
@@ -8772,6 +8769,9 @@ msgstr "Stemmen beheren voor de toewijzing van rollen in de organisatie"
 
 msgid "No installment plans have been configured for this event yet"
 msgstr "Er zijn voor dit evenement nog geen afbetalingsplannen ingesteld"
+
+msgid "No pending questions have been answered in the last 3 months"
+msgstr "Er zijn de afgelopen 3 maanden geen openstaande vragen beantwoord"
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr "De onkostendeclaraties van medewerkers controleren en goedkeuren"
@@ -11155,13 +11155,6 @@ msgstr ""
 "activatiechecklist"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Als deze optie is aangevinkt, kunnen uitgaven alleen worden goedgekeurd "
-"vanuit het organisatiepaneel"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11287,6 +11280,13 @@ msgid ""
 msgstr ""
 "Bewijs afgegeven door de bank als bewijs van de overschrijving (als pdf-"
 "bestand)"
+
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Als deze functie is ingeschakeld, kun je goedkeuringen van onkosten alleen "
+"via het dashboard van de organisatie beheren"
 
 #, python-format
 msgid ""
@@ -11697,14 +11697,6 @@ msgid ""
 msgstr ""
 "Beheer beveiligde video- en audiocontent die voor dit evenement wordt "
 "beschermd door eenmalige toegangstokens"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Betaal de lidmaatschapsbijdrage van %(amount)s%(currency)s (jaarlijks in "
-"%(year)d), vereist om aan dit evenement deel te nemen"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -12243,6 +12235,13 @@ msgstr ""
 "van de toewijzingen van deze gebeurtenis"
 
 msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
+msgstr ""
+"Je krijgt een bericht zodra er een nieuwe sessie wordt gepland en je krijgt "
+"voorrang bij de inschrijving"
+
+msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -12291,6 +12290,14 @@ msgid ""
 msgstr ""
 "Optioneel: upload een foto van jezelf in combinatie met je personage "
 "speciaal voor dit evenement"
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Betaal de jaarlijkse contributie van %(year)d ter waarde van "
+"%(amount)s%(currency)s, die je moet betalen om dit evenement bij te wonen"
 
 #, python-format
 msgid ""
@@ -12518,13 +12525,6 @@ msgid ""
 msgstr ""
 "We vragen slechts een momentje van je tijd om de documenten die je hebt "
 "geüpload te controleren, het duurt niet lang"
-
-msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration"
-msgstr ""
-"Je krijgt bericht wanneer er een nieuwe sessie wordt georganiseerd en je "
-"krijgt prioriteit bij het registreren"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "

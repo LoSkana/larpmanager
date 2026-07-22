@@ -4583,9 +4583,6 @@ msgstr "Waluty i materiały"
 msgid "Customised mail server"
 msgstr "Dostosowany serwer pocztowy"
 
-msgid "Disable event approval"
-msgstr "Wyłącz zatwierdzanie zdarzeń"
-
 msgid "Display all users data"
 msgstr "Wyświetlanie danych wszystkich użytkowników"
 
@@ -5407,6 +5404,9 @@ msgstr "Opóźnienie w kompilacji profilu"
 
 msgid "Describe how we can help you"
 msgstr "Opisz, jak możemy Ci pomóc"
+
+msgid "Disable event-level approval"
+msgstr "Wyłącz zatwierdzanie na poziomie zdarzeń"
 
 #, python-format
 msgid "Feature %(name)s deactivated"
@@ -7109,11 +7109,6 @@ msgstr "Zarządzaj darowiznami dokonywanymi przez uczestników"
 msgid "Manage questions asked by the participants"
 msgstr "Zarządzaj pytaniami zadawanymi przez uczestników"
 
-msgid "No answered questions in the last 3 months"
-msgstr ""
-"W ciągu ostatnich 3 miesięcy nie było żadnych pytań, na które udzielono "
-"odpowiedzi"
-
 msgid "No handout templates have been created yet"
 msgstr "Nie stworzono jeszcze żadnych szablonów materiałów informacyjnych"
 
@@ -7505,9 +7500,6 @@ msgstr "Postacie są widoczne tylko dla zalogowanych użytkowników"
 msgid "Create your first event using the button above"
 msgstr "Utwórz swoje pierwsze wydarzenie, klikając przycisk powyżej"
 
-msgid "Do you wish to be always updated on our events"
-msgstr "Chcesz być zawsze na bieżąco z naszymi wydarzeniami"
-
 msgid "Hint: The correct answers to this question are"
 msgstr "Wskazówka: Prawidłowe odpowiedzi na to pytanie to"
 
@@ -7820,6 +7812,9 @@ msgstr "Teraz można wykonać sprawdzenie poprawności kodu fiskalnego"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Teraz można skonfigurować ustawienia zewnętrznego serwera poczty"
+
+msgid "Payment for this event is complete and up to date"
+msgstr "Opłata za to wydarzenie została uregulowana i jest aktualna"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Surowce, materiały pomocnicze, materiały eksploatacyjne i towary"
@@ -8228,9 +8223,6 @@ msgstr ""
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Czy chcesz umożliwić użytkownikom dokonywanie dobrowolnych darowizn"
-
-msgid "Everything is in order about the payment of this event"
-msgstr "Wszystko jest w porządku w kwestii płatności za to wydarzenie"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Wskaż piosenkę, którą chcesz zadedykować swojej postaci"
@@ -8673,6 +8665,9 @@ msgstr ""
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Gdzie został umieszczony? Kiedy spodziewany jest powrót?"
 
+msgid "Would you like to receive updates about our upcoming events"
+msgstr "Chcesz dostawać informacje o naszych nadchodzących wydarzeniach"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Płatności można dokonać <a href='%(url)s'>na tej stronie</a>"
@@ -8755,6 +8750,11 @@ msgstr "Zarządzaj głosowaniami w celu przypisania ról w organizacji"
 msgid "No installment plans have been configured for this event yet"
 msgstr ""
 "Na razie nie skonfigurowano żadnych planów ratalnych dla tego wydarzenia"
+
+msgid "No pending questions have been answered in the last 3 months"
+msgstr ""
+"W ciągu ostatnich 3 miesięcy nie udzielono odpowiedzi na żadne z otwartych "
+"pytań"
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
@@ -11050,13 +11050,6 @@ msgstr ""
 "listę kontrolną aktywacji"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Jeśli opcja jest zaznaczona, zatwierdzanie wydatków może odbywać się "
-"wyłącznie z poziomu panelu organizacji"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11180,6 +11173,13 @@ msgid ""
 "pdf file)"
 msgstr ""
 "Oświadczenie wydane przez bank jako dowód wydania przelewu (jako plik pdf)"
+
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Gdy ta opcja jest włączona, zatwierdzaniem wydatków można zarządzać "
+"wyłącznie z poziomu pulpitu nawigacyjnego organizacji"
 
 #, python-format
 msgid ""
@@ -11582,14 +11582,6 @@ msgid ""
 msgstr ""
 "Zarządzaj bezpiecznymi materiałami wideo i audio chronionymi jednorazowymi "
 "tokenami dostępu dla tego wydarzenia"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Zapłać opłatę członkowską za rok %(year)d w wysokości "
-"%(amount)s%(currency)s, wymaganą do udziału w tym wydarzeniu"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -12127,6 +12119,13 @@ msgstr ""
 " przypisań tego zdarzenia"
 
 msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
+msgstr ""
+"Otrzymasz powiadomienie, gdy zostanie zaplanowana nowa sesja, i będziesz "
+"mieć pierwszeństwo przy rejestracji"
+
+msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -12175,6 +12174,15 @@ msgid ""
 msgstr ""
 "Opcjonalnie: prześlij swoje zdjęcie związane z postacią specjalnie na "
 "potrzeby tego wydarzenia"
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Wpłać roczną opłatę członkowską w wysokości %(year)d, wynoszącą "
+"%(amount)s%(currency)s, która jest wymagana, żeby wziąć udział w tym "
+"wydarzeniu"
 
 #, python-format
 msgid ""
@@ -12402,13 +12410,6 @@ msgid ""
 msgstr ""
 "Prosimy tylko o chwilę czasu na sprawdzenie przesłanych dokumentów, nie "
 "zajmie to dużo czasu"
-
-msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration"
-msgstr ""
-"Zostaniesz powiadomiony, gdy zostanie zorganizowana nowa sesja i będziesz "
-"mieć możliwość szybkiej rejestracji"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "

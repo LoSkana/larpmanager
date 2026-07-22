@@ -4583,9 +4583,6 @@ msgstr "Valutor & material"
 msgid "Customised mail server"
 msgstr "Skräddarsydd e-postserver"
 
-msgid "Disable event approval"
-msgstr "Avaktivera godkännande av händelse"
-
 msgid "Display all users data"
 msgstr "Visa alla användares data"
 
@@ -5407,6 +5404,9 @@ msgstr "Försening i sammanställning av profil"
 
 msgid "Describe how we can help you"
 msgstr "Beskriv hur vi kan hjälpa dig"
+
+msgid "Disable event-level approval"
+msgstr "Inaktivera godkännande på händelsenivå"
 
 #, python-format
 msgid "Feature %(name)s deactivated"
@@ -7106,9 +7106,6 @@ msgstr "Hantera donationer som utförs av deltagare"
 msgid "Manage questions asked by the participants"
 msgstr "Hantera frågor som ställts av deltagarna"
 
-msgid "No answered questions in the last 3 months"
-msgstr "Inga besvarade frågor under de senaste 3 månaderna"
-
 msgid "No handout templates have been created yet"
 msgstr "Det har ännu inte skapats några mallar för informationsblad"
 
@@ -7500,9 +7497,6 @@ msgstr "Tecknen är endast synliga för inloggade användare"
 msgid "Create your first event using the button above"
 msgstr "Skapa ditt första evenemang med hjälp av knappen ovan"
 
-msgid "Do you wish to be always updated on our events"
-msgstr "Vill du hålla dig uppdaterad om våra evenemang"
-
 msgid "Hint: The correct answers to this question are"
 msgstr "Ledtråd: De rätta svaren på denna fråga är"
 
@@ -7815,6 +7809,9 @@ msgstr "Nu kan du göra en kontroll av skattekodens giltighet"
 
 msgid "Now you can set the external mail server settings"
 msgstr "Nu kan du ange inställningarna för den externa e-postservern"
+
+msgid "Payment for this event is complete and up to date"
+msgstr "Betalningen för detta evenemang är genomförd och i ordning"
 
 msgid "Raw materials, auxiliaries, consumables and goods"
 msgstr "Råvaror, hjälpmaterial, förbrukningsvaror och varor"
@@ -8219,9 +8216,6 @@ msgstr ""
 
 msgid "Do you want to allow users to make voluntary donations"
 msgstr "Vill du tillåta användare att göra frivilliga donationer"
-
-msgid "Everything is in order about the payment of this event"
-msgstr "Allt är i sin ordning för att vi ska kunna betala för detta evenemang"
 
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Ange en sång som du vill tillägna din karaktär"
@@ -8647,6 +8641,9 @@ msgstr "Använd knappen ovan för att skapa en tagg för att kategorisera objekt
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Var har den placerats? När förväntas den komma tillbaka?"
 
+msgid "Would you like to receive updates about our upcoming events"
+msgstr "Vill du få information om våra kommande evenemang"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>"
 msgstr "Du kan göra betalningen <a href='%(url)s'>på den här sidan</a>"
@@ -8723,6 +8720,9 @@ msgstr "Hantera röster för tilldelning av roller i organisationen"
 msgid "No installment plans have been configured for this event yet"
 msgstr ""
 "Det har ännu inte ställts in några avbetalningsplaner för detta evenemang"
+
+msgid "No pending questions have been answered in the last 3 months"
+msgstr "Inga öppna frågor har besvarats under de senaste tre månaderna"
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr "Granska och godkänna utgiftsrapporter som lämnats in av medarbetare"
@@ -10974,13 +10974,6 @@ msgstr ""
 " först"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Om det är markerat kan godkännande av utgifter endast utföras från "
-"organisationspanelen"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11101,6 +11094,13 @@ msgid ""
 "Statement issued by the bank as proof of the issuance of the transfer (as "
 "pdf file)"
 msgstr "Bevis utfärdat av banken som bevis på överföringen (som pdf-fil)"
+
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"När funktionen är aktiverad kan godkännanden av utgifter endast hanteras "
+"från organisationens instrumentpanel"
 
 #, python-format
 msgid ""
@@ -11506,14 +11506,6 @@ msgid ""
 msgstr ""
 "Hantera säkert video- och ljudinnehåll som skyddas av engångsbehörigheter "
 "för detta evenemang"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Betala den årliga medlemsavgiften %(year)d på %(amount)s%(currency)s, som "
-"krävs för att delta i detta evenemang"
 
 msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
@@ -12051,6 +12043,13 @@ msgstr ""
 " händelsens tilldelningar"
 
 msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
+msgstr ""
+"Du kommer att få ett meddelande när en ny session planeras och få förtur vid"
+" anmälan"
+
+msgid ""
 "Communicate them only if strictly necessary, and if possible communicate "
 "them in anonymous form"
 msgstr ""
@@ -12099,6 +12098,14 @@ msgid ""
 msgstr ""
 "Valfritt: ladda upp ett foto av dig själv tillsammans med din rollfigur "
 "specifikt för detta evenemang"
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Betala den årliga medlemsavgiften på %(year)d, motsvarande "
+"%(amount)s%(currency)s, som krävs för att delta i detta evenemang"
 
 #, python-format
 msgid ""
@@ -12326,13 +12333,6 @@ msgid ""
 msgstr ""
 "Vi ber bara om en stund av din tid för att kontrollera de dokument du har "
 "laddat upp, det tar inte lång tid"
-
-msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration"
-msgstr ""
-"Du kommer att få ett meddelande när en ny session anordnas och du kommer att"
-" få prioritet vid registreringen"
 
 msgid ""
 "A friend of yours will be able to receive the registration as a gift by "

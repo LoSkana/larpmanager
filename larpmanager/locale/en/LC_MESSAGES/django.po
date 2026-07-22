@@ -742,12 +742,12 @@ msgid ""
 "whole numbers from 0 to 100)"
 msgstr ""
 
-msgid "Disable event approval"
+msgid "Disable event-level approval"
 msgstr ""
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization "
-"panel"
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
 msgstr ""
 
 msgid "Promotion"
@@ -4542,7 +4542,7 @@ msgstr ""
 msgid "Newsletter"
 msgstr ""
 
-msgid "Do you wish to be always updated on our events"
+msgid "Would you like to receive updates about our upcoming events"
 msgstr ""
 
 msgid "If you are a candidate for the Board, please write an introduction here"
@@ -6043,8 +6043,8 @@ msgid "Pre-register here"
 msgstr ""
 
 msgid ""
-"You will be notified when a new session is organized, and you will have fast-"
-"track on registration"
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
 msgstr ""
 
 msgid "Past sessions"
@@ -7073,7 +7073,7 @@ msgstr ""
 msgid "To view previous questions click here"
 msgstr ""
 
-msgid "No answered questions in the last 3 months"
+msgid "No pending questions have been answered in the last 3 months"
 msgstr ""
 
 msgid ""
@@ -11618,8 +11618,8 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
 msgstr ""
 
 msgid "Upload membership application"
@@ -12283,7 +12283,7 @@ msgstr ""
 msgid "Your tax code has a problem that we ask you to correct"
 msgstr ""
 
-msgid "Everything is in order about the payment of this event"
+msgid "Payment for this event is complete and up to date"
 msgstr ""
 
 msgid "You have already sent a payment pending verification"

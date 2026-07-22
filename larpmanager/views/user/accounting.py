@@ -480,7 +480,7 @@ def _check_registration_payment_preconditions(
 
     # Check if registration is already fully paid
     if registration.tot_iscr == registration.tot_payed:
-        messages.success(request, _("Everything is in order about the payment of this event") + "!")
+        messages.success(request, _("Payment for this event is complete and up to date") + "!")
         return redirect("event_payments", event_slug=registration.run.get_slug())
 
     # Check for pending payment verification
