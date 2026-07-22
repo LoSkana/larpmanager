@@ -55,7 +55,7 @@ simply chosen a different (still valid) reading. Distinguish these
 two cases explicitly. When msgstr_it is empty, judge solely against
 msgid.
 
-Specific LARP terms: Award (refers to awarding XP), Badges (in the context of achievements),
+Specific LARP terms: Award (refers to awarding XP, in italian "assegnazioni"), Badges (in the context of achievements),
 Casting (assigning characters / roles to players / participants), Pools (character/resource pools), Plot (quest/mission/storyline), Handout (setting/world-building knowledge)
 
 Categories (status field):

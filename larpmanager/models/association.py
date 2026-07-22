@@ -381,7 +381,7 @@ class AssociationTextType(models.TextChoices):
     PROFILE = "p", _("Profile")
     HOME = "h", _("Calendar")
     SIGNUP = "u", _("Registration mail")
-    MEMBERSHIP = "m", _("Membership")
+    MEMBERSHIP = "m", _("Membership request")
     STATUTE = "s", _("Statute")
     LEGAL = "l", _("Legal notice")
     FOOTER = "f", _("Footer")

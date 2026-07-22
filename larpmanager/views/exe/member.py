@@ -549,7 +549,7 @@ def exe_membership_status(request: HttpRequest, member_uuid: str) -> HttpRespons
     context["num"] = member_uuid
     context["name"] = context["member_edit"].display_real()
 
-    context["form"].page_title = str(context["member_edit"]) + " - " + _("Membership")
+    context["form"].page_title = str(context["member_edit"]) + " - " + _("Membership status")
 
     return render(request, "larpmanager/exe/edit.html", context)
 

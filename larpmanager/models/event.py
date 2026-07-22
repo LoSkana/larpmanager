@@ -201,7 +201,7 @@ class Event(UuidMixin, BaseModel):
         null=True,
         blank=True,
         verbose_name=_("Parent campaign"),
-        help_text=_("Link this event to another event to create a campaign series where characters are shared")
+        help_text=_("Selecting an event joins its campaign and shares characters with it")
         + " ("
         + _("leave empty to start a new campaign")
         + ")",
