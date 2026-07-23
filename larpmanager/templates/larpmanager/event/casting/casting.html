@@ -91,7 +91,7 @@
                            id="submit"
                            value="{% trans "Submit" %}"
                            style="margin-top:1rem"
-                           onClick="return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Confirm your choices" %}{% endfilter %}?');">
+                           onClick="return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Confirm your choices?" %}{% endfilter %}');">
                 </form>
             {% endif %}
         </div>

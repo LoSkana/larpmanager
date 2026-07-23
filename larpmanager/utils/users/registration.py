@@ -102,9 +102,7 @@ def registration_available(run: Run, features: dict, run_status: dict, context: 
             or remaining_primary_tickets * 1.0 / run.event.max_pg < percentage_threshold_for_urgency
         ):
             run_status["count"] = remaining_primary_tickets
-            run_status["additional"] = (
-                _(" Hurry: only %(num)d tickets available") % {"num": remaining_primary_tickets} + "."
-            )
+            run_status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_primary_tickets}
         return
 
     # Check if filler tickets are available (fallback option)
@@ -147,9 +145,7 @@ def _available_waiting(run: Run, run_status: dict, registration_counts: dict) ->
         if remaining_waiting_spots > 0:
             run_status["waiting"] = True
             run_status["count"] = remaining_waiting_spots
-            run_status["additional"] = (
-                _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting_spots} + "."
-            )
+            run_status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_waiting_spots}
             return True
 
     # No waiting list spots available
@@ -184,7 +180,7 @@ def _available_filler(run: Run, run_status: dict, registration_counts: Any) -> b
             run_status["filler"] = True
             run_status["count"] = remaining_filler
             # Add urgency message for limited availability
-            run_status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
+            run_status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_filler}
             return True
 
     # No filler tickets available
@@ -475,9 +471,9 @@ def _status_payment(
         run_status["status_type"] = "pending"
         run_status["action"] = {
             "label": _("Payment awaiting verification"),
-            "label_long": _("Your payment has been received and is being verified by the organizers")
-            + "; "
-            + _("no further action is needed at the moment"),
+            "label_long": _(
+                "Your payment has been received and is being verified by the organizers; no further action is needed at the moment"
+            ),
         }
         context["pending_invoices"] = True
         run_status["payment_pending"] = True

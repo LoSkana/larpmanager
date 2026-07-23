@@ -254,7 +254,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
         # Handle single feature activation with immediate redirect
         if len(context["new_features"]) == 1:
             feature = context["new_features"][0]
-            msg = _("Feature %(name)s activated") % {"name": feature.name} + "! " + feature.after_text
+            msg = _("Feature %(name)s activated!") % {"name": feature.name} + " " + feature.after_text
             clear_messages(request)
             messages.success(request, msg)
             return redirect(feature.follow_link)
@@ -485,17 +485,17 @@ def exe_version_upgrade(request: HttpRequest) -> HttpResponse:
             save_single_config(member, "interface_version", str(target_version))
             messages.success(
                 request,
-                _("Preview activated") + ": " + _("you are now viewing version %(v)s") % {"v": target_version} + ".",
+                _("Preview activated: you are now viewing version %(v)s.") % {"v": target_version},
             )
         elif action == "upgrade":
             association = Association.objects.get(pk=context["association_id"])
             save_single_config(association, "version", str(target_version))
             save_single_config(member, "interface_version", "")
             _reset_all_association(context["association_id"], context["slug"])
-            messages.success(request, _("Organization upgraded to version %(v)s") % {"v": target_version} + ".")
+            messages.success(request, _("Organization upgraded to version %(v)s.") % {"v": target_version})
         elif action == "reset_preview":
             save_single_config(member, "interface_version", "")
-            messages.success(request, _("Preview reset") + ". " + _("Using organization version."))
+            messages.success(request, _("Preview reset. Using organization version."))
 
         return redirect("exe_version_upgrade")
 

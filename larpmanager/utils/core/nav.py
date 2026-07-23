@@ -109,7 +109,7 @@ def _add_registration_items(
             reverse("register", args=[slug]),
             "fa-solid fa-pen-to-square",
             _("Your registration"),
-            str(_("Update here the registration options")) + "!",
+            str(_("Update here the registration options!")),
             active=active == "register",
         )
         run_status = context.get("run_status") or {}
@@ -124,7 +124,7 @@ def _add_registration_items(
                     reverse("event_payments", args=[slug]),
                     "fa-solid fa-receipt",
                     _("Payments"),
-                    str(_("View your payment details for this event")) + "!",
+                    str(_("View your payment details for this event!")),
                     active=active in ("event_payments", "event_payments_registration"),
                 )
             )
@@ -134,7 +134,7 @@ def _add_registration_items(
                     reverse("character_your", args=[slug]),
                     "fa-solid fa-user",
                     _("Your character"),
-                    str(_("Access your character")) + "!",
+                    str(_("Access your character!")),
                     active=active == "char",
                 )
             )
@@ -150,7 +150,7 @@ def _add_registration_items(
                     reverse("casting", args=[slug]),
                     "fa-solid fa-masks-theater",
                     _("Casting"),
-                    str(_("Select your preferences on the characters to play")) + "!",
+                    str(_("Select your preferences on the characters to play!")),
                     active=active == "casting",
                     sidebar_gate=("casting", allowed_sidebar),
                 ),
@@ -161,7 +161,7 @@ def _add_registration_items(
                     reverse("matchmaker", args=[slug]),
                     "fa-solid fa-people-arrows",
                     _("Matchmaker"),
-                    str(_("Answer questions to help match you with characters")) + "!",
+                    str(_("Answer questions to help match you with characters!")),
                     active=active == "matchmaker",
                 )
             )
@@ -189,7 +189,7 @@ def _add_character_items(
             reverse("gallery", args=[slug]),
             "fa-solid fa-images",
             _("Gallery"),
-            str(_("View the list of characters and participants")) + "!",
+            str(_("View the list of characters and participants!")),
             active=active == "gallery",
         )
     )
@@ -198,7 +198,7 @@ def _add_character_items(
             reverse("search", args=[slug]),
             "fa-solid fa-magnifying-glass",
             _("Search"),
-            str(_("Filter or search the characters")) + "!",
+            str(_("Filter or search the characters!")),
             active=active == "search",
         )
     )
@@ -209,7 +209,7 @@ def _add_character_items(
                 reverse("ensemble", args=[slug]),
                 "fa-solid fa-people-group",
                 _("Ensemble"),
-                str(_("Learn all characters before the event")) + "!",
+                str(_("Learn all characters before the event!")),
                 active=active == "ensemble",
                 sidebar_gate=("ensemble", allowed_sidebar),
             ),
@@ -232,7 +232,7 @@ def _add_writing_items(
                 reverse("workshops", args=[slug]),
                 "fa-solid fa-hammer",
                 _("Workshop"),
-                str(_("Fill out the event prep questions")) + "!",
+                str(_("Fill out the event prep questions!")),
                 active=active == "workshops",
                 sidebar_gate=("workshop", allowed_sidebar),
             ),
@@ -246,7 +246,7 @@ def _add_writing_items(
                 reverse("factions", args=[slug]),
                 "fa-solid fa-flag",
                 _("Factions"),
-                str(_("Discover the game factions")) + "!",
+                str(_("Discover the game factions!")),
                 active=active == "factions",
                 sidebar_gate=("faction", allowed_sidebar),
             ),
@@ -258,7 +258,7 @@ def _add_writing_items(
                 reverse("guilds", args=[slug]),
                 "fa-solid fa-users",
                 _("Guilds"),
-                str(_("Discover the game guilds")) + "!",
+                str(_("Discover the game guilds!")),
                 active=active == "guilds",
                 sidebar_gate=("guild", allowed_sidebar),
             ),
@@ -270,7 +270,7 @@ def _add_writing_items(
                 reverse("quests", args=[slug]),
                 "fa-solid fa-scroll",
                 _("Quest"),
-                str(_("Find out what quests are available")) + "!",
+                str(_("Find out what quests are available!")),
                 active=active == "quests",
                 sidebar_gate=("questbuilder", allowed_sidebar),
             ),
@@ -293,7 +293,7 @@ def _add_extra_items(
                 reverse("album", args=[slug]),
                 "fa-solid fa-camera",
                 _("Album"),
-                str(_("View photos from the event")) + "!",
+                str(_("View photos from the event!")),
                 sidebar_gate=("album", allowed_sidebar),
             ),
         )
@@ -314,7 +314,7 @@ def _add_extra_items(
             entry["icon"] = el[3]
         items.append(entry)
     if registration and "print_pdf" in features and context.get("show_character"):
-        pdf_tooltip = str(_("Download the list of characters with their interpreters' profile images")) + "!"
+        pdf_tooltip = str(_("Download the list of characters with their interpreters' profile images!"))
         _append(
             items,
             _item(
@@ -384,7 +384,7 @@ def build_main_nav_items(context: dict[str, Any]) -> list[dict[str, Any]]:
             reverse("event", args=[slug]),
             "fa-solid fa-calendar-days",
             _("Event"),
-            str(_("Discover what this event is about")) + "!",
+            str(_("Discover what this event is about!")),
             active=active == "event",
         )
     )
@@ -395,7 +395,7 @@ def build_main_nav_items(context: dict[str, Any]) -> list[dict[str, Any]]:
                 event.website,
                 "fa-solid fa-globe",
                 _("Website"),
-                str(_("Browse the presentation website")) + "!",
+                str(_("Browse the presentation website!")),
                 link_mode="_blank",
             )
         )

@@ -618,7 +618,7 @@ def get_started(request: HttpRequest) -> Any:
         joined_association = _join_form(context, request)
         if joined_association:
             # send message
-            messages.success(request, _("Welcome to %(name)s") % {"name": request.association["name"]} + "!")
+            messages.success(request, _("Welcome to %(organization)s!") % {"organization": request.association["name"]})
             # send email
             if request.association["skin_id"] == 1:
                 join_email(joined_association)

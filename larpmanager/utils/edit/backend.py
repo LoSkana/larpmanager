@@ -858,7 +858,7 @@ def _process_working_ticket(request: HttpRequest, element_type: str, edit_uuid: 
     if len(other_editors) > 0:
         warning_message = _("Warning! Other users are editing this item.")
         warning_message += " " + _("You cannot work on it at the same time: the work of one of you would be lost.")
-        warning_message += " " + _("List of other users") + ": " + ", ".join(other_editors)
+        warning_message += " " + _("List of other users:") + " " + ", ".join(other_editors)
 
     # Update ticket with current user's information and timestamp
     active_tickets[user_token] = (str(request.user.member), current_timestamp)

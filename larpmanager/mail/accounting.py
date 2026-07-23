@@ -28,13 +28,12 @@ from larpmanager.cache.feature import get_association_features, get_event_featur
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.mail.digest import my_send_digest_email
 from larpmanager.mail.templates import (
-    get_credit_email,
+    get_assignment_email,
     get_expense_mail,
     get_pay_credit_email,
     get_pay_money_email,
     get_pay_token_email,
     get_token_credit_name,
-    get_token_email,
 )
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
@@ -126,14 +125,10 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
         email_subject += " " + _("for %(event)s") % {"event": expense_item.run}
 
     # Create base email body with approval details
-    email_body = (
-        _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved")
-        % {
-            "amount": expense_item.value,
-            "reason": expense_item.descr,
-        }
-        + "!"
-    )
+    email_body = _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved!") % {
+        "amount": expense_item.value,
+        "reason": expense_item.descr,
+    }
 
     # Get token and credit names for the association
     _token_name, credits_name = get_token_credit_name(expense_item.association_id)
@@ -141,9 +136,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     # Add credit information if run has credits feature enabled
     event_features = get_event_features(expense_item.run.event_id) if expense_item.run else {}
     if expense_item.run and "credits" in event_features:
-        email_body += (
-            "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credits_name} + "."
-        )
+        email_body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s.") % {"credits": credits_name}
         email_body += " " + _("This is automatically deducted from the registration of a future event.")
 
         # Add link to accounting page for formal request option
@@ -336,17 +329,11 @@ def notify_refund(credits_name: str, instance: AccountingItemOther) -> None:
     email_subject = hdr(instance) + _("Issued Reimbursement")
 
     # Construct notification body with refund details
-    email_body = (
-        _(
-            "A reimbursement for '%(reason)s' has been marked as issued. %(amount).2f %(elements)s have been marked as used",
-        )
-        % {
-            "amount": instance.value,
-            "elements": credits_name,
-            "reason": instance.descr,
-        }
-        + "."
-    )
+    email_body = _("A reimbursement of %(amount).2f %(elements)s for '%(reason)s' has been issued.") % {
+        "amount": instance.value,
+        "elements": credits_name,
+        "reason": instance.descr,
+    }
 
     # Send notification email to the member
     my_send_mail(email_subject, email_body, instance.member, instance)
@@ -375,7 +362,7 @@ def notify_credit(credits_name: str, instance: AccountingItemOther) -> None:
     """
     # Send notification email to the credit recipient
     activate(instance.member.language)
-    email_subject, email_body = get_credit_email(credits_name, instance)
+    email_subject, email_body = get_assignment_email(credits_name, instance)
 
     # Build URL for user's accounting page and add usage instructions
     accounting_url = get_url("accounting", instance)
@@ -395,7 +382,7 @@ def notify_credit(credits_name: str, instance: AccountingItemOther) -> None:
         for event_organizer in get_event_organizers(instance.run.event):
             # Localize email content for each organizer
             activate(event_organizer.language)
-            email_subject, email_body = get_credit_email(credits_name, instance)
+            email_subject, email_body = get_assignment_email(credits_name, instance)
 
             # Add member information to subject for organizer context
             email_subject += _(" for %(user)s") % {"user": instance.member}
@@ -406,7 +393,7 @@ def notify_token(instance: Any, tokens_name: str) -> None:
     """Send token notification emails to user and event organizers."""
     # Send notification to the token recipient
     activate(instance.member.language)
-    email_subject, email_body = get_token_email(instance, tokens_name)
+    email_subject, email_body = get_assignment_email(tokens_name, instance)
     additional_body = (
         "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event!") + "</i>"
     )
@@ -416,7 +403,7 @@ def notify_token(instance: Any, tokens_name: str) -> None:
     if instance.run:
         for organizer in get_event_organizers(instance.run.event):
             activate(organizer.language)
-            email_subject, email_body = get_token_email(instance, tokens_name)
+            email_subject, email_body = get_assignment_email(tokens_name, instance)
             email_subject += _(" for %(user)s") % {"user": instance.member}
             my_send_mail(email_subject, email_body, organizer, instance)
 

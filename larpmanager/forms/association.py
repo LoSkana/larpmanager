@@ -223,7 +223,7 @@ class ExeAssociationTextForm(BaseModelForm):
             )
             # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
-                self.add_error("default", "There is already a language set as default") + "!"
+                self.add_error("default", "There is already a language set as default!")
 
         # Check for duplicate language-type combination
         res = AssociationText.objects.filter(
@@ -233,7 +233,7 @@ class ExeAssociationTextForm(BaseModelForm):
             first = res.first()
             # Ensure we're not comparing against the current instance
             if first.pk != self.instance.pk:
-                self.add_error("language", "There is already a language of this type") + "!"
+                self.add_error("language", "There is already a language of this type!")
 
         return cleaned_data
 
@@ -469,10 +469,8 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("calendar_tagline", ConfigType.BOOL, tagline_label, tagline_help_text)
 
         delete_label = _("Bulk delete")
-        delete_help_text = (
-            _("If checked, allows to delete items in bulk")
-            + ". "
-            + _("WARNING: deleted items might not be full recoverable")
+        delete_help_text = _(
+            "If checked, allows to delete items in bulk. WARNING: deleted items might not be full recoverable"
         )
         self.add_configs("allow_bulk_delete", ConfigType.BOOL, delete_label, delete_help_text)
 
@@ -1114,10 +1112,9 @@ class ExePreferencesForm(ConfigForm):
 
     page_title = _("Personal preferences")
 
-    page_info = (
-        _("Set your personal theme, notification digest mode, and interface version")
-        + "; "
-        + _("these settings override the organization defaults for your account only")
+    page_info = _(
+        "Set your personal theme, notification digest mode, and interface version; "
+        "these settings override the organization defaults for your account only"
     )
 
     load_js: ClassVar[list] = ["appearance-colors"]

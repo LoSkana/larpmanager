@@ -87,10 +87,10 @@ def update_registration_status(instance: Any) -> None:
     # Determine email subject and body based on modification type
     if instance.modified == 1:
         email_subject = hdr(instance.run.event) + _("Registration to %(event)s") % email_context
-        email_body = _("Hello! Your registration at <b>%(event)s</b> has been confirmed") % email_context + "!"
+        email_body = _("Hello! Your registration at <b>%(event)s</b> has been confirmed!") % email_context
     else:
         email_subject = hdr(instance.run.event) + _("Registration updated for %(event)s") % email_context
-        email_body = _("Hi! Your registration to <b>%(event)s</b> has been updated") % email_context + "!"
+        email_body = _("Hi! Your registration to <b>%(event)s</b> has been updated!") % email_context
 
     # Append registration details to email body
     email_body += registration_options(instance)
@@ -173,7 +173,7 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
 
     # Build the main email body with character assignment information
     email_body = (
-        _("In the event <b>%(event)s</b> you were assigned the character: <b>%(character)s</b>") % email_context + "."
+        _("In the event <b>%(event)s</b> you were assigned the character: <b>%(character)s</b>.") % email_context
     )
 
     # Generate URL for character access page
@@ -183,7 +183,7 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     )
 
     # Add character access link to email body
-    email_body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": character_url} + "!"
+    email_body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": character_url}
 
     # Append custom assignment message if configured for the event
     custom_assignment_message = get_event_text(instance.registration.run.event_id, EventTextType.ASSIGNMENT)
@@ -318,5 +318,5 @@ def send_pre_registration_confirmation_email(pre_registration: Any) -> None:
     if not pre_registration.pk:
         activate(pre_registration.member.language)
         subject = hdr(pre_registration.event) + _("Pre-registration at %(event)s") % context
-        body_text = _("We confirm that you have successfully pre-registered for <b>%(event)s</b>") % context + "!"
+        body_text = _("We confirm that you have successfully pre-registered for <b>%(event)s</b>!") % context
         my_send_mail(subject, body_text, pre_registration.member, pre_registration.event)

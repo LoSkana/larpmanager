@@ -123,7 +123,7 @@ def handle_badge_assignment_notifications(instance: Any, pk_set: Any) -> None:
         body = _("You have been awarded an achievement!") + "<br /><br />"
         body += _("Description") + f": {badge['descr']}<br /><br />"
         profile_url = get_url(f"public/{member.uuid}/", instance)
-        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": profile_url} + "."
+        body += _("Display your achievements in your <a href= %(url)s'>public profile</a>.") % {"url": profile_url}
         my_send_mail(subject, body, member, instance)
 
 
@@ -159,9 +159,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     body = _("We confirm that your membership has been accepted by the board. We welcome you to our community!")
 
     # Add card number to notification
-    body += (
-        "<br /><br />" + _("Your card number is: <b>%(number)03d</b>") % {"number": member.membership.card_number} + "."
-    )
+    body += "<br /><br />" + _("Your card number is: <b>%(number)03d</b>.") % {"number": member.membership.card_number}
 
     # Add additional response details if provided
     if resp:
@@ -198,8 +196,8 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     if unpaid_registration_links:
         body += (
             "<br /><br />"
-            + _("To confirm your event registration, please complete your payment within one week. You can do so here")
-            + ": "
+            + _("To confirm your event registration, please complete your payment within one week. You can do so here:")
+            + " "
             + ", ".join(unpaid_registration_links)
         )
 

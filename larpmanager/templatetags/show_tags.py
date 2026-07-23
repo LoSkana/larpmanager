@@ -139,7 +139,7 @@ def tooltip_fields(character: dict[str, Any], tooltip: str) -> str:
     tooltip += "</span>"
 
     if character.get("player_uuid"):
-        tooltip += "<span>" + str(_("Player")) + ": <b>" + escape(character["player_full"]) + "</b></span>"
+        tooltip += "<span>" + str(_("Player:")) + " <b>" + escape(character["player_full"]) + "</b></span>"
 
     return tooltip
 
@@ -166,7 +166,7 @@ def tooltip_factions(character: dict[str, Any], context: dict, tooltip: str) -> 
                 faction_names += ", "
             faction_names += escape(faction_element["name"])
     if faction_names:
-        tooltip += "<span>" + str(_("Factions")) + ": " + faction_names + "</span>"
+        tooltip += "<span>" + str(_("Factions:")) + " " + faction_names + "</span>"
     return tooltip
 
 

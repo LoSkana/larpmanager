@@ -443,7 +443,7 @@ def orga_features(request: HttpRequest, event_slug: str) -> Any:
             el.follow_link = _orga_feature_after_link(el, event_slug)
         if len(context["new_features"]) == 1:
             feature = context["new_features"][0]
-            msg = _("Feature %(name)s activated") % {"name": feature.name} + "! " + feature.after_text
+            msg = _("Feature %(name)s activated!") % {"name": feature.name} + " " + feature.after_text
             clear_messages(request)
             messages.success(request, msg)
             return redirect(feature.follow_link)

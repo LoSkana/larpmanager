@@ -201,7 +201,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
     activate(mb.language)
     subj = hdr(instance.association) + _("Role approval %(role)s") % {"role": instance.name}
     url = get_url(reverse("manage"), instance.association)
-    body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
+    body = _("Access the management panel <a href= %(url)s'>from here</a>!") % {"url": url}
     my_send_mail(subj, body, mb, instance.association)
 
     # Notify existing executives about the new role assignment
@@ -285,7 +285,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                 "event": instance.event,
             }
             url = get_url(reverse("manage", kwargs={"event_slug": instance.event.slug}), instance.event.association)
-            body = _("Access the management panel <a href= %(url)s'>from here</a>") % {"url": url} + "!"
+            body = _("Access the management panel <a href= %(url)s'>from here</a>!") % {"url": url}
             my_send_mail(subj, body, mb, instance.event)
 
             # Notify organizers about the new role assignment
@@ -342,7 +342,7 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
     activate(registration.member.language)
 
     # Build email subject with event header and localized message
-    email_subject = hdr(registration.run.event) + _("Bring a friend to %(event)s") % {"event": registration.run} + "!"
+    email_subject = hdr(registration.run.event) + _("Bring a friend to %(event)s!") % {"event": registration.run}
 
     # Start email body with the user's personal discount code
     email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": registration.uuid}
@@ -354,29 +354,25 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
         + " "
         + _(
             "Every friend who signs up and uses this code in the 'Discounts' field will "
-            "receive %(amount_to)s %(currency)s off the ticket",
+            "receive %(amount_to)s %(currency)s off the ticket.",
         )
         % {
             "amount_to": context["bring_friend_discount_to"],
             "currency": registration.run.event.association.get_currency_symbol(),
         }
-        + ". "
+        + " "
         # Add information about the user's own discount benefit
-        + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration")
+        + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration.")
         % {
             "amount_from": context["bring_friend_discount_from"],
             "currency": registration.run.event.association.get_currency_symbol(),
         }
-        + "."
     )
 
     # Add link to check remaining discount availability
-    email_body += (
-        "<br /><br />"
-        + _("Check the available number of discounts <a href='%(url)s'>on this page</a>")
-        % {"url": f"{registration.run.get_slug()}/limitations/"}
-        + "."
-    )
+    email_body += "<br /><br />" + _("Check the available number of discounts <a href='%(url)s'>on this page</a>.") % {
+        "url": f"{registration.run.get_slug()}/limitations/"
+    }
 
     # Add closing message and send the email
     email_body += "<br /><br />" + _("See you soon!")
@@ -432,7 +428,7 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
         reverse("character_your", kwargs={"event_slug": instance.run.get_slug()}),
         instance.run.event,
     )
-    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>") % {"url": character_url} + "!"
+    body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": character_url}
 
     # Append custom assignment message if configured for this event
     custom_assignment_message = get_event_text(instance.run.event_id, EventTextType.ASSIGNMENT)

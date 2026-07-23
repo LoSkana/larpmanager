@@ -474,7 +474,7 @@ def _check_registration_payment_preconditions(
         if "error_cf" in result:
             messages.warning(
                 request,
-                _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"],
+                _("Your tax code has a problem that we ask you to correct:") + " " + result["error_cf"],
             )
             return redirect("profile")
 
@@ -1105,7 +1105,7 @@ def accounting_submit(request: HttpRequest, payment_method: str, invoice_uuid: s
     notify_invoice_check(inv)
 
     # Display success message and redirect to profile check
-    mes = _("Payment received") + "! " + _("As soon as it is approved, your accounting will be updated.")
+    mes = _("We've received your payment! Your accounting will be updated once it is approved.")
     return accounting_profile_check(request, mes, inv)
 
 

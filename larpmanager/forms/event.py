@@ -608,12 +608,9 @@ class OrgaConfigForm(ConfigForm):
 
         # Disable self-service cancellation
         disable_cancellation_label = _("Disable cancellation")
-        disable_cancellation_help_text = (
-            _("If checked: participants cannot cancel their own registration")
-            + "; "
-            + _(
-                "A cancellation request email will be sent to the staff instead",
-            )
+        disable_cancellation_help_text = _(
+            "If checked: participants cannot cancel their own registration; A cancellation request "
+            "email will be sent to the staff instead"
         )
         self.add_configs(
             "player_cancellation_disable",
@@ -1291,13 +1288,13 @@ class OrgaEventTextForm(BaseModelForm):
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
             # Ensure the existing default is not the current instance being edited
             if res.count() > 0 and res.first().pk != self.instance.pk:
-                self.add_error("default", "There is already a language set as default") + "!"
+                self.add_error("default", "There is already a language set as default!")
 
         # Validate language-type combination uniqueness
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
         # Ensure the existing combination is not the current instance being edited
         if res.count() > 0 and res.first().pk != self.instance.pk:
-            self.add_error("language", "There is already a language of this type") + "!"
+            self.add_error("language", "There is already a language of this type!")
 
         return cleaned_data
 

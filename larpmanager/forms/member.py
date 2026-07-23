@@ -396,7 +396,7 @@ class ResidenceWidget(forms.MultiWidget):
 def validate_no_pipe(value: str) -> None:
     """Validate that the value does not contain pipe characters."""
     if "|" in value:
-        raise forms.ValidationError(_("Character not allowed") + ": |")
+        raise forms.ValidationError(_("Value not allowed:") + " |")
 
 
 class ResidenceField(forms.MultiValueField):
@@ -628,12 +628,11 @@ class ProfileForm(BaseProfileForm):
             duplicates = duplicates.exclude(pk=self.instance.pk)
         if duplicates.exists():
             raise ValidationError(
-                _("An account with this phone number may already exist")
-                + ". "
-                + _("If it is yours, please recover it from the login page")
-                + "; "
-                + _("otherwise please open a support ticket")
-                + ". "
+                _(
+                    "Looks like an account already exists with this phone number! "
+                    "You can recover your account from the login page, "
+                    "or contact support if you need assistance."
+                )
             )
 
         return data

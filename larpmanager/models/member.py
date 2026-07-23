@@ -44,7 +44,7 @@ from larpmanager.utils.core.codes import countries
 logger = logging.getLogger(__name__)
 
 SENSITIVE_DISCLAIMER = _(
-    "It will only be used for internal bureaucratic purposes, and will NEVER be displayed to other participants"
+    "It will only be used for internal bureaucratic purposes, and will NEVER be displayed to other participants."
 )
 
 
@@ -147,11 +147,10 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         null=True,
         help_text=_(
             "If the first name shown on your documents is different from the one you prefer to use, then write "
-            "it here; otherwise leave this field empty",
+            "it here; otherwise leave this field empty.",
         )
-        + ". "
-        + SENSITIVE_DISCLAIMER
-        + ". ",
+        + " "
+        + SENSITIVE_DISCLAIMER,
     )
 
     gender = models.CharField(
@@ -160,10 +159,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         default=None,
         verbose_name=_("Legal Gender"),
         null=True,
-        help_text=_("Indicate your legal gender as it appears on official documents")
-        + ". "
-        + SENSITIVE_DISCLAIMER
-        + ". ",
+        help_text=_("Indicate your legal gender as it appears on official documents.") + " " + SENSITIVE_DISCLAIMER,
     )
 
     pronoun = models.CharField(

@@ -486,10 +486,10 @@ def registration_redirect(
     context = {"event": run}
     if is_new_registration:
         # Success message for new registration
-        message = _("Registration confirmed at %(event)s") % context + "!"
+        message = _("Registration confirmed at %(event)s!") % context
     else:
         # Success message for registration update
-        message = _("Registration updated to %(event)s") % context + "!"
+        message = _("Registration updated to %(event)s!") % context
 
     messages.success(request, message)
     return redirect("event", event_slug=registration.run.get_slug())
@@ -1192,12 +1192,12 @@ def unregister(request: HttpRequest, event_slug: str) -> Any:
                 % email_context
             )
             email_body += ".<br /><br />"
-            email_body += _("To process the cancellation, click here") + ": "
+            email_body += _("To process the cancellation, click here:") + " "
             email_body += f"<a href='{cancel_url}'>{cancel_url}</a>"
             for organizer in get_event_organizers(event):
                 my_send_mail(email_subject, email_body, organizer, run)
 
-            mes = _("Your cancellation request has been sent to the staff") + "; " + _("please wait for their response")
+            mes = _("Your cancellation request has been sent to the staff; please wait for their response")
             messages.success(request, mes)
         else:
             cancel_reg(registration)

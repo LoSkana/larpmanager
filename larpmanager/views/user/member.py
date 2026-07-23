@@ -1001,7 +1001,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
     # Handle delegated user trying to return to parent account
     if request.user.member.parent:
         if request.method == "POST":
-            message = _("You are now logged in with your main account") + ": " + str(request.user.member.parent)
+            message = _("You are now logged in with your main account:") + " " + str(request.user.member.parent)
             return _switch_account(request, request.user.member.parent.user, message)
         # Show option to return to parent account
         return render(request, "larpmanager/member/delegated.html", context)
@@ -1020,7 +1020,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
                 msg = f"delegated account not found: {account_login}"
                 raise Http404(msg)
             delegated = del_dict[account_login]
-            message = _("You are now logged in with the delegate account") + ": " + str(delegated)
+            message = _("You are now logged in with the delegate account:") + " " + str(delegated)
             return _switch_account(request, delegated.user, message)
 
         # Handle creating a new delegated account
