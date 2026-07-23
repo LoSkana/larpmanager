@@ -3,7 +3,7 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "Go"
-msgstr "Weiter"
+msgstr "Gehen"
 
 msgid "Hi"
 msgstr "Hallo"
@@ -42,7 +42,7 @@ msgid "PDF"
 msgstr "PDF"
 
 msgid "Tot"
-msgstr "Tot"
+msgstr "Ges"
 
 msgid "VAT"
 msgstr "Mehrwertsteuer"
@@ -162,7 +162,7 @@ msgid "None"
 msgstr "Keine"
 
 msgid "Note"
-msgstr "Anmerkungen"
+msgstr "Notiz"
 
 msgid "Only"
 msgstr "Nur"
@@ -234,7 +234,7 @@ msgid "Type"
 msgstr "Typ"
 
 msgid "Used"
-msgstr "Gebraucht"
+msgstr "Genutzt"
 
 msgid "User"
 msgstr "Benutzer"
@@ -249,7 +249,7 @@ msgid "What"
 msgstr "Was"
 
 msgid "When"
-msgstr "Wenn"
+msgstr "Wann"
 
 msgid "days"
 msgstr "Tage"
@@ -264,7 +264,7 @@ msgid "more"
 msgstr "mehr"
 
 msgid "used"
-msgstr "gebraucht"
+msgstr "genutzt"
 
 msgid "Actor"
 msgstr "Schauspieler"
@@ -288,7 +288,7 @@ msgid "Avoid"
 msgstr "Vermeiden"
 
 msgid "Award"
-msgstr "Auszeichnung"
+msgstr "Zuweisung"
 
 msgid "Badge"
 msgstr "Abzeichen"
@@ -309,7 +309,7 @@ msgid "Count"
 msgstr "Zählung"
 
 msgid "Cover"
-msgstr "Abdeckung"
+msgstr "Umschlag"
 
 msgid "Dates"
 msgstr "Daten"
@@ -506,7 +506,7 @@ msgid "Answer"
 msgstr "Antwort"
 
 msgid "Awards"
-msgstr "Auszeichnungen"
+msgstr "Zuweisungen"
 
 msgid "Badges"
 msgstr "Abzeichen"
@@ -536,7 +536,7 @@ msgid "Delete"
 msgstr "Löschen"
 
 msgid "Detail"
-msgstr "Einzelheiten"
+msgstr "Einzelheit"
 
 msgid "Direct"
 msgstr "Direkt"
@@ -668,7 +668,7 @@ msgid "Review"
 msgstr "Überprüfung"
 
 msgid "Safety"
-msgstr "Sicherheit"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Suche"
@@ -1044,7 +1044,7 @@ msgid "options"
 msgstr "optionen"
 
 msgid "seconds"
-msgstr "Sekunden"
+msgstr "sekunden"
 
 msgid "Accepted"
 msgstr "Angenommen"
@@ -1161,7 +1161,7 @@ msgid "Inactive"
 msgstr "Inaktiv"
 
 msgid "Included"
-msgstr "Einschließlich"
+msgstr "Einbezogen"
 
 msgid "Invoices"
 msgstr "Rechnungen"
@@ -1275,7 +1275,7 @@ msgid "Refunded"
 msgstr "Erstattet"
 
 msgid "Register"
-msgstr "Register"
+msgstr "Registrieren"
 
 msgid "Registry"
 msgstr "Verzeichnis"
@@ -1353,13 +1353,13 @@ msgid "Workshop"
 msgstr "Workshop"
 
 msgid "download"
-msgstr "Herunterladen"
+msgstr "herunterladen"
 
 msgid "factions"
-msgstr "Fraktionen"
+msgstr "fraktionen"
 
 msgid "payments"
-msgstr "Zahlungen"
+msgstr "zahlungen"
 
 msgid "positive"
 msgstr "positiv"
@@ -1533,7 +1533,7 @@ msgid "Retention"
 msgstr "Aufbewahrung"
 
 msgid "Returning"
-msgstr "Rückkehr"
+msgstr "Rückgabe"
 
 msgid "Set quest"
 msgstr "Quest festlegen"
@@ -1785,7 +1785,7 @@ msgid "Play Again"
 msgstr "Erneut spielen"
 
 msgid "Plot Roles"
-msgstr "Handlungsrollen"
+msgstr "Plot-Rollen"
 
 msgid "Pool Types"
 msgstr "Pool-Typen"
@@ -1803,10 +1803,10 @@ msgid "Priorities"
 msgstr "Prioritäten"
 
 msgid "Quest Type"
-msgstr "Aufgabentyp"
+msgstr "Quest-Typ"
 
 msgid "Quest type"
-msgstr "Art der Aufgabe"
+msgstr "Quest-Typ"
 
 msgid "Recipients"
 msgstr "Empfänger"
@@ -1923,7 +1923,7 @@ msgid "Actual paid"
 msgstr "Tatsächlich gezahlt"
 
 msgid "Add to plot"
-msgstr "Zur Handlung hinzufügen"
+msgstr "Zum Plot hinzufügen"
 
 msgid "Additionals"
 msgstr "Zusätze"
@@ -2217,7 +2217,7 @@ msgid "City / Place"
 msgstr "Stadt/Ort"
 
 msgid "Collaborator"
-msgstr "Beitragende"
+msgstr "Mitarbeiter"
 
 msgid "Compact list"
 msgstr "Kompakte Liste"
@@ -2716,7 +2716,7 @@ msgid "View Selector"
 msgstr "Ansicht Selektor"
 
 msgid "Wanna connect"
-msgstr "Möchten Sie eine Verbindung herstellen"
+msgstr "Willst du dich verbinden"
 
 msgid "Your messages"
 msgstr "Ihre Nachrichten"
@@ -2870,7 +2870,7 @@ msgid "Member removed"
 msgstr "Mitglied entfernt"
 
 msgid "Member revoked"
-msgstr "Partner widerrufen"
+msgstr "Mitglied widerrufen"
 
 msgid "Membership fee"
 msgstr "Beiträge"

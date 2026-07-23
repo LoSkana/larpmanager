@@ -288,7 +288,7 @@ msgid "Avoid"
 msgstr "Unikać"
 
 msgid "Award"
-msgstr "Nagroda"
+msgstr "Przyznanie"
 
 msgid "Badge"
 msgstr "Odznaka"
@@ -668,7 +668,7 @@ msgid "Review"
 msgstr "Recenzja"
 
 msgid "Safety"
-msgstr "Bezpieczeństwo"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Wyszukiwanie"
@@ -764,7 +764,7 @@ msgid "Answers"
 msgstr "Odpowiedzi"
 
 msgid "Approve"
-msgstr "Zatwierdzić"
+msgstr "Zatwierdź"
 
 msgid "Archive"
 msgstr "Archiwum"
@@ -791,7 +791,7 @@ msgid "Columns"
 msgstr "Kolumny"
 
 msgid "Confirm"
-msgstr "Potwierdzenie"
+msgstr "Potwierdź"
 
 msgid "Contact"
 msgstr "Kontakt"
@@ -815,7 +815,7 @@ msgid "Credits"
 msgstr "Kredyty"
 
 msgid "Decline"
-msgstr "Odrzucić"
+msgstr "Odrzuć"
 
 msgid "Default"
 msgstr "Domyślne"
@@ -824,7 +824,7 @@ msgid "Details"
 msgstr "Szczegóły"
 
 msgid "Display"
-msgstr "Wyświetlacz"
+msgstr "Display"
 
 msgid "Element"
 msgstr "Element"
@@ -842,7 +842,7 @@ msgid "Gallery"
 msgstr "Galeria"
 
 msgid "Handout"
-msgstr "Materiał informacyjny"
+msgstr "Handout"
 
 msgid "History"
 msgstr "Historia"
@@ -920,7 +920,7 @@ msgid "Problem"
 msgstr "Problem"
 
 msgid "Proceed"
-msgstr "Kontynuować"
+msgstr "Kontynuuj"
 
 msgid "Profile"
 msgstr "Profil"
@@ -1011,7 +1011,7 @@ msgid "Used by"
 msgstr "Używany przez"
 
 msgid "Utility"
-msgstr "Użyteczność"
+msgstr "Narzędzie"
 
 msgid "Version"
 msgstr "Wersja"
@@ -1155,7 +1155,7 @@ msgid "Giftable"
 msgstr "Nadaje się na prezent"
 
 msgid "Handouts"
-msgstr "Materiały informacyjne"
+msgstr "Handouty"
 
 msgid "Inactive"
 msgstr "Nieaktywny"
@@ -1197,7 +1197,7 @@ msgid "One-Time"
 msgstr "Jednorazowo"
 
 msgid "One-shot"
-msgstr "Jeden strzał"
+msgstr "One-shot"
 
 msgid "Optional"
 msgstr "Opcjonalnie"
@@ -1353,7 +1353,7 @@ msgid "Workshop"
 msgstr "Warsztat"
 
 msgid "download"
-msgstr "pobieranie"
+msgstr "Pobierz"
 
 msgid "factions"
 msgstr "frakcje"
@@ -1386,7 +1386,7 @@ msgid "Cancelled"
 msgstr "Anulowane"
 
 msgid "Character"
-msgstr "Charakter"
+msgstr "Postać"
 
 msgid "Completed"
 msgstr "Zakończono"
@@ -1443,7 +1443,7 @@ msgid "Interface"
 msgstr "Interfejs"
 
 msgid "Inventory"
-msgstr "Inwentaryzacja"
+msgstr "Inwentarz"
 
 msgid "Languages"
 msgstr "Języki"
@@ -1629,7 +1629,7 @@ msgid "Appointees"
 msgstr "Mianowani"
 
 msgid "Approve it"
-msgstr "Zatwierdzić"
+msgstr "Zatwierdź"
 
 msgid "Assignment"
 msgstr "Przydział"
@@ -1722,7 +1722,7 @@ msgid "Link color"
 msgstr "Kolor łącza"
 
 msgid "Matchmaker"
-msgstr "Organizator"
+msgstr "Dopasowywacz"
 
 msgid "Media file"
 msgstr "Plik multimedialny"
@@ -2232,7 +2232,7 @@ msgid "Content type"
 msgstr "Typ zawartości"
 
 msgid "Contributors"
-msgstr "Autorzy"
+msgstr "Współpracownicy"
 
 msgid "Credits name"
 msgstr "Nazwa kredytu"
@@ -2759,7 +2759,7 @@ msgid "Bring a friend"
 msgstr "Przyprowadź przyjaciela"
 
 msgid "Bulk operation"
-msgstr "Praca masowa"
+msgstr "Operacja masowa"
 
 msgid "Cargo manifest"
 msgstr "Manifest ładunku"
@@ -2825,13 +2825,13 @@ msgid "Final quantity"
 msgstr "Ilość końcowa"
 
 msgid "Full returning"
-msgstr "Pełny powrót"
+msgstr "Pełny zwrot"
 
 msgid "Global balance"
 msgstr "Bilans globalny"
 
 msgid "Handout Models"
-msgstr "Szablony pomocy"
+msgstr "Szablony materiałów"
 
 msgid "Help Questions"
 msgstr "Pytania dotyczące pomocy"
@@ -2867,7 +2867,7 @@ msgid "Member refused"
 msgstr "Członek odmówił"
 
 msgid "Member removed"
-msgstr "Użytkownik został usunięty"
+msgstr "Członek został usunięty"
 
 msgid "Member revoked"
 msgstr "Członek odwołany"
@@ -2906,7 +2906,7 @@ msgid "Pre-requisites"
 msgstr "Wymagania wstępne"
 
 msgid "Print registry"
-msgstr "Rejestr drukowania"
+msgstr "Drukuj rejestr"
 
 msgid "Privacy Policy"
 msgstr "Polityka prywatności"
@@ -2987,7 +2987,7 @@ msgid "Your character"
 msgstr "Twoja postać"
 
 msgid "complete sheet"
-msgstr "wypełnij arkusz"
+msgstr "pełny arkusz"
 
 msgid "customisations"
 msgstr "dostosowania"
@@ -3026,16 +3026,16 @@ msgid "Bundle is ready"
 msgstr "Pakiet jest gotowy"
 
 msgid "Change password"
-msgstr "Zmiana hasła"
+msgstr "Zmień hasło"
 
 msgid "Character Sheet"
 msgstr "Arkusz postaci"
 
 msgid "Character cover"
-msgstr "Osłona postaci"
+msgstr "Okładka postaci"
 
 msgid "Characters link"
-msgstr "Postacie link"
+msgstr "Link postaci"
 
 msgid "Characters list"
 msgstr "Lista postaci"
@@ -3059,7 +3059,7 @@ msgid "Delegated users"
 msgstr "Delegowani użytkownicy"
 
 msgid "Disable credits"
-msgstr "Wyłączenie kredytów"
+msgstr "Wyłącz kredyty"
 
 msgid "Document number"
 msgstr "Numer dokumentu"
@@ -3068,7 +3068,7 @@ msgid "Drag to reorder"
 msgstr "Przeciągnij, żeby zmienić kolejność"
 
 msgid "Edit membership"
-msgstr "Edycja członkostwa"
+msgstr "Edytuj członkostwo"
 
 msgid "Event not found"
 msgstr "Nie znaleziono zdarzenia"
@@ -3095,7 +3095,7 @@ msgid "Invite declined"
 msgstr "Zaproszenie odrzucone"
 
 msgid "Mail assignment"
-msgstr "Przydział poczty"
+msgstr "Przypisanie e-mailem"
 
 msgid "Maximum members"
 msgstr "Maksymalna liczba członków"
@@ -3119,7 +3119,7 @@ msgid "Overall balance"
 msgstr "Ogólny bilans"
 
 msgid "Parent campaign"
-msgstr "Kampania rodzicielska"
+msgstr "Kampania nadrzędna"
 
 msgid "Payment Methods"
 msgstr "Metody płatności"
@@ -3155,7 +3155,7 @@ msgid "Public Holidays"
 msgstr "Święta państwowe"
 
 msgid "Publish players"
-msgstr "Publikowanie graczy"
+msgstr "Publikuj graczy"
 
 msgid "Refund Requests"
 msgstr "Żądania zwrotu pieniędzy"
@@ -3164,7 +3164,7 @@ msgid "Remove prologue"
 msgstr "Usuń prolog"
 
 msgid "Replacing names"
-msgstr "Zastępowanie nazw"
+msgstr "Zastąp nazwy"
 
 msgid "Restore Preview"
 msgstr "Przywróć podgląd"
@@ -3323,7 +3323,7 @@ msgid "First assignment"
 msgstr "Pierwsze zadanie"
 
 msgid "Handout template"
-msgstr "Szablon materiałów informacyjnych"
+msgstr "Szablon handoutu"
 
 msgid "Interval sending"
 msgstr "Wysyłanie interwałowe"
@@ -3347,7 +3347,7 @@ msgid "Multiple systems"
 msgstr "Wiele systemów"
 
 msgid "My guild invites"
-msgstr "Moja gildia zaprasza"
+msgstr "Zaproszenia od mojej gildii"
 
 msgid "Name of the plot"
 msgstr "Nazwa misji"
@@ -3389,7 +3389,7 @@ msgid "Password changed"
 msgstr "Hasło zostało zmienione"
 
 msgid "Patron / Reduced"
-msgstr "Patron / Redukcja"
+msgstr "Patron / Zniżka"
 
 msgid "Payment currency"
 msgstr "Waluta płatności"

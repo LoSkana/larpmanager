@@ -93,7 +93,7 @@ msgid "Done"
 msgstr "Fait"
 
 msgid "Edit"
-msgstr "Editer"
+msgstr "Éditer"
 
 msgid "File"
 msgstr "Fichier"
@@ -593,7 +593,7 @@ msgid "Invite"
 msgstr "Inviter"
 
 msgid "Joined"
-msgstr "Rejoint"
+msgstr "Adhéré"
 
 msgid "Labels"
 msgstr "Étiquettes"
@@ -641,7 +641,7 @@ msgid "Option"
 msgstr "Option"
 
 msgid "Patron"
-msgstr "Patron"
+msgstr "Mécène"
 
 msgid "Player"
 msgstr "Joueur"
@@ -668,7 +668,7 @@ msgid "Review"
 msgstr "Révision"
 
 msgid "Safety"
-msgstr "Sécurité"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Recherche"
@@ -731,7 +731,7 @@ msgid "Verify"
 msgstr "Vérifier"
 
 msgid "Voting"
-msgstr "Vote"
+msgstr "Votes"
 
 msgid "issued"
 msgstr "émis"
@@ -743,7 +743,7 @@ msgid "within"
 msgstr "à l'intérieur"
 
 msgid "Ability"
-msgstr "Compétences"
+msgstr "Compétence"
 
 msgid "Actions"
 msgstr "Actions"
@@ -1149,7 +1149,7 @@ msgid "Factions"
 msgstr "Factions"
 
 msgid "Features"
-msgstr "Caractéristiques"
+msgstr "Fonctionnalités"
 
 msgid "Giftable"
 msgstr "Offrable"
@@ -1488,7 +1488,7 @@ msgid "Organizer"
 msgstr "Organisateur"
 
 msgid "Pool type"
-msgstr "Type de regroupement"
+msgstr "Type de pool"
 
 msgid "Portraits"
 msgstr "Portraits"
@@ -1686,7 +1686,7 @@ msgid "Edit guild"
 msgstr "Modifier la guilde"
 
 msgid "Email list"
-msgstr "Liste d'adresses électroniques"
+msgstr "Liste de courriels"
 
 msgid "Event area"
 msgstr "Espace événements"
@@ -1809,7 +1809,7 @@ msgid "Quest type"
 msgstr "Type de quête"
 
 msgid "Recipients"
-msgstr "Bénéficiaires"
+msgstr "Destinataires"
 
 msgid "Refund for"
 msgstr "Remboursement pour"
@@ -1854,7 +1854,7 @@ msgid "Statistics"
 msgstr "Statistiques"
 
 msgid "Surcharges"
-msgstr "Surtaxes"
+msgstr "Suppléments"
 
 msgid "Text color"
 msgstr "Couleur du texte"
@@ -2103,7 +2103,7 @@ msgid "Quick Setup"
 msgstr "Installation rapide"
 
 msgid "Redeem link"
-msgstr "Lien d'activation"
+msgstr "Lien de rédention"
 
 msgid "Register to"
 msgstr "S'inscrire à"

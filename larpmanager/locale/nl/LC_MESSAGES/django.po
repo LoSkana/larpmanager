@@ -288,7 +288,7 @@ msgid "Avoid"
 msgstr "Vermijd"
 
 msgid "Award"
-msgstr "Onderscheiding"
+msgstr "Toewijzing"
 
 msgid "Badge"
 msgstr "Badge"
@@ -506,7 +506,7 @@ msgid "Answer"
 msgstr "Antwoord"
 
 msgid "Awards"
-msgstr "Onderscheidingen"
+msgstr "Toewijzingen"
 
 msgid "Badges"
 msgstr "Badges"
@@ -668,7 +668,7 @@ msgid "Review"
 msgstr "Beoordeling"
 
 msgid "Safety"
-msgstr "Veiligheid"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Zoek op"

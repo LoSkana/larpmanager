@@ -108,7 +108,7 @@ msgid "Gift"
 msgstr "Lahja"
 
 msgid "Help"
-msgstr "Apua"
+msgstr "Ohje"
 
 msgid "Hide"
 msgstr "Piilota"
@@ -288,7 +288,7 @@ msgid "Avoid"
 msgstr "Vältä"
 
 msgid "Award"
-msgstr "Palkinto"
+msgstr "Assegnazione"
 
 msgid "Badge"
 msgstr "Merkki"
@@ -506,7 +506,7 @@ msgid "Answer"
 msgstr "Vastaa"
 
 msgid "Awards"
-msgstr "Palkinnot"
+msgstr "Assegnazioni"
 
 msgid "Badges"
 msgstr "Merkit"
@@ -668,7 +668,7 @@ msgid "Review"
 msgstr "Arvostelu"
 
 msgid "Safety"
-msgstr "Turvallisuus"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Etsi"
@@ -815,7 +815,7 @@ msgid "Credits"
 msgstr "Krediitit"
 
 msgid "Decline"
-msgstr "Hylkäys"
+msgstr "Hylkää"
 
 msgid "Default"
 msgstr "Oletusarvo"
@@ -1008,7 +1008,7 @@ msgid "Updated"
 msgstr "Päivitetty"
 
 msgid "Used by"
-msgstr "Käytetty:"
+msgstr "Käyttäjä:"
 
 msgid "Utility"
 msgstr "Apuohjelma"
@@ -1065,7 +1065,7 @@ msgid "Approved"
 msgstr "Hyväksytty"
 
 msgid "Assigned"
-msgstr "Myönnetty"
+msgstr "Määrätty"
 
 msgid "Auto buy"
 msgstr "Automaattinen osto"
@@ -1152,10 +1152,10 @@ msgid "Features"
 msgstr "Ominaisuudet"
 
 msgid "Giftable"
-msgstr "Lahjaksi"
+msgstr "Lahjattavissa"
 
 msgid "Handouts"
-msgstr "Esitteitä"
+msgstr "Jakelulehtiet"
 
 msgid "Inactive"
 msgstr "Inaktiivinen"
@@ -1413,7 +1413,7 @@ msgid "Deadlines"
 msgstr "Määräajat"
 
 msgid "Delivered"
-msgstr "Jaettu"
+msgstr "Toimitettu"
 
 msgid "Discounts"
 msgstr "Alennukset"
@@ -1458,7 +1458,7 @@ msgid "Milestone"
 msgstr "Virstanpylväs"
 
 msgid "Modifiers"
-msgstr "Muuntimet"
+msgstr "Muokkaajat"
 
 msgid "Move down"
 msgstr "Siirrä alaspäin"
@@ -1467,7 +1467,7 @@ msgid "Movements"
 msgstr "Liikkeet"
 
 msgid "Need help"
-msgstr "Tarvitsen apua"
+msgstr "Tarvitsetko apua"
 
 msgid "New event"
 msgstr "Uusi tapahtuma"
@@ -1530,7 +1530,7 @@ msgid "Residence"
 msgstr "Asuinpaikka"
 
 msgid "Retention"
-msgstr "Säilytys"
+msgstr "Pidätys"
 
 msgid "Returning"
 msgstr "Palautus"
@@ -1560,7 +1560,7 @@ msgid "Start day"
 msgstr "Aloituspäivä"
 
 msgid "Statement"
-msgstr "Lausunto"
+msgstr "Todiste"
 
 msgid "Subdomain"
 msgstr "Aliverkkotunnus"
@@ -1659,7 +1659,7 @@ msgid "Chronology"
 msgstr "Kronologia"
 
 msgid "Collection"
-msgstr "Kokoelma"
+msgstr "Keräys"
 
 msgid "Components"
 msgstr "Komponentit"
@@ -1722,7 +1722,7 @@ msgid "Link color"
 msgstr "Linkin väri"
 
 msgid "Matchmaker"
-msgstr "Naimakauppias"
+msgstr "Sovittaja"
 
 msgid "Media file"
 msgstr "Mediatiedosto"
@@ -1797,7 +1797,7 @@ msgid "Pool types"
 msgstr "Poolityypit"
 
 msgid "Preference"
-msgstr "Etusija"
+msgstr "Mieltymys"
 
 msgid "Priorities"
 msgstr "Prioriteetit"
@@ -1842,10 +1842,10 @@ msgid "Short name"
 msgstr "Lyhyt nimi"
 
 msgid "Speed Larp"
-msgstr "Nopeus Larp"
+msgstr "Speed Larp"
 
 msgid "Speed larp"
-msgstr "Nopeus larp"
+msgstr "Speed larp"
 
 msgid "Start date"
 msgstr "Aloituspäivä"
@@ -2004,7 +2004,7 @@ msgid "Event texts"
 msgstr "Tapahtuman tekstit"
 
 msgid "Fiscal code"
-msgstr "Verokoodi"
+msgstr "Verotunnus"
 
 msgid "Five quotas"
 msgstr "Viisi kiintiötä"
@@ -2133,7 +2133,7 @@ msgid "Shorten URL"
 msgstr "Lyhennä URL-osoitetta"
 
 msgid "Show closed"
-msgstr "Näytä suljettu"
+msgstr "Näytä suljetut"
 
 msgid "Signup link"
 msgstr "Ilmoittautumislinkki"

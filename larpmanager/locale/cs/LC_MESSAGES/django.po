@@ -3,7 +3,7 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "Go"
-msgstr "Přejít na"
+msgstr "Jít"
 
 msgid "Hi"
 msgstr "Ahoj"
@@ -180,7 +180,7 @@ msgid "Plot"
 msgstr "Zápletka"
 
 msgid "Port"
-msgstr "Připojovací port"
+msgstr "Port"
 
 msgid "Prev"
 msgstr "Předchozí"
@@ -300,7 +300,7 @@ msgid "Check"
 msgstr "Zkontrolovat"
 
 msgid "Close"
-msgstr "Uzavřeno"
+msgstr "Zavřít"
 
 msgid "Color"
 msgstr "Barva"
@@ -659,7 +659,7 @@ msgid "Reason"
 msgstr "Důvod"
 
 msgid "Refund"
-msgstr "Vrácení peněz"
+msgstr "Vrácení"
 
 msgid "Remove"
 msgstr "Odstranit"
@@ -668,7 +668,7 @@ msgid "Review"
 msgstr "Přezkoumání"
 
 msgid "Safety"
-msgstr "Bezpečnost"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Vyhledávání"
@@ -878,7 +878,7 @@ msgid "Modules"
 msgstr "Moduly"
 
 msgid "Move up"
-msgstr "Posun nahoru"
+msgstr "Přesunout nahoru"
 
 msgid "No step"
 msgstr "Žádný krok"
@@ -926,7 +926,7 @@ msgid "Profile"
 msgstr "Profil"
 
 msgid "Pronoun"
-msgstr "Zájmena"
+msgstr "Zájmeno"
 
 msgid "Reading"
 msgstr "Čtení"
@@ -1008,7 +1008,7 @@ msgid "Updated"
 msgstr "Aktualizováno"
 
 msgid "Used by"
-msgstr "Používáno od"
+msgstr "Používáno přes"
 
 msgid "Utility"
 msgstr "Utility"
@@ -1077,7 +1077,7 @@ msgid "Campaign"
 msgstr "Kampaň"
 
 msgid "Carousel"
-msgstr "Kolotoč"
+msgstr "Karusel"
 
 msgid "Claimant"
 msgstr "Žadatel"
@@ -1137,7 +1137,7 @@ msgid "Ensemble"
 msgstr "Soubor"
 
 msgid "Excluded"
-msgstr "S výjimkou"
+msgstr "Vyloučeno"
 
 msgid "Expected"
 msgstr "Očekávané"
@@ -1155,13 +1155,13 @@ msgid "Giftable"
 msgstr "Dárkové"
 
 msgid "Handouts"
-msgstr "Handouts"
+msgstr "Podklady"
 
 msgid "Inactive"
 msgstr "Neaktivní"
 
 msgid "Included"
-msgstr "Včetně"
+msgstr "Zahrnuto"
 
 msgid "Invoices"
 msgstr "Faktury"
@@ -1278,7 +1278,7 @@ msgid "Register"
 msgstr "Registrace"
 
 msgid "Registry"
-msgstr "Registrace"
+msgstr "Registr"
 
 msgid "Reminder"
 msgstr "Připomínka"
@@ -1755,7 +1755,7 @@ msgid "New player"
 msgstr "Nový hráč"
 
 msgid "New signup"
-msgstr "Nové registrace"
+msgstr "Nová registrace"
 
 msgid "Newsletter"
 msgstr "Zpravodaj"
@@ -1803,10 +1803,10 @@ msgid "Priorities"
 msgstr "Priority"
 
 msgid "Quest Type"
-msgstr "Typ úkolu"
+msgstr "Typ mise"
 
 msgid "Quest type"
-msgstr "Typ úkolu"
+msgstr "Typ mise"
 
 msgid "Recipients"
 msgstr "Příjemci"
@@ -1941,7 +1941,7 @@ msgid "Assigned to"
 msgstr "Přiřazeno k"
 
 msgid "Assignments"
-msgstr "Ocenění"
+msgstr "Přiřazení"
 
 msgid "Association"
 msgstr "Sdružení"
@@ -1977,7 +1977,7 @@ msgid "Coming soon"
 msgstr "Již brzy"
 
 msgid "Competences"
-msgstr "Odbornost"
+msgstr "Odbornosti"
 
 msgid "Connections"
 msgstr "Připojení"
@@ -2076,7 +2076,7 @@ msgid "Please wait"
 msgstr "Prosím, počkejte"
 
 msgid "Pool Labels"
-msgstr "Štítky bazénu"
+msgstr "Štítky fondů"
 
 msgid "Postal code"
 msgstr "PSČ"
@@ -2097,7 +2097,7 @@ msgid "Public page"
 msgstr "Veřejná stránka"
 
 msgid "Quest types"
-msgstr "Typy úkolů"
+msgstr "Typy misí"
 
 msgid "Quick Setup"
 msgstr "Rychlé nastavení"
@@ -2232,10 +2232,10 @@ msgid "Content type"
 msgstr "Typ obsahu"
 
 msgid "Contributors"
-msgstr "Autoři"
+msgstr "Přispěvatelé"
 
 msgid "Credits name"
-msgstr "Název úvěru"
+msgstr "Název kreditu"
 
 msgid "Event hidden"
 msgstr "Skrytá událost"
@@ -2825,10 +2825,10 @@ msgid "Final quantity"
 msgstr "Konečné množství"
 
 msgid "Full returning"
-msgstr "Celková návratnost"
+msgstr "Úplné vrácení"
 
 msgid "Global balance"
-msgstr "Globální rozpočet"
+msgstr "Globální bilance"
 
 msgid "Handout Models"
 msgstr "Modely pro rozdávání"
@@ -2846,7 +2846,7 @@ msgid "List of voters"
 msgstr "Seznam voličů"
 
 msgid "Mail signature"
-msgstr "Podpis pošty"
+msgstr "Podpis e-mailu"
 
 msgid "Manage it here"
 msgstr "Spravujte ji zde"
@@ -2915,7 +2915,7 @@ msgid "Profiles (PDF)"
 msgstr "Profily (PDF)"
 
 msgid "Progress steps"
-msgstr "Kroky k pokroku"
+msgstr "Kroky pokroku"
 
 msgid "Prologues type"
 msgstr "Typ prologů"
@@ -2969,7 +2969,7 @@ msgid "Type of ticket"
 msgstr "Typ vstupenky"
 
 msgid "Type prologues"
-msgstr "Typ prologu"
+msgstr "Typy prologů"
 
 msgid "URL identifier"
 msgstr "Identifikátor URL"
@@ -2993,7 +2993,7 @@ msgid "customisations"
 msgstr "přizpůsobení"
 
 msgid "refund request"
-msgstr "žádost o proplacení"
+msgstr "žádost o vrácení peněz"
 
 msgid "select a badge"
 msgstr "vyberte odznak"

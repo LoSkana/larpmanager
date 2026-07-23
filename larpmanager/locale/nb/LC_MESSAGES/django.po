@@ -288,7 +288,7 @@ msgid "Avoid"
 msgstr "Unngå"
 
 msgid "Award"
-msgstr "Pris"
+msgstr "Tildeling"
 
 msgid "Badge"
 msgstr "Merke"
@@ -394,7 +394,7 @@ msgid "Payed"
 msgstr "Betalt"
 
 msgid "Photo"
-msgstr "Bilder"
+msgstr "Foto"
 
 msgid "Plots"
 msgstr "Plott"
@@ -668,7 +668,7 @@ msgid "Review"
 msgstr "Anmeldelse"
 
 msgid "Safety"
-msgstr "Sikkerhet"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Søk"
@@ -725,7 +725,7 @@ msgid "Update"
 msgstr "Oppdatering"
 
 msgid "Upload"
-msgstr "Ladning"
+msgstr "Opplasting"
 
 msgid "Verify"
 msgstr "Bekreft"
@@ -842,7 +842,7 @@ msgid "Gallery"
 msgstr "Galleri"
 
 msgid "Handout"
-msgstr "Utdeling"
+msgstr "Handout"
 
 msgid "History"
 msgstr "Historie"
@@ -1155,7 +1155,7 @@ msgid "Giftable"
 msgstr "Gavbar"
 
 msgid "Handouts"
-msgstr "Utdelinger"
+msgstr "Handouts"
 
 msgid "Inactive"
 msgstr "Inaktiv"
@@ -1197,7 +1197,7 @@ msgid "One-Time"
 msgstr "Engangsbruk"
 
 msgid "One-shot"
-msgstr "Ett skudd"
+msgstr "One-shot"
 
 msgid "Optional"
 msgstr "Valgfritt"
@@ -1791,10 +1791,10 @@ msgid "Pool Types"
 msgstr "Pooltyper"
 
 msgid "Pool label"
-msgstr "Bassengetikett"
+msgstr "Pool-etikett"
 
 msgid "Pool types"
-msgstr "Bassengtyper"
+msgstr "Pool-typer"
 
 msgid "Preference"
 msgstr "Preferanse"
@@ -2022,7 +2022,7 @@ msgid "In Progress"
 msgstr "Pågående"
 
 msgid "In creation"
-msgstr "I skapelsen"
+msgstr "Under opprettelse"
 
 msgid "In revision"
 msgstr "I revisjon"
@@ -2250,7 +2250,7 @@ msgid "Faction list"
 msgstr "Liste over fraksjoner"
 
 msgid "Faction logo"
-msgstr "Gruppens logo"
+msgstr "Fraksjonslogo"
 
 msgid "Form section"
 msgstr "Skjemadelen"
@@ -2331,7 +2331,7 @@ msgid "Questions WS"
 msgstr "WS-spørsmål"
 
 msgid "Redirect URL"
-msgstr "Omdirigere URL"
+msgstr "Omdiriger-URL"
 
 msgid "Refund given"
 msgstr "Utstedte refusjoner"
@@ -2409,7 +2409,7 @@ msgid "Translations"
 msgstr "Oversettelser"
 
 msgid "Type of text"
-msgstr "Type tekst"
+msgstr "Teksttype"
 
 msgid "Url Shortner"
 msgstr "URL-forkortelse"
@@ -2512,7 +2512,7 @@ msgid "Days deadline"
 msgstr "Dager frist"
 
 msgid "Deadline date"
-msgstr "Frist"
+msgstr "Fristdato"
 
 msgid "Document type"
 msgstr "Dokumenttype"
@@ -2551,10 +2551,10 @@ msgid "Faction cover"
 msgstr "Gruppedekning"
 
 msgid "Fiscal Budget"
-msgstr "Finansbudsjett"
+msgstr "Skatterbudsjett"
 
 msgid "Free donation"
-msgstr "Gratis donasjon"
+msgstr "Frivillig donasjon"
 
 msgid "Guild created"
 msgstr "Gilde opprettet"
@@ -2614,7 +2614,7 @@ msgid "Original text"
 msgstr "Opprinnelig tekst"
 
 msgid "Passages made"
-msgstr "Tiltak som er iverksatt"
+msgstr "Passasjer gjort"
 
 msgid "Past sessions"
 msgstr "Tidligere økter"
@@ -2825,10 +2825,10 @@ msgid "Final quantity"
 msgstr "Endelig mengde"
 
 msgid "Full returning"
-msgstr "Totalavkastning"
+msgstr "Fullstendig restitusjon"
 
 msgid "Global balance"
-msgstr "Globalt budsjett"
+msgstr "Global balanse"
 
 msgid "Handout Models"
 msgstr "Modeller for utdeling"
@@ -2837,7 +2837,7 @@ msgid "Help Questions"
 msgstr "Hjelpespørsmål"
 
 msgid "Inventory type"
-msgstr "Lagertype"
+msgstr "Inventartype"
 
 msgid "Invite to role"
 msgstr "Inviter til rolle"
@@ -2933,7 +2933,7 @@ msgid "Request signed"
 msgstr "Signert forespørsel"
 
 msgid "Returning type"
-msgstr "Avkastningstype"
+msgstr "Returtype"
 
 msgid "Sensitive data"
 msgstr "Sensitive opplysninger"
@@ -3134,7 +3134,7 @@ msgid "Payment summary"
 msgstr "Betalingsoversikt"
 
 msgid "Pending invites"
-msgstr "Venter på invitasjoner"
+msgstr "Ventende invitasjoner"
 
 msgid "Portraits (PDF)"
 msgstr "Portretter (PDF)"
@@ -3182,7 +3182,7 @@ msgid "Show statistics"
 msgstr "Vis statistikk"
 
 msgid "Shuttle service"
-msgstr "Skytteltrafikk"
+msgstr "Shuttletjeneste"
 
 msgid "Start algorithm"
 msgstr "Start-algoritme"
@@ -3203,7 +3203,7 @@ msgid "View accounting"
 msgstr "Vis regnskap"
 
 msgid "Volounteer data"
-msgstr "Frivillige opplysninger"
+msgstr "Frivillige data"
 
 msgid "WILL BE DELETED"
 msgstr "VIL BLI SLETTET"
@@ -3299,7 +3299,7 @@ msgid "Enabled features"
 msgstr "Aktiverte funksjoner"
 
 msgid "Event Appearance"
-msgstr "Arrangementets opptreden"
+msgstr "Arrangementets utseende"
 
 msgid "Event Navigation"
 msgstr "Hendelsesnavigasjon"
@@ -3380,7 +3380,7 @@ msgid "Organization fee"
 msgstr "Medlemskontingent"
 
 msgid "Organization tax"
-msgstr "Medlemskatt eller Medlemsavgift"
+msgstr "Medlemskatt"
 
 msgid "Partecipation to"
 msgstr "Deltakelse i"
@@ -3428,7 +3428,7 @@ msgid "Reminder payment"
 msgstr "Påminnelse om betaling"
 
 msgid "Reminder profile"
-msgstr "Påminnelsesprofil"
+msgstr "Profilpåminnelse"
 
 msgid "Remove character"
 msgstr "Fjern tegn"
@@ -3530,7 +3530,7 @@ msgid "Cancellation date"
 msgstr "Dato for avmelding"
 
 msgid "Casting algorithm"
-msgstr "Kaststyringsalgoritme"
+msgstr "Casting-algoritme"
 
 msgid "Character profile"
 msgstr "Karakterprofil"
@@ -3569,7 +3569,7 @@ msgid "Download document"
 msgstr "Last ned dokumentet"
 
 msgid "Elements uploaded"
-msgstr "Elementer lastet"
+msgstr "Elementer lastet opp"
 
 msgid "Event public page"
 msgstr "Offentlig side for arrangementet"

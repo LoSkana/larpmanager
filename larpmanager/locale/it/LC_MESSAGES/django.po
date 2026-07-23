@@ -506,10 +506,10 @@ msgid "Answer"
 msgstr "Rispondi"
 
 msgid "Awards"
-msgstr "Premi"
+msgstr "Assegnazioni"
 
 msgid "Badges"
-msgstr "Distintivi"
+msgstr "Badges"
 
 msgid "Cancel"
 msgstr "Annulla"

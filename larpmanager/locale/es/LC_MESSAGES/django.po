@@ -42,7 +42,7 @@ msgid "PDF"
 msgstr "PDF"
 
 msgid "Tot"
-msgstr "Tot"
+msgstr "Total"
 
 msgid "VAT"
 msgstr "IVA"
@@ -288,7 +288,7 @@ msgid "Avoid"
 msgstr "Evitar"
 
 msgid "Award"
-msgstr "Premio"
+msgstr "Asignación"
 
 msgid "Badge"
 msgstr "Insignia"
@@ -415,7 +415,7 @@ msgid "Retry"
 msgstr "¡Inténtalo de nuevo"
 
 msgid "Roles"
-msgstr "Cargos"
+msgstr "Roles"
 
 msgid "Rules"
 msgstr "Reglas"
@@ -506,7 +506,7 @@ msgid "Answer"
 msgstr "Respuesta"
 
 msgid "Awards"
-msgstr "Premios"
+msgstr "Asignaciones"
 
 msgid "Badges"
 msgstr "Insignias"
@@ -668,7 +668,7 @@ msgid "Review"
 msgstr "Revisión"
 
 msgid "Safety"
-msgstr "Seguridad"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Buscar"
@@ -782,7 +782,7 @@ msgid "Camping"
 msgstr "Camping"
 
 msgid "Casting"
-msgstr "Asignación"
+msgstr "Casting"
 
 msgid "Closing"
 msgstr "Cierre"
@@ -842,7 +842,7 @@ msgid "Gallery"
 msgstr "Galería"
 
 msgid "Handout"
-msgstr "Documento"
+msgstr "Handout"
 
 msgid "History"
 msgstr "Historial"
@@ -1086,7 +1086,7 @@ msgid "Complete"
 msgstr "Completo"
 
 msgid "Computed"
-msgstr "Computado"
+msgstr "Calculado"
 
 msgid "Consumed"
 msgstr "Consumidos"
@@ -1155,7 +1155,7 @@ msgid "Giftable"
 msgstr "Regalable"
 
 msgid "Handouts"
-msgstr "Documentos"
+msgstr "Handouts"
 
 msgid "Inactive"
 msgstr "Inactivo"
@@ -1275,7 +1275,7 @@ msgid "Refunded"
 msgstr "Reembolsado"
 
 msgid "Register"
-msgstr "Regístrese"
+msgstr "Registrarse"
 
 msgid "Registry"
 msgstr "Registro"
@@ -1377,7 +1377,7 @@ msgid "Approvals"
 msgstr "Aprobaciones"
 
 msgid "Attending"
-msgstr "Asistiendo"
+msgstr "Asistente"
 
 msgid "Available"
 msgstr "Disponible"
@@ -1728,7 +1728,7 @@ msgid "Media file"
 msgstr "Archivo multimedia"
 
 msgid "Membership"
-msgstr "Socio"
+msgstr "Membresía"
 
 msgid "Milestones"
 msgstr "Hitos"
@@ -1755,7 +1755,7 @@ msgid "New player"
 msgstr "Nuevo jugador"
 
 msgid "New signup"
-msgstr "Nuevas inscripciones"
+msgstr "Nueva inscripción"
 
 msgid "Newsletter"
 msgstr "Boletín"
@@ -1869,7 +1869,7 @@ msgid "Total paid"
 msgstr "Total pagado"
 
 msgid "Two quotas"
-msgstr "Dos plazos"
+msgstr "Dos cuotas"
 
 msgid "Usage date"
 msgstr "Fecha de consumo"
@@ -1962,7 +1962,7 @@ msgid "Cache reset"
 msgstr "¡Reinicio de caché"
 
 msgid "Carbon copy"
-msgstr "Duplicado"
+msgstr "Copia de carbón"
 
 msgid "Card number"
 msgstr "Número de tarjeta"
@@ -2052,7 +2052,7 @@ msgid "Limitations"
 msgstr "Limitaciones"
 
 msgid "Lock events"
-msgstr "Eventos de bloqueo"
+msgstr "Bloquear eventos"
 
 msgid "Nationality"
 msgstr "Nacionalidad"
@@ -2602,7 +2602,7 @@ msgid "No events yet"
 msgstr "Aún no hay eventos"
 
 msgid "Not completed"
-msgstr "No completado"
+msgstr "No completados"
 
 msgid "Number events"
 msgstr "Número de eventos"
@@ -2677,7 +2677,7 @@ msgid "Shared secret"
 msgstr "Secreto compartido"
 
 msgid "Show inactive"
-msgstr "Mostrar inactivo"
+msgstr "Mostrar inactivas"
 
 msgid "Signup update"
 msgstr "Actualización del registro"
@@ -2873,7 +2873,7 @@ msgid "Member revoked"
 msgstr "Miembro revocado"
 
 msgid "Membership fee"
-msgstr "Cuotas de afiliación"
+msgstr "Cuota de afiliación"
 
 msgid "Multiplication"
 msgstr "Multiplicación"
@@ -2969,7 +2969,7 @@ msgid "Type of ticket"
 msgstr "Tipo de entrada"
 
 msgid "Type prologues"
-msgstr "Tipo de prólogo"
+msgstr "Tipo de prólogos"
 
 msgid "URL identifier"
 msgstr "Identificador de URL"
@@ -3005,7 +3005,7 @@ msgid "Ability removed"
 msgstr "Capacidad eliminada"
 
 msgid "Add to xp award"
-msgstr "Añadir a los puntos de experiencia"
+msgstr "Añadir a la asignación de XP"
 
 msgid "App Integration"
 msgstr "Integración de aplicaciones"
@@ -3035,7 +3035,7 @@ msgid "Character cover"
 msgstr "Portada del personaje"
 
 msgid "Characters link"
-msgstr "Enlace al personaje"
+msgstr "Enlace a personajes"
 
 msgid "Characters list"
 msgstr "Lista de personajes"
@@ -3074,7 +3074,7 @@ msgid "Event not found"
 msgstr "Evento no encontrado"
 
 msgid "External access"
-msgstr "Acceso exterior"
+msgstr "Acceso externo"
 
 msgid "Filter selected"
 msgstr "Filtro seleccionado"
@@ -3140,7 +3140,7 @@ msgid "Portraits (PDF)"
 msgstr "Retratos (PDF)"
 
 msgid "Preview Restore"
-msgstr "Vista previa Restaurar"
+msgstr "Restaurar vista previa"
 
 msgid "Private message"
 msgstr "Mensaje privado"
@@ -3170,7 +3170,7 @@ msgid "Restore Preview"
 msgstr "Restaurar vista previa"
 
 msgid "Role invitation"
-msgstr "Invitación a participar"
+msgstr "Invitación a un rol"
 
 msgid "Select Language"
 msgstr "Seleccionar idioma"
@@ -3233,7 +3233,7 @@ msgid "printable sheet"
 msgstr "hoja imprimible"
 
 msgid "upcoming events"
-msgstr "Actos programados"
+msgstr "Próximos eventos"
 
 msgid "Ability Template"
 msgstr "Plantilla de capacidades"
@@ -3263,10 +3263,10 @@ msgid "Casting priority"
 msgstr "Prioridad de asignación"
 
 msgid "Character Config"
-msgstr "Configuración de caracteres"
+msgstr "Configuración de personajes"
 
 msgid "Character review"
-msgstr "Revisión de personajes"
+msgstr "Revisión de personaje"
 
 msgid "Collection total"
 msgstr "Total recolectado"
@@ -3302,7 +3302,7 @@ msgid "Event Appearance"
 msgstr "Aspecto del evento"
 
 msgid "Event Navigation"
-msgstr "Navegación por eventos"
+msgstr "Navegación del evento"
 
 msgid "Event accounting"
 msgstr "Contabilidad del evento"
@@ -3323,7 +3323,7 @@ msgid "First assignment"
 msgstr "Primera asignación"
 
 msgid "Handout template"
-msgstr "Plantilla de documento"
+msgstr "Plantilla de handout"
 
 msgid "Interval sending"
 msgstr "Envío a intervalos"
@@ -3347,7 +3347,7 @@ msgid "Multiple systems"
 msgstr "Múltiples sistemas"
 
 msgid "My guild invites"
-msgstr "Mi clan invita a"
+msgstr "Invitaciones de mi gremio"
 
 msgid "Name of the plot"
 msgstr "Nombre de la misión"
@@ -3374,13 +3374,13 @@ msgid "Organisation fee"
 msgstr "Cuota de organización"
 
 msgid "Organisation tax"
-msgstr "Organización fiscal"
+msgstr "Impuesto de organización"
 
 msgid "Organization fee"
 msgstr "Cuota de afiliación"
 
 msgid "Organization tax"
-msgstr "Cuota de organización"
+msgstr "Impuesto de organización"
 
 msgid "Partecipation to"
 msgstr "Participación en"
@@ -3431,7 +3431,7 @@ msgid "Reminder profile"
 msgstr "Recordatorio del perfil"
 
 msgid "Remove character"
-msgstr "Eliminar carácter"
+msgstr "Eliminar personaje"
 
 msgid "Remove from plot"
 msgstr "Eliminar de la misión"
@@ -3641,7 +3641,7 @@ msgid "Not participating"
 msgstr "No participan"
 
 msgid "One-Time Contents"
-msgstr "Contenido único"
+msgstr "Contenidos únicos"
 
 msgid "Organization name"
 msgstr "Nombre de la organización"
@@ -4119,7 +4119,7 @@ msgid "Yes, keep me posted"
 msgstr "Sí, mantenedme informado"
 
 msgid "Your characters are"
-msgstr "Sus personajes son"
+msgstr "Tus personajes son"
 
 msgid "in the organization"
 msgstr "en la organización"

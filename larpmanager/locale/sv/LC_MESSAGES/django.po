@@ -288,7 +288,7 @@ msgid "Avoid"
 msgstr "Undvik"
 
 msgid "Award"
-msgstr "Utmärkelse"
+msgstr "Tilldelning"
 
 msgid "Badge"
 msgstr "Märke"
@@ -1221,7 +1221,7 @@ msgid "Payments"
 msgstr "Betalningar"
 
 msgid "Pdf bulk"
-msgstr "Pdf-massiv"
+msgstr "PDF massivt"
 
 msgid "Personal"
 msgstr "Personal"
@@ -1233,7 +1233,7 @@ msgid "Position"
 msgstr "Position"
 
 msgid "Priority"
-msgstr "Prioriteringar"
+msgstr "Prioritering"
 
 msgid "Problems"
 msgstr "Problem"
@@ -1380,7 +1380,7 @@ msgid "Attending"
 msgstr "Närvarande"
 
 msgid "Available"
-msgstr "Tillgänglig"
+msgstr "Tillgängliga"
 
 msgid "Cancelled"
 msgstr "Avbokad"
@@ -1506,7 +1506,7 @@ msgid "Prologues"
 msgstr "Prologer"
 
 msgid "Promotion"
-msgstr "Marknadsföring"
+msgstr "Promotion"
 
 msgid "Questions"
 msgstr "Frågor"
@@ -2825,7 +2825,7 @@ msgid "Final quantity"
 msgstr "Slutlig kvantitet"
 
 msgid "Full returning"
-msgstr "Total avkastning"
+msgstr "Fullständig återbetalning"
 
 msgid "Global balance"
 msgstr "Global balans"
@@ -2870,10 +2870,10 @@ msgid "Member removed"
 msgstr "Medlem borttagen"
 
 msgid "Member revoked"
-msgstr "Partner återkallad"
+msgstr "Medlem återkallad"
 
 msgid "Membership fee"
-msgstr "Avgifter"
+msgstr "Medlemsavgift"
 
 msgid "Multiplication"
 msgstr "Multiplikation"
@@ -2906,7 +2906,7 @@ msgid "Pre-requisites"
 msgstr "Förkunskapskrav"
 
 msgid "Print registry"
-msgstr "Register för utskrift"
+msgstr "Skriv ut register"
 
 msgid "Privacy Policy"
 msgstr "Integritetspolicy"
@@ -3080,10 +3080,10 @@ msgid "Filter selected"
 msgstr "Filter valt"
 
 msgid "First character"
-msgstr "Första tecknet"
+msgstr "Första karaktären"
 
 msgid "Highlight color"
-msgstr "Markera färg"
+msgstr "Markeringsfärg"
 
 msgid "Invalid request"
 msgstr "Ogiltig begäran"
@@ -3095,13 +3095,13 @@ msgid "Invite declined"
 msgstr "Inbjudan avvisad"
 
 msgid "Mail assignment"
-msgstr "Tilldelning av post"
+msgstr "Tilldelning via mejl"
 
 msgid "Maximum members"
 msgstr "Maximalt antal medlemmar"
 
 msgid "Member approved"
-msgstr "Godkänd av medlem"
+msgstr "Godkänd medlem"
 
 msgid "Membership fees"
 msgstr "Föreningens avgifter"
@@ -3116,7 +3116,7 @@ msgid "Non-residential"
 msgstr "Icke-bostäder"
 
 msgid "Overall balance"
-msgstr "Budget för likvida medel"
+msgstr "Övergripande saldo"
 
 msgid "Parent campaign"
 msgstr "Föräldrakampanj"
@@ -3140,7 +3140,7 @@ msgid "Portraits (PDF)"
 msgstr "Porträtt (PDF)"
 
 msgid "Preview Restore"
-msgstr "Återställning av förhandsgranskning"
+msgstr "Förhandsgranskning av återställning"
 
 msgid "Private message"
 msgstr "Privat meddelande"
@@ -3149,7 +3149,7 @@ msgid "Profile updated"
 msgstr "Profil uppdaterad"
 
 msgid "Progress status"
-msgstr "Framsteg"
+msgstr "Framstegsstatus"
 
 msgid "Public Holidays"
 msgstr "Helgdagar"
@@ -3338,7 +3338,7 @@ msgid "Maximum reserves"
 msgstr "Maximala reserver"
 
 msgid "May the best win"
-msgstr "Må den bästa mannen vinna"
+msgstr "Må den bäste vinna"
 
 msgid "Missing question"
 msgstr "Frågan saknas"
@@ -3476,7 +3476,7 @@ msgid "Transaction fees"
 msgstr "Transaktionsavgifter"
 
 msgid "Transfer preview"
-msgstr "Förhandstitt på övergångar"
+msgstr "Förhandsgranskning av överföringar"
 
 msgid "Workshop Modules"
 msgstr "Workshopmoduler"
@@ -3527,7 +3527,7 @@ msgid "Awaiting approval"
 msgstr "Avvaktar godkännande"
 
 msgid "Cancellation date"
-msgstr "Datum för avregistrering"
+msgstr "Annulleringsdatum"
 
 msgid "Casting algorithm"
 msgstr "Algoritm för rollfördelning"
@@ -3569,7 +3569,7 @@ msgid "Download document"
 msgstr "Ladda ner dokument"
 
 msgid "Elements uploaded"
-msgstr "Elementen är laddade"
+msgstr "Elementen har laddats upp"
 
 msgid "Event public page"
 msgstr "Offentlig evenemangssida"
@@ -3629,7 +3629,7 @@ msgid "Membership status"
 msgstr "Medlemskapets status"
 
 msgid "Module Activation"
-msgstr "Aktivering av modul"
+msgstr "Aktivering av moduler"
 
 msgid "Move to container"
 msgstr "Flytta till container"
@@ -3944,7 +3944,7 @@ msgid "Access Confirmation"
 msgstr "Bekräftelse av åtkomst"
 
 msgid "Access Information:"
-msgstr "Tillgång till information:"
+msgstr "Åtkomstinformation:"
 
 msgid "Accounting tracking"
 msgstr "Spårning av redovisning"
@@ -3977,7 +3977,7 @@ msgid "Characters assigned"
 msgstr "Karaktärer tilldelade"
 
 msgid "Characters shortcut"
-msgstr "Kortkommando för tecken"
+msgstr "Genväg till karaktärer"
 
 msgid "Confirm Unsubscribe"
 msgstr "Bekräfta avbeställning"
@@ -4052,7 +4052,7 @@ msgid "No abilities found."
 msgstr "Inga förmågor hittades."
 
 msgid "No characters found"
-msgstr "Inga tecken hittades"
+msgstr "Inga karaktärer hittades"
 
 msgid "No members assigned"
 msgstr "Inga medlemmar har tilldelats"
@@ -4073,7 +4073,7 @@ msgid "Preferences - Total"
 msgstr "Preferenser - Totalt"
 
 msgid "Public informations"
-msgstr "Information till allmänheten"
+msgstr "Offentlig information"
 
 msgid "Quotas total number"
 msgstr "Totalt antal kvoter"
@@ -4140,7 +4140,7 @@ msgid "All printable sheets"
 msgstr "Alla utskrivbara blad"
 
 msgid "Available characters"
-msgstr "Tillgängliga tecken"
+msgstr "Tillgängliga karaktärer"
 
 msgid "Back to PDF settings"
 msgstr "Tillbaka till PDF-inställningarna"
@@ -4253,7 +4253,7 @@ msgid "Payment confirmation"
 msgstr "Bekräftelse av betalningar"
 
 msgid "Payment installments"
-msgstr "Betalning av delbetalningar"
+msgstr "Delbetalningar"
 
 msgid "Payments in approval"
 msgstr "Betalningar under godkännande"
@@ -4268,7 +4268,7 @@ msgid "Please wait a moment"
 msgstr "Vänligen vänta ett ögonblick"
 
 msgid "Plot-character roles"
-msgstr "Roller mellan intrig och karaktärer"
+msgstr "Intrig-karaktär roller"
 
 msgid "Preference not valid"
 msgstr "Ogiltig preferens"
@@ -4295,19 +4295,19 @@ msgid "Registrations status"
 msgstr "Status för registreringar"
 
 msgid "Remove from xp award"
-msgstr "Ta bort från XP-utmärkelsen"
+msgstr "Ta bort från XP-tilldelning"
 
 msgid "Require registration"
 msgstr "Kräver registrering"
 
 msgid "Returning percentage"
-msgstr "Procentuell avkastning"
+msgstr "Återbetalningsprocent"
 
 msgid "Select the new event"
 msgstr "Välj det nya evenemanget"
 
 msgid "Set character status"
-msgstr "Ange teckenstatus"
+msgstr "Ange karaktärsstatus"
 
 msgid "Set up ability types"
 msgstr "Ställ in förmågetyper"
@@ -4319,7 +4319,7 @@ msgid "Sign up as a reserve"
 msgstr "Anmäl dig som reserv"
 
 msgid "Terms and Conditions"
-msgstr "Villkor och anvisningar"
+msgstr "Villkor och betingelser"
 
 msgid "Terms and conditions"
 msgstr "Villkor och bestämmelser"
@@ -4379,7 +4379,7 @@ msgid "Character sheet intro"
 msgstr "Introduktion till karaktärsblad"
 
 msgid "Characters unassigned"
-msgstr "Tecken som inte är tilldelade"
+msgstr "Karaktärer som inte är tilldelade"
 
 msgid "Code 'Bring a friend'"
 msgstr "Kod \"Ta med en vän\""
