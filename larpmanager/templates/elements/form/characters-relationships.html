@@ -25,7 +25,7 @@
                         <div class="hide  f_{{ key }}">
                             <textarea name="rel_{{ key }}" id="rel_{{key}}">{{ item.direct | safe }}</textarea>
                             <div class="helptext">
-                                {% trans "text length" %}: <span class="count"></span> / {{ form.relationship_max_length }}
+                                {% trans "text length:" %} <span class="count"></span> / {{ form.relationship_max_length }}
                             </div>
                         </div>
                         <div class="helptext">{% trans "How the relationship is described from this character's perspective" %}</div>

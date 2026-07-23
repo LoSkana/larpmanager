@@ -129,23 +129,6 @@ class Command(BaseCommand):
 
             po_file = polib.pofile(po_file_path)
 
-            punctuation_symbols = (".", "?", "!", ",")
-            has_changed = False
-            for entry in po_file:
-                if (
-                    entry.msgstr
-                    and entry.msgstr.endswith(punctuation_symbols)
-                    and not entry.msgid.endswith(punctuation_symbols)
-                ):
-                    if "fuzzy" in entry.flags:
-                        entry.flags.remove("fuzzy")
-                    entry.msgstr = entry.msgstr.rstrip(".?!,")
-                    has_changed = True
-
-            if has_changed:
-                self.save_po(po_file, po_file_path)
-                po_file = polib.pofile(po_file_path)
-
             for entry in po_file.untranslated_entries():
                 self.translate_entry(entry, locale_code)
 

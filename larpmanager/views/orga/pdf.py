@@ -80,7 +80,7 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
         if form.is_valid():
             form.save()
             save_log(context, Event, context["event"], context["event"].uuid)
-            messages.success(request, _("Updated") + "!")
+            messages.success(request, _("Updated!"))
             return redirect(request.path_info)
     else:
         # Initialize form with current event data for GET requests
@@ -177,7 +177,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
             print_character_bkg(context["event"].association.slug, run.get_slug(), ch.uuid)
 
     # Show success message and redirect
-    messages.success(request, _("Regeneration pdf started") + "!")
+    messages.success(request, _("Regeneration pdf started!"))
     return redirect("orga_characters_pdf", event_slug=context["run"].get_slug())
 
 

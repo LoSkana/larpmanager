@@ -11,14 +11,14 @@
     {% if preview_items %}
         <div class="alert alert-warning" role="alert">
             <i class="fas fa-exclamation-triangle"></i>
-            <strong>{% trans "Warning" %}:</strong>
-            {% trans "This operation is permanent and cannot be undone" %}.
-            {% trans "Please review the changes carefully before confirming" %}.
+            <strong>{% trans "Warning:" %}</strong>
+            {% trans "This operation is permanent and cannot be undone." %}
+            {% trans "Please review the changes carefully before confirming." %}
         </div>
         <h3>{% trans "Items that will be modified" %}</h3>
         <p>
-            {% trans "The following items will have their quantities reduced based on the assignments for this event" %}.
-            {% trans "Items marked in red will be deleted because their final quantity will be zero or negative" %}.
+            {% trans "The following items will have their quantities reduced based on the assignments for this event." %}
+            {% trans "Items marked in red will be deleted because their final quantity will be zero or negative." %}
         </p>
         <table class="go_datatable" id="preview_table">
             <thead>
@@ -66,7 +66,7 @@
             </tbody>
         </table>
         {% if preview_items %}
-            <p class="no-elements-available">{% trans "No items with assigned quantities were found for this event" %}.</p>
+            <p class="no-elements-available">{% trans "No items with assigned quantities were found for this event." %}</p>
         {% endif %}
         <div class="mt-4">
             <form method="post"
@@ -85,8 +85,8 @@
     {% else %}
         <div class="alert alert-info" role="alert">
             <i class="fas fa-info-circle"></i>
-            {% trans "No items will be modified" %}.
-            {% trans "Either no items have assigned quantities, or all assignments have zero quantity" %}.
+            {% trans "No items will be modified." %}
+            {% trans "Either no items have assigned quantities, or all assignments have zero quantity." %}
         </div>
         <a href="{% url 'orga_warehouse_manifest' run.get_slug %}"
            class="btn btn-primary">

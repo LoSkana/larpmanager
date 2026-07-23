@@ -33,7 +33,7 @@
                 {% endif %}
             </table>
         {% endif %}
-        <p>{% trans "Choose the payment method" %}:</p>
+        <p>{% trans "Choose the payment method:" %}</p>
         <table id="payment_form">
             {% for key, el in form.methods.items %}
                 <tr id="row_{{ el.slug }}"
@@ -51,7 +51,7 @@
                     {% if user_fees %}
                         <th>
                             {% if el.fee %}
-                                {% trans "Fee" %}: +{{ el.fee }}%
+                                {% trans "Fee:" %} +{{ el.fee }}%
                             {% endif %}
                         </th>
                     {% endif %}

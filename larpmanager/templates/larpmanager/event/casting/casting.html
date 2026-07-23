@@ -7,7 +7,7 @@
     <div class="form_container user_resize platform">
         {% if features.questbuilder %}
             <p>
-                {% trans "Go to the casting for" %}:
+                {% trans "Go to the casting for:" %}
                 {% if not typ %}
                     <strong>{% trans "Characters" %}</strong>
                 {% else %}
@@ -25,24 +25,24 @@
         {% if casting_history %}
             <p>
                 {% if typ %}
-                    <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "Show the history of preferences" %}.</a>
+                    <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "Show the history of preferences." %}</a>
                 {% else %}
-                    <a href="{% url 'casting_history' run.get_slug %}">{% trans "Show the history of preferences" %}.</a>
+                    <a href="{% url 'casting_history' run.get_slug %}">{% trans "Show the history of preferences." %}</a>
                 {% endif %}
             </p>
         {% endif %}
         {% if assigned %}
             <p>
-                {% trans "Assigned" %}: <b>{{ assigned }}</b>
+                {% trans "Assigned:" %} <b>{{ assigned }}</b>
             </p>
         {% else %}
-            <p>{% trans "Enter your preferences here" %}!</p>
+            <p>{% trans "Enter your preferences here!" %}</p>
             {% if casting_show_pref %}
                 <p>
                     {% if typ %}
-                        <a href="{% url 'casting_preferences' run.get_slug typ %}">{% trans "Show the global preferences" %}.</a>
+                        <a href="{% url 'casting_preferences' run.get_slug typ %}">{% trans "Show the global preferences." %}</a>
                     {% else %}
-                        <a href="{% url 'casting_preferences' run.get_slug %}">{% trans "Show the global preferences" %}.</a>
+                        <a href="{% url 'casting_preferences' run.get_slug %}">{% trans "Show the global preferences." %}</a>
                     {% endif %}
                 </p>
             {% endif %}
@@ -73,7 +73,7 @@
                         <div id="casting-info">
                             <span class="pref-counter" id="pref-counter"></span>
                             <span class="helptext">
-                                <i>{% trans "Drag items to reorder your preferences" %}.
+                                <i>{% trans "Drag items to reorder your preferences." %}
                                 </i></span>
                             </div>
                             <div class="pref-list" id="pref-list"></div>
@@ -82,7 +82,7 @@
                     </div>
                     {% if casting_avoid %}
                         <p class="casting-avoid">
-                            <i>{% trans "Indicate here any element you wish to avoid in the assignment" %}:</i>
+                            <i>{% trans "Indicate here any element you wish to avoid in the assignment:" %}</i>
                         </p>
                         <input type="text" name="avoid" id="avoid" value="{{ avoid }}" />
                     {% endif %}

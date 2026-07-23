@@ -87,7 +87,7 @@ def send_membership_confirm(request: HttpRequest, membership: Any) -> None:
         ) % {"amount": membership_fee_amount, "currency": request.association["currency_symbol"]}
 
     # Add closing message and send email
-    email_body += "<br /><br />" + _("Thank you for choosing to be part of our community") + "!"
+    email_body += "<br /><br />" + _("Thank you for choosing to be part of our community!")
     my_send_mail(email_subject, email_body, member_profile, membership)
 
 
@@ -100,7 +100,7 @@ def send_membership_payment_notification_email(membership_item: AccountingItemMe
     # to user
     activate(membership_item.member.language)
     subject = hdr(membership_item) + _("Membership fee payment %(year)s") % {"year": membership_item.year}
-    body = _("The payment of your membership fee for this year has been received") + "!"
+    body = _("The payment of your membership fee for this year has been received!")
     my_send_mail(subject, body, membership_item.member, membership_item, **_receipt_attachment_path(membership_item))
 
 
@@ -120,7 +120,7 @@ def handle_badge_assignment_notifications(instance: Any, pk_set: Any) -> None:
         activate(member.language)
         badge = instance.show()
         subject = hdr(instance) + _("Achievement assignment: %(badge)s") % {"badge": badge["name"]}
-        body = _("You have been awarded an achievement") + "!" + "<br /><br />"
+        body = _("You have been awarded an achievement!") + "<br /><br />"
         body += _("Description") + f": {badge['descr']}<br /><br />"
         profile_url = get_url(f"public/{member.uuid}/", instance)
         body += _("Display your achievements in your <a href= %(url)s'>public profile</a>") % {"url": profile_url} + "."
@@ -155,8 +155,8 @@ def notify_membership_approved(member: Member, resp: str) -> None:
     activate(member.language)
 
     # Build notification subject and body
-    subject = hdr(member.membership) + _("Membership of the Organization accepted") + "!"
-    body = _("We confirm that your membership has been accepted by the board. We welcome you to our community") + "!"
+    subject = hdr(member.membership) + _("Membership of the Organization accepted!")
+    body = _("We confirm that your membership has been accepted by the board. We welcome you to our community!")
 
     # Add card number to notification
     body += (
@@ -220,11 +220,11 @@ def notify_membership_reject(member: Any, resp: Any) -> None:
     """Send notification when membership application is rejected."""
     # Manda Mail
     activate(member.language)
-    subject = hdr(member.membership) + _("Membership of the Organization refused") + "!"
-    body = _("We inform you that your membership of the Association has not been accepted by the board") + "."
+    subject = hdr(member.membership) + _("Membership of the Organization refused!")
+    body = _("We inform you that your membership of the Association has not been accepted by the board.")
     if resp:
         body += " " + _("Motivation") + f": {resp}"
-    body += " " + _("For more information, write to us") + "!"
+    body += " " + _("For more information, write to us!")
     my_send_mail(subject, body, member, member.membership)
 
 
@@ -267,7 +267,7 @@ def send_help_question_notification_email(instance: Any) -> None:
     else:
         # new answer
         activate(member.language)
-        subject = hdr(instance) + _("New answer") + "!"
+        subject = hdr(instance) + _("New answer!")
         body = _("Your question has been answered") + f": {escape(instance.text)}"
 
         url = get_url(f"{instance.run.get_slug()}/help", instance) if instance.run else get_url("help", instance)

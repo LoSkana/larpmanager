@@ -24,18 +24,18 @@
                 {% endif %}
                 {% if 'chat' in association.features %}
                     <p>
-                        <b>{% trans "Private message" %}: </b> <a href="{% url 'chat' member_public.uuid %}">Chat</a>
+                        <b>{% trans "Private message:" %} </b> <a href="{% url 'chat' member_public.uuid %}">Chat</a>
                     </p>
                 {% endif %}
                 {% if member_public.pronoun %}
                     <p>
-                        <b>{% trans "Pronouns" %}: </b>
+                        <b>{% trans "Pronouns:" %} </b>
                         {{ member_public.pronoun }}
                     </p>
                 {% endif %}
                 {% if member_public.social_contact %}
                     <p>
-                        <b>{% trans "Contact" %}: </b>
+                        <b>{% trans "Contact:" %} </b>
                         {% if member_public.contact_url %}
                             <a href="{{ member_public.social_contact }}">{{ member_public.social_contact }}</a>
                         {% else %}

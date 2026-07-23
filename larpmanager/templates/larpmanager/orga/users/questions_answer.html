@@ -7,7 +7,7 @@
     <h2>{{ member }}</h2>
     {% if reg_characters %}
         <p>
-            <b>{% trans "Characters" %}: </b>
+            <b>{% trans "Characters:" %} </b>
             {% for el in reg_characters %}
                 {% include "elements/comma.html" %}
                 {{ el.name }}
@@ -16,7 +16,7 @@
     {% endif %}
     {% if reg_factions %}
         <p>
-            <b>{% trans "Factions" %}: </b>
+            <b>{% trans "Factions:" %} </b>
             {% for el in reg_factions %}
                 {% include "elements/comma.html" %}
                 {{ el.name }}

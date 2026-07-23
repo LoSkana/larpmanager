@@ -6,7 +6,7 @@
 {% block content %}
     <p>{% trans "You have been gifted a registration to this event, by" %} {{ registration.member }}!</p>
     <p>
-        {% trans "By pressing confirm, this registration will be assigned to you, and you will then be duly registered" %}:
+        {% trans "By pressing confirm, this registration will be assigned to you, and you will then be duly registered:" %}
     </p>
     <br />
     <form action="{{ request.path }}" method="post">

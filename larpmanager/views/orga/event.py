@@ -190,7 +190,7 @@ def full_event_edit(
             saved_run = _save_event_run(context, run, run_form, saved_event, on_created_callback)
 
             # Show success message and redirect based on access level
-            messages.success(request, _("Operation completed") + "!")
+            messages.success(request, _("Operation completed!"))
             return _full_event_edit_success_response(request, context, saved_run, is_frame, is_executive=is_executive)
     else:
         # Create empty forms for GET requests
@@ -499,14 +499,14 @@ def orga_features_go(request: HttpRequest, event_slug: str, slug: str, *, to_act
         if target_feature_id not in current_event_feature_ids:
             for dep_id in Feature.get_all_dependencies([target_feature_id]):
                 context["event"].features.add(dep_id)
-            message = _("Feature %(name)s activated") + "!"
+            message = _("Feature %(name)s activated!")
         else:
-            message = _("Feature %(name)s already activated") + "!"
+            message = _("Feature %(name)s already activated!")
     elif target_feature_id not in current_event_feature_ids:
-        message = _("Feature %(name)s already deactivated") + "!"
+        message = _("Feature %(name)s already deactivated!")
     else:
         context["event"].features.remove(target_feature_id)
-        message = _("Feature %(name)s deactivated") + "!"
+        message = _("Feature %(name)s deactivated!")
 
     # Save the event and update cached features for child events
     context["event"].save()
@@ -670,7 +670,7 @@ def orga_restore(request: HttpRequest, event_slug: str) -> HttpResponse:
                 return render(request, "larpmanager/orga/restore.html", context)
             try:
                 context["logs"] = execute_restore(context, zip_bytes)
-                messages.success(request, _("Completed") + "!")
+                messages.success(request, _("Completed!"))
                 return render(request, "larpmanager/orga/uploads.html", context)
             except Exception as exc:
                 logger.exception("Restore execute error")
@@ -741,7 +741,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
                 context["redr"] = redr
 
                 # Show success message and render results page
-                messages.success(request, _("Elements uploaded") + "!")
+                messages.success(request, _("Elements uploaded!"))
                 return render(request, "larpmanager/orga/uploads.html", context)
 
             except Exception as exp:
@@ -1102,7 +1102,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
     reset_all_run(context["event"], context["run"])
 
     # Notify user of successful cache reset
-    messages.success(request, _("Cache reset") + "!")
+    messages.success(request, _("Cache reset!"))
     return redirect("manage", event_slug=context["run"].get_slug())
 
 
@@ -1148,16 +1148,16 @@ def _orga_run_quick_edit(
 @login_required
 def orga_run_quick_edit_dates(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Quick edit for run dates in a modal."""
-    return _orga_run_quick_edit(request, event_slug, OrgaRunDatesForm, _("Dates updated") + "!")
+    return _orga_run_quick_edit(request, event_slug, OrgaRunDatesForm, _("Dates updated!"))
 
 
 @login_required
 def orga_run_quick_edit_development(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Quick edit for run development status in a modal."""
-    return _orga_run_quick_edit(request, event_slug, OrgaRunDevelopmentForm, _("Status updated") + "!")
+    return _orga_run_quick_edit(request, event_slug, OrgaRunDevelopmentForm, _("Status updated!"))
 
 
 @login_required
 def orga_run_quick_edit_registration(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Quick edit for run registration status in a modal."""
-    return _orga_run_quick_edit(request, event_slug, OrgaRunRegistrationForm, _("Registration settings updated") + "!")
+    return _orga_run_quick_edit(request, event_slug, OrgaRunRegistrationForm, _("Registration settings updated!"))

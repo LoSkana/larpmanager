@@ -27,7 +27,7 @@
                     {% csrf_token %}
                     {% include "elements/avatar_upload.html" with avatar_current_src=custom_profile avatar_upload_url=av_upload avatar_rotate_l_url=av_rot_l avatar_rotate_r_url=av_rot_r avatar_confirm_selector="#confirm" %}
                 </form>
-                <div class="helptext char_profile">{% trans "Upload a photo of your character specifically for this event" %}!</div>
+                <div class="helptext char_profile">{% trans "Upload a photo of your character specifically for this event!" %}</div>
             </div>
             <hr />
         {% endif %}

@@ -92,7 +92,7 @@ def join_email(association: Any) -> None:
     """
     for executive_member in get_association_executives(association):
         activate(executive_member.language)
-        welcome_subject = _("Welcome to LarpManager") + "!"
+        welcome_subject = _("Welcome to LarpManager!")
         welcome_body = render_to_string(
             "mails/join_association.html",
             {"member": executive_member, "association": association},
@@ -215,7 +215,7 @@ def _add_member_association_role(exes: list[Member], instance: AssociationRole, 
             "user": mb,
             "role": instance.name,
         }
-        body = _("The user has been assigned the specified role") + "."
+        body = _("The user has been assigned the specified role.")
         my_send_mail(subj, body, m, instance.association)
 
 
@@ -300,7 +300,7 @@ def on_event_roles_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: AR
                     "role": instance.name,
                     "event": instance.event,
                 }
-                body = _("The user has been assigned the specified role") + "."
+                body = _("The user has been assigned the specified role.")
                 my_send_mail(subj, body, m, instance.event)
 
 
@@ -350,8 +350,7 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
     # Add instructions for sharing the code and friend's discount amount
     email_body += (
         "<br /><br />"
-        + _("Copy this code and share it with friends")
-        + "!"
+        + _("Copy this code and share it with friends!")
         + " "
         + _(
             "Every friend who signs up and uses this code in the 'Discounts' field will "
@@ -380,7 +379,7 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
     )
 
     # Add closing message and send the email
-    email_body += "<br /><br />" + _("See you soon") + "!"
+    email_body += "<br /><br />" + _("See you soon!")
     my_send_mail(email_subject, email_body, registration.member, registration.run)
 
 
@@ -482,7 +481,7 @@ def mail_confirm_casting(
     }
 
     # Start email body with confirmation message
-    email_body = _("Your preferences have been saved in the system") + ":"
+    email_body = _("Your preferences have been saved in the system:")
 
     # Add selected preferences list to email body
     email_body += "<br /><br />" + "<br />".join(selected_preferences)
@@ -490,7 +489,7 @@ def mail_confirm_casting(
     # Append avoidance preferences if any were specified
     if elements_to_avoid:
         email_body += "<br/><br />"
-        email_body += _("Elements you wish to avoid in the assignment") + ":"
+        email_body += _("Elements you wish to avoid in the assignment:")
         email_body += f" {elements_to_avoid}"
 
     # Send the confirmation email to the member

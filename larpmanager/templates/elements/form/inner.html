@@ -96,11 +96,11 @@
                 {% get_field form.max_lengths field.auto_id as args %}
                 {% if args.1 == "m" %}
                     <div class="helptext">
-                        {% trans "options" %}: <span class="count"></span> / {{ args.0 }}
+                        {% trans "options:" %} <span class="count"></span> / {{ args.0 }}
                     </div>
                 {% else %}
                     <div class="helptext">
-                        {% trans "text length" %}: <span class="count"></span> / {{ args.0 }}
+                        {% trans "text length:" %} <span class="count"></span> / {{ args.0 }}
                     </div>
                 {% endif %}
             {% endif %}

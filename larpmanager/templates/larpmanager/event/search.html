@@ -9,11 +9,11 @@
 {% block content %}
     {% if hide_login %}
         <p>
-            <i>{% trans "Characters are only visible to logged in users" %}: <a href="{% url 'login' %}">{% trans "Login" %}</a></i>
+            <i>{% trans "Characters are only visible to logged in users:" %} <a href="{% url 'login' %}">{% trans "Login" %}</a></i>
         </p>
     {% elif hide_signup %}
         <p>
-            <i>{% trans "Characters are only visible to participants" %}: <a href="{% url 'register' run.get_slug %}">{% trans "Register" %}</a></i>
+            <i>{% trans "Characters are only visible to participants:" %} <a href="{% url 'register' run.get_slug %}">{% trans "Register" %}</a></i>
         </p>
     {% elif not show_character %}
         <p>
@@ -23,7 +23,7 @@
         {% if features.questbuilder and show_quest %}
             <h2>Quest</h2>
             <p>
-                {% trans "Go to the quests of type" %}:
+                {% trans "Go to the quests of type:" %}
                 {% for id, qt in quest_types.items %}
                     {% include "elements/comma.html" %}
                     <a href="{% url 'quests' run.get_slug qt.uuid %}">{{ qt.name }}</a>
@@ -47,18 +47,18 @@
         </div>
         <div class="c nav hide istr">
             <div class="user_resize">
-                <p>{% trans "On this page you can filter characters and directly view their information" %}.</p>
+                <p>{% trans "On this page you can filter characters and directly view their information." %}</p>
                 <p>
-                    {% trans "In the text search, you can enter any text; the search will be done on the number, name, teaser, player, groups to which the character belong" %}.
+                    {% trans "In the text search, you can enter any text; the search will be done on the number, name, teaser, player, groups to which the character belong." %}
                 </p>
                 <p>
-                    {% trans "Where you find a button like this, you can press it to perform filtering further" %}.<a href="#" onclick="false;">{% trans "Example" %}</a>
+                    {% trans "Where you find a button like this, you can press it to perform filtering further." %}<a href="#" onclick="false;">{% trans "Example" %}</a>
                 </p>
                 <p>
-                    {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search" %}.<a href="#" class="sel" onclick="false;">{% trans "Included" %}</a>
+                    {% trans "If you press once, it will be *included* in the search. If a character belongs to at least one inclusion category, it will be shown in the search." %}<a href="#" class="sel" onclick="false;">{% trans "Included" %}</a>
                 </p>
                 <p>
-                    {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search" %}.<a href="#" class="nsel" onclick="false;">{% trans "Excluded" %}</a>
+                    {% trans "If you press a second time, it will be *excluded* in the search. If a character belongs to even one exclusion category, it will not be shown in the search." %}<a href="#" class="nsel" onclick="false;">{% trans "Excluded" %}</a>
                 </p>
             </div>
         </div>
@@ -100,14 +100,14 @@
         {% endfor %}
         <div id="spec" class="c nav hide spec">
             <div class="user_resize">
-                {% trans "Player" %}:
+                {% trans "Player:" %}
                 <a typ="spec" href="#" tog="pl">{% trans "Assigned" %}</a>
             </div>
         </div>
         <div class="hide link_list">
             <div class="user_resize">
                 <div id="top"></div>
-                <span class="helptext">{% trans "Click on a name to go and view it directly" %}.</span>
+                <span class="helptext">{% trans "Click on a name to go and view it directly." %}</span>
             </div>
         </div>
         <div id="search-results">

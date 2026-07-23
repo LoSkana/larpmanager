@@ -307,15 +307,15 @@ def exe_features_go(request: HttpRequest, slug: str, *, to_active: bool = True) 
         if slug not in context["features"]:
             for dep_id in Feature.get_all_dependencies([feature_id]):
                 association.features.add(dep_id)
-            message = _("Feature %(name)s activated") + "!"
+            message = _("Feature %(name)s activated!")
         else:
-            message = _("Feature %(name)s already activated") + "!"
+            message = _("Feature %(name)s already activated!")
     # Handle feature deactivation
     elif slug not in context["features"]:
-        message = _("Feature %(name)s already deactivated") + "!"
+        message = _("Feature %(name)s already deactivated!")
     else:
         association.features.remove(feature_id)
-        message = _("Feature %(name)s deactivated") + "!"
+        message = _("Feature %(name)s deactivated!")
 
     # Save changes to association
     association.save()
@@ -478,7 +478,7 @@ def exe_version_upgrade(request: HttpRequest) -> HttpResponse:
 
         available_numbers = [v["number"] for v in VERSIONS if v["available"]]
         if target_version not in available_numbers:
-            messages.error(request, _("Invalid version selected") + ".")
+            messages.error(request, _("Invalid version selected."))
             return redirect("exe_version_upgrade")
 
         if action == "test":
@@ -495,7 +495,7 @@ def exe_version_upgrade(request: HttpRequest) -> HttpResponse:
             messages.success(request, _("Organization upgraded to version %(v)s") % {"v": target_version} + ".")
         elif action == "reset_preview":
             save_single_config(member, "interface_version", "")
-            messages.success(request, _("Preview reset") + ". " + _("Using organization version") + ".")
+            messages.success(request, _("Preview reset") + ". " + _("Using organization version."))
 
         return redirect("exe_version_upgrade")
 
@@ -527,7 +527,7 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     _reset_all_association(association_id, association_slug)
 
     # Notify user of successful cache reset
-    messages.success(request, _("Cache reset") + "!")
+    messages.success(request, _("Cache reset!"))
     return redirect("manage")
 
 

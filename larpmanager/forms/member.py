@@ -669,7 +669,7 @@ class ProfileForm(BaseProfileForm):
 
         # Check if profile photo is both allowed and mandatory, then validate presence
         if "profile" in self.allowed and "profile" in self.mandatory and not self.instance.profile:
-            self.add_error(None, _("Please upload your profile photo") + "!")
+            self.add_error(None, _("Please upload your profile photo!"))
 
         return cleaned_data
 

@@ -1023,7 +1023,7 @@ def orga_registrations_customization(request: HttpRequest, event_slug: str, char
         if form.is_valid():
             form.save()
             save_log(context, RegistrationCharacterRel, rcr, None, operation_type=LogOperationType.UPDATE)
-            messages.success(request, _("Player customisation updated") + "!")
+            messages.success(request, _("Player customisation updated!"))
             return redirect("orga_registrations", event_slug=context["run"].get_slug())
     else:
         form = RegistrationCharacterRelForm(instance=rcr, context=context)

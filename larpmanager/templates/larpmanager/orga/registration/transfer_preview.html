@@ -22,7 +22,7 @@
         </tr>
         {% if registration.ticket %}
             <tr>
-                <th>{% trans "Ticket" %}:</th>
+                <th>{% trans "Ticket:" %}</th>
                 <td>{{ registration.ticket.name }} ({{ registration.ticket.get_tier_display }})</td>
             </tr>
         {% endif %}

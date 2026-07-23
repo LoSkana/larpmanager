@@ -1039,8 +1039,7 @@ class OrgaConfigForm(ConfigForm):
             )
             payment_reason_help_text += (
                 " "
-                + _("You can use the following fields, they will be filled in automatically")
-                + ":"
+                + _("You can use the following fields, they will be filled in automatically:")
                 + "{player_name}, {question_name}"
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, payment_reason_label, payment_reason_help_text)
@@ -1661,16 +1660,16 @@ class OrgaRunForm(ConfigForm):
         # Validate end date is present
         end = cleaned_data.get("end")
         if "end" in self.fields and not end:
-            raise ValidationError({"end": _("You need to define the end date") + "!"})
+            raise ValidationError({"end": _("You need to define the end date!")})
 
         # Validate start date is present
         start = cleaned_data.get("start")
         if "start" in self.fields and not start:
-            raise ValidationError({"start": _("You need to define the start date") + "!"})
+            raise ValidationError({"start": _("You need to define the start date!")})
 
         # Ensure end date is not before start date
         if start and end and end < start:
-            raise ValidationError({"end": _("End date cannot be before start date") + "!"})
+            raise ValidationError({"end": _("End date cannot be before start date!")})
 
         # Validate registration status requirements
         registration_status = cleaned_data.get("registration_status")
@@ -1678,17 +1677,17 @@ class OrgaRunForm(ConfigForm):
         if registration_status == RegistrationStatus.EXTERNAL:
             register_link = cleaned_data.get("register_link")
             if not register_link:
-                raise ValidationError({"register_link": _("Value required") + "!"})
+                raise ValidationError({"register_link": _("Value required!")})
 
         if registration_status == RegistrationStatus.FUTURE:
             registration_open = cleaned_data.get("registration_open")
             if not registration_open:
-                raise ValidationError({"registration_open": _("Value required") + "!"})
+                raise ValidationError({"registration_open": _("Value required!")})
 
         if registration_status == RegistrationStatus.CLOSING:
             registration_open = cleaned_data.get("registration_open")
             if not registration_open:
-                raise ValidationError({"registration_open": _("Value required") + "!"})
+                raise ValidationError({"registration_open": _("Value required!")})
 
         return cleaned_data
 

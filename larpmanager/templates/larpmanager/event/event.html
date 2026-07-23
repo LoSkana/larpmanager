@@ -57,9 +57,9 @@
                         <h3>
                             {% with char_entry.links|first as first_link %}
                                 {% if first_link %}
-                                    <a href="{{ first_link.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}: {{ char_entry.name }}</a>
+                                    <a href="{{ first_link.url }}"><i class="fa-solid fa-user"></i> {% trans "Character:" %} {{ char_entry.name }}</a>
                                 {% else %}
-                                    <i class="fa-solid fa-user"></i> {% trans "Character" %}: {{ char_entry.name }}
+                                    <i class="fa-solid fa-user"></i> {% trans "Character:" %} {{ char_entry.name }}
                                 {% endif %}
                             {% endwith %}
                         </h3>
@@ -93,16 +93,16 @@
                                     <a href="{% url 'accounting_registration' reg.uuid %}"><i class="fa-solid fa-coins"></i> {% trans "Accounting" %}</a>
                                 </h3>
                                 <p>
-                                    {% trans "Total registration fee" %}: {{ reg.tot_iscr|format_decimal }}{{ currency_symbol }}
+                                    {% trans "Total registration fee:" %} {{ reg.tot_iscr|format_decimal }}{{ currency_symbol }}
                                     {% if reg.tot_payed %}
-                                        | {% trans "Total payments" %}: {{ reg.tot_payed|format_decimal }}{{ currency_symbol }}
+                                        | {% trans "Total payments:" %} {{ reg.tot_payed|format_decimal }}{{ currency_symbol }}
                                     {% endif %}
                                 </p>
                                 {% if not run_status.payment_pending %}
                                     {% if reg.quota %}
                                         <p>
                                             <a href="{% url 'accounting_registration' reg.uuid %}">
-                                                {% trans "Next payment" %}: {{ reg.quota|format_decimal }}{{ currency_symbol }},
+                                                {% trans "Next payment:" %} {{ reg.quota|format_decimal }}{{ currency_symbol }},
                                                 {% if reg.deadline > 0 %}
                                                     {% trans "expected within" %} {{ reg.deadline }} {% trans "days" %}
                                                 {% else %}
@@ -130,7 +130,7 @@
                     {% endif %}
                     {% if event.website %}
                         <p>
-                            <a href="{{ event.website }}" class="button primary" target="_blank">{% trans "Discover the web site" %}!</a>
+                            <a href="{{ event.website }}" class="button primary" target="_blank">{% trans "Discover the web site!" %}</a>
                         </p>
                     {% endif %}
                 </div>
@@ -138,7 +138,7 @@
                 {% if event.authors %}
                     <div class="event-card">
                         <p>
-                            <i class="fa-solid fa-pen-nib"></i> <b>{% trans "Authors" %}:</b> {{ event.authors }}
+                            <i class="fa-solid fa-pen-nib"></i> <b>{% trans "Authors:" %}</b> {{ event.authors }}
                         </p>
                     </div>
                 {% endif %}
@@ -168,9 +168,9 @@
                 {% elif features.pre_register and not run_upcoming %}
                     <div class="event-card">
                         <p>
-                            {% trans "There are no new sessions scheduled at this time" %}.
-                            <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here" %}!</a>
-                            {% trans "You will be notified when a new session is organized, and you will have fast-track on registration" %}!
+                            {% trans "There are no new sessions scheduled at this time." %}
+                            <a href="{% url 'pre_register' event.slug %}">{% trans "Pre-register here!" %}</a>
+                            {% trans "You will be notified when a new session is organized, and you will have fast-track on registration!" %}
                         </p>
                     </div>
                 {% endif %}

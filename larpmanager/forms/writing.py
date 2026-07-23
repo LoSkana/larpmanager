@@ -151,7 +151,7 @@ class PlayerRelationshipForm(BaseModelForm):
         # Check if user is trying to create relationship with themselves
         character_id = _get_character_cache_id(self.params)
         if self.cleaned_data["target"].id == character_id:
-            self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
+            self.add_error("target", _("You cannot create a relationship towards yourself!"))
 
         # Check for existing relationships with same target and registration
         try:
@@ -160,7 +160,7 @@ class PlayerRelationshipForm(BaseModelForm):
             )
             # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
-                self.add_error("target", _("Already existing relationship") + "!")
+                self.add_error("target", _("Already existing relationship!"))
         except ObjectDoesNotExist:
             # No existing relationship found - this is valid
             pass

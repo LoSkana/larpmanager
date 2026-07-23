@@ -5,11 +5,11 @@
 {% endblock title %}
 {% block content %}
     <p>
-        {% trans "<strong>Lite Mode</strong> is a simplified environment designed to help you master the core mechanics of the platform" %}.
-        {% trans "Once you have completed the following steps, you can switch to <strong>Advanced Mode</strong>, granting you total control over the platform's professional features" %}.
+        {% trans "<strong>Lite Mode</strong> is a simplified environment designed to help you master the core mechanics of the platform." %}
+        {% trans "Once you have completed the following steps, you can switch to <strong>Advanced Mode</strong>, granting you total control over the platform's professional features." %}
     </p>
     <div class="features-grid">
-        <h3>{% trans "What you will unlock" %}:</h3>
+        <h3>{% trans "What you will unlock:" %}</h3>
         <ul class="no-list">
             <li>
                 <i class="fa-solid fa-sliders"></i>
@@ -38,7 +38,7 @@
             </li>
         </ul>
     </div>
-    <h3>{% trans "Progress" %}:</h3>
+    <h3>{% trans "Progress:" %}</h3>
     <table class="go_datatable">
         <thead>
             <tr>
@@ -74,7 +74,7 @@
         </tbody>
     </table>
     {% if not checklist %}
-        <p class="no-elements-available">{% trans "No activation steps are available" %}.</p>
+        <p class="no-elements-available">{% trans "No activation steps are available." %}</p>
     {% endif %}
     <br />
     {% if all_done %}
@@ -86,7 +86,7 @@
         </form>
     {% else %}
         <p>
-            <em>{% trans "Complete all steps above to unlock advanced mode" %}.</em>
+            <em>{% trans "Complete all steps above to unlock advanced mode." %}</em>
         </p>
     {% endif %}
 {% endblock content %}

@@ -53,18 +53,18 @@
                     </div>
                     <div class="ens-book-body">
                         <p class="ens-name">
-                            <b>{% trans "Character" %}:</b>
+                            <b>{% trans "Character:" %}</b>
                             {{ ch.name }}
                             {% if ch.title %}<span class="ens-title">- {{ ch.title }}</span>{% endif %}
                         </p>
                         {% if ensemble_show_player and ch.player_name %}
                             <p class="ens-player">
-                                <b>{% trans "Player" %}:</b> {{ ch.player_name }}
+                                <b>{% trans "Player:" %}</b> {{ ch.player_name }}
                             </p>
                         {% endif %}
                         {% if ch.factions %}
                             <p class="ens-factions">
-                                <b>{% trans "Factions" %}:</b>
+                                <b>{% trans "Factions:" %}</b>
                                 {% for f in ch.factions %}
                                     {% if f.name %}
                                         <span class="ens-faction-tag"
@@ -75,7 +75,7 @@
                         {% endif %}
                         {% if ch.guilds %}
                             <p class="ens-guilds">
-                                <b>{% trans "Guilds" %}:</b>
+                                <b>{% trans "Guilds:" %}</b>
                                 {% for g in ch.guilds %}
                                     {% if g.name %}
                                         <span class="ens-guild-tag"
@@ -223,7 +223,7 @@
             </table>
         </div>
     {% else %}
-        <p class="ens-empty">{% trans "No characters available" %}.</p>
+        <p class="ens-empty">{% trans "No characters available." %}</p>
     {% endif %}
 {% endblock content %}
 {% block css %}

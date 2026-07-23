@@ -201,7 +201,7 @@ def guild_create(request: HttpRequest, event_slug: str) -> HttpResponse:
                 role=GuildRole.ADMIN,
                 status=GuildMembershipStatus.ACCEPTED,
             )
-            messages.success(request, _("Guild created") + "!")
+            messages.success(request, _("Guild created!"))
             return redirect("guild", event_slug=event_slug, guild_uuid=new_guild.uuid)
     else:
         form = GuildForm(instance=None, context=context)
@@ -222,7 +222,7 @@ def guild_edit(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRe
         form = GuildForm(request.POST, request.FILES, instance=guild_obj, context=context)
         if form.is_valid():
             form.save()
-            messages.success(request, _("Guild updated") + "!")
+            messages.success(request, _("Guild updated!"))
             return redirect("guild", event_slug=event_slug, guild_uuid=guild_obj.uuid)
     else:
         form = GuildForm(instance=guild_obj, context=context)
@@ -263,7 +263,7 @@ def guild_invite(request: HttpRequest, event_slug: str, guild_uuid: str) -> Http
             }
             body += "<br/><br/>" + reverse("guild_invites", args=[context["event"].slug])
             my_send_mail(subject, body, target.player, context["event"])
-        messages.success(request, _("Invite sent") + "!")
+        messages.success(request, _("Invite sent!"))
 
     return redirect("guild", event_slug=event_slug, guild_uuid=guild_obj.uuid)
 
@@ -291,7 +291,7 @@ def guild_invite_accept(request: HttpRequest, event_slug: str, guild_uuid: str, 
     else:
         membership.status = GuildMembershipStatus.ACCEPTED
         membership.save()
-        messages.success(request, _("You joined the guild") + "!")
+        messages.success(request, _("You joined the guild!"))
 
     return redirect("guild_invites", event_slug=event_slug)
 
@@ -352,7 +352,7 @@ def guild_kick(request: HttpRequest, event_slug: str, guild_uuid: str, character
         }
         my_send_mail(subject, body, character.player, context["event"])
 
-    messages.success(request, _("Member removed") + "!")
+    messages.success(request, _("Member removed!"))
     return redirect("guild", event_slug=event_slug, guild_uuid=guild_obj.uuid)
 
 
@@ -405,7 +405,7 @@ def guild_promote(request: HttpRequest, event_slug: str, guild_uuid: str, charac
     )
     membership.role = GuildRole.ADMIN
     membership.save()
-    messages.success(request, _("Member promoted to admin") + "!")
+    messages.success(request, _("Member promoted to admin!"))
     return redirect("guild", event_slug=event_slug, guild_uuid=guild_obj.uuid)
 
 
@@ -436,6 +436,6 @@ def guild_demote(request: HttpRequest, event_slug: str, guild_uuid: str, charact
     else:
         membership.role = GuildRole.MEMBER
         membership.save()
-        messages.success(request, _("Member demoted") + "!")
+        messages.success(request, _("Member demoted!"))
 
     return redirect("guild", event_slug=event_slug, guild_uuid=guild_obj.uuid)

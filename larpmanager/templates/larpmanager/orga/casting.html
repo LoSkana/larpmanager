@@ -10,7 +10,7 @@
     <div id="main_casting">
         {% if features.questbuilder %}
             <p>
-                {% trans "Casting management for" %}:
+                {% trans "Casting management for:" %}
                 {% if not typ %}
                     <strong>{% trans "characters" %}</strong>
                 {% else %}
@@ -60,7 +60,7 @@
                 </table>
             </div>
             <p class="hide">
-                {% trans "Participants" %}: <span id="num_pl"></span>, {% trans "Characters" %}: <span id="num_ch"></span>
+                {% trans "Participants:" %} <span id="num_pl"></span>, {% trans "Characters:" %} <span id="num_ch"></span>
             </p>
             <hr />
             <div class="centerized">
@@ -70,7 +70,7 @@
             <i>({% trans "The optimal allocation based on the set values is simulated; you can run it as many times as you like before final loading" %})</i>
             <hr />
             <p>
-                <i>{% trans "Guide" %}:
+                <i>{% trans "Guide:" %}
                     <span class="YES">YES</span> - {% trans "Choice available, click to lock" %},
                     <span class="NO">NO</span> - {% trans "Choice locked, click to make it available" %},
                     <span class="MR">MR</span> - {% trans "Mirror type character, not selectable" %},
@@ -96,9 +96,9 @@
                        onclick="return window.lmTesting ? true : confirm('Are you sure? There's no coming back!')"
                        value="{% trans "Upload" %}" />
                 <p>
-                    {% trans "Assign selected characters to participants" %}.
+                    {% trans "Assign selected characters to participants." %}
                     <br />
-                    <i>({% trans "Attention: the operation is final, please double-check the assignments before uploading" %}!)</i>
+                    <i>({% trans "Attention: the operation is final, please double-check the assignments before uploading!" %})</i>
                 </p>
             </div>
         </form>

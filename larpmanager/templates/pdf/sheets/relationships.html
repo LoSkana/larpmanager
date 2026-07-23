@@ -21,7 +21,7 @@
                         {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
                         {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                         {% if el.player_uuid %}
-                            | <b>{% trans "Player" %}:&nbsp;</b>
+                            | <b>{% trans "Player:" %}&nbsp;</b>
                             <a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                         {% endif %}
                         {% if el.factions_list %}| {{ el.factions_list }}{% endif %}

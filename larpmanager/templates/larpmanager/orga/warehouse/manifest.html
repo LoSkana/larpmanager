@@ -27,12 +27,12 @@
         <h2>{{ area }}</h2>
         {% if area.position %}
             <p>
-                <b>{% trans "Position" %}:</b> {{ area.position }}
+                <b>{% trans "Position:" %}</b> {{ area.position }}
             </p>
         {% endif %}
         {% if area.description %}
             <p>
-                <b>{% trans "Description" %}:</b> {{ area.description }}
+                <b>{% trans "Description:" %}</b> {{ area.description }}
             </p>
         {% endif %}
         <table id="inv_manifest_itm_{{ area.uuid }}"
@@ -102,7 +102,7 @@
             </tbody>
         </table>
         {% if area.items %}
-            <p class="no-elements-available">{% trans "No items have been assigned to this area yet" %}.</p>
+            <p class="no-elements-available">{% trans "No items have been assigned to this area yet." %}</p>
         {% endif %}
     {% endfor %}
     <div id="imagePopup">

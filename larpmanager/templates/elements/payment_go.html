@@ -1,6 +1,6 @@
 {% load i18n static show_tags %}
 <p>
-    {% trans "You are about to make a payment of" %}: <b>{{ invoice.mc_gross | format_decimal }} {{ currency_symbol }}</b>.
+    {% trans "You are about to make a payment of:" %} <b>{{ invoice.mc_gross | format_decimal }} {{ currency_symbol }}</b>.
 </p>
 {% if method == 'redsys' %}
     <form name="from" action="{{ redsys_form.Ds_Redsys_Url }}" method="post">
@@ -44,7 +44,7 @@
 {% endif %}
 {% if method == 'paypal' %}
     <div class="paypal">
-        <p>{% trans "Follow the link below to complete your payment on the Paypal platform" %}.</p>
+        <p>{% trans "Follow the link below to complete your payment on the Paypal platform." %}</p>
         {{ paypal_form.render }}
     </div>
 {% endif %}
@@ -91,7 +91,7 @@
 {% endif %}
 {% if method == 'any' %}
     <p>
-        {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed" %}!
+        {% trans "Please indicate below the exact method of payment you made. Remember to submit the form, otherwise your payment will not be processed!" %}
     </p>
     <form action="{% url 'accounting_submit' 'any' invoice.uuid request.path %}"
           method="post"
@@ -105,14 +105,14 @@
 {% endif %}
 {% if method == 'wire' %}
     <p>
-        <b><i>{% trans "Important: after completing the transfer, you must return to this page and submit the form at the bottom, otherwise your payment will not be registered" %}!</i></b>
+        <b><i>{% trans "Important: after completing the transfer, you must return to this page and submit the form at the bottom, otherwise your payment will not be registered!" %}</i></b>
     </p>
     <hr />
     <p>
-        <b>(1)</b> {% trans "Use the bank details below to make the transfer from your bank" %}.
+        <b>(1)</b> {% trans "Use the bank details below to make the transfer from your bank." %}
     </p>
     <p>
-        <i>{% trans "Copy the causal exactly as shown (in coloured text)" %}!</i>
+        <i>{% trans "Copy the causal exactly as shown (in coloured text)!" %}</i>
     </p>
     <ul>
         <li>
@@ -147,10 +147,10 @@
     <p>
         <b>(2)</b>
         {% if require_receipt %}
-            {% trans "Once the transfer is confirmed, upload the payment receipt below" %}.
-            {% trans "You can upload a file in pdf format, or an image" %}.
+            {% trans "Once the transfer is confirmed, upload the payment receipt below." %}
+            {% trans "You can upload a file in pdf format, or an image." %}
         {% else %}
-            {% trans "Once the transfer is confirmed, submit the form below to notify us of your payment" %}.
+            {% trans "Once the transfer is confirmed, submit the form below to notify us of your payment." %}
         {% endif %}
     </p>
     <form action="{% url 'accounting_submit' 'wire' invoice.uuid request.path %}"
@@ -165,24 +165,24 @@
     </form>
 {% endif %}
 {% if method == 'paypal_nf' %}
-    <p>{% trans "Follow the steps below" %}:</p>
+    <p>{% trans "Follow the steps below:" %}</p>
     <p>
-        <b>(1)</b> {% trans "Click on the image below (Paypal.me) to open the payment" %}.
+        <b>(1)</b> {% trans "Click on the image below (Paypal.me) to open the payment." %}
     </p>
     <p>
-        <b>(2)</b> {% trans "Copy and paste exactly all the coloured text below into the notes" %}.
-        <b>({% trans "this is important" %}!)</b>
+        <b>(2)</b> {% trans "Copy and paste exactly all the coloured text below into the notes." %}
+        <b>({% trans "this is important!" %})</b>
     </p>
     <p class="causal">{{ invoice.causal }}</p>
     <p>
-        <b>(3)</b> {% trans "Indicates that payment is sent 'to friends and family'" %}.
+        <b>(3)</b> {% trans "Indicates that payment is sent 'to friends and family'." %}
     </p>
     <p>
         <b>(4)</b>
         {% if require_receipt %}
-            {% trans "Once you have made the payment, return to this page, and upload below the screenshot of the confirmation sent by Paypal" %}.
+            {% trans "Once you have made the payment, return to this page, and upload below the screenshot of the confirmation sent by Paypal." %}
         {% else %}
-            {% trans "Once you have made the payment, return to this page and submit the form below to notify us of your payment" %}.
+            {% trans "Once you have made the payment, return to this page and submit the form below to notify us of your payment." %}
         {% endif %}
     </p>
     <hr />
@@ -195,7 +195,7 @@
     </form>
     <hr />
     <p>
-        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed" %}!</i></b>
+        <b><i>{% trans "Please be careful to perform these steps - otherwise your  payment will not be processed!" %}</i></b>
     </p>
     <hr />
     <a href="https://PayPal.Me/{{ paypal_nf_handle }}/{{ invoice.mc_gross | floatformat:2 }}"

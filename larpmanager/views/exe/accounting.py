@@ -780,7 +780,7 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
     context["el"].save()
 
     # Show success message and redirect to invoice list
-    messages.success(request, _("Element approved") + "!")
+    messages.success(request, _("Element approved!"))
     if is_frame:
         return render(request, "elements/dashboard/form_success.html", context)
     return redirect("exe_payments")
@@ -929,7 +929,7 @@ def exe_refunds_confirm(request: HttpRequest, refund_uuid: str) -> HttpResponse:
     context["el"].save()
 
     # Show success message to the user and redirect to refunds list
-    messages.success(request, _("Element approved") + "!")
+    messages.success(request, _("Element approved!"))
     return redirect("exe_refunds")
 
 
@@ -1275,7 +1275,7 @@ def exe_verification(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Process uploaded verification file and count verified payments
             counter = invoice_verify(context, request.FILES["first"])
-            messages.success(request, _("Verified payments") + "!" + " " + str(counter))
+            messages.success(request, _("Verified payments!") + " " + str(counter))
             return redirect("exe_verification")
 
     else:

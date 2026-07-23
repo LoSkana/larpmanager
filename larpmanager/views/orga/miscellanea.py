@@ -120,7 +120,7 @@ def orga_albums_upload(request: HttpRequest, event_slug: str, album_slug: str) -
             upload_albums(context["album"], request.FILES["elem"])
 
             # Show success message and redirect to same page
-            messages.success(request, event_slug, _("Photos and videos successfully uploaded") + "!")
+            messages.success(request, event_slug, _("Photos and videos successfully uploaded!"))
             return redirect(request, event_slug.path_info)
     else:
         # Create empty form for GET request

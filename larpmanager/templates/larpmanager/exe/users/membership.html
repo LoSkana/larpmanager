@@ -6,15 +6,15 @@
 {% block content %}
     {% include "elements/pending_invoices_exe.html" %}
     <p>
-        {% trans "Total members" %}: {{ list | length }}
+        {% trans "Total members:" %} {{ list | length }}
         {% if sum.s %}
-            - {% trans "Request" %}: {{ sum.s }}
+            - {% trans "Request:" %} {{ sum.s }}
         {% endif %}
         {% if sum.p %}
-            - {% trans "Paid current year" %}: {{ sum.p }}
+            - {% trans "Paid current year:" %} {{ sum.p }}
         {% endif %}
         {% if sum.a %}
-            - {% trans "Accepted" %}: {{ sum.a }}
+            - {% trans "Accepted:" %} {{ sum.a }}
         {% endif %}
     </p>
     <div class="staff-list">
@@ -71,7 +71,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No members found" %}. {% trans "Members will appear here once they have submitted a membership request" %}.
+            {% trans "No members found." %} {% trans "Members will appear here once they have submitted a membership request." %}
         </p>
     {% endif %}
     <hr />

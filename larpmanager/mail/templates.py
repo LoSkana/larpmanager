@@ -83,7 +83,7 @@ def get_payment_info(association_id: int, payment_url: str) -> str:
             + ". "
         )
 
-    text += "<br /><br />" + _("Let us know if you encounter any issues or need assistance") + "!"
+    text += "<br /><br />" + _("Let us know if you encounter any issues or need assistance!")
 
     return text
 
@@ -111,7 +111,7 @@ def _get_wire_payment_info(payment_url: str, *, require_receipt: bool) -> str:
 def get_registration_new_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for new registration organizer notification."""
     email_subject = hdr(instance.run.event) + _("Registration to %(event)s by %(user)s") % email_context
-    email_body = _("The user has confirmed its registration for this event") + "!"
+    email_body = _("The user has confirmed its registration for this event!")
     email_body += registration_options(instance)
     return email_subject, email_body
 
@@ -119,7 +119,7 @@ def get_registration_new_organizer_email(instance: Registration, email_context: 
 def get_registration_update_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for registration update organizer notification."""
     email_subject = hdr(instance.run.event) + _("Registration updated to %(event)s by %(user)s") % email_context
-    email_body = _("The user has updated their registration for this event") + "!"
+    email_body = _("The user has updated their registration for this event!")
     email_body += registration_options(instance)
     return email_subject, email_body
 
@@ -127,7 +127,7 @@ def get_registration_update_organizer_email(instance: Registration, email_contex
 def get_registration_cancel_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for registration cancellation organizer notification."""
     email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s by %(user)s") % email_context
-    email_body = _("The registration for this event has been cancelled") + "."
+    email_body = _("The registration for this event has been cancelled.")
     return email_subject, email_body
 
 
@@ -159,7 +159,7 @@ def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
         email_body += f"<br /><br /><a href='{document_download_url}'>" + _("Download document") + "</a>"
 
     # Add approval prompt and confirmation link
-    email_body += "<br /><br />" + _("Did you check and is it correct") + "?"
+    email_body += "<br /><br />" + _("Did you check and is it correct?")
     approval_url = f"{instance.run.get_slug()}/manage/expenses/approve/{instance.pk}"
     email_body += f" <a href='{approval_url}'>" + _("Approve it") + "</a>"
 
@@ -292,7 +292,7 @@ def get_notify_refund_email(p: AccountingItemOther) -> tuple[str, str]:
 def get_invoice_email(invoice: Any) -> tuple[str, str]:
     """Generate email subject and body for invoice payment verification."""
     # Start building the email body with verification prompt
-    body = _("Verify that the data are correct") + ":"
+    body = _("Verify that the data are correct:")
 
     # Add payment reason and amount details
     body += "<br /><br />" + _("Reason for payment") + f": <b>{invoice.causal}</b>"
@@ -307,7 +307,7 @@ def get_invoice_email(invoice: Any) -> tuple[str, str]:
         body += f"<br /><br /><i>{invoice.text}</i>"
 
     # Add confirmation prompt and link
-    body += "<br /><br />" + _("Did you check and is it correct") + "?"
+    body += "<br /><br />" + _("Did you check and is it correct?")
     confirmation_url = get_url("accounting/confirm", invoice)
     body += f" <a href='{confirmation_url}/{invoice.cod}'>" + _("Payment confirmation") + "</a>"
 
@@ -381,7 +381,7 @@ def registration_options(registration_instance: Any) -> str:
     # Add selected registration options if any exist
     selected_options = get_registration_options(registration_instance)
     if selected_options:
-        email_body += "<br /><br />" + _("Selected options") + ":"
+        email_body += "<br /><br />" + _("Selected options:")
         for option_name, option_value in selected_options:
             email_body += f"<br />{escape(option_name)} - {escape(option_value)}"
 

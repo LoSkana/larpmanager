@@ -124,7 +124,7 @@
                 <tr>
                     <td></td>
                     <td colspan="100">
-                        <p class="no-elements-available">{% trans "No outflows recorded for the selected year" %}.</p>
+                        <p class="no-elements-available">{% trans "No outflows recorded for the selected year." %}</p>
                     </td>
                 </tr>
             {% endfor %}
@@ -166,7 +166,7 @@
         </tbody>
     </table>
     {% if not pos %}
-        <p class="no-elements-available">{% trans "No members with positive credits for the selected year" %}.</p>
+        <p class="no-elements-available">{% trans "No members with positive credits for the selected year." %}</p>
     {% endif %}
     <h4>{{ credits_name }} {% trans "negatives" %}</h4>
     <table class="go_datatable">
@@ -188,6 +188,6 @@
         </tbody>
     </table>
     {% if not neg %}
-        <p class="no-elements-available">{% trans "No members with negative credits for the selected year" %}.</p>
+        <p class="no-elements-available">{% trans "No members with negative credits for the selected year." %}</p>
     {% endif %}
 {% endblock content %}

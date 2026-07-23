@@ -9,10 +9,10 @@
 {% block content %}
     {% if member_edit.membership %}
         {% if features.tokens %}
-            <h3>{% trans "Credit balance" %}: {{ member_edit.membership.credit|format_decimal }}</h3>
+            <h3>{% trans "Credit balance:" %} {{ member_edit.membership.credit|format_decimal }}</h3>
         {% endif %}
         {% if features.credits %}
-            <h3>{% trans "Token balance" %}: {{ member_edit.membership.tokens|format_decimal }}</h3>
+            <h3>{% trans "Token balance:" %} {{ member_edit.membership.tokens|format_decimal }}</h3>
         {% endif %}
     {% endif %}
     {% if pays %}

@@ -7,7 +7,7 @@
     {% trans "Target newsletter subscribers who haven't played this event yet, grouped by language for outreach campaigns" %}
 {% endblock info %}
 {% block content %}
-    <p>{% trans "List of newsletter subscribers who have not yet played this event" %}:</p>
+    <p>{% trans "List of newsletter subscribers who have not yet played this event:" %}</p>
     {% for key, value in lst.items %}
         <h2>{{ key }}</h2>
         <p>

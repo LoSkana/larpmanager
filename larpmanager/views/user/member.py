@@ -175,14 +175,14 @@ def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member
 
     activate(profile.language)
 
-    message = _("Personal data updated") + "!"
+    message = _("Personal data updated!")
 
     # Check if membership workflow is needed
     if "membership" in context["features"] and membership.status in [
         MembershipStatus.EMPTY,
         MembershipStatus.JOINED,
     ]:
-        message += " " + _("Last step, please upload your membership application") + "."
+        message += " " + _("Last step, please upload your membership application.")
         messages.success(request, message)
         return redirect("membership")
 
@@ -192,7 +192,7 @@ def _save_profile(request: HttpRequest, context: dict, form: ProfileForm, member
             member=member, alert=True, run__event__association_id=context["association_id"]
         )
         if alert_registrations:
-            message = _("To confirm your registration, please pay the amount indicated") + "."
+            message = _("To confirm your registration, please pay the amount indicated.")
             messages.success(request, message)
             return redirect("accounting_registration", registration_uuid=alert_registrations.first().uuid)
 
@@ -430,7 +430,7 @@ def profile_privacy_rewoke(request: HttpRequest, slug: str) -> HttpResponse:
         membership.save()
 
         # Notify user of successful operation
-        messages.success(request, _("Data share removed successfully") + "!")
+        messages.success(request, _("Data share removed successfully!"))
     except Exception as err:
         # Handle any errors by raising 404
         msg = "error in performing request"
@@ -484,7 +484,7 @@ def membership(request: HttpRequest) -> HttpResponse:
                 send_membership_confirm(request, el)
 
                 # Show success message and redirect to home
-                mes = _("Your membership application was successfully submitted") + "!"
+                mes = _("Your membership application was successfully submitted!")
                 messages.success(request, mes)
                 return redirect("home")
 
@@ -664,7 +664,7 @@ def chat(request: HttpRequest, slug: str) -> Any:
 
     my_member_id = context["member"].id
     if member_id == my_member_id:
-        messages.success(request, _("You can't send messages to yourself") + "!")
+        messages.success(request, _("You can't send messages to yourself!"))
         return redirect("home")
 
     channel = get_channel(member_id, my_member_id)
@@ -699,7 +699,7 @@ def chat(request: HttpRequest, slug: str) -> Any:
                 )
             mine_contact.last_message = timezone.now()
             mine_contact.save()
-            messages.success(request, _("Message sent") + "!")
+            messages.success(request, _("Message sent!"))
             return redirect(request.path_info)
 
     mine_contact = get_contact(my_member_id, member_id)
@@ -912,11 +912,11 @@ def vote(request: HttpRequest) -> HttpResponse:
     # Check if membership payment is required and completed
     if "membership" in context["features"]:
         if context["membership"].status != MembershipStatus.ACCEPTED:
-            messages.error(request, _("You must be an approved member to vote") + ".")
+            messages.error(request, _("You must be an approved member to vote."))
             return redirect("membership")
         que = AccountingItemMembership.objects.filter(association_id=context["association_id"], year=context["year"])
         if not que.filter(member_id=context["member"].id).exists():
-            messages.error(request, _("You must complete payment of membership dues in order to vote") + "!")
+            messages.error(request, _("You must complete payment of membership dues in order to vote!"))
             return redirect("accounting_membership")
 
     # Check if user has already voted this year
@@ -1045,7 +1045,7 @@ def delegated(request: HttpRequest) -> HttpResponse:
             mb.compiled = True
             mb.save()
 
-            messages.success(request, _("New delegate user added") + "!")
+            messages.success(request, _("New delegate user added!"))
             return redirect("delegated")
     else:
         # Display form for creating new delegated account

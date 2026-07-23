@@ -342,7 +342,7 @@ def activate_feature_association(
     association.save()
 
     # Display success message to user
-    messages.success(request, _("Feature activated") + ":" + feature.name)
+    messages.success(request, _("Feature activated:") + feature.name)
 
     # Redirect to specified path or feature's default view
     if path:
@@ -402,7 +402,7 @@ def activate_feature_event(
     context["event"].save()
 
     # Display success message to user with feature name
-    messages.success(request, _("Feature activated") + ":" + feature.name)
+    messages.success(request, _("Feature activated:") + feature.name)
 
     # Redirect to custom path if provided, otherwise use feature's default view
     if path:
@@ -539,7 +539,7 @@ def ticket(request: HttpRequest, reason: Any = "") -> Any:
             if context["member"]:
                 lm_ticket.member = context["member"]
             lm_ticket.save()
-            messages.success(request, _("Your request has been sent, we will reply as soon as possible") + "!")
+            messages.success(request, _("Your request has been sent, we will reply as soon as possible!"))
             return redirect("home")
     else:
         form = LarpManagerTicketForm(request=request, context=context)
@@ -1109,7 +1109,7 @@ def lm_send(request: HttpRequest) -> Any:
             body = request.POST["body"]
             interval = int(request.POST.get("interval", 1))
             send_mail_exec(players, subj, body, interval=interval)
-            messages.success(request, _("Mail added to queue") + "!")
+            messages.success(request, _("Mail added to queue!"))
             return redirect(request.path_info)
     else:
         form = LmSendMailForm()

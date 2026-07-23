@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load i18n %}
 {% block title %}
-    {% trans "Character Inventory" %}: {{ inventory.name }}
+    {% trans "Character Inventory:" %} {{ inventory.name }}
 {% endblock title %}
 {% block content %}
     <style>
@@ -154,7 +154,7 @@
                 </tr>
             {% empty %}
                 <tr>
-                    <td colspan="7" class="ci-empty-row">{% trans "No transfers yet" %}.</td>
+                    <td colspan="7" class="ci-empty-row">{% trans "No transfers yet." %}</td>
                 </tr>
             {% endfor %}
         </tbody>

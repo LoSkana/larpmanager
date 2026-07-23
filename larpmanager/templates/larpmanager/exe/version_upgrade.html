@@ -22,12 +22,10 @@
 {% block title %}
     {% trans "Version Management" %} - {% trans "Organization" %}
 {% endblock title %}
-
 {% block content %}
     <p>
-        {% trans "Current platform version" %}: <strong>{{ assoc_version }}</strong> ({{ assoc_version_description }})
+        {% trans "Current platform version:" %} <strong>{{ assoc_version }}</strong> ({{ assoc_version_description }})
     </p>
-
     {% if is_previewing %}
         <div class="alert alert-info">
             {% trans "Previewing version" %} <strong>{{ member_version }}</strong>.
@@ -38,7 +36,6 @@
             </form>
         </div>
     {% endif %}
-
     {% if upgradeable_versions %}
         <h3>{% trans "Available versions" %}</h3>
         {% for version in upgradeable_versions %}
@@ -58,7 +55,8 @@
                         {% csrf_token %}
                         <input type="hidden" name="action" value="upgrade">
                         <input type="hidden" name="target_version" value="{{ version.number }}">
-                        <button type="submit" class="button button-upgrade"
+                        <button type="submit"
+                                class="button button-upgrade"
                                 onclick="return confirm('{% trans "Apply the upgrade to the entire organization?" %}')">
                             <i class="fa-solid fa-arrow-up"></i> {% trans "Apply Upgrade" %}
                         </button>
@@ -69,7 +67,7 @@
     {% else %}
         <p>
             <i class="fa-solid fa-circle-check"></i>
-            <em>{% trans "The organization is running the latest version" %}.</em>
+            <em>{% trans "The organization is running the latest version." %}</em>
         </p>
     {% endif %}
 {% endblock content %}

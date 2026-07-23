@@ -7,11 +7,11 @@
     {% trans "Run consistency checks on character sheets to detect missing, invalid, or asymmetric relationships" %}
 {% endblock info %}
 {% block content %}
-    <b>{% trans "Characters" %} - {% trans "Check inverse relationship" %}:
+    <b>{% trans "Characters" %} - {% trans "Check inverse relationship:" %}
         {% if checks.relat_missing %}
             <span class="redderized">KO - {{ checks.relat_missing | length }}</span> </b>
         <p>
-            <i>{% trans "The character on the left has in relationships the one on the right, but the reverse is not true. Check whether to remove the relationship to the one on the left, or add it on the one on the right" %}.</i>
+            <i>{% trans "The character on the left has in relationships the one on the right, but the reverse is not true. Check whether to remove the relationship to the one on the left, or add it on the one on the right." %}</i>
         </p>
         <table>
             <tr>
@@ -36,11 +36,11 @@
     {% else %}
         <span class="greenized">OK</span>
     {% endif %}
-    <b>{% trans "Characters" %} - {% trans "check nonexistent relationships" %}:
+    <b>{% trans "Characters" %} - {% trans "check nonexistent relationships:" %}
         {% if checks.relat_extinct %}
             <span class="redderized">KO {{ checks.relat_extinct | length }}</span> </b>
         <p>
-            <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
+            <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
         </p>
         <table>
             <tr>
@@ -62,14 +62,14 @@
         <span class="greenized">OK</span>
     {% endif %}
     <!--
-<b>{% trans "Empty relationship check (no text)" %}:
+<b>{% trans "Empty relationship check (no text):" %}
 
     {% if checks.relat_empty %}
 
     {{ checks.relat_empty | length }} </b>
 
 
-    <p><i>{% trans "The relationship between these characters turns out to be empty. Check whether it should be written something" %}.</i></p>
+    <p><i>{% trans "The relationship between these characters turns out to be empty. Check whether it should be written something." %}</i></p>
 
     <table>
         <tr>
@@ -95,13 +95,13 @@
 {% endif %}
 -->
     <!--
-<b>{% trans "Characters" %} - {% trans "check nonexistent relationships" %}:
+<b>{% trans "Characters" %} - {% trans "check nonexistent relationships:" %}
 
     {% if checks.character_extinct %}
 
     <span class="redderized">KO {{ checks.character_extinct | length }}</span> </b>
 
-    <p><i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i></p>
+    <p><i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i></p>
 
     <table>
         <tr>
@@ -126,13 +126,13 @@
 
 {% endif %}
 
-<b>{% trans "Characters" %} - {% trans "check lack relationships" %}:
+<b>{% trans "Characters" %} - {% trans "check lack relationships:" %}
 
     {% if checks.character_missing %}
 
     <span class="redderized">KO {{ checks.character_missing | length }}</span> </b>
 
-    <p><i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but in the relationships instead that character was not related. Check whether it is necessary to create a relationship to the character, or remove the reference from the text" %}.</i></p>
+    <p><i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but in the relationships instead that character was not related. Check whether it is necessary to create a relationship to the character, or remove the reference from the text." %}</i></p>
 
     <table>
         <tr>
@@ -157,13 +157,13 @@
 
 {% endif %}
 
-<b>{% trans "Characters" %} - {% trans "check excessive relationships" %}:
+<b>{% trans "Characters" %} - {% trans "check excessive relationships:" %}
 
     {% if checks.character_interloper %}
 
     <span class="redderized">KO {{ checks.character_interloper | length }}</span> </b>
 
-    <p><i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but in the relationships instead it is related. Check whether it is necessary to remove the relationship to the character, or indicate in the text a reference to the character" %}.</i></p>
+    <p><i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but in the relationships instead it is related. Check whether it is necessary to remove the relationship to the character, or indicate in the text a reference to the character." %}</i></p>
 
     <table>
         <tr>
@@ -190,7 +190,7 @@
 
 -->
     {% if features.faction %}
-        <b>{% trans "Faction" %} - {% trans "check nonexistent relationships" %}:
+        <b>{% trans "Faction" %} - {% trans "check nonexistent relationships:" %}
             {% if checks.faction_extinct %}
                 <span class="redderized">KO {{ checks.faction_extinct | length }}</span> </b>
             <p>
@@ -213,7 +213,7 @@
         {% else %}
             <span class="greenized">OK</span>
         {% endif %}
-        <b>{% trans "Factions" %} - {% trans "check lack relationships" %}:
+        <b>{% trans "Factions" %} - {% trans "check lack relationships:" %}
             {% if checks.faction_missing %}
                 <span class="redderized">KO {{ checks.faction_missing | length }}</span> </b>
             <p>
@@ -236,11 +236,11 @@
         {% else %}
             <span class="greenized">OK</span>
         {% endif %}
-        <b>{% trans "Factions" %} - {% trans "check excessive relationships" %}:
+        <b>{% trans "Factions" %} - {% trans "check excessive relationships:" %}
             {% if checks.faction_interloper %}
                 <span class="redderized">KO {{ checks.faction_interloper | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character" %}.</i>
+                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
             </p>
             <table>
                 <tr>
@@ -261,11 +261,11 @@
         {% endif %}
     {% endif %}
     {% if features.prologue %}
-        <b>{% trans "Prologue" %} - {% trans "check nonexistent relationships" %}:
+        <b>{% trans "Prologue" %} - {% trans "check nonexistent relationships:" %}
             {% if checks.prologue_extinct %}
                 <span class="redderized">KO {{ checks.prologue_extinct | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
+                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
             </p>
             <table>
                 <tr>
@@ -284,11 +284,11 @@
         {% else %}
             <span class="greenized">OK</span>
         {% endif %}
-        <b>{% trans "Prologues" %} - {% trans "check lack relationships" %}:
+        <b>{% trans "Prologues" %} - {% trans "check lack relationships:" %}
             {% if checks.prologue_missing %}
                 <span class="redderized">KO {{ checks.prologue_missing | length }}</span>  </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text" %}.</i>
+                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
             </p>
             <table>
                 <tr>
@@ -307,11 +307,11 @@
         {% else %}
             <span class="greenized">OK</span>
         {% endif %}
-        <b>{% trans "Prologues" %} - {% trans "check excessive relationships" %}:
+        <b>{% trans "Prologues" %} - {% trans "check excessive relationships:" %}
             {% if checks.prologue_interloper %}
                 <span class="redderized">KO {{ checks.prologue_interloper | length }}</span>  </b>
             <p>
-                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character" %}.</i>
+                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
             </p>
             <table>
                 <tr>
@@ -332,11 +332,11 @@
         {% endif %}
     {% endif %}
     {% if features.plot %}
-        <b>{% trans "Plot" %} - {% trans "check nonexistent relationships" %}:
+        <b>{% trans "Plot" %} - {% trans "check nonexistent relationships:" %}
             {% if checks.plot_extinct %}
                 <span class="redderized">KO {{ checks.plot_extinct | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
+                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
             </p>
             <table>
                 <tr>
@@ -355,11 +355,11 @@
         {% else %}
             <span class="greenized">OK</span>
         {% endif %}
-        <b>{% trans "Plots" %} - {% trans "check lack relationships" %}:
+        <b>{% trans "Plots" %} - {% trans "check lack relationships:" %}
             {% if checks.plot_missing %}
                 <span class="redderized">KO {{ checks.plot_missing | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text" %}.</i>
+                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
             </p>
             <table>
                 <tr>
@@ -378,11 +378,11 @@
         {% else %}
             <span class="greenized">OK</span>
         {% endif %}
-        <b>{% trans "Plots" %} - {% trans "check excessive relationships" %}:
+        <b>{% trans "Plots" %} - {% trans "check excessive relationships:" %}
             {% if checks.plot_interloper %}
                 <span class="redderized">KO {{ checks.plot_interloper | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character" %}.</i>
+                <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
             </p>
             <table>
                 <tr>
@@ -403,11 +403,11 @@
         {% endif %}
     {% endif %}
     {% if features.speedlarp %}
-        <b>{% trans "Speedlarp" %} - {% trans "check nonexistent relationships" %}:
+        <b>{% trans "Speedlarp" %} - {% trans "check nonexistent relationships:" %}
             {% if checks.speedlarp_extinct %}
                 <span class="redderized">KO {{ checks.speedlarp_extinct | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist" %}.</i>
+                <i>{% trans "In the text of the element on the left, it is referenced a character with the number indicated on the right, but the latter does not appear to exist." %}</i>
             </p>
             <table>
                 <tr>
@@ -426,11 +426,11 @@
         {% else %}
             <span class="greenized">OK</span>
         {% endif %}
-        <b>{% trans "Speedlarp" %} - {% trans "check lack relationships" %}:
+        <b>{% trans "Speedlarp" %} - {% trans "check lack relationships:" %}
             {% if checks.speedlarp_missing %}
                 <span class="redderized">KO {{ checks.speedlarp_missing | length }}</span> </b>
             <p>
-                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text" %}.</i>
+                <i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but instead in the relationships the character was not related. Check whether it is necessary to create a relationship, or remove the reference from the text." %}</i>
             </p>
             <table>
                 <tr>
@@ -448,11 +448,11 @@
             </table>
         {% else %}
             <span class="greenized">OK</span>
-            <b>{% trans "Speedlarp" %} - {% trans "check excessive relationships" %}:
+            <b>{% trans "Speedlarp" %} - {% trans "check excessive relationships:" %}
                 {% if checks.speedlarp_interloper %}
                     <span class="redderized">KO {{ checks.speedlarp_interloper | length }}</span> </b>
                 <p>
-                    <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character" %}.</i>
+                    <i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but instead in the relationships the character is related. Check whether it is necessary to remove the relationship, or indicate in the text a reference to the character." %}</i>
                 </p>
                 <table>
                     <tr>
@@ -472,7 +472,7 @@
                 <span class="greenized">OK</span>
             {% endif %}
         {% endif %}
-        <b>{% trans "Check double speed larps" %}:
+        <b>{% trans "Check double speed larps:" %}
             {% if speed_larps_double %}
                 <span class="redderized">KO {{ speed_larps_double | length }}</span> </b>
             <table>
@@ -490,7 +490,7 @@
         {% else %}
             <span class="greenized">OK</span>
         {% endif %}
-        <b>{% trans "Check missing speed larp" %}:
+        <b>{% trans "Check missing speed larp:" %}
             {% if speed_larps_missing %}
                 <span class="redderized">KO {{ speed_larps_missing | length }}</span> </b>
             <table>

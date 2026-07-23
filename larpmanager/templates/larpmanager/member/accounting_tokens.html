@@ -13,11 +13,11 @@
     <div class="user_resize platform">
         {% if member.tokens > 0 %}
             <p>
-                {% trans "Total" %}: <b>{{ member.tokens }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
+                {% trans "Total:" %} <b>{{ member.tokens }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event!" %}</i>
             </p>
         {% endif %}
         <p>
-            {% trans "Go to the tokens history" %}:
+            {% trans "Go to the tokens history:" %}
             <a href="#" class="my_toggle" tog='given'>{% trans "Delivered" %}</a>,
             <a href="#" class="my_toggle" tog='used'>{% trans "Consumed" %}</a>
         </p>

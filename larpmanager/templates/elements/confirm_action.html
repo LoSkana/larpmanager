@@ -8,7 +8,7 @@
         {% csrf_token %}
         <div class="form_container">
             <p class="delete-confirm-message">
-                {% trans "Please confirm you want to perform this action" %}.
+                {% trans "Please confirm you want to perform this action." %}
                 {% if el_name %}{{ el_name }}{% endif %}
             </p>
             <div class="form-actions">

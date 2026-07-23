@@ -365,7 +365,7 @@ def user_edit(
                     )
                     context[model_name].delete()
 
-                messages.success(request, _("Operation completed") + "!")
+                messages.success(request, _("Operation completed!"))
                 context["saved"] = context[model_name]
                 return True
 
@@ -378,7 +378,7 @@ def user_edit(
                 model_type = form_type.Meta.model
                 save_log(context, model_type, saved_instance, entity_uuid, info=info)
 
-            messages.success(request, _("Operation completed") + "!")
+            messages.success(request, _("Operation completed!"))
             context["saved"] = saved_instance
             return True
     else:
@@ -513,7 +513,7 @@ def _backend_save(
 
     # Show success message if not in quiet mode
     if not quiet:
-        messages.success(request, _("Operation completed") + "!")
+        messages.success(request, _("Operation completed!"))
 
     # Handle deletion if delete flag is set in POST data
     should_delete = request.POST.get("delete") == "1"
@@ -689,7 +689,7 @@ def backend_delete(
 
     element.delete()
 
-    messages.success(request, _("Operation completed") + "!")
+    messages.success(request, _("Operation completed!"))
 
 
 def _element_display_name(element: BaseModel) -> str:
@@ -856,8 +856,8 @@ def _process_working_ticket(request: HttpRequest, element_type: str, edit_uuid: 
     # Generate warning message if other users are currently editing
     warning_message = ""
     if len(other_editors) > 0:
-        warning_message = _("Warning! Other users are editing this item") + "."
-        warning_message += " " + _("You cannot work on it at the same time: the work of one of you would be lost") + "."
+        warning_message = _("Warning! Other users are editing this item.")
+        warning_message += " " + _("You cannot work on it at the same time: the work of one of you would be lost.")
         warning_message += " " + _("List of other users") + ": " + ", ".join(other_editors)
 
     # Update ticket with current user's information and timestamp

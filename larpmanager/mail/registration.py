@@ -222,9 +222,7 @@ def update_registration_cancellation(instance: Registration) -> None:
     email_context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
     email_subject = hdr(instance.run.event) + _("Registration cancellation for %(event)s") % email_context
-    email_body = (
-        _("We confirm that your registration for this event has been cancelled. We are sorry to see you go") + "!"
-    )
+    email_body = _("We confirm that your registration for this event has been cancelled. We are sorry to see you go!")
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Send notification emails to organizers if feature is enabled
@@ -299,7 +297,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
     # Send cancellation notification to the registered user
     activate(instance.member.language)
     email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % context
-    email_body = _("We confirm that your registration for this event has been cancelled") + "."
+    email_body = _("We confirm that your registration for this event has been cancelled.")
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Check if organization wants to receive deletion notifications

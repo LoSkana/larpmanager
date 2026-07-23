@@ -104,8 +104,7 @@ def get_remember_membership_body(registration: Any) -> str:
         "<br /><br />"
         + _("If we don't hear from you, we'll assume you're no longer interested in the event")
         + ". "
-        + _("Your registration will be cancelled to allow other participants to take your spot")
-        + "."
+        + _("Your registration will be cancelled to allow other participants to take your spot.")
     )
 
     return email_body
@@ -192,8 +191,7 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
         "<br /><br />"
         + _("You can make the payment <a href='%(url)s'>on this page</a>") % {"url": payment_url}
         + ". "
-        + _("If you encounter any issues, contact us and we will assist you")
-        + "!"
+        + _("If you encounter any issues, contact us and we will assist you!")
     )
 
     # Add wire transfer details if active for this association
@@ -293,17 +291,13 @@ def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
     )
 
     # Add explanation about membership fee purpose
-    email_body += (
-        "<br /><br />"
-        + _("It is required for participation in all our live events, as it also covers the insurance fee")
-        + "."
+    email_body += "<br /><br />" + _(
+        "It is required for participation in all our live events, as it also covers the insurance fee."
     )
 
     # Emphasize participation requirements
-    email_body += (
-        "<br /><br />"
-        + _("Unfortunately, without full payment of the fee, participation in the event is not permitted")
-        + "."
+    email_body += "<br /><br />" + _(
+        "Unfortunately, without full payment of the fee, participation in the event is not permitted."
     )
 
     # Provide payment link and support information

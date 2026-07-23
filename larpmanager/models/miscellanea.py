@@ -67,7 +67,7 @@ class HelpQuestion(UuidMixin, BaseModel):
     text = models.TextField(
         max_length=5000,
         verbose_name=_("Text"),
-        help_text=_("Write your question, request or concern here. We will be happy to answer you") + "!",
+        help_text=_("Write your question, request or concern here. We will be happy to answer you!"),
     )
 
     closed = models.BooleanField(default=False)

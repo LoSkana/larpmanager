@@ -6,13 +6,13 @@
 {% block content %}
     {% include "elements/table/header.html" %}
     <p>
-        <i>{% trans "The ticket will be divided equally in the number of quotas indicated" %}.</i>
+        <i>{% trans "The ticket will be divided equally in the number of quotas indicated." %}</i>
     </p>
     <p>
-        <i>{% trans "Payment deadlines will be similarly equally divided, based on the date of registration" %}.</i>
+        <i>{% trans "Payment deadlines will be similarly equally divided, based on the date of registration." %}</i>
     </p>
     <p>
-        <i>{% trans "Beyond the minimum number of days indicated, the quota will no longer be available during registration" %}.</i>
+        <i>{% trans "Beyond the minimum number of days indicated, the quota will no longer be available during registration." %}</i>
     </p>
     <table id="registration_quotas" class="go_datatable writing">
         <thead>
@@ -49,7 +49,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No payment quota options have been defined for this event yet" %}. {% trans "Use the button above to add a quota plan" %}.
+            {% trans "No payment quota options have been defined for this event yet." %} {% trans "Use the button above to add a quota plan." %}
         </p>
     {% endif %}
     {% include "elements/table/footer.html" %}

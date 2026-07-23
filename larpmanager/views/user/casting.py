@@ -234,7 +234,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
     # Verify user has completed event registration
     registration = context.get("registration")
     if not registration:
-        messages.success(request, _("You must signed up in order to select your preferences") + "!")
+        messages.success(request, _("You must signed up in order to select your preferences!"))
         return redirect("event", event_slug=context["run"].get_slug())
 
     # Check if user is on waiting list (cannot set preferences)
@@ -506,7 +506,7 @@ def _casting_update(request: HttpRequest, context: dict, prefs: dict) -> None:
     avoidance_text = _handle_casting_avoidance(context, request, typ)
 
     # Show success message to user
-    messages.success(request, _("Preferences saved") + "!")
+    messages.success(request, _("Preferences saved!"))
 
     # Build preference list for confirmation email
     preference_names_list = _build_preference_names_list(context, typ, prefs)

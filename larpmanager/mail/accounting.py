@@ -144,7 +144,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
         email_body += (
             "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s") % {"credits": credits_name} + "."
         )
-        email_body += " " + _("This is automatically deducted from the registration of a future event") + "."
+        email_body += " " + _("This is automatically deducted from the registration of a future event.")
 
         # Add link to accounting page for formal request option
         email_body += (
@@ -381,8 +381,7 @@ def notify_credit(credits_name: str, instance: AccountingItemOther) -> None:
     accounting_url = get_url("accounting", instance)
     additional_body_text = (
         " <br /><br /><i>"
-        + _("They will be used automatically when you sign up for a new event")
-        + "!"
+        + _("They will be used automatically when you sign up for a new event!")
         + "<br /><br />"
         + _("Alternatively, you can request a reimbursement in <a href='%(url)s'>your accounting</a>.</i>")
         % {"url": accounting_url}
@@ -409,7 +408,7 @@ def notify_token(instance: Any, tokens_name: str) -> None:
     activate(instance.member.language)
     email_subject, email_body = get_token_email(instance, tokens_name)
     additional_body = (
-        "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event") + "!" + "</i>"
+        "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event!") + "</i>"
     )
     my_send_mail(email_subject, email_body + additional_body, instance.member, instance)
 
@@ -496,7 +495,7 @@ def send_gift_collection_notification_email(instance: AccountingItemCollection) 
         subject = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {
             "recipient": instance.collection.display_member(),
         }
-        email_body = _("Thank you for participating") + "!"
+        email_body = _("Thank you for participating!")
         my_send_mail(subject, email_body, instance.member, instance.collection)
 
         activate(instance.collection.organizer.language)
@@ -504,7 +503,7 @@ def send_gift_collection_notification_email(instance: AccountingItemCollection) 
             "recipient": instance.collection.display_member(),
             "user": instance.member.display_member(),
         }
-        email_body = _("The collection grows") + "!"
+        email_body = _("The collection grows!")
         my_send_mail(subject, email_body, instance.collection.organizer, instance.collection)
 
 

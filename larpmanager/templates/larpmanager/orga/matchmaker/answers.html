@@ -9,11 +9,11 @@
 {% block content %}
     {% if not questions %}
         <p class="no-elements-available">
-            {% trans "No matchmaker questions have been created yet" %}.
+            {% trans "No matchmaker questions have been created yet." %}
             <a href="{% url 'orga_registration_form' run.get_slug "matchmaker" %}">{% trans "Configure the matchmaker form" %}</a>.
         </p>
     {% elif not rows %}
-        <p class="no-elements-available">{% trans "No participant has answered the matchmaker form yet" %}.</p>
+        <p class="no-elements-available">{% trans "No participant has answered the matchmaker form yet." %}</p>
     {% else %}
         <table id="matchmaker_answers" class="go_datatable writing">
             <thead>

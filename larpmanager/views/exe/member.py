@@ -233,14 +233,14 @@ def exe_membership_evaluation(request: HttpRequest, member_uuid: str) -> HttpRes
                 save_log(context, Membership, member.membership, None, operation_type=LogOperationType.UPDATE)
                 notify_membership_approved(member, resp)
                 update_member_registrations(member)
-                messages.success(request, _("Member approved") + "!")
+                messages.success(request, _("Member approved!"))
             else:
                 # Reject member and send notifications
                 member.membership.status = MembershipStatus.EMPTY
                 member.membership.save()
                 save_log(context, Membership, member.membership, None, operation_type=LogOperationType.UPDATE)
                 notify_membership_reject(member, resp)
-                messages.success(request, _("Member refused") + "!")
+                messages.success(request, _("Member refused!"))
 
             return redirect("exe_membership")
     else:
@@ -644,7 +644,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
             save_log(context, PaymentInvoice, payment, None)
 
             # Show success message and redirect to membership page
-            messages.success(request, _("Operation completed") + "!")
+            messages.success(request, _("Operation completed!"))
             return redirect("exe_membership")
     else:
         # Initialize empty form for GET requests
@@ -681,7 +681,7 @@ def exe_membership_document(request: HttpRequest) -> Any:
             membership.status = MembershipStatus.ACCEPTED
             membership.save()
             save_log(context, Membership, membership, None, operation_type=LogOperationType.UPDATE)
-            messages.success(request, _("Operation completed") + "!")
+            messages.success(request, _("Operation completed!"))
             return redirect("exe_membership")
     else:
         form = ExeMembershipDocumentForm(context=context)
@@ -1147,7 +1147,7 @@ def exe_questions_answer(request: HttpRequest, member_uuid: str) -> HttpResponse
             save_log(context, HelpQuestion, hp, None)
 
             # Notify user of successful submission and redirect
-            messages.success(request, _("Answer submitted") + "!")
+            messages.success(request, _("Answer submitted!"))
             return redirect("exe_questions")
     else:
         # Initialize empty form for GET requests
