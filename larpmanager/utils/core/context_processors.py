@@ -82,7 +82,9 @@ def cache_association(request: HttpRequest) -> dict:
         above_threshold = cache.get(cache_key)
         max_threshold = 10
         if above_threshold is None:
-            count = Registration.objects.filter(run__event__association_id=association_id).count()
+            count = Registration.objects.filter(
+                run__event__association_id=association_id, cancellation_date__isnull=True, pending=False
+            ).count()
             above_threshold = count >= max_threshold
             timeout = CACHE_TIMEOUT_1_DAY if above_threshold else 3600
             cache.set(cache_key, above_threshold, timeout)

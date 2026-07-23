@@ -225,6 +225,15 @@
   color: #31b0d5;
 }
 
+.reg-banner.reg-request_pending {
+  border-left-color: #f0ad4e;
+  background: rgba(240, 173, 78, 0.07);
+}
+
+.reg-banner.reg-request_pending .reg-action-main i {
+  color: #c89900;
+}
+
 body.association.new_v22 .user_resize {
   padding: 0.5em 1em;
   border-radius: 8px;

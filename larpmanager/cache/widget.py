@@ -56,6 +56,7 @@ from larpmanager.models.form import (
 from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
 from larpmanager.models.miscellanea import HelpQuestion, Log, Milestone, MilestoneStatus
 from larpmanager.models.registration import (
+    Registration,
     RegistrationCharacterRel,
     RegistrationInstallment,
     RegistrationQuota,
@@ -480,6 +481,11 @@ def _init_orga_actions_cache(run: Run) -> dict:
     ).count()
     if pending_payments_count > 0:
         data["pending_invoices_registration"] = {"count": pending_payments_count}
+
+    # Pending signup requests awaiting approval
+    pending_requests_count = Registration.objects.filter(run=run, pending=True).count()
+    if pending_requests_count > 0:
+        data["pending_registration_requests"] = {"count": pending_requests_count}
 
     # Registration questions without options
     registration_questions_without_options = list(

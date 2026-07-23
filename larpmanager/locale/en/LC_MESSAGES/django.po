@@ -742,12 +742,12 @@ msgid ""
 "whole numbers from 0 to 100)"
 msgstr ""
 
-msgid "Disable event approval"
+msgid "Disable event-level approval"
 msgstr ""
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization "
-"panel"
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
 msgstr ""
 
 msgid "Promotion"
@@ -1255,6 +1255,14 @@ msgstr ""
 msgid "A cancellation request email will be sent to the staff instead"
 msgstr ""
 
+msgid "Approval process"
+msgstr ""
+
+msgid ""
+"If checked: players cannot sign up directly; they submit a signup request "
+"that an organizer must approve before they can complete registration"
+msgstr ""
+
 msgid "Character Sheet"
 msgstr ""
 
@@ -1739,6 +1747,11 @@ msgstr ""
 
 msgid ""
 "Content of mail notifying participants of their character in review status"
+msgstr ""
+
+msgid ""
+"Shown on the signup request page and added to the request-received "
+"confirmation mail"
 msgstr ""
 
 msgid ""
@@ -2479,6 +2492,13 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+msgid "Request signup"
+msgstr ""
+
+msgid ""
+"Your signup will not be confirmed until an organizer approves this request"
+msgstr ""
+
 msgid ""
 "Manage all active participant registrations, including character "
 "assignments, ticket types, and payment status"
@@ -2954,6 +2974,9 @@ msgstr ""
 msgid "New Registrations"
 msgstr ""
 
+msgid "Signup Requests"
+msgstr ""
+
 msgid "Go to organization dashboard"
 msgstr ""
 
@@ -3125,6 +3148,40 @@ msgid "Registration cancelled for %(event)s"
 msgstr ""
 
 msgid "We confirm that your registration for this event has been cancelled"
+msgstr ""
+
+#, python-format
+msgid "Signup request received for %(event)s"
+msgstr ""
+
+#, python-format
+msgid "Hello! We have received your request to sign up for <b>%(event)s</b>"
+msgstr ""
+
+msgid "An organizer will review it soon"
+msgstr ""
+
+#, python-format
+msgid "Signup request accepted for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Good news! Your request to sign up for <b>%(event)s</b> has been accepted"
+msgstr ""
+
+#, python-format
+msgid "Please <a href='%(url)s'>complete your signup</a>."
+msgstr ""
+
+#, python-format
+msgid "Signup request declined for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"We are sorry to inform you that your request to sign up for <b>%(event)s</b> "
+"was not accepted"
 msgstr ""
 
 #, python-format
@@ -3302,6 +3359,13 @@ msgid "The registration for this event has been cancelled"
 msgstr ""
 
 #, python-format
+msgid "Signup request for %(event)s by %(user)s"
+msgstr ""
+
+msgid "The user has requested to sign up for this event"
+msgstr ""
+
+#, python-format
 msgid "Reimbursement request for %(event)s"
 msgstr ""
 
@@ -3431,6 +3495,9 @@ msgid "To access this feature, you must first register"
 msgstr ""
 
 msgid "This feature is available for non-waiting tickets"
+msgstr ""
+
+msgid "Your signup request is awaiting organizer approval"
 msgstr ""
 
 msgid "not visible at this time"
@@ -3962,6 +4029,9 @@ msgid "Approved character"
 msgstr ""
 
 msgid "Character review"
+msgstr ""
+
+msgid "Registration approval request"
 msgstr ""
 
 msgid "Visible"
@@ -4542,7 +4612,7 @@ msgstr ""
 msgid "Newsletter"
 msgstr ""
 
-msgid "Do you wish to be always updated on our events"
+msgid "Would you like to receive updates about our upcoming events"
 msgstr ""
 
 msgid "If you are a candidate for the Board, please write an introduction here"
@@ -4857,7 +4927,7 @@ msgstr ""
 msgid "When this token was used"
 msgstr ""
 
-msgid "Used by"
+msgid "User"
 msgstr ""
 
 msgid "Member who used this token (if authenticated)"
@@ -5802,9 +5872,6 @@ msgstr ""
 msgid "Ask a question"
 msgstr ""
 
-msgid "User"
-msgstr ""
-
 msgid "Manage"
 msgstr ""
 
@@ -6043,8 +6110,8 @@ msgid "Pre-register here"
 msgstr ""
 
 msgid ""
-"You will be notified when a new session is organized, and you will have fast-"
-"track on registration"
+"You will be notified when a new session is scheduled and given priority "
+"access to registration"
 msgstr ""
 
 msgid "Past sessions"
@@ -6337,6 +6404,9 @@ msgstr ""
 
 #, python-format
 msgid "Conditions of %(event)s"
+msgstr ""
+
+msgid "Request to signup"
 msgstr ""
 
 msgid "Search and filter the characters of the event"
@@ -7073,7 +7143,7 @@ msgstr ""
 msgid "To view previous questions click here"
 msgstr ""
 
-msgid "No answered questions in the last 3 months"
+msgid "No pending questions have been answered in the last 3 months"
 msgstr ""
 
 msgid ""
@@ -9137,6 +9207,21 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
+msgid "Requests"
+msgstr ""
+
+msgid "Review pending signup requests and approve or reject them"
+msgstr ""
+
+msgid "Requested"
+msgstr ""
+
+msgid "Reject"
+msgstr ""
+
+msgid "No pending signup requests for this event"
+msgstr ""
+
 msgid "Upload a backup ZIP file to restore event data"
 msgstr ""
 
@@ -10857,6 +10942,9 @@ msgstr ""
 msgid "Manage participant registrations"
 msgstr ""
 
+msgid "Approve or reject pending signup requests"
+msgstr ""
+
 msgid "Manage the registration tickets"
 msgstr ""
 
@@ -11618,8 +11706,11 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+
+msgid "Signup request pending"
 msgstr ""
 
 msgid "Upload membership application"
@@ -12049,6 +12140,10 @@ msgid "<b>%(number)s</b> characters to approve"
 msgstr ""
 
 #, python-format
+msgid "<b>%(number)s</b> signup requests to approve"
+msgstr ""
+
+#, python-format
 msgid "Registration questions without options: %(list)s"
 msgstr ""
 
@@ -12247,6 +12342,12 @@ msgstr ""
 msgid "Player customisation updated"
 msgstr ""
 
+msgid "Signup request approved"
+msgstr ""
+
+msgid "Signup request rejected"
+msgstr ""
+
 msgid "Please select both a registration and an event"
 msgstr ""
 
@@ -12283,7 +12384,7 @@ msgstr ""
 msgid "Your tax code has a problem that we ask you to correct"
 msgstr ""
 
-msgid "Everything is in order about the payment of this event"
+msgid "Payment for this event is complete and up to date"
 msgstr ""
 
 msgid "You have already sent a payment pending verification"
@@ -12644,6 +12745,9 @@ msgid "This event has concluded"
 msgstr ""
 
 msgid "This event has been cancelled"
+msgstr ""
+
+msgid "Your signup request has been submitted"
 msgstr ""
 
 msgid "The registration code is not active at the moment"

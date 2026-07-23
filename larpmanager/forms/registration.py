@@ -704,6 +704,68 @@ class MatchmakerForm(BaseRegistrationForm):
         return self.instance
 
 
+class RequestApprovalForm(BaseRegistrationForm):
+    """Player-facing form for a signup approval request.
+
+    Creates a pending Registration (no ticket, awaiting organizer approval) and saves answers
+    for questions with applicable=RegistrationQuestionApplicable.REQUEST, plus a fixed
+    confirmation checkbox.
+    """
+
+    class Meta:
+        model = Registration
+        fields = ()
+
+    confirm = forms.BooleanField(
+        required=True,
+        label=_("Request signup"),
+        help_text=_("Your signup will not be confirmed until an organizer approves this request"),
+    )
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Initialize form with the request questions for the current event."""
+        super().__init__(*args, **kwargs)
+
+        self.questions = []
+        self.sections = {}
+        self.section_descriptions = {}
+        self.profiles = {}
+
+        event = self.params["run"].event
+        self._init_registration_question(self.instance, event)
+        for question in self.questions:
+            self._init_request_field(question)
+
+        # Keep the confirmation checkbox first
+        self.fields = {"confirm": self.fields.pop("confirm"), **self.fields}
+
+    def _init_questions(self, event: Event) -> None:
+        """Load only the request-applicable registration questions."""
+        self.questions = get_cached_registration_questions(event, applicable=RegistrationQuestionApplicable.REQUEST)
+
+    def _init_request_field(self, question: dict) -> None:
+        """Initialize a single request question field (mirrors RegistrationForm.init_question)."""
+        if skip_registration_question(question, self.instance, self.params["features"]):
+            return
+
+        field_key = self._init_field(question, registration_counts=None, is_organizer=False)
+        if not field_key:
+            return
+
+        if question.get("section_name"):
+            self.sections["id_" + field_key] = question["section_name"]
+            if question.get("section_description"):
+                self.section_descriptions[question["section_name"]] = question["section_description"]
+
+    def save(self, commit: bool = True) -> Registration:  # noqa: FBT001, FBT002
+        """Save the pending registration and its request-question answers."""
+        self.instance.pending = True
+        if commit:
+            self.instance.save()
+        self.save_registration_questions(self.instance, is_organizer=False)
+        return self.instance
+
+
 class OrgaRegistrationForm(BaseRegistrationForm):
     """Form for OrgaRegistration."""
 

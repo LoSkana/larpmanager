@@ -350,6 +350,9 @@ class Registration(UuidMixin, BaseModel):
 
     cancellation_date = models.DateTimeField(null=True, blank=True)
 
+    # True while the registration is a signup request awaiting organizer approval
+    pending = models.BooleanField(default=False)
+
     surcharge = models.IntegerField(default=0)
 
     refunded = models.BooleanField(default=False)
@@ -418,6 +421,11 @@ class Registration(UuidMixin, BaseModel):
                 fields=["refunded"],
                 name="reg_refunded_idx",
                 condition=Q(refunded=True),
+            ),
+            models.Index(
+                fields=["run", "pending"],
+                name="reg_run_pending_idx",
+                condition=Q(pending=True),
             ),
             models.Index(
                 fields=["run", "cancellation_date"],

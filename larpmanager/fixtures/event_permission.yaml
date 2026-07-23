@@ -396,6 +396,18 @@
     module: registration
 - model: larpmanager.eventpermission
   fields:
+    name: Requests
+    descr: Approve or reject pending signup requests
+    slug: orga_registration_requests
+    number: 12
+    config: null
+    active_if: registration_approval_process
+    hidden: false
+    icon: user-clock
+    feature: orga_registrations
+    module: registration
+- model: larpmanager.eventpermission
+  fields:
     name: Tickets
     descr: Manage the registration tickets
     slug: orga_registration_tickets

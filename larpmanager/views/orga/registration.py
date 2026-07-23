@@ -30,6 +30,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
+from django.db.models import Prefetch
 from django.db.models.functions import Substr
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -48,12 +49,13 @@ from larpmanager.accounting.registration import (
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.registration import get_active_registrations, get_registration_tickets
 from larpmanager.cache.text_fields import get_cache_registration_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
     RegistrationCharacterRelForm,
 )
+from larpmanager.mail.registration import send_registration_request_accepted_email
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -68,6 +70,7 @@ from larpmanager.models.form import (
     RegistrationChoice,
     RegistrationOption,
     RegistrationQuestion,
+    RegistrationQuestionApplicable,
 )
 from larpmanager.models.member import LogOperationType, Member, Membership, get_user_membership
 from larpmanager.models.registration import (
@@ -584,8 +587,8 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["reg_all"] = {}
     context["list_factions"] = {}
 
-    # Query active (non-cancelled) registrations ordered by last update
-    que = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True).order_by("-updated")
+    # Query active (non-cancelled, non-pending) registrations ordered by last update
+    que = get_active_registrations(context["run"]).order_by("-updated")
     context["registration_list"] = list(que.select_related("member"))
 
     _registrations_prepare_membership(context)
@@ -1040,8 +1043,8 @@ def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResp
     # Check user permissions for the event
     context = check_event_context(request, event_slug, "orga_registrations")
 
-    # Collect all registration IDs for the current run
-    registration_ids = [str(registration.id) for registration in Registration.objects.filter(run=context["run"])]
+    # Collect all active (non-pending) registration IDs for the current run
+    registration_ids = [str(registration.id) for registration in get_active_registrations(context["run"])]
 
     # Trigger background registration checks
     check_registration_background(registration_ids)
@@ -1125,6 +1128,107 @@ def orga_registration_discount_del(
         event_slug=context["run"].get_slug(),
         registration_uuid=context["registration"].uuid,
     )
+
+
+@login_required
+def orga_registration_requests(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Display pending signup requests, with their answers to the request questions."""
+    from larpmanager.views.orga.form import get_ordered_registration_questions  # noqa: PLC0415
+
+    context = check_event_context(request, event_slug, "orga_registration_requests")
+    context["list"] = list(
+        Registration.objects.filter(run=context["run"], pending=True).order_by("-created").select_related("member")
+    )
+
+    questions = list(
+        get_ordered_registration_questions(context, applicable=RegistrationQuestionApplicable.REQUEST).prefetch_related(
+            Prefetch("options", queryset=RegistrationOption.objects.order_by("order"))
+        )
+    )
+    context["questions"] = questions
+
+    question_ids = [question.id for question in questions]
+    registration_ids = [registration.id for registration in context["list"]]
+
+    answers_by_registration: dict[int, dict[int, str]] = {}
+    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids, registration_id__in=registration_ids):
+        answers_by_registration.setdefault(answer.registration_id, {})[answer.question_id] = answer.text
+
+    choices_by_registration: dict[int, dict[int, list[str]]] = {}
+    for choice in RegistrationChoice.objects.filter(
+        question_id__in=question_ids, registration_id__in=registration_ids
+    ).select_related("option"):
+        choices_by_registration.setdefault(choice.registration_id, {}).setdefault(choice.question_id, []).append(
+            choice.option.name
+        )
+
+    for registration in context["list"]:
+        cells = []
+        for question in questions:
+            if question.typ in (BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE):
+                value = ", ".join(choices_by_registration.get(registration.id, {}).get(question.id, []))
+            else:
+                value = answers_by_registration.get(registration.id, {}).get(question.id, "")
+            cells.append(value)
+        registration.request_cells = cells
+
+    return render(request, "larpmanager/orga/registration_requests.html", context)
+
+
+@login_required
+def orga_registration_request_approve(request: HttpRequest, event_slug: str, registration_uuid: str) -> HttpResponse:
+    """Approve a pending signup request: the player can then complete the normal registration.
+
+    Shows a confirmation page before applying the change: bare frame popup when opened
+    via the iframe modal, full-chrome confirm page on a direct GET otherwise.
+    """
+    context = check_event_context(request, event_slug, "orga_registration_requests")
+    get_registration(context, registration_uuid)
+
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    if request.method != "POST":
+        context["frame"] = is_frame
+        context["el_name"] = str(context["registration"].member)
+        template = "elements/dashboard/approve_confirm.html" if is_frame else "elements/confirm_action.html"
+        return render(request, template, context)
+
+    registration = context["registration"]
+    registration.pending = False
+    registration.save()
+
+    send_registration_request_accepted_email(registration)
+    messages.success(request, _("Signup request approved") + "!")
+
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
+    return redirect("orga_registration_requests", event_slug=context["run"].get_slug())
+
+
+@login_required
+def orga_registration_request_reject(request: HttpRequest, event_slug: str, registration_uuid: str) -> HttpResponse:
+    """Reject a pending signup request, soft-deleting it and notifying the player.
+
+    Shows a confirmation page before applying the change: bare frame popup when opened
+    via the iframe modal, full-chrome confirm page on a direct GET otherwise.
+    """
+    context = check_event_context(request, event_slug, "orga_registration_requests")
+    get_registration(context, registration_uuid)
+
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
+    if request.method != "POST":
+        context["frame"] = is_frame
+        context["el_name"] = str(context["registration"].member)
+        template = "elements/dashboard/delete_confirm.html" if is_frame else "elements/confirm_action.html"
+        return render(request, template, context)
+
+    context["registration"].delete()
+    messages.success(request, _("Signup request rejected") + "!")
+
+    if is_frame:
+        return render(request, "elements/dashboard/form_success.html", context)
+    return redirect("orga_registration_requests", event_slug=context["run"].get_slug())
 
 
 @login_required
@@ -1280,7 +1384,11 @@ def get_pre_registration(event: Any) -> dict[str, list | dict[int, int]]:
     result_data = {"list": [], "pred": []}
 
     # Get set of member IDs who have already registered for this event
-    signed_member_ids = set(Registration.objects.filter(run__event=event).values_list("member_id", flat=True))
+    signed_member_ids = set(
+        Registration.objects.filter(run__event=event, cancellation_date__isnull=True, pending=False).values_list(
+            "member_id", flat=True
+        )
+    )
 
     # Get all pre-registrations ordered by preference and creation date
     pre_registrations = PreRegistration.objects.filter(event=event).order_by("pref", "created")
@@ -1448,8 +1556,8 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
-    # Verify member has registration for this event
-    if not Registration.objects.filter(member=member, run=context["run"]).exists():
+    # Verify member has an active registration for this event
+    if not get_active_registrations(context["run"]).filter(member=member).exists():
         return JsonResponse({"k": 0})
 
     # Build member information HTML starting with name and profile

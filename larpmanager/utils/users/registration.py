@@ -50,7 +50,7 @@ from larpmanager.models.member import Member, Membership, MembershipStatus, get_
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
 from larpmanager.utils.core.common import feature_visible, format_datetime, get_time_diff_today
-from larpmanager.utils.core.exceptions import RewokedMembershipError, SignupError, WaitingError
+from larpmanager.utils.core.exceptions import PendingApprovalError, RewokedMembershipError, SignupError, WaitingError
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -243,7 +243,9 @@ def _status_membership_fee(
     run_status["action"] = {
         "url": membership_url,
         "label": _("Pay membership fee"),
-        "label_long": _("Pay the %(year)d membership fee of %(amount)s%(currency)s, required to attend this event")
+        "label_long": _(
+            "Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required to attend this event"
+        )
         % {
             "year": current_year,
             "amount": fee,
@@ -253,7 +255,7 @@ def _status_membership_fee(
     return True
 
 
-def registration_status_signed(  # noqa: C901 - Complex registration status logic with feature checks
+def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration status logic with feature checks
     run: Run,
     registration: Registration,
     member: Member,
@@ -282,6 +284,17 @@ def registration_status_signed(  # noqa: C901 - Complex registration status logi
     # Extract values from context dictionary if provided
     if context is None:
         context = {}
+
+    # Signup request still awaiting organizer approval: nothing else to check yet
+    if registration.pending:
+        run_status["text"] = _("Signup request pending")
+        run_status["status_type"] = "request_pending"
+        run_status["action"] = {
+            "label": _("Awaiting approval"),
+            "label_long": _("Your signup request is awaiting organizer approval"),
+        }
+        run_status["can_pay"] = False
+        return
 
     # Initialize character registration status for the run
     registration_status_characters(run, registration, run_status, features, context)
@@ -1217,6 +1230,10 @@ def check_signup(context: dict) -> None:
     registration = get_player_signup(context)
     if not registration:
         raise SignupError(context["run"].get_slug())
+
+    # Signup request still awaiting organizer approval
+    if registration.pending:
+        raise PendingApprovalError(context["run"].get_slug())
 
     # Check if registration is in waiting list
     if registration.ticket and registration.ticket.tier == TicketTier.WAITING:

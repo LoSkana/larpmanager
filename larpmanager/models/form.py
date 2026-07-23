@@ -218,19 +218,25 @@ class RegistrationQuestionApplicable(models.TextChoices):
 
     REGISTRATION = "r", "registration"
     MATCHMAKER = "m", "matchmaker"
+    REQUEST = "q", "request"
 
 
 def _get_registration_mapping() -> dict[str, str | None]:
-    """Return mapping of registration form types to their gating feature (None = always available)."""
+    """Return mapping of registration form types to their gating feature (None = always available).
+
+    A gate prefixed with "config:" refers to an EventConfig boolean rather than a Feature slug.
+    """
     return {
         "registration": None,
         "matchmaker": "matchmaker",
+        "request": "config:registration_approval_process",
     }
 
 
 REGISTRATION_TYPE_TO_APPLICABLE = {
     "registration": RegistrationQuestionApplicable.REGISTRATION,
     "matchmaker": RegistrationQuestionApplicable.MATCHMAKER,
+    "request": RegistrationQuestionApplicable.REQUEST,
 }
 
 REGISTRATION_APPLICABLE_TO_TYPE = {value: key for key, value in REGISTRATION_TYPE_TO_APPLICABLE.items()}

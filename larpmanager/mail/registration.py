@@ -314,6 +314,78 @@ def send_registration_deletion_email(instance: Registration) -> None:
             )
 
 
+def send_registration_request_received_email(instance: Registration) -> None:
+    """Send confirmation that a signup approval request was received, and notify organizers.
+
+    Args:
+        instance: Pending Registration instance created from the request form.
+
+    """
+    email_context = {"event": instance.run, "user": instance.member}
+    activate(instance.member.language)
+    email_subject = hdr(instance.run.event) + _("Signup request received for %(event)s") % email_context
+    email_body = (
+        _("Hello! We have received your request to sign up for <b>%(event)s</b>") % email_context
+        + ". "
+        + _("An organizer will review it soon")
+        + "."
+    )
+
+    custom_message = get_event_text(
+        instance.run.event_id, EventTextType.REGISTRATION_APPROVAL, instance.member.language
+    )
+    if custom_message:
+        email_body += "<br />" + custom_message
+
+    my_send_mail(email_subject, email_body, instance.member, instance.run)
+
+    association_id = instance.run.event.association_id
+    if get_association_config(association_id, "mail_signup_new", default_value=False):
+        for organizer in get_event_organizers(instance.run.event):
+            my_send_digest_email(
+                member=organizer,
+                run=instance.run,
+                instance=instance,
+                notification_type=NotificationType.REGISTRATION_REQUEST_NEW,
+            )
+
+
+def send_registration_request_accepted_email(instance: Registration) -> None:
+    """Send email to the player when their signup request is approved, with a link to complete registration.
+
+    Args:
+        instance: Registration instance whose request was just approved (pending set to False).
+
+    """
+    email_context = {"event": instance.run, "user": instance.member}
+    activate(instance.member.language)
+    email_subject = hdr(instance.run.event) + _("Signup request accepted for %(event)s") % email_context
+    email_body = _("Good news! Your request to sign up for <b>%(event)s</b> has been accepted") % email_context + "."
+
+    register_url = get_url(instance.run.get_slug() + "/register", instance.run.event)
+    email_body += "<br /><br />" + _("Please <a href='%(url)s'>complete your signup</a>.") % {"url": register_url}
+
+    my_send_mail(email_subject, email_body, instance.member, instance.run)
+
+
+def send_registration_request_rejected_email(instance: Registration) -> None:
+    """Send email to the player when their pending signup request is rejected (soft-deleted).
+
+    Args:
+        instance: Pending Registration instance about to be soft-deleted.
+
+    """
+    email_context = {"event": instance.run, "user": instance.member}
+    activate(instance.member.language)
+    email_subject = hdr(instance.run.event) + _("Signup request declined for %(event)s") % email_context
+    email_body = (
+        _("We are sorry to inform you that your request to sign up for <b>%(event)s</b> was not accepted")
+        % email_context
+        + "."
+    )
+    my_send_mail(email_subject, email_body, instance.member, instance.run)
+
+
 def send_pre_registration_confirmation_email(pre_registration: Any) -> None:
     """Handle pre-registration pre-save notifications."""
     context = {"event": pre_registration.event}

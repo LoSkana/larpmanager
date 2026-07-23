@@ -187,6 +187,7 @@ from larpmanager.mail.registration import (
     send_pre_registration_confirmation_email,
     send_registration_cancellation_email,
     send_registration_deletion_email,
+    send_registration_request_rejected_email,
 )
 from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
 from larpmanager.models.accounting import (
@@ -1623,6 +1624,10 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     if is_clone_active():
         return
 
+    # Signup requests awaiting approval have no ticket/characters yet: skip
+    if instance.pending:
+        return
+
     # Assign character from previous campaign if applicable
     assign_previous_campaign_character(instance)
 
@@ -1653,6 +1658,9 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
     """Send email notification before registration is deleted."""
     if is_clone_active():
+        return
+    if instance.pending:
+        send_registration_request_rejected_email(instance)
         return
     send_registration_deletion_email(instance)
 

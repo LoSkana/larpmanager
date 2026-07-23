@@ -37,6 +37,7 @@ _STATUS_ICONS = {
     "pending": "fa-solid fa-clock",
     "action_needed": "fa-solid fa-circle-exclamation",
     "provisional": "fa-solid fa-hourglass-half",
+    "request_pending": "fa-solid fa-user-clock",
     "todo": "fa-solid fa-list-check",
 }
 
@@ -104,7 +105,7 @@ def _add_registration_items(
     context: dict[str, Any],
 ) -> None:
     allowed_sidebar = context.get("demo_allowed_sidebar")
-    if registration:
+    if registration and not registration.pending:
         entry = _item(
             reverse("register", args=[slug]),
             "fa-solid fa-pen-to-square",

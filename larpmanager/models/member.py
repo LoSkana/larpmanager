@@ -321,7 +321,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         choices=NewsletterChoices.choices,
         default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
-        help_text=_("Do you wish to be always updated on our events") + "?",
+        help_text=_("Would you like to receive updates about our upcoming events") + "?",
         null=True,
     )
 
@@ -827,6 +827,7 @@ class NotificationType(models.TextChoices):
     REGISTRATION_NEW = "registration_new", "New Registration"
     REGISTRATION_UPDATE = "registration_update", "Updated Registration"
     REGISTRATION_CANCEL = "registration_cancel", "Cancelled Registration"
+    REGISTRATION_REQUEST_NEW = "registration_request_new", "New Signup Request"
     PAYMENT_MONEY = "payment_money", "Money Payment"
     PAYMENT_CREDIT = "payment_credit", "Credit Payment"
     PAYMENT_TOKEN = "payment_token", "Token Payment"

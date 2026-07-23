@@ -26,6 +26,7 @@ from django.db.models import Prefetch
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.registration import get_active_registrations
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -34,7 +35,6 @@ from larpmanager.models.form import (
     RegistrationQuestionApplicable,
     RegistrationQuestionType,
 )
-from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Faction
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.views.orga.form import get_ordered_registration_questions
@@ -57,9 +57,7 @@ def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpRespon
     context["questions"] = questions
 
     registrations = (
-        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
-        .select_related("member")
-        .order_by("member__name", "member__surname")
+        get_active_registrations(context["run"]).select_related("member").order_by("member__name", "member__surname")
     )
 
     question_ids = [question.id for question in questions]

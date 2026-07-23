@@ -47,9 +47,10 @@ from larpmanager.forms.registration import (
     PreRegistrationForm,
     RegistrationForm,
     RegistrationGiftForm,
+    RequestApprovalForm,
 )
 from larpmanager.mail.base import bring_friend_instructions
-from larpmanager.mail.registration import update_registration_status_bkg
+from larpmanager.mail.registration import send_registration_request_received_email, update_registration_status_bkg
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -674,6 +675,11 @@ def register(
     # Set up registration context for the current run
     registration = context.get("registration")
 
+    # A pending signup request cannot be edited through the normal form: send back to its status page
+    if registration and registration.pending:
+        messages.info(request, _("Your signup request is awaiting organizer approval") + ".")
+        return redirect("event", event_slug=current_run.get_slug())
+
     # Apply ticket selection if provided, verifying it belongs to this event
     _apply_ticket(context, ticket_uuid, current_event.pk)
 
@@ -685,6 +691,10 @@ def register(
 
     # Handle registration redirects for new registrations (skipped is a valid ticket link is provided)
     if is_new_registration and not context.get("ticket"):
+        # If the approval process is enabled, players must submit a signup request instead
+        if get_event_config(current_event.id, "registration_approval_process", default_value=False, context=context):
+            return redirect("request_signup", event_slug=current_run.get_slug())
+
         redirect_response = _check_redirect_registration(request, context, secret_code)
         if redirect_response:
             return redirect_response
@@ -746,6 +756,40 @@ def _apply_ticket(context: dict, ticket_uuid: str | None, event_id: int) -> None
     except ObjectDoesNotExist:
         # Ticket not found or doesn't belong to this event - ignore silently
         pass
+
+
+@login_required
+def request_signup(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Player-facing page to submit a signup approval request when the approval process is enabled."""
+    context = get_event_context(request, event_slug, include_status=True, check_visibility=False)
+    current_run = context["run"]
+    current_event = context["event"]
+
+    if not get_event_config(current_event.id, "registration_approval_process", default_value=False, context=context):
+        raise Http404
+
+    # Already has a registration (pending or confirmed): nothing to request
+    if context.get("registration"):
+        return redirect("register", event_slug=current_run.get_slug())
+
+    pending_instance = Registration(run=current_run, member=context["member"])
+
+    if request.method == "POST":
+        form = RequestApprovalForm(request.POST, instance=pending_instance, context=context)
+        if form.is_valid():
+            saved_registration = form.save()
+            send_registration_request_received_email(saved_registration)
+            messages.success(request, _("Your signup request has been submitted") + "!")
+            return redirect("event", event_slug=current_run.get_slug())
+    else:
+        form = RequestApprovalForm(instance=pending_instance, context=context)
+
+    context["form"] = form
+    context["approval_text"] = get_event_text(
+        current_event.id, EventTextType.REGISTRATION_APPROVAL, context["member"].language
+    )
+
+    return render(request, "larpmanager/event/request_signup.html", context)
 
 
 def _check_redirect_registration(request: HttpRequest, context: dict, secret_code: str | None) -> HttpResponse | None:  # noqa: PLR0911
@@ -1097,8 +1141,12 @@ def _validate_exclusive_logic(discount: Discount, member: Member, run: Run, even
         if AccountingItemDiscount.objects.filter(member=member, run=run).exists():
             return False
 
-        # Verify member has registration in another run of the same event
-        if not Registration.objects.filter(member=member, run__event=event).exclude(run=run).exists():
+        # Verify member has an active registration in another run of the same event
+        if not (
+            Registration.objects.filter(member=member, run__event=event, cancellation_date__isnull=True, pending=False)
+            .exclude(run=run)
+            .exists()
+        ):
             return False
 
     # If PLAYAGAIN discount was already applied, no other allowed
