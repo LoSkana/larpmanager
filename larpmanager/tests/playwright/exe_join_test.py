@@ -51,7 +51,6 @@ def test_exe_join(pw_page: Any) -> None:
     page.get_by_role("textbox", name="Password confirmation").fill("banana1234!")
     page.get_by_role("textbox", name="Name:", exact=True).click()
     page.get_by_role("textbox", name="Name:", exact=True).fill("prova")
-    page.get_by_role("cell", name="Yes, keep me posted! Do you").click()
     page.get_by_label("Newsletter").select_option("o")
     page.get_by_role("textbox", name="Surname").click()
     page.get_by_role("textbox", name="Surname").fill("orga")
