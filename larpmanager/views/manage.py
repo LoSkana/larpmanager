@@ -668,6 +668,16 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
                 count=actions_data["pending_expenses"]["count"],
             )
 
+    # Check for pending signup requests awaiting approval
+    if actions_data.get("pending_registration_requests", {}).get("count", 0) > 0:
+        _add_action(
+            context,
+            _("<b>%(number)s</b> signup requests to approve")
+            % {"number": actions_data["pending_registration_requests"]["count"]},
+            "orga_registration_requests",
+            count=actions_data["pending_registration_requests"]["count"],
+        )
+
     # Check for pending registration invoice approvals
     if actions_data.get("pending_invoices_registration", {}).get("count", 0) > 0:
         _add_action(

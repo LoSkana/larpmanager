@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Request to signup" %} - {{ run.search }}
+{% endblock title %}
+{% block content %}
+    <div class="form_container user_resize platform">
+        {% if approval_text %}<p>{{ approval_text|safe }}</p>{% endif %}
+        <form id="request_signup"
+              action="{{ request.path }}"
+              method="post"
+              novalidate>
+            {% csrf_token %}
+            <div>{% include "elements/form/register.html" %}</div>
+            <input type="submit" value="{% trans "Confirm" %}" id="request_signup_go">
+        </form>
+    </div>
+{% endblock content %}

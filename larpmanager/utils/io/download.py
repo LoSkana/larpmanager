@@ -683,8 +683,8 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
 
     # Handle registration-specific filtering and data enrichment
     if model_name == "registration":
-        # Filter out cancelled registrations and optimize ticket queries
-        queryset = queryset.filter(cancellation_date__isnull=True).select_related("ticket")
+        # Filter out cancelled and pending registrations and optimize ticket queries
+        queryset = queryset.filter(cancellation_date__isnull=True, pending=False).select_related("ticket")
 
         # Get accounting data for all registrations in the queryset
         accounting_data = _orga_registrations_acc(context, queryset)

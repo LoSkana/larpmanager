@@ -93,6 +93,7 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
         member=member,
         run__end__gte=cutoff_date,
         cancellation_date__isnull=True,
+        pending=False,
         run__event__association_id=association_id,
     ).select_related("run", "run__event")
     navigation_context["reg_menu"] = [

@@ -622,6 +622,19 @@ class OrgaConfigForm(ConfigForm):
             disable_cancellation_help_text,
         )
 
+        # Require organizer approval before a player can complete signup
+        approval_process_label = _("Approval process")
+        approval_process_help_text = _(
+            "If checked: players cannot sign up directly; they submit a signup request "
+            "that an organizer must approve before they can complete registration",
+        )
+        self.add_configs(
+            "registration_approval_process",
+            ConfigType.BOOL,
+            approval_process_label,
+            approval_process_help_text,
+        )
+
     def set_config_char_form(self) -> None:
         """Configure character form options for events with character feature enabled.
 
@@ -1239,6 +1252,11 @@ class OrgaEventTextForm(BaseModelForm):
                 [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW],
             )
 
+        if not get_event_config(
+            self.params["event"].id, "registration_approval_process", default_value=False, context=self.params
+        ):
+            delete_choice.append(EventTextType.REGISTRATION_APPROVAL)
+
         for tp in delete_choice:
             ch = remove_choice(ch, tp)
         self.fields["typ"].choices = ch
@@ -1258,6 +1276,9 @@ class OrgaEventTextForm(BaseModelForm):
             ),
             EventTextType.CHARACTER_REVIEW: _(
                 "Content of mail notifying participants of their character in review status",
+            ),
+            EventTextType.REGISTRATION_APPROVAL: _(
+                "Shown on the signup request page and added to the request-received confirmation mail",
             ),
         }
         help_text = []

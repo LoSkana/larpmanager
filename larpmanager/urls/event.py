@@ -374,6 +374,11 @@ urlpatterns = [
         name="register_reduced",
     ),
     path(
+        "<slug:event_slug>/register/request/",
+        views_ur.request_signup,
+        name="request_signup",
+    ),
+    path(
         "<slug:event_slug>/register/<slug:secret_code>/",
         views_ur.register_exclusive,
         name="register_exclusive",

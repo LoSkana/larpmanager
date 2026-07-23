@@ -1,0 +1,45 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Requests" %} - {{ event.name }}
+{% endblock title %}
+{% block info %}
+    {% trans "Review pending signup requests and approve or reject them" %}
+{% endblock info %}
+{% block content %}
+    <table id="registration_requests" class="go_datatable writing">
+        <thead>
+            <tr>
+                <th></th>
+                <th>{% trans "Player" %}</th>
+                <th></th>
+                <th>{% trans "Requested" %}</th>
+                {% for question in questions %}<th>{{ question.name }}</th>{% endfor %}
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.uuid }}">
+                    <td>
+                        <a href="{% url 'orga_registration_request_approve' run.get_slug el.uuid %}"
+                           class="frame-confirm"><i class="fa-solid fa-check"></i> {% trans "Approve" %}</a>
+                    </td>
+                    <td>
+                        <a href="{% url 'public' el.member.uuid %}">{{ el.member }}</a>
+                    </td>
+                    <td>{{ el.member.email }}</td>
+                    <td>{{ el.created|date:"Y-m-d" }}</td>
+                    {% for cell in el.request_cells %}<td>{{ cell }}</td>{% endfor %}
+                    <td>
+                        <a href="{% url 'orga_registration_request_reject' run.get_slug el.uuid %}"
+                           class="frame-confirm"><i class="fa-solid fa-xmark"></i> {% trans "Reject" %}</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if not list %}
+        <p class="no-elements-available">{% trans "No pending signup requests for this event" %}.</p>
+    {% endif %}
+{% endblock content %}

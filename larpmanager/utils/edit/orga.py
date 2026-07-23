@@ -29,6 +29,7 @@ from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields, reset_event_cache_all
+from larpmanager.cache.config import get_event_config
 from larpmanager.forms.accounting import (
     ExeInvoiceForm,
     OrgaCreditForm,
@@ -879,6 +880,14 @@ def check_writing_form_type(context: dict, form_type: str) -> None:
     context["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
 
 
+def _is_registration_gate_active(context: dict, gate: str) -> bool:
+    """Return True if a registration form type's gating feature/config is active."""
+    if gate.startswith("config:"):
+        config_slug = gate.removeprefix("config:")
+        return get_event_config(context["event"].id, config_slug, default_value=False)
+    return gate in context["features"]
+
+
 def check_registration_form_type(context: dict, form_type: str) -> None:
     """Validate registration form type and update context with type information.
 
@@ -896,9 +905,11 @@ def check_registration_form_type(context: dict, form_type: str) -> None:
     form_type = form_type.lower()
     registration_type_mapping = _get_registration_mapping()
 
-    # Build available types from those whose gating feature (if any) is active
+    # Build available types from those whose gating feature/config (if any) is active
     available_types = [
-        key for key, feature in registration_type_mapping.items() if feature is None or feature in context["features"]
+        key
+        for key, gate in registration_type_mapping.items()
+        if gate is None or _is_registration_gate_active(context, gate)
     ]
 
     # Validate the requested type is available

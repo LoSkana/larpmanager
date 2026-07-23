@@ -1,5 +1,5 @@
 {% load i18n %}
-{% if run_status.status_type == "action_needed" or run_status.status_type == "provisional" or run_status.status_type == "pending" %}
+{% if run_status.status_type == "action_needed" or run_status.status_type == "provisional" or run_status.status_type == "pending" or run_status.status_type == "request_pending" %}
     {% if run_status.action %}
         <div class="reg-banner only_v22 reg-{{ run_status.status_type }}">
             <span class="reg-action-main">
@@ -9,6 +9,8 @@
                     <i class="fa-solid fa-circle-exclamation"></i>
                 {% elif run_status.status_type == "provisional" %}
                     <i class="fa-solid fa-hourglass-half"></i>
+                {% elif run_status.status_type == "request_pending" %}
+                    <i class="fa-solid fa-user-clock"></i>
                 {% endif %}
                 {% if run_status.action.url %}
                     <a href="{{ run_status.action.url }}" class="reg-action-link">{{ run_status.action.label_long|default:run_status.action.label }} <i class="fa-solid fa-chevron-right"></i></a>
