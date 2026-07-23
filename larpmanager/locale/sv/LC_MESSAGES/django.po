@@ -409,7 +409,7 @@ msgid "Print"
 msgstr "Skriv ut"
 
 msgid "Quest"
-msgstr "Quest"
+msgstr "Uppdrag"
 
 msgid "Quota"
 msgstr "Kvot"
@@ -515,7 +515,7 @@ msgid "Answer"
 msgstr "Svar"
 
 msgid "Awards"
-msgstr "Utmärkelser"
+msgstr "Tilldelningar"
 
 msgid "Badge:"
 msgstr "Märke:"
@@ -692,7 +692,7 @@ msgid "Review"
 msgstr "Granskning"
 
 msgid "Safety"
-msgstr "Säkerhet"
+msgstr "Safety"
 
 msgid "Search"
 msgstr "Sök"

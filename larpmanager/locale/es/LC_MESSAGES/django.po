@@ -755,7 +755,7 @@ msgid "Upload"
 msgstr "Carga"
 
 msgid "Verify"
-msgstr "Verifica"
+msgstr "Verificar"
 
 msgid "Voting"
 msgstr "Votación"
@@ -908,7 +908,7 @@ msgid "Move up"
 msgstr "Sube"
 
 msgid "No step"
-msgstr "Sin escalón"
+msgstr "Sin paso"
 
 msgid "Nothing"
 msgstr "Nada"
@@ -1089,7 +1089,7 @@ msgid "Authors:"
 msgstr "Autores:"
 
 msgid "Auto buy"
-msgstr "Auto compra"
+msgstr "Compra automática"
 
 msgid "Balance:"
 msgstr "Saldo:"
@@ -1290,7 +1290,7 @@ msgid "Pronouns"
 msgstr "Pronombres"
 
 msgid "Proposed"
-msgstr "Propuesta"
+msgstr "Propuesto"
 
 msgid "Province"
 msgstr "Provincia"
@@ -1311,7 +1311,7 @@ msgid "Redirect"
 msgstr "Redirigir"
 
 msgid "Refunded"
-msgstr "Reembolsado"
+msgstr "Reembolsados"
 
 msgid "Register"
 msgstr "Registrarse"
@@ -1338,7 +1338,7 @@ msgid "Resource"
 msgstr "Recurso"
 
 msgid "Returned"
-msgstr "Devuelto"
+msgstr "Devueltos"
 
 msgid "Revision"
 msgstr "Revisión"
@@ -1434,7 +1434,7 @@ msgid "Attending"
 msgstr "Asistente"
 
 msgid "Available"
-msgstr "Disponible"
+msgstr "Disponibles"
 
 msgid "Campaign:"
 msgstr "Campaña:"

@@ -409,7 +409,7 @@ msgid "Print"
 msgstr "Tulosta"
 
 msgid "Quest"
-msgstr "Quest"
+msgstr "Tehtävä"
 
 msgid "Quota"
 msgstr "Kiintiö"
@@ -479,7 +479,7 @@ msgid "Users"
 msgstr "Käyttäjät"
 
 msgid "Utils"
-msgstr "Utils"
+msgstr "Työkalut"
 
 msgid "Value"
 msgstr "Arvo"
@@ -569,7 +569,7 @@ msgid "Export"
 msgstr "Vie"
 
 msgid "Female"
-msgstr "Nainen"
+msgstr "Naispuolinen"
 
 msgid "Fields"
 msgstr "Kentät"
@@ -803,7 +803,7 @@ msgid "Camping"
 msgstr "Leirintäalue"
 
 msgid "Casting"
-msgstr "Hahmojako"
+msgstr "Casting"
 
 msgid "Closing"
 msgstr "Sulkeminen"
@@ -866,7 +866,7 @@ msgid "Guilds:"
 msgstr "Killat:"
 
 msgid "Handout"
-msgstr "Jakelulehti"
+msgstr "Handout"
 
 msgid "History"
 msgstr "Historia"
@@ -1104,7 +1104,7 @@ msgid "Carousel"
 msgstr "Karuselli"
 
 msgid "Casting:"
-msgstr "Hahmojako:"
+msgstr "Casting:"
 
 msgid "Claimant"
 msgstr "Hakija"
@@ -1188,7 +1188,7 @@ msgid "Giftable"
 msgstr "Lahjattavissa"
 
 msgid "Handouts"
-msgstr "Jakelulehtiet"
+msgstr "Handouts"
 
 msgid "Inactive"
 msgstr "Inaktiivinen"

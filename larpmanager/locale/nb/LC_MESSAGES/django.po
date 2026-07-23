@@ -123,7 +123,7 @@ msgid "Icon"
 msgstr "Ikon"
 
 msgid "Info"
-msgstr "Informasjon"
+msgstr "Info"
 
 msgid "Item"
 msgstr "Gjenstand"
@@ -183,7 +183,7 @@ msgid "Plot"
 msgstr "Plott"
 
 msgid "Port"
-msgstr "Tilkoblingsport"
+msgstr "Port"
 
 msgid "Prev"
 msgstr "Forrige"
@@ -515,7 +515,7 @@ msgid "Answer"
 msgstr "Svar"
 
 msgid "Awards"
-msgstr "Priser"
+msgstr "Tildelinger"
 
 msgid "Badge:"
 msgstr "Merke:"
@@ -548,7 +548,7 @@ msgid "Delete"
 msgstr "Slett"
 
 msgid "Detail"
-msgstr "Detaljer"
+msgstr "Detalj"
 
 msgid "Direct"
 msgstr "Direkte"
@@ -605,7 +605,7 @@ msgid "Insert"
 msgstr "Sett inn"
 
 msgid "Invite"
-msgstr "Invitere"
+msgstr "Inviter"
 
 msgid "Joined"
 msgstr "Ble med"
@@ -749,10 +749,10 @@ msgid "Unused"
 msgstr "Ubrukt"
 
 msgid "Update"
-msgstr "Oppdatering"
+msgstr "Oppdater"
 
 msgid "Upload"
-msgstr "Opplasting"
+msgstr "Last opp"
 
 msgid "Verify"
 msgstr "Bekreft"
@@ -890,7 +890,7 @@ msgid "Lottery"
 msgstr "Lotteri"
 
 msgid "Maximum"
-msgstr "Massimo"
+msgstr "Maksimum"
 
 msgid "Members"
 msgstr "Medlemmer"
@@ -1266,7 +1266,7 @@ msgid "Position"
 msgstr "Stilling"
 
 msgid "Priority"
-msgstr "Prioriteter"
+msgstr "Prioritet"
 
 msgid "Private:"
 msgstr "Privat:"

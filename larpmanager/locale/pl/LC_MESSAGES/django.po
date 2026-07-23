@@ -18,7 +18,7 @@ msgid "Age"
 msgstr "Wiek"
 
 msgid "All"
-msgstr "Wszystkie"
+msgstr "Wszystko"
 
 msgid "End"
 msgstr "Koniec"
@@ -153,7 +153,7 @@ msgid "Main"
 msgstr "Główny"
 
 msgid "Male"
-msgstr "Mężczyzna"
+msgstr "Męski"
 
 msgid "Name"
 msgstr "Nazwa"
@@ -273,7 +273,7 @@ msgid "Album"
 msgstr "Album"
 
 msgid "Alert"
-msgstr "Alarm"
+msgstr "Ostrzeżenie"
 
 msgid "Alias"
 msgstr "Alias"
@@ -409,7 +409,7 @@ msgid "Print"
 msgstr "Drukuj"
 
 msgid "Quest"
-msgstr "Zadanie"
+msgstr "Misja"
 
 msgid "Quota"
 msgstr "Kwota"
@@ -515,7 +515,7 @@ msgid "Answer"
 msgstr "Odpowiedź"
 
 msgid "Awards"
-msgstr "Nagrody"
+msgstr "Przyznania"
 
 msgid "Badge:"
 msgstr "Odznaka:"
@@ -668,7 +668,7 @@ msgid "Public"
 msgstr "Publiczny"
 
 msgid "Quests"
-msgstr "Zadania"
+msgstr "Misje"
 
 msgid "Quotas"
 msgstr "Kwoty"
@@ -1404,7 +1404,7 @@ msgid "Workshop"
 msgstr "Warsztat"
 
 msgid "download"
-msgstr "Pobierz"
+msgstr "pobierz"
 
 msgid "factions"
 msgstr "frakcje"
@@ -1602,7 +1602,7 @@ msgid "Reminders"
 msgstr "Przypomnienia"
 
 msgid "Requested"
-msgstr "Proszę o"
+msgstr "Żądany"
 
 msgid "Residence"
 msgstr "Rezydencja"
@@ -1611,7 +1611,7 @@ msgid "Retention"
 msgstr "Zatrzymanie"
 
 msgid "Returning"
-msgstr "Powrót"
+msgstr "Zwrot"
 
 msgid "Set quest"
 msgstr "Ustaw zadanie"

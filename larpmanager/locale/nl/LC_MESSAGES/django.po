@@ -150,7 +150,7 @@ msgid "Mail"
 msgstr "Mail"
 
 msgid "Main"
-msgstr "Hoofd"
+msgstr "Voornaamste"
 
 msgid "Male"
 msgstr "Mannelijk"
@@ -385,7 +385,7 @@ msgid "Order"
 msgstr "Bestelling"
 
 msgid "Other"
-msgstr "Ander"
+msgstr "Andere"
 
 msgid "Owing"
 msgstr "Te betalen"
@@ -608,7 +608,7 @@ msgid "Invite"
 msgstr "Uitnodigen"
 
 msgid "Joined"
-msgstr "Aangesloten bij"
+msgstr "Aangesloten"
 
 msgid "Labels"
 msgstr "Labels"
@@ -695,7 +695,7 @@ msgid "Safety"
 msgstr "Safety"
 
 msgid "Search"
-msgstr "Zoek op"
+msgstr "Zoeken"
 
 msgid "Second"
 msgstr "Tweede"
@@ -794,7 +794,7 @@ msgid "Authors"
 msgstr "Auteurs"
 
 msgid "Average"
-msgstr "Media"
+msgstr "Gemiddelde"
 
 msgid "Balance"
 msgstr "Saldo"
@@ -959,7 +959,7 @@ msgid "Pronoun"
 msgstr "Voornaamwoord"
 
 msgid "Reading"
-msgstr "Lezen"
+msgstr "Lezing"
 
 msgid "Receipt"
 msgstr "Ontvangstbewijs"
@@ -993,7 +993,7 @@ msgid "Setting"
 msgstr "Instelling"
 
 msgid "Sharing"
-msgstr "Delen"
+msgstr "Deling"
 
 msgid "Shuttle"
 msgstr "Shuttle"
@@ -1050,7 +1050,7 @@ msgid "Visible"
 msgstr "Zichtbaar"
 
 msgid "Waiting"
-msgstr "Wachten"
+msgstr "Wachting"
 
 msgid "Website"
 msgstr "Website"
@@ -1059,10 +1059,10 @@ msgid "Welcome"
 msgstr "Welkom"
 
 msgid "Working"
-msgstr "Werken"
+msgstr "Werk"
 
 msgid "Writing"
-msgstr "Schrijven"
+msgstr "Geschrift"
 
 msgid "Accepted"
 msgstr "Geaccepteerd"
@@ -1089,7 +1089,7 @@ msgid "Authors:"
 msgstr "Auteurs:"
 
 msgid "Auto buy"
-msgstr "Auto kopen"
+msgstr "Automatisch kopen"
 
 msgid "Balance:"
 msgstr "Saldo:"
@@ -1218,7 +1218,7 @@ msgid "Messages"
 msgstr "Berichten"
 
 msgid "New cost"
-msgstr "Nieuwe kosten"
+msgstr "Nieuwe kost"
 
 msgid "New gift"
 msgstr "Nieuw cadeau"
@@ -1431,7 +1431,7 @@ msgid "Assigned:"
 msgstr "Toegewezen:"
 
 msgid "Attending"
-msgstr "Aanwezig"
+msgstr "Aanwezige"
 
 msgid "Available"
 msgstr "Beschikbaar"

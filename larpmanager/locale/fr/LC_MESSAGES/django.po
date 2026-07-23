@@ -144,10 +144,10 @@ msgid "Logo"
 msgstr "Logo"
 
 msgid "Logs"
-msgstr "Journaux"
+msgstr "Logs"
 
 msgid "Mail"
-msgstr "Courrier"
+msgstr "Mail"
 
 msgid "Main"
 msgstr "Principal"
@@ -397,7 +397,7 @@ msgid "Photo"
 msgstr "Photo"
 
 msgid "Plots"
-msgstr "Intrigues"
+msgstr "Trames"
 
 msgid "Prev:"
 msgstr "Précédent:"
@@ -515,7 +515,7 @@ msgid "Answer"
 msgstr "Réponse"
 
 msgid "Awards"
-msgstr "Récompenses"
+msgstr "Attributions"
 
 msgid "Badge:"
 msgstr "Badge:"
@@ -866,7 +866,7 @@ msgid "Guilds:"
 msgstr "Guildes:"
 
 msgid "Handout"
-msgstr "Document à distribuer"
+msgstr "Handout"
 
 msgid "History"
 msgstr "Historique"
@@ -935,7 +935,7 @@ msgid "Players"
 msgstr "Joueurs"
 
 msgid "Preview"
-msgstr "Avant-première"
+msgstr "Aperçu"
 
 msgid "Primary"
 msgstr "Primaire"
@@ -962,7 +962,7 @@ msgid "Reading"
 msgstr "Lecture"
 
 msgid "Receipt"
-msgstr "Accusé de réception"
+msgstr "Reçu"
 
 msgid "Reduced"
 msgstr "Réduit"
@@ -990,7 +990,7 @@ msgstr "Session"
 
 msgctxt "event"
 msgid "Setting"
-msgstr "Paramètres"
+msgstr "Paramètre"
 
 msgid "Sharing"
 msgstr "Partage"
@@ -1005,7 +1005,7 @@ msgid "Sign In"
 msgstr "Se connecter"
 
 msgid "Station"
-msgstr "Poste de travail"
+msgstr "Poste"
 
 msgid "Status:"
 msgstr "Statut:"
@@ -1059,7 +1059,7 @@ msgid "Welcome"
 msgstr "Bienvenue"
 
 msgid "Working"
-msgstr "Travailler"
+msgstr "En cours"
 
 msgid "Writing"
 msgstr "Rédaction"
@@ -1095,7 +1095,7 @@ msgid "Balance:"
 msgstr "Solde:"
 
 msgid "Calendar"
-msgstr "Agenda"
+msgstr "Calendrier"
 
 msgid "Campaign"
 msgstr "Campagne"
@@ -1188,7 +1188,7 @@ msgid "Giftable"
 msgstr "Offrable"
 
 msgid "Handouts"
-msgstr "Documents à distribuer"
+msgstr "Handouts"
 
 msgid "Inactive"
 msgstr "Inactif"
@@ -1608,7 +1608,7 @@ msgid "Residence"
 msgstr "Résidence"
 
 msgid "Retention"
-msgstr "Retenue à la source"
+msgstr "Retenue"
 
 msgid "Returning"
 msgstr "Retour"
@@ -1986,7 +1986,7 @@ msgid "click here"
 msgstr "cliquez ici"
 
 msgid "reply here"
-msgstr "Répondez ici"
+msgstr "répondez ici"
 
 msgid "Access Link"
 msgstr "Lien d'accès"
@@ -2181,7 +2181,7 @@ msgid "Quick Setup"
 msgstr "Installation rapide"
 
 msgid "Redeem link"
-msgstr "Lien de rédention"
+msgstr "Lien de rédemption"
 
 msgid "Register to"
 msgstr "S'inscrire à"
