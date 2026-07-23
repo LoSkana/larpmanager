@@ -19,9 +19,7 @@
             </p>
             <br />
             <p>
-                {% trans "When you want to close the collection, follow this link." %}
-                {% trans "A special redemption code will be generated, to be given to the recipient:" %}
-                <a href="{% url 'accounting_collection_close' coll.contribute_code %}">{% trans "Close the collection" %}</a>
+                {% trans "When you want to close the collection, follow this link. A special redemption code will be generated, to be given to the recipient:" %}<a href="{% url 'accounting_collection_close' coll.contribute_code %}">{% trans "Close the collection" %}</a>
             </p>
             <br />
         {% endif %}

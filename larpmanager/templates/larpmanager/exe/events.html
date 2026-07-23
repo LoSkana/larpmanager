@@ -71,8 +71,6 @@
         </tbody>
     </table>
     {% if not list %}
-        <p class="no-elements-available">
-            {% trans "No events yet." %} {% trans "Create your first event using the button above." %}
-        </p>
+        <p class="no-elements-available">{% trans "No events yet. Create your first event using the button above." %}</p>
     {% endif %}
 {% endblock content %}

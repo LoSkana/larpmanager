@@ -20,9 +20,7 @@
             &nbsp;
             <a href="{% url 'orga_characters_pdf' run.get_slug %}">{% trans "Back to PDF settings" %}</a>
         {% else %}
-            <p>
-                {% trans "Bundle generation in progress." %} {% trans "This page will refresh automatically every 10 seconds." %}
-            </p>
+            <p>{% trans "Bundle generation in progress. This page will refresh automatically every 10 seconds." %}</p>
             <p>{% trans "Please wait" %}...</p>
             <a href="{% url 'orga_characters_pdf' run.get_slug %}">{% trans "Back to PDF settings" %}</a>
         {% endif %}

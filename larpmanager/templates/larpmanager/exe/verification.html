@@ -12,9 +12,7 @@
           enctype="multipart/form-data"
           method="post">
         {% csrf_token %}
-        {% trans "Select a file with extension csv." %}
-        {% trans "The first column the amount, the second the receipts." %}
-        {% trans "Get this data from the bank or equivalent, to verify the entries marked." %}
+        {% trans "Select a file with extension csv. The first column the amount, the second the receipts. Get this data from the bank or equivalent, to verify the entries marked." %}
         <br />
         <br />
         <table>
@@ -63,7 +61,7 @@
     </table>
     {% if not todo %}
         <p class="no-elements-available">
-            {% trans "No payments pending verification." %} {% trans "All payments have been verified or none have been submitted yet." %}
+            {% trans "No payments pending verification. All payments have been verified or none have been submitted yet." %}
         </p>
     {% endif %}
 {% endblock content %}

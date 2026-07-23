@@ -6,10 +6,7 @@
 {% block content %}
     {% if error %}
         <h2>{% trans "Invalid or expired unsubscribe link" %}</h2>
-        <p>
-            {% trans "This unsubscribe link is no longer valid." %}
-            {% trans "Please use the link from a recent email." %}
-        </p>
+        <p>{% trans "This unsubscribe link is no longer valid. Please use the link from a recent email." %}</p>
     {% elif done %}
         {% if is_org %}
             <h2>{% trans "You have been unsubscribed from this organization's newsletter" %}</h2>

@@ -121,7 +121,7 @@
             error: function () {
                 $('#upload_spinner').addClass('hide');
                 $(confirmSel).prop('disabled', false);
-                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Error uploading image." %} {% trans "Please retry or use a smaller file." %}{% endfilter %}');
+                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Error uploading image. Please retry or use a smaller file." %}{% endfilter %}');
             }
         });
     }
