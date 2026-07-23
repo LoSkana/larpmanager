@@ -3022,6 +3022,9 @@ msgstr "Integración de aplicaciones"
 msgid "Ask LarpManager"
 msgstr "Pregúntale a LarpManager"
 
+msgid "Assign to areas"
+msgstr "Asignar a áreas"
+
 msgid "Attachment Name"
 msgstr "Nombre del archivo adjunto"
 
@@ -6236,9 +6239,6 @@ msgstr "Tipo(s) de alojamiento disponible(s)"
 msgid "Upload data directly from CSV file"
 msgstr "Subir datos directamente desde un archivo CSV"
 
-msgid "Use the button above to assign one"
-msgstr "Usa el botón de arriba para asignar uno"
-
 msgid "You are about to make a payment of"
 msgstr "Estás a punto de hacer un pago de"
 
@@ -9383,11 +9383,6 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Gestiona los créditos utilizados por los participantes para cubrir la cuota "
 "de inscripción"
-
-msgid "No warehouse items have been assigned to an area of this event yet"
-msgstr ""
-"Todavía no se ha asignado ningún artículo de almacén a ninguna zona de este "
-"evento"
 
 msgid "Primary spots are sold out, but you can still sign up as a reserve"
 msgstr ""

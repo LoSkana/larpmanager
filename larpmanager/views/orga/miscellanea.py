@@ -393,22 +393,26 @@ def orga_warehouse_area_delete(request: HttpRequest, event_slug: str, area_uuid:
 
 @login_required
 def orga_warehouse_items(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """List warehouse items assigned to at least one area of this event.
+    """List all warehouse items of the association, for assignment to this event.
 
-    Each row shows, via the cached per-event assignment summary, which areas
-    the item is sent to and in what quantity (e.g. "Kitchen (3)").
+    Each row shows the same columns as the executive warehouse items list,
+    plus, via the cached per-event assignment summary, which areas the item
+    is sent to and in what quantity (e.g. "Kitchen (3)").
     """
     context = check_event_context(request, event_slug, "orga_warehouse_items")
 
+    warehouse_cache = get_association_warehouse_cache(context["association_id"])
     assignments_cache = get_event_warehouse_assignments_cache(context["event"])
 
     context["list"] = []
-    for item in WarehouseItem.objects.filter(
-        association_id=context["association_id"],
-        id__in=assignments_cache.keys(),
-    ).select_related("container"):
-        item.areas_cached = assignments_cache[item.id]["list"]
+    items = WarehouseItem.objects.filter(association_id=context["association_id"])
+    items = items.select_related("container").prefetch_related("tags")
+    for item in items:
+        item.tags_cached = warehouse_cache.get(item.id, {}).get("tags", [])
+        item.areas_cached = assignments_cache.get(item.id, {}).get("list", [])
         context["list"].append(item)
+
+    get_warehouse_optionals(context, [5])
 
     return render(request, "larpmanager/orga/warehouse/items.html", context)
 

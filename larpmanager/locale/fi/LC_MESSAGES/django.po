@@ -3022,6 +3022,9 @@ msgstr "Sovelluksen integrointi"
 msgid "Ask LarpManager"
 msgstr "Kysy LarpManagerilta"
 
+msgid "Assign to areas"
+msgstr "Määritä alueille"
+
 msgid "Attachment Name"
 msgstr "Liitteen nimi"
 
@@ -6236,9 +6239,6 @@ msgstr "Saatavilla oleva(t) majoitustyyppi(t)"
 msgid "Upload data directly from CSV file"
 msgstr "Lataa tiedot suoraan CSV-tiedostosta"
 
-msgid "Use the button above to assign one"
-msgstr "Määritä yksi valitsemalla yllä oleva painike"
-
 msgid "You are about to make a payment of"
 msgstr "Olet suorittamassa maksun, jonka suuruus on"
 
@@ -9302,9 +9302,6 @@ msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Hallinnoi osallistujien käyttämiä hyvityksiä ilmoittautumismaksun "
 "kattamiseksi"
-
-msgid "No warehouse items have been assigned to an area of this event yet"
-msgstr "Tämän tapahtuman alueelle ei ole vielä määritetty varastotuotteita"
 
 msgid "Primary spots are sold out, but you can still sign up as a reserve"
 msgstr ""

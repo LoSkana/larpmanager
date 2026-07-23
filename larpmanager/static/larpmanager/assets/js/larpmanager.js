@@ -667,7 +667,7 @@ function replaceNewUrl() {
     });
 
     if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
-        $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit)', function(e) {
+        $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit), table.go_datatable a:has(i.action-dialog), table.pagin_datatable a:has(i.action-dialog)', function(e) {
             e.preventDefault();
             openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);
             return false;
@@ -691,6 +691,8 @@ function replaceNewUrl() {
 
 // Reload datatable contents after a modal save, re-fetching the page and patching tables/headings.
 function refreshDatatables() {
+    const savedScrollTop = $(window).scrollTop();
+
     $('table.pagin_datatable').each(function() {
         const tableId = $(this).attr('id');
         if (tableId && window.datatables && window.datatables[tableId]) {
@@ -717,6 +719,7 @@ function refreshDatatables() {
                 if (typeof window.reloadActiveQuestions === 'function') window.reloadActiveQuestions();
                 if (typeof window.applyColumnToggles === 'function') window.applyColumnToggles();
                 resize_fields();
+                $(window).scrollTop(savedScrollTop);
                 window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
                 return;
             }
@@ -739,6 +742,7 @@ function refreshDatatables() {
                     order: dt.order(),
                     search: dt.search(),
                     colSearches: dt.columns().search().toArray(),
+                    page: dt.page(),
                 };
                 dt.destroy();
                 delete window.datatables[tableId];
@@ -811,6 +815,7 @@ function refreshDatatables() {
             window.applyColumnToggles();
         }
         resize_fields();
+        $(window).scrollTop(savedScrollTop);
         window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
     }).fail(function() {
         console.error('refreshDatatables: failed to reload', window.location.href);
@@ -1089,6 +1094,7 @@ function data_tables() {
             }
             if (state.order && state.order.length) { table.order(state.order); needDraw = true; }
             if (needDraw) table.draw(false);
+            if (state.page) table.page(state.page).draw(false);
         }
     });
 
