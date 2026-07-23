@@ -625,9 +625,6 @@ msgstr "Zaloguj się"
 msgid "Manage"
 msgstr "Zarządzaj"
 
-msgid "Marked"
-msgstr "Oznaczony"
-
 msgid "Master"
 msgstr "Mistrz"
 
@@ -804,6 +801,9 @@ msgstr "Kemping"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Checked"
+msgstr "Zaznaczone"
 
 msgid "Closing"
 msgstr "Zamknięcie"

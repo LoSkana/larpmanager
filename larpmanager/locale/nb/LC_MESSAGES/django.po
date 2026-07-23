@@ -625,9 +625,6 @@ msgstr "Logg inn"
 msgid "Manage"
 msgstr "Administrere"
 
-msgid "Marked"
-msgstr "Markert"
-
 msgid "Master"
 msgstr "Mester"
 
@@ -804,6 +801,9 @@ msgstr "Camping"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Checked"
+msgstr "Avkrysset"
 
 msgid "Closing"
 msgstr "Stengning"

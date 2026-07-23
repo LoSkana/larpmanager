@@ -625,9 +625,6 @@ msgstr "Logga in"
 msgid "Manage"
 msgstr "Hantera"
 
-msgid "Marked"
-msgstr "Märkt"
-
 msgid "Master"
 msgstr "Mästare"
 
@@ -804,6 +801,9 @@ msgstr "Camping"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Checked"
+msgstr "Markerat"
 
 msgid "Closing"
 msgstr "Avslutning"

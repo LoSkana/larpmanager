@@ -625,9 +625,6 @@ msgstr "Kirjaudu sisään"
 msgid "Manage"
 msgstr "Hallitse"
 
-msgid "Marked"
-msgstr "Merkitty"
-
 msgid "Master"
 msgstr "Mestari"
 
@@ -804,6 +801,9 @@ msgstr "Leirintäalue"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Checked"
+msgstr "Valittu"
 
 msgid "Closing"
 msgstr "Sulkeminen"

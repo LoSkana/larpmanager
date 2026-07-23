@@ -6813,7 +6813,7 @@ msgstr ""
 msgid "No members have self-assessed this competence yet."
 msgstr ""
 
-msgid "Marked"
+msgid "Checked"
 msgstr ""
 
 msgid "No competences have been defined yet. Add one to get started."

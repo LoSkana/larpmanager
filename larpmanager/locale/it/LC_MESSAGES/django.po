@@ -625,9 +625,6 @@ msgstr "Log in"
 msgid "Manage"
 msgstr "Gestisci"
 
-msgid "Marked"
-msgstr "Segnati"
-
 msgid "Master"
 msgstr "Maestro"
 
@@ -804,6 +801,9 @@ msgstr "Campeggio"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Checked"
+msgstr "Selezionato"
 
 msgid "Closing"
 msgstr "Chiusura"
@@ -4267,7 +4267,7 @@ msgstr "Chiudi la raccolta"
 
 #, python-format
 msgid "Closing on: %(date)s"
-msgstr "Data di chiusura: %(date)s"
+msgstr "Chiuderanno il: %(date)s"
 
 msgid "Complete sheet (Pdf)"
 msgstr "Scheda completa (Pdf)"
@@ -4349,7 +4349,7 @@ msgstr "Numero di passeggeri"
 
 #, python-format
 msgid "Opening on: %(date)s"
-msgstr "Inizio: %(date)s"
+msgstr "Apriranno il: %(date)s"
 
 msgid "Operation completed!"
 msgstr "Operazione completata!"

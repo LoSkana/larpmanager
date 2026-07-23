@@ -625,9 +625,6 @@ msgstr "Conectarse"
 msgid "Manage"
 msgstr "Gestionar"
 
-msgid "Marked"
-msgstr "Marcado"
-
 msgid "Master"
 msgstr "Master"
 
@@ -804,6 +801,9 @@ msgstr "Camping"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Checked"
+msgstr "Marcado"
 
 msgid "Closing"
 msgstr "Cierre"

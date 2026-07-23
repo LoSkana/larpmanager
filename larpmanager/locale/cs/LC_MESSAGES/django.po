@@ -625,9 +625,6 @@ msgstr "Přihlášení"
 msgid "Manage"
 msgstr "Správa"
 
-msgid "Marked"
-msgstr "Označeno"
-
 msgid "Master"
 msgstr "Mistr"
 
@@ -804,6 +801,9 @@ msgstr "Kempování"
 
 msgid "Casting"
 msgstr "Casting"
+
+msgid "Checked"
+msgstr "Zaškrtnuto"
 
 msgid "Closing"
 msgstr "Uzavírání"
