@@ -70,10 +70,10 @@ class RegistrationAdmin(DefModelAdmin):
     """Admin interface for Registration model."""
 
     exclude = ("search",)
-    list_display: ClassVar[tuple] = ("id", "run", "member", "ticket", "quotas", "cancellation_date", "uuid")
+    list_display: ClassVar[tuple] = ("id", "run", "member", "ticket", "quotas", "pending", "cancellation_date", "uuid")
     search_fields: ClassVar[tuple] = ("id", "search", "uuid")
     autocomplete_fields: ClassVar[list] = ["run", "member", "ticket"]
-    list_filter = (RunFilter, MemberFilter, "cancellation_date")
+    list_filter = (RunFilter, MemberFilter, "pending", "cancellation_date")
 
 
 @admin.register(RegistrationTicket)

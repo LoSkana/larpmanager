@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.registration import get_active_registrations
 from larpmanager.mail.base import mail_confirm_casting
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.registration import Registration, TicketTier
@@ -785,7 +786,7 @@ def casting_history_characters(context: dict) -> None:
 
     # Query all valid registrations (non-cancelled, non-staff/NPC)
     registration_query = (
-        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
+        get_active_registrations(context["run"])
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     )
@@ -860,7 +861,7 @@ def casting_history_traits(context: dict) -> None:
 
     # Process registrations and attach casting preferences
     for registration in (
-        Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
+        get_active_registrations(context["run"])
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     ):

@@ -26,6 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import get_language
 
+from larpmanager.cache.config import _get_event_parent_id
 from larpmanager.models.event import EventText, EventTextType
 
 logger = logging.getLogger(__name__)
@@ -117,7 +118,8 @@ def get_event_text(event_id: int, text_type: str, language_code: str | None = No
     """Get event text for the specified event, type, and language.
 
     Retrieves event text from cache if available, otherwise falls back to
-    default language cache. Uses current language if no language specified.
+    default language cache, then to the campaign parent event (if any).
+    Uses current language if no language specified.
 
     Args:
         event_id: The ID of the event to get text for
@@ -138,7 +140,16 @@ def get_event_text(event_id: int, text_type: str, language_code: str | None = No
         return cached_text
 
     # Fall back to default language cache if no text found
-    return get_event_text_cache_def(event_id, text_type)
+    default_text = get_event_text_cache_def(event_id, text_type)
+    if default_text:
+        return default_text
+
+    # Fall back to the campaign parent event, if this event belongs to one
+    parent_id = _get_event_parent_id(event_id, None)
+    if parent_id:
+        return get_event_text(parent_id, text_type, language_code)
+
+    return ""
 
 
 def update_event_text_cache_on_save(instance: EventText) -> None:

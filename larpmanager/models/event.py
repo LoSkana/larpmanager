@@ -545,6 +545,8 @@ class EventTextType(models.TextChoices):
     CHARACTER_APPROVED = "ca", _("Approved character")
     CHARACTER_REVIEW = "cr", _("Character review")
 
+    REGISTRATION_APPROVAL = "ra", _("Registration approval request")
+
 
 class EventText(UuidMixin, BaseModel):
     """Represents EventText model."""

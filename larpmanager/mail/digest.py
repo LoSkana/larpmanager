@@ -38,6 +38,7 @@ from larpmanager.mail.templates import (
     get_pay_token_email,
     get_registration_cancel_organizer_email,
     get_registration_new_organizer_email,
+    get_registration_request_new_organizer_email,
     get_registration_update_organizer_email,
     get_token_credit_name,
 )
@@ -105,6 +106,10 @@ def my_send_digest_email(
         elif notification_type == NotificationType.REGISTRATION_CANCEL:
             email_context = {"event": instance.run, "user": instance.member}
             subject, body = get_registration_cancel_organizer_email(instance, email_context)
+
+        elif notification_type == NotificationType.REGISTRATION_REQUEST_NEW:
+            email_context = {"event": instance.run, "user": instance.member}
+            subject, body = get_registration_request_new_organizer_email(instance, email_context)
 
         elif notification_type == NotificationType.PAYMENT_MONEY:
             currency_symbol = run.event.association.get_currency_symbol()
@@ -360,6 +365,7 @@ def generate_summary_email(event: Event, notifications: list) -> str:
         ("new_registrations", _digest_new_registrations),
         ("updated_registrations", _digest_updated_registrations),
         ("cancelled_registrations", _digest_cancelled_registrations),
+        ("request_registrations", _digest_request_registrations),
         ("all_payments", _digest_payments),
         ("invoice_approvals", _digest_invoices),
     ]
@@ -384,6 +390,7 @@ def _digest_organize_notifications(notifications: list) -> dict:
         NotificationType.REGISTRATION_NEW: "new_registrations",
         NotificationType.REGISTRATION_UPDATE: "updated_registrations",
         NotificationType.REGISTRATION_CANCEL: "cancelled_registrations",
+        NotificationType.REGISTRATION_REQUEST_NEW: "request_registrations",
         NotificationType.PAYMENT_MONEY: "all_payments",
         NotificationType.PAYMENT_CREDIT: "all_payments",
         NotificationType.PAYMENT_TOKEN: "all_payments",
@@ -449,7 +456,7 @@ def _digest_cancelled_registrations(
     email_body += "<h4>" + _("Cancelled Registrations") + f": {len(cancelled_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in cancelled_registrations]
-    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
+    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event, pending=False):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
         email_body += f"<li><b>{registration.member}</b> - {ticket_name}</li>"
     email_body += "</ul>"
@@ -464,7 +471,7 @@ def _digest_updated_registrations(
     email_body += "<h4>" + _("Updated Registrations") + f": {len(updated_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in updated_registrations]
-    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
+    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event, pending=False):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
         email_body += (
             f"<li><b>{registration.member}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
@@ -486,7 +493,7 @@ def _digest_new_registrations(event: Event, email_body: str, new_registrations: 
     email_body += "<h4>" + _("New Registrations") + f": {len(new_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in new_registrations]
-    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event):
+    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event, pending=False):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
         email_body += (
             f"<li><b>{registration.member}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
@@ -498,6 +505,28 @@ def _digest_new_registrations(event: Event, email_body: str, new_registrations: 
             event,
         )
         email_body += f' - <a href="{edit_url}">' + _("View") + "</a></li>"
+
+    email_body += "</ul>"
+    return email_body
+
+
+def _digest_request_registrations(
+    event: Event,
+    email_body: str,
+    request_registrations: list,
+    currency_symbol: str,  # noqa: ARG001
+) -> str:
+    """Generate email content for digest new signup requests."""
+    email_body += "<h4>" + _("Signup Requests") + f": {len(request_registrations)}" + "</h4>"
+    email_body += "<ul>"
+    registration_ids = [notification.object_id for notification in request_registrations]
+    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event, pending=True):
+        email_body += f"<li><b>{registration.member}</b>"
+        requests_url = get_url(
+            reverse("orga_registration_requests", kwargs={"event_slug": event.slug}),
+            event,
+        )
+        email_body += f' - <a href="{requests_url}">' + _("View") + "</a></li>"
 
     email_body += "</ul>"
     return email_body

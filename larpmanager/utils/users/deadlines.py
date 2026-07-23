@@ -80,7 +80,7 @@ def check_run_deadlines(runs: list[Run]) -> list:
         members_by_run[run.id] = []
 
     # Query active registrations
-    registration_query = Registration.objects.filter(run_id__in=run_ids, cancellation_date__isnull=True)
+    registration_query = Registration.objects.filter(run_id__in=run_ids, cancellation_date__isnull=True, pending=False)
     registration_query = registration_query.exclude(ticket__tier=TicketTier.WAITING)
     for registration in registration_query:
         registration_ids.append(registration.id)

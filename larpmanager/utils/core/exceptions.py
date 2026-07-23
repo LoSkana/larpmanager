@@ -92,6 +92,20 @@ class WaitingError(Exception):
         self.slug = slug
 
 
+class PendingApprovalError(Exception):
+    """Exception raised when a signup request is still awaiting organizer approval.
+
+    Attributes:
+        slug (str): Event slug for the pending request
+
+    """
+
+    def __init__(self, slug: str) -> None:
+        """Initialize with association slug."""
+        super().__init__()
+        self.slug = slug
+
+
 class HiddenError(Exception):
     """Exception raised when trying to access hidden content.
 

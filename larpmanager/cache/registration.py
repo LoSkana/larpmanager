@@ -35,6 +35,11 @@ from larpmanager.utils.core.common import _search_char_reg
 from main.settings import CACHE_TIMEOUT_1_DAY
 
 
+def get_active_registrations(run: Run) -> Any:
+    """Return registrations for a run that are neither cancelled nor a pending signup request."""
+    return Registration.objects.filter(run=run, cancellation_date__isnull=True, pending=False)
+
+
 def clear_registration_tickets_cache(event_id: int) -> None:
     """Clear cached registration tickets for an event."""
     cache.delete(cache_registration_tickets_key(event_id))
@@ -173,7 +178,7 @@ def update_registration_counts(run: Run) -> dict[str, int]:
     }
 
     # Get all non-cancelled registrations for this run
-    registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+    registrations = get_active_registrations(run)
 
     # Get event features
     features = get_event_features(run.event_id)
@@ -227,6 +232,7 @@ def update_registration_counts(run: Run) -> dict[str, int]:
     registration_choices = RegistrationChoice.objects.filter(
         registration__run=run,
         registration__cancellation_date__isnull=True,
+        registration__pending=False,
         question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
     )
     for choice_data in registration_choices.values("option_id").annotate(total=Count("option_id")):

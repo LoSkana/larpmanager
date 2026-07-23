@@ -688,6 +688,9 @@ msgstr "Syy"
 msgid "Refund"
 msgstr "Palautus"
 
+msgid "Reject"
+msgstr "Hylkää"
+
 msgid "Remove"
 msgstr "Poista"
 
@@ -1052,9 +1055,6 @@ msgstr "Liput"
 msgid "Tooltip"
 msgstr "Työkaluvihje"
 
-msgid "Used by"
-msgstr "Käyttäjä:"
-
 msgid "Utility"
 msgstr "Apuohjelma"
 
@@ -1352,6 +1352,9 @@ msgstr "Vastaa"
 msgid "Request:"
 msgstr "Pyyntö:"
 
+msgid "Requests"
+msgstr "Pyynnöt"
+
 msgid "Required"
 msgstr "Vaadittu"
 
@@ -1630,6 +1633,9 @@ msgstr "Jäljellä"
 
 msgid "Reminders"
 msgstr "Muistutukset"
+
+msgid "Requested"
+msgstr "Pyydetty"
 
 msgid "Residence"
 msgstr "Asuinpaikka"
@@ -3040,6 +3046,9 @@ msgstr "Pyydä palautusta"
 msgid "Request signed"
 msgstr "Allekirjoitettu pyyntö"
 
+msgid "Request signup"
+msgstr "Pyydä rekisteröitymistä"
+
 msgid "Requests open:"
 msgstr "Pyynnöt avoinna:"
 
@@ -3313,6 +3322,9 @@ msgstr "Näytä tilastot"
 msgid "Shuttle service"
 msgstr "Kuljetuspalvelu"
 
+msgid "Signup Requests"
+msgstr "Rekisteröitymispyynnöt"
+
 msgid "Start algorithm"
 msgstr "Aloita algoritmi"
 
@@ -3387,6 +3399,9 @@ msgstr "Aktivoi toiminto"
 
 msgid "Amount breakdown"
 msgstr "Summien erittely"
+
+msgid "Approval process"
+msgstr "Hyväksymisprosessi"
 
 msgid "Back to manifest"
 msgstr "Takaisin manifestiin"
@@ -3861,6 +3876,9 @@ msgstr "Jäljellä olevat hyvitykset"
 
 msgid "Remove from guild"
 msgstr "Poista killasta"
+
+msgid "Request to signup"
+msgstr "Rekisteröitymispyyntö"
 
 msgid "Residence address"
 msgstr "Asuinpaikan osoite"
@@ -4727,9 +4745,6 @@ msgstr "Valuutat ja materiaalit"
 msgid "Customised mail server"
 msgstr "Mukautettu sähköpostipalvelin"
 
-msgid "Disable event approval"
-msgstr "Tapahtuman hyväksynnän poistaminen käytöstä"
-
 msgid "Discover the web site!"
 msgstr "Tutustu verkkosivustoon!"
 
@@ -4838,6 +4853,9 @@ msgstr "Valitse hahmosi!"
 
 msgid "Set up payment methods"
 msgstr "Määritä maksutavat"
+
+msgid "Signup request pending"
+msgstr "Rekisteröintipyyntö odottaa käsittelyä"
 
 msgid "Split by participation"
 msgstr "Jako osallistumisen mukaan"
@@ -5135,6 +5153,12 @@ msgstr "Salainen ilmoittautumislinkki"
 
 msgid "Select a valid character"
 msgstr "Valitse kelvollinen hahmo"
+
+msgid "Signup request approved!"
+msgstr "Rekisteröitymispyyntö on hyväksytty!"
+
+msgid "Signup request rejected!"
+msgstr "Rekisteröitymispyyntö hylättiin!"
 
 msgid "Target session not found"
 msgstr "Kohdeistuntoa ei löydy"
@@ -5583,6 +5607,9 @@ msgstr "Viive profiilin laatimisessa"
 msgid "Describe how we can help you"
 msgstr "Kuvaile, miten voimme auttaa sinua"
 
+msgid "Disable event-level approval"
+msgstr "Poista tapahtumakohtainen hyväksyntä käytöstä"
+
 msgid "Enter your preferences here!"
 msgstr "Kirjoita mieltymyksesi tähän!"
 
@@ -5733,6 +5760,9 @@ msgstr "Edistäminen - sivusto, mainonta"
 
 msgid "Question name (keep it short)"
 msgstr "Kysymyksen nimi (pidä se lyhyenä)"
+
+msgid "Registration approval request"
+msgstr "Rekisteröinnin hyväksymispyyntö"
 
 msgid "Registrations opening not set"
 msgstr "Ilmoittautumisen aukeamista ei ole asetettu"
@@ -6710,6 +6740,18 @@ msgstr "Valitse organisaatio, johon haluat siirtyä"
 msgid "Set the organization payment currency"
 msgstr "Aseta organisaation maksuvaluutta"
 
+#, python-format
+msgid "Signup request accepted for %(event)s"
+msgstr "Ilmoittautumispyyntö on hyväksytty %(event)s -tapahtumaan"
+
+#, python-format
+msgid "Signup request declined for %(event)s"
+msgstr "Rekisteröitymispyyntö hylättiin %(event)s:n vuoksi"
+
+#, python-format
+msgid "Signup request received for %(event)s"
+msgstr "%(event)s -tapahtumasta on saatu ilmoittautumispyyntö"
+
 msgid "The question type, allowed values are"
 msgstr "Kysymystyyppi, sallitut arvot ovat"
 
@@ -6960,6 +7002,9 @@ msgstr "Sinun on oltava hyväksytty jäsen äänestääksesi."
 msgid "You must be logged in to view this page"
 msgstr "Sinun täytyy olla kirjautuneena sisään nähdäksesi tämän sivun"
 
+msgid "Your signup request has been submitted!"
+msgstr "Rekisteröitymispyyntösi on lähetetty!"
+
 msgid "6-digit code from your authenticator app"
 msgstr "6-numeroinen koodi autentikointisovelluksesta"
 
@@ -7015,7 +7060,7 @@ msgid "Now you can set the dynamic installments"
 msgstr "Nyt voit asettaa dynaamiset erät"
 
 msgid "One character more or less than expected"
-msgstr "Yksi hahmo enemmän tai vähemmän kuin odotettu"
+msgstr "Yksi merkki enemmän tai vähemmän kuin odotettu"
 
 msgid "Photos and videos successfully uploaded!"
 msgstr "Kuvat ja videot onnistuneesti ladattu!"
@@ -7028,6 +7073,10 @@ msgstr "Odotettavat sekunnit jokaisen sähköpostierän välillä"
 
 msgid "Set casting options in the configuration"
 msgstr "Aseta kastauksiasetukset kokoonpanossa"
+
+#, python-format
+msgid "Signup request for %(event)s by %(user)s"
+msgstr "%(user)s:in rekisteröitymispyyntö %(event)s -tapahtumaan"
 
 msgid "The collection was delivered to the user"
 msgstr "Keräys jaettiin käyttäjälle"
@@ -7076,6 +7125,9 @@ msgstr "Kykytyypit ilman kykyjä: %(list)s"
 msgid "Added at the top of the user profile page"
 msgstr "Lisätty käyttäjäprofiilisivun yläosaan"
 
+msgid "Approve or reject pending signup requests"
+msgstr "Hyväksy tai hylkää odottavat rekisteröitymispyynnöt"
+
 msgid "Authenticator app configured successfully"
 msgstr "Todentajasovellus määritetty onnistuneesti"
 
@@ -7123,6 +7175,9 @@ msgstr "Nimi sellaisena kuin se näkyy kuitin otsakkeessa"
 
 msgid "No item has conflicting area assignments."
 msgstr "Yhdelläkään kohteella ei ole ristiriitaisia aluejakoja."
+
+msgid "No pending signup requests for this event"
+msgstr "Tälle tapahtumalle ei ole vireillä olevia ilmoittautumispyyntöjä"
 
 msgid "No resource files have been uploaded yet."
 msgstr "Resurssitiedostoja ei ole vielä ladattu."
@@ -7371,9 +7426,6 @@ msgstr "Ilmoita liput, joiden osalta se on aktiivinen"
 msgid "Manage fields that track participants' data"
 msgstr "Hallitse kenttiä, joilla seurataan osallistujien tietoja"
 
-msgid "No answered questions in the last 3 months."
-msgstr "Viimeisten 3 kuukauden aikana ei ole vastattuja kysymyksiä."
-
 msgid "No handout templates have been created yet."
 msgstr "Mallipohjia ei ole vielä luotu."
 
@@ -7436,6 +7488,10 @@ msgstr "Sinulle lahjoitettu ilmoittautuminen on lunastettu!"
 
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Valinnainen) Saatavilla olevien paikkojen enimmäismäärä"
+
+#, python-format
+msgid "<b>%(number)s</b> signup requests to approve"
+msgstr "<b>%(number)s</b> hyväksyttävää rekisteröitymispyyntöä"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Peruutus puuttuvan profiilin laatimisen vuoksi"
@@ -7725,9 +7781,6 @@ msgstr "Luo ensimmäinen tapahtumasi yllä olevan painikkeen avulla."
 msgid "Customize specific texts on the event interface"
 msgstr "Mukauta tapahtuman käyttöliittymän erityisiä tekstejä"
 
-msgid "Do you wish to be always updated on our events?"
-msgstr "Haluatko olla aina ajan tasalla tapahtumistamme?"
-
 #, python-format
 msgid "Donation of %(user)s, with reason: '%(reason)s'"
 msgstr "Lahjoitus käyttäjältä: %(user)s, syy: '%(reason)s'"
@@ -7973,6 +8026,9 @@ msgstr "Vaihda organisaation ja tapahtumien hallinnan välillä"
 msgid "The registration code is not active at the moment"
 msgstr "Ilmoittautumiskoodi ei ole aktiivinen tällä hetkellä"
 
+msgid "The user has requested to sign up for this event."
+msgstr "Käyttäjä on pyytänyt ilmoittautumista tähän tapahtumaan."
+
 msgid "There are no new sessions scheduled at this time."
 msgstr "Tällä hetkellä ei ole uusia istuntoja."
 
@@ -8047,6 +8103,13 @@ msgstr "Tästä tapahtumasta ei ole toistaiseksi ilmoitettu ongelmia."
 msgid "Pay %(amount)s%(currency)s within %(counter)s days"
 msgstr "Maksakaa %(amount)s%(currency)s %(counter)s päivän kuluessa"
 
+msgid "Payment for this event is complete and up to date!"
+msgstr "Tämän tapahtuman maksu on suoritettu ja ajan tasalla!"
+
+#, python-format
+msgid "Please <a href='%(url)s'>complete your signup</a>."
+msgstr "<a href='%(url)s'>Viimeistele rekisteröitymisesi</a>."
+
 msgid "Second character in the relationship (destination)"
 msgstr "Suhteen toinen hahmo (määränpää)"
 
@@ -8086,6 +8149,9 @@ msgstr "Et voi luoda suhdetta itseesi!"
 
 msgid "Your account is protected by an authenticator app."
 msgstr "Tilisi on suojattu autentikointisovelluksella."
+
+msgid "Your signup request is awaiting organizer approval"
+msgstr "Ilmoittautumispyyntösi odottaa järjestäjän hyväksyntää"
 
 msgid "hidden faction visible only to assigned characters"
 msgstr "piilotettu ryhmittymä, joka näkyy vain sille osoitetuille hahmoille"
@@ -8142,6 +8208,12 @@ msgstr "Luo ensimmäinen kriteeri yllä olevan painikkeen avulla."
 
 msgid "Your registration for this event has been confirmed"
 msgstr "Ilmoittautumisesi tähän tapahtumaan on vahvistettu"
+
+msgid "Your signup request is awaiting organizer approval!"
+msgstr "Ilmoittautumispyyntösi odottaa järjestäjän hyväksyntää!"
+
+msgid "Your signup request is awaiting organizer approval."
+msgstr "Ilmoittautumispyyntösi odottaa järjestäjän hyväksyntää."
 
 msgid "use high-quality wide images for best visual impact"
 msgstr ""
@@ -8415,9 +8487,6 @@ msgstr "Kustannukset näkyvät tässä, kun tapahtumat on luotu ja toteutettu."
 msgid "Create at least one ticket type for event registrations"
 msgstr "Luo vähintään yksi lipputyyppi tapahtumien rekisteröintiä varten"
 
-msgid "Everything is in order about the payment of this event!"
-msgstr "Kaikki on kunnossa tämän tapahtuman maksun osalta!"
-
 msgid "Give a registration to this event as a gift to a friend"
 msgstr "Lahjoita ystävällesi ilmoittautuminen tähän tapahtumaan"
 
@@ -8600,6 +8669,9 @@ msgid "Optional - Other options as requirements, comma-separated"
 msgstr ""
 "Valinnainen - Muut vaatimuksiksi käytettävät vaihtoehdot, pilkulla "
 "eroteltuina"
+
+msgid "Review pending signup requests and approve or reject them"
+msgstr "Tarkista odottavat rekisteröitymispyynnöt ja hyväksy tai hylkää ne"
 
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Henkilöstön jäsenet, jotka vastaanottavat ja hallinnoivat tukilippuja"
@@ -8876,6 +8948,9 @@ msgstr ""
 "Luo tuotteiden luokittelua varten tunniste käyttämällä yllä olevaa "
 "painiketta."
 
+msgid "Would you like to receive updates about our upcoming events?"
+msgstr "Haluatko saada tietoa tulevista tapahtumistamme?"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>."
 msgstr "Voit suorittaa maksun <a href='%(url)s'>tältä sivulta</a>."
@@ -8938,6 +9013,11 @@ msgstr "Hallinnoi tapahtuma-alueita, joille varastotuotteet sijoitetaan"
 
 msgid "No installment plans have been configured for this event yet."
 msgstr "Tälle tapahtumalle ei ole vielä määritetty maksusuunnitelmia."
+
+msgid "No pending questions have been answered in the last 3 months."
+msgstr ""
+"Viimeisten kolmen kuukauden aikana ei ole vastattu mihinkään avoimiin "
+"kysymyksiin."
 
 msgid "Note that if the cost is 0, it will be automatically assigned"
 msgstr "Huomaa, että jos hinta on 0, se määritetään automaattisesti"
@@ -10112,6 +10192,12 @@ msgstr ""
 "Ottaa käyttöön kentän 'hide', jotta kirjoituselementti voidaan piilottaa "
 "osallistujilta"
 
+#, python-format
+msgid ""
+"Good news! Your request to sign up for <b>%(event)s</b> has been accepted."
+msgstr ""
+"Hyviä uutisia! Pyyntösi liittyä <b>%(event)s</b> -tapahtumaan on hyväksytty."
+
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr "Vahvistan, että kaikki vaaditut henkilötietoni on täytetty oikein"
@@ -10163,6 +10249,12 @@ msgid ""
 msgstr ""
 "Sinun on luotava vähintään yksi prologityyppi, ennen kuin voit luoda "
 "prologeja"
+
+msgid ""
+"Your signup will not be confirmed until an organizer approves this request"
+msgstr ""
+"Rekisteröitymisesi vahvistetaan vasta, kun järjestäjä on hyväksynyt tämän "
+"pyynnön"
 
 msgid ""
 "(Optional) The character names to assign to the player, separated by commas"
@@ -11072,13 +11164,6 @@ msgstr ""
 "Varoitus: se on lopullinen!"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Jos valittuna, kulujen hyväksyntä voidaan suorittaa vain "
-"organisaatiopaneelista käsin"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11219,6 +11304,13 @@ msgid ""
 msgstr ""
 "Pankin antama tiliote todisteena tilisiirron myöntämisestä (pdf-tiedostona)"
 
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Kun tämä toiminto on käytössä, kulujen hyväksyntöjä voidaan hallita "
+"ainoastaan organisaation hallintapaneelista"
+
 #, python-format
 msgid ""
 "You have been invited to join the guild %(guild)s with your character "
@@ -11321,6 +11413,13 @@ msgid ""
 msgstr ""
 "Tarkista, mitkä hahmot ja ominaisuudet on jaettu pelaajille, ryhmiteltynä "
 "ryhmittymien mukaan"
+
+msgid ""
+"Shown on the signup request page and added to the request-received "
+"confirmation mail"
+msgstr ""
+"Näkyy rekisteröitymispyynnön sivulla ja lisätään pyynnön vastaanottamista "
+"koskevaan vahvistussähköpostiin"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "
@@ -11618,14 +11717,6 @@ msgid ""
 msgstr ""
 "Hallitse tämän tapahtuman turvallista video- ja äänisisältöä, joka on "
 "suojattu kertakäyttöisillä pääsytunnuksilla"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Maksa %(year)d vuoden jäsenmaksu %(amount)s%(currency)s, jota vaaditaan "
-"tähän tapahtumaan osallistumiseksi"
 
 msgid ""
 "Total amount of money expected if all registered participants fully pay "
@@ -12141,6 +12232,14 @@ msgstr ""
 "Sivupalkki on laajentunut. Uusia valikoita ilmestyy jatkossakin, kun "
 "aktivoit lisämoduuleja"
 
+#, python-format
+msgid ""
+"We are sorry to inform you that your request to sign up for <b>%(event)s</b>"
+" was not accepted."
+msgstr ""
+"Valitettavasti joudumme ilmoittamaan, että pyyntösi ilmoittautua "
+"<b>%(event)s</b> ei tullut hyväksytyksi."
+
 msgid ""
 "When you're ready to permanently update warehouse quantities based on this "
 "event's assignments"
@@ -12168,6 +12267,15 @@ msgid ""
 msgstr ""
 "Jos se osoitetaan sinulle, sinulle osoitetaan automaattisesti alkuperäinen "
 "hahmo, jota se peilaa."
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Maksa %(year)d:n vuotuinen jäsenmaksu, jonka suuruus on "
+"%(amount)s%(currency)s. Jäsenmaksu on välttämätön tämän tapahtuman "
+"osallistumiseksi"
 
 msgid ""
 "The following items will have their quantities reduced based on the "
@@ -12197,6 +12305,13 @@ msgid ""
 msgstr ""
 "Yksilöllinen koodi sisäiseen käyttöön - ei näkyvissä. Merkitse merkkijono "
 "ilman välilyöntejä tai outoja symboleja"
+
+msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration."
+msgstr ""
+"Saat ilmoituksen, kun uusi istunto on aikataulutettu, ja sinulle annetaan "
+"etuoikeus ilmoittautumiseen."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "
@@ -12529,13 +12644,6 @@ msgstr ""
 "annetussa osoitteessa"
 
 msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration!"
-msgstr ""
-"Sinulle ilmoitetaan, kun uusi istunto järjestetään, ja sinulla on etusija "
-"ilmoittautumisen avautuessa!"
-
-msgid ""
 "A friend of yours will be able to receive the registration as a gift by "
 "accessing this special link!"
 msgstr ""
@@ -12717,6 +12825,14 @@ msgid ""
 msgstr ""
 "Osallistujat voivat lähettää toisilleen yksityisviestejä paljastamatta "
 "henkilökohtaisia sähköpostiosoitteita"
+
+#, python-format
+msgid ""
+"Hello! We have received your request to sign up for <b>%(event)s</b>. An "
+"organizer will review it soon."
+msgstr ""
+"Hei! Olemme vastaanottaneet ilmoittautumispyynnön tapahtumaan "
+"<b>%(event)s</b>. Järjestäjä tarkistaa sen pian."
 
 msgid ""
 "If you select one (or more) factions, this modifier applies only to "
@@ -13933,6 +14049,14 @@ msgstr ""
 "Mahdollistaa yläpalkissa olevan painikkeen, jolla voidaan ohjata todennetut "
 "käyttäjät ulkoiseen sovellukseen käyttämällä määritettävissä olevaa URL-"
 "osoitetta ja valinnaista JWT-pohjaista SSO:ta"
+
+msgid ""
+"If checked: players cannot sign up directly; they submit a signup request "
+"that an organizer must approve before they can complete registration"
+msgstr ""
+"Jos tämä on valittuna: pelaajat eivät voi ilmoittautua suoraan, vaan he "
+"lähettävät ilmoittautumispyynnön, jonka järjestäjän on hyväksyttävä ennen "
+"kuin he voivat viimeistellä ilmoittautumisensa"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

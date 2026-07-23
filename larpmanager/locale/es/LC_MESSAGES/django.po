@@ -688,6 +688,9 @@ msgstr "Razón"
 msgid "Refund"
 msgstr "Reembolso"
 
+msgid "Reject"
+msgstr "Rechazar"
+
 msgid "Remove"
 msgstr "Eliminar"
 
@@ -1052,9 +1055,6 @@ msgstr "Entradas"
 msgid "Tooltip"
 msgstr "Información sobre herramientas"
 
-msgid "Used by"
-msgstr "Utilizado por"
-
 msgid "Utility"
 msgstr "Utilidad"
 
@@ -1352,6 +1352,9 @@ msgstr "Responder a"
 msgid "Request:"
 msgstr "Solicitud:"
 
+msgid "Requests"
+msgstr "Solicitudes"
+
 msgid "Required"
 msgstr "Requerido"
 
@@ -1630,6 +1633,9 @@ msgstr "Restantes"
 
 msgid "Reminders"
 msgstr "Recordatorios"
+
+msgid "Requested"
+msgstr "Solicitado"
 
 msgid "Residence"
 msgstr "Residencia"
@@ -3040,6 +3046,9 @@ msgstr "Solicitudes de devolución"
 msgid "Request signed"
 msgstr "Solicitud firmada"
 
+msgid "Request signup"
+msgstr "Solicitar registro"
+
 msgid "Requests open:"
 msgstr "Peticiones abiertas:"
 
@@ -3313,6 +3322,9 @@ msgstr "Mostrar estadísticas"
 msgid "Shuttle service"
 msgstr "Servicio de transporte"
 
+msgid "Signup Requests"
+msgstr "Solicitudes de registro"
+
 msgid "Start algorithm"
 msgstr "Iniciar algoritmo"
 
@@ -3387,6 +3399,9 @@ msgstr "Activar función"
 
 msgid "Amount breakdown"
 msgstr "Desglose de importes"
+
+msgid "Approval process"
+msgstr "Proceso de aprobación"
 
 msgid "Back to manifest"
 msgstr "Volver al manifiesto"
@@ -3861,6 +3876,9 @@ msgstr "Créditos restantes"
 
 msgid "Remove from guild"
 msgstr "Sacar del gremio"
+
+msgid "Request to signup"
+msgstr "Solicitud de registro"
 
 msgid "Residence address"
 msgstr "Dirección de residencia"
@@ -4727,9 +4745,6 @@ msgstr "Divisas y materiales"
 msgid "Customised mail server"
 msgstr "Servidor de correo personalizado"
 
-msgid "Disable event approval"
-msgstr "Desactivar la aprobación de eventos"
-
 msgid "Discover the web site!"
 msgstr "Descubre el sitio web!"
 
@@ -4838,6 +4853,9 @@ msgstr "Elige tu personaje!"
 
 msgid "Set up payment methods"
 msgstr "Establecer métodos de pago"
+
+msgid "Signup request pending"
+msgstr "Solicitud de registro pendiente"
 
 msgid "Split by participation"
 msgstr "Dividido por participación"
@@ -5135,6 +5153,12 @@ msgstr "Enlace de inscripción secreto"
 
 msgid "Select a valid character"
 msgstr "Elige un carácter válido"
+
+msgid "Signup request approved!"
+msgstr "¡Solicitud de registro aprobada!"
+
+msgid "Signup request rejected!"
+msgstr "¡Solicitud de registro rechazada!"
 
 msgid "Target session not found"
 msgstr "Sesión objetivo no encontrada"
@@ -5583,6 +5607,9 @@ msgstr "Retraso en la compilación de perfiles"
 msgid "Describe how we can help you"
 msgstr "Describa cómo podemos ayudarle"
 
+msgid "Disable event-level approval"
+msgstr "Desactivar la aprobación a nivel de evento"
+
 msgid "Enter your preferences here!"
 msgstr "Indica aquí tus preferencias!"
 
@@ -5733,6 +5760,9 @@ msgstr "Promoción - sitio web, publicidad"
 
 msgid "Question name (keep it short)"
 msgstr "Nombre de la pregunta (sea breve)"
+
+msgid "Registration approval request"
+msgstr "Solicitud de aprobación de inscripción"
 
 msgid "Registrations opening not set"
 msgstr "Apertura de registros no fijada"
@@ -6710,6 +6740,18 @@ msgstr "Selecciona la organización a la que deseas dirigirte"
 msgid "Set the organization payment currency"
 msgstr "Establecer la moneda de pago de la organización"
 
+#, python-format
+msgid "Signup request accepted for %(event)s"
+msgstr "Se ha aceptado la solicitud de inscripción para %(event)s"
+
+#, python-format
+msgid "Signup request declined for %(event)s"
+msgstr "Se ha rechazado la solicitud de registro para %(event)s"
+
+#, python-format
+msgid "Signup request received for %(event)s"
+msgstr "Se ha recibido una solicitud de inscripción para %(event)s"
+
 msgid "The question type, allowed values are"
 msgstr "El tipo de pregunta, los valores permitidos son"
 
@@ -6961,6 +7003,9 @@ msgstr "Debes ser un miembro aprobado para poder votar."
 msgid "You must be logged in to view this page"
 msgstr "Debe iniciar sesión para ver esta página"
 
+msgid "Your signup request has been submitted!"
+msgstr "¡Ya hemos enviado tu solicitud de registro!"
+
 msgid "6-digit code from your authenticator app"
 msgstr "Código de 6 dígitos de tu aplicación de autenticación"
 
@@ -7030,6 +7075,10 @@ msgstr "Segundos de espera entre cada lote de correos"
 msgid "Set casting options in the configuration"
 msgstr "Establecer opciones de reparto en la configuración"
 
+#, python-format
+msgid "Signup request for %(event)s by %(user)s"
+msgstr "Solicitud de inscripción para %(event)s por parte de %(user)s"
+
 msgid "The collection was delivered to the user"
 msgstr "La colección se entregó al usuario"
 
@@ -7076,6 +7125,9 @@ msgstr "Tipos de habilidades sin habilidades: %(list)s"
 
 msgid "Added at the top of the user profile page"
 msgstr "Añadido en la parte superior de la página de perfil de usuario"
+
+msgid "Approve or reject pending signup requests"
+msgstr "Aprobar o rechazar las solicitudes de registro pendientes"
 
 msgid "Authenticator app configured successfully"
 msgstr "Aplicación Authenticator configurada correctamente"
@@ -7124,6 +7176,9 @@ msgstr "Nombre tal y como aparecerá en la cabecera del recibo"
 
 msgid "No item has conflicting area assignments."
 msgstr "Ningún artículo tiene asignaciones de zona contradictorias."
+
+msgid "No pending signup requests for this event"
+msgstr "No hay solicitudes de inscripción pendientes para este evento"
 
 msgid "No resource files have been uploaded yet."
 msgstr "Aún no se ha subido ningún archivo de recursos."
@@ -7374,9 +7429,6 @@ msgstr "Indica las entradas para las que está activo"
 msgid "Manage fields that track participants' data"
 msgstr "Gestionar los campos que rastrean los datos de los participantes"
 
-msgid "No answered questions in the last 3 months."
-msgstr "No hay preguntas respondidas en los últimos 3 meses."
-
 msgid "No handout templates have been created yet."
 msgstr "Aún no se han creado plantillas para los folletos."
 
@@ -7440,6 +7492,10 @@ msgstr "Tu inscripción regalada ha sido canjeada!"
 
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Opcional) Número máximo de plazas disponibles"
+
+#, python-format
+msgid "<b>%(number)s</b> signup requests to approve"
+msgstr "<b>%(number)s</b> solicitudes de registro pendientes de aprobación"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Anulación por falta de compilación de perfiles"
@@ -7735,9 +7791,6 @@ msgstr "Crea tu primer evento con el botón de arriba."
 msgid "Customize specific texts on the event interface"
 msgstr "Personaliza textos específicos en la interfaz de eventos"
 
-msgid "Do you wish to be always updated on our events?"
-msgstr "¿Quieres estar al día de nuestros eventos?"
-
 #, python-format
 msgid "Donation of %(user)s, with reason: '%(reason)s'"
 msgstr "Donación de %(user)s, con motivo: '%(reason)s'"
@@ -7990,6 +8043,9 @@ msgstr "Cambia entre la gestión de la Organización y la de los Eventos"
 msgid "The registration code is not active at the moment"
 msgstr "El código de registro no está activo en este momento"
 
+msgid "The user has requested to sign up for this event."
+msgstr "El usuario ha solicitado inscribirse en este evento."
+
 msgid "There are no new sessions scheduled at this time."
 msgstr "No hay nuevas sesiones programadas en este momento."
 
@@ -8066,6 +8122,13 @@ msgstr ""
 msgid "Pay %(amount)s%(currency)s within %(counter)s days"
 msgstr "Paga %(amount)s %(currency)s en un plazo de %(counter)s días"
 
+msgid "Payment for this event is complete and up to date!"
+msgstr "¡El pago de este evento ya está hecho y al día!"
+
+#, python-format
+msgid "Please <a href='%(url)s'>complete your signup</a>."
+msgstr "Por favor, <a href='%(url)s'>completa tu registro</a>."
+
 msgid "Second character in the relationship (destination)"
 msgstr "Segundo personaje de la relación (destino)"
 
@@ -8106,6 +8169,10 @@ msgstr "No puedes crear una relación contigo mismo!"
 
 msgid "Your account is protected by an authenticator app."
 msgstr "Tu cuenta está protegida por una aplicación de autenticación."
+
+msgid "Your signup request is awaiting organizer approval"
+msgstr ""
+"Tu solicitud de inscripción está pendiente de que el organizador la apruebe"
 
 msgid "hidden faction visible only to assigned characters"
 msgstr "facción oculta visible sólo para los personajes asignados"
@@ -8165,6 +8232,15 @@ msgstr "Usa el botón de arriba para crear el primer criterio."
 
 msgid "Your registration for this event has been confirmed"
 msgstr "Ya se ha confirmado tu inscripción en este evento"
+
+msgid "Your signup request is awaiting organizer approval!"
+msgstr ""
+"¡Tu solicitud de inscripción está pendiente de que el organizador la "
+"apruebe!"
+
+msgid "Your signup request is awaiting organizer approval."
+msgstr ""
+"Tu solicitud de inscripción está pendiente de que el organizador la apruebe."
 
 msgid "use high-quality wide images for best visual impact"
 msgstr ""
@@ -8442,9 +8518,6 @@ msgstr ""
 msgid "Create at least one ticket type for event registrations"
 msgstr "Crea al menos un tipo de entrada para las inscripciones a eventos"
 
-msgid "Everything is in order about the payment of this event!"
-msgstr "¡Todo está en orden respecto al pago de este evento!"
-
 msgid "Give a registration to this event as a gift to a friend"
 msgstr "Regala a un amigo una inscripción a este evento"
 
@@ -8633,6 +8706,10 @@ msgstr "Ahora puedes revisar la información contable histórica"
 
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Opcional - Otras opciones según los requisitos, separadas por comas"
+
+msgid "Review pending signup requests and approve or reject them"
+msgstr ""
+"Revisa las solicitudes de registro pendientes y apruébalas o recházalas"
 
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Personal que recibirá y gestionará las solicitudes de asistencia"
@@ -8935,6 +9012,9 @@ msgstr ""
 "Usa el botón de arriba para crear una etiqueta con la que clasificar los "
 "artículos."
 
+msgid "Would you like to receive updates about our upcoming events?"
+msgstr "¿Te gustaría recibir información sobre nuestros próximos eventos?"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>."
 msgstr "Puedes realizar el pago <a href='%(url)s'>en esta página</a>."
@@ -9007,6 +9087,10 @@ msgstr ""
 msgid "No installment plans have been configured for this event yet."
 msgstr ""
 "Todavía no se han configurado planes de pago a plazos para este evento."
+
+msgid "No pending questions have been answered in the last 3 months."
+msgstr ""
+"No se ha respondido a ninguna pregunta pendiente en los últimos 3 meses."
 
 msgid "Note that if the cost is 0, it will be automatically assigned"
 msgstr "Ten en cuenta que si el coste es 0, se asignará automáticamente"
@@ -10248,6 +10332,13 @@ msgstr ""
 "Habilita el campo 'hide', para poder ocultar el elemento de escritura a los "
 "participantes"
 
+#, python-format
+msgid ""
+"Good news! Your request to sign up for <b>%(event)s</b> has been accepted."
+msgstr ""
+"¡Buenas noticias! Tu solicitud para inscribirte en <b>%(event)s</b> ha sido "
+"aceptada."
+
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr ""
@@ -10303,6 +10394,12 @@ msgstr ""
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Debe crear al menos un tipo de prólogo antes de poder crear prólogos"
+
+msgid ""
+"Your signup will not be confirmed until an organizer approves this request"
+msgstr ""
+"Tu inscripción no se confirmará hasta que un organizador apruebe esta "
+"solicitud"
 
 msgid ""
 "(Optional) The character names to assign to the player, separated by commas"
@@ -11254,13 +11351,6 @@ msgstr ""
 "definitivo!"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Si está marcada, la aprobación de los gastos sólo puede realizarse desde el "
-"panel de la organización"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11404,6 +11494,13 @@ msgstr ""
 "Justificante expedido por el banco como prueba de la transferencia (en "
 "formato pdf)"
 
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Cuando está activada esta opción, las aprobaciones de gastos solo se pueden "
+"gestionar desde el panel de control de la organización"
+
 #, python-format
 msgid ""
 "You have been invited to join the guild %(guild)s with your character "
@@ -11508,6 +11605,13 @@ msgid ""
 msgstr ""
 "Revisa qué personajes y rasgos se han asignado a los jugadores, agrupados "
 "por facción"
+
+msgid ""
+"Shown on the signup request page and added to the request-received "
+"confirmation mail"
+msgstr ""
+"Aparece en la página de solicitud de registro y se incluye en el correo de "
+"confirmación de recepción de la solicitud"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "
@@ -11809,14 +11913,6 @@ msgid ""
 msgstr ""
 "Gestiona el contenido de vídeo y audio protegido mediante tokens de acceso "
 "de un solo uso para este evento"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Paga la cuota de afiliación de %(year)d de %(amount)s%(currency)s, requerida"
-" para participar en este evento"
 
 msgid ""
 "Total amount of money expected if all registered participants fully pay "
@@ -12341,6 +12437,14 @@ msgstr ""
 "La barra lateral se ha ampliado. Seguirán apareciendo nuevos menús a medida "
 "que actives módulos adicionales"
 
+#, python-format
+msgid ""
+"We are sorry to inform you that your request to sign up for <b>%(event)s</b>"
+" was not accepted."
+msgstr ""
+"Lamentamos informarte de que tu solicitud para inscribirte en "
+"<b>%(event)s</b> no ha sido aceptada."
+
 msgid ""
 "When you're ready to permanently update warehouse quantities based on this "
 "event's assignments"
@@ -12368,6 +12472,14 @@ msgid ""
 msgstr ""
 "Si se te asigna, se te asignará automáticamente el personaje original que "
 "refleja."
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Paga la cuota anual de %(year)d, que asciende a %(amount)s%(currency)s, "
+"necesaria para asistir a este evento"
 
 msgid ""
 "The following items will have their quantities reduced based on the "
@@ -12397,6 +12509,13 @@ msgid ""
 msgstr ""
 "Código único para uso interno - no visible. Indica un código sin espacios ni"
 " símbolos extraños"
+
+msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration."
+msgstr ""
+"Te avisaremos cuando se programe una nueva sesión y tendrás acceso "
+"prioritario a la inscripción."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "
@@ -12733,13 +12852,6 @@ msgstr ""
 " en la dirección facilitada"
 
 msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration!"
-msgstr ""
-"Recibirá un aviso cuando se organice una nueva sesión y podrá inscribirse "
-"por la vía rápida!"
-
-msgid ""
 "A friend of yours will be able to receive the registration as a gift by "
 "accessing this special link!"
 msgstr ""
@@ -12922,6 +13034,14 @@ msgid ""
 msgstr ""
 "Permite a los participantes enviarse mensajes privados sin revelar sus "
 "direcciones de correo electrónico personales"
+
+#, python-format
+msgid ""
+"Hello! We have received your request to sign up for <b>%(event)s</b>. An "
+"organizer will review it soon."
+msgstr ""
+"¡Hola! Hemos recibido tu solicitud para inscribirte en <b>%(event)s</b>. Un "
+"organizador la revisará en breve."
 
 msgid ""
 "If you select one (or more) factions, this modifier applies only to "
@@ -14146,6 +14266,14 @@ msgstr ""
 "Habilita un botón en la barra superior para redirigir a los usuarios "
 "autenticados a una aplicación externa, utilizando una URL configurable y un "
 "SSO basado en JWT opcional"
+
+msgid ""
+"If checked: players cannot sign up directly; they submit a signup request "
+"that an organizer must approve before they can complete registration"
+msgstr ""
+"Si está marcado: los jugadores no pueden inscribirse directamente; tienen "
+"que enviar una solicitud de inscripción que un organizador debe aprobar "
+"antes de que puedan completar la inscripción"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

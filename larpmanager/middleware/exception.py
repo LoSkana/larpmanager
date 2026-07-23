@@ -38,6 +38,7 @@ from larpmanager.utils.core.exceptions import (
     MainPageError,
     MembershipError,
     NotFoundError,
+    PendingApprovalError,
     RedirectError,
     ReturnNowError,
     RewokedMembershipError,
@@ -116,6 +117,15 @@ class ExceptionHandlingMiddleware:
                 lambda ex: self._redirect_with_message(
                     request,
                     _("This feature is available for non-waiting tickets!"),
+                    "register",
+                    [ex.slug],
+                ),
+            ),
+            (
+                PendingApprovalError,
+                lambda ex: self._redirect_with_message(
+                    request,
+                    _("Your signup request is awaiting organizer approval!"),
                     "register",
                     [ex.slug],
                 ),

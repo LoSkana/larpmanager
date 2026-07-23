@@ -131,6 +131,13 @@ def get_registration_cancel_organizer_email(instance: Registration, email_contex
     return email_subject, email_body
 
 
+def get_registration_request_new_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
+    """Generate email subject and body for new signup request organizer notification."""
+    email_subject = hdr(instance.run.event) + _("Signup request for %(event)s by %(user)s") % email_context
+    email_body = _("The user has requested to sign up for this event.")
+    return email_subject, email_body
+
+
 def get_expense_mail(instance: AccountingItemExpense) -> tuple[str, str]:
     """Generate email subject and body for expense reimbursement requests."""
     # Generate email subject with event context

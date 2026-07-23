@@ -1042,7 +1042,7 @@ class OneTimeAccessToken(UuidMixin, BaseModel):
         blank=True,
         null=True,
         related_name="used_onetime_tokens",
-        verbose_name=_("Used by"),
+        verbose_name=_("User"),
         help_text=_("Member who used this token (if authenticated)"),
     )
 

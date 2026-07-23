@@ -318,7 +318,9 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             "slug": "orga_registrations",
             "name": _("First registration"),
             "descr": _("Have at least one participant registered for an event"),
-            "done": Registration.objects.filter(run__event__association_id=association_id).exists(),
+            "done": Registration.objects.filter(
+                run__event__association_id=association_id, cancellation_date__isnull=True, pending=False
+            ).exists(),
             "url": _get_registrations_url(association_id),
         },
     ]

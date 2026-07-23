@@ -1207,7 +1207,7 @@ def matchmaker(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, "matchmaker")
 
     registration = context.get("registration")
-    if not registration:
+    if not registration or registration.pending:
         messages.warning(request, _("You must register for the event before answering the matchmaker questions"))
         return redirect("register", event_slug=context["run"].get_slug())
 

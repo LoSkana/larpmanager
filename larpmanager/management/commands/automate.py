@@ -32,6 +32,7 @@ from larpmanager.accounting.balance import check_accounting, check_run_accountin
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features, get_event_features
+from larpmanager.cache.registration import get_active_registrations
 from larpmanager.mail.accounting import notify_invoice_check
 from larpmanager.mail.base import check_holiday
 from larpmanager.mail.digest import send_daily_organizer_summaries
@@ -212,7 +213,9 @@ class Command(BaseCommand):
                 AssociationConfig.objects.filter(association=association, name=Command._DELETION_WARNING_KEY).delete()
                 continue
 
-            signup_count = Registration.objects.filter(run__event__association=association).count()
+            signup_count = Registration.objects.filter(
+                run__event__association=association, cancellation_date__isnull=True, pending=False
+            ).count()
             if signup_count >= Command._INACTIVE_SIGNUP_THRESHOLD:
                 # Active enough: clear any pending warning
                 AssociationConfig.objects.filter(association=association, name=Command._DELETION_WARNING_KEY).delete()
@@ -415,7 +418,7 @@ class Command(BaseCommand):
         # Process past events for participation and staff/organizer roles
         for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
             # Process regular player registrations
-            registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+            registrations = get_active_registrations(run)
             for registration in registrations.exclude(
                 ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
             ):
@@ -447,7 +450,7 @@ class Command(BaseCommand):
 
         # Process future events for friend referral tracking
         for run in Run.objects.filter(end__gt=timezone.now().date()):
-            for registration in Registration.objects.filter(run=run, cancellation_date__isnull=True).exclude(
+            for registration in get_active_registrations(run).exclude(
                 ticket__tier=TicketTier.WAITING,
             ):
                 self.check_friends_player(registration, cache)

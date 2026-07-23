@@ -688,6 +688,9 @@ msgstr "Årsak"
 msgid "Refund"
 msgstr "Tilbakebetaling"
 
+msgid "Reject"
+msgstr "Avvis"
+
 msgid "Remove"
 msgstr "Fjern"
 
@@ -1052,9 +1055,6 @@ msgstr "Billetter"
 msgid "Tooltip"
 msgstr "Verktøytips"
 
-msgid "Used by"
-msgstr "Brukt av"
-
 msgid "Utility"
 msgstr "Verktøy"
 
@@ -1352,6 +1352,9 @@ msgstr "Svar til"
 msgid "Request:"
 msgstr "Forespørsel:"
 
+msgid "Requests"
+msgstr "Forespørsler"
+
 msgid "Required"
 msgstr "Nødvendig"
 
@@ -1630,6 +1633,9 @@ msgstr "Gjenværende"
 
 msgid "Reminders"
 msgstr "Påminnelser"
+
+msgid "Requested"
+msgstr "Forespurt"
 
 msgid "Residence"
 msgstr "Bolig"
@@ -3040,6 +3046,9 @@ msgstr "Forespørsler om refusjon"
 msgid "Request signed"
 msgstr "Signert forespørsel"
 
+msgid "Request signup"
+msgstr "Be om registrering"
+
 msgid "Requests open:"
 msgstr "Åpne forespørsler:"
 
@@ -3313,6 +3322,9 @@ msgstr "Vis statistikk"
 msgid "Shuttle service"
 msgstr "Shuttletjeneste"
 
+msgid "Signup Requests"
+msgstr "Registreringsforespørsler"
+
 msgid "Start algorithm"
 msgstr "Start-algoritme"
 
@@ -3387,6 +3399,9 @@ msgstr "Aktiver funksjonen"
 
 msgid "Amount breakdown"
 msgstr "Fordeling av beløp"
+
+msgid "Approval process"
+msgstr "Godkjenningsprosess"
 
 msgid "Back to manifest"
 msgstr "Tilbake til manifest"
@@ -3861,6 +3876,9 @@ msgstr "Gjenværende kreditter"
 
 msgid "Remove from guild"
 msgstr "Fjern fra klanen"
+
+msgid "Request to signup"
+msgstr "Forespørsel om registrering"
 
 msgid "Residence address"
 msgstr "Bostedsadresse"
@@ -4727,9 +4745,6 @@ msgstr "Valutaer og materialer"
 msgid "Customised mail server"
 msgstr "Skreddersydd e-postserver"
 
-msgid "Disable event approval"
-msgstr "Deaktiver godkjenning av hendelser"
-
 msgid "Discover the web site!"
 msgstr "Utforsk nettstedet!"
 
@@ -4838,6 +4853,9 @@ msgstr "Velg din karakter!"
 
 msgid "Set up payment methods"
 msgstr "Konfigurer betalingsmetoder"
+
+msgid "Signup request pending"
+msgstr "Registreringsforespørsel i ventemodus"
 
 msgid "Split by participation"
 msgstr "Fordelt etter deltakelse"
@@ -5135,6 +5153,12 @@ msgstr "Hemmelig registreringslenke"
 
 msgid "Select a valid character"
 msgstr "Velg et gyldig tegn"
+
+msgid "Signup request approved!"
+msgstr "Registreringsforespørselen er godkjent!"
+
+msgid "Signup request rejected!"
+msgstr "Registreringsforespørsel avvist!"
 
 msgid "Target session not found"
 msgstr "Målsesjonen ble ikke funnet"
@@ -5583,6 +5607,9 @@ msgstr "Forsinkelse i profilkompilering"
 msgid "Describe how we can help you"
 msgstr "Beskriv hvordan vi kan hjelpe deg"
 
+msgid "Disable event-level approval"
+msgstr "Deaktiver godkjenning på hendelsesnivå"
+
 msgid "Enter your preferences here!"
 msgstr "Angi dine preferanser her!"
 
@@ -5733,6 +5760,9 @@ msgstr "Markedsføring - nettsted, reklame"
 
 msgid "Question name (keep it short)"
 msgstr "Navn på spørsmålet (hold det kort)"
+
+msgid "Registration approval request"
+msgstr "Forespørsel om godkjenning av registrering"
 
 msgid "Registrations opening not set"
 msgstr "Registreringsåpning ikke satt"
@@ -6710,6 +6740,18 @@ msgstr "Velg organisasjonen du vil gå videre til"
 msgid "Set the organization payment currency"
 msgstr "Angi organisasjonens betalingsvaluta"
 
+#, python-format
+msgid "Signup request accepted for %(event)s"
+msgstr "Registreringsforespørsel godkjent for %(event)s"
+
+#, python-format
+msgid "Signup request declined for %(event)s"
+msgstr "Registreringsforespørsel avvist for %(event)s"
+
+#, python-format
+msgid "Signup request received for %(event)s"
+msgstr "Det er mottatt en påmeldingsforespørsel for %(event)s"
+
 msgid "The question type, allowed values are"
 msgstr "Spørsmålstypen, tillatte verdier er"
 
@@ -6962,6 +7004,9 @@ msgstr "Du må være et godkjent medlem for å stemme."
 msgid "You must be logged in to view this page"
 msgstr "Du må være innlogget for å se denne siden"
 
+msgid "Your signup request has been submitted!"
+msgstr "Registreringsforespørselen din er sendt inn!"
+
 msgid "6-digit code from your authenticator app"
 msgstr "6-sifret kode fra autentiseringsappen din"
 
@@ -7031,6 +7076,10 @@ msgstr "Sekunder å vente mellom hver e-postbatch"
 msgid "Set casting options in the configuration"
 msgstr "Angi rollefordelingsalternativer i konfigurasjonen"
 
+#, python-format
+msgid "Signup request for %(event)s by %(user)s"
+msgstr "Registreringsforespørsel for %(event)s fra %(user)s"
+
 msgid "The collection was delivered to the user"
 msgstr "Samlingen ble levert til brukeren"
 
@@ -7077,6 +7126,9 @@ msgstr "Evnetyper uten evner: %(list)s"
 
 msgid "Added at the top of the user profile page"
 msgstr "Lagt til øverst på brukerprofilsiden"
+
+msgid "Approve or reject pending signup requests"
+msgstr "Godkjenn eller avvis ventende registreringsforespørsler"
 
 msgid "Authenticator app configured successfully"
 msgstr "Autentiseringsappen er konfigurert med suksess"
@@ -7125,6 +7177,9 @@ msgstr "Navn som vil vises på kvitteringshodet"
 
 msgid "No item has conflicting area assignments."
 msgstr "Ingen elementer har motstridende arealtildelinger."
+
+msgid "No pending signup requests for this event"
+msgstr "Det er ingen ventende påmeldingsforespørsler for dette arrangementet"
 
 msgid "No resource files have been uploaded yet."
 msgstr "Det er foreløpig ikke lastet opp noen ressursfiler."
@@ -7373,9 +7428,6 @@ msgstr "Angi hvilke billetter den er aktiv for"
 msgid "Manage fields that track participants' data"
 msgstr "Administrer felt som sporer deltakernes data"
 
-msgid "No answered questions in the last 3 months."
-msgstr "Ingen besvarte spørsmål de siste 3 månedene."
-
 msgid "No handout templates have been created yet."
 msgstr "Det er foreløpig ikke laget noen maler for utdelingsark."
 
@@ -7438,6 +7490,10 @@ msgstr "Din begavede registrering har blitt innløst!"
 
 msgid "(Optional) Maximun number of spots available"
 msgstr "(Valgfritt) Maksimalt antall tilgjengelige plasser"
+
+#, python-format
+msgid "<b>%(number)s</b> signup requests to approve"
+msgstr "<b>%(number)s</b> registreringsforespørsler som skal godkjennes"
 
 msgid "Cancellation for missing profile compilation"
 msgstr "Avbestilling på grunn av manglende profilkompilering"
@@ -7727,9 +7783,6 @@ msgstr "Opprett ditt første arrangement ved å bruke knappen ovenfor."
 msgid "Customize specific texts on the event interface"
 msgstr "Tilpass spesifikke tekster på hendelsesgrensesnittet"
 
-msgid "Do you wish to be always updated on our events?"
-msgstr "Vil du holde deg oppdatert om arrangementene våre?"
-
 #, python-format
 msgid "Donation of %(user)s, with reason: '%(reason)s'"
 msgstr "Donasjon av %(user)s, med årsak: '%(reason)s'"
@@ -7975,6 +8028,9 @@ msgstr "Bytt mellom organisasjons- og hendelsesadministrasjon"
 msgid "The registration code is not active at the moment"
 msgstr "Registreringskoden er ikke aktiv for øyeblikket"
 
+msgid "The user has requested to sign up for this event."
+msgstr "Brukeren har bedt om å melde seg på dette arrangementet."
+
 msgid "There are no new sessions scheduled at this time."
 msgstr "Det er ingen nye økter planlagt for øyeblikket."
 
@@ -8051,6 +8107,13 @@ msgstr ""
 msgid "Pay %(amount)s%(currency)s within %(counter)s days"
 msgstr "Betal %(amount)s %(currency)s innen %(counter)s dager"
 
+msgid "Payment for this event is complete and up to date!"
+msgstr "Betalingen for dette arrangementet er fullført og oppdatert!"
+
+#, python-format
+msgid "Please <a href='%(url)s'>complete your signup</a>."
+msgstr "Vennligst <a href='%(url)s'>fullfør registreringen</a>."
+
 msgid "Second character in the relationship (destination)"
 msgstr "Andre tegn i relasjonen (destinasjon)"
 
@@ -8090,6 +8153,9 @@ msgstr "Du kan ikke skape et forhold til deg selv!"
 
 msgid "Your account is protected by an authenticator app."
 msgstr "Kontoen din er beskyttet av en autentiseringsapp."
+
+msgid "Your signup request is awaiting organizer approval"
+msgstr "Din påmeldingsforespørsel venter på godkjenning fra arrangøren"
 
 msgid "hidden faction visible only to assigned characters"
 msgstr "skjult faksjon som kun er synlig for tildelte karakterer"
@@ -8146,6 +8212,12 @@ msgstr "Bruk knappen ovenfor for å opprette det første kriteriet."
 
 msgid "Your registration for this event has been confirmed"
 msgstr "Din påmelding til dette arrangementet er bekreftet"
+
+msgid "Your signup request is awaiting organizer approval!"
+msgstr "Din påmeldingsforespørsel venter på godkjenning fra arrangøren!"
+
+msgid "Your signup request is awaiting organizer approval."
+msgstr "Din påmeldingsforespørsel venter på godkjenning fra arrangøren."
 
 msgid "use high-quality wide images for best visual impact"
 msgstr "bruk brede bilder av høy kvalitet for best visuell effekt"
@@ -8420,9 +8492,6 @@ msgstr ""
 msgid "Create at least one ticket type for event registrations"
 msgstr "Opprett minst én billettype for arrangementspåmeldinger"
 
-msgid "Everything is in order about the payment of this event!"
-msgstr "Alt er i orden for at vi skal kunne betale for dette arrangementet!"
-
 msgid "Give a registration to this event as a gift to a friend"
 msgstr "Gi en påmelding til dette arrangementet i gave til en venn"
 
@@ -8604,6 +8673,10 @@ msgstr "Nå kan du gå gjennom den historiske regnskapsinformasjonen"
 
 msgid "Optional - Other options as requirements, comma-separated"
 msgstr "Valgfritt - Andre alternativer som krav, kommaseparert"
+
+msgid "Review pending signup requests and approve or reject them"
+msgstr ""
+"Gjennomgå ventende registreringsforespørsler og godkjenn eller avvis dem"
 
 msgid "Staff members who will receive and manage support tickets"
 msgstr "Medarbeidere som skal motta og håndtere supporthenvendelser"
@@ -8891,6 +8964,9 @@ msgid "Use the button above to create a tag for categorizing items."
 msgstr ""
 "Bruk knappen ovenfor for å opprette en tag for å kategorisere elementer."
 
+msgid "Would you like to receive updates about our upcoming events?"
+msgstr "Vil du motta oppdateringer om våre kommende arrangementer?"
+
 #, python-format
 msgid "You can make the payment <a href='%(url)s'>on this page</a>."
 msgstr "Du kan foreta betalingen <a href='%(url)s'>på denne siden</a>."
@@ -8957,6 +9033,10 @@ msgid "No installment plans have been configured for this event yet."
 msgstr ""
 "Det er foreløpig ikke opprettet noen avbetalingsordninger for dette "
 "arrangementet."
+
+msgid "No pending questions have been answered in the last 3 months."
+msgstr ""
+"Det er ikke blitt besvart noen ubesvarte spørsmål de siste tre månedene."
 
 msgid "Note that if the cost is 0, it will be automatically assigned"
 msgstr "Merk at hvis kostnaden er 0, vil den automatisk bli tildelt"
@@ -10126,6 +10206,13 @@ msgid ""
 msgstr ""
 "Aktiverer feltet 'skjul', for å kunne skjule skriveelementet fra deltakerne"
 
+#, python-format
+msgid ""
+"Good news! Your request to sign up for <b>%(event)s</b> has been accepted."
+msgstr ""
+"Gode nyheter! Din forespørsel om å melde deg på <b>%(event)s</b> er "
+"godkjent."
+
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr "Jeg bekrefter at alle nødvendige personopplysninger er korrekt utfylt"
@@ -10173,6 +10260,12 @@ msgstr ""
 msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr "Du må opprette minst én prologtype før du kan opprette prologer"
+
+msgid ""
+"Your signup will not be confirmed until an organizer approves this request"
+msgstr ""
+"Registreringen din blir ikke bekreftet før en arrangør har godkjent denne "
+"forespørselen"
 
 msgid ""
 "(Optional) The character names to assign to the player, separated by commas"
@@ -11087,13 +11180,6 @@ msgid ""
 msgstr "Klikk på denne knappen for å utføre uttrekket. OBS: dette er endelig!"
 
 msgid ""
-"If checked, approval of expenses can be performed only from the organization"
-" panel"
-msgstr ""
-"Hvis dette alternativet er krysset av, kan utgiftene kun godkjennes fra "
-"organisasjonspanelet"
-
-msgid ""
 "If checked, enables ability templates that can be reused across multiple "
 "abilities"
 msgstr ""
@@ -11237,6 +11323,13 @@ msgid ""
 "pdf file)"
 msgstr "Bevis utstedt av banken som bevis på overføringen (som pdf-fil)"
 
+msgid ""
+"When enabled, expense approvals can only be managed from the organization "
+"dashboard"
+msgstr ""
+"Når denne funksjonen er aktivert, kan godkjenning av utgifter kun håndteres "
+"fra organisasjonens oversiktsside"
+
 #, python-format
 msgid ""
 "You have been invited to join the guild %(guild)s with your character "
@@ -11337,6 +11430,13 @@ msgid ""
 msgstr ""
 "Gjennomgå hvilke karakterer og egenskaper som er tildelt spillerne, gruppert"
 " etter fraksjon"
+
+msgid ""
+"Shown on the signup request page and added to the request-received "
+"confirmation mail"
+msgstr ""
+"Vises på registreringssiden og legges til i bekreftelses-e-posten om mottatt"
+" forespørsel"
 
 msgid ""
 "Track all item assignments grouped by area, marking each item as loaded and "
@@ -11635,14 +11735,6 @@ msgid ""
 msgstr ""
 "Administrer sikkert video- og lydinnhold beskyttet av engangstilgangstokener"
 " for dette arrangementet"
-
-#, python-format
-msgid ""
-"Pay the %(year)d membership fee of %(amount)s%(currency)s, required to "
-"attend this event"
-msgstr ""
-"Betal den %(year)d medlemsavgiften på %(amount)s%(currency)s, som kreves for"
-" å delta i dette arrangementet"
 
 msgid ""
 "Total amount of money expected if all registered participants fully pay "
@@ -12165,6 +12257,14 @@ msgstr ""
 "Sidefeltet har blitt utvidet. Nye menyer vil fortsette å dukke opp etter "
 "hvert som du aktiverer flere moduler"
 
+#, python-format
+msgid ""
+"We are sorry to inform you that your request to sign up for <b>%(event)s</b>"
+" was not accepted."
+msgstr ""
+"Vi beklager å måtte meddele at din forespørsel om å melde deg på "
+"<b>%(event)s</b> ikke ble godkjent."
+
 msgid ""
 "When you're ready to permanently update warehouse quantities based on this "
 "event's assignments"
@@ -12192,6 +12292,14 @@ msgid ""
 msgstr ""
 "Hvis du får den tildelt, vil du automatisk bli tildelt den opprinnelige "
 "karakteren den speiler."
+
+#, python-format
+msgid ""
+"Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
+"to attend this event"
+msgstr ""
+"Betal det årlige medlemskontingentet på %(year)d på %(amount)s%(currency)s, "
+"som kreves for å kunne delta på dette arrangementet"
 
 msgid ""
 "The following items will have their quantities reduced based on the "
@@ -12221,6 +12329,13 @@ msgid ""
 msgstr ""
 "Unik kode for internt bruk - ikke synlig. Angi en streng uten mellomrom "
 "eller merkelige symboler"
+
+msgid ""
+"You will be notified when a new session is scheduled and given priority "
+"access to registration."
+msgstr ""
+"Du vil få beskjed når en ny sesjon blir planlagt, og du vil få fortrinnsrett"
+" til påmelding."
 
 msgid ""
 "Adds a link on personal accounts pages, allowing users to donate money to "
@@ -12556,13 +12671,6 @@ msgstr ""
 "spesifisert i adressen som er oppgitt"
 
 msgid ""
-"You will be notified when a new session is organized, and you will have "
-"fast-track on registration!"
-msgstr ""
-"Du vil bli varslet når en ny sesjon arrangeres, og du vil få "
-"hurtigregistrering!"
-
-msgid ""
 "A friend of yours will be able to receive the registration as a gift by "
 "accessing this special link!"
 msgstr ""
@@ -12745,6 +12853,14 @@ msgid ""
 msgstr ""
 "Gjør det mulig for deltakerne å sende private meldinger til hverandre uten å"
 " avsløre personlige e-postadresser"
+
+#, python-format
+msgid ""
+"Hello! We have received your request to sign up for <b>%(event)s</b>. An "
+"organizer will review it soon."
+msgstr ""
+"Hei! Vi har mottatt din forespørsel om å melde deg på <b>%(event)s</b>. En "
+"arrangør vil snart vurdere den."
 
 msgid ""
 "If you select one (or more) factions, this modifier applies only to "
@@ -13952,6 +14068,14 @@ msgstr ""
 "Aktiverer en knapp i topplinjen for å omdirigere autentiserte brukere til en"
 " ekstern applikasjon, ved hjelp av en konfigurerbar URL og valgfri JWT-"
 "basert SSO"
+
+msgid ""
+"If checked: players cannot sign up directly; they submit a signup request "
+"that an organizer must approve before they can complete registration"
+msgstr ""
+"Hvis dette feltet er merket av: Spillerne kan ikke melde seg på direkte; de "
+"sender inn en påmeldingsforespørsel som en arrangør må godkjenne før de kan "
+"fullføre påmeldingen"
 
 msgid ""
 "In the text search, you can enter any text; the search will be done on the "

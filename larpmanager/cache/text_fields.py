@@ -298,8 +298,10 @@ def _update_cache_text_fields_answer(
 def init_cache_registration_field(run: Run) -> dict:
     """Initialize registration field cache for all registrations in a run."""
     cache_data = {}
-    # Iterate through all registrations for this run and populate cache
-    for registration in Registration.objects.filter(run=run):
+    from larpmanager.cache.registration import get_active_registrations  # noqa: PLC0415
+
+    # Iterate through active (non-cancelled, non-pending) registrations for this run
+    for registration in get_active_registrations(run):
         _init_element_cache_registration_field(registration, cache_data)
     return cache_data
 

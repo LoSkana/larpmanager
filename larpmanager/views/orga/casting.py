@@ -34,6 +34,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.registration import get_active_registrations
 from larpmanager.forms.miscellanea import NO_FACTION_KEY, OrganizerCastingOptionsForm
 from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Quest, QuestType, Trait
 from larpmanager.models.member import Member, Membership
@@ -147,7 +148,7 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
             member = Member.objects.get(uuid=member_uuid)
 
             # Get active registration for this member and run
-            registration = Registration.objects.get(member=member, run=context["run"], cancellation_date__isnull=True)
+            registration = get_active_registrations(context["run"]).get(member=member)
 
             # Extract entity UUID (character or trait)
             entity_uuid = parts[1]
@@ -438,7 +439,7 @@ def get_casting_data(
     cache_aim, cache_memberships, casting_submissions = _casting_prepare(context)
 
     # Process each registration to build player preferences
-    registrations_query = Registration.objects.filter(run=context["run"], cancellation_date__isnull=True)
+    registrations_query = get_active_registrations(context["run"])
     # Exclude non-participant ticket types from casting
     registrations_query = registrations_query.exclude(
         ticket__tier__in=[TicketTier.WAITING],

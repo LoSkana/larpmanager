@@ -27,7 +27,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.registration import get_active_registrations, get_registration_tickets
 from larpmanager.models.accounting import (
     AccountingItemPayment,
     PaymentChoices,
@@ -234,7 +234,9 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
         return
 
     # Fetch all active registrations for this member in the current run
-    member_registrations = Registration.objects.filter(run=run, member_id=member_id, cancellation_date__isnull=True)
+    member_registrations = Registration.objects.filter(
+        run=run, member_id=member_id, cancellation_date__isnull=True, pending=False
+    )
 
     # Handle case where member has no active registrations
     if not member_registrations.exists():
@@ -342,8 +344,8 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
     # Get accounting context data (features, tickets, pricing)
     features, registration_tickets, cached_accounting_info_per_registration = _get_accounting_context(run)
 
-    # Filter for active registrations only (exclude cancelled ones)
-    active_registrations = Registration.objects.filter(run=run, cancellation_date__isnull=True)
+    # Filter for active registrations only (exclude cancelled and pending ones)
+    active_registrations = get_active_registrations(run)
     accounting_cache = {}
 
     # Process each registration to calculate accounting data

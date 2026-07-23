@@ -142,8 +142,10 @@ def exe_membership(request: HttpRequest) -> HttpResponse:
         ),
     )
 
-    # Get registrations for upcoming runs and group by member
-    next_regs_qs = Registration.objects.filter(run__id__in=next_runs.keys()).values_list("run_id", "member_id")
+    # Get active registrations for upcoming runs and group by member
+    next_regs_qs = Registration.objects.filter(
+        run__id__in=next_runs.keys(), cancellation_date__isnull=True, pending=False
+    ).values_list("run_id", "member_id")
 
     # Create member_id -> [run_ids] mapping for upcoming registrations
     next_regs = defaultdict(list)

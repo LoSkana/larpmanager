@@ -347,6 +347,21 @@ urlpatterns = [
         name="orga_registration_surcharges_delete",
     ),
     path(
+        "<slug:event_slug>/manage/registrations/requests/",
+        views_or.orga_registration_requests,
+        name="orga_registration_requests",
+    ),
+    path(
+        "<slug:event_slug>/manage/registrations/requests/<slug:registration_uuid>/approve/",
+        views_or.orga_registration_request_approve,
+        name="orga_registration_request_approve",
+    ),
+    path(
+        "<slug:event_slug>/manage/registrations/requests/<slug:registration_uuid>/reject/",
+        views_or.orga_registration_request_reject,
+        name="orga_registration_request_reject",
+    ),
+    path(
         "<slug:event_slug>/manage/cancellations/",
         views_or.orga_cancellations,
         name="orga_cancellations",
