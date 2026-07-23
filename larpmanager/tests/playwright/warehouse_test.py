@@ -342,20 +342,13 @@ def item_areas(page: Any) -> None:
 
     sidebar(page, "Items")
 
-    # Item 2 not assigned to any area of this event yet, so it must not appear
-    expect(page.locator("#one").get_by_text("Item 2", exact=True)).to_have_count(0)
+    # the list now shows every warehouse item, assigned or not
+    expect(page.locator("#one").get_by_text("Item 2", exact=True)).to_have_count(1)
 
-    page.get_by_role("link", name="New").click()
+    # clicking the row's edit link pre-loads the item even though it has no
+    # assignment yet in this event
+    page.get_by_role("row", name="Item 2").get_by_role("link").first.click()
     edit_iframe = get_modal_iframe(page)
-    edit_iframe.locator("#select2-id_item-container").click()
-    edit_iframe.get_by_role("searchbox").first.fill("Item")
-    _wait_select2_results(edit_iframe)
-
-    # Item 1 / Item 3sa are already assigned in this event: the picker must
-    # only offer items that are not yet assigned here
-    expect(edit_iframe.locator(".select2-results__option", has_text="Item 1")).to_have_count(0)
-    expect(edit_iframe.locator(".select2-results__option", has_text="Item 3sa")).to_have_count(0)
-    edit_iframe.get_by_role("option", name="Item 2").click()
 
     def area_input(frame: Any, area_name: str) -> Any:
         return frame.locator("tr", has_text=area_name).locator("input")
@@ -372,7 +365,9 @@ def item_areas(page: Any) -> None:
     area_input(edit_iframe, "sALOON").fill("3")
     save_modal(page, edit_iframe)
 
-    expect_normalized(page, page.locator("#one"), "Item 2 Boc B Kitchen (2) sALOON (3)")
+    expect_normalized(
+        page, page.locator("tr", has_text="Item 2"), "Item 2 sdsadas Boc B Gru sad Kitchen (2) sALOON (3)"
+    )
 
     # edit again: quantities must be preloaded from the existing assignments
     page.get_by_role("row", name="Item 2").get_by_role("link").first.click()
@@ -380,9 +375,13 @@ def item_areas(page: Any) -> None:
     assert area_input(edit_iframe, "Kitchen").input_value() == "2"
     assert area_input(edit_iframe, "sALOON").input_value() == "3"
 
-    # zeroing out every area removes the item's assignments for this event
+    # zeroing out every area clears the item's assignments for this event,
+    # but the item itself must still be listed
     area_input(edit_iframe, "Kitchen").fill("0")
     area_input(edit_iframe, "sALOON").fill("0")
     save_modal(page, edit_iframe)
 
-    expect(page.locator("#one").get_by_text("Item 2", exact=True)).to_have_count(0)
+    expect(page.locator("#one").get_by_text("Item 2", exact=True)).to_have_count(1)
+    row = page.locator("tr", has_text="Item 2")
+    expect(row.get_by_text("Kitchen", exact=False)).to_have_count(0)
+    expect(row.get_by_text("sALOON", exact=False)).to_have_count(0)

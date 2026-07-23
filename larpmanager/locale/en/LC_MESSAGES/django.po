@@ -9576,10 +9576,7 @@ msgstr ""
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 
-msgid "No warehouse items have been assigned to an area of this event yet"
-msgstr ""
-
-msgid "Use the button above to assign one"
+msgid "Assign to areas"
 msgstr ""
 
 msgid "Cargo manifest"

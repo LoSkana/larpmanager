@@ -3022,6 +3022,9 @@ msgstr "Integrace aplikací"
 msgid "Ask LarpManager"
 msgstr "Zeptejte se LarpManageru"
 
+msgid "Assign to areas"
+msgstr "Přiřadit k oblastem"
+
 msgid "Attachment Name"
 msgstr "Název přílohy"
 
@@ -6236,9 +6239,6 @@ msgstr "Typ(y) dostupného ubytování"
 msgid "Upload data directly from CSV file"
 msgstr "Načíst data přímo ze souboru CSV"
 
-msgid "Use the button above to assign one"
-msgstr "Pomocí tlačítka výše jej přiřaďte"
-
 msgid "You are about to make a payment of"
 msgstr "Chystáte se provést platbu ve výši"
 
@@ -9242,9 +9242,6 @@ msgstr ""
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
 "Spravuje kredity, které účastníci využívají k úhradě registračního poplatku"
-
-msgid "No warehouse items have been assigned to an area of this event yet"
-msgstr "K žádné zóně této akce zatím nebyly přiřazeny žádné skladové položky"
 
 msgid "Primary spots are sold out, but you can still sign up as a reserve"
 msgstr ""

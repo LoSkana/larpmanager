@@ -667,7 +667,7 @@ function replaceNewUrl() {
     });
 
     if ($('body').hasClass('new_v21') && $('body').hasClass('manage')) {
-        $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit)', function(e) {
+        $(document).on('click', 'table.go_datatable a:has(i.fa-edit), table.pagin_datatable a:has(i.fa-edit), table.go_datatable a:has(i.action-dialog), table.pagin_datatable a:has(i.action-dialog)', function(e) {
             e.preventDefault();
             openIframeModal(this.href + '?frame=1', 'popup_edit', refreshDatatables);
             return false;
