@@ -3074,6 +3074,9 @@ msgstr "Sovelluksen integrointi"
 msgid "Ask LarpManager"
 msgstr "Kysy LarpManagerilta"
 
+msgid "Assign to areas"
+msgstr "Määritä alueille"
+
 msgid "Attachment Name"
 msgstr "Liitteen nimi"
 
@@ -12521,13 +12524,6 @@ msgid ""
 msgstr ""
 "Ottaa käyttöön uuden tavan näyttää aiemmat ja tulevat tapahtumat suosittujen"
 " suoratoistopalveluiden ulkoasujen innoittamana"
-
-msgid ""
-"No warehouse items have been assigned to an area of this event yet. Use the "
-"button above to assign one."
-msgstr ""
-"Tämän tapahtuman alueelle ei ole vielä määritetty varastotuotteita. Määritä "
-"tuotteet yllä olevan painikkeen avulla."
 
 msgid ""
 "Pre-registration is free. It does not guarantee a spot, but gives you "

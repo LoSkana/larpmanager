@@ -3074,6 +3074,9 @@ msgstr "App integratie"
 msgid "Ask LarpManager"
 msgstr "Vraag het aan LarpManager"
 
+msgid "Assign to areas"
+msgstr "Toewijzen aan gebieden"
+
 msgid "Attachment Name"
 msgstr "Naam bijlage"
 
@@ -12700,13 +12703,6 @@ msgid ""
 msgstr ""
 "Introduceert een nieuwe manier om afgelopen en komende evenementen weer te "
 "geven, geïnspireerd op populaire lay-outs van streamingdiensten"
-
-msgid ""
-"No warehouse items have been assigned to an area of this event yet. Use the "
-"button above to assign one."
-msgstr ""
-"Er zijn nog geen magazijnartikelen toegewezen aan een zone van dit "
-"evenement. Gebruik de knop hierboven om er een toe te wijzen."
 
 msgid ""
 "Pre-registration is free. It does not guarantee a spot, but gives you "

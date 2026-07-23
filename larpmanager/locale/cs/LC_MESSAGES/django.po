@@ -3074,6 +3074,9 @@ msgstr "Integrace aplikací"
 msgid "Ask LarpManager"
 msgstr "Zeptejte se LarpManageru"
 
+msgid "Assign to areas"
+msgstr "Přiřadit k oblastem"
+
 msgid "Attachment Name"
 msgstr "Název přílohy"
 
@@ -12385,13 +12388,6 @@ msgid ""
 msgstr ""
 "Představuje nový způsob zobrazení minulých a nadcházejících událostí, "
 "inspirovaný oblíbenými rozvrženími streamovacích služeb"
-
-msgid ""
-"No warehouse items have been assigned to an area of this event yet. Use the "
-"button above to assign one."
-msgstr ""
-"K žádné zóně této akce zatím nebyly přiřazeny žádné skladové položky. K "
-"přiřazení použijte tlačítko výše."
 
 msgid ""
 "Pre-registration is free. It does not guarantee a spot, but gives you "
