@@ -135,7 +135,7 @@ class ExceptionHandlingMiddleware:
                 HiddenError,
                 lambda ex: self._redirect_with_message(
                     request,
-                    ex.name + " " + _("not visible at this time"),
+                    _("%(name)s not visible at this time") % {"name": ex.name},
                     "gallery",
                     [ex.slug],
                 ),

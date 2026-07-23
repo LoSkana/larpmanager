@@ -2,7 +2,7 @@
 {% load i18n tz show_tags static %}
 {% block title %}
     {% trans label_typ as name %}
-    {{ name }} {% trans "form" %} - {{ run.search | truncatechars:50 }}
+    {% blocktrans with name=name %}{{ name }} form{% endblocktrans %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
     {{ page_info }}

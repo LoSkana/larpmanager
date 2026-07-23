@@ -4,7 +4,7 @@
     {% trans "Registration not open" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% trans "The registrations to the event" %} <i>{{ run }}</i> {% trans "are not yet open!" %}
+    {% blocktrans with run=run %}The registrations to the event <i>{{ run }}</i> are not yet open!{% endblocktrans %}
     <br />
     <br />
     {% if run.registration_open %}

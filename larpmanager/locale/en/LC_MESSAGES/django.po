@@ -921,7 +921,8 @@ msgstr ""
 msgid "Selected event does not belong to this organization"
 msgstr ""
 
-msgid "already used"
+#, python-format
+msgid "%(field)s already used"
 msgstr ""
 
 msgid "You have exceeded the maximum number of selectable options"
@@ -2695,22 +2696,25 @@ msgstr ""
 msgid "Manage all character factions of the event"
 msgstr ""
 
+#, python-format
+msgid "<b>%(type)s</b>: main grouping / affiliation for characters"
+msgstr ""
+
 msgid "Primary"
 msgstr ""
 
-msgid "main grouping / affiliation for characters"
+#, python-format
+msgid "<b>%(type)s</b>: secondary grouping across primary factions"
 msgstr ""
 
 msgid "Transversal"
 msgstr ""
 
-msgid "secondary grouping across primary factions"
+#, python-format
+msgid "<b>%(type)s</b>: hidden faction visible only to assigned characters"
 msgstr ""
 
 msgid "Secret"
-msgstr ""
-
-msgid "hidden faction visible only to assigned characters"
 msgstr ""
 
 msgid "Guild"
@@ -3485,7 +3489,8 @@ msgstr ""
 msgid "Your signup request is awaiting organizer approval!"
 msgstr ""
 
-msgid "not visible at this time"
+#, python-format
+msgid "%(name)s not visible at this time"
 msgstr ""
 
 msgid "You're not allowed to sign up!"
@@ -5206,10 +5211,7 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-msgid "Click or drag photo here"
-msgstr ""
-
-msgid "maximum"
+msgid "Click or drag photo here (maximum 10 MB)"
 msgstr ""
 
 msgid "Uploading"
@@ -5425,7 +5427,8 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-msgid "text length:"
+#, python-format
+msgid "text length: <span class=\"count\"></span> / %(max)s"
 msgstr ""
 
 msgid "How the relationship is described from this character's perspective"
@@ -5469,7 +5472,8 @@ msgstr ""
 msgid "Original"
 msgstr ""
 
-msgid "options:"
+#, python-format
+msgid "options: <span class=\"count\"></span> / %(max)s"
 msgstr ""
 
 msgid "After confirmation, add another"
@@ -5744,16 +5748,12 @@ msgstr ""
 msgid "Total payments:"
 msgstr ""
 
-msgid "Next payment:"
+#, python-format
+msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"
 msgstr ""
 
-msgid "expected within"
-msgstr ""
-
-msgid "days"
-msgstr ""
-
-msgid "overdue by"
+#, python-format
+msgid "Next payment: %(quota)s%(currency)s overdue by %(days)s days"
 msgstr ""
 
 msgid "No additional payments are required at this time"
@@ -6092,10 +6092,16 @@ msgstr ""
 msgid "Create new character"
 msgstr ""
 
-msgid "total"
+#, python-format
+msgid "%(name)s total"
 msgstr ""
 
-msgid "used"
+#, python-format
+msgid "%(name)s used"
+msgstr ""
+
+#, python-format
+msgid "%(name)s available"
 msgstr ""
 
 msgid "Character relationships"
@@ -6113,10 +6119,8 @@ msgstr ""
 msgid "Select which of your characters you want to access:"
 msgstr ""
 
-msgid "The registrations to the event"
-msgstr ""
-
-msgid "are closed!"
+#, python-format
+msgid "The registrations to the event <i>%(run)s</i> are closed!"
 msgstr ""
 
 msgid "Get to know all the characters before the event"
@@ -6138,6 +6142,14 @@ msgid "No characters available."
 msgstr ""
 
 msgid "Discover the details of this event"
+msgstr ""
+
+#, python-format
+msgid "Next payment: %(quota)s%(currency)s, expected within %(days)s days"
+msgstr ""
+
+#, python-format
+msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
 msgstr ""
 
 msgid "Discover the web site!"
@@ -6191,10 +6203,12 @@ msgstr ""
 msgid "Add new"
 msgstr ""
 
-msgid "within"
+#, python-format
+msgid "%(amount)s%(currency)s within %(days)s days"
 msgstr ""
 
-msgid "immediately"
+#, python-format
+msgid " %(amount)s%(currency)s immediately"
 msgstr ""
 
 msgid "If no payment is received, registration may be cancelled"
@@ -6314,7 +6328,8 @@ msgstr ""
 msgid "Registration not open"
 msgstr ""
 
-msgid "are not yet open!"
+#, python-format
+msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
 msgstr ""
 
 msgid "Will open at:"
@@ -6346,10 +6361,8 @@ msgstr ""
 msgid "Description:"
 msgstr ""
 
-msgid "Duration:"
-msgstr ""
-
-msgid "seconds"
+#, python-format
+msgid "Duration: %(duration)s seconds"
 msgstr ""
 
 msgid "Type:"
@@ -6622,7 +6635,8 @@ msgstr ""
 msgid "Event balance"
 msgstr ""
 
-msgid "issued"
+#, python-format
+msgid "%(name)s issued"
 msgstr ""
 
 msgid "Overall balance:"
@@ -6724,13 +6738,15 @@ msgstr ""
 msgid "No outflows recorded for the selected year."
 msgstr ""
 
-msgid "positive"
+#, python-format
+msgid "%(name)s in credit"
 msgstr ""
 
 msgid "No members with positive credits for the selected year."
 msgstr ""
 
-msgid "negatives"
+#, python-format
+msgid "%(name)s in debit"
 msgstr ""
 
 msgid "No members with negative credits for the selected year."
@@ -7723,13 +7739,16 @@ msgstr ""
 msgid "Role invitation"
 msgstr ""
 
-msgid "You have been invited to join the role:"
+#, python-format
+msgid ""
+"You have been invited to join the role <strong>%(role.name)s</strong> in the "
+"event <strong>%(event)s</strong>."
 msgstr ""
 
-msgid "for event"
-msgstr ""
-
-msgid "in the organization"
+#, python-format
+msgid ""
+"You have been invited to join the role <strong>%(role.name)s</strong> in the "
+"organization."
 msgstr ""
 
 msgid ""
@@ -7863,6 +7882,9 @@ msgstr ""
 msgid "Milestones"
 msgstr ""
 
+msgid "days"
+msgstr ""
+
 msgid "Overdue"
 msgstr ""
 
@@ -7907,10 +7929,12 @@ msgstr ""
 msgid "These are the event registrations for which you have to make a payment."
 msgstr ""
 
-msgid "You must pay"
+#, python-format
+msgid "You must pay %(amount)s%(currency)s by the deadline of %(days)s days"
 msgstr ""
 
-msgid "by the deadline of"
+#, python-format
+msgid "You must pay %(amount)s%(currency)s immediately"
 msgstr ""
 
 msgid "Payments pending delegated accounts"
@@ -8236,10 +8260,8 @@ msgstr ""
 msgid "You are currently logged in with the:"
 msgstr ""
 
-msgid "To log back in with the account"
-msgstr ""
-
-msgid "press here:"
+#, python-format
+msgid "To log back in with the account %(parent)s, press here:"
 msgstr ""
 
 msgid ""
@@ -8262,13 +8284,14 @@ msgstr ""
 msgid "Remaining"
 msgstr ""
 
-msgid "The membership fee"
+#, python-format
+msgid ""
+"Your %(year)s membership fee is outstanding and will be added to your next "
+"payment. %(amount)s"
 msgstr ""
 
-msgid "is still to be paid, and will be added to your next payment"
-msgstr ""
-
-msgid "has been paid"
+#, python-format
+msgid "Your %(year)s membership fee has been paid. %(amount)s"
 msgstr ""
 
 msgid "Amount breakdown"
@@ -8333,7 +8356,7 @@ msgstr ""
 msgid "Your request will be considered at the next meeting of the Board."
 msgstr ""
 
-msgid "You will receive confirmation of the outcome of its  evaluation."
+msgid "You will receive confirmation of the outcome of its evaluation."
 msgstr ""
 
 msgid ""
@@ -8620,7 +8643,8 @@ msgstr ""
 msgid "Only"
 msgstr ""
 
-msgid "and"
+#, python-format
+msgid "Both %(tokens)s and %(credits)s"
 msgstr ""
 
 msgid "Returning percentage"
@@ -9084,6 +9108,10 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
+#, python-format
+msgid "%(used)s / %(total)s used"
+msgstr ""
+
 msgid "No one-time content items defined yet."
 msgstr ""
 
@@ -9151,7 +9179,8 @@ msgstr ""
 msgid "Discounts available"
 msgstr ""
 
-msgid "form"
+#, python-format
+msgid "%(name)s form"
 msgstr ""
 
 msgid "No questions have been created yet for this form."
@@ -9455,6 +9484,9 @@ msgid "Unrecognized files in ZIP (will be skipped):"
 msgstr ""
 
 msgid "Create"
+msgstr ""
+
+msgid "and"
 msgstr ""
 
 msgid "more"
@@ -12455,7 +12487,12 @@ msgstr ""
 msgid "Results not present"
 msgstr ""
 
-msgid "options"
+#, python-format
+msgid "Options (max %(max)s)"
+msgstr ""
+
+#, python-format
+msgid "Text length (max %(max)s)"
 msgstr ""
 
 msgid "No value has been selected for parent"
@@ -12503,13 +12540,10 @@ msgstr ""
 msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
 
-msgid "Warehouse quantities committed successfully"
-msgstr ""
-
-msgid "items updated"
-msgstr ""
-
-msgid "items deleted"
+#, python-format
+msgid ""
+"Warehouse quantities committed successfully: %(updated)s items updated, "
+"%(deleted)s items deleted"
 msgstr ""
 
 msgid "Updated!"

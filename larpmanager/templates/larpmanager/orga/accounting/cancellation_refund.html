@@ -68,7 +68,7 @@
     {% else %}
         <div class="nav typ">
             <a id="typ_t" href="#" onclick="return select_typ('t');">{% trans "Only" %} {{ tokens_name }}</a>
-            <a id="typ_c" href="#" onclick="return select_typ('c');">{{ tokens_name }} {% trans "and" %} {{ credits_name }}</a>
+            <a id="typ_c" href="#" onclick="return select_typ('c');">{% blocktrans with tokens=tokens_name credits=credits_name %}Both {{ tokens }} and {{ credits }}{% endblocktrans %}</a>
         </div>
     {% endif %}
     <br />

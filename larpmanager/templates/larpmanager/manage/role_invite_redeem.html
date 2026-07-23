@@ -9,13 +9,11 @@
 {% block content %}
     <h3>{% trans "Role invitation" %}</h3>
     <p>
-        {% trans "You have been invited to join the role:" %} <strong>{{ role.name }}</strong>
         {% if invite.event %}
-            {% trans "for event" %} <strong>{{ invite.event }}</strong>
+            {% blocktrans with role=role.name event=invite.event %}You have been invited to join the role <strong>{{ role.name }}</strong> in the event <strong>{{ event }}</strong>.{% endblocktrans %}
         {% else %}
-            {% trans "in the organization" %}
+            {% blocktrans with role=role.name %}You have been invited to join the role <strong>{{ role.name }}</strong> in the organization.{% endblocktrans %}
         {% endif %}
-        .
     </p>
     <form method="post">
         {% csrf_token %}

@@ -38,11 +38,10 @@
                     {% include "elements/comma.html" %}
                     <b>{{ registration.run }}</b> -
                     <a href="{% url 'accounting_registration' registration.uuid %}">
-                        {% trans "You must pay" %} {{ registration.quota|format_decimal }}{{ currency_symbol }}
                         {% if registration.deadline > 0 %}
-                            {% trans "by the deadline of" %} {{ registration.deadline }} {% trans "days" %}
+                            {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol days=registration.deadline %}You must pay {{ amount }}{{ currency }} by the deadline of {{ days }} days{% endblocktrans %}
                         {% else %}
-                            {% trans "immediately" %}
+                            {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol %}You must pay {{ amount }}{{ currency }} immediately{% endblocktrans %}
                         {% endif %}
                     </a>
                     {% if registration.deadline <= 0 %}
@@ -245,11 +244,10 @@
                     {% elif registration.quota > 0 %}
                         <p>
                             <a href="{% url 'accounting_registration' registration.uuid %}">
-                                {% trans "You must pay" %} {{ registration.quota|format_decimal }}{{ currency_symbol }}
                                 {% if registration.deadline > 0 %}
-                                    {% trans "by the deadline of" %} {{ registration.deadline }} {% trans "days" %}
+                                    {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol days=registration.deadline %}You must pay {{ amount }}{{ currency }} by the deadline of {{ days }} days{% endblocktrans %}
                                 {% else %}
-                                    {% trans "immediately" %}
+                                    {% blocktrans with amount=registration.quota|format_decimal currency=currency_symbol %}You must pay {{ amount }}{{ currency }} immediately{% endblocktrans %}
                                 {% endif %}
                             </a>
                             {% if registration.deadline <= 0 %}

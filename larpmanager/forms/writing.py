@@ -429,12 +429,12 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Configure faction type help text with descriptions
-        help_texts = {
-            _("Primary"): _("main grouping / affiliation for characters"),
-            _("Transversal"): _("secondary grouping across primary factions"),
-            _("Secret"): _("hidden faction visible only to assigned characters"),
-        }
-        self.fields["typ"].help_text = ", ".join([f"<b>{key}</b>: {value}" for key, value in help_texts.items()])
+        help_texts = [
+            _("<b>%(type)s</b>: main grouping / affiliation for characters") % {"type": _("Primary")},
+            _("<b>%(type)s</b>: secondary grouping across primary factions") % {"type": _("Transversal")},
+            _("<b>%(type)s</b>: hidden faction visible only to assigned characters") % {"type": _("Secret")},
+        ]
+        self.fields["typ"].help_text = ", ".join(help_texts)
 
 
 class OrgaGuildForm(WritingForm, BaseWritingForm):

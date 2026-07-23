@@ -54,7 +54,7 @@
         </tr>
         {% if features.tokens %}
             <tr>
-                <td>{{ tokens_name }} {% trans "issued" %}</td>
+                <td>{% blocktrans with name=tokens_name %}{{ name }} issued{% endblocktrans %}</td>
                 <td>
                     <b>{{ tokens_sum }}</b>
                 </td>
@@ -62,7 +62,7 @@
         {% endif %}
         {% if features.credits %}
             <tr>
-                <td>{{ credits_name }} {% trans "issued" %}</td>
+                <td>{% blocktrans with name=credits_name %}{{ name }} issued{% endblocktrans %}</td>
                 <td>
                     <b>{{ credits_sum }}</b>
                 </td>

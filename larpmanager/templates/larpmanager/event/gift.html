@@ -50,12 +50,12 @@
                         {% if registration.payment %}
                             {% if registration.deadline > 0 %}
                                 <a href="{% url 'accounting_registration' registration.uuid %}">
-                                    {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
-                                {% trans "within" %} {{ registration.payment.deadline }} {% trans "days" %}</a>
-                            {% else %}
-                                <a href="{% url 'accounting_registration' registration.uuid %}">
-                                    {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
-                                    {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
+                                    {% blocktrans with amount=registration.payment.quota|format_decimal currency=currency_symbol days=registration.payment.deadline %}{{ amount }}{{ currency }} within {{ days }} days{% endblocktrans %}</a>
+                                {% else %}
+                                    <a href="{% url 'accounting_registration' registration.uuid %}">
+                                        {% blocktrans with amount=registration.payment.quota|format_decimal currency=currency_symbol %} {{ amount }}{{ currency }} immediately{% endblocktrans %}
+                                    </a>
+                                    <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
                                 {% endif %}
                             {% elif registration.pending %}
                                 {% trans "Payment currently in review by the staff." %}

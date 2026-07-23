@@ -16,7 +16,7 @@
                 {% trans "You are currently logged in with the:" %} <b>{{ request.user.member }}</b>.
             </p>
             <p>
-                {% trans "To log back in with the account" %} {{ request.user.member.parent }}, {% trans "press here:" %}
+                {% blocktrans with parent=request.user.member.parent %}To log back in with the account {{ parent }}, press here:{% endblocktrans %}
                 <a href="#" onclick="submitForm('login_0'); return false;">{% trans "Login" %}</a>
             </p>
         {% else %}

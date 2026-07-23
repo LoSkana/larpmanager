@@ -359,7 +359,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
             # Raise validation error if duplicate exists
             if queryset.exists():
-                raise ValidationError(field_name.capitalize() + " " + _("already used"))
+                raise ValidationError(_("%(field)s already used") % {"field": field_name.capitalize()})
 
         return field_value
 

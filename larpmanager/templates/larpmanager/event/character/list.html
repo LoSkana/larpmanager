@@ -34,9 +34,9 @@
                 {% endif %}
                 {% if features.experience and exp_systems %}
                     {% for sys in exp_systems %}
-                        <th>{{ sys.name }} {% trans "total" %}</th>
-                        <th>{{ sys.name }} {% trans "used" %}</th>
-                        <th>{{ sys.name }} {% trans "available" %}</th>
+                        <th>{% blocktrans with name=sys.name %}{{ name }} total{% endblocktrans %}</th>
+                        <th>{% blocktrans with name=sys.name %}{{ name }} used{% endblocktrans %}</th>
+                        <th>{% blocktrans with name=sys.name %}{{ name }} available{% endblocktrans %}</th>
                     {% endfor %}
                 {% endif %}
                 {% if exp_user %}<th></th>{% endif %}

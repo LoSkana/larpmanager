@@ -41,7 +41,7 @@ from larpmanager.forms.utils import (
     remove_choice,
     save_permissions_role,
 )
-from larpmanager.models.access import AssociationPermission, AssociationRole
+from larpmanager.models.access import AssociationPermission, AssociationRole, RoleInvite
 from larpmanager.models.association import Association, AssociationText, AssociationTextType, AssociationTranslation
 from larpmanager.models.member import Member
 from larpmanager.utils.larpmanager.versions import VERSIONS
@@ -295,6 +295,11 @@ class ExeAssociationRoleForm(BaseModelForm):
         """Save form instance and update related role permissions."""
         instance = super().save(commit=commit)
         save_permissions_role(instance, self)
+        # Member added directly to the role: drop any pending invite sent to them for this role
+        member_emails = [email.lower() for email in instance.members.values_list("email", flat=True)]
+        for invite in RoleInvite.objects.filter(association_role=instance, redeemed_by__isnull=True):
+            if invite.email.lower() in member_emails:
+                invite.delete()
         return instance
 
 

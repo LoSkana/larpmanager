@@ -45,7 +45,7 @@
                     <td>
                         <a href="{% url 'orga_onetimes_tokens' run.get_slug %}">
                             {% with stats=el.get_token_stats %}
-                                {{ stats.used }} / {{ stats.total }} {% trans "used" %}
+                                {% blocktrans with used=stats.used total=stats.total %}{{ used }} / {{ total }} used{% endblocktrans %}
                             {% endwith %}
                         </a>
                     </td>

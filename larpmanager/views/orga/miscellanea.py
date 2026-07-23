@@ -962,11 +962,8 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
     # Display success message with statistics to user
     messages.success(
         request,
-        _("Warehouse quantities committed successfully")
-        + f": {items_updated} "
-        + _("items updated")
-        + f", {items_deleted} "
-        + _("items deleted"),
+        _("Warehouse quantities committed successfully: %(updated)s items updated, %(deleted)s items deleted")
+        % {"updated": items_updated, "deleted": items_deleted},
     )
 
     return redirect("orga_warehouse_manifest", event_slug=event_slug)

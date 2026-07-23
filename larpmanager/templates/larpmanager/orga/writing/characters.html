@@ -51,9 +51,9 @@
     {% endif %}
     {% if features.experience %}
         {% for sys in exp_systems %}
-            <th class="px">{{ sys.name }} {% trans "total" %}</th>
-            <th class="px">{{ sys.name }} {% trans "used" %}</th>
-            <th class="px">{{ sys.name }} {% trans "available" %}</th>
+            <th class="px">{% blocktrans with name=sys.name %}{{ name }} total{% endblocktrans %}</th>
+            <th class="px">{% blocktrans with name=sys.name %}{{ name }} used{% endblocktrans %}</th>
+            <th class="px">{% blocktrans with name=sys.name %}{{ name }} available{% endblocktrans %}</th>
         {% endfor %}
     {% endif %}
     {% include "elements/writing/questions_header.html" %}

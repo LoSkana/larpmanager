@@ -47,18 +47,12 @@
         {% if membership_fee == 'bundled' %}
             <p class="payment-membership-info">
                 <i class="fa-solid fa-circle-info"></i>
-                {% trans "The membership fee" %}
-                {% if run.start %}{{ run.start.year }}{% endif %}
-                {% if membership_amount_display %}{{ membership_amount_display }}{% endif %}
-                {% trans "is still to be paid, and will be added to your next payment" %}
+                {% blocktrans with year=run.start.year|default:"" amount=membership_amount_display|default:"" %}Your {{ year }} membership fee is outstanding and will be added to your next payment. {{ amount }}{% endblocktrans %}
             </p>
         {% elif membership_fee == 'done' %}
             <p class="payment-membership-info">
                 <i class="fa-solid fa-circle-check"></i>
-                {% trans "The membership fee" %}
-                {% if run.start %}{{ run.start.year }}{% endif %}
-                {% trans "has been paid" %}
-                {% if membership_amount_paid_display %}{{ membership_amount_paid_display }}{% endif %}
+                {% blocktrans with year=run.start.year|default:"" amount=membership_amount_paid_display|default:"" %}Your {{ year }} membership fee has been paid. {{ amount }}{% endblocktrans %}
             </p>
         {% endif %}
         <hr />

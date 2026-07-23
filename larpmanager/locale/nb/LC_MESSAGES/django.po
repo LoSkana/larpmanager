@@ -257,17 +257,11 @@ msgstr "Når"
 msgid "days"
 msgstr "dager"
 
-msgid "form"
-msgstr "skjema"
-
 msgid "gift"
 msgstr "gave"
 
 msgid "more"
 msgstr "mer"
-
-msgid "used"
-msgstr "brukt"
 
 msgid "Actor"
 msgstr "Skuespiller"
@@ -501,9 +495,6 @@ msgstr "e-post"
 
 msgid "quick"
 msgstr "raskt"
-
-msgid "total"
-msgstr "totalt"
 
 msgid "Absent"
 msgstr "Fraværende"
@@ -769,14 +760,8 @@ msgstr "Bekreft"
 msgid "Voting"
 msgstr "Stemmegivning"
 
-msgid "issued"
-msgstr "utstedt"
-
 msgid "member"
 msgstr "medlem"
-
-msgid "within"
-msgstr "innenfor"
 
 msgid "Ability"
 msgstr "Evne"
@@ -1078,15 +1063,6 @@ msgstr "Arbeid"
 
 msgid "Writing"
 msgstr "Skriving"
-
-msgid "maximum"
-msgstr "maksimum"
-
-msgid "options"
-msgstr "alternativer"
-
-msgid "seconds"
-msgstr "sekunder"
 
 msgid "Accepted"
 msgstr "Akseptert"
@@ -1433,14 +1409,8 @@ msgstr "Last ned"
 msgid "factions"
 msgstr "fraksjoner"
 
-msgid "options:"
-msgstr "alternativer:"
-
 msgid "payments"
 msgstr "betalinger"
-
-msgid "positive"
-msgstr "positiv"
 
 msgid "--- Empty"
 msgstr "--- Tom"
@@ -1507,9 +1477,6 @@ msgstr "Rabatter"
 
 msgid "Donations"
 msgstr "Donasjoner"
-
-msgid "Duration:"
-msgstr "Varighet:"
 
 msgid "Enrolment"
 msgstr "Innmelding"
@@ -1711,12 +1678,6 @@ msgstr "tilgjengelig"
 
 msgid "donations"
 msgstr "donasjoner"
-
-msgid "for event"
-msgstr "for arrangement"
-
-msgid "negatives"
-msgstr "negativer"
 
 msgid "Accounting"
 msgstr "Regnskap"
@@ -2024,9 +1985,6 @@ msgstr "kronologi"
 msgid "click here"
 msgstr "klikk her"
 
-msgid "overdue by"
-msgstr "forfalt med"
-
 msgid "reply here"
 msgstr "svar her"
 
@@ -2297,17 +2255,8 @@ msgstr "Hvor det er"
 msgid "Your Events"
 msgstr "Dine arrangementer"
 
-msgid "are closed!"
-msgstr "er stengt!"
-
 msgid "collections"
 msgstr "samlinger"
-
-msgid "immediately"
-msgstr "umiddelbart"
-
-msgid "press here:"
-msgstr "trykk her:"
 
 msgid "Ability type"
 msgstr "Ferdighetstype"
@@ -2552,17 +2501,8 @@ msgstr "Venteliste"
 msgid "We're coming"
 msgstr "Vi er på vei"
 
-msgid "You must pay"
-msgstr "Du må betale"
-
 msgid "Your team ID"
 msgstr "Din team-ID"
-
-msgid "already used"
-msgstr "allerede brukt"
-
-msgid "text length:"
-msgstr "tekstlengde:"
 
 msgid "user profile"
 msgstr "brukerprofil"
@@ -2570,6 +2510,14 @@ msgstr "brukerprofil"
 #, python-format
 msgid " for %(user)s"
 msgstr " for %(user)s"
+
+#, python-format
+msgid "%(name)s form"
+msgstr "%(name)s-skjema"
+
+#, python-format
+msgid "%(name)s used"
+msgstr "%(name)s brukt"
 
 msgid "Ability types"
 msgstr "Ferdighetstyper"
@@ -2709,9 +2657,6 @@ msgstr "Navn på oppdraget"
 msgid "New character"
 msgstr "Ny karakter"
 
-msgid "Next payment:"
-msgstr "Neste betaling:"
-
 msgid "Next sessions"
 msgstr "Neste økter"
 
@@ -2836,14 +2781,9 @@ msgstr "Dine meldinger"
 msgid "for %(event)s"
 msgstr "for %(event)s"
 
-msgid "has been paid"
-msgstr "er betalt"
-
-msgid "items deleted"
-msgstr "elementer slettet"
-
-msgid "items updated"
-msgstr "elementer oppdatert"
+#, python-format
+msgid "%(name)s total"
+msgstr "%(name)s totalt"
 
 msgid "Active devices"
 msgstr "Aktive enheter"
@@ -3121,6 +3061,10 @@ msgstr "anmodning om refusjon"
 msgid "select a badge"
 msgstr "velg et merke"
 
+#, python-format
+msgid "%(name)s issued"
+msgstr "%(name)s er utstedt"
+
 msgid "Ability missing"
 msgstr "Manglende evne"
 
@@ -3376,9 +3320,6 @@ msgstr "Du kan konsultere"
 msgid "Your characters"
 msgstr "Karakterene dine"
 
-msgid "expected within"
-msgstr "forventet innen"
-
 msgid "membership fees"
 msgstr "medlemskontingent"
 
@@ -3633,6 +3574,10 @@ msgstr "last den ned her"
 
 msgid "follow this link"
 msgstr "følg denne lenken"
+
+#, python-format
+msgid "%(name)s in debit"
+msgstr "%(name)s har et underskudd"
 
 msgid "Ability Templates"
 msgstr "Evne-maler"
@@ -3916,8 +3861,13 @@ msgstr "Din registrering"
 msgid "already delivered"
 msgstr "allerede levert"
 
-msgid "are not yet open!"
-msgstr "er ennå ikke åpnet!"
+#, python-format
+msgid "%(name)s available"
+msgstr "%(name)s er tilgjengelig"
+
+#, python-format
+msgid "%(name)s in credit"
+msgstr "%(name)s i kreditt"
 
 msgid "Access the history"
 msgstr "Få tilgang til historikken"
@@ -4066,9 +4016,6 @@ msgstr "Gjennomgå alle medlemmer"
 msgid "Set up quest types"
 msgstr "Sett opp oppdragstyper"
 
-msgid "The membership fee"
-msgstr "Medlemskontingenten"
-
 msgid "The trash is empty"
 msgstr "Søppelet er tomt"
 
@@ -4119,9 +4066,6 @@ msgstr "Organisasjonene dine"
 
 msgid "Your date of birth"
 msgstr "Din fødselsdato"
-
-msgid "by the deadline of"
-msgstr "innen fristen"
 
 msgid "this is important!"
 msgstr "dette er viktig!"
@@ -4290,9 +4234,6 @@ msgstr "Hvor den befinner seg"
 
 msgid "Your characters are"
 msgstr "Karakterene dine er"
-
-msgid "in the organization"
-msgstr "i organisasjonen"
 
 msgid "--- NOT ASSIGNED ---"
 msgstr "--- IKKE TILDELT ---"
@@ -4615,6 +4556,10 @@ msgstr "Token for engangstilgang"
 msgid "Operation not allowed"
 msgstr "Operasjon ikke tillatt"
 
+#, python-format
+msgid "Options (max %(max)s)"
+msgstr "Alternativer (maks. %(max)s)"
+
 msgid "Participant questions"
 msgstr "Spørsmål fra deltakerne"
 
@@ -4702,6 +4647,10 @@ msgstr "Du har allerede betalt"
 
 msgid "You joined the guild!"
 msgstr "Du har blitt medlem av klanen!"
+
+#, python-format
+msgid "%(field)s already used"
+msgstr "%(field)s er allerede brukt"
 
 msgid "Accept role invitation"
 msgstr "Godta rolleinvitasjon"
@@ -5060,9 +5009,6 @@ msgstr "Avbryt registreringen din"
 msgid "Character configurations"
 msgstr "Tegnkonfigurasjoner"
 
-msgid "Click or drag photo here"
-msgstr "Klikk eller dra bildet hit"
-
 msgid "Code of the box or shelf"
 msgstr "Kode for esken eller hyllen"
 
@@ -5199,8 +5145,9 @@ msgstr "Registreringsbilletten din"
 msgid "cancel your registration"
 msgstr "kansellere registreringen din"
 
-msgid "not visible at this time"
-msgstr "ikke synlig på dette tidspunktet"
+#, python-format
+msgid "%(used)s / %(total)s used"
+msgstr "%(used)s / %(total)s brukt"
 
 msgid "Character Inventory Types"
 msgstr "Typer av karakterinventar"
@@ -5320,6 +5267,10 @@ msgstr "Filens størrelse i byte"
 
 msgid "Standalone Payment Window"
 msgstr "Frittstående betalingsvindu"
+
+#, python-format
+msgid "Text length (max %(max)s)"
+msgstr "Tekstlengde (maks. %(max)s)"
 
 msgid "These are our past events"
 msgstr "Dette er våre tidligere arrangementer"
@@ -5830,6 +5781,10 @@ msgstr "Ikke åpne automatisk igjen"
 msgid "Duration in seconds (optional)"
 msgstr "Varighet i sekunder (valgfritt)"
 
+#, python-format
+msgid "Duration: %(duration)s seconds"
+msgstr "Varighet: %(duration)s sekunder"
+
 msgid "Invalid code, please try again"
 msgstr "Ugyldig kode, vennligst prøv igjen"
 
@@ -5878,9 +5833,6 @@ msgstr "Vis/skjul fullførte milepæler"
 msgid "The other fields are optional."
 msgstr "De andre feltene er valgfrie."
 
-msgid "The registrations to the event"
-msgstr "Påmelding til arrangementet"
-
 msgid "The total registration fee is:"
 msgstr "Den totale deltakeravgiften er:"
 
@@ -5919,6 +5871,10 @@ msgstr "Aktiver funksjoner for arrangementet"
 
 msgid "After confirmation, add another"
 msgstr "Etter bekreftelse legger du til en ny"
+
+#, python-format
+msgid "Both %(tokens)s and %(credits)s"
+msgstr "Både %(tokens)s og %(credits)s"
 
 msgid "Character Inventory Pool Labels"
 msgstr "Etiketter for karakterinventar-poolen"
@@ -5994,9 +5950,6 @@ msgstr "Tillegg på billetten"
 
 msgid "The date when this event begins"
 msgstr "Datoen da denne hendelsen begynner"
-
-msgid "To log back in with the account"
-msgstr "Slik logger du inn igjen med kontoen"
 
 msgid "Total of recorded money inflows"
 msgstr "Summen av registrerte pengestrømmer"
@@ -6155,6 +6108,10 @@ msgstr "Du må definere sluttdatoen!"
 
 msgid "check nonexistent relationships:"
 msgstr "sjekke ikke-eksisterende relasjoner:"
+
+#, python-format
+msgid "%(name)s not visible at this time"
+msgstr "%(name)s er ikke synlig for øyeblikket"
 
 msgid "(Optional) The cost of the ticket"
 msgstr "(Valgfritt) Kostnaden for billetten"
@@ -6397,6 +6354,10 @@ msgstr "Organisasjonen din er opprettet"
 
 msgid "Your updated registration total is"
 msgstr "Den oppdaterte totalsummen din er"
+
+#, python-format
+msgid " %(amount)s%(currency)s immediately"
+msgstr " %(amount)s%(currency)s umiddelbart"
 
 #, python-format
 msgid "%(elements)s received for %(event)s"
@@ -6995,9 +6956,6 @@ msgstr "Vi ber deg om å betale det resterende beløpet:"
 msgid "You are about to perform a donation of:"
 msgstr "Du gir en donasjon på:"
 
-msgid "You have been invited to join the role:"
-msgstr "Du har blitt invitert til å bli med i rollen:"
-
 msgid "You must be an approved member to vote."
 msgstr "Du må være et godkjent medlem for å stemme."
 
@@ -7015,6 +6973,9 @@ msgstr "Tegnene er ikke synlige for øyeblikket"
 
 msgid "Click below to confirm the cancellation:"
 msgstr "Klikk nedenfor for å bekrefte avbestillingen:"
+
+msgid "Click or drag photo here (maximum 10 MB)"
+msgstr "Klikk eller dra et bilde hit (maks. 10 MB)"
 
 msgid "Current financial balance for this event"
 msgstr "Nåværende økonomisk balanse for dette arrangementet"
@@ -7375,11 +7336,9 @@ msgstr "Fornavnet ditt, slik du foretrekker å bli kalt"
 msgid "copy this link and give it to your friend:"
 msgstr "kopier denne lenken og gi den til vennen din:"
 
-msgid "main grouping / affiliation for characters"
-msgstr "hovedgruppering/tilhørighet for karakterer"
-
-msgid "secondary grouping across primary factions"
-msgstr "sekundær gruppering på tvers av primære fraksjoner"
+#, python-format
+msgid "%(amount)s%(currency)s within %(days)s days"
+msgstr "%(amount)s%(currency)s innen %(days)s dager"
 
 msgid "(Optional) The amount of voluntary donation"
 msgstr "(Valgfritt) Beløpet for den frivillige donasjonen"
@@ -7470,9 +7429,6 @@ msgstr "Bruk knappen ovenfor for å legge til et nytt spørsmål."
 
 msgid "Use the button above to add an installment."
 msgstr "Bruk knappen ovenfor for å legge til en avdragssats."
-
-msgid "Warehouse quantities committed successfully"
-msgstr "Lagerkvantitetene er bindende registrert"
 
 msgid "Warning! Other users are editing this item."
 msgstr "Advarsel! Andre brukere redigerer dette elementet."
@@ -7768,6 +7724,10 @@ msgstr "Se listen over arrangementer du er påmeldt til"
 msgid "Welcome to the dashboard of your organization!"
 msgstr "Velkommen til dashbordet i organisasjonen din!"
 
+#, python-format
+msgid "options: <span class=\"count\"></span> / %(max)s"
+msgstr "alternativer: <span class=\"count\"></span> / %(max)s"
+
 msgid "Added to the registration page, before the form"
 msgstr "Lagt til på registreringssiden, før skjemaet"
 
@@ -7863,6 +7823,10 @@ msgstr "Vær oppmerksom på dette! Skjemaet inneholder feil i feltene"
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Du har blitt videresendt til Event Dashboard"
+
+#, python-format
+msgid "You must pay %(amount)s%(currency)s immediately"
+msgstr "Du må betale %(amount)s%(currency)s umiddelbart"
 
 msgid "Your preferences have been saved in the system:"
 msgstr "Dine preferanser er lagret i systemet:"
@@ -8157,8 +8121,9 @@ msgstr "Kontoen din er beskyttet av en autentiseringsapp."
 msgid "Your signup request is awaiting organizer approval"
 msgstr "Din påmeldingsforespørsel venter på godkjenning fra arrangøren"
 
-msgid "hidden faction visible only to assigned characters"
-msgstr "skjult faksjon som kun er synlig for tildelte karakterer"
+#, python-format
+msgid "text length: <span class=\"count\"></span> / %(max)s"
+msgstr "tekstlengde: <span class=\"count\"></span> / %(max)s"
 
 msgid "you can still pay the remaining amount if you wish"
 msgstr "du kan fortsatt betale det resterende beløpet hvis du ønsker det"
@@ -8476,6 +8441,10 @@ msgstr "Om dette innholdet for øyeblikket er tilgjengelig for tilgang"
 msgid "You have not reached the minimum number of preferences"
 msgstr "Du har ikke nådd minimumsantallet av preferanser som skal angis"
 
+#, python-format
+msgid "Your %(year)s membership fee has been paid. %(amount)s"
+msgstr "Medlemskontingenten din for %(year)s er betalt. %(amount)s"
+
 msgid "Add an inventory to track items assigned to characters."
 msgstr ""
 "Legg til et inventar for å holde oversikt over gjenstander som er tildelt "
@@ -8549,6 +8518,10 @@ msgstr "Brukeren har oppdatert sin påmelding til dette arrangementet!"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Denne siden gir en oversikt over de ulike typene karakterinventar"
+
+#, python-format
+msgid "To log back in with the account %(parent)s, press here:"
+msgstr "For å logge inn igjen med %(parent)s-kontoen, trykk her:"
 
 msgid "Total of what has already been paid at the current date"
 msgstr "Summen av det som allerede er betalt på gjeldende dato"
@@ -8687,6 +8660,10 @@ msgstr "Tegnfeltet av beregnet type som skal oppdateres"
 msgid "The currency you want to use for all payments and pricing"
 msgstr "Valutaen du ønsker å bruke for alle betalinger og priser"
 
+#, python-format
+msgid "The registrations to the event <i>%(run)s</i> are closed!"
+msgstr "Påmeldingen til arrangementet <i>%(run)s</i> er stengt!"
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Dette vil fjerne deg fra denne organisasjonens nyhetsbrev."
 
@@ -8790,6 +8767,14 @@ msgstr "Du har overskredet det maksimale antallet valgbare alternativer"
 msgid "Your event '%(event_name)s' has been successfully created!"
 msgstr "Arrangementet '%(event_name)s' har blitt opprettet med suksess!"
 
+#, python-format
+msgid "<b>%(type)s</b>: main grouping / affiliation for characters"
+msgstr "<b>%(type)s</b>: hovedgruppering / tilhørighet for karakterer"
+
+#, python-format
+msgid "<b>%(type)s</b>: secondary grouping across primary factions"
+msgstr "<b>%(type)s</b>: sekundær gruppering på tvers av primære fraksjoner"
+
 msgid "Check and complete your organization's activation checklist"
 msgstr ""
 "Gå gjennom og fullfør sjekklisten for aktivering av organisasjonen din"
@@ -8867,9 +8852,6 @@ msgstr "Hvor har den blitt plassert? Når forventes den å komme tilbake?"
 msgid "You must consent to data sharing to accept this invitation."
 msgstr "Du må samtykke til datadeling for å akseptere denne invitasjonen."
 
-msgid "is still to be paid, and will be added to your next payment"
-msgstr "er fortsatt utestående og vil bli lagt til din neste betaling"
-
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr "bruk et rektangulært bilde, helst i forholdet 4:3 for best resultat"
 
@@ -8927,6 +8909,11 @@ msgstr "Administrer spørsmålene som vises i karakteropprettelseskjemaet"
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr "Administrer avstemninger for tildeling av roller i organisasjonen"
+
+#, python-format
+msgid "Next payment: %(quota)s%(currency)s overdue by %(days)s days"
+msgstr ""
+"Neste betaling: %(quota)s %(currency)s forfalt for %(days)s dager siden"
 
 msgid "No items with assigned quantities were found for this event."
 msgstr ""
@@ -9028,6 +9015,11 @@ msgstr ""
 
 msgid "Manage the event areas where warehouse items will be deployed"
 msgstr "Administrer de områdene der varene fra lageret skal plasseres"
+
+#, python-format
+msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
+msgstr ""
+"Neste betaling: %(quota)s %(currency)s, forfalt for %(days)s dager siden"
 
 msgid "No installment plans have been configured for this event yet."
 msgstr ""
@@ -9211,6 +9203,10 @@ msgstr ""
 msgid "No items are available in the warehouse to assign to this area."
 msgstr "Det finnes ingen varer på lageret som kan tilordnes dette området."
 
+#, python-format
+msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
+msgstr "Påmeldingen til arrangementet <i>%(run)s</i> er ikke åpen ennå!"
+
 msgid "This content is protected and cannot be downloaded or recorded."
 msgstr "Dette innholdet er beskyttet og kan ikke lastes ned eller tas opp."
 
@@ -9231,6 +9227,9 @@ msgstr "Du kan gi en preferanse for å spille det, som med andre tegn."
 
 msgid "You must create at least one quest before you can create traits"
 msgstr "Du må opprette minst ett oppdrag før du kan opprette egenskaper"
+
+msgid "You will receive confirmation of the outcome of its evaluation."
+msgstr "Du vil motta en bekreftelse på resultatet av vurderingen."
 
 msgid "All payments have been verified or none have been submitted yet."
 msgstr "Alle betalinger er bekreftet, eller det er ikke sendt inn noen ennå."
@@ -9298,9 +9297,6 @@ msgstr "Advarsel: Det finnes allerede et godkjent medlem med samme navn!"
 msgid "You can also upload a second file with the registration options:"
 msgstr "Du kan også laste opp en annen fil med registreringsalternativene:"
 
-msgid "You will receive confirmation of the outcome of its  evaluation."
-msgstr "Du vil motta en bekreftelse på resultatet av evalueringen."
-
 msgid "Add a button to provide quick links in the event navigation menu."
 msgstr ""
 "Legg til en knapp for å vise hurtiglenker i navigasjonsmenyen for "
@@ -9343,6 +9339,10 @@ msgstr ""
 #, python-format
 msgid "New participation in the collection for %(recipient)s by %(user)s"
 msgstr "Ny deltakelse i innsamlingen for %(recipient)s av %(user)s"
+
+#, python-format
+msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"
+msgstr "Neste betaling: %(quota)s%(currency)s forventes innen %(days)s dager"
 
 msgid "Now you can review the diet information submitted by participants"
 msgstr ""
@@ -9443,6 +9443,11 @@ msgstr ""
 "Administrerer kreditter som deltakerne bruker for å dekke "
 "registreringsavgiften"
 
+#, python-format
+msgid "Next payment: %(quota)s%(currency)s, expected within %(days)s days"
+msgstr ""
+"Neste betaling: %(quota)s %(currency)s, forventes innen %(days)s dager"
+
 msgid "Select the types of writing elements that this question applies to"
 msgstr "Velg hvilke typer skriveelementer dette spørsmålet gjelder"
 
@@ -9458,6 +9463,11 @@ msgstr ""
 
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "om karakteren er klar over identiteten til det andre trekket."
+
+#, python-format
+msgid "<b>%(type)s</b>: hidden faction visible only to assigned characters"
+msgstr ""
+"<b>%(type)s</b>: skjult fraksjon som kun er synlig for tildelte karakterer"
 
 msgid "A preview of the changes will be shown before any data is modified."
 msgstr "Det vises en forhåndsvisning av endringene før dataene endres."
@@ -9651,6 +9661,10 @@ msgstr "Vi bekrefter at påmeldingen til dette arrangementet er avlyst."
 
 msgid "You must create at least one quest type before you can create quests"
 msgstr "Du må opprette minst én oppdragstype før du kan opprette oppdrag"
+
+#, python-format
+msgid "You must pay %(amount)s%(currency)s by the deadline of %(days)s days"
+msgstr "Du må betale %(amount)s%(currency)s innen fristen på %(days)s dager"
 
 msgid "Your payment has been submitted, and is awaiting manual verification"
 msgstr "Betalingen din er sendt inn og venter på manuell bekreftelse"
@@ -11917,6 +11931,14 @@ msgstr ""
 "Følg med på hvilke registrerte deltakere som har fullført alle obligatoriske"
 " kurs det siste året"
 
+#, python-format
+msgid ""
+"You have been invited to join the role <strong>%(role.name)s</strong> in the"
+" organization."
+msgstr ""
+"Du har blitt invitert til å bli med i rollen <strong>%(role.name)s</strong> "
+"i organisasjonen."
+
 msgid ""
 "Create a ticket type by clicking 'New'; set the name, price, and "
 "availability, then save it"
@@ -12272,6 +12294,14 @@ msgstr ""
 "Når du er klar til å oppdatere lagerantallene permanent basert på denne "
 "hendelsens oppgaver"
 
+#, python-format
+msgid ""
+"Your %(year)s membership fee is outstanding and will be added to your next "
+"payment. %(amount)s"
+msgstr ""
+"Medlemsavgiften din for %(year)s er ennå ikke betalt og vil bli lagt til din"
+" neste betaling. %(amount)s"
+
 msgid ""
 "Configure date-based surcharges that add extra fees to registrations after a"
 " specified deadline"
@@ -12534,6 +12564,14 @@ msgid ""
 msgstr ""
 "Last opp en tilpasset fontfil for sidetitler som passer til arrangementets "
 "tema (TTF-, OTF- eller WOFF-format)"
+
+#, python-format
+msgid ""
+"Warehouse quantities committed successfully: %(updated)s items updated, "
+"%(deleted)s items deleted"
+msgstr ""
+"Lagerbeholdninger er oppdatert: %(updated)s varer oppdatert, %(deleted)s "
+"varer slettet"
 
 msgid ""
 "You can optionally add columns for the registration questions, allowed "
@@ -13261,6 +13299,14 @@ msgid ""
 "The relationship between these characters turns out to be empty. Check "
 "whether it should be written something."
 msgstr "Forholdet mellom disse tegnene er tomt. Sjekk om noe må skrives."
+
+#, python-format
+msgid ""
+"You have been invited to join the role <strong>%(role.name)s</strong> in the"
+" event <strong>%(event)s</strong>."
+msgstr ""
+"Du har blitt invitert til å delta i rollen <strong>%(role.name)s</strong> i "
+"arrangementet <strong>%(event)s</strong>."
 
 msgid ""
 "Your membership application is under review by the organization; payment "

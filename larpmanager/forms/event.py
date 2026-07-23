@@ -56,7 +56,7 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.forms.widgets import DescriptionRadioSelect
-from larpmanager.models.access import EventPermission, EventRole
+from larpmanager.models.access import EventPermission, EventRole, RoleInvite
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
 from larpmanager.models.event import (
@@ -1348,6 +1348,11 @@ class OrgaEventRoleForm(BaseModelForm):
         """Save form instance and update role permissions."""
         instance: EventRole = super().save()
         save_permissions_role(instance, self)
+        # Member added directly to the role: drop any pending invite sent to them for this role
+        member_emails = [email.lower() for email in instance.members.values_list("email", flat=True)]
+        for invite in RoleInvite.objects.filter(event_role=instance, redeemed_by__isnull=True):
+            if invite.email.lower() in member_emails:
+                invite.delete()
         return instance
 
 

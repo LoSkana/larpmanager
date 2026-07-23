@@ -146,7 +146,7 @@
             </tr>
         {% endfor %}
     </table>
-    <h4>{{ credits_name }} {% trans "positive" %}</h4>
+    <h4>{% blocktrans with name=credits_name %}{{ name }} in credit{% endblocktrans %}</h4>
     <table class="go_datatable">
         <thead>
             <tr>
@@ -168,7 +168,7 @@
     {% if not pos %}
         <p class="no-elements-available">{% trans "No members with positive credits for the selected year." %}</p>
     {% endif %}
-    <h4>{{ credits_name }} {% trans "negatives" %}</h4>
+    <h4>{% blocktrans with name=credits_name %}{{ name }} in debit{% endblocktrans %}</h4>
     <table class="go_datatable">
         <thead>
             <tr>

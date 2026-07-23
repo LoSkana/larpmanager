@@ -116,9 +116,7 @@
                     </p>
                 {% endif %}
                 {% if content.duration %}
-                    <p>
-                        <strong>{% trans "Duration:" %}</strong> {{ content.duration|floatformat:0 }} {% trans "seconds" %}
-                    </p>
+                    <p>{% blocktrans with duration=content.duration|floatformat:0 %}Duration: {{ duration }} seconds{% endblocktrans %}</p>
                 {% endif %}
                 <p>
                     <strong>{% trans "Type:" %}</strong>
