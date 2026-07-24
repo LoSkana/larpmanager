@@ -2765,7 +2765,7 @@ msgstr ""
 msgid "Manage speed larps for this event"
 msgstr ""
 
-msgid "Reimbursement approved"
+msgid "Reimbursement Approved"
 msgstr ""
 
 #, python-format
@@ -2774,76 +2774,75 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Your request for reimbursement of %(amount).2f, with reason '%(reason)s', "
-"has been approved!"
-msgstr ""
-
-#, python-format
-msgid "The sum was assigned to you as %(credits)s."
-msgstr ""
-
-msgid "This is automatically deducted from the registration of a future event."
+"Your reimbursement request of %(amount).2f for '%(reason)s' has been "
+"approved."
 msgstr ""
 
 #, python-format
 msgid ""
-"Alternatively, you can request a payout of your balance on <a "
-"href='%(url)s'>your accounting page</a>."
+"These funds have been added to your account as %(credits)s.They will be "
+"automatically applied toward your next event registration."
 msgstr ""
 
-msgid "Issued Reimbursement"
+#, python-format
+msgid ""
+"Alternatively, you may request a payout of your balance on <a "
+"href='%(url)s'>your accounting</a>."
+msgstr ""
+
+msgid "Reimbursement Processed"
 msgstr ""
 
 #, python-format
 msgid ""
 "A reimbursement of %(amount).2f %(elements)s for '%(reason)s' has been "
-"issued."
+"processed."
 msgstr ""
 
-msgid "They will be used automatically when you sign up for a new event!"
+msgid "These will be automatically applied when you register for a new event."
 msgstr ""
 
 #, python-format
 msgid ""
-"Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
-"accounting</a>.</i>"
+"Alternatively, you can request a payout on <a href='%(url)s'>your accounting "
+"page</a>.</i>"
 msgstr ""
 
 #, python-format
 msgid " for %(user)s"
 msgstr ""
 
-msgid "Donation given"
+msgid "Donation Received"
 msgstr ""
 
 #, python-format
 msgid ""
-"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
-"for your support, and for believing in us!"
+"Thank you for your donation of %(amount)d%(currency)s! We really appreciate "
+"your support and for believing in what we do."
 msgstr ""
 
 #, python-format
-msgid "Activate collection for: %(recipient)s"
+msgid "Collection Activated for: %(recipient)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"We confirm that the collection for '%(recipient)s' has been activated. <a "
-"href='%(url)s'>Manage it here!</a>"
+"The collection for '%(recipient)s' has been successfully activated. <a "
+"href='%(url)s'>Manage it here</a>."
 msgstr ""
 
 #, python-format
-msgid "Collection participation for: %(recipient)s"
+msgid "Collection Participation for %(recipient)s"
 msgstr ""
 
-msgid "Thank you for participating!"
+msgid "Thank you for your contribution!"
 msgstr ""
 
 #, python-format
-msgid "New participation in the collection for %(recipient)s by %(user)s"
+msgid "New contribution to the collection for %(recipient)s by %(user)s"
 msgstr ""
 
-msgid "The collection grows!"
+msgid "The collection is growing!"
 msgstr ""
 
 msgid "Welcome to LarpManager!"
@@ -2993,101 +2992,105 @@ msgstr ""
 msgid "Help Questions"
 msgstr ""
 
-msgid "Request of membership to the Organization"
+msgid "Membership Application Received"
 msgstr ""
 
 msgid ""
-"You have completed your application for association membership: therefore, "
-"your event registrations are temporarily confirmed."
+"Thank you for submitting your membership application. Your event "
+"registrations are provisionally confirmed."
 msgstr ""
 
 msgid ""
-"As per the statutes, we will review your request at the next board meeting "
-"and send you an update e-mail as soon as possible (you should receive a "
-"reply within a few weeks at the latest)."
+"In accordance with our statutes, the board will review your application at "
+"the next meeting. You will receive an update by email once a decision has "
+"been made (typically within a few weeks)."
 msgstr ""
 
 msgid ""
-"Once your admission is approved, you will be able to pay for the tickets for "
-"the events you have registered for."
+"Once your membership is approved, you can proceed with the payment for your "
+"registered events."
 msgstr ""
 
 #, python-format
 msgid ""
-"Please also note that payment of the annual membership fee (%(amount)d "
-"%(currency)s) is required to participate in events."
+"Please note that an annual membership fee of %(amount)d %(currency)s is "
+"required to participate in events."
 msgstr ""
 
-msgid "Thank you for choosing to be part of our community!"
-msgstr ""
-
-#, python-format
-msgid "Membership fee payment %(year)s"
-msgstr ""
-
-msgid "The payment of your membership fee for this year has been received!"
+msgid "Thank you for joining our community!"
 msgstr ""
 
 #, python-format
-msgid "Achievement assignment: %(badge)s"
-msgstr ""
-
-msgid "You have been awarded an achievement!"
-msgstr ""
-
-#, python-format
-msgid "Display your achievements in your <a href= %(url)s'>public profile</a>."
-msgstr ""
-
-msgid "Membership of the Organization accepted!"
+msgid "Membership Fee Payment Received - %(year)s"
 msgstr ""
 
 msgid ""
-"We confirm that your membership has been accepted by the board. We welcome "
-"you to our community!"
+"We have successfully received your membership fee payment for this year."
 msgstr ""
 
 #, python-format
-msgid "Your card number is: <b>%(number)03d</b>."
+msgid "Achievement Unlocked: %(badge)s"
 msgstr ""
 
-msgid "More details"
+msgid "You have unlocked a new achievement!"
+msgstr ""
+
+#, python-format
+msgid "View your achievements on your <a href='%(url)s'>public profile</a>."
+msgstr ""
+
+msgid "Membership Approved!"
+msgstr ""
+
+msgid ""
+"Your membership application has been approved by the board. Welcome to the "
+"organization!"
+msgstr ""
+
+#, python-format
+msgid "Your membership card number is: <b>%(number)03d</b>."
+msgstr ""
+
+msgid "Additional details"
 msgstr ""
 
 msgid ""
 "To confirm your event registration, please complete your payment within one "
-"week. You can do so here:"
+"week:"
 msgstr ""
 
 #, python-format
 msgid ""
-"In addition, you must be up to date with the payment of your membership fee "
-"in order to participate in events. Make your payment <a href='%(url)s'>on "
-"this page</a>."
+"Payment of the membership fee for this year is required to participate in "
+"events. You can pay your fee <a href='%(url)s'>here</a>."
 msgstr ""
 
-msgid "Membership of the Organization refused!"
+msgid "Membership Application Status"
 msgstr ""
 
 msgid ""
-"We inform you that your membership of the Association has not been accepted "
-"by the board."
+"We regret to inform you that your membership application was not approved by "
+"the board."
 msgstr ""
 
-msgid "Motivation"
+msgid "Reason"
 msgstr ""
 
-msgid "For more information, write to us!"
+msgid "If you have questions, feel free to contact us."
 msgstr ""
 
 #, python-format
-msgid "(<a href='%(url)s'>answer here</a>)"
+msgid "(<a href='%(url)s'>Reply here</a>)"
 msgstr ""
 
-msgid "New answer!"
+msgid "New Answer Received"
 msgstr ""
 
 msgid "Your question has been answered"
+msgstr ""
+
+#, python-format
+msgid "(<a href='%(url)s'>View reply</a>)"
 msgstr ""
 
 #, python-format
@@ -3098,11 +3101,11 @@ msgid "reply here"
 msgstr ""
 
 #, python-format
-msgid "Registration to %(event)s"
+msgid "Registration for %(event)s"
 msgstr ""
 
 #, python-format
-msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed!"
+msgid "Hello! Your registration for <b>%(event)s</b> has been confirmed."
 msgstr ""
 
 #, python-format
@@ -3110,7 +3113,7 @@ msgid "Registration updated for %(event)s"
 msgstr ""
 
 #, python-format
-msgid "Hi! Your registration to <b>%(event)s</b> has been updated!"
+msgid "Hello! Your registration for <b>%(event)s</b> has been updated."
 msgstr ""
 
 msgid "cancel your registration"
@@ -3125,95 +3128,93 @@ msgstr ""
 
 #, python-format
 msgid ""
-"In the event <b>%(event)s</b> you were assigned the character: "
-"<b>%(character)s</b>."
+"You have been assigned the character <b>%(character)s</b> for <b>%(event)s</"
+"b>."
 msgstr ""
 
 #, python-format
-msgid "Registration cancellation for %(event)s"
-msgstr ""
-
-msgid ""
-"We confirm that your registration for this event has been cancelled. We are "
-"sorry to see you go!"
+msgid "Access your character profile <a href='%(url)s'>here</a>."
 msgstr ""
 
 #, python-format
 msgid "Registration cancelled for %(event)s"
 msgstr ""
 
-msgid "We confirm that your registration for this event has been cancelled."
+msgid ""
+"Your registration for this event has been successfully cancelled. We are "
+"sorry to see you go!"
+msgstr ""
+
+msgid "Your registration for this event has been successfully cancelled."
 msgstr ""
 
 #, python-format
-msgid "Signup request received for %(event)s"
+msgid "Registration request received for %(event)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We have received your request to sign up for <b>%(event)s</b>. An "
-"organizer will review it soon."
+"Hello! We have received your request to register for <b>%(event)s</b>. An "
+"organizer will review it shortly."
 msgstr ""
 
 #, python-format
-msgid "Signup request accepted for %(event)s"
-msgstr ""
-
-#, python-format
-msgid ""
-"Good news! Your request to sign up for <b>%(event)s</b> has been accepted."
-msgstr ""
-
-#, python-format
-msgid "Please <a href='%(url)s'>complete your signup</a>."
-msgstr ""
-
-#, python-format
-msgid "Signup request declined for %(event)s"
+msgid "Registration request approved for %(event)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"We are sorry to inform you that your request to sign up for <b>%(event)s</b> "
+"Great news! Your request to register for <b>%(event)s</b> has been approved."
+msgstr ""
+
+#, python-format
+msgid "Please <a href='%(url)s'>complete your registration</a>."
+msgstr ""
+
+#, python-format
+msgid "Registration request declined for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"We regret to inform you that your request to register for <b>%(event)s</b> "
 "was not accepted."
 msgstr ""
 
 #, python-format
-msgid "Pre-registration at %(event)s"
+msgid "Pre-registration for %(event)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"We confirm that you have successfully pre-registered for <b>%(event)s</b>!"
+"Your pre-registration for <b>%(event)s</b> has been successfully confirmed."
 msgstr ""
 
 #, python-format
-msgid "Confirmation of registration for %(event)s"
+msgid "Registration confirmation for %(event)s"
 msgstr ""
 
 #, python-format
 msgid ""
 "Hello! To confirm your provisional registration for %(event)s, you must "
-"apply for membership in the association."
+"apply for association membership."
 msgstr ""
 
 #, python-format
-msgid "To complete the process, simply <a href='%(url)s'>click here</a>."
+msgid "To complete the process, <a href='%(url)s'>click here</a>."
+msgstr ""
+
+msgid "If you need assistance, please contact us. We are happy to help!"
 msgstr ""
 
 msgid ""
-"If you need a hand, feel free to let us know. We'll try to help as best we "
-"can!"
-msgstr ""
-
-msgid ""
-"If we don't hear from you, we'll assume you're no longer interested in the "
-"event. Your registration will be cancelled to allow other participants to "
-"take your spot."
+"If we do not hear from you, we will assume you are no longer interested in "
+"attending. Your registration will be cancelled to make room for other "
+"participants."
 msgstr ""
 
 #, python-format
-msgid "Confirm registration to %(event)s"
+msgid "Confirm registration for %(event)s"
 msgstr ""
 
 #, python-format
@@ -3222,132 +3223,133 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We are reaching out regarding your provisional registration for "
+"Hello! We are contacting you regarding your provisional registration for "
 "<b>%(event)s</b>."
 msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We are reaching out regarding your registration for <b>%(event)s</b>."
+"Hello! We are contacting you regarding your registration for <b>%(event)s</"
+"b>."
+msgstr ""
+
+#, python-format
+msgid "To confirm your spot, please pay %(amount)s as soon as possible."
+msgstr ""
+
+#, python-format
+msgid "To confirm your spot, please pay %(amount)s within %(days)s days."
+msgstr ""
+
+msgid ""
+"If you have already arranged a separate payment agreement with us, please "
+"disregard this email."
+msgstr ""
+
+#, python-format
+msgid "You can submit your payment <a href='%(url)s'>on this page</a>."
+msgstr ""
+
+msgid "If you encounter any issues, please contact us for assistance."
+msgstr ""
+
+msgid ""
+"If we do not receive a response, we will assume you are no longer interested "
+"and will cancel your registration to free up space for other participants."
+msgstr ""
+
+#, python-format
+msgid "Profile completion reminder for %(event)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"To confirm it, please pay the following amount as soon as possible: "
-"%(amount)s."
-msgstr ""
-
-#, python-format
-msgid "To confirm it, please pay %(amount)s within %(days)s days."
-msgstr ""
-
-msgid "If you have a separate agreement with us, you may disregard this email"
-msgstr ""
-
-#, python-format
-msgid "You can make the payment <a href='%(url)s'>on this page</a>."
-msgstr ""
-
-msgid "If you encounter any issues, contact us and we will assist you!"
-msgstr ""
-
-msgid ""
-"If we don't hear from you, we'll assume you're no longer interested in the "
-"event and will cancel your registration to make room for other participants."
-msgstr ""
-
-#, python-format
-msgid "Profile compilation reminder for %(event)s"
-msgstr ""
-
-#, python-format
-msgid ""
-"Hello! You signed up for %(event)s but haven't completed your profile yet.It "
-"only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out the "
+"Hello! You registered for %(event)s but have not completed your profile yet. "
+"It takes only 5 minutes, <a href='%(url)s'>click here</a> to complete the "
 "form."
 msgstr ""
 
 #, python-format
-msgid "Reminder payment of membership fees for %(event)s"
+msgid "Membership fee payment reminder for %(event)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"Hello! You have registered for %(event)s, but we have not yet received your "
-"annual membership payment."
+"Hello! You are registered for %(event)s, but we have not yet received your "
+"annual membership fee."
 msgstr ""
 
 msgid ""
-"It is required for participation in all our live events, as it also covers "
-"the insurance fee."
+"Annual membership is mandatory for participation in all our live events, as "
+"it covers required liability insurance."
 msgstr ""
 
-msgid ""
-"Unfortunately, without full payment of the fee, participation in the event "
-"is not permitted."
+msgid "Without payment of this fee, event participation is not permitted."
 msgstr ""
 
-msgid "Review the users that are missing the event's deadlines"
+msgid "Review users with pending event deadlines:"
 msgstr ""
 
 #, python-format
 msgid ""
-"You can choose your payment method and find all the information needed to "
-"complete the transfer <a href='%(url)s'>on the payment page</a>."
-msgstr ""
-
-#, python-format
-msgid ""
-"You can find all the information needed to complete the transfer <a "
+"You can select your preferred payment method and view the details <a "
 "href='%(url)s'>on the payment page</a>."
 msgstr ""
 
-msgid "Let us know if you encounter any issues or need assistance!"
+#, python-format
+msgid ""
+"You can view all details required details <a href='%(url)s'>on the payment "
+"page</a>."
+msgstr ""
+
+msgid ""
+"Please contact support if you encounter any issues or require assistance."
 msgstr ""
 
 #, python-format
 msgid ""
-"To pay by bank transfer, visit the <a href='%(url)s'>payment page</a> to "
-"find all necessary details (such as the IBAN and payment reference)."
+"For bank transfers, visit the <a href='%(url)s'>payment page</a> to view "
+"details (including IBAN and payment reference)."
 msgstr ""
 
 msgid ""
-"Please upload the payment receipt on that page once the transfer is complete."
+"Please upload your payment receipt to that page once the transfer is "
+"complete."
 msgstr ""
 
 msgid ""
 "Please mark the payment as completed on that page once the transfer is done."
 msgstr ""
 
-msgid "This is important, otherwise your payment will not be registered."
+msgid "This step is required to process and register your payment."
 msgstr ""
 
 #, python-format
-msgid "Registration to %(event)s by %(user)s"
+msgid "Registration for %(event)s by %(user)s"
 msgstr ""
 
-msgid "The user has confirmed its registration for this event!"
-msgstr ""
-
-#, python-format
-msgid "Registration updated to %(event)s by %(user)s"
-msgstr ""
-
-msgid "The user has updated their registration for this event!"
+msgid "The user has confirmed their registration for this event."
 msgstr ""
 
 #, python-format
-msgid "Registration cancelled for %(event)s by %(user)s"
+msgid "Registration updated for %(event)s by %(user)s"
 msgstr ""
 
-msgid "The registration for this event has been cancelled."
+msgid "The user has updated their registration details for this event."
 msgstr ""
 
 #, python-format
-msgid "Signup request for %(event)s by %(user)s"
+msgid "Registration canceled for %(event)s by %(user)s"
 msgstr ""
 
-msgid "The user has requested to sign up for this event."
+msgid "The registration for this event has been canceled."
+msgstr ""
+
+#, python-format
+msgid "Registration request for %(event)s by %(user)s"
+msgstr ""
+
+msgid "The user has submitted a request to register for this event."
 msgstr ""
 
 #, python-format
@@ -3355,11 +3357,12 @@ msgid "Reimbursement request for %(event)s"
 msgstr ""
 
 #, python-format
-msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
+msgid ""
+"Staff member %(user)s submitted a new reimbursement request for %(event)s."
 msgstr ""
 
 #, python-format
-msgid "The sum is %(amount).2f, with reason '%(reason)s'."
+msgid "Amount: %(amount).2f. Description: '%(reason)s'."
 msgstr ""
 
 msgid "Download document"
@@ -3368,32 +3371,32 @@ msgstr ""
 msgid "Did you check and is it correct?"
 msgstr ""
 
-msgid "Approve it"
+msgid "Approve request"
 msgstr ""
 
 #, python-format
-msgid "Utilisation %(tokens)s per %(event)s"
+msgid "Use of %(tokens)s for %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)s %(tokens)s were used to participate in this event!"
+msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 
 #, python-format
-msgid "Utilisation %(credits)s per %(event)s"
+msgid "Use of %(credits)s for %(event)s"
 msgstr ""
 
 #, python-format
-msgid "%(amount)s %(credits)s were used to participate in this event!"
+msgid "%(amount)s %(credits)s were applied to participation in this event."
 msgstr ""
 
 #, python-format
-msgid "Payment for %(event)s"
+msgid "Payment received for %(event)s"
 msgstr ""
 
 #, python-format
 msgid ""
-"A payment of <b>%(amount).2f %(currency)s</b> was received for this event!"
+"A payment of <b>%(amount).2f %(currency)s</b> was recorded for this event."
 msgstr ""
 
 #, python-format
@@ -3409,34 +3412,37 @@ msgid "You have received %(amount).2f %(elements)s for '%(reason)s'."
 msgstr ""
 
 #, python-format
-msgid "Request refund from: %(user)s"
+msgid "Refund request from %(user)s"
 msgstr ""
 
 #, python-format
-msgid "Details: %(details)s (<b>%(amount).2f</b>)"
+msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr ""
 
-msgid "Verify that the data are correct:"
+msgid "Please verify the following payment details:"
 msgstr ""
 
-msgid "Reason for payment"
+msgid "Payment reference"
 msgstr ""
 
 msgid "Amount"
 msgstr ""
 
-msgid "Payment to check:"
+msgid "Confirm payment"
 msgstr ""
 
-msgid "Ticket selected"
+msgid "Payment verification required:"
+msgstr ""
+
+msgid "Selected ticket"
 msgstr ""
 
 #, python-format
-msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>."
+msgid "Total registration fee: <b>%(amount).2f %(currency)s</b>."
 msgstr ""
 
 #, python-format
-msgid "Payments already received: <b>%(amount).2f %(currency)s</b>."
+msgid "Payments received to date: <b>%(amount).2f %(currency)s</b>."
 msgstr ""
 
 msgid "Selected options:"
@@ -3444,40 +3450,37 @@ msgstr ""
 
 #, python-format
 msgid ""
-"You must pay at least <b>%(amount).2f %(currency)s</b> within %(deadline)d "
-"days."
+"A minimum payment of <b>%(amount).2f %(currency)s</b> is required within "
+"%(deadline)d days."
 msgstr ""
 
 msgid ""
-"If payment is not received within this period, your registration may be "
-"cancelled."
-msgstr ""
-
-#, python-format
-msgid ""
-"<i>Payment overdue</i>: Please pay <b>%(amount).2f %(currency)s</b> as soon "
-"as possible!"
-msgstr ""
-
-msgid "If payment is not received, your registration may be cancelled."
-msgstr ""
-
-#, python-format
-msgid "New question by %(user)s"
-msgstr ""
-
-#, python-format
-msgid "A question was asked by: %(user)s"
-msgstr ""
-
-#, python-format
-msgid "Password reset of user %(user)s"
+"Please make sure to send your payment on time, or we might have to cancel "
+"your spot."
 msgstr ""
 
 #, python-format
 msgid ""
-"The user requested the password reset, but did not complete it. Give them "
-"this link: %(url)s"
+"<i>Payment overdue</i>: Submit payment of <b>%(amount).2f %(currency)s</b> "
+"immediately."
+msgstr ""
+
+#, python-format
+msgid "New support request from %(user)s"
+msgstr ""
+
+#, python-format
+msgid "A support request was submitted by %(user)s:"
+msgstr ""
+
+#, python-format
+msgid "Password reset request for %(user)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"User initiated a password reset but did not complete it. Give them this "
+"link: %(url)s"
 msgstr ""
 
 msgid "To access this feature, you must first register!"
@@ -4732,7 +4735,7 @@ msgid "Text"
 msgstr ""
 
 msgid ""
-"Write your question, request or concern here. We will be happy to answer you!"
+"Write your question, request or doubt here. We will be happy to answer you!"
 msgstr ""
 
 msgid "Attachment"
@@ -4777,40 +4780,37 @@ msgstr ""
 msgid "Number of passengers"
 msgstr ""
 
-msgid "Indicates how many passengers require transportation"
+msgid "Number of passengers requiring transportation."
 msgstr ""
 
-msgid "Address"
+msgid "Pickup location"
 msgstr ""
 
-msgid "Indicate as precisely as possible where to pick you up"
-msgstr ""
-
-msgid ""
-"Indicates how you can be recognized, if you will be found near some point "
-"specific, if you have a lot of luggage: any information that might help us "
-"help you"
-msgstr ""
-
-msgid "Request date"
-msgstr ""
-
-msgid "For which day you will need transportation"
-msgstr ""
-
-msgid "Request time"
+msgid "Provide as precise a location or address as possible for pickup."
 msgstr ""
 
 msgid ""
-"For what time you will need transportation (time zone of the larp location)"
+"Include identifying details (e.g., clothing, luggage, precise meeting point) "
+"to help us locate you."
 msgstr ""
 
-msgid "Note"
+msgid "Pickup date"
+msgstr ""
+
+msgid "The date transportation is needed."
+msgstr ""
+
+msgid "Pickup time"
+msgstr ""
+
+msgid "The time transportation is needed (local event time zone)."
+msgstr ""
+
+msgid "Driver notes"
 msgstr ""
 
 msgid ""
-"Indicates useful information to passengers, such as color of your car, time "
-"estimated time of your arrival"
+"Information for passengers (such as car color/model, estimated arrival time)."
 msgstr ""
 
 msgid "Severity"
@@ -4901,6 +4901,9 @@ msgid "Content"
 msgstr ""
 
 msgid "Token"
+msgstr ""
+
+msgid "Note"
 msgstr ""
 
 msgid "Optional note about this token (e.g., recipient name, purpose)"
@@ -5635,7 +5638,7 @@ msgstr ""
 msgid "Closing"
 msgstr ""
 
-msgid "Confirm?"
+msgid "Do you confirm?"
 msgstr ""
 
 msgid "Add option"
@@ -7505,7 +7508,10 @@ msgstr ""
 msgid "Passengers"
 msgstr ""
 
-msgid "Passages made"
+msgid "Address"
+msgstr ""
+
+msgid "Passages completed"
 msgstr ""
 
 msgid "Unsubscribe"
@@ -7840,8 +7846,8 @@ msgid "Payments in approval"
 msgstr ""
 
 msgid ""
-"These are the event signup for which you submitted a payment, and it's being "
-"reviewed by the staff. You don't have to do anything at this time!"
+"Your payment for these event sign-ups is currently under review. No action "
+"is required on your part."
 msgstr ""
 
 msgid "Pending payments"
@@ -7874,10 +7880,13 @@ msgstr ""
 msgid "Pay %(amount)s%(currency)s as soon as possible"
 msgstr ""
 
-msgid "Do you wish to be reimbursed? Open a new one"
+msgid "They will be used automatically when you sign up for a new event!"
 msgstr ""
 
-msgid "refund request"
+#, python-format
+msgid ""
+"Would you like to request a reimbursement? <a "
+"href=\"%(accounting_refund_url)s\">Submit a new refund request</a>."
 msgstr ""
 
 msgid "Requests open:"
@@ -8251,17 +8260,17 @@ msgid ""
 "admitted as a Member."
 msgstr ""
 
+#, python-format
 msgid ""
-"We have pre-filled the application form based on the data you provided us:"
+"We have pre-filled the application form with your details: <a "
+"href=\"%(membership_request_url)s\" download>download it here</a>."
 msgstr ""
 
-msgid "download it here"
-msgstr ""
-
-msgid "If there are wrong data you can update your"
-msgstr ""
-
-msgid "The registration request will be updated automatically."
+#, python-format
+msgid ""
+"If any details are incorrect, you can update them on your <a "
+"href=\"%(profile_url)s\">user profile</a>. The application form will update "
+"automatically."
 msgstr ""
 
 msgid ""
@@ -8317,6 +8326,9 @@ msgid ""
 msgstr ""
 
 msgid "Request submitted:"
+msgstr ""
+
+msgid "download it here"
 msgstr ""
 
 msgid "I am not good what to say. I never thought it would happen."
@@ -8806,9 +8818,6 @@ msgid "Currencies & Materials"
 msgstr ""
 
 msgid "Transfer"
-msgstr ""
-
-msgid "Reason"
 msgstr ""
 
 msgid "Add from NPC"
@@ -9941,7 +9950,8 @@ msgid "SpeedLarp"
 msgstr ""
 
 msgid ""
-"Manage speed-larp scenes, their station, sheet text, and assigned characters"
+"Manage speed-larp scenes, their stations, prompt text, and assigned "
+"characters"
 msgstr ""
 
 msgid "Station"
@@ -11067,7 +11077,7 @@ msgstr ""
 msgid "Manage the event handouts"
 msgstr ""
 
-msgid "Manage the type of character abilities"
+msgid "Manage the types of character abilities"
 msgstr ""
 
 msgid "Manage the character abilities purchaseable with experience"
@@ -11507,7 +11517,7 @@ msgid "Name of quest"
 msgstr ""
 
 #, python-format
-msgid "Membership registration of %(user)s"
+msgid "Membership application form for %(user)s"
 msgstr ""
 
 msgid "Lightweight"

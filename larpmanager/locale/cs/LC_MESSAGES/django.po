@@ -1115,9 +1115,6 @@ msgstr "Kompletní"
 msgid "Computed"
 msgstr "Vypočítané"
 
-msgid "Confirm?"
-msgstr "Potvrdit?"
-
 msgid "Consumed"
 msgstr "Spotřebováno"
 
@@ -1703,9 +1700,6 @@ msgstr "Použitelné"
 msgid "Appointees"
 msgstr "Jmenovaní"
 
-msgid "Approve it"
-msgstr "Schválit"
-
 msgid "Assignment"
 msgstr "Zadání"
 
@@ -1819,9 +1813,6 @@ msgstr "Různé"
 
 msgid "Modifiable"
 msgstr "Modifikovatelné"
-
-msgid "Motivation"
-msgstr "Motivace"
 
 msgid "Navigation"
 msgstr "Navigace"
@@ -2135,9 +2126,6 @@ msgstr "Státní příslušnost"
 msgid "Net profit:"
 msgstr "Čistý zisk:"
 
-msgid "New answer!"
-msgstr "Nová odpověď!"
-
 msgid "New session"
 msgstr "Nové zasedání"
 
@@ -2149,6 +2137,12 @@ msgstr "Účastník"
 
 msgid "Past events"
 msgstr "Minulé události"
+
+msgid "Pickup date"
+msgstr "Datum vyzvednutí"
+
+msgid "Pickup time"
+msgstr "Čas vyzvednutí"
 
 msgid "Please wait"
 msgstr "Prosím, počkejte"
@@ -2306,6 +2300,9 @@ msgstr "Název kreditu"
 msgid "Description:"
 msgstr "Popis:"
 
+msgid "Driver notes"
+msgstr "Poznámky řidiče"
+
 msgid "Event hidden"
 msgstr "Skrytá událost"
 
@@ -2359,9 +2356,6 @@ msgstr "Právní upozornění"
 
 msgid "Members list"
 msgstr "Seznam členů"
-
-msgid "More details"
-msgstr "Více informací"
 
 msgid "Municipality"
 msgstr "Obec"
@@ -2420,14 +2414,8 @@ msgstr "Odstranit správce"
 msgid "Rensponsable"
 msgstr "Zodpovědný"
 
-msgid "Request date"
-msgstr "Datum požadavku"
-
 msgid "Request for:"
 msgstr "Žádost o:"
-
-msgid "Request time"
-msgstr "Čas požadavku"
 
 msgid "Requirements"
 msgstr "Požadavky"
@@ -2675,9 +2663,6 @@ msgstr "Původní text"
 msgid "Participants:"
 msgstr "Účastníci:"
 
-msgid "Passages made"
-msgstr "Absolvované pasáže"
-
 msgid "Past sessions"
 msgstr "Minulá zasedání"
 
@@ -2853,9 +2838,6 @@ msgstr "Výchozí pole"
 
 msgid "Disable Tokens"
 msgstr "Zakázat tokeny"
-
-msgid "Donation given"
-msgstr "Vyplacený dar"
 
 msgid "Element saved!"
 msgstr "Uložený prvek!"
@@ -3052,9 +3034,6 @@ msgstr "kompletní list"
 msgid "customisations"
 msgstr "přizpůsobení"
 
-msgid "refund request"
-msgstr "žádost o vrácení peněz"
-
 msgid "select a badge"
 msgstr "vyberte odznak"
 
@@ -3070,6 +3049,9 @@ msgstr "Přidat k ocenění XP"
 
 msgid "App Integration"
 msgstr "Integrace aplikací"
+
+msgid "Approve request"
+msgstr "Schválit žádost"
 
 msgid "Ask LarpManager"
 msgstr "Zeptejte se LarpManageru"
@@ -3116,6 +3098,9 @@ msgstr "Konfigurace formuláře:"
 msgid "Confirm Restore"
 msgstr "Potvrzení obnovení"
 
+msgid "Confirm payment"
+msgstr "Potvrdit platbu"
+
 msgid "Credit balance:"
 msgstr "Kreditní zůstatek:"
 
@@ -3130,6 +3115,9 @@ msgstr "Delegovaní uživatelé"
 
 msgid "Disable credits"
 msgstr "Zakázat kredity"
+
+msgid "Do you confirm?"
+msgstr "Potvrzujete to?"
 
 msgid "Document number"
 msgstr "Číslo dokumentu"
@@ -3218,6 +3206,9 @@ msgstr "Platební metody"
 msgid "Payment summary"
 msgstr "Přehled plateb"
 
+msgid "Pickup location"
+msgstr "Místo vyzvednutí"
+
 msgid "Portraits (PDF)"
 msgstr "Portréty (PDF)"
 
@@ -3257,6 +3248,9 @@ msgstr "Pozvání do role"
 msgid "Select Language"
 msgstr "Zvolte jazyk"
 
+msgid "Selected ticket"
+msgstr "Vybraná vstupenka"
+
 msgid "Send invitation"
 msgstr "Odeslat pozvánku"
 
@@ -3274,9 +3268,6 @@ msgstr "Spustit algoritmus"
 
 msgid "Status updated!"
 msgstr "Stav aktualizován!"
-
-msgid "Ticket selected"
-msgstr "Vybraná vstupenka"
 
 msgid "Today activity:"
 msgstr "Dnešní aktivita:"
@@ -3660,6 +3651,9 @@ msgstr "Výchozí režim zobrazení"
 msgid "Disable Auto save"
 msgstr "Zakázat automatické ukládání"
 
+msgid "Donation Received"
+msgstr "Přijatý dar"
+
 msgid "Download document"
 msgstr "Stáhnout dokument"
 
@@ -3765,11 +3759,11 @@ msgstr "Platba potvrzena"
 msgid "Payment not found"
 msgstr "Platba nebyla nalezena"
 
+msgid "Payment reference"
+msgstr "Referenční číslo platby"
+
 msgid "Payment submitted"
 msgstr "Předložená platba"
-
-msgid "Payment to check:"
-msgstr "Platba, která má být zkontrolována:"
 
 msgid "Payments Received"
 msgstr "Přijaté platby"
@@ -3878,6 +3872,9 @@ msgstr "Zadejte nový požadavek!"
 msgid "Added to the queue"
 msgstr "Přidáno do fronty"
 
+msgid "Additional details"
+msgstr "Další podrobnosti"
+
 msgid "Additional tickets"
 msgstr "Další vstupenky"
 
@@ -3965,6 +3962,9 @@ msgstr "Nová žádost o vrácení peněz"
 msgid "Paid current year:"
 msgstr "Zaplaceno v běžném roce:"
 
+msgid "Passages completed"
+msgstr "Dokončené úseky"
+
 msgid "Patron and Reduced"
 msgstr "Patron a snížené"
 
@@ -3997,9 +3997,6 @@ msgstr "Navrhovaný charakter"
 
 msgid "RUNTS registration"
 msgstr "Registrace RUNTS"
-
-msgid "Reason for payment"
-msgstr "Důvod platby"
 
 msgid "Registrations open"
 msgstr "Registrace jsou otevřeny"
@@ -4166,6 +4163,9 @@ msgstr "Minimální preference"
 msgid "Navigation language"
 msgstr "Navigační jazyk"
 
+msgid "New Answer Received"
+msgstr "Byla obdržena nová odpověď"
+
 msgid "New shuttle request"
 msgstr "Nová žádost o kyvadlovou dopravu"
 
@@ -4308,9 +4308,6 @@ msgstr "Pole pro vyloučení"
 msgid "Independent factions"
 msgstr "Nezávislé frakce"
 
-msgid "Issued Reimbursement"
-msgstr "Vydaná náhrada"
-
 msgid "Last membership date"
 msgstr "Datum posledního členství"
 
@@ -4328,6 +4325,9 @@ msgstr "Maximální počet účastníků"
 
 msgid "Maximum waiting list"
 msgstr "Maximální počet čekatelů"
+
+msgid "Membership Approved!"
+msgstr "Členství schváleno!"
 
 msgid "Membership ID number"
 msgstr "Identifikační číslo členství"
@@ -4551,10 +4551,6 @@ msgstr "Možnosti (max %(max)s)"
 msgid "Participant questions"
 msgstr "Otázky účastníků"
 
-#, python-format
-msgid "Payment for %(event)s"
-msgstr "Platba za %(event)s"
-
 msgid "Pre-registration link"
 msgstr "Odkaz na předběžnou registraci"
 
@@ -4596,9 +4592,6 @@ msgstr "Ověření daňového kódu"
 
 msgid "Template instructions"
 msgstr "Pokyny k šabloně"
-
-msgid "The collection grows!"
-msgstr "Sbírka se rozrůstá!"
 
 msgid "The tax code matches!"
 msgstr "Daňový zákoník odpovídá!"
@@ -4769,8 +4762,8 @@ msgstr "Vstupní příplatek"
 msgid "Registrations shortcut"
 msgstr "Zkratka pro registrace"
 
-msgid "Reimbursement approved"
-msgstr "Schválená úhrada"
+msgid "Reimbursement Approved"
+msgstr "Proplacení schváleno"
 
 #, python-format
 msgid "Role approval %(role)s"
@@ -4940,6 +4933,9 @@ msgstr "Registrační podmínky"
 msgid "Registrations not open!"
 msgstr "Registrace ještě není otevřena!"
 
+msgid "Reimbursement Processed"
+msgstr "Proplacení bylo zpracováno"
+
 msgid "Reminder membership fee"
 msgstr "Připomenutí členského poplatku"
 
@@ -5029,10 +5025,6 @@ msgstr "Přidán nový uživatel delegáta!"
 
 msgid "New organization created"
 msgstr "Vytvoření nového sdružení"
-
-#, python-format
-msgid "New question by %(user)s"
-msgstr "Nová otázka od %(user)s"
 
 msgid "No characters available."
 msgstr "Žádné postavy nejsou k dispozici."
@@ -5207,10 +5199,6 @@ msgstr "pdf regenerace zahájena!"
 msgid "Registration form options"
 msgstr "Možnosti registračního formuláře"
 
-#, python-format
-msgid "Registration to %(event)s"
-msgstr "Registrace v %(event)s"
-
 msgid "Request sent for approval"
 msgstr "Žádost zaslaná ke schválení"
 
@@ -5305,11 +5293,18 @@ msgstr "Zapište se na seznam předběžných registrací!"
 msgid "Receipt already confirmed."
 msgstr "Příjem již potvrzen."
 
+#, python-format
+msgid "Registration for %(event)s"
+msgstr "Registrace na %(event)s"
+
 msgid "Select one or more options"
 msgstr "Vyberte jednu nebo více možností"
 
 msgid "Short name - international"
 msgstr "Krátký název - mezinárodní"
+
+msgid "The collection is growing!"
+msgstr "Kolekce se rozrůstá!"
 
 msgid "The name of the competence"
 msgstr "Název kompetence"
@@ -5532,14 +5527,15 @@ msgstr "Nebylo nalezeno žádné přijaté členství"
 msgid "Please wait before retrying."
 msgstr "Před dalším pokusem vyčkejte."
 
+#, python-format
+msgid "Refund request from %(user)s"
+msgstr "Žádost o vrácení peněz od %(user)s"
+
 msgid "Show the global preferences."
 msgstr "Zobrazit globální nastavení."
 
 msgid "Surcharge cannot be negative"
 msgstr "Příplatek nemůže být záporný"
-
-msgid "Thank you for participating!"
-msgstr "Děkujeme za účast!"
 
 msgid "The only mandatory column is"
 msgstr "Jediný povinný sloupec je"
@@ -5593,6 +5589,9 @@ msgstr "Spravuje moduly pro workshopy"
 msgid "Maximum number of preferences"
 msgstr "Maximální počet preferencí"
 
+msgid "Membership Application Status"
+msgstr "Stav žádosti o členství"
+
 msgid "Minimum number of preferences"
 msgstr "Minimální počet preferencí"
 
@@ -5621,10 +5620,6 @@ msgstr "Přizpůsobení hráče aktualizováno!"
 msgid "Players waiting for character"
 msgstr "Hráči čekají na postavu"
 
-#, python-format
-msgid "Pre-registration at %(event)s"
-msgstr "Předběžná registrace na %(event)s"
-
 msgid "Preferred navigation language"
 msgstr "Preferovaný jazyk navigace"
 
@@ -5639,10 +5634,6 @@ msgstr "Žádost o schválení registrace"
 
 msgid "Registrations opening not set"
 msgstr "Otevření registrací není nastaveno"
-
-#, python-format
-msgid "Request refund from: %(user)s"
-msgstr "Žádost o vrácení peněz od: %(user)s"
 
 msgid "Result of the bulk email send"
 msgstr "Výsledek hromadného rozesílání e-mailů"
@@ -5725,6 +5716,17 @@ msgstr "Správa otázek pro workshopy"
 msgid "Password reset request url for"
 msgstr "URL adresa žádosti o reset hesla pro"
 
+#, python-format
+msgid "Payment received for %(event)s"
+msgstr "Přijata platba za %(event)s"
+
+msgid "Payment verification required:"
+msgstr "Je nutné ověření platby:"
+
+#, python-format
+msgid "Pre-registration for %(event)s"
+msgstr "Předběžná registrace na %(event)s"
+
 msgid "Registration settings updated!"
 msgstr "Aktualizace nastavení registrace!"
 
@@ -5776,6 +5778,10 @@ msgstr "(Nepovinné) Počet kvót"
 msgid "(Optional) The surcharge amount"
 msgstr "(Nepovinné) Výše příplatku"
 
+#, python-format
+msgid "Achievement Unlocked: %(badge)s"
+msgstr "Odemčený úspěch: %(badge)s"
+
 msgid "Activate features for the event"
 msgstr "Aktivace funkcí pro událost"
 
@@ -5810,16 +5816,11 @@ msgstr "Správa registračních lístků"
 msgid "Manage the type of event quests"
 msgstr "Správa typu úkolů událostí"
 
-#, python-format
-msgid "Membership fee payment %(year)s"
-msgstr "Platba členského poplatku %(year)s"
+msgid "Membership Application Received"
+msgstr "Žádost o členství byla přijata"
 
 msgid "Name to be displayed for tokens"
 msgstr "Název, který se má zobrazit u žetonů"
-
-#, python-format
-msgid "Password reset of user %(user)s"
-msgstr "Obnovení hesla uživatele %(user)s"
 
 msgid "Please correct the error below."
 msgstr "Opravte prosím níže uvedenou chybu."
@@ -5854,6 +5855,10 @@ msgstr "Datum zahájení této události"
 
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
+
+#, python-format
+msgid "Use of %(tokens)s for %(event)s"
+msgstr "Použití %(tokens)s pro %(event)s"
 
 msgid "View your private conversations"
 msgstr "Zobrazit soukromé konverzace"
@@ -5977,11 +5982,18 @@ msgstr "Dosud jste zaplatili celkem:"
 msgid "Sum of payments received through"
 msgstr "Součet plateb přijatých prostřednictvím"
 
+msgid "Thank you for your contribution!"
+msgstr "Děkujeme za váš příspěvek!"
+
 msgid "Total of recorded money outflows"
 msgstr "Součet zaznamenaných odlivů peněz"
 
 msgid "Two-Factor Authentication (TOTP)"
 msgstr "Dvoufaktorové ověřování (TOTP)"
+
+#, python-format
+msgid "Use of %(credits)s for %(event)s"
+msgstr "Využití %(credits)s pro %(event)s"
 
 msgid "Voting for the Executive is open"
 msgstr "Hlasování do výkonné rady je otevřené"
@@ -6005,20 +6017,8 @@ msgstr "(Nepovinné) Cena vstupného"
 msgid "(Optional) The name of the ticket"
 msgstr "(Nepovinné) Název lístku"
 
-#, python-format
-msgid "A question was asked by: %(user)s"
-msgstr "Otázku položil: %(user)s"
-
 msgid "Access the organization dashboard"
 msgstr "Přístup k řídicímu panelu organizace"
-
-#, python-format
-msgid "Achievement assignment: %(badge)s"
-msgstr "Přiřazení úspěchu: %(badge)s"
-
-#, python-format
-msgid "Confirm registration to %(event)s"
-msgstr "Potvrzení registrace do %(event)s"
 
 msgid "Days available cannot be negative"
 msgstr "Počet dnů k dispozici nemůže být záporný"
@@ -6049,6 +6049,10 @@ msgstr "Je volitelný účastníky?"
 
 msgid "Manage speed larps for this event"
 msgstr "Správa rychlých LARPů pro tuto akci"
+
+#, python-format
+msgid "New support request from %(user)s"
+msgstr "Nová žádost o podporu od %(user)s"
 
 msgid "No address was added to the queue"
 msgstr "Žádná adresa nebyla přidána do fronty"
@@ -6084,8 +6088,13 @@ msgstr "Celková výše přijatých účastnických poplatků"
 msgid "Verify manually approved payments"
 msgstr "Ověřování ručně schválených plateb"
 
-msgid "Verify that the data are correct:"
-msgstr "Zkontrolujte, zda jsou údaje správné:"
+#, python-format
+msgid "(<a href='%(url)s'>Reply here</a>)"
+msgstr "(<a href='%(url)s'>Odpovědět zde</a>)"
+
+#, python-format
+msgid "(<a href='%(url)s'>View reply</a>)"
+msgstr "(<a href='%(url)s'>Zobrazit odpověď</a>)"
 
 msgid "(Optional) The ability description"
 msgstr "(Nepovinné) Popis schopnosti"
@@ -6099,6 +6108,10 @@ msgstr "Požádejte organizátory o aktivaci."
 #, python-format
 msgid "Cancellation request for %(event)s"
 msgstr "Žádost o zrušení %(event)s"
+
+#, python-format
+msgid "Confirm registration for %(event)s"
+msgstr "Potvrďte registraci na %(event)s"
 
 msgid "Date of expiration of the document"
 msgstr "Datum ukončení platnosti dokladu"
@@ -6117,9 +6130,6 @@ msgstr "Zadejte platné datum ve formátu DD-MM"
 
 msgid "Fill out the event prep questions!"
 msgstr "Vyplňte přípravné otázky k události!"
-
-msgid "For more information, write to us!"
-msgstr "Pro více informací nám napište!"
 
 msgid "Go to the history preferences for:"
 msgstr "Přejděte do historie preferencí pro:"
@@ -6193,6 +6203,9 @@ msgstr "Sbírka byla aktivována!"
 msgid "The collection has been delivered!"
 msgstr "Sbírka byla doručena!"
 
+msgid "The date transportation is needed."
+msgstr "Datum, kdy je třeba zajistit přepravu."
+
 msgid "The payment has not been completed"
 msgstr "Platba nebyla dokončena"
 
@@ -6224,10 +6237,6 @@ msgstr " %(amount)s%(currency)s okamžitě"
 #, python-format
 msgid "%(elements)s received for %(event)s"
 msgstr "%(elements)s přijatých pro %(event)s"
-
-#, python-format
-msgid "(<a href='%(url)s'>answer here</a>)"
-msgstr "(<a href='%(url)s'>odpověď zde</a>)"
 
 msgid "(Optional) Cost (0 = auto assigned)"
 msgstr "(Nepovinné) Náklady (0 = automaticky přiřazeno)"
@@ -6264,10 +6273,6 @@ msgstr "Spravovat všechny úvodní části této akce"
 msgid "Mark as completed: <b>%(list)s</b>."
 msgstr "Označte jako dokončené: <b>%(list)s</b>."
 
-#, python-format
-msgid "Membership registration of %(user)s"
-msgstr "Registrace členství %(user)s"
-
 msgid "Name of the discount - internal use"
 msgstr "Název slevy - pro interní použití"
 
@@ -6285,6 +6290,10 @@ msgstr "Nyní můžete nastavit formulář pro slaďování"
 
 msgid "Optional description of the content"
 msgstr "Nepovinný popis obsahu"
+
+#, python-format
+msgid "Password reset request for %(user)s"
+msgstr "Žádost o obnovení hesla pro %(user)s"
 
 msgid "Payments pending delegated accounts"
 msgstr "Nevyřízené platby na delegovaných účtech"
@@ -6414,18 +6423,20 @@ msgstr "Schválení role %(role)s na %(event)s"
 msgid "Select the event of this new session"
 msgstr "Vyberte událost této nové relace"
 
+msgid "Thank you for joining our community!"
+msgstr "Děkujeme, že jste se připojili k naší komunitě!"
+
 msgid "They need to complete it immediately"
 msgstr "Musí ji okamžitě dokončit"
-
-#, python-format
-msgid "Utilisation %(tokens)s per %(event)s"
-msgstr "Využití %(tokens)s na %(event)s"
 
 msgid "View photos and media from the event"
 msgstr "Prohlédněte si fotografie a další materiály z akce"
 
 msgid "You can't send messages to yourself!"
 msgstr "Nemůžete posílat zprávy sami sobě!"
+
+msgid "You have unlocked a new achievement!"
+msgstr "Odemkl/a jsi nový úspěch!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -6526,27 +6537,11 @@ msgstr "Nyní můžete nastavit možnosti přizpůsobení"
 msgid "Now you can set the legal notice text"
 msgstr "Nyní můžete nastavit text právního upozornění"
 
-#, python-format
-msgid "Registration to %(event)s by %(user)s"
-msgstr "Registrace do %(event)s od %(user)s"
-
 msgid "Select the organisation to proceed to"
 msgstr "Vyberte organizaci, na kterou chcete přejít"
 
 msgid "Set the organization payment currency"
 msgstr "Nastavení měny platby organizace"
-
-#, python-format
-msgid "Signup request accepted for %(event)s"
-msgstr "Žádost o registraci na %(event)s byla přijata"
-
-#, python-format
-msgid "Signup request declined for %(event)s"
-msgstr "Žádost o registraci byla zamítnuta pro %(event)s"
-
-#, python-format
-msgid "Signup request received for %(event)s"
-msgstr "Byla přijata žádost o registraci na %(event)s"
 
 msgid "The question type, allowed values are"
 msgstr "Typ otázky, povolené hodnoty jsou"
@@ -6563,10 +6558,6 @@ msgstr "Celková částka vrácená účastníkům"
 msgid "Update here the registration options!"
 msgstr "Aktualizujte zde možnosti registrace!"
 
-#, python-format
-msgid "Utilisation %(credits)s per %(event)s"
-msgstr "Využití %(credits)s na %(event)s"
-
 msgid "View the complete list of our events!"
 msgstr "Prohlédněte si kompletní seznam našich akcí!"
 
@@ -6579,16 +6570,9 @@ msgstr "V současné době jste přihlášeni pomocí:"
 msgid "You don't have any registrations yet."
 msgstr "Zatím nemáte žádné registrace."
 
-msgid "You have been awarded an achievement!"
-msgstr "Byl vám udělen úspěch!"
-
 #, python-format
 msgid "<b>%(number)s</b> %(label)s to approve"
 msgstr "<b>%(number)s</b> %(label)s ke schválení"
-
-#, python-format
-msgid "Activate collection for: %(recipient)s"
-msgstr "Aktivace sbírky pro: %(recipient)s"
 
 msgid "Activate features for the organization"
 msgstr "Aktivace funkcí pro organizaci"
@@ -6614,9 +6598,6 @@ msgstr "Zadejte výši svého příspěvku:"
 msgid "Learn all characters before the event!"
 msgstr "Naučte se všechny postavy před akcí!"
 
-msgid "Manage the type of character abilities"
-msgstr "Správa typu schopností postavy"
-
 msgid "Manage workshop modules for this event"
 msgstr "Správa modulů workshopů pro tuto akci"
 
@@ -6628,6 +6609,10 @@ msgstr "Nyní můžete začít vytvářet speed-larpy"
 
 msgid "Please select your casting preferences"
 msgstr "Vyberte prosím své preference ohledně obsazení"
+
+#, python-format
+msgid "Registration for %(event)s by %(user)s"
+msgstr "Registrace %(event)s provedená %(user)s"
 
 msgid "Visit the tutorial to learn the basics"
 msgstr "Navštivte výukový program a naučte se základy"
@@ -6667,6 +6652,10 @@ msgstr "Nelze vyloučit posledního správce cechu"
 msgid "Character are not visible at the moment"
 msgstr "Postavy nejsou v tuto chvíli viditelné"
 
+#, python-format
+msgid "Collection Activated for: %(recipient)s"
+msgstr "Kolekce aktivována pro: %(recipient)s"
+
 #, python-brace-format
 msgid "Completed module. Remaining: {number:d}"
 msgstr "Dokončený modul. Zbývá: {number:d}"
@@ -6701,6 +6690,9 @@ msgstr "Typ MIME souboru (např. video/mp4)"
 msgid "Manage experience awarded to characters"
 msgstr "Správa zkušeností přidělených postavám"
 
+msgid "Manage the types of character abilities"
+msgstr "Správa typů schopností postav"
+
 msgid "Manages and assigns tasks to characters"
 msgstr "Správa a přidělování úkolů postavám"
 
@@ -6713,9 +6705,6 @@ msgstr "Spravuje příjmy z akcí nebo organizací"
 #, python-format
 msgid "Membership fee of %(user)s for %(year)s"
 msgstr "Členský poplatek %(user)s za %(year)s"
-
-msgid "Membership of the Organization refused!"
-msgstr "Členství odmítnuto!"
 
 msgid "No events with staff competences found."
 msgstr ""
@@ -6748,8 +6737,8 @@ msgid "Perform checks on warehouse assignments"
 msgstr "Provádění kontrol přiřazení skladů"
 
 #, python-format
-msgid "Registration cancellation for %(event)s"
-msgstr "Zrušení registrace pro %(event)s"
+msgid "Registration confirmation for %(event)s"
+msgstr "Potvrzení registrace na %(event)s"
 
 msgid "Set the experience points configuration"
 msgstr "Nastavení konfigurace zkušenostních bodů"
@@ -6829,8 +6818,9 @@ msgstr "Správa sbírek, kterých se účastní uživatelé"
 msgid "Manage incoming revenue linked to events"
 msgstr "Správa příjmů souvisejících s akcemi"
 
-msgid "Membership of the Organization accepted!"
-msgstr "Členství ve sdružení je přijato!"
+#, python-format
+msgid "Membership application form for %(user)s"
+msgstr "Formulář žádosti o členství pro %(user)s"
 
 msgid "Name of the ticket into which to convert"
 msgstr "Název typu lístku, do kterého se má převést"
@@ -6849,10 +6839,6 @@ msgstr "Sekundy čekání mezi jednotlivými dávkami e-mailů"
 
 msgid "Set casting options in the configuration"
 msgstr "Nastavení možností obsazování v konfiguraci"
-
-#, python-format
-msgid "Signup request for %(event)s by %(user)s"
-msgstr "Žádost o registraci na %(event)s od %(user)s"
 
 msgid "The collection was delivered to the user"
 msgstr "Sbírka byla doručena uživateli"
@@ -6955,8 +6941,9 @@ msgstr "Nyní můžete vytvořit zápletky události"
 msgid "Payment currently in review by the staff."
 msgstr "Zaměstnanci v současné době přezkoumávají platbu."
 
-msgid "Request of membership to the Organization"
-msgstr "Žádost o členství ve sdružení"
+#, python-format
+msgid "Profile completion reminder for %(event)s"
+msgstr "Připomenutí k vyplnění profilu pro %(event)s"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Rozeslat hromadný e-mail účastníkům akce"
@@ -6999,10 +6986,6 @@ msgstr "Nemáte nakonfigurovanou žádnou aplikaci autentizátoru."
 msgid "You think you should have an achievement?"
 msgstr "Myslíte si, že máte nárok na odznaku?"
 
-#, python-format
-msgid "Your card number is: <b>%(number)03d</b>."
-msgstr "Číslo vaší karty je: <b>%(number)03d</b>."
-
 msgid "if the character belongs to this element."
 msgstr "pokud postava patří k tomuto prvku."
 
@@ -7020,18 +7003,11 @@ msgid "Character already assigned, not selectable"
 msgstr "Postava již přiřazena, nelze vybrat"
 
 #, python-format
-msgid "Confirmation of registration for %(event)s"
-msgstr "Potvrzení registrace pro %(event)s"
+msgid "Collection Participation for %(recipient)s"
+msgstr "Účast v sbírce pro %(recipient)s"
 
 msgid "Create a new session for an existing event"
 msgstr "Vytvořit novou relaci pro existující událost"
-
-#, python-format
-msgid "Details: %(details)s (<b>%(amount).2f</b>)"
-msgstr "Podrobnosti: %(details)s (<b>%(amount).2f</b>)"
-
-msgid "For which day you will need transportation"
-msgstr "Na který den budete potřebovat dopravu"
 
 msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "Kód jazyka ISO (např. 'en', 'it', 'de')"
@@ -7051,6 +7027,10 @@ msgstr "Správa darů provedených účastníky"
 
 msgid "Manage questions asked by the participants"
 msgstr "Správa otázek účastníků"
+
+#, python-format
+msgid "Membership Fee Payment Received - %(year)s"
+msgstr "Přijata platba členského příspěvku – %(year)s"
 
 msgid "Now you can create discounts for the event"
 msgstr "Nyní můžete vytvářet slevy pro událost"
@@ -7082,12 +7062,11 @@ msgstr "Účastníci, kteří NEZASLALI preference"
 msgid "Preview reset. Using organization version."
 msgstr "Nastavení náhledu bylo resetováno. Používá se verze organizace."
 
-#, python-format
-msgid "Profile compilation reminder for %(event)s"
-msgstr "Připomenutí sestavení profilu pro %(event)s"
-
 msgid "Reserve additional tickets beyond your own"
 msgstr "Rezervace dalších vstupenek nad rámec vlastních"
+
+msgid "Review users with pending event deadlines:"
+msgstr "Zkontrolujte uživatele, u nichž se blíží termíny událostí:"
 
 msgid "Select randomly lottery tickets to upgrade"
 msgstr "Vyberte náhodně losy pro upgrade"
@@ -7139,10 +7118,6 @@ msgstr "Prohlédněte si akce, které již proběhly"
 msgid "Click on a name to go and view it directly."
 msgstr "Kliknutím na název jej můžete přímo zobrazit."
 
-#, python-format
-msgid "Collection participation for: %(recipient)s"
-msgstr "Účast na sbírce pro: %(recipient)s"
-
 msgid "Description to be shown on the special page"
 msgstr "Popis, který se zobrazí na speciální stránce"
 
@@ -7151,9 +7126,6 @@ msgstr "Volně uveďte výši svého daru"
 
 msgid "If checked, allow ticket tier: Collaborator"
 msgstr "Pokud je zaškrtnuto, povolte vrstvu vstupenky: Spolupracovník"
-
-msgid "If there are wrong data you can update your"
-msgstr "Pokud jsou údaje nesprávné, aktualizujte je"
 
 msgid "Indicate precisely your field of experience"
 msgstr "Přesně uveďte obor své praxe"
@@ -7176,6 +7148,18 @@ msgstr "Nyní můžete pro událost vytvořit milníky"
 msgid "Please review and submit it for publication"
 msgstr "Prosíme, zkontrolujte ji a předložte ke zveřejnění"
 
+#, python-format
+msgid "Registration request approved for %(event)s"
+msgstr "Žádost o registraci pro %(event)s byla schválena"
+
+#, python-format
+msgid "Registration request declined for %(event)s"
+msgstr "Žádost o registraci pro %(event)s byla zamítnuta"
+
+#, python-format
+msgid "Registration request received for %(event)s"
+msgstr "Byla přijata žádost o registraci na %(event)s"
+
 msgid "Select a badge above to manage its members."
 msgstr "Vyberte některý z odznaků výše a spravujte jeho členy."
 
@@ -7184,10 +7168,6 @@ msgstr "Text zobrazený vedle obrázku kolotoče"
 
 msgid "The organization this membership belongs to"
 msgstr "Organizace, do které toto členství patří"
-
-#, python-format
-msgid "The sum was assigned to you as %(credits)s."
-msgstr "Částka vám byla přidělena jako %(credits)s."
 
 msgid "This access link is invalid or has expired."
 msgstr "Tento přístupový odkaz je neplatný nebo jeho platnost vypršela."
@@ -7216,6 +7196,10 @@ msgstr "(Nepovinné) Maximální počet volných míst"
 msgid "<b>%(number)s</b> signup requests to approve"
 msgstr "<b>%(number)s</b> žádostí o registraci k schválení"
 
+#, python-format
+msgid "A support request was submitted by %(user)s:"
+msgstr "Žádost o podporu podal/a %(user)s:"
+
 msgid "Cancellation for missing profile compilation"
 msgstr "Zrušení kvůli chybějícímu sestavení profilu"
 
@@ -7230,9 +7214,6 @@ msgstr "Přizpůsobte vzhled události"
 
 msgid "Discount not combinable with other benefits."
 msgstr "Slevu nelze kombinovat s jinými úlevami."
-
-msgid "Do you wish to be reimbursed? Open a new one"
-msgstr "Chcete, aby vám byly náklady proplaceny? Otevřete novou"
 
 msgid "Edit the core settings for your organization"
 msgstr "Upravte základní nastavení vaší organizace"
@@ -7275,6 +7256,9 @@ msgstr "Nyní můžete nastavit platební metody"
 
 msgid "Now you can set the registration secret link"
 msgstr "Nyní můžete nastavit tajný odkaz pro registraci"
+
+msgid "Please verify the following payment details:"
+msgstr "Prosím, zkontrolujte následující platební údaje:"
 
 msgid "Remember to put the prefix at the beginning!"
 msgstr "Nezapomeňte uvést předponu na začátku!"
@@ -7345,6 +7329,10 @@ msgstr "Spravujte uživatele, za které můžete jednat"
 msgid "Member who used this token (if authenticated)"
 msgstr "Člen, který použil tento token (je-li ověřen)"
 
+#, python-format
+msgid "Membership fee payment reminder for %(event)s"
+msgstr "Upomínka k úhradě členského příspěvku za %(event)s"
+
 msgid "Modify the character details to make it yours"
 msgstr "Upravte údaje o postavě tak, aby byla vaše"
 
@@ -7362,10 +7350,6 @@ msgstr "Nyní můžete definovat sekce registračního formuláře"
 
 msgid "Place of birth not included in the ISTAT list"
 msgstr "Místo narození neuvedené v seznamu ISTAT"
-
-#, python-format
-msgid "Registration updated to %(event)s by %(user)s"
-msgstr "Registrace aktualizována na %(event)s uživatelem %(user)s"
 
 msgid "Search and filter the characters of the event"
 msgstr "Vyhledávání a filtrování postav dané události"
@@ -7424,6 +7408,9 @@ msgstr "Nyní můžete vybrat, které vstupenky lze darovat"
 msgid "Now you can set the experience points settings"
 msgstr "Nyní můžete nastavit body zkušeností"
 
+msgid "Number of passengers requiring transportation."
+msgstr "Počet cestujících, kteří potřebují dopravu."
+
 msgid "Optional - Image displayed within the question"
 msgstr "Nepovinné - Obrázek zobrazený v rámci otázky"
 
@@ -7440,6 +7427,14 @@ msgstr "Vyberte prosím registraci i událost"
 #, python-format
 msgid "Registration for %(member)s moved to %(event)s"
 msgstr "Registrace pro %(member)s byla přesunuta na %(event)s"
+
+#, python-format
+msgid "Registration request for %(event)s by %(user)s"
+msgstr "Žádost o registraci na %(event)s podaná %(user)s"
+
+#, python-format
+msgid "Registration updated for %(event)s by %(user)s"
+msgstr "%(user)s aktualizoval/a registraci pro %(event)s"
 
 msgid "Set up Patron and Reduced ticket configuration"
 msgstr "Nastavení konfigurace vstupenky Patrona a Snížené ceny"
@@ -7497,6 +7492,9 @@ msgstr "Seznamte se se všemi postavami ještě před začátkem akce"
 msgid "If checked: Add a field to track items quantity"
 msgstr "Pokud je zaškrtnuto: Přidat pole pro sledování množství položek"
 
+msgid "If you have questions, feel free to contact us."
+msgstr "Pokud máte nějaké dotazy, neváhejte se na nás obrátit."
+
 msgid "Indicate the country of which you are a citizen"
 msgstr "Uveďte zemi, jejímž jste občanem"
 
@@ -7517,6 +7515,10 @@ msgstr "Volitelná šablona spojená s touto schopností."
 
 msgid "Please confirm you want to perform this action."
 msgstr "Potvrďte prosím, že chcete tuto akci provést."
+
+#, python-format
+msgid "Registration canceled for %(event)s by %(user)s"
+msgstr "Zrušení registrace na %(event)s uživatelem %(user)s"
 
 #, python-format
 msgid "Registration for %(member)s copied to %(event)s"
@@ -7559,6 +7561,10 @@ msgstr "Vaše předvolby byly uloženy do systému:"
 msgid "Access the pages to manage each different aspect"
 msgstr "Otevřete stránky, kde můžete spravovat jednotlivé aspekty"
 
+#, python-format
+msgid "Amount: %(amount).2f. Description: '%(reason)s'."
+msgstr "Částka: %(amount).2f. Popis: '%(reason)s'."
+
 msgid "Are you sure? The items might be not recoverable"
 msgstr "Jste si jistý? Položky nemusí být možné obnovit"
 
@@ -7579,10 +7585,6 @@ msgstr "V tuto chvíli nejsou vyžadovány žádné další platby"
 
 msgid "No cancelled registrations found for this event."
 msgstr "Pro tuto akci nebyly nalezeny žádné zrušené registrace."
-
-#, python-format
-msgid "Registration cancelled for %(event)s by %(user)s"
-msgstr "Zrušení registrace %(event)s od %(user)s"
 
 #, python-format
 msgid "Registration questions without options: %(list)s"
@@ -7682,10 +7684,6 @@ msgstr "Suroviny, pomocné látky, spotřební materiál a zboží"
 msgid "Registrations for this event are currently closed"
 msgstr "Registrace na tuto akci jsou v současné době uzavřeny"
 
-#, python-format
-msgid "Reminder payment of membership fees for %(event)s"
-msgstr "Připomenutí platby členských příspěvků za %(event)s"
-
 msgid "Select which payment methods participants can use"
 msgstr "Zvolte, které platební metody mohou účastníci používat"
 
@@ -7694,9 +7692,6 @@ msgstr "Přepínání mezi správou organizací a událostí"
 
 msgid "The registration code is not active at the moment"
 msgstr "Registrační kód není v současné době aktivní"
-
-msgid "The user has requested to sign up for this event."
-msgstr "Uživatel požádal o registraci na tuto akci."
 
 msgid "There are no new sessions scheduled at this time."
 msgstr "V tuto chvíli nejsou naplánovány žádné nové schůzky."
@@ -7725,6 +7720,10 @@ msgstr "Barva pro klikací odkazy a interaktivní prvky"
 
 msgid "Define the data collected in the user profile form"
 msgstr "Definice údajů shromažďovaných ve formuláři profilu uživatele"
+
+#, python-format
+msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
+msgstr "Podrobnosti: %(details)s (Částka: <b>%(amount).2f</b>)"
 
 msgid "Fill in this field if you have accessibility needs"
 msgstr "Toto pole vyplňte, pokud máte požadavky na přístupnost"
@@ -7757,10 +7756,6 @@ msgstr "Zaplaťte %(amount)s %(currency)s do %(counter)s dnů"
 msgid "Payment for this event is complete and up to date!"
 msgstr "Platba za tuto akci je uhrazena a v pořádku!"
 
-#, python-format
-msgid "Please <a href='%(url)s'>complete your signup</a>."
-msgstr "Prosím, <a href='%(url)s'>dokončete registraci</a>."
-
 msgid "Second character in the relationship (destination)"
 msgstr "Druhá postava ve vztahu (cílová destinace)"
 
@@ -7770,9 +7765,8 @@ msgstr "Vyberte si postavy, které chcete hrát!"
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Nastavení vizuální stránky: barvy, pozadí, obrázek obálky"
 
-#, python-format
-msgid "The sum is %(amount).2f, with reason '%(reason)s'."
-msgstr "Součet je %(amount).2f s důvodem '%(reason)s'."
+msgid "The registration for this event has been canceled."
+msgstr "Registrace na tuto akci byla zrušena."
 
 msgid "This feature is available for non-waiting tickets!"
 msgstr "Tato funkce je k dispozici pro vstupenky mimo čekací listinu!"
@@ -7840,12 +7834,6 @@ msgstr "Vybraná událost nepatří do této organizace"
 msgid "Short guides to help you learn how the system works"
 msgstr "Krátké průvodce, které vám pomohou naučit se, jak systém funguje"
 
-msgid "Thank you for choosing to be part of our community!"
-msgstr "Děkujeme, že jste se rozhodli být součástí naší komunity!"
-
-msgid "The registration for this event has been cancelled."
-msgstr "Registrace na akci byla zrušena."
-
 msgid "Your registration for this event has been confirmed"
 msgstr "Vaše registrace na tuto akci byla potvrzena"
 
@@ -7883,9 +7871,6 @@ msgstr "Popis role postavy v ději"
 
 msgid "If checked: shows the list of authors for each event"
 msgstr "Pokud je zaškrtnuto: zobrazí seznam autorů pro každou událost"
-
-msgid "Indicates how many passengers require transportation"
-msgstr "Uvádí, kolik cestujících potřebuje přepravu"
 
 msgid "Indicates whether it can be selected by participants"
 msgstr "Označuje, zda jej mohou vybrat účastníci"
@@ -7925,6 +7910,10 @@ msgstr "Zpracováváme vaši platbu. Prosím, chvíli počkejte."
 
 msgid "You have already sent a payment pending verification"
 msgstr "Již jste odeslali platbu, která čeká na ověření"
+
+#, python-format
+msgid "Your membership card number is: <b>%(number)03d</b>."
+msgstr "Číslo vaší členské karty je: <b>%(number)03d</b>."
 
 msgid "Your organization's unique subdomain in the platform"
 msgstr "Jedinečná subdoména vaší organizace v platformě"
@@ -8036,9 +8025,6 @@ msgstr "Každý token lze z bezpečnostních důvodů použít pouze jednou."
 msgid "Indicate a song you want to dedicate to your character"
 msgstr "Uveďte píseň, kterou chcete věnovat své postavě"
 
-msgid "Indicate as precisely as possible where to pick you up"
-msgstr "Co nejpřesněji uveďte, kde vás vyzvednout"
-
 msgid "Indicate how spending is allocated at the budget level"
 msgstr "Uveďte, jak jsou výdaje nastaveny na úrovni rozpočtu"
 
@@ -8122,23 +8108,11 @@ msgstr "Pro vybraný rok nejsou žádní členové s kladným zůstatkem."
 msgid "No payment invoices awaiting confirmation at this time."
 msgstr "V tuto chvíli nejsou k dispozici žádné faktury čekající na potvrzení."
 
-msgid "Review the users that are missing the event's deadlines"
-msgstr "Přehled uživatelů, kteří nedodržují termíny události"
-
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Vyberte řádky tabulky a zvolte operaci, která se má použít"
 
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Počáteční režim zobrazení při otevření stránky skupiny"
-
-msgid "The registration request will be updated automatically."
-msgstr "Žádost o registraci bude aktualizována automaticky."
-
-msgid "The user has confirmed its registration for this event!"
-msgstr "Uživatel potvrdil svou registraci na tuto událost!"
-
-msgid "The user has updated their registration for this event!"
-msgstr "Uživatel aktualizoval svou registraci na tuto událost!"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Tato stránka shrnuje typy inventářů postav"
@@ -8200,6 +8174,10 @@ msgstr "Nastavte, které organizace mají přístup k vašim osobním údajům"
 msgid "Payment due: %(amount)s%(currency)s within %(days)d days"
 msgstr "Splatnost platby: %(amount)s%(currency)s do %(days)d dnů"
 
+#, python-format
+msgid "Please <a href='%(url)s'>complete your registration</a>."
+msgstr "Prosím, <a href='%(url)s'>dokončete registraci</a>."
+
 msgid "Please check the address again, especially its beginning"
 msgstr "Zkontrolujte prosím znovu adresu, zejména její začátek"
 
@@ -8227,6 +8205,10 @@ msgstr "Pro tuto splátku musíte vybrat alespoň jednu vstupenku"
 
 msgid "(Optional) Other ability as prerequisite, comma-separated"
 msgstr "(Nepovinné) Jiná schopnost jako předpoklad, oddělená čárkou"
+
+#, python-format
+msgid "Access your character profile <a href='%(url)s'>here</a>."
+msgstr "Profil své postavy si můžete zobrazit <a href='%(url)s'>zde</a>."
 
 msgid "Available credit balance for event payments and purchases"
 msgstr "Dostupný zůstatek kreditu pro platby za události a nákupy"
@@ -8274,6 +8256,9 @@ msgstr "Měna, kterou chcete používat pro všechny platby a ceny"
 msgid "The registrations to the event <i>%(run)s</i> are closed!"
 msgstr "Registrace na akci <i>%(run)s</i> jsou uzavřeny!"
 
+msgid "The user has confirmed their registration for this event."
+msgstr "Uživatel potvrdil svou registraci na tuto akci."
+
 msgid "This will remove you from this organization's newsletter."
 msgstr "Tím budete odstraněni ze zpravodaje této organizace."
 
@@ -8282,6 +8267,10 @@ msgstr "Chcete-li je přestat dostávat, zrušte prosím své registrace."
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Součet výdajů předložených spolupracovníky a schválených"
+
+#, python-format
+msgid "Total registration fee: <b>%(amount).2f %(currency)s</b>."
+msgstr "Celkový registrační poplatek: <b>%(amount).2f %(currency)s</b>."
 
 msgid "Track all external income entries recorded for this event"
 msgstr ""
@@ -8349,12 +8338,15 @@ msgstr "Pravděpodobnost zobrazení speciální stránky (z tisíců)"
 msgid "Sign up for the event, or update your registration options"
 msgstr "Zaregistrujte se na akci nebo upravte své registrační možnosti"
 
+msgid "The time transportation is needed (local event time zone)."
+msgstr "Je třeba uvést čas (časové pásmo místa konání akce)."
+
 msgid "This character is already a member or has a pending invite"
 msgstr "Tato postava je již členem nebo má nevyřízenou pozvánku"
 
 #, python-format
-msgid "To confirm it, please pay %(amount)s within %(days)s days."
-msgstr "Pro potvrzení prosím zaplaťte %(amount)s do %(days)s dnů."
+msgid "To complete the process, <a href='%(url)s'>click here</a>."
+msgstr "Chcete-li proces dokončit, <a href='%(url)s'>klikněte sem</a>."
 
 msgid "Unique membership card number assigned by the organization"
 msgstr "Jedinečné číslo členské karty přidělené organizací"
@@ -8383,20 +8375,11 @@ msgstr "Zkontrolujte a vyplňte kontrolní seznam pro aktivaci vaší organizace
 msgid "Do you want to accept payments processed through the system"
 msgstr "Chcete přijímat platby zpracované prostřednictvím systému"
 
-#, python-format
-msgid "Hi! Your registration to <b>%(event)s</b> has been updated!"
-msgstr "Ahoj! Vaše registrace do <b>%(event)s</b> byla aktualizována!"
-
 msgid "I am not good what to say. I never thought it would happen."
 msgstr "Nevím, co na to říct. Nikdy jsem si nemyslel, že se to stane."
 
 msgid "If you have a discount code, enter it here and press enter."
 msgstr "Pokud máte kód slevy, zadejte jej zde a stiskněte klávesu enter."
-
-msgid "Let us know if you encounter any issues or need assistance!"
-msgstr ""
-"Dejte nám vědět, pokud narazíte na nějaké problémy nebo budete potřebovat "
-"pomoc!"
 
 msgid "Manage the character abilities purchaseable with experience"
 msgstr "Správa schopností postavy, které lze zakoupit za zkušenosti"
@@ -8435,14 +8418,11 @@ msgid "This contributor has not self-assessed any competences yet."
 msgstr ""
 "Tento přispěvatel zatím neprovedl žádné vlastní hodnocení svých kompetencí."
 
+msgid "This step is required to process and register your payment."
+msgstr "Tento krok je nezbytný pro zpracování a zaúčtování vaší platby."
+
 msgid "To stop those, you would need to cancel your registrations."
 msgstr "Chcete-li je zastavit, musíte zrušit své registrace."
-
-#, python-format
-msgid "Total of your signup fee: <b>%(amount).2f %(currency)s</b>."
-msgstr ""
-"Celková částka vašeho registračního poplatku: <b>%(amount).2f "
-"%(currency)s</b>."
 
 msgid "Upload membership documents to complete a member's approval"
 msgstr "Nahrajte dokumenty k členství, aby bylo schválení člena dokončeno"
@@ -8519,8 +8499,8 @@ msgid "No matchmaker questions have been set up for this event yet."
 msgstr "Pro tuto akci zatím nebyly nastaveny žádné otázky do seznamovací hry."
 
 #, python-format
-msgid "Payments already received: <b>%(amount).2f %(currency)s</b>."
-msgstr "Již přijaté platby: <b>%(amount).2f %(currency)s</b>."
+msgid "Payments received to date: <b>%(amount).2f %(currency)s</b>."
+msgstr "Dosud přijaté platby: <b>%(amount).2f %(currency)s</b>."
 
 msgid "Review and approve expense claims submitted by collaborators"
 msgstr ""
@@ -8528,6 +8508,9 @@ msgstr ""
 
 msgid "The maximum number of guilds for this event has been reached"
 msgstr "Byl dosažen maximální počet cechů pro tuto akci"
+
+msgid "The user has submitted a request to register for this event."
+msgstr "Uživatel podal žádost o registraci na tuto akci."
 
 msgid "This character is inactive and cannot be assigned to players"
 msgstr "Tato postava je neaktivní a nelze ji přiřadit k hráčům"
@@ -8540,14 +8523,6 @@ msgstr "Nahrajte podepsanou přihlášku k členství (PDF nebo obrázek)"
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Chtěli byste dostávat informace o našich nadcházejících akcích?"
-
-#, python-format
-msgid "You can make the payment <a href='%(url)s'>on this page</a>."
-msgstr "Platbu můžete provést <a href='%(url)s'>na této stránce</a>."
-
-#, python-format
-msgid "%(amount)s %(tokens)s were used to participate in this event!"
-msgstr "K účasti na této akci bylo použito %(amount)s %(tokens)s!"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Nepovinné) Možnosti postav jako požadavky, oddělené čárkou"
@@ -8644,10 +8619,6 @@ msgid "You have received %(amount).2f %(elements)s for '%(reason)s'."
 msgstr "Obdrželi jste %(amount).2f %(elements)s z důvodu „%(reason)s“."
 
 #, python-format
-msgid "%(amount)s %(credits)s were used to participate in this event!"
-msgstr "K účasti na této akci bylo použito %(amount)s %(credits)s!"
-
-#, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
 msgstr "Pro tuto událost již existuje kvóta s %(quotas)d plateb"
 
@@ -8676,6 +8647,11 @@ msgstr "Popis tohoto způsobu platby, který se zobrazí uživateli"
 
 msgid "Enables field 'number', an unique numerical ID to reference it"
 msgstr "Povoluje pole \"number\", jedinečné číselné ID, na které se odkazuje"
+
+msgid "If you encounter any issues, please contact us for assistance."
+msgstr ""
+"Pokud narazíte na nějaké potíže, obraťte se prosím na nás a my vám rádi "
+"pomůžeme."
 
 msgid "Indicate here any element you wish to avoid in the assignment:"
 msgstr "Zde uveďte všechny prvky, kterým se chcete v zadání vyhnout:"
@@ -8735,6 +8711,10 @@ msgstr ""
 msgid "Do you want users to join events only after an approval process"
 msgstr "Chcete, aby se uživatelé připojovali k událostem až po schválení"
 
+#, python-format
+msgid "Hello! Your registration for <b>%(event)s</b> has been updated."
+msgstr "Dobrý den! Vaše registrace na <b>%(event)s</b> byla aktualizována."
+
 msgid "Here you can review the event details and visit its public page"
 msgstr ""
 "Zde si můžete prohlédnout podrobnosti o akci a navštívit její veřejnou "
@@ -8743,12 +8723,6 @@ msgstr ""
 msgid "If checked, no tokens will be used in the entries of this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou při zadávání této události použity žádné žetony"
-
-msgid "If payment is not received, your registration may be cancelled."
-msgstr "Pokud platba nebude obdržena, může být vaše registrace zrušena."
-
-msgid "If you encounter any issues, contact us and we will assist you!"
-msgstr "Pokud narazíte na nějaké problémy, kontaktujte nás a my vám pomůžeme!"
 
 msgid "Indicate the exact date in which the payment has been performed"
 msgstr "Uveďte přesné datum, ke kterému byla platba provedena"
@@ -8780,6 +8754,9 @@ msgstr ""
 msgid "The registrations to the event <i>%(run)s</i> are not yet open!"
 msgstr "Registrace na akci <i>%(run)s</i> ještě nejsou otevřené!"
 
+msgid "The user has updated their registration details for this event."
+msgstr "Uživatel aktualizoval své registrační údaje pro tuto akci."
+
 msgid "This content is protected and cannot be downloaded or recorded."
 msgstr "Tento obsah je chráněn a nelze jej stahovat ani nahrávat."
 
@@ -8791,6 +8768,10 @@ msgstr "Pro převod z vaší banky použijte níže uvedené bankovní údaje."
 
 msgid "We ask you to pay the amount requested for the next instalment:"
 msgstr "Žádáme vás, abyste zaplatili požadovanou částku na další splátku:"
+
+#, python-format
+msgid "You can submit your payment <a href='%(url)s'>on this page</a>."
+msgstr "Platbu můžete provést <a href='%(url)s'>na této stránce</a>."
 
 msgid "You must create at least one quest before you can create traits"
 msgstr "Před vytvořením vlastností musíte vytvořit alespoň jeden úkol"
@@ -8806,9 +8787,8 @@ msgstr ""
 msgid "Do you want to allow participants to create their own characters"
 msgstr "Chcete umožnit účastníkům vytvořit si vlastní postavy"
 
-#, python-format
-msgid "Hello! Your registration at <b>%(event)s</b> has been confirmed!"
-msgstr "Ahoj! Vaše registrace na <b>%(event)s</b> byla potvrzena!"
+msgid "If you need assistance, please contact us. We are happy to help!"
+msgstr "Pokud potřebujete pomoc, obraťte se na nás. Rádi vám pomůžeme!"
 
 msgid "Lets staff access the diet information submitted by participants"
 msgstr ""
@@ -8825,11 +8805,18 @@ msgid "Manage questions asked during workshop activities for this event"
 msgstr ""
 "Spravujte otázky položené během workshopových aktivit v rámci této akce"
 
+#, python-format
+msgid "New contribution to the collection for %(recipient)s by %(user)s"
+msgstr "Nový příspěvek do sbírky pro %(recipient)s od %(user)s"
+
 msgid "Now participants can submit collections, and you can review them"
 msgstr "Nyní mohou účastníci odesílat sbírky a vy si je můžete prohlédnout"
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Část registračního poplatku odvozená pouze od vybrané vstupenky"
+
+msgid "Provide as precise a location or address as possible for pickup."
+msgstr "Uveďte co nejpřesnější místo nebo adresu pro vyzvednutí."
 
 msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
@@ -8841,6 +8828,11 @@ msgstr ""
 
 msgid "To be able to pay, your membership application must be approved."
 msgstr "Abyste mohli platit, musí být vaše žádost o členství schválena."
+
+#, python-format
+msgid "To confirm your spot, please pay %(amount)s as soon as possible."
+msgstr ""
+"Chcete-li si místo rezervovat, uhraďte prosím částku %(amount)s co nejdříve."
 
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
@@ -8862,6 +8854,10 @@ msgstr "Aktuální stav žádosti o členství a schvalovacího procesu"
 msgid "Express your preferences on the characters you would like to play"
 msgstr "Uveďte, za které postavy byste si přáli hrát"
 
+#, python-format
+msgid "Hello! Your registration for <b>%(event)s</b> has been confirmed."
+msgstr "Dobrý den! Vaše registrace na <b>%(event)s</b> byla potvrzena."
+
 msgid "If checked, no credits will be used in the entries for this event"
 msgstr ""
 "Pokud je zaškrtnuto, nebudou v položkách pro tuto událost použity žádné "
@@ -8881,10 +8877,6 @@ msgstr "V textu odkazujte na ostatní znaky jen jejich číslem:"
 msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Spravuje žetony, které účastníci používají k úhradě registračního poplatku"
-
-#, python-format
-msgid "New participation in the collection for %(recipient)s by %(user)s"
-msgstr "Nová účast na sbírce pro %(recipient)s od %(user)s"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"
@@ -8916,13 +8908,11 @@ msgstr ""
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr "Budou vám automaticky odečteny při registraci do nové události!"
 
-msgid "This is important, otherwise your payment will not be registered."
-msgstr "To je důležité, jinak nebude vaše platba zaregistrována."
-
 #, python-format
-msgid "To complete the process, simply <a href='%(url)s'>click here</a>."
+msgid "To confirm your spot, please pay %(amount)s within %(days)s days."
 msgstr ""
-"Chcete-li proces dokončit, jednoduše <a href='%(url)s'>klikněte zde</a>."
+"Chcete-li si místo potvrdit, uhraďte prosím částku %(amount)s do %(days)s "
+"dnů."
 
 msgid "URL of the external application where the user will be redirected"
 msgstr "Adresa URL externí aplikace, kam bude uživatel přesměrován"
@@ -8938,6 +8928,9 @@ msgstr "S touto organizací máte aktivní registrace na události."
 
 msgid "Your full residential address including street, city, and country"
 msgstr "Úplná adresa bydliště včetně ulice, města a země"
+
+msgid "Your registration for this event has been successfully cancelled."
+msgstr "Vaše registrace na tuto akci byla úspěšně zrušena."
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr "Přidáno na konec všech e-mailů potvrzujících účastníkům přihlášení"
@@ -8982,8 +8975,15 @@ msgstr ""
 msgid "Upload the scan of your signed application (image or pdf document)"
 msgstr "Nahrajte sken podepsané přihlášky (obrázek nebo dokument pdf)"
 
+msgid "Without payment of this fee, event participation is not permitted."
+msgstr "Bez uhrazení tohoto poplatku není účast na akci povolena."
+
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "zda si je postava vědoma identity druhého rysu."
+
+#, python-format
+msgid "%(amount)s %(credits)s were applied to participation in this event."
+msgstr "Na účast na této akci bylo uplatněno %(amount)s %(credits)s."
 
 #, python-format
 msgid "<b>%(type)s</b>: hidden faction visible only to assigned characters"
@@ -9057,9 +9057,6 @@ msgstr ""
 msgid "The full name of your event as it will be displayed to participants"
 msgstr "Úplný název vaší akce, jak se bude zobrazovat účastníkům"
 
-msgid "The payment of your membership fee for this year has been received!"
-msgstr "Potvrzujeme zaplacení členského příspěvku na aktuální rok!"
-
 msgid "To confirm your registration, please fill in your personal profile."
 msgstr "Pro potvrzení registrace vyplňte svůj osobní profil."
 
@@ -9067,6 +9064,10 @@ msgid "View all event information, and any specifics tickets costs, in its"
 msgstr ""
 "Veškeré informace o akci a podrobnosti o nákladech na registraci naleznete "
 "na stránkách akce"
+
+#, python-format
+msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
+msgstr "%(amount)s %(tokens)s bylo uplatněno za účelem účasti na této akci."
 
 msgid "Allows participants to create and modify their own characters freely"
 msgstr "Umožňuje účastníkům volně vytvářet a upravovat vlastní postavy"
@@ -9126,13 +9127,15 @@ msgstr ""
 "Zobrazte podrobný protokol aktivit všech změn provedených pro tuto "
 "organizaci"
 
+#, python-format
+msgid "View your achievements on your <a href='%(url)s'>public profile</a>."
+msgstr ""
+"Prohlédněte si své úspěchy na svém <a href='%(url)s'>veřejném profilu</a>."
+
 msgid "Wanna try other demos, or are you ready to create your organization?"
 msgstr ""
 "Chcete si vyzkoušet další ukázky, nebo jste připraveni založit svou "
 "organizaci?"
-
-msgid "We confirm that your registration for this event has been cancelled."
-msgstr "Potvrzujeme, že registrace na tuto akci byla zrušena."
 
 msgid "You must create at least one quest type before you can create quests"
 msgstr "Před vytvořením úkolů musíte vytvořit alespoň jeden typ úkolu"
@@ -9196,10 +9199,6 @@ msgstr ""
 "Nastavte možnosti pro automatické generování postav_ových listů do formátu "
 "PDF"
 
-#, python-format
-msgid "Staff member %(user)s added a new reimbursement request for %(event)s"
-msgstr "Zaměstnanec %(user)s přidal novou žádost o vrácení peněz za %(event)s"
-
 msgid "The ticket will be divided equally in the number of quotas indicated."
 msgstr "Vstupenka bude rozdělena rovným dílem na uvedený počet podílů."
 
@@ -9249,11 +9248,6 @@ msgid "Follow the link below to complete your payment on the Paypal platform."
 msgstr ""
 "Pro dokončení platby na platformě Paypal následujte níže uvedený odkaz."
 
-msgid "If you have a separate agreement with us, you may disregard this email"
-msgstr ""
-"Pokud s námi máte uzavřenou samostatnou smlouvu, můžete tento e-mail "
-"ignorovat"
-
 msgid "Maximum number of participant slots available (set to 0 for unlimited)"
 msgstr ""
 "Maximální počet dostupných slotů pro účastníky (pro neomezený počet nastavte"
@@ -9274,6 +9268,9 @@ msgstr ""
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"
+
+msgid "These will be automatically applied when you register for a new event."
+msgstr "Tyto údaje se automaticky použijí při registraci na novou akci."
 
 msgid "This discount code is already used in one or more of the selected runs"
 msgstr "Tento slevový kód již byl použit v jednom nebo více vybraných bězích"
@@ -9298,11 +9295,6 @@ msgid ""
 "Content of mail reminding participants to fill their membership request"
 msgstr ""
 "Obsah e-mailu, který účastníkům připomíná, aby vyplnili žádost o členství"
-
-#, python-format
-msgid ""
-"Display your achievements in your <a href= %(url)s'>public profile</a>."
-msgstr "Zobrazte své úspěchy ve svém <a href='%(url)s'>veřejném profilu</a>."
 
 msgid ""
 "Enables participants to write their own list of character relationships"
@@ -9357,10 +9349,6 @@ msgstr "Na prvním řádku souboru jsou názvy polí, které chcete nahrát."
 msgid ""
 "These are the event registrations for which you have to make a payment."
 msgstr "Jedná se o registrace událostí, za které je třeba zaplatit."
-
-msgid ""
-"This is automatically deducted from the registration of a future event."
-msgstr "Tato částka se automaticky odečte z registrace budoucí akce."
 
 msgid ""
 "This will unsubscribe you from all LarpManager platform communications."
@@ -9487,6 +9475,10 @@ msgstr ""
 "přístupových tokenů"
 
 msgid ""
+"We have successfully received your membership fee payment for this year."
+msgstr "Úspěšně jsme obdrželi platbu vašeho členského příspěvku za tento rok."
+
+msgid ""
 "Activate and configure advanced features for your organization and events"
 msgstr ""
 "Aktivace a konfigurace pokročilých funkcí pro vaši organizaci a události"
@@ -9563,6 +9555,12 @@ msgstr ""
 "Osobní předvolba verze rozhraní, má přednost před nastavením organizace"
 
 msgid ""
+"Please contact support if you encounter any issues or require assistance."
+msgstr ""
+"Pokud narazíte na nějaké problémy nebo budete potřebovat pomoc, obraťte se "
+"prosím na podporu."
+
+msgid ""
 "Preview the rendered sheet of this writing element as players will see it"
 msgstr ""
 "Zobrazte náhled vykresleného listu tohoto prvku, tak jak ho uvidí hráči"
@@ -9605,10 +9603,10 @@ msgstr ""
 
 #, python-format
 msgid ""
-"A payment of <b>%(amount).2f %(currency)s</b> was received for this event!"
+"A payment of <b>%(amount).2f %(currency)s</b> was recorded for this event."
 msgstr ""
-"Za tuto událost byla přijata platba ve výši <b>%(amount).2f "
-"%(currency)s</b>!"
+"U této události byla zaznamenána platba ve výši <b>%(amount).2f "
+"%(currency)s</b>."
 
 msgid ""
 "Added at the bottom of mail notifying participants of character assignment"
@@ -9630,12 +9628,6 @@ msgid ""
 msgstr ""
 "Povoluje pole 'skrýt', aby bylo možné skrýt prvek pro psaní před účastníky"
 
-#, python-format
-msgid ""
-"Good news! Your request to sign up for <b>%(event)s</b> has been accepted."
-msgstr ""
-"Dobrá zpráva! Vaše žádost o registraci na <b>%(event)s</b> byla přijata."
-
 msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr "Potvrzuji, že všechny požadované osobní údaje byly vyplněny správně"
@@ -9651,6 +9643,12 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto, umožňuje účastníkům přizpůsobit zájmena svých postav"
 
+#, python-format
+msgid ""
+"Staff member %(user)s submitted a new reimbursement request for %(event)s."
+msgstr ""
+"Zaměstnanec %(user)s podal novou žádost o proplacení výdajů za %(event)s."
+
 msgid ""
 "Text visible only by the assigned participant, when 'show text' is checked"
 msgstr ""
@@ -9665,16 +9663,6 @@ msgid ""
 "To confirm your registration, apply to become a member of the Association."
 msgstr ""
 "Chcete-li potvrdit svou registraci, podejte žádost o členství ve sdružení."
-
-#, python-format
-msgid ""
-"We confirm that you have successfully pre-registered for <b>%(event)s</b>!"
-msgstr "Potvrzujeme, že jste se úspěšně předregistrovali na <b>%(event)s</b>!"
-
-msgid ""
-"We have pre-filled the application form based on the data you provided us:"
-msgstr ""
-"Přihlášku jsme předvyplnili na základě údajů, které jste nám poskytli:"
 
 msgid ""
 "You must create at least one prologue type before you can create prologues"
@@ -9706,11 +9694,6 @@ msgid ""
 "Enable specific features to add specialized functionalities to the platform"
 msgstr ""
 "Povolte specifické funkce pro přidání specializovaných funkcí do platformy"
-
-msgid ""
-"For what time you will need transportation (time zone of the larp location)"
-msgstr ""
-"Na jakou dobu budete potřebovat dopravu (časové pásmo místa konání akce)"
 
 msgid ""
 "Identify items assigned to more than one area to spot and resolve conflicts"
@@ -9797,6 +9780,10 @@ msgstr ""
 "touto akcí"
 
 msgid ""
+"Write your question, request or doubt here. We will be happy to answer you!"
+msgstr "Zde napište svůj dotaz, požadavek nebo pochybnost. Rádi vám odpovíme!"
+
+msgid ""
 "You can withdraw your consent to data sharing by clicking the related link."
 msgstr ""
 "Souhlas se sdílením údajů můžete odvolat kliknutím na příslušný odkaz."
@@ -9804,6 +9791,11 @@ msgstr ""
 msgid ""
 "You will continue to receive communications related to those registrations."
 msgstr "Budete i nadále dostávat sdělení týkající se těchto registrací."
+
+#, python-format
+msgid ""
+"Your pre-registration for <b>%(event)s</b> has been successfully confirmed."
+msgstr "Vaše předběžná registrace na <b>%(event)s</b> byla úspěšně potvrzena."
 
 msgid ""
 "Your registration is provisional: complete the payment to confirm your spot"
@@ -9842,9 +9834,9 @@ msgstr ""
 
 #, python-format
 msgid ""
-"Hello! We are reaching out regarding your registration for <b>%(event)s</b>."
+"Great news! Your request to register for <b>%(event)s</b> has been approved."
 msgstr ""
-"Dobrý den! Obracíme se na vás ohledně vaší registrace na <b>%(event)s</b>."
+"Skvělá zpráva! Vaše žádost o registraci na <b>%(event)s</b> byla schválena."
 
 msgid ""
 "Hover on the link, or click on the question icon, to see what the link does."
@@ -9894,12 +9886,6 @@ msgid ""
 msgstr ""
 "Spravujte kategorie úkolů, z nichž každá obsahuje úvodní text a příslušné "
 "úkoly"
-
-msgid ""
-"Manage speed-larp scenes, their station, sheet text, and assigned characters"
-msgstr ""
-"Spravujte scény speed-larpu, jejich stanoviště, texty v listech a přidělené "
-"postavy"
 
 msgid ""
 "Maximum number of reserve character slots available (set to 0 for unlimited)"
@@ -10051,6 +10037,13 @@ msgstr ""
 "Uveďte, zda je dovednost viditelná pro uživatele a zda ji lze volně zakoupit"
 
 msgid ""
+"Information for passengers (such as car color/model, estimated arrival "
+"time)."
+msgstr ""
+"Informace pro cestující (například barva a model vozidla, předpokládaný čas "
+"příjezdu)."
+
+msgid ""
 "Manage organizer roles and assign permissions to staff members for this "
 "event"
 msgstr ""
@@ -10077,11 +10070,6 @@ msgid ""
 msgstr ""
 "Zatím nejsou definovány žádné skladové kontejnery. Pomocí tlačítka výše "
 "přidejte kontejner."
-
-msgid ""
-"Please upload the payment receipt on that page once the transfer is "
-"complete."
-msgstr "Po dokončení převodu nahrajte na tuto stránku potvrzení o platbě."
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "
@@ -10118,11 +10106,6 @@ msgstr ""
 "Událost uvedenou v url adrese jsme nenašli; možná se jedná o jednu z těchto "
 "událostí?"
 
-msgid ""
-"Write your question, request or concern here. We will be happy to answer "
-"you!"
-msgstr "Zde napište svůj dotaz, požadavek nebo pochybnost. Rádi vám odpovíme!"
-
 #, python-format
 msgid ""
 "You can consult the <a href=\"%(conditions_url)s\">registration "
@@ -10136,14 +10119,6 @@ msgid ""
 "lost."
 msgstr ""
 "Nemůžete na něm pracovat současně: práce jednoho z vás by byla ztracena."
-
-#, python-format
-msgid ""
-"A reimbursement of %(amount).2f %(elements)s for '%(reason)s' has been "
-"issued."
-msgstr ""
-"Byla provedena refundace ve výši %(amount).2f %(elements)s z důvodu "
-"„%(reason)s“."
 
 msgid ""
 "Answer the following questions. Select *all* of the answers that seem "
@@ -10164,6 +10139,13 @@ msgid ""
 msgstr ""
 "Umožňuje nastavit postavu jako 'zrcadlo' pro jinou postavu a skrýt tak její "
 "skutečnou povahu"
+
+#, python-format
+msgid ""
+"Hello! We are contacting you regarding your registration for "
+"<b>%(event)s</b>."
+msgstr ""
+"Dobrý den! Obracíme se na vás ohledně vaší registrace na <b>%(event)s</b>."
 
 msgid ""
 "If checked, allows participants to customise their characters' profile "
@@ -10187,6 +10169,13 @@ msgstr ""
 " vybrat"
 
 msgid ""
+"Manage speed-larp scenes, their stations, prompt text, and assigned "
+"characters"
+msgstr ""
+"Správa scén speed-larpu, jejich stanovišť, textů pro podněty a přidělených "
+"postav"
+
+msgid ""
 "Manage the progress steps that track the completion status of writing "
 "elements"
 msgstr ""
@@ -10199,6 +10188,13 @@ msgid ""
 msgstr ""
 "Zatím nebyla definována žádná kritéria. Pomocí tlačítka výše vytvořte první "
 "kritérium."
+
+msgid ""
+"Please upload your payment receipt to that page once the transfer is "
+"complete."
+msgstr ""
+"Jakmile bude převod dokončen, nahrajte prosím na tuto stránku doklad o "
+"platbě."
 
 msgid ""
 "Send bulk e-mails to participants and review the full archive of sent "
@@ -10245,6 +10241,14 @@ msgid ""
 "dates"
 msgstr "Zobrazit roční seznam členů s čísly karet a daty prodloužení"
 
+#, python-format
+msgid ""
+"Your reimbursement request of %(amount).2f for '%(reason)s' has been "
+"approved."
+msgstr ""
+"Vaše žádost o proplacení částky %(amount).2f z důvodu „%(reason)s“ byla "
+"schválena."
+
 msgid ""
 "Browse the edit history of this writing element and compare version "
 "differences"
@@ -10258,13 +10262,6 @@ msgid ""
 msgstr ""
 "Pokud je nastaveno, je tento způsob platby k dispozici pouze pro organizace "
 "této země"
-
-msgid ""
-"If you need a hand, feel free to let us know. We'll try to help as best we "
-"can!"
-msgstr ""
-"Pokud potřebujete pomoc, klidně nám dejte vědět. Pokusíme se vám pomoci, jak"
-" nejlépe umíme!"
 
 msgid ""
 "Indicate the name of the member for whom you want to activate a new "
@@ -10322,19 +10319,18 @@ msgid ""
 "payment."
 msgstr "Jedná se o registrace delegovaných účtů, za které je třeba zaplatit."
 
-#, python-format
-msgid ""
-"To confirm it, please pay the following amount as soon as possible: "
-"%(amount)s."
-msgstr ""
-"Pro potvrzení prosím co nejdříve zaplaťte následující částku: %(amount)s."
-
 msgid ""
 "You have activated the following features, for each here's the links to "
 "follow:"
 msgstr ""
 "Aktivovali jste následující funkce, pro každou z nich zde najdete odkazy, "
 "které je třeba sledovat:"
+
+#, python-format
+msgid ""
+"You have been assigned the character <b>%(character)s</b> for "
+"<b>%(event)s</b>."
+msgstr "Byla vám přidělena postava <b>%(character)s</b> pro <b>%(event)s</b>."
 
 msgid ""
 "Do you want a dashboard to track and manage deadlines missed by registered "
@@ -10412,11 +10408,11 @@ msgstr ""
 
 #, python-format
 msgid ""
-"You must pay at least <b>%(amount).2f %(currency)s</b> within %(deadline)d "
-"days."
+"A reimbursement of %(amount).2f %(elements)s for '%(reason)s' has been "
+"processed."
 msgstr ""
-"Musíte zaplatit alespoň <b>%(amount).2f %(currency)s</b> do %(deadline)d "
-"dnů."
+"Byla zpracována refundace ve výši %(amount).2f %(elements)s z důvodu "
+"„%(reason)s“."
 
 msgid ""
 "Choose which of your characters will found this guild and become its first "
@@ -10477,6 +10473,13 @@ msgid ""
 msgstr ""
 "Tato stránka obsahuje přehled označení (labelů) skupin, která se používají "
 "ke seskupování skupin (poolů) v inventářích postav"
+
+msgid ""
+"To confirm your event registration, please complete your payment within one "
+"week:"
+msgstr ""
+"Chcete-li potvrdit svou registraci na akci, proveďte prosím platbu do "
+"jednoho týdne:"
 
 msgid ""
 "Track a member's full event registration history with payment status for "
@@ -10560,12 +10563,6 @@ msgid ""
 msgstr ""
 "Pokud je zaškrtnuto: povolí šablony schopností, které lze opakovaně používat"
 " u více schopností"
-
-msgid ""
-"If payment is not received within this period, your registration may be "
-"cancelled."
-msgstr ""
-"Pokud v této lhůtě nebude obdržena platba, může být vaše registrace zrušena."
 
 msgid ""
 "If you don't find an user, you can save the role, and then invite them "
@@ -10757,14 +10754,6 @@ msgstr ""
 "Zkopírujte vybrané prvky z jiné události do této události a přepište tak "
 "stávající data"
 
-#, python-format
-msgid ""
-"In the event <b>%(event)s</b> you were assigned the character: "
-"<b>%(character)s</b>."
-msgstr ""
-"V události <b>%(event)s</b> vám byla přiřazena postava: "
-"<b>%(character)s</b>."
-
 msgid ""
 "Indicate the character options, which must be selected to make the ability "
 "available"
@@ -10853,6 +10842,13 @@ msgstr ""
 "přidat nový modul."
 
 msgid ""
+"Please make sure to send your payment on time, or we might have to cancel "
+"your spot."
+msgstr ""
+"Nezapomeňte prosím uhradit platbu včas, jinak budeme možná nuceni vaše místo"
+" zrušit."
+
+msgid ""
 "Registrations stay closed until the date and time set below, then open "
 "automatically"
 msgstr ""
@@ -10884,6 +10880,14 @@ msgid ""
 msgstr ""
 "Sledujte všechna přiřazení položek seskupená podle oblastí a označujte "
 "jednotlivé položky jako naložené a nasazené"
+
+#, python-format
+msgid ""
+"You can view all details required details <a href='%(url)s'>on the payment "
+"page</a>."
+msgstr ""
+"Všechny potřebné údaje si můžete prohlédnout <a href='%(url)s'>na platební "
+"stránce</a>."
 
 msgid ""
 "Your cancellation request has been sent to the staff; please wait for their "
@@ -10980,6 +10984,14 @@ msgstr ""
 "Nahrajte fotografii dokladu totožnosti, který jste uvedli v žádosti (obrázek"
 " nebo pdf)"
 
+#, python-format
+msgid ""
+"User initiated a password reset but did not complete it. Give them this "
+"link: %(url)s"
+msgstr ""
+"Uživatel zahájil proces obnovení hesla, ale nedokončil jej. Poskytněte mu "
+"tento odkaz: %(url)s"
+
 msgid ""
 "Enables the creation, editing, and assignment of characters to registered "
 "participants"
@@ -11034,6 +11046,14 @@ msgid ""
 msgstr ""
 "neregistrovaní uživatelé budou přesměrováni sem, zatímco registrovaní "
 "uživatelé budou mít normální přístup"
+
+#, python-format
+msgid ""
+"<i>Payment overdue</i>: Submit payment of <b>%(amount).2f %(currency)s</b> "
+"immediately."
+msgstr ""
+"<i>Splatná platba</i>: Neprodleně uhraďte částku ve výši <b>%(amount).2f "
+"%(currency)s</b>."
 
 msgid ""
 "Do you want to make your upcoming events visible to external sites through a"
@@ -11116,33 +11136,24 @@ msgstr ""
 " uživatel?"
 
 msgid ""
+"We regret to inform you that your membership application was not approved by"
+" the board."
+msgstr ""
+"S lítostí Vám oznamujeme, že Vaše žádost o členství nebyla představenstvem "
+"schválena."
+
+msgid ""
 "You are now registered, but your account is inactive. We have sent an "
 "activation email."
 msgstr ""
 "Nyní jste zaregistrováni, ale váš účet je neaktivní. Zaslali jsme vám "
 "aktivační e-mail."
 
-#, python-format
-msgid ""
-"<i>Payment overdue</i>: Please pay <b>%(amount).2f %(currency)s</b> as soon "
-"as possible!"
-msgstr ""
-"<i>Platba po splatnosti</i>: <b>%(amount).2f %(currency)s</b> uhraďte prosím"
-" co nejdříve!"
-
 msgid ""
 "Attention: the operation is final, please double-check the assignments "
 "before uploading!"
 msgstr ""
 "Upozornění: operace je konečná, před odesláním přiřazení překontrolujte!"
-
-#, python-format
-msgid ""
-"Hello! We are reaching out regarding your provisional registration for "
-"<b>%(event)s</b>."
-msgstr ""
-"Ahoj! Obracíme se na vás ohledně vaší předběžné registrace na "
-"<b>%(event)s</b>."
 
 msgid ""
 "If checked, the annual membership fee is paid separately from the event "
@@ -11197,6 +11208,13 @@ msgid ""
 msgstr ""
 "Celková očekávaná částka, pokud všichni registrovaní účastníci plně uhradí "
 "svou dlužnou částku"
+
+msgid ""
+"Your membership application has been approved by the board. Welcome to the "
+"organization!"
+msgstr ""
+"Vaše žádost o členství byla schválena představenstvem. Vítejte v naší "
+"organizaci!"
 
 msgid ""
 "Acquisition of abilities by players is not enabled for this event: contact "
@@ -11310,12 +11328,6 @@ msgstr ""
 "jazyka a preferencí v komunikaci"
 
 msgid ""
-"We inform you that your membership of the Association has not been accepted "
-"by the board."
-msgstr ""
-"Oznamujeme Vám, že Vaše členství v Asociaci nebylo Výkonnou radou přijato."
-
-msgid ""
 "Whether this translation override is currently active. Inactive translations"
 " are ignored."
 msgstr ""
@@ -11328,6 +11340,22 @@ msgid ""
 msgstr ""
 "Stisknutím příslušného tlačítka můžete vytvořit nové účty delegátů nebo se s"
 " nimi přihlásit"
+
+#, python-format
+msgid ""
+"Alternatively, you can request a payout on <a href='%(url)s'>your accounting"
+" page</a>.</i>"
+msgstr ""
+"Případně můžete požádat o výplatu na <a href='%(url)s'>své účetní "
+"stránce</a>.</i>"
+
+#, python-format
+msgid ""
+"Hello! We are contacting you regarding your provisional registration for "
+"<b>%(event)s</b>."
+msgstr ""
+"Dobrý den! Obracíme se na vás ohledně vaší předběžné registrace na "
+"<b>%(event)s</b>."
 
 msgid ""
 "If checked, participants will be able to view for each character the "
@@ -11384,6 +11412,14 @@ msgid ""
 msgstr ""
 "Byli jste pozváni, abyste se připojili k roli <strong>%(role.name)s</strong>"
 " v organizaci."
+
+#, python-format
+msgid ""
+"A minimum payment of <b>%(amount).2f %(currency)s</b> is required within "
+"%(deadline)d days."
+msgstr ""
+"Do %(deadline)d dnů je třeba uhradit minimální splátku ve výši "
+"<b>%(amount).2f %(currency)s</b>."
 
 msgid ""
 "Create a ticket type by clicking 'New'; set the name, price, and "
@@ -11492,13 +11528,6 @@ msgstr ""
 "Umožňuje generovat slevové kódy, které mohou účastníci použít ke snížení "
 "ceny vstupenky"
 
-#, python-format
-msgid ""
-"Alternatively, you can request a reimbursement in <a href='%(url)s'>your "
-"accounting</a>.</i>"
-msgstr ""
-"Případně můžete požádat o proplacení v <a href='%(url)s'>účetnictví</a>.</i>"
-
 msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
 "transversal or secret"
@@ -11534,14 +11563,6 @@ msgstr ""
 "Všimněte si, že existující schopnosti se stejným názvem budou přepsány "
 "nahranými daty."
 
-#, python-format
-msgid ""
-"The user requested the password reset, but did not complete it. Give them "
-"this link: %(url)s"
-msgstr ""
-"Uživatel požádal o obnovení hesla, ale nedokončil je. Poskytněte mu tento "
-"odkaz: %(url)s"
-
 msgid ""
 "To participate in this event, you will have to pay in addition the annual "
 "membership fee of:"
@@ -11549,10 +11570,13 @@ msgstr ""
 "Chcete-li se této akce zúčastnit, musíte navíc zaplatit roční členský "
 "poplatek ve výši:"
 
+#, python-format
 msgid ""
-"Unfortunately, without full payment of the fee, participation in the event "
-"is not permitted."
-msgstr "Bez uhrazení celého poplatku není bohužel účast na akci povolena."
+"We regret to inform you that your request to register for <b>%(event)s</b> "
+"was not accepted."
+msgstr ""
+"S lítostí Vám oznamujeme, že Vaše žádost o registraci na <b>%(event)s</b> "
+"nebyla přijata."
 
 msgid ""
 "You can indicate a template event from which functionality and "
@@ -11560,14 +11584,6 @@ msgid ""
 msgstr ""
 "Můžete zadat událost šablony, ze které budou zkopírovány funkce a "
 "konfigurace"
-
-#, python-format
-msgid ""
-"Your request for reimbursement of %(amount).2f, with reason '%(reason)s', "
-"has been approved!"
-msgstr ""
-"Vaše žádost o proplacení částky %(amount).2f s důvodem '%(reason)s' byla "
-"schválena!"
 
 msgid ""
 "Click 'New' to create your first event; fill in the name, dates, and basic "
@@ -11624,13 +11640,6 @@ msgid ""
 msgstr ""
 "Abyste se mohli registrovat na akce asociace, musíte požádat o přijetí za "
 "člena."
-
-msgid ""
-"It is required for participation in all our live events, as it also covers "
-"the insurance fee."
-msgstr ""
-"Je nutná pro účast na všech našich živých akcích, protože pokrývá také "
-"poplatek za pojištění."
 
 msgid ""
 "Manage organization roles, assign members, and configure the permissions "
@@ -11696,6 +11705,13 @@ msgstr ""
 "jednu možnost"
 
 msgid ""
+"Your registration for this event has been successfully cancelled. We are "
+"sorry to see you go!"
+msgstr ""
+"Vaše registrace na tuto akci byla úspěšně zrušena. Je nám líto, že "
+"odcházíte!"
+
+msgid ""
 "A user with this email address already exists. Please use a different email "
 "or try logging in."
 msgstr ""
@@ -11745,6 +11761,13 @@ msgstr ""
 " a vytvářejte nové akce"
 
 msgid ""
+"Once your membership is approved, you can proceed with the payment for your "
+"registered events."
+msgstr ""
+"Jakmile bude vaše členství schváleno, můžete přistoupit k úhradě poplatků za"
+" akce, na které jste se zaregistrovali."
+
+msgid ""
 "Optional - Maximum number of times it can be selected across all "
 "registrations (0 = unlimited)"
 msgstr ""
@@ -11756,14 +11779,6 @@ msgid ""
 msgstr ""
 "Postranní panel se rozšířil. Nové nabídky se budou objevovat i nadále, "
 "jakmile aktivujete další moduly"
-
-#, python-format
-msgid ""
-"We are sorry to inform you that your request to sign up for <b>%(event)s</b>"
-" was not accepted."
-msgstr ""
-"S lítostí vám oznamujeme, že vaše žádost o registraci na <b>%(event)s</b> "
-"nebyla přijata."
 
 msgid ""
 "When you're ready to permanently update warehouse quantities based on this "
@@ -11793,6 +11808,13 @@ msgid ""
 msgstr ""
 "Vyplňte a nahrajte svou přihlášku k členství, která je nutná k tomu, abyste "
 "mohli uhradit registrační poplatek"
+
+msgid ""
+"If you have already arranged a separate payment agreement with us, please "
+"disregard this email."
+msgstr ""
+"Pokud jste s námi již uzavřeli samostatnou dohodu o splátkách, tento e-mail "
+"prosím ignorujte."
 
 msgid ""
 "No events with LarpManager costs found. Costs will appear here once events "
@@ -11937,25 +11959,19 @@ msgstr ""
 "postav, který se právě vytváří na pozadí"
 
 msgid ""
-"We confirm that your membership has been accepted by the board. We welcome "
-"you to our community!"
-msgstr ""
-"Potvrzujeme, že vaše členství bylo přijato výkonnou radou. Vítáme vás v naší"
-" komunitě!"
-
-msgid ""
-"We confirm that your registration for this event has been cancelled. We are "
-"sorry to see you go!"
-msgstr ""
-"Potvrzujeme, že vaše registrace na tuto akci byla zrušena. Je nám líto, že "
-"odjíždíte!"
-
-msgid ""
 "You have already paid your dues for the current year, so you are already "
 "covered for this event!"
 msgstr ""
 "Již jste zaplatili členský poplatek na aktuální rok, takže jste již na tuto "
 "akci zahrnuti!"
+
+#, python-format
+msgid ""
+"Alternatively, you may request a payout of your balance on <a "
+"href='%(url)s'>your accounting</a>."
+msgstr ""
+"Případně můžete požádat o výplatu zůstatku na <a href='%(url)s'>vašem "
+"účtu</a>."
 
 msgid ""
 "Create a character by clicking 'New'; give it a name and fill in the "
@@ -11977,6 +11993,14 @@ msgid ""
 msgstr ""
 "Umožňuje pole 'cover', aby se v galerii zobrazil konkrétní obrázek - dokud "
 "není přiřazen účastníkovi"
+
+#, python-format
+msgid ""
+"Hello! You are registered for %(event)s, but we have not yet received your "
+"annual membership fee."
+msgstr ""
+"Dobrý den! Jste zaregistrováni na %(event)s, ale dosud jsme neobdrželi váš "
+"roční členský příspěvek."
 
 msgid ""
 "If checked, all registrations are displayed in a single table rather than "
@@ -12135,6 +12159,13 @@ msgstr ""
 " skryjí, místo aby se zobrazily zakázané"
 
 msgid ""
+"Include identifying details (e.g., clothing, luggage, precise meeting point)"
+" to help us locate you."
+msgstr ""
+"Uveďte identifikační údaje (např. oblečení, zavazadla, přesné místo "
+"setkání), které nám pomohou vás najít."
+
+msgid ""
 "Lets you define sections in the registration form, grouping questions to "
 "make lengthy forms clearer"
 msgstr ""
@@ -12213,6 +12244,13 @@ msgstr ""
 "pořádané pro naše členy!"
 
 msgid ""
+"Your payment for these event sign-ups is currently under review. No action "
+"is required on your part."
+msgstr ""
+"Vaše platba za tyto registrace na akce se v současné době prověřuje. Z vaší "
+"strany není třeba nic podnikat."
+
+msgid ""
 "Automatically generates a PDF fiscal receipt for each payment, in accordance"
 " with Italian legislation"
 msgstr ""
@@ -12275,13 +12313,6 @@ msgstr ""
 "Postava byla přidána do frakce, ale v textu frakce se o ní nikde nepíše"
 
 msgid ""
-"To confirm your event registration, please complete your payment within one "
-"week. You can do so here:"
-msgstr ""
-"Pro potvrzení registrace na akci proveďte platbu do jednoho týdne. Můžete "
-"tak učinit zde:"
-
-msgid ""
 "Upload a membership fee invoice for a member to record and confirm their "
 "payment for the current year"
 msgstr ""
@@ -12294,14 +12325,6 @@ msgid ""
 msgstr ""
 "Ověřte nevyřízené platby nahráním souboru CSV z vaší banky a porovnejte "
 "transakce s registracemi"
-
-#, python-format
-msgid ""
-"Alternatively, you can request a payout of your balance on <a "
-"href='%(url)s'>your accounting page</a>."
-msgstr ""
-"Případně můžete požádat o výplatu svého zůstatku na <a href='%(url)s'>vaší "
-"účetní stránce</a>."
 
 msgid ""
 "Browse and search all writing elements for this event, including characters,"
@@ -12323,14 +12346,6 @@ msgid ""
 msgstr ""
 "Umožňuje spravovat příjmy z události, které nepocházejí z registrací "
 "účastníků"
-
-#, python-format
-msgid ""
-"Hello! You have registered for %(event)s, but we have not yet received your "
-"annual membership payment."
-msgstr ""
-"Dobrý den! Zaregistrovali jste se na %(event)s, ale ještě jsme neobdrželi "
-"vaši roční platbu za členství."
 
 msgid ""
 "Review safety information submitted by registered participants, grouped with"
@@ -12366,14 +12381,6 @@ msgid ""
 msgstr ""
 "Umožňuje účastníkům posílat si navzájem soukromé zprávy, aniž by došlo k "
 "odhalení osobních e-mailových adres"
-
-#, python-format
-msgid ""
-"Hello! We have received your request to sign up for <b>%(event)s</b>. An "
-"organizer will review it soon."
-msgstr ""
-"Dobrý den! Obdrželi jsme vaši žádost o registraci na <b>%(event)s</b>. "
-"Organizátor ji brzy posoudí."
 
 msgid ""
 "If you select one (or more) factions, this modifier applies only to "
@@ -12522,6 +12529,14 @@ msgstr ""
 "Přidává typy vstupenek 'Patron' a 'Snížené'. Každá zakoupená vstupenka "
 "'Patron' zpřístupní jednu vstupenku 'Snížené'"
 
+#, python-format
+msgid ""
+"Hello! To confirm your provisional registration for %(event)s, you must "
+"apply for association membership."
+msgstr ""
+"Dobrý den! Abyste potvrdili svou předběžnou registraci na %(event)s, musíte "
+"podat žádost o členství v asociaci."
+
 msgid ""
 "I could not find anything relevant in the documentation. Try asking in "
 "English, or open a support ticket."
@@ -12578,6 +12593,14 @@ msgstr ""
 "Procentuální podíl tržeb vypočtených jako poplatek za infrastrukturu "
 "sdružení (v celých číslech od 0 do 100)"
 
+#, python-format
+msgid ""
+"The collection for '%(recipient)s' has been successfully activated. <a "
+"href='%(url)s'>Manage it here</a>."
+msgstr ""
+"Kolekce pro „%(recipient)s“ byla úspěšně aktivována. <a "
+"href='%(url)s'>Spravujte ji zde</a>."
+
 msgid ""
 "The question will be shown in the selected section (if left empty it will "
 "shown at the start of the form)"
@@ -12600,13 +12623,6 @@ msgstr ""
 "vztahuje pouze na postavy, které je mají všechny"
 
 msgid ""
-"Indicates useful information to passengers, such as color of your car, time "
-"estimated time of your arrival"
-msgstr ""
-"Uvádí užitečné informace pro cestující, například barvu vozu, předpokládaný "
-"čas příjezdu"
-
-msgid ""
 "Keeps a daily record of the organisation's and events' financial status, "
 "displaying trend graphs over time"
 msgstr ""
@@ -12619,6 +12635,14 @@ msgid ""
 msgstr ""
 "Platby jsou zpracovávány přímo prostřednictvím vámi nakonfigurovaných metod "
 "a odesílají příjmy přímo na váš účet."
+
+#, python-format
+msgid ""
+"Please note that an annual membership fee of %(amount)d %(currency)s is "
+"required to participate in events."
+msgstr ""
+"Vezměte prosím na vědomí, že pro účast na akcích je nutné uhradit roční "
+"členský příspěvek ve výši %(amount)d %(currency)s."
 
 msgid ""
 "View the full list of competences self-assessed by this contributor, "
@@ -12648,6 +12672,14 @@ msgid ""
 msgstr ""
 "Každý přítel, který se zaregistruje a použije tento kód, získá následující "
 "slevu přímo na vstupenku:"
+
+#, python-format
+msgid ""
+"Hello! We have received your request to register for <b>%(event)s</b>. An "
+"organizer will review it shortly."
+msgstr ""
+"Dobrý den! Obdrželi jsme vaši žádost o registraci na <b>%(event)s</b>. "
+"Organizátor ji brzy posoudí."
 
 msgid ""
 "It will only be used for internal bureaucratic purposes, and will NEVER be "
@@ -12706,19 +12738,18 @@ msgstr ""
 "rozdělte je do skupin podle jazyka pro účely oslovovacích kampaní"
 
 msgid ""
+"Thank you for submitting your membership application. Your event "
+"registrations are provisionally confirmed."
+msgstr ""
+"Děkujeme za podání žádosti o členství. Vaše registrace na akce jsou "
+"prozatímně potvrzeny."
+
+msgid ""
 "Upload a custom font file for page titles to match your organization's "
 "branding (TTF, OTF, or WOFF formats)"
 msgstr ""
 "Nahrání vlastního souboru písma pro názvy stránek, aby odpovídaly značce "
 "vaší organizace (formáty TTF, OTF nebo WOFF)"
-
-#, python-format
-msgid ""
-"You can find all the information needed to complete the transfer <a "
-"href='%(url)s'>on the payment page</a>."
-msgstr ""
-"Všechny informace potřebné k dokončení převodu najdete <a href='%(url)s'>na "
-"platební stránce</a>."
 
 msgid ""
 "If present, it indicates the reason for the payment that the participant "
@@ -12771,11 +12802,11 @@ msgstr ""
 
 #, python-format
 msgid ""
-"We confirm that the collection for '%(recipient)s' has been activated. <a "
-"href='%(url)s'>Manage it here!</a>"
+"You can select your preferred payment method and view the details <a "
+"href='%(url)s'>on the payment page</a>."
 msgstr ""
-"Potvrzujeme, že sběr pro '%(recipient)s' byl aktivován. <a "
-"href='%(url)s'>Spravujte ji zde!</a>"
+"Můžete si vybrat preferovaný způsob platby a zobrazit podrobnosti <a "
+"href='%(url)s'>na stránce platby</a>."
 
 msgid ""
 "Access personal data fields for all registered participants and staff, along"
@@ -12911,6 +12942,14 @@ msgstr ""
 "Sledujte všechny platby členů za jednotlivé akce, kontrolujte částky a stav "
 "plateb a potvrzujte nevyřízené faktury za registraci"
 
+#, python-format
+msgid ""
+"Would you like to request a reimbursement? <a "
+"href=\"%(accounting_refund_url)s\">Submit a new refund request</a>."
+msgstr ""
+"Chcete požádat o vrácení peněz? <a href=\"%(accounting_refund_url)s\">Podat "
+"novou žádost o vrácení peněz</a>."
+
 msgid ""
 "Enables fixed installment deadlines for registration fees, allowing you to "
 "define multiple due dates and amounts"
@@ -12924,14 +12963,6 @@ msgid ""
 msgstr ""
 "U textových otázek maximální počet znaků; u více možností maximální počet "
 "možností (0 = bez omezení)"
-
-#, python-format
-msgid ""
-"Hello! To confirm your provisional registration for %(event)s, you must "
-"apply for membership in the association."
-msgstr ""
-"Dobrý den! Pro potvrzení předběžné registrace na %(event)s musíte požádat o "
-"členství ve sdružení."
 
 msgid ""
 "If checked, options no longer available in the registration form are hidden,"
@@ -12953,13 +12984,6 @@ msgid ""
 msgstr ""
 "Zatím nebyly vytvořeny žádné šablony pro pracovní listy. Pomocí tlačítka "
 "výše přidejte šablonu rozvržení CSS pro své pracovní listy."
-
-msgid ""
-"Once your admission is approved, you will be able to pay for the tickets for"
-" the events you have registered for."
-msgstr ""
-"Jakmile bude vaše přijetí schváleno, budete moci zaplatit za vstupenky na "
-"akce, na které jste se zaregistrovali."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -13060,6 +13084,13 @@ msgstr ""
 "panel správy, který umožňuje upravit obsah tohoto upozornění"
 
 msgid ""
+"Annual membership is mandatory for participation in all our live events, as "
+"it covers required liability insurance."
+msgstr ""
+"Pro účast na všech našich živých akcích je povinné roční členství, protože "
+"zahrnuje povinné pojištění odpovědnosti za škodu."
+
+msgid ""
 "Background image displayed across all pages of your organization - use a "
 "subtle pattern or texture for best results"
 msgstr ""
@@ -13157,14 +13188,6 @@ msgstr ""
 "Pokud je zaškrtnuto, umožňuje zobrazit otázku registračního formuláře pouze "
 "v případě, že je účastník přiřazen k určitým frakcím."
 
-#, python-format
-msgid ""
-"We confirm we received the donation of %(amount)d%(currency)s. We thank you "
-"for your support, and for believing in us!"
-msgstr ""
-"Potvrzujeme, že jsme obdrželi dar ve výši %(amount)d%(currency)s. Děkujeme "
-"vám za vaši podporu a za to, že v nás věříte!"
-
 msgid ""
 "Are you a doctor, a nurse, or a licensed rescuer? We can ask you to "
 "intervene in case accidents occur during the event?"
@@ -13215,6 +13238,15 @@ msgstr ""
 "Měřítko, jak moc zvýhodnit účastníky, kteří dokončili plnou platbu dříve (0 "
 "= výchozí zakázáno, 1 = normální, 10 = silné)"
 
+#, python-format
+msgid ""
+"For bank transfers, visit the <a href='%(url)s'>payment page</a> to view "
+"details (including IBAN and payment reference)."
+msgstr ""
+"V případě bankovních převodů navštivte <a href='%(url)s'>stránku pro "
+"platby</a>, kde najdete podrobné informace (včetně čísla IBAN a referenčního"
+" čísla platby)."
+
 msgid ""
 "If checked, enables criterions that conditionally modify experience point "
 "totals based on prerequisites and requirements"
@@ -13264,6 +13296,14 @@ msgstr ""
 "Počet měsíců na začátku roku, během nichž je možné uhradit roční poplatek, "
 "aniž by bylo nutné mít aktivní registraci na nějakou akci."
 
+#, python-format
+msgid ""
+"Thank you for your donation of %(amount)d%(currency)s! We really appreciate "
+"your support and for believing in what we do."
+msgstr ""
+"Děkujeme za váš příspěvek ve výši %(amount)d %(currency)s! Velmi si vážíme "
+"vaší podpory a toho, že věříte v to, co děláme."
+
 msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"
 " staff can manage the status of those requests"
@@ -13277,14 +13317,6 @@ msgid ""
 msgstr ""
 "Umožňuje zadat sadu uživatelů, kterým budou zasílány e-maily s potvrzením o "
 "platbě pro všechny události namísto organizátorů jednotlivých událostí"
-
-#, python-format
-msgid ""
-"Please also note that payment of the annual membership fee (%(amount)d "
-"%(currency)s) is required to participate in events."
-msgstr ""
-"Vezměte prosím na vědomí, že pro účast na akcích je nutné uhradit roční "
-"členský příspěvek (%(amount)d %(currency)s)."
 
 msgid ""
 "Run the lottery draw to randomly select participants from lottery-tier "
@@ -13431,12 +13463,13 @@ msgstr ""
 "Uveďte speciální slevový kód, který bude účastníkům sdělen a který bude "
 "třeba zadat při registraci."
 
+#, python-format
 msgid ""
-"You have completed your application for association membership: therefore, "
-"your event registrations are temporarily confirmed."
+"We have pre-filled the application form with your details: <a "
+"href=\"%(membership_request_url)s\" download>download it here</a>."
 msgstr ""
-"Vyplnili jste žádost o členství ve sdružení: vaše registrace na akce jsou "
-"proto dočasně potvrzeny."
+"Přihlášku jsme již předvyplnili vašimi údaji: <a "
+"href=\"%(membership_request_url)s\" download>stáhněte si ji zde</a>."
 
 msgid ""
 "Identify association members who haven't registered yet, including their "
@@ -13522,6 +13555,22 @@ msgid ""
 msgstr ""
 "Zatím nebyly definovány žádné kroky postupu. Pomocí tlačítka výše přidejte "
 "kroky pro sledování stavu dokončení jednotlivých částí textu."
+
+#, python-format
+msgid ""
+"Payment of the membership fee for this year is required to participate in "
+"events. You can pay your fee <a href='%(url)s'>here</a>."
+msgstr ""
+"Pro účast na akcích je nutné uhradit členský příspěvek za tento rok. "
+"Příspěvek můžete uhradit <a href='%(url)s'>zde</a>."
+
+#, python-format
+msgid ""
+"These funds have been added to your account as %(credits)s.They will be "
+"automatically applied toward your next event registration."
+msgstr ""
+"Tyto prostředky byly připsány na váš účet ve výši %(credits)s. Budou "
+"automaticky započítány při vaší příští registraci na akci."
 
 #, python-format
 msgid ""
@@ -13694,14 +13743,6 @@ msgstr ""
 "Potvrzujeme, že vaše hlasy jsou v systému správně zapsány! Děkujeme, že se "
 "podílíte na demokratickém životě sdružení!"
 
-#, python-format
-msgid ""
-"You can choose your payment method and find all the information needed to "
-"complete the transfer <a href='%(url)s'>on the payment page</a>."
-msgstr ""
-"Způsob platby a všechny informace potřebné k dokončení převodu najdete <a "
-"href='%(url)s'>na platební stránce</a>."
-
 msgid ""
 "Lets you upload and host files directly on the platform, making them "
 "available either to staff or to participants via secret external links"
@@ -13729,15 +13770,6 @@ msgid ""
 msgstr ""
 "Vybraná pole se zobrazí takto: veřejná pole viditelná pro všechny účastníky,"
 " neveřejná pole viditelná pouze pro přiřazené účastníky"
-
-#, python-format
-msgid ""
-"To pay by bank transfer, visit the <a href='%(url)s'>payment page</a> to "
-"find all necessary details (such as the IBAN and payment reference)."
-msgstr ""
-"Chcete-li platit bankovním převodem, navštivte <a href='%(url)s'>stránku pro"
-" platby</a>, kde najdete všechny potřebné údaje (například IBAN a referenční"
-" číslo platby)."
 
 msgid ""
 "Your request has been logged; due to delicacy of the task requested, our "
@@ -13790,13 +13822,6 @@ msgid ""
 msgstr ""
 "Klikněte na role, na kterých chcete spolupracovat, poté zadejte úroveň svých"
 " zkušeností a nakonec přesně uveďte svou odbornost."
-
-msgid ""
-"These are the event signup for which you submitted a payment, and it's being"
-" reviewed by the staff. You don't have to do anything at this time!"
-msgstr ""
-"Jedná se o přihlášení k události, za kterou jste odeslali platbu a kterou "
-"právě kontrolují pracovníci. V tuto chvíli nemusíte nic dělat!"
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "
@@ -13867,6 +13892,16 @@ msgstr ""
 "V horní části najdete zkratky pro přístup k ovládacímu panelu organizace "
 "(tato stránka) a k aktivním ovládacím panelům událostí, pokud je vytvoříte."
 
+#, python-format
+msgid ""
+"If any details are incorrect, you can update them on your <a "
+"href=\"%(profile_url)s\">user profile</a>. The application form will update "
+"automatically."
+msgstr ""
+"Pokud jsou některé údaje nesprávné, můžete je aktualizovat ve svém <a "
+"href=\"%(profile_url)s\">uživatelském profilu</a>. Formulář žádosti se "
+"aktualizuje automaticky."
+
 msgid ""
 "In the text of the element on the left, it is referenced a character with "
 "the number indicated on the right, but the latter does not appear to exist."
@@ -13922,11 +13957,11 @@ msgstr ""
 "asociace. Tímto způsobem si můžete libovolně přizpůsobit vzhled."
 
 msgid ""
-"If we don't hear from you, we'll assume you're no longer interested in the "
-"event and will cancel your registration to make room for other participants."
+"If we do not receive a response, we will assume you are no longer interested"
+" and will cancel your registration to free up space for other participants."
 msgstr ""
-"Pokud se nám neozvete, budeme předpokládat, že o akci již nemáte zájem, a "
-"vaši registraci zrušíme, abychom uvolnili místo dalším účastníkům."
+"Pokud neobdržíme odpověď, budeme předpokládat, že již nemáte zájem, a vaši "
+"registraci zrušíme, abychom uvolnili místo pro ostatní účastníky."
 
 msgid ""
 "Important: after completing the transfer, you must return to this page and "
@@ -13978,6 +14013,16 @@ msgstr ""
 "Pokud stisknete tlačítko podruhé, bude z vyhledávání *vyřazeno*. Pokud znak "
 "patří byť jen do jedné vylučovací kategorie, nebude ve vyhledávání zobrazen."
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not completed your profile yet."
+" It takes only 5 minutes, <a href='%(url)s'>click here</a> to complete the "
+"form."
+msgstr ""
+"Dobrý den! Zaregistrovali jste se na %(event)s, ale ještě jste nedoplnili "
+"svůj profil. Zabere to jen 5 minut, <a href='%(url)s'>klikněte sem</a>, "
+"abyste formulář vyplnili."
+
 msgid ""
 "Indicates a way for other participants to contact you. It can be an email, a"
 " social profile, whatever you want. It will be made public to others "
@@ -13988,22 +14033,12 @@ msgstr ""
 "účastníky"
 
 msgid ""
-"Indicates how you can be recognized, if you will be found near some point "
-"specific, if you have a lot of luggage: any information that might help us "
-"help you"
+"If we do not hear from you, we will assume you are no longer interested in "
+"attending. Your registration will be cancelled to make room for other "
+"participants."
 msgstr ""
-"Uvádí, jak vás lze poznat, zda vás najdeme poblíž určitého místa, zda máte "
-"hodně zavazadel: všechny informace, které by nám mohly pomoci"
-
-#, python-format
-msgid ""
-"Hello! You signed up for %(event)s but haven't completed your profile yet.It"
-" only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out "
-"the form."
-msgstr ""
-"Dobrý den! Zaregistrovali jste se na %(event)s, ale ještě jste nedoplnili "
-"svůj profil. Zabere to jen 5 minut – stačí <a href='%(url)s'>kliknout "
-"sem</a> a vyplnit formulář."
+"Pokud se nám neozvete, budeme předpokládat, že již nemáte zájem o účast. "
+"Vaše registrace bude zrušena, abychom uvolnili místo pro další účastníky."
 
 msgid ""
 "Select a file with extension csv. The first column the amount, the second "
@@ -14038,23 +14073,6 @@ msgid ""
 msgstr ""
 "Tím, že se zaregistrujete na tuto událost, nám dáváte souhlas ke sdílení "
 "vašich údajů uložených na naší platformě s organizátory akce."
-
-msgid ""
-"If we don't hear from you, we'll assume you're no longer interested in the "
-"event. Your registration will be cancelled to allow other participants to "
-"take your spot."
-msgstr ""
-"Pokud se nám neozvete, budeme předpokládat, že o akci již nemáte zájem. Vaše"
-" registrace bude zrušena, aby vaše místo mohli obsadit jiní účastníci."
-
-#, python-format
-msgid ""
-"In addition, you must be up to date with the payment of your membership fee "
-"in order to participate in events. Make your payment <a href='%(url)s'>on "
-"this page</a>."
-msgstr ""
-"Kromě toho musíte mít uhrazený členský příspěvek, abyste se mohli účastnit "
-"akcí. Platbu proveďte <a href='%(url)s'>na této stránce</a>."
 
 msgid ""
 "Want to help one of your friends play with us? Organize a collection: you "
@@ -14171,21 +14189,21 @@ msgstr ""
 "konečné množství bude nulové nebo záporné."
 
 msgid ""
-"As per the statutes, we will review your request at the next board meeting "
-"and send you an update e-mail as soon as possible (you should receive a "
-"reply within a few weeks at the latest)."
-msgstr ""
-"V souladu se stanovami vaši žádost posoudíme na příštím zasedání správní "
-"rady a co nejdříve vám zašleme aktuální e-mail (odpověď byste měli obdržet "
-"nejpozději do několika týdnů)."
-
-msgid ""
 "You have not yet submitted your application for membership to the "
 "Organization. If you are not a Member, we cannot accept payment from you, "
 "and you cannot confirm your event registrations."
 msgstr ""
 "Dosud jste nepodali žádost o členství ve sdružení. Pokud nejste členem, "
 "nemůžeme od vás přijmout platbu a nemůžete potvrdit registraci na akci."
+
+msgid ""
+"In accordance with our statutes, the board will review your application at "
+"the next meeting. You will receive an update by email once a decision has "
+"been made (typically within a few weeks)."
+msgstr ""
+"V souladu s našimi stanovami představenstvo vaši žádost projedná na svém "
+"příštím zasedání. Jakmile bude rozhodnutí přijato (obvykle během několika "
+"týdnů), obdržíte o tom informaci e-mailem."
 
 msgid ""
 "You have submitted a deposit, and it is being reviewed by the staff. You "

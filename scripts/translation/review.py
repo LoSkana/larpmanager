@@ -57,7 +57,8 @@ msgid.
 
 Specific LARP terms: Award (refers to awarding XP, in italian "assegnazioni"), Badges (in the context of achievements),
 Casting (assigning characters / roles to players / participants), Pools (character/resource pools),
-Plot (quest/mission/storyline), Handout (setting/world-building knowledge), Safety (tieni termine inglese), Speed larp (tieni termine inglese)
+Plot (quest/mission/storyline), Handout (setting/world-building knowledge), Safety (tieni termine inglese),
+Speed larp (tieni termine inglese), Collection (money collection by friends)
 
 Categories (status field):
 - "ok": translation is accurate and natural

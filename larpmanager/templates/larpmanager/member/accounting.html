@@ -20,7 +20,7 @@
         {% if payments_pending %}
             <h2>{% trans "Payments in approval" %}</h2>
             <p>
-                {% trans "These are the event signup for which you submitted a payment, and it's being reviewed by the staff. You don't have to do anything at this time!" %}
+                {% trans "Your payment for these event sign-ups is currently under review. No action is required on your part." %}
             </p>
             <p>
                 {% for registration in payments_pending %}
@@ -77,7 +77,12 @@
                     <i>{% trans "They will be used automatically when you sign up for a new event!" %}</i>
                     {% if 'refund' in association.features %}
                         <br />
-                        {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'accounting_refund' %}">{% trans "refund request" %}</a>.
+                        {% url 'accounting_refund' as accounting_refund_url %}
+                        <p>
+                            {% blocktrans trimmed %}
+                                Would you like to request a reimbursement? <a href="{{ accounting_refund_url }}">Submit a new refund request</a>.
+                            {% endblocktrans %}
+                        </p>
                         {% if refunds %}
                             <b>{% trans "Requests open:" %} </b>
                             {% for el in refunds %}

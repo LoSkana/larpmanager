@@ -4496,7 +4496,7 @@ class Migration(migrations.Migration):
                 (
                     "text",
                     models.TextField(
-                        help_text="Write your question, request or concern here. We will be happy to answer you!",
+                        help_text="Write your question, request or doubt here. We will be happy to answer you!",
                         max_length=5000,
                         verbose_name="Text",
                     ),

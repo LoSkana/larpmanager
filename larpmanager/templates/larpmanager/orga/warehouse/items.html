@@ -32,7 +32,8 @@
                     <td></td>
                     <td>
                         <a href="{% url 'orga_warehouse_items_edit' run.get_slug el.uuid %}"
-                           qtip="{% trans "Assign to areas" %}"><i class="fa-solid fa-map-location-dot action-dialog"></i></a>
+                           qtip="{% trans "Assign to areas" %}"
+                           class="frame-confirm"><i class="fa-solid fa-map-location-dot action-dialog"></i></a>
                     </td>
                     <td>{{ el.name }}</td>
                     {% if optionals.quantity %}

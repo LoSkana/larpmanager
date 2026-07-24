@@ -42,7 +42,7 @@
 window.addEventListener('DOMContentLoaded', function() {
 
 $('#close').click(function(){
-    return window.lmTesting ? true : confirm("{% filter escapejs %}{% trans "Confirm?" %}{% endfilter %}");
+    return window.lmTesting ? true : confirm("{% filter escapejs %}{% trans "Do you confirm?" %}{% endfilter %}");
 })
 });
     </script>

@@ -221,7 +221,7 @@ function flashSaved($row) {
             }
 
             if (!$link.hasClass('io-confirm-delete')) {
-                $link.addClass('io-confirm-delete').attr('title', '{% filter escapejs %}{% trans "Confirm?" %}{% endfilter %}');
+                $link.addClass('io-confirm-delete').attr('title', '{% filter escapejs %}{% trans "Do you confirm?" %}{% endfilter %}');
                 setTimeout(function() {
                     $link.removeClass('io-confirm-delete').attr('title', '{% filter escapejs %}{% trans "Delete" %}{% endfilter %}');
                 }, 3000);

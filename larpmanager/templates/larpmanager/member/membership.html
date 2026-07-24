@@ -27,10 +27,18 @@
         {% if member.membership.status == 'e' or member.membership.status == 'j' %}
             <h3>{% trans "You are not yet a Member of the Organization!" %}</h3>
             <p>{% trans "In order to subscribe to the Organization's events you must apply to be admitted as a Member." %}</p>
+            {% url 'membership_request' as membership_request_url %}
+            {% url 'profile' as profile_url %}
             <p>
-                {% trans "We have pre-filled the application form based on the data you provided us:" %} <a href="{% url 'membership_request' %}" download>{% trans "download it here" %}</a>.
+                {% blocktrans trimmed %}
+                    We have pre-filled the application form with your details: <a href="{{ membership_request_url }}" download>download it here</a>.
+                {% endblocktrans %}
                 <br />
-                ({% trans "If there are wrong data you can update your" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>. {% trans "The registration request will be updated automatically." %})
+                (
+                {% blocktrans trimmed %}
+                    If any details are incorrect, you can update them on your <a href="{{ profile_url }}">user profile</a>. The application form will update automatically.
+                {% endblocktrans %}
+                )
             </p>
             <hr />
             <p>

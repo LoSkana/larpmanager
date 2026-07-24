@@ -120,12 +120,12 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
         return
 
     # Build email subject with optional run information
-    email_subject = hdr(expense_item) + _("Reimbursement approved")
+    email_subject = hdr(expense_item) + _("Reimbursement Approved")
     if expense_item.run:
         email_subject += " " + _("for %(event)s") % {"event": expense_item.run}
 
     # Create base email body with approval details
-    email_body = _("Your request for reimbursement of %(amount).2f, with reason '%(reason)s', has been approved!") % {
+    email_body = _("Your reimbursement request of %(amount).2f for '%(reason)s' has been approved.") % {
         "amount": expense_item.value,
         "reason": expense_item.descr,
     }
@@ -136,15 +136,16 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     # Add credit information if run has credits feature enabled
     event_features = get_event_features(expense_item.run.event_id) if expense_item.run else {}
     if expense_item.run and "credits" in event_features:
-        email_body += "<br /><br /><i>" + _("The sum was assigned to you as %(credits)s.") % {"credits": credits_name}
-        email_body += " " + _("This is automatically deducted from the registration of a future event.")
+        email_body += "<br /><br /><i>" + _(
+            "These funds have been added to your account as %(credits)s."
+            "They will be automatically applied toward your next event registration."
+        ) % {"credits": credits_name}
 
         # Add link to accounting page for formal request option
         email_body += (
             " "
             + _(
-                "Alternatively, you can request a payout of your balance on <a "
-                "href='%(url)s'>your accounting page</a>.",
+                "Alternatively, you may request a payout of your balance on <a href='%(url)s'>your accounting</a>.",
             )
             % {"url": get_url("accounting", expense_item)}
             + "</i>"
@@ -326,10 +327,10 @@ def notify_refund(credits_name: str, instance: AccountingItemOther) -> None:
     activate(instance.member.language)
 
     # Build email subject with header and refund notice
-    email_subject = hdr(instance) + _("Issued Reimbursement")
+    email_subject = hdr(instance) + _("Reimbursement Processed")
 
     # Construct notification body with refund details
-    email_body = _("A reimbursement of %(amount).2f %(elements)s for '%(reason)s' has been issued.") % {
+    email_body = _("A reimbursement of %(amount).2f %(elements)s for '%(reason)s' has been processed.") % {
         "amount": instance.value,
         "elements": credits_name,
         "reason": instance.descr,
@@ -368,9 +369,9 @@ def notify_credit(credits_name: str, instance: AccountingItemOther) -> None:
     accounting_url = get_url("accounting", instance)
     additional_body_text = (
         " <br /><br /><i>"
-        + _("They will be used automatically when you sign up for a new event!")
+        + _("These will be automatically applied when you register for a new event.")
         + "<br /><br />"
-        + _("Alternatively, you can request a reimbursement in <a href='%(url)s'>your accounting</a>.</i>")
+        + _("Alternatively, you can request a payout on <a href='%(url)s'>your accounting page</a>.</i>")
         % {"url": accounting_url}
     )
 
@@ -395,7 +396,7 @@ def notify_token(instance: Any, tokens_name: str) -> None:
     activate(instance.member.language)
     email_subject, email_body = get_assignment_email(tokens_name, instance)
     additional_body = (
-        "<br /><br /><i>" + _("They will be used automatically when you sign up for a new event!") + "</i>"
+        "<br /><br /><i>" + _("These will be automatically applied when you register for a new event.") + "</i>"
     )
     my_send_mail(email_subject, email_body + additional_body, instance.member, instance)
 
@@ -434,14 +435,13 @@ def send_donation_confirmation_email(instance: AccountingItemDonation) -> None:
     activate(instance.member.language)
 
     # Construct email subject with donation header and confirmation text
-    email_subject = hdr(instance) + _("Donation given")
+    email_subject = hdr(instance) + _("Donation Received")
 
     # Build email body with donation amount and currency information
     email_body = _(
-        "We confirm we received the donation of %(amount)d%(currency)s. We thank you for your "
-        "support, and for believing in us!",
+        "Thank you for your donation of %(amount)d%(currency)s! We really appreciate "
+        "your support and for believing in what we do.",
     ) % {"amount": instance.value, "currency": instance.association.get_currency_symbol()}
-
     my_send_mail(email_subject, email_body, instance.member, instance, **_receipt_attachment_path(instance))
 
 
@@ -457,11 +457,10 @@ def send_collection_activation_email(instance: AccountingItemCollection) -> None
     activate(instance.organizer.language)
 
     # Build localized email subject and body
-    email_subject = hdr(instance) + _("Activate collection for: %(recipient)s") % email_context
+    email_subject = hdr(instance) + _("Collection Activated for: %(recipient)s") % email_context
     email_body = (
         _(
-            "We confirm that the collection for '%(recipient)s' has been activated. <a "
-            "href='%(url)s'>Manage it here!</a>",
+            "The collection for '%(recipient)s' has been successfully activated. <a href='%(url)s'>Manage it here</a>.",
         )
         % email_context
     )
@@ -479,18 +478,18 @@ def send_gift_collection_notification_email(instance: AccountingItemCollection) 
     """
     if not instance.pk:
         activate(instance.member.language)
-        subject = hdr(instance.collection) + _("Collection participation for: %(recipient)s") % {
+        subject = hdr(instance.collection) + _("Collection Participation for %(recipient)s") % {
             "recipient": instance.collection.display_member(),
         }
-        email_body = _("Thank you for participating!")
+        email_body = _("Thank you for your contribution!")
         my_send_mail(subject, email_body, instance.member, instance.collection)
 
         activate(instance.collection.organizer.language)
-        subject = hdr(instance.collection) + _("New participation in the collection for %(recipient)s by %(user)s") % {
+        subject = hdr(instance.collection) + _("New contribution to the collection for %(recipient)s by %(user)s") % {
             "recipient": instance.collection.display_member(),
             "user": instance.member.display_member(),
         }
-        email_body = _("The collection grows!")
+        email_body = _("The collection is growing!")
         my_send_mail(subject, email_body, instance.collection.organizer, instance.collection)
 
 
