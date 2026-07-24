@@ -10838,10 +10838,10 @@ msgstr ""
 msgid "Manage volunteer registry"
 msgstr ""
 
-msgid "Enrolment"
+msgid "Insurance Data"
 msgstr ""
 
-msgid "Display all users data"
+msgid "Display all users data for insurance"
 msgstr ""
 
 msgid "Methods"
@@ -12457,14 +12457,14 @@ msgstr ""
 msgid "To be able to pay, your membership application must be approved."
 msgstr ""
 
-msgid "No registration found for this event"
+msgid ""
+"No registration found for this event, please ensure that you have accessed "
+"the platform using the correct account"
 msgstr ""
 
 msgid ""
-"please ensure that you have accessed the platform using the correct account"
-msgstr ""
-
-msgid "No accepted membership found"
+"No accepted membership found, please ensure that you have accessed the "
+"platform using the correct account"
 msgstr ""
 
 msgid "You have already paid this year's membership fee"
@@ -12537,7 +12537,9 @@ msgstr ""
 msgid "Character not found"
 msgstr ""
 
-msgid "No character found for this event"
+msgid ""
+"No character found for this event, please ensure that you have accessed the "
+"platform using the correct account"
 msgstr ""
 
 msgid "Informations saved!"

@@ -278,9 +278,9 @@ def character_your(request: HttpRequest, event_slug: str, path: str | None = Non
     if not registration:
         messages.error(
             request,
-            _("No registration found for this event")
-            + ", "
-            + _("please ensure that you have accessed the platform using the correct account"),
+            _(
+                "No registration found for this event, please ensure that you have accessed the platform using the correct account"
+            ),
         )
         return redirect("home")
 
@@ -291,9 +291,9 @@ def character_your(request: HttpRequest, event_slug: str, path: str | None = Non
     if not rcrs:
         messages.error(
             request,
-            _("No character found for this event")
-            + ", "
-            + _("please ensure that you have accessed the platform using the correct account"),
+            _(
+                "No character found for this event, please ensure that you have accessed the platform using the correct account"
+            ),
         )
         return redirect("home")
 

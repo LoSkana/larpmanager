@@ -524,9 +524,9 @@ def get_accounting_registration(request: HttpRequest, context: dict, registratio
 
     messages.error(
         request,
-        _("No registration found for this event")
-        + ", "
-        + _("please ensure that you have accessed the platform using the correct account"),
+        _(
+            "No registration found for this event, please ensure that you have accessed the platform using the correct account"
+        ),
     )
     msg = "home"
     raise RedirectError(msg)
@@ -560,9 +560,9 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
     if memb.status != MembershipStatus.ACCEPTED:
         messages.error(
             request,
-            _("No accepted membership found")
-            + ", "
-            + _("please ensure that you have accessed the platform using the correct account"),
+            _(
+                "No accepted membership found, please ensure that you have accessed the platform using the correct account"
+            ),
         )
         return redirect("accounting")
 

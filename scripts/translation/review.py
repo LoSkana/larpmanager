@@ -56,6 +56,7 @@ two cases explicitly. When msgstr_it is empty, judge solely against
 msgid.
 
 Specific LARP terms: Award (refers to awarding XP, in italian "assegnazioni"), Badges (in the context of achievements),
+Characters (usually game characters, but in some cases text characters),
 Casting (assigning characters / roles to players / participants), Pools (character/resource pools),
 Plot (quest/mission/storyline), Handout (setting/world-building knowledge), Safety (tieni termine inglese),
 Speed larp (tieni termine inglese), Collection (money collection by friends)

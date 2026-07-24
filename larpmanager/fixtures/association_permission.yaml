@@ -360,8 +360,8 @@
     module: italy
 - model: larpmanager.associationpermission
   fields:
-    name: Enrolment
-    descr: Display all users data
+    name: Insurance Data
+    descr: Display all users data for insurance
     slug: exe_enrolment
     number: 81
     config: null
