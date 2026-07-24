@@ -6097,6 +6097,9 @@ msgstr ""
 msgid "Discover the details of this event"
 msgstr ""
 
+msgid "Posti disponibili:"
+msgstr ""
+
 msgid "Discover the web site"
 msgstr ""
 

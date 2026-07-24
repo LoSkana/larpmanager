@@ -3892,6 +3892,9 @@ msgstr "Zahlungsabwicklung"
 msgid "Perform extraction"
 msgstr "Extraktion durchführen"
 
+msgid "Posti disponibili:"
+msgstr "Offene Stellen:"
+
 msgid "Previewing version"
 msgstr "Vorschaufassung"
 

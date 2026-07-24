@@ -3892,6 +3892,9 @@ msgstr "Hantering av betalningar"
 msgid "Perform extraction"
 msgstr "Utför extraktion"
 
+msgid "Posti disponibili:"
+msgstr "Lediga tjänster:"
+
 msgid "Previewing version"
 msgstr "Förhandsgranskning av version"
 
