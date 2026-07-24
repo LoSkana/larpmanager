@@ -133,7 +133,7 @@
                                 {% else %}
                                     <i class="fa-solid fa-building"></i>
                                 {% endif %}
-                                <span class="label orga-label">{{ association.name }}</span>
+                                <span class="label orga-label">{{ association.name|truncatechars:20 }}</span>
                             </a>
                         {% elif run %}
                             <a href="{% url 'manage' run.get_slug %}">
@@ -142,7 +142,7 @@
                                 {% else %}
                                     <i class="fa-solid fa-calendar-days"></i>
                                 {% endif %}
-                                <span class="label">{{ run }}</span>
+                                <span class="label">{{ run|truncatechars:20 }}</span>
                             </a>
                         {% else %}
                             <a href="{% url 'manage' %}">
@@ -169,7 +169,7 @@
                                 {% else %}
                                     <i class="fa-solid fa-calendar-days"></i>
                                 {% endif %}
-                                <span class="label">{{ run }}</span>
+                                <span class="label">{{ run|truncatechars:20 }}</span>
                             </a>
                         {% else %}
                             <a href="{% url 'home' %}">
@@ -178,24 +178,12 @@
                                 {% else %}
                                     <i class="fa-solid fa-house"></i>
                                 {% endif %}
-                                <span class="label">{{ association.name }}</span>
+                                <span class="label">{{ association.name|truncatechars:20 }}</span>
                             </a>
                         {% endif %}
                     {% endif %}
                 </span>
             </td>
-            {% if is_larpmanager_skin and manage and not lite_mode %}
-                <td>
-                    <div class="el">
-                        <a id="wwyltd-open-mobile" href="#" class="wwyltd-open-trigger"><i class="fa-solid fa-magnifying-glass"></i></a>
-                    </div>
-                </td>
-                <td>
-                    <div class="el">
-                        <a href="#" class="chat-widget-open-trigger"><i class="fa-solid fa-comment-dots"></i></a>
-                    </div>
-                </td>
-            {% endif %}
             <td>
                 <div class="el">
                     <a id="topbar-mobile-v22" href="#" class="sidebar_tutorial"><i class="fa-solid fa-layer-group"></i></a>

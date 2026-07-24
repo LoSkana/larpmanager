@@ -147,7 +147,7 @@ def _init_regs(
 
     # check if there is a pending payment
     if registration.id in pending_invoices:
-        registration.pending = True
+        registration.currently_pending = True
         context["payments_pending"].append(registration)
     elif registration.quota > 0:
         context["payments_todo"].append(registration)

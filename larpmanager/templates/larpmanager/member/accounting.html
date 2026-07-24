@@ -238,7 +238,7 @@
                 <div id="reg_{{ registration.uuid }}"
                      class="hide reg_{{ registration.uuid }}">
                     <h3>{{ registration.run.search }}</h3>
-                    {% if registration.pending %}
+                    {% if registration.currently_pending %}
                         <p>
                             <i>{% trans "You have submitted a deposit, and it is being reviewed by the staff. You don't have to do anything for the time being, as soon as it is confirmed the accounting of the event will be updated" %}.</i>
                         </p>
