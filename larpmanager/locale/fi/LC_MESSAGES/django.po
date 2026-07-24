@@ -3892,6 +3892,9 @@ msgstr "Maksujen käsittely"
 msgid "Perform extraction"
 msgstr "Suorita poiminta"
 
+msgid "Posti disponibili:"
+msgstr "Avoimet työpaikat:"
+
 msgid "Previewing version"
 msgstr "Esikatseluversio"
 

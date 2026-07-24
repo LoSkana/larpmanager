@@ -3892,6 +3892,9 @@ msgstr "Zpracování plateb"
 msgid "Perform extraction"
 msgstr "Proveďte extrakci"
 
+msgid "Posti disponibili:"
+msgstr "Volná pracovní místa:"
+
 msgid "Previewing version"
 msgstr "Verze náhledu"
 

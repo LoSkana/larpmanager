@@ -3892,6 +3892,9 @@ msgstr "Betalingsverwerking"
 msgid "Perform extraction"
 msgstr "Extractie uitvoeren"
 
+msgid "Posti disponibili:"
+msgstr "Beschikbare vacatures:"
+
 msgid "Previewing version"
 msgstr "Voorbeeldversie"
 

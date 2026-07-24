@@ -41,10 +41,12 @@ from larpmanager.models.casting import Casting
 from larpmanager.models.event import Event, PreRegistration, RegistrationStatus, Run
 from larpmanager.models.form import (
     BaseQuestionType,
+    QuestionApplicable,
     RegistrationAnswer,
     RegistrationChoice,
     RegistrationOption,
     WritingChoice,
+    WritingOption,
 )
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
@@ -1024,6 +1026,39 @@ def _character_links_html(character_entry: dict) -> str:
     return format_html_join(" | ", "{}", ((snippet,) for snippet in character_link_snippets))
 
 
+def _get_character_options_availability(run: Run) -> list[dict[str, Any]]:
+    """Return occupancy info for limited character options that don't depend on other options.
+
+    Only options with a max_available limit and no prerequisites (requirements) are
+    included, since those are the only ones whose availability can be shown upfront,
+    before the player has started answering the character form.
+
+    Args:
+        run: The run to compute option occupancy for.
+
+    Returns:
+        List of dicts with name, question name, max_available and used count.
+
+    """
+    counts = get_registration_counts(run)
+
+    options = WritingOption.objects.filter(
+        event_id=run.event_id,
+        question__applicable=QuestionApplicable.CHARACTER,
+        max_available__gt=0,
+        requirements__isnull=True,
+    ).select_related("question")
+
+    return [
+        {
+            "question": option.question.name,
+            "name": option.name,
+            "available": option.max_available - counts.get(f"option_char_{option.id}", 0),
+        }
+        for option in options
+    ]
+
+
 def _status_approval(
     run: Run, registration: Registration, run_status: dict, features: dict, *, is_character_assigned: bool
 ) -> None:
@@ -1063,6 +1098,7 @@ def _status_approval(
             "icon": "fa-solid fa-wand-magic-sparkles",
             "status_type": "todo",
             "status_icon": "fa-solid fa-list-check",
+            "options_availability": _get_character_options_availability(run),
         }
 
     # Show character selection link if no characters assigned but max chars available
