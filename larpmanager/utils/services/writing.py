@@ -460,7 +460,7 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
         element_type: Writing element model class
 
     """
-    cached_text_fields = get_cache_text_field(element_type, context["event"])
+    cached_text_fields = get_cache_text_field(element_type, context["event"].get_class_parent(element_type))
     for element in context["list"]:
         if element.uuid not in cached_text_fields:
             continue
