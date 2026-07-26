@@ -4,10 +4,17 @@
         {% with char.fields|get:idx as field %}
             {% if field %}
                 {% if screen or question.printable %}
-                    <div class="go-inline">
-                        <span class="hide-screen">|</span>
-                        <b>{{ question.name }}:&nbsp;</b>{% get_character_field field char.options %}
-                    </div>
+                    {% if question.typ == 'p' %}
+                        <div class="go-block">
+                            <b>{{ question.name }}:</b>
+                            <p>{{ field|linebreaksbr }}</p>
+                        </div>
+                    {% else %}
+                        <div class="go-inline">
+                            <span class="hide-screen">|</span>
+                            <b>{{ question.name }}:&nbsp;</b>{% get_character_field field char.options %}
+                        </div>
+                    {% endif %}
                 {% endif %}
             {% endif %}
         {% endwith %}
