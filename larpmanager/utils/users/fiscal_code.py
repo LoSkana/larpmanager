@@ -376,24 +376,24 @@ def _go(member: Member, *, male: bool = True) -> dict[str, Any]:  # noqa: C901 -
 
     # Perform detailed validation checks with specific error messages
     if almost_equal(validation_context["calculated_cf"], validation_context["supplied_cf"]):
-        validation_context["error_cf"] = _("One character more or less than expected")
+        validation_context["error_cf"] = _("One symbol more or less than expected")
     elif len(validation_context["supplied_cf"]) != expected_fiscal_code_length:
-        validation_context["error_cf"] = _("Wrong number of characters")
+        validation_context["error_cf"] = _("Wrong length")
     elif count_differences(validation_context["calculated_cf"], validation_context["supplied_cf"]) == 1:
-        validation_context["error_cf"] = _("Differing by only one character from the expected one")
+        validation_context["error_cf"] = _("Differs by only one symbol from the expected one")
 
     # Check specific sections of the fiscal code for targeted error messages
     elif validation_context["calculated_cf"][:6] != validation_context["supplied_cf"][:6]:
         validation_context["error_cf"] = _(
-            "First and last name characters do not match (remember to enter the correct first "
+            "Symbols for first and last name do not match (remember to enter the correct first "
             "and last names in legal_name)",
         )
     elif validation_context["calculated_cf"][-6:-1] != validation_context["supplied_cf"][-6:-1]:
         validation_context["error_cf"] = _(
-            "Characters relating to place of birth do not match (check exact municipality)",
+            "Symbols for place of birth do not match (check exact municipality)",
         )
     elif validation_context["calculated_cf"][6:10] != validation_context["supplied_cf"][6:10]:
-        validation_context["error_cf"] = _("Date of birth characters do not match (check exact date)")
+        validation_context["error_cf"] = _("Symbols for date of birth do not match (check exact date)")
 
     # Set final validation result
     validation_context["correct_cf"] = validation_context["calculated_cf"] == validation_context["supplied_cf"]

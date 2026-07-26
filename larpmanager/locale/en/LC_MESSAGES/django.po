@@ -477,18 +477,6 @@ msgstr ""
 msgid "Customised mail server"
 msgstr ""
 
-msgid "Host Address"
-msgstr ""
-
-msgid "Port"
-msgstr ""
-
-msgid "Username of account"
-msgstr ""
-
-msgid "Password of account"
-msgstr ""
-
 msgid "Pre-registration"
 msgstr ""
 
@@ -2704,7 +2692,8 @@ msgid "Primary"
 msgstr ""
 
 #, python-format
-msgid "<b>%(type)s</b>: secondary grouping across primary factions"
+msgid ""
+"<b>%(type)s</b>: secondary grouping within the primary faction structure"
 msgstr ""
 
 msgid "Transversal"
@@ -6057,7 +6046,7 @@ msgstr ""
 msgid "No abilities found."
 msgstr ""
 
-msgid "Select the new ability to get"
+msgid "Select the new ability to obtain"
 msgstr ""
 
 msgid "Edit"
@@ -7329,9 +7318,9 @@ msgid "Upload verified payments"
 msgstr ""
 
 msgid ""
-"Select a file with extension csv. The first column the amount, the second "
-"the receipts. Get this data from the bank or equivalent, to verify the "
-"entries marked."
+"Select a file with extension csv. The first column contains the amounts, the "
+"second the receipts. Get this data from the bank or an equivalent entity to "
+"verify the marked entries."
 msgstr ""
 
 msgid "List payments to verify"
@@ -9446,7 +9435,7 @@ msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 
 msgid ""
-"To upload role of the characters in the plots, add a second file with the "
+"To upload roles of the characters in the plots, add a second file with the "
 "following columns"
 msgstr ""
 
@@ -10014,7 +10003,7 @@ msgstr ""
 msgid "Password changed"
 msgstr ""
 
-msgid "Confirm password reset"
+msgid "Password reset confirmed"
 msgstr ""
 
 msgid "Failed password reset"
@@ -11734,25 +11723,24 @@ msgstr ""
 msgid "Place of birth not included in the ISTAT list"
 msgstr ""
 
-msgid "One character more or less than expected"
+msgid "One symbol more or less than expected"
 msgstr ""
 
-msgid "Wrong number of characters"
+msgid "Wrong length"
 msgstr ""
 
-msgid "Differing by only one character from the expected one"
+msgid "Differs by only one symbol from the expected one"
 msgstr ""
 
 msgid ""
-"First and last name characters do not match (remember to enter the correct "
+"Symbols for first and last name do not match (remember to enter the correct "
 "first and last names in legal_name)"
 msgstr ""
 
-msgid ""
-"Characters relating to place of birth do not match (check exact municipality)"
+msgid "Symbols for place of birth do not match (check exact municipality)"
 msgstr ""
 
-msgid "Date of birth characters do not match (check exact date)"
+msgid "Symbols for date of birth do not match (check exact date)"
 msgstr ""
 
 #, python-format

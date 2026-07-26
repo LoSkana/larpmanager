@@ -529,16 +529,16 @@ class ExeConfigForm(ConfigForm):
             use_tls_label = "TLD"
             self.add_configs("mail_server_use_tls", ConfigType.BOOL, use_tls_label, empty_help_text)
 
-            host_address_label = _("Host Address")
+            host_address_label = "Host Address"
             self.add_configs("mail_server_host", ConfigType.CHAR, host_address_label, empty_help_text)
 
-            port_label = _("Port")
+            port_label = "Port"
             self.add_configs("mail_server_port", ConfigType.INT, port_label, empty_help_text)
 
-            username_label = _("Username of account")
+            username_label = "Username"
             self.add_configs("mail_server_host_user", ConfigType.CHAR, username_label, empty_help_text)
 
-            password_label = _("Password of account")
+            password_label = "Password"  # noqa: S105
             self.add_configs("mail_server_host_password", ConfigType.CHAR, password_label, empty_help_text)
 
     def set_config_others(self) -> None:

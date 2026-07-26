@@ -61,6 +61,8 @@ Casting (assigning characters / roles to players / participants), Pools (charact
 Plot (quest/mission/storyline), Handout (setting/world-building knowledge), Safety (tieni termine inglese),
 Speed larp (tieni termine inglese), Collection (money collection by friends)
 
+Use informal language and the second-person singular (you).
+
 Categories (status field):
 - "ok": translation is accurate and natural
 - "mistranslation": target meaning diverges from both EN and IT
