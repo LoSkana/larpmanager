@@ -120,6 +120,10 @@ p {
   margin-right: 0;
 }
 
+.go-block b {
+  font-size: 110%;
+}
+
 .success {
   font-weight: bold;
   font-size: 120%;
