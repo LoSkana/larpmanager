@@ -349,6 +349,9 @@ class Event(UuidMixin, BaseModel):
 
     def get_cover_thumb_url(self) -> str | None:
         """Get the URL of the cover thumbnail image, or None if unavailable."""
+        if not self.cover:
+            return None
+
         try:
             # noinspection PyUnresolvedReferences
             return self.cover_thumb.url
