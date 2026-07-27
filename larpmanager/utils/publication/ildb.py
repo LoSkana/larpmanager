@@ -65,9 +65,13 @@ ILDB_CREW_UUID_CONFIG = "ildb_crew"
 ILDB_CAST_UUID_CONFIG = "ildb_cast"
 
 
-def _ildb_http(method: str, url: str, api_key: str = "", **kwargs: Any) -> requests.Response:
-    """Execute one ILDB API call and sleep 1 s to stay within the 60 req/min limit.
+ILDB_MAX_RETRIES = 5
 
+
+def _ildb_http(method: str, url: str, api_key: str = "", **kwargs: Any) -> requests.Response:
+    """Execute one ILDB API call, retrying up to 5x with increasing wait on failure.
+
+    Sleeps 1 s after each call to stay within the 60 req/min limit.
     When api_key is provided, Authorization and Accept headers are injected automatically.
     On HTTP errors, admins are notified with the payload and response details before re-raising.
     """
@@ -76,17 +80,26 @@ def _ildb_http(method: str, url: str, api_key: str = "", **kwargs: Any) -> reque
         headers.setdefault("Authorization", f"Bearer {api_key}")
         headers.setdefault("Accept", "application/json")
         kwargs["headers"] = headers
-    response = getattr(requests, method)(url, **kwargs)
-    time.sleep(1)
-    try:
-        response.raise_for_status()
-    except requests.exceptions.HTTPError:
-        payload = kwargs.get("json") or kwargs.get("data") or kwargs.get("files")
-        notify_admins(
-            f"ILDB {method.upper()} failed {response.status_code}",
-            f"URL: {url}\nPayload: {payload}\nResponse: {response.text}",
-        )
-        raise
+
+    for attempt in range(1, ILDB_MAX_RETRIES + 1):
+        try:
+            response = getattr(requests, method)(url, **kwargs)
+            time.sleep(1)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as exc:
+            if attempt >= ILDB_MAX_RETRIES:
+                response_obj = getattr(exc, "response", None)
+                status = response_obj.status_code if response_obj is not None else "-"
+                text = response_obj.text if response_obj is not None else str(exc)
+                payload = kwargs.get("json") or kwargs.get("data") or kwargs.get("files")
+                notify_admins(
+                    f"ILDB {method.upper()} failed {status}",
+                    f"URL: {url}\nPayload: {payload}\nResponse: {text}",
+                )
+                raise
+            time.sleep(attempt * 5)
+            continue
+        return response
     return response
 
 
