@@ -43,7 +43,7 @@
                             {% if el.pronoun %}({{ el.pronoun }}){% endif %}
                             <br />
                             {% if el.player_uuid %}
-                                <b>{% trans "Player" %}:</b>&nbsp;<a href="{% url 'public' el.player_uuid %}">
+                                <b>{% trans "Player:" %}</b>&nbsp;<a href="{% url 'public' el.player_uuid %}">
                                     {% if run.id in all_runs %}
                                         {{ el.player_full }}
                                     {% else %}
@@ -52,7 +52,7 @@
                                 </a>
                             {% endif %}
                             <br />
-                            <b>{% trans "Factions" %}:</b>
+                            <b>{% trans "Factions:" %}</b>
                             {% for g in el.factions %}
                                 {% if not g.typ == 'g' %}
                                     {% include "elements/comma.html" %}

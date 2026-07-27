@@ -278,9 +278,9 @@ def character_your(request: HttpRequest, event_slug: str, path: str | None = Non
     if not registration:
         messages.error(
             request,
-            _("No registration found for this event")
-            + ", "
-            + _("please ensure that you have accessed the platform using the correct account"),
+            _(
+                "No registration found for this event, please ensure that you have accessed the platform using the correct account"
+            ),
         )
         return redirect("home")
 
@@ -291,9 +291,9 @@ def character_your(request: HttpRequest, event_slug: str, path: str | None = Non
     if not rcrs:
         messages.error(
             request,
-            _("No character found for this event")
-            + ", "
-            + _("please ensure that you have accessed the platform using the correct account"),
+            _(
+                "No character found for this event, please ensure that you have accessed the platform using the correct account"
+            ),
         )
         return redirect("home")
 
@@ -356,7 +356,7 @@ def character_form(
         form = form_class(request.POST, request.FILES, instance=instance, context=context)
         if form.is_valid():
             # Set appropriate success message based on operation type
-            success_message = _("Informations saved") + "!" if instance else _("New character created") + "!"
+            success_message = _("Informations saved!") if instance else _("New character created!")
 
             character, success_message = _save_character(context, form, success_message)
 
@@ -762,7 +762,7 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     else:
         character_id = _get_character_cache_id(context)
         RegistrationCharacterRel.objects.create(registration_id=context["registration"].id, character_id=character_id)
-        messages.success(request, _("Assigned character") + "!")
+        messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", event_slug=event_slug)
 
@@ -990,7 +990,7 @@ def character_abilities_del(request: HttpRequest, event_slug: str, character_uui
         remove_char_ability(context["character"], context["ability"].id)
         context["character"].save()
 
-    messages.success(request, _("Ability removed") + "!")
+    messages.success(request, _("Ability removed!"))
     return redirect(
         "character_abilities", event_slug=context["run"].get_slug(), character_uuid=context["character"].uuid
     )
@@ -1032,7 +1032,7 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
         char.exp_ability_list.add(ability)
         char.save()
         context["character"] = char
-    messages.success(request, _("Ability acquired") + "!")
+    messages.success(request, _("Ability acquired!"))
 
     get_undo_abilities(context, context["character"], ability)
 

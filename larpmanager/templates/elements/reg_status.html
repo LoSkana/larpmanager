@@ -67,23 +67,20 @@
                 {% with uuid=reg_uuid|default:reg.uuid %}
                     <span class="hide reg_accounting_{{ uuid }}">
                         {% if reg.tot_payed %}
-                            {% trans "Total registration fee" %}: {{ reg.tot_iscr|format_decimal }} | {% trans "Total payments" %}: {{ reg.tot_payed|format_decimal }}
+                            {% trans "Total registration fee:" %} {{ reg.tot_iscr|format_decimal }} | {% trans "Total payments:" %} {{ reg.tot_payed|format_decimal }}
                         {% else %}
-                            {% trans "Total registration fee" %}: {{ reg.tot_iscr|format_decimal }}
+                            {% trans "Total registration fee:" %} {{ reg.tot_iscr|format_decimal }}
                         {% endif %}
                         {% if pending_invoices %}
                         {% elif reg.quota %}
                             | <a href="{% url 'accounting_registration' reg.uuid %}">
-                            {% if membership_fee == 'bundled' and membership_amount %}
-                                {% trans "Next payment" %}: {{ reg.quota|add:membership_amount|format_decimal }}{{ currency_symbol }}
-                                ({% trans "Includes membership fee" %} {{ run.start.year }}: {{ membership_amount|format_decimal }}{{ currency_symbol }})
-                            {% else %}
-                                {% trans "Next payment" %}: {{ reg.quota|format_decimal }}{{ currency_symbol }},
-                            {% endif %}
                             {% if reg.deadline > 0 %}
-                                {% trans "expected within" %} {{ reg.deadline }} {% trans "days" %}
+                                {% blocktrans with quota=reg.quota|format_decimal currency=currency_symbol days=reg.deadline %}Next payment: {{ quota }}{{ currency }} expected within {{ days }} days{% endblocktrans %}
                             {% else %}
-                                {% trans "overdue by" %} {{ reg.deadline|abs_value }} {% trans "days" %}
+                                {% blocktrans with days=reg.deadline|abs_value %}Next payment: {{ quota }}{{ currency }} overdue by {{ days }} days{% endblocktrans %}
+                            {% endif %}
+                            {% if membership_fee == 'bundled' and membership_amount %}
+                                ({% trans "Includes membership fee" %} {{ run.start.year }}: {{ membership_amount|format_decimal }}{{ currency_symbol }})
                             {% endif %}
                         </a>
                     {% elif reg.tot_iscr > reg.tot_payed %}

@@ -16,7 +16,7 @@
     {% if features.questbuilder %}
         {% if staff %}
             <p>
-                {% trans "Go to the preferences for" %}:
+                {% trans "Go to the preferences for:" %}
                 {% if not typ %}
                     <strong>{% trans "Characters" %}</strong>
                 {% else %}
@@ -33,7 +33,7 @@
             <h3>Preferenze {{ gl_name }}</h3>
         {% else %}
             <p>
-                {% trans "Go to the preferences for" %}:
+                {% trans "Go to the preferences for:" %}
                 {% if not typ %}
                     <strong>{% trans "characters" %}</strong>
                 {% else %}
@@ -53,9 +53,9 @@
     {% if casting_history %}
         <p>
             {% if typ %}
-                <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "Show the history of preferences" %}.</a>
+                <a href="{% url 'casting_history' run.get_slug typ %}">{% trans "Show the history of preferences." %}</a>
             {% else %}
-                <a href="{% url 'casting_history' run.get_slug %}">{% trans "Show the history of preferences" %}.</a>
+                <a href="{% url 'casting_history' run.get_slug %}">{% trans "Show the history of preferences." %}</a>
             {% endif %}
         </p>
     {% endif %}

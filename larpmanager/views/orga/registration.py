@@ -1026,7 +1026,7 @@ def orga_registrations_customization(request: HttpRequest, event_slug: str, char
         if form.is_valid():
             form.save()
             save_log(context, RegistrationCharacterRel, rcr, None, operation_type=LogOperationType.UPDATE)
-            messages.success(request, _("Player customisation updated") + "!")
+            messages.success(request, _("Player customisation updated!"))
             return redirect("orga_registrations", event_slug=context["run"].get_slug())
     else:
         form = RegistrationCharacterRelForm(instance=rcr, context=context)
@@ -1198,7 +1198,7 @@ def orga_registration_request_approve(request: HttpRequest, event_slug: str, reg
     registration.save()
 
     send_registration_request_accepted_email(registration)
-    messages.success(request, _("Signup request approved") + "!")
+    messages.success(request, _("Signup request approved!"))
 
     if is_frame:
         return render(request, "elements/dashboard/form_success.html", context)
@@ -1224,7 +1224,7 @@ def orga_registration_request_reject(request: HttpRequest, event_slug: str, regi
         return render(request, template, context)
 
     context["registration"].delete()
-    messages.success(request, _("Signup request rejected") + "!")
+    messages.success(request, _("Signup request rejected!"))
 
     if is_frame:
         return render(request, "elements/dashboard/form_success.html", context)

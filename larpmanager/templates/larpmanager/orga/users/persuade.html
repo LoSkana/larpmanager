@@ -7,7 +7,7 @@
     {% trans "Identify association members who haven't registered yet, including their pre-registration status and past participation history" %}
 {% endblock info %}
 {% block content %}
-    <p>{% trans "List of users who have not registered for a future session of the event" %}:</p>
+    <p>{% trans "List of users who have not registered for a future session of the event:" %}</p>
     <table id="persuade" class="go_datatable">
         <thead>
             <tr>
@@ -36,7 +36,7 @@
     </table>
     {% if not lst %}
         <p class="no-elements-available">
-            {% trans "All association members have already registered for a future session of this event" %}.
+            {% trans "All association members have already registered for a future session of this event." %}
         </p>
     {% endif %}
 {% endblock content %}

@@ -441,13 +441,13 @@ def share(request: HttpRequest) -> Any:
 
     el = context["membership"]
     if el.status != MembershipStatus.EMPTY:
-        messages.success(request, _("You have already granted data sharing with this organisation") + "!")
+        messages.success(request, _("You have already granted data sharing with this organisation!"))
         return redirect("home")
 
     if request.method == "POST":
         el.status = MembershipStatus.JOINED
         el.save()
-        messages.success(request, _("You have granted data sharing with this organisation") + "!")
+        messages.success(request, _("You have granted data sharing with this organisation!"))
         return redirect("home")
 
     context["disable_join"] = True
@@ -1215,7 +1215,7 @@ def matchmaker(request: HttpRequest, event_slug: str) -> HttpResponse:
         form = MatchmakerForm(request.POST, request.FILES, instance=registration, context=context)
         if form.is_valid():
             form.save()
-            messages.success(request, _("Answers saved") + "!")
+            messages.success(request, _("Answers saved!"))
             return redirect("matchmaker", event_slug=context["run"].get_slug())
     else:
         form = MatchmakerForm(instance=registration, context=context)

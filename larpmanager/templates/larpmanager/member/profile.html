@@ -11,24 +11,19 @@
     <div class="user_resize platform">
         <hr class="no_v20" />
         <p>
-            {% trans "You are logged in with an email address" %}: <i>{{ member.email }}</i>.
-            <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it" %}?</a>
+            {% trans "You are logged in with an email address:" %} <i>{{ member.email }}</i>.
+            <a href="{% url 'ticket' 'email' %}">{% trans "Would you like to change it?" %}</a>
         </p>
         <hr />
         {% if vote_open %}
             <p>
                 {% trans "Voting for the Executive is open" %},
-                <a href="{% url 'vote' %}">{% trans "submit your vote here" %}!</a>.
+                <a href="{% url 'vote' %}">{% trans "submit your vote here!" %}</a>.
             </p>
             <hr />
         {% endif %}
         <p>
-            <i>{% trans "Your data will be saved in the system, which is used by several associations" %}.
-                {% trans "We value the privacy of your data and will treat it with the utmost care" %}.
-                {% trans "In particular, they will only be made visible to the organisers of the events you decide to register for" %}.
-                {% trans "They will not be communicated, shared or processed in any other way" %}.
-                {% trans "You can check and edit the list of organizations that can access your data on" %}
-                <a href="{% url 'privacy' %}">privacy</a>.</i>
+            <i>{% trans "Your data will be saved in the system, which is used by several associations. We value the privacy of your data and will treat it with the utmost care. In particular, they will only be made visible to the organisers of the events you decide to register for. They will not be communicated, shared or processed in any other way. You can check and edit the list of organizations that can access your data on" %}<a href="{% url 'privacy' %}">privacy</a>.</i>
         </p>
         <hr />
         {% if custom_text %}
@@ -57,9 +52,7 @@
                             <td>
                                 {% include "elements/avatar_upload.html" with avatar_current_src=profile avatar_upload_url=av_upload avatar_rotate_l_url=av_rot_l avatar_rotate_r_url=av_rot_r avatar_confirm_selector="input[type=submit]" %}
                                 <div class="helptext avatar_help">
-                                    {% trans "Upload your profile photo" %}.
-                                    {% trans "It will be shown to other participants" %}.
-                                    {% trans "Please choose a clear and easily recognizable photo" %}!
+                                    {% trans "Upload your profile photo. It will be shown to other participants. Please choose a clear and easily recognizable photo!" %}
                                 </div>
                                 {% if 'profile' in form.mandatory %}<div id="avatar_error"></div>{% endif %}
                             </td>
@@ -122,7 +115,7 @@
                     $('#avatar_error').empty();
                     if ($('#profile').hasClass('hide')) {
                         e.preventDefault();
-                        $('#avatar_error').html("<p><b class='form-error' style='color: var(--ter-clr);'>{% trans "Please upload your profile photo" %}!</b></p>");
+                        $('#avatar_error').html("<p><b class='form-error' style='color: var(--ter-clr);'>{% trans "Please upload your profile photo!" %}</b></p>");
                         window.jump_to('#avatar_dropzone');
                     }
                 });

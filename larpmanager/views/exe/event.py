@@ -344,11 +344,9 @@ def exe_events_delete(request: HttpRequest, run_uuid: str) -> HttpResponse:
     # Inform user
     messages.success(
         request,
-        _("Your request has been logged")
-        + "; "
-        + _("due to delicacy of the task requested, our team will review it manually")
-        + "; "
-        + _("we'll let you know as soon as possible"),
+        _(
+            "Your request has been logged; due to delicacy of the task requested, our team will review it manually; we'll let you know as soon as possible"
+        ),
     )
 
     return redirect("exe_events")

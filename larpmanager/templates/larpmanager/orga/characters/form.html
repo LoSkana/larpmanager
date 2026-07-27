@@ -10,7 +10,7 @@
 {% block content %}
     {% if available_typ|length > 1 %}
         <p>
-            {% trans "Configure form" %}:
+            {% trans "Configure form:" %}
             {% for nm in available_typ.keys %}
                 {% include "elements/comma.html" %}
                 {% if nm == label_typ %}
@@ -92,7 +92,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No form fields defined yet" %}. {% trans "Add a field to collect information from players on their character sheet" %}.
+            {% trans "No form fields defined yet. Add a field to collect information from players on their character sheet." %}
         </p>
     {% endif %}
     {% include "elements/table/footer.html" %}

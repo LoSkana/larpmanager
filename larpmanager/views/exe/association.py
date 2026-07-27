@@ -254,7 +254,7 @@ def exe_features(request: HttpRequest) -> HttpResponse:
         # Handle single feature activation with immediate redirect
         if len(context["new_features"]) == 1:
             feature = context["new_features"][0]
-            msg = _("Feature %(name)s activated") % {"name": feature.name} + "! " + feature.after_text
+            msg = _("Feature %(name)s activated!") % {"name": feature.name} + " " + feature.after_text
             clear_messages(request)
             messages.success(request, msg)
             return redirect(feature.follow_link)
@@ -307,15 +307,15 @@ def exe_features_go(request: HttpRequest, slug: str, *, to_active: bool = True) 
         if slug not in context["features"]:
             for dep_id in Feature.get_all_dependencies([feature_id]):
                 association.features.add(dep_id)
-            message = _("Feature %(name)s activated") + "!"
+            message = _("Feature %(name)s activated!")
         else:
-            message = _("Feature %(name)s already activated") + "!"
+            message = _("Feature %(name)s already activated!")
     # Handle feature deactivation
     elif slug not in context["features"]:
-        message = _("Feature %(name)s already deactivated") + "!"
+        message = _("Feature %(name)s already deactivated!")
     else:
         association.features.remove(feature_id)
-        message = _("Feature %(name)s deactivated") + "!"
+        message = _("Feature %(name)s deactivated!")
 
     # Save changes to association
     association.save()
@@ -478,24 +478,24 @@ def exe_version_upgrade(request: HttpRequest) -> HttpResponse:
 
         available_numbers = [v["number"] for v in VERSIONS if v["available"]]
         if target_version not in available_numbers:
-            messages.error(request, _("Invalid version selected") + ".")
+            messages.error(request, _("Invalid version selected."))
             return redirect("exe_version_upgrade")
 
         if action == "test":
             save_single_config(member, "interface_version", str(target_version))
             messages.success(
                 request,
-                _("Preview activated") + ": " + _("you are now viewing version %(v)s") % {"v": target_version} + ".",
+                _("Preview activated: you are now viewing version %(v)s.") % {"v": target_version},
             )
         elif action == "upgrade":
             association = Association.objects.get(pk=context["association_id"])
             save_single_config(association, "version", str(target_version))
             save_single_config(member, "interface_version", "")
             _reset_all_association(context["association_id"], context["slug"])
-            messages.success(request, _("Organization upgraded to version %(v)s") % {"v": target_version} + ".")
+            messages.success(request, _("Organization upgraded to version %(v)s.") % {"v": target_version})
         elif action == "reset_preview":
             save_single_config(member, "interface_version", "")
-            messages.success(request, _("Preview reset") + ". " + _("Using organization version") + ".")
+            messages.success(request, _("Preview reset. Using organization version."))
 
         return redirect("exe_version_upgrade")
 
@@ -527,7 +527,7 @@ def exe_reload_cache(request: HttpRequest) -> HttpResponse:
     _reset_all_association(association_id, association_slug)
 
     # Notify user of successful cache reset
-    messages.success(request, _("Cache reset") + "!")
+    messages.success(request, _("Cache reset!"))
     return redirect("manage")
 
 

@@ -9,28 +9,26 @@
             <p>{% trans "The collection was delivered to the user" %} {{ coll.member }}</p>
         {% elif coll.status == 'd' %}
             <p>
-                {% trans "The collection is ready to be delivered, give this link to the recipient" %}:
+                {% trans "The collection is ready to be delivered, give this link to the recipient:" %}
                 <a href="{% url 'accounting_collection_redeem' coll.redeem_code %}">{% trans "Redeem link" %}</a>
             </p>
         {% elif coll.status == 'o' %}
             <p>
-                {% trans "The collection is active! To participate click on the following link, or copy it to whoever you want to get involved" %}:
+                {% trans "The collection is active! To participate click on the following link, or copy it to whoever you want to get involved:" %}
                 <a href="{% url 'accounting_collection_participate' coll.contribute_code %}">{% trans "Link to participate in" %}</a>
             </p>
             <br />
             <p>
-                {% trans "When you want to close the collection, follow this link" %}.
-                {% trans "A special redemption code will be generated, to be given to the recipient" %}:
-                <a href="{% url 'accounting_collection_close' coll.contribute_code %}">{% trans "Close the collection" %}</a>
+                {% trans "When you want to close the collection, follow this link. A special redemption code will be generated, to be given to the recipient:" %}<a href="{% url 'accounting_collection_close' coll.contribute_code %}">{% trans "Close the collection" %}</a>
             </p>
             <br />
         {% endif %}
         <p>
-            {% trans "Number of partecipants" %}: <b>{{ list | length }}.</b> {% trans "Total collection" %}: <b>{{ coll.total }}.</b>
+            {% trans "Number of partecipants:" %} <b>{{ list | length }}.</b> {% trans "Total collection:" %} <b>{{ coll.total }}.</b>
         </p>
         {% if list %}
             <p>
-                {% trans "Contributors" %}:
+                {% trans "Contributors:" %}
                 {% for el in list %}
                     {% include "elements/comma.html" %}
                     {{ el.member.display_member }}
@@ -44,7 +42,7 @@
 window.addEventListener('DOMContentLoaded', function() {
 
 $('#close').click(function(){
-    return window.lmTesting ? true : confirm("{% filter escapejs %}{% trans "Confirm" %}{% endfilter %}?");
+    return window.lmTesting ? true : confirm("{% filter escapejs %}{% trans "Do you confirm?" %}{% endfilter %}");
 })
 });
     </script>

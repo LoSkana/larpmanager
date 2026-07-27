@@ -90,7 +90,7 @@
                         {% if 'help' in association.features %}
                             <td>
                                 <p>
-                                    <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help" %}?</a>
+                                    <a href=" {% if run %}{% url 'help' run.get_slug %}{% else %}{% url 'help' %}{% endif %} ">{% trans "Need help?" %}</a>
                                 </p>
                             </td>
                         {% endif %}
@@ -119,11 +119,11 @@
             <div class="demo-footer">
                 <span>
                     {% if association.demo_type_name %}
-                        {% blocktrans with name=association.demo_type_name %}You are exploring the "{{ name }}" demo{% endblocktrans %}.
+                        {% blocktrans with name=association.demo_type_name %}You are exploring the demo "{{ name }}." demo{% endblocktrans %}
                     {% else %}
-                        {% trans "You are exploring a demo organization" %}.
+                        {% trans "You are exploring a demo organization." %}
                     {% endif %}
-                    {% trans "Only some of the platform features are activated" %}.
+                    {% trans "Only some of the platform features are activated." %}
                 </span>
                 <a href="//{{ association.main_domain }}/get-started/">{% trans "Wanna try other demos, or are you ready to create your organization?" %} <i class="fa-solid fa-arrow-right"></i></a>
             </div>

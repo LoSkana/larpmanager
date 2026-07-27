@@ -1156,7 +1156,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             if self.instance.pk:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
-                msg = _("User already has a registration for this event") + "!"
+                msg = _("User already has a registration for this event!")
                 raise ValidationError(msg)
 
         return form_data
@@ -1725,7 +1725,7 @@ class PreRegistrationForm(BaseForm):
             required=False,
             max_length=255,
             label=_("Informations"),
-            help_text=_("Is there anything else you would like to tell us") + "?",
+            help_text=_("Is there anything else you would like to tell us?"),
         )
 
 

@@ -21,7 +21,7 @@ window.addEventListener('DOMContentLoaded', function() {
         let steps = [
           {
             popover: {
-              title: '{% filter escapejs %}{% trans "Welcome to" %} {{ association.platform }}{% endfilter %}!',
+              title: '{% filter escapejs %}{% trans "Welcome to" %} {{ association.platform }}!{% endfilter %}',
               description: '{{ welcome_intro | escapejs }}'
             }
           }
@@ -62,7 +62,7 @@ window.addEventListener('DOMContentLoaded', function() {
         let steps = [
           {
             popover: {
-              title: '{% filter escapejs %}{% trans "Event created" %}{% endfilter %}!',
+              title: '{% filter escapejs %}{% trans "Event created!" %}{% endfilter %}',
               description: '{{ first_event_intro | escapejs }}'
             }
           },
@@ -139,7 +139,7 @@ window.addEventListener('DOMContentLoaded', function() {
         let steps = [
           {
             popover: {
-              title: '{% filter escapejs %}{% trans "Advanced Mode Enabled" %}{% endfilter %}!',
+              title: '{% filter escapejs %}{% trans "Advanced Mode Enabled!" %}{% endfilter %}',
               description: '{{ advanced_unlock | escapejs }}'
             }
           },
@@ -155,7 +155,7 @@ window.addEventListener('DOMContentLoaded', function() {
           {
             element: '#wwyltd',
             popover: {
-              title: '{% filter escapejs %}{% trans "Need help" %}?{% endfilter %}',
+              title: '{% filter escapejs %}{% trans "Need help?" %}{% endfilter %}',
               description: '{{ wwyltd_sugg | escapejs }}',
               side: 'bottom',
               align: 'start'

@@ -37,7 +37,7 @@
             {% if reg_questions %}
                 <div class="staff-list">
                     <div class="nav">
-                        {% trans "Questions" %}:
+                        {% trans "Questions:" %}
                         {% for key, que in reg_questions.items %}
                             {% if que.typ == 'e' or que.typ == 'p' %}
                                 <a href="#" class="table_toggle no_jump" tog='q_{{ key }}'>{{ que.name | truncatechars:25 }}</a>

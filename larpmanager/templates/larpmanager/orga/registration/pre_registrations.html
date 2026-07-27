@@ -11,7 +11,7 @@
     <br />
     <br />
     <h2>
-        {% trans "Unconverted pre-registrations" %}: <b>{{ dc.pred | length }}</b>
+        {% trans "Unconverted pre-registrations:" %} <b>{{ dc.pred | length }}</b>
     </h2>
     <p>
         {% for el in dc.pred %}
@@ -21,7 +21,7 @@
     </p>
     <hr class="c" />
     <h2>
-        {% trans "Pre registrations total" %}: <b>{{ dc.list | length }}</b>
+        {% trans "Pre registrations total:" %} <b>{{ dc.list | length }}</b>
     </h2>
     <table id="pre_registrations" class="go_datatable">
         <thead>

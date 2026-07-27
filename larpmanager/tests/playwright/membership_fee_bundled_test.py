@@ -184,7 +184,7 @@ def request_and_approve_membership(live_server: Any, page: Any) -> None:
     sidebar(page, "Payments")
     expect_normalized(page, page.locator("#one"), "Total due 100")
     expect_normalized(page, page.locator("#one"), """
-    The membership fee 2050 (20€) is still to be paid, and will be added to your next payment""")
+    your 2050 membership fee is outstanding and will be added to your next payment. (20€)""")
     page.get_by_role("link", name=re.compile(r"A payment of 120€ is due within 8 days to confirm your registration")).click()
     page.get_by_role("checkbox", name="Payment confirmation:").check()
     submit(page)
@@ -209,7 +209,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     sidebar(page, "Payments")
     expect_normalized(page, page.locator("#one"), "Total due 100")
     expect_normalized(page, page.locator("#one"), "Total paid 100")
-    expect_normalized(page, page.locator("#one"), "The membership fee 2050 has been paid (20€)")
+    expect_normalized(page, page.locator("#one"), "your 2050 membership fee has been paid. (20€)")
 
     # Second event: register (riepilogo shows 70, no membership fee since already paid)
     go_to(page, live_server, "/testsecond/register")
@@ -236,4 +236,4 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     sidebar(page, "Payments")
     expect_normalized(page, page.locator("#one"), "Total due 70")
     expect_normalized(page, page.locator("#one"), "Total paid 70")
-    expect_normalized(page, page.locator("#one"), "The membership fee 2050 has been paid (20€)")
+    expect_normalized(page, page.locator("#one"), "your 2050 membership fee has been paid. (20€)")

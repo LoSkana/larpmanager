@@ -25,7 +25,7 @@
                     {% if el.player_uuid %}
                         <div class="go-inline">
                             <p>
-                                <b>{% trans "Player" %}: </b> <a href="{% url 'public' el.player_uuid %}">
+                                <b>{% trans "Player:" %} </b> <a href="{% url 'public' el.player_uuid %}">
                                     {% if run.id in all_runs %}
                                         {{ el.player_full }}
                                     {% else %}
@@ -47,7 +47,7 @@
                     {% endif %}
                     {% if el.factions %}
                         <div class="go-inline">
-                            <b>{% trans "Factions" %}:</b>
+                            <b>{% trans "Factions:" %}</b>
                             {% for fnum in el.factions %}
                                 {% with factions|get:fnum as g %}
                                     {% if not g.typ == 'g' %}

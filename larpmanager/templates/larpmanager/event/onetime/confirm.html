@@ -112,16 +112,14 @@
             <div class="content-info">
                 {% if content.description %}
                     <p>
-                        <strong>{% trans "Description" %}:</strong> {{ content.description }}
+                        <strong>{% trans "Description:" %}</strong> {{ content.description }}
                     </p>
                 {% endif %}
                 {% if content.duration %}
-                    <p>
-                        <strong>{% trans "Duration" %}:</strong> {{ content.duration|floatformat:0 }} {% trans "seconds" %}
-                    </p>
+                    <p>{% blocktrans with duration=content.duration|floatformat:0 %}Duration: {{ duration }} seconds{% endblocktrans %}</p>
                 {% endif %}
                 <p>
-                    <strong>{% trans "Type" %}:</strong>
+                    <strong>{% trans "Type:" %}</strong>
                     {% if content.content_type|slice:":5" == "video" %}
                         {% trans "Video" %}
                     {% elif content.content_type|slice:":5" == "audio" %}
@@ -132,8 +130,10 @@
                 </p>
             </div>
             <div class="warning-box">
-                <h3>⚠️ {% trans "One-Time Access Warning" %}</h3>
-                <p>{% trans "This content can only be accessed once. Please read carefully before proceeding" %}:</p>
+                <h3>
+                    <i class="fa-solid fa-exclamation"></i> {% trans "One-Time Access Warning" %}
+                </h3>
+                <p>{% trans "This content can only be accessed once. Please read carefully before proceeding:" %}</p>
                 <ul>
                     <li>{% trans "Once you click 'Access Content', this link will be permanently consumed" %}</li>
                     <li>{% trans "You will not be able to use this link again after accessing the content" %}</li>
@@ -150,7 +150,7 @@
                 <a href="#" onclick="history.back(); return false;" class="btn-cancel">{% trans "Cancel" %}</a>
             </div>
             <div class="onetime-info onetime-info-footer">
-                <p>{% trans "This content is protected and cannot be downloaded or recorded" %}.</p>
+                <p>{% trans "This content is protected and cannot be downloaded or recorded." %}</p>
             </div>
         </div>
     </body>

@@ -121,7 +121,7 @@ class RegistrationTicket(UuidMixin, OrderMixin, BaseModel):
     visible = models.BooleanField(
         default=True,
         verbose_name=_("Visible"),
-        help_text=_("Is it selectable by participants") + "?",
+        help_text=_("Is it selectable by participants?"),
     )
 
     casting_priority = models.IntegerField(
@@ -509,8 +509,7 @@ class RegistrationCharacterRel(BaseModel):
         max_length=500,
         upload_to=UploadToPathAndRename("registration/"),
         verbose_name=_("Character portrait"),
-        help_text=_("Optional: upload a photo of yourself associated with your character specifically for this event")
-        + "!",
+        help_text=_("Optional: upload a photo of yourself associated with your character specifically for this event!"),
         null=True,
         blank=True,
     )

@@ -8,7 +8,7 @@
         </h2>
         <p>
             {% if widgets.logs.total_count %}
-                {% trans "Today activity" %}: {{ widgets.logs.total_count }}
+                {% trans "Today activity:" %} {{ widgets.logs.total_count }}
                 {% for op_type, data in widgets.logs.operation_counts.items %}| {{ data.label }}: {{ data.count }}{% endfor %}
             {% endif %}
         </p>

@@ -246,7 +246,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
         context["el"].status = PaymentStatus.CONFIRMED
     else:
         # Invoice already processed - show warning and redirect
-        messages.warning(request, _("Receipt already confirmed") + ".")
+        messages.warning(request, _("Receipt already confirmed."))
         if is_frame:
             return render(request, "elements/dashboard/form_success.html", context)
         return redirect("orga_payments", event_slug=context["run"].get_slug())
@@ -255,7 +255,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
     context["el"].save()
 
     # Show success message and redirect to invoices list
-    messages.success(request, _("Element approved") + "!")
+    messages.success(request, _("Element approved!"))
     if is_frame:
         return render(request, "elements/dashboard/form_success.html", context)
     return redirect("orga_payments", event_slug=context["run"].get_slug())
@@ -581,7 +581,7 @@ def payment_edit(
             if invoice_form:
                 saved_invoice = invoice_form.save()
                 save_log(context, type(saved_invoice), saved_invoice, None, operation_type=LogOperationType.UPDATE)
-            messages.success(request, _("Element saved") + "!")
+            messages.success(request, _("Element saved!"))
             return redirect_fn()
 
         context["form1"] = payment_form

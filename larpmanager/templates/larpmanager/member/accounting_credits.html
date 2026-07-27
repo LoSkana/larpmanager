@@ -13,9 +13,14 @@
     <div class="user_resize platform">
         {% if member.credit > 0 %}
             <p>
-                {% trans "Total" %}: <b>{{ member.credit }}{{ currency_symbol }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event" %}!</i>
+                {% trans "Total:" %} <b>{{ member.credit }}{{ currency_symbol }}</b>. <i>{% trans "They will be used automatically when you sign up for a new event!" %}</i>
                 <br />
-                {% trans "Do you wish to be reimbursed? Open a new one" %} <a href="{% url 'accounting_refund' %}">{% trans "refund request" %}</a>.
+                {% url 'accounting_refund' as accounting_refund_url %}
+                <p>
+                    {% blocktrans trimmed %}
+                        Would you like to request a reimbursement? <a href="{{ accounting_refund_url }}">Submit a new refund request</a>.
+                    {% endblocktrans %}
+                </p>
                 {% if refunds %}
                     <b>Richieste aperte: </b>
                     {% for el in refunds %}

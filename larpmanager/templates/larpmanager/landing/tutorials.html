@@ -26,9 +26,7 @@
             {% if intro %}
                 <p>
                     <i>
-                        {% trans "With these tutorials, you can learn how to use the tool in no time" %}!
-                        {% trans "You can read them in order, or scroll directly to the one that interests you most" %}.
-                    </i>
+                    {% trans "With these tutorials, you can learn how to use the tool in no time! You can read them in order, or scroll directly to the one that interests you most." %}</i>
                 </p>
             {% endif %}
             <div id="tutorial-nav" class="anchor-nav"></div>
@@ -37,13 +35,13 @@
                 <tr>
                     <td>
                         {% if prev %}
-                            {% trans "Prev" %}: <a href="{% url 'tutorials' prev.2 %}{% if iframe %}?in_iframe=1{% endif %}">{{ prev.0 | template_trans }}</a>
+                            {% trans "Prev:" %} <a href="{% url 'tutorials' prev.2 %}{% if iframe %}?in_iframe=1{% endif %}">{{ prev.0 | template_trans }}</a>
                         {% endif %}
                     </td>
                     <td></td>
                     <td>
                         {% if next %}
-                            {% trans "Next" %}: <a href="{% url 'tutorials' next.2 %}{% if iframe %}?in_iframe=1{% endif %}">{{ next.0 | template_trans }}</a>
+                            {% trans "Next:" %} <a href="{% url 'tutorials' next.2 %}{% if iframe %}?in_iframe=1{% endif %}">{{ next.0 | template_trans }}</a>
                         {% endif %}
                     </td>
                 </tr>

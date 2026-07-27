@@ -20,12 +20,12 @@
                         </div>
                         {% if el.player_uuid %}
                             <div class="go-inline">
-                                <b>{% trans "Player" %}:&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
+                                <b>{% trans "Player:" %}&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
                             </div>
                         {% endif %}
                         <div class="go-inline">
                             {% if el.factions_list %}
-                                <b>{% trans "Factions" %}:&nbsp;{{ el.factions_list }}</b>
+                                <b>{% trans "Factions:" %}&nbsp;{{ el.factions_list }}</b>
                             {% endif %}
                         </div>
                     </div>

@@ -104,9 +104,7 @@ def registration_available(run: Run, features: dict, run_status: dict, context: 
             or remaining_primary_tickets * 1.0 / run.event.max_pg < percentage_threshold_for_urgency
         ):
             run_status["count"] = remaining_primary_tickets
-            run_status["additional"] = (
-                _(" Hurry: only %(num)d tickets available") % {"num": remaining_primary_tickets} + "."
-            )
+            run_status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_primary_tickets}
         return
 
     # Check if filler tickets are available (fallback option)
@@ -149,9 +147,7 @@ def _available_waiting(run: Run, run_status: dict, registration_counts: dict) ->
         if remaining_waiting_spots > 0:
             run_status["waiting"] = True
             run_status["count"] = remaining_waiting_spots
-            run_status["additional"] = (
-                _(" Hurry: only %(num)d tickets available") % {"num": remaining_waiting_spots} + "."
-            )
+            run_status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_waiting_spots}
             return True
 
     # No waiting list spots available
@@ -186,7 +182,7 @@ def _available_filler(run: Run, run_status: dict, registration_counts: Any) -> b
             run_status["filler"] = True
             run_status["count"] = remaining_filler
             # Add urgency message for limited availability
-            run_status["additional"] = _(" Hurry: only %(num)d tickets available") % {"num": remaining_filler} + "."
+            run_status["additional"] = _(" Hurry: only %(num)d tickets available.") % {"num": remaining_filler}
             return True
 
     # No filler tickets available
@@ -490,9 +486,9 @@ def _status_payment(
         run_status["status_type"] = "pending"
         run_status["action"] = {
             "label": _("Payment awaiting verification"),
-            "label_long": _("Your payment has been received and is being verified by the organizers")
-            + "; "
-            + _("no further action is needed at the moment"),
+            "label_long": _(
+                "Your payment has been received and is being verified by the organizers; no further action is needed at the moment"
+            ),
         }
         context["pending_invoices"] = True
         run_status["payment_pending"] = True
@@ -670,8 +666,8 @@ def _check_run_status(context: dict, run: Run, member: Member, run_status: dict,
     # Handle external registration - redirect is handled in view layer
     if status == RegistrationStatus.EXTERNAL:
         run_status["open"] = True
-        run_status["text"] = _("Registration is open") + "!"
-        run_status["text_long"] = _("Registrations are open: sign up now to secure your spot") + "!"
+        run_status["text"] = _("Registration is open!")
+        run_status["text_long"] = _("Registrations are open: sign up now to secure your spot!")
         run_status["url"] = register_url
         return run_status
 
@@ -689,7 +685,7 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
         current_datetime = timezone.now()
 
         run_status["open"] = False
-        run_status["text"] = run_status.get("text") or _("Registrations not open") + "!"
+        run_status["text"] = run_status.get("text") or _("Registrations not open!")
         run_status["text_long"] = run_status.get("text_long") or _("Registrations for this event have not opened yet")
 
         if not run.registration_open:
@@ -714,15 +710,14 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
 
     # signup open, not already signed in
     messages = {
-        "primary": _("Registration is open") + "!",
-        "filler": _("Sign up as a reserve") + "!",
-        "waiting": _("Join the waiting list") + "!",
+        "primary": _("Registration is open!"),
+        "filler": _("Sign up as a reserve!"),
+        "waiting": _("Join the waiting list!"),
     }
     messages_long = {
-        "primary": _("Registrations are open: sign up now to secure your spot") + "!",
-        "filler": _("Primary spots are sold out, but you can still sign up as a reserve") + "!",
-        "waiting": _("The event is sold out, but you can join the waiting list to be notified if a spot frees up")
-        + "!",
+        "primary": _("Registrations are open: sign up now to secure your spot!"),
+        "filler": _("Primary spots are sold out, but you can still sign up as a reserve!"),
+        "waiting": _("The event is sold out, but you can join the waiting list to be notified if a spot frees up!"),
     }
 
     # pick the first matching message (or None)
@@ -782,7 +777,7 @@ def _status_preregister(run: Run, member: Member, run_status: dict, context: dic
 
     # Set status message based on pre-registration state
     if has_pre_registration:
-        status_message = _("Pre-registration confirmed") + "!"
+        status_message = _("Pre-registration confirmed!")
         run_status["text"] = status_message
         run_status["text_long"] = _(
             "Your pre-registration has been confirmed: you will be notified when registrations open"
@@ -790,8 +785,8 @@ def _status_preregister(run: Run, member: Member, run_status: dict, context: dic
 
     else:
         # Create pre-registration link for unauthenticated or non-pre-registered users
-        status_message = _("Pre-register to the event") + "!"
-        status_message_long = _("Pre-registrations are open: pre-register to be notified when registrations open") + "!"
+        status_message = _("Pre-register to the event!")
+        status_message_long = _("Pre-registrations are open: pre-register to be notified when registrations open!")
         preregister_url = reverse("pre_register", args=[run.event.slug])
         run_status["text"] = status_message
         run_status["text_long"] = status_message_long
@@ -1093,8 +1088,8 @@ def _status_approval(
         run_status["character_action"] = {
             "url": url,
             "label": _("Create your character"),
-            "label_long": _("Create the character you will play in this event") + "!",
-            "tooltip": _("Create your character") + "!",
+            "label_long": _("Create the character you will play in this event!"),
+            "tooltip": _("Create your character!"),
             "icon": "fa-solid fa-wand-magic-sparkles",
             "status_type": "todo",
             "status_icon": "fa-solid fa-list-check",
@@ -1106,7 +1101,7 @@ def _status_approval(
         url = reverse("character_list", args=[run.get_slug()])
         if run_status["details"]:
             run_status["details"] += " - "
-        message = _("Select your character") + "!"
+        message = _("Select your character!")
         run_status["details"] += f"<a href='{url}'>{message}</a>"
 
 
@@ -1158,7 +1153,7 @@ def _status_casting(
     run_status["casting_action"] = {
         "url": reverse("casting", args=[run.get_slug()]),
         "label": _("Select your preferences"),
-        "label_long": _("Select your casting preferences") + "!",
+        "label_long": _("Select your casting preferences!"),
         "icon": "fa-solid fa-people-arrows",
     }
 

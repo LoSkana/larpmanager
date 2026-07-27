@@ -54,8 +54,7 @@
     <h3>{% trans "Returning type" %}</h3>
     {% if not features.tokens and not features.credits %}
         <div class="alert alert-warning">
-            {% trans "Warning: Neither tokens nor credits features are enabled" %}.
-            {% trans "Refunds cannot be processed as virtual currency" %}.
+            {% trans "Warning: Neither tokens nor credits features are enabled. Refunds cannot be processed as virtual currency." %}
         </div>
     {% elif features.tokens and not features.credits %}
         <div class="nav typ">
@@ -68,7 +67,7 @@
     {% else %}
         <div class="nav typ">
             <a id="typ_t" href="#" onclick="return select_typ('t');">{% trans "Only" %} {{ tokens_name }}</a>
-            <a id="typ_c" href="#" onclick="return select_typ('c');">{{ tokens_name }} {% trans "and" %} {{ credits_name }}</a>
+            <a id="typ_c" href="#" onclick="return select_typ('c');">{% blocktrans with tokens=tokens_name credits=credits_name %}Both {{ tokens }} and {{ credits }}{% endblocktrans %}</a>
         </div>
     {% endif %}
     <br />
@@ -178,7 +177,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Cannot process refund: Neither tokens nor credits features are enabled" %}{% endfilter %}');
                 return false;
             {% else %}
-                return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure" %}{% endfilter %}?');
+                return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure?" %}{% endfilter %}');
             {% endif %}
         });
     });

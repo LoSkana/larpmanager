@@ -30,7 +30,7 @@
                         {% if el.pending_invites %}
                             <br />
                             <small><i>
-                                {% trans "Pending invites" %}:
+                                {% trans "Pending invites:" %}
                                 {% for inv in el.pending_invites %}
                                     {{ inv.email }}
                                     {% if not forloop.last %},{% endif %}
@@ -56,7 +56,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No roles defined yet" %}. {% trans "Create a role to assign permissions and invite staff members to your organization" %}.
+            {% trans "No roles defined yet. Create a role to assign permissions and invite staff members to your organization." %}
         </p>
     {% endif %}
     {% include "elements/table/footer.html" %}

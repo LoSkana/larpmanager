@@ -6,7 +6,7 @@
 {% block content %}
     <div class="form_container user_resize platform">
         {% if not form.questions %}
-            <p>{% trans "No matchmaker questions have been set up for this event yet" %}.</p>
+            <p>{% trans "No matchmaker questions have been set up for this event yet." %}</p>
         {% else %}
             <form id="matchmaker" action="{{ request.path }}" method="post" novalidate>
                 {% csrf_token %}

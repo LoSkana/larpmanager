@@ -897,10 +897,13 @@ def orga_writing_excel_edit(request: HttpRequest, event_slug: str, writing_type:
         context["question"].typ in ["m", "t", "p", "e", "name", "teaser", "text", "title"]
         and context["question"].max_length
     ):
-        # Set appropriate label for multiple choice vs text fields
-        name = _("options") if context["question"].typ == "m" else "text length"
+        # Set appropriate label for multiple choice vs text fields, with the max length in context
+        if context["question"].typ == "m":
+            name = _("Options (max %(max)s)") % {"max": context["question"].max_length}
+        else:
+            name = _("Text length (max %(max)s)") % {"max": context["question"].max_length}
         # Generate counter display with current/max length format
-        counter = f'<div class="helptext">{name}: <span class="count"></span> / {context["question"].max_length}</div>'
+        counter = f'<div class="helptext">{name}: <span class="count"></span></div>'
 
     # Prepare localized labels and form field references
     confirm = _("Confirm")

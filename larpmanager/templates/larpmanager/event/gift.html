@@ -9,8 +9,7 @@
 {% block content %}
     <div class="user_resize">
         <p>
-            {% trans "On this page you can book tickets for the event; once paid, a special code will be generated" %}.
-            {% trans "A friend of yours will be able to receive the registration as a gift by accessing this special link" %}!
+            {% trans "On this page you can book tickets for the event; once paid, a special code will be generated. A friend of yours will be able to receive the registration as a gift by accessing this special link!" %}
         </p>
         <div class="c nav">
             <a href="{% url 'gift_new' run.get_slug %}">{% trans "Add new" %}</a>
@@ -50,19 +49,19 @@
                         {% if registration.payment %}
                             {% if registration.deadline > 0 %}
                                 <a href="{% url 'accounting_registration' registration.uuid %}">
-                                    {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
-                                {% trans "within" %} {{ registration.payment.deadline }} {% trans "days" %}</a>
-                            {% else %}
-                                <a href="{% url 'accounting_registration' registration.uuid %}">
-                                    {{ registration.payment.quota | format_decimal }}{{ currency_symbol }}
-                                    {% trans "immediately" %}</a> <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
+                                    {% blocktrans with amount=registration.payment.quota|format_decimal currency=currency_symbol days=registration.payment.deadline %}{{ amount }}{{ currency }} within {{ days }} days{% endblocktrans %}</a>
+                                {% else %}
+                                    <a href="{% url 'accounting_registration' registration.uuid %}">
+                                        {% blocktrans with amount=registration.payment.quota|format_decimal currency=currency_symbol %} {{ amount }}{{ currency }} immediately{% endblocktrans %}
+                                    </a>
+                                    <i>({% trans "If no payment is received, registration may be cancelled" %})</i>
                                 {% endif %}
                             {% elif registration.pending %}
-                                {% trans "Payment currently in review by the staff" %}.
+                                {% trans "Payment currently in review by the staff." %}
                             {% else %}
                                 <a href="{% url 'gift_redeem' run.get_slug registration.redeem_code %}">{% trans "Access link" %}</a>
                                 <i> -
-                                    {% trans "copy this link and give it to your friend" %}:
+                                    {% trans "copy this link and give it to your friend:" %}
                                 </i>
                                 <b>
                                     {{ request.scheme }}://{{ request.get_host }}{% url 'gift_redeem' run.get_slug registration.redeem_code %}

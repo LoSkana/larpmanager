@@ -5,10 +5,10 @@
 {% endblock title %}
 {% block content %}
     <p>
-        {% trans "Need a ride" %}?
-        <a href="{% url 'shuttle_new' %}">{% trans "Add a new request" %}!</a>
+        {% trans "Need a ride?" %}
+        <a href="{% url 'shuttle_new' %}">{% trans "Add a new request!" %}</a>
         <br />
-        (<i>{% trans "Notes: Try to group as many passengers per request as possible; if you notice any delays, write us directly, do not enter new requests" %}!)</i>
+        (<i>{% trans "Notes: Try to group as many passengers per request as possible; if you notice any delays, write us directly, do not enter new requests!" %})</i>
     </p>
     <br />
     <div class="no-more-tables">
@@ -48,7 +48,7 @@
     <br />
     <div class="no-more-tables">
         <h2>
-            <a class="my_toggle" tog="past">{% trans "Passages made" %}</a>
+            <a class="my_toggle" tog="past">{% trans "Passages completed" %}</a>
         </h2>
         <table class="hide past">
             <thead>

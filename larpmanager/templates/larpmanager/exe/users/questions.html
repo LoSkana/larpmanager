@@ -50,13 +50,13 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No open questions at the moment" %}. {% trans "All member requests have been answered or closed" %}.
+            {% trans "No open questions at the moment. All member requests have been answered or closed." %}
         </p>
     {% endif %}
     <div class="hide closed">
         <h2>Domande già risposte</h2>
         <p>
-            <i>{% trans "This page only shows questions from the last 3 months" %}. {% trans "To view previous questions click here" %}: </i>
+            <i>{% trans "This page only shows questions from the last 3 months. To view previous questions click here:" %}</i>
             <form action="{{ request.path }}" method="post">
                 {% csrf_token %}
                 <input type="submit" value="{% trans "Confirm" %}">
@@ -91,7 +91,7 @@
             </tbody>
         </table>
         {% if not closed %}
-            <p class="no-elements-available">{% trans "No pending questions have been answered in the last 3 months" %}.</p>
+            <p class="no-elements-available">{% trans "No pending questions have been answered in the last 3 months." %}</p>
         {% endif %}
     </div>
 {% endblock content %}

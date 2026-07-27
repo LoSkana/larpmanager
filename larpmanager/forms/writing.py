@@ -151,7 +151,7 @@ class PlayerRelationshipForm(BaseModelForm):
         # Check if user is trying to create relationship with themselves
         character_id = _get_character_cache_id(self.params)
         if self.cleaned_data["target"].id == character_id:
-            self.add_error("target", _("You cannot create a relationship towards yourself") + "!")
+            self.add_error("target", _("You cannot create a relationship towards yourself!"))
 
         # Check for existing relationships with same target and registration
         try:
@@ -160,7 +160,7 @@ class PlayerRelationshipForm(BaseModelForm):
             )
             # Allow editing existing relationship, but prevent duplicates
             if rel.id != self.instance.id:
-                self.add_error("target", _("Already existing relationship") + "!")
+                self.add_error("target", _("Already existing relationship!"))
         except ObjectDoesNotExist:
             # No existing relationship found - this is valid
             pass
@@ -429,12 +429,12 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Configure faction type help text with descriptions
-        help_texts = {
-            _("Primary"): _("main grouping / affiliation for characters"),
-            _("Transversal"): _("secondary grouping across primary factions"),
-            _("Secret"): _("hidden faction visible only to assigned characters"),
-        }
-        self.fields["typ"].help_text = ", ".join([f"<b>{key}</b>: {value}" for key, value in help_texts.items()])
+        help_texts = [
+            _("<b>%(type)s</b>: main grouping / affiliation for characters") % {"type": _("Primary")},
+            _("<b>%(type)s</b>: secondary grouping within the primary faction structure") % {"type": _("Transversal")},
+            _("<b>%(type)s</b>: hidden faction visible only to assigned characters") % {"type": _("Secret")},
+        ]
+        self.fields["typ"].help_text = ", ".join(help_texts)
 
 
 class OrgaGuildForm(WritingForm, BaseWritingForm):

@@ -44,7 +44,7 @@ from larpmanager.utils.core.codes import countries
 logger = logging.getLogger(__name__)
 
 SENSITIVE_DISCLAIMER = _(
-    "It will only be used for internal bureaucratic purposes, and will NEVER be displayed to other participants"
+    "It will only be used for internal bureaucratic purposes, and will NEVER be displayed to other participants."
 )
 
 
@@ -65,7 +65,7 @@ class FirstAidChoices(models.TextChoices):
 class NewsletterChoices(models.TextChoices):
     """Choices for NewsletterChoices."""
 
-    ALL = "a", _("Yes, keep me posted") + "!"
+    ALL = "a", _("Yes, keep me posted!")
     ONLY = "o", _("Only really important communications")
     NO = "n", _("No, I don't want updates")
 
@@ -147,11 +147,10 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         null=True,
         help_text=_(
             "If the first name shown on your documents is different from the one you prefer to use, then write "
-            "it here; otherwise leave this field empty",
+            "it here; otherwise leave this field empty.",
         )
-        + ". "
-        + SENSITIVE_DISCLAIMER
-        + ". ",
+        + " "
+        + SENSITIVE_DISCLAIMER,
     )
 
     gender = models.CharField(
@@ -160,10 +159,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         default=None,
         verbose_name=_("Legal Gender"),
         null=True,
-        help_text=_("Indicate your legal gender as it appears on official documents")
-        + ". "
-        + SENSITIVE_DISCLAIMER
-        + ". ",
+        help_text=_("Indicate your legal gender as it appears on official documents.") + " " + SENSITIVE_DISCLAIMER,
     )
 
     pronoun = models.CharField(
@@ -186,7 +182,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
     phone_contact = PhoneNumberField(
         unique=True,
         verbose_name=_("Phone contact"),
-        help_text=_("Remember to put the prefix at the beginning") + "!",
+        help_text=_("Remember to put the prefix at the beginning!"),
         blank=True,
         null=True,
     )
@@ -321,14 +317,14 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         choices=NewsletterChoices.choices,
         default=NewsletterChoices.ALL,
         verbose_name=_("Newsletter"),
-        help_text=_("Would you like to receive updates about our upcoming events") + "?",
+        help_text=_("Would you like to receive updates about our upcoming events?"),
         null=True,
     )
 
     presentation = models.CharField(
         max_length=500,
         verbose_name=_("Presentation"),
-        help_text=_("If you are a candidate for the Board, please write an introduction here") + "!",
+        help_text=_("If you are a candidate for the Board, please write an introduction here!"),
         null=True,
         blank=True,
     )

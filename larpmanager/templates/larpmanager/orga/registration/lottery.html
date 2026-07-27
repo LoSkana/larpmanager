@@ -8,17 +8,17 @@
 {% endblock info %}
 {% block content %}
     {% if chosen %}
-        <i>{% trans "The following registrations were drawn" %}:
+        <i>{% trans "The following registrations were drawn:" %}
             {% for el in chosen %}
                 {% include "elements/comma.html" %}
                 {{ el.member }}
             {% endfor %}
         </i>
     {% endif %}
-    <p>{% trans "The total number of tickets to be drawn was indicated" %}: {{ num_draws }}</p>
-    <p>{% trans "Lottery tickets currently present" %}: {{ num_lottery }}</p>
-    <p>{% trans "Tickets that have already been drawn" %}: {{ num_def }}</p>
-    <i>{% trans "Go ahead and click on this button to perform the extraction. Warning: it is final" %}!</i>
+    <p>{% trans "The total number of tickets to be drawn was indicated:" %} {{ num_draws }}</p>
+    <p>{% trans "Lottery tickets currently present:" %} {{ num_lottery }}</p>
+    <p>{% trans "Tickets that have already been drawn:" %} {{ num_def }}</p>
+    <i>{% trans "Go ahead and click on this button to perform the extraction. Warning: it is final!" %}</i>
     <br />
     <form action="{{ request.path }}" method="post">
         {% csrf_token %}

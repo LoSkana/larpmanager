@@ -12,7 +12,7 @@
                 <th></th>
                 <th>{% trans "Name" %}</th>
                 <th>{% trans "Description" %}</th>
-                <th>{% trans "Marked" %}</th>
+                <th>{% trans "Checked" %}</th>
                 <th></th>
             </tr>
         </thead>
@@ -35,9 +35,7 @@
         </tbody>
     </table>
     {% if not list %}
-        <p class="no-elements-available">
-            {% trans "No competences have been defined yet" %}. {% trans "Add one to get started" %}.
-        </p>
+        <p class="no-elements-available">{% trans "No competences have been defined yet. Add one to get started." %}</p>
     {% endif %}
     {% include "elements/table/footer.html" %}
 {% endblock content %}

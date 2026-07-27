@@ -67,7 +67,7 @@ class HelpQuestion(UuidMixin, BaseModel):
     text = models.TextField(
         max_length=5000,
         verbose_name=_("Text"),
-        help_text=_("Write your question, request or concern here. We will be happy to answer you") + "!",
+        help_text=_("Write your question, request or doubt here. We will be happy to answer you!"),
     )
 
     closed = models.BooleanField(default=False)
@@ -608,31 +608,29 @@ class ShuttleService(UuidMixin, BaseModel):
 
     passengers = models.IntegerField(
         verbose_name=_("Number of passengers"),
-        help_text=_("Indicates how many passengers require transportation"),
+        help_text=_("Number of passengers requiring transportation."),
     )
 
     address = models.TextField(
-        verbose_name=_("Address"),
-        help_text=_("Indicate as precisely as possible where to pick you up"),
+        verbose_name=_("Pickup location"),
+        help_text=_("Provide as precise a location or address as possible for pickup."),
     )
 
     info = models.TextField(
-        verbose_name=_("Informations"),
+        verbose_name=_("Additional details"),
         help_text=_(
-            "Indicates how you can be recognized, if you will be found near some point "
-            "specific, if you have a lot of luggage: any information that might help us help "
-            "you",
+            "Include identifying details (e.g., clothing, luggage, precise meeting point) to help us locate you."
         ),
     )
 
     date = models.DateField(
-        verbose_name=_("Request date"),
-        help_text=_("For which day you will need transportation"),
+        verbose_name=_("Pickup date"),
+        help_text=_("The date transportation is needed."),
     )
 
     time = models.TimeField(
-        verbose_name=_("Request time"),
-        help_text=_("For what time you will need transportation (time zone of the larp location)"),
+        verbose_name=_("Pickup time"),
+        help_text=_("The time transportation is needed (local event time zone)."),
     )
 
     working = models.ForeignKey(
@@ -644,10 +642,8 @@ class ShuttleService(UuidMixin, BaseModel):
     )
 
     notes = models.TextField(
-        verbose_name=_("Note"),
-        help_text=_(
-            "Indicates useful information to passengers, such as color of your car, time estimated time of your arrival",
-        ),
+        verbose_name=_("Driver notes"),
+        help_text=_("Information for passengers (such as car color/model, estimated arrival time)."),
         null=True,
     )
 

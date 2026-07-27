@@ -296,7 +296,7 @@ def accounting_refund(request: HttpRequest) -> HttpResponse:
             # Show success message and redirect to accounting dashboard
             messages.success(
                 request,
-                _("Request for reimbursement entered! You will receive notice when it is processed.") + ".",
+                _("Request for reimbursement entered! You will receive notice when it is processed.."),
             )
             return redirect("accounting")
     else:
@@ -339,7 +339,7 @@ def accounting_payment(request: HttpRequest, event_slug: str, method: str | None
     if not context["registration"]:
         messages.warning(
             request,
-            _("We cannot find your registration for this event. Are you logged in as the correct user") + "?",
+            _("We cannot find your registration for this event. Are you logged in as the correct user?"),
         )
         return redirect("accounting")
 
@@ -474,13 +474,13 @@ def _check_registration_payment_preconditions(
         if "error_cf" in result:
             messages.warning(
                 request,
-                _("Your tax code has a problem that we ask you to correct") + ": " + result["error_cf"],
+                _("Your tax code has a problem that we ask you to correct:") + " " + result["error_cf"],
             )
             return redirect("profile")
 
     # Check if registration is already fully paid
     if registration.tot_iscr == registration.tot_payed:
-        messages.success(request, _("Payment for this event is complete and up to date") + "!")
+        messages.success(request, _("Payment for this event is complete and up to date!"))
         return redirect("event_payments", event_slug=registration.run.get_slug())
 
     # Check for pending payment verification
@@ -499,7 +499,7 @@ def _check_registration_payment_preconditions(
 
     # Verify membership approval if membership feature is enabled
     if "membership" in context["features"] and not registration.membership.date:
-        mes = _("To be able to pay, your membership application must be approved") + "."
+        mes = _("To be able to pay, your membership application must be approved.")
         messages.warning(request, mes)
         return redirect("event_payments", event_slug=registration.run.get_slug())
 
@@ -524,9 +524,9 @@ def get_accounting_registration(request: HttpRequest, context: dict, registratio
 
     messages.error(
         request,
-        _("No registration found for this event")
-        + ", "
-        + _("please ensure that you have accessed the platform using the correct account"),
+        _(
+            "No registration found for this event, please ensure that you have accessed the platform using the correct account"
+        ),
     )
     msg = "home"
     raise RedirectError(msg)
@@ -560,9 +560,9 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
     if memb.status != MembershipStatus.ACCEPTED:
         messages.error(
             request,
-            _("No accepted membership found")
-            + ", "
-            + _("please ensure that you have accessed the platform using the correct account"),
+            _(
+                "No accepted membership found, please ensure that you have accessed the platform using the correct account"
+            ),
         )
         return redirect("accounting")
 
@@ -705,7 +705,7 @@ def accounting_collection(request: HttpRequest) -> HttpResponse:
                 p.save()
 
             # Show success message and redirect to collection management
-            messages.success(request, _("The collection has been activated") + "!")
+            messages.success(request, _("The collection has been activated!"))
             return redirect("accounting_collection_manage", collection_code=p.contribute_code)
     else:
         # Initialize empty form for GET request
@@ -890,7 +890,7 @@ def accounting_collection_redeem(request: HttpRequest, collection_code: str) -> 
             locked.save()
 
         # Display success message and redirect to home
-        messages.success(request, _("The collection has been delivered") + "!")
+        messages.success(request, _("The collection has been delivered!"))
         return redirect("home")
 
     # For GET requests, prepare collection items list for display
@@ -952,7 +952,7 @@ def accounting_wait(request: HttpRequest) -> HttpResponse:
 @login_required
 def accounting_cancelled(request: HttpRequest) -> HttpResponse:
     """Handle cancelled payment redirecting to accounting page."""
-    mes = _("The payment was not completed. Please contact us to find out why") + "."
+    mes = _("The payment was not completed. Please contact us to find out why.")
     messages.warning(request, mes)
     return redirect("accounting")
 
@@ -980,7 +980,7 @@ def accounting_profile_check(request: HttpRequest, success_message: str, invoice
     # Check if membership profile has been completed
     if not membership.compiled:
         # Add profile completion prompt to message and redirect to profile
-        success_message += " " + _("As a final step, we ask you to complete your profile") + "."
+        success_message += " " + _("As a final step, we ask you to complete your profile.")
         messages.success(request, success_message)
         return redirect("profile")
 
@@ -1030,7 +1030,7 @@ def accounting_payed(request: HttpRequest, registration_uuid: str | None = None)
         inv = None
 
     # Set success message for payment completion
-    mes = _("You have completed the payment") + "!"
+    mes = _("You have completed the payment!")
 
     # Redirect to profile check with success message and invoice
     return accounting_profile_check(request, mes, inv)
@@ -1059,7 +1059,7 @@ def accounting_submit(request: HttpRequest, payment_method: str, invoice_uuid: s
     context = get_context(request)
     # Only allow POST requests for security
     if request.method != "POST":
-        messages.error(request, _("You can't access this way") + "!")
+        messages.error(request, _("You can't access this way!"))
         return redirect("accounting")
 
     # Check if receipt is required for manual payments
@@ -1076,7 +1076,7 @@ def accounting_submit(request: HttpRequest, payment_method: str, invoice_uuid: s
 
     # Validate form data and uploaded files
     if not form.is_valid():
-        mes = _("Error loading. Invalid file format (we accept only pdf or images)") + "."
+        mes = _("Error loading. Invalid file format (we accept only pdf or images).")
         messages.error(request, mes)
         return redirect("/" + redirect_path)
 
@@ -1105,7 +1105,7 @@ def accounting_submit(request: HttpRequest, payment_method: str, invoice_uuid: s
     notify_invoice_check(inv)
 
     # Display success message and redirect to profile check
-    mes = _("Payment received") + "! " + _("As soon as it is approved, your accounting will be updated") + "."
+    mes = _("We've received your payment! Your accounting will be updated once it is approved.")
     return accounting_profile_check(request, mes, inv)
 
 

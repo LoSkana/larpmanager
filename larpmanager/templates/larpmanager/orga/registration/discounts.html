@@ -25,7 +25,8 @@
                         <td>{{ el.disc }}</td>
                         <td>{{ el.value }}</td>
                         <td>
-                            <a href="{% url 'orga_registration_discount_del' run.get_slug registration.uuid el.uuid %}">{% trans "Delete" %}</a>
+                            <a href="{% url 'orga_registration_discount_del' run.get_slug registration.uuid el.uuid %}"
+                               class="frame-confirm"><i class="fa-solid fa-xmark"></i> {% trans "Delete" %}</a>
                         </td>
                     </tr>
                 {% endfor %}
@@ -50,7 +51,8 @@
                         <td>{{ el }}</td>
                         <td>{{ el.value }}</td>
                         <td>
-                            <a href="{% url 'orga_registration_discount_add' run.get_slug registration.uuid el.uuid %}">{% trans "Add" %}</a>
+                            <a href="{% url 'orga_registration_discount_add' run.get_slug registration.uuid el.uuid %}"
+                               class="frame-confirm"><i class="fa-solid fa-check"></i> {% trans "Add" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

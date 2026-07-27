@@ -31,7 +31,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No characters have been created yet" %}. {% trans "Add characters to see their role assignments here" %}.
+            {% trans "No characters have been created yet. Add characters to see their role assignments here." %}
         </p>
     {% endif %}
     {% for el in roles_list %}
@@ -53,7 +53,7 @@
             {% endfor %}
         </table>
         {% if not roles_list %}
-            <p class="no-elements-available">{% trans "No characters have been assigned this role value yet" %}.</p>
+            <p class="no-elements-available">{% trans "No characters have been assigned this role value yet." %}</p>
         {% endif %}
     {% endfor %}
 {% endblock content %}

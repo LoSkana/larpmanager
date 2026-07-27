@@ -713,7 +713,7 @@ def form_edit_handler(
 
         # If item was deleted, redirect to list view
         if request.POST.get("delete") == "1":
-            messages.success(request, _("Operation completed") + "!")
+            messages.success(request, _("Operation completed!"))
             return _form_edit_list_response(request, context, is_frame, redirect_list_view_name, extra_context)
 
         # If AJAX request, return JSON with question UUID
@@ -728,7 +728,7 @@ def form_edit_handler(
 
         # Handle "continue editing" button - redirect to new question form
         if "continue" in request.POST:
-            messages.success(request, _("Operation completed") + "!")
+            messages.success(request, _("Operation completed!"))
             if extra_context:  # writing form
                 redirect_kwargs = {
                     "event_slug": context["run"].get_slug(),
@@ -754,7 +754,7 @@ def form_edit_handler(
             }
             return redirect(redirect_view_name, **redirect_kwargs)
 
-        messages.success(request, _("Operation completed") + "!")
+        messages.success(request, _("Operation completed!"))
         return _form_edit_list_response(request, context, is_frame, redirect_list_view_name, extra_context)
 
     # Prepare context for the inline (no-modal) options editor

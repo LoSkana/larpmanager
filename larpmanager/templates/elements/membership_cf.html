@@ -7,20 +7,20 @@
                 <i>{{ error_cf }}</i>
             </p>
         {% endif %}
-        <p>{% trans "Calculated" %}: {{ calculated_cf }}</p>
-        <p>{% trans "Supplied" %}: {{ supplied_cf }}</p>
+        <p>{% trans "Calculated:" %} {{ calculated_cf }}</p>
+        <p>{% trans "Supplied:" %} {{ supplied_cf }}</p>
         {% if calculated_cf != supplied_cf %}
             <p class="warning">
-                <i>{% trans "Attention, the tax code does not match" %}!</i>
+                <i>{% trans "Attention, the tax code does not match!" %}</i>
             </p>
         {% else %}
             <p class="success">
-                <i>{% trans "The tax code matches" %}!</i>
+                <i>{% trans "The tax code matches!" %}</i>
             </p>
         {% endif %}
     {% elif member.nationality %}
         <h2>
-            {% trans "Nationality" %}: {{ member.get_nationality_display }}
+            {% trans "Nationality:" %} {{ member.get_nationality_display }}
             {% if el.fiscal_code %}, {{ el.fiscal_code }}{% endif %}
         </h2>
     {% endif %}

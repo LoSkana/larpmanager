@@ -120,7 +120,7 @@ def orga_albums_upload(request: HttpRequest, event_slug: str, album_slug: str) -
             upload_albums(context["album"], request.FILES["elem"])
 
             # Show success message and redirect to same page
-            messages.success(request, event_slug, _("Photos and videos successfully uploaded") + "!")
+            messages.success(request, event_slug, _("Photos and videos successfully uploaded!"))
             return redirect(request, event_slug.path_info)
     else:
         # Create empty form for GET request
@@ -966,11 +966,8 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
     # Display success message with statistics to user
     messages.success(
         request,
-        _("Warehouse quantities committed successfully")
-        + f": {items_updated} "
-        + _("items updated")
-        + f", {items_deleted} "
-        + _("items deleted"),
+        _("Warehouse quantities committed successfully: %(updated)s items updated, %(deleted)s items deleted")
+        % {"updated": items_updated, "deleted": items_deleted},
     )
 
     return redirect("orga_warehouse_manifest", event_slug=event_slug)

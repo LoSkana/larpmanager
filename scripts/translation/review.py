@@ -1,15 +1,13 @@
 """Translation QA pipeline for LarpManager .po files.
 
-Parses .po files into a sqlite db, then hands chunks to Claude Code
-itself for review against the curated Italian reference (no separate
-API key/billing - runs on Claude Code's own session), and stores
-verdicts back in the db for reporting.
+Parses .po files into a sqlite db, then hands chunks to a configured
+agent CLI (Claude code / Codex) for review against the curated Italian
+reference, and stores verdicts back in the db for reporting.
 
-Usage (inside a Claude Code session):
+Usage (with the agent  CLI installed and authenticated):
     python scripts/translation/review.py sync
     python scripts/translation/review.py next-chunk --lang fr
-    # Claude reads the chunk file, reviews it per SYSTEM_PROMPT below,
-    # writes the JSON array of verdicts to the configured result_path
+    python scripts/translation/review.py review
     python scripts/translation/review.py ingest
     python scripts/translation/review.py report --lang fr
 
@@ -18,7 +16,8 @@ scripts/review_config.json, override with --config.
 
 .venv/bin/python scripts/translation/review.py sync                # parse .po -> db
 .venv/bin/python scripts/translation/review.py next-chunk --lang fr # writes chunk_path + state_path
-# Claude Code reads chunk_path, reviews per SYSTEM_PROMPT (in the script), writes result_path
+# The configured agent CLI reads chunk_path and writes its final JSON response to result_path
+.venv/bin/python scripts/translation/review.py review
 .venv/bin/python scripts/translation/review.py ingest               # loads result_path into db, deletes chunk state
 .venv/bin/python scripts/translation/review.py report --lang fr
 """
@@ -26,6 +25,7 @@ scripts/review_config.json, override with --config.
 import argparse
 import json
 import sqlite3
+import subprocess
 from pathlib import Path
 
 import polib
@@ -56,8 +56,12 @@ two cases explicitly. When msgstr_it is empty, judge solely against
 msgid.
 
 Specific LARP terms: Award (refers to awarding XP, in italian "assegnazioni"), Badges (in the context of achievements),
+Characters (usually game characters, but in some cases text characters),
 Casting (assigning characters / roles to players / participants), Pools (character/resource pools),
-Plot (quest/mission/storyline), Handout (setting/world-building knowledge), Safety (tieni termine inglese), Speed larp (tieni termine inglese)
+Plot (quest/mission/storyline), Handout (setting/world-building knowledge), Safety (tieni termine inglese),
+Speed larp (tieni termine inglese), Collection (money collection by friends)
+
+Use informal language and the second-person singular (you).
 
 Categories (status field):
 - "ok": translation is accurate and natural
@@ -246,7 +250,7 @@ def cmd_next_chunk(config: dict, lang: str | None) -> None:
     )
 
     print(f"next-chunk: wrote {len(rows)} entries ({group_lang}/{po_file}) to {config['chunk_path']}")
-    print(f"next-chunk: review per the SYSTEM_PROMPT in this script, write verdicts to {config['result_path']}")
+    print("next-chunk: run: python scripts/translation/review.py review")
     print("next-chunk: then run: python scripts/translation/review.py ingest")
 
 
@@ -271,7 +275,13 @@ def cmd_ingest(config: dict) -> None:
         flagged_msgids.add(result["msgid"])
         conn.execute(
             "UPDATE entries SET status=?, note=?, suggested_fix=?, reviewed_at=CURRENT_TIMESTAMP, model=? WHERE id=?",
-            (result["status"], result.get("note", ""), result.get("suggested_fix", ""), config["model"], row_id),
+            (
+                result["status"],
+                result.get("note", ""),
+                result.get("suggested_fix", ""),
+                state.get("review_model", config["model"]),
+                row_id,
+            ),
         )
         updated += 1
 
@@ -281,7 +291,7 @@ def cmd_ingest(config: dict) -> None:
         conn.execute(
             f"UPDATE entries SET status='ok', note='', suggested_fix='', "
             f"reviewed_at=CURRENT_TIMESTAMP, model=? WHERE id IN ({placeholders})",
-            (config["model"], *ok_ids),
+            (state.get("review_model", config["model"]), *ok_ids),
         )
     conn.commit()
     conn.close()
@@ -291,6 +301,67 @@ def cmd_ingest(config: dict) -> None:
     print(
         f"ingest: flagged {updated}, marked {len(ok_ids)} ok ({state['lang']}/{state['po_file']})"
     )
+
+
+def cmd_review(config: dict, agent: str, model: str | None) -> None:
+    """Run the selected CLI reviewer against the prepared chunk."""
+    chunk_path = Path(config["chunk_path"])
+    state_path = Path(config["state_path"])
+    result_path = Path(config["result_path"])
+    if not state_path.exists():
+        raise SystemExit("review: no state file, run next-chunk first")
+    if not chunk_path.exists():
+        raise SystemExit(f"review: no chunk file at {chunk_path}")
+
+    prompt = f"""{SYSTEM_PROMPT}
+
+Read the JSON array at {chunk_path}. Review every entry according to the
+rules above. Your final response must be ONLY the resulting JSON array, with
+no prose and no markdown fences. It will be saved directly as
+{result_path}; do not edit any files yourself.
+"""
+    if agent == "codex":
+        command = [
+            "codex",
+            "exec",
+            "--cd",
+            str(REPO_ROOT),
+            "--sandbox",
+            "read-only",
+            "--output-last-message",
+            str(result_path),
+        ]
+        if model:
+            command.extend(["--model", model])
+        command.append(prompt)
+    elif agent == "claude":
+        command = ["claude", "-p", prompt, "--allowedTools", "Read", "--permission-mode", "bypassPermissions"]
+        if model:
+            command.extend(["--model", model])
+    else:
+        raise SystemExit(f"review: unsupported agent {agent!r}; choose codex or claude")
+
+    try:
+        if agent == "codex":
+            subprocess.run(command, check=True)
+        else:
+            completed = subprocess.run(command, check=True, capture_output=True, text=True)
+            result_path.write_text(completed.stdout)
+    except FileNotFoundError as exc:
+        raise SystemExit(f"review: {agent} CLI not found; install it and ensure `{agent}` is on PATH") from exc
+    except subprocess.CalledProcessError as exc:
+        raise SystemExit(f"review: {agent} CLI failed with exit code {exc.returncode}") from exc
+
+    try:
+        results = json.loads(result_path.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        raise SystemExit(f"review: {agent} did not produce valid JSON at {result_path}") from exc
+    if not isinstance(results, list):
+        raise SystemExit(f"review: {agent} result must be a JSON array")
+    state = json.loads(state_path.read_text())
+    state["review_model"] = model or f"{agent}-cli"
+    state_path.write_text(json.dumps(state))
+    print(f"review: {agent} wrote {len(results)} flagged verdicts to {result_path}")
 
 
 def cmd_pending_langs(config: dict) -> None:
@@ -341,10 +412,14 @@ def main() -> None:
 
     sub.add_parser("sync", help="parse .po files into the db")
 
-    p_chunk = sub.add_parser("next-chunk", help="write the next pending batch to chunk_path for Claude to review")
+    p_chunk = sub.add_parser("next-chunk", help="write the next pending batch to chunk_path for the configured agent")
     p_chunk.add_argument("--lang", default=None, help="restrict to one language (default: first pending)")
 
-    sub.add_parser("ingest", help="load result_path verdicts (written by Claude) back into the db")
+    p_review = sub.add_parser("review", help="have an agent CLI review chunk_path into result_path")
+    p_review.add_argument("--agent", choices=("codex", "claude"), default=None, help="reviewer CLI (default: config agent)")
+    p_review.add_argument("--model", default=None, help="reviewer model override (default: CLI default)")
+
+    sub.add_parser("ingest", help="load result_path verdicts back into the db")
 
     sub.add_parser("pending-langs", help="list languages that still have pending entries")
 
@@ -359,6 +434,8 @@ def main() -> None:
         cmd_sync(config)
     elif args.command == "next-chunk":
         cmd_next_chunk(config, args.lang)
+    elif args.command == "review":
+        cmd_review(config, args.agent or config.get("agent", "codex"), args.model)
     elif args.command == "ingest":
         cmd_ingest(config)
     elif args.command == "pending-langs":

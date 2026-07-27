@@ -625,7 +625,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Ability type
-    descr: Manage the type of character abilities
+    descr: Manage the types of character abilities
     slug: orga_exp_ability_types
     number: 81
     config: experience

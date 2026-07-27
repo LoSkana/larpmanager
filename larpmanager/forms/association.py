@@ -41,7 +41,7 @@ from larpmanager.forms.utils import (
     remove_choice,
     save_permissions_role,
 )
-from larpmanager.models.access import AssociationPermission, AssociationRole
+from larpmanager.models.access import AssociationPermission, AssociationRole, RoleInvite
 from larpmanager.models.association import Association, AssociationText, AssociationTextType, AssociationTranslation
 from larpmanager.models.member import Member
 from larpmanager.utils.larpmanager.versions import VERSIONS
@@ -223,7 +223,7 @@ class ExeAssociationTextForm(BaseModelForm):
             )
             # Ensure we're not comparing against the current instance
             if res.count() > 0 and res.first().pk != self.instance.pk:
-                self.add_error("default", "There is already a language set as default") + "!"
+                self.add_error("default", "There is already a language set as default!")
 
         # Check for duplicate language-type combination
         res = AssociationText.objects.filter(
@@ -233,7 +233,7 @@ class ExeAssociationTextForm(BaseModelForm):
             first = res.first()
             # Ensure we're not comparing against the current instance
             if first.pk != self.instance.pk:
-                self.add_error("language", "There is already a language of this type") + "!"
+                self.add_error("language", "There is already a language of this type!")
 
         return cleaned_data
 
@@ -295,6 +295,11 @@ class ExeAssociationRoleForm(BaseModelForm):
         """Save form instance and update related role permissions."""
         instance = super().save(commit=commit)
         save_permissions_role(instance, self)
+        # Member added directly to the role: drop any pending invite sent to them for this role
+        member_emails = [email.lower() for email in instance.members.values_list("email", flat=True)]
+        for invite in RoleInvite.objects.filter(association_role=instance, redeemed_by__isnull=True):
+            if invite.email.lower() in member_emails:
+                invite.delete()
         return instance
 
 
@@ -469,10 +474,8 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("calendar_tagline", ConfigType.BOOL, tagline_label, tagline_help_text)
 
         delete_label = _("Bulk delete")
-        delete_help_text = (
-            _("If checked, allows to delete items in bulk")
-            + ". "
-            + _("WARNING: deleted items might not be full recoverable")
+        delete_help_text = _(
+            "If checked, allows to delete items in bulk. WARNING: deleted items might not be full recoverable"
         )
         self.add_configs("allow_bulk_delete", ConfigType.BOOL, delete_label, delete_help_text)
 
@@ -526,16 +529,16 @@ class ExeConfigForm(ConfigForm):
             use_tls_label = "TLD"
             self.add_configs("mail_server_use_tls", ConfigType.BOOL, use_tls_label, empty_help_text)
 
-            host_address_label = _("Host Address")
+            host_address_label = "Host Address"
             self.add_configs("mail_server_host", ConfigType.CHAR, host_address_label, empty_help_text)
 
-            port_label = _("Port")
+            port_label = "Port"
             self.add_configs("mail_server_port", ConfigType.INT, port_label, empty_help_text)
 
-            username_label = _("Username of account")
+            username_label = "Username"
             self.add_configs("mail_server_host_user", ConfigType.CHAR, username_label, empty_help_text)
 
-            password_label = _("Password of account")
+            password_label = "Password"  # noqa: S105
             self.add_configs("mail_server_host_password", ConfigType.CHAR, password_label, empty_help_text)
 
     def set_config_others(self) -> None:
@@ -1114,10 +1117,9 @@ class ExePreferencesForm(ConfigForm):
 
     page_title = _("Personal preferences")
 
-    page_info = (
-        _("Set your personal theme, notification digest mode, and interface version")
-        + "; "
-        + _("these settings override the organization defaults for your account only")
+    page_info = _(
+        "Set your personal theme, notification digest mode, and interface version; "
+        "these settings override the organization defaults for your account only"
     )
 
     load_js: ClassVar[list] = ["appearance-colors"]

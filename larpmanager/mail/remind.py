@@ -44,7 +44,7 @@ def remember_membership(registration: Any) -> None:
     """
     activate(registration.member.language)
 
-    subject = hdr(registration.run.event) + _("Confirmation of registration for %(event)s") % {
+    subject = hdr(registration.run.event) + _("Registration confirmation for %(event)s") % {
         "event": registration.run,
     }
 
@@ -80,32 +80,21 @@ def get_remember_membership_body(registration: Any) -> str:
     # Generate main instruction message with event name and membership link
     email_body = (
         _(
-            "Hello! To confirm your provisional registration for %(event)s, "
-            "you must apply for membership in the association",
+            "Hello! To confirm your provisional registration for %(event)s, you must apply for association membership.",
         )
         % {"event": registration.run}
-        + ". "
-        + _("To complete the process, simply <a href='%(url)s'>click here</a>")
+        + " "
+        + _("To complete the process, <a href='%(url)s'>click here</a>.")
         % {"url": get_url("membership", registration.run.event)}
-        + ". "
     )
 
     # Add helpful support message for users who need assistance
-    email_body += (
-        "<br /><br />("
-        + _("If you need a hand, feel free to let us know")
-        + ". "
-        + _("We'll try to help as best we can")
-        + "!)"
-    )
+    email_body += "<br /><br />(" + _("If you need assistance, please contact us. We are happy to help!")
 
     # Include warning about registration cancellation for inactive users
-    email_body += (
-        "<br /><br />"
-        + _("If we don't hear from you, we'll assume you're no longer interested in the event")
-        + ". "
-        + _("Your registration will be cancelled to allow other participants to take your spot")
-        + "."
+    email_body += "<br /><br />" + _(
+        "If we do not hear from you, we will assume you are no longer interested in attending. "
+        "Your registration will be cancelled to make room for other participants."
     )
 
     return email_body
@@ -127,7 +116,7 @@ def remember_pay(registration: Any) -> None:
     email_context = {"event": registration.run}
 
     if is_provisional:
-        email_subject = hdr(registration.run.event) + _("Confirm registration to %(event)s") % email_context
+        email_subject = hdr(registration.run.event) + _("Confirm registration for %(event)s") % email_context
     else:
         email_subject = hdr(registration.run.event) + _("Complete payment for %(event)s") % email_context
 
@@ -170,43 +159,42 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
 
     # Generate appropriate greeting based on registration type
     if is_provisional:
-        intro_message = _("Hello! We are reaching out regarding your provisional registration for <b>%(event)s</b>")
+        intro_message = _("Hello! We are contacting you regarding your provisional registration for <b>%(event)s</b>.")
     else:
-        intro_message = _("Hello! We are reaching out regarding your registration for <b>%(event)s</b>")
+        intro_message = _("Hello! We are contacting you regarding your registration for <b>%(event)s</b>.")
 
-    email_body = intro_message % context + "."
+    email_body = intro_message % context
 
     # Add payment instruction based on deadline status
     if days_until_deadline <= 0:
-        payment_instruction = _("To confirm it, please pay the following amount as soon as possible: %(amount)s")
+        payment_instruction = _("To confirm your spot, please pay %(amount)s as soon as possible.")
     else:
-        payment_instruction = _("To confirm it, please pay %(amount)s within %(days)s days")
+        payment_instruction = _("To confirm your spot, please pay %(amount)s within %(days)s days.")
 
-    email_body += "<br /><br />" + payment_instruction % {"amount": amount_to_pay, "days": days_until_deadline} + "."
+    email_body += "<br /><br />" + payment_instruction % {"amount": amount_to_pay, "days": days_until_deadline}
 
     # Add disclaimer for existing agreements
-    email_body += "<br /><br />(" + _("If you have a separate agreement with us, you may disregard this email") + ")"
+    email_body += (
+        "<br /><br />("
+        + _("If you have already arranged a separate payment agreement with us, please disregard this email.")
+        + ")"
+    )
 
     # Include payment link and support contact information
     email_body += (
         "<br /><br />"
-        + _("You can make the payment <a href='%(url)s'>on this page</a>") % {"url": payment_url}
-        + ". "
-        + _("If you encounter any issues, contact us and we will assist you")
-        + "!"
+        + _("You can submit your payment <a href='%(url)s'>on this page</a>.") % {"url": payment_url}
+        + " "
+        + _("If you encounter any issues, please contact us for assistance.")
     )
 
     # Add wire transfer details if active for this association
     email_body += get_payment_info(registration.run.event.association_id, payment_url)
 
     # Add cancellation warning for non-responsive registrants
-    email_body += (
-        "<br /><br />"
-        + _(
-            "If we don't hear from you, we'll assume you're no longer interested in the event and "
-            "will cancel your registration to make room for other participants",
-        )
-        + "."
+    email_body += "<br /><br />" + _(
+        "If we do not receive a response, we will assume you are no longer interested and "
+        "will cancel your registration to free up space for other participants.",
     )
 
     return email_body
@@ -225,7 +213,7 @@ def remember_profile(registration: Any) -> None:
     activate(registration.member.language)
     context = {"event": registration.run, "url": get_url("profile", registration.run.event)}
 
-    subject = hdr(registration.run.event) + _("Profile compilation reminder for %(event)s") % context
+    subject = hdr(registration.run.event) + _("Profile completion reminder for %(event)s") % context
 
     body = get_association_text(
         registration.run.event.association_id,
@@ -239,10 +227,11 @@ def remember_profile(registration: Any) -> None:
 def get_remember_profile_body(email_context: Any) -> Any:
     """Generate default profile completion reminder email body text."""
     return (
-        _("Hello! You signed up for %(event)s but haven't completed your profile yet") % email_context
-        + ". "
-        + _("It only takes 5 minutes - just <a href='%(url)s'>click here</a> to fill out the form") % email_context
-        + "."
+        _(
+            "Hello! You registered for %(event)s but have not completed your profile yet. "
+            "It takes only 5 minutes, <a href='%(url)s'>click here</a> to complete the form."
+        )
+        % email_context
     )
 
 
@@ -259,7 +248,7 @@ def remember_membership_fee(registration: Any) -> None:
     activate(registration.member.language)
     context = {"event": registration.run}
 
-    subject = hdr(registration.run.event) + _("Reminder payment of membership fees for %(event)s") % context
+    subject = hdr(registration.run.event) + _("Membership fee payment reminder for %(event)s") % context
 
     body = get_association_text(
         registration.run.event.association_id,
@@ -287,24 +276,16 @@ def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
     """
     # Create main greeting and issue description
     email_body = (
-        _("Hello! You have registered for %(event)s, but we have not yet received your annual membership payment")
-        % context
-        + "."
+        _("Hello! You are registered for %(event)s, but we have not yet received your annual membership fee.") % context
     )
 
     # Add explanation about membership fee purpose
-    email_body += (
-        "<br /><br />"
-        + _("It is required for participation in all our live events, as it also covers the insurance fee")
-        + "."
+    email_body += "<br /><br />" + _(
+        "Annual membership is mandatory for participation in all our live events, as it covers required liability insurance."
     )
 
     # Emphasize participation requirements
-    email_body += (
-        "<br /><br />"
-        + _("Unfortunately, without full payment of the fee, participation in the event is not permitted")
-        + "."
-    )
+    email_body += "<br /><br />" + _("Without payment of this fee, event participation is not permitted.")
 
     # Provide payment link and support information
     membership_url = get_url("accounting_membership")
@@ -331,21 +312,21 @@ def notify_deadlines(run: Any) -> None:
         return
 
     deadline_elements = {
-        "memb_del": "Cancellation for missing organization registration",
-        "fee_del": "Cancellation for missing yearly membership fee",
-        "pay_del": "Cancellation for missing payment",
-        "profile_del": "Cancellation for missing profile",
-        "memb": "Delay in organization registration",
-        "fee": "Delay in yearly membership fee",
-        "pay": "Delay in payment",
-        "profile": "Delay in profile",
+        "memb_del": "Cancellation: Missing organization registration",
+        "fee_del": "Cancellation: Missing annual membership fee",
+        "pay_del": "Cancellation: Missing payment",
+        "profile_del": "Cancellation: Missing profile",
+        "memb": "Overdue: Organization registration",
+        "fee": "Overdue: Annual membership fee",
+        "pay": "Overdue: Payment",
+        "profile": "Overdue: Profile completion",
         "cast": "Missing casting preferences",
     }
 
     for organizer in get_event_organizers(run.event):
         activate(organizer.language)
         subject = hdr(run.event) + _("Deadlines") + f" {run}"
-        body = _("Review the users that are missing the event's deadlines")
+        body = _("Review users with pending event deadlines:")
         for deadline_key, description in deadline_elements.items():
             if deadline_key not in run_deadlines or not run_deadlines[deadline_key]:
                 continue

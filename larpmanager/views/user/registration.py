@@ -185,7 +185,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
                         info=form.cleaned_data["new_info"],
                     ).save()
 
-            messages.success(request, _("Pre-registrations saved") + "!")
+            messages.success(request, _("Pre-registrations saved!"))
             return redirect("pre_register")
     else:
         form = PreRegistrationForm(context=context)
@@ -201,7 +201,7 @@ def pre_register_remove(request: HttpRequest, event_slug: str) -> Any:
     element = PreRegistration.objects.filter(member=context["member"], event=context["event"]).first()
     if element:
         element.delete()
-        messages.success(request, _("Pre-registration cancelled") + "!")
+        messages.success(request, _("Pre-registration cancelled!"))
     else:
         messages.warning(request, _("Pre-registration not found."))
     return redirect("pre_register")
@@ -455,7 +455,7 @@ def registration_redirect(
     """
     # Redirect to profile if membership data not compiled
     if not context["membership"].compiled:
-        message = _("To confirm your registration, please fill in your personal profile") + "."
+        message = _("To confirm your registration, please fill in your personal profile.")
         messages.success(request, message)
         return redirect("profile")
 
@@ -467,13 +467,13 @@ def registration_redirect(
             membership_status in [MembershipStatus.EMPTY, MembershipStatus.JOINED]
             and registration.ticket.tier != TicketTier.WAITING
         ):
-            message = _("To confirm your registration, apply to become a member of the Association") + "."
+            message = _("To confirm your registration, apply to become a member of the Association.")
             messages.success(request, message)
             return redirect("membership")
 
     # Redirect to payment page if registration has outstanding payment alert
     if "payment" in context["features"] and registration.alert:
-        message = _("To confirm your registration, please pay the amount indicated") + "."
+        message = _("To confirm your registration, please pay the amount indicated.")
         messages.success(request, message)
         return redirect("accounting_registration", registration_uuid=registration.uuid)
 
@@ -487,10 +487,10 @@ def registration_redirect(
     context = {"event": run}
     if is_new_registration:
         # Success message for new registration
-        message = _("Registration confirmed at %(event)s") % context + "!"
+        message = _("Registration confirmed at %(event)s!") % context
     else:
         # Success message for registration update
-        message = _("Registration updated to %(event)s") % context + "!"
+        message = _("Registration updated to %(event)s!") % context
 
     messages.success(request, message)
     return redirect("event", event_slug=registration.run.get_slug())
@@ -677,7 +677,7 @@ def register(
 
     # A pending signup request cannot be edited through the normal form: send back to its status page
     if registration and registration.pending:
-        messages.info(request, _("Your signup request is awaiting organizer approval") + ".")
+        messages.info(request, _("Your signup request is awaiting organizer approval."))
         return redirect("event", event_slug=current_run.get_slug())
 
     # Apply ticket selection if provided, verifying it belongs to this event
@@ -779,7 +779,7 @@ def request_signup(request: HttpRequest, event_slug: str) -> HttpResponse:
         if form.is_valid():
             saved_registration = form.save()
             send_registration_request_received_email(saved_registration)
-            messages.success(request, _("Your signup request has been submitted") + "!")
+            messages.success(request, _("Your signup request has been submitted!"))
             return redirect("event", event_slug=current_run.get_slug())
     else:
         form = RequestApprovalForm(instance=pending_instance, context=context)
@@ -966,7 +966,7 @@ def register_conditions(request: HttpRequest, event_slug: str | None = None) -> 
 # ~ pass
 # ~ # check there are no discount stores a friend
 # ~ if AccountingItemDiscount.objects.filter(member=context["member"], run=context['run'], disc__typ=DiscountType.STANDARD).count() > 0:
-# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits") + "."})
+# ~ Return jsonrespone ({'really': 'ko', 'msg': _ ("Discount not combinable with other benefits.")})
 # ~ # check the user TO don't already have the discount
 # ~ try:
 # ~ ac = AccountingItemDiscount.objects.get(disc=disc, member=context["member"], run=context['run'])
@@ -1081,7 +1081,7 @@ def _check_discount(discount: Any, member: Any, run: Any, event: Any) -> Any:
         return _("Sorry, this facilitation code has already been used the maximum number allowed")
 
     if not _validate_exclusive_logic(discount, member, run, event):
-        return _("Discount not combinable with other benefits") + "."
+        return _("Discount not combinable with other benefits.")
 
     return None
 
@@ -1240,12 +1240,12 @@ def unregister(request: HttpRequest, event_slug: str) -> Any:
                 % email_context
             )
             email_body += ".<br /><br />"
-            email_body += _("To process the cancellation, click here") + ": "
+            email_body += _("To process the cancellation, click here:") + " "
             email_body += f"<a href='{cancel_url}'>{cancel_url}</a>"
             for organizer in get_event_organizers(event):
                 my_send_mail(email_subject, email_body, organizer, run)
 
-            mes = _("Your cancellation request has been sent to the staff") + "; " + _("please wait for their response")
+            mes = _("Your cancellation request has been sent to the staff; please wait for their response")
             messages.success(request, mes)
         else:
             cancel_reg(registration)
@@ -1318,7 +1318,7 @@ def gift(request: HttpRequest, event_slug: str) -> HttpResponse:
 def check_registration_open(context: dict, request: HttpRequest) -> None:
     """Check if registrations are open, redirect to home if closed."""
     if not context.get("run_status", {})["open"]:
-        messages.warning(request, _("Registrations not open") + "!")
+        messages.warning(request, _("Registrations not open!"))
         msg = "home"
         raise RedirectError(msg)
 
@@ -1445,7 +1445,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
 
     # Check if user is already registered for this event
     if context["registration"]:
-        messages.success(request, _("You cannot redeem a membership, you are already a member") + "!")
+        messages.success(request, _("You cannot redeem a membership, you are already a member!"))
         return redirect("event", event_slug=context["run"].get_slug())
 
     # Attempt to find valid registration with the provided redemption code
@@ -1468,7 +1468,7 @@ def gift_redeem(request: HttpRequest, event_slug: str, code: str) -> HttpRespons
             registration.save()
 
         # Notify user of successful redemption and redirect to event page
-        messages.success(request, _("Your gifted registration has been redeemed") + "!")
+        messages.success(request, _("Your gifted registration has been redeemed!"))
         return redirect("event", event_slug=context["run"].get_slug())
 
     # Add registration object to context for template rendering

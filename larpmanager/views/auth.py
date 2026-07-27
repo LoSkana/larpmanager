@@ -107,7 +107,7 @@ class MyRegistrationView(AssocVersionMixin, RegistrationView):
         # Log in the authenticated user and send registration signal
         login(self.request, new_user)
         signals.user_registered.send(sender=self.__class__, user=new_user, request=self.request)
-        messages.success(self.request, _("Registration completed successfully") + "!")
+        messages.success(self.request, _("Registration completed successfully!"))
 
         # Set membership status to JOINED for non-default associations
         if self.request.association["id"] > 1:

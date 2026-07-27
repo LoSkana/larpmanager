@@ -4,5 +4,5 @@
     {% trans "Registration closed" %} - {{ run.search }}
 {% endblock title %}
 {% block content %}
-    {% trans "The registrations to the event" %} <i>{{ run }}</i> {% trans "are closed" %}!
+    {% blocktrans with run=run %}The registrations to the event <i>{{ run }}</i> are closed!{% endblocktrans %}
 {% endblock content %}

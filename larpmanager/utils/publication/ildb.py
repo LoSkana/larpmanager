@@ -598,7 +598,7 @@ def _notify_association(association: Association, run: Run, ildb_event_id: str) 
     review_url = f"https://www.larpdatabase.com/events/{ildb_event_id}/review"
 
     with translation.override(get_exec_language(association)):
-        subject = f"[{association.name}] " + _("Event added to ILDB") + ": " + run.event.name
+        subject = f"[{association.name}] " + _("Event added to ILDB:") + " " + run.event.name
         body = (
             "<p>"
             + _("The event <strong>%(event)s</strong> has been automatically added to larpdatabase.com as a draft.")

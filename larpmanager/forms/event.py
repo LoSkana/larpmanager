@@ -56,7 +56,7 @@ from larpmanager.forms.utils import (
     save_permissions_role,
 )
 from larpmanager.forms.widgets import DescriptionRadioSelect
-from larpmanager.models.access import EventPermission, EventRole
+from larpmanager.models.access import EventPermission, EventRole, RoleInvite
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
 from larpmanager.models.event import (
@@ -608,12 +608,9 @@ class OrgaConfigForm(ConfigForm):
 
         # Disable self-service cancellation
         disable_cancellation_label = _("Disable cancellation")
-        disable_cancellation_help_text = (
-            _("If checked: participants cannot cancel their own registration")
-            + "; "
-            + _(
-                "A cancellation request email will be sent to the staff instead",
-            )
+        disable_cancellation_help_text = _(
+            "If checked: participants cannot cancel their own registration; A cancellation request "
+            "email will be sent to the staff instead"
         )
         self.add_configs(
             "player_cancellation_disable",
@@ -1052,8 +1049,7 @@ class OrgaConfigForm(ConfigForm):
             )
             payment_reason_help_text += (
                 " "
-                + _("You can use the following fields, they will be filled in automatically")
-                + ":"
+                + _("You can use the following fields, they will be filled in automatically:")
                 + "{player_name}, {question_name}"
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, payment_reason_label, payment_reason_help_text)
@@ -1313,13 +1309,13 @@ class OrgaEventTextForm(BaseModelForm):
             res = EventText.objects.filter(event_id=self.params["event"].id, default=True, typ=typ)
             # Ensure the existing default is not the current instance being edited
             if res.count() > 0 and res.first().pk != self.instance.pk:
-                self.add_error("default", "There is already a language set as default") + "!"
+                self.add_error("default", "There is already a language set as default!")
 
         # Validate language-type combination uniqueness
         res = EventText.objects.filter(event_id=self.params["event"].id, language=language, typ=typ)
         # Ensure the existing combination is not the current instance being edited
         if res.count() > 0 and res.first().pk != self.instance.pk:
-            self.add_error("language", "There is already a language of this type") + "!"
+            self.add_error("language", "There is already a language of this type!")
 
         return cleaned_data
 
@@ -1352,6 +1348,11 @@ class OrgaEventRoleForm(BaseModelForm):
         """Save form instance and update role permissions."""
         instance: EventRole = super().save()
         save_permissions_role(instance, self)
+        # Member added directly to the role: drop any pending invite sent to them for this role
+        member_emails = [email.lower() for email in instance.members.values_list("email", flat=True)]
+        for invite in RoleInvite.objects.filter(event_role=instance, redeemed_by__isnull=True):
+            if invite.email.lower() in member_emails:
+                invite.delete()
         return instance
 
 
@@ -1682,16 +1683,16 @@ class OrgaRunForm(ConfigForm):
         # Validate end date is present
         end = cleaned_data.get("end")
         if "end" in self.fields and not end:
-            raise ValidationError({"end": _("You need to define the end date") + "!"})
+            raise ValidationError({"end": _("You need to define the end date!")})
 
         # Validate start date is present
         start = cleaned_data.get("start")
         if "start" in self.fields and not start:
-            raise ValidationError({"start": _("You need to define the start date") + "!"})
+            raise ValidationError({"start": _("You need to define the start date!")})
 
         # Ensure end date is not before start date
         if start and end and end < start:
-            raise ValidationError({"end": _("End date cannot be before start date") + "!"})
+            raise ValidationError({"end": _("End date cannot be before start date!")})
 
         # Validate registration status requirements
         registration_status = cleaned_data.get("registration_status")
@@ -1699,17 +1700,17 @@ class OrgaRunForm(ConfigForm):
         if registration_status == RegistrationStatus.EXTERNAL:
             register_link = cleaned_data.get("register_link")
             if not register_link:
-                raise ValidationError({"register_link": _("Value required") + "!"})
+                raise ValidationError({"register_link": _("Value required!")})
 
         if registration_status == RegistrationStatus.FUTURE:
             registration_open = cleaned_data.get("registration_open")
             if not registration_open:
-                raise ValidationError({"registration_open": _("Value required") + "!"})
+                raise ValidationError({"registration_open": _("Value required!")})
 
         if registration_status == RegistrationStatus.CLOSING:
             registration_open = cleaned_data.get("registration_open")
             if not registration_open:
-                raise ValidationError({"registration_open": _("Value required") + "!"})
+                raise ValidationError({"registration_open": _("Value required!")})
 
         return cleaned_data
 

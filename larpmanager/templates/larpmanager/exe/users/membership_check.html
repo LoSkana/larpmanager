@@ -34,8 +34,6 @@
             {% endfor %}
         </table>
     {% else %}
-        <p class="no-elements-available">
-            {% trans "No fiscal code errors found" %}. {% trans "All member records are consistent" %}.
-        </p>
+        <p class="no-elements-available">{% trans "No fiscal code errors found. All member records are consistent." %}</p>
     {% endif %}
 {% endblock content %}

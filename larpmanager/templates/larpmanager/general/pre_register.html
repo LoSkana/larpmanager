@@ -5,9 +5,9 @@
 {% endblock title %}
 {% block content %}
     <div class="detail">
-        <p>{% trans "Registrations for this event are not open yet, but you can pre-register" %}.</p>
+        <p>{% trans "Registrations for this event are not open yet, but you can pre-register." %}</p>
         <p>
-            {% trans "Pre-registration is free. It does not guarantee a spot, but gives you priority when registration opens" %}.
+            {% trans "Pre-registration is free. It does not guarantee a spot, but gives you priority when registration opens." %}
         </p>
     </div>
     {% if event %}
@@ -28,7 +28,7 @@
             {% if preferences %}
                 <th>{% trans "Order" %}</th>
             {% endif %}
-            <th>{% trans "Do you want to tell us something" %}?</th>
+            <th>{% trans "Do you want to tell us something?" %}</th>
             <th></th>
         </tr>
         {% for al in already %}

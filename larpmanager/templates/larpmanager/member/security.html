@@ -12,7 +12,7 @@
         <hr class="no_v20" />
         <h3>{% trans "Two-Factor Authentication (TOTP)" %}</h3>
         {% if devices %}
-            <p>{% trans "Your account is protected by an authenticator app" %}.</p>
+            <p>{% trans "Your account is protected by an authenticator app." %}</p>
             <hr />
             <h4>{% trans "Active devices" %}</h4>
             <table class="mob">
@@ -35,9 +35,9 @@
                 {% endfor %}
             </table>
         {% else %}
-            <p>{% trans "You have no authenticator app configured" %}.</p>
+            <p>{% trans "You have no authenticator app configured." %}</p>
             <p>
-                {% trans "Scan this QR code with Google Authenticator, Authy, or any compatible TOTP app, then enter the 6-digit code to confirm" %}.
+                {% trans "Scan this QR code with Google Authenticator, Authy, or any compatible TOTP app, then enter the 6-digit code to confirm." %}
             </p>
             <hr />
             <img src="{{ qr_code_data }}" alt="QR Code" />

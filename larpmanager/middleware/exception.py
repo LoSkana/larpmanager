@@ -107,7 +107,7 @@ class ExceptionHandlingMiddleware:
                 SignupError,
                 lambda ex: self._redirect_with_message(
                     request,
-                    _("To access this feature, you must first register") + "!",
+                    _("To access this feature, you must first register!"),
                     "register",
                     [ex.slug],
                 ),
@@ -116,7 +116,7 @@ class ExceptionHandlingMiddleware:
                 WaitingError,
                 lambda ex: self._redirect_with_message(
                     request,
-                    _("This feature is available for non-waiting tickets") + "!",
+                    _("This feature is available for non-waiting tickets!"),
                     "register",
                     [ex.slug],
                 ),
@@ -125,7 +125,7 @@ class ExceptionHandlingMiddleware:
                 PendingApprovalError,
                 lambda ex: self._redirect_with_message(
                     request,
-                    _("Your signup request is awaiting organizer approval") + "!",
+                    _("Your signup request is awaiting organizer approval!"),
                     "register",
                     [ex.slug],
                 ),
@@ -135,7 +135,7 @@ class ExceptionHandlingMiddleware:
                 HiddenError,
                 lambda ex: self._redirect_with_message(
                     request,
-                    ex.name + " " + _("not visible at this time"),
+                    _("%(name)s not visible at this time") % {"name": ex.name},
                     "gallery",
                     [ex.slug],
                 ),
@@ -150,7 +150,7 @@ class ExceptionHandlingMiddleware:
             ),
             (
                 RewokedMembershipError,
-                lambda _ex: self._redirect_with_message(request, _("You're not allowed to sign up") + "!", "home", []),
+                lambda _ex: self._redirect_with_message(request, _("You're not allowed to sign up!"), "home", []),
             ),
         ]
 

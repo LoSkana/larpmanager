@@ -8,7 +8,7 @@
 {% endblock info %}
 {% block content %}
     <h2>
-        {% trans "Global balance" %}: <b>{{ global_sum }}</b>
+        {% trans "Global balance:" %} <b>{{ global_sum }}</b>
     </h2>
     <p class="info_bar">
         <i>({% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %})</i>
@@ -54,7 +54,7 @@
         </tr>
         {% if features.tokens %}
             <tr>
-                <td>{{ tokens_name }} {% trans "issued" %}</td>
+                <td>{% blocktrans with name=tokens_name %}{{ name }} issued{% endblocktrans %}</td>
                 <td>
                     <b>{{ tokens_sum }}</b>
                 </td>
@@ -62,7 +62,7 @@
         {% endif %}
         {% if features.credits %}
             <tr>
-                <td>{{ credits_name }} {% trans "issued" %}</td>
+                <td>{% blocktrans with name=credits_name %}{{ name }} issued{% endblocktrans %}</td>
                 <td>
                     <b>{{ credits_sum }}</b>
                 </td>
@@ -70,7 +70,7 @@
         {% endif %}
     </table>
     <h2>
-        {% trans "Overall balance" %}: <b>{{ bank_sum }}</b>
+        {% trans "Overall balance:" %} <b>{{ bank_sum }}</b>
     </h2>
     <p class="info_bar">
         <i>({% trans "This is the overall amount that should be held in the organization's bank and financial accounts" %})</i>
@@ -132,7 +132,7 @@
         {% endif %}
     </table>
     <p>
-        {% trans "Show" %}:
+        {% trans "Show:" %}
         {% for year in sum_year %}
             <a href="#" class="summary" tog='{{ year }}'>{% trans "Summary" %} {{ year }}</a>,
             <a href="#" class="my_toggle hide" tog='sum_{{ year }}'>hidden</a>
@@ -227,7 +227,7 @@
                 {% endfor %}
             </table>
             {% if not list %}
-                <p class="no-elements-available">{% trans "No participants have been issued tokens yet" %}.</p>
+                <p class="no-elements-available">{% trans "No participants have been issued tokens yet." %}</p>
             {% endif %}
         </div>
     {% endif %}
@@ -255,7 +255,7 @@
                 {% endfor %}
             </table>
             {% if not list %}
-                <p class="no-elements-available">{% trans "No participants have been issued credits yet" %}.</p>
+                <p class="no-elements-available">{% trans "No participants have been issued credits yet." %}</p>
             {% endif %}
         </div>
     {% endif %}
@@ -286,7 +286,7 @@
             {% endfor %}
         </table>
         {% if not runs %}
-            <p class="no-elements-available">{% trans "No event runs have been recorded yet" %}.</p>
+            <p class="no-elements-available">{% trans "No event runs have been recorded yet." %}</p>
         {% endif %}
     </div>
 {% endblock content %}

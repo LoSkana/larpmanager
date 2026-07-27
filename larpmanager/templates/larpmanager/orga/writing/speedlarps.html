@@ -4,7 +4,7 @@
     {% trans "SpeedLarp" %} - {{ event.name }}
 {% endblock title %}
 {% block info %}
-    {% trans "Manage speed-larp scenes, their station, sheet text, and assigned characters" %}
+    {% trans "Manage speed-larp scenes, their stations, prompt text, and assigned characters" %}
 {% endblock info %}
 {% block content %}
     {% include "elements/table/header.html" %}
@@ -86,7 +86,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No speed-larp scenes have been created yet" %}. {% trans "Use the button above to add your first speed-larp scene" %}.
+            {% trans "No speed-larp scenes have been created yet. Use the button above to add your first speed-larp scene." %}
         </p>
     {% endif %}
     {% include "elements/table/footer.html" %}

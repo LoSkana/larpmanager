@@ -220,24 +220,24 @@ def _get_registrations_url(association_id: int) -> str:
 
 
 ACTIVATION_HINTS: dict[str, Any] = {
-    "exe_events": lambda: _("Click 'New' to create your first event")
-    + "; "
-    + _("fill in the name, dates, and basic details, then save"),
-    "exe_methods": lambda: _("Choose how participants will pay: bank transfer, PayPal, Stripe, or other options")
-    + "; "
-    + _("configure at least one method and save"),
-    "orga_registration_tickets": lambda: _("Create a ticket type by clicking 'New'")
-    + "; "
-    + _("set the name, price, and availability, then save it"),
-    "orga_registration_form": lambda: _("Add a question to your registration form by clicking 'New'")
-    + "; "
-    + _("for example, ask for dietary requirements or emergency contact details"),
-    "orga_registrations": lambda: _("You are now seeing the registration form as a participant would")
-    + "; "
-    + _("Select a ticket, fill in the required fields, and complete the registration to experience the full flow"),
-    "orga_characters": lambda: _("Create a character by clicking 'New'")
-    + "; "
-    + _("give it a name and fill in the character details, then save"),
+    "exe_events": lambda: _(
+        "Click 'New' to create your first event; fill in the name, dates, and basic details, then save"
+    ),
+    "exe_methods": lambda: _(
+        "Choose how participants will pay: bank transfer, PayPal, Stripe, or other options; configure at least one method and save"
+    ),
+    "orga_registration_tickets": lambda: _(
+        "Create a ticket type by clicking 'New'; set the name, price, and availability, then save it"
+    ),
+    "orga_registration_form": lambda: _(
+        "Add a question to your registration form by clicking 'New'; for example, ask for dietary requirements or emergency contact details"
+    ),
+    "orga_registrations": lambda: _(
+        "You are now seeing the registration form as a participant would; Select a ticket, fill in the required fields, and complete the registration to experience the full flow"
+    ),
+    "orga_characters": lambda: _(
+        "Create a character by clicking 'New'; give it a name and fill in the character details, then save"
+    ),
     "orga_casting": lambda: _(
         "Edit an existing registration and assign a character to the participant using the dropdown selection"
     ),

@@ -354,7 +354,7 @@ def get_membership_request(context: dict, member: Member) -> HttpResponse:
 
     # Generate PDF from template and return as HTTP response
     xhtml_pdf(template_context, template, file_path, html=True)
-    return return_pdf(file_path, _("Membership registration of %(user)s") % {"user": member})
+    return return_pdf(file_path, _("Membership application form for %(user)s") % {"user": member})
 
 
 def print_character(context: dict, *, force: bool = False) -> HttpResponse:

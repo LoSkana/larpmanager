@@ -15,16 +15,16 @@
     <div class="form_container user_resize">
         {% if registration and not registration.provisional and features.bring_friend %}
             <hr />
-            <h4>{% trans "Bring a friend" %}!</h4>
+            <h4>{% trans "Bring a friend!" %}</h4>
             <p>
-                {% trans "Personal code" %}: <b>{{ registration.uuid }}</b>
+                {% trans "Personal code:" %} <b>{{ registration.uuid }}</b>
             </p>
-            <p>{% trans "Copy this code and share it with friends" %}!</p>
+            <p>{% trans "Copy this code and share it with friends!" %}</p>
             <p>
-                {% trans "Every friend who registers and uses this code will receive the following discount directly on their ticket" %}: {{ bring_friend_discount_to|floatformat:"0" }}{{ currency_symbol_symbol }}.
+                {% trans "Every friend who registers and uses this code will receive the following discount directly on their ticket:" %} {{ bring_friend_discount_to|floatformat:"0" }}{{ currency_symbol_symbol }}.
             </p>
             <p>
-                {% trans "For each of them, you will receive the following discount on your membership event registration" %}: {{ bring_friend_discount_from|floatformat:"0" }}{{ currency_symbol_symbol }}.
+                {% trans "For each of them, you will receive the following discount on your membership event registration:" %} {{ bring_friend_discount_from|floatformat:"0" }}{{ currency_symbol_symbol }}.
             </p>
         {% endif %}
         {% if registration or not run_status.closed %}
@@ -81,7 +81,7 @@
                                             <input type="text" name="discount" id="id_discount">
                                             <input type="button" value="{% trans "Confirm" %}" id="discount_go">
                                         </div>
-                                        <span class="helptext">{% trans "If you have a discount code, enter it here and press enter" %}.</span>
+                                        <span class="helptext">{% trans "If you have a discount code, enter it here and press enter." %}</span>
                                     </td>
                                 </tr>
                             </table>
@@ -102,18 +102,18 @@
                                 {% if not features.laog and membership_amount %}
                                     {% if membership_fee == 'done' %}
                                         <tr>
-                                            <td>{% trans "You have already paid your dues for the current year, so you are already covered for this event" %}!</td>
+                                            <td>{% trans "You have already paid your dues for the current year, so you are already covered for this event!" %}</td>
                                         </tr>
                                     {% elif membership_fee == 'future' %}
                                         <tr>
                                             <td>
-                                                {% trans "To participate in this event, you will have to pay the annual membership fee of" %}: <b>{{ membership_amount }}{{ currency_symbol }}</b>.
+                                                {% trans "To participate in this event, you will have to pay the annual membership fee of:" %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             </td>
                                         </tr>
                                     {% elif membership_fee == 'todo' %}
                                         <tr>
                                             <td>
-                                                {% trans "To participate in this event, you will have to pay in addition the annual membership fee of" %}: <b>{{ membership_amount }}{{ currency_symbol }}</b>.
+                                                {% trans "To participate in this event, you will have to pay in addition the annual membership fee of:" %} <b>{{ membership_amount }}{{ currency_symbol }}</b>.
                                             </td>
                                         </tr>
                                     {% endif %}
@@ -121,7 +121,7 @@
                                 {% if member.membership.status == 'e' or member.membership.status == 'j' %}
                                     <tr>
                                         <td>
-                                            {% trans "In order to confirm your registration, you must request to register as a member of the Association. The procedure will automatically take you through the required steps" %}.
+                                            {% trans "In order to confirm your registration, you must request to register as a member of the Association. The procedure will automatically take you through the required steps." %}
                                         </td>
                                     </tr>
                                 {% endif %}
@@ -129,7 +129,7 @@
                             {% if not registration %}
                                 <tr>
                                     <td>
-                                        {% trans "By proceeding with your registration for this event, you are giving us your authorisation to share your data saved on our platform with the organisers of the event" %}.
+                                        {% trans "By proceeding with your registration for this event, you are giving us your authorisation to share your data saved on our platform with the organisers of the event." %}
                                     </td>
                                 </tr>
                             {% endif %}
