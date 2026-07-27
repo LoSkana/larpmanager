@@ -117,11 +117,28 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     # Store personal theme preference (overrides event/association theme)
     navigation_context["member_theme"] = member.get_config("member_theme", default_value="")
 
-    # Visible runs for v22 topbar (public upcoming events)
+    # Visible runs for v22 topbar (public upcoming events + hidden managed events)
     navigation_context["visible_runs"] = _get_visible_runs(association_id)
-    navigation_context["visible_runs_slugs"] = {vrun["slug"] for vrun in navigation_context["visible_runs"]}
+    navigation_context["hidden_role_runs"] = _get_hidden_role_runs(
+        association_id,
+        navigation_context["association_role"],
+        navigation_context["event_role"],
+    )
+    navigation_context["visible_runs_slugs"] = {
+        vrun["slug"] for vrun in navigation_context["visible_runs"] + navigation_context["hidden_role_runs"]
+    }
 
     return navigation_context
+
+
+def _get_hidden_role_runs(association_id: int, association_roles: dict, event_roles: dict) -> list[dict]:
+    """Get upcoming hidden runs that the user may access through a role."""
+    is_admin = 1 in association_roles
+    return [
+        {"slug": run.get_slug(), "name": str(run), "cover_url": run.get_cover_url()}
+        for run in get_coming_runs(association_id, include_hidden=True).filter(development=DevelopStatus.START)
+        if _determine_run_roles(run, event_roles, is_admin=is_admin)
+    ]
 
 
 def _get_visible_runs(association_id: int) -> list[dict]:

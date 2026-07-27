@@ -52,6 +52,13 @@
                         <span>{{ vrun.name }}</span>
                     </a>
                 {% endfor %}
+                {% for vrun in hidden_role_runs %}
+                    <a class="tv22-pill{% if run and run.get_slug == vrun.slug %} active{% endif %}"
+                       href="{% url 'event_redirect' event_slug=vrun.slug %}">
+                        {% if vrun.cover_url %}<img class="tv22-pill-img" src="{{ vrun.cover_url }}" alt="">{% endif %}
+                        <span>{{ vrun.name }}</span>
+                    </a>
+                {% endfor %}
                 {% if user.is_authenticated and not association.demo_type_name %}
                     <a class="tv22-pill tv22-pill-profile{% if not run and is_profile_page %} active{% endif %}"
                        href="{% url 'profile' %}">

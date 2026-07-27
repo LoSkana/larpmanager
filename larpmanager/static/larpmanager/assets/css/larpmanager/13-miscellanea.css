@@ -518,6 +518,10 @@ body.association.new_v22 .user_resize {
   color: #e67e22;
 }
 
+.event-card .button.primary {
+  margin: 0 auto;
+}
+
 .payment-summary-cards {
   display: flex;
   flex-wrap: wrap;
