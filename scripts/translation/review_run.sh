@@ -1,13 +1,13 @@
 #!/bin/bash
-# Drives translation_review.py end-to-end: next-chunk -> headless `claude -p`
+# Drives review.py end-to-end: next-chunk -> configured headless agent CLI
 # review -> ingest, looped until pending entries run out or a limit is hit.
-# Each iteration is a real Claude Code turn, billed to the CLI session/plan.
+# Each iteration is a real agent CLI turn, billed to the CLI session/plan.
 #
 # Without --lang, round-robins one chunk per pending language per pass
 # (cs, de, es, ... then back to cs) instead of draining one language first.
 #
 # Usage:
-#   scripts/translation_review_run.sh [--lang LANG] [--max-chunks N] [--model MODEL]
+#   scripts/translation_review_run.sh [--agent AGENT] [--lang LANG] [--max-chunks N] [--model MODEL]
 #
 # Env overrides: CONFIG (path to translation_review_config.json)
 
@@ -21,27 +21,18 @@ TR="$PYTHON $SCRIPT_DIR/review.py"
 
 LANG_FILTER=""
 MAX_CHUNKS=0
-MODEL="haiku"
+MODEL=""
+AGENT=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
+    --agent) AGENT="$2"; shift 2 ;;
     --lang) LANG_FILTER="$2"; shift 2 ;;
     --max-chunks) MAX_CHUNKS="$2"; shift 2 ;;
     --model) MODEL="$2"; shift 2 ;;
     *) echo "unknown arg: $1" >&2; exit 1 ;;
   esac
 done
-
-chunk_path=$("$PYTHON" -c "import json;print(json.load(open('$CONFIG'))['chunk_path'])")
-result_path=$("$PYTHON" -c "import json;print(json.load(open('$CONFIG'))['result_path'])")
-
-system_prompt=$("$PYTHON" -c "
-import importlib.util
-spec = importlib.util.spec_from_file_location('tr', '$SCRIPT_DIR/review.py')
-m = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(m)
-print(m.SYSTEM_PROMPT)
-")
 
 process_one_chunk() {
   local lang="$1"
@@ -51,14 +42,14 @@ process_one_chunk() {
     return 1
   fi
 
-  local prompt="$system_prompt
-
-Read the JSON array at $chunk_path, review each entry per the rules above, and write ONLY the resulting JSON array (same schema, no prose, no markdown fences) to $result_path."
-
-  claude -p "$prompt" \
-    --allowedTools "Read,Write" \
-    --permission-mode bypassPermissions \
-    --model "$MODEL"
+  local review_args=()
+  if [ -n "$AGENT" ]; then
+    review_args+=(--agent "$AGENT")
+  fi
+  if [ -n "$MODEL" ]; then
+    review_args+=(--model "$MODEL")
+  fi
+  $TR review "${review_args[@]}"
 
   $TR ingest
   return 0

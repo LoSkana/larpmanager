@@ -209,7 +209,7 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     sidebar(page, "Payments")
     expect_normalized(page, page.locator("#one"), "Total due 100")
     expect_normalized(page, page.locator("#one"), "Total paid 100")
-    expect_normalized(page, page.locator("#one"), "The membership fee 2050 has been paid (20€)")
+    expect_normalized(page, page.locator("#one"), "your 2050 membership fee has been paid. (20€)")
 
     # Second event: register (riepilogo shows 70, no membership fee since already paid)
     go_to(page, live_server, "/testsecond/register")
@@ -236,4 +236,4 @@ def register_and_pay_bundled(live_server: Any, page: Any) -> None:
     sidebar(page, "Payments")
     expect_normalized(page, page.locator("#one"), "Total due 70")
     expect_normalized(page, page.locator("#one"), "Total paid 70")
-    expect_normalized(page, page.locator("#one"), "The membership fee 2050 has been paid (20€)")
+    expect_normalized(page, page.locator("#one"), "your 2050 membership fee has been paid. (20€)")
