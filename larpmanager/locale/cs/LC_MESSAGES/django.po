@@ -1256,9 +1256,6 @@ msgstr "Osobní"
 msgid "Portrait"
 msgstr "Fotografický portrét"
 
-msgid "Position"
-msgstr "Pozice"
-
 msgid "Priority"
 msgstr "Priorita"
 
@@ -1598,12 +1595,6 @@ msgstr "Požadováno"
 msgid "Residence"
 msgstr "Rezidence"
 
-msgid "Retention"
-msgstr "Zadržení"
-
-msgid "Returning"
-msgstr "Návrat"
-
 msgid "Set quest"
 msgstr "Zadání úkolu"
 
@@ -1880,9 +1871,6 @@ msgstr "Otázky:"
 msgid "Recipients"
 msgstr "Příjemci"
 
-msgid "Refund for"
-msgstr "Úhrada za"
-
 msgid "Registered"
 msgstr "Registrovaní"
 
@@ -1979,9 +1967,6 @@ msgstr "Přístupový odkaz"
 msgid "Access link"
 msgstr "Přístupový odkaz"
 
-msgid "Actual paid"
-msgstr "Skutečně vyplacené"
-
 msgid "Add to plot"
 msgstr "Přidat do zápletky"
 
@@ -1993,6 +1978,9 @@ msgstr "Agroturistika"
 
 msgid "Amount Paid"
 msgstr "Vyplacená částka"
+
+msgid "Amount kept"
+msgstr "Zadržená částka"
 
 msgid "Amount paid"
 msgstr "Vyplacená částka"
@@ -2693,6 +2681,12 @@ msgstr "Zveřejnit zaměstnance"
 msgid "Question type"
 msgstr "Typ otázky"
 
+msgid "Refund amount"
+msgstr "Částka vrácených peněz"
+
+msgid "Refund method"
+msgstr "Způsob vrácení peněz"
+
 msgid "Registrations"
 msgstr "Registrace"
 
@@ -2704,9 +2698,6 @@ msgstr "Vyžadovat přihlášení"
 
 msgid "Requirements:"
 msgstr "Požadavky:"
-
-msgid "See you soon!"
-msgstr "Čekáme na vás!"
 
 msgid "Self-catering"
 msgstr "Vlastní stravování"
@@ -2812,6 +2803,9 @@ msgstr "Sbírka pro"
 msgid "Communications"
 msgstr "Komunikace"
 
+msgid "Confirm refund"
+msgstr "Potvrdit vrácení peněz"
+
 msgid "Credit balance"
 msgstr "Kreditní zůstatek"
 
@@ -2856,9 +2850,6 @@ msgstr "Soubor nebyl nalezen"
 
 msgid "Final quantity"
 msgstr "Konečné množství"
-
-msgid "Full returning"
-msgstr "Úplné vrácení"
 
 msgid "Global balance"
 msgstr "Globální bilance"
@@ -2950,8 +2941,11 @@ msgstr "Profily (PDF)"
 msgid "Progress steps"
 msgstr "Kroky pokroku"
 
-msgid "Prologues type"
-msgstr "Typ prologů"
+msgid "Prologue types"
+msgstr "Typy prologů"
+
+msgid "Refund details"
+msgstr "Podrobnosti o vrácení peněz"
 
 msgid "Remove consent"
 msgstr "Odstranit souhlas"
@@ -2967,9 +2961,6 @@ msgstr "Žádost o registraci"
 
 msgid "Requests open:"
 msgstr "Otevřené požadavky:"
-
-msgid "Returning type"
-msgstr "Typ návratu"
 
 msgid "Sensitive data"
 msgstr "Citlivé údaje"
@@ -3789,6 +3780,9 @@ msgstr "Realizované příjmy:"
 msgid "Redeem collection"
 msgstr "Uplatnit sbírku"
 
+msgid "Refund percentage"
+msgstr "Procento vrácení peněz"
+
 msgid "Registration Form"
 msgstr "Registrační formulář"
 
@@ -4405,9 +4399,6 @@ msgstr "Odstranit z ocenění XP"
 msgid "Require registration"
 msgstr "Vyžadovat registraci"
 
-msgid "Returning percentage"
-msgstr "Procento návratnosti"
-
 msgid "Select the new event"
 msgstr "Vyberte novou událost"
 
@@ -4881,9 +4872,6 @@ msgstr "Minimální věk: %(number)d"
 
 msgid "Minimum number of votes"
 msgstr "Minimální počet hlasů"
-
-msgid "Move registration event"
-msgstr "Přesun registrační události"
 
 msgid "No registrations found."
 msgstr "Nebyly nalezeny žádné registrace."
@@ -5416,6 +5404,10 @@ msgstr "Předběžná registrace nebyla nalezena."
 msgid "Question saved successfully"
 msgstr "Otázka byla úspěšně uložena"
 
+#, python-format
+msgid "Refund for %(registration)s"
+msgstr "Vrácení peněz za %(registration)s"
+
 msgid "Registration form questions"
 msgstr "Otázky k registračnímu formuláři"
 
@@ -5449,6 +5441,9 @@ msgstr "Země vaší organizace"
 #, python-format
 msgid "%(credits_name)s to be used:"
 msgstr "K použití %(credits_name)s:"
+
+msgid "Allow registration transfers"
+msgstr "Povolit převody registrací"
 
 msgid "Allow reserve signup anytime"
 msgstr "Umožněte registraci do rezervy kdykoli"
@@ -5792,8 +5787,8 @@ msgstr "Spravujte všechny úkoly v rámci akce"
 msgid "Manage the registration tickets"
 msgstr "Spravujte registrační lístky"
 
-msgid "Manage the type of event quests"
-msgstr "Spravujte typ úkolů pro akci"
+msgid "Manage the types of event quest"
+msgstr "Správa typů úkolů spojených s událostmi"
 
 msgid "Membership Application Received"
 msgstr "Žádost o členství byla přijata"
@@ -6128,8 +6123,8 @@ msgstr "Spravovat všechny podklady k této akci"
 msgid "Manage the registration surcharges"
 msgstr "Spravujte registrační příplatky"
 
-msgid "Manage the type of event prologues"
-msgstr "Spravujte typ prologů"
+msgid "Manage the types of event prologue"
+msgstr "Správa typů úvodů událostí"
 
 msgid "Manage your association membership"
 msgstr "Spravujte své členství ve sdružení"
@@ -6158,7 +6153,7 @@ msgid "Registration updated to %(event)s!"
 msgstr "Registrace aktualizována na %(event)s!"
 
 #, python-format
-msgid "Registrations opening at: %(date)s"
+msgid "Registrations opening on: %(date)s"
 msgstr "Registrace se otevírají: %(date)s"
 
 msgid "Review participants' personal data"
@@ -6784,9 +6779,6 @@ msgstr "Pokud potřebujete pomoc, nezapomeňte se podívat na:"
 
 msgid "If you no longer wish to attend, you can"
 msgstr "Pokud si již nepřejete účastnit se, můžete"
-
-msgid "If you wish to update your personal data"
-msgstr "Pokud si přejete aktualizovat své osobní údaje"
 
 msgid "Invite a user by email to join this role"
 msgstr "Pozvěte uživatele e-mailem, aby se připojil k této roli"
@@ -8511,6 +8503,9 @@ msgstr "Přidáno na konec e-mailu potvrzujícího účastníkům přihlášení
 msgid "Assign the characters following the participants' preferences"
 msgstr "Přiřazujte postavy podle preferencí účastníků"
 
+msgid "Cannot issue a refund: neither tokens nor credits are enabled"
+msgstr "Vrácení peněz není možné: nejsou povoleny ani tokeny, ani kredity"
+
 msgid "Display full history of participant preferences on characters"
 msgstr "Zobrazujte úplnou historii preferencí účastníků na postavách"
 
@@ -9198,10 +9193,6 @@ msgstr ""
 "Přiřaďte skladové položky k jedné nebo více zónám akce, a to po jednotlivých"
 " položkách"
 
-msgid "Cannot process refund: Neither tokens nor credits features are enabled"
-msgstr ""
-"Nelze zpracovat vrácení peněz: Funkce žetonů ani kreditů nejsou povoleny"
-
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Den roku, od kterého začíná rok sdružení, ve formátu DD-MM"
 
@@ -9317,6 +9308,11 @@ msgstr ""
 msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
 msgstr "Povoleny jsou pouze malé znaky a čísla, žádné mezery ani symboly"
+
+msgid ""
+"Refunds are unavailable because neither tokens nor credits are enabled."
+msgstr ""
+"Vrácení peněz není možné, protože nejsou povoleny ani tokeny, ani kredity."
 
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
@@ -10667,6 +10663,14 @@ msgstr ""
 "Je-li tato možnost zapnutá, zobrazí se původní obrázek v plné velikosti "
 "namísto miniatury"
 
+#, python-format
+msgid ""
+"If you wish to update your personal data, <a href=\"%(profile_url)s\">click "
+"here</a>."
+msgstr ""
+"Pokud si přejete aktualizovat své osobní údaje, <a "
+"href=\"%(profile_url)s\">klikněte sem</a>."
+
 msgid ""
 "No experience systems defined yet. Use the button above to create the first "
 "system."
@@ -10986,6 +10990,13 @@ msgstr ""
 "toto tlačítko."
 
 msgid ""
+"Issue a refund in tokens or credits for a participant whose registration was"
+" cancelled"
+msgstr ""
+"Provést vrácení peněz ve formě tokenů nebo kreditů účastníkovi, jehož "
+"registrace byla zrušena"
+
+msgid ""
 "Percentage of VAT to be calculated on the sum of the costs of the "
 "registration options"
 msgstr ""
@@ -11079,13 +11090,6 @@ msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
 "registration."
 msgstr "Lhůty splatnosti budou rovnoměrně rozděleny podle data registrace."
-
-msgid ""
-"Process a token or credit refund for a participant who has cancelled their "
-"registration"
-msgstr ""
-"Zpracovat vrácení žetonů nebo kreditu účastníkovi, který zrušil svou "
-"registraci"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"
@@ -12630,13 +12634,6 @@ msgid ""
 msgstr ""
 "Zobrazit úplný seznam kompetencí, které tento přispěvatel sám vyhodnotil, "
 "včetně úrovní zkušeností a poznámek"
-
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
-msgstr ""
-"Upozornění: Funkce tokenů ani kreditů nejsou aktivovány. Vrácení peněz nelze"
-" provést ve formě virtuální měny."
 
 #, python-format
 msgid ""

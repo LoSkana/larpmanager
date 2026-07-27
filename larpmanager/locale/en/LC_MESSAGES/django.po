@@ -103,7 +103,7 @@ msgid "Registration closed"
 msgstr ""
 
 #, python-format
-msgid "Registrations opening at: %(date)s"
+msgid "Registrations opening on: %(date)s"
 msgstr ""
 
 msgid "Player"
@@ -515,7 +515,7 @@ msgstr ""
 msgid "Campaign"
 msgstr ""
 
-msgid "Move registration event"
+msgid "Allow registration transfers"
 msgstr ""
 
 msgid "Allow to switch registration between events"
@@ -2898,9 +2898,6 @@ msgstr ""
 #, python-format
 msgid ""
 "Check the available number of discounts <a href='%(url)s'>on this page</a>."
-msgstr ""
-
-msgid "See you soon!"
 msgstr ""
 
 #, python-format
@@ -7370,9 +7367,6 @@ msgstr ""
 msgid "The organization is running the latest version."
 msgstr ""
 
-msgid "Position"
-msgstr ""
-
 msgid ""
 "No warehouse containers defined yet. Use the button above to add a container."
 msgstr ""
@@ -8296,7 +8290,10 @@ msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr ""
 
-msgid "If you wish to update your personal data"
+#, python-format
+msgid ""
+"If you wish to update your personal data, <a href=\"%(profile_url)s\">click "
+"here</a>."
 msgstr ""
 
 msgid ""
@@ -8506,38 +8503,34 @@ msgstr ""
 msgid "Entry"
 msgstr ""
 
-msgid "Refund for"
+#, python-format
+msgid "Refund for %(registration)s"
 msgstr ""
 
 msgid ""
-"Process a token or credit refund for a participant who has cancelled their "
-"registration"
+"Issue a refund in tokens or credits for a participant whose registration was "
+"cancelled"
 msgstr ""
 
 msgid "Registration fee"
 msgstr ""
 
-msgid "Actual paid"
-msgstr ""
-
 msgid "Money"
 msgstr ""
 
-msgid "Returning"
+msgid "Refund details"
 msgstr ""
 
-msgid "Retention"
+msgid "Amount kept"
 msgstr ""
 
-msgid "Full returning"
+msgid "Refund amount"
 msgstr ""
 
-msgid "Returning type"
+msgid "Refund method"
 msgstr ""
 
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
+msgid "Refunds are unavailable because neither tokens nor credits are enabled."
 msgstr ""
 
 msgid "Only"
@@ -8547,13 +8540,13 @@ msgstr ""
 msgid "Both %(tokens)s and %(credits)s"
 msgstr ""
 
-msgid "Returning percentage"
+msgid "Refund percentage"
 msgstr ""
 
-msgid "Approve reimbursement"
+msgid "Confirm refund"
 msgstr ""
 
-msgid "Cannot process refund: Neither tokens nor credits features are enabled"
+msgid "Cannot issue a refund: neither tokens nor credits are enabled"
 msgstr ""
 
 msgid "Cancellations"
@@ -8563,6 +8556,9 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 
 msgid "Cancellation date"
+msgstr ""
+
+msgid "Approve reimbursement"
 msgstr ""
 
 msgid "No cancelled registrations found for this event."
@@ -10964,7 +10960,7 @@ msgstr ""
 msgid "Manage the event factions"
 msgstr ""
 
-msgid "Manage the type of event quests"
+msgid "Manage the types of event quest"
 msgstr ""
 
 msgid "Manage the event quests"
@@ -10973,10 +10969,10 @@ msgstr ""
 msgid "Manage the traits available in the event quests"
 msgstr ""
 
-msgid "Prologues type"
+msgid "Prologue types"
 msgstr ""
 
-msgid "Manage the type of event prologues"
+msgid "Manage the types of event prologue"
 msgstr ""
 
 msgid "Manage the event prologues"

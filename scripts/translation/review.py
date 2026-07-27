@@ -59,7 +59,8 @@ Specific LARP terms: Award (refers to awarding XP, in italian "assegnazioni"), B
 Characters (usually game characters, but in some cases text characters),
 Casting (assigning characters / roles to players / participants), Pools (character/resource pools),
 Plot (quest/mission/storyline), Handout (setting/world-building knowledge), Safety (tieni termine inglese),
-Speed larp (tieni termine inglese), Collection (money collection by friends)
+Speed larp (tieni termine inglese), Collection (money collection by friends), Matchmaker (algoritmo di character-to-player matching),
+Ensemble (feature to show the characters ensemble/cast), Quest / Trait (larp terms)
 
 Use informal language and the second-person singular (you).
 
@@ -343,7 +344,7 @@ no prose and no markdown fences. It will be saved directly as
 
     try:
         if agent == "codex":
-            subprocess.run(command, check=True)
+            subprocess.run(command, check=True, capture_output=True, text=True)
         else:
             completed = subprocess.run(command, check=True, capture_output=True, text=True)
             result_path.write_text(completed.stdout)

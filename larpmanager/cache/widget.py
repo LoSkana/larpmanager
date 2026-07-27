@@ -134,7 +134,7 @@ def _compute_registration_status(run: Run) -> str:
     if status_code == "future":
         if opening_datetime:
             formatted_opening_date = opening_datetime.strftime(format_datetime)
-            return _("Registrations opening at: %(date)s") % {"date": formatted_opening_date}
+            return _("Registrations opening on: %(date)s") % {"date": formatted_opening_date}
         return _("Registrations opening not set")
 
     return status_messages.get(status_code, _("Registration closed"))

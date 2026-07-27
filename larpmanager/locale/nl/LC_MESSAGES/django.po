@@ -1256,9 +1256,6 @@ msgstr "Persoonlijk"
 msgid "Portrait"
 msgstr "Fotoportret"
 
-msgid "Position"
-msgstr "Positie"
-
 msgid "Priority"
 msgstr "Prioriteit"
 
@@ -1598,12 +1595,6 @@ msgstr "Gevraagd"
 msgid "Residence"
 msgstr "Residentie"
 
-msgid "Retention"
-msgstr "Inhouding"
-
-msgid "Returning"
-msgstr "Terugsturen"
-
 msgid "Set quest"
 msgstr "Zoektocht instellen"
 
@@ -1880,9 +1871,6 @@ msgstr "Vragen:"
 msgid "Recipients"
 msgstr "Ontvangers"
 
-msgid "Refund for"
-msgstr "Vergoeding voor"
-
 msgid "Registered"
 msgstr "Geregistreerd"
 
@@ -1979,9 +1967,6 @@ msgstr "Toegangslink"
 msgid "Access link"
 msgstr "Toegangslink"
 
-msgid "Actual paid"
-msgstr "Werkelijk betaald"
-
 msgid "Add to plot"
 msgstr "Toevoegen aan plot"
 
@@ -1993,6 +1978,9 @@ msgstr "Agrotoerisme"
 
 msgid "Amount Paid"
 msgstr "Betaald bedrag"
+
+msgid "Amount kept"
+msgstr "Ingehouden bedrag"
 
 msgid "Amount paid"
 msgstr "Betaald bedrag"
@@ -2693,6 +2681,12 @@ msgstr "Personeel publiceren"
 msgid "Question type"
 msgstr "Type vraag"
 
+msgid "Refund amount"
+msgstr "Terug te betalen bedrag"
+
+msgid "Refund method"
+msgstr "Terugbetalingswijze"
+
 msgid "Registrations"
 msgstr "Registratie"
 
@@ -2704,9 +2698,6 @@ msgstr "Aanmelden vereist"
 
 msgid "Requirements:"
 msgstr "Vereisten:"
-
-msgid "See you soon!"
-msgstr "We wachten op je!"
 
 msgid "Self-catering"
 msgstr "Zelfcatering"
@@ -2812,6 +2803,9 @@ msgstr "Verzamelen voor"
 msgid "Communications"
 msgstr "Communicatie"
 
+msgid "Confirm refund"
+msgstr "Bevestig de terugbetaling"
+
 msgid "Credit balance"
 msgstr "Kredietsaldo"
 
@@ -2856,9 +2850,6 @@ msgstr "Bestand niet gevonden"
 
 msgid "Final quantity"
 msgstr "Definitieve hoeveelheid"
-
-msgid "Full returning"
-msgstr "Volledige terugbetaling"
 
 msgid "Global balance"
 msgstr "Globaal balans"
@@ -2950,8 +2941,11 @@ msgstr "Profielen (PDF)"
 msgid "Progress steps"
 msgstr "Voortgangsstappen"
 
-msgid "Prologues type"
-msgstr "Soort prologen"
+msgid "Prologue types"
+msgstr "Soorten proloog"
+
+msgid "Refund details"
+msgstr "Informatie over terugbetalingen"
 
 msgid "Remove consent"
 msgstr "Toestemming verwijderen"
@@ -2967,9 +2961,6 @@ msgstr "Aanmelding aanvragen"
 
 msgid "Requests open:"
 msgstr "Open verzoeken:"
-
-msgid "Returning type"
-msgstr "Type terugbetaling"
 
 msgid "Sensitive data"
 msgstr "Gevoelige gegevens"
@@ -3789,6 +3780,9 @@ msgstr "Gerealiseerde omzet:"
 msgid "Redeem collection"
 msgstr "Colletta inwisselen"
 
+msgid "Refund percentage"
+msgstr "Terugbetalingspercentage"
+
 msgid "Registration Form"
 msgstr "Registratieformulier"
 
@@ -4405,9 +4399,6 @@ msgstr "Verwijder uit XP-toewijzing"
 msgid "Require registration"
 msgstr "Registratie verplichten"
 
-msgid "Returning percentage"
-msgstr "Restitutiepercentage"
-
 msgid "Select the new event"
 msgstr "Selecteer de nieuwe gebeurtenis"
 
@@ -4881,9 +4872,6 @@ msgstr "Minimumleeftijd: %(number)d"
 
 msgid "Minimum number of votes"
 msgstr "Minimum aantal stemmen"
-
-msgid "Move registration event"
-msgstr "Verplaats registratie evenement"
 
 msgid "No registrations found."
 msgstr "Geen registraties gevonden."
@@ -5416,6 +5404,10 @@ msgstr "Voorinschrijving niet gevonden."
 msgid "Question saved successfully"
 msgstr "Vraag succesvol opgeslagen"
 
+#, python-format
+msgid "Refund for %(registration)s"
+msgstr "Terugbetaling voor %(registration)s"
+
 msgid "Registration form questions"
 msgstr "Vragen over registratieformulier"
 
@@ -5449,6 +5441,9 @@ msgstr "Het land van je organisatie"
 #, python-format
 msgid "%(credits_name)s to be used:"
 msgstr "Te gebruiken %(credits_name)s:"
+
+msgid "Allow registration transfers"
+msgstr "Registratieoverdrachten toestaan"
 
 msgid "Allow reserve signup anytime"
 msgstr "Sta toe dat reserveringsinschrijvingen op elk moment mogelijk zijn"
@@ -5792,8 +5787,8 @@ msgstr "Beheer alle opdrachten voor het evenement"
 msgid "Manage the registration tickets"
 msgstr "De registratietickets beheren"
 
-msgid "Manage the type of event quests"
-msgstr "Beheer het type van evenementmissies"
+msgid "Manage the types of event quest"
+msgstr "Beheer de soorten evenement-quests"
 
 msgid "Membership Application Received"
 msgstr "Aanvraag voor lidmaatschap ontvangen"
@@ -6129,8 +6124,8 @@ msgstr "Beheer alle hand-outs voor dit evenement"
 msgid "Manage the registration surcharges"
 msgstr "De registratietoeslagen beheren"
 
-msgid "Manage the type of event prologues"
-msgstr "Het type proloog beheren"
+msgid "Manage the types of event prologue"
+msgstr "De soorten inleidingen bij evenementen beheren"
 
 msgid "Manage your association membership"
 msgstr "Beheer je lidmaatschap van de vereniging"
@@ -6159,7 +6154,7 @@ msgid "Registration updated to %(event)s!"
 msgstr "Registratie bijgewerkt tot %(event)s!"
 
 #, python-format
-msgid "Registrations opening at: %(date)s"
+msgid "Registrations opening on: %(date)s"
 msgstr "Registraties openen op: %(date)s"
 
 msgid "Review participants' personal data"
@@ -6784,9 +6779,6 @@ msgstr "Als je hulp nodig hebt, ga dan naar:"
 
 msgid "If you no longer wish to attend, you can"
 msgstr "Als je niet langer wilt deelnemen, kun je"
-
-msgid "If you wish to update your personal data"
-msgstr "Als je je persoonlijke gegevens wilt bijwerken"
 
 msgid "Invite a user by email to join this role"
 msgstr "Nodig een gebruiker via e-mail uit om deze rol te vervullen"
@@ -8578,6 +8570,11 @@ msgstr ""
 msgid "Assign the characters following the participants' preferences"
 msgstr "Wijs de personages toe volgens de voorkeuren van de deelnemers"
 
+msgid "Cannot issue a refund: neither tokens nor credits are enabled"
+msgstr ""
+"Ik kan geen terugbetaling doen: tokens en credits zijn allebei niet "
+"ingeschakeld"
+
 msgid "Display full history of participant preferences on characters"
 msgstr ""
 "Volledige geschiedenis van deelnemersvoorkeuren op karakters weergeven"
@@ -9366,11 +9363,6 @@ msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Magazijnartikelen per stuk toewijzen aan een of meer zones van het evenement"
 
-msgid "Cannot process refund: Neither tokens nor credits features are enabled"
-msgstr ""
-"Kan restitutie niet verwerken: De functies tokens noch credits zijn "
-"ingeschakeld"
-
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Dag van het jaar waarop het verenigingsjaar begint, in DD-MM formaat"
 
@@ -9501,6 +9493,12 @@ msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
 msgstr ""
 "Alleen kleine letters en cijfers zijn toegestaan, geen spaties of symbolen"
+
+msgid ""
+"Refunds are unavailable because neither tokens nor credits are enabled."
+msgstr ""
+"Terugbetalingen zijn niet mogelijk, omdat noch tokens noch credits zijn "
+"ingeschakeld."
 
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
@@ -10956,6 +10954,14 @@ msgstr ""
 "Als deze optie is ingeschakeld, wordt de originele afbeelding op volledige "
 "grootte weergegeven in plaats van de miniatuurversie"
 
+#, python-format
+msgid ""
+"If you wish to update your personal data, <a href=\"%(profile_url)s\">click "
+"here</a>."
+msgstr ""
+"Als je je persoonlijke gegevens wilt bijwerken, <a "
+"href=\"%(profile_url)s\">klik dan hier</a>."
+
 msgid ""
 "No experience systems defined yet. Use the button above to create the first "
 "system."
@@ -11289,6 +11295,13 @@ msgstr ""
 " knop."
 
 msgid ""
+"Issue a refund in tokens or credits for a participant whose registration was"
+" cancelled"
+msgstr ""
+"Geef een terugbetaling in tokens of tegoeden aan een deelnemer wiens "
+"inschrijving is geannuleerd"
+
+msgid ""
 "Percentage of VAT to be calculated on the sum of the costs of the "
 "registration options"
 msgstr ""
@@ -11386,13 +11399,6 @@ msgid ""
 msgstr ""
 "De betalingstermijnen worden gelijk verdeeld op basis van de "
 "registratiedatum."
-
-msgid ""
-"Process a token or credit refund for a participant who has cancelled their "
-"registration"
-msgstr ""
-"Een token of tegoed verwerken voor een deelnemer die zijn inschrijving heeft"
-" geannuleerd"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"
@@ -12954,13 +12960,6 @@ msgid ""
 msgstr ""
 "Bekijk de volledige lijst met competenties die deze bijdragende gebruiker "
 "zelf heeft beoordeeld, inclusief ervaringsniveaus en opmerkingen"
-
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
-msgstr ""
-"Waarschuwing: De functies voor tokens en credits zijn niet ingeschakeld. "
-"Terugbetalingen kunnen niet in virtuele valuta worden verwerkt."
 
 #, python-format
 msgid ""

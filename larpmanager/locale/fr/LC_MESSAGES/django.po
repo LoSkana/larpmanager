@@ -1256,9 +1256,6 @@ msgstr "Personnel"
 msgid "Portrait"
 msgstr "Portrait photographique"
 
-msgid "Position"
-msgstr "Position"
-
 msgid "Priority"
 msgstr "Priorité"
 
@@ -1598,12 +1595,6 @@ msgstr "Demandé"
 msgid "Residence"
 msgstr "Résidence"
 
-msgid "Retention"
-msgstr "Retenue"
-
-msgid "Returning"
-msgstr "Retour"
-
 msgid "Set quest"
 msgstr "Définir la quête"
 
@@ -1880,9 +1871,6 @@ msgstr "Questions:"
 msgid "Recipients"
 msgstr "Destinataires"
 
-msgid "Refund for"
-msgstr "Remboursement pour"
-
 msgid "Registered"
 msgstr "Inscrits"
 
@@ -1979,9 +1967,6 @@ msgstr "Lien d'accès"
 msgid "Access link"
 msgstr "Lien d'accès"
 
-msgid "Actual paid"
-msgstr "Montant payé"
-
 msgid "Add to plot"
 msgstr "Ajouter à la trame"
 
@@ -1993,6 +1978,9 @@ msgstr "Agritourisme"
 
 msgid "Amount Paid"
 msgstr "Montant payé"
+
+msgid "Amount kept"
+msgstr "Montant conservé"
 
 msgid "Amount paid"
 msgstr "Montant payé"
@@ -2693,6 +2681,12 @@ msgstr "Publier le personnel"
 msgid "Question type"
 msgstr "Type de question"
 
+msgid "Refund amount"
+msgstr "Montant du remboursement"
+
+msgid "Refund method"
+msgstr "Mode de remboursement"
+
 msgid "Registrations"
 msgstr "Inscriptions"
 
@@ -2704,9 +2698,6 @@ msgstr "Exiger une connexion"
 
 msgid "Requirements:"
 msgstr "Exigences:"
-
-msgid "See you soon!"
-msgstr "À bientôt!"
 
 msgid "Self-catering"
 msgstr "Auto-restauration"
@@ -2812,6 +2803,9 @@ msgstr "Collecte pour"
 msgid "Communications"
 msgstr "Communications"
 
+msgid "Confirm refund"
+msgstr "Confirmer le remboursement"
+
 msgid "Credit balance"
 msgstr "Solde créditeur"
 
@@ -2856,9 +2850,6 @@ msgstr "Fichier non trouvé"
 
 msgid "Final quantity"
 msgstr "Quantité finale"
-
-msgid "Full returning"
-msgstr "Retour total"
 
 msgid "Global balance"
 msgstr "Bilan global"
@@ -2950,8 +2941,11 @@ msgstr "Profils (PDF)"
 msgid "Progress steps"
 msgstr "Les étapes du progrès"
 
-msgid "Prologues type"
-msgstr "Type de prologues"
+msgid "Prologue types"
+msgstr "Types de prologues"
+
+msgid "Refund details"
+msgstr "Détails du remboursement"
 
 msgid "Remove consent"
 msgstr "Supprimer le consentement"
@@ -2967,9 +2961,6 @@ msgstr "Demande d'inscription"
 
 msgid "Requests open:"
 msgstr "Requêtes ouvertes:"
-
-msgid "Returning type"
-msgstr "Type de retour"
 
 msgid "Sensitive data"
 msgstr "Données sensibles"
@@ -3789,6 +3780,9 @@ msgstr "Recettes réalisées:"
 msgid "Redeem collection"
 msgstr "Rachat de la collection"
 
+msgid "Refund percentage"
+msgstr "Pourcentage de remboursement"
+
 msgid "Registration Form"
 msgstr "Formulaire d'inscription"
 
@@ -4405,9 +4399,6 @@ msgstr "Retirer de l'attribution de XP"
 msgid "Require registration"
 msgstr "Obligation d'inscription"
 
-msgid "Returning percentage"
-msgstr "Pourcentage de retour"
-
 msgid "Select the new event"
 msgstr "Sélectionner le nouvel événement"
 
@@ -4881,9 +4872,6 @@ msgstr "Âge minimum : %(number)d"
 
 msgid "Minimum number of votes"
 msgstr "Nombre minimum de votes"
-
-msgid "Move registration event"
-msgstr "Déplacer l'événement d'une inscription"
 
 msgid "No registrations found."
 msgstr "Aucune inscription trouvée."
@@ -5416,6 +5404,10 @@ msgstr "La préinscription n'a pas été trouvée."
 msgid "Question saved successfully"
 msgstr "La question a été enregistrée avec succès"
 
+#, python-format
+msgid "Refund for %(registration)s"
+msgstr "Remboursement des %(registration)s"
+
 msgid "Registration form questions"
 msgstr "Questions sur le formulaire d'inscription"
 
@@ -5449,6 +5441,9 @@ msgstr "Le pays de ton organisation"
 #, python-format
 msgid "%(credits_name)s to be used:"
 msgstr "%(credits_name)s à utiliser :"
+
+msgid "Allow registration transfers"
+msgstr "Autoriser les transferts d'enregistrement"
 
 msgid "Allow reserve signup anytime"
 msgstr "Permettre l'inscription sur liste d'attente à tout moment"
@@ -5792,8 +5787,8 @@ msgstr "Gérer toutes les quêtes de l'événement"
 msgid "Manage the registration tickets"
 msgstr "Gérer les tickets d'inscription"
 
-msgid "Manage the type of event quests"
-msgstr "Gérer le type de quêtes événementielles"
+msgid "Manage the types of event quest"
+msgstr "Gérer les types de quêtes d'événement"
 
 msgid "Membership Application Received"
 msgstr "Demande d'adhésion reçue"
@@ -6128,8 +6123,8 @@ msgstr "Gérer tous les documents à distribuer pour cet événement"
 msgid "Manage the registration surcharges"
 msgstr "Gérer les surtaxes d'enregistrement"
 
-msgid "Manage the type of event prologues"
-msgstr "Gérer le type de prologues d'événements"
+msgid "Manage the types of event prologue"
+msgstr "Gérer les types de prologue d'événement"
 
 msgid "Manage your association membership"
 msgstr "Gérer ton adhésion à l'association"
@@ -6158,7 +6153,7 @@ msgid "Registration updated to %(event)s!"
 msgstr "Inscription mise à jour à %(event)s !"
 
 #, python-format
-msgid "Registrations opening at: %(date)s"
+msgid "Registrations opening on: %(date)s"
 msgstr "Ouverture des inscriptions le : %(date)s"
 
 msgid "Review participants' personal data"
@@ -6785,9 +6780,6 @@ msgstr "Si tu as besoin d'aide, n'oublie pas de consulter:"
 msgid "If you no longer wish to attend, you can"
 msgstr "Si tu ne souhaites plus participer, tu peux"
 
-msgid "If you wish to update your personal data"
-msgstr "Si tu souhaites mettre à jour tes données personnelles"
-
 msgid "Invite a user by email to join this role"
 msgstr "Invite un utilisateur par e-mail à rejoindre ce rôle"
 
@@ -6957,7 +6949,7 @@ msgstr "Tu as été ajouté au rôle : %(role)s"
 
 #, python-format
 msgid "You have been invited to join as %(role)s"
-msgstr "Tu as été invité(e) à t'inscrire en tant que %(role)s"
+msgstr "Tu as été invité(e) à participer en tant que %(role)s"
 
 msgid "You have exceeded the maximum text length"
 msgstr "Vous avez dépassé la longueur maximale du texte"
@@ -8635,6 +8627,11 @@ msgid "Assign the characters following the participants' preferences"
 msgstr ""
 "Attribuer les personnages en fonction des préférences des participants"
 
+msgid "Cannot issue a refund: neither tokens nor credits are enabled"
+msgstr ""
+"Impossible d'effectuer un remboursement : ni les jetons ni les crédits ne "
+"sont activés"
+
 msgid "Display full history of participant preferences on characters"
 msgstr ""
 "Afficher l'historique complet des préférences des participants sur les "
@@ -9453,11 +9450,6 @@ msgstr ""
 "Attribue les articles de stock à une ou plusieurs zones de l'événement, un "
 "par un"
 
-msgid "Cannot process refund: Neither tokens nor credits features are enabled"
-msgstr ""
-"Impossible de traiter le remboursement : Les fonctions 'jetons' et 'crédits'"
-" ne sont pas activées"
-
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr ""
 "Jour de l'année à partir duquel commence l'année de l'association, au format"
@@ -9597,6 +9589,12 @@ msgid ""
 msgstr ""
 "Seuls les minuscules et les chiffres sont autorisés, sans espaces ni "
 "symboles"
+
+msgid ""
+"Refunds are unavailable because neither tokens nor credits are enabled."
+msgstr ""
+"Les remboursements ne sont pas possibles, car ni les jetons ni les crédits "
+"ne sont activés."
 
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
@@ -11077,6 +11075,14 @@ msgstr ""
 "Si cette option est activée, elle affiche l'image originale en taille réelle"
 " au lieu de la vignette"
 
+#, python-format
+msgid ""
+"If you wish to update your personal data, <a href=\"%(profile_url)s\">click "
+"here</a>."
+msgstr ""
+"Si tu souhaites mettre à jour tes données personnelles, <a "
+"href=\"%(profile_url)s\">clique ici</a>."
+
 msgid ""
 "No experience systems defined yet. Use the button above to create the first "
 "system."
@@ -11407,6 +11413,13 @@ msgstr ""
 "bouton."
 
 msgid ""
+"Issue a refund in tokens or credits for a participant whose registration was"
+" cancelled"
+msgstr ""
+"Effectuer un remboursement sous forme de jetons ou de crédits pour un "
+"participant dont l'inscription a été annulée"
+
+msgid ""
 "Percentage of VAT to be calculated on the sum of the costs of the "
 "registration options"
 msgstr ""
@@ -11504,13 +11517,6 @@ msgid ""
 msgstr ""
 "Les délais de paiement seront répartis équitablement en fonction de la date "
 "d'inscription."
-
-msgid ""
-"Process a token or credit refund for a participant who has cancelled their "
-"registration"
-msgstr ""
-"Traiter le remboursement d'un bon ou d'un crédit pour un participant qui a "
-"annulé son inscription"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"
@@ -13079,13 +13085,6 @@ msgid ""
 msgstr ""
 "Consulte la liste complète des compétences autoévaluées par ce contributeur,"
 " y compris les niveaux d'expérience et les remarques"
-
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
-msgstr ""
-"Attention : ni les jetons ni les crédits ne sont activés. Les remboursements"
-" ne peuvent pas être effectués sous forme de monnaie virtuelle."
 
 #, python-format
 msgid ""

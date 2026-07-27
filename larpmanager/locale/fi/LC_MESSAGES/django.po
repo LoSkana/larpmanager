@@ -1256,9 +1256,6 @@ msgstr "Henkilökohtainen"
 msgid "Portrait"
 msgstr "Muotokuva"
 
-msgid "Position"
-msgstr "Asema"
-
 msgid "Priority"
 msgstr "Prioriteetti"
 
@@ -1598,12 +1595,6 @@ msgstr "Pyydetty"
 msgid "Residence"
 msgstr "Asuinpaikka"
 
-msgid "Retention"
-msgstr "Pidätys"
-
-msgid "Returning"
-msgstr "Palautus"
-
 msgid "Set quest"
 msgstr "Aseta tehtävä"
 
@@ -1880,9 +1871,6 @@ msgstr "Kysymykset:"
 msgid "Recipients"
 msgstr "Vastaanottajat"
 
-msgid "Refund for"
-msgstr "Palautus kohteelle"
-
 msgid "Registered"
 msgstr "Rekisteröity"
 
@@ -1979,9 +1967,6 @@ msgstr "Pääsylinkki"
 msgid "Access link"
 msgstr "Pääsylinkki"
 
-msgid "Actual paid"
-msgstr "Tosiasiallinen maksu"
-
 msgid "Add to plot"
 msgstr "Lisää juoneen"
 
@@ -1993,6 +1978,9 @@ msgstr "Maatilamatkailu"
 
 msgid "Amount Paid"
 msgstr "Maksettu summa"
+
+msgid "Amount kept"
+msgstr "Säilytetty summa"
 
 msgid "Amount paid"
 msgstr "Maksettu määrä"
@@ -2693,6 +2681,12 @@ msgstr "Julkaise henkilöstö"
 msgid "Question type"
 msgstr "Kysymyksen tyyppi"
 
+msgid "Refund amount"
+msgstr "Palautussumma"
+
+msgid "Refund method"
+msgstr "Palautustapa"
+
 msgid "Registrations"
 msgstr "Ilmoittautumiset"
 
@@ -2704,9 +2698,6 @@ msgstr "Vaadi kirjautuminen"
 
 msgid "Requirements:"
 msgstr "Vaatimukset:"
-
-msgid "See you soon!"
-msgstr "Nähdään pian!"
 
 msgid "Self-catering"
 msgstr "Omavarainen"
@@ -2812,6 +2803,9 @@ msgstr "Keräys kohteelle"
 msgid "Communications"
 msgstr "Viestintä"
 
+msgid "Confirm refund"
+msgstr "Vahvista hyvitys"
+
 msgid "Credit balance"
 msgstr "Luottosaldo"
 
@@ -2856,9 +2850,6 @@ msgstr "Tiedostoa ei löydy"
 
 msgid "Final quantity"
 msgstr "Lopullinen määrä"
-
-msgid "Full returning"
-msgstr "Täysi palautus"
 
 msgid "Global balance"
 msgstr "Kokonaistasapaino"
@@ -2950,8 +2941,11 @@ msgstr "Profiilit (PDF)"
 msgid "Progress steps"
 msgstr "Edistymisen vaiheet"
 
-msgid "Prologues type"
-msgstr "Prologien tyyppi"
+msgid "Prologue types"
+msgstr "Prologityypit"
+
+msgid "Refund details"
+msgstr "Palautustiedot"
 
 msgid "Remove consent"
 msgstr "Suostumuksen poistaminen"
@@ -2967,9 +2961,6 @@ msgstr "Pyydä rekisteröitymistä"
 
 msgid "Requests open:"
 msgstr "Pyynnöt avoinna:"
-
-msgid "Returning type"
-msgstr "Palauttava tyyppi"
 
 msgid "Sensitive data"
 msgstr "Arkaluonteiset tiedot"
@@ -3789,6 +3780,9 @@ msgstr "Toteutuneet tulot:"
 msgid "Redeem collection"
 msgstr "Lunasta kokoelma"
 
+msgid "Refund percentage"
+msgstr "Palautusprosentti"
+
 msgid "Registration Form"
 msgstr "Rekisteröintilomake"
 
@@ -4405,9 +4399,6 @@ msgstr "Poista XP-palkinnosta"
 msgid "Require registration"
 msgstr "Edellyttää ilmoittautumista"
 
-msgid "Returning percentage"
-msgstr "Palautusprosentti"
-
 msgid "Select the new event"
 msgstr "Valitse uusi tapahtuma"
 
@@ -4881,9 +4872,6 @@ msgstr "Vähimmäisikä: %(number)d"
 
 msgid "Minimum number of votes"
 msgstr "Äänten vähimmäismäärä"
-
-msgid "Move registration event"
-msgstr "Siirrä tapahtuman ilmoittautuminen"
 
 msgid "No registrations found."
 msgstr "Rekisteröintejä ei löytynyt."
@@ -5416,6 +5404,10 @@ msgstr "Ennakkorekisteröintiä ei löydy."
 msgid "Question saved successfully"
 msgstr "Kysymys tallennettu onnistuneesti"
 
+#, python-format
+msgid "Refund for %(registration)s"
+msgstr "Palautus %(registration)s"
+
 msgid "Registration form questions"
 msgstr "Rekisteröintilomakkeen kysymykset"
 
@@ -5449,6 +5441,9 @@ msgstr "Organisaationne maa"
 #, python-format
 msgid "%(credits_name)s to be used:"
 msgstr "Käytettävät %(credits_name)s:"
+
+msgid "Allow registration transfers"
+msgstr "Salli rekisteröintien siirrot"
 
 msgid "Allow reserve signup anytime"
 msgstr "Salli varausilmoittautuminen milloin tahansa"
@@ -5792,8 +5787,8 @@ msgstr "Hallinnoi kaikkia tapahtuman tehtäviä"
 msgid "Manage the registration tickets"
 msgstr "Ilmoittautumislippujen hallinta"
 
-msgid "Manage the type of event quests"
-msgstr "Tapahtumatehtävien tyypin hallinta"
+msgid "Manage the types of event quest"
+msgstr "Hallitse tapahtumatehtävien tyyppejä"
 
 msgid "Membership Application Received"
 msgstr "Jäsenhakemus vastaanotettu"
@@ -6128,8 +6123,8 @@ msgstr "Hallinnoi kaikkia tämän tapahtuman esitteitä"
 msgid "Manage the registration surcharges"
 msgstr "Hallinnoi ilmoittautumisen lisämaksuja"
 
-msgid "Manage the type of event prologues"
-msgstr "Tapahtuman prologien tyypin hallinta"
+msgid "Manage the types of event prologue"
+msgstr "Hallitse tapahtuman alkupuoliskon tyyppejä"
 
 msgid "Manage your association membership"
 msgstr "Hallinnoi yhdistyksen jäsenyyttäsi"
@@ -6158,7 +6153,7 @@ msgid "Registration updated to %(event)s!"
 msgstr "Päivitetty ilmoittautuminen tapahtumaan %(event)s!"
 
 #, python-format
-msgid "Registrations opening at: %(date)s"
+msgid "Registrations opening on: %(date)s"
 msgstr "Ilmoittautumiset aukeavat: %(date)s"
 
 msgid "Review participants' personal data"
@@ -6783,9 +6778,6 @@ msgstr "Jos tarvitset apua, muista tarkistaa:"
 
 msgid "If you no longer wish to attend, you can"
 msgstr "Jos haluat perua osallistumisesi voit"
-
-msgid "If you wish to update your personal data"
-msgstr "Jos haluat päivittää henkilötietojasi"
 
 msgid "Invite a user by email to join this role"
 msgstr "Kutsu käyttäjä sähköpostitse tähän rooliin"
@@ -8533,6 +8525,9 @@ msgstr ""
 msgid "Assign the characters following the participants' preferences"
 msgstr "Määritä hahmot osallistujien mieltymysten mukaan"
 
+msgid "Cannot issue a refund: neither tokens nor credits are enabled"
+msgstr "Palautusta ei voida suorittaa: tokenit eivätkä krediitit ole käytössä"
+
 msgid "Display full history of participant preferences on characters"
 msgstr "Näytä osallistujien mieltymysten koko historia hahmoissa"
 
@@ -9269,10 +9264,6 @@ msgstr ""
 "Määritä varastotuotteet tapahtuman yhdelle tai useammalle alueelle tuote "
 "kerrallaan"
 
-msgid "Cannot process refund: Neither tokens nor credits features are enabled"
-msgstr ""
-"Palautusta ei voida käsitellä: Ei ole käytössä rahakkeita eikä hyvityksiä"
-
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Sen vuoden päivä, josta jäsenyysvuosi alkaa, muodossa pp-kk"
 
@@ -9402,6 +9393,12 @@ msgid ""
 msgstr ""
 "Ainoastaan pienet kirjaimet ja numerot ovat sallittuja, ei välilyöntejä tai "
 "symboleja"
+
+msgid ""
+"Refunds are unavailable because neither tokens nor credits are enabled."
+msgstr ""
+"Palautuksia ei ole saatavilla, koska tokenit ja krediitit eivät ole "
+"käytössä."
 
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
@@ -10791,6 +10788,14 @@ msgstr ""
 "Jos tämä asetus on käytössä, näytetään alkuperäinen täysikokoinen kuva "
 "pikkukuvan sijaan"
 
+#, python-format
+msgid ""
+"If you wish to update your personal data, <a href=\"%(profile_url)s\">click "
+"here</a>."
+msgstr ""
+"Jos haluat päivittää henkilötietojasi, <a href=\"%(profile_url)s\">klikkaa "
+"tästä</a>."
+
 msgid ""
 "No experience systems defined yet. Use the button above to create the first "
 "system."
@@ -11119,6 +11124,13 @@ msgstr ""
 "painiketta."
 
 msgid ""
+"Issue a refund in tokens or credits for a participant whose registration was"
+" cancelled"
+msgstr ""
+"Maksetaan hyvitys rahakkeina tai hyvityspisteinä osallistujalle, jonka "
+"ilmoittautuminen on peruutettu"
+
+msgid ""
 "Percentage of VAT to be calculated on the sum of the costs of the "
 "registration options"
 msgstr ""
@@ -11213,13 +11225,6 @@ msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
 "registration."
 msgstr "Maksuajat jaetaan vastaavasti tasan ilmoittautumispäivän perusteella."
-
-msgid ""
-"Process a token or credit refund for a participant who has cancelled their "
-"registration"
-msgstr ""
-"Käsittele osallistujan, joka on peruuttanut ilmoittautumisensa, maksutunnus-"
-" tai kredittipalautus"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"
@@ -12764,13 +12769,6 @@ msgid ""
 msgstr ""
 "Katso täydellinen luettelo tämän avustajan itsearvioimista osaamisalueista, "
 "mukaan lukien kokemustasot ja huomautukset"
-
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
-msgstr ""
-"Varoitus: Token- ja krediittitoimintoja ei ole otettu käyttöön. Hyvityksiä "
-"ei voida käsitellä virtuaalivaluuttana."
 
 #, python-format
 msgid ""

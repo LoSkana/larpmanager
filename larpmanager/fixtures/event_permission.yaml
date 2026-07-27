@@ -289,7 +289,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Quest type
-    descr: Manage the type of event quests
+    descr: Manage the types of event quest
     slug: orga_quest_types
     number: 51
     config: null
@@ -324,8 +324,8 @@
     module: quests
 - model: larpmanager.eventpermission
   fields:
-    name: Prologues type
-    descr: Manage the type of event prologues
+    name: Prologue types
+    descr: Manage the types of event prologue
     slug: orga_prologue_types
     number: 61
     config: null

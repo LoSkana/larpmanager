@@ -1256,9 +1256,6 @@ msgstr "Personlig"
 msgid "Portrait"
 msgstr "Portrettfoto"
 
-msgid "Position"
-msgstr "Stilling"
-
 msgid "Priority"
 msgstr "Prioritet"
 
@@ -1598,12 +1595,6 @@ msgstr "Forespurt"
 msgid "Residence"
 msgstr "Bolig"
 
-msgid "Retention"
-msgstr "Tilbakeholdelse"
-
-msgid "Returning"
-msgstr "Retur"
-
 msgid "Set quest"
 msgstr "Sett oppdrag"
 
@@ -1880,9 +1871,6 @@ msgstr "Spørsmål:"
 msgid "Recipients"
 msgstr "Mottakere"
 
-msgid "Refund for"
-msgstr "Refusjon for"
-
 msgid "Registered"
 msgstr "Innskrevet"
 
@@ -1979,9 +1967,6 @@ msgstr "Tilgangslenke"
 msgid "Access link"
 msgstr "Tilgangslenke"
 
-msgid "Actual paid"
-msgstr "Faktisk betalt"
-
 msgid "Add to plot"
 msgstr "Legg til i plottet"
 
@@ -1993,6 +1978,9 @@ msgstr "Landbruksturisme"
 
 msgid "Amount Paid"
 msgstr "Betalt beløp"
+
+msgid "Amount kept"
+msgstr "Beholdt beløp"
 
 msgid "Amount paid"
 msgstr "Utbetalt beløp"
@@ -2693,6 +2681,12 @@ msgstr "Publiser ansatte"
 msgid "Question type"
 msgstr "Type spørsmål"
 
+msgid "Refund amount"
+msgstr "Tilbakebetalingsbeløp"
+
+msgid "Refund method"
+msgstr "Tilbakebetalingsmåte"
+
 msgid "Registrations"
 msgstr "Registrering"
 
@@ -2704,9 +2698,6 @@ msgstr "Krever innlogging"
 
 msgid "Requirements:"
 msgstr "Krav:"
-
-msgid "See you soon!"
-msgstr "Vi venter på deg!"
 
 msgid "Self-catering"
 msgstr "Selvhushold"
@@ -2812,6 +2803,9 @@ msgstr "Samle inn for"
 msgid "Communications"
 msgstr "Kommunikasjon"
 
+msgid "Confirm refund"
+msgstr "Bekreft refusjon"
+
 msgid "Credit balance"
 msgstr "Kredittsaldo"
 
@@ -2856,9 +2850,6 @@ msgstr "Filen ble ikke funnet"
 
 msgid "Final quantity"
 msgstr "Endelig mengde"
-
-msgid "Full returning"
-msgstr "Fullstendig restitusjon"
 
 msgid "Global balance"
 msgstr "Global balanse"
@@ -2950,8 +2941,11 @@ msgstr "Profiler (PDF)"
 msgid "Progress steps"
 msgstr "Fremdriftstrinn"
 
-msgid "Prologues type"
-msgstr "Prologtype"
+msgid "Prologue types"
+msgstr "Typer av prologer"
+
+msgid "Refund details"
+msgstr "Informasjon om refusjon"
 
 msgid "Remove consent"
 msgstr "Fjern samtykke"
@@ -2967,9 +2961,6 @@ msgstr "Be om registrering"
 
 msgid "Requests open:"
 msgstr "Åpne forespørsler:"
-
-msgid "Returning type"
-msgstr "Returtype"
 
 msgid "Sensitive data"
 msgstr "Følsomme data"
@@ -3789,6 +3780,9 @@ msgstr "Realiserte inntekter:"
 msgid "Redeem collection"
 msgstr "Løs inn samlingen"
 
+msgid "Refund percentage"
+msgstr "Refusjonsprosent"
+
 msgid "Registration Form"
 msgstr "Registreringsskjema"
 
@@ -4405,9 +4399,6 @@ msgstr "Fjern fra XP-tildeling"
 msgid "Require registration"
 msgstr "Krev registrering"
 
-msgid "Returning percentage"
-msgstr "Retur prosent"
-
 msgid "Select the new event"
 msgstr "Velg den nye hendelsen"
 
@@ -4881,9 +4872,6 @@ msgstr "Minimumsalder: %(number)d"
 
 msgid "Minimum number of votes"
 msgstr "Minimum antall stemmer"
-
-msgid "Move registration event"
-msgstr "Flytt registreringsarrangement"
 
 msgid "No registrations found."
 msgstr "Ingen registreringer funnet."
@@ -5416,6 +5404,10 @@ msgstr "Forhåndsregistrering ikke funnet."
 msgid "Question saved successfully"
 msgstr "Spørsmålet ble lagret"
 
+#, python-format
+msgid "Refund for %(registration)s"
+msgstr "Tilbakebetaling for %(registration)s"
+
 msgid "Registration form questions"
 msgstr "Spørsmål til registreringsskjemaet"
 
@@ -5449,6 +5441,9 @@ msgstr "Organisasjonens land"
 #, python-format
 msgid "%(credits_name)s to be used:"
 msgstr "%(credits_name)s som skal brukes:"
+
+msgid "Allow registration transfers"
+msgstr "Tillat overføring av registreringer"
 
 msgid "Allow reserve signup anytime"
 msgstr "Tillat påmelding til reservelisten når som helst"
@@ -5792,8 +5787,8 @@ msgstr "Administrer alle oppdragene for arrangementet"
 msgid "Manage the registration tickets"
 msgstr "Administrer registreringsbilletter"
 
-msgid "Manage the type of event quests"
-msgstr "Administrer typen hendelsesoppdrag"
+msgid "Manage the types of event quest"
+msgstr "Administrer typene av begivenhetsoppdrag"
 
 msgid "Membership Application Received"
 msgstr "Medlemssøknad mottatt"
@@ -6128,8 +6123,8 @@ msgstr "Administrer alle handouts for dette arrangementet"
 msgid "Manage the registration surcharges"
 msgstr "Administrer registreringstilleggsavgifter"
 
-msgid "Manage the type of event prologues"
-msgstr "Administrer typen hendelsesprologer"
+msgid "Manage the types of event prologue"
+msgstr "Administrer typene av innledninger til arrangementer"
 
 msgid "Manage your association membership"
 msgstr "Administrer ditt medlemskap i foreningen"
@@ -6158,7 +6153,7 @@ msgid "Registration updated to %(event)s!"
 msgstr "Registrering oppdatert til %(event)s!"
 
 #, python-format
-msgid "Registrations opening at: %(date)s"
+msgid "Registrations opening on: %(date)s"
 msgstr "Registreringene åpner kl: %(date)s"
 
 msgid "Review participants' personal data"
@@ -6783,9 +6778,6 @@ msgstr "Hvis du trenger hjelp, husk å sjekke ut:"
 
 msgid "If you no longer wish to attend, you can"
 msgstr "Hvis du ikke lenger ønsker å delta, kan du"
-
-msgid "If you wish to update your personal data"
-msgstr "Hvis du ønsker å oppdatere personopplysningene dine"
 
 msgid "Invite a user by email to join this role"
 msgstr "Inviter en bruker via e-post til å bli tilknyttet denne rollen"
@@ -8536,6 +8528,9 @@ msgstr "Lagt til nederst i e-posten som bekrefter påmeldingen til deltakerne"
 msgid "Assign the characters following the participants' preferences"
 msgstr "Tildel tegnene i henhold til deltakernes preferanser"
 
+msgid "Cannot issue a refund: neither tokens nor credits are enabled"
+msgstr "Kan ikke utbetale refusjon: verken tokens eller kreditter er aktivert"
+
 msgid "Display full history of participant preferences on characters"
 msgstr "Vis full historikk over deltakernes preferanser på tegn"
 
@@ -9279,11 +9274,6 @@ msgstr ""
 "Tilordne lagerartikler til ett eller flere områder på arrangementet, én "
 "artikkel om gangen"
 
-msgid "Cannot process refund: Neither tokens nor credits features are enabled"
-msgstr ""
-"Kan ikke behandle refusjon: Verken tokens- eller kredittfunksjoner er "
-"aktivert"
-
 msgid "Day of the year from which the membership year begins, in DD-MM format"
 msgstr "Dag i året som foreningsåret begynner fra, i formatet DD-MM"
 
@@ -9406,6 +9396,12 @@ msgstr ""
 msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
 msgstr "Kun små bokstaver og tall er tillatt, ingen mellomrom eller symboler"
+
+msgid ""
+"Refunds are unavailable because neither tokens nor credits are enabled."
+msgstr ""
+"Det er ikke mulig å få refusjon, siden verken tokens eller kreditter er "
+"aktivert."
 
 msgid ""
 "Select a valid choice. That choice is not one of the available choices."
@@ -10800,6 +10796,14 @@ msgstr ""
 "Hvis denne funksjonen er aktivert, vises det opprinnelige bildet i full "
 "størrelse i stedet for miniatyrbildet"
 
+#, python-format
+msgid ""
+"If you wish to update your personal data, <a href=\"%(profile_url)s\">click "
+"here</a>."
+msgstr ""
+"Hvis du ønsker å oppdatere dine personopplysninger, <a "
+"href=\"%(profile_url)s\">klikk her</a>."
+
 msgid ""
 "No experience systems defined yet. Use the button above to create the first "
 "system."
@@ -11126,6 +11130,13 @@ msgstr ""
 "denne knappen."
 
 msgid ""
+"Issue a refund in tokens or credits for a participant whose registration was"
+" cancelled"
+msgstr ""
+"Utbetal en refusjon i form av tokens eller kreditt til en deltaker som har "
+"fått sin påmelding kansellert"
+
+msgid ""
 "Percentage of VAT to be calculated on the sum of the costs of the "
 "registration options"
 msgstr ""
@@ -11219,13 +11230,6 @@ msgid ""
 "Payment deadlines will be similarly equally divided, based on the date of "
 "registration."
 msgstr "Betalingsfristene fordeles likt i henhold til registreringsdatoen."
-
-msgid ""
-"Process a token or credit refund for a participant who has cancelled their "
-"registration"
-msgstr ""
-"Behandle en refusjon av token eller kreditt for en deltaker som har avmeldt "
-"seg"
 
 msgid ""
 "Upload the scan of both your signed request, and your document (image or pdf"
@@ -12784,13 +12788,6 @@ msgid ""
 msgstr ""
 "Se den fullstendige listen over kompetanser som denne bidragsyteren har "
 "vurdert selv, inkludert erfaringsnivåer og merknader"
-
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
-msgstr ""
-"Advarsel: Verken token- eller kredittfunksjonene er aktivert. Refusjoner kan"
-" ikke behandles som virtuell valuta."
 
 #, python-format
 msgid ""
