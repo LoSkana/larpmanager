@@ -878,7 +878,7 @@ msgid "Inflows"
 msgstr "Wpływy"
 
 msgid "Inverse"
-msgstr "Odwrotność"
+msgstr "Odwrotny"
 
 msgid "Invited"
 msgstr "Zaproszony"
@@ -1179,7 +1179,7 @@ msgid "Features"
 msgstr "Funkcje"
 
 msgid "Giftable"
-msgstr "Nadaje się na prezent"
+msgstr "Podarowalny"
 
 msgid "Handouts"
 msgstr "Handouty"
@@ -1248,7 +1248,7 @@ msgid "Payments"
 msgstr "Płatności"
 
 msgid "Pdf bulk"
-msgstr "Pdf luzem"
+msgstr "Pdf masowo"
 
 msgid "Personal"
 msgstr "Osobiste"
@@ -1956,7 +1956,7 @@ msgid "Volunteers"
 msgstr "Wolontariusze"
 
 msgid "Welcome to"
-msgstr "Witamy w"
+msgstr "Witaj w (singular) or Zapraszamy do (plural collective, if intended)"
 
 msgid "accounting"
 msgstr "księgowość"
@@ -1980,7 +1980,9 @@ msgid "Access link"
 msgstr "Łącze dostępu"
 
 msgid "Actual paid"
-msgstr "Rzeczywista płatność"
+msgstr ""
+"Rzeczywista zapłata or Zapłacona kwota (noun phrase matching Polish "
+"structure but preserving adjective sense)"
 
 msgid "Add to plot"
 msgstr "Dodaj do fabuły"
@@ -2064,7 +2066,7 @@ msgid "Event Texts"
 msgstr "Teksty wydarzeń"
 
 msgid "Event texts"
-msgstr "Teksty wydarzeń"
+msgstr "Teksty wydarzenia (to match singular event scope)"
 
 msgid "Fiscal code"
 msgstr "Kod fiskalny"
@@ -2253,7 +2255,7 @@ msgid "Activity Log"
 msgstr "Dziennik aktywności"
 
 msgid "Add from NPC"
-msgstr "Dodaj od NPC"
+msgstr "Aggiungi da NPC"
 
 msgid "Add prologue"
 msgstr "Dodaj prolog"
@@ -2427,7 +2429,7 @@ msgid "Tech Support"
 msgstr "Pomoc techniczna"
 
 msgid "Tell me more"
-msgstr "Dowiedz się więcej"
+msgstr "Powiedz mi więcej"
 
 msgid "Test gallery"
 msgstr "Galeria testowa"
@@ -2709,7 +2711,7 @@ msgid "See you soon!"
 msgstr "Czekamy na ciebie!"
 
 msgid "Self-catering"
-msgstr "Wyżywienie we własnym zakresie"
+msgstr "Samodzielne wyżywienie i zakwaterowanie"
 
 msgid "Shared secret"
 msgstr "Wspólny sekret"
@@ -3036,7 +3038,7 @@ msgstr "wybierz odznakę"
 
 #, python-format
 msgid "%(name)s issued"
-msgstr "Wydano %(name)s"
+msgstr "Przyznane przez %(name)s"
 
 msgid "Ability missing"
 msgstr "Brak umiejętności"
@@ -3733,7 +3735,7 @@ msgid "No transfers yet."
 msgstr "Brak transferów."
 
 msgid "Not participating"
-msgstr "Nienauczestniczący"
+msgstr "Nieuczestniczący"
 
 msgid "One-Time Contents"
 msgstr "Zawartości jednorazowe"
@@ -4182,7 +4184,7 @@ msgid "Photo of the object"
 msgstr "Zdjęcie obiektu"
 
 msgid "Preferences - Total"
-msgstr "Preferencje - ogółem"
+msgstr "Preferencje - Razem"
 
 msgid "Quotas total number"
 msgstr "Całkowita liczba kontyngentów"
@@ -4370,7 +4372,7 @@ msgid "Player relationships"
 msgstr "Relacje między graczami"
 
 msgid "Plot-character roles"
-msgstr "Role fabularne i role postaci"
+msgstr "Role fabularne-postaci"
 
 msgid "Preference not valid"
 msgstr "Preferencja nieważna"
@@ -4515,7 +4517,7 @@ msgid "Make the request now!"
 msgstr "Złóż wniosek teraz!"
 
 msgid "Manage warehouse tags"
-msgstr "Zarządzanie znacznikami magazynu"
+msgstr "Zarządzaj znacznikami magazynu"
 
 msgid "Name of the character"
 msgstr "Nazwa postaci"
@@ -4594,7 +4596,7 @@ msgid "Token not initialized"
 msgstr "Token nie został zainicjowany"
 
 msgid "Transfer registration"
-msgstr "Rejestracja transferu"
+msgstr "Przenieś rejestrację"
 
 msgid "Type your question..."
 msgstr "Wpisz swoje pytanie..."
@@ -4694,7 +4696,7 @@ msgid "Manage refund requests"
 msgstr "Zarządzaj wnioskami o zwrot pieniędzy"
 
 msgid "Manage the event plots"
-msgstr "Zarządzaj intrygi / wątkami / fabułami wydarzenia"
+msgstr "Zarządzaj fabułami wydarzenia"
 
 msgid "Manage warehouse items"
 msgstr "Zarządzaj pozycjami magazynowymi"
@@ -4934,7 +4936,7 @@ msgid "Show available factions"
 msgstr "Pokaż dostępne frakcje"
 
 msgid "The genre of your event"
-msgstr "Gatunek wydarzenia"
+msgstr "Gatunek twojego wydarzenia"
 
 msgid "The participant's email"
 msgstr "Adres e-mail uczestnika"
@@ -4991,7 +4993,7 @@ msgid "Lightweight sheet (Test)"
 msgstr "Lekki arkusz (test)"
 
 msgid "Manage area of the event"
-msgstr "Zarządzanie obszarem wydarzenia"
+msgstr "Zarządzaj obszarem wydarzenia"
 
 msgid "Manages event's expenses"
 msgstr "Zarządza wydatkami związanymi z wydarzeniem"
@@ -5054,10 +5056,10 @@ msgid "Select a valid character"
 msgstr "Wybierz prawidłową postać"
 
 msgid "Signup request approved!"
-msgstr "Twoja prośba o rejestrację została zatwierdzona!"
+msgstr "Prośba o rejestrację zatwierdzona!"
 
 msgid "Signup request rejected!"
-msgstr "Twoja prośba o rejestrację została odrzucona!"
+msgstr "Prośba o rejestrację odrzucona!"
 
 msgid "Target session not found"
 msgstr "Nie znaleziono sesji docelowej"
@@ -5127,7 +5129,7 @@ msgid "Error reading backup file"
 msgstr "Błąd odczytu pliku kopii zapasowej"
 
 msgid "Generate a new ILDB token"
-msgstr "Generowanie nowego tokena ILDB"
+msgstr "Wygeneruj nowy token ILDB"
 
 msgid "Go to the quests of type:"
 msgstr "Przejdź do zadań typu:"
@@ -5145,16 +5147,16 @@ msgid "Kitchen - food, tableware"
 msgstr "Kuchnia - żywność, zastawa stołowa"
 
 msgid "Manage experience systems"
-msgstr "Zarządzanie systemami doświadczeń"
+msgstr "Zarządzaj systemami doświadczeń"
 
 msgid "Manage the event factions"
-msgstr "Zarządzanie frakcjami wydarzenia"
+msgstr "Zarządzaj frakcjami wydarzenia"
 
 msgid "Manage the event handouts"
-msgstr "Zarządzanie handoutami wydarzenia"
+msgstr "Zarządzaj handoutami wydarzenia"
 
 msgid "Manage volunteer registry"
-msgstr "Zarządzanie rejestrem wolontariuszy"
+msgstr "Zarządzaj rejestrem wolontariuszy"
 
 msgid "Member promoted to admin!"
 msgstr "Członek awansowany na administratora!"
@@ -5234,7 +5236,7 @@ msgid "Access the event dashboard"
 msgstr "Przejdź do pulpitu nawigacyjnego wydarzenia"
 
 msgid "Access you character sheet"
-msgstr "Uzyskaj dostęp do arkusza postaci"
+msgstr "Przejdź do arkusza postaci"
 
 msgid "Can't copy from same event"
 msgstr "Nie można kopiować z tego samego zdarzenia"
@@ -5261,10 +5263,10 @@ msgid "Hide unassigned characters"
 msgstr "Ukryj nieprzypisane postaci"
 
 msgid "Manage the event prologues"
-msgstr "Zarządzanie prologami wydarzeń"
+msgstr "Zarządzaj prologami wydarzenia"
 
 msgid "Manage warehouse movements"
-msgstr "Zarządzanie ruchami magazynowymi"
+msgstr "Zarządzaj ruchami magazynowymi"
 
 msgid "Now you can create inflows"
 msgstr "Teraz możesz tworzyć napływy"
@@ -5279,7 +5281,7 @@ msgid "Pre-register to the event!"
 msgstr "Zarejestruj się wstępnie na to wydarzenie!"
 
 msgid "Receipt already confirmed."
-msgstr "Odbiór już potwierdzony."
+msgstr "Paragon już potwierdzony."
 
 #, python-format
 msgid "Registration for %(event)s"
@@ -5326,7 +5328,7 @@ msgstr "Utrzymuj to krótkie i angażujące"
 
 #, python-format
 msgid "%(tokens_name)s to be used:"
-msgstr "Należy użyć następujących %(tokens_name)s:"
+msgstr "%(tokens_name)s do wykorzystania:"
 
 msgid "(click on image to enlarge)"
 msgstr "(kliknij na obrazek, aby powiększyć)"
@@ -5335,7 +5337,7 @@ msgid "Ability no longer available"
 msgstr "Ta umiejętność nie jest już dostępna"
 
 msgid "Activate new event features"
-msgstr "Aktywacja nowych funkcji wydarzenia"
+msgstr "Aktywuj nowe funkcje wydarzenia"
 
 msgid "Check inverse relationship:"
 msgstr "Sprawdzaj odwrotną zależność:"
@@ -5375,16 +5377,16 @@ msgid "Loading performed, see logs"
 msgstr "Wykonano ładowanie, patrz dzienniki"
 
 msgid "Manage experience modifiers"
-msgstr "Zarządzanie modyfikatorami doświadczenia"
+msgstr "Zarządzaj modyfikatorami doświadczenia"
 
 msgid "Manage quiz-style workshops"
-msgstr "Zarządzanie warsztatami w formie quizu"
+msgstr "Zarządzaj warsztatami w formie quizu"
 
 msgid "Manage the event characters"
-msgstr "Zarządzanie postaciami wydarzenia"
+msgstr "Zarządzaj postaciami wydarzenia"
 
 msgid "Manage warehouse containers"
-msgstr "Zarządzanie kontenerami magazynowymi"
+msgstr "Zarządzaj kontenerami magazynowymi"
 
 msgid "Meals included in the event"
 msgstr "Posiłki wliczone w cenę wydarzenia"
@@ -5426,7 +5428,7 @@ msgid "Set up dynamic installments"
 msgstr "Skonfiguruj dynamiczne raty"
 
 msgid "Set up registration tickets"
-msgstr "Konfiguracja biletów rejestracyjnych"
+msgstr "Skonfiguruj bilety rejestracyjne"
 
 msgid "Ticket name (keep it short)"
 msgstr "Nazwa biletu (trzymaj krótko)"
@@ -5448,7 +5450,7 @@ msgstr "Kraj Twojej organizacji"
 
 #, python-format
 msgid "%(credits_name)s to be used:"
-msgstr "Liczba %(credits_name)s do wykorzystania:"
+msgstr "%(credits_name)s do wykorzystania:"
 
 msgid "Allow reserve signup anytime"
 msgstr "Zezwól na rejestrację w rezerwie w dowolnym momencie"
@@ -5470,7 +5472,7 @@ msgid "Current status of this event"
 msgstr "Aktualny status tego wydarzenia"
 
 msgid "Define the registration form"
-msgstr "Definiowanie formularza rejestracyjnego"
+msgstr "Definiuj formularz rejestracyjny"
 
 msgid "Delay in profile compilation"
 msgstr "Opóźnienie w kompilacji profilu"
@@ -5501,7 +5503,7 @@ msgid "Manage experience criterions"
 msgstr "Zarządzaj kryteriami doświadczenia"
 
 msgid "Manage the event speed-larps"
-msgstr "Zarządzanie speed-larpami wydarzenia"
+msgstr "Zarządzaj speed-larpami wydarzenia"
 
 msgid "Membership request submitted"
 msgstr "Złożono wniosek o członkostwo"
@@ -5728,7 +5730,7 @@ msgid "The total registration fee is:"
 msgstr "Całkowita opłata rejestracyjna wynosi:"
 
 msgid "Type of accommodation included"
-msgstr "Rodzaj zakwaterowania wliczony w cenę"
+msgstr "Rodzaj zakwaterowania zawarty"
 
 msgid "Unconverted pre-registrations:"
 msgstr "Niekonwertowane rejestracje wstępne:"
@@ -5784,7 +5786,7 @@ msgid "Full address of the association"
 msgstr "Pełny adres stowarzyszenia"
 
 msgid "Manage all plots for this event"
-msgstr "Zarządzaj wszystkimi intrigami dla tego wydarzenia"
+msgstr "Zarządzaj wszystkimi wątkami fabularnymi dla tego wydarzenia"
 
 msgid "Manage all quests for the event"
 msgstr "Zarządzaj wszystkimi zadaniami związanymi z wydarzeniem"
@@ -6030,7 +6032,7 @@ msgid "Is it selectable by participants?"
 msgstr "Czy można go wybrać dla uczestników?"
 
 msgid "Manage speed larps for this event"
-msgstr "Zajmij się organizacją szybkich larpów na tę imprezę"
+msgstr "Zarządzaj szybkimi larpami dla tego wydarzenia"
 
 #, python-format
 msgid "New support request from %(user)s"

@@ -617,7 +617,7 @@ msgid "Locked"
 msgstr "Bloccato"
 
 msgid "Log in"
-msgstr "Log in"
+msgstr "Accedi"
 
 msgid "Manage"
 msgstr "Gestisci"
@@ -1113,7 +1113,7 @@ msgid "Computed"
 msgstr "Calcolato"
 
 msgid "Consumed"
-msgstr "Consumati"
+msgstr "Consumato"
 
 msgid "Contact:"
 msgstr "Contatto:"
@@ -1137,7 +1137,7 @@ msgid "Deployed"
 msgstr "Schierato"
 
 msgid "Disabled"
-msgstr "Disabilitata"
+msgstr "Disabilitato"
 
 msgid "Discount"
 msgstr "Sconto"
@@ -1305,7 +1305,7 @@ msgid "Redirect"
 msgstr "Redirect"
 
 msgid "Refunded"
-msgstr "Rimborsati"
+msgstr "Rimborsato"
 
 msgid "Register"
 msgstr "Iscrizione"
@@ -1332,7 +1332,7 @@ msgid "Resource"
 msgstr "Risorsa"
 
 msgid "Returned"
-msgstr "Restituiti"
+msgstr "Restituito"
 
 msgid "Revision"
 msgstr "Revisione"
@@ -2253,7 +2253,7 @@ msgid "Activity Log"
 msgstr "Log di attività"
 
 msgid "Add from NPC"
-msgstr "Aggiungi da PNG"
+msgstr "Aggiungi da NPC"
 
 msgid "Add prologue"
 msgstr "Aggiungi prologo"
@@ -2313,7 +2313,7 @@ msgid "Faction logo"
 msgstr "Logo della fazione"
 
 msgid "Form section"
-msgstr "Sezione form"
+msgstr "Sezione modulo"
 
 msgid "Full payment"
 msgstr "Pagamento completo"
@@ -2430,7 +2430,7 @@ msgid "Tell me more"
 msgstr "Dimmi di più"
 
 msgid "Test gallery"
-msgstr "Test galleria"
+msgstr "Galleria di prova"
 
 msgid "Three quotas"
 msgstr "Tre quote"
@@ -2595,7 +2595,7 @@ msgid "External site"
 msgstr "Sito esterno"
 
 msgid "Faction cover"
-msgstr "Copertina gruppo"
+msgstr "Copertina della fazione"
 
 msgid "Fiscal Budget"
 msgstr "Bilancio fiscale"
@@ -3324,7 +3324,7 @@ msgid "Ability removed!"
 msgstr "Abilità rimossa!"
 
 msgid "Activate feature"
-msgstr "Attiva feature"
+msgstr "Attiva funzionalità"
 
 msgid "Amount breakdown"
 msgstr "Ripartizione degli importi"
@@ -3637,7 +3637,7 @@ msgid "Credit assignment"
 msgstr "Assegnazione dei crediti"
 
 msgid "Current template:"
-msgstr "Template attuale:"
+msgstr "Modello attuale:"
 
 msgid "Custom title font"
 msgstr "Font del titolo personalizzato"
@@ -4140,7 +4140,7 @@ msgid "History preferences"
 msgstr "Storico preferenze"
 
 msgid "I am not interested"
-msgstr "Non sono interessato"
+msgstr "Non mi interessa"
 
 msgid "Informations saved!"
 msgstr "Informazioni salvate!"
@@ -4330,7 +4330,7 @@ msgid "New pre-registration"
 msgstr "Nuova preiscrizione"
 
 msgid "Not available, kiddo"
-msgstr "Non disponibile, caro"
+msgstr "Non disponibile, amico"
 
 msgid "Notifications digest"
 msgstr "Digest delle notifiche"
@@ -4491,7 +4491,7 @@ msgid "Disable amount change"
 msgstr "Disabilita cambio ammontare"
 
 msgid "Failed password reset"
-msgstr "Password reset fallito"
+msgstr "Reimpostazione della password fallita"
 
 msgid "Failed to add faction"
 msgstr "Impossibile aggiungere la fazione"
@@ -4530,7 +4530,7 @@ msgid "Object does not exist"
 msgstr "Oggetto non esiste"
 
 msgid "One-Time Access Token"
-msgstr "Token di accesso una tantum"
+msgstr "Token di accesso monouso"
 
 msgid "Operation not allowed"
 msgstr "Operazione non consentita"
@@ -4543,7 +4543,7 @@ msgid "Participant questions"
 msgstr "Domande dei partecipanti"
 
 msgid "Pre-registration link"
-msgstr "Link pre-iscrizioni"
+msgstr "Link per pre-iscrizioni"
 
 msgid "Prop - weapons, props"
 msgstr "Prop - armi, oggetti di scena"
@@ -4634,7 +4634,7 @@ msgid "Activate advanced mode"
 msgstr "Attiva la modalità avanzata"
 
 msgid "Additional Preferences"
-msgstr "Preferenze addizionali"
+msgstr "Preferenze aggiuntive"
 
 msgid "Advanced Mode Enabled!"
 msgstr "Modalità avanzata abilitata!"
@@ -4721,7 +4721,7 @@ msgid "No organization found."
 msgstr "Nessuna organizzazione trovata."
 
 msgid "One-Time Access Tokens"
-msgstr "Token di accesso una tantum"
+msgstr "Token di accesso monouso"
 
 msgid "Payment membership fee"
 msgstr "Pagamento quota associativa"
@@ -4791,7 +4791,7 @@ msgid "Workshop already done!"
 msgstr "Workshop già superato!"
 
 msgid "Workshop option answer"
-msgstr "Risposta sull'opzione \"Workshop\""
+msgstr "Risposta alla domanda sul workshop"
 
 msgid "give them this address"
 msgstr "dai loro questo indirizzo"
@@ -4849,7 +4849,7 @@ msgid "Follow the steps below:"
 msgstr "Segui i seguenti passaggi:"
 
 msgid "Includes membership fee"
-msgstr "Include la quota associativa"
+msgstr "Comprende la quota associativa"
 
 msgid "Join the collection for"
 msgstr "Partecipa alla colletta per"
@@ -4892,7 +4892,7 @@ msgid "Number of partecipants:"
 msgstr "Numero di partecipanti:"
 
 msgid "One-Time Access Warning"
-msgstr "Avviso di accesso una tantum"
+msgstr "Avviso di accesso monouso"
 
 msgid "Password Reset Requests"
 msgstr "Richieste di reimpostazione della password"
@@ -4991,7 +4991,7 @@ msgid "Lightweight sheet (Test)"
 msgstr "Scheda leggera (Test)"
 
 msgid "Manage area of the event"
-msgstr "Gestione dell'area dell'evento"
+msgstr "Gestisci l'area dell'evento"
 
 msgid "Manages event's expenses"
 msgstr "Gestisce le spese dell'evento"
@@ -5036,7 +5036,7 @@ msgid "Provisional registration"
 msgstr "Iscrizione provvisoria"
 
 msgid "Referred Friend Discount"
-msgstr "Sconto per amici segnalati"
+msgstr "Sconto per amico consigliato"
 
 msgid "Referrer Reward Discount"
 msgstr "Sconto per chi presenta un amico"
@@ -5145,7 +5145,7 @@ msgid "Kitchen - food, tableware"
 msgstr "Cucina - cibo, stoviglie"
 
 msgid "Manage experience systems"
-msgstr "Gestire i sistemi di esperienza"
+msgstr "Gestisci i sistemi di esperienza"
 
 msgid "Manage the event factions"
 msgstr "Gestisci le fazioni dell'evento"
@@ -5501,7 +5501,7 @@ msgid "Manage experience criterions"
 msgstr "Gestisci i criteri relativi all'esperienza"
 
 msgid "Manage the event speed-larps"
-msgstr "Gestisci gli eventi speed-larps"
+msgstr "Gestisci gli speed-larps dell'evento"
 
 msgid "Membership request submitted"
 msgstr "Richiesta di associazione inviata"
@@ -6240,7 +6240,7 @@ msgid "Insert the html code for the footer"
 msgstr "Inserisci il codice html per il piè di pagina"
 
 msgid "Insert the html code for the header"
-msgstr "Inserisci il codice html per la intestazione"
+msgstr "Inserisci il codice html per l'intestazione"
 
 msgid "Invalid or expired unsubscribe link"
 msgstr "Link di cancellazione non valido o scaduto"
@@ -7090,7 +7090,7 @@ msgid "Assign selected characters to participants."
 msgstr "Assegna i personaggi selezionati ai partecipanti."
 
 msgid "Authentication token (mark all permissions)"
-msgstr "Token di autenticazione (contrassegnare tutte le autorizzazioni)"
+msgstr "Token di autenticazione (contrassegna tutte le autorizzazioni)"
 
 msgid "Browse events that have already taken place"
 msgstr "Scopri gli eventi che si sono già svolti"
@@ -7920,7 +7920,7 @@ msgid "Your organization's unique subdomain in the platform"
 msgstr "Il sottodominio unico della tua organizzazione nella piattaforma"
 
 msgid " here the conditions of disenrollment for this event."
-msgstr " qui le condizioni di discrizione per questo evento."
+msgstr " qui le condizioni di disiscrizione per questo evento."
 
 msgid "As a final step, we ask you to complete your profile."
 msgstr "Come ultimo passaggio ti chiediamo di completare il tuo profilo."
@@ -7957,7 +7957,7 @@ msgid "Manage photo and video albums uploaded for this event"
 msgstr "Gestisci gli album di foto e video caricati per questo evento"
 
 msgid "No characters have been assigned this role value yet."
-msgstr "A nessun carattere è stato ancora assegnato questo valore di ruolo."
+msgstr "A nessun personaggio è stato ancora assegnato questo valore di ruolo."
 
 msgid "No characters have been assigned to this faction yet."
 msgstr "A questa fazione non è stato ancora assegnato nessun personaggio."

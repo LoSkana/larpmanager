@@ -183,7 +183,7 @@ msgid "Plot"
 msgstr "Handling"
 
 msgid "Prev"
-msgstr "Före"
+msgstr "Föregående"
 
 msgid "Read"
 msgstr "Läs"
@@ -397,7 +397,7 @@ msgid "Plots"
 msgstr "Handlingar"
 
 msgid "Prev:"
-msgstr "Före:"
+msgstr "Föregående:"
 
 msgid "Price"
 msgstr "Pris"
@@ -467,7 +467,7 @@ msgid "Trait"
 msgstr "Drag"
 
 msgid "Trash"
-msgstr "Skräp"
+msgstr "Papperskorg"
 
 msgid "Type:"
 msgstr "Typ:"
@@ -536,7 +536,7 @@ msgid "Copied"
 msgstr "Kopierad"
 
 msgid "Counts"
-msgstr "Räkningar"
+msgstr "Antal"
 
 msgid "Create"
 msgstr "Skapa"
@@ -1002,7 +1002,7 @@ msgid "Sign In"
 msgstr "Logga in"
 
 msgid "Station"
-msgstr "Arbetsstation"
+msgstr "Station"
 
 msgid "Status:"
 msgstr "Status:"
@@ -1026,7 +1026,7 @@ msgid "Systems"
 msgstr "System"
 
 msgid "Tagline"
-msgstr "Tagline"
+msgstr "Slagord"
 
 msgid "Ticket:"
 msgstr "Biljett:"
@@ -1206,7 +1206,7 @@ msgid "Manifest"
 msgstr "Manifest"
 
 msgid "Max uses"
-msgstr "Maximal användning"
+msgstr "Maximalt antal använder"
 
 msgid "Messages"
 msgstr "Meddelanden"
@@ -1242,13 +1242,13 @@ msgid "Partners"
 msgstr "Partner"
 
 msgid "Passport"
-msgstr "Passport"
+msgstr "Pass"
 
 msgid "Payments"
 msgstr "Betalningar"
 
 msgid "Pdf bulk"
-msgstr "PDF massiv"
+msgstr "PDF-paket"
 
 msgid "Personal"
 msgstr "Personal"
@@ -1599,7 +1599,7 @@ msgid "Residence"
 msgstr "Bostad"
 
 msgid "Retention"
-msgstr "Avdrag"
+msgstr "Innehållning"
 
 msgid "Returning"
 msgstr "Återgång"
@@ -1725,7 +1725,7 @@ msgid "Chronology"
 msgstr "Kronologi"
 
 msgid "Collection"
-msgstr "Insamling"
+msgstr "Penninginsamling"
 
 msgid "Completed!"
 msgstr "Färdigställd!"
@@ -2034,7 +2034,7 @@ msgid "Characters:"
 msgstr "Karaktärer:"
 
 msgid "Collections"
-msgstr "Insamlingar"
+msgstr "Penninginsamlingar"
 
 msgid "Coming soon"
 msgstr "Kommer snart"
@@ -2370,7 +2370,7 @@ msgid "Organization"
 msgstr "Förening"
 
 msgid "PDF Profiles"
-msgstr "Pdf-profiler"
+msgstr "PDF-profiler"
 
 msgid "Participants"
 msgstr "Deltagare"
@@ -3011,7 +3011,7 @@ msgid "Type prologues"
 msgstr "Typ av prolog"
 
 msgid "URL identifier"
-msgstr "URL-identifierare"
+msgstr "URL-identifikator"
 
 msgid "Wanna connect?"
 msgstr "Vill du ansluta dig?"
@@ -3036,7 +3036,7 @@ msgstr "välj ett märke"
 
 #, python-format
 msgid "%(name)s issued"
-msgstr "%(name)s har utfärdats"
+msgstr "Tilldelningar från %(name)s"
 
 msgid "Ability missing"
 msgstr "Förmåga saknas"
@@ -3384,7 +3384,7 @@ msgid "Event accounting"
 msgstr "Redovisning av evenemang"
 
 msgid "Event navigation"
-msgstr "Navigation för evenemang"
+msgstr "Navigering för evenemang"
 
 msgid "Expected revenue"
 msgstr "Förväntade intäkter"
@@ -3510,7 +3510,7 @@ msgid "Remove character"
 msgstr "Ta bort karaktär"
 
 msgid "Remove from plot"
-msgstr "Ta bort från intrigan"
+msgstr "Ta bort från plotten"
 
 msgid "Request approved"
 msgstr "Begäran godkänd"
@@ -4643,7 +4643,7 @@ msgid "Age (during the event)"
 msgstr "Ålder (vid händelsen)"
 
 msgid "Arrived safe and sound"
-msgstr "Anlände säkra och oskadd"
+msgstr "Anlände säkra och oskadda"
 
 msgid "Browse upcoming events"
 msgstr "Se kommande evenemang"
@@ -4809,7 +4809,7 @@ msgid "Candidates at the polls"
 msgstr "Kandidater vid valen"
 
 msgid "Casting management for:"
-msgstr "Hantering av gjutning för:"
+msgstr "Hantering av rollfördelning för:"
 
 msgid "Character customisation"
 msgstr "Anpassning av karaktärer"
@@ -4867,7 +4867,7 @@ msgid "Manage experience rules"
 msgstr "Hantera erfarenhetsregler"
 
 msgid "Manage the event guilds"
-msgstr "Hantera evenemangsgillena"
+msgstr "Hantera evenemangsgilderna"
 
 msgid "Manage the event quests"
 msgstr "Hantera eventuppdragen"
@@ -5353,7 +5353,7 @@ msgid "Description - international"
 msgstr "Beskrivning - internationell"
 
 msgid "Discover the game factions!"
-msgstr "Upptäck spelgruppernas fraktioner!"
+msgstr "Upptäck spelfaktionerna!"
 
 msgid "Enter a valid numeric value"
 msgstr "Ange ett giltigt numeriskt värde"
@@ -6120,7 +6120,7 @@ msgid "Log in to create your organization"
 msgstr "Logga in för att skapa din organisation"
 
 msgid "Lottery tickets currently present:"
-msgstr "Det finns lotter:"
+msgstr "Det finns lottobiljetter:"
 
 msgid "Manage all handouts for this event"
 msgstr "Hantera alla utdelningsmaterial för detta evenemang"
@@ -6174,7 +6174,7 @@ msgid "Set up award for experience points"
 msgstr "Ställ in utdelning av erfarenhetspoäng"
 
 msgid "Set up the membership request text"
-msgstr "Skapa en text för medlemsförfrågan"
+msgstr "Ställ in texten för medlemsförfrågan"
 
 msgid "The collection has been activated!"
 msgstr "Kollektionen har aktiverats!"
@@ -6835,7 +6835,7 @@ msgstr "Bra jobbat, du har klarat alla moduler!"
 
 #, python-format
 msgid "Writing fields without options: %(list)s"
-msgstr "Skriva fält utan alternativ: %(list)s"
+msgstr "Skrivfält utan alternativ: %(list)s"
 
 msgid "You are logged in with an email address:"
 msgstr "Du är inloggad med en e-postadress:"
@@ -6933,7 +6933,7 @@ msgid "The modifier's number (unique identifier)"
 msgstr "Modifierarens nummer (unik identifierare)"
 
 msgid "This collection has already been redeemed"
-msgstr "Denna samling har redan använts"
+msgstr "Denna samling har redan lösts in"
 
 msgid "Total amount paid for platform management"
 msgstr "Totalt belopp som betalats för plattformshantering"
@@ -7078,7 +7078,7 @@ msgid "(Optional) The amount of voluntary donation"
 msgstr "(Valfritt) Beloppet för den frivilliga donationen"
 
 msgid "Allow to switch registration between events"
-msgstr "Möjlighet att byta registrering mellan evenemang"
+msgstr "Möjliggör att byta registrering mellan evenemang"
 
 #, python-format
 msgid "Approval %(user)s as %(role)s for %(event)s"
@@ -7425,7 +7425,7 @@ msgid "Text show at the start of all character sheets"
 msgstr "Text visas i början av alla karaktärsblad"
 
 msgid "The character field of computed type to update"
-msgstr "Teckenfältet för den beräknade typ som ska uppdateras"
+msgstr "Karaktärsfältet för den beräknade typ som ska uppdateras"
 
 msgid "The user has been assigned the specified role."
 msgstr "Användaren har tilldelats den angivna rollen."
