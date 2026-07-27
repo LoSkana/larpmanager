@@ -487,6 +487,7 @@ body.association.new_v22 .user_resize {
 @media (max-width: 840px) {
   .event-layout {
     flex-direction: column-reverse;
+    margin: 0;
   }
 
   .event-side {

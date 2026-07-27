@@ -2657,6 +2657,18 @@ msgid ""
 "Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
 msgstr ""
 
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+
+msgid "Commit remaining warehouse stock"
+msgstr ""
+
+msgid "This item has no finite quantity to commit"
+msgstr ""
+
+msgid "No quantity is available to commit"
+msgstr ""
+
 msgid "available"
 msgstr ""
 
@@ -5591,6 +5603,15 @@ msgid ""
 "always of the same macrotype)."
 msgstr ""
 
+msgid "Item:"
+msgstr ""
+
+msgid "Total:"
+msgstr ""
+
+msgid "Available:"
+msgstr ""
+
 msgid "You are logged in as"
 msgstr ""
 
@@ -6893,9 +6914,6 @@ msgstr ""
 msgid ""
 "No events with LarpManager costs found. Costs will appear here once events "
 "are created and run."
-msgstr ""
-
-msgid "Total:"
 msgstr ""
 
 msgid "Payments:"
@@ -9630,6 +9648,9 @@ msgid "Back to manifest"
 msgstr ""
 
 msgid "Assign warehouse items to one or more areas of the event, item by item"
+msgstr ""
+
+msgid "Commit all remaining quantity"
 msgstr ""
 
 msgid "Assign to areas"

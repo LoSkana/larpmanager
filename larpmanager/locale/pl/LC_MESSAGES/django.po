@@ -354,6 +354,9 @@ msgstr "Obraz"
 msgid "Italy"
 msgstr "Włochy"
 
+msgid "Item:"
+msgstr "Pozycja:"
+
 msgid "Items"
 msgstr "Przedmioty"
 
@@ -1702,6 +1705,9 @@ msgstr "Załącznik"
 
 msgid "Attendance"
 msgstr "Obecność"
+
+msgid "Available:"
+msgstr "Dostępne:"
 
 msgid "Birth date"
 msgstr "Data urodzenia"
@@ -5545,6 +5551,9 @@ msgstr "Czy chciałbyś to zmienić?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Zatwierdzenie %(user)s jako %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Zarejestruj całą pozostałą ilość"
+
 msgid "Configure the matchmaker form"
 msgstr "Skonfiguruj formularz serwisu kojarzenia par"
 
@@ -5878,6 +5887,9 @@ msgstr "Postać przypisana do %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Wybierz ambientację dla wydarzenia"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Zarejestruj pozostałe zapasy magazynowe"
+
 msgid "Configure event feature settings"
 msgstr "Skonfiguruj ustawienia funkcji zdarzeń"
 
@@ -6144,6 +6156,9 @@ msgstr "Zatwierdź ręcznie otrzymane płatności"
 
 msgid "No activation steps are available."
 msgstr "Nie ma żadnych kroków aktywacyjnych."
+
+msgid "No quantity is available to commit"
+msgstr "Nie ma dostępnej ilości, którą można by zarezerwować"
 
 msgid "Now you can create event templates"
 msgstr "Teraz możesz tworzyć szablony wydarzeń"
@@ -7066,6 +7081,9 @@ msgstr "Istnieje już członek o tym numerze"
 
 msgid "This invitation has already been redeemed."
 msgstr "To zaproszenie zostało już zrealizowane."
+
+msgid "This item has no finite quantity to commit"
+msgstr "Nie ma określonej ilości tego produktu, którą można zarezerwować"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Imię, którym wolisz być nazywany"
@@ -8985,6 +9003,11 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Dodano na dole wszystkich wiadomości e-mail potwierdzających rejestrację "
 "uczestników"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Przypisz wszystkie pozostałe dostępne zapasy tego produktu do strefy "
+"wydarzenia"
 
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr "Skopiuj i wklej dokładnie cały kolorowy tekst poniżej do notatek."

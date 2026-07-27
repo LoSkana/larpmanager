@@ -354,6 +354,9 @@ msgstr "Bild"
 msgid "Italy"
 msgstr "Italien"
 
+msgid "Item:"
+msgstr "Artikel:"
+
 msgid "Items"
 msgstr "Artikel"
 
@@ -1702,6 +1705,9 @@ msgstr "Anhang"
 
 msgid "Attendance"
 msgstr "Teilnahme"
+
+msgid "Available:"
+msgstr "Verfügbar:"
 
 msgid "Birth date"
 msgstr "Datum der Geburt"
@@ -5543,6 +5549,9 @@ msgstr "Möchtest du es ändern?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Genehmigung %(user)s als %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Die gesamte Restmenge verbuchen"
+
 msgid "Configure the matchmaker form"
 msgstr "Das Matchmaker-Formular konfigurieren"
 
@@ -5876,6 +5885,9 @@ msgstr "Zugewiesener Charakter für %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Wählen Sie das Szenario für die Veranstaltung"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Den verbleibenden Lagerbestand verbuchen"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurieren Sie die Einstellungen für Ereignisfunktionen"
 
@@ -6146,6 +6158,9 @@ msgstr "Eingehende Zahlungen manuell genehmigen"
 
 msgid "No activation steps are available."
 msgstr "Es sind keine Aktivierungsschritte verfügbar."
+
+msgid "No quantity is available to commit"
+msgstr "Es ist keine Menge verfügbar, die du buchen kannst"
 
 msgid "Now you can create event templates"
 msgstr ""
@@ -7092,6 +7107,10 @@ msgstr "Es gibt bereits ein Mitglied mit dieser Nummer"
 
 msgid "This invitation has already been redeemed."
 msgstr "Diese Einladung ist bereits eingelöst worden."
+
+msgid "This item has no finite quantity to commit"
+msgstr ""
+"Für diesen Artikel gibt es keine festgelegte Menge, die du bestellen musst"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Ihr Vorname, wie Sie lieber genannt werden möchten"
@@ -9160,6 +9179,11 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Am Ende aller Mails zur Bestätigung der Anmeldung an die Teilnehmer "
 "hinzugefügt"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Weise den gesamten verbleibenden Lagerbestand dieses Artikels einem "
+"Veranstaltungsbereich zu"
 
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr ""

@@ -243,6 +243,8 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
 
     page_title = _("Item area assignments")
 
+    load_templates: ClassVar[list] = ["warehouse-item"]
+
     class Meta:
         model = WarehouseItem
         fields: ClassVar[list] = []
@@ -263,13 +265,14 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
                 widget=forms.HiddenInput,
                 required=True,
             )
-            # Fixed, non-editable display of the item name (the real value is
-            # carried by the hidden "item" field above).
-            self.fields["item_display"] = forms.CharField(
-                label=_("Item"),
-                initial=str(self.instance),
-                required=False,
-                disabled=True,
+            assigned_total = (
+                WarehouseItemAssignment.objects.filter(item=self.instance).aggregate(total=Sum("quantity"))["total"]
+                or 0
+            )
+            self.warehouse_item = self.instance
+            self.warehouse_item_total = self.instance.quantity
+            self.warehouse_item_available = (
+                max(self.instance.quantity - assigned_total, 0) if self.instance.quantity is not None else None
             )
         else:
             assigned_item_ids = WarehouseItemAssignment.objects.filter(area__event=event).values_list(
@@ -385,3 +388,62 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
         update_warehouse_item_cache(item)
         self.instance = item
         return item
+
+
+class OrgaWarehouseItemCommitRemainingForm(BaseModelForm):
+    """Assign all currently available stock of one item to a selected event area."""
+
+    page_info = _("Assign all remaining available stock of this item to an event area")
+
+    page_title = _("Commit remaining warehouse stock")
+
+    load_templates: ClassVar[list] = ["warehouse-item"]
+
+    class Meta:
+        model = WarehouseItemAssignment
+        fields: ClassVar[list] = ["area"]
+        widgets: ClassVar[dict] = {"area": WarehouseAreaS2Widget}
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """Configure the fixed item details and event-area selector."""
+        super().__init__(*args, **kwargs)
+        self.item: WarehouseItem = self.params["commit_item"]
+        self.event = self.params["event"]
+        self.configure_field_event("area", self.event)
+        self.warehouse_item = self.item
+        self.warehouse_item_total = self.item.quantity
+        self.warehouse_item_available = self._available_quantity()
+
+    def _available_quantity(self, item: WarehouseItem | None = None) -> int:
+        item = item or self.item
+        assigned = WarehouseItemAssignment.objects.filter(item=item).aggregate(total=Sum("quantity"))["total"] or 0
+        return max((item.quantity or 0) - assigned, 0)
+
+    def clean(self) -> dict:
+        """Ensure finite stock remains before showing the commit confirmation."""
+        cleaned = super().clean()
+        if self.item.quantity is None:
+            self.add_error("area", _("This item has no finite quantity to commit"))
+        elif self._available_quantity() <= 0:
+            self.add_error("area", _("No quantity is available to commit"))
+        return cleaned
+
+    def save(self, commit: bool = True) -> WarehouseItemAssignment:  # noqa: FBT001, FBT002, ARG002
+        """Add the remaining quantity to the selected area under the shared item lock."""
+        with transaction.atomic():
+            item = WarehouseItem.objects.select_for_update().get(pk=self.item.pk)
+            quantity = self._available_quantity(item)
+            if quantity <= 0:
+                raise ValidationError(_("No quantity is available to commit"))
+
+            assignment, _created = WarehouseItemAssignment.objects.get_or_create(
+                item=item,
+                area=self.cleaned_data["area"],
+                event=self.event,
+            )
+            assignment.quantity = (assignment.quantity or 0) + quantity
+            assignment.save()
+
+        update_warehouse_item_cache(item)
+        self.instance = assignment
+        return assignment

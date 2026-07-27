@@ -15,9 +15,11 @@
             <tr>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th>{% trans "Name" %}</th>
                 {% if optionals.quantity %}
                     <th>{% trans "Quantity" %}</th>
+                    <th>{% trans "Available" %}</th>
                 {% endif %}
                 <th>{% trans "Description" %}</th>
                 <th>{% trans "Container" %}</th>
@@ -31,6 +33,14 @@
                 <tr id="{{ el.uuid }}">
                     <td></td>
                     <td>
+                        {% if el.available_quantity %}
+                            <a href="{% url 'orga_warehouse_items_commit_remaining' run.get_slug el.uuid %}"
+                               qtip="{% trans "Commit all remaining quantity" %}">
+                                <i class="fa-solid fa-boxes-stacked action-dialog"></i>
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td>
                         <a href="{% url 'orga_warehouse_items_edit' run.get_slug el.uuid %}"
                            qtip="{% trans "Assign to areas" %}">
                             <i class="fa-solid fa-map-location-dot action-dialog"></i>
@@ -40,6 +50,9 @@
                     {% if optionals.quantity %}
                         <td>
                             {% if el.quantity %}{{ el.quantity }}{% endif %}
+                        </td>
+                        <td>
+                            {% if el.available_quantity is not None %}{{ el.available_quantity }}{% endif %}
                         </td>
                     {% endif %}
                     <td>{{ el.description | truncatechars:200 }}</td>

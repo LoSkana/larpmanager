@@ -1867,6 +1867,11 @@ urlpatterns = [
         name="orga_warehouse_items_edit",
     ),
     path(
+        "<slug:event_slug>/manage/warehouse/items/<slug:item_uuid>/all/",
+        views_oms.orga_warehouse_items_commit_remaining,
+        name="orga_warehouse_items_commit_remaining",
+    ),
+    path(
         "<slug:event_slug>/manage/warehouse/checks/",
         views_oms.orga_warehouse_checks,
         name="orga_warehouse_checks",
