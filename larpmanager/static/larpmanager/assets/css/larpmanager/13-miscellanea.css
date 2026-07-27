@@ -435,6 +435,7 @@ body.association.new_v22 .user_resize {
   box-shadow: 0 2px 8px rgba(var(--pri-rgb), 0.06);
   padding: 1em 1.25em;
   margin-bottom: 1em;
+  overflow-wrap: anywhere;
 }
 
 .event-main .event-card:last-child {

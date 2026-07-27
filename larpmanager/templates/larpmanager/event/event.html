@@ -83,6 +83,16 @@
                                 <i class="{{ run_status.character_action.icon }}"></i> {{ run_status.character_action.label }}
                             </a>
                         </p>
+                        {% if run_status.character_action.options_availability %}
+                            <p>
+                                {% if run_status.character_action.options_availability %}
+                                    {% for opt in run_status.character_action.options_availability %}
+                                        {% include "elements/comma.html" %}
+                                        <i>{{ opt.name }}</i> ({{ opt.available }})
+                                    {% endfor %}
+                                {% endif %}
+                            </p>
+                        {% endif %}
                     </div>
                 {% endif %}
                 {% if run_status.registration %}
