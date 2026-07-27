@@ -354,6 +354,9 @@ msgstr "Bilde"
 msgid "Italy"
 msgstr "Italia"
 
+msgid "Item:"
+msgstr "Vare:"
+
 msgid "Items"
 msgstr "Gjenstander"
 
@@ -1702,6 +1705,9 @@ msgstr "Vedlegg"
 
 msgid "Attendance"
 msgstr "Tilstedeværelse"
+
+msgid "Available:"
+msgstr "Tilgjengelig:"
 
 msgid "Birth date"
 msgstr "Fødselsdato"
@@ -5543,6 +5549,9 @@ msgstr "Ønsker du å endre det?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Godkjenning %(user)s som %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Legg inn hele den gjenværende mengden"
+
 msgid "Configure the matchmaker form"
 msgstr "Konfigurer Matchmaker-skjemaet"
 
@@ -5876,6 +5885,9 @@ msgstr "Karakter tildelt for %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Velg innstilling for arrangementet"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Bokfør gjenværende lagerbeholdning"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurer innstillinger for hendelsesfunksjoner"
 
@@ -6142,6 +6154,9 @@ msgstr "Godkjenn mottatte betalinger manuelt"
 
 msgid "No activation steps are available."
 msgstr "Det finnes ingen aktiveringstrinn."
+
+msgid "No quantity is available to commit"
+msgstr "Det er ingen tilgjengelig mengde å forplikte seg til"
 
 msgid "Now you can create event templates"
 msgstr "Nå kan du opprette hendelsesmaler"
@@ -7063,6 +7078,9 @@ msgstr "Det er allerede et medlem med dette nummeret"
 
 msgid "This invitation has already been redeemed."
 msgstr "Denne invitasjonen har allerede blitt innløst."
+
+msgid "This item has no finite quantity to commit"
+msgstr "Det er ikke fastsatt noe bestemt antall av denne varen"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Fornavnet ditt, slik du foretrekker å bli kalt"
@@ -8971,6 +8989,11 @@ msgstr "Din påmelding til dette arrangementet er nå blitt avmeldt med hell."
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Lagt til nederst i alle e-poster som bekrefter påmelding til deltakerne"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Tildel hele den gjenværende tilgjengelige lagerbeholdningen av denne varen "
+"til et arrangementområde"
 
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr "Kopier og lim inn nøyaktig all farget tekst nedenfor i notatene."

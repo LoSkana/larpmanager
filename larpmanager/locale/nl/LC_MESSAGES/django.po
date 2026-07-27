@@ -354,6 +354,9 @@ msgstr "Afbeelding"
 msgid "Italy"
 msgstr "Italië"
 
+msgid "Item:"
+msgstr "Artikel:"
+
 msgid "Items"
 msgstr "Items"
 
@@ -1702,6 +1705,9 @@ msgstr "Bijlage"
 
 msgid "Attendance"
 msgstr "Aanwezigheid"
+
+msgid "Available:"
+msgstr "Beschikbaar:"
 
 msgid "Birth date"
 msgstr "Geboortedatum"
@@ -5543,6 +5549,9 @@ msgstr "Wil je het veranderen?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Goedkeuring %(user)s als %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Zet de resterende hoeveelheid vast"
+
 msgid "Configure the matchmaker form"
 msgstr "Stel het Matchmaker-formulier in"
 
@@ -5876,6 +5885,9 @@ msgstr "Karakter toegewezen voor %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Kies de instelling voor het evenement"
 
+msgid "Commit remaining warehouse stock"
+msgstr "De resterende voorraad in het magazijn vastleggen"
+
 msgid "Configure event feature settings"
 msgstr "Instellingen gebeurtenisfuncties configureren"
 
@@ -6143,6 +6155,9 @@ msgstr "Ontvangen betalingen handmatig goedkeuren"
 
 msgid "No activation steps are available."
 msgstr "Er zijn geen activeringsstappen beschikbaar."
+
+msgid "No quantity is available to commit"
+msgstr "Er is geen hoeveelheid beschikbaar om vast te leggen"
 
 msgid "Now you can create event templates"
 msgstr "Nu kun je sjablonen voor evenementen maken"
@@ -7064,6 +7079,9 @@ msgstr "Er is al een lid met dit nummer"
 
 msgid "This invitation has already been redeemed."
 msgstr "Deze uitnodiging is al ingewisseld."
+
+msgid "This item has no finite quantity to commit"
+msgstr "Van dit artikel is geen vaste hoeveelheid vastgelegd"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Je voornaam zoals je liever genoemd wilt worden"
@@ -9037,6 +9055,10 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Toegevoegd onderaan alle mails ter bevestiging van inschrijving aan "
 "deelnemers"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Wijs alle resterende voorraad van dit artikel toe aan een evenementenruimte"
 
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr ""

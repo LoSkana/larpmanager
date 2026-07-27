@@ -24,7 +24,8 @@ from typing import Any
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.db.models import Sum
+from django.http import Http404, HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -35,6 +36,7 @@ from larpmanager.cache.warehouse import get_association_warehouse_cache, get_eve
 from larpmanager.forms.miscellanea import (
     UploadAlbumsForm,
 )
+from larpmanager.forms.warehouse import OrgaWarehouseItemCommitRemainingForm
 from larpmanager.models.miscellanea import (
     Album,
     Log,
@@ -54,8 +56,10 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_album_cod, get_element
+from larpmanager.utils.core.common import get_album_cod, get_element, get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
+from larpmanager.utils.edit.backend import backend_edit
+from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.services.writing import writing_post
@@ -407,9 +411,18 @@ def orga_warehouse_items(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["list"] = []
     items = WarehouseItem.objects.filter(association_id=context["association_id"])
     items = items.select_related("container").prefetch_related("tags")
+    assigned_quantities = {
+        row["item_id"]: row["total"] or 0
+        for row in WarehouseItemAssignment.objects.filter(item__association_id=context["association_id"])
+        .values("item_id")
+        .annotate(total=Sum("quantity"))
+    }
     for item in items:
         item.tags_cached = warehouse_cache.get(item.id, {}).get("tags", [])
         item.areas_cached = assignments_cache.get(item.id, {}).get("list", [])
+        item.available_quantity = (
+            max(item.quantity - assigned_quantities.get(item.id, 0), 0) if item.quantity is not None else None
+        )
         context["list"].append(item)
 
     get_warehouse_optionals(context, [5])
@@ -427,6 +440,26 @@ def orga_warehouse_items_new(request: HttpRequest, event_slug: str) -> HttpRespo
 def orga_warehouse_items_edit(request: HttpRequest, event_slug: str, item_uuid: str) -> HttpResponse:
     """Edit a warehouse item's area assignments for this event."""
     return orga_edit(request, event_slug, OrgaAction.WAREHOUSE_ITEM_AREAS, item_uuid)
+
+
+@login_required
+def orga_warehouse_items_commit_remaining(request: HttpRequest, event_slug: str, item_uuid: str) -> HttpResponse:
+    """Commit an item's entire remaining finite stock to one area of this event."""
+    context = check_event_context(request, event_slug, "orga_warehouse_items")
+    item = get_object_uuid(WarehouseItem, item_uuid)
+    if item.association_id != context["association_id"]:
+        msg = "not your association"
+        raise Http404(msg)
+
+    context["commit_item"] = item
+    context["add_another"] = False
+    result = backend_edit(request, context, OrgaWarehouseItemCommitRemainingForm)
+    is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+    if result:
+        if is_frame:
+            return render(request, "elements/dashboard/form_success.html", context)
+        return redirect("orga_warehouse_items", context["run"].get_slug())
+    return render_frame_or_fallback(request, context, is_frame, "larpmanager/orga/edit.html")
 
 
 @login_required

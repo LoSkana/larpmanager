@@ -354,6 +354,9 @@ msgstr "Obrázek"
 msgid "Italy"
 msgstr "Itálie"
 
+msgid "Item:"
+msgstr "Položka:"
+
 msgid "Items"
 msgstr "Položky"
 
@@ -1702,6 +1705,9 @@ msgstr "Příloha"
 
 msgid "Attendance"
 msgstr "Docházka"
+
+msgid "Available:"
+msgstr "K dispozici:"
 
 msgid "Birth date"
 msgstr "Datum narození"
@@ -5543,6 +5549,9 @@ msgstr "Chcete to změnit?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Schválení %(user)s jako %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Zapsat celé zbývající množství"
+
 msgid "Configure the matchmaker form"
 msgstr "Nakonfigurujte formulář pro vyhledávání partnerů"
 
@@ -5876,6 +5885,9 @@ msgstr "Postava přiřazená pro %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Zvolte nastavení pro akci"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Zaúčtovat zbývající skladové zásoby"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurujte nastavení funkcí pro akci"
 
@@ -6142,6 +6154,9 @@ msgstr "Ručně schvalte přijaté platby"
 
 msgid "No activation steps are available."
 msgstr "Nejsou k dispozici žádné kroky k aktivaci."
+
+msgid "No quantity is available to commit"
+msgstr "Není k dispozici žádné množství, které by bylo možné rezervovat"
 
 msgid "Now you can create event templates"
 msgstr "Nyní můžete vytvářet šablony událostí"
@@ -7066,6 +7081,9 @@ msgstr "Člen s tímto číslem již existuje"
 
 msgid "This invitation has already been redeemed."
 msgstr "Toto pozvání již bylo vykoupeno."
+
+msgid "This item has no finite quantity to commit"
+msgstr "U této položky není možné stanovit konkrétní množství k objednání"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Vaše křestní jméno, jak si přejete být oslovován"
@@ -8909,6 +8927,11 @@ msgstr "Vaše registrace na tuto akci byla úspěšně zrušena."
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr "Přidáno na konec všech e-mailů potvrzujících účastníkům přihlášení"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Přiřaďte veškeré zbývající dostupné zásoby této položky do oblasti určené "
+"pro akci"
 
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr ""

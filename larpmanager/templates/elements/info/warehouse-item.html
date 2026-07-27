@@ -1,0 +1,16 @@
+{% load i18n %}
+{% if form.warehouse_item %}
+    <table>
+        <tr>
+            <td>
+                <b>{% trans "Item:" %}</b> {{ form.warehouse_item }}
+            </td>
+            <td>
+                <b>{% trans "Total:" %}</b> {{ form.warehouse_item_total }}
+            </td>
+            <td>
+                <b>{% trans "Available:" %}</b> {{ form.warehouse_item_available }}
+            </td>
+        </tr>
+    </table>
+{% endif %}

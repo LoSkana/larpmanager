@@ -354,6 +354,9 @@ msgstr "Image"
 msgid "Italy"
 msgstr "Italie"
 
+msgid "Item:"
+msgstr "Article :"
+
 msgid "Items"
 msgstr "Articles"
 
@@ -1702,6 +1705,9 @@ msgstr "Annexe"
 
 msgid "Attendance"
 msgstr "Présence"
+
+msgid "Available:"
+msgstr "Disponible :"
 
 msgid "Birth date"
 msgstr "Date de naissance"
@@ -5543,6 +5549,9 @@ msgstr "Souhaites-tu le modifier?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Approbation de %(user)s en tant que %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Engage toute la quantité restante"
+
 msgid "Configure the matchmaker form"
 msgstr "Configurer le formulaire Matchmaker"
 
@@ -5876,6 +5885,9 @@ msgstr "Personnage attribué pour %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Choisir le cadre de l'événement"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Enregistrer le stock restant en entrepôt"
+
 msgid "Configure event feature settings"
 msgstr "Configurer les paramètres des fonctions d'événement"
 
@@ -6142,6 +6154,9 @@ msgstr "Approuver manuellement les paiements reçus"
 
 msgid "No activation steps are available."
 msgstr "Il n'y a aucune étape d'activation disponible."
+
+msgid "No quantity is available to commit"
+msgstr "Il n'y a pas de quantité disponible à réserver"
 
 msgid "Now you can create event templates"
 msgstr "Tu peux maintenant créer des modèles d'événements"
@@ -7070,6 +7085,9 @@ msgstr "Il y a déjà un membre avec ce numéro"
 
 msgid "This invitation has already been redeemed."
 msgstr "Cette invitation a déjà été rachetée."
+
+msgid "This item has no finite quantity to commit"
+msgstr "Il n'y a pas de quantité précise à réserver pour cet article"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Votre prénom tel que vous préférez être appelé"
@@ -9114,6 +9132,11 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Ajouté au bas de tous les courriers confirmant l'inscription aux "
 "participants"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Attribue tout le stock restant de cet article à une zone dédiée à un "
+"événement"
 
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr ""

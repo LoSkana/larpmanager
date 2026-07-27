@@ -354,6 +354,9 @@ msgstr "Imagen"
 msgid "Italy"
 msgstr "Italia"
 
+msgid "Item:"
+msgstr "Artículo:"
+
 msgid "Items"
 msgstr "Artículos"
 
@@ -1702,6 +1705,9 @@ msgstr "Anexo"
 
 msgid "Attendance"
 msgstr "Asistencia"
+
+msgid "Available:"
+msgstr "Disponible:"
 
 msgid "Birth date"
 msgstr "Fecha de nacimiento"
@@ -5543,6 +5549,9 @@ msgstr "¿Quiere cambiarlo?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Aprobación %(user)s como %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Asigna toda la cantidad restante"
+
 msgid "Configure the matchmaker form"
 msgstr "Configura el formulario de Matchmaker"
 
@@ -5876,6 +5885,9 @@ msgstr "Personaje asignado para %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Elige el escenario del evento"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Registrar el stock restante en el almacén"
+
 msgid "Configure event feature settings"
 msgstr "Configurar las funciones de eventos"
 
@@ -6142,6 +6154,9 @@ msgstr "Aprobar manualmente los pagos recibidos"
 
 msgid "No activation steps are available."
 msgstr "No hay pasos de activación disponibles."
+
+msgid "No quantity is available to commit"
+msgstr "No hay cantidad disponible para reservar"
 
 msgid "Now you can create event templates"
 msgstr "Ahora puedes crear plantillas de eventos"
@@ -7065,6 +7080,9 @@ msgstr "Ya hay un miembro con este número"
 
 msgid "This invitation has already been redeemed."
 msgstr "Esta invitación ya ha sido redimida."
+
+msgid "This item has no finite quantity to commit"
+msgstr "No hay una cantidad concreta de este artículo que puedas reservar"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Tu nombre de pila, como prefieres ser llamado"
@@ -9036,6 +9054,11 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Añadido al final de todos los correos de confirmación de inscripción a los "
 "participantes"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Asigna todo el stock disponible restante de este artículo a una zona de "
+"eventos"
 
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr ""

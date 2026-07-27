@@ -354,6 +354,9 @@ msgstr "Bild"
 msgid "Italy"
 msgstr "Italien"
 
+msgid "Item:"
+msgstr "Artikel:"
+
 msgid "Items"
 msgstr "Föremål"
 
@@ -1702,6 +1705,9 @@ msgstr "Bilaga"
 
 msgid "Attendance"
 msgstr "Närvaro"
+
+msgid "Available:"
+msgstr "Finns:"
 
 msgid "Birth date"
 msgstr "Födelsedatum"
@@ -5543,6 +5549,9 @@ msgstr "Skulle du vilja ändra det?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Godkännande av %(user)s som %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Boka hela återstående kvantiteten"
+
 msgid "Configure the matchmaker form"
 msgstr "Konfigurera formuläret för matchmaker"
 
@@ -5876,6 +5885,9 @@ msgstr "Karaktär tilldelad för %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Välj miljö för evenemanget"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Boka in återstående lagerbeholdning"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurera inställningar för händelsefunktioner"
 
@@ -6142,6 +6154,9 @@ msgstr "Manuellt godkänna mottagna betalningar"
 
 msgid "No activation steps are available."
 msgstr "Det finns inga aktiveringssteg."
+
+msgid "No quantity is available to commit"
+msgstr "Det finns inget antal att boka"
 
 msgid "Now you can create event templates"
 msgstr "Nu kan du skapa eventmallar"
@@ -7063,6 +7078,9 @@ msgstr "Det finns redan en medlem med detta nummer"
 
 msgid "This invitation has already been redeemed."
 msgstr "Denna inbjudan har redan lösts in."
+
+msgid "This item has no finite quantity to commit"
+msgstr "Det finns inget fastställt antal av denna artikel att binda sig för"
 
 msgid "Your first name as you prefer to be called"
 msgstr "Ditt förnamn som du föredrar att bli kallad"
@@ -8941,6 +8959,11 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Läggs till längst ner i alla e-postmeddelanden som bekräftar anmälan till "
 "deltagare"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Tilldela allt återstående tillgängligt lager av denna artikel till ett "
+"evenemangsområde"
 
 msgid "Copy and paste exactly all the coloured text below into the notes."
 msgstr "Kopiera och klistra in exakt all färgad text nedan i anteckningarna."
