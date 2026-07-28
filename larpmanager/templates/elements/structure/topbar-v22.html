@@ -59,19 +59,6 @@
                         <span>{{ vrun.name }}</span>
                     </a>
                 {% endfor %}
-                {% if user.is_authenticated and not association.demo_type_name %}
-                    <a class="tv22-pill tv22-pill-profile{% if not run and is_profile_page %} active{% endif %}"
-                       href="{% url 'profile' %}">
-                        {% if user.member.profile %}
-                            <img class="tv22-pill-img"
-                                 src="{{ user.member.profile_thumb.url }}"
-                                 alt="">
-                        {% else %}
-                            <i class="fa-solid fa-gear"></i>
-                        {% endif %}
-                        <span>{% trans "Profile" %}</span>
-                    </a>
-                {% endif %}
             {% endif %}
         </div>
     </div>
@@ -79,6 +66,19 @@
             aria-label="{% trans "Scroll right" %}">
         <i class="fa-solid fa-chevron-right"></i>
     </button>
+    {% if not manage and user.is_authenticated and not association.demo_type_name %}
+        <a class="tv22-profile{% if not run and is_profile_page %} active{% endif %}"
+           href="{% url 'profile' %}">
+            {% if user.member.profile %}
+                <img class="tv22-pill-img"
+                     src="{{ user.member.profile_thumb.url }}"
+                     alt="">
+            {% else %}
+                <i class="fa-solid fa-gear"></i>
+            {% endif %}
+            <span>{% trans "Profile" %}</span>
+        </a>
+    {% endif %}
     {% if topbar_admin %}
         {% if manage %}
             {% if is_larpmanager_skin and not association.demo and not lite_mode %}

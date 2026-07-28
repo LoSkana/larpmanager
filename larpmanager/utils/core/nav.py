@@ -492,9 +492,7 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
         has_registrations = flags["has_registrations"]
         has_paid_registrations = flags["has_paid_registrations"]
 
-    items: list[dict[str, Any]] = [
-        _item(reverse("home"), "fa-solid fa-calendar", _("Calendar"), "", active=active == "calendar", home=True)
-    ]
+    items: list[dict[str, Any]] = []
 
     if request.association.get("user_characters_shortcut", False):
         items.append(
