@@ -354,7 +354,7 @@ class Character(Writing):
     def get_character_filepath(run: Run) -> str:
         """Get the directory path for storing character files for a given run."""
         directory_path = str(Path(run.get_media_filepath()) / "characters/")
-        Path(directory_path).mkdir(parents=True, exist_ok=True)
+        Path(directory_path).mkdir(mode=0o770, parents=True, exist_ok=True)
         return directory_path
 
     def get_media_filepath(self, run: Run, descr: str) -> str:
@@ -558,7 +558,7 @@ class Faction(Writing):
     def get_faction_filepath(run: Run) -> str:
         """Get the directory path for storing faction PDF files for a specific run."""
         directory_path = str(Path(run.get_media_filepath()) / "factions/")
-        Path(directory_path).mkdir(parents=True, exist_ok=True)
+        Path(directory_path).mkdir(mode=0o770, parents=True, exist_ok=True)
         return directory_path
 
     def get_sheet_filepath(self, run: Run) -> str:
@@ -796,7 +796,7 @@ class Handout(Writing):
     def get_filepath(self, run: Run) -> str:
         """Build the file path for this handout's PDF within the event's media directory."""
         handouts_directory = str(Path(run.event.get_media_filepath()) / "handouts")
-        Path(handouts_directory).mkdir(parents=True, exist_ok=True)
+        Path(handouts_directory).mkdir(mode=0o770, parents=True, exist_ok=True)
         return str(Path(handouts_directory) / f"{self.number}-{self.media_token}.pdf")
 
 

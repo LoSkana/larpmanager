@@ -1644,7 +1644,7 @@ def get_csv_upload_tmp(csv_upload: Any, run: Run) -> str:
 
     # Ensure directory exists
     if not Path(tmp_file).exists():
-        Path(tmp_file).mkdir(parents=True, exist_ok=True)
+        Path(tmp_file).mkdir(mode=0o770, parents=True, exist_ok=True)
 
     # Generate timestamped filename
     tmp_file = str(Path(tmp_file) / timezone.now().strftime("%Y-%m-%d-%H:%M:%S"))

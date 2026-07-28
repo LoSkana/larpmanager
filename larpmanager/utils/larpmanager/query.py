@@ -27,7 +27,7 @@ def _save_index(index_dir: str, schema: Any) -> object:
     """Create or open a Whoosh index directory."""
     # Create directory if it doesn't exist and return new index
     if not Path(index_dir).exists():
-        Path(index_dir).mkdir(parents=True, exist_ok=True)
+        Path(index_dir).mkdir(mode=0o770, parents=True, exist_ok=True)
         return create_in(index_dir, schema, "MAIN")
 
     # Open existing index directory
