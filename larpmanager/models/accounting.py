@@ -135,7 +135,7 @@ class PaymentInvoice(UuidMixin, BaseModel):
         """Return invoice summary with payment status and transaction details."""
         res = _("Payment") + f" {self.member} ({self.mc_gross})"
         if self.registration:
-            res += " " + self.registration.run
+            res += f" {self.registration.run}"
         return res
 
     def download(self) -> str:
