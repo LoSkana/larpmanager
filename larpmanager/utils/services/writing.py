@@ -660,7 +660,7 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
         all_chars = list(context["list"])
         context["split_lists"] = [
             {"title": "", "list": [c for c in all_chars if c.has_registration]},
-            {"title": _("Not participating"), "list": [c for c in all_chars if not c.has_registration]},
+            {"title": _("Characters not participating"), "list": [c for c in all_chars if not c.has_registration]},
         ]
 
 

@@ -328,7 +328,7 @@ def workshop_answer(request: HttpRequest, event_slug: str, module_uuid: str) -> 
     # Check if user has already completed this workshop module
     completed = [el.pk for el in context["member"].workshops.select_related().all()]
     if context["workshop"].pk in completed:
-        messages.success(request, _("Workshop already done!"))
+        messages.success(request, _("You have already completed this workshop module."))
         return redirect("workshops", event_slug=context["run"].get_slug())
 
     # Build list of questions for the current workshop module

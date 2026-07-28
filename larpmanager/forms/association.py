@@ -684,8 +684,8 @@ class ExeConfigForm(ConfigForm):
 
         field_label = _("Standalone Payment Window")
         field_help_text = _(
-            "Number of months at the start of the year when paying the annual fee "
-            "is allowed without requiring an active event signup."
+            "Number of months at the start of the year during which members may pay the annual fee "
+            "without an active event registration."
         )
         self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
 
@@ -716,7 +716,7 @@ class ExeConfigForm(ConfigForm):
             # Payment amount modification controls
             label_disable_amount_change = _("Disable amount change")
             help_text_disable_amount_change = _(
-                "If checked: Hides the possibility for the participant to change the payment amount for his entries",
+                "If checked, participants cannot change the payment amount for their registrations.",
             )
             self.add_configs(
                 "payment_hide_amount",
@@ -822,7 +822,7 @@ class ExeConfigForm(ConfigForm):
 
         # Configure organization infrastructure fee calculation
         if "organization_tax" in self.params["features"]:
-            self.set_section("organization_tax", _("Organisation fee"))
+            self.set_section("organization_tax", _("Event organization fee"))
             label_organization_fee_percentage = _("Percentage")
             help_text_organization_fee_percentage = _(
                 "Percentage of takings calculated as a fee for association infrastructure (in "

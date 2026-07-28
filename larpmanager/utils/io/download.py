@@ -971,7 +971,7 @@ def _get_column_names(context: dict) -> None:
                 "abilities": _("(Optional) Ability names, comma-separated - rule applies if character has any"),
                 "field": _("The character field of computed type to update"),
                 "operation": _("Operation: ADD, SUB, MUL, DIV"),
-                "amount": _("Amount for the operation"),
+                "amount": _("Transaction amount"),
                 "order": _("(Optional) Display order"),
             },
         ]
@@ -1159,8 +1159,8 @@ def _get_writing_names(context: dict) -> None:
     elif context["writing_typ"] == QuestionApplicable.PLOT:
         context["columns"].append(
             {
-                "plot": _("Name of the plot"),
-                "character": _("Name of the character"),
+                "plot": _("Plot name"),
+                "character": _("Character name"),
                 "text": _("Description of the role of the character in the plot"),
             },
         )

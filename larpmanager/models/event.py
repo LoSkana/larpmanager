@@ -540,8 +540,8 @@ class EventTextType(models.TextChoices):
     TOC = "t", _("Terms and conditions")
     REGISTER = "r", _("Registration form")
     SEARCH = "s", _("Search")
-    SIGNUP = "g", _("Registration mail")
-    ASSIGNMENT = "a", _("Mail assignment")
+    SIGNUP = "g", _("Registration email")
+    ASSIGNMENT = "a", _("Character assignment email")
     USER_CHARACTER = "c", _("Player's character form")
 
     CHARACTER_PROPOSED = "cs", _("Proposed character")

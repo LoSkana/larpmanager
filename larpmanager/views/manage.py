@@ -478,7 +478,7 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
     ):
         _add_priority(
             context,
-            _("Set up the organization tax configuration"),
+            _("Configure the association infrastructure fee"),
             "exe_accounting",
             "config/organization_tax",
         )

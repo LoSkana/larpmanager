@@ -642,7 +642,7 @@ class ShuttleService(UuidMixin, BaseModel):
     )
 
     notes = models.TextField(
-        verbose_name=_("Driver notes"),
+        verbose_name=_("Passenger instructions"),
         help_text=_("Information for passengers (such as car color/model, estimated arrival time)."),
         null=True,
     )

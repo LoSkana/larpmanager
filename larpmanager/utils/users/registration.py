@@ -693,7 +693,7 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
             return run_status
 
         if run.registration_open > current_datetime:
-            run_status["details"] = _("Opening on: %(date)s") % {
+            run_status["details"] = _("Registration opens on: %(date)s") % {
                 "date": run.registration_open.strftime(format_datetime),
             }
             return run_status
@@ -736,7 +736,7 @@ def _status_future_open(run: Run, register_url: str, run_status: dict) -> dict:
         run_status["text_long"] = selected_message_long
         run_status["url"] = register_url
         if run.registration_status == RegistrationStatus.CLOSING and run.registration_open:
-            closing_details = _("Closing on: %(date)s") % {
+            closing_details = _("Registration closes on: %(date)s") % {
                 "date": run.registration_open.strftime(format_datetime),
             }
             if run_status.get("details"):
