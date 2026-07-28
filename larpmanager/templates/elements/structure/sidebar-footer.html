@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n static %}
 <div class="sidebar-footer sidebar-section">
     {% if user.is_authenticated %}
         <span class="sidebar-link-wrap">
@@ -42,3 +42,13 @@
         </span>
     {% endif %}
 </div>
+<!-- If you're using LarpManager under AGPL, do not change! -->
+<span class="sidebar-link-wrap">
+    <a class="sidebar-link sidebar-section lm"
+       href="https://larpmanager.com">
+        <img src="{% static 'lm_logo.png' %}"
+             alt="LarpManager"
+             class="sidebar-logo" />
+        <span>LarpManager</span>
+    </a>
+</span>
