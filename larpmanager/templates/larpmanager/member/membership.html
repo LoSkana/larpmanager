@@ -19,7 +19,10 @@
                 <p>{% trans "Supplied:" %} {{ supplied_cf }}</p>
                 <p>{% trans "Expected:" %} {{ calculated_cf }}</p>
                 <p>
-                    {% trans "Update your data in the" %} <a href="{% url 'profile' %}">{% trans "user profile" %}</a>.
+                    {% url 'profile' as profile_url %}
+                    {% blocktrans trimmed with url=profile_url %}
+                        Update your information in your <a href="{{ url }}">user profile</a>.
+                    {% endblocktrans %}
                 </p>
                 <hr />
             </div>
@@ -97,7 +100,8 @@
                 <hr />
                 {{ form.confirm_3 }} {% trans "I confirm that all my required personal data have been filled in correctly" %}
                 <hr />
-                {% trans "If you wish to update your personal data" %}, <a href="{% url 'profile' %}">{% trans "click here" %}</a>.
+                {% url 'profile' as profile_url %}
+                {% blocktrans %}If you wish to update your personal data, <a href="{{ profile_url }}">click here</a>.{% endblocktrans %}
                 <hr />
                 {{ form.confirm_4 }} {% trans "I confirm that I have affixed the date and my signature wherever required" %}
                 <hr />

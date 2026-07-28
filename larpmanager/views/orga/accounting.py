@@ -642,7 +642,7 @@ def orga_outflows(request: HttpRequest, event_slug: str) -> HttpResponse:
                 ("descr", _("Description")),
                 ("value", _("Value")),
                 ("payment_date", _("Date")),
-                ("statement", _("Statement")),
+                ("statement", _("Receipt")),
             ],
             # Define custom display callbacks for specific fields
             "callbacks": {
@@ -712,7 +712,7 @@ def orga_inflows(request: HttpRequest, event_slug: str) -> HttpResponse:
                 ("descr", _("Description")),
                 ("value", _("Value")),
                 ("payment_date", _("Date")),
-                ("statement", _("Statement")),
+                ("statement", _("Receipt")),
             ],
             # Define custom callback functions for rendering specific table cells
             "callbacks": {
@@ -790,7 +790,7 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
                 ("action", _("Action")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
-                ("statement", _("Statement")),
+                ("statement", _("Receipt")),
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],

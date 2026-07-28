@@ -576,7 +576,7 @@ class ExeConfigForm(ConfigForm):
         if "campaign" in self.params["features"]:
             self.set_section("campaign", _("Campaign"))
 
-            move_registration_label = _("Move registration event")
+            move_registration_label = _("Allow registration transfers")
             move_registration_help_text = _("Allow to switch registration between events")
             self.add_configs("campaign_switch", ConfigType.BOOL, move_registration_label, move_registration_help_text)
 

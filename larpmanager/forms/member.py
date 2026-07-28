@@ -730,7 +730,7 @@ class MembershipResponseForm(BaseForm):
 class ExeVolunteerRegistryForm(BaseModelForm):
     """Form for ExeVolunteerRegistry."""
 
-    page_title = _("Volounteer data")
+    page_title = _("Volounteers data")
 
     page_info = _(
         "Manage the volunteer registry: view, add, and edit volunteer records, and print an official PDF copy"
@@ -773,9 +773,7 @@ class MembershipForm(BaseAccForm):
 class ExeMemberForm(BaseProfileForm):
     """Form for ExeMember."""
 
-    page_info = _(
-        "View and edit a member's profile, including personal data, membership documents, and links to their registrations and accounting"
-    )
+    page_info = _("View and edit member profiles, documents, registrations, and payment history.")
 
     class Meta:
         model = Member
@@ -816,9 +814,7 @@ class ExeMembershipForm(BaseModelForm):
 class ExeMembershipFeeForm(BaseForm):
     """Form for ExeMembershipFee."""
 
-    page_info = _(
-        "Upload a membership fee invoice for a member to record and confirm their payment for the current year"
-    )
+    page_info = _("Upload member's fee receipt to confirm payment for the current year")
 
     page_title = _("Upload membership fee")
 

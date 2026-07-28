@@ -374,8 +374,6 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
         "url": f"{registration.run.get_slug()}/limitations/"
     }
 
-    # Add closing message and send the email
-    email_body += "<br /><br />" + _("See you soon!")
     my_send_mail(email_subject, email_body, registration.member, registration.run)
 
 

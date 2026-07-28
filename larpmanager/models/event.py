@@ -201,7 +201,7 @@ class Event(UuidMixin, BaseModel):
         null=True,
         blank=True,
         verbose_name=_("Parent campaign"),
-        help_text=_("Selecting an event joins its campaign and shares characters with it")
+        help_text=_("Selecting an event makes you join its campaign and share your characters with it")
         + " ("
         + _("leave empty to start a new campaign")
         + ")",
@@ -680,7 +680,7 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Registration date"),
-        help_text=_("Date and time when registrations open, or close, for participants depending on status"),
+        help_text=_("Date and time of status change"),
     )
 
     register_link = models.URLField(

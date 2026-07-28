@@ -1,17 +1,17 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Refund for" %} - {{ registration }}
+    {% blocktrans with registration=registration %}Refund for {{ registration }}{% endblocktrans %}
 {% endblock title %}
 {% block info %}
-    {% trans "Process a token or credit refund for a participant who has cancelled their registration" %}
+    {% trans "Issue a refund in tokens or credits for a participant whose registration was cancelled" %}
 {% endblock info %}
 {% block content %}
     <h3>{% trans "Payment" %}</h3>
     <table>
         <tr>
             <th>{% trans "Registration fee" %}</th>
-            <th>{% trans "Actual paid" %}</th>
+            <th>{% trans "Amount paid" %}</th>
             <th>{% trans "Money" %}</th>
             {% if features.tokens %}<th>{{ tokens_name }}</th>{% endif %}
             {% if features.credits %}<th>{{ credits_name }}</th>{% endif %}
@@ -36,11 +36,11 @@
             {% endif %}
         </tr>
     </table>
-    <h3>{% trans "Returning" %}</h3>
+    <h3>{% trans "Refund details" %}</h3>
     <table>
         <tr>
-            <th>{% trans "Retention" %}</th>
-            <th>{% trans "Full returning" %}</th>
+            <th>{% trans "Amount kept" %}</th>
+            <th>{% trans "Refund amount" %}</th>
             {% if features.tokens %}<th>{{ tokens_name }}</th>{% endif %}
             {% if features.credits %}<th>{{ credits_name }}</th>{% endif %}
         </tr>
@@ -51,10 +51,10 @@
             {% if features.credits %}<td id="ref_credit">0</td>{% endif %}
         </tr>
     </table>
-    <h3>{% trans "Returning type" %}</h3>
+    <h3>{% trans "Refund method" %}</h3>
     {% if not features.tokens and not features.credits %}
         <div class="alert alert-warning">
-            {% trans "Warning: Neither tokens nor credits features are enabled. Refunds cannot be processed as virtual currency." %}
+            {% trans "Refunds are unavailable because neither tokens nor credits are enabled." %}
         </div>
     {% elif features.tokens and not features.credits %}
         <div class="nav typ">
@@ -71,7 +71,7 @@
         </div>
     {% endif %}
     <br />
-    <h3>{% trans "Returning percentage" %}</h3>
+    <h3>{% trans "Refund percentage" %}</h3>
     <div class="nav p">
         {% for i in '0123456789'|make_list %}
             <a id="p_{{ forloop.counter }}"
@@ -80,7 +80,6 @@
         {% endfor %}
     </div>
     <br />
-    <h3>{% trans "Approve reimbursement" %}</h3>
     <form id="ref" action="{{ request.path }}" method="post">
         {% csrf_token %}
         <input type="hidden" id="inp_token" name="inp_token" value="0" />
@@ -174,7 +173,7 @@ window.addEventListener('DOMContentLoaded', function() {
 
         $('form').on('submit', function() {
             {% if not features.tokens and not features.credits %}
-                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Cannot process refund: Neither tokens nor credits features are enabled" %}{% endfilter %}');
+                if (!window.lmTesting) alert('{% filter escapejs %}{% trans "Cannot issue a refund: neither tokens nor credits are enabled" %}{% endfilter %}');
                 return false;
             {% else %}
                 return window.lmTesting ? true : confirm('{% filter escapejs %}{% trans "Are you really sure?" %}{% endfilter %}');

@@ -340,9 +340,10 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
             run_status["text"] = registration_text
             run_status["status_type"] = "pending"
             run_status["action"] = {
-                "label": _("Awaiting member approval"),
+                "label": _("Pending approval"),
                 "label_long": _(
-                    "Your membership application is under review by the organization; payment will be available once it is approved"
+                    "Your membership application is being reviewed by the organization. "
+                    "Payment will be available once it has been approved."
                 ),
             }
             run_status["can_pay"] = False

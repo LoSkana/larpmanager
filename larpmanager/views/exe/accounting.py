@@ -108,7 +108,7 @@ def exe_outflows(request: HttpRequest) -> HttpResponse:
                 ("descr", _("Description")),
                 ("value", _("Value")),
                 ("payment_date", _("Date")),
-                ("statement", _("Statement")),
+                ("statement", _("Receipt")),
             ],
             # Define custom display callbacks for specific fields
             "callbacks": {
@@ -180,7 +180,7 @@ def exe_inflows(request: HttpRequest) -> HttpResponse:
                 ("descr", _("Description")),
                 ("value", _("Value")),
                 ("payment_date", _("Date")),
-                ("statement", _("Statement")),
+                ("statement", _("Receipt")),
             ],
             # Configure custom rendering callbacks for special fields
             "callbacks": {
@@ -453,7 +453,7 @@ def exe_expenses(request: HttpRequest) -> HttpResponse:
                 ("action", _("Action")),
                 ("run", _("Event")),
                 ("descr", _("Description")),
-                ("statement", _("Statement")),
+                ("statement", _("Receipt")),
                 ("value", _("Value")),
                 ("created", _("Date")),
             ],

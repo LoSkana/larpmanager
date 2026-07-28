@@ -1078,7 +1078,7 @@ def _check_discount(discount: Any, member: Any, run: Any, event: Any) -> Any:
         return _("Non-cumulative code")
 
     if discount.max_redeem > 0 and _is_discount_maxed(discount, run):
-        return _("Sorry, this facilitation code has already been used the maximum number allowed")
+        return _("This discount code has reached its limit.")
 
     if not _validate_exclusive_logic(discount, member, run, event):
         return _("Discount not combinable with other benefits.")

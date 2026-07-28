@@ -9,13 +9,13 @@
 {% block content %}
     <h2>{% trans "Global balance" %}</h2>
     <br />
-    <i>({% trans "this figure is the main positive, the operating margin. It takes into account of budgets for events that have been over two months, which are considered to be closed, and treats all tokens and credits as reimbursed." %})</i>
+    <i>({% trans "Operating margin, taking into account the budgets of completed events, minus credits or tokens issued." %})</i>
     <br />
     <br />
     <div id="globalSumContainer" class="accounting_record"></div>
     <h2>{% trans "Overall balance" %}</h2>
     <br />
-    <i>({% trans "this figure is the net that should result as availability of financial instruments - it does not take into account tokens and credits" %})</i>
+    <i>({% trans "Net financial availability, held in the organization's bank and financial accounts." %})</i>
     <br />
     <br />
     <div id="bankSumContainer" class="accounting_record"></div>

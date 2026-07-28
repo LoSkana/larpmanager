@@ -103,7 +103,7 @@ msgid "Registration closed"
 msgstr ""
 
 #, python-format
-msgid "Registrations opening at: %(date)s"
+msgid "Registrations opening on: %(date)s"
 msgstr ""
 
 msgid "Player"
@@ -154,9 +154,7 @@ msgstr ""
 msgid "Payments"
 msgstr ""
 
-msgid ""
-"Track all member payments across events, review amounts and statuses, and "
-"confirm pending registration invoices"
+msgid "Track and review event payments, and confirm pending ones"
 msgstr ""
 
 msgid "Manage outgoing payments linked to events"
@@ -193,9 +191,7 @@ msgstr ""
 msgid "A member must be selected to mark the collection as paid"
 msgstr ""
 
-msgid ""
-"Manage discounts configured for this event, including type, value, and "
-"redemption codes"
+msgid "Configure event discounts, discount types, values, and promo codes."
 msgstr ""
 
 msgid "Indicates the sessions for which the discount is available"
@@ -515,7 +511,7 @@ msgstr ""
 msgid "Campaign"
 msgstr ""
 
-msgid "Move registration event"
+msgid "Allow registration transfers"
 msgstr ""
 
 msgid "Allow to switch registration between events"
@@ -1705,7 +1701,7 @@ msgstr ""
 msgid "Manage custom text entries used across different sections of this event"
 msgstr ""
 
-msgid "Text show at the start of all character sheets"
+msgid "Text shown at the start of all character sheets"
 msgstr ""
 
 msgid "Added to the registration page, before the form"
@@ -2282,7 +2278,7 @@ msgid ""
 "them of the approval decision"
 msgstr ""
 
-msgid "Volounteer data"
+msgid "Volounteers data"
 msgstr ""
 
 msgid ""
@@ -2291,8 +2287,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"View and edit a member's profile, including personal data, membership "
-"documents, and links to their registrations and accounting"
+"View and edit member profiles, documents, registrations, and payment history."
 msgstr ""
 
 msgid ""
@@ -2300,9 +2295,7 @@ msgid ""
 "requests, and track renewal status for the current year"
 msgstr ""
 
-msgid ""
-"Upload a membership fee invoice for a member to record and confirm their "
-"payment for the current year"
+msgid "Upload member's fee receipt to confirm payment for the current year"
 msgstr ""
 
 msgid "Upload membership fee"
@@ -2480,8 +2473,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Manage all active participant registrations, including character "
-"assignments, ticket types, and payment status"
+"Manage all registrations, character assignments, tickets, options and "
+"accounting status"
 msgstr ""
 
 msgid "Registration"
@@ -2505,9 +2498,7 @@ msgstr ""
 msgid "User already has a registration for this event!"
 msgstr ""
 
-msgid ""
-"Define the ticket types participants can select when registering, including "
-"pricing and tiers"
+msgid "Configure ticket types, pricing, and tiers for participants."
 msgstr ""
 
 msgid ""
@@ -2595,8 +2586,7 @@ msgstr ""
 msgid "Select the new event"
 msgstr ""
 
-msgid ""
-"Manage all warehouse items, including their containers, tags, and quantities"
+msgid "Manage all warehouse items, their containers, tags, and quantities"
 msgstr ""
 
 msgid "Warehouse items"
@@ -2910,9 +2900,6 @@ msgstr ""
 #, python-format
 msgid ""
 "Check the available number of discounts <a href='%(url)s'>on this page</a>."
-msgstr ""
-
-msgid "See you soon!"
 msgstr ""
 
 #, python-format
@@ -3789,7 +3776,7 @@ msgstr ""
 msgid "Registration mail"
 msgstr ""
 
-msgid "Statute"
+msgid "Association Statute"
 msgstr ""
 
 msgid "Legal notice"
@@ -3804,16 +3791,13 @@ msgstr ""
 msgid "Privacy"
 msgstr ""
 
-msgid "Reminder membership request"
+msgid "Membership request reminder email"
 msgstr ""
 
-msgid "Reminder membership fee"
+msgid "Payment reminder email"
 msgstr ""
 
-msgid "Reminder payment"
-msgstr ""
-
-msgid "Reminder profile"
+msgid "Profile completion reminder email"
 msgstr ""
 
 msgid "Type of text"
@@ -3975,7 +3959,9 @@ msgstr ""
 msgid "Parent campaign"
 msgstr ""
 
-msgid "Selecting an event joins its campaign and shares characters with it"
+msgid ""
+"Selecting an event makes you join its campaign and share your characters "
+"with it"
 msgstr ""
 
 msgid "leave empty to start a new campaign"
@@ -4076,9 +4062,7 @@ msgstr ""
 msgid "Registration date"
 msgstr ""
 
-msgid ""
-"Date and time when registrations open, or close, for participants depending "
-"on status"
+msgid "Date and time of status change"
 msgstr ""
 
 msgid "External registration link"
@@ -5371,7 +5355,7 @@ msgstr ""
 msgid "Names"
 msgstr ""
 
-msgid "Cancellation for missing organization registration"
+msgid "Cancellation for missing membership registration"
 msgstr ""
 
 msgid "Tolerance exceeded, proceed with the cancellation"
@@ -5386,7 +5370,7 @@ msgstr ""
 msgid "Cancellation for missing profile"
 msgstr ""
 
-msgid "Delay in organization registration"
+msgid "Membership registration overdue"
 msgstr ""
 
 msgid "They need to complete it immediately"
@@ -5657,7 +5641,7 @@ msgstr ""
 msgid "Maximum"
 msgstr ""
 
-msgid "An error occurred while reordering"
+msgid "An error occurred while elements reordering"
 msgstr ""
 
 msgid "An error occurred while deleting"
@@ -5694,7 +5678,7 @@ msgstr ""
 msgid "Use the bank details below to make the transfer from your bank."
 msgstr ""
 
-msgid "Copy the causal exactly as shown (in coloured text)!"
+msgid "Copy the payment reference exactly as shown (in colored text)."
 msgstr ""
 
 msgid "Bank address"
@@ -6413,14 +6397,12 @@ msgstr ""
 msgid "Personal code:"
 msgstr ""
 
-msgid ""
-"Every friend who registers and uses this code will receive the following "
-"discount directly on their ticket:"
+#, python-format
+msgid "Friends who use your code get %(discount)s%(symbol)s off their ticket."
 msgstr ""
 
-msgid ""
-"For each of them, you will receive the following discount on your membership "
-"event registration:"
+#, python-format
+msgid "You get %(discount)s%(symbol)s off for each friend who registers."
 msgstr ""
 
 msgid "Cancel registration"
@@ -6611,8 +6593,8 @@ msgid "Global balance:"
 msgstr ""
 
 msgid ""
-"This is the associative positive operating margin, taking into account the "
-"budgets of completed events, minus credits or tokens issued"
+"Operating margin, taking into account the budgets of completed events, minus "
+"credits or tokens issued."
 msgstr ""
 
 msgid "Membership fees"
@@ -6632,8 +6614,8 @@ msgid "Overall balance:"
 msgstr ""
 
 msgid ""
-"This is the overall amount that should be held in the organization's bank "
-"and financial accounts"
+"Net financial availability, held in the organization's bank and financial "
+"accounts."
 msgstr ""
 
 msgid "Total payments"
@@ -6672,17 +6654,6 @@ msgstr ""
 msgid ""
 "Track the historical evolution of the organization's global and bank "
 "balances over time as interactive charts"
-msgstr ""
-
-msgid ""
-"this figure is the main positive, the operating margin. It takes into "
-"account of budgets for events that have been over two months, which are "
-"considered to be closed, and treats all tokens and credits as reimbursed."
-msgstr ""
-
-msgid ""
-"this figure is the net that should result as availability of financial "
-"instruments - it does not take into account tokens and credits"
 msgstr ""
 
 msgid ""
@@ -7316,9 +7287,7 @@ msgstr ""
 msgid "Collected votes"
 msgstr ""
 
-msgid ""
-"No candidates registered yet. Candidates will appear here once they are "
-"added to the vote."
+msgid "Votes will appear here once cast."
 msgstr ""
 
 msgid "List of voters"
@@ -7348,9 +7317,6 @@ msgid "Payment"
 msgstr ""
 
 msgid "Verification"
-msgstr ""
-
-msgid "Statement"
 msgstr ""
 
 msgid ""
@@ -7386,9 +7352,6 @@ msgid "Apply Upgrade"
 msgstr ""
 
 msgid "The organization is running the latest version."
-msgstr ""
-
-msgid "Position"
 msgstr ""
 
 msgid ""
@@ -7875,7 +7838,7 @@ msgid "Payments pending delegated accounts"
 msgstr ""
 
 msgid ""
-"These are delegated account registrations for which you have to make a "
+"These are registrations from delegated account for which you have to make a "
 "payment."
 msgstr ""
 
@@ -7989,7 +7952,7 @@ msgstr ""
 msgid "Manage it here!"
 msgstr ""
 
-msgid "Collection participated:"
+msgid "Collections participated:"
 msgstr ""
 
 msgid "If you would like to make a donation to the Organization"
@@ -8253,10 +8216,8 @@ msgstr ""
 msgid "Expected:"
 msgstr ""
 
-msgid "Update your data in the"
-msgstr ""
-
-msgid "user profile"
+#, python-format
+msgid "Update your information in your <a href=\"%(url)s\">user profile</a>."
 msgstr ""
 
 msgid "You are not yet a Member of the Organization!"
@@ -8314,7 +8275,10 @@ msgid ""
 "I confirm that all my required personal data have been filled in correctly"
 msgstr ""
 
-msgid "If you wish to update your personal data"
+#, python-format
+msgid ""
+"If you wish to update your personal data, <a href=\"%(profile_url)s\">click "
+"here</a>."
 msgstr ""
 
 msgid ""
@@ -8524,38 +8488,34 @@ msgstr ""
 msgid "Entry"
 msgstr ""
 
-msgid "Refund for"
+#, python-format
+msgid "Refund for %(registration)s"
 msgstr ""
 
 msgid ""
-"Process a token or credit refund for a participant who has cancelled their "
-"registration"
+"Issue a refund in tokens or credits for a participant whose registration was "
+"cancelled"
 msgstr ""
 
 msgid "Registration fee"
 msgstr ""
 
-msgid "Actual paid"
-msgstr ""
-
 msgid "Money"
 msgstr ""
 
-msgid "Returning"
+msgid "Refund details"
 msgstr ""
 
-msgid "Retention"
+msgid "Amount kept"
 msgstr ""
 
-msgid "Full returning"
+msgid "Refund amount"
 msgstr ""
 
-msgid "Returning type"
+msgid "Refund method"
 msgstr ""
 
-msgid ""
-"Warning: Neither tokens nor credits features are enabled. Refunds cannot be "
-"processed as virtual currency."
+msgid "Refunds are unavailable because neither tokens nor credits are enabled."
 msgstr ""
 
 msgid "Only"
@@ -8565,13 +8525,10 @@ msgstr ""
 msgid "Both %(tokens)s and %(credits)s"
 msgstr ""
 
-msgid "Returning percentage"
+msgid "Refund percentage"
 msgstr ""
 
-msgid "Approve reimbursement"
-msgstr ""
-
-msgid "Cannot process refund: Neither tokens nor credits features are enabled"
+msgid "Cannot issue a refund: neither tokens nor credits are enabled"
 msgstr ""
 
 msgid "Cancellations"
@@ -8581,6 +8538,9 @@ msgid "Review all cancelled registrations and track their refund status"
 msgstr ""
 
 msgid "Cancellation date"
+msgstr ""
+
+msgid "Approve reimbursement"
 msgstr ""
 
 msgid "No cancelled registrations found for this event."
@@ -9097,18 +9057,17 @@ msgstr ""
 msgid "The following registrations were drawn:"
 msgstr ""
 
-msgid "The total number of tickets to be drawn was indicated:"
+msgid "Total tickets to be drawn:"
 msgstr ""
 
-msgid "Lottery tickets currently present:"
+msgid "Tickets currently in the lottery:"
 msgstr ""
 
-msgid "Tickets that have already been drawn:"
+msgid "Tickets already drawn:"
 msgstr ""
 
 msgid ""
-"Go ahead and click on this button to perform the extraction. Warning: it is "
-"final!"
+"Click this button to run the draw. Warning: this action cannot be undone."
 msgstr ""
 
 msgid "Perform extraction"
@@ -9934,8 +9893,7 @@ msgid ""
 "quest type to organize your quests."
 msgstr ""
 
-msgid ""
-"View and edit all directed relationships between characters in this event"
+msgid "View and edit all relationships between characters in this event"
 msgstr ""
 
 msgid "Target"
@@ -10985,7 +10943,7 @@ msgstr ""
 msgid "Manage the event factions"
 msgstr ""
 
-msgid "Manage the type of event quests"
+msgid "Manage the types of event quest"
 msgstr ""
 
 msgid "Manage the event quests"
@@ -10994,10 +10952,10 @@ msgstr ""
 msgid "Manage the traits available in the event quests"
 msgstr ""
 
-msgid "Prologues type"
+msgid "Prologue types"
 msgstr ""
 
-msgid "Manage the type of event prologues"
+msgid "Manage the types of event prologue"
 msgstr ""
 
 msgid "Manage the event prologues"
@@ -11293,7 +11251,7 @@ msgstr ""
 msgid "View photos from the event!"
 msgstr ""
 
-msgid "Give a card to your friend"
+msgid "Gift a registration to your friend"
 msgstr ""
 
 msgid ""
@@ -11413,7 +11371,7 @@ msgstr ""
 msgid "(Optional) The ability description"
 msgstr ""
 
-msgid "(Optional) Other ability as prerequisite, comma-separated"
+msgid "(Optional) Other abilities as prerequisite, comma-separated"
 msgstr ""
 
 msgid "(Optional) Character options as requirements, comma-separated"
@@ -11655,7 +11613,7 @@ msgstr ""
 msgid "Create at least one character for one of your events"
 msgstr ""
 
-msgid "First assignment"
+msgid "First character assignment"
 msgstr ""
 
 msgid "Assign a character to a registered participant"
@@ -11791,12 +11749,12 @@ msgid ""
 "for your registration"
 msgstr ""
 
-msgid "Awaiting member approval"
+msgid "Pending approval"
 msgstr ""
 
 msgid ""
-"Your membership application is under review by the organization; payment "
-"will be available once it is approved"
+"Your membership application is being reviewed by the organization. Payment "
+"will be available once it has been approved."
 msgstr ""
 
 msgid "Complete your profile"
@@ -12850,9 +12808,7 @@ msgstr ""
 msgid "Non-cumulative code"
 msgstr ""
 
-msgid ""
-"Sorry, this facilitation code has already been used the maximum number "
-"allowed"
+msgid "This discount code has reached its limit."
 msgstr ""
 
 msgid "Discount not combinable with other benefits."

@@ -7,7 +7,7 @@
         <table>
             {% if widgets.accounting.global_sum != 0 %}
                 <tr>
-                    <th descr="{% trans "This is the associative positive operating margin, taking into account the budgets of completed events, minus credits or tokens issued" %}">
+                    <th descr="{% trans "Operating margin, taking into account the budgets of completed events, minus credits or tokens issued." %}">
                         <a href="#" class="sidebar-link">{% trans "Global balance" %}</a>
                         <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
                         <td>{{ widgets.accounting.global_sum }}</td>
@@ -16,7 +16,7 @@
             {% endif %}
             {% if widgets.accounting.bank_sum != 0 %}
                 <tr>
-                    <th descr="{% trans "This is the overall amount that should be held in the organization's bank and financial accounts" %}">
+                    <th descr="{% trans "Net financial availability, held in the organization's bank and financial accounts." %}">
                         <a href="#" class="sidebar-link">{% trans "Overall balance" %}</a>
                         <a href="#" class="explain-icon"><i class="fas fa-question-circle"></i></a>
                         <td>{{ widgets.accounting.bank_sum }}</td>

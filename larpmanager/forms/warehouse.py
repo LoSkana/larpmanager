@@ -49,7 +49,7 @@ from larpmanager.models.miscellanea import (
 class ExeWarehouseItemForm(BaseModelForm):
     """Form for ExeWarehouseItem."""
 
-    page_info = _("Manage all warehouse items, including their containers, tags, and quantities")
+    page_info = _("Manage all warehouse items, their containers, tags, and quantities")
 
     page_title = _("Warehouse items")
 

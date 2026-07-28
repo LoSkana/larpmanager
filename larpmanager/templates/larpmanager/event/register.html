@@ -21,10 +21,14 @@
             </p>
             <p>{% trans "Copy this code and share it with friends!" %}</p>
             <p>
-                {% trans "Every friend who registers and uses this code will receive the following discount directly on their ticket:" %} {{ bring_friend_discount_to|floatformat:"0" }}{{ currency_symbol_symbol }}.
+                {% blocktrans trimmed with discount=bring_friend_discount_to|floatformat:"0" symbol=currency_symbol_symbol %}
+                    Friends who use your code get {{ discount }}{{ symbol }} off their ticket.
+                {% endblocktrans %}
             </p>
             <p>
-                {% trans "For each of them, you will receive the following discount on your membership event registration:" %} {{ bring_friend_discount_from|floatformat:"0" }}{{ currency_symbol_symbol }}.
+                {% blocktrans trimmed with discount=bring_friend_discount_from|floatformat:"0" symbol=currency_symbol_symbol %}
+                    You get {{ discount }}{{ symbol }} off for each friend who registers.
+                {% endblocktrans %}
             </p>
         {% endif %}
         {% if registration or not run_status.closed %}
