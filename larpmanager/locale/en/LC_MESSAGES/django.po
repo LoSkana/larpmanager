@@ -3504,6 +3504,9 @@ msgstr ""
 msgid "Withheld as transaction fee"
 msgstr ""
 
+msgid "Payment"
+msgstr ""
+
 msgid "Set design - staging, materials"
 msgstr ""
 
@@ -7311,9 +7314,6 @@ msgid ""
 msgstr ""
 
 msgid "List payments to verify"
-msgstr ""
-
-msgid "Payment"
 msgstr ""
 
 msgid "Verification"
