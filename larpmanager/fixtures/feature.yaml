@@ -718,13 +718,13 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Fiscal Budget
+    name: Annual fiscal report
     descr: Generates an annual summary of fiscal activity for the Italian budget report
     slug: ita_balance
     overall: true
     placeholder: false
     order: 10
-    after_text: Now you can review the annual balance
+    after_text: You can now review the annual balance sheet.
     after_link: exe_balance
     hidden: false
     module: italy
@@ -779,7 +779,7 @@
     overall: false
     placeholder: false
     order: 50
-    after_text: Now you can set the experience points settings
+    after_text: You can now configure experience point settings.
     after_link: config/experience
     hidden: false
     module: event
@@ -828,14 +828,14 @@
     - character
 - model: larpmanager.feature
   fields:
-    name: Organisation tax
+    name: Event organization fee
     descr: Allows you to set a 'tax' percentage on event income that must be set aside
       for the organisation
     slug: organization_tax
     overall: true
     placeholder: false
     order: 110
-    after_text: Now you can set the organization tax options
+    after_text: Now you can set the options for the event organization fee
     after_link: config/organization_tax
     hidden: false
     module: accounting

@@ -201,7 +201,7 @@ def pre_register_remove(request: HttpRequest, event_slug: str) -> Any:
     element = PreRegistration.objects.filter(member=context["member"], event=context["event"]).first()
     if element:
         element.delete()
-        messages.success(request, _("Pre-registration cancelled!"))
+        messages.success(request, _("Your pre-registration has been cancelled."))
     else:
         messages.warning(request, _("Pre-registration not found."))
     return redirect("pre_register")

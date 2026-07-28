@@ -649,8 +649,8 @@ msgid "Disable amount change"
 msgstr ""
 
 msgid ""
-"If checked: Hides the possibility for the participant to change the payment "
-"amount for his entries"
+"If checked, participants cannot change the payment amount for their "
+"registrations."
 msgstr ""
 
 msgid "Unique code"
@@ -713,7 +713,7 @@ msgstr ""
 msgid "Treasury appointees"
 msgstr ""
 
-msgid "Organisation fee"
+msgid "Event organization fee"
 msgstr ""
 
 msgid "Percentage"
@@ -998,13 +998,13 @@ msgstr ""
 msgid "Insert the css code to customize the pdf printing"
 msgstr ""
 
-msgid "Header"
+msgid "Header HTML"
 msgstr ""
 
 msgid "Insert the html code for the header"
 msgstr ""
 
-msgid "Footer"
+msgid "Footer HTML"
 msgstr ""
 
 msgid "Insert the html code for the footer"
@@ -1628,7 +1628,7 @@ msgid ""
 "earlier (0=default disabled, 1=normal, 10=strong)"
 msgstr ""
 
-msgid "Alert"
+msgid "Payment reminder"
 msgstr ""
 
 msgid ""
@@ -1636,7 +1636,7 @@ msgid ""
 "notifies the participant to proceed with the payment. Default 30."
 msgstr ""
 
-msgid "Causal"
+msgid "Payment reference"
 msgstr ""
 
 msgid ""
@@ -1647,7 +1647,7 @@ msgstr ""
 msgid "You can use the following fields, they will be filled in automatically:"
 msgstr ""
 
-msgid "Disable provisional"
+msgid "Disable provisional registrations"
 msgstr ""
 
 msgid ""
@@ -3398,9 +3398,6 @@ msgstr ""
 msgid "Please verify the following payment details:"
 msgstr ""
 
-msgid "Payment reference"
-msgstr ""
-
 msgid "Amount"
 msgstr ""
 
@@ -3752,7 +3749,7 @@ msgstr ""
 msgid "it will enable country-specific features"
 msgstr ""
 
-msgid "Support maintainers"
+msgid "Support staff"
 msgstr ""
 
 msgid "Staff members who will receive and manage support tickets"
@@ -3761,13 +3758,16 @@ msgstr ""
 msgid "Calendar"
 msgstr ""
 
-msgid "Registration mail"
+msgid "Registration email"
 msgstr ""
 
 msgid "Association Statute"
 msgstr ""
 
 msgid "Legal notice"
+msgstr ""
+
+msgid "Footer"
 msgstr ""
 
 msgid "Terms and Conditions"
@@ -3797,7 +3797,7 @@ msgstr ""
 msgid "Text language"
 msgstr ""
 
-msgid "Optional ordering number"
+msgid "Optional sorting"
 msgstr ""
 
 msgid "Association"
@@ -3984,7 +3984,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "Mail assignment"
+msgid "Character assignment email"
 msgstr ""
 
 msgid "Player's character form"
@@ -4779,7 +4779,7 @@ msgstr ""
 msgid "The time transportation is needed (local event time zone)."
 msgstr ""
 
-msgid "Driver notes"
+msgid "Passenger information"
 msgstr ""
 
 msgid ""
@@ -5170,7 +5170,7 @@ msgstr ""
 msgid "Something went wrong in the account activation:"
 msgstr ""
 
-msgid "Registration closed."
+msgid "Registration is closed."
 msgstr ""
 
 msgid "Registration complete"
@@ -5379,7 +5379,7 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
-msgid "Show hint"
+msgid "Show help tip"
 msgstr ""
 
 msgid "Don't open automatically again"
@@ -6143,7 +6143,7 @@ msgstr ""
 msgid "Browse the characters and participants of the event"
 msgstr ""
 
-msgid "Registered"
+msgid "Registrants"
 msgstr ""
 
 msgid "Give a registration to this event as a gift to a friend"
@@ -6188,7 +6188,10 @@ msgstr ""
 msgid "New gift"
 msgstr ""
 
-msgid "View all event information, and any specifics tickets costs, in its"
+#, python-format
+msgid ""
+" View all event information and ticket prices on <a target=\"_blank\" "
+"href=\"%(website)s\">the event website</a>."
 msgstr ""
 
 msgid "Summary"
@@ -6329,7 +6332,7 @@ msgstr ""
 msgid "Audio"
 msgstr ""
 
-msgid "Media"
+msgid "Media files"
 msgstr ""
 
 msgid "One-Time Access Warning"
@@ -6671,9 +6674,6 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-msgid "Organization fee"
-msgstr ""
-
 msgid "No outflows recorded for the selected year."
 msgstr ""
 
@@ -6886,19 +6886,19 @@ msgid ""
 "order or total"
 msgstr ""
 
-msgid "First"
+msgid "1st choice"
 msgstr ""
 
-msgid "Second"
+msgid "2nd choice"
 msgstr ""
 
-msgid "Third"
+msgid "3rd choice"
 msgstr ""
 
-msgid "Fourth"
+msgid "4th choice"
 msgstr ""
 
-msgid "Fifth"
+msgid "5th choice"
 msgstr ""
 
 msgid ""
@@ -6967,7 +6967,7 @@ msgid ""
 "links for your events."
 msgstr ""
 
-msgid "Archive mail"
+msgid "Email archive"
 msgstr ""
 
 msgid ""
@@ -7162,7 +7162,7 @@ msgid ""
 "those requiring no further action"
 msgstr ""
 
-msgid "Show questions already answered"
+msgid "Show answered questions"
 msgstr ""
 
 msgid "Answer"
@@ -7208,7 +7208,7 @@ msgstr ""
 msgid "Card number"
 msgstr ""
 
-msgid "Date of association"
+msgid "Membership date"
 msgstr ""
 
 msgid ""
@@ -7400,17 +7400,20 @@ msgstr ""
 msgid "May the best win!"
 msgstr ""
 
-msgid "Prev"
+msgid "First page"
+msgstr ""
+
+msgid "Previus page"
 msgstr ""
 
 #, python-format
 msgid "Page %(number)s of %(num_pages)s"
 msgstr ""
 
-msgid "Next"
+msgid "Next page"
 msgstr ""
 
-msgid "Last"
+msgid "Last page"
 msgstr ""
 
 msgid "Browse events that have already taken place"
@@ -7432,6 +7435,9 @@ msgid ""
 msgstr ""
 
 msgid "New pre-registration"
+msgstr ""
+
+msgid "Preference order"
 msgstr ""
 
 msgid "Do you want to tell us something?"
@@ -7570,8 +7576,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"At the top, you'll find shortcuts to access your organization dashboard "
-"(this page), as well as the active event dashboards, when you'll create them."
+"At the top, you'll find shortcuts to this organization dashboard and to each "
+"active event dashboard once you create the event."
 msgstr ""
 
 msgid ""
@@ -7726,9 +7732,6 @@ msgid "Net profit"
 msgstr ""
 
 msgid "Minimum amount of net profit to be retained for the association tax"
-msgstr ""
-
-msgid "Organization tax"
 msgstr ""
 
 msgid "No transactions recorded"
@@ -8406,7 +8409,7 @@ msgid ""
 "app, then enter the 6-digit code to confirm."
 msgstr ""
 
-msgid "Sharing"
+msgid "Data sharing"
 msgstr ""
 
 msgid ""
@@ -8464,7 +8467,10 @@ msgstr ""
 msgid "Net profit:"
 msgstr ""
 
-msgid "Organization tax:"
+msgid "Event organization fee:"
+msgstr ""
+
+msgid "Minimum amount of net profit to be retained for the organization fee"
 msgstr ""
 
 msgid "Entry"
@@ -9641,7 +9647,7 @@ msgid ""
 "module."
 msgstr ""
 
-msgid "Workshop option answer"
+msgid "Workshop question answer options"
 msgstr ""
 
 msgid ""
@@ -10421,14 +10427,14 @@ msgstr ""
 msgid "Now you can verify wire payments"
 msgstr ""
 
-msgid "Fiscal Budget"
+msgid "Annual fiscal report"
 msgstr ""
 
 msgid ""
 "Generates an annual summary of fiscal activity for the Italian budget report"
 msgstr ""
 
-msgid "Now you can review the annual balance"
+msgid "You can now review the annual balance sheet."
 msgstr ""
 
 msgid "Enables payment processing, specifying which payment methods to accept"
@@ -10458,7 +10464,7 @@ msgid ""
 "then be used to purchase abilities"
 msgstr ""
 
-msgid "Now you can set the experience points settings"
+msgid "You can now configure experience point settings."
 msgstr ""
 
 msgid "Allows participants to create and modify their own characters freely"
@@ -10479,15 +10485,12 @@ msgstr ""
 msgid "Allows characters to have inventories"
 msgstr ""
 
-msgid "Organisation tax"
-msgstr ""
-
 msgid ""
 "Allows you to set a 'tax' percentage on event income that must be set aside "
 "for the organisation"
 msgstr ""
 
-msgid "Now you can set the organization tax options"
+msgid "Now you can set the options for the event organization fee"
 msgstr ""
 
 msgid ""
@@ -11451,10 +11454,7 @@ msgstr ""
 msgid "Description of the relationship from source to target"
 msgstr ""
 
-msgid "Name of the plot"
-msgstr ""
-
-msgid "Name of the character"
+msgid "Plot name"
 msgstr ""
 
 msgid "Description of the role of the character in the plot"
@@ -11827,7 +11827,7 @@ msgid "Registrations for this event have not opened yet"
 msgstr ""
 
 #, python-format
-msgid "Opening on: %(date)s"
+msgid "Registration opens on: %(date)s"
 msgstr ""
 
 msgid "Registrations closed"
@@ -11848,7 +11848,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "Closing on: %(date)s"
+msgid "Registration closes on: %(date)s"
 msgstr ""
 
 msgid "Pre-registration confirmed!"
@@ -11922,6 +11922,9 @@ msgid "VAT (Ticket)"
 msgstr ""
 
 msgid "VAT (Options)"
+msgstr ""
+
+msgid "Causal"
 msgstr ""
 
 msgid "Element approved!"
@@ -12121,7 +12124,7 @@ msgstr ""
 msgid "Set up payment methods"
 msgstr ""
 
-msgid "Set up the organization tax configuration"
+msgid "Configure the event organization fee"
 msgstr ""
 
 msgid "Set up the taxes configuration"
@@ -12663,7 +12666,7 @@ msgstr ""
 msgid "Question saved!"
 msgstr ""
 
-msgid "Workshop already done!"
+msgid "You have already completed this workshop module."
 msgstr ""
 
 #, python-brace-format
@@ -12725,7 +12728,7 @@ msgstr ""
 msgid "Pre-registrations saved!"
 msgstr ""
 
-msgid "Pre-registration cancelled!"
+msgid "Your pre-registration has been cancelled."
 msgstr ""
 
 msgid "Pre-registration not found."

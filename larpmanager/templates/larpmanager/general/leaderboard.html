@@ -13,17 +13,17 @@
         <tr>
             <td>
                 {% if number != 1 %}
-                    <a href="{% url 'leaderboard' 1 %}"><i class="fas fa-angle-double-left"></i> {% trans "First" %}</a>
+                    <a href="{% url 'leaderboard' 1 %}"><i class="fas fa-angle-double-left"></i> {% trans "First page" %}</a>
                 {% endif %}
                 {% if previous_page_number > 0 %}
-                    <a href="{% url 'leaderboard' previous_page_number %}">{% trans "Prev" %}</a>
+                    <a href="{% url 'leaderboard' previous_page_number %}">{% trans "Previus page" %}</a>
                 {% endif %}
             </td>
             <td>{% blocktrans %}Page {{ number }} of {{ num_pages }}{% endblocktrans %}</td>
             <td>
                 {% if number != num_pages %}
-                    <a href="{% url 'leaderboard' next_page_number %}">{% trans "Next" %}</a>
-                    <a href="{% url 'leaderboard' num_pages %}">{% trans "Last" %} <i class="fas fa-angle-double-right"></i></a>
+                    <a href="{% url 'leaderboard' next_page_number %}">{% trans "Next page" %}</a>
+                    <a href="{% url 'leaderboard' num_pages %}">{% trans "Last page" %} <i class="fas fa-angle-double-right"></i></a>
                 {% endif %}
             </td>
         </tr>

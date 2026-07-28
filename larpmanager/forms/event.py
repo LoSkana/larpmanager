@@ -124,11 +124,15 @@ class EventCharactersPdfForm(ConfigForm):
 
         # Add header content configuration
         # Users can define custom HTML content to appear at the top of each PDF page
-        self.add_configs("header_content", ConfigType.TEXTAREA, _("Header"), _("Insert the html code for the header"))
+        self.add_configs(
+            "header_content", ConfigType.TEXTAREA, _("Header HTML"), _("Insert the html code for the header")
+        )
 
         # Add footer content configuration
         # Users can define custom HTML content to appear at the bottom of each PDF page
-        self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer"), _("Insert the html code for the footer"))
+        self.add_configs(
+            "footer_content", ConfigType.TEXTAREA, _("Footer HTML"), _("Insert the html code for the footer")
+        )
 
 
 class OrgaEventForm(BaseModelForm):
@@ -1035,7 +1039,7 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("payment", _("Payments"))
 
             # Payment alert configuration - days before deadline to notify users
-            payment_alert_label = _("Alert")
+            payment_alert_label = _("Payment reminder")
             payment_alert_help_text = _(
                 "Given a payment deadline, indicates the number of days under which it notifies "
                 "the participant to proceed with the payment. Default 30.",
@@ -1043,7 +1047,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("payment_alert", ConfigType.INT, payment_alert_label, payment_alert_help_text)
 
             # Custom payment reason configuration with dynamic field substitution
-            payment_reason_label = _("Causal")
+            payment_reason_label = _("Payment reference")
             payment_reason_help_text = _(
                 "If present, it indicates the reason for the payment that the participant must put on the payments they make.",
             )
@@ -1055,7 +1059,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("payment_custom_reason", ConfigType.CHAR, payment_reason_label, payment_reason_help_text)
 
             # Option to disable provisional registrations - auto-confirm all registrations
-            disable_provisional_label = _("Disable provisional")
+            disable_provisional_label = _("Disable provisional registrations")
             disable_provisional_help_text = _(
                 "If checked, all registrations are confirmed even if no payment has been received",
             )

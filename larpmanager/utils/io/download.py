@@ -1159,8 +1159,8 @@ def _get_writing_names(context: dict) -> None:
     elif context["writing_typ"] == QuestionApplicable.PLOT:
         context["columns"].append(
             {
-                "plot": _("Name of the plot"),
-                "character": _("Name of the character"),
+                "plot": _("Plot name"),
+                "character": _("Character name"),
                 "text": _("Description of the role of the character in the plot"),
             },
         )

@@ -300,7 +300,7 @@ class Association(UuidMixin, BaseModel):
         "larpmanager.Member",
         related_name="maintained_associations",
         blank=True,
-        verbose_name=_("Support maintainers"),
+        verbose_name=_("Support staff"),
         help_text=_("Staff members who will receive and manage support tickets"),
     )
 
@@ -380,7 +380,7 @@ class AssociationTextType(models.TextChoices):
 
     PROFILE = "p", _("Profile")
     HOME = "h", _("Calendar")
-    SIGNUP = "u", _("Registration mail")
+    SIGNUP = "u", _("Registration email")
     MEMBERSHIP = "m", _("Membership request")
     STATUTE = "s", _("Association Statute")
     LEGAL = "l", _("Legal notice")
@@ -469,7 +469,7 @@ class AssociationTranslation(UuidMixin, BaseModel):
         null=True,
         blank=True,
         verbose_name=_("Number"),
-        help_text=_("Optional ordering number"),
+        help_text=_("Optional sorting"),
     )
 
     association = models.ForeignKey(
