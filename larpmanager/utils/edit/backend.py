@@ -149,29 +149,39 @@ def save_version(element: Any, model_type: str, member: Member, *, to_delete: bo
         # For non-question types, use the element's text directly
         tv.text = element.text
 
-    # Add character relationships if this is a character type
-    if model_type == QuestionApplicable.CHARACTER:
-        rels = Relationship.objects.filter(source=element)
-        if rels:
-            tv.text += "\nRelationships\n"
-            for rel in rels:
-                tv.text += f"{rel.target}: {html_clean(rel.text)}\n"
-
-    # Add plot character associations if this is a plot type
-    if model_type == QuestionApplicable.PLOT:
-        chars = PlotCharacterRel.objects.filter(plot=element)
-        if chars:
-            tv.text += "\nCharacters\n"
-            for rel in chars:
-                tv.text += f"{rel.character}: {html_clean(rel.text)}\n"
+    _append_related_text(tv, element, model_type)
 
     # Save the completed version to database
     tv.save()
 
 
+def _append_related_text(version: TextVersion, element: Any, model_type: str) -> None:
+    """Append relationship and plot-role context to character and plot snapshots."""
+    if model_type == QuestionApplicable.CHARACTER:
+        rels = Relationship.objects.filter(source=element)
+        if rels:
+            version.text += "\nRelationships\n"
+            for rel in rels:
+                version.text += f"{rel.target}: {html_clean(rel.text)}\n"
+
+        plot_roles = element.get_plot_characters()
+        if plot_roles:
+            version.text += "\nPlots\n"
+            for rel in plot_roles:
+                version.text += f"{rel.plot}: {html_clean(rel.text)}\n"
+
+    if model_type == QuestionApplicable.PLOT:
+        chars = PlotCharacterRel.objects.filter(plot=element).select_related("character").order_by("character__number")
+        if chars:
+            version.text += "\nCharacters\n"
+            for rel in chars:
+                version.text += f"{rel.character}: {html_clean(rel.text)}\n"
+
+
 def _version_applicable(element: BaseModel, model_type: str) -> str:
     """Prepare text for the version log for an element with writing answers and choices."""
     texts = []
+    includes_text_field = False
 
     # Pre-fetch all answers and choices for this element
     answers_by_question = {a.question_id: a.text for a in WritingAnswer.objects.filter(element_id=element.id)}
@@ -181,11 +191,16 @@ def _version_applicable(element: BaseModel, model_type: str) -> str:
 
     # Collect all applicable questions and their values
     for question in get_cached_writing_questions(element.event, model_type):
+        if question["typ"] == "text":
+            includes_text_field = True
         value = _get_field_value(element, question, answers_by_question, choices_by_question)
         if not value:
             continue
         value = html_clean(value)
         texts.append(f"{question.get('name')}: {value}")
+
+    if not includes_text_field and element.text:
+        texts.insert(0, html_clean(element.text))
 
     return "\n".join(texts)
 
