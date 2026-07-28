@@ -2794,9 +2794,6 @@ msgstr "Colletta per"
 msgid "Communications"
 msgstr "Comunicazioni"
 
-msgid "Confirm refund"
-msgstr "Conferma il rimborso"
-
 msgid "Credit balance"
 msgstr "Saldo crediti"
 

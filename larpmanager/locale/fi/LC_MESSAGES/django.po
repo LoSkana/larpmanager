@@ -2794,9 +2794,6 @@ msgstr "Keräys kohteelle"
 msgid "Communications"
 msgstr "Viestintä"
 
-msgid "Confirm refund"
-msgstr "Vahvista hyvitys"
-
 msgid "Credit balance"
 msgstr "Luottosaldo"
 

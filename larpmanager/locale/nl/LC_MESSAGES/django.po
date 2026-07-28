@@ -2794,9 +2794,6 @@ msgstr "Inzameling voor"
 msgid "Communications"
 msgstr "Communicatie"
 
-msgid "Confirm refund"
-msgstr "Bevestig de terugbetaling"
-
 msgid "Credit balance"
 msgstr "Kredietsaldo"
 

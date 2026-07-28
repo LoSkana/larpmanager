@@ -2794,9 +2794,6 @@ msgstr "Innsamling til"
 msgid "Communications"
 msgstr "Kommunikasjon"
 
-msgid "Confirm refund"
-msgstr "Bekreft refusjon"
-
 msgid "Credit balance"
 msgstr "Kredittsaldo"
 

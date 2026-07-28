@@ -2794,9 +2794,6 @@ msgstr "Sbírka pro"
 msgid "Communications"
 msgstr "Komunikace"
 
-msgid "Confirm refund"
-msgstr "Potvrdit vrácení peněz"
-
 msgid "Credit balance"
 msgstr "Kreditní zůstatek"
 

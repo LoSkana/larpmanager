@@ -80,12 +80,11 @@
         {% endfor %}
     </div>
     <br />
-    <h3>{% trans "Confirm refund" %}</h3>
     <form id="ref" action="{{ request.path }}" method="post">
         {% csrf_token %}
         <input type="hidden" id="inp_token" name="inp_token" value="0" />
         <input type="hidden" id="inp_credit" name="inp_credit" value="0" />
-        <input type="submit" value="{% trans "Confirm refund" %}">
+        <input type="submit" value="{% trans "Confirm" %}">
     </form>
 {% endblock content %}
 {% block js %}

@@ -8510,9 +8510,6 @@ msgstr ""
 msgid "Refund percentage"
 msgstr ""
 
-msgid "Confirm refund"
-msgstr ""
-
 msgid "Cannot issue a refund: neither tokens nor credits are enabled"
 msgstr ""
 

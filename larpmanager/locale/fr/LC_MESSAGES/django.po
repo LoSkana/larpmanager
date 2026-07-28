@@ -2794,9 +2794,6 @@ msgstr "Collecte pour"
 msgid "Communications"
 msgstr "Communications"
 
-msgid "Confirm refund"
-msgstr "Confirmer le remboursement"
-
 msgid "Credit balance"
 msgstr "Solde de crédits"
 
