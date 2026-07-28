@@ -9909,8 +9909,7 @@ msgid ""
 "quest type to organize your quests."
 msgstr ""
 
-msgid ""
-"View and edit all directed relationships between characters in this event"
+msgid "View and edit all relationships between characters in this event"
 msgstr ""
 
 msgid "Target"
@@ -12825,9 +12824,7 @@ msgstr ""
 msgid "Non-cumulative code"
 msgstr ""
 
-msgid ""
-"Sorry, this facilitation code has already been used the maximum number "
-"allowed"
+msgid "This discount code has reached its limit."
 msgstr ""
 
 msgid "Discount not combinable with other benefits."
