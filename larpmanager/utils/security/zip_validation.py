@@ -165,7 +165,7 @@ def safe_extract_zip(zip_file: zipfile.ZipFile | Any, extraction_path: str | Pat
         raise ValueError(msg)
 
     # Create extraction directory if it doesn't exist
-    extraction_path.mkdir(parents=True, exist_ok=True)
+    extraction_path.mkdir(mode=0o770, parents=True, exist_ok=True)
 
     # Open ZIP file if path was provided
     if isinstance(zip_file, (str, Path)):

@@ -336,6 +336,9 @@ msgstr "Obrázek"
 msgid "Italy"
 msgstr "Itálie"
 
+msgid "Item:"
+msgstr "Položka:"
+
 msgid "Items"
 msgstr "Položky"
 
@@ -996,6 +999,9 @@ msgid "Tooltip"
 msgstr "Tooltip"
 
 msgid "Updates"
+msgstr "Aktualizace"
+
+msgid "Upgrade"
 msgstr "Aktualizace"
 
 msgid "Utility"
@@ -1672,6 +1678,9 @@ msgstr "Příloha"
 
 msgid "Attendance"
 msgstr "Docházka"
+
+msgid "Available:"
+msgstr "K dispozici:"
 
 msgid "Birth date"
 msgstr "Datum narození"
@@ -2793,9 +2802,6 @@ msgstr "Sbírka pro"
 
 msgid "Communications"
 msgstr "Komunikace"
-
-msgid "Confirm refund"
-msgstr "Potvrdit vrácení peněz"
 
 msgid "Credit balance"
 msgstr "Kreditní zůstatek"
@@ -4997,6 +5003,9 @@ msgstr "Žádost o registraci byla schválena!"
 msgid "Signup request rejected!"
 msgstr "Žádost o registraci byla zamítnuta!"
 
+msgid "Switch to latest version"
+msgstr "Přejít na nejnovější verzi"
+
 msgid "Target session not found"
 msgstr "Cílová relace nebyla nalezena"
 
@@ -5506,6 +5515,9 @@ msgstr "Chceš to změnit?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Schválení %(user)s jako %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Zapsat celé zbývající množství"
+
 msgid "Configure the matchmaker form"
 msgstr "Nakonfiguruj formulář Matchmaker"
 
@@ -5846,6 +5858,9 @@ msgstr "Postava přiřazená pro %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Zvol prostředí pro akci"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Zaúčtovat zbývající skladové zásoby"
+
 msgid "Configure event feature settings"
 msgstr "Nakonfiguruj nastavení funkcí pro akci"
 
@@ -6125,6 +6140,9 @@ msgstr "Ručně schval přijaté platby"
 
 msgid "No activation steps are available."
 msgstr "Nejsou k dispozici žádné kroky k aktivaci."
+
+msgid "No quantity is available to commit"
+msgstr "Není k dispozici žádné množství, které by bylo možné rezervovat"
 
 msgid "Now you can create event templates"
 msgstr "Nyní můžeš vytvářet šablony událostí"
@@ -7046,6 +7064,9 @@ msgstr "Člen s tímto číslem již existuje"
 msgid "This invitation has already been redeemed."
 msgstr "Toto pozvání již bylo vykoupeno."
 
+msgid "This item has no finite quantity to commit"
+msgstr "U této položky není možné stanovit konkrétní množství k objednání"
+
 msgid "Venue - rent, utilities, and accommodation"
 msgstr "Místo konání – nájemné, benzín, noclehy"
 
@@ -7509,6 +7530,9 @@ msgstr "Uživatel již má registraci na tuto událost!"
 
 msgid "Warning. The form contains errors to the fields"
 msgstr "Pozor! Formulář obsahuje chyby v polích"
+
+msgid "You are now using the latest interface version."
+msgstr "Právě používáte nejnovější verzi rozhraní."
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Byl/a jsi přesměrován/a na panel událostí"
@@ -8072,6 +8096,9 @@ msgstr "V tuto chvíli nejsou k dispozici žádné faktury čekající na potvrz
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Vyber řádky tabulky a zvol operaci, která se má použít"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Přejděte na nejnovější verzi uživatelského rozhraní pro svůj účet"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Počáteční režim zobrazení při otevření stránky skupiny"
 
@@ -8087,6 +8114,10 @@ msgstr "Součet toho, co již bylo zaplaceno k aktuálnímu datu"
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Pro tuto událost bylo přiděleno skladové množství"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Svůj účet můžete nyní přepnout na verzi %(version)s."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Abys mohl/a vybrat své preference, musíš být zaregistrován/a!"
@@ -8910,6 +8941,11 @@ msgstr "Tvoje registrace na tuto akci byla úspěšně zrušena."
 
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr "Přidáno na konec všech e-mailů potvrzujících účastníkům přihlášení"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Přiřaďte veškeré zbývající dostupné zásoby této položky do oblasti určené "
+"pro akci"
 
 msgid "Enables warehouse management for organization warehouse management"
 msgstr "Umožňuje řízení skladu pro řízení skladu organizace"

@@ -336,6 +336,9 @@ msgstr "Obraz"
 msgid "Italy"
 msgstr "Włochy"
 
+msgid "Item:"
+msgstr "Pozycja:"
+
 msgid "Items"
 msgstr "Przedmioty"
 
@@ -997,6 +1000,9 @@ msgstr "Tooltip"
 
 msgid "Updates"
 msgstr "Aktualizacje"
+
+msgid "Upgrade"
+msgstr "Aktualizacja"
 
 msgid "Utility"
 msgstr "Narzędzie"
@@ -1672,6 +1678,9 @@ msgstr "Załącznik"
 
 msgid "Attendance"
 msgstr "Obecność"
+
+msgid "Available:"
+msgstr "Dostępne:"
 
 msgid "Birth date"
 msgstr "Data urodzenia"
@@ -2793,9 +2802,6 @@ msgstr "Zbiórka dla"
 
 msgid "Communications"
 msgstr "Komunikacja"
-
-msgid "Confirm refund"
-msgstr "Potwierdź zwrot pieniędzy"
 
 msgid "Credit balance"
 msgstr "Saldo kredytowe"
@@ -4997,6 +5003,9 @@ msgstr "Prośba o rejestrację zatwierdzona!"
 msgid "Signup request rejected!"
 msgstr "Prośba o rejestrację odrzucona!"
 
+msgid "Switch to latest version"
+msgstr "Przejdź na najnowszą wersję"
+
 msgid "Target session not found"
 msgstr "Nie znaleziono sesji docelowej"
 
@@ -5506,6 +5515,9 @@ msgstr "Czy chciałbyś to zmienić?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Zatwierdzenie %(user)s jako %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Zarejestruj całą pozostałą ilość"
+
 msgid "Configure the matchmaker form"
 msgstr "Skonfiguruj formularz Matchmakera"
 
@@ -5846,6 +5858,9 @@ msgstr "Postać przypisana do %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Wybierz ambientację dla wydarzenia"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Zarejestruj pozostałe zapasy magazynowe"
+
 msgid "Configure event feature settings"
 msgstr "Skonfiguruj ustawienia funkcji wydarzenia"
 
@@ -6125,6 +6140,9 @@ msgstr "Zatwierdź ręcznie otrzymane płatności"
 
 msgid "No activation steps are available."
 msgstr "Nie ma żadnych kroków aktywacyjnych."
+
+msgid "No quantity is available to commit"
+msgstr "Nie ma dostępnej ilości, którą można by zarezerwować"
 
 msgid "Now you can create event templates"
 msgstr "Teraz możesz tworzyć szablony wydarzeń"
@@ -7045,6 +7063,9 @@ msgstr "Istnieje już członek o tym numerze"
 msgid "This invitation has already been redeemed."
 msgstr "To zaproszenie zostało już zrealizowane."
 
+msgid "This item has no finite quantity to commit"
+msgstr "Nie ma określonej ilości tego produktu, którą można zarezerwować"
+
 msgid "Venue - rent, utilities, and accommodation"
 msgstr "Lokalizacja - czynsz, gaz, noclegi"
 
@@ -7510,6 +7531,9 @@ msgstr "Użytkownik już zarejestrował się na to wydarzenie!"
 
 msgid "Warning. The form contains errors to the fields"
 msgstr "Ostrzeżenie. Formularz zawiera błędy w polach"
+
+msgid "You are now using the latest interface version."
+msgstr "Korzystasz teraz z najnowszej wersji interfejsu."
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Nastąpiło przekierowanie do pulpitu nawigacyjnego wydarzenia"
@@ -8080,6 +8104,9 @@ msgstr ""
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Zaznacz wiersze tabeli i wybierz operację do zastosowania"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Przejdź na najnowszą wersję interfejsu swojego konta"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Początkowy tryb wyświetlania po otwarciu strony Ensemble"
 
@@ -8095,6 +8122,10 @@ msgstr "Suma kwot już zapłaconych na bieżący dzień"
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Na to wydarzenie przeznaczono ilości magazynowe"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Możesz już teraz zaktualizować swoje konto do wersji %(version)s."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Musisz się zarejestrować, aby wybrać swoje preferencje!"
@@ -9000,6 +9031,11 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Dodano na dole wszystkich wiadomości e-mail potwierdzających rejestrację "
 "uczestników"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Przypisz wszystkie pozostałe dostępne zapasy tego produktu do strefy "
+"wydarzenia"
 
 msgid "Enables warehouse management for organization warehouse management"
 msgstr "Umożliwia zarządzanie magazynem dla zarządzania magazynem organizacji"

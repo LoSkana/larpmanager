@@ -52,7 +52,7 @@ from PIL import Image, UnidentifiedImageError
 
 from larpmanager.accounting.member import info_accounting
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.config import get_association_config, save_single_config
 from larpmanager.forms.member import (
     AvatarForm,
     LanguageForm,
@@ -89,7 +89,7 @@ from larpmanager.utils.core.exceptions import check_association_feature
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import get_membership_request
 from larpmanager.utils.io.upload import normalize_profile_image
-from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION, VERSIONS
 from larpmanager.utils.publication.api import get_client_ip
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
 from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
@@ -258,6 +258,31 @@ def profile(request: HttpRequest) -> Any:
         )
 
     return render(request, "larpmanager/member/profile.html", context)
+
+
+@login_required
+def profile_upgrade(request: HttpRequest) -> HttpResponse:
+    """Let a member opt in to the latest interface for the current association."""
+    context = get_context(request)
+    if context["association_id"] == 0:
+        return HttpResponseRedirect("/")
+
+    assoc_version = context.get("assoc_version", LATEST_AVAILABLE_VERSION)
+
+    if assoc_version >= LATEST_AVAILABLE_VERSION or context.get("effective_version") >= LATEST_AVAILABLE_VERSION:
+        return redirect("profile")
+
+    if request.method == "POST":
+        save_single_config(context["member"], "interface_version", str(LATEST_AVAILABLE_VERSION))
+        messages.success(request, _("You are now using the latest interface version."))
+        return redirect("profile")
+
+    context["latest_version"] = LATEST_AVAILABLE_VERSION
+    context["latest_version_description"] = next(
+        (version["description"] for version in VERSIONS if version["number"] == LATEST_AVAILABLE_VERSION),
+        "",
+    )
+    return render(request, "larpmanager/member/profile_upgrade.html", context)
 
 
 def load_profile(request: HttpRequest, img: Any, ext: str) -> JsonResponse:  # noqa: ARG001

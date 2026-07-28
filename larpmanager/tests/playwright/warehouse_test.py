@@ -347,7 +347,7 @@ def item_areas(page: Any) -> None:
 
     # clicking the row's edit link pre-loads the item even though it has no
     # assignment yet in this event
-    page.get_by_role("row", name="Item 2").get_by_role("link").first.click()
+    page.get_by_role("row", name="Item 2").get_by_role("link").nth(1).click()
     edit_iframe = get_modal_iframe(page)
 
     def area_input(frame: Any, area_name: str) -> Any:
@@ -370,6 +370,7 @@ def item_areas(page: Any) -> None:
     )
 
     # edit again: quantities must be preloaded from the existing assignments
+    # (as the first link is now hidden, this become the new first one)
     page.get_by_role("row", name="Item 2").get_by_role("link").first.click()
     edit_iframe = get_modal_iframe(page)
     assert area_input(edit_iframe, "Kitchen").input_value() == "2"

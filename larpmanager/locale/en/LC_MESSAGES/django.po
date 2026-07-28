@@ -2647,6 +2647,18 @@ msgid ""
 "Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
 msgstr ""
 
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+
+msgid "Commit remaining warehouse stock"
+msgstr ""
+
+msgid "This item has no finite quantity to commit"
+msgstr ""
+
+msgid "No quantity is available to commit"
+msgstr ""
+
 msgid "available"
 msgstr ""
 
@@ -5575,6 +5587,15 @@ msgid ""
 "always of the same macrotype)."
 msgstr ""
 
+msgid "Item:"
+msgstr ""
+
+msgid "Total:"
+msgstr ""
+
+msgid "Available:"
+msgstr ""
+
 msgid "You are logged in as"
 msgstr ""
 
@@ -6865,9 +6886,6 @@ msgstr ""
 msgid ""
 "No events with LarpManager costs found. Costs will appear here once events "
 "are created and run."
-msgstr ""
-
-msgid "Total:"
 msgstr ""
 
 msgid "Payments:"
@@ -8372,6 +8390,19 @@ msgid ""
 "choose a clear and easily recognizable photo!"
 msgstr ""
 
+msgid "Upgrade"
+msgstr ""
+
+msgid "Switch to the latest interface version for your account"
+msgstr ""
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr ""
+
+msgid "Switch to latest version"
+msgstr ""
+
 msgid "Private message:"
 msgstr ""
 
@@ -8515,9 +8546,6 @@ msgid "Both %(tokens)s and %(credits)s"
 msgstr ""
 
 msgid "Refund percentage"
-msgstr ""
-
-msgid "Confirm refund"
 msgstr ""
 
 msgid "Cannot issue a refund: neither tokens nor credits are enabled"
@@ -9602,6 +9630,9 @@ msgid "Back to manifest"
 msgstr ""
 
 msgid "Assign warehouse items to one or more areas of the event, item by item"
+msgstr ""
+
+msgid "Commit all remaining quantity"
 msgstr ""
 
 msgid "Assign to areas"
@@ -12628,6 +12659,9 @@ msgid "Last step, please upload your membership application."
 msgstr ""
 
 msgid "To confirm your registration, please pay the amount indicated."
+msgstr ""
+
+msgid "You are now using the latest interface version."
 msgstr ""
 
 msgid "Data share removed successfully!"

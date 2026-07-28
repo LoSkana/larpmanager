@@ -336,6 +336,9 @@ msgstr "Bilde"
 msgid "Italy"
 msgstr "Italia"
 
+msgid "Item:"
+msgstr "Vare:"
+
 msgid "Items"
 msgstr "Gjenstander"
 
@@ -997,6 +1000,9 @@ msgstr "Verktøytips"
 
 msgid "Updates"
 msgstr "Oppdateringer"
+
+msgid "Upgrade"
+msgstr "Oppgradering"
 
 msgid "Utility"
 msgstr "Verktøy"
@@ -1672,6 +1678,9 @@ msgstr "Vedlegg"
 
 msgid "Attendance"
 msgstr "Tilstedeværelse"
+
+msgid "Available:"
+msgstr "Tilgjengelig:"
 
 msgid "Birth date"
 msgstr "Fødselsdato"
@@ -2793,9 +2802,6 @@ msgstr "Innsamling til"
 
 msgid "Communications"
 msgstr "Kommunikasjon"
-
-msgid "Confirm refund"
-msgstr "Bekreft refusjon"
 
 msgid "Credit balance"
 msgstr "Kredittsaldo"
@@ -4997,6 +5003,9 @@ msgstr "Registreringsforespørselen er godkjent!"
 msgid "Signup request rejected!"
 msgstr "Registreringsforespørsel avvist!"
 
+msgid "Switch to latest version"
+msgstr "Bytt til den nyeste versjonen"
+
 msgid "Target session not found"
 msgstr "Målsesjonen ble ikke funnet"
 
@@ -5506,6 +5515,9 @@ msgstr "Ønsker du å endre det?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Godkjenning %(user)s som %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Legg inn hele den gjenværende mengden"
+
 msgid "Configure the matchmaker form"
 msgstr "Konfigurer Matchmaker-skjemaet"
 
@@ -5846,6 +5858,9 @@ msgstr "Karakter tildelt for %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Velg setting for arrangementet"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Bokfør gjenværende lagerbeholdning"
+
 msgid "Configure event feature settings"
 msgstr "Konfigurer innstillinger for hendelsesfunksjoner"
 
@@ -6125,6 +6140,9 @@ msgstr "Godkjenn mottatte betalinger manuelt"
 
 msgid "No activation steps are available."
 msgstr "Det finnes ingen aktiveringstrinn."
+
+msgid "No quantity is available to commit"
+msgstr "Det er ingen tilgjengelig mengde å forplikte seg til"
 
 msgid "Now you can create event templates"
 msgstr "Nå kan du opprette hendelsesmaler"
@@ -7046,6 +7064,9 @@ msgstr "Det er allerede et medlem med dette nummeret"
 msgid "This invitation has already been redeemed."
 msgstr "Denne invitasjonen har allerede blitt innløst."
 
+msgid "This item has no finite quantity to commit"
+msgstr "Det er ikke fastsatt noe bestemt antall av denne varen"
+
 msgid "Venue - rent, utilities, and accommodation"
 msgstr "Beliggenhet - husleie, gass, overnattinger"
 
@@ -7509,6 +7530,9 @@ msgstr "Bruker har allerede en registrering for dette arrangementet!"
 
 msgid "Warning. The form contains errors to the fields"
 msgstr "Advarsel! Skjemaet inneholder feil i feltene"
+
+msgid "You are now using the latest interface version."
+msgstr "Du bruker nå den nyeste versjonen av grensesnittet."
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Du har blitt videresendt til Event Dashboard"
@@ -8076,6 +8100,9 @@ msgstr ""
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Bytt til den nyeste versjonen av brukergrensesnittet for kontoen din"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Den første visningsmodusen når du åpner ensemblesiden"
 
@@ -8091,6 +8118,10 @@ msgstr "Summen av det som allerede er betalt på gjeldende dato"
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Lagermengder har blitt forpliktet for dette arrangementet"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Du kan oppgradere kontoen din til versjon %(version)s nå."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Du må være registrert for å kunne velge dine preferanser!"
@@ -8979,6 +9010,11 @@ msgstr "Din påmelding til dette arrangementet er nå blitt avmeldt med hell."
 msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Lagt til nederst i alle e-poster som bekrefter påmelding til deltakerne"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Tildel hele den gjenværende tilgjengelige lagerbeholdningen av denne varen "
+"til et arrangementområde"
 
 msgid "Enables warehouse management for organization warehouse management"
 msgstr "Muliggjør lagerstyring for organisasjonens lagerstyring"

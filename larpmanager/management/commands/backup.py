@@ -82,7 +82,7 @@ class Command(BaseCommand):
             )
 
             # Create directory structure if it doesn't exist
-            path.parent.mkdir(parents=True, exist_ok=True)
+            path.parent.mkdir(mode=0o770, parents=True, exist_ok=True)
 
             # Write the compressed backup file to disk
             path.write_bytes(resp.content)

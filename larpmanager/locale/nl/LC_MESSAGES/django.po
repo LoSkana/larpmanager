@@ -336,6 +336,9 @@ msgstr "Afbeelding"
 msgid "Italy"
 msgstr "Italië"
 
+msgid "Item:"
+msgstr "Artikel:"
+
 msgid "Items"
 msgstr "Items"
 
@@ -997,6 +1000,9 @@ msgstr "Tooltip"
 
 msgid "Updates"
 msgstr "Updates"
+
+msgid "Upgrade"
+msgstr "Upgrade"
 
 msgid "Utility"
 msgstr "Utility"
@@ -1672,6 +1678,9 @@ msgstr "Bijlage"
 
 msgid "Attendance"
 msgstr "Aanwezigheid"
+
+msgid "Available:"
+msgstr "Beschikbaar:"
 
 msgid "Birth date"
 msgstr "Geboortedatum"
@@ -2793,9 +2802,6 @@ msgstr "Inzameling voor"
 
 msgid "Communications"
 msgstr "Communicatie"
-
-msgid "Confirm refund"
-msgstr "Bevestig de terugbetaling"
 
 msgid "Credit balance"
 msgstr "Kredietsaldo"
@@ -4997,6 +5003,9 @@ msgstr "Je aanmeldingsverzoek is goedgekeurd!"
 msgid "Signup request rejected!"
 msgstr "Aanmeldingsverzoek afgewezen!"
 
+msgid "Switch to latest version"
+msgstr "Schakel over naar de nieuwste versie"
+
 msgid "Target session not found"
 msgstr "Doelsessie niet gevonden"
 
@@ -5506,6 +5515,9 @@ msgstr "Wil je het veranderen?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Goedkeuring %(user)s als %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Zet de resterende hoeveelheid in"
+
 msgid "Configure the matchmaker form"
 msgstr "Stel het Matchmaker-formulier in"
 
@@ -5846,6 +5858,9 @@ msgstr "Karakter toegewezen voor %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Kies de setting voor het evenement"
 
+msgid "Commit remaining warehouse stock"
+msgstr "De resterende voorraad in het magazijn vastleggen"
+
 msgid "Configure event feature settings"
 msgstr "Instellingen gebeurtenisfuncties configureren"
 
@@ -6126,6 +6141,9 @@ msgstr "Ontvangen betalingen handmatig goedkeuren"
 
 msgid "No activation steps are available."
 msgstr "Er zijn geen activeringsstappen beschikbaar."
+
+msgid "No quantity is available to commit"
+msgstr "Er is geen hoeveelheid beschikbaar om vast te leggen"
 
 msgid "Now you can create event templates"
 msgstr "Nu kun je sjablonen voor evenementen maken"
@@ -7046,6 +7064,9 @@ msgstr "Er is al een lid met dit nummer"
 msgid "This invitation has already been redeemed."
 msgstr "Deze uitnodiging is al ingewisseld."
 
+msgid "This item has no finite quantity to commit"
+msgstr "Van dit artikel is geen vaste hoeveelheid vastgelegd"
+
 msgid "Venue - rent, utilities, and accommodation"
 msgstr "Locatie - huur, gas, overnachtingen"
 
@@ -7517,6 +7538,9 @@ msgstr "Gebruiker heeft al een registratie voor dit evenement!"
 
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attentie! Het formulier bevat fouten in de velden"
+
+msgid "You are now using the latest interface version."
+msgstr "Je gebruikt nu de nieuwste versie van de interface."
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Je bent doorgestuurd naar het evenementdashboard"
@@ -8091,6 +8115,9 @@ msgstr ""
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Schakel over naar de nieuwste versie van de interface voor je account"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "De initiële weergavemodus bij het openen van de ensemblepagina"
 
@@ -8108,6 +8135,10 @@ msgstr "Totaal van wat al is betaald op de huidige datum"
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Magazijnhoeveelheden zijn vastgelegd voor dit evenement"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Je kunt je account nu upgraden naar versie %(version)s."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Je moet geregistreerd zijn om je voorkeuren te kunnen selecteren!"
@@ -9048,6 +9079,10 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Toegevoegd onderaan alle mails ter bevestiging van inschrijving aan "
 "deelnemers"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Wijs alle resterende voorraad van dit artikel toe aan een evenementgebied"
 
 msgid "Enables warehouse management for organization warehouse management"
 msgstr "Maakt magazijnbeheer voor organisatie mogelijk"

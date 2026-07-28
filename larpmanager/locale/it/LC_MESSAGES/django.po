@@ -336,6 +336,9 @@ msgstr "Immagine"
 msgid "Italy"
 msgstr "Italia"
 
+msgid "Item:"
+msgstr "Articolo:"
+
 msgid "Items"
 msgstr "Oggetti"
 
@@ -997,6 +1000,9 @@ msgstr "Tooltip"
 
 msgid "Updates"
 msgstr "Aggiornamenti"
+
+msgid "Upgrade"
+msgstr "Aggiornamento"
 
 msgid "Utility"
 msgstr "Utilità"
@@ -1672,6 +1678,9 @@ msgstr "Allegato"
 
 msgid "Attendance"
 msgstr "Presenza"
+
+msgid "Available:"
+msgstr "Disponibile:"
 
 msgid "Birth date"
 msgstr "Data di nascita"
@@ -2793,9 +2802,6 @@ msgstr "Colletta per"
 
 msgid "Communications"
 msgstr "Comunicazioni"
-
-msgid "Confirm refund"
-msgstr "Conferma il rimborso"
 
 msgid "Credit balance"
 msgstr "Saldo crediti"
@@ -4997,6 +5003,9 @@ msgstr "Richiesta di registrazione approvata!"
 msgid "Signup request rejected!"
 msgstr "Richiesta di registrazione rifiutata!"
 
+msgid "Switch to latest version"
+msgstr "Passa alla versione più recente"
+
 msgid "Target session not found"
 msgstr "Sessione di destinazione non trovata"
 
@@ -5506,6 +5515,9 @@ msgstr "Desideri cambiarlo?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Approvazione %(user)s come %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Registra tutto il quantitativo rimanente"
+
 msgid "Configure the matchmaker form"
 msgstr "Configura il modulo Matchmaker"
 
@@ -5846,6 +5858,9 @@ msgstr "Personaggio assegnato per %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Scegli l'ambientazione dell'evento"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Registra le rimanenze di magazzino"
+
 msgid "Configure event feature settings"
 msgstr "Configura le impostazioni delle funzioni evento"
 
@@ -6125,6 +6140,9 @@ msgstr "Approva manualmente i pagamenti ricevuti"
 
 msgid "No activation steps are available."
 msgstr "Non sono disponibili procedure di attivazione."
+
+msgid "No quantity is available to commit"
+msgstr "Non c'è nessuna quantità disponibile da impegnare"
 
 msgid "Now you can create event templates"
 msgstr "Ora puoi creare modelli di eventi"
@@ -7047,6 +7065,9 @@ msgstr "C'è già un membro con questo numero"
 msgid "This invitation has already been redeemed."
 msgstr "Questo invito è già stato riscattato."
 
+msgid "This item has no finite quantity to commit"
+msgstr "Per questo articolo non c'è una quantità precisa da impegnare"
+
 msgid "Venue - rent, utilities, and accommodation"
 msgstr "Location - affitto, gas, pernottamenti"
 
@@ -7514,6 +7535,9 @@ msgstr "L'utente ha già una registrazione per questo evento!"
 
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attenzione! Il modulo contiene errori nei campi"
+
+msgid "You are now using the latest interface version."
+msgstr "Ora stai utilizzando l'ultima versione dell'interfaccia."
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Sei stato reindirizzato alla dashboard dell'evento"
@@ -8103,6 +8127,9 @@ msgstr "Al momento non ci sono fatture di pagamento in attesa di conferma."
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Seleziona le righe della tabella e scegli l'operazione da applicare"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Passa all'ultima versione dell'interfaccia per il tuo account"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr ""
 "La modalità di visualizzazione iniziale all'apertura della pagina "
@@ -8120,6 +8147,10 @@ msgstr "Totale di quanto già pagato alla data attuale"
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Le quantità di magazzino sono state impegnate per questo evento"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Ora puoi aggiornare il tuo account alla versione %(version)s."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Devi essere iscritto per poter selezionare le tue preferenze!"
@@ -9058,6 +9089,11 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Aggiunto in fondo a tutte le mail di conferma dell'iscrizione ai "
 "partecipanti"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Assegna tutte le scorte disponibili rimanenti di questo articolo a un'area "
+"dedicata all'evento"
 
 msgid "Enables warehouse management for organization warehouse management"
 msgstr ""

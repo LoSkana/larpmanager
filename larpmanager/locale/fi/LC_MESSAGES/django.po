@@ -336,6 +336,9 @@ msgstr "Kuva"
 msgid "Italy"
 msgstr "Italia"
 
+msgid "Item:"
+msgstr "Tuote:"
+
 msgid "Items"
 msgstr "Nimikkeet"
 
@@ -997,6 +1000,9 @@ msgstr "Työkaluvihje"
 
 msgid "Updates"
 msgstr "Päivitykset"
+
+msgid "Upgrade"
+msgstr "Päivitä"
 
 msgid "Utility"
 msgstr "Apuohjelma"
@@ -1672,6 +1678,9 @@ msgstr "Liite"
 
 msgid "Attendance"
 msgstr "Osallistuminen"
+
+msgid "Available:"
+msgstr "Saatavilla:"
 
 msgid "Birth date"
 msgstr "Syntymäpäivä"
@@ -2793,9 +2802,6 @@ msgstr "Keräys kohteelle"
 
 msgid "Communications"
 msgstr "Viestintä"
-
-msgid "Confirm refund"
-msgstr "Vahvista hyvitys"
 
 msgid "Credit balance"
 msgstr "Luottosaldo"
@@ -4997,6 +5003,9 @@ msgstr "Rekisteröitymispyyntö on hyväksytty!"
 msgid "Signup request rejected!"
 msgstr "Rekisteröitymispyyntö hylättiin!"
 
+msgid "Switch to latest version"
+msgstr "Päivitä uusimpaan versioon"
+
 msgid "Target session not found"
 msgstr "Kohdeistuntoa ei löydy"
 
@@ -5506,6 +5515,9 @@ msgstr "Haluaisitko muuttaa sen?"
 msgid "Approval %(user)s as %(role)s"
 msgstr "Hyväksyntä %(user)s rooliin %(role)s"
 
+msgid "Commit all remaining quantity"
+msgstr "Kirjaa kaikki jäljellä oleva määrä"
+
 msgid "Configure the matchmaker form"
 msgstr "Määritä Matchmaker-lomake"
 
@@ -5846,6 +5858,9 @@ msgstr "Hahmo asetettu tapahtumaan %(event)s"
 msgid "Choose the setting for the event"
 msgstr "Valitse tapahtuman ympäristö"
 
+msgid "Commit remaining warehouse stock"
+msgstr "Kirjaa jäljellä oleva varastovarasto"
+
 msgid "Configure event feature settings"
 msgstr "Tapahtumaominaisuuden asetusten määrittäminen"
 
@@ -6125,6 +6140,9 @@ msgstr "Hyväksy vastaanotetut maksut manuaalisesti"
 
 msgid "No activation steps are available."
 msgstr "Aktivointivaiheita ei ole saatavilla."
+
+msgid "No quantity is available to commit"
+msgstr "Saatavilla ei ole varattavaa määrää"
 
 msgid "Now you can create event templates"
 msgstr "Nyt voit luoda tapahtumamalleja"
@@ -7045,6 +7063,9 @@ msgstr "Tällä numerolla on jo jäsen"
 msgid "This invitation has already been redeemed."
 msgstr "Tämä kutsu on jo lunastettu."
 
+msgid "This item has no finite quantity to commit"
+msgstr "Tälle tuotteelle ei ole määritelty sitovaa määrää"
+
 msgid "Venue - rent, utilities, and accommodation"
 msgstr "Sijainti - vuokra, kaasu, yöpymiset"
 
@@ -7509,6 +7530,9 @@ msgstr "Käyttäjällä on jo rekisteröityminen tähän tapahtumaan!"
 
 msgid "Warning. The form contains errors to the fields"
 msgstr "Varoitus. Lomake sisältää virheitä kentissä"
+
+msgid "You are now using the latest interface version."
+msgstr "Käytät nyt käyttöliittymän uusinta versiota."
 
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Sinut on ohjattu tapahtuman kojelaudalle"
@@ -8082,6 +8106,9 @@ msgstr "Tällä hetkellä ei ole maksulaskuja, jotka odottavat vahvistusta."
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Valitse taulukon rivit ja valitse sovellettava toiminto"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Vaihda tilisi käyttöliittymän uusimpaan versioon"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Alkuperäinen näyttötila, kun ensemble-sivu avataan"
 
@@ -8098,6 +8125,10 @@ msgstr "Nykyiseen päivämäärään mennessä jo maksettujen maksujen kokonaism
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Varastomäärät ovat sidottu tätä tapahtumaa varten"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Voit päivittää tilisi versioon %(version)s nyt."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Sinun on oltava ilmoittautunut, jotta voit valita mieltymyksesi!"
@@ -8970,6 +9001,10 @@ msgid "Added at the bottom of all mails confirming signup to participants"
 msgstr ""
 "Lisätty kaikkien osallistujille lähetettävien ilmoittautumisen vahvistavien "
 "sähköpostiviestien alareunaan"
+
+msgid "Assign all remaining available stock of this item to an event area"
+msgstr ""
+"Siirrä tämän tuotteen kaikki jäljellä oleva varastosaldo tapahtuma-alueelle"
 
 msgid "Enables warehouse management for organization warehouse management"
 msgstr "Mahdollistaa varastonhallinnan organisaation varastonhallintaa varten"

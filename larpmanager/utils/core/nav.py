@@ -27,6 +27,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.registration import Registration
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -429,6 +430,24 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
         ),
     ]
 
+    # Allow opt in to use latest interface version
+    assoc_version = request.association.get("assoc_version", LATEST_AVAILABLE_VERSION)
+    if assoc_version < LATEST_AVAILABLE_VERSION and hasattr(request.user, "member"):
+        member_version_str = request.user.member.get_config("interface_version", default_value=None)
+        member_version = int(member_version_str) if member_version_str else assoc_version
+        effective_version = max(member_version, assoc_version)
+        if effective_version < LATEST_AVAILABLE_VERSION:
+            items.append(
+                _item(
+                    reverse("profile_upgrade"),
+                    "fa-solid fa-arrow-up",
+                    _("Upgrade"),
+                    "",
+                    active=active == "profile_upgrade",
+                    home=False,
+                )
+            )
+
     if "membership" in features:
         _append(
             items,
@@ -492,9 +511,7 @@ def build_profile_home_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
         has_registrations = flags["has_registrations"]
         has_paid_registrations = flags["has_paid_registrations"]
 
-    items: list[dict[str, Any]] = [
-        _item(reverse("home"), "fa-solid fa-calendar", _("Calendar"), "", active=active == "calendar", home=True)
-    ]
+    items: list[dict[str, Any]] = []
 
     if request.association.get("user_characters_shortcut", False):
         items.append(
