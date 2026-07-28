@@ -143,7 +143,7 @@ def _capture_test_artifacts(
         return None
 
     screenshot_dir = Path(__file__).parent / "test_screenshots"
-    screenshot_dir.mkdir(exist_ok=True)
+    screenshot_dir.mkdir(mode=0o770, exist_ok=True)
 
     # Generate filename with timestamp and test name
     timestamp = datetime.now(UTC).strftime("%Y%m%d%H%M%S")
@@ -184,7 +184,7 @@ def pw_page(
     video_dir = None
     if record:
         video_dir = Path(__file__).parent / "test_videos"
-        video_dir.mkdir(exist_ok=True)
+        video_dir.mkdir(mode=0o770, exist_ok=True)
 
     browser = browser_type.launch(
         headless=not headed,

@@ -167,7 +167,7 @@ def upload_albums_el(alb: models.Model, name: str, main: models.Model, o_path: s
     for directory_id in parent_directories:
         destination_path = destination_path / str(directory_id)
         if not destination_path.exists():
-            destination_path.mkdir(parents=True, exist_ok=True)
+            destination_path.mkdir(mode=0o770, parents=True, exist_ok=True)
 
     # Complete the file path with unique filename
     destination_path = destination_path / unique_filename

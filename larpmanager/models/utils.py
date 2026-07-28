@@ -245,7 +245,7 @@ class UploadToPathAndRename:
             for el in bkp_tomove:
                 # Create backup directory if it doesn't exist
                 bkp = Path(conf_settings.MEDIA_ROOT) / "bkp" / path
-                bkp.mkdir(parents=True, exist_ok=True)
+                bkp.mkdir(mode=0o770, parents=True, exist_ok=True)
 
                 # Generate timestamped backup filename and move file
                 bkp_fn = f"{instance.pk}_{timezone.now()}.{ext}"
@@ -288,7 +288,7 @@ def get_payment_details_path(association: Association) -> str:
 
     """
     # Ensure payment settings directory exists
-    Path(conf_settings.PAYMENT_SETTING_FOLDER).mkdir(parents=True, exist_ok=True)
+    Path(conf_settings.PAYMENT_SETTING_FOLDER).mkdir(mode=0o770, parents=True, exist_ok=True)
 
     # Generate key identifier for filename security
     key_identifier = _key_id(association.key)

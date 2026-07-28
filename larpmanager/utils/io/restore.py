@@ -91,7 +91,7 @@ def save_restore_temp(zip_bytes: bytes) -> str:
     """Save ZIP bytes to a temp file, return the unique key."""
     key = str(uuid.uuid4())
     path = Path(settings.MEDIA_ROOT) / _TMP_DIR_NAME / f"{key}.zip"
-    path.parent.mkdir(parents=True, exist_ok=True)
+    path.parent.mkdir(mode=0o770, parents=True, exist_ok=True)
     path.write_bytes(zip_bytes)
     return key
 

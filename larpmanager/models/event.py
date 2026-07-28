@@ -435,7 +435,7 @@ class Event(UuidMixin, BaseModel):
         # Build path to PDF directory using object slug
         pdf_directory_path = str(Path(conf_settings.MEDIA_ROOT) / f"pdf/{self.slug}/")
         # Ensure directory exists
-        Path(pdf_directory_path).mkdir(parents=True, exist_ok=True)
+        Path(pdf_directory_path).mkdir(mode=0o770, parents=True, exist_ok=True)
         return pdf_directory_path
 
     def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
@@ -812,7 +812,7 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}-{self.media_token}/")
 
         # Ensure directory exists
-        Path(run_media_path).mkdir(parents=True, exist_ok=True)
+        Path(run_media_path).mkdir(mode=0o770, parents=True, exist_ok=True)
 
         return run_media_path
 

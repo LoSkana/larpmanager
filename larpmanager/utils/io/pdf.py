@@ -615,7 +615,7 @@ def generate_payment_receipt(accounting_item: Any) -> tuple[str, str]:
     }
 
     receipts_dir = Path(conf_settings.MEDIA_ROOT) / "receipts" / str(association_id)
-    receipts_dir.mkdir(parents=True, exist_ok=True)
+    receipts_dir.mkdir(mode=0o770, parents=True, exist_ok=True)
     file_path = str(receipts_dir / f"{accounting_item.id}.pdf")
 
     xhtml_pdf(pdf_context, "pdf/receipt.html", file_path)
@@ -959,7 +959,7 @@ def build_friendly_bundle_bkg(association_slug: str, event_slug: str) -> None:
     run = context["run"]
 
     zip_path = get_friendly_bundle_filepath(run)
-    zip_path.parent.mkdir(parents=True, exist_ok=True)
+    zip_path.parent.mkdir(mode=0o770, parents=True, exist_ok=True)
     zip_path_tmp = zip_path.with_suffix(".tmp")
 
     try:
