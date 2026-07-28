@@ -1037,6 +1037,9 @@ msgstr "Bilety"
 msgid "Tooltip"
 msgstr "Tooltip"
 
+msgid "Upgrade"
+msgstr "Aktualizacja"
+
 msgid "Utility"
 msgstr "Narzędzie"
 
@@ -5032,6 +5035,9 @@ msgstr "Prośba o rejestrację zatwierdzona!"
 msgid "Signup request rejected!"
 msgstr "Prośba o rejestrację odrzucona!"
 
+msgid "Switch to latest version"
+msgstr "Przejdź na najnowszą wersję"
+
 msgid "Target session not found"
 msgstr "Nie znaleziono sesji docelowej"
 
@@ -7536,6 +7542,9 @@ msgstr "Użytkownik już zarejestrował się na to wydarzenie!"
 msgid "Warning. The form contains errors to the fields"
 msgstr "Ostrzeżenie. Formularz zawiera błędy w polach"
 
+msgid "You are now using the latest interface version."
+msgstr "Korzystasz teraz z najnowszej wersji interfejsu."
+
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Nastąpiło przekierowanie do pulpitu nawigacyjnego wydarzenia"
 
@@ -8099,6 +8108,9 @@ msgstr ""
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Zaznacz wiersze tabeli i wybierz operację do zastosowania"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Przejdź na najnowszą wersję interfejsu swojego konta"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Początkowy tryb wyświetlania po otwarciu strony Ensemble"
 
@@ -8114,6 +8126,10 @@ msgstr "Suma kwot już zapłaconych na bieżący dzień"
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Na to wydarzenie przeznaczono ilości magazynowe"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Możesz już teraz zaktualizować swoje konto do wersji %(version)s."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Musisz się zarejestrować, aby wybrać swoje preferencje!"

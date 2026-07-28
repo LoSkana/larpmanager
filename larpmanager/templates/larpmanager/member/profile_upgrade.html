@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Upgrade" %}
+{% endblock title %}
+{% block info %}
+    {% trans "Switch to the latest interface version for your account" %}
+{% endblock info %}
+{% block content %}
+    {% include "larpmanager/member/profile_nav.html" %}
+    <div class="user_resize platform">
+        <hr class="no_v20" />
+        <p>
+            {% blocktrans with version=latest_version %}You can switch your account to version {{ version }} now.{% endblocktrans %}
+        </p>
+        {% if latest_version_description %}
+            <p>
+                <em>{{ latest_version_description }}</em>
+            </p>
+        {% endif %}
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="button">
+                <i class="fa-solid fa-arrow-up"></i> {% trans "Switch to latest version" %}
+            </button>
+        </form>
+    </div>
+{% endblock content %}

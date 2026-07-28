@@ -90,6 +90,11 @@ urlpatterns = [
         name="profile",
     ),
     path(
+        "profile/upgrade/",
+        views_um.profile_upgrade,
+        name="profile_upgrade",
+    ),
+    path(
         "profile/upload/",
         views_um.profile_upload,
         name="profile_upload",

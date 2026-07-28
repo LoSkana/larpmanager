@@ -1037,6 +1037,9 @@ msgstr "Billetter"
 msgid "Tooltip"
 msgstr "Verktøytips"
 
+msgid "Upgrade"
+msgstr "Oppgradering"
+
 msgid "Utility"
 msgstr "Verktøy"
 
@@ -5032,6 +5035,9 @@ msgstr "Registreringsforespørselen er godkjent!"
 msgid "Signup request rejected!"
 msgstr "Registreringsforespørsel avvist!"
 
+msgid "Switch to latest version"
+msgstr "Bytt til den nyeste versjonen"
+
 msgid "Target session not found"
 msgstr "Målsesjonen ble ikke funnet"
 
@@ -7534,6 +7540,9 @@ msgstr "Bruker har allerede en registrering for dette arrangementet!"
 msgid "Warning. The form contains errors to the fields"
 msgstr "Advarsel! Skjemaet inneholder feil i feltene"
 
+msgid "You are now using the latest interface version."
+msgstr "Du bruker nå den nyeste versjonen av grensesnittet."
+
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Du har blitt videresendt til Event Dashboard"
 
@@ -8094,6 +8103,9 @@ msgstr ""
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Bytt til den nyeste versjonen av brukergrensesnittet for kontoen din"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Den første visningsmodusen når du åpner ensemblesiden"
 
@@ -8109,6 +8121,10 @@ msgstr "Summen av det som allerede er betalt på gjeldende dato"
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Lagermengder har blitt forpliktet for dette arrangementet"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Du kan oppgradere kontoen din til versjon %(version)s nå."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Du må være registrert for å kunne velge dine preferanser!"
