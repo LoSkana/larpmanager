@@ -13,7 +13,9 @@
         {% csrf_token %}
         <input type="hidden" name="frame" value="1">
         <div class="form_container auto_resize">
-            <p class="delete-confirm-message">{% trans "Are you sure you want to approve this element?" %} {{ el_name }}</p>
+            <p class="delete-confirm-message">
+                {% trans "Are you sure you want to approve this element?" %} {{ el_name|truncatechars:50 }}
+            </p>
             <div class="form-actions">
                 <input type="submit" value="{% trans "Confirm" %}" class="btn-save">
             </div>
