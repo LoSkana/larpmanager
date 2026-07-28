@@ -200,7 +200,7 @@
                 </table>
                 {% if collection_gifts %}
                     <p>
-                        {% trans "Collections participated:" %}
+                        {% trans "Collections you have participated in:" %}
                         {% for el in collection_gifts %}
                             {% include "elements/comma.html" %}
                             <i>{{ el.collection.member.display_member }}</i> ({{ el.value }}{{ currency_symbol }})

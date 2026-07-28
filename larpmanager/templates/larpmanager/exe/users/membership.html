@@ -11,7 +11,7 @@
             - {% trans "Request:" %} {{ sum.s }}
         {% endif %}
         {% if sum.p %}
-            - {% trans "Paid current year:" %} {{ sum.p }}
+            - {% trans "Paid for the current year:" %} {{ sum.p }}
         {% endif %}
         {% if sum.a %}
             - {% trans "Accepted:" %} {{ sum.a }}
@@ -99,7 +99,7 @@
                 </td>
             </tr>
             <tr>
-                <th>{% trans "Paid current year" %}</th>
+                <th>{% trans "Paid for the current year" %}</th>
                 <td>
                     {% for el in p %}
                         {% include "elements/comma.html" with separator="," %}

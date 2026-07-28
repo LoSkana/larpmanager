@@ -119,7 +119,7 @@
             <div class="demo-footer">
                 <span>
                     {% if association.demo_type_name %}
-                        {% blocktrans with name=association.demo_type_name %}You are exploring the demo "{{ name }}." demo{% endblocktrans %}
+                        {% blocktrans with name=association.demo_type_name %}You are exploring the "{{ name }}" demo.{% endblocktrans %}
                     {% else %}
                         {% trans "You are exploring a demo organization." %}
                     {% endif %}

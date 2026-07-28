@@ -971,7 +971,7 @@ def _get_column_names(context: dict) -> None:
                 "abilities": _("(Optional) Ability names, comma-separated - rule applies if character has any"),
                 "field": _("The character field of computed type to update"),
                 "operation": _("Operation: ADD, SUB, MUL, DIV"),
-                "amount": _("Amount for the operation"),
+                "amount": _("Transaction amount"),
                 "order": _("(Optional) Display order"),
             },
         ]

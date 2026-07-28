@@ -625,8 +625,8 @@ msgid "Standalone Payment Window"
 msgstr ""
 
 msgid ""
-"Number of months at the start of the year when paying the annual fee is "
-"allowed without requiring an active event signup."
+"Number of months at the start of the year during which members may pay the "
+"annual fee without an active event registration."
 msgstr ""
 
 msgid "Separate membership fee"
@@ -2453,7 +2453,7 @@ msgstr ""
 msgid "Two quotas"
 msgstr ""
 
-msgid "Three quotas"
+msgid "Three instalments"
 msgstr ""
 
 msgid "Four quotas"
@@ -3510,7 +3510,7 @@ msgstr ""
 msgid "Kitchen - food, tableware"
 msgstr ""
 
-msgid "Location - rent, gas, overnight stays"
+msgid "Venue - rent, utilities, and accommodation"
 msgstr ""
 
 msgid "Secretarial - stationery, printing"
@@ -4779,7 +4779,7 @@ msgstr ""
 msgid "The time transportation is needed (local event time zone)."
 msgstr ""
 
-msgid "Passenger information"
+msgid "Passenger instructions"
 msgstr ""
 
 msgid ""
@@ -5322,7 +5322,7 @@ msgstr ""
 msgid "Advanced Mode Enabled!"
 msgstr ""
 
-msgid "Module Activation"
+msgid "Activate modules"
 msgstr ""
 
 msgid "Need help?"
@@ -5679,7 +5679,8 @@ msgstr ""
 msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr ""
 
-msgid "Copy and paste exactly all the coloured text below into the notes."
+msgid ""
+"Copy and paste all the coloured text below exactly into the notes field."
 msgstr ""
 
 msgid "this is important!"
@@ -5997,7 +5998,7 @@ msgstr ""
 msgid "History preferences"
 msgstr ""
 
-msgid "Go to the history preferences for:"
+msgid "View preference history for:"
 msgstr ""
 
 msgid "characters"
@@ -6243,7 +6244,7 @@ msgstr ""
 msgid "Founding character"
 msgstr ""
 
-msgid "My guild invites"
+msgid "My pending guild invitations"
 msgstr ""
 
 msgid "You have no pending guild invites."
@@ -7077,7 +7078,7 @@ msgstr ""
 msgid "Request:"
 msgstr ""
 
-msgid "Paid current year:"
+msgid "Paid for the current year:"
 msgstr ""
 
 msgid "Accepted:"
@@ -7100,7 +7101,7 @@ msgstr ""
 msgid "Emails"
 msgstr ""
 
-msgid "Paid current year"
+msgid "Paid for the current year"
 msgstr ""
 
 msgid "Member Data Checks"
@@ -7937,7 +7938,7 @@ msgstr ""
 msgid "Manage it here!"
 msgstr ""
 
-msgid "Collections participated:"
+msgid "Collections you have participated in:"
 msgstr ""
 
 msgid "If you would like to make a donation to the Organization"
@@ -8290,7 +8291,7 @@ msgstr ""
 msgid "I am not good what to say. I never thought it would happen."
 msgstr ""
 
-msgid "Members of the Organization"
+msgid "Member of the Organization"
 msgstr ""
 
 msgid ""
@@ -8470,7 +8471,7 @@ msgstr ""
 msgid "Event organization fee:"
 msgstr ""
 
-msgid "Minimum amount of net profit to be retained for the organization fee"
+msgid "Minimum net profit to retain for the association infrastructure fee"
 msgstr ""
 
 msgid "Entry"
@@ -8796,7 +8797,7 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
-msgid "No transfers yet."
+msgid "No inventory transfers yet."
 msgstr ""
 
 msgid "Character Inventory Types"
@@ -9042,7 +9043,7 @@ msgstr ""
 
 msgid ""
 "Run the lottery draw to randomly select participants from lottery-tier "
-"registrations and upgrade them to confirmed tickets"
+"registrations and upgrade the selected registrations to confirmed tickets"
 msgstr ""
 
 msgid "The following registrations were drawn:"
@@ -9061,7 +9062,7 @@ msgid ""
 "Click this button to run the draw. Warning: this action cannot be undone."
 msgstr ""
 
-msgid "Perform extraction"
+msgid "Run lottery draw"
 msgstr ""
 
 msgid ""
@@ -9315,6 +9316,9 @@ msgid "and"
 msgstr ""
 
 msgid "more"
+msgstr ""
+
+msgid "Updates"
 msgstr ""
 
 msgid "Skip"
@@ -9772,20 +9776,19 @@ msgid "check lack relationships:"
 msgstr ""
 
 msgid ""
-"In the text of the element on the left, it appears a character with the "
-"number indicated on the right, but in the relationships instead that "
-"character was not related. Check whether it is necessary to create a "
-"relationship to the character, or remove the reference from the text."
+"The text of the element on the left refers to the character whose number is "
+"shown on the right, but no relationship exists between the characters. "
+"Create the relationship or remove the reference from the text."
 msgstr ""
 
 msgid "check excessive relationships:"
 msgstr ""
 
 msgid ""
-"In the text of the element on the left, a character is NOT indicated with "
-"the number shown on the right, but in the relationships instead it is "
-"related. Check whether it is necessary to remove the relationship to the "
-"character, or indicate in the text a reference to the character."
+"The text of the element on the left does NOT refer to the character whose "
+"number is shown on the right, but a relationship exists between the "
+"characters. Remove the relationship or add a reference to the character in "
+"the text."
 msgstr ""
 
 msgid ""
@@ -9928,7 +9931,7 @@ msgid ""
 msgstr ""
 
 #, python-format
-msgid "You are exploring the demo \"%(name)s.\" demo"
+msgid "You are exploring the \"%(name)s\" demo."
 msgstr ""
 
 msgid "You are exploring a demo organization."
@@ -11375,7 +11378,7 @@ msgstr ""
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr ""
 
-msgid "Amount for the operation"
+msgid "Transaction amount"
 msgstr ""
 
 msgid "(Optional) Display order"
@@ -11678,7 +11681,7 @@ msgstr ""
 msgid "Order the factions from your most (top) to least (bottom) preferred"
 msgstr ""
 
-msgid "Not participating"
+msgid "Characters not participating"
 msgstr ""
 
 msgid "Place of birth not included in the ISTAT list"
@@ -11924,7 +11927,7 @@ msgstr ""
 msgid "VAT (Options)"
 msgstr ""
 
-msgid "Causal"
+msgid "Bank payment reference"
 msgstr ""
 
 msgid "Element approved!"
@@ -12124,7 +12127,7 @@ msgstr ""
 msgid "Set up payment methods"
 msgstr ""
 
-msgid "Configure the event organization fee"
+msgid "Configure the association infrastructure fee"
 msgstr ""
 
 msgid "Set up the taxes configuration"

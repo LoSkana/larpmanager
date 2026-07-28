@@ -277,7 +277,7 @@ class ExpenseChoices(models.TextChoices):
     PROMOZ = "e", _("Promotion - site, advertising")
     TRANS = "f", _("Transportation - gas, highway")
     KITCH = "g", _("Kitchen - food, tableware")
-    LOCAT = "h", _("Location - rent, gas, overnight stays")
+    LOCAT = "h", _("Venue - rent, utilities, and accommodation")
     SEGRET = "i", _("Secretarial - stationery, printing")
     OTHER = "j", _("Other")
 

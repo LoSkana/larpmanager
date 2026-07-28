@@ -297,7 +297,7 @@ class RegistrationForm(BaseRegistrationForm):
             quota_labels = [
                 _("Single payment"),
                 _("Two quotas"),
-                _("Three quotas"),
+                _("Three instalments"),
                 _("Four quotas"),
                 _("Five quotas"),
             ]

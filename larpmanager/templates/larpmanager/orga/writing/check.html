@@ -132,7 +132,7 @@
 
     <span class="redderized">KO {{ checks.character_missing | length }}</span> </b>
 
-    <p><i>{% trans "In the text of the element on the left, it appears a character with the number indicated on the right, but in the relationships instead that character was not related. Check whether it is necessary to create a relationship to the character, or remove the reference from the text." %}</i></p>
+    <p><i>{% trans "The text of the element on the left refers to the character whose number is shown on the right, but no relationship exists between the characters. Create the relationship or remove the reference from the text." %}</i></p>
 
     <table>
         <tr>
@@ -163,7 +163,7 @@
 
     <span class="redderized">KO {{ checks.character_interloper | length }}</span> </b>
 
-    <p><i>{% trans "In the text of the element on the left, a character is NOT indicated with the number shown on the right, but in the relationships instead it is related. Check whether it is necessary to remove the relationship to the character, or indicate in the text a reference to the character." %}</i></p>
+    <p><i>{% trans "The text of the element on the left does NOT refer to the character whose number is shown on the right, but a relationship exists between the characters. Remove the relationship or add a reference to the character in the text." %}</i></p>
 
     <table>
         <tr>

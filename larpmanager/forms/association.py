@@ -684,8 +684,8 @@ class ExeConfigForm(ConfigForm):
 
         field_label = _("Standalone Payment Window")
         field_help_text = _(
-            "Number of months at the start of the year when paying the annual fee "
-            "is allowed without requiring an active event signup."
+            "Number of months at the start of the year during which members may pay the annual fee "
+            "without an active event registration."
         )
         self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
 

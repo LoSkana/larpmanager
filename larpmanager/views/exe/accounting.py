@@ -675,7 +675,7 @@ def exe_invoices(request: HttpRequest) -> HttpResponse:
                 ("status", _("Status")),
                 ("gross", _("Gross")),
                 ("trans", _("Transaction")),
-                ("causal", _("Causal")),
+                ("causal", _("Bank payment reference")),
                 ("details", _("Details")),
                 ("created", _("Date")),
                 ("action", _("Action")),

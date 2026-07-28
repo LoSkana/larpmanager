@@ -4,7 +4,7 @@
     {% trans "Lottery" %} {{ gl_name }} - {{ run.search }}
 {% endblock title %}
 {% block info %}
-    {% trans "Run the lottery draw to randomly select participants from lottery-tier registrations and upgrade them to confirmed tickets" %}
+    {% trans "Run the lottery draw to randomly select participants from lottery-tier registrations and upgrade the selected registrations to confirmed tickets" %}
 {% endblock info %}
 {% block content %}
     {% if chosen %}
@@ -24,6 +24,6 @@
     </p>
     <form action="{{ request.path }}" method="post">
         {% csrf_token %}
-        <button type="submit" name="submit" value="1">{% trans "Perform extraction" %}</button>
+        <button type="submit" name="submit" value="1">{% trans "Run lottery draw" %}</button>
     </form>
 {% endblock content %}
