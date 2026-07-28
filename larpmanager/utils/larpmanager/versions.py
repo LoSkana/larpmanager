@@ -31,7 +31,7 @@ VERSIONS = [
     },
     {
         "number": 22,
-        "description": "User interface sidebar",
+        "description": "Introduces an organized user interface sidebar",
         "available": True,
     },
 ]

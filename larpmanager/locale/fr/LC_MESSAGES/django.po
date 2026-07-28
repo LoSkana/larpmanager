@@ -1037,6 +1037,9 @@ msgstr "Billets"
 msgid "Tooltip"
 msgstr "Info-bulle"
 
+msgid "Upgrade"
+msgstr "Mise à jour"
+
 msgid "Utility"
 msgstr "Utilité"
 
@@ -5032,6 +5035,9 @@ msgstr "Ta demande d'inscription a été acceptée !"
 msgid "Signup request rejected!"
 msgstr "Ta demande d'inscription a été refusée !"
 
+msgid "Switch to latest version"
+msgstr "Passer à la dernière version"
+
 msgid "Target session not found"
 msgstr "Session cible non trouvée"
 
@@ -7545,6 +7551,9 @@ msgstr "L'utilisateur est déjà inscrit à cet événement !"
 msgid "Warning. The form contains errors to the fields"
 msgstr "Attention ! Le formulaire contient des erreurs dans les champs"
 
+msgid "You are now using the latest interface version."
+msgstr "Tu utilises désormais la dernière version de l'interface."
+
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Tu as été redirigé vers le tableau de bord de l'événement"
 
@@ -8145,6 +8154,9 @@ msgstr ""
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Sélectionne les lignes du tableau et choisis l'opération à appliquer"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Passe à la dernière version de l'interface de ton compte"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Mode d'affichage initial lors de l'ouverture de la page d'ensemble"
 
@@ -8160,6 +8172,11 @@ msgstr "Total de ce qui a déjà été payé à la date actuelle"
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Des quantités d'entrepôt ont été engagées pour cet événement"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr ""
+"Tu peux dès maintenant mettre ton compte à jour vers la version %(version)s."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Tu dois être inscrit pour pouvoir sélectionner tes préférences!"

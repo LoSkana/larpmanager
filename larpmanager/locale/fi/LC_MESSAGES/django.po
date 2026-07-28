@@ -1037,6 +1037,9 @@ msgstr "Liput"
 msgid "Tooltip"
 msgstr "Työkaluvihje"
 
+msgid "Upgrade"
+msgstr "Päivitä"
+
 msgid "Utility"
 msgstr "Apuohjelma"
 
@@ -5032,6 +5035,9 @@ msgstr "Rekisteröitymispyyntö on hyväksytty!"
 msgid "Signup request rejected!"
 msgstr "Rekisteröitymispyyntö hylättiin!"
 
+msgid "Switch to latest version"
+msgstr "Päivitä uusimpaan versioon"
+
 msgid "Target session not found"
 msgstr "Kohdeistuntoa ei löydy"
 
@@ -7534,6 +7540,9 @@ msgstr "Käyttäjällä on jo rekisteröityminen tähän tapahtumaan!"
 msgid "Warning. The form contains errors to the fields"
 msgstr "Varoitus. Lomake sisältää virheitä kentissä"
 
+msgid "You are now using the latest interface version."
+msgstr "Käytät nyt käyttöliittymän uusinta versiota."
+
 msgid "You have been redirected to the Event Dashboard"
 msgstr "Sinut on ohjattu tapahtuman kojelaudalle"
 
@@ -8099,6 +8108,9 @@ msgstr "Tällä hetkellä ei ole maksulaskuja, jotka odottavat vahvistusta."
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Valitse taulukon rivit ja valitse sovellettava toiminto"
 
+msgid "Switch to the latest interface version for your account"
+msgstr "Vaihda tilisi käyttöliittymän uusimpaan versioon"
+
 msgid "The initial display mode when opening the ensemble page"
 msgstr "Alkuperäinen näyttötila, kun ensemble-sivu avataan"
 
@@ -8115,6 +8127,10 @@ msgstr "Nykyiseen päivämäärään mennessä jo maksettujen maksujen kokonaism
 
 msgid "Warehouse quantities have been committed for this event"
 msgstr "Varastomäärät ovat sidottu tätä tapahtumaa varten"
+
+#, python-format
+msgid "You can switch your account to version %(version)s now."
+msgstr "Voit päivittää tilisi versioon %(version)s nyt."
 
 msgid "You must signed up in order to select your preferences!"
 msgstr "Sinun on oltava ilmoittautunut, jotta voit valita mieltymyksesi!"
