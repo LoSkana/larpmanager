@@ -53,7 +53,7 @@
         {% endif %}
         {% if delegated_todo %}
             <h2>{% trans "Payments pending delegated accounts" %}</h2>
-            <p>{% trans "These are delegated account registrations for which you have to make a payment." %}</p>
+            <p>{% trans "These are registrations from delegated account for which you have to make a payment." %}</p>
             <p>
                 {% for del in delegated %}
                     {% for registration in del.context.payments_todo %}
@@ -200,7 +200,7 @@
                 </table>
                 {% if collection_gifts %}
                     <p>
-                        {% trans "Collection participated:" %}
+                        {% trans "Collections participated:" %}
                         {% for el in collection_gifts %}
                             {% include "elements/comma.html" %}
                             <i>{{ el.collection.member.display_member }}</i> ({{ el.value }}{{ currency_symbol }})

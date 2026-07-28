@@ -10,7 +10,7 @@
     {% if res.memb_del %}
         <tr>
             <td>
-                <b>{% trans "Cancellation for missing organization registration" %}</b>
+                <b>{% trans "Cancellation for missing membership registration" %}</b>
             </td>
             <td>{% trans "Tolerance exceeded, proceed with the cancellation" %}</td>
             <td>{{ res.memb_del|length }}</td>
@@ -94,7 +94,7 @@
     {% if res.memb %}
         <tr>
             <td>
-                <b>{% trans "Delay in organization registration" %}</b>
+                <b>{% trans "Membership registration overdue" %}</b>
             </td>
             <td>
                 {% trans "They need to complete it immediately" %} - <a href="{% url 'membership' %}">{% trans "give them this address" %}</a>

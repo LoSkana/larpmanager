@@ -112,11 +112,11 @@
         <b>(1)</b> {% trans "Use the bank details below to make the transfer from your bank." %}
     </p>
     <p>
-        <i>{% trans "Copy the causal exactly as shown (in coloured text)!" %}</i>
+        <i>{% trans "Copy the payment reference exactly as shown (in colored text)." %}</i>
     </p>
     <ul>
         <li>
-            <b>{% trans "Causal" %}</b>: <span class="causal">{{ invoice.causal }}</span>
+            <b>{% trans "Payment reference" %}</b>: <span class="causal">{{ invoice.causal }}</span>
         </li>
         <li>
             <b>{% trans "Amount" %}</b>: {{ invoice.mc_gross|format_decimal }} {{ payment_currency }}

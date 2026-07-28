@@ -336,7 +336,7 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
             },
             {
                 "slug": "orga_casting",
-                "name": _("First assignment"),
+                "name": _("First character assignment"),
                 "descr": _("Assign a character to a registered participant"),
                 "done": RegistrationCharacterRel.objects.filter(
                     registration__run__event__association_id=association_id

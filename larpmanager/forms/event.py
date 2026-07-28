@@ -1258,7 +1258,7 @@ class OrgaEventTextForm(BaseModelForm):
         self.fields["typ"].choices = ch
 
         help_texts = {
-            EventTextType.INTRO: _("Text show at the start of all character sheets"),
+            EventTextType.INTRO: _("Text shown at the start of all character sheets"),
             EventTextType.TOC: _("Terms and conditions of signup, shown in a page linked in the registration form"),
             EventTextType.REGISTER: _("Added to the registration page, before the form"),
             EventTextType.SEARCH: _("Added at the top of the search page of characters"),

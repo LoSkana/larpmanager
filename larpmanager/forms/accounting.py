@@ -193,9 +193,7 @@ class ExePaymentForm(BaseModelForm):
 
     page_title = _("Payments")
 
-    page_info = _(
-        "Track all member payments across events, review amounts and statuses, and confirm pending registration invoices"
-    )
+    page_info = _("Track and review event payments, and confirm pending ones")
 
     class Meta:
         model = AccountingItemPayment
@@ -522,7 +520,7 @@ class ExeCollectionForm(CollectionNewForm):
 class OrgaDiscountForm(BaseModelForm):
     """Form for OrgaDiscount."""
 
-    page_info = _("Manage discounts configured for this event, including type, value, and redemption codes")
+    page_info = _("Configure event discounts, discount types, values, and promo codes.")
 
     page_title = _("Discount")
 

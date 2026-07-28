@@ -305,7 +305,7 @@ def _add_extra_items(
                 reverse("gift", args=[slug]),
                 "fa-solid fa-gift",
                 _("Gift"),
-                str(_("Give a card to your friend")),
+                str(_("Gift a registration to your friend")),
                 sidebar_gate=("gift", allowed_sidebar),
             ),
         )

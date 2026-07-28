@@ -382,7 +382,7 @@ class AssociationTextType(models.TextChoices):
     HOME = "h", _("Calendar")
     SIGNUP = "u", _("Registration mail")
     MEMBERSHIP = "m", _("Membership request")
-    STATUTE = "s", _("Statute")
+    STATUTE = "s", _("Association Statute")
     LEGAL = "l", _("Legal notice")
     FOOTER = "f", _("Footer")
     TOC = "t", _("Terms and Conditions")
@@ -390,10 +390,10 @@ class AssociationTextType(models.TextChoices):
     SIGNATURE = "g", _("Mail signature")
     PRIVACY = "y", _("Privacy")
 
-    REMINDER_MEMBERSHIP = "rm", _("Reminder membership request")
-    REMINDER_MEMBERSHIP_FEE = "rf", _("Reminder membership fee")
-    REMINDER_PAY = "rp", _("Reminder payment")
-    REMINDER_PROFILE = "rr", _("Reminder profile")
+    REMINDER_MEMBERSHIP = "rm", _("Membership request reminder email")
+    REMINDER_MEMBERSHIP_FEE = "rf", _("Membership request reminder email")
+    REMINDER_PAY = "rp", _("Payment reminder email")
+    REMINDER_PROFILE = "rr", _("Profile completion reminder email")
 
 
 class AssociationText(UuidMixin, BaseModel):

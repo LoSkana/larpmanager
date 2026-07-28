@@ -957,7 +957,7 @@ def _get_column_names(context: dict) -> None:
                 "cost": _("(Optional) Cost of the ability"),
                 "typ": _("Ability type"),
                 "descr": _("(Optional) The ability description"),
-                "prerequisites": _("(Optional) Other ability as prerequisite, comma-separated"),
+                "prerequisites": _("(Optional) Other abilities as prerequisite, comma-separated"),
                 "requirements": _("(Optional) Character options as requirements, comma-separated"),
             },
         ]

@@ -769,9 +769,7 @@ class RequestApprovalForm(BaseRegistrationForm):
 class OrgaRegistrationForm(BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
-    page_info = _(
-        "Manage all active participant registrations, including character assignments, ticket types, and payment status"
-    )
+    page_info = _("Manage all registrations, character assignments, tickets, options and accounting status")
 
     page_title = _("Registrations")
 
@@ -1212,7 +1210,7 @@ class RegistrationCharacterRelForm(BaseModelForm):
 class OrgaRegistrationTicketForm(BaseModelForm):
     """Form for OrgaRegistrationTicket."""
 
-    page_info = _("Define the ticket types participants can select when registering, including pricing and tiers")
+    page_info = _("Configure ticket types, pricing, and tiers for participants.")
 
     page_title = _("Tickets")
 
