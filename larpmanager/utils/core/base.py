@@ -164,7 +164,7 @@ def get_context_member(request: HttpRequest, context: dict) -> None:
     get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
     # Compute effective interface version (member override, clamped to [assoc_version, latest])
-    member_version_str = context["member"].get_config("interface_version", default_value=None)
+    member_version_str = context["member"].get_config("interface_version")
     member_version = int(member_version_str) if member_version_str else None
     assoc_version = context.get("assoc_version", LATEST_AVAILABLE_VERSION)
     if member_version is not None and assoc_version != LATEST_AVAILABLE_VERSION:
@@ -473,17 +473,13 @@ def get_event_context(
         event_view = "register"
         event_kwargs = {"event_slug": context["run"].get_slug()}
         # Check if gallery is hidden for non-authenticated users
-        hide_gallery_for_non_login = get_event_config(
-            context["event"].id, "gallery_hide_login", default_value=False, context=context
-        )
+        hide_gallery_for_non_login = get_event_config(context["event"].id, "gallery_hide_login", context=context)
         if hide_gallery_for_non_login and not request.user.is_authenticated:
             messages.warning(request, _("You must be logged in to view this page"))
             raise RedirectError(event_view, kwargs=event_kwargs)
 
         # Check if gallery is hidden for non-registered users
-        hide_gallery_for_non_signup = get_event_config(
-            context["event"].id, "gallery_hide_signup", default_value=False, context=context
-        )
+        hide_gallery_for_non_signup = get_event_config(context["event"].id, "gallery_hide_signup", context=context)
         if hide_gallery_for_non_signup and not registration:
             messages.warning(request, _("You must be registered to view this page"))
             raise RedirectError(event_view, kwargs=event_kwargs)

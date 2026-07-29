@@ -655,9 +655,7 @@ def backend_edit(
 
         # Set auto-save behavior based on event configuration
         if "event" in context:
-            context["auto_save"] = not get_event_config(
-                context["event"].id, "writing_disable_auto", default_value=False, context=context
-            )
+            context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", context=context)
             context["download"] = 1
 
             # Set up character finder functionality
@@ -791,7 +789,7 @@ def _setup_char_finder(context: dict, model_type: type) -> None:
 
     """
     # Check if character finder is disabled for this event
-    if get_event_config(context["event"].id, "writing_disable_char_finder", default_value=False, context=context):
+    if get_event_config(context["event"].id, "writing_disable_char_finder", context=context):
         return
 
     # Select appropriate widget class based on type

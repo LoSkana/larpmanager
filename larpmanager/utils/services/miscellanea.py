@@ -265,9 +265,7 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
         )
 
     # Award badge to user if configured for this association
-    badge_code = get_association_config(
-        context["association_id"], "centauri_badge", default_value=None, context=template_context
-    )
+    badge_code = get_association_config(context["association_id"], "centauri_badge", context=template_context)
     if badge_code:
         badge = Badge.objects.filter(cod=badge_code).first()
         if badge:

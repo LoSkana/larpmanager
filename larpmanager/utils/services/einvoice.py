@@ -148,7 +148,6 @@ def _einvoice_header(
     ET.SubElement(transmitter_id, "IdCodice").text = get_association_config(
         inv.association_id,
         "einvoice_idcodice",
-        default_value=None,
         context=config_holder,
     )
     # Progressive invoice number padded to 10 digits
@@ -158,7 +157,6 @@ def _einvoice_header(
     ET.SubElement(transmission_data, "CodiceDestinatario").text = get_association_config(
         inv.association_id,
         "einvoice_codicedestinatario",
-        default_value=None,
         context=config_holder,
     )
 
@@ -171,7 +169,6 @@ def _einvoice_header(
     ET.SubElement(vat_fiscal_id, "IdCodice").text = get_association_config(
         inv.association_id,
         "einvoice_partitaiva",
-        default_value=None,
         context=config_holder,
     )
     # Add association name and tax regime
@@ -179,13 +176,11 @@ def _einvoice_header(
     ET.SubElement(supplier_registry, "Denominazione").text = get_association_config(
         inv.association_id,
         "einvoice_denominazione",
-        default_value=None,
         context=config_holder,
     )
     ET.SubElement(supplier_registry_data, "RegimeFiscale").text = get_association_config(
         inv.association_id,
         "einvoice_regimefiscale",
-        default_value=None,
         context=config_holder,
     )
     # Add association registered address
@@ -193,37 +188,31 @@ def _einvoice_header(
     ET.SubElement(supplier_address, "Indirizzo").text = get_association_config(
         inv.association_id,
         "einvoice_indirizzo",
-        default_value=None,
         context=config_holder,
     )
     ET.SubElement(supplier_address, "NumeroCivico").text = get_association_config(
         inv.association_id,
         "einvoice_numerocivico",
-        default_value=None,
         context=config_holder,
     )
     ET.SubElement(supplier_address, "Cap").text = get_association_config(
         inv.association_id,
         "einvoice_cap",
-        default_value=None,
         context=config_holder,
     )
     ET.SubElement(supplier_address, "Comune").text = get_association_config(
         inv.association_id,
         "einvoice_comune",
-        default_value=None,
         context=config_holder,
     )
     ET.SubElement(supplier_address, "Provincia").text = get_association_config(
         inv.association_id,
         "einvoice_provincia",
-        default_value=None,
         context=config_holder,
     )
     ET.SubElement(supplier_address, "Nazione").text = get_association_config(
         inv.association_id,
         "einvoice_nazione",
-        default_value=None,
         context=config_holder,
     )
 
@@ -297,13 +286,9 @@ def _einvoice_body(einvoice: Any, invoice: Any, xml_root: Any) -> None:
     config_holder = {}
 
     # Get VAT rate and nature configuration from association settings
-    vat_rate = get_association_config(
-        invoice.association_id, "einvoice_aliquotaiva", default_value="", context=config_holder
-    )
+    vat_rate = get_association_config(invoice.association_id, "einvoice_aliquotaiva", context=config_holder)
     ET.SubElement(line_details, "AliquotaIVA").text = vat_rate
-    vat_nature = get_association_config(
-        invoice.association_id, "einvoice_natura", default_value="", context=config_holder
-    )
+    vat_nature = get_association_config(invoice.association_id, "einvoice_natura", context=config_holder)
     if vat_nature:
         ET.SubElement(line_details, "Natura").text = vat_nature
 

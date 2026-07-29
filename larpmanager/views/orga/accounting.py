@@ -407,7 +407,6 @@ def _is_credit_readonly(context: dict) -> bool:
     return get_association_config(
         context["event"].association_id,
         "credit_readonly_event",
-        default_value=False,
         context=context,
     )
 
@@ -772,7 +771,6 @@ def orga_expenses(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["disable_approval"] = get_association_config(
         context["event"].association_id,
         "expense_disable_orga",
-        default_value=False,
         context=context,
     )
 
@@ -862,9 +860,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
     context = check_event_context(request, event_slug, "orga_expenses")
 
     # Verify that expense functionality is enabled for this association
-    if get_association_config(
-        context["event"].association_id, "expense_disable_orga", default_value=False, context=context
-    ):
+    if get_association_config(context["event"].association_id, "expense_disable_orga", context=context):
         msg = "eh no caro mio"
         raise Http404(msg)
 

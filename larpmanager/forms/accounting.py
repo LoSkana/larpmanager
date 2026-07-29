@@ -114,9 +114,7 @@ class OrgaExpenseForm(BaseModelFormRun):
             self.delete_field("balance")
 
         # Remove approval field if organization has disabled expense approval
-        if get_association_config(
-            self.params.get("event").association_id, "expense_disable_orga", default_value=False, context=self.params
-        ):
+        if get_association_config(self.params.get("event").association_id, "expense_disable_orga", context=self.params):
             self.delete_field("is_approved")
 
 

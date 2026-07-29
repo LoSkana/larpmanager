@@ -66,7 +66,7 @@ def _apply_tokens(
         Remaining balance after applying tokens
 
     """
-    disable_tokens = get_event_config(event_id, "tokens_disable", default_value=False)
+    disable_tokens = get_event_config(event_id, "tokens_disable")
     if membership.tokens <= 0 or disable_tokens:
         return remaining
 
@@ -107,7 +107,7 @@ def _apply_credits(
         Remaining balance after applying credits
 
     """
-    disable_credits = get_event_config(event_id, "credits_disable", default_value=False)
+    disable_credits = get_event_config(event_id, "credits_disable")
     if membership.credit <= 0 or disable_credits:
         return remaining
 

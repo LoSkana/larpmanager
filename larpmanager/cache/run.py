@@ -200,7 +200,7 @@ def init_cache_config_run(run: Run) -> dict:
 
     # Process additional display configurations
     additional_display_dict = {}
-    additional_config_value = run.get_config("show_addit", default_value="[]")
+    additional_config_value = run.get_config("show_addit")
     for element in ast.literal_eval(additional_config_value):
         additional_display_dict[element] = 1
     context["show_addit"] = additional_display_dict

@@ -858,9 +858,7 @@ def exe_vote(request: HttpRequest) -> HttpResponse:
     # Parse candidate IDs from association configuration
     idxs = [
         el.strip()
-        for el in get_association_config(association_id, "vote_candidates", default_value="", context=context).split(
-            ","
-        )
+        for el in get_association_config(association_id, "vote_candidates", context=context).split(",")
         if el.strip()
     ]
 

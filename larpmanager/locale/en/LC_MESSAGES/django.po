@@ -80,6 +80,12 @@ msgstr ""
 msgid "Collected contribution of %(user)s for %(recipient)s"
 msgstr ""
 
+msgid "Freely indicate the amount of your donation"
+msgstr ""
+
+msgid "Free donation"
+msgstr ""
+
 msgid "Registrations on external link"
 msgstr ""
 
@@ -2483,12 +2489,6 @@ msgid "Registration"
 msgstr ""
 
 msgid "Main"
-msgstr ""
-
-msgid "Free donation"
-msgstr ""
-
-msgid "Freely indicate the amount of your donation"
 msgstr ""
 
 msgid "Quotas"
