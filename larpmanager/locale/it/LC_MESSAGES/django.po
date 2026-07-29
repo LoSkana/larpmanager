@@ -4868,6 +4868,9 @@ msgstr "Rimborso elaborato"
 msgid "Select your preferences"
 msgstr "Scegli le tue preferenze"
 
+msgid "Separate membership fee"
+msgstr "Quota associativa separata"
+
 msgid "Show answered questions"
 msgstr "Mostra le domande a cui hai risposto"
 
@@ -11606,6 +11609,13 @@ msgid ""
 msgstr ""
 "Se abilitato, non invia una notifica al partecipante quando viene assegnato "
 "un personaggio."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Se attivata, la quota associativa annuale viene pagata separatamente dalla "
+"quota di iscrizione all'evento."
 
 msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "

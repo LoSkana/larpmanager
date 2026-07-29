@@ -113,7 +113,7 @@ def check_orga_features(page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Now you can set customization options")
     expect_normalized(page,
-        page.locator("#one"), "You have activated the following features, for each here's the links to follow"
+        page.locator("#one"), "You have activated the following features. Here are the relevant links:"
     )
     sidebar(page, "Features")
     # Automatically added with character customization

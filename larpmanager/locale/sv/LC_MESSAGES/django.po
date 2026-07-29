@@ -4868,6 +4868,9 @@ msgstr "Återbetalningen har behandlats"
 msgid "Select your preferences"
 msgstr "Välj dina preferenser"
 
+msgid "Separate membership fee"
+msgstr "Separat medlemsavgift"
+
 msgid "Show answered questions"
 msgstr "Visa besvarade frågor"
 
@@ -11383,6 +11386,13 @@ msgid ""
 msgstr ""
 "Om det är aktiverat skickas ingen notifiering till deltagaren när en "
 "karaktär tilldelas."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Om detta är aktiverat betalas den årliga medlemsavgiften separat från "
+"anmälningsavgiften för evenemanget."
 
 msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "

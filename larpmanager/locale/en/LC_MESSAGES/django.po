@@ -630,6 +630,14 @@ msgid ""
 "annual fee without an active event registration."
 msgstr ""
 
+msgid "Separate membership fee"
+msgstr ""
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+
 msgid "Charge transaction fees to participant"
 msgstr ""
 

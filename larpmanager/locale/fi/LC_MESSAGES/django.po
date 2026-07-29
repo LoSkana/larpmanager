@@ -4868,6 +4868,9 @@ msgstr "Korvaus on käsitelty"
 msgid "Select your preferences"
 msgstr "Valitse asetuksesi"
 
+msgid "Separate membership fee"
+msgstr "Erillinen jäsenmaksu"
+
 msgid "Show answered questions"
 msgstr "Näytä vastatut kysymykset"
 
@@ -11403,6 +11406,13 @@ msgid ""
 msgstr ""
 "Jos käytössä, osallistujalle ei lähetetä ilmoitusta, kun hänelle osoitetaan "
 "hahmo."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Jos käytössä, vuotuinen jäsenmaksu maksetaan erikseen tapahtuman "
+"osallistumismaksusta."
 
 msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "

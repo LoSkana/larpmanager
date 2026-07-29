@@ -4868,6 +4868,9 @@ msgstr "Refusjonen er behandlet"
 msgid "Select your preferences"
 msgstr "Velg preferansene dine"
 
+msgid "Separate membership fee"
+msgstr "Separat medlemsavgift"
+
 msgid "Show answered questions"
 msgstr "Vis besvarte spørsmål"
 
@@ -11408,6 +11411,13 @@ msgid ""
 msgstr ""
 "Hvis aktivert, sendes det ikke et varsel til deltakeren når en karakter "
 "tildeles."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Hvis aktivert, betales den årlige medlemsavgiften separat fra "
+"påmeldingsavgiften for arrangementet."
 
 msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "

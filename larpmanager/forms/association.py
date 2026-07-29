@@ -80,7 +80,7 @@ class ExeAssociationForm(BaseModelForm):
             "skin",
             "lite_mode",
             "maintainers",
-            "demo_type.",
+            "demo_type",
         )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -689,6 +689,12 @@ class ExeConfigForm(ConfigForm):
             "without an active event registration."
         )
         self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
+
+        field_label = _("Separate membership fee")
+        field_help_text = _(
+            "If enabled, the annual membership fee is paid separately from the event registration fee.",
+        )
+        self.add_configs("membership_fee_separated", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_accounting_1(self) -> None:
         """Configure accounting-related form fields for association settings."""

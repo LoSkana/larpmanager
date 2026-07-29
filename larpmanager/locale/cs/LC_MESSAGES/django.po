@@ -4868,6 +4868,9 @@ msgstr "Proplacení bylo zpracováno"
 msgid "Select your preferences"
 msgstr "Vyber si své preference"
 
+msgid "Separate membership fee"
+msgstr "Samostatný členský poplatek"
+
 msgid "Show answered questions"
 msgstr "Zobrazit zodpovězené otázky"
 
@@ -11225,6 +11228,13 @@ msgid ""
 " is assigned."
 msgstr ""
 "Pokud je povoleno, neodešle účastníkovi oznámení při přiřazení postavy."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Pokud je tato možnost povolena, roční členský poplatek se platí zvlášť "
+"oproti registračnímu poplatku za akci."
 
 msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "

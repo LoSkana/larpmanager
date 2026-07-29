@@ -4868,6 +4868,9 @@ msgstr "Remboursement effectué"
 msgid "Select your preferences"
 msgstr "Choisis tes préférences"
 
+msgid "Separate membership fee"
+msgstr "Cotisation séparée"
+
 msgid "Show answered questions"
 msgstr "Afficher les questions auxquelles on a répondu"
 
@@ -11698,6 +11701,13 @@ msgid ""
 msgstr ""
 "Si activé, n’envoie pas de notification au·à la participant·e lorsqu’un "
 "personnage est attribué."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Si activé, la cotisation annuelle est payée séparément des frais "
+"d'inscription à l'événement."
 
 msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "

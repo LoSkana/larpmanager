@@ -4868,6 +4868,9 @@ msgstr "Erstattung bearbeitet"
 msgid "Select your preferences"
 msgstr "Wähle deine Einstellungen aus"
 
+msgid "Separate membership fee"
+msgstr "Separate Mitgliedsgebühr"
+
 msgid "Show answered questions"
 msgstr "Beantwortete Fragen anzeigen"
 
@@ -11724,6 +11727,13 @@ msgid ""
 msgstr ""
 "Wenn aktiviert, wird keine Benachrichtigung an den Teilnehmenden gesendet, "
 "wenn ein Charakter zugewiesen wird."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Wenn aktiviert, wird die jährliche Mitgliedsgebühr getrennt von der "
+"Anmeldegebühr für die Veranstaltung bezahlt."
 
 msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "

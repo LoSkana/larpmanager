@@ -4868,6 +4868,9 @@ msgstr "Terugbetaling verwerkt"
 msgid "Select your preferences"
 msgstr "Kies je voorkeuren"
 
+msgid "Separate membership fee"
+msgstr "Apart lidmaatschapsgeld"
+
 msgid "Show answered questions"
 msgstr "Beantwoorde vragen weergeven"
 
@@ -11605,6 +11608,13 @@ msgid ""
 msgstr ""
 "Indien ingeschakeld, ontvangt de deelnemer geen melding wanneer een "
 "personage wordt toegewezen."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Indien ingeschakeld, wordt het jaarlijkse lidmaatschapsgeld apart van de "
+"inschrijvingskosten voor het evenement betaald."
 
 msgid ""
 "Indicates the amount of reimbursement desired (can't be higher than your "
