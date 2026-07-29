@@ -514,7 +514,7 @@ def _status_payment(
 
         note = None
         if wire_created_invoices:
-            note = _("If you have made a wire transfer, please upload the receipt for it to be processed")
+            note = _("If you have made a wire transfer, please upload its receipt for processing")
 
         total_amount = registration.quota
         if context.get("membership_fee") == "bundled" and context.get("membership_amount"):

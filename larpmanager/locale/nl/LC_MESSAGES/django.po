@@ -3419,7 +3419,7 @@ msgstr "Optioneel sorteren"
 msgid "Overall balance:"
 msgstr "Totaalsaldo:"
 
-msgid "Partecipation to"
+msgid "Participation in"
 msgstr "Deelname aan"
 
 msgid "Password changed"
@@ -3893,6 +3893,9 @@ msgstr "Verberg niet beschikbaar"
 msgid "Historic residence"
 msgstr "Historische woonplaats"
 
+msgid "Information saved!"
+msgstr "Informatie opgeslagen!"
+
 msgid "Invite a character"
 msgstr "Nodig een personage uit"
 
@@ -4100,14 +4103,14 @@ msgstr "Evenementconfiguratie"
 msgid "Event configuration"
 msgstr "Gebeurtenisconfiguratie"
 
+msgid "General information"
+msgstr "Algemene informatie"
+
 msgid "History preferences"
 msgstr "Voorkeuren geschiedenis"
 
 msgid "I am not interested"
 msgstr "Ik ben niet geïnteresseerd"
-
-msgid "Informations saved!"
-msgstr "Informatie opgeslagen!"
 
 msgid "Maximum preferences"
 msgstr "Maximale voorkeuren"
@@ -4147,6 +4150,9 @@ msgstr "Foto van het object"
 
 msgid "Preferences - Total"
 msgstr "Voorkeuren - Totaal"
+
+msgid "Public information:"
+msgstr "Openbare informatie:"
 
 msgid "Quotas total number"
 msgstr "Totaal aantal quota"
@@ -4336,9 +4342,6 @@ msgstr "Ongeldige voorkeur"
 
 msgid "Proceed with payment"
 msgstr "Ga verder met betalen"
-
-msgid "Public informations:"
-msgstr "Publieke informatie:"
 
 msgid "Registration history"
 msgstr "Registratiegeschiedenis"
@@ -4669,9 +4672,6 @@ msgstr "Voorkeuren nieuwsbrief"
 
 msgid "No address was ignored"
 msgstr "Er is geen enkel adres over het hoofd gezien"
-
-msgid "No organization found."
-msgstr "Geen organisatie gevonden."
 
 msgid "One-Time Access Tokens"
 msgstr "Eenmalige toegangstokens"
@@ -5486,6 +5486,9 @@ msgstr "Afbeelding wordt geüpload, even geduld"
 msgid "View preference history for:"
 msgstr "Ga naar de voorkeurengeschiedenis voor:"
 
+msgid "View the characters you play"
+msgstr "Bekijk de personages die je speelt"
+
 #, python-format
 msgid "Welcome to %(organization)s!"
 msgstr "Welkom bij %(organization)s!"
@@ -6288,9 +6291,6 @@ msgstr "Unieke identifier voor de URL van het evenement"
 
 msgid "Upload data directly from CSV file."
 msgstr "Gegevens rechtstreeks vanuit een CSV-bestand uploaden."
-
-msgid "View the characters you are playing"
-msgstr "Bekijk de personages die je speelt"
 
 msgid "You are about to make a payment of:"
 msgstr "Je staat op het punt een betaling te doen van:"
@@ -7496,6 +7496,9 @@ msgstr "De aanmelding voor %(event)s is geannuleerd door %(user)s"
 msgid "Registration for %(member)s copied to %(event)s"
 msgstr "De aanmelding voor %(member)s is naar %(event)s gekopieerd"
 
+msgid "Review participants' safety-related information"
+msgstr "Bekijk veiligheidsgerelateerde informatie van deelnemers"
+
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Toont het berekende belastingbedrag op elke betaling"
 
@@ -7573,9 +7576,6 @@ msgstr "Registratievragen zonder opties: %(list)s"
 
 msgid "Registrations for this event have not opened yet"
 msgstr "De inschrijvingen voor dit evenement zijn nog niet geopend"
-
-msgid "Review participants' safety-related informations"
-msgstr "Bekijk veiligheidsgerelateerde informatie van deelnemers"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Geselecteerde elementen worden aan deelnemers getoond."
@@ -7843,9 +7843,6 @@ msgstr "Je aanmelding voor dit evenement is bevestigd"
 msgid "Your signup request is awaiting organizer approval!"
 msgstr "Je aanmeldingsverzoek wacht op goedkeuring door de organisator!"
 
-msgid "Your signup request is awaiting organizer approval."
-msgstr "Je aanmeldingsverzoek wacht op goedkeuring door de organisator."
-
 msgid "use high-quality wide images for best visual impact"
 msgstr ""
 "gebruik brede afbeeldingen van hoge kwaliteit voor de beste visuele impact"
@@ -7936,6 +7933,10 @@ msgstr "Definieer ten minste één vraag in het registratieformulier"
 
 msgid "Description of the relationship from source to target"
 msgstr "Beschrijving van de relatie van bron naar doel"
+
+msgid "Description of this payment method shown to the user."
+msgstr ""
+"Beschrijving van deze betaalmethode die aan de gebruiker wordt getoond."
 
 msgid "Displays lists of participants to persuade to sign up"
 msgstr ""
@@ -8710,11 +8711,6 @@ msgstr ""
 "Kopieer de betalingsreferentie precies zoals hier weergegeven (in gekleurde "
 "tekst)."
 
-msgid "Description of this payment method to be displayed to the user"
-msgstr ""
-"Beschrijving van deze betaalmethode die moet worden weergegeven aan de "
-"gebruiker"
-
 msgid "Do you want to manage character progression through abilities?"
 msgstr "Wil je de voortgang van personages via vaardigheden beheren?"
 
@@ -9076,11 +9072,6 @@ msgstr "Je volledige woonadres inclusief straat, stad en land"
 msgid "Your registration for this event has been successfully cancelled."
 msgstr "Je aanmelding voor dit evenement is succesvol geannuleerd."
 
-msgid "Added at the bottom of all mails confirming signup to participants"
-msgstr ""
-"Toegevoegd onderaan alle mails ter bevestiging van inschrijving aan "
-"deelnemers"
-
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
 "Fout bij het laden. Ongeldig bestandsformaat - we accepteren alleen pdf en "
@@ -9255,6 +9246,11 @@ msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 "%(amount)s %(tokens)s zijn ingewisseld om mee te doen aan dit evenement."
 
+msgid "Added at the bottom of all emails confirming signups to participants"
+msgstr ""
+"Onderaan alle e-mails ter bevestiging van inschrijvingen aan deelnemers "
+"toegevoegd"
+
 msgid "Allows participants to create and modify their own characters freely"
 msgstr "Deelnemers kunnen hun eigen personages vrijelijk maken en aanpassen"
 
@@ -9415,6 +9411,11 @@ msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 "Schakelt de verwerking van betalingen in en geeft aan welke "
 "betalingsmethoden moeten worden geaccepteerd"
+
+msgid "Expected total income from participation fees selected by participants"
+msgstr ""
+"Verwachte totale inkomsten uit deelnamekosten die door deelnemers zijn "
+"geselecteerd"
 
 msgid "Fixed and dynamic installments cannot be used together; deactivate one"
 msgstr ""
@@ -9927,6 +9928,12 @@ msgid ""
 msgstr ""
 "Indien geselecteerd, stuur organisatoren een e-mailmelding bij bijgewerkte "
 "inschrijvingen."
+
+msgid ""
+"If you have made a wire transfer, please upload its receipt for processing"
+msgstr ""
+"Als je een bankoverschrijving hebt gedaan, upload dan het betalingsbewijs "
+"zodat deze verwerkt kan worden"
 
 #, python-format
 msgid ""
@@ -10634,6 +10641,13 @@ msgstr ""
 "Het evenement dat je hebt aangevraagd is alleen zichtbaar voor deelnemers "
 "die zijn aangemeld bij het systeem."
 
+msgid ""
+"To participate in the organization's events, you must apply to become a "
+"member."
+msgstr ""
+"Om deel te nemen aan de evenementen van de organisatie, moet je een aanvraag"
+" indienen om lid te worden."
+
 #, python-format
 msgid ""
 "You have been assigned the character <b>%(character)s</b> for "
@@ -10681,13 +10695,6 @@ msgid ""
 msgstr ""
 "Als je een evenement selecteert, doe je mee aan de bijbehorende campagne en "
 "deel je je personages daarmee"
-
-msgid ""
-"Terms and conditions of signup, shown in a page linked in the registration "
-"form."
-msgstr ""
-"Algemene voorwaarden voor inschrijving, getoond op een pagina die is gelinkt"
-" in het inschrijfformulier."
 
 msgid ""
 "This content can only be accessed once. Please read carefully before "
@@ -10892,13 +10899,6 @@ msgstr ""
 "inschrijvingen niet wijzigen."
 
 msgid ""
-"If you have made a wire transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Als je een overschrijving hebt gedaan, upload dan het ontvangstbewijs zodat "
-"het verwerkt kan worden"
-
-msgid ""
 "Manage CSS layout templates that control the visual formatting of printed "
 "handouts"
 msgstr ""
@@ -10960,13 +10960,6 @@ msgid ""
 msgstr ""
 "Bepaalt hoe vaak herinneringsmails worden verstuurd, in dagen (als dit niet "
 "is ingesteld, worden er geen e-mails verstuurd)."
-
-msgid ""
-"Theoretical total of income due to participation fees selected by the "
-"participants"
-msgstr ""
-"Theoretisch totaal van inkomsten uit door de deelnemers gekozen "
-"deelnamekosten"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "
@@ -11728,6 +11721,13 @@ msgstr ""
 "gemakkelijk leesbare pagina worden geëxporteerd."
 
 msgid ""
+"Indicates private information about your character, visible only to you and "
+"the organizers"
+msgstr ""
+"Geeft privé-informatie over je personage aan, alleen zichtbaar voor jou en "
+"de organisatoren"
+
+msgid ""
 "Introduces 'Quests' as building blocks of the character sheet, each with "
 "multiple 'traits'"
 msgstr ""
@@ -11975,13 +11975,6 @@ msgid ""
 msgstr ""
 "Indien ingeschakeld, worden in de galerij geen deelnemers getoond waaraan "
 "geen personage is toegewezen."
-
-msgid ""
-"In order to subscribe to the Organization's events you must apply to be "
-"admitted as a Member."
-msgstr ""
-"Om je in te schrijven voor evenementen van de Vereniging, moet je een "
-"aanvraag indienen om toegelaten te worden als Lid."
 
 msgid ""
 "Manage organization roles, assign members, and configure the permissions "
@@ -12590,13 +12583,6 @@ msgstr ""
 "registratie die na een bepaalde datum wordt gemaakt"
 
 msgid ""
-"Indicates public information about your character, which will be shown only "
-"to you and the organizers"
-msgstr ""
-"Vermeld openbare informatie over je personage, deze zal alleen zichtbaar "
-"zijn voor jou en de organisatoren"
-
-msgid ""
 "Manage custom texts used across the organization, such as emails and "
 "registration pages, per language"
 msgstr ""
@@ -12609,6 +12595,13 @@ msgid ""
 msgstr ""
 "Er zijn nog geen formuliervelden gedefinieerd. Voeg een veld toe om "
 "informatie van spelers op hun personageblad te verzamelen."
+
+msgid ""
+"Percentage retained by the payment system. Enter the value as a number "
+"without the percentage symbol."
+msgstr ""
+"Percentage dat door het betalingssysteem wordt ingehouden. Voer de waarde in"
+" als een getal zonder het percentagesymbool."
 
 msgid ""
 "Registrations are managed on another site: participants are redirected to "
@@ -13091,13 +13084,6 @@ msgid ""
 msgstr ""
 "Er zijn nog geen questcategorieën aangemaakt. Gebruik de knop hierboven om "
 "een questtype toe te voegen en je quests te ordenen."
-
-msgid ""
-"Percentage to be retained by the payment system - enter the value as a "
-"number, without the percentage symbol"
-msgstr ""
-"Door het betalingssysteem in te houden percentage - voer de waarde in als "
-"een getal, zonder het procentsymbool"
 
 msgid ""
 "Review a member's full accounting history, including payments, transactions,"
@@ -13852,6 +13838,13 @@ msgstr ""
 "of ook door reeds ingeschreven deelnemers."
 
 msgid ""
+"This is the information with which your character will begin each act. "
+"Please do NOT read it before the act to which it refers!"
+msgstr ""
+"Dit is de informatie waarmee je personage aan elke akte begint. Lees deze "
+"alsjeblieft NIET vóór de akte waarop ze betrekking heeft!"
+
+msgid ""
 "You can now freely explore the system. You'll find below some suggestions on"
 " what you could do now to set up everything nicely!"
 msgstr ""
@@ -14370,14 +14363,6 @@ msgstr ""
 "te zien."
 
 msgid ""
-"This is the information with which your character will begin each act. We "
-"ask that you do NOT read this information before the act to which it "
-"referenced!"
-msgstr ""
-"Dit is de informatie waarmee je personage elke act begint. We vragen je om "
-"deze informatie NIET te lezen vóór de act waarnaar deze verwijst!"
-
-msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "
 "character belongs to even one exclusion category, it will not be shown in "
 "the search."
@@ -14587,6 +14572,15 @@ msgstr ""
 "paar weken), krijg je hierover een bericht via e-mail."
 
 msgid ""
+"Please remember that the information on this page was provided in confidence"
+" and must be treated with the utmost care. Share it only when strictly "
+"necessary and, where possible, anonymously."
+msgstr ""
+"Onthoud alsjeblieft dat de informatie op deze pagina vertrouwelijk is "
+"verstrekt en met de grootste zorg moet worden behandeld. Deel deze alleen "
+"wanneer strikt noodzakelijk en, waar mogelijk, anoniem."
+
+msgid ""
 "On this page you can book tickets for the event; once paid, a special code "
 "will be generated. A friend of yours will be able to receive the "
 "registration as a gift by accessing this special link!"
@@ -14653,17 +14647,6 @@ msgstr ""
 " maar we zijn niet op de hoogte van de betaling van je lidmaatschapsgeld. "
 "Let op: als je dit niet doet, <b>kun je niet deelnemen aan evenementen</b> "
 "of stemmen op de ledenvergadering!"
-
-msgid ""
-"Please remember that the information on this page was given with the "
-"implicit trust that it will be treated with the utmost care. Communicate "
-"them only if strictly necessary, and if possible communicate them in "
-"anonymous form."
-msgstr ""
-"Houd er rekening mee dat de informatie op deze pagina is verstrekt in het "
-"vertrouwen dat er uiterst zorgvuldig mee wordt omgegaan. Deel deze "
-"informatie alleen als het echt nodig is, en indien mogelijk in anonieme "
-"vorm."
 
 msgid ""
 "The text of the element on the left does NOT refer to the character whose "

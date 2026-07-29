@@ -3419,7 +3419,7 @@ msgstr "Optionale Sortierung"
 msgid "Overall balance:"
 msgstr "Gesamtsaldo:"
 
-msgid "Partecipation to"
+msgid "Participation in"
 msgstr "Teilnahme an"
 
 msgid "Password changed"
@@ -3893,6 +3893,9 @@ msgstr "Nicht Verfügbare ausblenden"
 msgid "Historic residence"
 msgstr "Historischer Wohnsitz"
 
+msgid "Information saved!"
+msgstr "Informationen gespeichert!"
+
 msgid "Invite a character"
 msgstr "Eine Figur einladen"
 
@@ -4100,14 +4103,14 @@ msgstr "Veranstaltungskonfiguration"
 msgid "Event configuration"
 msgstr "Konfiguration der Veranstaltung"
 
+msgid "General information"
+msgstr "Allgemeine Informationen"
+
 msgid "History preferences"
 msgstr "Präferenzhistorie"
 
 msgid "I am not interested"
 msgstr "Nicht interessiert"
-
-msgid "Informations saved!"
-msgstr "Informationen gespeichert!"
 
 msgid "Maximum preferences"
 msgstr "Maximale Präferenzen"
@@ -4147,6 +4150,9 @@ msgstr "Foto des Objekts"
 
 msgid "Preferences - Total"
 msgstr "Präferenzen - Gesamt"
+
+msgid "Public information:"
+msgstr "Öffentliche Informationen:"
 
 msgid "Quotas total number"
 msgstr "Gesamtzahl der Quoten"
@@ -4336,9 +4342,6 @@ msgstr "Ungültige Präferenz"
 
 msgid "Proceed with payment"
 msgstr "Zur Zahlung weitergehen"
-
-msgid "Public informations:"
-msgstr "Öffentliche Informationen:"
 
 msgid "Registration history"
 msgstr "Anmeldungsverlauf"
@@ -4669,9 +4672,6 @@ msgstr "Newsletter-Einstellungen"
 
 msgid "No address was ignored"
 msgstr "Keine Adresse wurde übersehen"
-
-msgid "No organization found."
-msgstr "Keine Organisation gefunden."
 
 msgid "One-Time Access Tokens"
 msgstr "Token für den einmaligen Zugang"
@@ -5486,6 +5486,9 @@ msgstr "Bild hochladen, bitte warten"
 msgid "View preference history for:"
 msgstr "Rufe die Einstellungshistorie für:"
 
+msgid "View the characters you play"
+msgstr "Zeige die Charaktere an, die du spielst"
+
 #, python-format
 msgid "Welcome to %(organization)s!"
 msgstr "Willkommen bei %(organization)s!"
@@ -6287,9 +6290,6 @@ msgstr "Eindeutiger Bezeichner für die Ereignis-URL"
 
 msgid "Upload data directly from CSV file."
 msgstr "Daten direkt aus einer CSV-Datei hochladen."
-
-msgid "View the characters you are playing"
-msgstr "Zeige die Charaktere an, die du spielst"
 
 msgid "You are about to make a payment of:"
 msgstr "Du bist im Begriff, eine Zahlung zu leisten in Höhe von:"
@@ -7494,6 +7494,9 @@ msgstr "Anmeldung für %(event)s von %(user)s storniert"
 msgid "Registration for %(member)s copied to %(event)s"
 msgstr "Die Anmeldung von %(member)s wurde nach %(event)s kopiert"
 
+msgid "Review participants' safety-related information"
+msgstr "Sicherheitsrelevante Informationen der Teilnehmenden prüfen"
+
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Zeigt den berechneten Steuerbetrag für jede Zahlung an"
 
@@ -7572,9 +7575,6 @@ msgstr "Registrierungsfragen ohne Optionen: %(list)s"
 
 msgid "Registrations for this event have not opened yet"
 msgstr "Die Anmeldung für diese Veranstaltung ist noch nicht möglich"
-
-msgid "Review participants' safety-related informations"
-msgstr "Überprüfe sicherheitsrelevante Informationen der Teilnehmenden"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Ausgewählte Elemente werden den Teilnehmenden angezeigt."
@@ -7860,9 +7860,6 @@ msgstr "Deine Anmeldung für diese Veranstaltung wurde bestätigt"
 msgid "Your signup request is awaiting organizer approval!"
 msgstr "Deine Anmeldeanfrage wartet auf die Freigabe durch den Veranstalter!"
 
-msgid "Your signup request is awaiting organizer approval."
-msgstr "Deine Anmeldeanfrage wartet auf die Freigabe durch den Veranstalter."
-
 msgid "use high-quality wide images for best visual impact"
 msgstr "Verwende hochwertige, breite Bilder für die beste visuelle Wirkung"
 
@@ -7954,6 +7951,9 @@ msgstr "Definiere mindestens eine Frage im Anmeldeformular"
 
 msgid "Description of the relationship from source to target"
 msgstr "Beschreibung der Beziehung von Quelle zu Ziel"
+
+msgid "Description of this payment method shown to the user."
+msgstr "Beschreibung dieser Zahlungsmethode, die dem Benutzer angezeigt wird."
 
 msgid "Displays lists of participants to persuade to sign up"
 msgstr ""
@@ -8771,10 +8771,6 @@ msgstr ""
 "Kopiere die Zahlungsreferenz genau so, wie sie angegeben ist (in farbigem "
 "Text)."
 
-msgid "Description of this payment method to be displayed to the user"
-msgstr ""
-"Beschreibung dieser Zahlungsmethode, die dem Benutzer angezeigt werden soll"
-
 msgid "Do you want to manage character progression through abilities?"
 msgstr "Möchtest du die Charakterentwicklung über Fähigkeiten verwalten?"
 
@@ -9156,11 +9152,6 @@ msgstr "Deine vollständige Wohnadresse mit Straße, Stadt und Land"
 msgid "Your registration for this event has been successfully cancelled."
 msgstr "Deine Anmeldung für diese Veranstaltung wurde erfolgreich storniert."
 
-msgid "Added at the bottom of all mails confirming signup to participants"
-msgstr ""
-"Am Ende aller Mails zur Bestätigung der Anmeldung an die Teilnehmer "
-"hinzugefügt"
-
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr ""
 "Fehler beim Laden. Ungültiges Dateiformat - wir akzeptieren nur pdf und "
@@ -9336,6 +9327,11 @@ msgstr ""
 "%(amount)s %(tokens)s wurden für die Teilnahme an dieser Veranstaltung "
 "eingelöst."
 
+msgid "Added at the bottom of all emails confirming signups to participants"
+msgstr ""
+"Wird am Ende aller E-Mails zur Anmeldebestätigung an Teilnehmende "
+"hinzugefügt"
+
 msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 "Ermöglicht den Teilnehmern, ihre eigenen Charaktere frei zu erstellen und zu"
@@ -9510,6 +9506,11 @@ msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 "Ermöglicht die Zahlungsabwicklung und gibt an, welche Zahlungsmethoden "
 "akzeptiert werden sollen"
+
+msgid "Expected total income from participation fees selected by participants"
+msgstr ""
+"Voraussichtliche Gesamteinnahmen aus den von den Teilnehmenden gewählten "
+"Teilnahmegebühren"
 
 msgid "Fixed and dynamic installments cannot be used together; deactivate one"
 msgstr ""
@@ -10035,6 +10036,12 @@ msgid ""
 msgstr ""
 "Wenn ausgewählt, wird bei aktualisierten Anmeldungen eine E-Mail-"
 "Benachrichtigung an die Orga gesendet."
+
+msgid ""
+"If you have made a wire transfer, please upload its receipt for processing"
+msgstr ""
+"Wenn du eine Überweisung getätigt hast, lade bitte den Beleg zur Bearbeitung"
+" hoch"
 
 #, python-format
 msgid ""
@@ -10746,6 +10753,13 @@ msgstr ""
 "Die Veranstaltung, die du angefordert hast, ist nur für im System "
 "angemeldete Teilnehmer sichtbar."
 
+msgid ""
+"To participate in the organization's events, you must apply to become a "
+"member."
+msgstr ""
+"Um an den Veranstaltungen der Organisation teilzunehmen, musst du die "
+"Mitgliedschaft beantragen."
+
 #, python-format
 msgid ""
 "You have been assigned the character <b>%(character)s</b> for "
@@ -10795,13 +10809,6 @@ msgid ""
 msgstr ""
 "Wenn du ein Event auswählst, nimmst du an der dazugehörigen Kampagne teil "
 "und teilst deine Charaktere mit ihr"
-
-msgid ""
-"Terms and conditions of signup, shown in a page linked in the registration "
-"form."
-msgstr ""
-"Teilnahmebedingungen für die Anmeldung, die auf einer im Anmeldeformular "
-"verlinkten Seite angezeigt werden."
 
 msgid ""
 "This content can only be accessed once. Please read carefully before "
@@ -11008,13 +11015,6 @@ msgstr ""
 "nicht ändern."
 
 msgid ""
-"If you have made a wire transfer, please upload the receipt for it to be "
-"processed"
-msgstr ""
-"Wenn du eine Überweisung getätigt hast, lade bitte den Beleg hoch, damit sie"
-" bearbeitet werden kann."
-
-msgid ""
 "Manage CSS layout templates that control the visual formatting of printed "
 "handouts"
 msgstr ""
@@ -11076,13 +11076,6 @@ msgid ""
 msgstr ""
 "Legt fest, wie oft Erinnerungs-E-Mails gesendet werden, in Tagen (wenn nicht"
 " festgelegt, werden keine E-Mails gesendet)."
-
-msgid ""
-"Theoretical total of income due to participation fees selected by the "
-"participants"
-msgstr ""
-"Theoretisches Gesamteinkommen durch die von den Teilnehmern gewählten "
-"Teilnahmegebühren"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "
@@ -11847,6 +11840,13 @@ msgstr ""
 "Seite exportiert werden."
 
 msgid ""
+"Indicates private information about your character, visible only to you and "
+"the organizers"
+msgstr ""
+"Kennzeichnet private Informationen über deinen Charakter, die nur für dich "
+"und die Organisatoren sichtbar sind"
+
+msgid ""
 "Introduces 'Quests' as building blocks of the character sheet, each with "
 "multiple 'traits'"
 msgstr ""
@@ -12094,13 +12094,6 @@ msgid ""
 msgstr ""
 "Wenn aktiviert, werden in der Galerie keine Teilnehmenden angezeigt, denen "
 "kein Charakter zugewiesen wurde."
-
-msgid ""
-"In order to subscribe to the Organization's events you must apply to be "
-"admitted as a Member."
-msgstr ""
-"Um dich für Veranstaltungen der Vereinigung anzumelden, musst du einen "
-"Antrag auf Aufnahme als Mitglied stellen."
 
 msgid ""
 "Manage organization roles, assign members, and configure the permissions "
@@ -12712,13 +12705,6 @@ msgstr ""
 " bestimmten Datum erhoben werden"
 
 msgid ""
-"Indicates public information about your character, which will be shown only "
-"to you and the organizers"
-msgstr ""
-"Gib öffentliche Informationen über deinen Charakter an, die nur für dich und"
-" die Organisatoren sichtbar sein werden"
-
-msgid ""
 "Manage custom texts used across the organization, such as emails and "
 "registration pages, per language"
 msgstr ""
@@ -12731,6 +12717,13 @@ msgid ""
 msgstr ""
 "Es wurden noch keine Formularfelder definiert. Füge ein Feld hinzu, um "
 "Informationen von den Spielern auf ihrem Charakterblatt zu erfassen."
+
+msgid ""
+"Percentage retained by the payment system. Enter the value as a number "
+"without the percentage symbol."
+msgstr ""
+"Prozentsatz, den das Zahlungssystem einbehält. Gib den Wert als Zahl ohne "
+"Prozentzeichen ein."
 
 msgid ""
 "Registrations are managed on another site: participants are redirected to "
@@ -13217,13 +13210,6 @@ msgid ""
 msgstr ""
 "Es wurden noch keine Quest-Kategorien angelegt. Nutze die Schaltfläche oben,"
 " um einen Quest-Typ hinzuzufügen und deine Quests zu organisieren."
-
-msgid ""
-"Percentage to be retained by the payment system - enter the value as a "
-"number, without the percentage symbol"
-msgstr ""
-"Vom Zahlungssystem einzubehaltender Prozentsatz – gib den Wert als Zahl ein,"
-" ohne das Prozentzeichen"
 
 msgid ""
 "Review a member's full accounting history, including payments, transactions,"
@@ -13985,6 +13971,13 @@ msgstr ""
 "angemeldeten Teilnehmern in Anspruch genommen werden kann."
 
 msgid ""
+"This is the information with which your character will begin each act. "
+"Please do NOT read it before the act to which it refers!"
+msgstr ""
+"Das sind die Informationen, mit denen dein Charakter jeden Akt beginnt. "
+"Bitte lies sie NICHT vor dem Akt, auf den sie sich beziehen!"
+
+msgid ""
 "You can now freely explore the system. You'll find below some suggestions on"
 " what you could do now to set up everything nicely!"
 msgstr ""
@@ -14515,15 +14508,6 @@ msgstr ""
 "Video direkt."
 
 msgid ""
-"This is the information with which your character will begin each act. We "
-"ask that you do NOT read this information before the act to which it "
-"referenced!"
-msgstr ""
-"Dies sind die Informationen, mit denen dein Charakter jeden Akt beginnen "
-"wird. Wir bitten dich, diese Informationen NICHT vor dem Akt zu lesen, auf "
-"den sie sich beziehen!"
-
-msgid ""
 "If you press a second time, it will be *excluded* in the search. If a "
 "character belongs to even one exclusion category, it will not be shown in "
 "the search."
@@ -14735,6 +14719,15 @@ msgstr ""
 "innerhalb weniger Wochen), erhältst du eine Benachrichtigung per E-Mail."
 
 msgid ""
+"Please remember that the information on this page was provided in confidence"
+" and must be treated with the utmost care. Share it only when strictly "
+"necessary and, where possible, anonymously."
+msgstr ""
+"Bitte denk daran, dass die Informationen auf dieser Seite vertraulich "
+"bereitgestellt wurden und mit größter Sorgfalt behandelt werden müssen. "
+"Teile sie nur, wenn es unbedingt notwendig ist, und wenn möglich anonym."
+
+msgid ""
 "On this page you can book tickets for the event; once paid, a special code "
 "will be generated. A friend of yours will be able to receive the "
 "registration as a gift by accessing this special link!"
@@ -14805,17 +14798,6 @@ msgstr ""
 "vorsichtig: Wenn du ihn nicht bezahlst, <b>kannst du weder an "
 "Veranstaltungen teilnehmen</b> noch bei der Jahreshauptversammlung "
 "abstimmen!"
-
-msgid ""
-"Please remember that the information on this page was given with the "
-"implicit trust that it will be treated with the utmost care. Communicate "
-"them only if strictly necessary, and if possible communicate them in "
-"anonymous form."
-msgstr ""
-"Bitte denk daran, dass die Informationen auf dieser Seite in dem "
-"stillschweigenden Vertrauen bereitgestellt wurden, dass sie mit größter "
-"Sorgfalt behandelt werden. Gib sie nur weiter, wenn es unbedingt notwendig "
-"ist, und wenn möglich in anonymisierter Form."
 
 msgid ""
 "The text of the element on the left does NOT refer to the character whose "

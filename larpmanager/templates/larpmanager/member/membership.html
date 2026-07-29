@@ -29,7 +29,7 @@
         {% endif %}
         {% if member.membership.status == 'e' or member.membership.status == 'j' %}
             <h3>{% trans "You are not yet a Member of the Organization!" %}</h3>
-            <p>{% trans "In order to subscribe to the Organization's events you must apply to be admitted as a Member." %}</p>
+            <p>{% trans "To participate in the organization's events, you must apply to become a member." %}</p>
             {% url 'membership_request' as membership_request_url %}
             {% url 'profile' as profile_url %}
             <p>

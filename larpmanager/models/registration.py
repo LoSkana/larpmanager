@@ -501,7 +501,7 @@ class RegistrationCharacterRel(BaseModel):
         null=True,
         verbose_name=_("Private"),
         help_text=_(
-            "Indicates public information about your character, which will be shown only to you and the organizers",
+            "Indicates private information about your character, visible only to you and the organizers",
         ),
     )
 

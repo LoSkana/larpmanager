@@ -677,7 +677,7 @@ def register(
 
     # A pending signup request cannot be edited through the normal form: send back to its status page
     if registration and registration.pending:
-        messages.info(request, _("Your signup request is awaiting organizer approval."))
+        messages.info(request, _("Your signup request is awaiting organizer approval"))
         return redirect("event", event_slug=current_run.get_slug())
 
     # Apply ticket selection if provided, verifying it belongs to this event

@@ -1722,7 +1722,7 @@ class PreRegistrationForm(BaseForm):
         self.fields["new_info"] = forms.CharField(
             required=False,
             max_length=255,
-            label=_("Informations"),
+            label=_("General information"),
             help_text=_("Is there anything else you would like to tell us?"),
         )
 

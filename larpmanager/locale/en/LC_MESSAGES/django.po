@@ -58,9 +58,7 @@ msgstr ""
 msgid "Registrations"
 msgstr ""
 
-msgid ""
-"Theoretical total of income due to participation fees selected by the "
-"participants"
+msgid "Expected total income from participation fees selected by participants"
 msgstr ""
 
 #, python-format
@@ -229,12 +227,12 @@ msgid ""
 "credentials for each active payment gateway"
 msgstr ""
 
-msgid "Description of this payment method to be displayed to the user"
+msgid "Description of this payment method shown to the user."
 msgstr ""
 
 msgid ""
-"Percentage to be retained by the payment system - enter the value as a "
-"number, without the percentage symbol"
+"Percentage retained by the payment system. Enter the value as a number "
+"without the percentage symbol."
 msgstr ""
 
 msgid "Fee"
@@ -267,7 +265,7 @@ msgstr ""
 msgid "Added at the top of the main calendar page"
 msgstr ""
 
-msgid "Added at the bottom of all mails confirming signup to participants"
+msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
 
 msgid "Content of the membership request filled with user data"
@@ -284,7 +282,7 @@ msgstr ""
 
 msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
-"form."
+"form"
 msgstr ""
 
 msgid "Added to the bottom of all mails sent"
@@ -1703,11 +1701,6 @@ msgstr ""
 msgid "Text shown at the start of all character sheets"
 msgstr ""
 
-msgid ""
-"Terms and conditions of signup, shown in a page linked in the registration "
-"form"
-msgstr ""
-
 msgid "Added to the registration page, before the form"
 msgstr ""
 
@@ -2048,7 +2041,7 @@ msgid ""
 "language, type, setting, location, and style"
 msgstr ""
 
-msgid "Informations"
+msgid "General information"
 msgstr ""
 
 msgid "Languages"
@@ -5074,8 +5067,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Indicates public information about your character, which will be shown only "
-"to you and the organizers"
+"Indicates private information about your character, visible only to you and "
+"the organizers"
 msgstr ""
 
 msgid "Character portrait"
@@ -5804,7 +5797,7 @@ msgstr ""
 msgid "Song:"
 msgstr ""
 
-msgid "Public informations:"
+msgid "Public information:"
 msgstr ""
 
 msgid "Private:"
@@ -5826,9 +5819,8 @@ msgid "Graph"
 msgstr ""
 
 msgid ""
-"This is the information with which your character will begin each act. We "
-"ask that you do NOT read this information before the act to which it "
-"referenced!"
+"This is the information with which your character will begin each act. "
+"Please do NOT read it before the act to which it refers!"
 msgstr ""
 
 msgid "Delegated users"
@@ -5904,9 +5896,6 @@ msgid "Execute"
 msgstr ""
 
 msgid "No organization found"
-msgstr ""
-
-msgid "No organization found."
 msgstr ""
 
 msgid "Activate feature"
@@ -7492,6 +7481,9 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
+msgid "Informations"
+msgstr ""
+
 msgid "Passages completed"
 msgstr ""
 
@@ -8110,7 +8102,7 @@ msgstr ""
 msgid "We are processing your payment. Please wait a moment"
 msgstr ""
 
-msgid "View the characters you are playing"
+msgid "View the characters you play"
 msgstr ""
 
 msgid "Last Event"
@@ -8230,8 +8222,8 @@ msgid "You are not yet a Member of the Organization!"
 msgstr ""
 
 msgid ""
-"In order to subscribe to the Organization's events you must apply to be "
-"admitted as a Member."
+"To participate in the organization's events, you must apply to become a "
+"member."
 msgstr ""
 
 #, python-format
@@ -9459,10 +9451,9 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Please remember that the information on this page was given with the "
-"implicit trust that it will be treated with the utmost care. Communicate "
-"them only if strictly necessary, and if possible communicate them in "
-"anonymous form."
+"Please remember that the information on this page was provided in confidence "
+"and must be treated with the utmost care. Share it only when strictly "
+"necessary and, where possible, anonymously."
 msgstr ""
 
 msgid ""
@@ -10936,7 +10927,7 @@ msgstr ""
 msgid "Manages event's expenses"
 msgstr ""
 
-msgid "Review participants' safety-related informations"
+msgid "Review participants' safety-related information"
 msgstr ""
 
 msgid "Review participants' dietary restrictions and allergies."
@@ -11841,8 +11832,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"If you have made a wire transfer, please upload the receipt for it to be "
-"processed"
+"If you have made a wire transfer, please upload its receipt for processing"
 msgstr ""
 
 msgid "Registrations for this event are currently closed"
@@ -12356,7 +12346,7 @@ msgstr ""
 msgid "Registration settings updated!"
 msgstr ""
 
-msgid "Partecipation to"
+msgid "Participation in"
 msgstr ""
 
 msgid "Photos and videos successfully uploaded!"
@@ -12528,7 +12518,7 @@ msgid ""
 "platform using the correct account"
 msgstr ""
 
-msgid "Informations saved!"
+msgid "Information saved!"
 msgstr ""
 
 msgid "New character created!"
@@ -12799,9 +12789,6 @@ msgid "This event has concluded"
 msgstr ""
 
 msgid "This event has been cancelled"
-msgstr ""
-
-msgid "Your signup request is awaiting organizer approval."
 msgstr ""
 
 msgid "Your signup request has been submitted!"

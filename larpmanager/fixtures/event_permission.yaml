@@ -181,7 +181,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Safety
-    descr: Review participants' safety-related informations
+    descr: Review participants' safety-related information
     slug: orga_safety
     number: 11
     config: null

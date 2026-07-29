@@ -718,9 +718,9 @@ class ExePaymentSettingsForm(BaseModelForm):
                 label = el.replace(f"{method.slug}_", "")
 
                 help_dict = {
-                    "descr": _("Description of this payment method to be displayed to the user"),
+                    "descr": _("Description of this payment method shown to the user."),
                     "fee": _(
-                        "Percentage to be retained by the payment system - enter the value as a number, without the percentage symbol",
+                        "Percentage retained by the payment system. Enter the value as a number without the percentage symbol.",
                     ),
                 }
                 if label in help_dict:

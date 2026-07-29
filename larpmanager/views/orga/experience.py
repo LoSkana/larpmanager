@@ -120,7 +120,7 @@ def orga_exp_deliveries_new(request: HttpRequest, event_slug: str) -> HttpRespon
                 context=context,
                 initial={
                     "characters": [str(u) for u in character_uuids],
-                    "name": _("Partecipation to") + f" {run.search}",
+                    "name": _("Participation in") + f" {run.search}",
                 },
             )
             context["form"] = form

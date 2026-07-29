@@ -168,13 +168,13 @@ class ExeAssociationTextForm(BaseModelForm):
         help_texts = {
             AssociationTextType.PROFILE: _("Added at the top of the user profile page"),
             AssociationTextType.HOME: _("Added at the top of the main calendar page"),
-            AssociationTextType.SIGNUP: _("Added at the bottom of all mails confirming signup to participants"),
+            AssociationTextType.SIGNUP: _("Added at the bottom of all emails confirming signups to participants"),
             AssociationTextType.MEMBERSHIP: _("Content of the membership request filled with user data"),
             AssociationTextType.STATUTE: _("Added to the membership page as the paragraph for statute info"),
             AssociationTextType.LEGAL: _("Content of legal notice page linked at the bottom of all pages"),
             AssociationTextType.FOOTER: _("Added to the bottom of all pages"),
             AssociationTextType.TOC: _(
-                "Terms and conditions of signup, shown in a page linked in the registration form.",
+                "Terms and conditions of signup, shown in a page linked in the registration form",
             ),
             AssociationTextType.SIGNATURE: _("Added to the bottom of all mails sent"),
             AssociationTextType.PRIVACY: _("Content of privacy page linked at the bottom of all pages"),

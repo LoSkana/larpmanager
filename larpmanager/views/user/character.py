@@ -356,7 +356,7 @@ def character_form(
         form = form_class(request.POST, request.FILES, instance=instance, context=context)
         if form.is_valid():
             # Set appropriate success message based on operation type
-            success_message = _("Informations saved!") if instance else _("New character created!")
+            success_message = _("Information saved!") if instance else _("New character created!")
 
             character, success_message = _save_character(context, form, success_message)
 

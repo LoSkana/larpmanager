@@ -2397,7 +2397,7 @@ class OrgaPromotionForm(ConfigForm):
 
     def set_configs(self) -> None:
         """Configure publication metadata fields."""
-        self.set_section("info", _("Informations"))
+        self.set_section("info", _("General information"))
 
         self.add_configs(
             "pub_language",
