@@ -284,7 +284,7 @@ msgstr ""
 
 msgid ""
 "Terms and conditions of signup, shown in a page linked in the registration "
-"form"
+"form."
 msgstr ""
 
 msgid "Added to the bottom of all mails sent"
@@ -293,10 +293,11 @@ msgstr ""
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr ""
 
-msgid "Content of mail reminding participants to fill their membership request"
+msgid ""
+"Content of mail reminding participants to fill their membership request."
 msgstr ""
 
-msgid "Content of mail reminding participants to pay the membership fee"
+msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
 
 msgid "Content of mail reminding participants to pay their signup fee"
@@ -362,39 +363,39 @@ msgstr ""
 msgid "Past events"
 msgstr ""
 
-msgid "If selected, a link to past events is shown in the calendar"
+msgid "If selected, a link to past events is shown in the calendar."
 msgstr ""
 
 msgid "Characters shortcut"
 msgstr ""
 
 msgid ""
-"If selected, the sidebar shows a link to view all of a user's characters"
+"If selected, the sidebar shows a link to view all of a user's characters."
 msgstr ""
 
 msgid "Registrations shortcut"
 msgstr ""
 
 msgid ""
-"If selected, the sidebar shows a link to view all of a user's registrations"
+"If selected, the sidebar shows a link to view all of a user's registrations."
 msgstr ""
 
 msgid "Website"
 msgstr ""
 
-msgid "If selected, the website is shown for each event"
+msgid "If selected, the website is shown for each event."
 msgstr ""
 
 msgid "Where"
 msgstr ""
 
-msgid "If selected, the location is shown for each event"
+msgid "If selected, the location is shown for each event."
 msgstr ""
 
 msgid "Authors"
 msgstr ""
 
-msgid "If selected, the list of authors is shown for each event"
+msgid "If selected, the list of authors is shown for each event."
 msgstr ""
 
 msgctxt "event"
@@ -402,13 +403,13 @@ msgid "Genre"
 msgstr ""
 
 msgctxt "event"
-msgid "If selected, the genre is shown for each event"
+msgid "If selected, the genre is shown for each event."
 msgstr ""
 
 msgid "Tagline"
 msgstr ""
 
-msgid "If selected, the tagline is shown for each event"
+msgid "If selected, the tagline is shown for each event."
 msgstr ""
 
 msgid "Bulk delete"
@@ -427,7 +428,7 @@ msgstr ""
 
 msgid ""
 "If enabled, receive a single daily summary email instead of immediate "
-"notifications for registrations, payments, and invoice approvals"
+"notifications for registrations, payments, and invoice approvals."
 msgstr ""
 
 msgid "Carbon copy"
@@ -435,27 +436,27 @@ msgstr ""
 
 msgid ""
 "If enabled, sends a copy of every email sent to participants to the main "
-"email address"
+"email address."
 msgstr ""
 
 msgid "Interval sending"
 msgstr ""
 
 msgid ""
-"In seconds, amount of time between each sent email (default: 3, minimum: 1)"
+"In seconds, amount of time between each sent email (default: 3, minimum: 1)."
 msgstr ""
 
 msgid "New signup"
 msgstr ""
 
-msgid "If selected, send an email notification to organizers for new signups"
+msgid "If selected, send an email notification to organizers for new signups."
 msgstr ""
 
 msgid "Signup update"
 msgstr ""
 
 msgid ""
-"If selected, send an email notification to organizers for updated signups"
+"If selected, send an email notification to organizers for updated signups."
 msgstr ""
 
 msgid "Signup cancellation"
@@ -469,7 +470,7 @@ msgstr ""
 msgid "Payments received"
 msgstr ""
 
-msgid "If selected, send organizers an email for each payment received"
+msgid "If selected, send organizers an email for each payment received."
 msgstr ""
 
 msgid "Customised mail server"
@@ -483,7 +484,7 @@ msgstr ""
 
 msgid ""
 "If enabled, participants give a preference value when adding pre-"
-"registrations"
+"registrations."
 msgstr ""
 
 msgid "Easter egg"
@@ -492,22 +493,22 @@ msgstr ""
 msgid "Probability"
 msgstr ""
 
-msgid "Probability of showing the special page (out of thousands)"
+msgid "Probability of showing the special page (out of thousands)."
 msgstr ""
 
 msgid "Badge"
 msgstr ""
 
-msgid "Name of badge to be awarded"
+msgid "Name of badge to be awarded."
 msgstr ""
 
-msgid "Description to be shown on the special page"
+msgid "Description to be shown on the special page."
 msgstr ""
 
 msgid "Page"
 msgstr ""
 
-msgid "Contents of the special page"
+msgid "Contents of the special page."
 msgstr ""
 
 msgid "Campaign"
@@ -516,7 +517,7 @@ msgstr ""
 msgid "Allow registration transfers"
 msgstr ""
 
-msgid "Allow registration switching between events"
+msgid "Allow registration switching between events."
 msgstr ""
 
 msgid "Warehouse"
@@ -525,7 +526,7 @@ msgstr ""
 msgid "Quantity"
 msgstr ""
 
-msgid "If selected, add a field to track item quantities"
+msgid "If selected, add a field to track item quantities."
 msgstr ""
 
 msgid "Users"
@@ -536,7 +537,7 @@ msgstr ""
 
 msgid ""
 "If enabled, a user's public page shows a list of all events they have "
-"attended"
+"attended."
 msgstr ""
 
 msgid "Deadline"
@@ -547,7 +548,7 @@ msgstr ""
 
 msgid ""
 "Number of days past the deadline beyond which registrations are marked to be "
-"cancelled (default 30 days)"
+"cancelled (default 30 days)."
 msgstr ""
 
 msgid "Frequency"
@@ -555,7 +556,7 @@ msgstr ""
 
 msgid ""
 "Sets how often reminder emails are sent, in days (if not set, no emails are "
-"sent)"
+"sent)."
 msgstr ""
 
 msgid "Voting"
@@ -564,37 +565,37 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-msgid "If selected, members can vote"
+msgid "If selected, members can vote."
 msgstr ""
 
 msgid "Candidates"
 msgstr ""
 
-msgid "Candidates at the polls"
+msgid "Candidates at the polls."
 msgstr ""
 
 msgid "Minimum votes"
 msgstr ""
 
-msgid "Minimum number of votes"
+msgid "Minimum number of votes."
 msgstr ""
 
 msgid "Maximum votes"
 msgstr ""
 
-msgid "Maximum number of votes"
+msgid "Maximum number of votes."
 msgstr ""
 
 msgid "Reminder"
 msgstr ""
 
-msgid "Sets how often reminder emails are sent, in days (default: 5)"
+msgid "Sets how often reminder emails are sent, in days (default: 5)."
 msgstr ""
 
 msgid "Public Holidays"
 msgstr ""
 
-msgid "If enabled, the system will send reminders on holidays"
+msgid "If enabled, the system will send reminders on holidays."
 msgstr ""
 
 msgid "Members"
@@ -603,7 +604,7 @@ msgstr ""
 msgid "Age"
 msgstr ""
 
-msgid "Minimum age of members (leave empty for no limit)"
+msgid "Minimum age of members (leave empty for no limit)."
 msgstr ""
 
 msgid "Annual fee"
@@ -611,13 +612,13 @@ msgstr ""
 
 msgid ""
 "Annual fee required of members, starting from the beginning of the "
-"membership year"
+"membership year."
 msgstr ""
 
 msgid "Start day"
 msgstr ""
 
-msgid "Day of the year from which the membership year begins, in DD-MM format"
+msgid "Day of the year from which the membership year begins, in DD-MM format."
 msgstr ""
 
 msgid "Enter a valid date in DD-MM format"
@@ -631,20 +632,12 @@ msgid ""
 "annual fee without an active event registration."
 msgstr ""
 
-msgid "Separate membership fee"
-msgstr ""
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee"
-msgstr ""
-
 msgid "Charge transaction fees to participant"
 msgstr ""
 
 msgid ""
 "If enabled, the system will automatically add payment gateway fees to the "
-"ticket price, so the participant covers them instead of the organization"
+"ticket price, so the participant covers them instead of the organization."
 msgstr ""
 
 msgid "Disable amount change"
@@ -675,7 +668,7 @@ msgstr ""
 msgid "Ticket"
 msgstr ""
 
-msgid "Percentage of VAT to be calculated on the ticket cost alone"
+msgid "Percentage of VAT to be calculated on the ticket cost alone."
 msgstr ""
 
 msgid "Options"
@@ -683,26 +676,27 @@ msgstr ""
 
 msgid ""
 "Percentage of VAT to be calculated on the sum of the costs of the "
-"registration options"
+"registration options."
 msgstr ""
 
 msgid "Token name"
 msgstr ""
 
-msgid "Name to be displayed for tokens"
+msgid "Name to be displayed for tokens."
 msgstr ""
 
 msgid "Credits name"
 msgstr ""
 
-msgid "Name to be displayed for credits"
+msgid "Name to be displayed for credits."
 msgstr ""
 
 msgid "Lock events"
 msgstr ""
 
 msgid ""
-"If enabled, prevents credits from being created or changed in the event panel"
+"If enabled, prevents credits from being created or changed in the event "
+"panel."
 msgstr ""
 
 msgid "Treasury"
@@ -711,7 +705,7 @@ msgstr ""
 msgid "Appointees"
 msgstr ""
 
-msgid "Treasury appointees"
+msgid "Treasury appointees."
 msgstr ""
 
 msgid "Organizational fee"
@@ -722,7 +716,7 @@ msgstr ""
 
 msgid ""
 "Percentage of takings calculated as a fee for association infrastructure (in "
-"whole numbers from 0 to 100)"
+"whole numbers from 0 to 100)."
 msgstr ""
 
 msgid "Disable event-level approval"
@@ -730,7 +724,7 @@ msgstr ""
 
 msgid ""
 "When enabled, expense approvals can only be managed from the organization "
-"dashboard"
+"dashboard."
 msgstr ""
 
 msgid "Promotion"
@@ -739,19 +733,19 @@ msgstr ""
 msgid "Publish staff"
 msgstr ""
 
-msgid "If selected, publish staff members"
+msgid "If selected, publish staff members."
 msgstr ""
 
 msgid "Publish players"
 msgstr ""
 
-msgid "If selected, publish registered players"
+msgid "If selected, publish registered players."
 msgstr ""
 
-msgid "Authentication token (mark all permissions)"
+msgid "Authentication token (mark all permissions)."
 msgstr ""
 
-msgid "Your team ID"
+msgid "Your team ID."
 msgstr ""
 
 msgid "App Integration"
@@ -760,13 +754,13 @@ msgstr ""
 msgid "Button text"
 msgstr ""
 
-msgid "Label shown on the topbar button to access the external application"
+msgid "Label shown on the topbar button to access the external application."
 msgstr ""
 
 msgid "Redirect URL"
 msgstr ""
 
-msgid "URL of the external application where the user will be redirected"
+msgid "URL of the external application where the user will be redirected."
 msgstr ""
 
 msgid "Shared secret"
@@ -774,13 +768,13 @@ msgstr ""
 
 msgid ""
 "Secret key used to sign the JWT token for SSO authentication with the "
-"external application"
+"external application."
 msgstr ""
 
 msgid "Algorithm"
 msgstr ""
 
-msgid "Signing algorithm for the JWT token (default: HS256)"
+msgid "Signing algorithm for the JWT token (default: HS256)."
 msgstr ""
 
 msgid "Receipts"
@@ -789,19 +783,19 @@ msgstr ""
 msgid "Full name"
 msgstr ""
 
-msgid "Name as will appear on the receipt header"
+msgid "Name as will appear on the receipt header."
 msgstr ""
 
 msgid "Legal address"
 msgstr ""
 
-msgid "Full address of the association"
+msgid "Full address of the association."
 msgstr ""
 
 msgid "Fiscal code"
 msgstr ""
 
-msgid "Tax identification code of the association"
+msgid "Tax identification code of the association."
 msgstr ""
 
 msgid "RUNTS registration"
@@ -890,7 +884,7 @@ msgid ""
 "these settings override the organization defaults for your account only"
 msgstr ""
 
-msgid "Personal theme preference, overrides the event and organization theme"
+msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 
 msgid "Interface version"
@@ -1039,7 +1033,7 @@ msgstr ""
 msgid "Show shortcuts"
 msgstr ""
 
-msgid "If enabled, automatically show shortcuts on mobile"
+msgid "If enabled, automatically show shortcuts on mobile."
 msgstr ""
 
 msgid "Export"
@@ -1053,7 +1047,7 @@ msgstr ""
 msgid "Limitations"
 msgstr ""
 
-msgid "If enabled, show summary page with number of tickets/options used"
+msgid "If enabled, show summary page with number of tickets/options used."
 msgstr ""
 
 msgid "Character cover"
@@ -1064,7 +1058,7 @@ msgstr ""
 
 msgid ""
 "If enabled, displays the original full-sized image instead of the thumbnail "
-"version"
+"version."
 msgstr ""
 
 msgid "Disable assignment"
@@ -1081,13 +1075,13 @@ msgstr ""
 msgid "Show player name"
 msgstr ""
 
-msgid "If enabled, shows the player's name alongside their character"
+msgid "If enabled, shows the player's name alongside their character."
 msgstr ""
 
 msgid "Default view mode"
 msgstr ""
 
-msgid "The initial display mode when opening the ensemble page"
+msgid "The initial display mode when opening the ensemble page."
 msgstr ""
 
 msgid "Book"
@@ -1102,16 +1096,16 @@ msgstr ""
 msgid "Tickets"
 msgstr ""
 
-msgid "If enabled, allow ticket tier: Staff"
+msgid "If enabled, allow ticket tier: Staff."
 msgstr ""
 
-msgid "If enabled, allow ticket tier: NPC"
+msgid "If enabled, allow ticket tier: NPC."
 msgstr ""
 
-msgid "If enabled, allow ticket tier: Collaborator"
+msgid "If enabled, allow ticket tier: Collaborator."
 msgstr ""
 
-msgid "If enabled, allow ticket tier: Seller"
+msgid "If enabled, allow ticket tier: Seller."
 msgstr ""
 
 msgid "Patron / Reduced"
@@ -1134,13 +1128,13 @@ msgstr ""
 msgid "Number of extractions"
 msgstr ""
 
-msgid "Number of tickets to be drawn"
+msgid "Number of tickets to be drawn."
 msgstr ""
 
 msgid "Conversion ticket"
 msgstr ""
 
-msgid "Name of the ticket into which to convert"
+msgid "Name of the ticket into which to convert."
 msgstr ""
 
 msgid "Gallery"
@@ -1151,7 +1145,7 @@ msgstr ""
 
 msgid ""
 "If enabled, the characters will not be displayed to those not logged in to "
-"the system"
+"the system."
 msgstr ""
 
 msgid "Require registration"
@@ -1159,7 +1153,7 @@ msgstr ""
 
 msgid ""
 "If enabled, the characters will not be displayed to those who are not "
-"registered to the event"
+"registered to the event."
 msgstr ""
 
 msgid "Hide unassigned characters"
@@ -1167,7 +1161,7 @@ msgstr ""
 
 msgid ""
 "If enabled, does not show characters in the gallery who have not been "
-"assigned a participant"
+"assigned a participant."
 msgstr ""
 
 msgid "Hide participants without a character"
@@ -1175,7 +1169,7 @@ msgstr ""
 
 msgid ""
 "If enabled, does not show participants in the gallery who have not been "
-"assigned a character"
+"assigned a character."
 msgstr ""
 
 msgid "Disable grouping"
@@ -1183,7 +1177,7 @@ msgstr ""
 
 msgid ""
 "If enabled, all registrations are displayed in a single table rather than "
-"being separated by type"
+"being separated by type."
 msgstr ""
 
 msgid "Allowed"
@@ -1199,7 +1193,7 @@ msgstr ""
 
 msgid ""
 "If enabled, options no longer available in the registration form are hidden, "
-"instead of being displayed disabled"
+"instead of being displayed disabled."
 msgstr ""
 
 msgid "Faction selection"
@@ -1223,7 +1217,7 @@ msgstr ""
 
 msgid ""
 "If enabled, allows a registration form question to be visible based on the "
-"participant's age"
+"participant's age."
 msgstr ""
 
 msgid "Disable cancellation"
@@ -1231,7 +1225,7 @@ msgstr ""
 
 msgid ""
 "If enabled, participants cannot cancel their own registration; A "
-"cancellation request email will be sent to the staff instead"
+"cancellation request email will be sent to the staff instead."
 msgstr ""
 
 msgid "Approval process"
@@ -1239,7 +1233,7 @@ msgstr ""
 
 msgid ""
 "If enabled, players cannot sign up directly; they submit a signup request "
-"that an organizer must approve before they can complete registration"
+"that an organizer must approve before they can complete registration."
 msgstr ""
 
 msgid "Character Sheet"
@@ -1247,13 +1241,13 @@ msgstr ""
 
 msgid ""
 "If enabled, options no longer available in the form are hidden, instead of "
-"being displayed disabled"
+"being displayed disabled."
 msgstr ""
 
 msgid "Maximum available"
 msgstr ""
 
-msgid "If enabled, an option can be chosen a maximum number of times"
+msgid "If enabled, an option can be chosen a maximum number of times."
 msgstr ""
 
 msgid ""
@@ -1273,7 +1267,8 @@ msgid "Title"
 msgstr ""
 
 msgid ""
-"Enables field 'title', a short (2-3 words) text added to the character's name"
+"Enables field 'title', a short (2-3 words) text added to the character's "
+"name."
 msgstr ""
 
 msgid "Number"
@@ -1317,7 +1312,7 @@ msgstr ""
 
 msgid ""
 "Normally all character fields (public or private) are shown; with this "
-"configuration you can select which ones to display at any given time"
+"configuration you can select which ones to display at any given time."
 msgstr ""
 
 msgid "Relationships max length"
@@ -1332,7 +1327,7 @@ msgid "Disable auto relationships"
 msgstr ""
 
 msgid ""
-"If enabled, auto-relationships from character references will not be created"
+"If enabled, auto-relationships from character references will not be created."
 msgstr ""
 
 msgid "Disable character finder"
@@ -1340,14 +1335,14 @@ msgstr ""
 
 msgid ""
 "Disable the system that finds the character number when a special reference "
-"symbol is written"
+"symbol is written:"
 msgstr ""
 
 msgid "Replacing names"
 msgstr ""
 
 msgid ""
-"If enabled, character names will be automatically replaced by a reference"
+"If enabled, character names will be automatically replaced by a reference."
 msgstr ""
 
 msgid "Paste as text"
@@ -1355,7 +1350,7 @@ msgstr ""
 
 msgid ""
 "If enabled, automatically removes formatting when pasting text into the "
-"WYSIWYG editor"
+"WYSIWYG editor."
 msgstr ""
 
 msgid "Disable Auto save"
@@ -1384,13 +1379,13 @@ msgstr ""
 msgid "Check"
 msgstr ""
 
-msgid "If enabled, enables the consistency check tool for character sheets"
+msgid "If enabled, enables the consistency check tool for character sheets."
 msgstr ""
 
 msgid "Reading"
 msgstr ""
 
-msgid "If enabled, enables the reading view for writing elements"
+msgid "If enabled, enables the reading view for writing elements."
 msgstr ""
 
 msgid "Split by participation"
@@ -1398,13 +1393,14 @@ msgstr ""
 
 msgid ""
 "If enabled, show two separate tables on the characters page, one for "
-"characters participating in this run and one for non-participating characters"
+"characters participating in this run and one for non-participating "
+"characters."
 msgstr ""
 
 msgid "Independent factions"
 msgstr ""
 
-msgid "If enabled, do not use the parent event's factions"
+msgid "If enabled, do not use the parent event's factions."
 msgstr ""
 
 msgid "Experience points"
@@ -1423,13 +1419,13 @@ msgstr ""
 
 msgid ""
 "Time window (in hours) during which the user can revoke a chosen ability and "
-"recover spent XP (default is 0)"
+"recover spent XP (default is 0)."
 msgstr ""
 
 msgid "Initial experience points"
 msgstr ""
 
-msgid "Initial value of experience points for all characters"
+msgid "Initial value of experience points for all characters."
 msgstr ""
 
 msgid "Ability templates"
@@ -1437,14 +1433,14 @@ msgstr ""
 
 msgid ""
 "If enabled, enables ability templates that can be reused across multiple "
-"abilities"
+"abilities."
 msgstr ""
 
 msgid "Rules"
 msgstr ""
 
 msgid ""
-"If enabled, enables rules for computed character fields based on abilities"
+"If enabled, enables rules for computed character fields based on abilities."
 msgstr ""
 
 msgid "Modifiers"
@@ -1452,15 +1448,15 @@ msgstr ""
 
 msgid ""
 "If enabled, enables modifiers that can adjust ability costs based on "
-"prerequisites and requirements"
+"prerequisites and requirements."
 msgstr ""
 
 msgid "Criteria"
 msgstr ""
 
 msgid ""
-"If enabled, enables criterions that conditionally modify experience point "
-"totals based on prerequisites and requirements"
+"If enabled, this feature enables criteria that conditionally modify "
+"experience point totals based on prerequisites and requirements."
 msgstr ""
 
 msgid "Auto buy"
@@ -1486,25 +1482,25 @@ msgstr ""
 msgid "Maximum number"
 msgstr ""
 
-msgid "Maximum number of characters the player can create (default=1)"
+msgid "Maximum number of characters the player can create (default=1)."
 msgstr ""
 
 msgid "Approval"
 msgstr ""
 
-msgid "If enabled, activates a staff-managed approval process for characters"
+msgid "If enabled, activates a staff-managed approval process for characters."
 msgstr ""
 
 msgid "Guilds"
 msgstr ""
 
-msgid "Maximum number of guilds players can create (0 = no limit)"
+msgid "Maximum number of guilds players can create (0 = no limit)."
 msgstr ""
 
 msgid "Maximum members"
 msgstr ""
 
-msgid "Maximum number of accepted members per guild (0 = no limit)"
+msgid "Maximum number of accepted members per guild (0 = no limit)."
 msgstr ""
 
 msgid "Character customisation"
@@ -1514,7 +1510,8 @@ msgid "Name"
 msgstr ""
 
 msgid ""
-"If enabled, it allows participants to customise the names of their characters"
+"If enabled, it allows participants to customise the names of their "
+"characters."
 msgstr ""
 
 msgid "Profile"
@@ -1522,21 +1519,21 @@ msgstr ""
 
 msgid ""
 "If enabled, allows participants to customise their characters' profile "
-"picture"
+"picture."
 msgstr ""
 
 msgid "Pronoun"
 msgstr ""
 
 msgid ""
-"If enabled, it allows participants to customise their characters' pronouns"
+"If enabled, it allows participants to customise their characters' pronouns."
 msgstr ""
 
 msgid "Song"
 msgstr ""
 
 msgid ""
-"If enabled, it allows participants to indicate the song of their characters"
+"If enabled, it allows participants to indicate the song of their characters."
 msgstr ""
 
 msgid "Private"
@@ -1544,7 +1541,7 @@ msgstr ""
 
 msgid ""
 "If enabled, it allows participants to enter private information on their "
-"characters, visible only to them and the staff"
+"characters, visible only to them and the staff."
 msgstr ""
 
 msgid "Public"
@@ -1552,7 +1549,7 @@ msgstr ""
 
 msgid ""
 "If enabled, it allows participants to enter public information on their "
-"characters, visible to all"
+"characters, visible to all."
 msgstr ""
 
 msgid "Casting"
@@ -1561,13 +1558,13 @@ msgstr ""
 msgid "Minimum preferences"
 msgstr ""
 
-msgid "Minimum number of preferences"
+msgid "Minimum number of preferences."
 msgstr ""
 
 msgid "Maximum preferences"
 msgstr ""
 
-msgid "Maximum number of preferences"
+msgid "Maximum number of preferences."
 msgstr ""
 
 msgid "Additional Preferences"
@@ -1575,7 +1572,7 @@ msgstr ""
 
 msgid ""
 "Additional preferences, for random assignment when no solution is found "
-"(default 0)"
+"(default 0)."
 msgstr ""
 
 msgid "Field for exclusions"
@@ -1583,13 +1580,13 @@ msgstr ""
 
 msgid ""
 "If enabled, it adds a field in which the participant can indicate which "
-"elements they wish to avoid altogether"
+"elements they wish to avoid altogether."
 msgstr ""
 
 msgid "Assignments"
 msgstr ""
 
-msgid "Number of characters to be assigned (default 1)"
+msgid "Number of characters to be assigned (default 1)."
 msgstr ""
 
 msgid "Mirror"
@@ -1605,13 +1602,13 @@ msgstr ""
 
 msgid ""
 "If enabled, participants will be able to view for each character the "
-"preference statistics"
+"preference statistics."
 msgstr ""
 
 msgid "Show history"
 msgstr ""
 
-msgid "If enabled, shows participants the histories of preferences entered"
+msgid "If enabled, shows participants the histories of preferences entered."
 msgstr ""
 
 msgid "Registration priority"
@@ -1619,7 +1616,7 @@ msgstr ""
 
 msgid ""
 "A measure of how much to favor earlier registrants (0=default disabled, "
-"1=normal, 10=strong)"
+"1=normal, 10=strong)."
 msgstr ""
 
 msgid "Payment priority"
@@ -1627,7 +1624,7 @@ msgstr ""
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "
-"earlier (0=default disabled, 1=normal, 10=strong)"
+"earlier (0=default disabled, 1=normal, 10=strong)."
 msgstr ""
 
 msgid "Payment reminder"
@@ -1654,19 +1651,19 @@ msgstr ""
 
 msgid ""
 "If enabled, all registrations are confirmed even if no payment has been "
-"received"
+"received."
 msgstr ""
 
 msgid "Disable Tokens"
 msgstr ""
 
-msgid "If enabled, no tokens will be used in the entries of this event"
+msgid "If enabled, no tokens will be used in the entries of this event."
 msgstr ""
 
 msgid "Disable credits"
 msgstr ""
 
-msgid "If enabled, no credits will be used in the entries for this event"
+msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 
 msgid "Bring a friend"
@@ -1677,13 +1674,13 @@ msgstr ""
 
 msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
-"their code"
+"their code."
 msgstr ""
 
 msgid "Referred Friend Discount"
 msgstr ""
 
-msgid "Discount amount applied to a new user signing up with a referral code"
+msgid "Discount amount applied to a new user signing up with a referral code."
 msgstr ""
 
 msgid "Event Appearance"
@@ -1704,6 +1701,11 @@ msgid "Manage custom text entries used across different sections of this event"
 msgstr ""
 
 msgid "Text shown at the start of all character sheets"
+msgstr ""
+
+msgid ""
+"Terms and conditions of signup, shown in a page linked in the registration "
+"form"
 msgstr ""
 
 msgid "Added to the registration page, before the form"
@@ -1817,7 +1819,7 @@ msgstr ""
 
 msgid ""
 "Selected fields will be displayed as follows: public fields visible to all "
-"participants, private fields visible only to assigned participants"
+"participants, private fields visible only to assigned participants."
 msgstr ""
 
 msgid "Visibility"
@@ -1841,7 +1843,7 @@ msgstr ""
 msgid "Relationships"
 msgstr ""
 
-msgid "Selected elements will be shown to participants"
+msgid "Selected elements will be shown to participants."
 msgstr ""
 
 msgid "Elements"
@@ -1872,7 +1874,7 @@ msgstr ""
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
-"persistent world"
+"persistent world."
 msgstr ""
 
 msgid "One-shot"
@@ -1880,7 +1882,7 @@ msgstr ""
 
 msgid ""
 "Single event focusing on narrative, characters written by staff and assigned "
-"via casting algorithm, with factions and plots"
+"via casting algorithm, with factions and plots."
 msgstr ""
 
 msgid "Manual configuration"
@@ -2314,7 +2316,7 @@ msgstr ""
 msgid "Method"
 msgstr ""
 
-msgid "Membership fee already existing for this user and for this year"
+msgid "Membership fee already existing for this user and for this year."
 msgstr ""
 
 msgid "Upload membership documents to complete a member's approval"
@@ -2322,7 +2324,7 @@ msgstr ""
 
 msgid ""
 "The member must have already confirmed their consent to share personal data "
-"with your organization"
+"with your organization."
 msgstr ""
 
 msgid "Upload membership document"
@@ -2368,13 +2370,13 @@ msgstr ""
 msgid "Recipients"
 msgstr ""
 
-msgid "List of recipient email address, comma separated"
+msgid "List of recipient email address, comma separated."
 msgstr ""
 
 msgid "Interval (s)"
 msgstr ""
 
-msgid "Seconds to wait between each email batch"
+msgid "Seconds to wait between each email batch."
 msgstr ""
 
 msgid "Manage event utilities and QR code tools for this event"
@@ -2476,12 +2478,12 @@ msgid "Request signup"
 msgstr ""
 
 msgid ""
-"Your signup will not be confirmed until an organizer approves this request"
+"Your signup will not be confirmed until an organizer approves this request."
 msgstr ""
 
 msgid ""
 "Manage all registrations, character assignments, tickets, options and "
-"accounting status"
+"accounting status."
 msgstr ""
 
 msgid "Registration"
@@ -2499,7 +2501,7 @@ msgstr ""
 msgid "Quotas"
 msgstr ""
 
-msgid "The number of payments to split the fee"
+msgid "The number of payments to split the fee."
 msgstr ""
 
 msgid "User already has a registration for this event!"
@@ -2635,12 +2637,12 @@ msgstr ""
 msgid "Warehouse assignments"
 msgstr ""
 
-msgid "An assignment for this item and area already exists"
+msgid "An assignment for this item and area already exists."
 msgstr ""
 
 msgid ""
 "Assign this warehouse item to one or more areas of the event, setting a "
-"quantity for each"
+"quantity for each."
 msgstr ""
 
 msgid "Item area assignments"
@@ -2654,13 +2656,13 @@ msgid ""
 "Total assigned quantity (%(total)s) exceeds available stock (%(available)s)"
 msgstr ""
 
-msgid "Assign all remaining available stock of this item to an event area"
+msgid "Assign all remaining available stock of this item to an event area."
 msgstr ""
 
 msgid "Commit remaining warehouse stock"
 msgstr ""
 
-msgid "This item has no finite quantity to commit"
+msgid "This item has no finite quantity to commit."
 msgstr ""
 
 msgid "No quantity is available to assign."
@@ -11350,7 +11352,7 @@ msgid ""
 "You must create at least one prologue type before you can create prologues"
 msgstr ""
 
-msgid "There are no signups for this event, so no payment can be created"
+msgid "There are no signups for this event, so no payment can be created."
 msgstr ""
 
 msgid "Question saved successfully"
@@ -11358,7 +11360,7 @@ msgstr ""
 
 msgid ""
 "You must define at least one option before saving a single-choice or "
-"multiple-choice question"
+"multiple-choice question."
 msgstr ""
 
 msgid "Options price"
@@ -12321,7 +12323,7 @@ msgstr ""
 msgid "Text length (max %(max)s)"
 msgstr ""
 
-msgid "No value has been selected for parent"
+msgid "No value has been selected for parent."
 msgstr ""
 
 msgid "Can't copy from same event"
@@ -12330,7 +12332,7 @@ msgstr ""
 msgid "Copy done"
 msgstr ""
 
-msgid "Session expired, please upload the file again"
+msgid "Session expired, please upload the file again."
 msgstr ""
 
 msgid "Completed!"

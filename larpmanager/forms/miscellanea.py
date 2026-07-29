@@ -73,7 +73,7 @@ class SendMailForm(BaseForm):
     players = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 3}),
         label=_("Recipients"),
-        help_text=_("List of recipient email address, comma separated"),
+        help_text=_("List of recipient email address, comma separated."),
     )
 
     subject = forms.CharField()
@@ -95,7 +95,7 @@ class LmSendMailForm(SendMailForm):
 
     interval = forms.IntegerField(
         label=_("Interval (s)"),
-        help_text=_("Seconds to wait between each email batch"),
+        help_text=_("Seconds to wait between each email batch."),
         initial=1500,
         min_value=1,
     )

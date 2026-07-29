@@ -231,7 +231,7 @@ class OrgaWarehouseItemAssignmentForm(BaseModelForm):
 
         # Raise validation error if duplicate assignment exists
         if qs.exists():
-            raise ValidationError({"area": _("An assignment for this item and area already exists")})
+            raise ValidationError({"area": _("An assignment for this item and area already exists.")})
 
         return cleaned
 
@@ -239,7 +239,7 @@ class OrgaWarehouseItemAssignmentForm(BaseModelForm):
 class OrgaWarehouseItemAreasForm(BaseModelForm):
     """Form to assign a single warehouse item to several areas of an event at once."""
 
-    page_info = _("Assign this warehouse item to one or more areas of the event, setting a quantity for each")
+    page_info = _("Assign this warehouse item to one or more areas of the event, setting a quantity for each.")
 
     page_title = _("Item area assignments")
 
@@ -393,7 +393,7 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
 class OrgaWarehouseItemCommitRemainingForm(BaseModelForm):
     """Assign all currently available stock of one item to a selected event area."""
 
-    page_info = _("Assign all remaining available stock of this item to an event area")
+    page_info = _("Assign all remaining available stock of this item to an event area.")
 
     page_title = _("Commit remaining warehouse stock")
 
@@ -423,7 +423,7 @@ class OrgaWarehouseItemCommitRemainingForm(BaseModelForm):
         """Ensure finite stock remains before showing the commit confirmation."""
         cleaned = super().clean()
         if self.item.quantity is None:
-            self.add_error("area", _("This item has no finite quantity to commit"))
+            self.add_error("area", _("This item has no finite quantity to commit."))
         elif self._available_quantity() <= 0:
             self.add_error("area", _("No quantity is available to assign."))
         return cleaned

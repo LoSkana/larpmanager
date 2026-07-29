@@ -371,7 +371,7 @@ class OrgaConfigForm(ConfigForm):
 
         show_shortcuts_label = _("Show shortcuts")
         show_shortcuts_help_text = _(
-            "If enabled, automatically show shortcuts on mobile",
+            "If enabled, automatically show shortcuts on mobile.",
         )
         self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, show_shortcuts_label, show_shortcuts_help_text)
 
@@ -382,7 +382,7 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("show_export", ConfigType.BOOL, export_label, export_help_text)
 
         limitations_label = _("Limitations")
-        limitations_help_text = _("If enabled, show summary page with number of tickets/options used")
+        limitations_help_text = _("If enabled, show summary page with number of tickets/options used.")
         self.add_configs("show_limitations", ConfigType.BOOL, limitations_label, limitations_help_text)
 
     def set_config_cover(self) -> None:
@@ -390,7 +390,7 @@ class OrgaConfigForm(ConfigForm):
         if "cover" in self.params.get("features"):
             self.set_section("cover", _("Character cover"))
             field_label = _("Use full-size image")
-            field_help_text = _("If enabled, displays the original full-sized image instead of the thumbnail version")
+            field_help_text = _("If enabled, displays the original full-sized image instead of the thumbnail version.")
             self.add_configs("cover_orig", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_email(self) -> None:
@@ -434,14 +434,14 @@ class OrgaConfigForm(ConfigForm):
             "ensemble_show_player",
             ConfigType.BOOL,
             _("Show player name"),
-            _("If enabled, shows the player's name alongside their character"),
+            _("If enabled, shows the player's name alongside their character."),
         )
 
         self.add_configs(
             "ensemble_default_mode",
             ConfigType.CHOICE,
             _("Default view mode"),
-            _("The initial display mode when opening the ensemble page"),
+            _("The initial display mode when opening the ensemble page."),
             extra_data=[("book", _("Book")), ("cards", _("Cards")), ("compact", _("Compact list"))],
         )
 
@@ -450,15 +450,15 @@ class OrgaConfigForm(ConfigForm):
         self.set_section("tickets", _("Tickets"))
 
         staff_ticket_label = "Staff"
-        staff_ticket_help_text = _("If enabled, allow ticket tier: Staff")
+        staff_ticket_help_text = _("If enabled, allow ticket tier: Staff.")
         self.add_configs("ticket_staff", ConfigType.BOOL, staff_ticket_label, staff_ticket_help_text)
 
         npc_ticket_label = "NPC"
-        npc_ticket_help_text = _("If enabled, allow ticket tier: NPC")
+        npc_ticket_help_text = _("If enabled, allow ticket tier: NPC.")
         self.add_configs("ticket_npc", ConfigType.BOOL, npc_ticket_label, npc_ticket_help_text)
 
         collaborator_ticket_label = "Collaborator"
-        collaborator_ticket_help_text = _("If enabled, allow ticket tier: Collaborator")
+        collaborator_ticket_help_text = _("If enabled, allow ticket tier: Collaborator.")
         self.add_configs(
             "ticket_collaborator",
             ConfigType.BOOL,
@@ -467,7 +467,7 @@ class OrgaConfigForm(ConfigForm):
         )
 
         seller_ticket_label = "Seller"
-        seller_ticket_help_text = _("If enabled, allow ticket tier: Seller")
+        seller_ticket_help_text = _("If enabled, allow ticket tier: Seller.")
         self.add_configs("ticket_seller", ConfigType.BOOL, seller_ticket_label, seller_ticket_help_text)
 
         if "reduced" in self.params["features"]:
@@ -498,11 +498,11 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("lottery", _("Lottery"))
 
             lottery_num_draws_label = _("Number of extractions")
-            lottery_num_draws_help_text = _("Number of tickets to be drawn")
+            lottery_num_draws_help_text = _("Number of tickets to be drawn.")
             self.add_configs("lottery_num_draws", ConfigType.INT, lottery_num_draws_label, lottery_num_draws_help_text)
 
             lottery_conversion_ticket_label = _("Conversion ticket")
-            lottery_conversion_ticket_help_text = _("Name of the ticket into which to convert")
+            lottery_conversion_ticket_help_text = _("Name of the ticket into which to convert.")
             self.add_configs(
                 "lottery_ticket",
                 ConfigType.CHAR,
@@ -518,25 +518,25 @@ class OrgaConfigForm(ConfigForm):
         self.set_section("gallery", _("Gallery"))
 
         label = _("Require login")
-        help_text = _("If enabled, the characters will not be displayed to those not logged in to the system")
+        help_text = _("If enabled, the characters will not be displayed to those not logged in to the system.")
         self.add_configs("gallery_hide_login", ConfigType.BOOL, label, help_text)
 
         label = _("Require registration")
         help_text = _(
-            "If enabled, the characters will not be displayed to those who are not registered to the event",
+            "If enabled, the characters will not be displayed to those who are not registered to the event.",
         )
         self.add_configs("gallery_hide_signup", ConfigType.BOOL, label, help_text)
 
         if "character" in self.params.get("features"):
             label = _("Hide unassigned characters")
             help_text = _(
-                "If enabled, does not show characters in the gallery who have not been assigned a participant",
+                "If enabled, does not show characters in the gallery who have not been assigned a participant.",
             )
             self.add_configs("gallery_hide_uncasted_characters", ConfigType.BOOL, label, help_text)
 
             label = _("Hide participants without a character")
             help_text = _(
-                "If enabled, does not show participants in the gallery who have not been assigned a character",
+                "If enabled, does not show participants in the gallery who have not been assigned a character.",
             )
             self.add_configs("gallery_hide_uncasted_players", ConfigType.BOOL, label, help_text)
 
@@ -556,7 +556,7 @@ class OrgaConfigForm(ConfigForm):
         # Configure table grouping behavior
         grouping_label = _("Disable grouping")
         grouping_help_text = _(
-            "If enabled, all registrations are displayed in a single table rather than being separated by type",
+            "If enabled, all registrations are displayed in a single table rather than being separated by type.",
         )
         self.add_configs("registration_no_grouping", ConfigType.BOOL, grouping_label, grouping_help_text)
 
@@ -570,7 +570,7 @@ class OrgaConfigForm(ConfigForm):
         # Control visibility of unavailable registration options
         hide_unavailable_label = _("Hide not available")
         hide_unavailable_help_text = _(
-            "If enabled, options no longer available in the registration form are hidden, instead of being displayed disabled",
+            "If enabled, options no longer available in the registration form are hidden, instead of being displayed disabled.",
         )
         self.add_configs(
             "registration_hide_unavailable",
@@ -606,14 +606,14 @@ class OrgaConfigForm(ConfigForm):
         # Enable age-based question visibility
         age_selection_label = _("Age selection")
         age_selection_help_text = _(
-            "If enabled, allows a registration form question to be visible based on the participant's age",
+            "If enabled, allows a registration form question to be visible based on the participant's age.",
         )
         self.add_configs("registration_reg_que_age", ConfigType.BOOL, age_selection_label, age_selection_help_text)
 
         # Disable self-service cancellation
         disable_cancellation_label = _("Disable cancellation")
         disable_cancellation_help_text = _(
-            "If enabled, participants cannot cancel their own registration; A cancellation request email will be sent to the staff instead"
+            "If enabled, participants cannot cancel their own registration; A cancellation request email will be sent to the staff instead."
         )
         self.add_configs(
             "player_cancellation_disable",
@@ -625,7 +625,7 @@ class OrgaConfigForm(ConfigForm):
         # Require organizer approval before a player can complete signup
         approval_process_label = _("Approval process")
         approval_process_help_text = _(
-            "If enabled, players cannot sign up directly; they submit a signup request that an organizer must approve before they can complete registration",
+            "If enabled, players cannot sign up directly; they submit a signup request that an organizer must approve before they can complete registration.",
         )
         self.add_configs(
             "registration_approval_process",
@@ -645,12 +645,12 @@ class OrgaConfigForm(ConfigForm):
 
             label = _("Hide not available")
             help_text = _(
-                "If enabled, options no longer available in the form are hidden, instead of being displayed disabled",
+                "If enabled, options no longer available in the form are hidden, instead of being displayed disabled.",
             )
             self.add_configs("character_form_hide_unavailable", ConfigType.BOOL, label, help_text)
 
             label = _("Maximum available")
-            help_text = _("If enabled, an option can be chosen a maximum number of times")
+            help_text = _("If enabled, an option can be chosen a maximum number of times.")
             self.add_configs("character_form_wri_que_max", ConfigType.BOOL, label, help_text)
 
             label = _("Ticket selection")
@@ -673,7 +673,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_section("writing", _("Characters"))
 
         config_label = _("Title")
-        config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name")
+        config_help_text = _("Enables field 'title', a short (2-3 words) text added to the character's name.")
         self.add_configs("writing_title", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Number")
@@ -704,7 +704,7 @@ class OrgaConfigForm(ConfigForm):
 
         config_label = _("Field visibility")
         config_help_text = _(
-            "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time",
+            "Normally all character fields (public or private) are shown; with this configuration you can select which ones to display at any given time.",
         )
         self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
 
@@ -718,23 +718,23 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
 
             config_label = _("Disable auto relationships")
-            config_help_text = _("If enabled, auto-relationships from character references will not be created")
+            config_help_text = _("If enabled, auto-relationships from character references will not be created.")
             self.add_configs("writing_disable_auto_relationship", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Disable character finder")
         config_help_text = (
-            _("Disable the system that finds the character number when a special reference symbol is written")
-            + " (#, @, ^)"
+            _("Disable the system that finds the character number when a special reference symbol is written:")
+            + " (#, @, ^)."
         )
         self.add_configs("writing_disable_char_finder", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Replacing names")
-        config_help_text = _("If enabled, character names will be automatically replaced by a reference")
+        config_help_text = _("If enabled, character names will be automatically replaced by a reference.")
         self.add_configs("writing_substitute", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Paste as text")
         config_help_text = _(
-            "If enabled, automatically removes formatting when pasting text into the WYSIWYG editor",
+            "If enabled, automatically removes formatting when pasting text into the WYSIWYG editor.",
         )
         self.add_configs("writing_paste_text", ConfigType.BOOL, config_label, config_help_text)
 
@@ -755,11 +755,11 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("writing_unimportant", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Check")
-        config_help_text = _("If enabled, enables the consistency check tool for character sheets")
+        config_help_text = _("If enabled, enables the consistency check tool for character sheets.")
         self.add_configs("writing_check", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Reading")
-        config_help_text = _("If enabled, enables the reading view for writing elements")
+        config_help_text = _("If enabled, enables the reading view for writing elements.")
         self.add_configs("writing_reading", ConfigType.BOOL, config_label, config_help_text)
 
     def set_config_character(self) -> None:
@@ -784,12 +784,12 @@ class OrgaConfigForm(ConfigForm):
 
             split_label = _("Split by participation")
             split_help_text = _(
-                "If enabled, show two separate tables on the characters page, one for characters participating in this run and one for non-participating characters"
+                "If enabled, show two separate tables on the characters page, one for characters participating in this run and one for non-participating characters."
             )
             self.add_configs("campaign_split_registration", ConfigType.BOOL, split_label, split_help_text)
 
             independent_factions_label = _("Independent factions")
-            independent_factions_help_text = _("If enabled, do not use the parent event's factions")
+            independent_factions_help_text = _("If enabled, do not use the parent event's factions.")
             self.add_configs(
                 "campaign_faction_indep",
                 ConfigType.BOOL,
@@ -811,13 +811,13 @@ class OrgaConfigForm(ConfigForm):
             # Undo period configuration - time window for ability revocation
             undo_period_label = _("Undo period")
             undo_period_help_text = _(
-                "Time window (in hours) during which the user can revoke a chosen ability and recover spent XP (default is 0)",
+                "Time window (in hours) during which the user can revoke a chosen ability and recover spent XP (default is 0).",
             )
             self.add_configs("exp_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
 
             # Initial experience points configuration
             initial_experience_points_label = _("Initial experience points")
-            initial_experience_points_help_text = _("Initial value of experience points for all characters")
+            initial_experience_points_help_text = _("Initial value of experience points for all characters.")
             self.add_configs(
                 "exp_start",
                 ConfigType.INT,
@@ -828,28 +828,28 @@ class OrgaConfigForm(ConfigForm):
             # Ability templates configuration
             ability_templates_label = _("Ability templates")
             ability_templates_help_text = _(
-                "If enabled, enables ability templates that can be reused across multiple abilities",
+                "If enabled, enables ability templates that can be reused across multiple abilities.",
             )
             self.add_configs("exp_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
 
             # Rules configuration
             rules_label = _("Rules")
             rules_help_text = _(
-                "If enabled, enables rules for computed character fields based on abilities",
+                "If enabled, enables rules for computed character fields based on abilities.",
             )
             self.add_configs("exp_rules", ConfigType.BOOL, rules_label, rules_help_text)
 
             # Modifiers configuration
             modifiers_label = _("Modifiers")
             modifiers_help_text = _(
-                "If enabled, enables modifiers that can adjust ability costs based on prerequisites and requirements",
+                "If enabled, enables modifiers that can adjust ability costs based on prerequisites and requirements.",
             )
             self.add_configs("exp_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
 
             # Criteria configuration
             criterions_label = _("Criteria")
             criterions_help_text = _(
-                "If enabled, enables criterions that conditionally modify experience point totals based on prerequisites and requirements",
+                "If enabled, this feature enables criteria that conditionally modify experience point totals based on prerequisites and requirements.",
             )
             self.add_configs("exp_criterions", ConfigType.BOOL, criterions_label, criterions_help_text)
 
@@ -873,12 +873,12 @@ class OrgaConfigForm(ConfigForm):
 
             # Maximum character limit configuration
             max_characters_label = _("Maximum number")
-            max_characters_help_text = _("Maximum number of characters the player can create (default=1)")
+            max_characters_help_text = _("Maximum number of characters the player can create (default=1).")
             self.add_configs("user_character_max", ConfigType.INT, max_characters_label, max_characters_help_text)
 
             # Character approval process configuration
             character_approval_label = _("Approval")
-            character_approval_help_text = _("If enabled, activates a staff-managed approval process for characters")
+            character_approval_help_text = _("If enabled, activates a staff-managed approval process for characters.")
             self.add_configs(
                 "user_character_approval",
                 ConfigType.BOOL,
@@ -892,11 +892,11 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("guild", _("Guilds"))
 
             max_number_label = _("Maximum number")
-            max_number_help_text = _("Maximum number of guilds players can create (0 = no limit)")
+            max_number_help_text = _("Maximum number of guilds players can create (0 = no limit).")
             self.add_configs("guild_max_number", ConfigType.INT, max_number_label, max_number_help_text)
 
             max_members_label = _("Maximum members")
-            max_members_help_text = _("Maximum number of accepted members per guild (0 = no limit)")
+            max_members_help_text = _("Maximum number of accepted members per guild (0 = no limit).")
             self.add_configs("guild_max_members", ConfigType.INT, max_members_label, max_members_help_text)
 
     def set_config_custom(self) -> None:
@@ -906,13 +906,13 @@ class OrgaConfigForm(ConfigForm):
 
             character_name_label = _("Name")
             character_name_help_text = _(
-                "If enabled, it allows participants to customise the names of their characters",
+                "If enabled, it allows participants to customise the names of their characters.",
             )
             self.add_configs("custom_character_name", ConfigType.BOOL, character_name_label, character_name_help_text)
 
             character_profile_label = _("Profile")
             character_profile_help_text = _(
-                "If enabled, allows participants to customise their characters' profile picture",
+                "If enabled, allows participants to customise their characters' profile picture.",
             )
             self.add_configs(
                 "custom_character_profile",
@@ -923,7 +923,7 @@ class OrgaConfigForm(ConfigForm):
 
             character_pronoun_label = _("Pronoun")
             character_pronoun_help_text = _(
-                "If enabled, it allows participants to customise their characters' pronouns",
+                "If enabled, it allows participants to customise their characters' pronouns.",
             )
             self.add_configs(
                 "custom_character_pronoun",
@@ -933,12 +933,12 @@ class OrgaConfigForm(ConfigForm):
             )
 
             character_song_label = _("Song")
-            character_song_help_text = _("If enabled, it allows participants to indicate the song of their characters")
+            character_song_help_text = _("If enabled, it allows participants to indicate the song of their characters.")
             self.add_configs("custom_character_song", ConfigType.BOOL, character_song_label, character_song_help_text)
 
             character_private_label = _("Private")
             character_private_help_text = _(
-                "If enabled, it allows participants to enter private information on their characters, visible only to them and the staff",
+                "If enabled, it allows participants to enter private information on their characters, visible only to them and the staff.",
             )
             self.add_configs(
                 "custom_character_private",
@@ -949,7 +949,7 @@ class OrgaConfigForm(ConfigForm):
 
             character_public_label = _("Public")
             character_public_help_text = _(
-                "If enabled, it allows participants to enter public information on their characters, visible to all",
+                "If enabled, it allows participants to enter public information on their characters, visible to all.",
             )
             self.add_configs(
                 "custom_character_public",
@@ -968,25 +968,25 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("casting", _("Casting"))
 
             label = _("Minimum preferences")
-            help_text = _("Minimum number of preferences")
+            help_text = _("Minimum number of preferences.")
             self.add_configs("casting_min", ConfigType.INT, label, help_text)
 
             label = _("Maximum preferences")
-            help_text = _("Maximum number of preferences")
+            help_text = _("Maximum number of preferences.")
             self.add_configs("casting_max", ConfigType.INT, label, help_text)
 
             label = _("Additional Preferences")
-            help_text = _("Additional preferences, for random assignment when no solution is found (default 0)")
+            help_text = _("Additional preferences, for random assignment when no solution is found (default 0).")
             self.add_configs("casting_add", ConfigType.INT, label, help_text)
 
             label = _("Field for exclusions")
             help_text = _(
-                "If enabled, it adds a field in which the participant can indicate which elements they wish to avoid altogether",
+                "If enabled, it adds a field in which the participant can indicate which elements they wish to avoid altogether.",
             )
             self.add_configs("casting_avoid", ConfigType.BOOL, label, help_text)
 
             label = _("Assignments")
-            help_text = _("Number of characters to be assigned (default 1)")
+            help_text = _("Number of characters to be assigned (default 1).")
             self.add_configs("casting_characters", ConfigType.INT, label, help_text)
 
             label = _("Mirror")
@@ -994,22 +994,22 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("casting_mirror", ConfigType.BOOL, label, help_text)
 
             label = _("Show statistics")
-            help_text = _("If enabled, participants will be able to view for each character the preference statistics")
+            help_text = _("If enabled, participants will be able to view for each character the preference statistics.")
             self.add_configs("casting_show_pref", ConfigType.BOOL, label, help_text)
 
             label = _("Show history")
-            help_text = _("If enabled, shows participants the histories of preferences entered")
+            help_text = _("If enabled, shows participants the histories of preferences entered.")
             self.add_configs("casting_history", ConfigType.BOOL, label, help_text)
 
             label = _("Registration priority")
             help_text = _(
-                "A measure of how much to favor earlier registrants (0=default disabled, 1=normal, 10=strong)",
+                "A measure of how much to favor earlier registrants (0=default disabled, 1=normal, 10=strong).",
             )
             self.add_configs("casting_reg_priority", ConfigType.INT, label, help_text)
 
             label = _("Payment priority")
             help_text = _(
-                "A measure of how much to favor participants who completed full payment earlier (0=default disabled, 1=normal, 10=strong)",
+                "A measure of how much to favor participants who completed full payment earlier (0=default disabled, 1=normal, 10=strong).",
             )
             self.add_configs("casting_pay_priority", ConfigType.INT, label, help_text)
 
@@ -1045,14 +1045,14 @@ class OrgaConfigForm(ConfigForm):
             payment_reason_help_text += (
                 " "
                 + _("You can use the following fields; they will be filled in automatically:")
-                + "{player_name}, {question_name}"
+                + " {player_name}, {question_name}."
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, payment_reason_label, payment_reason_help_text)
 
             # Option to disable provisional registrations - auto-confirm all registrations
             disable_provisional_label = _("Disable provisional registrations")
             disable_provisional_help_text = _(
-                "If enabled, all registrations are confirmed even if no payment has been received",
+                "If enabled, all registrations are confirmed even if no payment has been received.",
             )
             self.add_configs(
                 "payment_no_provisional",
@@ -1066,7 +1066,7 @@ class OrgaConfigForm(ConfigForm):
 
             # Token disabling option for this specific event
             disable_tokens_label = _("Disable Tokens")
-            disable_tokens_help_text = _("If enabled, no tokens will be used in the entries of this event")
+            disable_tokens_help_text = _("If enabled, no tokens will be used in the entries of this event.")
             self.add_configs("tokens_disable", ConfigType.BOOL, disable_tokens_label, disable_tokens_help_text)
 
         if "credits" in self.params["features"]:
@@ -1074,7 +1074,7 @@ class OrgaConfigForm(ConfigForm):
 
             # Credit disabling option for this specific event
             disable_credits_label = _("Disable credits")
-            disable_credits_help_text = _("If enabled, no credits will be used in the entries for this event")
+            disable_credits_help_text = _("If enabled, no credits will be used in the entries for this event.")
             self.add_configs(
                 "credits_disable",
                 ConfigType.BOOL,
@@ -1089,7 +1089,7 @@ class OrgaConfigForm(ConfigForm):
             # Discount amount for the referring participant
             referrer_discount_label = _("Referrer Reward Discount")
             referrer_discount_help_text = _(
-                "Discount awarded to an existing participant when a friend signs up using their code"
+                "Discount awarded to an existing participant when a friend signs up using their code."
             )
             self.add_configs(
                 "bring_friend_discount_to",
@@ -1100,7 +1100,7 @@ class OrgaConfigForm(ConfigForm):
 
             # Discount amount for the referred friend
             referred_discount_label = _("Referred Friend Discount")
-            referred_discount_help_text = _("Discount amount applied to a new user signing up with a referral code")
+            referred_discount_help_text = _("Discount amount applied to a new user signing up with a referral code.")
             self.add_configs(
                 "bring_friend_discount_from",
                 ConfigType.INT,
@@ -1587,8 +1587,7 @@ class OrgaRunForm(ConfigForm):
             return
 
         help_text = _(
-            "Selected fields will be displayed as follows: public fields visible to all participants, "
-            "private fields visible only to assigned participants",
+            "Selected fields will be displayed as follows: public fields visible to all participants, private fields visible only to assigned participants.",
         )
 
         writing_elements = _get_writing_elements()
@@ -1636,14 +1635,14 @@ class OrgaRunForm(ConfigForm):
             if self.instance.pk and element_key in self.params["features"]:
                 additional_choices.append((element_key, element_display_name))
         if additional_choices:
-            help_text = _("Selected elements will be shown to participants")
-            self.add_configs(
-                "show_addit",
-                ConfigType.MULTI_BOOL,
-                _("Elements"),
-                help_text,
-                extra_data=additional_choices,
-            )
+            help_text = _("Selected elements will be shown to participants.")
+        self.add_configs(
+            "show_addit",
+            ConfigType.MULTI_BOOL,
+            _("Elements"),
+            help_text,
+            extra_data=additional_choices,
+        )
 
         self.set_section("visibility", _("Visibility"))
         for writing_element_key, writing_element_label in writing_elements:
@@ -1733,14 +1732,14 @@ _EVENT_TEMPLATES = [
     (
         "campaign",
         _("Campaign"),
-        _("Multi-event story with player-created characters, experience points, and a persistent world"),
+        _("Multi-event story with player-created characters, experience points, and a persistent world."),
         ["character", "user_character", "experience", "campaign"],
     ),
     (
         "oneshot",
         _("One-shot"),
         _(
-            "Single event focusing on narrative, characters written by staff and assigned via casting algorithm, with factions and plots"
+            "Single event focusing on narrative, characters written by staff and assigned via casting algorithm, with factions and plots."
         ),
         ["character", "casting", "faction", "plot", "handout"],
     ),

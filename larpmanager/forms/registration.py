@@ -719,7 +719,7 @@ class RequestApprovalForm(BaseRegistrationForm):
     confirm = forms.BooleanField(
         required=True,
         label=_("Request signup"),
-        help_text=_("Your signup will not be confirmed until an organizer approves this request"),
+        help_text=_("Your signup will not be confirmed until an organizer approves this request."),
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -769,7 +769,7 @@ class RequestApprovalForm(BaseRegistrationForm):
 class OrgaRegistrationForm(BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
-    page_info = _("Manage all registrations, character assignments, tickets, options and accounting status")
+    page_info = _("Manage all registrations, character assignments, tickets, options and accounting status.")
 
     page_title = _("Registrations")
 
@@ -971,7 +971,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             required=True,
             choices=quota_choices,
             label=_("Quotas"),
-            help_text=_("The number of payments to split the fee"),
+            help_text=_("The number of payments to split the fee."),
         )
 
         # Set initial value and section assignment

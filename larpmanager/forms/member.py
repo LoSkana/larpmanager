@@ -866,7 +866,7 @@ class ExeMembershipFeeForm(BaseForm):
 
         # Check if membership fee already exists for this association and year
         if AccountingItemMembership.objects.filter(member=member, year=year, association_id=association_id).exists():
-            self.add_error("member", _("Membership fee already existing for this user and for this year"))
+            self.add_error("member", _("Membership fee already existing for this user and for this year."))
 
         return member
 
@@ -877,7 +877,7 @@ class ExeMembershipDocumentForm(BaseForm):
     page_info = (
         _("Upload membership documents to complete a member's approval")
         + " - "
-        + _("The member must have already confirmed their consent to share personal data with your organization")
+        + _("The member must have already confirmed their consent to share personal data with your organization.")
     )
 
     page_title = _("Upload membership document")
