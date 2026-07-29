@@ -167,8 +167,7 @@ class Character(Writing):
         blank=True,
         related_name="mirror_inv",
         help_text=_(
-            "Indicate whether the character is a mirror (i.e., whether this pg shows the true "
-            "secret face of another character)",
+            "Whether the character is a mirror (i.e., whether this pg shows the true secret face of another character)",
         ),
     )
 
@@ -543,7 +542,7 @@ class Faction(Writing):
 
     selectable = models.BooleanField(
         default=False,
-        help_text=_("Indicates whether it can be selected by participants"),
+        help_text=_("Whether the faction can be selected by participants"),
     )
 
     locked = models.BooleanField(default=False)

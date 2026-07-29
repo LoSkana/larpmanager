@@ -193,7 +193,7 @@ msgstr ""
 msgid "Configure event discounts, discount types, values, and promo codes."
 msgstr ""
 
-msgid "Indicates the sessions for which the discount is available"
+msgid "The sessions for which the discount is available"
 msgstr ""
 
 msgid "Upload a PDF file or image (JPG, PNG, etc.)"
@@ -212,8 +212,8 @@ msgid "Enter any useful information for the organizers to verify the payment"
 msgstr ""
 
 msgid ""
-"Indicates the amount of reimbursement desired (can't be higher than your "
-"current credits)"
+"The amount of reimbursement desired (can't be higher than your current "
+"credits)"
 msgstr ""
 
 msgid "Request refund"
@@ -996,19 +996,19 @@ msgstr ""
 msgid "Writing options"
 msgstr ""
 
-msgid "Enter the CSS code to customize PDF printing."
+msgid "The CSS code to customize PDF printing."
 msgstr ""
 
 msgid "Header HTML"
 msgstr ""
 
-msgid "Enter the HTML code for the header."
+msgid "The HTML code for the header."
 msgstr ""
 
 msgid "Footer HTML"
 msgstr ""
 
-msgid "Enter the HTML code for the footer."
+msgid "The HTML code for the footer."
 msgstr ""
 
 msgid "Event"
@@ -1118,9 +1118,9 @@ msgid "Patron / Reduced"
 msgstr ""
 
 msgid ""
-"Indicates the ratio between reduced and patron tickets, multiplied by 10. "
-"Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets "
-"for 1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets"
+"The ratio between reduced and patron tickets, multiplied by 10. Example: 10 -"
+"> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for 1 patron "
+"ticket. 5 -> 1 reduced ticket for 2 patron tickets"
 msgstr ""
 
 msgid "Allow reserve signup anytime"
@@ -2582,8 +2582,7 @@ msgstr ""
 msgid "Preference"
 msgstr ""
 
-msgid ""
-"Enter the order of preference of your pre-registration (1 is the maximum)"
+msgid "The order of preference of your pre-registration (1 is the maximum)"
 msgstr ""
 
 msgid "Is there anything else you would like to tell us?"
@@ -3564,7 +3563,7 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-msgid "Enter the outflow category"
+msgid "The outflow category"
 msgstr ""
 
 msgid "Balance"
@@ -3576,7 +3575,7 @@ msgstr ""
 msgid "Payment date"
 msgstr ""
 
-msgid "Enter the exact date on which the payment was made"
+msgid "The exact date on which the payment was made"
 msgstr ""
 
 msgid "Standard"
@@ -3601,34 +3600,31 @@ msgid "Sessions"
 msgstr ""
 
 msgid ""
-"Enter the discount value; it will be deducted from the total amount "
-"calculated."
+"The discount value; it will be deducted from the total registration fee."
 msgstr ""
 
-msgid ""
-"Enter the maximum number of these discounts that can be requested (0 for "
-"unlimited uses)"
+msgid "The maximum number of uses (0 for unlimited uses)"
 msgstr ""
 
 msgid "Code"
 msgstr ""
 
 msgid ""
-"Indicate the special discount code, to be communicated to the participants, "
-"which will need to be entered during registration."
+"Unique promotional code to share with participants for use during "
+"registration"
 msgstr ""
 
 msgid ""
-"Indicate the type of discount: standard, play again (only available to those "
-"who have already played this event)"
+"The type of discount: standard, play again (only available to those who have "
+"already played this event)"
 msgstr ""
 
 msgid "Enter whether the discount is visible and usable by participants"
 msgstr ""
 
 msgid ""
-"Indicate whether the discount can be used only on new enrollment, or whether "
-"it can be used by already registered participants."
+"Whether the discount can be used only on new enrollment, or whether it can "
+"be used by already registered participants."
 msgstr ""
 
 msgid "This discount code is already used in one or more of the selected runs"
@@ -3650,8 +3646,8 @@ msgid "Details"
 msgstr ""
 
 msgid ""
-"Indicate all references of how you want your refund to be paid  (ex: IBAN "
-"and full bank details, paypal link, etc)"
+"Enter all references of how you want your refund to be paid  (ex: IBAN and "
+"full bank details, paypal link, etc)"
 msgstr ""
 
 msgid "Enter the amount of reimbursement desired"
@@ -4127,13 +4123,12 @@ msgid "Pre-requisites"
 msgstr ""
 
 msgid ""
-"Enter the prerequisite abilities, which must be possessed before one can "
-"acquire this"
+"The prerequisite abilities, which must be possessed before one can acquire "
+"this"
 msgstr ""
 
 msgid ""
-"Enter the character options, which must be selected to make the ability "
-"available"
+"The character options, which must be selected to make the ability available"
 msgstr ""
 
 msgid "Addition"
@@ -4505,7 +4500,7 @@ msgid "Contact"
 msgstr ""
 
 msgid ""
-"Indicates a way for other participants to contact you. It can be an email "
+"Enter a way for other participants to contact you. It can be an email "
 "address, a social profile, or anything else you choose. It will be made "
 "public to other participants."
 msgstr ""
@@ -4624,7 +4619,7 @@ msgstr ""
 msgid "Profile completed"
 msgstr ""
 
-msgid "Indicates whether the member has completed their profile information"
+msgid "Whether the member has completed their profile information"
 msgstr ""
 
 msgid "Credit balance"
@@ -5033,7 +5028,7 @@ msgstr ""
 msgid "Deadline date"
 msgstr ""
 
-msgid "Enter the tickets for which it is active"
+msgid "The tickets for which it is active"
 msgstr ""
 
 msgid "Surcharge applied to the ticket"
@@ -5074,8 +5069,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Indicates private information about your character, visible only to you and "
-"the organizers"
+"Enter private information about your character, visible only to you and the "
+"organizers"
 msgstr ""
 
 msgid "Character portrait"
@@ -5119,8 +5114,8 @@ msgid "Enter the title of the character - it will be shown along with the name"
 msgstr ""
 
 msgid ""
-"Indicate whether the character is a mirror (i.e., whether this pg shows the "
-"true secret face of another character)"
+"Whether the character is a mirror (i.e., whether this pg shows the true "
+"secret face of another character)"
 msgstr ""
 
 msgid "Cover photo fo the character"
@@ -5140,7 +5135,7 @@ msgstr ""
 msgid "Faction logo"
 msgstr ""
 
-msgid "Indicates whether it can be selected by participants"
+msgid "Whether the faction can be selected by participants"
 msgstr ""
 
 msgid "Admin"
@@ -6004,7 +5999,7 @@ msgstr ""
 msgid "Drag items to reorder your preferences."
 msgstr ""
 
-msgid "Indicate here any element you wish to avoid in the assignment:"
+msgid "Enter here any element you wish to avoid in the assignment:"
 msgstr ""
 
 msgid "Confirm your choices?"
@@ -8003,8 +7998,7 @@ msgid "You are about to perform a donation of:"
 msgstr ""
 
 msgid ""
-"Indicate the name of the member for whom you want to activate a new "
-"collection:"
+"Enter the name of the member for whom you want to activate a new collection:"
 msgstr ""
 
 msgid "Collection for"
@@ -8148,10 +8142,10 @@ msgstr ""
 msgid "I do it regularly and have considerable experience"
 msgstr ""
 
-msgid "Indicate your level of experience"
+msgid "Enter your level of experience"
 msgstr ""
 
-msgid "Indicate precisely your field of experience"
+msgid "Enter precisely your field of experience"
 msgstr ""
 
 msgid "Manage users that you can act on their behalf"

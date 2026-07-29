@@ -488,7 +488,7 @@ class AccountingItemExpense(AccountingItem):
         max_length=1,
         choices=ExpenseChoices.choices,
         verbose_name=_("Type"),
-        help_text=_("Enter the outflow category"),
+        help_text=_("The outflow category"),
     )
 
     balance = models.CharField(
@@ -523,7 +523,7 @@ class AccountingItemFlow(AccountingItem):
     payment_date = models.DateField(
         null=True,
         verbose_name=_("Payment date"),
-        help_text=_("Enter the exact date on which the payment was made"),
+        help_text=_("The exact date on which the payment was made"),
     )
 
     def download(self) -> str:
@@ -541,7 +541,7 @@ class AccountingItemOutflow(AccountingItemFlow):
         max_length=1,
         choices=ExpenseChoices.choices,
         verbose_name=_("Type"),
-        help_text=_("Enter the outflow category"),
+        help_text=_("The outflow category"),
     )
 
     balance = models.CharField(
@@ -586,21 +586,18 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
         decimal_places=2,
         default=0,
         validators=[MinValueValidator(Decimal("0.00"))],
-        help_text=_("Enter the discount value; it will be deducted from the total amount calculated."),
+        help_text=_("The discount value; it will be deducted from the total registration fee."),
     )
 
     max_redeem = models.IntegerField(
-        help_text=_("Enter the maximum number of these discounts that can be requested (0 for unlimited uses)"),
+        help_text=_("The maximum number of uses (0 for unlimited uses)"),
     )
 
     cod = models.CharField(
         max_length=12,
         default=my_uuid_short,
         verbose_name=_("Code"),
-        help_text=_(
-            "Indicate the special discount code, to be communicated to the participants, which "
-            "will need to be entered during registration.",
-        ),
+        help_text=_("Unique promotional code to share with participants for use during registration"),
     )
 
     typ = models.CharField(
@@ -608,8 +605,7 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
         choices=DiscountType.choices,
         verbose_name=_("Type"),
         help_text=_(
-            "Indicate the type of discount: standard, play again (only available to those who "
-            "have already played this event)",
+            "The type of discount: standard, play again (only available to those who have already played this event)",
         ),
     )
 
@@ -621,7 +617,7 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
     only_reg = models.BooleanField(
         default=True,
         help_text=_(
-            "Indicate whether the discount can be used only on new enrollment, or whether it "
+            "Whether the discount can be used only on new enrollment, or whether it "
             "can be used by already registered participants.",
         ),
     )
@@ -810,7 +806,7 @@ class RefundRequest(UuidMixin, BaseModel):
         max_length=2000,
         verbose_name=_("Details"),
         help_text=_(
-            "Indicate all references of how you want your refund to be paid  (ex: IBAN and "
+            "Enter all references of how you want your refund to be paid  (ex: IBAN and "
             "full bank details, paypal link, etc)",
         ),
     )

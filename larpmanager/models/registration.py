@@ -254,7 +254,7 @@ class RegistrationInstallment(UuidMixin, OrderMixin, BaseModel):
         related_name="installments",
         blank=True,
         verbose_name=_("Tickets"),
-        help_text=_("Enter the tickets for which it is active"),
+        help_text=_("The tickets for which it is active"),
     )
 
     class Meta:
@@ -501,7 +501,7 @@ class RegistrationCharacterRel(BaseModel):
         null=True,
         verbose_name=_("Private"),
         help_text=_(
-            "Indicates private information about your character, visible only to you and the organizers",
+            "Enter private information about your character, visible only to you and the organizers",
         ),
     )
 

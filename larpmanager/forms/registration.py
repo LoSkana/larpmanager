@@ -1712,7 +1712,7 @@ class PreRegistrationForm(BaseForm):
                 required=False,
                 choices=cho_pref,
                 label=_("Preference"),
-                help_text=_("Enter the order of preference of your pre-registration (1 is the maximum)"),
+                help_text=_("The order of preference of your pre-registration (1 is the maximum)"),
             )
             self.initial["new_pref"] = min(prefs)
         else:

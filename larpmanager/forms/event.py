@@ -120,19 +120,15 @@ class EventCharactersPdfForm(ConfigForm):
 
         # Add CSS configuration for PDF styling
         # This allows users to customize the visual appearance of generated PDFs
-        self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("Enter the CSS code to customize PDF printing."))
+        self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("The CSS code to customize PDF printing."))
 
         # Add header content configuration
         # Users can define custom HTML content to appear at the top of each PDF page
-        self.add_configs(
-            "header_content", ConfigType.TEXTAREA, _("Header HTML"), _("Enter the HTML code for the header.")
-        )
+        self.add_configs("header_content", ConfigType.TEXTAREA, _("Header HTML"), _("The HTML code for the header."))
 
         # Add footer content configuration
         # Users can define custom HTML content to appear at the bottom of each PDF page
-        self.add_configs(
-            "footer_content", ConfigType.TEXTAREA, _("Footer HTML"), _("Enter the HTML code for the footer.")
-        )
+        self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer HTML"), _("The HTML code for the footer."))
 
 
 class OrgaEventForm(BaseModelForm):
@@ -474,7 +470,7 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("reduced", _("Patron / Reduced"))
             reduced_ratio_label = "Ratio"
             reduced_ratio_help_text = _(
-                "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
+                "The ratio between reduced and patron tickets, multiplied by 10. "
                 "Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for "
                 "1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets",
             )
