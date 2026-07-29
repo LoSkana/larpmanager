@@ -324,7 +324,7 @@ class LanguageForm(BaseForm):
 
     language = forms.ChoiceField(
         choices=conf_settings.LANGUAGES,
-        label=_("Select Language"),
+        label=_("Select a language"),
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
@@ -694,13 +694,13 @@ class MembershipRequestForm(forms.ModelForm):
 
     request = forms.FileField(
         label=_("Request signed"),
-        help_text=_("Upload the scan of your signed application (image or pdf document)"),
+        help_text=_("Upload a scan of your signed application (image or PDF document)."),
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
     )
 
     document = forms.FileField(
         label=_("Photo of an ID"),
-        help_text=_("Upload a photo of the identity document that you listed in the request (image or pdf)"),
+        help_text=_("Upload a photo of the identity document listed in the request (image or PDF)."),
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
     )
 
@@ -814,7 +814,7 @@ class ExeMembershipForm(BaseModelForm):
 class ExeMembershipFeeForm(BaseForm):
     """Form for ExeMembershipFee."""
 
-    page_info = _("Upload member's fee receipt to confirm payment for the current year")
+    page_info = _("Upload a membership-fee receipt to confirm payment for the current year.")
 
     page_title = _("Upload membership fee")
 

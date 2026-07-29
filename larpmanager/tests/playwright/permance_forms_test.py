@@ -125,7 +125,7 @@ def check_orga_config(page: Any) -> None:
     page.get_by_role("link", name="Configuration").first.click()
     page.get_by_role("link", name=re.compile(r"^Display ")).click()
     page.locator("#id_show_shortcuts_mobile").check()
-    page.get_by_text("If checked: Show summary page").click()
+    page.get_by_text("If enabled, show summary page").click()
     page.locator("#id_show_limitations").check()
     submit_confirm(page)
     page.get_by_role("link", name="Configuration").first.click()

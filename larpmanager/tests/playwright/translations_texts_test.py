@@ -70,8 +70,8 @@ def test_translations_text(pw_page: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Hello")
 
     go_to(page, live_server, "/language")
-    page.get_by_label("Select Language").select_option("it")
-    page.get_by_label("Select Language").click()
+    page.get_by_label('Select a language').select_option("it")
+    page.get_by_label('Select a language').click()
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "BUONGIORNO")
     topbar(page, "Profilo")

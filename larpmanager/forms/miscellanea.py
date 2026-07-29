@@ -297,7 +297,7 @@ def _delete_optionals_warehouse(warehouse_form: BaseModelForm) -> None:
 class ExeCompetenceForm(BaseModelForm):
     """Form for ExeCompetence."""
 
-    page_info = _("Manage the organization's competences, defining skill areas that contributors can self-assess")
+    page_info = _("Manage the organization's competencies, defining skill areas that contributors can self-assess.")
 
     class Meta:
         model = Competence

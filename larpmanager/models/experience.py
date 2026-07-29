@@ -217,8 +217,7 @@ class RuleExp(UuidMixin, OrderMixin, BaseConceptModel):
         related_name="rules",
         blank=True,
         help_text=_(
-            "The rule will be applied, only one time, if the character has any of the abilities. "
-            "If no abilities are chosen, the rule is applied to all characters.",
+            "The rule will be applied only once if the character has any of the abilities. If no abilities are chosen, it applies to all characters.",
         ),
     )
 

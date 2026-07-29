@@ -75,8 +75,7 @@ def get_payment_info(association_id: int, payment_url: str) -> str:
 
     else:
         text += (
-            _("You can view all details required details <a href='%(url)s'>on the payment page</a>.")
-            % {"url": payment_url}
+            _("You can view all required details <a href='%(url)s'>on the payment page</a>.") % {"url": payment_url}
             + " "
         )
 

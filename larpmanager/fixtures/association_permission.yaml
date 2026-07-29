@@ -1,7 +1,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Organization
-    descr: Manage the organization's main settings
+    descr: Manage the main settings of the organization
     slug: exe_association
     number: 2
     config: interface

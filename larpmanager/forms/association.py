@@ -475,7 +475,7 @@ class ExeConfigForm(ConfigForm):
 
         delete_label = _("Bulk delete")
         delete_help_text = _(
-            "If checked, allows items to be deleted in bulk. WARNING: deleted items might not be fully recoverable."
+            "If enabled, allows items to be deleted in bulk. WARNING: deleted items might not be fully recoverable."
         )
         self.add_configs("allow_bulk_delete", ConfigType.BOOL, delete_label, delete_help_text)
 
@@ -487,14 +487,13 @@ class ExeConfigForm(ConfigForm):
         if self.instance.main_mail:
             digest_label = _("Notifications digest")
             digest_help_text = _(
-                "If checked: receive a single daily summary email instead of immediate notifications "
-                "for registrations, payments, and invoice approvals"
+                "If enabled, receive a single daily summary email instead of immediate notifications for registrations, payments, and invoice approvals"
             )
             self.add_configs("mail_exe_digest", ConfigType.BOOL, digest_label, digest_help_text)
 
             carbon_copy_label = _("Carbon copy")
             carbon_copy_help_text = _(
-                "If checked, sends a copy of every email sent to participants to the main email address"
+                "If enabled, sends a copy of every email sent to participants to the main email address"
             )
             self.add_configs("mail_cc", ConfigType.BOOL, carbon_copy_label, carbon_copy_help_text)
 
@@ -549,7 +548,7 @@ class ExeConfigForm(ConfigForm):
         if "pre_register" in self.params["features"]:
             self.set_section("pre_reg", _("Pre-registration"))
             preferences_label = _("Enable preferences")
-            preferences_help_text = _("If checked, participants give a preference value when adding pre-registrations")
+            preferences_help_text = _("If enabled, participants give a preference value when adding pre-registrations")
             self.add_configs("pre_reg_preferences", ConfigType.BOOL, preferences_label, preferences_help_text)
 
         # Configure easter egg feature (centauri)
@@ -605,7 +604,7 @@ class ExeConfigForm(ConfigForm):
         self.set_section("users", _("Users"))
 
         field_label = _("Event history")
-        field_help_text = _("If checked, a user's public page shows a list of all events they have attended")
+        field_help_text = _("If enabled, a user's public page shows a list of all events they have attended")
         self.add_configs("player_larp_history", ConfigType.BOOL, field_label, field_help_text)
 
         # Configure deadline management if feature is enabled
@@ -658,7 +657,7 @@ class ExeConfigForm(ConfigForm):
 
             # Holiday scheduling for reminder emails
             field_label = _("Public Holidays")
-            field_help_text = _("If checked, the system will send reminders on holidays")
+            field_help_text = _("If enabled, the system will send reminders on holidays")
             self.add_configs("remind_holidays", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_membership(self) -> None:
@@ -693,7 +692,7 @@ class ExeConfigForm(ConfigForm):
 
         field_label = _("Separate membership fee")
         field_help_text = _(
-            "If checked, the annual membership fee is paid separately from the event registration fee",
+            "If enabled, the annual membership fee is paid separately from the event registration fee",
         )
         self.add_configs("membership_fee_separated", ConfigType.BOOL, field_label, field_help_text)
 
@@ -718,7 +717,7 @@ class ExeConfigForm(ConfigForm):
             # Payment amount modification controls
             label_disable_amount_change = _("Disable amount change")
             help_text_disable_amount_change = _(
-                "If checked, participants cannot change the payment amount for their registrations.",
+                "If enabled, participants cannot change the payment amount for their registrations.",
             )
             self.add_configs(
                 "payment_hide_amount",
@@ -730,7 +729,7 @@ class ExeConfigForm(ConfigForm):
             # Unique payment identification system
             label_unique_payment_code = _("Unique code")
             help_text_unique_payment_code = _(
-                "If checked, adds a unique code to each payment to help identify it.",
+                "If enabled, adds a unique code to each payment to help identify it.",
             )
             self.add_configs(
                 "payment_special_code",
@@ -800,7 +799,7 @@ class ExeConfigForm(ConfigForm):
             # Make credits readonly in events
             label_credit_readonly_event = _("Lock events")
             help_text_credit_readonly_event = _(
-                "If checked, prevents credits from being created or changed in the event panel"
+                "If enabled, prevents credits from being created or changed in the event panel"
             )
             self.add_configs(
                 "credit_readonly_event",
@@ -1069,7 +1068,7 @@ class ExeQuickSetupForm(QuickSetupForm):
                     "campaign": (
                         True,
                         _("Campaign"),
-                        _("Do you want to manage campaigns, a series of events that share the same characters"),
+                        _("Do you want to manage campaigns, a series of events that share the same characters?"),
                     ),
                 },
             )
@@ -1079,35 +1078,35 @@ class ExeQuickSetupForm(QuickSetupForm):
                 "publisher": (
                     True,
                     _("Promotion"),
-                    _("Do you want to make your upcoming events visible to external sites through a public API"),
+                    _("Do you want to make your upcoming events visible to external sites through a public API?"),
                 ),
-                "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system")),
+                "payment": (True, _("Payments"), _("Do you want to accept payments processed through the system?")),
                 "payment_fees_user": (
                     False,
                     _("Transaction fees"),
                     _(
-                        "Do you want to add payment gateway fees to the ticket price, so that the user pays them instead of the organization",
+                        "Do you want to add payment gateway fees to the ticket price so the user pays them instead of the organization?",
                     ),
                 ),
                 "membership": (
                     True,
                     _("Membership"),
-                    _("Do you want users to join events only after an approval process"),
+                    _("Do you want users to join events only after an approval process?"),
                 ),
                 "deadlines": (
                     True,
                     _("Deadlines"),
-                    _("Do you want a dashboard to track and manage deadlines missed by registered users"),
+                    _("Do you want a dashboard to track and manage deadlines missed by registered users?"),
                 ),
                 "remind": (
                     True,
                     _("Reminders"),
                     _(
-                        "Do you want to enable an automatic email reminder system for registered users who miss a deadline",
+                        "Do you want to enable automatic email reminders for registered users who miss a deadline?",
                     ),
                 ),
-                "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform")),
-                "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations")),
+                "help": (True, _("Help"), _("Do you want to manage user help requests directly through the platform?")),
+                "donate": (True, _("Donations"), _("Do you want to allow users to make voluntary donations?")),
             },
         )
 
@@ -1157,8 +1156,7 @@ class ExePreferencesForm(ConfigForm):
         # Add organizer digest mode toggle option
         digest_mode_label = _("Notifications digest")
         digest_mode_help_text = _(
-            "If checked: receive a single daily summary email instead of immediate notifications "
-            "for registrations, payments, and invoice approvals"
+            "If enabled, receive a single daily summary email instead of immediate notifications for registrations, payments, and invoice approvals"
         )
         self.add_configs(
             "mail_orga_digest",

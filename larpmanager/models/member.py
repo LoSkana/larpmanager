@@ -191,8 +191,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         max_length=150,
         verbose_name=_("Contact"),
         help_text=_(
-            "Indicates a way for other participants to contact you. It can be an email, a social "
-            "profile, whatever you want. It will be made public to others participants",
+            "Indicates a way for other participants to contact you. It can be an email address, a social profile, or anything else you choose. It will be made public to other participants.",
         ),
         blank=True,
         null=True,
@@ -239,7 +238,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         default=DocumentChoices.IDENT,
         verbose_name=_("Document type"),
         null=True,
-        help_text=_("Enter a type of identification document issued by the nation in which you reside"),
+        help_text=_("Enter the type of identification document issued by the country where you live."),
     )
 
     document = models.CharField(

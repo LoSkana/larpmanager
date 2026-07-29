@@ -151,7 +151,7 @@ class PlayerRelationshipForm(BaseModelForm):
         # Check if user is trying to create relationship with themselves
         character_id = _get_character_cache_id(self.params)
         if self.cleaned_data["target"].id == character_id:
-            self.add_error("target", _("You cannot create a relationship towards yourself!"))
+            self.add_error("target", _("You cannot create a relationship with yourself!"))
 
         # Check for existing relationships with same target and registration
         try:
@@ -392,7 +392,7 @@ class OrgaFactionForm(WritingForm, BaseWritingForm):
 
     page_title = _("Faction")
 
-    page_info = _("Manage all character factions of the event")
+    page_info = _("Manage all character factions for this event")
 
     class Meta:
         model = Faction

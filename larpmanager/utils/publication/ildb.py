@@ -604,7 +604,7 @@ def _notify_association(association: Association, run: Run, ildb_event_id: str) 
             + _("The event <strong>%(event)s</strong> has been automatically added to larpdatabase.com as a draft.")
             % {"event": run.search}
             + "</p><p>"
-            + _("Please review and submit it for publication")
+            + _("Please review it and submit it for publication.")
             + f": <a href='{review_url}'>{review_url}</a>"
             + "</p>"
         )

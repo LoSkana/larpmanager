@@ -425,7 +425,7 @@ class OrgaWarehouseItemCommitRemainingForm(BaseModelForm):
         if self.item.quantity is None:
             self.add_error("area", _("This item has no finite quantity to commit"))
         elif self._available_quantity() <= 0:
-            self.add_error("area", _("No quantity is available to commit"))
+            self.add_error("area", _("No quantity is available to assign."))
         return cleaned
 
     def save(self, commit: bool = True) -> WarehouseItemAssignment:  # noqa: FBT001, FBT002, ARG002
@@ -434,7 +434,7 @@ class OrgaWarehouseItemCommitRemainingForm(BaseModelForm):
             item = WarehouseItem.objects.select_for_update().get(pk=self.item.pk)
             quantity = self._available_quantity(item)
             if quantity <= 0:
-                raise ValidationError(_("No quantity is available to commit"))
+                raise ValidationError(_("No quantity is available to assign."))
 
             assignment, _created = WarehouseItemAssignment.objects.get_or_create(
                 item=item,
