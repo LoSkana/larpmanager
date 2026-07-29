@@ -906,7 +906,7 @@ class OrgaConfigForm(ConfigForm):
 
             character_name_label = _("Name")
             character_name_help_text = _(
-                "If enabled, it allows participants to customise the names of their characters.",
+                "If enabled, allows participants to customise the names of their characters.",
             )
             self.add_configs("custom_character_name", ConfigType.BOOL, character_name_label, character_name_help_text)
 
@@ -923,7 +923,7 @@ class OrgaConfigForm(ConfigForm):
 
             character_pronoun_label = _("Pronoun")
             character_pronoun_help_text = _(
-                "If enabled, it allows participants to customise their characters' pronouns.",
+                "If enabled, allows participants to customise their characters' pronouns.",
             )
             self.add_configs(
                 "custom_character_pronoun",
@@ -933,12 +933,12 @@ class OrgaConfigForm(ConfigForm):
             )
 
             character_song_label = _("Song")
-            character_song_help_text = _("If enabled, it allows participants to indicate the song of their characters.")
+            character_song_help_text = _("If enabled allows participants to indicate the song of their characters.")
             self.add_configs("custom_character_song", ConfigType.BOOL, character_song_label, character_song_help_text)
 
             character_private_label = _("Private")
             character_private_help_text = _(
-                "If enabled, it allows participants to enter private information on their characters, visible only to them and the staff.",
+                "If enabled allows participants to enter private information on their characters, visible only to them and the staff.",
             )
             self.add_configs(
                 "custom_character_private",
@@ -949,7 +949,7 @@ class OrgaConfigForm(ConfigForm):
 
             character_public_label = _("Public")
             character_public_help_text = _(
-                "If enabled, it allows participants to enter public information on their characters, visible to all.",
+                "If enabled allows participants to enter public information on their characters, visible to all.",
             )
             self.add_configs(
                 "custom_character_public",
