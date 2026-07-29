@@ -244,4 +244,11 @@ class Migration(migrations.Migration):
             name='printable',
             field=models.BooleanField(default=True, help_text='Enter whether the field is printed in PDF generations', verbose_name='Printable'),
         ),
+        migrations.AlterField(
+            model_name='registrationcharacterrel',
+            name='custom_private',
+            field=models.TextField(blank=True,
+                                   help_text='Indicates private information about your character, visible only to you and the organizers',
+                                   max_length=5000, null=True, verbose_name='Private'),
+        ),
     ]
