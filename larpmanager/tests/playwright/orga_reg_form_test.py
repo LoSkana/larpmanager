@@ -180,7 +180,7 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#register_form"),
         """
-        (*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2
+        (*) : These fields are required Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2
         Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2
         Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge""",
     )

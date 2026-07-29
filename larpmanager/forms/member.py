@@ -730,7 +730,7 @@ class MembershipResponseForm(BaseForm):
 class ExeVolunteerRegistryForm(BaseModelForm):
     """Form for ExeVolunteerRegistry."""
 
-    page_title = _("Volounteers data")
+    page_title = _("Volunteer data")
 
     page_info = _(
         "Manage the volunteer registry: view, add, and edit volunteer records, and print an official PDF copy"

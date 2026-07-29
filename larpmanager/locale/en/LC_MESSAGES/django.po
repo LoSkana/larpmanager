@@ -361,38 +361,39 @@ msgstr ""
 msgid "Past events"
 msgstr ""
 
-msgid "If checked: shows a link in the calendar to past events"
+msgid "If selected, a link to past events is shown in the calendar"
 msgstr ""
 
 msgid "Characters shortcut"
 msgstr ""
 
-msgid "If checked: shows a link in the sidebar to view all user's characters"
+msgid ""
+"If selected, the sidebar shows a link to view all of a user's characters"
 msgstr ""
 
 msgid "Registrations shortcut"
 msgstr ""
 
 msgid ""
-"If checked: shows a link in the sidebar to view all user's registrations"
+"If selected, the sidebar shows a link to view all of a user's registrations"
 msgstr ""
 
 msgid "Website"
 msgstr ""
 
-msgid "If checked: shows the website for each event"
+msgid "If selected, the website is shown for each event"
 msgstr ""
 
 msgid "Where"
 msgstr ""
 
-msgid "If checked: shows the position for each event"
+msgid "If selected, the location is shown for each event"
 msgstr ""
 
 msgid "Authors"
 msgstr ""
 
-msgid "If checked: shows the list of authors for each event"
+msgid "If selected, the list of authors is shown for each event"
 msgstr ""
 
 msgctxt "event"
@@ -400,13 +401,13 @@ msgid "Genre"
 msgstr ""
 
 msgctxt "event"
-msgid "If checked: shows the genre for each event"
+msgid "If selected, the genre is shown for each event"
 msgstr ""
 
 msgid "Tagline"
 msgstr ""
 
-msgid "If checked: shows the tagline for each event"
+msgid "If selected, the tagline is shown for each event"
 msgstr ""
 
 msgid "Bulk delete"
@@ -446,29 +447,28 @@ msgstr ""
 msgid "New signup"
 msgstr ""
 
-msgid ""
-"If checked: Send an email notification to the organisers for new signups"
+msgid "If selected, send an email notification to organizers for new signups"
 msgstr ""
 
 msgid "Signup update"
 msgstr ""
 
 msgid ""
-"If checked: Send an email notification to the organisers for updated signups"
+"If selected, send an email notification to organizers for updated signups"
 msgstr ""
 
 msgid "Signup cancellation"
 msgstr ""
 
 msgid ""
-"If checked: Send a notification email to the organisers for cancellation of "
-"registration"
+"If selected, send organizers a notification email when a registration is "
+"cancelled."
 msgstr ""
 
 msgid "Payments received"
 msgstr ""
 
-msgid "If checked: Send an email to the organisers for each payment received"
+msgid "If selected, send organizers an email for each payment received"
 msgstr ""
 
 msgid "Customised mail server"
@@ -524,7 +524,7 @@ msgstr ""
 msgid "Quantity"
 msgstr ""
 
-msgid "If checked: Add a field to track items quantity"
+msgid "If selected, add a field to track item quantities"
 msgstr ""
 
 msgid "Users"
@@ -563,7 +563,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-msgid "If checked: members can vote"
+msgid "If selected, members can vote"
 msgstr ""
 
 msgid "Candidates"
@@ -664,7 +664,8 @@ msgid "Require receipt for manual payments"
 msgstr ""
 
 msgid ""
-"If checked: Participants must provide a receipt/invoice for manual payments"
+"If selected, participants must provide a receipt or invoice for manual "
+"payments."
 msgstr ""
 
 msgid "VAT"
@@ -737,13 +738,13 @@ msgstr ""
 msgid "Publish staff"
 msgstr ""
 
-msgid "If checked: publish staff members"
+msgid "If selected, publish staff members"
 msgstr ""
 
 msgid "Publish players"
 msgstr ""
 
-msgid "If checked: publish registered players"
+msgid "If selected, publish registered players"
 msgstr ""
 
 msgid "Authentication token (mark all permissions)"
@@ -1296,20 +1297,20 @@ msgid "Hide"
 msgstr ""
 
 msgid ""
-"Enables field 'hide', to be able to hide writing element from participants"
+"Enables the 'hide' field, which hides a writing element from participants."
 msgstr ""
 
 msgid "Locked"
 msgstr ""
 
 msgid ""
-"Enables field 'locked', to prevent players from viewing the full character "
-"sheet even when assigned"
+"Enables the 'locked' field, which prevents players from viewing the full "
+"character sheet even when it is assigned."
 msgstr ""
 
 msgid ""
-"Enables field 'assigned', to track which staff member is responsible for "
-"each writing element"
+"Enables the 'assigned' field, which tracks the staff member responsible for "
+"each writing element."
 msgstr ""
 
 msgid "Field visibility"
@@ -1324,7 +1325,8 @@ msgid "Relationships max length"
 msgstr ""
 
 msgid ""
-"Set maximum length on character relationships (default 10000 characters)"
+"Set the maximum length of character relationships (default: 10,000 "
+"characters)."
 msgstr ""
 
 msgid "Disable auto relationships"
@@ -2284,7 +2286,7 @@ msgid ""
 "them of the approval decision"
 msgstr ""
 
-msgid "Volounteers data"
+msgid "Volunteer data"
 msgstr ""
 
 msgid ""
@@ -3493,9 +3495,7 @@ msgstr ""
 msgid "Bank Statement"
 msgstr ""
 
-msgid ""
-"Statement issued by the bank as proof of the issuance of the transfer (as "
-"pdf file)"
+msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
 msgstr ""
 
 msgid "Gross"
@@ -3507,31 +3507,31 @@ msgstr ""
 msgid "Withheld as transaction fee"
 msgstr ""
 
-msgid "Set design - staging, materials"
+msgid "Set design: staging and materials"
 msgstr ""
 
-msgid "Costumes - make up, cloth, armor"
+msgid "Costumes: makeup, clothing, and armor"
 msgstr ""
 
-msgid "Prop - weapons, props"
+msgid "Props: weapons and accessories"
 msgstr ""
 
-msgid "Electronics - computers, hitech, lights"
+msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr ""
 
-msgid "Promotion - site, advertising"
+msgid "Promotion: website and advertising"
 msgstr ""
 
-msgid "Transportation - gas, highway"
+msgid "Transportation: fuel and highway tolls"
 msgstr ""
 
-msgid "Kitchen - food, tableware"
+msgid "Kitchen: food and tableware"
 msgstr ""
 
-msgid "Venue - rent, utilities, and accommodation"
+msgid "Venue: rent, utilities, and accommodation"
 msgstr ""
 
-msgid "Secretarial - stationery, printing"
+msgid "Secretarial: stationery and printing"
 msgstr ""
 
 msgid "Raw materials, auxiliaries, consumables and goods"
@@ -3555,25 +3555,25 @@ msgstr ""
 msgid "Credit assignment"
 msgstr ""
 
-msgid "Tokens assignment"
+msgid "Token assignment"
 msgstr ""
 
 msgid "Type"
 msgstr ""
 
-msgid "Indicate the outflow category"
+msgid "Enter the outflow category"
 msgstr ""
 
 msgid "Balance"
 msgstr ""
 
-msgid "Indicate how spending is allocated at the budget level"
+msgid "Enter how spending is allocated in the budget"
 msgstr ""
 
 msgid "Payment date"
 msgstr ""
 
-msgid "Indicate the exact date in which the payment has been performed"
+msgid "Enter the exact date on which the payment was made"
 msgstr ""
 
 msgid "Standard"
@@ -3591,7 +3591,7 @@ msgstr ""
 msgid "Name of the discount - internal use"
 msgstr ""
 
-msgid "Indicate the sessions for which the discount is active"
+msgid "Select the sessions for which the discount is active"
 msgstr ""
 
 msgid "Sessions"
@@ -3603,8 +3603,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Indicate the maximum number of such discounts that can be requested (0 for "
-"infinite uses)"
+"Enter the maximum number of these discounts that can be requested (0 for "
+"unlimited uses)"
 msgstr ""
 
 msgid "Code"
@@ -3620,7 +3620,7 @@ msgid ""
 "who have already played this event)"
 msgstr ""
 
-msgid "Indicates whether the discount is visible and usable by participants"
+msgid "Enter whether the discount is visible and usable by participants"
 msgstr ""
 
 msgid ""
@@ -3651,7 +3651,7 @@ msgid ""
 "and full bank details, paypal link, etc)"
 msgstr ""
 
-msgid "Indicates the amount of reimbursement desired"
+msgid "Enter the amount of reimbursement desired"
 msgstr ""
 
 msgid "Global balance"
@@ -3699,7 +3699,8 @@ msgid "Your organization's logo"
 msgstr ""
 
 msgid ""
-"upload any size, it will be automatically optimized; square images work best"
+"Upload an image of any size; it will be automatically optimized. Square "
+"images work best."
 msgstr ""
 
 msgid "Contact email"
@@ -4116,19 +4117,19 @@ msgid "Note that if the cost is 0, it will be automatically assigned"
 msgstr ""
 
 msgid ""
-"Indicate whether the ability is visible to users, and can be freely purchased"
+"Enter whether the ability is visible to users, and can be freely purchased"
 msgstr ""
 
 msgid "Pre-requisites"
 msgstr ""
 
 msgid ""
-"Indicate the prerequisite abilities, which must be possessed before one can "
+"Enter the prerequisite abilities, which must be possessed before one can "
 "acquire this"
 msgstr ""
 
 msgid ""
-"Indicate the character options, which must be selected to make the ability "
+"Enter the character options, which must be selected to make the ability "
 "available"
 msgstr ""
 
@@ -4261,7 +4262,7 @@ msgstr ""
 msgid "Printable"
 msgstr ""
 
-msgid "Indicate whether the field is printed in PDF generations"
+msgid "Enter whether the field is printed in PDF generations"
 msgstr ""
 
 msgid "Applicable"
@@ -4287,8 +4288,7 @@ msgid "Prerequisites"
 msgstr ""
 
 msgid ""
-"Indicates other options that must be selected for this option to be "
-"selectable"
+"Enter other options that must be selected for this option to be selectable"
 msgstr ""
 
 msgid ""
@@ -4336,7 +4336,7 @@ msgstr ""
 msgid "Giftable"
 msgstr ""
 
-msgid "Indicates whether the option can be included in the gifted signups"
+msgid "Enter whether the option can be included in the gifted signups"
 msgstr ""
 
 msgid "Select which form this question belongs to"
@@ -4477,19 +4477,19 @@ msgstr ""
 msgid "Legal Gender"
 msgstr ""
 
-msgid "Indicate your legal gender as it appears on official documents."
+msgid "Enter your legal gender as it appears on official documents."
 msgstr ""
 
 msgid "Pronouns"
 msgstr ""
 
-msgid "Indicate the pronouns you wish to be used to refer to you"
+msgid "Enter the pronouns you want others to use when referring to you"
 msgstr ""
 
 msgid "Nationality"
 msgstr ""
 
-msgid "Indicate the country of which you are a citizen"
+msgid "Enter the country of which you are a citizen"
 msgstr ""
 
 msgid "Phone contact"
@@ -4535,8 +4535,8 @@ msgid "Document type"
 msgstr ""
 
 msgid ""
-"Indicates a type of identification document issued by the nation in which "
-"you reside"
+"Enter a type of identification document issued by the nation in which you "
+"reside"
 msgstr ""
 
 msgid "Document number"
@@ -4726,7 +4726,7 @@ msgid "Text"
 msgstr ""
 
 msgid ""
-"Write your question, request or doubt here. We will be happy to answer you!"
+"Write your question, request, or concern here. We will be happy to help!"
 msgstr ""
 
 msgid "Attachment"
@@ -5030,7 +5030,7 @@ msgstr ""
 msgid "Deadline date"
 msgstr ""
 
-msgid "Indicate the tickets for which it is active"
+msgid "Enter the tickets for which it is active"
 msgstr ""
 
 msgid "Surcharge applied to the ticket"
@@ -5062,12 +5062,12 @@ msgstr ""
 msgid "If you wish, indicate a pronoun for your character"
 msgstr ""
 
-msgid "Indicate a song you want to dedicate to your character"
+msgid "Enter a song you want to dedicate to your character"
 msgstr ""
 
 msgid ""
-"Indicates public information about your character, which will be shown to "
-"all other participants"
+"Enter public information about your character, which will be shown to all "
+"other participants"
 msgstr ""
 
 msgid ""
@@ -5112,8 +5112,7 @@ msgstr ""
 msgid "Approved"
 msgstr ""
 
-msgid ""
-"Indicates the title of the character - it will be shown along with the name"
+msgid "Enter the title of the character - it will be shown along with the name"
 msgstr ""
 
 msgid ""
@@ -5406,7 +5405,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-msgid "Input an element name to insert their reference code"
+msgid "Enter an element name to insert its reference code"
 msgstr ""
 
 msgid "Select a character to add a new relationship"
@@ -5448,10 +5447,10 @@ msgstr ""
 msgid "Confirmation delete"
 msgstr ""
 
-msgid "Attention! The form contains errors in the fields:"
+msgid "Attention: the form contains errors in the following fields:"
 msgstr ""
 
-msgid "These fields are mandatory"
+msgid "These fields are required"
 msgstr ""
 
 msgid "Drag to reorder"
@@ -5467,7 +5466,7 @@ msgstr ""
 msgid "options: <span class=\"count\"></span> / %(max)s"
 msgstr ""
 
-msgid "After confirmation, add another"
+msgid "After saving, add another"
 msgstr ""
 
 msgid "The form is saved every 30 seconds."
@@ -5495,7 +5494,7 @@ msgstr ""
 msgid "Includes membership fee"
 msgstr ""
 
-msgid "(click on image to enlarge)"
+msgid "(click the image to enlarge it)"
 msgstr ""
 
 msgid "Select year"
@@ -5541,11 +5540,11 @@ msgstr ""
 msgid "In the text refer to the other characters solely by their number:"
 msgstr ""
 
-msgid "if the character belongs to this element."
+msgid "If the character belongs to this element."
 msgstr ""
 
 msgid ""
-"if the character does NOT belong to this element, but is only referenced."
+"If the character does NOT belong to this element but is only referenced."
 msgstr ""
 
 msgid ""
@@ -5588,8 +5587,8 @@ msgid "whether the character is NOT aware of the identity of the other trait."
 msgstr ""
 
 msgid ""
-"(You can also refer to traits from other quests, but be careful that  are "
-"always of the same macrotype)."
+"(You can also refer to traits from other quests, but make sure they are "
+"always of the same macrotype.)"
 msgstr ""
 
 msgid "Item:"
@@ -5646,13 +5645,13 @@ msgstr ""
 msgid "Maximum"
 msgstr ""
 
-msgid "An error occurred while elements reordering"
+msgid "An error occurred while reordering elements"
 msgstr ""
 
 msgid "An error occurred while deleting"
 msgstr ""
 
-msgid "Warning. The form contains errors to the fields"
+msgid "Warning: the form contains errors in the fields"
 msgstr ""
 
 msgid "Choose the payment method:"
@@ -5664,7 +5663,7 @@ msgstr ""
 msgid "You are about to make a payment of:"
 msgstr ""
 
-msgid "Follow the link below to complete your payment on the Paypal platform."
+msgid "Follow the link below to complete your payment on the PayPal platform."
 msgstr ""
 
 msgid "Experimental"
@@ -6977,7 +6976,7 @@ msgstr ""
 msgid "The trash is empty"
 msgstr ""
 
-msgid "Url Shortner"
+msgid "URL shorteners"
 msgstr ""
 
 msgid "External link"
@@ -7172,10 +7171,10 @@ msgid ""
 "communication preference"
 msgstr ""
 
-msgid "All comunications"
+msgid "All communications"
 msgstr ""
 
-msgid "No comunications"
+msgid "No communications"
 msgstr ""
 
 msgid "Questions"
@@ -7212,7 +7211,7 @@ msgstr ""
 msgid "Give a new answer"
 msgstr ""
 
-msgid "Comunications"
+msgid "Event communications"
 msgstr ""
 
 msgid "Read mail"
@@ -7427,7 +7426,7 @@ msgstr ""
 msgid "First page"
 msgstr ""
 
-msgid "Previus page"
+msgid "Previous page"
 msgstr ""
 
 #, python-format
@@ -8038,7 +8037,7 @@ msgstr ""
 msgid "Close the collection"
 msgstr ""
 
-msgid "Number of partecipants:"
+msgid "Number of participants:"
 msgstr ""
 
 msgid "Total collection:"
@@ -9017,7 +9016,7 @@ msgstr ""
 msgid "Show closed"
 msgstr ""
 
-msgid "Rensponsable"
+msgid "Responsible"
 msgstr ""
 
 msgid ""
@@ -9974,10 +9973,12 @@ msgstr ""
 msgid "Only some of the platform features are activated."
 msgstr ""
 
-msgid "Wanna try other demos, or are you ready to create your organization?"
+msgid ""
+"Would you like to try other demos, or are you ready to create your "
+"organization?"
 msgstr ""
 
-msgid "Attention! The form contains errors in the fields"
+msgid "Attention: the form contains errors in the following fields."
 msgstr ""
 
 msgid "Please correct the error below."
@@ -10059,7 +10060,7 @@ msgstr ""
 msgid "Allows you to copy any element directly from another event"
 msgstr ""
 
-msgid "Now you can copy elements from an other event"
+msgid "Now you can copy elements from another event."
 msgstr ""
 
 msgid ""
@@ -10180,7 +10181,7 @@ msgid ""
 "the association freely"
 msgstr ""
 
-msgid "Now participants can submit donation, and you can review them"
+msgid "Now participants can submit donations, and you can review them."
 msgstr ""
 
 msgid ""
@@ -10188,7 +10189,7 @@ msgid ""
 "newsletter preferences"
 msgstr ""
 
-msgid "Now you can review users mailing list"
+msgid "Now you can review users' mailing lists."
 msgstr ""
 
 msgid "Utility"
@@ -10199,7 +10200,7 @@ msgid ""
 "available either to staff or to participants via secret external links"
 msgstr ""
 
-msgid "Now you can host files in the platform"
+msgid "Now you can host files on the platform."
 msgstr ""
 
 msgid "Character customization"
@@ -10305,7 +10306,7 @@ msgstr ""
 msgid "Now you can create badges"
 msgstr ""
 
-msgid "Enables warehouse management for organization warehouse management"
+msgid "Enables warehouse management for the organization."
 msgstr ""
 
 msgid "Now you can add warehouse containers and items"
@@ -10372,7 +10373,7 @@ msgid ""
 "displaying trend graphs over time"
 msgstr ""
 
-msgid "Now you can review the historical accounting informations"
+msgid "Now you can review historical accounting information."
 msgstr ""
 
 msgid ""
@@ -10477,7 +10478,7 @@ msgstr ""
 msgid "Enables payment processing, specifying which payment methods to accept"
 msgstr ""
 
-msgid "Now you can set the payment methods settings"
+msgid "Now you can configure the payment methods."
 msgstr ""
 
 msgid ""
@@ -10507,7 +10508,7 @@ msgstr ""
 msgid "Allows participants to create and modify their own characters freely"
 msgstr ""
 
-msgid "Now you can set settings for character creation by players"
+msgid "Now you can configure character creation by players."
 msgstr ""
 
 msgid "Player relationships"
@@ -10535,7 +10536,7 @@ msgid ""
 "and optionally assigns a result"
 msgstr ""
 
-msgid "Now you can se the special page options"
+msgid "Now you can configure the special page options."
 msgstr ""
 
 msgid "URL shortener"
@@ -10544,7 +10545,7 @@ msgstr ""
 msgid "Adds a page where you can define shorter URLs for long links"
 msgstr ""
 
-msgid "Now you can create url shortners"
+msgid "Now you can create URL shorteners."
 msgstr ""
 
 msgid ""
@@ -10593,7 +10594,7 @@ msgstr ""
 msgid "Enables a volunteer register, as required by Italian RUNTS regulations"
 msgstr ""
 
-msgid "Now you can review the volunteers registry"
+msgid "Now you can review the volunteer registry."
 msgstr ""
 
 msgid "Taxes"
@@ -10646,7 +10647,7 @@ msgstr ""
 msgid "Check the validity of the fiscal code"
 msgstr ""
 
-msgid "Now you can peform the fiscal code validity check"
+msgid "Now you can perform the fiscal code validity check."
 msgstr ""
 
 msgid "Manage events"
@@ -10724,7 +10725,7 @@ msgstr ""
 msgid "Now players can create guilds for the event"
 msgstr ""
 
-msgid "Manage the organization main settings"
+msgid "Manage the organization's main settings"
 msgstr ""
 
 msgid "Assign roles to collaborators and grant access to specific functions"
@@ -10779,7 +10780,7 @@ msgstr ""
 msgid "Customize textual elements of the organization interface"
 msgstr ""
 
-msgid "Manage url shortner"
+msgid "Manage URL shortener"
 msgstr ""
 
 msgid "Containers"
@@ -10816,7 +10817,7 @@ msgstr ""
 msgid "Manage participant questions and answer them"
 msgstr ""
 
-msgid "Displays list of emails of users"
+msgid "Displays a list of users' email addresses"
 msgstr ""
 
 msgid "Volunteers"
@@ -11028,7 +11029,7 @@ msgstr ""
 msgid "Manages registration cancellations"
 msgstr ""
 
-msgid "Displays list of emails of signed-up participants"
+msgid "Displays a list of signed-up participants' email addresses"
 msgstr ""
 
 msgid "Manages and assigns tasks to characters"
@@ -11052,7 +11053,7 @@ msgstr ""
 msgid "PDF"
 msgstr ""
 
-msgid "Set the options for the automatic PDF generation of characters sheets"
+msgid "Set the options for automatically generating character-sheet PDFs"
 msgstr ""
 
 msgid "Handout Models"
@@ -11067,7 +11068,7 @@ msgstr ""
 msgid "Manage the types of character abilities"
 msgstr ""
 
-msgid "Manage the character abilities purchaseable with experience"
+msgid "Manage the character abilities purchasable with experience points"
 msgstr ""
 
 msgid "Manage experience awarded to characters"
@@ -11082,7 +11083,7 @@ msgstr ""
 msgid "Manage experience modifiers"
 msgstr ""
 
-msgid "Manage experience criterions"
+msgid "Manage experience criteria"
 msgstr ""
 
 msgid "Systems"
@@ -11106,7 +11107,7 @@ msgstr ""
 msgid "Manage issues during the event"
 msgstr ""
 
-msgid "Select randomly lottery tickets to upgrade"
+msgid "Randomly select lottery tickets to upgrade"
 msgstr ""
 
 msgid "Manage quiz-style workshops"
@@ -11115,7 +11116,7 @@ msgstr ""
 msgid "Modules"
 msgstr ""
 
-msgid "Manages modules for workshops"
+msgid "Manage modules for workshops"
 msgstr ""
 
 msgid "Manage questions for workshops"
@@ -11145,7 +11146,7 @@ msgstr ""
 msgid "Read the writing elements"
 msgstr ""
 
-msgid "Manage area of the event"
+msgid "Manage event areas"
 msgstr ""
 
 msgid "Checks"
@@ -11581,9 +11582,9 @@ msgid ""
 msgstr ""
 
 msgid ""
-"You are now seeing the registration form as a participant would; Select a "
+"You are now seeing the registration form as a participant would. Select a "
 "ticket, fill in the required fields, and complete the registration to "
-"experience the full flow"
+"experience the full flow."
 msgstr ""
 
 msgid ""
@@ -11593,7 +11594,7 @@ msgstr ""
 
 msgid ""
 "Edit an existing registration and assign a character to the participant "
-"using the dropdown selection"
+"using the drop-down list."
 msgstr ""
 
 msgid "Tutorial"

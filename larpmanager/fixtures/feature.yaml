@@ -35,7 +35,7 @@
     overall: false
     placeholder: false
     order: 10
-    after_text: Now you can copy elements from an other event
+    after_text: Now you can copy elements from another event.
     after_link: orga_copy
     hidden: false
     module: miscellany
@@ -245,7 +245,7 @@
     overall: true
     placeholder: false
     order: 20
-    after_text: Now participants can submit donation, and you can review them
+    after_text: Now participants can submit donations, and you can review them.
     after_link: exe_donations
     hidden: false
     module: accounting
@@ -259,7 +259,7 @@
     overall: true
     placeholder: false
     order: 60
-    after_text: Now you can review users mailing list
+    after_text: Now you can review users' mailing lists.
     after_link: exe_newsletter
     hidden: false
     module: users
@@ -273,7 +273,7 @@
     overall: false
     placeholder: false
     order: 30
-    after_text: Now you can host files in the platform
+    after_text: Now you can host files on the platform.
     after_link: orga_utils
     hidden: false
     module: miscellany
@@ -451,7 +451,7 @@
 - model: larpmanager.feature
   fields:
     name: Warehouse
-    descr: Enables warehouse management for organization warehouse management
+    descr: Enables warehouse management for the organization.
     slug: warehouse
     overall: true
     placeholder: false
@@ -554,7 +554,7 @@
     overall: true
     placeholder: false
     order: 140
-    after_text: Now you can review the historical accounting informations
+    after_text: Now you can review historical accounting information.
     after_link: exe_accounting_rec
     hidden: false
     module: accounting
@@ -737,7 +737,7 @@
     overall: true
     placeholder: false
     order: 10
-    after_text: Now you can set the payment methods settings
+    after_text: Now you can configure the payment methods.
     after_link: exe_methods
     hidden: false
     module: accounting
@@ -792,7 +792,7 @@
     overall: false
     placeholder: false
     order: 30
-    after_text: Now you can set settings for character creation by players
+    after_text: Now you can configure character creation by players.
     after_link: config/user_character
     hidden: false
     module: event
@@ -849,7 +849,7 @@
     overall: true
     placeholder: false
     order: 9999
-    after_text: Now you can se the special page options
+    after_text: Now you can configure the special page options.
     after_link: config/centauri
     hidden: false
     module: italy
@@ -862,7 +862,7 @@
     overall: true
     placeholder: false
     order: 10
-    after_text: Now you can create url shortners
+    after_text: Now you can create URL shorteners.
     after_link: exe_urlshortner
     hidden: false
     module: miscellany
@@ -944,7 +944,7 @@
     overall: true
     placeholder: false
     order: 20
-    after_text: Now you can review the volunteers registry
+    after_text: Now you can review the volunteer registry.
     after_link: exe_volunteer_registry
     hidden: false
     module: italy
@@ -1039,7 +1039,7 @@
     overall: true
     placeholder: false
     order: 30
-    after_text: Now you can peform the fiscal code validity check
+    after_text: Now you can perform the fiscal code validity check.
     after_link: exe_membership_check
     hidden: false
     module: italy

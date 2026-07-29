@@ -691,18 +691,18 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("writing_cover", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Hide")
-        config_help_text = _("Enables field 'hide', to be able to hide writing element from participants")
+        config_help_text = _("Enables the 'hide' field, which hides a writing element from participants.")
         self.add_configs("writing_hide", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Locked")
         config_help_text = _(
-            "Enables field 'locked', to prevent players from viewing the full character sheet even when assigned"
+            "Enables the 'locked' field, which prevents players from viewing the full character sheet even when it is assigned."
         )
         self.add_configs("writing_locked", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Assignment")
         config_help_text = _(
-            "Enables field 'assigned', to track which staff member is responsible for each writing element",
+            "Enables the 'assigned' field, which tracks the staff member responsible for each writing element.",
         )
         self.add_configs("writing_assigned", ConfigType.BOOL, config_label, config_help_text)
 
@@ -718,7 +718,7 @@ class OrgaConfigForm(ConfigForm):
         """Configure writing behavior options (editor, tools, access)."""
         if "relationships" in self.params.get("features"):
             config_label = _("Relationships max length")
-            config_help_text = _("Set maximum length on character relationships (default 10000 characters)")
+            config_help_text = _("Set the maximum length of character relationships (default: 10,000 characters).")
             self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
 
             config_label = _("Disable auto relationships")

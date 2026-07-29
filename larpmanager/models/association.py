@@ -132,7 +132,7 @@ class Association(UuidMixin, BaseModel):
         blank=True,
         help_text=_("Your organization's logo")
         + " ("
-        + _("upload any size, it will be automatically optimized; square images work best")
+        + _("Upload an image of any size; it will be automatically optimized. Square images work best.")
         + ")",
     )
 

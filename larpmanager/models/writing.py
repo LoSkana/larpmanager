@@ -157,7 +157,7 @@ class Character(Writing):
     title = models.CharField(
         max_length=100,
         blank=True,
-        help_text=_("Indicates the title of the character - it will be shown along with the name"),
+        help_text=_("Enter the title of the character - it will be shown along with the name"),
     )
 
     mirror = models.OneToOneField(

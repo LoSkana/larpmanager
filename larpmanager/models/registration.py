@@ -254,7 +254,7 @@ class RegistrationInstallment(UuidMixin, OrderMixin, BaseModel):
         related_name="installments",
         blank=True,
         verbose_name=_("Tickets"),
-        help_text=_("Indicate the tickets for which it is active"),
+        help_text=_("Enter the tickets for which it is active"),
     )
 
     class Meta:
@@ -484,7 +484,7 @@ class RegistrationCharacterRel(BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Song"),
-        help_text=_("Indicate a song you want to dedicate to your character"),
+        help_text=_("Enter a song you want to dedicate to your character"),
     )
 
     custom_public = models.TextField(
@@ -492,7 +492,7 @@ class RegistrationCharacterRel(BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Public"),
-        help_text=_("Indicates public information about your character, which will be shown to all other participants"),
+        help_text=_("Enter public information about your character, which will be shown to all other participants"),
     )
 
     custom_private = models.TextField(

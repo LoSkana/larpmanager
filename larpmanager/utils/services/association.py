@@ -233,13 +233,13 @@ ACTIVATION_HINTS: dict[str, Any] = {
         "Add a question to your registration form by clicking 'New'; for example, ask for dietary requirements or emergency contact details"
     ),
     "orga_registrations": lambda: _(
-        "You are now seeing the registration form as a participant would; Select a ticket, fill in the required fields, and complete the registration to experience the full flow"
+        "You are now seeing the registration form as a participant would. Select a ticket, fill in the required fields, and complete the registration to experience the full flow."
     ),
     "orga_characters": lambda: _(
         "Create a character by clicking 'New'; give it a name and fill in the character details, then save"
     ),
     "orga_casting": lambda: _(
-        "Edit an existing registration and assign a character to the participant using the dropdown selection"
+        "Edit an existing registration and assign a character to the participant using the drop-down list."
     ),
 }
 

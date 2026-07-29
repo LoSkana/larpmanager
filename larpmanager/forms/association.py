@@ -441,36 +441,36 @@ class ExeConfigForm(ConfigForm):
         self.set_section("interface", _("Interface"))
 
         past_events_label = _("Past events")
-        past_events_help_text = _("If checked: shows a link in the calendar to past events")
+        past_events_help_text = _("If selected, a link to past events is shown in the calendar")
         self.add_configs("calendar_past_events", ConfigType.BOOL, past_events_label, past_events_help_text)
 
         if self.params.get("skin_id") == 1:
             field_label = _("Characters shortcut")
-            field_help_text = _("If checked: shows a link in the sidebar to view all user's characters")
+            field_help_text = _("If selected, the sidebar shows a link to view all of a user's characters")
             self.add_configs("user_characters_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
         field_label = _("Registrations shortcut")
-        field_help_text = _("If checked: shows a link in the sidebar to view all user's registrations")
+        field_help_text = _("If selected, the sidebar shows a link to view all of a user's registrations")
         self.add_configs("user_registrations_shortcut", ConfigType.BOOL, field_label, field_help_text)
 
         website_label = _("Website")
-        website_help_text = _("If checked: shows the website for each event")
+        website_help_text = _("If selected, the website is shown for each event")
         self.add_configs("calendar_website", ConfigType.BOOL, website_label, website_help_text)
 
         location_label = _("Where")
-        location_help_text = _("If checked: shows the position for each event")
+        location_help_text = _("If selected, the location is shown for each event")
         self.add_configs("calendar_where", ConfigType.BOOL, location_label, location_help_text)
 
         authors_label = _("Authors")
-        authors_help_text = _("If checked: shows the list of authors for each event")
+        authors_help_text = _("If selected, the list of authors is shown for each event")
         self.add_configs("calendar_authors", ConfigType.BOOL, authors_label, authors_help_text)
 
         genre_label = pgettext("event", "Genre")
-        genre_help_text = pgettext("event", "If checked: shows the genre for each event")
+        genre_help_text = pgettext("event", "If selected, the genre is shown for each event")
         self.add_configs("calendar_genre", ConfigType.BOOL, genre_label, genre_help_text)
 
         tagline_label = _("Tagline")
-        tagline_help_text = _("If checked: shows the tagline for each event")
+        tagline_help_text = _("If selected, the tagline is shown for each event")
         self.add_configs("calendar_tagline", ConfigType.BOOL, tagline_label, tagline_help_text)
 
         delete_label = _("Bulk delete")
@@ -504,24 +504,24 @@ class ExeConfigForm(ConfigForm):
 
         # Configure new signup notification toggle
         new_signup_label = _("New signup")
-        new_signup_help_text = _("If checked: Send an email notification to the organisers for new signups")
+        new_signup_help_text = _("If selected, send an email notification to organizers for new signups")
         self.add_configs("mail_signup_new", ConfigType.BOOL, new_signup_label, new_signup_help_text)
 
         # Configure signup update notification setting
         signup_update_label = _("Signup update")
-        signup_update_help_text = _("If checked: Send an email notification to the organisers for updated signups")
+        signup_update_help_text = _("If selected, send an email notification to organizers for updated signups")
         self.add_configs("mail_signup_update", ConfigType.BOOL, signup_update_label, signup_update_help_text)
 
         # Configure signup cancellation notification option
         signup_cancellation_label = _("Signup cancellation")
         signup_cancellation_help_text = _(
-            "If checked: Send a notification email to the organisers for cancellation of registration",
+            "If selected, send organizers a notification email when a registration is cancelled.",
         )
         self.add_configs("mail_signup_del", ConfigType.BOOL, signup_cancellation_label, signup_cancellation_help_text)
 
         # Configure payment notification toggle
         payment_received_label = _("Payments received")
-        payment_received_help_text = _("If checked: Send an email to the organisers for each payment received")
+        payment_received_help_text = _("If selected, send organizers an email for each payment received")
         self.add_configs("mail_payment", ConfigType.BOOL, payment_received_label, payment_received_help_text)
 
         if "custom_mail" in self.params["features"]:
@@ -587,7 +587,7 @@ class ExeConfigForm(ConfigForm):
             self.set_section("warehouse", _("Warehouse"))
 
             quantity_label = _("Quantity")
-            quantity_help_text = _("If checked: Add a field to track items quantity")
+            quantity_help_text = _("If selected, add a field to track item quantities")
             self.add_configs("warehouse_quantity", ConfigType.BOOL, quantity_label, quantity_help_text)
 
     def set_config_members(self) -> None:
@@ -630,7 +630,7 @@ class ExeConfigForm(ConfigForm):
 
             # Toggle voting availability
             field_label = _("Active")
-            field_help_text = _("If checked: members can vote")
+            field_help_text = _("If selected, members can vote")
             self.add_configs("vote_open", ConfigType.BOOL, field_label, field_help_text)
 
             # List of candidates for election
@@ -742,7 +742,7 @@ class ExeConfigForm(ConfigForm):
             # Manual payment receipt requirement
             label_require_payment_receipt = _("Require receipt for manual payments")
             help_text_require_payment_receipt = _(
-                "If checked: Participants must provide a receipt/invoice for manual payments",
+                "If selected, participants must provide a receipt or invoice for manual payments.",
             )
             self.add_configs(
                 "payment_require_receipt",
@@ -862,13 +862,13 @@ class ExeConfigForm(ConfigForm):
             "publication_crew",
             ConfigType.BOOL,
             _("Publish staff"),
-            _("If checked: publish staff members"),
+            _("If selected, publish staff members"),
         )
         self.add_configs(
             "publication_cast",
             ConfigType.BOOL,
             _("Publish players"),
-            _("If checked: publish registered players"),
+            _("If selected, publish registered players"),
         )
 
         field_label = "ILDB - API key"

@@ -68,7 +68,7 @@ class PaymentInvoice(UuidMixin, BaseModel):
         null=True,
         blank=True,
         verbose_name=_("Bank Statement"),
-        help_text=_("Statement issued by the bank as proof of the issuance of the transfer (as pdf file)"),
+        help_text=_("Statement issued by the bank as proof of the transfer (as a PDF file)"),
     )
 
     text = models.TextField(null=True, blank=True)
@@ -270,15 +270,15 @@ class ElectronicInvoice(UuidMixin, BaseModel):
 class ExpenseChoices(models.TextChoices):
     """Choices for ExpenseChoices."""
 
-    SCENOGR = "a", _("Set design - staging, materials")
-    COST = "b", _("Costumes - make up, cloth, armor")
-    PROP = "c", _("Prop - weapons, props")
-    ELECTR = "d", _("Electronics - computers, hitech, lights")
-    PROMOZ = "e", _("Promotion - site, advertising")
-    TRANS = "f", _("Transportation - gas, highway")
-    KITCH = "g", _("Kitchen - food, tableware")
-    LOCAT = "h", _("Venue - rent, utilities, and accommodation")
-    SEGRET = "i", _("Secretarial - stationery, printing")
+    SCENOGR = "a", _("Set design: staging and materials")
+    COST = "b", _("Costumes: makeup, clothing, and armor")
+    PROP = "c", _("Props: weapons and accessories")
+    ELECTR = "d", _("Electronics: computers, high-tech equipment, and lighting")
+    PROMOZ = "e", _("Promotion: website and advertising")
+    TRANS = "f", _("Transportation: fuel and highway tolls")
+    KITCH = "g", _("Kitchen: food and tableware")
+    LOCAT = "h", _("Venue: rent, utilities, and accommodation")
+    SEGRET = "i", _("Secretarial: stationery and printing")
     OTHER = "j", _("Other")
 
 
@@ -427,7 +427,7 @@ class AccountingItemOther(AccountingItem):
         # Determine base string based on other type
         s = _("Credit assignment")
         if self.oth == OtherChoices.TOKEN:
-            s = _("Tokens assignment")
+            s = _("Token assignment")
         elif self.oth == OtherChoices.REFUND:
             s = _("Refund")
 
@@ -487,14 +487,14 @@ class AccountingItemExpense(AccountingItem):
         max_length=1,
         choices=ExpenseChoices.choices,
         verbose_name=_("Type"),
-        help_text=_("Indicate the outflow category"),
+        help_text=_("Enter the outflow category"),
     )
 
     balance = models.CharField(
         max_length=1,
         choices=BalanceChoices.choices,
         verbose_name=_("Balance"),
-        help_text=_("Indicate how spending is allocated at the budget level"),
+        help_text=_("Enter how spending is allocated in the budget"),
         null=True,
         blank=False,
     )
@@ -522,7 +522,7 @@ class AccountingItemFlow(AccountingItem):
     payment_date = models.DateField(
         null=True,
         verbose_name=_("Payment date"),
-        help_text=_("Indicate the exact date in which the payment has been performed"),
+        help_text=_("Enter the exact date on which the payment was made"),
     )
 
     def download(self) -> str:
@@ -540,14 +540,14 @@ class AccountingItemOutflow(AccountingItemFlow):
         max_length=1,
         choices=ExpenseChoices.choices,
         verbose_name=_("Type"),
-        help_text=_("Indicate the outflow category"),
+        help_text=_("Enter the outflow category"),
     )
 
     balance = models.CharField(
         max_length=1,
         choices=BalanceChoices.choices,
         verbose_name=_("Balance"),
-        help_text=_("Indicate how spending is allocated at the budget level"),
+        help_text=_("Enter how spending is allocated in the budget"),
         null=True,
         blank=False,
     )
@@ -576,7 +576,7 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
         Run,
         related_name="discounts",
         blank=True,
-        help_text=_("Indicate the sessions for which the discount is active"),
+        help_text=_("Select the sessions for which the discount is active"),
         verbose_name=_("Sessions"),
     )
 
@@ -589,7 +589,7 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
     )
 
     max_redeem = models.IntegerField(
-        help_text=_("Indicate the maximum number of such discounts that can be requested (0 for infinite uses)"),
+        help_text=_("Enter the maximum number of these discounts that can be requested (0 for unlimited uses)"),
     )
 
     cod = models.CharField(
@@ -614,7 +614,7 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
 
     visible = models.BooleanField(
         default=False,
-        help_text=_("Indicates whether the discount is visible and usable by participants"),
+        help_text=_("Enter whether the discount is visible and usable by participants"),
     )
 
     only_reg = models.BooleanField(
@@ -819,7 +819,7 @@ class RefundRequest(UuidMixin, BaseModel):
         decimal_places=2,
         default=0,
         verbose_name=_("Refund"),
-        help_text=_("Indicates the amount of reimbursement desired"),
+        help_text=_("Enter the amount of reimbursement desired"),
         validators=[MinValueValidator(Decimal("0.01"))],
     )
 

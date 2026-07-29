@@ -121,7 +121,7 @@ class AbilityExp(UuidMixin, OrderMixin, BaseConceptModel):
 
     visible = models.BooleanField(
         default=True,
-        help_text=_("Indicate whether the ability is visible to users, and can be freely purchased"),
+        help_text=_("Enter whether the ability is visible to users, and can be freely purchased"),
     )
 
     prerequisites = models.ManyToManyField(
@@ -130,7 +130,7 @@ class AbilityExp(UuidMixin, OrderMixin, BaseConceptModel):
         blank=True,
         symmetrical=False,
         verbose_name=_("Pre-requisites"),
-        help_text=_("Indicate the prerequisite abilities, which must be possessed before one can acquire this"),
+        help_text=_("Enter the prerequisite abilities, which must be possessed before one can acquire this"),
     )
 
     requirements = models.ManyToManyField(
@@ -138,7 +138,7 @@ class AbilityExp(UuidMixin, OrderMixin, BaseConceptModel):
         related_name="abilities",
         blank=True,
         verbose_name=_("Requirements"),
-        help_text=_("Indicate the character options, which must be selected to make the ability available"),
+        help_text=_("Enter the character options, which must be selected to make the ability available"),
     )
 
     characters = models.ManyToManyField(Character, related_name="exp_ability_list", blank=True)
