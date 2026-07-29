@@ -4874,6 +4874,9 @@ msgstr "Erstattung bearbeitet"
 msgid "Select your preferences"
 msgstr "Wähle deine Einstellungen aus"
 
+msgid "Separate membership fee"
+msgstr "Separater Mitgliedsbeitrag"
+
 msgid "Show answered questions"
 msgstr "Beantwortete Fragen anzeigen"
 
@@ -11733,6 +11736,13 @@ msgid ""
 msgstr ""
 "Wenn aktiviert, wird keine Benachrichtigung an den Teilnehmenden gesendet, "
 "wenn ein Charakter zugewiesen wird."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Wenn aktiviert, wird der jährliche Mitgliedsbeitrag separat von der "
+"Anmeldegebühr für die Veranstaltung bezahlt."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

@@ -691,9 +691,7 @@ class ExeConfigForm(ConfigForm):
         self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
 
         field_label = _("Separate membership fee")
-        field_help_text = _(
-            "If enabled, the annual membership fee is paid separately from the event registration fee.",
-        )
+        field_help_text = _("If enabled, the annual membership fee is paid separately from the event registration fee.")
         self.add_configs("membership_fee_separated", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_accounting_1(self) -> None:

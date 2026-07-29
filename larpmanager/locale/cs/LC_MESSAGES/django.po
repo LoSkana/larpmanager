@@ -4874,6 +4874,9 @@ msgstr "Proplacení bylo zpracováno"
 msgid "Select your preferences"
 msgstr "Vyber si své preference"
 
+msgid "Separate membership fee"
+msgstr "Samostatný členský poplatek"
+
 msgid "Show answered questions"
 msgstr "Zobrazit zodpovězené otázky"
 
@@ -11234,6 +11237,13 @@ msgid ""
 " is assigned."
 msgstr ""
 "Pokud je povoleno, neodešle účastníkovi oznámení při přiřazení postavy."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Pokud je povoleno, roční členský poplatek se platí zvlášť od poplatku za "
+"registraci na akci."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

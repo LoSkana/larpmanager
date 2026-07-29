@@ -4874,6 +4874,9 @@ msgstr "Terugbetaling verwerkt"
 msgid "Select your preferences"
 msgstr "Kies je voorkeuren"
 
+msgid "Separate membership fee"
+msgstr "Afzonderlijk lidmaatschapsgeld"
+
 msgid "Show answered questions"
 msgstr "Beantwoorde vragen weergeven"
 
@@ -11615,6 +11618,13 @@ msgid ""
 msgstr ""
 "Indien ingeschakeld, ontvangt de deelnemer geen melding wanneer een "
 "personage wordt toegewezen."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Indien ingeschakeld, wordt het jaarlijkse lidmaatschapsgeld apart van het "
+"inschrijfgeld voor het evenement betaald."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

@@ -4874,6 +4874,9 @@ msgstr "Zwrot kosztów został zrealizowany"
 msgid "Select your preferences"
 msgstr "Wybierz swoje preferencje"
 
+msgid "Separate membership fee"
+msgstr "Oddzielna opłata członkowska"
+
 msgid "Show answered questions"
 msgstr "Pokaż pytania, na które udzielono odpowiedzi"
 
@@ -11482,6 +11485,13 @@ msgid ""
 msgstr ""
 "Jeśli włączone, nie wysyła powiadomienia do uczestnika po przypisaniu "
 "postaci."
+
+msgid ""
+"If enabled, the annual membership fee is paid separately from the event "
+"registration fee."
+msgstr ""
+"Jeśli włączone, roczna opłata członkowska jest płatna oddzielnie od opłaty "
+"za rejestrację na wydarzenie."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "
