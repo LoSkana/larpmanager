@@ -747,7 +747,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
             except Exception as exp:
                 # Log the full traceback and show error to user
                 logger.exception("Upload error")
-                messages.error(request, _("Unknow error on upload") + f": {exp}")
+                messages.error(request, _("Unknown error while uploading.") + f": {exp}")
 
             # Redirect back to the main page on error or completion
             return HttpResponseRedirect(redr)

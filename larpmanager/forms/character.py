@@ -536,7 +536,7 @@ class OrgaCharacterForm(CharacterForm):
             self.fields[plot_field_name] = forms.CharField(
                 widget=WritingTinyMCE(),
                 label=plot_name,
-                help_text=_("This text will be added to the sheet, in the plot paragraph %(name)s")
+                help_text=_("This text will be added to the %(name)s plot paragraph in the sheet.")
                 % {"name": plot_name},
                 required=False,
             )

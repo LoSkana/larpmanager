@@ -120,18 +120,18 @@ class EventCharactersPdfForm(ConfigForm):
 
         # Add CSS configuration for PDF styling
         # This allows users to customize the visual appearance of generated PDFs
-        self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("Insert the css code to customize the pdf printing"))
+        self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("Enter the CSS code to customize PDF printing."))
 
         # Add header content configuration
         # Users can define custom HTML content to appear at the top of each PDF page
         self.add_configs(
-            "header_content", ConfigType.TEXTAREA, _("Header HTML"), _("Insert the html code for the header")
+            "header_content", ConfigType.TEXTAREA, _("Header HTML"), _("Enter the HTML code for the header.")
         )
 
         # Add footer content configuration
         # Users can define custom HTML content to appear at the bottom of each PDF page
         self.add_configs(
-            "footer_content", ConfigType.TEXTAREA, _("Footer HTML"), _("Insert the html code for the footer")
+            "footer_content", ConfigType.TEXTAREA, _("Footer HTML"), _("Enter the HTML code for the footer.")
         )
 
 
@@ -376,7 +376,9 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("show_shortcuts_mobile", ConfigType.BOOL, show_shortcuts_label, show_shortcuts_help_text)
 
         export_label = _("Export")
-        export_help_text = _("If checked: allow to export characters and registration in a easily readable page")
+        export_help_text = _(
+            "If checked, allows characters and registrations to be exported to an easily readable page."
+        )
         self.add_configs("show_export", ConfigType.BOOL, export_label, export_help_text)
 
         limitations_label = _("Limitations")
@@ -396,7 +398,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_section("email", _("Email notifications"))
         disable_assignment_label = _("Disable assignment")
         disable_assignment_help_text = _(
-            "If checked: Does not send communication to the participant when the character is assigned",
+            "If checked, does not send a notification to the participant when a character is assigned.",
         )
         self.add_configs("mail_character", ConfigType.BOOL, disable_assignment_label, disable_assignment_help_text)
 
@@ -561,7 +563,7 @@ class OrgaConfigForm(ConfigForm):
         # Configure staff visibility permissions for registration questions
         allowed_label = _("Allowed")
         allowed_help_text = _(
-            "If checked, enables to set for each registration question the list of staff members allowed to see it's answers from the participants",
+            "If checked, lets you set which staff members may see participants' answers to each registration question.",
         )
         self.add_configs("registration_reg_que_allowed", ConfigType.BOOL, allowed_label, allowed_help_text)
 
@@ -656,11 +658,11 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("character_form_wri_que_max", ConfigType.BOOL, label, help_text)
 
             label = _("Ticket selection")
-            help_text = _("If checked, allows a option to be visible only to participants with selected ticket")
+            help_text = _("If checked, allows an option to be visible only to participants with a selected ticket.")
             self.add_configs("character_form_wri_que_tickets", ConfigType.BOOL, label, help_text)
 
             label = _("Requirements")
-            help_text = _("If checked, allows a option to be visible only if other options are selected")
+            help_text = _("If checked, allows an option to be visible only if other options are selected.")
             self.add_configs("character_form_wri_que_requirements", ConfigType.BOOL, label, help_text)
 
     def set_config_writing(self) -> None:
@@ -679,12 +681,12 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("writing_title", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Number")
-        config_help_text = _("Enables field 'number', an unique numerical ID to reference it")
+        config_help_text = _("Enables the 'number' field, a unique numerical ID used to reference the character.")
         self.add_configs("writing_number", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Cover image")
         config_help_text = _(
-            "Enables field 'cover', to shown a specific image in the gallery - until assigned to a participant",
+            "Enables the 'cover' field to show a specific image in the gallery until the character is assigned to a participant.",
         )
         self.add_configs("writing_cover", ConfigType.BOOL, config_label, config_help_text)
 
@@ -741,18 +743,18 @@ class OrgaConfigForm(ConfigForm):
         self.add_configs("writing_paste_text", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Disable Auto save")
-        config_help_text = _("If checked, automatic saving during editing will be disable for writing elements")
+        config_help_text = _("If checked, automatic saving while editing writing elements will be disabled.")
         self.add_configs("writing_disable_auto", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("External access")
         config_help_text = _(
-            "If checked, generates secret urls to share the full character sheet with a not signed up user",
+            "If checked, generates secret URLs for sharing the full character sheet with a user who has not signed up.",
         )
         self.add_configs("writing_external_access", ConfigType.BOOL, config_label, config_help_text)
 
         config_label = _("Unimportant")
         config_help_text = _(
-            "If checked, allows to track the plots or relationships not really important for the character",
+            "If checked, allows tracking plots or relationships that are less important to the character.",
         )
         self.add_configs("writing_unimportant", ConfigType.BOOL, config_label, config_help_text)
 
@@ -850,8 +852,8 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("exp_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
 
-            # Criterions configuration
-            criterions_label = _("Criterions")
+            # Criteria configuration
+            criterions_label = _("Criteria")
             criterions_help_text = _(
                 "If checked, enables criterions that conditionally modify experience point totals "
                 "based on prerequisites and requirements",
@@ -999,7 +1001,7 @@ class OrgaConfigForm(ConfigForm):
             self.add_configs("casting_characters", ConfigType.INT, label, help_text)
 
             label = _("Mirror")
-            help_text = _("Enables to set a character as a 'mirror' for another, to hide it's true nature")
+            help_text = _("Allows you to set a character as a 'mirror' of another character to hide its true nature.")
             self.add_configs("casting_mirror", ConfigType.BOOL, label, help_text)
 
             label = _("Show statistics")
@@ -1053,7 +1055,7 @@ class OrgaConfigForm(ConfigForm):
             )
             payment_reason_help_text += (
                 " "
-                + _("You can use the following fields, they will be filled in automatically:")
+                + _("You can use the following fields; they will be filled in automatically:")
                 + "{player_name}, {question_name}"
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, payment_reason_label, payment_reason_help_text)
@@ -1344,7 +1346,7 @@ class OrgaEventRoleForm(BaseModelForm):
         # Prepare permission-based role selection for event permissions
         prepare_permissions_role(self, EventPermission)
         self.fields["members"].help_text = (
-            _("If you don't find an user, you can save the role, and then invite them clicking on")
+            _("If you don't find a user, save the role and then invite them by clicking on this symbol:")
             + " <i class='fas fa-envelope'></i>"
         )
 
@@ -2131,7 +2133,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
             ("", "#load_accounting", _("Accounting")),
             ("", "email", _("Email")),
             ("", "date", _("Chronology")),
-            ("additional_tickets", "additionals", _("Additionals")),
+            ("additional_tickets", "additionals", _("Additional tickets")),
             ("gift", "gift", _("Gift")),
             ("membership", "membership", _("Member")),
             ("faction", "factions", _("Factions")),

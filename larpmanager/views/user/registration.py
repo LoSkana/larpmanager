@@ -543,7 +543,7 @@ def save_registration_bring_friend(context: dict, form: object, registration: Re
             value=int(context["bring_friend_discount_from"]),
             run=context["run"],
             oth=OtherChoices.TOKEN,
-            descr=_("You have use a friend code") + f" - {friend.member.display_member()} - {cod}",
+            descr=_("You have used a friend code.") + f" - {friend.member.display_member()} - {cod}",
             association_id=context["association_id"],
             ref_addit=registration.id,
         )
@@ -1249,7 +1249,7 @@ def unregister(request: HttpRequest, event_slug: str) -> Any:
             messages.success(request, mes)
         else:
             cancel_reg(registration)
-            mes = _("Your registration to %(event)s has been cancelled") % {"event": context["event"]}
+            mes = _("Your registration for %(event)s has been cancelled.") % {"event": context["event"]}
             messages.success(request, mes)
         return redirect("accounting")
 

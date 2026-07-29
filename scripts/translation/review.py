@@ -30,6 +30,11 @@ from pathlib import Path
 
 import polib
 
+try:
+    from .prompt_settings import translation_context
+except ImportError:  # Direct execution: python scripts/translation/review.py
+    from prompt_settings import translation_context
+
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 DEFAULT_CONFIG_PATH = Path(__file__).resolve().parent / "review_config.json"
 
@@ -55,14 +60,7 @@ simply chosen a different (still valid) reading. Distinguish these
 two cases explicitly. When msgstr_it is empty, judge solely against
 msgid.
 
-Specific LARP terms: Award (refers to awarding XP, in italian "assegnazioni"), Badges (in the context of achievements),
-Characters (usually game characters, but in some cases text characters),
-Casting (assigning characters / roles to players / participants), Pools (character/resource pools),
-Plot (quest/mission/storyline), Handout (setting/world-building knowledge), Safety (tieni termine inglese),
-Speed larp (tieni termine inglese), Collection (money collection by friends), Matchmaker (algoritmo di character-to-player matching),
-Ensemble (feature to show the characters ensemble/cast), Quest / Trait (larp terms)
-
-Use informal language and the second-person singular (you).
+{translation_context}
 
 Categories (status field):
 - "ok": translation is accurate and natural
@@ -101,7 +99,7 @@ problem, one object each:
 
 Any msgid from the input not present in your output array is assumed
 "ok" - this is how you skip the "ok" cases.
-"""
+""".replace("{translation_context}", translation_context())
 
 SEVERITY_ORDER = {
     "mistranslation": 0,

@@ -1505,7 +1505,7 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Experience Criterions
+    name: Experience Criteria
     descr: Pseudo-feature activated by exp_criterions configuration
     slug: exp_criterions
     overall: false

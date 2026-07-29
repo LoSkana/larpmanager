@@ -262,7 +262,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         null=True,
         verbose_name=_("Date of expiration of the document"),
         help_text=_(
-            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for.",
+            "Leave blank if the document has no expiration date. Please check that it does not expire before the event you want to sign up for.",
         ),
     )
 

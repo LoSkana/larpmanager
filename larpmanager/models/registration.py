@@ -326,7 +326,7 @@ class Registration(UuidMixin, BaseModel):
 
     additionals = models.IntegerField(
         default=0,
-        verbose_name=_("Additionals"),
+        verbose_name=_("Additional tickets"),
         help_text=_("Number of additional participants"),
     )
 

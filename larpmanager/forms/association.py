@@ -287,7 +287,7 @@ class ExeAssociationRoleForm(BaseModelForm):
         # Prepare role-based permissions for association
         prepare_permissions_role(self, AssociationPermission)
         self.fields["members"].help_text = (
-            _("If you don't find an user, you can save the role, and then invite them clicking on")
+            _("If you don't find a user, save the role and then invite them by clicking this symbol:")
             + " <i class='fas fa-envelope'></i>"
         )
 
@@ -475,7 +475,7 @@ class ExeConfigForm(ConfigForm):
 
         delete_label = _("Bulk delete")
         delete_help_text = _(
-            "If checked, allows to delete items in bulk. WARNING: deleted items might not be full recoverable"
+            "If checked, allows items to be deleted in bulk. WARNING: deleted items might not be fully recoverable."
         )
         self.add_configs("allow_bulk_delete", ConfigType.BOOL, delete_label, delete_help_text)
 
@@ -493,7 +493,9 @@ class ExeConfigForm(ConfigForm):
             self.add_configs("mail_exe_digest", ConfigType.BOOL, digest_label, digest_help_text)
 
             carbon_copy_label = _("Carbon copy")
-            carbon_copy_help_text = _("If checked: Sends the main mail a copy of all mails sent to participants")
+            carbon_copy_help_text = _(
+                "If checked, sends a copy of every email sent to participants to the main email address"
+            )
             self.add_configs("mail_cc", ConfigType.BOOL, carbon_copy_label, carbon_copy_help_text)
 
         mail_interval_label = _("Interval sending")
@@ -577,7 +579,7 @@ class ExeConfigForm(ConfigForm):
             self.set_section("campaign", _("Campaign"))
 
             move_registration_label = _("Allow registration transfers")
-            move_registration_help_text = _("Allow to switch registration between events")
+            move_registration_help_text = _("Allow registration switching between events")
             self.add_configs("campaign_switch", ConfigType.BOOL, move_registration_label, move_registration_help_text)
 
         # Configure warehouse management options
@@ -603,7 +605,7 @@ class ExeConfigForm(ConfigForm):
         self.set_section("users", _("Users"))
 
         field_label = _("Event history")
-        field_help_text = _("If checked: in the public page of an user shows a list of all events attended")
+        field_help_text = _("If checked, a user's public page shows a list of all events they have attended")
         self.add_configs("player_larp_history", ConfigType.BOOL, field_label, field_help_text)
 
         # Configure deadline management if feature is enabled
@@ -656,7 +658,7 @@ class ExeConfigForm(ConfigForm):
 
             # Holiday scheduling for reminder emails
             field_label = _("Public Holidays")
-            field_help_text = _("If checked: the system will send reminds the days on which holidays fall")
+            field_help_text = _("If checked, the system will send reminders on holidays")
             self.add_configs("remind_holidays", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_membership(self) -> None:
@@ -728,7 +730,7 @@ class ExeConfigForm(ConfigForm):
             # Unique payment identification system
             label_unique_payment_code = _("Unique code")
             help_text_unique_payment_code = _(
-                "If checked: Adds a unique code to each payment, which helps in being able to recognize it",
+                "If checked, adds a unique code to each payment to help identify it.",
             )
             self.add_configs(
                 "payment_special_code",
@@ -1148,7 +1150,7 @@ class ExePreferencesForm(ConfigForm):
             "member_theme",
             ConfigType.CHOICE,
             _("Theme"),
-            _("Personal theme preference, overrides the event and organization theme."),
+            _("Personal theme preference, overrides the event and organization theme"),
             theme_choices,
         )
 

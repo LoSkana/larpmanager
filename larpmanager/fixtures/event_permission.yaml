@@ -696,7 +696,7 @@
     module: experience
 - model: larpmanager.eventpermission
   fields:
-    name: Criterions
+    name: Criteria
     descr: Manage experience criterions
     slug: orga_exp_criterions
     number: 95
