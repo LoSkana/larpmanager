@@ -133,9 +133,10 @@ class PaymentInvoice(UuidMixin, BaseModel):
 
     def __str__(self) -> str:
         """Return invoice summary with payment status and transaction details."""
-        return (
-            f"({self.status}) Invoice for {self.member} - {self.causal} - {self.txn_id} {self.mc_gross} {self.mc_fee}"
-        )
+        res = _("Payment") + f" {self.member} ({self.mc_gross})"
+        if self.registration:
+            res += f" {self.registration.run}"
+        return res
 
     def download(self) -> str:
         """Download the invoice file if available.
