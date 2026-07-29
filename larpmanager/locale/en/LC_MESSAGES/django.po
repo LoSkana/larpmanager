@@ -2456,19 +2456,19 @@ msgstr ""
 msgid "Code 'Bring a friend'"
 msgstr ""
 
-msgid "Single payment"
+msgid "One"
 msgstr ""
 
-msgid "Two quotas"
+msgid "Two"
 msgstr ""
 
-msgid "Three instalments"
+msgid "Three"
 msgstr ""
 
-msgid "Four quotas"
+msgid "Four"
 msgstr ""
 
-msgid "Five quotas"
+msgid "Five"
 msgstr ""
 
 msgid "Default"
@@ -3599,8 +3599,7 @@ msgstr ""
 msgid "Sessions"
 msgstr ""
 
-msgid ""
-"The discount value; it will be deducted from the total registration fee."
+msgid "The discount value; it will be deducted from the total registration fee"
 msgstr ""
 
 msgid "The maximum number of uses (0 for unlimited uses)"
@@ -4217,7 +4216,7 @@ msgstr ""
 msgid "Pay what you want"
 msgstr ""
 
-msgid "Installments"
+msgid "Payment Installments"
 msgstr ""
 
 msgid "Faction preference"
@@ -9050,6 +9049,9 @@ msgid ""
 "add one."
 msgstr ""
 
+msgid "Installments"
+msgstr ""
+
 msgid "Installment"
 msgstr ""
 
@@ -11697,8 +11699,8 @@ msgid "Registration surcharge"
 msgstr ""
 
 msgid ""
-"Number of installments to split the fee: payments and deadlines will be "
-"equally divided from the registration date"
+"Select how many payments to split the fee into. Total amount and deadlines "
+"are divided equally starting from the registration date."
 msgstr ""
 
 msgid "Order the factions from your most (top) to least (bottom) preferred"

@@ -586,7 +586,7 @@ class Discount(UuidMixin, OrderMixin, BaseModel):
         decimal_places=2,
         default=0,
         validators=[MinValueValidator(Decimal("0.00"))],
-        help_text=_("The discount value; it will be deducted from the total registration fee."),
+        help_text=_("The discount value; it will be deducted from the total registration fee"),
     )
 
     max_redeem = models.IntegerField(

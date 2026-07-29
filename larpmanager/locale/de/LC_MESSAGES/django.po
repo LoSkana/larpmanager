@@ -38,11 +38,17 @@ msgstr "Netto"
 msgid "New"
 msgstr "Neu"
 
+msgid "One"
+msgstr "Eins"
+
 msgid "PDF"
 msgstr "PDF"
 
 msgid "Tot"
 msgstr "Gesamt"
+
+msgid "Two"
+msgstr "Zwei"
 
 msgid "VAT"
 msgstr "Mehrwertsteuer"
@@ -101,8 +107,14 @@ msgstr "Gebühr:"
 msgid "File"
 msgstr "Datei"
 
+msgid "Five"
+msgstr "Fünf"
+
 msgid "Form"
 msgstr "Formular"
+
+msgid "Four"
+msgstr "Vier"
 
 msgid "Free"
 msgstr "Kostenlos"
@@ -273,7 +285,7 @@ msgid "Award"
 msgstr "Zuweisung"
 
 msgid "Badge"
-msgstr "Abzeichen"
+msgstr "Badge"
 
 msgid "Cards"
 msgstr "Karten"
@@ -430,6 +442,9 @@ msgstr "Texte"
 msgid "Theme"
 msgstr "Thema"
 
+msgid "Three"
+msgstr "Drei"
+
 msgid "Title"
 msgstr "Titel"
 
@@ -443,7 +458,7 @@ msgid "Total"
 msgstr "Gesamtbetrag"
 
 msgid "Trait"
-msgstr "Eigenschaft"
+msgstr "Trait"
 
 msgid "Trash"
 msgstr "Papierkorb"
@@ -494,10 +509,10 @@ msgid "Awards"
 msgstr "Zuweisungen"
 
 msgid "Badge:"
-msgstr "Abzeichen:"
+msgstr "Badge:"
 
 msgid "Badges"
-msgstr "Abzeichen"
+msgstr "Badges"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -698,7 +713,7 @@ msgid "Total:"
 msgstr "Gesamtbetrag:"
 
 msgid "Traits"
-msgstr "Eigenschaften"
+msgstr "Traits"
 
 msgid "Unpaid"
 msgstr "Unbezahlt"
@@ -764,7 +779,7 @@ msgid "Camping"
 msgstr "Camping"
 
 msgid "Casting"
-msgstr "Besetzung"
+msgstr "Casting"
 
 msgid "Checked"
 msgstr "Angekreuzt"
@@ -1068,7 +1083,7 @@ msgid "Carousel"
 msgstr "Karussell"
 
 msgid "Casting:"
-msgstr "Besetzung:"
+msgstr "Casting:"
 
 msgid "Claimant"
 msgstr "Antragsteller"
@@ -1913,9 +1928,6 @@ msgstr "Token-Name"
 msgid "Total paid"
 msgstr "Gesamtzahlung"
 
-msgid "Two quotas"
-msgstr "Zwei Raten"
-
 msgid "Usage date"
 msgstr "Verwendungsdatum"
 
@@ -2042,14 +2054,8 @@ msgstr "Veranstaltungstexte"
 msgid "Fiscal code"
 msgstr "Steueridentifikationsnummer"
 
-msgid "Five quotas"
-msgstr "Fünf Raten"
-
 msgid "Footer HTML"
 msgstr "HTML-Fußzeile"
-
-msgid "Four quotas"
-msgstr "Vier Raten"
 
 msgid "Gallery Pdf"
 msgstr "PDF-Galerie"
@@ -2496,7 +2502,7 @@ msgid "Are you sure?"
 msgstr "Bist du sicher?"
 
 msgid "Assign Badges"
-msgstr "Abzeichen zuweisen"
+msgstr "Badges zuweisen"
 
 msgid "Authorisation"
 msgstr "Autorisierung"
@@ -2765,7 +2771,7 @@ msgid "Available days"
 msgstr "Verfügbare Tage"
 
 msgid "Back to badges"
-msgstr "Zurück zu den Abzeichen"
+msgstr "Zurück zu den Badges"
 
 msgid "Bank Statement"
 msgstr "Kontoauszug"
@@ -2879,7 +2885,7 @@ msgid "Maximum number"
 msgstr "Maximale Anzahl"
 
 msgid "Member revoked"
-msgstr "Mitglied widerrufen"
+msgstr "Mitgliedschaft aberkannt"
 
 msgid "Membership fee"
 msgstr "Beiträge"
@@ -2962,9 +2968,6 @@ msgstr "Questtyp festlegen"
 msgid "Show shortcuts"
 msgstr "Tastenkürzel anzeigen"
 
-msgid "Single payment"
-msgstr "Einmalige Zahlung"
-
 msgid "Tax code check"
 msgstr "Prüfung der Steuernummer"
 
@@ -2987,7 +2990,7 @@ msgid "Type of ticket"
 msgstr "Ticket-Typ"
 
 msgid "Type prologues"
-msgstr "Typ Prologe"
+msgstr "Prologtypen"
 
 msgid "URL identifier"
 msgstr "URL-Identifikator"
@@ -3017,11 +3020,11 @@ msgid "customisations"
 msgstr "Anpassungen"
 
 msgid "select a badge"
-msgstr "Wähle ein Abzeichen aus"
+msgstr "Wähle ein Badge aus"
 
 #, python-format
 msgid "%(name)s issued"
-msgstr "%(name)ss Auszeichnungen"
+msgstr "Von %(name)s vergebene XP"
 
 msgid "Ability missing"
 msgstr "Fehlende Fähigkeit"
@@ -3483,7 +3486,7 @@ msgid "Required feature"
 msgstr "Erforderliches Merkmal"
 
 msgid "Run lottery draw"
-msgstr "Extraktion durchführen"
+msgstr "Auslosung durchführen"
 
 msgid "Search abilities"
 msgstr "Fähigkeiten suchen"
@@ -3736,7 +3739,7 @@ msgid "Promotional image"
 msgstr "Werbebild"
 
 msgid "Quests and Traits"
-msgstr "Missionen und Eigenschaften"
+msgstr "Quests und Traits"
 
 msgid "Realized revenue:"
 msgstr "Realisierte Einnahmen:"
@@ -3791,9 +3794,6 @@ msgstr "Der Name der Frage"
 
 msgid "The ticket's name"
 msgstr "Der Name des Tickets"
-
-msgid "Three instalments"
-msgstr "Drei Raten"
 
 msgid "Total collection:"
 msgstr "Gesamte Sammlung:"
@@ -3942,7 +3942,7 @@ msgid "Payment processing"
 msgstr "Zahlungsabwicklung"
 
 msgid "Pre-register here!"
-msgstr "Melde dich hier voran!"
+msgstr "Melde dich hier vorab an!"
 
 msgid "Preferences saved!"
 msgstr "Präferenzen gespeichert!"
@@ -4047,7 +4047,7 @@ msgid "Allowed values are:"
 msgstr "Erlaubte Werte sind:"
 
 msgid "Assigned character!"
-msgstr "Zugewiesener Charakter!"
+msgstr "Charakter zugewiesen!"
 
 msgid "Association Statute"
 msgstr "Satzung des Vereins"
@@ -4315,6 +4315,9 @@ msgstr "Einnahmen der Vereinigung"
 
 msgid "Password reset token"
 msgstr "Token zum Zurücksetzen des Passworts"
+
+msgid "Payment Installments"
+msgstr "Ratenzahlungen"
 
 msgid "Payment Verification"
 msgstr "Zahlungsüberprüfung"
@@ -4602,7 +4605,7 @@ msgid "Arrived safe and sound"
 msgstr "Sicher angekommen"
 
 msgid "Bank payment reference"
-msgstr "Begründung"
+msgstr "Verwendungszweck"
 
 msgid "Browse upcoming events"
 msgstr "Kommende Veranstaltungen ansehen"
@@ -5114,7 +5117,7 @@ msgid "Payments pending approval"
 msgstr "Zur Genehmigung anstehende Zahlungen"
 
 msgid "Read the writing elements"
-msgstr "Lies die Schreibelements"
+msgstr "Lies die Schreibelemente"
 
 msgid "Registration form options"
 msgstr "Optionen für das Anmeldeformular"
@@ -5239,7 +5242,7 @@ msgid "Short name - international"
 msgstr "Kurzer Name - international"
 
 msgid "The collection is growing!"
-msgstr "Die Sammlung wächst!"
+msgstr "Die Geldsammlung wächst!"
 
 msgid "The name of the competence"
 msgstr "Der Name der Kompetenz"
@@ -5343,7 +5346,7 @@ msgid "Membership fees in approval"
 msgstr "Mitgliedschaftsgebühren in Genehmigung"
 
 msgid "Missing casting preferences"
-msgstr "Fehlende Besetzungspräferenzen"
+msgstr "Fehlende Casting-Präferenzen"
 
 msgid "No inventory transfers yet."
 msgstr "Noch keine Transfers."
@@ -5374,7 +5377,7 @@ msgid "Ticket name (keep it short)"
 msgstr "Ticketname (kurz halten)"
 
 msgid "View badges you have earned"
-msgstr "Deine verdienten Abzeichen anzeigen"
+msgstr "Deine verdienten Badges anzeigen"
 
 msgid "View limited ticket options"
 msgstr "Begrenzte Ticketoptionen anzeigen"
@@ -5452,7 +5455,7 @@ msgid "Membership request submitted"
 msgstr "Mitgliedschaftsantrag eingereicht"
 
 msgid "My pending guild invitations"
-msgstr "Einladungen meiner Gilde"
+msgstr "Ausstehende Einladungen meiner Gilde"
 
 msgid "Name of badge to be awarded."
 msgstr "Name des zu verleihenden Badges."
@@ -5478,7 +5481,7 @@ msgstr "Diese Einladung ist abgelaufen."
 
 #, python-format
 msgid "Trait assigned for %(event)s"
-msgstr "Zugeordnete Eigenschaft für %(event)s"
+msgstr "Trait für %(event)s zugewiesen"
 
 msgid "Uploading image, please wait"
 msgstr "Bild hochladen, bitte warten"
@@ -5510,7 +5513,7 @@ msgid "Configure the matchmaker form"
 msgstr "Das Matchmaker-Formular konfigurieren"
 
 msgid "Confirm and commit quantities"
-msgstr "Bestätigen und Festlegen von Mengen"
+msgstr "Mengen bestätigen und verbuchen"
 
 msgid "Contents of the special page."
 msgstr "Inhalt der Sonderseite."
@@ -5781,7 +5784,7 @@ msgstr "Bitte korrigiere den Fehler unten."
 
 #, python-format
 msgid "Quests without traits: %(list)s"
-msgstr "Quests ohne Eigenschaften: %(list)s"
+msgstr "Quests ohne Traits: %(list)s"
 
 #, python-format
 msgid "Registration opens on: %(date)s"
@@ -6949,7 +6952,7 @@ msgid "You have no authenticator app configured."
 msgstr "Du hast keine Authenticator-App konfiguriert."
 
 msgid "You think you should have an achievement?"
-msgstr "Glaubst du, dass du ein Abzeichen verdient hast?"
+msgstr "Glaubst du, dass du ein Badge verdient hast?"
 
 msgid "Your pre-registration has been cancelled."
 msgstr "Deine Voranmeldung wurde storniert."
@@ -7101,7 +7104,7 @@ msgid "Registration request received for %(event)s"
 msgstr "Anmeldeanfrage für %(event)s eingegangen"
 
 msgid "Select a badge above to manage its members."
-msgstr "Wähle oben ein Abzeichen aus, um dessen Mitglieder zu verwalten."
+msgstr "Wähle oben ein Badge aus, um dessen Mitglieder zu verwalten."
 
 msgid "Tax identification code of the association."
 msgstr "Steueridentifikationsnummer des Vereins."
@@ -7164,7 +7167,7 @@ msgid "Configure casting preferences for this event"
 msgstr "Konfiguriere die Casting-Einstellungen für diese Veranstaltung"
 
 msgid "Configure the association infrastructure fee"
-msgstr "Die Veranstaltungsgebühr festlegen"
+msgstr "Die Infrastrukturgebühr des Vereins konfigurieren"
 
 msgid "Customize the visual appearance of the event"
 msgstr "Passe das Erscheinungsbild der Veranstaltung an"
@@ -7221,7 +7224,7 @@ msgid "Select the registration you want to transfer"
 msgstr "Wähle die Registrierung, die du übertragen möchtest"
 
 msgid "Set up character customization configuration"
-msgstr "Konfiguration der Charakteranpassung einrichten"
+msgstr "Richte die Konfiguration der Charakteranpassung ein"
 
 msgid "The exact date on which the payment was made"
 msgstr "Das genaue Datum, an dem die Zahlung erfolgte"
@@ -7489,7 +7492,7 @@ msgid "Registration for %(member)s copied to %(event)s"
 msgstr "Die Anmeldung von %(member)s wurde nach %(event)s kopiert"
 
 msgid "Review participants' safety-related information"
-msgstr "Sicherheitsrelevante Informationen der Teilnehmenden prüfen"
+msgstr "Safety-relevante Informationen der Teilnehmenden prüfen"
 
 msgid "Shows the calculated tax amount on each payment"
 msgstr "Zeigt den berechneten Steuerbetrag für jede Zahlung an"
@@ -7780,7 +7783,9 @@ msgid "The registration for this event has been canceled."
 msgstr "Die Anmeldung für diese Veranstaltung wurde abgesagt."
 
 msgid "This feature is available for non-waiting tickets!"
-msgstr "Diese Funktion ist für nicht wartende Tickets verfügbar!"
+msgstr ""
+"Diese Funktion ist für Tickets verfügbar, die nicht auf der Warteliste "
+"stehen!"
 
 msgid "This member has not registered for any events yet."
 msgstr "Dieses Mitglied hat sich noch für keine Veranstaltungen angemeldet."
@@ -8031,7 +8036,7 @@ msgstr "Du kannst jetzt Inhalte hochladen und Zugriffstoken generieren"
 
 msgid "You have been gifted a registration to this event, by"
 msgstr ""
-"Dir wurde eine Teilnahme an dieser Veranstaltung geschenkt, und zwar von"
+"Dir wurde eine Anmeldung für diese Veranstaltung geschenkt, und zwar von"
 
 msgid "You have granted data sharing with this organisation!"
 msgstr "Du hast dem Datenaustausch mit dieser Organisation zugestimmt!"
@@ -8057,7 +8062,7 @@ msgid "Initial value of experience points for all characters."
 msgstr "Anfangswert der Erfahrungspunkte für alle Charaktere."
 
 msgid "Manage fields for character sheet and writing elements"
-msgstr "Verwalte Felder für Charakterbogen und Schreibelements"
+msgstr "Verwalte Felder für Charakterbogen und Schreibelemente"
 
 msgid "No registrations have been received for this event yet"
 msgstr "Für diese Veranstaltung liegen noch keine Anmeldungen vor"
@@ -8357,8 +8362,7 @@ msgstr ""
 "eine kleinere Datei."
 
 msgid "If enabled, enables the reading view for writing elements."
-msgstr ""
-"Wenn aktiviert, wird die Leseansicht zum Schreiben von Elementen aktiviert."
+msgstr "Wenn aktiviert, wird die Leseansicht für Schreibelemente aktiviert."
 
 msgid "If instead you wish to upload a new photo of your document"
 msgstr ""
@@ -8748,8 +8752,8 @@ msgstr "Du hast %(amount).2f %(elements)s wegen „%(reason)s“ erhalten."
 #, python-format
 msgid "A quota with %(quotas)d payments already exists for this event"
 msgstr ""
-"Für dieses Ereignis existiert bereits ein Kontingent mit "
-"%(quotas)d-Zahlungen"
+"Für dieses Event gibt es bereits eine Ratenzahlungsoption mit %(quotas)d "
+"Raten"
 
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr ""
@@ -8998,7 +9002,7 @@ msgstr "Ein Teil der Anmeldegebühr stammt nur aus dem gewählten Ticket"
 
 msgid "Participants can now submit collections, and you can review them"
 msgstr ""
-"Teilnehmende können jetzt Collections einreichen und du kannst sie prüfen"
+"Teilnehmende können jetzt Geldsammlungen einreichen und du kannst sie prüfen"
 
 msgid "Provide as precise a location or address as possible for pickup."
 msgstr ""
@@ -9289,8 +9293,8 @@ msgstr ""
 
 msgid "Minimum net profit to retain for the association infrastructure fee"
 msgstr ""
-"Mindestbetrag des Nettogewinns, der für die Organisationsgebühr einbehalten "
-"werden muss"
+"Mindestbetrag des Nettogewinns, der für die Infrastrukturgebühr des Vereins "
+"einbehalten werden muss"
 
 msgid "Order the factions from your most (top) to least (bottom) preferred"
 msgstr ""
@@ -9407,7 +9411,7 @@ msgstr ""
 
 #, python-format
 msgid "This text will be added to the %(name)s plot paragraph in the sheet."
-msgstr "Dieser Text wird dem Plot-Absatz %(name)s im Sheet hinzugefügt."
+msgstr "Dieser Text wird dem Handlungsabsatz %(name)s im Bogen hinzugefügt."
 
 msgid "View detailed activity log of all changes made for this organization"
 msgstr ""
@@ -9465,7 +9469,7 @@ msgstr "Die Zahlungsfristen werden gleichmäßig ab dem Anmeldedatum verteilt."
 
 msgid "Present (in the relationships of this character is present the other)"
 msgstr ""
-"Anwesend (in den Beziehungen dieses Charakters ist der andere anwesend)"
+"Vorhanden (in den Beziehungen dieses Charakters ist der andere vorhanden)"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8):"
 msgstr ""
@@ -9676,6 +9680,10 @@ msgstr ""
 "Auswahlmöglichkeiten."
 
 msgid ""
+"The discount value; it will be deducted from the total registration fee"
+msgstr "Der Rabattwert; er wird von der gesamten Anmeldegebühr abgezogen"
+
+msgid ""
 "The first line of the file are the field names that you want to upload."
 msgstr ""
 "Die erste Zeile der Datei enthält die Feldnamen, die du hochladen möchtest."
@@ -9724,7 +9732,7 @@ msgstr ""
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
 msgstr ""
-"Ermöglicht es der Organisation, Abzeichen zu vergeben und eine öffentliche "
+"Ermöglicht es der Organisation, Badges zu vergeben und eine öffentliche "
 "Rangliste zu aktivieren"
 
 msgid ""
@@ -9749,8 +9757,7 @@ msgid ""
 "Copy and paste all the coloured text below exactly into the notes field."
 msgstr ""
 "Kopiere den gesamten unten stehenden farbigen Text und füge ihn genau in das"
-" Notizfeld ein.Kopiere den gesamten unten stehenden farbigen Text und füge "
-"ihn genau in die Notizen ein."
+" Notizfeld ein."
 
 msgid ""
 "Download the list of characters with their interpreters' profile images!"
@@ -9779,8 +9786,8 @@ msgstr ""
 msgid ""
 "If the character does NOT belong to this element but is only referenced."
 msgstr ""
-"Wenn der Charakter NICHT zu diesem Element gehört, sondern nur darauf "
-"verweist."
+"Wenn der Charakter NICHT zu diesem Element gehört, sondern nur darin erwähnt"
+" wird."
 
 msgid ""
 "If you are a candidate for the Board, please write an introduction here!"
@@ -9825,10 +9832,6 @@ msgid ""
 msgstr ""
 "Wähle aus, welche Felder sich automatisch öffnen sollen, wenn die Liste "
 "angezeigt wird"
-
-msgid ""
-"The discount value; it will be deducted from the total registration fee."
-msgstr "Der Rabattwert; er wird von der gesamten Anmeldegebühr abgezogen."
 
 msgid ""
 "The main email address participants can use to contact your organization"
@@ -9926,8 +9929,8 @@ msgstr ""
 msgid ""
 "No badges have been created yet. Use the button above to add a new badge."
 msgstr ""
-"Es wurden noch keine Abzeichen erstellt. Klick auf die Schaltfläche oben, um"
-" ein neues Abzeichen hinzuzufügen."
+"Es wurden noch keine Badges erstellt. Klicke auf die Schaltfläche oben, um "
+"ein neues Badge hinzuzufügen."
 
 msgid ""
 "Note: The special code is re-generated each time you change the gift card"
@@ -10252,7 +10255,7 @@ msgstr "Möchtest du die Anmeldegebühr in dynamische Zahlungsraten aufteilen?"
 msgid ""
 "Enter the name of the member for whom you want to activate a new collection:"
 msgstr ""
-"Gib den Namen des Mitglieds ein, für das du eine neue Collection aktivieren "
+"Gib den Namen des Mitglieds ein, für das du eine neue Sammlung aktivieren "
 "möchtest:"
 
 msgid ""
@@ -10282,7 +10285,7 @@ msgstr ""
 msgid ""
 "If you are an Italian citizen, indicate your tax code; otherwise leave blank"
 msgstr ""
-"Wenn du italienischer Staatsbürger bist, gib bitte deine Steuernummer an; "
+"Wenn du italienischer Staatsbürger bist, gib bitte deine Steuer-ID an; "
 "andernfalls lasse das Feld frei"
 
 msgid ""
@@ -10360,8 +10363,8 @@ msgstr ""
 msgid ""
 "View casting history showing character and trait assignments across sessions"
 msgstr ""
-"Zeige den Casting-Verlauf an, der die Zuweisungen von Charakteren und "
-"Eigenschaften über alle Sitzungen hinweg anzeigt"
+"Zeige den Casting-Verlauf an, der die Zuweisungen von Charakteren und Traits"
+" über alle Sitzungen hinweg anzeigt"
 
 #, python-format
 msgid ""
@@ -10588,7 +10591,7 @@ msgid ""
 "Manage speed-larp scenes, their stations, prompt text, and assigned "
 "characters"
 msgstr ""
-"Verwalte Speed-Larp-Szenen, ihre Stationen, den Prompt-Text und die "
+"Verwalte Speed larp-Szenen, ihre Stationen, den Prompt-Text und die "
 "zugewiesenen Charaktere"
 
 msgid ""
@@ -10630,7 +10633,7 @@ msgid ""
 "Unique promotional code to share with participants for use during "
 "registration"
 msgstr ""
-"Einmaliger Werbecode zum Teilen mit Teilnehmenden zur Nutzung während der "
+"Eindeutiger Werbecode zum Teilen mit Teilnehmenden zur Nutzung während der "
 "Anmeldung"
 
 msgid ""
@@ -11194,8 +11197,8 @@ msgid ""
 "You have been invited to join the guild %(guild)s with your character "
 "%(character)s"
 msgstr ""
-"Du wurdest eingeladen, mit deinem Charakter %(character)s der Gilde "
-"%(guild)s beizutreten"
+"Du wurdest eingeladen, der Gilde %(guild)s mit deinem Charakter "
+"%(character)s beizutreten"
 
 msgid ""
 "Additional preferences, for random assignment when no solution is found "
@@ -11756,8 +11759,8 @@ msgid ""
 "Optional - Casting priority granted by this option (e.g., 1 = low, 5 = "
 "medium, 25 = high)"
 msgstr ""
-"Fakultativ - Durch diese Option gewährte Besetzungspriorität (z. B. 1 = "
-"niedrig, 5 = mittel, 25 = hoch)"
+"Optional - Durch diese Option gewährte Casting-Priorität (z. B. 1 = niedrig,"
+" 5 = mittel, 25 = hoch)"
 
 msgid ""
 "Optional - Maximum number of times it can be requested across all signups (0"
@@ -12006,8 +12009,8 @@ msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
-"Wenn aktiviert, können Plots oder Beziehungen verfolgt werden, die für den "
-"Charakter weniger wichtig sind."
+"Wenn aktiviert, können Handlungsstränge oder Beziehungen verfolgt werden, "
+"die für den Charakter weniger wichtig sind."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -12034,8 +12037,8 @@ msgid ""
 "To upload roles of the characters in the plots, add a second file with the "
 "following columns"
 msgstr ""
-"Um die Rollen der Charaktere in den Plots hochzuladen, füge eine zweite "
-"Datei mit den folgenden Spalten hinzu"
+"Um die Rollen der Charaktere in den Handlungssträngen hochzuladen, füge eine"
+" zweite Datei mit den folgenden Spalten hinzu"
 
 #, python-format
 msgid ""
@@ -12415,7 +12418,7 @@ msgid ""
 "href='%(url)s'>your accounting</a>."
 msgstr ""
 "Alternativ kannst du eine Auszahlung deines Guthabens über <a "
-"href='%(url)s'>dein Konto</a> beantragen."
+"href='%(url)s'>deine Buchhaltung</a> beantragen."
 
 msgid ""
 "Create a character by clicking 'New'; give it a name and fill in the "
@@ -12435,8 +12438,8 @@ msgid ""
 "Enables the 'assigned' field, which tracks the staff member responsible for "
 "each writing element."
 msgstr ""
-"Aktiviert das Feld „zugewiesen“, das das für jedes Schreibungselement "
-"verantwortliche Teammitglied erfasst."
+"Aktiviert das Feld „zugewiesen“, das das für jedes Textelement zuständige "
+"Teammitglied erfasst."
 
 #, python-format
 msgid ""
@@ -12999,8 +13002,8 @@ msgid ""
 "Manage association badges: view, create, edit, and track how many members "
 "each badge has been assigned to"
 msgstr ""
-"Vereinsabzeichen verwalten: anzeigen, erstellen, bearbeiten und "
-"nachverfolgen, wie vielen Mitgliedern jedes Abzeichen zugewiesen wurde"
+"Vereins-Badges verwalten: anzeigen, erstellen, bearbeiten und nachverfolgen,"
+" wie vielen Mitgliedern jedes Badge zugewiesen wurde"
 
 msgid ""
 "Manage discounts applied to a participant's registration by adding or "
@@ -13072,7 +13075,7 @@ msgid ""
 "casting optimization algorithm"
 msgstr ""
 "Weise den Teilnehmern Rollen zu, indem du ihre Präferenzen überprüfst und "
-"den Algorithmus zur Besetzungsoptimierung ausführst"
+"den Casting-Optimierungsalgorithmus ausführst"
 
 msgid ""
 "If you select one (or more) character abilities, this modifier applies only "
@@ -13481,7 +13484,7 @@ msgid ""
 "character sheet even when it is assigned."
 msgstr ""
 "Aktiviert das Feld „gesperrt“, das verhindert, dass Spieler das vollständige"
-" Charakterblatt sehen, auch wenn es zugewiesen ist."
+" Charakterblatt sehen, auch wenn der Charakter zugewiesen ist."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "
@@ -13489,13 +13492,6 @@ msgid ""
 msgstr ""
 "Es wurden noch keine Prolog-Kategorien angelegt. Nutze die Schaltfläche "
 "oben, um einen Prolog-Typ hinzuzufügen und deine Prologe zu gruppieren."
-
-msgid ""
-"Number of installments to split the fee: payments and deadlines will be "
-"equally divided from the registration date"
-msgstr ""
-"Anzahl der Raten zur Aufteilung der Gebühr: Die Zahlungen und Fristen werden"
-" ab dem Anmeldedatum gleichmäßig aufgeteilt"
 
 msgid ""
 "Once the transfer is confirmed, upload the payment receipt below. You can "
@@ -14079,6 +14075,13 @@ msgstr ""
 "zu strukturieren."
 
 msgid ""
+"Select how many payments to split the fee into. Total amount and deadlines "
+"are divided equally starting from the registration date."
+msgstr ""
+"Wähle aus, in wie viele Zahlungen du die Gebühr aufteilen möchtest. "
+"Gesamtbetrag und Fristen werden ab dem Anmeldedatum gleichmäßig aufgeteilt."
+
+msgid ""
 "When you want to close the collection, follow this link. A special "
 "redemption code will be generated, to be given to the recipient:"
 msgstr ""
@@ -14167,7 +14170,7 @@ msgid ""
 "assigned the trait: <b>%(trait)s</b> of quest: <b>%(quest)s</b>."
 msgstr ""
 "In der Veranstaltung <b>%(event)s</b>, für die du dich eingeschrieben hast, "
-"wurde dir die Eigenschaft zugewiesen: <b>%(trait)s</b> von Quest: "
+"wurde dir der Trait zugewiesen: <b>%(trait)s</b> von Quest: "
 "<b>%(quest)s</b>."
 
 msgid ""
@@ -14317,10 +14320,8 @@ msgid ""
 "registrations and upgrade the selected registrations to confirmed tickets"
 msgstr ""
 "Führe die Verlosung durch, um Teilnehmer aus den Anmeldungen der "
-"Verlosungsstufe nach dem Zufallsprinzip auszuwählen und deren Anmeldungen zu"
-" bestätigten Tickets hochzustufenFühre die Verlosung durch, um Teilnehmer "
-"aus den Anmeldungen der Verlosungsstufe nach dem Zufallsprinzip auszuwählen "
-"und sie zu bestätigten Tickets hochzustufen"
+"Verlosungsstufe nach dem Zufallsprinzip auszuwählen und die ausgewählten "
+"Anmeldungen zu bestätigten Tickets hochzustufen."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "
