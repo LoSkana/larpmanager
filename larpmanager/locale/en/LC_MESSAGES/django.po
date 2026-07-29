@@ -714,7 +714,7 @@ msgstr ""
 msgid "Treasury appointees"
 msgstr ""
 
-msgid "Event organization fee"
+msgid "Organizational fee"
 msgstr ""
 
 msgid "Percentage"
@@ -3503,6 +3503,9 @@ msgid "Total payment sent"
 msgstr ""
 
 msgid "Withheld as transaction fee"
+msgstr ""
+
+msgid "Payment"
 msgstr ""
 
 msgid "Set design: staging and materials"
@@ -8496,7 +8499,7 @@ msgstr ""
 msgid "Net profit:"
 msgstr ""
 
-msgid "Event organization fee:"
+msgid "Organizational fee:"
 msgstr ""
 
 msgid "Minimum net profit to retain for the association infrastructure fee"
@@ -10523,7 +10526,7 @@ msgid ""
 "for the organisation"
 msgstr ""
 
-msgid "Now you can set the options for the event organization fee"
+msgid "Now you can set the options for the Organizational fee"
 msgstr ""
 
 msgid ""

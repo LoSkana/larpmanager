@@ -3920,6 +3920,9 @@ msgstr "Tehtävätyypin nimi"
 msgid "New refund request"
 msgstr "Uusi palautuspyyntö"
 
+msgid "Organizational fee"
+msgstr "Järjestelymaksu"
+
 msgid "Passages completed"
 msgstr "Suoritetut osuudet"
 
@@ -4135,6 +4138,9 @@ msgstr "Jäseniä ei ole määritetty"
 
 msgid "Non-cumulative code"
 msgstr "Ei-kumulatiivinen koodi"
+
+msgid "Organizational fee:"
+msgstr "Järjestelymaksu:"
 
 msgid "Photo of the object"
 msgstr "Kuva esineestä"
@@ -4616,9 +4622,6 @@ msgstr "Tutustu verkkosivustoon!"
 msgid "Event deletion request"
 msgstr "Tapahtuman poistopyyntö"
 
-msgid "Event organization fee"
-msgstr "Tapahtuman järjestämismaksu"
-
 msgid "Expenses collaborators"
 msgstr "Yhteistyökumppanien kulut"
 
@@ -4791,9 +4794,6 @@ msgstr "Haluatko jatkaa?"
 
 msgid "Early registration link"
 msgstr "Varhaisen ilmoittautumisen linkki"
-
-msgid "Event organization fee:"
-msgstr "Tapahtuman järjestämismaksu:"
 
 msgid "Failed to add character"
 msgstr "Hahmon lisääminen epäonnistui"
@@ -8033,6 +8033,9 @@ msgstr "Tähän tapahtumaan ei ole vielä saatu ilmoittautumisia"
 msgid "Now you can add relationships when editing a character"
 msgstr "Nyt voit lisätä suhteita hahmoa muokatessasi"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Nyt voit määrittää järjestelymaksun asetukset"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"
 
@@ -8324,9 +8327,6 @@ msgstr "Hallitse työpajan kysymyksiin tarjolla olevia vastausvaihtoehtoja"
 
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr "Pelaajien luotavien kiltojen enimmäismäärä (0 = ei rajoitusta)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr "Nyt voit määrittää tapahtuman järjestämismaksun asetukset"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Vaihtoehdon nimi, joka näkyy kysymyksessä (pidä se lyhyenä)"

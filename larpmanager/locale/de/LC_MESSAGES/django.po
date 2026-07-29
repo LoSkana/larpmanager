@@ -3920,6 +3920,9 @@ msgstr "Name des Missionstyps"
 msgid "New refund request"
 msgstr "Neuer Erstattungsantrag"
 
+msgid "Organizational fee"
+msgstr "Organisationsgebühr"
+
 msgid "Passages completed"
 msgstr "Abgeschlossene Passagen"
 
@@ -4135,6 +4138,9 @@ msgstr "Es sind keine Mitglieder zugewiesen"
 
 msgid "Non-cumulative code"
 msgstr "Nicht kumulativer Code"
+
+msgid "Organizational fee:"
+msgstr "Organisationsgebühr:"
 
 msgid "Photo of the object"
 msgstr "Foto des Objekts"
@@ -4616,9 +4622,6 @@ msgstr "Entdecke die Website!"
 msgid "Event deletion request"
 msgstr "Antrag auf Löschung eines Ereignisses"
 
-msgid "Event organization fee"
-msgstr "Veranstaltungsorganisationsgebühr"
-
 msgid "Expenses collaborators"
 msgstr "Ausgaben für Mitarbeiter"
 
@@ -4791,9 +4794,6 @@ msgstr "Möchtest du fortfahren?"
 
 msgid "Early registration link"
 msgstr "Link zur frühzeitigen Anmeldung"
-
-msgid "Event organization fee:"
-msgstr "Veranstaltungsorganisationsgebühr:"
 
 msgid "Failed to add character"
 msgstr "Charakter kann nicht hinzugefügt werden"
@@ -8067,6 +8067,9 @@ msgid "Now you can add relationships when editing a character"
 msgstr ""
 "Jetzt kannst du beim Bearbeiten eines Charakters Beziehungen hinzufügen"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Jetzt kannst du die Optionen für die Organisationsgebühr festlegen"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Die Mengenverfolgung ist für diese Organisation nicht aktiviert"
 
@@ -8388,11 +8391,6 @@ msgstr "Die Antwortmöglichkeiten für Workshop-Fragen verwalten"
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr ""
 "Maximale Anzahl an Gilden, die Spieler gründen können (0 = keine Begrenzung)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr ""
-"Jetzt kannst du die Optionen für die Organisationsgebühr der Veranstaltung "
-"festlegen"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Name der Option, angezeigt in der Frage (kurz halten)"

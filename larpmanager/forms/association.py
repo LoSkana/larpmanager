@@ -823,7 +823,7 @@ class ExeConfigForm(ConfigForm):
 
         # Configure organization infrastructure fee calculation
         if "organization_tax" in self.params["features"]:
-            self.set_section("organization_tax", _("Event organization fee"))
+            self.set_section("organization_tax", _("Organizational fee"))
             label_organization_fee_percentage = _("Percentage")
             help_text_organization_fee_percentage = _(
                 "Percentage of takings calculated as a fee for association infrastructure (in "

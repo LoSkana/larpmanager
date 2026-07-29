@@ -3920,6 +3920,9 @@ msgstr "Naam van questtype"
 msgid "New refund request"
 msgstr "Nieuw verzoek om terugbetaling"
 
+msgid "Organizational fee"
+msgstr "Organisatiekosten"
+
 msgid "Passages completed"
 msgstr "Afgeronde passages"
 
@@ -4135,6 +4138,9 @@ msgstr "Er zijn geen leden toegewezen"
 
 msgid "Non-cumulative code"
 msgstr "Niet-cumulatieve code"
+
+msgid "Organizational fee:"
+msgstr "Organisatiekosten:"
 
 msgid "Photo of the object"
 msgstr "Foto van het object"
@@ -4616,9 +4622,6 @@ msgstr "Ontdek de website!"
 msgid "Event deletion request"
 msgstr "Verzoek om verwijdering van het evenement"
 
-msgid "Event organization fee"
-msgstr "Kosten voor het organiseren van een evenement"
-
 msgid "Expenses collaborators"
 msgstr "Onkosten medewerkers"
 
@@ -4791,9 +4794,6 @@ msgstr "Wil je doorgaan?"
 
 msgid "Early registration link"
 msgstr "Link voor vroege registratie"
-
-msgid "Event organization fee:"
-msgstr "Kosten voor de organisatie van het evenement:"
 
 msgid "Failed to add character"
 msgstr "Kon geen personage toevoegen"
@@ -8044,6 +8044,9 @@ msgstr "Er zijn nog geen inschrijvingen ontvangen voor dit evenement"
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kun je relaties toevoegen wanneer je een personage bewerkt"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Nu kun je de opties voor de organisatiekosten instellen"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
 "Het bijhouden van hoeveelheden is niet ingeschakeld voor deze organisatie"
@@ -8358,11 +8361,6 @@ msgstr "Beheer de antwoordopties voor workshopvragen"
 
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr "Maximaal aantal gilden dat spelers kunnen aanmaken (0 = geen limiet)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr ""
-"Nu kun je de opties voor de organisatievergoeding voor het evenement "
-"instellen"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Optienaam, weergegeven in de vraag (houd het kort)"

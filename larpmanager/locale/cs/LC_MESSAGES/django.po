@@ -3920,6 +3920,9 @@ msgstr "Název typu úkolu"
 msgid "New refund request"
 msgstr "Nová žádost o vrácení peněz"
 
+msgid "Organizational fee"
+msgstr "Organizační poplatek"
+
 msgid "Passages completed"
 msgstr "Dokončené úseky"
 
@@ -4135,6 +4138,9 @@ msgstr "Není přiřazen žádný člen"
 
 msgid "Non-cumulative code"
 msgstr "Nekumulativní kód"
+
+msgid "Organizational fee:"
+msgstr "Organizační poplatek:"
 
 msgid "Photo of the object"
 msgstr "Fotografie objektu"
@@ -4616,9 +4622,6 @@ msgstr "Objev webové stránky!"
 msgid "Event deletion request"
 msgstr "Žádost o odstranění události"
 
-msgid "Event organization fee"
-msgstr "Poplatek za organizaci akce"
-
 msgid "Expenses collaborators"
 msgstr "Výdaje spolupracovníků"
 
@@ -4791,9 +4794,6 @@ msgstr "Chceš pokračovat?"
 
 msgid "Early registration link"
 msgstr "Odkaz pro včasnou registraci"
-
-msgid "Event organization fee:"
-msgstr "Poplatek za organizaci akce:"
 
 msgid "Failed to add character"
 msgstr "Nepodařilo se přidat postavu"
@@ -8027,6 +8027,9 @@ msgstr "Na tuto akci zatím nebyly doručeny žádné registrace"
 msgid "Now you can add relationships when editing a character"
 msgstr "Nyní můžeš při úpravě postavy přidávat vztahy"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Nyní můžeš nastavit možnosti pro organizační poplatek"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Sledování množství není pro tuto organizaci povoleno"
 
@@ -8312,9 +8315,6 @@ msgstr "Správa možností odpovědí dostupných pro otázky v rámci workshopu
 
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr "Maximální počet cechů, které mohou hráči založit (0 = bez omezení)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr "Nyní můžeš nastavit možnosti týkající se poplatku za organizaci akce"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Název možnosti, zobrazený v otázce (ponech ho krátký)"

@@ -828,14 +828,14 @@
     - character
 - model: larpmanager.feature
   fields:
-    name: Event organization fee
+    name: Organizational fee
     descr: Allows you to set a 'tax' percentage on event income that must be set aside
       for the organisation
     slug: organization_tax
     overall: true
     placeholder: false
     order: 110
-    after_text: Now you can set the options for the event organization fee
+    after_text: Now you can set the options for the Organizational fee
     after_link: config/organization_tax
     hidden: false
     module: accounting

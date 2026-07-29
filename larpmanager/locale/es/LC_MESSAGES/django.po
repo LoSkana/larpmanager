@@ -3920,6 +3920,9 @@ msgstr "Nombre del tipo de misión"
 msgid "New refund request"
 msgstr "Nueva solicitud de devolución"
 
+msgid "Organizational fee"
+msgstr "Tarifa de organización"
+
 msgid "Passages completed"
 msgstr "Pasajes completados"
 
@@ -4135,6 +4138,9 @@ msgstr "No hay miembros asignados"
 
 msgid "Non-cumulative code"
 msgstr "Código no acumulativo"
+
+msgid "Organizational fee:"
+msgstr "Tarifa de organización:"
 
 msgid "Photo of the object"
 msgstr "Foto del objeto"
@@ -4616,9 +4622,6 @@ msgstr "Descubre el sitio web!"
 msgid "Event deletion request"
 msgstr "Solicitud de eliminación del evento"
 
-msgid "Event organization fee"
-msgstr "Cuota de organización del evento"
-
 msgid "Expenses collaborators"
 msgstr "Gastos de colaboradores"
 
@@ -4791,9 +4794,6 @@ msgstr "¿Quieres continuar?"
 
 msgid "Early registration link"
 msgstr "Enlace de inscripción anticipada"
-
-msgid "Event organization fee:"
-msgstr "Cuota de organización del evento:"
 
 msgid "Failed to add character"
 msgstr "Fallo al añadir personaje"
@@ -8059,6 +8059,9 @@ msgstr "Aún no se han recibido inscripciones para este evento"
 msgid "Now you can add relationships when editing a character"
 msgstr "Ahora puedes añadir relaciones al editar un personaje"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Ahora puedes configurar las opciones para la tarifa de organización"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "El seguimiento de cantidades no está activado para esta organización"
 
@@ -8369,11 +8372,6 @@ msgstr ""
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr ""
 "Número máximo de gremios que pueden crear los jugadores (0 = sin límite)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr ""
-"Ahora puedes configurar las opciones relacionadas con la cuota de "
-"organización del evento"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nombre de la opción, que aparece en la pregunta (manténlo breve)"

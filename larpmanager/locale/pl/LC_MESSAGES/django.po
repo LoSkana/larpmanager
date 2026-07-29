@@ -3920,6 +3920,9 @@ msgstr "Nazwa typu zadania"
 msgid "New refund request"
 msgstr "Nowy wniosek o zwrot pieniędzy"
 
+msgid "Organizational fee"
+msgstr "Opłata organizacyjna"
+
 msgid "Passages completed"
 msgstr "Ukończone fragmenty"
 
@@ -4135,6 +4138,9 @@ msgstr "Nie przypisano żadnych członków"
 
 msgid "Non-cumulative code"
 msgstr "Kod, którego nie można łączyć"
+
+msgid "Organizational fee:"
+msgstr "Opłata organizacyjna:"
 
 msgid "Photo of the object"
 msgstr "Zdjęcie obiektu"
@@ -4616,9 +4622,6 @@ msgstr "Odkryj stronę internetową!"
 msgid "Event deletion request"
 msgstr "Żądanie usunięcia wydarzenia"
 
-msgid "Event organization fee"
-msgstr "Opłata za organizację imprezy"
-
 msgid "Expenses collaborators"
 msgstr "Wydatki współpracowników"
 
@@ -4791,9 +4794,6 @@ msgstr "Czy chcesz kontynuować?"
 
 msgid "Early registration link"
 msgstr "Link do wczesnej rejestracji"
-
-msgid "Event organization fee:"
-msgstr "Opłata za organizację imprezy:"
 
 msgid "Failed to add character"
 msgstr "Nie udało się dodać postaci"
@@ -8038,6 +8038,9 @@ msgstr "Nie otrzymano jeszcze żadnych zgłoszeń na to wydarzenie"
 msgid "Now you can add relationships when editing a character"
 msgstr "Teraz możesz dodawać relacje podczas edycji postaci"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Teraz możesz ustawić opcje opłaty organizacyjnej"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Śledzenie ilości nie jest włączone dla tej organizacji"
 
@@ -8343,9 +8346,6 @@ msgstr "Zarządzaj opcjami odpowiedzi dostępnymi dla pytań z warsztatów"
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr ""
 "Maksymalna liczba gildii, które gracze mogą założyć (0 = bez ograniczeń)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr "Teraz możesz ustawić opcje dotyczące opłaty za organizację wydarzenia"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nazwa opcji wyświetlana w pytaniu (powinna być krótka)"

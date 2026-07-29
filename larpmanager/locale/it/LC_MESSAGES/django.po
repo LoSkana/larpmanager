@@ -3920,6 +3920,9 @@ msgstr "Nome del tipo di missione"
 msgid "New refund request"
 msgstr "Nuova richiesta rimborso"
 
+msgid "Organizational fee"
+msgstr "Quota organizzativa"
+
 msgid "Passages completed"
 msgstr "Passaggi completati"
 
@@ -4135,6 +4138,9 @@ msgstr "Nessun membro assegnato"
 
 msgid "Non-cumulative code"
 msgstr "Codice non cumulabile"
+
+msgid "Organizational fee:"
+msgstr "Quota organizzativa:"
 
 msgid "Photo of the object"
 msgstr "Foto dell'oggetto"
@@ -4616,9 +4622,6 @@ msgstr "Scopri il sito web!"
 msgid "Event deletion request"
 msgstr "Richiesta di cancellazione dell'evento"
 
-msgid "Event organization fee"
-msgstr "Quota di organizzazione evento"
-
 msgid "Expenses collaborators"
 msgstr "Spese dei collaboratori"
 
@@ -4791,9 +4794,6 @@ msgstr "Vuoi procedere?"
 
 msgid "Early registration link"
 msgstr "Link per iscrizione anticipata"
-
-msgid "Event organization fee:"
-msgstr "Quota di organizzazione evento:"
 
 msgid "Failed to add character"
 msgstr "Impossibile aggiungere il personaggio"
@@ -8054,6 +8054,9 @@ msgstr "Non sono ancora pervenute iscrizioni per questo evento"
 msgid "Now you can add relationships when editing a character"
 msgstr "Ora puoi aggiungere relazioni quando si modifica un personaggio"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Ora puoi impostare le opzioni per la quota organizzativa"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr ""
 "Il monitoraggio della quantità non è abilitato per questa organizzazione"
@@ -8368,10 +8371,6 @@ msgstr ""
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr ""
 "Numero massimo di gilde che i giocatori possono creare (0 = nessun limite)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr ""
-"Ora puoi impostare le opzioni relative alla Quota di organizzazione evento"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr ""

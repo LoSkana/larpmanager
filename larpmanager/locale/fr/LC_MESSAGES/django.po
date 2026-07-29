@@ -3920,6 +3920,9 @@ msgstr "Nom du type de quête"
 msgid "New refund request"
 msgstr "Nouvelle demande de remboursement"
 
+msgid "Organizational fee"
+msgstr "Frais d’organisation"
+
 msgid "Passages completed"
 msgstr "Passages terminés"
 
@@ -4135,6 +4138,9 @@ msgstr "Aucun membre n'a été désigné"
 
 msgid "Non-cumulative code"
 msgstr "Code non cumulatif"
+
+msgid "Organizational fee:"
+msgstr "Frais d’organisation :"
 
 msgid "Photo of the object"
 msgstr "Photo de l'objet"
@@ -4616,9 +4622,6 @@ msgstr "Découvre le site web!"
 msgid "Event deletion request"
 msgstr "Demande de suppression d'un événement"
 
-msgid "Event organization fee"
-msgstr "Frais d'organisation de l'événement"
-
 msgid "Expenses collaborators"
 msgstr "Dépenses des collaborateurs"
 
@@ -4791,9 +4794,6 @@ msgstr "Veux-tu continuer?"
 
 msgid "Early registration link"
 msgstr "Lien pour l'inscription anticipée"
-
-msgid "Event organization fee:"
-msgstr "Frais d'organisation de l'événement :"
 
 msgid "Failed to add character"
 msgstr "Échec de l'ajout d'un personnage"
@@ -8072,6 +8072,9 @@ msgstr ""
 "Tu peux maintenant ajouter des relations lors de la modification d'un "
 "personnage"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Tu peux maintenant définir les options des frais d’organisation"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Le suivi des quantités n'est pas activé pour cette organisation"
 
@@ -8407,11 +8410,6 @@ msgstr ""
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr ""
 "Nombre maximum de guildes que les joueurs peuvent créer (0 = pas de limite)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr ""
-"Tu peux désormais définir les options relatives aux frais d'organisation de "
-"l'événement"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Nom de l'option, affiché dans la question (reste court)"

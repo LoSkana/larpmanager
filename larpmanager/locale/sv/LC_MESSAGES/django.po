@@ -3920,6 +3920,9 @@ msgstr "Namn på uppdragstyp"
 msgid "New refund request"
 msgstr "Ny begäran om återbetalning"
 
+msgid "Organizational fee"
+msgstr "Organisationsavgift"
+
 msgid "Passages completed"
 msgstr "Avslutade avsnitt"
 
@@ -4135,6 +4138,9 @@ msgstr "Inga medlemmar har tilldelats"
 
 msgid "Non-cumulative code"
 msgstr "Icke-kumulativ kod"
+
+msgid "Organizational fee:"
+msgstr "Organisationsavgift:"
 
 msgid "Photo of the object"
 msgstr "Foto av objektet"
@@ -4616,9 +4622,6 @@ msgstr "Upptäck webbplatsen!"
 msgid "Event deletion request"
 msgstr "Begäran om radering av evenemang"
 
-msgid "Event organization fee"
-msgstr "Avgift för evenemangsarrangemang"
-
 msgid "Expenses collaborators"
 msgstr "Kostnader för medarbetare"
 
@@ -4791,9 +4794,6 @@ msgstr "Vill du fortsätta?"
 
 msgid "Early registration link"
 msgstr "Länk för tidig registrering"
-
-msgid "Event organization fee:"
-msgstr "Avgift för evenemangsarrangemang:"
 
 msgid "Failed to add character"
 msgstr "Misslyckades med att lägga till karaktär"
@@ -8030,6 +8030,9 @@ msgstr "Inga anmälningar har ännu mottagits för detta evenemang"
 msgid "Now you can add relationships when editing a character"
 msgstr "Nu kan du lägga till relationer när du redigerar en karaktär"
 
+msgid "Now you can set the options for the Organizational fee"
+msgstr "Nu kan du ställa in alternativen för organisationsavgiften"
+
 msgid "Quantity tracking is not enabled for this organization"
 msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
 
@@ -8319,10 +8322,6 @@ msgstr ""
 
 msgid "Maximum number of guilds players can create (0 = no limit)"
 msgstr "Högsta antal guilder som spelare kan skapa (0 = ingen gräns)"
-
-msgid "Now you can set the options for the event organization fee"
-msgstr ""
-"Nu kan du ställa in alternativen för organisationsavgiften för evenemanget"
 
 msgid "Option name, displayed within the question (keep it short)"
 msgstr "Alternativets namn, visas i frågan (håll det kort)"
