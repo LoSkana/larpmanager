@@ -544,7 +544,7 @@ class OrgaDiscountForm(BaseModelForm):
             choices=choices,
             widget=widget,
             required=False,
-            help_text=_("Indicates the sessions for which the discount is available"),
+            help_text=_("The sessions for which the discount is available"),
         )
 
         # Pre-populate field with existing runs if editing an instance
@@ -637,7 +637,7 @@ class RefundRequestForm(BaseModelForm):
             max_digits=10,
             decimal_places=2,
             initial=self.params["membership"].credit,
-            help_text=_("Indicates the amount of reimbursement desired (can't be higher than your current credits)"),
+            help_text=_("The amount of reimbursement desired (can't be higher than your current credits)"),
         )
 
 

@@ -191,7 +191,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         max_length=150,
         verbose_name=_("Contact"),
         help_text=_(
-            "Indicates a way for other participants to contact you. It can be an email address, a social profile, or anything else you choose. It will be made public to other participants.",
+            "Enter a way for other participants to contact you. It can be an email address, a social profile, or anything else you choose. It will be made public to other participants.",
         ),
         blank=True,
         null=True,
@@ -509,7 +509,7 @@ class Membership(BaseModel):
     compiled = models.BooleanField(
         default=False,
         verbose_name=_("Profile completed"),
-        help_text=_("Indicates whether the member has completed their profile information"),
+        help_text=_("Whether the member has completed their profile information"),
     )
 
     credit = models.DecimalField(

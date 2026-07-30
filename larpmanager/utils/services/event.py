@@ -500,7 +500,7 @@ def save_event_registration_form(features: dict, instance: object) -> None:
         "pay_what_you_want": _("Freely indicate the amount of your donation"),
         "reg_surcharges": _("Registration surcharge"),
         "reg_quotas": _(
-            "Number of installments to split the fee: payments and deadlines will be equally divided from the registration date",
+            "Select how many payments to split the fee into. Total amount and deadlines are divided equally starting from the registration date.",
         ),
     }
 
