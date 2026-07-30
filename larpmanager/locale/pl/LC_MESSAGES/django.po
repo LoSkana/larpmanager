@@ -6812,9 +6812,6 @@ msgstr "Pola writing bez opcji: %(list)s"
 msgid "You are logged in with an email address:"
 msgstr "Jesteś zalogowany przy użyciu adresu e-mail:"
 
-msgid "You can now review users' mailing lists."
-msgstr "Możesz teraz przeglądać listy mailingowe użytkowników."
-
 msgid "You can now set the dynamic installments"
 msgstr "Możesz teraz ustawić dynamiczne raty"
 
@@ -6860,9 +6857,6 @@ msgstr "Czy poprawnie sprawdziłeś wymagane dane?"
 
 msgid "Display all participants data as registry"
 msgstr "Wyświetl dane wszystkich uczestników jako rejestr"
-
-msgid "Displays a list of users' email addresses"
-msgstr "Wyświetla listę adresów e-mail użytkowników"
 
 msgid "Donation amount chosen by the participant"
 msgstr "Kwota darowizny wybrana przez uczestnika"
@@ -7698,6 +7692,9 @@ msgstr "Przekroczona tolerancja, kontynuuj anulowanie"
 msgid "You are including (at least one of these filters)"
 msgstr "Uwzględniasz (co najmniej jeden z tych filtrów)"
 
+msgid "You can now review mailing lists for newsletters."
+msgstr "Możesz teraz przeglądać listy mailingowe newsletterów."
+
 msgid "You can now set the external mail server settings"
 msgstr "Możesz teraz ustawić konfigurację zewnętrznego serwera pocztowego"
 
@@ -7713,6 +7710,9 @@ msgstr "Zdefiniuj dane gromadzone w formularzu profilu użytkownika"
 #, python-format
 msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr "Szczegóły: %(details)s (Kwota: <b>%(amount).2f</b>)"
+
+msgid "Displays a list of email addresses for newsletters"
+msgstr "Wyświetla listę adresów e-mail do newsletterów"
 
 msgid "Enables warehouse management for the organization."
 msgstr "Włącza zarządzanie magazynem dla organizacji."
@@ -8315,9 +8315,6 @@ msgstr ""
 "Skontaktuj się z organizatorami, jeśli potrzebujesz nowego linku dostępu "
 "później"
 
-msgid "Displays a list of signed-up participants' email addresses"
-msgstr "Wyświetla listę adresów e-mail zapisanych uczestników"
-
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
 "Wystąpił błąd podczas przesyłania zdjęcia. Spróbuj jeszcze raz albo użyj "
@@ -8489,6 +8486,9 @@ msgstr "Skonfiguruj rodzaje biletów, ceny i poziomy dostępu dla uczestników."
 
 msgid "Content of mail reminding participants to fill their profile"
 msgstr "Treść wiadomości przypominającej uczestnikom o wypełnieniu profilu"
+
+msgid "Displays a list of signed-up email addresses for newsletters"
+msgstr "Wyświetla listę zapisanych adresów e-mail do newsletterów"
 
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr "Wyświetla uczestników zalegających z płatnością lub innymi terminami"
@@ -13809,11 +13809,11 @@ msgstr ""
 "z przycisku powyżej, żeby dodać sekcję i uporządkować pytania rejestracyjne."
 
 msgid ""
-"Select how many payments to split the fee into. Total amount and deadlines "
-"are divided equally starting from the registration date."
+"Select how many payments to split the fee into (total amount and deadlines "
+"are divided equally starting from the registration date)"
 msgstr ""
-"Wybierz, na ile płatności podzielić opłatę. Całkowita kwota i terminy "
-"zostaną podzielone równo, począwszy od daty rejestracji."
+"Wybierz, na ile płatności podzielić opłatę (łączna kwota i terminy są "
+"dzielone równo, począwszy od daty rejestracji)"
 
 msgid ""
 "When you want to close the collection, follow this link. A special "
