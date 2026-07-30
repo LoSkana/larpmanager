@@ -205,7 +205,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
             checks = [("writing_external_access", "access_token"), ("writing_number", "number")]
             for check in checks:
-                config = get_event_config(current_event.id, check[0], default_value=False, context=self.params)
+                config = get_event_config(current_event.id, check[0], context=self.params)
                 if config and self.instance.pk:
                     fields_default.add(check[1])
                     self.reorder_field(check[1])

@@ -260,7 +260,6 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
         template_context[config_key] = get_association_config(
             context["association_id"],
             config_key,
-            default_value=None,
             context=template_context,
         )
 

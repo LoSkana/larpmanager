@@ -1287,7 +1287,7 @@ class OrgaRegistrationTicketForm(BaseModelForm):
 
             # Skip ticket tiers that require configuration options not set
             if tier_value in ticket_configs and not get_event_config(
-                event.id, f"ticket_{ticket_configs[tier_value]}", default_value=False, context=context
+                event.id, f"ticket_{ticket_configs[tier_value]}", context=context
             ):
                 continue
 

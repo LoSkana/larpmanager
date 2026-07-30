@@ -32,7 +32,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import CONFIG_UNSET, get_element_config, get_event_config
+from larpmanager.cache.config import get_element_config, get_event_config
 from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
@@ -232,9 +232,9 @@ class Character(Writing):
         """Return string representation."""
         return self.name
 
-    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this character."""
-        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+        return get_element_config(self, name, bypass_cache=bypass_cache)
 
     @property
     def is_active(self) -> bool:

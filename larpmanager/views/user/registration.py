@@ -860,9 +860,7 @@ def _add_bring_friend_discounts(context: dict) -> None:
 
     # Retrieve discount configuration for both directions (to/from)
     for discount_config_name in ["bring_friend_discount_to", "bring_friend_discount_from"]:
-        context[discount_config_name] = get_event_config(
-            context["event"].id, discount_config_name, default_value=0, context=context
-        )
+        context[discount_config_name] = get_event_config(context["event"].id, discount_config_name, context=context)
 
 
 def _register_prepare(context: dict, registration: Any) -> Any:

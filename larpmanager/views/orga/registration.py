@@ -575,7 +575,6 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         context[config] = get_event_config(
             context["event"].id,
             config,
-            default_value=False,
             context=context,
         )
 
@@ -662,7 +661,7 @@ def _load_preferences_columns(context: dict) -> None:
 
     """
     # Load user's saved column visibility preferences
-    default_fields_str = context["member"].get_config(f"open_registration_{context['event'].id}", default_value="[]")
+    default_fields_str = context["member"].get_config(f"open_registration_{context['event'].id}")
 
     # Parse default fields, handling empty or invalid JSON
     # Replace single quotes with double quotes for valid JSON

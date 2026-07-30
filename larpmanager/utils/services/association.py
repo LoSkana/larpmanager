@@ -272,8 +272,8 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
     def _done(slug: str) -> bool:
         config_key = f"{slug}_suggestion"
         if slug.startswith("exe"):
-            return bool(get_association_config(association_id, config_key, default_value=False))
-        return any(get_event_config(eid, config_key, default_value=False) for eid in event_ids)
+            return bool(get_association_config(association_id, config_key))
+        return any(get_event_config(eid, config_key) for eid in event_ids)
 
     _not_used = [
         {
