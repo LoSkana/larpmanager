@@ -205,7 +205,7 @@ def _status_membership_fee(
     if user_membership.status != MembershipStatus.ACCEPTED:
         return False
 
-    fee = int(get_association_config(run.event.association_id, "membership_fee", default_value=0))
+    fee = int(get_association_config(run.event.association_id, "membership_fee"))
     if not fee:
         return False
 
@@ -550,7 +550,7 @@ def _set_membership_context(context: dict, run: Run, member: Member, registratio
         return
     association_id = run.event.association_id
     event_year = run.start.year
-    context["membership_amount"] = get_association_config(association_id, "membership_fee", default_value=0)
+    context["membership_amount"] = get_association_config(association_id, "membership_fee")
     currency_symbol = run.event.association.get_currency_symbol()
     context["membership_amount_display"] = ""
     if context["membership_amount"]:
@@ -571,7 +571,7 @@ def _set_membership_context(context: dict, run: Run, member: Member, registratio
             context["membership_amount_paid_display"] = f"({_format_decimal(paid_item.value)}{currency_symbol})"
         return
 
-    membership_fee_separated = get_association_config(association_id, "membership_fee_separated", default_value=True)
+    membership_fee_separated = get_association_config(association_id, "membership_fee_separated")
     if membership_fee_separated:
         if timezone.now().year != event_year:
             context["membership_fee"] = "future"
@@ -866,7 +866,7 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
     current_character_count = characters.exclude(id__in=inactive_character_ids).count()
 
     # Get the maximum allowed characters from event configuration
-    maximum_characters_allowed = int(get_event_config(event.id, "user_character_max", default_value=1))
+    maximum_characters_allowed = int(get_event_config(event.id, "user_character_max"))
 
     # Return whether limit is reached and the maximum allowed
     return current_character_count >= maximum_characters_allowed, maximum_characters_allowed
@@ -936,7 +936,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
         character_name = character_rel.custom_name
 
     # Add approval status if character approval is enabled and not approved
-    approval_required = get_event_config(run.event_id, "user_character_approval", default_value=False, context=context)
+    approval_required = get_event_config(run.event_id, "user_character_approval", context=context)
     if approval_required and character_rel.character.status != CharacterStatus.APPROVED:
         character_name += f" ({_(character_rel.character.get_status_display())})"
 
@@ -963,7 +963,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
         )
 
     if feature_visible("experience", features, allowed_sidebar) and get_event_config(
-        run.event_id, "exp_user", default_value=False, context=context
+        run.event_id, "exp_user", context=context
     ):
         character_links.append(
             {
@@ -1129,7 +1129,7 @@ def casting_preferences_pending(
     if is_character_assigned:
         return False
 
-    field_visibility = get_event_config(run.event_id, "writing_field_visibility", default_value=False, context=context)
+    field_visibility = get_event_config(run.event_id, "writing_field_visibility", context=context)
     if field_visibility and not (context or {}).get("show_character"):
         return False
 
@@ -1292,7 +1292,7 @@ def check_assign_character(context: dict) -> None:
         return
 
     # Get the maximum number of characters a user can have assigned
-    user_character_max = max(1, int(get_event_config(context["event"].id, "user_character_max", default_value=1)))
+    user_character_max = max(1, int(get_event_config(context["event"].id, "user_character_max")))
 
     # Get currently assigned character IDs for this registration
     assigned_character_ids = set(registration.rcrs.values_list("character_id", flat=True))
@@ -1339,7 +1339,7 @@ def get_reduced_available_count(run: Any) -> int:
 
     """
     # Get the ratio for reduced tickets per patron registrations
-    reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio", default_value=10))
+    reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio"))
 
     # Count current reduced and patron registrations (excluding cancelled)
     reduced_registrations_count = Registration.objects.filter(

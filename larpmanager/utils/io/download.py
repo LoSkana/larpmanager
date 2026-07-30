@@ -405,7 +405,7 @@ def _row_header(  # noqa: C901, PLR0912
         row_values.append(profile_url)
 
     # Add character number column if writing_number config is enabled
-    if model == "character" and get_event_config(context["event"].id, "writing_number", default_value=False):
+    if model == "character" and get_event_config(context["event"].id, "writing_number"):
         header_columns.append("number")
         row_values.append(el.number)
 
@@ -1138,7 +1138,7 @@ def _get_writing_names(context: dict) -> None:
         context["fields"]["email"] = "skip"
 
         # Add status field if approval feature is enabled
-        if get_event_config(context["event"].id, "user_character_approval", default_value=False):
+        if get_event_config(context["event"].id, "user_character_approval"):
             context["fields"]["status"] = "character_status"
 
         # Add assigned field if assigned feature is enabled

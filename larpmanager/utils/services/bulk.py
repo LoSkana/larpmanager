@@ -79,7 +79,7 @@ def _require_role_delete(request: HttpRequest, context: dict) -> None:
 
 def _check_bulk_delete_enabled(context: dict) -> None:
     """Raise PermissionDenied if bulk delete is not enabled for this association."""
-    if not get_association_config(context["association_id"], "allow_bulk_delete", default_value=False, context=context):
+    if not get_association_config(context["association_id"], "allow_bulk_delete", context=context):
         raise PermissionDenied
 
 
@@ -90,7 +90,7 @@ def _bulk_op(idx: int, objs: Any) -> dict:
 
 def _add_bulk_delete_option(request: HttpRequest, context: dict) -> None:
     """Append bulk delete option to context bulk list if enabled for the association and user has the required role."""
-    if not get_association_config(context["association_id"], "allow_bulk_delete", default_value=False, context=context):
+    if not get_association_config(context["association_id"], "allow_bulk_delete", context=context):
         return
     if _check_delete_role(request, context):
         objs = [{"uuid": 1, "name": _("Are you sure? The items might not be recoverable.")}]
@@ -609,7 +609,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
         )
 
     # Add status assignment operation if enabled
-    if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
+    if get_event_config(context["event"].id, "user_character_approval", context=context):
         status_choices = [{"uuid": choice[0], "name": choice[1]} for choice in CharacterStatus.choices]
         context["bulk"].append(
             _bulk_op(Operations.SET_CHAR_STATUS, status_choices),

@@ -398,9 +398,7 @@ def _orga_registrations_custom_character(context: dict) -> None:
         return
     context["custom_info"] = []
     for field_name in ["pronoun", "song", "public", "private", "profile"]:
-        if not get_event_config(
-            context["event"].id, "custom_character_" + field_name, default_value=False, context=context
-        ):
+        if not get_event_config(context["event"].id, "custom_character_" + field_name, context=context):
             continue
         context["custom_info"].append(field_name)
 
@@ -432,9 +430,7 @@ def _orga_registrations_prepare(context: dict) -> None:
         str(q["uuid"]) for q in event_questions if q["typ"] in [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
     ]
 
-    context["no_grouping"] = get_event_config(
-        context["event"].id, "registration_no_grouping", default_value=False, context=context
-    )
+    context["no_grouping"] = get_event_config(context["event"].id, "registration_no_grouping", context=context)
 
 
 def _get_registration_fields(context: dict, member: Any, event_questions: list | None = None) -> dict:
@@ -579,7 +575,6 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
         context[config] = get_event_config(
             context["event"].id,
             config,
-            default_value=False,
             context=context,
         )
 
@@ -621,7 +616,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["download"] = 1
 
     # Enable export view if configured
-    if get_event_config(context["event"].id, "show_export", default_value=False, context=context):
+    if get_event_config(context["event"].id, "show_export", context=context):
         context["export"] = "registration"
 
     _load_preferences_columns(context)
@@ -666,7 +661,7 @@ def _load_preferences_columns(context: dict) -> None:
 
     """
     # Load user's saved column visibility preferences
-    default_fields_str = context["member"].get_config(f"open_registration_{context['event'].id}", default_value="[]")
+    default_fields_str = context["member"].get_config(f"open_registration_{context['event'].id}")
 
     # Parse default fields, handling empty or invalid JSON
     # Replace single quotes with double quotes for valid JSON
@@ -1421,9 +1416,7 @@ def orga_pre_registrations(request: HttpRequest, event_slug: str) -> HttpRespons
     context["dc"] = get_pre_registration(context["event"])
 
     # Retrieve pre-registration preferences from association config
-    context["preferences"] = get_association_config(
-        context["association_id"], "pre_reg_preferences", default_value=False
-    )
+    context["preferences"] = get_association_config(context["association_id"], "pre_reg_preferences")
 
     return render(request, "larpmanager/orga/registration/pre_registrations.html", context)
 
@@ -1437,12 +1430,10 @@ def lottery_info(request: HttpRequest, context: dict) -> None:  # noqa: ARG001
 
     """
     # Get number of lottery draws from event configuration
-    context["num_draws"] = int(
-        get_event_config(context["event"].id, "lottery_num_draws", default_value=0, context=context)
-    )
+    context["num_draws"] = int(get_event_config(context["event"].id, "lottery_num_draws", context=context))
 
     # Get lottery ticket configuration
-    context["ticket"] = get_event_config(context["event"].id, "lottery_ticket", default_value="", context=context)
+    context["ticket"] = get_event_config(context["event"].id, "lottery_ticket", context=context)
 
     # Count active lottery registrations
     context["num_lottery"] = Registration.objects.filter(

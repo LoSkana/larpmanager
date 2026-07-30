@@ -715,7 +715,7 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
             return []
         from larpmanager.cache.config import get_event_config  # noqa: PLC0415
 
-        show_number = get_event_config(self.event.id, "writing_number", default_value=False)
+        show_number = get_event_config(self.event.id, "writing_number")
         base_qs = self.event.get_elements(Character).only("id", "uuid", "name", "number").order_by("name")
         qs = base_qs.filter(uuid__in=val_list)
         if not qs.exists():

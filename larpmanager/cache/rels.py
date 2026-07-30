@@ -435,7 +435,7 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
 
 def _count_unimportant(rels: Any, event_id: int) -> int:
     """Count rels whose text starts with $unimportant, when feature enabled."""
-    if not get_event_config(event_id, "writing_unimportant", default_value=False):
+    if not get_event_config(event_id, "writing_unimportant"):
         return 0
     return sum(1 for rel in rels if strip_tags(rel.text).lstrip().startswith("$unimportant"))
 
@@ -467,7 +467,7 @@ def _build_faction_relations(char: Character, event: Event) -> dict[str, Any]:
         Dictionary with faction relationship data
     """
     cache_event_id = event.id if event else char.event_id
-    if get_event_config(cache_event_id, "campaign_faction_indep", default_value=False):
+    if get_event_config(cache_event_id, "campaign_faction_indep"):
         # Use the cache event for independent faction lookup
         faction_event_id = cache_event_id
     else:
@@ -657,7 +657,7 @@ def get_event_plot_rels(plot: Plot) -> dict[str, Any]:
 
         # Build structured relationship dictionary with list and count
         relationships["character_rels"] = build_relationship_dict(character_id_name_pairs)
-        if get_event_config(plot.event_id, "writing_unimportant", default_value=False):
+        if get_event_config(plot.event_id, "writing_unimportant"):
             relationships["character_rels"]["important"] = relationships["character_rels"][
                 "count"
             ] - _count_unimportant(character_relationships, plot.event_id)
