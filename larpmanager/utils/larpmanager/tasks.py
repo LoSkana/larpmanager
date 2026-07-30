@@ -455,6 +455,7 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
         "sender_name": "LarpManager",
         "headers": {},
         "bcc_recipients": [],
+        "base_url": get_url("").rstrip("/"),
     }
 
     cache_context = {}
@@ -480,6 +481,9 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
     # Apply association-level metadata
     if association_id:
         association = Association.objects.get(pk=association_id)
+
+        # Base URL for absolutizing relative links/images in the body
+        metadata["base_url"] = get_url("", association).rstrip("/")
 
         # Add BCC if configured
         if association.get_config("mail_cc", default_value=False, bypass_cache=True) and association.main_mail:
@@ -511,6 +515,17 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
     return metadata
 
 
+# Root-relative src/href attributes (excludes protocol-relative "//host/path")
+_RELATIVE_URL_RE = re.compile(r"""(<[^>]+\s(?:src|href)\s*=\s*["'])(/(?!/)[^"']*)(["'])""", re.IGNORECASE)
+
+
+def absolute_email_urls(body: str, base_url: str) -> str:
+    """Rewrite root-relative src/href attributes to absolute URLs."""
+    if not body:
+        return body
+    return _RELATIVE_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}{match.group(3)}", body)
+
+
 def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> EmailMultiAlternatives:
     """Build EmailMultiAlternatives from components.
 
@@ -518,12 +533,15 @@ def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> 
         subj: Email subject
         body: Email body (HTML format)
         m_email: Recipient email address
-        metadata: Dict with sender_email, sender_name, headers, bcc_recipients, org_main_mail (optional)
+        metadata: Dict with sender_email, sender_name, headers, bcc_recipients, base_url, org_main_mail (optional)
 
     Returns:
         EmailMultiAlternatives instance ready to send
     """
     sender = f"{clean_sender(metadata['sender_name'])} <{metadata['sender_email']}>"
+
+    if metadata.get("base_url"):
+        body = absolute_email_urls(body, metadata["base_url"])
 
     # Note: Connection is NOT set here - backend handles sending
     message = EmailMultiAlternatives(
