@@ -88,9 +88,7 @@
             {% endif %}
             {% if field.help_text %}
                 <br>
-                <div class="helptext {% if field.field.widget.input_type == 'checkbox' %}helptext-checkbox{% endif %}">
-                    {{ field.help_text | safe }}
-                </div>
+                <div class="helptext">{{ field.help_text | safe }}</div>
             {% endif %}
             {% if field.auto_id in form.max_lengths %}
                 {% get_field form.max_lengths field.auto_id as args %}

@@ -259,7 +259,7 @@
     overall: true
     placeholder: false
     order: 60
-    after_text: You can now review users' mailing lists.
+    after_text: You can now review mailing lists for newsletters.
     after_link: exe_newsletter
     hidden: false
     module: users

@@ -6812,9 +6812,6 @@ msgstr "Kirjoituskentät ilman vaihtoehtoja: %(list)s"
 msgid "You are logged in with an email address:"
 msgstr "Olet kirjautunut sisään sähköpostiosoitteella:"
 
-msgid "You can now review users' mailing lists."
-msgstr "Voit nyt tarkistaa käyttäjien postituslistat."
-
 msgid "You can now set the dynamic installments"
 msgstr "Voit nyt määrittää dynaamiset maksuerät"
 
@@ -6860,9 +6857,6 @@ msgstr "Tarkistitko vaaditut tiedot asianmukaisesti?"
 
 msgid "Display all participants data as registry"
 msgstr "Näytä kaikkien osallistujien tiedot rekisterinä"
-
-msgid "Displays a list of users' email addresses"
-msgstr "Näyttää luettelon käyttäjien sähköpostiosoitteista"
 
 msgid "Donation amount chosen by the participant"
 msgstr "Osallistujan valitsema lahjoitussumma"
@@ -7695,6 +7689,9 @@ msgstr "Toleranssi ylitetty, jatka peruutusta"
 msgid "You are including (at least one of these filters)"
 msgstr "Sisällytät (vähintään yhden näistä suodattimista)"
 
+msgid "You can now review mailing lists for newsletters."
+msgstr "Voit nyt tarkistaa uutiskirjeiden postituslistoja."
+
 msgid "You can now set the external mail server settings"
 msgstr "Voit nyt määrittää ulkoisen sähköpostipalvelimen asetukset"
 
@@ -7710,6 +7707,9 @@ msgstr "Määritä käyttäjäprofiililomakkeella kerättävät tiedot"
 #, python-format
 msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr "Tiedot: %(details)s (Summa: <b>%(amount).2f</b>)"
+
+msgid "Displays a list of email addresses for newsletters"
+msgstr "Näyttää uutiskirjeiden sähköpostiosoitteiden luettelon"
 
 msgid "Enables warehouse management for the organization."
 msgstr "Ottaa käyttöön organisaation varastonhallinnan."
@@ -8295,10 +8295,6 @@ msgstr "Voit kopioida minkä tahansa elementin suoraan toisesta tapahtumasta"
 msgid "Contact the organizers if you need a new access link later"
 msgstr "Ota yhteyttä järjestäjiin, jos tarvitset uuden linkin myöhemmin"
 
-msgid "Displays a list of signed-up participants' email addresses"
-msgstr ""
-"Näyttää luettelon ilmoittautuneiden osallistujien sähköpostiosoitteista"
-
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
 "Kuvan lataamisessa tapahtui virhe. Yritä uudelleen tai käytä pienempää "
@@ -8465,6 +8461,9 @@ msgstr "Määritä lipputyypit, hinnat ja osallistujien tasot."
 msgid "Content of mail reminding participants to fill their profile"
 msgstr ""
 "Osallistujia profiilin täyttämisestä muistuttavan sähköpostiviestin sisältö"
+
+msgid "Displays a list of signed-up email addresses for newsletters"
+msgstr "Näyttää uutiskirjeiden tilattujen sähköpostiosoitteiden luettelon"
 
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr ""
@@ -13722,11 +13721,11 @@ msgstr ""
 "avulla."
 
 msgid ""
-"Select how many payments to split the fee into. Total amount and deadlines "
-"are divided equally starting from the registration date."
+"Select how many payments to split the fee into (total amount and deadlines "
+"are divided equally starting from the registration date)"
 msgstr ""
-"Valitse, moneenko maksuun haluat jakaa maksun. Kokonaissumma ja määräajat "
-"jaetaan tasan rekisteröintipäivästä alkaen."
+"Valitse, moneenko maksuun osallistumismaksu jaetaan (kokonaissumma ja "
+"eräpäivät jaetaan tasan alkaen ilmoittautumispäivästä)"
 
 msgid ""
 "When you want to close the collection, follow this link. A special "
