@@ -121,19 +121,15 @@ class EventCharactersPdfForm(ConfigForm):
 
         # Add CSS configuration for PDF styling
         # This allows users to customize the visual appearance of generated PDFs
-        self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("Enter the CSS code to customize PDF printing."))
+        self.add_configs("page_css", ConfigType.TEXTAREA, "CSS", _("The CSS code to customize PDF printing."))
 
         # Add header content configuration
         # Users can define custom HTML content to appear at the top of each PDF page
-        self.add_configs(
-            "header_content", ConfigType.TEXTAREA, _("Header HTML"), _("Enter the HTML code for the header.")
-        )
+        self.add_configs("header_content", ConfigType.TEXTAREA, _("Header HTML"), _("The HTML code for the header."))
 
         # Add footer content configuration
         # Users can define custom HTML content to appear at the bottom of each PDF page
-        self.add_configs(
-            "footer_content", ConfigType.TEXTAREA, _("Footer HTML"), _("Enter the HTML code for the footer.")
-        )
+        self.add_configs("footer_content", ConfigType.TEXTAREA, _("Footer HTML"), _("The HTML code for the footer."))
 
 
 class OrgaEventForm(BaseModelForm):
@@ -475,7 +471,7 @@ class OrgaConfigForm(ConfigForm):
             self.set_section("reduced", _("Patron / Reduced"))
             reduced_ratio_label = "Ratio"
             reduced_ratio_help_text = _(
-                "Indicates the ratio between reduced and patron tickets, multiplied by 10. "
+                "The ratio between reduced and patron tickets, multiplied by 10. "
                 "Example: 10 -> 1 reduced ticket for 1 patron ticket. 20 -> 2 reduced tickets for "
                 "1 patron ticket. 5 -> 1 reduced ticket for 2 patron tickets",
             )
@@ -907,7 +903,7 @@ class OrgaConfigForm(ConfigForm):
 
             character_name_label = _("Name")
             character_name_help_text = _(
-                "If enabled, it allows participants to customise the names of their characters.",
+                "If enabled, allows participants to customise the names of their characters.",
             )
             self.add_configs("custom_character_name", ConfigType.BOOL, character_name_label, character_name_help_text)
 
@@ -924,7 +920,7 @@ class OrgaConfigForm(ConfigForm):
 
             character_pronoun_label = _("Pronoun")
             character_pronoun_help_text = _(
-                "If enabled, it allows participants to customise their characters' pronouns.",
+                "If enabled, allows participants to customise their characters' pronouns.",
             )
             self.add_configs(
                 "custom_character_pronoun",
@@ -934,12 +930,12 @@ class OrgaConfigForm(ConfigForm):
             )
 
             character_song_label = _("Song")
-            character_song_help_text = _("If enabled, it allows participants to indicate the song of their characters.")
+            character_song_help_text = _("If enabled allows participants to indicate the song of their characters.")
             self.add_configs("custom_character_song", ConfigType.BOOL, character_song_label, character_song_help_text)
 
             character_private_label = _("Private")
             character_private_help_text = _(
-                "If enabled, it allows participants to enter private information on their characters, visible only to them and the staff.",
+                "If enabled allows participants to enter private information on their characters, visible only to them and the staff.",
             )
             self.add_configs(
                 "custom_character_private",
@@ -950,7 +946,7 @@ class OrgaConfigForm(ConfigForm):
 
             character_public_label = _("Public")
             character_public_help_text = _(
-                "If enabled, it allows participants to enter public information on their characters, visible to all.",
+                "If enabled allows participants to enter public information on their characters, visible to all.",
             )
             self.add_configs(
                 "custom_character_public",
