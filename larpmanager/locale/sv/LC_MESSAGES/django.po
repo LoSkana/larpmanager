@@ -551,7 +551,7 @@ msgid "Errors"
 msgstr "Fel"
 
 msgid "Events"
-msgstr "Händelser"
+msgstr "Evenemang"
 
 msgid "Export"
 msgstr "Export"
@@ -1863,7 +1863,7 @@ msgid "Preference"
 msgstr "Preferens"
 
 msgid "Priorities"
-msgstr "Prioriteringar"
+msgstr "Prioriteter"
 
 msgid "Quest Type"
 msgstr "Typ av Quest"
@@ -2544,7 +2544,7 @@ msgid "Document type"
 msgstr "Typ av dokument"
 
 msgid "Dynamic rates"
-msgstr "Dynamiska avbetalningar"
+msgstr "Dynamiska priser"
 
 msgid "Email Content"
 msgstr "Innehåll i e-post"
@@ -3171,7 +3171,7 @@ msgid "Multiple choice"
 msgstr "Flera valmöjligheter"
 
 msgid "Non-residential"
-msgstr "Icke-bosatt"
+msgstr "Icke-residentiell"
 
 msgid "Overall balance"
 msgstr "Övergripande saldo"
@@ -3309,7 +3309,7 @@ msgid "Activate feature"
 msgstr "Aktivera funktion"
 
 msgid "Activate modules"
-msgstr "Aktivering av moduler"
+msgstr "Aktivera moduler"
 
 msgid "Amount breakdown"
 msgstr "Fördelning av belopp"
@@ -3987,7 +3987,7 @@ msgid "Total payment sent"
 msgstr "Totalt skickad betalning"
 
 msgid "Transaction amount"
-msgstr "Belopp för åtgärden"
+msgstr "Transaktionsbelopp"
 
 msgid "Transaction totals"
 msgstr "Summa transaktioner"
@@ -5464,7 +5464,7 @@ msgid "Name of badge to be awarded."
 msgstr "Namn på badge som ska tilldelas."
 
 msgid "Please wait before retrying."
-msgstr "Vänligen vänta innan du försöker igen."
+msgstr "Vänta innan du försöker igen."
 
 #, python-format
 msgid "Refund request from %(user)s"
@@ -5487,7 +5487,7 @@ msgid "Trait assigned for %(event)s"
 msgstr "Trait tilldelad för %(event)s"
 
 msgid "Uploading image, please wait"
-msgstr "Laddar upp bild, vänligen vänta"
+msgstr "Laddar upp bild, vänta"
 
 msgid "View preference history for:"
 msgstr "Gå till preferenshistoriken för:"
@@ -6271,7 +6271,7 @@ msgstr "Registreringsstatus för detta evenemang"
 
 #, python-format
 msgid "Reimbursement request for %(event)s"
-msgstr "Ersättningsbegäran för %(event)s"
+msgstr "Återbetalningsbegäran för %(event)s"
 
 msgid "Require receipt for manual payments"
 msgstr "Kräv kvitto för manuella betalningar"
@@ -6473,7 +6473,7 @@ msgid "No event runs have been recorded yet."
 msgstr "Inga körningar av evenemang har registrerats ännu."
 
 msgid "No recognized files found in the ZIP."
-msgstr "Inga identifierade filer hittades i ZIP."
+msgstr "Inga igenkända filer hittades i ZIP-filen."
 
 msgid "One symbol more or less than expected"
 msgstr "En symbol mer eller mindre än förväntat"
@@ -10255,8 +10255,8 @@ msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's "
 "name."
 msgstr ""
-"Aktiverar fältet ”titel”, en kort text (2–3 ord) som läggs till efter "
-"karaktärens namn."
+"Aktiverar fältet ”titel”, en kort text (2–3 ord) som läggs till karaktärens "
+"namn."
 
 #, python-format
 msgid ""
@@ -14338,8 +14338,8 @@ msgid ""
 " the left, or add it on the one on the right."
 msgstr ""
 "Karaktären till vänster har den till höger i relationerna, men det omvända "
-"är inte sant. Kontrollera om du ska ta bort relationen till den till "
-"vänster, eller lägga till den till den till höger."
+"är inte sant. Kontrollera om du ska ta bort relationen från den till "
+"vänster, eller lägga till den på den till höger."
 
 msgid ""
 "The ratio between reduced and patron tickets, multiplied by 10. Example: 10 "
@@ -14550,5 +14550,5 @@ msgstr ""
 "epilepsi, psykiska problem (t.ex. neuroser, bipolär sjukdom, ångestsyndrom, "
 "olika fobier), triggerämnen ('linjer och slöjor', vi kan inte lova att du "
 "inte kommer att stöta på dem under evenemanget, men vi kommer att se till "
-"att de inte är en del av dina huvuduppdrag). Lämna tomt om du inte har något"
-" att rapportera!"
+"att de inte är en del av dina huvudsakliga Quest). Lämna tomt om du inte har"
+" något att rapportera!"

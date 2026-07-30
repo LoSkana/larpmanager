@@ -605,7 +605,7 @@ msgid "Log in"
 msgstr "Logg inn"
 
 msgid "Manage"
-msgstr "Administrere"
+msgstr "Administrer"
 
 msgid "Master"
 msgstr "Mester"
@@ -2394,7 +2394,7 @@ msgid "Remove admin"
 msgstr "Fjern administrator"
 
 msgid "Request for:"
-msgstr "Anmodning om:"
+msgstr "Forespørsel om:"
 
 msgid "Requirements"
 msgstr "Krav"
@@ -2544,7 +2544,7 @@ msgid "Document type"
 msgstr "Dokumenttype"
 
 msgid "Dynamic rates"
-msgstr "Dynamiske avdrag"
+msgstr "Dynamiske priser"
 
 msgid "Email Content"
 msgstr "Innhold i e-post"
@@ -3309,7 +3309,7 @@ msgid "Activate feature"
 msgstr "Aktiver funksjonen"
 
 msgid "Activate modules"
-msgstr "Modulaktivering"
+msgstr "Aktiver moduler"
 
 msgid "Amount breakdown"
 msgstr "Fordeling av beløp"
@@ -4602,7 +4602,7 @@ msgid "Age (during the event)"
 msgstr "Alder (ved hendelsen)"
 
 msgid "Arrived safe and sound"
-msgstr "Kom trygt frem"
+msgstr "Kommet trygt frem"
 
 msgid "Bank payment reference"
 msgstr "Betalingsreferanse for bankoverføring"
@@ -5303,7 +5303,7 @@ msgid "Date of membership approval"
 msgstr "Dato for godkjenning av medlemskap"
 
 msgid "Description - international"
-msgstr "Beskrivelse - internasjonalt"
+msgstr "Beskrivelse - internasjonal"
 
 msgid "Discover the game factions!"
 msgstr "Oppdag spillfaksjonene!"
@@ -5681,7 +5681,7 @@ msgid "Payment received for %(event)s"
 msgstr "Mottatt betaling for %(event)s"
 
 msgid "Payment verification required:"
-msgstr "Betalingsbekreftelse kreves:"
+msgstr "Betalingsverifisering kreves:"
 
 #, python-format
 msgid "Pre-registration for %(event)s"
@@ -5721,7 +5721,7 @@ msgid "Unknown error while uploading."
 msgstr "Ukjent feil under opplasting."
 
 msgid "Upload and host files directly"
-msgstr "Last opp og lagre filer direkte"
+msgstr "Last opp og host filer direkte"
 
 msgid "You're not allowed to sign up!"
 msgstr "Du har ikke lov til å registrere deg!"
@@ -5749,7 +5749,7 @@ msgstr "(klikk på bildet for å forstørre det)"
 
 #, python-format
 msgid "Achievement Unlocked: %(badge)s"
-msgstr "Achievement låst opp: %(badge)s"
+msgstr "Badge låst opp: %(badge)s"
 
 msgid "Activate features for the event"
 msgstr "Aktiver funksjoner for arrangementet"
@@ -6401,7 +6401,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Du kan ikke sende meldinger til deg selv!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Du har oppnådd en ny prestasjon!"
+msgstr "Du har låst opp en ny prestasjon!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -8868,7 +8868,7 @@ msgstr "Medlemskontingent finnes allerede for denne brukeren og dette året."
 
 #, python-format
 msgid "New contribution to the collection for %(recipient)s by %(user)s"
-msgstr "Nytt bidrag til samlingen for %(recipient)s fra %(user)s"
+msgstr "Nytt bidrag til innsamlingen for %(recipient)s fra %(user)s"
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "En del av registreringsavgiften stammer kun fra den valgte billetten"
@@ -8907,7 +8907,7 @@ msgid "Warning: there is already an approved member with the same name!"
 msgstr "Advarsel: Det finnes allerede et godkjent medlem med samme navn!"
 
 msgid "You can also upload a second file with the registration options:"
-msgstr "Du kan også laste opp den andre filen med registreringsalternativene:"
+msgstr "Du kan også laste opp en ekstra fil med registreringsalternativene:"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -9006,7 +9006,7 @@ msgid "Your full residential address including street, city, and country"
 msgstr "Fullstendig bostedsadresse, inkludert gate, by og land"
 
 msgid "Your registration for this event has been successfully cancelled."
-msgstr "Din påmelding til dette arrangementet er nå blitt avmeldt med hell."
+msgstr "Påmeldingen din til dette arrangementet har blitt avmeldt."
 
 msgid "Error loading. Invalid file format (we accept only pdf or images)."
 msgstr "Feil ved innlasting. Ugyldig filformat - vi godtar kun pdf og bilder."
@@ -9300,7 +9300,7 @@ msgstr ""
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Tilordne lagerartikler til ett eller flere områder på arrangementet, én "
-"artikkel om gangen"
+"gjenstand om gangen"
 
 msgid "Discount amount applied to a new user signing up with a referral code."
 msgstr ""
@@ -9966,8 +9966,8 @@ msgstr ""
 msgid ""
 "Browse each event's staff members and the competences they bring to the team"
 msgstr ""
-"Se hvem som er med på hvert arrangement, og hvilke ferdigheter de bidrar med"
-" til teamet"
+"Bla gjennom hvert arrangements medarbeidere og kompetansen de bidrar med i "
+"teamet"
 
 msgid ""
 "Content of mail notifying participants of their character in approved status"
@@ -9978,8 +9978,8 @@ msgstr ""
 msgid ""
 "Content of mail notifying participants of their character in proposed status"
 msgstr ""
-"Innholdet i e-posten som informerer deltakerne om at karakteren deres har "
-"foreslått status"
+"Innholdet i e-posten som varsler deltakerne om at karakteren deres har "
+"statusen «foreslått»"
 
 msgid ""
 "Do you want to split the registration fee into dynamic payment installments?"
@@ -11042,8 +11042,8 @@ msgid ""
 "Review which characters and traits have been assigned to players, grouped by"
 " faction"
 msgstr ""
-"Gjennomgå hvilke karakterer og egenskaper som er tildelt spillerne, gruppert"
-" etter fraksjon"
+"Gjennomgå hvilke karakterer og Traits som er tildelt spillerne, gruppert "
+"etter fraksjon"
 
 msgid ""
 "Shown on the signup request page and added to the request-received "
@@ -11573,8 +11573,8 @@ msgid ""
 "You have been invited to join the role <strong>%(role.name)s</strong> in the"
 " organization."
 msgstr ""
-"Du har blitt invitert til å bli med i rollen <strong>%(role.name)s</strong> "
-"i organisasjonen."
+"Du har blitt invitert til å påta deg rollen <strong>%(role.name)s</strong> i"
+" organisasjonen."
 
 #, python-format
 msgid ""
@@ -12142,7 +12142,7 @@ msgid ""
 "Hello! You are registered for %(event)s, but we have not yet received your "
 "annual membership fee."
 msgstr ""
-"Hei! Du er påmeldt %(event)s, men vi har ennå ikke mottatt ditt årlige "
+"Hei! Du er påmeldt %(event)s, men vi har ennå ikke mottatt din årlige "
 "medlemskontingent."
 
 msgid ""
@@ -12462,8 +12462,8 @@ msgid ""
 "Enables managing of entry of revenue for an event that do not originate from"
 " participant registrations"
 msgstr ""
-"Gjør det mulig å administrere inntekter for et arrangement som ikke stammer "
-"fra deltakerregistreringer"
+"Gjør det mulig å administrere registrering av inntekter for et arrangement "
+"som ikke stammer fra deltakerregistreringer"
 
 msgid ""
 "If enabled, allows items to be deleted in bulk. WARNING: deleted items might"

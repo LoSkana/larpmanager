@@ -461,7 +461,7 @@ msgid "Trait"
 msgstr "Trait"
 
 msgid "Trash"
-msgstr "Basura"
+msgstr "Papelera"
 
 msgid "Type:"
 msgstr "Tipo:"
@@ -2544,7 +2544,7 @@ msgid "Document type"
 msgstr "Tipo de documento"
 
 msgid "Dynamic rates"
-msgstr "Plazos dinámicos"
+msgstr "Tarifas dinámicas"
 
 msgid "Email Content"
 msgstr "Contenido del correo electrónico"
@@ -3309,7 +3309,7 @@ msgid "Activate feature"
 msgstr "Activar función"
 
 msgid "Activate modules"
-msgstr "Activación de módulos"
+msgstr "Activar módulos"
 
 msgid "Amount breakdown"
 msgstr "Desglose de importes"
@@ -3333,7 +3333,7 @@ msgid "Casting priority"
 msgstr "Prioridad de Casting"
 
 msgid "Character Config"
-msgstr "Configuración de personajes"
+msgstr "Configuración del personaje"
 
 msgid "Character review"
 msgstr "Revisión de personaje"
@@ -3450,7 +3450,7 @@ msgid "Pending payments"
 msgstr "Pagos pendientes"
 
 msgid "Player selection"
-msgstr "Selección de jugadores"
+msgstr "Selección de jugador"
 
 msgid "Pre-registration"
 msgstr "Preinscripción"
@@ -3513,7 +3513,7 @@ msgid "The name ability"
 msgstr "Nombre de la habilidad"
 
 msgid "Ticket selection"
-msgstr "Selección de entradas"
+msgstr "Selección de entrada"
 
 msgid "Token assignment"
 msgstr "Asignación de fichas"
@@ -3643,7 +3643,7 @@ msgid "External catering"
 msgstr "Restauración externa"
 
 msgid "Faction selection"
-msgstr "Selección de facciones"
+msgstr "Selección de facción"
 
 msgid "Feature activated"
 msgstr "Función activada"
@@ -5178,7 +5178,7 @@ msgid "choice value not provided"
 msgstr "valor de elección no proporcionado"
 
 msgid "Access the event dashboard"
-msgstr "Acceder al panel de eventos"
+msgstr "Acceder al panel de control del evento"
 
 msgid "Can't copy from same event"
 msgstr "No se puede copiar desde el mismo evento"
@@ -5749,7 +5749,7 @@ msgstr "(haz clic en la imagen para ampliarla)"
 
 #, python-format
 msgid "Achievement Unlocked: %(badge)s"
-msgstr "Achievement desbloqueado: %(badge)s"
+msgstr "Badge desbloqueado: %(badge)s"
 
 msgid "Activate features for the event"
 msgstr "Activa funciones para el evento"
@@ -5809,7 +5809,7 @@ msgid "Set up the voting configuration"
 msgstr "Establece la configuración de la votación"
 
 msgid "Surcharge applied to the ticket"
-msgstr "Recargo aplicado al billete"
+msgstr "Recargo aplicado a la entrada"
 
 msgid "The date when this event begins"
 msgstr "Fecha de inicio del evento"
@@ -5980,10 +5980,10 @@ msgid "%(name)s not visible at this time"
 msgstr "%(name)s no está visible ahora mismo"
 
 msgid "(Optional) The cost of the ticket"
-msgstr "(Opcional) El coste del billete"
+msgstr "(Opcional) El coste de la entrada"
 
 msgid "(Optional) The name of the ticket"
-msgstr "(Opcional) El nombre del billete"
+msgstr "(Opcional) El nombre de la entrada"
 
 msgid "Access the organization dashboard"
 msgstr "Acceder al panel de control de la organización"
@@ -7605,7 +7605,7 @@ msgid "The subscription plan associated with this event"
 msgstr "Plan de suscripción asociado a este evento"
 
 msgid "They are regularly paid for the following years:"
-msgstr "Se pagan regularmente para los años siguientes:"
+msgstr "Constan como pagados para los siguientes años:"
 
 msgid "To access this feature, you must first register!"
 msgstr "Para acceder a esta función, primero debes registrarte!"
@@ -12755,8 +12755,8 @@ msgid ""
 "Enable or disable features for this event and all its runs; click a feature "
 "name to read its description"
 msgstr ""
-"Activa o desactiva las funciones de este evento y todas sus ejecuciones; haz"
-" clic en el nombre de una función para leer su descripción"
+"Activa o desactiva las funciones de este evento y todas sus ediciones; haz "
+"clic en el nombre de una función para leer su descripción"
 
 msgid ""
 "Enables 'New player' tickets, reserved for users that never participated in "
@@ -13359,7 +13359,7 @@ msgid ""
 "assisting another participant with event fees"
 msgstr ""
 "Permite a los participantes crear y contribuir a colectas destinadas a "
-"ayudar a otro participante a pagar los gastos del evento"
+"ayudar a otro participante a pagar las cuotas del evento"
 
 msgid ""
 "Enable or disable payment methods available at checkout, and configure "
@@ -14797,5 +14797,5 @@ msgstr ""
 "ejemplo, neurosis, trastorno bipolar, trastorno de ansiedad, fobias varias),"
 " temas desencadenantes ('líneas y velos', no podemos prometer que no te los "
 "vayas a encontrar en el evento, pero nos aseguraremos de que no formen parte"
-" de tus misiones principales). Déjalo vacío si no tienes nada de lo que "
+" de tus Quest principales). Déjalo vacío si no tienes nada de lo que "
 "informar."
