@@ -398,9 +398,7 @@ def _orga_registrations_custom_character(context: dict) -> None:
         return
     context["custom_info"] = []
     for field_name in ["pronoun", "song", "public", "private", "profile"]:
-        if not get_event_config(
-            context["event"].id, "custom_character_" + field_name, default_value=False, context=context
-        ):
+        if not get_event_config(context["event"].id, "custom_character_" + field_name, context=context):
             continue
         context["custom_info"].append(field_name)
 

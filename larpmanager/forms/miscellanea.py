@@ -288,7 +288,6 @@ def _delete_optionals_warehouse(warehouse_form: BaseModelForm) -> None:
         if not get_association_config(
             warehouse_form.params["association_id"],
             f"warehouse_{optional_field_name}",
-            default_value=False,
             context=warehouse_form.params,
         ):
             warehouse_form.delete_field(optional_field_name)

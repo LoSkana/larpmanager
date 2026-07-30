@@ -56,6 +56,8 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "casting_characters": 1,
     "casting_min": 1,
     "casting_mirror": False,
+    "casting_pay_priority": 0,
+    "casting_reg_priority": 0,
     "centauri_badge": None,
     "centauri_prob": 0,
     "character_form_hide_unavailable": False,
@@ -97,6 +99,11 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "gallery_hide_uncasted_players": False,
     "guild_max_members": 0,
     "guild_max_number": 0,
+    "ildb": "",
+    "ildb_api_key": "",
+    "ildb_expire": "",
+    "ildb_key_hash": "",
+    "ildb_team_id": "",
     "inactive": False,
     "interface_admin_links": False,
     "interface_version": None,
@@ -183,8 +190,15 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "writing_substitute": False,
     "writing_unimportant": False,
 }
-CONFIG_DEFAULT_PREFIXES: list[tuple[str, Any]] = []
-CONFIG_DEFAULT_SUFFIXES: list[tuple[str, Any]] = []
+CONFIG_DEFAULT_PREFIXES: list[tuple[str, Any]] = [
+    ("calendar_", False),
+    ("custom_character_", False),
+    ("warehouse_", False),
+    ("pub_", ""),
+]
+CONFIG_DEFAULT_SUFFIXES: list[tuple[str, Any]] = [
+    ("_suggestion", False),
+]
 
 
 def get_config_default(config_name: str) -> Any:

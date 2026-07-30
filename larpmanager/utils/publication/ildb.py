@@ -116,8 +116,8 @@ class IldbCtx:
 def _ensure_ildb_expire(association: Association, api_key: str) -> None:
     """Ensure token expiry is tracked; reset expire when the key is rotated."""
     key_hash = hashlib.md5(api_key.encode()).hexdigest()[:8]  # noqa: S324
-    stored_hash = get_association_config(association.id, ILDB_KEY_HASH_CONFIG, default_value="")
-    expire_val = get_association_config(association.id, ILDB_EXPIRE_CONFIG, default_value="")
+    stored_hash = get_association_config(association.id, ILDB_KEY_HASH_CONFIG)
+    expire_val = get_association_config(association.id, ILDB_EXPIRE_CONFIG)
     if stored_hash != key_hash or not expire_val:
         expire_date = (timezone.now() + timedelta(days=270)).date().isoformat()
         save_single_config(association, ILDB_EXPIRE_CONFIG, expire_date)
@@ -130,14 +130,14 @@ def _get_ildb_context(event: Event, run: Run | None = None) -> IldbCtx | None:
     When run is provided, ildb_event_id is the stored ILDB run ID (empty if not yet published).
     """
     association = event.association
-    api_key = get_association_config(association.id, ILDB_CONFIG_KEY, default_value="")
-    team_id = get_association_config(association.id, ILDB_TEAM_CONFIG_KEY, default_value="")
+    api_key = get_association_config(association.id, ILDB_CONFIG_KEY)
+    team_id = get_association_config(association.id, ILDB_TEAM_CONFIG_KEY)
     if not api_key or not team_id:
         return None
     _ensure_ildb_expire(association, api_key)
     ildb_event_id = ""
     if run is not None:
-        stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+        stored = run.get_config(ILDB_RUN_CONFIG)
         if stored:
             ildb_event_id = stored
     return IldbCtx(api_key=api_key, team_id=team_id, association=association, ildb_event_id=ildb_event_id)
@@ -200,7 +200,7 @@ def _find_event_id(run: Run, ctx: IldbCtx) -> str:
 
     If a matching draft event is found via the API, notifies the association by email.
     """
-    stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+    stored = run.get_config(ILDB_RUN_CONFIG)
     if stored:
         return stored
 
@@ -434,7 +434,7 @@ def sync_crew(event: Event, ctx: IldbCtx) -> None:
     """
     crew = _build_crew(event)
     for run in event.runs.filter(development=DevelopStatus.SHOW):
-        stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+        stored = run.get_config(ILDB_RUN_CONFIG)
         if not stored:
             continue
         ctx.ildb_event_id = stored

@@ -1190,9 +1190,7 @@ class RegistrationCharacterRelForm(BaseModelForm):
             [
                 s
                 for s in ["name", "pronoun", "song", "public", "private"]
-                if not get_event_config(
-                    self.params["event"].id, "custom_character_" + s, default_value=False, context=self.params
-                )
+                if not get_event_config(self.params["event"].id, "custom_character_" + s, context=self.params)
             ]
         )
 

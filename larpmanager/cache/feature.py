@@ -85,7 +85,7 @@ def update_association_features(association_id: int) -> dict[str, int]:
             "tagline",
         ]:
             # Add calendar features based on configuration
-            if association.get_config("calendar_" + sl, default_value=False):
+            if association.get_config("calendar_" + sl):
                 res[sl] = 1
 
         # Check field-based features (safety and diet)

@@ -139,7 +139,8 @@ Get configuration for an event with caching.
 def get_event_config(
     event_id: int,
     config_name: str,
-    default_value: any = None,
+    *,
+    default_value: any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False
 ) -> any
@@ -148,11 +149,18 @@ def get_event_config(
 **Parameters:**
 - `event_id` - Event ID to get configuration for
 - `config_name` - Configuration key to retrieve
-- `default_value` - Default value if not set (also determines return type)
+- `default_value` - Explicit default; usually omitted (see below)
 - `context` - Optional context dict for multi-config caching
 - `bypass_cache` - If True, fetch from database (useful for background tasks)
 
 **Returns:** Configuration value with automatic type conversion
+
+**Defaults:** Don't pass `default_value` at the call site when `config_name` is a
+fixed string. Instead add the name (or a prefix/suffix rule) to `CONFIG_DEFAULTS` /
+`CONFIG_DEFAULT_PREFIXES` / `CONFIG_DEFAULT_SUFFIXES` in `larpmanager/cache/config.py`,
+so the default lives in one place and is reused by every caller. Only pass
+`default_value` explicitly when the config name itself is built dynamically at
+runtime (e.g. `f"casting_{priority_key}"` where `priority_key` is a variable).
 
 **Example usage:**
 ```python
@@ -161,20 +169,18 @@ from larpmanager.cache.config import get_event_config
 def orga_characters(request, event_slug):
     context = check_event_context(request, event_slug, permission_slug="orga_characters")
 
-    # Get boolean config with default False
+    # Default (False) comes from CONFIG_DEFAULTS["character_require_backstory"]
     require_backstory = get_event_config(
         context["event"].id,
         "character_require_backstory",
-        False,
-        context
+        context=context,
     )
 
-    # Get string config with default None
+    # Default ("500") comes from CONFIG_DEFAULTS["character_backstory_min_words"]
     backstory_min_words = get_event_config(
         context["event"].id,
         "character_backstory_min_words",
-        "500",
-        context
+        context=context,
     )
 
     if require_backstory:
@@ -185,8 +191,8 @@ def orga_characters(request, event_slug):
 ```
 
 **Type conversion:**
-- If `default_value` is `bool` → converts "True"/"False" string to boolean
-- If value is empty or "None" → returns `default_value`
+- If the resolved default is `bool` → converts "True"/"False" string to boolean
+- If value is empty or "None" → returns the resolved default
 - Otherwise → returns the string value
 
 ### get_association_config()
@@ -198,7 +204,8 @@ Get configuration for an organization with caching.
 def get_association_config(
     association_id: int,
     config_name: str,
-    default_value: any = None,
+    *,
+    default_value: any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False
 ) -> any
@@ -213,12 +220,11 @@ from larpmanager.cache.config import get_association_config
 def exe_members(request):
     context = check_association_context(request, permission_slug="exe_members")
 
-    # Check if birthdate is required
+    # Default (False) comes from CONFIG_DEFAULTS["require_birthdate"]
     require_birthdate = get_association_config(
         context["association_id"],
         "require_birthdate",
-        False,
-        context
+        context=context,
     )
 
     context["require_birthdate"] = require_birthdate
@@ -401,23 +407,24 @@ self.set_section("section_slug", _("Section Title"))
 ✅ **Use configurations for optional settings**
 ```python
 # Good - optional feature-specific setting
-require_backstory = get_event_config(event_id, "require_backstory", False, context)
+require_backstory = get_event_config(event_id, "require_backstory", context=context)
 
 # Bad - adding field that not all events use
 # class Event(models.Model):
 #     require_backstory = models.BooleanField(default=False)  # ❌
 ```
 
-✅ **Provide sensible defaults**
+✅ **Put the default in `CONFIG_DEFAULTS`, not inline**
 ```python
-# Good - default value makes sense if not configured
-max_chars = get_event_config(event_id, "max_characters_per_user", 3, context)
+# Good - default lives in larpmanager/cache/config.py: CONFIG_DEFAULTS["max_characters_per_user"] = 3
+max_chars = get_event_config(event_id, "max_characters_per_user", context=context)
 
-# Bad - no default could cause issues
-max_chars = get_event_config(event_id, "max_characters_per_user", None, context)
-if max_chars is None:  # Extra handling needed
-    max_chars = 3
+# Bad - default scattered inline at the call site, easy to drift out of sync
+# with other callers of the same config name
+max_chars = get_event_config(event_id, "max_characters_per_user", default_value=3, context=context)
 ```
+Only pass `default_value=` inline when `config_name` is built dynamically
+(e.g. from a variable), so there is no fixed name to key `CONFIG_DEFAULTS` on.
 
 ✅ **Use meaningful config names**
 ```python
