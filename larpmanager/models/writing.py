@@ -32,7 +32,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import CONFIG_UNSET, get_element_config, get_event_config
+from larpmanager.cache.config import get_element_config, get_event_config
 from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
@@ -157,7 +157,7 @@ class Character(Writing):
     title = models.CharField(
         max_length=100,
         blank=True,
-        help_text=_("Indicates the title of the character - it will be shown along with the name"),
+        help_text=_("Enter the title of the character - it will be shown along with the name"),
     )
 
     mirror = models.OneToOneField(
@@ -167,8 +167,7 @@ class Character(Writing):
         blank=True,
         related_name="mirror_inv",
         help_text=_(
-            "Indicate whether the character is a mirror (i.e., whether this pg shows the true "
-            "secret face of another character)",
+            "Whether the character is a mirror (i.e., whether this pg shows the true secret face of another character)",
         ),
     )
 
@@ -232,14 +231,14 @@ class Character(Writing):
         """Return string representation."""
         return self.name
 
-    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this character."""
-        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+        return get_element_config(self, name, bypass_cache=bypass_cache)
 
     @property
     def is_active(self) -> bool:
         """Check if character is active (not marked as inactive in CharacterConfig)."""
-        is_inactive = self.get_config("inactive", default_value=False)
+        is_inactive = self.get_config("inactive")
         return not (is_inactive == "True" or is_inactive is True)
 
     def show(self, run: Run | None = None) -> Any:
@@ -274,9 +273,7 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if get_event_config(self.event_id, "user_character_approval", default_value=False) and self.status not in [
-            CharacterStatus.APPROVED
-        ]:
+        if get_event_config(self.event_id, "user_character_approval") and self.status not in [CharacterStatus.APPROVED]:
             js["hide"] = True
 
         js["locked"] = self.locked
@@ -543,7 +540,7 @@ class Faction(Writing):
 
     selectable = models.BooleanField(
         default=False,
-        help_text=_("Indicates whether it can be selected by participants"),
+        help_text=_("Whether the faction can be selected by participants"),
     )
 
     locked = models.BooleanField(default=False)
@@ -960,7 +957,7 @@ def replace_character_names(instance: Any) -> None:
         return
 
     # Early return if event doesn't have character substitution enabled
-    if not get_event_config(instance.event_id, "writing_substitute", default_value=False):
+    if not get_event_config(instance.event_id, "writing_substitute"):
         return
 
     # Build character name to number mapping for replacement

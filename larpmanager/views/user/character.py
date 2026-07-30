@@ -164,9 +164,7 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
         context["pref"] = get_casting_preferences(context["char"]["uuid"], context)
 
     # Set character approval configuration for template rendering
-    context["approval"] = get_event_config(
-        context["event"].id, "user_character_approval", default_value=False, context=context
-    )
+    context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
 
     context["show_full_pdf"] = has_pdf_customization(context["event"].id)
 
@@ -196,7 +194,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
     context = get_event_context(request, event_slug)
 
     # Check if external access feature is enabled for this event
-    if not get_event_config(context["event"].id, "writing_external_access", default_value=False, context=context):
+    if not get_event_config(context["event"].id, "writing_external_access", context=context):
         msg = "external access not active"
         raise Http404(msg)
 
@@ -356,7 +354,7 @@ def character_form(
         form = form_class(request.POST, request.FILES, instance=instance, context=context)
         if form.is_valid():
             # Set appropriate success message based on operation type
-            success_message = _("Informations saved!") if instance else _("New character created!")
+            success_message = _("Information saved!") if instance else _("New character created!")
 
             character, success_message = _save_character(context, form, success_message)
 
@@ -384,7 +382,6 @@ def character_form(
     context["hide_unavailable"] = get_event_config(
         context["event"].id,
         "character_form_hide_unavailable",
-        default_value=False,
         context=context,
     )
 
@@ -451,7 +448,6 @@ def _update_character(context: dict, character: Any, form: BaseModelForm, messag
         get_event_config(
             context["event"].id,
             "user_character_approval",
-            default_value=False,
             context=context,
         )
         and character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]
@@ -494,7 +490,7 @@ def character_customize(request: HttpRequest, event_slug: str, character_uuid: s
         if rgr.custom_profile:
             context["custom_profile"] = rgr.profile_thumb.url
 
-        if get_event_config(context["event"].id, "custom_character_profile", default_value=False, context=context):
+        if get_event_config(context["event"].id, "custom_character_profile", context=context):
             context["avatar_form"] = AvatarForm()
 
         return character_form(request, context, event_slug, rgr, RegistrationCharacterRelForm)
@@ -667,9 +663,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
 
     check, _max_chars = check_character_maximum(context["event"], context["member"])
     context["char_maximum"] = check
-    context["approval"] = get_event_config(
-        context["event"].id, "user_character_approval", default_value=False, context=context
-    )
+    context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
     context["assigned"] = RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).count()
     return render(request, "larpmanager/event/character/list.html", context)
 
@@ -916,7 +910,7 @@ def check_char_abilities(request: HttpRequest, event_slug: str, character_uuid: 
     event_id = context["event"].parent_id or context["event"].id
 
     # Check if user ability selection is enabled for this event
-    if not get_event_config(event_id, "exp_user", default_value=False):
+    if not get_event_config(event_id, "exp_user"):
         messages.warning(
             request, _("Acquisition of abilities by players is not enabled for this event: contact the organizers")
         )
@@ -1049,9 +1043,9 @@ def get_undo_abilities(context: dict, char: Any, new_ability: Any = None) -> Any
         list: List of ability UUID objects that can be undone
 
     """
-    undo_window_hours = int(get_event_config(context["event"].id, "exp_undo", default_value=0, context=context))
+    undo_window_hours = int(get_event_config(context["event"].id, "exp_undo", context=context))
     config_key = f"added_px_{char.uuid}"
-    stored_config_value = char.get_config(config_key, default_value="{}")
+    stored_config_value = char.get_config(config_key)
     ability_timestamp_map = ast.literal_eval(stored_config_value)
     current_timestamp = int(time.time())
     # clean from abilities out of the undo time windows

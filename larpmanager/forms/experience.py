@@ -87,7 +87,7 @@ class OrgaDeliveryExpForm(ExpBaseForm):
 
     page_title = _("Award")
 
-    page_info = _("Manage experience point awarded to characters")
+    page_info = _("Manage experience points awarded to characters")
 
     class Meta:
         model = DeliveryExp
@@ -162,8 +162,8 @@ class OrgaAbilityExpForm(ExpBaseForm):
             if field_name in self.fields and hasattr(self.fields[field_name].widget, "set_event"):
                 self.configure_field_event(field_name, event)
 
-        exp_user = get_event_config(event.id, "exp_user", default_value=False, context=self.params)
-        exp_templates = get_event_config(event.id, "exp_templates", default_value=False, context=self.params)
+        exp_user = get_event_config(event.id, "exp_user", context=self.params)
+        exp_templates = get_event_config(event.id, "exp_templates", context=self.params)
 
         # Remove template field if exp_templates is disabled
         if not exp_templates:

@@ -31,7 +31,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill, ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import CONFIG_UNSET, get_element_config
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.base import (
     AlphanumericValidator,
     BaseModel,
@@ -132,7 +132,7 @@ class Association(UuidMixin, BaseModel):
         blank=True,
         help_text=_("Your organization's logo")
         + " ("
-        + _("upload any size, it will be automatically optimized; square images work best")
+        + _("Upload an image of any size; it will be automatically optimized. Square images work best.")
         + ")",
     )
 
@@ -330,9 +330,9 @@ class Association(UuidMixin, BaseModel):
         # noinspection PyUnresolvedReferences
         return get_currency_symbol(self.get_payment_currency_display())
 
-    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this association."""
-        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+        return get_element_config(self, name, bypass_cache=bypass_cache)
 
     def promoter_dict(self) -> dict[str, str]:
         """Return a dictionary with promoter information including slug, name, and optional thumbnail URL."""

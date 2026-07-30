@@ -353,6 +353,11 @@ AWS_SES_REGION_NAME = 'us-east-1'
 # Anthropic API key for the live chat assistant (optional - chat is disabled if unset)
 ANTHROPIC_API_KEY = None
 
+# Optional CLI agent used for translation instead of DeepL.
+LLM_TRANSLATION_AGENT = None
+LLM_TRANSLATION_MODEL = None
+LLM_TRANSLATION_MAX_TOKENS = 4000
+
 X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'

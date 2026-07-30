@@ -189,11 +189,9 @@ def casting_details(context: dict) -> dict:
         context["typ"] = None
 
     # Set type identifier and numeric casting configuration
-    for config_key, default_value in (("add", 0), ("min", 5), ("max", 5)):
+    for config_key in ("add", "min", "max"):
         context[f"casting_{config_key}"] = int(
-            get_event_config(
-                context["event"].id, f"casting_{config_key}", default_value=default_value, context=context
-            ),
+            get_event_config(context["event"].id, f"casting_{config_key}", context=context),
         )
 
     # Set boolean casting preferences from event configuration
@@ -201,7 +199,6 @@ def casting_details(context: dict) -> dict:
         context["casting_" + preference_name] = get_event_config(
             context["event"].id,
             "casting_" + preference_name,
-            default_value=False,
             context=context,
         )
 
@@ -235,7 +232,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
     # Verify user has completed event registration
     registration = context.get("registration")
     if not registration:
-        messages.success(request, _("You must signed up in order to select your preferences!"))
+        messages.success(request, _("You must sign up to select your preferences!"))
         return redirect("event", event_slug=context["run"].get_slug())
 
     # Check if user is on waiting list (cannot set preferences)
@@ -305,7 +302,7 @@ def _process_casting_post(casting_type: str | None, context: dict, request: Http
 
         # Validate no duplicate preferences selected
         if pref in prefs.values():
-            messages.warning(request, _("You have indicated more than one preferences towards the same element"))
+            messages.warning(request, _("You have indicated more than one preference for the same element."))
             validation_error = True
             break
         prefs[i] = pref
@@ -379,7 +376,7 @@ def _check_already_done(context: dict) -> None:
     """
     # Check if character assignment already done (type 0)
     if "quest_type" not in context:
-        casting_chars = int(get_event_config(context["run"].event_id, "casting_characters", default_value=1))
+        casting_chars = int(get_event_config(context["run"].event_id, "casting_characters"))
         if context["registration"].rcrs.count() >= casting_chars:
             # Collect names of all assigned characters
             character_names = [

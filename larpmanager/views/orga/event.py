@@ -261,9 +261,7 @@ def prepare_roles_list(
             for permission in role.permissions.all():
                 # Check active_if config for event permissions
                 if permission.active_if and context.get("event"):
-                    config_value = get_event_config(
-                        context["event"].id, permission.active_if, default_value=False, context=context
-                    )
+                    config_value = get_event_config(context["event"].id, permission.active_if, context=context)
                     if not config_value:
                         continue
 
@@ -666,7 +664,7 @@ def orga_restore(request: HttpRequest, event_slug: str) -> HttpResponse:
             temp_key = request.POST.get("temp_key", "")
             zip_bytes = load_restore_temp(temp_key)
             if zip_bytes is None:
-                messages.error(request, _("Session expired, please upload the file again"))
+                messages.error(request, _("Session expired, please upload the file again."))
                 return render(request, "larpmanager/orga/restore.html", context)
             try:
                 context["logs"] = execute_restore(context, zip_bytes)
@@ -747,7 +745,7 @@ def orga_upload(request: HttpRequest, event_slug: str, upload_type: str) -> Http
             except Exception as exp:
                 # Log the full traceback and show error to user
                 logger.exception("Upload error")
-                messages.error(request, _("Unknow error on upload") + f": {exp}")
+                messages.error(request, _("Unknown error while uploading.") + f": {exp}")
 
             # Redirect back to the main page on error or completion
             return HttpResponseRedirect(redr)

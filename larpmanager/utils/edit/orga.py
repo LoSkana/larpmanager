@@ -187,7 +187,7 @@ def validate_payments(request: HttpRequest, context: dict, event_slug: str) -> N
     """Validate that at least one active signup exists for the run before allowing payment creation."""
     run = context.get("run")
     if not Registration.objects.filter(run=run, cancellation_date__isnull=True).exists():
-        messages.warning(request, _("There are no signups for this event, so no payment can be created"))
+        messages.warning(request, _("There are no signups for this event, so no payment can be created."))
         msg = "orga_payments"
         raise RedirectError(msg, args=[event_slug])
 
@@ -743,7 +743,7 @@ def form_edit_handler(
         if is_choice and not option_model.objects.filter(question_id=context["saved"].id).exists():
             messages.warning(
                 request,
-                _("You must define at least one option before saving a single-choice or multiple-choice question"),
+                _("You must define at least one option before saving a single-choice or multiple-choice question."),
             )
 
             # Redirect to question page
@@ -884,7 +884,7 @@ def _is_registration_gate_active(context: dict, gate: str) -> bool:
     """Return True if a registration form type's gating feature/config is active."""
     if gate.startswith("config:"):
         config_slug = gate.removeprefix("config:")
-        return get_event_config(context["event"].id, config_slug, default_value=False)
+        return get_event_config(context["event"].id, config_slug)
     return gate in context["features"]
 
 

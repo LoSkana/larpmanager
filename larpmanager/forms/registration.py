@@ -295,11 +295,11 @@ class RegistrationForm(BaseRegistrationForm):
         if "reg_quotas" in self.params["features"] and "waiting" not in self.run_status:
             # Define labels for different quota options (1-5 quotas)
             quota_labels = [
-                _("Single payment"),
-                _("Two quotas"),
-                _("Three instalments"),
-                _("Four quotas"),
-                _("Five quotas"),
+                _("One"),
+                _("Two"),
+                _("Three"),
+                _("Four"),
+                _("Five"),
             ]
 
             # Calculate days difference between today and run end date
@@ -576,7 +576,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Handle filler ticket visibility based on event config and member status
         elif ticket_tier == TicketTier.FILLER:
-            filler_alway = get_event_config(event.id, "filler_always", default_value=False, context=self.params)
+            filler_alway = get_event_config(event.id, "filler_always", context=self.params)
             if filler_alway:
                 # With filler_always enabled, show only if run supports filler/primary or member has filler ticket
                 if (
@@ -719,7 +719,7 @@ class RequestApprovalForm(BaseRegistrationForm):
     confirm = forms.BooleanField(
         required=True,
         label=_("Request signup"),
-        help_text=_("Your signup will not be confirmed until an organizer approves this request"),
+        help_text=_("Your signup will not be confirmed until an organizer approves this request."),
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -769,7 +769,7 @@ class RequestApprovalForm(BaseRegistrationForm):
 class OrgaRegistrationForm(BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
-    page_info = _("Manage all registrations, character assignments, tickets, options and accounting status")
+    page_info = _("Manage all registrations, character assignments, tickets, options and accounting status.")
 
     page_title = _("Registrations")
 
@@ -895,13 +895,11 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         self.fields["pay_what"].label = get_event_config(
             self.params["run"].event_id,
             "pay_what_you_want_label",
-            default_value=_("Free donation"),
             context=self.params,
         )
         self.fields["pay_what"].help_text = get_event_config(
             self.params["run"].event_id,
             "pay_what_you_want_descr",
-            default_value=_("Freely indicate the amount of your donation"),
             context=self.params,
         )
 
@@ -971,7 +969,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             required=True,
             choices=quota_choices,
             label=_("Quotas"),
-            help_text=_("The number of payments to split the fee"),
+            help_text=_("The number of payments to split the fee."),
         )
 
         # Set initial value and section assignment
@@ -1192,9 +1190,7 @@ class RegistrationCharacterRelForm(BaseModelForm):
             [
                 s
                 for s in ["name", "pronoun", "song", "public", "private"]
-                if not get_event_config(
-                    self.params["event"].id, "custom_character_" + s, default_value=False, context=self.params
-                )
+                if not get_event_config(self.params["event"].id, "custom_character_" + s, context=self.params)
             ]
         )
 
@@ -1291,7 +1287,7 @@ class OrgaRegistrationTicketForm(BaseModelForm):
 
             # Skip ticket tiers that require configuration options not set
             if tier_value in ticket_configs and not get_event_config(
-                event.id, f"ticket_{ticket_configs[tier_value]}", default_value=False, context=context
+                event.id, f"ticket_{ticket_configs[tier_value]}", context=context
             ):
                 continue
 
@@ -1705,14 +1701,13 @@ class PreRegistrationForm(BaseForm):
         if self.context.get("event") and get_association_config(
             self.context["event"].association_id,
             "pre_reg_preferences",
-            default_value=False,
             context=self.context,
         ):
             self.fields["new_pref"] = forms.ChoiceField(
                 required=False,
                 choices=cho_pref,
                 label=_("Preference"),
-                help_text=_("Enter the order of preference of your pre-registration (1 is the maximum)"),
+                help_text=_("The order of preference of your pre-registration (1 is the maximum)"),
             )
             self.initial["new_pref"] = min(prefs)
         else:
@@ -1722,7 +1717,7 @@ class PreRegistrationForm(BaseForm):
         self.fields["new_info"] = forms.CharField(
             required=False,
             max_length=255,
-            label=_("Informations"),
+            label=_("General information"),
             help_text=_("Is there anything else you would like to tell us?"),
         )
 

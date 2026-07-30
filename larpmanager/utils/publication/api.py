@@ -222,7 +222,7 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
             # Add publication metadata from EventConfig
             pub_char_fields = ["country", "accommodation", "event_type"]
             for field in pub_char_fields:
-                value = get_element_config(event, f"pub_{field}", default_value="")
+                value = get_element_config(event, f"pub_{field}")
                 if value:
                     event_data[field] = value
 
@@ -230,7 +230,7 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
                 event_data["place"] = event.where
 
             for field in ["accommodation_type", "meals", "language"]:
-                raw = get_element_config(event, f"pub_{field}", default_value="")
+                raw = get_element_config(event, f"pub_{field}")
                 parsed = parse_multi_config(raw)
                 if parsed:
                     event_data[field] = parsed
@@ -238,18 +238,14 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
             _setting_map = {v: label.lower() for v, label in PromotionSetting.choices}
             event_settings = [
                 _setting_map[g]
-                for g in parse_multi_config(get_element_config(event, "pub_setting", default_value=""))
+                for g in parse_multi_config(get_element_config(event, "pub_setting"))
                 if g in _setting_map
             ]
             if event_settings:
                 event_data["setting"] = event_settings
 
             _mood_map = {v: label.lower() for v, label in PromotionMood.choices}
-            moods = [
-                _mood_map[g]
-                for g in parse_multi_config(get_element_config(event, "pub_mood", default_value=""))
-                if g in _mood_map
-            ]
+            moods = [_mood_map[g] for g in parse_multi_config(get_element_config(event, "pub_mood")) if g in _mood_map]
             if moods:
                 event_data["mood"] = moods
 

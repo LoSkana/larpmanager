@@ -1,6 +1,6 @@
 {% load i18n %}
 
-{% trans "An user with this email address has been created on our website. If you wish to activate, click on:" %}
+{% trans "A user with this email address has been created on our website. If you wish to activate it, click:" %}
 
 https://{{ site.domain }}{% url 'django_registration_activate' activation_key %}
 

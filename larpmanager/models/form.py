@@ -133,7 +133,7 @@ RegistrationQuestionType = extend_textchoices(
         ("TICKET", "ticket", _("Ticket")),
         ("ADDITIONAL", "additional_tickets", _("Additional")),
         ("PWYW", "pay_what_you_want", _("Pay what you want")),
-        ("QUOTA", "reg_quotas", _("Installments")),
+        ("QUOTA", "reg_quotas", _("Payment Installments")),
         ("SURCHARGE", "reg_surcharges", _("Surcharge")),
         ("FACTION_PREFERENCE", "faction_preference", _("Faction preference")),
     ],
@@ -304,7 +304,7 @@ class WritingQuestion(UuidMixin, OrderMixin, BaseModel):
     printable = models.BooleanField(
         default=True,
         verbose_name=_("Printable"),
-        help_text=_("Indicate whether the field is printed in PDF generations"),
+        help_text=_("Enter whether the field is printed in PDF generations"),
     )
 
     applicable = models.CharField(
@@ -417,7 +417,7 @@ class WritingOption(UuidMixin, OrderMixin, BaseModel):
         symmetrical=False,
         blank=True,
         verbose_name=_("Prerequisites"),
-        help_text=_("Indicates other options that must be selected for this option to be selectable"),
+        help_text=_("Enter other options that must be selected for this option to be selectable"),
     )
 
     tickets = models.ManyToManyField(
@@ -626,7 +626,7 @@ class RegistrationQuestion(UuidMixin, OrderMixin, BaseModel):
     giftable = models.BooleanField(
         default=False,
         verbose_name=_("Giftable"),
-        help_text=_("Indicates whether the option can be included in the gifted signups"),
+        help_text=_("Enter whether the option can be included in the gifted signups"),
     )
 
     applicable = models.CharField(

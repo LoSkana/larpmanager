@@ -24,8 +24,10 @@ from typing import TYPE_CHECKING, Any
 from django.apps import apps
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.utils.translation import gettext_lazy as _
 
 from larpmanager.models.base import Config
+from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -33,23 +35,123 @@ if TYPE_CHECKING:
 # Configs that must always read from the child event, never from the campaign parent (matched as prefixes)
 EVENT_CONFIGS_OWN_CHILD: frozenset[str] = frozenset({"payment_custom_reason", "theme", "pub_"})
 
-# Sentinel distinguishing "no default_value passed" from "default_value=None explicitly passed"
-CONFIG_UNSET: Any = object()
-
 # Centralized config defaults, used when a caller does not pass an explicit default_value.
 # Exact-name match first, then prefix, then suffix; falls back to False if nowhere matched.
 CONFIG_DEFAULTS: dict[str, Any] = {
-    "user_character_approval": False,
     "payment_custom_reason": "",
-    "theme": "",
+    # "nebula" mirrors AppearanceTheme.NEBULA.value;
+    "theme": "nebula",
     "intro_driver": "",
+    "app_integration_algorithm": "HS256",
+    "app_integration_button_text": "",
+    "app_integration_redirect_url": "",
+    "app_integration_secret": "",
+    "bring_friend_discount_from": 0,
+    "bring_friend_discount_to": 0,
+    "casting_add": 0,
+    "casting_characters": 1,
+    "casting_max": 5,
+    "casting_min": 1,
+    "casting_pay_priority": 0,
+    "casting_reg_priority": 0,
+    "centauri_badge": None,
+    "centauri_content": None,
+    "centauri_descr": None,
+    "centauri_prob": 0,
+    "credits_name": None,
+    "deadline_days": 0,
+    "deadlines_tolerance": "30",
+    "einvoice_aliquotaiva": "",
+    "einvoice_cap": None,
+    "einvoice_codicedestinatario": None,
+    "einvoice_comune": None,
+    "einvoice_denominazione": None,
+    "einvoice_idcodice": None,
+    "einvoice_indirizzo": None,
+    "einvoice_natura": "",
+    "einvoice_nazione": None,
+    "einvoice_numerocivico": None,
+    "einvoice_partitaiva": None,
+    "einvoice_provincia": None,
+    "einvoice_regimefiscale": None,
+    "ensemble_default_mode": "book",
+    "exp_start": 0,
+    "exp_undo": 0,
+    "free_abilities": "[]",
+    "guild_max_members": 0,
+    "guild_max_number": 0,
+    "footer_content": "",
+    "header_content": "",
+    "ildb": "",
+    "ildb_api_key": "",
+    "ildb_expire": "",
+    "ildb_key_hash": "",
+    "ildb_team_id": "",
+    "interface_version": None,
+    "lottery_num_draws": 0,
+    "lottery_ticket": "",
+    "mail_server_host": "",
+    "mail_server_host_password": "",
+    "mail_server_host_user": "",
+    "mail_server_port": "",
+    "member_theme": "",
+    "membership_age": "",
+    "membership_day": "01-01",
+    "membership_fee": 0,
+    "membership_fee_separated": True,
+    "membership_grazing": "0",
+    "organization_tax_perc": "10",
+    "page_css": "",
+    "pay_what_you_want_descr": _("Freely indicate the amount of your donation"),
+    "pay_what_you_want_label": _("Free donation"),
+    "payment_alert": 30,
+    "pub_accommodation": "",
+    "pub_accommodation_type": "",
+    "pub_country": "",
+    "pub_event_type": "",
+    "pub_language": "",
+    "pub_lat": "",
+    "pub_lon": "",
+    "pub_meals": "",
+    "pub_mood": "",
+    "pub_place": "",
+    "pub_setting": "",
+    "receipt_codice_fiscale": "",
+    "receipt_legal_name": "",
+    "receipt_runts": "",
+    "receipt_sede_legale": "",
+    "reduced_ratio": 10,
+    "remind_days": 5,
+    "remind_holidays": True,
+    "show_addit": "[]",
+    "show_export": False,
+    "show_limitations": False,
+    "show_shortcuts_mobile": False,
+    "sticky": "{}",
+    "token_credit_credit_name": None,
+    "token_credit_token_name": None,
+    "tokens_name": None,
+    "treasurer_appointees": "",
+    "user_character_max": 1,
+    "vat_options": 0,
+    "vat_ticket": 0,
+    "version": LATEST_AVAILABLE_VERSION,
+    "vote_candidates": "",
+    "vote_max": "1",
+    "vote_min": "1",
+    "writing_relationship_length": 10000,
 }
-CONFIG_DEFAULT_PREFIXES: list[tuple[str, Any]] = []
+CONFIG_DEFAULT_PREFIXES: list[tuple[str, Any]] = [
+    ("pub_", ""),
+    ("show_", "[]"),
+    ("open_", "[]"),
+    ("added_", "{}"),
+]
 CONFIG_DEFAULT_SUFFIXES: list[tuple[str, Any]] = []
 
 
 def get_config_default(config_name: str) -> Any:
-    """Look up the centralized default for a config name (exact, then prefix, then suffix)."""
+    """Look up the centralized default for a config name (exact, then prefix, then suffix). Fallback as False."""
     if config_name in CONFIG_DEFAULTS:
         return CONFIG_DEFAULTS[config_name]
     for prefix, default in CONFIG_DEFAULT_PREFIXES:
@@ -226,20 +328,16 @@ def _get_fkey_config(model_instance: object) -> str | None:
     return foreign_key_field_map.get(model_class_name)
 
 
-def get_element_config(
-    element: Any, config_name: str, default_value: Any = CONFIG_UNSET, *, bypass_cache: bool = False
-) -> Any:
-    """Get configuration value with type conversion and default fallback.
+def get_element_config(element: Any, config_name: str, *, bypass_cache: bool = False) -> Any:
+    """Get configuration value with type conversion and centralized default fallback.
 
     Retrieves a configuration value from an element's aux_configs, handling
-    caching and type conversion based on the default value type.
+    caching and type conversion based on the centralized default's type.
 
     Args:
         element: Model instance to get configuration from. Must have aux_configs
             attribute or be compatible with get_configs/update_configs functions.
         config_name: Configuration parameter name to retrieve.
-        default_value: Default value to return if config not found. Also serves as
-            type indicator for conversion of the retrieved value.
         bypass_cache: Whether to bypass cache and fetch directly from database.
             Useful for background processes where cache might be stale.
 
@@ -269,11 +367,8 @@ def get_element_config(
             # Use cached configurations for better performance
             element.aux_configs = get_configs(element)
 
-    # Resolve centralized default when caller did not pass an explicit one
-    if default_value is CONFIG_UNSET:
-        default_value = get_config_default(config_name)
-
     # Evaluate and return the configuration value with type conversion
+    default_value = get_config_default(config_name)
     return evaluate_config(element.aux_configs, config_name, default_value)
 
 
@@ -282,7 +377,6 @@ def _get_cached_config(
     element_type: str,
     config_name: str,
     *,
-    default_value: any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> any:
@@ -303,9 +397,7 @@ def _get_cached_config(
             element_configs = get_element_configs(element_id, element_type)
         context[cache_key][element_id] = element_configs
 
-    if default_value is CONFIG_UNSET:
-        default_value = get_config_default(config_name)
-
+    default_value = get_config_default(config_name)
     return evaluate_config(element_configs, config_name, default_value)
 
 
@@ -313,7 +405,6 @@ def get_association_config(
     association_id: int,
     config_name: str,
     *,
-    default_value: Any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
@@ -322,7 +413,6 @@ def get_association_config(
         association_id,
         "association",
         config_name,
-        default_value=default_value,
         context=context,
         bypass_cache=bypass_cache,
     )
@@ -361,7 +451,6 @@ def get_event_config(
     event_id: int,
     config_name: str,
     *,
-    default_value: Any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
@@ -375,23 +464,18 @@ def get_event_config(
         parent_id = _get_event_parent_id(event_id, context)
         lookup_id = parent_id if parent_id else event_id
 
-    return _get_cached_config(
-        lookup_id, "event", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
-    )
+    return _get_cached_config(lookup_id, "event", config_name, context=context, bypass_cache=bypass_cache)
 
 
 def get_member_config(
     member_id: int,
     config_name: str,
     *,
-    default_value: Any = CONFIG_UNSET,
     context: dict | None = None,
     bypass_cache: bool = False,
 ) -> Any:
     """Get member configuration value from cache or database."""
-    return _get_cached_config(
-        member_id, "member", config_name, default_value=default_value, context=context, bypass_cache=bypass_cache
-    )
+    return _get_cached_config(member_id, "member", config_name, context=context, bypass_cache=bypass_cache)
 
 
 def _is_config_set_cached(

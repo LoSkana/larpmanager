@@ -233,13 +233,13 @@ ACTIVATION_HINTS: dict[str, Any] = {
         "Add a question to your registration form by clicking 'New'; for example, ask for dietary requirements or emergency contact details"
     ),
     "orga_registrations": lambda: _(
-        "You are now seeing the registration form as a participant would; Select a ticket, fill in the required fields, and complete the registration to experience the full flow"
+        "You are now seeing the registration form as a participant would. Select a ticket, fill in the required fields, and complete the registration to experience the full flow."
     ),
     "orga_characters": lambda: _(
         "Create a character by clicking 'New'; give it a name and fill in the character details, then save"
     ),
     "orga_casting": lambda: _(
-        "Edit an existing registration and assign a character to the participant using the dropdown selection"
+        "Edit an existing registration and assign a character to the participant using the drop-down list."
     ),
 }
 
@@ -272,8 +272,8 @@ def get_activation_checklist(association_id: int) -> tuple[list[dict], int]:
     def _done(slug: str) -> bool:
         config_key = f"{slug}_suggestion"
         if slug.startswith("exe"):
-            return bool(get_association_config(association_id, config_key, default_value=False))
-        return any(get_event_config(eid, config_key, default_value=False) for eid in event_ids)
+            return bool(get_association_config(association_id, config_key))
+        return any(get_event_config(eid, config_key) for eid in event_ids)
 
     _not_used = [
         {

@@ -439,7 +439,7 @@ def _get_ildb_actions_data(association_id: int) -> dict:
 
 def _is_ildb_token_expired(association_id: int) -> bool:
     """Return True if the stored ILDB token expiry date has passed."""
-    expire_val = get_association_config(association_id, ILDB_EXPIRE_CONFIG, default_value="")
+    expire_val = get_association_config(association_id, ILDB_EXPIRE_CONFIG)
     if not expire_val:
         return False
     try:
@@ -450,15 +450,15 @@ def _is_ildb_token_expired(association_id: int) -> bool:
 
 def _get_ildb_unpublished_runs(association_id: int) -> list[str]:
     """Return search names of runs not yet published to ILDB."""
-    api_key = get_association_config(association_id, ILDB_CONFIG_KEY, default_value="")
-    team_id = get_association_config(association_id, ILDB_TEAM_CONFIG_KEY, default_value="")
+    api_key = get_association_config(association_id, ILDB_CONFIG_KEY)
+    team_id = get_association_config(association_id, ILDB_TEAM_CONFIG_KEY)
     if not api_key or not team_id:
         return []
     one_month_ago = timezone.now().date() - timedelta(days=30)
     candidate_runs = Run.objects.filter(event__association_id=association_id, end__gte=one_month_ago).order_by("end")
     unpublished = []
     for run in candidate_runs:
-        stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+        stored = run.get_config(ILDB_RUN_CONFIG)
         if not stored or stored in ("True", "False"):
             unpublished.append(run.search)
     return unpublished

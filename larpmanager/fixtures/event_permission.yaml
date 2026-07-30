@@ -181,7 +181,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Safety
-    descr: Review participants' safety-related informations
+    descr: Review participants' safety-related information
     slug: orga_safety
     number: 11
     config: null
@@ -529,7 +529,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Newsletter
-    descr: Displays list of emails of signed-up participants
+    descr: Displays a list of signed-up participants' email addresses
     slug: orga_newsletter
     number: 71
     config: null
@@ -589,7 +589,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: PDF
-    descr: Set the options for the automatic PDF generation of characters sheets
+    descr: Set the options for automatically generating character-sheet PDFs
     slug: orga_characters_pdf
     number: 111
     config: null
@@ -637,7 +637,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Abilities
-    descr: Manage the character abilities purchaseable with experience
+    descr: Manage the character abilities purchasable with experience points
     slug: orga_exp_abilities
     number: 51
     config: experience
@@ -696,8 +696,8 @@
     module: experience
 - model: larpmanager.eventpermission
   fields:
-    name: Criterions
-    descr: Manage experience criterions
+    name: Criteria
+    descr: Manage experience criteria
     slug: orga_exp_criterions
     number: 95
     config: experience
@@ -769,7 +769,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Lottery
-    descr: Select randomly lottery tickets to upgrade
+    descr: Randomly select lottery tickets to upgrade
     slug: orga_lottery
     number: 121
     config: lottery
@@ -793,7 +793,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Modules
-    descr: Manages modules for workshops
+    descr: Manage modules for workshops
     slug: orga_workshop_modules
     number: 61
     config: null
@@ -913,7 +913,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Area
-    descr: Manage area of the event
+    descr: Manage event areas
     slug: orga_warehouse_area
     number: 11
     config: warehouse

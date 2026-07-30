@@ -850,7 +850,7 @@ def exe_refunds(request: HttpRequest) -> HttpResponse:
     context.update(
         {
             "fields": [
-                ("details", _("Informations")),
+                ("details", _("General information")),
                 ("member", _("Member")),
                 ("value", _("Total required")),
                 ("credits", _("Remaining credits")),

@@ -117,7 +117,7 @@ def update_registration_status(instance: Any) -> None:
     association_id = instance.run.event.association_id
 
     # Handle new registration notifications to organizers
-    if instance.modified == 1 and get_association_config(association_id, "mail_signup_new", default_value=False):
+    if instance.modified == 1 and get_association_config(association_id, "mail_signup_new"):
         for organizer in get_event_organizers(instance.run.event):
             my_send_digest_email(
                 member=organizer,
@@ -127,7 +127,7 @@ def update_registration_status(instance: Any) -> None:
             )
 
     # Handle registration update notifications to organizers
-    elif get_association_config(association_id, "mail_signup_update", default_value=False):
+    elif get_association_config(association_id, "mail_signup_update"):
         for organizer in get_event_organizers(instance.run.event):
             my_send_digest_email(
                 member=organizer,
@@ -159,7 +159,7 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
         return
 
     # Check if character assignment emails are disabled for this event
-    if get_event_config(instance.registration.run.event_id, "mail_character", default_value=False):
+    if get_event_config(instance.registration.run.event_id, "mail_character"):
         return
 
     # Prepare context data for email template
@@ -226,7 +226,7 @@ def update_registration_cancellation(instance: Registration) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Send notification emails to organizers if feature is enabled
-    if get_association_config(instance.run.event.association_id, "mail_signup_del", default_value=False):
+    if get_association_config(instance.run.event.association_id, "mail_signup_del"):
         # Store member and ticket info in details since registration might be deleted
         for organizer in get_event_organizers(instance.run.event):
             my_send_digest_email(
@@ -301,7 +301,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Check if organization wants to receive deletion notifications
-    if get_association_config(instance.run.event.association_id, "mail_signup_del", default_value=False):
+    if get_association_config(instance.run.event.association_id, "mail_signup_del"):
         # Store member and ticket info in details since registration is being deleted
         for organizer in get_event_organizers(instance.run.event):
             my_send_digest_email(
@@ -336,7 +336,7 @@ def send_registration_request_received_email(instance: Registration) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     association_id = instance.run.event.association_id
-    if get_association_config(association_id, "mail_signup_new", default_value=False):
+    if get_association_config(association_id, "mail_signup_new"):
         for organizer in get_event_organizers(instance.run.event):
             my_send_digest_email(
                 member=organizer,

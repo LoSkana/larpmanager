@@ -419,7 +419,7 @@ def award_auto_populate(page: Any, live_server: Any) -> None:
     edit_iframe = get_modal_iframe(page)
 
     # Fill in award name and amount inside the modal
-    expect(edit_iframe.locator("#id_name")).to_have_value("Partecipation to Test Larp")
+    expect(edit_iframe.locator("#id_name")).to_have_value("Participation in Test Larp")
     edit_iframe.locator("#id_name").fill("auto populated award")
     edit_iframe.locator("#id_amount").fill("5")
     save_modal(page, edit_iframe)
