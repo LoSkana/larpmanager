@@ -116,8 +116,8 @@ class IldbCtx:
 def _ensure_ildb_expire(association: Association, api_key: str) -> None:
     """Ensure token expiry is tracked; reset expire when the key is rotated."""
     key_hash = hashlib.md5(api_key.encode()).hexdigest()[:8]  # noqa: S324
-    stored_hash = get_association_config(association.id, ILDB_KEY_HASH_CONFIG, default_value="")
-    expire_val = get_association_config(association.id, ILDB_EXPIRE_CONFIG, default_value="")
+    stored_hash = get_association_config(association.id, ILDB_KEY_HASH_CONFIG)
+    expire_val = get_association_config(association.id, ILDB_EXPIRE_CONFIG)
     if stored_hash != key_hash or not expire_val:
         expire_date = (timezone.now() + timedelta(days=270)).date().isoformat()
         save_single_config(association, ILDB_EXPIRE_CONFIG, expire_date)
@@ -130,14 +130,14 @@ def _get_ildb_context(event: Event, run: Run | None = None) -> IldbCtx | None:
     When run is provided, ildb_event_id is the stored ILDB run ID (empty if not yet published).
     """
     association = event.association
-    api_key = get_association_config(association.id, ILDB_CONFIG_KEY, default_value="")
-    team_id = get_association_config(association.id, ILDB_TEAM_CONFIG_KEY, default_value="")
+    api_key = get_association_config(association.id, ILDB_CONFIG_KEY)
+    team_id = get_association_config(association.id, ILDB_TEAM_CONFIG_KEY)
     if not api_key or not team_id:
         return None
     _ensure_ildb_expire(association, api_key)
     ildb_event_id = ""
     if run is not None:
-        stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+        stored = run.get_config(ILDB_RUN_CONFIG)
         if stored:
             ildb_event_id = stored
     return IldbCtx(api_key=api_key, team_id=team_id, association=association, ildb_event_id=ildb_event_id)
@@ -200,7 +200,7 @@ def _find_event_id(run: Run, ctx: IldbCtx) -> str:
 
     If a matching draft event is found via the API, notifies the association by email.
     """
-    stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+    stored = run.get_config(ILDB_RUN_CONFIG)
     if stored:
         return stored
 
@@ -335,32 +335,32 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
 
     # Load publication metadata from EventConfig
     genre_map = _get_genre_slug_map()
-    setting_raw = get_element_config(event, "pub_setting", default_value="")
-    mood_raw = get_element_config(event, "pub_mood", default_value="")
+    setting_raw = get_element_config(event, "pub_setting")
+    mood_raw = get_element_config(event, "pub_mood")
     slugs = parse_multi_config(setting_raw) + parse_multi_config(mood_raw)
     genere_ids = {genre_map[s] for s in slugs if s in genre_map}
     genere = sorted(genere_ids) or [genre_map.get("no-genre-specified", 27)]
 
-    lingua_raw = get_element_config(event, "pub_language", default_value="")
+    lingua_raw = get_element_config(event, "pub_language")
     lingua = parse_multi_config(lingua_raw) or [PromotionLanguage.values[0]]
 
-    tipologia_raw = get_element_config(event, "pub_event_type", default_value="") or PromotionEventType.values[0]
+    tipologia_raw = get_element_config(event, "pub_event_type") or PromotionEventType.values[0]
     tipologia = _TIPOLOGIA_MAP.get(tipologia_raw, tipologia_raw)
 
-    luogo = get_element_config(event, "pub_place", default_value="") or event.where or None
-    nazione = get_element_config(event, "pub_country", default_value="") or None
+    luogo = get_element_config(event, "pub_place") or event.where or None
+    nazione = get_element_config(event, "pub_country") or None
 
-    accommodation_raw = get_element_config(event, "pub_accommodation", default_value="")
+    accommodation_raw = get_element_config(event, "pub_accommodation")
     accommodation = _ACCOMMODATION_MAP.get(accommodation_raw, accommodation_raw) or None
 
-    tipo_accommodation_raw = get_element_config(event, "pub_accommodation_type", default_value="")
+    tipo_accommodation_raw = get_element_config(event, "pub_accommodation_type")
     tipo_accommodation = [_ACCOMMODATION_TYPE_MAP.get(v, v) for v in parse_multi_config(tipo_accommodation_raw)] or None
 
-    pasti_raw = get_element_config(event, "pub_meals", default_value="")
+    pasti_raw = get_element_config(event, "pub_meals")
     pasti = [_MEALS_MAP.get(v, v) for v in parse_multi_config(pasti_raw)] or None
 
-    lat = get_element_config(event, "pub_lat", default_value="").strip()
-    lon = get_element_config(event, "pub_lon", default_value="").strip()
+    lat = get_element_config(event, "pub_lat").strip()
+    lon = get_element_config(event, "pub_lon").strip()
     location = f"{lat},{lon}" if lat and lon else None
 
     locandina = event.cover if event.cover else None
@@ -434,7 +434,7 @@ def sync_crew(event: Event, ctx: IldbCtx) -> None:
     """
     crew = _build_crew(event)
     for run in event.runs.filter(development=DevelopStatus.SHOW):
-        stored = run.get_config(ILDB_RUN_CONFIG, default_value="")
+        stored = run.get_config(ILDB_RUN_CONFIG)
         if not stored:
             continue
         ctx.ildb_event_id = stored
@@ -523,7 +523,7 @@ def sync_cast(registration: Registration | None, run: Run, registration_id: int 
     ctx = _get_ildb_context(run.event, run)
     if not ctx or not ctx.ildb_event_id:
         return
-    if not get_association_config(ctx.association.id, "publication_cast", default_value=False):
+    if not get_association_config(ctx.association.id, "publication_cast"):
         return
 
     base_url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/cast"

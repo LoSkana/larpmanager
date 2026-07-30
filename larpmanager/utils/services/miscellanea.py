@@ -265,9 +265,7 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
         )
 
     # Award badge to user if configured for this association
-    badge_code = get_association_config(
-        context["association_id"], "centauri_badge", default_value=None, context=template_context
-    )
+    badge_code = get_association_config(context["association_id"], "centauri_badge", context=template_context)
     if badge_code:
         badge = Badge.objects.filter(cod=badge_code).first()
         if badge:
@@ -319,9 +317,7 @@ def get_warehouse_optionals(context: Any, default_columns: Any) -> None:
     optionals = {}
     has_active_optional = 0
     for field in WarehouseItem.get_optional_fields():
-        optionals[field] = get_association_config(
-            context["association_id"], f"warehouse_{field}", default_value=False, context=context
-        )
+        optionals[field] = get_association_config(context["association_id"], f"warehouse_{field}", context=context)
         if optionals[field]:
             has_active_optional = 1
     context["optionals"] = optionals

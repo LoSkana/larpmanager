@@ -318,13 +318,11 @@ def _info_membership(context: dict, member: Member) -> None:
     context["year"] = current_year
 
     # Get membership day configuration (default: January 1st)
-    membership_day = get_association_config(
-        context["association_id"], "membership_day", default_value="01-01", context=context
-    )
+    membership_day = get_association_config(context["association_id"], "membership_day", context=context)
     if membership_day:
         # Get grace period in months (default: 0 months)
         membership_grace_period_months = int(
-            get_association_config(context["association_id"], "membership_grazing", default_value="0", context=context),
+            get_association_config(context["association_id"], "membership_grazing", context=context),
         )
 
         # Build full date string with current year
@@ -379,7 +377,7 @@ def get_membership_fee_for_reg(
     redeem_code = registration.redeem_code if registration else None
     if (
         "membership" not in get_association_features(association_id)
-        or get_association_config(association_id, "membership_fee_separated", default_value=True)
+        or get_association_config(association_id, "membership_fee_separated")
         or redeem_code
     ):
         return 0
@@ -387,7 +385,7 @@ def get_membership_fee_for_reg(
     event_year = run.start.year
     if event_year < current_year:
         return 0
-    fee = int(get_association_config(association_id, "membership_fee", default_value=0))
+    fee = int(get_association_config(association_id, "membership_fee"))
     if not fee:
         return 0
     already_paid = AccountingItemMembership.objects.filter(

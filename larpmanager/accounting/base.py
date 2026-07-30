@@ -76,7 +76,7 @@ def is_registration_provisional(
         features = get_event_features(event.id)
 
     # Check if provisional payments are disabled for this event
-    if get_event_config(event.id, "payment_no_provisional", default_value=False, context=context):
+    if get_event_config(event.id, "payment_no_provisional", context=context):
         return False
 
     # Check if payment feature is enabled and registration has outstanding balance
@@ -169,9 +169,7 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
             return
 
         # Check if payment notifications are enabled for this association
-        if not get_association_config(
-            instance.registration.run.event.association_id, "mail_payment", default_value=False
-        ):
+        if not get_association_config(instance.registration.run.event.association_id, "mail_payment"):
             return
 
         instance._send_confirmation = True  # noqa: SLF001

@@ -29,7 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config, is_event_config_set
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
@@ -164,7 +164,7 @@ def get_context_member(request: HttpRequest, context: dict) -> None:
     get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
     # Compute effective interface version (member override, clamped to [assoc_version, latest])
-    member_version_str = context["member"].get_config("interface_version", default_value=None)
+    member_version_str = context["member"].get_config("interface_version")
     member_version = int(member_version_str) if member_version_str else None
     assoc_version = context.get("assoc_version", LATEST_AVAILABLE_VERSION)
     if member_version is not None and assoc_version != LATEST_AVAILABLE_VERSION:
@@ -473,17 +473,13 @@ def get_event_context(
         event_view = "register"
         event_kwargs = {"event_slug": context["run"].get_slug()}
         # Check if gallery is hidden for non-authenticated users
-        hide_gallery_for_non_login = get_event_config(
-            context["event"].id, "gallery_hide_login", default_value=False, context=context
-        )
+        hide_gallery_for_non_login = get_event_config(context["event"].id, "gallery_hide_login", context=context)
         if hide_gallery_for_non_login and not request.user.is_authenticated:
             messages.warning(request, _("You must be logged in to view this page"))
             raise RedirectError(event_view, kwargs=event_kwargs)
 
         # Check if gallery is hidden for non-registered users
-        hide_gallery_for_non_signup = get_event_config(
-            context["event"].id, "gallery_hide_signup", default_value=False, context=context
-        )
+        hide_gallery_for_non_signup = get_event_config(context["event"].id, "gallery_hide_signup", context=context)
         if hide_gallery_for_non_signup and not registration:
             messages.warning(request, _("You must be registered to view this page"))
             raise RedirectError(event_view, kwargs=event_kwargs)
@@ -511,10 +507,9 @@ def prepare_run(context: Any) -> None:
     for context_key, default in configs:
         context[context_key] = get_event_config(event_id, context_key, default_value=default, context=context)
 
-    # Override page theme if defined
-    event_theme = get_event_config(event_id, "theme", default_value="", context=context)
-    if event_theme:
-        context["page_theme"] = event_theme
+    # Override page theme if defined at the event level
+    if is_event_config_set(event_id, "theme", context=context):
+        context["page_theme"] = get_event_config(event_id, "theme", context=context)
 
     if "staff" in context or not context.get("writing_field_visibility"):
         context["show_all"] = "1"

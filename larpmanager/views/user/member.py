@@ -254,7 +254,7 @@ def profile(request: HttpRequest) -> Any:
     # Add vote configuration only if voting is enabled
     if "vote" in context["features"]:
         context["vote_open"] = get_association_config(
-            context["membership"].association_id, "vote_open", default_value=False, context=context
+            context["membership"].association_id, "vote_open", context=context
         )
 
     return render(request, "larpmanager/member/profile.html", context)
@@ -616,7 +616,7 @@ def public(request: HttpRequest, slug: str) -> HttpResponse:  # noqa: C901 - Com
 
     # Add LARP history if enabled in association configuration
     association_id = context["association_id"]
-    if get_association_config(association_id, "player_larp_history", default_value=False):
+    if get_association_config(association_id, "player_larp_history"):
         # Fetch registrations with related run and event data
         context["regs"] = (
             Registration.objects.filter(
@@ -953,12 +953,10 @@ def vote(request: HttpRequest) -> HttpResponse:
     # Retrieve voting configuration from association settings
     association_id = context["association_id"]
 
-    context["vote_open"] = get_association_config(association_id, "vote_open", default_value=False, context=context)
-    context["vote_cands"] = get_association_config(
-        association_id, "vote_candidates", default_value="", context=context
-    ).split(",")
-    context["vote_min"] = get_association_config(association_id, "vote_min", default_value="1", context=context)
-    context["vote_max"] = get_association_config(association_id, "vote_max", default_value="1", context=context)
+    context["vote_open"] = get_association_config(association_id, "vote_open", context=context)
+    context["vote_cands"] = get_association_config(association_id, "vote_candidates", context=context).split(",")
+    context["vote_min"] = get_association_config(association_id, "vote_min", context=context)
+    context["vote_max"] = get_association_config(association_id, "vote_max", context=context)
 
     # Process vote submission if POST request
     if request.method == "POST":

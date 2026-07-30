@@ -209,9 +209,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         available_runs = Run.objects.filter(event=self.params.get("event"))
 
         # If campaign switch is active, expand to include related events
-        if get_association_config(
-            self.params.get("event").association_id, "campaign_switch", default_value=False, context=self.params
-        ):
+        if get_association_config(self.params.get("event").association_id, "campaign_switch", context=self.params):
             # Start with current event ID
             related_event_ids = {self.params.get("event").id}
 
@@ -1662,7 +1660,6 @@ class BaseAccForm(BaseForm):
         self.context["user_fees"] = get_association_config(
             self.context["association_id"],
             "payment_fees_user",
-            default_value=False,
             context=self.context,
         )
 

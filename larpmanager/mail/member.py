@@ -77,7 +77,7 @@ def send_membership_confirm(request: HttpRequest, membership: Any) -> None:
     )
 
     # Check if membership fee is required and add fee information
-    membership_fee_amount = int(get_association_config(membership.association_id, "membership_fee", default_value="0"))
+    membership_fee_amount = int(get_association_config(membership.association_id, "membership_fee"))
     if membership_fee_amount:
         email_body += " " + _(
             "Please note that an annual membership fee of %(amount)d %(currency)s "
@@ -202,7 +202,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
         )
 
     # Add membership fee payment instructions if required
-    if requires_membership_fee and get_association_config(association_id, "membership_fee", default_value=0):
+    if requires_membership_fee and get_association_config(association_id, "membership_fee"):
         membership_fee_url = get_url("accounting/membership", member.membership)
         body += "<br /><br />" + _(
             "Payment of the membership fee for this year is required to participate in events. "
