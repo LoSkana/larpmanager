@@ -79,14 +79,14 @@ def test_translations_text(pw_page: Any) -> None:
 
 
     go_to(page, live_server, "/language")
-    page.get_by_label("Seleziona la lingua").select_option("fr")
+    page.get_by_label("Seleziona una lingua").select_option("fr")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "bonjour")
     topbar(page, "Profil")
     expect_normalized(page, page.locator("#sidebar"), "Informations personnelles")
 
     go_to(page, live_server, "/language")
-    page.get_by_label("Sélectionner la langue").select_option("de")
+    page.get_by_label("Sélectionne une langue").select_option("de")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Hello")
     topbar(page, "Profil")
