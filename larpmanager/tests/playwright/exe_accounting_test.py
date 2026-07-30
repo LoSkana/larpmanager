@@ -128,7 +128,6 @@ def add_exe(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_descr").click()
     edit_iframe.locator("#id_descr").fill("babe")
     load_image(edit_iframe,"#id_invoice")
-    edit_iframe.get_by_role("cell", name="--------- Enter the outflow").click()
     edit_iframe.locator("#id_exp").select_option("a")
     save_modal(page, edit_iframe)
     page.get_by_role("link", name="New").click()

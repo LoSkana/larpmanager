@@ -529,7 +529,7 @@
 - model: larpmanager.eventpermission
   fields:
     name: Newsletter
-    descr: Displays a list of signed-up participants' email addresses
+    descr: Displays a list of signed-up email addresses for newsletters
     slug: orga_newsletter
     number: 71
     config: null
