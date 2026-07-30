@@ -138,9 +138,7 @@ def pre_register(request: HttpRequest, event_slug: str = "") -> HttpResponse:
     context["already"] = []  # Events user has already pre-registered for
 
     # Check if preference ordering is enabled
-    context["preferences"] = get_association_config(
-        context["association_id"], "pre_reg_preferences", default_value=False
-    )
+    context["preferences"] = get_association_config(context["association_id"], "pre_reg_preferences")
 
     # Build set of already pre-registered event IDs
     ch = {}
@@ -584,11 +582,9 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
     context["event_terms_conditions"] = get_event_text(context["event"].id, EventTextType.TOC)
     context["association_terms_conditions"] = get_association_text(context["association_id"], AssociationTextType.TOC)
     context["hide_unavailable"] = get_event_config(
-        context["event"].id, "registration_hide_unavailable", default_value=False, context=context
+        context["event"].id, "registration_hide_unavailable", context=context
     )
-    context["no_provisional"] = get_event_config(
-        context["event"].id, "payment_no_provisional", default_value=False, context=context
-    )
+    context["no_provisional"] = get_event_config(context["event"].id, "payment_no_provisional", context=context)
 
     init_form_submitted(context, form, request, registration)
 
@@ -692,7 +688,7 @@ def register(
     # Handle registration redirects for new registrations (skipped is a valid ticket link is provided)
     if is_new_registration and not context.get("ticket"):
         # If the approval process is enabled, players must submit a signup request instead
-        if get_event_config(current_event.id, "registration_approval_process", default_value=False, context=context):
+        if get_event_config(current_event.id, "registration_approval_process", context=context):
             return redirect("request_signup", event_slug=current_run.get_slug())
 
         redirect_response = _check_redirect_registration(request, context, secret_code)
@@ -765,7 +761,7 @@ def request_signup(request: HttpRequest, event_slug: str) -> HttpResponse:
     current_run = context["run"]
     current_event = context["event"]
 
-    if not get_event_config(current_event.id, "registration_approval_process", default_value=False, context=context):
+    if not get_event_config(current_event.id, "registration_approval_process", context=context):
         raise Http404
 
     # Already has a registration (pending or confirmed): nothing to request
@@ -1219,9 +1215,7 @@ def unregister(request: HttpRequest, event_slug: str) -> Any:
         msg = "Registration does not exist"
         raise Http404(msg) from err
 
-    cancellation_disabled = get_event_config(
-        context["event"].id, "player_cancellation_disable", default_value=False, context=context
-    )
+    cancellation_disabled = get_event_config(context["event"].id, "player_cancellation_disable", context=context)
 
     if request.method == "POST":
         if cancellation_disabled:

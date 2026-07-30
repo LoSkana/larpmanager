@@ -88,7 +88,7 @@ def check_run_deadlines(runs: list[Run]) -> list:
         registrations_by_run[registration.run_id].append(registration)
 
     # Get tolerance setting
-    tolerance = int(get_association_config(runs[0].event.association_id, "deadlines_tolerance", default_value="30"))
+    tolerance = int(get_association_config(runs[0].event.association_id, "deadlines_tolerance"))
 
     # Check membership feature
     association_id = runs[0].event.association_id
@@ -300,7 +300,7 @@ def deadlines_casting(collect: Any, features: Any, player_ids: Any, run: Any) ->
     if "casting" not in features:
         return
 
-    casting_characters_required = get_event_config(run.event_id, "casting_characters", default_value=1)
+    casting_characters_required = get_event_config(run.event_id, "casting_characters")
     # members that already have a character
     members_with_characters = (
         Registration.objects.filter(run=run)

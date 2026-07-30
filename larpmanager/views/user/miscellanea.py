@@ -477,9 +477,9 @@ def app_integration_redirect(request: HttpRequest) -> HttpResponse:
 
     association_id = context["association_id"]
 
-    secret = get_association_config(association_id, "app_integration_secret", default_value="")
-    redirect_url = get_association_config(association_id, "app_integration_redirect_url", default_value="")
-    algorithm = get_association_config(association_id, "app_integration_algorithm", default_value="HS256")
+    secret = get_association_config(association_id, "app_integration_secret")
+    redirect_url = get_association_config(association_id, "app_integration_redirect_url")
+    algorithm = get_association_config(association_id, "app_integration_algorithm")
 
     if not secret or not redirect_url:
         return HttpResponseForbidden("App integration is not fully configured.")

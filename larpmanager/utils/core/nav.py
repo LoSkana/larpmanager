@@ -433,7 +433,7 @@ def build_profile_nav_items(request: HttpRequest) -> list[dict[str, Any]]:
     # Allow opt in to use latest interface version
     assoc_version = request.association.get("assoc_version", LATEST_AVAILABLE_VERSION)
     if assoc_version < LATEST_AVAILABLE_VERSION and hasattr(request.user, "member"):
-        member_version_str = request.user.member.get_config("interface_version", default_value=None)
+        member_version_str = request.user.member.get_config("interface_version")
         member_version = int(member_version_str) if member_version_str else assoc_version
         effective_version = max(member_version, assoc_version)
         if effective_version < LATEST_AVAILABLE_VERSION:

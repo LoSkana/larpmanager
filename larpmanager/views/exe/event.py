@@ -244,9 +244,7 @@ def exe_pre_registrations(request: HttpRequest) -> HttpResponse:
     context["seen"] = []
 
     # Get preference configuration for the association
-    context["preferences"] = get_association_config(
-        context["association_id"], "pre_reg_preferences", default_value=False, context=context
-    )
+    context["preferences"] = get_association_config(context["association_id"], "pre_reg_preferences", context=context)
 
     # Track which events we've already processed
     seen_events = set()

@@ -607,10 +607,10 @@ def generate_payment_receipt(accounting_item: Any) -> tuple[str, str]:
         "year": year,
         "method": invoice.method.name if invoice else None,
         "causal": causal,
-        "receipt_legal_name": get_association_config(association_id, "receipt_legal_name", default_value=""),
-        "receipt_sede_legale": get_association_config(association_id, "receipt_sede_legale", default_value=""),
-        "receipt_codice_fiscale": get_association_config(association_id, "receipt_codice_fiscale", default_value=""),
-        "receipt_runts": get_association_config(association_id, "receipt_runts", default_value=""),
+        "receipt_legal_name": get_association_config(association_id, "receipt_legal_name"),
+        "receipt_sede_legale": get_association_config(association_id, "receipt_sede_legale"),
+        "receipt_codice_fiscale": get_association_config(association_id, "receipt_codice_fiscale"),
+        "receipt_runts": get_association_config(association_id, "receipt_runts"),
         "is_donation": isinstance(accounting_item, AccountingItemDonation),
     }
 

@@ -450,8 +450,8 @@ class Event(UuidMixin, BaseModel):
             lat = next((c.value for c in geo if c.name == "pub_lat"), "").strip()
             lon = next((c.value for c in geo if c.name == "pub_lon"), "").strip()
         else:
-            lat = get_element_config(self, "pub_lat", default_value="").strip()
-            lon = get_element_config(self, "pub_lon", default_value="").strip()
+            lat = get_element_config(self, "pub_lat").strip()
+            lon = get_element_config(self, "pub_lon").strip()
         if lat and lon:
             return f"https://www.google.com/maps?q={lat},{lon}"
         return ""
