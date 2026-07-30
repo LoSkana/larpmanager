@@ -5608,6 +5608,9 @@ msgstr "Aktiver nye plattformfunksjoner"
 msgid "Already existing relationship!"
 msgstr "Allerede eksisterende forhold!"
 
+msgid "Assign remaining stock to area"
+msgstr "Fordel gjenværende lagerbeholdning på området"
+
 msgid "Character Inventory Pool Types"
 msgstr "Typer av karakterinventar-pool"
 

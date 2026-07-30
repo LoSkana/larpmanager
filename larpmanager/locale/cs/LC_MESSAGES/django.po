@@ -5608,6 +5608,9 @@ msgstr "Aktivuj nové funkce platformy"
 msgid "Already existing relationship!"
 msgstr "Již existující vztah!"
 
+msgid "Assign remaining stock to area"
+msgstr "Přiřadit zbývající zásoby do oblasti"
+
 msgid "Character Inventory Pool Types"
 msgstr "Typy Poolů inventáře postav"
 

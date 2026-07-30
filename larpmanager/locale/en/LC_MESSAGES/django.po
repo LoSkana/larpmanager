@@ -11689,6 +11689,9 @@ msgstr ""
 msgid "Remove character"
 msgstr ""
 
+msgid "Assign remaining stock to area"
+msgstr ""
+
 msgid "Your registration ticket"
 msgstr ""
 

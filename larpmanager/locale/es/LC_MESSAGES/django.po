@@ -5608,6 +5608,9 @@ msgstr "Activar nuevas funciones de la plataforma"
 msgid "Already existing relationship!"
 msgstr "Relación ya existente!"
 
+msgid "Assign remaining stock to area"
+msgstr "Asignar el stock restante a la zona"
+
 msgid "Character Inventory Pool Types"
 msgstr "Tipos de pool de inventario de personajes"
 
