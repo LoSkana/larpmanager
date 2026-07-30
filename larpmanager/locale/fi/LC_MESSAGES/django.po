@@ -5623,6 +5623,9 @@ msgstr "Aktivoi uudet alustan ominaisuudet"
 msgid "Already existing relationship!"
 msgstr "Jo olemassa oleva suhde!"
 
+msgid "Assign remaining stock to area"
+msgstr "Määritä jäljellä oleva varasto alueelle"
+
 msgid "Character Inventory Pool Types"
 msgstr "Hahmojen inventaariopoolien tyypit"
 

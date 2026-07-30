@@ -23,6 +23,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import models, transaction
+from django.db.models import Sum
 from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -37,14 +38,17 @@ import datetime
 
 from larpmanager.cache.bulk import get_bulk_options_cache
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.warehouse import update_warehouse_item_cache
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp
 from larpmanager.models.form import WritingAnswer, WritingChoice
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import (
+    WarehouseArea,
     WarehouseContainer,
     WarehouseItem,
+    WarehouseItemAssignment,
     WarehouseTag,
 )
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus, Faction, Plot, Prologue
@@ -211,6 +215,7 @@ class Operations(models.IntegerChoices):
     DEL_FACT_CHAR = 24, _("Remove character")
     SET_FACT_PROGRESS = 25, _("Set progress step")
     SET_FACT_ASSIGNED = 26, _("Set assigned staff member")
+    SET_ITEM_AREA_REMAINING = 27, _("Assign remaining stock to area")
 
 
 def _scoped_bulk_queryset(context: dict, model_class: type, object_uuids: list[str]) -> QuerySet:
@@ -381,6 +386,59 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
         _bulk_op(Operations.DEL_ITEM_TAG, available_tags),
     ]
     _add_bulk_delete_option(request, context)
+
+
+def exec_set_item_area_remaining(context: dict, target: str, uuids: list[str]) -> str:
+    """Assign each selected item's full remaining stock to a target event area.
+
+    Items with unlimited stock or with nothing left available are skipped.
+    """
+    area = context["event"].get_elements(WarehouseArea).get(uuid=target)
+    with transaction.atomic():
+        items = list(
+            WarehouseItem.objects.select_for_update().filter(
+                association_id=context["association_id"],
+                uuid__in=uuids,
+                quantity__isnull=False,
+            )
+        )
+        assigned_by_item = {
+            row["item_id"]: row["total"] or 0
+            for row in WarehouseItemAssignment.objects.filter(item__in=items)
+            .values("item_id")
+            .annotate(total=Sum("quantity"))
+        }
+        for item in items:
+            available = max(item.quantity - assigned_by_item.get(item.id, 0), 0)
+            if available <= 0:
+                continue
+            assignment, _created = WarehouseItemAssignment.objects.get_or_create(
+                item=item,
+                area=area,
+                event=context["event"],
+            )
+            assignment.quantity = (assignment.quantity or 0) + available
+            assignment.save()
+
+    for item in items:
+        update_warehouse_item_cache(item)
+
+    return area.name
+
+
+def handle_bulk_orga_items(request: HttpRequest, context: dict) -> None:
+    """Handle bulk operations on warehouse items scoped to a single event.
+
+    Supports committing each item's full remaining stock to an area of the current event.
+    """
+    if request.POST:
+        mapping = {Operations.SET_ITEM_AREA_REMAINING: exec_set_item_area_remaining}
+        raise ReturnNowError(exec_bulk(request, context, mapping, WarehouseItem))
+
+    areas = WarehouseArea.objects.filter(event=context["event"]).values("uuid", "name").order_by("name")
+    context["bulk"] = [
+        _bulk_op(Operations.SET_ITEM_AREA_REMAINING, areas),
+    ]
 
 
 def _get_chars(context: dict, character_uuids: list[str]) -> QuerySet[Character]:
