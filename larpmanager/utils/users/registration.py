@@ -205,7 +205,7 @@ def _status_membership_fee(
     if user_membership.status != MembershipStatus.ACCEPTED:
         return False
 
-    fee = int(get_association_config(run.event.association_id, "membership_fee", default_value=0))
+    fee = int(get_association_config(run.event.association_id, "membership_fee"))
     if not fee:
         return False
 
@@ -550,7 +550,7 @@ def _set_membership_context(context: dict, run: Run, member: Member, registratio
         return
     association_id = run.event.association_id
     event_year = run.start.year
-    context["membership_amount"] = get_association_config(association_id, "membership_fee", default_value=0)
+    context["membership_amount"] = get_association_config(association_id, "membership_fee")
     currency_symbol = run.event.association.get_currency_symbol()
     context["membership_amount_display"] = ""
     if context["membership_amount"]:
@@ -1339,7 +1339,7 @@ def get_reduced_available_count(run: Any) -> int:
 
     """
     # Get the ratio for reduced tickets per patron registrations
-    reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio", default_value=10))
+    reduced_tickets_per_patron_ratio = int(get_event_config(run.event_id, "reduced_ratio"))
 
     # Count current reduced and patron registrations (excluding cancelled)
     reduced_registrations_count = Registration.objects.filter(

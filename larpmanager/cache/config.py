@@ -42,7 +42,8 @@ CONFIG_UNSET: Any = object()
 # Exact-name match first, then prefix, then suffix; falls back to False if nowhere matched.
 CONFIG_DEFAULTS: dict[str, Any] = {
     "payment_custom_reason": "",
-    "theme": "",
+    # "nebula" mirrors AppearanceTheme.NEBULA.value;
+    "theme": "nebula",
     "intro_driver": "",
     "allow_bulk_delete": False,
     "app_integration_algorithm": "HS256",
@@ -117,8 +118,10 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "member_theme": "",
     "membership_age": "",
     "membership_day": "01-01",
+    "membership_fee": 0,
     "membership_fee_separated": True,
     "membership_grazing": "0",
+    "organization_tax_perc": "10",
     "pay_what_you_want_descr": _("Freely indicate the amount of your donation"),
     "pay_what_you_want_label": _("Free donation"),
     "payment_alert": 30,
@@ -147,6 +150,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "receipt_legal_name": "",
     "receipt_runts": "",
     "receipt_sede_legale": "",
+    "reduced_ratio": 10,
     "registration_approval_process": False,
     "registration_hide_unavailable": False,
     "registration_no_grouping": False,
@@ -161,6 +165,8 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "treasurer_appointees": "",
     "user_character_approval": False,
     "user_character_max": 1,
+    "vat_options": 0,
+    "vat_ticket": 0,
     "version": LATEST_AVAILABLE_VERSION,
     "vote_candidates": "",
     "vote_max": "1",

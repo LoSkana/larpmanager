@@ -626,7 +626,7 @@ def exe_membership_fee(request: HttpRequest) -> HttpResponse:
             association_id = context["association_id"]
 
             # Get membership fee amount from association configuration
-            fee = get_association_config(association_id, "membership_fee", default_value="0", context=context)
+            fee = get_association_config(association_id, "membership_fee", context=context)
 
             # Create payment invoice record with confirmed status
             payment = PaymentInvoice.objects.create(
