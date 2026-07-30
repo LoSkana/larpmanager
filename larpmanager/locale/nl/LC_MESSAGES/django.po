@@ -6813,9 +6813,6 @@ msgstr "Schrijfvelden zonder opties: %(list)s"
 msgid "You are logged in with an email address:"
 msgstr "Je bent aangemeld met een e-mailadres:"
 
-msgid "You can now review users' mailing lists."
-msgstr "Je kunt nu de mailinglijsten van gebruikers bekijken."
-
 msgid "You can now set the dynamic installments"
 msgstr "Je kunt nu de dynamische termijnen instellen"
 
@@ -6861,9 +6858,6 @@ msgstr "Heb je de vereiste gegevens goed gecontroleerd?"
 
 msgid "Display all participants data as registry"
 msgstr "Toon alle deelnemersgegevens als register"
-
-msgid "Displays a list of users' email addresses"
-msgstr "Toont een lijst met e-mailadressen van gebruikers"
 
 msgid "Donation amount chosen by the participant"
 msgstr "Donatiebedrag gekozen door de deelnemer"
@@ -7704,6 +7698,9 @@ msgstr "Tolerantie overschreden, doorgaan met annuleren"
 msgid "You are including (at least one of these filters)"
 msgstr "Je sluit (ten minste een van) deze filters in"
 
+msgid "You can now review mailing lists for newsletters."
+msgstr "Je kunt nu mailinglijsten voor nieuwsbrieven bekijken."
+
 msgid "You can now set the external mail server settings"
 msgstr "Je kunt nu de instellingen van de externe mailserver instellen"
 
@@ -7719,6 +7716,9 @@ msgstr "Definieer de verzamelde gegevens in het gebruikersprofielformulier"
 #, python-format
 msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr "Details: %(details)s (Bedrag: <b>%(amount).2f</b>)"
+
+msgid "Displays a list of email addresses for newsletters"
+msgstr "Toont een lijst met e-mailadressen voor nieuwsbrieven"
 
 msgid "Enables warehouse management for the organization."
 msgstr "Schakelt magazijnbeheer voor de organisatie in."
@@ -8328,9 +8328,6 @@ msgstr ""
 "Neem contact op met de organisatoren als je later een nieuwe toegangslink "
 "nodig hebt"
 
-msgid "Displays a list of signed-up participants' email addresses"
-msgstr "Toont een lijst met e-mailadressen van ingeschreven deelnemers"
-
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
 "Fout bij het uploaden van de afbeelding. Probeer het nog eens of gebruik een"
@@ -8507,6 +8504,9 @@ msgid "Content of mail reminding participants to fill their profile"
 msgstr ""
 "Inhoud van e-mail waarin deelnemers worden herinnerd om hun profiel in te "
 "vullen"
+
+msgid "Displays a list of signed-up email addresses for newsletters"
+msgstr "Toont een lijst met aangemelde e-mailadressen voor nieuwsbrieven"
 
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr "Toont deelnemers met achterstallige betalingen of andere deadlines"

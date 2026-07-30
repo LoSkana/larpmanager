@@ -6813,9 +6813,6 @@ msgstr "Skrive felt uten alternativer: %(list)s"
 msgid "You are logged in with an email address:"
 msgstr "Du er logget inn med en e-postadresse:"
 
-msgid "You can now review users' mailing lists."
-msgstr "Du kan nå gjennomgå brukernes e-postlister."
-
 msgid "You can now set the dynamic installments"
 msgstr "Du kan nå angi de dynamiske avdragene"
 
@@ -6861,9 +6858,6 @@ msgstr "Har du sjekket de nødvendige dataene på riktig måte?"
 
 msgid "Display all participants data as registry"
 msgstr "Vis alle deltakerdata som register"
-
-msgid "Displays a list of users' email addresses"
-msgstr "Viser en liste over brukernes e-postadresser"
 
 msgid "Donation amount chosen by the participant"
 msgstr "Donasjonsbeløp valgt av deltakeren"
@@ -7694,6 +7688,9 @@ msgstr "Toleranse overskredet, fortsett med kanselleringen"
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderer (minst ett av) disse filtrene"
 
+msgid "You can now review mailing lists for newsletters."
+msgstr "Du kan nå gjennomgå e-postlister for nyhetsbrev."
+
 msgid "You can now set the external mail server settings"
 msgstr "Du kan nå angi innstillingene for ekstern e-postserver"
 
@@ -7709,6 +7706,9 @@ msgstr "Definer dataene som samles inn i brukerprofilskjemaet"
 #, python-format
 msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr "Detaljer: %(details)s (Beløp: <b>%(amount).2f</b>)"
+
+msgid "Displays a list of email addresses for newsletters"
+msgstr "Viser en liste over e-postadresser for nyhetsbrev"
 
 msgid "Enables warehouse management for the organization."
 msgstr "Aktiverer lagerstyring for organisasjonen."
@@ -8294,9 +8294,6 @@ msgstr ""
 msgid "Contact the organizers if you need a new access link later"
 msgstr "Kontakt arrangørene hvis du trenger en ny tilgangslink senere"
 
-msgid "Displays a list of signed-up participants' email addresses"
-msgstr "Viser en liste over påmeldte deltakeres e-postadresser"
-
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr "Feil ved opplasting av bilde. Prøv på nytt, eller bruk en mindre fil."
 
@@ -8463,6 +8460,9 @@ msgstr "Konfigurer billettyper, priser og nivåer for deltakerne."
 
 msgid "Content of mail reminding participants to fill their profile"
 msgstr "Innholdet i e-posten som minner deltakerne om å fylle ut profilen sin"
+
+msgid "Displays a list of signed-up email addresses for newsletters"
+msgstr "Viser en liste over påmeldte e-postadresser for nyhetsbrev"
 
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr "Viser deltakere med forfalt betaling eller andre frister"

@@ -6815,9 +6815,6 @@ msgstr "Schreibfelder ohne Optionen: %(list)s"
 msgid "You are logged in with an email address:"
 msgstr "Du bist mit einer E-Mail-Adresse eingeloggt:"
 
-msgid "You can now review users' mailing lists."
-msgstr "Du kannst jetzt die Mailinglisten der Nutzenden prüfen."
-
 msgid "You can now set the dynamic installments"
 msgstr "Du kannst jetzt die dynamischen Raten festlegen"
 
@@ -6863,9 +6860,6 @@ msgstr "Hast du die erforderlichen Daten ordnungsgemäß überprüft?"
 
 msgid "Display all participants data as registry"
 msgstr "Zeige alle Daten der Teilnehmenden als Register an"
-
-msgid "Displays a list of users' email addresses"
-msgstr "Zeigt eine Liste der E-Mail-Adressen von Benutzenden an"
 
 msgid "Donation amount chosen by the participant"
 msgstr "Vom Teilnehmer gewählter Spendenbetrag"
@@ -7708,6 +7702,9 @@ msgstr "Toleranz überschritten, mit der Stornierung fortfahren"
 msgid "You are including (at least one of these filters)"
 msgstr "Du schließt (mindestens einen) dieser Filter ein"
 
+msgid "You can now review mailing lists for newsletters."
+msgstr "Du kannst jetzt Mailinglisten für Newsletter überprüfen."
+
 msgid "You can now set the external mail server settings"
 msgstr "Du kannst jetzt die Einstellungen des externen Mailservers festlegen"
 
@@ -7723,6 +7720,9 @@ msgstr "Definiere die im Benutzerprofilformular erfassten Daten"
 #, python-format
 msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr "Details: %(details)s (Betrag: <b>%(amount).2f</b>)"
+
+msgid "Displays a list of email addresses for newsletters"
+msgstr "Zeigt eine Liste von E-Mail-Adressen für Newsletter an"
 
 msgid "Enables warehouse management for the organization."
 msgstr "Aktiviert die Lagerverwaltung für die Organisation."
@@ -8356,9 +8356,6 @@ msgstr ""
 "Kontaktiere die Organisatoren, wenn du später einen neuen Zugangslink "
 "benötigst"
 
-msgid "Displays a list of signed-up participants' email addresses"
-msgstr "Zeigt eine Liste der E-Mail-Adressen angemeldeter Teilnehmender an"
-
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
 "Fehler beim Hochladen des Bildes. Bitte versuche es erneut oder verwende "
@@ -8547,6 +8544,9 @@ msgstr "Konfiguriere Ticketarten, Preise und Preisstufen für die Teilnehmer."
 msgid "Content of mail reminding participants to fill their profile"
 msgstr ""
 "Inhalt der E-Mail, die die Teilnehmer daran erinnert, ihr Profil auszufüllen"
+
+msgid "Displays a list of signed-up email addresses for newsletters"
+msgstr "Zeigt eine Liste der für Newsletter angemeldeten E-Mail-Adressen an"
 
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr "Zeigt Teilnehmende mit überfälligen Zahlungen oder anderen Fristen an"
