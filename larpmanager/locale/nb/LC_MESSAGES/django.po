@@ -635,7 +635,7 @@ msgid "Option"
 msgstr "Alternativ"
 
 msgid "Patron"
-msgstr "Beskytter"
+msgstr "Støttespiller"
 
 msgid "Photo:"
 msgstr "Foto:"
@@ -1164,7 +1164,7 @@ msgid "Features"
 msgstr "Funksjoner"
 
 msgid "Giftable"
-msgstr "Gavbar"
+msgstr "Gavebar"
 
 msgid "Handouts"
 msgstr "Handouts"
@@ -2370,7 +2370,7 @@ msgid "Payment date"
 msgstr "Betalingsdato"
 
 msgid "Pre-Register"
-msgstr "Forhåndspåmelding"
+msgstr "Forhåndsregistrer deg"
 
 msgid "Presentation"
 msgstr "Presentasjon"
@@ -3634,7 +3634,7 @@ msgid "Expected revenue:"
 msgstr "Forventede inntekter:"
 
 msgid "Experience System"
-msgstr "Opplevelsessystem"
+msgstr "Erfaringssystem"
 
 msgid "Experience points"
 msgstr "Erfaringspoeng"
@@ -4683,7 +4683,7 @@ msgid "One-Time Access Tokens"
 msgstr "Engangsadgangstokener"
 
 msgid "Passenger instructions"
-msgstr "Passasjerinformasjon"
+msgstr "Instruksjoner for passasjerer"
 
 msgid "Payment membership fee"
 msgstr "Betaling av medlemsavgift"
@@ -5077,7 +5077,7 @@ msgid "Generate a new ILDB token"
 msgstr "Generer et nytt ILDB-token"
 
 msgid "Go to the quests of type:"
-msgstr "Gå til oppdrag av typen:"
+msgstr "Gå til Quest av typen:"
 
 msgid "Go to the tokens history:"
 msgstr "Gå til tokenhistorikken:"
@@ -5184,7 +5184,7 @@ msgid "Can't copy from same event"
 msgstr "Kan ikke kopiere fra samme hendelse"
 
 msgid "Character assignment email"
-msgstr "E-post om tildeling av rolle"
+msgstr "E-post om tildeling av karakter"
 
 msgid "Choose the payment method:"
 msgstr "Velg betalingsmåte:"
@@ -5352,7 +5352,7 @@ msgid "Missing casting preferences"
 msgstr "Mangler castingpreferanser"
 
 msgid "No inventory transfers yet."
-msgstr "Ingen overføringer ennå."
+msgstr "Ingen inventaroverføringer ennå."
 
 msgid "Pre-registration confirmed!"
 msgstr "Forhåndsregistrering bekreftet!"
@@ -5415,7 +5415,7 @@ msgid "Bring a friend to %(event)s!"
 msgstr "Ta med en venn til %(event)s!"
 
 msgid "Characters not participating"
-msgstr "Deltar ikke"
+msgstr "Karakterer som ikke deltar"
 
 msgid "Cover photo fo the character"
 msgstr "Forsidebilde av karakteren"
@@ -5458,7 +5458,7 @@ msgid "Membership request submitted"
 msgstr "Forespørsel om medlemskap innlevert"
 
 msgid "My pending guild invitations"
-msgstr "Mine gildeinnvitasjoner"
+msgstr "Mine ventende gildeinnvitasjoner"
 
 msgid "Name of badge to be awarded."
 msgstr "Navn på badge som skal tildeles."
@@ -5973,7 +5973,7 @@ msgid "You need to define the end date!"
 msgstr "Du må definere sluttdatoen!"
 
 msgid "check nonexistent relationships:"
-msgstr "sjekke ikke-eksisterende relasjoner:"
+msgstr "sjekk ikke-eksisterende relasjoner:"
 
 #, python-format
 msgid "%(name)s not visible at this time"
@@ -6418,7 +6418,7 @@ msgid "Added to the bottom of all mails sent"
 msgstr "Lagt til nederst i alle e-poster som sendes"
 
 msgid "Allows characters to have inventories"
-msgstr "Tillater karakterer å ha varelager"
+msgstr "Tillater karakterer å ha inventarer"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Gi din stemme til det nye styret!"
@@ -6752,7 +6752,7 @@ msgid "Current financial balance for this event"
 msgstr "Nåværende økonomisk balanse for dette arrangementet"
 
 msgid "Enter precisely your field of experience"
-msgstr "Oppgi nøyaktig erfaringområdet ditt"
+msgstr "Oppgi nøyaktig erfaringsområdet ditt"
 
 msgid "IP address from which the token was used"
 msgstr "IP-adressen som tokenet ble brukt fra"
@@ -6811,7 +6811,7 @@ msgstr "Godt gjort, du har fullført alle modulene!"
 
 #, python-format
 msgid "Writing fields without options: %(list)s"
-msgstr "Skrive felt uten alternativer: %(list)s"
+msgstr "Skrivefelt uten alternativer: %(list)s"
 
 msgid "You are logged in with an email address:"
 msgstr "Du er logget inn med en e-postadresse:"
@@ -6875,7 +6875,7 @@ msgid "Enter the amount of reimbursement desired"
 msgstr "Angi ønsket refusjonsbeløp"
 
 msgid "Explore the quests available in the event"
-msgstr "Utforsk oppdragene som er tilgjengelige i arrangementet"
+msgstr "Utforsk Questene som er tilgjengelige i arrangementet"
 
 msgid "If the character belongs to this element."
 msgstr "Hvis karakteren tilhører dette elementet."
@@ -6939,7 +6939,7 @@ msgid "You are excluding (none of these filters)"
 msgstr "Du ekskluderer (ingen av disse filtrene)"
 
 msgid "You can now create the plots of the event"
-msgstr "Du kan nå opprette arrangementets plots"
+msgstr "Du kan nå opprette plott for arrangementet"
 
 #, python-format
 msgid "You have been added to the role: %(role)s"
@@ -7473,7 +7473,7 @@ msgid "If you have questions, feel free to contact us."
 msgstr "Hvis du har spørsmål, er du velkommen til å ta kontakt med oss."
 
 msgid "Manage the traits available in the event quests"
-msgstr "Administrer Traits tilgjengelige i arrangementets Quester"
+msgstr "Administrer Traits tilgjengelige i arrangementets Quests"
 
 msgid "Optional template associated with this ability."
 msgstr "Valgfri mal knyttet til denne evnen."
@@ -7535,7 +7535,7 @@ msgid "You cannot create a relationship with yourself!"
 msgstr "Du kan ikke opprette en relasjon med deg selv!"
 
 msgid "You have been redirected to the Event Dashboard"
-msgstr "Du har blitt videresendt til Event Dashboard"
+msgstr "Du har blitt videresendt til arrangementsdashbordet"
 
 #, python-format
 msgid "You must pay %(amount)s%(currency)s immediately"
@@ -7815,7 +7815,8 @@ msgid "If enabled, automatically show shortcuts on mobile."
 msgstr "Hvis aktivert, vis snarveier automatisk på mobil."
 
 msgid "If enabled, do not use the parent event's factions."
-msgstr "Hvis aktivert, ikke bruk fraksjonene til foreldreaktiviteten."
+msgstr ""
+"Hvis aktivert, ikke bruk fraksjonene til det overordnede arrangementet."
 
 msgid "Join our Discord for help, ideas, or to report bugs"
 msgstr "Bli med på Discord for å få hjelp, ideer eller rapportere feil"
@@ -7896,7 +7897,7 @@ msgid "Select the sessions for which the discount is active"
 msgstr "Velg øktene rabatten er aktiv for"
 
 msgid "Some features require 'Credits', which is not active"
-msgstr "Noen funksjoner krever \"Credits\", som ikke er aktive"
+msgstr "Noen funksjoner krever «Credits», som ikke er aktiv."
 
 msgid "The character has missing values in required fields:"
 msgstr "Karakteren mangler verdier i obligatoriske felt:"
@@ -8044,7 +8045,7 @@ msgid "Select which elements to copy, from which other event."
 msgstr "Velg hvilke elementer som skal kopieres fra hvilken annen hendelse."
 
 msgid "Some features require 'Character', which is not active"
-msgstr "Noen funksjoner krever \"Karakter\", som ikke er aktive"
+msgstr "Noen funksjoner krever «Karakter», som ikke er aktiv."
 
 msgid "This invitation was sent to a different email address."
 msgstr "Denne invitasjonen ble sendt til en annen e-postadresse."
@@ -8581,7 +8582,7 @@ msgid "Display full history of participant preferences on characters"
 msgstr "Vis hele historikken over deltakerpreferanser for karakterer"
 
 msgid "In the membership book the number of your membership card is:"
-msgstr "I medlemsboken er medlemsnummeret ditt:"
+msgstr "I medlemsboken er nummeret på medlemskortet ditt:"
 
 msgid "Link to an external website with additional event information"
 msgstr ""
@@ -9061,7 +9062,7 @@ msgstr "URL til den eksterne applikasjonen som brukeren blir videresendt til."
 
 msgid "Without payment of this fee, event participation is not permitted."
 msgstr ""
-"Uten betaling av dette gebyret er det ikke tillatt å delta på arrangementet."
+"Hvis du ikke betaler dette gebyret, kan du ikke delta på arrangementet."
 
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "om karakteren er klar over identiteten til den andre Trait."
@@ -12112,8 +12113,8 @@ msgid ""
 "Alternatively, you may request a payout of your balance on <a "
 "href='%(url)s'>your accounting</a>."
 msgstr ""
-"Alternativt kan du be om utbetaling av saldoen din på <a href='%(url)s'>din "
-"konto</a>."
+"Alternativt kan du be om utbetaling av saldoen din på <a "
+"href='%(url)s'>regnskapet ditt</a>."
 
 msgid ""
 "Create a character by clicking 'New'; give it a name and fill in the "
@@ -12800,7 +12801,7 @@ msgid ""
 "Please note that an annual membership fee of %(amount)d %(currency)s is "
 "required to participate in events."
 msgstr ""
-"Vær oppmerksom på at det kreves et årlig medlemskontingent på %(amount)d "
+"Vær oppmerksom på at det kreves en årlig medlemskontingent på %(amount)d "
 "%(currency)s for å kunne delta på arrangementene."
 
 msgid ""
@@ -14190,7 +14191,7 @@ msgid ""
 "registration fees!"
 msgstr ""
 "Vil du hjelpe en venn av deg med å spille hos oss? Organiser en innsamling: "
-"du og alle som ønsker å bidra kan donere en del av registreringsavgiften!"
+"du og alle som ønsker å bidra kan donere en del av påmeldingsavgiftene sine!"
 
 msgid ""
 "To request a change of your e-mail address, please indicate both your old "

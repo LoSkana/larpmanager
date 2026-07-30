@@ -1542,7 +1542,7 @@ msgid "Position:"
 msgstr "Positie:"
 
 msgid "Preaching"
-msgstr "Preek"
+msgstr "Prediking"
 
 msgid "Printable"
 msgstr "Afdrukbaar"
@@ -2025,7 +2025,7 @@ msgid "Coming soon"
 msgstr "Binnenkort beschikbaar"
 
 msgid "Competences"
-msgstr "Expertise"
+msgstr "Competenties"
 
 msgid "Connections"
 msgstr "Verbindingen"
@@ -2807,7 +2807,7 @@ msgid "Customisations"
 msgstr "Aanpassingen"
 
 msgid "Dates updated!"
-msgstr "Data bijgewerkt!"
+msgstr "Datums bijgewerkt!"
 
 msgid "Days available"
 msgstr "Beschikbare dagen"
@@ -3066,7 +3066,7 @@ msgid "Character cover"
 msgstr "Omslag van het personage"
 
 msgid "Characters link"
-msgstr "Karakter links"
+msgstr "Link naar personages"
 
 msgid "Characters list"
 msgstr "Lijst van personages"
@@ -3739,7 +3739,7 @@ msgid "Promotional image"
 msgstr "Promotionele afbeelding"
 
 msgid "Quests and Traits"
-msgstr "Quests en eigenschappen"
+msgstr "Quests en Traits"
 
 msgid "Realized revenue:"
 msgstr "Gerealiseerde omzet:"
@@ -5184,7 +5184,7 @@ msgid "Can't copy from same event"
 msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 
 msgid "Character assignment email"
-msgstr "E-mail over de toewijzing van personages"
+msgstr "E-mail over de toewijzing van een personage"
 
 msgid "Choose the payment method:"
 msgstr "Kies het betaalmiddel:"
@@ -5535,7 +5535,7 @@ msgid "I Understand - Access Content"
 msgstr "Ik begrijp het - Inhoud openen"
 
 msgid "Membership Application Status"
-msgstr "Status van je lidmaatschapsaanvraag"
+msgstr "Status van de lidmaatschapsaanvraag"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Bewerking: ADD, SUB, MUL, DIV"
@@ -6203,7 +6203,7 @@ msgid "Your organization has been created"
 msgstr "Je organisatie is opgericht"
 
 msgid "Your updated registration total is"
-msgstr "Je bijgewerkte totaal is"
+msgstr "Het bijgewerkte totaal van je inschrijving is"
 
 #, python-format
 msgid " %(amount)s%(currency)s immediately"
@@ -6265,7 +6265,7 @@ msgid "Password reset request for %(user)s"
 msgstr "Verzoek om het wachtwoord van %(user)s te resetten"
 
 msgid "Payments pending delegated accounts"
-msgstr "Betalingen in afwachting van gedelegeerde rekeningen"
+msgstr "Openstaande betalingen voor gedelegeerde accounts"
 
 msgid "Registrations status for this event"
 msgstr "Registratiestatus voor dit evenement"
@@ -6713,7 +6713,7 @@ msgid "We ask you to pay the remaining amount:"
 msgstr "We vragen je om het resterende bedrag te betalen:"
 
 msgid "You are about to perform a donation of:"
-msgstr "Je doet een donatie van:"
+msgstr "Je staat op het punt een donatie te doen van:"
 
 msgid "You can now configure the ensemble page"
 msgstr "Je kunt nu de Ensemble-pagina configureren"
@@ -6792,7 +6792,7 @@ msgid "Set casting options in the configuration"
 msgstr "Castingopties instellen in de configuratie"
 
 msgid "The collection was delivered to the user"
-msgstr "De inzamelactie werd geleverd aan de gebruiker"
+msgstr "De opbrengst van de inzamelactie is aan de gebruiker overhandigd."
 
 msgid "The number of payments to split the fee."
 msgstr "Het aantal betalingen waarin de bijdrage wordt gesplitst."
@@ -6939,7 +6939,7 @@ msgid "You are excluding (none of these filters)"
 msgstr "Je sluit (geen van deze filters) uit"
 
 msgid "You can now create the plots of the event"
-msgstr "Je kunt nu de plots van het evenement maken"
+msgstr "Je kunt nu de verhaallijnen van het evenement maken"
 
 #, python-format
 msgid "You have been added to the role: %(role)s"
@@ -7168,7 +7168,7 @@ msgid "Characters are only visible to participants:"
 msgstr "Personages zijn alleen zichtbaar voor deelnemers:"
 
 msgid "Configure casting preferences for this event"
-msgstr "Stel je castingvoorkeuren voor dit evenement in"
+msgstr "Stel je voorkeuren voor Casting voor dit evenement in"
 
 msgid "Configure the association infrastructure fee"
 msgstr "Configureer de infrastructuurvergoeding van de vereniging"
@@ -7608,7 +7608,7 @@ msgid "To access this feature, you must first register!"
 msgstr "Om toegang te krijgen tot deze functie, moet je je eerst registreren!"
 
 msgid "You are now logged in with the delegate account:"
-msgstr "Je bent nu ingelogd met de account van de gedelegeerde:"
+msgstr "Je bent nu ingelogd met het gedelegeerde account:"
 
 msgid "You can now configure experience point settings."
 msgstr "Je kunt nu de instellingen voor ervaringspunten configureren."
@@ -8011,7 +8011,7 @@ msgid "Warehouse quantities already committed for this event"
 msgstr "Reeds vastgelegde magazijnhoeveelheden voor dit evenement"
 
 msgid "You can now create the 'patron' and 'reduced' tickets"
-msgstr "Je kunt nu de tickets 'patron' en 'reduced' maken"
+msgstr "Je kunt nu de tickets 'supporter' en 'gereduceerd' maken."
 
 msgid "You can now review historical accounting information."
 msgstr "Je kunt nu historische boekhoudinformatie bekijken."
@@ -8062,7 +8062,7 @@ msgid "Select which elements to copy, from which other event."
 msgstr "Selecteer welke elementen je wilt kopiëren, van welk ander evenement."
 
 msgid "Some features require 'Character', which is not active"
-msgstr "Sommige functies vereisen 'Character', dat niet actief is"
+msgstr "Sommige functies vereisen 'Personage', dat niet actief is."
 
 msgid "This invitation was sent to a different email address."
 msgstr "Deze uitnodiging is naar een ander e-mailadres gestuurd."
@@ -9509,8 +9509,7 @@ msgstr "Je personage %(character)s is uit het gilde %(guild)s verwijderd"
 
 msgid "whether the character is NOT aware of the identity of the other trait."
 msgstr ""
-"of het personage zich NIET bewust is van de identiteit van de andere "
-"eigenschap."
+"of het personage zich NIET bewust is van de identiteit van de andere Trait."
 
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
@@ -10463,7 +10462,7 @@ msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's "
 "name."
 msgstr ""
-"Schakelt het veld 'title' in, een korte tekst (2-3 woorden) die aan de naam "
+"Schakelt het veld 'titel' in, een korte tekst (2-3 woorden) die aan de naam "
 "van het personage wordt toegevoegd."
 
 #, python-format
@@ -10518,8 +10517,8 @@ msgid ""
 "These CSS commands will be carried over to all pages in your Association "
 "space"
 msgstr ""
-"Deze CSS-commando's worden doorgevoerd op alle pagina's in je Association-"
-"ruimte"
+"Deze CSS-commando's worden doorgevoerd op alle pagina's in de ruimte van je "
+"vereniging"
 
 msgid ""
 "Track upcoming event deadlines and identify members who need to be followed "
@@ -10925,15 +10924,15 @@ msgid ""
 "Manage CSS layout templates that control the visual formatting of printed "
 "handouts"
 msgstr ""
-"Beheer CSS-lay-outsjablonen die de visuele opmaak van gedrukte hand-outs "
+"Beheer CSS-lay-outsjablonen die de visuele opmaak van gedrukte Handouts "
 "bepalen"
 
 msgid ""
 "No handouts have been created yet. Use the button above to add your first "
 "handout."
 msgstr ""
-"Er zijn nog geen hand-outs aangemaakt. Gebruik de knop hierboven om je "
-"eerste hand-out toe te voegen."
+"Er zijn nog geen Handouts aangemaakt. Gebruik de knop hierboven om je eerste"
+" Handout toe te voegen."
 
 msgid ""
 "No open questions at the moment. All member requests have been answered or "
@@ -12204,7 +12203,7 @@ msgid ""
 "for <b>%(event)s</b>"
 msgstr ""
 "De deelnemer <b>%(user)s</b> heeft verzocht zijn registratie voor "
-"<b>%(event)s</b> te annuleren"
+"<b>%(event)s</b> te annuleren."
 
 msgid ""
 "Unique code for internal use - not visible. Indicate a string without spaces"
@@ -13634,7 +13633,7 @@ msgid ""
 " language, type, setting, location, and style"
 msgstr ""
 "Vul de openbare metadata in die worden gebruikt om dit evenement extern te "
-"promoten, zoals taal, type, setting, locatie en stijl"
+"promoten, zoals taal, type, spelwereld, locatie en stijl"
 
 #, python-format
 msgid ""
@@ -13739,7 +13738,8 @@ msgid ""
 " via casting algorithm, with factions and plots."
 msgstr ""
 "Eenmalig evenement met focus op verhaal, door de staf geschreven personages "
-"die via een castingalgoritme worden toegewezen, met facties en plots."
+"die via een castingalgoritme worden toegewezen, met facties en "
+"verhaallijnen."
 
 msgid ""
 "Specify your custom character name (depending on the event you can choose "
