@@ -324,7 +324,7 @@ class LanguageForm(BaseForm):
 
     language = forms.ChoiceField(
         choices=conf_settings.LANGUAGES,
-        label=_("Select Language"),
+        label=_("Select a language"),
         widget=forms.Select(attrs={"class": "form-control"}),
     )
 
@@ -694,13 +694,13 @@ class MembershipRequestForm(forms.ModelForm):
 
     request = forms.FileField(
         label=_("Request signed"),
-        help_text=_("Upload the scan of your signed application (image or pdf document)"),
+        help_text=_("Upload a scan of your signed application (image or PDF document)."),
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
     )
 
     document = forms.FileField(
         label=_("Photo of an ID"),
-        help_text=_("Upload a photo of the identity document that you listed in the request (image or pdf)"),
+        help_text=_("Upload a photo of the identity document listed in the request (image or PDF)."),
         validators=[FileTypeValidator(allowed_types=["image/*", "application/pdf"])],
     )
 
@@ -730,7 +730,7 @@ class MembershipResponseForm(BaseForm):
 class ExeVolunteerRegistryForm(BaseModelForm):
     """Form for ExeVolunteerRegistry."""
 
-    page_title = _("Volounteers data")
+    page_title = _("Volunteer data")
 
     page_info = _(
         "Manage the volunteer registry: view, add, and edit volunteer records, and print an official PDF copy"
@@ -814,7 +814,7 @@ class ExeMembershipForm(BaseModelForm):
 class ExeMembershipFeeForm(BaseForm):
     """Form for ExeMembershipFee."""
 
-    page_info = _("Upload member's fee receipt to confirm payment for the current year")
+    page_info = _("Upload a membership-fee receipt to confirm payment for the current year.")
 
     page_title = _("Upload membership fee")
 
@@ -866,7 +866,7 @@ class ExeMembershipFeeForm(BaseForm):
 
         # Check if membership fee already exists for this association and year
         if AccountingItemMembership.objects.filter(member=member, year=year, association_id=association_id).exists():
-            self.add_error("member", _("Membership fee already existing for this user and for this year"))
+            self.add_error("member", _("Membership fee already existing for this user and for this year."))
 
         return member
 
@@ -877,7 +877,7 @@ class ExeMembershipDocumentForm(BaseForm):
     page_info = (
         _("Upload membership documents to complete a member's approval")
         + " - "
-        + _("The member must have already confirmed their consent to share personal data with your organization")
+        + _("The member must have already confirmed their consent to share personal data with your organization.")
     )
 
     page_title = _("Upload membership document")

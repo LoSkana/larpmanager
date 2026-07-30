@@ -177,7 +177,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
             print_character_bkg(context["event"].association.slug, run.get_slug(), ch.uuid)
 
     # Show success message and redirect
-    messages.success(request, _("Regeneration pdf started!"))
+    messages.success(request, _("PDF regeneration has started!"))
     return redirect("orga_characters_pdf", event_slug=context["run"].get_slug())
 
 

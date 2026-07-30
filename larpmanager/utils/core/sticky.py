@@ -137,9 +137,9 @@ def _get_text_message(context: dict, message: str) -> str:
     if message == "new_event":
         sticky_message_lines = [
             _("Your event '%(event_name)s' has been successfully created!"),
-            _("This page is the event's dashboard, where you can fully manage all it's settings."),
+            _("This page is the event's dashboard, where you can fully manage all its settings."),
             _("Users can sign up to the event accessing <a href='%(signup_url)s' target='_blank'>this address</a>."),
-            _("You can now setup the tickets, the signup form, the registration options."),
+            _("You can now set up tickets, the signup form, and registration options."),
             _("In this page you'll find a list of actions and suggestions on the next steps!"),
         ]
 

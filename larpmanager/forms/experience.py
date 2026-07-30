@@ -87,7 +87,7 @@ class OrgaDeliveryExpForm(ExpBaseForm):
 
     page_title = _("Award")
 
-    page_info = _("Manage experience point awarded to characters")
+    page_info = _("Manage experience points awarded to characters")
 
     class Meta:
         model = DeliveryExp

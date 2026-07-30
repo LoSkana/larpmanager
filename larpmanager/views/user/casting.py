@@ -235,7 +235,7 @@ def casting(request: HttpRequest, event_slug: str, casting_type: str | None = No
     # Verify user has completed event registration
     registration = context.get("registration")
     if not registration:
-        messages.success(request, _("You must signed up in order to select your preferences!"))
+        messages.success(request, _("You must sign up to select your preferences!"))
         return redirect("event", event_slug=context["run"].get_slug())
 
     # Check if user is on waiting list (cannot set preferences)
@@ -305,7 +305,7 @@ def _process_casting_post(casting_type: str | None, context: dict, request: Http
 
         # Validate no duplicate preferences selected
         if pref in prefs.values():
-            messages.warning(request, _("You have indicated more than one preferences towards the same element"))
+            messages.warning(request, _("You have indicated more than one preference for the same element."))
             validation_error = True
             break
         prefs[i] = pref

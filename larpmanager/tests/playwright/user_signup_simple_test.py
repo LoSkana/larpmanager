@@ -136,8 +136,8 @@ def pre_register(live_server: Any, page: Any) -> None:
 
     submit_confirm(page)
     page.get_by_role("link", name="Delete").click()
-    page.get_by_role("textbox", name="Informations").click()
-    page.get_by_role("textbox", name="Informations").fill("bauuu")
+    page.get_by_role("textbox", name='General information').click()
+    page.get_by_role("textbox", name='General information').fill("bauuu")
     page.get_by_label("Event").select_option("u1")
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "bauuu")

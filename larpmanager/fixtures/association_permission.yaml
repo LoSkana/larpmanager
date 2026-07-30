@@ -1,7 +1,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Organization
-    descr: Manage the organization main settings
+    descr: Manage the main settings of the organization
     slug: exe_association
     number: 2
     config: interface
@@ -217,7 +217,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: URL shortener
-    descr: Manage url shortner
+    descr: Manage URL shortener
     slug: exe_urlshortner
     number: 11
     config: null
@@ -337,7 +337,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Newsletter
-    descr: Displays list of emails of users
+    descr: Displays a list of email addresses for newsletters
     slug: exe_newsletter
     number: 51
     config: null

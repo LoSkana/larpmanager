@@ -159,13 +159,13 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         default=None,
         verbose_name=_("Legal Gender"),
         null=True,
-        help_text=_("Indicate your legal gender as it appears on official documents.") + " " + SENSITIVE_DISCLAIMER,
+        help_text=_("Enter your legal gender as it appears on official documents.") + " " + SENSITIVE_DISCLAIMER,
     )
 
     pronoun = models.CharField(
         max_length=20,
         verbose_name=_("Pronouns"),
-        help_text=_("Indicate the pronouns you wish to be used to refer to you"),
+        help_text=_("Enter the pronouns you want others to use when referring to you"),
         blank=True,
         null=True,
     )
@@ -176,7 +176,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         blank=True,
         null=True,
         verbose_name=_("Nationality"),
-        help_text=_("Indicate the country of which you are a citizen"),
+        help_text=_("Enter the country of which you are a citizen"),
     )
 
     phone_contact = PhoneNumberField(
@@ -191,8 +191,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         max_length=150,
         verbose_name=_("Contact"),
         help_text=_(
-            "Indicates a way for other participants to contact you. It can be an email, a social "
-            "profile, whatever you want. It will be made public to others participants",
+            "Enter a way for other participants to contact you. It can be an email address, a social profile, or anything else you choose. It will be made public to other participants.",
         ),
         blank=True,
         null=True,
@@ -239,7 +238,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         default=DocumentChoices.IDENT,
         verbose_name=_("Document type"),
         null=True,
-        help_text=_("Indicates a type of identification document issued by the nation in which you reside"),
+        help_text=_("Enter the type of identification document issued by the country where you live."),
     )
 
     document = models.CharField(
@@ -262,7 +261,7 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         null=True,
         verbose_name=_("Date of expiration of the document"),
         help_text=_(
-            "Leave blank if the document has no expiration date - Please check that it does not expire before the event you want to signup up for.",
+            "Leave blank if the document has no expiration date. Please check that it does not expire before the event you want to sign up for.",
         ),
     )
 
@@ -510,7 +509,7 @@ class Membership(BaseModel):
     compiled = models.BooleanField(
         default=False,
         verbose_name=_("Profile completed"),
-        help_text=_("Indicates whether the member has completed their profile information"),
+        help_text=_("Whether the member has completed their profile information"),
     )
 
     credit = models.DecimalField(

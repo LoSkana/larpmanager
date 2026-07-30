@@ -295,11 +295,11 @@ class RegistrationForm(BaseRegistrationForm):
         if "reg_quotas" in self.params["features"] and "waiting" not in self.run_status:
             # Define labels for different quota options (1-5 quotas)
             quota_labels = [
-                _("Single payment"),
-                _("Two quotas"),
-                _("Three instalments"),
-                _("Four quotas"),
-                _("Five quotas"),
+                _("One"),
+                _("Two"),
+                _("Three"),
+                _("Four"),
+                _("Five"),
             ]
 
             # Calculate days difference between today and run end date
@@ -719,7 +719,7 @@ class RequestApprovalForm(BaseRegistrationForm):
     confirm = forms.BooleanField(
         required=True,
         label=_("Request signup"),
-        help_text=_("Your signup will not be confirmed until an organizer approves this request"),
+        help_text=_("Your signup will not be confirmed until an organizer approves this request."),
     )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -769,7 +769,7 @@ class RequestApprovalForm(BaseRegistrationForm):
 class OrgaRegistrationForm(BaseRegistrationForm):
     """Form for OrgaRegistration."""
 
-    page_info = _("Manage all registrations, character assignments, tickets, options and accounting status")
+    page_info = _("Manage all registrations, character assignments, tickets, options and accounting status.")
 
     page_title = _("Registrations")
 
@@ -971,7 +971,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
             required=True,
             choices=quota_choices,
             label=_("Quotas"),
-            help_text=_("The number of payments to split the fee"),
+            help_text=_("The number of payments to split the fee."),
         )
 
         # Set initial value and section assignment
@@ -1712,7 +1712,7 @@ class PreRegistrationForm(BaseForm):
                 required=False,
                 choices=cho_pref,
                 label=_("Preference"),
-                help_text=_("Enter the order of preference of your pre-registration (1 is the maximum)"),
+                help_text=_("The order of preference of your pre-registration (1 is the maximum)"),
             )
             self.initial["new_pref"] = min(prefs)
         else:
@@ -1722,7 +1722,7 @@ class PreRegistrationForm(BaseForm):
         self.fields["new_info"] = forms.CharField(
             required=False,
             max_length=255,
-            label=_("Informations"),
+            label=_("General information"),
             help_text=_("Is there anything else you would like to tell us?"),
         )
 

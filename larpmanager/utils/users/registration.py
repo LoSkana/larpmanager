@@ -514,7 +514,7 @@ def _status_payment(
 
         note = None
         if wire_created_invoices:
-            note = _("If you have made a wire transfer, please upload the receipt for it to be processed")
+            note = _("If you have made a wire transfer, please upload its receipt for processing")
 
         total_amount = registration.quota
         if context.get("membership_fee") == "bundled" and context.get("membership_amount"):
@@ -945,7 +945,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
         {
             "url": character_url,
             "label": character_name,
-            "tooltip": _("Access you character sheet"),
+            "tooltip": _("Access your character sheet"),
             "icon": "fa-solid fa-person",
         }
     ]
@@ -999,7 +999,7 @@ def _get_character_links(run: Run, context: dict, features: dict, character_rel:
             {
                 "url": reverse("help", args=[run.get_slug()]),
                 "label": _("Questions"),
-                "tooltip": _("Write here questions about your character directly to the authors"),
+                "tooltip": _("Write your questions about the character directly to the authors here."),
                 "icon": "fa-solid fa-circle-question",
             }
         )

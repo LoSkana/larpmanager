@@ -35,7 +35,7 @@ import pytest
 from django.conf import settings, settings as django_settings
 from django.core.cache import cache
 from django.core.management import call_command
-from django.db import connection, transaction
+from django.db import DatabaseError, connection, transaction
 from django.test.utils import ContextList
 from playwright.sync_api import BrowserContext, BrowserType, Dialog, Page, Response
 from pytest_django.fixtures import SettingsWrapper
@@ -374,8 +374,8 @@ def _get_applied_migrations() -> set[str]:
                 WHERE app = 'larpmanager'
             """)
             return {row[0] for row in cursor.fetchall()}
-    except (OSError, RuntimeError) as e:
-        # If query fails, return empty set (schema needs reload)
+    except (OSError, RuntimeError, DatabaseError) as e:
+        # If query fails (e.g. django_migrations table missing), return empty set (schema needs reload)
         logger = logging.getLogger(__name__)
         logger.debug("Failed to get applied migrations: %s", e)
         return set()

@@ -546,7 +546,7 @@ class OrgaDiscountForm(BaseModelForm):
             choices=choices,
             widget=widget,
             required=False,
-            help_text=_("Indicates the sessions for which the discount is available"),
+            help_text=_("The sessions for which the discount is available"),
         )
 
         # Pre-populate field with existing runs if editing an instance
@@ -639,7 +639,7 @@ class RefundRequestForm(BaseModelForm):
             max_digits=10,
             decimal_places=2,
             initial=self.params["membership"].credit,
-            help_text=_("Indicates the amount of reimbursement desired (can't be higher than your current credits)"),
+            help_text=_("The amount of reimbursement desired (can't be higher than your current credits)"),
         )
 
 
@@ -718,9 +718,9 @@ class ExePaymentSettingsForm(BaseModelForm):
                 label = el.replace(f"{method.slug}_", "")
 
                 help_dict = {
-                    "descr": _("Description of this payment method to be displayed to the user"),
+                    "descr": _("Description of this payment method shown to the user."),
                     "fee": _(
-                        "Percentage to be retained by the payment system - enter the value as a number, without the percentage symbol",
+                        "Percentage retained by the payment system. Enter the value as a number without the percentage symbol.",
                     ),
                 }
                 if label in help_dict:

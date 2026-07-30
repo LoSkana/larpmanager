@@ -83,7 +83,7 @@
     {% else %}
         <div class="alert alert-info" role="alert">
             <i class="fas fa-info-circle"></i>
-            {% trans "No items will be modified. Either no items have assigned quantities, or all assignments have zero quantity." %}
+            {% trans "No items will be modified. Either no items have been assigned quantities, or all assignments have a quantity of zero." %}
         </div>
         <a href="{% url 'orga_warehouse_manifest' run.get_slug %}"
            class="btn btn-primary">

@@ -93,7 +93,7 @@ def _add_bulk_delete_option(request: HttpRequest, context: dict) -> None:
     if not get_association_config(context["association_id"], "allow_bulk_delete", default_value=False, context=context):
         return
     if _check_delete_role(request, context):
-        objs = [{"uuid": 1, "name": _("Are you sure? The items might be not recoverable")}]
+        objs = [{"uuid": 1, "name": _("Are you sure? The items might not be recoverable.")}]
         context["bulk"].append(_bulk_op(Operations.DEL_BULK, objs))
 
 

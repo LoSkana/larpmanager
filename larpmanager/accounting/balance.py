@@ -428,7 +428,7 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
     details["registration"] = get_accounting_registration_detail(
         _("Registrations"),
         run,
-        _("Theoretical total of income due to participation fees selected by the participants"),
+        _("Expected total income from participation fees selected by participants"),
     )
 
     # Calculate final financial figures

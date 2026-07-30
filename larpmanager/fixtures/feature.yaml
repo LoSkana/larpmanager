@@ -7,7 +7,7 @@
     overall: false
     placeholder: false
     order: 240
-    after_text: Now you can create prologues for the event
+    after_text: You can now create prologues for the event
     after_link: orga_prologues
     hidden: false
     module: writing
@@ -22,7 +22,7 @@
     overall: false
     placeholder: false
     order: 120
-    after_text: Now you can create quests for the event
+    after_text: You can now create quests for the event
     after_link: orga_quest_types
     hidden: false
     module: writing
@@ -35,7 +35,7 @@
     overall: false
     placeholder: false
     order: 10
-    after_text: Now you can copy elements from an other event
+    after_text: You can now copy elements from another event.
     after_link: orga_copy
     hidden: false
     module: miscellany
@@ -49,7 +49,7 @@
     overall: false
     placeholder: false
     order: 50
-    after_text: Now you can configure the registration question
+    after_text: You can now configure the registration question
     after_link: orga_registration_form
     hidden: false
     module: accounting
@@ -63,7 +63,7 @@
     overall: false
     placeholder: false
     order: 30
-    after_text: Now you can create discounts for the event
+    after_text: You can now create discounts for the event
     after_link: orga_discounts
     hidden: false
     module: accounting
@@ -91,7 +91,7 @@
     overall: true
     placeholder: false
     order: 20
-    after_text: Now you can set the reminder options
+    after_text: You can now set the reminder options
     after_link: config/remind
     hidden: false
     module: registration
@@ -105,7 +105,7 @@
     overall: false
     placeholder: false
     order: 9999
-    after_text: Now you can set the discount options
+    after_text: You can now set the discount options
     after_link: config/bring_friend
     hidden: false
     module: accounting
@@ -119,7 +119,7 @@
     overall: false
     placeholder: false
     order: 25
-    after_text: Now you can set the PDF generation options
+    after_text: You can now set the PDF generation options
     after_link: orga_characters_pdf
     hidden: false
     module: writing
@@ -134,7 +134,7 @@
     overall: false
     placeholder: false
     order: 20
-    after_text: Now you can start creating workshops, starting from modules
+    after_text: You can now start creating workshops, starting from modules
     after_link: orga_workshop_modules
     hidden: false
     module: miscellany
@@ -148,7 +148,7 @@
     overall: false
     placeholder: false
     order: 60
-    after_text: Now you can start creating speed-larps
+    after_text: You can now start creating speed-larps
     after_link: orga_speedlarps
     hidden: false
     module: miscellany
@@ -161,7 +161,7 @@
     overall: false
     placeholder: false
     order: 20
-    after_text: Now you can review the safety information submitted by participants
+    after_text: You can now review the safety information submitted by participants
     after_link: orga_safety
     hidden: true
     module: users
@@ -175,7 +175,7 @@
     overall: false
     placeholder: false
     order: 10
-    after_text: Now you can set the casting options
+    after_text: You can now set the casting options
     after_link: config/casting
     hidden: false
     module: event
@@ -189,7 +189,7 @@
     overall: false
     placeholder: false
     order: 91
-    after_text: Now you can set the matchmaker form
+    after_text: You can now set the matchmaker form
     after_link: form/matchmaker/
     hidden: false
     module: event
@@ -203,7 +203,7 @@
     overall: true
     placeholder: false
     order: 10
-    after_text: Now you can review participants' questions
+    after_text: You can now review participants' questions
     after_link: exe_questions
     hidden: false
     module: users
@@ -217,7 +217,7 @@
     overall: true
     placeholder: false
     order: 40
-    after_text: Now participants can submit collections, and you can review them
+    after_text: Participants can now submit collections, and you can review them
     after_link: exe_collections
     hidden: false
     module: accounting
@@ -231,7 +231,7 @@
     overall: true
     placeholder: false
     order: 30
-    after_text: Now participants can submit preregistrations, and you can review them
+    after_text: Participants can now submit preregistrations, and you can review them
     after_link: exe_pre_registrations
     hidden: false
     module: registration
@@ -245,7 +245,7 @@
     overall: true
     placeholder: false
     order: 20
-    after_text: Now participants can submit donation, and you can review them
+    after_text: Participants can now submit donations, and you can review them.
     after_link: exe_donations
     hidden: false
     module: accounting
@@ -259,7 +259,7 @@
     overall: true
     placeholder: false
     order: 60
-    after_text: Now you can review users mailing list
+    after_text: You can now review mailing lists for newsletters.
     after_link: exe_newsletter
     hidden: false
     module: users
@@ -273,7 +273,7 @@
     overall: false
     placeholder: false
     order: 30
-    after_text: Now you can host files in the platform
+    after_text: You can now host files on the platform.
     after_link: orga_utils
     hidden: false
     module: miscellany
@@ -287,7 +287,7 @@
     overall: false
     placeholder: false
     order: 40
-    after_text: Now you can set customization options
+    after_text: You can now set customization options
     after_link: config/custom_character
     hidden: false
     module: event
@@ -302,7 +302,7 @@
     overall: true
     placeholder: false
     order: 40
-    after_text: Now you can set membership options
+    after_text: You can now set membership options
     after_link: config/membership
     hidden: false
     module: users
@@ -330,7 +330,7 @@
     overall: true
     placeholder: false
     order: 40
-    after_text: Now you can set the external mail server settings
+    after_text: You can now set the external mail server settings
     after_link: config/custom_mail_server
     hidden: false
     module: miscellany
@@ -344,7 +344,7 @@
     overall: false
     placeholder: false
     order: 90
-    after_text: Now you can create the lottery ticket
+    after_text: You can now create the lottery ticket
     after_link: orga_registration_tickets
     hidden: false
     module: registration
@@ -358,7 +358,7 @@
     overall: false
     placeholder: false
     order: 70
-    after_text: Now you can create the ticket for reserves
+    after_text: You can now create the ticket for reserves
     after_link: orga_registration_tickets
     hidden: false
     module: registration
@@ -387,7 +387,7 @@
     overall: false
     placeholder: false
     order: 60
-    after_text: Now you can create the waiting ticket
+    after_text: You can now create the waiting ticket
     after_link: orga_registration_tickets
     hidden: false
     module: registration
@@ -401,7 +401,7 @@
     overall: false
     placeholder: false
     order: 40
-    after_text: Now you can review the event's problems
+    after_text: You can now review the event's problems
     after_link: orga_problems
     hidden: false
     module: miscellany
@@ -416,7 +416,7 @@
     overall: false
     placeholder: false
     order: 20
-    after_text: Now you can set the dynamic installments
+    after_text: You can now set the dynamic installments
     after_link: orga_registration_quotas
     hidden: false
     module: accounting
@@ -430,7 +430,7 @@
     overall: true
     placeholder: false
     order: 90
-    after_text: Now you can set the vote options
+    after_text: You can now set the vote options
     after_link: config/vote
     hidden: false
     module: users
@@ -443,7 +443,7 @@
     overall: true
     placeholder: false
     order: 80
-    after_text: Now you can create badges
+    after_text: You can now create badges
     after_link: exe_badges
     hidden: false
     module: users
@@ -451,12 +451,12 @@
 - model: larpmanager.feature
   fields:
     name: Warehouse
-    descr: Enables warehouse management for organization warehouse management
+    descr: Enables warehouse management for the organization.
     slug: warehouse
     overall: true
     placeholder: false
     order: 5
-    after_text: Now you can add warehouse containers and items
+    after_text: You can now add warehouse containers and items
     after_link: exe_warehouse_containers
     hidden: false
     module: miscellany
@@ -470,7 +470,7 @@
     overall: false
     placeholder: false
     order: 20
-    after_text: Now you can set the registration secret link
+    after_text: You can now set the registration secret link
     after_link: orga_run
     hidden: false
     module: registration
@@ -484,7 +484,7 @@
     overall: false
     placeholder: false
     order: 10
-    after_text: Now you can create fixed installments
+    after_text: You can now create fixed installments
     after_link: orga_registration_installments
     hidden: false
     module: accounting
@@ -497,7 +497,7 @@
     overall: false
     placeholder: false
     order: 200
-    after_text: Now you can add relationships when editing a character
+    after_text: You can now add relationships when editing a character
     after_link: orga_characters
     hidden: false
     module: writing
@@ -512,7 +512,7 @@
     overall: false
     placeholder: false
     order: 40
-    after_text: Now you can define registration form sections
+    after_text: You can now define registration form sections
     after_link: orga_registration_sections
     hidden: false
     module: registration
@@ -540,7 +540,7 @@
     overall: false
     placeholder: false
     order: 80
-    after_text: Now you can create the 'patron' and 'reduced' tickets
+    after_text: You can now create the 'patron' and 'reduced' tickets
     after_link: orga_registration_tickets
     hidden: false
     module: registration
@@ -554,7 +554,7 @@
     overall: true
     placeholder: false
     order: 140
-    after_text: Now you can review the historical accounting informations
+    after_text: You can now review historical accounting information.
     after_link: exe_accounting_rec
     hidden: false
     module: accounting
@@ -568,7 +568,7 @@
     overall: false
     placeholder: false
     order: 110
-    after_text: Now you can create the progress steps
+    after_text: You can now create the progress steps
     after_link: orga_progress_steps
     hidden: false
     module: writing
@@ -581,7 +581,7 @@
     overall: false
     placeholder: false
     order: 30
-    after_text: Now you can review the diet information submitted by participants
+    after_text: You can now review the diet information submitted by participants
     after_link: orga_diet
     hidden: true
     module: users
@@ -595,7 +595,7 @@
     overall: true
     placeholder: false
     order: 10
-    after_text: Now you can review the organization's deadlines
+    after_text: You can now review the organization's deadlines
     after_link: exe_deadlines
     hidden: false
     module: registration
@@ -609,7 +609,7 @@
     overall: false
     placeholder: false
     order: 130
-    after_text: Now you can create the plots of the event
+    after_text: You can now create the plots of the event
     after_link: orga_plots
     hidden: false
     module: writing
@@ -624,7 +624,7 @@
     overall: false
     placeholder: false
     order: 120
-    after_text: Now you can create the factions of the event
+    after_text: You can now create the factions of the event
     after_link: orga_factions
     hidden: false
     module: writing
@@ -639,7 +639,7 @@
     overall: false
     placeholder: false
     order: 140
-    after_text: Now you can create the handouts of the event
+    after_text: You can now create the handouts of the event
     after_link: orga_handouts
     hidden: false
     module: writing
@@ -654,7 +654,7 @@
     overall: true
     placeholder: false
     order: 30
-    after_text: Now crew can upload expenses, and you can review them
+    after_text: Crew can now upload expenses, and you can review them
     after_link: exe_expenses
     hidden: false
     module: accounting
@@ -669,7 +669,7 @@
     overall: true
     placeholder: false
     order: 50
-    after_text: Now set up the tokens configuration
+    after_text: You can now set up the tokens configuration
     after_link: config/tokens
     hidden: false
     module: accounting
@@ -683,7 +683,7 @@
     overall: true
     placeholder: false
     order: 55
-    after_text: Now set up the credits configuration
+    after_text: You can now set up the credits configuration
     after_link: config/credits
     hidden: false
     module: accounting
@@ -697,7 +697,7 @@
     overall: true
     placeholder: false
     order: 90
-    after_text: Now you can create outflows
+    after_text: You can now create outflows
     after_link: exe_outflows
     hidden: false
     module: accounting
@@ -711,7 +711,7 @@
     overall: true
     placeholder: false
     order: 130
-    after_text: Now you can verify wire payments
+    after_text: You can now verify wire payments
     after_link: exe_verification
     hidden: false
     module: accounting
@@ -737,7 +737,7 @@
     overall: true
     placeholder: false
     order: 10
-    after_text: Now you can set the payment methods settings
+    after_text: You can now configure the payment methods.
     after_link: exe_methods
     hidden: false
     module: accounting
@@ -750,7 +750,7 @@
     overall: true
     placeholder: false
     order: 60
-    after_text: Now participants can create refund requests, and you can review them
+    after_text: Participants can now create refund requests, and you can review them
     after_link: exe_refunds
     hidden: false
     module: accounting
@@ -765,7 +765,7 @@
     overall: true
     placeholder: false
     order: 10
-    after_text: Now you can set the legal notice text
+    after_text: You can now set the legal notice text
     after_link: exe_texts
     hidden: false
     module: appearance
@@ -792,7 +792,7 @@
     overall: false
     placeholder: false
     order: 30
-    after_text: Now you can set settings for character creation by players
+    after_text: You can now configure character creation by players.
     after_link: config/user_character
     hidden: false
     module: event
@@ -828,14 +828,14 @@
     - character
 - model: larpmanager.feature
   fields:
-    name: Event organization fee
+    name: Organizational fee
     descr: Allows you to set a 'tax' percentage on event income that must be set aside
       for the organisation
     slug: organization_tax
     overall: true
     placeholder: false
     order: 110
-    after_text: Now you can set the options for the event organization fee
+    after_text: You can now set the options for the Organizational fee
     after_link: config/organization_tax
     hidden: false
     module: accounting
@@ -849,7 +849,7 @@
     overall: true
     placeholder: false
     order: 9999
-    after_text: Now you can se the special page options
+    after_text: You can now configure the special page options.
     after_link: config/centauri
     hidden: false
     module: italy
@@ -862,7 +862,7 @@
     overall: true
     placeholder: false
     order: 10
-    after_text: Now you can create url shortners
+    after_text: You can now create URL shorteners.
     after_link: exe_urlshortner
     hidden: false
     module: miscellany
@@ -876,7 +876,7 @@
     overall: false
     placeholder: false
     order: 40
-    after_text: Now you can create registration surcharges
+    after_text: You can now create registration surcharges
     after_link: orga_registration_surcharges
     hidden: false
     module: accounting
@@ -890,7 +890,7 @@
     overall: true
     placeholder: false
     order: 80
-    after_text: Now you can create inflows
+    after_text: You can now create inflows
     after_link: exe_inflows
     hidden: false
     module: accounting
@@ -931,7 +931,7 @@
     overall: true
     placeholder: false
     order: 9999
-    after_text: Now you can set up the receipts data
+    after_text: You can now set up the receipts data
     after_link: config/receipts
     hidden: false
     module: italy
@@ -944,7 +944,7 @@
     overall: true
     placeholder: false
     order: 20
-    after_text: Now you can review the volunteers registry
+    after_text: You can now review the volunteer registry.
     after_link: exe_volunteer_registry
     hidden: false
     module: italy
@@ -957,7 +957,7 @@
     overall: true
     placeholder: false
     order: 100
-    after_text: Now you can set the taxes options
+    after_text: You can now set the taxes options
     after_link: config/vat
     hidden: false
     module: accounting
@@ -985,7 +985,7 @@
     overall: false
     placeholder: false
     order: 60
-    after_text: Now you can select which tickets can be gifted
+    after_text: You can now select which tickets can be gifted
     after_link: orga_registration_tickets
     hidden: false
     module: accounting
@@ -998,7 +998,7 @@
     overall: false
     placeholder: false
     order: 50
-    after_text: Now you can configure the registration question
+    after_text: You can now configure the registration question
     after_link: orga_registration_form
     hidden: false
     module: registration
@@ -1012,7 +1012,7 @@
     overall: false
     placeholder: false
     order: 1
-    after_text: Now you can create characters
+    after_text: You can now create characters
     after_link: orga_characters
     hidden: false
     module: writing
@@ -1026,7 +1026,7 @@
     overall: true
     placeholder: false
     order: 11
-    after_text: Now you can create event templates
+    after_text: You can now create event templates
     after_link: exe_templates
     hidden: false
     module: events
@@ -1039,7 +1039,7 @@
     overall: true
     placeholder: false
     order: 30
-    after_text: Now you can peform the fiscal code validity check
+    after_text: You can now perform the fiscal code validity check.
     after_link: exe_membership_check
     hidden: false
     module: italy
@@ -1091,7 +1091,7 @@
     overall: true
     placeholder: false
     order: 1
-    after_text: Now you can manage events
+    after_text: You can now manage events
     after_link: exe_events
     hidden: false
     module: events
@@ -1430,7 +1430,7 @@
     overall: false
     placeholder: false
     order: 75
-    after_text: Now you can create the "new player" ticket
+    after_text: You can now create the "new player" ticket
     after_link: orga_registration_tickets
     hidden: false
     module: registration
@@ -1443,7 +1443,7 @@
     overall: true
     placeholder: false
     order: 80
-    after_text: Now set the promotion configurations
+    after_text: You can now set the promotion configurations
     after_link: config/publication
     hidden: false
     module: events
@@ -1458,7 +1458,7 @@
     overall: false
     placeholder: false
     order: 50
-    after_text: Now you can upload content and generate access tokens
+    after_text: You can now upload content and generate access tokens
     after_link: orga_onetimes
     hidden: false
     module: miscellany
@@ -1472,7 +1472,7 @@
     overall: true
     placeholder: false
     order: 30
-    after_text: Now you can define custom organization translations
+    after_text: You can now define custom organization translations
     after_link: exe_translations
     hidden: false
     module: appearance
@@ -1505,7 +1505,7 @@
     dependencies: []
 - model: larpmanager.feature
   fields:
-    name: Experience Criterions
+    name: Experience Criteria
     descr: Pseudo-feature activated by exp_criterions configuration
     slug: exp_criterions
     overall: false
@@ -1605,7 +1605,7 @@
     overall: false
     placeholder: false
     order: 250
-    after_text: Now you can create milestones for the event
+    after_text: You can now create milestones for the event
     after_link: orga_milestones
     hidden: false
     module: miscellany
@@ -1619,7 +1619,7 @@
     overall: false
     placeholder: false
     order: 5
-    after_text: Now you can configure the ensemble page
+    after_text: You can now configure the ensemble page
     after_link: config/ensemble
     hidden: false
     module: miscellany
@@ -1660,7 +1660,7 @@
     overall: false
     placeholder: false
     order: 125
-    after_text: Now players can create guilds for the event
+    after_text: Players can now create guilds for the event
     after_link: orga_guilds
     hidden: false
     module: writing

@@ -80,7 +80,7 @@ class OrgaPoolTypeForm(BaseModelForm):
 
     page_title = _("Pool type")
 
-    page_info = _("This page allows you to add or edit a ci pool type")
+    page_info = _("This page lets you add or edit an inventory pool type.")
 
     class Meta:
         model = PoolType
@@ -91,7 +91,7 @@ class OrgaInventoryTypeForm(BaseModelForm):
     """Form for managing character inventory types."""
 
     page_title = _("Inventory type")
-    page_info = _("This page allows you to add or edit an inventory type")
+    page_info = _("This page lets you add or edit an inventory type.")
 
     class Meta:
         model = InventoryType
@@ -116,7 +116,7 @@ class OrgaPoolLabelForm(BaseModelForm):
     """Form for managing pool labels for character inventories."""
 
     page_title = _("Pool label")
-    page_info = _("This page allows you to add or edit a pool label")
+    page_info = _("This page lets you add or edit a pool label.")
 
     class Meta:
         model = PoolLabel

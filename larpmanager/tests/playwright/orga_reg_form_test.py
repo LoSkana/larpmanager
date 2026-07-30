@@ -77,7 +77,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
         """
             Ticket Your registration ticket2 Ticket Additional Reserve additional tickets beyond your
             own Additional Optional Pay what you want Freely indicate the amount of your donation Pay
-            what you want Optional installments Number of installments to split the fee: payments
+            what you want Optional payment installments select how many payments to split the fee into
              """
                       )
     expect_normalized(page,
@@ -98,7 +98,7 @@ def prepare_form(page: Any, live_server: Any) -> None:
         page.locator("#one"),
         """
             Additional Reserve additional tickets beyond your own Additional Optional Ticket Your
-            registration ticket2 Ticket installments Number of installments to split the fee: payments
+            registration ticket2 Ticket payment installments select how many payments to split the fee into
         """
     )
     expect_normalized(page,
@@ -180,7 +180,7 @@ def signup(page: Any, live_server: Any) -> None:
     expect_normalized(page,
         page.locator("#register_form"),
         """
-        (*) : These fields are mandatory Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2
+        (*) : These fields are required Additional 0 1 2 3 4 5 Reserve additional tickets beyond your own2
         Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2
         Pay what you want Freely indicate the amount of your donation Surcharge 5€ Registration surcharge""",
     )

@@ -1,7 +1,7 @@
 {% extends "utils.html" %}
 {% load show_tags i18n %}
 {% block title %}
-    {% trans "Criterions" %} - {{ run.search | truncatechars:50 }}
+    {% trans "Criteria" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block content %}
     {% include "elements/table/header.html" %}
@@ -65,7 +65,7 @@
     </table>
     {% if not list %}
         <p class="no-elements-available">
-            {% trans "No criterions defined yet. Use the button above to create the first criterion." %}
+            {% trans "No criteria have been defined yet. Use the button above to create the first criterion." %}
         </p>
     {% endif %}
     {% include "elements/table/footer.html" %}

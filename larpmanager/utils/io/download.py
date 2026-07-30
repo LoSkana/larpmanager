@@ -504,7 +504,7 @@ def _header_regs(
 
     # Add additional registrations if question exists
     if "additional_tickets" in type_names:
-        column_headers.append(type_names.get("additional_tickets", _("Additionals")))
+        column_headers.append(type_names.get("additional_tickets", _("Additional tickets")))
         column_values.append(registration.additionals)
 
     # Handle character-related data if character feature is enabled
@@ -945,7 +945,7 @@ def _get_column_names(context: dict) -> None:
                 "tier": _("The tier of the ticket"),
                 "description": _("(Optional) The ticket's description"),
                 "price": _("(Optional) The cost of the ticket"),
-                "max_available": _("(Optional) Maximun number of spots available"),
+                "max_available": _("(Optional) Maximum number of spots available"),
             },
         ]
 
