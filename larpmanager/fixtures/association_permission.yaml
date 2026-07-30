@@ -337,7 +337,7 @@
 - model: larpmanager.associationpermission
   fields:
     name: Newsletter
-    descr: Displays a list of users' email addresses
+    descr: Displays a list of email addresses for newsletters
     slug: exe_newsletter
     number: 51
     config: null

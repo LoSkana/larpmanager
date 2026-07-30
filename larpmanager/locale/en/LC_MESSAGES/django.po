@@ -10183,7 +10183,7 @@ msgid ""
 "newsletter preferences"
 msgstr ""
 
-msgid "You can now review users' mailing lists."
+msgid "You can now review mailing lists for newsletters."
 msgstr ""
 
 msgid "Utility"
@@ -10811,7 +10811,7 @@ msgstr ""
 msgid "Manage participant questions and answer them"
 msgstr ""
 
-msgid "Displays a list of users' email addresses"
+msgid "Displays a list of email addresses for newsletters"
 msgstr ""
 
 msgid "Volunteers"
@@ -11023,7 +11023,7 @@ msgstr ""
 msgid "Manages registration cancellations"
 msgstr ""
 
-msgid "Displays a list of signed-up participants' email addresses"
+msgid "Displays a list of signed-up email addresses for newsletters"
 msgstr ""
 
 msgid "Manages and assigns tasks to characters"
@@ -11699,8 +11699,8 @@ msgid "Registration surcharge"
 msgstr ""
 
 msgid ""
-"Select how many payments to split the fee into. Total amount and deadlines "
-"are divided equally starting from the registration date."
+"Select how many payments to split the fee into (total amount and deadlines "
+"are divided equally starting from the registration date)"
 msgstr ""
 
 msgid "Order the factions from your most (top) to least (bottom) preferred"
