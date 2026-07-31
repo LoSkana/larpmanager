@@ -20,7 +20,7 @@
 
 """Tests for character cache functions"""
 
-from larpmanager.cache.character import get_writing_element_fields_batch
+from larpmanager.cache.writing import get_writing_element_fields_batch
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice, WritingOption, WritingQuestion, \
     BaseQuestionType
 from larpmanager.tests.unit.base import BaseTestCase

@@ -384,6 +384,18 @@
     module: writing
 - model: larpmanager.eventpermission
   fields:
+    name: Relationship tags
+    descr: Manage the tags that can be applied to character relationships
+    slug: orga_relationship_tags
+    number: 92
+    config: null
+    active_if: writing_relationship_tags
+    hidden: false
+    icon: tags
+    feature: relationships
+    module: writing
+- model: larpmanager.eventpermission
+  fields:
     name: Registrations
     descr: Manage participant registrations
     slug: orga_registrations

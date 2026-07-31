@@ -1,0 +1,57 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Relationship tags" %} - {{ run.search }}
+{% endblock title %}
+{% block info %}
+    {% trans "Manage the tags that can be applied to character relationships" %}
+{% endblock info %}
+{% block content %}
+    {% include "elements/table/header.html" %}
+    <table id="relationship_tags"
+           class="go_datatable writing row_reorder"
+           data-reorder-url="{% url 'orga_reorder_items' run.get_slug %}"
+           data-reorder-model="orga_relationship_tags">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="reorder-handle"></th>
+                <th></th>
+                <th>{% trans "Name" %}</th>
+                <th>{% trans "Symmetric" %}</th>
+                <th>{% trans "Tagged sides" %}</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.uuid }}">
+                    <td></td>
+                    <td class="reorder-handle">
+                        <i class="fa-solid fa-grip-vertical"></i>
+                    </td>
+                    <td>
+                        <a href="{% url 'orga_relationship_tags_edit' run.get_slug el.uuid %}"
+                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                    </td>
+                    <td>{{ el.name }}</td>
+                    <td>
+                        {% if el.symmetric %}<i class="fas fa-check"></i>{% endif %}
+                    </td>
+                    <td>{{ el.relationships.count }}</td>
+                    <td>
+                        <a href="{% url 'orga_relationship_tags_delete' run.get_slug el.uuid %}"
+                           qtip="{% trans "Delete" %}"
+                           class="only_new_v18"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% if not list %}
+        <p class="no-elements-available">
+            {% trans "No relationship tags have been defined yet. Use the button above to add tags such as love or rivalry." %}
+        </p>
+    {% endif %}
+    {% include "elements/table/footer.html" %}
+{% endblock content %}

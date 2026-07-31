@@ -45,8 +45,9 @@ from xhtml2pdf import pisa
 
 from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.models.accounting import (
     AccountingItemDonation,
     AccountingItemMembership,

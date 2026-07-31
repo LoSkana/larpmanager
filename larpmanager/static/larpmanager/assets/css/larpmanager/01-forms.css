@@ -739,3 +739,11 @@ body:not(.new_v18) .only_new_v18 {
     width: 100% !important;
   }
 }
+
+.rel_tag_checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin: 0 1em 0.5em 0;
+  font-weight: normal;
+}

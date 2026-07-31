@@ -1622,6 +1622,9 @@ msgstr "Geleverd:"
 msgid "Surcharge"
 msgstr "Toeslag"
 
+msgid "Symmetric"
+msgstr "Symmetrisch"
+
 msgid "Tolerance"
 msgstr "Tolerantie"
 
@@ -2410,6 +2413,9 @@ msgstr "Toon geschiedenis"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tagged sides"
+msgstr "Getagde kanten"
 
 msgid "Tech Support"
 msgstr "Technische ondersteuning"
@@ -3761,6 +3767,9 @@ msgstr "Registratieformulier"
 
 msgid "Registration info"
 msgstr "Registratie info"
+
+msgid "Relationship tags"
+msgstr "Relatietags"
 
 msgid "Remaining credits"
 msgstr "Resterende credits"
@@ -8443,6 +8452,9 @@ msgstr ""
 msgid "Probability of showing the special page (out of thousands)."
 msgstr "Kans om de speciale pagina te tonen (op duizend)."
 
+msgid "Symmetric tags apply to both characters in the relationship"
+msgstr "Symmetrische tags gelden voor beide karakters in de relatie"
+
 msgid "The question visibility to participants, allowed values are"
 msgstr ""
 "De zichtbaarheid van de vraag voor deelnemers, toegestane waarden zijn"
@@ -8753,6 +8765,9 @@ msgstr ""
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
 "Beheer poollabels voor het groeperen van pools in personage-inventarissen"
+
+msgid "Manage the tags that can be applied to character relationships"
+msgstr "Beheer de tags die op karakterrelaties kunnen worden toegepast"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr ""
@@ -12603,6 +12618,13 @@ msgstr ""
 "informatie van spelers op hun personageblad te verzamelen."
 
 msgid ""
+"No relationship tags have been defined yet. Use the button above to add tags"
+" such as love or rivalry."
+msgstr ""
+"Er zijn nog geen relatietags gedefinieerd. Gebruik de knop hierboven om tags"
+" toe te voegen, zoals liefde of rivaliteit."
+
+msgid ""
 "Percentage retained by the payment system. Enter the value as a number "
 "without the percentage symbol."
 msgstr ""
@@ -13679,6 +13701,13 @@ msgstr ""
 "publieke info, etc.) van de personages die ze toegewezen krijgen"
 
 msgid ""
+"If checked, applying this tag to a relationship also applies it to the other"
+" character's relationship back towards this one"
+msgstr ""
+"Als aangevinkt, wordt deze tag bij toepassing op een relatie ook toegepast "
+"op de relatie van het andere karakter terug naar dit karakter"
+
+msgid ""
 "If you select one (or more) tickets, the question will only be shown to "
 "participants who have selected one of those tickets"
 msgstr ""
@@ -14433,6 +14462,15 @@ msgstr ""
 "Maakt beveiligde streaming van video/audio-inhoud mogelijk via eenmalige "
 "toegangstokens. Elk token kan maar één keer worden gebruikt en houdt bij "
 "wie, wanneer en waar toegang heeft gehad tot de inhoud"
+
+msgid ""
+"If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "
+"character relationships, applied to both sides of the relationship when the "
+"tag is symmetric."
+msgstr ""
+"Indien ingeschakeld, kun je herbruikbare tags (bijv. liefde, rivaliteit) "
+"definiëren om toe te passen op karakterrelaties; bij symmetrische tags "
+"worden ze op beide kanten van de relatie toegepast."
 
 msgid ""
 "You have submitted a payment, and it is being reviewed by the staff. You do "

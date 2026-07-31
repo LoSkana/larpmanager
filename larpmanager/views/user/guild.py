@@ -27,8 +27,9 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.utils import GuildInviteS2Widget
 from larpmanager.forms.writing import GuildForm
 from larpmanager.mail.base import my_send_mail

@@ -35,6 +35,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.rels import get_event_rels_cache
 from larpmanager.cache.text_fields import ALLOWED_TYPES, get_cache_text_field
+from larpmanager.cache.writing import get_cached_relationship_tags
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
@@ -624,6 +625,17 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
     if "relationships" in context["features"]:
         for character in context["list"]:
             character.relationships_rels = event_relationships.get(character.id, {}).get("relationships_rels", [])
+
+        # Add per-tag relationship counts, when the config is enabled
+        context["writing_relationship_tags"] = get_event_config(
+            context["event"].id, "writing_relationship_tags", context=context
+        )
+        if context["writing_relationship_tags"]:
+            context["relationship_tags"] = get_cached_relationship_tags(context["event"])
+            for character in context["list"]:
+                character.relationship_tag_counts = event_relationships.get(character.id, {}).get(
+                    "relationship_tag_counts", {}
+                )
 
     # Add plot relationship data
     if "plot" in context["features"]:

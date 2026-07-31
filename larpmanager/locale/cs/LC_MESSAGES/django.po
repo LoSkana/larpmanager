@@ -1622,6 +1622,9 @@ msgstr "Dodáno:"
 msgid "Surcharge"
 msgstr "Příplatek"
 
+msgid "Symmetric"
+msgstr "Symetrický"
+
 msgid "Tolerance"
 msgstr "Tolerance"
 
@@ -2410,6 +2413,9 @@ msgstr "Zobrazit historii"
 
 msgid "Subscription"
 msgstr "Předplatné"
+
+msgid "Tagged sides"
+msgstr "Označené strany"
 
 msgid "Tech Support"
 msgstr "Technická podpora"
@@ -3761,6 +3767,9 @@ msgstr "Registrační formulář"
 
 msgid "Registration info"
 msgstr "Informace o registraci"
+
+msgid "Relationship tags"
+msgstr "Štítky vztahů"
 
 msgid "Remaining credits"
 msgstr "Zbývající kredity"
@@ -8391,6 +8400,9 @@ msgstr ""
 msgid "Probability of showing the special page (out of thousands)."
 msgstr "Pravděpodobnost zobrazení speciální stránky (z tisíce)."
 
+msgid "Symmetric tags apply to both characters in the relationship"
+msgstr "Symetrické štítky se použijí na obě postavy ve vztahu"
+
 msgid "The question visibility to participants, allowed values are"
 msgstr "Viditelnost otázky pro účastníky, povolené hodnoty jsou"
 
@@ -8661,6 +8673,9 @@ msgstr ""
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Spravovat štítky poolů pro seskupování poolů v inventářích postav"
+
+msgid "Manage the tags that can be applied to character relationships"
+msgstr "Spravuj štítky, které lze přidávat ke vztahům postav"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Správa přidělení tokenů účastníkům této akce"
@@ -12211,6 +12226,13 @@ msgstr ""
 "hráči zadávat informace o své postavě."
 
 msgid ""
+"No relationship tags have been defined yet. Use the button above to add tags"
+" such as love or rivalry."
+msgstr ""
+"Zatím nebyly definovány žádné štítky vztahů. Pomocí tlačítka výše přidej "
+"štítky, jako je láska nebo rivalita."
+
+msgid ""
 "Percentage retained by the payment system. Enter the value as a number "
 "without the percentage symbol."
 msgstr ""
@@ -13272,6 +13294,13 @@ msgstr ""
 "informace atd.) přiřazených postav"
 
 msgid ""
+"If checked, applying this tag to a relationship also applies it to the other"
+" character's relationship back towards this one"
+msgstr ""
+"Pokud je zaškrtnuto, přidání tohoto štítku ke vztahu ho přidá také ke vztahu"
+" druhé postavy zpět k této postavě"
+
+msgid ""
 "If you select one (or more) tickets, the question will only be shown to "
 "participants who have selected one of those tickets"
 msgstr ""
@@ -13987,6 +14016,15 @@ msgstr ""
 "Umožňuje zabezpečené streamování video/audio obsahu prostřednictvím "
 "jednorázových přístupových tokenů. Každý token lze použít pouze jednou a "
 "sleduje, kdo, kdy a odkud k obsahu přistupoval"
+
+msgid ""
+"If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "
+"character relationships, applied to both sides of the relationship when the "
+"tag is symmetric."
+msgstr ""
+"Pokud je povoleno, umožní ti definovat znovupoužitelné štítky (např. láska, "
+"rivalita), které lze přidávat ke vztahům postav; pokud je štítek symetrický,"
+" použije se na obě strany vztahu."
 
 msgid ""
 "You have submitted a payment, and it is being reviewed by the staff. You do "

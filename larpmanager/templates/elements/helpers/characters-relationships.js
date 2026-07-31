@@ -13,6 +13,13 @@ const editUrl = "{% url 'orga_characters_new' run.get_slug %}";
 // Get relationship length limit from form context
 const relationshipLimit = {{ form.relationship_max_length|default:10000 }};
 
+// Relationship tags available in this event, used to build the tags checkboxes for newly added relationships
+const relationshipTags = [
+    {% for tag in relationship_tags %}
+        {uuid: "{{ tag.uuid|escapejs }}", name: "{{ tag.name|escapejs }}"},
+    {% endfor %}
+];
+
 window.addEventListener('DOMContentLoaded', function() {
 
     var already = [];
@@ -58,6 +65,23 @@ window.addEventListener('DOMContentLoaded', function() {
             setupRelationshipEditor(editorId);
         });
         {% endif %}
+
+        if (relationshipTags.length) {
+            var tagsCell = $('<td class="tags_cell"></td>');
+            relationshipTags.forEach(function(tag) {
+                // build with DOM nodes: tag names are organizer-supplied and must never be parsed as HTML
+                var checkbox = $('<input type="checkbox">')
+                    .attr('name', 'rel_tags_' + ch_uuid)
+                    .attr('value', tag.uuid);
+                tagsCell.append($('<label class="rel_tag_checkbox"></label>').append(checkbox).append(document.createTextNode(tag.name)));
+            });
+            {% trans "Tags" as tags_label %}
+            {% trans "Symmetric tags apply to both characters in the relationship" as tags_helptext %}
+            tagsCell.append($('<div class="helptext"></div>').text("{{ tags_helptext|escapejs }}"));
+            var tagsRow = $('<tr></tr>').append($('<th></th>').text("{{ tags_label|escapejs }}")).append(tagsCell);
+            $('#rel_' + ch_uuid + '_tr').append(tagsRow);
+        }
+
         already.push(ch_uuid);
 
     }

@@ -1622,6 +1622,9 @@ msgstr "Toimitettu:"
 msgid "Surcharge"
 msgstr "Lisämaksu"
 
+msgid "Symmetric"
+msgstr "Symmetrinen"
+
 msgid "Tolerance"
 msgstr "Toleranssi"
 
@@ -2410,6 +2413,9 @@ msgstr "Näytä historia"
 
 msgid "Subscription"
 msgstr "Tilaus"
+
+msgid "Tagged sides"
+msgstr "Tunnisteella merkityt puolet"
 
 msgid "Tech Support"
 msgstr "Tekninen tuki"
@@ -3761,6 +3767,9 @@ msgstr "Ilmoittautumislomake"
 
 msgid "Registration info"
 msgstr "Rekisteröintitiedot"
+
+msgid "Relationship tags"
+msgstr "Suhdetunnisteet"
 
 msgid "Remaining credits"
 msgstr "Jäljellä olevat hyvitykset"
@@ -8402,6 +8411,9 @@ msgstr ""
 msgid "Probability of showing the special page (out of thousands)."
 msgstr "Erikoissivun näyttämisen todennäköisyys (tuhansista)."
 
+msgid "Symmetric tags apply to both characters in the relationship"
+msgstr "Symmetriset tunnisteet koskevat suhteen molempia hahmoja"
+
 msgid "The question visibility to participants, allowed values are"
 msgstr "Kysymyksen näkyvyys osallistujille, sallitut arvot ovat seuraavat"
 
@@ -8694,6 +8706,9 @@ msgstr "Jos sinulla on ongelmia, ota meihin yhteyttä, niin autamme sinua."
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Hallitse pool-tunnisteita poolien ryhmittelyyn hahmoinventaarioissa"
+
+msgid "Manage the tags that can be applied to character relationships"
+msgstr "Hallitse tunnisteita, joita voi lisätä hahmojen välisiin suhteisiin"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Hallitse tapahtuman osallistujille myönnettyjä tokeneita"
@@ -12385,6 +12400,13 @@ msgstr ""
 "pelaajilta tietoja heidän hahmolomakkeistaan."
 
 msgid ""
+"No relationship tags have been defined yet. Use the button above to add tags"
+" such as love or rivalry."
+msgstr ""
+"Suhdetunnisteita ei ole vielä määritetty. Lisää tunnisteita, kuten rakkaus "
+"tai kilpailu, yllä olevalla painikkeella."
+
+msgid ""
 "Percentage retained by the payment system. Enter the value as a number "
 "without the percentage symbol."
 msgstr ""
@@ -13452,6 +13474,13 @@ msgstr ""
 "ominaisuuksia (nimi, pronomini, julkiset tiedot jne.)"
 
 msgid ""
+"If checked, applying this tag to a relationship also applies it to the other"
+" character's relationship back towards this one"
+msgstr ""
+"Jos valittu, tämän tunnisteen lisääminen suhteeseen lisää sen myös toisen "
+"hahmon suhteeseen tätä hahmoa kohtaan"
+
+msgid ""
 "If you select one (or more) tickets, the question will only be shown to "
 "participants who have selected one of those tickets"
 msgstr ""
@@ -14187,6 +14216,15 @@ msgstr ""
 "Mahdollistaa videon/audiosisällön turvallisen suoratoiston "
 "kertakäyttötunnusten avulla. Kutakin tokenia voidaan käyttää vain kerran, ja"
 " sen avulla seurataan, kuka on käyttänyt sisältöä, milloin ja mistä"
+
+msgid ""
+"If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "
+"character relationships, applied to both sides of the relationship when the "
+"tag is symmetric."
+msgstr ""
+"Jos käytössä, voit määrittää uudelleenkäytettäviä tunnisteita (esim. "
+"rakkaus, kilpailu), joita voi lisätä hahmojen välisiin suhteisiin. "
+"Symmetrinen tunniste lisätään suhteen molemmille puolille."
 
 msgid ""
 "You have submitted a payment, and it is being reviewed by the staff. You do "
