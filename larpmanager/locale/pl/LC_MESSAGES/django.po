@@ -1736,8 +1736,14 @@ msgstr "Skontaktuj się z nami"
 msgid "Containers"
 msgstr "Kontenery"
 
+msgid "Criterions"
+msgstr "Kryteria"
+
 msgid "Deleted on"
 msgstr "Usunięto dnia"
+
+msgid "Deliveries"
+msgstr "Dostawy"
 
 msgid "Easter egg"
 msgstr "Jajko wielkanocne"
@@ -4172,6 +4178,9 @@ msgstr "Brak wyników"
 msgid "Signup cancellation"
 msgstr "Anulowanie rejestracji"
 
+msgid "The delivery's name"
+msgstr "Nazwa dostawy"
+
 msgid "Use full-size image"
 msgstr "Użyj obrazu w pełnym rozmiarze"
 
@@ -4384,6 +4393,9 @@ msgstr "Zasady i warunki"
 
 msgid "Terms and conditions"
 msgstr "Zasady i warunki"
+
+msgid "The criterion's name"
+msgstr "Nazwa kryterium"
 
 msgid "The outflow category"
 msgstr "Kategoria wydatku"
@@ -5537,6 +5549,9 @@ msgstr "Rozumiem - Przejdź do treści"
 msgid "Membership Application Status"
 msgstr "Status wniosku o członkostwo"
 
+msgid "Name of the experience system"
+msgstr "Nazwa systemu doświadczenia"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Działanie: ADD, SUB, MUL, DIV"
 
@@ -6420,6 +6435,9 @@ msgstr "Dodawany na dole wszystkich wysyłanych wiadomości"
 msgid "Allows characters to have inventories"
 msgstr "Umożliwia postaciom posiadanie ekwipunku"
 
+msgid "Amount of experience points delivered"
+msgstr "Liczba przyznanych punktów doświadczenia"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Oddaj swój głos na nowy Zarząd!"
 
@@ -6830,6 +6848,9 @@ msgstr "będzie wyświetlane na głównej stronie wydarzenia"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Opcjonalnie) Nazwy umiejętności, oddzielone przecinkami"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Opcjonalnie) Nazwy frakcji, oddzielone przecinkami"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Typy umiejętności bez umiejętności: %(list)s"
@@ -7011,6 +7032,9 @@ msgstr "Sprawdź użytkowników z oczekującymi terminami wydarzeń:"
 
 msgid "Select which form this question belongs to"
 msgstr "Wybierz, do jakiego formularza należy to pytanie"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Numer kryterium (unikalny identyfikator)"
 
 msgid "The member associated with this membership"
 msgstr "Członek powiązany z tym członkostwem"
@@ -8584,6 +8608,10 @@ msgstr "Prześlij podpisany formularz wniosku o członkostwo (PDF lub obraz)"
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Chcesz dostawać informacje o naszych nadchodzących wydarzeniach?"
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Opcjonalnie) Nazwy postaci, którym przyznano punkty, oddzielone przecinkami"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Opcjonalnie) Opcje postaci jako wymagania, oddzielone przecinkami"
@@ -10961,6 +10989,13 @@ msgstr ""
 "Zostałeś zaproszony do gildii %(guild)s ze swoją postacią %(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Opcjonalnie) Numer dostawy, przypisywany automatycznie, jeśli go brakuje "
+"lub jest już zajęty"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11874,6 +11909,13 @@ msgstr ""
 "Skorzystaj z przycisku powyżej, żeby dodać nowy problem."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Pamiętaj, że istniejące dostawy o tej samej nazwie zostaną nadpisane "
+"przesłanymi danymi."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -12055,6 +12097,13 @@ msgid ""
 msgstr ""
 "Nie znaleziono żadnych wydarzeń z kosztami w LarpManagerze. Koszty pojawią "
 "się tutaj, gdy wydarzenia zostaną utworzone i zrealizowane."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Pamiętaj, że istniejące kryteria o tym samym numerze zostaną nadpisane "
+"przesłanymi danymi."
 
 #, python-format
 msgid ""

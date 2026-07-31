@@ -1736,8 +1736,14 @@ msgstr "Kontaktuj nás"
 msgid "Containers"
 msgstr "Kontejnery"
 
+msgid "Criterions"
+msgstr "Kritéria"
+
 msgid "Deleted on"
 msgstr "Odstraněno dne"
+
+msgid "Deliveries"
+msgstr "Výdeje"
 
 msgid "Easter egg"
 msgstr "Velikonoční vajíčko"
@@ -4172,6 +4178,9 @@ msgstr "Výsledky nejsou k dispozici"
 msgid "Signup cancellation"
 msgstr "Zrušení registrace"
 
+msgid "The delivery's name"
+msgstr "Název výdeje"
+
 msgid "Use full-size image"
 msgstr "Použít obrázek v plné velikosti"
 
@@ -4384,6 +4393,9 @@ msgstr "Podmínky a pravidla"
 
 msgid "Terms and conditions"
 msgstr "Podmínky a pravidla"
+
+msgid "The criterion's name"
+msgstr "Název kritéria"
 
 msgid "The outflow category"
 msgstr "Kategorie výdajů"
@@ -5537,6 +5549,9 @@ msgstr "Rozumím – Přejít k obsahu"
 msgid "Membership Application Status"
 msgstr "Stav žádosti o členství"
 
+msgid "Name of the experience system"
+msgstr "Název systému zkušeností"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operace: ADD, SUB, MUL, DIV"
 
@@ -6420,6 +6435,9 @@ msgstr "Přidáno na konec všech odeslaných e-mailů"
 msgid "Allows characters to have inventories"
 msgstr "Umožňuje postavám mít inventáře"
 
+msgid "Amount of experience points delivered"
+msgstr "Počet udělených zkušenostních bodů"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Hlasuj pro nové vedení!"
 
@@ -6831,6 +6849,9 @@ msgstr "se zobrazí na hlavní stránce události"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Nepovinné) Názvy schopností oddělené čárkou"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Volitelné) Názvy frakcí oddělené čárkami"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Typy schopností bez schopností: %(list)s"
@@ -7011,6 +7032,9 @@ msgstr "Zkontroluj uživatele s nevyřízenými termíny událostí:"
 
 msgid "Select which form this question belongs to"
 msgstr "Vyber, do kterého formuláře tato otázka patří"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Číslo kritéria (jedinečný identifikátor)"
 
 msgid "The member associated with this membership"
 msgstr "Člen přidružený k tomuto členství"
@@ -8538,6 +8562,9 @@ msgstr "Nahraj podepsanou přihlášku k členství (PDF nebo obrázek)"
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Chceš dostávat informace o našich nadcházejících akcích?"
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr "(Volitelné) Názvy postav, kterým byly body uděleny, oddělené čárkami"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Nepovinné) Možnosti postav jako požadavky, oddělené čárkou"
@@ -10728,6 +10755,13 @@ msgstr ""
 "%(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Volitelné) Číslo výdeje, přiřazené automaticky, pokud chybí nebo je již "
+"obsazené"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11620,6 +11654,13 @@ msgstr ""
 "problém, použij tlačítko výše."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Upozorňujeme, že existující výdeje se stejným názvem budou přepsány "
+"nahranými daty."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -11799,6 +11840,13 @@ msgid ""
 msgstr ""
 "Nebyly nalezeny žádné akce s náklady v systému LarpManager. Náklady se zde "
 "zobrazí, jakmile budou akce vytvořeny a uskutečněny."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Upozorňujeme, že existující kritéria se stejným číslem budou přepsána "
+"nahranými daty."
 
 #, python-format
 msgid ""

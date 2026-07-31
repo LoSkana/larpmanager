@@ -1736,8 +1736,14 @@ msgstr "Contacte-nous"
 msgid "Containers"
 msgstr "Conteneurs"
 
+msgid "Criterions"
+msgstr "Critères"
+
 msgid "Deleted on"
 msgstr "Supprimé le"
+
+msgid "Deliveries"
+msgstr "Remises"
 
 msgid "Easter egg"
 msgstr "Oeuf de Pâques"
@@ -4172,6 +4178,9 @@ msgstr "Résultats non disponibles"
 msgid "Signup cancellation"
 msgstr "Annulation de l'inscription"
 
+msgid "The delivery's name"
+msgstr "Le nom de la remise"
+
 msgid "Use full-size image"
 msgstr "Utiliser l'image en taille réelle"
 
@@ -4384,6 +4393,9 @@ msgstr "Conditions générales d'utilisation"
 
 msgid "Terms and conditions"
 msgstr "Conditions générales d'utilisation"
+
+msgid "The criterion's name"
+msgstr "Le nom du critère"
 
 msgid "The outflow category"
 msgstr "La catégorie de sortie"
@@ -5537,6 +5549,9 @@ msgstr "Je comprends - Accède au contenu"
 msgid "Membership Application Status"
 msgstr "Statut de la demande d'adhésion"
 
+msgid "Name of the experience system"
+msgstr "Nom du système d’expérience"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Opération : ADD, SUB, MUL, DIV"
 
@@ -6420,6 +6435,9 @@ msgstr "Ajouté au bas de tous les e-mails envoyés"
 msgid "Allows characters to have inventories"
 msgstr "Permet aux personnages d'avoir des inventaires"
 
+msgid "Amount of experience points delivered"
+msgstr "Nombre de points d’expérience attribués"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Vote pour le nouvel exécutif!"
 
@@ -6833,6 +6851,9 @@ msgstr "sera affichée sur la page principale de l'événement"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Facultatif) Noms de capacités, séparés par des virgules"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Facultatif) Noms des factions, séparés par des virgules"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Types de capacités sans capacités : %(list)s"
@@ -7018,6 +7039,9 @@ msgstr ""
 
 msgid "Select which form this question belongs to"
 msgstr "Choisis à quel formulaire cette question appartient"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Le numéro du critère (identifiant unique)"
 
 msgid "The member associated with this membership"
 msgstr "Le membre associé à cette adhésion"
@@ -8665,6 +8689,11 @@ msgstr "Envoyer le formulaire de demande d'adhésion signé (PDF ou image)"
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Tu veux recevoir des infos sur nos prochains événements ?"
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Facultatif) Noms des personnages auxquels ils ont été attribués, séparés "
+"par des virgules"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
@@ -11186,6 +11215,13 @@ msgstr ""
 "%(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Facultatif) Le numéro de la remise, attribué automatiquement s’il est "
+"absent ou déjà utilisé"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -12102,6 +12138,13 @@ msgstr ""
 "bouton ci-dessus pour signaler un nouveau problème."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Note que les remises existantes portant le même nom seront écrasées par les "
+"données importées."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -12284,6 +12327,13 @@ msgid ""
 msgstr ""
 "Aucun événement avec des coûts LarpManager n'a été trouvé. Les coûts "
 "s'afficheront ici une fois que les événements auront été créés et organisés."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Note que les critères existants portant le même numéro seront écrasés par "
+"les données importées."
 
 #, python-format
 msgid ""

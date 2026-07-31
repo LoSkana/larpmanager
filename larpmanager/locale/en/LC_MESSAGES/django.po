@@ -9408,6 +9408,16 @@ msgid ""
 "the uploaded data."
 msgstr ""
 
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with "
+"the uploaded data."
+msgstr ""
+
+msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+
 msgid "You can also upload a second file with the registration options:"
 msgstr ""
 
@@ -11360,19 +11370,7 @@ msgstr ""
 msgid "Options price"
 msgstr ""
 
-msgid "The ticket's name"
-msgstr ""
-
-msgid "The tier of the ticket"
-msgstr ""
-
-msgid "(Optional) The ticket's description"
-msgstr ""
-
-msgid "(Optional) The cost of the ticket"
-msgstr ""
-
-msgid "(Optional) Maximum number of spots available"
+msgid "Name of the experience system"
 msgstr ""
 
 msgid "The name ability"
@@ -11390,6 +11388,56 @@ msgstr ""
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
 
+msgid "The criterion's number (unique identifier)"
+msgstr ""
+
+msgid "The criterion's name"
+msgstr ""
+
+msgid "Operation: ADD, SUB, MUL, DIV"
+msgstr ""
+
+msgid "Transaction amount"
+msgstr ""
+
+msgid "(Optional) Prerequisite ability names, comma-separated"
+msgstr ""
+
+msgid "(Optional) Faction names, comma-separated"
+msgstr ""
+
+msgid "(Optional) Display order"
+msgstr ""
+
+msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+
+msgid "The delivery's name"
+msgstr ""
+
+msgid "Amount of experience points delivered"
+msgstr ""
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+
+msgid "The ticket's name"
+msgstr ""
+
+msgid "The tier of the ticket"
+msgstr ""
+
+msgid "(Optional) The ticket's description"
+msgstr ""
+
+msgid "(Optional) The cost of the ticket"
+msgstr ""
+
+msgid "(Optional) Maximum number of spots available"
+msgstr ""
+
 msgid "The rule's number (unique identifier)"
 msgstr ""
 
@@ -11400,15 +11448,6 @@ msgstr ""
 msgid "The character field of computed type to update"
 msgstr ""
 
-msgid "Operation: ADD, SUB, MUL, DIV"
-msgstr ""
-
-msgid "Transaction amount"
-msgstr ""
-
-msgid "(Optional) Display order"
-msgstr ""
-
 msgid "The modifier's number (unique identifier)"
 msgstr ""
 
@@ -11416,9 +11455,6 @@ msgid "(Optional) Ability names, comma-separated"
 msgstr ""
 
 msgid "(Optional) Cost (0 = auto assigned)"
-msgstr ""
-
-msgid "(Optional) Prerequisite ability names, comma-separated"
 msgstr ""
 
 msgid "The question name"
@@ -11529,6 +11565,12 @@ msgid "Character Form"
 msgstr ""
 
 msgid "Character Config"
+msgstr ""
+
+msgid "Criterions"
+msgstr ""
+
+msgid "Deliveries"
 msgstr ""
 
 msgid "Plot Roles"

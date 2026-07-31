@@ -1736,8 +1736,14 @@ msgstr "Contáctanos"
 msgid "Containers"
 msgstr "Contenedores"
 
+msgid "Criterions"
+msgstr "Criterios"
+
 msgid "Deleted on"
 msgstr "Suprimido el"
+
+msgid "Deliveries"
+msgstr "Asignaciones"
 
 msgid "Easter egg"
 msgstr "Huevo de Pascua"
@@ -4172,6 +4178,9 @@ msgstr "Resultados no presentes"
 msgid "Signup cancellation"
 msgstr "Cancelación de inscripción"
 
+msgid "The delivery's name"
+msgstr "El nombre de la asignación"
+
 msgid "Use full-size image"
 msgstr "Usar la imagen a tamaño completo"
 
@@ -4384,6 +4393,9 @@ msgstr "Términos y Condiciones"
 
 msgid "Terms and conditions"
 msgstr "Términos y condiciones"
+
+msgid "The criterion's name"
+msgstr "El nombre del criterio"
 
 msgid "The outflow category"
 msgstr "La categoría de salida"
@@ -5537,6 +5549,9 @@ msgstr "Entiendo - Acceder al contenido"
 msgid "Membership Application Status"
 msgstr "Estado de la solicitud de afiliación"
 
+msgid "Name of the experience system"
+msgstr "Nombre del sistema de experiencia"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operación: ADD, SUB, MUL, DIV"
 
@@ -6420,6 +6435,9 @@ msgstr "Añadido al final de todos los correos enviados"
 msgid "Allows characters to have inventories"
 msgstr "Permite que los personajes tengan inventarios"
 
+msgid "Amount of experience points delivered"
+msgstr "Cantidad de puntos de experiencia asignados"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Vota para la nueva junta ejecutiva!"
 
@@ -6830,6 +6848,9 @@ msgstr "se mostrará en la página principal del evento"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Opcional) Nombres de capacidades, separados por comas"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Opcional) Nombres de las facciones, separados por comas"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Tipos de habilidades sin habilidades: %(list)s"
@@ -7012,6 +7033,9 @@ msgstr "Revisa los usuarios que tienen plazos pendientes para eventos:"
 
 msgid "Select which form this question belongs to"
 msgstr "Elige a qué formulario pertenece esta pregunta"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "El número del criterio (identificador único)"
 
 msgid "The member associated with this membership"
 msgstr "El miembro asociado a esta afiliación"
@@ -8620,6 +8644,11 @@ msgstr "Carga el formulario de solicitud de afiliación firmado (PDF o imagen)"
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "¿Te gustaría recibir información sobre nuestros próximos eventos?"
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Opcional) Nombres de los personajes a los que se les asignó, separados por "
+"comas"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Opcional) Opciones de personaje como requisitos, separadas por comas"
@@ -11086,6 +11115,13 @@ msgstr ""
 "Te han invitado a unirte al gremio %(guild)s con tu personaje %(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Opcional) El número de la asignación, asignado automáticamente si falta o "
+"ya está en uso"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -12003,6 +12039,13 @@ msgstr ""
 "de arriba para añadir un nuevo problema."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Ten en cuenta que las asignaciones existentes con el mismo nombre se "
+"sobrescribirán con los datos subidos."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -12185,6 +12228,13 @@ msgid ""
 msgstr ""
 "No se han encontrado eventos con costes en LarpManager. Los costes "
 "aparecerán aquí una vez que se creen y se celebren los eventos."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Ten en cuenta que los criterios existentes con el mismo número se "
+"sobrescribirán con los datos subidos."
 
 #, python-format
 msgid ""

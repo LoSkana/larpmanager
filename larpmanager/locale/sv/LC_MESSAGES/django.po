@@ -1736,8 +1736,14 @@ msgstr "Kontakta oss"
 msgid "Containers"
 msgstr "Behållare"
 
+msgid "Criterions"
+msgstr "Kriterier"
+
 msgid "Deleted on"
 msgstr "Raderad den"
+
+msgid "Deliveries"
+msgstr "Leveranser"
 
 msgid "Easter egg"
 msgstr "Påskägg"
@@ -4172,6 +4178,9 @@ msgstr "Inga resultat tillgängliga"
 msgid "Signup cancellation"
 msgstr "Annullering av registrering"
 
+msgid "The delivery's name"
+msgstr "Leveransens namn"
+
 msgid "Use full-size image"
 msgstr "Använd bilden i full storlek"
 
@@ -4384,6 +4393,9 @@ msgstr "Villkor och betingelser"
 
 msgid "Terms and conditions"
 msgstr "Villkor och bestämmelser"
+
+msgid "The criterion's name"
+msgstr "Kriteriets namn"
 
 msgid "The outflow category"
 msgstr "Utgiftskategorin"
@@ -5537,6 +5549,9 @@ msgstr "Jag förstår - Få tillgång till innehåll"
 msgid "Membership Application Status"
 msgstr "Status för medlemsansökan"
 
+msgid "Name of the experience system"
+msgstr "Erfarenhetssystemets namn"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operation: ADD, SUB, MUL, DIV"
 
@@ -6420,6 +6435,9 @@ msgstr "Läggs till längst ner i alla utskickade mail"
 msgid "Allows characters to have inventories"
 msgstr "Tillåter karaktärer att ha inventarier"
 
+msgid "Amount of experience points delivered"
+msgstr "Antal utdelade erfarenhetspoäng"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Lägg din röst på den nya direktionen!"
 
@@ -6830,6 +6848,9 @@ msgstr "kommer att visas på huvudsidan för evenemanget"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Valfritt) Namn på förmågor, kommaseparerade"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Valfritt) Fraktionsnamn, kommaseparerade"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Förmågetyper utan förmågor: %(list)s"
@@ -7010,6 +7031,9 @@ msgstr "Granska användare med utestående tidsgränser för evenemang:"
 
 msgid "Select which form this question belongs to"
 msgstr "Välj vilket formulär denna fråga tillhör"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Kriteriets nummer (unik identifierare)"
 
 msgid "The member associated with this membership"
 msgstr "Den medlem som är associerad med detta medlemskap"
@@ -8549,6 +8573,9 @@ msgstr ""
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Vill du få information om våra kommande evenemang?"
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr "(Valfritt) Karaktärsnamn som det tilldelades till, kommaseparerade"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valfritt) Karaktärsalternativ som krav, kommaseparerade"
@@ -10869,6 +10896,13 @@ msgstr ""
 "%(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Valfritt) Leveransens nummer, tilldelas automatiskt om det saknas eller "
+"redan används"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11782,6 +11816,13 @@ msgstr ""
 "knappen ovan för att lägga till ett nytt problem."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Observera att befintliga leveranser med samma namn kommer att skrivas över "
+"med uppladdade data."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -11963,6 +12004,13 @@ msgid ""
 msgstr ""
 "Inga evenemang med kostnader i LarpManager hittades. Kostnaderna kommer att "
 "visas här så snart evenemangen har skapats och genomförts."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Observera att befintliga kriterier med samma nummer kommer att skrivas över "
+"med uppladdade data."
 
 #, python-format
 msgid ""
