@@ -1,31 +1,43 @@
 {% extends "utils.html" %}
 {% load i18n %}
+{% block body_class %}
+    {% if frame %}floating_iframe outer_delete{% endif %}
+{% endblock body_class %}
 {% block title %}
     {% trans "Confirm" %}
 {% endblock title %}
+{% block info %}
+{% endblock info %}
 {% block content %}
     <form method="post" class="confirm_action_form">
         {% csrf_token %}
-        <div class="form_container">
+        {% if frame %}<input type="hidden" name="frame" value="1">{% endif %}
+        <div class="form_container{% if frame %} auto_resize{% endif %}">
             <p class="delete-confirm-message">
                 {% trans "Please confirm you want to perform this action." %}
                 {% if el_name %}{{ el_name }}{% endif %}
             </p>
             <div class="form-actions">
                 <input type="submit" value="{% trans "Confirm" %}" class="btn-save">
-                <a href="#" id="confirm_action_cancel" class="btn-cancel">{% trans "Cancel" %}</a>
+                {% if not frame %}
+                    <a href="#" id="confirm_action_cancel" class="btn-cancel">{% trans "Cancel" %}</a>
+                {% endif %}
             </div>
         </div>
     </form>
 {% endblock content %}
 {% block js %}
     {{ block.super }}
-    <script>
+    {% if frame %}
+        {% include "elements/helpers/iframe_resize.js" %}
+    {% else %}
+        <script>
     $(document).ready(function() {
         $('#confirm_action_cancel').on('click', function(e) {
             e.preventDefault();
             history.back();
         });
     });
-    </script>
+        </script>
+    {% endif %}
 {% endblock js %}

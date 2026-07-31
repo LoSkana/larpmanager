@@ -103,7 +103,8 @@ def discount(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
     edit_iframe.locator("#id_name").click()
     edit_iframe.locator("#id_name").fill("discount")
-    edit_iframe.get_by_role("checkbox", name="Test Larp").check(force=True)
+    # the run being edited is preselected on a new discount
+    expect(edit_iframe.get_by_role("checkbox", name="Test Larp")).to_be_checked()
     edit_iframe.locator("#id_value").click()
     edit_iframe.locator("#id_value").press("Home")
     edit_iframe.locator("#id_value").fill("20")
@@ -129,6 +130,35 @@ def discount(live_server: Any, page: Any) -> None:
     page.get_by_role("button", name="Continue").click()
     expect_normalized(page, page.locator("#riepilogo"), "Your updated registration total is: 80€.")
     page.locator("#register_go").click()
+
+    registration_discount(live_server, page)
+
+
+def registration_discount(live_server: Any, page: Any) -> None:
+    """Remove and re-add the applied discount from the orga registration discounts page."""
+    go_to(page, live_server, "/test/manage/registrations")
+    page.wait_for_selector("table.go_datatable")
+    page.locator('.table_toggle[tog="disc"]').first.click(force=True)
+    page.locator("td.disc a").first.click(force=True)
+    expect_normalized(page, page.locator("#discounts_active"), "discount")
+
+    # delete the applied discount through the confirmation popup
+    page.locator("#discounts_active a:has(i.fa-xmark)").first.click(force=True)
+    confirm_frame(page)
+    expect(page.locator("#discounts_active")).to_have_count(0)
+
+    # add it back through the same popup, and check it is no longer offered twice
+    page.locator("#discounts_availble a:has(i.fa-check)").first.click(force=True)
+    confirm_frame(page)
+    expect_normalized(page, page.locator("#discounts_active"), "discount")
+    expect(page.locator("#discounts_availble")).to_have_count(0)
+
+
+def confirm_frame(page: Any) -> None:
+    """Confirm the action popup, that reloads the underlying page."""
+    frame = get_modal_iframe(page)
+    frame.get_by_role("button", name="Confirm").click(force=True)
+    page.wait_for_load_state("domcontentloaded")
 
 
 def pay(live_server: Any, page: Any) -> None:

@@ -1058,10 +1058,15 @@ def orga_registration_discounts(request: HttpRequest, event_slug: str, registrat
     get_registration(context, registration_uuid)
 
     # Get active discounts for this registration's member
-    context["active"] = AccountingItemDiscount.objects.filter(run=context["run"], member=context["registration"].member)
+    context["active"] = AccountingItemDiscount.objects.filter(
+        run=context["run"],
+        member=context["registration"].member,
+    ).select_related("disc")
 
-    # Get all available discounts for this run
-    context["available"] = context["run"].discounts.all()
+    # Get discounts of this run not already applied to the registration
+    context["available"] = context["run"].discounts.exclude(
+        id__in=context["active"].values_list("disc_id", flat=True),
+    )
 
     return render(request, "larpmanager/orga/registration/discounts.html", context)
 
@@ -1086,14 +1091,19 @@ def orga_registration_discount_add(
     context = check_event_context(request, event_slug, "orga_registrations")
     get_registration(context, registration_uuid)
     get_discount(context, discount_uuid)
-    AccountingItemDiscount.objects.create(
-        value=context["discount"].value,
+
+    # Skip if the same discount is already applied to this member for this run
+    (_item, created) = AccountingItemDiscount.objects.get_or_create(
         member=context["registration"].member,
         disc=context["discount"],
         run=context["run"],
-        association_id=context["association_id"],
+        defaults={
+            "value": context["discount"].value,
+            "association_id": context["association_id"],
+        },
     )
-    context["registration"].save()
+    if created:
+        context["registration"].save()
     return redirect(
         "orga_registration_discounts",
         event_slug=context["run"].get_slug(),

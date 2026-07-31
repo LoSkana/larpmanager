@@ -533,7 +533,7 @@ class OrgaDiscountForm(BaseModelForm):
         """Initialize form with dynamically generated run selection field.
 
         Creates a multiple choice field with checkboxes for all runs in the same event
-        as the provided run parameter. Pre-selects runs associated with the instance.
+        as the provided run parameter. Pre-selects the instance runs, or the current run when new.
         """
         super().__init__(*args, **kwargs)
 
@@ -549,9 +549,11 @@ class OrgaDiscountForm(BaseModelForm):
             help_text=_("The sessions for which the discount is available"),
         )
 
-        # Pre-populate field with existing runs if editing an instance
+        # Pre-populate field with existing runs, or the current run for new discounts
         if self.instance and self.instance.pk:
             self.initial["runs"] = [r.id for r in self.instance.runs.all()]
+        else:
+            self.initial["runs"] = [self.params["run"].id]
 
 
 class InvoiceSubmitForm(BaseForm):
