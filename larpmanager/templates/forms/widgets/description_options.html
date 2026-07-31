@@ -1,0 +1,24 @@
+{% load i18n %}
+{% with id=widget.attrs.id %}
+    <div {% if id %}id="{{ id }}"{% endif %}
+         {% if widget.attrs.class %}class="{{ widget.attrs.class }}"{% endif %}>
+        {% for group, options, index in widget.optgroups %}
+            {% if group %}
+                <div>
+                    <label>{{ group }}</label>
+                {% endif %}
+                {% for option in options %}
+                    <div {% if widget.collapse_unselected and not option.selected %}class="opt-collapsed hide"{% endif %}>
+                        {% include option.template_name with widget=option %}
+                    </div>
+                {% endfor %}
+                {% if group %}</div>{% endif %}
+        {% endfor %}
+        {% if widget.collapse_unselected %}
+            <a href="#" class="opt-show-more">
+                <span class="sl-show"><i class="fa-regular fa-eye"></i> {% trans "Show other options" %}</span>
+                <span class="sl-hide hide"><i class="fa-regular fa-eye-slash"></i> {% trans "Hide other options" %}</span>
+            </a>
+        {% endif %}
+    </div>
+{% endwith %}

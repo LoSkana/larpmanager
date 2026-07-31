@@ -476,6 +476,16 @@ function initSlugField() {
 // ========== Init: Toggles ==========
 
 // Show/hide target blocks via .my_toggle, scrolling into view and tracking select state.
+// Toggle the options hidden when editing an existing answer (only selected ones shown).
+function initCollapsedOptions() {
+    $(document).on('click', '.opt-show-more', function (e) {
+        e.preventDefault();
+        var $link = $(this);
+        $link.siblings('.opt-collapsed').toggleClass('hide');
+        $link.find('.sl-show, .sl-hide').toggleClass('hide');
+    });
+}
+
 function initToggles() {
     $(document).on("click", ".my_toggle", function() {
         var k = $(this).attr("tog");
@@ -628,6 +638,7 @@ $(document).ready(function() {
     // Forms / inputs
     initDatepickers();
     initSlugField();
+    initCollapsedOptions();
 
     // Interactions
     initToggles();
@@ -997,6 +1008,9 @@ function data_tables() {
         var is_reorder = $table.hasClass('row_reorder');
         var full_layout = !is_reorder && rowCount >= 10;
         var no_buttons = $table.attr('no_buttons') !== undefined;
+        // opt-in: keep export buttons also on short tables, that would otherwise get the minimal layout
+        var force_buttons = !no_buttons && $table.attr('force_buttons') !== undefined;
+        var export_buttons = { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] };
 
         var dtConfig = {
             scrollX: true,
@@ -1006,8 +1020,9 @@ function data_tables() {
             layout: full_layout
                 ? (no_buttons
                     ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
-                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } })
-                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
+                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: export_buttons })
+                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null,
+                    bottom2: force_buttons ? export_buttons : null },
             columnControl: ['order', 'searchDropdown'],
             lengthMenu: [[25, 50, 100, 250, 500, 1000], [25, 50, 100, 250, 500, 1000]],
             order: [],
