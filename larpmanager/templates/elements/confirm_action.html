@@ -7,6 +7,7 @@
     {% trans "Confirm" %}
 {% endblock title %}
 {% block info %}
+    {% if not frame %}{{ block.super }}{% endif %}
 {% endblock info %}
 {% block content %}
     <form method="post" class="confirm_action_form">
