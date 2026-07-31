@@ -223,8 +223,9 @@ def check_reserve(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "test/")
     sidebar(page, "Your registration")
     # the reserve ticket is not the selected one, so it starts collapsed
-    expand_options(page)
     ticket_row = page.locator("#id_ticket_tr")
+    expect(ticket_row.get_by_role("radio", name="Reserve")).to_be_hidden()
+    expand_options(page)
     expect(ticket_row.get_by_role("radio", name="Standard 5€ sadsadsadsa")).to_be_checked()
     expect(ticket_row.get_by_role("radio", name="Reserve")).not_to_be_checked()
     # expanded options are part of the visible text of the row

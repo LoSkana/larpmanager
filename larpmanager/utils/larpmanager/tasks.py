@@ -515,8 +515,12 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
     return metadata
 
 
-# A whole html tag, rewritten one at a time so every attribute inside it is considered
-_TAG_RE = re.compile(r"<[^>]+>")
+# A whole html tag, rewritten one at a time so every attribute inside it is considered;
+# quoted attribute values are consumed as a unit, so a ">" inside them does not end the tag
+_TAG_RE = re.compile(r"""<[^>'"]*(?:(?:"[^"]*"|'[^']*')[^>'"]*)*>""")
+
+# Content of a style block, the only place outside tags where css url() references are expected
+_STYLE_BLOCK_RE = re.compile(r"(<style\b[^>]*>)(.*?)(</style\s*>)", re.IGNORECASE | re.DOTALL)
 
 # Root-relative single-value attributes (excludes protocol-relative "//host/path")
 _RELATIVE_URL_RE = re.compile(r"""(\s(?:src|href|poster|background)\s*=\s*["'])(/(?!/)[^"']*)(["'])""", re.IGNORECASE)
@@ -543,20 +547,34 @@ def _absolute_srcset(value: str, base_url: str) -> str:
     return _SRCSET_CANDIDATE_RE.sub(lambda match: f"{match.group(1)}{match.group(2)}{base_url}{match.group(3)}", value)
 
 
+def _absolute_css(css: str, base_url: str) -> str:
+    """Prefix every root-relative css url() reference with the base url."""
+    return _RELATIVE_CSS_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}", css)
+
+
 def _absolute_tag(tag: str, base_url: str) -> str:
     """Absolutize every root-relative url attribute of a single html tag."""
     tag = _RELATIVE_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}{match.group(3)}", tag)
-    return _RELATIVE_SRCSET_RE.sub(
+    tag = _RELATIVE_SRCSET_RE.sub(
         lambda match: f"{match.group(1)}{_absolute_srcset(match.group(2), base_url)}{match.group(3)}", tag
     )
+    # covers inline styles, the only css that lives inside a tag
+    return _absolute_css(tag, base_url)
 
 
 def absolute_email_urls(body: str, base_url: str) -> str:
-    """Rewrite root-relative links, media references and CSS urls to absolute urls."""
+    """Rewrite root-relative links, media references and CSS urls to absolute urls.
+
+    Urls are rewritten only where they can appear: inside html tags (attributes
+    and inline styles) and inside style blocks, so plain text and scripts are
+    left untouched.
+    """
     if not body:
         return body
     body = _TAG_RE.sub(lambda match: _absolute_tag(match.group(0), base_url), body)
-    return _RELATIVE_CSS_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}", body)
+    return _STYLE_BLOCK_RE.sub(
+        lambda match: f"{match.group(1)}{_absolute_css(match.group(2), base_url)}{match.group(3)}", body
+    )
 
 
 def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> EmailMultiAlternatives:
