@@ -526,6 +526,7 @@ class ProfileForm(BaseProfileForm):
             "first_aid",
             "diet",
             "safety",
+            "accessibility",
             "newsletter",
             "presentation",
             "birth_date",
@@ -542,6 +543,7 @@ class ProfileForm(BaseProfileForm):
         widgets: ClassVar[dict] = {
             "diet": Textarea(attrs={"rows": 5}),
             "safety": Textarea(attrs={"rows": 5}),
+            "accessibility": Textarea(attrs={"rows": 5}),
             "presentation": Textarea(attrs={"rows": 5}),
             "birth_date": DatePickerInput,
             "document_issued": DatePickerInput,

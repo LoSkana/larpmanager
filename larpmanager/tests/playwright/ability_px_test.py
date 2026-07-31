@@ -34,6 +34,7 @@ from larpmanager.tests.utils import (
     _wait_lm_ready,
     char_dual_pick,
     click_and_wait_question,
+    expand_options,
     expect_normalized,
     fill_tinymce,
     get_modal_iframe,
@@ -366,6 +367,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
+    # Rogue is selected, so the other classes start collapsed
+    expand_options(page)
     page.locator('label[for="id_que_u5_0"]').click()
     submit_confirm(page)
     page.get_by_role("link", name="Abilities").click()
@@ -397,6 +400,7 @@ def modifiers(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/gallery/")
     page.get_by_role("link", name="Test Character").nth(1).click()
     page.get_by_role("link", name="Edit").click()
+    expand_options(page)
     page.locator('label[for="id_que_u5_0"]').click()
     submit_confirm(page)
     page.get_by_role("link", name="Abilities").click()

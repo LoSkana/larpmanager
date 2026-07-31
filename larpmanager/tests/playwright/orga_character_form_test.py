@@ -39,7 +39,7 @@ from larpmanager.tests.utils import (submit_register,
                                      logout,
                                      submit_confirm,
                                      expect_normalized, new_option, submit_option, get_option,
-                                     get_modal_iframe, save_modal, _wait_lm_ready, sidebar, )
+                                     get_modal_iframe, save_modal, _wait_lm_ready, sidebar, expand_options, )
 
 pytestmark = pytest.mark.e2e
 
@@ -170,6 +170,8 @@ def check_first_char(page: Any, live_server: Any) -> None:
     edit_iframe.locator("#id_que_u4").press("Tab")
     edit_iframe.get_by_text("bbbbbbbbbb").click()
     edit_iframe.get_by_text("bbbbbbbbbb").fill("dddddddddd")
+    # the character is already saved: unselected options start collapsed
+    expand_options(edit_iframe)
     edit_iframe.locator('label[for="id_que_u6_1"]').click()
     edit_iframe.locator('label[for="id_que_u8_0"]').click()
     edit_iframe.locator('label[for="id_que_u7_0"]').click()
@@ -192,12 +194,19 @@ def check_first_char(page: Any, live_server: Any) -> None:
 
 def recheck_char(live_server: Any, page: Any) -> None:
     edit_iframe = get_modal_iframe(page)
+    # the character is already saved: unselected options start collapsed
+    expand_options(edit_iframe)
     expect_normalized(page, edit_iframe.locator("#main_form"), "long descr")
     expect_normalized(page, edit_iframe.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, edit_iframe.locator("#main_form"), "only only descr all all descr choose one option - restricted text")
+    # the show/hide options link sits between the options and the question hint
+    expect_normalized(page, edit_iframe.locator("#main_form"), "only only descr all all descr")
+    expect_normalized(page, edit_iframe.locator("#main_form"), "choose one option - restricted text")
     expect_normalized(page, edit_iframe.locator('[id="id_que_u7_tr"]'), "multiple text")
     expect_normalized(page,
-        edit_iframe.locator('[id="id_que_u7_tr"]'), "all all descr many many descr few few descr select one or more options - multiple descr"
+        edit_iframe.locator('[id="id_que_u7_tr"]'), "all all descr many many descr few few descr"
+    )
+    expect_normalized(page,
+        edit_iframe.locator('[id="id_que_u7_tr"]'), "select one or more options - multiple descr"
     )
     save_modal(page, edit_iframe)
     go_to(page, live_server, "/test/character/list")

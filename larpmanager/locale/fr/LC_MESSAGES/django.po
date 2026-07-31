@@ -3896,6 +3896,9 @@ msgstr "Personnage fondateur"
 msgid "Hide not available"
 msgstr "Masquer les non disponibles"
 
+msgid "Hide other options"
+msgstr "Masquer les autres options"
+
 msgid "Historic residence"
 msgstr "Résidence historique"
 
@@ -3979,6 +3982,9 @@ msgstr "Consulte tous les membres"
 
 msgid "Set up quest types"
 msgstr "Configurer les types de quêtes"
+
+msgid "Show other options"
+msgstr "Afficher les autres options"
 
 msgid "The trash is empty"
 msgstr "La poubelle est vide"
@@ -10160,6 +10166,12 @@ msgstr ""
 "ajouter la première étape."
 
 msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Aucune donnée de participant n'est encore disponible. Elles apparaîtront ici"
+" dès que les utilisateurs s'inscriront."
+
+msgid ""
 "No registered participants have completed any workshops for this event yet."
 msgstr ""
 "Aucun participant inscrit n'a encore terminé aucun atelier pour cet "
@@ -12329,6 +12341,13 @@ msgstr ""
 "s'afficheront ici une fois que les événements auront été créés et organisés."
 
 msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Aucune information de Safety n'a encore été renseignée. Elle apparaîtra ici "
+"dès que les participants la fourniront."
+
+msgid ""
 "Note that existing criterions with the same number, will be overwritten with"
 " the uploaded data."
 msgstr ""
@@ -12745,6 +12764,13 @@ msgid ""
 msgstr ""
 "Gère les textes personnalisés utilisés dans toute l'organisation, comme les "
 "e-mails et les pages d'inscription, par langue"
+
+msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Aucune préférence alimentaire n'a encore été renseignée. Elles apparaîtront "
+"ici dès que les participants les fourniront."
 
 msgid ""
 "No form fields defined yet. Add a field to collect information from players "

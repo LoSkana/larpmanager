@@ -5971,6 +5971,12 @@ msgstr ""
 msgid "Filter selected"
 msgstr ""
 
+msgid "Show other options"
+msgstr ""
+
+msgid "Hide other options"
+msgstr ""
+
 msgid "View photos and media from the event"
 msgstr ""
 
@@ -9470,6 +9476,11 @@ msgid ""
 msgstr ""
 
 msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+
+msgid ""
 "Export the email list of active registrants for use in newsletters and "
 "communications"
 msgstr ""
@@ -9511,6 +9522,11 @@ msgid ""
 "their assigned characters"
 msgstr ""
 
+msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+
 msgid "Users data"
 msgstr ""
 
@@ -9522,6 +9538,10 @@ msgstr ""
 msgid ""
 "Please remember that the information on this page was given with the "
 "implicit trust that it will be treated with the utmost care."
+msgstr ""
+
+msgid ""
+"No participant data available yet. It will appear here once users register."
 msgstr ""
 
 msgid "Spam"

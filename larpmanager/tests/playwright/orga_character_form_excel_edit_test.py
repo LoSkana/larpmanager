@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (
     go_to,
     login_orga,
     submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
-    click_and_wait_question,
+    click_and_wait_question, expand_options,
 )
 
 pytestmark = pytest.mark.e2e
@@ -283,6 +283,8 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing value - Option A)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Option A").dblclick()
     panel = wait_for_inline_edit(page)
+    # Option A is already selected, so the other options start collapsed
+    expand_options(panel)
     panel.locator('label[for="id_que_u6_1"]').click()  # Option B
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Option B")
@@ -304,6 +306,8 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
     panel = wait_for_inline_edit(page)
+    # Choice X and Y are already selected, so Choice Z starts collapsed
+    expand_options(panel)
     panel.locator('label[for="id_que_u7_0"]').click()
     panel.locator('label[for="id_que_u7_2"]').click()
     submit_inline_edit(page)

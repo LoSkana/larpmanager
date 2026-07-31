@@ -3896,6 +3896,9 @@ msgstr "Oprichtend personage"
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
+msgid "Hide other options"
+msgstr "Verberg andere opties"
+
 msgid "Historic residence"
 msgstr "Historische woonplaats"
 
@@ -3979,6 +3982,9 @@ msgstr "Bekijk alle leden"
 
 msgid "Set up quest types"
 msgstr "Questtypes instellen"
+
+msgid "Show other options"
+msgstr "Toon andere opties"
 
 msgid "The trash is empty"
 msgstr "De prullenbak is leeg"
@@ -10073,6 +10079,12 @@ msgstr ""
 "eerste mijlpaal toe te voegen."
 
 msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Er zijn nog geen deelnemersgegevens beschikbaar. Die verschijnen hier zodra "
+"gebruikers zich registreren."
+
+msgid ""
 "No registered participants have completed any workshops for this event yet."
 msgstr ""
 "Er zijn nog geen geregistreerde deelnemers die een workshop voor dit "
@@ -12233,6 +12245,13 @@ msgstr ""
 "plaatsgevonden."
 
 msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Er is nog geen Safety-informatie ingediend. Die verschijnt hier zodra "
+"deelnemers die doorgeven."
+
+msgid ""
 "Note that existing criterions with the same number, will be overwritten with"
 " the uploaded data."
 msgstr ""
@@ -12646,6 +12665,13 @@ msgid ""
 msgstr ""
 "Beheer de aangepaste teksten die binnen de hele organisatie worden gebruikt,"
 " zoals e-mails en registratiepagina’s, per taal"
+
+msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Er zijn nog geen dieetvoorkeuren ingediend. Ze verschijnen hier zodra "
+"deelnemers ze doorgeven."
 
 msgid ""
 "No form fields defined yet. Add a field to collect information from players "

@@ -525,6 +525,12 @@ class BaseRegistrationForm(BaseModelFormRun):
         """Return True if effective_version >= 20 (radio/checkbox with inline descriptions)."""
         return int(self.params.get("effective_version", 0)) >= self._inline_widgets_min_version
 
+    @cached_property
+    def _is_edit(self) -> bool:
+        """Return True when the form edits an already saved instance."""
+        instance = getattr(self, "instance", None)
+        return bool(instance and instance.pk)
+
     def _init_registration_question(self, instance: Any | None, event: Event) -> None:
         """Initialize registration questions and answers from existing instance.
 
@@ -1256,7 +1262,10 @@ class BaseRegistrationForm(BaseModelFormRun):
                 f" - {help_text}" if help_text else ""
             )
             field_kwargs["widget"] = DescriptionRadioSelect(
-                attrs={"class": "my-radio-class"}, descriptions=descriptions, metadata=metadata
+                attrs={"class": "my-radio-class"},
+                descriptions=descriptions,
+                metadata=metadata,
+                collapse_unselected=self._is_edit,
             )
         self.fields[field_key] = forms.ChoiceField(**field_kwargs)
 
@@ -1316,7 +1325,10 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Create the multiple choice field with checkbox widget
         if self._use_inline_widgets_v20:
             widget = DescriptionCheckboxSelectMultiple(
-                attrs={"class": "my-checkbox-class"}, descriptions=descriptions, metadata=metadata
+                attrs={"class": "my-checkbox-class"},
+                descriptions=descriptions,
+                metadata=metadata,
+                collapse_unselected=self._is_edit,
             )
             hint = _("Select one or more options")
             help_text = f'<span class="choice-hint">{hint}</span>' + (f" - {help_text}" if help_text else "")

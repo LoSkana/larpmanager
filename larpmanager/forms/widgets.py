@@ -67,17 +67,35 @@ def _inject_card(option: dict, label: Any, desc: str, meta: dict) -> None:
 class _DescriptionOptionsMixin:
     """Mixin that injects per-option description and card layout into each option label."""
 
+    template_name = "forms/widgets/description_options.html"
+
     def __init__(
         self,
         *args: Any,
         descriptions: dict | None = None,
         metadata: dict | None = None,
+        collapse_unselected: bool = False,
         **kwargs: Any,
     ) -> None:
         """Prepare widget metadata."""
         super().__init__(*args, **kwargs)
         self.descriptions = descriptions or {}
         self.metadata = metadata or {}
+        self.collapse_unselected = collapse_unselected
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Add flag telling the template to render unselected options hidden."""
+        context = super().get_context(name, value, attrs)
+        widget_context = context["widget"]
+        collapse = False
+        if self.collapse_unselected:
+            options = [
+                option for _group, group_options, _index in widget_context["optgroups"] for option in group_options
+            ]
+            selected_count = sum(1 for option in options if option["selected"])
+            collapse = 0 < selected_count < len(options)
+        widget_context["collapse_unselected"] = collapse
+        return context
 
     def create_option(
         self,

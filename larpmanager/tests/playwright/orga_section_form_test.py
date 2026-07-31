@@ -34,6 +34,7 @@ from larpmanager.tests.utils import (submit_register,
                                      login_user,
                                      expect_normalized, fill_tinymce, check_feature, sidebar,
                                      get_modal_iframe, save_modal, _wait_lm_ready, char_dual_pick,
+                                     expand_options,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -313,6 +314,10 @@ def test_orga_section_form(pw_page: Any) -> None:
     # check it is visible
     go_to(page, live_server, "/test/register")
     sidebar(page, "Your registration")
+    # the registration already exists: unselected tickets start collapsed
+    expand_options(page)
     expect(page.get_by_role("cell", name="faaaaacc")).to_be_visible()
+    # the show/hide options link sits between the tickets and the question description
+    expect_normalized(page, page.locator("#register_form"), "ticket (*) standard depends")
     expect_normalized(page, page.locator("#register_form"),
-                      "ticket (*) standard depends your registration ticket faaaaacc needs preferences")
+                      "your registration ticket faaaaacc needs preferences")
