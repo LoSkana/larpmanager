@@ -1351,6 +1351,7 @@ def get_reduced_available_count(run: Any) -> int:
         run=run,
         ticket__tier=TicketTier.PATRON,
         cancellation_date__isnull=True,
+        tot_payed__gt=0,
     ).count()
 
     # Calculate available reduced slots: floor(patron_count * ratio / 10) - used_reduced
