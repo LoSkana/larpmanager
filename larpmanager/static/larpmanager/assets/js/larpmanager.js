@@ -846,16 +846,19 @@ function setupConditionalFields() {
         var $controller = $(this);
         var controllerName = $controller.attr('data-conditional-controller');
 
-        // Radio widgets repeat the attribute on every input: bind the group once
+        // Radio widgets repeat the attribute on their wrapper and on every input:
+        // ignore the wrapper, and bind the input group only once
+        var $radios = $('input[type="radio"][data-conditional-controller="' + controllerName + '"]');
+        var isRadio = $radios.length > 0;
+        if (isRadio && !$controller.is(':radio')) {
+            return;
+        }
         if (initializedControllers[controllerName]) {
             return;
         }
         initializedControllers[controllerName] = true;
 
-        var isRadio = $controller.is(':radio');
-        var $group = isRadio
-            ? $('input[type="radio"][data-conditional-controller="' + controllerName + '"]')
-            : $controller;
+        var $group = isRadio ? $radios : $controller;
 
         function updateVisibility() {
             var selectedValue = isRadio ? $group.filter(':checked').val() : $controller.val();
