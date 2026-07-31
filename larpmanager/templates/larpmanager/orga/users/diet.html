@@ -11,38 +11,39 @@
         <i>
         {% trans "Please remember that the information on this page was provided in confidence and must be treated with the utmost care. Share it only when strictly necessary and, where possible, anonymously." %}</i>
     </p>
-    <table class="go_datatable" force_buttons>
-        <thead>
-            <tr>
-                <th></th>
-                <th>{% trans "Player" %}</th>
-                <th>{% trans "Characters" %}</th>
-                <th>{% trans "Diet" %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for el in list %}
+    {% if list %}
+        <table class="go_datatable" force_buttons>
+            <thead>
                 <tr>
-                    <td class="member_cover">
-                        <div class="img_cover"
-                             style="background-image:url('{% if el.profile %}{{ el.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
-                        </div>
-                    </td>
-                    <td>{{ el.display_real }}</td>
-                    <td>
-                        {% if el.chars %}
-                            {% for ch in el.chars %}
-                                {% include "elements/comma.html" %}
-                                {{ ch }}
-                            {% endfor %}
-                        {% endif %}
-                    </td>
-                    <td>{{ el.diet }}</td>
+                    <th></th>
+                    <th>{% trans "Player" %}</th>
+                    <th>{% trans "Characters" %}</th>
+                    <th>{% trans "Diet" %}</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% if not list %}
+            </thead>
+            <tbody>
+                {% for el in list %}
+                    <tr>
+                        <td class="member_cover">
+                            <div class="img_cover"
+                                 style="background-image:url('{% if el.profile %}{{ el.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                            </div>
+                        </td>
+                        <td>{{ el.display_real }}</td>
+                        <td>
+                            {% if el.chars %}
+                                {% for ch in el.chars %}
+                                    {% include "elements/comma.html" %}
+                                    {{ ch }}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>{{ el.diet }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
         <p class="no-elements-available">
             {% trans "No dietary preferences have been submitted yet. They will appear here once participants provide them." %}
         </p>

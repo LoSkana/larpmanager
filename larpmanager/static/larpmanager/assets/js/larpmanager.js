@@ -475,17 +475,18 @@ function initSlugField() {
 
 // ========== Init: Toggles ==========
 
-// Show/hide target blocks via .my_toggle, scrolling into view and tracking select state.
 // Toggle the options hidden when editing an existing answer (only selected ones shown).
 function initCollapsedOptions() {
     $(document).on('click', '.opt-show-more', function (e) {
         e.preventDefault();
         var $link = $(this);
-        $link.siblings('.opt-collapsed').toggleClass('hide');
+        // options may be nested in optgroup wrappers, so search the whole widget container
+        $link.parent().find('.opt-collapsed').toggleClass('hide');
         $link.find('.sl-show, .sl-hide').toggleClass('hide');
     });
 }
 
+// Show/hide target blocks via .my_toggle, scrolling into view and tracking select state.
 function initToggles() {
     $(document).on("click", ".my_toggle", function() {
         var k = $(this).attr("tog");

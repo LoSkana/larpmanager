@@ -511,6 +511,21 @@ def click_option(input_locator):
     input_locator.locator("xpath=ancestor::label[1]").click()
 
 
+def expand_options(scope):
+    """Reveal the options hidden by the collapse-unselected choice widgets.
+
+    When a form edits an already saved registration or character, single and
+    multiple choice questions render only the selected options; the remaining
+    ones are hidden behind a "Show other options" link, and must be expanded
+    before they can be read or clicked. ``scope`` may be a page, a frame or a
+    locator; every still-collapsed link inside it is expanded."""
+    links = scope.locator(".opt-show-more:visible")
+    for index in range(links.count()):
+        link = links.nth(index)
+        if link.locator(".sl-show").is_visible():
+            link.click()
+
+
 def drag_reorder(page, source, target):
     """Drag a reorder handle onto a target row and persist the new order.
 

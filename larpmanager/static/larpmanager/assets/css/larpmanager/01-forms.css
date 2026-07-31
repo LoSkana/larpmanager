@@ -366,6 +366,11 @@ input[type="checkbox"].checkbox_single {
   margin: 0;
 }
 
+/* beats the .my-checkbox-class > div / .reg-radio-class > div display rules */
+.opt-collapsed.hide {
+  display: none;
+}
+
 .opt-show-more {
   display: inline-block;
   margin: 0.2em 0 0.4em;
