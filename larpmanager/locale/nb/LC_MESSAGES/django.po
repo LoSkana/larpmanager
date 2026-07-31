@@ -3890,6 +3890,9 @@ msgstr "Stifterkarakter"
 msgid "Hide not available"
 msgstr "Skjul utilgjengelige"
 
+msgid "Hide other options"
+msgstr "Skjul andre alternativer"
+
 msgid "Historic residence"
 msgstr "Historisk bolig"
 
@@ -3973,6 +3976,9 @@ msgstr "Gå gjennom alle medlemmer"
 
 msgid "Set up quest types"
 msgstr "Sett opp Quest-typer"
+
+msgid "Show other options"
+msgstr "Vis andre alternativer"
 
 msgid "The trash is empty"
 msgstr "Papirkurven er tom"
@@ -9883,6 +9889,12 @@ msgstr ""
 "til den første milepælen."
 
 msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Ingen deltakerdata er tilgjengelige ennå. De vises her når brukere "
+"registrerer seg."
+
+msgid ""
 "No registered participants have completed any workshops for this event yet."
 msgstr ""
 "Det er foreløpig ingen registrerte deltakere som har fullført noen av "
@@ -11992,6 +12004,13 @@ msgstr ""
 "Kostnadene vil vises her så snart arrangementene er opprettet og "
 "gjennomført."
 
+msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Ingen Safety-informasjon er sendt inn ennå. Den vises her når deltakerne "
+"oppgir den."
+
 #, python-format
 msgid ""
 "Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
@@ -12400,6 +12419,13 @@ msgid ""
 msgstr ""
 "Administrer tilpassede tekster som brukes i hele organisasjonen, for "
 "eksempel i e-poster og på registreringssider, for hvert språk"
+
+msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Ingen kostholdspreferanser er sendt inn ennå. De vises her når deltakerne "
+"oppgir dem."
 
 msgid ""
 "No form fields defined yet. Add a field to collect information from players "

@@ -384,7 +384,10 @@ class RegistrationForm(BaseRegistrationForm):
         ticket_field_kwargs: dict = {"required": True, "choices": ticket_choices}
         if self._use_inline_widgets_v20:
             ticket_field_kwargs["widget"] = DescriptionRadioSelect(
-                attrs={"class": "my-radio-class"}, descriptions=ticket_descriptions, metadata=ticket_metadata
+                attrs={"class": "my-radio-class"},
+                descriptions=ticket_descriptions,
+                metadata=ticket_metadata,
+                collapse_unselected=self._is_edit,
             )
         self.fields["ticket"] = forms.ChoiceField(**ticket_field_kwargs)
 
@@ -936,6 +939,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 attrs={"class": "my-radio-class"},
                 descriptions=orga_descriptions,
                 metadata=orga_metadata,
+                collapse_unselected=self._is_edit,
             )
         self.fields["ticket"] = forms.ChoiceField(**orga_ticket_kwargs)
 

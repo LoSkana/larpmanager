@@ -515,15 +515,48 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
     return metadata
 
 
-# Root-relative src/href attributes (excludes protocol-relative "//host/path")
-_RELATIVE_URL_RE = re.compile(r"""(<[^>]+\s(?:src|href)\s*=\s*["'])(/(?!/)[^"']*)(["'])""", re.IGNORECASE)
+# A whole html tag, rewritten one at a time so every attribute inside it is considered
+_TAG_RE = re.compile(r"<[^>]+>")
+
+# Root-relative single-value attributes (excludes protocol-relative "//host/path")
+_RELATIVE_URL_RE = re.compile(r"""(\s(?:src|href|poster|background)\s*=\s*["'])(/(?!/)[^"']*)(["'])""", re.IGNORECASE)
+
+# Srcset attributes, whose value is a comma separated list of candidates
+_RELATIVE_SRCSET_RE = re.compile(r"""(\ssrcset\s*=\s*["'])([^"']*)(["'])""", re.IGNORECASE)
+
+# Root-relative CSS url() references, in inline styles or <style> blocks
+_RELATIVE_CSS_URL_RE = re.compile(r"""(url\(\s*['"]?)(/(?!/)[^)'"]*)""", re.IGNORECASE)
+
+# Root-relative url at the start of a srcset candidate (excludes protocol-relative "//host/path")
+_SRCSET_CANDIDATE_RE = re.compile(r"(\A|,)(\s*)(/(?!/)[^\s,]*)")
+
+
+def _absolute_srcset(value: str, base_url: str) -> str:
+    """Prefix every root-relative candidate of a srcset value with the base url.
+
+    Values holding a data uri are left untouched: their comma separated base64
+    payload cannot be told apart from a candidate list, and may itself start
+    with a slash.
+    """
+    if "data:" in value.lower():
+        return value
+    return _SRCSET_CANDIDATE_RE.sub(lambda match: f"{match.group(1)}{match.group(2)}{base_url}{match.group(3)}", value)
+
+
+def _absolute_tag(tag: str, base_url: str) -> str:
+    """Absolutize every root-relative url attribute of a single html tag."""
+    tag = _RELATIVE_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}{match.group(3)}", tag)
+    return _RELATIVE_SRCSET_RE.sub(
+        lambda match: f"{match.group(1)}{_absolute_srcset(match.group(2), base_url)}{match.group(3)}", tag
+    )
 
 
 def absolute_email_urls(body: str, base_url: str) -> str:
-    """Rewrite root-relative src/href attributes to absolute URLs."""
+    """Rewrite root-relative links, media references and CSS urls to absolute urls."""
     if not body:
         return body
-    return _RELATIVE_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}{match.group(3)}", body)
+    body = _TAG_RE.sub(lambda match: _absolute_tag(match.group(0), base_url), body)
+    return _RELATIVE_CSS_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}", body)
 
 
 def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> EmailMultiAlternatives:

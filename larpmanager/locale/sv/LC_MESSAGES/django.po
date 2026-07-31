@@ -3890,6 +3890,9 @@ msgstr "Grundande karaktär"
 msgid "Hide not available"
 msgstr "Dölj otillgängliga"
 
+msgid "Hide other options"
+msgstr "Dölj andra alternativ"
+
 msgid "Historic residence"
 msgstr "Historisk bostad"
 
@@ -3973,6 +3976,9 @@ msgstr "Granska alla medlemmar"
 
 msgid "Set up quest types"
 msgstr "Ställ in Quest-typer"
+
+msgid "Show other options"
+msgstr "Visa andra alternativ"
 
 msgid "The trash is empty"
 msgstr "Papperskorgen är tom"
@@ -9852,6 +9858,12 @@ msgstr ""
 " den första milstolpen."
 
 msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Inga deltagaruppgifter finns tillgängliga ännu. De visas här när användarna "
+"registrerar sig."
+
+msgid ""
 "No registered participants have completed any workshops for this event yet."
 msgstr ""
 "Inga registrerade deltagare har ännu genomfört någon workshop inom ramen för"
@@ -11964,6 +11976,13 @@ msgstr ""
 "Inga evenemang med kostnader i LarpManager hittades. Kostnaderna kommer att "
 "visas här så snart evenemangen har skapats och genomförts."
 
+msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Ingen Safety-information har skickats in ännu. Den visas här när deltagarna "
+"har angett den."
+
 #, python-format
 msgid ""
 "Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
@@ -12371,6 +12390,13 @@ msgid ""
 msgstr ""
 "Hantera anpassade texter som används inom hela organisationen, till exempel "
 "i e-postmeddelanden och på registreringssidor, per språk"
+
+msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Inga kostpreferenser har skickats in ännu. De visas här när deltagarna har "
+"angett dem."
 
 msgid ""
 "No form fields defined yet. Add a field to collect information from players "

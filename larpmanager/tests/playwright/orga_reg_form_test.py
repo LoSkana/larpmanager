@@ -30,7 +30,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_date, go_to, login_orga, expect_normalized, submit_confirm, sidebar, \
-    get_modal_iframe, save_modal, drag_reorder
+    get_modal_iframe, save_modal, drag_reorder, expand_options
 
 pytestmark = pytest.mark.e2e
 
@@ -177,6 +177,8 @@ def signup(page: Any, live_server: Any) -> None:
 
     # check form
     sidebar(page, "Your registration")
+    # the registration already exists: unselected options start collapsed
+    expand_options(page)
     expect_normalized(page,
         page.locator("#register_form"),
         """
@@ -220,12 +222,10 @@ def check_reserve(page: Any, live_server: Any) -> None:
     # check filler is available
     go_to(page, live_server, "test/")
     sidebar(page, "Your registration")
-    expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
-        """
-        - row "Ticket (*) Standard 5€ sadsadsadsa Reserve Your registration ticket2":
-          - cell "Ticket (*)"
-          - cell "Standard 5€ sadsadsadsa Reserve Your registration ticket2":
-            - radio "Standard 5€ sadsadsadsa" [checked]
-            - radio "Reserve"
-        """
-    )
+    # the reserve ticket is not the selected one, so it starts collapsed
+    expand_options(page)
+    ticket_row = page.locator("#id_ticket_tr")
+    expect(ticket_row.get_by_role("radio", name="Standard 5€ sadsadsadsa")).to_be_checked()
+    expect(ticket_row.get_by_role("radio", name="Reserve")).not_to_be_checked()
+    # expanded options are part of the visible text of the row
+    expect_normalized(page, ticket_row, "Ticket (*) Standard 5€ sadsadsadsa Reserve")

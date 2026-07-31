@@ -3890,6 +3890,9 @@ msgstr "Postać założycielska"
 msgid "Hide not available"
 msgstr "Ukryj niedostępne"
 
+msgid "Hide other options"
+msgstr "Ukryj inne opcje"
+
 msgid "Historic residence"
 msgstr "Historyczna rezydencja"
 
@@ -3973,6 +3976,9 @@ msgstr "Przeglądaj wszystkich członków"
 
 msgid "Set up quest types"
 msgstr "Skonfiguruj typy Quest"
+
+msgid "Show other options"
+msgstr "Pokaż inne opcje"
 
 msgid "The trash is empty"
 msgstr "Kosz jest pusty"
@@ -9932,6 +9938,12 @@ msgstr ""
 "żeby dodać pierwszy etap."
 
 msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Brak danych uczestników. Pojawią się tutaj, gdy użytkownicy się "
+"zarejestrują."
+
+msgid ""
 "No registered participants have completed any workshops for this event yet."
 msgstr ""
 "Żaden z zarejestrowanych uczestników nie ukończył jeszcze żadnego warsztatu "
@@ -12056,6 +12068,13 @@ msgstr ""
 "Nie znaleziono żadnych wydarzeń z kosztami w LarpManagerze. Koszty pojawią "
 "się tutaj, gdy wydarzenia zostaną utworzone i zrealizowane."
 
+msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Nie przesłano jeszcze żadnych informacji dotyczących Safety. Pojawią się "
+"tutaj, gdy uczestnicy je podadzą."
+
 #, python-format
 msgid ""
 "Pay the %(year)d annual membership fee of %(amount)s%(currency)s, required "
@@ -12463,6 +12482,13 @@ msgid ""
 msgstr ""
 "Zarządzaj niestandardowymi tekstami używanymi w całej organizacji, takimi "
 "jak wiadomości e-mail i strony rejestracji, w poszczególnych językach"
+
+msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Nie przesłano jeszcze żadnych preferencji żywieniowych. Pojawią się tutaj, "
+"gdy uczestnicy je podadzą."
 
 msgid ""
 "No form fields defined yet. Add a field to collect information from players "

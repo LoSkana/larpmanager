@@ -11,31 +11,41 @@
         <i>
         {% trans "Please remember that the information on this page was provided in confidence and must be treated with the utmost care. Share it only when strictly necessary and, where possible, anonymously." %}</i>
     </p>
-    <table>
-        <tr>
-            <th></th>
-            <th>{% trans "Player" %}</th>
-            <th>{% trans "Characters" %}</th>
-            <th>{% trans "Safety" %}</th>
-        </tr>
-        {% for el in list %}
-            <tr>
-                <td class="member_cover">
-                    <div class="img_cover"
-                         style="background-image:url('{% if el.profile %}{{ el.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
-                    </div>
-                </td>
-                <td>{{ el.display_real }}</td>
-                <td>
-                    {% if el.chars %}
-                        {% for ch in el.chars %}
-                            {% include "elements/comma.html" %}
-                            {{ ch }}
-                        {% endfor %}
-                    {% endif %}
-                </td>
-                <td>{{ el.safety }}</td>
-            </tr>
-        {% endfor %}
-    </table>
+    {% if list %}
+        <table class="go_datatable" force_buttons>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>{% trans "Player" %}</th>
+                    <th>{% trans "Characters" %}</th>
+                    <th>{% trans "Safety" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for el in list %}
+                    <tr>
+                        <td class="member_cover">
+                            <div class="img_cover"
+                                 style="background-image:url('{% if el.profile %}{{ el.profile_thumb.url }}{% else %}{% static 'larpmanager/assets/blank-avatar.svg' %}{% endif %}')">
+                            </div>
+                        </td>
+                        <td>{{ el.display_real }}</td>
+                        <td>
+                            {% if el.chars %}
+                                {% for ch in el.chars %}
+                                    {% include "elements/comma.html" %}
+                                    {{ ch }}
+                                {% endfor %}
+                            {% endif %}
+                        </td>
+                        <td>{{ el.safety }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="no-elements-available">
+            {% trans "No safety information has been submitted yet. It will appear here once participants provide it." %}
+        </p>
+    {% endif %}
 {% endblock content %}
