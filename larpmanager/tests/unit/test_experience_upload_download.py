@@ -21,7 +21,9 @@
 """Tests for experience CSV export/import, including the experience system column"""
 
 from typing import Any
+from unittest import mock
 
+import pandas as pd
 import pytest
 
 from larpmanager.cache.experience import clear_event_exp_systems_cache
@@ -40,7 +42,7 @@ from larpmanager.utils.io.download import (
     export_criterions,
     export_deliveries,
 )
-from larpmanager.utils.io.restore import _FakeFile, _FakeForm
+from larpmanager.utils.io.restore import _FakeFile, _FakeForm, _preview_deliveries
 from larpmanager.utils.io.upload import (
     _ability_load,
     _assign_requirements,
@@ -173,6 +175,66 @@ class TestExperienceUploadDownload(BaseTestCase):
         self.assertEqual(row["amount"], 10)
         self.assertEqual(row["characters"], character.name)
         self.assertNotIn("system", headers)
+
+    def test_delivery_is_matched_ignoring_case(self) -> None:
+        """A delivery is updated even when the uploaded name differs only by case"""
+        _delivery_load(self.context, {"name": "first award", "amount": "10"})
+
+        result = _delivery_load(self.context, {"name": "First Award", "amount": "20"})
+
+        self.assertTrue(result.startswith("OK - Updated"))
+        self.assertEqual(DeliveryExp.objects.get(event=self.event, name="first award").amount, 20)
+        self.assertEqual(DeliveryExp.objects.filter(event=self.event).count(), 1)
+
+    def test_delivery_number_is_not_reassigned_on_update(self) -> None:
+        """The number of an existing delivery is kept, and the uploaded one is reported"""
+        _delivery_load(self.context, {"number": "7", "name": "first award", "amount": "10"})
+
+        result = _delivery_load(self.context, {"number": "9", "name": "first award", "amount": "20"})
+
+        self.assertIn("WARN - number kept as 7, ignoring the uploaded one: 9", result)
+        delivery = DeliveryExp.objects.get(event=self.event, name="first award")
+        self.assertEqual(delivery.number, 7)
+        self.assertEqual(delivery.amount, 20)
+
+    def test_unknown_column_is_reported_once_for_the_whole_file(self) -> None:
+        """An unrecognized column is dropped when the file is read, so it is reported only once"""
+        csv_text = "number,name,amount,event_id\n1,bonus,5,999\n2,malus,3,999\n"
+
+        logs = self._load_csv("exp_criterion", csv_text)
+
+        self.assertEqual(len([log for log in logs if "event_id" in log]), 1)
+        self.assertIn("WARN - columns ignored: event_id", logs[0])
+        parent_id = self.event.get_class_parent(CriterionExp).id
+        self.assertEqual(CriterionExp.objects.get(event=self.event, number=1).event_id, parent_id)
+
+    def test_criterion_row_is_rolled_back_on_failure(self) -> None:
+        """A row that fails midway leaves no half written criterion behind"""
+        first, second = self._writing_options()
+        criterion = CriterionExp.objects.create(event=self.event, number=1, name="bonus", system=self.system)
+        criterion.requirements.add(first, second)
+
+        row = {"number": "1", "name": "bonus", "amount": "5", "requirements": first.name}
+        with (
+            mock.patch("larpmanager.utils.io.upload.save_log", side_effect=RuntimeError("boom")),
+            pytest.raises(RuntimeError),
+        ):
+            _criterion_load(self.context, row)
+
+        criterion.refresh_from_db()
+        self.assertEqual(criterion.amount, 0)
+        self.assertEqual(
+            sorted(criterion.requirements.values_list("name", flat=True)), sorted([first.name, second.name])
+        )
+
+    def test_delivery_preview_matches_the_execution_ignoring_case(self) -> None:
+        """The restore preview reports an update when only the case of the name differs"""
+        _delivery_load(self.context, {"name": "first award", "amount": "10"})
+
+        section = _preview_deliveries(self.context, pd.DataFrame([{"name": "First Award", "amount": 20}]))
+
+        self.assertEqual(section["updates"], ["First Award"])
+        self.assertEqual(section["creates"], [])
 
     def test_criterion_relations_are_replaced_on_reupload(self) -> None:
         """Re-uploading a criterion replaces its relations instead of accumulating them"""

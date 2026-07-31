@@ -353,7 +353,11 @@ def _preview_criterions(context: dict, df: pd.DataFrame) -> dict:
 
 def _preview_deliveries(context: dict, df: pd.DataFrame) -> dict:
     event_id = context["event"].get_class_parent(DeliveryExp)
-    existing = set(DeliveryExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True))
+    # Names are matched case-insensitively, as the execution does
+    existing = {
+        name.lower()
+        for name in DeliveryExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True)
+    }
 
     creates, updates, skips = [], [], []
     for _idx, row in df.iterrows():
@@ -361,7 +365,7 @@ def _preview_deliveries(context: dict, df: pd.DataFrame) -> dict:
         if not name:
             skips.append("(empty): missing name")
             continue
-        (updates if name in existing else creates).append(name)
+        (updates if name.lower() in existing else creates).append(name)
 
     return _section(str(_("Deliveries")), creates, updates, skips)
 

@@ -32,6 +32,7 @@ import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.utils import timezone
 from PIL import Image
 
@@ -367,11 +368,12 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
     # Normalize column names to lowercase for validation
     input_dataframe.columns = [column.lower() for column in input_dataframe.columns]
 
-    # Validate that all columns are recognized
+    # Drop the columns that are not recognized, reporting them once instead of on every row
     not_recognized = [column for column in input_dataframe.columns if column.lower() not in allowed_column_names]
     logs = []
     if not_recognized:
         logs.append(f"WARN - columns ignored: {', '.join(not_recognized)}")
+        input_dataframe = input_dataframe.drop(columns=not_recognized)
 
     return input_dataframe, logs
 
@@ -1912,6 +1914,7 @@ def _apply_ability_field(
         logs.append(f"WARN - unknown column ignored: {field_name}")
 
 
+@transaction.atomic
 def _ability_load(context: dict, csv_row: dict) -> str:
     """Load ability data from CSV row for bulk import.
 
@@ -2277,6 +2280,7 @@ def _apply_criterion_field(
         logs.append(f"WARN - unknown column ignored: {field_name}")
 
 
+@transaction.atomic
 def _criterion_load(context: dict, csv_row: dict) -> str:
     """Load criterion data from CSV row for bulk import."""
     number, err = _get_row_number(csv_row)
@@ -2326,7 +2330,7 @@ def deliveries_load(context: dict, form: Form) -> list[str]:
     return processing_logs
 
 
-def _row_delivery_number(csv_row: dict, logs: list[str] | None = None) -> int | None:
+def _row_delivery_number(csv_row: dict, logs: list[str]) -> int | None:
     """Return the number requested by the row, None when missing or unparsable."""
     value = csv_row.get("number")
     if _is_missing(value) or _is_blank(value):
@@ -2334,14 +2338,12 @@ def _row_delivery_number(csv_row: dict, logs: list[str] | None = None) -> int | 
     try:
         return _to_int(value)
     except (TypeError, ValueError, ArithmeticError):
-        if logs is not None:
-            logs.append(f"WARN - invalid number value, assigned automatically: {value}")
+        logs.append(f"WARN - invalid number value, assigned automatically: {value}")
         return None
 
 
-def _free_delivery_number(parent_event: Any, csv_row: dict, logs: list[str]) -> int | None:
-    """Return the number requested by the row, only if not already taken by another delivery."""
-    number = _row_delivery_number(csv_row, logs)
+def _free_delivery_number(parent_event: Any, number: int | None, logs: list[str]) -> int | None:
+    """Return the requested number, only if not already taken by another delivery."""
     if number is None:
         return None
     if DeliveryExp.objects.filter(event=parent_event, number=number).exists():
@@ -2350,21 +2352,24 @@ def _free_delivery_number(parent_event: Any, csv_row: dict, logs: list[str]) -> 
     return number
 
 
-def _find_delivery(parent_event: Any, name: str, csv_row: dict, logs: list[str]) -> DeliveryExp | None:
+def _find_delivery(parent_event: Any, name: str, number: int | None, logs: list[str]) -> DeliveryExp | None:
     """Return the existing delivery the row refers to, None when it must be created.
 
     Delivery names are not unique, so when several share the uploaded name the number
     of the row selects which one is updated, falling back to the lowest numbered.
     """
-    matches = list(DeliveryExp.objects.filter(event=parent_event, name=name).order_by("number"))
+    matches = list(DeliveryExp.objects.filter(event=parent_event, name__iexact=name).order_by("number"))
     if not matches:
         return None
     if len(matches) == 1:
-        return matches[0]
+        chosen = matches[0]
+    else:
+        chosen = next((match for match in matches if match.number == number), matches[0])
+        logs.append(f"WARN - several deliveries named {name}, updated the one with number {chosen.number}")
 
-    number = _row_delivery_number(csv_row)
-    chosen = next((match for match in matches if match.number == number), matches[0])
-    logs.append(f"WARN - several deliveries named {name}, updated the one with number {chosen.number}")
+    # The number of an existing delivery is never reassigned from the file
+    if number is not None and number != chosen.number:
+        logs.append(f"WARN - number kept as {chosen.number}, ignoring the uploaded one: {number}")
     return chosen
 
 
@@ -2385,6 +2390,7 @@ def _apply_delivery_field(
         logs.append(f"WARN - unknown column ignored: {field_name}")
 
 
+@transaction.atomic
 def _delivery_load(context: dict, csv_row: dict) -> str:
     """Load delivery data from CSV row for bulk import."""
     name, err = _get_row_name(csv_row)
@@ -2395,15 +2401,16 @@ def _delivery_load(context: dict, csv_row: dict) -> str:
     parent_event = event.get_class_parent(DeliveryExp)
 
     logs = []
+    number = _row_delivery_number(csv_row, logs)
 
-    delivery = _find_delivery(parent_event, name, csv_row, logs)
+    delivery = _find_delivery(parent_event, name, number, logs)
     was_created = delivery is None
     if was_created:
         # Keep the uploaded number only on creation, and only when still available
         fields = {"system": _resolve_exp_system(event), "amount": 0}
-        number = _free_delivery_number(parent_event, csv_row, logs)
-        if number is not None:
-            fields["number"] = number
+        free_number = _free_delivery_number(parent_event, number, logs)
+        if free_number is not None:
+            fields["number"] = free_number
         delivery = DeliveryExp.objects.create(event=parent_event, name=name, **fields)
 
     for field_name, field_value in csv_row.items():

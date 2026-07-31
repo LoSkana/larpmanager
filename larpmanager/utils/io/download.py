@@ -985,8 +985,12 @@ def _get_column_names(context: dict) -> None:
         - columns: List of dicts with column names and descriptions
         - fields: Dict mapping field names to types (for registration type)
         - name: Name of the export type (for exp_abilitie type)
+        - extra_columns: List of columns accepted on upload but not shown in the template
 
     """
+    # Reset the columns accepted without being shown, so that they never survive another type
+    context["extra_columns"] = []
+
     # Handle registration data export with participant, ticket, and question columns
     if context["typ"] == "registration":
         _registration_column_names(context)
