@@ -42,12 +42,13 @@ from larpmanager.utils.io.download import (
     export_criterions,
     export_deliveries,
 )
-from larpmanager.utils.io.restore import _FakeFile, _FakeForm, _preview_deliveries
+from larpmanager.utils.io.restore import _FakeFile, _FakeForm, _preview_abilities, _preview_deliveries
 from larpmanager.utils.io.upload import (
     _ability_load,
     _assign_requirements,
     _criterion_load,
     _delivery_load,
+    abilities_load,
     criterions_load,
     deliveries_load,
 )
@@ -79,8 +80,12 @@ class TestExperienceUploadDownload(BaseTestCase):
         """Run a real CSV through the loader of the given upload type, as an upload would"""
         context = {**self.context, "typ": typ}
         form = _FakeForm(first=_FakeFile(csv_text.encode()))
-        loader = criterions_load if typ == "exp_criterion" else deliveries_load
-        return loader(context, form)
+        loaders = {
+            "exp_abilitie": abilities_load,
+            "exp_criterion": criterions_load,
+            "exp_deliverie": deliveries_load,
+        }
+        return loaders[typ](context, form)
 
     def _writing_options(self) -> tuple[Any, Any]:
         """Create a writing question with two options, usable as criterion requirements"""
@@ -133,6 +138,70 @@ class TestExperienceUploadDownload(BaseTestCase):
         ability = AbilityExp.objects.get(event=self.event, name="sword")
         self.assertEqual(ability.system_id, second.id)
         self.assertEqual(ability.cost, 3)
+
+    def test_ability_is_matched_ignoring_case(self) -> None:
+        """An ability is updated even when the uploaded name differs only by case"""
+        _ability_load(self.context, {"name": "sword", "cost": "3"})
+
+        result = _ability_load(self.context, {"name": "Sword", "cost": "5"})
+
+        self.assertTrue(result.startswith("OK - Updated"))
+        self.assertEqual(AbilityExp.objects.get(event=self.event, name="sword").cost, 5)
+        self.assertEqual(AbilityExp.objects.filter(event=self.event).count(), 1)
+
+    def test_ability_relations_are_kept_when_the_cell_is_empty(self) -> None:
+        """An empty ability relation cell keeps the stored relation instead of clearing it"""
+        first, _second = self._writing_options()
+        AbilityExp.objects.create(event=self.event, name="shield", number=2, system=self.system, cost=2)
+
+        _ability_load(self.context, {"name": "sword", "prerequisites": "shield", "requirements": first.name})
+        self._load_csv("exp_abilitie", "name,cost,prerequisites,requirements\nsword,4,,\n")
+
+        ability = AbilityExp.objects.get(event=self.event, name="sword")
+        self.assertEqual(ability.cost, 4)
+        self.assertEqual(list(ability.prerequisites.values_list("name", flat=True)), ["shield"])
+        self.assertEqual(list(ability.requirements.values_list("name", flat=True)), [first.name])
+
+    def test_ability_preview_matches_the_execution_ignoring_case(self) -> None:
+        """The restore preview reports an update when only the case of the ability name differs"""
+        _ability_load(self.context, {"name": "sword", "cost": "3"})
+
+        section = _preview_abilities(self.context, pd.DataFrame([{"name": "Sword", "cost": 5}]))
+
+        self.assertEqual(section["updates"], ["Sword"])
+        self.assertEqual(section["creates"], [])
+
+    def test_ability_relations_are_replaced_when_the_cell_has_data(self) -> None:
+        """A filled ability relation cell replaces the stored relation instead of adding to it"""
+        first, second = self._writing_options()
+        ability = AbilityExp.objects.create(event=self.event, name="sword", number=1, system=self.system, cost=2)
+        ability.requirements.add(first)
+
+        _ability_load(self.context, {"name": "sword", "requirements": second.name})
+
+        self.assertEqual(list(ability.requirements.values_list("name", flat=True)), [second.name])
+
+    def test_ability_visible_round_trip(self) -> None:
+        """The visible flag is exported as text, and read back by an upload of the same file"""
+        AbilityExp.objects.create(event=self.event, name="sword", number=1, system=self.system, cost=2, visible=False)
+
+        self.assertIn("visible", self._columns("exp_abilitie"))
+        _name, headers, rows = export_abilities(self.context)[0]
+        row = dict(zip(headers, rows[0], strict=True))
+        self.assertEqual(row["visible"], "false")
+
+        self._load_csv("exp_abilitie", "name,visible\nsword,true\n")
+        self.assertTrue(AbilityExp.objects.get(event=self.event, name="sword").visible)
+
+    def test_ability_visible_is_kept_when_the_cell_is_empty(self) -> None:
+        """A blank visible cell keeps the stored flag instead of hiding the ability"""
+        AbilityExp.objects.create(event=self.event, name="sword", number=1, system=self.system, cost=2)
+
+        self._load_csv("exp_abilitie", "name,cost,visible\nsword,4,\n")
+
+        ability = AbilityExp.objects.get(event=self.event, name="sword")
+        self.assertEqual(ability.cost, 4)
+        self.assertTrue(ability.visible)
 
     def test_criterion_round_trip(self) -> None:
         """Criterion rows are imported and exported back with the same values"""

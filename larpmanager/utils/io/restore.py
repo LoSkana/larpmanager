@@ -316,13 +316,17 @@ def _preview_questtype(context: dict, df: pd.DataFrame) -> dict:
 
 def _preview_abilities(context: dict, df: pd.DataFrame) -> dict:
     event_id = context["event"].get_class_parent(AbilityExp)
-    existing = set(AbilityExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True))
+    # Names are matched case-insensitively, as the execution does
+    existing = {
+        name.lower()
+        for name in AbilityExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True)
+    }
 
     creates, updates, skips = [], [], []
     for _idx, row in df.iterrows():
         name = str(row.get("name", "")).strip()
         if name:
-            (updates if name in existing else creates).append(name)
+            (updates if name.lower() in existing else creates).append(name)
 
     return _section(str(_("Abilities")), creates, updates, skips)
 

@@ -1872,7 +1872,7 @@ def _assign_system(context: dict, element: Any, logs: list[str], value: str) -> 
 
 _ABILITY_PLAIN_FIELDS = frozenset({"descr"})
 
-# Columns whose empty value is meaningful: it clears the relation instead of being ignored
+# Criterion and delivery columns whose empty value is meaningful: it clears the relation instead of being ignored
 _RELATION_COLUMNS = frozenset({"prerequisites", "requirements", "factions", "characters"})
 
 
@@ -1891,19 +1891,27 @@ def _skip_row_field(field_name: str, field_value: object, handled: tuple[str, ..
     return field_name not in _RELATION_COLUMNS and _is_missing(field_value)
 
 
+def _skip_ability_field(field_name: str, field_value: object) -> bool:
+    """Return whether an ability CSV field must be skipped, because already handled or empty.
+
+    Unlike the other experience elements, an empty cell never clears an ability relation:
+    the stored prerequisites and requirements are kept, and only a filled cell replaces them.
+    """
+    if field_name in ("name", "cost"):
+        return True
+    return _is_missing(field_value) or _is_blank(field_value)
+
+
 def _apply_ability_field(
     context: dict, ability_element: AbilityExp, logs: list[str], field_name: str, field_value: object
 ) -> None:
     """Apply a single CSV field to an AbilityExp instance."""
-    if field_name not in _RELATION_COLUMNS and _is_blank(field_value):
-        return
-
     if field_name == "typ":
         _assign_type(context, ability_element, logs, field_value)
     elif field_name == "prerequisites":
-        _assign_prereq(context, ability_element, logs, _relation_value(field_value))
+        _assign_prereq(context, ability_element, logs, str(field_value))
     elif field_name == "requirements":
-        _assign_requirements(context, ability_element, logs, _relation_value(field_value))
+        _assign_requirements(context, ability_element, logs, str(field_value))
     elif field_name == "system":
         _assign_system(context, ability_element, logs, str(field_value))
     elif field_name == "visible":
@@ -1938,14 +1946,17 @@ def _ability_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    system = _resolve_exp_system(event)
+    parent_event = event.get_class_parent(AbilityExp)
 
-    # Get or create ability object using event's class parent
-    (ability_element, was_created) = AbilityExp.objects.get_or_create(
-        event=event.get_class_parent(AbilityExp),
-        name=name,
-        defaults={"system": system},
-    )
+    # Match the stored ability ignoring case, so that a different casing updates it instead of duplicating it
+    ability_element = AbilityExp.objects.filter(event=parent_event, name__iexact=name).order_by("number").first()
+    was_created = ability_element is None
+    if was_created:
+        ability_element = AbilityExp.objects.create(
+            event=parent_event,
+            name=name,
+            system=_resolve_exp_system(event),
+        )
 
     logs = []
 
@@ -1957,7 +1968,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
 
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        if _skip_row_field(field_name, field_value, ("name", "cost")):
+        if _skip_ability_field(field_name, field_value):
             continue
         _apply_ability_field(context, ability_element, logs, field_name, field_value)
 
@@ -2015,7 +2026,10 @@ def _assign_relation(
         logs.append(f"ERR - Too many {relation_name}: {len(raw_names)} exceeds limit of {MAX_COMMA_VALUES}")
         return
 
-    element.save()
+    # A relation needs a primary key, while the fields set so far are left to the final save of the row
+    if element.pk is None:
+        element.save()
+
     manager = getattr(element, relation_name)
     if replace:
         manager.clear()

@@ -888,6 +888,7 @@ def _ability_template(context: dict) -> Any:
         "descr": "Ability description",
         "prerequisites": "Prerequisite abilities, comma-separated",
         "requirements": "Character options, comma-separated",
+        "visible": "true",
         "system": "Experience system name",
     }
     column_names = list(context["columns"][0].keys())

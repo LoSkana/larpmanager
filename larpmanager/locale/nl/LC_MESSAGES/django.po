@@ -4185,7 +4185,7 @@ msgid "Signup cancellation"
 msgstr "Annulering inschrijving"
 
 msgid "The delivery's name"
-msgstr "De naam van de levering"
+msgstr "De naam van de zending"
 
 msgid "Use full-size image"
 msgstr "Gebruik de afbeelding op volledige grootte"
@@ -6856,7 +6856,7 @@ msgid "(Optional) Ability names, comma-separated"
 msgstr "(Optioneel) Vaardigheidsnamen, door komma's gescheiden"
 
 msgid "(Optional) Faction names, comma-separated"
-msgstr "(Optioneel) Factienamen, komma-gescheiden"
+msgstr "(Optioneel) Namen van facties, gescheiden door komma’s"
 
 #, python-format
 msgid "Ability types without abilities: %(list)s"
@@ -8642,7 +8642,8 @@ msgstr "Wil je op de hoogte blijven van onze komende evenementen?"
 
 msgid "(Optional) Character names it was awarded to, comma-separated"
 msgstr ""
-"(Optioneel) Namen van personages waaraan het is toegekend, komma-gescheiden"
+"(Optioneel) De namen van de personages waaraan het is toegekend, gescheiden "
+"door komma’s"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Optioneel) Karakteropties als vereisten, door komma's gescheiden"
@@ -9013,6 +9014,9 @@ msgstr "Waarschuwing: er is al een goedgekeurd lid met dezelfde naam!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Je kunt ook een tweede bestand uploaden met de registratieopties:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Optioneel) Of de functie zichtbaar is voor gebruikers: true of false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -11132,8 +11136,8 @@ msgid ""
 "(Optional) The delivery's number, assigned automatically if missing or "
 "already taken"
 msgstr ""
-"(Optioneel) Het nummer van de levering, automatisch toegewezen als het "
-"ontbreekt of al in gebruik is"
+"(Optioneel) Het nummer van de levering; dit wordt automatisch toegewezen als"
+" het ontbreekt of al in gebruik is"
 
 msgid ""
 "Additional preferences, for random assignment when no solution is found "
@@ -12057,7 +12061,7 @@ msgid ""
 "Note that existing deliveries with the same name, will be overwritten with "
 "the uploaded data."
 msgstr ""
-"Let op: bestaande leveringen met dezelfde naam worden overschreven met de "
+"Let op: bestaande leveringen met dezelfde naam worden overschreven door de "
 "geüploade gegevens."
 
 msgid ""
@@ -12255,7 +12259,7 @@ msgid ""
 "Note that existing criterions with the same number, will be overwritten with"
 " the uploaded data."
 msgstr ""
-"Let op: bestaande criteria met hetzelfde nummer worden overschreven met de "
+"Let op: bestaande criteria met hetzelfde nummer worden overschreven door de "
 "geüploade gegevens."
 
 #, python-format

@@ -4185,7 +4185,7 @@ msgid "Signup cancellation"
 msgstr "Rekisteröitymisen peruutus"
 
 msgid "The delivery's name"
-msgstr "Toimituksen nimi"
+msgstr "Lähetyksen nimi"
 
 msgid "Use full-size image"
 msgstr "Käytä täysikokoista kuvaa"
@@ -6442,7 +6442,7 @@ msgid "Allows characters to have inventories"
 msgstr "Mahdollistaa hahmojen inventaarion"
 
 msgid "Amount of experience points delivered"
-msgstr "Jaettujen kokemuspisteiden määrä"
+msgstr "Annetut kokemuspisteet"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Äänestä uutta johtokuntaa!"
@@ -6855,7 +6855,7 @@ msgid "(Optional) Ability names, comma-separated"
 msgstr "(Valinnainen) Kykyjen nimet, pilkulla eroteltuina"
 
 msgid "(Optional) Faction names, comma-separated"
-msgstr "(Valinnainen) Ryhmittymien nimet pilkuilla eroteltuna"
+msgstr "(Valinnainen) Ryhmittymien nimet, pilkuilla erotettuina"
 
 #, python-format
 msgid "Ability types without abilities: %(list)s"
@@ -8591,7 +8591,7 @@ msgstr "Haluatko saada tietoa tulevista tapahtumistamme?"
 
 msgid "(Optional) Character names it was awarded to, comma-separated"
 msgstr ""
-"(Valinnainen) Hahmojen nimet, joille se myönnettiin, pilkuilla eroteltuna"
+"(Valinnainen) Hahmot, joille palkinto on myönnetty, pilkuilla erotettuina"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valinnainen) Hahmovaihtoehdot vaatimuksina, pilkulla eroteltuina"
@@ -8938,6 +8938,9 @@ msgstr "Varoitus: on jo hyväksytty jäsen, jolla on sama nimi!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Voit myös ladata toisen tiedoston ilmoittautumisvaihtoehtojen kanssa:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Valinnainen) Onko ominaisuus näkyvissä käyttäjille: true tai false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -10931,8 +10934,8 @@ msgid ""
 "(Optional) The delivery's number, assigned automatically if missing or "
 "already taken"
 msgstr ""
-"(Valinnainen) Toimituksen numero, joka määritetään automaattisesti, jos se "
-"puuttuu tai on jo käytössä"
+"(Valinnainen) Lähetyksen numero, joka annetaan automaattisesti, jos sitä ei "
+"ole ilmoitettu tai se on jo varattu"
 
 msgid ""
 "Additional preferences, for random assignment when no solution is found "
@@ -11843,8 +11846,8 @@ msgid ""
 "Note that existing deliveries with the same name, will be overwritten with "
 "the uploaded data."
 msgstr ""
-"Huomaa, että olemassa olevat samannimiset toimitukset korvataan ladatuilla "
-"tiedoilla."
+"Huomaa, että olemassa olevat toimitukset, joilla on sama nimi, korvataan "
+"ladatuilla tiedoilla."
 
 msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
@@ -12039,7 +12042,7 @@ msgid ""
 "Note that existing criterions with the same number, will be overwritten with"
 " the uploaded data."
 msgstr ""
-"Huomaa, että olemassa olevat samalla numerolla olevat kriteerit korvataan "
+"Huomaa, että olemassa olevat kriteerit, joilla on sama numero, korvataan "
 "ladatuilla tiedoilla."
 
 #, python-format

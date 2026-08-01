@@ -11408,6 +11408,9 @@ msgstr ""
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr ""
 
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr ""
+
 msgid "The criterion's number (unique identifier)"
 msgstr ""
 

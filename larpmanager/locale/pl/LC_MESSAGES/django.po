@@ -4185,7 +4185,7 @@ msgid "Signup cancellation"
 msgstr "Anulowanie rejestracji"
 
 msgid "The delivery's name"
-msgstr "Nazwa dostawy"
+msgstr "Nazwa przesyłki"
 
 msgid "Use full-size image"
 msgstr "Użyj obrazu w pełnym rozmiarze"
@@ -5556,7 +5556,7 @@ msgid "Membership Application Status"
 msgstr "Status wniosku o członkostwo"
 
 msgid "Name of the experience system"
-msgstr "Nazwa systemu doświadczenia"
+msgstr "Nazwa systemu doświadczeń"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Działanie: ADD, SUB, MUL, DIV"
@@ -6442,7 +6442,7 @@ msgid "Allows characters to have inventories"
 msgstr "Umożliwia postaciom posiadanie ekwipunku"
 
 msgid "Amount of experience points delivered"
-msgstr "Liczba przyznanych punktów doświadczenia"
+msgstr "Ilość przyznanych punktów doświadczenia"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Oddaj swój głos na nowy Zarząd!"
@@ -8617,7 +8617,8 @@ msgstr "Chcesz dostawać informacje o naszych nadchodzących wydarzeniach?"
 
 msgid "(Optional) Character names it was awarded to, comma-separated"
 msgstr ""
-"(Opcjonalnie) Nazwy postaci, którym przyznano punkty, oddzielone przecinkami"
+"(Opcjonalnie) Nazwy postaci, którym została przyznana, oddzielone "
+"przecinkami"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Opcjonalnie) Opcje postaci jako wymagania, oddzielone przecinkami"
@@ -8967,6 +8968,10 @@ msgstr ""
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Możesz również przesłać drugi plik z opcjami rejestracji:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr ""
+"(Opcjonalnie) Czy ta funkcja jest widoczna dla użytkowników: true lub false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -11004,8 +11009,8 @@ msgid ""
 "(Optional) The delivery's number, assigned automatically if missing or "
 "already taken"
 msgstr ""
-"(Opcjonalnie) Numer dostawy, przypisywany automatycznie, jeśli go brakuje "
-"lub jest już zajęty"
+"(Opcjonalnie) Numer przesyłki – zostanie przypisany automatycznie, jeśli go "
+"nie podasz lub jest już zajęty"
 
 msgid ""
 "Additional preferences, for random assignment when no solution is found "
@@ -11924,8 +11929,8 @@ msgid ""
 "Note that existing deliveries with the same name, will be overwritten with "
 "the uploaded data."
 msgstr ""
-"Pamiętaj, że istniejące dostawy o tej samej nazwie zostaną nadpisane "
-"przesłanymi danymi."
+"Pamiętaj, że istniejące dostawy o tej samej nazwie zostaną nadpisane danymi,"
+" które wrzucisz."
 
 msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
@@ -12122,7 +12127,7 @@ msgid ""
 " the uploaded data."
 msgstr ""
 "Pamiętaj, że istniejące kryteria o tym samym numerze zostaną nadpisane "
-"przesłanymi danymi."
+"danymi, które wrzucisz."
 
 #, python-format
 msgid ""

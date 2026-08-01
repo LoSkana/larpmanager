@@ -5556,7 +5556,7 @@ msgid "Membership Application Status"
 msgstr "Status för medlemsansökan"
 
 msgid "Name of the experience system"
-msgstr "Erfarenhetssystemets namn"
+msgstr "Namn på erfarenhetssystemet"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operation: ADD, SUB, MUL, DIV"
@@ -6442,7 +6442,7 @@ msgid "Allows characters to have inventories"
 msgstr "Tillåter karaktärer att ha inventarier"
 
 msgid "Amount of experience points delivered"
-msgstr "Antal utdelade erfarenhetspoäng"
+msgstr "Antal tilldelade erfarenhetspoäng"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Lägg din röst på den nya direktionen!"
@@ -6855,7 +6855,7 @@ msgid "(Optional) Ability names, comma-separated"
 msgstr "(Valfritt) Namn på förmågor, kommaseparerade"
 
 msgid "(Optional) Faction names, comma-separated"
-msgstr "(Valfritt) Fraktionsnamn, kommaseparerade"
+msgstr "(Valfritt) Fraktionsnamn, åtskilda med kommatecken"
 
 #, python-format
 msgid "Ability types without abilities: %(list)s"
@@ -7039,7 +7039,7 @@ msgid "Select which form this question belongs to"
 msgstr "Välj vilket formulär denna fråga tillhör"
 
 msgid "The criterion's number (unique identifier)"
-msgstr "Kriteriets nummer (unik identifierare)"
+msgstr "Kriteriets nummer (unikt identifieringsnummer)"
 
 msgid "The member associated with this membership"
 msgstr "Den medlem som är associerad med detta medlemskap"
@@ -8581,7 +8581,9 @@ msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Vill du få information om våra kommande evenemang?"
 
 msgid "(Optional) Character names it was awarded to, comma-separated"
-msgstr "(Valfritt) Karaktärsnamn som det tilldelades till, kommaseparerade"
+msgstr ""
+"(Valfritt) Namn på karaktärer som utmärkelsen tilldelats, separerade med "
+"kommatecken"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valfritt) Karaktärsalternativ som krav, kommaseparerade"
@@ -8916,6 +8918,9 @@ msgstr "Varning: det finns redan en godkänd medlem med samma namn!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Du kan också ladda upp en andra fil med registreringsalternativen:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Valfritt) Om funktionen är synlig för användarna: true eller false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -10911,8 +10916,8 @@ msgid ""
 "(Optional) The delivery's number, assigned automatically if missing or "
 "already taken"
 msgstr ""
-"(Valfritt) Leveransens nummer, tilldelas automatiskt om det saknas eller "
-"redan används"
+"(Valfritt) Leveransnumret, som tilldelas automatiskt om det saknas eller "
+"redan är upptaget"
 
 msgid ""
 "Additional preferences, for random assignment when no solution is found "
@@ -11832,7 +11837,7 @@ msgid ""
 "the uploaded data."
 msgstr ""
 "Observera att befintliga leveranser med samma namn kommer att skrivas över "
-"med uppladdade data."
+"med de uppladdade uppgifterna."
 
 msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
@@ -12029,7 +12034,7 @@ msgid ""
 " the uploaded data."
 msgstr ""
 "Observera att befintliga kriterier med samma nummer kommer att skrivas över "
-"med uppladdade data."
+"med de uppladdade uppgifterna."
 
 #, python-format
 msgid ""

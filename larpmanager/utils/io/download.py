@@ -937,6 +937,7 @@ def _exp_column_names(context: dict) -> None:
             "descr": _("(Optional) The ability description"),
             "prerequisites": _("(Optional) Other abilities as prerequisite, comma-separated"),
             "requirements": _("(Optional) Character options as requirements, comma-separated"),
+            "visible": _("(Optional) Whether the ability is visible to users: true or false"),
         }
         context["name"] = "Ability"
     elif context["typ"] == "exp_criterion":
@@ -1301,6 +1302,11 @@ def _system_cell(element: Any) -> str:
     return element.system.name if element.system else ""
 
 
+def _visible_cell(element: Any) -> str:
+    """Return the visible flag of an element as the lowercase text the upload accepts."""
+    return "true" if element.visible else "false"
+
+
 def export_abilities(context: Any) -> Any:
     """Export abilities data for an event.
 
@@ -1312,7 +1318,7 @@ def export_abilities(context: Any) -> Any:
               where keys are column headers and values are ability data rows
 
     """
-    column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
+    column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements", "visible"]
     multiple_systems = _add_system_header(context, column_headers)
 
     ability_queryset = (
@@ -1331,6 +1337,7 @@ def export_abilities(context: Any) -> Any:
             ability.descr,
             ", ".join([prereq.name for prereq in ability.prerequisites.all()]),
             ", ".join([req.name for req in ability.requirements.all()]),
+            _visible_cell(ability),
         ]
         if multiple_systems:
             row_data.append(_system_cell(ability))
