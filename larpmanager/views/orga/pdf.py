@@ -26,7 +26,8 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.character import get_event_cache_all
+from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable

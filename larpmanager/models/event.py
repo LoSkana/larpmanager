@@ -332,6 +332,7 @@ class Event(UuidMixin, BaseModel):
             "systemexppooltypeci",
             "writingquestion",
             "writingoption",
+            "relationshiptag",
         ]
 
         # Check if inheritance conditions are met

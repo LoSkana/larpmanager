@@ -25,7 +25,7 @@ import logging
 from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Exists, Model, OuterRef
+from django.db.models import Count, Exists, Model, OuterRef, Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
@@ -35,6 +35,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.rels import get_event_rels_cache
 from larpmanager.cache.text_fields import ALLOWED_TYPES, get_cache_text_field
+from larpmanager.cache.writing import get_cached_relationship_tags
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
@@ -55,6 +56,7 @@ from larpmanager.models.writing import (
     GuildMembershipStatus,
     Plot,
     Prologue,
+    RelationshipTag,
     SpeedLarp,
     Writing,
     replace_character_names,
@@ -330,6 +332,12 @@ def writing_list(  # noqa: C901, PLR0912 - Complex writing list building with fe
     # Add prerequisites prefetching for ability experience types
     if issubclass(writing_type, AbilityExp):
         context["list"] = context["list"].prefetch_related("prerequisites")
+
+    # Add the number of tagged relationship sides, to avoid a count query per tag
+    if issubclass(writing_type, RelationshipTag):
+        context["list"] = context["list"].annotate(
+            relationships_count=Count("relationships", filter=Q(relationships__deleted=None)),
+        )
 
     # Setup writing-specific context if writing elements exist
     if writing:
@@ -624,6 +632,17 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
     if "relationships" in context["features"]:
         for character in context["list"]:
             character.relationships_rels = event_relationships.get(character.id, {}).get("relationships_rels", [])
+
+        # Add per-tag relationship counts, when the config is enabled
+        context["writing_relationship_tags"] = get_event_config(
+            context["event"].id, "writing_relationship_tags", context=context
+        )
+        if context["writing_relationship_tags"]:
+            context["relationship_tags"] = get_cached_relationship_tags(context["event"])
+            for character in context["list"]:
+                character.relationship_tag_counts = event_relationships.get(character.id, {}).get(
+                    "relationship_tag_counts", {}
+                )
 
     # Add plot relationship data
     if "plot" in context["features"]:

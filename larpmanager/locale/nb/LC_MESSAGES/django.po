@@ -1622,6 +1622,9 @@ msgstr "Levert:"
 msgid "Surcharge"
 msgstr "Tilleggsavgift"
 
+msgid "Symmetric"
+msgstr "Symmetrisk"
+
 msgid "Tolerance"
 msgstr "Toleranse"
 
@@ -2416,6 +2419,9 @@ msgstr "Vis historikk"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tagged sides"
+msgstr "Taggede sider"
 
 msgid "Tech Support"
 msgstr "Teknisk støtte"
@@ -3767,6 +3773,9 @@ msgstr "Registreringsskjema"
 
 msgid "Registration info"
 msgstr "Informasjon om registrering"
+
+msgid "Relationship tags"
+msgstr "Relasjonstagger"
 
 msgid "Remaining credits"
 msgstr "Gjenværende kreditter"
@@ -8438,6 +8447,9 @@ msgstr ""
 msgid "Probability of showing the special page (out of thousands)."
 msgstr "Sannsynlighet for å vise spesialsiden (per tusen)."
 
+msgid "Symmetric tags apply to both characters in the relationship"
+msgstr "Symmetriske tagger brukes på begge karakterene i relasjonen"
+
 msgid "The question visibility to participants, allowed values are"
 msgstr "Spørsmålets synlighet for deltakerne, tillatte verdier er"
 
@@ -8732,6 +8744,9 @@ msgstr ""
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr ""
 "Administrer poolettiketter for gruppering av pools i karakterinventarer"
+
+msgid "Manage the tags that can be applied to character relationships"
+msgstr "Administrer taggene som kan brukes på karakterrelasjoner"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Administrer tildeling av token til deltakerne på dette arrangementet"
@@ -12487,6 +12502,13 @@ msgstr ""
 " inn opplysninger fra spillerne på karakterarket deres."
 
 msgid ""
+"No relationship tags have been defined yet. Use the button above to add tags"
+" such as love or rivalry."
+msgstr ""
+"Ingen relasjonstagger er definert ennå. Bruk knappen over for å legge til "
+"tagger som kjærlighet eller rivalisering."
+
+msgid ""
 "Percentage retained by the payment system. Enter the value as a number "
 "without the percentage symbol."
 msgstr ""
@@ -13554,6 +13576,13 @@ msgstr ""
 "pronomen, offentlig informasjon osv.) for karakterene de blir tildelt"
 
 msgid ""
+"If checked, applying this tag to a relationship also applies it to the other"
+" character's relationship back towards this one"
+msgstr ""
+"Hvis dette er krysset av, vil bruk av denne taggen på en relasjon også bruke"
+" den på den andre karakterens relasjon tilbake til denne"
+
+msgid ""
 "If you select one (or more) tickets, the question will only be shown to "
 "participants who have selected one of those tickets"
 msgstr ""
@@ -14287,6 +14316,15 @@ msgstr ""
 "Muliggjør sikker strømming av video-/lydinnhold via engangstokener. Hvert "
 "token kan bare brukes én gang, og sporer hvem som har fått tilgang til "
 "innholdet, når og fra hvor"
+
+msgid ""
+"If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "
+"character relationships, applied to both sides of the relationship when the "
+"tag is symmetric."
+msgstr ""
+"Hvis aktivert, lar det deg definere gjenbrukbare tagger (f.eks. kjærlighet, "
+"rivalisering) som kan brukes på karakterrelasjoner, og som brukes på begge "
+"sider av relasjonen når taggen er symmetrisk."
 
 msgid ""
 "You have submitted a payment, and it is being reviewed by the staff. You do "

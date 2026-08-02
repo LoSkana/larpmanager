@@ -31,6 +31,7 @@ from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
 from larpmanager.cache.registration import clear_registration_tickets_cache, get_registration_tickets
+from larpmanager.cache.writing import clear_relationship_tags_cache
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
 from larpmanager.models.form import REGISTRATION_APPLICABLE_TO_TYPE, RegistrationOption, RegistrationQuestion
 from larpmanager.models.registration import (
@@ -442,4 +443,6 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
         clear_event_button_cache(context["event"].id)
     if action.config.get("tickets"):
         clear_registration_tickets_cache(context["event"].id)
+    if action.config.get("relationship_tags"):
+        clear_relationship_tags_cache(context["event"].get_class_parent(model_class).id)
     return JsonResponse({"ok": True})

@@ -34,6 +34,7 @@ from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
+from larpmanager.utils.core.clone_guard import is_clone_active
 from larpmanager.utils.core.common import _validate_and_fetch_objects
 from larpmanager.utils.larpmanager.tasks import background_auto
 
@@ -504,6 +505,16 @@ def _build_character_relations(char: Character) -> dict[str, Any]:
     return relationships_rels
 
 
+def _build_relationship_tag_counts(char: Character) -> dict[str, int]:
+    """Count, per relationship tag, how many of this character's direct relationships carry it."""
+    character_relationships = Relationship.objects.filter(deleted=None, source=char).prefetch_related("tags")
+    counts: dict[str, int] = {}
+    for relationship in character_relationships:
+        for tag in relationship.tags.all():
+            counts[tag.uuid] = counts.get(tag.uuid, 0) + 1
+    return counts
+
+
 def get_event_char_rels(char: Character, features: dict[str, Any], event: Event) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
@@ -548,6 +559,9 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
         # Handle character-to-character relationships if relationships feature is enabled
         if "relationships" in features:
             relations["relationships_rels"] = _build_character_relations(char)
+
+            if get_event_config(event.id, "writing_relationship_tags"):
+                relations["relationship_tag_counts"] = _build_relationship_tag_counts(char)
 
         # Handle speedlarp relationships if speedlarp feature is enabled
         if "speedlarp" in features:
@@ -905,6 +919,67 @@ def refresh_event_questtype_relationships(quest_type: QuestType) -> None:
 
     # Update the cache with the refreshed questtype data
     update_cache_section(quest_type.event_id, "questtypes", quest_type.id, quest_type_relationship_data)
+
+
+def on_relationship_tags_m2m_changed(sender: type, **kwargs: Any) -> None:  # noqa: ARG001
+    """Refresh cached relationships when the tags of a relationship change.
+
+    Tags are set after the relationship is saved. Symmetric tags are mirrored onto
+    the inverse relationship, so the target character stats are refreshed too.
+    """
+    action = kwargs.pop("action", None)
+    if is_clone_active():
+        return
+
+    instance = kwargs.pop("instance", None)
+    reverse = kwargs.pop("reverse", False)
+
+    # a reverse clear reports an empty pk_set, so the affected relationships are captured beforehand
+    if action == "pre_clear":
+        if reverse:
+            instance.cleared_relationship_ids = list(instance.relationships.values_list("pk", flat=True))
+        return
+
+    if action not in ["post_add", "post_remove", "post_clear"]:
+        return
+
+    if not reverse:
+        # instance is a Relationship
+        _refresh_relationship_tag_counts([instance])
+        return
+
+    # instance is a RelationshipTag, pk_set holds the affected relationship ids
+    pk_set = kwargs.pop("pk_set", None)
+    if pk_set is None:
+        pk_set = getattr(instance, "cleared_relationship_ids", [])
+    _refresh_relationship_tag_counts(
+        Relationship.objects.filter(pk__in=pk_set).select_related("source", "target"),
+    )
+
+
+def collect_relationship_tag_characters(tag: Any) -> list:
+    """Return the characters whose cached stats depend on the given relationship tag."""
+    return _relationship_characters(tag.relationships.select_related("source", "target"))
+
+
+def refresh_characters_relationships(characters: Any) -> None:
+    """Refresh cached relationships for each of the given characters."""
+    for character in characters:
+        refresh_character_relationships(character)
+
+
+def _relationship_characters(relationships: Any) -> list:
+    """Return the distinct characters on either side of the given relationships."""
+    characters = {}
+    for relationship in relationships:
+        characters[relationship.source_id] = relationship.source
+        characters[relationship.target_id] = relationship.target
+    return list(characters.values())
+
+
+def _refresh_relationship_tag_counts(relationships: Any) -> None:
+    """Refresh cached stats for both characters of each given relationship."""
+    refresh_characters_relationships(_relationship_characters(relationships))
 
 
 # Background tasks for cache updates
