@@ -64,7 +64,9 @@ from larpmanager.utils.io.download import (
     export_abilities,
     export_character_configs,
     export_character_form,
+    export_criterions,
     export_data,
+    export_deliveries,
     export_event,
     export_registration_form,
     export_tickets,
@@ -641,6 +643,9 @@ def _prepare_backup(context: dict) -> HttpResponse:
     # Export experience/abilities data if feature is enabled
     if "experience" in context["features"]:
         export_files.extend(export_abilities(context))
+        export_files.extend(export_deliveries(context))
+        # Exported regardless of the criterions config, so that backup and restore stay symmetric
+        export_files.extend(export_criterions(context))
 
     # Export quest builder data if feature is enabled
     if "questbuilder" in context["features"]:
@@ -833,6 +838,10 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
         exports = _rule_template(context)
     elif upload_type == "exp_modifier":
         exports = _modifier_template(context)
+    elif upload_type == "exp_criterion":
+        exports = _criterion_template(context)
+    elif upload_type == "exp_deliverie":
+        exports = _delivery_template(context)
     else:
         # Generate generic form template for other data types
         exports = _form_template(context)
@@ -877,15 +886,13 @@ def _ability_template(context: dict) -> Any:
         "cost": "Ability cost",
         "typ": "Ability type",
         "descr": "Ability description",
-        "prerequisites": "Ability prerequisite, comma-separated",
+        "prerequisites": "Prerequisite abilities, comma-separated",
         "requirements": "Character options, comma-separated",
+        "visible": "true",
+        "system": "Experience system name",
     }
     column_names = list(context["columns"][0].keys())
-    example_row_values = []
-    for field_name, example_value in field_example_values.items():
-        if field_name not in column_names:
-            continue
-        example_row_values.append(example_value)
+    example_row_values = [field_example_values.get(column_name, "") for column_name in column_names]
     export_data.append(("abilities", column_names, [example_row_values]))
     return export_data
 
@@ -901,7 +908,7 @@ def _rule_template(context: dict) -> Any:
         "order": "1",
     }
     column_names = list(context["columns"][0].keys())
-    example_row = [field_example_values[f] for f in field_example_values if f in column_names]
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
     return [("rules", column_names, [example_row])]
 
 
@@ -916,8 +923,41 @@ def _modifier_template(context: dict) -> Any:
         "order": "1",
     }
     column_names = list(context["columns"][0].keys())
-    example_row = [field_example_values[f] for f in field_example_values if f in column_names]
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
     return [("modifiers", column_names, [example_row])]
+
+
+def _criterion_template(context: dict) -> Any:
+    """Generate template for criterion uploads with example data."""
+    field_example_values = {
+        "number": "1",
+        "name": "Criterion name",
+        "operation": "ADD",
+        "amount": "10",
+        "prerequisites": "Prerequisite abilities, comma-separated",
+        "requirements": "Character options, comma-separated",
+        "factions": "Factions name, comma-separated",
+        "order": "1",
+        "system": "Experience system name",
+    }
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("criterions", column_names, [example_row])]
+
+
+def _delivery_template(context: dict) -> Any:
+    """Generate template for delivery uploads with example data."""
+    field_example_values = {
+        "number": "1",
+        "name": "Delivery name",
+        "amount": "10",
+        "characters": "Characters name, comma-separated",
+        "order": "1",
+        "system": "Experience system name",
+    }
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("deliveries", column_names, [example_row])]
 
 
 def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]]:

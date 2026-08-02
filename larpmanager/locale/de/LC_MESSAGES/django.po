@@ -1736,8 +1736,14 @@ msgstr "Kontaktiere uns"
 msgid "Containers"
 msgstr "Container"
 
+msgid "Criterions"
+msgstr "Kriterien"
+
 msgid "Deleted on"
 msgstr "Gelöscht am"
+
+msgid "Deliveries"
+msgstr "Lieferungen"
 
 msgid "Easter egg"
 msgstr "Osterei"
@@ -4178,6 +4184,9 @@ msgstr "Ergebnisse nicht vorhanden"
 msgid "Signup cancellation"
 msgstr "Anmeldungskündigung"
 
+msgid "The delivery's name"
+msgstr "Der Name der Lieferung"
+
 msgid "Use full-size image"
 msgstr "Bild in voller Größe verwenden"
 
@@ -4390,6 +4399,9 @@ msgstr "Geschäftsbedingungen"
 
 msgid "Terms and conditions"
 msgstr "Geschäftsbedingungen"
+
+msgid "The criterion's name"
+msgstr "Der Name des Kriteriums"
 
 msgid "The outflow category"
 msgstr "Die Ausgabenkategorie"
@@ -5543,6 +5555,9 @@ msgstr "Ich verstehe - Inhalt aufrufen"
 msgid "Membership Application Status"
 msgstr "Status des Mitgliedsantrags"
 
+msgid "Name of the experience system"
+msgstr "Name des Erfahrungssystems"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operation: ADD, SUB, MUL, DIV"
 
@@ -6426,6 +6441,9 @@ msgstr "Wird am Ende aller gesendeten Mails hinzugefügt"
 msgid "Allows characters to have inventories"
 msgstr "Erlaubt Charakteren, Inventare zu haben"
 
+msgid "Amount of experience points delivered"
+msgstr "Anzahl der gutgeschriebenen Erfahrungspunkte"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Gib deine Stimme für den neuen Vorstand ab!"
 
@@ -6839,6 +6857,9 @@ msgstr "wird auf der Hauptseite der Veranstaltung angezeigt"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Optional) Ability-Namen, durch Komma getrennt"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Optional) Fraktionsnamen, durch Kommas getrennt"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Fähigkeitstypen ohne Fähigkeiten: %(list)s"
@@ -7019,6 +7040,9 @@ msgstr "Überprüfe Nutzer mit anstehenden Event-Terminen:"
 
 msgid "Select which form this question belongs to"
 msgstr "Wähle, zu welchem Formular diese Frage gehört"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Die Nummer des Kriteriums (eindeutige Kennung)"
 
 msgid "The member associated with this membership"
 msgstr "Das Mitglied, das mit dieser Mitgliedschaft verbunden ist"
@@ -8658,6 +8682,11 @@ msgid "Would you like to receive updates about our upcoming events?"
 msgstr ""
 "Möchtest du über unsere kommenden Veranstaltungen auf dem Laufenden bleiben?"
 
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Optional) Namen der Charaktere, an die es vergeben wurde, durch Kommas "
+"getrennt"
+
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Optional) Charakteroptionen als Anforderungen, durch Komma getrennt"
 
@@ -9056,6 +9085,10 @@ msgstr ""
 msgid "You can also upload a second file with the registration options:"
 msgstr ""
 "Du kannst auch eine zweite Datei mit den Registrierungsoptionen hochladen:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr ""
+"(Optional) Ob die Funktion für Benutzer sichtbar ist: „true“ oder „false“"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -11219,6 +11252,13 @@ msgstr ""
 "%(character)s beizutreten"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Optional) Die Liefernummer, die automatisch vergeben wird, falls sie fehlt "
+"oder bereits vergeben ist"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -12137,6 +12177,13 @@ msgstr ""
 "auf die Schaltfläche oben, um ein neues Problem hinzuzufügen."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Beachte, dass bereits vorhandene Lieferungen mit demselben Namen durch die "
+"hochgeladenen Daten überschrieben werden."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -12326,6 +12373,13 @@ msgid ""
 msgstr ""
 "Es wurden noch keine Safety-Informationen angegeben. Sie werden hier "
 "angezeigt, sobald Teilnehmende sie angeben."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Beachte, dass bereits vorhandene Kriterien mit derselben Nummer durch die "
+"hochgeladenen Daten überschrieben werden."
 
 #, python-format
 msgid ""

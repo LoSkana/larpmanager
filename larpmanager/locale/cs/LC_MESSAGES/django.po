@@ -1736,8 +1736,14 @@ msgstr "Kontaktuj nás"
 msgid "Containers"
 msgstr "Kontejnery"
 
+msgid "Criterions"
+msgstr "Kritéria"
+
 msgid "Deleted on"
 msgstr "Odstraněno dne"
+
+msgid "Deliveries"
+msgstr "Dodávky"
 
 msgid "Easter egg"
 msgstr "Velikonoční vajíčko"
@@ -4178,6 +4184,9 @@ msgstr "Výsledky nejsou k dispozici"
 msgid "Signup cancellation"
 msgstr "Zrušení registrace"
 
+msgid "The delivery's name"
+msgstr "Název zásilky"
+
 msgid "Use full-size image"
 msgstr "Použít obrázek v plné velikosti"
 
@@ -4390,6 +4399,9 @@ msgstr "Podmínky a pravidla"
 
 msgid "Terms and conditions"
 msgstr "Podmínky a pravidla"
+
+msgid "The criterion's name"
+msgstr "Název kritéria"
 
 msgid "The outflow category"
 msgstr "Kategorie výdajů"
@@ -5543,6 +5555,9 @@ msgstr "Rozumím – Přejít k obsahu"
 msgid "Membership Application Status"
 msgstr "Stav žádosti o členství"
 
+msgid "Name of the experience system"
+msgstr "Název systému zkušeností"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operace: ADD, SUB, MUL, DIV"
 
@@ -6426,6 +6441,9 @@ msgstr "Přidáno na konec všech odeslaných e-mailů"
 msgid "Allows characters to have inventories"
 msgstr "Umožňuje postavám mít inventáře"
 
+msgid "Amount of experience points delivered"
+msgstr "Počet udělených zkušenostních bodů"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Hlasuj pro nové vedení!"
 
@@ -6837,6 +6855,9 @@ msgstr "se zobrazí na hlavní stránce události"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Nepovinné) Názvy schopností oddělené čárkou"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Volitelné) Názvy frakcí, oddělené čárkami"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Typy schopností bez schopností: %(list)s"
@@ -7017,6 +7038,9 @@ msgstr "Zkontroluj uživatele s nevyřízenými termíny událostí:"
 
 msgid "Select which form this question belongs to"
 msgstr "Vyber, do kterého formuláře tato otázka patří"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Číslo kritéria (jedinečný identifikátor)"
 
 msgid "The member associated with this membership"
 msgstr "Člen přidružený k tomuto členství"
@@ -8545,6 +8569,9 @@ msgstr "Nahraj podepsanou přihlášku k členství (PDF nebo obrázek)"
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Chceš dostávat informace o našich nadcházejících akcích?"
 
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr "(Volitelné) Jména postav, kterým byla udělena, oddělená čárkami"
+
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Nepovinné) Možnosti postav jako požadavky, oddělené čárkou"
 
@@ -8861,6 +8888,9 @@ msgstr "Upozornění: již existuje schválený člen se stejným jménem!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Můžeš také nahrát druhý soubor s možnostmi registrace:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Volitelné) Zda je schopnost viditelná pro uživatele: true nebo false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -10740,6 +10770,13 @@ msgstr ""
 "%(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Volitelné) Číslo zásilky, které se při jeho chybějícím zadání nebo v "
+"případě, že je již obsazeno, přiřadí automaticky"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11632,6 +11669,13 @@ msgstr ""
 "problém, použij tlačítko výše."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Upozorňujeme, že stávající dodávky se stejným názvem budou nahrazeny "
+"nahranými údaji."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -11818,6 +11862,13 @@ msgid ""
 msgstr ""
 "Zatím nebyly uvedeny žádné informace o Safety. Zobrazí se zde, jakmile je "
 "účastníci poskytnou."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Upozorňujeme, že stávající kritéria se stejným číslem budou nahrazena "
+"nahranými údaji."
 
 #, python-format
 msgid ""

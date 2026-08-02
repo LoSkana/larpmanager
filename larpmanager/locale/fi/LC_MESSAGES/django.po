@@ -1736,8 +1736,14 @@ msgstr "Ota yhteyttä"
 msgid "Containers"
 msgstr "Säiliöt"
 
+msgid "Criterions"
+msgstr "Kriteerit"
+
 msgid "Deleted on"
 msgstr "Poistettu:"
+
+msgid "Deliveries"
+msgstr "Toimitukset"
 
 msgid "Easter egg"
 msgstr "Pääsiäismuna"
@@ -4178,6 +4184,9 @@ msgstr "Tuloksia ei ole"
 msgid "Signup cancellation"
 msgstr "Rekisteröitymisen peruutus"
 
+msgid "The delivery's name"
+msgstr "Lähetyksen nimi"
+
 msgid "Use full-size image"
 msgstr "Käytä täysikokoista kuvaa"
 
@@ -4390,6 +4399,9 @@ msgstr "Käyttöehdot"
 
 msgid "Terms and conditions"
 msgstr "Käyttöehdot"
+
+msgid "The criterion's name"
+msgstr "Kriteerin nimi"
 
 msgid "The outflow category"
 msgstr "Menokategoria"
@@ -5543,6 +5555,9 @@ msgstr "Ymmärrän - Käytä sisältöä"
 msgid "Membership Application Status"
 msgstr "Jäsenhakemuksen tila"
 
+msgid "Name of the experience system"
+msgstr "Kokemusjärjestelmän nimi"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operaatio: ADD, SUB, MUL, DIV"
 
@@ -6426,6 +6441,9 @@ msgstr "Lisätään kaikkien lähetettyjen sähköpostiviestien alareunaan"
 msgid "Allows characters to have inventories"
 msgstr "Mahdollistaa hahmojen inventaarion"
 
+msgid "Amount of experience points delivered"
+msgstr "Annetut kokemuspisteet"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Äänestä uutta johtokuntaa!"
 
@@ -6836,6 +6854,9 @@ msgstr "näytetään tapahtuman pääsivulla"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Valinnainen) Kykyjen nimet, pilkulla eroteltuina"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Valinnainen) Ryhmittymien nimet, pilkuilla erotettuina"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Kykytyypit ilman kykyjä: %(list)s"
@@ -7016,6 +7037,9 @@ msgstr "Tarkista käyttäjät, joilla on avoimia tapahtumien määräaikoja:"
 
 msgid "Select which form this question belongs to"
 msgstr "Valitse, mihin lomakkeeseen tämä kysymys kuuluu"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Kriteerin numero (yksilöllinen tunniste)"
 
 msgid "The member associated with this membership"
 msgstr "Tähän jäsenyyteen liittyvä jäsen"
@@ -8565,6 +8589,10 @@ msgstr "Lataa allekirjoitettu jäsenhakemuslomake (PDF tai kuva)"
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Haluatko saada tietoa tulevista tapahtumistamme?"
 
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Valinnainen) Hahmot, joille palkinto on myönnetty, pilkuilla erotettuina"
+
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valinnainen) Hahmovaihtoehdot vaatimuksina, pilkulla eroteltuina"
 
@@ -8910,6 +8938,9 @@ msgstr "Varoitus: on jo hyväksytty jäsen, jolla on sama nimi!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Voit myös ladata toisen tiedoston ilmoittautumisvaihtoehtojen kanssa:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Valinnainen) Onko ominaisuus näkyvissä käyttäjille: true tai false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -10900,6 +10931,13 @@ msgstr ""
 "Sinut on kutsuttu liittymään %(guild)s-kiltaan hahmollasi %(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Valinnainen) Lähetyksen numero, joka annetaan automaattisesti, jos sitä ei "
+"ole ilmoitettu tai se on jo varattu"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11805,6 +11843,13 @@ msgstr ""
 " olevan painikkeen avulla."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Huomaa, että olemassa olevat toimitukset, joilla on sama nimi, korvataan "
+"ladatuilla tiedoilla."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -11992,6 +12037,13 @@ msgid ""
 msgstr ""
 "Safety-tietoja ei ole vielä ilmoitettu. Ne näkyvät täällä, kun osallistujat "
 "ovat antaneet ne."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Huomaa, että olemassa olevat kriteerit, joilla on sama numero, korvataan "
+"ladatuilla tiedoilla."
 
 #, python-format
 msgid ""

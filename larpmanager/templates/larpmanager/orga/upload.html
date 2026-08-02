@@ -65,6 +65,36 @@
         <p>
             <i>{% trans "Note that existing abilities with the same name, will be overwritten with the uploaded data." %}</i>
         </p>
+    {% elif typ == 'exp_criterion' %}
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below:" %}</p>
+        <table>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <i>{% trans "Note that existing criterions with the same number, will be overwritten with the uploaded data." %}</i>
+        </p>
+    {% elif typ == 'exp_deliverie' %}
+        <p>{% trans "The first line of the file must contain the column names, see the descriptions below:" %}</p>
+        <table>
+            {% for column, description in columns.0.items %}
+                <tr>
+                    <th>
+                        <h3>{{ column | safe }}</h3>
+                    </th>
+                    <td>{{ description | safe }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <p>
+            <i>{% trans "Note that existing deliveries with the same name, will be overwritten with the uploaded data." %}</i>
+        </p>
     {% elif typ == 'registration_form' or typ == 'matchmaker_form' %}
         <h2>{% trans "Questions" %}</h2>
         <p>{% trans "The first line of the file must contain the column names, see the descriptions below:" %}</p>

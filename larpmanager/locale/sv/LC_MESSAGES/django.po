@@ -1736,8 +1736,14 @@ msgstr "Kontakta oss"
 msgid "Containers"
 msgstr "Behållare"
 
+msgid "Criterions"
+msgstr "Kriterier"
+
 msgid "Deleted on"
 msgstr "Raderad den"
+
+msgid "Deliveries"
+msgstr "Leveranser"
 
 msgid "Easter egg"
 msgstr "Påskägg"
@@ -4178,6 +4184,9 @@ msgstr "Inga resultat tillgängliga"
 msgid "Signup cancellation"
 msgstr "Annullering av registrering"
 
+msgid "The delivery's name"
+msgstr "Leveransens namn"
+
 msgid "Use full-size image"
 msgstr "Använd bilden i full storlek"
 
@@ -4390,6 +4399,9 @@ msgstr "Villkor och betingelser"
 
 msgid "Terms and conditions"
 msgstr "Villkor och bestämmelser"
+
+msgid "The criterion's name"
+msgstr "Kriteriets namn"
 
 msgid "The outflow category"
 msgstr "Utgiftskategorin"
@@ -5543,6 +5555,9 @@ msgstr "Jag förstår - Få tillgång till innehåll"
 msgid "Membership Application Status"
 msgstr "Status för medlemsansökan"
 
+msgid "Name of the experience system"
+msgstr "Namn på erfarenhetssystemet"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operation: ADD, SUB, MUL, DIV"
 
@@ -6426,6 +6441,9 @@ msgstr "Läggs till längst ner i alla utskickade mail"
 msgid "Allows characters to have inventories"
 msgstr "Tillåter karaktärer att ha inventarier"
 
+msgid "Amount of experience points delivered"
+msgstr "Antal tilldelade erfarenhetspoäng"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Lägg din röst på den nya direktionen!"
 
@@ -6836,6 +6854,9 @@ msgstr "kommer att visas på huvudsidan för evenemanget"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Valfritt) Namn på förmågor, kommaseparerade"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Valfritt) Fraktionsnamn, åtskilda med kommatecken"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Förmågetyper utan förmågor: %(list)s"
@@ -7016,6 +7037,9 @@ msgstr "Granska användare med utestående tidsgränser för evenemang:"
 
 msgid "Select which form this question belongs to"
 msgstr "Välj vilket formulär denna fråga tillhör"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Kriteriets nummer (unikt identifieringsnummer)"
 
 msgid "The member associated with this membership"
 msgstr "Den medlem som är associerad med detta medlemskap"
@@ -8556,6 +8580,11 @@ msgstr ""
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Vill du få information om våra kommande evenemang?"
 
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Valfritt) Namn på karaktärer som utmärkelsen tilldelats, separerade med "
+"kommatecken"
+
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valfritt) Karaktärsalternativ som krav, kommaseparerade"
 
@@ -8889,6 +8918,9 @@ msgstr "Varning: det finns redan en godkänd medlem med samma namn!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Du kan också ladda upp en andra fil med registreringsalternativen:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Valfritt) Om funktionen är synlig för användarna: true eller false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -10881,6 +10913,13 @@ msgstr ""
 "%(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Valfritt) Leveransnumret, som tilldelas automatiskt om det saknas eller "
+"redan är upptaget"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11794,6 +11833,13 @@ msgstr ""
 "knappen ovan för att lägga till ett nytt problem."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Observera att befintliga leveranser med samma namn kommer att skrivas över "
+"med de uppladdade uppgifterna."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -11982,6 +12028,13 @@ msgid ""
 msgstr ""
 "Ingen Safety-information har skickats in ännu. Den visas här när deltagarna "
 "har angett den."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Observera att befintliga kriterier med samma nummer kommer att skrivas över "
+"med de uppladdade uppgifterna."
 
 #, python-format
 msgid ""

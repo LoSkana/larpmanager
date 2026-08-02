@@ -1736,8 +1736,14 @@ msgstr "Neem contact met ons op"
 msgid "Containers"
 msgstr "Containers"
 
+msgid "Criterions"
+msgstr "Criteria"
+
 msgid "Deleted on"
 msgstr "Verwijderd op"
+
+msgid "Deliveries"
+msgstr "Leveringen"
 
 msgid "Easter egg"
 msgstr "Paasei"
@@ -4178,6 +4184,9 @@ msgstr "Resultaten niet aanwezig"
 msgid "Signup cancellation"
 msgstr "Annulering inschrijving"
 
+msgid "The delivery's name"
+msgstr "De naam van de zending"
+
 msgid "Use full-size image"
 msgstr "Gebruik de afbeelding op volledige grootte"
 
@@ -4390,6 +4399,9 @@ msgstr "Algemene voorwaarden"
 
 msgid "Terms and conditions"
 msgstr "Algemene voorwaarden"
+
+msgid "The criterion's name"
+msgstr "De naam van het criterium"
 
 msgid "The outflow category"
 msgstr "De uitgavencategorie"
@@ -5543,6 +5555,9 @@ msgstr "Ik begrijp het - Inhoud openen"
 msgid "Membership Application Status"
 msgstr "Status van je lidmaatschapsaanvraag"
 
+msgid "Name of the experience system"
+msgstr "Naam van het ervaringssysteem"
+
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Bewerking: ADD, SUB, MUL, DIV"
 
@@ -6427,6 +6442,9 @@ msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
 msgid "Allows characters to have inventories"
 msgstr "Laat personages inventarissen hebben"
 
+msgid "Amount of experience points delivered"
+msgstr "Aantal toegekende ervaringspunten"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Breng je stem uit voor de nieuwe Executive!"
 
@@ -6837,6 +6855,9 @@ msgstr "wordt weergegeven op de hoofdpagina van het evenement"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Optioneel) Vaardigheidsnamen, door komma's gescheiden"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Optioneel) Namen van facties, gescheiden door komma’s"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Vaardigheidstypes zonder vaardigheden: %(list)s"
@@ -7017,6 +7038,9 @@ msgstr "Bekijk welke gebruikers nog deadlines voor evenementen hebben:"
 
 msgid "Select which form this question belongs to"
 msgstr "Kies bij welk formulier deze vraag hoort"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Het nummer van het criterium (unieke identificatiecode)"
 
 msgid "The member associated with this membership"
 msgstr "Het lid geassocieerd met dit lidmaatschap"
@@ -8616,6 +8640,11 @@ msgstr ""
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Wil je op de hoogte blijven van onze komende evenementen?"
 
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Optioneel) De namen van de personages waaraan het is toegekend, gescheiden "
+"door komma’s"
+
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Optioneel) Karakteropties als vereisten, door komma's gescheiden"
 
@@ -8985,6 +9014,9 @@ msgstr "Waarschuwing: er is al een goedgekeurd lid met dezelfde naam!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Je kunt ook een tweede bestand uploaden met de registratieopties:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Optioneel) Of de functie zichtbaar is voor gebruikers: true of false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -11101,6 +11133,13 @@ msgstr ""
 "personage %(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Optioneel) Het nummer van de levering; dit wordt automatisch toegewezen als"
+" het ontbreekt of al in gebruik is"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -12019,6 +12058,13 @@ msgstr ""
 "hierboven om een nieuw probleem toe te voegen."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Let op: bestaande leveringen met dezelfde naam worden overschreven door de "
+"geüploade gegevens."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -12208,6 +12254,13 @@ msgid ""
 msgstr ""
 "Er is nog geen Safety-informatie ingediend. Die verschijnt hier zodra "
 "deelnemers die doorgeven."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Let op: bestaande criteria met hetzelfde nummer worden overschreven door de "
+"geüploade gegevens."
 
 #, python-format
 msgid ""

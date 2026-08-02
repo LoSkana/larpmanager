@@ -192,7 +192,6 @@ class Command(BaseCommand):
 
                 for entry in fuzzy_entries:
                     self.translate_entry(entry, locale_code)
-                self.translate_entry(entry, locale_code)
 
             self.save_po(po_file, po_file_path)
 

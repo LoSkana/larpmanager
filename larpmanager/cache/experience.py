@@ -74,6 +74,11 @@ def get_event_exp_systems(event: Event) -> list[SystemExp]:
     return systems
 
 
+def has_multiple_exp_systems(event: Event) -> bool:
+    """Return whether the event has more than one experience system configured."""
+    return len(get_event_exp_systems(event)) > 1
+
+
 def clear_event_exp_systems_cache(event_id: int) -> None:
     """Clear cached experience systems list for the given event ID."""
     cache.delete(get_event_exp_systems_key(event_id))
