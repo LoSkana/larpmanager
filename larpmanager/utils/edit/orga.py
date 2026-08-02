@@ -247,7 +247,7 @@ class OrgaAction(str, Enum):
     )
     SPEEDLARPS = ("orga_speedlarps", {"form": OrgaSpeedLarpForm, "writing": TextVersionChoices.SPEEDLARP})
     PROGRESS_STEPS = ("orga_progress_steps", {"form": OrgaProgressStepForm})
-    RELATIONSHIP_TAGS = ("orga_relationship_tags", {"form": OrgaRelationshipTagForm})
+    RELATIONSHIP_TAGS = ("orga_relationship_tags", {"form": OrgaRelationshipTagForm, "relationship_tags": True})
 
     # Registration
     REGISTRATION_TICKETS = ("orga_registration_tickets", {"form": OrgaRegistrationTicketForm, "tickets": True})

@@ -807,6 +807,10 @@ class OrgaCharacterForm(CharacterForm):
         if not get_event_config(self.params["event"].id, "writing_relationship_tags", context=self.params):
             return
 
+        # with no tag defined the form renders no checkbox, so an empty post must not clear anything
+        if not get_cached_relationship_tags(self.params["event"]):
+            return
+
         relationships = self.params.get("relationships", {})
         for ch_uuid in submitted_uuids:
             character_id = uuid_to_id[ch_uuid]
@@ -821,25 +825,28 @@ class OrgaCharacterForm(CharacterForm):
             if ch_uuid not in deleted_uuids:
                 self._get_rel(character_id, instance, "direct").tags.set(new_tags)
 
-            # mirror only symmetric tags onto the inverse relationship
-            new_symmetric = {tag for tag in new_tags if tag.symmetric}
-            previous_symmetric = {tag for tag in previous_tags if tag.symmetric}
-            removed_symmetric = previous_symmetric - new_symmetric
-            if not new_symmetric and not removed_symmetric:
-                continue
+            self._mirror_symmetric_tags(instance, character_id, new_tags, previous_tags)
 
-            if new_symmetric:
-                inverse_rel = self._get_rel(character_id, instance, "inverse")
-            else:
-                # only tags to drop: never create an inverse relationship just to empty it
-                inverse_rel = Relationship.objects.filter(source_id=character_id, target_id=instance.pk).first()
-                if inverse_rel is None:
-                    continue
+    def _mirror_symmetric_tags(self, instance: Any, character_id: int, new_tags: list, previous_tags: list) -> None:
+        """Apply on the inverse relationship the symmetric tags added to, or removed from, the direct one."""
+        new_symmetric = {tag for tag in new_tags if tag.symmetric}
+        previous_symmetric = {tag for tag in previous_tags if tag.symmetric}
+        removed_symmetric = previous_symmetric - new_symmetric
+        if not new_symmetric and not removed_symmetric:
+            return
 
-            if removed_symmetric:
-                inverse_rel.tags.remove(*removed_symmetric)
-            if new_symmetric:
-                inverse_rel.tags.add(*new_symmetric)
+        if new_symmetric:
+            inverse_rel = self._get_rel(character_id, instance, "inverse")
+        else:
+            # only tags to drop: never create an inverse relationship just to empty it
+            inverse_rel = Relationship.objects.filter(source_id=character_id, target_id=instance.pk).first()
+            if inverse_rel is None:
+                return
+
+        if removed_symmetric:
+            inverse_rel.tags.remove(*removed_symmetric)
+        if new_symmetric:
+            inverse_rel.tags.add(*new_symmetric)
 
     @staticmethod
     def _get_rel(character_id: int, instance: Any, relationship_type: str) -> Relationship:

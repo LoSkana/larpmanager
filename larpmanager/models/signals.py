@@ -1845,6 +1845,9 @@ def post_save_relationship_tag(sender: type, instance: RelationshipTag, **kwargs
     """Clear relationship tags cache when a tag is saved."""
     clear_relationship_tags_cache(instance.event_id)
 
+    if instance.deleted:
+        refresh_characters_relationships(collect_relationship_tag_characters(instance))
+
 
 @receiver(pre_delete, sender=RelationshipTag)
 def pre_delete_relationship_tag(sender: type, instance: RelationshipTag, **kwargs: Any) -> None:
