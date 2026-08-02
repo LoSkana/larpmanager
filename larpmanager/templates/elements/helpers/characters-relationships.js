@@ -67,7 +67,7 @@ window.addEventListener('DOMContentLoaded', function() {
         {% endif %}
 
         if (relationshipTags.length) {
-            var tagsCell = $('<td class="tags_cell"></td>');
+            var tagsCell = $('<td></td>');
             relationshipTags.forEach(function(tag) {
                 // build with DOM nodes: tag names are organizer-supplied and must never be parsed as HTML
                 var checkbox = $('<input type="checkbox">')

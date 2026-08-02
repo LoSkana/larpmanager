@@ -25,7 +25,7 @@ import logging
 from typing import Any
 
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Exists, Model, OuterRef
+from django.db.models import Count, Exists, Model, OuterRef, Q
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
@@ -56,6 +56,7 @@ from larpmanager.models.writing import (
     GuildMembershipStatus,
     Plot,
     Prologue,
+    RelationshipTag,
     SpeedLarp,
     Writing,
     replace_character_names,
@@ -331,6 +332,12 @@ def writing_list(  # noqa: C901, PLR0912 - Complex writing list building with fe
     # Add prerequisites prefetching for ability experience types
     if issubclass(writing_type, AbilityExp):
         context["list"] = context["list"].prefetch_related("prerequisites")
+
+    # Add the number of tagged relationship sides, to avoid a count query per tag
+    if issubclass(writing_type, RelationshipTag):
+        context["list"] = context["list"].annotate(
+            relationships_count=Count("relationships", filter=Q(relationships__deleted=None)),
+        )
 
     # Setup writing-specific context if writing elements exist
     if writing:

@@ -822,6 +822,10 @@ class OrgaCharacterForm(CharacterForm):
             if not new_tags and not previous_tags:
                 continue
 
+            # unchanged tags: the direct relationship and its mirror are already up to date
+            if set(new_tags) == set(previous_tags):
+                continue
+
             if ch_uuid not in deleted_uuids:
                 self._get_rel(character_id, instance, "direct").tags.set(new_tags)
 

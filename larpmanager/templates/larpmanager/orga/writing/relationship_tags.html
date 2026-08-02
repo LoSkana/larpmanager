@@ -38,7 +38,7 @@
                     <td>
                         {% if el.symmetric %}<i class="fas fa-check"></i>{% endif %}
                     </td>
-                    <td>{{ el.relationships.count }}</td>
+                    <td>{{ el.relationships_count }}</td>
                     <td>
                         <a href="{% url 'orga_relationship_tags_delete' run.get_slug el.uuid %}"
                            qtip="{% trans "Delete" %}"
