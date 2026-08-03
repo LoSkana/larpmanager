@@ -220,8 +220,9 @@ def upload_membership(page: Any, live_server: Any) -> None:
     # Set membership fee and explicitly mark as separated (not bundled with registration)
     page.locator("#id_membership_fee").click()
     page.locator("#id_membership_fee").fill("10")
-    page.locator("#id_membership_fee_separated").check()
     submit_confirm(page)
+
+    go_to(page, live_server, "/manage/config/membership_fee_separated/on/")
 
     # Upload membership
     page.get_by_role("link", name="Members").click()

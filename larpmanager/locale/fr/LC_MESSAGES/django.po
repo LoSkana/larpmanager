@@ -4874,9 +4874,6 @@ msgstr "Remboursement effectué"
 msgid "Select your preferences"
 msgstr "Choisis tes préférences"
 
-msgid "Separate membership fee"
-msgstr "Cotisation d’adhésion séparée"
-
 msgid "Show answered questions"
 msgstr "Afficher les questions auxquelles on a répondu"
 
@@ -5219,6 +5216,10 @@ msgstr "Gère les mouvements de l’entrepôt"
 msgid "Member of the Organization"
 msgstr "Membre de l'organisation"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "L'option %(name)s est activée !"
+
 msgid "Option no longer available"
 msgstr "L'option n'est plus disponible"
 
@@ -5462,6 +5463,10 @@ msgstr "Mes invitations de guilde en attente"
 
 msgid "Name of badge to be awarded."
 msgstr "Nom du badge à attribuer."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "L'option %(name)s est désactivée !"
 
 msgid "Please wait before retrying."
 msgstr "Attends avant de réessayer."
@@ -6129,6 +6134,10 @@ msgstr "Approuve manuellement les paiements reçus"
 msgid "No activation steps are available."
 msgstr "Il n'y a aucune étape d'activation disponible."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "L'option %(name)s est déjà activée !"
+
 msgid "Promotion: website and advertising"
 msgstr "Promotion : site web et publicité"
 
@@ -6347,6 +6356,10 @@ msgstr "Aucune question n'a encore reçu de réponse."
 
 msgid "Only really important communications"
 msgstr "Seules les communications vraiment importantes"
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "L'option %(name)s est déjà désactivée !"
 
 #, python-format
 msgid "Quest types without quests: %(list)s"
@@ -11714,13 +11727,6 @@ msgid ""
 msgstr ""
 "Si activé, n’envoie pas de notification au·à la participant·e lorsqu’un "
 "personnage est attribué."
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Si cette option est activée, la cotisation annuelle est payée séparément des"
-" frais d’inscription à l’événement."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

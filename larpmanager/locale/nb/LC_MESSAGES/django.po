@@ -4874,9 +4874,6 @@ msgstr "Refusjonen er behandlet"
 msgid "Select your preferences"
 msgstr "Velg preferansene dine"
 
-msgid "Separate membership fee"
-msgstr "Separat medlemsavgift"
-
 msgid "Show answered questions"
 msgstr "Vis besvarte spørsmål"
 
@@ -5219,6 +5216,10 @@ msgstr "Administrer lagerbevegelser"
 msgid "Member of the Organization"
 msgstr "Medlem av organisasjonen"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Alternativet %(name)s er aktivert!"
+
 msgid "Option no longer available"
 msgstr "Alternativet er ikke lenger tilgjengelig"
 
@@ -5462,6 +5463,10 @@ msgstr "Mine gildeinnvitasjoner"
 
 msgid "Name of badge to be awarded."
 msgstr "Navn på badge som skal tildeles."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Alternativet %(name)s er deaktivert!"
 
 msgid "Please wait before retrying."
 msgstr "Vennligst vent før du prøver på nytt."
@@ -6129,6 +6134,10 @@ msgstr "Godkjenn mottatte betalinger manuelt"
 msgid "No activation steps are available."
 msgstr "Det finnes ingen aktiveringstrinn."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Alternativet %(name)s er allerede aktivert!"
+
 msgid "Promotion: website and advertising"
 msgstr "Promotering: nettsted og annonsering"
 
@@ -6347,6 +6356,10 @@ msgstr "Det er ikke besvart noen spørsmål ennå."
 
 msgid "Only really important communications"
 msgstr "Kun virkelig viktig kommunikasjon"
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Alternativet %(name)s er allerede deaktivert!"
 
 #, python-format
 msgid "Quest types without quests: %(list)s"
@@ -11422,13 +11435,6 @@ msgid ""
 msgstr ""
 "Hvis aktivert, sendes det ikke et varsel til deltakeren når en karakter "
 "tildeles."
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Hvis aktivert, betales den årlige medlemsavgiften separat fra "
-"påmeldingsavgiften for arrangementet."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

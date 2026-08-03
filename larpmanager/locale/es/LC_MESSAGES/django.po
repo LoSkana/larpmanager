@@ -4874,9 +4874,6 @@ msgstr "Reembolso tramitado"
 msgid "Select your preferences"
 msgstr "Elige tus preferencias"
 
-msgid "Separate membership fee"
-msgstr "Cuota de membresía separada"
-
 msgid "Show answered questions"
 msgstr "Mostrar preguntas respondidas"
 
@@ -5219,6 +5216,10 @@ msgstr "Gestiona los movimientos del almacén"
 msgid "Member of the Organization"
 msgstr "Miembro de la organización"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "¡Se ha activado la opción %(name)s!"
+
 msgid "Option no longer available"
 msgstr "Opción ya no disponible"
 
@@ -5462,6 +5463,10 @@ msgstr "Mis invitaciones pendientes del gremio"
 
 msgid "Name of badge to be awarded."
 msgstr "Nombre del badge que se asignará."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "¡La opción %(name)s está desactivada!"
 
 msgid "Please wait before retrying."
 msgstr "Espera antes de volver a intentarlo."
@@ -6129,6 +6134,10 @@ msgstr "Aprueba manualmente los pagos recibidos"
 msgid "No activation steps are available."
 msgstr "No hay pasos de activación disponibles."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "¡La opción %(name)s ya está activada!"
+
 msgid "Promotion: website and advertising"
 msgstr "Promoción: sitio web y publicidad"
 
@@ -6347,6 +6356,10 @@ msgstr "Aún no se ha respondido a ninguna pregunta."
 
 msgid "Only really important communications"
 msgstr "Sólo las comunicaciones realmente importantes"
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "¡La opción %(name)s ya está desactivada!"
 
 #, python-format
 msgid "Quest types without quests: %(list)s"
@@ -11614,13 +11627,6 @@ msgid ""
 msgstr ""
 "Si está activado, no envía una notificación al participante cuando se le "
 "asigna un personaje."
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Si está activado, la cuota anual de membresía se paga por separado de la "
-"cuota de inscripción al evento."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

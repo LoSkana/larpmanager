@@ -4874,9 +4874,6 @@ msgstr "Proplacení bylo zpracováno"
 msgid "Select your preferences"
 msgstr "Vyber si své preference"
 
-msgid "Separate membership fee"
-msgstr "Samostatný členský poplatek"
-
 msgid "Show answered questions"
 msgstr "Zobrazit zodpovězené otázky"
 
@@ -5219,6 +5216,10 @@ msgstr "Spravovat skladové pohyby"
 msgid "Member of the Organization"
 msgstr "Člen organizace"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Možnost %(name)s byla aktivována!"
+
 msgid "Option no longer available"
 msgstr "Možnost již není k dispozici"
 
@@ -5462,6 +5463,10 @@ msgstr "Pozvánky do mé gildy"
 
 msgid "Name of badge to be awarded."
 msgstr "Název badge, který má být udělen."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Možnost %(name)s byla deaktivována!"
 
 msgid "Please wait before retrying."
 msgstr "Před dalším pokusem počkej."
@@ -6129,6 +6134,10 @@ msgstr "Ručně schvalovat přijaté platby"
 msgid "No activation steps are available."
 msgstr "Nejsou k dispozici žádné kroky k aktivaci."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Možnost %(name)s je již aktivována!"
+
 msgid "Promotion: website and advertising"
 msgstr "Propagace: webové stránky a reklama"
 
@@ -6347,6 +6356,10 @@ msgstr "Zatím nebyla zodpovězena žádná otázka."
 
 msgid "Only really important communications"
 msgstr "Pouze skutečně důležitá sdělení"
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Možnost %(name)s je již deaktivována!"
 
 #, python-format
 msgid "Quest types without quests: %(list)s"
@@ -11237,13 +11250,6 @@ msgid ""
 " is assigned."
 msgstr ""
 "Pokud je povoleno, neodešle účastníkovi oznámení při přiřazení postavy."
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Pokud je povoleno, roční členský poplatek se platí zvlášť od poplatku za "
-"registraci na akci."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

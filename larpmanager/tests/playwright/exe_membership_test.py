@@ -43,10 +43,7 @@ def test_exe_membership(pw_page: Any) -> None:
     go_to(page, live_server, "/manage/features/membership/on")
 
     # explicitly set membership fee as separated (not bundled with registration)
-    go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
-    page.locator("#id_membership_fee_separated").check()
-    submit_confirm(page)
+    go_to(page, live_server, "/manage/config/membership_fee_separated/on/")
 
     # register
     go_to(page, live_server, "/test/register")

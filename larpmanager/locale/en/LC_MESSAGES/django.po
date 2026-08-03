@@ -636,14 +636,6 @@ msgid ""
 "annual fee without an active event registration."
 msgstr ""
 
-msgid "Separate membership fee"
-msgstr ""
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-
 msgid "Charge transaction fees to participant"
 msgstr ""
 
@@ -11995,6 +11987,22 @@ msgstr ""
 
 #, python-format
 msgid "Feature %(name)s deactivated!"
+msgstr ""
+
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr ""
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr ""
+
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr ""
+
+#, python-format
+msgid "Option %(name)s deactivated!"
 msgstr ""
 
 msgid "Invalid version selected."
