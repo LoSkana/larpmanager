@@ -1504,6 +1504,7 @@ class OrgaRunForm(ConfigForm):
         self.fields["development"].widget = DescriptionRadioSelect(
             attrs={"class": "my-radio-class"},
             descriptions={str(value): str(status_text[DevelopStatus(value)]) for value, _label in development_choices},
+            collapse_unselected=self._is_edit,
         )
         self.fields["development"].choices = development_choices
 
@@ -1555,6 +1556,7 @@ class OrgaRunForm(ConfigForm):
         self.fields["registration_status"].widget = DescriptionRadioSelect(
             attrs={"class": "my-radio-class", "data-conditional-controller": "registration_status"},
             descriptions={str(value): str(status_help[RegistrationStatus(value)]) for value, _label in choices},
+            collapse_unselected=self._is_edit,
         )
         self.fields["registration_status"].choices = choices
         if "registration_open" in self.fields:
@@ -1784,6 +1786,7 @@ class ExeEventForm(OrgaEventForm):
                     widget=DescriptionRadioSelect(
                         attrs={"class": "my-radio-class"},
                         descriptions={slug: str(desc) for slug, (_label, desc) in template_descriptions.items()},
+                        collapse_unselected=self._is_edit,
                     ),
                 )
 

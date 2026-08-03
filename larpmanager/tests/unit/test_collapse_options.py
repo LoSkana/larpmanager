@@ -30,18 +30,18 @@ class TestCollapseUnselectedOptions(BaseTestCase):
     """Test cases for the collapse_unselected flag of the description widgets"""
 
     @staticmethod
-    def _render_radio(value: str, *, collapse: bool) -> str:
+    def _render_radio(value: str, *, collapse: bool | None = True) -> str:
         widget = DescriptionRadioSelect(choices=CHOICES, collapse_unselected=collapse)
         return widget.render("que", value, attrs={"id": "id_que"})
 
     @staticmethod
-    def _render_checkbox(value: list[str], *, collapse: bool) -> str:
+    def _render_checkbox(value: list[str], *, collapse: bool | None = True) -> str:
         widget = DescriptionCheckboxSelectMultiple(choices=CHOICES, collapse_unselected=collapse)
         return widget.render("que", value, attrs={"id": "id_que"})
 
     def test_radio_hides_unselected(self) -> None:
         """On edit only the selected radio stays visible, the others are collapsed"""
-        html = self._render_radio("b", collapse=True)
+        html = self._render_radio("b")
         assert html.count("opt-collapsed hide") == len(CHOICES) - 1
         # the wrapper of the selected option carries no collapse class
         selected_block = html.split('value="b"')[0].rsplit("<div", 1)[1]
@@ -50,27 +50,37 @@ class TestCollapseUnselectedOptions(BaseTestCase):
 
     def test_checkbox_hides_unselected(self) -> None:
         """Multiple choice collapses every option that is not among the selected ones"""
-        html = self._render_checkbox(["a", "c"], collapse=True)
+        html = self._render_checkbox(["a", "c"])
         assert html.count("opt-collapsed hide") == 1
         assert "opt-show-more" in html
 
     def test_no_collapse_when_flag_off(self) -> None:
-        """Creation forms pass the flag off, so every option is rendered visible"""
-        html = self._render_radio("b", collapse=False)
+        """Widgets not opting in render every option visible, with no toggle at all"""
+        html = self._render_radio("b", collapse=None)
         assert "opt-collapsed" not in html
         assert "opt-show-more" not in html
 
-    def test_no_collapse_without_selection(self) -> None:
-        """Nothing is collapsed when no option is selected, or the field would look empty"""
-        html = self._render_radio("", collapse=True)
+    def test_new_element_expanded_with_toggle(self) -> None:
+        """Creation forms start expanded, but still offer the link to collapse the options"""
+        html = self._render_radio("", collapse=False)
+        assert html.count('class="opt-wrap"') == len(CHOICES)
         assert "opt-collapsed" not in html
-        assert "opt-show-more" not in html
+        assert "opt-show-more" in html
+        # the link starts on the hide label, as the options are visible
+        assert '<span class="sl-show hide">' in html
+        assert '<span class="sl-hide">' in html
+
+    def test_collapse_without_selection(self) -> None:
+        """Editing collapses the options even when none of them is selected"""
+        html = self._render_radio("")
+        assert html.count("opt-collapsed hide") == len(CHOICES)
+        assert '<span class="sl-show">' in html
 
     def test_no_collapse_when_all_selected(self) -> None:
-        """Nothing is collapsed when every option is already selected"""
-        html = self._render_checkbox(["a", "b", "c"], collapse=True)
+        """Nothing is collapsed when every option is already selected, the toggle stays available"""
+        html = self._render_checkbox(["a", "b", "c"])
         assert "opt-collapsed" not in html
-        assert "opt-show-more" not in html
+        assert '<span class="sl-hide">' in html
 
     def test_container_keeps_widget_attributes(self) -> None:
         """Attributes set on the widget are rendered on the container, as Django does"""
