@@ -475,13 +475,19 @@ function initSlugField() {
 
 // ========== Init: Toggles ==========
 
-// Toggle the options hidden when editing an existing answer (only selected ones shown).
+// Toggle the options of a choice widget, keeping visible the ones currently chosen.
 function initCollapsedOptions() {
     $(document).on('click', '.opt-show-more', function (e) {
         e.preventDefault();
         var $link = $(this);
+        // the show label is visible only while the options are collapsed
+        var expand = !$link.find('.sl-show').hasClass('hide');
         // options may be nested in optgroup wrappers, so search the whole widget container
-        $link.parent().find('.opt-collapsed').toggleClass('hide');
+        $link.parent().find('.opt-wrap').each(function () {
+            var $option = $(this);
+            var checked = $option.find('input:checked').length > 0;
+            $option.toggleClass('opt-collapsed hide', !expand && !checked);
+        });
         $link.find('.sl-show, .sl-hide').toggleClass('hide');
     });
 }

@@ -71,6 +71,12 @@ logger = logging.getLogger(__name__)
 class FormMixin:
     """Mixin for common form operations."""
 
+    @cached_property
+    def _is_edit(self) -> bool:
+        """Return True when the form edits an already saved instance."""
+        instance = getattr(self, "instance", None)
+        return bool(instance and instance.pk)
+
     def configure_field_event(self, field_name: str, event: Event) -> None:
         """Configure a form field's widget and queryset for a specific event."""
         field = self.fields[field_name]
@@ -524,12 +530,6 @@ class BaseRegistrationForm(BaseModelFormRun):
     def _use_inline_widgets_v20(self) -> bool:
         """Return True if effective_version >= 20 (radio/checkbox with inline descriptions)."""
         return int(self.params.get("effective_version", 0)) >= self._inline_widgets_min_version
-
-    @cached_property
-    def _is_edit(self) -> bool:
-        """Return True when the form edits an already saved instance."""
-        instance = getattr(self, "instance", None)
-        return bool(instance and instance.pk)
 
     def _init_registration_question(self, instance: Any | None, event: Event) -> None:
         """Initialize registration questions and answers from existing instance.

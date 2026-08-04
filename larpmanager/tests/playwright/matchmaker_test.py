@@ -167,6 +167,9 @@ def fill_matchmaker(page: Any, live_server: Any, short_value: str, long_value: s
     # matchmaker questions must not be mixed into the standard registration form
     expect(page.locator("#matchmaker")).to_be_visible()
 
+    # the form is bound to the existing registration: the options start collapsed
+    expand_options(page)
+
     page.get_by_role("textbox", name="what would you like to play").fill(short_value)
     page.get_by_role("textbox", name="backstory notes").fill(long_value)
 

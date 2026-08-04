@@ -37,6 +37,7 @@ password = "banana"
 orga_user = "orga@test.it"
 test_user = "user@test.it"
 
+EXPAND_ATTEMPTS = 5
 SHORT_TIMEOUT = 10_000
 LONG_TIMEOUT = 60_000
 
@@ -519,11 +520,24 @@ def expand_options(scope):
     ones are hidden behind a "Show other options" link, and must be expanded
     before they can be read or clicked. ``scope`` may be a page, a frame or a
     locator; every still-collapsed link inside it is expanded."""
-    links = scope.locator(".opt-show-more:visible")
+    links = scope.locator(".opt-show-more")
+    try:
+        # the caller may have just navigated, wait for the widgets of the new page
+        links.first.wait_for(state="attached", timeout=SHORT_TIMEOUT)
+    except PlaywrightError:
+        return
     for index in range(links.count()):
         link = links.nth(index)
-        if link.locator(".sl-show").is_visible():
+        # the link is served by a delegated listener, retry until larpmanager.js is bound
+        for _attempt in range(EXPAND_ATTEMPTS):
+            if not link.is_visible() or not link.locator(".sl-show").is_visible():
+                break
             link.click()
+            try:
+                expect(link.locator(".sl-hide")).to_be_visible(timeout=1000)
+            except AssertionError:
+                continue
+            break
 
 
 def drag_reorder(page, source, target):

@@ -30,7 +30,7 @@ import pytest
 
 from larpmanager.tests.utils import go_to, login_orga, expect_normalized, submit_confirm, new_option, \
     submit_option, sidebar, get_modal_iframe, save_modal, click_and_wait_question, _wait_lm_ready, \
-    click_option
+    click_option, expand_options
 
 pytestmark = pytest.mark.e2e
 
@@ -201,6 +201,8 @@ def characters(page: Any, live_server: Any) -> None:
     edit_iframe.get_by_role("list").click()
     edit_iframe.get_by_role("searchbox").fill("fas")
     edit_iframe.get_by_role("option", name="fassione (P)").click()
+    # the character is already saved: the options start collapsed
+    expand_options(edit_iframe)
     edit_iframe.locator('label[for="id_que_u8_0"]').click()
     edit_iframe.locator('label[for="id_que_u9_1"]').click()
     save_modal(page, edit_iframe)
