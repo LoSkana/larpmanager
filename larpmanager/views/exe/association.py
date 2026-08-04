@@ -34,7 +34,6 @@ from django.views.decorators.http import require_POST
 from larpmanager.cache.config import get_association_config, save_single_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.association import (
-    ExeConfigForm,
     ExeFeatureForm,
 )
 from larpmanager.mail.base import send_role_invite_email
@@ -356,14 +355,7 @@ def exe_features_off(request: HttpRequest, slug: str) -> HttpResponse:
     return redirect("manage")
 
 
-def _exe_config_after_link(section_slug: str | None) -> str:
-    """Generate the configuration page URL, jumping to the section of the toggled option."""
-    if section_slug:
-        return reverse("exe_config", kwargs={"section": section_slug})
-    return reverse("exe_config")
-
-
-def exe_config_go(request: HttpRequest, slug: str, *, to_active: bool = True) -> str | None:
+def exe_config_go(request: HttpRequest, slug: str, *, to_active: bool = True) -> None:
     """Activate or deactivate a boolean configuration option of an association.
 
     Args:
@@ -371,23 +363,11 @@ def exe_config_go(request: HttpRequest, slug: str, *, to_active: bool = True) ->
         slug: The name of the configuration option to toggle
         to_active: Whether to activate (True) or deactivate (False) the option
 
-    Returns:
-        str | None: The section slug the option belongs to
-
-    Raises:
-        Http404: If the option is not available as a boolean configuration
-
     """
     # Check user permissions and retrieve the association
     context = check_association_context(request, "exe_config")
     context["request"] = request
     association = Association.objects.get(pk=context["association_id"])
-
-    # Only options offered as boolean fields by the configuration form can be toggled
-    config_field = ExeConfigForm(instance=association, context=context).get_bool_field(slug)
-    if not config_field:
-        msg = "option not available!"
-        raise Http404(msg)
 
     # Skip the update if the option already has the requested value
     if get_association_config(context["association_id"], slug, default_value=False) == to_active:
@@ -397,23 +377,21 @@ def exe_config_go(request: HttpRequest, slug: str, *, to_active: bool = True) ->
         association.save()
         message = _("Option %(name)s activated!") if to_active else _("Option %(name)s deactivated!")
 
-    messages.success(request, message % {"name": config_field["label"]})
-
-    return config_field["section_slug"]
+    messages.success(request, message % {"name": slug})
 
 
 @login_required
 def exe_config_on(request: HttpRequest, slug: str) -> HttpResponseRedirect:
     """Activate a configuration option and redirect to the configuration page."""
-    section_slug = exe_config_go(request, slug, to_active=True)
-    return redirect(_exe_config_after_link(section_slug))
+    exe_config_go(request, slug, to_active=True)
+    return redirect("exe_config")
 
 
 @login_required
 def exe_config_off(request: HttpRequest, slug: str) -> HttpResponseRedirect:
     """Deactivate a configuration option and redirect to the configuration page."""
-    section_slug = exe_config_go(request, slug, to_active=False)
-    return redirect(_exe_config_after_link(section_slug))
+    exe_config_go(request, slug, to_active=False)
+    return redirect("exe_config")
 
 
 @login_required

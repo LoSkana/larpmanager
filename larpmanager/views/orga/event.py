@@ -37,7 +37,6 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
     ExeEventForm,
-    OrgaConfigForm,
     OrgaEventForm,
     OrgaFeatureForm,
     OrgaRunDatesForm,
@@ -553,15 +552,13 @@ def orga_features_off(request: HttpRequest, event_slug: str, slug: str) -> HttpR
     return redirect("manage", event_slug=event_slug)
 
 
-def _orga_config_after_link(event_slug: str, section_slug: str | None) -> str:
+def _orga_config_after_link(event_slug: str) -> str:
     """Build the configuration page URL, jumping to the section of the toggled option."""
     kwargs = {"event_slug": event_slug}
-    if section_slug:
-        kwargs["section"] = section_slug
     return reverse("orga_config", kwargs=kwargs)
 
 
-def orga_config_go(request: HttpRequest, event_slug: str, slug: str, *, to_active: bool = True) -> str | None:
+def orga_config_go(request: HttpRequest, event_slug: str, slug: str, *, to_active: bool = True) -> None:
     """Toggle a boolean configuration option for an event.
 
     Args:
@@ -570,21 +567,9 @@ def orga_config_go(request: HttpRequest, event_slug: str, slug: str, *, to_activ
         slug: The name of the configuration option to toggle
         to_active: Whether to activate (True) or deactivate (False) the option
 
-    Returns:
-        str | None: The section slug the option belongs to
-
-    Raises:
-        Http404: If the option is not available as a boolean configuration
-
     """
     context = check_event_context(request, event_slug, "orga_config")
     context["request"] = request
-
-    # Only options offered as boolean fields by the configuration form can be toggled
-    config_field = OrgaConfigForm(instance=context["event"], context=context).get_bool_field(slug)
-    if not config_field:
-        msg = "option not available!"
-        raise Http404(msg)
 
     # Configs of campaign children are held by the parent event
     event = context["event"]
@@ -599,23 +584,21 @@ def orga_config_go(request: HttpRequest, event_slug: str, slug: str, *, to_activ
         clear_run_cache_and_media(context["run"])
         message = _("Option %(name)s activated!") if to_active else _("Option %(name)s deactivated!")
 
-    messages.success(request, message % {"name": config_field["label"]})
-
-    return config_field["section_slug"]
+    messages.success(request, message % {"name": slug})
 
 
 @login_required
 def orga_config_on(request: HttpRequest, event_slug: str, slug: str) -> HttpResponseRedirect:
     """Activate a configuration option and redirect to the configuration page."""
-    section_slug = orga_config_go(request, event_slug, slug, to_active=True)
-    return redirect(_orga_config_after_link(event_slug, section_slug))
+    orga_config_go(request, event_slug, slug, to_active=True)
+    return redirect(_orga_config_after_link(event_slug))
 
 
 @login_required
 def orga_config_off(request: HttpRequest, event_slug: str, slug: str) -> HttpResponseRedirect:
     """Deactivate a configuration option and redirect to the configuration page."""
-    section_slug = orga_config_go(request, event_slug, slug, to_active=False)
-    return redirect(_orga_config_after_link(event_slug, section_slug))
+    orga_config_go(request, event_slug, slug, to_active=False)
+    return redirect(_orga_config_after_link(event_slug))
 
 
 @login_required

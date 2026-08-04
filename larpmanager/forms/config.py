@@ -196,13 +196,6 @@ class ConfigForm(BaseModelForm):
             },
         )
 
-    def get_bool_field(self, configuration_key: str) -> dict | None:
-        """Get the definition of an available boolean config field, or None if not available."""
-        for field_definition in self.config_fields:
-            if field_definition["key"] == configuration_key and field_definition["type"] == ConfigType.BOOL:
-                return field_definition
-        return None
-
     def save(self, commit: bool = True) -> BaseModel:  # noqa: FBT001, FBT002
         """Save the form instance with configuration values.
 
