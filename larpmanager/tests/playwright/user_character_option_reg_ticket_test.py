@@ -153,6 +153,8 @@ def create_character(page: Any) -> None:
     sidebar(page, "Edit")
 
     # check only one option available
+    # the character is already saved: the option starts collapsed
+    expand_options(page)
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"\n- text: bmb')
     page.locator('label[for="id_que_u4_0"]').click()  # select "bmb" (only option)
     submit_confirm(page)

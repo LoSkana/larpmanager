@@ -354,6 +354,8 @@ def modifiers(page: Any, live_server: Any) -> None:
     )
     page.get_by_role("link", name="Test Character").click()
     page.get_by_role("link", name="Edit").click()
+    # the character is already saved: the class options start collapsed
+    expand_options(page)
     page.locator('label[for="id_que_u5_1"]').click()
     submit_confirm(page)
     page.get_by_role("link", name="Abilities").click()
