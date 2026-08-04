@@ -469,7 +469,6 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
         event_smtp_user = get_event_config(
             event.id,
             "mail_server_host_user",
-            default_value="",
             context=cache_context,
             bypass_cache=True,
         )
@@ -486,7 +485,7 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
         metadata["base_url"] = get_url("", association).rstrip("/")
 
         # Add BCC if configured
-        if association.get_config("mail_cc", default_value=False, bypass_cache=True) and association.main_mail:
+        if association.get_config("mail_cc", bypass_cache=True) and association.main_mail:
             metadata["bcc_recipients"].append(association.main_mail)
 
         # Store organization main email for potential Reply-To (used by SES backend)
@@ -495,7 +494,7 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
 
         # Set sender (only if event didn't set it)
         if not event_settings_applied:
-            assoc_smtp_user = association.get_config("mail_server_host_user", default_value="", bypass_cache=True)
+            assoc_smtp_user = association.get_config("mail_server_host_user", bypass_cache=True)
             if assoc_smtp_user:
                 metadata["sender_email"] = assoc_smtp_user
                 metadata["sender_name"] = association.name

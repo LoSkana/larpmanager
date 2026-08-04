@@ -437,7 +437,7 @@ def event_payments_registration(
 
     # Load association configuration for payment display
     association_obj = Association.objects.get(pk=context["association_id"])
-    context["hide_amount"] = association_obj.get_config("payment_hide_amount", default_value=False)
+    context["hide_amount"] = association_obj.get_config("payment_hide_amount")
 
     # Pre-select payment method if specified
     if method:
@@ -1063,7 +1063,7 @@ def accounting_submit(request: HttpRequest, payment_method: str, invoice_uuid: s
         return redirect("accounting")
 
     # Check if receipt is required for manual payments
-    require_receipt = get_association_config(context["association_id"], "payment_require_receipt", default_value=False)
+    require_receipt = get_association_config(context["association_id"], "payment_require_receipt")
 
     # Select appropriate form based on payment type
     if payment_method in {"wire", "paypal_nf"}:
@@ -1144,7 +1144,7 @@ def accounting_confirm(request: HttpRequest, invoice_cod: str) -> HttpResponse:
 
     # Check if user is appointed treasurer
     if "treasurer" in get_association_features(association_id):
-        for mb in get_association_config(association_id, "treasurer_appointees", default_value="").split(", "):
+        for mb in get_association_config(association_id, "treasurer_appointees").split(", "):
             if not mb:
                 continue
             if context["member"].id == int(mb):

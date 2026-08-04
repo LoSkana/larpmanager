@@ -87,7 +87,7 @@ def _build_exp_context(
     )
 
     # Check if modifiers are enabled for this event; return empty if disabled
-    if not get_event_config(character.event_id, "exp_modifiers", default_value=False):
+    if not get_event_config(character.event_id, "exp_modifiers"):
         return current_character_abilities, current_character_choices, {}
 
     # Get all modifiers
@@ -334,7 +334,7 @@ def _apply_criterion_exp(
     criterions: list | None = None,
 ) -> None:
     """Apply all matching CriterionExp rules to deliveries_by_system in order."""
-    if not get_event_config(character.event_id, "exp_criterions", default_value=False):
+    if not get_event_config(character.event_id, "exp_criterions"):
         return
 
     if criterions is None:
@@ -491,7 +491,7 @@ def calculate_character_experience_points(character: Any) -> None:
     if "experience" not in get_event_features(character.event_id):
         return
 
-    starting_experience_points = get_event_config(character.event_id, "exp_start", default_value=0)
+    starting_experience_points = get_event_config(character.event_id, "exp_start")
 
     # Automatically obtain abilities with cost 0
     current_character_abilities, current_character_choices, modifiers_by_ability = _handle_free_abilities(character)
@@ -503,12 +503,12 @@ def calculate_character_experience_points(character: Any) -> None:
 
     # Pre-fetch criterions once so the auto-buy loop and final data build share the same list.
     criterions: list | None = None
-    if get_event_config(character.event_id, "exp_criterions", default_value=False):
+    if get_event_config(character.event_id, "exp_criterions"):
         criterions = _fetch_criterions(character)
 
     # Auto-buy abilities if configured; loop until convergence so that criterion
     # bonuses unlocked by auto-bought abilities are reflected in subsequent iterations.
-    if get_event_config(character.event_id, "exp_auto_buy", default_value=False):
+    if get_event_config(character.event_id, "exp_auto_buy"):
         while True:
             px_avail_by_system = _build_px_avail_by_system(
                 character,

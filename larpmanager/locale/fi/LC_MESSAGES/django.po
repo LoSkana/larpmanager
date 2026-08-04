@@ -4892,9 +4892,6 @@ msgstr "Korvaus on käsitelty"
 msgid "Select your preferences"
 msgstr "Valitse asetuksesi"
 
-msgid "Separate membership fee"
-msgstr "Erillinen jäsenmaksu"
-
 msgid "Show answered questions"
 msgstr "Näytä vastatut kysymykset"
 
@@ -5237,6 +5234,10 @@ msgstr "Hallitse varaston siirtoja"
 msgid "Member of the Organization"
 msgstr "Järjestön jäsen"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Asetus %(name)s on otettu käyttöön!"
+
 msgid "Option no longer available"
 msgstr "Vaihtoehto ei ole enää saatavilla"
 
@@ -5480,6 +5481,10 @@ msgstr "Killan lähettämät kutsut"
 
 msgid "Name of badge to be awarded."
 msgstr "Myönnettävän Badgen nimi."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Asetus %(name)s on poistettu käytöstä!"
 
 msgid "Please wait before retrying."
 msgstr "Odota ennen kuin yrität uudelleen."
@@ -6153,6 +6158,10 @@ msgstr "Hyväksy vastaanotetut maksut manuaalisesti"
 msgid "No activation steps are available."
 msgstr "Aktivointivaiheita ei ole saatavilla."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Vaihtoehto %(name)s on jo käytössä!"
+
 msgid "Promotion: website and advertising"
 msgstr "Markkinointi: verkkosivusto ja mainonta"
 
@@ -6371,6 +6380,10 @@ msgstr "Kysymyksiin ei ole vielä vastattu."
 
 msgid "Only really important communications"
 msgstr "Vain todella tärkeä viestintä"
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Asetus %(name)s on jo poistettu käytöstä!"
 
 #, python-format
 msgid "Quest types without quests: %(list)s"
@@ -11463,13 +11476,6 @@ msgid ""
 msgstr ""
 "Jos käytössä, osallistujalle ei lähetetä ilmoitusta, kun hänelle osoitetaan "
 "hahmo."
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Jos käytössä, vuotuinen jäsenmaksu maksetaan erikseen tapahtuman "
-"ilmoittautumismaksusta."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

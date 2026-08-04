@@ -205,10 +205,8 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["download"] = 1
 
     # Retrieve event configuration for user EXP management permissions
-    context["exp_user"] = get_event_config(context["event"].id, "exp_user", default_value=False, context=context)
-    context["exp_templates"] = get_event_config(
-        context["event"].id, "exp_templates", default_value=False, context=context
-    )
+    context["exp_user"] = get_event_config(context["event"].id, "exp_user", context=context)
+    context["exp_templates"] = get_event_config(context["event"].id, "exp_templates", context=context)
 
     # Expose system column only when multiple systems are configured
     context["multiple_systems"] = has_multiple_exp_systems(context["event"])
@@ -453,7 +451,7 @@ def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse
     if exclude_uuids:
         qs = qs.exclude(uuid__in=exclude_uuids)
 
-    show_number = get_event_config(context["event"].id, "writing_number", default_value=False, context=context)
+    show_number = get_event_config(context["event"].id, "writing_number", context=context)
 
     qs = qs.order_by("name")[:25]
     res = [(str(ch.uuid), f"#{ch.number} {ch.name}" if show_number else ch.name, ch.pk) for ch in qs]

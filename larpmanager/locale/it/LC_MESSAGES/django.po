@@ -4892,9 +4892,6 @@ msgstr "Rimborso elaborato"
 msgid "Select your preferences"
 msgstr "Scegli le tue preferenze"
 
-msgid "Separate membership fee"
-msgstr "Quota associativa separata"
-
 msgid "Show answered questions"
 msgstr "Mostra le domande a cui hai risposto"
 
@@ -5237,6 +5234,10 @@ msgstr "Gestisci i movimenti di magazzino"
 msgid "Member of the Organization"
 msgstr "Membro dell'Associazione"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "L'opzione %(name)s è stata attivata!"
+
 msgid "Option no longer available"
 msgstr "Opzione non più disponibile"
 
@@ -5480,6 +5481,10 @@ msgstr "Inviti della mia gilda"
 
 msgid "Name of badge to be awarded."
 msgstr "Nome del badge da assegnare."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "L'opzione %(name)s è stata disattivata!"
 
 msgid "Please wait before retrying."
 msgstr "Attendi prima di riprovare."
@@ -6153,6 +6158,10 @@ msgstr "Approva manualmente i pagamenti ricevuti"
 msgid "No activation steps are available."
 msgstr "Non sono disponibili procedure di attivazione."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "L'opzione %(name)s è già attivata!"
+
 msgid "Promotion: website and advertising"
 msgstr "Promozione: sito web e pubblicità"
 
@@ -6371,6 +6380,10 @@ msgstr "Non c'è ancora nessuna risposta alle domande."
 
 msgid "Only really important communications"
 msgstr "Solo le comunicazioni veramente importanti"
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "L'opzione %(name)s è già disattivata!"
 
 #, python-format
 msgid "Quest types without quests: %(list)s"
@@ -11681,13 +11694,6 @@ msgid ""
 msgstr ""
 "Se abilitato, non invia una notifica al partecipante quando viene assegnato "
 "un personaggio."
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Se abilitato, la quota associativa annuale viene pagata separatamente dalla "
-"quota di iscrizione all'evento."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

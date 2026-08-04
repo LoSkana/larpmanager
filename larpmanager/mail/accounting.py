@@ -508,7 +508,7 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
 
     """
     # Check if payment notifications are enabled for this organization
-    if not get_association_config(inv.association_id, "mail_payment", default_value=False):
+    if not get_association_config(inv.association_id, "mail_payment"):
         return
 
     # Get organization features to determine notification recipients
@@ -528,7 +528,7 @@ def notify_invoice_check(inv: PaymentInvoice) -> None:
     # If treasurer feature is enabled, add treasurer appointees to the notification list
     if "treasurer" in features:
         # Parse comma-separated list of treasurer member IDs
-        treasurer_list = get_association_config(inv.association_id, "treasurer_appointees", default_value="")
+        treasurer_list = get_association_config(inv.association_id, "treasurer_appointees")
         treasurer_ids = [x for x in treasurer_list.split(",") if x.strip()]
         query = Membership.objects.filter(
             association_id=inv.association_id, member_id__in=treasurer_ids

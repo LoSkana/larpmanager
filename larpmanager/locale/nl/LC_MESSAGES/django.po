@@ -4892,9 +4892,6 @@ msgstr "Terugbetaling verwerkt"
 msgid "Select your preferences"
 msgstr "Kies je voorkeuren"
 
-msgid "Separate membership fee"
-msgstr "Afzonderlijk lidmaatschapsgeld"
-
 msgid "Show answered questions"
 msgstr "Beantwoorde vragen weergeven"
 
@@ -5237,6 +5234,10 @@ msgstr "Beheer magazijnbewegingen"
 msgid "Member of the Organization"
 msgstr "Lid van de organisatie"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Optie %(name)s is ingeschakeld!"
+
 msgid "Option no longer available"
 msgstr "Optie niet langer beschikbaar"
 
@@ -5480,6 +5481,10 @@ msgstr "Mijn openstaande gilde-uitnodigingen"
 
 msgid "Name of badge to be awarded."
 msgstr "Naam van de toe te kennen badge."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Optie %(name)s is uitgeschakeld!"
 
 msgid "Please wait before retrying."
 msgstr "Wacht even voordat je het opnieuw probeert."
@@ -6154,6 +6159,10 @@ msgstr "Keur ontvangen betalingen handmatig goed"
 msgid "No activation steps are available."
 msgstr "Er zijn geen activeringsstappen beschikbaar."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Optie %(name)s is al ingeschakeld!"
+
 msgid "Promotion: website and advertising"
 msgstr "Promotie: website en reclame"
 
@@ -6372,6 +6381,10 @@ msgstr "Er zijn nog geen vragen beantwoord."
 
 msgid "Only really important communications"
 msgstr "Alleen echt belangrijke communicatie"
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Optie %(name)s is al uitgeschakeld!"
 
 #, python-format
 msgid "Quest types without quests: %(list)s"
@@ -11672,13 +11685,6 @@ msgid ""
 msgstr ""
 "Indien ingeschakeld, ontvangt de deelnemer geen melding wanneer een "
 "personage wordt toegewezen."
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Indien ingeschakeld, wordt het jaarlijkse lidmaatschapsgeld apart van het "
-"inschrijfgeld voor het evenement betaald."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

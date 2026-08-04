@@ -59,11 +59,11 @@ def signup(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/manage/features/payment/on")
     # Activate membership
     go_to(page, live_server, "/manage/features/membership/on")
-    go_to(page, live_server, "/manage/config")
-    page.get_by_role("link", name=re.compile(r"^Members\s.+")).click()
-    # explicitly set membership fee as separated (not bundled with registration)
-    page.locator("#id_membership_fee_separated").check()
 
+    # explicitly set membership fee as separated (not bundled with registration)
+    go_to(page, live_server, "/manage/config/membership_fee_separated/on/")
+
+    go_to(page, live_server, "/manage/config")
     page.get_by_role("link", name=re.compile(r"^Email notifications\s.+")).click()
     page.locator("#id_mail_cc").check()
     page.locator("#id_mail_signup_new").check()

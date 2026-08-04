@@ -335,32 +335,32 @@ def _build_event_payload(event: Event, run: Run) -> tuple[dict, Any | None]:
 
     # Load publication metadata from EventConfig
     genre_map = _get_genre_slug_map()
-    setting_raw = get_element_config(event, "pub_setting", default_value="")
-    mood_raw = get_element_config(event, "pub_mood", default_value="")
+    setting_raw = get_element_config(event, "pub_setting")
+    mood_raw = get_element_config(event, "pub_mood")
     slugs = parse_multi_config(setting_raw) + parse_multi_config(mood_raw)
     genere_ids = {genre_map[s] for s in slugs if s in genre_map}
     genere = sorted(genere_ids) or [genre_map.get("no-genre-specified", 27)]
 
-    lingua_raw = get_element_config(event, "pub_language", default_value="")
+    lingua_raw = get_element_config(event, "pub_language")
     lingua = parse_multi_config(lingua_raw) or [PromotionLanguage.values[0]]
 
-    tipologia_raw = get_element_config(event, "pub_event_type", default_value="") or PromotionEventType.values[0]
+    tipologia_raw = get_element_config(event, "pub_event_type") or PromotionEventType.values[0]
     tipologia = _TIPOLOGIA_MAP.get(tipologia_raw, tipologia_raw)
 
-    luogo = get_element_config(event, "pub_place", default_value="") or event.where or None
-    nazione = get_element_config(event, "pub_country", default_value="") or None
+    luogo = get_element_config(event, "pub_place") or event.where or None
+    nazione = get_element_config(event, "pub_country") or None
 
-    accommodation_raw = get_element_config(event, "pub_accommodation", default_value="")
+    accommodation_raw = get_element_config(event, "pub_accommodation")
     accommodation = _ACCOMMODATION_MAP.get(accommodation_raw, accommodation_raw) or None
 
-    tipo_accommodation_raw = get_element_config(event, "pub_accommodation_type", default_value="")
+    tipo_accommodation_raw = get_element_config(event, "pub_accommodation_type")
     tipo_accommodation = [_ACCOMMODATION_TYPE_MAP.get(v, v) for v in parse_multi_config(tipo_accommodation_raw)] or None
 
-    pasti_raw = get_element_config(event, "pub_meals", default_value="")
+    pasti_raw = get_element_config(event, "pub_meals")
     pasti = [_MEALS_MAP.get(v, v) for v in parse_multi_config(pasti_raw)] or None
 
-    lat = get_element_config(event, "pub_lat", default_value="").strip()
-    lon = get_element_config(event, "pub_lon", default_value="").strip()
+    lat = get_element_config(event, "pub_lat").strip()
+    lon = get_element_config(event, "pub_lon").strip()
     location = f"{lat},{lon}" if lat and lon else None
 
     locandina = event.cover if event.cover else None
@@ -523,7 +523,7 @@ def sync_cast(registration: Registration | None, run: Run, registration_id: int 
     ctx = _get_ildb_context(run.event, run)
     if not ctx or not ctx.ildb_event_id:
         return
-    if not get_association_config(ctx.association.id, "publication_cast", default_value=False):
+    if not get_association_config(ctx.association.id, "publication_cast"):
         return
 
     base_url = f"{ILDB_API_BASE}/teams/{ctx.team_id}/events/{ctx.ildb_event_id}/cast"

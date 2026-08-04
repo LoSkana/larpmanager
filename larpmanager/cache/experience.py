@@ -91,7 +91,7 @@ def get_event_exp_key(event_id: int) -> str:
 
 def get_exp_effective_event_id(event: Event) -> int:
     """Return the event ID to use as EXP cache key."""
-    if event.parent_id and not event.get_config("campaign_abilitypx_indep", default_value=False):
+    if event.parent_id and not event.get_config("campaign_abilitypx_indep"):
         return event.parent_id
     return event.id
 

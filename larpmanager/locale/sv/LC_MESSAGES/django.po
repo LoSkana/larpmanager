@@ -4892,9 +4892,6 @@ msgstr "Återbetalningen har behandlats"
 msgid "Select your preferences"
 msgstr "Välj dina preferenser"
 
-msgid "Separate membership fee"
-msgstr "Separat medlemsavgift"
-
 msgid "Show answered questions"
 msgstr "Visa besvarade frågor"
 
@@ -5237,6 +5234,10 @@ msgstr "Hantera lagerrörelser"
 msgid "Member of the Organization"
 msgstr "Medlem i organisationen"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Alternativet %(name)s har aktiverats!"
+
 msgid "Option no longer available"
 msgstr "Alternativet är inte längre tillgängligt"
 
@@ -5480,6 +5481,10 @@ msgstr "Mina väntande gillesinbjudningar"
 
 msgid "Name of badge to be awarded."
 msgstr "Namn på badge som ska tilldelas."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Alternativet %(name)s är inaktiverat!"
 
 msgid "Please wait before retrying."
 msgstr "Vänligen vänta innan du försöker igen."
@@ -6153,6 +6158,10 @@ msgstr "Godkänn mottagna betalningar manuellt"
 msgid "No activation steps are available."
 msgstr "Det finns inga aktiveringssteg."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Alternativet %(name)s är redan aktiverat!"
+
 msgid "Promotion: website and advertising"
 msgstr "Marknadsföring: webbplats och reklam"
 
@@ -6371,6 +6380,10 @@ msgstr "Inga frågor har besvarats ännu."
 
 msgid "Only really important communications"
 msgstr "Endast riktigt viktig kommunikation"
+
+#, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Alternativet %(name)s är redan inaktiverat!"
 
 #, python-format
 msgid "Quest types without quests: %(list)s"
@@ -11449,13 +11462,6 @@ msgid ""
 msgstr ""
 "Om det är aktiverat skickas ingen notifiering till deltagaren när en "
 "karaktär tilldelas."
-
-msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Om det är aktiverat betalas den årliga medlemsavgiften separat från "
-"anmälningsavgiften för evenemanget."
 
 msgid ""
 "No characters have been created yet. Add characters to see their player "

@@ -305,9 +305,7 @@ def get_casting_choices_quests(context: dict) -> tuple[dict[str, str], list[str]
 def check_player_skip_characters(relation: RegistrationCharacterRel, context: dict) -> bool:
     """Check if registration has reached maximum allowed characters."""
     # Get max characters allowed from event config
-    max_characters_allowed = int(
-        get_event_config(context["event"].id, "casting_characters", default_value=1, context=context)
-    )
+    max_characters_allowed = int(get_event_config(context["event"].id, "casting_characters", context=context))
 
     # Check if current character count meets or exceeds limit
     return RegistrationCharacterRel.objects.filter(registration=relation).count() >= max_characters_allowed
