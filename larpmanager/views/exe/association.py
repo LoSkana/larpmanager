@@ -370,7 +370,7 @@ def exe_config_go(request: HttpRequest, slug: str, *, to_active: bool = True) ->
     association = Association.objects.get(pk=context["association_id"])
 
     # Skip the update if the option already has the requested value
-    if get_association_config(context["association_id"], slug, default_value=False) == to_active:
+    if get_association_config(context["association_id"], slug) == to_active:
         message = _("Option %(name)s already activated!") if to_active else _("Option %(name)s already deactivated!")
     else:
         save_single_config(association, slug, str(to_active))

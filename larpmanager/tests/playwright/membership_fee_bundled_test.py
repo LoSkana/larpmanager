@@ -73,6 +73,9 @@ def setup(live_server: Any, page: Any) -> None:
     page.locator("#id_membership_fee").fill("20")
     submit_confirm(page)
 
+    # explicitly set membership fee as bundled with the registration fee
+    go_to(page, live_server, "/manage/config/membership_fee_separated/off/")
+
     # Set up wire payment method
     go_to(page, live_server, "/manage/methods")
     page.get_by_role("checkbox", name="Wire").check()

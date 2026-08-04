@@ -576,7 +576,7 @@ def orga_config_go(request: HttpRequest, event_slug: str, slug: str, *, to_activ
     config_target = event.parent if event.parent_id else event
 
     # Skip the update if the option already has the requested value
-    if get_event_config(config_target.id, slug, default_value=False) == to_active:
+    if get_event_config(config_target.id, slug) == to_active:
         message = _("Option %(name)s already activated!") if to_active else _("Option %(name)s already deactivated!")
     else:
         save_single_config(config_target, slug, str(to_active))

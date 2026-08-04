@@ -20,8 +20,7 @@
 
 """
 Test: Direct activation and deactivation of configuration options.
-Verifies that the organization and event config on/off links set the option value,
-and that options not available as boolean configurations are rejected.
+Verifies that the organization and event config on/off links set the option value.
 """
 
 from typing import Any
@@ -53,7 +52,3 @@ def test_config_toggle(pw_page: Any) -> None:
     expect(page.locator("#id_show_export")).to_be_checked()
     go_to(page, live_server, "/test/manage/config/show_export/off")
     expect(page.locator("#id_show_export")).not_to_be_checked()
-
-    # Options not offered as boolean configurations are not accepted
-    assert page.request.get(f"{live_server}/manage/config/not_existing/on/").status == 404
-    assert page.request.get(f"{live_server}/test/manage/config/not_existing/on/").status == 404

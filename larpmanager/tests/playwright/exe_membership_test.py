@@ -23,7 +23,6 @@ Verifies membership application submission with document uploads, profile confir
 request approval process, and membership status tracking.
 """
 
-import re
 from typing import Any
 
 import pytest
