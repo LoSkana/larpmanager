@@ -313,12 +313,6 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
         template = get_template(template_path)
         html_content = template.render(context)
 
-    # Remove empty or whitespace-only <p> tags before PDF rendering
-    html_content = re.sub(r"<p[^>]*>(\s|&nbsp;)*</p>", "", html_content)
-
-    # Replace <br> tags with non-breaking space for horizontal spacing
-    html_content = re.sub(r"<br\s*/?>", "&nbsp;", html_content)
-
     # xhtml2pdf ignores unitless line-height values (e.g. "2"); convert to percentage
     html_content = re.sub(
         r"line-height:\s*([0-9]+(?:\.[0-9]+)?)\s*;",
