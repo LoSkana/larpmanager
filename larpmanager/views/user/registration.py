@@ -662,18 +662,20 @@ def register(
     current_run = context["run"]
     current_event = context["event"]
 
-    # Prevent registration on concluded or cancelled runs
-    if current_run.development in [DevelopStatus.DONE, DevelopStatus.CANC]:
+    # Set up registration context for the current run
+    registration = context.get("registration")
+
+    # Prevent new registrations or changes on concluded or cancelled runs: existing ones stay readable
+    concluded = current_run.development in [DevelopStatus.DONE, DevelopStatus.CANC]
+    if concluded and (not registration or request.method == "POST"):
         msg = _("Registration closed") + " - "
-        if current_run == DevelopStatus.DONE:
+        if current_run.development == DevelopStatus.DONE:
             msg += _("This event has concluded")
         else:
             msg += _("This event has been cancelled")
         messages.warning(request, msg)
         return redirect("event", event_slug=current_run.get_slug())
-
-    # Set up registration context for the current run
-    registration = context.get("registration")
+    context["registration_readonly"] = concluded
 
     # A pending signup request cannot be edited through the normal form: send back to its status page
     if registration and registration.pending:

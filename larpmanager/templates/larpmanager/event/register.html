@@ -139,7 +139,9 @@
                             {% endif %}
                         </tbody>
                     </table>
-                    <input type="submit" value="{% trans "Confirm" %}" id="register_go">
+                    {% if not registration_readonly %}
+                        <input type="submit" value="{% trans "Confirm" %}" id="register_go">
+                    {% endif %}
                 </div>
             </form>
         </div>
