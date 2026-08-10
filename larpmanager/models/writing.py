@@ -382,9 +382,16 @@ class Character(Writing):
         """Return queryset of relationships where this character is the source."""
         return Relationship.objects.filter(source_id=self.pk)
 
-    def get_plot_characters(self) -> Any:
-        """Return queryset of plot-character relations for this character."""
-        return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
+    def get_plot_characters(self, event: Any = None) -> Any:
+        """Return queryset of plot-character relations for this character.
+
+        Plots are not inherited in campaigns: when an event is given, only relations
+        towards plots of that event are returned.
+        """
+        queryset = PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
+        if event:
+            queryset = queryset.filter(plot__event=event.get_class_parent("plot"))
+        return queryset.order_by("order")
 
     @classmethod
     def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
@@ -985,6 +992,33 @@ def replace_character_names(instance: Any) -> None:
             plot_character_relationship.save()
 
 
+class RelationshipTag(UuidMixin, OrderMixin, BaseConceptModel):
+    """Represents a reusable label applied to relationships between characters."""
+
+    symmetric = models.BooleanField(
+        default=True,
+        verbose_name=_("Symmetric"),
+        help_text=_(
+            "If checked, applying this tag to a relationship also applies it to the other "
+            "character's relationship back towards this one",
+        ),
+    )
+
+    class Meta:
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_RelationshipTag_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_RelationshipTag_without_optional",
+            ),
+        ]
+
+
 class Relationship(BaseModel):
     """Represents Relationship model."""
 
@@ -995,6 +1029,8 @@ class Relationship(BaseModel):
     text = HTMLField(blank=True)
 
     auto = models.BooleanField(default=False)
+
+    tags = models.ManyToManyField(RelationshipTag, related_name="relationships", blank=True)
 
     @property
     def event(self) -> Any:

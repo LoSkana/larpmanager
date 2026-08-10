@@ -26,12 +26,13 @@ from typing import Any
 from django.db import transaction
 from django.http import Http404
 
-from larpmanager.cache.character import get_character_element_fields, get_event_cache_all
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import search_player
+from larpmanager.cache.writing import get_character_element_fields
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -420,10 +421,10 @@ def get_character_sheet_plots(context: dict) -> None:
 
     context["sheet_plots"] = []
 
-    # Get all plot relations for the character ordered by sequence
-    plot_relations = PlotCharacterRel.objects.select_related("plot").filter(character=context["character"])
+    # Get the plot relations of the current event for the character, ordered by sequence
+    plot_relations = context["character"].get_plot_characters(context["event"])
 
-    for plot_relation in plot_relations.order_by("order"):
+    for plot_relation in plot_relations:
         # Start with the base plot text
         combined_text = plot_relation.plot.text
 

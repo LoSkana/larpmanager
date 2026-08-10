@@ -1167,6 +1167,26 @@ urlpatterns = [
         name="orga_progress_steps_delete",
     ),
     path(
+        "<slug:event_slug>/manage/relationship_tags/",
+        views_ow.orga_relationship_tags,
+        name="orga_relationship_tags",
+    ),
+    path(
+        "<slug:event_slug>/manage/relationship_tags/new/",
+        views_ow.orga_relationship_tags_new,
+        name="orga_relationship_tags_new",
+    ),
+    path(
+        "<slug:event_slug>/manage/relationship_tags/<slug:tag_uuid>/edit/",
+        views_ow.orga_relationship_tags_edit,
+        name="orga_relationship_tags_edit",
+    ),
+    path(
+        "<slug:event_slug>/manage/relationship_tags/<slug:tag_uuid>/delete/",
+        views_ow.orga_relationship_tags_delete,
+        name="orga_relationship_tags_delete",
+    ),
+    path(
         "<slug:event_slug>/manage/experience/systems/",
         views_ox.orga_exp_systems,
         name="orga_exp_systems",
@@ -1645,6 +1665,16 @@ urlpatterns = [
         "<slug:event_slug>/manage/config/",
         views_oe.orga_config,
         name="orga_config",
+    ),
+    path(
+        "<slug:event_slug>/manage/config/<slug:slug>/on/",
+        views_oe.orga_config_on,
+        name="orga_config_on",
+    ),
+    path(
+        "<slug:event_slug>/manage/config/<slug:slug>/off/",
+        views_oe.orga_config_off,
+        name="orga_config_off",
     ),
     path(
         "<slug:event_slug>/manage/backup/",

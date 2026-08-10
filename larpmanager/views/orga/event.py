@@ -32,7 +32,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import clear_run_cache_and_media
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.run import get_cache_run
 from larpmanager.forms.event import (
@@ -64,7 +64,9 @@ from larpmanager.utils.io.download import (
     export_abilities,
     export_character_configs,
     export_character_form,
+    export_criterions,
     export_data,
+    export_deliveries,
     export_event,
     export_registration_form,
     export_tickets,
@@ -550,6 +552,55 @@ def orga_features_off(request: HttpRequest, event_slug: str, slug: str) -> HttpR
     return redirect("manage", event_slug=event_slug)
 
 
+def _orga_config_after_link(event_slug: str) -> str:
+    """Build the configuration page URL, jumping to the section of the toggled option."""
+    kwargs = {"event_slug": event_slug}
+    return reverse("orga_config", kwargs=kwargs)
+
+
+def orga_config_go(request: HttpRequest, event_slug: str, slug: str, *, to_active: bool = True) -> None:
+    """Toggle a boolean configuration option for an event.
+
+    Args:
+        request: The HTTP request object
+        event_slug: The event slug identifier
+        slug: The name of the configuration option to toggle
+        to_active: Whether to activate (True) or deactivate (False) the option
+
+    """
+    context = check_event_context(request, event_slug, "orga_config")
+    context["request"] = request
+
+    # Configs of campaign children are held by the parent event
+    event = context["event"]
+    config_target = event.parent if event.parent_id else event
+
+    # Skip the update if the option already has the requested value
+    if get_event_config(config_target.id, slug) == to_active:
+        message = _("Option %(name)s already activated!") if to_active else _("Option %(name)s already deactivated!")
+    else:
+        save_single_config(config_target, slug, str(to_active))
+        config_target.save()
+        clear_run_cache_and_media(context["run"])
+        message = _("Option %(name)s activated!") if to_active else _("Option %(name)s deactivated!")
+
+    messages.success(request, message % {"name": slug})
+
+
+@login_required
+def orga_config_on(request: HttpRequest, event_slug: str, slug: str) -> HttpResponseRedirect:
+    """Activate a configuration option and redirect to the configuration page."""
+    orga_config_go(request, event_slug, slug, to_active=True)
+    return redirect(_orga_config_after_link(event_slug))
+
+
+@login_required
+def orga_config_off(request: HttpRequest, event_slug: str, slug: str) -> HttpResponseRedirect:
+    """Deactivate a configuration option and redirect to the configuration page."""
+    orga_config_go(request, event_slug, slug, to_active=False)
+    return redirect(_orga_config_after_link(event_slug))
+
+
 @login_required
 def orga_deadlines(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display deadlines for a specific run."""
@@ -639,6 +690,9 @@ def _prepare_backup(context: dict) -> HttpResponse:
     # Export experience/abilities data if feature is enabled
     if "experience" in context["features"]:
         export_files.extend(export_abilities(context))
+        export_files.extend(export_deliveries(context))
+        # Exported regardless of the criterions config, so that backup and restore stay symmetric
+        export_files.extend(export_criterions(context))
 
     # Export quest builder data if feature is enabled
     if "questbuilder" in context["features"]:
@@ -831,6 +885,10 @@ def orga_upload_template(request: HttpRequest, event_slug: str, upload_type: str
         exports = _rule_template(context)
     elif upload_type == "exp_modifier":
         exports = _modifier_template(context)
+    elif upload_type == "exp_criterion":
+        exports = _criterion_template(context)
+    elif upload_type == "exp_deliverie":
+        exports = _delivery_template(context)
     else:
         # Generate generic form template for other data types
         exports = _form_template(context)
@@ -875,15 +933,13 @@ def _ability_template(context: dict) -> Any:
         "cost": "Ability cost",
         "typ": "Ability type",
         "descr": "Ability description",
-        "prerequisites": "Ability prerequisite, comma-separated",
+        "prerequisites": "Prerequisite abilities, comma-separated",
         "requirements": "Character options, comma-separated",
+        "visible": "true",
+        "system": "Experience system name",
     }
     column_names = list(context["columns"][0].keys())
-    example_row_values = []
-    for field_name, example_value in field_example_values.items():
-        if field_name not in column_names:
-            continue
-        example_row_values.append(example_value)
+    example_row_values = [field_example_values.get(column_name, "") for column_name in column_names]
     export_data.append(("abilities", column_names, [example_row_values]))
     return export_data
 
@@ -899,7 +955,7 @@ def _rule_template(context: dict) -> Any:
         "order": "1",
     }
     column_names = list(context["columns"][0].keys())
-    example_row = [field_example_values[f] for f in field_example_values if f in column_names]
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
     return [("rules", column_names, [example_row])]
 
 
@@ -914,8 +970,41 @@ def _modifier_template(context: dict) -> Any:
         "order": "1",
     }
     column_names = list(context["columns"][0].keys())
-    example_row = [field_example_values[f] for f in field_example_values if f in column_names]
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
     return [("modifiers", column_names, [example_row])]
+
+
+def _criterion_template(context: dict) -> Any:
+    """Generate template for criterion uploads with example data."""
+    field_example_values = {
+        "number": "1",
+        "name": "Criterion name",
+        "operation": "ADD",
+        "amount": "10",
+        "prerequisites": "Prerequisite abilities, comma-separated",
+        "requirements": "Character options, comma-separated",
+        "factions": "Factions name, comma-separated",
+        "order": "1",
+        "system": "Experience system name",
+    }
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("criterions", column_names, [example_row])]
+
+
+def _delivery_template(context: dict) -> Any:
+    """Generate template for delivery uploads with example data."""
+    field_example_values = {
+        "number": "1",
+        "name": "Delivery name",
+        "amount": "10",
+        "characters": "Characters name, comma-separated",
+        "order": "1",
+        "system": "Experience system name",
+    }
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("deliveries", column_names, [example_row])]
 
 
 def _form_template(context: dict) -> list[tuple[str, list[str], list[list[str]]]]:

@@ -30,6 +30,7 @@ wrapped view body only runs on that POST.
 from __future__ import annotations
 
 from functools import wraps
+from http import HTTPStatus
 from typing import TYPE_CHECKING
 
 from django.shortcuts import render
@@ -40,6 +41,8 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from django.http import HttpRequest, HttpResponse
+
+REDIRECT_STATUS = (HTTPStatus.MOVED_PERMANENTLY, HTTPStatus.FOUND)
 
 
 def confirm_post(view_func: Callable[..., HttpResponse]) -> Callable[..., HttpResponse]:
@@ -52,8 +55,21 @@ def confirm_post(view_func: Callable[..., HttpResponse]) -> Callable[..., HttpRe
 
     @wraps(view_func)
     def _wrapped(request: HttpRequest, *args: object, **kwargs: object) -> HttpResponse:
+        is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
+
         if request.method == "POST":
-            return view_func(request, *args, **kwargs)
-        return render(request, "elements/confirm_action.html", get_context(request))
+            response = view_func(request, *args, **kwargs)
+            # Inside an iframe modal, hand the redirect target over to the parent window
+            if is_frame and response.status_code in REDIRECT_STATUS and response.get("Location"):
+                return render(
+                    request,
+                    "elements/dashboard/frame_redirect.html",
+                    {"redirect_url": response["Location"]},
+                )
+            return response
+
+        context = get_context(request)
+        context["frame"] = is_frame
+        return render(request, "elements/confirm_action.html", context)
 
     return _wrapped

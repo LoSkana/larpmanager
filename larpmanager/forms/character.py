@@ -35,6 +35,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.rels import refresh_character_relationships_background
+from larpmanager.cache.writing import get_cached_relationship_tags
 from larpmanager.forms.base import BaseModelForm
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
@@ -71,6 +72,7 @@ from larpmanager.models.writing import (
     Plot,
     PlotCharacterRel,
     Relationship,
+    RelationshipTag,
     TextVersionChoices,
 )
 from larpmanager.utils.edit.backend import save_version
@@ -405,11 +407,12 @@ class OrgaCharacterForm(CharacterForm):
         if not self.instance.pk:
             return
         rel_by_uuid: dict[str, dict] = {}
-        for relationship in self.instance.source.select_related("target").all():
+        for relationship in self.instance.source.select_related("target").prefetch_related("tags").all():
             other_char = relationship.target
             if other_char.uuid not in rel_by_uuid:
                 rel_by_uuid[other_char.uuid] = {"char": other_char}
             rel_by_uuid[other_char.uuid]["direct"] = relationship.text
+            rel_by_uuid[other_char.uuid]["tags"] = list(relationship.tags.all())
         for relationship in self.instance.target.select_related("source").all():
             other_char = relationship.source
             if other_char.uuid not in rel_by_uuid:
@@ -439,6 +442,11 @@ class OrgaCharacterForm(CharacterForm):
 
         # Load relationship data from DB (also populates self.params["relationships"])
         self._load_relationships_data()
+
+        if get_event_config(context["event"].id, "writing_relationship_tags", context=self.params):
+            context["relationship_tags"] = get_cached_relationship_tags(context["event"])
+            for entry in self.params["relationships"].values():
+                entry["tag_uuids"] = [tag.uuid for tag in entry.get("tags", [])]
 
         if not self.instance.pk:
             return
@@ -511,7 +519,12 @@ class OrgaCharacterForm(CharacterForm):
         )
         self.configure_field_event("plots", self.params["event"])
 
-        self.plots = self.instance.get_plot_characters()
+        # the js builds the role row of a plot as soon as it is selected, before saving
+        self.load_js = [*self.load_js, "character-plots"]
+        self.plot_role_help_text = _("This text will be added to the %(name)s plot paragraph in the sheet.")
+        self.params["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
+
+        self.plots = self.instance.get_plot_characters(self.params["event"])
         self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
 
         self.add_char_finder = []
@@ -531,8 +544,7 @@ class OrgaCharacterForm(CharacterForm):
             self.fields[plot_field_name] = forms.CharField(
                 widget=WritingTinyMCE(),
                 label=plot_name,
-                help_text=_("This text will be added to the %(name)s plot paragraph in the sheet.")
-                % {"name": plot_name},
+                help_text=self.plot_role_help_text % {"name": plot_name},
                 required=False,
             )
 
@@ -562,9 +574,10 @@ class OrgaCharacterForm(CharacterForm):
         if "plots" not in self.cleaned_data:
             return
 
-        # Add / remove plots
+        # Add / remove plots, restricted to the plots of this event (they are not inherited)
+        plot_event = self.params["event"].get_class_parent(Plot)
         selected = set(self.cleaned_data.get("plots", []))
-        current = set(Plot.objects.filter(plotcharacterrel__character=instance))
+        current = set(Plot.objects.filter(plotcharacterrel__character=instance, event=plot_event))
 
         to_add = selected - current
         to_remove = current - selected
@@ -575,15 +588,14 @@ class OrgaCharacterForm(CharacterForm):
         for plot in to_add:
             PlotCharacterRel.objects.create(character=instance, plot=plot)
 
-        # update texts
+        # update texts (rows added client side are not declared fields, read them from raw data)
         to_update = []
-        for pr in instance.get_plot_characters():
+        for pr in instance.get_plot_characters(self.params["event"]):
             field = f"pl_{pr.plot_id}"
-            if field not in self.cleaned_data:
+            text = self.cleaned_data[field] if field in self.cleaned_data else self.data.get(field)
+            if text is None or text == pr.text:
                 continue
-            if self.cleaned_data[field] == pr.text:
-                continue
-            pr.text = self.cleaned_data[field]
+            pr.text = text
             to_update.append(pr)
         if to_update:
             PlotCharacterRel.objects.bulk_update(to_update, ["text"])
@@ -668,10 +680,13 @@ class OrgaCharacterForm(CharacterForm):
 
         uuid_to_id = dict(self.params["event"].get_elements(Character).values_list("uuid", "id"))
 
-        rel_data = {k: v for k, v in self.data.items() if k.startswith("rel")}
+        rel_data = {k: v for k, v in self.data.items() if k.startswith("rel_") and not k.startswith("rel_tags_")}
         # Only process relationships if relationship fields are present in the form
         if not rel_data:
             return
+        posted_tags = self._posted_relationship_tags()
+        submitted_uuids = set()
+        deleted_uuids = set()
         for key, value in rel_data.items():
             match = re.match(r"rel_([a-zA-Z0-9]+)", key)
             if not match:
@@ -684,6 +699,7 @@ class OrgaCharacterForm(CharacterForm):
                 msg = f"char {ch_uuid} not recognized"
                 raise Http404(msg)
 
+            submitted_uuids.add(ch_uuid)
             character_id = uuid_to_id[ch_uuid]
 
             # Strip surrounding whitespace from template indentation (e.g. when TinyMCE
@@ -696,13 +712,8 @@ class OrgaCharacterForm(CharacterForm):
 
             # if value is empty or contains only HTML whitespace (e.g. <p></p>, <p>&nbsp;</p>)
             if not clean_value or not plain_text:
-                # if wasn't present, do nothing
-                if ch_uuid not in self.params["relationships"] or rel_type not in self.params["relationships"][ch_uuid]:
-                    continue
-                # else delete
-                rel = self._get_rel(character_id, instance, rel_type)
-                save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], to_delete=True)
-                rel.delete()
+                if self._clear_relationship_text(character_id, instance, ch_uuid, keep=bool(posted_tags.get(ch_uuid))):
+                    deleted_uuids.add(ch_uuid)
                 continue
 
             # if the value is present, and is the same as before, do nothing
@@ -725,6 +736,120 @@ class OrgaCharacterForm(CharacterForm):
             rel.auto = False
             save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"])
             rel.save()
+
+        self._save_relationship_tags(instance, uuid_to_id, submitted_uuids, deleted_uuids, posted_tags)
+
+    def _clear_relationship_text(self, character_id: int, instance: Any, ch_uuid: str, *, keep: bool) -> bool:
+        """Handle a relationship whose text was emptied, returning True when the row was removed.
+
+        A relationship still carrying tags is kept alive with an empty text, so that the tags
+        (and any symmetric mirror they created) survive.
+        """
+        previous = self.params["relationships"].get(ch_uuid, {})
+        # if wasn't present, do nothing
+        if "direct" not in previous:
+            return False
+
+        rel = self._get_rel(character_id, instance, "direct")
+        save_version(rel, TextVersionChoices.RELATIONSHIP, self.params["member"], to_delete=True)
+        if keep:
+            rel.text = ""
+            rel.save()
+            return False
+
+        rel.delete()
+        return True
+
+    def _data_getlist(self, field_name: str) -> list[str]:
+        """Read a repeated raw form value, tolerating a plain dict instead of a QueryDict."""
+        if hasattr(self.data, "getlist"):
+            return self.data.getlist(field_name)
+        value = self.data.get(field_name)
+        if value is None:
+            return []
+        return list(value) if isinstance(value, (list, tuple)) else [value]
+
+    def _posted_relationship_tags(self) -> dict[str, list]:
+        """Read the relationship tag checkboxes posted for each character, keyed by character uuid.
+
+        Tags are posted as plain checkboxes (`rel_tags_{uuid}`), not a declared form field,
+        so they are read directly from raw POST data. Unknown uuids are dropped, so only tags
+        belonging to this event can be applied.
+        """
+        if not get_event_config(self.params["event"].id, "writing_relationship_tags", context=self.params):
+            return {}
+
+        prefix = "rel_tags_"
+        tag_by_uuid = {tag.uuid: tag for tag in self.params["event"].get_elements(RelationshipTag)}
+        posted: dict[str, list] = {}
+        for key in self.data:
+            if not key.startswith(prefix):
+                continue
+            posted[key[len(prefix) :]] = [
+                tag_by_uuid[tag_uuid] for tag_uuid in self._data_getlist(key) if tag_uuid in tag_by_uuid
+            ]
+        return posted
+
+    def _save_relationship_tags(
+        self,
+        instance: Any,
+        uuid_to_id: dict,
+        submitted_uuids: set,
+        deleted_uuids: set,
+        posted_tags: dict[str, list],
+    ) -> None:
+        """Apply the posted relationship tags to the relationships of the edited character.
+
+        Only tags flagged as symmetric are mirrored onto the other character's relationship
+        back towards this one; asymmetric tags are only set on the relationship being edited.
+        """
+        if not get_event_config(self.params["event"].id, "writing_relationship_tags", context=self.params):
+            return
+
+        # with no tag defined the form renders no checkbox, so an empty post must not clear anything
+        if not get_cached_relationship_tags(self.params["event"]):
+            return
+
+        relationships = self.params.get("relationships", {})
+        for ch_uuid in submitted_uuids:
+            character_id = uuid_to_id[ch_uuid]
+            # a deleted relationship took its tags with it, so it counts as having none
+            new_tags = [] if ch_uuid in deleted_uuids else posted_tags.get(ch_uuid, [])
+            previous_tags = relationships.get(ch_uuid, {}).get("tags", [])
+
+            # nothing to tag and no existing relationship to untag: don't create an empty one
+            if not new_tags and not previous_tags:
+                continue
+
+            # unchanged tags: the direct relationship and its mirror are already up to date
+            if set(new_tags) == set(previous_tags):
+                continue
+
+            if ch_uuid not in deleted_uuids:
+                self._get_rel(character_id, instance, "direct").tags.set(new_tags)
+
+            self._mirror_symmetric_tags(instance, character_id, new_tags, previous_tags)
+
+    def _mirror_symmetric_tags(self, instance: Any, character_id: int, new_tags: list, previous_tags: list) -> None:
+        """Apply on the inverse relationship the symmetric tags added to, or removed from, the direct one."""
+        new_symmetric = {tag for tag in new_tags if tag.symmetric}
+        previous_symmetric = {tag for tag in previous_tags if tag.symmetric}
+        removed_symmetric = previous_symmetric - new_symmetric
+        if not new_symmetric and not removed_symmetric:
+            return
+
+        if new_symmetric:
+            inverse_rel = self._get_rel(character_id, instance, "inverse")
+        else:
+            # only tags to drop: never create an inverse relationship just to empty it
+            inverse_rel = Relationship.objects.filter(source_id=character_id, target_id=instance.pk).first()
+            if inverse_rel is None:
+                return
+
+        if removed_symmetric:
+            inverse_rel.tags.remove(*removed_symmetric)
+        if new_symmetric:
+            inverse_rel.tags.add(*new_symmetric)
 
     @staticmethod
     def _get_rel(character_id: int, instance: Any, relationship_type: str) -> Relationship:

@@ -25,7 +25,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max
+from django.db.models import Max, Prefetch
 from django.db.models.functions import Length, Substr
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
@@ -250,8 +250,14 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, character_uui
     # Get parent event to ensure character belongs to this event
     parent_event = context["event"].get_class_parent(Character)
 
+    # Plots are not inherited in campaigns: keep only the ones of this event
+    plots_prefetch = Prefetch(
+        "plots",
+        queryset=Plot.objects.filter(event=context["event"].get_class_parent(Plot)).prefetch_related("characters"),
+    )
+
     # Load character with prefetched factions and plots, filtered by event
-    context["character"] = Character.objects.prefetch_related("factions_list__characters", "plots__characters").get(
+    context["character"] = Character.objects.prefetch_related("factions_list__characters", plots_prefetch).get(
         event=parent_event, uuid=character_uuid
     )
 

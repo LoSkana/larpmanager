@@ -72,8 +72,8 @@
     {% endif %}
 {% endif %}
 {% if check %}
-    {% if character.mirror_inv and False %}
-        <div class="go-inline">
+    {% if character.mirror_inv %}
+        <div class="go-inline" id="char_mirror_inv">
             <span class="hide-screen">|</span>
             <b>{% trans "Mirror:" %}&nbsp;</b>{{ character.mirror_inv }}
         </div>

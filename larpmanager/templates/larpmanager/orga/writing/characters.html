@@ -84,6 +84,13 @@
                 <i class="fa fa-hashtag"></i> {% trans "Important" %}
             </th>
         {% endif %}
+        {% if writing_relationship_tags %}
+            {% for tag in relationship_tags %}
+                <th class="stats stats-relationship_list">
+                    <i class="fa fa-hashtag"></i> {{ tag.name }}
+                </th>
+            {% endfor %}
+        {% endif %}
     {% endif %}
     {% if features.speedlarp %}
         <th class="speedlarp">{% trans "Speedlarp" %}</th>
@@ -178,6 +185,11 @@
         </td>
         <td class="stats">{{ el.relationships_rels.count }}</td>
         {% if writing_unimportant %}<td class="stats">{{ el.relationships_rels.important }}</td>{% endif %}
+        {% if writing_relationship_tags %}
+            {% for tag in relationship_tags %}
+                <td class="stats">{{ el.relationship_tag_counts|get:tag.uuid|default:0 }}</td>
+            {% endfor %}
+        {% endif %}
     {% endif %}
     {% if features.speedlarp %}
         <td class="speedlarp dot_links">

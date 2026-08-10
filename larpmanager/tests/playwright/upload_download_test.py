@@ -77,7 +77,45 @@ def test_upload_download(pw_page: Any) -> None:
 
     abilities(page)
 
+    criterions_deliveries(page)
+
     full(page)
+
+
+def criterions_deliveries(page: Any) -> None:
+    # enable criteria
+    page.get_by_role("link", name="Configuration").first.click()
+    page.get_by_role("link", name=re.compile(r"^Experience points ")).click()
+    page.locator("#id_exp_criterions").check()
+    submit_confirm(page)
+
+    sidebar(page, "Criteria")
+    page.get_by_role("link", name="Upload").click()
+    check_download(page, "Download example template")
+    upload(page, "#id_first", get_path("criterions.csv"))
+    submit_confirm(page)
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created bonus OK - Created malus",
+    )
+    page.get_by_role("link", name="Proceed").click()
+    _wait_lm_ready(page)
+    check_download(page, "Download")
+
+    sidebar(page, "Awards")
+    page.get_by_role("link", name="Upload").click()
+    check_download(page, "Download example template")
+    upload(page, "#id_first", get_path("deliveries.csv"))
+    submit_confirm(page)
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Loading performed, see logs Proceed Logs OK - Created first award OK - Created second award",
+    )
+    page.get_by_role("link", name="Proceed").click()
+    _wait_lm_ready(page)
+    check_download(page, "Download")
 
 
 def abilities(page: Any) -> None:

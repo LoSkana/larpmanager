@@ -366,6 +366,18 @@ input[type="checkbox"].checkbox_single {
   margin: 0;
 }
 
+/* beats the .my-checkbox-class > div / .reg-radio-class > div display rules */
+.opt-collapsed.hide {
+  display: none;
+}
+
+.opt-show-more {
+  display: inline-block;
+  margin: 0.2em 0 0.4em;
+  font-size: 0.85em;
+  cursor: pointer;
+}
+
 .choice-hint {
   display: inline-block;
   font-size: 0.85em;
@@ -738,4 +750,12 @@ body:not(.new_v18) .only_new_v18 {
   .new_v18 .form_container table .tox-tinymce {
     width: 100% !important;
   }
+}
+
+.rel_tag_checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  margin: 0 1em 0.5em 0;
+  font-weight: normal;
 }
