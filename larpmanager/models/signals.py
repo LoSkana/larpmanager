@@ -24,9 +24,10 @@ from typing import Any
 
 from axes.signals import user_locked_out
 from django.contrib.auth.models import User
-from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
+from django.db.models.signals import m2m_changed, post_save, pre_save
 from django.dispatch import receiver
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
+from safedelete.signals import post_softdelete, pre_softdelete
 
 from larpmanager.accounting.base import (
     handle_accounting_item_collection_post_save,
@@ -50,14 +51,12 @@ from larpmanager.accounting.registration import (
 from larpmanager.accounting.token_credit import (
     update_credit_on_expense_save,
     update_token_credit_on_other_save,
-    update_token_credit_on_payment_delete,
     update_token_credit_on_payment_save,
 )
 from larpmanager.accounting.vat import calculate_payment_vat
 from larpmanager.cache.accounting import clear_registration_accounting_cache, refresh_member_accounting_cache
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.association_text import (
-    clear_association_text_cache_on_delete,
     update_association_text_cache_on_save,
 )
 from larpmanager.cache.association_translation import clear_association_translation_cache
@@ -76,7 +75,7 @@ from larpmanager.cache.character import (
     update_member_event_character_cache,
 )
 from larpmanager.cache.config import reset_element_configs
-from larpmanager.cache.event_text import reset_event_text, update_event_text_cache_on_save
+from larpmanager.cache.event_text import update_event_text_cache_on_save
 from larpmanager.cache.experience import (
     clear_event_exp_systems_cache,
     on_ability_characters_m2m_changed,
@@ -302,17 +301,12 @@ from larpmanager.utils.auth.permission import auto_assign_event_permission_numbe
 from larpmanager.utils.core.clone_guard import is_clone_active
 from larpmanager.utils.core.nav import invalidate_user_nav_entries
 from larpmanager.utils.io.pdf import (
-    cleanup_character_pdfs_before_delete,
     cleanup_character_pdfs_on_save,
-    cleanup_faction_pdfs_before_delete,
     cleanup_faction_pdfs_on_save,
     cleanup_handout_pdfs_after_save,
-    cleanup_handout_pdfs_before_delete,
     cleanup_handout_template_pdfs_after_save,
-    cleanup_handout_template_pdfs_before_delete,
     cleanup_pdfs_on_trait_assignment,
     cleanup_relationship_pdfs_after_save,
-    cleanup_relationship_pdfs_before_delete,
     deactivate_castings_and_remove_pdfs,
     delete_character_pdf_files,
 )
@@ -419,19 +413,6 @@ def post_save_callback(sender: type, instance: object, created: bool, **kwargs: 
         reset_widgets(instance)
 
 
-@receiver(post_delete)
-def post_delete_text_fields_callback(sender: type, instance: object, **kwargs: Any) -> None:
-    """Handle post-delete operations for all models."""
-    # Update text fields cache after model instance deletion
-    update_text_fields_cache(instance)
-
-    # Update cache for accounting items
-    reset_accountingitem_cache(instance)
-
-    if isinstance(instance, RESET_WIDGETS_TYPES):
-        reset_widgets(instance)
-
-
 def reset_accountingitem_cache(instance: Any) -> None:
     """Handle reset cache after accounting item saved."""
     if not isinstance(instance, AccountingItem):
@@ -446,12 +427,6 @@ def post_save_ability_exp(sender: type, instance: AbilityExp, *args: Any, **kwar
     """Update character experience when ability changes."""
     _recalcuate_characters_experience_points(instance)
     on_ability_saved(instance)
-
-
-@receiver(post_delete, sender=AbilityExp)
-def post_delete_ability_exp(sender: type, instance: AbilityExp, *args: Any, **kwargs: Any) -> None:
-    """Update character experience when ability is deleted."""
-    _recalcuate_characters_experience_points(instance)
 
 
 @receiver(pre_save, sender=AccountingItemCollection)
@@ -574,23 +549,9 @@ def post_save_payment_accounting_cache(
     calculate_payment_vat(instance)
 
 
-@receiver(post_delete, sender=AccountingItemPayment)
-def post_delete_payment_accounting_cache(
-    sender: type,
-    instance: AccountingItemPayment,
-    **kwargs: Any,
-) -> None:
-    """Update accounting caches after payment deletion."""
-    update_token_credit_on_payment_delete(instance)
-
-    # Refresh member accounting cache if payment is linked to a registration
-    if instance.registration and instance.registration.run:
-        refresh_member_accounting_cache(instance.registration.run, instance.member_id)
-
-
-@receiver(pre_delete, sender=AssignmentTrait)
-def pre_delete_assignment_trait(sender: type, instance: AssignmentTrait, **kwargs: Any) -> None:
-    """Signal handler to deactivate castings and remove PDFs when an assignment trait is deleted."""
+@receiver(pre_softdelete, sender=AssignmentTrait)
+def pre_softdelete_assignment_trait(sender: type, instance: AssignmentTrait, **kwargs: Any) -> None:
+    """Deactivate castings and remove PDFs when an assignment trait is soft deleted."""
     deactivate_castings_and_remove_pdfs(instance)
 
 
@@ -625,12 +586,6 @@ def post_save_assignment_trait(
             update_character_referenced_chars_background(char_id)
 
 
-@receiver(post_delete, sender=AssignmentTrait)
-def post_delete_assignment_trait_reset(sender: type, instance: AssignmentTrait, **kwargs: Any) -> None:
-    """Clear cache and media after assignment deletion."""
-    clear_run_cache_and_media(instance.run)
-
-
 @receiver(pre_save, sender=AssociationPermission)
 def pre_save_association_permission(sender: type, instance: object, **kwargs: Any) -> None:
     """Auto-assign number to association permission before save."""
@@ -648,28 +603,6 @@ def post_save_association_permission_index_permission(
     clear_association_permission_cache(instance)
 
 
-@receiver(post_delete, sender=AssociationPermission)
-def post_delete_association_permission_index_permission(
-    sender: type,
-    instance: AssociationPermission,
-    **kwargs: Any,
-) -> None:
-    """Clear association permission caches after deletion."""
-    clear_index_permission_cache("association")
-    clear_association_permission_cache(instance)
-
-
-@receiver(pre_delete, sender=AssociationRole)
-def pre_delete_association_role_reset(sender: type, instance: AssociationRole, **kwargs: dict) -> None:
-    """Clean up cache and event links when an association role is deleted."""
-    # Clear cached role data
-    remove_association_role_cache(instance.pk)
-
-    # Reset event links for all members with this role
-    for member in instance.members.all():
-        reset_event_links(member.id, instance.association_id)
-
-
 @receiver(post_save, sender=AssociationRole)
 def post_save_association_role_reset(sender: type, instance: AssociationRole, **kwargs: Any) -> None:
     """Reset caches when an association role is saved."""
@@ -681,12 +614,6 @@ def post_save_association_role_reset(sender: type, instance: AssociationRole, **
         reset_event_links(member.id, instance.association_id)
 
 
-@receiver(pre_delete, sender=AssociationText)
-def pre_delete_association_text(sender: type, instance: object, **kwargs: Any) -> None:
-    """Clear association text cache before deletion."""
-    clear_association_text_cache_on_delete(instance)
-
-
 @receiver(post_save, sender=AssociationText)
 def post_save_association_text(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
     """Update association text cache after save."""
@@ -696,12 +623,6 @@ def post_save_association_text(sender: type, instance: object, created: bool, **
 @receiver(post_save, sender=AssociationTranslation)
 def post_save_association_translation(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
     """Clear cache when association translation is saved."""
-    clear_association_translation_cache(instance.association_id, instance.language)
-
-
-@receiver(pre_delete, sender=AssociationTranslation)
-def pre_delete_association_translation(sender: type, instance: object, **kwargs: Any) -> None:
-    """Clear cache when association translation is deleted."""
     clear_association_translation_cache(instance.association_id, instance.language)
 
 
@@ -738,12 +659,6 @@ def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs
 @receiver(post_save, sender=AssociationConfig)
 def post_save_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
     """Clear association config cache after save."""
-    reset_element_configs(instance.association)
-
-
-@receiver(post_delete, sender=AssociationConfig)
-def post_delete_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
-    """Clear association config cache after deletion."""
     reset_element_configs(instance.association)
 
 
@@ -837,42 +752,18 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     update_character_referenced_chars_background(instance.id)
 
 
-@receiver(pre_delete, sender=Character)
-def pre_delete_character_reset(sender: type, instance: Character, **kwargs: Any) -> None:
-    """Clear event cache and cleanup PDFs before character deletion."""
-    clear_event_cache_all_runs(instance.event)
-    cleanup_character_pdfs_before_delete(instance)
-
-
-@receiver(post_delete, sender=Character)
-def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs: Any) -> None:
-    """Clear caches for deleted character and update related relationships."""
+@receiver(post_softdelete, sender=Character)
+def post_softdelete_character_reset_rels(sender: type, instance: Character, **kwargs: Any) -> None:
+    """Clear event and relationship caches when a character is soft deleted."""
     if is_clone_active():
         return
-
-    # Update all related caches
-    refresh_character_related_caches(instance)
-
-    # Clear event-level relationship cache
+    clear_event_cache_all_runs(instance.event)
     clear_event_relationships_cache(instance.event_id)
-
-    # Refresh cache for characters that had this character as target
-    for rel in Relationship.objects.filter(target=instance):
-        refresh_character_relationships_background(rel.source_id)
-
-    # Update visible factions
-    update_visible_factions(instance.event)
 
 
 @receiver(post_save, sender=CharacterConfig)
 def post_save_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset character configuration cache after save."""
-    reset_element_configs(instance.character)
-
-
-@receiver(post_delete, sender=CharacterConfig)
-def post_delete_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Reset character configuration cache after model deletion."""
     reset_element_configs(instance.character)
 
 
@@ -911,12 +802,6 @@ def post_save_delivery_exp(
     """Refresh delivery characters after save signal."""
     _recalcuate_characters_experience_points(instance)
     refresh_delivery_relationships(instance)
-
-
-@receiver(post_delete, sender=DeliveryExp)
-def post_delete_delivery_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Signal handler that refreshes delivery characters after a delivery is deleted."""
-    _recalcuate_characters_experience_points(instance)
 
 
 @receiver(post_save, sender=Inventory)
@@ -980,35 +865,15 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
         publish_event(instance.id)
 
 
-@receiver(post_delete, sender=Event)
-def post_delete_event_links(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear cache for event links after deletion."""
-    clear_run_event_links_cache(instance)
-
-
 @receiver(post_save, sender=SystemExp)
 def post_save_system_exp(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear experience systems cache after save."""
     clear_event_exp_systems_cache(instance.event_id)
 
 
-@receiver(pre_delete, sender=SystemExp)
-def pre_delete_system_exp(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear experience systems cache before deletion."""
-    clear_event_exp_systems_cache(instance.event_id)
-
-
 @receiver(post_save, sender=EventButton)
 def post_save_event_button(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
     """Clear event button cache after save."""
-    clear_event_button_cache(instance.event_id)
-    for run in instance.event.runs.all():
-        reset_cache_config_run(run)
-
-
-@receiver(pre_delete, sender=EventButton)
-def pre_delete_event_button(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear cache when event button is deleted."""
     clear_event_button_cache(instance.event_id)
     for run in instance.event.runs.all():
         reset_cache_config_run(run)
@@ -1030,17 +895,6 @@ def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> 
         clear_event_relationships_cache(instance.event_id)
 
 
-@receiver(post_delete, sender=EventConfig)
-def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear event configuration cache after deletion."""
-    reset_element_configs(instance.event)
-    for run in instance.event.runs.all():
-        reset_cache_config_run(run)
-
-    if instance.name == "writing_relationship_tags":
-        clear_event_relationships_cache(instance.event_id)
-
-
 @receiver(pre_save, sender=EventPermission)
 def pre_save_event_permission(sender: type, instance: EventPermission, **kwargs: Any) -> None:
     """Auto-assign permission number before saving EventPermission."""
@@ -1054,24 +908,6 @@ def post_save_event_permission_reset(sender: type, instance: EventPermission, **
     clear_index_permission_cache("event")
 
 
-@receiver(post_delete, sender=EventPermission)
-def post_delete_event_permission_reset(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Reset event permission caches after EventPermission deletion."""
-    clear_event_permission_cache(instance)
-    clear_index_permission_cache("event")
-
-
-@receiver(pre_delete, sender=EventRole)
-def pre_delete_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
-    """Reset caches and event links when an EventRole is deleted."""
-    # Clear the event role cache for this instance
-    remove_event_role_cache(instance.pk)
-
-    # Reset event links for all members associated with this role
-    for member in instance.members.all():
-        reset_event_links(member.id, instance.event.association_id)
-
-
 @receiver(post_save, sender=EventRole)
 def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
     """Reset caches when an EventRole is saved."""
@@ -1082,15 +918,15 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
     for member in instance.members.all():
         reset_event_links(member.id, instance.event.association_id)
 
-    # Schedule publication crew sync (skip if being soft-deleted)
+    # Schedule publication crew sync (soft deletes are handled by post_softdelete)
     if instance.deleted is None:
         publish_event_role(instance.id)
 
 
-@receiver(post_delete, sender=EventText)
-def post_delete_event_text(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear event text cache after deletion."""
-    reset_event_text(instance)
+@receiver(post_softdelete, sender=EventRole)
+def post_softdelete_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
+    """Rebuild the published crew list after an event role is soft deleted."""
+    publish_event_role(instance.id)
 
 
 @receiver(post_save, sender=EventText)
@@ -1146,28 +982,13 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
     update_visible_factions(instance.event)
 
 
-@receiver(pre_delete, sender=Faction)
-def pre_delete_faction(sender: type, instance: Faction, **kwargs: dict) -> None:
-    """Clean up faction PDFs and clear event cache before faction deletion."""
-    cleanup_faction_pdfs_before_delete(instance)
-    clear_event_cache_all_runs(instance.event)
-
-
-@receiver(post_delete, sender=Faction)
-def post_delete_faction_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
-    """Reset character relationships when a faction is deleted."""
+@receiver(post_softdelete, sender=Faction)
+def post_softdelete_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any) -> None:
+    """Clear event cache and drop a soft deleted faction from the relationship cache."""
     if is_clone_active():
         return
-
-    # Update cache for all characters that were in this faction
-    for char in instance.characters.all():
-        refresh_character_relationships_background(char.id)
-
-    # Remove faction from cache
+    clear_event_cache_all_runs(instance.event)
     remove_item_from_cache_section(instance.event_id, "factions", instance.id)
-
-    # Update visible factions config
-    update_visible_factions(instance.event)
 
 
 @receiver(post_save, sender=Feature)
@@ -1175,17 +996,6 @@ def post_save_feature_index_permission(sender: type, instance: object, **kwargs:
     """Clear permission and feature caches after feature/permission save."""
     clear_index_permission_cache("event")
     clear_index_permission_cache("association")
-    reset_features_cache()
-
-
-@receiver(post_delete, sender=Feature)
-def post_delete_feature_index_permission(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear permission and feature caches after deleting feature index permission."""
-    # Clear both event and association permission caches
-    clear_index_permission_cache("event")
-    clear_index_permission_cache("association")
-
-    # Reset global features cache
     reset_features_cache()
 
 
@@ -1200,34 +1010,10 @@ def post_save_feature_module_index_permission(sender: type, instance: object, **
     reset_features_cache()
 
 
-@receiver(post_delete, sender=FeatureModule)
-def post_delete_feature_module_index_permission(
-    sender: type,
-    instance: object,
-    **kwargs: object,
-) -> None:
-    """Clear permission and feature caches after deletion."""
-    clear_index_permission_cache("event")
-    clear_index_permission_cache("association")
-    reset_features_cache()
-
-
-@receiver(pre_delete, sender=Handout)
-def pre_delete_handout(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clean up handout PDFs before deletion."""
-    cleanup_handout_pdfs_before_delete(instance)
-
-
 @receiver(post_save, sender=Handout)
 def post_save_handout(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clean up handout PDFs after save."""
     cleanup_handout_pdfs_after_save(instance)
-
-
-@receiver(pre_delete, sender=HandoutTemplate)
-def pre_delete_handout_template(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Delete associated PDF files before deleting handout template."""
-    cleanup_handout_template_pdfs_before_delete(instance)
 
 
 @receiver(post_save, sender=HandoutTemplate)
@@ -1251,12 +1037,6 @@ def pre_save_larp_manager_faq(sender: type, instance: LarpManagerFaq, *args: Any
 @receiver(post_save, sender=LarpManagerGuide)
 def post_save_reset_guides_cache(sender: type, instance: object, **kwargs: dict) -> None:
     """Signal handler to reset guides cache when guide content changes."""
-    reset_guides_cache()
-
-
-@receiver(post_delete, sender=LarpManagerGuide)
-def post_delete_reset_guides_cache(sender: type, instance: object, **kwargs: dict) -> None:
-    """Reset guides cache after model deletion."""
     reset_guides_cache()
 
 
@@ -1284,21 +1064,9 @@ def post_save_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any) 
     reset_tutorials_cache()
 
 
-@receiver(post_delete, sender=LarpManagerTutorial)
-def post_delete_reset_tutorials_cache(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Reset tutorials cache after instance deletion."""
-    reset_tutorials_cache()
-
-
 @receiver(post_save, sender=LarpManagerShowcase)
 def post_save_reset_lm_home_cache_showcase(sender: type, instance: object, **kwargs: dict) -> None:
     """Signal handler to reset home cache when showcase content changes."""
-    clear_larpmanager_home_cache()
-
-
-@receiver(post_delete, sender=LarpManagerShowcase)
-def post_delete_reset_lm_home_cache_showcase(sender: type, instance: object, **kwargs: dict) -> None:
-    """Reset home cache after showcase deletion."""
     clear_larpmanager_home_cache()
 
 
@@ -1308,21 +1076,9 @@ def post_save_reset_lm_home_cache_highlight(sender: type, instance: object, **kw
     clear_larpmanager_home_cache()
 
 
-@receiver(post_delete, sender=LarpManagerHighlight)
-def post_delete_reset_lm_home_cache_highlight(sender: type, instance: object, **kwargs: dict) -> None:
-    """Reset home cache after highlight deletion."""
-    clear_larpmanager_home_cache()
-
-
 @receiver(post_save, sender=LarpManagerScreenshot)
 def post_save_reset_lm_home_cache_screenshot(sender: type, instance: object, **kwargs: dict) -> None:
     """Signal handler to reset home cache when screenshot content changes."""
-    clear_larpmanager_home_cache()
-
-
-@receiver(post_delete, sender=LarpManagerScreenshot)
-def post_delete_reset_lm_home_cache_screenshot(sender: type, instance: object, **kwargs: dict) -> None:
-    """Reset home cache after screenshot deletion."""
     clear_larpmanager_home_cache()
 
 
@@ -1332,33 +1088,15 @@ def post_save_reset_lm_home_cache_partner(sender: type, instance: object, **kwar
     clear_larpmanager_home_cache()
 
 
-@receiver(post_delete, sender=LarpManagerPartner)
-def post_delete_reset_lm_home_cache_partner(sender: type, instance: object, **kwargs: dict) -> None:
-    """Reset home cache after partner deletion."""
-    clear_larpmanager_home_cache()
-
-
 @receiver(post_save, sender=LarpManagerCollaborator)
 def post_save_reset_lm_collaborators_cache(sender: type, instance: object, **kwargs: dict) -> None:
     """Signal handler to reset collaborators cache when collaborator content changes."""
     clear_larpmanager_collaborators_cache()
 
 
-@receiver(post_delete, sender=LarpManagerCollaborator)
-def post_delete_reset_lm_collaborators_cache(sender: type, instance: object, **kwargs: dict) -> None:
-    """Reset collaborators cache after collaborator deletion."""
-    clear_larpmanager_collaborators_cache()
-
-
 @receiver(post_save, sender=LarpManagerText)
 def post_save_reset_lm_texts_cache(sender: type, instance: LarpManagerText, **kwargs: dict) -> None:
     """Signal handler to reset texts cache when text content changes."""
-    clear_larpmanager_texts_cache()
-
-
-@receiver(post_delete, sender=LarpManagerText)
-def post_delete_reset_lm_texts_cache(sender: type, instance: LarpManagerText, **kwargs: dict) -> None:
-    """Reset texts cache after text deletion."""
     clear_larpmanager_texts_cache()
 
 
@@ -1371,12 +1109,6 @@ def post_save_member_reset(sender: type, instance: Member, **kwargs: dict) -> No
 @receiver(post_save, sender=MemberConfig)
 def post_save_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset member configuration cache after save."""
-    reset_element_configs(instance.member)
-
-
-@receiver(post_delete, sender=MemberConfig)
-def post_delete_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear member config cache after deletion."""
     reset_element_configs(instance.member)
 
 
@@ -1395,12 +1127,6 @@ def post_save_modifier_exp(sender: type, instance: object, *args: Any, **kwargs:
     refresh_modifier_relationships(instance)
 
 
-@receiver(post_delete, sender=ModifierExp)
-def post_delete_modifier_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Update character experience after modifier deletion."""
-    _recalcuate_characters_experience_points(instance)
-
-
 @receiver(pre_save, sender=PaymentInvoice)
 def pre_save_payment_invoice(sender: type[PaymentInvoice], instance: PaymentInvoice, **kwargs: Any) -> None:
     """Process payment invoice status changes before saving."""
@@ -1409,18 +1135,12 @@ def pre_save_payment_invoice(sender: type[PaymentInvoice], instance: PaymentInvo
     process_payment_invoice_status_change(instance)
 
 
-@receiver(pre_delete, sender=PaymentInvoice)
-def pre_delete_payment_invoice_membership_config(
+@receiver(pre_softdelete, sender=PaymentInvoice)
+def pre_softdelete_payment_invoice_membership_config(
     sender: type[PaymentInvoice], instance: PaymentInvoice, **kwargs: Any
 ) -> None:
-    """Clean up payment invoices before deleting instance."""
+    """Release the membership fee reservation when an invoice is soft deleted."""
     cleanup_membership_fee_reservation(instance)
-
-
-@receiver(pre_delete, sender=PlayerRelationship)
-def pre_delete_player_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clean up relationship PDFs before deleting instance."""
-    cleanup_relationship_pdfs_before_delete(instance)
 
 
 @receiver(post_save, sender=PlayerRelationship)
@@ -1449,32 +1169,17 @@ def post_save_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> No
         refresh_character_relationships_background(char_rel.character_id)
 
 
-@receiver(post_delete, sender=Plot)
-def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> None:
-    """Reset character relationships and cache when a plot is deleted."""
-    # Update cache for all characters that were in this plot
-    for char_rel in instance.get_plot_characters():
-        refresh_character_relationships_background(char_rel.character_id)
-
-    # Remove plot from cache
+@receiver(post_softdelete, sender=Plot)
+def post_softdelete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted plot from the event relationship cache."""
+    if is_clone_active():
+        return
     remove_item_from_cache_section(instance.event_id, "plots", instance.id)
 
 
 @receiver(post_save, sender=PlotCharacterRel)
 def post_save_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
     """Recompute auto relationships when a plot-character relation changes."""
-    if is_clone_active():
-        return
-    if instance.plot_id:
-        refresh_event_plot_relationships_background(instance.plot_id)
-        mark_plot_character_rel_dirty(instance.plot_id, instance.character_id)
-    if instance.character_id:
-        update_character_referenced_chars_background(instance.character_id)
-
-
-@receiver(post_delete, sender=PlotCharacterRel)
-def post_delete_plot_character_rel_refs(sender: type, instance: PlotCharacterRel, **kwargs: Any) -> None:
-    """Recompute auto relationships when a plot-character relation is deleted."""
     if is_clone_active():
         return
     if instance.plot_id:
@@ -1510,14 +1215,11 @@ def post_save_prologue_reset_rels(sender: type, instance: Prologue, **kwargs: An
         refresh_character_relationships_background(char.id)
 
 
-@receiver(post_delete, sender=Prologue)
-def post_delete_prologue_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
-    """Reset character relationships and cache when prologue is deleted."""
-    # Update cache for all characters that were in this prologue
-    for char in instance.characters.all():
-        refresh_character_relationships_background(char.id)
-
-    # Remove prologue from cache
+@receiver(post_softdelete, sender=Prologue)
+def post_softdelete_prologue_reset_rels(sender: type, instance: Prologue, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted prologue from the event relationship cache."""
+    if is_clone_active():
+        return
     remove_item_from_cache_section(instance.event_id, "prologues", instance.id)
 
 
@@ -1538,20 +1240,12 @@ def post_save_quest_reset_rels(sender: type, instance: Quest, **kwargs: Any) -> 
         refresh_event_questtype_relationships_background(instance.typ_id)
 
 
-@receiver(pre_delete, sender=Quest)
-def pre_delete_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear event cache when quest is deleted."""
+@receiver(post_softdelete, sender=Quest)
+def post_softdelete_quest_reset_rels(sender: type, instance: Quest, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted quest from the event relationship cache."""
+    if is_clone_active():
+        return
     clear_event_cache_all_runs(instance.event)
-
-
-@receiver(post_delete, sender=Quest)
-def post_delete_quest_reset_rels(sender: type, instance: object, **kwargs: Any) -> None:
-    """Reset quest relationships after quest deletion."""
-    # Update questtype cache if quest had a type
-    if instance.typ:
-        refresh_event_questtype_relationships_background(instance.typ_id)
-
-    # Remove quest from cache
     remove_item_from_cache_section(instance.event_id, "quests", instance.id)
 
 
@@ -1576,20 +1270,12 @@ def post_save_questtype_reset_rels(
         refresh_event_quest_relationships_background(quest.id)
 
 
-@receiver(pre_delete, sender=QuestType)
-def pre_delete_quest_type_reset(sender: type, instance: QuestType, **kwargs: dict) -> None:
-    """Clear cache when a quest type is deleted."""
+@receiver(post_softdelete, sender=QuestType)
+def post_softdelete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted quest type from the event relationship cache."""
+    if is_clone_active():
+        return
     clear_event_cache_all_runs(instance.event)
-
-
-@receiver(post_delete, sender=QuestType)
-def post_delete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs: Any) -> None:
-    """Reset quest relationships when a quest type is deleted."""
-    # Update cache for all quests that were of this type
-    for quest in instance.quests.all():
-        refresh_event_quest_relationships_background(quest.id)
-
-    # Remove questtype from cache
     remove_item_from_cache_section(instance.event_id, "questtypes", instance.id)
 
 
@@ -1640,14 +1326,16 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     if instance.pending:
         return
 
-    # Assign character from previous campaign if applicable
-    assign_previous_campaign_character(instance)
+    # Soft deleted registrations only need their caches dropped, not their data recomputed
+    if not instance.deleted:
+        # Assign character from previous campaign if applicable
+        assign_previous_campaign_character(instance)
 
-    # Process ticket options and character-related data
-    process_character_ticket_options(instance)
+        # Process ticket options and character-related data
+        process_character_ticket_options(instance)
 
-    # Update accounting records and balances
-    handle_registration_accounting_updates(instance)
+        # Update accounting records and balances
+        handle_registration_accounting_updates(instance)
 
     # Clear cached accounting data for this run
     clear_registration_accounting_cache(instance.run_id)
@@ -1662,13 +1350,14 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
-    # Sync published data on this registration
-    publish_registration(instance.id)
+    # Sync published data on this registration (soft deletes are handled by post_softdelete, which knows the run)
+    if not instance.deleted:
+        publish_registration(instance.id)
 
 
-@receiver(pre_delete, sender=Registration)
-def pre_delete_registration(sender: type, instance: Registration, *args: Any, **kwargs: Any) -> None:
-    """Send email notification before registration is deleted."""
+@receiver(pre_softdelete, sender=Registration)
+def pre_softdelete_registration(sender: type, instance: Registration, **kwargs: Any) -> None:
+    """Send email notification before a registration is soft deleted."""
     if is_clone_active():
         return
     if instance.pending:
@@ -1677,13 +1366,12 @@ def pre_delete_registration(sender: type, instance: Registration, *args: Any, **
     send_registration_deletion_email(instance)
 
 
-@receiver(post_delete, sender=Registration)
-def post_delete_registration_accounting_cache(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear accounting cache for the associated run after registration deletion, and sync published data."""
+@receiver(post_softdelete, sender=Registration)
+def post_softdelete_registration_publication(sender: type, instance: Registration, **kwargs: Any) -> None:
+    """Sync published data after a registration is soft deleted (run needed, the row is gone from queries)."""
     if is_clone_active():
         return
 
-    clear_registration_accounting_cache(instance.run_id)
     publish_registration(instance.id, instance.run_id)
 
 
@@ -1716,44 +1404,15 @@ def post_save_registration_character_rel_savereg(
     publish_registration(instance.registration_id)
 
 
-@receiver(post_delete, sender=RegistrationCharacterRel)
-def post_delete_registration_character_rel_savereg(
-    sender: type, instance: RegistrationCharacterRel, **kwargs: Any
-) -> None:
-    """Reset character registration cache after relationship deletion."""
-    if is_clone_active():
-        return
-
-    reset_character_registration_cache(instance)
-
-    # Clear deadline widget cache (casting requirements)
-    reset_widgets(instance.registration)
-
-    # Schedule publication cast sync
-    publish_registration(instance.registration_id)
-
-
 @receiver(post_save, sender=RegistrationSection)
 def post_save_registration_section(sender: type, instance: RegistrationSection, **kwargs: dict) -> None:
     """Process registration section post-save signal."""
     clear_registration_questions_cache(instance.event_id)
 
 
-@receiver(post_delete, sender=RegistrationSection)
-def post_delete_registration_section(sender: type, instance: RegistrationSection, **kwargs: Any) -> None:
-    """Process registration section post-delete signal."""
-    clear_registration_questions_cache(instance.event_id)
-
-
 @receiver(post_save, sender=RegistrationQuestion)
 def post_save_registration_question(sender: type, instance: RegistrationQuestion, **kwargs: dict) -> None:
     """Process registration question post-save signal."""
-    clear_registration_questions_cache(instance.event_id)
-
-
-@receiver(post_delete, sender=RegistrationQuestion)
-def post_delete_registration_question(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
-    """Process registration question post-delete signal."""
     clear_registration_questions_cache(instance.event_id)
 
 
@@ -1764,12 +1423,6 @@ def post_save_registration_option(sender: type, instance: RegistrationOption, **
         return
 
     process_registration_option_post_save(instance)
-    clear_registration_questions_cache(instance.question.event_id)
-
-
-@receiver(post_delete, sender=RegistrationOption)
-def post_delete_registration_option(sender: type, instance: RegistrationOption, **kwargs: Any) -> None:
-    """Process registration option post-delete signal."""
     clear_registration_questions_cache(instance.question.event_id)
 
 
@@ -1789,30 +1442,12 @@ def post_save_ticket_accounting_cache(
     clear_registration_tickets_cache(instance.event_id)
 
 
-@receiver(post_delete, sender=RegistrationTicket)
-def post_delete_ticket_accounting_cache(sender: type, instance: RegistrationTicket, **kwargs: Any) -> None:
-    """Clear cache for all runs when a ticket is deleted."""
-    reset_registration_ticket(instance)
-
-
-@receiver(post_delete, sender=RegistrationQuota)
-def post_delete_registration_quota(sender: type, instance: RegistrationQuota, **kwargs: Any) -> None:
-    """Clear cache for registration tickets when quota is deleted."""
-    clear_registration_tickets_cache(instance.event_id)
-
-
 @receiver(pre_save, sender=Relationship)
 def pre_save_relationship_replace_names(sender: type, instance: Relationship, **kwargs: Any) -> None:
     """Replace character name placeholders in relationship text before saving."""
     if is_clone_active():
         return
     replace_character_names(instance)
-
-
-@receiver(pre_delete, sender=Relationship)
-def pre_delete_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Delete character PDF files before relationship deletion."""
-    delete_character_pdf_files(instance.source)
 
 
 @receiver(post_save, sender=Relationship)
@@ -1834,12 +1469,6 @@ def post_save_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any
         ).delete()
 
 
-@receiver(post_delete, sender=Relationship)
-def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Update cache for source character after relationship deletion."""
-    refresh_character_relationships(instance.source)
-
-
 @receiver(post_save, sender=RelationshipTag)
 def post_save_relationship_tag(sender: type, instance: RelationshipTag, **kwargs: Any) -> None:
     """Clear relationship tags cache when a tag is saved."""
@@ -1849,19 +1478,6 @@ def post_save_relationship_tag(sender: type, instance: RelationshipTag, **kwargs
         refresh_characters_relationships(collect_relationship_tag_characters(instance))
 
 
-@receiver(pre_delete, sender=RelationshipTag)
-def pre_delete_relationship_tag(sender: type, instance: RelationshipTag, **kwargs: Any) -> None:
-    """Remember which characters use a relationship tag, before the tag links are dropped."""
-    instance.tag_characters_to_refresh = collect_relationship_tag_characters(instance)
-
-
-@receiver(post_delete, sender=RelationshipTag)
-def post_delete_relationship_tag(sender: type, instance: RelationshipTag, **kwargs: Any) -> None:
-    """Clear relationship tags cache, and the cached stats of the characters using the tag."""
-    clear_relationship_tags_cache(instance.event_id)
-    refresh_characters_relationships(getattr(instance, "tag_characters_to_refresh", []))
-
-
 @receiver(post_save, sender=RuleExp)
 def post_save_rule_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update characters experience when rule changes."""
@@ -1869,23 +1485,11 @@ def post_save_rule_exp(sender: type, instance: object, *args: Any, **kwargs: Any
     refresh_rule_relationships(instance)
 
 
-@receiver(post_delete, sender=RuleExp)
-def post_delete_rule_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Update character experience when a rule is deleted."""
-    _recalcuate_characters_experience_points(instance)
-
-
 @receiver(post_save, sender=CriterionExp)
 def post_save_criterion_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update character experience when a criterion is saved."""
     _recalcuate_characters_experience_points(instance)
     refresh_criterion_relationships(instance)
-
-
-@receiver(post_delete, sender=CriterionExp)
-def post_delete_criterion_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
-    """Update character experience when a criterion is deleted."""
-    _recalcuate_characters_experience_points(instance)
 
 
 @receiver(pre_save, sender=Run)
@@ -1934,31 +1538,9 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
     publish_event(instance.event_id)
 
 
-@receiver(pre_delete, sender=Run)
-def pre_delete_run_reset(sender: type, instance: Run, **kwargs: Any) -> None:
-    """Reset run cache and media files before deletion."""
-    clear_run_cache_and_media(instance)
-
-
-@receiver(post_delete, sender=Run)
-def post_delete_run_links(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear event links cache when a run link is deleted."""
-    clear_run_event_links_cache(instance.event)
-
-    # Clear association cache to update onboarding status
-    clear_association_cache(instance.event.association.slug)
-
-
 @receiver(post_save, sender=RunConfig)
 def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset run config cache when related instance is saved."""
-    reset_element_configs(instance.run)
-    reset_cache_config_run(instance.run)
-
-
-@receiver(post_delete, sender=RunConfig)
-def post_delete_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear configuration cache after Run deletion."""
     reset_element_configs(instance.run)
     reset_cache_config_run(instance.run)
 
@@ -1980,14 +1562,11 @@ def post_save_speedlarp_reset_rels(sender: type, instance: Any, **kwargs: Any) -
         refresh_character_relationships_background(char.id)
 
 
-@receiver(post_delete, sender=SpeedLarp)
-def post_delete_speedlarp_reset_rels(sender: type, instance: SpeedLarp, **kwargs: Any) -> None:
-    """Reset character relationships and cache when speedlarp is deleted."""
-    # Update cache for all characters that were in this speedlarp
-    for char in instance.characters.all():
-        refresh_character_relationships_background(char.id)
-
-    # Remove speedlarp from cache
+@receiver(post_softdelete, sender=SpeedLarp)
+def post_softdelete_speedlarp_reset_rels(sender: type, instance: SpeedLarp, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted speedlarp from the event relationship cache."""
+    if is_clone_active():
+        return
     remove_item_from_cache_section(instance.event_id, "speedlarps", instance.id)
 
 
@@ -2008,18 +1587,12 @@ def post_save_trait_reset_rels(sender: type, instance: Trait, **kwargs: Any) -> 
     refresh_all_instance_traits(instance)
 
 
-@receiver(pre_delete, sender=Trait)
-def pre_delete_trait_reset(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear event cache when trait is deleted."""
+@receiver(post_softdelete, sender=Trait)
+def post_softdelete_trait_reset(sender: type, instance: Trait, **kwargs: Any) -> None:
+    """Clear event cache when a trait is soft deleted."""
+    if is_clone_active():
+        return
     clear_event_cache_all_runs(instance.event)
-
-
-@receiver(post_delete, sender=Trait)
-def post_delete_trait_reset_rels(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Reset quest relationships after trait deletion."""
-    # Update quest cache if trait had a quest
-    if instance.quest:
-        refresh_event_quest_relationships_background(instance.quest_id)
 
 
 @receiver(post_save, sender=User)
@@ -2042,14 +1615,6 @@ def post_save_writing_answer_refs(sender: type, instance: WritingAnswer, **kwarg
     update_character_referenced_chars_background(instance.element_id)
 
 
-@receiver(post_delete, sender=WritingAnswer)
-def post_delete_writing_answer_refs(sender: type, instance: WritingAnswer, **kwargs: Any) -> None:
-    """Recompute auto relationships when a character writing answer is deleted."""
-    if is_clone_active():
-        return
-    update_character_referenced_chars_background(instance.element_id)
-
-
 @receiver(post_save, sender=WritingOption)
 def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear caches when WritingOption is saved."""
@@ -2059,22 +1624,6 @@ def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -
 
     # Refresh ability caches that show this option in their requirement_rels
     on_writing_option_saved(instance, instance.question.event_id)
-
-
-@receiver(pre_delete, sender=WritingOption)
-def pre_delete_character_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Clear character-related caches when a character option is deleted."""
-    clear_event_cache_all_runs(instance.question.event)
-    clear_event_fields_cache(instance.question.event_id)
-    clear_writing_questions_cache(instance.event_id)
-
-
-@receiver(pre_delete, sender=WritingQuestion)
-def pre_delete_writing_question_reset(sender: type, instance: WritingQuestion, **kwargs: Any) -> None:
-    """Clear caches when a writing question is deleted."""
-    clear_event_fields_cache(instance.event_id)
-    clear_event_cache_all_runs(instance.event)
-    clear_writing_questions_cache(instance.event_id)
 
 
 @receiver(post_save, sender=WritingQuestion)
@@ -2150,7 +1699,6 @@ m2m_changed.connect(on_member_badges_m2m_changed, sender=Badge.members.through)
 m2m_changed.connect(on_warehouse_item_tags_m2m_changed, sender=WarehouseItem.tags.through)
 
 post_save.connect(on_warehouse_item_assignment_changed, sender=WarehouseItemAssignment)
-post_delete.connect(on_warehouse_item_assignment_changed, sender=WarehouseItemAssignment)
 
 
 m2m_changed.connect(on_ability_characters_m2m_changed, sender=AbilityExp.characters.through)
@@ -2173,10 +1721,9 @@ m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through
 _BULK_MODELS = [Character, Plot, Faction, Prologue, ProgressStep, DeliveryExp, QuestType, Quest, AbilityTypeExp]
 for _bulk_model in _BULK_MODELS:
     post_save.connect(on_bulk_model_changed, sender=_bulk_model)
-    post_delete.connect(on_bulk_model_changed, sender=_bulk_model)
 
 m2m_changed.connect(on_event_role_members_changed, sender=EventRole.members.through)
-post_delete.connect(on_event_role_deleted, sender=EventRole)
+post_softdelete.connect(on_event_role_deleted, sender=EventRole)
 
 
 @receiver(user_locked_out)

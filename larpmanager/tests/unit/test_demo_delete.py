@@ -117,25 +117,25 @@ class TestDeferredDeleteDemo(BaseTestCase):
         assert seen == {"user_gone": True, "member_gone": True}
 
     def test_signal_handlers_skip_side_effects_when_clone_suppressed(self) -> None:
-        """post_delete handlers touched by the association cascade must no-op while signals are suppressed."""
-        with mock.patch("larpmanager.models.signals.refresh_character_related_caches") as refresh_char:
-            lm_signals.post_delete_character_reset_rels(Character, self.character_one)
-        refresh_char.assert_called_once()
+        """Soft delete handlers touched by the association cascade must no-op while signals are suppressed."""
+        with mock.patch("larpmanager.models.signals.clear_event_relationships_cache") as clear_rels:
+            lm_signals.post_softdelete_character_reset_rels(Character, self.character_one)
+        clear_rels.assert_called_once()
 
         with (
-            mock.patch("larpmanager.models.signals.refresh_character_related_caches") as refresh_char,
+            mock.patch("larpmanager.models.signals.clear_event_relationships_cache") as clear_rels,
             clone_signals_suppressed(),
         ):
-            lm_signals.post_delete_character_reset_rels(Character, self.character_one)
-        refresh_char.assert_not_called()
+            lm_signals.post_softdelete_character_reset_rels(Character, self.character_one)
+        clear_rels.assert_not_called()
 
         with mock.patch("larpmanager.models.signals.publish_registration") as publish:
-            lm_signals.post_delete_registration_accounting_cache(Registration, self.registration)
+            lm_signals.post_softdelete_registration_publication(Registration, self.registration)
         publish.assert_called_once()
 
         with (
             mock.patch("larpmanager.models.signals.publish_registration") as publish,
             clone_signals_suppressed(),
         ):
-            lm_signals.post_delete_registration_accounting_cache(Registration, self.registration)
+            lm_signals.post_softdelete_registration_publication(Registration, self.registration)
         publish.assert_not_called()

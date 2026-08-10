@@ -322,12 +322,6 @@ def update_token_credit_on_payment_save(instance: AccountingItemPayment, *, crea
         update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
 
 
-def update_token_credit_on_payment_delete(instance: AccountingItemPayment) -> None:
-    """Handle accounting item payment post-delete token/credit updates."""
-    if instance.registration:
-        update_token_credit(instance, token=instance.pay == PaymentChoices.TOKEN)
-
-
 def update_token_credit_on_other_save(accounting_item: AccountingItemOther) -> None:
     """Handle accounting item other save for token/credit updates."""
     if not accounting_item.member:
