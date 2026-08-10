@@ -47,6 +47,7 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Prologue,
     PrologueType,
+    RelationshipTag,
     SpeedLarp,
     TextVersion,
     TextVersionChoices,
@@ -550,6 +551,31 @@ def orga_progress_steps_edit(request: HttpRequest, event_slug: str, step_uuid: s
 def orga_progress_steps_delete(request: HttpRequest, event_slug: str, step_uuid: str) -> HttpResponse:
     """Delete step for event."""
     return orga_delete(request, event_slug, OrgaAction.PROGRESS_STEPS, step_uuid)
+
+
+@login_required
+def orga_relationship_tags(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Return relationship tags list for event organization."""
+    context = check_event_context(request, event_slug, "orga_relationship_tags")
+    return writing_list(request, context, RelationshipTag, "relationship_tag")
+
+
+@login_required
+def orga_relationship_tags_new(request: HttpRequest, event_slug: str) -> HttpResponse:
+    """Create a relationship tag for an event."""
+    return orga_new(request, event_slug, OrgaAction.RELATIONSHIP_TAGS)
+
+
+@login_required
+def orga_relationship_tags_edit(request: HttpRequest, event_slug: str, tag_uuid: str) -> HttpResponse:
+    """Edit a relationship tag for an event."""
+    return orga_edit(request, event_slug, OrgaAction.RELATIONSHIP_TAGS, tag_uuid)
+
+
+@login_required
+def orga_relationship_tags_delete(request: HttpRequest, event_slug: str, tag_uuid: str) -> HttpResponse:
+    """Delete relationship tag for event."""
+    return orga_delete(request, event_slug, OrgaAction.RELATIONSHIP_TAGS, tag_uuid)
 
 
 @login_required

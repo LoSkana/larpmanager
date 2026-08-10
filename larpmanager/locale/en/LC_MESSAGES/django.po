@@ -1319,21 +1319,6 @@ msgid ""
 "configuration you can select which ones to display at any given time."
 msgstr ""
 
-msgid "Relationships max length"
-msgstr ""
-
-msgid ""
-"Set the maximum length of character relationships (default: 10,000 "
-"characters)."
-msgstr ""
-
-msgid "Disable auto relationships"
-msgstr ""
-
-msgid ""
-"If enabled, auto-relationships from character references will not be created."
-msgstr ""
-
 msgid "Disable character finder"
 msgstr ""
 
@@ -1390,6 +1375,33 @@ msgid "Reading"
 msgstr ""
 
 msgid "If enabled, enables the reading view for writing elements."
+msgstr ""
+
+msgid "Relationships"
+msgstr ""
+
+msgid "Relationships max length"
+msgstr ""
+
+msgid ""
+"Set the maximum length of character relationships (default: 10,000 "
+"characters)."
+msgstr ""
+
+msgid "Disable auto relationships"
+msgstr ""
+
+msgid ""
+"If enabled, auto-relationships from character references will not be created."
+msgstr ""
+
+msgid "Relationship tags"
+msgstr ""
+
+msgid ""
+"If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "
+"character relationships, applied to both sides of the relationship when the "
+"tag is symmetric."
 msgstr ""
 
 msgid "Split by participation"
@@ -1836,9 +1848,6 @@ msgid "Prologues"
 msgstr ""
 
 msgid "Workshop"
-msgstr ""
-
-msgid "Relationships"
 msgstr ""
 
 msgid "Selected elements will be shown to participants."
@@ -2754,6 +2763,9 @@ msgid "Speed larp"
 msgstr ""
 
 msgid "Manage speed larps for this event"
+msgstr ""
+
+msgid "Manage the tags that can be applied to character relationships"
 msgstr ""
 
 msgid "Reimbursement Approved"
@@ -5144,6 +5156,14 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
+msgid "Symmetric"
+msgstr ""
+
+msgid ""
+"If checked, applying this tag to a relationship also applies it to the other "
+"character's relationship back towards this one"
+msgstr ""
+
 msgid "Activation failed"
 msgstr ""
 
@@ -5411,6 +5431,12 @@ msgid "text length: <span class=\"count\"></span> / %(max)s"
 msgstr ""
 
 msgid "How the relationship is described from this character's perspective"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Symmetric tags apply to both characters in the relationship"
 msgstr ""
 
 msgid "Inverse"
@@ -7352,9 +7378,6 @@ msgid ""
 msgstr ""
 
 msgid "Container"
-msgstr ""
-
-msgid "Tags"
 msgstr ""
 
 msgid ""
@@ -9931,6 +9954,14 @@ msgstr ""
 msgid ""
 "No quest categories have been created yet. Use the button above to add a "
 "quest type to organize your quests."
+msgstr ""
+
+msgid "Tagged sides"
+msgstr ""
+
+msgid ""
+"No relationship tags have been defined yet. Use the button above to add tags "
+"such as love or rivalry."
 msgstr ""
 
 msgid "View and edit all relationships between characters in this event"

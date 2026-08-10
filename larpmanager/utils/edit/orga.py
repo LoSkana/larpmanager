@@ -28,8 +28,9 @@ from django.shortcuts import redirect, render
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields, reset_event_cache_all
+from larpmanager.cache.character import get_event_cache_all, reset_event_cache_all
 from larpmanager.cache.config import get_event_config
+from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.accounting import (
     ExeInvoiceForm,
     OrgaCreditForm,
@@ -104,6 +105,7 @@ from larpmanager.forms.writing import (
     OrgaPrologueTypeForm,
     OrgaQuestForm,
     OrgaQuestTypeForm,
+    OrgaRelationshipTagForm,
     OrgaSpeedLarpForm,
     OrgaTraitForm,
 )
@@ -245,6 +247,7 @@ class OrgaAction(str, Enum):
     )
     SPEEDLARPS = ("orga_speedlarps", {"form": OrgaSpeedLarpForm, "writing": TextVersionChoices.SPEEDLARP})
     PROGRESS_STEPS = ("orga_progress_steps", {"form": OrgaProgressStepForm})
+    RELATIONSHIP_TAGS = ("orga_relationship_tags", {"form": OrgaRelationshipTagForm, "relationship_tags": True})
 
     # Registration
     REGISTRATION_TICKETS = ("orga_registration_tickets", {"form": OrgaRegistrationTicketForm, "tickets": True})

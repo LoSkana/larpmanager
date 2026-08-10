@@ -130,14 +130,17 @@ from larpmanager.cache.registration import (
 )
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
+    collect_relationship_tag_characters,
     mark_plot_character_rel_dirty,
     on_faction_characters_m2m_changed,
     on_plot_characters_m2m_changed,
     on_prologue_characters_m2m_changed,
+    on_relationship_tags_m2m_changed,
     on_speedlarp_characters_m2m_changed,
     refresh_character_related_caches,
     refresh_character_relationships,
     refresh_character_relationships_background,
+    refresh_characters_relationships,
     refresh_event_faction_relationships_background,
     refresh_event_plot_relationships_background,
     refresh_event_prologue_relationships_background,
@@ -159,6 +162,7 @@ from larpmanager.cache.skin import clear_skin_cache
 from larpmanager.cache.text_fields import update_text_fields_cache
 from larpmanager.cache.warehouse import on_warehouse_item_assignment_changed, on_warehouse_item_tags_m2m_changed
 from larpmanager.cache.widget import reset_widgets
+from larpmanager.cache.writing import clear_relationship_tags_cache
 from larpmanager.cache.wwyltd import reset_features_cache, reset_guides_cache, reset_tutorials_cache
 from larpmanager.mail.accounting import (
     send_collection_activation_email,
@@ -290,6 +294,7 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Prologue,
     Relationship,
+    RelationshipTag,
     SpeedLarp,
     replace_character_names,
 )
@@ -1020,6 +1025,10 @@ def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> 
     if instance.name.startswith("pub_"):
         publish_event(instance.event_id)
 
+    # The per-tag relationship stats are only built while the config is on, so they must be rebuilt
+    if instance.name == "writing_relationship_tags":
+        clear_event_relationships_cache(instance.event_id)
+
 
 @receiver(post_delete, sender=EventConfig)
 def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
@@ -1027,6 +1036,9 @@ def post_delete_reset_event_config(sender: type, instance: Any, **kwargs: Any) -
     reset_element_configs(instance.event)
     for run in instance.event.runs.all():
         reset_cache_config_run(run)
+
+    if instance.name == "writing_relationship_tags":
+        clear_event_relationships_cache(instance.event_id)
 
 
 @receiver(pre_save, sender=EventPermission)
@@ -1828,6 +1840,28 @@ def post_delete_relationship_reset_rels(sender: type, instance: Any, **kwargs: A
     refresh_character_relationships(instance.source)
 
 
+@receiver(post_save, sender=RelationshipTag)
+def post_save_relationship_tag(sender: type, instance: RelationshipTag, **kwargs: Any) -> None:
+    """Clear relationship tags cache when a tag is saved."""
+    clear_relationship_tags_cache(instance.event_id)
+
+    if instance.deleted:
+        refresh_characters_relationships(collect_relationship_tag_characters(instance))
+
+
+@receiver(pre_delete, sender=RelationshipTag)
+def pre_delete_relationship_tag(sender: type, instance: RelationshipTag, **kwargs: Any) -> None:
+    """Remember which characters use a relationship tag, before the tag links are dropped."""
+    instance.tag_characters_to_refresh = collect_relationship_tag_characters(instance)
+
+
+@receiver(post_delete, sender=RelationshipTag)
+def post_delete_relationship_tag(sender: type, instance: RelationshipTag, **kwargs: Any) -> None:
+    """Clear relationship tags cache, and the cached stats of the characters using the tag."""
+    clear_relationship_tags_cache(instance.event_id)
+    refresh_characters_relationships(getattr(instance, "tag_characters_to_refresh", []))
+
+
 @receiver(post_save, sender=RuleExp)
 def post_save_rule_exp(sender: type, instance: object, *args: Any, **kwargs: Any) -> None:
     """Update characters experience when rule changes."""
@@ -2098,6 +2132,7 @@ m2m_changed.connect(on_plot_characters_m2m_changed, sender=Plot.characters.throu
 m2m_changed.connect(on_plot_characters_refs_changed, sender=Plot.characters.through)
 m2m_changed.connect(on_speedlarp_characters_m2m_changed, sender=SpeedLarp.characters.through)
 m2m_changed.connect(on_prologue_characters_m2m_changed, sender=Prologue.characters.through)
+m2m_changed.connect(on_relationship_tags_m2m_changed, sender=Relationship.tags.through)
 
 m2m_changed.connect(on_association_roles_m2m_changed, sender=AssociationRole.members.through)
 m2m_changed.connect(on_event_roles_m2m_changed, sender=EventRole.members.through)

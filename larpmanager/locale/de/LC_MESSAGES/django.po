@@ -1622,6 +1622,9 @@ msgstr "Mitgeliefert:"
 msgid "Surcharge"
 msgstr "Aufpreis"
 
+msgid "Symmetric"
+msgstr "Symmetrisch"
+
 msgid "Tolerance"
 msgstr "Toleranz"
 
@@ -2416,6 +2419,9 @@ msgstr "Verlauf anzeigen"
 
 msgid "Subscription"
 msgstr "Abonnement"
+
+msgid "Tagged sides"
+msgstr "Markierte Seiten"
 
 msgid "Tech Support"
 msgstr "Technischer Support"
@@ -3767,6 +3773,9 @@ msgstr "Anmeldeformular"
 
 msgid "Registration info"
 msgstr "Infos zur Anmeldung"
+
+msgid "Relationship tags"
+msgstr "Beziehungs-Tags"
 
 msgid "Remaining credits"
 msgstr "Verbleibende Kredite"
@@ -8526,6 +8535,9 @@ msgstr ""
 msgid "Probability of showing the special page (out of thousands)."
 msgstr "Wahrscheinlichkeit, die Sonderseite anzuzeigen (von Tausend)."
 
+msgid "Symmetric tags apply to both characters in the relationship"
+msgstr "Symmetrische Tags gelten für beide Charaktere in der Beziehung"
+
 msgid "The question visibility to participants, allowed values are"
 msgstr "Die Sichtbarkeit der Frage für die Teilnehmer, zulässige Werte sind"
 
@@ -8861,6 +8873,10 @@ msgstr ""
 
 msgid "Manage pool labels for grouping pools in character inventories"
 msgstr "Verwalte Pool-Labels zum Gruppieren von Pools in Charakterinventaren"
+
+msgid "Manage the tags that can be applied to character relationships"
+msgstr ""
+"Verwalte die Tags, die auf Charakterbeziehungen angewendet werden können"
 
 msgid "Manage token assignments issued to participants for this event"
 msgstr "Verwalte die an die Teilnehmer dieser Veranstaltung vergebenen Token"
@@ -12813,6 +12829,13 @@ msgstr ""
 "Informationen von den Spielern auf ihrem Charakterblatt zu erfassen."
 
 msgid ""
+"No relationship tags have been defined yet. Use the button above to add tags"
+" such as love or rivalry."
+msgstr ""
+"Es wurden noch keine Beziehungs-Tags definiert. Verwende die Schaltfläche "
+"oben, um Tags wie Liebe oder Rivalität hinzuzufügen."
+
+msgid ""
 "Percentage retained by the payment system. Enter the value as a number "
 "without the percentage symbol."
 msgstr ""
@@ -13895,6 +13918,13 @@ msgstr ""
 " Informationen usw.) der ihnen zugewiesenen Charaktere anzupassen"
 
 msgid ""
+"If checked, applying this tag to a relationship also applies it to the other"
+" character's relationship back towards this one"
+msgstr ""
+"Wenn aktiviert, wird dieser Tag beim Anwenden auf eine Beziehung auch auf "
+"die Beziehung des anderen Charakters zu diesem Charakter angewendet"
+
+msgid ""
 "If you select one (or more) tickets, the question will only be shown to "
 "participants who have selected one of those tickets"
 msgstr ""
@@ -14664,6 +14694,15 @@ msgstr ""
 "Ermöglicht sicheres Streaming von Video-/Audioinhalten über einmalige "
 "Zugriffstoken. Jedes Token kann nur einmal verwendet werden und zeichnet "
 "auf, wer, wann und von wo aus auf die Inhalte zugegriffen hat"
+
+msgid ""
+"If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "
+"character relationships, applied to both sides of the relationship when the "
+"tag is symmetric."
+msgstr ""
+"Wenn aktiviert, kannst du wiederverwendbare Tags (z. B. Liebe, Rivalität) "
+"definieren, die auf Charakterbeziehungen angewendet werden. Bei "
+"symmetrischen Tags werden sie auf beide Seiten der Beziehung angewendet."
 
 msgid ""
 "You have submitted a payment, and it is being reviewed by the staff. You do "
