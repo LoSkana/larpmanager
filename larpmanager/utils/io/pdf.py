@@ -643,22 +643,10 @@ def generate_payment_receipt(accounting_item: Any) -> tuple[str, str]:
 # ## HANDLE - DELETE FILES WHEN UPDATED
 
 
-def cleanup_handout_pdfs_before_delete(handout: Any) -> None:
-    """Handle handout pre-delete PDF cleanup."""
-    for event_run in handout.event.runs.all():
-        safe_remove(handout.get_filepath(event_run))
-
-
 def cleanup_handout_pdfs_after_save(instance: object) -> None:
     """Handle handout post-save PDF cleanup."""
     for run in instance.event.runs.all():
         safe_remove(instance.get_filepath(run))
-
-
-def cleanup_handout_template_pdfs_before_delete(handout_template: Any) -> None:
-    """Handle handout template pre-delete PDF cleanup."""
-    for event_run in handout_template.event.runs.all():
-        safe_remove(handout_template.get_filepath(event_run))
 
 
 def cleanup_handout_template_pdfs_after_save(instance: object) -> None:
@@ -704,34 +692,16 @@ def delete_character_pdf_files(instance: object, single: Any = None, runs: Any =
         safe_remove(instance.get_relationships_filepath(run))
 
 
-def cleanup_character_pdfs_before_delete(character: Any) -> None:
-    """Handle character pre-delete PDF cleanup."""
-    remove_run_pdf(character.event)
-    delete_character_pdf_files(character)
-
-
 def cleanup_character_pdfs_on_save(instance: object) -> None:
     """Handle character post-save PDF cleanup."""
     remove_run_pdf(instance.event)
     delete_character_pdf_files(instance)
 
 
-def cleanup_relationship_pdfs_before_delete(instance: object) -> None:
-    """Handle player relationship pre-delete PDF cleanup."""
-    for relationship_character_run in instance.registration.rcrs.all():
-        delete_character_pdf_files(relationship_character_run.character, instance.registration.run)
-
-
 def cleanup_relationship_pdfs_after_save(instance: object) -> None:
     """Handle player relationship post-save PDF cleanup."""
     for el in instance.registration.rcrs.all():
         delete_character_pdf_files(el.character, instance.registration.run)
-
-
-def cleanup_faction_pdfs_before_delete(instance: object) -> None:
-    """Handle faction pre-delete PDF cleanup."""
-    for character in instance.event.character_set.all():
-        delete_character_pdf_files(character)
 
 
 def cleanup_faction_pdfs_on_save(instance: object) -> None:
