@@ -601,7 +601,7 @@ def accounting_membership(request: HttpRequest, method: str | None = None) -> Ht
     if method:
         context["def_method"] = method
 
-    context["membership_fee"] = get_association_config(context["association_id"], "membership_fee", default_value=0)
+    context["membership_fee"] = get_association_config(context["association_id"], "membership_fee")
 
     # Process form submission or render initial form
     if request.method == "POST":

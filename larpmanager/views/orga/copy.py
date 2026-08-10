@@ -67,6 +67,7 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Prologue,
     Relationship,
+    RelationshipTag,
     SpeedLarp,
 )
 from larpmanager.utils.core.base import check_event_context
@@ -180,7 +181,14 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
         Relationship.objects.filter(source__event_id=e_id).values_list("source_id", "target_id")
     )
 
-    for relationship in Relationship.objects.filter(source__event_id=p_id):
+    # Map source tags to the copied ones, to carry over relationship tags
+    source_tag_numbers = dict(RelationshipTag.objects.filter(event_id=p_id).values_list("id", "number"))
+    target_tag_ids = dict(RelationshipTag.objects.filter(event_id=e_id).values_list("number", "id"))
+    tag_through_model = Relationship.tags.through
+    tag_through_rows = []
+
+    for relationship in Relationship.objects.filter(source__event_id=p_id).prefetch_related("tags"):
+        source_tag_ids = [tag.id for tag in relationship.tags.all()]
         new_source_id = relationship.source_id
         if new_source_id not in source_character_map:
             continue
@@ -205,6 +213,17 @@ def correct_relationship(e_id: Any, p_id: Any) -> None:
 
         relationship.pk = None
         relationship.save()
+
+        # Re-apply the tags, pointing to the copied ones of the target event
+        tag_through_rows.extend(
+            tag_through_model(relationship_id=relationship.pk, relationshiptag_id=target_tag_ids[number])
+            for number in (source_tag_numbers[tag_id] for tag_id in source_tag_ids if tag_id in source_tag_numbers)
+            if number in target_tag_ids
+        )
+
+    # Insert the tag links in bulk: avoids firing a cache refresh per relationship during the copy
+    if tag_through_rows:
+        tag_through_model.objects.bulk_create(tag_through_rows, ignore_conflicts=True)
 
 
 def correct_workshop(e_id: int, p_id: int) -> None:
@@ -772,6 +791,7 @@ def _copy_characters_and_questions(target_event_id: int, parent_event_id: int, t
         correct_rels(target_event_id, parent_event_id, WritingQuestion, WritingOption, "question", "name")
     if "character" in targets:
         copy_class(target_event_id, parent_event_id, Character)
+        copy_class(target_event_id, parent_event_id, RelationshipTag)
         correct_relationship(target_event_id, parent_event_id)
         copy_class(target_event_id, parent_event_id, WritingQuestion)
         copy_class(target_event_id, parent_event_id, WritingOption)

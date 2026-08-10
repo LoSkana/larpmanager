@@ -263,9 +263,7 @@ def prepare_roles_list(
             for permission in role.permissions.all():
                 # Check active_if config for event permissions
                 if permission.active_if and context.get("event"):
-                    config_value = get_event_config(
-                        context["event"].id, permission.active_if, default_value=False, context=context
-                    )
+                    config_value = get_event_config(context["event"].id, permission.active_if, context=context)
                     if not config_value:
                         continue
 

@@ -35,17 +35,14 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.character import (
-    get_event_cache_all,
-    get_writing_element_fields,
-    get_writing_element_fields_batch,
-)
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_writing_field_names
 from larpmanager.cache.registration import get_registration_counts, get_registration_tickets
+from larpmanager.cache.writing import get_writing_element_fields, get_writing_element_fields_batch
 from larpmanager.forms.registration import MatchmakerForm
 from larpmanager.models.accounting import PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType

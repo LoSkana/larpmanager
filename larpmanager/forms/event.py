@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _, pgettext
 from larpmanager.cache.config import (
     get_association_config,
     get_event_config,
+    is_event_config_set,
     reset_element_configs,
     save_all_element_configs,
     save_single_config,
@@ -350,6 +351,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_custom()
         self.set_config_casting()
         self.set_config_guild()
+        self.set_config_relationships()
 
         # 5. Miscellanea
         self.set_config_accounting()
@@ -708,15 +710,6 @@ class OrgaConfigForm(ConfigForm):
 
     def _set_config_writing_behavior(self) -> None:
         """Configure writing behavior options (editor, tools, access)."""
-        if "relationships" in self.params.get("features"):
-            config_label = _("Relationships max length")
-            config_help_text = _("Set the maximum length of character relationships (default: 10,000 characters).")
-            self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
-
-            config_label = _("Disable auto relationships")
-            config_help_text = _("If enabled, auto-relationships from character references will not be created.")
-            self.add_configs("writing_disable_auto_relationship", ConfigType.BOOL, config_label, config_help_text)
-
         config_label = _("Disable character finder")
         config_help_text = (
             _("Disable the system that finds the character number when a special reference symbol is written:")
@@ -757,6 +750,28 @@ class OrgaConfigForm(ConfigForm):
         config_label = _("Reading")
         config_help_text = _("If enabled, enables the reading view for writing elements.")
         self.add_configs("writing_reading", ConfigType.BOOL, config_label, config_help_text)
+
+    def set_config_relationships(self) -> None:
+        """Configure relationships options."""
+        if "relationships" not in self.params.get("features"):
+            return
+
+        self.set_section("relationships", _("Relationships"))
+
+        config_label = _("Relationships max length")
+        config_help_text = _("Set the maximum length of character relationships (default: 10,000 characters).")
+        self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
+
+        config_label = _("Disable auto relationships")
+        config_help_text = _("If enabled, auto-relationships from character references will not be created.")
+        self.add_configs("writing_disable_auto_relationship", ConfigType.BOOL, config_label, config_help_text)
+
+        config_label = _("Relationship tags")
+        config_help_text = _(
+            "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to character "
+            "relationships, applied to both sides of the relationship when the tag is symmetric.",
+        )
+        self.add_configs("writing_relationship_tags", ConfigType.BOOL, config_label, config_help_text)
 
     def set_config_character(self) -> None:
         """Configure character-related settings including campaign and faction options.
@@ -1166,12 +1181,12 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
         # Load current theme: from event config if editing, else from association config (new event default)
         current_theme = None
-        if self.instance.pk:
-            current_theme = get_event_config(self.instance.id, "theme", default_value="")
+        if self.instance.pk and is_event_config_set(self.instance.id, "theme"):
+            current_theme = get_event_config(self.instance.id, "theme")
 
         if not current_theme:
             assoc_id = self.params.get("association_id")
-            current_theme = (get_association_config(assoc_id, "theme") if assoc_id else None) or AppearanceTheme.NEBULA
+            current_theme = get_association_config(assoc_id, "theme") if assoc_id else AppearanceTheme.NEBULA
         self.initial["theme"] = current_theme
         self.order_fields(["theme"] + [f for f in self.fields if f != "theme"])
 

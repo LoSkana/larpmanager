@@ -32,7 +32,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import CONFIG_UNSET, get_element_config, get_event_config
+from larpmanager.cache.config import get_element_config, get_event_config
 from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
@@ -231,9 +231,9 @@ class Character(Writing):
         """Return string representation."""
         return self.name
 
-    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this character."""
-        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+        return get_element_config(self, name, bypass_cache=bypass_cache)
 
     @property
     def is_active(self) -> bool:
@@ -992,6 +992,33 @@ def replace_character_names(instance: Any) -> None:
             plot_character_relationship.save()
 
 
+class RelationshipTag(UuidMixin, OrderMixin, BaseConceptModel):
+    """Represents a reusable label applied to relationships between characters."""
+
+    symmetric = models.BooleanField(
+        default=True,
+        verbose_name=_("Symmetric"),
+        help_text=_(
+            "If checked, applying this tag to a relationship also applies it to the other "
+            "character's relationship back towards this one",
+        ),
+    )
+
+    class Meta:
+        indexes: ClassVar[list] = [models.Index(fields=["number", "event"])]
+        constraints: ClassVar[list] = [
+            UniqueConstraint(
+                fields=["event", "number", "deleted"],
+                name="unique_RelationshipTag_with_optional",
+            ),
+            UniqueConstraint(
+                fields=["event", "number"],
+                condition=Q(deleted=None),
+                name="unique_RelationshipTag_without_optional",
+            ),
+        ]
+
+
 class Relationship(BaseModel):
     """Represents Relationship model."""
 
@@ -1002,6 +1029,8 @@ class Relationship(BaseModel):
     text = HTMLField(blank=True)
 
     auto = models.BooleanField(default=False)
+
+    tags = models.ManyToManyField(RelationshipTag, related_name="relationships", blank=True)
 
     @property
     def event(self) -> Any:

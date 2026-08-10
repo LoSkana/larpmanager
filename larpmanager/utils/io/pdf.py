@@ -45,8 +45,9 @@ from xhtml2pdf import pisa
 
 from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.character import get_event_cache_all, get_writing_element_fields
+from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.models.accounting import (
     AccountingItemDonation,
     AccountingItemMembership,
@@ -95,7 +96,7 @@ def fix_filename(filename: Any) -> Any:
 def has_pdf_customization(event_id: int) -> bool:
     """Return True if event has any custom PDF styling configured."""
     for key in ["page_css", "header_content", "footer_content"]:
-        value = get_event_config(event_id, key, default_value="")
+        value = get_event_config(event_id, key)
         if value and str(value).strip():
             return True
     return False
@@ -240,7 +241,6 @@ def add_pdf_instructions(context: dict) -> None:
         context[instruction_key] = get_event_config(
             context["event"].id,
             instruction_key,
-            default_value="",
             context=context,
             bypass_cache=True,
         )

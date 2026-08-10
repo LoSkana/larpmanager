@@ -339,7 +339,7 @@ class ExeAppearanceForm(BaseModelCssForm):
         self.prevent_canc = True
         self.show_link = ["id_association_css"]
         if self.instance.pk:
-            self.initial["theme"] = self.instance.get_config("theme", default_value=AppearanceTheme.NEBULA)
+            self.initial["theme"] = self.instance.get_config("theme")
         self.order_fields(["theme"] + [f for f in self.fields if f != "theme"])
 
     def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002
