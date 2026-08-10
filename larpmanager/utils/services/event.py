@@ -300,6 +300,10 @@ def save_event_character_form(features: dict, instance: object) -> None:
         extra = [typ for typ in [WritingQuestionType.HIDE, WritingQuestionType.LOCKED] if typ in features]
         _init_writing_element(instance, def_tps, [QuestionApplicable.FACTION], extra_types=extra or None)
 
+    # Add guild writing elements if guild feature is enabled
+    if "guild" in features:
+        _init_writing_element(instance, def_tps, [QuestionApplicable.GUILD])
+
     # Add plot writing elements with modified teaser settings if plot feature is enabled
     if "plot" in features:
         # Create a copy of default types with modified teaser for plot concept
