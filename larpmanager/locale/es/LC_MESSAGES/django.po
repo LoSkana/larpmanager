@@ -2748,7 +2748,7 @@ msgid "View Selector"
 msgstr "Selector de vista"
 
 msgid "Will open at:"
-msgstr "Se abrirá a las:"
+msgstr "Se abrirán a las:"
 
 msgid "Your messages"
 msgstr "Tus mensajes"
@@ -4182,7 +4182,7 @@ msgid "Redeem registration"
 msgstr "Canjear inscripción"
 
 msgid "Registration closed"
-msgstr "Inscripción cerrada"
+msgstr "Inscripciones cerradas"
 
 msgid "Remove from faction"
 msgstr "Eliminar de la facción"
@@ -5486,7 +5486,7 @@ msgid "Membership request submitted"
 msgstr "Solicitud de afiliación enviada"
 
 msgid "My pending guild invitations"
-msgstr "Mis invitaciones pendientes del gremio"
+msgstr "Mis invitaciones pendientes al gremio"
 
 msgid "Name of badge to be awarded."
 msgstr "Nombre del badge que se asignará."
@@ -6528,7 +6528,7 @@ msgid "Select the organisation to proceed to"
 msgstr "Selecciona la organización a la que proceder"
 
 msgid "Set the organization payment currency"
-msgstr "Establecer la moneda de pago de la organización"
+msgstr "Configura la moneda de pago de la organización"
 
 msgid "The question type, allowed values are"
 msgstr "El tipo de pregunta, los valores permitidos son"
@@ -6543,7 +6543,7 @@ msgid "Update here the registration options!"
 msgstr "Actualiza aquí tus opciones de inscripción!"
 
 msgid "View the complete list of our events!"
-msgstr "Ver la lista completa de nuestros eventos!"
+msgstr "Consulta la lista completa de nuestros eventos!"
 
 msgid "Write here what you would like to to!"
 msgstr "Escribe aquí lo que te gustaría hacer!"
@@ -6601,7 +6601,7 @@ msgid "Learn all characters before the event!"
 msgstr "Apréndete todos los personajes antes del evento!"
 
 msgid "Manage workshop modules for this event"
-msgstr "Gestionar los módulos de los talleres de este evento"
+msgstr "Gestiona los módulos de los talleres de este evento"
 
 msgid "No value has been selected for parent."
 msgstr "No se ha seleccionado ningún valor para el elemento padre."
@@ -6670,13 +6670,13 @@ msgid "Completed module. Remaining: {number:d}"
 msgstr "Módulo completado. Restantes: {number:d}"
 
 msgid "Configure organization feature settings"
-msgstr "Configurar la configuración de características de la organización"
+msgstr "Configura las opciones de las funciones de la organización"
 
 msgid "Create the first character of the event"
-msgstr "Crear el primer personaje del evento"
+msgstr "Crea el primer personaje del evento"
 
 msgid "Customize organization pages appearance"
-msgstr "Personalizar la apariencia de las páginas de organización"
+msgstr "Personaliza la apariencia de las páginas de la organización"
 
 msgid "Date from when the surcharge is applied"
 msgstr "Fecha a partir de la cual se aplica el recargo"
@@ -6734,10 +6734,10 @@ msgid "Registration confirmation for %(event)s"
 msgstr "Confirmación de inscripción para %(event)s"
 
 msgid "Set the experience points configuration"
-msgstr "Establecer la configuración de los puntos de experiencia"
+msgstr "Configura los puntos de experiencia"
 
 msgid "Set up payment methods for participants"
-msgstr "Establecer métodos de pago para los participantes"
+msgstr "Configura los métodos de pago para los participantes"
 
 msgid "Sum of the signup fee, total to be paid"
 msgstr "Suma de la cuota de inscripción, total a pagar"
@@ -6824,7 +6824,7 @@ msgid "Manage collections participated by users"
 msgstr "Gestiona las colectas en las que participan los usuarios"
 
 msgid "Manage incoming revenue linked to events"
-msgstr "Gestionar los ingresos relacionados con los eventos"
+msgstr "Gestiona los ingresos relacionados con los eventos"
 
 #, python-format
 msgid "Membership application form for %(user)s"
@@ -6834,7 +6834,7 @@ msgid "Photos and videos successfully uploaded!"
 msgstr "Fotos y vídeos cargados correctamente!"
 
 msgid "Set casting options in the configuration"
-msgstr "Establecer opciones de Casting en la configuración"
+msgstr "Configura las opciones de casting en la configuración"
 
 msgid "The collection was delivered to the user"
 msgstr "La recaudación se entregó al usuario"
@@ -6926,7 +6926,7 @@ msgid "Latitude coordinate of the event location"
 msgstr "Coordenada de latitud del lugar del acontecimiento"
 
 msgid "Manage outgoing payments linked to events"
-msgstr "Gestionar los pagos salientes relacionados con eventos"
+msgstr "Gestiona los pagos salientes relacionados con los eventos"
 
 msgid "Manage templates for experience abilities"
 msgstr "Gestiona las plantillas para habilidades de experiencia"
@@ -11401,8 +11401,8 @@ msgid ""
 "The first line of the file must contain the column names, see the "
 "descriptions below:"
 msgstr ""
-"La primera línea del fichero debe contener los nombres de las columnas, "
-"véanse las descripciones a continuación:"
+"La primera línea del fichero debe contener los nombres de las columnas; "
+"consulta las descripciones a continuación:"
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -12467,8 +12467,8 @@ msgid ""
 "Upload a custom font file for page titles to match your event's theme (TTF, "
 "OTF, or WOFF formats)"
 msgstr ""
-"Carga un archivo de fuentes personalizadas para los títulos de las páginas "
-"que coincidan con el tema de tu evento (formatos TTF, OTF o WOFF)"
+"Carga un archivo de fuente personalizada para los títulos de las páginas que"
+" coincida con el tema de tu evento (formatos TTF, OTF o WOFF)"
 
 #, python-format
 msgid ""
@@ -13804,8 +13804,8 @@ msgid ""
 "Number of months at the start of the year during which members may pay the "
 "annual fee without an active event registration."
 msgstr ""
-"Número de meses a principios de año en los que se puede pagar la cuota anual"
-" sin necesidad de estar inscrito en ningún evento activo."
+"Número de meses a principios de año durante los cuales los miembros pueden "
+"pagar la cuota anual sin tener una inscripción activa en ningún evento."
 
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "
@@ -14844,8 +14844,8 @@ msgid ""
 "relationship, or remove the reference from the text."
 msgstr ""
 "En el texto del elemento de la izquierda, se indica un personaje con el "
-"número indicado a la derecha, pero en las relaciones, el personaje no está "
-"referenciado. Comprueba si es necesario crear una relación o eliminar la "
+"número indicado a la derecha, pero en las relaciones el personaje no está "
+"relacionado. Comprueba si es necesario crear una relación o eliminar la "
 "referencia del texto."
 
 msgid ""

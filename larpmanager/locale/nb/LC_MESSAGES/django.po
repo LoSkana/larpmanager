@@ -761,7 +761,7 @@ msgid "Answers"
 msgstr "Svar"
 
 msgid "Approve"
-msgstr "Godkjenne"
+msgstr "Godkjenn"
 
 msgid "Archive"
 msgstr "Arkiv"
@@ -1785,7 +1785,7 @@ msgid "IP address"
 msgstr "IP-adresse"
 
 msgid "Influencer"
-msgstr "Påvirker"
+msgstr "Influencer"
 
 msgid "Last Event"
 msgstr "Siste arrangement"
@@ -2166,7 +2166,7 @@ msgid "Quick Setup"
 msgstr "Hurtigoppsett"
 
 msgid "Redeem link"
-msgstr "Løs inn lenke"
+msgstr "Innløsningslenke"
 
 msgid "Register to"
 msgstr "Registrer deg for"
@@ -3014,7 +3014,7 @@ msgid "Volunteer data"
 msgstr "Frivilligdata"
 
 msgid "Wanna connect?"
-msgstr "Vil du logge inn?"
+msgstr "Vil du koble deg til?"
 
 msgid "Warehouse area"
 msgstr "Lagerområdet"
@@ -4224,7 +4224,7 @@ msgid "All printable sheets"
 msgstr "Alle utskriftsark"
 
 msgid "Annual fiscal report"
-msgstr "Årsregnskap"
+msgstr "Årlig skatterapport"
 
 msgid "Are you really sure?"
 msgstr "Er du virkelig sikker?"
@@ -4513,7 +4513,7 @@ msgid "No organization found"
 msgstr "Ingen organisasjon funnet"
 
 msgid "Number of extractions"
-msgstr "Antall ekstraksjoner"
+msgstr "Antall trekninger"
 
 msgid "Object does not exist"
 msgstr "Objektet eksisterer ikke"
@@ -4541,7 +4541,7 @@ msgid "Register to the event"
 msgstr "Meld deg på arrangementet"
 
 msgid "Registration complete"
-msgstr "Fullstendig registrering"
+msgstr "Registreringen er fullført"
 
 msgid "Registration is open!"
 msgstr "Registreringen er åpen!"
@@ -6153,7 +6153,7 @@ msgid "Manage the registration surcharges"
 msgstr "Administrer påmeldingstilleggene"
 
 msgid "Manage the types of event prologue"
-msgstr "Administrer typene arrangementets prolog"
+msgstr "Administrer typene av prolog for dette arrangementet"
 
 msgid "Manage your association membership"
 msgstr "Administrer ditt medlemskap i foreningen"
@@ -6420,7 +6420,7 @@ msgid "Secretarial: stationery and printing"
 msgstr "Sekretariat: kontorrekvisita og utskrift"
 
 msgid "Select the event of this new session"
-msgstr "Velg hendelsen for denne nye økten"
+msgstr "Velg arrangementet for denne nye økten"
 
 msgid "Thank you for joining our community!"
 msgstr "Takk for at du har blitt en del av fellesskapet vårt!"
@@ -7028,7 +7028,7 @@ msgid "ISO language code (e.g., 'en', 'it', 'de')"
 msgstr "ISO-språkkode (f.eks. 'en', 'it', 'de')"
 
 msgid "Longitude coordinate of the event location"
-msgstr "Lengdegradskoordinat for hendelsesstedet"
+msgstr "Lengdegradskoordinat for arrangementsstedet"
 
 msgid "Manage donations performed by participants"
 msgstr "Administrer donasjoner utført av deltakere"
@@ -7289,7 +7289,7 @@ msgid "Unrecognized files in ZIP (will be skipped):"
 msgstr "Ukjente filer i ZIP-filen (vil bli hoppet over):"
 
 msgid "View all log entries recorded for this event"
-msgstr "Vis alle loggoppføringer som er registrert for denne hendelsen"
+msgstr "Vis alle loggoppføringer som er registrert for dette arrangementet"
 
 msgid "View all your historical financial movements"
 msgstr "Se alle dine tidligere økonomiske transaksjoner"
@@ -7331,7 +7331,7 @@ msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpass knappene i arrangementets navigasjonslinje"
 
 msgid "Define roles to grant event management access"
-msgstr "Definer roller for å gi tilgang til hendelseshåndtering"
+msgstr "Definer roller for å gi tilgang til arrangementsadministrasjon"
 
 msgid "Elements you wish to avoid in the assignment:"
 msgstr "Elementer du ønsker å unngå i tildelingen:"
@@ -9513,8 +9513,8 @@ msgstr ""
 msgid ""
 "Once you click 'Access Content', this link will be permanently consumed"
 msgstr ""
-"Når du klikker på 'Få tilgang til innhold', vil denne lenken bli brukt "
-"permanent"
+"Når du klikker på «Få tilgang til innhold», vil denne lenken bli permanent "
+"oppbrukt"
 
 msgid ""
 "Only lowercase characters and numbers are allowed, no spaces or symbols"
@@ -10138,7 +10138,7 @@ msgstr "Merk betalingen som fullført på den siden når overføringen er utfør
 msgid ""
 "Preview the factions and plots linked to this character as a compact summary"
 msgstr ""
-"Få en oversikt over fraksjonene og plottene knyttet til denne karakteren i "
+"Få en oversikt over fraksjonene og intrigene knyttet til denne karakteren i "
 "form av et kort sammendrag"
 
 msgid ""
@@ -10354,8 +10354,8 @@ msgid ""
 "Enables field 'title', a short (2-3 words) text added to the character's "
 "name."
 msgstr ""
-"Aktiverer feltet «title», en kort tekst (2–3 ord) som legges til karakterens"
-" navn."
+"Aktiverer feltet «tittel», en kort tekst (2–3 ord) som legges til "
+"karakterens navn."
 
 #, python-format
 msgid ""
@@ -12470,7 +12470,7 @@ msgid ""
 "By pressing confirm, this registration will be assigned to you, and you will"
 " then be duly registered:"
 msgstr ""
-"Ved å trykke på bekreft, vil denne oppføringen bli tildelt deg, og du vil da"
+"Ved å trykke på bekreft, vil denne påmeldingen bli tildelt deg, og du vil da"
 " bli behørig registrert:"
 
 msgid ""

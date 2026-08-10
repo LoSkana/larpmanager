@@ -2061,7 +2061,7 @@ msgid "Event texts"
 msgstr "Texty událostí"
 
 msgid "Fiscal code"
-msgstr "DIČ"
+msgstr "Daňové identifikační číslo"
 
 msgid "Footer HTML"
 msgstr "Zápatí HTML"
@@ -5004,7 +5004,7 @@ msgid "Referred Friend Discount"
 msgstr "Sleva pro doporučeného přítele"
 
 msgid "Referrer Reward Discount"
-msgstr "Sleva za doporučení"
+msgstr "Sleva pro doporučitele"
 
 msgid "Relationships max length"
 msgstr "Maximální délka vztahů"
@@ -5061,7 +5061,7 @@ msgid "Your organization's logo"
 msgstr "Logo tvé organizace"
 
 msgid "Your registration ticket"
-msgstr "Tvoje vstupenka"
+msgstr "Tvoje registrační vstupenka"
 
 msgid "cancel your registration"
 msgstr "zrušit svou registraci"
@@ -6235,7 +6235,7 @@ msgid "You have no pending guild invites."
 msgstr "Nemáš žádné nevyřízené pozvánky do cechu."
 
 msgid "You need to define the start date!"
-msgstr "Je třeba určit datum zahájení!"
+msgstr "Musíš určit datum zahájení!"
 
 msgid "Your organization has been created"
 msgstr "Tvá organizace byla vytvořena"
@@ -6399,7 +6399,7 @@ msgid "Quest types without quests: %(list)s"
 msgstr "Typy Questů bez Questů: %(list)s"
 
 msgid "Regenerate (recreates all pdf: slow)"
-msgstr "Regenerovat (obnoví všechna pdf: pomalu)"
+msgstr "Regenerovat (znovu vytvoří všechny soubory PDF: pomalu)"
 
 #, python-format
 msgid "Registration cancelled for %(event)s"
@@ -6426,10 +6426,10 @@ msgid "Thank you for joining our community!"
 msgstr "Děkujeme, že ses připojil/a k naší komunitě!"
 
 msgid "They need to complete it immediately"
-msgstr "Musí ji okamžitě dokončit"
+msgstr "Musí to okamžitě dokončit"
 
 msgid "View photos and media from the event"
-msgstr "Prohlédni si fotografie a další materiály z akce"
+msgstr "Prohlédni si fotografie a multimediální obsah z akce"
 
 msgid "You can now set the discount options"
 msgstr "Nyní můžeš nastavit možnosti slev"
@@ -8047,7 +8047,7 @@ msgid "Warehouse quantities already committed for this event"
 msgstr "Množství skladových zásob, které již bylo pro tuto akci přiděleno"
 
 msgid "You can now create the 'patron' and 'reduced' tickets"
-msgstr "Nyní můžeš vytvořit vstupenky „patron“ a „reduced“"
+msgstr "Nyní můžeš vytvořit vstupenky „patronské“ a „zlevněné“"
 
 msgid "You can now review historical accounting information."
 msgstr "Nyní můžeš zkontrolovat historické účetní informace."
@@ -8829,7 +8829,7 @@ msgid "Use the bank details below to make the transfer from your bank."
 msgstr "Pro převod z tvé banky použij níže uvedené bankovní údaje."
 
 msgid "We ask you to pay the amount requested for the next instalment:"
-msgstr "Žádáme tě, abys zaplatil/a požadovanou částku na další splátku:"
+msgstr "Prosíme tě, abys zaplatil/a požadovanou částku na další splátku:"
 
 #, python-format
 msgid "You can submit your payment <a href='%(url)s'>on this page</a>."
@@ -10573,8 +10573,8 @@ msgid ""
 "We've received your payment! Your accounting will be updated once it is "
 "approved."
 msgstr ""
-"Tvoji platbu jsme obdrželi! Jakmile bude schválena, bude tvůj účetní výkaz "
-"aktualizován."
+"Tvoji platbu jsme obdrželi! Jakmile bude schválena, budou tvoje účetní "
+"záznamy aktualizovány."
 
 msgid ""
 "Where you find a button like this, you can press it to perform filtering "
@@ -11338,7 +11338,7 @@ msgid ""
 "No resource files have been uploaded yet. Use the button above to add a new "
 "file or link."
 msgstr ""
-"Zatím nebyly nahrány žádné zdrojové soubory. Pomocí tlačítka výše můžeš "
+"Zatím nebyly nahrány žádné soubory s materiály. Pomocí tlačítka výše můžeš "
 "přidat nový soubor nebo odkaz."
 
 msgid ""
@@ -12324,7 +12324,7 @@ msgid ""
 "Percentage retained by the payment system. Enter the value as a number "
 "without the percentage symbol."
 msgstr ""
-"Procento ponechané platebním systémem. Zadej hodnotu jako číslo bez symbolu "
+"Procento stržené platebním systémem. Zadej hodnotu jako číslo bez symbolu "
 "procenta."
 
 msgid ""
@@ -13414,7 +13414,7 @@ msgid ""
 "setting each field as mandatory, optional, or absent"
 msgstr ""
 "Nastav, která pole s osobními údaji se při registraci shromažďují, a urči, "
-"zda je každé pole povinné, volitelné nebo se nevyplňuje"
+"zda je každé pole povinné, volitelné nebo chybí."
 
 msgid ""
 "Explore our interactive demos to see specific features in action. Get your "

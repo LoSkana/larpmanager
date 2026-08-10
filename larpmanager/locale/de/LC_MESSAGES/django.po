@@ -1236,7 +1236,7 @@ msgid "Pdf bulk"
 msgstr "Massen-PDF"
 
 msgid "Personal"
-msgstr "Personal"
+msgstr "Persönlich"
 
 msgid "Portrait"
 msgstr "Foto-Porträt"
@@ -1749,7 +1749,7 @@ msgid "Deliveries"
 msgstr "Lieferungen"
 
 msgid "Easter egg"
-msgstr "Osterei"
+msgstr "Easter Egg"
 
 msgid "Edit dates"
 msgstr "Daten bearbeiten"
@@ -1911,7 +1911,7 @@ msgid "Short name"
 msgstr "Kurzer Name"
 
 msgid "Speed Larp"
-msgstr "Speed-Larp"
+msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
@@ -2136,7 +2136,7 @@ msgid "Pickup time"
 msgstr "Abholzeit"
 
 msgid "Please wait"
-msgstr "Bitte warten"
+msgstr "Bitte warte"
 
 msgid "Pool Labels"
 msgstr "Pool-Labels"
@@ -2529,7 +2529,7 @@ msgid "Cancellations"
 msgstr "Annullierungen"
 
 msgid "Close on date"
-msgstr "Abschlussdatum"
+msgstr "Schließdatum"
 
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -2897,10 +2897,10 @@ msgid "Maximum number"
 msgstr "Maximale Anzahl"
 
 msgid "Member revoked"
-msgstr "Mitgliedschaft aberkannt"
+msgstr "Mitglied entfernt"
 
 msgid "Membership fee"
-msgstr "Beiträge"
+msgstr "Mitgliedsbeitrag"
 
 msgid "Multiplication"
 msgstr "Multiplikation"
@@ -3297,7 +3297,7 @@ msgid "Writing options"
 msgstr "Optionen zum Schreiben"
 
 msgid "You can consult"
-msgstr "Du findest"
+msgstr "Du kannst nachsehen"
 
 msgid "Your characters"
 msgstr "Deine Charaktere"
@@ -3778,7 +3778,7 @@ msgid "Relationship tags"
 msgstr "Beziehungs-Tags"
 
 msgid "Remaining credits"
-msgstr "Verbleibende Kredite"
+msgstr "Verbleibendes Guthaben"
 
 msgid "Remove from guild"
 msgstr "Aus der Gilde entfernen"
@@ -4416,7 +4416,7 @@ msgid "The outflow category"
 msgstr "Die Ausgabenkategorie"
 
 msgid "Time And Date Of Use"
-msgstr "Zeitpunkt und Datum der Nutzung"
+msgstr "Uhrzeit und Datum der Nutzung"
 
 msgid "Treasury appointees."
 msgstr "Kassenbeauftragte."
@@ -4598,7 +4598,7 @@ msgid "Verification payments"
 msgstr "Zahlungen zur Überprüfung"
 
 msgid "Warehouse assignments"
-msgstr "Aufgaben im Lager"
+msgstr "Lagerzuweisungen"
 
 msgid "What you will unlock:"
 msgstr "Was du freischalten wirst:"
@@ -4662,7 +4662,7 @@ msgid "Event deletion request"
 msgstr "Antrag auf Löschung eines Ereignisses"
 
 msgid "Expenses collaborators"
-msgstr "Ausgaben für Mitarbeiter"
+msgstr "Ausgaben der Mitarbeitenden"
 
 msgid "Failed to add profiles"
 msgstr "Profile können nicht hinzugefügt werden"
@@ -6180,7 +6180,7 @@ msgstr "Anmeldung für %(event)s aktualisiert"
 
 #, python-format
 msgid "Registration updated to %(event)s!"
-msgstr "Anmeldung aktualisiert auf %(event)s!"
+msgstr "Anmeldung für %(event)s aktualisiert!"
 
 #, python-format
 msgid "Registrations opening on: %(date)s"
@@ -9193,7 +9193,7 @@ msgstr ""
 
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr ""
-"Sie werden automatisch abgezogen, wenn du dich für eine neue Veranstaltung "
+"Sie werden automatisch verwendet, wenn du dich für eine neue Veranstaltung "
 "anmeldest!"
 
 #, python-format
@@ -9285,7 +9285,7 @@ msgstr ""
 
 msgid "Symbols for place of birth do not match (check exact municipality)"
 msgstr ""
-"Die Angaben zum Geburtsort stimmen nicht überein (überprüfe die genaue "
+"Die Symbole zum Geburtsort stimmen nicht überein (überprüfe die genaue "
 "Gemeinde)"
 
 msgid "There are no signups for this event, so no payment can be created."
@@ -11032,7 +11032,7 @@ msgid ""
 "each run"
 msgstr ""
 "Verfolge den gesamten Anmeldungsverlauf eines Mitglieds mit dem "
-"Zahlungsstatus für jeden Lauf"
+"Zahlungsstatus für jede Veranstaltungsausgabe"
 
 msgid ""
 "Upload scans of both your signed request and your document (image or PDF "

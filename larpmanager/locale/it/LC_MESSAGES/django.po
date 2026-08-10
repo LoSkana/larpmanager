@@ -3135,7 +3135,7 @@ msgid "External access"
 msgstr "Accesso esterno"
 
 msgid "Filter selected"
-msgstr "Filtro selezionato"
+msgstr "Filtra i selezionati"
 
 msgid "First character"
 msgstr "Primo personaggio"
@@ -4047,7 +4047,7 @@ msgid "Your date of birth"
 msgstr "La tua data di nascita"
 
 msgid "this is important!"
-msgstr "è importante!"
+msgstr "questo è importante!"
 
 msgid "Access Confirmation"
 msgstr "Conferma di accesso"
@@ -6444,7 +6444,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Non puoi inviare messaggi a te stesso!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Hai sbloccato un nuovo obiettivo!"
+msgstr "Hai sbloccato un nuovo Badge!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -6627,7 +6627,7 @@ msgstr "Stai esplorando un'organizzazione di prova."
 
 #, python-format
 msgid "You are exploring the \"%(name)s\" demo."
-msgstr "Stai esplorando la demo \"%(name)s.\""
+msgstr "Stai esplorando la demo \"%(name)s\"."
 
 msgid "You can now start creating speed-larps"
 msgstr "Ora puoi iniziare a creare speed larp"
@@ -12492,8 +12492,8 @@ msgid ""
 "You can optionally add columns for the registration questions, allowed "
 "values for the header are:"
 msgstr ""
-"È possibile aggiungere facoltativamente colonne per le domande di "
-"registrazione; i valori consentiti per l'intestazione sono:"
+"Puoi aggiungere facoltativamente colonne per le domande di registrazione; i "
+"valori consentiti per l'intestazione sono:"
 
 msgid ""
 "A user with this email address has been created on our website. If you wish "

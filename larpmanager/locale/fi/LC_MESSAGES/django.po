@@ -2514,7 +2514,7 @@ msgid "Are you sure?"
 msgstr "Oletko varma?"
 
 msgid "Assign Badges"
-msgstr "Määritä Badges"
+msgstr "Myönnä Badges"
 
 msgid "Authorisation"
 msgstr "Lupa"
@@ -2954,7 +2954,7 @@ msgid "Refund details"
 msgstr "Palautustiedot"
 
 msgid "Remove consent"
-msgstr "Suostumuksen poistaminen"
+msgstr "Poista suostumus"
 
 msgid "Request refund"
 msgstr "Pyydä palautusta"
@@ -2963,7 +2963,7 @@ msgid "Request signed"
 msgstr "Allekirjoitettu pyyntö"
 
 msgid "Request signup"
-msgstr "Pyydä rekisteröitymistä"
+msgstr "Pyydä ilmoittautumista"
 
 msgid "Requests open:"
 msgstr "Pyynnöt avoinna:"
@@ -2981,7 +2981,7 @@ msgid "Show shortcuts"
 msgstr "Näytä pikanäppäimet"
 
 msgid "Tax code check"
-msgstr "Verokoodin tarkistus"
+msgstr "Verotunnuksen tarkistus"
 
 msgid "Token balance:"
 msgstr "Tokenin saldo:"
@@ -4896,7 +4896,7 @@ msgid "Registration is closed."
 msgstr "Ilmoittautuminen on päättynyt."
 
 msgid "Registrations not open!"
-msgstr "Ilmoittautumiset eivät ole auki!"
+msgstr "Ilmoittautuminen ei ole vielä avoinna!"
 
 msgid "Reimbursement Processed"
 msgstr "Korvaus on käsitelty"
@@ -5080,10 +5080,10 @@ msgid "Character sheet questions"
 msgstr "Hahmon arkin kysymykset"
 
 msgid "Check double speed larps:"
-msgstr "Tarkista kaksois speed-larpit:"
+msgstr "Tarkista kaksinkertaiset Speed larpit:"
 
 msgid "Check missing speed larp:"
-msgstr "Tarkista puuttuva speed-larp:"
+msgstr "Tarkista puuttuva Speed larp:"
 
 msgid "Current platform version:"
 msgstr "Nykyinen alustaversio:"
@@ -5433,7 +5433,7 @@ msgid "Allow registration transfers"
 msgstr "Salli rekisteröintien siirrot"
 
 msgid "Allow reserve signup anytime"
-msgstr "Salli varausilmoittautuminen milloin tahansa"
+msgstr "Salli varasijalle ilmoittautuminen milloin tahansa"
 
 msgid "Authenticator device removed"
 msgstr "Tunnistuslaite poistettu"
@@ -5500,7 +5500,7 @@ msgstr "Odota ennen kuin yrität uudelleen."
 
 #, python-format
 msgid "Refund request from %(user)s"
-msgstr "%(user)s palautuspyyntö"
+msgstr "%(user)s:n palautuspyyntö"
 
 msgid "Show the global preferences."
 msgstr "Näytä yleiset asetukset."
@@ -6540,7 +6540,7 @@ msgid "Total amount refunded to participants"
 msgstr "Osallistujille palautettu kokonaismäärä"
 
 msgid "Update here the registration options!"
-msgstr "Päivitä tässä ilmoittautumisvaihtoehdot!"
+msgstr "Päivitä tässä ilmoittautumisvaihtoehtojasi!"
 
 msgid "View the complete list of our events!"
 msgstr "Katso täydellinen luettelo tapahtumistamme!"
@@ -7237,7 +7237,7 @@ msgid "First character in the relationship (origin)"
 msgstr "Suhteen ensimmäinen hahmo (alkuperä)"
 
 msgid "If enabled, allow ticket tier: Collaborator."
-msgstr "Jos käytössä, salli lipputaso: Collaborator."
+msgstr "Jos käytössä, salli lipputaso: Yhteistyökumppani."
 
 msgid "Manage all character factions for this event"
 msgstr "Hallitse tämän tapahtuman kaikkia hahmoryhmittymiä"
@@ -7816,7 +7816,7 @@ msgid "Second character in the relationship (destination)"
 msgstr "Suhteen toinen hahmo (määränpää)"
 
 msgid "Select your preferences on the characters to play!"
-msgstr "Valitse haluamasi pelattavat hahmot!"
+msgstr "Valitse pelattavia hahmoja koskevat toiveesi!"
 
 msgid "Set visual aspect: colors, background, cover image"
 msgstr "Määritä visuaalinen ilme: värit, tausta, kansikuva"
@@ -8273,7 +8273,7 @@ msgstr "Käytettävissä oleva luottosaldo tapahtumien maksuja ja ostoja varten"
 
 #, python-format
 msgid "Click <a href='%(url)s'>here</a> to accept the invitation"
-msgstr "Hyväksy kutsu klikkaamalla <a href='%(url)s'>täältä</a>"
+msgstr "Hyväksy kutsu klikkaamalla <a href='%(url)s'>tästä</a>"
 
 msgid "Click on the image below (Paypal.me) to open the payment."
 msgstr "Klikkaa alla olevaa kuvaa (Paypal.me) avataksesi maksun."
@@ -8479,7 +8479,7 @@ msgid "To stop those, you would need to cancel your registrations."
 msgstr "Jos haluat lopettaa nämä, sinun on peruutettava rekisteröinnit."
 
 msgid "Upload membership documents to complete a member's approval"
-msgstr "Lataa jäsenasiakirjat jäsenyyden hyväksymisen varten"
+msgstr "Lataa jäsenasiakirjat jäsenen hyväksynnän viimeistelemiseksi"
 
 msgid "Where it has been placed? When it is expected to come back?"
 msgstr "Mihin se on sijoitettu? Milloin sen odotetaan palaavan?"
@@ -9093,7 +9093,7 @@ msgstr ""
 
 msgid "Manage all warehouse items, their containers, tags, and quantities"
 msgstr ""
-"Hallinnoi kaikkia varastotuotteita, niiden pakkauksia, tunnisteita ja määriä"
+"Hallinnoi kaikkia varastotuotteita, niiden säiliöitä, tunnisteita ja määriä"
 
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
@@ -9347,7 +9347,7 @@ msgstr ""
 "UTF-8-koodattuina):"
 
 msgid "Statement issued by the bank as proof of the transfer (as a PDF file)"
-msgstr "Pankin antama lausunto maksun todisteeksi (PDF-tiedostona)"
+msgstr "Pankin antama lausunto tilisiirron todisteeksi (PDF-tiedostona)"
 
 msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
@@ -12010,7 +12010,7 @@ msgid ""
 "Your %(year)s membership fee is outstanding and will be added to your next "
 "payment. %(amount)s"
 msgstr ""
-"%(year)s jäsenmaksusi on maksamatta, ja se lisätään seuraavaan maksusi. "
+"%(year)s jäsenmaksusi on maksamatta, ja se lisätään seuraavaan maksuusi. "
 "%(amount)s"
 
 msgid ""
@@ -12188,8 +12188,8 @@ msgid ""
 "Alternatively, you may request a payout of your balance on <a "
 "href='%(url)s'>your accounting</a>."
 msgstr ""
-"Vaihtoehtoisesti voit pyytää saldosi maksamista <a href='%(url)s'>tilisi</a>"
-" kautta."
+"Vaihtoehtoisesti voit pyytää saldosi maksamista <a "
+"href='%(url)s'>kirjanpidossasi</a>."
 
 msgid ""
 "Create a character by clicking 'New'; give it a name and fill in the "
@@ -12238,7 +12238,7 @@ msgid ""
 "No external item movements have been created yet. Use the button above to "
 "assign warehouse items."
 msgstr ""
-"Ulkoisia tavaraliikkeitä ei ole vielä luotu. Osoita varastotavarat yllä "
+"Ulkoisia tavaraliikkeitä ei ole vielä luotu. Määritä varastotuotteita yllä "
 "olevan painikkeen avulla."
 
 #, python-format
@@ -12845,8 +12845,8 @@ msgid ""
 "Whether the character is a mirror (i.e., whether this pg shows the true "
 "secret face of another character)"
 msgstr ""
-"Onko hahmo peili (eli näyttääkö tämä pg toisen hahmon todelliset salaiset "
-"kasvot)"
+"Onko hahmo peili (eli näyttääkö tämä hahmo toisen hahmon todelliset salaiset"
+" kasvot)"
 
 msgid ""
 "Assign participants to roles by reviewing their preferences and running the "
@@ -13488,8 +13488,8 @@ msgid ""
 "Once you have made the payment, return to this page, and upload below the "
 "screenshot of the confirmation sent by Paypal."
 msgstr ""
-"Kun olet suorittanut maksun, palaa tälle sivulle ja lataa alla oleva "
-"kuvakaappaus Paypalin lähettämästä vahvistuksesta."
+"Kun olet suorittanut maksun, palaa tälle sivulle ja lataa alle Paypalin "
+"lähettämän vahvistuksen kuvakaappaus."
 
 msgid ""
 "A measure of how much to favor participants who completed full payment "
@@ -14679,7 +14679,7 @@ msgstr ""
 " pääsee vastauksiin käsiksi, eikä niitä välitetä missään muodossa. Nämä "
 "tiedot voivat koskea: fyysisiä terveysongelmia, epilepsiaa, "
 "mielenterveysongelmia (esimerkiksi neuroosi, kaksisuuntainen mielialahäiriö,"
-" ahdistuneisuushäiriöt, erilaiset fobiat), triggeröiviä aiheita ('lineet ja "
+" ahdistuneisuushäiriöt, erilaiset fobiat), triggeröiviä aiheita ('linjat ja "
 "verhot' – emme voi luvata, ettei törmää niihin tapahtumassa, mutta "
 "varmistamme, etteivät ne ole osa pää-Questejasi). Jätä tyhjäksi, jos sinulla"
 " ei ole raportoitavaa!"

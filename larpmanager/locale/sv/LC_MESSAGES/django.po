@@ -12728,8 +12728,8 @@ msgid ""
 "Adds 'Patron' and 'Reduced' ticket types. Each Patron ticket purchased makes"
 " one Reduced ticket available"
 msgstr ""
-"Lägger till biljettyperna 'Patron' och 'Reduced'. Varje Patron-biljett som "
-"köps gör en Reduced-biljett tillgänglig"
+"Lägger till biljettyperna 'Patron' och 'Reducerad'. Varje Patron-biljett som"
+" köps gör en Reducerad-biljett tillgänglig"
 
 #, python-format
 msgid ""
