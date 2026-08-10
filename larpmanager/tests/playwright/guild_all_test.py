@@ -33,6 +33,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     _select2_search_and_pick,
+    fill_tinymce,
     get_modal_iframe,
     go_to,
     login_orga,
@@ -80,6 +81,8 @@ def test_guild_all(pw_page: Any) -> None:
     go_to(page, live_server, "/test/guilds/new/")
     page.locator("#founder_character").select_option(label="Guild Founder")
     page.locator("#id_name").fill("The Silver Hand")
+    fill_tinymce(page, "id_teaser", "A guild of silver knights")
+    fill_tinymce(page, "id_text", "The full history of the Silver Hand")
     page.locator("#form_submit").click()
 
     expect(page).to_have_url(re.compile(r"/guilds/u1"))
