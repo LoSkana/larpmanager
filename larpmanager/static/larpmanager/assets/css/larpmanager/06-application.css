@@ -204,6 +204,27 @@
   padding: 0 1em;
 }
 
+/* Character sheet: text column on the left, sticky profile picture on the right */
+
+.gallery.sheet-cols {
+  display: flex;
+  align-items: flex-start;
+}
+
+.gallery.sheet-cols .el {
+  order: 2;
+  float: none;
+  flex: 0 0 15em;
+  position: sticky;
+  top: 1em;
+}
+
+.gallery.sheet-cols .text {
+  order: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 /*** plot ***/
 
 .plot {
@@ -211,10 +232,10 @@
   border-radius: 1em;
   background-color: rgba(var(--pri-rgb), 0.1);
   border: solid 1px rgba(var(--pri-rgb), 0.125);
-  max-height: 30em;
+  max-height: 25em;
   overflow-y: auto;
   overflow-x: hidden;
-  width: 100%;
+  width: auto;
   padding: 1em;
   box-sizing: border-box;
 }
@@ -383,6 +404,14 @@ form .plot {
     width: 100%;
     float: none;
     margin: 1em auto;
+  }
+
+  .gallery.sheet-cols {
+    display: block;
+  }
+
+  .gallery.sheet-cols .el {
+    position: static;
   }
 
   .gallery .badge .icon-name {
