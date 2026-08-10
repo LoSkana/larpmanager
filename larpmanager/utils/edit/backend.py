@@ -743,6 +743,9 @@ def set_suggestion(context: dict, permission: str) -> None:
     a suggestion has been made for a specific permission. It works with both
     event and association contexts.
 
+    For campaign child events the flag is stored on the parent event, since suggestion
+    configs are read from the parent.
+
     Args:
         context: Context dictionary containing either 'event' key with event object
                  or 'association_id' key with association ID
@@ -751,6 +754,10 @@ def set_suggestion(context: dict, permission: str) -> None:
     """
     # Determine the target object based on context
     target_object = context["event"] if "event" in context else Association.objects.get(pk=context["association_id"])
+
+    # Child events of a campaign read their configs from the parent: write the flag there
+    if getattr(target_object, "parent_id", None):
+        target_object = target_object.parent
 
     # Build the configuration key for this permission's suggestion
     config_key = f"{permission}_suggestion"
