@@ -37,6 +37,7 @@ from larpmanager.tests.utils import (go_to, submit_register,
                                      logout,
                                      submit_confirm,
                                      expect_normalized, new_option, submit_option, get_modal_iframe, save_modal,
+                                     expand_options,
                                      )
 
 pytestmark = pytest.mark.e2e
@@ -275,6 +276,8 @@ def signup_first(live_server: Any, page: Any) -> None:
 def signup_check(live_server: Any, page: Any) -> None:
     # check values
     go_to(page, live_server, "/test/register")
+    # the registration already exists: unselected options start collapsed
+    expand_options(page)
     expect_normalized(page, page.locator("#register_form"), "short description")
     expect(page.get_by_role("textbox", name="short text")).to_have_value("aaaaaaaaaa")
     expect_normalized(page, page.locator("#register_form"), "long description")

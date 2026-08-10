@@ -44,6 +44,7 @@ from larpmanager.models.miscellanea import (
     WarehouseMovement,
     WarehouseTag,
 )
+from larpmanager.utils.services.miscellanea import warehouse_add_assignment, warehouse_available_quantity
 
 
 class ExeWarehouseItemForm(BaseModelForm):
@@ -265,14 +266,10 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
                 widget=forms.HiddenInput,
                 required=True,
             )
-            assigned_total = (
-                WarehouseItemAssignment.objects.filter(item=self.instance).aggregate(total=Sum("quantity"))["total"]
-                or 0
-            )
             self.warehouse_item = self.instance
             self.warehouse_item_total = self.instance.quantity
             self.warehouse_item_available = (
-                max(self.instance.quantity - assigned_total, 0) if self.instance.quantity is not None else None
+                warehouse_available_quantity(self.instance) if self.instance.quantity is not None else None
             )
         else:
             assigned_item_ids = WarehouseItemAssignment.objects.filter(area__event=event).values_list(
@@ -415,9 +412,7 @@ class OrgaWarehouseItemCommitRemainingForm(BaseModelForm):
         self.warehouse_item_available = self._available_quantity()
 
     def _available_quantity(self, item: WarehouseItem | None = None) -> int:
-        item = item or self.item
-        assigned = WarehouseItemAssignment.objects.filter(item=item).aggregate(total=Sum("quantity"))["total"] or 0
-        return max((item.quantity or 0) - assigned, 0)
+        return warehouse_available_quantity(item or self.item)
 
     def clean(self) -> dict:
         """Ensure finite stock remains before showing the commit confirmation."""
@@ -436,13 +431,7 @@ class OrgaWarehouseItemCommitRemainingForm(BaseModelForm):
             if quantity <= 0:
                 raise ValidationError(_("No quantity is available to assign."))
 
-            assignment, _created = WarehouseItemAssignment.objects.get_or_create(
-                item=item,
-                area=self.cleaned_data["area"],
-                event=self.event,
-            )
-            assignment.quantity = (assignment.quantity or 0) + quantity
-            assignment.save()
+            assignment = warehouse_add_assignment(item, self.cleaned_data["area"], self.event, quantity)
 
         update_warehouse_item_cache(item)
         self.instance = assignment

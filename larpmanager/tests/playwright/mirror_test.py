@@ -130,3 +130,7 @@ def casting(live_server: Any, page: Any) -> None:
     go_to(page, live_server, "/test/gallery/")
     expect_normalized(page, page.locator("#one"), "Test Character")
     expect(page.locator("#one")).not_to_contain_text("Mirror")
+
+    # the assigned character sheet names the mirror character pointing at it
+    go_to(page, live_server, "/test/character/u1/")
+    expect_normalized(page, page.locator("#char_mirror_inv"), "Mirror")

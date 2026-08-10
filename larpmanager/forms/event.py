@@ -351,6 +351,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_custom()
         self.set_config_casting()
         self.set_config_guild()
+        self.set_config_relationships()
 
         # 5. Miscellanea
         self.set_config_accounting()
@@ -709,15 +710,6 @@ class OrgaConfigForm(ConfigForm):
 
     def _set_config_writing_behavior(self) -> None:
         """Configure writing behavior options (editor, tools, access)."""
-        if "relationships" in self.params.get("features"):
-            config_label = _("Relationships max length")
-            config_help_text = _("Set the maximum length of character relationships (default: 10,000 characters).")
-            self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
-
-            config_label = _("Disable auto relationships")
-            config_help_text = _("If enabled, auto-relationships from character references will not be created.")
-            self.add_configs("writing_disable_auto_relationship", ConfigType.BOOL, config_label, config_help_text)
-
         config_label = _("Disable character finder")
         config_help_text = (
             _("Disable the system that finds the character number when a special reference symbol is written:")
@@ -758,6 +750,28 @@ class OrgaConfigForm(ConfigForm):
         config_label = _("Reading")
         config_help_text = _("If enabled, enables the reading view for writing elements.")
         self.add_configs("writing_reading", ConfigType.BOOL, config_label, config_help_text)
+
+    def set_config_relationships(self) -> None:
+        """Configure relationships options."""
+        if "relationships" not in self.params.get("features"):
+            return
+
+        self.set_section("relationships", _("Relationships"))
+
+        config_label = _("Relationships max length")
+        config_help_text = _("Set the maximum length of character relationships (default: 10,000 characters).")
+        self.add_configs("writing_relationship_length", ConfigType.INT, config_label, config_help_text)
+
+        config_label = _("Disable auto relationships")
+        config_help_text = _("If enabled, auto-relationships from character references will not be created.")
+        self.add_configs("writing_disable_auto_relationship", ConfigType.BOOL, config_label, config_help_text)
+
+        config_label = _("Relationship tags")
+        config_help_text = _(
+            "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to character "
+            "relationships, applied to both sides of the relationship when the tag is symmetric.",
+        )
+        self.add_configs("writing_relationship_tags", ConfigType.BOOL, config_label, config_help_text)
 
     def set_config_character(self) -> None:
         """Configure character-related settings including campaign and faction options.
@@ -1501,6 +1515,7 @@ class OrgaRunForm(ConfigForm):
         self.fields["development"].widget = DescriptionRadioSelect(
             attrs={"class": "my-radio-class"},
             descriptions={str(value): str(status_text[DevelopStatus(value)]) for value, _label in development_choices},
+            collapse_unselected=self._is_edit,
         )
         self.fields["development"].choices = development_choices
 
@@ -1552,6 +1567,7 @@ class OrgaRunForm(ConfigForm):
         self.fields["registration_status"].widget = DescriptionRadioSelect(
             attrs={"class": "my-radio-class", "data-conditional-controller": "registration_status"},
             descriptions={str(value): str(status_help[RegistrationStatus(value)]) for value, _label in choices},
+            collapse_unselected=self._is_edit,
         )
         self.fields["registration_status"].choices = choices
         if "registration_open" in self.fields:
@@ -1778,6 +1794,7 @@ class ExeEventForm(OrgaEventForm):
                     widget=DescriptionRadioSelect(
                         attrs={"class": "my-radio-class"},
                         descriptions={slug: str(desc) for slug, (_label, desc) in template_descriptions.items()},
+                        collapse_unselected=self._is_edit,
                     ),
                 )
 

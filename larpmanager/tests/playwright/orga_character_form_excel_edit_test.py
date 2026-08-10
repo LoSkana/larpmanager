@@ -35,7 +35,7 @@ from larpmanager.tests.utils import (
     go_to,
     login_orga,
     submit_inline_edit, wait_for_inline_edit, new_option, submit_option, get_modal_iframe, save_modal,
-    click_and_wait_question,
+    click_and_wait_question, expand_options,
 )
 
 pytestmark = pytest.mark.e2e
@@ -159,6 +159,8 @@ def edit_first_character(page: Any, live_server: Any) -> None:
     # Fill all custom questions
     edit_iframe.locator("#id_que_u4").fill("Text value 1")
     edit_iframe.locator("#id_que_u5").fill("Paragraph value 1")
+    # the character is already saved: the options start collapsed
+    expand_options(edit_iframe)
     edit_iframe.locator('label[for="id_que_u6_0"]').click()  # Option A
     edit_iframe.locator('label[for="id_que_u7_0"]').click()
     edit_iframe.locator('label[for="id_que_u7_1"]').click()
@@ -283,6 +285,8 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing value - Option A)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Option A").dblclick()
     panel = wait_for_inline_edit(page)
+    # Option A is already selected, so the other options start collapsed
+    expand_options(panel)
     panel.locator('label[for="id_que_u6_1"]').click()  # Option B
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u1"]'), "Option B")
@@ -291,6 +295,8 @@ def inline_editing_singlechoice_question(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(9).dblclick()
     panel = wait_for_inline_edit(page)
+    # no option is selected yet, so they all start collapsed
+    expand_options(panel)
     panel.locator('label[for="id_que_u6_2"]').click()  # Option C
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Option C")
@@ -304,6 +310,8 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     # Edit u1 (existing values - Choice X and Y)
     page.locator('[id="u1"]').get_by_role("cell").filter(has_text="Choice X").dblclick()
     panel = wait_for_inline_edit(page)
+    # Choice X and Y are already selected, so Choice Z starts collapsed
+    expand_options(panel)
     panel.locator('label[for="id_que_u7_0"]').click()
     panel.locator('label[for="id_que_u7_2"]').click()
     submit_inline_edit(page)
@@ -314,6 +322,8 @@ def inline_editing_multichoice_question(page: Any, live_server: Any) -> None:
     cells_u2 = page.locator('[id="u2"]').get_by_role("cell")
     cells_u2.nth(10).dblclick()
     panel = wait_for_inline_edit(page)
+    # no option is selected yet, so they all start collapsed
+    expand_options(panel)
     panel.locator('label[for="id_que_u7_0"]').click()
     submit_inline_edit(page)
     expect_normalized(page, page.locator('[id="u2"]'), "Choice X")

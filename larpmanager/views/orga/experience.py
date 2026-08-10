@@ -29,7 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.experience import get_event_exp_cache, get_event_exp_systems
+from larpmanager.cache.experience import get_event_exp_cache, has_multiple_exp_systems
 from larpmanager.forms.experience import OrgaDeliveryExpForm
 from larpmanager.models.event import Run
 from larpmanager.models.experience import (
@@ -48,7 +48,14 @@ from larpmanager.utils.core.base import check_event_context, get_event_context
 from larpmanager.utils.core.exceptions import FeatureError, ReturnNowError, UserPermissionError
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
-from larpmanager.utils.io.download import export_abilities, export_modifiers, export_rules, zip_exports
+from larpmanager.utils.io.download import (
+    export_abilities,
+    export_criterions,
+    export_deliveries,
+    export_modifiers,
+    export_rules,
+    zip_exports,
+)
 from larpmanager.utils.services.bulk import handle_bulk_ability
 
 logger = logging.getLogger(__name__)
@@ -80,8 +87,15 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Verify user has permission and retrieve event context
     context = check_event_context(request, event_slug, "orga_exp_deliveries")
 
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_deliveries(context), "Deliveries"))
+
+    context["upload"] = "exp_deliveries"
+    context["download"] = 1
+
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
 
     # Get all deliveries ordered by number
     deliveries = list(context["event"].get_elements(DeliveryExp).order_by("order").select_related("system"))
@@ -195,7 +209,7 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["exp_templates"] = get_event_config(context["event"].id, "exp_templates", context=context)
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
 
     # Query and prepare abilities list with optimized database access
     abilities = list(context["event"].get_elements(AbilityExp).order_by("order").select_related("typ", "system"))
@@ -374,6 +388,13 @@ def orga_exp_criterions(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display and manage experience criterions for an event."""
     context = check_event_context(request, event_slug, "orga_exp_criterions")
 
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_criterions(context), "Criterions"))
+
+    context["upload"] = "exp_criterions"
+    context["download"] = 1
+
     criterions = list(context["event"].get_elements(CriterionExp).order_by("order").select_related("system"))
 
     px_cache = get_event_exp_cache(context["event"])
@@ -382,7 +403,7 @@ def orga_exp_criterions(request: HttpRequest, event_slug: str) -> HttpResponse:
             criterion.cached_rels = px_cache["criterions"][criterion.id]
 
     context["list"] = criterions
-    context["multiple_systems"] = len(get_event_exp_systems(context["event"])) > 1
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
 
     return render(request, "larpmanager/orga/experience/criterions.html", context)
 

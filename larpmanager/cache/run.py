@@ -176,13 +176,13 @@ def init_cache_config_run(run: Run) -> dict:
         "buttons": get_event_button_cache(event_id),
     }
     configs = [
-        ("limitations", "show_limitations", event_id, False),
-        ("user_character_max", "user_character_max", event_id, 1),
-        ("cover_orig", "cover_orig", event_id, False),
-        ("exp_user", "exp_user", parent_id, False),
+        ("limitations", "show_limitations", event_id),
+        ("user_character_max", "user_character_max", event_id),
+        ("cover_orig", "cover_orig", event_id),
+        ("exp_user", "exp_user", parent_id),
     ]
-    for context_key, config_key, event_id, default in configs:
-        context[context_key] = get_event_config(event_id, config_key, default_value=default, context=context)
+    for context_key, config_key, lookup_event_id in configs:
+        context[context_key] = get_event_config(lookup_event_id, config_key, context=context)
 
     # Process writing system configurations for enabled features
     mapping = _get_writing_mapping()
@@ -193,7 +193,7 @@ def init_cache_config_run(run: Run) -> dict:
 
         # Parse and convert list configuration to dictionary lookup
         config_display_dict = {}
-        config_value = run.get_config("show_" + config_name, default_value="[]")
+        config_value = run.get_config("show_" + config_name)
         for element in ast.literal_eval(config_value):
             config_display_dict[element] = 1
         context["show_" + config_name] = config_display_dict

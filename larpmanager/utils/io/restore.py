@@ -34,7 +34,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import QuestType
 from larpmanager.models.event import EventConfig, RunConfig
-from larpmanager.models.experience import AbilityExp
+from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp
 from larpmanager.models.form import (
     QuestionApplicable,
     RegistrationOption,
@@ -45,7 +45,10 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import Registration, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterConfig, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.io.upload import (
+    _get_row_number,
     abilities_load,
+    criterions_load,
+    deliveries_load,
     form_load,
     registrations_load,
     tickets_load,
@@ -126,6 +129,14 @@ def _read_df(zip_file: zipfile.ZipFile, filename: str) -> pd.DataFrame | None:
 
 def _section(label: str, creates: list, updates: list, skips: list) -> dict:
     return {"label": label, "creates": creates, "updates": updates, "skips": skips}
+
+
+def _cell(row: pd.Series, column: str) -> str:
+    """Return the stripped value of a row column, empty string for missing or NaN values."""
+    value = row.get(column)
+    if value is None or pd.isna(value):
+        return ""
+    return str(value).strip()
 
 
 def _fake_csv(df: pd.DataFrame) -> _FakeFile:
@@ -305,15 +316,62 @@ def _preview_questtype(context: dict, df: pd.DataFrame) -> dict:
 
 def _preview_abilities(context: dict, df: pd.DataFrame) -> dict:
     event_id = context["event"].get_class_parent(AbilityExp)
-    existing = set(AbilityExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True))
+    # Names are matched case-insensitively, as the execution does
+    existing = {
+        name.lower()
+        for name in AbilityExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True)
+    }
 
     creates, updates, skips = [], [], []
     for _idx, row in df.iterrows():
         name = str(row.get("name", "")).strip()
         if name:
-            (updates if name in existing else creates).append(name)
+            (updates if name.lower() in existing else creates).append(name)
 
     return _section(str(_("Abilities")), creates, updates, skips)
+
+
+def _preview_criterions(context: dict, df: pd.DataFrame) -> dict:
+    event_id = context["event"].get_class_parent(CriterionExp)
+    existing = set(
+        CriterionExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("number", flat=True)
+    )
+
+    creates, updates, skips = [], [], []
+    for _idx, row in df.iterrows():
+        # Parse with the same helper used on execution, so the preview matches the result
+        number_int, err = _get_row_number(row)
+        if err:
+            skips.append(f"{_cell(row, 'number') or '(empty)'}: {err}")
+            continue
+        if number_int in existing:
+            updates.append(str(number_int))
+        elif not _cell(row, "name"):
+            # A criterion cannot be created without a name, mirroring the execution
+            skips.append(f"{number_int}: missing name")
+        else:
+            creates.append(str(number_int))
+
+    return _section(str(_("Criterions")), creates, updates, skips)
+
+
+def _preview_deliveries(context: dict, df: pd.DataFrame) -> dict:
+    event_id = context["event"].get_class_parent(DeliveryExp)
+    # Names are matched case-insensitively, as the execution does
+    existing = {
+        name.lower()
+        for name in DeliveryExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True)
+    }
+
+    creates, updates, skips = [], [], []
+    for _idx, row in df.iterrows():
+        name = _cell(row, "name")
+        if not name:
+            skips.append("(empty): missing name")
+            continue
+        (updates if name.lower() in existing else creates).append(name)
+
+    return _section(str(_("Deliveries")), creates, updates, skips)
 
 
 def _preview_registration(context: dict, df: pd.DataFrame) -> dict:
@@ -521,6 +579,16 @@ def _exec_abilities(context: dict, df: pd.DataFrame) -> list[str]:
     return abilities_load(ctx, _FakeForm(first=_fake_csv(df)))
 
 
+def _exec_criterions(context: dict, df: pd.DataFrame) -> list[str]:
+    ctx = {**context, "typ": "exp_criterion"}
+    return criterions_load(ctx, _FakeForm(first=_fake_csv(df)))
+
+
+def _exec_deliveries(context: dict, df: pd.DataFrame) -> list[str]:
+    ctx = {**context, "typ": "exp_deliverie"}
+    return deliveries_load(ctx, _FakeForm(first=_fake_csv(df)))
+
+
 def _exec_registration(context: dict, df: pd.DataFrame) -> list[str]:
     ctx = {**context, "typ": "registration"}
     return registrations_load(ctx, _FakeForm(first=_fake_csv(df)))
@@ -633,6 +701,14 @@ def preview_restore(context: dict, zip_bytes: bytes) -> tuple[list[dict], list[s
         sections.append(_preview_abilities(context, dfs["abilities"]))
         handled.add("abilities")
 
+    if "criterions" in dfs:
+        sections.append(_preview_criterions(context, dfs["criterions"]))
+        handled.add("criterions")
+
+    if "deliveries" in dfs:
+        sections.append(_preview_deliveries(context, dfs["deliveries"]))
+        handled.add("deliveries")
+
     unknown = [f"{stem}.csv" for stem in dfs if stem not in handled]
     return sections, unknown
 
@@ -699,5 +775,9 @@ def execute_restore(context: dict, zip_bytes: bytes) -> list[str]:
         _safe_run(logs, "questtype", _exec_questtype, context, dfs["questtype"])
     if "abilities" in dfs:
         _safe_run(logs, "abilities", _exec_abilities, context, dfs["abilities"])
+    if "criterions" in dfs:
+        _safe_run(logs, "criterions", _exec_criterions, context, dfs["criterions"])
+    if "deliveries" in dfs:
+        _safe_run(logs, "deliveries", _exec_deliveries, context, dfs["deliveries"])
 
     return logs

@@ -754,7 +754,7 @@ def set_suggestion(context: dict, permission: str) -> None:
 
     # Build the configuration key for this permission's suggestion
     config_key = f"{permission}_suggestion"
-    existing_suggestion = target_object.get_config(config_key, default_value=False)
+    existing_suggestion = target_object.get_config(config_key)
 
     # Exit early if suggestion already exists
     if existing_suggestion:

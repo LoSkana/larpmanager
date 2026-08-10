@@ -189,11 +189,9 @@ def casting_details(context: dict) -> dict:
         context["typ"] = None
 
     # Set type identifier and numeric casting configuration
-    for config_key, default_value in (("add", 0), ("min", 1), ("max", 5)):
+    for config_key in ("add", "min", "max"):
         context[f"casting_{config_key}"] = int(
-            get_event_config(
-                context["event"].id, f"casting_{config_key}", default_value=default_value, context=context
-            ),
+            get_event_config(context["event"].id, f"casting_{config_key}", context=context),
         )
 
     # Set boolean casting preferences from event configuration
@@ -201,7 +199,6 @@ def casting_details(context: dict) -> dict:
         context["casting_" + preference_name] = get_event_config(
             context["event"].id,
             "casting_" + preference_name,
-            default_value=False,
             context=context,
         )
 

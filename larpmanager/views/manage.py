@@ -297,9 +297,7 @@ def _exe_suggestions(context: dict) -> None:
         )
 
     for permission_key, suggestion_text in suggestions.items():
-        if get_association_config(
-            context["association_id"], f"{permission_key}_suggestion", default_value=False, context=context
-        ):
+        if get_association_config(context["association_id"], f"{permission_key}_suggestion", context=context):
             continue
         _add_suggestion(context, suggestion_text, permission_key)
 
@@ -401,9 +399,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         actions["exe_quick"] = _("Select and activate key features")
 
     for permission_key, suggestion_text in actions.items():
-        if get_association_config(
-            context["association_id"], f"{permission_key}_suggestion", default_value=False, context=context
-        ):
+        if get_association_config(context["association_id"], f"{permission_key}_suggestion", context=context):
             continue
         _add_action(context, suggestion_text, permission_key)
 
@@ -955,9 +951,7 @@ def _orga_registration_actions(context: dict, enabled_features: dict[str, Any]) 
     if "custom_character" in enabled_features:
         is_configured = False
         for field_name in ["pronoun", "song", "public", "private", "profile"]:
-            if get_event_config(
-                context["event"].id, "custom_character_" + field_name, default_value=False, context=context
-            ):
+            if get_event_config(context["event"].id, "custom_character_" + field_name, context=context):
                 is_configured = True
 
         if not is_configured:
@@ -983,7 +977,7 @@ def _orga_suggestions(context: dict) -> None:
         actions["orga_quick"] = _("Select and activate key features")
 
     for permission_slug, suggestion_text in actions.items():
-        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
+        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", context=context):
             continue
         _add_action(context, suggestion_text, permission_slug)
 
@@ -1002,7 +996,7 @@ def _orga_suggestions(context: dict) -> None:
         )
 
     for permission_slug, suggestion_text in suggestions.items():
-        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", default_value=False, context=context):
+        if get_event_config(context["event"].id, f"{permission_slug}_suggestion", context=context):
             continue
         _add_suggestion(context, suggestion_text, permission_slug)
 

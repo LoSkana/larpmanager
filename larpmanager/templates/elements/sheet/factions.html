@@ -7,14 +7,14 @@
                 {% if field %}
                     {% if screen or question.printable %}
                         <h2 class="c title">{{ question.name }}</h2>
-                        <div class="plot text">{% show_char field run 1 %}</div>
+                        <div class="plot">{% show_char field run 1 %}</div>
                     {% endif %}
                 {% endif %}
             {% endwith %}
         {% elif question.typ == 'text' %}
             {% if fact.text and show_faction.text %}
                 {% if not fact.only_text %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
-                <div class="plot text">{% show_char fact.text run 1 %}</div>
+                <div class="plot">{% show_char fact.text run 1 %}</div>
             {% endif %}
         {% else %}
             {% with fact.fields|get:idx as field %}

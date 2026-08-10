@@ -56,6 +56,7 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Prologue,
     PrologueType,
+    RelationshipTag,
     SpeedLarp,
 )
 from larpmanager.utils.core.validators import FileTypeValidator
@@ -747,3 +748,15 @@ class OrgaSpeedLarpForm(WritingForm):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Initialize writing element form."""
         super().__init__(*args, **kwargs)
+
+
+class OrgaRelationshipTagForm(BaseModelForm):
+    """Form for RelationshipTag."""
+
+    page_title = _("Relationship tags")
+
+    page_info = _("Manage the tags that can be applied to character relationships")
+
+    class Meta:
+        model = RelationshipTag
+        exclude = ("number", "order")
