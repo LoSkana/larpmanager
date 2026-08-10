@@ -103,6 +103,9 @@ function load_question(el) {
                     cell.invalidate('dom');
                 }
             });
+
+            // redraw so search and ordering are evaluated on the freshly loaded column
+            table.draw(false);
         });
 
          done[q_uuid] = 1;
