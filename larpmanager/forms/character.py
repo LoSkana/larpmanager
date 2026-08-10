@@ -511,7 +511,12 @@ class OrgaCharacterForm(CharacterForm):
         )
         self.configure_field_event("plots", self.params["event"])
 
-        self.plots = self.instance.get_plot_characters()
+        # the js builds the role row of a plot as soon as it is selected, before saving
+        self.load_js = [*self.load_js, "character-plots"]
+        self.plot_role_help_text = _("This text will be added to the %(name)s plot paragraph in the sheet.")
+        self.params["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
+
+        self.plots = self.instance.get_plot_characters(self.params["event"])
         self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
 
         self.add_char_finder = []
@@ -531,8 +536,7 @@ class OrgaCharacterForm(CharacterForm):
             self.fields[plot_field_name] = forms.CharField(
                 widget=WritingTinyMCE(),
                 label=plot_name,
-                help_text=_("This text will be added to the %(name)s plot paragraph in the sheet.")
-                % {"name": plot_name},
+                help_text=self.plot_role_help_text % {"name": plot_name},
                 required=False,
             )
 
@@ -562,9 +566,10 @@ class OrgaCharacterForm(CharacterForm):
         if "plots" not in self.cleaned_data:
             return
 
-        # Add / remove plots
+        # Add / remove plots, restricted to the plots of this event (they are not inherited)
+        plot_event = self.params["event"].get_class_parent(Plot)
         selected = set(self.cleaned_data.get("plots", []))
-        current = set(Plot.objects.filter(plotcharacterrel__character=instance))
+        current = set(Plot.objects.filter(plotcharacterrel__character=instance, event=plot_event))
 
         to_add = selected - current
         to_remove = current - selected
@@ -575,15 +580,14 @@ class OrgaCharacterForm(CharacterForm):
         for plot in to_add:
             PlotCharacterRel.objects.create(character=instance, plot=plot)
 
-        # update texts
+        # update texts (rows added client side are not declared fields, read them from raw data)
         to_update = []
-        for pr in instance.get_plot_characters():
+        for pr in instance.get_plot_characters(self.params["event"]):
             field = f"pl_{pr.plot_id}"
-            if field not in self.cleaned_data:
+            text = self.cleaned_data[field] if field in self.cleaned_data else self.data.get(field)
+            if text is None or text == pr.text:
                 continue
-            if self.cleaned_data[field] == pr.text:
-                continue
-            pr.text = self.cleaned_data[field]
+            pr.text = text
             to_update.append(pr)
         if to_update:
             PlotCharacterRel.objects.bulk_update(to_update, ["text"])

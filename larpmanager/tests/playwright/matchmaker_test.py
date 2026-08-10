@@ -34,6 +34,7 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     click_option,
+    expand_options,
     expect_normalized,
     get_modal_iframe,
     go_to,
@@ -166,6 +167,9 @@ def fill_matchmaker(page: Any, live_server: Any, short_value: str, long_value: s
     # matchmaker questions must not be mixed into the standard registration form
     expect(page.locator("#matchmaker")).to_be_visible()
 
+    # the form is bound to the existing registration: the options start collapsed
+    expand_options(page)
+
     page.get_by_role("textbox", name="what would you like to play").fill(short_value)
     page.get_by_role("textbox", name="backstory notes").fill(long_value)
 
@@ -178,6 +182,8 @@ def fill_matchmaker(page: Any, live_server: Any, short_value: str, long_value: s
 
     # reload and check the answers were actually persisted
     go_to(page, live_server, "/test/matchmaker/")
+    # the answers are already saved: unselected options start collapsed
+    expand_options(page)
     expect(page.get_by_role("textbox", name="what would you like to play")).to_have_value(short_value)
     expect(page.get_by_role("textbox", name="backstory notes")).to_have_value(long_value)
     expect(page.get_by_role("radio", name="villains")).to_be_checked()

@@ -382,9 +382,16 @@ class Character(Writing):
         """Return queryset of relationships where this character is the source."""
         return Relationship.objects.filter(source_id=self.pk)
 
-    def get_plot_characters(self) -> Any:
-        """Return queryset of plot-character relations for this character."""
-        return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
+    def get_plot_characters(self, event: Any = None) -> Any:
+        """Return queryset of plot-character relations for this character.
+
+        Plots are not inherited in campaigns: when an event is given, only relations
+        towards plots of that event are returned.
+        """
+        queryset = PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
+        if event:
+            queryset = queryset.filter(plot__event=event.get_class_parent("plot"))
+        return queryset.order_by("order")
 
     @classmethod
     def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:

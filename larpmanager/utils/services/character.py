@@ -420,10 +420,10 @@ def get_character_sheet_plots(context: dict) -> None:
 
     context["sheet_plots"] = []
 
-    # Get all plot relations for the character ordered by sequence
-    plot_relations = PlotCharacterRel.objects.select_related("plot").filter(character=context["character"])
+    # Get the plot relations of the current event for the character, ordered by sequence
+    plot_relations = context["character"].get_plot_characters(context["event"])
 
-    for plot_relation in plot_relations.order_by("order"):
+    for plot_relation in plot_relations:
         # Start with the base plot text
         combined_text = plot_relation.plot.text
 

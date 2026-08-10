@@ -1736,8 +1736,14 @@ msgstr "Skontaktuj się z nami"
 msgid "Containers"
 msgstr "Kontenery"
 
+msgid "Criterions"
+msgstr "Kryteria"
+
 msgid "Deleted on"
 msgstr "Usunięto dnia"
+
+msgid "Deliveries"
+msgstr "Dostawy"
 
 msgid "Easter egg"
 msgstr "Jajko wielkanocne"
@@ -3890,6 +3896,9 @@ msgstr "Postać założycielska"
 msgid "Hide not available"
 msgstr "Ukryj niedostępne"
 
+msgid "Hide other options"
+msgstr "Ukryj inne opcje"
+
 msgid "Historic residence"
 msgstr "Historyczna rezydencja"
 
@@ -3973,6 +3982,9 @@ msgstr "Przeglądaj wszystkich członków"
 
 msgid "Set up quest types"
 msgstr "Skonfiguruj typy Quest"
+
+msgid "Show other options"
+msgstr "Pokaż inne opcje"
 
 msgid "The trash is empty"
 msgstr "Kosz jest pusty"
@@ -4171,6 +4183,9 @@ msgstr "Brak wyników"
 
 msgid "Signup cancellation"
 msgstr "Anulowanie rejestracji"
+
+msgid "The delivery's name"
+msgstr "Nazwa przesyłki"
 
 msgid "Use full-size image"
 msgstr "Użyj obrazu w pełnym rozmiarze"
@@ -4384,6 +4399,9 @@ msgstr "Zasady i warunki"
 
 msgid "Terms and conditions"
 msgstr "Zasady i warunki"
+
+msgid "The criterion's name"
+msgstr "Nazwa kryterium"
 
 msgid "The outflow category"
 msgstr "Kategoria wydatku"
@@ -4874,9 +4892,6 @@ msgstr "Zwrot kosztów został zrealizowany"
 msgid "Select your preferences"
 msgstr "Wybierz swoje preferencje"
 
-msgid "Separate membership fee"
-msgstr "Oddzielna opłata członkowska"
-
 msgid "Show answered questions"
 msgstr "Pokaż pytania, na które odpowiedziałeś(-aś)"
 
@@ -5219,6 +5234,10 @@ msgstr "Zarządzaj ruchami magazynowymi"
 msgid "Member of the Organization"
 msgstr "Członek organizacji"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Opcja %(name)s została włączona!"
+
 msgid "Option no longer available"
 msgstr "Opcja nie jest już dostępna"
 
@@ -5463,6 +5482,10 @@ msgstr "Moje oczekujące zaproszenia do gildii"
 msgid "Name of badge to be awarded."
 msgstr "Nazwa badge do przyznania."
 
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Opcja %(name)s została wyłączona!"
+
 msgid "Please wait before retrying."
 msgstr "Poczekaj przed ponowieniem próby."
 
@@ -5536,6 +5559,9 @@ msgstr "Rozumiem - Przejdź do treści"
 
 msgid "Membership Application Status"
 msgstr "Status wniosku o członkostwo"
+
+msgid "Name of the experience system"
+msgstr "Nazwa systemu doświadczeń"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Działanie: ADD, SUB, MUL, DIV"
@@ -6132,6 +6158,10 @@ msgstr "Ręcznie zatwierdzaj otrzymane płatności"
 msgid "No activation steps are available."
 msgstr "Nie ma żadnych kroków aktywacyjnych."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Opcja %(name)s jest już włączona!"
+
 msgid "Promotion: website and advertising"
 msgstr "Promocja: strona internetowa i reklama"
 
@@ -6352,6 +6382,10 @@ msgid "Only really important communications"
 msgstr "Tylko naprawdę ważna komunikacja"
 
 #, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Opcja %(name)s jest już wyłączona!"
+
+#, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Typy Questów bez Questów: %(list)s"
 
@@ -6419,6 +6453,9 @@ msgstr "Dodawany na dole wszystkich wysyłanych wiadomości"
 
 msgid "Allows characters to have inventories"
 msgstr "Umożliwia postaciom posiadanie ekwipunku"
+
+msgid "Amount of experience points delivered"
+msgstr "Ilość przyznanych punktów doświadczenia"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Oddaj swój głos na nowy Zarząd!"
@@ -6815,9 +6852,6 @@ msgstr "Pola writing bez opcji: %(list)s"
 msgid "You are logged in with an email address:"
 msgstr "Jesteś zalogowany przy użyciu adresu e-mail:"
 
-msgid "You can now review users' mailing lists."
-msgstr "Możesz teraz przeglądać listy mailingowe użytkowników."
-
 msgid "You can now set the dynamic installments"
 msgstr "Możesz teraz ustawić dynamiczne raty"
 
@@ -6832,6 +6866,9 @@ msgstr "będzie wyświetlane na głównej stronie wydarzenia"
 
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Opcjonalnie) Nazwy umiejętności, oddzielone przecinkami"
+
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Opcjonalnie) Nazwy frakcji, oddzielone przecinkami"
 
 #, python-format
 msgid "Ability types without abilities: %(list)s"
@@ -6863,9 +6900,6 @@ msgstr "Czy poprawnie sprawdziłeś wymagane dane?"
 
 msgid "Display all participants data as registry"
 msgstr "Wyświetl dane wszystkich uczestników jako rejestr"
-
-msgid "Displays a list of users' email addresses"
-msgstr "Wyświetla listę adresów e-mail użytkowników"
 
 msgid "Donation amount chosen by the participant"
 msgstr "Kwota darowizny wybrana przez uczestnika"
@@ -7017,6 +7051,9 @@ msgstr "Sprawdź użytkowników z oczekującymi terminami wydarzeń:"
 
 msgid "Select which form this question belongs to"
 msgstr "Wybierz, do jakiego formularza należy to pytanie"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Numer kryterium (unikalny identyfikator)"
 
 msgid "The member associated with this membership"
 msgstr "Członek powiązany z tym członkostwem"
@@ -7700,6 +7737,9 @@ msgstr "Przekroczona tolerancja, kontynuuj anulowanie"
 msgid "You are including (at least one of these filters)"
 msgstr "Uwzględniasz (co najmniej jeden z tych filtrów)"
 
+msgid "You can now review mailing lists for newsletters."
+msgstr "Możesz teraz przeglądać listy mailingowe newsletterów."
+
 msgid "You can now set the external mail server settings"
 msgstr "Możesz teraz ustawić konfigurację zewnętrznego serwera pocztowego"
 
@@ -7715,6 +7755,9 @@ msgstr "Zdefiniuj dane gromadzone w formularzu profilu użytkownika"
 #, python-format
 msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr "Szczegóły: %(details)s (Kwota: <b>%(amount).2f</b>)"
+
+msgid "Displays a list of email addresses for newsletters"
+msgstr "Wyświetla listę adresów e-mail do newsletterów"
 
 msgid "Enables warehouse management for the organization."
 msgstr "Włącza zarządzanie magazynem dla organizacji."
@@ -8317,9 +8360,6 @@ msgstr ""
 "Skontaktuj się z organizatorami, jeśli potrzebujesz nowego linku dostępu "
 "później"
 
-msgid "Displays a list of signed-up participants' email addresses"
-msgstr "Wyświetla listę adresów e-mail zapisanych uczestników"
-
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
 "Wystąpił błąd podczas przesyłania zdjęcia. Spróbuj jeszcze raz albo użyj "
@@ -8492,6 +8532,9 @@ msgstr "Skonfiguruj rodzaje biletów, ceny i poziomy dostępu dla uczestników."
 msgid "Content of mail reminding participants to fill their profile"
 msgstr "Treść wiadomości przypominającej uczestnikom o wypełnieniu profilu"
 
+msgid "Displays a list of signed-up email addresses for newsletters"
+msgstr "Wyświetla listę zapisanych adresów e-mail do newsletterów"
+
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr "Wyświetla uczestników zalegających z płatnością lub innymi terminami"
 
@@ -8584,6 +8627,11 @@ msgstr "Prześlij podpisany formularz wniosku o członkostwo (PDF lub obraz)"
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Chcesz dostawać informacje o naszych nadchodzących wydarzeniach?"
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Opcjonalnie) Nazwy postaci, którym została przyznana, oddzielone "
+"przecinkami"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Opcjonalnie) Opcje postaci jako wymagania, oddzielone przecinkami"
@@ -8933,6 +8981,10 @@ msgstr ""
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Możesz również przesłać drugi plik z opcjami rejestracji:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr ""
+"(Opcjonalnie) Czy ta funkcja jest widoczna dla użytkowników: true lub false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -9930,6 +9982,12 @@ msgid ""
 msgstr ""
 "Nie zdefiniowano jeszcze żadnych etapów. Skorzystaj z przycisku powyżej, "
 "żeby dodać pierwszy etap."
+
+msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Brak danych uczestników. Pojawią się tutaj, gdy użytkownicy się "
+"zarejestrują."
 
 msgid ""
 "No registered participants have completed any workshops for this event yet."
@@ -10961,6 +11019,13 @@ msgstr ""
 "Zostałeś zaproszony do gildii %(guild)s ze swoją postacią %(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Opcjonalnie) Numer przesyłki – zostanie przypisany automatycznie, jeśli go "
+"nie podasz lub jest już zajęty"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11490,13 +11555,6 @@ msgstr ""
 "postaci."
 
 msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Jeśli włączone, roczna opłata członkowska jest płatna oddzielnie od opłaty "
-"za rejestrację na wydarzenie."
-
-msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""
@@ -11874,6 +11932,13 @@ msgstr ""
 "Skorzystaj z przycisku powyżej, żeby dodać nowy problem."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Pamiętaj, że istniejące dostawy o tej samej nazwie zostaną nadpisane danymi,"
+" które wrzucisz."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -12055,6 +12120,20 @@ msgid ""
 msgstr ""
 "Nie znaleziono żadnych wydarzeń z kosztami w LarpManagerze. Koszty pojawią "
 "się tutaj, gdy wydarzenia zostaną utworzone i zrealizowane."
+
+msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Nie przesłano jeszcze żadnych informacji dotyczących Safety. Pojawią się "
+"tutaj, gdy uczestnicy je podadzą."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Pamiętaj, że istniejące kryteria o tym samym numerze zostaną nadpisane "
+"danymi, które wrzucisz."
 
 #, python-format
 msgid ""
@@ -12463,6 +12542,13 @@ msgid ""
 msgstr ""
 "Zarządzaj niestandardowymi tekstami używanymi w całej organizacji, takimi "
 "jak wiadomości e-mail i strony rejestracji, w poszczególnych językach"
+
+msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Nie przesłano jeszcze żadnych preferencji żywieniowych. Pojawią się tutaj, "
+"gdy uczestnicy je podadzą."
 
 msgid ""
 "No form fields defined yet. Add a field to collect information from players "
@@ -13812,11 +13898,11 @@ msgstr ""
 "z przycisku powyżej, żeby dodać sekcję i uporządkować pytania rejestracyjne."
 
 msgid ""
-"Select how many payments to split the fee into. Total amount and deadlines "
-"are divided equally starting from the registration date."
+"Select how many payments to split the fee into (total amount and deadlines "
+"are divided equally starting from the registration date)"
 msgstr ""
-"Wybierz, na ile płatności podzielić opłatę. Całkowita kwota i terminy "
-"zostaną podzielone równo, począwszy od daty rejestracji."
+"Wybierz, na ile płatności podzielić opłatę (łączna kwota i terminy są "
+"dzielone równo, począwszy od daty rejestracji)"
 
 msgid ""
 "When you want to close the collection, follow this link. A special "

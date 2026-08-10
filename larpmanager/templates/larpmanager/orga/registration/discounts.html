@@ -25,7 +25,7 @@
                         <td>{{ el.disc }}</td>
                         <td>{{ el.value }}</td>
                         <td>
-                            <a href="{% url 'orga_registration_discount_del' run.get_slug registration.uuid el.uuid %}"
+                            <a href="{% url 'orga_registration_discount_del' run.get_slug registration.uuid el.disc.uuid %}"
                                class="frame-confirm"><i class="fa-solid fa-xmark"></i> {% trans "Delete" %}</a>
                         </td>
                     </tr>

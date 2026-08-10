@@ -440,16 +440,17 @@ def _count_unimportant(rels: Any, event_id: int) -> int:
     return sum(1 for rel in rels if strip_tags(rel.text).lstrip().startswith("$unimportant"))
 
 
-def _build_plot_relations(char: Character) -> dict[str, Any]:
+def _build_plot_relations(char: Character, event: Event) -> dict[str, Any]:
     """Build plot relationships for a character.
 
     Args:
         char: Character to build plot relationships for
+        event: Event for which the cache is built, used to scope plots
 
     Returns:
         Dictionary with plot relationship data including important count
     """
-    related_plots = char.get_plot_characters()
+    related_plots = char.get_plot_characters(event)
     plot_list = [(plot_rel.plot.uuid, plot_rel.plot.name) for plot_rel in related_plots]
     plot_rels = build_relationship_dict(plot_list)
     plot_rels["important"] = plot_rels["count"] - _count_unimportant(related_plots, char.event_id)
@@ -515,7 +516,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
         char: The Character instance to get relationships for.
         features: Dictionary of enabled features for the event.
         event: Optional Event instance for which we are rebuilding the cache.
-               Used for faction independence configuration.
+               Used to scope plots and for faction independence configuration.
 
     Returns:
         Dictionary containing relationship data with keys:
@@ -539,7 +540,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
     try:
         # Handle plot relationships if plot feature is enabled
         if "plot" in features:
-            relations["plot_rels"] = _build_plot_relations(char)
+            relations["plot_rels"] = _build_plot_relations(char, event)
 
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:

@@ -31,7 +31,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
-from larpmanager.cache.config import save_single_config
+from larpmanager.cache.config import get_association_config, save_single_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.association import (
     ExeFeatureForm,
@@ -353,6 +353,45 @@ def exe_features_off(request: HttpRequest, slug: str) -> HttpResponse:
     """Disable features and redirect to management page."""
     exe_features_go(request, slug, to_active=False)
     return redirect("manage")
+
+
+def exe_config_go(request: HttpRequest, slug: str, *, to_active: bool = True) -> None:
+    """Activate or deactivate a boolean configuration option of an association.
+
+    Args:
+        request: The HTTP request object containing user and association context
+        slug: The name of the configuration option to toggle
+        to_active: Whether to activate (True) or deactivate (False) the option
+
+    """
+    # Check user permissions and retrieve the association
+    context = check_association_context(request, "exe_config")
+    context["request"] = request
+    association = Association.objects.get(pk=context["association_id"])
+
+    # Skip the update if the option already has the requested value
+    if get_association_config(context["association_id"], slug) == to_active:
+        message = _("Option %(name)s already activated!") if to_active else _("Option %(name)s already deactivated!")
+    else:
+        save_single_config(association, slug, str(to_active))
+        association.save()
+        message = _("Option %(name)s activated!") if to_active else _("Option %(name)s deactivated!")
+
+    messages.success(request, message % {"name": slug})
+
+
+@login_required
+def exe_config_on(request: HttpRequest, slug: str) -> HttpResponseRedirect:
+    """Activate a configuration option and redirect to the configuration page."""
+    exe_config_go(request, slug, to_active=True)
+    return redirect("exe_config")
+
+
+@login_required
+def exe_config_off(request: HttpRequest, slug: str) -> HttpResponseRedirect:
+    """Deactivate a configuration option and redirect to the configuration page."""
+    exe_config_go(request, slug, to_active=False)
+    return redirect("exe_config")
 
 
 @login_required

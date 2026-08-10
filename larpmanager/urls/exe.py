@@ -258,6 +258,16 @@ urlpatterns = [
         name="exe_config",
     ),
     path(
+        "manage/config/<slug:slug>/on/",
+        views_eas.exe_config_on,
+        name="exe_config_on",
+    ),
+    path(
+        "manage/config/<slug:slug>/off/",
+        views_eas.exe_config_off,
+        name="exe_config_off",
+    ),
+    path(
         "manage/profile/",
         views_eas.exe_profile,
         name="exe_profile",

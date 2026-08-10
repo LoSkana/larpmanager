@@ -1736,8 +1736,14 @@ msgstr "Kontakt oss"
 msgid "Containers"
 msgstr "Beholdere"
 
+msgid "Criterions"
+msgstr "Kriterier"
+
 msgid "Deleted on"
 msgstr "Slettet på"
+
+msgid "Deliveries"
+msgstr "Leveranser"
 
 msgid "Easter egg"
 msgstr "Påskeegg"
@@ -3890,6 +3896,9 @@ msgstr "Stifterkarakter"
 msgid "Hide not available"
 msgstr "Skjul utilgjengelige"
 
+msgid "Hide other options"
+msgstr "Skjul andre alternativer"
+
 msgid "Historic residence"
 msgstr "Historisk bolig"
 
@@ -3973,6 +3982,9 @@ msgstr "Gå gjennom alle medlemmer"
 
 msgid "Set up quest types"
 msgstr "Sett opp Quest-typer"
+
+msgid "Show other options"
+msgstr "Vis andre alternativer"
 
 msgid "The trash is empty"
 msgstr "Papirkurven er tom"
@@ -4171,6 +4183,9 @@ msgstr "Resultater ikke til stede"
 
 msgid "Signup cancellation"
 msgstr "Avmelding"
+
+msgid "The delivery's name"
+msgstr "Navnet på leveransen"
 
 msgid "Use full-size image"
 msgstr "Bruk bildet i full størrelse"
@@ -4384,6 +4399,9 @@ msgstr "Vilkår og betingelser"
 
 msgid "Terms and conditions"
 msgstr "Vilkår og betingelser"
+
+msgid "The criterion's name"
+msgstr "Kriteriets navn"
 
 msgid "The outflow category"
 msgstr "Utgiftskategorien"
@@ -4874,9 +4892,6 @@ msgstr "Refusjonen er behandlet"
 msgid "Select your preferences"
 msgstr "Velg preferansene dine"
 
-msgid "Separate membership fee"
-msgstr "Separat medlemsavgift"
-
 msgid "Show answered questions"
 msgstr "Vis besvarte spørsmål"
 
@@ -5219,6 +5234,10 @@ msgstr "Administrer lagerbevegelser"
 msgid "Member of the Organization"
 msgstr "Medlem av organisasjonen"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Alternativet %(name)s er aktivert!"
+
 msgid "Option no longer available"
 msgstr "Alternativet er ikke lenger tilgjengelig"
 
@@ -5463,6 +5482,10 @@ msgstr "Mine ventende gildeinnvitasjoner"
 msgid "Name of badge to be awarded."
 msgstr "Navn på badge som skal tildeles."
 
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Alternativet %(name)s er deaktivert!"
+
 msgid "Please wait before retrying."
 msgstr "Vennligst vent før du prøver på nytt."
 
@@ -5536,6 +5559,9 @@ msgstr "Jeg forstår - Få tilgang til innhold"
 
 msgid "Membership Application Status"
 msgstr "Status på medlemssøknaden"
+
+msgid "Name of the experience system"
+msgstr "Navnet på erfaringssystemet"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operasjon: ADD, SUB, MUL, DIV"
@@ -6132,6 +6158,10 @@ msgstr "Godkjenn mottatte betalinger manuelt"
 msgid "No activation steps are available."
 msgstr "Det finnes ingen aktiveringstrinn."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Alternativet %(name)s er allerede aktivert!"
+
 msgid "Promotion: website and advertising"
 msgstr "Promotering: nettsted og annonsering"
 
@@ -6352,6 +6382,10 @@ msgid "Only really important communications"
 msgstr "Kun virkelig viktig kommunikasjon"
 
 #, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Alternativet %(name)s er allerede deaktivert!"
+
+#, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Quest-typer uten Quester: %(list)s"
 
@@ -6419,6 +6453,9 @@ msgstr "Lagt til nederst i alle e-poster som sendes"
 
 msgid "Allows characters to have inventories"
 msgstr "Tillater karakterer å ha inventarer"
+
+msgid "Amount of experience points delivered"
+msgstr "Antall oppnådde erfaringspoeng"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Gi din stemme til det nye styret!"
@@ -6816,9 +6853,6 @@ msgstr "Skrivefelt uten alternativer: %(list)s"
 msgid "You are logged in with an email address:"
 msgstr "Du er logget inn med en e-postadresse:"
 
-msgid "You can now review users' mailing lists."
-msgstr "Du kan nå gjennomgå brukernes e-postlister."
-
 msgid "You can now set the dynamic installments"
 msgstr "Du kan nå angi de dynamiske avdragene"
 
@@ -6833,6 +6867,9 @@ msgstr "vil bli vist på hovedsiden for arrangementet"
 
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Valgfritt) Navn på evner, kommaseparert"
+
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Valgfritt) Fraksjonsnavn, atskilt med komma"
 
 #, python-format
 msgid "Ability types without abilities: %(list)s"
@@ -6864,9 +6901,6 @@ msgstr "Har du sjekket de nødvendige dataene på riktig måte?"
 
 msgid "Display all participants data as registry"
 msgstr "Vis alle deltakerdata som register"
-
-msgid "Displays a list of users' email addresses"
-msgstr "Viser en liste over brukernes e-postadresser"
 
 msgid "Donation amount chosen by the participant"
 msgstr "Donasjonsbeløp valgt av deltakeren"
@@ -7017,6 +7051,9 @@ msgstr "Gjennomgå brukere med utestående arrangementsfrister:"
 
 msgid "Select which form this question belongs to"
 msgstr "Velg hvilket skjema dette spørsmålet tilhører"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Kriteriets nummer (unik identifikator)"
 
 msgid "The member associated with this membership"
 msgstr "Medlemmet som er knyttet til dette medlemskapet"
@@ -7697,6 +7734,9 @@ msgstr "Toleranse overskredet, fortsett med kanselleringen"
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderer (minst ett av) disse filtrene"
 
+msgid "You can now review mailing lists for newsletters."
+msgstr "Du kan nå gjennomgå e-postlister for nyhetsbrev."
+
 msgid "You can now set the external mail server settings"
 msgstr "Du kan nå angi innstillingene for ekstern e-postserver"
 
@@ -7712,6 +7752,9 @@ msgstr "Definer dataene som samles inn i brukerprofilskjemaet"
 #, python-format
 msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr "Detaljer: %(details)s (Beløp: <b>%(amount).2f</b>)"
+
+msgid "Displays a list of email addresses for newsletters"
+msgstr "Viser en liste over e-postadresser for nyhetsbrev"
 
 msgid "Enables warehouse management for the organization."
 msgstr "Aktiverer lagerstyring for organisasjonen."
@@ -8298,9 +8341,6 @@ msgstr ""
 msgid "Contact the organizers if you need a new access link later"
 msgstr "Kontakt arrangørene hvis du trenger en ny tilgangslink senere"
 
-msgid "Displays a list of signed-up participants' email addresses"
-msgstr "Viser en liste over påmeldte deltakeres e-postadresser"
-
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr "Feil ved opplasting av bilde. Prøv på nytt, eller bruk en mindre fil."
 
@@ -8468,6 +8508,9 @@ msgstr "Konfigurer billettyper, priser og nivåer for deltakerne."
 msgid "Content of mail reminding participants to fill their profile"
 msgstr "Innholdet i e-posten som minner deltakerne om å fylle ut profilen sin"
 
+msgid "Displays a list of signed-up email addresses for newsletters"
+msgstr "Viser en liste over påmeldte e-postadresser for nyhetsbrev"
+
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr "Viser deltakere med forfalt betaling eller andre frister"
 
@@ -8560,6 +8603,10 @@ msgstr "Last opp det signerte medlemssøknadsskjemaet (PDF eller bilde)"
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Vil du motta oppdateringer om våre kommende arrangementer?"
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Valgfritt) Navnene på karakterene som prisen ble tildelt, atskilt med komma"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Valgfritt) Karakteralternativer som krav, kommaseparert"
@@ -8908,6 +8955,9 @@ msgstr "Advarsel: Det finnes allerede et godkjent medlem med samme navn!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Du kan også laste opp en ekstra fil med registreringsalternativene:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Valgfritt) Om funksjonen er synlig for brukerne: true eller false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -9882,6 +9932,12 @@ msgid ""
 msgstr ""
 "Det er ikke definert noen milepæler ennå. Bruk knappen ovenfor for å legge "
 "til den første milepælen."
+
+msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Ingen deltakerdata er tilgjengelige ennå. De vises her når brukere "
+"registrerer seg."
 
 msgid ""
 "No registered participants have completed any workshops for this event yet."
@@ -10899,6 +10955,13 @@ msgstr ""
 "din %(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Valgfritt) Leveringsnummeret, som tildeles automatisk dersom det mangler "
+"eller allerede er opptatt"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11428,13 +11491,6 @@ msgstr ""
 "tildeles."
 
 msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Hvis aktivert, betales den årlige medlemsavgiften separat fra "
-"påmeldingsavgiften for arrangementet."
-
-msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""
@@ -11810,6 +11866,13 @@ msgstr ""
 "arrangementet. Bruk knappen ovenfor for å legge til et nytt problem."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Vær oppmerksom på at eksisterende leveranser med samme navn vil bli "
+"overskrevet med de opplastede dataene."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -11992,6 +12055,20 @@ msgstr ""
 "Det ble ikke funnet noen arrangementer med kostnader i LarpManager. "
 "Kostnadene vil vises her så snart arrangementene er opprettet og "
 "gjennomført."
+
+msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Ingen Safety-informasjon er sendt inn ennå. Den vises her når deltakerne "
+"oppgir den."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Vær oppmerksom på at eksisterende kriterier med samme nummer vil bli "
+"overskrevet med de opplastede dataene."
 
 #, python-format
 msgid ""
@@ -12401,6 +12478,13 @@ msgid ""
 msgstr ""
 "Administrer tilpassede tekster som brukes i hele organisasjonen, for "
 "eksempel i e-poster og på registreringssider, for hvert språk"
+
+msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Ingen kostholdspreferanser er sendt inn ennå. De vises her når deltakerne "
+"oppgir dem."
 
 msgid ""
 "No form fields defined yet. Add a field to collect information from players "
@@ -13746,11 +13830,11 @@ msgstr ""
 "registreringsspørsmålene dine."
 
 msgid ""
-"Select how many payments to split the fee into. Total amount and deadlines "
-"are divided equally starting from the registration date."
+"Select how many payments to split the fee into (total amount and deadlines "
+"are divided equally starting from the registration date)"
 msgstr ""
-"Velg hvor mange betalinger avgiften skal deles opp i. Totalbeløpet og "
-"fristene deles likt, med start fra påmeldingsdatoen."
+"Velg hvor mange betalinger avgiften skal deles opp i (totalbeløp og frister "
+"deles likt fra registreringsdatoen)"
 
 msgid ""
 "When you want to close the collection, follow this link. A special "

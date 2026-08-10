@@ -23,7 +23,6 @@ from typing import TYPE_CHECKING, Any
 
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.db import models, transaction
-from django.db.models import Sum
 from django.http import HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
@@ -38,7 +37,6 @@ import datetime
 
 from larpmanager.cache.bulk import get_bulk_options_cache
 from larpmanager.cache.config import get_association_config, get_event_config
-from larpmanager.cache.warehouse import update_warehouse_item_cache
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, DeliveryExp
@@ -48,12 +46,16 @@ from larpmanager.models.miscellanea import (
     WarehouseArea,
     WarehouseContainer,
     WarehouseItem,
-    WarehouseItemAssignment,
     WarehouseTag,
 )
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus, Faction, Plot, Prologue
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.exceptions import ReturnNowError
+from larpmanager.utils.services.miscellanea import (
+    warehouse_add_assignment,
+    warehouse_assigned_quantities,
+    warehouse_available_quantity,
+)
 
 RECOVERABLE_MODELS: dict[str, type] = {
     "character": Character,
@@ -253,7 +255,14 @@ def _create_bulk_logs(
         )
 
 
-def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict, model_class: type) -> JsonResponse:
+def exec_bulk(
+    request: HttpRequest,
+    context: dict,
+    operation_mapping: dict,
+    model_class: type,
+    *,
+    allow_delete: bool = False,
+) -> JsonResponse:
     """Execute bulk operations on a collection of objects.
 
     Args:
@@ -261,6 +270,9 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict, mode
         context: Context dictionary with operation-specific data
         operation_mapping: Dictionary mapping operation names to their handler functions
         model_class: Django model class of the objects being modified (for logging)
+        allow_delete: Whether the caller offers bulk delete; must mirror the
+            listing built for GET, so an operation never exposed in the page
+            cannot be reached with a raw POST
 
     Returns:
         JsonResponse: Success response with "ok" status or error response with
@@ -275,6 +287,8 @@ def exec_bulk(request: HttpRequest, context: dict, operation_mapping: dict, mode
 
     # Handle delete separately: log before deletion so objects are still queryable
     if operation_name == Operations.DEL_BULK:
+        if not allow_delete:
+            return JsonResponse({"error": "unknow operation"}, status=400)
         _require_role_delete(request, context)
         _check_bulk_delete_enabled(context)
         try:
@@ -366,7 +380,7 @@ def handle_bulk_items(request: HttpRequest, context: dict) -> None:
             Operations.MOVE_ITEM_BOX: exec_move_item_box,
         }
         # Execute the bulk operation and raise ReturnNowError with results
-        raise ReturnNowError(exec_bulk(request, context, operation_type_to_handler, WarehouseItem))
+        raise ReturnNowError(exec_bulk(request, context, operation_type_to_handler, WarehouseItem, allow_delete=True))
 
     # Fetch available containers for the current association
     available_containers = (
@@ -402,26 +416,12 @@ def exec_set_item_area_remaining(context: dict, target: str, uuids: list[str]) -
                 quantity__isnull=False,
             )
         )
-        assigned_by_item = {
-            row["item_id"]: row["total"] or 0
-            for row in WarehouseItemAssignment.objects.filter(item__in=items)
-            .values("item_id")
-            .annotate(total=Sum("quantity"))
-        }
+        assigned_by_item = warehouse_assigned_quantities(items)
         for item in items:
-            available = max(item.quantity - assigned_by_item.get(item.id, 0), 0)
+            available = warehouse_available_quantity(item, assigned_by_item.get(item.id, 0))
             if available <= 0:
                 continue
-            assignment, _created = WarehouseItemAssignment.objects.get_or_create(
-                item=item,
-                area=area,
-                event=context["event"],
-            )
-            assignment.quantity = (assignment.quantity or 0) + available
-            assignment.save()
-
-    for item in items:
-        update_warehouse_item_cache(item)
+            warehouse_add_assignment(item, area, context["event"], available)
 
     return area.name
 
@@ -435,7 +435,7 @@ def handle_bulk_orga_items(request: HttpRequest, context: dict) -> None:
         mapping = {Operations.SET_ITEM_AREA_REMAINING: exec_set_item_area_remaining}
         raise ReturnNowError(exec_bulk(request, context, mapping, WarehouseItem))
 
-    areas = WarehouseArea.objects.filter(event=context["event"]).values("uuid", "name").order_by("name")
+    areas = context["event"].get_elements(WarehouseArea).values("uuid", "name").order_by("name")
     context["bulk"] = [
         _bulk_op(Operations.SET_ITEM_AREA_REMAINING, areas),
     ]
@@ -608,7 +608,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
             Operations.SET_CHAR_STATUS: exec_set_char_status,
         }
         # Execute the bulk operation and raise exception to return result
-        raise ReturnNowError(exec_bulk(request, context, mapping, Character))
+        raise ReturnNowError(exec_bulk(request, context, mapping, Character, allow_delete=True))
 
     # Initialize bulk operations list for GET requests
     context["bulk"] = []
@@ -684,7 +684,7 @@ def handle_bulk_plots(request: HttpRequest, context: dict) -> None:
             Operations.SET_PLOT_PROGRESS: exec_set_plot_progress,
             Operations.SET_PLOT_ASSIGNED: exec_set_plot_assigned,
         }
-        raise ReturnNowError(exec_bulk(request, context, mapping, Plot))
+        raise ReturnNowError(exec_bulk(request, context, mapping, Plot, allow_delete=True))
 
     event = context["event"]
 
@@ -746,7 +746,7 @@ def handle_bulk_factions(request: HttpRequest, context: dict) -> None:
             Operations.SET_FACT_PROGRESS: exec_set_faction_progress,
             Operations.SET_FACT_ASSIGNED: exec_set_faction_assigned,
         }
-        raise ReturnNowError(exec_bulk(request, context, mapping, Faction))
+        raise ReturnNowError(exec_bulk(request, context, mapping, Faction, allow_delete=True))
 
     context["bulk"] = []
     event = context["event"]
@@ -791,7 +791,9 @@ def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
     """
     # Handle POST request - execute bulk operations
     if request.POST:
-        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}, Quest))
+        raise ReturnNowError(
+            exec_bulk(request, context, {Operations.SET_QUEST_TYPE: exec_set_quest_type}, Quest, allow_delete=True)
+        )
 
     context["bulk"] = [
         _bulk_op(Operations.SET_QUEST_TYPE, get_bulk_options_cache(context["event"], "quest_types")),
@@ -816,7 +818,9 @@ def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
     """Handle bulk trait operations for quest assignment."""
     if request.POST:
         # Execute bulk operation for setting quest traits
-        raise ReturnNowError(exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}, Trait))
+        raise ReturnNowError(
+            exec_bulk(request, context, {Operations.SET_TRAIT_QUEST: exec_set_quest}, Trait, allow_delete=True)
+        )
 
     context["bulk"] = [
         _bulk_op(Operations.SET_TRAIT_QUEST, get_bulk_options_cache(context["event"], "quests")),
@@ -848,7 +852,9 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
     if request.POST:
         # Execute bulk operation and return early if POST request
         raise ReturnNowError(
-            exec_bulk(request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}, AbilityExp)
+            exec_bulk(
+                request, context, {Operations.SET_ABILITY_TYPE: exec_set_ability_type}, AbilityExp, allow_delete=True
+            )
         )
 
     context["bulk"] = [

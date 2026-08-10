@@ -1736,8 +1736,14 @@ msgstr "Neem contact met ons op"
 msgid "Containers"
 msgstr "Containers"
 
+msgid "Criterions"
+msgstr "Criteria"
+
 msgid "Deleted on"
 msgstr "Verwijderd op"
+
+msgid "Deliveries"
+msgstr "Leveringen"
 
 msgid "Easter egg"
 msgstr "Paasei"
@@ -3890,6 +3896,9 @@ msgstr "Oprichtend personage"
 msgid "Hide not available"
 msgstr "Verberg niet beschikbaar"
 
+msgid "Hide other options"
+msgstr "Verberg andere opties"
+
 msgid "Historic residence"
 msgstr "Historische woonplaats"
 
@@ -3973,6 +3982,9 @@ msgstr "Bekijk alle leden"
 
 msgid "Set up quest types"
 msgstr "Questtypes instellen"
+
+msgid "Show other options"
+msgstr "Toon andere opties"
 
 msgid "The trash is empty"
 msgstr "De prullenbak is leeg"
@@ -4171,6 +4183,9 @@ msgstr "Resultaten niet aanwezig"
 
 msgid "Signup cancellation"
 msgstr "Annulering inschrijving"
+
+msgid "The delivery's name"
+msgstr "De naam van de zending"
 
 msgid "Use full-size image"
 msgstr "Gebruik de afbeelding op volledige grootte"
@@ -4384,6 +4399,9 @@ msgstr "Algemene voorwaarden"
 
 msgid "Terms and conditions"
 msgstr "Algemene voorwaarden"
+
+msgid "The criterion's name"
+msgstr "De naam van het criterium"
 
 msgid "The outflow category"
 msgstr "De uitgavencategorie"
@@ -4874,9 +4892,6 @@ msgstr "Terugbetaling verwerkt"
 msgid "Select your preferences"
 msgstr "Kies je voorkeuren"
 
-msgid "Separate membership fee"
-msgstr "Afzonderlijk lidmaatschapsgeld"
-
 msgid "Show answered questions"
 msgstr "Beantwoorde vragen weergeven"
 
@@ -5219,6 +5234,10 @@ msgstr "Beheer magazijnbewegingen"
 msgid "Member of the Organization"
 msgstr "Lid van de organisatie"
 
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Optie %(name)s is ingeschakeld!"
+
 msgid "Option no longer available"
 msgstr "Optie niet langer beschikbaar"
 
@@ -5463,6 +5482,10 @@ msgstr "Mijn openstaande gilde-uitnodigingen"
 msgid "Name of badge to be awarded."
 msgstr "Naam van de toe te kennen badge."
 
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Optie %(name)s is uitgeschakeld!"
+
 msgid "Please wait before retrying."
 msgstr "Wacht even voordat je het opnieuw probeert."
 
@@ -5536,6 +5559,9 @@ msgstr "Ik begrijp het - Inhoud openen"
 
 msgid "Membership Application Status"
 msgstr "Status van de lidmaatschapsaanvraag"
+
+msgid "Name of the experience system"
+msgstr "Naam van het ervaringssysteem"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Bewerking: ADD, SUB, MUL, DIV"
@@ -6133,6 +6159,10 @@ msgstr "Keur ontvangen betalingen handmatig goed"
 msgid "No activation steps are available."
 msgstr "Er zijn geen activeringsstappen beschikbaar."
 
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Optie %(name)s is al ingeschakeld!"
+
 msgid "Promotion: website and advertising"
 msgstr "Promotie: website en reclame"
 
@@ -6353,6 +6383,10 @@ msgid "Only really important communications"
 msgstr "Alleen echt belangrijke communicatie"
 
 #, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Optie %(name)s is al uitgeschakeld!"
+
+#, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Questtypes zonder quests: %(list)s"
 
@@ -6420,6 +6454,9 @@ msgstr "Toegevoegd aan de onderkant van alle verzonden e-mails"
 
 msgid "Allows characters to have inventories"
 msgstr "Laat personages inventarissen hebben"
+
+msgid "Amount of experience points delivered"
+msgstr "Aantal toegekende ervaringspunten"
 
 msgid "Cast your vote for the new Executive!"
 msgstr "Breng je stem uit voor het nieuwe bestuur!"
@@ -6816,9 +6853,6 @@ msgstr "Schrijfvelden zonder opties: %(list)s"
 msgid "You are logged in with an email address:"
 msgstr "Je bent aangemeld met een e-mailadres:"
 
-msgid "You can now review users' mailing lists."
-msgstr "Je kunt nu de mailinglijsten van gebruikers bekijken."
-
 msgid "You can now set the dynamic installments"
 msgstr "Je kunt nu de dynamische termijnen instellen"
 
@@ -6833,6 +6867,9 @@ msgstr "wordt weergegeven op de hoofdpagina van het evenement"
 
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Optioneel) Vaardigheidsnamen, door komma's gescheiden"
+
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Optioneel) Namen van facties, gescheiden door komma’s"
 
 #, python-format
 msgid "Ability types without abilities: %(list)s"
@@ -6864,9 +6901,6 @@ msgstr "Heb je de vereiste gegevens goed gecontroleerd?"
 
 msgid "Display all participants data as registry"
 msgstr "Toon alle deelnemersgegevens als register"
-
-msgid "Displays a list of users' email addresses"
-msgstr "Toont een lijst met e-mailadressen van gebruikers"
 
 msgid "Donation amount chosen by the participant"
 msgstr "Donatiebedrag gekozen door de deelnemer"
@@ -7017,6 +7051,9 @@ msgstr "Bekijk welke gebruikers nog deadlines voor evenementen hebben:"
 
 msgid "Select which form this question belongs to"
 msgstr "Kies bij welk formulier deze vraag hoort"
+
+msgid "The criterion's number (unique identifier)"
+msgstr "Het nummer van het criterium (unieke identificatiecode)"
 
 msgid "The member associated with this membership"
 msgstr "Het lid geassocieerd met dit lidmaatschap"
@@ -7707,6 +7744,9 @@ msgstr "Tolerantie overschreden, doorgaan met annuleren"
 msgid "You are including (at least one of these filters)"
 msgstr "Je sluit (ten minste een van) deze filters in"
 
+msgid "You can now review mailing lists for newsletters."
+msgstr "Je kunt nu mailinglijsten voor nieuwsbrieven bekijken."
+
 msgid "You can now set the external mail server settings"
 msgstr "Je kunt nu de instellingen van de externe mailserver instellen"
 
@@ -7722,6 +7762,9 @@ msgstr "Definieer de verzamelde gegevens in het gebruikersprofielformulier"
 #, python-format
 msgid "Details: %(details)s (Amount: <b>%(amount).2f</b>)"
 msgstr "Details: %(details)s (Bedrag: <b>%(amount).2f</b>)"
+
+msgid "Displays a list of email addresses for newsletters"
+msgstr "Toont een lijst met e-mailadressen voor nieuwsbrieven"
 
 msgid "Enables warehouse management for the organization."
 msgstr "Schakelt magazijnbeheer voor de organisatie in."
@@ -8331,9 +8374,6 @@ msgstr ""
 "Neem contact op met de organisatoren als je later een nieuwe toegangslink "
 "nodig hebt"
 
-msgid "Displays a list of signed-up participants' email addresses"
-msgstr "Toont een lijst met e-mailadressen van ingeschreven deelnemers"
-
 msgid "Error uploading image. Please retry or use a smaller file."
 msgstr ""
 "Fout bij het uploaden van de afbeelding. Probeer het nog eens of gebruik een"
@@ -8511,6 +8551,9 @@ msgstr ""
 "Inhoud van e-mail waarin deelnemers worden herinnerd om hun profiel in te "
 "vullen"
 
+msgid "Displays a list of signed-up email addresses for newsletters"
+msgstr "Toont een lijst met aangemelde e-mailadressen voor nieuwsbrieven"
+
 msgid "Displays participants overdue for payment or other deadlines"
 msgstr "Toont deelnemers met achterstallige betalingen of andere deadlines"
 
@@ -8609,6 +8652,11 @@ msgstr ""
 
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Wil je op de hoogte blijven van onze komende evenementen?"
+
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr ""
+"(Optioneel) De namen van de personages waaraan het is toegekend, gescheiden "
+"door komma’s"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Optioneel) Karakteropties als vereisten, door komma's gescheiden"
@@ -8979,6 +9027,9 @@ msgstr "Waarschuwing: er is al een goedgekeurd lid met dezelfde naam!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Je kunt ook een tweede bestand uploaden met de registratieopties:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Optioneel) Of de functie zichtbaar is voor gebruikers: true of false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -10044,6 +10095,12 @@ msgstr ""
 "eerste mijlpaal toe te voegen."
 
 msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Er zijn nog geen deelnemersgegevens beschikbaar. Die verschijnen hier zodra "
+"gebruikers zich registreren."
+
+msgid ""
 "No registered participants have completed any workshops for this event yet."
 msgstr ""
 "Er zijn nog geen geregistreerde deelnemers die een workshop voor dit "
@@ -11088,6 +11145,13 @@ msgstr ""
 "personage %(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Optioneel) Het nummer van de levering; dit wordt automatisch toegewezen als"
+" het ontbreekt of al in gebruik is"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11622,13 +11686,6 @@ msgstr ""
 "personage wordt toegewezen."
 
 msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Indien ingeschakeld, wordt het jaarlijkse lidmaatschapsgeld apart van het "
-"inschrijfgeld voor het evenement betaald."
-
-msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""
@@ -12006,6 +12063,13 @@ msgstr ""
 "hierboven om een nieuw probleem toe te voegen."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Let op: bestaande leveringen met dezelfde naam worden overschreven door de "
+"geüploade gegevens."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -12188,6 +12252,20 @@ msgstr ""
 "Er zijn geen evenementen gevonden met kosten in LarpManager. De kosten "
 "verschijnen hier zodra er evenementen zijn aangemaakt en hebben "
 "plaatsgevonden."
+
+msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Er is nog geen Safety-informatie ingediend. Die verschijnt hier zodra "
+"deelnemers die doorgeven."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Let op: bestaande criteria met hetzelfde nummer worden overschreven door de "
+"geüploade gegevens."
 
 #, python-format
 msgid ""
@@ -12596,6 +12674,13 @@ msgid ""
 msgstr ""
 "Beheer de aangepaste teksten die binnen de hele organisatie worden gebruikt,"
 " zoals e-mails en registratiepagina’s, per taal"
+
+msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Er zijn nog geen dieetvoorkeuren ingediend. Ze verschijnen hier zodra "
+"deelnemers ze doorgeven."
 
 msgid ""
 "No form fields defined yet. Add a field to collect information from players "
@@ -13952,11 +14037,11 @@ msgstr ""
 "registratievragen te ordenen."
 
 msgid ""
-"Select how many payments to split the fee into. Total amount and deadlines "
-"are divided equally starting from the registration date."
+"Select how many payments to split the fee into (total amount and deadlines "
+"are divided equally starting from the registration date)"
 msgstr ""
-"Selecteer in hoeveel betalingen je de kosten wilt splitsen. Het totaalbedrag"
-" en de deadlines worden gelijk verdeeld vanaf de inschrijfdatum."
+"Kies in hoeveel betalingen je de kosten wilt splitsen (het totale bedrag en "
+"de deadlines worden gelijk verdeeld, vanaf de registratiedatum)"
 
 msgid ""
 "When you want to close the collection, follow this link. A special "
