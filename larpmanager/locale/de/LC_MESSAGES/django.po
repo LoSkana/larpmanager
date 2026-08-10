@@ -3,7 +3,7 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=UTF-8\n"
 
 msgid "Go"
-msgstr "Gehen"
+msgstr "Los"
 
 msgid "Hi"
 msgstr "Hallo"
@@ -331,7 +331,7 @@ msgid "Genre"
 msgstr "Genre"
 
 msgid "Graph"
-msgstr "Grafik"
+msgstr "Diagramm"
 
 msgid "Gross"
 msgstr "Brutto"
@@ -1236,7 +1236,7 @@ msgid "Pdf bulk"
 msgstr "Massen-PDF"
 
 msgid "Personal"
-msgstr "Personal"
+msgstr "Persönlich"
 
 msgid "Portrait"
 msgstr "Foto-Porträt"
@@ -1542,7 +1542,7 @@ msgid "Position:"
 msgstr "Position:"
 
 msgid "Preaching"
-msgstr "Predigt"
+msgstr "Teilnehmerwerbung"
 
 msgid "Printable"
 msgstr "Druckbar"
@@ -1749,7 +1749,7 @@ msgid "Deliveries"
 msgstr "Lieferungen"
 
 msgid "Easter egg"
-msgstr "Osterei"
+msgstr "Easter Egg"
 
 msgid "Edit dates"
 msgstr "Daten bearbeiten"
@@ -1911,7 +1911,7 @@ msgid "Short name"
 msgstr "Kurzer Name"
 
 msgid "Speed Larp"
-msgstr "Speed-Larp"
+msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
@@ -2136,7 +2136,7 @@ msgid "Pickup time"
 msgstr "Abholzeit"
 
 msgid "Please wait"
-msgstr "Bitte warten"
+msgstr "Bitte warte"
 
 msgid "Pool Labels"
 msgstr "Pool-Labels"
@@ -2529,7 +2529,7 @@ msgid "Cancellations"
 msgstr "Annullierungen"
 
 msgid "Close on date"
-msgstr "Abschlussdatum"
+msgstr "Schließdatum"
 
 msgid "Configuration"
 msgstr "Konfiguration"
@@ -2586,7 +2586,7 @@ msgid "Faction cover"
 msgstr "Fraktionsbild"
 
 msgid "Free donation"
-msgstr "Freiwillige Spende"
+msgstr "Spende nach freiem Ermessen"
 
 msgid "Inflows total"
 msgstr "Einnahmen insgesamt"
@@ -2897,10 +2897,10 @@ msgid "Maximum number"
 msgstr "Maximale Anzahl"
 
 msgid "Member revoked"
-msgstr "Mitgliedschaft aberkannt"
+msgstr "Mitglied entfernt"
 
 msgid "Membership fee"
-msgstr "Beiträge"
+msgstr "Mitgliedsbeitrag"
 
 msgid "Multiplication"
 msgstr "Multiplikation"
@@ -2909,7 +2909,7 @@ msgid "Obtain ability"
 msgstr "Fähigkeit erwerben"
 
 msgid "One-time token"
-msgstr "Einmalige Wertmarke"
+msgstr "Einmal-Token"
 
 msgid "Outflows total"
 msgstr "Ausgaben insgesamt"
@@ -3297,7 +3297,7 @@ msgid "Writing options"
 msgstr "Optionen zum Schreiben"
 
 msgid "You can consult"
-msgstr "Du kannst es einsehen"
+msgstr "Du kannst nachsehen"
 
 msgid "Your characters"
 msgstr "Deine Charaktere"
@@ -3321,7 +3321,7 @@ msgid "Activate feature"
 msgstr "Funktion aktivieren"
 
 msgid "Activate modules"
-msgstr "Modul-Aktivierung"
+msgstr "Module aktivieren"
 
 msgid "Amount breakdown"
 msgstr "Aufschlüsselung der Beträge"
@@ -3378,7 +3378,7 @@ msgid "Event Navigation"
 msgstr "Veranstaltungsnavigation"
 
 msgid "Event accounting"
-msgstr "Abrechnung von Veranstaltungen"
+msgstr "Veranstaltungsbuchhaltung"
 
 msgid "Event navigation"
 msgstr "Veranstaltungsnavigation"
@@ -3778,7 +3778,7 @@ msgid "Relationship tags"
 msgstr "Beziehungs-Tags"
 
 msgid "Remaining credits"
-msgstr "Verbleibende Kredite"
+msgstr "Verbleibendes Guthaben"
 
 msgid "Remove from guild"
 msgstr "Aus der Gilde entfernen"
@@ -4008,7 +4008,7 @@ msgid "Total payment sent"
 msgstr "Gesamtzahlung gesendet"
 
 msgid "Transaction amount"
-msgstr "Betrag für die Operation"
+msgstr "Transaktionsbetrag"
 
 msgid "Transaction totals"
 msgstr "Transaktionen insgesamt"
@@ -4416,7 +4416,7 @@ msgid "The outflow category"
 msgstr "Die Ausgabenkategorie"
 
 msgid "Time And Date Of Use"
-msgstr "Zeitpunkt und Datum der Nutzung"
+msgstr "Uhrzeit und Datum der Nutzung"
 
 msgid "Treasury appointees."
 msgstr "Kassenbeauftragte."
@@ -4558,6 +4558,9 @@ msgstr "Registrierungsabschnitte"
 msgid "Reserve registrations"
 msgstr "Reserveanmeldungen"
 
+msgid "Show closed questions"
+msgstr "Geschlossene Fragen anzeigen"
+
 msgid "Sign up as a reserve!"
 msgstr "Melde dich als Reservespieler an!"
 
@@ -4595,7 +4598,7 @@ msgid "Verification payments"
 msgstr "Zahlungen zur Überprüfung"
 
 msgid "Warehouse assignments"
-msgstr "Aufgaben im Lager"
+msgstr "Lagerzuweisungen"
 
 msgid "What you will unlock:"
 msgstr "Was du freischalten wirst:"
@@ -4659,7 +4662,7 @@ msgid "Event deletion request"
 msgstr "Antrag auf Löschung eines Ereignisses"
 
 msgid "Expenses collaborators"
-msgstr "Ausgaben für Mitarbeiter"
+msgstr "Ausgaben der Mitarbeitenden"
 
 msgid "Failed to add profiles"
 msgstr "Profile können nicht hinzugefügt werden"
@@ -4683,7 +4686,7 @@ msgid "Manage refund requests"
 msgstr "Verwalte Erstattungsanfragen"
 
 msgid "Manage the event plots"
-msgstr "Verwalte die Plots der Veranstaltung"
+msgstr "Verwalte die Handlungsstränge der Veranstaltung"
 
 msgid "Manage warehouse items"
 msgstr "Verwalte Lagerartikel"
@@ -4704,7 +4707,7 @@ msgid "Newsletter preferences"
 msgstr "Newsletter-Einstellungen"
 
 msgid "No address was ignored"
-msgstr "Keine Adresse wurde übersehen"
+msgstr "Keine Adresse wurde ignoriert"
 
 msgid "One-Time Access Tokens"
 msgstr "Token für den einmaligen Zugang"
@@ -4900,9 +4903,6 @@ msgstr "Erstattung bearbeitet"
 
 msgid "Select your preferences"
 msgstr "Wähle deine Einstellungen aus"
-
-msgid "Show answered questions"
-msgstr "Beantwortete Fragen anzeigen"
 
 msgid "Show available factions"
 msgstr "Verfügbare Fraktionen anzeigen"
@@ -5486,7 +5486,7 @@ msgid "Membership request submitted"
 msgstr "Mitgliedschaftsantrag eingereicht"
 
 msgid "My pending guild invitations"
-msgstr "Ausstehende Einladungen meiner Gilde"
+msgstr "Meine ausstehenden Einladungen zur Gilde"
 
 msgid "Name of badge to be awarded."
 msgstr "Name des zu verleihenden Badges."
@@ -5735,7 +5735,7 @@ msgid "Set up the taxes configuration"
 msgstr "Einrichten der Steuerkonfiguration"
 
 msgid "Set your interface preferences"
-msgstr "Lege deine Schnittstelleneinstellungen fest"
+msgstr "Lege deine Einstellungen für die Benutzeroberfläche fest"
 
 msgid "Show/hide completed milestones"
 msgstr "Abgeschlossene Meilensteine anzeigen/ausblenden"
@@ -6180,7 +6180,7 @@ msgstr "Anmeldung für %(event)s aktualisiert"
 
 #, python-format
 msgid "Registration updated to %(event)s!"
-msgstr "Anmeldung aktualisiert auf %(event)s!"
+msgstr "Anmeldung für %(event)s aktualisiert!"
 
 #, python-format
 msgid "Registrations opening on: %(date)s"
@@ -6962,7 +6962,7 @@ msgid "The modifier's number (unique identifier)"
 msgstr "Die Nummer des Modifikators (eindeutiger Bezeichner)"
 
 msgid "This collection has already been redeemed"
-msgstr "Diese Sammlung ist bereits eingelöst worden"
+msgstr "Diese Sammelaktion wurde bereits eingelöst"
 
 msgid "This discount code has reached its limit."
 msgstr "Dieser Rabattcode hat sein Limit erreicht."
@@ -7020,7 +7020,7 @@ msgstr "Charakter bereits zugewiesen, nicht auswählbar"
 
 #, python-format
 msgid "Collection Participation for %(recipient)s"
-msgstr "Teilnahme an der Sammlung für %(recipient)s"
+msgstr "Teilnahme an der Sammelaktion für %(recipient)s"
 
 msgid "Create a new session for an existing event"
 msgstr "Erstelle eine neue Sitzung für eine bestehende Veranstaltung"
@@ -7751,7 +7751,7 @@ msgstr ""
 "Auf dieser Seite kannst du einen Inventartyp hinzufügen oder bearbeiten."
 
 msgid "Tolerance exceeded, proceed with the cancellation"
-msgstr "Toleranz überschritten, mit der Stornierung fortfahren"
+msgstr "Toleranz überschritten, fahre mit der Stornierung fort"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du schließt (mindestens einen) dieser Filter ein"
@@ -8006,7 +8006,7 @@ msgid "Your organization's unique subdomain in the platform"
 msgstr "Die eindeutige Subdomain deiner Organisation auf der Plattform"
 
 msgid " here the conditions of disenrollment for this event."
-msgstr "Hier sind die Bedingungen für die Abmeldung von dieser Veranstaltung."
+msgstr " hier die Bedingungen zur Abmeldung von dieser Veranstaltung."
 
 msgid "As a final step, we ask you to complete your profile."
 msgstr "Als letzten Schritt bitten wir dich, dein Profil zu vervollständigen."
@@ -8553,7 +8553,7 @@ msgstr ""
 "verbuchen."
 
 msgid "To stop those, you would need to cancel your registrations."
-msgstr "Um diese zu stoppen, müsstest du deine Anmeldungen löschen."
+msgstr "Um diese zu stoppen, müsstest du deine Anmeldungen stornieren."
 
 msgid "Upload membership documents to complete a member's approval"
 msgstr ""
@@ -9118,7 +9118,7 @@ msgstr ""
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
-"(Optional) Ob die Funktion für Benutzer sichtbar ist: „true“ oder „false“"
+"(Optional) Ob die Fähigkeit für Nutzer sichtbar ist: „true“ oder „false“"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -9127,7 +9127,8 @@ msgstr ""
 
 msgid "Create and manage events and their setting - names, dates, status"
 msgstr ""
-"Erstelle und verwalte Veranstaltungen und ihr Setting – Namen, Daten, Status"
+"Erstelle und verwalte Veranstaltungen und ihre Einstellungen – Namen, Daten,"
+" Status"
 
 msgid "Current status of the membership application and approval process"
 msgstr ""
@@ -9192,7 +9193,7 @@ msgstr ""
 
 msgid "They will be used automatically when you sign up for a new event!"
 msgstr ""
-"Sie werden automatisch abgezogen, wenn du dich für eine neue Veranstaltung "
+"Sie werden automatisch verwendet, wenn du dich für eine neue Veranstaltung "
 "anmeldest!"
 
 #, python-format
@@ -9284,7 +9285,7 @@ msgstr ""
 
 msgid "Symbols for place of birth do not match (check exact municipality)"
 msgstr ""
-"Die Angaben zum Geburtsort stimmen nicht überein (überprüfe die genaue "
+"Die Symbole zum Geburtsort stimmen nicht überein (überprüfe die genaue "
 "Gemeinde)"
 
 msgid "There are no signups for this event, so no payment can be created."
@@ -11031,7 +11032,7 @@ msgid ""
 "each run"
 msgstr ""
 "Verfolge den gesamten Anmeldungsverlauf eines Mitglieds mit dem "
-"Zahlungsstatus für jeden Lauf"
+"Zahlungsstatus für jede Veranstaltungsausgabe"
 
 msgid ""
 "Upload scans of both your signed request and your document (image or PDF "
@@ -14566,7 +14567,7 @@ msgid ""
 "With these tutorials, you can learn how to use the tool in no time! You can "
 "read them in order, or scroll directly to the one that interests you most."
 msgstr ""
-"Mit diesen Anleitungen lernst du im Handumdrehen, wie man das Tool benutzt! "
+"Mit diesen Anleitungen lernst du im Handumdrehen, wie du das Tool benutzt! "
 "Du kannst sie der Reihe nach durchlesen oder direkt zu der springen, die "
 "dich am meisten interessiert."
 
@@ -14919,8 +14920,7 @@ msgstr ""
 "Du bist für eine Veranstaltung in diesem Kalenderjahr angemeldet, aber uns "
 "ist nicht bekannt, dass du deinen Mitgliedsbeitrag bezahlt hast. Sei "
 "vorsichtig: Wenn du ihn nicht bezahlst, <b>kannst du weder an "
-"Veranstaltungen teilnehmen</b> noch bei der Jahreshauptversammlung "
-"abstimmen!"
+"Veranstaltungen teilnehmen</b> noch bei der Mitgliederversammlung abstimmen!"
 
 msgid ""
 "The text of the element on the left does NOT refer to the character whose "

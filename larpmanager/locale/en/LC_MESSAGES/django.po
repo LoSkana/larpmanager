@@ -7202,7 +7202,7 @@ msgid ""
 "those requiring no further action"
 msgstr ""
 
-msgid "Show answered questions"
+msgid "Show closed questions"
 msgstr ""
 
 msgid "Answer"

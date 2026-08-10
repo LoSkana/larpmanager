@@ -635,7 +635,7 @@ msgid "Option"
 msgstr "Alternativ"
 
 msgid "Patron"
-msgstr "Beskyddare"
+msgstr "Stödjare"
 
 msgid "Photo:"
 msgstr "Foto:"
@@ -848,7 +848,7 @@ msgid "Handout"
 msgstr "Handout"
 
 msgid "History"
-msgstr "Historia"
+msgstr "Historik"
 
 msgid "ID Card"
 msgstr "Identitetskort"
@@ -1068,7 +1068,7 @@ msgid "Authors:"
 msgstr "Författare:"
 
 msgid "Auto buy"
-msgstr "Köp automatiskt"
+msgstr "Automatiskt köp"
 
 msgid "Balance:"
 msgstr "Saldo:"
@@ -1407,7 +1407,7 @@ msgid "Assigned:"
 msgstr "Tilldelad:"
 
 msgid "Attending"
-msgstr "Närvarande"
+msgstr "Deltar"
 
 msgid "Available"
 msgstr "Tillgängliga"
@@ -3189,7 +3189,7 @@ msgid "Overall balance"
 msgstr "Övergripande saldo"
 
 msgid "Parent campaign"
-msgstr "Föräldrakampanj"
+msgstr "Överordnad kampanj"
 
 msgid "Payment Methods"
 msgstr "Betalningsmetoder"
@@ -3637,7 +3637,7 @@ msgid "Download document"
 msgstr "Ladda ner dokument"
 
 msgid "Element approved!"
-msgstr "Godkänt element!"
+msgstr "Element godkänt!"
 
 msgid "Event public page"
 msgstr "Offentlig evenemangssida"
@@ -4083,7 +4083,7 @@ msgid "Character Inventory"
 msgstr "Karaktärsinventarie"
 
 msgid "Character inventory"
-msgstr "Karaktärsinventering"
+msgstr "Karaktärsinventarie"
 
 msgid "Character not found"
 msgstr "Karaktären hittades inte"
@@ -4558,6 +4558,9 @@ msgstr "Registreringssektioner"
 msgid "Reserve registrations"
 msgstr "Reservanmälningar"
 
+msgid "Show closed questions"
+msgstr "Visa stängda frågor"
+
 msgid "Sign up as a reserve!"
 msgstr "Anmäl dig som reserv!"
 
@@ -4659,7 +4662,7 @@ msgid "Event deletion request"
 msgstr "Begäran om radering av evenemang"
 
 msgid "Expenses collaborators"
-msgstr "Kostnader för medarbetare"
+msgstr "Medarbetarnas utgifter"
 
 msgid "Failed to add profiles"
 msgstr "Misslyckades med att lägga till profiler"
@@ -4900,9 +4903,6 @@ msgstr "Återbetalningen har behandlats"
 
 msgid "Select your preferences"
 msgstr "Välj dina preferenser"
-
-msgid "Show answered questions"
-msgstr "Visa besvarade frågor"
 
 msgid "Show available factions"
 msgstr "Visa tillgängliga fraktioner"
@@ -5863,7 +5863,7 @@ msgid "Where the event will take place"
 msgstr "Var evenemanget kommer att äga rum"
 
 msgid "You have completed the payment!"
-msgstr "Du har slutfört insättningen!"
+msgstr "Du har slutfört betalningen!"
 
 msgid "Your question has been answered"
 msgstr "Din fråga har besvarats"
@@ -5894,7 +5894,7 @@ msgid "Choose the setting for the event"
 msgstr "Välj miljö för evenemanget"
 
 msgid "Commit remaining warehouse stock"
-msgstr "Boka in återstående lagerbeholdning"
+msgstr "Boka in återstående lagerbehållning"
 
 msgid "Configure event feature settings"
 msgstr "Konfigurera inställningar för händelsefunktioner"
@@ -6510,7 +6510,7 @@ msgid "Manage the pre-registrations received"
 msgstr "Hantera mottagna föranmälningar"
 
 msgid "Mirror type character, not selectable"
-msgstr "Spegelkaraktär, inte valbar"
+msgstr "Karaktär av typen Mirror, ej valbar"
 
 msgid "No collections have been created yet."
 msgstr "Ingen insamling har skapats ännu."
@@ -6824,7 +6824,7 @@ msgid "Manage collections participated by users"
 msgstr "Hantera insamlingar som användare deltar i"
 
 msgid "Manage incoming revenue linked to events"
-msgstr "Hantera intäkter från evenemang"
+msgstr "Hantera inkommande intäkter kopplade till evenemang"
 
 #, python-format
 msgid "Membership application form for %(user)s"
@@ -8607,7 +8607,7 @@ msgstr "Vill du få information om våra kommande evenemang?"
 
 msgid "(Optional) Character names it was awarded to, comma-separated"
 msgstr ""
-"(Valfritt) Namn på karaktärer som utmärkelsen tilldelats, separerade med "
+"(Valfritt) Namn på karaktärer som tilldelningen gavs till, separerade med "
 "kommatecken"
 
 msgid "(Optional) Character options as requirements, comma-separated"
@@ -8781,7 +8781,7 @@ msgid "Your request has been sent, we will reply as soon as possible!"
 msgstr "Din förfrågan har skickats, vi kommer att svara så snart som möjligt!"
 
 msgid "for no relationship, only to display the other character name."
-msgstr "utan någon relation, bara för att visa det andra karaktärsnamnet."
+msgstr "utan någon relation, bara för att visa den andra karaktärens namn."
 
 msgid "Allows a user to reserve extra tickets in addition to their own"
 msgstr ""
@@ -8939,7 +8939,7 @@ msgstr "Video- eller ljudfil som ska streamas (rekommenderas: MP4, WebM, MP3)"
 
 msgid "View and edit all relationships between characters in this event"
 msgstr ""
-"Visa och redigera alla relationer mellan karaktärerna i denna händelse"
+"Visa och redigera alla relationer mellan karaktärerna i detta evenemang"
 
 msgid "Warning: there is already an approved member with the same name!"
 msgstr "Varning: det finns redan en godkänd medlem med samma namn!"
@@ -8956,7 +8956,8 @@ msgstr ""
 "medlemsavgiften."
 
 msgid "Create and manage events and their setting - names, dates, status"
-msgstr "Skapa och hantera evenemang och deras miljö – namn, datum, status"
+msgstr ""
+"Skapa och hantera evenemang och deras inställningar – namn, datum och status"
 
 msgid "Current status of the membership application and approval process"
 msgstr ""
@@ -9101,8 +9102,7 @@ msgid "URL of the external application where the user will be redirected."
 msgstr "URL till den externa applikationen dit användaren omdirigeras."
 
 msgid "Without payment of this fee, event participation is not permitted."
-msgstr ""
-"Utan betalning av denna avgift är det inte tillåtet att delta i evenemanget."
+msgstr "Om du inte betalar avgiften kan du inte delta i evenemanget."
 
 msgid "whether the character is aware of the identity of the other trait."
 msgstr "om karaktären är medveten om den andra Traitens identitet."
@@ -10524,7 +10524,7 @@ msgstr ""
 msgid ""
 "The prerequisite abilities, which must be possessed before one can acquire "
 "this"
-msgstr "Förkunskapsförmågorna som måste finnas innan denna kan förvärvas"
+msgstr "Förkunskapsförmågorna, som måste innehas innan denna kan förvärvas"
 
 msgid ""
 "To participate in the organization's events, you must apply to become a "
@@ -12155,8 +12155,8 @@ msgid ""
 "Review the quantity changes that will be applied to warehouse stock before "
 "confirming the commit"
 msgstr ""
-"Granska de kvantitetsändringar som kommer att tillämpas på lagerbeholdningen"
-" innan du bekräftar ändringarna"
+"Granska de kvantitetsändringar som kommer att tillämpas på lagerbeståndet "
+"innan du bekräftar ändringarna"
 
 msgid ""
 "Track the progress of the printable character sheet ZIP bundle being "
@@ -12728,8 +12728,8 @@ msgid ""
 "Adds 'Patron' and 'Reduced' ticket types. Each Patron ticket purchased makes"
 " one Reduced ticket available"
 msgstr ""
-"Lägger till biljettyperna 'Patron' och 'Reduced'. Varje Patron-biljett som "
-"köps gör en Reduced-biljett tillgänglig"
+"Lägger till biljettyperna 'Patron' och 'Reducerad'. Varje Patron-biljett som"
+" köps gör en Reducerad-biljett tillgänglig"
 
 #, python-format
 msgid ""
@@ -13674,8 +13674,8 @@ msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
 "which a random subset is converted into normal tickets"
 msgstr ""
-"Möjliggör 'lotter' med obegränsad tillgänglighet och utan kostnad, från "
-"vilka en slumpmässig delmängd omvandlas till vanliga biljetter"
+"Möjliggör lotteribiljetter med obegränsad tillgänglighet och utan kostnad, "
+"där en slumpmässig delmängd omvandlas till vanliga biljetter"
 
 #, python-format
 msgid ""
