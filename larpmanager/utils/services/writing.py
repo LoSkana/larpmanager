@@ -492,13 +492,9 @@ def _prepare_writing_list(context: dict) -> None:
         if question_field_list:
             context["default_fields"] = json.dumps(question_field_list)
 
-    context["auto_save"] = not get_event_config(
-        context["event"].id, "writing_disable_auto", default_value=False, context=context
-    )
+    context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", context=context)
 
-    context["writing_unimportant"] = get_event_config(
-        context["event"].id, "writing_unimportant", default_value=False, context=context
-    )
+    context["writing_unimportant"] = get_event_config(context["event"].id, "writing_unimportant", context=context)
 
 
 def writing_list_plot(context: dict) -> None:
@@ -653,7 +649,7 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
                 character.player_display = character.player.display_member(context)
 
     context["campaign_split_registration"] = get_event_config(
-        context["event"].id, "campaign_split_registration", default_value=False, context=context
+        context["event"].id, "campaign_split_registration", context=context
     )
     # Split list by registration status if config is enabled
     if "campaign" in context["features"] and context["campaign_split_registration"]:

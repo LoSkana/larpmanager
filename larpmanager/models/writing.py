@@ -238,7 +238,7 @@ class Character(Writing):
     @property
     def is_active(self) -> bool:
         """Check if character is active (not marked as inactive in CharacterConfig)."""
-        is_inactive = self.get_config("inactive", default_value=False)
+        is_inactive = self.get_config("inactive")
         return not (is_inactive == "True" or is_inactive is True)
 
     def show(self, run: Run | None = None) -> Any:
@@ -273,9 +273,7 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if get_event_config(self.event_id, "user_character_approval", default_value=False) and self.status not in [
-            CharacterStatus.APPROVED
-        ]:
+        if get_event_config(self.event_id, "user_character_approval") and self.status not in [CharacterStatus.APPROVED]:
             js["hide"] = True
 
         js["locked"] = self.locked
@@ -966,7 +964,7 @@ def replace_character_names(instance: Any) -> None:
         return
 
     # Early return if event doesn't have character substitution enabled
-    if not get_event_config(instance.event_id, "writing_substitute", default_value=False):
+    if not get_event_config(instance.event_id, "writing_substitute"):
         return
 
     # Build character name to number mapping for replacement

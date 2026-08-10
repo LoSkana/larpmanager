@@ -62,7 +62,6 @@ def _get_event_smtp_config(run_id: int) -> dict | None:
         host_user = get_event_config(
             event.id,
             "mail_server_host_user",
-            default_value="",
             context=cache_context,
             bypass_cache=True,
         )
@@ -75,14 +74,12 @@ def _get_event_smtp_config(run_id: int) -> dict | None:
             "host": get_event_config(
                 event.id,
                 "mail_server_host",
-                default_value="",
                 context=cache_context,
                 bypass_cache=True,
             ),
             "port": get_event_config(
                 event.id,
                 "mail_server_port",
-                default_value="",
                 context=cache_context,
                 bypass_cache=True,
             ),
@@ -90,14 +87,12 @@ def _get_event_smtp_config(run_id: int) -> dict | None:
             "password": get_event_config(
                 event.id,
                 "mail_server_host_password",
-                default_value="",
                 context=cache_context,
                 bypass_cache=True,
             ),
             "use_tls": get_event_config(
                 event.id,
                 "mail_server_use_tls",
-                default_value=False,
                 context=cache_context,
                 bypass_cache=True,
             ),
@@ -121,18 +116,18 @@ def _get_association_smtp_config(association_id: int) -> dict | None:
         association = Association.objects.get(pk=association_id)
 
         # Check if association has custom SMTP host user configured
-        host_user = association.get_config("mail_server_host_user", default_value="", bypass_cache=True)
+        host_user = association.get_config("mail_server_host_user", bypass_cache=True)
 
         if not host_user:
             return None
 
         # Return SMTP configuration
         return {
-            "host": association.get_config("mail_server_host", default_value="", bypass_cache=True),
-            "port": association.get_config("mail_server_port", default_value="", bypass_cache=True),
+            "host": association.get_config("mail_server_host", bypass_cache=True),
+            "port": association.get_config("mail_server_port", bypass_cache=True),
             "username": host_user,
-            "password": association.get_config("mail_server_host_password", default_value="", bypass_cache=True),
-            "use_tls": association.get_config("mail_server_use_tls", default_value=False, bypass_cache=True),
+            "password": association.get_config("mail_server_host_password", bypass_cache=True),
+            "use_tls": association.get_config("mail_server_use_tls", bypass_cache=True),
         }
 
     except ObjectDoesNotExist:

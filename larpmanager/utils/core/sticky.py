@@ -39,7 +39,7 @@ if TYPE_CHECKING:
 
 def _get_sticky(member: Member) -> dict:
     """Get sticky messages for member."""
-    value = member.get_config("sticky", default_value="{}")
+    value = member.get_config("sticky")
     return ast.literal_eval(value)
 
 

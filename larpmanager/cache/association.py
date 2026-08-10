@@ -31,7 +31,6 @@ from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.association import Association
 from larpmanager.models.event import Run
-from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
 
 logger = logging.getLogger(__name__)
 
@@ -154,9 +153,7 @@ def init_cache_association(a_slug: str) -> dict | None:
             association.id, config, default_value=False, context=temp_context
         )
 
-    association_dict["assoc_version"] = int(
-        get_association_config(association.id, "version", default_value=LATEST_AVAILABLE_VERSION, context=temp_context)
-    )
+    association_dict["assoc_version"] = int(get_association_config(association.id, "version", context=temp_context))
 
     if "app_integration" in association_dict.get("features", {}):
         for config in ["app_integration_button_text", "app_integration_redirect_url"]:
@@ -220,7 +217,7 @@ def _init_features(association: Association, cache_element: dict) -> None:
 
     # Configure Centauri probability settings if feature is enabled
     if "centauri" in cache_element["features"]:
-        probability = association.get_config("centauri_prob", default_value=0)
+        probability = association.get_config("centauri_prob")
         if probability:
             cache_element["centauri_prob"] = probability
 

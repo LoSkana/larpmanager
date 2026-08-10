@@ -41,7 +41,12 @@ from django_select2.forms import Select2Widget
 from slugify import slugify
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import (
+    get_association_config,
+    get_event_config,
+    is_association_config_set,
+    is_event_config_set,
+)
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.widget import get_exe_widget_cache, get_orga_widget_cache
@@ -431,14 +436,11 @@ def _exe_users_actions(
         if not get_association_text(context["association_id"], AssociationTextType.MEMBERSHIP):
             _add_priority(context, _("Set up the membership request text"), "exe_membership", "texts")
 
-        if (
-            len(get_association_config(context["association_id"], "membership_fee", default_value="", context=context))
-            == 0
-        ):
+        if not is_association_config_set(context["association_id"], "membership_fee", context=context):
             _add_priority(context, _("Set up the membership configuration"), "exe_membership", "config/membership")
 
-    if "vote" in enabled_features and not get_association_config(
-        context["association_id"], "vote_candidates", default_value="", context=context
+    if "vote" in enabled_features and not is_association_config_set(
+        context["association_id"], "vote_candidates", context=context
     ):
         _add_priority(
             context,
@@ -473,8 +475,8 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
             "exe_methods",
         )
 
-    if "organization_tax" in enabled_features and not get_association_config(
-        context["association_id"], "organization_tax_perc", default_value="", context=context
+    if "organization_tax" in enabled_features and not is_association_config_set(
+        context["association_id"], "organization_tax_perc", context=context
     ):
         _add_priority(
             context,
@@ -484,11 +486,9 @@ def _exe_accounting_actions(context: dict, enabled_features: dict[str, Any]) -> 
         )
 
     if "vat" in enabled_features:
-        vat_ticket = get_association_config(context["association_id"], "vat_ticket", default_value="", context=context)
-        vat_options = get_association_config(
-            context["association_id"], "vat_options", default_value="", context=context
-        )
-        if not vat_ticket or not vat_options:
+        vat_ticket_set = is_association_config_set(context["association_id"], "vat_ticket", context=context)
+        vat_options_set = is_association_config_set(context["association_id"], "vat_options", context=context)
+        if not vat_ticket_set or not vat_options_set:
             _add_priority(
                 context,
                 _("Set up the taxes configuration"),
@@ -524,7 +524,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     get_index_event_permissions(request, context, event_slug)
     is_organizer, _perms, _roles = get_event_roles(request, context, event_slug)
     context["is_organizer"] = is_organizer or 1 in context.get("association_role", {})
-    if get_association_config(context["association_id"], "interface_admin_links", default_value=False, context=context):
+    if get_association_config(context["association_id"], "interface_admin_links", context=context):
         get_index_association_permissions(request, context, context["association_id"], enforce_check=False)
 
     # Load registration status
@@ -546,7 +546,7 @@ def _orga_manage(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Mobile shortcuts handling
-    if get_event_config(context["event"].id, "show_shortcuts_mobile", default_value=False, context=context):
+    if get_event_config(context["event"].id, "show_shortcuts_mobile", context=context):
         origin_id = request.GET.get("origin", "")
         should_open_shortcuts = False
         if origin_id:
@@ -577,7 +577,7 @@ def _orga_widgets(request: HttpRequest, context: dict, features: dict):
     ]
 
     if "user_character" in features and get_event_config(
-        context["event"].id, "user_character_approval", default_value=False, context=context
+        context["event"].id, "user_character_approval", context=context
     ):
         widgets_available.append("user_character")
 
@@ -657,9 +657,7 @@ def _orga_actions_priorities(request: HttpRequest, context: dict, features: dict
         )
 
     # Check for pending expense approvals (if not disabled for organizers)
-    if not get_association_config(
-        context["event"].association_id, "expense_disable_orga", default_value=False, context=context
-    ):
+    if not get_association_config(context["event"].association_id, "expense_disable_orga", context=context):
         if actions_data.get("pending_expenses", {}).get("count", 0) > 0:
             _add_action(
                 context,
@@ -755,9 +753,7 @@ def _orga_casting_actions(context: dict, enabled_features: dict[str, Any], actio
         enabled_features: Dictionary of enabled features.
         actions_data: Cached actions data from get_orga_widget_cache.
     """
-    if "casting" in enabled_features and not get_event_config(
-        context["event"].id, "casting_min", default_value=0, context=context
-    ):
+    if "casting" in enabled_features and not is_event_config_set(context["event"].id, "casting_min", context=context):
         _add_priority(
             context,
             _("Set casting options in the configuration"),
@@ -810,7 +806,7 @@ def _orga_exp_actions(context: dict, enabled_features: dict, actions_data: dict)
         return
 
     # Check if experience points configuration is missing
-    if not get_event_config(context["event"].id, "exp_start", default_value=0, context=context):
+    if not is_event_config_set(context["event"].id, "exp_start", context=context):
         _add_priority(
             context,
             _("Set the experience points configuration"),
@@ -906,9 +902,7 @@ def _orga_registration_accounting_actions(context: dict, enabled_features: dict[
                 )
 
     # Handle reduced tickets feature configuration
-    if "reduced" in enabled_features and not get_event_config(
-        context["event"].id, "reduced_ratio", default_value=0, context=context
-    ):
+    if "reduced" in enabled_features and not is_event_config_set(context["event"].id, "reduced_ratio", context=context):
         _add_priority(
             context,
             _("Set up Patron and Reduced ticket configuration"),
@@ -921,9 +915,7 @@ def _check_currency_priority(request: HttpRequest, context: dict, features: dict
     """Check if currency has been already set / checked."""
     if (
         "payment" in features
-        and not get_association_config(
-            context["association_id"], "exe_association_suggestion", default_value=False, context=context
-        )
+        and not get_association_config(context["association_id"], "exe_association_suggestion", context=context)
         and has_association_permission(request, context, "exe_association")
     ):
         _add_priority(
