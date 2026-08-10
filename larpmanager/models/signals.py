@@ -918,9 +918,15 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
     for member in instance.members.all():
         reset_event_links(member.id, instance.event.association_id)
 
-    # Schedule publication crew sync (skip if being soft-deleted)
+    # Schedule publication crew sync (soft deletes are handled by post_softdelete)
     if instance.deleted is None:
         publish_event_role(instance.id)
+
+
+@receiver(post_softdelete, sender=EventRole)
+def post_softdelete_event_role_reset(sender: type, instance: EventRole, **kwargs: Any) -> None:
+    """Rebuild the published crew list after an event role is soft deleted."""
+    publish_event_role(instance.id)
 
 
 @receiver(post_save, sender=EventText)
@@ -1320,14 +1326,16 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     if instance.pending:
         return
 
-    # Assign character from previous campaign if applicable
-    assign_previous_campaign_character(instance)
+    # Soft deleted registrations only need their caches dropped, not their data recomputed
+    if not instance.deleted:
+        # Assign character from previous campaign if applicable
+        assign_previous_campaign_character(instance)
 
-    # Process ticket options and character-related data
-    process_character_ticket_options(instance)
+        # Process ticket options and character-related data
+        process_character_ticket_options(instance)
 
-    # Update accounting records and balances
-    handle_registration_accounting_updates(instance)
+        # Update accounting records and balances
+        handle_registration_accounting_updates(instance)
 
     # Clear cached accounting data for this run
     clear_registration_accounting_cache(instance.run_id)
@@ -1342,8 +1350,9 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     # Update registration count caches for this run
     clear_registration_counts_cache(instance.run_id)
 
-    # Sync published data on this registration
-    publish_registration(instance.id)
+    # Sync published data on this registration (soft deletes are handled by post_softdelete, which knows the run)
+    if not instance.deleted:
+        publish_registration(instance.id)
 
 
 @receiver(pre_softdelete, sender=Registration)

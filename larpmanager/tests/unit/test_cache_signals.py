@@ -990,3 +990,41 @@ class TestSoftDeleteSignals(BaseTestCase):
         role.delete()
 
         mock_reset.assert_any_call(event.id, "staffers")
+
+    @patch("larpmanager.models.signals.publish_event_role")
+    def test_event_role_soft_delete_republishes_crew(self, mock_publish: Any) -> None:
+        """Test that soft deleting an event role rebuilds the published crew list"""
+        event = self.get_event()
+        role = EventRole.objects.create(name="Test Role", event=event, number=43)
+        mock_publish.reset_mock()
+
+        role.delete()
+
+        mock_publish.assert_called_once_with(role.id)
+
+    def test_publish_event_role_resolves_soft_deleted_role(self) -> None:
+        """Test that the crew sync still finds the event of a soft deleted role"""
+        from larpmanager.utils.publication.base import publish_event_role
+
+        event = self.get_event()
+        role = EventRole.objects.create(name="Test Role", event=event, number=44)
+        with patch("larpmanager.models.signals.publish_event_role"):
+            role.delete()
+
+        with patch("larpmanager.utils.publication.base._get_ildb_context", return_value=None) as mock_ctx:
+            publish_event_role(role.id)
+
+        mock_ctx.assert_called_once()
+
+    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.models.signals.handle_registration_accounting_updates")
+    def test_registration_soft_delete_skips_accounting_recompute(self, mock_accounting: Any, mock_clear: Any) -> None:
+        """Test that soft deleting a registration clears caches without recomputing its accounting"""
+        registration = self.create_registration()
+        mock_accounting.reset_mock()
+        mock_clear.reset_mock()
+
+        registration.delete()
+
+        mock_accounting.assert_not_called()
+        mock_clear.assert_called_once_with(registration.run_id)

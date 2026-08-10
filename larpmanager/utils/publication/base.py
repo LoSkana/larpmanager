@@ -76,9 +76,13 @@ def publish_registration(registration_id: int, run_id: int | None = None) -> Non
 
 @background_auto(queue=PUB_QUEUE, skip_duplicates=True)
 def publish_event_role(event_role_id: int) -> None:
-    """Background task: full crew sync after EventRole metadata changes."""
+    """Background task: full crew sync after EventRole metadata changes.
+
+    Soft deleted roles are still resolved, to recover their event: the crew list is
+    rebuilt from the roles that are left, so a removed role drops out of it.
+    """
     try:
-        role = EventRole.objects.select_related("event__association").get(pk=event_role_id)
+        role = EventRole.all_objects.select_related("event__association").get(pk=event_role_id)
     except ObjectDoesNotExist:
         return
 
