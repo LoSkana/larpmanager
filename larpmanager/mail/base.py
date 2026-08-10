@@ -405,7 +405,7 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
     activate(instance.member.language)
 
     # Skip email if character mail is disabled for this event
-    if get_event_config(instance.run.event_id, "mail_character", default_value=False):
+    if get_event_config(instance.run.event_id, "mail_character"):
         return
 
     # Get trait and quest display information for the current run
@@ -511,7 +511,7 @@ def send_character_status_update_email(instance: Character) -> None:
 
     """
     # Early return if character approval feature is disabled for this event
-    if not get_event_config(instance.event_id, "user_character_approval", default_value=False):
+    if not get_event_config(instance.event_id, "user_character_approval"):
         return
 
     # Skip if it has no player

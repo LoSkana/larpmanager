@@ -138,7 +138,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
         character_approval_enabled = get_event_config(
             self.params.get("event").id,
             "user_character_approval",
-            default_value=False,
             context=self.params,
         )
         if not character_approval_enabled:
@@ -208,7 +207,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
             checks = [("writing_external_access", "access_token"), ("writing_number", "number")]
             for check in checks:
-                config = get_event_config(current_event.id, check[0], default_value=False, context=self.params)
+                config = get_event_config(current_event.id, check[0], context=self.params)
                 if config and self.instance.pk:
                     fields_default.add(check[1])
                     self.reorder_field(check[1])
@@ -224,7 +223,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         """Add character completion proposal field for user approval workflow."""
         if (
             not self.orga
-            and get_event_config(event.id, "user_character_approval", default_value=False, context=self.params)
+            and get_event_config(event.id, "user_character_approval", context=self.params)
             and (not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW])
         ):
             self.fields["propose"] = forms.BooleanField(
@@ -391,9 +390,7 @@ class OrgaCharacterForm(CharacterForm):
 
         # Load relationship field max length from event configuration
         self.relationship_max_length = int(
-            get_event_config(
-                self.params["event"].id, "writing_relationship_length", default_value=10000, context=self.params
-            ),
+            get_event_config(self.params["event"].id, "writing_relationship_length", context=self.params),
         )
 
         # For AJAX auto-save: skip widget setup but still load relationship data for saving
@@ -477,12 +474,10 @@ class OrgaCharacterForm(CharacterForm):
         else:
             self.delete_field("player")
 
-        if not get_event_config(
-            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
-        ):
+        if not get_event_config(self.params["event"].id, "user_character_approval", context=self.params):
             self.delete_field("status")
 
-        if get_event_config(self.params["event"].id, "casting_mirror", default_value=False, context=self.params):
+        if get_event_config(self.params["event"].id, "casting_mirror", context=self.params):
             if "mirror" in self.fields:
                 characters_query = self.params["run"].event.get_elements(Character).all()
                 character_choices = [(character.uuid, character.name) for character in characters_query]
@@ -500,7 +495,7 @@ class OrgaCharacterForm(CharacterForm):
             )
             # Set initial value - default to True unless character has inactive config
             if self.instance.pk:
-                is_inactive = self.instance.get_config("inactive", default_value=False)
+                is_inactive = self.instance.get_config("inactive")
                 self.initial["active"] = not (is_inactive == "True" or is_inactive is True)
             else:
                 self.initial["active"] = True
@@ -524,7 +519,12 @@ class OrgaCharacterForm(CharacterForm):
         )
         self.configure_field_event("plots", self.params["event"])
 
-        self.plots = self.instance.get_plot_characters()
+        # the js builds the role row of a plot as soon as it is selected, before saving
+        self.load_js = [*self.load_js, "character-plots"]
+        self.plot_role_help_text = _("This text will be added to the %(name)s plot paragraph in the sheet.")
+        self.params["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
+
+        self.plots = self.instance.get_plot_characters(self.params["event"])
         self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
 
         self.add_char_finder = []
@@ -544,8 +544,7 @@ class OrgaCharacterForm(CharacterForm):
             self.fields[plot_field_name] = forms.CharField(
                 widget=WritingTinyMCE(),
                 label=plot_name,
-                help_text=_("This text will be added to the %(name)s plot paragraph in the sheet.")
-                % {"name": plot_name},
+                help_text=self.plot_role_help_text % {"name": plot_name},
                 required=False,
             )
 
@@ -575,9 +574,10 @@ class OrgaCharacterForm(CharacterForm):
         if "plots" not in self.cleaned_data:
             return
 
-        # Add / remove plots
+        # Add / remove plots, restricted to the plots of this event (they are not inherited)
+        plot_event = self.params["event"].get_class_parent(Plot)
         selected = set(self.cleaned_data.get("plots", []))
-        current = set(Plot.objects.filter(plotcharacterrel__character=instance))
+        current = set(Plot.objects.filter(plotcharacterrel__character=instance, event=plot_event))
 
         to_add = selected - current
         to_remove = current - selected
@@ -588,15 +588,14 @@ class OrgaCharacterForm(CharacterForm):
         for plot in to_add:
             PlotCharacterRel.objects.create(character=instance, plot=plot)
 
-        # update texts
+        # update texts (rows added client side are not declared fields, read them from raw data)
         to_update = []
-        for pr in instance.get_plot_characters():
+        for pr in instance.get_plot_characters(self.params["event"]):
             field = f"pl_{pr.plot_id}"
-            if field not in self.cleaned_data:
+            text = self.cleaned_data[field] if field in self.cleaned_data else self.data.get(field)
+            if text is None or text == pr.text:
                 continue
-            if self.cleaned_data[field] == pr.text:
-                continue
-            pr.text = self.cleaned_data[field]
+            pr.text = text
             to_update.append(pr)
         if to_update:
             PlotCharacterRel.objects.bulk_update(to_update, ["text"])
@@ -1045,7 +1044,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
 
             # Handle character type 'c' - requires 'exp_rules' config
             elif choice[0] == "c":
-                if not get_event_config(self.params["event"].id, "exp_rules", default_value=False):
+                if not get_event_config(self.params["event"].id, "exp_rules"):
                     continue
 
             # Add valid choice to final list
@@ -1062,9 +1061,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
             return
 
         # Check if character approval feature is enabled for this event
-        if not get_event_config(
-            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
-        ):
+        if not get_event_config(self.params["event"].id, "user_character_approval", context=self.params):
             self.delete_field("editable")
         else:
             # Create multiple choice field for character status selection

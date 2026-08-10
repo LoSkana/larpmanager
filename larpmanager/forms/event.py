@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _, pgettext
 from larpmanager.cache.config import (
     get_association_config,
     get_event_config,
+    is_event_config_set,
     reset_element_configs,
     save_all_element_configs,
     save_single_config,
@@ -1180,12 +1181,12 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
         # Load current theme: from event config if editing, else from association config (new event default)
         current_theme = None
-        if self.instance.pk:
-            current_theme = get_event_config(self.instance.id, "theme", default_value="")
+        if self.instance.pk and is_event_config_set(self.instance.id, "theme"):
+            current_theme = get_event_config(self.instance.id, "theme")
 
         if not current_theme:
             assoc_id = self.params.get("association_id")
-            current_theme = (get_association_config(assoc_id, "theme") if assoc_id else None) or AppearanceTheme.NEBULA
+            current_theme = get_association_config(assoc_id, "theme") if assoc_id else AppearanceTheme.NEBULA
         self.initial["theme"] = current_theme
         self.order_fields(["theme"] + [f for f in self.fields if f != "theme"])
 
@@ -1246,16 +1247,12 @@ class OrgaEventTextForm(BaseModelForm):
         if "character" not in self.params["features"]:
             delete_choice.append(EventTextType.INTRO)
 
-        if not get_event_config(
-            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
-        ):
+        if not get_event_config(self.params["event"].id, "user_character_approval", context=self.params):
             delete_choice.extend(
                 [EventTextType.CHARACTER_PROPOSED, EventTextType.CHARACTER_APPROVED, EventTextType.CHARACTER_REVIEW],
             )
 
-        if not get_event_config(
-            self.params["event"].id, "registration_approval_process", default_value=False, context=self.params
-        ):
+        if not get_event_config(self.params["event"].id, "registration_approval_process", context=self.params):
             delete_choice.append(EventTextType.REGISTRATION_APPROVAL)
 
         for tp in delete_choice:
@@ -1518,6 +1515,7 @@ class OrgaRunForm(ConfigForm):
         self.fields["development"].widget = DescriptionRadioSelect(
             attrs={"class": "my-radio-class"},
             descriptions={str(value): str(status_text[DevelopStatus(value)]) for value, _label in development_choices},
+            collapse_unselected=self._is_edit,
         )
         self.fields["development"].choices = development_choices
 
@@ -1569,6 +1567,7 @@ class OrgaRunForm(ConfigForm):
         self.fields["registration_status"].widget = DescriptionRadioSelect(
             attrs={"class": "my-radio-class", "data-conditional-controller": "registration_status"},
             descriptions={str(value): str(status_help[RegistrationStatus(value)]) for value, _label in choices},
+            collapse_unselected=self._is_edit,
         )
         self.fields["registration_status"].choices = choices
         if "registration_open" in self.fields:
@@ -1582,7 +1581,7 @@ class OrgaRunForm(ConfigForm):
             self.fields["register_link"].custom_class = "hide"
             self.fields["registration_open"].custom_style = "display: none"
 
-    def set_configs(self) -> None:  # noqa: C901 - Complex form configuration with feature-dependent field setup
+    def set_configs(self) -> None:
         """Configure event-specific form fields and sections.
 
         Sets up various event features and their configuration options
@@ -1591,9 +1590,7 @@ class OrgaRunForm(ConfigForm):
         if "character" not in self.params["features"] or "event" not in self.params:
             return
 
-        if not get_event_config(
-            self.params["event"].id, "writing_field_visibility", default_value=False, context=self.params
-        ):
+        if not get_event_config(self.params["event"].id, "writing_field_visibility", context=self.params):
             return
 
         help_text = _(
@@ -1644,8 +1641,7 @@ class OrgaRunForm(ConfigForm):
         for element_key, element_display_name in additional_elements_display.items():
             if self.instance.pk and element_key in self.params["features"]:
                 additional_choices.append((element_key, element_display_name))
-        if additional_choices:
-            help_text = _("Selected elements will be shown to participants.")
+        help_text = _("Selected elements will be shown to participants.")
         self.add_configs(
             "show_addit",
             ConfigType.MULTI_BOOL,
@@ -1798,6 +1794,7 @@ class ExeEventForm(OrgaEventForm):
                     widget=DescriptionRadioSelect(
                         attrs={"class": "my-radio-class"},
                         descriptions={slug: str(desc) for slug, (_label, desc) in template_descriptions.items()},
+                        collapse_unselected=self._is_edit,
                     ),
                 )
 
@@ -2236,13 +2233,11 @@ class OrgaPreferencesForm(ExePreferencesForm):
     def character_configs(self, extra_config_options: list) -> None:
         """Add configs relative to characters."""
         # Add player field if character limit is set
-        if get_event_config(self.params["event"].id, "user_character_max", default_value=1, context=self.params):
+        if get_event_config(self.params["event"].id, "user_character_max", context=self.params):
             extra_config_options.append(("player", _("Player")))
 
         # Add status field if character approval is enabled
-        if get_event_config(
-            self.params["event"].id, "user_character_approval", default_value=False, context=self.params
-        ):
+        if get_event_config(self.params["event"].id, "user_character_approval", context=self.params):
             extra_config_options.append(("status", _("Status")))
 
         # Define character feature fields with their config keys and labels

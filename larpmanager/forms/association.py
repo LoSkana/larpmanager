@@ -339,7 +339,7 @@ class ExeAppearanceForm(BaseModelCssForm):
         self.prevent_canc = True
         self.show_link = ["id_association_css"]
         if self.instance.pk:
-            self.initial["theme"] = self.instance.get_config("theme", default_value=AppearanceTheme.NEBULA)
+            self.initial["theme"] = self.instance.get_config("theme")
         self.order_fields(["theme"] + [f for f in self.fields if f != "theme"])
 
     def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002
@@ -689,10 +689,6 @@ class ExeConfigForm(ConfigForm):
             "without an active event registration."
         )
         self.add_configs("membership_grazing", ConfigType.INT, field_label, field_help_text)
-
-        field_label = _("Separate membership fee")
-        field_help_text = _("If enabled, the annual membership fee is paid separately from the event registration fee.")
-        self.add_configs("membership_fee_separated", ConfigType.BOOL, field_label, field_help_text)
 
     def set_config_accounting_1(self) -> None:
         """Configure accounting-related form fields for association settings."""

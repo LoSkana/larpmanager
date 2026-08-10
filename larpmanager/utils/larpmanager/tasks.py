@@ -455,6 +455,7 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
         "sender_name": "LarpManager",
         "headers": {},
         "bcc_recipients": [],
+        "base_url": get_url("").rstrip("/"),
     }
 
     cache_context = {}
@@ -468,7 +469,6 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
         event_smtp_user = get_event_config(
             event.id,
             "mail_server_host_user",
-            default_value="",
             context=cache_context,
             bypass_cache=True,
         )
@@ -481,8 +481,11 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
     if association_id:
         association = Association.objects.get(pk=association_id)
 
+        # Base URL for absolutizing relative links/images in the body
+        metadata["base_url"] = get_url("", association).rstrip("/")
+
         # Add BCC if configured
-        if association.get_config("mail_cc", default_value=False, bypass_cache=True) and association.main_mail:
+        if association.get_config("mail_cc", bypass_cache=True) and association.main_mail:
             metadata["bcc_recipients"].append(association.main_mail)
 
         # Store organization main email for potential Reply-To (used by SES backend)
@@ -491,7 +494,7 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
 
         # Set sender (only if event didn't set it)
         if not event_settings_applied:
-            assoc_smtp_user = association.get_config("mail_server_host_user", default_value="", bypass_cache=True)
+            assoc_smtp_user = association.get_config("mail_server_host_user", bypass_cache=True)
             if assoc_smtp_user:
                 metadata["sender_email"] = assoc_smtp_user
                 metadata["sender_name"] = association.name
@@ -511,6 +514,68 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
     return metadata
 
 
+# A whole html tag, rewritten one at a time so every attribute inside it is considered;
+# quoted attribute values are consumed as a unit, so a ">" inside them does not end the tag
+_TAG_RE = re.compile(r"""<[^>'"]*(?:(?:"[^"]*"|'[^']*')[^>'"]*)*>""")
+
+# Content of a style block, the only place outside tags where css url() references are expected
+_STYLE_BLOCK_RE = re.compile(r"(<style\b[^>]*>)(.*?)(</style\s*>)", re.IGNORECASE | re.DOTALL)
+
+# Root-relative single-value attributes (excludes protocol-relative "//host/path")
+_RELATIVE_URL_RE = re.compile(r"""(\s(?:src|href|poster|background)\s*=\s*["'])(/(?!/)[^"']*)(["'])""", re.IGNORECASE)
+
+# Srcset attributes, whose value is a comma separated list of candidates
+_RELATIVE_SRCSET_RE = re.compile(r"""(\ssrcset\s*=\s*["'])([^"']*)(["'])""", re.IGNORECASE)
+
+# Root-relative CSS url() references, in inline styles or <style> blocks
+_RELATIVE_CSS_URL_RE = re.compile(r"""(url\(\s*['"]?)(/(?!/)[^)'"]*)""", re.IGNORECASE)
+
+# Root-relative url at the start of a srcset candidate (excludes protocol-relative "//host/path")
+_SRCSET_CANDIDATE_RE = re.compile(r"(\A|,)(\s*)(/(?!/)[^\s,]*)")
+
+
+def _absolute_srcset(value: str, base_url: str) -> str:
+    """Prefix every root-relative candidate of a srcset value with the base url.
+
+    Values holding a data uri are left untouched: their comma separated base64
+    payload cannot be told apart from a candidate list, and may itself start
+    with a slash.
+    """
+    if "data:" in value.lower():
+        return value
+    return _SRCSET_CANDIDATE_RE.sub(lambda match: f"{match.group(1)}{match.group(2)}{base_url}{match.group(3)}", value)
+
+
+def _absolute_css(css: str, base_url: str) -> str:
+    """Prefix every root-relative css url() reference with the base url."""
+    return _RELATIVE_CSS_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}", css)
+
+
+def _absolute_tag(tag: str, base_url: str) -> str:
+    """Absolutize every root-relative url attribute of a single html tag."""
+    tag = _RELATIVE_URL_RE.sub(lambda match: f"{match.group(1)}{base_url}{match.group(2)}{match.group(3)}", tag)
+    tag = _RELATIVE_SRCSET_RE.sub(
+        lambda match: f"{match.group(1)}{_absolute_srcset(match.group(2), base_url)}{match.group(3)}", tag
+    )
+    # covers inline styles, the only css that lives inside a tag
+    return _absolute_css(tag, base_url)
+
+
+def absolute_email_urls(body: str, base_url: str) -> str:
+    """Rewrite root-relative links, media references and CSS urls to absolute urls.
+
+    Urls are rewritten only where they can appear: inside html tags (attributes
+    and inline styles) and inside style blocks, so plain text and scripts are
+    left untouched.
+    """
+    if not body:
+        return body
+    body = _TAG_RE.sub(lambda match: _absolute_tag(match.group(0), base_url), body)
+    return _STYLE_BLOCK_RE.sub(
+        lambda match: f"{match.group(1)}{_absolute_css(match.group(2), base_url)}{match.group(3)}", body
+    )
+
+
 def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> EmailMultiAlternatives:
     """Build EmailMultiAlternatives from components.
 
@@ -518,12 +583,15 @@ def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> 
         subj: Email subject
         body: Email body (HTML format)
         m_email: Recipient email address
-        metadata: Dict with sender_email, sender_name, headers, bcc_recipients, org_main_mail (optional)
+        metadata: Dict with sender_email, sender_name, headers, bcc_recipients, base_url, org_main_mail (optional)
 
     Returns:
         EmailMultiAlternatives instance ready to send
     """
     sender = f"{clean_sender(metadata['sender_name'])} <{metadata['sender_email']}>"
+
+    if metadata.get("base_url"):
+        body = absolute_email_urls(body, metadata["base_url"])
 
     # Note: Connection is NOT set here - backend handles sending
     message = EmailMultiAlternatives(

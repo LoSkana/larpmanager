@@ -115,7 +115,7 @@ def _build_navigation_context(request: HttpRequest, context: dict) -> dict:
     )
 
     # Store personal theme preference (overrides event/association theme)
-    navigation_context["member_theme"] = member.get_config("member_theme", default_value="")
+    navigation_context["member_theme"] = member.get_config("member_theme")
 
     # Visible runs for v22 topbar (public upcoming events + hidden managed events)
     navigation_context["visible_runs"] = _get_visible_runs(association_id)

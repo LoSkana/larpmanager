@@ -475,6 +475,23 @@ function initSlugField() {
 
 // ========== Init: Toggles ==========
 
+// Toggle the options of a choice widget, keeping visible the ones currently chosen.
+function initCollapsedOptions() {
+    $(document).on('click', '.opt-show-more', function (e) {
+        e.preventDefault();
+        var $link = $(this);
+        // the show label is visible only while the options are collapsed
+        var expand = !$link.find('.sl-show').hasClass('hide');
+        // options may be nested in optgroup wrappers, so search the whole widget container
+        $link.parent().find('.opt-wrap').each(function () {
+            var $option = $(this);
+            var checked = $option.find('input:checked').length > 0;
+            $option.toggleClass('opt-collapsed hide', !expand && !checked);
+        });
+        $link.find('.sl-show, .sl-hide').toggleClass('hide');
+    });
+}
+
 // Show/hide target blocks via .my_toggle, scrolling into view and tracking select state.
 function initToggles() {
     $(document).on("click", ".my_toggle", function() {
@@ -628,6 +645,7 @@ $(document).ready(function() {
     // Forms / inputs
     initDatepickers();
     initSlugField();
+    initCollapsedOptions();
 
     // Interactions
     initToggles();
@@ -834,16 +852,19 @@ function setupConditionalFields() {
         var $controller = $(this);
         var controllerName = $controller.attr('data-conditional-controller');
 
-        // Radio widgets repeat the attribute on every input: bind the group once
+        // Radio widgets repeat the attribute on their wrapper and on every input:
+        // ignore the wrapper, and bind the input group only once
+        var $radios = $('input[type="radio"][data-conditional-controller="' + controllerName + '"]');
+        var isRadio = $radios.length > 0;
+        if (isRadio && !$controller.is(':radio')) {
+            return;
+        }
         if (initializedControllers[controllerName]) {
             return;
         }
         initializedControllers[controllerName] = true;
 
-        var isRadio = $controller.is(':radio');
-        var $group = isRadio
-            ? $('input[type="radio"][data-conditional-controller="' + controllerName + '"]')
-            : $controller;
+        var $group = isRadio ? $radios : $controller;
 
         function updateVisibility() {
             var selectedValue = isRadio ? $group.filter(':checked').val() : $controller.val();
@@ -997,6 +1018,9 @@ function data_tables() {
         var is_reorder = $table.hasClass('row_reorder');
         var full_layout = !is_reorder && rowCount >= 10;
         var no_buttons = $table.attr('no_buttons') !== undefined;
+        // opt-in: keep export buttons also on short tables, that would otherwise get the minimal layout
+        var force_buttons = !no_buttons && $table.attr('force_buttons') !== undefined;
+        var export_buttons = { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] };
 
         var dtConfig = {
             scrollX: true,
@@ -1006,8 +1030,9 @@ function data_tables() {
             layout: full_layout
                 ? (no_buttons
                     ? { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging' }
-                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: { buttons: ['copy', 'csv', 'excel', 'pdf', 'print'] } })
-                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null },
+                    : { topStart: null, topEnd: null, bottomStart: 'pageLength', bottomEnd: 'paging', bottom2: export_buttons })
+                : { topStart: null, topEnd: null, bottomStart: null, bottomEnd: null,
+                    bottom2: force_buttons ? export_buttons : null },
             columnControl: ['order', 'searchDropdown'],
             lengthMenu: [[25, 50, 100, 250, 500, 1000], [25, 50, 100, 250, 500, 1000]],
             order: [],

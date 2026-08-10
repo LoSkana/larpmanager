@@ -1,0 +1,3 @@
+number,name,operation,amount,prerequisites,requirements,factions,order
+1,bonus,ADD,5,sword,,,1
+2,malus,SUB,3,"sword, shield",,,2

@@ -579,12 +579,8 @@ def check_gallery_visibility(request: HttpRequest, context: dict) -> bool:
     if "manage" in context:
         return True
 
-    hide_gallery_for_non_signup = get_event_config(
-        context["event"].id, "gallery_hide_signup", default_value=False, context=context
-    )
-    hide_gallery_for_non_login = get_event_config(
-        context["event"].id, "gallery_hide_login", default_value=False, context=context
-    )
+    hide_gallery_for_non_signup = get_event_config(context["event"].id, "gallery_hide_signup", context=context)
+    hide_gallery_for_non_login = get_event_config(context["event"].id, "gallery_hide_login", context=context)
 
     if hide_gallery_for_non_login and not request.user.is_authenticated:
         context["hide_login"] = True
@@ -628,22 +624,18 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
     features = get_event_features(context["event"].id)
 
     # Load character cache if writing fields are visible or character display is forced
-    field_visibility = get_event_config(
-        context["event"].id, "writing_field_visibility", default_value=False, context=context
-    )
+    field_visibility = get_event_config(context["event"].id, "writing_field_visibility", context=context)
     if not field_visibility or context.get("show_character"):
         get_event_cache_all(context)
 
     # Check configuration for hiding uncasted players
-    hide_uncasted_players = get_event_config(
-        context["event"].id, "gallery_hide_uncasted_players", default_value=False, context=context
-    )
+    hide_uncasted_players = get_event_config(context["event"].id, "gallery_hide_uncasted_players", context=context)
     if not hide_uncasted_players:
         # Get registrations that have assigned characters
         que = RegistrationCharacterRel.objects.filter(registration__run_id=context["run"].id)
 
         # Filter by character approval status if required
-        if get_event_config(context["event"].id, "user_character_approval", default_value=False, context=context):
+        if get_event_config(context["event"].id, "user_character_approval", context=context):
             que = que.filter(character__status__in=[CharacterStatus.APPROVED])
         assigned = que.values_list("registration_id", flat=True)
 
@@ -724,12 +716,8 @@ def ensemble(request: HttpRequest, event_slug: str) -> HttpResponse:
         key=lambda ch: ch["number"],
     )
 
-    context["ensemble_show_player"] = get_event_config(
-        context["event"].id, "ensemble_show_player", default_value=False, context=context
-    )
-    context["ensemble_default_mode"] = get_event_config(
-        context["event"].id, "ensemble_default_mode", default_value="book", context=context
-    )
+    context["ensemble_show_player"] = get_event_config(context["event"].id, "ensemble_show_player", context=context)
+    context["ensemble_default_mode"] = get_event_config(context["event"].id, "ensemble_default_mode", context=context)
 
     return render(request, "larpmanager/event/ensemble.html", context)
 

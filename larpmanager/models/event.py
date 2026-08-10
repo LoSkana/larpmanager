@@ -37,7 +37,7 @@ from imagekit.processors import ResizeToFit
 from safedelete.models import SOFT_DELETE, SOFT_DELETE_CASCADE
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import CONFIG_UNSET, get_element_config
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association, AssociationPlan
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.member import Member
@@ -338,11 +338,7 @@ class Event(UuidMixin, BaseModel):
         # Check if inheritance conditions are met
         # Verify that campaign independence is not enabled for this element type
         # If independence is disabled (False), use parent's elements
-        if (
-            self.parent
-            and model_class in inheritable_elements
-            and not self.get_config(f"campaign_{model_class}_indep", default_value=False)
-        ):
+        if self.parent and model_class in inheritable_elements and not self.get_config(f"campaign_{model_class}_indep"):
             return self.parent
 
         # Return self if no parent exists, element not inheritable, or independence enabled
@@ -439,9 +435,9 @@ class Event(UuidMixin, BaseModel):
         Path(pdf_directory_path).mkdir(mode=0o770, parents=True, exist_ok=True)
         return pdf_directory_path
 
-    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this event."""
-        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+        return get_element_config(self, name, bypass_cache=bypass_cache)
 
     @property
     def maps_url(self) -> str:
@@ -451,8 +447,8 @@ class Event(UuidMixin, BaseModel):
             lat = next((c.value for c in geo if c.name == "pub_lat"), "").strip()
             lon = next((c.value for c in geo if c.name == "pub_lon"), "").strip()
         else:
-            lat = get_element_config(self, "pub_lat", default_value="").strip()
-            lon = get_element_config(self, "pub_lon", default_value="").strip()
+            lat = get_element_config(self, "pub_lat").strip()
+            lon = get_element_config(self, "pub_lon").strip()
         if lat and lon:
             return f"https://www.google.com/maps?q={lat},{lon}"
         return ""
@@ -825,9 +821,9 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         """Return the file path for the profiles PDF."""
         return self.get_media_filepath() + "profiles.pdf"
 
-    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this run."""
-        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+        return get_element_config(self, name, bypass_cache=bypass_cache)
 
 
 class RunConfig(BaseModel):

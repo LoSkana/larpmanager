@@ -491,22 +491,16 @@ def _prepare_writing_list(context: dict) -> None:
         logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 
     model_name = context["label_typ"].lower()
-    context["default_fields"] = context["member"].get_config(
-        f"open_{model_name}_{context['event'].id}", default_value="[]"
-    )
+    context["default_fields"] = context["member"].get_config(f"open_{model_name}_{context['event'].id}")
     if context["default_fields"] == "[]" and context.get("writing_typ"):
         def_types = get_def_writing_types()
         question_field_list = [f"q_{q['uuid']}" for q in questions if q["typ"] in def_types]
         if question_field_list:
             context["default_fields"] = json.dumps(question_field_list)
 
-    context["auto_save"] = not get_event_config(
-        context["event"].id, "writing_disable_auto", default_value=False, context=context
-    )
+    context["auto_save"] = not get_event_config(context["event"].id, "writing_disable_auto", context=context)
 
-    context["writing_unimportant"] = get_event_config(
-        context["event"].id, "writing_unimportant", default_value=False, context=context
-    )
+    context["writing_unimportant"] = get_event_config(context["event"].id, "writing_unimportant", context=context)
 
 
 def writing_list_plot(context: dict) -> None:
@@ -672,7 +666,7 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
                 character.player_display = character.player.display_member(context)
 
     context["campaign_split_registration"] = get_event_config(
-        context["event"].id, "campaign_split_registration", default_value=False, context=context
+        context["event"].id, "campaign_split_registration", context=context
     )
     # Split list by registration status if config is enabled
     if "campaign" in context["features"] and context["campaign_split_registration"]:

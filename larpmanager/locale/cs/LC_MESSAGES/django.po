@@ -485,7 +485,7 @@ msgid "email"
 msgstr "e-mail"
 
 msgid "quick"
-msgstr "rychle"
+msgstr "rychlý"
 
 msgid "Absent"
 msgstr "Nepřítomný"
@@ -509,7 +509,7 @@ msgid "Awards"
 msgstr "Udělení"
 
 msgid "Badge:"
-msgstr "Odznak:"
+msgstr "Badge:"
 
 msgid "Badges"
 msgstr "Badges"
@@ -665,7 +665,7 @@ msgid "Remove"
 msgstr "Odstranit"
 
 msgid "Retry!"
-msgstr "Opakovat!"
+msgstr "Zkusit znovu!"
 
 msgid "Review"
 msgstr "Přezkoumání"
@@ -1167,7 +1167,7 @@ msgid "Giftable"
 msgstr "Lze darovat"
 
 msgid "Handouts"
-msgstr "Handouty"
+msgstr "Handouts"
 
 msgid "Inactive"
 msgstr "Neaktivní"
@@ -1365,7 +1365,7 @@ msgid "Updated!"
 msgstr "Aktualizováno!"
 
 msgid "Used on:"
-msgstr "Používá se na:"
+msgstr "Použito na:"
 
 msgid "Versions"
 msgstr "Verze"
@@ -1739,11 +1739,17 @@ msgstr "Kontaktuj nás"
 msgid "Containers"
 msgstr "Kontejnery"
 
+msgid "Criterions"
+msgstr "Kritéria"
+
 msgid "Deleted on"
 msgstr "Odstraněno dne"
 
+msgid "Deliveries"
+msgstr "Dodávky"
+
 msgid "Easter egg"
-msgstr "Velikonoční vajíčko"
+msgstr "Easter egg"
 
 msgid "Edit dates"
 msgstr "Upravit data"
@@ -1860,7 +1866,7 @@ msgid "Pool label"
 msgstr "Štítek poolu"
 
 msgid "Pool types"
-msgstr "Typy fondů"
+msgstr "Typy poolů"
 
 msgid "Preference"
 msgstr "Preference"
@@ -2508,7 +2514,7 @@ msgid "Are you sure?"
 msgstr "Jsi si jistý/á?"
 
 msgid "Assign Badges"
-msgstr "Přiřadit odznaky"
+msgstr "Přiřadit Badges"
 
 msgid "Authorisation"
 msgstr "Autorizace"
@@ -2613,7 +2619,7 @@ msgid "Minimum votes"
 msgstr "Minimální počet hlasů"
 
 msgid "Name of quest"
-msgstr "Název úkolu"
+msgstr "Název Questu"
 
 msgid "New character"
 msgstr "Nová postava"
@@ -2777,7 +2783,7 @@ msgid "Available days"
 msgstr "Dostupné dny"
 
 msgid "Back to badges"
-msgstr "Zpět na odznaky"
+msgstr "Zpět na Badges"
 
 msgid "Bank Statement"
 msgstr "Výpis z bankovního účtu"
@@ -2969,7 +2975,7 @@ msgid "Session active"
 msgstr "Relace aktivní"
 
 msgid "Set quest type"
-msgstr "Nastavit typ úkolu"
+msgstr "Nastavit typ Questu"
 
 msgid "Show shortcuts"
 msgstr "Zobrazit zkratky"
@@ -3219,7 +3225,7 @@ msgid "Publish players"
 msgstr "Zveřejnit hráče"
 
 msgid "Question saved!"
-msgstr "Uložená otázka!"
+msgstr "Otázka uložena!"
 
 msgid "Refund Requests"
 msgstr "Žádosti o vrácení peněz"
@@ -3270,7 +3276,7 @@ msgid "Upload Expenses"
 msgstr "Nahrát výdaje"
 
 msgid "Value required!"
-msgstr "Požadovaná hodnota!"
+msgstr "Hodnota je povinná!"
 
 msgid "Version Upgrade"
 msgstr "Aktualizace verze"
@@ -3306,10 +3312,10 @@ msgid "upcoming events"
 msgstr "Naplánované události"
 
 msgid "Ability Template"
-msgstr "Šablona schopností"
+msgstr "Šablona schopnosti"
 
 msgid "Ability removed!"
-msgstr "Odstraněná schopnost!"
+msgstr "Schopnost odstraněna!"
 
 msgid "Activate feature"
 msgstr "Aktivovat funkci"
@@ -3550,7 +3556,7 @@ msgid "Ability Templates"
 msgstr "Šablony schopností"
 
 msgid "Ability acquired!"
-msgstr "Získaná schopnost!"
+msgstr "Schopnost získána!"
 
 msgid "Ability templates"
 msgstr "Šablony schopností"
@@ -3631,7 +3637,7 @@ msgid "Download document"
 msgstr "Stáhni dokument"
 
 msgid "Element approved!"
-msgstr "Schválený prvek!"
+msgstr "Prvek schválen!"
 
 msgid "Event public page"
 msgstr "Veřejná stránka události"
@@ -3706,7 +3712,7 @@ msgid "No communications"
 msgstr "Žádná komunikace"
 
 msgid "One-Time Contents"
-msgstr "Jednorázový obsah"
+msgstr "Jednorázové obsahy"
 
 msgid "Organization name"
 msgstr "Název organizace"
@@ -3899,6 +3905,9 @@ msgstr "Zakladatelská postava"
 msgid "Hide not available"
 msgstr "Skrýt nedostupné"
 
+msgid "Hide other options"
+msgstr "Skrýt další možnosti"
+
 msgid "Historic residence"
 msgstr "Historická rezidence"
 
@@ -3983,6 +3992,9 @@ msgstr "Zkontrolovat všechny členy"
 msgid "Set up quest types"
 msgstr "Nastavit typy Quest"
 
+msgid "Show other options"
+msgstr "Zobrazit další možnosti"
+
 msgid "The trash is empty"
 msgstr "Koš je prázdný"
 
@@ -3996,7 +4008,7 @@ msgid "Total payment sent"
 msgstr "Celková odeslaná platba"
 
 msgid "Transaction amount"
-msgstr "Částka za operaci"
+msgstr "Částka transakce"
 
 msgid "Transaction totals"
 msgstr "Součty transakcí"
@@ -4180,6 +4192,9 @@ msgstr "Výsledky nejsou k dispozici"
 
 msgid "Signup cancellation"
 msgstr "Zrušení registrace"
+
+msgid "The delivery's name"
+msgstr "Název zásilky"
 
 msgid "Use full-size image"
 msgstr "Použít obrázek v plné velikosti"
@@ -4394,6 +4409,9 @@ msgstr "Podmínky a pravidla"
 msgid "Terms and conditions"
 msgstr "Podmínky a pravidla"
 
+msgid "The criterion's name"
+msgstr "Název kritéria"
+
 msgid "The outflow category"
 msgstr "Kategorie výdajů"
 
@@ -4474,7 +4492,7 @@ msgid "Failed to add gallery"
 msgstr "Nepodařilo se přidat galerii"
 
 msgid "Failed to add handout"
-msgstr "Nepodařilo se přidat podklady"
+msgstr "Nepodařilo se přidat Handout"
 
 msgid "Go to event dashboard"
 msgstr "Přejít na ovládací panel události"
@@ -4574,7 +4592,7 @@ msgid "Upload membership fee"
 msgstr "Nahrát členský poplatek"
 
 msgid "Verification payments"
-msgstr "Ověřovací platby"
+msgstr "Ověření plateb"
 
 msgid "Warehouse assignments"
 msgstr "Přidělování skladových úkolů"
@@ -4614,7 +4632,7 @@ msgid "Arrived safe and sound"
 msgstr "Bezpečně dorazili"
 
 msgid "Bank payment reference"
-msgstr "Popis"
+msgstr "Referenční údaj platby"
 
 msgid "Browse upcoming events"
 msgstr "Prohlédni si nadcházející akce"
@@ -4707,7 +4725,7 @@ msgid "Register of volunteers"
 msgstr "Rejstřík dobrovolníků"
 
 msgid "Registration cancelled"
-msgstr "Zrušení registrace"
+msgstr "Registrace zrušena"
 
 msgid "Registration confirmed"
 msgstr "Registrace potvrzena"
@@ -4774,7 +4792,7 @@ msgid "Cancelled Registrations"
 msgstr "Zrušené registrace"
 
 msgid "Casting management for:"
-msgstr "Správa obsazování pro:"
+msgstr "Správa Castingu pro:"
 
 msgid "Character customisation"
 msgstr "Přizpůsobení postavy"
@@ -4882,9 +4900,6 @@ msgstr "Proplacení bylo zpracováno"
 
 msgid "Select your preferences"
 msgstr "Vyber si své preference"
-
-msgid "Separate membership fee"
-msgstr "Samostatný členský poplatek"
 
 msgid "Show answered questions"
 msgstr "Zobrazit zodpovězené otázky"
@@ -5086,7 +5101,7 @@ msgid "Generate a new ILDB token"
 msgstr "Vygeneruj nový token ILDB"
 
 msgid "Go to the quests of type:"
-msgstr "Přejdi na úkoly typu:"
+msgstr "Přejdi na Questy typu:"
 
 msgid "Go to the tokens history:"
 msgstr "Přejdi do historie tokenů:"
@@ -5175,7 +5190,7 @@ msgid "Use of third party assets"
 msgstr "Použití majetku třetích stran"
 
 msgid "You can now create badges"
-msgstr "Nyní můžeš vytvářet odznaky"
+msgstr "Nyní můžeš vytvářet Badges"
 
 msgid "You can now manage events"
 msgstr "Nyní můžeš spravovat akce"
@@ -5227,6 +5242,10 @@ msgstr "Spravovat skladové pohyby"
 
 msgid "Member of the Organization"
 msgstr "Člen organizace"
+
+#, python-format
+msgid "Option %(name)s activated!"
+msgstr "Možnost %(name)s byla aktivována!"
 
 msgid "Option no longer available"
 msgstr "Možnost již není k dispozici"
@@ -5358,7 +5377,7 @@ msgid "Membership fees in approval"
 msgstr "Poplatky za členství čekající na schválení"
 
 msgid "Missing casting preferences"
-msgstr "Chybějící předvolby obsazení"
+msgstr "Chybějící preference Castingu"
 
 msgid "No inventory transfers yet."
 msgstr "Zatím žádné přesuny."
@@ -5389,7 +5408,7 @@ msgid "Ticket name (keep it short)"
 msgstr "Název vstupenky (ať je krátký)"
 
 msgid "View badges you have earned"
-msgstr "Zobraz odznaky, které jsi získal/a"
+msgstr "Zobraz Badges, které jsi získal/a"
 
 msgid "View limited ticket options"
 msgstr "Zobrazit omezené možnosti vstupenek"
@@ -5467,10 +5486,14 @@ msgid "Membership request submitted"
 msgstr "Žádost o členství zaslána"
 
 msgid "My pending guild invitations"
-msgstr "Pozvánky do mé gildy"
+msgstr "Moje nevyřízené pozvánky do gildy"
 
 msgid "Name of badge to be awarded."
 msgstr "Název badge, který má být udělen."
+
+#, python-format
+msgid "Option %(name)s deactivated!"
+msgstr "Možnost %(name)s byla deaktivována!"
 
 msgid "Please wait before retrying."
 msgstr "Před dalším pokusem počkej."
@@ -5493,7 +5516,7 @@ msgstr "Platnost této pozvánky vypršela."
 
 #, python-format
 msgid "Trait assigned for %(event)s"
-msgstr "Vlastnost přiřazená pro %(event)s"
+msgstr "Trait přiřazený pro %(event)s"
 
 msgid "Uploading image, please wait"
 msgstr "Nahrávání obrázku, prosím počkej"
@@ -5545,6 +5568,9 @@ msgstr "Rozumím – Přejít k obsahu"
 
 msgid "Membership Application Status"
 msgstr "Stav žádosti o členství"
+
+msgid "Name of the experience system"
+msgstr "Název systému zkušeností"
 
 msgid "Operation: ADD, SUB, MUL, DIV"
 msgstr "Operace: ADD, SUB, MUL, DIV"
@@ -5617,6 +5643,9 @@ msgstr "Aktivuj nové funkce platformy"
 msgid "Already existing relationship!"
 msgstr "Již existující vztah!"
 
+msgid "Assign remaining stock to area"
+msgstr "Přiřadit zbývající zásoby do oblasti"
+
 msgid "Character Inventory Pool Types"
 msgstr "Typy Poolů inventáře postav"
 
@@ -5637,7 +5666,7 @@ msgid "Delay in yearly membership fee"
 msgstr "Zpoždění ročního členského poplatku"
 
 msgid "Don't open automatically again"
-msgstr "Neotevírej si jej automaticky"
+msgstr "Už jej automaticky neotevírej."
 
 msgid "Duration in seconds (optional)"
 msgstr "Doba trvání v sekundách (nepovinné)"
@@ -5789,7 +5818,7 @@ msgid "Membership Application Received"
 msgstr "Žádost o členství byla přijata"
 
 msgid "Membership registration overdue"
-msgstr "Členství je po lhůtě platnosti"
+msgstr "Přihlášení k členství je po termínu"
 
 msgid "Please correct the error below."
 msgstr "Oprav prosím níže uvedenou chybu."
@@ -5976,7 +6005,7 @@ msgid "You can now verify wire payments"
 msgstr "Nyní můžeš ověřovat platby převodem"
 
 msgid "You need to define the end date!"
-msgstr "Je třeba určit datum ukončení!"
+msgstr "Musíš určit datum ukončení!"
 
 msgid "check nonexistent relationships:"
 msgstr "Kontrola neexistujících vztahů:"
@@ -6137,6 +6166,10 @@ msgstr "Ručně schvalovat přijaté platby"
 
 msgid "No activation steps are available."
 msgstr "Nejsou k dispozici žádné kroky k aktivaci."
+
+#, python-format
+msgid "Option %(name)s already activated!"
+msgstr "Možnost %(name)s je již aktivována!"
 
 msgid "Promotion: website and advertising"
 msgstr "Propagace: webové stránky a reklama"
@@ -6358,6 +6391,10 @@ msgid "Only really important communications"
 msgstr "Pouze skutečně důležitá sdělení"
 
 #, python-format
+msgid "Option %(name)s already deactivated!"
+msgstr "Možnost %(name)s je již deaktivována!"
+
+#, python-format
 msgid "Quest types without quests: %(list)s"
 msgstr "Typy Questů bez Questů: %(list)s"
 
@@ -6426,6 +6463,9 @@ msgstr "Přidáno na konec všech odeslaných e-mailů"
 msgid "Allows characters to have inventories"
 msgstr "Umožňuje postavám mít inventáře"
 
+msgid "Amount of experience points delivered"
+msgstr "Počet udělených zkušenostních bodů"
+
 msgid "Cast your vote for the new Executive!"
 msgstr "Hlasuj pro nové vedení!"
 
@@ -6433,7 +6473,7 @@ msgid "Check the validity of the fiscal code"
 msgstr "Zkontroluj platnost fiskálního kódu"
 
 msgid "Collections you have participated in:"
-msgstr "Zúčastněné sbírky:"
+msgstr "Sbírky, kterých ses zúčastnil/a:"
 
 msgid "Costumes: makeup, clothing, and armor"
 msgstr "Kostýmy: make-up, oblečení a zbroj"
@@ -6552,7 +6592,7 @@ msgid "I confirm that I have made the payment"
 msgstr "Potvrzuji, že jsem provedl/a platbu"
 
 msgid "If enabled, allow ticket tier: Seller."
-msgstr "Je-li povoleno, umožnit úroveň vstupenky: Seller."
+msgstr "Je-li povoleno, umožnit úroveň vstupenky: Prodejce."
 
 msgid "Input the amount of your contribution:"
 msgstr "Zadej výši svého příspěvku:"
@@ -6587,7 +6627,7 @@ msgstr "Prohlížíš si ukázkovou organizaci."
 
 #, python-format
 msgid "You are exploring the \"%(name)s\" demo."
-msgstr "Prohlížíš si ukázku „%(name)s.“"
+msgstr "Prohlížíš si ukázku „%(name)s“."
 
 msgid "You can now start creating speed-larps"
 msgstr "Nyní můžeš začít vytvářet speed-larps"
@@ -6837,6 +6877,9 @@ msgstr "se zobrazí na hlavní stránce události"
 msgid "(Optional) Ability names, comma-separated"
 msgstr "(Nepovinné) Názvy schopností oddělené čárkou"
 
+msgid "(Optional) Faction names, comma-separated"
+msgstr "(Volitelné) Názvy frakcí, oddělené čárkami"
+
 #, python-format
 msgid "Ability types without abilities: %(list)s"
 msgstr "Typy schopností bez schopností: %(list)s"
@@ -7018,6 +7061,9 @@ msgstr "Zkontroluj uživatele s nevyřízenými termíny událostí:"
 msgid "Select which form this question belongs to"
 msgstr "Vyber, do kterého formuláře tato otázka patří"
 
+msgid "The criterion's number (unique identifier)"
+msgstr "Číslo kritéria (jedinečný identifikátor)"
+
 msgid "The member associated with this membership"
 msgstr "Člen přidružený k tomuto členství"
 
@@ -7025,7 +7071,7 @@ msgid "There is already a member with this number"
 msgstr "Člen s tímto číslem již existuje"
 
 msgid "This invitation has already been redeemed."
-msgstr "Toto pozvání již bylo vykoupeno."
+msgstr "Toto pozvání již bylo uplatněno."
 
 msgid "You can now configure the payment methods."
 msgstr "Nyní můžeš nastavit platební metody."
@@ -7192,7 +7238,7 @@ msgid "First character in the relationship (origin)"
 msgstr "První postava ve vztahu (původ)"
 
 msgid "If enabled, allow ticket tier: Collaborator."
-msgstr "Je-li povoleno, umožnit úroveň vstupenky: Collaborator."
+msgstr "Je-li povoleno, umožnit úroveň vstupenky: Spolupracovník."
 
 msgid "Manage all character factions for this event"
 msgstr "Spravuj všechny frakce postav pro tuto akci"
@@ -7352,7 +7398,7 @@ msgid "Amount of the next payment instalment required"
 msgstr "Výše další požadované splátky"
 
 msgid "An ability cannot be a prerequisite of itself."
-msgstr "Schopnost nemůže být sama o sobě předpokladem."
+msgstr "Schopnost nemůže být předpokladem sama sebe."
 
 msgid "Are you sure you want to approve this element?"
 msgstr "Opravdu chceš tento prvek schválit?"
@@ -7361,7 +7407,7 @@ msgid "Assign a character to a registered participant"
 msgstr "Přiřazení postavy registrovanému účastníkovi"
 
 msgid "Cancellation for missing yearly membership fee"
-msgstr "Zrušení z důvodu chybějícího ročního členského poplatku"
+msgstr "Zrušení z důvodu nezaplacení ročního členského příspěvku"
 
 msgid "Complete the checklist to unlock all features:"
 msgstr "Dokončením kontrolního seznamu odemkneš všechny funkce platformy:"
@@ -7482,7 +7528,7 @@ msgid "Please confirm you want to perform this action."
 msgstr "Potvrď prosím, že chceš tuto akci provést."
 
 msgid "Please review it and submit it for publication."
-msgstr "Zkontroluj ji prosím a odešli ke zveřejnění."
+msgstr "Zkontroluj ho prosím a odešli ke zveřejnění."
 
 #, python-format
 msgid "Registration canceled for %(event)s by %(user)s"
@@ -7620,7 +7666,7 @@ msgstr "(Nepovinné) Počet dalších registrací"
 
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>!"
-msgstr "Přístup ke své postavě <a href='%(url)s'>zde</a>!"
+msgstr "Ke své postavě se dostaneš <a href='%(url)s'>zde</a>!"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Přidáno v horní části stránky vyhledávání postav"
@@ -7935,7 +7981,7 @@ msgstr "V posledním kroku tě požádáme o vyplnění tvého profilu."
 
 #, python-format
 msgid "Casting preferences saved on '%(type)s' for %(event)s"
-msgstr "Předvolby obsazení uložené na '%(type)s' pro %(event)s"
+msgstr "Předvolby Castingu uložené na '%(type)s' pro %(event)s"
 
 msgid "Crew can now upload expenses, and you can review them"
 msgstr "Organizační tým nyní může nahrávat výdaje a ty je můžeš zkontrolovat"
@@ -7978,7 +8024,7 @@ msgstr "Této frakci zatím nebyly přiřazeny žádné postavy."
 
 msgid "No characters or handouts available to export as PDF."
 msgstr ""
-"Nejsou k dispozici žádné postavy ani podklady k exportu do formátu PDF."
+"Nejsou k dispozici žádné postavy ani Handouty k exportu do formátu PDF."
 
 #, python-format
 msgid "Preview activated: you are now viewing version %(v)s."
@@ -8010,7 +8056,7 @@ msgid "You can now upload content and generate access tokens"
 msgstr "Nyní můžeš nahrávat obsah a vytvářet přístupové tokeny"
 
 msgid "You have been gifted a registration to this event, by"
-msgstr "Vstup na tuto událost ti byl darován od:"
+msgstr "Registrace na tuto akci ti byla darována od:"
 
 msgid "You have granted data sharing with this organisation!"
 msgstr "Povolil/a jsi sdílení dat s touto organizací!"
@@ -8548,6 +8594,9 @@ msgstr "Nahraj podepsanou přihlášku k členství (PDF nebo obrázek)"
 msgid "Would you like to receive updates about our upcoming events?"
 msgstr "Chceš dostávat informace o našich nadcházejících akcích?"
 
+msgid "(Optional) Character names it was awarded to, comma-separated"
+msgstr "(Volitelné) Jména postav, kterým byla udělena, oddělená čárkami"
+
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Nepovinné) Možnosti postav jako požadavky, oddělené čárkou"
 
@@ -8867,6 +8916,9 @@ msgstr "Upozornění: již existuje schválený člen se stejným jménem!"
 
 msgid "You can also upload a second file with the registration options:"
 msgstr "Můžeš také nahrát druhý soubor s možnostmi registrace:"
+
+msgid "(Optional) Whether the ability is visible to users: true or false"
+msgstr "(Volitelné) Zda je schopnost viditelná pro uživatele: true nebo false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -9301,7 +9353,7 @@ msgid "Your character %(character)s has been removed from the guild %(guild)s"
 msgstr "Tvoje postava %(character)s byla odstraněna z cechu %(guild)s"
 
 msgid "whether the character is NOT aware of the identity of the other trait."
-msgstr "zda si postava NENÍ vědoma identity druhého rysu."
+msgstr "zda si postava NENÍ vědoma identity druhého Traitu."
 
 msgid ""
 "Absent (in the relationships of this character the other one is absent)"
@@ -9410,7 +9462,7 @@ msgstr "<b>%(type)s</b>: sekundární seskupení v rámci primárních frakcí"
 
 msgid ""
 "Allows the organisation to award badges and enables a public leaderboard"
-msgstr "Umožňuje organizaci udělovat odznaky a umožňuje veřejný žebříček"
+msgstr "Umožňuje organizaci udělovat Badges a aktivovat veřejný žebříček"
 
 msgid ""
 "Choose how often you want to receive updates about events and activities"
@@ -9762,6 +9814,12 @@ msgid ""
 msgstr ""
 "Zatím nejsou definovány žádné milníky. Pomocí tlačítka výše přidej první "
 "milník."
+
+msgid ""
+"No participant data available yet. It will appear here once users register."
+msgstr ""
+"Zatím nejsou k dispozici žádné údaje o účastnících. Zobrazí se zde, jakmile "
+"se uživatelé zaregistrují."
 
 msgid ""
 "No registered participants have completed any workshops for this event yet."
@@ -10740,6 +10798,13 @@ msgstr ""
 "%(character)s"
 
 msgid ""
+"(Optional) The delivery's number, assigned automatically if missing or "
+"already taken"
+msgstr ""
+"(Volitelné) Číslo zásilky, které se při jeho chybějícím zadání nebo v "
+"případě, že je již obsazeno, přiřadí automaticky"
+
+msgid ""
 "Additional preferences, for random assignment when no solution is found "
 "(default 0)."
 msgstr ""
@@ -11254,13 +11319,6 @@ msgstr ""
 "Pokud je povoleno, neodešle účastníkovi oznámení při přiřazení postavy."
 
 msgid ""
-"If enabled, the annual membership fee is paid separately from the event "
-"registration fee."
-msgstr ""
-"Pokud je povoleno, roční členský poplatek se platí zvlášť od poplatku za "
-"registraci na akci."
-
-msgid ""
 "No characters have been created yet. Add characters to see their player "
 "assignments here."
 msgstr ""
@@ -11632,6 +11690,13 @@ msgstr ""
 "problém, použij tlačítko výše."
 
 msgid ""
+"Note that existing deliveries with the same name, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Upozorňujeme, že stávající dodávky se stejným názvem budou nahrazeny "
+"nahranými údaji."
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -11811,6 +11876,20 @@ msgid ""
 msgstr ""
 "Nebyly nalezeny žádné akce s náklady v systému LarpManager. Náklady se zde "
 "zobrazí, jakmile budou akce vytvořeny a uskutečněny."
+
+msgid ""
+"No safety information has been submitted yet. It will appear here once "
+"participants provide it."
+msgstr ""
+"Zatím nebyly uvedeny žádné informace o Safety. Zobrazí se zde, jakmile je "
+"účastníci poskytnou."
+
+msgid ""
+"Note that existing criterions with the same number, will be overwritten with"
+" the uploaded data."
+msgstr ""
+"Upozorňujeme, že stávající kritéria se stejným číslem budou nahrazena "
+"nahranými údaji."
 
 #, python-format
 msgid ""
@@ -12219,6 +12298,13 @@ msgstr ""
 "registrační stránky, podle jednotlivých jazyků"
 
 msgid ""
+"No dietary preferences have been submitted yet. They will appear here once "
+"participants provide them."
+msgstr ""
+"Zatím nebyly uvedeny žádné stravovací preference. Zobrazí se zde, jakmile je"
+" účastníci uvedou."
+
+msgid ""
 "No form fields defined yet. Add a field to collect information from players "
 "on their character sheet."
 msgstr ""
@@ -12396,8 +12482,8 @@ msgid ""
 "Evaluate a membership application and approve or reject it, with duplicate "
 "detection and document review"
 msgstr ""
-"Posoudit žádost o členství a schválit ji nebo zamítnout, včetně kontroly "
-"duplicit a prověření dokumentů"
+"Posuď žádost o členství a schval ji nebo zamítni, včetně kontroly duplicit a"
+" prověření dokumentů"
 
 msgid ""
 "If enabled, allows a registration form question to be visible based on the "
@@ -12496,7 +12582,7 @@ msgid ""
 "a user who has not signed up."
 msgstr ""
 "Pokud je povoleno, vytvoří tajné URL pro sdílení kompletního listu postavy s"
-" uživatelem, který se nepřihlásil."
+" uživatelem, který se nezaregistroval."
 
 msgid ""
 "If enabled, lets you set which staff members may see participants' answers "
@@ -12782,7 +12868,7 @@ msgid ""
 "prerequisites or character options"
 msgstr ""
 "Definuj kritéria, která podmíněně upravují celkový počet zkušenostních bodů "
-"na základě předpokladů nebo nastavení postavy."
+"na základě předpokladů nebo možností postavy."
 
 msgid ""
 "If you have active event registrations, you will still receive "
@@ -13376,9 +13462,9 @@ msgid ""
 "Enables a ticket-like system for issues during the event, where staff can "
 "log issues, assign severity/urgency, and track them"
 msgstr ""
-"Umožňuje systém podobný lístkům pro problémy během události, kde mohou "
-"zaměstnanci zaznamenávat problémy, přiřazovat jim závažnost/naléhavost a "
-"sledovat je"
+"Umožňuje systém podobný ticketům pro problémy během akce, kde mohou členové "
+"týmu zaznamenávat problémy, přiřazovat jim závažnost/naléhavost a sledovat "
+"je"
 
 #, python-format
 msgid ""
@@ -13400,7 +13486,7 @@ msgid ""
 "create a role and assign permissions to staff members."
 msgstr ""
 "Pro tuto akci zatím nebyly definovány žádné role. Pomocí tlačítka výše můžeš"
-" vytvořit roli a přiřadit oprávnění jednotlivým zaměstnancům."
+" vytvořit roli a přiřadit oprávnění členům týmu."
 
 msgid ""
 "At the top, you'll find shortcuts to this organization dashboard and to each"
@@ -13465,7 +13551,7 @@ msgid ""
 "staff and already registered participants can access it"
 msgstr ""
 "Akce je ve fázi přípravy: není zobrazena na úvodní stránce ani v kalendáři, "
-"přístup k ní mají pouze zaměstnanci a již zaregistrovaní účastníci"
+"přístup k ní mají pouze členové týmu a již zaregistrovaní účastníci"
 
 msgid ""
 "Allows a user to create 'delegated' accounts they fully manage (e.g., "
@@ -13702,7 +13788,7 @@ msgid ""
 "available either to staff or to participants via secret external links"
 msgstr ""
 "Umožňuje nahrávat a hostovat soubory přímo na platformě a zpřístupnit je "
-"zaměstnancům nebo účastníkům prostřednictvím tajných externích odkazů"
+"členům týmu nebo účastníkům prostřednictvím tajných externích odkazů"
 
 msgid ""
 "If the first name shown on your documents is different from the one you "
@@ -13929,8 +14015,8 @@ msgid ""
 "group)"
 msgstr ""
 "Vygeneruje speciální skrytý odkaz, který umožní určitým účastníkům "
-"zaregistrovat se, i když je obecná registrace uzavřena (např. včasný přístup"
-" pro určitou skupinu)"
+"zaregistrovat se, i když je obecná registrace uzavřena (např. přednostní "
+"přístup pro určitou skupinu)"
 
 msgid ""
 "Looks like an account already exists with this phone number! You can recover"
@@ -14180,7 +14266,7 @@ msgid ""
 " the left, or add it on the one on the right."
 msgstr ""
 "Postava vlevo má ve vztazích tu vpravo, ale naopak to neplatí. Zkontroluj, "
-"zda máš odebrat vztah k tomu vlevo, nebo jej přidat k tomu vpravo."
+"zda máš odebrat vztah u postavy vlevo, nebo jej přidat u postavy vpravo."
 
 msgid ""
 "The ratio between reduced and patron tickets, multiplied by 10. Example: 10 "
@@ -14380,5 +14466,5 @@ msgstr ""
 "se mohou týkat: fyzických zdravotních problémů, epilepsie, psychických "
 "problémů (např. neurózy, bipolární poruchy, úzkostné poruchy, různých "
 "fobií), spouštěcích témat ('čar a závojů', nemůžeme slíbit, že na ně během "
-"akce nenarazíš, ale zajistíme, aby nebyly součástí tvých hlavních úkolů). "
+"akce nenarazíš, ale zajistíme, aby nebyly součástí tvých hlavních Questů). "
 "Pokud nemáš věci k nahlášení, nech prázdné!"

@@ -71,6 +71,12 @@ logger = logging.getLogger(__name__)
 class FormMixin:
     """Mixin for common form operations."""
 
+    @cached_property
+    def _is_edit(self) -> bool:
+        """Return True when the form edits an already saved instance."""
+        instance = getattr(self, "instance", None)
+        return bool(instance and instance.pk)
+
     def configure_field_event(self, field_name: str, event: Event) -> None:
         """Configure a form field's widget and queryset for a specific event."""
         field = self.fields[field_name]
@@ -209,9 +215,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         available_runs = Run.objects.filter(event=self.params.get("event"))
 
         # If campaign switch is active, expand to include related events
-        if get_association_config(
-            self.params.get("event").association_id, "campaign_switch", default_value=False, context=self.params
-        ):
+        if get_association_config(self.params.get("event").association_id, "campaign_switch", context=self.params):
             # Start with current event ID
             related_event_ids = {self.params.get("event").id}
 
@@ -1256,7 +1260,10 @@ class BaseRegistrationForm(BaseModelFormRun):
                 f" - {help_text}" if help_text else ""
             )
             field_kwargs["widget"] = DescriptionRadioSelect(
-                attrs={"class": "my-radio-class"}, descriptions=descriptions, metadata=metadata
+                attrs={"class": "my-radio-class"},
+                descriptions=descriptions,
+                metadata=metadata,
+                collapse_unselected=self._is_edit,
             )
         self.fields[field_key] = forms.ChoiceField(**field_kwargs)
 
@@ -1316,7 +1323,10 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Create the multiple choice field with checkbox widget
         if self._use_inline_widgets_v20:
             widget = DescriptionCheckboxSelectMultiple(
-                attrs={"class": "my-checkbox-class"}, descriptions=descriptions, metadata=metadata
+                attrs={"class": "my-checkbox-class"},
+                descriptions=descriptions,
+                metadata=metadata,
+                collapse_unselected=self._is_edit,
             )
             hint = _("Select one or more options")
             help_text = f'<span class="choice-hint">{hint}</span>' + (f" - {help_text}" if help_text else "")
@@ -1662,7 +1672,6 @@ class BaseAccForm(BaseForm):
         self.context["user_fees"] = get_association_config(
             self.context["association_id"],
             "payment_fees_user",
-            default_value=False,
             context=self.context,
         )
 

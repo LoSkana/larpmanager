@@ -33,9 +33,10 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.accounting import get_registration_accounting_cache
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_configs, get_event_config
+from larpmanager.cache.experience import has_multiple_exp_systems
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
-from larpmanager.models.experience import AbilityExp, ModifierExp, RuleExp
+from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -405,7 +406,7 @@ def _row_header(  # noqa: C901, PLR0912
         row_values.append(profile_url)
 
     # Add character number column if writing_number config is enabled
-    if model == "character" and get_event_config(context["event"].id, "writing_number", default_value=False):
+    if model == "character" and get_event_config(context["event"].id, "writing_number"):
         header_columns.append("number")
         row_values.append(el.number)
 
@@ -911,6 +912,60 @@ def _orga_registrations_acc(context: Any, registrations: Any = None) -> Any:
     return cached_data
 
 
+def _add_system_column(context: dict, columns: dict) -> None:
+    """Add the experience system column, only when multiple systems are configured.
+
+    With a single system the column is not offered, but it is still accepted on upload,
+    so that backups taken from an event with several systems can be restored.
+    """
+    if has_multiple_exp_systems(context["event"]):
+        columns["system"] = _("Name of the experience system")
+    else:
+        context["extra_columns"] = ["system"]
+
+
+_EXP_SYSTEM_TYPES = ("exp_abilitie", "exp_criterion", "exp_deliverie")
+
+
+def _exp_column_names(context: dict) -> None:
+    """Define column mappings for the experience types owning an experience system."""
+    if context["typ"] == "exp_abilitie":
+        columns = {
+            "name": _("The name ability"),
+            "cost": _("(Optional) Cost of the ability"),
+            "typ": _("Ability type"),
+            "descr": _("(Optional) The ability description"),
+            "prerequisites": _("(Optional) Other abilities as prerequisite, comma-separated"),
+            "requirements": _("(Optional) Character options as requirements, comma-separated"),
+            "visible": _("(Optional) Whether the ability is visible to users: true or false"),
+        }
+        context["name"] = "Ability"
+    elif context["typ"] == "exp_criterion":
+        columns = {
+            "number": _("The criterion's number (unique identifier)"),
+            "name": _("The criterion's name"),
+            "operation": _("Operation: ADD, SUB, MUL, DIV"),
+            "amount": _("Transaction amount"),
+            "prerequisites": _("(Optional) Prerequisite ability names, comma-separated"),
+            "requirements": _("(Optional) Character options as requirements, comma-separated"),
+            "factions": _("(Optional) Faction names, comma-separated"),
+            "order": _("(Optional) Display order"),
+        }
+        context["name"] = "Criterion"
+    else:
+        columns = {
+            "number": _("(Optional) The delivery's number, assigned automatically if missing or already taken"),
+            "name": _("The delivery's name"),
+            "amount": _("Amount of experience points delivered"),
+            "characters": _("(Optional) Character names it was awarded to, comma-separated"),
+            "order": _("(Optional) Display order"),
+        }
+        context["name"] = "Delivery"
+
+    _add_system_column(context, columns)
+    context["columns"] = [columns]
+
+
 def _get_column_names(context: dict) -> None:
     """Define column mappings and field types for different export contexts.
 
@@ -931,8 +986,12 @@ def _get_column_names(context: dict) -> None:
         - columns: List of dicts with column names and descriptions
         - fields: Dict mapping field names to types (for registration type)
         - name: Name of the export type (for exp_abilitie type)
+        - extra_columns: List of columns accepted on upload but not shown in the template
 
     """
+    # Reset the columns accepted without being shown, so that they never survive another type
+    context["extra_columns"] = []
+
     # Handle registration data export with participant, ticket, and question columns
     if context["typ"] == "registration":
         _registration_column_names(context)
@@ -950,18 +1009,8 @@ def _get_column_names(context: dict) -> None:
         ]
 
     # Handle ability/experience system export
-    elif context["typ"] == "exp_abilitie":
-        context["columns"] = [
-            {
-                "name": _("The name ability"),
-                "cost": _("(Optional) Cost of the ability"),
-                "typ": _("Ability type"),
-                "descr": _("(Optional) The ability description"),
-                "prerequisites": _("(Optional) Other abilities as prerequisite, comma-separated"),
-                "requirements": _("(Optional) Character options as requirements, comma-separated"),
-            },
-        ]
-        context["name"] = "Ability"
+    elif context["typ"] in _EXP_SYSTEM_TYPES:
+        _exp_column_names(context)
 
     # Handle experience rule export
     elif context["typ"] == "exp_rule":
@@ -1138,7 +1187,7 @@ def _get_writing_names(context: dict) -> None:
         context["fields"]["email"] = "skip"
 
         # Add status field if approval feature is enabled
-        if get_event_config(context["event"].id, "user_character_approval", default_value=False):
+        if get_event_config(context["event"].id, "user_character_approval"):
             context["fields"]["status"] = "character_status"
 
         # Add assigned field if assigned feature is enabled
@@ -1240,6 +1289,24 @@ def export_event(context: Any) -> Any:
     return export_data
 
 
+def _add_system_header(context: Any, column_headers: list[str]) -> bool:
+    """Append the system column header when the event has multiple systems, and report it."""
+    multiple_systems = has_multiple_exp_systems(context["event"])
+    if multiple_systems:
+        column_headers.append("system")
+    return multiple_systems
+
+
+def _system_cell(element: Any) -> str:
+    """Return the experience system name of an element, empty string when unset."""
+    return element.system.name if element.system else ""
+
+
+def _visible_cell(element: Any) -> str:
+    """Return the visible flag of an element as the lowercase text the upload accepts."""
+    return "true" if element.visible else "false"
+
+
 def export_abilities(context: Any) -> Any:
     """Export abilities data for an event.
 
@@ -1251,13 +1318,14 @@ def export_abilities(context: Any) -> Any:
               where keys are column headers and values are ability data rows
 
     """
-    column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements"]
+    column_headers = ["name", "cost", "typ", "descr", "prerequisites", "requirements", "visible"]
+    multiple_systems = _add_system_header(context, column_headers)
 
     ability_queryset = (
         context["event"]
         .get_elements(AbilityExp)
         .order_by("number")
-        .select_related("typ")
+        .select_related("typ", "system")
         .prefetch_related("requirements", "prerequisites")
     )
     ability_rows = []
@@ -1269,10 +1337,72 @@ def export_abilities(context: Any) -> Any:
             ability.descr,
             ", ".join([prereq.name for prereq in ability.prerequisites.all()]),
             ", ".join([req.name for req in ability.requirements.all()]),
+            _visible_cell(ability),
         ]
+        if multiple_systems:
+            row_data.append(_system_cell(ability))
         ability_rows.append(row_data)
 
     return [("abilities", column_headers, ability_rows)]
+
+
+def export_criterions(context: Any) -> Any:
+    """Export criterions data for an event."""
+    column_headers = ["number", "name", "operation", "amount", "prerequisites", "requirements", "factions", "order"]
+    multiple_systems = _add_system_header(context, column_headers)
+
+    criterion_queryset = (
+        context["event"]
+        .get_elements(CriterionExp)
+        .order_by("order")
+        .select_related("system")
+        .prefetch_related("prerequisites", "requirements", "factions")
+    )
+    criterion_rows = []
+    for criterion in criterion_queryset:
+        row_data = [
+            criterion.number,
+            criterion.name,
+            criterion.operation,
+            criterion.amount,
+            ", ".join([prereq.name for prereq in criterion.prerequisites.all()]),
+            ", ".join([req.name for req in criterion.requirements.all()]),
+            ", ".join([faction.name for faction in criterion.factions.all()]),
+            criterion.order,
+        ]
+        if multiple_systems:
+            row_data.append(_system_cell(criterion))
+        criterion_rows.append(row_data)
+
+    return [("criterions", column_headers, criterion_rows)]
+
+
+def export_deliveries(context: Any) -> Any:
+    """Export deliveries data for an event."""
+    column_headers = ["number", "name", "amount", "characters", "order"]
+    multiple_systems = _add_system_header(context, column_headers)
+
+    delivery_queryset = (
+        context["event"]
+        .get_elements(DeliveryExp)
+        .order_by("order")
+        .select_related("system")
+        .prefetch_related("characters")
+    )
+    delivery_rows = []
+    for delivery in delivery_queryset:
+        row_data = [
+            delivery.number,
+            delivery.name,
+            delivery.amount,
+            ", ".join([character.name for character in delivery.characters.all()]),
+            delivery.order,
+        ]
+        if multiple_systems:
+            row_data.append(_system_cell(delivery))
+        delivery_rows.append(row_data)
+
+    return [("deliveries", column_headers, delivery_rows)]
 
 
 def export_rules(context: Any) -> Any:

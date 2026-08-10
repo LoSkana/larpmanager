@@ -84,11 +84,11 @@ def _check_admin(context: dict, guild: Guild) -> None:
 
 
 def _guild_max_number(context: dict) -> int:
-    return get_event_config(context["event"].id, "guild_max_number", default_value=0, context=context)
+    return get_event_config(context["event"].id, "guild_max_number", context=context)
 
 
 def _guild_max_members(context: dict) -> int:
-    return get_event_config(context["event"].id, "guild_max_members", default_value=0, context=context)
+    return get_event_config(context["event"].id, "guild_max_members", context=context)
 
 
 @login_required

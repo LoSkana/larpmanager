@@ -32,7 +32,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
-from larpmanager.cache.config import CONFIG_UNSET, get_element_config, get_event_config
+from larpmanager.cache.config import get_element_config, get_event_config
 from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
@@ -231,14 +231,14 @@ class Character(Writing):
         """Return string representation."""
         return self.name
 
-    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this character."""
-        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+        return get_element_config(self, name, bypass_cache=bypass_cache)
 
     @property
     def is_active(self) -> bool:
         """Check if character is active (not marked as inactive in CharacterConfig)."""
-        is_inactive = self.get_config("inactive", default_value=False)
+        is_inactive = self.get_config("inactive")
         return not (is_inactive == "True" or is_inactive is True)
 
     def show(self, run: Run | None = None) -> Any:
@@ -273,9 +273,7 @@ class Character(Writing):
             js["mirror"] = self.mirror.show_red()
 
         js["hide"] = self.hide
-        if get_event_config(self.event_id, "user_character_approval", default_value=False) and self.status not in [
-            CharacterStatus.APPROVED
-        ]:
+        if get_event_config(self.event_id, "user_character_approval") and self.status not in [CharacterStatus.APPROVED]:
             js["hide"] = True
 
         js["locked"] = self.locked
@@ -384,9 +382,16 @@ class Character(Writing):
         """Return queryset of relationships where this character is the source."""
         return Relationship.objects.filter(source_id=self.pk)
 
-    def get_plot_characters(self) -> Any:
-        """Return queryset of plot-character relations for this character."""
-        return PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot").order_by("order")
+    def get_plot_characters(self, event: Any = None) -> Any:
+        """Return queryset of plot-character relations for this character.
+
+        Plots are not inherited in campaigns: when an event is given, only relations
+        towards plots of that event are returned.
+        """
+        queryset = PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
+        if event:
+            queryset = queryset.filter(plot__event=event.get_class_parent("plot"))
+        return queryset.order_by("order")
 
     @classmethod
     def get_example_csv(cls, enabled_features: dict[str, int]) -> list[list[str]]:
@@ -959,7 +964,7 @@ def replace_character_names(instance: Any) -> None:
         return
 
     # Early return if event doesn't have character substitution enabled
-    if not get_event_config(instance.event_id, "writing_substitute", default_value=False):
+    if not get_event_config(instance.event_id, "writing_substitute"):
         return
 
     # Build character name to number mapping for replacement

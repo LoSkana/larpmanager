@@ -306,7 +306,7 @@ def get_character_sheet_exp(context: dict) -> None:
         return
 
     event_id = context["character"].event_id
-    context["exp_auto_buy"] = get_event_config(event_id, "exp_auto_buy", default_value=False)
+    context["exp_auto_buy"] = get_event_config(event_id, "exp_auto_buy")
 
     # Initialize abilities dictionary for grouping by type
     context["sheet_abilities"] = {}
@@ -421,10 +421,10 @@ def get_character_sheet_plots(context: dict) -> None:
 
     context["sheet_plots"] = []
 
-    # Get all plot relations for the character ordered by sequence
-    plot_relations = PlotCharacterRel.objects.select_related("plot").filter(character=context["character"])
+    # Get the plot relations of the current event for the character, ordered by sequence
+    plot_relations = context["character"].get_plot_characters(context["event"])
 
-    for plot_relation in plot_relations.order_by("order"):
+    for plot_relation in plot_relations:
         # Start with the base plot text
         combined_text = plot_relation.plot.text
 
@@ -899,7 +899,7 @@ def update_character_referenced_chars(character_id: int) -> None:
         character = Character.objects.select_related("event", "player").get(pk=character_id)
     except Character.DoesNotExist:
         return
-    if get_event_config(character.event_id, "writing_disable_auto_relationship", default_value=False):
+    if get_event_config(character.event_id, "writing_disable_auto_relationship"):
         return
     sources_map = _collect_sources_map(character)
     _persist_auto_relationships(character, sources_map)

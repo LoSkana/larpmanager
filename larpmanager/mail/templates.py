@@ -33,12 +33,8 @@ def get_token_credit_name(association_id: int) -> tuple[str, str]:
     association_config_cache = {}
 
     # Retrieve custom token and credit names from association config
-    tokens_name = get_association_config(
-        association_id, "tokens_name", default_value=None, context=association_config_cache
-    )
-    credits_name = get_association_config(
-        association_id, "credits_name", default_value=None, context=association_config_cache
-    )
+    tokens_name = get_association_config(association_id, "tokens_name", context=association_config_cache)
+    credits_name = get_association_config(association_id, "credits_name", context=association_config_cache)
 
     # Apply default translated names if custom names not configured
     if not tokens_name:
@@ -54,7 +50,7 @@ def get_payment_info(association_id: int, payment_url: str) -> str:
     association = Association.objects.only("slug", "key").prefetch_related("payment_methods").get(pk=association_id)
     active_slugs = {m.slug for m in association.payment_methods.all()}
 
-    require_receipt: bool = get_association_config(association_id, "payment_require_receipt", default_value=False)
+    require_receipt: bool = get_association_config(association_id, "payment_require_receipt")
 
     text = "<br /><br />"
     if len(active_slugs) > 1:

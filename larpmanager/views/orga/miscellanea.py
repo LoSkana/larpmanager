@@ -61,6 +61,7 @@ from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
+from larpmanager.utils.services.bulk import handle_bulk_orga_items
 from larpmanager.utils.services.miscellanea import get_warehouse_optionals, upload_albums
 from larpmanager.utils.services.writing import writing_post
 
@@ -405,6 +406,8 @@ def orga_warehouse_items(request: HttpRequest, event_slug: str) -> HttpResponse:
     """
     context = check_event_context(request, event_slug, "orga_warehouse_items")
 
+    handle_bulk_orga_items(request, context)
+
     warehouse_cache = get_association_warehouse_cache(context["association_id"])
     assignments_cache = get_event_warehouse_assignments_cache(context["event"])
 
@@ -622,7 +625,7 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
     # Check if warehouse quantities have been committed for this event
     # This flag controls UI elements for the commit functionality
-    context["warehouse_committed"] = context["event"].get_config("warehouse_committed", default_value=False)
+    context["warehouse_committed"] = context["event"].get_config("warehouse_committed")
 
     # Iterate through all warehouse item assignments for this event
     # Group items by their assigned areas for organized manifest display
@@ -850,7 +853,7 @@ def orga_warehouse_commit_preview(request: HttpRequest, event_slug: str) -> Http
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
 
     # Prevent re-committing quantities - this is a one-time operation per event
-    if context["event"].get_config("warehouse_committed", default_value=False):
+    if context["event"].get_config("warehouse_committed"):
         messages.warning(request, _("Warehouse quantities already committed for this event"))
         return redirect("orga_warehouse_manifest", event_slug=event_slug)
 
@@ -937,7 +940,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
     context = check_event_context(request, event_slug, "orga_warehouse_manifest")
 
     # Prevent re-committing quantities - this is a one-time destructive operation
-    if context["event"].get_config("warehouse_committed", default_value=False):
+    if context["event"].get_config("warehouse_committed"):
         messages.warning(request, _("Warehouse quantities already committed for this event"))
         return redirect("orga_warehouse_manifest", event_slug=event_slug)
 

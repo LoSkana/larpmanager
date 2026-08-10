@@ -83,7 +83,7 @@ def publish_event_role(event_role_id: int) -> None:
         return
 
     ctx = _get_ildb_context(role.event)
-    if not ctx or not get_association_config(ctx.association.id, "publication_crew", default_value=False):
+    if not ctx or not get_association_config(ctx.association.id, "publication_crew"):
         return
     sync_crew_ildb(role.event, ctx)
 

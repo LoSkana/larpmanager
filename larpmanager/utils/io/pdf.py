@@ -96,7 +96,7 @@ def fix_filename(filename: Any) -> Any:
 def has_pdf_customization(event_id: int) -> bool:
     """Return True if event has any custom PDF styling configured."""
     for key in ["page_css", "header_content", "footer_content"]:
-        value = get_event_config(event_id, key, default_value="")
+        value = get_event_config(event_id, key)
         if value and str(value).strip():
             return True
     return False
@@ -241,7 +241,6 @@ def add_pdf_instructions(context: dict) -> None:
         context[instruction_key] = get_event_config(
             context["event"].id,
             instruction_key,
-            default_value="",
             context=context,
             bypass_cache=True,
         )
@@ -314,12 +313,6 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
         template = get_template(template_path)
         html_content = template.render(context)
 
-    # Remove empty or whitespace-only <p> tags before PDF rendering
-    html_content = re.sub(r"<p[^>]*>(\s|&nbsp;)*</p>", "", html_content)
-
-    # Replace <br> tags with non-breaking space for horizontal spacing
-    html_content = re.sub(r"<br\s*/?>", "&nbsp;", html_content)
-
     # xhtml2pdf ignores unitless line-height values (e.g. "2"); convert to percentage
     html_content = re.sub(
         r"line-height:\s*([0-9]+(?:\.[0-9]+)?)\s*;",
@@ -339,6 +332,17 @@ def xhtml_pdf(context: dict, template_path: str, output_filename: str, *, html: 
             raise Http404(msg)
 
 
+class _PrintableDict(dict):
+    """Dict that renders as a given string when printed directly in a template."""
+
+    def __init__(self, label: str, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self._label = label
+
+    def __str__(self) -> str:
+        return self._label
+
+
 def get_membership_request(context: dict, member: Member) -> HttpResponse:
     """Generate and return a PDF membership registration document."""
     # Get the file path for the member's request document
@@ -348,6 +352,15 @@ def get_membership_request(context: dict, member: Member) -> HttpResponse:
     member_data = {field.name: str(getattr(member, field.name) or "") for field in member._meta.fields}  # noqa: SLF001
     member_data["display_member"] = member.display_member()
     member_data["display_real"] = member.display_real()
+    member_data["get_residence"] = member.get_residence()
+
+    # Expose safe user fields, keeping direct printing of `member.user` unchanged
+    user = member.user
+    member_data["user"] = _PrintableDict(
+        str(user),
+        {name: str(getattr(user, name, "") or "") for name in ("username", "email", "first_name", "last_name")},
+    )
+
     template_context = {"member": member_data}
 
     # Retrieve association-specific membership template text
@@ -608,10 +621,10 @@ def generate_payment_receipt(accounting_item: Any) -> tuple[str, str]:
         "year": year,
         "method": invoice.method.name if invoice else None,
         "causal": causal,
-        "receipt_legal_name": get_association_config(association_id, "receipt_legal_name", default_value=""),
-        "receipt_sede_legale": get_association_config(association_id, "receipt_sede_legale", default_value=""),
-        "receipt_codice_fiscale": get_association_config(association_id, "receipt_codice_fiscale", default_value=""),
-        "receipt_runts": get_association_config(association_id, "receipt_runts", default_value=""),
+        "receipt_legal_name": get_association_config(association_id, "receipt_legal_name"),
+        "receipt_sede_legale": get_association_config(association_id, "receipt_sede_legale"),
+        "receipt_codice_fiscale": get_association_config(association_id, "receipt_codice_fiscale"),
+        "receipt_runts": get_association_config(association_id, "receipt_runts"),
         "is_donation": isinstance(accounting_item, AccountingItemDonation),
     }
 

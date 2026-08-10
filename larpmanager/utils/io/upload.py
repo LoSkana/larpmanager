@@ -32,6 +32,7 @@ import pandas as pd
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.utils import timezone
 from PIL import Image
 
@@ -40,7 +41,16 @@ from larpmanager.cache.question import get_cached_registration_questions, get_ca
 from larpmanager.models.base import Feature
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import EventConfig
-from larpmanager.models.experience import AbilityExp, AbilityTypeExp, ModifierExp, Operation, RuleExp, SystemExp
+from larpmanager.models.experience import (
+    AbilityExp,
+    AbilityTypeExp,
+    CriterionExp,
+    DeliveryExp,
+    ModifierExp,
+    Operation,
+    RuleExp,
+    SystemExp,
+)
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -157,6 +167,24 @@ def _to_decimal(value: str) -> Decimal:
     return Decimal(_normalize_numeric(value))
 
 
+def _is_missing(value: object) -> bool:
+    """Return whether a CSV cell carries no value at all (None or NaN).
+
+    An empty string is not missing: it is an explicit request to clear the field.
+    """
+    if value is None:
+        return True
+    try:
+        return bool(pd.isna(value))
+    except (TypeError, ValueError):
+        return False
+
+
+def _is_blank(value: object) -> bool:
+    """Return whether a CSV cell holds no meaningful text."""
+    return not str(value).strip()
+
+
 def _strip_number_prefix(name: str) -> str:
     """Strip initial '#number ' pattern from name."""
     return re.sub(r"^#\d+\s+", "", name)
@@ -205,6 +233,8 @@ def go_upload(context: dict, upload_form_data: Any) -> Any:
         "exp_abilitie": lambda: abilities_load(context, upload_form_data),
         "exp_rule": lambda: rules_load(context, upload_form_data),
         "exp_modifier": lambda: modifiers_load(context, upload_form_data),
+        "exp_criterion": lambda: criterions_load(context, upload_form_data),
+        "exp_deliverie": lambda: deliveries_load(context, upload_form_data),
         "registration_ticket": lambda: tickets_load(context, upload_form_data),
     }
     handler = dispatch.get(upload_type)
@@ -324,6 +354,9 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
     if "fields" in context:
         allowed_column_names.extend(context["fields"].keys())
 
+    # Add columns accepted on upload but not shown in the template
+    allowed_column_names.extend(context.get("extra_columns", []))
+
     # Convert all allowed column names to lowercase for comparison
     allowed_column_names = [column_name.lower() for column_name in allowed_column_names]
 
@@ -335,11 +368,12 @@ def _get_file(context: dict, file: Any, column_id: int | None = None) -> tuple[p
     # Normalize column names to lowercase for validation
     input_dataframe.columns = [column.lower() for column in input_dataframe.columns]
 
-    # Validate that all columns are recognized
+    # Drop the columns that are not recognized, reporting them once instead of on every row
     not_recognized = [column for column in input_dataframe.columns if column.lower() not in allowed_column_names]
     logs = []
     if not_recognized:
         logs.append(f"WARN - columns ignored: {', '.join(not_recognized)}")
+        input_dataframe = input_dataframe.drop(columns=not_recognized)
 
     return input_dataframe, logs
 
@@ -1554,9 +1588,9 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
         elif field_name == "price":
             processed_value = _to_decimal(processed_value)
 
-        # Handle requirements field with special processing
+        # Handle requirements field with special processing, only adding the uploaded ones
         if field_name == "requirements":
-            _assign_requirements(import_context, option_instance, [], field_value)
+            _assign_requirements(import_context, option_instance, [], field_value, replace=False)
             continue
 
         # Set the field value on the instance
@@ -1704,7 +1738,10 @@ def _get_row_name(csv_row: dict) -> tuple[str | None, str | None]:
             return None, "ERR - Empty name, row skipped"
     except (TypeError, ValueError):
         pass
-    return str(name), None
+    stripped_name = str(name).strip()
+    if not stripped_name:
+        return None, "ERR - Empty name, row skipped"
+    return stripped_name, None
 
 
 def _get_row_number(csv_row: dict) -> tuple[int | None, str | None]:
@@ -1814,7 +1851,7 @@ def abilities_load(context: dict, form: Form) -> list[str]:
     return processing_logs
 
 
-def _resolve_ability_system(event: Any) -> Any:
+def _resolve_exp_system(event: Any) -> Any:
     """Return the first SystemExp for the event, creating it if none exists."""
     systems = get_event_exp_systems(event)
     if systems:
@@ -1824,6 +1861,68 @@ def _resolve_ability_system(event: Any) -> Any:
     return system
 
 
+def _assign_system(context: dict, element: Any, logs: list[str], value: str) -> None:
+    """Assign the experience system to an element by name."""
+    system = context["event"].get_elements(SystemExp).filter(name__iexact=value.strip()).first()
+    if system:
+        element.system = system
+    else:
+        logs.append(f"ERR - system not found: {value}")
+
+
+_ABILITY_PLAIN_FIELDS = frozenset({"descr"})
+
+# Criterion and delivery columns whose empty value is meaningful: it clears the relation instead of being ignored
+_RELATION_COLUMNS = frozenset({"prerequisites", "requirements", "factions", "characters"})
+
+
+def _relation_value(value: object) -> str:
+    """Normalize a relation cell, reading a missing value as empty so that it clears the relation."""
+    return "" if _is_missing(value) else str(value)
+
+
+def _skip_row_field(field_name: str, field_value: object, handled: tuple[str, ...]) -> bool:
+    """Return whether a CSV field must be skipped, because already handled or holding no value.
+
+    Relation columns are never skipped: an empty cell there clears the relation.
+    """
+    if field_name in handled:
+        return True
+    return field_name not in _RELATION_COLUMNS and _is_missing(field_value)
+
+
+def _skip_ability_field(field_name: str, field_value: object) -> bool:
+    """Return whether an ability CSV field must be skipped, because already handled or empty.
+
+    Unlike the other experience elements, an empty cell never clears an ability relation:
+    the stored prerequisites and requirements are kept, and only a filled cell replaces them.
+    """
+    if field_name in ("name", "cost"):
+        return True
+    return _is_missing(field_value) or _is_blank(field_value)
+
+
+def _apply_ability_field(
+    context: dict, ability_element: AbilityExp, logs: list[str], field_name: str, field_value: object
+) -> None:
+    """Apply a single CSV field to an AbilityExp instance."""
+    if field_name == "typ":
+        _assign_type(context, ability_element, logs, field_value)
+    elif field_name == "prerequisites":
+        _assign_prereq(context, ability_element, logs, str(field_value))
+    elif field_name == "requirements":
+        _assign_requirements(context, ability_element, logs, str(field_value))
+    elif field_name == "system":
+        _assign_system(context, ability_element, logs, str(field_value))
+    elif field_name == "visible":
+        ability_element.visible = str(field_value).lower().strip() == "true"
+    elif field_name in _ABILITY_PLAIN_FIELDS:
+        setattr(ability_element, field_name, field_value)
+    else:
+        logs.append(f"WARN - unknown column ignored: {field_name}")
+
+
+@transaction.atomic
 def _ability_load(context: dict, csv_row: dict) -> str:
     """Load ability data from CSV row for bulk import.
 
@@ -1847,14 +1946,17 @@ def _ability_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    system = _resolve_ability_system(event)
+    parent_event = event.get_class_parent(AbilityExp)
 
-    # Get or create ability object using event's class parent
-    (ability_element, was_created) = AbilityExp.objects.get_or_create(
-        event=event.get_class_parent(AbilityExp),
-        name=name,
-        defaults={"system": system},
-    )
+    # Match the stored ability ignoring case, so that a different casing updates it instead of duplicating it
+    ability_element = AbilityExp.objects.filter(event=parent_event, name__iexact=name).order_by("number").first()
+    was_created = ability_element is None
+    if was_created:
+        ability_element = AbilityExp.objects.create(
+            event=parent_event,
+            name=name,
+            system=_resolve_exp_system(event),
+        )
 
     logs = []
 
@@ -1862,36 +1964,13 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     if "cost" in csv_row:
         cost_value = csv_row["cost"]
         if cost_value is not None and cost_value != "" and not pd.isna(cost_value):
-            ability_element.cost = _to_int(cost_value)
+            _assign_numeric(ability_element, logs, "cost", cost_value)
 
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        # Skip empty, NaN values, or fields already processed above
-        if not field_value or pd.isna(field_value) or field_name in ["name", "cost"]:
+        if _skip_ability_field(field_name, field_value):
             continue
-        processed_value = field_value
-
-        # Handle type field assignment
-        if field_name == "typ":
-            _assign_type(context, ability_element, logs, field_value)
-            continue
-
-        # Handle prerequisites field parsing
-        if field_name == "prerequisites":
-            _assign_prereq(context, ability_element, logs, field_value)
-            continue
-
-        # Handle requirements field processing
-        if field_name == "requirements":
-            _assign_requirements(context, ability_element, logs, field_value)
-            continue
-
-        # Convert visible field to boolean
-        if field_name == "visible":
-            processed_value = field_value.lower().strip() == "true"
-
-        # Set the attribute on the element
-        setattr(ability_element, field_name, processed_value)
+        _apply_ability_field(context, ability_element, logs, field_name, field_value)
 
     # Save the element to database
     ability_element.save()
@@ -1899,8 +1978,9 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     # Log the operation for audit trail
     save_log(context, AbilityExp, ability_element, operation_type=LogOperationType.UPLOAD)
 
-    # Return appropriate success message
-    return f"OK - Created {ability_element}" if was_created else f"OK - Updated {ability_element}"
+    # Return appropriate success message, together with the errors collected on its fields
+    status = f"OK - Created {ability_element}" if was_created else f"OK - Updated {ability_element}"
+    return _row_result(status, logs)
 
 
 def _assign_type(
@@ -1919,37 +1999,61 @@ def _assign_type(
         error_logs.append(f"ERR - quest type not found: {ability_type_name}")
 
 
+def _assign_relation(
+    context: dict,
+    element: Any,
+    logs: list[str],
+    value: object,
+    relation: tuple[str, type, str],
+    *,
+    replace: bool = True,
+) -> None:
+    """Assign a many-to-many relation of an element from comma-separated names.
+
+    Args:
+        context: Context dict containing 'event' key with Event instance
+        element: Target element owning the relation
+        logs: List to append error messages to
+        value: Comma-separated element names
+        relation: Tuple of relation attribute name, related model, and label used in errors
+        replace: If set, the uploaded list replaces the current one, so that the upload stays
+            idempotent and an empty value clears the relation; otherwise names are only added
+
+    """
+    (relation_name, related_model, label) = relation
+    raw_names = [raw_name for raw_name in str(value).split(",") if raw_name.strip()]
+    if len(raw_names) > MAX_COMMA_VALUES:
+        logs.append(f"ERR - Too many {relation_name}: {len(raw_names)} exceeds limit of {MAX_COMMA_VALUES}")
+        return
+
+    # A relation needs a primary key, while the fields set so far are left to the final save of the row
+    if element.pk is None:
+        element.save()
+
+    manager = getattr(element, relation_name)
+    if replace:
+        manager.clear()
+    for raw_name in raw_names:
+        # Look up the related element by name (case-insensitive)
+        related_element = context["event"].get_elements(related_model).filter(name__iexact=raw_name.strip()).first()
+        if related_element:
+            manager.add(related_element)
+        else:
+            logs.append(f"{label} not found: {raw_name}")
+
+
+_REL_PREREQUISITES = ("prerequisites", AbilityExp, "Prerequisite")
+_REL_REQUIREMENTS = ("requirements", WritingOption, "requirements")
+
+
 def _assign_prereq(
     context: dict,
     element: AbilityExp,
     logs: list[str],
     value: str,
 ) -> None:
-    """Assign prerequisites to an ability from comma-separated names.
-
-    Args:
-        context: Dictionary containing 'event' key with Event instance
-        element: Target ability to add prerequisites to
-        logs: List to append error messages
-        value: Comma-separated prerequisite ability names
-
-    """
-    prereq_names = value.split(",")
-    if len(prereq_names) > MAX_COMMA_VALUES:
-        logs.append(f"ERR - Too many prerequisites: {len(prereq_names)} exceeds limit of {MAX_COMMA_VALUES}")
-        return
-
-    element.save()
-    # Parse each prerequisite name from the comma-separated string
-    for prerequisite_name in prereq_names:
-        # Look up prerequisite ability by name (case-insensitive)
-        prerequisite_element = (
-            context["event"].get_elements(AbilityExp).filter(name__iexact=prerequisite_name.strip()).first()
-        )
-        if prerequisite_element:
-            element.prerequisites.add(prerequisite_element)
-        else:
-            logs.append(f"Prerequisite not found: {prerequisite_name}")
+    """Assign prerequisite abilities to an element from comma-separated names."""
+    _assign_relation(context, element, logs, value, _REL_PREREQUISITES)
 
 
 def _assign_requirements(
@@ -1957,33 +2061,11 @@ def _assign_requirements(
     writing_element: BaseModel,
     error_logs: list[str],
     requirement_names: str,
+    *,
+    replace: bool = True,
 ) -> None:
-    """Assign writing option requirements to a writing element by parsing comma-separated names.
-
-    Args:
-        context: Context dict containing 'event' key with Event instance
-        writing_element: WritingElement to add requirements to
-        error_logs: List to append error messages to
-        requirement_names: Comma-separated string of requirement names
-
-    """
-    req_names = requirement_names.split(",")
-    if len(req_names) > MAX_COMMA_VALUES:
-        error_logs.append(f"ERR - Too many requirements: {len(req_names)} exceeds limit of {MAX_COMMA_VALUES}")
-        return
-
-    writing_element.save()
-    # Process each requirement name from comma-separated string
-    for requirement_name in req_names:
-        # Look up writing option by case-insensitive name match
-        writing_option = (
-            context["event"].get_elements(WritingOption).filter(name__iexact=requirement_name.strip()).first()
-        )
-        if writing_option:
-            # Add the requirement to the writing element
-            writing_element.requirements.add(writing_option)
-        else:
-            error_logs.append(f"requirements not found: {requirement_name}")
+    """Assign writing option requirements to an element from comma-separated names."""
+    _assign_relation(context, writing_element, error_logs, requirement_names, _REL_REQUIREMENTS, replace=replace)
 
 
 def _assign_abilities(
@@ -2020,12 +2102,12 @@ def _assign_rule_field(context: dict, rule: RuleExp, logs: list[str], value: str
         logs.append(f"ERR - field not found: {value}")
 
 
-def _assign_rule_operation(rule: RuleExp, logs: list[str], value: str) -> None:
-    """Assign the operation to a rule by value string (ADD/SUB/MUL/DIV)."""
+def _assign_operation(element: Any, logs: list[str], value: str) -> None:
+    """Assign the operation to an element by value string (ADD/SUB/MUL/DIV)."""
     operation_map = {op.value: op for op in Operation}
     op_val = value.strip().upper()
     if op_val in operation_map:
-        rule.operation = operation_map[op_val]
+        element.operation = operation_map[op_val]
     else:
         logs.append(f"ERR - unknown operation: {value}")
 
@@ -2043,7 +2125,7 @@ def _apply_rule_field(context: dict, rule: RuleExp, logs: list[str], field_name:
     elif field_name == "order":
         rule.order = _to_int(field_value)
     elif field_name == "operation":
-        _assign_rule_operation(rule, logs, str(field_value))
+        _assign_operation(rule, logs, str(field_value))
     else:
         setattr(rule, field_name, field_value)
 
@@ -2145,3 +2227,213 @@ def _modifier_load(context: dict, csv_row: dict) -> str:
     save_log(context, ModifierExp, modifier, operation_type=LogOperationType.UPLOAD)
 
     return f"OK - Created {modifier}" if was_created else f"OK - Updated {modifier}"
+
+
+def _row_result(status: str, logs: list[str]) -> str:
+    """Combine the row status with the errors collected while applying its fields."""
+    return "; ".join([status, *logs]) if logs else status
+
+
+_REL_FACTIONS = ("factions", Faction, "Faction")
+_REL_CHARACTERS = ("characters", Character, "Character")
+
+
+def _assign_factions(context: dict, element: Any, logs: list[str], value: str) -> None:
+    """Assign factions to an element from comma-separated names."""
+    _assign_relation(context, element, logs, value, _REL_FACTIONS)
+
+
+def _assign_characters(context: dict, element: Any, logs: list[str], value: str) -> None:
+    """Assign characters to an element from comma-separated names."""
+    _assign_relation(context, element, logs, value, _REL_CHARACTERS)
+
+
+def criterions_load(context: dict, form: Form) -> list[str]:
+    """Load criterions from uploaded file and process each row."""
+    (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
+    if input_dataframe is not None:
+        if len(input_dataframe) > MAX_CSV_ROWS:
+            return [f"ERR - File too large: {len(input_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
+        for criterion_row in input_dataframe.to_dict(orient="records"):
+            processing_logs.append(_criterion_load(context, criterion_row))
+    return processing_logs
+
+
+def _assign_numeric(element: Any, logs: list[str], field_name: str, value: object, *, decimal: bool = False) -> None:
+    """Assign a numeric field to an element, logging an error for values that cannot be parsed."""
+    try:
+        setattr(element, field_name, _to_decimal(value) if decimal else _to_int(value))
+    except (TypeError, ValueError, ArithmeticError):
+        logs.append(f"ERR - invalid {field_name} value: {value}")
+
+
+def _apply_criterion_field(
+    context: dict, criterion: CriterionExp, logs: list[str], field_name: str, field_value: object
+) -> None:
+    """Apply a single CSV field to a CriterionExp instance."""
+    if field_name not in _RELATION_COLUMNS and _is_blank(field_value):
+        return
+
+    if field_name == "prerequisites":
+        _assign_prereq(context, criterion, logs, _relation_value(field_value))
+    elif field_name == "requirements":
+        _assign_requirements(context, criterion, logs, _relation_value(field_value))
+    elif field_name == "factions":
+        _assign_factions(context, criterion, logs, _relation_value(field_value))
+    elif field_name == "system":
+        _assign_system(context, criterion, logs, str(field_value))
+    elif field_name == "operation":
+        _assign_operation(criterion, logs, str(field_value))
+    elif field_name == "amount":
+        _assign_numeric(criterion, logs, "amount", field_value, decimal=True)
+    elif field_name == "order":
+        _assign_numeric(criterion, logs, "order", field_value)
+    elif field_name == "name":
+        criterion.name = str(field_value).strip()
+    else:
+        logs.append(f"WARN - unknown column ignored: {field_name}")
+
+
+@transaction.atomic
+def _criterion_load(context: dict, csv_row: dict) -> str:
+    """Load criterion data from CSV row for bulk import."""
+    number, err = _get_row_number(csv_row)
+    if err:
+        return err
+
+    event = context["event"]
+    parent_event = event.get_class_parent(CriterionExp)
+
+    criterion = CriterionExp.objects.filter(event=parent_event, number=number).first()
+    was_created = criterion is None
+    if was_created:
+        # The name is required to create a criterion, while it may be omitted when updating one
+        name, err = _get_row_name(csv_row)
+        if err:
+            return err
+        criterion = CriterionExp.objects.create(
+            event=parent_event,
+            number=number,
+            name=name,
+            system=_resolve_exp_system(event),
+            order=0,
+        )
+
+    logs = []
+
+    for field_name, field_value in csv_row.items():
+        if _skip_row_field(field_name, field_value, ("number",)):
+            continue
+        _apply_criterion_field(context, criterion, logs, field_name, field_value)
+
+    criterion.save()
+    save_log(context, CriterionExp, criterion, operation_type=LogOperationType.UPLOAD)
+
+    status = f"OK - Created {criterion}" if was_created else f"OK - Updated {criterion}"
+    return _row_result(status, logs)
+
+
+def deliveries_load(context: dict, form: Form) -> list[str]:
+    """Load deliveries from uploaded file and process each row."""
+    (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
+    if input_dataframe is not None:
+        if len(input_dataframe) > MAX_CSV_ROWS:
+            return [f"ERR - File too large: {len(input_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
+        for delivery_row in input_dataframe.to_dict(orient="records"):
+            processing_logs.append(_delivery_load(context, delivery_row))
+    return processing_logs
+
+
+def _row_delivery_number(csv_row: dict, logs: list[str]) -> int | None:
+    """Return the number requested by the row, None when missing or unparsable."""
+    value = csv_row.get("number")
+    if _is_missing(value) or _is_blank(value):
+        return None
+    try:
+        return _to_int(value)
+    except (TypeError, ValueError, ArithmeticError):
+        logs.append(f"WARN - invalid number value, assigned automatically: {value}")
+        return None
+
+
+def _free_delivery_number(parent_event: Any, number: int | None, logs: list[str]) -> int | None:
+    """Return the requested number, only if not already taken by another delivery."""
+    if number is None:
+        return None
+    if DeliveryExp.objects.filter(event=parent_event, number=number).exists():
+        logs.append(f"WARN - number already taken, assigned automatically: {number}")
+        return None
+    return number
+
+
+def _find_delivery(parent_event: Any, name: str, number: int | None, logs: list[str]) -> DeliveryExp | None:
+    """Return the existing delivery the row refers to, None when it must be created.
+
+    Delivery names are not unique, so when several share the uploaded name the number
+    of the row selects which one is updated, falling back to the lowest numbered.
+    """
+    matches = list(DeliveryExp.objects.filter(event=parent_event, name__iexact=name).order_by("number"))
+    if not matches:
+        return None
+    if len(matches) == 1:
+        chosen = matches[0]
+    else:
+        chosen = next((match for match in matches if match.number == number), matches[0])
+        logs.append(f"WARN - several deliveries named {name}, updated the one with number {chosen.number}")
+
+    # The number of an existing delivery is never reassigned from the file
+    if number is not None and number != chosen.number:
+        logs.append(f"WARN - number kept as {chosen.number}, ignoring the uploaded one: {number}")
+    return chosen
+
+
+def _apply_delivery_field(
+    context: dict, delivery: DeliveryExp, logs: list[str], field_name: str, field_value: object
+) -> None:
+    """Apply a single CSV field to a DeliveryExp instance."""
+    if field_name not in _RELATION_COLUMNS and _is_blank(field_value):
+        return
+
+    if field_name == "system":
+        _assign_system(context, delivery, logs, str(field_value))
+    elif field_name == "characters":
+        _assign_characters(context, delivery, logs, _relation_value(field_value))
+    elif field_name in ("amount", "order"):
+        _assign_numeric(delivery, logs, field_name, field_value)
+    else:
+        logs.append(f"WARN - unknown column ignored: {field_name}")
+
+
+@transaction.atomic
+def _delivery_load(context: dict, csv_row: dict) -> str:
+    """Load delivery data from CSV row for bulk import."""
+    name, err = _get_row_name(csv_row)
+    if err:
+        return err
+
+    event = context["event"]
+    parent_event = event.get_class_parent(DeliveryExp)
+
+    logs = []
+    number = _row_delivery_number(csv_row, logs)
+
+    delivery = _find_delivery(parent_event, name, number, logs)
+    was_created = delivery is None
+    if was_created:
+        # Keep the uploaded number only on creation, and only when still available
+        fields = {"system": _resolve_exp_system(event), "amount": 0}
+        free_number = _free_delivery_number(parent_event, number, logs)
+        if free_number is not None:
+            fields["number"] = free_number
+        delivery = DeliveryExp.objects.create(event=parent_event, name=name, **fields)
+
+    for field_name, field_value in csv_row.items():
+        if _skip_row_field(field_name, field_value, ("name", "number")):
+            continue
+        _apply_delivery_field(context, delivery, logs, field_name, field_value)
+
+    delivery.save()
+    save_log(context, DeliveryExp, delivery, operation_type=LogOperationType.UPLOAD)
+
+    status = f"OK - Created {delivery}" if was_created else f"OK - Updated {delivery}"
+    return _row_result(status, logs)

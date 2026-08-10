@@ -887,7 +887,7 @@ def _is_registration_gate_active(context: dict, gate: str) -> bool:
     """Return True if a registration form type's gating feature/config is active."""
     if gate.startswith("config:"):
         config_slug = gate.removeprefix("config:")
-        return get_event_config(context["event"].id, config_slug, default_value=False)
+        return get_event_config(context["event"].id, config_slug)
     return gate in context["features"]
 
 

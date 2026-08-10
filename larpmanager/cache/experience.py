@@ -74,6 +74,11 @@ def get_event_exp_systems(event: Event) -> list[SystemExp]:
     return systems
 
 
+def has_multiple_exp_systems(event: Event) -> bool:
+    """Return whether the event has more than one experience system configured."""
+    return len(get_event_exp_systems(event)) > 1
+
+
 def clear_event_exp_systems_cache(event_id: int) -> None:
     """Clear cached experience systems list for the given event ID."""
     cache.delete(get_event_exp_systems_key(event_id))
@@ -86,7 +91,7 @@ def get_event_exp_key(event_id: int) -> str:
 
 def get_exp_effective_event_id(event: Event) -> int:
     """Return the event ID to use as EXP cache key."""
-    if event.parent_id and not event.get_config("campaign_abilitypx_indep", default_value=False):
+    if event.parent_id and not event.get_config("campaign_abilitypx_indep"):
         return event.parent_id
     return event.id
 

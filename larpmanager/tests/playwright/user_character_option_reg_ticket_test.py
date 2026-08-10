@@ -31,7 +31,8 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, logout, expect_normalized, submit_register, \
-    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, _wait_select2_results
+    submit_confirm, new_option, submit_option, sidebar, get_modal_iframe, save_modal, _wait_select2_results, \
+    expand_options
 
 pytestmark = pytest.mark.e2e
 
@@ -140,6 +141,8 @@ def create_character(page: Any) -> None:
 
     # change ticket
     sidebar(page, "Your registration")
+    # the registration already exists: the other tickets start collapsed
+    expand_options(page)
     page.locator('label[for="id_ticket_1"]').click()
     page.get_by_role("button", name="Continue").click()
     sidebar(page, "myyyy")
@@ -150,6 +153,8 @@ def create_character(page: Any) -> None:
     sidebar(page, "Edit")
 
     # check only one option available
+    # the character is already saved: the option starts collapsed
+    expand_options(page)
     expect(page.locator("#id_que_u4")).to_match_aria_snapshot('- radio "bmb"\n- text: bmb')
     page.locator('label[for="id_que_u4_0"]').click()  # select "bmb" (only option)
     submit_confirm(page)

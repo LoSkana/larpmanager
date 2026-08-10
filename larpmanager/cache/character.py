@@ -133,7 +133,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
 
     # Get event configuration for hiding uncasted characters
     hide_uncasted_characters = get_event_config(
-        context["event"].id, "gallery_hide_uncasted_characters", default_value=False, context=context
+        context["event"].id, "gallery_hide_uncasted_characters", context=context
     )
 
     # Derive assigned character IDs from already-loaded assignments

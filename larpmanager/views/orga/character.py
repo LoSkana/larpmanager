@@ -25,7 +25,7 @@ from django.conf import settings as conf_settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Max
+from django.db.models import Max, Prefetch
 from django.db.models.functions import Length, Substr
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
@@ -109,10 +109,10 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Load event data and configuration settings
     get_event_cache_all(context)
     for config_name in ["user_character_approval", "writing_external_access", "writing_number"]:
-        context[config_name] = get_event_config(context["event"].id, config_name, default_value=False, context=context)
+        context[config_name] = get_event_config(context["event"].id, config_name, context=context)
 
     # Enable export functionality if configured
-    if get_event_config(context["event"].id, "show_export", default_value=False, context=context):
+    if get_event_config(context["event"].id, "show_export", context=context):
         context["export"] = "character"
 
     if context.get("user_character_approval"):
@@ -250,8 +250,14 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, character_uui
     # Get parent event to ensure character belongs to this event
     parent_event = context["event"].get_class_parent(Character)
 
+    # Plots are not inherited in campaigns: keep only the ones of this event
+    plots_prefetch = Prefetch(
+        "plots",
+        queryset=Plot.objects.filter(event=context["event"].get_class_parent(Plot)).prefetch_related("characters"),
+    )
+
     # Load character with prefetched factions and plots, filtered by event
-    context["character"] = Character.objects.prefetch_related("factions_list__characters", "plots__characters").get(
+    context["character"] = Character.objects.prefetch_related("factions_list__characters", plots_prefetch).get(
         event=parent_event, uuid=character_uuid
     )
 
@@ -424,7 +430,7 @@ def _process_character_choices(context: dict, event: Event, mapping: dict, quest
     res = {}
     player_ids = {}
     character_ids = Character.objects.filter(event=event).values_list("id", flat=True)
-    writing_number = get_event_config(context["event"].id, "writing_number", default_value=False, context=context)
+    writing_number = get_event_config(context["event"].id, "writing_number", context=context)
     for el in WritingChoice.objects.filter(question=question, element_id__in=character_ids):
         # Skip if character not in current event mapping
         if el.element_id not in mapping:
@@ -503,9 +509,7 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
     context["list"] = get_cached_writing_questions(context["event"], context["writing_typ"])
 
     # Set approval configuration and status flags for template rendering
-    context["approval"] = get_event_config(
-        context["event"].id, "user_character_approval", default_value=False, context=context
-    )
+    context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
     context["status"] = "user_character" in context["features"] and writing_type.lower() == "character"
 
     return render(request, "larpmanager/orga/characters/form.html", context)

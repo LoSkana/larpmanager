@@ -1667,6 +1667,16 @@ urlpatterns = [
         name="orga_config",
     ),
     path(
+        "<slug:event_slug>/manage/config/<slug:slug>/on/",
+        views_oe.orga_config_on,
+        name="orga_config_on",
+    ),
+    path(
+        "<slug:event_slug>/manage/config/<slug:slug>/off/",
+        views_oe.orga_config_off,
+        name="orga_config_off",
+    ),
+    path(
         "<slug:event_slug>/manage/backup/",
         views_oe.orga_backup,
         name="orga_backup",
