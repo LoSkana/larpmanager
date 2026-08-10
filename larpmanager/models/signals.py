@@ -27,6 +27,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import m2m_changed, post_delete, post_save, pre_delete, pre_save
 from django.dispatch import receiver
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
+from safedelete.signals import post_softdelete, pre_softdelete
 
 from larpmanager.accounting.base import (
     handle_accounting_item_collection_post_save,
@@ -594,6 +595,12 @@ def pre_delete_assignment_trait(sender: type, instance: AssignmentTrait, **kwarg
     deactivate_castings_and_remove_pdfs(instance)
 
 
+@receiver(pre_softdelete, sender=AssignmentTrait)
+def pre_softdelete_assignment_trait(sender: type, instance: AssignmentTrait, **kwargs: Any) -> None:
+    """Deactivate castings and remove PDFs when an assignment trait is soft deleted."""
+    deactivate_castings_and_remove_pdfs(instance)
+
+
 @receiver(post_save, sender=AssignmentTrait)
 def post_save_assignment_trait(
     sender: type,
@@ -862,6 +869,15 @@ def post_delete_character_reset_rels(sender: type, instance: Character, **kwargs
 
     # Update visible factions
     update_visible_factions(instance.event)
+
+
+@receiver(post_softdelete, sender=Character)
+def post_softdelete_character_reset_rels(sender: type, instance: Character, **kwargs: Any) -> None:
+    """Clear event and relationship caches when a character is soft deleted."""
+    if is_clone_active():
+        return
+    clear_event_cache_all_runs(instance.event)
+    clear_event_relationships_cache(instance.event_id)
 
 
 @receiver(post_save, sender=CharacterConfig)
@@ -1170,6 +1186,15 @@ def post_delete_faction_reset_rels(sender: type, instance: object, **kwargs: Any
     update_visible_factions(instance.event)
 
 
+@receiver(post_softdelete, sender=Faction)
+def post_softdelete_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any) -> None:
+    """Clear event cache and drop a soft deleted faction from the relationship cache."""
+    if is_clone_active():
+        return
+    clear_event_cache_all_runs(instance.event)
+    remove_item_from_cache_section(instance.event_id, "factions", instance.id)
+
+
 @receiver(post_save, sender=Feature)
 def post_save_feature_index_permission(sender: type, instance: object, **kwargs: dict) -> None:
     """Clear permission and feature caches after feature/permission save."""
@@ -1417,6 +1442,14 @@ def pre_delete_payment_invoice_membership_config(
     cleanup_membership_fee_reservation(instance)
 
 
+@receiver(pre_softdelete, sender=PaymentInvoice)
+def pre_softdelete_payment_invoice_membership_config(
+    sender: type[PaymentInvoice], instance: PaymentInvoice, **kwargs: Any
+) -> None:
+    """Release the membership fee reservation when an invoice is soft deleted."""
+    cleanup_membership_fee_reservation(instance)
+
+
 @receiver(pre_delete, sender=PlayerRelationship)
 def pre_delete_player_relationship(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clean up relationship PDFs before deleting instance."""
@@ -1457,6 +1490,14 @@ def post_delete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> 
         refresh_character_relationships_background(char_rel.character_id)
 
     # Remove plot from cache
+    remove_item_from_cache_section(instance.event_id, "plots", instance.id)
+
+
+@receiver(post_softdelete, sender=Plot)
+def post_softdelete_plot_reset_rels(sender: type, instance: Plot, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted plot from the event relationship cache."""
+    if is_clone_active():
+        return
     remove_item_from_cache_section(instance.event_id, "plots", instance.id)
 
 
@@ -1521,6 +1562,14 @@ def post_delete_prologue_reset_rels(sender: type, instance: object, **kwargs: An
     remove_item_from_cache_section(instance.event_id, "prologues", instance.id)
 
 
+@receiver(post_softdelete, sender=Prologue)
+def post_softdelete_prologue_reset_rels(sender: type, instance: Prologue, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted prologue from the event relationship cache."""
+    if is_clone_active():
+        return
+    remove_item_from_cache_section(instance.event_id, "prologues", instance.id)
+
+
 @receiver(pre_save, sender=Quest)
 def pre_save_quest_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Update cache before saving quest instance."""
@@ -1552,6 +1601,15 @@ def post_delete_quest_reset_rels(sender: type, instance: object, **kwargs: Any) 
         refresh_event_questtype_relationships_background(instance.typ_id)
 
     # Remove quest from cache
+    remove_item_from_cache_section(instance.event_id, "quests", instance.id)
+
+
+@receiver(post_softdelete, sender=Quest)
+def post_softdelete_quest_reset_rels(sender: type, instance: Quest, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted quest from the event relationship cache."""
+    if is_clone_active():
+        return
+    clear_event_cache_all_runs(instance.event)
     remove_item_from_cache_section(instance.event_id, "quests", instance.id)
 
 
@@ -1590,6 +1648,15 @@ def post_delete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs
         refresh_event_quest_relationships_background(quest.id)
 
     # Remove questtype from cache
+    remove_item_from_cache_section(instance.event_id, "questtypes", instance.id)
+
+
+@receiver(post_softdelete, sender=QuestType)
+def post_softdelete_questtype_reset_rels(sender: type, instance: QuestType, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted quest type from the event relationship cache."""
+    if is_clone_active():
+        return
+    clear_event_cache_all_runs(instance.event)
     remove_item_from_cache_section(instance.event_id, "questtypes", instance.id)
 
 
@@ -1675,6 +1742,26 @@ def pre_delete_registration(sender: type, instance: Registration, *args: Any, **
         send_registration_request_rejected_email(instance)
         return
     send_registration_deletion_email(instance)
+
+
+@receiver(pre_softdelete, sender=Registration)
+def pre_softdelete_registration(sender: type, instance: Registration, **kwargs: Any) -> None:
+    """Send email notification before a registration is soft deleted."""
+    if is_clone_active():
+        return
+    if instance.pending:
+        send_registration_request_rejected_email(instance)
+        return
+    send_registration_deletion_email(instance)
+
+
+@receiver(post_softdelete, sender=Registration)
+def post_softdelete_registration_publication(sender: type, instance: Registration, **kwargs: Any) -> None:
+    """Sync published data after a registration is soft deleted (run needed, the row is gone from queries)."""
+    if is_clone_active():
+        return
+
+    publish_registration(instance.id, instance.run_id)
 
 
 @receiver(post_delete, sender=Registration)
@@ -1991,6 +2078,14 @@ def post_delete_speedlarp_reset_rels(sender: type, instance: SpeedLarp, **kwargs
     remove_item_from_cache_section(instance.event_id, "speedlarps", instance.id)
 
 
+@receiver(post_softdelete, sender=SpeedLarp)
+def post_softdelete_speedlarp_reset_rels(sender: type, instance: SpeedLarp, **kwargs: Any) -> None:
+    """Clear caches and drop a soft deleted speedlarp from the event relationship cache."""
+    if is_clone_active():
+        return
+    remove_item_from_cache_section(instance.event_id, "speedlarps", instance.id)
+
+
 @receiver(pre_save, sender=Trait)
 def pre_save_trait_reset(sender: type, instance: Trait, **kwargs: dict) -> None:
     """Update cache before saving trait."""
@@ -2011,6 +2106,14 @@ def post_save_trait_reset_rels(sender: type, instance: Trait, **kwargs: Any) -> 
 @receiver(pre_delete, sender=Trait)
 def pre_delete_trait_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear event cache when trait is deleted."""
+    clear_event_cache_all_runs(instance.event)
+
+
+@receiver(post_softdelete, sender=Trait)
+def post_softdelete_trait_reset(sender: type, instance: Trait, **kwargs: Any) -> None:
+    """Clear event cache when a trait is soft deleted."""
+    if is_clone_active():
+        return
     clear_event_cache_all_runs(instance.event)
 
 
@@ -2177,6 +2280,7 @@ for _bulk_model in _BULK_MODELS:
 
 m2m_changed.connect(on_event_role_members_changed, sender=EventRole.members.through)
 post_delete.connect(on_event_role_deleted, sender=EventRole)
+post_softdelete.connect(on_event_role_deleted, sender=EventRole)
 
 
 @receiver(user_locked_out)

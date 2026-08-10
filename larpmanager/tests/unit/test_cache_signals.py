@@ -25,12 +25,16 @@ from typing import Any
 from unittest.mock import patch
 
 from django.core.cache import cache
-from safedelete import HARD_DELETE
 
 # Import signals module to register signal handlers
 import larpmanager.models.signals  # noqa: F401
-from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole, \
-    PermissionModule
+from larpmanager.models.access import (
+    AssociationPermission,
+    AssociationRole,
+    EventPermission,
+    EventRole,
+    PermissionModule,
+)
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
     AccountingItemOther,
@@ -78,12 +82,12 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(character.event)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
-    def test_character_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
-        """Test that Character pre_delete signal resets character cache"""
+    def test_character_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
+        """Test that soft deleting a character resets the character cache"""
         character = self.character()
         event = character.event  # Store event before delete
         mock_reset.reset_mock()  # Reset mock after setup
-        character.delete(force_policy=HARD_DELETE)  # HARD_DELETE to trigger pre_delete signal
+        character.delete()
 
         mock_reset.assert_called_once_with(event)
 
@@ -98,12 +102,12 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(event)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
-    def test_faction_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
-        """Test that Faction pre_delete signal resets character cache"""
+    def test_faction_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
+        """Test that soft deleting a faction resets the character cache"""
         event = self.get_event()
         faction = Faction.objects.create(name="Test Faction", event=event)
         mock_reset.reset_mock()  # Reset after create
-        faction.delete(force_policy=HARD_DELETE)
+        faction.delete()
 
         mock_reset.assert_called_once_with(event)
 
@@ -118,12 +122,12 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(event)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
-    def test_quest_type_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
-        """Test that QuestType pre_delete signal resets character cache"""
+    def test_quest_type_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
+        """Test that soft deleting a quest type resets the character cache"""
         event = self.get_event()
         quest_type = QuestType.objects.create(name="Test Quest Type", event=event)
         mock_reset.reset_mock()  # Reset after create
-        quest_type.delete(force_policy=HARD_DELETE)
+        quest_type.delete()
 
         mock_reset.assert_called_once_with(event)
 
@@ -139,13 +143,13 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(event)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
-    def test_quest_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
-        """Test that Quest pre_delete signal resets character cache"""
+    def test_quest_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
+        """Test that soft deleting a quest resets the character cache"""
         event = self.get_event()
         quest_type = QuestType.objects.create(name="Test Quest Type", event=event)
         quest = Quest.objects.create(name="Test Quest", typ=quest_type, event=event)
         mock_reset.reset_mock()  # Reset after creates
-        quest.delete(force_policy=HARD_DELETE)
+        quest.delete()
 
         mock_reset.assert_called_once_with(event)
 
@@ -160,12 +164,12 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(event)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
-    def test_trait_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
-        """Test that Trait pre_delete signal resets character cache"""
+    def test_trait_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
+        """Test that soft deleting a trait resets the character cache"""
         event = self.get_event()
         trait = Trait.objects.create(name="Test Trait", event=event)
         mock_reset.reset_mock()  # Reset after create
-        trait.delete(force_policy=HARD_DELETE)
+        trait.delete()
 
         mock_reset.assert_called_once_with(event)
 
@@ -329,7 +333,9 @@ class TestCacheSignals(BaseTestCase):
         module = FeatureModule.objects.create(name="Test module", order=100)
         feature = Feature.objects.create(name="Test Feature", order=100, module=module)
         perm_module = PermissionModule.objects.create(name="Test module", order=100)
-        permission = EventPermission(name="Test Permission", number=100, descr="Test", feature=feature, module=perm_module)
+        permission = EventPermission(
+            name="Test Permission", number=100, descr="Test", feature=feature, module=perm_module
+        )
         permission.save()
 
         mock_reset.assert_called_once_with(permission)
@@ -341,7 +347,9 @@ class TestCacheSignals(BaseTestCase):
         module = FeatureModule.objects.create(name="Test module", order=100)
         feature = Feature.objects.create(name="Test Feature", order=100, module=module)
         perm_module = PermissionModule.objects.create(name="Test module", order=100)
-        permission = EventPermission.objects.create(name="Test Permission", number=101, descr="Test", feature=feature, module=perm_module)
+        permission = EventPermission.objects.create(
+            name="Test Permission", number=101, descr="Test", feature=feature, module=perm_module
+        )
         mock_reset.reset_mock()  # Reset after create
         permission.delete()
 
@@ -550,12 +558,12 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.assert_called_once_with(character)
 
     @patch("larpmanager.models.signals.clear_event_relationships_cache")
-    def test_character_post_delete_resets_rels_cache(self, mock_reset: Any) -> None:
-        """Test that Character post_delete signal resets rels cache"""
+    def test_character_soft_delete_resets_rels_cache(self, mock_reset: Any) -> None:
+        """Test that soft deleting a character resets the rels cache"""
         character = self.character()
         event_id = character.event_id
         mock_reset.reset_mock()  # Reset after character creation
-        character.delete(force_policy=HARD_DELETE)
+        character.delete()
 
         mock_reset.assert_called_once_with(event_id)
 
@@ -889,3 +897,96 @@ class TestCacheSignals(BaseTestCase):
 
         # Verify cache was reset for all members
         self.assertTrue(mock_reset.call_count >= 2)
+
+
+class TestSoftDeleteSignals(BaseTestCase):
+    """Test cases for the receivers bound to the safedelete soft delete signals"""
+
+    def setUp(self) -> None:
+        """Clear cache before each test."""
+        super().setUp()
+        cache.clear()
+
+    @patch("larpmanager.models.signals.remove_item_from_cache_section")
+    def test_faction_soft_delete_drops_rels_cache_entry(self, mock_remove: Any) -> None:
+        """Test that a soft deleted faction is dropped from the event rels cache"""
+        event = self.get_event()
+        faction = Faction.objects.create(name="Test Faction", event=event)
+        faction_id = faction.id
+        mock_remove.reset_mock()
+
+        faction.delete()
+
+        mock_remove.assert_called_once_with(event.id, "factions", faction_id)
+
+    @patch("larpmanager.models.signals.remove_item_from_cache_section")
+    def test_plot_soft_delete_drops_rels_cache_entry(self, mock_remove: Any) -> None:
+        """Test that a soft deleted plot is dropped from the event rels cache"""
+        event = self.get_event()
+        plot = Plot.objects.create(name="Test Plot", event=event)
+        plot_id = plot.id
+        mock_remove.reset_mock()
+
+        plot.delete()
+
+        mock_remove.assert_called_once_with(event.id, "plots", plot_id)
+
+    @patch("larpmanager.models.signals.remove_item_from_cache_section")
+    def test_quest_soft_delete_drops_rels_cache_entry(self, mock_remove: Any) -> None:
+        """Test that a soft deleted quest is dropped from the event rels cache"""
+        event = self.get_event()
+        quest_type = QuestType.objects.create(name="Test Quest Type", event=event)
+        quest = Quest.objects.create(name="Test Quest", typ=quest_type, event=event)
+        quest_id = quest.id
+        mock_remove.reset_mock()
+
+        quest.delete()
+
+        mock_remove.assert_any_call(event.id, "quests", quest_id)
+
+    @patch("larpmanager.models.signals.send_registration_deletion_email")
+    def test_registration_soft_delete_sends_email(self, mock_mail: Any) -> None:
+        """Test that soft deleting a registration notifies the player"""
+        registration = self.create_registration()
+        mock_mail.reset_mock()
+
+        registration.delete()
+
+        mock_mail.assert_called_once_with(registration)
+
+    @patch("larpmanager.models.signals.cleanup_membership_fee_reservation")
+    def test_payment_invoice_soft_delete_releases_reservation(self, mock_cleanup: Any) -> None:
+        """Test that soft deleting a payment invoice releases the membership fee reservation"""
+        invoice = self.payment_invoice()
+        invoice.save()
+        mock_cleanup.reset_mock()
+
+        invoice.delete()
+
+        mock_cleanup.assert_called_once_with(invoice)
+
+    @patch("larpmanager.models.signals.deactivate_castings_and_remove_pdfs")
+    def test_assignment_trait_soft_delete_deactivates_castings(self, mock_deactivate: Any) -> None:
+        """Test that soft deleting an assignment trait deactivates the related castings"""
+        event = self.get_event()
+        run = self.get_run()
+        quest_type = QuestType.objects.create(name="Test Quest Type", event=event)
+        quest = Quest.objects.create(name="Test Quest", typ=quest_type, event=event)
+        trait = Trait.objects.create(name="Test Trait", event=event, quest=quest)
+        assignment = AssignmentTrait.objects.create(run=run, member=self.get_member(), trait=trait, typ=0)
+        mock_deactivate.reset_mock()
+
+        assignment.delete()
+
+        mock_deactivate.assert_called_once_with(assignment)
+
+    @patch("larpmanager.cache.bulk.reset_bulk_cache")
+    def test_event_role_soft_delete_resets_staffers_cache(self, mock_reset: Any) -> None:
+        """Test that soft deleting an event role clears the staffers cache"""
+        event = self.get_event()
+        role = EventRole.objects.create(name="Test Role", event=event, number=42)
+        mock_reset.reset_mock()
+
+        role.delete()
+
+        mock_reset.assert_any_call(event.id, "staffers")

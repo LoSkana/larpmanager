@@ -692,6 +692,10 @@ def update_member_event_character_cache(instance: Member) -> None:
 
 def on_character_pre_save_update_cache(char: Character) -> None:
     """Update or clear character cache before save based on changed fields."""
+    # Skip cache updates when the instance is being soft-deleted
+    if char.deleted:
+        return
+
     # Clear cache for new characters (no primary key yet)
     if not char.pk:
         clear_event_cache_all_runs(char.event)
