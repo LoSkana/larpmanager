@@ -44,6 +44,15 @@ from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Character
 from larpmanager.utils.core.common import round_to_two_significant_digits
 
+# Path from each counted model to its Association, used to exclude demo organizations
+NON_DEMO_PATHS = {
+    Event: "association",
+    Character: "event__association",
+    Registration: "run__event__association",
+    Member: "memberships__association",
+    PaymentInvoice: "association",
+}
+
 
 def clear_larpmanager_home_cache() -> None:
     """Clear the cached larpmanager home page."""
@@ -92,14 +101,18 @@ def update_cache_lm_home() -> dict[str, int | list]:
     """
     context = {}
 
-    # Count objects for main models and round to two significant digits
-    for model_class in [Event, Character, Registration, Member, PaymentInvoice]:
+    # Count objects for main models, excluding demo organizations, rounded to two significant digits
+    for model_class, assoc_path in NON_DEMO_PATHS.items():
         model_name = str(model_class.__name__).lower()
-        model_count = model_class.objects.count()
+        model_count = model_class.objects.filter(**{f"{assoc_path}__demo_type__isnull": True}).distinct().count()
         context[f"cnt_{model_name}"] = int(round_to_two_significant_digits(model_count))
 
     # Count runs that have more than 5 registrations
-    runs_query = Run.objects.annotate(num_registration=Count("registrations")).filter(num_registration__gt=5)
+    runs_query = (
+        Run.objects.filter(event__association__demo_type__isnull=True)
+        .annotate(num_registration=Count("registrations"))
+        .filter(num_registration__gt=5)
+    )
     context["cnt_run"] = int(round_to_two_significant_digits(runs_query.count()))
 
     # Gather additional display data

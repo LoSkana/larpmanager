@@ -34,13 +34,14 @@ from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.files.base import ContentFile
 from django.db import models
+from django.db.models import Sum
 from django.shortcuts import render
 from PIL import Image as PILImage, ImageOps
 
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
 from larpmanager.models.member import Badge
-from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem
+from larpmanager.models.miscellanea import Album, AlbumImage, AlbumUpload, WarehouseItem, WarehouseItemAssignment
 from larpmanager.utils.security import safe_extract_zip
 
 if TYPE_CHECKING:
@@ -260,7 +261,6 @@ def check_centauri(request: HttpRequest, context: dict) -> HttpResponse | None:
         template_context[config_key] = get_association_config(
             context["association_id"],
             config_key,
-            default_value=None,
             context=template_context,
         )
 
@@ -322,6 +322,44 @@ def get_warehouse_optionals(context: Any, default_columns: Any) -> None:
             has_active_optional = 1
     context["optionals"] = optionals
     context["no_header_cols"] = json.dumps([column + has_active_optional for column in default_columns])
+
+
+def warehouse_assigned_quantities(items: Any) -> dict[int, int]:
+    """Return the quantity already assigned to any area, per warehouse item id."""
+    return {
+        row["item_id"]: row["total"] or 0
+        for row in WarehouseItemAssignment.objects.filter(item__in=items)
+        .values("item_id")
+        .annotate(total=Sum("quantity"))
+    }
+
+
+def warehouse_available_quantity(item: WarehouseItem, assigned: int | None = None) -> int:
+    """Return the stock of an item not yet assigned to any area, 0 if unlimited."""
+    if item.quantity is None:
+        return 0
+    if assigned is None:
+        assigned = warehouse_assigned_quantities([item]).get(item.id, 0)
+    return max(item.quantity - assigned, 0)
+
+
+def warehouse_add_assignment(item: WarehouseItem, area: Any, event: Any, quantity: int) -> Any:
+    """Add a quantity to the item/area assignment, creating it if missing.
+
+    The lookup matches the unique constraint on (area, item) only: an area may
+    be inherited from a parent campaign event, so the same pair can already be
+    assigned under a different event, and adding the event to the lookup would
+    attempt a duplicate insert.
+    """
+    assignment, created = WarehouseItemAssignment.objects.get_or_create(
+        item=item,
+        area=area,
+        defaults={"quantity": quantity, "event": event},
+    )
+    if not created:
+        assignment.quantity = (assignment.quantity or 0) + quantity
+        assignment.save()
+    return assignment
 
 
 def auto_rotate_vertical_photos(instance: object, sender: type) -> None:

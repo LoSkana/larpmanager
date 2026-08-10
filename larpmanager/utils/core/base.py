@@ -499,13 +499,10 @@ def prepare_run(context: Any) -> None:
     """
     run_configuration = get_cache_config_run(context["run"])
 
-    configs = [
-        ("has_visible_factions", False),
-        ("writing_field_visibility", False),
-    ]
+    configs = ["has_visible_factions", "writing_field_visibility"]
     event_id = context["event"].id
-    for context_key, default in configs:
-        context[context_key] = get_event_config(event_id, context_key, default_value=default, context=context)
+    for context_key in configs:
+        context[context_key] = get_event_config(event_id, context_key, context=context)
 
     # Override page theme if defined at the event level
     if is_event_config_set(event_id, "theme", context=context):

@@ -229,9 +229,7 @@ class QuickSetupForm(BaseModelForm):
                 label=field_label,
                 help_text=field_help_text + "?",
             )
-            initial_value = (
-                config_key in features if is_feature_flag else self.instance.get_config(config_key, default_value=False)
-            )
+            initial_value = config_key in features if is_feature_flag else self.instance.get_config(config_key)
             self.initial[config_key] = initial_value
 
     def save(self, commit: bool = True) -> Association:  # noqa: FBT001, FBT002

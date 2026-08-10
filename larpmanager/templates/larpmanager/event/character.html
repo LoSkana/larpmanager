@@ -12,7 +12,7 @@
             <i>{% trans "The character has missing values in required fields:" %} {{ missing_fields }}</i>
             <hr />
         {% endif %}
-        <div class="gallery single">
+        <div class="gallery single sheet-cols">
             <div class="el">
                 <div class="icon">
                     <img src="{% get_char_profile char %}"
@@ -32,27 +32,27 @@
                     </div>
                     {% include "elements/sheet/teaser.html" %}
                 </div>
-                <div class="sheet">
-                    {% if check %}
-                        <hr class="clear" />
-                        {% include "elements/sheet/pdf.html" %}
-                        {% if intro %}<div class="char_intro">{{ intro | safe }}</div>{% endif %}
-                        {% include "elements/sheet/experience.html" %}
-                        {% include "elements/sheet/inventories.html" %}
-                        {% include "elements/sheet/factions.html" %}
-                        {% include "elements/sheet/guilds.html" %}
-                        {% include "elements/sheet/texts.html" with char=sheet_char %}
-                        {% include "elements/sheet/plots.html" %}
-                        {% include "elements/sheet/quests.html" %}
-                        {% include "elements/sheet/relationships.html" %}
-                        {% include "elements/sheet/questbuilder.html" %}
-                        {% include "elements/sheet/speedlarp.html" %}
-                        {% include "elements/sheet/prologue.html" %}
-                    {% else %}
-                        {% include "elements/sheet/texts.html" %}
-                    {% endif %}
-                </div>
             </div>
+        </div>
+        <div class="sheet">
+            {% if check %}
+                <hr class="clear" />
+                {% include "elements/sheet/pdf.html" %}
+                {% if intro %}<div class="char_intro">{{ intro | safe }}</div>{% endif %}
+                {% include "elements/sheet/experience.html" %}
+                {% include "elements/sheet/inventories.html" %}
+                {% include "elements/sheet/factions.html" %}
+                {% include "elements/sheet/guilds.html" %}
+                {% include "elements/sheet/texts.html" with char=sheet_char %}
+                {% include "elements/sheet/plots.html" %}
+                {% include "elements/sheet/quests.html" %}
+                {% include "elements/sheet/relationships.html" %}
+                {% include "elements/sheet/questbuilder.html" %}
+                {% include "elements/sheet/speedlarp.html" %}
+                {% include "elements/sheet/prologue.html" %}
+            {% else %}
+                {% include "elements/sheet/texts.html" %}
+            {% endif %}
         </div>
     </div>
 {% endblock content %}

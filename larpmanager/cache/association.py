@@ -149,17 +149,13 @@ def init_cache_association(a_slug: str) -> dict | None:
         "user_registrations_shortcut",
         "calendar_past_events",
     ]:
-        association_dict[config] = get_association_config(
-            association.id, config, default_value=False, context=temp_context
-        )
+        association_dict[config] = get_association_config(association.id, config, context=temp_context)
 
     association_dict["assoc_version"] = int(get_association_config(association.id, "version", context=temp_context))
 
     if "app_integration" in association_dict.get("features", {}):
         for config in ["app_integration_button_text", "app_integration_redirect_url"]:
-            association_dict[config] = get_association_config(
-                association.id, config, default_value="", context=temp_context
-            )
+            association_dict[config] = get_association_config(association.id, config, context=temp_context)
 
     return association_dict
 
@@ -197,12 +193,12 @@ def _init_features(association: Association, cache_element: dict) -> None:
     # Configure custom mail server settings if feature is enabled
     if "custom_mail" in cache_element["features"]:
         config_key = "mail_server_use_tls"
-        cache_element[config_key] = association.get_config(config_key, default_value=False)
+        cache_element[config_key] = association.get_config(config_key)
 
         # Add mail server connection parameters
         for setting in ["host", "port", "host_user", "host_password"]:
             config_key = "mail_server_" + setting
-            cache_element[config_key] = association.get_config(config_key, default_value="")
+            cache_element[config_key] = association.get_config(config_key)
 
     # Configure token and credit naming if feature is enabled
     for setting in ["tokens", "credits"]:
@@ -210,9 +206,9 @@ def _init_features(association: Association, cache_element: dict) -> None:
             name_key = f"{setting}_name"
             # Try new config key first, fallback to old token_credit_* key for backward compatibility
             old_key = f"token_credit_{setting[:-1]}_name"  # tokens->token, credits->credit
-            new_value = association.get_config(name_key, default_value=None)
+            new_value = association.get_config(name_key)
             if new_value is None:
-                new_value = association.get_config(old_key, default_value=None)
+                new_value = association.get_config(old_key)
             cache_element[name_key] = new_value
 
     # Configure Centauri probability settings if feature is enabled

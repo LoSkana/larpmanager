@@ -278,6 +278,11 @@ def plots_character(live_server: Any, page: Any) -> None:
     # Wait for search results to appear and click first option
     _wait_select2_results(edit_iframe)
     edit_iframe.locator(".select2-results__option").first.click()
+
+    # the role rows are built as soon as the plot is selected, without saving first
+    expect(edit_iframe.locator("#id_pl_2_tr")).to_be_visible()
+    expect(edit_iframe.locator("#id_pl_3_tr")).to_be_visible()
+    fill_tinymce(edit_iframe, "id_pl_3", "instant role")
     save_modal(page, edit_iframe)
 
     # check there are all three
@@ -286,6 +291,9 @@ def plots_character(live_server: Any, page: Any) -> None:
 
     page.locator('[id="u1"]').locator(".fa-edit").click()
     edit_iframe = get_modal_iframe(page)
+
+    # the role text written on the freshly added row was saved
+    expect(edit_iframe.locator("#id_pl_3")).to_have_value("<p>instant role</p>")
 
     # remove third
     edit_iframe.get_by_role("listitem", name="bibi").locator("span").click()

@@ -31,7 +31,7 @@ import pytest
 from playwright.sync_api import expect
 
 from larpmanager.tests.utils import go_to, load_image, login_orga, submit_confirm, expect_normalized, submit_register, \
-    delete_modal, sidebar
+    delete_modal, expand_options, sidebar
 
 pytestmark = pytest.mark.e2e
 
@@ -127,6 +127,7 @@ def pre_register(live_server: Any, page: Any) -> None:
 
     # Set registration_status to PRE (Pre-registration)
     go_to(page, live_server, "/test/manage/run")
+    expand_options(page)
     page.locator('label[for="id_registration_status_2"]').click()
     submit_confirm(page)
 
@@ -144,5 +145,6 @@ def pre_register(live_server: Any, page: Any) -> None:
 
     # Change registration_status to OPEN for normal registration
     go_to(page, live_server, "/test/manage/run")
+    expand_options(page)
     page.locator('label[for="id_registration_status_1"]').click()
     submit_confirm(page)

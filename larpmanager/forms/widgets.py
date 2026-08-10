@@ -67,17 +67,43 @@ def _inject_card(option: dict, label: Any, desc: str, meta: dict) -> None:
 class _DescriptionOptionsMixin:
     """Mixin that injects per-option description and card layout into each option label."""
 
+    template_name = "forms/widgets/description_options.html"
+
     def __init__(
         self,
         *args: Any,
         descriptions: dict | None = None,
         metadata: dict | None = None,
+        collapse_unselected: bool | None = None,
         **kwargs: Any,
     ) -> None:
-        """Prepare widget metadata."""
+        """Prepare widget metadata.
+
+        collapse_unselected drives the collapse toggle: None disables it, True renders the
+        unselected options already collapsed, False renders them visible with the link to collapse.
+        """
         super().__init__(*args, **kwargs)
         self.descriptions = descriptions or {}
         self.metadata = metadata or {}
+        self.collapse_unselected = collapse_unselected
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Add flags telling the template which options can be collapsed, and the initial state."""
+        context = super().get_context(name, value, attrs)
+        widget_context = context["widget"]
+        collapsible = False
+        collapsed = False
+        if self.collapse_unselected is not None:
+            options = [
+                option for _group, group_options, _index in widget_context["optgroups"] for option in group_options
+            ]
+            selected_count = sum(1 for option in options if option["selected"])
+            collapsible = len(options) > 0
+            # start collapsed only if some option would actually stay out of view
+            collapsed = collapsible and self.collapse_unselected and selected_count < len(options)
+        widget_context["collapsible"] = collapsible
+        widget_context["collapse_unselected"] = collapsed
+        return context
 
     def create_option(
         self,
