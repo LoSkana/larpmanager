@@ -6,7 +6,7 @@
 {% block content %}
     {% if show_quest.teaser %}
         <h2>{{ writing_field_names.teaser }}</h2>
-        <p>{{ quest.teaser | safe }}</p>
+        <div class="plot">{{ quest.teaser | safe }}</div>
     {% endif %}
     {% include "elements/sheet/fields.html" with char=quest_fields %}
     {% if show_trait %}

@@ -7,7 +7,7 @@
                     {% if question.typ == 'p' %}
                         <div class="go-block">
                             <b>{{ question.name }}:</b>
-                            <p>{{ field|linebreaksbr }}</p>
+                            <div class="plot">{{ field|linebreaksbr }}</div>
                         </div>
                     {% else %}
                         <div class="go-inline">

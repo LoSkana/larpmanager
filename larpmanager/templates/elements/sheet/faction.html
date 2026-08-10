@@ -5,7 +5,7 @@
          alt="faction logo" />
 {% endif %}
 {% if show_faction.teaser %}
-    <p>{% show_char faction.teaser run 1 %}</p>
+    <div class="plot">{% show_char faction.teaser run 1 %}</div>
 {% endif %}
 {% include "elements/sheet/fields.html" with char=fact %}
 <h2>{% trans "Characters" %}</h2>

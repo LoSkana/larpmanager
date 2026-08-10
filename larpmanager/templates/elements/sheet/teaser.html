@@ -1,7 +1,7 @@
 {% load show_tags i18n %}
 {% if char.teaser and show_character.teaser %}
     <h2 class="c">{{ writing_fields.character.names.teaser }}</h2>
-    <div class="teaser">{% show_char char.teaser run 1 %}</div>
+    <div class="plot teaser">{% show_char char.teaser run 1 %}</div>
 {% endif %}
 {% for fnum in char.factions %}
     {% with factions|get:fnum as fact %}
@@ -14,7 +14,7 @@
                 <h2>{{ fact.name }}</h2>
             {% endif %}
             {% if fact.teaser and show_faction.teaser %}
-                {% show_char fact.teaser run 1 %}
+                <div class="plot">{% show_char fact.teaser run 1 %}</div>
             {% endif %}
         {% endif %}
     {% endwith %}
