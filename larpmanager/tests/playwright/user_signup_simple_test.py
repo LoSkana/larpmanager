@@ -108,7 +108,7 @@ def help_questions(live_server: Any, page: Any) -> None:
 
     go_to(page, live_server, "/manage/questions")
     page.get_by_role("link", name="Close").click()
-    page.get_by_role("link", name="Show answered questions").click()
+    page.get_by_role("link", name="Show closed questions").click()
     submit_confirm(page)
 
 

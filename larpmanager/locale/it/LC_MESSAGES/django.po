@@ -1599,7 +1599,7 @@ msgid "Show less"
 msgstr "Mostra meno"
 
 msgid "Show more"
-msgstr "Mostra altro"
+msgstr "Mostra di più"
 
 msgid "SpeedLarp"
 msgstr "SpeedLarp"
@@ -4558,6 +4558,9 @@ msgstr "Sezioni di iscrizione"
 msgid "Reserve registrations"
 msgstr "Iscrizioni di riserva"
 
+msgid "Show closed questions"
+msgstr "Mostra le domande chiuse"
+
 msgid "Sign up as a reserve!"
 msgstr "Iscriviti come riserva!"
 
@@ -4900,9 +4903,6 @@ msgstr "Rimborso elaborato"
 
 msgid "Select your preferences"
 msgstr "Scegli le tue preferenze"
-
-msgid "Show answered questions"
-msgstr "Mostra le domande a cui hai risposto"
 
 msgid "Show available factions"
 msgstr "Mostra le fazioni disponibili"
@@ -6856,7 +6856,7 @@ msgstr "Complimenti, hai completato tutti i moduli!"
 
 #, python-format
 msgid "Writing fields without options: %(list)s"
-msgstr "Campi di writing senza opzioni: %(list)s"
+msgstr "Campi di scrittura senza opzioni: %(list)s"
 
 msgid "You are logged in with an email address:"
 msgstr "Sei loggato con indirizzo email:"
@@ -8623,7 +8623,7 @@ msgstr "Gestisci i sistemi di punti esperienza disponibili per questo evento"
 
 msgid "Manage the questions displayed in the character writing form"
 msgstr ""
-"Gestisci le domande visualizzate nel modulo di creazione del personaggio"
+"Gestisci le domande visualizzate nel modulo di scrittura del personaggio"
 
 msgid "Manage votes for the assignment of roles in the organization"
 msgstr ""
@@ -13809,8 +13809,8 @@ msgid ""
 "Number of months at the start of the year during which members may pay the "
 "annual fee without an active event registration."
 msgstr ""
-"Numero di mesi all'inizio dell'anno in cui è possibile pagare la quota "
-"annuale senza dover essere iscritti a un evento attivo."
+"Numero di mesi all'inizio dell'anno durante i quali i membri possono pagare "
+"la quota annuale senza avere un'iscrizione attiva a un evento."
 
 msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "
@@ -14353,8 +14353,8 @@ msgid ""
 "characters."
 msgstr ""
 "Attiva i personaggi \"di riserva\": schede personaggio più semplici, "
-"assegnate ai partecipanti pronti a sostituire i personaggi principali in "
-"caso di rinuncia all'ultimo minuto."
+"assegnate ai partecipanti pronti a sostituire chi rinuncia all'ultimo minuto"
+" tra i personaggi principali."
 
 msgid ""
 "If enabled, show two separate tables on the characters page, one for "
