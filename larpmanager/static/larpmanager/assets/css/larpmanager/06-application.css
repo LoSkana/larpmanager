@@ -215,6 +215,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   width: 100%;
+  padding: 1em;
+  box-sizing: border-box;
 }
 
 form .plot {
@@ -222,10 +224,6 @@ form .plot {
   margin: 2%;
   width: 96%;
   max-height: 10em;
-}
-
-.sheet .plot {
-  padding: 1em;
 }
 
 .plot-cont {
@@ -371,7 +369,7 @@ form .plot {
   .plot {
     padding: 0.5em;
     background: none;
-    border: none;
+    max-height: 20em;
   }
 
   .gallery .text {
