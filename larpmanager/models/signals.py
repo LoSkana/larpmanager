@@ -881,10 +881,16 @@ def post_save_event_button(sender: type, instance: object, created: bool, **kwar
 
 @receiver(post_save, sender=EventConfig)
 def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
-    """Reset event configuration cache after model save."""
+    """Reset event configuration cache after model save, including child events of a campaign."""
     reset_element_configs(instance.event)
     for run in instance.event.runs.all():
         reset_cache_config_run(run)
+
+    # child events inherit the parent configs, so their caches must be reset too
+    for child in Event.objects.filter(parent_id=instance.event_id):
+        reset_element_configs(child)
+        for run in child.runs.all():
+            reset_cache_config_run(run)
 
     # If a publication config has been changed, trigger event publication
     if instance.name.startswith("pub_"):
