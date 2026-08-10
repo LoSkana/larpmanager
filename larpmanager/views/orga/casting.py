@@ -496,9 +496,7 @@ def get_casting_data(
 
     # Load priority configuration for algorithm weighting
     for priority_key in ("reg_priority", "pay_priority"):
-        context[priority_key] = int(
-            get_event_config(context["event"].id, f"casting_{priority_key}", default_value=0, context=context)
-        )
+        context[priority_key] = int(get_event_config(context["event"].id, f"casting_{priority_key}", context=context))
 
 
 def _casting_prepare(context: dict) -> tuple[set, dict[Any, Any], dict[Any, list[Any]]]:

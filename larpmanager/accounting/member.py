@@ -385,7 +385,7 @@ def get_membership_fee_for_reg(
     event_year = run.start.year
     if event_year < current_year:
         return 0
-    fee = int(get_association_config(association_id, "membership_fee", default_value=0))
+    fee = int(get_association_config(association_id, "membership_fee"))
     if not fee:
         return 0
     already_paid = AccountingItemMembership.objects.filter(

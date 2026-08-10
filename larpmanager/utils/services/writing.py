@@ -483,9 +483,7 @@ def _prepare_writing_list(context: dict) -> None:
         logger.debug("Name question not found for writing type %s: %s", context["writing_typ"], e)
 
     model_name = context["label_typ"].lower()
-    context["default_fields"] = context["member"].get_config(
-        f"open_{model_name}_{context['event'].id}", default_value="[]"
-    )
+    context["default_fields"] = context["member"].get_config(f"open_{model_name}_{context['event'].id}")
     if context["default_fields"] == "[]" and context.get("writing_typ"):
         def_types = get_def_writing_types()
         question_field_list = [f"q_{q['uuid']}" for q in questions if q["typ"] in def_types]

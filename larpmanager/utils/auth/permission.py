@@ -440,11 +440,9 @@ def get_index_permissions(  # noqa: C901, PLR0912
         if permission.get("active_if"):
             config_key = permission["active_if"]
             if permission_type == "event" and context.get("event"):
-                config_value = get_event_config(context["event"].id, config_key, default_value=False, context=context)
+                config_value = get_event_config(context["event"].id, config_key, context=context)
             elif permission_type == "association" and context.get("association_id"):
-                config_value = get_association_config(
-                    context["association_id"], config_key, default_value=False, context=context
-                )
+                config_value = get_association_config(context["association_id"], config_key, context=context)
             else:
                 config_value = False
             if not config_value:

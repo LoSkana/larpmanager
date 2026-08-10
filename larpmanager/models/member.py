@@ -35,7 +35,7 @@ from imagekit.models import ImageSpecField
 from phonenumber_field.modelfields import PhoneNumberField
 from pilkit.processors import ResizeToFill
 
-from larpmanager.cache.config import CONFIG_UNSET, get_element_config
+from larpmanager.cache.config import get_element_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, MediaTokenMixin, UuidMixin
 from larpmanager.models.utils import UploadToPathAndRename, download_d, show_thumb
@@ -441,9 +441,9 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         # Format: street number, city (province), country_code (country)
         return f"{address_components[4]} {address_components[5]}, {address_components[2]} ({address_components[3]}), {address_components[1].replace('IT-', '')} ({address_components[0]})"
 
-    def get_config(self, name: str, *, default_value: Any = CONFIG_UNSET, bypass_cache: bool = False) -> Any:
+    def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this member."""
-        return get_element_config(self, name, default_value, bypass_cache=bypass_cache)
+        return get_element_config(self, name, bypass_cache=bypass_cache)
 
 
 class MemberConfig(BaseModel):

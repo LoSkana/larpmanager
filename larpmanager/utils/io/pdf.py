@@ -95,7 +95,7 @@ def fix_filename(filename: Any) -> Any:
 def has_pdf_customization(event_id: int) -> bool:
     """Return True if event has any custom PDF styling configured."""
     for key in ["page_css", "header_content", "footer_content"]:
-        value = get_event_config(event_id, key, default_value="")
+        value = get_event_config(event_id, key)
         if value and str(value).strip():
             return True
     return False
@@ -240,7 +240,6 @@ def add_pdf_instructions(context: dict) -> None:
         context[instruction_key] = get_event_config(
             context["event"].id,
             instruction_key,
-            default_value="",
             context=context,
             bypass_cache=True,
         )

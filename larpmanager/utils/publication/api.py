@@ -222,7 +222,7 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
             # Add publication metadata from EventConfig
             pub_char_fields = ["country", "accommodation", "event_type"]
             for field in pub_char_fields:
-                value = get_element_config(event, f"pub_{field}", default_value="")
+                value = get_element_config(event, f"pub_{field}")
                 if value:
                     event_data[field] = value
 
@@ -230,7 +230,7 @@ def published_events(request: HttpRequest) -> JsonResponse:  # noqa: C901, PLR09
                 event_data["place"] = event.where
 
             for field in ["accommodation_type", "meals", "language"]:
-                raw = get_element_config(event, f"pub_{field}", default_value="")
+                raw = get_element_config(event, f"pub_{field}")
                 parsed = parse_multi_config(raw)
                 if parsed:
                     event_data[field] = parsed

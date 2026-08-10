@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _, pgettext
 from larpmanager.cache.config import (
     get_association_config,
     get_event_config,
+    is_event_config_set,
     reset_element_configs,
     save_all_element_configs,
     save_single_config,
@@ -1166,12 +1167,12 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
         # Load current theme: from event config if editing, else from association config (new event default)
         current_theme = None
-        if self.instance.pk:
-            current_theme = get_event_config(self.instance.id, "theme", default_value="")
+        if self.instance.pk and is_event_config_set(self.instance.id, "theme"):
+            current_theme = get_event_config(self.instance.id, "theme")
 
         if not current_theme:
             assoc_id = self.params.get("association_id")
-            current_theme = (get_association_config(assoc_id, "theme") if assoc_id else None) or AppearanceTheme.NEBULA
+            current_theme = get_association_config(assoc_id, "theme") if assoc_id else AppearanceTheme.NEBULA
         self.initial["theme"] = current_theme
         self.order_fields(["theme"] + [f for f in self.fields if f != "theme"])
 

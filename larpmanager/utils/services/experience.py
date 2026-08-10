@@ -256,7 +256,7 @@ def _get_available_abilities(
 def get_free_abilities(char: Character) -> list:
     """Return the list of free abilities for a character."""
     config_name = _free_abilities_cache_key()
-    config_value = char.get_config(config_name, default_value="[]")
+    config_value = char.get_config(config_name)
     return json.loads(config_value)
 
 

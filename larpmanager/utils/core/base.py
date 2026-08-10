@@ -29,7 +29,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
-from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.config import get_association_config, get_event_config, is_event_config_set
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import cache_event_links
 from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
@@ -499,18 +499,14 @@ def prepare_run(context: Any) -> None:
     """
     run_configuration = get_cache_config_run(context["run"])
 
-    configs = [
-        ("has_visible_factions", False),
-        ("writing_field_visibility", False),
-    ]
+    configs = ["has_visible_factions", "writing_field_visibility"]
     event_id = context["event"].id
-    for context_key, default in configs:
-        context[context_key] = get_event_config(event_id, context_key, default_value=default, context=context)
+    for context_key in configs:
+        context[context_key] = get_event_config(event_id, context_key, context=context)
 
-    # Override page theme if defined
-    event_theme = get_event_config(event_id, "theme", default_value="", context=context)
-    if event_theme:
-        context["page_theme"] = event_theme
+    # Override page theme if defined at the event level
+    if is_event_config_set(event_id, "theme", context=context):
+        context["page_theme"] = get_event_config(event_id, "theme", context=context)
 
     if "staff" in context or not context.get("writing_field_visibility"):
         context["show_all"] = "1"
