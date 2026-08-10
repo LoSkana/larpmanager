@@ -756,10 +756,15 @@ function refreshDatatables() {
 
             if (tableId && window.datatables && window.datatables[tableId]) {
                 const dt = window.datatables[tableId];
+                // ColumnControl filters live in column.search.fixed('dtcc'), not in column().search():
+                // ask its state handlers to serialise themselves the same way stateSave would
+                const ccState = {};
+                $(dt.table().node()).trigger('stateSaveParams.dt', [dt.settings()[0], ccState]);
                 savedStates[tableId] = {
                     order: dt.order(),
                     search: dt.search(),
                     colSearches: dt.columns().search().toArray(),
+                    columnControl: ccState.columnControl,
                     page: dt.page(),
                 };
                 dt.destroy();
@@ -1116,6 +1121,14 @@ function data_tables() {
                 state.colSearches.forEach(function(colSearch, i) {
                     if (colSearch) { table.column(i).search(colSearch); needDraw = true; }
                 });
+            }
+            if (state.columnControl) {
+                // replay the saved ColumnControl state: its components listen for stateLoaded
+                $(table.table().node()).trigger('stateLoaded.dt', [
+                    table.settings()[0],
+                    { columnControl: state.columnControl },
+                ]);
+                needDraw = true;
             }
             if (state.order && state.order.length) { table.order(state.order); needDraw = true; }
             if (needDraw) table.draw(false);
