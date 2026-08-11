@@ -7615,7 +7615,9 @@ msgstr ""
 msgid "Show inactive"
 msgstr ""
 
-msgid "The quick access sidebar is on the left (on mobile, tap "
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the "
+"bottom to open it)."
 msgstr ""
 
 msgid ""

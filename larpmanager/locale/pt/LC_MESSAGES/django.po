@@ -499,6 +499,9 @@ msgstr "Ação"
 msgid "Active"
 msgstr "Ativo"
 
+msgid "Admins"
+msgstr "Administradores"
+
 msgid "Amount"
 msgstr "Montante"
 
@@ -1175,9 +1178,6 @@ msgstr "Inativo"
 msgid "Included"
 msgstr "Incluído"
 
-msgid "Invoices"
-msgstr "Faturas"
-
 msgid "Language"
 msgstr "Idioma"
 
@@ -1400,9 +1400,6 @@ msgstr "Aceite:"
 msgid "Algorithm"
 msgstr "Algoritmo"
 
-msgid "Approvals"
-msgstr "Aprovações"
-
 msgid "Assigned:"
 msgstr "Atribuído:"
 
@@ -1576,6 +1573,9 @@ msgstr "Destinatário"
 
 msgid "Recompute"
 msgstr "Recalcular"
+
+msgid "Reference"
+msgstr "Referência"
 
 msgid "Remaining"
 msgstr "Restantes"
@@ -4634,9 +4634,6 @@ msgstr "Idade (durante o evento)"
 msgid "Arrived safe and sound"
 msgstr "Chegámos bem"
 
-msgid "Bank payment reference"
-msgstr "Referência de pagamento bancário"
-
 msgid "Browse upcoming events"
 msgstr "Explora os próximos eventos"
 
@@ -6161,9 +6158,6 @@ msgstr "Gerir a tua adesão à associação"
 msgid "Manages registration cancellations"
 msgstr "Gere cancelamentos de inscrição"
 
-msgid "Manually approve payments received"
-msgstr "Aprovar manualmente pagamentos recebidos"
-
 msgid "No activation steps are available."
 msgstr "Não há passos de ativação disponíveis."
 
@@ -7248,9 +7242,6 @@ msgstr "Gerir inventários de personagens e os seus itens"
 msgid "Manage event metadata for external promotion"
 msgstr "Gerir metadados do evento para promoção externa"
 
-msgid "Manage invoices of payments and approve them"
-msgstr "Gerir faturas de pagamentos e aprová-las"
-
 msgid "Manage participant questions and answer them"
 msgstr "Gerir perguntas dos participantes e respondê-las"
 
@@ -8164,9 +8155,6 @@ msgstr "Não existem membros com créditos negativos no ano selecionado."
 msgid "No members with positive credits for the selected year."
 msgstr "Não existem membros com créditos positivos no ano selecionado."
 
-msgid "No payment invoices awaiting confirmation at this time."
-msgstr "Neste momento, não há faturas de pagamento a aguardar confirmação."
-
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Seleciona as linhas da tabela e escolhe a operação a aplicar"
 
@@ -8252,9 +8240,9 @@ msgstr "O modo de apresentação inicial ao abrir a página do Ensemble."
 msgid "The link will be valid for the following number of days:"
 msgstr "A ligação será válida pelo seguinte número de dias:"
 
-msgid "The quick access sidebar is on the left (on mobile, tap "
-msgstr ""
-"A barra lateral de acesso rápido está à esquerda (no telemóvel, toca em "
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Estas personagens não são membros da guilda: %(names)s"
 
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Encontrámos um problema com o código fiscal que forneceste:"
@@ -9008,6 +8996,9 @@ msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Gere tokens usados pelos participantes para cobrir a taxa de inscrição"
 
+msgid "Members that can manage the guild: they must be among the members"
+msgstr "Membros que podem gerir a guilda: têm de estar entre os membros"
+
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"
 msgstr ""
@@ -9429,11 +9420,6 @@ msgstr "Ups! Deste uma ou mais respostas incorretas. Confere-as abaixo."
 msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 "Preferência de tema pessoal, substitui o tema do evento e da organização."
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-"Revê e confirma as faturas de pagamento submetidas que aguardam aprovação "
-"manual"
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr ""
@@ -12069,6 +12055,13 @@ msgid ""
 msgstr ""
 "Opcional — Número máximo de vezes que pode ser selecionada em todas as "
 "inscrições (0 = ilimitado)"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
+" bottom to open it)."
+msgstr ""
+"A barra lateral de acesso rápido fica à esquerda (no telemóvel, toca em "
+"\"Atalhos\" na parte inferior para a abrir)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "

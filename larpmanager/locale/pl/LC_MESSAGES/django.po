@@ -8252,10 +8252,6 @@ msgstr "Początkowy tryb wyświetlania przy otwieraniu strony ensemble."
 msgid "The link will be valid for the following number of days:"
 msgstr "Link będzie ważny przez następującą liczbę dni:"
 
-msgid "The quick access sidebar is on the left (on mobile, tap "
-msgstr ""
-"Pasek szybkiego dostępu znajduje się po lewej stronie (na telefonie dotknij "
-
 #, python-format
 msgid "These characters are not members of the guild: %(names)s"
 msgstr "Te postacie nie są członkami gildii: %(names)s"
@@ -12057,6 +12053,13 @@ msgid ""
 msgstr ""
 "Opcjonalnie - maksymalna liczba razy, kiedy może być wybrana we wszystkich "
 "rejestracjach (0 = nieograniczona)"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
+" bottom to open it)."
+msgstr ""
+"Panel szybkiego dostępu znajduje się po lewej stronie (na urządzeniu "
+"mobilnym stuknij „Skróty” na dole, aby go otworzyć)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "

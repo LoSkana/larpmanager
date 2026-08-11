@@ -8238,10 +8238,6 @@ msgstr "Den innledende visningsmodusen når ensemble-siden åpnes."
 msgid "The link will be valid for the following number of days:"
 msgstr "Koblingen vil være gyldig i følgende antall dager:"
 
-msgid "The quick access sidebar is on the left (on mobile, tap "
-msgstr ""
-"Sidepanelet for hurtig tilgang ligger til venstre (på mobil: trykk på "
-
 #, python-format
 msgid "These characters are not members of the guild: %(names)s"
 msgstr "Disse karakterene er ikke medlemmer av lauget: %(names)s"
@@ -11987,6 +11983,13 @@ msgid ""
 msgstr ""
 "Valgfritt - Maksimalt antall ganger det kan velges på tvers av alle "
 "registreringer (0 = ubegrenset)"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
+" bottom to open it)."
+msgstr ""
+"Hurtigtilgangssidefeltet er til venstre (på mobil trykker du på «Snarveier» "
+"nederst for å åpne det)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
