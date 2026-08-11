@@ -1067,9 +1067,6 @@ msgstr "Godkänd"
 msgid "Assigned"
 msgstr "Tilldelad"
 
-msgid "Authors:"
-msgstr "Författare:"
-
 msgid "Auto buy"
 msgstr "Automatiskt köp"
 
@@ -1210,6 +1207,9 @@ msgstr "För engångsbruk"
 
 msgid "One-shot"
 msgstr "One-shot"
+
+msgid "Open map"
+msgstr "Öppna karta"
 
 msgid "Optional"
 msgstr "Valfritt"
@@ -4652,9 +4652,6 @@ msgstr "Valutor & material"
 msgid "Customised mail server"
 msgstr "Skräddarsydd e-postserver"
 
-msgid "Discover the web site!"
-msgstr "Upptäck webbplatsen!"
-
 msgid "Event deletion request"
 msgstr "Begäran om radering av evenemang"
 
@@ -4915,6 +4912,9 @@ msgstr "Total registreringsavgift:"
 
 msgid "Welcome to LarpManager!"
 msgstr "Välkommen till LarpManager!"
+
+msgid "Write to the organizers"
+msgstr "Skriv till arrangörerna"
 
 msgid "(Optional) Display order"
 msgstr "(Valfritt) Visningsordning"

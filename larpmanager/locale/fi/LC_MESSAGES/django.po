@@ -1067,9 +1067,6 @@ msgstr "Hyväksytty"
 msgid "Assigned"
 msgstr "Määrätty"
 
-msgid "Authors:"
-msgstr "Kirjoittajat:"
-
 msgid "Auto buy"
 msgstr "Automaattinen osto"
 
@@ -1210,6 +1207,9 @@ msgstr "Kertakäyttöinen"
 
 msgid "One-shot"
 msgstr "One-shot"
+
+msgid "Open map"
+msgstr "Avaa kartta"
 
 msgid "Optional"
 msgstr "Valinnainen"
@@ -4652,9 +4652,6 @@ msgstr "Valuutat ja materiaalit"
 msgid "Customised mail server"
 msgstr "Mukautettu sähköpostipalvelin"
 
-msgid "Discover the web site!"
-msgstr "Tutustu verkkosivustoon!"
-
 msgid "Event deletion request"
 msgstr "Tapahtuman poistopyyntö"
 
@@ -4915,6 +4912,9 @@ msgstr "Ilmoittautumismaksu yhteensä:"
 
 msgid "Welcome to LarpManager!"
 msgstr "Tervetuloa LarpManageriin!"
+
+msgid "Write to the organizers"
+msgstr "Kirjoita järjestäjille"
 
 msgid "(Optional) Display order"
 msgstr "(Valinnainen) Näyttöjärjestys"

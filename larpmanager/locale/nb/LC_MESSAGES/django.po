@@ -1067,9 +1067,6 @@ msgstr "Godkjent"
 msgid "Assigned"
 msgstr "Tilordnet"
 
-msgid "Authors:"
-msgstr "Forfattere:"
-
 msgid "Auto buy"
 msgstr "Autokjøp"
 
@@ -1210,6 +1207,9 @@ msgstr "Engangs"
 
 msgid "One-shot"
 msgstr "One-shot"
+
+msgid "Open map"
+msgstr "Åpne kart"
 
 msgid "Optional"
 msgstr "Valgfritt"
@@ -4652,9 +4652,6 @@ msgstr "Valutaer og materialer"
 msgid "Customised mail server"
 msgstr "Skreddersydd e-postserver"
 
-msgid "Discover the web site!"
-msgstr "Utforsk nettstedet!"
-
 msgid "Event deletion request"
 msgstr "Forespørsel om sletting av hendelse"
 
@@ -4915,6 +4912,9 @@ msgstr "Total registreringsavgift:"
 
 msgid "Welcome to LarpManager!"
 msgstr "Velkommen til LarpManager!"
+
+msgid "Write to the organizers"
+msgstr "Skriv til arrangørene"
 
 msgid "(Optional) Display order"
 msgstr "(Valgfritt) Visningsrekkefølge"

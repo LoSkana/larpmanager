@@ -6167,12 +6167,6 @@ msgstr ""
 msgid "Next payment: %(quota)s%(currency)s, overdue by %(days)s days"
 msgstr ""
 
-msgid "Discover the web site!"
-msgstr ""
-
-msgid "Authors:"
-msgstr ""
-
 msgid "Next sessions"
 msgstr ""
 
@@ -6191,6 +6185,15 @@ msgid "Past sessions"
 msgstr ""
 
 msgid "Link"
+msgstr ""
+
+msgid "Dates"
+msgstr ""
+
+msgid "Open map"
+msgstr ""
+
+msgid "Write to the organizers"
 msgstr ""
 
 msgid "Discover the factions of the game"
@@ -7724,9 +7727,6 @@ msgid "<b>Lite Mode</b>: %(progress)s%% complete."
 msgstr ""
 
 msgid "Complete the checklist to unlock all features:"
-msgstr ""
-
-msgid "Dates"
 msgstr ""
 
 msgid "Counts"

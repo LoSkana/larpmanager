@@ -1067,9 +1067,6 @@ msgstr "Goedgekeurd"
 msgid "Assigned"
 msgstr "Toegewezen"
 
-msgid "Authors:"
-msgstr "Auteurs:"
-
 msgid "Auto buy"
 msgstr "Automatisch kopen"
 
@@ -1210,6 +1207,9 @@ msgstr "Eenmalig"
 
 msgid "One-shot"
 msgstr "One-shot"
+
+msgid "Open map"
+msgstr "Kaart openen"
 
 msgid "Optional"
 msgstr "Optioneel"
@@ -4652,9 +4652,6 @@ msgstr "Valuta & materialen"
 msgid "Customised mail server"
 msgstr "Aangepaste mailserver"
 
-msgid "Discover the web site!"
-msgstr "Ontdek de website!"
-
 msgid "Event deletion request"
 msgstr "Verzoek om verwijdering van het evenement"
 
@@ -4915,6 +4912,9 @@ msgstr "Totale registratiekosten:"
 
 msgid "Welcome to LarpManager!"
 msgstr "Welkom bij LarpManager!"
+
+msgid "Write to the organizers"
+msgstr "Schrijf naar de organisatoren"
 
 msgid "(Optional) Display order"
 msgstr "(Optioneel) Weergavevolgorde"
