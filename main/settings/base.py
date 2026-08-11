@@ -160,7 +160,7 @@ LANGUAGES = [
     ('nb', 'Norsk'),
     ('sv', 'Svenska'),
     ('fi', 'suomi'),
-    # ('pt', 'Português'),
+    ('pt', 'Português'),
     # ('el', 'Ελληνικά'),
     # ('da', 'Dansk'),
     # ('et', 'Eesti'),
@@ -178,6 +178,10 @@ LANGUAGES = [
     # ('ja', '日本語'),
     # ('ko', '한국어'),
     # ('zh', '汉语'),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
 ]
 
 TIME_ZONE = 'UTC'
