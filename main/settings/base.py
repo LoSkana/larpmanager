@@ -370,7 +370,6 @@ SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 SAFE_DELETE_FIELD_NAME = 'deleted'
 
 CLEAN_DB = [
-    'VACUUM',
     "delete from larpmanager_textversion where created < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_log where created < CURRENT_DATE - INTERVAL '6 months';",
     # "delete from paypal_ipn where created < CURRENT_DATE - INTERVAL '6 months';",
@@ -399,6 +398,14 @@ CLEAN_DB = [
     "delete from larpmanager_casting where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_relationship where deleted < CURRENT_DATE - INTERVAL '6 months';",
     "delete from larpmanager_larpmanagerprofiler where created < CURRENT_DATE - INTERVAL '6 months';",
+
+    # recipients first: the foreign key is not cascading at database level
+    "delete from larpmanager_emailrecipient where email_content_id in ( select id from larpmanager_emailcontent where created < CURRENT_DATE - INTERVAL '12 months');",
+    "delete from larpmanager_emailcontent where created < CURRENT_DATE - INTERVAL '12 months';",
+    "delete from axes_accesslog where attempt_time < CURRENT_DATE - INTERVAL '3 months';",
+
+    # last, to reclaim the space freed by the deletions above
+    'VACUUM (ANALYZE)',
 ]
 
 
