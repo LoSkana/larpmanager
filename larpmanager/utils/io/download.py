@@ -36,6 +36,7 @@ from larpmanager.cache.config import get_configs, get_event_config
 from larpmanager.cache.experience import has_multiple_exp_systems
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
+from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -51,8 +52,8 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
-from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Character, CharacterConfig, Plot, PlotCharacterRel, Relationship
+from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
+from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, PlotCharacterRel, Relationship
 from larpmanager.utils.core.common import check_field
 from larpmanager.utils.edit.backend import _get_values_mapping
 from larpmanager.utils.security.csv_validation import SanitizingCsvWriter, sanitize_dataframe
@@ -1463,3 +1464,65 @@ def export_character_configs(context: Any) -> Any:
         .order_by("character__number", "name")
     ]
     return [("character_config", column_headers, rows)]
+
+
+def prepare_backup(context: dict) -> HttpResponse:
+    """Prepare comprehensive event data backup by exporting various components.
+
+    Creates a ZIP file containing exported event data including registrations,
+    characters, factions, plots, abilities, and quest builder components based
+    on enabled features.
+
+    Args:
+        context: Context dictionary containing:
+            - event: Event object to backup
+            - features: Dict of enabled feature flags
+            - Other context data required by export functions
+
+    Returns:
+        HttpResponse: ZIP file response containing all exported event data
+
+    Raises:
+        KeyError: If required context keys are missing
+        Exception: If export or ZIP creation fails
+
+    """
+    export_files = []
+
+    # Export core event data
+    export_files.extend(export_event(context))
+
+    # Export registration-related data
+    export_files.extend(export_data(context, Registration))
+    export_files.extend(export_registration_form(context))
+    export_files.extend(export_tickets(context))
+
+    # Export character data if feature is enabled
+    if "character" in context["features"]:
+        export_files.extend(export_data(context, Character))
+        export_files.extend(export_character_form(context))
+        export_files.extend(export_character_configs(context))
+
+    # Export faction data if feature is enabled
+    if "faction" in context["features"]:
+        export_files.extend(export_data(context, Faction))
+
+    # Export plot data if feature is enabled
+    if "plot" in context["features"]:
+        export_files.extend(export_data(context, Plot))
+
+    # Export experience/abilities data if feature is enabled
+    if "experience" in context["features"]:
+        export_files.extend(export_abilities(context))
+        export_files.extend(export_deliveries(context))
+        # Exported regardless of the criterions config, so that backup and restore stay symmetric
+        export_files.extend(export_criterions(context))
+
+    # Export quest builder data if feature is enabled
+    if "questbuilder" in context["features"]:
+        export_files.extend(export_data(context, QuestType))
+        export_files.extend(export_data(context, Quest))
+        export_files.extend(export_data(context, Trait))
+
+    # Create and return ZIP file with all exports
+    return zip_exports(context, export_files, "backup")

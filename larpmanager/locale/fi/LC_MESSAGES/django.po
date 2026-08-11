@@ -1904,6 +1904,9 @@ msgstr "Kuvakaappaus"
 msgid "Searchable"
 msgstr "Hakukelpoinen"
 
+msgid "Select all"
+msgstr "Valitse kaikki"
+
 msgid "Selectable"
 msgstr "Valittavissa"
 
@@ -1915,6 +1918,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "Speed larps"
 
 msgid "Start date"
 msgstr "Aloituspäivä"
@@ -2102,9 +2108,6 @@ msgstr "Poistu killasta"
 msgid "Lightweight"
 msgstr "Kevyt"
 
-msgid "Limitations"
-msgstr "Rajoitukset"
-
 msgid "Lock events"
 msgstr "Lukitse tapahtumat"
 
@@ -2261,6 +2264,9 @@ msgstr "Lisää NPC:ltä"
 msgid "Add prologue"
 msgstr "Lisää prologi"
 
+msgid "Availability"
+msgstr "Saatavuus"
+
 msgid "Bank address"
 msgstr "Pankin osoite"
 
@@ -2296,6 +2302,9 @@ msgstr "Tietojen jakaminen"
 
 msgid "Description:"
 msgstr "Kuvaus:"
+
+msgid "Deselect all"
+msgstr "Poista kaikkien valinta"
 
 msgid "Event hidden"
 msgstr "Tapahtuma piilotettu"
@@ -3158,6 +3167,9 @@ msgstr "Kutsu hylätty"
 msgid "Manage it here!"
 msgstr "Hallitse sitä täällä!"
 
+msgid "Matchmaker Form"
+msgstr "Matchmaker-lomake"
+
 msgid "Maximum members"
 msgstr "Jäsenten enimmäismäärä"
 
@@ -3798,6 +3810,9 @@ msgstr "Valitut vaihtoehdot:"
 msgid "Set progress step"
 msgstr "Aseta edistymisvaihe"
 
+msgid "Show availability"
+msgstr "Näytä saatavuus"
+
 msgid "Subscription plan"
 msgstr "Tilaussuunnitelma"
 
@@ -3862,6 +3877,9 @@ msgstr "Hahmon luominen"
 
 msgid "Character portrait"
 msgstr "Hahmon muotokuva"
+
+msgid "Check availability"
+msgstr "Tarkista saatavuus"
 
 msgid "Competences events"
 msgstr "Osaamistapahtumat"
@@ -3976,6 +3994,9 @@ msgstr "Ehdotettu hahmo"
 
 msgid "RUNTS registration"
 msgstr "RUNTS rekisteröinti"
+
+msgid "Registration Quota"
+msgstr "Ilmoittautumismaksu"
 
 msgid "Registration email"
 msgstr "Ilmoittautumissähköposti"
@@ -4370,6 +4391,9 @@ msgstr "Mieltymys ei ole voimassa"
 msgid "Proceed with payment"
 msgstr "Jatka maksamiseen"
 
+msgid "Registration Tickets"
+msgstr "Ilmoittautumisliput"
+
 msgid "Registration history"
 msgstr "Ilmoittautumishistoria"
 
@@ -4496,6 +4520,9 @@ msgstr "Handout-lisääminen epäonnistui"
 
 msgid "Go to event dashboard"
 msgstr "Siirry tapahtuman kojelautaan"
+
+msgid "Handout and templates"
+msgstr "Handoutit ja mallit"
 
 msgid "Invalid choice format"
 msgstr "Virheellinen valintaformaatti"
@@ -4720,6 +4747,9 @@ msgstr "Henkilötiedot päivitetty!"
 
 msgid "Register of volunteers"
 msgstr "Vapaaehtoisten rekisteri"
+
+msgid "Registration Surcharge"
+msgstr "Ilmoittautumislisämaksu"
 
 msgid "Registration cancelled"
 msgstr "Ilmoittautuminen peruutettu"
@@ -5002,6 +5032,9 @@ msgstr "Suositellun ystävän alennus"
 
 msgid "Referrer Reward Discount"
 msgstr "Viittauspalkkioalennus"
+
+msgid "Registration Installment"
+msgstr "Ilmoittautumiserä"
 
 msgid "Relationships max length"
 msgstr "Suhteiden enimmäispituus"
@@ -5406,9 +5439,6 @@ msgstr "Lipun nimi (pidä se lyhyenä)"
 
 msgid "View badges you have earned"
 msgstr "Tarkastele ansaitsemiasi badgeja"
-
-msgid "View limited ticket options"
-msgstr "Katso rajoitetut lippuvaihtoehdot"
 
 msgid "View photos from the event!"
 msgstr "Katso kuvia tapahtumasta!"
@@ -7687,9 +7717,6 @@ msgstr "Portaalin etusivulla näkyvä esillä oleva kuva"
 msgid "Full event description with all important details"
 msgstr "Täydellinen tapahtumakuvaus kaikkine tärkeine yksityiskohtineen"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Tässä ovat ilmoittautumisvaihtoehdot, joiden määrä on rajoitettu."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Jos valittu, jokaiselle tapahtumalle näytetään iskulause."
 
@@ -7805,6 +7832,9 @@ msgstr "Tämän tapahtuman maksu on suoritettu ja ajan tasalla!"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Suhteen toinen hahmo (määränpää)"
+
+msgid "Select the single elements to copy into this event"
+msgstr "Valitse tähän tapahtumaan kopioitavat yksittäiset elementit"
 
 msgid "Select your preferences on the characters to play!"
 msgstr "Valitse pelattavia hahmoja koskevat toiveesi!"
@@ -8088,9 +8118,6 @@ msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Tarkista osallistujien vastaukset Matchmaker-kysymyksiin."
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Valitse, mitkä elementit kopioidaan, mistä muusta tapahtumasta."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Jotkin ominaisuudet vaativat 'Hahmoa', joka ei ole aktiivinen"
 
@@ -8269,6 +8296,9 @@ msgstr "Klikkaa alla olevaa kuvaa (Paypal.me) avataksesi maksun."
 
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Kaikkien sivujen alareunassa olevan yksityisyydensuojan sivun sisältö"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Kopioi valitut elementit toisesta tapahtumasta tähän tapahtumaan"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elektroniikka: tietokoneet, huipputekniset laitteet ja valaistus"
@@ -8486,9 +8516,6 @@ msgstr ""
 "Käytä suorakulmaista kuvaa, mieluiten 4:3-suhteessa, jotta saat parhaat "
 "tulokset"
 
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr "HUOMIO: Tämä toiminto korvaa tähän tapahtumaan tehdyt muutokset"
-
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
 msgstr "Pääset hallintapaneeliin <a href='%(url)s'>täältä</a>!"
@@ -8528,6 +8555,10 @@ msgid "Enter your legal gender as it appears on official documents."
 msgstr ""
 "Syötä virallinen sukupuolesi sellaisena kuin se näkyy virallisissa "
 "asiakirjoissa."
+
+msgid "Here are the sign up options with a limited number of spots."
+msgstr ""
+"Tässä ovat ilmoittautumisvaihtoehdot, joissa on rajallinen määrä paikkoja."
 
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr "Jos valittu, kalenterissa näytetään linkki aiempiin tapahtumiin."
@@ -9070,11 +9101,6 @@ msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 "Jos käytössä, tämän tapahtuman ilmoittautumisissa ei käytetä krediittejä."
 
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Jos käytössä, näytä yhteenvetosivu käytettyjen lippujen/vaihtoehtojen "
-"määrällä."
-
 msgid "Lets staff access the safety information submitted by participants"
 msgstr "Henkilöstö pääsee käsiksi osallistujien toimittamiin Safety-tietoihin"
 
@@ -9218,6 +9244,9 @@ msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 "%(amount)s %(tokens)s lunastettiin tämän tapahtuman osallistumisoikeuden "
 "saamiseksi."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr "HUOMIO: Tämän tapahtuman samannimiset elementit korvataan"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
@@ -10068,12 +10097,6 @@ msgid ""
 "Great news! Your request to register for <b>%(event)s</b> has been approved."
 msgstr ""
 "Hienoja uutisia! Pyyntösi ilmoittautua <b>%(event)s</b> on hyväksytty."
-
-msgid ""
-"Hover on the link, or click on the question icon, to see what the link does."
-msgstr ""
-"Siirrä hiiren kursori linkin päälle tai napsauta kysymyskuvaketta "
-"nähdäksesi, mitä linkki tekee."
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -10975,13 +10998,6 @@ msgstr ""
 "organisaation tilassa"
 
 msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Kopioi valitut kohteet toisesta tapahtumasta tähän tapahtumaan ja korvaa "
-"olemassa olevat tiedot"
-
-msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -11188,6 +11204,13 @@ msgid ""
 msgstr ""
 "Tiedoston ensimmäisellä rivillä on oltava sarakkeiden nimet, katso alla "
 "olevat kuvaukset:"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
+"open it)."
+msgstr ""
+"Pikakäyttösivupalkki on vasemmalla (mobiilissa napauta vasemman alakulman "
+"kuvaketta avataksesi sen)."
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -11970,13 +11993,6 @@ msgid ""
 msgstr ""
 "Valinnainen - Enimmäismäärä, kuinka monta kertaa se voidaan valita kaikissa "
 "ilmoittautumisissa (0 = rajoittamaton)"
-
-msgid ""
-"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
-" bottom to open it)."
-msgstr ""
-"Pikakäyttösivupalkki on vasemmalla (mobiilissa avaa se napauttamalla "
-"alareunassa kohtaa \"Pikavalinnat\")."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
@@ -13000,6 +13016,13 @@ msgstr ""
 "tapahtumat, saldot ja sovelletut alennukset"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Valitse kopioitavat elementit ja tapahtuma, josta ne kopioidaan. Seuraavassa"
+" vaiheessa valitset yksittäiset elementit."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13191,6 +13214,13 @@ msgid ""
 msgstr ""
 "Handout-malleja ei ole vielä luotu. Lisää handouteillesi CSS-asettelumalli "
 "yllä olevan painikkeen avulla."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Vain valitut elementit kopioidaan: samannimiset elementit korvataan, kaikki "
+"muut säilytetään."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -13425,6 +13455,13 @@ msgid ""
 msgstr ""
 "Oletko lääkäri, sairaanhoitaja tai lisensoitu pelastaja? Voimmeko pyytää "
 "sinua puuttumaan asiaan, jos tapahtuman aikana sattuu onnettomuuksia?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Jos käytössä, näytä pelaajille sivu, jolla näkyvät jäljellä olevat paikat "
+"lipuille, vaihtoehdoille ja alennuksille, joiden määrä on rajattu."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
@@ -13667,14 +13704,6 @@ msgid ""
 msgstr ""
 "Tälle tapahtumalle ei ole vielä määritelty rooleja. Luo rooli ja määritä "
 "henkilöstön jäsenille käyttöoikeudet yllä olevan painikkeen avulla."
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you create the event."
-msgstr ""
-"Yläosasta löydät pikakuvakkeet tähän organisaation hallintapaneeliin sekä "
-"kuhunkin aktiiviseen tapahtuman hallintapaneeliin, kun olet luonut "
-"tapahtuman."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -14300,6 +14329,15 @@ msgstr ""
 "Mahdollistaa videon/audiosisällön turvallisen suoratoiston "
 "kertakäyttötunnusten avulla. Kutakin tokenia voidaan käyttää vain kerran, ja"
 " sen avulla seurataan, kuka on käyttänyt sisältöä, milloin ja mistä"
+
+msgid ""
+"At the top, you'll find shortcuts to this organization dashboard and to each"
+" active event dashboard once you created them (on mobile, tap bottom-right "
+"icon to open it)."
+msgstr ""
+"Ylhäältä löydät pikavalinnat tämän organisaation hallintapaneeliin ja "
+"jokaisen aktiivisen tapahtuman hallintapaneeliin, kun olet luonut ne "
+"(mobiilissa napauta oikean alakulman kuvaketta avataksesi sen)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

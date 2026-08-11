@@ -759,3 +759,57 @@ body.floating_iframe .inner {
     font-size: 80%;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Copy: selection of the single elements to copy
+   --------------------------------------------------------------------------- */
+
+.copy-pick-section {
+  margin-bottom: 2em;
+}
+
+.copy-pick-actions {
+  margin: 0.3em 0 0.8em;
+}
+
+.copy-pick-actions a {
+  margin-right: 1.5em;
+}
+
+.copy-pick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6em;
+}
+
+.copy-pick-card {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 0.7em;
+  border: 1px solid rgba(var(--ter-rgb), 0.4);
+  border-radius: 0.4em;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.copy-pick-card:hover {
+  background-color: rgba(var(--ter-rgb), 0.1);
+}
+
+.copy-pick-card input[type="checkbox"] {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .copy-pick-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .copy-pick-grid {
+    grid-template-columns: 1fr;
+  }
+}

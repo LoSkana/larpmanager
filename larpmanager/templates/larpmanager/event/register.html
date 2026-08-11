@@ -38,7 +38,7 @@
                         <span><a href="{% url 'unregister' run.get_slug %}">{% trans "Cancel registration" %}</a></span>
                     {% endif %}
                     {% if limitations %}
-                        <span><a href="{% url 'limitations' run.get_slug %}">{% trans "View limited ticket options" %}</a></span>
+                        <span><a href="{% url 'limitations' run.get_slug %}">{% trans "Check availability" %}</a></span>
                     {% endif %}
                     {% if event.website %}
                         <span><a target="_blank" href="{{ event.website }}">{% trans "Event website" %}</a></span>

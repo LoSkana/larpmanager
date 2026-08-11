@@ -1,0 +1,45 @@
+{% extends "utils.html" %}
+{% load i18n %}
+{% block title %}
+    {% trans "Copy" %} - {{ run.search | truncatechars:50 }}
+{% endblock title %}
+{% block info %}
+    {% trans "Select the single elements to copy into this event" %}
+{% endblock info %}
+{% block js %}
+    {{ block.super }}
+    {% include "elements/helpers/copy-elements.js" %}
+{% endblock js %}
+{% block content %}
+    <p>
+        {% trans "Only the selected elements will be copied: elements with the same name are overwritten, all the others are kept." %}
+    </p>
+    <br />
+    <form action="{{ request.path }}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="step" value="elements" />
+        <input type="hidden" name="parent" value="{{ copy_parent }}" />
+        {% for target in copy_targets %}<input type="hidden" name="target" value="{{ target }}" />{% endfor %}
+        {% for section in copy_sections %}
+            <div class="copy-pick-section" data-copy-type="{{ section.key }}">
+                <h2>{{ section.label }}</h2>
+                <p class="copy-pick-actions">
+                    <a href="#" class="copy-pick-all"><i class="fas fa-check-double"></i> {% trans "Select all" %}</a>
+                    <a href="#" class="copy-pick-none"><i class="fas fa-ban"></i> {% trans "Deselect all" %}</a>
+                </p>
+                <div class="copy-pick-grid">
+                    {% for element in section.elements %}
+                        <label class="copy-pick-card">
+                            <input type="checkbox"
+                                   name="pick_{{ section.key }}"
+                                   value="{{ element.id }}"
+                                   checked />
+                            <span>{{ element.label }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        <input type="submit" value="{% trans "Confirm" %}" />
+    </form>
+{% endblock content %}

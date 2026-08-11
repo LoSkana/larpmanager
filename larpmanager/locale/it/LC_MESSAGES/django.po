@@ -1904,6 +1904,9 @@ msgstr "Schermata"
 msgid "Searchable"
 msgstr "Ricercabile"
 
+msgid "Select all"
+msgstr "Seleziona tutto"
+
 msgid "Selectable"
 msgstr "Selezionabile"
 
@@ -1914,6 +1917,9 @@ msgid "Speed Larp"
 msgstr "Speed Larp"
 
 msgid "Speed larp"
+msgstr "Speed larp"
+
+msgid "SpeedLarps"
 msgstr "Speed larp"
 
 msgid "Start date"
@@ -2102,9 +2108,6 @@ msgstr "Lascia la gilda"
 msgid "Lightweight"
 msgstr "Leggero"
 
-msgid "Limitations"
-msgstr "Limitazioni"
-
 msgid "Lock events"
 msgstr "Blocca gli eventi"
 
@@ -2261,6 +2264,9 @@ msgstr "Aggiungi da NPC"
 msgid "Add prologue"
 msgstr "Aggiungi prologo"
 
+msgid "Availability"
+msgstr "Disponibilità"
+
 msgid "Bank address"
 msgstr "Indirizzo bancario"
 
@@ -2296,6 +2302,9 @@ msgstr "Condivisione dei dati"
 
 msgid "Description:"
 msgstr "Descrizione:"
+
+msgid "Deselect all"
+msgstr "Deseleziona tutto"
 
 msgid "Event hidden"
 msgstr "Evento nascosto"
@@ -3158,6 +3167,9 @@ msgstr "Invito rifiutato"
 msgid "Manage it here!"
 msgstr "Gestiscila qui!"
 
+msgid "Matchmaker Form"
+msgstr "Modulo Matchmaker"
+
 msgid "Maximum members"
 msgstr "Numero massimo di membri"
 
@@ -3798,6 +3810,9 @@ msgstr "Opzioni selezionate:"
 msgid "Set progress step"
 msgstr "Imposta la fase di avanzamento"
 
+msgid "Show availability"
+msgstr "Mostra disponibilità"
+
 msgid "Subscription plan"
 msgstr "Piano di abbonamento"
 
@@ -3862,6 +3877,9 @@ msgstr "Creazione del personaggio"
 
 msgid "Character portrait"
 msgstr "Ritratto personaggio"
+
+msgid "Check availability"
+msgstr "Controlla disponibilità"
 
 msgid "Competences events"
 msgstr "Competenze eventi"
@@ -3976,6 +3994,9 @@ msgstr "Personaggio proposto"
 
 msgid "RUNTS registration"
 msgstr "Registrazione RUNTS"
+
+msgid "Registration Quota"
+msgstr "Quota di iscrizione"
 
 msgid "Registration email"
 msgstr "Email di registrazione"
@@ -4370,6 +4391,9 @@ msgstr "Preferenza non valida"
 msgid "Proceed with payment"
 msgstr "Procedi con il pagamento"
 
+msgid "Registration Tickets"
+msgstr "Biglietti di iscrizione"
+
 msgid "Registration history"
 msgstr "Storico iscrizioni"
 
@@ -4496,6 +4520,9 @@ msgstr "Impossibile aggiungere l'Handout"
 
 msgid "Go to event dashboard"
 msgstr "Vai alla dashboard dell'evento"
+
+msgid "Handout and templates"
+msgstr "Handout e modelli"
 
 msgid "Invalid choice format"
 msgstr "Formato di scelta non valido"
@@ -4720,6 +4747,9 @@ msgstr "Dati personali aggiornati!"
 
 msgid "Register of volunteers"
 msgstr "Registro dei volontari"
+
+msgid "Registration Surcharge"
+msgstr "Supplemento di iscrizione"
 
 msgid "Registration cancelled"
 msgstr "Iscrizione disdetta"
@@ -5002,6 +5032,9 @@ msgstr "Sconto per amico consigliato"
 
 msgid "Referrer Reward Discount"
 msgstr "Sconto per chi presenta un amico"
+
+msgid "Registration Installment"
+msgstr "Rata di iscrizione"
 
 msgid "Relationships max length"
 msgstr "Lunghezza massima delle relazioni"
@@ -5406,9 +5439,6 @@ msgstr "Nome del biglietto (tienilo corto)"
 
 msgid "View badges you have earned"
 msgstr "Visualizza i badge che hai ottenuto"
-
-msgid "View limited ticket options"
-msgstr "Visualizza le opzioni di biglietto limitate"
 
 msgid "View photos from the event!"
 msgstr "Visualizza le foto dell'evento!"
@@ -7693,9 +7723,6 @@ msgstr "Immagine in primo piano visualizzata sulla homepage del portale"
 msgid "Full event description with all important details"
 msgstr "Descrizione completa dell'evento con tutti i dettagli importanti"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Ecco di seguito le opzioni di iscrizioni a numero limitato."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Se selezionato, viene mostrato il sottotitolo di ogni evento."
 
@@ -7816,6 +7843,9 @@ msgstr "Il pagamento per questo evento è stato effettuato ed è in regola!"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Secondo personaggio della relazione (destinazione)"
+
+msgid "Select the single elements to copy into this event"
+msgstr "Seleziona i singoli elementi da copiare in questo evento"
 
 msgid "Select your preferences on the characters to play!"
 msgstr "Seleziona le tue preferenze sui personaggi da interpretare!"
@@ -8108,9 +8138,6 @@ msgstr ""
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Esamina le risposte dei partecipanti alle domande del matchmaker"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Seleziona quali elementi copiare, da quale altro evento."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Alcune funzioni richiedono \"Personaggio\", che non è attivo"
 
@@ -8301,6 +8328,9 @@ msgstr ""
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr ""
 "Contenuto della pagina sulla privacy collegata in fondo a tutte le pagine"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Copia gli elementi selezionati da un altro evento in questo evento"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elettronica: computer, attrezzature high-tech e illuminazione"
@@ -8535,11 +8565,6 @@ msgstr ""
 "utilizza un'immagine rettangolare, idealmente in rapporto 4:3 per ottenere "
 "risultati migliori"
 
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr ""
-"ATTENZIONE: questa azione sovrascrive le modifiche effettuate a questo "
-"evento"
-
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
 msgstr "Accedi al pannello di gestione <a href='%(url)s'>da qui</a>!"
@@ -8578,6 +8603,9 @@ msgstr "Vuoi accettare pagamenti elaborati tramite il sistema?"
 
 msgid "Enter your legal gender as it appears on official documents."
 msgstr "Inserisci il tuo genere legale come appare nei documenti ufficiali."
+
+msgid "Here are the sign up options with a limited number of spots."
+msgstr "Ecco le opzioni di iscrizione con un numero limitato di posti."
 
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr ""
@@ -9155,11 +9183,6 @@ msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 "Se abilitato, non verranno usati crediti nelle iscrizioni di questo evento."
 
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Se abilitato, mostra la pagina di riepilogo con il numero di "
-"biglietti/opzioni utilizzati."
-
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Consente allo staff di accedere alle informazioni di Safety fornite dai "
@@ -9315,6 +9338,11 @@ msgstr ""
 msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 "Sono stati riscattati %(amount)s %(tokens)s per partecipare a questo evento."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr ""
+"ATTENZIONE: gli elementi di questo evento con lo stesso nome verranno "
+"sovrascritti"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
@@ -10230,12 +10258,6 @@ msgid ""
 msgstr ""
 "Ottime notizie! La tua richiesta di iscrizione a <b>%(event)s</b> è stata "
 "approvata."
-
-msgid ""
-"Hover on the link, or click on the question icon, to see what the link does."
-msgstr ""
-"Passa il mouse sul link o fai clic sull'icona della domanda per vedere cosa "
-"fa il link."
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -11184,13 +11206,6 @@ msgstr ""
 "tradotte nello spazio dell'organizzazione"
 
 msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Copia gli elementi selezionati da un altro evento in questo evento, "
-"sovrascrivendo i dati esistenti"
-
-msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -11399,6 +11414,13 @@ msgid ""
 msgstr ""
 "La prima riga del file deve contenere i nomi delle colonne, vedi le "
 "descrizioni seguenti:"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
+"open it)."
+msgstr ""
+"La barra laterale di accesso rapido è a sinistra (su mobile, tocca l'icona "
+"in basso a sinistra per aprirla)."
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -12191,13 +12213,6 @@ msgid ""
 msgstr ""
 "Opzionale - Numero massimo di volte che può essere selezionato in tutte le "
 "iscrizioni (0 = illimitato)"
-
-msgid ""
-"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
-" bottom to open it)."
-msgstr ""
-"La barra laterale di accesso rapido è a sinistra (su mobile, tocca "
-"\"Scorciatoie\" in basso per aprirla)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
@@ -13225,6 +13240,13 @@ msgstr ""
 " transazioni, saldi e sconti applicati"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Scegli quali elementi copiare e da quale altro evento. Nel passaggio "
+"successivo selezionerai i singoli elementi."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13417,6 +13439,13 @@ msgid ""
 msgstr ""
 "Non sono stati ancora creati modelli di Handout. Usa il pulsante qui sopra "
 "per aggiungere un modello di layout CSS per i tuoi Handout."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Verranno copiati solo gli elementi selezionati: gli elementi con lo stesso "
+"nome verranno sovrascritti, tutti gli altri saranno mantenuti."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -13651,6 +13680,13 @@ msgid ""
 msgstr ""
 "Sei un medico, un infermiere, od un soccoritore abilitato? Possiamo "
 "chiederti di intervenire nel caso avvengano incidenti durante l'evento?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Se abilitato, mostra ai giocatori una pagina con i posti rimanenti per "
+"biglietti, opzioni e sconti con un numero limitato di posti."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
@@ -13894,14 +13930,6 @@ msgstr ""
 "Non sono ancora stati definiti ruoli per questo evento. Usa il pulsante qui "
 "sopra per creare un ruolo e assegnare le autorizzazioni ai membri dello "
 "staff."
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you create the event."
-msgstr ""
-"Nella parte superiore troverai i collegamenti rapidi a questa dashboard "
-"dell'organizzazione e alle dashboard di ciascun evento attivo, una volta "
-"creato l'evento."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -14547,6 +14575,15 @@ msgstr ""
 "Consente lo streaming sicuro di contenuti video/audio tramite token di "
 "accesso unico. Ogni token può essere utilizzato una sola volta e tiene "
 "traccia di chi ha avuto accesso ai contenuti, quando e da dove"
+
+msgid ""
+"At the top, you'll find shortcuts to this organization dashboard and to each"
+" active event dashboard once you created them (on mobile, tap bottom-right "
+"icon to open it)."
+msgstr ""
+"In alto trovi le scorciatoie alla dashboard di questa organizzazione e a "
+"quella di ogni evento attivo, una volta creati (su mobile, tocca l'icona in "
+"basso a destra per aprirla)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

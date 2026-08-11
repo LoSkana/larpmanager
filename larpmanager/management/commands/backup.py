@@ -27,7 +27,7 @@ from django.utils import timezone
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.utils.core.base import prepare_run
-from larpmanager.views.orga.event import _prepare_backup
+from larpmanager.utils.io.download import prepare_backup
 
 
 class Command(BaseCommand):
@@ -69,7 +69,7 @@ class Command(BaseCommand):
             prepare_run(context)
 
             # Generate the backup content
-            resp = _prepare_backup(context)
+            resp = prepare_backup(context)
 
             # Build hierarchical path: base_path/event_id/year/month/day/run_name.zip
             path = Path(

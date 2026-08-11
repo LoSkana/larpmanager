@@ -1904,6 +1904,9 @@ msgstr "Schermafbeelding"
 msgid "Searchable"
 msgstr "Doorzoekbaar"
 
+msgid "Select all"
+msgstr "Alles selecteren"
+
 msgid "Selectable"
 msgstr "Selecteerbaar"
 
@@ -1915,6 +1918,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "Speed larps"
 
 msgid "Start date"
 msgstr "Startdatum"
@@ -2102,9 +2108,6 @@ msgstr "De gilde verlaten"
 msgid "Lightweight"
 msgstr "Lichtgewicht"
 
-msgid "Limitations"
-msgstr "Beperkingen"
-
 msgid "Lock events"
 msgstr "Evenementen vergrendelen"
 
@@ -2261,6 +2264,9 @@ msgstr "Van NPC toevoegen"
 msgid "Add prologue"
 msgstr "Proloog toevoegen"
 
+msgid "Availability"
+msgstr "Beschikbaarheid"
+
 msgid "Bank address"
 msgstr "Adres bank"
 
@@ -2296,6 +2302,9 @@ msgstr "Het delen van gegevens"
 
 msgid "Description:"
 msgstr "Beschrijving:"
+
+msgid "Deselect all"
+msgstr "Alles deselecteren"
 
 msgid "Event hidden"
 msgstr "Evenement verborgen"
@@ -3158,6 +3167,9 @@ msgstr "Uitnodiging geweigerd"
 msgid "Manage it here!"
 msgstr "Beheer het hier!"
 
+msgid "Matchmaker Form"
+msgstr "Matchmaker-formulier"
+
 msgid "Maximum members"
 msgstr "Maximaal aantal leden"
 
@@ -3798,6 +3810,9 @@ msgstr "Geselecteerde opties:"
 msgid "Set progress step"
 msgstr "Voortgangsstap instellen"
 
+msgid "Show availability"
+msgstr "Beschikbaarheid tonen"
+
 msgid "Subscription plan"
 msgstr "Abonnementsplan"
 
@@ -3862,6 +3877,9 @@ msgstr "Het maken van een personage"
 
 msgid "Character portrait"
 msgstr "Karakterportret"
+
+msgid "Check availability"
+msgstr "Beschikbaarheid controleren"
 
 msgid "Competences events"
 msgstr "Vaardigheden voor evenementen"
@@ -3976,6 +3994,9 @@ msgstr "Voorgesteld karakter"
 
 msgid "RUNTS registration"
 msgstr "RUNTS registratie"
+
+msgid "Registration Quota"
+msgstr "Registratiebijdrage"
 
 msgid "Registration email"
 msgstr "Registratie-e-mail"
@@ -4370,6 +4391,9 @@ msgstr "Ongeldige voorkeur"
 msgid "Proceed with payment"
 msgstr "Ga verder met betalen"
 
+msgid "Registration Tickets"
+msgstr "Registratietickets"
+
 msgid "Registration history"
 msgstr "Registratiegeschiedenis"
 
@@ -4496,6 +4520,9 @@ msgstr "Handout niet toegevoegd"
 
 msgid "Go to event dashboard"
 msgstr "Ga naar het dashboard van het evenement"
+
+msgid "Handout and templates"
+msgstr "Handout en sjablonen"
 
 msgid "Invalid choice format"
 msgstr "Ongeldig keuzeformaat"
@@ -4720,6 +4747,9 @@ msgstr "Persoonlijke gegevens bijgewerkt!"
 
 msgid "Register of volunteers"
 msgstr "Register van vrijwilligers"
+
+msgid "Registration Surcharge"
+msgstr "Registratietoeslag"
 
 msgid "Registration cancelled"
 msgstr "Registratie geannuleerd"
@@ -5002,6 +5032,9 @@ msgstr "Korting voor doorverwezen vrienden"
 
 msgid "Referrer Reward Discount"
 msgstr "Korting voor wie vrienden aanbeveelt"
+
+msgid "Registration Installment"
+msgstr "Registratietermijn"
 
 msgid "Relationships max length"
 msgstr "Maximale relatielengte"
@@ -5406,9 +5439,6 @@ msgstr "Ticketnaam (houd het kort)"
 
 msgid "View badges you have earned"
 msgstr "Bekijk de badges die je hebt verdiend"
-
-msgid "View limited ticket options"
-msgstr "Beperkte ticketopties bekijken"
 
 msgid "View photos from the event!"
 msgstr "Bekijk foto's van het evenement!"
@@ -7694,9 +7724,6 @@ msgstr "Uitgelichte afbeelding op de startpagina van de portal"
 msgid "Full event description with all important details"
 msgstr "Volledige beschrijving van het evenement met alle belangrijke details"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Dit zijn de registratiemogelijkheden met beperkt aantal."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Indien geselecteerd, wordt de slogan voor elk evenement getoond."
 
@@ -7815,6 +7842,10 @@ msgstr "De betaling voor dit evenement is voltooid en helemaal in orde!"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Tweede personage in de relatie (bestemming)"
+
+msgid "Select the single elements to copy into this event"
+msgstr ""
+"Selecteer de afzonderlijke elementen die je naar dit evenement wilt kopiëren"
 
 msgid "Select your preferences on the characters to play!"
 msgstr "Selecteer je voorkeuren voor de personages om te spelen!"
@@ -8101,9 +8132,6 @@ msgstr ""
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Bekijk de antwoorden van de deelnemers op de ‘matchmaker’-vragen"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Selecteer welke elementen je wilt kopiëren, van welk ander evenement."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Sommige functies vereisen 'Personage', dat niet actief is."
 
@@ -8289,6 +8317,10 @@ msgstr ""
 
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Inhoud van privacy pagina gelinkt onderaan alle pagina's"
+
+msgid "Copy selected elements from another event into this event"
+msgstr ""
+"Geselecteerde elementen uit een ander evenement naar dit evenement kopiëren"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elektronica: computers, hightechapparatuur en verlichting"
@@ -8523,9 +8555,6 @@ msgstr ""
 "gebruik een rechthoekige afbeelding, idealiter 4:3 verhouding voor de beste "
 "resultaten"
 
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr "WAARSCHUWING: deze actie overschrijft wijzigingen in deze gebeurtenis"
-
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
 msgstr "Ga naar het beheerpaneel <a href='%(url)s'>van hier</a>!"
@@ -8563,6 +8592,9 @@ msgstr "Wil je betalingen accepteren die via het systeem worden verwerkt?"
 msgid "Enter your legal gender as it appears on official documents."
 msgstr ""
 "Voer je wettelijke geslacht in zoals het op officiële documenten staat."
+
+msgid "Here are the sign up options with a limited number of spots."
+msgstr "Hier zijn de aanmeldopties met een beperkt aantal plaatsen."
 
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr ""
@@ -9155,11 +9187,6 @@ msgstr ""
 "Indien ingeschakeld, worden er geen credits gebruikt in de inschrijvingen "
 "voor dit evenement."
 
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Indien ingeschakeld, toon een overzichtspagina met het aantal gebruikte "
-"tickets/opties."
-
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Geeft medewerkers toegang tot de Safety-informatie die deelnemers hebben "
@@ -9321,6 +9348,10 @@ msgstr "Je kunt nu de door deelnemers ingediende Safety-informatie bekijken"
 msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 "%(amount)s %(tokens)s zijn ingewisseld om mee te doen aan dit evenement."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr ""
+"LET OP: elementen van dit evenement met dezelfde naam worden overschreven"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
@@ -10225,12 +10256,6 @@ msgid ""
 msgstr ""
 "Geweldig nieuws! Je aanvraag om je in te schrijven voor <b>%(event)s</b> is "
 "goedgekeurd."
-
-msgid ""
-"Hover on the link, or click on the question icon, to see what the link does."
-msgstr ""
-"Beweeg met de muis over de koppeling of klik op het vraagpictogram om te "
-"zien wat de koppeling doet."
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -11172,13 +11197,6 @@ msgstr ""
 " de ruimte van de organisatie"
 
 msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Kopieer de geselecteerde elementen uit een ander evenement naar dit "
-"evenement, waarbij bestaande gegevens worden overschreven"
-
-msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -11387,6 +11405,13 @@ msgid ""
 msgstr ""
 "De eerste regel van het bestand moet de kolomnamen bevatten, zie de "
 "beschrijvingen hieronder:"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
+"open it)."
+msgstr ""
+"De zijbalk voor snelle toegang staat links (tik op mobiel op het pictogram "
+"linksonder om hem te openen)."
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -12179,13 +12204,6 @@ msgid ""
 msgstr ""
 "Optioneel - Maximum aantal keren dat het kan worden geselecteerd in alle "
 "registraties (0 = onbeperkt)"
-
-msgid ""
-"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
-" bottom to open it)."
-msgstr ""
-"De zijbalk met snelle toegang staat links (op mobiel tik je onderaan op "
-"\"Shortcuts\" om hem te openen)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
@@ -13213,6 +13231,13 @@ msgstr ""
 "transacties, saldi en toegepaste kortingen"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Selecteer welke elementen je wilt kopiëren en uit welk ander evenement. In "
+"de volgende stap selecteer je de afzonderlijke elementen."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13407,6 +13432,13 @@ msgid ""
 msgstr ""
 "Er zijn nog geen Handout-sjablonen aangemaakt. Gebruik de knop hierboven om "
 "een CSS-lay-outsjabloon voor je Handouts toe te voegen."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Alleen de geselecteerde elementen worden gekopieerd: elementen met dezelfde "
+"naam worden overschreven, alle andere blijven behouden."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
@@ -13644,6 +13676,13 @@ msgid ""
 msgstr ""
 "Ben je een arts, verpleegkundige of gediplomeerd hulpverlener? Kunnen we je "
 "vragen om in te grijpen als er tijdens het evenement ongelukken gebeuren?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Indien ingeschakeld, toon spelers een pagina met de resterende plaatsen voor"
+" tickets, opties en kortingen met een beperkt aantal."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
@@ -13889,13 +13928,6 @@ msgid ""
 msgstr ""
 "Er zijn nog geen rollen gedefinieerd voor dit evenement. Gebruik de knop "
 "hierboven om een rol aan te maken en rechten toe te wijzen aan medewerkers."
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you create the event."
-msgstr ""
-"Bovenaan vind je snelkoppelingen naar dit organisatiedashboard en naar het "
-"dashboard van elk actief evenement, zodra je het evenement hebt aangemaakt."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -14540,6 +14572,15 @@ msgstr ""
 "Maakt beveiligde streaming van video/audio-inhoud mogelijk via eenmalige "
 "toegangstokens. Elk token kan maar één keer worden gebruikt en houdt bij "
 "wie, wanneer en waar toegang heeft gehad tot de inhoud"
+
+msgid ""
+"At the top, you'll find shortcuts to this organization dashboard and to each"
+" active event dashboard once you created them (on mobile, tap bottom-right "
+"icon to open it)."
+msgstr ""
+"Bovenaan vind je snelkoppelingen naar het dashboard van deze organisatie en,"
+" zodra je ze hebt aangemaakt, naar het dashboard van elk actief evenement "
+"(tik op mobiel op het pictogram rechtsonder om het te openen)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

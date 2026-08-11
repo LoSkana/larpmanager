@@ -1048,10 +1048,12 @@ msgid ""
 "readable page."
 msgstr ""
 
-msgid "Limitations"
+msgid "Show availability"
 msgstr ""
 
-msgid "If enabled, show summary page with number of tickets/options used."
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
 msgstr ""
 
 msgid "Character cover"
@@ -6327,7 +6329,13 @@ msgstr ""
 msgid "My pending invites"
 msgstr ""
 
-msgid "Here are the sign up options with limited number."
+msgid "Availability"
+msgstr ""
+
+msgid "Here are the sign up options with a limited number of spots."
+msgstr ""
+
+msgid "Remaining"
 msgstr ""
 
 msgid "Question"
@@ -6449,7 +6457,7 @@ msgstr ""
 msgid "Cancel registration"
 msgstr ""
 
-msgid "View limited ticket options"
+msgid "Check availability"
 msgstr ""
 
 msgid "Event website"
@@ -7619,17 +7627,14 @@ msgid "Show inactive"
 msgstr ""
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the "
-"bottom to open it)."
-msgstr ""
-
-msgid ""
-"Hover on the link, or click on the question icon, to see what the link does."
+"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
+"open it)."
 msgstr ""
 
 msgid ""
 "At the top, you'll find shortcuts to this organization dashboard and to each "
-"active event dashboard once you create the event."
+"active event dashboard once you created them (on mobile, tap bottom-right "
+"icon to open it)."
 msgstr ""
 
 msgid ""
@@ -8205,9 +8210,6 @@ msgid "Total due"
 msgstr ""
 
 msgid "Total paid"
-msgstr ""
-
-msgid "Remaining"
 msgstr ""
 
 #, python-format
@@ -8877,15 +8879,29 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
+msgid "Copy selected elements from another event into this event"
+msgstr ""
+
 msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
 msgstr ""
 
-msgid "Select which elements to copy, from which other event."
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
 msgstr ""
 
-msgid "ATTENTION: This action overwrites changes made to this event"
+msgid "Select the single elements to copy into this event"
+msgstr ""
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Deselect all"
 msgstr ""
 
 msgid "View all deadlines that must be met for this event"
@@ -11267,6 +11283,39 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
+msgid "Registration Tickets"
+msgstr ""
+
+msgid "Registration Form"
+msgstr ""
+
+msgid "Matchmaker Form"
+msgstr ""
+
+msgid "Registration Quota"
+msgstr ""
+
+msgid "Registration Installment"
+msgstr ""
+
+msgid "Registration Surcharge"
+msgstr ""
+
+msgid "SpeedLarps"
+msgstr ""
+
+msgid "Handout and templates"
+msgstr ""
+
+msgid "No value has been selected for parent."
+msgstr ""
+
+msgid "Can't copy from same event"
+msgstr ""
+
+msgid "Copy done"
+msgstr ""
+
 msgid "Your registration"
 msgstr ""
 
@@ -11596,9 +11645,6 @@ msgid "Failed to add profiles"
 msgstr ""
 
 msgid "Failed to add gallery"
-msgstr ""
-
-msgid "Registration Form"
 msgstr ""
 
 msgid "Character Form"
@@ -12415,15 +12461,6 @@ msgstr ""
 
 #, python-format
 msgid "Text length (max %(max)s)"
-msgstr ""
-
-msgid "No value has been selected for parent."
-msgstr ""
-
-msgid "Can't copy from same event"
-msgstr ""
-
-msgid "Copy done"
 msgstr ""
 
 msgid "Session expired, please upload the file again."

@@ -40,7 +40,7 @@ from larpmanager.models.larpmanager import LarpManagerDemoHint, LarpManagerDemoT
 from larpmanager.models.member import Membership, MembershipStatus
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction
-from larpmanager.utils.core.common import copy_class
+from larpmanager.utils.core.copy import copy_class
 
 ASSOCIATION_SLUG = "demo-campaign"
 DEMO_TYPE_SLUG = "campaign"
