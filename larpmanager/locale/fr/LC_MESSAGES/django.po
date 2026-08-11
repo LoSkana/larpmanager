@@ -499,6 +499,9 @@ msgstr "Action"
 msgid "Active"
 msgstr "Actif"
 
+msgid "Admins"
+msgstr "Admins"
+
 msgid "Amount"
 msgstr "Somme"
 
@@ -8314,6 +8317,10 @@ msgid "The quick access sidebar is on the left (on mobile, tap "
 msgstr ""
 "La barre latérale d'accès rapide se trouve à gauche (sur mobile, appuie sur "
 
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Ces personnages ne sont pas membres de la guilde : %(names)s"
+
 msgid "We encountered a problem with the tax code you provided:"
 msgstr ""
 "Nous avons rencontré un problème avec le code fiscal que tu as fourni:"
@@ -9152,6 +9159,10 @@ msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Gère les jetons utilisés par les participants pour couvrir les frais "
 "d’inscription"
+
+msgid "Members that can manage the guild: they must be among the members"
+msgstr ""
+"Membres pouvant gérer la guilde : ils doivent faire partie des membres"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"

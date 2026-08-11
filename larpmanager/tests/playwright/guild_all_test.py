@@ -33,6 +33,8 @@ from playwright.sync_api import expect
 
 from larpmanager.tests.utils import (
     _select2_search_and_pick,
+    char_dual_pick,
+    fill_date,
     fill_tinymce,
     get_modal_iframe,
     go_to,
@@ -114,6 +116,18 @@ def test_guild_all(pw_page: Any) -> None:
     recruit_row = page.locator("#guild-members tr").filter(has_text="Guild Recruit")
     expect(recruit_row).to_contain_text("Member")
 
+    check_roles_and_leave(page, live_server)
+
+    logout(page)
+
+    # ========== SECTION 15: Guilds on a campaign child event (characters live on the parent) ==========
+    check_campaign_child(page, live_server)
+
+    logout(page)
+
+
+def check_roles_and_leave(page: Any, live_server: Any) -> None:
+    """Verify promote, demote, kick and the last-admin protection on leaving."""
     # ========== SECTION 10: Promote Guild Recruit to admin ==========
     rows = page.locator("#guild-members")
     recruit_row = rows.filter(has_text="Guild Recruit")
@@ -144,3 +158,90 @@ def test_guild_all(pw_page: Any) -> None:
     expect(page.locator(".jq-toast-single")).to_contain_text("last admin")
 
     logout(page)
+
+    # ========== SECTION 14: Orga adds a member and changes the guild admins ==========
+    check_orga_members_admins(page, live_server)
+
+
+def check_orga_members_admins(page: Any, live_server: Any) -> None:
+    """Verify the organizer can set both guild members and guild admins."""
+    login_orga(page, live_server)
+    go_to(page, live_server, "/test/manage/guilds/")
+    expect(page.locator("#one")).to_contain_text("The Silver Hand")
+    page.locator(".fa-edit").first.click()
+    edit_iframe = get_modal_iframe(page)
+
+    # Add Guild Recruit back as a member, and make it the only admin in place of Guild Founder
+    char_dual_pick(edit_iframe.locator("div.char-dual[data-field-id=id_characters]"), "Guild", "Guild Recruit")
+    admins = edit_iframe.locator("div.char-dual[data-field-id=id_admins]")
+    char_dual_pick(admins, "Guild", "Guild Recruit")
+    admins.locator(".char-dual-sel-list li").filter(has_text="Guild Founder").click()
+    save_modal(page, edit_iframe)
+
+    logout(page)
+
+    # The recruit is a member and admin, the founder is a plain member
+    login_user(page, live_server)
+    go_to(page, live_server, "/test/guilds/")
+    page.get_by_role("link", name="The Silver Hand").click()
+    recruit_row = page.locator("#guild-members tr").filter(has_text="Guild Recruit")
+    expect(recruit_row).to_contain_text("Admin")
+    founder_row = page.locator("#guild-members tr").filter(has_text="Guild Founder")
+    expect(founder_row).to_contain_text("Member")
+
+
+def check_campaign_child(page: Any, live_server: Any) -> None:
+    """Verify invite/accept/leave work on a child event, whose characters belong to the parent."""
+    login_orga(page, live_server)
+    go_to(page, live_server, "/manage/features/campaign/on")
+
+    go_to(page, live_server, "/manage/events")
+    page.get_by_role("link", name="New event").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_form1-name").fill("child guild")
+    edit_iframe.locator("#id_form1-name").press("Tab")
+    edit_iframe.locator("#slug").fill("childguild")
+    expect(edit_iframe.locator("#slug")).to_have_value("childguild")
+    edit_iframe.locator("#select2-id_form1-parent-container").click()
+    edit_iframe.get_by_role("searchbox").fill("tes")
+    edit_iframe.get_by_role("option", name="Test Larp", exact=True).click()
+    edit_iframe.locator('label[for="id_form2-development_1"]').click()
+    edit_iframe.locator('label[for="id_form2-registration_status_1"]').click()
+    fill_date(edit_iframe, "#id_form2-start", "2050-02-01")
+    fill_date(edit_iframe, "#id_form2-end", "2050-02-03")
+    save_modal(page, edit_iframe)
+
+    go_to(page, live_server, "/childguild/manage/features/guild/on")
+
+    # User registers to the child run, then founds a guild with a character of the parent event
+    login_user(page, live_server)
+    go_to(page, live_server, "/childguild/register")
+    submit_register(page)
+
+    go_to(page, live_server, "/childguild/guilds/new/")
+    page.locator("#founder_character").select_option(label="Guild Founder")
+    page.locator("#id_name").fill("The Iron Chain")
+    fill_tinymce(page, "id_teaser", "A guild of the child event")
+    fill_tinymce(page, "id_text", "The full history of the Iron Chain")
+    page.locator("#form_submit").click()
+
+    # Invite a parent-event character
+    page.locator("#select2-guild-invite-select-container").click()
+    _select2_search_and_pick(page.get_by_role("searchbox"), page, "Guild Recruit")
+    page.get_by_role("button", name="Invite").click()
+    expect(page.locator(".jq-toast-single")).to_contain_text("Invite sent")
+
+    # Accept the invite
+    go_to(page, live_server, "/childguild/guilds/invites/")
+    expect(page.locator("#one")).to_contain_text("Guild Recruit")
+    page.get_by_role("button", name="Accept").click()
+    expect(page.locator(".jq-toast-single")).to_contain_text("joined the guild")
+
+    # Promote the recruit, so the founder is not the last admin, then leave
+    go_to(page, live_server, "/childguild/guilds/")
+    page.get_by_role("link", name="The Iron Chain").click()
+    recruit_row = page.locator("#guild-members tr").filter(has_text="Guild Recruit")
+    recruit_row.get_by_role("button", name="Promote to admin").click()
+
+    page.locator("form[action*='/leave/'] button[type=submit]").click()
+    expect(page.locator(".jq-toast-single")).to_contain_text("left the guild")

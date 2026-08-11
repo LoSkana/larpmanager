@@ -499,6 +499,9 @@ msgstr "Handling"
 msgid "Active"
 msgstr "Aktiv"
 
+msgid "Admins"
+msgstr "Administratorer"
+
 msgid "Amount"
 msgstr "Sum"
 
@@ -8255,6 +8258,10 @@ msgid "The quick access sidebar is on the left (on mobile, tap "
 msgstr ""
 "Sidepanelet for hurtig tilgang ligger til venstre (på mobil: trykk på "
 
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Disse karakterene er ikke medlemmer av lauget: %(names)s"
+
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Vi har støtt på et problem med skattekoden du oppga:"
 
@@ -9011,6 +9018,9 @@ msgstr "Administrer karakterevner som kan kjøpes med erfaringspoeng"
 msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Administrerer tokener brukt av deltakere til å dekke påmeldingsavgiften"
+
+msgid "Members that can manage the guild: they must be among the members"
+msgstr "Medlemmer som kan administrere lauget: de må være blant medlemmene"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"

@@ -45,6 +45,23 @@ def _get_my_character_ids(context: dict) -> list[int]:
     return list(get_player_characters(context["member"], context["event"]).values_list("id", flat=True))
 
 
+def _get_event_character(context: dict, character_uuid: str, *, only_mine: bool = False) -> Character | None:
+    """Return an event character by uuid, following the campaign parent for inherited elements."""
+    queryset = context["event"].get_elements(Character)
+    if only_mine:
+        queryset = queryset.filter(player=context["member"])
+    return queryset.filter(uuid=character_uuid).first()
+
+
+def _get_my_character(context: dict, character_uuid: str) -> Character:
+    """Return one of the current player's characters by uuid, or raise Http404."""
+    character = _get_event_character(context, character_uuid, only_mine=True)
+    if not character:
+        msg = "Character not found"
+        raise Http404(msg)
+    return character
+
+
 def _get_my_membership(
     context: dict, guild: Guild, my_character_ids: list[int] | None = None
 ) -> GuildMembership | None:
@@ -243,7 +260,7 @@ def guild_invite(request: HttpRequest, event_slug: str, guild_uuid: str) -> Http
     _check_admin(context, guild_obj)
 
     target_uuid = request.POST.get("character_uuid")
-    target = Character.objects.filter(event=context["event"], uuid=target_uuid).first()
+    target = _get_event_character(context, target_uuid)
 
     if not target:
         messages.error(request, _("Character not found"))
@@ -276,7 +293,7 @@ def guild_invite_accept(request: HttpRequest, event_slug: str, guild_uuid: str, 
     context = get_event_context(request, event_slug, feature_slug="guild", include_status=True)
 
     guild_obj = get_object_or_404(Guild, event=context["event"], uuid=guild_uuid)
-    character = get_object_or_404(Character, event=context["event"], uuid=character_uuid, player=context["member"])
+    character = _get_my_character(context, character_uuid)
 
     membership = get_object_or_404(
         GuildMembership,
@@ -304,7 +321,7 @@ def guild_invite_decline(request: HttpRequest, event_slug: str, guild_uuid: str,
     context = get_event_context(request, event_slug, feature_slug="guild", include_status=True)
 
     guild_obj = get_object_or_404(Guild, event=context["event"], uuid=guild_uuid)
-    character = get_object_or_404(Character, event=context["event"], uuid=character_uuid, player=context["member"])
+    character = _get_my_character(context, character_uuid)
 
     GuildMembership.objects.filter(
         guild=guild_obj,
@@ -365,7 +382,7 @@ def guild_leave(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpR
 
     guild_obj = get_object_or_404(Guild, event=context["event"], uuid=guild_uuid)
     character_uuid = request.POST.get("character_uuid")
-    character = get_object_or_404(Character, event=context["event"], uuid=character_uuid, player=context["member"])
+    character = _get_my_character(context, character_uuid)
 
     membership = get_object_or_404(
         GuildMembership,

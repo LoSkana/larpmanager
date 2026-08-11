@@ -499,6 +499,9 @@ msgstr "Aktion"
 msgid "Active"
 msgstr "Aktiv"
 
+msgid "Admins"
+msgstr "Admins"
+
 msgid "Amount"
 msgstr "Summe"
 
@@ -8308,6 +8311,10 @@ msgstr ""
 "Die Schnellzugriffsleiste befindet sich auf der linken Seite (auf dem Handy "
 "tippst du auf "
 
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Diese Charaktere sind keine Mitglieder der Gilde: %(names)s"
+
 msgid "We encountered a problem with the tax code you provided:"
 msgstr ""
 "Es ist ein Problem mit der von dir angegebenen Steuerkennung aufgetreten:"
@@ -9161,6 +9168,11 @@ msgstr "Verwalte Charakterfähigkeiten, die mit Erfahrungspunkten kaufbar sind"
 msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Verwaltet Tokens, die Teilnehmende zur Deckung der Anmeldegebühr verwenden"
+
+msgid "Members that can manage the guild: they must be among the members"
+msgstr ""
+"Mitglieder, die die Gilde verwalten können: Sie müssen zu den Mitgliedern "
+"gehören"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"

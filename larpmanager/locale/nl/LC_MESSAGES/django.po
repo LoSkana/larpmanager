@@ -499,6 +499,9 @@ msgstr "Actie"
 msgid "Active"
 msgstr "Actief"
 
+msgid "Admins"
+msgstr "Beheerders"
+
 msgid "Amount"
 msgstr "Som"
 
@@ -8280,6 +8283,10 @@ msgstr ""
 "De zijbalk voor snelle toegang staat aan de linkerkant (op je mobiel tik je "
 "op "
 
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Deze personages zijn geen leden van de gilde: %(names)s"
+
 msgid "We encountered a problem with the tax code you provided:"
 msgstr ""
 "Er is een probleem opgetreden met de belastingcode die je hebt opgegeven:"
@@ -9086,6 +9093,9 @@ msgstr ""
 msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Beheert tokens die deelnemers gebruiken om de inschrijvingskosten te betalen"
+
+msgid "Members that can manage the guild: they must be among the members"
+msgstr "Leden die de gilde kunnen beheren: ze moeten tot de leden behoren"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"

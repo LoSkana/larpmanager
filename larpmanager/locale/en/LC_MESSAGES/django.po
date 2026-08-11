@@ -2723,6 +2723,16 @@ msgstr ""
 msgid "Manage all guilds of the event"
 msgstr ""
 
+msgid "Admins"
+msgstr ""
+
+msgid "Members that can manage the guild: they must be among the members"
+msgstr ""
+
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr ""
+
 msgid "Quest type"
 msgstr ""
 
