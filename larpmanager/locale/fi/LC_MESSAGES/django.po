@@ -983,6 +983,9 @@ msgstr "Sivupalkki"
 msgid "Sign In"
 msgstr "Kirjaudu sisään"
 
+msgid "Signups"
+msgstr "Ilmoittautumiset"
+
 msgid "Station"
 msgstr "Asema"
 
@@ -2741,6 +2744,9 @@ msgstr "Tekstin kieli"
 msgid "Ticket chosen"
 msgstr "Valittu lippu"
 
+msgid "Tickets sold:"
+msgstr "Myydyt liput:"
+
 msgid "Token balance"
 msgstr "Tokenin saldo"
 
@@ -3259,6 +3265,9 @@ msgstr "Valittu lippu"
 
 msgid "Send invitation"
 msgstr "Lähetä kutsu"
+
+msgid "Show sold count"
+msgstr "Näytä myyty määrä"
 
 msgid "Show statistics"
 msgstr "Näytä tilastot"
@@ -3812,6 +3821,9 @@ msgstr "Aseta edistymisvaihe"
 
 msgid "Show availability"
 msgstr "Näytä saatavuus"
+
+msgid "Show sold tickets"
+msgstr "Näytä myydyt liput"
 
 msgid "Subscription plan"
 msgstr "Tilaussuunnitelma"
@@ -11884,6 +11896,13 @@ msgstr ""
 "ladatuilla tiedoilla."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Valinnainen – ilmaisee, näytetäänkö tapahtumasivulla, kuinka monta tätä "
+"lippua on myyty"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13285,6 +13304,13 @@ msgid ""
 msgstr ""
 "Ottaa käyttöön 'lukittu'-kentän, joka estää pelaajia näkemästä koko "
 "hahmolomaketta, vaikka se olisi annettu heille."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Jos käytössä, näytä tapahtumasivulla myytyjen lippujen kokonaismäärä sekä "
+"kunkin käytössä olevan lipun myyty määrä."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "

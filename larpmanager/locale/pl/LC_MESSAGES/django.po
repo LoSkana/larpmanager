@@ -983,6 +983,9 @@ msgstr "Pasek boczny"
 msgid "Sign In"
 msgstr "Zaloguj się"
 
+msgid "Signups"
+msgstr "Zapisy"
+
 msgid "Station"
 msgstr "Stacja"
 
@@ -2741,6 +2744,9 @@ msgstr "Język tekstu"
 msgid "Ticket chosen"
 msgstr "Wybrany bilet"
 
+msgid "Tickets sold:"
+msgstr "Sprzedane bilety:"
+
 msgid "Token balance"
 msgstr "Saldo tokenów"
 
@@ -3259,6 +3265,9 @@ msgstr "Wybrany bilet"
 
 msgid "Send invitation"
 msgstr "Wyślij zaproszenie"
+
+msgid "Show sold count"
+msgstr "Pokaż liczbę sprzedanych"
 
 msgid "Show statistics"
 msgstr "Pokaż statystyki"
@@ -3812,6 +3821,9 @@ msgstr "Ustaw krok postępu"
 
 msgid "Show availability"
 msgstr "Pokaż dostępność"
+
+msgid "Show sold tickets"
+msgstr "Pokaż sprzedane bilety"
 
 msgid "Subscription plan"
 msgstr "Plan subskrypcji"
@@ -11965,6 +11977,13 @@ msgstr ""
 " które wrzucisz."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Opcjonalne – wskazuje, czy na stronie wydarzenia pokazać, ile biletów tego "
+"typu zostało sprzedanych"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13373,6 +13392,13 @@ msgid ""
 msgstr ""
 "Włącza pole „zablokowane”, które uniemożliwia graczom wyświetlanie pełnej "
 "karty postaci, nawet gdy jest ona przypisana."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Jeśli włączone, na stronie wydarzenia wyświetli się łączna liczba "
+"sprzedanych biletów oraz liczba sprzedanych biletów każdego włączonego typu."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "

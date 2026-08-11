@@ -805,7 +805,44 @@ def event(request: HttpRequest, event_slug: str) -> HttpResponse:
         or timezone.now().date() > context["run"].end
     )
 
+    set_sold_tickets(context)
+
     return render(request, "larpmanager/event/event.html", context)
+
+
+def set_sold_tickets(context: dict) -> None:
+    """Add sold ticket counts to the context, if enabled by event configuration.
+
+    Sets 'sold_total' with the overall number of participant tickets sold, and
+    'sold_tickets' with the per-ticket breakdown of tickets flagged as visible.
+    """
+    event_id = context["event"].id
+    if not get_event_config(event_id, "ticket_sold", context=context):
+        return
+
+    # Tiers that do not represent a sold participant ticket
+    excluded_tiers = [
+        TicketTier.WAITING,
+        TicketTier.STAFF,
+        TicketTier.NPC,
+        TicketTier.COLLABORATOR,
+        TicketTier.SELLER,
+    ]
+
+    counts = get_registration_counts(context["run"])
+
+    total = 0
+    sold_tickets = []
+    for ticket in get_registration_tickets(event_id):
+        if ticket["tier"] in excluded_tiers:
+            continue
+        number = counts.get(f"tk_{ticket['id']}", 0)
+        total += number
+        if ticket["show_sold"] and ticket["visible"]:
+            sold_tickets.append({"name": ticket["name"], "number": number})
+
+    context["sold_total"] = total
+    context["sold_tickets"] = sold_tickets
 
 
 def get_event_signups(request: HttpRequest, context: dict) -> dict:

@@ -983,6 +983,9 @@ msgstr "Seitenleiste"
 msgid "Sign In"
 msgstr "Anmelden"
 
+msgid "Signups"
+msgstr "Anmeldungen"
+
 msgid "Station"
 msgstr "Station"
 
@@ -2741,6 +2744,9 @@ msgstr "Sprache des Textes"
 msgid "Ticket chosen"
 msgstr "Ticket ausgewählt"
 
+msgid "Tickets sold:"
+msgstr "Verkaufte Tickets:"
+
 msgid "Token balance"
 msgstr "Token-Guthaben"
 
@@ -3259,6 +3265,9 @@ msgstr "Ausgewähltes Ticket"
 
 msgid "Send invitation"
 msgstr "Einladung senden"
+
+msgid "Show sold count"
+msgstr "Verkaufszahl anzeigen"
 
 msgid "Show statistics"
 msgstr "Statistik anzeigen"
@@ -3812,6 +3821,9 @@ msgstr "Fortschrittsstufe einstellen"
 
 msgid "Show availability"
 msgstr "Verfügbarkeit anzeigen"
+
+msgid "Show sold tickets"
+msgstr "Verkaufte Tickets anzeigen"
 
 msgid "Subscription plan"
 msgstr "Abonnement-Plan"
@@ -12219,6 +12231,13 @@ msgstr ""
 "hochgeladenen Daten überschrieben werden."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Optional – Gibt an, ob auf der Eventseite angezeigt werden soll, wie viele "
+"dieser Tickets verkauft wurden"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13634,6 +13653,13 @@ msgid ""
 msgstr ""
 "Aktiviert das Feld „gesperrt“, das verhindert, dass Spieler das vollständige"
 " Charakterblatt sehen, auch wenn der Charakter zugewiesen ist."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Wenn aktiviert, zeige auf der Eventseite die Gesamtzahl der verkauften "
+"Tickets sowie die Anzahl der für jedes aktivierte Ticket verkauften Tickets."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "

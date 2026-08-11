@@ -983,6 +983,9 @@ msgstr "Sidefelt"
 msgid "Sign In"
 msgstr "Logg inn"
 
+msgid "Signups"
+msgstr "Påmeldinger"
+
 msgid "Station"
 msgstr "Stasjon"
 
@@ -2741,6 +2744,9 @@ msgstr "Tekstens språk"
 msgid "Ticket chosen"
 msgstr "Billett valgt"
 
+msgid "Tickets sold:"
+msgstr "Solgte billetter:"
+
 msgid "Token balance"
 msgstr "Tokensaldo"
 
@@ -3259,6 +3265,9 @@ msgstr "Valgt billett"
 
 msgid "Send invitation"
 msgstr "Send invitasjon"
+
+msgid "Show sold count"
+msgstr "Vis antall solgte"
 
 msgid "Show statistics"
 msgstr "Vis statistikk"
@@ -3812,6 +3821,9 @@ msgstr "Angi fremdriftstrinn"
 
 msgid "Show availability"
 msgstr "Vis tilgjengelighet"
+
+msgid "Show sold tickets"
+msgstr "Vis solgte billetter"
 
 msgid "Subscription plan"
 msgstr "Abonnementsplan"
@@ -11894,6 +11906,13 @@ msgstr ""
 "overskrevet med de opplastede dataene."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Valgfritt – angir om det skal vises på arrangementssiden hvor mange av denne"
+" billetten som er solgt"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13298,6 +13317,13 @@ msgid ""
 msgstr ""
 "Aktiverer feltet «låst», som hindrer spillere i å se hele karakterskjemaet "
 "selv når det er tildelt."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Hvis aktivert, vis det totale antallet solgte billetter på "
+"arrangementssiden, samt antallet solgt for hver aktivert billett."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "

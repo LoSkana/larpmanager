@@ -983,6 +983,9 @@ msgstr "Zijbalk"
 msgid "Sign In"
 msgstr "Aanmelden"
 
+msgid "Signups"
+msgstr "Aanmeldingen"
+
 msgid "Station"
 msgstr "Werkstation"
 
@@ -2741,6 +2744,9 @@ msgstr "Taal van de tekst"
 msgid "Ticket chosen"
 msgstr "Geselecteerd ticket"
 
+msgid "Tickets sold:"
+msgstr "Verkochte tickets:"
+
 msgid "Token balance"
 msgstr "Token saldo"
 
@@ -3259,6 +3265,9 @@ msgstr "Geselecteerd ticket"
 
 msgid "Send invitation"
 msgstr "Uitnodiging versturen"
+
+msgid "Show sold count"
+msgstr "Verkocht aantal tonen"
 
 msgid "Show statistics"
 msgstr "Statistieken tonen"
@@ -3812,6 +3821,9 @@ msgstr "Voortgangsstap instellen"
 
 msgid "Show availability"
 msgstr "Beschikbaarheid tonen"
+
+msgid "Show sold tickets"
+msgstr "Verkochte tickets tonen"
 
 msgid "Subscription plan"
 msgstr "Abonnementsplan"
@@ -12094,6 +12106,13 @@ msgstr ""
 "geüploade gegevens."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Optioneel - Geeft aan of je op de eventpagina wilt tonen hoeveel van dit "
+"ticket er zijn verkocht"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13502,6 +13521,13 @@ msgid ""
 msgstr ""
 "Schakelt het veld 'vergrendeld' in, waarmee spelers het volledige "
 "personageblad niet kunnen bekijken, zelfs wanneer het is toegewezen."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Indien ingeschakeld, toon op de eventpagina het totale aantal verkochte "
+"tickets, plus het aantal verkochte tickets voor elk ingeschakeld ticket."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "
