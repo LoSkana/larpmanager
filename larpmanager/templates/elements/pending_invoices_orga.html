@@ -10,6 +10,7 @@
                     <th>{% trans "Member" %}</th>
                     <th>{% trans "Method" %}</th>
                     <th>{% trans "Amount" %}</th>
+                    <th>{% trans "Reference" %}</th>
                     <th>{% trans "Details" %}</th>
                     <th>{% trans "Date" %}</th>
                     <th></th>
@@ -29,6 +30,7 @@
                         <td>{{ inv.member }}</td>
                         <td>{{ inv.method }}</td>
                         <td>{{ inv.mc_gross | format_decimal }}</td>
+                        <td>{{ inv.causal }}</td>
                         <td>{{ inv.get_details | safe }}</td>
                         <td>{{ inv.created | date:"d/m/Y" }}</td>
                         <td>

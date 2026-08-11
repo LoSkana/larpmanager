@@ -157,54 +157,12 @@ def orga_expenses_my_new(request: HttpRequest, event_slug: str) -> HttpResponse:
 
 
 @login_required
-def orga_invoices(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display payment invoices awaiting confirmation for event organizers.
-
-    This view shows submitted payment invoices for the current event run with
-    optimized database queries to prevent N+1 query problems. Results are
-    filtered to show only invoices with SUBMITTED status.
-
-    Args:
-        request: Django HTTP request object containing user session and data
-        event_slug: Event slug identifier used to determine the current event context
-
-    Returns:
-        HttpResponse: Rendered template with paginated invoice list and context data
-
-    Raises:
-        PermissionDenied: If user lacks 'orga_invoices' permission for the event
-        Http404: If event with given slug does not exist
-
-    """
-    # Check user permissions and get event context
-    context = check_event_context(request, event_slug, "orga_invoices")
-
-    # Build optimized query with select_related to prevent N+1 queries
-    que = (
-        PaymentInvoice.objects.filter(registration__run=context["run"], status=PaymentStatus.SUBMITTED)
-        .select_related(
-            "member",  # For {{ el.member }} in template
-            "method",  # For {{ el.method }} in template
-            "registration",  # For confirmation URL generation
-            "registration__run",  # For run.get_slug() in confirmation URL
-        )
-        .order_by("-created")  # Show newest invoices first
-    )
-
-    # Add invoice list to template context
-    context["list"] = que
-
-    # Render template with invoice data
-    return render(request, "larpmanager/orga/accounting/invoices.html", context)
-
-
-@login_required
 def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Confirm a payment invoice for an organization event.
 
     This function allows organizers to confirm payment invoices that are in
     CREATED or SUBMITTED status. Once confirmed, the invoice status is updated
-    to CONFIRMED and the user is redirected back to the invoices list.
+    to CONFIRMED and the user is redirected back to the payments list.
 
     Args:
         request: The HTTP request object containing user and session data
@@ -212,15 +170,15 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
         invoice_uuid: The uuid of invoice to confirm
 
     Returns:
-        HttpResponse: Redirect to the invoices list page with success/warning message
+        HttpResponse: Redirect to the payments list page with success/warning message
 
     Raises:
         Http404: If the invoice doesn't belong to the current event
-        PermissionDenied: If user lacks orga_invoices permission (via check_event_context)
+        PermissionDenied: If user lacks orga_payments permission (via check_event_context)
 
     """
     # Check user permissions and get event context
-    context = check_event_context(request, event_slug, ["orga_payments", "orga_invoices"])
+    context = check_event_context(request, event_slug, "orga_payments")
 
     # Retrieve the payment invoice by number
     backend_get(context, PaymentInvoice, invoice_uuid)
@@ -264,7 +222,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
 @login_required
 def orga_invoices_delete(request: HttpRequest, event_slug: str, invoice_uuid: str) -> HttpResponse:
     """Delete a payment invoice and redirect to payments."""
-    context = check_event_context(request, event_slug, ["orga_payments", "orga_invoices"])
+    context = check_event_context(request, event_slug, "orga_payments")
     if request.GET.get("frame") == "1" or request.POST.get("frame") == "1":
         context["frame"] = True
         return backend_delete_frame(request, context, PaymentInvoice, invoice_uuid)

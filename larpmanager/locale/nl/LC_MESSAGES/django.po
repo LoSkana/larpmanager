@@ -1175,9 +1175,6 @@ msgstr "Inactief"
 msgid "Included"
 msgstr "Inbegrepen"
 
-msgid "Invoices"
-msgstr "Facturen"
-
 msgid "Language"
 msgstr "Taal"
 
@@ -1400,9 +1397,6 @@ msgstr "Geaccepteerd:"
 msgid "Algorithm"
 msgstr "Algoritme"
 
-msgid "Approvals"
-msgstr "Goedkeuringen"
-
 msgid "Assigned:"
 msgstr "Toegewezen:"
 
@@ -1576,6 +1570,9 @@ msgstr "Ontvanger"
 
 msgid "Recompute"
 msgstr "Herbereken"
+
+msgid "Reference"
+msgstr "Referentie"
 
 msgid "Remaining"
 msgstr "Resterend"
@@ -4634,9 +4631,6 @@ msgstr "Leeftijd (tijdens het evenement)"
 msgid "Arrived safe and sound"
 msgstr "Veilig aangekomen"
 
-msgid "Bank payment reference"
-msgstr "Betalingskenmerk"
-
 msgid "Browse upcoming events"
 msgstr "Bekijk de komende evenementen"
 
@@ -6162,9 +6156,6 @@ msgstr "Beheer je lidmaatschap van de vereniging"
 msgid "Manages registration cancellations"
 msgstr "Beheert inschrijvingsannuleringen"
 
-msgid "Manually approve payments received"
-msgstr "Keur ontvangen betalingen handmatig goed"
-
 msgid "No activation steps are available."
 msgstr "Er zijn geen activeringsstappen beschikbaar."
 
@@ -7249,9 +7240,6 @@ msgstr "Beheer personage-inventarissen en hun items"
 msgid "Manage event metadata for external promotion"
 msgstr "Beheer evenementmetadata voor externe promotie"
 
-msgid "Manage invoices of payments and approve them"
-msgstr "Beheer facturen van betalingen en keur ze goed"
-
 msgid "Manage participant questions and answer them"
 msgstr "Beheer vragen van deelnemers en beantwoord ze"
 
@@ -8178,11 +8166,6 @@ msgstr ""
 msgid "No members with positive credits for the selected year."
 msgstr ""
 "Er zijn geen leden met een positief saldo voor het geselecteerde jaar."
-
-msgid "No payment invoices awaiting confirmation at this time."
-msgstr ""
-"Er zijn op dit moment geen betalingsfacturen die nog bevestigd moeten "
-"worden."
 
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
@@ -9539,11 +9522,6 @@ msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 "Persoonlijke themavoorkeur, overschrijft het thema van het evenement en de "
 "organisatie."
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-"Controleer en bevestig ingediende betalingsfacturen die nog handmatig moeten"
-" worden goedgekeurd"
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr ""

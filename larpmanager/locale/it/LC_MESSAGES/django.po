@@ -1175,9 +1175,6 @@ msgstr "Inattivo"
 msgid "Included"
 msgstr "Incluso"
 
-msgid "Invoices"
-msgstr "Fatture"
-
 msgid "Language"
 msgstr "Lingua"
 
@@ -1400,9 +1397,6 @@ msgstr "Accettato:"
 msgid "Algorithm"
 msgstr "Algoritmo"
 
-msgid "Approvals"
-msgstr "Approvazioni"
-
 msgid "Assigned:"
 msgstr "Assegnato:"
 
@@ -1576,6 +1570,9 @@ msgstr "Destinatario"
 
 msgid "Recompute"
 msgstr "Ricalcola"
+
+msgid "Reference"
+msgstr "Riferimento"
 
 msgid "Remaining"
 msgstr "Rimanenti"
@@ -4634,9 +4631,6 @@ msgstr "Età (all'evento)"
 msgid "Arrived safe and sound"
 msgstr "Arrivati sani e salvi"
 
-msgid "Bank payment reference"
-msgstr "Causale"
-
 msgid "Browse upcoming events"
 msgstr "Scopri i prossimi eventi"
 
@@ -6161,9 +6155,6 @@ msgstr "Gestisci la tua iscrizione all'associazione"
 msgid "Manages registration cancellations"
 msgstr "Gestisce le cancellazioni delle iscrizioni"
 
-msgid "Manually approve payments received"
-msgstr "Approva manualmente i pagamenti ricevuti"
-
 msgid "No activation steps are available."
 msgstr "Non sono disponibili procedure di attivazione."
 
@@ -7250,9 +7241,6 @@ msgstr "Gestisci gli inventari dei personaggi e i relativi oggetti"
 msgid "Manage event metadata for external promotion"
 msgstr "Gestisci i metadati dell'evento per la promozione esterna"
 
-msgid "Manage invoices of payments and approve them"
-msgstr "Gestisci le fatture dei pagamenti e approvale"
-
 msgid "Manage participant questions and answer them"
 msgstr "Gestisci le domande dei partecipanti e rispondi"
 
@@ -8191,9 +8179,6 @@ msgstr "Non ci sono membri con crediti negativi per l'anno selezionato."
 
 msgid "No members with positive credits for the selected year."
 msgstr "Non ci sono membri con crediti positivi per l'anno selezionato."
-
-msgid "No payment invoices awaiting confirmation at this time."
-msgstr "Al momento non ci sono fatture di pagamento in attesa di conferma."
 
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Seleziona le righe della tabella e scegli l'operazione da applicare"
@@ -9536,11 +9521,6 @@ msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 "Preferenza personale del tema, sovrascrive il tema dell'evento e "
 "dell'organizzazione."
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-"Controlla e conferma le fatture di pagamento inviate in attesa di "
-"approvazione manuale"
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr ""

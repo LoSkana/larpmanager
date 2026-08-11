@@ -265,28 +265,20 @@ class TestDigestFunctions(BaseTestCase):
 
     def test_generate_association_summary_email_with_refund_requests(self) -> None:
         """Test generating association summary email with refund requests"""
-        from larpmanager.models.accounting import PaymentStatus, PaymentType
-        from larpmanager.models.base import PaymentMethod
+        from larpmanager.models.accounting import RefundRequest
 
-        method, _ = PaymentMethod.objects.get_or_create(
-            slug="test-method", defaults={"name": "Test Method", "fields": "field1"}
-        )
-        invoice = PaymentInvoice.objects.create(
+        refund = RefundRequest.objects.create(
             member=self.member,
             association=self.association,
-            causal="Refund Request",
-            mc_gross=Decimal("75.00"),
-            method=method,
-            typ=PaymentType.REGISTRATION,
-            status=PaymentStatus.CREATED,
-            cod=f"TEST-INV-{self.association.id}-3",
+            details="Refund Request",
+            value=Decimal("75.00"),
         )
 
         notification = NotificationQueue.objects.create(
             association=self.association,
             member=self.member,
             notification_type=NotificationType.REFUND_REQUEST,
-            object_id=invoice.id,
+            object_id=refund.id,
             sent=False,
         )
 
@@ -432,28 +424,20 @@ class TestDigestFunctions(BaseTestCase):
 
     def test_digest_refund_request_generates_correct_content(self) -> None:
         """Test that digest_refund_request generates correct HTML content"""
-        from larpmanager.models.accounting import PaymentStatus, PaymentType
-        from larpmanager.models.base import PaymentMethod
+        from larpmanager.models.accounting import RefundRequest
 
-        method, _ = PaymentMethod.objects.get_or_create(
-            slug="test-method", defaults={"name": "Test Method", "fields": "field1"}
-        )
-        invoice = PaymentInvoice.objects.create(
+        refund = RefundRequest.objects.create(
             member=self.member,
             association=self.association,
-            causal="Refund Test",
-            mc_gross=Decimal("50.00"),
-            method=method,
-            typ=PaymentType.REGISTRATION,
-            status=PaymentStatus.CREATED,
-            cod=f"TEST-INV-{self.association.id}-7",
+            details="Refund Test",
+            value=Decimal("50.00"),
         )
 
         notification = NotificationQueue.objects.create(
             association=self.association,
             member=self.member,
             notification_type=NotificationType.REFUND_REQUEST,
-            object_id=invoice.id,
+            object_id=refund.id,
             sent=False,
         )
 
@@ -462,6 +446,7 @@ class TestDigestFunctions(BaseTestCase):
         self.assertIn("Refund Requests", content)
         self.assertIn("(1)", content)
         self.assertIn(str(self.member), content)
+        self.assertIn("Refund Test", content)
         self.assertIn("View", content)
 
     def test_generate_summary_email_with_empty_notifications(self) -> None:

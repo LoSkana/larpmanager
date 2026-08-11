@@ -1175,9 +1175,6 @@ msgstr "Inaktiv"
 msgid "Included"
 msgstr "Inkludert"
 
-msgid "Invoices"
-msgstr "Fakturaer"
-
 msgid "Language"
 msgstr "Språk"
 
@@ -1400,9 +1397,6 @@ msgstr "Akseptert:"
 msgid "Algorithm"
 msgstr "Algoritme"
 
-msgid "Approvals"
-msgstr "Godkjenninger"
-
 msgid "Assigned:"
 msgstr "Tilordnet:"
 
@@ -1576,6 +1570,9 @@ msgstr "Mottaker"
 
 msgid "Recompute"
 msgstr "Beregne på nytt"
+
+msgid "Reference"
+msgstr "Referanse"
 
 msgid "Remaining"
 msgstr "Gjenværende"
@@ -4634,9 +4631,6 @@ msgstr "Alder (ved hendelsen)"
 msgid "Arrived safe and sound"
 msgstr "Kommet trygt frem"
 
-msgid "Bank payment reference"
-msgstr "Betalingsreferanse for bankoverføring"
-
 msgid "Browse upcoming events"
 msgstr "Se kommende arrangementer"
 
@@ -6161,9 +6155,6 @@ msgstr "Administrer ditt medlemskap i foreningen"
 msgid "Manages registration cancellations"
 msgstr "Administrerer avmeldinger"
 
-msgid "Manually approve payments received"
-msgstr "Godkjenn mottatte betalinger manuelt"
-
 msgid "No activation steps are available."
 msgstr "Det finnes ingen aktiveringstrinn."
 
@@ -7249,9 +7240,6 @@ msgstr "Administrer karakterinventarer og gjenstandene deres"
 msgid "Manage event metadata for external promotion"
 msgstr "Administrer arrangementsmetadata for ekstern promotering"
 
-msgid "Manage invoices of payments and approve them"
-msgstr "Administrer fakturaer for betalinger og godkjenn dem"
-
 msgid "Manage participant questions and answer them"
 msgstr "Administrer deltakerspørsmål og svar på dem"
 
@@ -8161,10 +8149,6 @@ msgstr "Ingen medlemmer med negativ saldo for det valgte året."
 
 msgid "No members with positive credits for the selected year."
 msgstr "Ingen medlemmer med positive saldoer for det valgte året."
-
-msgid "No payment invoices awaiting confirmation at this time."
-msgstr ""
-"Det er for øyeblikket ingen betalingsfakturaer som venter på bekreftelse."
 
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Velg tabellradene og velg operasjonen som skal brukes"
@@ -9418,11 +9402,6 @@ msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 "Personlig temapreferanse som overstyrer arrangementets og organisasjonens "
 "tema."
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-"Gjennomgå og bekreft innsendte betalingsfakturaer som venter på manuell "
-"godkjenning"
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr "Den engelske originalteksten slik den vises i koden (msgid i gettext)"

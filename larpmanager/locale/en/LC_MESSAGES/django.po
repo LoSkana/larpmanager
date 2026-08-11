@@ -5747,6 +5747,9 @@ msgstr ""
 msgid "Payments pending approval"
 msgstr ""
 
+msgid "Reference"
+msgstr ""
+
 msgid "Total registration fee:"
 msgstr ""
 
@@ -6732,9 +6735,6 @@ msgid "%(name)s in debit"
 msgstr ""
 
 msgid "No members with negative credits for the selected year."
-msgstr ""
-
-msgid "Invoices"
 msgstr ""
 
 msgid ""
@@ -8609,15 +8609,6 @@ msgid "Submit a new personal expense reimbursement request for this event"
 msgstr ""
 
 msgid "Track all external income entries recorded for this event"
-msgstr ""
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-
-msgid "Net"
-msgstr ""
-
-msgid "No payment invoices awaiting confirmation at this time."
 msgstr ""
 
 msgid "Track all personal expenses directly incurred for this event"
@@ -10885,9 +10876,6 @@ msgstr ""
 msgid "Configure payment methods available for participants"
 msgstr ""
 
-msgid "Manage invoices of payments and approve them"
-msgstr ""
-
 msgid "Check data"
 msgstr ""
 
@@ -11080,12 +11068,6 @@ msgid "Displays a list of signed-up email addresses for newsletters"
 msgstr ""
 
 msgid "Manages and assigns tasks to characters"
-msgstr ""
-
-msgid "Approvals"
-msgstr ""
-
-msgid "Manually approve payments received"
 msgstr ""
 
 msgid "Upload Expenses"
@@ -12036,13 +12018,13 @@ msgstr ""
 msgid "Request approved"
 msgstr ""
 
+msgid "Net"
+msgstr ""
+
 msgid "VAT (Ticket)"
 msgstr ""
 
 msgid "VAT (Options)"
-msgstr ""
-
-msgid "Bank payment reference"
 msgstr ""
 
 msgid "Element approved!"

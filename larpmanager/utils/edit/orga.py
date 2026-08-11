@@ -32,7 +32,6 @@ from larpmanager.cache.character import get_event_cache_all, reset_event_cache_a
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.accounting import (
-    ExeInvoiceForm,
     OrgaCreditForm,
     OrgaDiscountForm,
     OrgaExpenseForm,
@@ -301,7 +300,6 @@ class OrgaAction(str, Enum):
     TOKENS = ("orga_tokens", {"form": OrgaTokenForm})
     CREDITS = ("orga_credits", {"form": OrgaCreditForm})
     PAYMENTS = ("orga_payments", {"form": OrgaPaymentForm, "check": validate_payments})
-    INVOICES = ("orga_invoices", {"form": ExeInvoiceForm})
     OUTFLOWS = ("orga_outflows", {"form": OrgaOutflowForm})
     INFLOWS = ("orga_inflows", {"form": OrgaInflowForm})
     EXPENSES = ("orga_expenses", {"form": OrgaExpenseForm})

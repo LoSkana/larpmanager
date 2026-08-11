@@ -1027,11 +1027,6 @@ urlpatterns = [
         name="orga_expenses_my_new",
     ),
     path(
-        "<slug:event_slug>/manage/invoices/",
-        views_oa.orga_invoices,
-        name="orga_invoices",
-    ),
-    path(
         "<slug:event_slug>/manage/invoices/confirm/<slug:invoice_uuid>/",
         views_oa.orga_invoices_confirm,
         name="orga_invoices_confirm",
