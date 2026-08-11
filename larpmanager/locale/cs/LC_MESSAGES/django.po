@@ -499,6 +499,9 @@ msgstr "Akce"
 msgid "Active"
 msgstr "Aktivní"
 
+msgid "Admins"
+msgstr "Administrátoři"
+
 msgid "Amount"
 msgstr "Součet"
 
@@ -8235,6 +8238,10 @@ msgid "The quick access sidebar is on the left (on mobile, tap "
 msgstr ""
 "Postranní panel pro rychlý přístup se nachází vlevo (na mobilu klepni na "
 
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Tyto postavy nejsou členy guild: %(names)s"
+
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Narazili jsme na problém s daňovým kódem, který jsi nám poskytl(a):"
 
@@ -8938,6 +8945,9 @@ msgstr "Spravovat schopnosti postav koupitelné za zkušenostní body"
 
 msgid "Manages tokens used by participants to cover the registration fee"
 msgstr "Spravovat tokeny používané účastníky k úhradě registračního poplatku"
+
+msgid "Members that can manage the guild: they must be among the members"
+msgstr "Členové, kteří mohou spravovat guild: musí být mezi členy"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"

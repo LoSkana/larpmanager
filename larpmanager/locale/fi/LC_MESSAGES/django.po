@@ -499,6 +499,9 @@ msgstr "Toiminta"
 msgid "Active"
 msgstr "Aktiivinen"
 
+msgid "Admins"
+msgstr "Ylläpitäjät"
+
 msgid "Amount"
 msgstr "Määrä"
 
@@ -8243,6 +8246,10 @@ msgstr "Linkki on voimassa seuraavan määrän päiviä:"
 msgid "The quick access sidebar is on the left (on mobile, tap "
 msgstr "Pikavalintapalkki sijaitsee vasemmalla (mobiililaitteella napauta "
 
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Nämä hahmot eivät ole killan jäseniä: %(names)s"
+
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Toimittamasi verokoodin kanssa ilmeni ongelma:"
 
@@ -8991,6 +8998,9 @@ msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Hallitsee poletteja, joita osallistujat käyttävät ilmoittautumismaksun "
 "kattamiseen"
+
+msgid "Members that can manage the guild: they must be among the members"
+msgstr "Jäsenet, jotka voivat hallita kiltaa: heidän on oltava jäseniä"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"

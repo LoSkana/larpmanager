@@ -499,6 +499,9 @@ msgstr "Azione"
 msgid "Active"
 msgstr "Attivo"
 
+msgid "Admins"
+msgstr "Amministratori"
+
 msgid "Amount"
 msgstr "Somma"
 
@@ -8274,6 +8277,10 @@ msgstr ""
 "La barra laterale di accesso rapido si trova a sinistra (sui dispositivi "
 "mobili, tocca "
 
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Questi personaggi non sono membri della gilda: %(names)s"
+
 msgid "We encountered a problem with the tax code you provided:"
 msgstr ""
 "Abbiamo riscontrato un problema con il codice fiscale che hai fornito:"
@@ -9073,6 +9080,9 @@ msgstr "Gestisci le abilità dei personaggi acquistabili con punti esperienza"
 msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Gestisce i token usati dai partecipanti per coprire la quota di iscrizione"
+
+msgid "Members that can manage the guild: they must be among the members"
+msgstr "Membri che possono gestire la gilda: devono essere tra i membri"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"

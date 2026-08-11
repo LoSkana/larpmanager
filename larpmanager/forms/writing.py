@@ -21,7 +21,7 @@ from typing import Any, ClassVar
 
 from django import forms
 from django.contrib.postgres.aggregates import ArrayAgg
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -45,6 +45,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.writing import (
+    Character,
     Faction,
     Guild,
     GuildMembership,
@@ -447,6 +448,14 @@ class OrgaGuildForm(WritingForm, BaseWritingForm):
 
     page_info = _("Manage all guilds of the event")
 
+    admins = forms.ModelMultipleChoiceField(
+        queryset=Character.objects.none(),
+        required=False,
+        label=_("Admins"),
+        help_text=_("Members that can manage the guild: they must be among the members"),
+        widget=CharacterDualListWidget,
+    )
+
     class Meta:
         model = Guild
 
@@ -465,6 +474,8 @@ class OrgaGuildForm(WritingForm, BaseWritingForm):
 
         self.init_orga_fields()
         self.reorder_field("characters")
+        self.configure_field_event("admins", self.params.get("event"))
+        self.reorder_field("admins")
 
         # Handle color field based on ensemble feature
         if "ensemble" not in self.params.get("features"):
@@ -475,20 +486,39 @@ class OrgaGuildForm(WritingForm, BaseWritingForm):
         self.chars_id = set()
 
         if self.instance.pk:
-            self.init_characters = list(
-                self.instance.memberships.filter(status=GuildMembershipStatus.ACCEPTED).values_list(
-                    "character_id", flat=True
-                ),
-            )
+            accepted = self.instance.memberships.filter(status=GuildMembershipStatus.ACCEPTED)
+            self.init_characters = list(accepted.values_list("character_id", flat=True))
+            self.init_admins = list(accepted.filter(role=GuildRole.ADMIN).values_list("character_id", flat=True))
         else:
             self.init_characters = []
+            self.init_admins = []
 
         self.initial["characters"] = self.init_characters
+        self.initial["admins"] = self.init_admins
 
         self._init_special_fields()
 
-    def _save_multi(self, field: str, instance: Guild) -> None:  # noqa: ARG002
-        """Delete guild memberships for unselected characters."""
+    def clean_admins(self) -> Any:
+        """Ensure the selected admins are also members of the guild."""
+        admins = self.cleaned_data.get("admins")
+        characters = self.cleaned_data.get("characters")
+        if admins and characters is not None:
+            member_ids = set(characters.values_list("pk", flat=True))
+            missing = [str(char) for char in admins if char.pk not in member_ids]
+            if missing:
+                msg = _("These characters are not members of the guild: %(names)s") % {"names": ", ".join(missing)}
+                raise ValidationError(msg)
+        return admins
+
+    def _save_multi(self, field: str, instance: Guild) -> None:
+        """Delete guild memberships for unselected characters; admins are saved with the roles."""
+        if field == "admins":
+            return
+
+        if field != "characters":
+            super()._save_multi(field, instance)
+            return
+
         self.chars_id = set(self.cleaned_data["characters"].values_list("pk", flat=True))
 
         GuildMembership.objects.filter(
@@ -528,7 +558,17 @@ class OrgaGuildForm(WritingForm, BaseWritingForm):
                 status=GuildMembershipStatus.ACCEPTED,
             )
 
+        self._save_admins(instance)
+
         return instance
+
+    def _save_admins(self, instance: Guild) -> None:
+        """Align guild roles with the admins selected in the form."""
+        admin_ids = {char.pk for char in self.cleaned_data.get("admins", [])} & self.chars_id
+
+        memberships = GuildMembership.objects.filter(guild_id=instance.pk, character_id__in=self.chars_id)
+        memberships.filter(character_id__in=admin_ids).exclude(role=GuildRole.ADMIN).update(role=GuildRole.ADMIN)
+        memberships.exclude(character_id__in=admin_ids).exclude(role=GuildRole.MEMBER).update(role=GuildRole.MEMBER)
 
 
 class GuildForm(WritingForm, BaseWritingForm):
