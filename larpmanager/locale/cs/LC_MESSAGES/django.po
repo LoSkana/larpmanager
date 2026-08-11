@@ -984,7 +984,7 @@ msgid "Sign In"
 msgstr "Přihlásit se"
 
 msgid "Signups"
-msgstr "Přihlášky"
+msgstr "Přihlášení"
 
 msgid "Station"
 msgstr "Pracovní stanice"
@@ -1907,6 +1907,9 @@ msgstr "Snímek obrazovky"
 msgid "Searchable"
 msgstr "Vyhledávatelné"
 
+msgid "Select all"
+msgstr "Vybrat vše"
+
 msgid "Selectable"
 msgstr "Zvolitelný"
 
@@ -1918,6 +1921,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "Speed larpy"
 
 msgid "Start date"
 msgstr "Datum zahájení"
@@ -2105,9 +2111,6 @@ msgstr "Opustit cech"
 msgid "Lightweight"
 msgstr "Lehké"
 
-msgid "Limitations"
-msgstr "Omezení"
-
 msgid "Lock events"
 msgstr "Uzamknout události"
 
@@ -2264,6 +2267,9 @@ msgstr "Přidat z NPC"
 msgid "Add prologue"
 msgstr "Přidat prolog"
 
+msgid "Availability"
+msgstr "Dostupnost"
+
 msgid "Bank address"
 msgstr "Adresa banky"
 
@@ -2299,6 +2305,9 @@ msgstr "Sdílení dat"
 
 msgid "Description:"
 msgstr "Popis:"
+
+msgid "Deselect all"
+msgstr "Zrušit výběr všeho"
 
 msgid "Event hidden"
 msgstr "Skrytá událost"
@@ -3164,6 +3173,9 @@ msgstr "Pozvánka byla odmítnuta"
 msgid "Manage it here!"
 msgstr "Spravuj ji zde!"
 
+msgid "Matchmaker Form"
+msgstr "Formulář Matchmakeru"
+
 msgid "Maximum members"
 msgstr "Maximální počet členů"
 
@@ -3807,6 +3819,9 @@ msgstr "Vybrané možnosti:"
 msgid "Set progress step"
 msgstr "Nastavení kroku postupu"
 
+msgid "Show availability"
+msgstr "Zobrazit dostupnost"
+
 msgid "Show sold tickets"
 msgstr "Zobrazit prodané vstupenky"
 
@@ -3874,6 +3889,9 @@ msgstr "Vytvoření postavy"
 
 msgid "Character portrait"
 msgstr "Portrét postavy"
+
+msgid "Check availability"
+msgstr "Zkontrolovat dostupnost"
 
 msgid "Competences events"
 msgstr "Dovednosti v oblasti událostí"
@@ -3988,6 +4006,9 @@ msgstr "Navrhovaná postava"
 
 msgid "RUNTS registration"
 msgstr "Registrace RUNTS"
+
+msgid "Registration Quota"
+msgstr "Registrační poplatek"
 
 msgid "Registration email"
 msgstr "Registrační e-mail"
@@ -4382,6 +4403,9 @@ msgstr "Neplatná předvolba"
 msgid "Proceed with payment"
 msgstr "Pokračuj v platbě"
 
+msgid "Registration Tickets"
+msgstr "Registrační vstupenky"
+
 msgid "Registration history"
 msgstr "Historie registrací"
 
@@ -4508,6 +4532,9 @@ msgstr "Nepodařilo se přidat Handout"
 
 msgid "Go to event dashboard"
 msgstr "Přejít na ovládací panel události"
+
+msgid "Handout and templates"
+msgstr "Handouty a šablony"
 
 msgid "Invalid choice format"
 msgstr "Nesprávný formát výběru"
@@ -4732,6 +4759,9 @@ msgstr "Osobní údaje aktualizovány!"
 
 msgid "Register of volunteers"
 msgstr "Rejstřík dobrovolníků"
+
+msgid "Registration Surcharge"
+msgstr "Příplatek za registraci"
 
 msgid "Registration cancelled"
 msgstr "Registrace zrušena"
@@ -5014,6 +5044,9 @@ msgstr "Sleva pro doporučeného přítele"
 
 msgid "Referrer Reward Discount"
 msgstr "Sleva pro doporučitele"
+
+msgid "Registration Installment"
+msgstr "Registrační splátka"
 
 msgid "Relationships max length"
 msgstr "Maximální délka vztahů"
@@ -5418,9 +5451,6 @@ msgstr "Název vstupenky (ať je krátký)"
 
 msgid "View badges you have earned"
 msgstr "Zobraz Badges, které jsi získal/a"
-
-msgid "View limited ticket options"
-msgstr "Zobrazit omezené možnosti vstupenek"
 
 msgid "View photos from the event!"
 msgstr "Prohlédni si fotografie z akce!"
@@ -7698,9 +7728,6 @@ msgstr "Vybraný obrázek zobrazený na domovské stránce portálu"
 msgid "Full event description with all important details"
 msgstr "Úplný popis události se všemi důležitými informacemi"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Zde jsou možnosti zápisu s omezeným počtem míst."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Je-li vybráno, pro každou akci se zobrazí slogan."
 
@@ -7816,6 +7843,9 @@ msgstr "Platba za tuto akci je uhrazena a v pořádku!"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Druhá postava ve vztahu (cílová destinace)"
+
+msgid "Select the single elements to copy into this event"
+msgstr "Vyber jednotlivé prvky ke zkopírování do této akce"
 
 msgid "Select your preferences on the characters to play!"
 msgstr "Vyber své preference postav, které chceš hrát!"
@@ -8095,9 +8125,6 @@ msgstr "Sledování množství není pro tuto organizaci povoleno"
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Projdi si odpovědi účastníků na otázky matchmakeru"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Vyber, které prvky se mají zkopírovat z které jiné události."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Některé funkce vyžadují \"Postava\", která není aktivní"
 
@@ -8273,6 +8300,9 @@ msgstr "Pro otevření platby klikni na obrázek níže (Paypal.me)."
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr ""
 "Obsah stránky o ochraně osobních údajů s odkazem v dolní části všech stránek"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Zkopírovat vybrané prvky z jiné akce do této akce"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elektronika: počítače, moderní vybavení a osvětlení"
@@ -8484,9 +8514,6 @@ msgstr ""
 "použij obdélníkový obrázek, nejlépe v poměru 4:3, abys dosáhl(a) co "
 "nejlepších výsledků"
 
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr "UPOZORNĚNÍ: tato akce přepíše změny provedené v této události"
-
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
 msgstr "Do panelu správy se dostaneš <a href='%(url)s'>zde</a>!"
@@ -8522,6 +8549,9 @@ msgstr "Chceš přijímat platby zpracované systémem?"
 msgid "Enter your legal gender as it appears on official documents."
 msgstr ""
 "Zadej své zákonné pohlaví tak, jak je uvedeno v oficiálních dokumentech."
+
+msgid "Here are the sign up options with a limited number of spots."
+msgstr "Zde jsou možnosti přihlášení s omezeným počtem míst."
 
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr "Je-li vybráno, v kalendáři se zobrazí odkaz na minulé akce."
@@ -9022,11 +9052,6 @@ msgstr ""
 msgid "If enabled, no credits will be used in the entries for this event."
 msgstr "Je-li povoleno, v registracích této akce se nebudou používat kredity."
 
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Je-li povoleno, zobrazit souhrnnou stránku s počtem použitých "
-"vstupenek/možností."
-
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Umožňuje pracovníkům přístup k informacím o Safety poskytnutým účastníky"
@@ -9150,6 +9175,9 @@ msgstr "Nyní můžeš zkontrolovat informace o Safety odeslané účastníky"
 #, python-format
 msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr "%(amount)s %(tokens)s bylo vyměněno za účelem účasti na této akci."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr "POZOR: Prvky této akce se stejným názvem budou přepsány"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr "Přidáno na konec všech e-mailů potvrzujících přihlášení účastníkům"
@@ -9931,11 +9959,6 @@ msgid ""
 "Great news! Your request to register for <b>%(event)s</b> has been approved."
 msgstr ""
 "Skvělá zpráva! Tvoje žádost o registraci na <b>%(event)s</b> byla schválena."
-
-msgid ""
-"Hover on the link, or click on the question icon, to see what the link does."
-msgstr ""
-"Najetím na odkaz nebo kliknutím na ikonu otázky zjistíš, co odkaz dělá."
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -10824,13 +10847,6 @@ msgid ""
 msgstr "Umožňuje vyladit způsob překladu slov a frází v prostoru organizace"
 
 msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Zkopíruj vybrané prvky z jiné události do této události a přepiš tak "
-"stávající data"
-
-msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -11033,6 +11049,13 @@ msgid ""
 "The first line of the file must contain the column names, see the "
 "descriptions below:"
 msgstr "První řádek souboru musí obsahovat názvy sloupců, viz popisy níže:"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
+"open it)."
+msgstr ""
+"Panel rychlého přístupu je vlevo (na mobilu ho otevřeš klepnutím na ikonu "
+"vlevo dole)."
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -11700,7 +11723,7 @@ msgid ""
 "Optional - Indicates whether to show on the event page how many of this "
 "ticket have been sold"
 msgstr ""
-"Volitelné – Určuje, zda se má na stránce akce zobrazit, kolik vstupenek "
+"Volitelné – určuje, zda se má na stránce akce zobrazit, kolik vstupenek "
 "tohoto typu bylo prodáno"
 
 msgid ""
@@ -11812,13 +11835,6 @@ msgid ""
 "registrations (0 = unlimited)"
 msgstr ""
 "Nepovinné - maximální počet výběrů ve všech registracích (0 = neomezeně)"
-
-msgid ""
-"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
-" bottom to open it)."
-msgstr ""
-"Panel rychlého přístupu je vlevo (na mobilu ho otevřeš klepnutím na "
-"„Zkratky“ dole)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
@@ -12841,6 +12857,13 @@ msgstr ""
 "zůstatků a uplatněných slev."
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Vyber, které prvky chceš zkopírovat a z které jiné akce. V dalším kroku "
+"vybereš jednotlivé prvky."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13034,6 +13057,13 @@ msgstr ""
 "šablonu rozvržení CSS pro své handouty."
 
 msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Zkopírují se pouze vybrané prvky: prvky se stejným názvem budou přepsány, "
+"všechny ostatní zůstanou zachovány."
+
+msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
 " be able to select your preferences!"
 msgstr ""
@@ -13100,8 +13130,8 @@ msgid ""
 "If enabled, show on the event page the total number of tickets sold, plus "
 "the number sold for each enabled ticket."
 msgstr ""
-"Pokud je povoleno, zobrazí se na stránce akce celkový počet prodaných "
-"vstupenek a také počet prodaných vstupenek pro každý povolený typ vstupenky."
+"Pokud je povoleno, na stránce akce se zobrazí celkový počet prodaných "
+"vstupenek a také počet prodaných vstupenek pro každý povolený typ."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "
@@ -13270,6 +13300,13 @@ msgid ""
 msgstr ""
 "Jsi lékař, zdravotní sestra nebo licencovaný záchranář? Můžeme tě požádat, "
 "abys zasáhl/a v případě, že během akce dojde k nehodě?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Pokud je povoleno, zobraz hráčům stránku se zbývajícími místy pro vstupenky,"
+" možnosti a slevy s omezeným počtem."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
@@ -13508,13 +13545,6 @@ msgid ""
 msgstr ""
 "Pro tuto akci zatím nebyly definovány žádné role. Pomocí tlačítka výše můžeš"
 " vytvořit roli a přiřadit oprávnění členům týmu."
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you create the event."
-msgstr ""
-"V horní části najdeš odkazy na tento přehled organizace a na přehledy "
-"jednotlivých aktivních akcí, jakmile akci vytvoříš."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -14123,6 +14153,15 @@ msgstr ""
 "Umožňuje zabezpečené streamování video/audio obsahu prostřednictvím "
 "jednorázových přístupových tokenů. Každý token lze použít pouze jednou a "
 "sleduje, kdo, kdy a odkud k obsahu přistupoval"
+
+msgid ""
+"At the top, you'll find shortcuts to this organization dashboard and to each"
+" active event dashboard once you created them (on mobile, tap bottom-right "
+"icon to open it)."
+msgstr ""
+"Nahoře najdeš zástupce na nástěnku této organizace a na nástěnku každé "
+"aktivní akce, jakmile ji vytvoříš (na mobilu ji otevřeš klepnutím na ikonu "
+"vpravo dole)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

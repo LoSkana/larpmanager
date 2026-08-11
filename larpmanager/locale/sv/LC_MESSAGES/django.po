@@ -1907,6 +1907,9 @@ msgstr "Skärmdump"
 msgid "Searchable"
 msgstr "Sökbar"
 
+msgid "Select all"
+msgstr "Välj alla"
+
 msgid "Selectable"
 msgstr "Valbar"
 
@@ -1918,6 +1921,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "Speed larps"
 
 msgid "Start date"
 msgstr "Startdatum"
@@ -2105,9 +2111,6 @@ msgstr "Lämna gillet"
 msgid "Lightweight"
 msgstr "Lättviktig"
 
-msgid "Limitations"
-msgstr "Begränsningar"
-
 msgid "Lock events"
 msgstr "Lås evenemang"
 
@@ -2264,6 +2267,9 @@ msgstr "Lägg till från NPC"
 msgid "Add prologue"
 msgstr "Lägg till prolog"
 
+msgid "Availability"
+msgstr "Tillgänglighet"
+
 msgid "Bank address"
 msgstr "Bankens adress"
 
@@ -2299,6 +2305,9 @@ msgstr "Datadelning"
 
 msgid "Description:"
 msgstr "Beskrivning:"
+
+msgid "Deselect all"
+msgstr "Avmarkera alla"
 
 msgid "Event hidden"
 msgstr "Dolt evenemang"
@@ -3164,6 +3173,9 @@ msgstr "Inbjudan avvisad"
 msgid "Manage it here!"
 msgstr "Hantera det här!"
 
+msgid "Matchmaker Form"
+msgstr "Matchmaker-formulär"
+
 msgid "Maximum members"
 msgstr "Maximalt antal medlemmar"
 
@@ -3807,6 +3819,9 @@ msgstr "Valda alternativ:"
 msgid "Set progress step"
 msgstr "Ställ in förloppssteg"
 
+msgid "Show availability"
+msgstr "Visa tillgänglighet"
+
 msgid "Show sold tickets"
 msgstr "Visa sålda biljetter"
 
@@ -3874,6 +3889,9 @@ msgstr "Karaktärsskapande"
 
 msgid "Character portrait"
 msgstr "Porträtt av karaktären"
+
+msgid "Check availability"
+msgstr "Kontrollera tillgänglighet"
 
 msgid "Competences events"
 msgstr "Färdigheter för evenemang"
@@ -3988,6 +4006,9 @@ msgstr "Föreslagen karaktär"
 
 msgid "RUNTS registration"
 msgstr "RUNTS registrering"
+
+msgid "Registration Quota"
+msgstr "Anmälningsavgift"
 
 msgid "Registration email"
 msgstr "Registreringsmejl"
@@ -4382,6 +4403,9 @@ msgstr "Ogiltig preferens"
 msgid "Proceed with payment"
 msgstr "Fortsätt med betalningen"
 
+msgid "Registration Tickets"
+msgstr "Anmälningsbiljetter"
+
 msgid "Registration history"
 msgstr "Registreringshistorik"
 
@@ -4508,6 +4532,9 @@ msgstr "Misslyckades med att lägga till handout"
 
 msgid "Go to event dashboard"
 msgstr "Gå till instrumentpanelen för evenemang"
+
+msgid "Handout and templates"
+msgstr "Handout och mallar"
 
 msgid "Invalid choice format"
 msgstr "Ogiltigt valformat"
@@ -4732,6 +4759,9 @@ msgstr "Personuppgifter uppdaterade!"
 
 msgid "Register of volunteers"
 msgstr "Register över volontärer"
+
+msgid "Registration Surcharge"
+msgstr "Anmälningstillägg"
 
 msgid "Registration cancelled"
 msgstr "Registreringen har avbrutits"
@@ -5014,6 +5044,9 @@ msgstr "Rabatt för värvade vänner"
 
 msgid "Referrer Reward Discount"
 msgstr "Rabatt för den som värvar en vän"
+
+msgid "Registration Installment"
+msgstr "Anmälningsdelbetalning"
 
 msgid "Relationships max length"
 msgstr "Relationernas maximala längd"
@@ -5418,9 +5451,6 @@ msgstr "Biljettens namn (håll det kort)"
 
 msgid "View badges you have earned"
 msgstr "Visa de badges du har förtjänat"
-
-msgid "View limited ticket options"
-msgstr "Se begränsade biljettalternativ"
 
 msgid "View photos from the event!"
 msgstr "Se bilder från evenemanget!"
@@ -7700,9 +7730,6 @@ msgstr "Utvald bild som visas på portalens hemsida"
 msgid "Full event description with all important details"
 msgstr "Fullständig beskrivning av evenemanget med alla viktiga detaljer"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Här är alternativen för registrering med begränsat antal."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Om valt visas taglinen för varje evenemang."
 
@@ -7819,6 +7846,9 @@ msgstr "Betalningen för detta evenemang är genomförd och i ordning!"
 
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i relationen (destination)"
+
+msgid "Select the single elements to copy into this event"
+msgstr "Välj de enskilda element som ska kopieras till detta evenemang"
 
 msgid "Select your preferences on the characters to play!"
 msgstr "Välj dina preferenser bland karaktärerna att spela!"
@@ -8094,9 +8124,6 @@ msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Granska deltagarnas svar på matchmaker-frågorna"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Välj vilka element som ska kopieras, från vilket annat evenemang."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Vissa funktioner kräver \"Karaktär\", som inte är aktiv"
 
@@ -8272,6 +8299,9 @@ msgstr "Klicka på bilden nedan (Paypal.me) för att öppna betalningen."
 
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Innehåll på integritetssidan länkad längst ner på alla sidor"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Kopiera valda element från ett annat evenemang till detta evenemang"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elektronik: datorer, högteknologisk utrustning och belysning"
@@ -8487,10 +8517,6 @@ msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 "använd en rektangulär bild, helst i förhållandet 4:3 för bästa resultat"
 
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr ""
-"VARNING: denna åtgärd skriver över ändringar som gjorts i detta evenemang"
-
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
 msgstr "Öppna hanteringspanelen <a href='%(url)s'>från här</a>!"
@@ -8527,6 +8553,9 @@ msgstr "Vill du ta emot betalningar som behandlas via systemet?"
 
 msgid "Enter your legal gender as it appears on official documents."
 msgstr "Ange ditt juridiska kön så som det står i officiella dokument."
+
+msgid "Here are the sign up options with a limited number of spots."
+msgstr "Här är anmälningsalternativen med ett begränsat antal platser."
 
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr "Om valt visas en länk till tidigare evenemang i kalendern."
@@ -9057,11 +9086,6 @@ msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 "Om aktiverat används inga krediter i registreringarna för detta evenemang."
 
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Om aktiverat visas en sammanfattningssida med antal använda "
-"biljetter/alternativ."
-
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
 "Ger personalen tillgång till den Safety-information som deltagarna har "
@@ -9209,6 +9233,9 @@ msgstr "Du kan nu granska Safety-informationen som deltagarna har skickat in"
 #, python-format
 msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr "%(amount)s %(tokens)s har lösts in för deltagande i detta evenemang."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr "OBS: Element i detta evenemang med samma namn skrivs över"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
@@ -10042,12 +10069,6 @@ msgid ""
 msgstr ""
 "Fantastiska nyheter! Din ansökan om att anmäla dig till <b>%(event)s</b> har"
 " godkänts."
-
-msgid ""
-"Hover on the link, or click on the question icon, to see what the link does."
-msgstr ""
-"Håll muspekaren över länken eller klicka på frågesymbolen för att se vad "
-"länken gör."
 
 msgid ""
 "If selected, the sidebar shows a link to view all of a user's registrations."
@@ -10966,13 +10987,6 @@ msgstr ""
 "organisationens utrymme"
 
 msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Kopiera valda objekt från ett annat evenemang till det här evenemanget och "
-"skriv över befintliga uppgifter"
-
-msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
 "their code."
 msgstr ""
@@ -11179,6 +11193,13 @@ msgid ""
 msgstr ""
 "Den första raden i filen måste innehålla kolumnnamnen, se beskrivningarna "
 "nedan:"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
+"open it)."
+msgstr ""
+"Snabbåtkomstsidofältet finns till vänster (på mobilen, tryck på ikonen "
+"längst ned till vänster för att öppna det)."
 
 msgid ""
 "The secret code may only contain letters (a-z, A-Z), digits, hyphens and "
@@ -11861,8 +11882,8 @@ msgid ""
 "Optional - Indicates whether to show on the event page how many of this "
 "ticket have been sold"
 msgstr ""
-"Valfritt – anger om du vill visa på eventsidan hur många av den här "
-"biljetten som har sålts"
+"Valfritt – Anger om eventsidan ska visa hur många av den här biljetten som "
+"har sålts"
 
 msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
@@ -11975,13 +11996,6 @@ msgid ""
 msgstr ""
 "Valfritt - Maximalt antal gånger det kan väljas för alla registreringar (0 ="
 " obegränsat)"
-
-msgid ""
-"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
-" bottom to open it)."
-msgstr ""
-"Snabbåtkomstsidofältet finns till vänster (på mobilen, tryck på \"Genvägar\""
-" längst ned för att öppna det)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
@@ -13008,6 +13022,13 @@ msgstr ""
 "transaktioner, saldon och tillämpade rabatter"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Välj vilka element som ska kopieras och från vilket annat evenemang. I nästa"
+" steg väljer du de enskilda elementen."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13202,6 +13223,13 @@ msgstr ""
 "lägga till en CSS-layoutmall för dina Handout."
 
 msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Endast de valda elementen kopieras: element med samma namn skrivs över, alla"
+" andra behålls."
+
+msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
 " be able to select your preferences!"
 msgstr ""
@@ -13268,8 +13296,8 @@ msgid ""
 "If enabled, show on the event page the total number of tickets sold, plus "
 "the number sold for each enabled ticket."
 msgstr ""
-"Om aktiverat, visa på eventsidan det totala antalet sålda biljetter samt "
-"antalet sålda för varje aktiverad biljett."
+"Om aktiverat visas på eventsidan det totala antalet sålda biljetter samt "
+"antalet sålda av varje aktiverad biljett."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "
@@ -13440,6 +13468,13 @@ msgid ""
 msgstr ""
 "Är du läkare, sjuksköterska eller licensierad räddare? Kan vi be dig att "
 "ingripa om olyckor inträffar under evenemanget?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Om aktiverat visas spelarna en sida med återstående platser för biljetter, "
+"alternativ och rabatter som har ett begränsat antal."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
@@ -13680,13 +13715,6 @@ msgstr ""
 "Det har ännu inte definierats några roller för detta evenemang. Använd "
 "knappen ovan för att skapa en roll och tilldela behörigheter till "
 "personalen."
-
-msgid ""
-"At the top, you'll find shortcuts to this organization dashboard and to each"
-" active event dashboard once you create the event."
-msgstr ""
-"Högst upp hittar du genvägar till den här organisationsöversikten och till "
-"översikten för varje aktivt evenemang när du har skapat evenemanget."
 
 msgid ""
 "Enables 'lottery' tickets with unlimited availability and no cost, from "
@@ -14309,6 +14337,15 @@ msgstr ""
 "Möjliggör säker streaming av video- och ljudinnehåll via engångstoken. Varje"
 " token kan bara användas en gång och spårar vem som har fått tillgång till "
 "innehållet, när och varifrån"
+
+msgid ""
+"At the top, you'll find shortcuts to this organization dashboard and to each"
+" active event dashboard once you created them (on mobile, tap bottom-right "
+"icon to open it)."
+msgstr ""
+"Längst upp hittar du genvägar till den här organisationens kontrollpanel och"
+" till kontrollpanelen för varje aktivt event när du har skapat dem (på "
+"mobilen, tryck på ikonen längst ned till höger för att öppna den)."
 
 msgid ""
 "If enabled, lets you define reusable tags (e.g. love, rivalry) to apply to "

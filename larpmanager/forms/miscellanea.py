@@ -57,6 +57,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction, FactionType
+from larpmanager.utils.core.copy import get_copy_choices
 from larpmanager.utils.core.validators import FileTypeValidator
 
 PAY_CHOICES = (
@@ -478,34 +479,7 @@ class OrgaCopyForm(BaseForm):
         self.configure_field_association("parent", self.params["association_id"])
         self.fields["parent"].widget.set_exclude(self.params["event"].id)
 
-        cho = [
-            ("event", "Event"),
-            ("config", "Configuration"),
-            ("appearance", "Appearance"),
-            ("text", "Texts"),
-            ("navigation", "Navigation"),
-            ("role", "Roles"),
-            ("features", "Features"),
-            ("ticket", "Registration Tickets"),
-            ("question", "Registration Form"),
-            ("discount", "Discount"),
-            ("quota", "Registration Quota"),
-            ("installment", "Registration Installment"),
-            ("surcharge", "Registration Surcharge"),
-            ("writing_question", "Character Sheet"),
-            ("character", "Characters"),
-            ("experience", "Experience"),
-            ("faction", "Factions"),
-            ("quest", "Quests and Traits"),
-            ("prologue", "Prologues"),
-            ("speedlarp", "SpeedLarps"),
-            ("plot", "Plots"),
-            ("handout", "Handout and templates"),
-            ("workshop", "Workshops"),
-        ]
-
-        if "matchmaker" in self.params["features"]:
-            cho.insert(cho.index(("question", "Registration Form")) + 1, ("matchmaker_question", "Matchmaker Form"))
+        cho = get_copy_choices(self.params["features"])
 
         self.fields["target"] = forms.MultipleChoiceField(
             required=True,

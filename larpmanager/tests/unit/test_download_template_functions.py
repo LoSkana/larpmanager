@@ -24,7 +24,7 @@ import pytest
 
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.io.download import _get_column_names, _temp_csv_file
-from larpmanager.views.orga.event import _form_template
+from larpmanager.utils.io.template import _form_template
 
 
 @pytest.mark.django_db(transaction=True)

@@ -26,7 +26,6 @@ from larpmanager.views.orga import (
     accounting as views_oa,
     casting as views_oca,
     character as views_oc,
-    copy as views_oy,
     event as views_oe,
     experience as views_ox,
     form as views_of,
@@ -1793,7 +1792,7 @@ urlpatterns = [
     ),
     path(
         "<slug:event_slug>/manage/copy/",
-        views_oy.orga_copy,
+        views_oe.orga_copy,
         name="orga_copy",
     ),
     path(

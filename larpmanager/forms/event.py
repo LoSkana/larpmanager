@@ -82,7 +82,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.core.common import copy_class
+from larpmanager.utils.core.copy import copy_class
 from larpmanager.views.orga.registration import _get_registration_fields
 
 logger = logging.getLogger(__name__)
@@ -379,8 +379,11 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("show_export", ConfigType.BOOL, export_label, export_help_text)
 
-        limitations_label = _("Limitations")
-        limitations_help_text = _("If enabled, show summary page with number of tickets/options used.")
+        limitations_label = _("Show availability")
+        limitations_help_text = _(
+            "If enabled, show players a page with the remaining spots for tickets, options and discounts "
+            "that have a limited number."
+        )
         self.add_configs("show_limitations", ConfigType.BOOL, limitations_label, limitations_help_text)
 
     def set_config_cover(self) -> None:

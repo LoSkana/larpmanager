@@ -4,12 +4,14 @@
     {% trans "Copy" %} - {{ run.search | truncatechars:50 }}
 {% endblock title %}
 {% block info %}
-    {% trans "Copy selected elements from another event into this event, overwriting existing data" %}
+    {% trans "Copy selected elements from another event into this event" %}
 {% endblock info %}
 {% block content %}
-    <p>{% trans "Select which elements to copy, from which other event." %}</p>
     <p>
-        <i>{% trans "ATTENTION: This action overwrites changes made to this event" %}</i>
+        {% trans "Select which elements to copy, from which other event. In the next step you will select the single elements." %}
+    </p>
+    <p>
+        <i>{% trans "ATTENTION: Elements of this event with the same name are overwritten" %}</i>
     </p>
     <br />
     <br />

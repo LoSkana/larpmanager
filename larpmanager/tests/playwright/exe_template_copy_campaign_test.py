@@ -185,8 +185,9 @@ def copy(live_server: Any, page: Any) -> None:
     page.get_by_role("searchbox").fill("tes")
     page.get_by_role("option", name="Test Larp").click()
 
-    # copy everything
+    # copy everything: select all types, then confirm all their elements
     _checkboxes(page, True)
+    submit_confirm(page)
 
     go_to(page, live_server, "/copy/manage/roles/")
     row = page.locator('tr:has-text("User Test")')
