@@ -274,11 +274,11 @@ def save_event_character_form(features: dict, instance: object) -> None:
     # Activate the organization's language for proper localization
     _activate_orga_lang(instance)
 
-    # Define default question types with their properties
+    # Define default question types with their properties: only the name is required
     def_tps = {
         WritingQuestionType.NAME: ("Name", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 1000, 1),
-        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 10000, 2),
-        WritingQuestionType.SHEET: ("Text", QuestionStatus.MANDATORY, QuestionVisibility.PRIVATE, 50000, 3),
+        WritingQuestionType.TEASER: ("Presentation", QuestionStatus.OPTIONAL, QuestionVisibility.PUBLIC, 10000, 2),
+        WritingQuestionType.SHEET: ("Text", QuestionStatus.OPTIONAL, QuestionVisibility.PRIVATE, 50000, 3),
     }
 
     # Get basic custom question types from the system
@@ -304,7 +304,7 @@ def save_event_character_form(features: dict, instance: object) -> None:
     if "plot" in features:
         # Create a copy of default types with modified teaser for plot concept
         plot_tps = dict(def_tps)
-        plot_tps[WritingQuestionType.TEASER] = ("Concept", QuestionStatus.MANDATORY, QuestionVisibility.PUBLIC, 3000, 2)
+        plot_tps[WritingQuestionType.TEASER] = ("Concept", QuestionStatus.OPTIONAL, QuestionVisibility.PUBLIC, 3000, 2)
         _init_writing_element(instance, plot_tps, [QuestionApplicable.PLOT])
 
 
