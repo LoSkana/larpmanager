@@ -210,6 +210,9 @@ def copy_tickets_and_questions(page: Any, live_server: Any) -> None:
 
     submit_confirm(page)
 
+    # confirm all the single elements in the selection step
+    submit_confirm(page)
+
     # Verify tickets were copied
     go_to(page, live_server, "/eventb/manage/tickets/")
     expect_normalized(page, page.locator("#one"), "Premium Ticket")

@@ -12077,13 +12077,6 @@ msgstr ""
 "rejestracjach (0 = nieograniczona)"
 
 msgid ""
-"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
-" bottom to open it)."
-msgstr ""
-"Panel szybkiego dostępu znajduje się po lewej stronie (na urządzeniu "
-"mobilnym stuknij „Skróty” na dole, aby go otworzyć)."
-
-msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
 "additional modules"
 msgstr ""
