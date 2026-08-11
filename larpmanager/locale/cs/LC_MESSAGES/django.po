@@ -1067,9 +1067,6 @@ msgstr "Schváleno"
 msgid "Assigned"
 msgstr "Přiřazeno"
 
-msgid "Authors:"
-msgstr "Autoři:"
-
 msgid "Auto buy"
 msgstr "Automatický nákup"
 
@@ -1210,6 +1207,9 @@ msgstr "Jednorázové"
 
 msgid "One-shot"
 msgstr "Jednorázový"
+
+msgid "Open map"
+msgstr "Otevřít mapu"
 
 msgid "Optional"
 msgstr "Volitelný"
@@ -4652,9 +4652,6 @@ msgstr "Měny a materiály"
 msgid "Customised mail server"
 msgstr "Přizpůsobený poštovní server"
 
-msgid "Discover the web site!"
-msgstr "Objev webové stránky!"
-
 msgid "Event deletion request"
 msgstr "Žádost o odstranění události"
 
@@ -4915,6 +4912,9 @@ msgstr "Celkový registrační poplatek:"
 
 msgid "Welcome to LarpManager!"
 msgstr "Vítej v LarpManageru!"
+
+msgid "Write to the organizers"
+msgstr "Napiš organizátorům"
 
 msgid "(Optional) Display order"
 msgstr "(Volitelné) Pořadí zobrazení"

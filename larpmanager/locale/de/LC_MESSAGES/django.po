@@ -1067,9 +1067,6 @@ msgstr "Genehmigt"
 msgid "Assigned"
 msgstr "Zugewiesen"
 
-msgid "Authors:"
-msgstr "Autoren:"
-
 msgid "Auto buy"
 msgstr "Automatisch kaufen"
 
@@ -1210,6 +1207,9 @@ msgstr "Einmalig"
 
 msgid "One-shot"
 msgstr "One-shot"
+
+msgid "Open map"
+msgstr "Karte öffnen"
 
 msgid "Optional"
 msgstr "Optional"
@@ -4652,9 +4652,6 @@ msgstr "Währungen und Materialien"
 msgid "Customised mail server"
 msgstr "Kundenspezifischer Mail-Server"
 
-msgid "Discover the web site!"
-msgstr "Entdecke die Website!"
-
 msgid "Event deletion request"
 msgstr "Antrag auf Löschung eines Ereignisses"
 
@@ -4915,6 +4912,9 @@ msgstr "Anmeldegebühr insgesamt:"
 
 msgid "Welcome to LarpManager!"
 msgstr "Willkommen beim LarpManager!"
+
+msgid "Write to the organizers"
+msgstr "Schreib den Organisatoren"
 
 msgid "(Optional) Display order"
 msgstr "(Optional) Anzeigereihenfolge"

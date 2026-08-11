@@ -918,6 +918,17 @@ def concat(val1: Any, val2: Any) -> str:
     return f"{val1}{val2}"
 
 
+@register.filter
+def pretty_url(value: Any) -> str:
+    """Template filter to display an url without scheme, www prefix and trailing slash."""
+    if not value:
+        return ""
+    text = str(value)
+    for prefix in ("https://", "http://", "www."):
+        text = text.removeprefix(prefix)
+    return text.rstrip("/")
+
+
 @register.simple_tag
 def activation_hint(slug: str) -> str:
     """Return the translated hint text for an activation checklist slug."""
