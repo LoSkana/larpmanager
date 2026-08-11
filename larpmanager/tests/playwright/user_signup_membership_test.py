@@ -139,7 +139,7 @@ def pay(live_server: Any, page: Any) -> None:
     submit(page)
     # approve payment
     go_to(page, live_server, "/test/manage/payments")
-    page.get_by_role("link", name="Confirm").click()
+    page.get_by_role("link", name="Confirm").first.click()
     confirm_modal(page)
 
     # check payment

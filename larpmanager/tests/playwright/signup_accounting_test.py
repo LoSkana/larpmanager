@@ -190,7 +190,7 @@ def pay(live_server: Any, page: Any) -> None:
     # confirm payment
     go_to(page, live_server, "/test/manage/payments")
     expect(page.get_by_role("row", name="Admin Test Wire")).to_contain_text("52")
-    page.get_by_role("link", name="Confirm").click()
+    page.get_by_role("link", name="Confirm").first.click()
     confirm_modal(page)
 
 

@@ -80,9 +80,13 @@ INVOICE_PAGES = {
 INVOICE_DEFAULT_PAGE = "exe_payments"
 
 
-def invoice_page(invoice_uuid: str) -> str:
+def invoice_page(request: HttpRequest, invoice_uuid: str) -> str:
     """Return the accounting page owning the invoice, by its payment type."""
-    invoice_type = PaymentInvoice.objects.filter(uuid=invoice_uuid).values_list("typ", flat=True).first()
+    invoice_type = (
+        PaymentInvoice.objects.filter(uuid=invoice_uuid, association_id=request.association["id"])
+        .values_list("typ", flat=True)
+        .first()
+    )
     return INVOICE_PAGES.get(invoice_type, INVOICE_DEFAULT_PAGE)
 
 
@@ -661,7 +665,7 @@ def exe_payments_delete(request: HttpRequest, payment_uuid: str) -> HttpResponse
 @login_required
 def exe_invoices_delete(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
     """Delete a payment invoice and redirect to the page listing invoices of its type."""
-    page = invoice_page(invoice_uuid)
+    page = invoice_page(request, invoice_uuid)
     context = check_association_context(request, page)
     if request.GET.get("frame") == "1" or request.POST.get("frame") == "1":
         context["frame"] = True
@@ -689,7 +693,7 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
 
     """
     # Check user permissions on the accounting page owning invoices of this type
-    page = invoice_page(invoice_uuid)
+    page = invoice_page(request, invoice_uuid)
     context = check_association_context(request, page)
 
     # Retrieve the specific invoice by number

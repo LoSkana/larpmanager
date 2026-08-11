@@ -191,7 +191,7 @@ Optional registration field allowing participants to add a voluntary contributio
 
 ### Payment Feature
 
-Comprehensive payment management system supporting multiple gateways (PayPal, Stripe, Redsys, Satispay, SumUp). Tracks payment invoices with statuses (Created, Submitted, Confirmed, Checked), transaction fees, and payment methods. Event organizers can view and confirm pending payments via orga_payments/orga_invoices, while organization executives manage all payments through exe_payments/exe_invoices. Includes verification workflow, gross/net calculations, and detailed payment history. Links payments to registrations, memberships, donations, or collections.
+Comprehensive payment management system supporting multiple gateways (PayPal, Stripe, Redsys, Satispay, SumUp). Tracks payment invoices with statuses (Created, Submitted, Confirmed, Checked), transaction fees, and payment methods. Event organizers can view and confirm pending payments via orga_payments, while organization executives manage all payments through exe_payments (and exe_donations, exe_collections, exe_membership for the other invoice types). Includes verification workflow, gross/net calculations, and detailed payment history. Links payments to registrations, memberships, donations, or collections.
 
 ### PDF Generation Feature
 

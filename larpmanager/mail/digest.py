@@ -43,7 +43,7 @@ from larpmanager.mail.templates import (
     get_token_credit_name,
 )
 from larpmanager.models.access import get_association_executives
-from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice
+from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice, RefundRequest
 from larpmanager.models.association import Association, get_url, hdr
 from larpmanager.models.member import Member, Membership, NotificationQueue, NotificationType
 from larpmanager.models.miscellanea import HelpQuestion
@@ -596,11 +596,11 @@ def digest_refund_request(association: Association, refund_requests: list[Notifi
     """Handles refund request digest summary emails."""
     content = "<h4>" + _("Refund Requests") + f": ({len(refund_requests)})" + "</h4>"
     content += "<ul>"
-    invoice_ids = [notification.object_id for notification in refund_requests]
-    for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):
-        content += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f}"
+    request_ids = [notification.object_id for notification in refund_requests]
+    for refund in RefundRequest.objects.filter(pk__in=request_ids, association=association):
+        content += f"<li><b>{refund.member}</b> - {refund.details} - {refund.value:.2f}"
         content += " - " + _("Refund requested")
-        view_url = get_url(reverse("exe_payments"), association)
+        view_url = get_url(reverse("exe_refunds"), association)
         content += f' - <a href="{view_url}">' + _("View") + "</a></li>"
     content += "</ul>"
     return content

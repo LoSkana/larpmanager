@@ -69,6 +69,7 @@ from larpmanager.models.accounting import (
     PaymentInvoice,
     PaymentStatus,
     PaymentType,
+    RefundRequest,
 )
 from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.member import Member, MembershipStatus, NotificationType, get_user_membership
@@ -285,13 +286,13 @@ def accounting_refund(request: HttpRequest) -> HttpResponse:
         if form.is_valid():
             # Save refund request with transaction safety
             with transaction.atomic():
-                payment: PaymentInvoice = form.save(commit=False)
-                payment.member = context["member"]
-                payment.association_id = context["association_id"]
-                payment.save()
+                refund: RefundRequest = form.save(commit=False)
+                refund.member = context["member"]
+                refund.association_id = context["association_id"]
+                refund.save()
 
             # Send notification to administrators about new refund request
-            notify_organization_exe(payment.association, payment, notification_type=NotificationType.REFUND_REQUEST)
+            notify_organization_exe(refund.association, refund, notification_type=NotificationType.REFUND_REQUEST)
 
             # Show success message and redirect to accounting dashboard
             messages.success(

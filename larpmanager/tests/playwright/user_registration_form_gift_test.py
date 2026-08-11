@@ -259,7 +259,7 @@ def gift(page: Any, live_server: Any) -> None:
 
     # approve payment
     go_to(page, live_server, "/test/manage/payments")
-    page.get_by_role("link", name="Confirm").click()
+    page.get_by_role("link", name="Confirm").first.click()
     confirm_modal(page)
 
     # redeem
