@@ -230,8 +230,8 @@ def create_first_char(live_server: Any, page: Any) -> None:
 
     fill_presentation_text(page)
 
-    expect_normalized(page, page.locator("#lbl_id_text"), "Text (*)")
-    expect_normalized(page, page.locator("#lbl_id_teaser"), "Presentation (*)")
+    expect_normalized(page, page.locator("#lbl_id_text"), "Text")
+    expect_normalized(page, page.locator("#lbl_id_teaser"), "Presentation")
     expect_normalized(page, page.locator("#lbl_id_name"), "Name (*)")
     expect_normalized(page, page.locator("#main_form"), "short descr")
     page.locator("#id_que_u4").click()
