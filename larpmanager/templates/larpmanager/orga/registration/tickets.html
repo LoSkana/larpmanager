@@ -28,6 +28,9 @@
                 {% if features.gift %}
                     <th>{% trans "Gift" %}</th>
                 {% endif %}
+                {% if show_ticket_sold %}
+                    <th>{% trans "Show sold count" %}</th>
+                {% endif %}
                 <th>{% trans "Direct link" %}</th>
                 <th></th>
             </tr>
@@ -58,6 +61,11 @@
                     {% if features.gift %}
                         <td>
                             {% if el.giftable %}<i class="fa-solid fa-check"></i>{% endif %}
+                        </td>
+                    {% endif %}
+                    {% if show_ticket_sold %}
+                        <td>
+                            {% if el.show_sold %}<i class="fa-solid fa-check"></i>{% endif %}
                         </td>
                     {% endif %}
                     <td>

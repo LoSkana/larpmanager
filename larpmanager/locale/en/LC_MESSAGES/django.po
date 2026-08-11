@@ -1112,6 +1112,14 @@ msgstr ""
 msgid "If enabled, allow ticket tier: Seller."
 msgstr ""
 
+msgid "Show sold tickets"
+msgstr ""
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+
 msgid "Patron / Reduced"
 msgstr ""
 
@@ -5006,6 +5014,14 @@ msgid ""
 "Optional - Indicates whether the ticket can be gifted to other participants"
 msgstr ""
 
+msgid "Show sold count"
+msgstr ""
+
+msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+
 msgid "Description - will be displayed at the beginning of the section"
 msgstr ""
 
@@ -6194,6 +6210,12 @@ msgid "Open map"
 msgstr ""
 
 msgid "Write to the organizers"
+msgstr ""
+
+msgid "Signups"
+msgstr ""
+
+msgid "Tickets sold:"
 msgstr ""
 
 msgid "Discover the factions of the game"

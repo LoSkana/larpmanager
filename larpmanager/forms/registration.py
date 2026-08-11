@@ -1241,6 +1241,10 @@ class OrgaRegistrationTicketForm(BaseModelForm):
         if "gift" not in self.params["features"]:
             self.delete_field("giftable")
 
+        # Remove sold count field if the event does not show sold tickets
+        if not get_event_config(self.params["event"].id, "ticket_sold", context=self.params):
+            self.delete_field("show_sold")
+
     @staticmethod
     def get_tier_available(event: Event, context: dict) -> list[tuple[str, str]]:
         """Get available ticket tiers based on event features and configuration.

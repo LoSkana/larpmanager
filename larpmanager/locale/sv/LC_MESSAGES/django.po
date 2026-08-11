@@ -983,6 +983,9 @@ msgstr "Sidofält"
 msgid "Sign In"
 msgstr "Logga in"
 
+msgid "Signups"
+msgstr "Anmälningar"
+
 msgid "Station"
 msgstr "Station"
 
@@ -2732,6 +2735,9 @@ msgstr "Textens språk"
 msgid "Ticket chosen"
 msgstr "Biljett vald"
 
+msgid "Tickets sold:"
+msgstr "Sålda biljetter:"
+
 msgid "Token balance"
 msgstr "Token-saldo"
 
@@ -3247,6 +3253,9 @@ msgstr "Vald biljett"
 
 msgid "Send invitation"
 msgstr "Skicka inbjudan"
+
+msgid "Show sold count"
+msgstr "Visa antal sålda"
 
 msgid "Show statistics"
 msgstr "Visa statistik"
@@ -3797,6 +3806,9 @@ msgstr "Valda alternativ:"
 
 msgid "Set progress step"
 msgstr "Ställ in förloppssteg"
+
+msgid "Show sold tickets"
+msgstr "Visa sålda biljetter"
 
 msgid "Subscription plan"
 msgstr "Abonnemangsplan"
@@ -11846,6 +11858,13 @@ msgstr ""
 "med de uppladdade uppgifterna."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Valfritt – anger om du vill visa på eventsidan hur många av den här "
+"biljetten som har sålts"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13244,6 +13263,13 @@ msgid ""
 msgstr ""
 "Aktiverar fältet ”locked”, som förhindrar spelare från att se hela "
 "karaktärsbladet även när det har tilldelats."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Om aktiverat, visa på eventsidan det totala antalet sålda biljetter samt "
+"antalet sålda för varje aktiverad biljett."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "

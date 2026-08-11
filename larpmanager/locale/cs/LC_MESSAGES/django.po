@@ -983,6 +983,9 @@ msgstr "Postranní panel"
 msgid "Sign In"
 msgstr "Přihlásit se"
 
+msgid "Signups"
+msgstr "Přihlášky"
+
 msgid "Station"
 msgstr "Pracovní stanice"
 
@@ -2732,6 +2735,9 @@ msgstr "Jazyk textu"
 msgid "Ticket chosen"
 msgstr "Vybraná vstupenka"
 
+msgid "Tickets sold:"
+msgstr "Prodané vstupenky:"
+
 msgid "Token balance"
 msgstr "Zůstatek žetonů"
 
@@ -3247,6 +3253,9 @@ msgstr "Vybraná vstupenka"
 
 msgid "Send invitation"
 msgstr "Odeslat pozvánku"
+
+msgid "Show sold count"
+msgstr "Zobrazit počet prodaných"
 
 msgid "Show statistics"
 msgstr "Zobrazit statistiky"
@@ -3797,6 +3806,9 @@ msgstr "Vybrané možnosti:"
 
 msgid "Set progress step"
 msgstr "Nastavení kroku postupu"
+
+msgid "Show sold tickets"
+msgstr "Zobrazit prodané vstupenky"
 
 msgid "Subscription plan"
 msgstr "Plán předplatného"
@@ -11685,6 +11697,13 @@ msgstr ""
 "údaji."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Volitelné – Určuje, zda se má na stránce akce zobrazit, kolik vstupenek "
+"tohoto typu bylo prodáno"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13076,6 +13095,13 @@ msgid ""
 msgstr ""
 "Povolí pole „uzamčeno“, které hráčům brání zobrazit úplný list postavy, i "
 "když je jim přiřazena."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Pokud je povoleno, zobrazí se na stránce akce celkový počet prodaných "
+"vstupenek a také počet prodaných vstupenek pro každý povolený typ vstupenky."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "

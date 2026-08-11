@@ -29,6 +29,7 @@ from django.urls import reverse
 
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import reset_event_cache_all
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
 from larpmanager.cache.registration import clear_registration_tickets_cache, get_registration_tickets
 from larpmanager.cache.writing import clear_relationship_tags_cache
@@ -93,6 +94,8 @@ def orga_registration_tickets(request: HttpRequest, event_slug: str) -> HttpResp
     context["list"] = get_registration_tickets(context["event"].id)
     # Get available ticket tiers for the current event
     context["tiers"] = OrgaRegistrationTicketForm.get_tier_available(context["event"], context)
+    # Show the sold count column only if the event displays sold tickets
+    context["show_ticket_sold"] = get_event_config(context["event"].id, "ticket_sold", context=context)
 
     return render(request, "larpmanager/orga/registration/tickets.html", context)
 

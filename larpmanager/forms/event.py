@@ -468,6 +468,13 @@ class OrgaConfigForm(ConfigForm):
         seller_ticket_help_text = _("If enabled, allow ticket tier: Seller.")
         self.add_configs("ticket_seller", ConfigType.BOOL, seller_ticket_label, seller_ticket_help_text)
 
+        sold_label = _("Show sold tickets")
+        sold_help_text = _(
+            "If enabled, show on the event page the total number of tickets sold, plus the number sold "
+            "for each enabled ticket."
+        )
+        self.add_configs("ticket_sold", ConfigType.BOOL, sold_label, sold_help_text)
+
         if "reduced" in self.params["features"]:
             self.set_section("reduced", _("Patron / Reduced"))
             reduced_ratio_label = "Ratio"

@@ -983,6 +983,9 @@ msgstr "Barre latérale"
 msgid "Sign In"
 msgstr "Se connecter"
 
+msgid "Signups"
+msgstr "Inscriptions"
+
 msgid "Station"
 msgstr "Poste"
 
@@ -2732,6 +2735,9 @@ msgstr "Langue du texte"
 msgid "Ticket chosen"
 msgstr "Billet sélectionné"
 
+msgid "Tickets sold:"
+msgstr "Billets vendus :"
+
 msgid "Token balance"
 msgstr "Solde des jetons"
 
@@ -3247,6 +3253,9 @@ msgstr "Billet sélectionné"
 
 msgid "Send invitation"
 msgstr "Envoyer l'invitation"
+
+msgid "Show sold count"
+msgstr "Afficher le nombre vendu"
 
 msgid "Show statistics"
 msgstr "Afficher les statistiques"
@@ -3797,6 +3806,9 @@ msgstr "Options sélectionnées:"
 
 msgid "Set progress step"
 msgstr "Définir l'étape de progression"
+
+msgid "Show sold tickets"
+msgstr "Afficher les billets vendus"
 
 msgid "Subscription plan"
 msgstr "Plan d'abonnement"
@@ -12172,6 +12184,13 @@ msgstr ""
 " les données que tu as téléchargées."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Facultatif - Indique s’il faut afficher sur la page de l’événement combien "
+"de billets de ce type ont été vendus"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13583,6 +13602,13 @@ msgid ""
 msgstr ""
 "Active le champ « verrouillé », qui empêche les joueurs de voir la fiche de "
 "personnage complète même lorsqu'elle est attribuée."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Si activé, affiche sur la page de l’événement le nombre total de billets "
+"vendus, ainsi que le nombre vendu pour chaque billet activé."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "

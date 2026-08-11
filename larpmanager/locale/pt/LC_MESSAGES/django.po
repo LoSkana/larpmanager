@@ -983,6 +983,9 @@ msgstr "Barra lateral"
 msgid "Sign In"
 msgstr "Iniciar sessão"
 
+msgid "Signups"
+msgstr "Inscrições"
+
 msgid "Station"
 msgstr "Estação"
 
@@ -2732,6 +2735,9 @@ msgstr "Idioma do texto"
 msgid "Ticket chosen"
 msgstr "Bilhete escolhido"
 
+msgid "Tickets sold:"
+msgstr "Bilhetes vendidos:"
+
 msgid "Token balance"
 msgstr "Saldo de tokens"
 
@@ -3247,6 +3253,9 @@ msgstr "Bilhete selecionado"
 
 msgid "Send invitation"
 msgstr "Enviar convite"
+
+msgid "Show sold count"
+msgstr "Mostrar quantidade vendida"
 
 msgid "Show statistics"
 msgstr "Mostrar estatísticas"
@@ -3797,6 +3806,9 @@ msgstr "Opções selecionadas:"
 
 msgid "Set progress step"
 msgstr "Definir passo de progresso"
+
+msgid "Show sold tickets"
+msgstr "Mostrar bilhetes vendidos"
 
 msgid "Subscription plan"
 msgstr "Plano de subscrição"
@@ -11945,6 +11957,13 @@ msgstr ""
 "pelos dados carregados."
 
 msgid ""
+"Optional - Indicates whether to show on the event page how many of this "
+"ticket have been sold"
+msgstr ""
+"Opcional - Indica se deve mostrar na página do evento quantos destes "
+"bilhetes foram vendidos"
+
+msgid ""
 "Performs daily checks for upcoming payments deadlines and sends reminder "
 "emails automatically"
 msgstr ""
@@ -13343,6 +13362,13 @@ msgid ""
 msgstr ""
 "Ativa o campo «bloqueado», que impede os jogadores de ver a ficha completa "
 "da personagem mesmo quando esta é atribuída."
+
+msgid ""
+"If enabled, show on the event page the total number of tickets sold, plus "
+"the number sold for each enabled ticket."
+msgstr ""
+"Se ativado, mostra na página do evento o número total de bilhetes vendidos, "
+"além do número vendido para cada bilhete ativado."
 
 msgid ""
 "No prologue categories have been created yet. Use the button above to add a "

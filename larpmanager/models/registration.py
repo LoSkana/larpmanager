@@ -136,6 +136,12 @@ class RegistrationTicket(UuidMixin, OrderMixin, BaseModel):
         help_text=_("Optional - Indicates whether the ticket can be gifted to other participants"),
     )
 
+    show_sold = models.BooleanField(
+        default=False,
+        verbose_name=_("Show sold count"),
+        help_text=_("Optional - Indicates whether to show on the event page how many of this ticket have been sold"),
+    )
+
     def __str__(self) -> str:
         """Return ticket tier string representation with event, tier, name and price."""
         # noinspection PyUnresolvedReferences

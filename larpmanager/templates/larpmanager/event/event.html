@@ -257,6 +257,18 @@
                             <span class="event-fact-value">{% trans "Write to the organizers" %}</span>
                         </a>
                     {% endif %}
+                    {% if sold_total is not None %}
+                        <div class="event-fact event-fact-sold" title="{% trans "Signups" %}">
+                            <i class="fa-solid fa-users"></i>
+                            <span class="event-fact-value">{% trans "Tickets sold:" %} {{ sold_total }}</span>
+                        </div>
+                        {% for ticket in sold_tickets %}
+                            <div class="event-fact event-fact-sold-detail">
+                                <span class="sold-name">{{ ticket.name }}</span>
+                                <span class="sold-number">{{ ticket.number }}</span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
