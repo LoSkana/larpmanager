@@ -298,7 +298,8 @@ def verify_transfer(page: Any, live_server: Any) -> None:
     expect(edit_iframe.locator("label").filter(has_text="Standard Ticket").locator("input[name='ticket']")).to_be_checked()
 
     # Verify dietary restrictions answer
-    expect(edit_iframe.locator("#id_que_u8")).to_have_value("Vegetarian")
+    dietary_row = edit_iframe.locator("tr").filter(has_text="Dietary restrictions")
+    expect(dietary_row.locator("input[type='text']")).to_have_value("Vegetarian")
 
     # Verify t-shirt size (Large)
     expect(edit_iframe.locator("label").filter(has_text="Large").locator("input[type='radio']").first).to_be_checked()
