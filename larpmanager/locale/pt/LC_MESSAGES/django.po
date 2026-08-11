@@ -2108,9 +2108,6 @@ msgstr "Sair da guilda"
 msgid "Lightweight"
 msgstr "Leve"
 
-msgid "Limitations"
-msgstr "Limitações"
-
 msgid "Lock events"
 msgstr "Bloquear eventos"
 
@@ -2266,6 +2263,9 @@ msgstr "Adicionar de NPC"
 
 msgid "Add prologue"
 msgstr "Adicionar prólogo"
+
+msgid "Availability"
+msgstr "Disponibilidade"
 
 msgid "Bank address"
 msgstr "Morada do banco"
@@ -3810,6 +3810,9 @@ msgstr "Opções selecionadas:"
 msgid "Set progress step"
 msgstr "Definir passo de progresso"
 
+msgid "Show availability"
+msgstr "Mostrar disponibilidade"
+
 msgid "Subscription plan"
 msgstr "Plano de subscrição"
 
@@ -3874,6 +3877,9 @@ msgstr "Criação de personagens"
 
 msgid "Character portrait"
 msgstr "Retrato da personagem"
+
+msgid "Check availability"
+msgstr "Verificar disponibilidade"
 
 msgid "Competences events"
 msgstr "Competências dos eventos"
@@ -5433,9 +5439,6 @@ msgstr "Nome do bilhete (mantém-no curto)"
 
 msgid "View badges you have earned"
 msgstr "Vê os Badges que conquistaste"
-
-msgid "View limited ticket options"
-msgstr "Ver opções de bilhetes limitadas"
 
 msgid "View photos from the event!"
 msgstr "Vê as fotos do evento!"
@@ -7713,9 +7716,6 @@ msgstr "Imagem em destaque apresentada na página inicial do portal"
 msgid "Full event description with all important details"
 msgstr "Descrição completa do evento com todos os detalhes importantes"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Aqui estão as opções de inscrição com número limitado."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Se selecionado, o slogan é apresentado para cada evento."
 
@@ -8548,6 +8548,9 @@ msgstr "Queres aceitar pagamentos processados através do sistema?"
 msgid "Enter your legal gender as it appears on official documents."
 msgstr "Indica o teu género legal tal como aparece nos documentos oficiais."
 
+msgid "Here are the sign up options with a limited number of spots."
+msgstr "Aqui estão as opções de inscrição com vagas limitadas."
+
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr ""
 "Se selecionado, é apresentada uma ligação para eventos passados no "
@@ -9095,11 +9098,6 @@ msgstr ""
 
 msgid "If enabled, no credits will be used in the entries for this event."
 msgstr "Se ativado, não serão usados créditos nas inscrições deste evento."
-
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Se ativado, mostra uma página de resumo com o número de bilhetes/opções "
-"utilizados."
 
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
@@ -13545,6 +13543,13 @@ msgid ""
 msgstr ""
 "És médico, enfermeiro ou socorrista certificado? Podemos pedir-te que "
 "intervenhas caso ocorram acidentes durante o evento?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Se ativado, mostra aos jogadores uma página com as vagas restantes para "
+"bilhetes, opções e descontos com quantidade limitada."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "

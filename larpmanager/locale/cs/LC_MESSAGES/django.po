@@ -2108,9 +2108,6 @@ msgstr "Opustit cech"
 msgid "Lightweight"
 msgstr "Lehké"
 
-msgid "Limitations"
-msgstr "Omezení"
-
 msgid "Lock events"
 msgstr "Uzamknout události"
 
@@ -2266,6 +2263,9 @@ msgstr "Přidat z NPC"
 
 msgid "Add prologue"
 msgstr "Přidat prolog"
+
+msgid "Availability"
+msgstr "Dostupnost"
 
 msgid "Bank address"
 msgstr "Adresa banky"
@@ -3810,6 +3810,9 @@ msgstr "Vybrané možnosti:"
 msgid "Set progress step"
 msgstr "Nastavení kroku postupu"
 
+msgid "Show availability"
+msgstr "Zobrazit dostupnost"
+
 msgid "Subscription plan"
 msgstr "Plán předplatného"
 
@@ -3874,6 +3877,9 @@ msgstr "Vytvoření postavy"
 
 msgid "Character portrait"
 msgstr "Portrét postavy"
+
+msgid "Check availability"
+msgstr "Zkontrolovat dostupnost"
 
 msgid "Competences events"
 msgstr "Dovednosti v oblasti událostí"
@@ -5433,9 +5439,6 @@ msgstr "Název vstupenky (ať je krátký)"
 
 msgid "View badges you have earned"
 msgstr "Zobraz Badges, které jsi získal/a"
-
-msgid "View limited ticket options"
-msgstr "Zobrazit omezené možnosti vstupenek"
 
 msgid "View photos from the event!"
 msgstr "Prohlédni si fotografie z akce!"
@@ -7713,9 +7716,6 @@ msgstr "Vybraný obrázek zobrazený na domovské stránce portálu"
 msgid "Full event description with all important details"
 msgstr "Úplný popis události se všemi důležitými informacemi"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Zde jsou možnosti zápisu s omezeným počtem míst."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Je-li vybráno, pro každou akci se zobrazí slogan."
 
@@ -8538,6 +8538,9 @@ msgid "Enter your legal gender as it appears on official documents."
 msgstr ""
 "Zadej své zákonné pohlaví tak, jak je uvedeno v oficiálních dokumentech."
 
+msgid "Here are the sign up options with a limited number of spots."
+msgstr "Zde jsou možnosti přihlášení s omezeným počtem míst."
+
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr "Je-li vybráno, v kalendáři se zobrazí odkaz na minulé akce."
 
@@ -9036,11 +9039,6 @@ msgstr ""
 
 msgid "If enabled, no credits will be used in the entries for this event."
 msgstr "Je-li povoleno, v registracích této akce se nebudou používat kredity."
-
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Je-li povoleno, zobrazit souhrnnou stránku s počtem použitých "
-"vstupenek/možností."
 
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
@@ -13276,6 +13274,13 @@ msgid ""
 msgstr ""
 "Jsi lékař, zdravotní sestra nebo licencovaný záchranář? Můžeme tě požádat, "
 "abys zasáhl/a v případě, že během akce dojde k nehodě?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Pokud je povoleno, zobraz hráčům stránku se zbývajícími místy pro vstupenky,"
+" možnosti a slevy s omezeným počtem."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "

@@ -2108,9 +2108,6 @@ msgstr "De gilde verlaten"
 msgid "Lightweight"
 msgstr "Lichtgewicht"
 
-msgid "Limitations"
-msgstr "Beperkingen"
-
 msgid "Lock events"
 msgstr "Evenementen vergrendelen"
 
@@ -2266,6 +2263,9 @@ msgstr "Van NPC toevoegen"
 
 msgid "Add prologue"
 msgstr "Proloog toevoegen"
+
+msgid "Availability"
+msgstr "Beschikbaarheid"
 
 msgid "Bank address"
 msgstr "Adres bank"
@@ -3810,6 +3810,9 @@ msgstr "Geselecteerde opties:"
 msgid "Set progress step"
 msgstr "Voortgangsstap instellen"
 
+msgid "Show availability"
+msgstr "Beschikbaarheid tonen"
+
 msgid "Subscription plan"
 msgstr "Abonnementsplan"
 
@@ -3874,6 +3877,9 @@ msgstr "Het maken van een personage"
 
 msgid "Character portrait"
 msgstr "Karakterportret"
+
+msgid "Check availability"
+msgstr "Beschikbaarheid controleren"
 
 msgid "Competences events"
 msgstr "Vaardigheden voor evenementen"
@@ -5433,9 +5439,6 @@ msgstr "Ticketnaam (houd het kort)"
 
 msgid "View badges you have earned"
 msgstr "Bekijk de badges die je hebt verdiend"
-
-msgid "View limited ticket options"
-msgstr "Beperkte ticketopties bekijken"
 
 msgid "View photos from the event!"
 msgstr "Bekijk foto's van het evenement!"
@@ -7721,9 +7724,6 @@ msgstr "Uitgelichte afbeelding op de startpagina van de portal"
 msgid "Full event description with all important details"
 msgstr "Volledige beschrijving van het evenement met alle belangrijke details"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Dit zijn de registratiemogelijkheden met beperkt aantal."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Indien geselecteerd, wordt de slogan voor elk evenement getoond."
 
@@ -8593,6 +8593,9 @@ msgid "Enter your legal gender as it appears on official documents."
 msgstr ""
 "Voer je wettelijke geslacht in zoals het op officiële documenten staat."
 
+msgid "Here are the sign up options with a limited number of spots."
+msgstr "Hier zijn de aanmeldopties met een beperkt aantal plaatsen."
+
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr ""
 "Indien geselecteerd, wordt in de kalender een link naar eerdere evenementen "
@@ -9183,11 +9186,6 @@ msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 "Indien ingeschakeld, worden er geen credits gebruikt in de inschrijvingen "
 "voor dit evenement."
-
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Indien ingeschakeld, toon een overzichtspagina met het aantal gebruikte "
-"tickets/opties."
 
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
@@ -13678,6 +13676,13 @@ msgid ""
 msgstr ""
 "Ben je een arts, verpleegkundige of gediplomeerd hulpverlener? Kunnen we je "
 "vragen om in te grijpen als er tijdens het evenement ongelukken gebeuren?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Indien ingeschakeld, toon spelers een pagina met de resterende plaatsen voor"
+" tickets, opties en kortingen met een beperkt aantal."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
