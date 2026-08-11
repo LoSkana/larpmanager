@@ -8295,10 +8295,6 @@ msgstr "Mode d'affichage initial à l'ouverture de la page de l'Ensemble."
 msgid "The link will be valid for the following number of days:"
 msgstr "Le lien sera valable pendant le nombre de jours suivant :"
 
-msgid "The quick access sidebar is on the left (on mobile, tap "
-msgstr ""
-"La barre latérale d'accès rapide se trouve à gauche (sur mobile, appuie sur "
-
 #, python-format
 msgid "These characters are not members of the guild: %(names)s"
 msgstr "Ces personnages ne sont pas membres de la guilde : %(names)s"
@@ -12286,6 +12282,13 @@ msgid ""
 msgstr ""
 "Facultatif - Nombre maximal de fois qu'il peut être sélectionné dans toutes "
 "les inscriptions (0 = illimité)"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
+" bottom to open it)."
+msgstr ""
+"La barre latérale d’accès rapide se trouve à gauche (sur mobile, appuie sur "
+"« Raccourcis » en bas pour l’ouvrir)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "

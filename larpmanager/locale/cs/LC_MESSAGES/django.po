@@ -8234,10 +8234,6 @@ msgstr "Výchozí režim zobrazení při otevření stránky Ensemble."
 msgid "The link will be valid for the following number of days:"
 msgstr "Odkaz bude platný po následující počet dní:"
 
-msgid "The quick access sidebar is on the left (on mobile, tap "
-msgstr ""
-"Postranní panel pro rychlý přístup se nachází vlevo (na mobilu klepni na "
-
 #, python-format
 msgid "These characters are not members of the guild: %(names)s"
 msgstr "Tyto postavy nejsou členy guild: %(names)s"
@@ -11797,6 +11793,13 @@ msgid ""
 "registrations (0 = unlimited)"
 msgstr ""
 "Nepovinné - maximální počet výběrů ve všech registracích (0 = neomezeně)"
+
+msgid ""
+"The quick access sidebar is on the left (on mobile, tap \"Shortcuts\" at the"
+" bottom to open it)."
+msgstr ""
+"Panel rychlého přístupu je vlevo (na mobilu ho otevřeš klepnutím na "
+"„Zkratky“ dole)."
 
 msgid ""
 "The sidebar has expanded. New menus will continue to appear as you activate "
