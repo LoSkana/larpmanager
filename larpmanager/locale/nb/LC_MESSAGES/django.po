@@ -2108,9 +2108,6 @@ msgstr "Forlate gildet"
 msgid "Lightweight"
 msgstr "Lettvekt"
 
-msgid "Limitations"
-msgstr "Begrensninger"
-
 msgid "Lock events"
 msgstr "Lås arrangementer"
 
@@ -2266,6 +2263,9 @@ msgstr "Legg til fra NPC"
 
 msgid "Add prologue"
 msgstr "Legg til prolog"
+
+msgid "Availability"
+msgstr "Tilgjengelighet"
 
 msgid "Bank address"
 msgstr "Bankens adresse"
@@ -3810,6 +3810,9 @@ msgstr "Utvalgte alternativer:"
 msgid "Set progress step"
 msgstr "Angi fremdriftstrinn"
 
+msgid "Show availability"
+msgstr "Vis tilgjengelighet"
+
 msgid "Subscription plan"
 msgstr "Abonnementsplan"
 
@@ -3874,6 +3877,9 @@ msgstr "Karakteropprettelse"
 
 msgid "Character portrait"
 msgstr "Karakterportrett"
+
+msgid "Check availability"
+msgstr "Sjekk tilgjengelighet"
 
 msgid "Competences events"
 msgstr "Arrangementsferdigheter"
@@ -5433,9 +5439,6 @@ msgstr "Billettens navn (hold det kort)"
 
 msgid "View badges you have earned"
 msgstr "Se badges du har oppnådd"
-
-msgid "View limited ticket options"
-msgstr "Se begrensede billettalternativer"
 
 msgid "View photos from the event!"
 msgstr "Se bilder fra arrangementet!"
@@ -7713,9 +7716,6 @@ msgstr "Utvalgt bilde som vises på portalens hjemmeside"
 msgid "Full event description with all important details"
 msgstr "Fullstendig arrangementsbeskrivelse med alle viktige detaljer"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Her er påmeldingsalternativene med begrenset antall plasser."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Hvis valgt, vises slagordet for hvert arrangement."
 
@@ -8552,6 +8552,9 @@ msgstr "Vil du godta betalinger som behandles gjennom systemet?"
 msgid "Enter your legal gender as it appears on official documents."
 msgstr "Angi ditt juridiske kjønn slik det står i offisielle dokumenter."
 
+msgid "Here are the sign up options with a limited number of spots."
+msgstr "Her er påmeldingsalternativene med et begrenset antall plasser."
+
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr "Hvis valgt, vises en lenke til tidligere arrangementer i kalenderen."
 
@@ -9100,11 +9103,6 @@ msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 "Hvis aktivert, brukes ingen kreditter i påmeldingene til dette "
 "arrangementet."
-
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Hvis aktivert, vis en oppsummeringsside med antall brukte "
-"billetter/alternativer."
 
 msgid "Lets staff access the safety information submitted by participants"
 msgstr ""
@@ -13473,6 +13471,13 @@ msgid ""
 msgstr ""
 "Er du lege, sykepleier eller autorisert redningsmann? Kan vi be deg om å "
 "gripe inn hvis det skulle skje en ulykke under arrangementet?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Hvis aktivert, vis spillerne en side med gjenværende plasser for billetter, "
+"alternativer og rabatter som har et begrenset antall."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "

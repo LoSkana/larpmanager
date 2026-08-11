@@ -1048,10 +1048,12 @@ msgid ""
 "readable page."
 msgstr ""
 
-msgid "Limitations"
+msgid "Show availability"
 msgstr ""
 
-msgid "If enabled, show summary page with number of tickets/options used."
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
 msgstr ""
 
 msgid "Character cover"
@@ -6324,7 +6326,13 @@ msgstr ""
 msgid "My pending invites"
 msgstr ""
 
-msgid "Here are the sign up options with limited number."
+msgid "Availability"
+msgstr ""
+
+msgid "Here are the sign up options with a limited number of spots."
+msgstr ""
+
+msgid "Remaining"
 msgstr ""
 
 msgid "Question"
@@ -6446,7 +6454,7 @@ msgstr ""
 msgid "Cancel registration"
 msgstr ""
 
-msgid "View limited ticket options"
+msgid "Check availability"
 msgstr ""
 
 msgid "Event website"
@@ -8203,9 +8211,6 @@ msgid "Total due"
 msgstr ""
 
 msgid "Total paid"
-msgstr ""
-
-msgid "Remaining"
 msgstr ""
 
 #, python-format

@@ -27,7 +27,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
-from django.db.models import Q, QuerySet
+from django.db.models import Count, Q, QuerySet
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.utils import timezone
@@ -44,7 +44,7 @@ from larpmanager.cache.question import get_writing_field_names
 from larpmanager.cache.registration import get_registration_counts, get_registration_tickets
 from larpmanager.cache.writing import get_writing_element_fields, get_writing_element_fields_batch
 from larpmanager.forms.registration import MatchmakerForm
-from larpmanager.models.accounting import PaymentInvoice, PaymentType
+from larpmanager.models.accounting import AccountingItemDiscount, PaymentInvoice, PaymentType
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import (
@@ -1092,8 +1092,13 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
     return render(request, "larpmanager/event/quest.html", context)
 
 
+def _remaining(maximum: int, used: int) -> int:
+    """Return the number of spots still free, never negative."""
+    return max(maximum - used, 0)
+
+
 def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
-    """Display event limitations including ticket availability and discounts.
+    """Display event availability including tickets, options and discounts.
 
     This view shows the current availability status of tickets, discounts, and
     registration options for a specific event run, helping users understand
@@ -1104,8 +1109,8 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
         event_slug: Event slug identifier.
 
     Returns:
-        HttpResponse: Rendered template showing limitations, ticket availability,
-        discounts, and registration options with their current usage counts.
+        HttpResponse: Rendered template showing ticket, discount and registration
+        option availability with their remaining number of spots.
 
     """
     # Get event and run context with status validation
@@ -1114,10 +1119,20 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Retrieve current registration counts for tickets and options
     counts = get_registration_counts(context["run"])
 
+    # Count redemptions per discount for this run
+    discount_counts = dict(
+        AccountingItemDiscount.objects.filter(run=context["run"])
+        .values_list("disc_id")
+        .annotate(total=Count("id"))
+        .values_list("disc_id", "total")
+    )
+
     # Build discounts list with visibility filtering
     context["disc"] = []
     for discount in context["run"].discounts.exclude(visible=False):
-        context["disc"].append(discount.show())
+        dt = discount.show()
+        dt["remaining"] = _remaining(discount.max_redeem, discount_counts.get(discount.id, 0))
+        context["disc"].append(dt)
 
     context["tickets"] = []
     # Filter cached tickets for max_available > 0 and visible
@@ -1135,9 +1150,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
             "description": ticket["description"],
         }
         key = f"tk_{ticket['id']}"
-        # Add usage count if available in registration counts
-        if key in counts:
-            dt["used"] = counts[key]
+        dt["remaining"] = _remaining(ticket["max_available"], counts.get(key, 0))
         context["tickets"].append(dt)
 
     # Build registration options list with availability constraints
@@ -1148,9 +1161,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     for option in que:
         dt = option.show()
         key = f"option_{option.id}"
-        # Add usage count if available in registration counts
-        if key in counts:
-            dt["used"] = counts[key]
+        dt["remaining"] = _remaining(option.max_available, counts.get(key, 0))
         context["opts"].append(dt)
 
     return render(request, "larpmanager/event/limitations.html", context)

@@ -2108,9 +2108,6 @@ msgstr "Poistu killasta"
 msgid "Lightweight"
 msgstr "Kevyt"
 
-msgid "Limitations"
-msgstr "Rajoitukset"
-
 msgid "Lock events"
 msgstr "Lukitse tapahtumat"
 
@@ -2266,6 +2263,9 @@ msgstr "Lisää NPC:ltä"
 
 msgid "Add prologue"
 msgstr "Lisää prologi"
+
+msgid "Availability"
+msgstr "Saatavuus"
 
 msgid "Bank address"
 msgstr "Pankin osoite"
@@ -3810,6 +3810,9 @@ msgstr "Valitut vaihtoehdot:"
 msgid "Set progress step"
 msgstr "Aseta edistymisvaihe"
 
+msgid "Show availability"
+msgstr "Näytä saatavuus"
+
 msgid "Subscription plan"
 msgstr "Tilaussuunnitelma"
 
@@ -3874,6 +3877,9 @@ msgstr "Hahmon luominen"
 
 msgid "Character portrait"
 msgstr "Hahmon muotokuva"
+
+msgid "Check availability"
+msgstr "Tarkista saatavuus"
 
 msgid "Competences events"
 msgstr "Osaamistapahtumat"
@@ -5433,9 +5439,6 @@ msgstr "Lipun nimi (pidä se lyhyenä)"
 
 msgid "View badges you have earned"
 msgstr "Tarkastele ansaitsemiasi badgeja"
-
-msgid "View limited ticket options"
-msgstr "Katso rajoitetut lippuvaihtoehdot"
 
 msgid "View photos from the event!"
 msgstr "Katso kuvia tapahtumasta!"
@@ -7714,9 +7717,6 @@ msgstr "Portaalin etusivulla näkyvä esillä oleva kuva"
 msgid "Full event description with all important details"
 msgstr "Täydellinen tapahtumakuvaus kaikkine tärkeine yksityiskohtineen"
 
-msgid "Here are the sign up options with limited number."
-msgstr "Tässä ovat ilmoittautumisvaihtoehdot, joiden määrä on rajoitettu."
-
 msgid "If selected, the tagline is shown for each event."
 msgstr "Jos valittu, jokaiselle tapahtumalle näytetään iskulause."
 
@@ -8559,6 +8559,10 @@ msgstr ""
 "Syötä virallinen sukupuolesi sellaisena kuin se näkyy virallisissa "
 "asiakirjoissa."
 
+msgid "Here are the sign up options with a limited number of spots."
+msgstr ""
+"Tässä ovat ilmoittautumisvaihtoehdot, joissa on rajallinen määrä paikkoja."
+
 msgid "If selected, a link to past events is shown in the calendar."
 msgstr "Jos valittu, kalenterissa näytetään linkki aiempiin tapahtumiin."
 
@@ -9099,11 +9103,6 @@ msgstr ""
 msgid "If enabled, no credits will be used in the entries for this event."
 msgstr ""
 "Jos käytössä, tämän tapahtuman ilmoittautumisissa ei käytetä krediittejä."
-
-msgid "If enabled, show summary page with number of tickets/options used."
-msgstr ""
-"Jos käytössä, näytä yhteenvetosivu käytettyjen lippujen/vaihtoehtojen "
-"määrällä."
 
 msgid "Lets staff access the safety information submitted by participants"
 msgstr "Henkilöstö pääsee käsiksi osallistujien toimittamiin Safety-tietoihin"
@@ -13458,6 +13457,13 @@ msgid ""
 msgstr ""
 "Oletko lääkäri, sairaanhoitaja tai lisensoitu pelastaja? Voimmeko pyytää "
 "sinua puuttumaan asiaan, jos tapahtuman aikana sattuu onnettomuuksia?"
+
+msgid ""
+"If enabled, show players a page with the remaining spots for tickets, "
+"options and discounts that have a limited number."
+msgstr ""
+"Jos käytössä, näytä pelaajille sivu, jolla näkyvät jäljellä olevat paikat "
+"lipuille, vaihtoehdoille ja alennuksille, joiden määrä on rajattu."
 
 msgid ""
 "If your question is about a specific event, please select it! If  is a "
