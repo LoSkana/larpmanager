@@ -7615,16 +7615,15 @@ msgstr ""
 msgid "Show inactive"
 msgstr ""
 
-msgid "The quick access sidebar is on the left (on mobile, tap "
-msgstr ""
-
 msgid ""
-"Hover on the link, or click on the question icon, to see what the link does."
+"The quick access sidebar is on the left (on mobile, tap bottom-left icon to "
+"open it)."
 msgstr ""
 
 msgid ""
 "At the top, you'll find shortcuts to this organization dashboard and to each "
-"active event dashboard once you create the event."
+"active event dashboard once you created them (on mobile, tap bottom-right "
+"icon to open it)."
 msgstr ""
 
 msgid ""
