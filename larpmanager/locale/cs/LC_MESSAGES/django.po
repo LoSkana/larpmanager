@@ -1904,6 +1904,9 @@ msgstr "Snímek obrazovky"
 msgid "Searchable"
 msgstr "Vyhledávatelné"
 
+msgid "Select all"
+msgstr "Vybrat vše"
+
 msgid "Selectable"
 msgstr "Zvolitelný"
 
@@ -1915,6 +1918,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "Speed larpy"
 
 msgid "Start date"
 msgstr "Datum zahájení"
@@ -2296,6 +2302,9 @@ msgstr "Sdílení dat"
 
 msgid "Description:"
 msgstr "Popis:"
+
+msgid "Deselect all"
+msgstr "Zrušit výběr všeho"
 
 msgid "Event hidden"
 msgstr "Skrytá událost"
@@ -3158,6 +3167,9 @@ msgstr "Pozvánka byla odmítnuta"
 msgid "Manage it here!"
 msgstr "Spravuj ji zde!"
 
+msgid "Matchmaker Form"
+msgstr "Formulář Matchmakeru"
+
 msgid "Maximum members"
 msgstr "Maximální počet členů"
 
@@ -3977,6 +3989,9 @@ msgstr "Navrhovaná postava"
 msgid "RUNTS registration"
 msgstr "Registrace RUNTS"
 
+msgid "Registration Quota"
+msgstr "Registrační poplatek"
+
 msgid "Registration email"
 msgstr "Registrační e-mail"
 
@@ -4370,6 +4385,9 @@ msgstr "Neplatná předvolba"
 msgid "Proceed with payment"
 msgstr "Pokračuj v platbě"
 
+msgid "Registration Tickets"
+msgstr "Registrační vstupenky"
+
 msgid "Registration history"
 msgstr "Historie registrací"
 
@@ -4496,6 +4514,9 @@ msgstr "Nepodařilo se přidat Handout"
 
 msgid "Go to event dashboard"
 msgstr "Přejít na ovládací panel události"
+
+msgid "Handout and templates"
+msgstr "Handouty a šablony"
 
 msgid "Invalid choice format"
 msgstr "Nesprávný formát výběru"
@@ -4723,6 +4744,9 @@ msgstr "Osobní údaje aktualizovány!"
 
 msgid "Register of volunteers"
 msgstr "Rejstřík dobrovolníků"
+
+msgid "Registration Surcharge"
+msgstr "Příplatek za registraci"
 
 msgid "Registration cancelled"
 msgstr "Registrace zrušena"
@@ -5002,6 +5026,9 @@ msgstr "Sleva pro doporučeného přítele"
 
 msgid "Referrer Reward Discount"
 msgstr "Sleva pro doporučitele"
+
+msgid "Registration Installment"
+msgstr "Registrační splátka"
 
 msgid "Relationships max length"
 msgstr "Maximální délka vztahů"
@@ -7805,6 +7832,9 @@ msgstr "Platba za tuto akci je uhrazena a v pořádku!"
 msgid "Second character in the relationship (destination)"
 msgstr "Druhá postava ve vztahu (cílová destinace)"
 
+msgid "Select the single elements to copy into this event"
+msgstr "Vyber jednotlivé prvky ke zkopírování do této akce"
+
 msgid "Select your preferences on the characters to play!"
 msgstr "Vyber své preference postav, které chceš hrát!"
 
@@ -8083,9 +8113,6 @@ msgstr "Sledování množství není pro tuto organizaci povoleno"
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Projdi si odpovědi účastníků na otázky matchmakeru"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Vyber, které prvky se mají zkopírovat z které jiné události."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Některé funkce vyžadují \"Postava\", která není aktivní"
 
@@ -8265,6 +8292,9 @@ msgstr "Pro otevření platby klikni na obrázek níže (Paypal.me)."
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr ""
 "Obsah stránky o ochraně osobních údajů s odkazem v dolní části všech stránek"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Zkopírovat vybrané prvky z jiné akce do této akce"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elektronika: počítače, moderní vybavení a osvětlení"
@@ -8475,9 +8505,6 @@ msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 "použij obdélníkový obrázek, nejlépe v poměru 4:3, abys dosáhl(a) co "
 "nejlepších výsledků"
-
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr "UPOZORNĚNÍ: tato akce přepíše změny provedené v této události"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
@@ -9142,6 +9169,9 @@ msgstr "Nyní můžeš zkontrolovat informace o Safety odeslané účastníky"
 #, python-format
 msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr "%(amount)s %(tokens)s bylo vyměněno za účelem účasti na této akci."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr "POZOR: Prvky této akce se stejným názvem budou přepsány"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr "Přidáno na konec všech e-mailů potvrzujících přihlášení účastníkům"
@@ -10814,13 +10844,6 @@ msgid ""
 "Allows to fine-tune how words and phrases are translated in the "
 "organization's space"
 msgstr "Umožňuje vyladit způsob překladu slov a frází v prostoru organizace"
-
-msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Zkopíruj vybrané prvky z jiné události do této události a přepiš tak "
-"stávající data"
 
 msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
@@ -12819,6 +12842,13 @@ msgstr ""
 "zůstatků a uplatněných slev."
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Vyber, které prvky chceš zkopírovat a z které jiné akce. V dalším kroku "
+"vybereš jednotlivé prvky."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13010,6 +13040,13 @@ msgid ""
 msgstr ""
 "Zatím nebyly vytvořeny žádné šablony handoutů. Pomocí tlačítka výše přidej "
 "šablonu rozvržení CSS pro své handouty."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Zkopírují se pouze vybrané prvky: prvky se stejným názvem budou přepsány, "
+"všechny ostatní zůstanou zachovány."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"

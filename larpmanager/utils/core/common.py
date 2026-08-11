@@ -57,7 +57,7 @@ from larpmanager.models.miscellanea import (
     WorkshopModule,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.models.utils import my_uuid_short, strip_tags
+from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Handout,
     Relationship,
@@ -522,59 +522,6 @@ def normalize_string(input_string: str) -> str:
     return "".join(
         char for char in unicodedata.normalize("NFD", normalized_string) if unicodedata.category(char) != "Mn"
     )
-
-
-def copy_class(
-    target_event_id: int, source_event_id: int, model_class: type, extra_filter: dict[str, Any] | None = None
-) -> None:
-    """Copy objects of a given class from source event to target event.
-
-    Args:
-        target_event_id: Target event ID to copy objects to
-        source_event_id: Source event ID to copy objects from
-        model_class: Django model class to copy instances of
-        extra_filter: Optional additional filter kwargs restricting which objects are
-            deleted from the target and copied from the source (e.g. to scope the copy
-            to a subset of rows sharing the same event)
-
-    """
-    delete_queryset = model_class.objects.filter(event_id=target_event_id)
-    source_queryset = model_class.objects.filter(event_id=source_event_id)
-    if extra_filter:
-        delete_queryset = delete_queryset.filter(**extra_filter)
-        source_queryset = source_queryset.filter(**extra_filter)
-
-    delete_queryset.delete()
-
-    for source_object in source_queryset:
-        try:
-            # save a copy of m2m relations
-            many_to_many_data = {}
-
-            # noinspection PyProtectedMember
-            for field in source_object._meta.many_to_many:  # noqa: SLF001  # Django model metadata
-                many_to_many_data[field.name] = list(getattr(source_object, field.name).all())
-
-            source_object.pk = None
-            source_object.event_id = target_event_id
-            # noinspection PyProtectedMember
-            source_object._state.adding = True  # noqa: SLF001  # Django model state
-            # Regenerate unique fields that need new values for the copy
-            if hasattr(source_object, "uuid"):
-                source_object.uuid = None  # Let UuidMixin.save() regenerate with retry logic
-            if hasattr(source_object, "media_token"):
-                source_object.media_token = ""  # Let auto_set_media_token signal regenerate
-            for field_name, generation_function in {"access_token": my_uuid_short}.items():
-                if not hasattr(source_object, field_name):
-                    continue
-                setattr(source_object, field_name, generation_function())
-            source_object.save()
-
-            # copy m2m relations
-            for field_name, related_values in many_to_many_data.items():
-                getattr(source_object, field_name).set(related_values)
-        except Exception as error:  # noqa: BLE001 - Complex object cloning may fail in many ways, log and continue
-            logger.warning("found exp: %s", error)
 
 
 def get_payment_methods_ids(context: dict) -> set[int]:

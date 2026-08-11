@@ -499,6 +499,9 @@ msgstr "Ação"
 msgid "Active"
 msgstr "Ativo"
 
+msgid "Admins"
+msgstr "Administradores"
+
 msgid "Amount"
 msgstr "Montante"
 
@@ -1175,9 +1178,6 @@ msgstr "Inativo"
 msgid "Included"
 msgstr "Incluído"
 
-msgid "Invoices"
-msgstr "Faturas"
-
 msgid "Language"
 msgstr "Idioma"
 
@@ -1400,9 +1400,6 @@ msgstr "Aceite:"
 msgid "Algorithm"
 msgstr "Algoritmo"
 
-msgid "Approvals"
-msgstr "Aprovações"
-
 msgid "Assigned:"
 msgstr "Atribuído:"
 
@@ -1576,6 +1573,9 @@ msgstr "Destinatário"
 
 msgid "Recompute"
 msgstr "Recalcular"
+
+msgid "Reference"
+msgstr "Referência"
 
 msgid "Remaining"
 msgstr "Restantes"
@@ -1904,6 +1904,9 @@ msgstr "Captura de ecrã"
 msgid "Searchable"
 msgstr "Pesquisável"
 
+msgid "Select all"
+msgstr "Selecionar tudo"
+
 msgid "Selectable"
 msgstr "Selecionável"
 
@@ -1915,6 +1918,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "SpeedLarps"
 
 msgid "Start date"
 msgstr "Data de início"
@@ -2296,6 +2302,9 @@ msgstr "Partilha de dados"
 
 msgid "Description:"
 msgstr "Descrição:"
+
+msgid "Deselect all"
+msgstr "Desselecionar tudo"
 
 msgid "Event hidden"
 msgstr "Evento oculto"
@@ -3158,6 +3167,9 @@ msgstr "Convite recusado"
 msgid "Manage it here!"
 msgstr "Gere-a aqui!"
 
+msgid "Matchmaker Form"
+msgstr "Formulário do Matchmaker"
+
 msgid "Maximum members"
 msgstr "Número máximo de membros"
 
@@ -3977,6 +3989,9 @@ msgstr "Personagem proposta"
 msgid "RUNTS registration"
 msgstr "Registo RUNTS"
 
+msgid "Registration Quota"
+msgstr "Quota de inscrição"
+
 msgid "Registration email"
 msgstr "E-mail de inscrição"
 
@@ -4370,6 +4385,9 @@ msgstr "Preferência inválida"
 msgid "Proceed with payment"
 msgstr "Prosseguir para o pagamento"
 
+msgid "Registration Tickets"
+msgstr "Bilhetes de inscrição"
+
 msgid "Registration history"
 msgstr "Histórico de inscrições"
 
@@ -4496,6 +4514,9 @@ msgstr "Não foi possível adicionar o Handout"
 
 msgid "Go to event dashboard"
 msgstr "Ir para o painel do evento"
+
+msgid "Handout and templates"
+msgstr "Handout e modelos"
 
 msgid "Invalid choice format"
 msgstr "Formato de escolha inválido"
@@ -4634,9 +4655,6 @@ msgstr "Idade (durante o evento)"
 msgid "Arrived safe and sound"
 msgstr "Chegámos bem"
 
-msgid "Bank payment reference"
-msgstr "Referência de pagamento bancário"
-
 msgid "Browse upcoming events"
 msgstr "Explora os próximos eventos"
 
@@ -4726,6 +4744,9 @@ msgstr "Dados pessoais atualizados!"
 
 msgid "Register of volunteers"
 msgstr "Registo de voluntários"
+
+msgid "Registration Surcharge"
+msgstr "Sobretaxa de inscrição"
 
 msgid "Registration cancelled"
 msgstr "Inscrição cancelada"
@@ -5005,6 +5026,9 @@ msgstr "Desconto para amigo recomendado"
 
 msgid "Referrer Reward Discount"
 msgstr "Desconto para quem recomenda um amigo"
+
+msgid "Registration Installment"
+msgstr "Prestação de inscrição"
 
 msgid "Relationships max length"
 msgstr "Comprimento máximo das relações"
@@ -6161,9 +6185,6 @@ msgstr "Gerir a tua adesão à associação"
 msgid "Manages registration cancellations"
 msgstr "Gere cancelamentos de inscrição"
 
-msgid "Manually approve payments received"
-msgstr "Aprovar manualmente pagamentos recebidos"
-
 msgid "No activation steps are available."
 msgstr "Não há passos de ativação disponíveis."
 
@@ -7248,9 +7269,6 @@ msgstr "Gerir inventários de personagens e os seus itens"
 msgid "Manage event metadata for external promotion"
 msgstr "Gerir metadados do evento para promoção externa"
 
-msgid "Manage invoices of payments and approve them"
-msgstr "Gerir faturas de pagamentos e aprová-las"
-
 msgid "Manage participant questions and answer them"
 msgstr "Gerir perguntas dos participantes e respondê-las"
 
@@ -7817,6 +7835,9 @@ msgstr "O pagamento deste evento está completo e atualizado!"
 msgid "Second character in the relationship (destination)"
 msgstr "Segunda personagem da relação (destino)"
 
+msgid "Select the single elements to copy into this event"
+msgstr "Seleciona os elementos individuais a copiar para este evento"
+
 msgid "Select your preferences on the characters to play!"
 msgstr "Seleciona as tuas preferências sobre as personagens a interpretar!"
 
@@ -8095,9 +8116,6 @@ msgstr "O controlo de quantidades não está ativado para esta organização"
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Consultar as respostas dos participantes às perguntas do Matchmaker"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Seleciona que elementos copiar e de que outro evento."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Algumas funcionalidades requerem «Personagem», que não está ativa"
 
@@ -8163,9 +8181,6 @@ msgstr "Não existem membros com créditos negativos no ano selecionado."
 
 msgid "No members with positive credits for the selected year."
 msgstr "Não existem membros com créditos positivos no ano selecionado."
-
-msgid "No payment invoices awaiting confirmation at this time."
-msgstr "Neste momento, não há faturas de pagamento a aguardar confirmação."
 
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Seleciona as linhas da tabela e escolhe a operação a aplicar"
@@ -8256,6 +8271,10 @@ msgid "The quick access sidebar is on the left (on mobile, tap "
 msgstr ""
 "A barra lateral de acesso rápido está à esquerda (no telemóvel, toca em "
 
+#, python-format
+msgid "These characters are not members of the guild: %(names)s"
+msgstr "Estas personagens não são membros da guilda: %(names)s"
+
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Encontrámos um problema com o código fiscal que forneceste:"
 
@@ -8278,6 +8297,9 @@ msgstr "Clica na imagem abaixo (Paypal.me) para abrir o pagamento."
 
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Conteúdo da página de privacidade ligada no final de todas as páginas"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Copiar elementos selecionados de outro evento para este evento"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Eletrónica: computadores, equipamento de alta tecnologia e iluminação"
@@ -8491,9 +8513,6 @@ msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 "usa uma imagem retangular, idealmente com proporção 4:3 para melhores "
 "resultados"
-
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr "ATENÇÃO: esta ação substitui as alterações efetuadas neste evento"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
@@ -9008,6 +9027,9 @@ msgid "Manages tokens used by participants to cover the registration fee"
 msgstr ""
 "Gere tokens usados pelos participantes para cobrir a taxa de inscrição"
 
+msgid "Members that can manage the guild: they must be among the members"
+msgstr "Membros que podem gerir a guilda: têm de estar entre os membros"
+
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"
 msgstr ""
@@ -9231,6 +9253,10 @@ msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 "Foram utilizados %(amount)s %(tokens)s para participação neste evento."
 
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr ""
+"ATENÇÃO: os elementos deste evento com o mesmo nome serão substituídos"
+
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
 "Adicionado no final de todos os e-mails que confirmam inscrições aos "
@@ -9429,11 +9455,6 @@ msgstr "Ups! Deste uma ou mais respostas incorretas. Confere-as abaixo."
 msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 "Preferência de tema pessoal, substitui o tema do evento e da organização."
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-"Revê e confirma as faturas de pagamento submetidas que aguardam aprovação "
-"manual"
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr ""
@@ -11068,13 +11089,6 @@ msgid ""
 msgstr ""
 "Permite ajustar como palavras e frases são traduzidas no espaço da "
 "organização"
-
-msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Copia elementos selecionados de outro evento para este evento, substituindo "
-"os dados existentes"
 
 msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
@@ -13096,6 +13110,13 @@ msgstr ""
 " transações, saldos e descontos aplicados"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Seleciona quais os elementos a copiar e de que outro evento. No passo "
+"seguinte, vais selecionar os elementos individuais."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13287,6 +13308,13 @@ msgid ""
 msgstr ""
 "Ainda não foram criados modelos de Handout. Usa o botão acima para adicionar"
 " um modelo de layout CSS para os teus Handouts."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Apenas os elementos selecionados serão copiados: os elementos com o mesmo "
+"nome serão substituídos, todos os outros serão mantidos."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"

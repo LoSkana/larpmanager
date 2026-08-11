@@ -1904,6 +1904,9 @@ msgstr "Skärmdump"
 msgid "Searchable"
 msgstr "Sökbar"
 
+msgid "Select all"
+msgstr "Välj alla"
+
 msgid "Selectable"
 msgstr "Valbar"
 
@@ -1915,6 +1918,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "Speed larps"
 
 msgid "Start date"
 msgstr "Startdatum"
@@ -2296,6 +2302,9 @@ msgstr "Datadelning"
 
 msgid "Description:"
 msgstr "Beskrivning:"
+
+msgid "Deselect all"
+msgstr "Avmarkera alla"
 
 msgid "Event hidden"
 msgstr "Dolt evenemang"
@@ -3158,6 +3167,9 @@ msgstr "Inbjudan avvisad"
 msgid "Manage it here!"
 msgstr "Hantera det här!"
 
+msgid "Matchmaker Form"
+msgstr "Matchmaker-formulär"
+
 msgid "Maximum members"
 msgstr "Maximalt antal medlemmar"
 
@@ -3977,6 +3989,9 @@ msgstr "Föreslagen karaktär"
 msgid "RUNTS registration"
 msgstr "RUNTS registrering"
 
+msgid "Registration Quota"
+msgstr "Anmälningsavgift"
+
 msgid "Registration email"
 msgstr "Registreringsmejl"
 
@@ -4370,6 +4385,9 @@ msgstr "Ogiltig preferens"
 msgid "Proceed with payment"
 msgstr "Fortsätt med betalningen"
 
+msgid "Registration Tickets"
+msgstr "Anmälningsbiljetter"
+
 msgid "Registration history"
 msgstr "Registreringshistorik"
 
@@ -4496,6 +4514,9 @@ msgstr "Misslyckades med att lägga till handout"
 
 msgid "Go to event dashboard"
 msgstr "Gå till instrumentpanelen för evenemang"
+
+msgid "Handout and templates"
+msgstr "Handout och mallar"
 
 msgid "Invalid choice format"
 msgstr "Ogiltigt valformat"
@@ -4723,6 +4744,9 @@ msgstr "Personuppgifter uppdaterade!"
 
 msgid "Register of volunteers"
 msgstr "Register över volontärer"
+
+msgid "Registration Surcharge"
+msgstr "Anmälningstillägg"
 
 msgid "Registration cancelled"
 msgstr "Registreringen har avbrutits"
@@ -5002,6 +5026,9 @@ msgstr "Rabatt för värvade vänner"
 
 msgid "Referrer Reward Discount"
 msgstr "Rabatt för den som värvar en vän"
+
+msgid "Registration Installment"
+msgstr "Anmälningsdelbetalning"
 
 msgid "Relationships max length"
 msgstr "Relationernas maximala längd"
@@ -7808,6 +7835,9 @@ msgstr "Betalningen för detta evenemang är genomförd och i ordning!"
 msgid "Second character in the relationship (destination)"
 msgstr "Andra karaktären i relationen (destination)"
 
+msgid "Select the single elements to copy into this event"
+msgstr "Välj de enskilda element som ska kopieras till detta evenemang"
+
 msgid "Select your preferences on the characters to play!"
 msgstr "Välj dina preferenser bland karaktärerna att spela!"
 
@@ -8082,9 +8112,6 @@ msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Granska deltagarnas svar på matchmaker-frågorna"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Välj vilka element som ska kopieras, från vilket annat evenemang."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Vissa funktioner kräver \"Karaktär\", som inte är aktiv"
 
@@ -8264,6 +8291,9 @@ msgstr "Klicka på bilden nedan (Paypal.me) för att öppna betalningen."
 
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Innehåll på integritetssidan länkad längst ner på alla sidor"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Kopiera valda element från ett annat evenemang till detta evenemang"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elektronik: datorer, högteknologisk utrustning och belysning"
@@ -8478,10 +8508,6 @@ msgstr "Du måste samtycka till datadelning för att acceptera denna inbjudan."
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 "använd en rektangulär bild, helst i förhållandet 4:3 för bästa resultat"
-
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr ""
-"VARNING: denna åtgärd skriver över ändringar som gjorts i detta evenemang"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
@@ -9201,6 +9227,9 @@ msgstr "Du kan nu granska Safety-informationen som deltagarna har skickat in"
 #, python-format
 msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr "%(amount)s %(tokens)s har lösts in för deltagande i detta evenemang."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr "OBS: Element i detta evenemang med samma namn skrivs över"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
@@ -10956,13 +10985,6 @@ msgid ""
 msgstr ""
 "Gör det möjligt att finjustera hur ord och fraser översätts i "
 "organisationens utrymme"
-
-msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Kopiera valda objekt från ett annat evenemang till det här evenemanget och "
-"skriv över befintliga uppgifter"
 
 msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
@@ -12986,6 +13008,13 @@ msgstr ""
 "transaktioner, saldon och tillämpade rabatter"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Välj vilka element som ska kopieras och från vilket annat evenemang. I nästa"
+" steg väljer du de enskilda elementen."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13178,6 +13207,13 @@ msgid ""
 msgstr ""
 "Det har ännu inte skapats några Handout-mallar. Använd knappen ovan för att "
 "lägga till en CSS-layoutmall för dina Handout."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Endast de valda elementen kopieras: element med samma namn skrivs över, alla"
+" andra behålls."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"

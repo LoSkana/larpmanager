@@ -1904,6 +1904,9 @@ msgstr "Skjermbilde"
 msgid "Searchable"
 msgstr "Søkbar"
 
+msgid "Select all"
+msgstr "Velg alle"
+
 msgid "Selectable"
 msgstr "Kan velges"
 
@@ -1915,6 +1918,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "Speed larps"
 
 msgid "Start date"
 msgstr "Startdato"
@@ -2296,6 +2302,9 @@ msgstr "Deling av data"
 
 msgid "Description:"
 msgstr "Beskrivelse:"
+
+msgid "Deselect all"
+msgstr "Fjern alle valg"
 
 msgid "Event hidden"
 msgstr "Arrangement skjult"
@@ -3158,6 +3167,9 @@ msgstr "Invitasjonen ble avvist"
 msgid "Manage it here!"
 msgstr "Administrer det her!"
 
+msgid "Matchmaker Form"
+msgstr "Matchmaker-skjema"
+
 msgid "Maximum members"
 msgstr "Maksimalt antall medlemmer"
 
@@ -3977,6 +3989,9 @@ msgstr "Foreslått karakter"
 msgid "RUNTS registration"
 msgstr "RUNTS-registrering"
 
+msgid "Registration Quota"
+msgstr "Påmeldingskvote"
+
 msgid "Registration email"
 msgstr "Registrerings-e-post"
 
@@ -4370,6 +4385,9 @@ msgstr "Ugyldig preferanse"
 msgid "Proceed with payment"
 msgstr "Fortsett med betalingen"
 
+msgid "Registration Tickets"
+msgstr "Påmeldingsbilletter"
+
 msgid "Registration history"
 msgstr "Registreringshistorikk"
 
@@ -4496,6 +4514,9 @@ msgstr "Kunne ikke legge til Handout"
 
 msgid "Go to event dashboard"
 msgstr "Gå til hendelsesoversikten"
+
+msgid "Handout and templates"
+msgstr "Handout og maler"
 
 msgid "Invalid choice format"
 msgstr "Ugyldig valgformat"
@@ -4723,6 +4744,9 @@ msgstr "Personopplysninger oppdatert!"
 
 msgid "Register of volunteers"
 msgstr "Register over frivillige"
+
+msgid "Registration Surcharge"
+msgstr "Påmeldingstillegg"
 
 msgid "Registration cancelled"
 msgstr "Registrering kansellert"
@@ -5002,6 +5026,9 @@ msgstr "Rabatt for henviste venner"
 
 msgid "Referrer Reward Discount"
 msgstr "Rabatt for den som henviser en venn"
+
+msgid "Registration Installment"
+msgstr "Påmeldingsavdrag"
 
 msgid "Relationships max length"
 msgstr "Maksimal lengde på relasjoner"
@@ -7805,6 +7832,9 @@ msgstr "Betalingen for dette arrangementet er gjennomført og i orden!"
 msgid "Second character in the relationship (destination)"
 msgstr "Andre karakter i relasjonen (destinasjon)"
 
+msgid "Select the single elements to copy into this event"
+msgstr "Velg de enkelte elementene som skal kopieres til dette arrangementet"
+
 msgid "Select your preferences on the characters to play!"
 msgstr "Velg dine preferanser blandt karakterene du vil spille!"
 
@@ -8084,9 +8114,6 @@ msgstr "Mengdesporing er ikke aktivert for denne organisasjonen"
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Gå gjennom deltakernes svar på spørsmålene i Matchmaker"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Velg hvilke elementer som skal kopieres fra hvilken annen hendelse."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Noen funksjoner krever «Karakter», som ikke er aktiv."
 
@@ -8268,6 +8295,10 @@ msgstr "Klikk på bildet nedenfor (Paypal.me) for å åpne betalingen."
 
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Innholdet på personvernsiden som er lenket nederst på alle sider"
+
+msgid "Copy selected elements from another event into this event"
+msgstr ""
+"Kopier valgte elementer fra et annet arrangement til dette arrangementet"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elektronikk: datamaskiner, høyteknologisk utstyr og belysning"
@@ -8485,11 +8516,6 @@ msgstr "Du må samtykke til datadeling for å akseptere denne invitasjonen."
 
 msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr "bruk et rektangulært bilde, helst i forholdet 4:3 for best resultat"
-
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr ""
-"ADVARSEL: Denne handlingen overskriver endringer som er gjort i denne "
-"hendelsen"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
@@ -9227,6 +9253,9 @@ msgstr "Du kan nå gjennomgå Safety-informasjonen som deltakerne har sendt inn"
 msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 "%(amount)s %(tokens)s ble innløst for deltakelse i dette arrangementet."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr "OBS: Elementer i dette arrangementet med samme navn blir overskrevet"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
@@ -10985,13 +11014,6 @@ msgid ""
 msgstr ""
 "Gjør det mulig å finjustere hvordan ord og uttrykk oversettes i "
 "organisasjonens rom"
-
-msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Kopier valgte elementer fra en annen hendelse til denne hendelsen, og "
-"overskriv eksisterende data"
 
 msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
@@ -13015,6 +13037,13 @@ msgstr ""
 "transaksjoner, saldoer og brukte rabatter"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Velg hvilke elementer som skal kopieres, og fra hvilket arrangement. I neste"
+" steg velger du de enkelte elementene."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13204,6 +13233,13 @@ msgid ""
 msgstr ""
 "Det er foreløpig ikke opprettet noen Handout-maler. Bruk knappen ovenfor for"
 " å legge til en CSS-oppsettmal for Handoutene dine."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Bare de valgte elementene blir kopiert: elementer med samme navn blir "
+"overskrevet, alle andre beholdes."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"

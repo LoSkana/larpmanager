@@ -8875,15 +8875,29 @@ msgstr ""
 msgid "Copy"
 msgstr ""
 
+msgid "Copy selected elements from another event into this event"
+msgstr ""
+
 msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
 msgstr ""
 
-msgid "Select which elements to copy, from which other event."
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
 msgstr ""
 
-msgid "ATTENTION: This action overwrites changes made to this event"
+msgid "Select the single elements to copy into this event"
+msgstr ""
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+
+msgid "Select all"
+msgstr ""
+
+msgid "Deselect all"
 msgstr ""
 
 msgid "View all deadlines that must be met for this event"
@@ -11265,6 +11279,39 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
+msgid "Registration Tickets"
+msgstr ""
+
+msgid "Registration Form"
+msgstr ""
+
+msgid "Matchmaker Form"
+msgstr ""
+
+msgid "Registration Quota"
+msgstr ""
+
+msgid "Registration Installment"
+msgstr ""
+
+msgid "Registration Surcharge"
+msgstr ""
+
+msgid "SpeedLarps"
+msgstr ""
+
+msgid "Handout and templates"
+msgstr ""
+
+msgid "No value has been selected for parent."
+msgstr ""
+
+msgid "Can't copy from same event"
+msgstr ""
+
+msgid "Copy done"
+msgstr ""
+
 msgid "Your registration"
 msgstr ""
 
@@ -11594,9 +11641,6 @@ msgid "Failed to add profiles"
 msgstr ""
 
 msgid "Failed to add gallery"
-msgstr ""
-
-msgid "Registration Form"
 msgstr ""
 
 msgid "Character Form"
@@ -12413,15 +12457,6 @@ msgstr ""
 
 #, python-format
 msgid "Text length (max %(max)s)"
-msgstr ""
-
-msgid "No value has been selected for parent."
-msgstr ""
-
-msgid "Can't copy from same event"
-msgstr ""
-
-msgid "Copy done"
 msgstr ""
 
 msgid "Session expired, please upload the file again."

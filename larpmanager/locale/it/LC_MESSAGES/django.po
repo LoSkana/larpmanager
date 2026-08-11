@@ -1904,6 +1904,9 @@ msgstr "Schermata"
 msgid "Searchable"
 msgstr "Ricercabile"
 
+msgid "Select all"
+msgstr "Seleziona tutto"
+
 msgid "Selectable"
 msgstr "Selezionabile"
 
@@ -1914,6 +1917,9 @@ msgid "Speed Larp"
 msgstr "Speed Larp"
 
 msgid "Speed larp"
+msgstr "Speed larp"
+
+msgid "SpeedLarps"
 msgstr "Speed larp"
 
 msgid "Start date"
@@ -2296,6 +2302,9 @@ msgstr "Condivisione dei dati"
 
 msgid "Description:"
 msgstr "Descrizione:"
+
+msgid "Deselect all"
+msgstr "Deseleziona tutto"
 
 msgid "Event hidden"
 msgstr "Evento nascosto"
@@ -3158,6 +3167,9 @@ msgstr "Invito rifiutato"
 msgid "Manage it here!"
 msgstr "Gestiscila qui!"
 
+msgid "Matchmaker Form"
+msgstr "Modulo Matchmaker"
+
 msgid "Maximum members"
 msgstr "Numero massimo di membri"
 
@@ -3977,6 +3989,9 @@ msgstr "Personaggio proposto"
 msgid "RUNTS registration"
 msgstr "Registrazione RUNTS"
 
+msgid "Registration Quota"
+msgstr "Quota di iscrizione"
+
 msgid "Registration email"
 msgstr "Email di registrazione"
 
@@ -4370,6 +4385,9 @@ msgstr "Preferenza non valida"
 msgid "Proceed with payment"
 msgstr "Procedi con il pagamento"
 
+msgid "Registration Tickets"
+msgstr "Biglietti di iscrizione"
+
 msgid "Registration history"
 msgstr "Storico iscrizioni"
 
@@ -4496,6 +4514,9 @@ msgstr "Impossibile aggiungere l'Handout"
 
 msgid "Go to event dashboard"
 msgstr "Vai alla dashboard dell'evento"
+
+msgid "Handout and templates"
+msgstr "Handout e modelli"
 
 msgid "Invalid choice format"
 msgstr "Formato di scelta non valido"
@@ -4723,6 +4744,9 @@ msgstr "Dati personali aggiornati!"
 
 msgid "Register of volunteers"
 msgstr "Registro dei volontari"
+
+msgid "Registration Surcharge"
+msgstr "Supplemento di iscrizione"
 
 msgid "Registration cancelled"
 msgstr "Iscrizione disdetta"
@@ -5002,6 +5026,9 @@ msgstr "Sconto per amico consigliato"
 
 msgid "Referrer Reward Discount"
 msgstr "Sconto per chi presenta un amico"
+
+msgid "Registration Installment"
+msgstr "Rata di iscrizione"
 
 msgid "Relationships max length"
 msgstr "Lunghezza massima delle relazioni"
@@ -7817,6 +7844,9 @@ msgstr "Il pagamento per questo evento è stato effettuato ed è in regola!"
 msgid "Second character in the relationship (destination)"
 msgstr "Secondo personaggio della relazione (destinazione)"
 
+msgid "Select the single elements to copy into this event"
+msgstr "Seleziona i singoli elementi da copiare in questo evento"
+
 msgid "Select your preferences on the characters to play!"
 msgstr "Seleziona le tue preferenze sui personaggi da interpretare!"
 
@@ -8108,9 +8138,6 @@ msgstr ""
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Esamina le risposte dei partecipanti alle domande del matchmaker"
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Seleziona quali elementi copiare, da quale altro evento."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Alcune funzioni richiedono \"Personaggio\", che non è attivo"
 
@@ -8306,6 +8333,9 @@ msgstr ""
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr ""
 "Contenuto della pagina sulla privacy collegata in fondo a tutte le pagine"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Copia gli elementi selezionati da un altro evento in questo evento"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elettronica: computer, attrezzature high-tech e illuminazione"
@@ -8539,11 +8569,6 @@ msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 "utilizza un'immagine rettangolare, idealmente in rapporto 4:3 per ottenere "
 "risultati migliori"
-
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr ""
-"ATTENZIONE: questa azione sovrascrive le modifiche effettuate a questo "
-"evento"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
@@ -9320,6 +9345,11 @@ msgstr ""
 msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 "Sono stati riscattati %(amount)s %(tokens)s per partecipare a questo evento."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr ""
+"ATTENZIONE: gli elementi di questo evento con lo stesso nome verranno "
+"sovrascritti"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
@@ -11187,13 +11217,6 @@ msgid ""
 msgstr ""
 "Permette di definire in dettaglio il modo in cui parole e frasi vengono "
 "tradotte nello spazio dell'organizzazione"
-
-msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Copia gli elementi selezionati da un altro evento in questo evento, "
-"sovrascrivendo i dati esistenti"
 
 msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
@@ -13223,6 +13246,13 @@ msgstr ""
 " transazioni, saldi e sconti applicati"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Scegli quali elementi copiare e da quale altro evento. Nel passaggio "
+"successivo selezionerai i singoli elementi."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13415,6 +13445,13 @@ msgid ""
 msgstr ""
 "Non sono stati ancora creati modelli di Handout. Usa il pulsante qui sopra "
 "per aggiungere un modello di layout CSS per i tuoi Handout."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Verranno copiati solo gli elementi selezionati: gli elementi con lo stesso "
+"nome verranno sovrascritti, tutti gli altri saranno mantenuti."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"

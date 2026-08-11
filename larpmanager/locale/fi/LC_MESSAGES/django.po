@@ -1904,6 +1904,9 @@ msgstr "Kuvakaappaus"
 msgid "Searchable"
 msgstr "Hakukelpoinen"
 
+msgid "Select all"
+msgstr "Valitse kaikki"
+
 msgid "Selectable"
 msgstr "Valittavissa"
 
@@ -1915,6 +1918,9 @@ msgstr "Speed Larp"
 
 msgid "Speed larp"
 msgstr "Speed larp"
+
+msgid "SpeedLarps"
+msgstr "Speed larps"
 
 msgid "Start date"
 msgstr "Aloituspäivä"
@@ -2296,6 +2302,9 @@ msgstr "Tietojen jakaminen"
 
 msgid "Description:"
 msgstr "Kuvaus:"
+
+msgid "Deselect all"
+msgstr "Poista kaikkien valinta"
 
 msgid "Event hidden"
 msgstr "Tapahtuma piilotettu"
@@ -3158,6 +3167,9 @@ msgstr "Kutsu hylätty"
 msgid "Manage it here!"
 msgstr "Hallitse sitä täällä!"
 
+msgid "Matchmaker Form"
+msgstr "Matchmaker-lomake"
+
 msgid "Maximum members"
 msgstr "Jäsenten enimmäismäärä"
 
@@ -3977,6 +3989,9 @@ msgstr "Ehdotettu hahmo"
 msgid "RUNTS registration"
 msgstr "RUNTS rekisteröinti"
 
+msgid "Registration Quota"
+msgstr "Ilmoittautumismaksu"
+
 msgid "Registration email"
 msgstr "Ilmoittautumissähköposti"
 
@@ -4370,6 +4385,9 @@ msgstr "Mieltymys ei ole voimassa"
 msgid "Proceed with payment"
 msgstr "Jatka maksamiseen"
 
+msgid "Registration Tickets"
+msgstr "Ilmoittautumisliput"
+
 msgid "Registration history"
 msgstr "Ilmoittautumishistoria"
 
@@ -4496,6 +4514,9 @@ msgstr "Handout-lisääminen epäonnistui"
 
 msgid "Go to event dashboard"
 msgstr "Siirry tapahtuman kojelautaan"
+
+msgid "Handout and templates"
+msgstr "Handoutit ja mallit"
 
 msgid "Invalid choice format"
 msgstr "Virheellinen valintaformaatti"
@@ -4723,6 +4744,9 @@ msgstr "Henkilötiedot päivitetty!"
 
 msgid "Register of volunteers"
 msgstr "Vapaaehtoisten rekisteri"
+
+msgid "Registration Surcharge"
+msgstr "Ilmoittautumislisämaksu"
 
 msgid "Registration cancelled"
 msgstr "Ilmoittautuminen peruutettu"
@@ -5002,6 +5026,9 @@ msgstr "Suositellun ystävän alennus"
 
 msgid "Referrer Reward Discount"
 msgstr "Viittauspalkkioalennus"
+
+msgid "Registration Installment"
+msgstr "Ilmoittautumiserä"
 
 msgid "Relationships max length"
 msgstr "Suhteiden enimmäispituus"
@@ -7806,6 +7833,9 @@ msgstr "Tämän tapahtuman maksu on suoritettu ja ajan tasalla!"
 msgid "Second character in the relationship (destination)"
 msgstr "Suhteen toinen hahmo (määränpää)"
 
+msgid "Select the single elements to copy into this event"
+msgstr "Valitse tähän tapahtumaan kopioitavat yksittäiset elementit"
+
 msgid "Select your preferences on the characters to play!"
 msgstr "Valitse pelattavia hahmoja koskevat toiveesi!"
 
@@ -8088,9 +8118,6 @@ msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Tarkista osallistujien vastaukset Matchmaker-kysymyksiin."
 
-msgid "Select which elements to copy, from which other event."
-msgstr "Valitse, mitkä elementit kopioidaan, mistä muusta tapahtumasta."
-
 msgid "Some features require 'Character', which is not active"
 msgstr "Jotkin ominaisuudet vaativat 'Hahmoa', joka ei ole aktiivinen"
 
@@ -8272,6 +8299,9 @@ msgstr "Klikkaa alla olevaa kuvaa (Paypal.me) avataksesi maksun."
 
 msgid "Content of privacy page linked at the bottom of all pages"
 msgstr "Kaikkien sivujen alareunassa olevan yksityisyydensuojan sivun sisältö"
+
+msgid "Copy selected elements from another event into this event"
+msgstr "Kopioi valitut elementit toisesta tapahtumasta tähän tapahtumaan"
 
 msgid "Electronics: computers, high-tech equipment, and lighting"
 msgstr "Elektroniikka: tietokoneet, huipputekniset laitteet ja valaistus"
@@ -8488,9 +8518,6 @@ msgid "use a rectangular image, ideally 4:3 ratio for best results"
 msgstr ""
 "Käytä suorakulmaista kuvaa, mieluiten 4:3-suhteessa, jotta saat parhaat "
 "tulokset"
-
-msgid "ATTENTION: This action overwrites changes made to this event"
-msgstr "HUOMIO: Tämä toiminto korvaa tähän tapahtumaan tehdyt muutokset"
 
 #, python-format
 msgid "Access the management panel <a href= %(url)s'>from here</a>!"
@@ -9221,6 +9248,9 @@ msgid "%(amount)s %(tokens)s were redeemed for participation in this event."
 msgstr ""
 "%(amount)s %(tokens)s lunastettiin tämän tapahtuman osallistumisoikeuden "
 "saamiseksi."
+
+msgid "ATTENTION: Elements of this event with the same name are overwritten"
+msgstr "HUOMIO: Tämän tapahtuman samannimiset elementit korvataan"
 
 msgid "Added at the bottom of all emails confirming signups to participants"
 msgstr ""
@@ -10976,13 +11006,6 @@ msgid ""
 msgstr ""
 "Mahdollistaa hienosäätämisen, miten sanat ja lausekkeet käännetään "
 "organisaation tilassa"
-
-msgid ""
-"Copy selected elements from another event into this event, overwriting "
-"existing data"
-msgstr ""
-"Kopioi valitut kohteet toisesta tapahtumasta tähän tapahtumaan ja korvaa "
-"olemassa olevat tiedot"
 
 msgid ""
 "Discount awarded to an existing participant when a friend signs up using "
@@ -12996,6 +13019,13 @@ msgstr ""
 "tapahtumat, saldot ja sovelletut alennukset"
 
 msgid ""
+"Select which elements to copy, from which other event. In the next step you "
+"will select the single elements."
+msgstr ""
+"Valitse kopioitavat elementit ja tapahtuma, josta ne kopioidaan. Seuraavassa"
+" vaiheessa valitset yksittäiset elementit."
+
+msgid ""
 "View all members who have self-assessed this competence, along with their "
 "experience level and event history"
 msgstr ""
@@ -13187,6 +13217,13 @@ msgid ""
 msgstr ""
 "Handout-malleja ei ole vielä luotu. Lisää handouteillesi CSS-asettelumalli "
 "yllä olevan painikkeen avulla."
+
+msgid ""
+"Only the selected elements will be copied: elements with the same name are "
+"overwritten, all the others are kept."
+msgstr ""
+"Vain valitut elementit kopioidaan: samannimiset elementit korvataan, kaikki "
+"muut säilytetään."
 
 msgid ""
 "You are on the waiting list, you must be registered with a regular ticket to"
