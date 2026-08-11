@@ -122,8 +122,8 @@ def signup(page: Any, live_server: Any) -> None:
     submit(page)
 
     # approve payment
-    go_to(page, live_server, "/test/manage/invoices")
-    page.get_by_role("link", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/manage/payments")
+    page.get_by_role("link", name="Confirm").click()
     confirm_modal(page)
 
     # check reg status

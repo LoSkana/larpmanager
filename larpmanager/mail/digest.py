@@ -600,7 +600,7 @@ def digest_refund_request(association: Association, refund_requests: list[Notifi
     for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association=association):
         content += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f}"
         content += " - " + _("Refund requested")
-        view_url = get_url(reverse("exe_invoices"), association)
+        view_url = get_url(reverse("exe_payments"), association)
         content += f' - <a href="{view_url}">' + _("View") + "</a></li>"
     content += "</ul>"
     return content

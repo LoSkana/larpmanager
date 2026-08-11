@@ -1175,9 +1175,6 @@ msgstr "Neaktivní"
 msgid "Included"
 msgstr "Zahrnuto"
 
-msgid "Invoices"
-msgstr "Faktury"
-
 msgid "Language"
 msgstr "Jazyk"
 
@@ -1400,9 +1397,6 @@ msgstr "Přijato:"
 msgid "Algorithm"
 msgstr "Algoritmus"
 
-msgid "Approvals"
-msgstr "Schválení"
-
 msgid "Assigned:"
 msgstr "Přiřazeno:"
 
@@ -1576,6 +1570,9 @@ msgstr "Příjemce"
 
 msgid "Recompute"
 msgstr "Přepočítej"
+
+msgid "Reference"
+msgstr "Reference"
 
 msgid "Remaining"
 msgstr "Zbývající"
@@ -4634,9 +4631,6 @@ msgstr "Věk (při události)"
 msgid "Arrived safe and sound"
 msgstr "Bezpečně dorazili"
 
-msgid "Bank payment reference"
-msgstr "Referenční údaj platby"
-
 msgid "Browse upcoming events"
 msgstr "Prohlédni si nadcházející akce"
 
@@ -6161,9 +6155,6 @@ msgstr "Spravuj své členství ve sdružení"
 msgid "Manages registration cancellations"
 msgstr "Spravovat zrušení registrací"
 
-msgid "Manually approve payments received"
-msgstr "Ručně schvalovat přijaté platby"
-
 msgid "No activation steps are available."
 msgstr "Nejsou k dispozici žádné kroky k aktivaci."
 
@@ -7249,9 +7240,6 @@ msgstr "Spravovat inventáře postav a jejich položky"
 msgid "Manage event metadata for external promotion"
 msgstr "Spravovat metadata události pro externí propagaci"
 
-msgid "Manage invoices of payments and approve them"
-msgstr "Spravovat faktury za platby a schvalovat je"
-
 msgid "Manage participant questions and answer them"
 msgstr "Spravovat otázky účastníků a odpovídat na ně"
 
@@ -8159,9 +8147,6 @@ msgstr "Pro vybraný rok nejsou žádní členové s záporným zůstatkem."
 
 msgid "No members with positive credits for the selected year."
 msgstr "Pro vybraný rok nejsou žádní členové s kladným zůstatkem."
-
-msgid "No payment invoices awaiting confirmation at this time."
-msgstr "V tuto chvíli nejsou k dispozici žádné faktury čekající na potvrzení."
 
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Vyber řádky tabulky a zvol operaci, která se má použít"
@@ -9323,11 +9308,6 @@ msgstr ""
 
 msgid "Personal theme preference, overrides the event and organization theme."
 msgstr "Osobní preference motivu, přepíše motiv akce a organizace."
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-"Zkontrolovat a potvrdit odeslané platební faktury čekající na ruční "
-"schválení"
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr "Původní anglický text, jak je uveden v kódu (msgid v gettext)"

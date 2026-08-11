@@ -1175,9 +1175,6 @@ msgstr "Inaktiv"
 msgid "Included"
 msgstr "Inkluderad"
 
-msgid "Invoices"
-msgstr "Fakturor"
-
 msgid "Language"
 msgstr "Språk"
 
@@ -1400,9 +1397,6 @@ msgstr "Godkänd:"
 msgid "Algorithm"
 msgstr "Algoritm"
 
-msgid "Approvals"
-msgstr "Godkännanden"
-
 msgid "Assigned:"
 msgstr "Tilldelad:"
 
@@ -1576,6 +1570,9 @@ msgstr "Mottagare"
 
 msgid "Recompute"
 msgstr "Återberäkna"
+
+msgid "Reference"
+msgstr "Referens"
 
 msgid "Remaining"
 msgstr "Återstående"
@@ -4634,9 +4631,6 @@ msgstr "Ålder (under evenemanget)"
 msgid "Arrived safe and sound"
 msgstr "Anlände säkra och oskadda"
 
-msgid "Bank payment reference"
-msgstr "Betalningsreferens"
-
 msgid "Browse upcoming events"
 msgstr "Se kommande evenemang"
 
@@ -6161,9 +6155,6 @@ msgstr "Hantera ditt medlemskap i föreningen"
 msgid "Manages registration cancellations"
 msgstr "Hantera avanmälningar"
 
-msgid "Manually approve payments received"
-msgstr "Godkänn mottagna betalningar manuellt"
-
 msgid "No activation steps are available."
 msgstr "Det finns inga aktiveringssteg."
 
@@ -7248,9 +7239,6 @@ msgstr "Hantera karaktärsinventarier och deras föremål"
 msgid "Manage event metadata for external promotion"
 msgstr "Hantera evenemangsmetadata för extern marknadsföring"
 
-msgid "Manage invoices of payments and approve them"
-msgstr "Hantera fakturor för betalningar och godkänn dem"
-
 msgid "Manage participant questions and answer them"
 msgstr "Hantera deltagarfrågor och besvara dem"
 
@@ -8158,10 +8146,6 @@ msgstr "Inga medlemmar med negativa krediter för det valda året."
 
 msgid "No members with positive credits for the selected year."
 msgstr "Inga medlemmar med positiva krediter för det valda året."
-
-msgid "No payment invoices awaiting confirmation at this time."
-msgstr ""
-"Det finns för närvarande inga betalningsfakturor som väntar på bekräftelse."
 
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Markera tabellraderna och välj den operation som ska tillämpas"
@@ -9392,11 +9376,6 @@ msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 "Personlig temainställning, åsidosätter evenemangets och organisationens "
 "tema."
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-"Granska och bekräfta inlämnade betalningsfakturor som väntar på manuellt "
-"godkännande"
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr ""

@@ -31,7 +31,6 @@ from larpmanager.forms.accounting import (
     ExeDonationForm,
     ExeExpenseForm,
     ExeInflowForm,
-    ExeInvoiceForm,
     ExeOutflowForm,
     ExePaymentForm,
     ExePaymentSettingsForm,
@@ -135,7 +134,6 @@ class ExeAction(str, Enum):
     TOKENS = ("exe_tokens", {"form": ExeTokenForm})
     EXPENSES = ("exe_expenses", {"form": ExeExpenseForm})
     PAYMENTS = ("exe_payments", {"form": ExePaymentForm})
-    INVOICES = ("exe_invoices", {"form": ExeInvoiceForm})
     COLLECTIONS = ("exe_collections", {"form": ExeCollectionForm})
     REFUNDS = ("exe_refunds", {"form": ExeRefundRequestForm})
 

@@ -71,6 +71,20 @@ from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_new
 from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.views.orga.accounting import payment_edit
 
+# Slug of permission / page for each invoice type
+INVOICE_PAGES = {
+    PaymentType.DONATE: "exe_donations",
+    PaymentType.COLLECTION: "exe_collections",
+    PaymentType.MEMBERSHIP: "exe_membership",
+}
+INVOICE_DEFAULT_PAGE = "exe_payments"
+
+
+def invoice_page(invoice_uuid: str) -> str:
+    """Return the accounting page owning the invoice, by its payment type."""
+    invoice_type = PaymentInvoice.objects.filter(uuid=invoice_uuid).values_list("typ", flat=True).first()
+    return INVOICE_PAGES.get(invoice_type, INVOICE_DEFAULT_PAGE)
+
 
 @login_required
 def exe_outflows(request: HttpRequest) -> HttpResponse:
@@ -645,94 +659,15 @@ def exe_payments_delete(request: HttpRequest, payment_uuid: str) -> HttpResponse
 
 
 @login_required
-def exe_invoices(request: HttpRequest) -> HttpResponse:
-    """Display and manage payment invoices for the organization.
-
-    This view provides a paginated list of payment invoices with filtering
-    and confirmation capabilities for submitted invoices.
-
-    Args:
-        request: HTTP request object containing user and session data
-
-    Returns:
-        HttpResponse: Rendered template with invoice list and pagination
-
-    """
-    # Check user permissions for invoice management
-    context = check_association_context(request, "exe_invoices")
-    confirm = _("Confirm")
-
-    # Update context with table configuration
-    context.update(
-        {
-            # Define selectable relationships for filtering
-            "selrel": ("method", "member"),
-            # Define table columns and headers
-            "fields": [
-                ("member", _("Member")),
-                ("method", _("Method")),
-                ("type", _("Type")),
-                ("status", _("Status")),
-                ("gross", _("Gross")),
-                ("trans", _("Transaction")),
-                ("causal", _("Bank payment reference")),
-                ("details", _("Details")),
-                ("created", _("Date")),
-                ("action", _("Action")),
-            ],
-            # Define data formatting callbacks for each column
-            "callbacks": {
-                # Display payment method as string
-                "method": lambda el: str(el.method),
-                # Show human-readable type and status labels
-                "type": lambda el: el.get_typ_display(),
-                "status": lambda el: el.get_status_display(),
-                # Format monetary values with proper decimal formatting
-                "gross": lambda el: format_decimal(el.mc_gross),
-                "trans": lambda el: format_decimal(el.mc_fee) if el.mc_fee else "",
-                # Display causal and details information
-                "causal": lambda el: el.causal,
-                "details": lambda el: el.get_details(),
-                # Show confirm action only for submitted invoices
-                "action": lambda el: f"<a href='{reverse('exe_invoices_confirm', args=[el.uuid])}' class='frame-confirm'>{confirm}</a>"
-                if el.status == PaymentStatus.SUBMITTED
-                else "",
-            },
-            "delete_view": "exe_invoices_delete",
-        },
-    )
-
-    # Return paginated invoice list with edit functionality
-    return exe_paginate(
-        request,
-        context,
-        PaymentInvoice,
-        "larpmanager/exe/accounting/invoices.html",
-        "exe_invoices_edit",
-    )
-
-
-@login_required
-def exe_invoices_new(request: HttpRequest) -> HttpResponse:
-    """Create a new invoice."""
-    return exe_new(request, ExeAction.INVOICES)
-
-
-@login_required
-def exe_invoices_edit(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
-    """Edit an existing invoice."""
-    return exe_edit(request, ExeAction.INVOICES, invoice_uuid)
-
-
-@login_required
 def exe_invoices_delete(request: HttpRequest, invoice_uuid: str) -> HttpResponse:
-    """Delete a payment invoice and redirect to payments."""
-    context = check_association_context(request, ["exe_payments", "exe_invoices"])
+    """Delete a payment invoice and redirect to the page listing invoices of its type."""
+    page = invoice_page(invoice_uuid)
+    context = check_association_context(request, page)
     if request.GET.get("frame") == "1" or request.POST.get("frame") == "1":
         context["frame"] = True
         return backend_delete_frame(request, context, PaymentInvoice, invoice_uuid)
     backend_delete(request, context, PaymentInvoice, invoice_uuid)
-    return redirect("exe_payments")
+    return redirect(page)
 
 
 @login_required
@@ -747,14 +682,15 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
         invoice_uuid: The invoice uuid
 
     Returns:
-        HttpResponse: Redirect to the invoices list page
+        HttpResponse: Redirect to the accounting page listing invoices of that type
 
     Raises:
         Http404: If invoice is already confirmed or in invalid status
 
     """
-    # Check user permissions for invoice management
-    context = check_association_context(request, ["exe_payments", "exe_invoices"])
+    # Check user permissions on the accounting page owning invoices of this type
+    page = invoice_page(invoice_uuid)
+    context = check_association_context(request, page)
 
     # Retrieve the specific invoice by number
     backend_get(context, PaymentInvoice, invoice_uuid)
@@ -779,11 +715,11 @@ def exe_invoices_confirm(request: HttpRequest, invoice_uuid: str) -> HttpRespons
     # Persist changes to database
     context["el"].save()
 
-    # Show success message and redirect to invoice list
+    # Show success message and redirect to the page listing invoices of that type
     messages.success(request, _("Element approved!"))
     if is_frame:
         return render(request, "elements/dashboard/form_success.html", context)
-    return redirect("exe_payments")
+    return redirect(page)
 
 
 @login_required

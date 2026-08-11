@@ -1175,9 +1175,6 @@ msgstr "Inaktiivinen"
 msgid "Included"
 msgstr "Mukana"
 
-msgid "Invoices"
-msgstr "Laskut"
-
 msgid "Language"
 msgstr "Kieli"
 
@@ -1400,9 +1397,6 @@ msgstr "Hyväksytty:"
 msgid "Algorithm"
 msgstr "Algoritmi"
 
-msgid "Approvals"
-msgstr "Hyväksynnät"
-
 msgid "Assigned:"
 msgstr "Määrätty:"
 
@@ -1576,6 +1570,9 @@ msgstr "Vastaanottaja"
 
 msgid "Recompute"
 msgstr "Laske uudelleen"
+
+msgid "Reference"
+msgstr "Viite"
 
 msgid "Remaining"
 msgstr "Jäljellä"
@@ -4634,9 +4631,6 @@ msgstr "Ikä (tapahtuman aikana)"
 msgid "Arrived safe and sound"
 msgstr "Saapuivat ehjinä ja terveinä"
 
-msgid "Bank payment reference"
-msgstr "Maksun viitenumero"
-
 msgid "Browse upcoming events"
 msgstr "Selaa tulevia tapahtumia"
 
@@ -6161,9 +6155,6 @@ msgstr "Hallinnoi yhdistyksen jäsenyyttäsi"
 msgid "Manages registration cancellations"
 msgstr "Hallitsee ilmoittautumisten peruutuksia"
 
-msgid "Manually approve payments received"
-msgstr "Hyväksy vastaanotetut maksut manuaalisesti"
-
 msgid "No activation steps are available."
 msgstr "Aktivointivaiheita ei ole saatavilla."
 
@@ -7248,9 +7239,6 @@ msgstr "Hallitse hahmoinventaarioita ja niiden esineitä"
 msgid "Manage event metadata for external promotion"
 msgstr "Hallitse tapahtuman metatietoja ulkoista markkinointia varten"
 
-msgid "Manage invoices of payments and approve them"
-msgstr "Hallitse maksujen laskuja ja hyväksy ne"
-
 msgid "Manage participant questions and answer them"
 msgstr "Hallitse osallistujien kysymyksiä ja vastaa niihin"
 
@@ -8166,9 +8154,6 @@ msgid "No members with positive credits for the selected year."
 msgstr ""
 "Valitulta vuodelta ei löytynyt jäseniä, joilla olisi positiivisia "
 "kredittejä."
-
-msgid "No payment invoices awaiting confirmation at this time."
-msgstr "Tällä hetkellä ei ole maksulaskuja, jotka odottavat vahvistusta."
 
 msgid "Select the table rows and choose the operation to apply"
 msgstr "Valitse taulukon rivit ja valitse sovellettava toiminto"
@@ -9421,11 +9406,6 @@ msgid "Personal theme preference, overrides the event and organization theme."
 msgstr ""
 "Henkilökohtainen teemavalinta, joka ohittaa tapahtuman ja organisaation "
 "teeman."
-
-msgid "Review and confirm submitted payment invoices awaiting manual approval"
-msgstr ""
-"Tarkista ja vahvista lähetetyt maksulaskut, jotka odottavat manuaalista "
-"hyväksyntää"
 
 msgid "The original English text as it appears in the code (msgid in gettext)"
 msgstr ""

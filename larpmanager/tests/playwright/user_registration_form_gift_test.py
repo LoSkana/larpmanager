@@ -258,8 +258,8 @@ def gift(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Payment currently in review by the staff.")
 
     # approve payment
-    go_to(page, live_server, "/test/manage/invoices")
-    page.get_by_role("link", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/manage/payments")
+    page.get_by_role("link", name="Confirm").click()
     confirm_modal(page)
 
     # redeem

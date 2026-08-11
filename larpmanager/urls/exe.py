@@ -438,21 +438,6 @@ urlpatterns = [
         name="exe_payments_delete",
     ),
     path(
-        "manage/invoices/",
-        views_ea.exe_invoices,
-        name="exe_invoices",
-    ),
-    path(
-        "manage/invoices/new/",
-        views_ea.exe_invoices_new,
-        name="exe_invoices_new",
-    ),
-    path(
-        "manage/invoices/<slug:invoice_uuid>/edit/",
-        views_ea.exe_invoices_edit,
-        name="exe_invoices_edit",
-    ),
-    path(
         "manage/invoices/<slug:invoice_uuid>/delete/",
         views_ea.exe_invoices_delete,
         name="exe_invoices_delete",

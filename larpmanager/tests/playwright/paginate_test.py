@@ -97,8 +97,8 @@ def config(page: Any, live_server: Any) -> None:
     submit(page)
 
     # confirm payment
-    go_to(page, live_server, "/test/manage/invoices")
-    page.get_by_role("link", name="Confirm", exact=True).click()
+    go_to(page, live_server, "/test/manage/payments")
+    page.get_by_role("link", name="Confirm").click()
     confirm_modal(page)
 
 
@@ -188,9 +188,6 @@ def exe_paginate_views(page: Any, live_server: Any) -> None:
 
     # exe_payments - page load only
     go_to(page, live_server, "/manage/payments/")
-
-    # exe_invoices - page load only
-    go_to(page, live_server, "/manage/invoices/")
 
     # exe_refunds - page load only
     go_to(page, live_server, "/manage/refunds/")

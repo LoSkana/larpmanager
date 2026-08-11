@@ -106,9 +106,9 @@ def donation(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
-    go_to(page, live_server, "/manage/invoices")
+    go_to(page, live_server, "/manage/donations")
     # Check for donation invoice in the table
-    expect(page.get_by_role("row", name="Admin Test Wire donation")).to_be_visible()
+    expect(page.get_by_role("row", name="Admin Test Wire")).to_be_visible()
     page.get_by_role("link", name="Confirm").click()
     confirm_modal(page)
 
@@ -165,9 +165,9 @@ def membership_fees(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
-    go_to(page, live_server, "/manage/invoices")
+    go_to(page, live_server, "/manage/membership")
     # Check for membership fee invoice in the table
-    expect(page.get_by_role("row", name="Admin Test Wire membership")).to_be_visible()
+    expect(page.get_by_role("row", name="Admin Test Wire")).to_be_visible()
     page.get_by_role("link", name="Confirm").click()
     confirm_modal(page)
 
@@ -199,7 +199,7 @@ def collections(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "test iban")
     submit(page)
 
-    go_to(page, live_server, "/manage/invoices")
+    go_to(page, live_server, "/manage/collections")
     expect_normalized(page, page.locator("#one"), "Collected contribution of Admin Test for User")
     page.get_by_role("link", name="Confirm").click()
     confirm_modal(page)
