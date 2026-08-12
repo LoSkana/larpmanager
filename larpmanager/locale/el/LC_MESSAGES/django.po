@@ -4533,6 +4533,12 @@ msgstr "Αποτυχία προσθήκης Handout"
 msgid "Go to event dashboard"
 msgstr "Μετάβαση στον πίνακα εκδήλωσης"
 
+msgid "Guild invite accepted"
+msgstr "Η πρόσκληση στο guild έγινε αποδεκτή"
+
+msgid "Guild invite declined"
+msgstr "Η πρόσκληση στο guild απορρίφθηκε"
+
 msgid "Handout and templates"
 msgstr "Handout και πρότυπα"
 
@@ -7205,6 +7211,9 @@ msgstr "Ο οργανισμός στον οποίο ανήκει αυτή η σ�
 msgid "This access link is invalid or has expired."
 msgstr "Αυτός ο σύνδεσμος πρόσβασης δεν είναι έγκυρος ή έχει λήξει."
 
+msgid "This character is not playing in this event"
+msgstr "Αυτός ο χαρακτήρας δεν συμμετέχει σε αυτό το event"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Αυτό το είδος δεν έχει πεπερασμένη ποσότητα για δέσμευση."
 
@@ -7720,6 +7729,9 @@ msgstr "Είσαι σίγουρος; Τα στοιχεία ίσως να μην 
 
 msgid "Background image displayed across all event pages"
 msgstr "Εικόνα φόντου που εμφανίζεται σε όλες τις σελίδες της εκδήλωσης"
+
+msgid "Character not found, or not playing in this event"
+msgstr "Ο χαρακτήρας δεν βρέθηκε ή δεν συμμετέχει σε αυτό το event"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Χρώμα που χρησιμοποιείται για φόντα κειμένου και πλαίσια περιεχομένου"
@@ -10832,6 +10844,22 @@ msgid ""
 msgstr ""
 "Το επιθυμητό ποσό επιστροφής χρημάτων (δεν μπορεί να είναι μεγαλύτερο από τα"
 " τρέχοντα credits σου)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Ο χαρακτήρας %(character)s αποδέχτηκε την πρόσκληση να συμμετάσχει στο guild"
+" %(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Ο χαρακτήρας %(character)s απέρριψε την πρόσκληση να συμμετάσχει στο guild "
+"%(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

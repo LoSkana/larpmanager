@@ -47,6 +47,7 @@ from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Character,
+    CharacterConfig,
     FactionType,
     Guild,
     GuildMembershipStatus,
@@ -61,6 +62,30 @@ from larpmanager.utils.services.event import has_access_character
 from larpmanager.utils.services.experience import add_char_addit
 
 logger = logging.getLogger(__name__)
+
+
+def filter_playing_characters(queryset: Any, run: Any) -> Any:
+    """Restrict characters to active ones assigned to a non cancelled registration of the run.
+
+    Args:
+        queryset: Character queryset to filter
+        run: Run the characters must be playing in
+
+    Returns:
+        Filtered character queryset
+
+    """
+    inactive_ids = CharacterConfig.objects.filter(
+        character_id__in=queryset.values_list("id", flat=True),
+        name="inactive",
+        value="True",
+    ).values_list("character_id", flat=True)
+
+    return (
+        queryset.exclude(id__in=inactive_ids)
+        .filter(rcrs__registration__run=run, rcrs__registration__cancellation_date__isnull=True)
+        .distinct()
+    )
 
 
 def get_character_relationships(context: dict, *, restrict: bool = True) -> None:

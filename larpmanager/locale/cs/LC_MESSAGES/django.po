@@ -4533,6 +4533,12 @@ msgstr "Nepodařilo se přidat Handout"
 msgid "Go to event dashboard"
 msgstr "Přejít na ovládací panel události"
 
+msgid "Guild invite accepted"
+msgstr "Pozvánka do gildy přijata"
+
+msgid "Guild invite declined"
+msgstr "Pozvánka do gildy odmítnuta"
+
 msgid "Handout and templates"
 msgstr "Handouty a šablony"
 
@@ -7204,6 +7210,9 @@ msgstr "Organizace, do které toto členství patří"
 msgid "This access link is invalid or has expired."
 msgstr "Tento přístupový odkaz je neplatný nebo jeho platnost vypršela."
 
+msgid "This character is not playing in this event"
+msgstr "Tato postava se této akce neúčastní"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Tato položka nemá žádné omezené množství k rezervaci."
 
@@ -7712,6 +7721,9 @@ msgstr "Jsi si jistý/á? Položky nemusí být obnovitelné."
 
 msgid "Background image displayed across all event pages"
 msgstr "Obrázek na pozadí zobrazený na všech stránkách události"
+
+msgid "Character not found, or not playing in this event"
+msgstr "Postava nebyla nalezena nebo se této akce neúčastní"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Barva použitá pro pozadí textu a rámečky s obsahem"
@@ -10402,6 +10414,18 @@ msgid ""
 "credits)"
 msgstr ""
 "Požadovaná výše proplacení (nemůže být vyšší než tvoje aktuální kredity)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr "Postava %(character)s přijala pozvánku do gildy %(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr "Postava %(character)s odmítla pozvánku do gildy %(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

@@ -4533,6 +4533,12 @@ msgstr "Misslyckades med att lägga till handout"
 msgid "Go to event dashboard"
 msgstr "Gå till instrumentpanelen för evenemang"
 
+msgid "Guild invite accepted"
+msgstr "Gillesinbjudan accepterad"
+
+msgid "Guild invite declined"
+msgstr "Gillesinbjudan avböjd"
+
 msgid "Handout and templates"
 msgstr "Handout och mallar"
 
@@ -7203,6 +7209,9 @@ msgstr "Den organisation som detta medlemskap tillhör"
 msgid "This access link is invalid or has expired."
 msgstr "Denna länk är ogiltig eller har löpt ut."
 
+msgid "This character is not playing in this event"
+msgstr "Den här karaktären deltar inte i detta event"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Denna artikel har ingen begränsad kvantitet att reservera."
 
@@ -7714,6 +7723,9 @@ msgstr "Är du säker? Objekten kanske inte kan återställas."
 
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrundsbild visas på alla evenemangssidor"
+
+msgid "Character not found, or not playing in this event"
+msgstr "Karaktären hittades inte eller deltar inte i detta event"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Färg som används för textbakgrunder och innehållsrutor"
@@ -10524,6 +10536,21 @@ msgid ""
 msgstr ""
 "Det önskade återbetalningsbeloppet (kan inte vara högre än dina nuvarande "
 "krediter)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Karaktären %(character)s har accepterat inbjudan att gå med i gillet "
+"%(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Karaktären %(character)s har avböjt inbjudan att gå med i gillet %(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

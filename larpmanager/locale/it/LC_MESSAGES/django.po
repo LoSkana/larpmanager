@@ -4533,6 +4533,12 @@ msgstr "Impossibile aggiungere l'Handout"
 msgid "Go to event dashboard"
 msgstr "Vai alla dashboard dell'evento"
 
+msgid "Guild invite accepted"
+msgstr "Invito alla gilda accettato"
+
+msgid "Guild invite declined"
+msgstr "Invito alla gilda rifiutato"
+
 msgid "Handout and templates"
 msgstr "Handout e modelli"
 
@@ -7205,6 +7211,9 @@ msgstr "L'organizzazione di appartenenza"
 msgid "This access link is invalid or has expired."
 msgstr "Questo link di accesso non è valido o è scaduto."
 
+msgid "This character is not playing in this event"
+msgstr "Questo personaggio non partecipa a questo evento"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Questo articolo non ha una quantità finita da impegnare."
 
@@ -7718,6 +7727,9 @@ msgstr "Sei sicuro? Gli elementi potrebbero non essere recuperabili."
 
 msgid "Background image displayed across all event pages"
 msgstr "Immagine di sfondo visualizzata su tutte le pagine dell'evento"
+
+msgid "Character not found, or not playing in this event"
+msgstr "Personaggio non trovato o non partecipante a questo evento"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Colore utilizzato per gli sfondi di testo e le caselle di contenuto"
@@ -10749,6 +10761,22 @@ msgid ""
 msgstr ""
 "L'importo del rimborso desiderato (non può essere superiore ai tuoi crediti "
 "attuali)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Il personaggio %(character)s ha accettato l'invito a unirsi alla gilda "
+"%(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Il personaggio %(character)s ha rifiutato l'invito a unirsi alla gilda "
+"%(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

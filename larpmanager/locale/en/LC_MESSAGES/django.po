@@ -12759,6 +12759,9 @@ msgstr ""
 msgid "Guild updated!"
 msgstr ""
 
+msgid "Character not found, or not playing in this event"
+msgstr ""
+
 msgid "This character is already a member or has a pending invite"
 msgstr ""
 
@@ -12774,7 +12777,28 @@ msgstr ""
 msgid "This guild has reached its maximum number of members"
 msgstr ""
 
+msgid "This character is not playing in this event"
+msgstr ""
+
 msgid "You joined the guild!"
+msgstr ""
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+
+msgid "Guild invite accepted"
+msgstr ""
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+
+msgid "Guild invite declined"
 msgstr ""
 
 msgid "Invite declined"

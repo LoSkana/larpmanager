@@ -60,6 +60,15 @@ def create_and_assign_character(page: Any, live_server: Any, name: str) -> None:
     save_modal(page, edit_iframe)
 
 
+def create_unassigned_character(page: Any, live_server: Any, name: str) -> None:
+    """Create a character as organizer, without assigning it to any player."""
+    go_to(page, live_server, "/test/manage/characters")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").fill(name)
+    save_modal(page, edit_iframe)
+
+
 def test_guild_all(pw_page: Any) -> None:
     """Comprehensive test for the guild player self-service lifecycle."""
     page, live_server, _ = pw_page
@@ -73,6 +82,7 @@ def test_guild_all(pw_page: Any) -> None:
     # ========== SECTION 2: Orga creates two characters, both owned by user@test.it ==========
     create_and_assign_character(page, live_server, "Guild Founder")
     create_and_assign_character(page, live_server, "Guild Recruit")
+    create_unassigned_character(page, live_server, "Guild Outsider")
 
     # ========== SECTION 3: User registers to the event ==========
     login_user(page, live_server)
@@ -98,8 +108,13 @@ def test_guild_all(pw_page: Any) -> None:
     expect(page.get_by_role("link", name="Edit guild")).to_be_visible()
     expect(page.get_by_role("heading", name="Invite a character")).to_be_visible()
 
-    # ========== SECTION 7: Invite "Guild Recruit" ==========
+    # ========== SECTION 7: Invite "Guild Recruit", characters not playing are not proposed ==========
     page.locator("#select2-guild-invite-select-container").click()
+    page.get_by_role("searchbox").fill("Guild")
+    page.locator(".select2-results__option").first.wait_for(state="visible")
+    expect(page.locator(".select2-results")).to_contain_text("Guild Recruit")
+    expect(page.locator(".select2-results")).not_to_contain_text("Guild Outsider")
+
     _select2_search_and_pick(page.get_by_role("searchbox"), page, "Guild Recruit")
     page.get_by_role("button", name="Invite").click()
 
