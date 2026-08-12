@@ -37,8 +37,6 @@ from django.test import Client
 from django.urls import reverse
 from django.utils import timezone
 
-from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
-
 from larpmanager.mail.sns import _canonical_string, handle_sns_payload, verify_sns_signature
 from larpmanager.mail.suppression import (
     SOFT_BOUNCE_LIMIT,
@@ -47,8 +45,11 @@ from larpmanager.mail.suppression import (
     suppress_email,
     unsuppress_email,
 )
+from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
+from larpmanager.models.member import Membership, NewsletterChoices
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient, EmailSuppression, SuppressionReason
 from larpmanager.tests.unit.base import BaseTestCase
+from larpmanager.utils.larpmanager.tasks import partition_newsletter_recipients
 
 CERT_URL = "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-abc.pem"
 
@@ -492,6 +493,42 @@ class TestSuppressionOnSend(BaseTestCase):
             assert mock_send.call_args[1]["one_click"]
 
 
+class TestNewsletterPartition(BaseTestCase):
+    """Tests on which newsletter preferences accept a broadcast."""
+
+    def _member_with_preference(self, email: str, newsletter: str) -> None:
+        """Create a member of the association holding the given newsletter preference."""
+        user = self.create_user(username=email, email=email)
+        member = self.create_member(user=user)
+        Membership.objects.filter(member=member, association=self.association).update(newsletter=newsletter)
+
+    def setUp(self):
+        """Register members covering every newsletter preference."""
+        cache.clear()
+        self.association = self.get_association()
+        self._member_with_preference("all@example.com", NewsletterChoices.ALL)
+        self._member_with_preference("only@example.com", NewsletterChoices.ONLY)
+        self._member_with_preference("none@example.com", NewsletterChoices.NO)
+
+    def test_run_mail_reaches_the_important_only_preference(self):
+        """A mail tied to a run is a practical communication, so ONLY still gets it."""
+        recipients = ["all@example.com", "only@example.com", "none@example.com"]
+
+        allowed, opted_out = partition_newsletter_recipients(recipients, self.association.id, run_id=1)
+
+        assert allowed == ["all@example.com", "only@example.com"]
+        assert opted_out == ["none@example.com"]
+
+    def test_generic_broadcast_skips_the_important_only_preference(self):
+        """An association wide broadcast is not important enough for the ONLY preference."""
+        recipients = ["all@example.com", "only@example.com", "none@example.com"]
+
+        allowed, opted_out = partition_newsletter_recipients(recipients, self.association.id)
+
+        assert allowed == ["all@example.com"]
+        assert opted_out == ["only@example.com", "none@example.com"]
+
+
 class TestUnsubscribeEndpoints(BaseTestCase):
     """Tests that only the RFC 8058 endpoint is exempted from CSRF."""
 
@@ -520,9 +557,20 @@ class TestUnsubscribeEndpoints(BaseTestCase):
         newsletter = LarpManagerNewsletter.objects.get(email="reader@example.com")
         assert newsletter.status == NewsletterStatus.UNSUBSCRIBED
 
-    def test_one_click_endpoint_requires_the_marker(self):
-        """A post without the one-click marker is refused."""
+    def test_one_click_endpoint_accepts_an_empty_body(self):
+        """A post without a body still unsubscribes: the signed token authorises it."""
         response = self.client.post(reverse("unsubscribe_one_click", args=[self.token]))
+
+        assert response.status_code == HTTPStatus.OK
+        newsletter = LarpManagerNewsletter.objects.get(email="reader@example.com")
+        assert newsletter.status == NewsletterStatus.UNSUBSCRIBED
+
+    def test_one_click_endpoint_refuses_another_marker(self):
+        """A post carrying a different marker value is refused."""
+        response = self.client.post(
+            reverse("unsubscribe_one_click", args=[self.token]),
+            {"List-Unsubscribe": "Something-Else"},
+        )
 
         assert response.status_code == HTTPStatus.BAD_REQUEST
         assert not LarpManagerNewsletter.objects.filter(email="reader@example.com").exists()

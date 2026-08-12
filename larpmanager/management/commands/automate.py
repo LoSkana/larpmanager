@@ -448,11 +448,14 @@ class Command(BaseCommand):
         sent = bounces = complaints = 0
         for point in data_points:
             timestamp = point.get("Timestamp")
-            if timestamp:
-                if timestamp.tzinfo is None:
-                    timestamp = timestamp.replace(tzinfo=UTC)
-                if timestamp < limit:
-                    continue
+            # A point without a timestamp cannot be placed in the window: SES reports up to
+            # two weeks of data, so counting it would inflate a rate advertised as daily
+            if not timestamp:
+                continue
+            if timestamp.tzinfo is None:
+                timestamp = timestamp.replace(tzinfo=UTC)
+            if timestamp < limit:
+                continue
             sent += point.get("DeliveryAttempts", 0)
             bounces += point.get("Bounces", 0)
             complaints += point.get("Complaints", 0)

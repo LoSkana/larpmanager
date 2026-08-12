@@ -11340,6 +11340,18 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
+msgid "Invalid address"
+msgstr ""
+
+msgid "Forbidden domain"
+msgstr ""
+
+msgid "Opted out of communications"
+msgstr ""
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr ""
+
 msgid "Registration Tickets"
 msgstr ""
 

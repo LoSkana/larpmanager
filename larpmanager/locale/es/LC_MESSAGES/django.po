@@ -3182,6 +3182,9 @@ msgstr "Balance global:"
 msgid "Highlight color"
 msgstr "Color de realce"
 
+msgid "Invalid address"
+msgstr "Dirección no válida"
+
 msgid "Invalid request"
 msgstr "Solicitud no válida"
 
@@ -3433,6 +3436,9 @@ msgstr "Sitio web externo"
 
 msgid "Field visibility"
 msgstr "Visibilidad de los campos"
+
+msgid "Forbidden domain"
+msgstr "Dominio prohibido"
 
 msgid "Handout template"
 msgstr "Plantilla de handout"
@@ -5454,6 +5460,9 @@ msgstr "No se dio de baja ninguna dirección"
 msgid "No inventory transfers yet."
 msgstr "Aún no hay transferencias."
 
+msgid "Opted out of communications"
+msgstr "Has rechazado las comunicaciones"
+
 msgid "Pre-registration confirmed!"
 msgstr "Preinscripción confirmada!"
 
@@ -7381,6 +7390,9 @@ msgstr "¡Debes inscribirte para seleccionar tus preferencias!"
 
 msgid "You will no longer receive messages from us."
 msgstr "Dejarás de recibir mensajes nuestros."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Dirección bloqueada tras un rebote o una queja"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr "El importe debe ser distinto de cero para los criterios de división"

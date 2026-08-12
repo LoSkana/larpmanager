@@ -69,7 +69,7 @@ from larpmanager.mail.base import join_email
 from larpmanager.mail.digest import send_daily_organizer_summaries
 from larpmanager.mail.remind import remember_membership, remember_membership_fee, remember_pay, remember_profile
 from larpmanager.mail.sns import handle_sns_payload, verify_sns_signature
-from larpmanager.mail.suppression import suppress_email, unsuppress_email
+from larpmanager.mail.suppression import suppress_email
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.association import Association, AssociationPlan, AssociationTextType
 from larpmanager.models.base import Feature
@@ -96,7 +96,13 @@ from larpmanager.utils.auth.permission import has_association_permission, has_ev
 from larpmanager.utils.core.base import get_context, get_event_context
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.larpmanager.chat import get_chat_answer
-from larpmanager.utils.larpmanager.tasks import delete_association_task, delete_run_task, my_send_mail, send_mail_exec
+from larpmanager.utils.larpmanager.tasks import (
+    delete_association_task,
+    delete_run_task,
+    my_send_mail,
+    release_suppressed_emails,
+    send_mail_exec,
+)
 from larpmanager.utils.services.association import _reset_all_association
 from larpmanager.utils.services.demo import clone_association, schedule_demo_cleanup
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
@@ -1032,17 +1038,14 @@ def lm_suppressions(request: HttpRequest) -> Any:
     if request.method == "POST":
         emails = re.split(r"[\s,;|]+", request.POST.get("emails", ""))
         release = "release" in request.POST
-        count = 0
-        for orig_email in emails:
-            email = orig_email.strip().lower()
-            if not email or "@" not in email:
-                continue
-            if release:
-                unsuppress_email(email)
-            else:
+        cleaned = [email.strip().lower() for email in emails if email.strip() and "@" in email]
+        if release:
+            # Each release hits SES, so a bulk one is handed over to a background task
+            release_suppressed_emails(cleaned)
+        else:
+            for email in cleaned:
                 suppress_email(email, SuppressionReason.MANUAL)
-            count += 1
-        messages.success(request, f"{count} emails updated")
+        messages.success(request, f"{len(cleaned)} emails updated")
         return redirect(request.path_info)
 
     show_inactive = request.GET.get("inactive", "0") == "1"

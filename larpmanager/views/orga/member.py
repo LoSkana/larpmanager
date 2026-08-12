@@ -38,7 +38,13 @@ from larpmanager.models.member import FirstAidChoices, Member, Membership, Membe
 from larpmanager.models.miscellanea import EmailRecipient, HelpQuestion
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member, get_object_uuid
+from larpmanager.utils.core.common import (
+    _get_help_questions,
+    format_email_body,
+    format_email_skipped,
+    get_member,
+    get_object_uuid,
+)
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.larpmanager.tasks import (
     partition_newsletter_recipients,
@@ -458,7 +464,7 @@ def send_mail_batch(
     added, ignored = partition_shared_recipients(recipients, association_id)
 
     # Drop the addresses that opted out, so the result reports what is really queued
-    added, unsubscribed = partition_newsletter_recipients(added, association_id)
+    added, unsubscribed = partition_newsletter_recipients(added, association_id, run_id)
 
     # Execute the email sending operation for the allowed recipients, handing over the
     # opted out ones so they are traced as skipped without resolving them a second time
@@ -532,6 +538,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
                 ("subj", _("Subject")),
                 ("body", _("Body")),
                 ("sent", _("Sent")),
+                ("skipped", _("Skipped")),
             ],
             # Define formatting callbacks for each field
             # These functions control how data is displayed in the template
@@ -539,6 +546,7 @@ def orga_archive_email(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
+                "skipped": format_email_skipped,
             },
         },
     )

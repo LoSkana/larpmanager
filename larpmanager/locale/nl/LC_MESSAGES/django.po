@@ -3182,6 +3182,9 @@ msgstr "Globaal saldo:"
 msgid "Highlight color"
 msgstr "Markeerkleur"
 
+msgid "Invalid address"
+msgstr "Ongeldig adres"
+
 msgid "Invalid request"
 msgstr "Ongeldig verzoek"
 
@@ -3433,6 +3436,9 @@ msgstr "Externe website"
 
 msgid "Field visibility"
 msgstr "Zichtbaarheid velden"
+
+msgid "Forbidden domain"
+msgstr "Verboden domein"
 
 msgid "Handout template"
 msgstr "Handout-sjabloon"
@@ -5454,6 +5460,9 @@ msgstr "Er is geen adres uitgeschreven"
 msgid "No inventory transfers yet."
 msgstr "Nog geen transfers."
 
+msgid "Opted out of communications"
+msgstr "Afmelden voor communicatie"
+
 msgid "Pre-registration confirmed!"
 msgstr "Voorinschrijving bevestigd!"
 
@@ -7381,6 +7390,9 @@ msgstr "Je moet je inschrijven om je voorkeuren te selecteren!"
 
 msgid "You will no longer receive messages from us."
 msgstr "Je zult niet langer berichten van ons ontvangen."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Adres geblokkeerd na een bounce of een klacht"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr ""

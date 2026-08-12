@@ -40,7 +40,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
-from larpmanager.mail.suppression import get_suppressed_emails, is_suppressed
+from larpmanager.mail.suppression import get_suppressed_emails, is_suppressed, unsuppress_email
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
@@ -183,7 +183,9 @@ def partition_shared_recipients(recipients: list, association_id: int | None) ->
     return allowed, ignored
 
 
-def partition_newsletter_recipients(recipients: list, association_id: int | None) -> tuple[list, list]:
+def partition_newsletter_recipients(
+    recipients: list, association_id: int | None, run_id: int | None = None
+) -> tuple[list, list]:
     """Split recipients into those who accept bulk communications and those who opted out.
 
     Association mails honour the membership newsletter preference, platform
@@ -193,16 +195,21 @@ def partition_newsletter_recipients(recipients: list, association_id: int | None
     Args:
         recipients: List of recipient email addresses.
         association_id: Association the email is sent on behalf of.
+        run_id: Run the email is tied to, if any.
 
     Returns:
         Tuple (allowed, opted_out) of email addresses, preserving input order.
 
     """
     if association_id:
-        # ONLY accepts just the mails tied to a registration, never a staff broadcast
+        # ONLY still accepts the mails tied to a run, since they carry the practical
+        # information of an event the member signed up for, but not a generic broadcast
+        refused = [NewsletterChoices.NO]
+        if not run_id:
+            refused.append(NewsletterChoices.ONLY)
         queryset = Membership.objects.filter(
             association_id=association_id,
-            newsletter__in=[NewsletterChoices.NO, NewsletterChoices.ONLY],
+            newsletter__in=refused,
         ).values_list("member__email", flat=True)
     else:
         queryset = LarpManagerNewsletter.objects.filter(
@@ -236,7 +243,9 @@ def _create_bulk_recipients(
     recipients only holds the allowed ones.
     """
     if opted_out is None:
-        recipients, opted_out = partition_newsletter_recipients(recipients, email_content.association_id)
+        recipients, opted_out = partition_newsletter_recipients(
+            recipients, email_content.association_id, email_content.run_id
+        )
     opted_out_emails = set(opted_out)
     # Resolved once for the whole broadcast, instead of one query per recipient
     suppressed_emails = get_suppressed_emails(recipients)
@@ -284,6 +293,17 @@ def _broadcast_size_allowed(total_recipients: int) -> bool:
         return False
 
     return True
+
+
+@background_auto(queue="mail")
+def release_suppressed_emails(emails: list) -> None:
+    """Release a list of addresses from the local and the SES suppression lists.
+
+    Each release calls SES, so a bulk release runs out of the request cycle:
+    a few hundred addresses would otherwise time out the browser.
+    """
+    for email in emails:
+        unsuppress_email(email)
 
 
 @background_auto()
@@ -472,7 +492,8 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
 def _mark_skipped(email_recipient: EmailRecipient, reason: str) -> None:
     """Flag a recipient as not deliverable, so it is not retried forever."""
     email_recipient.skipped = reason
-    email_recipient.save(update_fields=["skipped"])
+    # updated drives the archive ordering, so it must be refreshed along with the flag
+    email_recipient.save(update_fields=["skipped", "updated"])
 
 
 def clean_sender(sender_name: Any) -> Any:

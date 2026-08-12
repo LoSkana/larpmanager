@@ -22,6 +22,7 @@
 from __future__ import annotations
 
 import logging
+from functools import lru_cache
 from typing import Any
 
 import boto3
@@ -29,7 +30,6 @@ from botocore.exceptions import BotoCoreError, ClientError
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db import transaction
-from django.db.models.functions import Lower
 
 from larpmanager.models.miscellanea import EmailSuppression, SuppressionReason
 
@@ -58,7 +58,7 @@ def get_suppression_state(email: str) -> dict[str, Any] | None:
     if cached is not None:
         return cached or None
     state = (
-        EmailSuppression.objects.filter(email__iexact=email.strip()).values("reason", "active", "bounce_count").first()
+        EmailSuppression.objects.filter(email=email.strip().lower()).values("reason", "active", "bounce_count").first()
     )
     cache.set(key, state or 0, SUPPRESSION_CACHE_TIMEOUT)
     return state
@@ -90,15 +90,12 @@ def get_suppressed_emails(emails: list[str], *, bulk: bool = True) -> set[str]:
     if not cleaned:
         return set()
 
-    # Rows may have been created with a different case, so the match is case insensitive
-    rows = (
-        EmailSuppression.objects.annotate(lower_email=Lower("email"))
-        .filter(lower_email__in=cleaned, active=True)
-        .values_list("lower_email", "reason")
-    )
+    # Addresses are always normalised to lowercase before being stored, so the plain
+    # lookup can use the unique index instead of scanning the whole table
+    rows = EmailSuppression.objects.filter(email__in=cleaned, active=True).values_list("email", "reason")
     if bulk:
-        return {email for email, _reason in rows}
-    return {email for email, reason in rows if reason == SuppressionReason.BOUNCE_PERMANENT}
+        return {email.lower() for email, _reason in rows}
+    return {email.lower() for email, reason in rows if reason == SuppressionReason.BOUNCE_PERMANENT}
 
 
 def clear_soft_bounces(email: str) -> None:
@@ -107,10 +104,20 @@ def clear_soft_bounces(email: str) -> None:
     Without this a handful of temporary failures spread over months would
     eventually add up to a permanent block.
     """
+    email = (email or "").strip().lower()
     state = get_suppression_state(email)
     if not state or state["active"] or not state["bounce_count"]:
         return
-    EmailSuppression.objects.filter(email__iexact=email.strip()).update(bounce_count=0)
+
+    # The same row lock used by suppress_email: without it a bounce processed concurrently
+    # would read the old counter and write it back, losing the reset
+    with transaction.atomic():
+        obj = EmailSuppression.all_objects.select_for_update().filter(email=email).first()
+        if not obj or obj.active or not obj.bounce_count:
+            return
+        obj.bounce_count = 0
+        obj.save(update_fields=["bounce_count", "updated", "last_event"])
+
     reset_suppression_cache(email)
 
 
@@ -162,14 +169,18 @@ def unsuppress_email(email: str) -> None:
     if not email:
         return
 
-    # Rows may have been created with a different case, so the release must be case insensitive
-    EmailSuppression.objects.filter(email__iexact=email).update(active=False, bounce_count=0)
+    EmailSuppression.objects.filter(email=email).update(active=False, bounce_count=0)
     reset_suppression_cache(email)
     _ses_delete_suppressed_destination(email)
 
 
-def _ses_delete_suppressed_destination(email: str) -> None:
-    """Delete an address from the SES account level suppression list, if configured."""
+@lru_cache(maxsize=1)
+def _get_ses_client() -> Any | None:
+    """Return the shared SES client, or None when the credentials are not configured.
+
+    The client is built once: releasing a long list of addresses would otherwise
+    pay the setup cost of a new client for every single one of them.
+    """
     if not all(
         [
             getattr(conf_settings, "AWS_SES_ACCESS_KEY_ID", None),
@@ -177,15 +188,22 @@ def _ses_delete_suppressed_destination(email: str) -> None:
             getattr(conf_settings, "AWS_SES_REGION_NAME", None),
         ]
     ):
-        return
+        return None
 
+    return boto3.client(
+        "sesv2",
+        aws_access_key_id=conf_settings.AWS_SES_ACCESS_KEY_ID,
+        aws_secret_access_key=conf_settings.AWS_SES_SECRET_ACCESS_KEY,
+        region_name=conf_settings.AWS_SES_REGION_NAME,
+    )
+
+
+def _ses_delete_suppressed_destination(email: str) -> None:
+    """Delete an address from the SES account level suppression list, if configured."""
     try:
-        client = boto3.client(
-            "sesv2",
-            aws_access_key_id=conf_settings.AWS_SES_ACCESS_KEY_ID,
-            aws_secret_access_key=conf_settings.AWS_SES_SECRET_ACCESS_KEY,
-            region_name=conf_settings.AWS_SES_REGION_NAME,
-        )
+        client = _get_ses_client()
+        if not client:
+            return
         client.delete_suppressed_destination(EmailAddress=email)
     except (ClientError, BotoCoreError) as exc:
         # A missing entry is expected whenever SES never suppressed the address

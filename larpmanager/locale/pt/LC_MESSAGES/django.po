@@ -3182,6 +3182,9 @@ msgstr "Saldo global:"
 msgid "Highlight color"
 msgstr "Cor de destaque"
 
+msgid "Invalid address"
+msgstr "Endereço inválido"
+
 msgid "Invalid request"
 msgstr "Pedido inválido"
 
@@ -3433,6 +3436,9 @@ msgstr "Site externo"
 
 msgid "Field visibility"
 msgstr "Visibilidade dos campos"
+
+msgid "Forbidden domain"
+msgstr "Domínio proibido"
 
 msgid "Handout template"
 msgstr "Modelo de Handout"
@@ -5454,6 +5460,9 @@ msgstr "Nenhum endereço cancelou a subscrição"
 msgid "No inventory transfers yet."
 msgstr "Ainda não há transferências de inventário."
 
+msgid "Opted out of communications"
+msgstr "Cancelaste a receção de comunicações"
+
 msgid "Pre-registration confirmed!"
 msgstr "Pré-inscrição confirmada!"
 
@@ -7379,6 +7388,9 @@ msgstr "Tens de te inscrever para selecionares as tuas preferências!"
 
 msgid "You will no longer receive messages from us."
 msgstr "Já não receberás mensagens nossas."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Endereço bloqueado após uma devolução ou uma reclamação"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr "O valor não pode ser zero para critérios de divisão"

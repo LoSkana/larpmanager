@@ -924,6 +924,13 @@ class EmailSuppression(BaseModel):
 
     raw = models.JSONField(blank=True, null=True, verbose_name=_("Raw Payload"))
 
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Store the address normalised, so lookups can use the unique index."""
+        self.email = (self.email or "").strip().lower()
+        if kwargs.get("update_fields") is not None:
+            kwargs["update_fields"] = {*kwargs["update_fields"], "email"}
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.email} ({self.get_reason_display()})"

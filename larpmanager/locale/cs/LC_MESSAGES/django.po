@@ -3182,6 +3182,9 @@ msgstr "Globální bilance:"
 msgid "Highlight color"
 msgstr "Barva zvýraznění"
 
+msgid "Invalid address"
+msgstr "Neplatná adresa"
+
 msgid "Invalid request"
 msgstr "Neplatný požadavek"
 
@@ -3433,6 +3436,9 @@ msgstr "Externí webové stránky"
 
 msgid "Field visibility"
 msgstr "Viditelnost polí"
+
+msgid "Forbidden domain"
+msgstr "Zakázaná doména"
 
 msgid "Handout template"
 msgstr "Šablona pro Handout"
@@ -5454,6 +5460,9 @@ msgstr "Žádná adresa nebyla odhlášena"
 msgid "No inventory transfers yet."
 msgstr "Zatím žádné přesuny."
 
+msgid "Opted out of communications"
+msgstr "Odhlásil(a) ses z komunikace"
+
 msgid "Pre-registration confirmed!"
 msgstr "Předběžná registrace potvrzena!"
 
@@ -7380,6 +7389,9 @@ msgstr "Abys mohl(a) vybrat své preference, musíš se přihlásit!"
 
 msgid "You will no longer receive messages from us."
 msgstr "Už od nás nebudeš dostávat zprávy."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Adresa zablokována po nedoručení nebo stížnosti"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr "Částka musí být pro kritéria dělení nenulová."

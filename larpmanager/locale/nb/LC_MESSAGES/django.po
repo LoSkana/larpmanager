@@ -3182,6 +3182,9 @@ msgstr "Global balanse:"
 msgid "Highlight color"
 msgstr "Høylysfarge"
 
+msgid "Invalid address"
+msgstr "Ugyldig adresse"
+
 msgid "Invalid request"
 msgstr "Ugyldig forespørsel"
 
@@ -3433,6 +3436,9 @@ msgstr "Ekstern nettside"
 
 msgid "Field visibility"
 msgstr "Feltsynlighet"
+
+msgid "Forbidden domain"
+msgstr "Forbudt domene"
 
 msgid "Handout template"
 msgstr "Handout-mal"
@@ -5454,6 +5460,9 @@ msgstr "Ingen adresse ble avmeldt"
 msgid "No inventory transfers yet."
 msgstr "Ingen inventaroverføringer ennå."
 
+msgid "Opted out of communications"
+msgstr "Har reservert seg mot kommunikasjon"
+
 msgid "Pre-registration confirmed!"
 msgstr "Forhåndsregistrering bekreftet!"
 
@@ -7380,6 +7389,9 @@ msgstr "Du må melde deg på for å velge preferansene dine!"
 
 msgid "You will no longer receive messages from us."
 msgstr "Du vil ikke lenger motta meldinger fra oss."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Adressen er blokkert etter en returmelding eller en klage"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr "Beløpet må være ulik null for delingskriterier"

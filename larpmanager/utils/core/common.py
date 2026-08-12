@@ -717,6 +717,19 @@ def format_email_body(email: object) -> str:
     return cleaned[:cutoff] + "..." if len(cleaned) > cutoff else cleaned
 
 
+def format_email_skipped(recipient: object) -> str:
+    """Return the readable reason why a recipient was not contacted."""
+    labels = {
+        "invalid": _("Invalid address"),
+        "forbidden": _("Forbidden domain"),
+        "newsletter": _("Opted out of communications"),
+        "suppressed": _("Address blocked after a bounce or a complaint"),
+    }
+    if not recipient.skipped:
+        return ""
+    return labels.get(recipient.skipped, recipient.skipped)
+
+
 def get_now() -> datetime:
     """Get current time - if executed in debug/test, without timezone, add it."""
     now = timezone.now()

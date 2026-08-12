@@ -911,7 +911,11 @@ def unsubscribe_one_click(request: HttpRequest, token: str = "") -> HttpResponse
     carries no CSRF token, so it is kept apart from the confirmation form:
     the ordinary unsubscribe page keeps its CSRF protection.
     """
-    if request.POST.get("List-Unsubscribe") != "One-Click":
+    # The signed token is the real authorisation: clients that post an empty or a
+    # differently cased body still get unsubscribed, since a refusal would be reported
+    # to the mailbox provider as a failed unsubscribe and hurt the sender reputation
+    body_value = request.POST.get("List-Unsubscribe", "")
+    if body_value and body_value.strip().lower() != "one-click":
         return HttpResponseBadRequest()
 
     resolved = _unsubscribe_token(token)

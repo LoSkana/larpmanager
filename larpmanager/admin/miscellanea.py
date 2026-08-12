@@ -323,6 +323,10 @@ class EmailSuppressionAdmin(DefModelAdmin):
     list_filter: ClassVar[tuple] = ("reason", "active")
     search_fields: ClassVar[list] = ["email"]
 
+    def get_readonly_fields(self, request: HttpRequest, obj: EmailSuppression | None = None) -> tuple:  # noqa: ARG002
+        """Freeze the address of an existing row, so its cached flag stays addressable."""
+        return ("email",) if obj else ()
+
 
 class OneTimeAccessTokenInline(admin.TabularInline):
     """Inline admin for access tokens."""

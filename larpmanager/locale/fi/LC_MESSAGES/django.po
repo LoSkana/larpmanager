@@ -3182,6 +3182,9 @@ msgstr "Kokonaissaldo:"
 msgid "Highlight color"
 msgstr "Korostusväri"
 
+msgid "Invalid address"
+msgstr "Virheellinen osoite"
+
 msgid "Invalid request"
 msgstr "Virheellinen pyyntö"
 
@@ -3433,6 +3436,9 @@ msgstr "Ulkoinen verkkosivusto"
 
 msgid "Field visibility"
 msgstr "Kentän näkyvyys"
+
+msgid "Forbidden domain"
+msgstr "Kielletty verkkotunnus"
 
 msgid "Handout template"
 msgstr "Handout-pohja"
@@ -5454,6 +5460,9 @@ msgstr "Yhtään osoitetta ei peruttu"
 msgid "No inventory transfers yet."
 msgstr "Ei vielä siirtoja."
 
+msgid "Opted out of communications"
+msgstr "Viestinnästä kieltäytynyt"
+
 msgid "Pre-registration confirmed!"
 msgstr "Ennakkoilmoittautuminen vahvistettu!"
 
@@ -7379,6 +7388,9 @@ msgstr "Sinun täytyy ilmoittautua valitaksesi mieltymyksesi!"
 
 msgid "You will no longer receive messages from us."
 msgstr "Et enää saa meiltä viestejä."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Osoite estetty palautuneen viestin tai valituksen jälkeen"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr "Jakokriteerien osalta summan on oltava eri kuin nolla"
