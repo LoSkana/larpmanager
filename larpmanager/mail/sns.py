@@ -24,6 +24,7 @@ from __future__ import annotations
 import base64
 import json
 import logging
+import re
 import urllib.request
 from typing import Any
 from urllib.parse import urlparse
@@ -47,6 +48,9 @@ SIGNED_FIELDS = {
     "UnsubscribeConfirmation": ("Message", "MessageId", "SubscribeURL", "Timestamp", "Token", "TopicArn", "Type"),
 }
 
+# Only the SNS service endpoints may host a signing certificate or a subscribe url
+SNS_HOST_RE = re.compile(r"^sns\.[a-z0-9-]+\.amazonaws\.com$")
+
 CERT_CACHE_TIMEOUT = 86400
 
 CERT_FETCH_TIMEOUT = 10
@@ -56,12 +60,15 @@ DEDUP_TIMEOUT = 86400
 
 
 def _is_aws_url(url: str) -> bool:
-    """Check that a url points to an https amazonaws.com host."""
+    """Check that a url points to an https endpoint owned by the SNS service.
+
+    Only sns.<region>.amazonaws.com is accepted.
+    """
     parsed = urlparse(url)
     if parsed.scheme != "https":
         return False
     host = parsed.netloc.split(":")[0].lower()
-    return host == "amazonaws.com" or host.endswith(".amazonaws.com")
+    return bool(SNS_HOST_RE.match(host))
 
 
 def _canonical_string(payload: dict[str, Any]) -> bytes:
@@ -182,12 +189,10 @@ def handle_sns_payload(payload: dict[str, Any]) -> bool:
         return False
 
     message_id = payload.get("MessageId")
-    if message_id:
-        dedup_key = f"sns_seen_{message_id}"
-        if cache.get(dedup_key):
-            logger.info("SNS notification already processed: %s", message_id)
-            return True
-        cache.set(dedup_key, 1, DEDUP_TIMEOUT)
+    dedup_key = f"sns_seen_{message_id}" if message_id else ""
+    if dedup_key and cache.get(dedup_key):
+        logger.info("SNS notification already processed: %s", message_id)
+        return True
 
     try:
         message = json.loads(payload.get("Message", "{}"))
@@ -196,4 +201,9 @@ def handle_sns_payload(payload: dict[str, Any]) -> bool:
         return False
 
     _handle_ses_message(message)
+
+    # Marked as seen only once handled, so that a retry of a failed delivery is not discarded
+    if dedup_key:
+        cache.set(dedup_key, 1, DEDUP_TIMEOUT)
+
     return True

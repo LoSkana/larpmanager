@@ -40,7 +40,12 @@ from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import _get_help_questions, format_email_body, get_member, get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
-from larpmanager.utils.larpmanager.tasks import partition_shared_recipients, send_mail_exec, split_recipients
+from larpmanager.utils.larpmanager.tasks import (
+    partition_newsletter_recipients,
+    partition_shared_recipients,
+    send_mail_exec,
+    split_recipients,
+)
 from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.utils.users.member import get_mail
 
@@ -422,10 +427,11 @@ def send_mail_batch(
     request: HttpRequest,
     association_id: int | None = None,
     run_id: int | None = None,
-) -> tuple[list, list]:
-    """Queue batch email, only for recipients who shared their data with the association.
+) -> tuple[list, list, list]:
+    """Queue batch email, only for recipients who shared their data and accept bulk mails.
 
-    Recipients without data sharing consent for the association are skipped.
+    Recipients without data sharing consent for the association are skipped, as
+    are those who opted out of the newsletter.
 
     Args:
         request: The HTTP request carrying the POST data (players, subject, body).
@@ -433,7 +439,7 @@ def send_mail_batch(
         run_id: Run sending the email (event send); association is derived from it.
 
     Returns:
-        Tuple (added, ignored) of email addresses.
+        Tuple (added, ignored, unsubscribed) of email addresses.
 
     """
     # Extract email parameters from POST data
@@ -451,11 +457,14 @@ def send_mail_batch(
     recipients = split_recipients(player_ids)
     added, ignored = partition_shared_recipients(recipients, association_id)
 
+    # Drop the addresses that opted out, so the result reports what is really queued
+    added, unsubscribed = partition_newsletter_recipients(added, association_id)
+
     # Execute the email sending operation for the allowed recipients
     if added:
         send_mail_exec(",".join(added), email_subject, email_body, association_id, run_id)
 
-    return added, ignored
+    return added, ignored, unsubscribed
 
 
 @login_required
@@ -481,7 +490,9 @@ def orga_send_mail(request: HttpRequest, event_slug: str) -> HttpResponse:
         form = SendMailForm(request.POST)
         if form.is_valid():
             # Queue mail for batch processing using current run (only data-sharing recipients)
-            context["added"], context["ignored"] = send_mail_batch(request, run_id=context["run"].id)
+            context["added"], context["ignored"], context["unsubscribed"] = send_mail_batch(
+                request, run_id=context["run"].id
+            )
             return render(request, "larpmanager/exe/users/send_mail_result.html", context)
     else:
         # Display empty form for GET requests

@@ -75,14 +75,21 @@ def suppress_email(email: str, reason: str, raw: dict[str, Any] | None = None) -
     if not email or "@" not in email:
         return None
 
-    obj = EmailSuppression.objects.filter(email=email).first()
+    # Soft deleted rows still hold the unique email, so they are revived instead of duplicated
+    obj = EmailSuppression.all_objects.filter(email=email).first()
     if not obj:
-        obj = EmailSuppression(email=email, bounce_count=0)
+        obj = EmailSuppression(email=email, bounce_count=0, active=False)
+    elif obj.deleted:
+        obj.deleted = None
+        obj.deleted_by_cascade = False
 
     obj.bounce_count += 1
-    obj.reason = reason
+    # A hard reason is never downgraded by a later transient bounce
+    if obj.reason not in HARD_REASONS:
+        obj.reason = reason
     obj.raw = raw
-    obj.active = reason in HARD_REASONS or obj.bounce_count >= SOFT_BOUNCE_LIMIT
+    # Suppression is only ever raised here: releasing an address is up to unsuppress_email
+    obj.active = obj.active or reason in HARD_REASONS or obj.bounce_count >= SOFT_BOUNCE_LIMIT
     obj.save()
 
     reset_suppression_cache(email)

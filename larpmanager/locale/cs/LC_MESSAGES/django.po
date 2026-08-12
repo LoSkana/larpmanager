@@ -2486,6 +2486,9 @@ msgstr "Překlady"
 msgid "Type of text"
 msgstr "Typ textu"
 
+msgid "Unsubscribed"
+msgstr "Odhlášeno"
+
 msgid "VAT (Ticket)"
 msgstr "DPH (vstupenka)"
 
@@ -5441,6 +5444,9 @@ msgstr "Poplatky za členství čekající na schválení"
 
 msgid "Missing casting preferences"
 msgstr "Chybějící preference Castingu"
+
+msgid "No address was unsubscribed"
+msgstr "Žádná adresa nebyla odhlášena"
 
 msgid "No inventory transfers yet."
 msgstr "Zatím žádné přesuny."
@@ -10738,6 +10744,12 @@ msgid ""
 msgstr ""
 "Nastavuje, jak často se odesílají připomínací e-maily, ve dnech (není-li "
 "nastaveno, žádné e-maily se neodesílají)."
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Tyto adresy se odhlásily z hromadné komunikace a nebyly přidány do fronty:"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "

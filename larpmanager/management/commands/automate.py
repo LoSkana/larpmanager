@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import boto3
@@ -71,6 +71,9 @@ from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 # AWS reviews accounts above 5% bounces or 0.1% complaints
 BOUNCE_RATE_LIMIT = 0.05
 COMPLAINT_RATE_LIMIT = 0.001
+
+# Fraction of the AWS limits at which the alert is raised, to leave room to react
+REPUTATION_WARNING_RATIO = 0.7
 
 # Rates are meaningless on a handful of messages
 MIN_REPUTATION_SAMPLE = 100
@@ -435,12 +438,15 @@ class Command(BaseCommand):
             return
 
         # Aggregate the last day of data points, which SES reports in 15 minute buckets
-        limit = timezone.now() - timedelta(days=1)
+        limit = datetime.now(UTC) - timedelta(days=1)
         sent = bounces = complaints = 0
         for point in data_points:
             timestamp = point.get("Timestamp")
-            if timestamp and timestamp < limit:
-                continue
+            if timestamp:
+                if timestamp.tzinfo is None:
+                    timestamp = timestamp.replace(tzinfo=UTC)
+                if timestamp < limit:
+                    continue
             sent += point.get("DeliveryAttempts", 0)
             bounces += point.get("Bounces", 0)
             complaints += point.get("Complaints", 0)
@@ -450,7 +456,9 @@ class Command(BaseCommand):
 
         bounce_rate = bounces / sent
         complaint_rate = complaints / sent
-        if bounce_rate <= BOUNCE_RATE_LIMIT and complaint_rate <= COMPLAINT_RATE_LIMIT:
+        bounce_warning = BOUNCE_RATE_LIMIT * REPUTATION_WARNING_RATIO
+        complaint_warning = COMPLAINT_RATE_LIMIT * REPUTATION_WARNING_RATIO
+        if bounce_rate <= bounce_warning and complaint_rate <= complaint_warning:
             return
 
         notify_admins(

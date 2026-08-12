@@ -183,33 +183,54 @@ def partition_shared_recipients(recipients: list, association_id: int | None) ->
     return allowed, ignored
 
 
-def is_newsletter_unsubscribed(email: str, association_id: int | None) -> bool:
-    """Check whether an address opted out of bulk communications.
+def partition_newsletter_recipients(recipients: list, association_id: int | None) -> tuple[list, list]:
+    """Split recipients into those who accept bulk communications and those who opted out.
 
     Association mails honour the membership newsletter preference, platform
-    mails the global newsletter status.
-    """
-    email = (email or "").strip()
-    if not email:
-        return False
+    mails the global newsletter status. The opted out set is resolved with a
+    single query, so a broadcast does not hit the database once per recipient.
 
+    Args:
+        recipients: List of recipient email addresses.
+        association_id: Association the email is sent on behalf of.
+
+    Returns:
+        Tuple (allowed, opted_out) of email addresses, preserving input order.
+
+    """
     if association_id:
-        return Membership.objects.filter(
-            member__email__iexact=email,
+        queryset = Membership.objects.filter(
             association_id=association_id,
             newsletter=NewsletterChoices.NO,
-        ).exists()
+        ).values_list("member__email", flat=True)
+    else:
+        queryset = LarpManagerNewsletter.objects.filter(
+            status=NewsletterStatus.UNSUBSCRIBED,
+        ).values_list("email", flat=True)
 
-    return LarpManagerNewsletter.objects.filter(
-        email__iexact=email,
-        status=NewsletterStatus.UNSUBSCRIBED,
-    ).exists()
+    opted_out_emails = {email.lower() for email in queryset if email}
+
+    allowed = []
+    opted_out = []
+    for email in recipients:
+        if email.strip().lower() in opted_out_emails:
+            opted_out.append(email)
+        else:
+            allowed.append(email)
+    return allowed, opted_out
 
 
 def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: dict) -> list:
-    """Create EmailRecipient records for valid, unique addresses and return their PKs."""
+    """Create EmailRecipient records for valid, unique addresses and return their PKs.
+
+    Addresses that opted out of bulk communications get a recipient row flagged
+    as skipped, so the send is traceable, but are never queued.
+    """
+    allowed, opted_out = partition_newsletter_recipients(recipients, email_content.association_id)
+    opted_out_emails = set(opted_out)
+
     recipient_ids = []
-    for email in recipients:
+    for email in allowed + opted_out:
         if not email or email in seen_emails:
             continue
         try:
@@ -217,17 +238,17 @@ def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: d
         except ValidationError:
             logger.warning("Skipping invalid email address in bulk send")
             continue
-        if is_newsletter_unsubscribed(email, email_content.association_id):
-            logger.info("Skipping bulk recipient opted out of the newsletter")
-            seen_emails[email] = 1
-            continue
+        seen_emails[email] = 1
         email_recipient = EmailRecipient.objects.create(
             email_content=email_content,
             recipient=email.strip(),
             language_code=None,
         )
+        if email in opted_out_emails:
+            logger.info("Skipping bulk recipient opted out of the newsletter")
+            _mark_skipped(email_recipient, "newsletter")
+            continue
         recipient_ids.append(email_recipient.pk)
-        seen_emails[email] = 1
     return recipient_ids
 
 

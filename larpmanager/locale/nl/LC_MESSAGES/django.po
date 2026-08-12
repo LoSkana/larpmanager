@@ -2486,6 +2486,9 @@ msgstr "Vertalingen"
 msgid "Type of text"
 msgstr "Type tekst"
 
+msgid "Unsubscribed"
+msgstr "Uitgeschreven"
+
 msgid "VAT (Ticket)"
 msgstr "BTW (ticket)"
 
@@ -5441,6 +5444,9 @@ msgstr "Contributies in afwachting van goedkeuring"
 
 msgid "Missing casting preferences"
 msgstr "Ontbrekende Casting-voorkeuren"
+
+msgid "No address was unsubscribed"
+msgstr "Er is geen adres uitgeschreven"
 
 msgid "No inventory transfers yet."
 msgstr "Nog geen transfers."
@@ -11096,6 +11102,13 @@ msgid ""
 msgstr ""
 "Bepaalt hoe vaak herinneringsmails worden verstuurd, in dagen (als dit niet "
 "is ingesteld, worden er geen e-mails verstuurd)."
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Deze adressen hebben zich afgemeld voor massacommunicatie en zijn niet aan "
+"de wachtrij toegevoegd:"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "

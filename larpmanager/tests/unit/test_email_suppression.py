@@ -21,6 +21,7 @@
 """Unit tests for the email suppression list and the SES/SNS notification flow."""
 
 import base64
+import contextlib
 import datetime
 import json
 from unittest.mock import patch
@@ -136,6 +137,28 @@ class TestSuppressionList(BaseTestCase):
         assert suppress_email("not-an-email", SuppressionReason.MANUAL) is None
         assert EmailSuppression.objects.count() == 0
 
+    def test_transient_bounce_does_not_release_hard_block(self):
+        """A late transient bounce never lifts a block set by a permanent one."""
+        suppress_email("hard@example.com", SuppressionReason.BOUNCE_PERMANENT)
+
+        suppress_email("hard@example.com", SuppressionReason.BOUNCE_TRANSIENT)
+
+        suppression = EmailSuppression.objects.get(email="hard@example.com")
+        assert suppression.active
+        assert suppression.reason == SuppressionReason.BOUNCE_PERMANENT
+        assert is_suppressed("hard@example.com")
+
+    def test_soft_deleted_entry_is_revived(self):
+        """A new event on a soft deleted address updates the existing row."""
+        suppress_email("gone@example.com", SuppressionReason.BOUNCE_PERMANENT)
+        EmailSuppression.objects.get(email="gone@example.com").delete()
+        cache.clear()
+
+        suppress_email("gone@example.com", SuppressionReason.COMPLAINT)
+
+        assert EmailSuppression.all_objects.filter(email="gone@example.com").count() == 1
+        assert is_suppressed("gone@example.com")
+
 
 class TestSnsSignature(BaseTestCase):
     """Tests for the verification of SNS payload signatures."""
@@ -165,6 +188,15 @@ class TestSnsSignature(BaseTestCase):
         """Certificates served outside amazonaws.com are refused."""
         payload = sign_payload(bounce_payload("a@example.com"), self.key)
         payload["SigningCertURL"] = "https://evil.example.com/cert.pem"
+
+        with patch("larpmanager.mail.sns._fetch_certificate", return_value=self.certificate) as mock_fetch:
+            assert not verify_sns_signature(payload)
+            mock_fetch.assert_not_called()
+
+    def test_non_sns_aws_certificate_url_rejected(self):
+        """Certificates served by another AWS service, such as S3, are refused."""
+        payload = sign_payload(bounce_payload("a@example.com"), self.key)
+        payload["SigningCertURL"] = "https://attacker-bucket.s3.amazonaws.com/cert.pem"
 
         with patch("larpmanager.mail.sns._fetch_certificate", return_value=self.certificate) as mock_fetch:
             assert not verify_sns_signature(payload)
@@ -229,6 +261,18 @@ class TestSnsHandling(BaseTestCase):
         handle_sns_payload(payload)
 
         assert EmailSuppression.objects.get(email="dup@example.com").bounce_count == 1
+
+    def test_failed_notification_can_be_retried(self):
+        """A notification that could not be handled is not swallowed by the dedup cache."""
+        payload = bounce_payload("retry@example.com", message_id="retry-id")
+
+        with patch("larpmanager.mail.sns._handle_ses_message", side_effect=OSError("db down")):
+            with contextlib.suppress(OSError):
+                handle_sns_payload(payload)
+
+        handle_sns_payload(payload)
+
+        assert EmailSuppression.objects.filter(email="retry@example.com").exists()
 
     def test_delivery_notification_ignored(self):
         """Delivery events do not create suppressions."""

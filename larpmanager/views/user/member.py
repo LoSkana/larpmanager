@@ -98,6 +98,9 @@ from larpmanager.views.user.event import build_registration_list, get_member_reg
 
 logger = logging.getLogger(__name__)
 
+# Lifetime of the signed unsubscribe token published in the List-Unsubscribe header
+UNSUBSCRIBE_TOKEN_MAX_AGE = 86400 * 100
+
 
 def language(request: HttpRequest) -> HttpResponse:
     """Handle language selection and preference setting for users.
@@ -884,7 +887,8 @@ def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
 
     try:
         token = bytes.fromhex(token).decode()
-        data = signing.loads(token, salt="unsubscribe", max_age=86400 * 30)
+        # One year: mailbox providers require the List-Unsubscribe url to keep working on old messages
+        data = signing.loads(token, salt="unsubscribe", max_age=UNSUBSCRIBE_TOKEN_MAX_AGE)
     except signing.BadSignature:
         return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
 

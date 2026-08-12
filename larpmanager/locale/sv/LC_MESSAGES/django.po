@@ -2486,6 +2486,9 @@ msgstr "Översättningar"
 msgid "Type of text"
 msgstr "Typ av text"
 
+msgid "Unsubscribed"
+msgstr "Avprenumererad"
+
 msgid "VAT (Ticket)"
 msgstr "Moms (biljett)"
 
@@ -5441,6 +5444,9 @@ msgstr "Medlemsavgifter under godkännande"
 
 msgid "Missing casting preferences"
 msgstr "Saknade castingpreferenser"
+
+msgid "No address was unsubscribed"
+msgstr "Ingen adress avprenumererades"
 
 msgid "No inventory transfers yet."
 msgstr "Inga överföringar ännu."
@@ -10876,6 +10882,13 @@ msgid ""
 msgstr ""
 "Anger hur ofta påminnelsemejl skickas, i dagar (om det inte anges skickas "
 "inga mejl)."
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Dessa adresser har avregistrerat sig från massutskick och lades inte till i "
+"kön:"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "

@@ -2486,6 +2486,9 @@ msgstr "Käännökset"
 msgid "Type of text"
 msgstr "Tekstityyppi"
 
+msgid "Unsubscribed"
+msgstr "Peruttu tilaus"
+
 msgid "VAT (Ticket)"
 msgstr "Arvonlisävero (lippu)"
 
@@ -5441,6 +5444,9 @@ msgstr "Jäsenmaksut hyväksyttäväksi"
 
 msgid "Missing casting preferences"
 msgstr "Puuttuvat Casting-mieltymykset"
+
+msgid "No address was unsubscribed"
+msgstr "Yhtään osoitetta ei peruttu"
 
 msgid "No inventory transfers yet."
 msgstr "Ei vielä siirtoja."
@@ -10900,6 +10906,12 @@ msgid ""
 msgstr ""
 "Määrittää, kuinka monen päivän välein muistutussähköposteja lähetetään (jos "
 "ei asetettu, sähköposteja ei lähetetä)."
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Nämä osoitteet kieltäytyivät joukkoviestinnästä, eikä niitä lisätty jonoon:"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "

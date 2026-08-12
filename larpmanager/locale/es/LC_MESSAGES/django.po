@@ -2486,6 +2486,9 @@ msgstr "Traducciones"
 msgid "Type of text"
 msgstr "Tipo de texto"
 
+msgid "Unsubscribed"
+msgstr "Dado de baja"
+
 msgid "VAT (Ticket)"
 msgstr "IVA (Entrada)"
 
@@ -5441,6 +5444,9 @@ msgstr "Cuotas de afiliación en aprobación"
 
 msgid "Missing casting preferences"
 msgstr "Faltan preferencias de Casting"
+
+msgid "No address was unsubscribed"
+msgstr "No se dio de baja ninguna dirección"
 
 msgid "No inventory transfers yet."
 msgstr "Aún no hay transferencias."
@@ -11095,6 +11101,13 @@ msgid ""
 msgstr ""
 "Establece cada cuántos días se envían los correos de recordatorio (si no se "
 "establece, no se envía ningún correo)."
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Estas direcciones rechazaron las comunicaciones masivas y no se añadieron a "
+"la cola:"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "

@@ -2486,6 +2486,9 @@ msgstr "Oversettelser"
 msgid "Type of text"
 msgstr "Teksttype"
 
+msgid "Unsubscribed"
+msgstr "Avmeldt"
+
 msgid "VAT (Ticket)"
 msgstr "MVA (billett)"
 
@@ -5441,6 +5444,9 @@ msgstr "Medlemskapsavgifter under godkjenning"
 
 msgid "Missing casting preferences"
 msgstr "Mangler castingpreferanser"
+
+msgid "No address was unsubscribed"
+msgstr "Ingen adresse ble avmeldt"
 
 msgid "No inventory transfers yet."
 msgstr "Ingen inventaroverføringer ennå."
@@ -10905,6 +10911,13 @@ msgid ""
 msgstr ""
 "Angir hvor ofte påminnelses-e-poster sendes, i dager (hvis ikke angitt, "
 "sendes ingen e-poster)."
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Disse adressene har reservert seg mot massekommunikasjon og ble ikke lagt "
+"til i køen:"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "

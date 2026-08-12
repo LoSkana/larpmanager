@@ -7352,6 +7352,17 @@ msgstr ""
 msgid "No address was ignored"
 msgstr ""
 
+msgid "Unsubscribed"
+msgstr ""
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+
+msgid "No address was unsubscribed"
+msgstr ""
+
 msgid "Back"
 msgstr ""
 

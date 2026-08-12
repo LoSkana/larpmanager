@@ -2486,6 +2486,9 @@ msgstr "Traduzioni"
 msgid "Type of text"
 msgstr "Tipologia del testo"
 
+msgid "Unsubscribed"
+msgstr "Disiscritto"
+
 msgid "VAT (Ticket)"
 msgstr "IVA (biglietto)"
 
@@ -5441,6 +5444,9 @@ msgstr "Quote associative in approvazione"
 
 msgid "Missing casting preferences"
 msgstr "Preferenze di casting mancanti"
+
+msgid "No address was unsubscribed"
+msgstr "Nessun indirizzo è stato disiscritto"
 
 msgid "No inventory transfers yet."
 msgstr "Non ci sono ancora trasferimenti."
@@ -11104,6 +11110,13 @@ msgid ""
 msgstr ""
 "Imposta ogni quanti giorni vengono inviate le email di promemoria (se non "
 "impostato, non viene inviata alcuna email)."
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Questi indirizzi hanno scelto di non ricevere comunicazioni di massa e non "
+"sono stati aggiunti alla coda:"
 
 msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "
