@@ -4533,6 +4533,12 @@ msgstr "Handout-lisääminen epäonnistui"
 msgid "Go to event dashboard"
 msgstr "Siirry tapahtuman kojelautaan"
 
+msgid "Guild invite accepted"
+msgstr "Kiltakutsu hyväksytty"
+
+msgid "Guild invite declined"
+msgstr "Kiltakutsu hylätty"
+
 msgid "Handout and templates"
 msgstr "Handoutit ja mallit"
 
@@ -7203,6 +7209,9 @@ msgstr "Järjestö, johon tämä jäsenyys kuuluu"
 msgid "This access link is invalid or has expired."
 msgstr "Tämä linkki ei ole voimassa tai sen voimassaolo on päättynyt."
 
+msgid "This character is not playing in this event"
+msgstr "Tämä hahmo ei pelaa tässä tapahtumassa"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Tällä tuotteella ei ole rajallista määrää varattavaksi."
 
@@ -7713,6 +7722,9 @@ msgstr "Oletko varma? Kohteita ei ehkä voi palauttaa."
 
 msgid "Background image displayed across all event pages"
 msgstr "Taustakuva näytetään kaikilla tapahtumasivuilla"
+
+msgid "Character not found, or not playing in this event"
+msgstr "Hahmoa ei löytynyt tai se ei pelaa tässä tapahtumassa"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Tekstitaustojen ja sisältölaatikoiden väri"
@@ -10555,6 +10567,18 @@ msgid ""
 "The amount of reimbursement desired (can't be higher than your current "
 "credits)"
 msgstr "Haluttu hyvityssumma (ei voi olla suurempi kuin nykyiset krediittisi)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr "Hahmo %(character)s on hyväksynyt kutsun liittyä kiltaan %(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr "Hahmo %(character)s on hylännyt kutsun liittyä kiltaan %(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

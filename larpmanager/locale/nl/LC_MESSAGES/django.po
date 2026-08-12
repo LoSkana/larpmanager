@@ -4533,6 +4533,12 @@ msgstr "Handout niet toegevoegd"
 msgid "Go to event dashboard"
 msgstr "Ga naar het dashboard van het evenement"
 
+msgid "Guild invite accepted"
+msgstr "Guild-uitnodiging geaccepteerd"
+
+msgid "Guild invite declined"
+msgstr "Guild-uitnodiging afgewezen"
+
 msgid "Handout and templates"
 msgstr "Handout en sjablonen"
 
@@ -7204,6 +7210,9 @@ msgstr "De organisatie waartoe dit lidmaatschap behoort"
 msgid "This access link is invalid or has expired."
 msgstr "Deze toegangslink is ongeldig of verlopen."
 
+msgid "This character is not playing in this event"
+msgstr "Dit personage speelt niet mee in dit evenement"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Dit item heeft geen beperkte hoeveelheid om vast te leggen."
 
@@ -7719,6 +7728,9 @@ msgstr "Weet je het zeker? De items zijn mogelijk niet herstelbaar."
 
 msgid "Background image displayed across all event pages"
 msgstr "Achtergrondafbeelding weergegeven op alle evenementpagina's"
+
+msgid "Character not found, or not playing in this event"
+msgstr "Character niet gevonden, of speelt niet mee in dit evenement"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Kleur gebruikt voor tekstachtergrond en inhoudsvakken"
@@ -10741,6 +10753,22 @@ msgid ""
 msgstr ""
 "Het gewenste terugbetalingsbedrag (kan niet hoger zijn dan je huidige "
 "tegoed)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Het personage %(character)s heeft de uitnodiging geaccepteerd om lid te "
+"worden van de guild %(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Het personage %(character)s heeft de uitnodiging om lid te worden van de "
+"guild %(guild)s afgewezen"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "
