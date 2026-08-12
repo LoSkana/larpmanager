@@ -19,6 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import logging
 import shutil
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -46,6 +47,8 @@ if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
     from larpmanager.models.member import Member
 
+logger = logging.getLogger(__name__)
+
 
 def delete_all_in_path(path: str) -> None:
     """Recursively delete all contents within a directory path.
@@ -55,13 +58,20 @@ def delete_all_in_path(path: str) -> None:
 
     """
     path_obj = Path(path)
-    if path_obj.exists():
-        # Remove all contents inside the path
-        for entry in path_obj.iterdir():
+    if not path_obj.exists():
+        return
+
+    def _on_error(func: Any, failed_path: Any, err: BaseException) -> None:  # noqa: ARG001
+        logger.warning("could not delete %s: %s", failed_path, err)
+
+    for entry in path_obj.iterdir():
+        try:
             if entry.is_file() or entry.is_symlink():
                 entry.unlink()
             elif entry.is_dir():
-                shutil.rmtree(entry)
+                shutil.rmtree(entry, onexc=_on_error)
+        except OSError as err:
+            logger.warning("could not delete %s: %s", entry, err)
 
 
 def get_event_cache_all_key(event_run: Run) -> str:
