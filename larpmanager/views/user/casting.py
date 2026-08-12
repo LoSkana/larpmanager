@@ -294,6 +294,10 @@ def _process_casting_post(casting_type: str | None, context: dict, request: Http
             continue
         pref = str(request.POST[k])
 
+        # Skip empty slots (fewer preferences submitted than the maximum allowed)
+        if not pref:
+            continue
+
         # Validate element ID is in the allowed list (not hidden, etc.)
         if pref not in valid_element_ids:
             messages.error(request, _("Invalid selection detected, please select from the available options"))
@@ -307,9 +311,16 @@ def _process_casting_post(casting_type: str | None, context: dict, request: Http
             break
         prefs[i] = pref
 
+    # Validate the minimum number of preferences has been reached
+    if not validation_error and len(prefs) < min(context["casting_min"], len(valid_element_ids)):
+        messages.error(request, _("You have not reached the minimum number of preferences"))
+        validation_error = True
+
     # Handle validation errors or save preferences
     if validation_error:
-        return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
+        if casting_type:
+            return redirect("casting", event_slug=context["run"].get_slug(), casting_type=casting_type)
+        return redirect("casting", event_slug=context["run"].get_slug())
 
     # Save preferences and redirect to refresh page
     _casting_update(request, context, prefs)

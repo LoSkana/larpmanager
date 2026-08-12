@@ -549,7 +549,7 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
 
     # Update cache based on instance type - Faction updates
     if isinstance(instance, Faction):
-        update_event_cache_all_faction(instance, cached_result)
+        update_event_cache_all_faction(instance, cached_result, run)
 
     # Character updates include both character data and faction refresh
     if isinstance(instance, Character):
@@ -640,14 +640,16 @@ def update_event_cache_all_character(instance: Character, res: dict, run: Run) -
     res["char_mapping"][instance.number] = instance.id
 
 
-def update_event_cache_all_faction(instance: Faction, res: dict[str, dict]) -> None:
+def update_event_cache_all_faction(instance: Faction, res: dict[str, dict], run: Run) -> None:
     """Update or add faction data in the cache result dictionary."""
-    faction_data = instance.show()
+    if instance.number not in res["factions"]:
+        # Faction missing from cache: rebuild faction data so type index and mapping stay consistent
+        get_event_cache_factions({"event": run.event}, res)
+        if instance.number not in res["factions"]:
+            return
 
-    if instance.number in res["factions"]:
-        res["factions"][instance.number].update(faction_data)
-    else:
-        res["factions"][instance.number] = faction_data
+    # Overlay in-memory values, since the instance may not be persisted yet (pre_save)
+    res["factions"][instance.number].update(instance.show())
 
 
 def has_different_cache_values(instance: object, previous_instance: object, attributes_to_check: list) -> bool:
