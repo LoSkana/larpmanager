@@ -26,6 +26,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **One migration for branch** - in case there is more changes to be done to the model, first make the new migration, execute it to update db, the join the code of the new migration with the other one, and remove the newer
 - **Concise comments and pydocs** - Use concise pydocs and comments, that shouldn't talk about the current change, only of the function overall behaviour.
 - **Config defaults belong in `CONFIG_DEFAULTS`** - when calling `get_event_config()`/`get_association_config()`/`get_member_config()`/`.get_config()` with a fixed (non-dynamic) config name, don't pass `default_value=` inline; add the name (or a prefix/suffix rule) to `CONFIG_DEFAULTS`/`CONFIG_DEFAULT_PREFIXES`/`CONFIG_DEFAULT_SUFFIXES` in `larpmanager/cache/config.py` instead, so the default is defined once and shared by every caller. Only pass `default_value=` inline when the config name itself is built dynamically at runtime.
+- Before adding a post_delete signal, check if the model is not soft-delete (would never be fired)
 ## Package Management
 
 The project uses **uv** for fast and reliable Python package management. All dependencies are defined in `pyproject.toml`.

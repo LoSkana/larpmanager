@@ -161,7 +161,7 @@ LANGUAGES = [
     ('sv', 'Svenska'),
     ('fi', 'suomi'),
     ('pt', 'Português'),
-    # ('el', 'Ελληνικά'),
+    ('el', 'Ελληνικά'),
     # ('da', 'Dansk'),
     # ('et', 'Eesti'),
     # ('uk', 'українська мова'),
