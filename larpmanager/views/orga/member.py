@@ -460,9 +460,10 @@ def send_mail_batch(
     # Drop the addresses that opted out, so the result reports what is really queued
     added, unsubscribed = partition_newsletter_recipients(added, association_id)
 
-    # Execute the email sending operation for the allowed recipients
+    # Execute the email sending operation for the allowed recipients, handing over the
+    # opted out ones so they are traced as skipped without resolving them a second time
     if added:
-        send_mail_exec(",".join(added), email_subject, email_body, association_id, run_id)
+        send_mail_exec(",".join(added), email_subject, email_body, association_id, run_id, opted_out=unsubscribed)
 
     return added, ignored, unsubscribed
 

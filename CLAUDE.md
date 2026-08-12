@@ -16,7 +16,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **[Feature Descriptions](docs/06-feature-descriptions.md)** - Complete reference of all available features
 - **[Test Database Schema Versioning](docs/07-test-database-schema-versioning.md)** - How the automatic schema version detection works
 - **[Security Best Practices](docs/08-security-best-practices.md)** - Critical security requirements including UUID usage
-- **[Email Deliverability](docs/10-email-deliverability.md)** - Suppression list, SES bounce/complaint handling, unsubscribe
 - **[README.md](README.md)** - Installation, deployment, and contribution guidelines
 
 ## Code Conventions

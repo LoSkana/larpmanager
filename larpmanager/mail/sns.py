@@ -110,7 +110,10 @@ def verify_sns_signature(payload: dict[str, Any]) -> bool:
         return False
 
     topic_arn = getattr(conf_settings, "AWS_SNS_TOPIC_ARN", None)
-    if topic_arn and payload.get("TopicArn") != topic_arn:
+    if not topic_arn:
+        logger.warning("SNS payload rejected: AWS_SNS_TOPIC_ARN is not configured")
+        return False
+    if payload.get("TopicArn") != topic_arn:
         logger.warning("SNS payload rejected: unexpected topic")
         return False
 

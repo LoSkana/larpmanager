@@ -220,17 +220,25 @@ def partition_newsletter_recipients(recipients: list, association_id: int | None
     return allowed, opted_out
 
 
-def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: dict) -> list:
+def _create_bulk_recipients(
+    email_content: Any,
+    recipients: list,
+    seen_emails: dict,
+    opted_out: list | None = None,
+) -> list:
     """Create EmailRecipient records for valid, unique addresses and return their PKs.
 
     Addresses that opted out of bulk communications get a recipient row flagged
-    as skipped, so the send is traceable, but are never queued.
+    as skipped, so the send is traceable, but are never queued. Callers that
+    already resolved the opted out addresses pass them in, so the query is not
+    repeated; in that case recipients only holds the allowed ones.
     """
-    allowed, opted_out = partition_newsletter_recipients(recipients, email_content.association_id)
+    if opted_out is None:
+        recipients, opted_out = partition_newsletter_recipients(recipients, email_content.association_id)
     opted_out_emails = set(opted_out)
 
     recipient_ids = []
-    for email in allowed + opted_out:
+    for email in recipients + opted_out:
         if not email or email in seen_emails:
             continue
         try:
@@ -260,6 +268,7 @@ def send_mail_exec(
     association_id: int | None = None,
     run_id: int | None = None,
     interval: int | None = None,
+    opted_out: list | None = None,
 ) -> None:
     """Send bulk emails to multiple recipients with batch delivery.
 
@@ -277,6 +286,7 @@ def send_mail_exec(
         association_id: Association ID for determining sender context
         run_id: Run ID for determining sender context (alternative to association_id)
         interval: Seconds to wait between each batch (defaults to MAIL_BATCH_INTERVAL)
+        opted_out: Addresses already known to have opted out, excluded from recipient_list
 
     Returns:
         None
@@ -330,7 +340,7 @@ def send_mail_exec(
         body=str(body),
     )
 
-    recipient_ids = _create_bulk_recipients(email_content, recipients, seen_emails)
+    recipient_ids = _create_bulk_recipients(email_content, recipients, seen_emails, opted_out)
 
     # Split into batches
     batches = [

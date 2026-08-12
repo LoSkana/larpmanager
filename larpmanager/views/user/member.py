@@ -887,7 +887,7 @@ def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
 
     try:
         token = bytes.fromhex(token).decode()
-        # One year: mailbox providers require the List-Unsubscribe url to keep working on old messages
+        # Mailbox providers require the List-Unsubscribe url to keep working on old messages
         data = signing.loads(token, salt="unsubscribe", max_age=UNSUBSCRIBE_TOKEN_MAX_AGE)
     except signing.BadSignature:
         return render(request, "larpmanager/general/unsubscribe.html", {"error": True})

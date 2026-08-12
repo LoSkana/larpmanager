@@ -44,6 +44,8 @@ from larpmanager.tests.unit.base import BaseTestCase
 
 CERT_URL = "https://sns.eu-west-1.amazonaws.com/SimpleNotificationService-abc.pem"
 
+TOPIC_ARN = "arn:aws:sns:eu-west-1:1:topic"
+
 
 def build_certificate():
     """Return a self signed certificate and its private key for signature tests."""
@@ -85,7 +87,7 @@ def bounce_payload(email: str, bounce_type: str = "Permanent", message_id: str =
     return {
         "Type": "Notification",
         "MessageId": message_id,
-        "TopicArn": "arn:aws:sns:eu-west-1:1:topic",
+        "TopicArn": TOPIC_ARN,
         "Timestamp": "2026-01-01T00:00:00.000Z",
         "Message": json.dumps(message),
     }
@@ -173,7 +175,10 @@ class TestSnsSignature(BaseTestCase):
         """A payload signed by the advertised certificate is accepted."""
         payload = sign_payload(bounce_payload("a@example.com"), self.key)
 
-        with patch("larpmanager.mail.sns._fetch_certificate", return_value=self.certificate):
+        with (
+            patch("larpmanager.mail.sns.conf_settings.AWS_SNS_TOPIC_ARN", TOPIC_ARN, create=True),
+            patch("larpmanager.mail.sns._fetch_certificate", return_value=self.certificate),
+        ):
             assert verify_sns_signature(payload)
 
     def test_tampered_payload_rejected(self):
@@ -181,7 +186,10 @@ class TestSnsSignature(BaseTestCase):
         payload = sign_payload(bounce_payload("a@example.com"), self.key)
         payload["Message"] = json.dumps({"notificationType": "Bounce"})
 
-        with patch("larpmanager.mail.sns._fetch_certificate", return_value=self.certificate):
+        with (
+            patch("larpmanager.mail.sns.conf_settings.AWS_SNS_TOPIC_ARN", TOPIC_ARN, create=True),
+            patch("larpmanager.mail.sns._fetch_certificate", return_value=self.certificate),
+        ):
             assert not verify_sns_signature(payload)
 
     def test_untrusted_certificate_url_rejected(self):
@@ -207,7 +215,7 @@ class TestSnsSignature(BaseTestCase):
         assert not verify_sns_signature(bounce_payload("a@example.com"))
 
     def test_unexpected_topic_rejected(self):
-        """Payloads from another topic are refused when the topic is pinned."""
+        """Payloads from another topic are refused, even if correctly signed."""
         payload = sign_payload(bounce_payload("a@example.com"), self.key)
 
         with (
@@ -215,6 +223,17 @@ class TestSnsSignature(BaseTestCase):
             patch("larpmanager.mail.sns._fetch_certificate", return_value=self.certificate),
         ):
             assert not verify_sns_signature(payload)
+
+    def test_unconfigured_topic_rejects_everything(self):
+        """Without a pinned topic every payload is refused, as any AWS account can sign one."""
+        payload = sign_payload(bounce_payload("a@example.com"), self.key)
+
+        with (
+            patch("larpmanager.mail.sns.conf_settings.AWS_SNS_TOPIC_ARN", None, create=True),
+            patch("larpmanager.mail.sns._fetch_certificate", return_value=self.certificate) as mock_fetch,
+        ):
+            assert not verify_sns_signature(payload)
+            mock_fetch.assert_not_called()
 
 
 class TestSnsHandling(BaseTestCase):
