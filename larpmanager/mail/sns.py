@@ -22,6 +22,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
 import logging
 import re
@@ -51,6 +52,9 @@ SIGNED_FIELDS = {
 # Only the SNS service endpoints may host a signing certificate or a subscribe url
 SNS_HOST_RE = re.compile(r"^sns\.[a-z0-9-]+\.amazonaws\.com$")
 
+# Signing certificates always live at this path, so nothing else is ever fetched
+SNS_CERT_PATH_RE = re.compile(r"^/SimpleNotificationService-[A-Za-z0-9]+\.pem$")
+
 CERT_CACHE_TIMEOUT = 86400
 
 CERT_FETCH_TIMEOUT = 10
@@ -71,6 +75,11 @@ def _is_aws_url(url: str) -> bool:
     return bool(SNS_HOST_RE.match(host))
 
 
+def _is_cert_url(url: str) -> bool:
+    """Check that a url points to an SNS signing certificate."""
+    return _is_aws_url(url) and bool(SNS_CERT_PATH_RE.match(urlparse(url).path))
+
+
 def _canonical_string(payload: dict[str, Any]) -> bytes:
     """Build the string signed by SNS for this payload."""
     fields = SIGNED_FIELDS.get(payload.get("Type", ""))
@@ -87,13 +96,16 @@ def _canonical_string(payload: dict[str, Any]) -> bytes:
 
 def _fetch_certificate(url: str) -> Any:
     """Download and cache the SNS signing certificate."""
-    cached = cache.get(f"sns_cert_{url}")
+    # The url reaches here before the signature is checked, so it is hashed into a
+    # fixed size key: an attacker knowing the topic arn cannot grow the cache at will
+    key = f"sns_cert_{hashlib.sha256(url.encode()).hexdigest()}"
+    cached = cache.get(key)
     if cached:
         return load_pem_x509_certificate(cached)
 
     with urllib.request.urlopen(url, timeout=CERT_FETCH_TIMEOUT) as response:  # noqa: S310
         pem = response.read()
-    cache.set(f"sns_cert_{url}", pem, CERT_CACHE_TIMEOUT)
+    cache.set(key, pem, CERT_CACHE_TIMEOUT)
     return load_pem_x509_certificate(pem)
 
 
@@ -105,7 +117,7 @@ def verify_sns_signature(payload: dict[str, Any]) -> bool:
     """
     signature_b64 = payload.get("Signature")
     cert_url = payload.get("SigningCertURL") or payload.get("SigningCertUrl")
-    if not signature_b64 or not cert_url or not _is_aws_url(cert_url):
+    if not signature_b64 or not cert_url or not _is_cert_url(cert_url):
         logger.warning("SNS payload rejected: missing signature or untrusted certificate url")
         return False
 
@@ -175,6 +187,12 @@ def _handle_ses_message(message: dict[str, Any]) -> None:
     logger.debug("SES notification ignored: %s", notification_type)
 
 
+def _release_dedup(dedup_key: str) -> None:
+    """Drop the deduplication claim of a notification that was not handled."""
+    if dedup_key:
+        cache.delete(dedup_key)
+
+
 def handle_sns_payload(payload: dict[str, Any]) -> bool:
     """Process a verified SNS payload, returning whether it was handled.
 
@@ -193,7 +211,9 @@ def handle_sns_payload(payload: dict[str, Any]) -> bool:
 
     message_id = payload.get("MessageId")
     dedup_key = f"sns_seen_{message_id}" if message_id else ""
-    if dedup_key and cache.get(dedup_key):
+    # Claimed atomically: SNS retries concurrently, and a check followed by a later
+    # write would let two deliveries of the same event both bump the bounce counter
+    if dedup_key and not cache.add(dedup_key, 1, DEDUP_TIMEOUT):
         logger.info("SNS notification already processed: %s", message_id)
         return True
 
@@ -201,12 +221,14 @@ def handle_sns_payload(payload: dict[str, Any]) -> bool:
         message = json.loads(payload.get("Message", "{}"))
     except json.JSONDecodeError:
         logger.warning("SNS notification carries an invalid message body")
+        _release_dedup(dedup_key)
         return False
 
-    _handle_ses_message(message)
-
-    # Marked as seen only once handled, so that a retry of a failed delivery is not discarded
-    if dedup_key:
-        cache.set(dedup_key, 1, DEDUP_TIMEOUT)
+    try:
+        _handle_ses_message(message)
+    except Exception:
+        # The claim is released so that a retry of a failed delivery is not discarded
+        _release_dedup(dedup_key)
+        raise
 
     return True

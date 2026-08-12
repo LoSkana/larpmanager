@@ -31,6 +31,7 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 from cryptography.x509.oid import NameOID
 from django.core.cache import cache
+from django.utils import timezone
 
 from larpmanager.mail.sns import _canonical_string, handle_sns_payload, verify_sns_signature
 from larpmanager.mail.suppression import (
@@ -112,6 +113,15 @@ class TestSuppressionList(BaseTestCase):
         suppress_email("angry@example.com", SuppressionReason.COMPLAINT)
 
         assert is_suppressed("angry@example.com")
+
+    def test_unsuppress_releases_mixed_case_row(self):
+        """A row stored with a different case is released just the same."""
+        EmailSuppression.objects.create(email="Mixed@Example.com", reason=SuppressionReason.MANUAL)
+
+        with patch("larpmanager.mail.suppression._ses_delete_suppressed_destination"):
+            unsuppress_email("mixed@example.com")
+
+        assert not is_suppressed("mixed@example.com")
 
     def test_transient_bounce_needs_repeated_failures(self):
         """Transient bounces accumulate before blocking the address."""
@@ -335,10 +345,10 @@ class TestSuppressionOnSend(BaseTestCase):
         return EmailRecipient.objects.create(email_content=content, recipient=email)
 
     def test_suppressed_recipient_is_skipped(self):
-        """A suppressed address is flagged and never handed to the backend."""
+        """A dead mailbox is flagged and never handed to the backend."""
         from larpmanager.utils.larpmanager.tasks import my_send_mail_bkg
 
-        suppress_email("blocked@example.com", SuppressionReason.COMPLAINT)
+        suppress_email("blocked@example.com", SuppressionReason.BOUNCE_PERMANENT)
         recipient = self._build_recipient("blocked@example.com")
 
         with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
@@ -348,6 +358,60 @@ class TestSuppressionOnSend(BaseTestCase):
         recipient.refresh_from_db()
         assert recipient.skipped == "suppressed"
         assert recipient.sent is None
+
+    def test_complaint_does_not_block_transactional_mail(self):
+        """A spam complaint must not lock a member out of password resets."""
+        from larpmanager.utils.larpmanager.tasks import my_send_mail_bkg
+
+        suppress_email("angry@example.com", SuppressionReason.COMPLAINT)
+        recipient = self._build_recipient("angry@example.com")
+
+        with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
+            my_send_mail_bkg.task_function(recipient.pk)
+            mock_send.assert_called_once()
+
+        recipient.refresh_from_db()
+        assert recipient.sent is not None
+
+    def test_complaint_blocks_bulk_mail(self):
+        """A complaining address is dropped when a broadcast is queued."""
+        from larpmanager.utils.larpmanager.tasks import _create_bulk_recipients
+
+        suppress_email("angry@example.com", SuppressionReason.COMPLAINT)
+        content = EmailContent.objects.create(subj="Subject", body="Body")
+
+        recipient_ids = _create_bulk_recipients(content, ["angry@example.com"], {}, opted_out=[])
+
+        assert recipient_ids == []
+        assert content.recipients.get().skipped == "suppressed"
+
+    def test_successful_send_clears_soft_bounces(self):
+        """A delivery forgets the transient failures accumulated so far."""
+        from larpmanager.utils.larpmanager.tasks import my_send_mail_bkg
+
+        suppress_email("full@example.com", SuppressionReason.BOUNCE_TRANSIENT)
+        recipient = self._build_recipient("full@example.com")
+
+        with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail"):
+            my_send_mail_bkg.task_function(recipient.pk)
+
+        assert EmailSuppression.objects.get(email="full@example.com").bounce_count == 0
+
+    def test_already_sent_recipient_is_not_restamped(self):
+        """A retried batch leaves delivered rows untouched, even if now suppressed."""
+        from larpmanager.utils.larpmanager.tasks import my_send_mail_bkg
+
+        recipient = self._build_recipient("blocked@example.com")
+        recipient.sent = timezone.now()
+        recipient.save()
+        suppress_email("blocked@example.com", SuppressionReason.BOUNCE_PERMANENT)
+
+        with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
+            my_send_mail_bkg.task_function(recipient.pk)
+            mock_send.assert_not_called()
+
+        recipient.refresh_from_db()
+        assert recipient.skipped is None
 
     def test_regular_recipient_is_sent(self):
         """A clean address is delivered and gets a one-click unsubscribe link."""

@@ -28,6 +28,7 @@ import boto3
 from botocore.exceptions import BotoCoreError, ClientError
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db import transaction
 
 from larpmanager.models.miscellanea import EmailSuppression, SuppressionReason
 
@@ -47,17 +48,48 @@ def _cache_key(email: str) -> str:
     return f"email_suppressed_{email.strip().lower()}"
 
 
-def is_suppressed(email: str) -> bool:
-    """Check whether an address is currently blocked from receiving emails."""
+def get_suppression_state(email: str) -> dict[str, Any] | None:
+    """Return the cached suppression state of an address, or None when it is clean."""
     if not email:
-        return False
+        return None
     key = _cache_key(email)
     cached = cache.get(key)
     if cached is not None:
-        return bool(cached)
-    suppressed = EmailSuppression.objects.filter(email__iexact=email.strip(), active=True).exists()
-    cache.set(key, 1 if suppressed else 0, SUPPRESSION_CACHE_TIMEOUT)
-    return suppressed
+        return cached or None
+    state = (
+        EmailSuppression.objects.filter(email__iexact=email.strip()).values("reason", "active", "bounce_count").first()
+    )
+    cache.set(key, state or 0, SUPPRESSION_CACHE_TIMEOUT)
+    return state
+
+
+def is_suppressed(email: str, *, bulk: bool = True) -> bool:
+    """Check whether an address is currently blocked from receiving emails.
+
+    Bulk communications are blocked by any active suppression. Transactional
+    mails (password resets, receipts, confirmations) are only blocked by a
+    permanent bounce: a spam complaint or a temporarily full mailbox must not
+    lock a member out of their own account.
+    """
+    state = get_suppression_state(email)
+    if not state or not state["active"]:
+        return False
+    if bulk:
+        return True
+    return state["reason"] == SuppressionReason.BOUNCE_PERMANENT
+
+
+def clear_soft_bounces(email: str) -> None:
+    """Reset the transient bounce counter of an address after a successful delivery.
+
+    Without this a handful of temporary failures spread over months would
+    eventually add up to a permanent block.
+    """
+    state = get_suppression_state(email)
+    if not state or state["active"] or not state["bounce_count"]:
+        return
+    EmailSuppression.objects.filter(email__iexact=email.strip()).update(bounce_count=0)
+    reset_suppression_cache(email)
 
 
 def reset_suppression_cache(email: str) -> None:
@@ -75,22 +107,26 @@ def suppress_email(email: str, reason: str, raw: dict[str, Any] | None = None) -
     if not email or "@" not in email:
         return None
 
-    # Soft deleted rows still hold the unique email, so they are revived instead of duplicated
-    obj = EmailSuppression.all_objects.filter(email=email).first()
-    if not obj:
-        obj = EmailSuppression(email=email, bounce_count=0, active=False)
-    elif obj.deleted:
-        obj.deleted = None
-        obj.deleted_by_cascade = False
+    # SES fans out events for the same address concurrently, so the row is locked while
+    # it is updated: soft deleted rows still hold the unique email and are revived here
+    with transaction.atomic():
+        obj, _created = EmailSuppression.all_objects.get_or_create(
+            email=email,
+            defaults={"reason": reason, "bounce_count": 0, "active": False},
+        )
+        obj = EmailSuppression.all_objects.select_for_update().get(pk=obj.pk)
+        if obj.deleted:
+            obj.deleted = None
+            obj.deleted_by_cascade = False
 
-    obj.bounce_count += 1
-    # A hard reason is never downgraded by a later transient bounce
-    if obj.reason not in HARD_REASONS:
-        obj.reason = reason
-    obj.raw = raw
-    # Suppression is only ever raised here: releasing an address is up to unsuppress_email
-    obj.active = obj.active or reason in HARD_REASONS or obj.bounce_count >= SOFT_BOUNCE_LIMIT
-    obj.save()
+        obj.bounce_count += 1
+        # A hard reason is never downgraded by a later transient bounce
+        if obj.reason not in HARD_REASONS:
+            obj.reason = reason
+        obj.raw = raw
+        # Suppression is only ever raised here: releasing an address is up to unsuppress_email
+        obj.active = obj.active or reason in HARD_REASONS or obj.bounce_count >= SOFT_BOUNCE_LIMIT
+        obj.save()
 
     reset_suppression_cache(email)
     logger.info("Suppression recorded: reason=%s active=%s count=%s", reason, obj.active, obj.bounce_count)
@@ -103,7 +139,8 @@ def unsuppress_email(email: str) -> None:
     if not email:
         return
 
-    EmailSuppression.objects.filter(email=email).update(active=False, bounce_count=0)
+    # Rows may have been created with a different case, so the release must be case insensitive
+    EmailSuppression.objects.filter(email__iexact=email).update(active=False, bounce_count=0)
     reset_suppression_cache(email)
     _ses_delete_suppressed_destination(email)
 

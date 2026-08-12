@@ -462,7 +462,7 @@ def send_mail_batch(
 
     # Execute the email sending operation for the allowed recipients, handing over the
     # opted out ones so they are traced as skipped without resolving them a second time
-    if added:
+    if added or unsubscribed:
         send_mail_exec(",".join(added), email_subject, email_body, association_id, run_id, opted_out=unsubscribed)
 
     return added, ignored, unsubscribed

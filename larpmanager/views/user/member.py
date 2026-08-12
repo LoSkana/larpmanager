@@ -878,9 +878,10 @@ def _unsubscribe_global(request: HttpRequest, email: str) -> dict:
 def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
     """Unsubscribe user from newsletter communications via signed token link.
 
-    Any POST unsubscribes immediately, so the same url serves both the
-    confirmation form and the RFC 8058 one-click request sent by mail clients,
-    which carries no CSRF token.
+    The same url serves the confirmation form and the RFC 8058 one-click
+    request sent by mail clients, which carries no CSRF token: a POST only
+    unsubscribes when it either confirms the form or carries the one-click
+    marker, so a token leaked through a forward cannot silently unsubscribe.
     """
     if not token:
         return redirect("home")
@@ -902,7 +903,8 @@ def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
         except Association.DoesNotExist:
             return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
 
-    if request.method == "POST":
+    one_click = request.POST.get("List-Unsubscribe") == "One-Click"
+    if request.method == "POST" and (one_click or request.POST.get("confirm")):
         ctx = _unsubscribe_org(request, email, association) if association else _unsubscribe_global(request, email)
         return render(request, "larpmanager/general/unsubscribe.html", ctx)
 

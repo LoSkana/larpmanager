@@ -40,7 +40,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
-from larpmanager.mail.suppression import is_suppressed
+from larpmanager.mail.suppression import clear_soft_bounces, is_suppressed
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
@@ -199,9 +199,10 @@ def partition_newsletter_recipients(recipients: list, association_id: int | None
 
     """
     if association_id:
+        # ONLY accepts just the mails tied to a registration, never a staff broadcast
         queryset = Membership.objects.filter(
             association_id=association_id,
-            newsletter=NewsletterChoices.NO,
+            newsletter__in=[NewsletterChoices.NO, NewsletterChoices.ONLY],
         ).values_list("member__email", flat=True)
     else:
         queryset = LarpManagerNewsletter.objects.filter(
@@ -228,10 +229,11 @@ def _create_bulk_recipients(
 ) -> list:
     """Create EmailRecipient records for valid, unique addresses and return their PKs.
 
-    Addresses that opted out of bulk communications get a recipient row flagged
-    as skipped, so the send is traceable, but are never queued. Callers that
-    already resolved the opted out addresses pass them in, so the query is not
-    repeated; in that case recipients only holds the allowed ones.
+    Addresses that opted out of bulk communications, or that bounced or
+    complained in the past, get a recipient row flagged as skipped, so the send
+    is traceable, but are never queued. Callers that already resolved the opted
+    out addresses pass them in, so the query is not repeated; in that case
+    recipients only holds the allowed ones.
     """
     if opted_out is None:
         recipients, opted_out = partition_newsletter_recipients(recipients, email_content.association_id)
@@ -255,6 +257,11 @@ def _create_bulk_recipients(
         if email in opted_out_emails:
             logger.info("Skipping bulk recipient opted out of the newsletter")
             _mark_skipped(email_recipient, "newsletter")
+            continue
+        # Bounced or complaining addresses are excluded from every bulk communication
+        if is_suppressed(email.strip()):
+            logger.info("Skipping bulk recipient on the suppression list")
+            _mark_skipped(email_recipient, "suppressed")
             continue
         recipient_ids.append(email_recipient.pk)
     return recipient_ids
@@ -376,6 +383,12 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             logger.warning("EmailRecipient %s not found", pk)
             continue
 
+        # Checked first: a batch retried after a mid batch failure must not restamp
+        # rows that were already delivered
+        if email_recipient.sent:
+            logger.info("Email %s already sent!", pk)
+            continue
+
         if "@" not in email_recipient.recipient:
             logger.info("Email recipient invalid: %s", email_recipient.recipient)
             _mark_skipped(email_recipient, "invalid")
@@ -389,14 +402,11 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             _mark_skipped(email_recipient, "forbidden")
             continue
 
-        # Bounced or complaining addresses are never contacted again
-        if is_suppressed(email_recipient.recipient):
+        # Addresses whose mailbox no longer exists are never contacted again; complaints
+        # and temporary failures only block bulk mails, which are filtered when queued
+        if is_suppressed(email_recipient.recipient, bulk=False):
             logger.info("Email recipient suppressed: %s", email_recipient.recipient)
             _mark_skipped(email_recipient, "suppressed")
-            continue
-
-        if email_recipient.sent:
-            logger.info("Email %s already sent!", pk)
             continue
 
         email_content = email_recipient.email_content
@@ -432,6 +442,9 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
         # Only mark as sent if successful
         email_recipient.sent = timezone.now()
         email_recipient.save()
+
+        # A delivery proves the mailbox works again, so past transient failures are forgotten
+        clear_soft_bounces(email_recipient.recipient)
 
 
 def _mark_skipped(email_recipient: EmailRecipient, reason: str) -> None:
