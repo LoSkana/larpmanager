@@ -41,6 +41,15 @@ SOFT_BOUNCE_LIMIT = 5
 # Reasons that block delivery as soon as a single event is received
 HARD_REASONS = {SuppressionReason.BOUNCE_PERMANENT, SuppressionReason.COMPLAINT, SuppressionReason.MANUAL}
 
+# How much each reason blocks: a stored reason is only ever replaced by a stricter one,
+# so a dead mailbox reported after a complaint still stops transactional mails too
+REASON_SEVERITY = {
+    SuppressionReason.BOUNCE_TRANSIENT: 1,
+    SuppressionReason.COMPLAINT: 2,
+    SuppressionReason.MANUAL: 2,
+    SuppressionReason.BOUNCE_PERMANENT: 3,
+}
+
 SUPPRESSION_CACHE_TIMEOUT = 3600
 
 
@@ -149,11 +158,14 @@ def suppress_email(email: str, reason: str, raw: dict[str, Any] | None = None) -
             obj.deleted_by_cascade = False
 
         obj.bounce_count += 1
-        # A hard reason is never downgraded by a later transient bounce, unless the address
-        # was released: keeping it would let the next soft limit revive a permanent block
-        if not obj.active or obj.reason not in HARD_REASONS:
+        # A reason is never downgraded while the address is blocked, but a stricter one
+        # replaces it; a released address starts over from the new event
+        if not obj.active or REASON_SEVERITY.get(reason, 0) > REASON_SEVERITY.get(obj.reason, 0):
             obj.reason = reason
-        obj.raw = raw
+        # A manual entry carries no payload: it must not erase the diagnostic of the
+        # bounce that is the only record of why the address is dead
+        if raw is not None:
+            obj.raw = raw
         # Suppression is only ever raised here: releasing an address is up to unsuppress_email
         obj.active = obj.active or reason in HARD_REASONS or obj.bounce_count >= SOFT_BOUNCE_LIMIT
         obj.save()

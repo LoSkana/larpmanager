@@ -35,6 +35,15 @@
     {% else %}
         <p>{% trans "No address was unsubscribed" %}</p>
     {% endif %}
+    <h2>{% trans "Suppressed" %}</h2>
+    {% if suppressed %}
+        <p>{% trans "These addresses bounced or reported a complaint in the past, and were not added to the queue:" %}</p>
+        <ul>
+            {% for email in suppressed %}<li>{{ email }}</li>{% endfor %}
+        </ul>
+    {% else %}
+        <p>{% trans "No address was suppressed" %}</p>
+    {% endif %}
     <p>
         <a href="{{ request.path }}">{% trans "Back" %}</a>
     </p>

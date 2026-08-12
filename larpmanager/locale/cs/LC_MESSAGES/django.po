@@ -1943,6 +1943,9 @@ msgstr "Datum zahájení"
 msgid "Statistics"
 msgstr "Statistiky"
 
+msgid "Suppressed"
+msgstr "Potlačeno"
+
 msgid "Surcharges"
 msgstr "Příplatky"
 
@@ -5205,6 +5208,9 @@ msgstr "Člen povýšen na správce!"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Nová zpráva od %(user)s"
+
+msgid "No address was suppressed"
+msgstr "Žádná adresa nebyla potlačena"
 
 msgid "Option saved successfully"
 msgstr "Možnost úspěšně uložena"
@@ -11787,6 +11793,13 @@ msgid ""
 msgstr ""
 "Zkontroluj předběžně registrované členy a zjisti, kteří z nich ještě "
 "nedokončili úplnou registraci"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Tyto adresy se v minulosti vrátily jako nedoručitelné nebo nahlásily "
+"stížnost a nebyly přidány do fronty:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "

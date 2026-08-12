@@ -440,14 +440,15 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             _mark_skipped(email_recipient, "forbidden")
             continue
 
-        # Addresses whose mailbox no longer exists are never contacted again; complaints
-        # and temporary failures only block bulk mails, which are filtered when queued
-        if is_suppressed(email_recipient.recipient, bulk=False):
+        email_content = email_recipient.email_content
+
+        # Rechecked at send time with the real nature of the mail: a batch queued hours
+        # earlier may hold addresses suppressed after the queue time filter ran
+        if is_suppressed(email_recipient.recipient, bulk=email_content.bulk):
             logger.info("Email recipient suppressed: %s", email_recipient.recipient)
             _mark_skipped(email_recipient, "suppressed")
             continue
 
-        email_content = email_recipient.email_content
         body = email_content.body
 
         association = None

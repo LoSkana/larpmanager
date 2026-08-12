@@ -997,7 +997,7 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
         form = SendMailForm(request.POST)
         if form.is_valid():
             # Queue mail for batch processing
-            context["added"], context["ignored"], context["unsubscribed"] = send_mail_batch(
+            context["added"], context["ignored"], context["unsubscribed"], context["suppressed"] = send_mail_batch(
                 request, association_id=context["association_id"]
             )
             return render(request, "larpmanager/exe/users/send_mail_result.html", context)

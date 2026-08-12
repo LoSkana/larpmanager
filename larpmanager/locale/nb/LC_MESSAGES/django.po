@@ -1943,6 +1943,9 @@ msgstr "Startdato"
 msgid "Statistics"
 msgstr "Statistikk"
 
+msgid "Suppressed"
+msgstr "Undertrykt"
+
 msgid "Surcharges"
 msgstr "Tilleggsavgifter"
 
@@ -5205,6 +5208,9 @@ msgstr "Medlem forfremmet til administrator!"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Ny melding fra %(user)s"
+
+msgid "No address was suppressed"
+msgstr "Ingen adresser ble undertrykt"
 
 msgid "Option saved successfully"
 msgstr "Alternativet ble lagret"
@@ -11974,6 +11980,13 @@ msgid ""
 msgstr ""
 "Gjennomgå forhåndsregistrerte medlemmer og hold oversikt over hvilke som "
 "ennå ikke har fullført registreringen"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Disse adressene har tidligere blitt avvist eller meldt som en klage, og ble "
+"ikke lagt til i køen:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "

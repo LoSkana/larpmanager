@@ -22,7 +22,6 @@
 from __future__ import annotations
 
 import base64
-import hashlib
 import json
 import logging
 import re
@@ -55,6 +54,9 @@ SNS_HOST_RE = re.compile(r"^sns\.[a-z0-9-]+\.amazonaws\.com$")
 # Signing certificates always live at this path, so nothing else is ever fetched
 SNS_CERT_PATH_RE = re.compile(r"^/SimpleNotificationService-[A-Za-z0-9]+\.pem$")
 
+# Number of colon separated fields of a topic arn
+ARN_PARTS = 6
+
 CERT_CACHE_TIMEOUT = 86400
 
 CERT_FETCH_TIMEOUT = 10
@@ -75,9 +77,23 @@ def _is_aws_url(url: str) -> bool:
     return bool(SNS_HOST_RE.match(host))
 
 
+def _topic_region() -> str:
+    """Return the region of the configured SNS topic arn, or an empty string."""
+    # arn:aws:sns:<region>:<account>:<topic>
+    parts = (getattr(conf_settings, "AWS_SNS_TOPIC_ARN", "") or "").split(":")
+    return parts[3] if len(parts) >= ARN_PARTS else ""
+
+
 def _is_cert_url(url: str) -> bool:
-    """Check that a url points to an SNS signing certificate."""
-    return _is_aws_url(url) and bool(SNS_CERT_PATH_RE.match(urlparse(url).path))
+    """Check that a url points to an SNS signing certificate of the topic region.
+
+    The certificate of a topic always lives in the region of the topic itself,
+    so pinning it keeps the fetch from being pointed at an arbitrary endpoint.
+    """
+    if not _is_aws_url(url) or not SNS_CERT_PATH_RE.match(urlparse(url).path):
+        return False
+    region = _topic_region()
+    return not region or urlparse(url).netloc.split(":")[0].lower() == f"sns.{region}.amazonaws.com"
 
 
 def _canonical_string(payload: dict[str, Any]) -> bytes:
@@ -95,17 +111,20 @@ def _canonical_string(payload: dict[str, Any]) -> bytes:
 
 
 def _fetch_certificate(url: str) -> Any:
-    """Download and cache the SNS signing certificate."""
-    # The url reaches here before the signature is checked, so it is hashed into a
-    # fixed size key: an attacker knowing the topic arn cannot grow the cache at will
-    key = f"sns_cert_{hashlib.sha256(url.encode()).hexdigest()}"
+    """Download and cache the SNS signing certificate.
+
+    The url reaches here before the signature is checked, so a single cache
+    entry is kept: the certificate name rotates, but an attacker knowing the
+    topic arn cannot turn distinct urls into unbounded cache entries.
+    """
+    key = "sns_cert_current"
     cached = cache.get(key)
-    if cached:
-        return load_pem_x509_certificate(cached)
+    if cached and cached.get("url") == url:
+        return load_pem_x509_certificate(cached["pem"])
 
     with urllib.request.urlopen(url, timeout=CERT_FETCH_TIMEOUT) as response:  # noqa: S310
         pem = response.read()
-    cache.set(key, pem, CERT_CACHE_TIMEOUT)
+    cache.set(key, {"url": url, "pem": pem}, CERT_CACHE_TIMEOUT)
     return load_pem_x509_certificate(pem)
 
 
@@ -228,6 +247,13 @@ def handle_sns_payload(payload: dict[str, Any]) -> bool:
         message = json.loads(payload.get("Message", "{}"))
     except json.JSONDecodeError:
         logger.warning("SNS notification carries an invalid message body")
+        _release_dedup(dedup_key)
+        return False
+
+    # Valid json that is not an object would blow up in the handler, and the retries of
+    # the failed delivery would keep hitting the same error
+    if not isinstance(message, dict):
+        logger.warning("SNS notification message body is not an object")
         _release_dedup(dedup_key)
         return False
 

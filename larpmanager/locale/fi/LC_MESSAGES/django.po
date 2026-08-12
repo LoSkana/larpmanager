@@ -1943,6 +1943,9 @@ msgstr "Aloituspäivä"
 msgid "Statistics"
 msgstr "Tilastot"
 
+msgid "Suppressed"
+msgstr "Estetty"
+
 msgid "Surcharges"
 msgstr "Lisämaksut"
 
@@ -5205,6 +5208,9 @@ msgstr "Jäsen ylennettiin ylläpitäjäksi!"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Uusi viesti käyttäjältä %(user)s"
+
+msgid "No address was suppressed"
+msgstr "Yhtään osoitetta ei estetty"
 
 msgid "Option saved successfully"
 msgstr "Vaihtoehto tallennettu onnistuneesti"
@@ -11963,6 +11969,13 @@ msgid ""
 msgstr ""
 "Tarkista ennakkoon rekisteröityneet jäsenet ja seuraa, ketkä eivät ole vielä"
 " suorittaneet rekisteröitymistä loppuun asti"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Nämä osoitteet palautuivat tai niistä tehtiin aiemmin valitus, eikä niitä "
+"lisätty jonoon:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "

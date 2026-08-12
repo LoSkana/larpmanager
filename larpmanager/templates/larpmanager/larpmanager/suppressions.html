@@ -34,6 +34,17 @@
                 </tr>
             {% endfor %}
         </table>
+        <div class="pagination center">
+            <span class="step-links">
+                {% if page.has_previous %}
+                    <a href="?page={{ page.previous_page_number }}{% if show_inactive %}&amp;inactive=1{% endif %}">Previous</a>
+                {% endif %}
+                &nbsp;Page {{ page.number }} of {{ page.paginator.num_pages }}&nbsp;
+                {% if page.has_next %}
+                    <a href="?page={{ page.next_page_number }}{% if show_inactive %}&amp;inactive=1{% endif %}">Next</a>
+                {% endif %}
+            </span>
+        </div>
     {% endif %}
     <hr>
     <h3>Add / release emails</h3>

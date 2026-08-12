@@ -32,6 +32,7 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Avg, Count, Min, Sum
 from django.http import (
     Http404,
@@ -110,6 +111,9 @@ from larpmanager.views.user.member import get_user_backend
 
 # Refuse oversized SNS bodies before parsing them
 MAX_SNS_PAYLOAD_SIZE = 256 * 1024
+
+# Suppressed addresses shown per page in the admin listing
+SUPPRESSIONS_PER_PAGE = 100
 
 
 def lm_home(request: HttpRequest) -> Any:
@@ -1053,7 +1057,18 @@ def lm_suppressions(request: HttpRequest) -> Any:
     if not show_inactive:
         query = query.filter(active=True)
 
-    context["suppression_list"] = query.order_by("-last_event")
+    # The table grows one row per bouncing address and is never pruned, so the listing
+    # is paginated instead of rendering the whole suppression history in one response
+    paginator = Paginator(query.order_by("-last_event"), SUPPRESSIONS_PER_PAGE)
+    try:
+        page = paginator.page(request.GET.get("page"))
+    except PageNotAnInteger:
+        page = paginator.page(1)
+    except EmptyPage:
+        page = paginator.page(paginator.num_pages)
+
+    context["suppression_list"] = page
+    context["page"] = page
     context["show_inactive"] = show_inactive
     return render(request, "larpmanager/larpmanager/suppressions.html", context)
 

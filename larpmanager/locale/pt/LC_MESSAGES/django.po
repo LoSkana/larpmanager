@@ -1943,6 +1943,9 @@ msgstr "Data de início"
 msgid "Statistics"
 msgstr "Estatísticas"
 
+msgid "Suppressed"
+msgstr "Suprimido"
+
 msgid "Surcharges"
 msgstr "Sobretaxas"
 
@@ -5205,6 +5208,9 @@ msgstr "Membro promovido a administrador!"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Nova mensagem de %(user)s"
+
+msgid "No address was suppressed"
+msgstr "Nenhum endereço foi suprimido"
 
 msgid "Option saved successfully"
 msgstr "Opção guardada com sucesso"
@@ -12048,6 +12054,13 @@ msgid ""
 msgstr ""
 "Revê os membros pré-inscritos e acompanha quais ainda não concluíram uma "
 "inscrição completa"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Estes endereços devolveram erro ou reportaram uma reclamação no passado e "
+"não foram adicionados à fila:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "

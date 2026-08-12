@@ -184,6 +184,24 @@ class TestSuppressionList(BaseTestCase):
         assert is_suppressed("freed@example.com")
         assert not is_suppressed("freed@example.com", bulk=False)
 
+    def test_permanent_bounce_upgrades_a_complaint(self):
+        """A mailbox that dies after a complaint stops receiving transactional mail too."""
+        suppress_email("angry@example.com", SuppressionReason.COMPLAINT)
+
+        suppress_email("angry@example.com", SuppressionReason.BOUNCE_PERMANENT)
+
+        suppression = EmailSuppression.objects.get(email="angry@example.com")
+        assert suppression.reason == SuppressionReason.BOUNCE_PERMANENT
+        assert is_suppressed("angry@example.com", bulk=False)
+
+    def test_manual_entry_keeps_the_bounce_diagnostic(self):
+        """Adding an address by hand never erases why it was blocked in the first place."""
+        suppress_email("dead@example.com", SuppressionReason.BOUNCE_PERMANENT, raw={"diagnosticCode": "550"})
+
+        suppress_email("dead@example.com", SuppressionReason.MANUAL)
+
+        assert EmailSuppression.objects.get(email="dead@example.com").raw == {"diagnosticCode": "550"}
+
     def test_bulk_lookup_resolves_every_address(self):
         """The batch lookup reports the same addresses as the single check."""
         suppress_email("dead@example.com", SuppressionReason.BOUNCE_PERMANENT)
@@ -317,6 +335,14 @@ class TestSnsHandling(BaseTestCase):
 
         assert EmailSuppression.objects.get(email="spam@example.com").reason == SuppressionReason.COMPLAINT
 
+    def test_non_object_message_body_rejected(self):
+        """Valid json that is not an object is discarded instead of raising."""
+        payload = bounce_payload("unused@example.com")
+        payload["Message"] = "123"
+
+        assert handle_sns_payload(payload) is False
+        assert EmailSuppression.objects.count() == 0
+
     def test_duplicate_notification_ignored(self):
         """Replayed notifications do not inflate the bounce counter."""
         payload = bounce_payload("dup@example.com", bounce_type="Transient", message_id="same-id")
@@ -432,6 +458,21 @@ class TestSuppressionOnSend(BaseTestCase):
 
         assert recipient_ids == []
         assert content.recipients.get().skipped == "suppressed"
+
+    def test_complaint_blocks_a_queued_bulk_mail(self):
+        """An address suppressed after the batch was queued is still dropped at send time."""
+        from larpmanager.utils.larpmanager.tasks import my_send_mail_bkg
+
+        recipient = self._build_recipient("late@example.com", bulk=True)
+        suppress_email("late@example.com", SuppressionReason.COMPLAINT)
+
+        with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
+            my_send_mail_bkg.task_function(recipient.pk)
+            mock_send.assert_not_called()
+
+        recipient.refresh_from_db()
+        assert recipient.skipped == "suppressed"
+        assert recipient.sent is None
 
     def test_send_does_not_clear_soft_bounces(self):
         """Acceptance by SES is not a delivery, so the transient counter survives a send."""

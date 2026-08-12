@@ -1943,6 +1943,9 @@ msgstr "Startdatum"
 msgid "Statistics"
 msgstr "Statistik"
 
+msgid "Suppressed"
+msgstr "Undertryckt"
+
 msgid "Surcharges"
 msgstr "Tilläggsavgifter"
 
@@ -5205,6 +5208,9 @@ msgstr "Medlem befordrad till administratör!"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Nytt meddelande från %(user)s"
+
+msgid "No address was suppressed"
+msgstr "Ingen adress undertrycktes"
 
 msgid "Option saved successfully"
 msgstr "Alternativet sparades framgångsrikt"
@@ -11947,6 +11953,13 @@ msgid ""
 msgstr ""
 "Granska förhandsregistrerade medlemmar och håll koll på vilka som ännu inte "
 "har slutfört sin registrering"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Dessa adresser studsade eller rapporterade ett klagomål tidigare och lades "
+"inte till i kön:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "

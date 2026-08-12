@@ -1943,6 +1943,9 @@ msgstr "Startdatum"
 msgid "Statistics"
 msgstr "Statistieken"
 
+msgid "Suppressed"
+msgstr "Onderdrukt"
+
 msgid "Surcharges"
 msgstr "Toeslagen"
 
@@ -5205,6 +5208,9 @@ msgstr "Lid gepromoveerd tot beheerder!"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Nieuw bericht van %(user)s"
+
+msgid "No address was suppressed"
+msgstr "Er is geen adres onderdrukt"
 
 msgid "Option saved successfully"
 msgstr "Optie succesvol opgeslagen"
@@ -12174,6 +12180,13 @@ msgid ""
 msgstr ""
 "Bekijk de vooraf geregistreerde leden en houd bij wie er nog niet volledig "
 "geregistreerd is"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Deze adressen zijn in het verleden teruggestuurd of hebben een klacht gemeld"
+" en zijn niet aan de wachtrij toegevoegd:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "

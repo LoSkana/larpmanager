@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
+from larpmanager.mail.suppression import get_suppressed_emails
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.event import PreRegistration, Run
 from larpmanager.models.member import FirstAidChoices, Member, Membership, MembershipStatus, NewsletterChoices
@@ -445,7 +446,7 @@ def send_mail_batch(
         run_id: Run sending the email (event send); association is derived from it.
 
     Returns:
-        Tuple (added, ignored, unsubscribed) of email addresses.
+        Tuple (added, ignored, unsubscribed, suppressed) of email addresses.
 
     """
     # Extract email parameters from POST data
@@ -471,7 +472,13 @@ def send_mail_batch(
     if added or unsubscribed:
         send_mail_exec(",".join(added), email_subject, email_body, association_id, run_id, opted_out=unsubscribed)
 
-    return added, ignored, unsubscribed
+    # Suppressed addresses are still handed over, so the send keeps a trace of the skip,
+    # but they never leave the queue: reporting them as added would be a lie
+    suppressed_emails = get_suppressed_emails(added)
+    suppressed = [email for email in added if email.strip().lower() in suppressed_emails]
+    added = [email for email in added if email.strip().lower() not in suppressed_emails]
+
+    return added, ignored, unsubscribed, suppressed
 
 
 @login_required
@@ -497,7 +504,7 @@ def orga_send_mail(request: HttpRequest, event_slug: str) -> HttpResponse:
         form = SendMailForm(request.POST)
         if form.is_valid():
             # Queue mail for batch processing using current run (only data-sharing recipients)
-            context["added"], context["ignored"], context["unsubscribed"] = send_mail_batch(
+            context["added"], context["ignored"], context["unsubscribed"], context["suppressed"] = send_mail_batch(
                 request, run_id=context["run"].id
             )
             return render(request, "larpmanager/exe/users/send_mail_result.html", context)
