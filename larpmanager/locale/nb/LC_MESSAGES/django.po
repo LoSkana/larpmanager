@@ -916,6 +916,9 @@ msgstr "Spiller:"
 msgid "Players"
 msgstr "Spillere"
 
+msgid "Playing"
+msgstr "Spiller"
+
 msgid "Preview"
 msgstr "Forhåndsvisning"
 
@@ -3759,6 +3762,9 @@ msgstr "Mottatte betalinger"
 msgid "Payments received"
 msgstr "Mottatte betalinger"
 
+msgid "Played characters"
+msgstr "Spilte karakterer"
+
 msgid "Pre registrations"
 msgstr "Forhåndsregistreringer"
 
@@ -3883,6 +3889,9 @@ msgstr "Godkjent karakter"
 
 msgid "Available versions"
 msgstr "Tilgjengelige versjoner"
+
+msgid "Changed character!"
+msgstr "Karakteren er endret!"
 
 msgid "Character creation"
 msgstr "Karakteropprettelse"
@@ -4497,6 +4506,9 @@ msgstr "Intro til karakterark"
 msgid "Characters unassigned"
 msgstr "Karakterer som ikke er tildelt"
 
+msgid "Choose your character"
+msgstr "Velg karakteren din"
+
 msgid "Code 'Bring a friend'"
 msgstr "Kode 'Ta med en venn'"
 
@@ -4570,6 +4582,9 @@ msgstr "Alternativer (maks. %(max)s)"
 msgid "Participant questions"
 msgstr "Spørsmål fra deltakerne"
 
+msgid "Playing in this event"
+msgstr "Spiller i dette arrangementet"
+
 msgid "Pre-registration link"
 msgstr "Lenke til forhåndsregistrering"
 
@@ -4596,6 +4611,9 @@ msgstr "Registreringsseksjoner"
 
 msgid "Reserve registrations"
 msgstr "Reserveregistreringer"
+
+msgid "Select this character"
+msgstr "Velg denne karakteren"
 
 msgid "Show closed questions"
 msgstr "Vis lukkede spørsmål"
@@ -4678,6 +4696,9 @@ msgstr "Se kommende arrangementer"
 
 msgid "Character Relationship"
 msgstr "Karakterrelasjon"
+
+msgid "Choose your character!"
+msgstr "Velg karakteren din!"
 
 msgid "Copy link to clipboard"
 msgstr "Kopier lenke til utklippstavlen"
@@ -4785,9 +4806,6 @@ msgstr "Godkjent refusjon"
 msgid "Role approval %(role)s"
 msgstr "Godkjenning av rolle %(role)s"
 
-msgid "Select your character!"
-msgstr "Velg din karakter!"
-
 msgid "Set up payment methods"
 msgstr "Konfigurer betalingsmetoder"
 
@@ -4875,6 +4893,10 @@ msgstr "Inkluderer medlemsavgift"
 
 msgid "Join the collection for"
 msgstr "Delta i innsamlingen for"
+
+#, python-format
+msgid "Last played in %(name)s"
+msgstr "Sist spilt i %(name)s"
 
 msgid "Lightweight sheet (Pdf)"
 msgstr "Lettvektsark (Pdf)"
@@ -5423,6 +5445,9 @@ msgstr "Mangler castingpreferanser"
 
 msgid "No inventory transfers yet."
 msgstr "Ingen inventaroverføringer ennå."
+
+msgid "Play this character instead"
+msgstr "Spill denne karakteren i stedet"
 
 msgid "Pre-registration confirmed!"
 msgstr "Forhåndsregistrering bekreftet!"
@@ -6656,9 +6681,6 @@ msgstr "Transport: drivstoff og bompenger"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Besøk veiledningen for å lære det grunnleggende"
 
-msgid "You already have an assigned character"
-msgstr "Du har allerede en tildelt karakter"
-
 msgid "You are exploring a demo organization."
 msgstr "Du utforsker en demo-organisasjon."
 
@@ -7713,6 +7735,9 @@ msgstr "Er du sikker? Elementene kan kanskje ikke gjenopprettes."
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrunnsbildet vises på alle arrangementssidene"
 
+msgid "Choose the character you will play in this event!"
+msgstr "Velg karakteren du skal spille i dette arrangementet!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Farge som brukes for tekstbakgrunner og innholdsbokser"
 
@@ -7769,6 +7794,9 @@ msgstr "Denne siden lar deg legge til eller redigere en inventartype."
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleranse overskredet, fortsett med kanselleringen"
+
+msgid "You already play the maximum number of characters"
+msgstr "Du spiller allerede det maksimale antallet karakterer"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderer (minst ett av) disse filtrene"
@@ -9357,6 +9385,9 @@ msgstr ""
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Hvis du må legge ved en fil, angir du det her, ellers lar du feltet stå tomt"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr "Antall karakterer hver deltaker spiller i arrangementet (standard=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr "Valgfritt - Maksimalt antall ganger det kan velges (0 = ubegrenset)"

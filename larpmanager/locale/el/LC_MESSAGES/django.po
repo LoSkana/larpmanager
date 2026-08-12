@@ -916,6 +916,9 @@ msgstr "Παίκτης:"
 msgid "Players"
 msgstr "Παίκτες"
 
+msgid "Playing"
+msgstr "Παίζει"
+
 msgid "Preview"
 msgstr "Προεπισκόπηση"
 
@@ -3759,6 +3762,9 @@ msgstr "Πληρωμές που ελήφθησαν"
 msgid "Payments received"
 msgstr "Ληφθείσες πληρωμές"
 
+msgid "Played characters"
+msgstr "Χαρακτήρες που έχεις παίξει"
+
 msgid "Pre registrations"
 msgstr "Προεγγραφές"
 
@@ -3883,6 +3889,9 @@ msgstr "Εγκεκριμένος χαρακτήρας"
 
 msgid "Available versions"
 msgstr "Διαθέσιμες εκδόσεις"
+
+msgid "Changed character!"
+msgstr "Ο χαρακτήρας άλλαξε!"
 
 msgid "Character creation"
 msgstr "Δημιουργία χαρακτήρα"
@@ -4497,6 +4506,9 @@ msgstr "Εισαγωγή φύλλου χαρακτήρα"
 msgid "Characters unassigned"
 msgstr "Χαρακτήρες χωρίς ανάθεση"
 
+msgid "Choose your character"
+msgstr "Διάλεξε τον χαρακτήρα σου"
+
 msgid "Code 'Bring a friend'"
 msgstr "Κωδικός «Φέρε έναν φίλο»"
 
@@ -4570,6 +4582,9 @@ msgstr "Επιλογές (μέγ. %(max)s)"
 msgid "Participant questions"
 msgstr "Ερωτήσεις συμμετεχόντων"
 
+msgid "Playing in this event"
+msgstr "Παίζεις σε αυτό το event"
+
 msgid "Pre-registration link"
 msgstr "Σύνδεσμος προεγγραφής"
 
@@ -4596,6 +4611,9 @@ msgstr "Ενότητες εγγραφής"
 
 msgid "Reserve registrations"
 msgstr "Εγγραφές επιλαχόντων"
+
+msgid "Select this character"
+msgstr "Επίλεξε αυτόν τον χαρακτήρα"
 
 msgid "Show closed questions"
 msgstr "Εμφάνιση κλειστών ερωτήσεων"
@@ -4678,6 +4696,9 @@ msgstr "Περιηγήσου στα επερχόμενα event"
 
 msgid "Character Relationship"
 msgstr "Σχέση του χαρακτήρα"
+
+msgid "Choose your character!"
+msgstr "Επίλεξε τον χαρακτήρα σου!"
 
 msgid "Copy link to clipboard"
 msgstr "Αντιγραφή συνδέσμου στο πρόχειρο"
@@ -4785,9 +4806,6 @@ msgstr "Εγκρίθηκε η επιστροφή χρημάτων"
 msgid "Role approval %(role)s"
 msgstr "Έγκριση ρόλου %(role)s"
 
-msgid "Select your character!"
-msgstr "Επίλεξε τον χαρακτήρα σου!"
-
 msgid "Set up payment methods"
 msgstr "Ρύθμισε τους τρόπους πληρωμής"
 
@@ -4875,6 +4893,10 @@ msgstr "Περιλαμβάνει τη συνδρομή μέλους"
 
 msgid "Join the collection for"
 msgstr "Συμμετείχε στη συλλογή για"
+
+#, python-format
+msgid "Last played in %(name)s"
+msgstr "Τελευταία παίχτηκε στο %(name)s"
 
 msgid "Lightweight sheet (Pdf)"
 msgstr "Ελαφρύ φύλλο (PDF)"
@@ -5423,6 +5445,9 @@ msgstr "Λείπουν οι προτιμήσεις Casting"
 
 msgid "No inventory transfers yet."
 msgstr "Δεν υπάρχουν ακόμη μεταφορές αποθέματος."
+
+msgid "Play this character instead"
+msgstr "Παίξε αυτόν τον χαρακτήρα αντί"
 
 msgid "Pre-registration confirmed!"
 msgstr "Η προεγγραφή επιβεβαιώθηκε!"
@@ -6656,9 +6681,6 @@ msgstr "Μεταφορές: καύσιμα και διόδια"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Επισκέψου τον οδηγό για να μάθεις τα βασικά"
 
-msgid "You already have an assigned character"
-msgstr "Έχεις ήδη ανατεθειμένο χαρακτήρα"
-
 msgid "You are exploring a demo organization."
 msgstr "Εξερευνάς έναν δοκιμαστικό οργανισμό."
 
@@ -7721,6 +7743,9 @@ msgstr "Είσαι σίγουρος; Τα στοιχεία ίσως να μην 
 msgid "Background image displayed across all event pages"
 msgstr "Εικόνα φόντου που εμφανίζεται σε όλες τις σελίδες της εκδήλωσης"
 
+msgid "Choose the character you will play in this event!"
+msgstr "Επίλεξε τον χαρακτήρα που θα παίξεις σε αυτό το event!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Χρώμα που χρησιμοποιείται για φόντα κειμένου και πλαίσια περιεχομένου"
 
@@ -7783,6 +7808,9 @@ msgstr ""
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Έγινε υπέρβαση του ορίου ανοχής, προχώρα με την ακύρωση"
+
+msgid "You already play the maximum number of characters"
+msgstr "Παίζεις ήδη τον μέγιστο αριθμό χαρακτήρων"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Συμπεριλαμβάνεις (τουλάχιστον ένα από αυτά τα φίλτρα)"
@@ -9536,6 +9564,10 @@ msgstr ""
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Αν χρειάζεται να επισυνάψεις αρχείο, δήλωσέ το εδώ, αλλιώς άφησέ το κενό"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr ""
+"Αριθμός χαρακτήρων που παίζει κάθε συμμετέχων στο event (προεπιλογή=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""

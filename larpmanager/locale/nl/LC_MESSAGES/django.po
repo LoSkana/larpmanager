@@ -916,6 +916,9 @@ msgstr "Speler:"
 msgid "Players"
 msgstr "Spelers"
 
+msgid "Playing"
+msgstr "Spelen"
+
 msgid "Preview"
 msgstr "Voorvertoning"
 
@@ -3759,6 +3762,9 @@ msgstr "Ontvangen betalingen"
 msgid "Payments received"
 msgstr "Ontvangen betalingen"
 
+msgid "Played characters"
+msgstr "Gespeelde personages"
+
 msgid "Pre registrations"
 msgstr "Voorinschrijvingen"
 
@@ -3883,6 +3889,9 @@ msgstr "Goedgekeurd karakter"
 
 msgid "Available versions"
 msgstr "Beschikbare versies"
+
+msgid "Changed character!"
+msgstr "Personage gewijzigd!"
 
 msgid "Character creation"
 msgstr "Het maken van een personage"
@@ -4497,6 +4506,9 @@ msgstr "Karakterblad intro"
 msgid "Characters unassigned"
 msgstr "Niet-toegewezen karakters"
 
+msgid "Choose your character"
+msgstr "Kies je personage"
+
 msgid "Code 'Bring a friend'"
 msgstr "Code 'Neem een vriend mee'"
 
@@ -4570,6 +4582,9 @@ msgstr "Opties (max %(max)s)"
 msgid "Participant questions"
 msgstr "Vragen van deelnemers"
 
+msgid "Playing in this event"
+msgstr "Spelen in dit evenement"
+
 msgid "Pre-registration link"
 msgstr "Link voor voorinschrijving"
 
@@ -4596,6 +4611,9 @@ msgstr "Registratiesecties"
 
 msgid "Reserve registrations"
 msgstr "Reserve-inschrijvingen"
+
+msgid "Select this character"
+msgstr "Selecteer dit personage"
 
 msgid "Show closed questions"
 msgstr "Toon gesloten vragen"
@@ -4678,6 +4696,9 @@ msgstr "Bekijk de komende evenementen"
 
 msgid "Character Relationship"
 msgstr "Karakterrelatie"
+
+msgid "Choose your character!"
+msgstr "Kies je personage!"
 
 msgid "Copy link to clipboard"
 msgstr "Koppeling naar klembord kopiëren"
@@ -4785,9 +4806,6 @@ msgstr "Vergoeding goedgekeurd"
 msgid "Role approval %(role)s"
 msgstr "Rolgoedkeuring %(role)s"
 
-msgid "Select your character!"
-msgstr "Selecteer je personage!"
-
 msgid "Set up payment methods"
 msgstr "Betaalmethoden instellen"
 
@@ -4875,6 +4893,10 @@ msgstr "Inclusief lidmaatschapsgeld"
 
 msgid "Join the collection for"
 msgstr "Doe mee aan de inzameling voor"
+
+#, python-format
+msgid "Last played in %(name)s"
+msgstr "Laatst gespeeld in %(name)s"
 
 msgid "Lightweight sheet (Pdf)"
 msgstr "Lichtgewicht karakterblad (Pdf)"
@@ -5423,6 +5445,9 @@ msgstr "Ontbrekende Casting-voorkeuren"
 
 msgid "No inventory transfers yet."
 msgstr "Nog geen transfers."
+
+msgid "Play this character instead"
+msgstr "Speel dit personage in plaats daarvan"
 
 msgid "Pre-registration confirmed!"
 msgstr "Voorinschrijving bevestigd!"
@@ -6656,9 +6681,6 @@ msgstr "Vervoer: brandstof en snelwegtol"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Ga naar de tutorial om de basis te leren"
 
-msgid "You already have an assigned character"
-msgstr "Je hebt al een toegewezen personage"
-
 msgid "You are exploring a demo organization."
 msgstr "Je bekijkt een demo-organisatie."
 
@@ -7720,6 +7742,9 @@ msgstr "Weet je het zeker? De items zijn mogelijk niet herstelbaar."
 msgid "Background image displayed across all event pages"
 msgstr "Achtergrondafbeelding weergegeven op alle evenementpagina's"
 
+msgid "Choose the character you will play in this event!"
+msgstr "Kies het personage dat je in dit evenement gaat spelen!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Kleur gebruikt voor tekstachtergrond en inhoudsvakken"
 
@@ -7779,6 +7804,9 @@ msgstr "Op deze pagina kun je een inventaristype toevoegen of bewerken."
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerantie overschreden, doorgaan met annuleren"
+
+msgid "You already play the maximum number of characters"
+msgstr "Je speelt al het maximale aantal personages"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Je sluit (ten minste een van) deze filters in"
@@ -9469,6 +9497,11 @@ msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Als je een bestand moet bijvoegen, geef dat dan hier aan, laat het anders "
 "leeg"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr ""
+"Aantal personages dat elke deelnemer tijdens het evenement speelt "
+"(standaard=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""

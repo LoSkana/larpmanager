@@ -916,6 +916,9 @@ msgstr "Spelare:"
 msgid "Players"
 msgstr "Spelare"
 
+msgid "Playing"
+msgstr "Spelar"
+
 msgid "Preview"
 msgstr "Förhandsgranskning"
 
@@ -3759,6 +3762,9 @@ msgstr "Erhållna betalningar"
 msgid "Payments received"
 msgstr "Erhållna betalningar"
 
+msgid "Played characters"
+msgstr "Spelade karaktärer"
+
 msgid "Pre registrations"
 msgstr "Förhandsregistreringar"
 
@@ -3883,6 +3889,9 @@ msgstr "Godkänd karaktär"
 
 msgid "Available versions"
 msgstr "Tillgängliga versioner"
+
+msgid "Changed character!"
+msgstr "Karaktären har ändrats!"
 
 msgid "Character creation"
 msgstr "Karaktärsskapande"
@@ -4497,6 +4506,9 @@ msgstr "Introduktion till karaktärsblad"
 msgid "Characters unassigned"
 msgstr "Karaktärer som inte är tilldelade"
 
+msgid "Choose your character"
+msgstr "Välj din karaktär"
+
 msgid "Code 'Bring a friend'"
 msgstr "Kod \"Ta med en vän\""
 
@@ -4570,6 +4582,9 @@ msgstr "Alternativ (max %(max)s)"
 msgid "Participant questions"
 msgstr "Frågor från deltagarna"
 
+msgid "Playing in this event"
+msgstr "Spelar i detta event"
+
 msgid "Pre-registration link"
 msgstr "Länk för förhandsregistrering"
 
@@ -4596,6 +4611,9 @@ msgstr "Registreringssektioner"
 
 msgid "Reserve registrations"
 msgstr "Reservanmälningar"
+
+msgid "Select this character"
+msgstr "Välj denna karaktär"
 
 msgid "Show closed questions"
 msgstr "Visa stängda frågor"
@@ -4678,6 +4696,9 @@ msgstr "Se kommande evenemang"
 
 msgid "Character Relationship"
 msgstr "Relation mellan karaktärer"
+
+msgid "Choose your character!"
+msgstr "Välj din karaktär!"
 
 msgid "Copy link to clipboard"
 msgstr "Kopiera länk till urklipp"
@@ -4785,9 +4806,6 @@ msgstr "Ersättning godkänd"
 msgid "Role approval %(role)s"
 msgstr "Godkännande av roll %(role)s"
 
-msgid "Select your character!"
-msgstr "Välj din karaktär!"
-
 msgid "Set up payment methods"
 msgstr "Konfigurera betalningsmetoder"
 
@@ -4875,6 +4893,10 @@ msgstr "Inkluderar medlemsavgift"
 
 msgid "Join the collection for"
 msgstr "Gå med i insamlingen för"
+
+#, python-format
+msgid "Last played in %(name)s"
+msgstr "Senast spelad i %(name)s"
 
 msgid "Lightweight sheet (Pdf)"
 msgstr "Lättviktsblad (Pdf)"
@@ -5423,6 +5445,9 @@ msgstr "Saknade castingpreferenser"
 
 msgid "No inventory transfers yet."
 msgstr "Inga överföringar ännu."
+
+msgid "Play this character instead"
+msgstr "Spela den här karaktären i stället"
 
 msgid "Pre-registration confirmed!"
 msgstr "Förhandsanmälan bekräftad!"
@@ -6655,9 +6680,6 @@ msgstr "Transport: bränsle och motorvägsavgifter"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Besök handledningen för att lära dig grunderna"
 
-msgid "You already have an assigned character"
-msgstr "Du har redan en tilldelad karaktär"
-
 msgid "You are exploring a demo organization."
 msgstr "Du utforskar en demoorganisation."
 
@@ -7715,6 +7737,9 @@ msgstr "Är du säker? Objekten kanske inte kan återställas."
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrundsbild visas på alla evenemangssidor"
 
+msgid "Choose the character you will play in this event!"
+msgstr "Välj karaktären du ska spela i detta event!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Färg som används för textbakgrunder och innehållsrutor"
 
@@ -7771,6 +7796,9 @@ msgstr "På den här sidan kan du lägga till eller redigera en inventarietyp."
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleransen överskriden, fortsätt med annulleringen"
+
+msgid "You already play the maximum number of characters"
+msgstr "Du spelar redan det maximala antalet karaktärer"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderar (minst ett av dessa filter)"
@@ -9328,6 +9356,9 @@ msgstr ""
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Om du behöver bifoga en fil anger du det här, annars lämnar du fältet tomt"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr "Antal karaktärer som varje deltagare spelar i eventet (standard=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr "Valfritt - Maximalt antal gånger det kan väljas (0 = obegränsat)"

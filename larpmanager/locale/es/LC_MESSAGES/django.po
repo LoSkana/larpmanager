@@ -916,6 +916,9 @@ msgstr "Jugador:"
 msgid "Players"
 msgstr "Jugadores"
 
+msgid "Playing"
+msgstr "Jugando"
+
 msgid "Preview"
 msgstr "Vista previa"
 
@@ -3759,6 +3762,9 @@ msgstr "Pagos recibidos"
 msgid "Payments received"
 msgstr "Pagos recibidos"
 
+msgid "Played characters"
+msgstr "Personajes interpretados"
+
 msgid "Pre registrations"
 msgstr "Preinscripciones"
 
@@ -3883,6 +3889,9 @@ msgstr "Personaje aprobado"
 
 msgid "Available versions"
 msgstr "Versiones disponibles"
+
+msgid "Changed character!"
+msgstr "¡Personaje cambiado!"
 
 msgid "Character creation"
 msgstr "Creación de personajes"
@@ -4497,6 +4506,9 @@ msgstr "Introducción de la hoja de personaje"
 msgid "Characters unassigned"
 msgstr "Personajes no asignados"
 
+msgid "Choose your character"
+msgstr "Elige tu personaje"
+
 msgid "Code 'Bring a friend'"
 msgstr "Código de “Trae a un amigo”"
 
@@ -4570,6 +4582,9 @@ msgstr "Opciones (máx. %(max)s)"
 msgid "Participant questions"
 msgstr "Preguntas de los participantes"
 
+msgid "Playing in this event"
+msgstr "Jugando en este evento"
+
 msgid "Pre-registration link"
 msgstr "Enlace de preinscripción"
 
@@ -4596,6 +4611,9 @@ msgstr "Secciones de inscripción"
 
 msgid "Reserve registrations"
 msgstr "Inscripciones en lista de espera"
+
+msgid "Select this character"
+msgstr "Selecciona este personaje"
 
 msgid "Show closed questions"
 msgstr "Mostrar preguntas cerradas"
@@ -4678,6 +4696,9 @@ msgstr "Echa un vistazo a los próximos eventos"
 
 msgid "Character Relationship"
 msgstr "Relación con el personaje"
+
+msgid "Choose your character!"
+msgstr "¡Elige tu personaje!"
 
 msgid "Copy link to clipboard"
 msgstr "Copiar enlace al portapapeles"
@@ -4785,9 +4806,6 @@ msgstr "Reembolso aprobado"
 msgid "Role approval %(role)s"
 msgstr "Aprobación de rol %(role)s"
 
-msgid "Select your character!"
-msgstr "Elige tu personaje!"
-
 msgid "Set up payment methods"
 msgstr "Establecer métodos de pago"
 
@@ -4875,6 +4893,10 @@ msgstr "Incluye la cuota de afiliación"
 
 msgid "Join the collection for"
 msgstr "Únete a la colecta para"
+
+#, python-format
+msgid "Last played in %(name)s"
+msgstr "Última vez jugado en %(name)s"
 
 msgid "Lightweight sheet (Pdf)"
 msgstr "Ficha ligera (Pdf)"
@@ -5423,6 +5445,9 @@ msgstr "Faltan preferencias de Casting"
 
 msgid "No inventory transfers yet."
 msgstr "Aún no hay transferencias."
+
+msgid "Play this character instead"
+msgstr "Interpreta a este personaje en su lugar"
 
 msgid "Pre-registration confirmed!"
 msgstr "Preinscripción confirmada!"
@@ -6655,9 +6680,6 @@ msgstr "Transporte: combustible y peajes de autopista"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Visita el tutorial para aprender lo básico"
 
-msgid "You already have an assigned character"
-msgstr "Ya tienes un personaje asignado"
-
 msgid "You are exploring a demo organization."
 msgstr "Estás explorando una organización de demostración."
 
@@ -7721,6 +7743,9 @@ msgstr "¿Estás seguro? Puede que los elementos no sean recuperables."
 msgid "Background image displayed across all event pages"
 msgstr "Imagen de fondo en todas las páginas del evento"
 
+msgid "Choose the character you will play in this event!"
+msgstr "¡Elige el personaje que jugarás en este evento!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Color utilizado para los fondos de texto y los cuadros de contenido"
 
@@ -7778,6 +7803,9 @@ msgstr "Esta página te permite añadir o editar un tipo de inventario."
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerancia superada, procede con la cancelación"
+
+msgid "You already play the maximum number of characters"
+msgstr "Ya interpretas el número máximo de personajes"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Estás incluyendo (al menos uno de estos filtros)"
@@ -9466,6 +9494,11 @@ msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Si necesitas adjuntar un archivo, indícalo aquí, de lo contrario déjalo en "
 "blanco"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr ""
+"Número de personajes que cada participante interpreta en el evento "
+"(predeterminado=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""

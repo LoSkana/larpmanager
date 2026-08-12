@@ -916,6 +916,9 @@ msgstr "Gracz:"
 msgid "Players"
 msgstr "Gracze"
 
+msgid "Playing"
+msgstr "Granie"
+
 msgid "Preview"
 msgstr "Podgląd"
 
@@ -3759,6 +3762,9 @@ msgstr "Otrzymane płatności"
 msgid "Payments received"
 msgstr "Otrzymane płatności"
 
+msgid "Played characters"
+msgstr "Odgrywane postacie"
+
 msgid "Pre registrations"
 msgstr "Wstępne rejestracje"
 
@@ -3883,6 +3889,9 @@ msgstr "Zatwierdzona postać"
 
 msgid "Available versions"
 msgstr "Dostępne wersje"
+
+msgid "Changed character!"
+msgstr "Zmieniono postać!"
 
 msgid "Character creation"
 msgstr "Tworzenie postaci"
@@ -4497,6 +4506,9 @@ msgstr "Wprowadzenie do arkusza postaci"
 msgid "Characters unassigned"
 msgstr "Postacie nieprzypisane"
 
+msgid "Choose your character"
+msgstr "Wybierz swoją postać"
+
 msgid "Code 'Bring a friend'"
 msgstr "Kod 'Przyprowadź znajomego'"
 
@@ -4570,6 +4582,9 @@ msgstr "Opcje (maks. %(max)s)"
 msgid "Participant questions"
 msgstr "Pytania uczestników"
 
+msgid "Playing in this event"
+msgstr "Gra w tym wydarzeniu"
+
 msgid "Pre-registration link"
 msgstr "Link do rejestracji wstępnej"
 
@@ -4596,6 +4611,9 @@ msgstr "Sekcje rejestracji"
 
 msgid "Reserve registrations"
 msgstr "Rejestracja rezerwowa"
+
+msgid "Select this character"
+msgstr "Wybierz tę postać"
 
 msgid "Show closed questions"
 msgstr "Pokaż zamknięte pytania"
@@ -4678,6 +4696,9 @@ msgstr "Zobacz nadchodzące wydarzenia"
 
 msgid "Character Relationship"
 msgstr "Relacja postaci"
+
+msgid "Choose your character!"
+msgstr "Wybierz swoją postać!"
 
 msgid "Copy link to clipboard"
 msgstr "Skopiuj łącze do schowka"
@@ -4785,9 +4806,6 @@ msgstr "Zatwierdzono zwrot kosztów"
 msgid "Role approval %(role)s"
 msgstr "Zatwierdzenie roli %(role)s"
 
-msgid "Select your character!"
-msgstr "Wybierz swoją postać!"
-
 msgid "Set up payment methods"
 msgstr "Skonfiguruj metody płatności"
 
@@ -4875,6 +4893,10 @@ msgstr "Obejmuje opłatę członkowską"
 
 msgid "Join the collection for"
 msgstr "Dołącz do zbiórki na"
+
+#, python-format
+msgid "Last played in %(name)s"
+msgstr "Ostatnio grano w %(name)s"
 
 msgid "Lightweight sheet (Pdf)"
 msgstr "Lekki arkusz (Pdf)"
@@ -5423,6 +5445,9 @@ msgstr "Brakujące preferencje castingu"
 
 msgid "No inventory transfers yet."
 msgstr "Brak transferów."
+
+msgid "Play this character instead"
+msgstr "Zagraj tą postacią zamiast"
 
 msgid "Pre-registration confirmed!"
 msgstr "Wstępna rejestracja potwierdzona!"
@@ -6655,9 +6680,6 @@ msgstr "Transport: paliwo i opłaty drogowe"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Odwiedź samouczek, aby poznać podstawy"
 
-msgid "You already have an assigned character"
-msgstr "Masz już przypisaną postać"
-
 msgid "You are exploring a demo organization."
 msgstr "Przeglądasz organizację demonstracyjną."
 
@@ -7714,6 +7736,9 @@ msgstr "Czy na pewno? Elementy mogą nie być możliwe do odzyskania."
 msgid "Background image displayed across all event pages"
 msgstr "Obraz tła wyświetlany na wszystkich stronach wydarzenia"
 
+msgid "Choose the character you will play in this event!"
+msgstr "Wybierz postać, którą będziesz grać w tym wydarzeniu!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Kolor używany dla tła tekstu i pól zawartości"
 
@@ -7772,6 +7797,9 @@ msgstr "Ta strona pozwala dodać lub edytować typ ekwipunku."
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Przekroczona tolerancja, kontynuuj anulowanie"
+
+msgid "You already play the maximum number of characters"
+msgstr "Grasz już maksymalną liczbą postaci"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Uwzględniasz (co najmniej jeden z tych filtrów)"
@@ -9399,6 +9427,11 @@ msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Jeśli chcesz załączyć plik, wskaż go tutaj, w przeciwnym razie pozostaw "
 "puste miejsce"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr ""
+"Liczba postaci, którymi każdy uczestnik gra podczas wydarzenia "
+"(domyślnie=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr "Opcjonalnie - maksymalna liczba powtórzeń (0 = nieograniczona)"

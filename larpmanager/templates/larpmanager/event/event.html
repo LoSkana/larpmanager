@@ -58,29 +58,27 @@
                         </p>
                     </div>
                 {% endfor %}
-                {% if run_status.character_action %}
+                {% for character_action in run_status.character_actions %}
                     <div class="event-card event-card-char">
                         <h3>
-                            <a href="{{ run_status.character_action.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}</a>
+                            <a href="{{ character_action.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}</a>
                         </h3>
                         <p>
-                            <a href="{{ run_status.character_action.url }}"
-                               title="{{ run_status.character_action.tooltip }}">
-                                <i class="{{ run_status.character_action.icon }}"></i> {{ run_status.character_action.label }}
+                            <a href="{{ character_action.url }}"
+                               title="{{ character_action.tooltip }}">
+                                <i class="{{ character_action.icon }}"></i> {{ character_action.label }}
                             </a>
                         </p>
-                        {% if run_status.character_action.options_availability %}
+                        {% if character_action.options_availability %}
                             <p>
-                                {% if run_status.character_action.options_availability %}
-                                    {% for opt in run_status.character_action.options_availability %}
-                                        {% include "elements/comma.html" %}
-                                        <i>{{ opt.name }}</i> ({{ opt.available }})
-                                    {% endfor %}
-                                {% endif %}
+                                {% for opt in character_action.options_availability %}
+                                    {% include "elements/comma.html" %}
+                                    <i>{{ opt.name }}</i> ({{ opt.available }})
+                                {% endfor %}
                             </p>
                         {% endif %}
                     </div>
-                {% endif %}
+                {% endfor %}
                 {% if run_status.registration %}
                     {% if features.payment and run_status.registration.tot_iscr %}
                         {% with reg=run_status.registration %}

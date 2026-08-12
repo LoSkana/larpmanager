@@ -916,6 +916,9 @@ msgstr "Hráč:"
 msgid "Players"
 msgstr "Hráči"
 
+msgid "Playing"
+msgstr "Hraní"
+
 msgid "Preview"
 msgstr "Náhled"
 
@@ -3759,6 +3762,9 @@ msgstr "Přijaté platby"
 msgid "Payments received"
 msgstr "Přijaté platby"
 
+msgid "Played characters"
+msgstr "Hrané postavy"
+
 msgid "Pre registrations"
 msgstr "Předběžné registrace"
 
@@ -3883,6 +3889,9 @@ msgstr "Schválená postava"
 
 msgid "Available versions"
 msgstr "Dostupné verze"
+
+msgid "Changed character!"
+msgstr "Postava změněna!"
 
 msgid "Character creation"
 msgstr "Vytvoření postavy"
@@ -4497,6 +4506,9 @@ msgstr "Úvod ke kartě postavy"
 msgid "Characters unassigned"
 msgstr "Nepřiřazené postavy"
 
+msgid "Choose your character"
+msgstr "Vyber si svou postavu"
+
 msgid "Code 'Bring a friend'"
 msgstr "Kód 'Přiveď přítele'"
 
@@ -4570,6 +4582,9 @@ msgstr "Možnosti (max %(max)s)"
 msgid "Participant questions"
 msgstr "Otázky účastníků"
 
+msgid "Playing in this event"
+msgstr "Hraješ na této akci"
+
 msgid "Pre-registration link"
 msgstr "Odkaz na předběžnou registraci"
 
@@ -4596,6 +4611,9 @@ msgstr "Sekce registrace"
 
 msgid "Reserve registrations"
 msgstr "Náhradní registrace"
+
+msgid "Select this character"
+msgstr "Vyber tuto postavu"
 
 msgid "Show closed questions"
 msgstr "Zobrazit uzavřené otázky"
@@ -4678,6 +4696,9 @@ msgstr "Prohlédni si nadcházející akce"
 
 msgid "Character Relationship"
 msgstr "Vztah postav"
+
+msgid "Choose your character!"
+msgstr "Vyber si svou postavu!"
 
 msgid "Copy link to clipboard"
 msgstr "Zkopíruj odkaz do schránky"
@@ -4785,9 +4806,6 @@ msgstr "Proplacení schváleno"
 msgid "Role approval %(role)s"
 msgstr "Schválení role %(role)s"
 
-msgid "Select your character!"
-msgstr "Vyber si svou postavu!"
-
 msgid "Set up payment methods"
 msgstr "Nastav platební metody"
 
@@ -4875,6 +4893,10 @@ msgstr "Včetně členského příspěvku"
 
 msgid "Join the collection for"
 msgstr "Zúčastni se sbírky pro"
+
+#, python-format
+msgid "Last played in %(name)s"
+msgstr "Naposledy hrál/a v %(name)s"
 
 msgid "Lightweight sheet (Pdf)"
 msgstr "Lehký list (Pdf)"
@@ -5423,6 +5445,9 @@ msgstr "Chybějící preference Castingu"
 
 msgid "No inventory transfers yet."
 msgstr "Zatím žádné přesuny."
+
+msgid "Play this character instead"
+msgstr "Hraj místo toho tuto postavu"
 
 msgid "Pre-registration confirmed!"
 msgstr "Předběžná registrace potvrzena!"
@@ -6655,9 +6680,6 @@ msgstr "Doprava: palivo a dálniční poplatky"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Navštiv výukový program a nauč se základy"
 
-msgid "You already have an assigned character"
-msgstr "Už máš přidělenou postavu"
-
 msgid "You are exploring a demo organization."
 msgstr "Prohlížíš si ukázkovou organizaci."
 
@@ -7713,6 +7735,9 @@ msgstr "Jsi si jistý/á? Položky nemusí být obnovitelné."
 msgid "Background image displayed across all event pages"
 msgstr "Obrázek na pozadí zobrazený na všech stránkách události"
 
+msgid "Choose the character you will play in this event!"
+msgstr "Vyber postavu, kterou budeš hrát na této akci!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Barva použitá pro pozadí textu a rámečky s obsahem"
 
@@ -7769,6 +7794,9 @@ msgstr "Tato stránka ti umožňuje přidat nebo upravit typ inventáře."
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Překročení tolerance, pokračuj ve zrušení"
+
+msgid "You already play the maximum number of characters"
+msgstr "Už hraješ maximální počet postav"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Zahrnuješ (alespoň jeden z těchto filtrů)"
@@ -9268,6 +9296,9 @@ msgstr ""
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Pokud potřebuješ přiložit soubor, uveď jej zde, jinak jej nech prázdný"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr "Počet postav, které každý účastník hraje na akci (výchozí=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr "Volitelné – Maximální počet, kolikrát jej lze vybrat (0 = neomezeně)"

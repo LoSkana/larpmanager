@@ -58,6 +58,7 @@ CONFIG_DEFAULTS: dict[str, Any] = {
     "centauri_content": None,
     "centauri_descr": None,
     "centauri_prob": 0,
+    "character_play_max": 1,
     "credits_name": None,
     "deadline_days": 0,
     "deadlines_tolerance": "30",

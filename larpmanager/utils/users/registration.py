@@ -872,6 +872,11 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
     return current_character_count >= maximum_characters_allowed, maximum_characters_allowed
 
 
+def get_character_play_max(event_id: int, context: dict | None = None) -> int:
+    """Return how many characters a player can play at the same time in an event."""
+    return max(1, int(get_event_config(event_id, "character_play_max", context=context)))
+
+
 def registration_status_characters(
     run: Run, registration: Registration, run_status: dict, features: dict, context: dict | None = None
 ) -> None:
@@ -919,9 +924,28 @@ def registration_status_characters(
             format_html_join(" - ", "{}", ((link,) for link in character_links)),
         )
 
-    is_assigned = len(character_links) > 0
+    assigned_count = len(character_links)
+    is_assigned = assigned_count > 0
 
-    _status_approval(run, registration, run_status, features, is_character_assigned=is_assigned)
+    # Count the player's own characters still available to be chosen
+    selectable_count = 0
+    if "user_character" in features:
+        owned_ids = set(get_player_characters(registration.member, run.event).values_list("id", flat=True))
+        assigned_ids = {character_rel.character_id for character_rel in registration_character_rels}
+        selectable_count = len(owned_ids - assigned_ids)
+
+        # Signal which character is played, only when the player owns more than one
+        if is_assigned:
+            run_status["character_multiple"] = len(owned_ids) > 1
+
+    _status_approval(
+        run,
+        registration,
+        run_status,
+        features,
+        assigned_count=assigned_count,
+        selectable_count=selectable_count,
+    )
     _status_casting(run, registration, run_status, features, context, is_character_assigned=is_assigned)
 
 
@@ -1056,20 +1080,27 @@ def _get_character_options_availability(run: Run) -> list[dict[str, Any]]:
 
 
 def _status_approval(
-    run: Run, registration: Registration, run_status: dict, features: dict, *, is_character_assigned: bool
+    run: Run,
+    registration: Registration,
+    run_status: dict,
+    features: dict,
+    *,
+    assigned_count: int,
+    selectable_count: int,
 ) -> None:
-    """Add character creation/selection links to run status based on feature availability.
+    """Add character creation/selection actions to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
-    is not on a waiting list, then adds appropriate character creation or selection
-    links to the run status details.
+    is not on a waiting list, then fills run_status["character_actions"] with the
+    available actions (create a new character, choose an existing one).
 
     Args:
         run: Run object containing event information
         registration: The registration object
         features: Dictionary of enabled features for the event
         run_status: Dictionary with run status
-        is_character_assigned: Boolean indicating if character is already assigned
+        assigned_count: Number of characters already assigned to the registration
+        selectable_count: Number of the player's own characters not yet assigned
 
     """
     # Check if user_character feature is enabled
@@ -1081,29 +1112,41 @@ def _status_approval(
         return
 
     # Get character creation limits for this user and event
-    can_create_character, maximum_characters = check_character_maximum(run.event, registration.member)
+    can_create_character, _maximum_characters = check_character_maximum(run.event, registration.member)
+
+    character_actions = []
 
     # Show character creation action if user can create more characters
     if not can_create_character:
-        url = reverse("character_create", args=[run.get_slug()])
-        run_status["character_action"] = {
-            "url": url,
-            "label": _("Create your character"),
-            "label_long": _("Create the character you will play in this event!"),
-            "tooltip": _("Create your character!"),
-            "icon": "fa-solid fa-wand-magic-sparkles",
-            "status_type": "todo",
-            "status_icon": "fa-solid fa-list-check",
-            "options_availability": _get_character_options_availability(run),
-        }
+        character_actions.append(
+            {
+                "url": reverse("character_create", args=[run.get_slug()]),
+                "label": _("Create your character"),
+                "label_long": _("Create the character you will play in this event!"),
+                "tooltip": _("Create your character!"),
+                "icon": "fa-solid fa-wand-magic-sparkles",
+                "status_type": "todo",
+                "status_icon": "fa-solid fa-list-check",
+                "options_availability": _get_character_options_availability(run),
+            }
+        )
 
-    # Show character selection link if no characters assigned but max chars available
-    elif not is_character_assigned and maximum_characters:
-        url = reverse("character_list", args=[run.get_slug()])
-        if run_status["details"]:
-            run_status["details"] += " - "
-        message = _("Select your character!")
-        run_status["details"] += f"<a href='{url}'>{message}</a>"
+    # Show character selection action if the player has free slots and characters to choose from
+    if selectable_count and assigned_count < get_character_play_max(run.event_id):
+        character_actions.append(
+            {
+                "url": reverse("character_list", args=[run.get_slug()]),
+                "label": _("Choose your character"),
+                "label_long": _("Choose the character you will play in this event!"),
+                "tooltip": _("Choose your character!"),
+                "icon": "fa-solid fa-users-viewfinder",
+                "status_type": "todo",
+                "status_icon": "fa-solid fa-list-check",
+            }
+        )
+
+    if character_actions:
+        run_status["character_actions"] = character_actions
 
 
 def casting_preferences_pending(
@@ -1275,9 +1318,11 @@ def check_signup(context: dict) -> None:
 def check_assign_character(context: dict) -> None:
     """Check and assign characters to player signup.
 
-    Automatically assigns available characters to a player's signup up to the
-    maximum allowed by user_character_max configuration, skipping characters
-    that are inactive or already assigned to this registration.
+    Automatically assigns available characters to a player's signup up to the number of
+    characters playable at the same time (character_play_max), skipping characters that
+    are inactive or already assigned to this registration. When the player owns more
+    assignable characters than free slots, nothing is assigned: the choice is left to
+    the player on the character list page.
 
     Args:
         context: Context dictionary containing event data
@@ -1291,14 +1336,15 @@ def check_assign_character(context: dict) -> None:
     if not registration:
         return
 
-    # Get the maximum number of characters a user can have assigned
-    user_character_max = max(1, int(get_event_config(context["event"].id, "user_character_max")))
+    # Get the number of characters the player can play at the same time
+    character_play_max = get_character_play_max(context["event"].id, context)
 
     # Get currently assigned character IDs for this registration
     assigned_character_ids = set(registration.rcrs.values_list("character_id", flat=True))
 
-    # Skip if player already has maximum character assignments
-    if len(assigned_character_ids) >= user_character_max:
+    # Skip if player already plays the maximum number of characters
+    free_slots = character_play_max - len(assigned_character_ids)
+    if free_slots <= 0:
         return
 
     # Get all characters belonging to this player for the event
@@ -1322,9 +1368,12 @@ def check_assign_character(context: dict) -> None:
     if not assignable_characters:
         return
 
-    # Auto-assign characters up to the user_character_max limit
-    characters_to_assign = user_character_max - len(assigned_character_ids)
-    for character in assignable_characters[:characters_to_assign]:
+    # Leave the choice to the player when there are more candidates than free slots
+    if len(assignable_characters) > free_slots:
+        return
+
+    # Auto-assign the remaining characters
+    for character in assignable_characters:
         RegistrationCharacterRel.objects.create(character_id=character.id, registration=registration)
 
 
