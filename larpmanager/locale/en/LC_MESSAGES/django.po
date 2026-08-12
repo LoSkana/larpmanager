@@ -4864,6 +4864,30 @@ msgstr ""
 msgid "Language Code"
 msgstr ""
 
+msgid "Skipped"
+msgstr ""
+
+msgid "Permanent bounce"
+msgstr ""
+
+msgid "Transient bounce"
+msgstr ""
+
+msgid "Complaint"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Bounce Count"
+msgstr ""
+
+msgid "Last Event"
+msgstr ""
+
+msgid "Raw Payload"
+msgstr ""
+
 msgid "The event this content belongs to"
 msgstr ""
 
@@ -8163,9 +8187,6 @@ msgid "We are processing your payment. Please wait a moment"
 msgstr ""
 
 msgid "View the characters you play"
-msgstr ""
-
-msgid "Last Event"
 msgstr ""
 
 msgid "You don't have any characters yet."

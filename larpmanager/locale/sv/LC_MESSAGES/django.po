@@ -610,6 +610,9 @@ msgstr "Logga in"
 msgid "Manage"
 msgstr "Hantera"
 
+msgid "Manual"
+msgstr "Manuell"
+
 msgid "Master"
 msgstr "Mästare"
 
@@ -985,6 +988,9 @@ msgstr "Logga in"
 
 msgid "Signups"
 msgstr "Anmälningar"
+
+msgid "Skipped"
+msgstr "Hoppades över"
 
 msgid "Station"
 msgstr "Station"
@@ -1420,6 +1426,9 @@ msgstr "Avbokad"
 
 msgid "Character"
 msgstr "Karaktär"
+
+msgid "Complaint"
+msgstr "Klagomål"
 
 msgid "Completed"
 msgstr "Färdigställd"
@@ -2171,6 +2180,9 @@ msgstr "Typer av Quest"
 msgid "Quick Setup"
 msgstr "Snabbinställning"
 
+msgid "Raw Payload"
+msgstr "Rådata"
+
 msgid "Redeem link"
 msgstr "Inlösenlänk"
 
@@ -2272,6 +2284,9 @@ msgstr "Tillgänglighet"
 
 msgid "Bank address"
 msgstr "Bankens adress"
+
+msgid "Bounce Count"
+msgstr "Antal studsar"
 
 msgid "Cache reset!"
 msgstr "Cache återställd!"
@@ -3482,6 +3497,9 @@ msgstr "Väntande inbjudningar:"
 msgid "Pending payments"
 msgstr "Väntande betalningar"
 
+msgid "Permanent bounce"
+msgstr "Permanent studs"
+
 msgid "Player selection"
 msgstr "Val av spelare"
 
@@ -3556,6 +3574,9 @@ msgstr "Transaktionsavgifter"
 
 msgid "Transfer preview"
 msgstr "Förhandsgranskning av överföringar"
+
+msgid "Transient bounce"
+msgstr "Tillfällig studs"
 
 msgid "Workshop Modules"
 msgstr "Workshopmoduler"

@@ -610,6 +610,9 @@ msgstr "Iniciar sessão"
 msgid "Manage"
 msgstr "Gerir"
 
+msgid "Manual"
+msgstr "Manual"
+
 msgid "Master"
 msgstr "Mestre"
 
@@ -985,6 +988,9 @@ msgstr "Iniciar sessão"
 
 msgid "Signups"
 msgstr "Inscrições"
+
+msgid "Skipped"
+msgstr "Ignorado"
 
 msgid "Station"
 msgstr "Estação"
@@ -1420,6 +1426,9 @@ msgstr "Cancelado"
 
 msgid "Character"
 msgstr "Personagem"
+
+msgid "Complaint"
+msgstr "Reclamação"
 
 msgid "Completed"
 msgstr "Concluído"
@@ -2171,6 +2180,9 @@ msgstr "Tipos de Quest"
 msgid "Quick Setup"
 msgstr "Configuração rápida"
 
+msgid "Raw Payload"
+msgstr "Dados brutos"
+
 msgid "Redeem link"
 msgstr "Link de resgate"
 
@@ -2272,6 +2284,9 @@ msgstr "Disponibilidade"
 
 msgid "Bank address"
 msgstr "Morada do banco"
+
+msgid "Bounce Count"
+msgstr "Número de devoluções"
 
 msgid "Cache reset!"
 msgstr "Cache reposta!"
@@ -3482,6 +3497,9 @@ msgstr "Convites pendentes:"
 msgid "Pending payments"
 msgstr "Pagamentos pendentes"
 
+msgid "Permanent bounce"
+msgstr "Devolução permanente"
+
 msgid "Player selection"
 msgstr "Seleção de jogador"
 
@@ -3556,6 +3574,9 @@ msgstr "Taxas de transação"
 
 msgid "Transfer preview"
 msgstr "Pré-visualização da transferência"
+
+msgid "Transient bounce"
+msgstr "Devolução temporária"
 
 msgid "Workshop Modules"
 msgstr "Módulos de workshop"

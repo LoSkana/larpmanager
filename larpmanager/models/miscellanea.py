@@ -840,6 +840,8 @@ class EmailRecipient(UuidMixin, BaseModel):
 
     language_code = models.CharField(max_length=10, blank=True, null=True, verbose_name=_("Language Code"))
 
+    skipped = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("Skipped"))
+
     class Meta:
         indexes: ClassVar[list] = [
             models.Index(fields=["email_content"], condition=Q(deleted__isnull=True), name="emailrecip_content_act"),
@@ -889,6 +891,39 @@ class EmailRecipient(UuidMixin, BaseModel):
 
 # Backward compatibility alias - will be removed after migration is complete
 Email = EmailContent
+
+
+class SuppressionReason(models.TextChoices):
+    """Reasons an email address is blocked from receiving messages."""
+
+    BOUNCE_PERMANENT = "b", _("Permanent bounce")
+    BOUNCE_TRANSIENT = "t", _("Transient bounce")
+    COMPLAINT = "c", _("Complaint")
+    MANUAL = "m", _("Manual")
+
+
+class EmailSuppression(BaseModel):
+    """Address blocked from every delivery, globally across associations.
+
+    Permanent bounces and complaints block immediately; transient bounces only
+    block after repeated failures.
+    """
+
+    email = models.EmailField(unique=True, verbose_name=_("Email"))
+
+    reason = models.CharField(max_length=1, choices=SuppressionReason.choices, verbose_name=_("Reason"))
+
+    bounce_count = models.PositiveIntegerField(default=1, verbose_name=_("Bounce Count"))
+
+    active = models.BooleanField(default=True, verbose_name=_("Active"))
+
+    last_event = models.DateTimeField(auto_now=True, verbose_name=_("Last Event"))
+
+    raw = models.JSONField(blank=True, null=True, verbose_name=_("Raw Payload"))
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.email} ({self.get_reason_display()})"
 
 
 class OneTimeContent(UuidMixin, BaseModel):

@@ -40,10 +40,12 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
+from larpmanager.mail.suppression import is_suppressed
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
-from larpmanager.models.member import Member, Membership, MembershipStatus
+from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
+from larpmanager.models.member import Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
@@ -181,6 +183,29 @@ def partition_shared_recipients(recipients: list, association_id: int | None) ->
     return allowed, ignored
 
 
+def is_newsletter_unsubscribed(email: str, association_id: int | None) -> bool:
+    """Check whether an address opted out of bulk communications.
+
+    Association mails honour the membership newsletter preference, platform
+    mails the global newsletter status.
+    """
+    email = (email or "").strip()
+    if not email:
+        return False
+
+    if association_id:
+        return Membership.objects.filter(
+            member__email__iexact=email,
+            association_id=association_id,
+            newsletter=NewsletterChoices.NO,
+        ).exists()
+
+    return LarpManagerNewsletter.objects.filter(
+        email__iexact=email,
+        status=NewsletterStatus.UNSUBSCRIBED,
+    ).exists()
+
+
 def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: dict) -> list:
     """Create EmailRecipient records for valid, unique addresses and return their PKs."""
     recipient_ids = []
@@ -191,6 +216,10 @@ def _create_bulk_recipients(email_content: Any, recipients: list, seen_emails: d
             validate_email(email.strip())
         except ValidationError:
             logger.warning("Skipping invalid email address in bulk send")
+            continue
+        if is_newsletter_unsubscribed(email, email_content.association_id):
+            logger.info("Skipping bulk recipient opted out of the newsletter")
+            seen_emails[email] = 1
             continue
         email_recipient = EmailRecipient.objects.create(
             email_content=email_content,
@@ -318,6 +347,7 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
 
         if "@" not in email_recipient.recipient:
             logger.info("Email recipient invalid: %s", email_recipient.recipient)
+            _mark_skipped(email_recipient, "invalid")
             continue
 
         domain = email_recipient.recipient.split("@")[-1].lower()
@@ -325,6 +355,13 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
         forbidden = ["demo", "test"]
         if any(keyword in domain for keyword in forbidden):
             logger.info("Email recipient forbidden: %s", email_recipient.recipient)
+            _mark_skipped(email_recipient, "forbidden")
+            continue
+
+        # Bounced or complaining addresses are never contacted again
+        if is_suppressed(email_recipient.recipient):
+            logger.info("Email recipient suppressed: %s", email_recipient.recipient)
+            _mark_skipped(email_recipient, "suppressed")
             continue
 
         if email_recipient.sent:
@@ -334,6 +371,7 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
         email_content = email_recipient.email_content
         body = email_content.body
 
+        association = None
         if email_content.association_id:
             # Add organization signature if available
             signature = get_association_text(
@@ -342,11 +380,11 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             if signature:
                 body += signature
 
-            # Append unsubscribe footer
             association = Association.objects.get(pk=email_content.association_id)
-            body += add_unsubscribe_body(association, email_recipient.recipient)
-        else:
-            body += add_unsubscribe_body(None, email_recipient.recipient)
+
+        # Append unsubscribe footer, reusing the same link in the message headers
+        unsubscribe_url = build_unsubscribe_url(association, email_recipient.recipient)
+        body += add_unsubscribe_body(unsubscribe_url)
 
         my_send_simple_mail(
             email_content.subj,
@@ -357,11 +395,18 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             email_content.reply_to,
             email_content.attachment_path,
             email_content.attachment_name,
+            unsubscribe_url,
         )
 
         # Only mark as sent if successful
         email_recipient.sent = timezone.now()
         email_recipient.save()
+
+
+def _mark_skipped(email_recipient: EmailRecipient, reason: str) -> None:
+    """Flag a recipient as not deliverable, so it is not retried forever."""
+    email_recipient.skipped = reason
+    email_recipient.save(update_fields=["skipped"])
 
 
 def clean_sender(sender_name: Any) -> Any:
@@ -372,7 +417,7 @@ def clean_sender(sender_name: Any) -> Any:
     return re.sub(r"\s+", " ", sender_name).strip()
 
 
-def my_send_simple_mail(
+def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole message description
     subj: str,
     body: str,
     m_email: str,
@@ -381,6 +426,7 @@ def my_send_simple_mail(
     reply_to: str | None = None,
     attachment_path: str | None = None,
     attachment_name: str | None = None,
+    unsubscribe_url: str | None = None,
 ) -> None:
     """Send email with association/event-specific configuration.
 
@@ -399,6 +445,7 @@ def my_send_simple_mail(
         reply_to: Custom Reply-To email address header
         attachment_path: Optional absolute filesystem path to a file to attach as PDF
         attachment_name: Optional filename to use in the email attachment (overrides the on-disk name)
+        unsubscribe_url: Optional one-click unsubscribe link, published in the message headers
 
     Raises:
         Exception: Re-raises email sending exceptions after logging error details
@@ -409,7 +456,7 @@ def my_send_simple_mail(
     """
     try:
         # Gather metadata (sender, BCC, headers)
-        metadata = _prepare_email_metadata(association_id, run_id, reply_to)
+        metadata = _prepare_email_metadata(association_id, run_id, reply_to, unsubscribe_url)
 
         # Build email message
         email_message = _build_email_message(subj, body, m_email, metadata)
@@ -439,13 +486,19 @@ def my_send_simple_mail(
         raise
 
 
-def _prepare_email_metadata(association_id: int | None, run_id: int | None, reply_to: str | None) -> dict:
+def _prepare_email_metadata(
+    association_id: int | None,
+    run_id: int | None,
+    reply_to: str | None,
+    unsubscribe_url: str | None = None,
+) -> dict:
     """Extract email metadata from association/event config.
 
     Args:
         association_id: Association ID for metadata extraction
         run_id: Run ID for event-specific metadata
         reply_to: Custom Reply-To email address
+        unsubscribe_url: One-click unsubscribe link to publish in the headers
 
     Returns:
         Dict containing sender_email, sender_name, headers, and bcc_recipients
@@ -503,15 +556,25 @@ def _prepare_email_metadata(association_id: int | None, run_id: int | None, repl
                 metadata["sender_email"] = f"{association.slug}@larpmanager.com"
                 metadata["sender_name"] = association.name
 
-    # Add headers
+    _add_email_headers(metadata, reply_to, unsubscribe_url)
+
+    return metadata
+
+
+def _add_email_headers(metadata: dict, reply_to: str | None, unsubscribe_url: str | None) -> None:
+    """Fill the message headers with the reply-to and unsubscribe entries."""
     if reply_to:
         if "\r" in reply_to or "\n" in reply_to:
             msg = "Invalid characters in reply-to address"
             raise ValueError(msg)
         metadata["headers"]["Reply-To"] = reply_to
-    metadata["headers"]["List-Unsubscribe"] = f"<mailto:{metadata['sender_email']}>"
 
-    return metadata
+    # RFC 8058: mailbox providers require an http link plus the one-click marker
+    if unsubscribe_url:
+        metadata["headers"]["List-Unsubscribe"] = f"<{unsubscribe_url}>, <mailto:{metadata['sender_email']}>"
+        metadata["headers"]["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
+    else:
+        metadata["headers"]["List-Unsubscribe"] = f"<mailto:{metadata['sender_email']}>"
 
 
 # A whole html tag, rewritten one at a time so every attribute inside it is considered;
@@ -611,14 +674,18 @@ def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> 
     return message
 
 
-def add_unsubscribe_body(association: Any, recipient_email: str = "") -> str:
-    """Add unsubscribe footer to email body with a signed token link."""
+def build_unsubscribe_url(association: Any, recipient_email: str = "") -> str:
+    """Build the signed unsubscribe link of a recipient, scoped to an association."""
     token_data: dict[str, Any] = {"email": recipient_email}
     if association:
         token_data["association_slug"] = association.slug
     token = signing.dumps(token_data, salt="unsubscribe")
     hex_token = token.encode().hex()
-    unsubscribe_url = get_url(f"unsubscribe/{hex_token}/", association)
+    return get_url(f"unsubscribe/{hex_token}/", association)
+
+
+def add_unsubscribe_body(unsubscribe_url: str) -> str:
+    """Add unsubscribe footer to email body."""
     html_footer = "<br /><br />-<br />"
     html_footer += f"<a ses:no-track href='{unsubscribe_url}'>Unsubscribe</a>"
     return html_footer

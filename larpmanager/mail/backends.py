@@ -71,10 +71,18 @@ class SESEmailBackend(EmailBackend):
         if email_message.bcc:
             destinations.extend(email_message.bcc)
 
-        # Send via SES
-        response = self.client.send_raw_email(
-            Source=email_message.from_email, Destinations=destinations, RawMessage={"Data": raw_message}
-        )
+        # Send via SES, tagging the message with the configuration set that
+        # routes bounce and complaint events to the notification endpoint
+        send_kwargs = {
+            "Source": email_message.from_email,
+            "Destinations": destinations,
+            "RawMessage": {"Data": raw_message},
+        }
+        configuration_set = getattr(settings, "AWS_SES_CONFIGURATION_SET", None)
+        if configuration_set:
+            send_kwargs["ConfigurationSetName"] = configuration_set
+
+        response = self.client.send_raw_email(**send_kwargs)
 
         message_id = response.get("MessageId", "unknown")
         logger.info("SES email sent: MessageId=%s", message_id)

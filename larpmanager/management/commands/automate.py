@@ -22,6 +22,8 @@ from __future__ import annotations
 from datetime import timedelta
 from typing import Any
 
+import boto3
+from botocore.exceptions import BotoCoreError, ClientError
 from django.conf import settings as conf_settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
@@ -65,6 +67,13 @@ from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 from larpmanager.utils.publication.base import publish_event_all
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
+
+# AWS reviews accounts above 5% bounces or 0.1% complaints
+BOUNCE_RATE_LIMIT = 0.05
+COMPLAINT_RATE_LIMIT = 0.001
+
+# Rates are meaningless on a handful of messages
+MIN_REPUTATION_SAMPLE = 100
 
 
 class Command(BaseCommand):
@@ -137,6 +146,9 @@ class Command(BaseCommand):
 
         # Send weekly recap of ask-larpmanager chat questions to admins
         self.send_chat_log_recap()
+
+        # Warn admins when SES bounce or complaint rates approach AWS thresholds
+        self.check_email_reputation()
 
         # Process automation tasks for active runs only
         # Skip completed or cancelled runs to avoid unnecessary processing
@@ -393,6 +405,58 @@ class Command(BaseCommand):
             send_password_reset_remainder(membership)
             membership.password_reset = ""
             membership.save()
+
+    @staticmethod
+    def check_email_reputation() -> None:
+        """Notify admins when SES bounce or complaint rates get close to the AWS limits.
+
+        AWS places an account under review above 5% bounces or 0.1% complaints,
+        so the alert fires well before sending is suspended.
+        """
+        if not all(
+            [
+                getattr(conf_settings, "AWS_SES_ACCESS_KEY_ID", None),
+                getattr(conf_settings, "AWS_SES_SECRET_ACCESS_KEY", None),
+                getattr(conf_settings, "AWS_SES_REGION_NAME", None),
+            ]
+        ):
+            return
+
+        try:
+            client = boto3.client(
+                "ses",
+                aws_access_key_id=conf_settings.AWS_SES_ACCESS_KEY_ID,
+                aws_secret_access_key=conf_settings.AWS_SES_SECRET_ACCESS_KEY,
+                region_name=conf_settings.AWS_SES_REGION_NAME,
+            )
+            data_points = client.get_send_statistics().get("SendDataPoints", [])
+        except (ClientError, BotoCoreError) as exc:
+            notify_admins("SES statistics unavailable", str(exc))
+            return
+
+        # Aggregate the last day of data points, which SES reports in 15 minute buckets
+        limit = timezone.now() - timedelta(days=1)
+        sent = bounces = complaints = 0
+        for point in data_points:
+            timestamp = point.get("Timestamp")
+            if timestamp and timestamp < limit:
+                continue
+            sent += point.get("DeliveryAttempts", 0)
+            bounces += point.get("Bounces", 0)
+            complaints += point.get("Complaints", 0)
+
+        if sent < MIN_REPUTATION_SAMPLE:
+            return
+
+        bounce_rate = bounces / sent
+        complaint_rate = complaints / sent
+        if bounce_rate <= BOUNCE_RATE_LIMIT and complaint_rate <= COMPLAINT_RATE_LIMIT:
+            return
+
+        notify_admins(
+            "SES reputation warning",
+            f"Sent: {sent} - bounces: {bounces} ({bounce_rate:.2%}) - complaints: {complaints} ({complaint_rate:.2%})",
+        )
 
     @staticmethod
     def clean_db() -> None:

@@ -354,6 +354,12 @@ AWS_SES_ACCESS_KEY_ID = None
 AWS_SES_SECRET_ACCESS_KEY = None
 AWS_SES_REGION_NAME = 'us-east-1'
 
+# SES configuration set publishing bounce/complaint events to SNS (optional)
+AWS_SES_CONFIGURATION_SET = None
+
+# SNS topic allowed to post to the SES notification endpoint (optional, recommended)
+AWS_SNS_TOPIC_ARN = None
+
 # Anthropic API key for the live chat assistant (optional - chat is disabled if unset)
 ANTHROPIC_API_KEY = None
 

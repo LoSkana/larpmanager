@@ -610,6 +610,9 @@ msgstr "Přihlásit se"
 msgid "Manage"
 msgstr "Spravovat"
 
+msgid "Manual"
+msgstr "Ruční"
+
 msgid "Master"
 msgstr "Mistr"
 
@@ -985,6 +988,9 @@ msgstr "Přihlásit se"
 
 msgid "Signups"
 msgstr "Přihlášení"
+
+msgid "Skipped"
+msgstr "Přeskočeno"
 
 msgid "Station"
 msgstr "Pracovní stanice"
@@ -1420,6 +1426,9 @@ msgstr "Zrušeno"
 
 msgid "Character"
 msgstr "Postava"
+
+msgid "Complaint"
+msgstr "Stížnost"
 
 msgid "Completed"
 msgstr "Dokončeno"
@@ -2171,6 +2180,9 @@ msgstr "Typy Questů"
 msgid "Quick Setup"
 msgstr "Rychlé nastavení"
 
+msgid "Raw Payload"
+msgstr "Nezpracovaný obsah"
+
 msgid "Redeem link"
 msgstr "Odkaz na vykoupení"
 
@@ -2272,6 +2284,9 @@ msgstr "Dostupnost"
 
 msgid "Bank address"
 msgstr "Adresa banky"
+
+msgid "Bounce Count"
+msgstr "Počet odmítnutí"
 
 msgid "Cache reset!"
 msgstr "Mezipaměť byla resetována!"
@@ -3482,6 +3497,9 @@ msgstr "Pozvánky čekají na vyřízení:"
 msgid "Pending payments"
 msgstr "Čekající platby"
 
+msgid "Permanent bounce"
+msgstr "Trvalé odmítnutí"
+
 msgid "Player selection"
 msgstr "Výběr hráče"
 
@@ -3556,6 +3574,9 @@ msgstr "Transakční poplatky"
 
 msgid "Transfer preview"
 msgstr "Náhled převodu"
+
+msgid "Transient bounce"
+msgstr "Dočasné odmítnutí"
 
 msgid "Workshop Modules"
 msgstr "Moduly workshopu"

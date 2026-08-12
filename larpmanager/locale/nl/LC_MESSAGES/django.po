@@ -610,6 +610,9 @@ msgstr "Inloggen"
 msgid "Manage"
 msgstr "Beheer"
 
+msgid "Manual"
+msgstr "Handmatig"
+
 msgid "Master"
 msgstr "Meester"
 
@@ -985,6 +988,9 @@ msgstr "Aanmelden"
 
 msgid "Signups"
 msgstr "Aanmeldingen"
+
+msgid "Skipped"
+msgstr "Overgeslagen"
 
 msgid "Station"
 msgstr "Werkstation"
@@ -1420,6 +1426,9 @@ msgstr "Geannuleerd"
 
 msgid "Character"
 msgstr "Personage"
+
+msgid "Complaint"
+msgstr "Klacht"
 
 msgid "Completed"
 msgstr "Voltooid"
@@ -2171,6 +2180,9 @@ msgstr "Questtypen"
 msgid "Quick Setup"
 msgstr "Snelle configuratie"
 
+msgid "Raw Payload"
+msgstr "Ruwe payload"
+
 msgid "Redeem link"
 msgstr "Link inwisselen"
 
@@ -2272,6 +2284,9 @@ msgstr "Beschikbaarheid"
 
 msgid "Bank address"
 msgstr "Adres bank"
+
+msgid "Bounce Count"
+msgstr "Aantal bounces"
 
 msgid "Cache reset!"
 msgstr "Cache opnieuw ingesteld!"
@@ -3482,6 +3497,9 @@ msgstr "Openstaande uitnodigingen:"
 msgid "Pending payments"
 msgstr "Openstaande betalingen"
 
+msgid "Permanent bounce"
+msgstr "Permanente bounce"
+
 msgid "Player selection"
 msgstr "Spelerselectie"
 
@@ -3556,6 +3574,9 @@ msgstr "Transactiekosten"
 
 msgid "Transfer preview"
 msgstr "Transfervoorbeeld"
+
+msgid "Transient bounce"
+msgstr "Tijdelijke bounce"
 
 msgid "Workshop Modules"
 msgstr "Workshopmodules"

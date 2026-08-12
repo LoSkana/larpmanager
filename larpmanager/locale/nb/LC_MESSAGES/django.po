@@ -610,6 +610,9 @@ msgstr "Logg inn"
 msgid "Manage"
 msgstr "Administrer"
 
+msgid "Manual"
+msgstr "Manuell"
+
 msgid "Master"
 msgstr "Mester"
 
@@ -985,6 +988,9 @@ msgstr "Logg inn"
 
 msgid "Signups"
 msgstr "Påmeldinger"
+
+msgid "Skipped"
+msgstr "Hoppet over"
 
 msgid "Station"
 msgstr "Stasjon"
@@ -1420,6 +1426,9 @@ msgstr "Avlyst"
 
 msgid "Character"
 msgstr "Karakter"
+
+msgid "Complaint"
+msgstr "Klage"
 
 msgid "Completed"
 msgstr "Ferdigstilt"
@@ -2171,6 +2180,9 @@ msgstr "Quest-typer"
 msgid "Quick Setup"
 msgstr "Hurtigoppsett"
 
+msgid "Raw Payload"
+msgstr "Rå nyttelast"
+
 msgid "Redeem link"
 msgstr "Innløsningslenke"
 
@@ -2272,6 +2284,9 @@ msgstr "Tilgjengelighet"
 
 msgid "Bank address"
 msgstr "Bankens adresse"
+
+msgid "Bounce Count"
+msgstr "Antall avvisninger"
 
 msgid "Cache reset!"
 msgstr "Cache tilbakestilt!"
@@ -3482,6 +3497,9 @@ msgstr "Ventende invitasjoner:"
 msgid "Pending payments"
 msgstr "Utestående betalinger"
 
+msgid "Permanent bounce"
+msgstr "Permanent avvisning"
+
 msgid "Player selection"
 msgstr "Valg av spiller"
 
@@ -3556,6 +3574,9 @@ msgstr "Transaksjonsgebyrer"
 
 msgid "Transfer preview"
 msgstr "Forhåndsvisning av overføringer"
+
+msgid "Transient bounce"
+msgstr "Midlertidig avvisning"
 
 msgid "Workshop Modules"
 msgstr "Workshopmoduler"

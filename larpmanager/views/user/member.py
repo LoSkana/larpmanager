@@ -46,6 +46,7 @@ from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import activate, get_language, gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
 from django_otp import login as otp_login, match_token
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from PIL import Image, UnidentifiedImageError
@@ -870,8 +871,14 @@ def _unsubscribe_global(request: HttpRequest, email: str) -> dict:
     return {"done": True, "is_org": False}
 
 
+@csrf_exempt
 def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
-    """Unsubscribe user from newsletter communications via signed token link."""
+    """Unsubscribe user from newsletter communications via signed token link.
+
+    Any POST unsubscribes immediately, so the same url serves both the
+    confirmation form and the RFC 8058 one-click request sent by mail clients,
+    which carries no CSRF token.
+    """
     if not token:
         return redirect("home")
 
@@ -891,7 +898,7 @@ def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
         except Association.DoesNotExist:
             return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
 
-    if request.method == "POST" and request.POST.get("confirm"):
+    if request.method == "POST":
         ctx = _unsubscribe_org(request, email, association) if association else _unsubscribe_global(request, email)
         return render(request, "larpmanager/general/unsubscribe.html", ctx)
 

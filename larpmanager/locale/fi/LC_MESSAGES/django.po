@@ -610,6 +610,9 @@ msgstr "Kirjaudu sisään"
 msgid "Manage"
 msgstr "Hallitse"
 
+msgid "Manual"
+msgstr "Manuaalinen"
+
 msgid "Master"
 msgstr "Mestari"
 
@@ -985,6 +988,9 @@ msgstr "Kirjaudu sisään"
 
 msgid "Signups"
 msgstr "Ilmoittautumiset"
+
+msgid "Skipped"
+msgstr "Ohitettu"
 
 msgid "Station"
 msgstr "Asema"
@@ -1420,6 +1426,9 @@ msgstr "Peruutettu"
 
 msgid "Character"
 msgstr "Hahmo"
+
+msgid "Complaint"
+msgstr "Valitus"
 
 msgid "Completed"
 msgstr "Valmistunut"
@@ -2171,6 +2180,9 @@ msgstr "Quest-tyypit"
 msgid "Quick Setup"
 msgstr "Pika-asetus"
 
+msgid "Raw Payload"
+msgstr "Raaka hyötykuorma"
+
 msgid "Redeem link"
 msgstr "Lunastuslinkki"
 
@@ -2272,6 +2284,9 @@ msgstr "Saatavuus"
 
 msgid "Bank address"
 msgstr "Pankin osoite"
+
+msgid "Bounce Count"
+msgstr "Palautusten määrä"
 
 msgid "Cache reset!"
 msgstr "Välimuisti nollattu!"
@@ -3482,6 +3497,9 @@ msgstr "Odottavat kutsut:"
 msgid "Pending payments"
 msgstr "Vireillä olevat maksut"
 
+msgid "Permanent bounce"
+msgstr "Pysyvä palautus"
+
 msgid "Player selection"
 msgstr "Pelaajan valinta"
 
@@ -3556,6 +3574,9 @@ msgstr "Transaktiomaksut"
 
 msgid "Transfer preview"
 msgstr "Siirtojen esikatselu"
+
+msgid "Transient bounce"
+msgstr "Tilapäinen palautus"
 
 msgid "Workshop Modules"
 msgstr "Työpajamoduulit"
