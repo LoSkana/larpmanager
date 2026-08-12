@@ -74,6 +74,9 @@ msgstr "Kropp"
 msgid "Book"
 msgstr "Bok"
 
+msgid "Bulk"
+msgstr "Massåtgärd"
+
 msgid "Card"
 msgstr "Kort"
 

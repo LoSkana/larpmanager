@@ -805,6 +805,9 @@ class EmailContent(UuidMixin, BaseModel):
 
     search = models.CharField(max_length=500, blank=True, verbose_name=_("Search"))
 
+    # Only bulk communications may carry the RFC 8058 one-click unsubscribe marker
+    bulk = models.BooleanField(default=False, verbose_name=_("Bulk"))
+
     class Meta:
         indexes: ClassVar[list] = [
             models.Index(fields=["association"], condition=Q(deleted__isnull=True), name="emailcontent_assoc_act"),

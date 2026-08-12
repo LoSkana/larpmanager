@@ -37,7 +37,7 @@ from cryptography.x509 import load_pem_x509_certificate
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
-from larpmanager.mail.suppression import suppress_email
+from larpmanager.mail.suppression import clear_soft_bounces, suppress_email
 from larpmanager.models.miscellanea import SuppressionReason
 
 logger = logging.getLogger(__name__)
@@ -182,6 +182,13 @@ def _handle_ses_message(message: dict[str, Any]) -> None:
         complaint = message.get("complaint", {})
         for recipient in complaint.get("complainedRecipients", []):
             suppress_email(recipient.get("emailAddress", ""), SuppressionReason.COMPLAINT, raw=complaint)
+        return
+
+    if notification_type == "Delivery":
+        # Acceptance by SES proves nothing: only a delivery clears past transient failures,
+        # since the bounce notification of a message always arrives after it was sent
+        for recipient in message.get("delivery", {}).get("recipients", []):
+            clear_soft_bounces(recipient)
         return
 
     logger.debug("SES notification ignored: %s", notification_type)

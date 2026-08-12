@@ -24,18 +24,25 @@ import base64
 import contextlib
 import datetime
 import json
+from http import HTTPStatus
 from unittest.mock import patch
 
 from cryptography import x509
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import padding, rsa
 from cryptography.x509.oid import NameOID
+from django.core import signing
 from django.core.cache import cache
+from django.test import Client
+from django.urls import reverse
 from django.utils import timezone
+
+from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
 
 from larpmanager.mail.sns import _canonical_string, handle_sns_payload, verify_sns_signature
 from larpmanager.mail.suppression import (
     SOFT_BOUNCE_LIMIT,
+    get_suppressed_emails,
     is_suppressed,
     suppress_email,
     unsuppress_email,
@@ -159,6 +166,33 @@ class TestSuppressionList(BaseTestCase):
         assert suppression.active
         assert suppression.reason == SuppressionReason.BOUNCE_PERMANENT
         assert is_suppressed("hard@example.com")
+
+    def test_released_address_drops_the_old_hard_reason(self):
+        """After a release, later transient bounces never revive the permanent block."""
+        suppress_email("freed@example.com", SuppressionReason.BOUNCE_PERMANENT)
+        with patch("larpmanager.mail.suppression._ses_delete_suppressed_destination"):
+            unsuppress_email("freed@example.com")
+
+        for _index in range(SOFT_BOUNCE_LIMIT):
+            suppress_email("freed@example.com", SuppressionReason.BOUNCE_TRANSIENT)
+
+        suppression = EmailSuppression.objects.get(email="freed@example.com")
+        assert suppression.active
+        assert suppression.reason == SuppressionReason.BOUNCE_TRANSIENT
+        # Only bulk mails are blocked: the member can still receive a password reset
+        assert is_suppressed("freed@example.com")
+        assert not is_suppressed("freed@example.com", bulk=False)
+
+    def test_bulk_lookup_resolves_every_address(self):
+        """The batch lookup reports the same addresses as the single check."""
+        suppress_email("dead@example.com", SuppressionReason.BOUNCE_PERMANENT)
+        suppress_email("angry@example.com", SuppressionReason.COMPLAINT)
+        suppress_email("full@example.com", SuppressionReason.BOUNCE_TRANSIENT)
+
+        emails = ["Dead@example.com", "angry@example.com", "full@example.com", "clean@example.com"]
+
+        assert get_suppressed_emails(emails) == {"dead@example.com", "angry@example.com"}
+        assert get_suppressed_emails(emails, bulk=False) == {"dead@example.com"}
 
     def test_soft_deleted_entry_is_revived(self):
         """A new event on a soft deleted address updates the existing row."""
@@ -303,7 +337,7 @@ class TestSnsHandling(BaseTestCase):
 
         assert EmailSuppression.objects.filter(email="retry@example.com").exists()
 
-    def test_delivery_notification_ignored(self):
+    def test_delivery_notification_creates_no_suppression(self):
         """Delivery events do not create suppressions."""
         payload = bounce_payload("ok@example.com")
         payload["Message"] = json.dumps({"notificationType": "Delivery"})
@@ -311,6 +345,19 @@ class TestSnsHandling(BaseTestCase):
         handle_sns_payload(payload)
 
         assert EmailSuppression.objects.count() == 0
+
+    def test_delivery_notification_clears_soft_bounces(self):
+        """A delivery forgets the transient failures accumulated so far."""
+        suppress_email("full@example.com", SuppressionReason.BOUNCE_TRANSIENT)
+
+        payload = bounce_payload("full@example.com")
+        payload["Message"] = json.dumps(
+            {"notificationType": "Delivery", "delivery": {"recipients": ["full@example.com"]}}
+        )
+
+        handle_sns_payload(payload)
+
+        assert EmailSuppression.objects.get(email="full@example.com").bounce_count == 0
 
     def test_subscription_confirmation_calls_back_aws(self):
         """Subscription confirmations are completed by calling the AWS url."""
@@ -339,9 +386,9 @@ class TestSuppressionOnSend(BaseTestCase):
         """Clear caches between tests."""
         cache.clear()
 
-    def _build_recipient(self, email: str) -> EmailRecipient:
+    def _build_recipient(self, email: str, *, bulk: bool = False) -> EmailRecipient:
         """Create a queued email for the given address."""
-        content = EmailContent.objects.create(subj="Subject", body="Body")
+        content = EmailContent.objects.create(subj="Subject", body="Body", bulk=bulk)
         return EmailRecipient.objects.create(email_content=content, recipient=email)
 
     def test_suppressed_recipient_is_skipped(self):
@@ -385,8 +432,8 @@ class TestSuppressionOnSend(BaseTestCase):
         assert recipient_ids == []
         assert content.recipients.get().skipped == "suppressed"
 
-    def test_successful_send_clears_soft_bounces(self):
-        """A delivery forgets the transient failures accumulated so far."""
+    def test_send_does_not_clear_soft_bounces(self):
+        """Acceptance by SES is not a delivery, so the transient counter survives a send."""
         from larpmanager.utils.larpmanager.tasks import my_send_mail_bkg
 
         suppress_email("full@example.com", SuppressionReason.BOUNCE_TRANSIENT)
@@ -395,7 +442,7 @@ class TestSuppressionOnSend(BaseTestCase):
         with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail"):
             my_send_mail_bkg.task_function(recipient.pk)
 
-        assert EmailSuppression.objects.get(email="full@example.com").bounce_count == 0
+        assert EmailSuppression.objects.get(email="full@example.com").bounce_count == 1
 
     def test_already_sent_recipient_is_not_restamped(self):
         """A retried batch leaves delivered rows untouched, even if now suppressed."""
@@ -414,7 +461,7 @@ class TestSuppressionOnSend(BaseTestCase):
         assert recipient.skipped is None
 
     def test_regular_recipient_is_sent(self):
-        """A clean address is delivered and gets a one-click unsubscribe link."""
+        """A clean address is delivered and gets an unsubscribe link."""
         from larpmanager.utils.larpmanager.tasks import my_send_mail_bkg
 
         recipient = self._build_recipient("clean@example.com")
@@ -424,23 +471,93 @@ class TestSuppressionOnSend(BaseTestCase):
             mock_send.assert_called_once()
             unsubscribe_url = mock_send.call_args[0][8]
             assert "unsubscribe/" in unsubscribe_url
+            # A transactional mail must never advertise one-click
+            assert "unsubscribe-one-click/" not in unsubscribe_url
+            assert not mock_send.call_args[1]["one_click"]
 
         recipient.refresh_from_db()
         assert recipient.skipped is None
         assert recipient.sent is not None
+
+    def test_bulk_recipient_gets_the_one_click_link(self):
+        """A broadcast publishes the endpoint reserved to the RFC 8058 post."""
+        from larpmanager.utils.larpmanager.tasks import my_send_mail_bkg
+
+        recipient = self._build_recipient("clean@example.com", bulk=True)
+
+        with patch("larpmanager.utils.larpmanager.tasks.my_send_simple_mail") as mock_send:
+            my_send_mail_bkg.task_function(recipient.pk)
+            mock_send.assert_called_once()
+            assert "unsubscribe-one-click/" in mock_send.call_args[0][8]
+            assert mock_send.call_args[1]["one_click"]
+
+
+class TestUnsubscribeEndpoints(BaseTestCase):
+    """Tests that only the RFC 8058 endpoint is exempted from CSRF."""
+
+    def setUp(self):
+        """Clear caches and build a signed token for a global unsubscribe."""
+        cache.clear()
+        token = signing.dumps({"email": "reader@example.com"}, salt="unsubscribe")
+        self.token = token.encode().hex()
+        self.client = Client(enforce_csrf_checks=True)
+
+    def test_confirm_form_requires_csrf(self):
+        """The confirmation page keeps its CSRF protection."""
+        response = self.client.post(reverse("unsubscribe", args=[self.token]), {"confirm": "1"})
+
+        assert response.status_code == HTTPStatus.FORBIDDEN
+        assert not LarpManagerNewsletter.objects.filter(email="reader@example.com").exists()
+
+    def test_one_click_post_is_accepted(self):
+        """The mail client post carries no CSRF token and still unsubscribes."""
+        response = self.client.post(
+            reverse("unsubscribe_one_click", args=[self.token]),
+            {"List-Unsubscribe": "One-Click"},
+        )
+
+        assert response.status_code == HTTPStatus.OK
+        newsletter = LarpManagerNewsletter.objects.get(email="reader@example.com")
+        assert newsletter.status == NewsletterStatus.UNSUBSCRIBED
+
+    def test_one_click_endpoint_requires_the_marker(self):
+        """A post without the one-click marker is refused."""
+        response = self.client.post(reverse("unsubscribe_one_click", args=[self.token]))
+
+        assert response.status_code == HTTPStatus.BAD_REQUEST
+        assert not LarpManagerNewsletter.objects.filter(email="reader@example.com").exists()
+
+    def test_one_click_endpoint_refuses_get(self):
+        """The exempted endpoint only answers posts."""
+        response = self.client.get(reverse("unsubscribe_one_click", args=[self.token]))
+
+        assert response.status_code == HTTPStatus.METHOD_NOT_ALLOWED
 
 
 class TestUnsubscribeHeaders(BaseTestCase):
     """Tests for the RFC 8058 one-click unsubscribe headers."""
 
     def test_one_click_headers_present(self):
-        """The unsubscribe link is published together with the one-click marker."""
+        """A bulk mail publishes the unsubscribe link together with the one-click marker."""
+        from larpmanager.utils.larpmanager.tasks import _prepare_email_metadata
+
+        metadata = _prepare_email_metadata(
+            None, None, None, "https://larpmanager.com/unsubscribe-one-click/abc/", one_click=True
+        )
+
+        assert metadata["headers"]["List-Unsubscribe"].startswith(
+            "<https://larpmanager.com/unsubscribe-one-click/abc/>"
+        )
+        assert metadata["headers"]["List-Unsubscribe-Post"] == "List-Unsubscribe=One-Click"
+
+    def test_one_click_marker_absent_on_transactional_mail(self):
+        """A transactional mail publishes the link, but never offers one-click."""
         from larpmanager.utils.larpmanager.tasks import _prepare_email_metadata
 
         metadata = _prepare_email_metadata(None, None, None, "https://larpmanager.com/unsubscribe/abc/")
 
         assert metadata["headers"]["List-Unsubscribe"].startswith("<https://larpmanager.com/unsubscribe/abc/>")
-        assert metadata["headers"]["List-Unsubscribe-Post"] == "List-Unsubscribe=One-Click"
+        assert "List-Unsubscribe-Post" not in metadata["headers"]
 
     def test_one_click_marker_absent_without_link(self):
         """Without a link only the mailto form is published."""

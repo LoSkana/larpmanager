@@ -74,6 +74,9 @@ msgstr "Lichaam"
 msgid "Book"
 msgstr "Boek"
 
+msgid "Bulk"
+msgstr "Bulk"
+
 msgid "Card"
 msgstr "Kaart"
 

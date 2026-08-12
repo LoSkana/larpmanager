@@ -74,6 +74,9 @@ msgstr "Tělo"
 msgid "Book"
 msgstr "Kniha"
 
+msgid "Bulk"
+msgstr "Hromadné"
+
 msgid "Card"
 msgstr "Karta"
 

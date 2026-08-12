@@ -38,4 +38,9 @@ class Migration(migrations.Migration):
             name='skipped',
             field=models.CharField(blank=True, max_length=50, null=True, verbose_name='Skipped'),
         ),
+        migrations.AddField(
+            model_name='emailcontent',
+            name='bulk',
+            field=models.BooleanField(default=False, verbose_name='Bulk'),
+        ),
     ]

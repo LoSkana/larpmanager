@@ -195,6 +195,11 @@ urlpatterns = [
         name="unsubscribe",
     ),
     path(
+        "unsubscribe-one-click/<str:token>/",
+        views_um.unsubscribe_one_click,
+        name="unsubscribe_one_click",
+    ),
+    path(
         "delegated/",
         views_um.delegated,
         name="delegated",

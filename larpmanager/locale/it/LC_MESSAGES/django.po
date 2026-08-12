@@ -74,6 +74,9 @@ msgstr "Corpo"
 msgid "Book"
 msgstr "Libro"
 
+msgid "Bulk"
+msgstr "In blocco"
+
 msgid "Card"
 msgstr "Tessera"
 

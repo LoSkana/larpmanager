@@ -74,6 +74,9 @@ msgstr "Körper"
 msgid "Book"
 msgstr "Buch"
 
+msgid "Bulk"
+msgstr "Massenbearbeitung"
+
 msgid "Card"
 msgstr "Karte"
 

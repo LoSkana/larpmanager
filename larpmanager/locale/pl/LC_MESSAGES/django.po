@@ -74,6 +74,9 @@ msgstr "Ciało"
 msgid "Book"
 msgstr "Książka"
 
+msgid "Bulk"
+msgstr "Masowo"
+
 msgid "Card"
 msgstr "Karta"
 

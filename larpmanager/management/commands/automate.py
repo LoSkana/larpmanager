@@ -25,6 +25,7 @@ from typing import Any
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError
 from django.conf import settings as conf_settings
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand
 from django.db import connection
@@ -77,6 +78,9 @@ REPUTATION_WARNING_RATIO = 0.7
 
 # Rates are meaningless on a handful of messages
 MIN_REPUTATION_SAMPLE = 100
+
+# A failing SES statistics call is only reported once a week
+SES_ERROR_ALERT_TIMEOUT = 86400 * 7
 
 
 class Command(BaseCommand):
@@ -434,7 +438,9 @@ class Command(BaseCommand):
             )
             data_points = client.get_send_statistics().get("SendDataPoints", [])
         except (ClientError, BotoCoreError) as exc:
-            notify_admins("SES statistics unavailable", str(exc))
+            # A misconfiguration fails on every daily run: warn once a week, not every day
+            if cache.add("ses_statistics_unavailable", 1, SES_ERROR_ALERT_TIMEOUT):
+                notify_admins("SES statistics unavailable", str(exc))
             return
 
         # Aggregate the last day of data points, which SES reports in 15 minute buckets

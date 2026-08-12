@@ -29,6 +29,7 @@ from botocore.exceptions import BotoCoreError, ClientError
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.db import transaction
+from django.db.models.functions import Lower
 
 from larpmanager.models.miscellanea import EmailSuppression, SuppressionReason
 
@@ -79,6 +80,27 @@ def is_suppressed(email: str, *, bulk: bool = True) -> bool:
     return state["reason"] == SuppressionReason.BOUNCE_PERMANENT
 
 
+def get_suppressed_emails(emails: list[str], *, bulk: bool = True) -> set[str]:
+    """Return the lowercased addresses of a list that are currently blocked.
+
+    Resolves the whole list with a single query, so a broadcast does not hit
+    the database once per recipient.
+    """
+    cleaned = {email.strip().lower() for email in emails if email and email.strip()}
+    if not cleaned:
+        return set()
+
+    # Rows may have been created with a different case, so the match is case insensitive
+    rows = (
+        EmailSuppression.objects.annotate(lower_email=Lower("email"))
+        .filter(lower_email__in=cleaned, active=True)
+        .values_list("lower_email", "reason")
+    )
+    if bulk:
+        return {email for email, _reason in rows}
+    return {email for email, reason in rows if reason == SuppressionReason.BOUNCE_PERMANENT}
+
+
 def clear_soft_bounces(email: str) -> None:
     """Reset the transient bounce counter of an address after a successful delivery.
 
@@ -120,8 +142,9 @@ def suppress_email(email: str, reason: str, raw: dict[str, Any] | None = None) -
             obj.deleted_by_cascade = False
 
         obj.bounce_count += 1
-        # A hard reason is never downgraded by a later transient bounce
-        if obj.reason not in HARD_REASONS:
+        # A hard reason is never downgraded by a later transient bounce, unless the address
+        # was released: keeping it would let the next soft limit revive a permanent block
+        if not obj.active or obj.reason not in HARD_REASONS:
             obj.reason = reason
         obj.raw = raw
         # Suppression is only ever raised here: releasing an address is up to unsuppress_email

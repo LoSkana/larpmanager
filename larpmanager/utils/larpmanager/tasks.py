@@ -40,7 +40,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
-from larpmanager.mail.suppression import clear_soft_bounces, is_suppressed
+from larpmanager.mail.suppression import get_suppressed_emails, is_suppressed
 from larpmanager.models.access import AssociationRole
 from larpmanager.models.association import Association, AssociationTextType, get_url
 from larpmanager.models.event import Event, Run
@@ -238,6 +238,8 @@ def _create_bulk_recipients(
     if opted_out is None:
         recipients, opted_out = partition_newsletter_recipients(recipients, email_content.association_id)
     opted_out_emails = set(opted_out)
+    # Resolved once for the whole broadcast, instead of one query per recipient
+    suppressed_emails = get_suppressed_emails(recipients)
 
     recipient_ids = []
     for email in recipients + opted_out:
@@ -259,12 +261,29 @@ def _create_bulk_recipients(
             _mark_skipped(email_recipient, "newsletter")
             continue
         # Bounced or complaining addresses are excluded from every bulk communication
-        if is_suppressed(email.strip()):
+        if email.strip().lower() in suppressed_emails:
             logger.info("Skipping bulk recipient on the suppression list")
             _mark_skipped(email_recipient, "suppressed")
             continue
         recipient_ids.append(email_recipient.pk)
     return recipient_ids
+
+
+def _broadcast_size_allowed(total_recipients: int) -> bool:
+    """Check that a broadcast has recipients and stays within the configured limit.
+
+    Opted out addresses are traced as skipped rows, so they count towards the size.
+    """
+    if not total_recipients:
+        logger.info("Broadcast skipped: no recipient left")
+        return False
+
+    max_recipients = getattr(conf_settings, "MAIL_MAX_RECIPIENTS", 2000)
+    if total_recipients > max_recipients:
+        logger.warning("Broadcast rejected: %d recipients exceeds limit of %d", total_recipients, max_recipients)
+        return False
+
+    return True
 
 
 @background_auto()
@@ -330,13 +349,11 @@ def send_mail_exec(
     # Parse symbol-separated email list
     recipients = split_recipients(recipient_list)
 
-    max_recipients = getattr(conf_settings, "MAIL_MAX_RECIPIENTS", 2000)
-    if len(recipients) > max_recipients:
-        logger.warning("Broadcast rejected: %d recipients exceeds limit of %d", len(recipients), max_recipients)
+    if not _broadcast_size_allowed(len(recipients) + len(opted_out or [])):
         return
 
-    # Notify administrators about bulk email operation
-    if sender_context:
+    # Notify administrators about bulk email operation, only when something is really sent
+    if sender_context and recipients:
         notify_admins(f"Sending {len(recipients)} - [{sender_context}]", f"{subj}")
 
     # Create a single EmailContent object for all recipients
@@ -345,6 +362,7 @@ def send_mail_exec(
         run_id=run_id,
         subj=subj,
         body=str(body),
+        bulk=True,
     )
 
     recipient_ids = _create_bulk_recipients(email_content, recipients, seen_emails, opted_out)
@@ -427,6 +445,12 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
         unsubscribe_url = build_unsubscribe_url(association, email_recipient.recipient)
         body += add_unsubscribe_body(unsubscribe_url)
 
+        # RFC 8058 one-click is meant for bulk mail only: pressing the mail client button
+        # on a receipt or a password reset must not silently drop the newsletter
+        header_url = unsubscribe_url
+        if email_content.bulk:
+            header_url = build_unsubscribe_url(association, email_recipient.recipient, one_click=True)
+
         my_send_simple_mail(
             email_content.subj,
             body,
@@ -436,15 +460,13 @@ def my_send_mail_bkg(email_recipient_pk: int | list[int]) -> None:
             email_content.reply_to,
             email_content.attachment_path,
             email_content.attachment_name,
-            unsubscribe_url,
+            header_url,
+            one_click=email_content.bulk,
         )
 
         # Only mark as sent if successful
         email_recipient.sent = timezone.now()
         email_recipient.save()
-
-        # A delivery proves the mailbox works again, so past transient failures are forgotten
-        clear_soft_bounces(email_recipient.recipient)
 
 
 def _mark_skipped(email_recipient: EmailRecipient, reason: str) -> None:
@@ -471,6 +493,8 @@ def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole
     attachment_path: str | None = None,
     attachment_name: str | None = None,
     unsubscribe_url: str | None = None,
+    *,
+    one_click: bool = False,
 ) -> None:
     """Send email with association/event-specific configuration.
 
@@ -489,7 +513,8 @@ def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole
         reply_to: Custom Reply-To email address header
         attachment_path: Optional absolute filesystem path to a file to attach as PDF
         attachment_name: Optional filename to use in the email attachment (overrides the on-disk name)
-        unsubscribe_url: Optional one-click unsubscribe link, published in the message headers
+        unsubscribe_url: Optional unsubscribe link, published in the message headers
+        one_click: Whether the link accepts an RFC 8058 one-click post (bulk mails only)
 
     Raises:
         Exception: Re-raises email sending exceptions after logging error details
@@ -500,7 +525,7 @@ def my_send_simple_mail(  # noqa: PLR0913 - transport wrapper carrying the whole
     """
     try:
         # Gather metadata (sender, BCC, headers)
-        metadata = _prepare_email_metadata(association_id, run_id, reply_to, unsubscribe_url)
+        metadata = _prepare_email_metadata(association_id, run_id, reply_to, unsubscribe_url, one_click=one_click)
 
         # Build email message
         email_message = _build_email_message(subj, body, m_email, metadata)
@@ -535,6 +560,8 @@ def _prepare_email_metadata(
     run_id: int | None,
     reply_to: str | None,
     unsubscribe_url: str | None = None,
+    *,
+    one_click: bool = False,
 ) -> dict:
     """Extract email metadata from association/event config.
 
@@ -542,7 +569,8 @@ def _prepare_email_metadata(
         association_id: Association ID for metadata extraction
         run_id: Run ID for event-specific metadata
         reply_to: Custom Reply-To email address
-        unsubscribe_url: One-click unsubscribe link to publish in the headers
+        unsubscribe_url: Unsubscribe link to publish in the headers
+        one_click: Whether to advertise RFC 8058 one-click support
 
     Returns:
         Dict containing sender_email, sender_name, headers, and bcc_recipients
@@ -600,12 +628,18 @@ def _prepare_email_metadata(
                 metadata["sender_email"] = f"{association.slug}@larpmanager.com"
                 metadata["sender_name"] = association.name
 
-    _add_email_headers(metadata, reply_to, unsubscribe_url)
+    _add_email_headers(metadata, reply_to, unsubscribe_url, one_click=one_click)
 
     return metadata
 
 
-def _add_email_headers(metadata: dict, reply_to: str | None, unsubscribe_url: str | None) -> None:
+def _add_email_headers(
+    metadata: dict,
+    reply_to: str | None,
+    unsubscribe_url: str | None,
+    *,
+    one_click: bool = False,
+) -> None:
     """Fill the message headers with the reply-to and unsubscribe entries."""
     if reply_to:
         if "\r" in reply_to or "\n" in reply_to:
@@ -613,10 +647,12 @@ def _add_email_headers(metadata: dict, reply_to: str | None, unsubscribe_url: st
             raise ValueError(msg)
         metadata["headers"]["Reply-To"] = reply_to
 
-    # RFC 8058: mailbox providers require an http link plus the one-click marker
+    # RFC 8058: mailbox providers require an http link plus the one-click marker, which
+    # may only be advertised on bulk mails
     if unsubscribe_url:
         metadata["headers"]["List-Unsubscribe"] = f"<{unsubscribe_url}>, <mailto:{metadata['sender_email']}>"
-        metadata["headers"]["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
+        if one_click:
+            metadata["headers"]["List-Unsubscribe-Post"] = "List-Unsubscribe=One-Click"
     else:
         metadata["headers"]["List-Unsubscribe"] = f"<mailto:{metadata['sender_email']}>"
 
@@ -718,14 +754,19 @@ def _build_email_message(subj: str, body: str, m_email: str, metadata: dict) -> 
     return message
 
 
-def build_unsubscribe_url(association: Any, recipient_email: str = "") -> str:
-    """Build the signed unsubscribe link of a recipient, scoped to an association."""
+def build_unsubscribe_url(association: Any, recipient_email: str = "", *, one_click: bool = False) -> str:
+    """Build the signed unsubscribe link of a recipient, scoped to an association.
+
+    The one-click variant points to the endpoint reserved to the RFC 8058 post
+    sent by mail clients, which is the only one exempted from CSRF.
+    """
     token_data: dict[str, Any] = {"email": recipient_email}
     if association:
         token_data["association_slug"] = association.slug
     token = signing.dumps(token_data, salt="unsubscribe")
     hex_token = token.encode().hex()
-    return get_url(f"unsubscribe/{hex_token}/", association)
+    path = "unsubscribe-one-click" if one_click else "unsubscribe"
+    return get_url(f"{path}/{hex_token}/", association)
 
 
 def add_unsubscribe_body(unsubscribe_url: str) -> str:

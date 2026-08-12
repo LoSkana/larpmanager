@@ -74,6 +74,9 @@ msgstr "Keho"
 msgid "Book"
 msgstr "Kirja"
 
+msgid "Bulk"
+msgstr "Massatoiminnot"
+
 msgid "Card"
 msgstr "Kortti"
 
