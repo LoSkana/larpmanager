@@ -288,7 +288,7 @@ def character(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
     go_to(page, live_server, "/test")
-    expect_normalized(page, page.locator("#one"), "Character: my character")
+    expect_normalized(page, page.locator("#one"), "Character my character")
 
 def verify_characters_shortcut(page: Any, live_server: Any) -> None:
     """Enable the user_characters_shortcut configuration."""
