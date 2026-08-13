@@ -12728,6 +12728,12 @@ msgstr ""
 msgid "This character is inactive and cannot be assigned to players"
 msgstr ""
 
+msgid "This character belongs to another player"
+msgstr ""
+
+msgid "This character is already played by another participant"
+msgstr ""
+
 msgid "You already play this character"
 msgstr ""
 

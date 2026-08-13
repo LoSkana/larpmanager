@@ -791,6 +791,26 @@ def get_options_dependencies(context: dict) -> None:
         context["dependencies"][str(option.uuid)] = [str(u) for u in option.requirements.values_list("uuid", flat=True)]
 
 
+def _get_character_assign_error(context: dict) -> str | None:
+    """Return the reason the character cannot be assigned to the player, or None if it can.
+
+    Args:
+        context: Context dictionary containing the character and the member
+
+    Returns:
+        str | None: Error message, or None when the character is assignable
+
+    """
+    if not context["character"].is_active:
+        return _("This character is inactive and cannot be assigned to players")
+
+    # Refuse characters created by another player
+    if context["character"].player_id and context["character"].player_id != context["member"].id:
+        return _("This character belongs to another player")
+
+    return None
+
+
 @login_required
 @require_POST
 def character_assign(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
@@ -808,8 +828,9 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     context = get_event_context(request, event_slug, signup=True, include_status=True)
     get_char_check(request, context, character_uuid, deny_public=True)
 
-    if not context["character"].is_active:
-        messages.error(request, _("This character is inactive and cannot be assigned to players"))
+    blocking_error = _get_character_assign_error(context)
+    if blocking_error:
+        messages.error(request, blocking_error)
         return redirect("character_list", event_slug=event_slug)
 
     registration_id = context["registration"].id
@@ -822,6 +843,19 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
         assigned = list(
             RegistrationCharacterRel.objects.filter(registration_id=registration_id).select_related("character")
         )
+
+        # Refuse characters already played by someone else in this run
+        if (
+            RegistrationCharacterRel.objects.filter(
+                character_id=character_id,
+                registration__run_id=context["run"].id,
+                registration__cancellation_date__isnull=True,
+            )
+            .exclude(registration_id=registration_id)
+            .exists()
+        ):
+            messages.error(request, _("This character is already played by another participant"))
+            return redirect("character_list", event_slug=event_slug)
 
         # Nothing to do if the character is already played
         if any(rel.character_id == character_id for rel in assigned):

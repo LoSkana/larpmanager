@@ -113,7 +113,7 @@ def check_played_character(page: Any, live_server: Any) -> None:
     """Check only one character is played, and the other one offers to take its place."""
     expect(page.locator(".char-choose-badge")).to_have_count(1)
     expect(page.locator(".char-choose-select")).to_have_count(1)
-    expect(page.locator(".char-choose-select")).to_contain_text("Play this character instead")
+    expect(page.locator(".char-choose-select")).to_contain_text("Select")
 
     go_to(page, live_server, "/test/register/")
     expect(page.get_by_role("link", name=re.compile("Create your character"))).to_have_count(0)
@@ -199,7 +199,7 @@ def check_carried_character(page: Any, live_server: Any) -> None:
     played = page.locator("#characters tbody tr", has=page.locator(".char-choose-badge"))
     expect(played).to_contain_text("alpha character")
     expect(page.locator(".char-choose-select")).to_have_count(1)
-    expect(page.locator(".char-choose-select")).to_contain_text("Play this character instead")
+    expect(page.locator(".char-choose-select")).to_contain_text("Select")
 
 
 def switch_campaign_character(page: Any, live_server: Any) -> None:

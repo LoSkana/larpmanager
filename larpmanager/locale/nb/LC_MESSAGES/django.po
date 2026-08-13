@@ -6909,6 +6909,9 @@ msgstr "Innsamlingen ble levert til brukeren"
 msgid "The number of payments to split the fee."
 msgstr "Antall betalinger kontingenten skal deles opp i."
 
+msgid "This character belongs to another player"
+msgstr "Denne karakteren tilhører en annen spiller"
+
 msgid "This content is currently not available."
 msgstr "Dette innholdet er for øyeblikket ikke tilgjengelig."
 
@@ -8242,6 +8245,9 @@ msgstr "Velg tabellradene og velg operasjonen som skal brukes"
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Bytt til den nyeste versjonen av brukergrensesnittet for kontoen din"
+
+msgid "This character is already played by another participant"
+msgstr "Denne karakteren spilles allerede av en annen deltaker"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Denne siden gir en oversikt over de ulike typene karakterinventar"

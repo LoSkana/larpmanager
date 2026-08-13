@@ -6909,6 +6909,9 @@ msgstr "De opbrengst van de inzamelactie is aan de gebruiker overhandigd."
 msgid "The number of payments to split the fee."
 msgstr "Het aantal betalingen waarin de bijdrage wordt gesplitst."
 
+msgid "This character belongs to another player"
+msgstr "Dit personage behoort toe aan een andere speler"
+
 msgid "This content is currently not available."
 msgstr "Deze inhoud is momenteel niet beschikbaar."
 
@@ -8260,6 +8263,9 @@ msgstr "Selecteer de tabelrijen en kies de toe te passen bewerking"
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Schakel over naar de nieuwste versie van de interface voor je account"
+
+msgid "This character is already played by another participant"
+msgstr "Dit personage wordt al gespeeld door een andere deelnemer"
 
 msgid "This page summarizes the types of character inventories"
 msgstr ""

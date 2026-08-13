@@ -6909,6 +6909,9 @@ msgstr "Sbírka byla doručena uživateli"
 msgid "The number of payments to split the fee."
 msgstr "Počet plateb, na které se má poplatek rozdělit."
 
+msgid "This character belongs to another player"
+msgstr "Tato postava patří jinému hráči"
+
 msgid "This content is currently not available."
 msgstr "Tento obsah není v současné době k dispozici."
 
@@ -8240,6 +8243,9 @@ msgstr "Vyber řádky tabulky a zvol operaci, která se má použít"
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Přejdi na nejnovější verzi uživatelského rozhraní pro svůj účet"
+
+msgid "This character is already played by another participant"
+msgstr "Tuto postavu už hraje jiný účastník"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Tato stránka shrnuje typy inventářů postav"

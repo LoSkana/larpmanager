@@ -112,7 +112,7 @@
  window.addEventListener('DOMContentLoaded', function() {
     $(document).on('click', '.char-choose-select', function(e) {
         e.preventDefault();
-        if (!window.lmTesting && !confirm('{% trans "Are you sure you want to play this character?" %}')) {
+        if (!window.lmTesting && !confirm('{% filter escapejs %}{% trans "Are you sure you want to play this character?" %}{% endfilter %}')) {
             return;
         }
         $(this).closest('form').submit();

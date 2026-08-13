@@ -6908,6 +6908,9 @@ msgstr "La recaudación se entregó al usuario"
 msgid "The number of payments to split the fee."
 msgstr "El número de pagos en que dividir la cuota."
 
+msgid "This character belongs to another player"
+msgstr "Este personaje pertenece a otro jugador"
+
 msgid "This content is currently not available."
 msgstr "Este contenido no está disponible actualmente."
 
@@ -8269,6 +8272,9 @@ msgstr "Selecciona las filas de la tabla y elige la operación a aplicar"
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Cambia a la última versión de la interfaz de tu cuenta"
+
+msgid "This character is already played by another participant"
+msgstr "Este personaje ya lo interpreta otro participante"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "En esta página se resumen los tipos de inventarios de personajes"

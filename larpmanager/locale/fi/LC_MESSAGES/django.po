@@ -6908,6 +6908,9 @@ msgstr "Keräys jaettiin käyttäjälle"
 msgid "The number of payments to split the fee."
 msgstr "Maksujen määrä, johon maksu jaetaan."
 
+msgid "This character belongs to another player"
+msgstr "Tämä hahmo kuuluu toiselle pelaajalle"
+
 msgid "This content is currently not available."
 msgstr "Tämä sisältö ei ole tällä hetkellä saatavilla."
 
@@ -8247,6 +8250,9 @@ msgstr "Valitse taulukon rivit ja valitse sovellettava toiminto"
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Vaihda tilisi käyttöliittymän uusimpaan versioon"
+
+msgid "This character is already played by another participant"
+msgstr "Tätä hahmoa esittää jo toinen osallistuja"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Tällä sivulla esitetään yhteenveto hahmoinventaarioiden tyypeistä"

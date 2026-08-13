@@ -6909,6 +6909,9 @@ msgstr "Η συλλογή παραδόθηκε στον χρήστη"
 msgid "The number of payments to split the fee."
 msgstr "Ο αριθμός πληρωμών στις οποίες θα χωριστεί το κόστος."
 
+msgid "This character belongs to another player"
+msgstr "Αυτός ο χαρακτήρας ανήκει σε άλλον παίκτη"
+
 msgid "This content is currently not available."
 msgstr "Αυτό το περιεχόμενο δεν είναι διαθέσιμο αυτή τη στιγμή."
 
@@ -8287,6 +8290,9 @@ msgstr ""
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Μετάβαση στην πιο πρόσφατη έκδοση διεπαφής για τον λογαριασμό σου"
+
+msgid "This character is already played by another participant"
+msgstr "Αυτόν τον χαρακτήρα τον παίζει ήδη άλλος συμμετέχων"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Αυτή η σελίδα συνοψίζει τους τύπους αποθεμάτων χαρακτήρων"

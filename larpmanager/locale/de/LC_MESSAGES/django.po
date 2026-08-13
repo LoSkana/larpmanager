@@ -6910,6 +6910,9 @@ msgstr "Die Sammlung wurde dem Benutzer zugestellt"
 msgid "The number of payments to split the fee."
 msgstr "Die Anzahl der Zahlungen, auf die der Beitrag aufgeteilt wird."
 
+msgid "This character belongs to another player"
+msgstr "Dieser Charakter gehört einem anderen Spieler"
+
 msgid "This content is currently not available."
 msgstr "Dieser Inhalt ist derzeit nicht verfügbar."
 
@@ -8288,6 +8291,9 @@ msgstr "Markiere die Tabellenzeilen und wähle die anzuwendende Operation"
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Wechsle zur neuesten Version der Benutzeroberfläche für dein Konto"
+
+msgid "This character is already played by another participant"
+msgstr "Dieser Charakter wird bereits von einem anderen Teilnehmer gespielt"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Diese Seite fasst die Arten von Charakterinventaren zusammen"
