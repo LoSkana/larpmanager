@@ -203,12 +203,12 @@ def check_reserve(page: Any, live_server: Any) -> None:
     # check reserve is not there
     go_to(page, live_server, "test/")
     sidebar(page, "Your registration")
-    # the accessible names include the show/hide options link, icon glyph included
+    # with a single option left, no show/hide options link is rendered
     expect(page.locator("#id_ticket_tr")).to_match_aria_snapshot(
         """
-        - row /Ticket \\(\\*\\) Standard 5€ sadsadsadsa .*Hide other options Your registration ticket2/:
+        - row "Ticket (*) Standard 5€ sadsadsadsa Your registration ticket2":
           - cell "Ticket (*)"
-          - cell /Standard 5€ sadsadsadsa .*Hide other options Your registration ticket2/:
+          - cell "Standard 5€ sadsadsadsa Your registration ticket2":
             - radio "Standard 5€ sadsadsadsa" [checked]
         """
     )
