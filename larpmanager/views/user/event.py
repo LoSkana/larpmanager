@@ -153,6 +153,7 @@ def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:
 
         # Precompute character rels, payment invoices, and pre-registrations objects
         context["character_rels_dict"] = get_character_rels_dict(context["my_regs"], member)
+        context["player_characters_dict"] = get_player_characters_dict(association_id, member)
         context["payment_invoices_dict"] = get_payment_invoices_dict(context["my_regs"], member)
         context["pre_registrations_dict"] = get_pre_registrations_dict(association_id, member)
     else:
@@ -202,6 +203,7 @@ def build_registration_list(member: Any, my_regs: Any, association_id: int, memb
         "membership": membership,
         "pre_registrations_dict": get_pre_registrations_dict(association_id, member),
         "character_rels_dict": get_character_rels_dict(my_regs_dict, member),
+        "player_characters_dict": get_player_characters_dict(association_id, member),
         "payment_invoices_dict": get_payment_invoices_dict(my_regs_dict, member),
     }
 
@@ -254,6 +256,29 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
             character_relations_by_registration_dict[character_relation.registration_id].append(character_relation)
 
     return character_relations_by_registration_dict
+
+
+def get_player_characters_dict(association_id: int, member: Any) -> dict:
+    """Get ids of the member's characters in the association, grouped by event ID.
+
+    Precalculates the characters owned by the player with a single query, so the
+    registration status of every run can be computed without a query per run.
+
+    Args:
+        association_id: Association to restrict characters to
+        member: Member object to filter characters for
+
+    Returns:
+        Dictionary mapping event IDs to lists of character IDs
+
+    """
+    characters_by_event: dict[int, list[int]] = {}
+
+    query = Character.objects.filter(player=member, event__association_id=association_id).values_list("event_id", "id")
+    for event_id, character_id in query:
+        characters_by_event.setdefault(event_id, []).append(character_id)
+
+    return characters_by_event
 
 
 def get_payment_invoices_dict(registrations_by_id: dict, member: Any) -> dict:
@@ -546,6 +571,7 @@ def calendar_past(request: HttpRequest) -> HttpResponse:
 
         # Build related data dictionaries for character, payment, and pre-registration info
         context["character_rels_dict"] = get_character_rels_dict(context["my_regs"], member)
+        context["player_characters_dict"] = get_player_characters_dict(aid, member)
         context["payment_invoices_dict"] = get_payment_invoices_dict(context["my_regs"], member)
         context["pre_registrations_dict"] = get_pre_registrations_dict(aid, member)
 

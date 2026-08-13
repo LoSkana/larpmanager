@@ -38,49 +38,76 @@
                         {% if run_status.details_characters and effective_version < 22 %}<p>{{ run_status.details_characters }}</p>{% endif %}
                     </p>
                 </div>
-                {% for char_entry in run_status.character_links %}
+                {% if run_status.character_links %}
                     <div class="event-card event-card-char">
                         <h3>
-                            {% with char_entry.links|first as first_link %}
-                                {% if first_link %}
-                                    <a href="{{ first_link.url }}"><i class="fa-solid fa-user"></i> {% trans "Character:" %} {{ char_entry.name }}</a>
-                                {% else %}
-                                    <i class="fa-solid fa-user"></i> {% trans "Character:" %} {{ char_entry.name }}
-                                {% endif %}
-                            {% endwith %}
+                            <i class="fa-solid fa-user"></i>
+                            {% if run_status.character_links|length > 1 %}
+                                {% trans "Characters" %}
+                            {% else %}
+                                {% trans "Character" %}
+                            {% endif %}
                         </h3>
-                        <p class="char-entry-links">
-                            {% for link in char_entry.links %}
-                                <a href="{{ link.url }}" title="{{ link.tooltip }}">
-                                    <i class="{{ link.icon }}"></i> {{ link.label }}
+                        {% for char_entry in run_status.character_links %}
+                            <p class="char-entry-links">
+                                {% for link in char_entry.links %}
+                                    <a href="{{ link.url }}" title="{{ link.tooltip }}">
+                                        <i class="{{ link.icon }}"></i> {{ link.label }}
+                                    </a>
+                                {% endfor %}
+                            </p>
+                        {% endfor %}
+                        {% if run_status.character_change %}
+                            <p class="char-entry-links">
+                                <a href="{{ run_status.character_change.url }}"
+                                   title="{{ run_status.character_change.tooltip }}">
+                                    <i class="{{ run_status.character_change.icon }}"></i> {{ run_status.character_change.label }}
                                 </a>
-                            {% endfor %}
-                        </p>
-                    </div>
-                {% endfor %}
-                {% if run_status.character_action %}
-                    <div class="event-card event-card-char">
-                        <h3>
-                            <a href="{{ run_status.character_action.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}</a>
-                        </h3>
-                        <p>
-                            <a href="{{ run_status.character_action.url }}"
-                               title="{{ run_status.character_action.tooltip }}">
-                                <i class="{{ run_status.character_action.icon }}"></i> {{ run_status.character_action.label }}
-                            </a>
-                        </p>
-                        {% if run_status.character_action.options_availability %}
-                            <p>
-                                {% if run_status.character_action.options_availability %}
-                                    {% for opt in run_status.character_action.options_availability %}
-                                        {% include "elements/comma.html" %}
-                                        <i>{{ opt.name }}</i> ({{ opt.available }})
-                                    {% endfor %}
-                                {% endif %}
+                            </p>
+                        {% endif %}
+                        {% if run_status.character_create %}
+                            <p class="char-entry-links">
+                                <a href="{{ run_status.character_create.url }}"
+                                   title="{{ run_status.character_create.tooltip }}">
+                                    <i class="{{ run_status.character_create.icon }}"></i> {{ run_status.character_create.label }}
+                                </a>
                             </p>
                         {% endif %}
                     </div>
+                {% elif run_status.character_create %}
+                    <div class="event-card event-card-char">
+                        <h3>
+                            <a href="{{ run_status.character_create.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}</a>
+                        </h3>
+                        <p class="char-entry-links">
+                            <a href="{{ run_status.character_create.url }}"
+                               title="{{ run_status.character_create.tooltip }}">
+                                <i class="{{ run_status.character_create.icon }}"></i> {{ run_status.character_create.label }}
+                            </a>
+                        </p>
+                    </div>
                 {% endif %}
+                {% for character_action in run_status.character_actions %}
+                    <div class="event-card event-card-char">
+                        <h3>
+                            <a href="{{ character_action.url }}"><i class="fa-solid fa-user"></i> {% trans "Character" %}</a>
+                        </h3>
+                        <p>
+                            <a href="{{ character_action.url }}"
+                               title="{{ character_action.tooltip }}">
+                                <i class="{{ character_action.icon }}"></i> {{ character_action.label }}
+                            </a>
+                        </p>
+                        {% if character_action.options_availability %}
+                            <p>
+                                {% for opt in character_action.options_availability %}
+                                    {% include "elements/comma.html" %}
+                                    <i>{{ opt.name }}</i> ({{ opt.available }})
+                                {% endfor %}
+                            </p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
                 {% if run_status.registration %}
                     {% if features.payment and run_status.registration.tot_iscr %}
                         {% with reg=run_status.registration %}

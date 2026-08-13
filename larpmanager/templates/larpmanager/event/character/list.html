@@ -18,12 +18,11 @@
         <thead>
             <tr>
                 <th></th>
-                <th class="hide">number</th>
                 {% if features.user_character %}<th></th>{% endif %}
                 <th>{{ writing_field_names.name }}</th>
                 {% if features.title %}<th>{{ writing_field_names.title }}</th>{% endif %}
                 <th>{{ writing_field_names.teaser }}</th>
-                {% for idx, _ in searchable.items %}
+                {% for idx, _unused in searchable.items %}
                     {% with questions|get:idx as que %}<th>{{ que.name }}</th>{% endwith %}
                 {% endfor %}
                 {% if approval %}
@@ -39,15 +38,15 @@
                         <th>{% blocktrans with name=sys.name %}{{ name }} available{% endblocktrans %}</th>
                     {% endfor %}
                 {% endif %}
+                <th>{% trans "Last played" %}</th>
                 {% if exp_user %}<th></th>{% endif %}
-                {% if not assigned %}<th></th>{% endif %}
+                <th></th>
             </tr>
         </thead>
         <tbody>
             {% for el in list %}
                 <tr id="{{ el.uuid }}">
                     <td></td>
-                    <td class="hide">{{ el.number }}</td>
                     {% if features.user_character %}
                         <td>
                             <a href="{% url 'character_edit' run.get_slug el.uuid %}"
@@ -57,7 +56,7 @@
                     <td>{{ el.name }}</td>
                     {% if features.title %}<td>{{ el.title }}</td>{% endif %}
                     <td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>
-                    {% for idx, _ in searchable.items %}
+                    {% for idx, _unused in searchable.items %}
                         {% with el.fields|get:idx as field %}
                             {% if field %}
                                 <td>{% get_character_field field options %}</td>
@@ -81,18 +80,43 @@
                             {% endfor %}
                         {% endif %}
                     {% endif %}
+                    <td>
+                        {% if el.last_run %}{{ el.last_run }}{% endif %}
+                    </td>
                     {% if exp_user %}
                         <td>
                             <a href="{% url 'character_abilities' run.get_slug el.uuid %}">{% trans "Ability" %}</a>
                         </td>
                     {% endif %}
-                    {% if not assigned %}
-                        <td>
-                            <a href="{% url 'character_assign' run.get_slug el.uuid %}">{% trans "Select" %}</a>
-                        </td>
-                    {% endif %}
+                    <td>
+                        {% if el.assigned_here %}
+                            <span class="char-choose-badge">{% trans "Selected" %}</span>
+                        {% elif el.addit.inactive != "True" %}
+                            {% if can_select or can_switch %}
+                                <form action="{% url 'character_assign' run.get_slug el.uuid %}"
+                                      method="post"
+                                      class="char-choose-form">
+                                    {% csrf_token %}
+                                    <a href="#" class="char-choose-select">{% trans "Select" %}</a>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 {% endblock content %}
+{% block js %}
+    <script>
+ window.addEventListener('DOMContentLoaded', function() {
+    $(document).on('click', '.char-choose-select', function(e) {
+        e.preventDefault();
+        if (!window.lmTesting && !confirm('{% filter escapejs %}{% trans "Are you sure you want to play this character?" %}{% endfilter %}')) {
+            return;
+        }
+        $(this).closest('form').submit();
+    });
+});
+    </script>
+{% endblock js %}

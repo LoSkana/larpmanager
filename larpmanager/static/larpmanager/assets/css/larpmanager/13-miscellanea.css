@@ -510,6 +510,7 @@ body.association.new_v22 .user_resize {
 
 .event-card .char-entry-links a {
   white-space: nowrap;
+  margin: 0.2em 0 0 0;
 }
 
 .event-info .event-tagline {

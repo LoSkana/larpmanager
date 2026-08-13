@@ -49,20 +49,20 @@
                     {% if run_status.action.note %}<div class="reg-action-note">{{ run_status.action.note }}</div>{% endif %}
                 </div>
             {% endif %}
-            {% if run_status.character_action %}
-                <div class="reg-action{% if run_status.character_action.status_type %} reg-{{ run_status.character_action.status_type }}{% endif %}">
-                    <a href="{{ run_status.character_action.url }}"
+            {% for character_action in run_status.character_actions %}
+                <div class="reg-action{% if character_action.status_type %} reg-{{ character_action.status_type }}{% endif %}">
+                    <a href="{{ character_action.url }}"
                        class="reg-action-link"
-                       title="{{ run_status.character_action.tooltip }}">
-                        <i class="{{ run_status.character_action.icon }}"></i>
-                        {% if long_text and run_status.character_action.label_long %}
-                            {{ run_status.character_action.label_long }}
+                       title="{{ character_action.tooltip }}">
+                        <i class="{{ character_action.icon }}"></i>
+                        {% if long_text and character_action.label_long %}
+                            {{ character_action.label_long }}
                         {% else %}
-                            {{ run_status.character_action.label }}
+                            {{ character_action.label }}
                         {% endif %}
                     </a>
                 </div>
-            {% endif %}
+            {% endfor %}
             {% if features.payment and reg and reg.tot_iscr %}
                 {% with uuid=reg_uuid|default:reg.uuid %}
                     <span class="hide reg_accounting_{{ uuid }}">

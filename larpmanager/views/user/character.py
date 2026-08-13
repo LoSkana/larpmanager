@@ -38,6 +38,7 @@ from django.db import IntegrityError, transaction
 from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 from PIL import Image, UnidentifiedImageError
@@ -59,7 +60,7 @@ from larpmanager.models.form import (
     WritingOption,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
-from larpmanager.models.registration import RegistrationCharacterRel
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
@@ -89,6 +90,7 @@ from larpmanager.utils.services.writing import char_add_addit
 from larpmanager.utils.users.registration import (
     check_assign_character,
     check_character_maximum,
+    get_character_play_max,
     get_player_characters,
 )
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
@@ -635,6 +637,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     context["list"] = get_player_characters(context["member"], context["event"])
     # add character configs
     char_add_addit(context)
+    context["list"] = list(context["list"])
 
     if "experience" in context.get("features", {}):
         context["exp_systems"] = [
@@ -661,8 +664,65 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     check, _max_chars = check_character_maximum(context["event"], context["member"])
     context["char_maximum"] = check
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
-    context["assigned"] = RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).count()
+
+    _character_list_assigned(context)
+    _character_list_last_run(context, char_ids)
+    _character_list_sort(context)
+
     return render(request, "larpmanager/event/character/list.html", context)
+
+
+def _character_list_assigned(context: dict) -> None:
+    """Flag which of the player's characters are assigned to the current registration."""
+    assigned_ids = set(
+        RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).values_list(
+            "character_id", flat=True
+        )
+    )
+    context["assigned"] = len(assigned_ids)
+
+    # Free slots allow a plain selection; a single full slot allows swapping the played character
+    play_max = get_character_play_max(context["event"].id, context)
+    context["can_select"] = len(assigned_ids) < play_max
+    own_ids = {el.id for el in context["list"]}
+    context["can_switch"] = (
+        not context["can_select"] and play_max == 1 and bool(assigned_ids) and assigned_ids <= own_ids
+    )
+
+    for el in context["list"]:
+        el.assigned_here = el.id in assigned_ids
+
+
+def _character_list_last_run(context: dict, char_ids: list[int]) -> None:
+    """Attach to each character the most recent past run where the player played it."""
+    relations = (
+        RegistrationCharacterRel.objects.filter(
+            character_id__in=char_ids,
+            registration__member_id=context["member"].id,
+            registration__cancellation_date__isnull=True,
+            registration__run__end__lt=timezone.now().date(),
+        )
+        .select_related("registration__run", "registration__run__event")
+        .order_by("character_id", "-registration__run__end")
+    )
+
+    last_runs: dict[int, Any] = {}
+    for rel in relations:
+        last_runs.setdefault(rel.character_id, rel.registration.run)
+
+    for el in context["list"]:
+        el.last_run = last_runs.get(el.id)
+
+
+def _character_list_sort(context: dict) -> None:
+    """Sort characters: active first, then most recently played, then most recently updated."""
+
+    def sort_key(el: Character) -> tuple:
+        inactive = el.addit.get("inactive") == "True"
+        played = -el.last_run.end.toordinal() if el.last_run and el.last_run.end else 0
+        return (inactive, played, -el.updated.timestamp())
+
+    context["list"].sort(key=sort_key)
 
 
 @login_required
@@ -731,9 +791,30 @@ def get_options_dependencies(context: dict) -> None:
         context["dependencies"][str(option.uuid)] = [str(u) for u in option.requirements.values_list("uuid", flat=True)]
 
 
+def _get_character_assign_error(context: dict) -> str | None:
+    """Return the reason the character cannot be assigned to the player, or None if it can.
+
+    Args:
+        context: Context dictionary containing the character and the member
+
+    Returns:
+        str | None: Error message, or None when the character is assignable
+
+    """
+    if not context["character"].is_active:
+        return _("This character is inactive and cannot be assigned to players")
+
+    # Refuse characters created by another player
+    if context["character"].player_id and context["character"].player_id != context["member"].id:
+        return _("This character belongs to another player")
+
+    return None
+
+
 @login_required
+@require_POST
 def character_assign(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
-    """Assign character to user's registration if not already assigned.
+    """Assign character to user's registration, replacing the played one when only one is allowed.
 
     Args:
         request: HTTP request object
@@ -746,16 +827,78 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     """
     context = get_event_context(request, event_slug, signup=True, include_status=True)
     get_char_check(request, context, character_uuid, deny_public=True)
-    if RegistrationCharacterRel.objects.filter(registration_id=context["registration"].id).exists():
-        messages.warning(request, _("You already have an assigned character"))
-    elif not context["character"].is_active:
-        messages.error(request, _("This character is inactive and cannot be assigned to players"))
-    else:
-        character_id = _get_character_cache_id(context)
-        RegistrationCharacterRel.objects.create(registration_id=context["registration"].id, character_id=character_id)
-        messages.success(request, _("Assigned character!"))
+
+    blocking_error = _get_character_assign_error(context)
+    if blocking_error:
+        messages.error(request, blocking_error)
+        return redirect("character_list", event_slug=event_slug)
+
+    registration_id = context["registration"].id
+    play_max = get_character_play_max(context["event"].id, context)
+    character_id = _get_character_cache_id(context)
+
+    with transaction.atomic():
+        # Lock the registration, so concurrent requests cannot exceed the number of playable characters
+        Registration.objects.select_for_update().filter(pk=registration_id).first()
+        assigned = list(
+            RegistrationCharacterRel.objects.filter(registration_id=registration_id).select_related("character")
+        )
+
+        # Refuse characters already played by someone else in this run
+        if (
+            RegistrationCharacterRel.objects.filter(
+                character_id=character_id,
+                registration__run_id=context["run"].id,
+                registration__cancellation_date__isnull=True,
+            )
+            .exclude(registration_id=registration_id)
+            .exists()
+        ):
+            messages.error(request, _("This character is already played by another participant"))
+            return redirect("character_list", event_slug=event_slug)
+
+        # Nothing to do if the character is already played
+        if any(rel.character_id == character_id for rel in assigned):
+            messages.warning(request, _("You already play this character"))
+            return redirect("character_list", event_slug=event_slug)
+
+        # All slots taken: allow replacing the played character, if it belongs to the player
+        if len(assigned) >= play_max:
+            if not _can_replace_character(context, play_max, assigned):
+                messages.warning(request, _("You already play the maximum number of characters"))
+                return redirect("character_list", event_slug=event_slug)
+
+            _replace_character(assigned[0], character_id)
+            messages.success(request, _("Changed character!"))
+            return redirect("character_list", event_slug=event_slug)
+
+        RegistrationCharacterRel.objects.create(registration_id=registration_id, character_id=character_id)
+
+    messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", event_slug=event_slug)
+
+
+def _replace_character(rel: RegistrationCharacterRel, character_id: int) -> None:
+    """Point the relation to another character, dropping the data customized for the previous one.
+
+    The relation is updated in place instead of being recreated, so the registration is never
+    left without a character (which would trigger the campaign auto-assignment again).
+    """
+    rel.character_id = character_id
+    for custom_field in ["custom_name", "custom_pronoun", "custom_song", "custom_public", "custom_private"]:
+        setattr(rel, custom_field, None)
+    rel.custom_profile = None
+    rel.save()
+
+
+def _can_replace_character(context: dict, play_max: int, assigned: list) -> bool:
+    """Check the played character can be swapped for another one created by the same player."""
+    if play_max != 1 or "user_character" not in context["features"]:
+        return False
+
+    # Refuse if the played character was not created by the player
+    return all(rel.character.player_id == context["member"].id for rel in assigned)
 
 
 @login_required

@@ -2,19 +2,21 @@
 <div id="sidebar" class="only_v22 topbar">
     <div class="inner new-menu">
         {% include "elements/structure/sidebar-header.html" %}
-        {% if run_status.character_action %}
+        {% if run_status.character_actions %}
             <div class="sidebar-section">
-                <span class="sidebar-link-wrap">
-                    <a class="sidebar-link"
-                       href="{{ run_status.character_action.url }}"
-                       title="{{ run_status.character_action.tooltip }}">
-                        <i class="{{ run_status.character_action.icon }}"></i>
-                        <span>{{ run_status.character_action.label }}</span>
-                        {% if run_status.character_action.status_icon %}
-                            <i class="{{ run_status.character_action.status_icon }} sidebar-status-badge reg-{{ run_status.character_action.status_type }}"></i>
-                        {% endif %}
-                    </a>
-                </span>
+                {% for character_action in run_status.character_actions %}
+                    <span class="sidebar-link-wrap">
+                        <a class="sidebar-link"
+                           href="{{ character_action.url }}"
+                           title="{{ character_action.tooltip }}">
+                            <i class="{{ character_action.icon }}"></i>
+                            <span>{{ character_action.label }}</span>
+                            {% if character_action.status_icon %}
+                                <i class="{{ character_action.status_icon }} sidebar-status-badge reg-{{ character_action.status_type }}"></i>
+                            {% endif %}
+                        </a>
+                    </span>
+                {% endfor %}
             </div>
         {% endif %}
         {% if run_status.character_links %}

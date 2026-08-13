@@ -2105,6 +2105,9 @@ msgstr "Inventare"
 msgid "Last change"
 msgstr "Zuletzt geändert"
 
+msgid "Last played"
+msgstr "Zuletzt gespielt"
+
 msgid "Leave guild"
 msgstr "Gilde verlassen"
 
@@ -3759,6 +3762,9 @@ msgstr "Erhaltene Zahlungen"
 msgid "Payments received"
 msgstr "Erhaltene Zahlungen"
 
+msgid "Played characters"
+msgstr "Gespielte Charaktere"
+
 msgid "Pre registrations"
 msgstr "Vorregistrierungen"
 
@@ -3883,6 +3889,9 @@ msgstr "Genehmigter Charakter"
 
 msgid "Available versions"
 msgstr "Verfügbare Versionen"
+
+msgid "Changed character!"
+msgstr "Charakter geändert!"
 
 msgid "Character creation"
 msgstr "Charaktererstellung"
@@ -4485,6 +4494,9 @@ msgstr "Zugewiesener Mitarbeiter"
 msgid "Category of the event"
 msgstr "Kategorie der Veranstaltung"
 
+msgid "Change your character"
+msgstr "Ändere deinen Charakter"
+
 msgid "Character Inventories"
 msgstr "Charakter-Inventare"
 
@@ -4496,6 +4508,9 @@ msgstr "Charakterbogen Einführung"
 
 msgid "Characters unassigned"
 msgstr "Nicht zugewiesene Charaktere"
+
+msgid "Choose your character"
+msgstr "Wähle deinen Charakter"
 
 msgid "Code 'Bring a friend'"
 msgstr "Code 'Freund mitbringen'"
@@ -4682,8 +4697,14 @@ msgstr "Sicher angekommen"
 msgid "Browse upcoming events"
 msgstr "Kommende Veranstaltungen ansehen"
 
+msgid "Change your character!"
+msgstr "Ändere deinen Charakter!"
+
 msgid "Character Relationship"
 msgstr "Charakter-Beziehung"
+
+msgid "Choose your character!"
+msgstr "Wähle deinen Charakter!"
 
 msgid "Copy link to clipboard"
 msgstr "Link in die Zwischenablage kopieren"
@@ -4790,9 +4811,6 @@ msgstr "Erstattung genehmigt"
 #, python-format
 msgid "Role approval %(role)s"
 msgstr "Genehmigung der Rolle %(role)s"
-
-msgid "Select your character!"
-msgstr "Wähle deinen Charakter!"
 
 msgid "Set up payment methods"
 msgstr "Zahlungsarten einrichten"
@@ -4982,6 +5000,9 @@ msgstr "Charakter-Konfigurationen"
 msgid "Code of the box or shelf"
 msgstr "Code der Schachtel oder des Regals"
 
+msgid "Create another character"
+msgstr "Einen weiteren Charakter erstellen"
+
 msgid "Create your organization"
 msgstr "Erstelle deine Organisation"
 
@@ -5132,6 +5153,9 @@ msgstr "Doppelte Speed-Larps prüfen:"
 
 msgid "Check missing speed larp:"
 msgstr "Fehlende Speed-Larps prüfen:"
+
+msgid "Create another character!"
+msgstr "Erstelle einen weiteren Charakter!"
 
 msgid "Current platform version:"
 msgstr "Aktuelle Plattformversion:"
@@ -5907,6 +5931,9 @@ msgstr "Zeige deine privaten Unterhaltungen an"
 msgid "Where the event will take place"
 msgstr "Wo findet die Veranstaltung statt"
 
+msgid "You already play this character"
+msgstr "Du spielst diesen Charakter bereits"
+
 msgid "You have completed the payment!"
 msgstr "Du hast die Einzahlung abgeschlossen!"
 
@@ -6661,9 +6688,6 @@ msgstr "Transport: Kraftstoff und Autobahnmaut"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Besuche das Tutorial, um die Grundlagen zu lernen"
 
-msgid "You already have an assigned character"
-msgstr "Du hast bereits einen zugewiesenen Charakter"
-
 msgid "You are exploring a demo organization."
 msgstr "Du erkundest gerade eine Demo-Organisation."
 
@@ -6885,6 +6909,9 @@ msgstr "Die Sammlung wurde dem Benutzer zugestellt"
 
 msgid "The number of payments to split the fee."
 msgstr "Die Anzahl der Zahlungen, auf die der Beitrag aufgeteilt wird."
+
+msgid "This character belongs to another player"
+msgstr "Dieser Charakter gehört einem anderen Spieler"
 
 msgid "This content is currently not available."
 msgstr "Dieser Inhalt ist derzeit nicht verfügbar."
@@ -7371,6 +7398,9 @@ msgstr "Das Upgrade auf die gesamte Organisation anwenden?"
 msgid "Are you sure you want to delete this element?"
 msgstr "Bist du sicher, dass du dieses Element löschen möchtest?"
 
+msgid "Are you sure you want to play this character?"
+msgstr "Möchtest du diesen Charakter wirklich spielen?"
+
 msgid "Customize buttons in the event navigation bar"
 msgstr "Passe die Schaltflächen in der Navigationsleiste der Veranstaltung an"
 
@@ -7735,6 +7765,9 @@ msgstr "Hintergrundbild, das auf allen Veranstaltungsseiten angezeigt wird"
 msgid "Character not found, or not playing in this event"
 msgstr "Charakter nicht gefunden oder spielt nicht bei diesem Event"
 
+msgid "Choose the character you will play in this event!"
+msgstr "Wähle den Charakter, den du bei diesem Event spielen wirst!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Farbe, die für Texthintergründe und Inhaltsfelder verwendet wird"
 
@@ -7794,6 +7827,9 @@ msgstr ""
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Toleranz überschritten, fahre mit der Stornierung fort"
+
+msgid "You already play the maximum number of characters"
+msgstr "Du spielst bereits die maximale Anzahl an Charakteren"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du schließt (mindestens einen) dieser Filter ein"
@@ -8255,6 +8291,9 @@ msgstr "Markiere die Tabellenzeilen und wähle die anzuwendende Operation"
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Wechsle zur neuesten Version der Benutzeroberfläche für dein Konto"
+
+msgid "This character is already played by another participant"
+msgstr "Dieser Charakter wird bereits von einem anderen Teilnehmer gespielt"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Diese Seite fasst die Arten von Charakterinventaren zusammen"
@@ -9575,6 +9614,11 @@ msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Wenn du eine Datei anhängen musst, gib diese hier an, andernfalls lass das "
 "Feld leer"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr ""
+"Anzahl der Charaktere, die jede teilnehmende Person im Event spielt "
+"(Standard=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr ""

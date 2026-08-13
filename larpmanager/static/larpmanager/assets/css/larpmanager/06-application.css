@@ -808,3 +808,35 @@ form .plot {
 .guild-invite-form .select2-container {
   min-width: 200px;
 }
+
+/*** character choose ***/
+
+.char-choose-badge {
+  display: inline-block;
+  padding: 0.1em 0.5em;
+  border-radius: 0.8em;
+  background-color: rgba(var(--ter-rgb), 0.8);
+  color: white;
+  vertical-align: middle;
+}
+
+.char-choose-form {
+  margin: 0;
+  display: inline-block;
+}
+
+.char-choose-select {
+  display: inline-block;
+  padding: 0.4em 0.9em;
+  border: none;
+  border-radius: 0.3em;
+  font: inherit;
+  cursor: pointer;
+  background-color: rgba(var(--pri-rgb), 0.7);
+  color: white;
+}
+
+.char-choose-select:hover {
+  background-color: rgba(var(--pri-rgb), 0.9);
+  color: white;
+}

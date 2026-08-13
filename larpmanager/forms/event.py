@@ -716,6 +716,12 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("writing_field_visibility", ConfigType.BOOL, config_label, config_help_text)
 
+        config_label = _("Played characters")
+        config_help_text = _(
+            "Number of characters each participant plays in the event (default=1).",
+        )
+        self.add_configs("character_play_max", ConfigType.INT, config_label, config_help_text)
+
         self._set_config_writing_behavior()
 
     def _set_config_writing_behavior(self) -> None:
