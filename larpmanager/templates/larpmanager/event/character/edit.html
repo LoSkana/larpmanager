@@ -32,9 +32,15 @@
             <hr />
         {% endif %}
         {% include "elements/form/main.html" %}
+        {% if auto_save %}
+            <p>{% trans "The form is auto-saved every 5 seconds." %}</p>
+        {% endif %}
     </div>
 {% endblock content %}
 {% block js %}
+    {% if auto_save %}
+        {% include "elements/form/user-auto-save.js" %}
+    {% endif %}
     {% include "elements/form/max_length.js" %}
     {{ form.unavail|json_script:"unavail" }}
     <script>

@@ -6814,6 +6814,9 @@ msgstr "CSS-koden för att anpassa PDF-utskrifter."
 msgid "The following registrations were drawn:"
 msgstr "Följande registreringar lottades ut:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Formuläret sparas automatiskt var femte sekund."
+
 msgid "The question status, allowed values are"
 msgstr "Frågans status, tillåtna värden är"
 
@@ -11842,6 +11845,13 @@ msgstr ""
 "viktiga för karaktären."
 
 msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Om aktiverat sparas inte spelarnas karaktärsformulär automatiskt medan du "
+"redigerar."
+
+msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""
@@ -14085,6 +14095,13 @@ msgstr ""
 "Låter dig ladda upp och hosta filer direkt på plattformen och göra dem "
 "tillgängliga antingen för personalen eller för deltagarna via hemliga "
 "externa länkar"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Den här karaktären ändrades i ett annat fönster: dina ändringar här har inte"
+" sparats. Kopiera texten du vill behålla och ladda sedan om sidan."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

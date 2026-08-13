@@ -1523,6 +1523,11 @@ msgstr ""
 msgid "If enabled, activates a staff-managed approval process for characters."
 msgstr ""
 
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+
 msgid "Guilds"
 msgstr ""
 
@@ -6123,6 +6128,9 @@ msgid "Character profile"
 msgstr ""
 
 msgid "Upload a photo of your character specifically for this event!"
+msgstr ""
+
+msgid "The form is auto-saved every 5 seconds."
 msgstr ""
 
 msgid "Your characters"
@@ -12695,6 +12703,11 @@ msgid "You have indicated more than one preference for the same element."
 msgstr ""
 
 msgid "Preferences saved!"
+msgstr ""
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 
 msgid "Characters are not visible at the moment"

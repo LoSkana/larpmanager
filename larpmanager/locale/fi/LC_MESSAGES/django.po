@@ -6814,6 +6814,9 @@ msgstr "CSS-koodi PDF-tulostuksen mukauttamiseen."
 msgid "The following registrations were drawn:"
 msgstr "Seuraavat ilmoittautumiset arvottiin:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Lomake tallennetaan automaattisesti 5 sekunnin välein."
+
 msgid "The question status, allowed values are"
 msgstr "Kysymyksen tila, sallitut arvot ovat"
 
@@ -11857,6 +11860,13 @@ msgstr ""
 " tärkeitä."
 
 msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Jos tämä on käytössä, pelaajien hahmolomaketta ei tallenneta automaattisesti"
+" muokkauksen aikana."
+
+msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""
@@ -14102,6 +14112,14 @@ msgstr ""
 "Voit ladata ja isännöidä tiedostoja suoraan alustalle, jolloin ne ovat joko "
 "henkilökunnan tai osallistujien käytettävissä salaisen ulkoisen linkin "
 "kautta"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Tätä hahmoa muokattiin toisessa ikkunassa: täällä tekemäsi muutokset eivät "
+"ole tallentuneet. Kopioi teksti, jonka haluat säilyttää, ja lataa sitten "
+"sivu uudelleen."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

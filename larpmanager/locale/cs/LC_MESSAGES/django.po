@@ -6815,6 +6815,9 @@ msgstr "CSS kód pro přizpůsobení tisku PDF."
 msgid "The following registrations were drawn:"
 msgstr "Byly vylosovány tyto registrace:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Formulář se automaticky ukládá každých 5 sekund."
+
 msgid "The question status, allowed values are"
 msgstr "Stav otázky, povolené hodnoty jsou"
 
@@ -11680,6 +11683,13 @@ msgstr ""
 "postavu méně důležité."
 
 msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Je-li povoleno, formulář postavy hráčů se při úpravách nebude ukládat "
+"automaticky."
+
+msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""
@@ -13906,6 +13916,13 @@ msgid ""
 msgstr ""
 "Umožňuje nahrávat a hostovat soubory přímo na platformě a zpřístupnit je "
 "členům týmu nebo účastníkům prostřednictvím tajných externích odkazů"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Tato postava byla upravena v jiném okně: tvoje změny zde nebyly uloženy. "
+"Zkopíruj text, který chceš zachovat, a pak stránku znovu načti."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

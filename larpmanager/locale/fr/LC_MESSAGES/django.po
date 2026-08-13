@@ -6814,6 +6814,9 @@ msgstr "Le code CSS pour personnaliser l’impression des PDF."
 msgid "The following registrations were drawn:"
 msgstr "Les inscriptions suivantes ont été tirées au sort :"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Le formulaire est enregistré automatiquement toutes les 5 secondes."
+
 msgid "The question status, allowed values are"
 msgstr "L'état de la question, les valeurs autorisées sont"
 
@@ -12171,6 +12174,13 @@ msgstr ""
 " pour le personnage."
 
 msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Si cette option est activée, le formulaire de personnage des joueurs ne sera"
+" pas enregistré automatiquement pendant la modification."
+
+msgid ""
 "Multi-event story with player-created characters, experience points, and a "
 "persistent world."
 msgstr ""
@@ -14458,6 +14468,14 @@ msgstr ""
 "Permet de charger et d'héberger des fichiers directement sur la plateforme, "
 "en les mettant à la disposition du personnel ou des participants par le "
 "biais de liens externes secrets"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Ce personnage a été modifié dans une autre fenêtre : tes modifications ici "
+"n’ont pas été enregistrées. Copie le texte que tu veux conserver, puis "
+"recharge la page."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "
