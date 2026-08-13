@@ -4545,6 +4545,12 @@ msgstr "Não foi possível adicionar o Handout"
 msgid "Go to event dashboard"
 msgstr "Ir para o painel do evento"
 
+msgid "Guild invite accepted"
+msgstr "Convite para a guilda aceite"
+
+msgid "Guild invite declined"
+msgstr "Convite para a guilda recusado"
+
 msgid "Handout and templates"
 msgstr "Handout e modelos"
 
@@ -7225,6 +7231,9 @@ msgstr "A organização à qual esta adesão pertence"
 msgid "This access link is invalid or has expired."
 msgstr "Esta ligação de acesso é inválida ou expirou."
 
+msgid "This character is not playing in this event"
+msgstr "Este personagem não participa neste evento"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Este item não tem uma quantidade finita para atribuir."
 
@@ -7734,6 +7743,9 @@ msgstr "Tens a certeza? Os itens podem não ser recuperáveis."
 
 msgid "Background image displayed across all event pages"
 msgstr "Imagem de fundo apresentada em todas as páginas do evento"
+
+msgid "Character not found, or not playing in this event"
+msgstr "Personagem não encontrado ou não participa neste evento"
 
 msgid "Choose the character you will play in this event!"
 msgstr "Escolhe a personagem que vais jogar neste evento!"
@@ -10658,6 +10670,20 @@ msgid ""
 msgstr ""
 "O montante de reembolso pretendido (não pode ser superior aos teus créditos "
 "atuais)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"O personagem %(character)s aceitou o convite para entrar na guilda %(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"O personagem %(character)s recusou o convite para entrar na guilda %(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

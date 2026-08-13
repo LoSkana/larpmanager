@@ -4545,6 +4545,12 @@ msgstr "Kunne ikke legge til Handout"
 msgid "Go to event dashboard"
 msgstr "Gå til hendelsesoversikten"
 
+msgid "Guild invite accepted"
+msgstr "Laugsinvitasjon godtatt"
+
+msgid "Guild invite declined"
+msgstr "Laugsinvitasjon avslått"
+
 msgid "Handout and templates"
 msgstr "Handout og maler"
 
@@ -7226,6 +7232,9 @@ msgstr "Organisasjonen dette medlemskapet tilhører"
 msgid "This access link is invalid or has expired."
 msgstr "Denne tilgangskoblingen er ugyldig eller har utløpt."
 
+msgid "This character is not playing in this event"
+msgstr "Denne karakteren spiller ikke i dette arrangementet"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Denne varen har ingen begrenset mengde å reservere."
 
@@ -7734,6 +7743,9 @@ msgstr "Er du sikker? Elementene kan kanskje ikke gjenopprettes."
 
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrunnsbildet vises på alle arrangementssidene"
+
+msgid "Character not found, or not playing in this event"
+msgstr "Karakteret ble ikke funnet, eller spiller ikke i dette arrangementet"
 
 msgid "Choose the character you will play in this event!"
 msgstr "Velg karakteren du skal spille i dette arrangementet!"
@@ -10581,6 +10593,22 @@ msgid ""
 "credits)"
 msgstr ""
 "Ønsket refusjonsbeløp (kan ikke være høyere enn dine nåværende kreditter)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Karakteren %(character)s har godtatt invitasjonen til å bli med i lauget "
+"%(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Karakteren %(character)s har avslått invitasjonen til å bli med i lauget "
+"%(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

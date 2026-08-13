@@ -760,18 +760,27 @@ class EventCharacterS2WidgetUuid(EventCharacterS2, S2Widget):
 class GuildInviteS2Widget(EventCharacterS2WidgetUuid):
     """Select2 widget for inviting characters to a guild.
 
-    Excludes hidden characters and characters already in the guild.
+    Excludes hidden characters, characters already in the guild, and characters
+    not actively playing in the run.
     """
 
     def set_guild(self, guild: Any) -> None:
         """Set the guild for this instance."""
         self.guild = guild
 
+    def set_run(self, run: Any) -> None:
+        """Set the run for this instance."""
+        self.run = run
+
     def get_queryset(self) -> QuerySet[Character]:
-        """Return event characters that are visible and not already in the guild."""
+        """Return event characters that are visible, playing in the run, and not already in the guild."""
+        from larpmanager.utils.services.character import filter_playing_characters  # noqa: PLC0415
+
         queryset = super().get_queryset().filter(hide=False)
         if hasattr(self, "guild"):
             queryset = queryset.exclude(guild_memberships__guild=self.guild)
+        if hasattr(self, "run"):
+            queryset = filter_playing_characters(queryset, self.run)
         return queryset
 
 

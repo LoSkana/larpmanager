@@ -4545,6 +4545,12 @@ msgstr "Impossible d'ajouter le handout"
 msgid "Go to event dashboard"
 msgstr "Accède au tableau de bord de l'événement"
 
+msgid "Guild invite accepted"
+msgstr "Invitation de guilde acceptée"
+
+msgid "Guild invite declined"
+msgstr "Invitation de guilde refusée"
+
 msgid "Handout and templates"
 msgstr "Handout et modèles"
 
@@ -7233,6 +7239,9 @@ msgstr "L'organisation à laquelle appartient cette adhésion"
 msgid "This access link is invalid or has expired."
 msgstr "Ce lien d'accès n'est pas valide ou a expiré."
 
+msgid "This character is not playing in this event"
+msgstr "Ce personnage ne participe pas à cet événement"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Cet article n'a pas de quantité limitée à engager."
 
@@ -7748,8 +7757,11 @@ msgstr "Es-tu sûr ? Les éléments pourraient ne pas être récupérables."
 msgid "Background image displayed across all event pages"
 msgstr "Image de fond affichée sur toutes les pages de l'événement"
 
+msgid "Character not found, or not playing in this event"
+msgstr "Personnage introuvable ou ne participe pas à cet événement"
+
 msgid "Choose the character you will play in this event!"
-msgstr "Choisis le personnage que tu joueras dans cet événement !"
+msgstr "Choisis le personnage que tu joueras lors de cet événement !"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr ""
@@ -10870,6 +10882,22 @@ msgid ""
 msgstr ""
 "Le montant du remboursement souhaité (il ne peut pas être supérieur à tes "
 "crédits actuels)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Le personnage %(character)s a accepté l’invitation à rejoindre la guilde "
+"%(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Le personnage %(character)s a refusé l’invitation à rejoindre la guilde "
+"%(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

@@ -4545,6 +4545,12 @@ msgstr "No se ha podido añadir el Handout"
 msgid "Go to event dashboard"
 msgstr "Ir al panel del evento"
 
+msgid "Guild invite accepted"
+msgstr "Invitación al gremio aceptada"
+
+msgid "Guild invite declined"
+msgstr "Invitación al gremio rechazada"
+
 msgid "Handout and templates"
 msgstr "Handout y plantillas"
 
@@ -7227,6 +7233,9 @@ msgstr "Organización a la que pertenece esta afiliación"
 msgid "This access link is invalid or has expired."
 msgstr "Este enlace de acceso no es válido o ha caducado."
 
+msgid "This character is not playing in this event"
+msgstr "Este personaje no participa en este evento"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Este artículo no tiene una cantidad limitada que comprometer."
 
@@ -7743,8 +7752,11 @@ msgstr "¿Estás seguro? Puede que los elementos no sean recuperables."
 msgid "Background image displayed across all event pages"
 msgstr "Imagen de fondo en todas las páginas del evento"
 
+msgid "Character not found, or not playing in this event"
+msgstr "Personaje no encontrado o no participa en este evento"
+
 msgid "Choose the character you will play in this event!"
-msgstr "¡Elige el personaje que jugarás en este evento!"
+msgstr "¡Elige el personaje que interpretarás en este evento!"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Color utilizado para los fondos de texto y los cuadros de contenido"
@@ -10774,6 +10786,22 @@ msgid ""
 msgstr ""
 "El importe del reembolso que deseas (no puede ser superior a tus créditos "
 "actuales)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"El personaje %(character)s ha aceptado la invitación para unirse al gremio "
+"%(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"El personaje %(character)s ha rechazado la invitación para unirse al gremio "
+"%(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

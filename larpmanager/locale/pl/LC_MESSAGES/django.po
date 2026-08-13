@@ -4545,6 +4545,12 @@ msgstr "Nie udało się dodać Handoutu"
 msgid "Go to event dashboard"
 msgstr "Przejdź do pulpitu nawigacyjnego wydarzenia"
 
+msgid "Guild invite accepted"
+msgstr "Zaproszenie do gildii zaakceptowane"
+
+msgid "Guild invite declined"
+msgstr "Zaproszenie do gildii odrzucone"
+
 msgid "Handout and templates"
 msgstr "Handouty i szablony"
 
@@ -7226,6 +7232,9 @@ msgstr "Organizacja, do której należy to członkostwo"
 msgid "This access link is invalid or has expired."
 msgstr "To łącze dostępu jest nieprawidłowe lub wygasło."
 
+msgid "This character is not playing in this event"
+msgstr "Ta postać nie gra w tym wydarzeniu"
+
 msgid "This item has no finite quantity to commit."
 msgstr "Ten przedmiot nie ma ograniczonej ilości do przydzielenia."
 
@@ -7736,8 +7745,11 @@ msgstr "Czy na pewno? Elementy mogą nie być możliwe do odzyskania."
 msgid "Background image displayed across all event pages"
 msgstr "Obraz tła wyświetlany na wszystkich stronach wydarzenia"
 
+msgid "Character not found, or not playing in this event"
+msgstr "Nie znaleziono postaci lub nie gra ona w tym wydarzeniu"
+
 msgid "Choose the character you will play in this event!"
-msgstr "Wybierz postać, którą będziesz grać w tym wydarzeniu!"
+msgstr "Wybierz postać, którą zagrasz podczas tego wydarzenia!"
 
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Kolor używany dla tła tekstu i pól zawartości"
@@ -10651,6 +10663,21 @@ msgid ""
 "credits)"
 msgstr ""
 "Żądana kwota zwrotu kosztów (nie może być wyższa niż Twoje obecne środki)"
+
+#, python-format
+msgid ""
+"The character %(character)s has accepted the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Postać %(character)s zaakceptowała zaproszenie do dołączenia do gildii "
+"%(guild)s"
+
+#, python-format
+msgid ""
+"The character %(character)s has declined the invite to join the guild "
+"%(guild)s"
+msgstr ""
+"Postać %(character)s odrzuciła zaproszenie do dołączenia do gildii %(guild)s"
 
 msgid ""
 "The event has taken place: archived among past events, registrations are "

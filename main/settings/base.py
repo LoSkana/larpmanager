@@ -266,20 +266,48 @@ CONTENT_SECURITY_POLICY = {
             'https://www.gstatic.com',
             'https://static.hotjar.com',
             'https://script.hotjar.com',
+            'https://*.hotjar.com',
         ],
-        'style-src': ["'self'", "'unsafe-inline'", *_CSP_CDN_HOSTS],
-        'font-src': ["'self'", 'data:', *_CSP_CDN_HOSTS],
+        'style-src': [
+            "'self'",
+            "'unsafe-inline'",
+            *_CSP_CDN_HOSTS,
+            'https://*.hotjar.com',
+            'https://fonts.googleapis.com',
+        ],
+        'font-src': [
+            "'self'",
+            'data:',
+            *_CSP_CDN_HOSTS,
+            'https://*.hotjar.com',
+            'https://fonts.gstatic.com',
+        ],
         'img-src': ["'self'", 'data:', 'blob:', 'https:'],
         'media-src': ["'self'", 'data:', 'blob:', 'https:'],
         'connect-src': [
             "'self'",
             'https://*.paypal.com',
             'https://gateway.sumup.com',
-            'https://www.google-analytics.com',
             'https://api.thecatapi.com',
             'https://*.hotjar.com',
             'https://*.hotjar.io',
+            # Hotjar streams recordings over WebSocket; wss: is not covered by the https: sources
+            'wss://*.hotjar.com',
+            # Google Analytics / Tag Manager / Ads beacons
+            'https://www.google-analytics.com',
+            'https://*.google-analytics.com',
+            'https://*.analytics.google.com',
+            'https://www.googletagmanager.com',
+            'https://*.googletagmanager.com',
+            'https://www.google.com',
+            'https://ad.doubleclick.net',
+            'https://*.g.doubleclick.net',
+            # Address lookup in the leaflet map picker
+            'https://nominatim.openstreetmap.org',
         ],
+        # Hotjar (and other libs) spawn workers from blob: URLs; without this it
+        # falls back to default-src 'self' and the worker is blocked
+        'worker-src': ["'self'", 'blob:'],
         'frame-src': [
             "'self'",
             'https://*.paypal.com',

@@ -37,6 +37,7 @@ from larpmanager.models.association import hdr
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.writing import Character, Guild, GuildMembership, GuildMembershipStatus, GuildRole
 from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.services.character import filter_playing_characters
 from larpmanager.utils.users.registration import get_player_characters
 
 
@@ -51,6 +52,34 @@ def _get_event_character(context: dict, character_uuid: str, *, only_mine: bool 
     if only_mine:
         queryset = queryset.filter(player=context["member"])
     return queryset.filter(uuid=character_uuid).first()
+
+
+def _get_playing_character(context: dict, character_uuid: str) -> Character | None:
+    """Return a visible event character by uuid, only if active and playing in the current run."""
+    queryset = filter_playing_characters(context["event"].get_elements(Character).filter(hide=False), context["run"])
+    return queryset.filter(uuid=character_uuid).first()
+
+
+def _notify_guild_admins(context: dict, guild_obj: Guild, subject_label: str, body: str, exclude: Character) -> None:
+    """Send a notification to every player administering the guild, skipping the acting character's player."""
+    admin_memberships = GuildMembership.objects.filter(
+        guild=guild_obj,
+        role=GuildRole.ADMIN,
+        status=GuildMembershipStatus.ACCEPTED,
+    ).select_related("character__player")
+
+    subject = f"{hdr(context['event'])} {subject_label} - {guild_obj.name}"
+    body += "<br/><br/>" + reverse("guild", args=[context["event"].slug, guild_obj.uuid])
+
+    notified = set()
+    for membership in admin_memberships:
+        player = membership.character.player
+        if not player or player.id in notified:
+            continue
+        if exclude.player_id and player.id == exclude.player_id:
+            continue
+        notified.add(player.id)
+        my_send_mail(subject, body, player, context["event"])
 
 
 def _get_my_character(context: dict, character_uuid: str) -> Character:
@@ -164,6 +193,7 @@ def guild(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRespons
         widget = GuildInviteS2Widget(attrs={"id": "guild-invite-select"})
         widget.set_event(context["event"])
         widget.set_guild(guild_obj)
+        widget.set_run(context["run"])
         context["guild_invite_widget"] = widget.render(name="character_uuid", value="")
         context["guild_invite_media"] = widget.media
 
@@ -260,10 +290,10 @@ def guild_invite(request: HttpRequest, event_slug: str, guild_uuid: str) -> Http
     _check_admin(context, guild_obj)
 
     target_uuid = request.POST.get("character_uuid")
-    target = _get_event_character(context, target_uuid)
+    target = _get_playing_character(context, target_uuid)
 
     if not target:
-        messages.error(request, _("Character not found"))
+        messages.error(request, _("Character not found, or not playing in this event"))
     elif GuildMembership.objects.filter(guild=guild_obj, character=target).exists():
         messages.error(request, _("This character is already a member or has a pending invite"))
     else:
@@ -306,10 +336,17 @@ def guild_invite_accept(request: HttpRequest, event_slug: str, guild_uuid: str, 
     accepted_count = GuildMembership.objects.filter(guild=guild_obj, status=GuildMembershipStatus.ACCEPTED).count()
     if max_members > 0 and accepted_count >= max_members:
         messages.error(request, _("This guild has reached its maximum number of members"))
+    elif not _get_playing_character(context, character_uuid):
+        messages.error(request, _("This character is not playing in this event"))
     else:
         membership.status = GuildMembershipStatus.ACCEPTED
         membership.save()
         messages.success(request, _("You joined the guild!"))
+        body = _("The character %(character)s has accepted the invite to join the guild %(guild)s") % {
+            "character": character.name,
+            "guild": guild_obj.name,
+        }
+        _notify_guild_admins(context, guild_obj, str(_("Guild invite accepted")), body, character)
 
     return redirect("guild_invites", event_slug=event_slug)
 
@@ -323,11 +360,18 @@ def guild_invite_decline(request: HttpRequest, event_slug: str, guild_uuid: str,
     guild_obj = get_object_or_404(Guild, event=context["event"], uuid=guild_uuid)
     character = _get_my_character(context, character_uuid)
 
-    GuildMembership.objects.filter(
+    deleted, _unused = GuildMembership.objects.filter(
         guild=guild_obj,
         character=character,
         status=GuildMembershipStatus.INVITED,
     ).delete()
+
+    if deleted:
+        body = _("The character %(character)s has declined the invite to join the guild %(guild)s") % {
+            "character": character.name,
+            "guild": guild_obj.name,
+        }
+        _notify_guild_admins(context, guild_obj, str(_("Guild invite declined")), body, character)
 
     messages.success(request, _("Invite declined"))
     return redirect("guild_invites", event_slug=event_slug)
