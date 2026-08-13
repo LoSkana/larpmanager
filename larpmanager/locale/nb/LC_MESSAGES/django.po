@@ -916,9 +916,6 @@ msgstr "Spiller:"
 msgid "Players"
 msgstr "Spillere"
 
-msgid "Playing"
-msgstr "Spiller"
-
 msgid "Preview"
 msgstr "Forhåndsvisning"
 
@@ -2107,6 +2104,9 @@ msgstr "Inventarer"
 
 msgid "Last change"
 msgstr "Sist endret"
+
+msgid "Last played"
+msgstr "Sist spilt"
 
 msgid "Leave guild"
 msgstr "Forlate gildet"
@@ -4591,9 +4591,6 @@ msgstr "Alternativer (maks. %(max)s)"
 msgid "Participant questions"
 msgstr "Spørsmål fra deltakerne"
 
-msgid "Playing in this event"
-msgstr "Spiller i dette arrangementet"
-
 msgid "Pre-registration link"
 msgstr "Lenke til forhåndsregistrering"
 
@@ -4620,9 +4617,6 @@ msgstr "Registreringsseksjoner"
 
 msgid "Reserve registrations"
 msgstr "Reserveregistreringer"
-
-msgid "Select this character"
-msgstr "Velg denne karakteren"
 
 msgid "Show closed questions"
 msgstr "Vis lukkede spørsmål"
@@ -4906,10 +4900,6 @@ msgstr "Inkluderer medlemsavgift"
 msgid "Join the collection for"
 msgstr "Delta i innsamlingen for"
 
-#, python-format
-msgid "Last played in %(name)s"
-msgstr "Sist spilt i %(name)s"
-
 msgid "Lightweight sheet (Pdf)"
 msgstr "Lettvektsark (Pdf)"
 
@@ -5009,6 +4999,9 @@ msgstr "Karakterkonfigurasjoner"
 
 msgid "Code of the box or shelf"
 msgstr "Kode for esken eller hyllen"
+
+msgid "Create another character"
+msgstr "Opprett en annen karakter"
 
 msgid "Create your organization"
 msgstr "Opprett din organisasjon"
@@ -5160,6 +5153,9 @@ msgstr "Sjekk doble speed larps:"
 
 msgid "Check missing speed larp:"
 msgstr "Sjekk manglende speed larp:"
+
+msgid "Create another character!"
+msgstr "Opprett en annen karakter!"
 
 msgid "Current platform version:"
 msgstr "Gjeldende plattformversjon:"
@@ -5457,9 +5453,6 @@ msgstr "Mangler castingpreferanser"
 
 msgid "No inventory transfers yet."
 msgstr "Ingen inventaroverføringer ennå."
-
-msgid "Play this character instead"
-msgstr "Spill denne karakteren i stedet"
 
 msgid "Pre-registration confirmed!"
 msgstr "Forhåndsregistrering bekreftet!"
@@ -7400,6 +7393,9 @@ msgstr "Bruke oppgraderingen på hele organisasjonen?"
 msgid "Are you sure you want to delete this element?"
 msgstr "Er du sikker på at du vil slette dette elementet?"
 
+msgid "Are you sure you want to play this character?"
+msgstr "Er du sikker på at du vil spille denne karakteren?"
+
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpass knappene i arrangementets navigasjonslinje"
 
@@ -7752,9 +7748,6 @@ msgstr "Er du sikker? Elementene kan kanskje ikke gjenopprettes."
 
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrunnsbildet vises på alle arrangementssidene"
-
-msgid "Change the character you will play in this event!"
-msgstr "Bytt karakteren du skal spille i dette arrangementet!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Karakteret ble ikke funnet, eller spiller ikke i dette arrangementet"

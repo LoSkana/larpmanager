@@ -949,28 +949,29 @@ def registration_status_characters(
 
     # Count the player's own characters still available to be chosen
     selectable_count = 0
+    owned_count = 0
     can_switch = False
     play_max = get_character_play_max(run.event_id, context)
     if "user_character" in features:
         owned_ids = get_player_characters_ids(registration.member, run.event, context)
         assigned_ids = {character_rel.character_id for character_rel in registration_character_rels}
         selectable_count = len(owned_ids - assigned_ids)
+        owned_count = len(owned_ids)
 
         # With no free slot, the played character can still be swapped, if the player created it
         can_switch = play_max == 1 and bool(assigned_ids) and assigned_ids <= owned_ids
-
-        # Signal which character is played, only when the player owns more than one
-        if is_assigned:
-            run_status["character_multiple"] = len(owned_ids) > 1
 
     _status_approval(
         run,
         registration,
         run_status,
         features,
-        assigned_count=assigned_count,
-        selectable_count=selectable_count,
-        play_max=play_max,
+        {
+            "assigned": assigned_count,
+            "selectable": selectable_count,
+            "owned": owned_count,
+            "play_max": play_max,
+        },
         can_switch=can_switch,
     )
     _status_casting(run, registration, run_status, features, context, is_character_assigned=is_assigned)
@@ -1111,26 +1112,24 @@ def _status_approval(
     registration: Registration,
     run_status: dict,
     features: dict,
+    character_counts: dict,
     *,
-    assigned_count: int,
-    selectable_count: int,
-    play_max: int,
     can_switch: bool,
 ) -> None:
     """Add character creation/selection actions to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
-    is not on a waiting list, then fills run_status["character_actions"] with the
-    available actions (create a new character, choose an existing one, change the played one).
+    is not on a waiting list, then fills run_status["character_actions"] with the available
+    actions (create a new character, choose an existing one), and run_status["character_change"]
+    / run_status["character_create"] with the links to swap the played character or to create
+    another one, shown only on the event page.
 
     Args:
         run: Run object containing event information
         registration: The registration object
         features: Dictionary of enabled features for the event
         run_status: Dictionary with run status
-        assigned_count: Number of characters already assigned to the registration
-        selectable_count: Number of the player's own characters not yet assigned
-        play_max: Number of characters the player can play at the same time
+        character_counts: Counts of assigned, selectable and owned characters, plus the play maximum
         can_switch: Whether the played character can be swapped for another one of the player
 
     """
@@ -1143,12 +1142,25 @@ def _status_approval(
         return
 
     # Get character creation limits for this user and event
-    can_create_character, _maximum_characters = check_character_maximum(run.event, registration.member)
+    reached_maximum, maximum_characters = check_character_maximum(run.event, registration.member)
+
+    assigned_count = character_counts["assigned"]
+    selectable_count = character_counts["selectable"]
+    owned_count = character_counts["owned"]
+    play_max = character_counts["play_max"]
 
     character_actions = []
 
+    # With more characters allowed, the player already created one is only offered to create another
+    if not reached_maximum and owned_count and maximum_characters > 1:
+        run_status["character_create"] = {
+            "url": reverse("character_create", args=[run.get_slug()]),
+            "label": _("Create another character"),
+            "tooltip": _("Create another character!"),
+            "icon": "fa-solid fa-wand-magic-sparkles",
+        }
     # Show character creation action if user can create more characters
-    if not can_create_character:
+    elif not reached_maximum:
         character_actions.append(
             {
                 "url": reverse("character_create", args=[run.get_slug()]),
@@ -1176,17 +1188,14 @@ def _status_approval(
             }
         )
 
-    # Show the change action when all slots are taken, but the player can swap the played character
+    # Offer the change link when all slots are taken, but the player can swap the played character
     elif selectable_count and can_switch:
-        character_actions.append(
-            {
-                "url": reverse("character_list", args=[run.get_slug()]),
-                "label": _("Change your character"),
-                "label_long": _("Change the character you will play in this event!"),
-                "tooltip": _("Change your character!"),
-                "icon": "fa-solid fa-right-left",
-            }
-        )
+        run_status["character_change"] = {
+            "url": reverse("character_list", args=[run.get_slug()]),
+            "label": _("Change your character"),
+            "tooltip": _("Change your character!"),
+            "icon": "fa-solid fa-right-left",
+        }
 
     if character_actions:
         run_status["character_actions"] = character_actions

@@ -916,9 +916,6 @@ msgstr "Spelare:"
 msgid "Players"
 msgstr "Spelare"
 
-msgid "Playing"
-msgstr "Spelar"
-
 msgid "Preview"
 msgstr "Förhandsgranskning"
 
@@ -2107,6 +2104,9 @@ msgstr "Inventarier"
 
 msgid "Last change"
 msgstr "Senast ändrad"
+
+msgid "Last played"
+msgstr "Senast spelad"
 
 msgid "Leave guild"
 msgstr "Lämna gillet"
@@ -4591,9 +4591,6 @@ msgstr "Alternativ (max %(max)s)"
 msgid "Participant questions"
 msgstr "Frågor från deltagarna"
 
-msgid "Playing in this event"
-msgstr "Spelar i detta event"
-
 msgid "Pre-registration link"
 msgstr "Länk för förhandsregistrering"
 
@@ -4620,9 +4617,6 @@ msgstr "Registreringssektioner"
 
 msgid "Reserve registrations"
 msgstr "Reservanmälningar"
-
-msgid "Select this character"
-msgstr "Välj denna karaktär"
 
 msgid "Show closed questions"
 msgstr "Visa stängda frågor"
@@ -4906,10 +4900,6 @@ msgstr "Inkluderar medlemsavgift"
 msgid "Join the collection for"
 msgstr "Gå med i insamlingen för"
 
-#, python-format
-msgid "Last played in %(name)s"
-msgstr "Senast spelad i %(name)s"
-
 msgid "Lightweight sheet (Pdf)"
 msgstr "Lättviktsblad (Pdf)"
 
@@ -5009,6 +4999,9 @@ msgstr "Konfigurationer av karaktärer"
 
 msgid "Code of the box or shelf"
 msgstr "Kod för lådan eller hyllan"
+
+msgid "Create another character"
+msgstr "Skapa en annan karaktär"
 
 msgid "Create your organization"
 msgstr "Skapa din organisation"
@@ -5160,6 +5153,9 @@ msgstr "Kontrollera dubblerade Speed larp:"
 
 msgid "Check missing speed larp:"
 msgstr "Kontrollera saknade Speed larp:"
+
+msgid "Create another character!"
+msgstr "Skapa en annan karaktär!"
 
 msgid "Current platform version:"
 msgstr "Aktuell plattformsversion:"
@@ -5457,9 +5453,6 @@ msgstr "Saknade castingpreferenser"
 
 msgid "No inventory transfers yet."
 msgstr "Inga överföringar ännu."
-
-msgid "Play this character instead"
-msgstr "Spela den här karaktären i stället"
 
 msgid "Pre-registration confirmed!"
 msgstr "Förhandsanmälan bekräftad!"
@@ -7399,6 +7392,9 @@ msgstr "Tillämpa uppgraderingen på hela organisationen?"
 msgid "Are you sure you want to delete this element?"
 msgstr "Är du säker på att du vill ta bort det här elementet?"
 
+msgid "Are you sure you want to play this character?"
+msgstr "Är du säker på att du vill spela den här karaktären?"
+
 msgid "Customize buttons in the event navigation bar"
 msgstr "Anpassa knappar i evenemangets navigeringsfält"
 
@@ -7754,9 +7750,6 @@ msgstr "Är du säker? Objekten kanske inte kan återställas."
 
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrundsbild visas på alla evenemangssidor"
-
-msgid "Change the character you will play in this event!"
-msgstr "Byt karaktären du kommer att spela i det här eventet!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Karaktären hittades inte eller deltar inte i detta event"

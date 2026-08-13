@@ -916,9 +916,6 @@ msgstr "Παίκτης:"
 msgid "Players"
 msgstr "Παίκτες"
 
-msgid "Playing"
-msgstr "Παίζει"
-
 msgid "Preview"
 msgstr "Προεπισκόπηση"
 
@@ -2107,6 +2104,9 @@ msgstr "Απογραφές"
 
 msgid "Last change"
 msgstr "Τελευταία αλλαγή"
+
+msgid "Last played"
+msgstr "Τελευταία φορά που το έπαιξες"
 
 msgid "Leave guild"
 msgstr "Αποχώρηση από τη συντεχνία"
@@ -4591,9 +4591,6 @@ msgstr "Επιλογές (μέγ. %(max)s)"
 msgid "Participant questions"
 msgstr "Ερωτήσεις συμμετεχόντων"
 
-msgid "Playing in this event"
-msgstr "Παίζεις σε αυτό το event"
-
 msgid "Pre-registration link"
 msgstr "Σύνδεσμος προεγγραφής"
 
@@ -4620,9 +4617,6 @@ msgstr "Ενότητες εγγραφής"
 
 msgid "Reserve registrations"
 msgstr "Εγγραφές επιλαχόντων"
-
-msgid "Select this character"
-msgstr "Επίλεξε αυτόν τον χαρακτήρα"
 
 msgid "Show closed questions"
 msgstr "Εμφάνιση κλειστών ερωτήσεων"
@@ -4906,10 +4900,6 @@ msgstr "Περιλαμβάνει τη συνδρομή μέλους"
 msgid "Join the collection for"
 msgstr "Συμμετείχε στη συλλογή για"
 
-#, python-format
-msgid "Last played in %(name)s"
-msgstr "Τελευταία παίχτηκε στο %(name)s"
-
 msgid "Lightweight sheet (Pdf)"
 msgstr "Ελαφρύ φύλλο (PDF)"
 
@@ -5009,6 +4999,9 @@ msgstr "Ρυθμίσεις χαρακτήρων"
 
 msgid "Code of the box or shelf"
 msgstr "Κωδικός του κουτιού ή του ραφιού"
+
+msgid "Create another character"
+msgstr "Δημιούργησε έναν ακόμη χαρακτήρα"
 
 msgid "Create your organization"
 msgstr "Δημιούργησε τον οργανισμό σου"
@@ -5160,6 +5153,9 @@ msgstr "Έλεγχος διπλών Speed larp:"
 
 msgid "Check missing speed larp:"
 msgstr "Έλεγξε τα Speed larp που λείπουν:"
+
+msgid "Create another character!"
+msgstr "Δημιούργησε έναν ακόμη χαρακτήρα!"
 
 msgid "Current platform version:"
 msgstr "Τρέχουσα έκδοση πλατφόρμας:"
@@ -5457,9 +5453,6 @@ msgstr "Λείπουν οι προτιμήσεις Casting"
 
 msgid "No inventory transfers yet."
 msgstr "Δεν υπάρχουν ακόμη μεταφορές αποθέματος."
-
-msgid "Play this character instead"
-msgstr "Παίξε αυτόν τον χαρακτήρα αντί"
 
 msgid "Pre-registration confirmed!"
 msgstr "Η προεγγραφή επιβεβαιώθηκε!"
@@ -7404,6 +7397,9 @@ msgstr "Εφαρμογή αναβάθμισης σε ολόκληρο τον ο�
 msgid "Are you sure you want to delete this element?"
 msgstr "Είσαι σίγουρος ότι θέλεις να διαγράψεις αυτό το στοιχείο;"
 
+msgid "Are you sure you want to play this character?"
+msgstr "Είσαι σίγουρος ότι θέλεις να παίξεις αυτόν τον χαρακτήρα;"
+
 msgid "Customize buttons in the event navigation bar"
 msgstr "Προσαρμογή κουμπιών στη γραμμή πλοήγησης της εκδήλωσης"
 
@@ -7760,9 +7756,6 @@ msgstr "Είσαι σίγουρος; Τα στοιχεία ίσως να μην 
 
 msgid "Background image displayed across all event pages"
 msgstr "Εικόνα φόντου που εμφανίζεται σε όλες τις σελίδες της εκδήλωσης"
-
-msgid "Change the character you will play in this event!"
-msgstr "Άλλαξε τον χαρακτήρα που θα παίξεις σε αυτό το event!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Ο χαρακτήρας δεν βρέθηκε ή δεν συμμετέχει σε αυτό το event"

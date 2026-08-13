@@ -5903,9 +5903,6 @@ msgstr ""
 msgid "Password reset"
 msgstr ""
 
-msgid "Playing"
-msgstr ""
-
 msgid "Tech Support"
 msgstr ""
 
@@ -6134,17 +6131,22 @@ msgstr ""
 msgid "Create new character"
 msgstr ""
 
-msgid "Playing in this event"
+#, python-format
+msgid "%(name)s total"
 msgstr ""
 
 #, python-format
-msgid "Last played in %(name)s"
+msgid "%(name)s used"
 msgstr ""
 
-msgid "Select this character"
+#, python-format
+msgid "%(name)s available"
 msgstr ""
 
-msgid "Play this character instead"
+msgid "Last played"
+msgstr ""
+
+msgid "Are you sure you want to play this character?"
 msgstr ""
 
 msgid "Character relationships"
@@ -9837,18 +9839,6 @@ msgstr ""
 msgid "Attending"
 msgstr ""
 
-#, python-format
-msgid "%(name)s total"
-msgstr ""
-
-#, python-format
-msgid "%(name)s used"
-msgstr ""
-
-#, python-format
-msgid "%(name)s available"
-msgstr ""
-
 msgid "Important"
 msgstr ""
 
@@ -12096,6 +12086,12 @@ msgstr ""
 msgid "Write your questions about the character directly to the authors here."
 msgstr ""
 
+msgid "Create another character"
+msgstr ""
+
+msgid "Create another character!"
+msgstr ""
+
 msgid "Create your character"
 msgstr ""
 
@@ -12115,9 +12111,6 @@ msgid "Choose your character!"
 msgstr ""
 
 msgid "Change your character"
-msgstr ""
-
-msgid "Change the character you will play in this event!"
 msgstr ""
 
 msgid "Change your character!"

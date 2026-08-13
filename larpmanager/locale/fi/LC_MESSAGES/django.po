@@ -916,9 +916,6 @@ msgstr "Pelaaja:"
 msgid "Players"
 msgstr "Pelaajat"
 
-msgid "Playing"
-msgstr "Pelaaminen"
-
 msgid "Preview"
 msgstr "Esikatselu"
 
@@ -2107,6 +2104,9 @@ msgstr "Inventaarit"
 
 msgid "Last change"
 msgstr "Viimeisin muutos"
+
+msgid "Last played"
+msgstr "Viimeksi pelattu"
 
 msgid "Leave guild"
 msgstr "Poistu killasta"
@@ -4591,9 +4591,6 @@ msgstr "Vaihtoehdot (enintään %(max)s)"
 msgid "Participant questions"
 msgstr "Osallistujien kysymykset"
 
-msgid "Playing in this event"
-msgstr "Pelaat tässä tapahtumassa"
-
 msgid "Pre-registration link"
 msgstr "Ennakkoilmoittautumislinkki"
 
@@ -4620,9 +4617,6 @@ msgstr "Ilmoittautumisosiot"
 
 msgid "Reserve registrations"
 msgstr "Varasijailmoittautumiset"
-
-msgid "Select this character"
-msgstr "Valitse tämä hahmo"
 
 msgid "Show closed questions"
 msgstr "Näytä suljetut kysymykset"
@@ -4906,10 +4900,6 @@ msgstr "Sisältää jäsenmaksun"
 msgid "Join the collection for"
 msgstr "Liity keräykseen:"
 
-#, python-format
-msgid "Last played in %(name)s"
-msgstr "Viimeksi pelattu tapahtumassa %(name)s"
-
 msgid "Lightweight sheet (Pdf)"
 msgstr "Kevytlomake (Pdf)"
 
@@ -5009,6 +4999,9 @@ msgstr "Hahmon kokoonpanot"
 
 msgid "Code of the box or shelf"
 msgstr "Laatikon tai hyllyn koodi"
+
+msgid "Create another character"
+msgstr "Luo toinen hahmo"
 
 msgid "Create your organization"
 msgstr "Luo organisaatiosi"
@@ -5160,6 +5153,9 @@ msgstr "Tarkista kaksinkertaiset Speed larpit:"
 
 msgid "Check missing speed larp:"
 msgstr "Tarkista puuttuva Speed larp:"
+
+msgid "Create another character!"
+msgstr "Luo toinen hahmo!"
 
 msgid "Current platform version:"
 msgstr "Nykyinen alustaversio:"
@@ -5457,9 +5453,6 @@ msgstr "Puuttuvat Casting-mieltymykset"
 
 msgid "No inventory transfers yet."
 msgstr "Ei vielä siirtoja."
-
-msgid "Play this character instead"
-msgstr "Pelaa tätä hahmoa sen sijaan"
 
 msgid "Pre-registration confirmed!"
 msgstr "Ennakkoilmoittautuminen vahvistettu!"
@@ -7399,6 +7392,9 @@ msgstr "Sovelletaanko päivitystä koko organisaatioon?"
 msgid "Are you sure you want to delete this element?"
 msgstr "Haluatko varmasti poistaa tämän elementin?"
 
+msgid "Are you sure you want to play this character?"
+msgstr "Haluatko varmasti pelata tätä hahmoa?"
+
 msgid "Customize buttons in the event navigation bar"
 msgstr "Mukauta tapahtuman navigointipalkin painikkeita"
 
@@ -7753,9 +7749,6 @@ msgstr "Oletko varma? Kohteita ei ehkä voi palauttaa."
 
 msgid "Background image displayed across all event pages"
 msgstr "Taustakuva näytetään kaikilla tapahtumasivuilla"
-
-msgid "Change the character you will play in this event!"
-msgstr "Vaihda hahmo, jota pelaat tässä tapahtumassa!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Hahmoa ei löytynyt tai se ei pelaa tässä tapahtumassa"

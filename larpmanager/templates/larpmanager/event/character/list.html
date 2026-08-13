@@ -1,5 +1,11 @@
 {% extends "base.html" %}
 {% load show_tags i18n %}
+{% block datatables_css %}
+    {% include "elements/structure/datatables-css.html" %}
+{% endblock datatables_css %}
+{% block datatables_js %}
+    {% include "elements/structure/datatables-js.html" %}
+{% endblock datatables_js %}
 {% block title %}
     {% trans "Your characters" %} - {{ run.search }}
 {% endblock title %}
@@ -8,84 +14,109 @@
         <a href="{% url 'character_create' run.get_slug %}" class="add-new">{% trans "Create new character" %}</a>
         <br />
     {% endif %}
-    <div class="char-choose-grid">
-        {% for el in list %}
-            <div class="char-choose-card{% if el.addit.inactive == "True" %} char-choose-inactive{% endif %}"
-                 id="{{ el.uuid }}">
-                <div class="char-choose-cover">
-                    {% if el.cover %}
-                        <img src="{{ el.thumb.url }}" alt="{{ el.name }}" />
-                    {% else %}
-                        <i class="fa-solid fa-user"></i>
+    <table id="characters" class="go_datatable">
+        <thead>
+            <tr>
+                <th></th>
+                {% if features.user_character %}<th></th>{% endif %}
+                <th>{{ writing_field_names.name }}</th>
+                {% if features.title %}<th>{{ writing_field_names.title }}</th>{% endif %}
+                <th>{{ writing_field_names.teaser }}</th>
+                {% for idx, _unused in searchable.items %}
+                    {% with questions|get:idx as que %}<th>{{ que.name }}</th>{% endwith %}
+                {% endfor %}
+                {% if approval %}
+                    <th>{% trans "Status" %}</th>
+                {% endif %}
+                {% if features.campaign %}
+                    <th>{% trans "Active" %}</th>
+                {% endif %}
+                {% if features.experience and exp_systems %}
+                    {% for sys in exp_systems %}
+                        <th>{% blocktrans with name=sys.name %}{{ name }} total{% endblocktrans %}</th>
+                        <th>{% blocktrans with name=sys.name %}{{ name }} used{% endblocktrans %}</th>
+                        <th>{% blocktrans with name=sys.name %}{{ name }} available{% endblocktrans %}</th>
+                    {% endfor %}
+                {% endif %}
+                <th>{% trans "Last played" %}</th>
+                {% if exp_user %}<th></th>{% endif %}
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for el in list %}
+                <tr id="{{ el.uuid }}">
+                    <td></td>
+                    {% if features.user_character %}
+                        <td>
+                            <a href="{% url 'character_edit' run.get_slug el.uuid %}"
+                               qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
+                        </td>
                     {% endif %}
-                </div>
-                <div class="char-choose-body">
-                    <h3 class="char-choose-name">
-                        {{ el.name }}
-                        {% if el.assigned_here %}
-                            <span class="char-choose-badge">{% trans "Playing in this event" %}</span>
-                        {% endif %}
-                    </h3>
-                    {% if features.title and el.title %}<div class="char-choose-title">{{ el.title }}</div>{% endif %}
-                    {% if el.teaser %}
-                        <div class="char-choose-teaser">{{ el.teaser | safe | clean_tags | truncatechars:200 }}</div>
+                    <td>{{ el.name }}</td>
+                    {% if features.title %}<td>{{ el.title }}</td>{% endif %}
+                    <td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>
+                    {% for idx, _unused in searchable.items %}
+                        {% with el.fields|get:idx as field %}
+                            {% if field %}
+                                <td>{% get_character_field field options %}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                        {% endwith %}
+                    {% endfor %}
+                    {% if approval %}<td>{{ el.get_status_display }}</td>{% endif %}
+                    {% if features.campaign %}
+                        <td>
+                            {% if el.addit.inactive != "True" %}<i class="fa fa-check"></i>{% endif %}
+                        </td>
                     {% endif %}
-                    <div class="char-choose-meta">
-                        {% for idx, _unused in searchable.items %}
-                            {% with el.fields|get:idx as field %}
-                                {% if field %}
-                                    {% with questions|get:idx as que %}
-                                        <span class="char-choose-field"><b>{{ que.name }}</b>: {% get_character_field field options %}</span>
-                                    {% endwith %}
-                                {% endif %}
-                            {% endwith %}
-                        {% endfor %}
-                        {% if approval %}
-                            <span class="char-choose-field"><b>{% trans "Status" %}</b>: {{ el.get_status_display }}</span>
-                        {% endif %}
-                        {% if features.campaign and el.addit.inactive == "True" %}
-                            <span class="char-choose-field">{% trans "Inactive" %}</span>
-                        {% endif %}
-                        {% if features.experience and exp_systems %}
+                    {% if features.experience %}
+                        {% if exp_systems %}
                             {% for sys in exp_systems %}
-                                <span class="char-choose-field">
-                                    <b>{{ sys.name }}</b>: {{ el.addit|get:sys.avail_key }} / {{ el.addit|get:sys.tot_key }}
-                                </span>
+                                <td>{{ el.addit|get:sys.tot_key }}</td>
+                                <td>{{ el.addit|get:sys.used_key }}</td>
+                                <td>{{ el.addit|get:sys.avail_key }}</td>
                             {% endfor %}
                         {% endif %}
-                    </div>
-                    {% if el.last_run %}
-                        <div class="char-choose-last">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                            {% blocktrans with name=el.last_run %}Last played in {{ name }}{% endblocktrans %}
-                        </div>
                     {% endif %}
-                </div>
-                <div class="char-choose-actions">
-                    {% if not el.assigned_here and el.addit.inactive != "True" %}
-                        {% if can_select or can_switch %}
-                            <form action="{% url 'character_assign' run.get_slug el.uuid %}"
-                                  method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="char-choose-select">
-                                    {% if can_select %}
-                                        {% trans "Select this character" %}
-                                    {% else %}
-                                        {% trans "Play this character instead" %}
-                                    {% endif %}
-                                </button>
-                            </form>
-                        {% endif %}
-                    {% endif %}
-                    {% if features.user_character %}
-                        <a href="{% url 'character_edit' run.get_slug el.uuid %}"
-                           qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
-                    {% endif %}
+                    <td>
+                        {% if el.last_run %}{{ el.last_run }}{% endif %}
+                    </td>
                     {% if exp_user %}
-                        <a href="{% url 'character_abilities' run.get_slug el.uuid %}">{% trans "Ability" %}</a>
+                        <td>
+                            <a href="{% url 'character_abilities' run.get_slug el.uuid %}">{% trans "Ability" %}</a>
+                        </td>
                     {% endif %}
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+                    <td>
+                        {% if el.assigned_here %}
+                            <span class="char-choose-badge">{% trans "Selected" %}</span>
+                        {% elif el.addit.inactive != "True" %}
+                            {% if can_select or can_switch %}
+                                <form action="{% url 'character_assign' run.get_slug el.uuid %}"
+                                      method="post"
+                                      class="char-choose-form">
+                                    {% csrf_token %}
+                                    <a href="#" class="char-choose-select">{% trans "Select" %}</a>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock content %}
+{% block js %}
+    <script>
+ window.addEventListener('DOMContentLoaded', function() {
+    $(document).on('click', '.char-choose-select', function(e) {
+        e.preventDefault();
+        if (!window.lmTesting && !confirm('{% trans "Are you sure you want to play this character?" %}')) {
+            return;
+        }
+        $(this).closest('form').submit();
+    });
+});
+    </script>
+{% endblock js %}

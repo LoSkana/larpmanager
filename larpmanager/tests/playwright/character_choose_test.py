@@ -20,9 +20,9 @@
 
 """Test: Character choose page.
 
-Verifies the character list rendered as a card grid, the actions shown in the registration
-status, the badge marking the character played in the event, and switching the played
-character when the player created more characters than they can play.
+Verifies the character list datatable, the actions shown in the registration status, the
+character card of the event page, and switching the played character when the player created
+more characters than they can play.
 """
 
 import re
@@ -61,12 +61,12 @@ def test_character_choose(pw_page: Any) -> None:
     submit_register(page)
 
     create_character(page, live_server, "alpha character")
-    create_character(page, live_server, "beta character")
+    create_character(page, live_server, "beta character", another=True)
 
-    check_card_grid(page, live_server)
+    check_char_table(page, live_server)
     check_played_character(page, live_server)
     switch_character(page, live_server)
-    check_sidebar_badge(page, live_server)
+    check_character_card(page, live_server)
 
 
 def setup_event(page: Any, live_server: Any) -> None:
@@ -84,10 +84,15 @@ def setup_event(page: Any, live_server: Any) -> None:
     submit_confirm(page)
 
 
-def create_character(page: Any, live_server: Any, name: str) -> None:
-    """Create a new character from the registration status action."""
-    go_to(page, live_server, "/test/register/")
-    sidebar(page, "Create your character")
+def create_character(page: Any, live_server: Any, name: str, *, another: bool = False) -> None:
+    """Create a new character, from the registration status action or from the event character card."""
+    if another:
+        # once the player owns a character, creating more is offered only in the event character card
+        go_to(page, live_server, "/test/")
+        page.locator(".event-card-char").get_by_role("link", name="Create another character").click()
+    else:
+        go_to(page, live_server, "/test/register/")
+        sidebar(page, "Create your character")
     page.locator("#id_name").click()
     page.locator("#id_name").fill(name)
     fill_tinymce(page, "id_teaser", f"teaser of {name}")
@@ -95,14 +100,13 @@ def create_character(page: Any, live_server: Any, name: str) -> None:
     submit_confirm(page)
 
 
-def check_card_grid(page: Any, live_server: Any) -> None:
-    """Check both characters are shown as cards, with no datatable."""
+def check_char_table(page: Any, live_server: Any) -> None:
+    """Check both characters are shown as rows of the character datatable."""
     go_to(page, live_server, "/test/character/list/")
-    expect(page.locator(".char-choose-card")).to_have_count(2)
-    expect(page.locator("#characters")).to_have_count(0)
-    expect(page.locator(".char-choose-card").first).to_contain_text("teaser of")
-    expect(page.locator(".char-choose-grid")).to_contain_text("alpha character")
-    expect(page.locator(".char-choose-grid")).to_contain_text("beta character")
+    expect(page.locator("#characters tbody tr")).to_have_count(2)
+    expect(page.locator("#characters tbody tr").first).to_contain_text("teaser of")
+    expect(page.locator("#characters")).to_contain_text("alpha character")
+    expect(page.locator("#characters")).to_contain_text("beta character")
 
 
 def check_played_character(page: Any, live_server: Any) -> None:
@@ -114,27 +118,31 @@ def check_played_character(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     expect(page.get_by_role("link", name=re.compile("Create your character"))).to_have_count(0)
 
-    # with no free slot left, the status still offers to change the played character
-    expect(page.get_by_role("link", name=re.compile("Change (your|the) character")).first).to_be_visible()
+    # the change link is offered only in the character card of the event page
+    expect(page.get_by_role("link", name=re.compile("Change your character"))).to_have_count(0)
+    go_to(page, live_server, "/test/")
+    expect(page.locator(".event-card-char").get_by_role("link", name="Change your character")).to_be_visible()
 
 
 def switch_character(page: Any, live_server: Any) -> None:
-    """Switch the played character, and check the badge moves to the other card."""
+    """Switch the played character, and check the badge moves to the other row."""
     go_to(page, live_server, "/test/character/list/")
-    played = page.locator(".char-choose-card", has=page.locator(".char-choose-badge"))
+    played = page.locator("#characters tbody tr", has=page.locator(".char-choose-badge"))
     expect(played).to_contain_text("alpha character")
 
     page.locator(".char-choose-select").click()
 
     expect(page.locator(".char-choose-badge")).to_have_count(1)
-    played = page.locator(".char-choose-card", has=page.locator(".char-choose-badge"))
+    played = page.locator("#characters tbody tr", has=page.locator(".char-choose-badge"))
     expect(played).to_contain_text("beta character")
 
 
-def check_sidebar_badge(page: Any, live_server: Any) -> None:
-    """Check the sidebar marks the played character, as the player owns more than one."""
-    go_to(page, live_server, "/test/register/")
-    expect(page.locator(".sidebar-playing-badge")).to_have_count(1)
+def check_character_card(page: Any, live_server: Any) -> None:
+    """Check the event page shows a single character card, with one link to change character."""
+    go_to(page, live_server, "/test/")
+    expect(page.locator(".event-card-char")).to_have_count(1)
+    expect(page.locator(".event-card-char")).to_contain_text("beta character")
+    expect(page.locator(".event-card-char").get_by_role("link", name="Change your character")).to_have_count(1)
 
 
 def test_character_choose_campaign(pw_page: Any) -> None:
@@ -151,7 +159,7 @@ def test_character_choose_campaign(pw_page: Any) -> None:
     submit_register(page)
 
     create_character(page, live_server, "alpha character")
-    create_character(page, live_server, "beta character")
+    create_character(page, live_server, "beta character", another=True)
 
     # signing up to the next run of the campaign carries over the played character
     go_to(page, live_server, "/childchoose/register/")
@@ -186,9 +194,9 @@ def create_child_event(page: Any, live_server: Any) -> None:
 def check_carried_character(page: Any, live_server: Any) -> None:
     """Check the character played in the previous run is carried over to the new one."""
     go_to(page, live_server, "/childchoose/character/list/")
-    expect(page.locator(".char-choose-card")).to_have_count(2)
+    expect(page.locator("#characters tbody tr")).to_have_count(2)
 
-    played = page.locator(".char-choose-card", has=page.locator(".char-choose-badge"))
+    played = page.locator("#characters tbody tr", has=page.locator(".char-choose-badge"))
     expect(played).to_contain_text("alpha character")
     expect(page.locator(".char-choose-select")).to_have_count(1)
     expect(page.locator(".char-choose-select")).to_contain_text("Play this character instead")
@@ -198,7 +206,7 @@ def switch_campaign_character(page: Any, live_server: Any) -> None:
     """Change the character played in the new run."""
     page.locator(".char-choose-select").click()
 
-    played = page.locator(".char-choose-card", has=page.locator(".char-choose-badge"))
+    played = page.locator("#characters tbody tr", has=page.locator(".char-choose-badge"))
     expect(played).to_contain_text("beta character")
 
     go_to(page, live_server, "/childchoose/")
@@ -208,5 +216,5 @@ def switch_campaign_character(page: Any, live_server: Any) -> None:
 def check_other_run_untouched(page: Any, live_server: Any) -> None:
     """Check the character played in the previous run did not change."""
     go_to(page, live_server, "/test/character/list/")
-    played = page.locator(".char-choose-card", has=page.locator(".char-choose-badge"))
+    played = page.locator("#characters tbody tr", has=page.locator(".char-choose-badge"))
     expect(played).to_contain_text("alpha character")

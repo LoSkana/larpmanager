@@ -916,9 +916,6 @@ msgstr "Jogador:"
 msgid "Players"
 msgstr "Jogadores"
 
-msgid "Playing"
-msgstr "A jogar"
-
 msgid "Preview"
 msgstr "Pré-visualizar"
 
@@ -2107,6 +2104,9 @@ msgstr "Inventários"
 
 msgid "Last change"
 msgstr "Última alteração"
+
+msgid "Last played"
+msgstr "Jogou por último"
 
 msgid "Leave guild"
 msgstr "Sair da guilda"
@@ -4591,9 +4591,6 @@ msgstr "Opções (máx. %(max)s)"
 msgid "Participant questions"
 msgstr "Perguntas dos participantes"
 
-msgid "Playing in this event"
-msgstr "A jogar neste evento"
-
 msgid "Pre-registration link"
 msgstr "Ligação de pré-inscrição"
 
@@ -4620,9 +4617,6 @@ msgstr "Secções de inscrição"
 
 msgid "Reserve registrations"
 msgstr "Inscrições de reserva"
-
-msgid "Select this character"
-msgstr "Seleciona esta personagem"
 
 msgid "Show closed questions"
 msgstr "Mostrar perguntas fechadas"
@@ -4906,10 +4900,6 @@ msgstr "Inclui quota de membro"
 msgid "Join the collection for"
 msgstr "Participa na coleta para"
 
-#, python-format
-msgid "Last played in %(name)s"
-msgstr "Jogaste pela última vez em %(name)s"
-
 msgid "Lightweight sheet (Pdf)"
 msgstr "Ficha leve (PDF)"
 
@@ -5009,6 +4999,9 @@ msgstr "Configurações de personagem"
 
 msgid "Code of the box or shelf"
 msgstr "Código da caixa ou prateleira"
+
+msgid "Create another character"
+msgstr "Criar outra personagem"
 
 msgid "Create your organization"
 msgstr "Cria a tua organização"
@@ -5160,6 +5153,9 @@ msgstr "Verificar Speed larps duplicados:"
 
 msgid "Check missing speed larp:"
 msgstr "Verificar Speed larp em falta:"
+
+msgid "Create another character!"
+msgstr "Criar outra personagem!"
 
 msgid "Current platform version:"
 msgstr "Versão atual da plataforma:"
@@ -5457,9 +5453,6 @@ msgstr "Preferências de Casting em falta"
 
 msgid "No inventory transfers yet."
 msgstr "Ainda não há transferências de inventário."
-
-msgid "Play this character instead"
-msgstr "Interpreta esta personagem em vez disso"
 
 msgid "Pre-registration confirmed!"
 msgstr "Pré-inscrição confirmada!"
@@ -7399,6 +7392,9 @@ msgstr "Aplicar a atualização a toda a organização?"
 msgid "Are you sure you want to delete this element?"
 msgstr "Tens a certeza de que queres eliminar este elemento?"
 
+msgid "Are you sure you want to play this character?"
+msgstr "Tens a certeza de que queres jogar esta personagem?"
+
 msgid "Customize buttons in the event navigation bar"
 msgstr "Personalizar botões na barra de navegação do evento"
 
@@ -7752,9 +7748,6 @@ msgstr "Tens a certeza? Os itens podem não ser recuperáveis."
 
 msgid "Background image displayed across all event pages"
 msgstr "Imagem de fundo apresentada em todas as páginas do evento"
-
-msgid "Change the character you will play in this event!"
-msgstr "Muda a personagem que vais jogar neste evento!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Personagem não encontrado ou não participa neste evento"

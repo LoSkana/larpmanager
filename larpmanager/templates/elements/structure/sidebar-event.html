@@ -27,9 +27,6 @@
                             <a class="sidebar-link" href="{{ link.url }}" title="{{ link.tooltip }}">
                                 {% if link.icon %}<i class="{{ link.icon }}"></i>{% endif %}
                                 <span>{{ link.label }}</span>
-                                {% if forloop.first and run_status.character_multiple %}
-                                    <span class="sidebar-playing-badge">{% trans "Playing" %}</span>
-                                {% endif %}
                             </a>
                         </span>
                     {% endfor %}

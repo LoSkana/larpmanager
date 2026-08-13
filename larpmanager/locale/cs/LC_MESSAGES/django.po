@@ -916,9 +916,6 @@ msgstr "Hráč:"
 msgid "Players"
 msgstr "Hráči"
 
-msgid "Playing"
-msgstr "Hraní"
-
 msgid "Preview"
 msgstr "Náhled"
 
@@ -2107,6 +2104,9 @@ msgstr "Inventáře"
 
 msgid "Last change"
 msgstr "Naposledy upraveno"
+
+msgid "Last played"
+msgstr "Naposledy hrál(a)"
 
 msgid "Leave guild"
 msgstr "Opustit cech"
@@ -4591,9 +4591,6 @@ msgstr "Možnosti (max %(max)s)"
 msgid "Participant questions"
 msgstr "Otázky účastníků"
 
-msgid "Playing in this event"
-msgstr "Hraješ na této akci"
-
 msgid "Pre-registration link"
 msgstr "Odkaz na předběžnou registraci"
 
@@ -4620,9 +4617,6 @@ msgstr "Sekce registrace"
 
 msgid "Reserve registrations"
 msgstr "Náhradní registrace"
-
-msgid "Select this character"
-msgstr "Vyber tuto postavu"
 
 msgid "Show closed questions"
 msgstr "Zobrazit uzavřené otázky"
@@ -4906,10 +4900,6 @@ msgstr "Včetně členského příspěvku"
 msgid "Join the collection for"
 msgstr "Zúčastni se sbírky pro"
 
-#, python-format
-msgid "Last played in %(name)s"
-msgstr "Naposledy hrál/a v %(name)s"
-
 msgid "Lightweight sheet (Pdf)"
 msgstr "Lehký list (Pdf)"
 
@@ -5009,6 +4999,9 @@ msgstr "Konfigurace postav"
 
 msgid "Code of the box or shelf"
 msgstr "Kód krabice nebo police"
+
+msgid "Create another character"
+msgstr "Vytvořit další postavu"
 
 msgid "Create your organization"
 msgstr "Vytvoř svou organizaci"
@@ -5160,6 +5153,9 @@ msgstr "Zkontroluj duplicitní speed larpy:"
 
 msgid "Check missing speed larp:"
 msgstr "Zkontroluj chybějící speed larpy:"
+
+msgid "Create another character!"
+msgstr "Vytvořit další postavu!"
 
 msgid "Current platform version:"
 msgstr "Aktuální verze platformy:"
@@ -5457,9 +5453,6 @@ msgstr "Chybějící preference Castingu"
 
 msgid "No inventory transfers yet."
 msgstr "Zatím žádné přesuny."
-
-msgid "Play this character instead"
-msgstr "Hraj místo toho tuto postavu"
 
 msgid "Pre-registration confirmed!"
 msgstr "Předběžná registrace potvrzena!"
@@ -7400,6 +7393,9 @@ msgstr "Použít upgrade pro celou organizaci?"
 msgid "Are you sure you want to delete this element?"
 msgstr "Opravdu chceš tento prvek smazat?"
 
+msgid "Are you sure you want to play this character?"
+msgstr "Opravdu chceš hrát tuto postavu?"
+
 msgid "Customize buttons in the event navigation bar"
 msgstr "Přizpůsobit tlačítka v navigační liště události"
 
@@ -7752,9 +7748,6 @@ msgstr "Jsi si jistý/á? Položky nemusí být obnovitelné."
 
 msgid "Background image displayed across all event pages"
 msgstr "Obrázek na pozadí zobrazený na všech stránkách události"
-
-msgid "Change the character you will play in this event!"
-msgstr "Změň postavu, kterou budeš hrát na této akci!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Postava nebyla nalezena nebo se této akce neúčastní"
