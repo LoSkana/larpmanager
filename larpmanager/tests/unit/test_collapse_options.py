@@ -82,6 +82,13 @@ class TestCollapseUnselectedOptions(BaseTestCase):
         assert "opt-collapsed" not in html
         assert '<span class="sl-hide">' in html
 
+    def test_no_toggle_with_single_option(self) -> None:
+        """With a single option there is nothing to toggle, the option stays visible"""
+        widget = DescriptionRadioSelect(choices=[("a", "Alpha")], collapse_unselected=True)
+        html = widget.render("que", "", attrs={"id": "id_que"})
+        assert "opt-collapsed" not in html
+        assert "opt-show-more" not in html
+
     def test_container_keeps_widget_attributes(self) -> None:
         """Attributes set on the widget are rendered on the container, as Django does"""
         widget = DescriptionRadioSelect(

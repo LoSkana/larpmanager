@@ -98,7 +98,8 @@ class _DescriptionOptionsMixin:
                 option for _group, group_options, _index in widget_context["optgroups"] for option in group_options
             ]
             selected_count = sum(1 for option in options if option["selected"])
-            collapsible = len(options) > 0
+            # a single option has nothing to toggle, keep it always visible
+            collapsible = len(options) > 1
             # start collapsed only if some option would actually stay out of view
             collapsed = collapsible and self.collapse_unselected and selected_count < len(options)
         widget_context["collapsible"] = collapsible
