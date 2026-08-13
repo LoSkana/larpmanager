@@ -4494,6 +4494,9 @@ msgstr "Přidělený zaměstnanec"
 msgid "Category of the event"
 msgstr "Kategorie události"
 
+msgid "Change your character"
+msgstr "Změň svou postavu"
+
 msgid "Character Inventories"
 msgstr "Inventáře postav"
 
@@ -4699,6 +4702,9 @@ msgstr "Bezpečně dorazili"
 
 msgid "Browse upcoming events"
 msgstr "Prohlédni si nadcházející akce"
+
+msgid "Change your character!"
+msgstr "Změň svou postavu!"
 
 msgid "Character Relationship"
 msgstr "Vztah postav"
@@ -5931,6 +5937,9 @@ msgstr "Zobrazit soukromé konverzace"
 
 msgid "Where the event will take place"
 msgstr "Kde se akce koná"
+
+msgid "You already play this character"
+msgstr "Tuto postavu už hraješ"
 
 msgid "You have completed the payment!"
 msgstr "Platbu jsi dokončil/a!"
@@ -7743,6 +7752,9 @@ msgstr "Jsi si jistý/á? Položky nemusí být obnovitelné."
 
 msgid "Background image displayed across all event pages"
 msgstr "Obrázek na pozadí zobrazený na všech stránkách události"
+
+msgid "Change the character you will play in this event!"
+msgstr "Změň postavu, kterou budeš hrát na této akci!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Postava nebyla nalezena nebo se této akce neúčastní"

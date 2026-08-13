@@ -4494,6 +4494,9 @@ msgstr "Nimetty toimihenkilö"
 msgid "Category of the event"
 msgstr "Tapahtuman luokka"
 
+msgid "Change your character"
+msgstr "Vaihda hahmoasi"
+
 msgid "Character Inventories"
 msgstr "Hahmojen inventaariot"
 
@@ -4699,6 +4702,9 @@ msgstr "Saapuivat ehjinä ja terveinä"
 
 msgid "Browse upcoming events"
 msgstr "Selaa tulevia tapahtumia"
+
+msgid "Change your character!"
+msgstr "Vaihda hahmoasi!"
 
 msgid "Character Relationship"
 msgstr "Hahmon suhde"
@@ -5931,6 +5937,9 @@ msgstr "Tarkastele yksityisiä keskustelujasi"
 
 msgid "Where the event will take place"
 msgstr "Missä tapahtuma järjestetään"
+
+msgid "You already play this character"
+msgstr "Pelaat jo tätä hahmoa"
 
 msgid "You have completed the payment!"
 msgstr "Olet suorittanut maksun!"
@@ -7744,6 +7753,9 @@ msgstr "Oletko varma? Kohteita ei ehkä voi palauttaa."
 
 msgid "Background image displayed across all event pages"
 msgstr "Taustakuva näytetään kaikilla tapahtumasivuilla"
+
+msgid "Change the character you will play in this event!"
+msgstr "Vaihda hahmo, jota pelaat tässä tapahtumassa!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Hahmoa ei löytynyt tai se ei pelaa tässä tapahtumassa"

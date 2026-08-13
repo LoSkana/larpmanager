@@ -60,7 +60,7 @@ from larpmanager.models.form import (
     WritingOption,
 )
 from larpmanager.models.miscellanea import PlayerRelationship
-from larpmanager.models.registration import RegistrationCharacterRel
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
@@ -792,6 +792,7 @@ def get_options_dependencies(context: dict) -> None:
 
 
 @login_required
+@require_POST
 def character_assign(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Assign character to user's registration, replacing the played one when only one is allowed.
 
@@ -807,43 +808,62 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
     context = get_event_context(request, event_slug, signup=True, include_status=True)
     get_char_check(request, context, character_uuid, deny_public=True)
 
-    registration_id = context["registration"].id
-    play_max = get_character_play_max(context["event"].id, context)
-    rels = RegistrationCharacterRel.objects.filter(registration_id=registration_id).select_related("character")
-    assigned = list(rels)
-
     if not context["character"].is_active:
         messages.error(request, _("This character is inactive and cannot be assigned to players"))
         return redirect("character_list", event_slug=event_slug)
 
+    registration_id = context["registration"].id
+    play_max = get_character_play_max(context["event"].id, context)
     character_id = _get_character_cache_id(context)
 
-    # All slots taken: allow replacing the played character, if it belongs to the player
-    if len(assigned) >= play_max:
-        if not _can_replace_character(context, play_max, assigned, character_id):
-            messages.warning(request, _("You already play the maximum number of characters"))
+    with transaction.atomic():
+        # Lock the registration, so concurrent requests cannot exceed the number of playable characters
+        Registration.objects.select_for_update().filter(pk=registration_id).first()
+        assigned = list(
+            RegistrationCharacterRel.objects.filter(registration_id=registration_id).select_related("character")
+        )
+
+        # Nothing to do if the character is already played
+        if any(rel.character_id == character_id for rel in assigned):
+            messages.warning(request, _("You already play this character"))
             return redirect("character_list", event_slug=event_slug)
 
-        with transaction.atomic():
-            RegistrationCharacterRel.objects.filter(registration_id=registration_id).delete()
-            RegistrationCharacterRel.objects.create(registration_id=registration_id, character_id=character_id)
-        messages.success(request, _("Changed character!"))
-        return redirect("character_list", event_slug=event_slug)
+        # All slots taken: allow replacing the played character, if it belongs to the player
+        if len(assigned) >= play_max:
+            if not _can_replace_character(context, play_max, assigned):
+                messages.warning(request, _("You already play the maximum number of characters"))
+                return redirect("character_list", event_slug=event_slug)
 
-    RegistrationCharacterRel.objects.create(registration_id=registration_id, character_id=character_id)
+            _replace_character(assigned[0], character_id)
+            messages.success(request, _("Changed character!"))
+            return redirect("character_list", event_slug=event_slug)
+
+        RegistrationCharacterRel.objects.create(registration_id=registration_id, character_id=character_id)
+
     messages.success(request, _("Assigned character!"))
 
     return redirect("character_list", event_slug=event_slug)
 
 
-def _can_replace_character(context: dict, play_max: int, assigned: list, character_id: int) -> bool:
+def _replace_character(rel: RegistrationCharacterRel, character_id: int) -> None:
+    """Point the relation to another character, dropping the data customized for the previous one.
+
+    The relation is updated in place instead of being recreated, so the registration is never
+    left without a character (which would trigger the campaign auto-assignment again).
+    """
+    rel.character_id = character_id
+    for custom_field in ["custom_name", "custom_pronoun", "custom_song", "custom_public", "custom_private"]:
+        setattr(rel, custom_field, None)
+    rel.custom_profile = None
+    rel.save()
+
+
+def _can_replace_character(context: dict, play_max: int, assigned: list) -> bool:
     """Check the played character can be swapped for another one created by the same player."""
     if play_max != 1 or "user_character" not in context["features"]:
         return False
 
-    # Refuse if the target is already played, or the played one was not created by the player
-    if any(rel.character_id == character_id for rel in assigned):
-        return False
+    # Refuse if the played character was not created by the player
     return all(rel.character.player_id == context["member"].id for rel in assigned)
 
 

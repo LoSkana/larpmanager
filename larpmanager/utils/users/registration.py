@@ -877,6 +877,26 @@ def get_character_play_max(event_id: int, context: dict | None = None) -> int:
     return max(1, int(get_event_config(event_id, "character_play_max", context=context)))
 
 
+def get_player_characters_ids(member: Member, event: Event, context: dict | None = None) -> set[int]:
+    """Get ids of the player's characters for an event, from the batched cache when available.
+
+    Args:
+        member: Player owning the characters
+        event: Event the characters belong to
+        context: Optional context dictionary, optionally containing cached data:
+            - player_characters_dict: Dictionary mapping event IDs to lists of character IDs
+
+    Returns:
+        Set of character IDs owned by the player in the event
+
+    """
+    player_characters_dict = (context or {}).get("player_characters_dict")
+    if player_characters_dict is not None:
+        return set(player_characters_dict.get(event.get_class_parent(Character).id, []))
+
+    return set(get_player_characters(member, event).values_list("id", flat=True))
+
+
 def registration_status_characters(
     run: Run, registration: Registration, run_status: dict, features: dict, context: dict | None = None
 ) -> None:
@@ -929,10 +949,15 @@ def registration_status_characters(
 
     # Count the player's own characters still available to be chosen
     selectable_count = 0
+    can_switch = False
+    play_max = get_character_play_max(run.event_id, context)
     if "user_character" in features:
-        owned_ids = set(get_player_characters(registration.member, run.event).values_list("id", flat=True))
+        owned_ids = get_player_characters_ids(registration.member, run.event, context)
         assigned_ids = {character_rel.character_id for character_rel in registration_character_rels}
         selectable_count = len(owned_ids - assigned_ids)
+
+        # With no free slot, the played character can still be swapped, if the player created it
+        can_switch = play_max == 1 and bool(assigned_ids) and assigned_ids <= owned_ids
 
         # Signal which character is played, only when the player owns more than one
         if is_assigned:
@@ -945,6 +970,8 @@ def registration_status_characters(
         features,
         assigned_count=assigned_count,
         selectable_count=selectable_count,
+        play_max=play_max,
+        can_switch=can_switch,
     )
     _status_casting(run, registration, run_status, features, context, is_character_assigned=is_assigned)
 
@@ -1087,12 +1114,14 @@ def _status_approval(
     *,
     assigned_count: int,
     selectable_count: int,
+    play_max: int,
+    can_switch: bool,
 ) -> None:
     """Add character creation/selection actions to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
     is not on a waiting list, then fills run_status["character_actions"] with the
-    available actions (create a new character, choose an existing one).
+    available actions (create a new character, choose an existing one, change the played one).
 
     Args:
         run: Run object containing event information
@@ -1101,6 +1130,8 @@ def _status_approval(
         run_status: Dictionary with run status
         assigned_count: Number of characters already assigned to the registration
         selectable_count: Number of the player's own characters not yet assigned
+        play_max: Number of characters the player can play at the same time
+        can_switch: Whether the played character can be swapped for another one of the player
 
     """
     # Check if user_character feature is enabled
@@ -1132,7 +1163,7 @@ def _status_approval(
         )
 
     # Show character selection action if the player has free slots and characters to choose from
-    if selectable_count and assigned_count < get_character_play_max(run.event_id):
+    if selectable_count and assigned_count < play_max:
         character_actions.append(
             {
                 "url": reverse("character_list", args=[run.get_slug()]),
@@ -1142,6 +1173,18 @@ def _status_approval(
                 "icon": "fa-solid fa-users-viewfinder",
                 "status_type": "todo",
                 "status_icon": "fa-solid fa-list-check",
+            }
+        )
+
+    # Show the change action when all slots are taken, but the player can swap the played character
+    elif selectable_count and can_switch:
+        character_actions.append(
+            {
+                "url": reverse("character_list", args=[run.get_slug()]),
+                "label": _("Change your character"),
+                "label_long": _("Change the character you will play in this event!"),
+                "tooltip": _("Change your character!"),
+                "icon": "fa-solid fa-right-left",
             }
         )
 

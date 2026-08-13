@@ -23,12 +23,14 @@
     {% endif %}
 {% endif %}
 {% for character_action in run_status.character_actions %}
-    <div class="reg-banner only_v22 reg-action_needed">
-        <span class="reg-action-main">
-            <i class="{{ character_action.icon }}"></i>
-            <a href="{{ character_action.url }}" class="reg-action-link">{{ character_action.label_long|default:character_action.label }} <i class="fa-solid fa-chevron-right"></i></a>
-        </span>
-    </div>
+    {% if character_action.status_type == "todo" %}
+        <div class="reg-banner only_v22 reg-action_needed">
+            <span class="reg-action-main">
+                <i class="{{ character_action.icon }}"></i>
+                <a href="{{ character_action.url }}" class="reg-action-link">{{ character_action.label_long|default:character_action.label }} <i class="fa-solid fa-chevron-right"></i></a>
+            </span>
+        </div>
+    {% endif %}
 {% endfor %}
 {% if run_status.casting_action %}
     <div class="reg-banner only_v22 reg-action_needed">

@@ -12114,6 +12114,15 @@ msgstr ""
 msgid "Choose your character!"
 msgstr ""
 
+msgid "Change your character"
+msgstr ""
+
+msgid "Change the character you will play in this event!"
+msgstr ""
+
+msgid "Change your character!"
+msgstr ""
+
 msgid "Select your preferences"
 msgstr ""
 
@@ -12724,6 +12733,9 @@ msgid "You have reached the maximum number of characters that can be created"
 msgstr ""
 
 msgid "This character is inactive and cannot be assigned to players"
+msgstr ""
+
+msgid "You already play this character"
 msgstr ""
 
 msgid "You already play the maximum number of characters"

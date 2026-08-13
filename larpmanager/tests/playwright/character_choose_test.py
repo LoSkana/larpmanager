@@ -114,6 +114,9 @@ def check_played_character(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/register/")
     expect(page.get_by_role("link", name=re.compile("Create your character"))).to_have_count(0)
 
+    # with no free slot left, the status still offers to change the played character
+    expect(page.get_by_role("link", name=re.compile("Change (your|the) character")).first).to_be_visible()
+
 
 def switch_character(page: Any, live_server: Any) -> None:
     """Switch the played character, and check the badge moves to the other card."""

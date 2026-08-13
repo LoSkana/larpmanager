@@ -4494,6 +4494,9 @@ msgstr "Membro da equipa atribuído"
 msgid "Category of the event"
 msgstr "Categoria do evento"
 
+msgid "Change your character"
+msgstr "Muda a tua personagem"
+
 msgid "Character Inventories"
 msgstr "Inventários de personagens"
 
@@ -4699,6 +4702,9 @@ msgstr "Chegámos bem"
 
 msgid "Browse upcoming events"
 msgstr "Explora os próximos eventos"
+
+msgid "Change your character!"
+msgstr "Muda a tua personagem!"
 
 msgid "Character Relationship"
 msgstr "Relação entre personagens"
@@ -5931,6 +5937,9 @@ msgstr "Ver as tuas conversas privadas"
 
 msgid "Where the event will take place"
 msgstr "Onde o evento terá lugar"
+
+msgid "You already play this character"
+msgstr "Já jogas esta personagem"
 
 msgid "You have completed the payment!"
 msgstr "Concluíste o pagamento!"
@@ -7743,6 +7752,9 @@ msgstr "Tens a certeza? Os itens podem não ser recuperáveis."
 
 msgid "Background image displayed across all event pages"
 msgstr "Imagem de fundo apresentada em todas as páginas do evento"
+
+msgid "Change the character you will play in this event!"
+msgstr "Muda a personagem que vais jogar neste evento!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Personagem não encontrado ou não participa neste evento"

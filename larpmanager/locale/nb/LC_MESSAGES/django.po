@@ -4494,6 +4494,9 @@ msgstr "Tildelt medarbeider"
 msgid "Category of the event"
 msgstr "Kategori for arrangementet"
 
+msgid "Change your character"
+msgstr "Bytt karakteren din"
+
 msgid "Character Inventories"
 msgstr "Karakterinventarer"
 
@@ -4699,6 +4702,9 @@ msgstr "Kommet trygt frem"
 
 msgid "Browse upcoming events"
 msgstr "Se kommende arrangementer"
+
+msgid "Change your character!"
+msgstr "Bytt karakteren din!"
 
 msgid "Character Relationship"
 msgstr "Karakterrelasjon"
@@ -5931,6 +5937,9 @@ msgstr "Se dine private samtaler"
 
 msgid "Where the event will take place"
 msgstr "Hvor arrangementet vil finne sted"
+
+msgid "You already play this character"
+msgstr "Du spiller allerede denne karakteren"
 
 msgid "You have completed the payment!"
 msgstr "Du har fullført innbetalingen!"
@@ -7743,6 +7752,9 @@ msgstr "Er du sikker? Elementene kan kanskje ikke gjenopprettes."
 
 msgid "Background image displayed across all event pages"
 msgstr "Bakgrunnsbildet vises på alle arrangementssidene"
+
+msgid "Change the character you will play in this event!"
+msgstr "Bytt karakteren du skal spille i dette arrangementet!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Karakteret ble ikke funnet, eller spiller ikke i dette arrangementet"

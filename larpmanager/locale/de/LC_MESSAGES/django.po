@@ -4494,6 +4494,9 @@ msgstr "Zugewiesener Mitarbeiter"
 msgid "Category of the event"
 msgstr "Kategorie der Veranstaltung"
 
+msgid "Change your character"
+msgstr "Ändere deinen Charakter"
+
 msgid "Character Inventories"
 msgstr "Charakter-Inventare"
 
@@ -4699,6 +4702,9 @@ msgstr "Sicher angekommen"
 
 msgid "Browse upcoming events"
 msgstr "Kommende Veranstaltungen ansehen"
+
+msgid "Change your character!"
+msgstr "Ändere deinen Charakter!"
 
 msgid "Character Relationship"
 msgstr "Charakter-Beziehung"
@@ -5931,6 +5937,9 @@ msgstr "Zeige deine privaten Unterhaltungen an"
 
 msgid "Where the event will take place"
 msgstr "Wo findet die Veranstaltung statt"
+
+msgid "You already play this character"
+msgstr "Du spielst diesen Charakter bereits"
 
 msgid "You have completed the payment!"
 msgstr "Du hast die Einzahlung abgeschlossen!"
@@ -7753,6 +7762,9 @@ msgstr ""
 
 msgid "Background image displayed across all event pages"
 msgstr "Hintergrundbild, das auf allen Veranstaltungsseiten angezeigt wird"
+
+msgid "Change the character you will play in this event!"
+msgstr "Ändere den Charakter, den du bei diesem Event spielen wirst!"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Charakter nicht gefunden oder spielt nicht bei diesem Event"

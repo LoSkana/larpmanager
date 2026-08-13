@@ -4494,6 +4494,9 @@ msgstr "Membre du personnel désigné"
 msgid "Category of the event"
 msgstr "Catégorie de l'événement"
 
+msgid "Change your character"
+msgstr "Changer de personnage"
+
 msgid "Character Inventories"
 msgstr "Inventaires de personnages"
 
@@ -4699,6 +4702,9 @@ msgstr "Arrivés sains et saufs"
 
 msgid "Browse upcoming events"
 msgstr "Découvre les événements à venir"
+
+msgid "Change your character!"
+msgstr "Change de personnage !"
 
 msgid "Character Relationship"
 msgstr "Relation de personnage"
@@ -5931,6 +5937,9 @@ msgstr "Consulte tes conversations privées"
 
 msgid "Where the event will take place"
 msgstr "Lieu de l'événement"
+
+msgid "You already play this character"
+msgstr "Tu incarnes déjà ce personnage"
 
 msgid "You have completed the payment!"
 msgstr "Tu as effectué le paiement!"
@@ -7756,6 +7765,9 @@ msgstr "Es-tu sûr ? Les éléments pourraient ne pas être récupérables."
 
 msgid "Background image displayed across all event pages"
 msgstr "Image de fond affichée sur toutes les pages de l'événement"
+
+msgid "Change the character you will play in this event!"
+msgstr "Change le personnage que tu joueras dans cet événement !"
 
 msgid "Character not found, or not playing in this event"
 msgstr "Personnage introuvable ou ne participe pas à cet événement"

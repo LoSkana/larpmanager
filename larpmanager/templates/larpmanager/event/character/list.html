@@ -62,13 +62,19 @@
                     {% endif %}
                 </div>
                 <div class="char-choose-actions">
-                    {% if not el.assigned_here %}
-                        {% if can_select %}
-                            <a href="{% url 'character_assign' run.get_slug el.uuid %}"
-                               class="char-choose-select">{% trans "Select this character" %}</a>
-                        {% elif can_switch %}
-                            <a href="{% url 'character_assign' run.get_slug el.uuid %}"
-                               class="char-choose-select">{% trans "Play this character instead" %}</a>
+                    {% if not el.assigned_here and el.addit.inactive != "True" %}
+                        {% if can_select or can_switch %}
+                            <form action="{% url 'character_assign' run.get_slug el.uuid %}"
+                                  method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="char-choose-select">
+                                    {% if can_select %}
+                                        {% trans "Select this character" %}
+                                    {% else %}
+                                        {% trans "Play this character instead" %}
+                                    {% endif %}
+                                </button>
+                            </form>
                         {% endif %}
                     {% endif %}
                     {% if features.user_character %}
