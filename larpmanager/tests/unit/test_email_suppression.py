@@ -551,23 +551,14 @@ class TestNewsletterPartition(BaseTestCase):
         self._member_with_preference("only@example.com", NewsletterChoices.ONLY)
         self._member_with_preference("none@example.com", NewsletterChoices.NO)
 
-    def test_run_mail_reaches_the_important_only_preference(self):
-        """A mail tied to a run is a practical communication, so ONLY still gets it."""
-        recipients = ["all@example.com", "only@example.com", "none@example.com"]
-
-        allowed, opted_out = partition_newsletter_recipients(recipients, self.association.id, run_id=1)
-
-        assert allowed == ["all@example.com", "only@example.com"]
-        assert opted_out == ["none@example.com"]
-
-    def test_generic_broadcast_skips_the_important_only_preference(self):
-        """An association wide broadcast is not important enough for the ONLY preference."""
+    def test_only_preference_receives_association_mails(self):
+        """The ONLY preference accepts association mails, whether or not tied to a run."""
         recipients = ["all@example.com", "only@example.com", "none@example.com"]
 
         allowed, opted_out = partition_newsletter_recipients(recipients, self.association.id)
 
-        assert allowed == ["all@example.com"]
-        assert opted_out == ["only@example.com", "none@example.com"]
+        assert allowed == ["all@example.com", "only@example.com"]
+        assert opted_out == ["none@example.com"]
 
 
 class TestUnsubscribeEndpoints(BaseTestCase):
