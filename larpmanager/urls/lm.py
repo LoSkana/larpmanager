@@ -25,6 +25,11 @@ from larpmanager.views import larpmanager as views_lm
 
 urlpatterns = [
     path(
+        "ses/notification/",
+        views_lm.ses_notification,
+        name="ses_notification",
+    ),
+    path(
         "get-started/",
         views_lm.get_started,
         name="get_started",
@@ -98,6 +103,11 @@ urlpatterns = [
         "lm/newsletter/",
         views_lm.lm_newsletter,
         name="lm_newsletter",
+    ),
+    path(
+        "lm/suppressions/",
+        views_lm.lm_suppressions,
+        name="lm_suppressions",
     ),
     path(
         "lm/payments/",

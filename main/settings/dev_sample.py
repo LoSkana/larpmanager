@@ -26,6 +26,8 @@ ANTHROPIC_API_KEY = '???'
 # AWS_SES_ACCESS_KEY_ID = 'your-access-key-id'
 # AWS_SES_SECRET_ACCESS_KEY = 'your-secret-access-key'
 # AWS_SES_REGION_NAME = 'us-east-1'
+# AWS_SES_CONFIGURATION_SET = 'larpmanager'
+# AWS_SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:000000000000:larpmanager-ses'
 
 # CREATE DATABASE larpmanager;
 # CREATE USER larpmanager WITH PASSWORD 'larpmanager';

@@ -74,6 +74,9 @@ msgstr "Kropp"
 msgid "Book"
 msgstr "Bok"
 
+msgid "Bulk"
+msgstr "Massåtgärd"
+
 msgid "Card"
 msgstr "Kort"
 
@@ -610,6 +613,9 @@ msgstr "Logga in"
 msgid "Manage"
 msgstr "Hantera"
 
+msgid "Manual"
+msgstr "Manuell"
+
 msgid "Master"
 msgstr "Mästare"
 
@@ -985,6 +991,9 @@ msgstr "Logga in"
 
 msgid "Signups"
 msgstr "Anmälningar"
+
+msgid "Skipped"
+msgstr "Hoppades över"
 
 msgid "Station"
 msgstr "Station"
@@ -1420,6 +1429,9 @@ msgstr "Avbokad"
 
 msgid "Character"
 msgstr "Karaktär"
+
+msgid "Complaint"
+msgstr "Klagomål"
 
 msgid "Completed"
 msgstr "Färdigställd"
@@ -1931,6 +1943,9 @@ msgstr "Startdatum"
 msgid "Statistics"
 msgstr "Statistik"
 
+msgid "Suppressed"
+msgstr "Undertryckt"
+
 msgid "Surcharges"
 msgstr "Tilläggsavgifter"
 
@@ -2174,6 +2189,9 @@ msgstr "Typer av Quest"
 msgid "Quick Setup"
 msgstr "Snabbinställning"
 
+msgid "Raw Payload"
+msgstr "Rådata"
+
 msgid "Redeem link"
 msgstr "Inlösenlänk"
 
@@ -2275,6 +2293,9 @@ msgstr "Tillgänglighet"
 
 msgid "Bank address"
 msgstr "Bankens adress"
+
+msgid "Bounce Count"
+msgstr "Antal studsar"
 
 msgid "Cache reset!"
 msgstr "Cache återställd!"
@@ -2473,6 +2494,9 @@ msgstr "Översättningar"
 
 msgid "Type of text"
 msgstr "Typ av text"
+
+msgid "Unsubscribed"
+msgstr "Avprenumererad"
 
 msgid "VAT (Ticket)"
 msgstr "Moms (biljett)"
@@ -3164,6 +3188,9 @@ msgstr "Global balans:"
 msgid "Highlight color"
 msgstr "Markeringsfärg"
 
+msgid "Invalid address"
+msgstr "Ogiltig adress"
+
 msgid "Invalid request"
 msgstr "Ogiltig begäran"
 
@@ -3416,6 +3443,9 @@ msgstr "Extern webbplats"
 msgid "Field visibility"
 msgstr "Fältsynlighet"
 
+msgid "Forbidden domain"
+msgstr "Förbjuden domän"
+
 msgid "Handout template"
 msgstr "Mall för handout"
 
@@ -3484,6 +3514,9 @@ msgstr "Väntande inbjudningar:"
 
 msgid "Pending payments"
 msgstr "Väntande betalningar"
+
+msgid "Permanent bounce"
+msgstr "Permanent studs"
 
 msgid "Player selection"
 msgstr "Val av spelare"
@@ -3559,6 +3592,9 @@ msgstr "Transaktionsavgifter"
 
 msgid "Transfer preview"
 msgstr "Förhandsgranskning av överföringar"
+
+msgid "Transient bounce"
+msgstr "Tillfällig studs"
 
 msgid "Workshop Modules"
 msgstr "Workshopmoduler"
@@ -5203,6 +5239,9 @@ msgstr "Medlem befordrad till administratör!"
 msgid "New message from %(user)s"
 msgstr "Nytt meddelande från %(user)s"
 
+msgid "No address was suppressed"
+msgstr "Ingen adress undertrycktes"
+
 msgid "Option saved successfully"
 msgstr "Alternativet sparades framgångsrikt"
 
@@ -5451,8 +5490,14 @@ msgstr "Medlemsavgifter under godkännande"
 msgid "Missing casting preferences"
 msgstr "Saknade castingpreferenser"
 
+msgid "No address was unsubscribed"
+msgstr "Ingen adress avprenumererades"
+
 msgid "No inventory transfers yet."
 msgstr "Inga överföringar ännu."
+
+msgid "Opted out of communications"
+msgstr "Har tackat nej till kommunikation"
 
 msgid "Pre-registration confirmed!"
 msgstr "Förhandsanmälan bekräftad!"
@@ -7385,6 +7430,9 @@ msgstr "Du måste anmäla dig för att välja dina preferenser!"
 
 msgid "You will no longer receive messages from us."
 msgstr "Du kommer inte längre att få meddelanden från oss."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Adressen blockerades efter en studs eller ett klagomål"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr "Beloppet får inte vara noll för divisionskriterierna"
@@ -10926,6 +10974,13 @@ msgstr ""
 "inga mejl)."
 
 msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Dessa adresser har avregistrerat sig från massutskick och lades inte till i "
+"kön:"
+
+msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "
 "email."
 msgstr ""
@@ -11967,6 +12022,13 @@ msgid ""
 msgstr ""
 "Granska förhandsregistrerade medlemmar och håll koll på vilka som ännu inte "
 "har slutfört sin registrering"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Dessa adresser studsade eller rapporterade ett klagomål tidigare och lades "
+"inte till i kön:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "
