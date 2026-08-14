@@ -913,6 +913,18 @@ class OrgaConfigForm(ConfigForm):
                 character_approval_help_text,
             )
 
+            # Background auto-save of the character form
+            disable_auto_label = _("Disable Auto save")
+            disable_auto_help_text = _(
+                "If enabled, the character form of the players will not be saved automatically while editing.",
+            )
+            self.add_configs(
+                "user_character_disable_auto",
+                ConfigType.BOOL,
+                disable_auto_label,
+                disable_auto_help_text,
+            )
+
     def set_config_guild(self) -> None:
         """Configure guild-related form fields for event settings."""
         if "guild" in self.params["features"]:

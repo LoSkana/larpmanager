@@ -6859,6 +6859,9 @@ msgstr "CSS-koden til at tilpasse PDF-udskrift."
 msgid "The following registrations were drawn:"
 msgstr "Følgende tilmeldinger blev trukket:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Formularen gemmes automatisk hvert 5. sekund."
+
 msgid "The question status, allowed values are"
 msgstr "Spørgsmålsstatussen, tilladte værdier er"
 
@@ -7066,6 +7069,9 @@ msgstr "Påmindelse om udfyldelse af profil til %(event)s"
 
 msgid "Seconds to wait between each email batch."
 msgstr "Sekunder, der skal gå mellem hver e-mailbatch."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Hemmelig gilde: kun synligt for dets medlemmer"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Send en masse-e-mail til eventets deltagere"
@@ -11840,11 +11846,25 @@ msgstr ""
 "deltagere"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Hvis markeret, vises lauget ikke i lauglisten eller galleriet: kun dets "
+"medlemmer kan se det"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Hvis aktiveret, kan du spore historier eller relationer, der er mindre "
 "vigtige for karakteren."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Hvis aktiveret, bliver spillernes karakterformular ikke automatisk gemt "
+"under redigering."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14086,6 +14106,13 @@ msgstr ""
 "Giver dig mulighed for at uploade og hoste filer direkte på platformen og "
 "gøre dem tilgængelige enten for personale eller deltagere via hemmelige "
 "eksterne links"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Denne karakter blev ændret i et andet vindue: dine ændringer her er ikke "
+"blevet gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

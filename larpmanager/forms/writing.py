@@ -581,7 +581,7 @@ class GuildForm(WritingForm, BaseWritingForm):
     class Meta:
         model = Guild
 
-        fields: ClassVar[list] = ["name", "teaser", "text", "cover"]
+        fields: ClassVar[list] = ["name", "teaser", "text", "cover", "secret"]
 
         widgets: ClassVar[dict] = {
             "teaser": WritingTinyMCE(),
@@ -601,7 +601,7 @@ class GuildForm(WritingForm, BaseWritingForm):
             self.instance.event = event
         self._init_registration_question(self.instance, event)
 
-        fields_default = {"name", "teaser", "text", "cover"}
+        fields_default = {"name", "teaser", "text", "cover", "secret"}
         fields_custom = set()
 
         for question in self.questions:

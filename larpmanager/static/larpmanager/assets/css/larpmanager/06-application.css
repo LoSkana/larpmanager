@@ -840,3 +840,10 @@ form .plot {
   background-color: rgba(var(--pri-rgb), 0.9);
   color: white;
 }
+
+/*** character auto save ***/
+
+#form_submit.auto_saved {
+  background-color: rgba(var(--pri-rgb), 0.9);
+  color: white;
+}

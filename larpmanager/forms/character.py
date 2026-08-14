@@ -124,6 +124,16 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
+        # Auto-save submits forms still being filled in: no field can block the save
+        if self.is_auto_save():
+            for field in self.fields.values():
+                field.required = False
+
+    def is_auto_save(self) -> bool:
+        """Check whether the form is bound to a background auto-save request."""
+        request = self.params.get("request")
+        return bool(request and request.method == "POST" and request.POST.get("ajax") == "1")
+
     def check_editable(self, question: dict) -> bool:
         """Check if a question is editable based on event config and instance status.
 
@@ -394,7 +404,7 @@ class OrgaCharacterForm(CharacterForm):
         )
 
         # For AJAX auto-save: skip widget setup but still load relationship data for saving
-        if self.params.get("request") and self.params["request"].POST.get("ajax") == "1":
+        if self.is_auto_save():
             self._load_relationships_data()
             return
 

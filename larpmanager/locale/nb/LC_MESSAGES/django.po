@@ -6860,6 +6860,9 @@ msgstr "CSS-koden for å tilpasse PDF-utskrift."
 msgid "The following registrations were drawn:"
 msgstr "Følgende registreringer ble trukket ut:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Skjemaet lagres automatisk hvert 5. sekund."
+
 msgid "The question status, allowed values are"
 msgstr "Spørsmålsstatus, tillatte verdier er"
 
@@ -7067,6 +7070,9 @@ msgstr "Påminnelse om å fullføre profilen for %(event)s"
 
 msgid "Seconds to wait between each email batch."
 msgstr "Sekunder å vente mellom hver e-postgruppe."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Hemmelig laug: kun synlig for medlemmene"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Send en masse-e-post til deltakerne på arrangementet"
@@ -11918,11 +11924,25 @@ msgstr ""
 "deltakere"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Hvis avkrysset vises ikke lauget i laugslisten eller galleriet: bare "
+"medlemmene kan se det"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Hvis aktivert, kan du spore plott eller relasjoner som er mindre viktige for"
 " karakteren."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Hvis aktivert, lagres ikke karakterarket til spillerne automatisk mens du "
+"redigerer."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14179,6 +14199,14 @@ msgstr ""
 "Gjør det mulig å laste opp og hoste filer direkte på plattformen, slik at de"
 " blir tilgjengelige enten for de ansatte eller for deltakerne via hemmelige "
 "eksterne lenker"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Denne karakteren ble endret i et annet vindu: endringene dine her har ikke "
+"blitt lagret. Kopier teksten du vil beholde, og last deretter inn siden på "
+"nytt."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

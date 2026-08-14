@@ -6859,6 +6859,9 @@ msgstr "Il codice CSS per personalizzare la stampa in PDF."
 msgid "The following registrations were drawn:"
 msgstr "Sono state estratte le seguenti iscrizioni:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Il modulo viene salvato automaticamente ogni 5 secondi."
+
 msgid "The question status, allowed values are"
 msgstr "Lo stato della domanda, i valori ammessi sono"
 
@@ -7066,6 +7069,9 @@ msgstr "Promemoria per completare il profilo per %(event)s"
 
 msgid "Seconds to wait between each email batch."
 msgstr "Secondi di attesa tra ogni blocco di email."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Gilda segreta: visibile solo ai suoi membri"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Invia un'e-mail di massa ai partecipanti all'evento"
@@ -12129,11 +12135,25 @@ msgstr ""
 "a tutti gli altri partecipanti"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Se selezionata, la gilda non viene mostrata nell'elenco delle gilde né nella"
+" galleria: la vedono solo i suoi membri"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Se abilitato, consente di tenere traccia di Plot o relazioni meno importanti"
 " per il personaggio."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Se abilitato, la scheda personaggio dei giocatori non verrà salvata "
+"automaticamente durante la modifica."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14400,6 +14420,14 @@ msgstr ""
 "Permette di caricare e ospitare i file direttamente sulla piattaforma, "
 "rendendoli disponibili allo staff o ai partecipanti tramite link esterni "
 "segreti"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Questo personaggio è stato modificato in un'altra finestra: le modifiche qui"
+" non sono state salvate. Copia il testo che vuoi mantenere, poi ricarica la "
+"pagina."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

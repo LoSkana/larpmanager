@@ -638,11 +638,17 @@ class Guild(Writing):
         blank=True,
     )
 
+    secret = models.BooleanField(
+        default=False,
+        verbose_name=_("Secret"),
+        help_text=_("If checked, the guild is not shown in the guild list or the gallery: only its members see it"),
+    )
+
     def show_red(self) -> dict:
         """Update JavaScript response with 'teaser' and cover attributes."""
         js = super().show_red()
 
-        for s in ["teaser", "color"]:
+        for s in ["teaser", "color", "secret"]:
             self.upd_js_attr(js, s)
 
         if self.cover:

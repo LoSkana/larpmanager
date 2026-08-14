@@ -6859,6 +6859,9 @@ msgstr "Le code CSS pour personnaliser l’impression des PDF."
 msgid "The following registrations were drawn:"
 msgstr "Les inscriptions suivantes ont été tirées au sort :"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Le formulaire est enregistré automatiquement toutes les 5 secondes."
+
 msgid "The question status, allowed values are"
 msgstr "L'état de la question, les valeurs autorisées sont"
 
@@ -7069,6 +7072,9 @@ msgstr "Rappel pour compléter le profil pour %(event)s"
 
 msgid "Seconds to wait between each email batch."
 msgstr "Secondes d'attente entre chaque lot d'e-mails."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Guilde secrète : visible uniquement par ses membres"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Envoyer un e-mail groupé aux participants de l'événement"
@@ -12219,11 +12225,25 @@ msgstr ""
 "tous les autres participants"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Si cette case est cochée, la guilde n’apparaît pas dans la liste des guildes"
+" ni dans la galerie : seuls ses membres la voient"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Si activé, permet de suivre les intrigues ou les relations moins importantes"
 " pour le personnage."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Si cette option est activée, le formulaire de personnage des joueurs ne sera"
+" pas enregistré automatiquement pendant la modification."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14520,6 +14540,14 @@ msgstr ""
 "Permet de charger et d'héberger des fichiers directement sur la plateforme, "
 "en les mettant à la disposition du personnel ou des participants par le "
 "biais de liens externes secrets"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Ce personnage a été modifié dans une autre fenêtre : tes modifications ici "
+"n’ont pas été enregistrées. Copie le texte que tu veux conserver, puis "
+"recharge la page."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

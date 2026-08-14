@@ -43,4 +43,9 @@ class Migration(migrations.Migration):
             name='bulk',
             field=models.BooleanField(default=False, verbose_name='Bulk'),
         ),
+        migrations.AddField(
+            model_name='guild',
+            name='secret',
+            field=models.BooleanField(default=False, help_text='If checked, the guild is not shown in the guild list or the gallery: only its members see it', verbose_name='Secret'),
+        ),
     ]

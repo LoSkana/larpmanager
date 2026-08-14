@@ -6859,6 +6859,9 @@ msgstr "O código CSS para personalizar a impressão em PDF."
 msgid "The following registrations were drawn:"
 msgstr "Foram sorteadas as seguintes inscrições:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "O formulário é guardado automaticamente a cada 5 segundos."
+
 msgid "The question status, allowed values are"
 msgstr "O estado da pergunta, os valores permitidos são"
 
@@ -7066,6 +7069,9 @@ msgstr "Lembrete para completar o perfil para %(event)s"
 
 msgid "Seconds to wait between each email batch."
 msgstr "Segundos a aguardar entre cada lote de e-mails."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Guild secreto: visível apenas para os seus membros"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Envia um e-mail em massa aos participantes do evento"
@@ -11992,11 +11998,25 @@ msgstr ""
 "todos os outros participantes"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Se marcado, o guild não é mostrado na lista de guilds nem na galeria: apenas"
+" os seus membros o veem"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Se ativado, permite acompanhar tramas ou relações menos importantes para a "
 "personagem."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Se ativado, o formulário da personagem dos jogadores não será guardado "
+"automaticamente durante a edição."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14250,6 +14270,14 @@ msgstr ""
 "Permite-te carregar e alojar ficheiros diretamente na plataforma, "
 "disponibilizando-os à equipa ou aos participantes através de ligações "
 "externas secretas"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Esta personagem foi modificada noutra janela: as tuas alterações aqui não "
+"foram guardadas. Copia o texto que queres manter e depois recarrega a "
+"página."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

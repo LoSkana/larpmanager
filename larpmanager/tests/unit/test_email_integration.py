@@ -94,7 +94,7 @@ class TestEmailMetadataPreparation(BaseTestCase):
 
             # Should use event sender, not association
             assert metadata['sender_email'] == 'event@example.com'
-            assert metadata['sender_name'] == 'Test Event'
+            assert metadata['sender_name'] == run.event.name
 
 
 class TestEmailMessageBuilding:

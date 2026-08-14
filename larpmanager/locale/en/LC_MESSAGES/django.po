@@ -1523,6 +1523,11 @@ msgstr ""
 msgid "If enabled, activates a staff-managed approval process for characters."
 msgstr ""
 
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+
 msgid "Guilds"
 msgstr ""
 
@@ -5214,6 +5219,11 @@ msgstr ""
 msgid "Guild logo"
 msgstr ""
 
+msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+
 msgid "Role"
 msgstr ""
 
@@ -6152,6 +6162,9 @@ msgstr ""
 msgid "Upload a photo of your character specifically for this event!"
 msgstr ""
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr ""
+
 msgid "Your characters"
 msgstr ""
 
@@ -6388,6 +6401,9 @@ msgid "Create a new guild"
 msgstr ""
 
 msgid "My pending invites"
+msgstr ""
+
+msgid "Secret guild: visible only to its members"
 msgstr ""
 
 msgid "Availability"
@@ -12753,6 +12769,11 @@ msgid "You have indicated more than one preference for the same element."
 msgstr ""
 
 msgid "Preferences saved!"
+msgstr ""
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
 msgstr ""
 
 msgid "Characters are not visible at the moment"

@@ -6859,6 +6859,9 @@ msgstr "CSS-koodi PDF-tulostuksen mukauttamiseen."
 msgid "The following registrations were drawn:"
 msgstr "Seuraavat ilmoittautumiset arvottiin:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Lomake tallennetaan automaattisesti 5 sekunnin välein."
+
 msgid "The question status, allowed values are"
 msgstr "Kysymyksen tila, sallitut arvot ovat"
 
@@ -7066,6 +7069,9 @@ msgstr "Muistutus %(event)s-tapahtuman profiilin täyttämisestä"
 
 msgid "Seconds to wait between each email batch."
 msgstr "Sekuntien määrä, joka odotetaan kunkin sähköpostierän välillä."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Salainen kilta: näkyy vain sen jäsenille"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Lähetä joukkopostitus tapahtuman osallistujille"
@@ -11904,11 +11910,25 @@ msgstr ""
 "osallistujille"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Jos valittu, kiltaa ei näytetä kilta- tai gallerialuettelossa: vain sen "
+"jäsenet näkevät sen"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Jos käytössä, voit seurata juonia tai suhteita, jotka ovat hahmolle vähemmän"
 " tärkeitä."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Jos tämä on käytössä, pelaajien hahmolomaketta ei tallenneta automaattisesti"
+" muokkauksen aikana."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14163,6 +14183,14 @@ msgstr ""
 "Voit ladata ja isännöidä tiedostoja suoraan alustalle, jolloin ne ovat joko "
 "henkilökunnan tai osallistujien käytettävissä salaisen ulkoisen linkin "
 "kautta"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Tätä hahmoa muokattiin toisessa ikkunassa: täällä tekemäsi muutokset eivät "
+"ole tallentuneet. Kopioi teksti, jonka haluat säilyttää, ja lataa sitten "
+"sivu uudelleen."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

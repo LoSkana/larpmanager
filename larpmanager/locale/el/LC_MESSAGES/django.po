@@ -6860,6 +6860,9 @@ msgstr "Ο κώδικας CSS για την προσαρμογή της εκτύ
 msgid "The following registrations were drawn:"
 msgstr "Κληρώθηκαν οι ακόλουθες εγγραφές:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Η φόρμα αποθηκεύεται αυτόματα κάθε 5 δευτερόλεπτα."
+
 msgid "The question status, allowed values are"
 msgstr "Η κατάσταση της ερώτησης, οι επιτρεπόμενες τιμές είναι"
 
@@ -7067,6 +7070,9 @@ msgstr "Υπενθύμιση ολοκλήρωσης προφίλ για %(event)
 
 msgid "Seconds to wait between each email batch."
 msgstr "Δευτερόλεπτα αναμονής ανάμεσα σε κάθε παρτίδα email."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Μυστική συντεχνία: ορατή μόνο στα μέλη της"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Στείλε μαζικό email στους συμμετέχοντες του event"
@@ -12211,11 +12217,25 @@ msgstr ""
 "όλους τους άλλους συμμετέχοντες"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Αν επιλεγεί, η συντεχνία δεν εμφανίζεται στη λίστα συντεχνιών ούτε στη "
+"συλλογή: τη βλέπουν μόνο τα μέλη της"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Αν ενεργοποιηθεί, επιτρέπει την παρακολούθηση πλοκών ή σχέσεων που είναι "
 "λιγότερο σημαντικές για τον χαρακτήρα."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Αν ενεργοποιηθεί, η φόρμα χαρακτήρα των παικτών δεν θα αποθηκεύεται αυτόματα"
+" κατά την επεξεργασία."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14498,6 +14518,14 @@ msgstr ""
 "Ti permette di caricare e ospitare file direttamente sulla piattaforma, "
 "rendendoli disponibili allo staff o ai partecipanti tramite link esterni "
 "segreti"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Αυτός ο χαρακτήρας τροποποιήθηκε σε άλλο παράθυρο: οι αλλαγές σου εδώ δεν "
+"έχουν αποθηκευτεί. Αντέγραψε το κείμενο που θέλεις να κρατήσεις και μετά "
+"ανανέωσε τη σελίδα."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

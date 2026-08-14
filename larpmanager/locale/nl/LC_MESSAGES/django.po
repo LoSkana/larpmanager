@@ -6860,6 +6860,9 @@ msgstr "De CSS-code om het afdrukken van PDF's aan te passen."
 msgid "The following registrations were drawn:"
 msgstr "De volgende inschrijvingen zijn getrokken:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Het formulier wordt elke 5 seconden automatisch opgeslagen."
+
 msgid "The question status, allowed values are"
 msgstr "De vraagstatus, toegestane waarden zijn"
 
@@ -7067,6 +7070,9 @@ msgstr "Herinnering om je profiel aan te vullen voor %(event)s"
 
 msgid "Seconds to wait between each email batch."
 msgstr "Aantal seconden wachten tussen elke e-mailbatch."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Geheime guild: alleen zichtbaar voor de leden"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Stuur een bulkmail naar de deelnemers van het evenement"
@@ -12120,11 +12126,25 @@ msgstr ""
 "deelnemers wordt getoond"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Als dit is aangevinkt, wordt de guild niet weergegeven in de guildlijst of "
+"de galerij: alleen de leden kunnen hem zien"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Indien ingeschakeld, kun je verhaallijnen of relaties bijhouden die minder "
 "belangrijk zijn voor het personage."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Als dit is ingeschakeld, wordt het karakterformulier van de spelers tijdens "
+"het bewerken niet automatisch opgeslagen."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14397,6 +14417,14 @@ msgstr ""
 "Je kunt bestanden rechtstreeks uploaden en hosten op het platform, zodat ze "
 "beschikbaar zijn voor medewerkers of deelnemers via geheime externe "
 "koppelingen"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Dit karakter is aangepast in een ander venster: je wijzigingen hier zijn "
+"niet opgeslagen. Kopieer de tekst die je wilt behouden en laad de pagina "
+"opnieuw."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "

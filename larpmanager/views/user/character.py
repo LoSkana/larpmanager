@@ -98,6 +98,15 @@ from larpmanager.views.user.registration import init_form_submitted
 
 logger = logging.getLogger(__name__)
 
+# Tolerance in seconds when comparing the version stamp of the loaded form with the saved one,
+# to absorb the rounding of the stamp sent to the browser and back
+STALE_TOLERANCE = 0.001
+
+CHARACTER_STALE_MESSAGE = _(
+    "This character was modified in another window: your changes here have not been saved. "
+    "Copy the text you want to keep, then reload the page.",
+)
+
 if TYPE_CHECKING:
     from larpmanager.forms.base import BaseModelForm
 
@@ -345,10 +354,23 @@ def character_form(
     # Initialize form dependencies and set element type for template context
     get_options_dependencies(context)
     context["elementTyp"] = Character
+    context["request"] = request
 
     context["user_character_text"] = get_event_text(context["event"].id, EventTextType.USER_CHARACTER)
 
-    if request.method == "POST":
+    _init_auto_save(context, instance)
+
+    # Auto-save posts the whole form in background: answer in json, without redirect
+    if request.method == "POST" and context.get("auto_save") and request.POST.get("ajax") == "1":
+        return _character_form_ajax(request, context, event_slug, instance, form_class)
+
+    # Refuse to save over changes done meanwhile from another window
+    is_stale = request.method == "POST" and _is_stale(context, request, instance)
+    if is_stale:
+        messages.error(request, CHARACTER_STALE_MESSAGE)
+        # Keep the submitted data on screen, so the player can copy it before reloading
+        form = form_class(request.POST, request.FILES, instance=instance, context=context)
+    elif request.method == "POST":
         # Process form submission with uploaded files
         form = form_class(request.POST, request.FILES, instance=instance, context=context)
         if form.is_valid():
@@ -387,7 +409,86 @@ def character_form(
     return render(request, "larpmanager/event/character/edit.html", context)
 
 
-def _save_character(context: dict, form: CharacterForm, success_message: str) -> str:
+def _set_auto_save(context: dict) -> None:
+    """Activate the background auto-save of the character form, unless disabled for the event."""
+    context["auto_save"] = not get_event_config(
+        context["event"].id,
+        "user_character_disable_auto",
+        context=context,
+    )
+
+
+def _init_auto_save(context: dict, instance: Character | RegistrationCharacterRel | None) -> None:
+    """Set up auto-save context: activation flag and version stamp of the loaded element."""
+    if not context.get("auto_save"):
+        return
+
+    context["base_updated"] = ""
+    if instance is not None and instance.pk:
+        context["base_updated"] = f"{instance.updated.timestamp():.6f}"
+
+
+def _is_stale(context: dict, request: HttpRequest, instance: Character | RegistrationCharacterRel | None) -> bool:
+    """Check if the element was saved elsewhere after the form was loaded."""
+    if not context.get("auto_save") or instance is None or not instance.pk:
+        return False
+
+    posted = request.POST.get("base_updated")
+    if not posted:
+        return False
+
+    try:
+        base_updated = float(posted)
+    except ValueError:
+        return False
+
+    # The instance is loaded fresh in this request, so its stamp is the current one
+    return instance.updated.timestamp() - base_updated > STALE_TOLERANCE
+
+
+def _character_form_ajax(
+    request: HttpRequest,
+    context: dict,
+    event_slug: str,
+    instance: Character | RegistrationCharacterRel | None,
+    form_class: type[BaseModelForm],
+) -> JsonResponse:
+    """Save the character form from the auto-save call, answering with the new version stamp."""
+    if _is_stale(context, request, instance):
+        return JsonResponse({"res": "ko", "stale": True, "warn": str(CHARACTER_STALE_MESSAGE)})
+
+    # Create the character only once the player has given it a name
+    if instance is None and not request.POST.get("name", "").strip():
+        return JsonResponse({"res": "ko"})
+
+    form = form_class(request.POST, request.FILES, instance=instance, context=context)
+    if not form.is_valid():
+        return JsonResponse({"res": "ko", "errors": form.errors})
+
+    character, _message = _save_character(context, form, "", auto_save=True)
+
+    # Read back the stamp, so it matches the stored one even if the save triggered other updates
+    character.refresh_from_db(fields=["updated"])
+
+    result = {"res": "ok", "updated": f"{character.updated.timestamp():.6f}"}
+
+    # Point the following auto-saves to the edit page of the character just created
+    if instance is None:
+        result["url"] = reverse(
+            "character_edit",
+            kwargs={"event_slug": event_slug, "character_uuid": character.uuid},
+        )
+
+    return JsonResponse(result)
+
+
+def _save_character(
+    context: dict,
+    form: CharacterForm,
+    success_message: str,
+    *,
+    auto_save: bool = False,
+) -> str:
     """Saves a character with retry behaviour."""
     # Retry logic to handle race conditions in character number assignment
     max_retries = 3
@@ -398,11 +499,12 @@ def _save_character(context: dict, form: CharacterForm, success_message: str) ->
             with transaction.atomic():
                 character = form.save(commit=False)
                 # Update character with additional processing and context
-                success_message = _update_character(context, character, form, success_message)
+                success_message = _update_character(context, character, form, success_message, auto_save=auto_save)
                 character.save()
 
-                # Handle character assignment logic
-                check_assign_character(context)
+                # Assignment to the registration is done only on explicit confirmation
+                if not auto_save:
+                    check_assign_character(context)
             # Success - break out of retry loop
             break
         except IntegrityError as e:
@@ -420,7 +522,14 @@ def _save_character(context: dict, form: CharacterForm, success_message: str) ->
     return character, success_message
 
 
-def _update_character(context: dict, character: Any, form: BaseModelForm, message: str) -> str:
+def _update_character(
+    context: dict,
+    character: Any,
+    form: BaseModelForm,
+    message: str,
+    *,
+    auto_save: bool = False,
+) -> str:
     """Update character status based on form data and event configuration.
 
     Args:
@@ -428,6 +537,7 @@ def _update_character(context: dict, character: Any, form: BaseModelForm, messag
         character: Character instance to update
         form: Form instance with cleaned data
         message: Initial message string
+        auto_save: Whether the save comes from the background auto-save
 
     Returns:
         Updated message string or original message if no changes
@@ -443,8 +553,10 @@ def _update_character(context: dict, character: Any, form: BaseModelForm, messag
 
     # Check if character approval is enabled for this event
     # Update status to proposed if character is in creation/review and user clicked propose
+    # The proposal is never triggered by the auto-save, only by an explicit confirmation
     if (
-        get_event_config(
+        not auto_save
+        and get_event_config(
             context["event"].id,
             "user_character_approval",
             context=context,
@@ -745,10 +857,13 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
 
     check, _max_chars = check_character_maximum(context["event"], context["member"])
     if check:
+        if request.POST.get("ajax") == "1":
+            return JsonResponse({"res": "ko"})
         messages.success(request, _("You have reached the maximum number of characters that can be created"))
         return redirect("character_list", event_slug=event_slug)
 
     context["class_name"] = "character"
+    _set_auto_save(context)
     return character_form(request, context, event_slug, None, CharacterForm)
 
 
@@ -757,6 +872,7 @@ def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -
     """Handle user character editing form."""
     context = get_event_context(request, event_slug, include_status=True, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
+    _set_auto_save(context)
     return character_form(request, context, event_slug, context["character"], CharacterForm)
 
 

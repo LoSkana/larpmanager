@@ -20,6 +20,8 @@
 
 """Tests for text-version snapshots."""
 
+from larpmanager.cache.question import clear_writing_questions_cache
+from larpmanager.models.form import QuestionApplicable, WritingQuestion, WritingQuestionType
 from larpmanager.models.writing import Plot, PlotCharacterRel, TextVersion, TextVersionChoices
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.edit.backend import save_version
@@ -32,6 +34,16 @@ class TestTextVersionPlotRoles(BaseTestCase):
         """Create a plot and two assigned characters."""
         super().setUp()
         event = self.create_event(name="Text version event")
+        # the character feature is not active in unit fixtures, so no default form is generated
+        WritingQuestion.objects.create(
+            event=event,
+            applicable=QuestionApplicable.CHARACTER,
+            typ=WritingQuestionType.NAME,
+            name="Name",
+            order=1,
+        )
+        # drop any questions cached for a previously created event reusing this id
+        clear_writing_questions_cache(event.id)
         self.plot = Plot.objects.create(event=event, number=1, name="The lost crown", text="Plot text")
         self.ari = self.character(event=event, number=1, name="Ari")
         other_character = self.character(event=event, number=2, name="Bea")
@@ -55,4 +67,4 @@ class TestTextVersionPlotRoles(BaseTestCase):
 
         version = TextVersion.objects.get(tp=TextVersionChoices.CHARACTER, eid=self.ari.id)
 
-        self.assertEqual(version.text, "\nPlots\nThe lost crown: Find the crown.\n")  # noqa: PT009
+        self.assertEqual(version.text, "Name: Ari\nPlots\nThe lost crown: Find the crown.\n")  # noqa: PT009

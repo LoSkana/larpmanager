@@ -6861,6 +6861,9 @@ msgstr "Der CSS-Code zur Anpassung des PDF-Drucks."
 msgid "The following registrations were drawn:"
 msgstr "Die folgenden Anmeldungen wurden ausgelost:"
 
+msgid "The form is auto-saved every 5 seconds."
+msgstr "Das Formular wird alle 5 Sekunden automatisch gespeichert."
+
 msgid "The question status, allowed values are"
 msgstr "Der Fragestatus, zulässige Werte sind"
 
@@ -7068,6 +7071,9 @@ msgstr "Erinnerung zur Vervollständigung des Profils für %(event)s"
 
 msgid "Seconds to wait between each email batch."
 msgstr "Sekunden, die zwischen den einzelnen E-Mail-Stapeln gewartet werden."
+
+msgid "Secret guild: visible only to its members"
+msgstr "Geheime Gilde: nur für ihre Mitglieder sichtbar"
 
 msgid "Send a bulk email to event's participants"
 msgstr "Sende eine Massen-E-Mail an die Teilnehmer der Veranstaltung"
@@ -12245,11 +12251,25 @@ msgstr ""
 "Teilnehmenden angezeigt werden"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Wenn aktiviert, wird die Gilde nicht in der Gildenliste oder der Galerie "
+"angezeigt: Nur ihre Mitglieder können sie sehen"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
 "Wenn aktiviert, können Plot oder Beziehungen verfolgt werden, die für den "
 "Charakter weniger wichtig sind."
+
+msgid ""
+"If enabled, the character form of the players will not be saved "
+"automatically while editing."
+msgstr ""
+"Wenn aktiviert, wird das Charakterformular der Spieler während der "
+"Bearbeitung nicht automatisch gespeichert."
 
 msgid ""
 "Multi-event story with player-created characters, experience points, and a "
@@ -14542,6 +14562,14 @@ msgstr ""
 "Ermöglicht das Hochladen und Hosten von Dateien direkt auf der Plattform, so"
 " dass sie entweder den Mitarbeitern oder den Teilnehmern über geheime "
 "externe Links zur Verfügung stehen"
+
+msgid ""
+"This character was modified in another window: your changes here have not "
+"been saved. Copy the text you want to keep, then reload the page."
+msgstr ""
+"Dieser Charakter wurde in einem anderen Fenster geändert: Deine Änderungen "
+"hier wurden nicht gespeichert. Kopiere den Text, den Du behalten möchtest, "
+"und lade dann die Seite neu."
 
 msgid ""
 "If the first name shown on your documents is different from the one you "
