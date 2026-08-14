@@ -172,7 +172,7 @@
                             </table>
                         </div>
                     </div>
-                {% elif features.pre_register and not run_upcoming %}
+                {% elif features.pre_register and not run_upcoming and not event.parent %}
                     <div class="event-card">
                         <p>
                             {% trans "There are no new sessions scheduled at this time." %}
