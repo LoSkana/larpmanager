@@ -155,7 +155,7 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
     amount_to_pay = f"{registration.quota:.2f}{currency_symbol}"
     days_until_deadline = registration.deadline
     base_payment_url = get_url("accounting/pay", registration.run.event)
-    payment_url = f"{base_payment_url}/{registration.run.event.slug}"
+    payment_url = f"{base_payment_url}/{registration.run.get_slug()}"
 
     # Generate appropriate greeting based on registration type
     if is_provisional:

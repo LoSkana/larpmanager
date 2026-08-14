@@ -68,7 +68,7 @@ class TestDigestFunctions(BaseTestCase):
         )
 
         # Generate email
-        email_content = generate_summary_email(self.event, [notification])
+        email_content = generate_summary_email(self.run, [notification])
 
         # Verify content
 
@@ -87,7 +87,7 @@ class TestDigestFunctions(BaseTestCase):
             sent=False,
         )
 
-        email_content = generate_summary_email(self.event, [notification])
+        email_content = generate_summary_email(self.run, [notification])
 
 
         self.assertIn("Updated Registrations", email_content)
@@ -105,7 +105,7 @@ class TestDigestFunctions(BaseTestCase):
             sent=False,
         )
 
-        email_content = generate_summary_email(self.event, [notification])
+        email_content = generate_summary_email(self.run, [notification])
 
 
         self.assertIn("Cancelled Registrations", email_content)
@@ -132,7 +132,7 @@ class TestDigestFunctions(BaseTestCase):
             sent=False,
         )
 
-        email_content = generate_summary_email(self.event, [notification])
+        email_content = generate_summary_email(self.run, [notification])
 
 
         self.assertIn("Payments Received", email_content)
@@ -165,7 +165,7 @@ class TestDigestFunctions(BaseTestCase):
             sent=False,
         )
 
-        email_content = generate_summary_email(self.event, [notification])
+        email_content = generate_summary_email(self.run, [notification])
 
 
         self.assertIn("Payments Awaiting Approval", email_content)
@@ -202,7 +202,7 @@ class TestDigestFunctions(BaseTestCase):
             ),
         ]
 
-        email_content = generate_summary_email(self.event, notifications)
+        email_content = generate_summary_email(self.run, notifications)
 
 
         self.assertIn("New Registrations", email_content)
@@ -451,7 +451,7 @@ class TestDigestFunctions(BaseTestCase):
 
     def test_generate_summary_email_with_empty_notifications(self) -> None:
         """Test generating summary email with empty notifications list"""
-        email_content = generate_summary_email(self.event, [])
+        email_content = generate_summary_email(self.run, [])
 
 
         self.assertIn(self.event.name, email_content)

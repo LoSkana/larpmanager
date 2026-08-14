@@ -52,7 +52,7 @@ from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.member import queue_executive_notification, queue_organizer_notification
 
 if TYPE_CHECKING:
-    from larpmanager.models.event import Event, Run
+    from larpmanager.models.event import Run
 
 logger = logging.getLogger(__name__)
 
@@ -275,16 +275,16 @@ def _daily_member_summaries(member_id: int, all_notifications: list) -> None:
     """Send a summary of all unsent notifications for a member."""
     member = Member.objects.get(pk=member_id)
 
-    # Separate event-level and association-level notifications
-    events_notifications = {}
+    # Separate run-level and association-level notifications
+    runs_notifications = {}
     associations_notifications = {}
     for notification in all_notifications:
         if notification.run:
-            # Event-level notification
-            event = notification.run.event
-            if event not in events_notifications:
-                events_notifications[event] = []
-            events_notifications[event].append(notification)
+            # Run-level notification
+            run = notification.run
+            if run not in runs_notifications:
+                runs_notifications[run] = []
+            runs_notifications[run].append(notification)
 
         elif notification.association:
             # Association-level notification
@@ -294,30 +294,30 @@ def _daily_member_summaries(member_id: int, all_notifications: list) -> None:
             associations_notifications[association].append(notification)
 
     logger.info(
-        "Sending daily summary to %s for %d events and %d associations with %d total notifications",
+        "Sending daily summary to %s for %d runs and %d associations with %d total notifications",
         str(member),
-        len(events_notifications),
+        len(runs_notifications),
         len(associations_notifications),
         len(all_notifications),
     )
 
-    # Send a summary email for each event this member has notifications for
-    for event, notifications in events_notifications.items():
+    # Send a summary email for each run this member has notifications for
+    for run, notifications in runs_notifications.items():
         # Activate member's preferred language
         activate(member.language)
 
-        # Generate summary email content for this event
-        email_content = generate_summary_email(event, notifications)
+        # Generate summary email content for this run
+        email_content = generate_summary_email(run, notifications)
 
         # Build email subject
-        email_subject = hdr(event) + _("Daily Summary") + f" - {event.name}"
+        email_subject = hdr(run.event) + _("Daily Summary") + f" - {run}"
 
         # Send the email
         my_send_mail(
             email_subject,
             email_content,
             member,
-            event,
+            run.event,
         )
 
     # Send a summary email for each association this member has notifications for
@@ -344,11 +344,11 @@ def _daily_member_summaries(member_id: int, all_notifications: list) -> None:
     logger.info("Daily summary sent to %s", str(member))
 
 
-def generate_summary_email(event: Event, notifications: list) -> str:
+def generate_summary_email(run: Run, notifications: list) -> str:
     """Generate HTML email content for daily organizer summary.
 
     Args:
-        event: Event instance
+        run: Run instance
         notifications: List of notifications to include
 
     Returns:
@@ -358,7 +358,7 @@ def generate_summary_email(event: Event, notifications: list) -> str:
     grouped_notifications = _digest_organize_notifications(notifications)
 
     email_body = ""
-    currency_symbol = event.association.get_currency_symbol()
+    currency_symbol = run.event.association.get_currency_symbol()
 
     # Map group keys to their handler functions (in display order)
     notification_handlers = [
@@ -373,12 +373,12 @@ def generate_summary_email(event: Event, notifications: list) -> str:
     # Process each notification group using its handler
     for group_key, handler_func in notification_handlers:
         if group_key in grouped_notifications:
-            email_body = handler_func(event, email_body, grouped_notifications[group_key], currency_symbol)
+            email_body = handler_func(run, email_body, grouped_notifications[group_key], currency_symbol)
 
     # Footer
     email_body += "<br/><hr/>"
-    event_dashboard_url = get_url(reverse("manage", kwargs={"event_slug": event.slug}), event)
-    email_body += "<p>" + _("Go to event dashboard") + f': <a href="{event_dashboard_url}">{event.name}</a></p>'
+    event_dashboard_url = get_url(reverse("manage", kwargs={"event_slug": run.get_slug()}), run.event)
+    email_body += "<p>" + _("Go to event dashboard") + f': <a href="{event_dashboard_url}">{run}</a></p>'
 
     return email_body
 
@@ -410,15 +410,16 @@ def _digest_organize_notifications(notifications: list) -> dict:
     return process
 
 
-def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, currency_symbol: str) -> str:
+def _digest_invoices(run: Run, email_body: str, invoice_approvals: list, currency_symbol: str) -> str:
     """Generate email content for digest invoice to approve."""
     email_body += "<h4>" + _("Payments Awaiting Approval") + f": {len(invoice_approvals)}" + "</h4>"
     email_body += "<ul>"
     invoice_ids = [notification.object_id for notification in invoice_approvals]
-    for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=event.association_id):
+    for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=run.event.association_id):
         email_body += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f} {currency_symbol}"
         approve_url = get_url(
-            reverse("orga_invoices_confirm", kwargs={"event_slug": event.slug, "invoice_uuid": invoice.uuid}), event
+            reverse("orga_invoices_confirm", kwargs={"event_slug": run.get_slug(), "invoice_uuid": invoice.uuid}),
+            run.event,
         )
         email_body += f' - <a href="{approve_url}">' + _("Approve") + "</a></li>"
     email_body += "</ul>"
@@ -426,13 +427,13 @@ def _digest_invoices(event: Event, email_body: str, invoice_approvals: list, cur
     return email_body
 
 
-def _digest_payments(event: Event, email_body: str, all_payments: list, currency_symbol: str) -> str:
+def _digest_payments(run: Run, email_body: str, all_payments: list, currency_symbol: str) -> str:
     """Generate email content for digest payments received."""
     email_body += "<h4>" + _("Payments Received") + f": {len(all_payments)}" + "</h4>"
     email_body += "<ul>"
 
     payment_ids = [notification.object_id for notification in all_payments]
-    for payment in AccountingItemPayment.objects.filter(pk__in=payment_ids, association_id=event.association_id):
+    for payment in AccountingItemPayment.objects.filter(pk__in=payment_ids, association_id=run.event.association_id):
         # Calculate net value (without transaction fees)
         net_value = payment.value
         if payment.inv and payment.inv.mc_fee:
@@ -447,7 +448,7 @@ def _digest_payments(event: Event, email_body: str, all_payments: list, currency
 
 
 def _digest_cancelled_registrations(
-    event: Event,
+    run: Run,
     email_body: str,
     cancelled_registrations: list,
     currency_symbol: str,  # noqa: ARG001
@@ -456,7 +457,7 @@ def _digest_cancelled_registrations(
     email_body += "<h4>" + _("Cancelled Registrations") + f": {len(cancelled_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in cancelled_registrations]
-    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event, pending=False):
+    for registration in Registration.objects.filter(pk__in=registration_ids, run=run, pending=False):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
         email_body += f"<li><b>{registration.member}</b> - {ticket_name}</li>"
     email_body += "</ul>"
@@ -464,23 +465,22 @@ def _digest_cancelled_registrations(
     return email_body
 
 
-def _digest_updated_registrations(
-    event: Event, email_body: str, updated_registrations: list, currency_symbol: str
-) -> str:
+def _digest_updated_registrations(run: Run, email_body: str, updated_registrations: list, currency_symbol: str) -> str:
     """Generate email content for digest updated registrations."""
     email_body += "<h4>" + _("Updated Registrations") + f": {len(updated_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in updated_registrations]
-    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event, pending=False):
+    for registration in Registration.objects.filter(pk__in=registration_ids, run=run, pending=False):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
         email_body += (
             f"<li><b>{registration.member}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
         )
         edit_url = get_url(
             reverse(
-                "orga_registrations_edit", kwargs={"event_slug": event.slug, "registration_uuid": registration.uuid}
+                "orga_registrations_edit",
+                kwargs={"event_slug": run.get_slug(), "registration_uuid": registration.uuid},
             ),
-            event,
+            run.event,
         )
         email_body += f' - <a href="{edit_url}">' + _("View") + "</a></li>"
     email_body += "</ul>"
@@ -488,21 +488,22 @@ def _digest_updated_registrations(
     return email_body
 
 
-def _digest_new_registrations(event: Event, email_body: str, new_registrations: list, currency_symbol: str) -> str:
+def _digest_new_registrations(run: Run, email_body: str, new_registrations: list, currency_symbol: str) -> str:
     """Generate email content for digest updated registrations."""
     email_body += "<h4>" + _("New Registrations") + f": {len(new_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in new_registrations]
-    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event, pending=False):
+    for registration in Registration.objects.filter(pk__in=registration_ids, run=run, pending=False):
         ticket_name = registration.ticket.name if registration.ticket else _("No ticket")
         email_body += (
             f"<li><b>{registration.member}</b> - {ticket_name} - {registration.tot_iscr:.2f} {currency_symbol}"
         )
         edit_url = get_url(
             reverse(
-                "orga_registrations_edit", kwargs={"event_slug": event.slug, "registration_uuid": registration.uuid}
+                "orga_registrations_edit",
+                kwargs={"event_slug": run.get_slug(), "registration_uuid": registration.uuid},
             ),
-            event,
+            run.event,
         )
         email_body += f' - <a href="{edit_url}">' + _("View") + "</a></li>"
 
@@ -511,7 +512,7 @@ def _digest_new_registrations(event: Event, email_body: str, new_registrations: 
 
 
 def _digest_request_registrations(
-    event: Event,
+    run: Run,
     email_body: str,
     request_registrations: list,
     currency_symbol: str,  # noqa: ARG001
@@ -520,11 +521,11 @@ def _digest_request_registrations(
     email_body += "<h4>" + _("Signup Requests") + f": {len(request_registrations)}" + "</h4>"
     email_body += "<ul>"
     registration_ids = [notification.object_id for notification in request_registrations]
-    for registration in Registration.objects.filter(pk__in=registration_ids, run__event=event, pending=True):
+    for registration in Registration.objects.filter(pk__in=registration_ids, run=run, pending=True):
         email_body += f"<li><b>{registration.member}</b>"
         requests_url = get_url(
-            reverse("orga_registration_requests", kwargs={"event_slug": event.slug}),
-            event,
+            reverse("orga_registration_requests", kwargs={"event_slug": run.get_slug()}),
+            run.event,
         )
         email_body += f' - <a href="{requests_url}">' + _("View") + "</a></li>"
 
