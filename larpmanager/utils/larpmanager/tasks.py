@@ -183,9 +183,7 @@ def partition_shared_recipients(recipients: list, association_id: int | None) ->
     return allowed, ignored
 
 
-def partition_newsletter_recipients(
-    recipients: list, association_id: int | None, run_id: int | None = None
-) -> tuple[list, list]:
+def partition_newsletter_recipients(recipients: list, association_id: int | None) -> tuple[list, list]:
     """Split recipients into those who accept bulk communications and those who opted out.
 
     Association mails honour the membership newsletter preference, platform
@@ -195,21 +193,15 @@ def partition_newsletter_recipients(
     Args:
         recipients: List of recipient email addresses.
         association_id: Association the email is sent on behalf of.
-        run_id: Run the email is tied to, if any.
 
     Returns:
         Tuple (allowed, opted_out) of email addresses, preserving input order.
 
     """
     if association_id:
-        # ONLY still accepts the mails tied to a run, since they carry the practical
-        # information of an event the member signed up for, but not a generic broadcast
-        refused = [NewsletterChoices.NO]
-        if not run_id:
-            refused.append(NewsletterChoices.ONLY)
         queryset = Membership.objects.filter(
             association_id=association_id,
-            newsletter__in=refused,
+            newsletter=NewsletterChoices.NO,
         ).values_list("member__email", flat=True)
     else:
         queryset = LarpManagerNewsletter.objects.filter(
@@ -243,9 +235,7 @@ def _create_bulk_recipients(
     recipients only holds the allowed ones.
     """
     if opted_out is None:
-        recipients, opted_out = partition_newsletter_recipients(
-            recipients, email_content.association_id, email_content.run_id
-        )
+        recipients, opted_out = partition_newsletter_recipients(recipients, email_content.association_id)
     opted_out_emails = set(opted_out)
     # Resolved once for the whole broadcast, instead of one query per recipient
     suppressed_emails = get_suppressed_emails(recipients)

@@ -74,6 +74,9 @@ msgstr "Krop"
 msgid "Book"
 msgstr "Bog"
 
+msgid "Bulk"
+msgstr "Masse"
+
 msgid "Card"
 msgstr "Kort"
 
@@ -610,6 +613,9 @@ msgstr "Log ind"
 msgid "Manage"
 msgstr "Administrer"
 
+msgid "Manual"
+msgstr "Manuel"
+
 msgid "Master"
 msgstr "Master"
 
@@ -985,6 +991,9 @@ msgstr "Log ind"
 
 msgid "Signups"
 msgstr "Tilmeldinger"
+
+msgid "Skipped"
+msgstr "Sprunget over"
 
 msgid "Station"
 msgstr "Station"
@@ -1420,6 +1429,9 @@ msgstr "Annulleret"
 
 msgid "Character"
 msgstr "Karakter"
+
+msgid "Complaint"
+msgstr "Klage"
 
 msgid "Completed"
 msgstr "Fuldført"
@@ -1931,6 +1943,9 @@ msgstr "Startdato"
 msgid "Statistics"
 msgstr "Statistik"
 
+msgid "Suppressed"
+msgstr "Undertrykt"
+
 msgid "Surcharges"
 msgstr "Tillæg"
 
@@ -2105,6 +2120,9 @@ msgstr "Inventarer"
 msgid "Last change"
 msgstr "Seneste ændring"
 
+msgid "Last played"
+msgstr "Senest spillet"
+
 msgid "Leave guild"
 msgstr "Forlad guild"
 
@@ -2170,6 +2188,9 @@ msgstr "Quest-typer"
 
 msgid "Quick Setup"
 msgstr "Hurtig opsætning"
+
+msgid "Raw Payload"
+msgstr "Rå nyttelast"
 
 msgid "Redeem link"
 msgstr "Indløsningslink"
@@ -2272,6 +2293,9 @@ msgstr "Tilgængelighed"
 
 msgid "Bank address"
 msgstr "Bankadresse"
+
+msgid "Bounce Count"
+msgstr "Antal afvisninger"
 
 msgid "Cache reset!"
 msgstr "Cache nulstillet!"
@@ -2470,6 +2494,9 @@ msgstr "Oversættelser"
 
 msgid "Type of text"
 msgstr "Teksttype"
+
+msgid "Unsubscribed"
+msgstr "Afmeldt"
 
 msgid "VAT (Ticket)"
 msgstr "Moms (billet)"
@@ -3161,6 +3188,9 @@ msgstr "Samlet saldo:"
 msgid "Highlight color"
 msgstr "Fremhævningsfarve"
 
+msgid "Invalid address"
+msgstr "Ugyldig adresse"
+
 msgid "Invalid request"
 msgstr "Ugyldig anmodning"
 
@@ -3413,6 +3443,9 @@ msgstr "Eksternt website"
 msgid "Field visibility"
 msgstr "Feltsynlighed"
 
+msgid "Forbidden domain"
+msgstr "Forbudt domæne"
+
 msgid "Handout template"
 msgstr "Handout-skabelon"
 
@@ -3481,6 +3514,9 @@ msgstr "Afventende invitationer:"
 
 msgid "Pending payments"
 msgstr "Ventende betalinger"
+
+msgid "Permanent bounce"
+msgstr "Permanent afvisning"
 
 msgid "Player selection"
 msgstr "Spillervalg"
@@ -3556,6 +3592,9 @@ msgstr "Transaktionsgebyrer"
 
 msgid "Transfer preview"
 msgstr "Forhåndsvisning af overførsler"
+
+msgid "Transient bounce"
+msgstr "Midlertidig afvisning"
 
 msgid "Workshop Modules"
 msgstr "Workshopmoduler"
@@ -3759,6 +3798,9 @@ msgstr "Modtagne betalinger"
 msgid "Payments received"
 msgstr "Modtagne betalinger"
 
+msgid "Played characters"
+msgstr "Spillede karakterer"
+
 msgid "Pre registrations"
 msgstr "Forhåndstilmeldinger"
 
@@ -3883,6 +3925,9 @@ msgstr "Godkendt karakter"
 
 msgid "Available versions"
 msgstr "Tilgængelige versioner"
+
+msgid "Changed character!"
+msgstr "Karakter skiftet!"
 
 msgid "Character creation"
 msgstr "Oprettelse af karakter"
@@ -4485,6 +4530,9 @@ msgstr "Tildelt medarbejder"
 msgid "Category of the event"
 msgstr "Eventets kategori"
 
+msgid "Change your character"
+msgstr "Skift din karakter"
+
 msgid "Character Inventories"
 msgstr "Karakterinventarer"
 
@@ -4496,6 +4544,9 @@ msgstr "Introduktion til karakterskema"
 
 msgid "Characters unassigned"
 msgstr "Ikke-tildelte karakterer"
+
+msgid "Choose your character"
+msgstr "Vælg din karakter"
 
 msgid "Code 'Bring a friend'"
 msgstr "Kode 'Tag en ven med'"
@@ -4682,8 +4733,14 @@ msgstr "Ankommet sikkert frem"
 msgid "Browse upcoming events"
 msgstr "Gennemse kommende events"
 
+msgid "Change your character!"
+msgstr "Skift din karakter!"
+
 msgid "Character Relationship"
 msgstr "Karakterrelation"
+
+msgid "Choose your character!"
+msgstr "Vælg din karakter!"
 
 msgid "Copy link to clipboard"
 msgstr "Kopiér link til udklipsholder"
@@ -4790,9 +4847,6 @@ msgstr "Refusion godkendt"
 #, python-format
 msgid "Role approval %(role)s"
 msgstr "Rollegodkendelse %(role)s"
-
-msgid "Select your character!"
-msgstr "Vælg din karakter!"
 
 msgid "Set up payment methods"
 msgstr "Opsæt betalingsmetoder"
@@ -4982,6 +5036,9 @@ msgstr "Karakterkonfigurationer"
 msgid "Code of the box or shelf"
 msgstr "Koden på kassen eller hylden"
 
+msgid "Create another character"
+msgstr "Opret en anden karakter"
+
 msgid "Create your organization"
 msgstr "Opret din organisation"
 
@@ -5133,6 +5190,9 @@ msgstr "Kontrollér dobbelte Speed larps:"
 msgid "Check missing speed larp:"
 msgstr "Kontrollér manglende Speed larp:"
 
+msgid "Create another character!"
+msgstr "Opret en anden karakter!"
+
 msgid "Current platform version:"
 msgstr "Aktuel platformsversion:"
 
@@ -5178,6 +5238,9 @@ msgstr "Medlem forfremmet til admin!"
 #, python-format
 msgid "New message from %(user)s"
 msgstr "Ny besked fra %(user)s"
+
+msgid "No address was suppressed"
+msgstr "Ingen adresse blev undertrykt"
 
 msgid "Option saved successfully"
 msgstr "Mulighed gemt"
@@ -5427,8 +5490,14 @@ msgstr "Kontingenter til godkendelse"
 msgid "Missing casting preferences"
 msgstr "Manglende Casting-præferencer"
 
+msgid "No address was unsubscribed"
+msgstr "Ingen adresse blev afmeldt"
+
 msgid "No inventory transfers yet."
 msgstr "Der er endnu ikke foretaget nogen inventaroverførsler."
+
+msgid "Opted out of communications"
+msgstr "Fravalgt kommunikation"
 
 msgid "Pre-registration confirmed!"
 msgstr "Forhåndsregistrering bekræftet!"
@@ -5906,6 +5975,9 @@ msgstr "Se dine private samtaler"
 
 msgid "Where the event will take place"
 msgstr "Hvor eventet finder sted"
+
+msgid "You already play this character"
+msgstr "Du spiller allerede denne karakter"
 
 msgid "You have completed the payment!"
 msgstr "Du har gennemført betalingen!"
@@ -6661,9 +6733,6 @@ msgstr "Transport: brændstof og motorvejsafgifter"
 msgid "Visit the tutorial to learn the basics"
 msgstr "Besøg vejledningen for at lære det grundlæggende"
 
-msgid "You already have an assigned character"
-msgstr "Du har allerede fået tildelt en karakter"
-
 msgid "You are exploring a demo organization."
 msgstr "Du udforsker en demoorganisation."
 
@@ -6883,6 +6952,9 @@ msgstr "Indsamlingen blev leveret til brugeren"
 
 msgid "The number of payments to split the fee."
 msgstr "Antallet af betalinger, som gebyret skal opdeles i."
+
+msgid "This character belongs to another player"
+msgstr "Denne karakter tilhører en anden spiller"
 
 msgid "This content is currently not available."
 msgstr "Dette indhold er ikke tilgængeligt lige nu."
@@ -7359,6 +7431,9 @@ msgstr "Du skal tilmelde dig for at vælge dine præferencer!"
 msgid "You will no longer receive messages from us."
 msgstr "Du vil ikke længere modtage beskeder fra os."
 
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Adresse blokeret efter en afvisning eller en klage"
+
 msgid "Amount must be non-zero for division criteria"
 msgstr "Beløbet må ikke være nul for divisionskriterier"
 
@@ -7367,6 +7442,9 @@ msgstr "Anvend opgraderingen på hele organisationen?"
 
 msgid "Are you sure you want to delete this element?"
 msgstr "Er du sikker på, at du vil slette dette element?"
+
+msgid "Are you sure you want to play this character?"
+msgstr "Er du sikker på, at du vil spille denne karakter?"
 
 msgid "Customize buttons in the event navigation bar"
 msgstr "Tilpas knapper i arrangementets navigationsbjælke"
@@ -7725,6 +7803,9 @@ msgstr "Baggrundsbillede, der vises på alle eventsider"
 msgid "Character not found, or not playing in this event"
 msgstr "Karakter ikke fundet eller spiller ikke i dette event"
 
+msgid "Choose the character you will play in this event!"
+msgstr "Vælg den karakter, du vil spille til dette event!"
+
 msgid "Color used for text backgrounds and content boxes"
 msgstr "Farve, der bruges til tekstbaggrunde og indholdsbokse"
 
@@ -7782,6 +7863,9 @@ msgstr "Denne side lader dig tilføje eller redigere en inventartype."
 
 msgid "Tolerance exceeded, proceed with the cancellation"
 msgstr "Tolerancen er overskredet, fortsæt med annulleringen"
+
+msgid "You already play the maximum number of characters"
+msgstr "Du spiller allerede det maksimale antal karakterer"
 
 msgid "You are including (at least one of these filters)"
 msgstr "Du inkluderer (mindst ét af disse filtre)"
@@ -8205,6 +8289,9 @@ msgstr "Vælg tabelrækkerne, og vælg den handling, der skal anvendes"
 
 msgid "Switch to the latest interface version for your account"
 msgstr "Skift til den nyeste brugerfladeversion for din konto"
+
+msgid "This character is already played by another participant"
+msgstr "Denne karakter spilles allerede af en anden deltager"
 
 msgid "This page summarizes the types of character inventories"
 msgstr "Denne side opsummerer typerne af karakterinventarer"
@@ -9302,6 +9389,9 @@ msgstr ""
 msgid "If you need to attach a file, indicate it here, otherwise leave blank"
 msgstr ""
 "Hvis du skal vedhæfte en fil, så angiv den her, ellers lad feltet stå tomt"
+
+msgid "Number of characters each participant plays in the event (default=1)."
+msgstr "Antal karakterer, hver deltager spiller til eventet (standard=1)."
 
 msgid "Optional - Maximum number of times it can be selected (0 = unlimited)"
 msgstr "Valgfrit - Maksimalt antal gange det kan vælges (0 = ubegrænset)"
@@ -10835,6 +10925,12 @@ msgstr ""
 "sendes der ingen e-mails)."
 
 msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Disse adresser har fravalgt massekommunikation og blev ikke føjet til køen:"
+
+msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "
 "email."
 msgstr ""
@@ -11876,6 +11972,13 @@ msgid ""
 msgstr ""
 "Gennemse forhåndstilmeldte medlemmer, og følg hvilke der endnu ikke har "
 "gennemført en fuld tilmelding"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Disse adresser er tidligere blevet afvist eller har indgivet en klage og "
+"blev ikke føjet til køen:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "
