@@ -33,6 +33,7 @@ class TestTextVersionPlotRoles(BaseTestCase):
         """Create a plot and two assigned characters."""
         super().setUp()
         event = self.create_event(name="Text version event")
+        # drop any questions cached for a previously created event reusing this id
         clear_writing_questions_cache(event.id)
         self.plot = Plot.objects.create(event=event, number=1, name="The lost crown", text="Plot text")
         self.ari = self.character(event=event, number=1, name="Ari")
@@ -57,4 +58,4 @@ class TestTextVersionPlotRoles(BaseTestCase):
 
         version = TextVersion.objects.get(tp=TextVersionChoices.CHARACTER, eid=self.ari.id)
 
-        self.assertEqual(version.text, "\nPlots\nThe lost crown: Find the crown.\n")  # noqa: PT009
+        self.assertEqual(version.text, "Name: Ari\nPlots\nThe lost crown: Find the crown.\n")  # noqa: PT009

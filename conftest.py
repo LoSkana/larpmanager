@@ -264,12 +264,17 @@ def _truncate_app_tables() -> None:
 
 
 def psql(params: list[str], env: Mapping[str, str]) -> None:
-    """Performs a query on the db."""
-    subprocess.run(params, check=True, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, env=env, text=True)  # noqa: S603
+    """Performs a query on the db, surfacing the psql error output on failure."""
+    result = subprocess.run(  # noqa: S603
+        params, check=False, stderr=subprocess.PIPE, stdout=subprocess.DEVNULL, env=env, text=True
+    )
+    if result.returncode != 0:
+        msg = f"psql failed ({result.returncode}): {result.stderr.strip()}"
+        raise RuntimeError(msg)
 
 
 def clean_db(host: str, env: Mapping[str, str], name: str, user: str) -> None:
-    """Drop the schema and recreate it."""
+    """Empty the public schema, without requiring ownership of the schema itself."""
     psql(
         [
             "psql",
@@ -280,9 +285,10 @@ def clean_db(host: str, env: Mapping[str, str], name: str, user: str) -> None:
             "-d",
             name,
             "-c",
-            """
-        DROP SCHEMA IF EXISTS public CASCADE;
-        CREATE SCHEMA IF NOT EXISTS public AUTHORIZATION larpmanager;
+            f"""
+        CREATE SCHEMA IF NOT EXISTS public;
+        DROP OWNED BY {user} CASCADE;
+        CREATE SCHEMA IF NOT EXISTS public;
     """,
         ],
         env,
@@ -437,6 +443,9 @@ def _load_test_db_sql() -> None:
     if not sql_path.exists():
         msg = f"Test database SQL file not found: {sql_path}"
         raise FileNotFoundError(msg)
+
+    # Release the django connection, so it cannot hold locks on the objects being dropped
+    connection.close()
 
     # Clean the database first
     clean_db(host, env, name, user)
