@@ -1,0 +1,66 @@
+{% extends "utils.html" %}
+{% load i18n static %}
+{% block title %}
+    Suppressions
+{% endblock title %}
+{% block content %}
+    <form method="get" action="">
+        <label>
+            <input type="checkbox"
+                   name="inactive"
+                   value="1"
+                   {% if show_inactive %}checked{% endif %}>
+            Show released
+        </label>
+        &nbsp;
+        <button type="submit">Filter</button>
+    </form>
+    {% if suppression_list %}
+        <table>
+            <tr>
+                <th>Email</th>
+                <th>Reason</th>
+                <th>Count</th>
+                <th>Active</th>
+                <th>Last event</th>
+            </tr>
+            {% for el in suppression_list %}
+                <tr>
+                    <td>{{ el.email }}</td>
+                    <td>{{ el.get_reason_display }}</td>
+                    <td>{{ el.bounce_count }}</td>
+                    <td>{{ el.active|yesno:"yes,no" }}</td>
+                    <td>{{ el.last_event }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="pagination center">
+            <span class="step-links">
+                {% if page.has_previous %}
+                    <a href="?page={{ page.previous_page_number }}{% if show_inactive %}&amp;inactive=1{% endif %}">Previous</a>
+                {% endif %}
+                &nbsp;Page {{ page.number }} of {{ page.paginator.num_pages }}&nbsp;
+                {% if page.has_next %}
+                    <a href="?page={{ page.next_page_number }}{% if show_inactive %}&amp;inactive=1{% endif %}">Next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+    <hr>
+    <h3>Add / release emails</h3>
+    <form method="post" action="">
+        {% csrf_token %}
+        <p>
+            <label>
+                <input type="checkbox" name="release" value="1">
+                Release (remove suppression, also on SES)
+            </label>
+        </p>
+        <p>
+            <label>Emails:</label>
+            <br>
+            <textarea name="emails" rows="10" cols="50"></textarea>
+        </p>
+        <button type="submit">Save</button>
+    </form>
+{% endblock content %}

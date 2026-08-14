@@ -36,6 +36,7 @@ from larpmanager.models.miscellanea import (
     Contact,
     EmailContent,
     EmailRecipient,
+    EmailSuppression,
     HelpQuestion,
     OneTimeAccessToken,
     OneTimeContent,
@@ -303,15 +304,28 @@ class EmailContentAdmin(DefModelAdmin):
 class EmailRecipientAdmin(DefModelAdmin):
     """Admin interface for EmailRecipient model."""
 
-    list_display: ClassVar[tuple] = ("id", "recipient", "email_content", "sent", "language_code", "uuid")
-    list_filter: ClassVar[tuple] = ("sent",)
+    list_display: ClassVar[tuple] = ("id", "recipient", "email_content", "sent", "skipped", "language_code", "uuid")
+    list_filter: ClassVar[tuple] = ("sent", "skipped")
     autocomplete_fields: ClassVar[list] = ["email_content"]
     search_fields: ClassVar[list] = ["id", "recipient", "email_content__subj", "uuid"]
-    readonly_fields: ClassVar[tuple] = ("email_content", "recipient", "sent", "language_code")
+    readonly_fields: ClassVar[tuple] = ("email_content", "recipient", "sent", "skipped", "language_code")
 
     def has_add_permission(self, request: HttpRequest) -> bool:  # noqa: ARG002
         """Disable manual creation of email recipients."""
         return False
+
+
+@admin.register(EmailSuppression)
+class EmailSuppressionAdmin(DefModelAdmin):
+    """Admin interface for EmailSuppression model."""
+
+    list_display: ClassVar[tuple] = ("email", "reason", "bounce_count", "active", "last_event")
+    list_filter: ClassVar[tuple] = ("reason", "active")
+    search_fields: ClassVar[list] = ["email"]
+
+    def get_readonly_fields(self, request: HttpRequest, obj: EmailSuppression | None = None) -> tuple:  # noqa: ARG002
+        """Freeze the address of an existing row, so its cached flag stays addressable."""
+        return ("email",) if obj else ()
 
 
 class OneTimeAccessTokenInline(admin.TabularInline):

@@ -74,6 +74,9 @@ msgstr "Corps"
 msgid "Book"
 msgstr "Livre"
 
+msgid "Bulk"
+msgstr "En masse"
+
 msgid "Card"
 msgstr "Carte"
 
@@ -610,6 +613,9 @@ msgstr "Se connecter"
 msgid "Manage"
 msgstr "Gérer"
 
+msgid "Manual"
+msgstr "Manuel"
+
 msgid "Master"
 msgstr "Maître"
 
@@ -985,6 +991,9 @@ msgstr "Se connecter"
 
 msgid "Signups"
 msgstr "Inscriptions"
+
+msgid "Skipped"
+msgstr "Ignoré"
 
 msgid "Station"
 msgstr "Poste"
@@ -1420,6 +1429,9 @@ msgstr "Annulé"
 
 msgid "Character"
 msgstr "Personnage"
+
+msgid "Complaint"
+msgstr "Plainte"
 
 msgid "Completed"
 msgstr "Terminé"
@@ -1931,6 +1943,9 @@ msgstr "Date de début"
 msgid "Statistics"
 msgstr "Statistiques"
 
+msgid "Suppressed"
+msgstr "Supprimées"
+
 msgid "Surcharges"
 msgstr "Suppléments"
 
@@ -2174,6 +2189,9 @@ msgstr "Types de Quest"
 msgid "Quick Setup"
 msgstr "Configuration rapide"
 
+msgid "Raw Payload"
+msgstr "Charge utile brute"
+
 msgid "Redeem link"
 msgstr "Lien de récupération"
 
@@ -2275,6 +2293,9 @@ msgstr "Disponibilités"
 
 msgid "Bank address"
 msgstr "Adresse de la banque"
+
+msgid "Bounce Count"
+msgstr "Nombre de rebonds"
 
 msgid "Cache reset!"
 msgstr "Cache réinitialisé !"
@@ -2473,6 +2494,9 @@ msgstr "Traductions"
 
 msgid "Type of text"
 msgstr "Type de texte"
+
+msgid "Unsubscribed"
+msgstr "Désabonné"
 
 msgid "VAT (Ticket)"
 msgstr "TVA (ticket)"
@@ -3164,6 +3188,9 @@ msgstr "Bilan global:"
 msgid "Highlight color"
 msgstr "Couleur de mise en évidence"
 
+msgid "Invalid address"
+msgstr "Adresse invalide"
+
 msgid "Invalid request"
 msgstr "Demande non valide"
 
@@ -3416,6 +3443,9 @@ msgstr "Site web externe"
 msgid "Field visibility"
 msgstr "Visibilité des champs"
 
+msgid "Forbidden domain"
+msgstr "Domaine interdit"
+
 msgid "Handout template"
 msgstr "Modèle de handout"
 
@@ -3484,6 +3514,9 @@ msgstr "Invitations en attente:"
 
 msgid "Pending payments"
 msgstr "Paiements en attente"
+
+msgid "Permanent bounce"
+msgstr "Rebond permanent"
 
 msgid "Player selection"
 msgstr "Sélection du joueur"
@@ -3559,6 +3592,9 @@ msgstr "Frais de transaction"
 
 msgid "Transfer preview"
 msgstr "Aperçu des transferts"
+
+msgid "Transient bounce"
+msgstr "Rebond temporaire"
 
 msgid "Workshop Modules"
 msgstr "Modules de l'atelier"
@@ -5203,6 +5239,9 @@ msgstr "Un membre a été promu administrateur!"
 msgid "New message from %(user)s"
 msgstr "Nouveau message de %(user)s"
 
+msgid "No address was suppressed"
+msgstr "Aucune adresse n’a été supprimée"
+
 msgid "Option saved successfully"
 msgstr "Option sauvegardée avec succès"
 
@@ -5451,8 +5490,14 @@ msgstr "Cotisations en attente d'approbation"
 msgid "Missing casting preferences"
 msgstr "Préférences de casting manquantes"
 
+msgid "No address was unsubscribed"
+msgstr "Aucune adresse n’a été désabonnée"
+
 msgid "No inventory transfers yet."
 msgstr "Pas encore de transferts."
+
+msgid "Opted out of communications"
+msgstr "A refusé les communications"
 
 msgid "Pre-registration confirmed!"
 msgstr "Préinscription confirmée!"
@@ -7028,6 +7073,9 @@ msgstr "Rappel pour compléter le profil pour %(event)s"
 msgid "Seconds to wait between each email batch."
 msgstr "Secondes d'attente entre chaque lot d'e-mails."
 
+msgid "Secret guild: visible only to its members"
+msgstr "Guilde secrète : visible uniquement par ses membres"
+
 msgid "Send a bulk email to event's participants"
 msgstr "Envoyer un e-mail groupé aux participants de l'événement"
 
@@ -7398,6 +7446,9 @@ msgstr "Tu dois t'inscrire pour sélectionner tes préférences !"
 
 msgid "You will no longer receive messages from us."
 msgstr "Tu ne recevras plus de messages de notre part."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Adresse bloquée après un rebond ou une plainte"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr "Le montant doit être différent de zéro pour les critères de division"
@@ -11250,6 +11301,13 @@ msgstr ""
 " aucun e-mail n'est envoyé)."
 
 msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Ces adresses ont refusé les communications groupées et n’ont pas été "
+"ajoutées à la file d’attente :"
+
+msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "
 "email."
 msgstr ""
@@ -12167,6 +12225,13 @@ msgstr ""
 "tous les autres participants"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Si cette case est cochée, la guilde n’apparaît pas dans la liste des guildes"
+" ni dans la galerie : seuls ses membres la voient"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
@@ -12306,6 +12371,13 @@ msgid ""
 msgstr ""
 "Passe en revue les membres préinscrits et identifie ceux qui n'ont pas "
 "encore finalisé leur inscription"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Ces adresses ont rebondi ou fait l’objet d’une plainte par le passé et n’ont"
+" pas été ajoutées à la file d’attente :"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "

@@ -31,6 +31,10 @@
                             <h3>
                                 {% if el.thumb %}<img class="faction-logo" src="{{ el.thumb.url }}" alt="guild logo" />{% endif %}
                                 <a href="{% url 'guild' run.get_slug el.uuid %}">{{ el.name }}</a>
+                                {% if el.secret %}
+                                    <i class="fa-solid fa-user-secret"
+                                       title="{% trans "Secret guild: visible only to its members" %}"></i>
+                                {% endif %}
                             </h3>
                         </td>
                         <td>{{ el.teaser | safe | clean_tags | truncatechars:200 }}</td>

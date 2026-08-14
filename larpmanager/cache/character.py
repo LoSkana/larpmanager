@@ -367,7 +367,7 @@ def get_event_cache_guilds(context: dict, result: dict) -> None:
     if "guild" not in get_event_features(context["event"].id):
         return
 
-    for guild in context["event"].get_elements(Guild).order_by("order"):
+    for guild in context["event"].get_elements(Guild).filter(secret=False).order_by("order"):
         _process_guild_cache(guild, result)
 
 

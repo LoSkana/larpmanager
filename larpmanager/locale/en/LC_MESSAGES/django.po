@@ -4863,6 +4863,9 @@ msgstr ""
 msgid "Attachment Name"
 msgstr ""
 
+msgid "Bulk"
+msgstr ""
+
 msgid "Email Content"
 msgstr ""
 
@@ -4873,6 +4876,30 @@ msgid "Time And Date Of Sending"
 msgstr ""
 
 msgid "Language Code"
+msgstr ""
+
+msgid "Skipped"
+msgstr ""
+
+msgid "Permanent bounce"
+msgstr ""
+
+msgid "Transient bounce"
+msgstr ""
+
+msgid "Complaint"
+msgstr ""
+
+msgid "Manual"
+msgstr ""
+
+msgid "Bounce Count"
+msgstr ""
+
+msgid "Last Event"
+msgstr ""
+
+msgid "Raw Payload"
 msgstr ""
 
 msgid "The event this content belongs to"
@@ -5190,6 +5217,11 @@ msgid "Guild cover"
 msgstr ""
 
 msgid "Guild logo"
+msgstr ""
+
+msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
 msgstr ""
 
 msgid "Role"
@@ -6371,6 +6403,9 @@ msgstr ""
 msgid "My pending invites"
 msgstr ""
 
+msgid "Secret guild: visible only to its members"
+msgstr ""
+
 msgid "Availability"
 msgstr ""
 
@@ -7348,6 +7383,28 @@ msgstr ""
 msgid "No address was ignored"
 msgstr ""
 
+msgid "Unsubscribed"
+msgstr ""
+
+msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+
+msgid "No address was unsubscribed"
+msgstr ""
+
+msgid "Suppressed"
+msgstr ""
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+
+msgid "No address was suppressed"
+msgstr ""
+
 msgid "Back"
 msgstr ""
 
@@ -8183,9 +8240,6 @@ msgid "We are processing your payment. Please wait a moment"
 msgstr ""
 
 msgid "View the characters you play"
-msgstr ""
-
-msgid "Last Event"
 msgstr ""
 
 msgid "You don't have any characters yet."
@@ -11323,6 +11377,18 @@ msgid "You must be registered to view this page"
 msgstr ""
 
 msgid "Welcome"
+msgstr ""
+
+msgid "Invalid address"
+msgstr ""
+
+msgid "Forbidden domain"
+msgstr ""
+
+msgid "Opted out of communications"
+msgstr ""
+
+msgid "Address blocked after a bounce or a complaint"
 msgstr ""
 
 msgid "Registration Tickets"

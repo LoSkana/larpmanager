@@ -74,6 +74,9 @@ msgstr "Κυρίως κείμενο"
 msgid "Book"
 msgstr "Βιβλίο"
 
+msgid "Bulk"
+msgstr "Μαζικό"
+
 msgid "Card"
 msgstr "Κάρτα"
 
@@ -610,6 +613,9 @@ msgstr "Σύνδεση"
 msgid "Manage"
 msgstr "Διαχείριση"
 
+msgid "Manual"
+msgstr "Χειροκίνητο"
+
 msgid "Master"
 msgstr "Master"
 
@@ -985,6 +991,9 @@ msgstr "Σύνδεση"
 
 msgid "Signups"
 msgstr "Εγγραφές"
+
+msgid "Skipped"
+msgstr "Παραλείφθηκε"
 
 msgid "Station"
 msgstr "Σταθμός"
@@ -1420,6 +1429,9 @@ msgstr "Ακυρώθηκε"
 
 msgid "Character"
 msgstr "Χαρακτήρας"
+
+msgid "Complaint"
+msgstr "Καταγγελία"
 
 msgid "Completed"
 msgstr "Ολοκληρώθηκε"
@@ -1931,6 +1943,9 @@ msgstr "Ημερομηνία έναρξης"
 msgid "Statistics"
 msgstr "Στατιστικά"
 
+msgid "Suppressed"
+msgstr "Αποκλείστηκε"
+
 msgid "Surcharges"
 msgstr "Προσαυξήσεις"
 
@@ -2174,6 +2189,9 @@ msgstr "Τύποι Quest"
 msgid "Quick Setup"
 msgstr "Γρήγορη ρύθμιση"
 
+msgid "Raw Payload"
+msgstr "Ακατέργαστο φορτίο"
+
 msgid "Redeem link"
 msgstr "Σύνδεσμος εξαργύρωσης"
 
@@ -2275,6 +2293,9 @@ msgstr "Διαθεσιμότητα"
 
 msgid "Bank address"
 msgstr "Διεύθυνση τράπεζας"
+
+msgid "Bounce Count"
+msgstr "Αριθμός αποτυχιών παράδοσης"
 
 msgid "Cache reset!"
 msgstr "Η cache επαναφέρθηκε!"
@@ -2473,6 +2494,9 @@ msgstr "Μεταφράσεις"
 
 msgid "Type of text"
 msgstr "Τύπος κειμένου"
+
+msgid "Unsubscribed"
+msgstr "Έγινε διαγραφή"
 
 msgid "VAT (Ticket)"
 msgstr "ΦΠΑ (Εισιτήριο)"
@@ -3164,6 +3188,9 @@ msgstr "Συνολικό υπόλοιπο:"
 msgid "Highlight color"
 msgstr "Χρώμα επισήμανσης"
 
+msgid "Invalid address"
+msgstr "Μη έγκυρη διεύθυνση"
+
 msgid "Invalid request"
 msgstr "Μη έγκυρο αίτημα"
 
@@ -3416,6 +3443,9 @@ msgstr "Εξωτερικός ιστότοπος"
 msgid "Field visibility"
 msgstr "Ορατότητα πεδίων"
 
+msgid "Forbidden domain"
+msgstr "Απαγορευμένος τομέας"
+
 msgid "Handout template"
 msgstr "Πρότυπο Handout"
 
@@ -3484,6 +3514,9 @@ msgstr "Εκκρεμείς προσκλήσεις:"
 
 msgid "Pending payments"
 msgstr "Εκκρεμείς πληρωμές"
+
+msgid "Permanent bounce"
+msgstr "Μόνιμη αποτυχία παράδοσης"
 
 msgid "Player selection"
 msgstr "Επιλογή παίκτη"
@@ -3559,6 +3592,9 @@ msgstr "Χρεώσεις συναλλαγών"
 
 msgid "Transfer preview"
 msgstr "Προεπισκόπηση μεταφοράς"
+
+msgid "Transient bounce"
+msgstr "Προσωρινή αποτυχία παράδοσης"
 
 msgid "Workshop Modules"
 msgstr "Ενότητες Workshop"
@@ -5203,6 +5239,9 @@ msgstr "Το μέλος προήχθη σε διαχειριστή!"
 msgid "New message from %(user)s"
 msgstr "Νέο μήνυμα από %(user)s"
 
+msgid "No address was suppressed"
+msgstr "Δεν αποκλείστηκε καμία διεύθυνση"
+
 msgid "Option saved successfully"
 msgstr "Η επιλογή αποθηκεύτηκε με επιτυχία"
 
@@ -5451,8 +5490,14 @@ msgstr "Συνδρομές υπό έγκριση"
 msgid "Missing casting preferences"
 msgstr "Λείπουν οι προτιμήσεις Casting"
 
+msgid "No address was unsubscribed"
+msgstr "Δεν έγινε διαγραφή καμίας διεύθυνσης"
+
 msgid "No inventory transfers yet."
 msgstr "Δεν υπάρχουν ακόμη μεταφορές αποθέματος."
+
+msgid "Opted out of communications"
+msgstr "Έχει επιλέξει να μη λαμβάνει επικοινωνίες"
 
 msgid "Pre-registration confirmed!"
 msgstr "Η προεγγραφή επιβεβαιώθηκε!"
@@ -7026,6 +7071,9 @@ msgstr "Υπενθύμιση ολοκλήρωσης προφίλ για %(event)
 msgid "Seconds to wait between each email batch."
 msgstr "Δευτερόλεπτα αναμονής ανάμεσα σε κάθε παρτίδα email."
 
+msgid "Secret guild: visible only to its members"
+msgstr "Μυστική συντεχνία: ορατή μόνο στα μέλη της"
+
 msgid "Send a bulk email to event's participants"
 msgstr "Στείλε μαζικό email στους συμμετέχοντες του event"
 
@@ -7393,6 +7441,9 @@ msgstr "Πρέπει να εγγραφείς για να επιλέξεις τι
 
 msgid "You will no longer receive messages from us."
 msgstr "Δεν θα λαμβάνεις πλέον μηνύματα από εμάς."
+
+msgid "Address blocked after a bounce or a complaint"
+msgstr "Η διεύθυνση αποκλείστηκε μετά από αποτυχία παράδοσης ή καταγγελία"
 
 msgid "Amount must be non-zero for division criteria"
 msgstr "Το ποσό πρέπει να είναι μη μηδενικό για κριτήρια διαίρεσης"
@@ -11245,6 +11296,13 @@ msgstr ""
 "δεν αποστέλλονται email)."
 
 msgid ""
+"These addresses opted out of bulk communications, and were not added to the "
+"queue:"
+msgstr ""
+"Οι παρακάτω διευθύνσεις επέλεξαν να μη λαμβάνουν μαζικές επικοινωνίες και "
+"δεν προστέθηκαν στην ουρά:"
+
+msgid ""
 "This unsubscribe link is no longer valid. Please use the link from a recent "
 "email."
 msgstr ""
@@ -12159,6 +12217,13 @@ msgstr ""
 "όλους τους άλλους συμμετέχοντες"
 
 msgid ""
+"If checked, the guild is not shown in the guild list or the gallery: only "
+"its members see it"
+msgstr ""
+"Αν επιλεγεί, η συντεχνία δεν εμφανίζεται στη λίστα συντεχνιών ούτε στη "
+"συλλογή: τη βλέπουν μόνο τα μέλη της"
+
+msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
@@ -12299,6 +12364,13 @@ msgid ""
 msgstr ""
 "Έλεγξε τα προεγγεγραμμένα μέλη και παρακολούθησε ποια δεν έχουν ολοκληρώσει "
 "ακόμη πλήρη εγγραφή"
+
+msgid ""
+"These addresses bounced or reported a complaint in the past, and were not "
+"added to the queue:"
+msgstr ""
+"Οι παρακάτω διευθύνσεις είχαν αποτυχία παράδοσης ή υπέβαλαν καταγγελία στο "
+"παρελθόν και δεν προστέθηκαν στην ουρά:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "

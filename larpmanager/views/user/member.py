@@ -42,10 +42,19 @@ from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import URLValidator
-from django.http import Http404, HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import (
+    Http404,
+    HttpRequest,
+    HttpResponse,
+    HttpResponseBadRequest,
+    HttpResponseRedirect,
+    JsonResponse,
+)
 from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import activate, get_language, gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django_otp import login as otp_login, match_token
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from PIL import Image, UnidentifiedImageError
@@ -96,6 +105,9 @@ from larpmanager.utils.users.member import get_leaderboard, get_member_uuid
 from larpmanager.views.user.event import build_registration_list, get_member_registrations
 
 logger = logging.getLogger(__name__)
+
+# Lifetime of the signed unsubscribe token published in the List-Unsubscribe header
+UNSUBSCRIBE_TOKEN_MAX_AGE = 86400 * 100
 
 
 def language(request: HttpRequest) -> HttpResponse:
@@ -870,26 +882,61 @@ def _unsubscribe_global(request: HttpRequest, email: str) -> dict:
     return {"done": True, "is_org": False}
 
 
+def _unsubscribe_token(token: str) -> tuple[str, Association | None] | None:
+    """Resolve a signed unsubscribe token into an email and its association, or None."""
+    try:
+        token = bytes.fromhex(token).decode()
+        # Mailbox providers require the List-Unsubscribe url to keep working on old messages
+        data = signing.loads(token, salt="unsubscribe", max_age=UNSUBSCRIBE_TOKEN_MAX_AGE)
+    except (ValueError, signing.BadSignature):
+        return None
+
+    email = data.get("email", "")
+    association_slug = data.get("association_slug")
+    if not association_slug:
+        return email, None
+
+    try:
+        return email, Association.objects.get(slug=association_slug)
+    except Association.DoesNotExist:
+        return None
+
+
+@csrf_exempt
+@require_POST
+def unsubscribe_one_click(request: HttpRequest, token: str = "") -> HttpResponse:
+    """Handle the RFC 8058 one-click post sent by mail clients.
+
+    This endpoint exists only for the List-Unsubscribe-Post header, which
+    carries no CSRF token, so it is kept apart from the confirmation form:
+    the ordinary unsubscribe page keeps its CSRF protection.
+    """
+    # The signed token is the real authorisation: clients that post an empty or a
+    # differently cased body still get unsubscribed, since a refusal would be reported
+    # to the mailbox provider as a failed unsubscribe and hurt the sender reputation
+    body_value = request.POST.get("List-Unsubscribe", "")
+    if body_value and body_value.strip().lower() != "one-click":
+        return HttpResponseBadRequest()
+
+    resolved = _unsubscribe_token(token)
+    if not resolved:
+        return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
+
+    email, association = resolved
+    ctx = _unsubscribe_org(request, email, association) if association else _unsubscribe_global(request, email)
+    return render(request, "larpmanager/general/unsubscribe.html", ctx)
+
+
 def unsubscribe(request: HttpRequest, token: str = "") -> HttpResponse:
     """Unsubscribe user from newsletter communications via signed token link."""
     if not token:
         return redirect("home")
 
-    try:
-        token = bytes.fromhex(token).decode()
-        data = signing.loads(token, salt="unsubscribe", max_age=86400 * 30)
-    except signing.BadSignature:
+    resolved = _unsubscribe_token(token)
+    if not resolved:
         return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
 
-    email = data.get("email", "")
-    association_slug = data.get("association_slug")
-
-    association = None
-    if association_slug:
-        try:
-            association = Association.objects.get(slug=association_slug)
-        except Association.DoesNotExist:
-            return render(request, "larpmanager/general/unsubscribe.html", {"error": True})
+    email, association = resolved
 
     if request.method == "POST" and request.POST.get("confirm"):
         ctx = _unsubscribe_org(request, email, association) if association else _unsubscribe_global(request, email)

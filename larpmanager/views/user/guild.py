@@ -21,6 +21,7 @@ from __future__ import annotations
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -129,6 +130,17 @@ def _check_admin(context: dict, guild: Guild) -> None:
         raise Http404(msg)
 
 
+def _get_my_guild_ids(context: dict, my_character_ids: list[int] | None = None) -> set[int]:
+    """Return the ids of the guilds the current player has a membership on, whatever its status."""
+    if my_character_ids is None:
+        my_character_ids = _get_my_character_ids(context)
+    if not my_character_ids:
+        return set()
+    return set(
+        GuildMembership.objects.filter(character_id__in=my_character_ids).values_list("guild_id", flat=True),
+    )
+
+
 def _guild_max_number(context: dict) -> int:
     return get_event_config(context["event"].id, "guild_max_number", context=context)
 
@@ -142,9 +154,9 @@ def guilds(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Render the guild list page for an event run."""
     context = get_event_context(request, event_slug, feature_slug="guild", include_status=True)
 
-    guild_list = list(
-        Guild.objects.filter(event=context["event"]).prefetch_related("memberships__character").order_by("number"),
-    )
+    my_guild_ids = _get_my_guild_ids(context)
+    guild_queryset = Guild.objects.filter(event=context["event"]).filter(Q(secret=False) | Q(id__in=my_guild_ids))
+    guild_list = list(guild_queryset.prefetch_related("memberships__character").order_by("number"))
     for guild_obj in guild_list:
         guild_obj.accepted_members = [
             m.character for m in guild_obj.memberships.all() if m.status == GuildMembershipStatus.ACCEPTED
@@ -152,8 +164,9 @@ def guilds(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["list"] = guild_list
 
     max_number = _guild_max_number(context)
+    total_number = Guild.objects.filter(event=context["event"]).count()
     context["can_create_guild"] = bool(get_player_characters(context["member"], context["event"]).exists()) and (
-        max_number <= 0 or len(guild_list) < max_number
+        max_number <= 0 or total_number < max_number
     )
 
     return render(request, "larpmanager/event/guilds.html", context)
@@ -165,6 +178,10 @@ def guild(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRespons
     context = get_event_context(request, event_slug, feature_slug="guild", include_status=True)
 
     guild_obj = get_object_or_404(Guild, event=context["event"], uuid=guild_uuid)
+    my_character_ids = _get_my_character_ids(context)
+    if guild_obj.secret and guild_obj.id not in _get_my_guild_ids(context, my_character_ids):
+        msg = "Guild not found"
+        raise Http404(msg)
     context["guild"] = guild_obj
 
     get_event_cache_all(context)
@@ -177,7 +194,6 @@ def guild(request: HttpRequest, event_slug: str, guild_uuid: str) -> HttpRespons
     for membership in context["memberships"]:
         membership.char = context["chars"].get(membership.character.number, {})
 
-    my_character_ids = _get_my_character_ids(context)
     context["my_membership"] = _get_my_membership(context, guild_obj, my_character_ids)
     context["my_admin_membership"] = _get_my_admin_membership(context, guild_obj, my_character_ids)
 

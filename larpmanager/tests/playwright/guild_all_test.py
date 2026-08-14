@@ -138,6 +138,8 @@ def test_guild_all(pw_page: Any) -> None:
     recruit_row = page.locator("#guild-members tr").filter(has_text="Guild Recruit")
     expect(recruit_row).to_contain_text("Member")
 
+    check_secret(page, live_server)
+
     check_roles_and_leave(page, live_server)
 
     logout(page)
@@ -146,6 +148,37 @@ def test_guild_all(pw_page: Any) -> None:
     check_campaign_child(page, live_server)
 
     logout(page)
+
+
+def check_secret(page: Any, live_server: Any) -> None:
+    """Verify a secret guild is listed only to its members, and unreachable to everybody else."""
+    # ========== SECTION 9b: Mark the guild as secret ==========
+    go_to(page, live_server, "/test/guilds/u1")
+    page.get_by_role("link", name="Edit guild").click()
+    page.locator("#id_secret").check()
+    page.locator("#form_submit").click()
+
+    # Members keep seeing it in the list
+    go_to(page, live_server, "/test/guilds/")
+    expect(page.locator("#one")).to_contain_text("The Silver Hand")
+
+    # Non members do not see it in the list, and cannot open it
+    logout(page)
+    login_orga(page, live_server)
+    go_to(page, live_server, "/test/guilds/")
+    expect(page.locator("#one")).not_to_contain_text("The Silver Hand")
+    page.goto(f"{live_server}/test/guilds/u1/")
+    page.wait_for_load_state("domcontentloaded")
+    expect(page.locator("body")).to_contain_text("we couldn't find the page")
+
+    # ========== SECTION 9c: Back to a public guild ==========
+    logout(page)
+    login_user(page, live_server)
+    go_to(page, live_server, "/test/guilds/u1/edit/")
+    page.locator("#id_secret").uncheck()
+    page.locator("#form_submit").click()
+
+    go_to(page, live_server, "/test/guilds/u1")
 
 
 def check_roles_and_leave(page: Any, live_server: Any) -> None:

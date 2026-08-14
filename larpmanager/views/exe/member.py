@@ -75,6 +75,7 @@ from larpmanager.utils.core.common import (
     _get_help_questions,
     ensure_timezone_aware,
     format_email_body,
+    format_email_skipped,
     get_assoc_member,
     get_help_question_member,
     get_object_uuid,
@@ -996,7 +997,9 @@ def exe_send_mail(request: HttpRequest) -> HttpResponse:
         form = SendMailForm(request.POST)
         if form.is_valid():
             # Queue mail for batch processing
-            context["added"], context["ignored"] = send_mail_batch(request, association_id=context["association_id"])
+            context["added"], context["ignored"], context["unsubscribed"], context["suppressed"] = send_mail_batch(
+                request, association_id=context["association_id"]
+            )
             return render(request, "larpmanager/exe/users/send_mail_result.html", context)
     else:
         # Display empty form for GET requests
@@ -1035,12 +1038,14 @@ def exe_archive_email(request: HttpRequest) -> HttpResponse:
                 ("subj", _("Subject")),
                 ("body", _("Body")),
                 ("sent", _("Sent")),
+                ("skipped", _("Skipped")),
             ],
             # Define formatting callbacks for each field
             "callbacks": {
                 "body": format_email_body,
                 "sent": lambda el: el.sent.strftime("%d/%m/%Y %H:%M") if el.sent else "",
                 "run": lambda el: str(el.run) if el.run else "",
+                "skipped": format_email_skipped,
             },
         },
     )

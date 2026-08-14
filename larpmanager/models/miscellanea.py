@@ -805,6 +805,9 @@ class EmailContent(UuidMixin, BaseModel):
 
     search = models.CharField(max_length=500, blank=True, verbose_name=_("Search"))
 
+    # Only bulk communications may carry the RFC 8058 one-click unsubscribe marker
+    bulk = models.BooleanField(default=False, verbose_name=_("Bulk"))
+
     class Meta:
         indexes: ClassVar[list] = [
             models.Index(fields=["association"], condition=Q(deleted__isnull=True), name="emailcontent_assoc_act"),
@@ -839,6 +842,8 @@ class EmailRecipient(UuidMixin, BaseModel):
     sent = models.DateTimeField(blank=True, null=True, verbose_name=_("Time And Date Of Sending"))
 
     language_code = models.CharField(max_length=10, blank=True, null=True, verbose_name=_("Language Code"))
+
+    skipped = models.CharField(max_length=50, blank=True, null=True, verbose_name=_("Skipped"))
 
     class Meta:
         indexes: ClassVar[list] = [
@@ -889,6 +894,46 @@ class EmailRecipient(UuidMixin, BaseModel):
 
 # Backward compatibility alias - will be removed after migration is complete
 Email = EmailContent
+
+
+class SuppressionReason(models.TextChoices):
+    """Reasons an email address is blocked from receiving messages."""
+
+    BOUNCE_PERMANENT = "b", _("Permanent bounce")
+    BOUNCE_TRANSIENT = "t", _("Transient bounce")
+    COMPLAINT = "c", _("Complaint")
+    MANUAL = "m", _("Manual")
+
+
+class EmailSuppression(BaseModel):
+    """Address blocked from every delivery, globally across associations.
+
+    Permanent bounces and complaints block immediately; transient bounces only
+    block after repeated failures.
+    """
+
+    email = models.EmailField(unique=True, verbose_name=_("Email"))
+
+    reason = models.CharField(max_length=1, choices=SuppressionReason.choices, verbose_name=_("Reason"))
+
+    bounce_count = models.PositiveIntegerField(default=1, verbose_name=_("Bounce Count"))
+
+    active = models.BooleanField(default=True, verbose_name=_("Active"))
+
+    last_event = models.DateTimeField(auto_now=True, verbose_name=_("Last Event"))
+
+    raw = models.JSONField(blank=True, null=True, verbose_name=_("Raw Payload"))
+
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Store the address normalised, so lookups can use the unique index."""
+        self.email = (self.email or "").strip().lower()
+        if kwargs.get("update_fields") is not None:
+            kwargs["update_fields"] = {*kwargs["update_fields"], "email"}
+        super().save(*args, **kwargs)
+
+    def __str__(self) -> str:
+        """Return string representation."""
+        return f"{self.email} ({self.get_reason_display()})"
 
 
 class OneTimeContent(UuidMixin, BaseModel):

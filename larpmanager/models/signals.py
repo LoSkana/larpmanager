@@ -24,7 +24,7 @@ from typing import Any
 
 from axes.signals import user_locked_out
 from django.contrib.auth.models import User
-from django.db.models.signals import m2m_changed, post_save, pre_save
+from django.db.models.signals import m2m_changed, post_delete, post_save, pre_save
 from django.dispatch import receiver
 from paypal.standard.ipn.signals import invalid_ipn_received, valid_ipn_received
 from safedelete.signals import post_softdelete, pre_softdelete
@@ -192,6 +192,7 @@ from larpmanager.mail.registration import (
     send_registration_deletion_email,
     send_registration_request_rejected_email,
 )
+from larpmanager.mail.suppression import reset_suppression_cache
 from larpmanager.models.access import AssociationPermission, AssociationRole, EventPermission, EventRole
 from larpmanager.models.accounting import (
     AccountingItem,
@@ -269,6 +270,7 @@ from larpmanager.models.larpmanager import (
 from larpmanager.models.member import Badge, Member, MemberConfig, Membership
 from larpmanager.models.miscellanea import (
     ChatMessage,
+    EmailSuppression,
     HelpQuestion,
     Log,
     PlayerRelationship,
@@ -863,6 +865,22 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     # Schedule event publication (skip if being soft-deleted)
     if instance.deleted is None:
         publish_event(instance.id)
+
+
+@receiver(post_save, sender=EmailSuppression)
+def post_save_email_suppression(sender: type, instance: EmailSuppression, **kwargs: Any) -> None:
+    """Drop the cached suppression flag when a row is edited, added or soft deleted.
+
+    A soft delete goes through save(), so this also covers the deletion done
+    from the admin; a hard delete is caught by the post_delete receiver.
+    """
+    reset_suppression_cache(instance.email)
+
+
+@receiver(post_delete, sender=EmailSuppression)
+def post_delete_email_suppression(sender: type, instance: EmailSuppression, **kwargs: Any) -> None:
+    """Drop the cached suppression flag when a row is deleted for good."""
+    reset_suppression_cache(instance.email)
 
 
 @receiver(post_save, sender=SystemExp)
