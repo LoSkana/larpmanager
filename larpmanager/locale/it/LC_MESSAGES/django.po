@@ -9165,6 +9165,9 @@ msgstr ""
 "Per confermare la tua prenotazione, ti preghiamo di versare %(amount)s il "
 "prima possibile."
 
+msgid "Too many demos created, please wait a little before trying again"
+msgstr "Troppe demo create, aspetta un po' prima di riprovare"
+
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
 "File video o audio da trasmettere in streaming (consigliato: MP4, WebM, MP3)"
@@ -10586,6 +10589,13 @@ msgid ""
 msgstr ""
 "Non ci sono ancora contenitori di magazzino definiti. Usa il pulsante qui "
 "sopra per aggiungere un contenitore."
+
+msgid ""
+"Preparing your demo, this takes a few seconds - please do not close this "
+"page"
+msgstr ""
+"Preparazione della tua demo, ci vogliono alcuni secondi - non chiudere "
+"questa pagina"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "

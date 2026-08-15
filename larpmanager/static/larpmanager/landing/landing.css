@@ -2013,6 +2013,28 @@ body.landing .get-started-card:hover {
   transform: translateY(-2px);
 }
 
+body.landing .get-started-card:disabled {
+  cursor: wait;
+  opacity: 0.5;
+  transform: none;
+}
+
+body.landing .get-started-card:disabled:hover {
+  background: var(--teal-bright);
+  transform: none;
+}
+
+body.landing .get-started-card-pending:disabled {
+  opacity: 1;
+  box-shadow: 0 0 0 3px var(--teal-bright);
+}
+
+body.landing .get-started-building {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
 body.landing .get-started-card i {
   font-size: 2rem;
 }

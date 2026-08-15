@@ -9091,6 +9091,9 @@ msgstr "Jotta voit maksaa, jäsenhakemuksesi on hyväksyttävä."
 msgid "To confirm your spot, please pay %(amount)s as soon as possible."
 msgstr "Vahvistaaksesi paikkasi, maksa %(amount)s mahdollisimman pian."
 
+msgid "Too many demos created, please wait a little before trying again"
+msgstr "Liian monta demoa luotu, odota hetki ennen kuin yrität uudelleen"
+
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
 "Suoratoistettava video- tai äänitiedosto (suositellaan: MP4, WebM, MP3)"
@@ -10406,6 +10409,12 @@ msgid ""
 msgstr ""
 "Varastokontteja ei ole vielä määritelty. Lisää kontti yllä olevan painikkeen"
 " avulla."
+
+msgid ""
+"Preparing your demo, this takes a few seconds - please do not close this "
+"page"
+msgstr ""
+"Valmistellaan demoasi, tämä kestää muutaman sekunnin - älä sulje tätä sivua"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "

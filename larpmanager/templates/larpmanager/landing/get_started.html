@@ -25,9 +25,11 @@
                 <p class="get-started-chaos">
                     {% trans "Explore our interactive demos to see specific features in action. Get your hands dirty and break things! No signup required." %}
                 </p>
-                <div class="get-started-grid">
+                <div class="get-started-grid" id="get-started-grid">
                     {% for demo_type in demo_types %}
-                        <form action="{% url 'get_started' %}" method="post">
+                        <form action="{% url 'get_started' %}"
+                              method="post"
+                              class="get-started-demo-form">
                             {% csrf_token %}
                             <input type="hidden" name="demo_uuid" value="{{ demo_type.uuid }}">
                             <button type="submit"
@@ -40,6 +42,10 @@
                         </form>
                     {% endfor %}
                 </div>
+                <p id="get-started-building" class="get-started-building hide">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    {% trans "Preparing your demo, this takes a few seconds - please do not close this page" %}
+                </p>
             </div>
             <div class="get-started-divider">
                 <a href="#get-started-real"

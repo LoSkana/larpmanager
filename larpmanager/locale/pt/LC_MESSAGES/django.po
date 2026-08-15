@@ -9085,6 +9085,10 @@ msgstr "Para poderes pagar, o teu pedido de adesão tem de ser aprovado."
 msgid "To confirm your spot, please pay %(amount)s as soon as possible."
 msgstr "Para confirmar o teu lugar, paga %(amount)s assim que possível."
 
+msgid "Too many demos created, please wait a little before trying again"
+msgstr ""
+"Foram criadas demasiadas demos, espera um pouco antes de tentares novamente"
+
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr ""
 "Ficheiro de vídeo ou áudio para transmissão (recomendado: MP4, WebM, MP3)"
@@ -10464,6 +10468,12 @@ msgid ""
 msgstr ""
 "Ainda não há contentores de armazém definidos. Usa o botão acima para "
 "adicionar um contentor."
+
+msgid ""
+"Preparing your demo, this takes a few seconds - please do not close this "
+"page"
+msgstr ""
+"A preparar a tua demo, isto demora alguns segundos — não feches esta página"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "
