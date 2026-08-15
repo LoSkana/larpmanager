@@ -42,10 +42,14 @@
                         </form>
                     {% endfor %}
                 </div>
-                <p id="get-started-building" class="get-started-building hide">
-                    <i class="fa-solid fa-spinner fa-spin"></i>
-                    {% trans "Preparing your demo, this takes a few seconds - please do not close this page" %}
-                </p>
+                <div id="get-started-building" class="get-started-building hide">
+                    <div class="get-started-building-inner">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <p class="get-started-building-text">
+                            {% trans "Preparing your demo, this takes a few seconds - please do not close this page" %}
+                        </p>
+                    </div>
+                </div>
             </div>
             <div class="get-started-divider">
                 <a href="#get-started-real"

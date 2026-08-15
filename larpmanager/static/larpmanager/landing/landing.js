@@ -127,6 +127,7 @@ window.addEventListener('DOMContentLoaded', function () {
         if (demoBuilding) {
             demoBuilding.classList.toggle('hide', !loading);
         }
+        document.body.classList.toggle('get-started-locked', loading);
     };
 
     demoForms.forEach(function (form) {
