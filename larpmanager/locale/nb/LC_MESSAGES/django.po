@@ -7276,6 +7276,9 @@ msgstr "Det er mottatt en registreringsforespørsel for %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Velg en badge ovenfor for å administrere medlemmene i den."
 
+msgid "Skip the demo, create your own organization"
+msgstr "Hopp over demoen, opprett din egen organisasjon"
+
 msgid "Tax identification code of the association."
 msgstr "Foreningens skatteidentifikasjonskode."
 
@@ -7756,9 +7759,6 @@ msgstr "Påmeldingen til dette arrangementet har ikke åpnet ennå"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Valgte elementer vises for deltakerne."
-
-msgid "Skip the demo, start your adventure from scratch"
-msgstr "Hopp over demoen, og start eventyret ditt helt fra begynnelsen"
 
 msgid "The sessions for which the discount is available"
 msgstr "Sesjonene rabatten er tilgjengelig for"

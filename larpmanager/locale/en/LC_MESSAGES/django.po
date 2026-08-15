@@ -7703,7 +7703,7 @@ msgid ""
 "Preparing your demo, this takes a few seconds - please do not close this page"
 msgstr ""
 
-msgid "Skip the demo, start your adventure from scratch"
+msgid "Skip the demo, create your own organization"
 msgstr ""
 
 msgid "Create your organization"

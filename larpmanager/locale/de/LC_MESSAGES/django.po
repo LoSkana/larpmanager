@@ -7277,6 +7277,9 @@ msgstr "Anmeldeanfrage für %(event)s eingegangen"
 msgid "Select a badge above to manage its members."
 msgstr "Wähle oben ein Badge aus, um dessen Mitglieder zu verwalten."
 
+msgid "Skip the demo, create your own organization"
+msgstr "Demo überspringen, erstelle deine eigene Organisation"
+
 msgid "Tax identification code of the association."
 msgstr "Steueridentifikationsnummer des Vereins."
 
@@ -7761,9 +7764,6 @@ msgstr "Die Anmeldung für diese Veranstaltung ist noch nicht möglich"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Ausgewählte Elemente werden den Teilnehmenden angezeigt."
-
-msgid "Skip the demo, start your adventure from scratch"
-msgstr "Lass die Demo aus und fang dein Abenteuer ganz von vorne an"
 
 msgid "The sessions for which the discount is available"
 msgstr "Die Sessions, für die der Rabatt verfügbar ist"

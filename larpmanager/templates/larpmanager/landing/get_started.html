@@ -51,7 +51,7 @@
                 <a href="#get-started-real"
                    class="get-started-skip"
                    onclick="document.getElementById('get-started-real').classList.remove('hide');">
-                    {% trans "Skip the demo, start your adventure from scratch" %} <i class="fa-solid fa-arrow-down"></i>
+                    {% trans "Skip the demo, create your own organization" %} <i class="fa-solid fa-arrow-down"></i>
                 </a>
             </div>
         {% endif %}
@@ -82,6 +82,8 @@
         </div>
     </div>
 {% endblock landing_content %}
+{% block landing_final %}
+{% endblock landing_final %}
 {% block js2 %}
     <script> window.base_domain = ".{{ association.base_domain }}"; </script>
 {% endblock js2 %}

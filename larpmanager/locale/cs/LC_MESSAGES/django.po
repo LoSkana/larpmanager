@@ -7276,6 +7276,9 @@ msgstr "Byla přijata žádost o registraci na %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Vyber badge výše a spravuj jeho členy."
 
+msgid "Skip the demo, create your own organization"
+msgstr "Přeskočit ukázku a vytvořit vlastní organizaci"
+
 msgid "Tax identification code of the association."
 msgstr "Daňové identifikační číslo spolku."
 
@@ -7756,9 +7759,6 @@ msgstr "Registrace na tuto akci ještě nebyla zahájena"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Vybrané prvky se zobrazí účastníkům."
-
-msgid "Skip the demo, start your adventure from scratch"
-msgstr "Přeskoč demo a začni své dobrodružství úplně od začátku"
 
 msgid "The sessions for which the discount is available"
 msgstr "Relace, pro které je sleva k dispozici"
