@@ -9228,6 +9228,10 @@ msgid "To confirm your spot, please pay %(amount)s as soon as possible."
 msgstr ""
 "Για να επιβεβαιώσεις τη θέση σου, πλήρωσε %(amount)s το συντομότερο δυνατό."
 
+msgid "Too many demos created, please wait a little before trying again"
+msgstr ""
+"Έχουν δημιουργηθεί πάρα πολλά demo, περίμενε λίγο πριν προσπαθήσεις ξανά"
+
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Αρχείο βίντεο ή ήχου για ροή (προτείνεται: MP4, WebM, MP3)"
 
@@ -10666,6 +10670,13 @@ msgid ""
 msgstr ""
 "Δεν έχουν οριστεί ακόμη αποθηκευτικά δοχεία. Χρησιμοποίησε το παραπάνω "
 "κουμπί για να προσθέσεις ένα δοχείο."
+
+msgid ""
+"Preparing your demo, this takes a few seconds - please do not close this "
+"page"
+msgstr ""
+"Προετοιμάζουμε το demo σου, θα διαρκέσει λίγα δευτερόλεπτα - μην κλείσεις "
+"αυτή τη σελίδα"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "

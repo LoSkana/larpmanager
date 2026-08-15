@@ -9092,6 +9092,9 @@ msgid "To confirm your spot, please pay %(amount)s as soon as possible."
 msgstr ""
 "For å bekrefte din plass, ber vi deg betale %(amount)s så snart som mulig."
 
+msgid "Too many demos created, please wait a little before trying again"
+msgstr "For mange demoer opprettet. Vent litt før du prøver igjen"
+
 msgid "Video or audio file to be streamed (recommended: MP4, WebM, MP3)"
 msgstr "Video- eller lydfil som skal strømmes (anbefalt: MP4, WebM, MP3)"
 
@@ -10400,6 +10403,12 @@ msgid ""
 msgstr ""
 "Det er foreløpig ikke definert noen lagercontainere. Bruk knappen ovenfor "
 "for å legge til en container."
+
+msgid ""
+"Preparing your demo, this takes a few seconds - please do not close this "
+"page"
+msgstr ""
+"Forbereder demoen din. Dette tar noen sekunder – ikke lukk denne siden"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "

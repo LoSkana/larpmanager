@@ -111,6 +111,47 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Demo launch: cloning takes a few seconds, so lock the cards and show progress.
+    var demoForms = document.querySelectorAll('.get-started-demo-form');
+    var demoBuilding = document.getElementById('get-started-building');
+
+    var setDemoLoading = function (loading, activeForm) {
+        demoForms.forEach(function (form) {
+            var card = form.querySelector('.get-started-card');
+            if (!card) {
+                return;
+            }
+            card.disabled = loading;
+            card.classList.toggle('get-started-card-pending', loading && form === activeForm);
+        });
+        if (demoBuilding) {
+            demoBuilding.classList.toggle('hide', !loading);
+        }
+    };
+
+    demoForms.forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (form.dataset.submitted) {
+                event.preventDefault();
+                return;
+            }
+            form.dataset.submitted = '1';
+            setDemoLoading(true, form);
+        });
+    });
+
+    // Coming back with the browser back button may restore the frozen page from
+    // the bfcache: unlock the cards so the user can start another demo
+    window.addEventListener('pageshow', function (event) {
+        if (!event.persisted) {
+            return;
+        }
+        demoForms.forEach(function (form) {
+            delete form.dataset.submitted;
+        });
+        setDemoLoading(false, null);
+    });
+
     window._lmReady = true;
 
 });

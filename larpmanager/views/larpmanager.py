@@ -47,10 +47,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 from django.utils.translation import gettext_lazy as _, override
 from django.views.decorators.cache import cache_page
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django_ratelimit.core import is_ratelimited
 from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
@@ -114,6 +116,9 @@ MAX_SNS_PAYLOAD_SIZE = 256 * 1024
 
 # Suppressed addresses shown per page in the admin listing
 SUPPRESSIONS_PER_PAGE = 100
+
+# Window in which re-submitting the same demo type reuses the demo already created
+DEMO_SESSION_REUSE_SECONDS = 300
 
 
 def lm_home(request: HttpRequest) -> Any:
@@ -601,8 +606,65 @@ def discord(request: HttpRequest) -> Any:
     return render(request, "larpmanager/landing/discord.html", context)
 
 
-@ratelimit(key="ip", rate="5/m", method="POST", block=False, group="demo_clone_burst")
-@ratelimit(key="ip", rate="10/d", method="POST", block=False, group="demo_clone")
+def _demo_rate_limited(request: HttpRequest) -> bool:
+    """Check (and increment) the per-IP demo creation quotas.
+
+    Counted only for requests that actually reach demo creation.
+    """
+    burst = is_ratelimited(request=request, group="demo_clone_burst", key="ip", rate="5/m", increment=True)
+    daily = is_ratelimited(request=request, group="demo_clone", key="ip", rate="10/d", increment=True)
+    return burst or daily
+
+
+def _recent_session_demo(request: HttpRequest) -> tuple[str, str] | None:
+    """Return (slug, path) of the demo this session just created, if still valid.
+
+    Used to make repeated submits of the same demo type idempotent: a double
+    click, or a back button re-post, lands on the demo already created instead
+    of building a second one.
+    """
+    recent = request.session.get("demo_recent")
+    if not recent or recent.get("uuid") != request.POST.get("demo_uuid"):
+        return None
+
+    created = parse_datetime(recent.get("created", "") or "")
+    if not created or (timezone.now() - created).total_seconds() > DEMO_SESSION_REUSE_SECONDS:
+        return None
+
+    if not Association.objects.filter(slug=recent["slug"]).exists():
+        return None
+
+    return recent["slug"], recent["path"]
+
+
+def _launch_demo(request: HttpRequest) -> Any:
+    """Handle a demo launch post: reuse the session demo, or build a new one.
+
+    Args:
+        request: Django HTTP request object carrying the demo type uuid.
+
+    Returns:
+        HttpResponse: Redirect to the demo dashboard, or back to the funnel
+            when the per-IP quota is exhausted.
+
+    """
+    user_agent = request.META.get("HTTP_USER_AGENT", "")
+    if is_suspicious_user_agent(user_agent):
+        return HttpResponseForbidden("Bots not allowed.")
+
+    # A demo just created in this session is reused, instead of building another one
+    recent_demo = _recent_session_demo(request)
+    if recent_demo:
+        return redirect("after_login", subdomain=recent_demo[0], path=recent_demo[1])
+
+    if _demo_rate_limited(request):
+        messages.error(request, _("Too many demos created, please wait a little before trying again"))
+        return redirect("get_started")
+
+    demo_type = get_object_or_404(LarpManagerDemoType, uuid=request.POST["demo_uuid"], active=True)
+    return _create_demo(request, demo_type)
+
+
 def get_started(request: HttpRequest) -> Any:
     """Show the entry funnel: start a pre-populated demo or create a real association.
 
@@ -623,14 +685,7 @@ def get_started(request: HttpRequest) -> Any:
 
     # Primary path: launch a demo instance of the chosen type
     if request.method == "POST" and request.POST.get("demo_uuid"):
-        if getattr(request, "limited", False):
-            messages.error(request, "whoah, whoah, slow down buddy")
-            return redirect("get_started")
-        user_agent = request.META.get("HTTP_USER_AGENT", "")
-        if is_suspicious_user_agent(user_agent):
-            return HttpResponseForbidden("Bots not allowed.")
-        demo_type = get_object_or_404(LarpManagerDemoType, uuid=request.POST["demo_uuid"], active=True)
-        return _create_demo(request, demo_type)
+        return _launch_demo(request)
 
     # Secondary path: create a real empty association (requires login)
     if request.user.is_authenticated:
@@ -1484,6 +1539,16 @@ def _create_demo(request: HttpRequest, demo_type: LarpManagerDemoType | None = N
     # Non-campaign demo types land the user directly on their event's dashboard;
     # empty demos and campaign demo types (multiple events) land on the assoc dashboard
     redirect_path = f"{first_event.slug}/manage" if first_event else "manage"
+
+    # Remember the demo just built, so an immediate re-post reuses it
+    if demo_type:
+        request.session["demo_recent"] = {
+            "uuid": str(demo_type.uuid),
+            "slug": demo_association.slug,
+            "path": redirect_path,
+            "created": timezone.now().isoformat(),
+        }
+
     return redirect("after_login", subdomain=demo_association.slug, path=redirect_path)
 
 

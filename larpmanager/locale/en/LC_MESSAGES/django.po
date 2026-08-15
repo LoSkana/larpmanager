@@ -7699,6 +7699,10 @@ msgid ""
 "hands dirty and break things! No signup required."
 msgstr ""
 
+msgid ""
+"Preparing your demo, this takes a few seconds - please do not close this page"
+msgstr ""
+
 msgid "Skip the demo, start your adventure from scratch"
 msgstr ""
 
@@ -12332,6 +12336,9 @@ msgid "Please write a question"
 msgstr ""
 
 msgid "Your request has been sent, we will reply as soon as possible!"
+msgstr ""
+
+msgid "Too many demos created, please wait a little before trying again"
 msgstr ""
 
 #, python-format
