@@ -7277,6 +7277,9 @@ msgstr "Λήφθηκε αίτημα εγγραφής για %(event)s"
 msgid "Select a badge above to manage its members."
 msgstr "Επίλεξε ένα Badge παραπάνω για να διαχειριστείς τα μέλη του."
 
+msgid "Skip the demo, create your own organization"
+msgstr "Παράλειψε το demo, δημιούργησε τον δικό σου οργανισμό"
+
 msgid "Tax identification code of the association."
 msgstr "Αριθμός φορολογικού μητρώου του συλλόγου."
 
@@ -7763,9 +7766,6 @@ msgstr "Οι εγγραφές για αυτό το event δεν έχουν αν�
 
 msgid "Selected elements will be shown to participants."
 msgstr "Τα επιλεγμένα στοιχεία θα εμφανίζονται στους συμμετέχοντες."
-
-msgid "Skip the demo, start your adventure from scratch"
-msgstr "Παράλειψε το demo, ξεκίνα την περιπέτειά σου από το μηδέν"
 
 msgid "The sessions for which the discount is available"
 msgstr "Οι συνεδρίες για τις οποίες διατίθεται η έκπτωση"

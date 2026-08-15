@@ -1969,6 +1969,10 @@ body.landing #get-started-real h2 {
   margin-bottom: 0.5rem;
 }
 
+body.landing .get-started-demo p {
+  text-align: center;
+}
+
 body.landing .get-started-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

@@ -7275,6 +7275,9 @@ msgstr "Ilmoittautumispyyntö tapahtumaan %(event)s on vastaanotettu"
 msgid "Select a badge above to manage its members."
 msgstr "Valitse yllä oleva badge hallitaksesi sen jäseniä."
 
+msgid "Skip the demo, create your own organization"
+msgstr "Ohita demo ja luo oma organisaatiosi"
+
 msgid "Tax identification code of the association."
 msgstr "Yhdistyksen verotunniste."
 
@@ -7756,9 +7759,6 @@ msgstr "Ilmoittautuminen tähän tapahtumaan ei ole vielä alkanut"
 
 msgid "Selected elements will be shown to participants."
 msgstr "Valitut elementit näytetään osallistujille."
-
-msgid "Skip the demo, start your adventure from scratch"
-msgstr "Ohita esittely ja aloita seikkailusi alusta"
 
 msgid "The sessions for which the discount is available"
 msgstr "Sessiot, joihin alennus on saatavilla"
