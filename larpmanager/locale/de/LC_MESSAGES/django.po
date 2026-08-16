@@ -2066,6 +2066,9 @@ msgstr "Verbindungen"
 msgid "Cover image"
 msgstr "Titelbild"
 
+msgid "Custom IBAN"
+msgstr "Benutzerdefinierte IBAN"
+
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -14735,6 +14738,14 @@ msgstr ""
 "Wenn aktiviert, fügt das System die Gebühren des Zahlungsanbieters "
 "automatisch zum Ticketpreis hinzu, sodass der Teilnehmer sie statt der "
 "Organisation trägt."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Falls vorhanden, gibt die den Teilnehmenden für Überweisungen zu diesem "
+"Event angezeigte IBAN an, statt der in den Zahlungsdetails der Organisation "
+"hinterlegten."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

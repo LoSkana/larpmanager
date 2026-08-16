@@ -2066,6 +2066,9 @@ msgstr "Συνδέσεις"
 msgid "Cover image"
 msgstr "Εικόνα εξωφύλλου"
 
+msgid "Custom IBAN"
+msgstr "Προσαρμοσμένο IBAN"
+
 msgid "Description"
 msgstr "Περιγραφή"
 
@@ -14688,6 +14691,14 @@ msgstr ""
 "Αν ενεργοποιηθεί, το σύστημα θα προσθέτει αυτόματα τις προμήθειες της πύλης "
 "πληρωμών στην τιμή του εισιτηρίου, ώστε να τις καλύπτει ο συμμετέχων αντί "
 "για τον οργανισμό."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Αν υπάρχει, υποδεικνύει το IBAN που εμφανίζεται στους συμμετέχοντες για "
+"τραπεζικά εμβάσματα αυτής της εκδήλωσης, αντί για εκείνο που έχει οριστεί "
+"στα στοιχεία πληρωμής του οργανισμού."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
