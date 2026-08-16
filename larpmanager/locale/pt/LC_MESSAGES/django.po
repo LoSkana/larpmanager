@@ -978,7 +978,7 @@ msgstr "Sessão"
 
 msgctxt "event"
 msgid "Setting"
-msgstr "Cenário"
+msgstr "Definição"
 
 msgid "Shuttle"
 msgstr "Transporte"
@@ -2121,7 +2121,7 @@ msgid "Last change"
 msgstr "Última alteração"
 
 msgid "Last played"
-msgstr "Jogou por último"
+msgstr "Jogado pela última vez"
 
 msgid "Leave guild"
 msgstr "Sair da guilda"
@@ -6433,7 +6433,7 @@ msgid "Review historical financial records"
 msgstr "Consultar registos financeiros históricos"
 
 msgid "Set up the membership configuration"
-msgstr "Configura a adesão"
+msgstr "Configura as definições de adesão"
 
 msgid "The form is saved every 30 seconds."
 msgstr "O formulário é guardado a cada 30 segundos."
@@ -6558,7 +6558,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Não podes enviar mensagens a ti próprio!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Desbloqueaste um novo achievement!"
+msgstr "Desbloqueaste um novo Badge!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -8844,7 +8844,7 @@ msgstr "Já existe uma quota com %(quotas)d pagamentos para este evento"
 
 msgid "Added to the membership page as the paragraph for statute info"
 msgstr ""
-"Adicionado à página de adesão como parágrafo para informações sobre os "
+"Adicionado à página de membros como parágrafo para informações sobre os "
 "estatutos"
 
 msgid "Assign crew roles and grant specific access to event functions"
@@ -9007,7 +9007,7 @@ msgid "You can submit your payment <a href='%(url)s'>on this page</a>."
 msgstr "Podes efetuar o teu pagamento <a href='%(url)s'>nesta página</a>."
 
 msgid "You must create at least one quest before you can create traits"
-msgstr "Tens de criar pelo menos uma Quest antes de poderes criar Trait"
+msgstr "Tens de criar pelo menos uma Quest antes de poderes criar Traits"
 
 #, python-format
 msgid "Are you sure you want to unsubscribe <strong>%(email)s</strong>?"
@@ -11818,8 +11818,8 @@ msgid ""
 "Alternatively, you can request a payout on <a href='%(url)s'>your accounting"
 " page</a>.</i>"
 msgstr ""
-"Em alternativa, podes pedir um pagamento na <a href='%(url)s'>tua página de "
-"contabilidade</a>.</i>"
+"Em alternativa, podes pedir um levantamento na <a href='%(url)s'>tua página "
+"de contabilidade</a>.</i>"
 
 msgid ""
 "Assign this warehouse item to one or more areas of the event, setting a "
@@ -14400,7 +14400,7 @@ msgid ""
 "belongs to at least one inclusion category, it will be shown in the search."
 msgstr ""
 "Se o premires uma vez, será *incluído* na pesquisa. Se uma personagem "
-"pertencer a pelo menos uma categoria incluída, será mostrada na pesquisa."
+"pertencer a pelo menos uma categoria de inclusão, será mostrada na pesquisa."
 
 msgid ""
 "By pressing confirm, the collection total will be credited to your account, "
