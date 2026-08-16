@@ -614,7 +614,7 @@ msgid "Manage"
 msgstr "Zarządzaj"
 
 msgid "Manual"
-msgstr "Ręcznie"
+msgstr "Podręcznik"
 
 msgid "Master"
 msgstr "Mistrz"
@@ -2190,7 +2190,7 @@ msgid "Quick Setup"
 msgstr "Szybka konfiguracja"
 
 msgid "Raw Payload"
-msgstr "Surowy ładunek"
+msgstr "Surowy payload"
 
 msgid "Redeem link"
 msgstr "Link do realizacji"
@@ -3177,7 +3177,7 @@ msgid "External access"
 msgstr "Dostęp zewnętrzny"
 
 msgid "Filter selected"
-msgstr "Filtr wybrany"
+msgstr "Filtruj wybrane"
 
 msgid "First character"
 msgstr "Pierwsza postać"
@@ -4341,7 +4341,7 @@ msgid "Display sent e-mails"
 msgstr "Wyświetl wysłane e-maile"
 
 msgid "Enter a valid number"
-msgstr "Wprowadź prawidłowy numer"
+msgstr "Wprowadź prawidłową liczbę"
 
 msgid "Event added to ILDB:"
 msgstr "Wydarzenie dodane do ILDB:"
@@ -4350,7 +4350,7 @@ msgid "Event already played"
 msgstr "Wydarzenie już rozegrane"
 
 msgid "Event communications"
-msgstr "Komunikaty dotyczące wydarzeń"
+msgstr "Komunikaty dotyczące wydarzenia"
 
 msgid "Extended description"
 msgstr "Rozszerzony opis"
@@ -4470,7 +4470,7 @@ msgid "Remove from xp award"
 msgstr "Usuń z przydziału XP"
 
 msgid "Require registration"
-msgstr "Wymagać rejestracji"
+msgstr "Wymagaj rejestracji"
 
 msgid "Select the new event"
 msgstr "Wybierz nowe wydarzenie"
@@ -4513,7 +4513,7 @@ msgstr "Jesteś zalogowany jako"
 
 #, python-format
 msgid "%(elements)s received"
-msgstr "Otrzymano %(elements)s"
+msgstr "%(elements)s otrzymano"
 
 msgid "Accommodation details"
 msgstr "Szczegóły dotyczące zakwaterowania"
@@ -4652,7 +4652,7 @@ msgid "Registration sections"
 msgstr "Sekcje rejestracji"
 
 msgid "Reserve registrations"
-msgstr "Rejestracja rezerwowa"
+msgstr "Rejestracje rezerwowe"
 
 msgid "Show closed questions"
 msgstr "Pokaż zamknięte pytania"
@@ -4767,7 +4767,7 @@ msgid "Go to the casting for:"
 msgstr "Przejdź do castingu dla:"
 
 msgid "How can we contact you"
-msgstr "Jak możemy się z Tobą skontaktować"
+msgstr "Jak możemy się z tobą skontaktować"
 
 msgid "Invalid request method"
 msgstr "Nieprawidłowa metoda żądania"
@@ -5557,7 +5557,7 @@ msgid "Bring a friend to %(event)s!"
 msgstr "Przyprowadź znajomego na %(event)s!"
 
 msgid "Characters not participating"
-msgstr "Nieuczestniczący"
+msgstr "Nieuczestniczące postaci"
 
 msgid "Cover photo fo the character"
 msgstr "Zdjęcie okładkowe postaci"
@@ -6558,7 +6558,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Nie możesz wysyłać wiadomości do siebie!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Odblokowałeś nowe osiągnięcie!"
+msgstr "Odblokowałeś nowy Badge!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -6738,7 +6738,7 @@ msgstr "Przeglądasz organizację demonstracyjną."
 
 #, python-format
 msgid "You are exploring the \"%(name)s\" demo."
-msgstr "Przeglądasz wersję demonstracyjną „%(name)s.”"
+msgstr "Przeglądasz wersję demonstracyjną „%(name)s”."
 
 msgid "You can now start creating speed-larps"
 msgstr "Możesz teraz rozpocząć tworzenie speed-larpów"
@@ -6811,7 +6811,7 @@ msgid "Manage the types of character abilities"
 msgstr "Zarządzaj typami zdolności postaci"
 
 msgid "Manages and assigns tasks to characters"
-msgstr "Zarządza zadaniami postaci i przypisuje je"
+msgstr "Zarządza zadaniami i przypisuje je postaciom"
 
 msgid "Manages events or organization expenses"
 msgstr "Zarządza wydatkami wydarzeń lub organizacji"
@@ -7040,7 +7040,7 @@ msgid "If the character belongs to this element."
 msgstr "Jeśli postać należy do tego elementu."
 
 msgid "Latitude coordinate of the event location"
-msgstr "Współrzędna szerokości geograficznej miejsca zdarzenia"
+msgstr "Współrzędna szerokości geograficznej miejsca wydarzenia"
 
 msgid "Manage outgoing payments linked to events"
 msgstr "Zarządzaj płatnościami wychodzącymi powiązanymi z wydarzeniami"
@@ -8467,7 +8467,7 @@ msgid "The user has confirmed their registration for this event."
 msgstr "Użytkownik potwierdził swoją rejestrację na to wydarzenie."
 
 msgid "This will remove you from this organization's newsletter."
-msgstr "Spowoduje to usunięcie Cię z newslettera tej organizacji."
+msgstr "Spowoduje to usunięcie cię z newslettera tej organizacji."
 
 msgid "To stop receiving them, please cancel your registrations."
 msgstr "Aby przestać je otrzymywać, anuluj swoje rejestracje."
@@ -8670,7 +8670,7 @@ msgid "Attention: the form contains errors in the following fields:"
 msgstr "Uwaga: formularz zawiera błędy w następujących polach:"
 
 msgid "Configure ticket types, pricing, and tiers for participants."
-msgstr "Skonfiguruj rodzaje biletów, ceny i poziomy dostępu dla uczestników."
+msgstr "Skonfiguruj rodzaje biletów, ceny i progi cenowe dla uczestników."
 
 msgid "Content of mail reminding participants to fill their profile"
 msgstr "Treść wiadomości przypominającej uczestnikom o wypełnieniu profilu"
@@ -9056,7 +9056,8 @@ msgid "Enter whether the discount is visible and usable by participants"
 msgstr "Określ, czy zniżka jest widoczna i dostępna dla uczestników"
 
 msgid "If enabled, no tokens will be used in the entries of this event."
-msgstr "Jeśli włączone, tokeny nie będą używane we wpisach tego wydarzenia."
+msgstr ""
+"Jeśli włączone, tokeny nie będą używane przy rejestracjach na to wydarzenie."
 
 msgid "If selected, send organizers an email for each payment received."
 msgstr ""
@@ -9137,7 +9138,7 @@ msgstr "Możesz również przesłać drugi plik z opcjami rejestracji:"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
-"(Opcjonalnie) Czy ta funkcja jest widoczna dla użytkowników: true lub false"
+"(Opcjonalnie) Czy zdolność jest widoczna dla użytkowników: true lub false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -9273,7 +9274,7 @@ msgstr ""
 
 msgid "Manages credits used by participants to cover the registration fee"
 msgstr ""
-"Zarządza środkami wykorzystanymi przez uczestników do pokrycia opłaty "
+"Zarządza kredytami wykorzystanymi przez uczestników do pokrycia opłaty "
 "rejestracyjnej"
 
 #, python-format
@@ -9525,7 +9526,7 @@ msgid "Payment deadlines will be divided equally from the registration date."
 msgstr "Terminy płatności zostaną równo rozłożone od daty rejestracji."
 
 msgid "Present (in the relationships of this character is present the other)"
-msgstr "Obecna (w relacjach tej postaci jest obecna druga)"
+msgstr "Obecność (w relacjach tej postaci występuje druga postać)"
 
 msgid "Select the files to upload (must be in CSV format, encoded in UTF-8):"
 msgstr ""
@@ -12015,7 +12016,7 @@ msgid ""
 "If enabled, allows tracking plots or relationships that are less important "
 "to the character."
 msgstr ""
-"Jeśli włączone, umożliwia śledzenie Plotów lub relacji mniej istotnych dla "
+"Jeśli włączone, umożliwia śledzenie fabuł lub relacji mniej istotnych dla "
 "postaci."
 
 msgid ""
@@ -12050,7 +12051,7 @@ msgid ""
 "To upload roles of the characters in the plots, add a second file with the "
 "following columns"
 msgstr ""
-"Aby przesłać role postaci w Plotach, dodaj drugi plik z następującymi "
+"Aby przesłać role postaci w fabułach, dodaj drugi plik z następującymi "
 "kolumnami"
 
 #, python-format
@@ -12649,7 +12650,7 @@ msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long!"
 msgstr ""
-"Prosimy tylko o chwilę Twojego czasu na sprawdzenie przesłanych dokumentów —"
+"Prosimy tylko o chwilę twojego czasu na sprawdzenie przesłanych dokumentów —"
 " nie zajmie to długo!"
 
 msgid ""
@@ -13008,9 +13009,7 @@ msgid ""
 "collects funds on your behalf."
 msgstr ""
 "Aby zapewnić ci całkowitą kontrolę nad przychodami, ta platforma nigdy nie "
-"obsługuje ani nie pobiera środków w twoim imieniu.Aby zapewnić Ci całkowitą "
-"kontrolę nad przychodami, ta platforma nigdy nie obsługuje ani nie pobiera "
-"środków w Twoim imieniu."
+"obsługuje ani nie pobiera środków w twoim imieniu."
 
 msgid ""
 "Adds 'Patron' and 'Reduced' ticket types. Each Patron ticket purchased makes"
@@ -13117,8 +13116,8 @@ msgid ""
 "The question will be shown in the selected section (if left empty it will "
 "shown at the start of the form)"
 msgstr ""
-"Pytanie zostanie wyświetlone w wybranej sekcji (jeśli pozostanie puste, "
-"zostanie wyświetlone na początku formularza)"
+"Pytanie zostanie wyświetlone w wybranej sekcji (jeśli nie wybierzesz żadnej,"
+" zostanie wyświetlone na początku formularza)"
 
 msgid ""
 "Whether the character is a mirror (i.e., whether this pg shows the true "
@@ -13623,8 +13622,8 @@ msgid ""
 "Enables the 'cover' field to show a specific image in the gallery until the "
 "character is assigned to a participant."
 msgstr ""
-"Włącza pole „cover”, aby wyświetlać określony obraz w galerii, dopóki postać"
-" nie zostanie przypisana uczestnikowi."
+"Włącza pole „okładka”, aby wyświetlać określony obraz w galerii, dopóki "
+"postać nie zostanie przypisana uczestnikowi."
 
 msgid ""
 "Lets staff upload receipts for event expenses, tracking both the event "
@@ -13841,8 +13840,8 @@ msgid ""
 "Allows participants to submit shuttle requests (e.g., pickup logistics), and"
 " staff can manage the status of those requests"
 msgstr ""
-"Umożliwia uczestnikom przesyłanie wniosków o transport (np. logistyka "
-"odbioru), a personel może zarządzać statusem tych wniosków"
+"Umożliwia uczestnikom przesyłanie próśb o transport wahadłowy (np. "
+"dotyczących odbioru), a personel może zarządzać statusem tych próśb."
 
 msgid ""
 "Lets you specify a set of users who receive payment confirmation emails for "
@@ -14426,7 +14425,7 @@ msgid ""
 "characters."
 msgstr ""
 "Włącza postacie „rezerwowe”: prostsze karty postaci, przypisane uczestnikom "
-"gotowym zastąpić główne postacie w razie rezygnacji w ostatniej chwili."
+"gotowym zastąpić osoby rezygnujące w ostatniej chwili z głównych postaci."
 
 msgid ""
 "If enabled, show two separate tables on the characters page, one for "
