@@ -1088,6 +1088,14 @@ class OrgaConfigForm(ConfigForm):
             )
             self.add_configs("payment_custom_reason", ConfigType.CHAR, payment_reason_label, payment_reason_help_text)
 
+            # Custom IBAN used for wire transfers of this event, overriding the organisation one
+            custom_iban_label = _("Custom IBAN")
+            custom_iban_help_text = _(
+                "If present, indicates the IBAN shown to participants for wire transfers of this event, "
+                "instead of the one set in the organisation's payment details.",
+            )
+            self.add_configs("payment_custom_iban", ConfigType.CHAR, custom_iban_label, custom_iban_help_text)
+
             # Option to disable provisional registrations - auto-confirm all registrations
             disable_provisional_label = _("Disable provisional registrations")
             disable_provisional_help_text = _(

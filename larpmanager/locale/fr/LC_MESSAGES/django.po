@@ -2066,6 +2066,9 @@ msgstr "Connexions"
 msgid "Cover image"
 msgstr "Image de couverture"
 
+msgid "Custom IBAN"
+msgstr "IBAN personnalisé"
+
 msgid "Description"
 msgstr "Description"
 
@@ -14711,6 +14714,14 @@ msgstr ""
 "Si activé, le système ajoutera automatiquement les frais de la passerelle de"
 " paiement au prix du billet, afin que le participant les paie à la place de "
 "l'organisation."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"S'il est présent, indique l'IBAN affiché aux participants pour les virements"
+" de cet événement, au lieu de celui défini dans les informations de paiement"
+" de l'organisation."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

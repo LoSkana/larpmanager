@@ -2066,6 +2066,9 @@ msgstr "Připojení"
 msgid "Cover image"
 msgstr "Obrázek na obálce"
 
+msgid "Custom IBAN"
+msgstr "Vlastní IBAN"
+
 msgid "Description"
 msgstr "Popis"
 
@@ -14145,6 +14148,13 @@ msgid ""
 msgstr ""
 "Je-li povoleno, systém automaticky přidá poplatky platební brány k ceně "
 "vstupenky, takže je místo organizace uhradí účastník."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Pokud je uveden, označuje IBAN zobrazený účastníkům pro bankovní převody k "
+"této akci místo toho, který je nastavený v platebních údajích organizace."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

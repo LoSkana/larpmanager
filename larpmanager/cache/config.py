@@ -39,6 +39,7 @@ EVENT_CONFIGS_OWN_CHILD: frozenset[str] = frozenset({"payment_custom_reason", "t
 # Exact-name match first, then prefix, then suffix; falls back to False if nowhere matched.
 CONFIG_DEFAULTS: dict[str, Any] = {
     "payment_custom_reason": "",
+    "payment_custom_iban": "",
     # "nebula" mirrors AppearanceTheme.NEBULA.value;
     "theme": "nebula",
     "intro_driver": "",

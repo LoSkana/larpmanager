@@ -2066,6 +2066,9 @@ msgstr "Anslutningar"
 msgid "Cover image"
 msgstr "Omslagsbild"
 
+msgid "Custom IBAN"
+msgstr "Anpassat IBAN"
+
 msgid "Description"
 msgstr "Beskrivning"
 
@@ -14327,6 +14330,14 @@ msgstr ""
 "Om aktiverat lägger systemet automatiskt till betalningsgatewayens avgifter "
 "på biljettpriset, så att deltagaren står för dem i stället för "
 "organisationen."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Om det anges visar det det IBAN-nummer som deltagarna ska använda för "
+"banköverföringar till detta event, i stället för det som angetts i "
+"organisationens betalningsuppgifter."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
