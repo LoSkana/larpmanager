@@ -7507,6 +7507,10 @@ msgstr "Cerca e filtra i personaggi dell'evento"
 msgid "Select the event you wish to pre-register for"
 msgstr "Seleziona l'evento per cui ti vuoi pre-iscrivere"
 
+#, python-format
+msgid "The option '%(option)s' requires: %(missing)s"
+msgstr "L'opzione '%(option)s' richiede: %(missing)s"
+
 msgid "View the list of characters and participants!"
 msgstr "Visualizza l'elenco dei personaggi e dei partecipanti!"
 

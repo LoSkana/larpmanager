@@ -21,6 +21,7 @@ import contextlib
 import html
 import re
 from datetime import UTC, datetime
+from functools import cached_property
 from typing import Any, ClassVar
 
 from django import forms
@@ -32,11 +33,11 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.question import get_cached_writing_questions
+from larpmanager.cache.question import get_cached_writing_questions, get_character_option_dependencies
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.rels import refresh_character_relationships_background
 from larpmanager.cache.writing import get_cached_relationship_tags
-from larpmanager.forms.base import BaseModelForm
+from larpmanager.forms.base import BaseModelForm, get_question_key
 from larpmanager.forms.utils import (
     AssociationMemberS2Widget,
     CharacterDualListWidget,
@@ -54,6 +55,7 @@ from larpmanager.models.base import Feature
 from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, DeliveryExp
 from larpmanager.models.form import (
+    BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
     QuestionVisibility,
@@ -128,6 +130,18 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if self.is_auto_save():
             for field in self.fields.values():
                 field.required = False
+
+    @cached_property
+    def dependencies(self) -> dict[str, list[str]]:
+        """Requirements between options, mapped by option uuid, reused from the context when already loaded."""
+        if "dependencies" in self.params:
+            return self.params["dependencies"]
+
+        event = self.params.get("event")
+        if not event:
+            return {}
+
+        return get_character_option_dependencies(event, self.params.get("features", []))
 
     def is_auto_save(self) -> bool:
         """Check whether the form is bound to a background auto-save request."""
@@ -345,6 +359,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         """
         cleaned_data = super().clean()
 
+        self._validate_dependencies()
+
         # Check if factions_list field exists in cleaned data
         if "factions_list" in self.cleaned_data:
             # Count primary factions to ensure only one is selected
@@ -359,6 +375,70 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 raise ValidationError({"factions_list": _("Select only one primary faction")})
 
         return cleaned_data
+
+    def _choice_fields(self) -> dict[str, dict[str, str]]:
+        """Return, for each choice field of the form, the uuid and name of its selectable options.
+
+        Options sold out are left out: the client side removes them from the page, so requiring
+        them would build an error the user has no way to fix.
+        """
+        choice_fields = {}
+        choice_types = BaseQuestionType.get_choice_types()
+        for question in self.questions:
+            if question["typ"] not in choice_types:
+                continue
+
+            field_key = get_question_key(question)
+            if field_key not in self.fields:
+                continue
+
+            names = {str(option["uuid"]): option["name"] for option in question.get("options") or []}
+            unavailable = set(self.unavail.get(question["uuid"], []))
+            choice_fields[field_key] = {
+                str(value): names.get(str(value), label)
+                for value, label in self.fields[field_key].choices
+                if str(value) and str(value) not in unavailable
+            }
+
+        return choice_fields
+
+    def _validate_dependencies(self) -> None:
+        """Check that every chosen option has all its required options chosen too.
+
+        Requirements pointing to options not available in the form are ignored, mirroring
+        the client side check: only what the user can actually select is enforced.
+        """
+        # Organizers are not bound by the option requirements; auto-save is checked too, as it stores choices
+        if self.orga or not self.dependencies:
+            return
+
+        choice_fields = self._choice_fields()
+        if not choice_fields:
+            return
+
+        # Name of every option the user can pick, on any question of the form
+        available = {uuid: label for options in choice_fields.values() for uuid, label in options.items()}
+
+        selected = set()
+        for field_key in choice_fields:
+            value = self.cleaned_data.get(field_key)
+            if not value:
+                continue
+            selected.update(value if isinstance(value, (list, tuple, set)) else [value])
+
+        for field_key, options in choice_fields.items():
+            for option_uuid in selected & set(options):
+                missing = [
+                    available[requirement]
+                    for requirement in self.dependencies.get(option_uuid, [])
+                    if requirement in available and requirement not in selected
+                ]
+                if missing:
+                    self.add_error(
+                        field_key,
+                        _("The option '%(option)s' requires: %(missing)s")
+                        % {"option": options[option_uuid], "missing": ", ".join(missing)},
+                    )
 
 
 class OrgaCharacterForm(CharacterForm):

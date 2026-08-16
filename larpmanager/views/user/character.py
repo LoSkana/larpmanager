@@ -47,7 +47,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.experience import get_event_exp_systems
-from larpmanager.cache.question import get_cached_writing_questions, get_writing_field_names
+from larpmanager.cache.question import get_character_option_dependencies, get_writing_field_names
 from larpmanager.cache.writing import get_character_element_fields, get_writing_element_fields_batch
 from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
@@ -55,10 +55,7 @@ from larpmanager.forms.registration import RegistrationCharacterRelForm
 from larpmanager.forms.writing import PlayerRelationshipForm
 from larpmanager.models.event import EventTextType
 from larpmanager.models.experience import AbilityExp
-from larpmanager.models.form import (
-    QuestionApplicable,
-    WritingOption,
-)
+from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.miscellanea import PlayerRelationship
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.models.writing import (
@@ -463,7 +460,7 @@ def _character_form_ajax(
 
     form = form_class(request.POST, request.FILES, instance=instance, context=context)
     if not form.is_valid():
-        return JsonResponse({"res": "ko", "errors": form.errors})
+        return JsonResponse({"res": "ko", "errors": form.errors.get_json_data()})
 
     character, _message = _save_character(context, form, "", auto_save=True)
 
@@ -888,23 +885,7 @@ def get_options_dependencies(context: dict) -> None:
              Will be modified to include 'dependencies' key with option mappings.
 
     """
-    # Initialize empty dependencies dictionary in context
-    context["dependencies"] = {}
-
-    # Early return if character feature is not enabled for this event
-    if "character" not in context["features"]:
-        return
-
-    # Get all character-applicable writing questions ordered by their sequence
-    character_questions = get_cached_writing_questions(context["event"], QuestionApplicable.CHARACTER)
-    question_ids = [question["id"] for question in character_questions]
-
-    # Find all writing options belonging to character questions
-    writing_options = context["event"].get_elements(WritingOption).filter(question_id__in=question_ids)
-
-    # Build dependency mapping for options that have requirements
-    for option in writing_options.filter(requirements__isnull=False).distinct():
-        context["dependencies"][str(option.uuid)] = [str(u) for u in option.requirements.values_list("uuid", flat=True)]
+    context["dependencies"] = get_character_option_dependencies(context["event"], context["features"])
 
 
 def _get_character_assign_error(context: dict) -> str | None:

@@ -7504,6 +7504,10 @@ msgstr "Søg og filtrér eventets karakterer"
 msgid "Select the event you wish to pre-register for"
 msgstr "Vælg det event, du vil forhåndstilmelde dig til"
 
+#, python-format
+msgid "The option '%(option)s' requires: %(missing)s"
+msgstr "Indstillingen '%(option)s' kræver: %(missing)s"
+
 msgid "View the list of characters and participants!"
 msgstr "Se listen over karakterer og deltagere!"
 

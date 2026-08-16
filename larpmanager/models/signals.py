@@ -1650,6 +1650,18 @@ def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -
     on_writing_option_saved(instance, instance.question.event_id)
 
 
+def on_writing_option_requirements_m2m_changed(
+    sender: type,
+    instance: Any,
+    action: str,
+    **kwargs: Any,
+) -> None:
+    """Clear the option requirements cache when the prerequisites of an option change."""
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+    clear_writing_questions_cache(instance.event_id)
+
+
 @receiver(post_save, sender=WritingQuestion)
 def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear cache for event fields and all runs when writing question changes."""
@@ -1739,6 +1751,9 @@ m2m_changed.connect(on_criterion_requirements_m2m_changed, sender=CriterionExp.r
 m2m_changed.connect(on_criterion_factions_m2m_changed, sender=CriterionExp.factions.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
+
+# The requirements are written after the option is saved, so post_save alone would leave a stale cache
+m2m_changed.connect(on_writing_option_requirements_m2m_changed, sender=WritingOption.requirements.through)
 
 
 # Bulk options cache invalidation: one receiver per model, one for EventRole m2m
