@@ -7509,6 +7509,10 @@ msgstr "Αναζήτησε και φιλτράρισε τους χαρακτήρ
 msgid "Select the event you wish to pre-register for"
 msgstr "Επίλεξε την εκδήλωση για την οποία θέλεις να κάνεις προεγγραφή"
 
+#, python-format
+msgid "The option '%(option)s' requires: %(missing)s"
+msgstr "Η επιλογή '%(option)s' απαιτεί: %(missing)s"
+
 msgid "View the list of characters and participants!"
 msgstr "Δες τη λίστα χαρακτήρων και συμμετεχόντων!"
 

@@ -40,6 +40,8 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from larpmanager.models.event import Event
 
 
@@ -263,10 +265,62 @@ def get_writing_field_names(event: Event, applicable: str) -> dict:
     return {q["typ"]: q["name"] for q in questions if q["typ"] in def_types}
 
 
+def get_event_dependencies_cache_key(event_id: int) -> str:
+    """Generate cache key for the requirements between character options."""
+    return f"event_option_dependencies_{event_id}"
+
+
+def init_option_dependencies_cache(event: Event) -> dict[str, list[str]]:
+    """Build the map of character option uuid to the uuids of the options it requires."""
+    character_questions = get_cached_writing_questions(event, QuestionApplicable.CHARACTER)
+    question_ids = [question["id"] for question in character_questions]
+
+    writing_options = (
+        WritingOption.objects.filter(question_id__in=question_ids, requirements__isnull=False)
+        .distinct()
+        .prefetch_related("requirements")
+    )
+
+    return {
+        str(option.uuid): [str(requirement.uuid) for requirement in option.requirements.all()]
+        for option in writing_options
+    }
+
+
+def get_character_option_dependencies(event: Event, features: Iterable[str]) -> dict[str, list[str]]:
+    """Get the requirements between character options, mapped by option uuid.
+
+    Args:
+        event: Event the character questions belong to, parent event is used when present
+        features: Active features of the event
+
+    Returns:
+        Dict of option uuid to list of required option uuids, empty if requirements are disabled
+
+    """
+    features = set(features)
+    # Without the requirements feature the prerequisites cannot be edited, so they are not enforced either
+    if "character" not in features or "wri_que_requirements" not in features:
+        return {}
+
+    if event.parent:
+        event = event.parent
+
+    cache_key = get_event_dependencies_cache_key(event.id)
+
+    dependencies = cache.get(cache_key)
+    if dependencies is None:
+        dependencies = init_option_dependencies_cache(event)
+        cache.set(cache_key, dependencies, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    return dependencies
+
+
 def clear_writing_questions_cache(event_id: int) -> None:
     """Clear writing questions cache for an event."""
     cache_key = get_event_questions_cache_key(event_id, "writing")
     cache.delete(cache_key)
+    cache.delete(get_event_dependencies_cache_key(event_id))
 
 
 def clear_registration_questions_cache(event_id: int) -> None:

@@ -901,12 +901,15 @@ def post_save_event_button(sender: type, instance: object, created: bool, **kwar
 def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset event configuration cache after model save, including child events of a campaign."""
     reset_element_configs(instance.event)
+    # some features are derived from configs, so the features cache must be rebuilt too
+    clear_event_features_cache(instance.event_id)
     for run in instance.event.runs.all():
         reset_cache_config_run(run)
 
     # child events inherit the parent configs, so their caches must be reset too
     for child in Event.objects.filter(parent_id=instance.event_id):
         reset_element_configs(child)
+        clear_event_features_cache(child.id)
         for run in child.runs.all():
             reset_cache_config_run(run)
 
@@ -1650,6 +1653,18 @@ def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -
     on_writing_option_saved(instance, instance.question.event_id)
 
 
+def on_writing_option_requirements_m2m_changed(
+    sender: type,
+    instance: Any,
+    action: str,
+    **kwargs: Any,
+) -> None:
+    """Clear the option requirements cache when the prerequisites of an option change."""
+    if action not in ("post_add", "post_remove", "post_clear"):
+        return
+    clear_writing_questions_cache(instance.event_id)
+
+
 @receiver(post_save, sender=WritingQuestion)
 def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear cache for event fields and all runs when writing question changes."""
@@ -1739,6 +1754,9 @@ m2m_changed.connect(on_criterion_requirements_m2m_changed, sender=CriterionExp.r
 m2m_changed.connect(on_criterion_factions_m2m_changed, sender=CriterionExp.factions.through)
 
 m2m_changed.connect(on_event_features_m2m_changed, sender=Event.features.through)
+
+# The requirements are written after the option is saved, so post_save alone would leave a stale cache
+m2m_changed.connect(on_writing_option_requirements_m2m_changed, sender=WritingOption.requirements.through)
 
 
 # Bulk options cache invalidation: one receiver per model, one for EventRole m2m

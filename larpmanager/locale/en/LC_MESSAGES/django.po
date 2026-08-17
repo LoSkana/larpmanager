@@ -960,6 +960,10 @@ msgstr ""
 msgid "Select only one primary faction"
 msgstr ""
 
+#, python-format
+msgid "The option '%(option)s' requires: %(missing)s"
+msgstr ""
+
 msgid "Manage characters of the event"
 msgstr ""
 

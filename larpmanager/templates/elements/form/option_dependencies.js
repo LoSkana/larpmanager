@@ -1,0 +1,198 @@
+{{ dependencies|json_script:"option-dependencies" }}
+<script>
+var dependencies = JSON.parse(document.getElementById('option-dependencies').textContent);
+
+// safety bound on the passes done to settle chained requirements
+var dependencies_max_passes = 20;
+
+function check_dependencies(dependencies) {
+    let selects = [];
+    let checkboxes = [];
+    let radios = [];
+    let remainingDependencies = [...dependencies]; // Create a copy of the dependencies array to manipulate it
+
+    // Collect the selects that contain dependency values
+    $('select').each(function () {
+        const name = $(this).attr('name');
+        let values = $(this).val();
+
+        if (values === null || values === undefined) return;
+
+        // multiple selects answer with an array: check every chosen value
+        if (!Array.isArray(values)) values = [values];
+
+        values.forEach(function (val) {
+            if (remainingDependencies.includes(val)) {
+                // Remove the found value from dependencies
+                remainingDependencies = remainingDependencies.filter(v => v !== val);
+                if (!selects.includes(name)) {
+                    selects.push(name);
+                }
+            }
+        });
+    });
+
+    // Collect checkbox groups that contain dependency values
+    $('input[type="checkbox"]:checked').each(function () {
+        const name = $(this).attr('name');
+        const value = $(this).val();
+
+        if (value && remainingDependencies.includes(value)) {
+            // Remove the found value from dependencies
+            remainingDependencies = remainingDependencies.filter(v => v !== value);
+            if (!checkboxes.includes(name)) {
+                checkboxes.push(name);
+            }
+        }
+    });
+
+    // Collect radio groups that contain dependency values
+    $('input[type="radio"]:checked').each(function () {
+        const name = $(this).attr('name');
+        const value = $(this).val();
+
+        if (value && remainingDependencies.includes(value)) {
+            remainingDependencies = remainingDependencies.filter(v => v !== value);
+            if (!radios.includes(name)) {
+                radios.push(name);
+            }
+        }
+    });
+
+    // Check the remaining values in dependencies
+    for (let val of remainingDependencies) {
+        // If the remaining value is in a select not yet selected, return false
+        let selectFound = $('select').not(function() {
+            return selects.includes($(this).attr('name'));
+        }).is(function () {
+            return $(this).find('option').toArray().some(option => $(option).val() === val);
+        });
+
+        if (selectFound) {
+            return false; // If the remaining value is in a select, return false
+        }
+
+        // If the remaining value is in a checkbox that was not considered before, return false
+        let checkboxFound = $('input[type="checkbox"]').is(function () {
+            return $(this).val() === val && !checkboxes.includes($(this).attr('name'));
+        });
+
+        if (checkboxFound) {
+            return false; // If the remaining value is in a checkbox that was not included, return false
+        }
+
+        // If the remaining value is in a radio group not yet selected, return false
+        let radioFound = $('input[type="radio"]').is(function () {
+            return $(this).val() === val && !radios.includes($(this).attr('name'));
+        });
+
+        if (radioFound) {
+            return false; // If the remaining value is in a radio group, return false
+        }
+    }
+
+    return true; // If all dependencies are satisfied, return true
+}
+
+function disable_dependencies_pass() {
+    reset_select = [];
+    let changed = false;
+
+    for (const [key, options] of Object.entries(dependencies)) {
+        available = check_dependencies(options);
+
+        // disable selects with that value
+        if (available) {
+          $('select option[value="' + key + '"]').prop('hidden', false);
+          $('#hp_' + key).show();
+        } else {
+          $('select option[value="' + key + '"]').prop('hidden', true);
+          $('#hp_' + key).hide();
+        }
+        if (!available) {
+            // check if there are select with disabled selected value
+            $('select').each(function() {
+                var selectedOption = $(this).find('option:selected');
+                if (selectedOption.val() === key) {
+                    reset_select.push($(this));
+                }
+            });
+        }
+
+        // disable checkboxes with that value
+        $('input[type="checkbox"][value="' + key + '"]').each(function() {
+            if (available) {
+              $(this).closest('div').show();
+              $(this).show();
+              $(this).closest('label').show();
+              $('#hp_' + key).show();
+            } else {
+              $(this).hide();
+              $(this).closest('label').hide();
+              $('#hp_' + key).hide();
+              $(this).closest('div').hide();
+            }
+            if (!available && $(this).is(':checked')) {
+                $(this).prop('checked', false);
+                changed = true;
+            }
+        });
+
+        // disable radio options with that value
+        $('input[type="radio"][value="' + key + '"]').each(function() {
+            if (available) {
+              $(this).closest('div').show();
+              $(this).show();
+              $(this).closest('label').show();
+            } else {
+              $(this).hide();
+              $(this).closest('label').hide();
+              $(this).closest('div').hide();
+            }
+            if (!available && $(this).is(':checked')) {
+                $(this).prop('checked', false);
+                changed = true;
+            }
+        });
+    }
+
+    $(reset_select).each(function() {
+      var $select = $(this);
+
+      // look for first option without value
+      var $option = $select.find('option').filter(function() {
+        var value = $(this).attr('value');
+        return typeof value === 'undefined' || value === '';
+      }).first();
+
+      // if does not exist, create it
+      if ($option.length === 0) {
+        $option = $('<option disabled="disabled" value="">-------</option>');
+        $select.prepend($option);
+      }
+
+      // select it
+      $option.prop('selected', true);
+      changed = true;
+    });
+
+    return changed;
+}
+
+function disable_dependencies() {
+    // deselecting an option can invalidate the ones requiring it: repeat until nothing else changes
+    for (let pass = 0; pass < dependencies_max_passes; pass++) {
+        if (!disable_dependencies_pass()) return;
+    }
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    $(function () {
+        disable_dependencies();
+
+        $('select, input[type="checkbox"], input[type="radio"]').on('change', function() {
+            disable_dependencies();
+        });
+    });
+});
+</script>

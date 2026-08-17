@@ -7504,6 +7504,10 @@ msgstr "Hae ja suodata tapahtuman hahmoja"
 msgid "Select the event you wish to pre-register for"
 msgstr "Valitse tapahtuma, johon haluat ilmoittautua ennakkoon"
 
+#, python-format
+msgid "The option '%(option)s' requires: %(missing)s"
+msgstr "Vaihtoehto '%(option)s' vaatii: %(missing)s"
+
 msgid "View the list of characters and participants!"
 msgstr "Näytä hahmojen ja osallistujien luettelo!"
 
