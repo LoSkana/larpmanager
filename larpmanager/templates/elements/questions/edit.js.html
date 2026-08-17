@@ -103,6 +103,9 @@ window.addEventListener('DOMContentLoaded', function() {
             $('#id_visibility_tr').fadeOut(speed);
         }
 
+        // Requirements gate only the questions rendered with their own field key
+        $('#id_requirements_tr').toggle(["s", "m", "t", "p", "e"].includes(selectedValue));
+
         // Hide visibility for specific types
         if (["name", "teaser", "text", "faction"].includes(selectedValue)) {
             $('#id_visibility_tr').fadeOut(speed);

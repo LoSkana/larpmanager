@@ -47,7 +47,7 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_event_config, save_single_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.experience import get_event_exp_systems
-from larpmanager.cache.question import get_character_option_dependencies, get_writing_field_names
+from larpmanager.cache.question import get_character_dependencies, get_writing_field_names
 from larpmanager.cache.writing import get_character_element_fields, get_writing_element_fields_batch
 from larpmanager.forms.character import CharacterForm
 from larpmanager.forms.member import AvatarForm
@@ -874,18 +874,19 @@ def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -
 
 
 def get_options_dependencies(context: dict) -> None:
-    """Populate context with writing option dependencies for character creation.
+    """Populate context with writing requirements for character creation.
 
-    Analyzes writing questions and options for the current event to build a
-    dependency mapping that determines which options require other options
-    to be selected first during character creation.
+    Analyzes writing questions and options for the current event to build the
+    dependency mappings that determine which options can be selected, and which
+    questions are shown, based on the options already chosen.
 
     Args:
         context: Context dictionary containing event, features, and other data.
-             Will be modified to include 'dependencies' key with option mappings.
+             Will be modified to include 'dependencies' key with the "options" and
+             "questions" mappings.
 
     """
-    context["dependencies"] = get_character_option_dependencies(context["event"], context["features"])
+    context["dependencies"] = get_character_dependencies(context["event"], context["features"])
 
 
 def _get_character_assign_error(context: dict) -> str | None:

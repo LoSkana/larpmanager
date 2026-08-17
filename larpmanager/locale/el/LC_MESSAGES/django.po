@@ -9812,6 +9812,12 @@ msgstr ""
 "χαρακτήρων"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Εισήγαγε άλλες επιλογές που πρέπει να επιλεγούν για να εμφανιστεί αυτή η "
+"ερώτηση"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr ""
 "Εισήγαγε τον αριθμό ή κωδικό του εγγράφου ταυτοποίησης που αναφέρεται "

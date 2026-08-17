@@ -315,6 +315,14 @@ class WritingQuestion(UuidMixin, OrderMixin, BaseModel):
         help_text=_("Select the types of writing elements that this question applies to"),
     )
 
+    requirements = models.ManyToManyField(
+        "WritingOption",
+        related_name="gated_questions",
+        blank=True,
+        verbose_name=_("Prerequisites"),
+        help_text=_("Enter other options that must be selected for this question to be shown"),
+    )
+
     def __str__(self) -> str:
         """Return string representation."""
         return f"{self.event} - {self.name[:30]}"

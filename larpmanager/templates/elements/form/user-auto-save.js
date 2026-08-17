@@ -49,7 +49,9 @@ function lmAutoSaveErrorText(errors) {
 
     $.each(errors, function(field, messages) {
         // use the label shown on the page, so the player knows which answer to correct
-        var label = $.trim($('label[for="id_' + field + '"]').first().text()).replace(/[:*]\s*$/, '');
+        var element = $('#lbl_id_' + field);
+        if (!element.length) element = $('label[for="id_' + field + '"]');
+        var label = $.trim(element.first().text()).replace(/[:*]\s*$/, '');
 
         $.each(messages, function(index, entry) {
             var message = typeof entry === 'string' ? entry : entry.message;
@@ -110,6 +112,8 @@ function lmAutoSaveSubmit() {
                 lmAutoSaveWarn(msg.warn);
             } else if (msg && msg.errors) {
                 lmAutoSaveError(msg.errors);
+                // rejected data is not saved: retry only once the player changes something
+                lm_auto_save.last_data = data;
             }
             return;
         }

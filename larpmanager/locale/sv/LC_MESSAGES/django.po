@@ -9589,6 +9589,11 @@ msgstr ""
 "Möjliggör för deltagarna att skriva en egen lista över karaktärsrelationer"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Ange andra alternativ som måste väljas för att den här frågan ska visas"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Ange det ID-nummer eller den kod som anges ovan"
 

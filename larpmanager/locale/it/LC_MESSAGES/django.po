@@ -9740,6 +9740,12 @@ msgstr ""
 "personaggi"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Inserisci le altre opzioni che devono essere selezionate affinché venga "
+"mostrata questa domanda"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr ""
 "Inserisci il numero o codice identificativo del documento di identità "

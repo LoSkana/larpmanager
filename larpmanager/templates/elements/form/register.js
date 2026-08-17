@@ -270,7 +270,10 @@ function check_mandatory() {
 
         if (el.attr('type') === 'hidden') continue;
 
-        if (el.parent().parent().hasClass('not-required')) continue;
+        // hidden questions mark their own row, fall back to the ancestors
+        var row = $('#' + k + '_tr');
+        if (!row.length) row = el.parent().parent();
+        if (row.hasClass('not-required')) continue;
 
         empty = true;
         if (el.is('input:text')) {
@@ -308,34 +311,7 @@ function check_tickets_map() {
     if( !sel ) sel = 0;
 
     $.each(tickets_map, function(index, value) {
-        var f = $.inArray(sel, value) !== -1;
-        var el = $('#id_' + index);
-
-        if (f) {
-            // show the question
-            el.parent().parent().show();
-            el.prop('disabled', false);
-            el.parent().parent().removeClass('not-required');
-            // restore required attribute if it was originally required
-            if (el.data('was-required')) el.prop('required', true);
-        } else {
-            // hide the question
-            el.parent().parent().hide();
-            $('#id_' + index + ' :checkbox').prop( "checked", false );
-            $('#id_' + index + ' option:selected').removeAttr("selected");
-            if (el.is('select')) {
-                var non = el.find("option:first")
-                if (non.text() != diss)
-                    el.prepend('<option selected="true" disabled="disabled">' + diss + '</option>');
-                else non.prop('selected', true);
-                el.prop('disabled', true);
-            }
-            // remove required to prevent browser native validation on hidden fields
-            if (el.prop('required')) el.data('was-required', true);
-            el.prop('required', false);
-
-            el.parent().parent().addClass('not-required');
-        }
+        toggle_question($('#id_' + index), $.inArray(sel, value) !== -1);
     });
 
     $('table.section').each(function(index, value) {

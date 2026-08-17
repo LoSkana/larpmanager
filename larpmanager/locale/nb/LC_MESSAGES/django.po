@@ -9613,6 +9613,12 @@ msgstr ""
 "karakterrelasjoner"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Skriv inn andre alternativer som må velges for at dette spørsmålet skal "
+"vises"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Vennligst skriv inn ID-nummeret eller koden som er angitt ovenfor"
 

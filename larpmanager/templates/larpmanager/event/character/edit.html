@@ -103,7 +103,10 @@
 
             if (el.attr('type') === 'hidden') continue;
 
-            if (el.parent().parent().hasClass('not-required')) continue;
+            // hidden questions mark their own row, fall back to the ancestors
+            var row = $('#' + k + '_tr');
+            if (!row.length) row = el.parent().parent();
+            if (row.hasClass('not-required')) continue;
 
             empty = true;
             if (el.is('input:text')) {
@@ -130,7 +133,8 @@
     });
 
     </script>
-    {% if dependencies %}
+    {% if dependencies.options or dependencies.questions %}
+        {% include "elements/form/question_toggle.js" %}
         {% include "elements/form/option_dependencies.js" %}
     {% endif %}
 {% endblock js %}

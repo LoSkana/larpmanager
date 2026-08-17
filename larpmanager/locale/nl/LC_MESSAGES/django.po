@@ -9744,6 +9744,11 @@ msgstr ""
 "Deelnemers kunnen hun eigen lijst met relaties tussen personages opstellen"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Voer andere opties in die geselecteerd moeten zijn om deze vraag te tonen"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr ""
 "Voer het nummer of de code van het identificatiedocument dat hierboven is "
