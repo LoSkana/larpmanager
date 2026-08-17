@@ -9819,6 +9819,12 @@ msgstr ""
 "personnages"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Saisis les autres options qui doivent être sélectionnées pour que cette "
+"question s’affiche"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr ""
 "Saisis le numéro d'identification ou le code du document indiqué ci-dessus"

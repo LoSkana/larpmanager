@@ -737,8 +737,17 @@ def _copy_writing_questions(
     # When only characters are copied, all questions are needed to carry over their values
     question_ids = picks.get("writing_question") if "writing_question" in targets else None
 
-    question_map = copy_class(target_event_id, source_event_id, WritingQuestion, source_ids=question_ids)
-    option_map = copy_children(target_event_id, source_event_id, WritingOption, question_map, "question")
+    question_map = copy_class(
+        target_event_id, source_event_id, WritingQuestion, source_ids=question_ids, skip_m2m=("requirements",)
+    )
+    option_map = copy_children(
+        target_event_id, source_event_id, WritingOption, question_map, "question", skip_m2m=("requirements",)
+    )
+
+    # Point the prerequisites to the options of the target event
+    remap_m2m(WritingQuestion, question_map, option_map, "requirements")
+    remap_m2m(WritingOption, option_map, option_map, "requirements")
+
     return question_map, option_map
 
 

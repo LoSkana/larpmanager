@@ -54,7 +54,11 @@ def test_user_character_form_editor(pw_page: Any) -> None:
 
     field_single_andor(page, live_server)
 
+    field_gated_question(page, live_server)
+
     character(page, live_server)
+
+    gated_question_reset(page, live_server)
 
     verify_characters_shortcut(page, live_server)
 
@@ -214,6 +218,25 @@ def field_single_req(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
 
+def field_gated_question(page: Any, live_server: Any) -> None:
+    # Add a mandatory question shown only when "wwww" from "single" is selected
+    go_to(page, live_server, "/test/manage/writing/form/")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("gated_q")
+    edit_iframe.locator("#id_status").select_option("m")
+    edit_iframe.locator("select[name=requirements] ~ .select2").click()
+    edit_iframe.locator("select[name=requirements] ~ .select2").get_by_role("searchbox").fill("ww")
+    edit_iframe.get_by_role("option", name=re.compile("wwww")).click()
+
+    iframe = new_option(edit_iframe)
+    iframe.locator("#id_name").fill("gear_a")
+    submit_option(edit_iframe, iframe)
+
+    save_modal(page, edit_iframe)
+
+
 def field_single_andor(page: Any, live_server: Any) -> None:
     """Add a question whose options mix requirements on the same and on other questions.
 
@@ -280,30 +303,59 @@ def verify_requirements_and_or(page: Any) -> None:
 
 
 def verify_requirements_hidden(page: Any) -> None:
-    """Verify options with unmet requirements are hidden, and shown when requirements are met.
+    """Verify elements with unmet requirements are hidden, and shown when requirements are met.
 
-    Tests both question types:
+    Tests both options and questions:
     - multiple-choice (checkbox): option "14" (u7) requires "wwww" (u3)
     - single-choice (radio): option "dep_b" (u9, index 1) in "single_req" (u8) requires "wwww" (u3)
+    - whole question: "gated_q" (u10) requires "wwww" (u3)
     """
     # the native inputs are visually hidden by lm.css (zero size); the dependency
     # JS toggles the wrapping label, so assert visibility on the label instead
     label_14 = page.locator('label:has(input[type="checkbox"][value="u7"])')
     dep_b_radio = page.locator('label:has(input[type="radio"][value="u9"])')
+    gated_row = page.locator("#id_que_u10_tr")
 
-    # Nothing selected yet in "single" - both dependent options must be hidden
+    # Nothing selected yet in "single" - the dependent options and question must be hidden
     expect(label_14).to_be_hidden()
     expect(dep_b_radio).to_be_hidden()
+    expect(gated_row).to_be_hidden()
 
-    # Select a different option ("rrrr", index 1) - both must still be hidden
+    # Select a different option ("rrrr", index 1) - all must still be hidden
     page.locator('label[for="id_que_u4_1"]').click()
     expect(label_14).to_be_hidden()
     expect(dep_b_radio).to_be_hidden()
+    expect(gated_row).to_be_hidden()
 
-    # Select "wwww" (index 2) - both must become visible
+    # Select "wwww" (index 2) - all must become visible
     page.locator('label[for="id_que_u4_2"]').click()
     expect(label_14).to_be_visible()
     expect(dep_b_radio).to_be_visible()
+    expect(gated_row).to_be_visible()
+
+
+def gated_question_reset(page: Any, live_server: Any) -> None:
+    """Verify a gated question stops being mandatory, and loses its answer, once hidden."""
+    go_to(page, live_server, "/test/character/u3/change/")
+
+    # the requirement is still selected: the question is shown with the stored answer
+    expect(page.locator("#id_que_u10_tr")).to_be_visible()
+    expect(page.locator('input[type="radio"][value="u12"]')).to_be_checked()
+
+    # select "rrrr": the mandatory question is hidden, and does not block the save
+    # editing an answered question collapses the options not chosen
+    page.locator("#id_que_u4 .opt-show-more").click()
+    page.locator('label[for="id_que_u4_1"]').click()
+    expect(page.locator("#id_que_u10_tr")).to_be_hidden()
+    submit_confirm(page)
+    expect_normalized(page, page.locator("#one"), "Status: Approved")
+
+    # selecting the requirement again shows the question, with the answer discarded
+    go_to(page, live_server, "/test/character/u3/change/")
+    page.locator("#id_que_u4 .opt-show-more").click()
+    page.locator('label[for="id_que_u4_2"]').click()
+    expect(page.locator("#id_que_u10_tr")).to_be_visible()
+    expect(page.locator('input[type="radio"][value="u12"]')).not_to_be_checked()
 
 
 def character(page: Any, live_server: Any) -> None:
@@ -338,6 +390,7 @@ def character(page: Any, live_server: Any) -> None:
     page.locator("#id_que_u6").fill("wow")
     page.locator("#id_que_u7").click()
     page.locator("#id_que_u7").fill("asdsadsa")
+    page.locator('label[for="id_que_u10_0"]').click()  # gear_a, shown by "wwww"
     submit_confirm(page)
 
     # confirm char: after creation the user lands on the character sheet

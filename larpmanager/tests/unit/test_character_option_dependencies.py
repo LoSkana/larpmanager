@@ -24,13 +24,14 @@ import pytest
 from django.core.cache import cache
 from django.test import RequestFactory
 
-from larpmanager.cache.question import get_character_option_dependencies
+from larpmanager.cache.question import get_character_option_dependencies, get_character_question_dependencies
 from larpmanager.forms.base import get_question_key
 from larpmanager.forms.character import CharacterForm, OrgaCharacterForm
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
     QuestionStatus,
+    WritingChoice,
     WritingOption,
     WritingQuestion,
     WritingQuestionType,
@@ -231,3 +232,127 @@ class TestCharacterOptionDependencies(BaseTestCase):
 
         assert form.is_valid(), form.errors
         assert str(self.psionic.uuid) in form.dependencies
+
+
+@pytest.mark.django_db
+class TestCharacterQuestionDependencies(BaseTestCase):
+    """Check that questions with unmet requirements are hidden and not stored."""
+
+    def setUp(self) -> None:
+        super().setUp()
+        cache.clear()
+        self.run = self.get_run()
+        self.event = self.run.event
+
+        WritingQuestion.objects.get_or_create(
+            event=self.event,
+            applicable=QuestionApplicable.CHARACTER,
+            typ=WritingQuestionType.NAME,
+            defaults={"name": "Name", "order": 1},
+        )
+
+        self.origin = self._question("Origin", order=2)
+        # mandatory, so the gating is what lets the form be saved without an answer
+        self.gear = self._question("Gear", order=3, status=QuestionStatus.MANDATORY)
+
+        self.bunker = WritingOption.objects.create(event=self.event, question=self.origin, name="Bunker", order=1)
+        self.wasteland = WritingOption.objects.create(event=self.event, question=self.origin, name="Wasteland", order=2)
+        self.rifle = WritingOption.objects.create(event=self.event, question=self.gear, name="Rifle", order=1)
+
+        self.gear.requirements.set([self.bunker])
+
+    def _question(self, name: str, order: int, status: str = QuestionStatus.OPTIONAL) -> WritingQuestion:
+        return WritingQuestion.objects.create(
+            event=self.event,
+            applicable=QuestionApplicable.CHARACTER,
+            typ=BaseQuestionType.SINGLE,
+            status=status,
+            name=name,
+            order=order,
+        )
+
+    def _context(self) -> dict:
+        return {
+            "event": self.event,
+            "run": self.run,
+            "member": self.get_member(),
+            "features": {"character", "user_character", "wri_que_requirements"},
+            "association_id": self.event.association_id,
+        }
+
+    def _character(self) -> Character:
+        return Character.objects.create(
+            event=self.event,
+            player=self.get_member(),
+            name="Original",
+            status=CharacterStatus.CREATION,
+        )
+
+    def _data(self, origin: WritingOption | None, gear: WritingOption | None) -> dict:
+        data = {"name": "Original"}
+        if origin:
+            data[get_question_key(self.origin)] = str(origin.uuid)
+        if gear:
+            data[get_question_key(self.gear)] = str(gear.uuid)
+        return data
+
+    def test_gated_question_not_required_when_requirement_missing(self) -> None:
+        form = CharacterForm(self._data(self.wasteland, None), instance=self._character(), context=self._context())
+
+        assert form.is_valid(), form.errors
+        assert form.gated_questions
+
+    def test_gated_question_required_when_requirement_selected(self) -> None:
+        form = CharacterForm(self._data(self.bunker, None), instance=self._character(), context=self._context())
+
+        assert not form.is_valid()
+        assert get_question_key(self.gear) in form.errors
+
+    def test_gated_question_answer_kept_when_requirement_selected(self) -> None:
+        form = CharacterForm(self._data(self.bunker, self.rifle), instance=self._character(), context=self._context())
+
+        assert form.is_valid(), form.errors
+        character = form.save()
+
+        assert WritingChoice.objects.filter(element_id=character.id, option=self.rifle).exists()
+
+    def test_gated_question_answer_discarded_on_save(self) -> None:
+        # the answer was given when the question was shown: hiding it again must remove it
+        character = self._character()
+        WritingChoice.objects.create(question=self.gear, option=self.rifle, element_id=character.id)
+
+        form = CharacterForm(self._data(self.wasteland, self.rifle), instance=character, context=self._context())
+
+        assert form.is_valid(), form.errors
+        form.save()
+
+        assert not WritingChoice.objects.filter(element_id=character.id, question=self.gear).exists()
+
+    def test_organizer_form_not_bound_by_question_requirements(self) -> None:
+        form = OrgaCharacterForm(
+            self._data(self.wasteland, self.rifle), instance=self._character(), context=self._context()
+        )
+
+        assert form.is_valid(), form.errors
+        character = form.save()
+
+        assert WritingChoice.objects.filter(element_id=character.id, option=self.rifle).exists()
+
+    def test_question_dependencies_cached_and_cleared_on_requirement_change(self) -> None:
+        features = {"character", "wri_que_requirements"}
+        assert get_character_question_dependencies(self.event, features) == {
+            str(self.gear.uuid): [str(self.bunker.uuid)]
+        }
+
+        self.gear.requirements.set([self.wasteland])
+
+        assert get_character_question_dependencies(self.event, features) == {
+            str(self.gear.uuid): [str(self.wasteland.uuid)]
+        }
+
+        self.gear.requirements.clear()
+
+        assert get_character_question_dependencies(self.event, features) == {}
+
+    def test_question_dependencies_empty_without_requirements_feature(self) -> None:
+        assert get_character_question_dependencies(self.event, {"character"}) == {}

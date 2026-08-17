@@ -9668,6 +9668,12 @@ msgstr ""
 "Umożliwia uczestnikom stworzenie własnej listy relacji między postaciami"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Wprowadź inne opcje, które muszą zostać wybrane, aby to pytanie było "
+"wyświetlane"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Wprowadź numer lub kod dokumentu identyfikacyjnego wskazanego powyżej"
 

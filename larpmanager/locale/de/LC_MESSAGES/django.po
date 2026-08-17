@@ -9846,6 +9846,12 @@ msgstr ""
 " erstellen"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Gib andere Optionen ein, die ausgewählt sein müssen, damit diese Frage "
+"angezeigt wird"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Gib die oben angegebene ID-Nummer oder den Code ein"
 

@@ -266,12 +266,19 @@ def get_writing_field_names(event: Event, applicable: str) -> dict:
 
 
 def get_event_dependencies_cache_key(event_id: int) -> str:
-    """Generate cache key for the requirements between character options."""
+    """Generate cache key for the requirements of character options and questions."""
     return f"event_option_dependencies_{event_id}"
 
 
-def init_option_dependencies_cache(event: Event) -> dict[str, list[str]]:
-    """Build the map of character option uuid to the uuids of the options it requires."""
+def _requirements_map(elements: Iterable[Any]) -> dict[str, list[str]]:
+    """Map the uuid of each element to the uuids of the options it requires."""
+    return {
+        str(element.uuid): [str(requirement.uuid) for requirement in element.requirements.all()] for element in elements
+    }
+
+
+def init_dependencies_cache(event: Event) -> dict[str, dict[str, list[str]]]:
+    """Build the requirement maps of character options and questions, keyed by uuid."""
     character_questions = get_cached_writing_questions(event, QuestionApplicable.CHARACTER)
     question_ids = [question["id"] for question in character_questions]
 
@@ -281,27 +288,31 @@ def init_option_dependencies_cache(event: Event) -> dict[str, list[str]]:
         .prefetch_related("requirements")
     )
 
-    return {
-        str(option.uuid): [str(requirement.uuid) for requirement in option.requirements.all()]
-        for option in writing_options
-    }
+    gated_questions = (
+        WritingQuestion.objects.filter(id__in=question_ids, requirements__isnull=False)
+        .distinct()
+        .prefetch_related("requirements")
+    )
+
+    return {"options": _requirements_map(writing_options), "questions": _requirements_map(gated_questions)}
 
 
-def get_character_option_dependencies(event: Event, features: Iterable[str]) -> dict[str, list[str]]:
-    """Get the requirements between character options, mapped by option uuid.
+def get_character_dependencies(event: Event, features: Iterable[str]) -> dict[str, dict[str, list[str]]]:
+    """Get the requirements of character options and questions, mapped by uuid.
 
     Args:
         event: Event the character questions belong to, parent event is used when present
         features: Active features of the event
 
     Returns:
-        Dict of option uuid to list of required option uuids, empty if requirements are disabled
+        Dict with "options" and "questions" maps of uuid to required option uuids,
+        both empty if requirements are disabled
 
     """
     features = set(features)
     # Without the requirements feature the prerequisites cannot be edited, so they are not enforced either
     if "character" not in features or "wri_que_requirements" not in features:
-        return {}
+        return {"options": {}, "questions": {}}
 
     if event.parent:
         event = event.parent
@@ -310,10 +321,20 @@ def get_character_option_dependencies(event: Event, features: Iterable[str]) -> 
 
     dependencies = cache.get(cache_key)
     if dependencies is None:
-        dependencies = init_option_dependencies_cache(event)
+        dependencies = init_dependencies_cache(event)
         cache.set(cache_key, dependencies, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return dependencies
+
+
+def get_character_option_dependencies(event: Event, features: Iterable[str]) -> dict[str, list[str]]:
+    """Get the requirements between character options, mapped by option uuid."""
+    return get_character_dependencies(event, features)["options"]
+
+
+def get_character_question_dependencies(event: Event, features: Iterable[str]) -> dict[str, list[str]]:
+    """Get the options required by each character question, mapped by question uuid."""
+    return get_character_dependencies(event, features)["questions"]
 
 
 def clear_writing_questions_cache(event_id: int) -> None:

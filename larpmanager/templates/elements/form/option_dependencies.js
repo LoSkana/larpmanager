@@ -1,6 +1,10 @@
 {{ dependencies|json_script:"option-dependencies" }}
 <script>
-var dependencies = JSON.parse(document.getElementById('option-dependencies').textContent);
+var all_dependencies = JSON.parse(document.getElementById('option-dependencies').textContent);
+
+// options required by each option, and options required by each question
+var dependencies = all_dependencies.options || {};
+var question_dependencies = all_dependencies.questions || {};
 
 // safety bound on the passes done to settle chained requirements
 var dependencies_max_passes = 20;
@@ -179,10 +183,31 @@ function disable_dependencies_pass() {
     return changed;
 }
 
+function disable_questions_pass() {
+    let changed = false;
+
+    for (const [key, options] of Object.entries(question_dependencies)) {
+        const el = $('#id_que_' + key);
+        if (!el.length) continue;
+
+        const available = check_dependencies(options);
+        const hidden = el.closest('tr').hasClass('not-required');
+
+        // hiding a question clears its answers, which can gate the questions requiring them
+        if (!available && !hidden) changed = true;
+
+        toggle_question(el, available);
+    }
+
+    return changed;
+}
+
 function disable_dependencies() {
     // deselecting an option can invalidate the ones requiring it: repeat until nothing else changes
     for (let pass = 0; pass < dependencies_max_passes; pass++) {
-        if (!disable_dependencies_pass()) return;
+        const options_changed = disable_dependencies_pass();
+        const questions_changed = disable_questions_pass();
+        if (!options_changed && !questions_changed) return;
     }
 }
 

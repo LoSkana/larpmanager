@@ -9624,6 +9624,11 @@ msgid ""
 msgstr "Antaa osallistujien kirjoittaa oman luettelonsa hahmosuhteista"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Syötä muut vaihtoehdot, jotka on valittava, jotta tämä kysymys näytetään"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Merkitse edellä mainitun tunnistusasiakirjan numero tai koodi"
 

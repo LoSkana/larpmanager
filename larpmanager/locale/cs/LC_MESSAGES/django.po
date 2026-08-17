@@ -9518,6 +9518,11 @@ msgid ""
 msgstr "Umožňuje účastníkům napsat vlastní seznam vztahů mezi postavami"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Zadej další možnosti, které musí být vybrány, aby se tato otázka zobrazila"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr ""
 "Zadej prosím výše uvedené identifikační číslo nebo kód dokumentu totožnosti"

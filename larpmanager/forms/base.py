@@ -100,6 +100,13 @@ class FormMixin:
         if field_key in self.fields:
             del self.fields[field_key]
 
+    def event_field_if_feature(self, field_name: str, feature: str, event: Event) -> None:
+        """Configure an event scoped field, removing it when its feature is not active."""
+        if feature not in self.params["features"]:
+            self.delete_field(field_name)
+        elif field_name in self.fields:
+            self.configure_field_event(field_name, event)
+
 
 class BaseForm(FormMixin, forms.Form):
     """Base for all non-models form."""

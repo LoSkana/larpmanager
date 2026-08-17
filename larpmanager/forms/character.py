@@ -33,7 +33,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.question import get_cached_writing_questions, get_character_option_dependencies
+from larpmanager.cache.question import get_cached_writing_questions, get_character_dependencies
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.rels import refresh_character_relationships_background
 from larpmanager.cache.writing import get_cached_relationship_tags
@@ -123,6 +123,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Initialize storage for field details and metadata
         self.details: dict[str, Any] = {}
 
+        # Questions hidden by their unmet requirements, filled during validation
+        self.gated_questions: list[dict] = []
+
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
@@ -133,15 +136,24 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
     @cached_property
     def dependencies(self) -> dict[str, list[str]]:
-        """Requirements between options, mapped by option uuid, reused from the context when already loaded."""
+        """Requirements between options, mapped by option uuid."""
+        return self._cached_dependencies("options")
+
+    @cached_property
+    def question_dependencies(self) -> dict[str, list[str]]:
+        """Options required by each question, mapped by question uuid."""
+        return self._cached_dependencies("questions")
+
+    def _cached_dependencies(self, kind: str) -> dict[str, list[str]]:
+        """Requirement map of the given kind, reused from the context when already loaded."""
         if "dependencies" in self.params:
-            return self.params["dependencies"]
+            return self.params["dependencies"].get(kind, {})
 
         event = self.params.get("event")
         if not event:
             return {}
 
-        return get_character_option_dependencies(event, self.params.get("features", []))
+        return get_character_dependencies(event, self.params.get("features", []))[kind]
 
     def is_auto_save(self) -> bool:
         """Check whether the form is bound to a background auto-save request."""
@@ -359,6 +371,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         """
         cleaned_data = super().clean()
 
+        self._gate_questions()
+
         self._validate_dependencies()
 
         # Check if factions_list field exists in cleaned data
@@ -376,11 +390,11 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         return cleaned_data
 
-    def _choice_fields(self) -> dict[str, dict[str, str]]:
+    def _choice_fields(self, *, include_unavailable: bool = False) -> dict[str, dict[str, str]]:
         """Return, for each choice field of the form, the uuid and name of its selectable options.
 
-        Options sold out are left out: the client side removes them from the page, so requiring
-        them would build an error the user has no way to fix.
+        Options sold out are left out unless requested: requiring them would build an error the
+        user has no way to fix.
         """
         choice_fields = {}
         choice_types = BaseQuestionType.get_choice_types()
@@ -393,7 +407,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 continue
 
             names = {str(option["uuid"]): option["name"] for option in question.get("options") or []}
-            unavailable = set(self.unavail.get(question["uuid"], []))
+            unavailable = set() if include_unavailable else set(self.unavail.get(question["uuid"], []))
             choice_fields[field_key] = {
                 str(value): names.get(str(value), label)
                 for value, label in self.fields[field_key].choices
@@ -426,6 +440,64 @@ class CharacterForm(WritingForm, BaseWritingForm):
             if not set(requirements) & selected
         ]
 
+    def _selected_options(self, choice_fields: dict[str, dict[str, str]], skip: set[str] | None = None) -> set[str]:
+        """Return the uuids of the options chosen in the given choice fields."""
+        selected = set()
+        for field_key in choice_fields:
+            if skip and field_key in skip:
+                continue
+            value = self.cleaned_data.get(field_key)
+            if not value:
+                continue
+            selected.update(value if isinstance(value, (list, tuple, set)) else [value])
+
+        return selected
+
+    def _gate_questions(self) -> None:
+        """Drop the answers of the questions whose required options are not chosen.
+
+        Mirrors the client side, which hides them: the answer is discarded and the question
+        cannot block the save, even when mandatory.
+        """
+        # Organizers are not bound by the requirements; auto-save is gated too, as it stores answers
+        if self.orga or not self.question_dependencies:
+            return
+
+        # Sold out options stay on the page unless configured otherwise: there they still gate the
+        # questions requiring them, as the client cannot see them chosen
+        keep_unavailable = not get_event_config(
+            self.params["event"].id, "character_form_hide_unavailable", context=self.params
+        )
+        choice_fields = self._choice_fields(include_unavailable=keep_unavailable)
+        # Requirements pointing to options not present in the form are treated as satisfied
+        available = {uuid for options in choice_fields.values() for uuid in options}
+
+        gated = {}
+        for question in self.questions:
+            requirements = [
+                requirement
+                for requirement in self.question_dependencies.get(str(question["uuid"]), [])
+                if requirement in available
+            ]
+            field_key = get_question_key(question)
+            if requirements and field_key in self.fields:
+                gated[field_key] = (question, set(requirements))
+
+        # Hiding a question deselects its options, which can gate others: repeat until stable
+        hidden: set[str] = set()
+        for _pass in range(len(gated)):
+            selected = self._selected_options(choice_fields, skip=hidden)
+            newly = {key for key, (_question, required) in gated.items() if key not in hidden and required - selected}
+            if not newly:
+                break
+            hidden |= newly
+
+        self.gated_questions = [gated[field_key][0] for field_key in hidden]
+        for field_key in hidden:
+            self._errors.pop(field_key, None)
+            question = gated[field_key][0]
+            self.cleaned_data[field_key] = [] if question["typ"] == BaseQuestionType.MULTIPLE else ""
+
     def _validate_dependencies(self) -> None:
         """Check that every chosen option has its required options chosen too.
 
@@ -444,12 +516,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         available = {uuid: label for options in choice_fields.values() for uuid, label in options.items()}
         owner = {uuid: field_key for field_key, options in choice_fields.items() for uuid in options}
 
-        selected = set()
-        for field_key in choice_fields:
-            value = self.cleaned_data.get(field_key)
-            if not value:
-                continue
-            selected.update(value if isinstance(value, (list, tuple, set)) else [value])
+        selected = self._selected_options(choice_fields)
 
         for field_key, options in choice_fields.items():
             for option_uuid in selected & set(options):
@@ -460,6 +527,17 @@ class CharacterForm(WritingForm, BaseWritingForm):
                         _("The option '%(option)s' requires: %(missing)s")
                         % {"option": options[option_uuid], "missing": ", ".join(missing)},
                     )
+
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
+        """Save the character, discarding the answers of the questions hidden by their requirements."""
+        instance = super().save(commit=commit)
+
+        if self.gated_questions and instance.pk:
+            question_ids = [question["id"] for question in self.gated_questions]
+            self.choice_class.objects.filter(question_id__in=question_ids, **{self.instance_key: instance.id}).delete()
+            self.answer_class.objects.filter(question_id__in=question_ids, **{self.instance_key: instance.id}).delete()
+
+        return instance
 
 
 class OrgaCharacterForm(CharacterForm):
@@ -1043,6 +1121,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
         exclude: ClassVar[list] = ["order", "applicable"]
         widgets: ClassVar[dict] = {
             "description": forms.Textarea(attrs={"rows": 3, "cols": 40}),
+            "requirements": EventWritingOptionS2WidgetMulti,
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -1116,6 +1195,16 @@ class OrgaWritingQuestionForm(BaseModelForm):
             )
 
         self.check_applicable = self.params["writing_typ"]
+
+        self._init_requirements()
+
+    def _init_requirements(self) -> None:
+        """Initialize the options gating the question, available only on character questions."""
+        if self.params["writing_typ"] != QuestionApplicable.CHARACTER:
+            self.delete_field("requirements")
+            return
+
+        self.event_field_if_feature("requirements", "wri_que_requirements", self.params["event"])
 
     def _init_type(self) -> None:
         """Initialize character type field choices based on available writing question types.
@@ -1200,6 +1289,8 @@ class OrgaWritingQuestionForm(BaseModelForm):
             instance.applicable = self.params["writing_typ"]
         if commit:
             instance.save()
+            # the instance was saved by hand: the m2m fields are still pending
+            self.save_m2m()
         return instance
 
 
@@ -1236,15 +1327,8 @@ class OrgaWritingOptionForm(BaseModelForm):
         elif "max_available" in self.fields:
             self.fields["max_available"].required = False
 
-        if "wri_que_tickets" not in self.params["features"]:
-            self.delete_field("tickets")
-        else:
-            self.configure_field_event("tickets", self.params["event"])
-
-        if "wri_que_requirements" not in self.params["features"]:
-            self.delete_field("requirements")
-        else:
-            self.configure_field_event("requirements", self.params["event"])
+        self.event_field_if_feature("tickets", "wri_que_tickets", self.params["event"])
+        self.event_field_if_feature("requirements", "wri_que_requirements", self.params["event"])
 
     def clean_max_available(self) -> int:
         """Treat blank max_available as 0."""

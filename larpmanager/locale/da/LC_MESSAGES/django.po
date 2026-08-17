@@ -9548,6 +9548,11 @@ msgstr ""
 "karakterrelationer"
 
 msgid ""
+"Enter other options that must be selected for this question to be shown"
+msgstr ""
+"Indtast andre valgmuligheder, der skal vælges, for at dette spørgsmål vises"
+
+msgid ""
 "Enter the number or code of the identification document indicated above"
 msgstr "Angiv nummeret eller koden på identitetsdokumentet angivet ovenfor"
 

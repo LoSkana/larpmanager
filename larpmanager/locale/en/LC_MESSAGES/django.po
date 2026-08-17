@@ -4315,6 +4315,12 @@ msgstr ""
 msgid "Select the types of writing elements that this question applies to"
 msgstr ""
 
+msgid "Prerequisites"
+msgstr ""
+
+msgid "Enter other options that must be selected for this question to be shown"
+msgstr ""
+
 msgid "Option name, displayed within the question (keep it short)"
 msgstr ""
 
@@ -4326,9 +4332,6 @@ msgstr ""
 msgid ""
 "Optional - Maximum number of times it can be selected across all characters "
 "(0 = unlimited)"
-msgstr ""
-
-msgid "Prerequisites"
 msgstr ""
 
 msgid ""
