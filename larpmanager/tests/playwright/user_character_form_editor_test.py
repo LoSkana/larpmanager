@@ -308,13 +308,13 @@ def verify_requirements_hidden(page: Any) -> None:
     Tests both options and questions:
     - multiple-choice (checkbox): option "14" (u7) requires "wwww" (u3)
     - single-choice (radio): option "dep_b" (u9, index 1) in "single_req" (u8) requires "wwww" (u3)
-    - whole question: "gated_q" (u9) requires "wwww" (u3)
+    - whole question: "gated_q" (u10) requires "wwww" (u3)
     """
     # the native inputs are visually hidden by lm.css (zero size); the dependency
     # JS toggles the wrapping label, so assert visibility on the label instead
     label_14 = page.locator('label:has(input[type="checkbox"][value="u7"])')
     dep_b_radio = page.locator('label:has(input[type="radio"][value="u9"])')
-    gated_row = page.locator("#id_que_u9_tr")
+    gated_row = page.locator("#id_que_u10_tr")
 
     # Nothing selected yet in "single" - the dependent options and question must be hidden
     expect(label_14).to_be_hidden()
@@ -339,14 +339,14 @@ def gated_question_reset(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/character/u3/change/")
 
     # the requirement is still selected: the question is shown with the stored answer
-    expect(page.locator("#id_que_u9_tr")).to_be_visible()
-    expect(page.locator('input[type="radio"][value="u10"]')).to_be_checked()
+    expect(page.locator("#id_que_u10_tr")).to_be_visible()
+    expect(page.locator('input[type="radio"][value="u12"]')).to_be_checked()
 
     # select "rrrr": the mandatory question is hidden, and does not block the save
     # editing an answered question collapses the options not chosen
     page.locator("#id_que_u4 .opt-show-more").click()
     page.locator('label[for="id_que_u4_1"]').click()
-    expect(page.locator("#id_que_u9_tr")).to_be_hidden()
+    expect(page.locator("#id_que_u10_tr")).to_be_hidden()
     submit_confirm(page)
     expect_normalized(page, page.locator("#one"), "Status: Approved")
 
@@ -354,8 +354,8 @@ def gated_question_reset(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/character/u3/change/")
     page.locator("#id_que_u4 .opt-show-more").click()
     page.locator('label[for="id_que_u4_2"]').click()
-    expect(page.locator("#id_que_u9_tr")).to_be_visible()
-    expect(page.locator('input[type="radio"][value="u10"]')).not_to_be_checked()
+    expect(page.locator("#id_que_u10_tr")).to_be_visible()
+    expect(page.locator('input[type="radio"][value="u12"]')).not_to_be_checked()
 
 
 def character(page: Any, live_server: Any) -> None:
@@ -390,7 +390,7 @@ def character(page: Any, live_server: Any) -> None:
     page.locator("#id_que_u6").fill("wow")
     page.locator("#id_que_u7").click()
     page.locator("#id_que_u7").fill("asdsadsa")
-    page.locator('label[for="id_que_u9_0"]').click()  # gear_a, shown by "wwww"
+    page.locator('label[for="id_que_u10_0"]').click()  # gear_a, shown by "wwww"
     submit_confirm(page)
 
     # confirm char: after creation the user lands on the character sheet
