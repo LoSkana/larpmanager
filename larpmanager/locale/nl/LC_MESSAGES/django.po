@@ -4754,6 +4754,9 @@ msgstr "Valuta & materialen"
 msgid "Customised mail server"
 msgstr "Aangepaste mailserver"
 
+msgid "Disable free abilities"
+msgstr "Gratis vaardigheden uitschakelen"
+
 msgid "Event deletion request"
 msgstr "Verzoek om verwijdering van het evenement"
 
@@ -11533,6 +11536,13 @@ msgid ""
 msgstr ""
 "Ik bevestig dat ik een geldig document heb geüpload dat is uitgegeven door "
 "de staat van mijn nationaliteit"
+
+msgid ""
+"If enabled, characters no longer automatically acquire abilities with a cost"
+" of zero."
+msgstr ""
+"Als dit is ingeschakeld, krijgen personages niet langer automatisch "
+"vaardigheden met kosten van nul."
 
 msgid ""
 "If you don't find a user, save the role and then invite them by clicking "

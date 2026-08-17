@@ -4754,6 +4754,9 @@ msgstr "Valutor & material"
 msgid "Customised mail server"
 msgstr "Skräddarsydd e-postserver"
 
+msgid "Disable free abilities"
+msgstr "Inaktivera fria förmågor"
+
 msgid "Event deletion request"
 msgstr "Begäran om radering av evenemang"
 
@@ -11302,6 +11305,13 @@ msgid ""
 msgstr ""
 "Jag bekräftar att jag har laddat upp ett giltigt dokument som utfärdats av "
 "den stat där jag är medborgare"
+
+msgid ""
+"If enabled, characters no longer automatically acquire abilities with a cost"
+" of zero."
+msgstr ""
+"Om detta är aktiverat får karaktärer inte längre automatiskt förmågor med "
+"kostnaden noll."
 
 msgid ""
 "If you don't find a user, save the role and then invite them by clicking "

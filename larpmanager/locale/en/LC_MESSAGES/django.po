@@ -1504,6 +1504,14 @@ msgid ""
 "bought."
 msgstr ""
 
+msgid "Disable free abilities"
+msgstr ""
+
+msgid ""
+"If enabled, characters no longer automatically acquire abilities with a cost "
+"of zero."
+msgstr ""
+
 msgid "Multiple systems"
 msgstr ""
 
