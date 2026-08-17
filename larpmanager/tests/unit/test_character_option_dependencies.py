@@ -168,6 +168,37 @@ class TestCharacterOptionDependencies(BaseTestCase):
 
         assert form.is_valid(), form.errors
 
+    def test_requirements_on_same_question_are_alternatives(self) -> None:
+        # only one option of a single choice question can be picked, so requirements on it are alternatives
+        self.psionic.requirements.set([self.bunker, self.wasteland])
+
+        form = CharacterForm(
+            self._data(self.wasteland, self.psionic),
+            instance=self._character(),
+            context=self._context(),
+        )
+
+        assert form.is_valid(), form.errors
+
+    def test_requirements_on_other_questions_are_all_needed(self) -> None:
+        training = self._question("Training", order=4)
+        medic = WritingOption.objects.create(event=self.event, question=training, name="Medic", order=1)
+        self.psionic.requirements.set([self.bunker, self.wasteland, medic])
+
+        data = self._data(self.wasteland, self.psionic)
+        form = CharacterForm(data, instance=self._character(), context=self._context())
+
+        assert not form.is_valid()
+        errors = str(form.errors[get_question_key(self.mutation)])
+        # the origin group is satisfied by the wasteland choice, only the missing training is reported
+        assert "Medic" in errors
+        assert "Bunker" not in errors
+
+        data[get_question_key(training)] = str(medic.uuid)
+        form = CharacterForm(data, instance=self._character(), context=self._context())
+
+        assert form.is_valid(), form.errors
+
     def test_dependencies_cached_and_cleared_on_requirement_change(self) -> None:
         features = {"character", "wri_que_requirements"}
         assert get_character_option_dependencies(self.event, features) == {

@@ -402,11 +402,35 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         return choice_fields
 
-    def _validate_dependencies(self) -> None:
-        """Check that every chosen option has all its required options chosen too.
+    def _missing_requirements(
+        self,
+        option_uuid: str,
+        available: dict[str, str],
+        owner: dict[str, str],
+        selected: set,
+    ) -> list[str]:
+        """Return the names of the requirement groups of an option that are not satisfied.
 
-        Requirements pointing to options not available in the form are ignored, mirroring
-        the client side check: only what the user can actually select is enforced.
+        Requirements are grouped by the question they belong to: picking any option of a group
+        satisfies it, while every group has to be satisfied. Requirements pointing to options
+        not available in the form are ignored.
+        """
+        groups: dict[str, list[str]] = {}
+        for requirement in self.dependencies.get(option_uuid, []):
+            if requirement in available:
+                groups.setdefault(owner[requirement], []).append(requirement)
+
+        return [
+            " / ".join(available[requirement] for requirement in requirements)
+            for requirements in groups.values()
+            if not set(requirements) & selected
+        ]
+
+    def _validate_dependencies(self) -> None:
+        """Check that every chosen option has its required options chosen too.
+
+        Mirrors the client side check: requirements on the same question are alternatives,
+        requirements on different questions are all needed.
         """
         # Organizers are not bound by the option requirements; auto-save is checked too, as it stores choices
         if self.orga or not self.dependencies:
@@ -416,8 +440,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if not choice_fields:
             return
 
-        # Name of every option the user can pick, on any question of the form
+        # Name of every option the user can pick, and the field it belongs to, on any question of the form
         available = {uuid: label for options in choice_fields.values() for uuid, label in options.items()}
+        owner = {uuid: field_key for field_key, options in choice_fields.items() for uuid in options}
 
         selected = set()
         for field_key in choice_fields:
@@ -428,11 +453,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         for field_key, options in choice_fields.items():
             for option_uuid in selected & set(options):
-                missing = [
-                    available[requirement]
-                    for requirement in self.dependencies.get(option_uuid, [])
-                    if requirement in available and requirement not in selected
-                ]
+                missing = self._missing_requirements(option_uuid, available, owner, selected)
                 if missing:
                     self.add_error(
                         field_key,
