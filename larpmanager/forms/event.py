@@ -348,6 +348,7 @@ class OrgaConfigForm(ConfigForm):
         self.set_config_writing()
         self.set_config_campaign()
         self.set_config_experience()
+        self.set_config_user_character()
         self.set_config_char_form()
         self.set_config_custom()
         self.set_config_casting()
@@ -891,8 +892,6 @@ class OrgaConfigForm(ConfigForm):
             "If enabled, enables managing multiple experience systems for the event. Each ability and award can be assigned to a specific system.",
         )
         self.add_configs("exp_systems", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
-
-        self.set_config_user_character()
 
     def set_config_user_character(self) -> None:
         """Configure the player character creation settings, if the user_character feature is enabled."""
