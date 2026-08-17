@@ -559,6 +559,10 @@ def _handle_free_abilities(
     # Build EXP context
     current_character_abilities, current_character_choices, modifiers_by_ability = _build_exp_context(character)
 
+    # if the automatic acquisition of cost 0 abilities is disabled, keep what already assigned
+    if get_event_config(character.event_id, "exp_no_free"):
+        return current_character_abilities, current_character_choices, modifiers_by_ability
+
     # look for available ability with cost 0, and not already in the free list: get them!
     # Use a dict with 0 for all systems (we only want cost=0 abilities here)
     zero_avail: dict[int, int] = defaultdict(int)

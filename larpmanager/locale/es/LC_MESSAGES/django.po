@@ -4754,6 +4754,9 @@ msgstr "Divisas y materiales"
 msgid "Customised mail server"
 msgstr "Servidor de correo personalizado"
 
+msgid "Disable free abilities"
+msgstr "Desactivar habilidades gratuitas"
+
 msgid "Event deletion request"
 msgstr "Solicitud de eliminación del evento"
 
@@ -11529,6 +11532,13 @@ msgid ""
 msgstr ""
 "Confirmo que he subido un documento válido expedido por el Estado de mi "
 "nacionalidad"
+
+msgid ""
+"If enabled, characters no longer automatically acquire abilities with a cost"
+" of zero."
+msgstr ""
+"Si se activa, los personajes ya no adquieren automáticamente habilidades con"
+" un coste de cero."
 
 msgid ""
 "If you don't find a user, save the role and then invite them by clicking "

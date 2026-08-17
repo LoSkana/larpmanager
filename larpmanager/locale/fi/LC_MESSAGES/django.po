@@ -4754,6 +4754,9 @@ msgstr "Valuutat ja materiaalit"
 msgid "Customised mail server"
 msgstr "Mukautettu sähköpostipalvelin"
 
+msgid "Disable free abilities"
+msgstr "Poista ilmaiset kyvyt käytöstä"
+
 msgid "Event deletion request"
 msgstr "Tapahtuman poistopyyntö"
 
@@ -11320,6 +11323,13 @@ msgid ""
 msgstr ""
 "Vahvistan, että olen ladannut kansalaisuusvaltioni myöntämän voimassa olevan"
 " asiakirjan"
+
+msgid ""
+"If enabled, characters no longer automatically acquire abilities with a cost"
+" of zero."
+msgstr ""
+"Jos tämä on käytössä, hahmot eivät enää automaattisesti saa kykyjä, joiden "
+"hinta on nolla."
 
 msgid ""
 "If you don't find a user, save the role and then invite them by clicking "

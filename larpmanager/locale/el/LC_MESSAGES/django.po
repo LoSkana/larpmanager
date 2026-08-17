@@ -4754,6 +4754,9 @@ msgstr "Νομίσματα και υλικά"
 msgid "Customised mail server"
 msgstr "Προσαρμοσμένος διακομιστής email"
 
+msgid "Disable free abilities"
+msgstr "Απενεργοποίηση δωρεάν ικανοτήτων"
+
 msgid "Event deletion request"
 msgstr "Αίτημα διαγραφής εκδήλωσης"
 
@@ -11624,6 +11627,13 @@ msgid ""
 msgstr ""
 "Επιβεβαιώνω ότι έχω μεταφορτώσει έγκυρο έγγραφο που εκδόθηκε από το κράτος "
 "της εθνικότητάς μου"
+
+msgid ""
+"If enabled, characters no longer automatically acquire abilities with a cost"
+" of zero."
+msgstr ""
+"Αν ενεργοποιηθεί, οι χαρακτήρες δεν αποκτούν πλέον αυτόματα ικανότητες με "
+"κόστος μηδέν."
 
 msgid ""
 "If you don't find a user, save the role and then invite them by clicking "

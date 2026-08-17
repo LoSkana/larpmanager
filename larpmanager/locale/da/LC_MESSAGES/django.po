@@ -4754,6 +4754,9 @@ msgstr "Valutaer og materialer"
 msgid "Customised mail server"
 msgstr "Tilpasset mailserver"
 
+msgid "Disable free abilities"
+msgstr "Deaktivér gratis evner"
+
 msgid "Event deletion request"
 msgstr "Anmodning om sletning af event"
 
@@ -11253,6 +11256,13 @@ msgid ""
 msgstr ""
 "Jeg bekræfter, at jeg har uploadet et gyldigt dokument udstedt af staten i "
 "mit nationalitetsland"
+
+msgid ""
+"If enabled, characters no longer automatically acquire abilities with a cost"
+" of zero."
+msgstr ""
+"Hvis aktiveret, får karakterer ikke længere automatisk evner med en pris på "
+"nul."
 
 msgid ""
 "If you don't find a user, save the role and then invite them by clicking "

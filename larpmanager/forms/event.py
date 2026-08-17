@@ -346,7 +346,9 @@ class OrgaConfigForm(ConfigForm):
 
         # 4. Characters
         self.set_config_writing()
-        self.set_config_character()
+        self.set_config_campaign()
+        self.set_config_experience()
+        self.set_config_user_character()
         self.set_config_char_form()
         self.set_config_custom()
         self.set_config_casting()
@@ -789,213 +791,217 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("writing_relationship_tags", ConfigType.BOOL, config_label, config_help_text)
 
-    def set_config_character(self) -> None:
-        """Configure character-related settings including campaign and faction options.
+    def set_config_campaign(self) -> None:
+        """Configure campaign-related settings."""
+        if "campaign" not in self.params["features"]:
+            return
 
-        This method sets up configuration fields for various character-related features
-        including campaign management, faction independence, experience points system,
-        and player-managed character creation settings.
+        self.set_section("campaign", _("Campaign"))
 
-        The configuration sections are conditionally created based on available features
-        in self.params.get("features"). Each section contains relevant boolean, integer,
-        and other configuration options with appropriate labels and help text.
+        split_label = _("Split by participation")
+        split_help_text = _(
+            "If enabled, show two separate tables on the characters page, one for characters participating in this run and one for non-participating characters."
+        )
+        self.add_configs("campaign_split_registration", ConfigType.BOOL, split_label, split_help_text)
 
-        Note:
-            Requires self.params.get("features") to contain feature flags and access to
-            self.set_section() and self.add_configs() methods.
+        independent_factions_label = _("Independent factions")
+        independent_factions_help_text = _("If enabled, do not use the parent event's factions.")
+        self.add_configs(
+            "campaign_faction_indep",
+            ConfigType.BOOL,
+            independent_factions_label,
+            independent_factions_help_text,
+        )
 
-        """
-        # Configure campaign-related settings if campaign feature is enabled
-        if "campaign" in self.params["features"]:
-            self.set_section("campaign", _("Campaign"))
+    def set_config_experience(self) -> None:
+        """Configure the experience points settings, if the experience feature is enabled."""
+        if "experience" not in self.params["features"]:
+            return
 
-            split_label = _("Split by participation")
-            split_help_text = _(
-                "If enabled, show two separate tables on the characters page, one for characters participating in this run and one for non-participating characters."
-            )
-            self.add_configs("campaign_split_registration", ConfigType.BOOL, split_label, split_help_text)
+        self.set_section("experience", _("Experience points"))
 
-            independent_factions_label = _("Independent factions")
-            independent_factions_help_text = _("If enabled, do not use the parent event's factions.")
-            self.add_configs(
-                "campaign_faction_indep",
-                ConfigType.BOOL,
-                independent_factions_label,
-                independent_factions_help_text,
-            )
+        # Player selection configuration - allows participants to choose abilities
+        player_selection_label = _("Player selection")
+        player_selection_help_text = _(
+            "If enabled, participants may add abilities themselves, by selecting from those that are visible, and whose pre-requisites they meet.",
+        )
+        self.add_configs("exp_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
 
-        # Configure experience points system if experience feature is enabled
-        if "experience" in self.params["features"]:
-            self.set_section("experience", _("Experience points"))
+        # Undo period configuration - time window for ability revocation
+        undo_period_label = _("Undo period")
+        undo_period_help_text = _(
+            "Time window (in hours) during which the user can revoke a chosen ability and recover spent XP (default is 0).",
+        )
+        self.add_configs("exp_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
 
-            # Player selection configuration - allows participants to choose abilities
-            player_selection_label = _("Player selection")
-            player_selection_help_text = _(
-                "If enabled, participants may add abilities themselves, by selecting from those that are visible, and whose pre-requisites they meet.",
-            )
-            self.add_configs("exp_user", ConfigType.BOOL, player_selection_label, player_selection_help_text)
+        # Initial experience points configuration
+        initial_experience_points_label = _("Initial experience points")
+        initial_experience_points_help_text = _("Initial value of experience points for all characters.")
+        self.add_configs(
+            "exp_start",
+            ConfigType.INT,
+            initial_experience_points_label,
+            initial_experience_points_help_text,
+        )
 
-            # Undo period configuration - time window for ability revocation
-            undo_period_label = _("Undo period")
-            undo_period_help_text = _(
-                "Time window (in hours) during which the user can revoke a chosen ability and recover spent XP (default is 0).",
-            )
-            self.add_configs("exp_undo", ConfigType.INT, undo_period_label, undo_period_help_text)
+        # Ability templates configuration
+        ability_templates_label = _("Ability templates")
+        ability_templates_help_text = _(
+            "If enabled, enables ability templates that can be reused across multiple abilities.",
+        )
+        self.add_configs("exp_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
 
-            # Initial experience points configuration
-            initial_experience_points_label = _("Initial experience points")
-            initial_experience_points_help_text = _("Initial value of experience points for all characters.")
-            self.add_configs(
-                "exp_start",
-                ConfigType.INT,
-                initial_experience_points_label,
-                initial_experience_points_help_text,
-            )
+        # Rules configuration
+        rules_label = _("Rules")
+        rules_help_text = _(
+            "If enabled, enables rules for computed character fields based on abilities.",
+        )
+        self.add_configs("exp_rules", ConfigType.BOOL, rules_label, rules_help_text)
 
-            # Ability templates configuration
-            ability_templates_label = _("Ability templates")
-            ability_templates_help_text = _(
-                "If enabled, enables ability templates that can be reused across multiple abilities.",
-            )
-            self.add_configs("exp_templates", ConfigType.BOOL, ability_templates_label, ability_templates_help_text)
+        # Modifiers configuration
+        modifiers_label = _("Modifiers")
+        modifiers_help_text = _(
+            "If enabled, enables modifiers that can adjust ability costs based on prerequisites and requirements.",
+        )
+        self.add_configs("exp_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
 
-            # Rules configuration
-            rules_label = _("Rules")
-            rules_help_text = _(
-                "If enabled, enables rules for computed character fields based on abilities.",
-            )
-            self.add_configs("exp_rules", ConfigType.BOOL, rules_label, rules_help_text)
+        # Criteria configuration
+        criterions_label = _("Criteria")
+        criterions_help_text = _(
+            "If enabled, this feature enables criteria that conditionally modify experience point totals based on prerequisites and requirements.",
+        )
+        self.add_configs("exp_criterions", ConfigType.BOOL, criterions_label, criterions_help_text)
 
-            # Modifiers configuration
-            modifiers_label = _("Modifiers")
-            modifiers_help_text = _(
-                "If enabled, enables modifiers that can adjust ability costs based on prerequisites and requirements.",
-            )
-            self.add_configs("exp_modifiers", ConfigType.BOOL, modifiers_label, modifiers_help_text)
+        # Auto buy configuration
+        auto_buy_label = _("Auto buy")
+        auto_buy_help_text = _(
+            "If enabled, characters automatically and repeatedly acquire the most expensive available ability with their remaining XP, until no more can be bought.",
+        )
+        self.add_configs("exp_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
 
-            # Criteria configuration
-            criterions_label = _("Criteria")
-            criterions_help_text = _(
-                "If enabled, this feature enables criteria that conditionally modify experience point totals based on prerequisites and requirements.",
-            )
-            self.add_configs("exp_criterions", ConfigType.BOOL, criterions_label, criterions_help_text)
+        # Free abilities configuration
+        no_free_label = _("Disable free abilities")
+        no_free_help_text = _(
+            "If enabled, characters no longer automatically acquire abilities with a cost of zero.",
+        )
+        self.add_configs("exp_no_free", ConfigType.BOOL, no_free_label, no_free_help_text)
 
-            # Auto buy configuration
-            auto_buy_label = _("Auto buy")
-            auto_buy_help_text = _(
-                "If enabled, characters automatically and repeatedly acquire the most expensive available ability with their remaining XP, until no more can be bought.",
-            )
-            self.add_configs("exp_auto_buy", ConfigType.BOOL, auto_buy_label, auto_buy_help_text)
+        # Multiple XP systems configuration
+        multiple_systems_label = _("Multiple systems")
+        multiple_systems_help_text = _(
+            "If enabled, enables managing multiple experience systems for the event. Each ability and award can be assigned to a specific system.",
+        )
+        self.add_configs("exp_systems", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
 
-            # Multiple XP systems configuration
-            multiple_systems_label = _("Multiple systems")
-            multiple_systems_help_text = _(
-                "If enabled, enables managing multiple experience systems for the event. Each ability and award can be assigned to a specific system.",
-            )
-            self.add_configs("exp_systems", ConfigType.BOOL, multiple_systems_label, multiple_systems_help_text)
+    def set_config_user_character(self) -> None:
+        """Configure the player character creation settings, if the user_character feature is enabled."""
+        if "user_character" not in self.params["features"]:
+            return
 
-        # Configure player character editor if user_character feature is enabled
-        if "user_character" in self.params["features"]:
-            self.set_section("user_character", _("Character creation"))
+        self.set_section("user_character", _("Character creation"))
 
-            # Maximum character limit configuration
-            max_characters_label = _("Maximum number")
-            max_characters_help_text = _("Maximum number of characters the player can create (default=1).")
-            self.add_configs("user_character_max", ConfigType.INT, max_characters_label, max_characters_help_text)
+        # Maximum character limit configuration
+        max_characters_label = _("Maximum number")
+        max_characters_help_text = _("Maximum number of characters the player can create (default=1).")
+        self.add_configs("user_character_max", ConfigType.INT, max_characters_label, max_characters_help_text)
 
-            # Character approval process configuration
-            character_approval_label = _("Approval")
-            character_approval_help_text = _("If enabled, activates a staff-managed approval process for characters.")
-            self.add_configs(
-                "user_character_approval",
-                ConfigType.BOOL,
-                character_approval_label,
-                character_approval_help_text,
-            )
+        # Character approval process configuration
+        character_approval_label = _("Approval")
+        character_approval_help_text = _("If enabled, activates a staff-managed approval process for characters.")
+        self.add_configs(
+            "user_character_approval",
+            ConfigType.BOOL,
+            character_approval_label,
+            character_approval_help_text,
+        )
 
-            # Background auto-save of the character form
-            disable_auto_label = _("Disable Auto save")
-            disable_auto_help_text = _(
-                "If enabled, the character form of the players will not be saved automatically while editing.",
-            )
-            self.add_configs(
-                "user_character_disable_auto",
-                ConfigType.BOOL,
-                disable_auto_label,
-                disable_auto_help_text,
-            )
+        # Background auto-save of the character form
+        disable_auto_label = _("Disable Auto save")
+        disable_auto_help_text = _(
+            "If enabled, the character form of the players will not be saved automatically while editing.",
+        )
+        self.add_configs(
+            "user_character_disable_auto",
+            ConfigType.BOOL,
+            disable_auto_label,
+            disable_auto_help_text,
+        )
 
     def set_config_guild(self) -> None:
         """Configure guild-related form fields for event settings."""
-        if "guild" in self.params["features"]:
-            self.set_section("guild", _("Guilds"))
+        if "guild" not in self.params["features"]:
+            return
 
-            max_number_label = _("Maximum number")
-            max_number_help_text = _("Maximum number of guilds players can create (0 = no limit).")
-            self.add_configs("guild_max_number", ConfigType.INT, max_number_label, max_number_help_text)
+        self.set_section("guild", _("Guilds"))
 
-            max_members_label = _("Maximum members")
-            max_members_help_text = _("Maximum number of accepted members per guild (0 = no limit).")
-            self.add_configs("guild_max_members", ConfigType.INT, max_members_label, max_members_help_text)
+        max_number_label = _("Maximum number")
+        max_number_help_text = _("Maximum number of guilds players can create (0 = no limit).")
+        self.add_configs("guild_max_number", ConfigType.INT, max_number_label, max_number_help_text)
+
+        max_members_label = _("Maximum members")
+        max_members_help_text = _("Maximum number of accepted members per guild (0 = no limit).")
+        self.add_configs("guild_max_members", ConfigType.INT, max_members_label, max_members_help_text)
 
     def set_config_custom(self) -> None:
         """Configure character customization form fields for event settings."""
-        if "custom_character" in self.params["features"]:
-            self.set_section("custom_character", _("Character customisation"))
+        if "custom_character" not in self.params["features"]:
+            return
 
-            character_name_label = _("Name")
-            character_name_help_text = _(
-                "If enabled, allows participants to customise the names of their characters.",
-            )
-            self.add_configs("custom_character_name", ConfigType.BOOL, character_name_label, character_name_help_text)
+        self.set_section("custom_character", _("Character customisation"))
 
-            character_profile_label = _("Profile")
-            character_profile_help_text = _(
-                "If enabled, allows participants to customise their characters' profile picture.",
-            )
-            self.add_configs(
-                "custom_character_profile",
-                ConfigType.BOOL,
-                character_profile_label,
-                character_profile_help_text,
-            )
+        character_name_label = _("Name")
+        character_name_help_text = _(
+            "If enabled, allows participants to customise the names of their characters.",
+        )
+        self.add_configs("custom_character_name", ConfigType.BOOL, character_name_label, character_name_help_text)
 
-            character_pronoun_label = _("Pronoun")
-            character_pronoun_help_text = _(
-                "If enabled, allows participants to customise their characters' pronouns.",
-            )
-            self.add_configs(
-                "custom_character_pronoun",
-                ConfigType.BOOL,
-                character_pronoun_label,
-                character_pronoun_help_text,
-            )
+        character_profile_label = _("Profile")
+        character_profile_help_text = _(
+            "If enabled, allows participants to customise their characters' profile picture.",
+        )
+        self.add_configs(
+            "custom_character_profile",
+            ConfigType.BOOL,
+            character_profile_label,
+            character_profile_help_text,
+        )
 
-            character_song_label = _("Song")
-            character_song_help_text = _("If enabled allows participants to indicate the song of their characters.")
-            self.add_configs("custom_character_song", ConfigType.BOOL, character_song_label, character_song_help_text)
+        character_pronoun_label = _("Pronoun")
+        character_pronoun_help_text = _(
+            "If enabled, allows participants to customise their characters' pronouns.",
+        )
+        self.add_configs(
+            "custom_character_pronoun",
+            ConfigType.BOOL,
+            character_pronoun_label,
+            character_pronoun_help_text,
+        )
 
-            character_private_label = _("Private")
-            character_private_help_text = _(
-                "If enabled allows participants to enter private information on their characters, visible only to them and the staff.",
-            )
-            self.add_configs(
-                "custom_character_private",
-                ConfigType.BOOL,
-                character_private_label,
-                character_private_help_text,
-            )
+        character_song_label = _("Song")
+        character_song_help_text = _("If enabled allows participants to indicate the song of their characters.")
+        self.add_configs("custom_character_song", ConfigType.BOOL, character_song_label, character_song_help_text)
 
-            character_public_label = _("Public")
-            character_public_help_text = _(
-                "If enabled allows participants to enter public information on their characters, visible to all.",
-            )
-            self.add_configs(
-                "custom_character_public",
-                ConfigType.BOOL,
-                character_public_label,
-                character_public_help_text,
-            )
+        character_private_label = _("Private")
+        character_private_help_text = _(
+            "If enabled allows participants to enter private information on their characters, visible only to them and the staff.",
+        )
+        self.add_configs(
+            "custom_character_private",
+            ConfigType.BOOL,
+            character_private_label,
+            character_private_help_text,
+        )
+
+        character_public_label = _("Public")
+        character_public_help_text = _(
+            "If enabled allows participants to enter public information on their characters, visible to all.",
+        )
+        self.add_configs(
+            "custom_character_public",
+            ConfigType.BOOL,
+            character_public_label,
+            character_public_help_text,
+        )
 
     def set_config_casting(self) -> None:
         """Configure casting-related form fields for event settings.

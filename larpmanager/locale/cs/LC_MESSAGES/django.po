@@ -4754,6 +4754,9 @@ msgstr "Měny a materiály"
 msgid "Customised mail server"
 msgstr "Přizpůsobený poštovní server"
 
+msgid "Disable free abilities"
+msgstr "Vypnout bezplatné schopnosti"
+
 msgid "Event deletion request"
 msgstr "Žádost o odstranění události"
 
@@ -11156,6 +11159,13 @@ msgid ""
 "nationality"
 msgstr ""
 "Potvrzuji, že jsem nahrál/a platný doklad vydaný státem, jehož jsem občanem"
+
+msgid ""
+"If enabled, characters no longer automatically acquire abilities with a cost"
+" of zero."
+msgstr ""
+"Pokud je povoleno, postavy již automaticky nezískávají schopnosti s nulovou "
+"cenou."
 
 msgid ""
 "If you don't find a user, save the role and then invite them by clicking "
