@@ -3014,7 +3014,7 @@ msgid "Sensitive data"
 msgstr "Følsomme data"
 
 msgid "Session active"
-msgstr "Økt aktiv"
+msgstr "Aktiv økt"
 
 msgid "Set quest type"
 msgstr "Angi Quest-type"
@@ -3177,7 +3177,7 @@ msgid "External access"
 msgstr "Ekstern tilgang"
 
 msgid "Filter selected"
-msgstr "Filter valgt"
+msgstr "Filtrer valgte"
 
 msgid "First character"
 msgstr "Første karakter"
@@ -4053,7 +4053,7 @@ msgid "RUNTS registration"
 msgstr "RUNTS-registrering"
 
 msgid "Registration Quota"
-msgstr "Påmeldingskvote"
+msgstr "Påmeldingsavgift"
 
 msgid "Registration email"
 msgstr "Registrerings-e-post"
@@ -4197,10 +4197,10 @@ msgid "Enter email address"
 msgstr "Skriv inn e-postadressen"
 
 msgid "Event Configuration"
-msgstr "Hendelseskonfigurasjon"
+msgstr "Arrangementskonfigurasjon"
 
 msgid "Event configuration"
-msgstr "Konfigurasjon av hendelse"
+msgstr "Konfigurasjon av arrangement"
 
 msgid "General information"
 msgstr "Generell informasjon"
@@ -4344,10 +4344,10 @@ msgid "Enter a valid number"
 msgstr "Skriv inn et gyldig nummer"
 
 msgid "Event added to ILDB:"
-msgstr "Hendelse lagt til i ILDB:"
+msgstr "Arrangement lagt til i ILDB:"
 
 msgid "Event already played"
-msgstr "Hendelse som allerede er spilt"
+msgstr "Arrangement allerede spilt"
 
 msgid "Event communications"
 msgstr "Kommunikasjon for arrangementet"
@@ -5433,7 +5433,7 @@ msgid "Check inverse relationship:"
 msgstr "Sjekk det omvendte forholdet:"
 
 msgid "Commit warehouse quantities"
-msgstr "Forplikt lagermengder"
+msgstr "Bekreft lagermengdene"
 
 msgid "Credits, tokens and refunds"
 msgstr "Kreditt, tokens og refusjoner"
@@ -6558,7 +6558,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Du kan ikke sende meldinger til deg selv!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Du har låst opp en ny prestasjon!"
+msgstr "Du har låst opp en ny Badge!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -6739,7 +6739,7 @@ msgstr "Du utforsker en demo-organisasjon."
 
 #, python-format
 msgid "You are exploring the \"%(name)s\" demo."
-msgstr "Du utforsker demoen «%(name)s.»"
+msgstr "Du utforsker demoen «%(name)s»."
 
 msgid "You can now start creating speed-larps"
 msgstr "Du kan nå begynne å opprette Speed larp-er"
@@ -7259,7 +7259,7 @@ msgid "No outflows recorded for the selected year."
 msgstr "Det er ikke registrert noen utbetalinger for det valgte året."
 
 msgid "Players can now create guilds for the event"
-msgstr "Spillere kan nå opprette guilds for arrangementet"
+msgstr "Spillere kan nå opprette laug for arrangementet"
 
 #, python-format
 msgid "Registration request approved for %(event)s"
@@ -7811,7 +7811,7 @@ msgid "Background image displayed across all event pages"
 msgstr "Bakgrunnsbildet vises på alle arrangementssidene"
 
 msgid "Character not found, or not playing in this event"
-msgstr "Karakteret ble ikke funnet, eller spiller ikke i dette arrangementet"
+msgstr "Karakteren ble ikke funnet, eller spiller ikke i dette arrangementet"
 
 msgid "Choose the character you will play in this event!"
 msgstr "Velg karakteren du skal spille i dette arrangementet!"
@@ -8067,7 +8067,7 @@ msgid "Description of the role of the character in the plot"
 msgstr "Beskrivelse av karakterens rolle i handlingen"
 
 msgid "Initialize the platform by creating your first event"
-msgstr "Initialiser plattformen ved å opprette din første hendelse"
+msgstr "Initialiser plattformen ved å opprette ditt første arrangement"
 
 msgid "Manages fixed installment payments for registrations"
 msgstr "Administrerer faste avdragsbetalinger for påmeldinger"
@@ -8817,8 +8817,7 @@ msgstr ""
 "komme i gang."
 
 msgid "No pending questions have been answered in the last 3 months."
-msgstr ""
-"Det er ikke blitt besvart noen ubesvarte spørsmål de siste tre månedene."
+msgstr "Ingen ventende spørsmål har blitt besvart de siste tre månedene."
 
 msgid "Note that if the cost is 0, it will be automatically assigned"
 msgstr "Merk at hvis kostnaden er 0, vil den automatisk bli tildelt"
@@ -9112,7 +9111,7 @@ msgid "You can also upload a second file with the registration options:"
 msgstr "Du kan også laste opp en ekstra fil med registreringsalternativene:"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
-msgstr "(Valgfritt) Om funksjonen er synlig for brukerne: true eller false"
+msgstr "(Valgfritt) Om evnen er synlig for brukerne: true eller false"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -11073,7 +11072,7 @@ msgid ""
 "or lore"
 msgstr ""
 "Gjør det mulig å bruke 'Handouts', forhåndsskrevne tekster som gir "
-"informasjon om et plot eller en historie"
+"informasjon om et plott eller en historie"
 
 msgid ""
 "If enabled, enables ability templates that can be reused across multiple "
@@ -11387,7 +11386,7 @@ msgid ""
 "underscores."
 msgstr ""
 "Den hemmelige koden kan bare inneholde bokstaver (a-z, A-Z), sifre, "
-"bindestreker og understrekinger."
+"bindestreker og understreker."
 
 msgid ""
 "These are registrations from delegated accounts for which you need to make a"
@@ -12094,8 +12093,8 @@ msgid ""
 "These addresses bounced or reported a complaint in the past, and were not "
 "added to the queue:"
 msgstr ""
-"Disse adressene har tidligere blitt avvist eller meldt som en klage, og ble "
-"ikke lagt til i køen:"
+"Disse adressene har tidligere blitt avvist eller fått en klage registrert, "
+"og ble ikke lagt til i køen:"
 
 msgid ""
 "This page only shows questions from the last 3 months. To view previous "
@@ -12975,8 +12974,8 @@ msgid ""
 "If enabled, generates secret URLs for sharing the full character sheet with "
 "a user who has not signed up."
 msgstr ""
-"Hvis aktivert, opprettes hemmelige URL-er for å dele det fullstendige "
-"karakterskjemaet med en bruker som ikke har meldt seg på."
+"Hvis aktivert, genereres hemmelige URL-er for å dele det fullstendige "
+"karakterarket med en bruker som ikke har meldt seg på."
 
 msgid ""
 "If enabled, lets you set which staff members may see participants' answers "
@@ -13487,7 +13486,7 @@ msgid ""
 "character sheet even when it is assigned."
 msgstr ""
 "Aktiverer feltet «låst», som hindrer spillere i å se hele karakterskjemaet "
-"selv når det er tildelt."
+"selv når karakteren er tildelt."
 
 msgid ""
 "If enabled, show on the event page the total number of tickets sold, plus "
@@ -14399,8 +14398,9 @@ msgid ""
 "Provides a character learning page with multiple display modes (book, cards,"
 " compact list) to help players memorise other characters before the event"
 msgstr ""
-"En side for å lære seg figurer med flere visningsmoduser (bok, kort, kompakt"
-" liste) for å hjelpe spillerne med å huske andre figurer før hendelsen"
+"Gir en side for å lære seg karakterer med flere visningsmoduser (bok, kort, "
+"kompakt liste) for å hjelpe spillerne med å huske andre karakterer før "
+"arrangementet"
 
 msgid ""
 "If enabled, characters automatically and repeatedly acquire the most "

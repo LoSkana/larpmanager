@@ -2043,7 +2043,7 @@ msgid "Carbon copy"
 msgstr "Κοινοποίηση"
 
 msgid "Card number"
-msgstr "Αριθμός κάρτας"
+msgstr "Αριθμός κάρτας μέλους"
 
 msgid "Change gift"
 msgstr "Αλλαγή δώρου"
@@ -2379,7 +2379,7 @@ msgid "Legal Notice"
 msgstr "Νομική ειδοποίηση"
 
 msgid "Legal notice"
-msgstr "Νομική σημείωση"
+msgstr "Νομική ειδοποίηση"
 
 msgid "Members list"
 msgstr "Λίστα μελών"
@@ -2667,7 +2667,7 @@ msgid "Next sessions"
 msgstr "Επόμενες συνεδρίες"
 
 msgid "Not completed"
-msgstr "Δεν ολοκληρώθηκε"
+msgstr "Δεν ολοκληρώθηκαν"
 
 msgid "Number events"
 msgstr "Αριθμός εκδηλώσεων"
@@ -4134,7 +4134,7 @@ msgid "Access Information:"
 msgstr "Πληροφορίες πρόσβασης:"
 
 msgid "Accounting tracking"
-msgstr "Monitoraggio contabile"
+msgstr "Παρακολούθηση λογιστικής"
 
 msgid "Activate account on"
 msgstr "Ενεργοποίηση λογαριασμού στο"
@@ -5106,7 +5106,7 @@ msgid "Referred Friend Discount"
 msgstr "Έκπτωση για παραπεμφθέντα φίλο"
 
 msgid "Referrer Reward Discount"
-msgstr "Έκπτωση ανταμοιβής παραπομπής"
+msgstr "Έκπτωση επιβράβευσης για όποιον παραπέμπει φίλο"
 
 msgid "Registration Installment"
 msgstr "Δόση εγγραφής"
@@ -5898,7 +5898,7 @@ msgstr "(κάνε κλικ στην εικόνα για μεγέθυνση)"
 
 #, python-format
 msgid "Achievement Unlocked: %(badge)s"
-msgstr "Ξεκλειδώθηκε επίτευγμα: %(badge)s"
+msgstr "Ξεκλειδώθηκε Badge: %(badge)s"
 
 msgid "Activate features for the event"
 msgstr "Ενεργοποίηση λειτουργιών για την εκδήλωση"
@@ -5917,7 +5917,7 @@ msgid "Discover the guilds of the game"
 msgstr "Ανακάλυψε τις συντεχνίες του παιχνιδιού"
 
 msgid "Manage all plots for this event"
-msgstr "Διαχειρίσου όλα τα Plot για αυτή την εκδήλωση"
+msgstr "Διαχειρίσου όλες τις πλοκές για αυτή την εκδήλωση"
 
 msgid "Manage all quests for the event"
 msgstr "Διαχειρίσου όλα τα Quest για την εκδήλωση"
@@ -6060,7 +6060,7 @@ msgid "Page %(number)s of %(num_pages)s"
 msgstr "Σελίδα %(number)s από %(num_pages)s"
 
 msgid "Please correct the errors below."
-msgstr "Correggi gli errori qui sotto."
+msgstr "Διόρθωσε τα παρακάτω σφάλματα."
 
 #, python-format
 msgid "Registration closes on: %(date)s"
@@ -6664,7 +6664,7 @@ msgid "Write here what you would like to to!"
 msgstr "Γράψε εδώ τι θα ήθελες να κάνεις!"
 
 msgid "You are currently logged in with the:"
-msgstr "Αυτή τη στιγμή έχεις συνδεθεί με τον:"
+msgstr "Αυτή τη στιγμή έχεις συνδεθεί με:"
 
 msgid "You can now create fixed installments"
 msgstr "Τώρα μπορείς να δημιουργήσεις σταθερές δόσεις"
@@ -7804,7 +7804,7 @@ msgstr "(Προαιρετικό) Ο αριθμός επιπλέον εγγραφ
 
 #, python-format
 msgid "Access your character <a href='%(url)s'>here</a>!"
-msgstr "Πρόσβαση στον χαρακτήρα σου <a href='%(url)s'>εδώ</a>!"
+msgstr "Απόκτησε πρόσβαση στον χαρακτήρα σου <a href='%(url)s'>εδώ</a>!"
 
 msgid "Added at the top of the search page of characters"
 msgstr "Προστίθεται στην κορυφή της σελίδας αναζήτησης χαρακτήρων"
@@ -9198,7 +9198,7 @@ msgstr ""
 
 #, python-format
 msgid "New contribution to the collection for %(recipient)s by %(user)s"
-msgstr "Νέα συνεισφορά στη συλλογή για %(recipient)s από %(user)s"
+msgstr "Νέα συνεισφορά στη συλλογή χρημάτων για %(recipient)s από %(user)s"
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr ""
@@ -10854,7 +10854,7 @@ msgid ""
 "View and adjust configuration options for each feature activated on this "
 "event"
 msgstr ""
-"Προβολή και προσαρμογή επιλογών διαμόρφωσης για κάθε λειτουργία που είναι "
+"Δες και προσάρμοσε τις επιλογές διαμόρφωσης για κάθε λειτουργία που είναι "
 "ενεργοποιημένη σε αυτή την εκδήλωση"
 
 msgid ""
@@ -10918,7 +10918,7 @@ msgid ""
 "Manage the modules used to group and organize workshop questions for this "
 "event"
 msgstr ""
-"Διαχείριση των ενοτήτων που χρησιμοποιούνται για την ομαδοποίηση και "
+"Διαχειρίσου τις ενότητες που χρησιμοποιούνται για την ομαδοποίηση και "
 "οργάνωση των ερωτήσεων workshop για αυτό το event"
 
 msgid ""
@@ -12633,7 +12633,7 @@ msgid ""
 "admin, invite and text"
 msgstr ""
 "Ενεργοποιεί τις «Συντεχνίες», ομάδες χαρακτήρων που δημιουργούνται από "
-"παίκτες και έχουν αυτοδιαχειριζόμενο διαχειριστή, προσκλήσεις και κείμενο"
+"παίκτες και έχουν αυτοδιαχειριζόμενο διαχειριστή, προσκλήσεις και μηνύματα"
 
 #, python-format
 msgid ""
@@ -13557,8 +13557,8 @@ msgid ""
 "Adds support for assigning XP (experience points) to characters, which can "
 "then be used to purchase abilities"
 msgstr ""
-"Προσθέτει υποστήριξη για την ανάθεση XP (πόντων εμπειρίας) σε χαρακτήρες, "
-"που μπορούν στη συνέχεια να χρησιμοποιηθούν για την αγορά ικανοτήτων"
+"Προσθέτει υποστήριξη για την ανάθεση XP (πόντων εμπειρίας) σε χαρακτήρες, τα"
+" οποία μπορούν στη συνέχεια να χρησιμοποιηθούν για την αγορά ικανοτήτων"
 
 msgid ""
 "Define criteria that conditionally modify experience point totals based on "
@@ -14452,8 +14452,8 @@ msgid ""
 "Please indicate below the exact method of payment you made. Remember to "
 "submit the form, otherwise your payment will not be processed!"
 msgstr ""
-"Παρακαλούμε, δήλωσε παρακάτω την ακριβή μέθοδο πληρωμής που χρησιμοποίησες. "
-"Θυμήσου να υποβάλεις τη φόρμα, αλλιώς η πληρωμή σου δεν θα διεκπεραιωθεί!"
+"Δήλωσε παρακάτω την ακριβή μέθοδο πληρωμής που χρησιμοποίησες. Θυμήσου να "
+"υποβάλεις τη φόρμα, αλλιώς η πληρωμή σου δεν θα διεκπεραιωθεί!"
 
 msgid ""
 "Select a zip file for upload. Directories will become albums, photos and the"

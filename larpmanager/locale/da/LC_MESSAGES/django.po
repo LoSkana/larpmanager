@@ -249,7 +249,7 @@ msgid "View"
 msgstr "Se"
 
 msgid "Vote"
-msgstr "Stem"
+msgstr "Stemme"
 
 msgid "What"
 msgstr "Hvad"
@@ -3005,7 +3005,7 @@ msgid "Request signed"
 msgstr "Anmodning underskrevet"
 
 msgid "Request signup"
-msgstr "Anmod om tilmelding"
+msgstr "Anmodning om tilmelding"
 
 msgid "Requests open:"
 msgstr "Åbne anmodninger:"
@@ -3336,10 +3336,10 @@ msgid "View accounting"
 msgstr "Se regnskab"
 
 msgid "WILL BE DELETED"
-msgstr "SLETTES"
+msgstr "VIL BLIVE SLETTET"
 
 msgid "WILL BE UPDATED"
-msgstr "OPDATERES"
+msgstr "VIL BLIVE OPDATERET"
 
 msgid "Warehouse items"
 msgstr "Lagerartikler"
@@ -14725,8 +14725,8 @@ msgid ""
 " Leave the field blank to save your changes and to be able to continue them "
 "in the future."
 msgstr ""
-"Klik her for at bekræfte, at du har færdiggjort characteren og er klar til "
-"at foreslå den til staff. Vær opmærksom på, at nogle felter muligvis ikke "
+"Klik her for at bekræfte, at du har færdiggjort karakteren og er klar til at"
+" foreslå den til staben. Vær opmærksom på, at nogle felter muligvis ikke "
 "længere kan redigeres. Lad feltet stå tomt for at gemme dine ændringer og "
 "kunne fortsætte med dem senere."
 

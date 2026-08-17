@@ -288,7 +288,7 @@ msgid "Award"
 msgstr "Tilldelning"
 
 msgid "Badge"
-msgstr "Märke"
+msgstr "Badge"
 
 msgid "Cards"
 msgstr "Kort"
@@ -518,7 +518,7 @@ msgid "Badge:"
 msgstr "Badge:"
 
 msgid "Badges"
-msgstr "Märken"
+msgstr "Badges"
 
 msgid "Cancel"
 msgstr "Avbryt"
@@ -614,7 +614,7 @@ msgid "Manage"
 msgstr "Hantera"
 
 msgid "Manual"
-msgstr "Manuell"
+msgstr "Manual"
 
 msgid "Master"
 msgstr "Mästare"
@@ -833,7 +833,7 @@ msgid "Details"
 msgstr "Detaljer"
 
 msgid "Display"
-msgstr "Visa"
+msgstr "Visning"
 
 msgid "Element"
 msgstr "Element"
@@ -1533,7 +1533,7 @@ msgid "Open Link"
 msgstr "Öppna länk"
 
 msgid "Operation"
-msgstr "Räknesätt"
+msgstr "Operation"
 
 msgid "Organizer"
 msgstr "Organisatör"
@@ -1929,10 +1929,10 @@ msgid "Short name"
 msgstr "Kort namn"
 
 msgid "Speed Larp"
-msgstr "Snabb Larp"
+msgstr "Speed Larp"
 
 msgid "Speed larp"
-msgstr "Snabb larp"
+msgstr "Speed larp"
 
 msgid "SpeedLarps"
 msgstr "Speed larps"
@@ -2400,7 +2400,7 @@ msgid "Not selected"
 msgstr "Ej vald"
 
 msgid "Open on date"
-msgstr "Öppnar den"
+msgstr "Öppningsdatum"
 
 msgid "Organization"
 msgstr "Förening"
@@ -3177,7 +3177,7 @@ msgid "External access"
 msgstr "Extern åtkomst"
 
 msgid "Filter selected"
-msgstr "Filter valt"
+msgstr "Filtrera de valda"
 
 msgid "First character"
 msgstr "Första karaktären"
@@ -3960,7 +3960,7 @@ msgid "Elements uploaded!"
 msgstr "Elementen har laddats upp!"
 
 msgid "Enable preferences"
-msgstr "Aktivera inställningar"
+msgstr "Aktivera preferenser"
 
 msgid "Experience Systems"
 msgstr "Erfarenhetssystem"
@@ -4038,7 +4038,7 @@ msgid "Pre-register here!"
 msgstr "Föranmäl dig här!"
 
 msgid "Preferences saved!"
-msgstr "Inställningar sparade!"
+msgstr "Preferenser sparade!"
 
 msgid "Previewing version"
 msgstr "Förhandsgranskning av version"
@@ -4637,7 +4637,7 @@ msgid "Register to the event"
 msgstr "Anmäl dig till evenemanget"
 
 msgid "Registration complete"
-msgstr "Fullständig registrering"
+msgstr "Registreringen är klar"
 
 msgid "Registration is open!"
 msgstr "Registreringarna är öppna!"
@@ -5433,7 +5433,7 @@ msgid "Check inverse relationship:"
 msgstr "kontrollera omvänt förhållande:"
 
 msgid "Commit warehouse quantities"
-msgstr "Binda lagerkvantiteter"
+msgstr "Bekräfta lagerkvantiteter"
 
 msgid "Credits, tokens and refunds"
 msgstr "Krediter, polletter och återbetalningar"
@@ -6558,7 +6558,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Du kan inte skicka meddelanden till dig själv!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Du har låst upp en ny prestation!"
+msgstr "Du har låst upp en ny Badge!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -7313,7 +7313,7 @@ msgid "You have been invited to the role: %(role)s"
 msgstr "Du har blivit inbjuden till rollen: %(role)s"
 
 msgid "Your gifted registration has been redeemed!"
-msgstr "Din skänkta registrering har lösts in!"
+msgstr "Din kostnadsfria registrering har lösts in!"
 
 msgid "(Optional) Maximum number of spots available"
 msgstr "(Valfritt) Maximalt antal tillgängliga platser"
@@ -7966,7 +7966,8 @@ msgid "The registration for this event has been canceled."
 msgstr "Anmälan till detta evenemang har avbokats."
 
 msgid "This feature is available for non-waiting tickets!"
-msgstr "Denna funktion är tillgänglig för icke-väntande biljetter!"
+msgstr ""
+"Denna funktion är tillgänglig för biljetter som inte står på väntelistan!"
 
 msgid "This member has not registered for any events yet."
 msgstr "Den här medlemmen har ännu inte anmält sig till några evenemang."
@@ -8098,7 +8099,7 @@ msgid "This guild has reached its maximum number of members"
 msgstr "Detta skrå har nått sitt maximala antal medlemmar"
 
 msgid "We are processing your payment. Please wait a moment"
-msgstr "Vi behandlar just nu din betalning. Vänligen vänta ett ögonblick"
+msgstr "Vi behandlar just nu din betalning. Vänta ett ögonblick."
 
 msgid "You can now configure character creation by players."
 msgstr "Du kan nu konfigurera spelarnas karaktärsskapande."
@@ -8142,7 +8143,7 @@ msgid "Enter whether the field is printed in PDF generations"
 msgstr "Ange om fältet skrivs ut i PDF-genereringar"
 
 msgid "Have at least one participant registered for an event"
-msgstr "Har minst en deltagare registrerad för ett evenemang"
+msgstr "Ha minst en deltagare registrerad för ett evenemang"
 
 msgid "Incorrect answer. Please enter the name of our hobby."
 msgstr "Felaktigt svar. Vänligen ange namnet på vår hobby."
@@ -8453,7 +8454,7 @@ msgid "This will remove you from this organization's newsletter."
 msgstr "Detta kommer att ta bort dig från denna organisations nyhetsbrev."
 
 msgid "To stop receiving them, please cancel your registrations."
-msgstr "För att sluta ta emot dem, vänligen avregistrera dig."
+msgstr "För att sluta ta emot dem, vänligen avboka dina anmälningar."
 
 msgid "Total of expenses submitted by collaborators and approved"
 msgstr "Summa av kostnader som lämnats in av medarbetare och godkänts"
@@ -11124,7 +11125,7 @@ msgid ""
 "Adds a 'progress' status field (e.g. draft, ready, approved) to key writing "
 "elements"
 msgstr ""
-"Lägger till ett statusfält för 'framsteg' (t.ex. utkast, klart, godkänt) "
+"Lägger till ett statusfält för \"framsteg\" (t.ex. utkast, klart, godkänt) "
 "till viktiga skrivelement"
 
 msgid ""
@@ -11430,7 +11431,7 @@ msgid ""
 "Track pre-registration counts for all events, broken down by preference "
 "order or total"
 msgstr ""
-"Räkna antalet förhandsanmälningar för alla evenemang, uppdelat efter "
+"Följ antalet förhandsanmälningar för alla evenemang, uppdelat efter "
 "önskemålsordning eller totalt"
 
 msgid ""
@@ -11839,7 +11840,7 @@ msgid ""
 "Review and approve expense reimbursement requests submitted by collaborators"
 " for this event"
 msgstr ""
-"Granska och godkänna ansökningar om kostnadsersättning som lämnats in av "
+"Granska och godkänn ansökningar om kostnadsersättning som lämnats in av "
 "medarbetare för detta evenemang"
 
 msgid ""
@@ -12775,7 +12776,7 @@ msgid ""
 "Enables Plots, story arcs involving selected characters, adding extra "
 "content to their character sheets"
 msgstr ""
-"Aktiverar Plots, berättelsebågar som involverar utvalda karaktärer och "
+"Aktiverar intriger, berättelsebågar som involverar utvalda karaktärer och "
 "lägger till extra innehåll i deras karaktärsblad"
 
 msgid ""

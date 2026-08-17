@@ -1554,7 +1554,7 @@ msgid "Position:"
 msgstr "Position:"
 
 msgid "Preaching"
-msgstr "Teilnehmerwerbung"
+msgstr "Predigt"
 
 msgid "Printable"
 msgstr "Druckbar"
@@ -2748,7 +2748,7 @@ msgid "Show help tip"
 msgstr "Hilfetipp anzeigen"
 
 msgid "Show inactive"
-msgstr "Inaktiv anzeigen"
+msgstr "Inaktive anzeigen"
 
 msgid "Signup update"
 msgstr "Aktualisierung der Registrierung"
@@ -3177,7 +3177,7 @@ msgid "External access"
 msgstr "Externer Zugang"
 
 msgid "Filter selected"
-msgstr "Filter ausgewählt"
+msgstr "Ausgewählte filtern"
 
 msgid "First character"
 msgstr "Erster Charakter"
@@ -4552,7 +4552,7 @@ msgid "Code 'Bring a friend'"
 msgstr "Code 'Freund mitbringen'"
 
 msgid "Collections delivered"
-msgstr "Gelieferte Sammlungen"
+msgstr "Übergebene Geldsammlungen"
 
 msgid "Complete sheet (Test)"
 msgstr "Vollständiger Bogen (Test)"
@@ -4910,7 +4910,7 @@ msgid "Conditions of %(event)s"
 msgstr "Bedingungen für %(event)s"
 
 msgid "Create a new collection"
-msgstr "Eine neue Sammlung erstellen"
+msgstr "Eine neue Geldsammlung erstellen"
 
 msgid "Create your first event"
 msgstr "Erstelle deine erste Veranstaltung"
@@ -4934,7 +4934,7 @@ msgid "Includes membership fee"
 msgstr "Inklusive Mitgliedsbeitrag"
 
 msgid "Join the collection for"
-msgstr "Beteilige dich an der Sammlung für"
+msgstr "Beteilige dich an der Geldsammlung für"
 
 msgid "Lightweight sheet (Pdf)"
 msgstr "Leichter Bogen (PDF)"
@@ -6558,7 +6558,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Du kannst keine Nachrichten an dich selbst senden!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Du hast eine neue Errungenschaft freigeschaltet!"
+msgstr "Du hast ein neues Badge freigeschaltet!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -6600,7 +6600,7 @@ msgstr "Das Enddatum kann nicht vor dem Startdatum liegen!"
 
 #, python-format
 msgid "Feature %(name)s already deactivated!"
-msgstr "Das Merkmal %(name)s ist bereits deaktiviert!"
+msgstr "Die Funktion %(name)s ist bereits deaktiviert!"
 
 msgid "Hide participants without a character"
 msgstr "Teilnehmer ohne Charakter ausblenden"
@@ -9205,7 +9205,7 @@ msgstr ""
 
 #, python-format
 msgid "New contribution to the collection for %(recipient)s by %(user)s"
-msgstr "Neuer Beitrag zur Sammlung für %(recipient)s von %(user)s"
+msgstr "Neuer Beitrag zur Geldsammlung für %(recipient)s von %(user)s"
 
 msgid "Part of the registration fee derived only from the ticket chosen"
 msgstr "Ein Teil der Anmeldegebühr stammt nur aus dem gewählten Ticket"
@@ -10561,8 +10561,8 @@ msgstr ""
 msgid ""
 "Please mark the payment as completed on that page once the transfer is done."
 msgstr ""
-"Bitte markiere die Zahlung auf dieser Seite als abgeschlossen, sobald die "
-"Überweisung erfolgt ist."
+"Bitte markiere die Zahlung auf der entsprechenden Seite als abgeschlossen, "
+"sobald die Überweisung erfolgt ist."
 
 msgid ""
 "Preview the factions and plots linked to this character as a compact summary"
@@ -12261,8 +12261,8 @@ msgid ""
 "Enables 'Factions' to organize characters into groups, either visible, "
 "transversal or secret"
 msgstr ""
-"Ermöglicht 'Fraktionen', um Charaktere in Gruppen zu organisieren, entweder "
-"sichtbar, quer oder geheim"
+"Aktiviert „Fraktionen“, um Charaktere in sichtbare, übergreifende oder "
+"geheime Gruppen zu organisieren."
 
 msgid ""
 "Enter public information about your character, which will be shown to all "
@@ -14419,8 +14419,8 @@ msgid ""
 "You have submitted your dues payment, and it is now being approved by the "
 "staff. You don't have to do anything for the time being!"
 msgstr ""
-"Du hast deinen Mitgliedsbeitrag überwiesen, und er wird jetzt geprüft. Du "
-"musst vorerst nichts weiter tun!"
+"Du hast deinen Mitgliedsbeitrag eingereicht, und er wird jetzt vom Team "
+"geprüft. Du musst vorerst nichts weiter tun!"
 
 msgid ""
 "No registration form sections have been created yet. Use the button above to"

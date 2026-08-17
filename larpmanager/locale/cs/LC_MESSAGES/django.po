@@ -2861,7 +2861,7 @@ msgid "Customisations"
 msgstr "Přizpůsobení"
 
 msgid "Dates updated!"
-msgstr "Data byla aktualizována!"
+msgstr "Termíny byly aktualizovány!"
 
 msgid "Days available"
 msgstr "Dostupné dny"
@@ -3135,7 +3135,7 @@ msgid "Configure form:"
 msgstr "Nakonfiguruj formulář:"
 
 msgid "Confirm Restore"
-msgstr "Potvrzení obnovení"
+msgstr "Potvrdit obnovení"
 
 msgid "Confirm payment"
 msgstr "Potvrdit platbu"
@@ -3177,7 +3177,7 @@ msgid "External access"
 msgstr "Externí přístup"
 
 msgid "Filter selected"
-msgstr "Filtr vybrán"
+msgstr "Filtrovat vybrané"
 
 msgid "First character"
 msgstr "První postava"
@@ -3261,7 +3261,7 @@ msgid "Preview Restore"
 msgstr "Náhled obnovení"
 
 msgid "Profile updated"
-msgstr "Aktualizovaný profil"
+msgstr "Profil byl aktualizován"
 
 msgid "Progress status"
 msgstr "Stav pokroku"
@@ -3537,7 +3537,7 @@ msgid "Realized revenue"
 msgstr "Realizované příjmy"
 
 msgid "Refund requested"
-msgstr "Žádost o vrácení peněz"
+msgstr "Vrácení peněz požadováno"
 
 msgid "Registration fee"
 msgstr "Registrační poplatek"
@@ -3591,7 +3591,7 @@ msgid "Transaction fees"
 msgstr "Transakční poplatky"
 
 msgid "Transfer preview"
-msgstr "Náhled převodu"
+msgstr "Náhled převodů"
 
 msgid "Transient bounce"
 msgstr "Dočasné odmítnutí"
@@ -6171,7 +6171,7 @@ msgid "Membership request reminder email"
 msgstr "E-mail s připomenutím žádosti o členství"
 
 msgid "Name to be displayed for credits."
-msgstr "Název zobrazovaný pro kredity."
+msgstr "Jméno, které se má zobrazit v titulcích."
 
 #, python-format
 msgid "New support request from %(user)s"
@@ -6558,7 +6558,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Nemůžeš posílat zprávy sám/sama sobě!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Odemkl/a jsi nový úspěch!"
+msgstr "Odemkl/a jsi nový Badge!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -7865,7 +7865,7 @@ msgid "The registration code is not active at the moment"
 msgstr "Registrační kód není v současné době aktivní"
 
 msgid "There are no new sessions scheduled at this time."
-msgstr "V tuto chvíli nejsou naplánovány žádné nové schůzky."
+msgstr "V tuto chvíli nejsou naplánovány žádné nové relace."
 
 msgid "This page lets you add or edit an inventory type."
 msgstr "Tato stránka ti umožňuje přidat nebo upravit typ inventáře."
@@ -8384,7 +8384,7 @@ msgstr "Odkaz bude platný po následující počet dní:"
 
 #, python-format
 msgid "These characters are not members of the guild: %(names)s"
-msgstr "Tyto postavy nejsou členy guild: %(names)s"
+msgstr "Tyto postavy nejsou členy gildy: %(names)s"
 
 msgid "We encountered a problem with the tax code you provided:"
 msgstr "Narazili jsme na problém s daňovým kódem, který jsi nám poskytl(a):"
@@ -10245,7 +10245,7 @@ msgid ""
 "Manage organizer roles and assign permissions to staff members for this "
 "event"
 msgstr ""
-"Spravuj role organizátorů a přiřaď zaměstnancům oprávnění pro tuto akci"
+"Spravuj role organizátorů a přiřaď členům týmu oprávnění pro tuto akci"
 
 msgid ""
 "Maximum number of people allowed on the waiting list (set to 0 for "
@@ -10376,8 +10376,8 @@ msgid ""
 "Manage speed-larp scenes, their stations, prompt text, and assigned "
 "characters"
 msgstr ""
-"Správa scén speed-larpu, jejich stanovišť, textů pro podněty a přidělených "
-"postav"
+"Spravuj scény Speed larp, jejich stanoviště, texty s podněty a přiřazené "
+"postavy"
 
 msgid ""
 "Manage the progress steps that track the completion status of writing "
@@ -11755,7 +11755,7 @@ msgid ""
 "If checked, the guild is not shown in the guild list or the gallery: only "
 "its members see it"
 msgstr ""
-"Pokud je zaškrtnuto, gildа se nezobrazuje v seznamu gild ani v galerii: vidí"
+"Pokud je zaškrtnuto, gilda se nezobrazuje v seznamu gild ani v galerii: vidí"
 " ji pouze její členové"
 
 msgid ""
@@ -12504,8 +12504,8 @@ msgid ""
 "No form fields defined yet. Add a field to collect information from players "
 "on their character sheet."
 msgstr ""
-"Zatím nebyla definována žádná pole formuláře. Přidej pole, do kterého budou "
-"hráči zadávat informace o své postavě."
+"Zatím nebyla definována žádná pole formuláře. Přidej pole pro shromažďování "
+"informací od hráčů na jejich listu postavy."
 
 msgid ""
 "No relationship tags have been defined yet. Use the button above to add tags"
@@ -13665,7 +13665,7 @@ msgid ""
 " via casting algorithm, with factions and plots."
 msgstr ""
 "Jedna akce zaměřená na příběh, s postavami napsanými týmem a přiřazenými "
-"pomocí algoritmu Casting, s frakcemi a Ploty."
+"pomocí algoritmu Casting, s frakcemi a Plot."
 
 msgid ""
 "Specify your custom character name (depending on the event you can choose "
@@ -14464,7 +14464,7 @@ msgid ""
 "and you cannot confirm your event registrations."
 msgstr ""
 "Dosud jsi nepodal(a) žádost o členství ve sdružení. Pokud nejsi členem, "
-"nemůžeme od tebe přijmout platbu a nemůžeš potvrdit registraci na akci."
+"nemůžeme od tebe přijmout platbu a nemůžeš potvrdit registrace na akce."
 
 msgid ""
 "In accordance with our statutes, the board will review your application at "

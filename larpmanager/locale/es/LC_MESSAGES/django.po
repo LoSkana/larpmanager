@@ -240,7 +240,7 @@ msgid "Type"
 msgstr "Tipo"
 
 msgid "Used"
-msgstr "Usado"
+msgstr "Usados"
 
 msgid "User"
 msgstr "Usuario"
@@ -3177,7 +3177,7 @@ msgid "External access"
 msgstr "Acceso externo"
 
 msgid "Filter selected"
-msgstr "Filtro seleccionado"
+msgstr "Filtrar los seleccionados"
 
 msgid "First character"
 msgstr "Primer personaje"
@@ -4083,7 +4083,7 @@ msgid "Total availability"
 msgstr "Disponibilidad total"
 
 msgid "Total payment sent"
-msgstr "Pago total enviado"
+msgstr "Total del pago enviado"
 
 msgid "Transaction amount"
 msgstr "Importe de la operación"
@@ -4643,7 +4643,7 @@ msgid "Registration is open!"
 msgstr "Inscripciones abiertas!"
 
 msgid "Registration not open"
-msgstr "Inscripción no abierta"
+msgstr "Las inscripciones no están abiertas"
 
 msgid "Registration priority"
 msgstr "Prioridad de inscripción"
@@ -4864,7 +4864,7 @@ msgid "The name of the option"
 msgstr "El nombre de la opción"
 
 msgid "The tier of the ticket"
-msgstr "El nivel del billete"
+msgstr "El nivel de la entrada"
 
 msgid "Tickets already drawn:"
 msgstr "Boletos ya sorteados:"
@@ -5109,7 +5109,7 @@ msgid "Referrer Reward Discount"
 msgstr "Descuento por presentar un amigo"
 
 msgid "Registration Installment"
-msgstr "Plazo de inscripción"
+msgstr "Cuota de inscripción"
 
 msgid "Relationships max length"
 msgstr "Longitud máxima de las relaciones"
@@ -5497,7 +5497,7 @@ msgid "No inventory transfers yet."
 msgstr "Aún no hay transferencias."
 
 msgid "Opted out of communications"
-msgstr "Has rechazado las comunicaciones"
+msgstr "Has decidido no recibir comunicaciones"
 
 msgid "Pre-registration confirmed!"
 msgstr "Preinscripción confirmada!"
@@ -6558,7 +6558,7 @@ msgid "You can't send messages to yourself!"
 msgstr "No puedes enviarte mensajes a ti mismo!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "¡Has desbloqueado un nuevo logro!"
+msgstr "¡Has desbloqueado un nuevo Badge!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -8417,7 +8417,7 @@ msgstr "El enlace será válido durante el siguiente número de días:"
 
 #, python-format
 msgid "These characters are not members of the guild: %(names)s"
-msgstr "Estos personajes no son miembros de la asociación: %(names)s"
+msgstr "Estos personajes no son miembros del gremio: %(names)s"
 
 msgid "We encountered a problem with the tax code you provided:"
 msgstr ""
@@ -8816,8 +8816,8 @@ msgstr "¿Te gustaría recibir información sobre nuestros próximos eventos?"
 
 msgid "(Optional) Character names it was awarded to, comma-separated"
 msgstr ""
-"(Opcional) Nombres de los personajes a los que se le ha concedido, separados"
-" por comas"
+"(Opcional) Nombres de los personajes a los que se les ha concedido, "
+"separados por comas"
 
 msgid "(Optional) Character options as requirements, comma-separated"
 msgstr "(Opcional) Opciones de personaje como requisitos, separadas por comas"
@@ -9235,7 +9235,7 @@ msgstr ""
 
 msgid "Members that can manage the guild: they must be among the members"
 msgstr ""
-"Miembros que pueden gestionar la asociación: deben estar entre los miembros"
+"Miembros que pueden gestionar la guild: deben estar entre los miembros"
 
 #, python-format
 msgid "Next payment: %(quota)s%(currency)s expected within %(days)s days"

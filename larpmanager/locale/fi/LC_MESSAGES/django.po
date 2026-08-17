@@ -560,7 +560,7 @@ msgid "Events"
 msgstr "Tapahtumat"
 
 msgid "Export"
-msgstr "Vie"
+msgstr "Vienti"
 
 msgid "Female"
 msgstr "Naispuolinen"
@@ -614,7 +614,7 @@ msgid "Manage"
 msgstr "Hallitse"
 
 msgid "Manual"
-msgstr "Manuaalinen"
+msgstr "Käyttöohje"
 
 msgid "Master"
 msgstr "Mestari"
@@ -677,7 +677,7 @@ msgid "Retry!"
 msgstr "Yritä uudelleen!"
 
 msgid "Review"
-msgstr "Tarkistuksessa"
+msgstr "Tarkistus"
 
 msgid "Safety"
 msgstr "Safety"
@@ -2376,10 +2376,10 @@ msgid "Legal Gender"
 msgstr "Oikeudellinen sukupuoli"
 
 msgid "Legal Notice"
-msgstr "Oikeudellinen huomautus"
+msgstr "Oikeudellinen ilmoitus"
 
 msgid "Legal notice"
-msgstr "Oikeudellinen huomautus"
+msgstr "Oikeudellinen ilmoitus"
 
 msgid "Members list"
 msgstr "Jäsenluettelo"
@@ -2496,7 +2496,7 @@ msgid "Type of text"
 msgstr "Tekstityyppi"
 
 msgid "Unsubscribed"
-msgstr "Peruttu tilaus"
+msgstr "Tilauksen perunut"
 
 msgid "VAT (Ticket)"
 msgstr "Arvonlisävero (lippu)"
@@ -2604,7 +2604,7 @@ msgid "Email address"
 msgstr "Sähköpostiosoite"
 
 msgid "Email archive"
-msgstr "Sähköpostitallenne"
+msgstr "Sähköpostiarkisto"
 
 msgid "Event balance"
 msgstr "Tapahtuman saldo"
@@ -3177,7 +3177,7 @@ msgid "External access"
 msgstr "Ulkoinen pääsy"
 
 msgid "Filter selected"
-msgstr "Suodatin valittu"
+msgstr "Suodata valitut"
 
 msgid "First character"
 msgstr "Ensimmäinen hahmo"
@@ -3372,7 +3372,7 @@ msgid "Activate feature"
 msgstr "Aktivoi toiminto"
 
 msgid "Activate modules"
-msgstr "Moduulien aktivointi"
+msgstr "Aktivoi moduulit"
 
 msgid "Amount breakdown"
 msgstr "Summien erittely"
@@ -3721,7 +3721,7 @@ msgid "Feature activated"
 msgstr "Ominaisuus aktivoitu"
 
 msgid "Fiscal code check"
-msgstr "Verokoodin tarkistus"
+msgstr "Verotunnuksen tarkistus"
 
 msgid "Fixed instalments"
 msgstr "Kiinteät erät"
@@ -3927,7 +3927,7 @@ msgid "Available versions"
 msgstr "Saatavilla olevat versiot"
 
 msgid "Changed character!"
-msgstr "Hahmo vaihdettu!"
+msgstr "Hahmoa muokattu!"
 
 msgid "Character creation"
 msgstr "Hahmon luominen"
@@ -4573,7 +4573,7 @@ msgid "Failed password reset"
 msgstr "Salasanan palautus epäonnistui"
 
 msgid "Failed to add faction"
-msgstr "Factionin lisääminen epäonnistui"
+msgstr "Ryhmän lisääminen epäonnistui"
 
 msgid "Failed to add gallery"
 msgstr "Gallerian lisääminen epäonnistui"
@@ -4697,7 +4697,7 @@ msgid "Warehouse assignments"
 msgstr "Varastotehtävät"
 
 msgid "What you will unlock:"
-msgstr "Mitä avaat:"
+msgstr "Mitä saat käyttöösi:"
 
 msgid "You have already paid"
 msgstr "Olet jo maksanut"
@@ -4959,7 +4959,7 @@ msgid "Minimum age: %(number)d"
 msgstr "Vähimmäisikä: %(number)d"
 
 msgid "No registrations found."
-msgstr "Rekisteröintejä ei löytynyt."
+msgstr "Ilmoittautumisia ei löytynyt."
 
 msgid "Number of participants:"
 msgstr "Osallistujien määrä:"
@@ -5246,7 +5246,7 @@ msgid "Option saved successfully"
 msgstr "Vaihtoehto tallennettu onnistuneesti"
 
 msgid "Paid for the current year"
-msgstr "Maksettu kuluvana vuonna"
+msgstr "Maksettu kuluvalta vuodelta"
 
 msgid "Payment already confirmed"
 msgstr "Maksu on jo vahvistettu"
@@ -5362,7 +5362,7 @@ msgid "Option no longer available"
 msgstr "Vaihtoehto ei ole enää saatavilla"
 
 msgid "Paid for the current year:"
-msgstr "Maksettu kuluvana vuonna:"
+msgstr "Maksettu kuluvalta vuodelta:"
 
 msgid "Payments Awaiting Approval"
 msgstr "Hyväksyntää odottavat maksut"
@@ -5491,7 +5491,7 @@ msgid "Missing casting preferences"
 msgstr "Puuttuvat Casting-mieltymykset"
 
 msgid "No address was unsubscribed"
-msgstr "Yhtään osoitetta ei peruttu"
+msgstr "Yhtään osoitetta ei poistettu tilauksesta"
 
 msgid "No inventory transfers yet."
 msgstr "Ei vielä siirtoja."
@@ -6073,7 +6073,7 @@ msgid "Select and activate key features"
 msgstr "Valitse ja aktivoi tärkeimmät ominaisuudet"
 
 msgid "Select the new ability to obtain"
-msgstr "Valitse uusi taito lisätäksesi se hahmollesi"
+msgstr "Valitse uusi hankittava kyky"
 
 msgid "Select your casting preferences!"
 msgstr "Valitse Casting-mieltymyksesi!"
@@ -6558,7 +6558,7 @@ msgid "You can't send messages to yourself!"
 msgstr "Et voi lähettää viestejä itsellesi!"
 
 msgid "You have unlocked a new achievement!"
-msgstr "Olet avannut uuden saavutuksen!"
+msgstr "Olet avannut uuden Badgen!"
 
 #, python-format
 msgid "<b>%(number)s</b> expenses to approve"
@@ -9395,11 +9395,12 @@ msgstr ""
 
 msgid "If enabled, enables the consistency check tool for character sheets."
 msgstr ""
-"Jos käytössä, ota käyttöön hahmolomakkeiden yhdenmukaisuuden "
-"tarkistustyökalu."
+"Jos käytössä, se ottaa käyttöön hahmolomakkeiden yhdenmukaisuuden "
+"tarkistustyökalun."
 
 msgid "If enabled, shows participants the histories of preferences entered."
-msgstr "Jos käytössä, näytä osallistujille syötettyjen mieltymysten historia."
+msgstr ""
+"Jos käytössä, se näyttää osallistujille syötettyjen mieltymysten historian."
 
 msgid "Invalid selection detected, please select from the available options"
 msgstr ""
@@ -9552,7 +9553,7 @@ msgstr ""
 
 msgid "If selected, send an email notification to organizers for new signups."
 msgstr ""
-"Jos valittu, lähetä järjestäjille sähköposti-ilmoitus uusista "
+"Jos valittu, se lähettää järjestäjille sähköposti-ilmoituksen uusista "
 "ilmoittautumisista."
 
 msgid "Maximum number of participant slots available (set to 0 for unlimited)"
@@ -10089,8 +10090,8 @@ msgstr "Jos käytössä, osallistujat voivat muokata hahmojensa nimiä."
 msgid ""
 "If enabled, enables rules for computed character fields based on abilities."
 msgstr ""
-"Jos käytössä, ota käyttöön kykyihin perustuvien laskettujen hahmokenttien "
-"säännöt."
+"Jos käytössä, se ottaa käyttöön kykyihin perustuvien laskettujen "
+"hahmokenttien säännöt."
 
 msgid ""
 "No abilities defined yet. Use the button above to create the first ability."
@@ -10529,7 +10530,7 @@ msgid ""
 "Manage speed-larp scenes, their stations, prompt text, and assigned "
 "characters"
 msgstr ""
-"Hallitse speed-larp-kohtauksia, niiden pisteitä, ohjeita ja osoitettuja "
+"Hallitse Speed larp -kohtauksia, niiden pisteitä, ohjeita ja osoitettuja "
 "roolihahmoja"
 
 msgid ""
@@ -10554,8 +10555,7 @@ msgstr ""
 msgid ""
 "These CSS commands will be carried over to all pages in your Association "
 "space"
-msgstr ""
-"Nämä CSS-komennot siirretään kaikille sivuille Association space -tilassasi"
+msgstr "Nämä CSS-komennot siirretään kaikille yhdistystilasi sivuille"
 
 msgid ""
 "Track upcoming event deadlines and identify members who need to be followed "
@@ -11797,8 +11797,7 @@ msgid ""
 "You have been invited to join the role <strong>%(role.name)s</strong> in the"
 " organization."
 msgstr ""
-"Sinut on kutsuttu liittymään organisaation rooliin "
-"<strong>%(role.name)s</strong>."
+"Sinut on kutsuttu organisaatiossa rooliin <strong>%(role.name)s</strong>."
 
 #, python-format
 msgid ""
@@ -12617,8 +12616,8 @@ msgid ""
 "No speed-larp scenes have been created yet. Use the button above to add your"
 " first speed-larp scene."
 msgstr ""
-"Speed-larp-kohtauksia ei ole vielä luotu. Lisää ensimmäinen speed-larp-"
-"kohtauksesi yllä olevan painikkeen avulla."
+"Speed larp -kohtauksia ei ole vielä luotu. Lisää ensimmäinen Speed larp "
+"-kohtauksesi yllä olevan painikkeen avulla."
 
 msgid ""
 "You are a regular member of our Organization. You can subscribe to events "
@@ -14509,7 +14508,8 @@ msgid ""
 "registration fees!"
 msgstr ""
 "Haluatko auttaa yhtä ystävistäsi pelaamaan kanssamme? Järjestä keräys: sinä "
-"ja kaikki halukkaat voivat lahjoittaa osan ilmoittautumismaksuistaan!"
+"ja kaikki halukkaat voivat lahjoittaa ystävällesi osan "
+"ilmoittautumismaksuistaan!"
 
 msgid ""
 "To request a change of your e-mail address, please indicate both your old "

@@ -52,6 +52,8 @@ def test_user_character_form_editor(pw_page: Any) -> None:
 
     field_single_req(page, live_server)
 
+    field_single_andor(page, live_server)
+
     field_gated_question(page, live_server)
 
     character(page, live_server)
@@ -235,6 +237,71 @@ def field_gated_question(page: Any, live_server: Any) -> None:
     save_modal(page, edit_iframe)
 
 
+def field_single_andor(page: Any, live_server: Any) -> None:
+    """Add a question whose options mix requirements on the same and on other questions.
+
+    - "dep_or" requires "ff" and "wwww", both options of "single": either one is enough
+    - "dep_and" requires "wwww" (of "single") and "q2" (of "rrrrrr"): both are needed
+    """
+    go_to(page, live_server, "/test/manage/writing/form/")
+    page.get_by_role("link", name="New").click()
+    edit_iframe = get_modal_iframe(page)
+    edit_iframe.locator("#id_name").click()
+    edit_iframe.locator("#id_name").fill("single_andor")
+
+    iframe = new_option(edit_iframe)
+    iframe.locator("#id_name").fill("dep_or")
+    iframe.searchbox("requirements").fill("ff")
+    iframe.get_by_role("option", name="single - ff").click()
+    iframe.searchbox("requirements").fill("ww")
+    iframe.get_by_role("option", name="single - wwww").click()
+    submit_option(edit_iframe, iframe)
+
+    iframe = new_option(edit_iframe)
+    iframe.locator("#id_name").fill("dep_and")
+    iframe.searchbox("requirements").fill("ww")
+    iframe.get_by_role("option", name="single - wwww").click()
+    iframe.searchbox("requirements").fill("q2")
+    iframe.get_by_role("option", name="rrrrrr - q2").click()
+    submit_option(edit_iframe, iframe)
+
+    save_modal(page, edit_iframe)
+
+
+def verify_requirements_and_or(page: Any) -> None:
+    """Verify how multiple requirements of the same option combine.
+
+    Requirements on the same question are alternatives (one of them is enough), while
+    requirements on different questions are all needed:
+    - "dep_or" (u10) requires "ff" (u1) or "wwww" (u3), both of question "single"
+    - "dep_and" (u11) requires "wwww" (u3) and "q2" (u5), of two different questions
+    """
+    dep_or = page.locator('label:has(input[type="radio"][value="u10"])')
+    dep_and = page.locator('label:has(input[type="radio"][value="u11"])')
+
+    # "wwww" is selected: the alternatives are satisfied, while "q2" is still missing
+    expect(dep_or).to_be_visible()
+    expect(dep_and).to_be_hidden()
+
+    # "ff" alone satisfies the alternatives too, being on the same question as "wwww"
+    page.locator('label[for="id_que_u4_0"]').click()
+    expect(dep_or).to_be_visible()
+    expect(dep_and).to_be_hidden()
+
+    # "q2" on its own is not enough: "wwww" is on another question, so it is needed as well
+    page.locator('label[for="id_que_u5_1"]').click()
+    expect(dep_or).to_be_visible()
+    expect(dep_and).to_be_hidden()
+
+    # with both questions answered as required, the option becomes available
+    page.locator('label[for="id_que_u4_2"]').click()
+    expect(dep_and).to_be_visible()
+
+    # leave "rrrrrr" empty again, it accepts a single answer
+    page.locator('label[for="id_que_u5_1"]').click()
+    expect(dep_and).to_be_hidden()
+
+
 def verify_requirements_hidden(page: Any) -> None:
     """Verify elements with unmet requirements are hidden, and shown when requirements are met.
 
@@ -305,6 +372,8 @@ def character(page: Any, live_server: Any) -> None:
 
     verify_requirements_hidden(page)
 
+    verify_requirements_and_or(page)
+
     page.locator("#id_name").click()
     page.locator("#id_name").fill("my character")
 
@@ -315,6 +384,8 @@ def character(page: Any, live_server: Any) -> None:
     page.locator('label[for="id_que_u4_0"]').click()  # ff
     page.locator('label[for="id_que_u4_2"]').click()  # wwww
     page.locator('label[for="id_que_u5_3"]').click()  # 14 (Available 3)
+    # dep_or requires "ff" and "wwww": only "wwww" is selected, and it is enough
+    page.locator('label[for="id_que_u9_0"]').click()  # dep_or
     page.locator("#id_que_u6").click()
     page.locator("#id_que_u6").fill("wow")
     page.locator("#id_que_u7").click()
@@ -324,6 +395,8 @@ def character(page: Any, live_server: Any) -> None:
 
     # confirm char: after creation the user lands on the character sheet
     expect_normalized(page, page.locator("#one"), "Status: Creation")
+    # the server accepted the alternatives too, not only the option requirements taken all together
+    expect_normalized(page, page.locator("#one"), "dep_or")
     page.get_by_role("link", name="Edit").click()
     page.get_by_role("cell", name="Click here to confirm that").click()
     page.get_by_text("Click here to confirm that").click()
