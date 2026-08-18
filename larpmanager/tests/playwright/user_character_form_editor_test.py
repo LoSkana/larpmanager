@@ -32,7 +32,7 @@ from playwright.sync_api import expect
 from larpmanager.tests.utils import fill_tinymce, go_to, login_orga, submit_confirm, expect_normalized, \
     submit_register, \
     submit_option, new_option, \
-    get_modal_iframe, save_modal, _wait_lm_ready, sidebar
+    get_modal_iframe, save_modal, _wait_lm_ready, sidebar, expand_options
 
 pytestmark = pytest.mark.e2e
 
@@ -502,3 +502,60 @@ def orga_gated_question(page: Any, live_server: Any) -> None:
     go_to(page, live_server, "/test/manage/characters/u3/edit/")
     page.locator('label[for="id_que_u4_2"]').click()
     expect(page.locator('input[type="radio"][value="u12"]')).not_to_be_checked()
+
+    orga_gated_collapse(page, live_server)
+
+
+def orga_gated_collapse(page: Any, live_server: Any) -> None:
+    """Verify the collapse toggle and the requirements do not fight over the same options.
+
+    Both hide options: the ones gated by their requirements are left out of the count that decides
+    whether the collapse link is worth showing, and the link keeps collapsing back the others.
+    """
+    # the questions have few options: lower the threshold, so the collapse link is rendered
+    go_to(page, live_server, "/test/manage/config/")
+    page.get_by_role("link", name=re.compile(r"^Display\s.+")).click()
+    page.locator("#id_collapse_options_min").fill("2")
+    submit_confirm(page)
+
+    dep_a_option = page.locator('#id_que_u8 .opt-wrap:has-text("dep_a")')
+    dep_b_option = page.locator('#id_que_u8 .opt-wrap:has-text("dep_b")')
+    show_more = page.locator("#id_que_u8 .opt-show-more")
+
+    # store the requirement of "dep_b", so both options of "single_req" are available
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+    expand_options(page.locator("#id_que_u4"))
+    page.locator('label[for="id_que_u4_2"]').click()
+    # the requirement also shows the mandatory "gated_q", which has to be answered to save
+    expand_options(page.locator("#id_que_u10"))
+    page.locator('label[for="id_que_u10_0"]').click()
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+
+    # no option of "single_req" is chosen: both start collapsed behind the link
+    expect(show_more).to_be_visible()
+    expect(dep_a_option).to_be_hidden()
+    expect(dep_b_option).to_be_hidden()
+
+    # they are shown together, and collapse back together
+    show_more.click()
+    expect(dep_a_option).to_be_visible()
+    expect(dep_b_option).to_be_visible()
+
+    show_more.click()
+    expect(dep_a_option).to_be_hidden()
+    expect(dep_b_option).to_be_hidden()
+
+    # dropping the requirement gates "dep_b" again, without revealing the collapsed "dep_a"
+    expand_options(page.locator("#id_que_u4"))
+    page.locator('label[for="id_que_u4_1"]').click()
+    expect(dep_b_option).to_be_hidden()
+    expect(dep_a_option).to_be_hidden()
+    submit_confirm(page)
+
+    # only "dep_a" is left by the unmet requirement: one option is not worth collapsing
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+    expect(show_more).to_be_hidden()
+    expect(dep_a_option).to_be_visible()
+    expect(dep_b_option).to_be_hidden()

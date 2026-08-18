@@ -371,6 +371,12 @@ input[type="checkbox"].checkbox_single {
   display: none;
 }
 
+/* options hidden by their unmet requirements: beats the widget display rules, and stays
+   independent from the collapse toggle, which owns the .hide class */
+.dep-hidden {
+  display: none !important;
+}
+
 .opt-show-more {
   display: inline-block;
   margin: 0.2em 0 0.4em;

@@ -76,6 +76,7 @@ class _DescriptionOptionsMixin:
         metadata: dict | None = None,
         collapse_unselected: bool | None = None,
         collapse_min: int = 2,
+        gated_options: set[str] | None = None,
         **kwargs: Any,
     ) -> None:
         """Prepare widget metadata.
@@ -83,12 +84,14 @@ class _DescriptionOptionsMixin:
         collapse_unselected drives the collapse toggle: None disables it, True renders the
         unselected options already collapsed, False renders them visible with the link to collapse.
         collapse_min is the minimum number of options required for the toggle to appear.
+        gated_options are the values hidden by their unmet requirements, left out of that count.
         """
         super().__init__(*args, **kwargs)
         self.descriptions = descriptions or {}
         self.metadata = metadata or {}
         self.collapse_unselected = collapse_unselected
         self.collapse_min = max(2, collapse_min)
+        self.gated_options: set[str] = gated_options or set()
 
     def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
         """Add flags telling the template which options can be collapsed, and the initial state."""
@@ -100,6 +103,8 @@ class _DescriptionOptionsMixin:
             options = [
                 option for _group, group_options, _index in widget_context["optgroups"] for option in group_options
             ]
+            # the options gated by their unmet requirements are not on the page: they do not count
+            options = [option for option in options if str(option["value"]) not in self.gated_options]
             selected_count = sum(1 for option in options if option["selected"])
             # below the minimum number of options there is nothing worth hiding
             collapsible = len(options) >= self.collapse_min

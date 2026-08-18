@@ -117,6 +117,23 @@ class TestCollapseUnselectedOptions(BaseTestCase):
         assert html.count("opt-collapsed hide") == len(CHOICES) - 1
         assert "opt-show-more" in html
 
+    def test_gated_options_left_out_of_the_count(self) -> None:
+        """Options hidden by their unmet requirements do not count toward the minimum"""
+        widget = DescriptionRadioSelect(choices=CHOICES, collapse_unselected=True, collapse_min=3, gated_options={"c"})
+        html = widget.render("que", "a", attrs={"id": "id_que"})
+        # only two options are on the page: below the minimum, nothing is collapsed
+        assert "opt-collapsed" not in html
+        assert "opt-show-more" not in html
+
+    def test_gated_options_do_not_block_the_toggle(self) -> None:
+        """The remaining options are still collapsed when they are enough on their own"""
+        widget = DescriptionRadioSelect(choices=CHOICES, collapse_unselected=True, collapse_min=2, gated_options={"c"})
+        html = widget.render("que", "a", attrs={"id": "id_que"})
+        # the selected "a" stays visible, the others are collapsed: the gated "c" is only
+        # left out of the count, the client keeps it hidden with its own class
+        assert html.count("opt-collapsed hide") == len(CHOICES) - 1
+        assert "opt-show-more" in html
+
 
 class _CollapseForm(FormMixin):
     """Minimal form stub exposing the collapse state logic of FormMixin."""

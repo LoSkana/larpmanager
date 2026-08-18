@@ -234,6 +234,45 @@ class TestCharacterOptionDependencies(BaseTestCase):
         assert "Bunker" in str(form.errors[get_question_key(self.mutation)])
         assert str(self.psionic.uuid) in form.dependencies
 
+    def _excel_form(self, origin: WritingOption) -> OrgaCharacterForm:
+        """Build the organizer form of a character holding the given origin, as the excel edit does."""
+        character = self._character()
+        WritingChoice.objects.create(question=self.origin, option=origin, element_id=character.id)
+        return OrgaCharacterForm(instance=character, context=self._context())
+
+    def test_excel_edit_hides_options_with_unmet_requirements(self) -> None:
+        # a single field is edited alone: the gating cannot run on the client, the choices are filtered here
+        form = self._excel_form(self.wasteland)
+        field_key = get_question_key(self.mutation)
+
+        form.filter_gated_choices(field_key)
+
+        assert str(self.psionic.uuid) not in [str(value) for value, _label in form.fields[field_key].choices]
+
+    def test_excel_edit_keeps_options_with_met_requirements(self) -> None:
+        form = self._excel_form(self.bunker)
+        field_key = get_question_key(self.mutation)
+
+        form.filter_gated_choices(field_key)
+
+        assert str(self.psionic.uuid) in [str(value) for value, _label in form.fields[field_key].choices]
+
+    def test_excel_edit_refuses_gated_option_on_submit(self) -> None:
+        # the popup can be stale: the filtered choices reject the option at validation too
+        character = self._character()
+        WritingChoice.objects.create(question=self.origin, option=self.wasteland, element_id=character.id)
+        field_key = get_question_key(self.mutation)
+
+        form = OrgaCharacterForm(
+            {"name": "Original", field_key: str(self.psionic.uuid)},
+            instance=character,
+            context=self._context(),
+        )
+        form.filter_gated_choices(field_key)
+
+        assert not form.is_valid()
+        assert field_key in form.errors
+
     def test_organizer_form_accepted_when_requirement_selected(self) -> None:
         form = OrgaCharacterForm(
             self._data(self.bunker, self.psionic),
