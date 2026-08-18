@@ -1133,9 +1133,6 @@ msgstr "Date limite"
 msgid "Deployed"
 msgstr "Déployé"
 
-msgid "Disabled"
-msgstr "Désactivé"
-
 msgid "Discount"
 msgstr "Remise"
 
@@ -1582,6 +1579,9 @@ msgstr "Questions"
 
 msgid "Read mail"
 msgstr "Lire le courrier"
+
+msgid "Read only"
+msgstr "Lecture seule"
 
 msgid "Recipient"
 msgstr "Destinataire"
@@ -5038,6 +5038,9 @@ msgstr "Configurations du personnage"
 
 msgid "Code of the box or shelf"
 msgstr "Code de la boîte ou de l'étagère"
+
+msgid "Collapse options minimum"
+msgstr "Réduire le minimum d’options"
 
 msgid "Create another character"
 msgstr "Créer un autre personnage"
@@ -9699,6 +9702,11 @@ msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Attribue les articles de stock à une ou plusieurs zones de l'événement, un "
 "par un"
+
+msgid "Assigned automatically when the participant cannot answer the question"
+msgstr ""
+"Attribuée automatiquement lorsque le participant ne peut pas répondre à la "
+"question"
 
 msgid "Discount amount applied to a new user signing up with a referral code."
 msgstr ""
@@ -14880,6 +14888,16 @@ msgstr ""
 " générales de l'association."
 
 msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Indique le nombre minimal d’options qu’un champ de formulaire doit avoir "
+"pour masquer celles qui ne sont pas sélectionnées derrière le lien « "
+"Afficher les autres options » ; si ce champ est vide, la valeur par défaut "
+"de 5 est utilisée."
+
+msgid ""
 "By proceeding with your registration for this event, you are giving us your "
 "authorisation to share your data saved on our platform with the organisers "
 "of the event."
@@ -15168,6 +15186,17 @@ msgstr ""
 "numériser, puis le télécharger via le formulaire ci-dessous. Ta demande sera"
 " examinée lors de la prochaine réunion du Conseil. Tu recevras une "
 "confirmation du résultat de son évaluation."
+
+msgid ""
+"Indicate whether this option is assigned automatically, when the question "
+"cannot be answered by the participant and no option was chosen; if several "
+"options are marked, the first one whose prerequisites are satisfied is "
+"assigned"
+msgstr ""
+"Indique si cette option est attribuée automatiquement lorsque le participant"
+" ne peut pas répondre à la question et qu’aucune option n’a été choisie ; si"
+" plusieurs options sont indiquées, la première dont les conditions "
+"préalables sont remplies est attribuée"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

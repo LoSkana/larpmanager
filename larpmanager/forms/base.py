@@ -33,9 +33,15 @@ from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.config import get_association_config, get_config_default, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
-from larpmanager.forms.utils import CharacterDualListWidget, ReadOnlyWidget, WritingTinyMCE, css_delimeter
+from larpmanager.forms.utils import (
+    CharacterDualListWidget,
+    ReadOnlyChoiceWidget,
+    ReadOnlyWidget,
+    WritingTinyMCE,
+    css_delimeter,
+)
 from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect, FactionPreferenceWidget
 from larpmanager.models.association import Association
 from larpmanager.models.event import Event, Run
@@ -76,6 +82,21 @@ class FormMixin:
         """Return True when the form edits an already saved instance."""
         instance = getattr(self, "instance", None)
         return bool(instance and instance.pk)
+
+    @cached_property
+    def _collapse_unselected(self) -> bool | None:
+        """Return the collapse state for option widgets, or None when collapsing must stay off.
+
+        Single field edits (double click on a list cell) and dashboard element forms always show
+        every option, since there the user is deliberately changing that single field. Writing
+        forms opened in a frame keep collapsing, as they are full element edits.
+        """
+        params = getattr(self, "params", None) or {}
+        if params.get("excel_edit") or params.get("is_modal"):
+            return None
+        if params.get("frame") and not params.get("is_writing"):
+            return None
+        return self._is_edit
 
     def configure_field_event(self, field_name: str, event: Event) -> None:
         """Configure a form field's widget and queryset for a specific event."""
@@ -536,6 +557,17 @@ class BaseRegistrationForm(BaseModelFormRun):
         """Return True if effective_version >= 20 (radio/checkbox with inline descriptions)."""
         return int(self.params.get("effective_version", 0)) >= self._inline_widgets_min_version
 
+    @cached_property
+    def _collapse_min(self) -> int:
+        """Return the minimum number of options needed to show the collapse toggle."""
+        event = self.params.get("event")
+        if not event:
+            return 2
+        try:
+            return int(get_event_config(event.id, "collapse_options_min", context=self.params))
+        except (TypeError, ValueError):
+            return get_config_default("collapse_options_min")
+
     def _init_registration_question(self, instance: Any | None, event: Event) -> None:
         """Initialize registration questions and answers from existing instance.
 
@@ -915,20 +947,10 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         # Apply user-specific field logic when not in organizer mode
         if not is_organizer:
-            # Check if question is editable for current user context
-            if not self.check_editable(question):
+            field_state = self._user_field_state(question)
+            if field_state is None:
                 return None
-
-            # Hide questions marked as hidden from users
-            if question["status"] == QuestionStatus.HIDDEN:
-                return None
-
-            # Disable fields for disabled questions or creation-only questions
-            if question["status"] == QuestionStatus.DISABLED:
-                is_field_active = False
-            else:
-                # Set field as required based on question status
-                is_required = question["status"] == QuestionStatus.MANDATORY
+            is_field_active, is_required = field_state
 
         # Initialize field type and apply type-specific configuration
         field_key = self.init_type(
@@ -944,7 +966,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
         # Apply user-specific field state (disabled/enabled)
         if not is_organizer:
-            self.fields[field_key].disabled = not is_field_active
+            self._apply_field_state(field_key, is_field_active=is_field_active)
 
         # Configure max length validation for applicable question types
         if question.get("max_length") and question["typ"] in get_writing_max_length():
@@ -960,6 +982,36 @@ class BaseRegistrationForm(BaseModelFormRun):
         question["basic_typ"] = question["typ"] in BaseQuestionType.get_basic_types()
 
         return field_key
+
+    def _user_field_state(self, question: dict) -> tuple[bool, bool] | None:
+        """Return (is_field_active, is_required) for a user form, or None when the question is skipped."""
+        # Check if question is editable for current user context
+        if not self.check_editable(question):
+            return None
+
+        # Hide questions marked as hidden from users
+        if question["status"] == QuestionStatus.HIDDEN:
+            return None
+
+        # Show disabled questions read only, but skip them on creation as there is nothing to show
+        if question["status"] == QuestionStatus.DISABLED:
+            if not self._is_edit:
+                return None
+            return False, False
+
+        return True, question["status"] == QuestionStatus.MANDATORY
+
+    def _apply_field_state(self, field_key: str, *, is_field_active: bool) -> None:
+        """Mark the field as disabled and add a read only hint to its help text when not editable."""
+        self.fields[field_key].disabled = not is_field_active
+        if is_field_active:
+            return
+
+        hint = _("Read only")
+        help_text = self.fields[field_key].help_text
+        self.fields[field_key].help_text = f'<span class="choice-hint">{hint}</span>' + (
+            f" - {help_text}" if help_text else ""
+        )
 
     def init_type(
         self,
@@ -996,13 +1048,23 @@ class BaseRegistrationForm(BaseModelFormRun):
         # Handle multiple choice questions (checkboxes, multi-select)
         if question["typ"] == BaseQuestionType.MULTIPLE:
             self.init_multiple(
-                field_key, question, registration_counts, is_organizer=is_organizer, is_required=is_required
+                field_key,
+                question,
+                registration_counts,
+                is_organizer=is_organizer,
+                is_required=is_required,
+                is_field_active=is_field_active,
             )
 
         # Handle single choice questions (radio buttons, dropdowns)
         elif question["typ"] == BaseQuestionType.SINGLE:
             self.init_single(
-                field_key, question, registration_counts, is_organizer=is_organizer, is_required=is_required
+                field_key,
+                question,
+                registration_counts,
+                is_organizer=is_organizer,
+                is_required=is_required,
+                is_field_active=is_field_active,
             )
 
         # Handle simple text input fields
@@ -1219,6 +1281,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         *,
         is_organizer: bool,
         is_required: bool,
+        is_field_active: bool = True,
     ) -> None:
         """Initialize single choice form field.
 
@@ -1228,6 +1291,7 @@ class BaseRegistrationForm(BaseModelFormRun):
             question: Question dict containing choices configuration and metadata
             registration_counts: Registration counts dictionary for quota tracking
             is_required: Whether the field is required for form validation
+            is_field_active: Whether the field can be changed (if False, shows the selection read-only)
 
         Side Effects:
             - Creates and adds a single choice field to self.fields
@@ -1261,7 +1325,9 @@ class BaseRegistrationForm(BaseModelFormRun):
             "label": question["name"],
             "help_text": help_text,
         }
-        if self._use_inline_widgets_v20:
+        if not is_field_active:
+            field_kwargs["widget"] = ReadOnlyChoiceWidget()
+        elif self._use_inline_widgets_v20:
             hint = _("Choose one option")
             field_kwargs["help_text"] = f'<span class="choice-hint">{hint}</span>' + (
                 f" - {help_text}" if help_text else ""
@@ -1270,7 +1336,8 @@ class BaseRegistrationForm(BaseModelFormRun):
                 attrs={"class": "my-radio-class"},
                 descriptions=descriptions,
                 metadata=metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
         self.fields[field_key] = forms.ChoiceField(**field_kwargs)
 
@@ -1289,6 +1356,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         *,
         is_organizer: bool,
         is_required: bool,
+        is_field_active: bool = True,
     ) -> None:
         """Set up multiple choice form field handling.
 
@@ -1303,6 +1371,7 @@ class BaseRegistrationForm(BaseModelFormRun):
                        for quota tracking purposes
             is_organizer: True if this is an organizational form, False for regular forms
             is_required: True if the field must be filled, False if optional
+            is_field_active: Whether the field can be changed (if False, shows the selection read-only)
 
         Side Effects:
             - Creates a MultipleChoiceField in self.fields[field_key]
@@ -1328,12 +1397,15 @@ class BaseRegistrationForm(BaseModelFormRun):
         field_validators = [max_selections_validator(question["max_length"])] if question.get("max_length") else []
 
         # Create the multiple choice field with checkbox widget
-        if self._use_inline_widgets_v20:
+        if not is_field_active:
+            widget = ReadOnlyChoiceWidget()
+        elif self._use_inline_widgets_v20:
             widget = DescriptionCheckboxSelectMultiple(
                 attrs={"class": "my-checkbox-class"},
                 descriptions=descriptions,
                 metadata=metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
             hint = _("Select one or more options")
             help_text = f'<span class="choice-hint">{hint}</span>' + (f" - {help_text}" if help_text else "")

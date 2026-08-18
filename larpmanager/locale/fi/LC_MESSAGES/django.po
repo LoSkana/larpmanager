@@ -1133,9 +1133,6 @@ msgstr "Määräaika"
 msgid "Deployed"
 msgstr "Käytössä"
 
-msgid "Disabled"
-msgstr "Poistettu käytöstä"
-
 msgid "Discount"
 msgstr "Alennus"
 
@@ -1582,6 +1579,9 @@ msgstr "Kysymykset"
 
 msgid "Read mail"
 msgstr "Lue posti"
+
+msgid "Read only"
+msgstr "Vain luku"
 
 msgid "Recipient"
 msgstr "Vastaanottaja"
@@ -5038,6 +5038,9 @@ msgstr "Hahmon kokoonpanot"
 
 msgid "Code of the box or shelf"
 msgstr "Laatikon tai hyllyn koodi"
+
+msgid "Collapse options minimum"
+msgstr "Piilota vaihtoehdot vähintään"
 
 msgid "Create another character"
 msgstr "Luo toinen hahmo"
@@ -9516,6 +9519,9 @@ msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Määritä varastotuotteet tapahtuman yhdelle tai useammalle alueelle tuote "
 "kerrallaan"
+
+msgid "Assigned automatically when the participant cannot answer the question"
+msgstr "Annetaan automaattisesti, kun osallistuja ei voi vastata kysymykseen"
 
 msgid "Discount amount applied to a new user signing up with a referral code."
 msgstr ""
@@ -14505,6 +14511,15 @@ msgstr ""
 "voit osallistua tapahtumiin ja äänestää yhdistyksen yleiskokouksissa."
 
 msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Määritä vaihtoehtojen vähimmäismäärä, jonka lomakekentässä on oltava, jotta "
+"valitsemattomat vaihtoehdot piilotetaan 'Näytä muut vaihtoehdot' -linkin "
+"taakse; jos kenttä jätetään tyhjäksi, käytetään oletusarvoa 5."
+
+msgid ""
 "By proceeding with your registration for this event, you are giving us your "
 "authorisation to share your data saved on our platform with the organisers "
 "of the event."
@@ -14787,6 +14802,17 @@ msgstr ""
 " skannattava se ja ladattava se alla olevaan lomakkeeseen. Pyyntösi "
 "käsitellään hallituksen seuraavassa kokouksessa. Saat vahvistuksen "
 "arvioinnin tuloksesta."
+
+msgid ""
+"Indicate whether this option is assigned automatically, when the question "
+"cannot be answered by the participant and no option was chosen; if several "
+"options are marked, the first one whose prerequisites are satisfied is "
+"assigned"
+msgstr ""
+"Ilmoita, annetaanko tämä vaihtoehto automaattisesti, kun osallistuja ei voi "
+"vastata kysymykseen eikä mitään vaihtoehtoa ole valittu; jos useita "
+"vaihtoehtoja on merkitty, annetaan ensimmäinen, რომლის edellytykset "
+"täyttyvät"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

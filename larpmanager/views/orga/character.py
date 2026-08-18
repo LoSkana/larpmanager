@@ -1011,6 +1011,7 @@ def _get_excel_form(
     """
     # Check user permissions and setup base context
     context = check_event_context(request, event_slug, f"orga_{element_type}s")
+    context["excel_edit"] = True
     if not is_submit:
         get_event_cache_all(context)
 

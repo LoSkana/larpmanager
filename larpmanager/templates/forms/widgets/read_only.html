@@ -1,5 +1,3 @@
 {% load show_tags %}
-<div class="plot">
-    {% if widget.value %}{{ widget.value|sanitize_html }}{% endif %}
-</div>
+{% if widget.value %}<div class="plot">{{ widget.value|sanitize_html }}</div>{% endif %}
 <input type="hidden" name="{{ widget.name }}" value="{{ widget.value }}" />

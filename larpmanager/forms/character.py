@@ -133,6 +133,12 @@ class CharacterForm(WritingForm, BaseWritingForm):
                 self.params.get("features", []),
             )
 
+        # Default options assigned to the questions the player cannot answer, mapped by question id
+        self.default_choices: dict[int, int] = {}
+
+        # Option counts of the run, kept to check the availability of the default options
+        self.registration_counts: dict = {}
+
         # Set up character-specific fields including factions and custom questions
         self._init_character()
 
@@ -225,6 +231,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Initialize registration questions and get counts
         self._init_registration_question(self.instance, event)
         registration_counts = get_registration_counts(self.params.get("run"))
+        self.registration_counts = registration_counts
 
         # Initialize field categorization sets
         fields_default = {"event"}
@@ -382,6 +389,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         self._validate_dependencies()
 
+        self._apply_default_options()
+
         # Check if factions_list field exists in cleaned data
         if "factions_list" in self.cleaned_data:
             # Count primary factions to ensure only one is selected
@@ -535,6 +544,127 @@ class CharacterForm(WritingForm, BaseWritingForm):
                         % {"option": options[option_uuid], "missing": ", ".join(missing)},
                     )
 
+    def _apply_default_options(self) -> None:
+        """Assign the default options of the single choice questions the player cannot answer.
+
+        A question is filled only when it holds no choice yet, and its field is missing from the form
+        or disabled: its options marked as default are evaluated in order, and the first one that is
+        available, allowed by the ticket and with its prerequisites satisfied is assigned. Assigning
+        an option can satisfy the prerequisites of another default, so the pass is repeated until
+        no other question is filled.
+        """
+        # Organizers can answer every question, so no option is ever assigned automatically
+        if self.orga:
+            return
+
+        pending = [question for question in self.questions if self._needs_default(question)]
+        if not pending:
+            return
+
+        # Same maps used to check the prerequisites of the chosen options: requirements pointing to
+        # options not available in the form are treated as satisfied
+        choice_fields = self._choice_fields()
+        available = {uuid: label for options in choice_fields.values() for uuid, label in options.items()}
+        owner = {uuid: field_key for field_key, options in choice_fields.items() for uuid in options}
+        selected = self._selected_options(choice_fields) | self._answered_options()
+
+        for _pass in range(len(pending)):
+            resolved = set()
+            for question in pending:
+                option = self._first_eligible_default(question, available, owner, selected)
+                if not option:
+                    continue
+
+                self.default_choices[question["id"]] = option["id"]
+                selected.add(str(option["uuid"]))
+                resolved.add(question["id"])
+
+            if not resolved:
+                break
+
+            pending = [question for question in pending if question["id"] not in resolved]
+
+    def _needs_default(self, question: dict) -> bool:
+        """Check whether a question has to be filled with one of its default options."""
+        if question["typ"] != BaseQuestionType.SINGLE:
+            return False
+
+        if not any(option.get("default") for option in question.get("options") or []):
+            return False
+
+        # A question dropped by its unmet prerequisites keeps no answer at all
+        if any(gated["id"] == question["id"] for gated in self.gated_questions):
+            return False
+
+        # An option already chosen is never replaced
+        if question["id"] in self.singles:
+            return False
+
+        # A field the player can still answer is left to them, even when left empty
+        field_key = get_question_key(question)
+        field = self.fields.get(field_key)
+        if field is not None and not field.disabled:
+            return False
+
+        return not self.cleaned_data.get(field_key)
+
+    def _answered_options(self) -> set[str]:
+        """Return the uuids of the options already chosen, including those without a field."""
+        chosen = {choice.option_id for choice in self.singles.values()}
+        if not chosen:
+            return set()
+
+        return {
+            str(option["uuid"])
+            for question in self.questions
+            for option in question.get("options") or []
+            if option["id"] in chosen
+        }
+
+    def _first_eligible_default(
+        self,
+        question: dict,
+        available: dict[str, str],
+        owner: dict[str, str],
+        selected: set,
+    ) -> dict | None:
+        """Return the first default option of a question that can be assigned, if any."""
+        defaults = [option for option in question.get("options") or [] if option.get("default")]
+        for option in sorted(defaults, key=lambda option: option.get("order") or 0):
+            if not self._option_available(question, option):
+                continue
+
+            if not self._option_allowed_ticket(option):
+                continue
+
+            if self._missing_requirements(str(option["uuid"]), available, owner, selected):
+                continue
+
+            return option
+
+        return None
+
+    def _option_available(self, question: dict, option: dict) -> bool:
+        """Check that an option is not sold out, reusing the counts computed for the form."""
+        if str(option["uuid"]) in self.unavail.get(question["uuid"], []):
+            return False
+
+        max_available = option.get("max_available") or 0
+        if max_available <= 0:
+            return True
+
+        taken = (self.registration_counts or {}).get(self.get_option_key_count(option), 0)
+        return taken < max_available
+
+    def _option_allowed_ticket(self, option: dict) -> bool:
+        """Check that the ticket of the player is one of those the option is restricted to."""
+        allowed = [ticket_id for ticket_id in option.get("tickets_map") or [] if ticket_id is not None]
+        registration = self.params.get("registration")
+        if not allowed or not registration:
+            return True
+
+        return registration.ticket_id in allowed
+
     def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save the character, discarding the answers of the questions hidden by their requirements."""
         instance = super().save(commit=commit)
@@ -543,6 +673,14 @@ class CharacterForm(WritingForm, BaseWritingForm):
             question_ids = [question["id"] for question in self.gated_questions]
             self.choice_class.objects.filter(question_id__in=question_ids, **{self.instance_key: instance.id}).delete()
             self.answer_class.objects.filter(question_id__in=question_ids, **{self.instance_key: instance.id}).delete()
+
+        if self.default_choices and instance.pk:
+            for question_id, option_id in self.default_choices.items():
+                self.choice_class.objects.get_or_create(
+                    question_id=question_id,
+                    option_id=option_id,
+                    **{self.instance_key: instance.id},
+                )
 
         return instance
 
@@ -1159,7 +1297,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
             help_texts = {
                 QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
                 QuestionStatus.MANDATORY: "The question needs to be filled by the player",
-                QuestionStatus.DISABLED: "The question is shown, but cannot be changed by the player",
+                QuestionStatus.DISABLED: "The question is shown read only, the player cannot change it",
                 QuestionStatus.HIDDEN: "The question is not shown to the player",
             }
 

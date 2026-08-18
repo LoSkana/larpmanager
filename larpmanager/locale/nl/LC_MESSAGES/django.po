@@ -1133,9 +1133,6 @@ msgstr "Deadline"
 msgid "Deployed"
 msgstr "Ingezet"
 
-msgid "Disabled"
-msgstr "Uitgeschakeld"
-
 msgid "Discount"
 msgstr "Korting"
 
@@ -1582,6 +1579,9 @@ msgstr "Vragen"
 
 msgid "Read mail"
 msgstr "Post lezen"
+
+msgid "Read only"
+msgstr "Alleen lezen"
 
 msgid "Recipient"
 msgstr "Ontvanger"
@@ -5038,6 +5038,9 @@ msgstr "Karakter configuraties"
 
 msgid "Code of the box or shelf"
 msgstr "Code van de doos of plank"
+
+msgid "Collapse options minimum"
+msgstr "Minimumaantal opties inklappen"
 
 msgid "Create another character"
 msgstr "Maak nog een personage aan"
@@ -9634,6 +9637,10 @@ msgstr "Je gebruiker heeft niet de vereiste rechten om deze pagina te openen."
 msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Magazijnartikelen per stuk toewijzen aan een of meer zones van het evenement"
+
+msgid "Assigned automatically when the participant cannot answer the question"
+msgstr ""
+"Automatisch toegewezen wanneer de deelnemer de vraag niet kan beantwoorden"
 
 msgid "Discount amount applied to a new user signing up with a referral code."
 msgstr ""
@@ -14759,6 +14766,15 @@ msgstr ""
 "vergaderingen van de vereniging."
 
 msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Geef het minimumaantal opties aan dat een formulierveld moet hebben om de "
+"niet-geselecteerde opties achter de link 'Andere opties tonen' te verbergen;"
+" als dit leeg is, wordt de standaardwaarde van 5 gebruikt."
+
+msgid ""
 "By proceeding with your registration for this event, you are giving us your "
 "authorisation to share your data saved on our platform with the organisers "
 "of the event."
@@ -15046,6 +15062,17 @@ msgstr ""
 "digitaliseren en uploaden via het onderstaande formulier. Je aanvraag wordt "
 "tijdens de volgende vergadering van het bestuur behandeld. Je krijgt een "
 "bevestiging van de uitkomst van de beoordeling."
+
+msgid ""
+"Indicate whether this option is assigned automatically, when the question "
+"cannot be answered by the participant and no option was chosen; if several "
+"options are marked, the first one whose prerequisites are satisfied is "
+"assigned"
+msgstr ""
+"Geef aan of deze optie automatisch wordt toegewezen wanneer de deelnemer de "
+"vraag niet kan beantwoorden en er geen optie is gekozen; als meerdere opties"
+" zijn gemarkeerd, wordt de eerste toegewezen waarvan de vereisten zijn "
+"vervuld"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

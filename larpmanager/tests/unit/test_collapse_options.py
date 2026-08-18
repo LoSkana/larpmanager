@@ -20,6 +20,9 @@
 
 """Tests for the choice widgets that collapse the options not selected."""
 
+from types import SimpleNamespace
+
+from larpmanager.forms.base import FormMixin
 from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect
 from larpmanager.tests.unit.base import BaseTestCase
 
@@ -99,3 +102,49 @@ class TestCollapseUnselectedOptions(BaseTestCase):
         assert 'id="id_que"' in container
         assert "my-radio-class" in container
         assert 'data-test="x"' in container
+
+    def test_no_toggle_below_collapse_min(self) -> None:
+        """With fewer options than the configured minimum the toggle is not shown"""
+        widget = DescriptionRadioSelect(choices=CHOICES, collapse_unselected=True, collapse_min=5)
+        html = widget.render("que", "a", attrs={"id": "id_que"})
+        assert "opt-collapsed" not in html
+        assert "opt-show-more" not in html
+
+    def test_toggle_at_collapse_min(self) -> None:
+        """Reaching the configured minimum of options enables the toggle"""
+        widget = DescriptionRadioSelect(choices=CHOICES, collapse_unselected=True, collapse_min=3)
+        html = widget.render("que", "a", attrs={"id": "id_que"})
+        assert html.count("opt-collapsed hide") == len(CHOICES) - 1
+        assert "opt-show-more" in html
+
+
+class _CollapseForm(FormMixin):
+    """Minimal form stub exposing the collapse state logic of FormMixin."""
+
+    def __init__(self, params: dict) -> None:
+        self.params = params
+        self.instance = SimpleNamespace(pk=1)
+
+
+class TestCollapseFormState(BaseTestCase):
+    """Test cases for the collapse state resolved by the forms"""
+
+    def test_edit_collapses(self) -> None:
+        """A regular edit form starts with the unselected options collapsed"""
+        assert _CollapseForm({})._collapse_unselected is True
+
+    def test_frame_disables_collapse(self) -> None:
+        """A dashboard element form rendered inside an iframe popup never collapses the options"""
+        assert _CollapseForm({"frame": True})._collapse_unselected is None
+
+    def test_writing_frame_keeps_collapse(self) -> None:
+        """A writing element edited inside an iframe still collapses the unselected options"""
+        assert _CollapseForm({"frame": True, "is_writing": True})._collapse_unselected is True
+
+    def test_excel_edit_disables_collapse(self) -> None:
+        """A double click single field edit never collapses the options"""
+        assert _CollapseForm({"excel_edit": True})._collapse_unselected is None
+
+    def test_modal_disables_collapse(self) -> None:
+        """A quick edit modal never collapses the options"""
+        assert _CollapseForm({"is_modal": True})._collapse_unselected is None

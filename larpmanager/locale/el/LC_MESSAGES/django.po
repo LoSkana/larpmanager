@@ -1133,9 +1133,6 @@ msgstr "Προθεσμία"
 msgid "Deployed"
 msgstr "Αναπτυγμένο σε παραγωγή"
 
-msgid "Disabled"
-msgstr "Απενεργοποιημένο"
-
 msgid "Discount"
 msgstr "Έκπτωση"
 
@@ -1582,6 +1579,9 @@ msgstr "Ερωτήσεις"
 
 msgid "Read mail"
 msgstr "Ανάγνωση email"
+
+msgid "Read only"
+msgstr "Μόνο για ανάγνωση"
 
 msgid "Recipient"
 msgstr "Παραλήπτης"
@@ -5038,6 +5038,9 @@ msgstr "Ρυθμίσεις χαρακτήρων"
 
 msgid "Code of the box or shelf"
 msgstr "Κωδικός του κουτιού ή του ραφιού"
+
+msgid "Collapse options minimum"
+msgstr "Ελάχιστος αριθμός επιλογών για σύμπτυξη"
 
 msgid "Create another character"
 msgstr "Δημιούργησε έναν ακόμη χαρακτήρα"
@@ -9701,6 +9704,10 @@ msgid "Assign warehouse items to one or more areas of the event, item by item"
 msgstr ""
 "Ανάθεσε αντικείμενα αποθήκης σε μία ή περισσότερες περιοχές του event, ένα "
 "αντικείμενο τη φορά"
+
+msgid "Assigned automatically when the participant cannot answer the question"
+msgstr ""
+"Ανατίθεται αυτόματα όταν ο συμμετέχων δεν μπορεί να απαντήσει στην ερώτηση"
 
 msgid "Discount amount applied to a new user signing up with a referral code."
 msgstr ""
@@ -14857,6 +14864,15 @@ msgstr ""
 "συμμετέχεις σε events και να ψηφίζεις στις συνελεύσεις του συλλόγου."
 
 msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Υποδείξτε τον ελάχιστο αριθμό επιλογών που πρέπει να έχει ένα πεδίο φόρμας "
+"για να κρύβονται οι μη επιλεγμένες πίσω από τον σύνδεσμο «Εμφάνιση άλλων "
+"επιλογών»· αν το αφήσετε κενό, χρησιμοποιείται η προεπιλογή 5."
+
+msgid ""
 "By proceeding with your registration for this event, you are giving us your "
 "authorisation to share your data saved on our platform with the organisers "
 "of the event."
@@ -15142,6 +15158,17 @@ msgstr ""
 "σαρώσεις ψηφιακά και να τη μεταφορτώσεις στην παρακάτω φόρμα. Το αίτημά σου "
 "θα εξεταστεί στην επόμενη συνεδρίαση του Διοικητικού Συμβουλίου. Θα λάβεις "
 "επιβεβαίωση για το αποτέλεσμα της αξιολόγησής του."
+
+msgid ""
+"Indicate whether this option is assigned automatically, when the question "
+"cannot be answered by the participant and no option was chosen; if several "
+"options are marked, the first one whose prerequisites are satisfied is "
+"assigned"
+msgstr ""
+"Υπόδειξε αν αυτή η επιλογή ανατίθεται αυτόματα, όταν ο συμμετέχων δεν μπορεί"
+" να απαντήσει στην ερώτηση και δεν έχει επιλεγεί καμία επιλογή· αν "
+"επισημανθούν πολλές επιλογές, ανατίθεται η πρώτη της οποίας πληρούνται οι "
+"προϋποθέσεις"
 
 msgid ""
 "This character represents the true secret identity of another character. You"

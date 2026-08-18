@@ -923,6 +923,9 @@ msgstr ""
 msgid "Invalid ticket selection"
 msgstr ""
 
+msgid "Read only"
+msgstr ""
+
 msgid "Not selected"
 msgstr ""
 
@@ -1050,6 +1053,15 @@ msgstr ""
 msgid ""
 "If enabled, allows characters and registrations to be exported to an easily "
 "readable page."
+msgstr ""
+
+msgid "Collapse options minimum"
+msgstr ""
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
 msgstr ""
 
 msgid "Show availability"
@@ -4272,9 +4284,6 @@ msgstr ""
 msgid "Mandatory"
 msgstr ""
 
-msgid "Disabled"
-msgstr ""
-
 msgid "Searchable"
 msgstr ""
 
@@ -4336,6 +4345,13 @@ msgstr ""
 
 msgid ""
 "Enter other options that must be selected for this option to be selectable"
+msgstr ""
+
+msgid ""
+"Indicate whether this option is assigned automatically, when the question "
+"cannot be answered by the participant and no option was chosen; if several "
+"options are marked, the first one whose prerequisites are satisfied is "
+"assigned"
 msgstr ""
 
 msgid ""
@@ -5744,6 +5760,9 @@ msgid "Add option"
 msgstr ""
 
 msgid "Maximum"
+msgstr ""
+
+msgid "Assigned automatically when the participant cannot answer the question"
 msgstr ""
 
 msgid "An error occurred while reordering elements"

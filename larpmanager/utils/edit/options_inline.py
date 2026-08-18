@@ -33,6 +33,8 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.forms.character import OrgaWritingOptionForm
 from larpmanager.forms.registration import OrgaRegistrationOptionForm
 from larpmanager.models.form import (
+    BaseQuestionType,
+    QuestionApplicable,
     RegistrationOption,
     RegistrationQuestion,
     WritingOption,
@@ -42,6 +44,21 @@ from larpmanager.models.member import LogOperationType
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
+
+
+def _allows_default(context: dict) -> bool:
+    """Check whether the options of the edited question can be marked as default.
+
+    Only the single choice questions of the character form are filled automatically, so the flag
+    is meaningless anywhere else.
+    """
+    # The question is held by "question" when saving an option, by "el" when editing the question
+    for key in ("question", "el"):
+        question = context.get(key)
+        if isinstance(question, WritingQuestion):
+            return question.typ == BaseQuestionType.SINGLE and question.applicable == QuestionApplicable.CHARACTER
+
+    return False
 
 
 def _inline_models(permission: str) -> tuple[type, type, type]:
@@ -69,6 +86,7 @@ def inline_options_config(context: dict, permission: str) -> dict[str, Any]:
             "show_max": "wri_que_max" in features,
             "show_requirements": "wri_que_requirements" in features,
             "show_tickets": "wri_que_tickets" in features,
+            "show_default": _allows_default(context),
         }
         if cfg["show_requirements"]:
             cfg["requirements_choices"] = (
@@ -87,6 +105,7 @@ def inline_options_config(context: dict, permission: str) -> dict[str, Any]:
             "show_max": True,
             "show_requirements": False,
             "show_tickets": False,
+            "show_default": False,
         }
 
     # Secondary (expandable) row is needed when there is more than the name to edit
@@ -104,6 +123,10 @@ def _serialize_option(option: Any, *, show_price: bool) -> dict[str, Any]:
     }
     if show_price:
         data["price"] = f"{option.price:.2f}"
+
+    # The default flag is present only on WritingOption
+    if hasattr(option, "default"):
+        data["default"] = option.default
 
     # M2M fields are present only on WritingOption
     for m2m in ("requirements", "tickets"):
