@@ -223,15 +223,25 @@ class TestCharacterOptionDependencies(BaseTestCase):
     def test_dependencies_empty_without_requirements_feature(self) -> None:
         assert get_character_option_dependencies(self.event, {"character"}) == {}
 
-    def test_organizer_form_not_bound_by_requirements(self) -> None:
+    def test_organizer_form_bound_by_requirements(self) -> None:
         form = OrgaCharacterForm(
             self._data(self.wasteland, self.psionic),
             instance=self._character(),
             context=self._context(),
         )
 
-        assert form.is_valid(), form.errors
+        assert not form.is_valid()
+        assert "Bunker" in str(form.errors[get_question_key(self.mutation)])
         assert str(self.psionic.uuid) in form.dependencies
+
+    def test_organizer_form_accepted_when_requirement_selected(self) -> None:
+        form = OrgaCharacterForm(
+            self._data(self.bunker, self.psionic),
+            instance=self._character(),
+            context=self._context(),
+        )
+
+        assert form.is_valid(), form.errors
 
 
 @pytest.mark.django_db
@@ -328,9 +338,20 @@ class TestCharacterQuestionDependencies(BaseTestCase):
 
         assert not WritingChoice.objects.filter(element_id=character.id, question=self.gear).exists()
 
-    def test_organizer_form_not_bound_by_question_requirements(self) -> None:
+    def test_organizer_form_bound_by_question_requirements(self) -> None:
         form = OrgaCharacterForm(
             self._data(self.wasteland, self.rifle), instance=self._character(), context=self._context()
+        )
+
+        assert form.is_valid(), form.errors
+        character = form.save()
+
+        # the gated question is hidden for organizers too: its answer is discarded
+        assert not WritingChoice.objects.filter(element_id=character.id, option=self.rifle).exists()
+
+    def test_organizer_form_question_kept_when_requirement_selected(self) -> None:
+        form = OrgaCharacterForm(
+            self._data(self.bunker, self.rifle), instance=self._character(), context=self._context()
         )
 
         assert form.is_valid(), form.errors
