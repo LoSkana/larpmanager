@@ -5039,6 +5039,9 @@ msgstr "Karakterkonfigurasjoner"
 msgid "Code of the box or shelf"
 msgstr "Kode for esken eller hyllen"
 
+msgid "Collapse options minimum"
+msgstr "Minimum antall alternativer for skjuling"
+
 msgid "Create another character"
 msgstr "Opprett en annen karakter"
 
@@ -14521,6 +14524,15 @@ msgstr ""
 "Vi har IKKE mottatt betalingen av medlemsavgiften din for dette året: denne "
 "er nødvendig for å kunne delta på arrangementer og stemme på foreningens "
 "generalforsamlinger."
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Angi minste antall alternativer et skjemafelt må ha for å skjule de ikke-"
+"valgte bak lenken «Vis andre alternativer»; hvis feltet er tomt, brukes "
+"standardverdien 5."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

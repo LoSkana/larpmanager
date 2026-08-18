@@ -388,6 +388,7 @@ class RegistrationForm(BaseRegistrationForm):
                 descriptions=ticket_descriptions,
                 metadata=ticket_metadata,
                 collapse_unselected=self._is_edit,
+                collapse_min=self._collapse_min,
             )
         self.fields["ticket"] = forms.ChoiceField(**ticket_field_kwargs)
 
@@ -938,6 +939,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 descriptions=orga_descriptions,
                 metadata=orga_metadata,
                 collapse_unselected=self._is_edit,
+                collapse_min=self._collapse_min,
             )
         self.fields["ticket"] = forms.ChoiceField(**orga_ticket_kwargs)
 

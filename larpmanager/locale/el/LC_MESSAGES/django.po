@@ -5039,6 +5039,9 @@ msgstr "Ρυθμίσεις χαρακτήρων"
 msgid "Code of the box or shelf"
 msgstr "Κωδικός του κουτιού ή του ραφιού"
 
+msgid "Collapse options minimum"
+msgstr "Ελάχιστος αριθμός επιλογών για σύμπτυξη"
+
 msgid "Create another character"
 msgstr "Δημιούργησε έναν ακόμη χαρακτήρα"
 
@@ -14855,6 +14858,15 @@ msgid ""
 msgstr ""
 "Η πληρωμή της συνδρομής σου για φέτος ΔΕΝ έχει ληφθεί: απαιτείται για να "
 "συμμετέχεις σε events και να ψηφίζεις στις συνελεύσεις του συλλόγου."
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Υποδείξτε τον ελάχιστο αριθμό επιλογών που πρέπει να έχει ένα πεδίο φόρμας "
+"για να κρύβονται οι μη επιλεγμένες πίσω από τον σύνδεσμο «Εμφάνιση άλλων "
+"επιλογών»· αν το αφήσετε κενό, χρησιμοποιείται η προεπιλογή 5."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

@@ -381,6 +381,13 @@ class OrgaConfigForm(ConfigForm):
         )
         self.add_configs("show_export", ConfigType.BOOL, export_label, export_help_text)
 
+        collapse_min_label = _("Collapse options minimum")
+        collapse_min_help_text = _(
+            "Indicate the minimum number of options a form field must have to hide the unselected ones "
+            "behind the 'Show other options' link; if empty, the default of 5 is used."
+        )
+        self.add_configs("collapse_options_min", ConfigType.INT, collapse_min_label, collapse_min_help_text)
+
         limitations_label = _("Show availability")
         limitations_help_text = _(
             "If enabled, show players a page with the remaining spots for tickets, options and discounts "

@@ -99,3 +99,17 @@ class TestCollapseUnselectedOptions(BaseTestCase):
         assert 'id="id_que"' in container
         assert "my-radio-class" in container
         assert 'data-test="x"' in container
+
+    def test_no_toggle_below_collapse_min(self) -> None:
+        """With fewer options than the configured minimum the toggle is not shown"""
+        widget = DescriptionRadioSelect(choices=CHOICES, collapse_unselected=True, collapse_min=5)
+        html = widget.render("que", "a", attrs={"id": "id_que"})
+        assert "opt-collapsed" not in html
+        assert "opt-show-more" not in html
+
+    def test_toggle_at_collapse_min(self) -> None:
+        """Reaching the configured minimum of options enables the toggle"""
+        widget = DescriptionRadioSelect(choices=CHOICES, collapse_unselected=True, collapse_min=3)
+        html = widget.render("que", "a", attrs={"id": "id_que"})
+        assert html.count("opt-collapsed hide") == len(CHOICES) - 1
+        assert "opt-show-more" in html

@@ -5039,6 +5039,9 @@ msgstr "Konfigurationer av karaktärer"
 msgid "Code of the box or shelf"
 msgstr "Kod för lådan eller hyllan"
 
+msgid "Collapse options minimum"
+msgstr "Minsta antal alternativ för att fälla ihop"
+
 msgid "Create another character"
 msgstr "Skapa en annan karaktär"
 
@@ -14489,6 +14492,15 @@ msgid ""
 msgstr ""
 "Årets medlemsavgift har INTE mottagits: den krävs för att kunna delta i "
 "evenemang och rösta vid föreningens stämmor."
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Ange det minsta antal alternativ som ett formulärfält måste ha för att dölja"
+" de ovalda bakom länken ”Visa andra alternativ”; om fältet lämnas tomt "
+"används standardvärdet 5."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "
