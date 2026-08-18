@@ -77,6 +77,18 @@ class FormMixin:
         instance = getattr(self, "instance", None)
         return bool(instance and instance.pk)
 
+    @cached_property
+    def _collapse_unselected(self) -> bool | None:
+        """Return the collapse state for option widgets, or None when collapsing must stay off.
+
+        Forms rendered inside a modal or an inline quick edit always show every option, since
+        there the user is deliberately changing that single field.
+        """
+        params = getattr(self, "params", None) or {}
+        if params.get("frame") or params.get("is_modal"):
+            return None
+        return self._is_edit
+
     def configure_field_event(self, field_name: str, event: Event) -> None:
         """Configure a form field's widget and queryset for a specific event."""
         field = self.fields[field_name]
@@ -1281,7 +1293,7 @@ class BaseRegistrationForm(BaseModelFormRun):
                 attrs={"class": "my-radio-class"},
                 descriptions=descriptions,
                 metadata=metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
                 collapse_min=self._collapse_min,
             )
         self.fields[field_key] = forms.ChoiceField(**field_kwargs)
@@ -1345,7 +1357,7 @@ class BaseRegistrationForm(BaseModelFormRun):
                 attrs={"class": "my-checkbox-class"},
                 descriptions=descriptions,
                 metadata=metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
                 collapse_min=self._collapse_min,
             )
             hint = _("Select one or more options")

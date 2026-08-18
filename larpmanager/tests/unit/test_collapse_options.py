@@ -20,6 +20,9 @@
 
 """Tests for the choice widgets that collapse the options not selected."""
 
+from types import SimpleNamespace
+
+from larpmanager.forms.base import FormMixin
 from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect
 from larpmanager.tests.unit.base import BaseTestCase
 
@@ -113,3 +116,27 @@ class TestCollapseUnselectedOptions(BaseTestCase):
         html = widget.render("que", "a", attrs={"id": "id_que"})
         assert html.count("opt-collapsed hide") == len(CHOICES) - 1
         assert "opt-show-more" in html
+
+
+class _CollapseForm(FormMixin):
+    """Minimal form stub exposing the collapse state logic of FormMixin."""
+
+    def __init__(self, params: dict) -> None:
+        self.params = params
+        self.instance = SimpleNamespace(pk=1)
+
+
+class TestCollapseFormState(BaseTestCase):
+    """Test cases for the collapse state resolved by the forms"""
+
+    def test_edit_collapses(self) -> None:
+        """A regular edit form starts with the unselected options collapsed"""
+        assert _CollapseForm({})._collapse_unselected is True
+
+    def test_frame_disables_collapse(self) -> None:
+        """A form rendered inside an iframe popup never collapses the options"""
+        assert _CollapseForm({"frame": True})._collapse_unselected is None
+
+    def test_modal_disables_collapse(self) -> None:
+        """A quick edit modal never collapses the options"""
+        assert _CollapseForm({"is_modal": True})._collapse_unselected is None
