@@ -30,6 +30,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.utils.http import url_has_allowed_host_and_scheme
 
+from larpmanager.utils.auth.sso import pop_login_slug
+
 if TYPE_CHECKING:
     from allauth.socialaccount.models import SocialLogin
     from django.forms import Form
@@ -47,6 +49,10 @@ def _get_redirect_url_with_subdomain_support(request: HttpRequest) -> str | None
     detect the subdomain the login started from. That information instead travels
     through the 'next' parameter, set server-side by `get_social_login_url` in
     show_tags.py, pointing to: /after_login/{slug}/
+
+    The callback request itself carries no 'next' (allauth keeps it in its session
+    state), so the slug stashed by SocialLoginTargetMiddleware is used as fallback
+    whenever that state was lost.
 
     Returns:
         str: Redirect URL path, or None to use default behavior
@@ -66,7 +72,12 @@ def _get_redirect_url_with_subdomain_support(request: HttpRequest) -> str | None
             # For other valid next URLs, use them
             return next_url
 
-    # No valid next parameter - caller should use default behavior
+    # No usable next parameter: fall back to the subdomain the login started from
+    slug = pop_login_slug(request)
+    if slug:
+        return reverse("after_login", kwargs={"subdomain": slug})
+
+    # Nothing to go back to - caller should use default behavior
     return None
 
 
@@ -184,9 +195,9 @@ class MySocialAccountAdapter(DefaultSocialAccountAdapter):
 class MyAccountAdapter(DefaultAccountAdapter):
     """Custom account adapter for LarpManager.
 
-    Handles redirect URLs for first-time signups (including social OAuth signups).
-    Uses the same logic as MySocialAccountAdapter to respect the 'next' parameter
-    and enable token-based cross-subdomain authentication.
+    Handles redirect URLs for logins and first-time signups (including social OAuth
+    signups). Uses the same logic as MySocialAccountAdapter to respect the 'next'
+    parameter and enable token-based cross-subdomain authentication.
     """
 
     def get_signup_redirect_url(self, request: HttpRequest) -> str:
@@ -196,3 +207,16 @@ class MyAccountAdapter(DefaultAccountAdapter):
 
         # If helper returned a URL, use it; otherwise use default behavior
         return redirect_url if redirect_url is not None else super().get_signup_redirect_url(request)
+
+    def get_login_redirect_url(self, request: HttpRequest) -> str:
+        """Get redirect URL after login, respecting the originating subdomain.
+
+        allauth resolves the post-login redirect through the account adapter (not
+        the social one), so this override is what keeps a social login that lost
+        its session state from landing on the main domain.
+        """
+        # Use common helper method for subdomain-aware redirect logic
+        redirect_url = _get_redirect_url_with_subdomain_support(request)
+
+        # If helper returned a URL, use it; otherwise use default behavior
+        return redirect_url if redirect_url is not None else super().get_login_redirect_url(request)

@@ -17,6 +17,7 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+import logging
 from collections.abc import Callable
 from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 
@@ -25,8 +26,11 @@ from django.core.cache import cache
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect
 
+from larpmanager.utils.auth.sso import session_token_key
 from larpmanager.utils.core.common import welcome_user
 from larpmanager.views.user.member import get_user_backend
+
+logger = logging.getLogger(__name__)
 
 
 class TokenAuthMiddleware:
@@ -54,15 +58,16 @@ class TokenAuthMiddleware:
                          otherwise normal middleware response
 
         Note:
-            Token is validated against cached user_id. Invalid tokens or users
-            are silently ignored for security reasons.
+            Token is validated against cached user_id. Invalid, expired or already
+            used tokens do not authenticate the user; they are only logged, as the
+            token value itself must never reach the response.
 
         """
         # Extract authentication token from query parameters
         token = request.GET.get("token")
         if token:
             # Retrieve user_id associated with this token from cache
-            user_id = cache.get(f"session_token:{token}")
+            user_id = cache.get(session_token_key(token))
             if user_id:
                 try:
                     # Authenticate user if valid user_id found
@@ -70,10 +75,17 @@ class TokenAuthMiddleware:
                     welcome_user(request, user)
                     login(request, user, backend=get_user_backend())
                     # Delete token after use to prevent replay attacks
-                    cache.delete(f"session_token:{token}")
+                    cache.delete(session_token_key(token))
                 except get_user_model().DoesNotExist:
-                    # Invalid user_id, ignore silently for security
-                    pass
+                    # Token pointed at a user that no longer exists
+                    logger.warning("Cross-subdomain login token referenced missing user %s", user_id)
+            else:
+                # Expired, already used or forged token: the user stays anonymous
+                logger.info(
+                    "Cross-subdomain login token not found in cache for host %s path %s",
+                    request.get_host(),
+                    request.path,
+                )
 
             # Parse current URL to remove token parameter
             parsed = urlparse(request.get_full_path())
