@@ -26,16 +26,20 @@ users based on email address, even when username differs from email.
 
 from __future__ import annotations
 
+import time
 from unittest.mock import Mock
 
 import pytest
 from allauth.socialaccount.models import SocialAccount, SocialLogin
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 from django.test import RequestFactory
 
+from larpmanager.middleware.sso import SocialLoginTargetMiddleware
 from larpmanager.models.member import Member
 from larpmanager.utils.auth.adapter import MyAccountAdapter, MySocialAccountAdapter
+from larpmanager.utils.auth.sso import SSO_SLUG_MAX_AGE, SSO_SLUG_SESSION_KEY
 
 
 @pytest.mark.django_db
@@ -293,4 +297,76 @@ class TestAccountAdapter:
         # In test settings, LOGIN_REDIRECT_URL = 'home' which resolves to "/"
         # So we verify it's a valid redirect (string type) and not an after_login URL
         assert isinstance(redirect_url, str)
+        assert "/after_login/" not in redirect_url
+
+
+class TestSocialLoginTargetMiddleware:
+    """Test that the target subdomain of a social login is remembered."""
+
+    @staticmethod
+    def _run(path: str, params: dict) -> dict:
+        request = RequestFactory().get(path, params)
+        request.session = {}
+        SocialLoginTargetMiddleware(lambda _request: HttpResponse())(request)
+        return request.session
+
+    def test_stashes_slug_from_next(self) -> None:
+        """The slug of the after_login target is stored in the session."""
+        session = self._run("/accounts/google/login/", {"next": "https://larpmanager.com/after_login/test-org/"})
+
+        assert session[SSO_SLUG_SESSION_KEY][0] == "test-org"
+
+    def test_ignores_unrelated_next(self) -> None:
+        """A next parameter that is not an after_login URL stores nothing."""
+        session = self._run("/accounts/google/login/", {"next": "/manage/"})
+
+        assert SSO_SLUG_SESSION_KEY not in session
+
+    def test_ignores_other_paths(self) -> None:
+        """Requests outside the provider login URLs store nothing."""
+        session = self._run("/manage/", {"next": "https://larpmanager.com/after_login/test-org/"})
+
+        assert SSO_SLUG_SESSION_KEY not in session
+
+
+@pytest.mark.django_db
+class TestStashedSlugFallback:
+    """Test the fallback used when django-allauth loses its session state.
+
+    The OAuth callback carries no 'next' of its own: allauth keeps it in a
+    per-attempt session state that is garbage collected once too many logins are
+    pending. Without a fallback the user would be sent to the main domain.
+    """
+
+    @staticmethod
+    def _callback_request(stashed: object) -> RequestFactory:
+        request = RequestFactory().get("/accounts/google/login/callback/")
+        request.association = {"id": 0, "slug": "", "name": "LarpManager"}
+        request.session = {SSO_SLUG_SESSION_KEY: stashed}
+        return request
+
+    def test_login_redirect_uses_stashed_slug(self) -> None:
+        """A login without 'next' goes back to the stashed subdomain."""
+        request = self._callback_request(["test-org", time.time()])
+
+        redirect_url = MyAccountAdapter().get_login_redirect_url(request)
+
+        assert redirect_url == "/after_login/test-org/"
+        # The slug is consumed, so it cannot hijack a later login
+        assert SSO_SLUG_SESSION_KEY not in request.session
+
+    def test_signup_redirect_uses_stashed_slug(self) -> None:
+        """A first-time social signup also goes back to the stashed subdomain."""
+        request = self._callback_request(["test-org", time.time()])
+
+        assert MyAccountAdapter().get_signup_redirect_url(request) == "/after_login/test-org/"
+
+    def test_stale_slug_is_ignored(self) -> None:
+        """An abandoned social login does not redirect a later login."""
+        request = self._callback_request(["test-org", time.time() - SSO_SLUG_MAX_AGE - 1])
+        # The allauth default redirect asserts an authenticated user
+        request.user = Mock(is_authenticated=True)
+
+        redirect_url = MyAccountAdapter().get_login_redirect_url(request)
+
         assert "/after_login/" not in redirect_url

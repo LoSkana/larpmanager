@@ -39,6 +39,7 @@ from django_otp import user_has_device
 
 from larpmanager.cache.config import save_single_config
 from larpmanager.forms.member import MyAuthForm
+from larpmanager.utils.auth.sso import SESSION_TOKEN_TTL, session_token_key
 from larpmanager.utils.core.base import get_context
 from larpmanager.utils.core.common import welcome_user
 from larpmanager.utils.larpmanager.query import query_index
@@ -123,7 +124,7 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
                      or redirect to login page if user is not authenticated
 
     Note:
-        The session token expires after 60 seconds for security purposes.
+        The session token is single use and expires after SESSION_TOKEN_TTL seconds.
 
     """
     # Check if user is authenticated, redirect to login if not
@@ -141,8 +142,7 @@ def after_login(request: HttpRequest, subdomain: str, path: str = "") -> HttpRes
     token = secrets.token_urlsafe(32)
 
     # Store token in cache with user ID and short timeout for security
-    # Session token has short 60 second timeout for security
-    cache.set(f"session_token:{token}", user.id, timeout=60)
+    cache.set(session_token_key(token), user.id, timeout=SESSION_TOKEN_TTL)
 
     # Build redirect URL with subdomain and token
     base_domain = get_base_domain(request)
