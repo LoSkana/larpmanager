@@ -483,7 +483,6 @@ def orga_gated_question(page: Any, live_server: Any) -> None:
     expect(dep_b_radio).to_be_hidden()
 
     # selecting the requirement shows them back
-    page.locator("#id_que_u4 .opt-show-more").click()
     page.locator('label[for="id_que_u4_2"]').click()
     expect(gated_row).to_be_visible()
     expect(dep_b_radio).to_be_visible()
@@ -496,12 +495,10 @@ def orga_gated_question(page: Any, live_server: Any) -> None:
     expect(page.locator('input[type="radio"][value="u12"]')).to_be_checked()
 
     # hiding the question again discards its answer, and does not block the save
-    page.locator("#id_que_u4 .opt-show-more").click()
     page.locator('label[for="id_que_u4_1"]').click()
     expect(page.locator("#id_que_u10_tr")).to_be_hidden()
     submit_confirm(page)
 
     go_to(page, live_server, "/test/manage/characters/u3/edit/")
-    page.locator("#id_que_u4 .opt-show-more").click()
     page.locator('label[for="id_que_u4_2"]').click()
     expect(page.locator('input[type="radio"][value="u12"]')).not_to_be_checked()
