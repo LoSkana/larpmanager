@@ -145,7 +145,7 @@ class QuestionStatus(models.TextChoices):
 
     OPTIONAL = "o", _("Optional")
     MANDATORY = "m", _("Mandatory")
-    DISABLED = "d", _("Disabled")
+    DISABLED = "d", _("Read only")
     HIDDEN = "h", _("Hidden")
 
     @classmethod

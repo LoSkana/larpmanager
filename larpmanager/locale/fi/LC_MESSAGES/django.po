@@ -1133,9 +1133,6 @@ msgstr "Määräaika"
 msgid "Deployed"
 msgstr "Käytössä"
 
-msgid "Disabled"
-msgstr "Poistettu käytöstä"
-
 msgid "Discount"
 msgstr "Alennus"
 
@@ -1582,6 +1579,9 @@ msgstr "Kysymykset"
 
 msgid "Read mail"
 msgstr "Lue posti"
+
+msgid "Read only"
+msgstr "Vain luku"
 
 msgid "Recipient"
 msgstr "Vastaanottaja"

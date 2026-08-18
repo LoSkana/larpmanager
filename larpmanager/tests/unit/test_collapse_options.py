@@ -134,8 +134,16 @@ class TestCollapseFormState(BaseTestCase):
         assert _CollapseForm({})._collapse_unselected is True
 
     def test_frame_disables_collapse(self) -> None:
-        """A form rendered inside an iframe popup never collapses the options"""
+        """A dashboard element form rendered inside an iframe popup never collapses the options"""
         assert _CollapseForm({"frame": True})._collapse_unselected is None
+
+    def test_writing_frame_keeps_collapse(self) -> None:
+        """A writing element edited inside an iframe still collapses the unselected options"""
+        assert _CollapseForm({"frame": True, "is_writing": True})._collapse_unselected is True
+
+    def test_excel_edit_disables_collapse(self) -> None:
+        """A double click single field edit never collapses the options"""
+        assert _CollapseForm({"excel_edit": True})._collapse_unselected is None
 
     def test_modal_disables_collapse(self) -> None:
         """A quick edit modal never collapses the options"""

@@ -1133,9 +1133,6 @@ msgstr "Date limite"
 msgid "Deployed"
 msgstr "Déployé"
 
-msgid "Disabled"
-msgstr "Désactivé"
-
 msgid "Discount"
 msgstr "Remise"
 
@@ -1582,6 +1579,9 @@ msgstr "Questions"
 
 msgid "Read mail"
 msgstr "Lire le courrier"
+
+msgid "Read only"
+msgstr "Lecture seule"
 
 msgid "Recipient"
 msgstr "Destinataire"
