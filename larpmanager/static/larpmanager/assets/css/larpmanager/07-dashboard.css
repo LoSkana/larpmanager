@@ -681,7 +681,7 @@ body.floating_iframe .inner {
 .demo-hint-toggle {
   position: fixed;
   bottom: 1.2em;
-  right: 1.2em;
+  right: 0.6em;
   z-index: 1000;
   width: 2.6em;
   height: 2.6em;
@@ -716,6 +716,18 @@ body.floating_iframe .inner {
 
 .demo-hint-panel.open {
   display: block;
+}
+
+@media (max-width: 840px) {
+  .demo-hint-toggle {
+    bottom: calc(3vw + 7vh + 0.6em);
+    bottom: calc(3vw + 7dvh + 0.6em);
+  }
+
+  .demo-hint-panel {
+    bottom: calc(3vw + 7vh + 3.9em);
+    bottom: calc(3vw + 7dvh + 3.9em);
+  }
 }
 
 .demo-hint-panel .demo-hint-title {
