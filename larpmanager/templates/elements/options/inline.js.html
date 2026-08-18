@@ -59,7 +59,12 @@ function flashSaved($row) {
             const $details = detailsRow($row);
             const data = {};
             $row.add($details).find('input[name], textarea[name]').each(function() {
-                data[$(this).attr('name')] = $(this).val();
+                const $field = $(this);
+                if ($field.attr('type') === 'checkbox') {
+                    data[$field.attr('name')] = $field.is(':checked') ? '1' : '';
+                } else {
+                    data[$field.attr('name')] = $field.val();
+                }
             });
             $details.find('select.io-m2m').each(function() {
                 const name = $(this).attr('name');
