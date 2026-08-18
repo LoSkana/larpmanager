@@ -32,7 +32,7 @@
                     <tr>
                         <td></td>
                         <td>{{ el.registration.run }}</td>
-                        <td>{{ el.created | date:'Y-m-d' }}</td>
+                        <td data-order="{{ el.created|date:'U' }}">{{ el.created|date:'d/m/Y' }}</td>
                         <td>{{ el.value }}</td>
                         <td>{{ el.typ }}</td>
                     </tr>
@@ -58,7 +58,7 @@
                     <tr>
                         <td></td>
                         <td>{{ el.run.search }}</td>
-                        <td>{{ el.created | date:'Y-m-d' }}</td>
+                        <td data-order="{{ el.created|date:'U' }}">{{ el.created|date:'d/m/Y' }}</td>
                         <td>{{ el.descr }}</td>
                         <td>{{ el.value }}</td>
                         <td>{{ el.typ }}</td>

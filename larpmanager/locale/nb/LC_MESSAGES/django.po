@@ -9503,6 +9503,12 @@ msgstr ""
 "For å laste opp relasjoner legger du til en fil nummer to med følgende "
 "kolonner"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Du kan gjennomgå og sende inn dataene dine på nytt <a "
+"href='%(url)s'>her</a>."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Du har nådd det maksimale antallet karakterer som kan opprettes"
 

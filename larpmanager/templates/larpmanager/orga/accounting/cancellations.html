@@ -53,7 +53,7 @@
                     </td>
                     <td>{{ el.member.email }}</td>
                     {% if features.info %}<td>{{ el.info }}</td>{% endif %}
-                    <td>{{ el.cancellation_date|date:"Y-m-d" }}</td>
+                    <td data-order="{{ el.cancellation_date|date:'U' }}">{{ el.cancellation_date|date:'d/m/Y' }}</td>
                     {% if features.credits or features.tokens %}
                         <td>
                             {% if el.refunded %}

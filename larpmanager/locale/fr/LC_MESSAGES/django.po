@@ -9691,6 +9691,12 @@ msgstr ""
 "Pour téléverser les relations, ajoute un deuxième fichier contenant les "
 "colonnes suivantes"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Tu peux vérifier et soumettre à nouveau tes données <a "
+"href='%(url)s'>ici</a>."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Tu as atteint le nombre maximum de personnages pouvant être créés"
 

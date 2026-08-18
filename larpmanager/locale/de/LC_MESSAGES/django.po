@@ -9718,6 +9718,12 @@ msgstr ""
 "Um Beziehungen hochzuladen, füge eine zweite Datei mit den folgenden Spalten"
 " hinzu"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Du kannst deine Daten <a href='%(url)s'>hier</a> überprüfen und erneut "
+"einreichen."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr ""
 "Du hast die maximale Anzahl von Charakteren erreicht, die erstellt werden "

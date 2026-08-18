@@ -9518,6 +9518,11 @@ msgstr ""
 "Para carregar relações, adiciona um segundo ficheiro com as seguintes "
 "colunas"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Podes rever e enviar novamente os teus dados <a href='%(url)s'>aqui</a>."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Atingiste o número máximo de personagens que podem ser criadas"
 

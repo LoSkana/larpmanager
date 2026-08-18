@@ -144,7 +144,7 @@
         <tbody>
             {% for t in transfers %}
                 <tr>
-                    <td>{{ t.timestamp|date:"Y-m-d H:i" }}</td>
+                    <td>{{ t.timestamp|date:"d/m/Y H:i" }}</td>
                     <td>{{ t.actor|default:"-" }}</td>
                     <td>{{ t.source_inventory.name|default:"NPC" }}</td>
                     <td>{{ t.target_inventory.name|default:"NPC" }}</td>

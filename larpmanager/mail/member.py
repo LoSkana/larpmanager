@@ -221,6 +221,10 @@ def notify_membership_reject(member: Any, resp: Any) -> None:
     body = _("We regret to inform you that your membership application was not approved by the board.")
     if resp:
         body += " " + _("Reason") + f": {resp}"
+    membership_url = get_url("membership", member.membership)
+    body += "<br /><br />" + _(
+        "You can review and submit again your data <a href='%(url)s'>here</a>.",
+    ) % {"url": membership_url}
     body += " " + _("If you have questions, feel free to contact us.")
     my_send_mail(subject, body, member, member.membership)
 

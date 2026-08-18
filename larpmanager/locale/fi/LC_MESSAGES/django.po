@@ -9509,6 +9509,12 @@ msgstr ""
 "Jos haluat ladata suhteita, lisää toinen tiedosto, jossa on seuraavat "
 "sarakkeet"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Voit tarkistaa tietosi ja lähettää ne uudelleen <a "
+"href='%(url)s'>täältä</a>."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Olet saavuttanut luotavien hahmojen enimmäismäärän"
 

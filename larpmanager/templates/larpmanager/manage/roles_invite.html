@@ -43,7 +43,7 @@
                         <tr>
                             <td></td>
                             <td>{{ inv.email }}</td>
-                            <td>{{ inv.created|date:"Y-m-d H:i" }}</td>
+                            <td data-order="{{ inv.created|date:'U' }}">{{ inv.created|date:'d/m/Y H:i' }}</td>
                             <td>
                                 {% if inv.redeemed_by %}
                                     {% trans "Redeemed" %} ({{ inv.redeemed_by }})

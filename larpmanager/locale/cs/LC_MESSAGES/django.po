@@ -9415,6 +9415,11 @@ msgstr "Potvrzení vydané bankou jako doklad o převodu (ve formátu PDF)"
 msgid "To upload relationships, add a second file with the following columns"
 msgstr "Chceš-li nahrát vztahy, přidej druhý soubor s následujícími sloupci"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Své údaje můžete zkontrolovat a znovu odeslat <a href='%(url)s'>zde</a>."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Dosáhl/a jsi maximálního počtu postav, které lze vytvořit"
 

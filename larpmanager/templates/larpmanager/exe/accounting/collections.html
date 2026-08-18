@@ -17,6 +17,7 @@
                 <th></th>
                 <th></th>
                 <th>{% trans "Request" %}</th>
+                <th>{% trans "Created" %}</th>
                 <th>{% trans "Participant" %}</th>
                 <th>{% trans "Organizer" %}</th>
                 <th>{% trans "Status" %}</th>
@@ -33,7 +34,8 @@
                         <a href="{% url 'exe_collections_edit' el.uuid %}"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
-                    <td>{{ el.request }}</td>
+                    <td>{{ el.name }}</td>
+                    <td data-order="{{ el.created|date:'U' }}">{{ el.created|date:'d/m/Y' }}</td>
                     <td>{{ el.member }}</td>
                     <td>{{ el.organizer }}</td>
                     <td>{{ el.get_status_display }}</td>

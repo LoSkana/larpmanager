@@ -128,9 +128,9 @@
                             {% if features.discount %}
                                 <th class="disc">{% trans "Discounts" %}</th>
                             {% endif %}
-                            <th class="date">{% trans "Creation" %} (y/m/d)</th>
-                            <th class="date">{% trans "Last change" %} (y/m/d)</th>
-                            <th class="date">{% trans "Full payment" %} (y/m/d)</th>
+                            <th class="date">{% trans "Creation" %}</th>
+                            <th class="date">{% trans "Last change" %}</th>
+                            <th class="date">{% trans "Full payment" %}</th>
                             {% if features.reg_quotas or features.reg_installments %}
                                 <th class="acc quota">{% trans "Next quota" %}</th>
                             {% endif %}
@@ -272,10 +272,10 @@
                                         <a href="{% url 'orga_registration_discounts' run.get_slug registration.uuid %}">{% trans "Manage" %}</a>
                                     </td>
                                 {% endif %}
-                                <td class="date">{{ registration.created | date:"y/m/d H:i" }}</td>
-                                <td class="date">{{ registration.updated | date:"y/m/d H:i" }}</td>
-                                <td class="date">
-                                    {% if registration.payment_date %}{{ registration.payment_date | date:"y/m/d H:i" }}{% endif %}
+                                <td class="date" data-order="{{ registration.created|date:'U' }}">{{ registration.created|date:'d/m/Y H:i' }}</td>
+                                <td class="date" data-order="{{ registration.updated|date:'U' }}">{{ registration.updated|date:'d/m/Y H:i' }}</td>
+                                <td class="date" data-order="{{ registration.payment_date|date:'U' }}">
+                                    {% if registration.payment_date %}{{ registration.payment_date|date:'d/m/Y H:i' }}{% endif %}
                                 </td>
                                 {% if features.reg_quotas or features.reg_installments %}
                                     <td class="acc quota"

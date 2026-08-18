@@ -281,7 +281,7 @@
                     <td>
                         {% if el.development != '9' %}NO{% endif %}
                     </td>
-                    <td>{{ el.start | date:"Y/m/d" }}</td>
+                    <td data-order="{{ el.start|date:'U' }}">{{ el.start|date:'d/m/Y' }}</td>
                 </tr>
             {% endfor %}
         </table>
