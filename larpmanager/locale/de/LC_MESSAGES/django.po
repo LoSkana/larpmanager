@@ -1133,9 +1133,6 @@ msgstr "Frist"
 msgid "Deployed"
 msgstr "Eingesetzt"
 
-msgid "Disabled"
-msgstr "Deaktiviert"
-
 msgid "Discount"
 msgstr "Rabatt"
 
@@ -1582,6 +1579,9 @@ msgstr "Fragen"
 
 msgid "Read mail"
 msgstr "Nachricht lesen"
+
+msgid "Read only"
+msgstr "Schreibgeschützt"
 
 msgid "Recipient"
 msgstr "Empfänger"

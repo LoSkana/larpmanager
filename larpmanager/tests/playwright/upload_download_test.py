@@ -269,7 +269,7 @@ def reg_form(page: Any) -> None:
     expect_normalized(
         page,
         page.locator("#one"),
-        "tbmobw npyrxd Multiple choice Optional npyrxd | rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Disabled lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr | fjxkum",
+        "tbmobw npyrxd Multiple choice Optional npyrxd | rdtbgg qmhcuf rdtbgg Multi-line text Mandatory holdmf qkcyjr Single-line text Read only lyucez fjxkum Advanced text editor Hidden bamkzw fzynqq Single choice Optional qkcyjr | fjxkum",
     )
     check_download(page, "Download")
 

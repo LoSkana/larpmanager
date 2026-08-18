@@ -1133,9 +1133,6 @@ msgstr "Προθεσμία"
 msgid "Deployed"
 msgstr "Αναπτυγμένο σε παραγωγή"
 
-msgid "Disabled"
-msgstr "Απενεργοποιημένο"
-
 msgid "Discount"
 msgstr "Έκπτωση"
 
@@ -1582,6 +1579,9 @@ msgstr "Ερωτήσεις"
 
 msgid "Read mail"
 msgstr "Ανάγνωση email"
+
+msgid "Read only"
+msgstr "Μόνο για ανάγνωση"
 
 msgid "Recipient"
 msgstr "Παραλήπτης"

@@ -49,4 +49,8 @@ window.addEventListener('DOMContentLoaded', function() {
     {% include "elements/working-ticket.js" with num=edit_uuid %}
     {% include "elements/auto-save.js" %}
     {% include "elements/helpers/iframe_resize.js" %}
+    {% if dependencies.options or dependencies.questions %}
+        {% include "elements/form/question_toggle.js" %}
+        {% include "elements/form/option_dependencies.js" %}
+    {% endif %}
 {% endblock js2 %}

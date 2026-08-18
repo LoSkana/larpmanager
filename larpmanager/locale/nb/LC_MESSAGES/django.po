@@ -1133,9 +1133,6 @@ msgstr "Frist"
 msgid "Deployed"
 msgstr "Utplassert"
 
-msgid "Disabled"
-msgstr "Deaktivert"
-
 msgid "Discount"
 msgstr "Rabatt"
 
@@ -1582,6 +1579,9 @@ msgstr "Spørsmål"
 
 msgid "Read mail"
 msgstr "Les post"
+
+msgid "Read only"
+msgstr "Skrivebeskyttet"
 
 msgid "Recipient"
 msgstr "Mottaker"

@@ -64,6 +64,8 @@ def test_user_character_form_editor(pw_page: Any) -> None:
 
     player_relationships(page, live_server)
 
+    orga_gated_question(page, live_server)
+
 
 def prepare(page: Any, live_server: Any) -> None:
     # Activate characters
@@ -464,3 +466,39 @@ def player_relationships(page: Any, live_server: Any) -> None:
 
     # Verify updated text
     expect_normalized(page, page.locator("#player_relationships"), "details relationship test character factions: test teaser (...) updated relationship text")
+
+
+def orga_gated_question(page: Any, live_server: Any) -> None:
+    """Verify the organizer form is bound by the requirements, exactly as the player form.
+
+    The stored answer of "single" is "rrrr", so the elements requiring "wwww" (u3) start hidden:
+    the option "dep_b" (u9) and the whole question "gated_q" (u10).
+    """
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+
+    gated_row = page.locator("#id_que_u10_tr")
+    dep_b_radio = page.locator('label:has(input[type="radio"][value="u9"])')
+
+    expect(gated_row).to_be_hidden()
+    expect(dep_b_radio).to_be_hidden()
+
+    # selecting the requirement shows them back
+    page.locator('label[for="id_que_u4_2"]').click()
+    expect(gated_row).to_be_visible()
+    expect(dep_b_radio).to_be_visible()
+
+    # the answer of the question, given while it is shown, is stored
+    page.locator('label[for="id_que_u10_0"]').click()
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+    expect(page.locator('input[type="radio"][value="u12"]')).to_be_checked()
+
+    # hiding the question again discards its answer, and does not block the save
+    page.locator('label[for="id_que_u4_1"]').click()
+    expect(page.locator("#id_que_u10_tr")).to_be_hidden()
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/characters/u3/edit/")
+    page.locator('label[for="id_que_u4_2"]').click()
+    expect(page.locator('input[type="radio"][value="u12"]')).not_to_be_checked()

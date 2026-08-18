@@ -1408,7 +1408,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
         help_texts = {
             QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
             QuestionStatus.MANDATORY: "The question needs to be filled by the player",
-            QuestionStatus.DISABLED: "The question is shown, but cannot be changed by the player",
+            QuestionStatus.DISABLED: "The question is shown read only, the player cannot change it",
             QuestionStatus.HIDDEN: "The question is not shown to the player",
         }
         self.fields["status"].help_text = ", ".join(

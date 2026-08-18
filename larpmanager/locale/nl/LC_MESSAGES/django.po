@@ -1133,9 +1133,6 @@ msgstr "Deadline"
 msgid "Deployed"
 msgstr "Ingezet"
 
-msgid "Disabled"
-msgstr "Uitgeschakeld"
-
 msgid "Discount"
 msgstr "Korting"
 
@@ -1582,6 +1579,9 @@ msgstr "Vragen"
 
 msgid "Read mail"
 msgstr "Post lezen"
+
+msgid "Read only"
+msgstr "Alleen lezen"
 
 msgid "Recipient"
 msgstr "Ontvanger"

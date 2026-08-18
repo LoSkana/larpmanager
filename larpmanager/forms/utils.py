@@ -84,6 +84,22 @@ class ReadOnlyWidget(Widget):
     template_name = "forms/widgets/read_only.html"
 
 
+class ReadOnlyChoiceWidget(forms.Select):
+    """Widget displaying the labels of the selected choices as read-only text."""
+
+    template_name = "forms/widgets/read_only_choice.html"
+
+    def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
+        """Add the labels of the currently selected choices to the widget context."""
+        context = super().get_context(name, value, attrs)
+        values = value if isinstance(value, (list, tuple)) else [value]
+        values = {str(single) for single in values if single not in (None, "")}
+        context["widget"]["selected_labels"] = [
+            option_label for option_value, option_label in self.choices if str(option_value) in values
+        ]
+        return context
+
+
 class DatePickerInput(forms.TextInput):
     """Date picker input widget for forms."""
 

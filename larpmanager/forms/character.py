@@ -126,6 +126,13 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Questions hidden by their unmet requirements, filled during validation
         self.gated_questions: list[dict] = []
 
+        # Publish the requirements to the page, so the client mirrors the server side gating
+        if "dependencies" not in self.params and self.params.get("event"):
+            self.params["dependencies"] = get_character_dependencies(
+                self.params["event"],
+                self.params.get("features", []),
+            )
+
         # Default options assigned to the questions the player cannot answer, mapped by question id
         self.default_choices: dict[int, int] = {}
 
@@ -468,8 +475,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         Mirrors the client side, which hides them: the answer is discarded and the question
         cannot block the save, even when mandatory.
         """
-        # Organizers are not bound by the requirements; auto-save is gated too, as it stores answers
-        if self.orga or not self.question_dependencies:
+        # Auto-save is gated too, as it stores answers
+        if not self.question_dependencies:
             return
 
         # Sold out options stay on the page unless configured otherwise: there they still gate the
@@ -513,8 +520,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
         Mirrors the client side check: requirements on the same question are alternatives,
         requirements on different questions are all needed.
         """
-        # Organizers are not bound by the option requirements; auto-save is checked too, as it stores choices
-        if self.orga or not self.dependencies:
+        # Auto-save is checked too, as it stores choices
+        if not self.dependencies:
             return
 
         choice_fields = self._choice_fields()
@@ -1290,7 +1297,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
             help_texts = {
                 QuestionStatus.OPTIONAL: "The question is shown, and can be filled by the player",
                 QuestionStatus.MANDATORY: "The question needs to be filled by the player",
-                QuestionStatus.DISABLED: "The question is shown, but cannot be changed by the player",
+                QuestionStatus.DISABLED: "The question is shown read only, the player cannot change it",
                 QuestionStatus.HIDDEN: "The question is not shown to the player",
             }
 

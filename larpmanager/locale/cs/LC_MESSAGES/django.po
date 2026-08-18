@@ -1133,9 +1133,6 @@ msgstr "Termín"
 msgid "Deployed"
 msgstr "Nasazeno"
 
-msgid "Disabled"
-msgstr "Zakázáno"
-
 msgid "Discount"
 msgstr "Sleva"
 
@@ -1582,6 +1579,9 @@ msgstr "Otázky"
 
 msgid "Read mail"
 msgstr "Přečti si poštu"
+
+msgid "Read only"
+msgstr "Pouze pro čtení"
 
 msgid "Recipient"
 msgstr "Příjemce"
