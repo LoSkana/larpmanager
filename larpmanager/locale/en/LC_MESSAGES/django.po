@@ -4339,6 +4339,13 @@ msgid ""
 msgstr ""
 
 msgid ""
+"Indicate whether this option is assigned automatically, when the question "
+"cannot be answered by the participant and no option was chosen; if several "
+"options are marked, the first one whose prerequisites are satisfied is "
+"assigned"
+msgstr ""
+
+msgid ""
 "If you select one (or more) tickets, the option will only be available to "
 "participants who have selected that ticket"
 msgstr ""
@@ -5744,6 +5751,9 @@ msgid "Add option"
 msgstr ""
 
 msgid "Maximum"
+msgstr ""
+
+msgid "Assigned automatically when the participant cannot answer the question"
 msgstr ""
 
 msgid "An error occurred while reordering elements"

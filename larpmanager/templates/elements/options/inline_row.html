@@ -59,6 +59,17 @@ When opt is None, renders the blank row used as the "new option" template.
                 <textarea name="description" maxlength="500">{% if opt %}{{ opt.description }}{% endif %}</textarea>
                 <span class="io-error-msg" data-field="description"></span>
             </div>
+            {% if inline_cfg.show_default %}
+                <div>
+                    <label>{% trans "Default" %}</label>
+                    <input type="checkbox"
+                           name="default"
+                           class="checkbox_single"
+                           {% if opt and opt.default %}checked{% endif %} />
+                    <span class="helptext">{% trans "Assigned automatically when the participant cannot answer the question" %}</span>
+                    <span class="io-error-msg" data-field="default"></span>
+                </div>
+            {% endif %}
             {% if inline_cfg.show_requirements %}
                 <div>
                     <label>{% trans "Requirements" %}</label>

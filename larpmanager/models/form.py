@@ -428,6 +428,16 @@ class WritingOption(UuidMixin, OrderMixin, BaseModel):
         help_text=_("Enter other options that must be selected for this option to be selectable"),
     )
 
+    default = models.BooleanField(
+        default=False,
+        verbose_name=_("Default"),
+        help_text=_(
+            "Indicate whether this option is assigned automatically, when the question cannot be "
+            "answered by the participant and no option was chosen; if several options are marked, "
+            "the first one whose prerequisites are satisfied is assigned",
+        ),
+    )
+
     tickets = models.ManyToManyField(
         RegistrationTicket,
         related_name="character_options",
@@ -464,6 +474,7 @@ class WritingOption(UuidMixin, OrderMixin, BaseModel):
         data["description"] = self.description
         data["order"] = self.order
         data["max_available"] = self.max_available
+        data["default"] = self.default
 
         # Preserve tickets_map annotation if it exists (added by cache queries)
         if hasattr(self, "tickets_map"):
