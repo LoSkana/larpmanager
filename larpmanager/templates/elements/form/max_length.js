@@ -56,6 +56,8 @@ function prepare_tinymce(key, limit) {
         tiny_count(editor, key);
     });
 
+    // show the initial count as soon as the editor is ready
+    tiny_count(editor, key);
   }
 }
 
@@ -70,21 +72,30 @@ function setUpMaxLength(key, limit, typ) {
     }
 }
 
+function count_element(key) {
+    var el = $('#' + key);
+    var count = el.parent().find(".count");
+    if (!count.length) {
+        count = $('#' + key + '_tr').find(".count");
+    }
+    return count;
+}
+
 function update_count(key, limit, typ, loop) {
     var el = $('#' + key);
     if (simple_count.includes(typ)) {
         cl = el.val().length;
-        el.parent().find(".count").html(cl);
+        count_element(key).html(cl);
         if (cl > limit) {
             el.val(el.val().substring(0, limit));
-            el.parent().find(".count").html(limit);
+            count_element(key).html(limit);
         }
     } else if (multiple_count.includes(typ)) {
         var name = key.replace(/^id_/, '');
         var group = $('input[name="' + name + '"]');
         var checkedCount = group.filter(':checked').length;
         group.not(':checked').not('.unavail').prop('disabled', checkedCount >= limit);
-        el.parent().find(".count").html(checkedCount);
+        count_element(key).html(checkedCount);
     } else if (tinymce_count.includes(typ)) {
         const editor = tinymce.get(key);
         if (editor) {
