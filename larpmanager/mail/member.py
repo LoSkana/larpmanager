@@ -280,7 +280,7 @@ def send_chat_message_notification_email(instance: Any) -> None:
         return
     activate(instance.receiver.language)
     subject = hdr(instance) + _("New message from %(user)s") % {"user": instance.sender.display_member()}
-    chat_url = get_url(f"chat/{instance.sender.id}/", instance)
+    chat_url = get_url(f"chat/{instance.sender.uuid}/", instance)
     email_body = f"<br /><br />{escape(instance.message)} (<a href='{chat_url}'>" + _("reply here") + "</a>)"
     my_send_mail(subject, email_body, instance.receiver, instance)
 
