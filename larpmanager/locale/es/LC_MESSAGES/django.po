@@ -9621,6 +9621,11 @@ msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Para cargar relaciones, añade un segundo archivo con las siguientes columnas"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Puedes revisar y volver a enviar tus datos <a href='%(url)s'>aquí</a>."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Has alcanzado el número máximo de personajes que se pueden crear"
 

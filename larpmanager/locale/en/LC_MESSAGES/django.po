@@ -3131,6 +3131,10 @@ msgstr ""
 msgid "Reason"
 msgstr ""
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+
 msgid "If you have questions, feel free to contact us."
 msgstr ""
 
@@ -6832,6 +6836,9 @@ msgstr ""
 msgid "already delivered"
 msgstr ""
 
+msgid "Created"
+msgstr ""
+
 msgid "Organizer"
 msgstr ""
 
@@ -9145,9 +9152,6 @@ msgid "File"
 msgstr ""
 
 msgid "Content Type"
-msgstr ""
-
-msgid "Created"
 msgstr ""
 
 #, python-format

@@ -18,7 +18,7 @@
         </tr>
         <tr>
             <th>Created</th>
-            <td>{{ assoc.created|date:"Y-m-d" }}</td>
+            <td>{{ assoc.created|date:"d/m/Y" }}</td>
         </tr>
         <tr>
             <th>Contact email</th>
@@ -65,7 +65,7 @@
                     <tr>
                         <td>{{ event.name }}</td>
                         <td>{{ event.slug }}</td>
-                        <td>{{ event.created|date:"Y-m-d" }}</td>
+                        <td>{{ event.created|date:"d/m/Y" }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

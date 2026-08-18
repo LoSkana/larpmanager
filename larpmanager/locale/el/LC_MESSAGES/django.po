@@ -9691,6 +9691,12 @@ msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Για να ανεβάσεις σχέσεις, πρόσθεσε ένα δεύτερο αρχείο με τις παρακάτω στήλες"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Μπορείς να ελέγξεις και να υποβάλεις ξανά τα δεδομένα σου <a "
+"href='%(url)s'>εδώ</a>."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr ""
 "Έχεις φτάσει τον μέγιστο αριθμό χαρακτήρων που μπορούν να δημιουργηθούν"

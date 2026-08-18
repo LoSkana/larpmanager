@@ -37,8 +37,8 @@
                     </td>
                     <td>{{ el.search }}</td>
                     <td>{{ el.get_development_display }}</td>
-                    <td>{{ el.start | date:"Y/m/d" }}</td>
-                    <td>{{ el.end | date:"Y/m/d" }}</td>
+                    <td data-order="{{ el.start|date:'U' }}">{{ el.start|date:'d/m/Y' }}</td>
+                    <td data-order="{{ el.end|date:'U' }}">{{ el.end|date:'d/m/Y' }}</td>
                     <td>
                         {% for ticket_name, count in el.registration_counts.items %}
                             {% include "elements/comma.html" %}

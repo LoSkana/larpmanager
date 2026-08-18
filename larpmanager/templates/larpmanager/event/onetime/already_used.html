@@ -19,7 +19,7 @@
             <div class="onetime-info-box">
                 <strong>{% trans "Access Information:" %}</strong>
                 <div class="onetime-info-detail">
-                    <span>{% trans "Used on:" %} {{ used_at|date:"Y-m-d H:i:s" }}</span>
+                    <span>{% trans "Used on:" %} {{ used_at|date:"d/m/Y H:i:s" }}</span>
                 </div>
                 {% if user_agent %}
                     <div class="onetime-user-agent">

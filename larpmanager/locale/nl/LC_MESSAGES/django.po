@@ -9627,6 +9627,11 @@ msgid "To upload relationships, add a second file with the following columns"
 msgstr ""
 "Voeg een tweede bestand toe met de volgende kolommen om relaties te uploaden"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Je kunt je gegevens <a href='%(url)s'>hier</a> bekijken en opnieuw indienen."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr ""
 "Je hebt het maximale aantal personages bereikt dat kan worden aangemaakt"

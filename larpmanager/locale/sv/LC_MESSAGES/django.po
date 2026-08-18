@@ -9476,6 +9476,11 @@ msgstr ""
 "För att ladda upp relationer lägger du till en andra fil med följande "
 "kolumner"
 
+#, python-format
+msgid "You can review and submit again your data <a href='%(url)s'>here</a>."
+msgstr ""
+"Du kan granska och skicka in dina uppgifter igen <a href='%(url)s'>här</a>."
+
 msgid "You have reached the maximum number of characters that can be created"
 msgstr "Du har nått det maximala antalet karaktärer som kan skapas"
 
