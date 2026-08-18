@@ -5039,6 +5039,9 @@ msgstr "Hahmon kokoonpanot"
 msgid "Code of the box or shelf"
 msgstr "Laatikon tai hyllyn koodi"
 
+msgid "Collapse options minimum"
+msgstr "Piilota vaihtoehdot vähintään"
+
 msgid "Create another character"
 msgstr "Luo toinen hahmo"
 
@@ -14503,6 +14506,15 @@ msgid ""
 msgstr ""
 "Tämän vuoden jäsenmaksuasi EI ole vielä saapunut: se on välttämätön, jotta "
 "voit osallistua tapahtumiin ja äänestää yhdistyksen yleiskokouksissa."
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Määritä vaihtoehtojen vähimmäismäärä, jonka lomakekentässä on oltava, jotta "
+"valitsemattomat vaihtoehdot piilotetaan 'Näytä muut vaihtoehdot' -linkin "
+"taakse; jos kenttä jätetään tyhjäksi, käytetään oletusarvoa 5."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

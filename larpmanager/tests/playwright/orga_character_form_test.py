@@ -198,7 +198,6 @@ def recheck_char(live_server: Any, page: Any) -> None:
     expand_options(edit_iframe)
     expect_normalized(page, edit_iframe.locator("#main_form"), "long descr")
     expect_normalized(page, edit_iframe.locator("#lbl_id_que_u8"), "restricted")
-    # the show/hide options link sits between the options and the question hint
     expect_normalized(page, edit_iframe.locator("#main_form"), "only only descr all all descr")
     expect_normalized(page, edit_iframe.locator("#main_form"), "choose one option - restricted text")
     expect_normalized(page, edit_iframe.locator('[id="id_que_u7_tr"]'), "multiple text")
@@ -243,15 +242,14 @@ def create_first_char(live_server: Any, page: Any) -> None:
     expect(page.locator("#id_que_u5")).to_have_value("bbbbbbbbbb")
     expect_normalized(page, page.locator("#main_form"), "long descr")
     expect_normalized(page, page.locator("#lbl_id_que_u6"), "available text")
-    # the show/hide options link sits between the options and the question hint
-    expect_normalized(page, page.locator("#main_form"), "available text all all few few descr 2 available hide other options choose one option - available descr")
+    expect_normalized(page, page.locator("#main_form"), "available text all all few few descr 2 available choose one option - available descr")
     click_option(page.locator("#id_que_u6_0"))
     click_option(page.locator("#id_que_u8_1"))
     expect_normalized(page, page.locator("#lbl_id_que_u8"), "restricted")
-    expect_normalized(page, page.locator("#main_form"), "restricted only only descr 1 available all all descr hide other options choose one option - restricted text")
+    expect_normalized(page, page.locator("#main_form"), "restricted only only descr 1 available all all descr choose one option - restricted text")
     click_option(page.locator("#id_que_u7_1"))
     expect_normalized(page,
-        page.locator('[id="id_que_u7_tr"]'), "multiple text all all descr many many descr 2 available few few descr 1 available hide other options select one or more options - multiple descr options: 1 / 2"
+        page.locator('[id="id_que_u7_tr"]'), "multiple text all all descr many many descr 2 available few few descr 1 available select one or more options - multiple descr options: 1 / 2"
     )
     expect_normalized(page, page.locator('[id="id_que_u7_tr"]'), "multiple text")
     click_option(page.locator("#id_que_u7_0"))

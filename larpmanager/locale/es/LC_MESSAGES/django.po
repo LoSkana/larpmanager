@@ -5039,6 +5039,9 @@ msgstr "Configuraciones de personajes"
 msgid "Code of the box or shelf"
 msgstr "Código de la caja o estantería"
 
+msgid "Collapse options minimum"
+msgstr "Mínimo de opciones para contraer"
+
 msgid "Create another character"
 msgstr "Crear otro personaje"
 
@@ -14745,6 +14748,15 @@ msgstr ""
 "AÚN NO hemos recibido el pago de tu cuota de socio de este año: es "
 "imprescindible para participar en los eventos y para votar en las asambleas "
 "de la asociación."
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Indica el número mínimo de opciones que debe tener un campo de formulario "
+"para ocultar las no seleccionadas tras el enlace «Mostrar otras opciones»; "
+"si se deja vacío, se usa el valor predeterminado de 5."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

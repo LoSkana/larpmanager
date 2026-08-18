@@ -75,17 +75,20 @@ class _DescriptionOptionsMixin:
         descriptions: dict | None = None,
         metadata: dict | None = None,
         collapse_unselected: bool | None = None,
+        collapse_min: int = 2,
         **kwargs: Any,
     ) -> None:
         """Prepare widget metadata.
 
         collapse_unselected drives the collapse toggle: None disables it, True renders the
         unselected options already collapsed, False renders them visible with the link to collapse.
+        collapse_min is the minimum number of options required for the toggle to appear.
         """
         super().__init__(*args, **kwargs)
         self.descriptions = descriptions or {}
         self.metadata = metadata or {}
         self.collapse_unselected = collapse_unselected
+        self.collapse_min = max(2, collapse_min)
 
     def get_context(self, name: str, value: Any, attrs: dict | None) -> dict:
         """Add flags telling the template which options can be collapsed, and the initial state."""
@@ -98,8 +101,8 @@ class _DescriptionOptionsMixin:
                 option for _group, group_options, _index in widget_context["optgroups"] for option in group_options
             ]
             selected_count = sum(1 for option in options if option["selected"])
-            # a single option has nothing to toggle, keep it always visible
-            collapsible = len(options) > 1
+            # below the minimum number of options there is nothing worth hiding
+            collapsible = len(options) >= self.collapse_min
             # start collapsed only if some option would actually stay out of view
             collapsed = collapsible and self.collapse_unselected and selected_count < len(options)
         widget_context["collapsible"] = collapsible

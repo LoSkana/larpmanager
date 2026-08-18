@@ -33,7 +33,7 @@ from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.config import get_association_config, get_config_default, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.utils import CharacterDualListWidget, ReadOnlyWidget, WritingTinyMCE, css_delimeter
 from larpmanager.forms.widgets import DescriptionCheckboxSelectMultiple, DescriptionRadioSelect, FactionPreferenceWidget
@@ -76,6 +76,18 @@ class FormMixin:
         """Return True when the form edits an already saved instance."""
         instance = getattr(self, "instance", None)
         return bool(instance and instance.pk)
+
+    @cached_property
+    def _collapse_unselected(self) -> bool | None:
+        """Return the collapse state for option widgets, or None when collapsing must stay off.
+
+        Forms rendered inside a modal or an inline quick edit always show every option, since
+        there the user is deliberately changing that single field.
+        """
+        params = getattr(self, "params", None) or {}
+        if params.get("frame") or params.get("is_modal"):
+            return None
+        return self._is_edit
 
     def configure_field_event(self, field_name: str, event: Event) -> None:
         """Configure a form field's widget and queryset for a specific event."""
@@ -535,6 +547,17 @@ class BaseRegistrationForm(BaseModelFormRun):
     def _use_inline_widgets_v20(self) -> bool:
         """Return True if effective_version >= 20 (radio/checkbox with inline descriptions)."""
         return int(self.params.get("effective_version", 0)) >= self._inline_widgets_min_version
+
+    @cached_property
+    def _collapse_min(self) -> int:
+        """Return the minimum number of options needed to show the collapse toggle."""
+        event = self.params.get("event")
+        if not event:
+            return 2
+        try:
+            return int(get_event_config(event.id, "collapse_options_min", context=self.params))
+        except (TypeError, ValueError):
+            return get_config_default("collapse_options_min")
 
     def _init_registration_question(self, instance: Any | None, event: Event) -> None:
         """Initialize registration questions and answers from existing instance.
@@ -1270,7 +1293,8 @@ class BaseRegistrationForm(BaseModelFormRun):
                 attrs={"class": "my-radio-class"},
                 descriptions=descriptions,
                 metadata=metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
         self.fields[field_key] = forms.ChoiceField(**field_kwargs)
 
@@ -1333,7 +1357,8 @@ class BaseRegistrationForm(BaseModelFormRun):
                 attrs={"class": "my-checkbox-class"},
                 descriptions=descriptions,
                 metadata=metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
             hint = _("Select one or more options")
             help_text = f'<span class="choice-hint">{hint}</span>' + (f" - {help_text}" if help_text else "")

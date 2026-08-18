@@ -343,8 +343,7 @@ def gated_question_reset(page: Any, live_server: Any) -> None:
     expect(page.locator('input[type="radio"][value="u12"]')).to_be_checked()
 
     # select "rrrr": the mandatory question is hidden, and does not block the save
-    # editing an answered question collapses the options not chosen
-    page.locator("#id_que_u4 .opt-show-more").click()
+    # the question has fewer options than the collapse minimum, so they are all shown
     page.locator('label[for="id_que_u4_1"]').click()
     expect(page.locator("#id_que_u10_tr")).to_be_hidden()
     submit_confirm(page)
@@ -352,7 +351,6 @@ def gated_question_reset(page: Any, live_server: Any) -> None:
 
     # selecting the requirement again shows the question, with the answer discarded
     go_to(page, live_server, "/test/character/u3/change/")
-    page.locator("#id_que_u4 .opt-show-more").click()
     page.locator('label[for="id_que_u4_2"]').click()
     expect(page.locator("#id_que_u10_tr")).to_be_visible()
     expect(page.locator('input[type="radio"][value="u12"]')).not_to_be_checked()

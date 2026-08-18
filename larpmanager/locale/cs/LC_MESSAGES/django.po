@@ -5039,6 +5039,9 @@ msgstr "Konfigurace postav"
 msgid "Code of the box or shelf"
 msgstr "Kód krabice nebo police"
 
+msgid "Collapse options minimum"
+msgstr "Minimální počet možností ke sbalení"
+
 msgid "Create another character"
 msgstr "Vytvořit další postavu"
 
@@ -14302,6 +14305,15 @@ msgid ""
 msgstr ""
 "Platba tvého členského příspěvku za tento rok NEBYLA přijata: je nezbytná "
 "pro účast na akcích a pro hlasování na valných hromadách sdružení."
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Určete minimální počet možností, které musí mít pole formuláře, aby se "
+"nevybrané skryly za odkazem „Zobrazit další možnosti“; pokud pole necháte "
+"prázdné, použije se výchozí hodnota 5."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

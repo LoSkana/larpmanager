@@ -5039,6 +5039,9 @@ msgstr "Konfiguracje postaci"
 msgid "Code of the box or shelf"
 msgstr "Kod pudełka lub półki"
 
+msgid "Collapse options minimum"
+msgstr "Minimalna liczba opcji do zwinięcia"
+
 msgid "Create another character"
 msgstr "Utwórz kolejną postać"
 
@@ -14606,6 +14609,15 @@ msgstr ""
 "Nie otrzymaliśmy jeszcze Twojej składki członkowskiej za ten rok: jest ona "
 "niezbędna, żeby brać udział w wydarzeniach i głosować na zgromadzeniach "
 "stowarzyszenia."
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Wskaż minimalną liczbę opcji, którą musi mieć pole formularza, aby ukryć "
+"niezaznaczone za linkiem „Pokaż inne opcje”; jeśli pole jest puste, używana "
+"jest domyślna wartość 5."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

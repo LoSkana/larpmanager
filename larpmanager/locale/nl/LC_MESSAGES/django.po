@@ -5039,6 +5039,9 @@ msgstr "Karakter configuraties"
 msgid "Code of the box or shelf"
 msgstr "Code van de doos of plank"
 
+msgid "Collapse options minimum"
+msgstr "Minimumaantal opties inklappen"
+
 msgid "Create another character"
 msgstr "Maak nog een personage aan"
 
@@ -14757,6 +14760,15 @@ msgstr ""
 "Je contributie voor dit jaar is NOG NIET ontvangen: je hebt deze nodig om "
 "mee te doen aan evenementen en om te stemmen tijdens de algemene "
 "vergaderingen van de vereniging."
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+"Geef het minimumaantal opties aan dat een formulierveld moet hebben om de "
+"niet-geselecteerde opties achter de link 'Andere opties tonen' te verbergen;"
+" als dit leeg is, wordt de standaardwaarde van 5 gebruikt."
 
 msgid ""
 "By proceeding with your registration for this event, you are giving us your "

@@ -387,7 +387,8 @@ class RegistrationForm(BaseRegistrationForm):
                 attrs={"class": "my-radio-class"},
                 descriptions=ticket_descriptions,
                 metadata=ticket_metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
         self.fields["ticket"] = forms.ChoiceField(**ticket_field_kwargs)
 
@@ -937,7 +938,8 @@ class OrgaRegistrationForm(BaseRegistrationForm):
                 attrs={"class": "my-radio-class"},
                 descriptions=orga_descriptions,
                 metadata=orga_metadata,
-                collapse_unselected=self._is_edit,
+                collapse_unselected=self._collapse_unselected,
+                collapse_min=self._collapse_min,
             )
         self.fields["ticket"] = forms.ChoiceField(**orga_ticket_kwargs)
 

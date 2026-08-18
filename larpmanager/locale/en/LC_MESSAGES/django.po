@@ -1052,6 +1052,15 @@ msgid ""
 "readable page."
 msgstr ""
 
+msgid "Collapse options minimum"
+msgstr ""
+
+msgid ""
+"Indicate the minimum number of options a form field must have to hide the "
+"unselected ones behind the 'Show other options' link; if empty, the default "
+"of 5 is used."
+msgstr ""
+
 msgid "Show availability"
 msgstr ""
 
