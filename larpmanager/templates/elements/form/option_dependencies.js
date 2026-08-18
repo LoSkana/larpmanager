@@ -98,6 +98,14 @@ function check_dependencies(dependencies) {
     return true; // If all dependencies are satisfied, return true
 }
 
+// Hide or show an element gated by the requirements.
+// A class is used instead of an inline style: the collapse toggle of the choice widgets
+// ("show / hide other options") manages its own 'hide' class, and an inline display would win
+// over it, leaving the collapsed options visible.
+function toggle_dependency_element(el, available) {
+    el.toggleClass('dep-hidden', !available);
+}
+
 function disable_dependencies_pass() {
     reset_select = [];
     let changed = false;
@@ -106,13 +114,9 @@ function disable_dependencies_pass() {
         available = check_dependencies(options);
 
         // disable selects with that value
-        if (available) {
-          $('select option[value="' + key + '"]').prop('hidden', false);
-          $('#hp_' + key).show();
-        } else {
-          $('select option[value="' + key + '"]').prop('hidden', true);
-          $('#hp_' + key).hide();
-        }
+        $('select option[value="' + key + '"]').prop('hidden', !available);
+        toggle_dependency_element($('#hp_' + key), available);
+
         if (!available) {
             // check if there are select with disabled selected value
             $('select').each(function() {
@@ -123,36 +127,12 @@ function disable_dependencies_pass() {
             });
         }
 
-        // disable checkboxes with that value
-        $('input[type="checkbox"][value="' + key + '"]').each(function() {
-            if (available) {
-              $(this).closest('div').show();
-              $(this).show();
-              $(this).closest('label').show();
-              $('#hp_' + key).show();
-            } else {
-              $(this).hide();
-              $(this).closest('label').hide();
-              $('#hp_' + key).hide();
-              $(this).closest('div').hide();
-            }
-            if (!available && $(this).is(':checked')) {
-                $(this).prop('checked', false);
-                changed = true;
-            }
-        });
+        // disable checkboxes and radios with that value
+        $('input[type="checkbox"][value="' + key + '"], input[type="radio"][value="' + key + '"]').each(function() {
+            toggle_dependency_element($(this), available);
+            toggle_dependency_element($(this).closest('label'), available);
+            toggle_dependency_element($(this).closest('div'), available);
 
-        // disable radio options with that value
-        $('input[type="radio"][value="' + key + '"]').each(function() {
-            if (available) {
-              $(this).closest('div').show();
-              $(this).show();
-              $(this).closest('label').show();
-            } else {
-              $(this).hide();
-              $(this).closest('label').hide();
-              $(this).closest('div').hide();
-            }
             if (!available && $(this).is(':checked')) {
                 $(this).prop('checked', false);
                 changed = true;

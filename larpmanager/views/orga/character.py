@@ -1055,6 +1055,10 @@ def _get_excel_form(
     if question.typ not in BaseQuestionType.get_basic_types():
         field_key = question.typ
 
+    # The other answers are not on the page: gate the options here, as the client side cannot
+    if hasattr(form, "filter_gated_choices"):
+        form.filter_gated_choices(field_key)
+
     # Filter form to show only the relevant question field
     if field_key in form.fields:
         form.fields = {field_key: form.fields[field_key]}

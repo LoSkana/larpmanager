@@ -294,6 +294,33 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         self._init_factions()
         self._init_custom_fields()
+        self._mark_gated_options()
+
+    def _mark_gated_options(self) -> None:
+        """Tell the choice widgets which options start hidden by their unmet requirements.
+
+        The gated options are not on the page, so they must not be counted when deciding whether
+        the remaining ones are enough to be collapsed behind the "show other options" link.
+        """
+        if not self.dependencies:
+            return
+
+        choice_fields = self._choice_fields()
+        if not choice_fields:
+            return
+
+        available = {uuid: label for options in choice_fields.values() for uuid, label in options.items()}
+        owner = {uuid: key for key, options in choice_fields.items() for uuid in options}
+        selected = self._initial_options(choice_fields)
+
+        for field_key, options in choice_fields.items():
+            widget = self.fields[field_key].widget
+            if not hasattr(widget, "gated_options"):
+                continue
+
+            widget.gated_options = {
+                uuid for uuid in options if self._missing_requirements(uuid, available, owner, selected)
+            }
 
     def _init_factions(self) -> None:
         """Initialize faction selection field for character form.
@@ -454,6 +481,42 @@ class CharacterForm(WritingForm, BaseWritingForm):
             " / ".join(available[requirement] for requirement in requirements)
             for requirements in groups.values()
             if not set(requirements) & selected
+        ]
+
+    def _initial_options(self, choice_fields: dict[str, dict[str, str]]) -> set[str]:
+        """Return the uuids of the options held by the choice fields before any change."""
+        selected = set()
+        for field_key in choice_fields:
+            value = self.initial.get(field_key)
+            if not value:
+                continue
+            values = value if isinstance(value, (list, tuple, set)) else [value]
+            selected.update(str(single) for single in values)
+
+        return selected
+
+    def filter_gated_choices(self, field_key: str) -> None:
+        """Drop from a field the options whose requirements are not met by the stored answers.
+
+        Used when a single field is edited alone (double click on a list cell): the other answers
+        are not on the page, so the client side gating cannot run and the check is done here.
+        """
+        if not self.dependencies or field_key not in self.fields:
+            return
+
+        choice_fields = self._choice_fields()
+        if field_key not in choice_fields:
+            return
+
+        available = {uuid: label for options in choice_fields.values() for uuid, label in options.items()}
+        owner = {uuid: key for key, options in choice_fields.items() for uuid in options}
+        selected = self._initial_options(choice_fields)
+
+        field = self.fields[field_key]
+        field.choices = [
+            (value, label)
+            for value, label in field.choices
+            if not str(value) or not self._missing_requirements(str(value), available, owner, selected)
         ]
 
     def _selected_options(self, choice_fields: dict[str, dict[str, str]], skip: set[str] | None = None) -> set[str]:
@@ -835,6 +898,8 @@ class OrgaCharacterForm(CharacterForm):
                 self.initial["active"] = True
 
         self._init_special_fields()
+
+        self._mark_gated_options()
 
     def _init_plots(self) -> None:
         """Initialize plot assignment fields in character forms.

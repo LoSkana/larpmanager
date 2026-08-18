@@ -553,6 +553,48 @@ dialog::backdrop {
   pointer-events: auto;
 }
 
+/* the page-level v20/v22 rules left-align headings and option rows: the popup centers them */
+#excel-edit h1,
+#excel-edit h2,
+#excel-edit h3,
+#excel-edit h4,
+#excel-edit p {
+  text-align: center;
+}
+
+#excel-edit input,
+#excel-edit textarea {
+  margin: auto;
+}
+
+#excel-edit .my-checkbox-class > div,
+#excel-edit .my-radio-class > div,
+#excel-edit .reg-checkbox-class > div,
+#excel-edit .reg-radio-class > div {
+  text-align: center;
+}
+
+#excel-edit .my-checkbox-class label,
+#excel-edit .my-radio-class label,
+#excel-edit .reg-checkbox-class label,
+#excel-edit .reg-radio-class label {
+  justify-content: center;
+  text-align: center;
+}
+
+#excel-edit .opt-body,
+#excel-edit .opt-card-body {
+  flex: 0 1 auto;
+}
+
+#excel-edit .opt-card-header {
+  justify-content: center;
+}
+
+#excel-edit .opt-card-price {
+  margin-left: 0;
+}
+
 #excel-edit .close {
   position: absolute;
   top: 0.5em;
