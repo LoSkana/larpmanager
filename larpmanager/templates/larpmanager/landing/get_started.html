@@ -49,14 +49,14 @@
                             aria-label="{% trans "Close" %}">&times;</button>
                     <div class="demo-confirm-step" id="demo-confirm-step">
                         <h2>{% trans "Create a new demo" %}</h2>
+                        <div class="demo-confirm-step hide" id="demo-building-step">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <p>{% trans "Preparing your demo, this takes a few seconds. Please do not close this page!" %}</p>
+                        </div>
                         <p>
                             {% trans "A new demo organization will be created just for you, ready to explore as you want. This takes a few seconds." %}
                         </p>
                         <button type="button" class="btn btn-primary" id="demo-confirm-proceed">{% trans "Proceed" %}</button>
-                    </div>
-                    <div class="demo-confirm-step hide" id="demo-building-step">
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-                        <p>{% trans "Preparing your demo, this takes a few seconds. Please do not close this page!" %}</p>
                     </div>
                 </dialog>
             </div>
