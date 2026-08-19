@@ -21,7 +21,7 @@
                     {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
                 </div>
                 {% if show_character.teaser and el.teaser %}
-                    <div class="plot">{% show_char el.teaser run 1 %}</div>
+                    <div class="plot rel_teaser">{% show_char el.teaser run 1 %}</div>
                 {% endif %}
                 <div class="plot">{% show_char el.text run 1 %}</div>
             </div>

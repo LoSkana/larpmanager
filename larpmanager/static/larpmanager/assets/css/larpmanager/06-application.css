@@ -253,8 +253,17 @@ form .plot {
 }
 
 .plot p {
-  margin: 0.5em 0;
+  margin: 0 0 1em 0;
   line-height: 1.3;
+}
+
+.plot p:last-child {
+  margin-bottom: 0;
+}
+
+.rel_teaser {
+  max-height: 10em;
+  margin-bottom: 1em;
 }
 
 .diff-version {
