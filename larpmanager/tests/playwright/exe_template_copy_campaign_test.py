@@ -70,9 +70,11 @@ def template(live_server: Any, page: Any) -> None:
     check_feature(page, "Texts")
     submit_confirm(page)
     page.locator("#one").get_by_role("link", name="Configuration").click()
-    page.get_by_role("link", name=re.compile(r"^Gallery ")).click()
-    page.locator("#id_gallery_hide_signup").check()
-    submit_confirm(page)
+    config_iframe = get_modal_iframe(page)
+    config_iframe.get_by_role("link", name=re.compile(r"^Gallery ")).click()
+    config_iframe.locator("#id_gallery_hide_signup").check()
+    config_iframe.get_by_role("button", name=re.compile(r"^(Confirm|Submit|Conferma)$", re.IGNORECASE)).click(force=True)
+    page.locator("#lm-modal").wait_for(state="hidden")
     # create new event from template
     go_to(page, live_server, "/manage/events")
 
