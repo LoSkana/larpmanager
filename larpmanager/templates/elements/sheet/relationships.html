@@ -8,20 +8,25 @@
                     <div class="img_cover"
                          style="background-image:url('{% get_char_profile el %}')"></div>
                 </div>
+                <div class="info">
+                    <p class="character-name">
+                        <a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a>
+                        {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
+                    </p>
+                    <p>
+                        {% if el.pronoun %}({{ el.pronoun }}){% endif %}
+                    </p>
+                    {% if el.player_uuid %}
+                        <p>
+                            <b>{% trans "Player:" %}&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
+                        </p>
+                    {% endif %}
+                    {% if el.factions_list %}<p>{{ el.factions_list }}</p>{% endif %}
+                </div>
             </div>
             <div class="text">
-                <div class="go-inline">
-                    <span class="character-name"><a href="{% url 'character' run.get_slug el.uuid %}">{{ el.name }}</a> </span>
-                    {% if el.title %}- <b>{{ el.title }}</b>{% endif %}
-                    {% if el.pronoun %}({{ el.pronoun }}){% endif %}
-                    {% if el.player_uuid %}
-                        |
-                        <b>{% trans "Player:" %}&nbsp;</b><a href="{% url 'public' el.player_uuid %}">{{ el.player }}</a>
-                    {% endif %}
-                    {% if el.factions_list %}| {{ el.factions_list }}{% endif %}
-                </div>
                 {% if show_character.teaser and el.teaser %}
-                    <div class="plot">{% show_char el.teaser run 1 %}</div>
+                    <div class="plot rel_teaser">{% show_char el.teaser run 1 %}</div>
                 {% endif %}
                 <div class="plot">{% show_char el.text run 1 %}</div>
             </div>
