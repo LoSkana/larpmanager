@@ -4533,20 +4533,6 @@ msgid ""
 "participants, and to the organisers."
 msgstr ""
 
-msgid "Legal name"
-msgstr ""
-
-msgid ""
-"If the first name shown on your documents is different from the one you "
-"prefer to use, then write it here; otherwise leave this field empty."
-msgstr ""
-
-msgid "Legal Gender"
-msgstr ""
-
-msgid "Enter your legal gender as it appears on official documents."
-msgstr ""
-
 msgid "Pronouns"
 msgstr ""
 
@@ -4668,6 +4654,20 @@ msgstr ""
 
 msgid ""
 "If you are a candidate for the Board, please write an introduction here!"
+msgstr ""
+
+msgid "Legal name"
+msgstr ""
+
+msgid ""
+"If the first name shown on your documents is different from the one you "
+"prefer to use, then write it here; otherwise leave this field empty."
+msgstr ""
+
+msgid "Legal Gender"
+msgstr ""
+
+msgid "Enter your legal gender as it appears on official documents."
 msgstr ""
 
 msgid "Inactive"

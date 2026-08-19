@@ -1,22 +1,25 @@
 {% load show_tags i18n %}
 {% for idx, question in char.questions.items %}
     {% if question.typ != 'e' %}
-        {% with char.fields|get:idx as field %}
-            {% if field %}
-                {% if screen or question.printable %}
-                    {% if question.typ == 'p' %}
-                        <div class="go-block">
-                            <b>{{ question.name }}:</b>
-                            <div class="plot">{{ field|linebreaksbr }}</div>
-                        </div>
-                    {% else %}
-                        <div class="go-inline">
-                            <span class="hide-screen">|</span>
-                            <b>{{ question.name }}:&nbsp;</b>{% get_character_field field char.options %}
-                        </div>
+        {% if question.typ == 'p' and question.visibility == 'e' %}
+        {% else %}
+            {% with char.fields|get:idx as field %}
+                {% if field %}
+                    {% if screen or question.printable %}
+                        {% if question.typ == 'p' %}
+                            <div class="go-block">
+                                <b>{{ question.name }}:</b>
+                                <div class="plot">{{ field|linebreaksbr }}</div>
+                            </div>
+                        {% else %}
+                            <div class="go-inline">
+                                <span class="hide-screen">|</span>
+                                <b>{{ question.name }}:&nbsp;</b>{% get_character_field field char.options %}
+                            </div>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
-            {% endif %}
-        {% endwith %}
+            {% endwith %}
+        {% endif %}
     {% endif %}
 {% endfor %}

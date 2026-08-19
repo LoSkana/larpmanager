@@ -518,10 +518,8 @@ class ProfileForm(BaseProfileForm):
         fields = (
             "name",
             "surname",
-            "legal_name",
             "nickname",
             "pronoun",
-            "gender",
             "social_contact",
             "first_aid",
             "diet",
@@ -538,6 +536,8 @@ class ProfileForm(BaseProfileForm):
             "document_expiration",
             "fiscal_code",
             "phone_contact",
+            "legal_name",
+            "gender",
         )
 
         widgets: ClassVar[dict] = {

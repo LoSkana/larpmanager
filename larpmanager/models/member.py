@@ -140,28 +140,6 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         blank=True,
     )
 
-    legal_name = models.CharField(
-        max_length=100,
-        verbose_name=_("Legal name"),
-        blank=True,
-        null=True,
-        help_text=_(
-            "If the first name shown on your documents is different from the one you prefer to use, then write "
-            "it here; otherwise leave this field empty.",
-        )
-        + " "
-        + SENSITIVE_DISCLAIMER,
-    )
-
-    gender = models.CharField(
-        max_length=1,
-        choices=GenderChoices.choices,
-        default=None,
-        verbose_name=_("Legal Gender"),
-        null=True,
-        help_text=_("Enter your legal gender as it appears on official documents.") + " " + SENSITIVE_DISCLAIMER,
-    )
-
     pronoun = models.CharField(
         max_length=20,
         verbose_name=_("Pronouns"),
@@ -326,6 +304,28 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         help_text=_("If you are a candidate for the Board, please write an introduction here!"),
         null=True,
         blank=True,
+    )
+
+    legal_name = models.CharField(
+        max_length=100,
+        verbose_name=_("Legal name"),
+        blank=True,
+        null=True,
+        help_text=_(
+            "If the first name shown on your documents is different from the one you prefer to use, then write "
+            "it here; otherwise leave this field empty.",
+        )
+        + " "
+        + SENSITIVE_DISCLAIMER,
+    )
+
+    gender = models.CharField(
+        max_length=1,
+        choices=GenderChoices.choices,
+        default=None,
+        verbose_name=_("Legal Gender"),
+        null=True,
+        help_text=_("Enter your legal gender as it appears on official documents.") + " " + SENSITIVE_DISCLAIMER,
     )
 
     # If the member is delegated, this field will hold the parent member account
