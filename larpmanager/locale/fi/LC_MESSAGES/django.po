@@ -3675,6 +3675,9 @@ msgstr "Keräys yhteensä:"
 msgid "Conversion ticket"
 msgstr "Muuntolippu"
 
+msgid "Create a new demo"
+msgstr "Luo uusi demo"
+
 msgid "Credit assignment"
 msgstr "Hyvitysten myöntäminen"
 
@@ -10436,10 +10439,10 @@ msgstr ""
 " avulla."
 
 msgid ""
-"Preparing your demo, this takes a few seconds - please do not close this "
-"page"
+"Preparing your demo, this takes a few seconds. Please do not close this "
+"page!"
 msgstr ""
-"Valmistellaan demoasi, tämä kestää muutaman sekunnin - älä sulje tätä sivua"
+"Demoasi valmistellaan, tässä kestää muutama sekunti. Älä sulje tätä sivua!"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "
@@ -13249,6 +13252,13 @@ msgid ""
 msgstr ""
 " Katso kaikki tapahtuman tiedot ja lippujen hinnat <a target=\"_blank\" "
 "href=\"%(website)s\">tapahtuman verkkosivuilta</a>."
+
+msgid ""
+"A new demo organization will be created just for you, ready to explore as "
+"you want. This takes a few seconds."
+msgstr ""
+"Sinulle luodaan uusi demo-organisaatio, jota voit tutkia haluamallasi "
+"tavalla. Tämä kestää muutaman sekunnin."
 
 msgid ""
 "Access personal data fields for all registered participants and staff, along"

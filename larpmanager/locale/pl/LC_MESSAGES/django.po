@@ -3675,6 +3675,9 @@ msgstr "Suma zbiórki:"
 msgid "Conversion ticket"
 msgstr "Bilet konwersji"
 
+msgid "Create a new demo"
+msgstr "Utwórz nowe demo"
+
 msgid "Credit assignment"
 msgstr "Przypisanie kredytu"
 
@@ -10492,10 +10495,10 @@ msgstr ""
 "powyżej, żeby dodać kontener."
 
 msgid ""
-"Preparing your demo, this takes a few seconds - please do not close this "
-"page"
+"Preparing your demo, this takes a few seconds. Please do not close this "
+"page!"
 msgstr ""
-"Przygotowujemy Twoje demo, to potrwa kilka sekund — nie zamykaj tej strony"
+"Przygotowujemy Twoje demo, to potrwa kilka sekund. Nie zamykaj tej strony!"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "
@@ -13344,6 +13347,13 @@ msgid ""
 msgstr ""
 " Zobacz wszystkie informacje o wydarzeniu i ceny biletów na <a "
 "target=\"_blank\" href=\"%(website)s\">stronie wydarzenia</a>."
+
+msgid ""
+"A new demo organization will be created just for you, ready to explore as "
+"you want. This takes a few seconds."
+msgstr ""
+"Zostanie utworzona nowa organizacja demonstracyjna tylko dla Ciebie, gotowa "
+"do odkrywania tak, jak chcesz. To potrwa kilka sekund."
 
 msgid ""
 "Access personal data fields for all registered participants and staff, along"
