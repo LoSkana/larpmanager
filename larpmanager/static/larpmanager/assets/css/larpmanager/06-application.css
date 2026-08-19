@@ -174,14 +174,20 @@
 .relationships .el {
   text-align: right;
   align-self: center;
-  width: 8em !important;
-  margin: 0 2em;
+  width: 10em !important;
+  margin: 0 1em;
 }
 
 .relationships .icon {
-  width: 8em;
-  height: 8em;
+  width: 10em;
+  height: 10em;
   padding: 0em;
+}
+
+.relationships .el .info {
+  width: 10em;
+  text-align: left;
+  white-space: normal;
 }
 
 .list .el {
