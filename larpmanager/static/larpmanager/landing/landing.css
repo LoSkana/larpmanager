@@ -2078,6 +2078,10 @@ body.landing .demo-confirm-step {
   text-align: center;
 }
 
+body.landing .demo-confirm-step.hide {
+  display: none;
+}
+
 body.landing .demo-confirm-step i {
   font-size: 3rem;
   color: var(--teal-bright);
