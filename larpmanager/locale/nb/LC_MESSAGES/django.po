@@ -3675,6 +3675,9 @@ msgstr "Total innsamling:"
 msgid "Conversion ticket"
 msgstr "Konverteringsbillett"
 
+msgid "Create a new demo"
+msgstr "Opprett en ny demo"
+
 msgid "Credit assignment"
 msgstr "Tildeling av kreditt"
 
@@ -10429,10 +10432,9 @@ msgstr ""
 "for å legge til en container."
 
 msgid ""
-"Preparing your demo, this takes a few seconds - please do not close this "
-"page"
-msgstr ""
-"Forbereder demoen din. Dette tar noen sekunder – ikke lukk denne siden"
+"Preparing your demo, this takes a few seconds. Please do not close this "
+"page!"
+msgstr "Gjør klar demoen din, dette tar noen sekunder. Ikke lukk denne siden!"
 
 msgid ""
 "Presentation visible to all participants, when 'show presentation' is "
@@ -13270,6 +13272,13 @@ msgid ""
 msgstr ""
 " Se all informasjon om arrangementet og billettpriser på <a "
 "target=\"_blank\" href=\"%(website)s\">arrangementets nettside</a>."
+
+msgid ""
+"A new demo organization will be created just for you, ready to explore as "
+"you want. This takes a few seconds."
+msgstr ""
+"En ny demoorganisasjon blir opprettet bare for deg, klar til å utforske slik"
+" du vil. Dette tar noen sekunder."
 
 msgid ""
 "Access personal data fields for all registered participants and staff, along"

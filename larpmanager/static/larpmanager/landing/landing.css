@@ -2028,50 +2028,59 @@ body.landing .get-started-card:disabled:hover {
   transform: none;
 }
 
-body.landing .get-started-card-pending:disabled {
-  opacity: 1;
-  box-shadow: 0 0 0 3px var(--teal-bright);
-}
-
-body.landing .get-started-building {
+.demo-confirm-modal {
   position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: fit-content;
+  min-width: 320px;
+  max-width: 30vw;
+  height: fit-content;
+  min-height: 200px;
+  max-height: 40vh;
+  margin: 0;
   padding: 2rem;
-  background: rgba(5, 15, 20, 0.94);
+  border: none;
+  border-radius: 12px;
+  background: #0a1418;
+  color: #fff;
+  box-shadow: 0 0 39px 12px rgba(0, 0, 0, 0.75);
 }
 
-body.landing .get-started-building.hide {
-  display: none;
+.demo-confirm-modal::backdrop {
+  background: rgba(0, 0, 0, 0.7);
 }
 
-body.landing .get-started-building-inner {
+@media (max-width: 840px) {
+  .demo-confirm-modal {
+    max-width: 90vw;
+  }
+}
+
+.demo-confirm-close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+body.landing .demo-confirm-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  max-width: 32rem;
+  gap: 1rem;
   text-align: center;
-  color: #fff;
 }
 
-body.landing .get-started-building-inner i {
-  font-size: 3.5rem;
+body.landing .demo-confirm-step i {
+  font-size: 3rem;
   color: var(--teal-bright);
-}
-
-body.landing .get-started-demo .get-started-building-text {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
-  text-align: center;
-}
-
-body.landing.get-started-locked {
-  overflow: hidden;
 }
 
 body.landing .get-started-card i {
