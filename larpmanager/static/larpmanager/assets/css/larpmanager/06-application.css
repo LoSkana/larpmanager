@@ -212,6 +212,10 @@
 
 /* Character sheet: text column on the left, sticky profile picture on the right */
 
+.sheet {
+  text-align: center;
+}
+
 .gallery.sheet-cols {
   display: flex;
   align-items: flex-start;
@@ -230,6 +234,10 @@
   order: 1;
   flex: 1 1 auto;
   min-width: 0;
+}
+
+.page_character_view h2 {
+  margin-left: 1em;
 }
 
 /*** plot ***/
@@ -269,7 +277,7 @@ form .plot {
 }
 
 .rel_teaser {
-  max-height: 10em;
+  max-height: 12em;
   margin-bottom: 1em;
 }
 
