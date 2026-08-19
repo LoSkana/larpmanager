@@ -175,7 +175,7 @@
   text-align: right;
   align-self: center;
   width: 10em !important;
-  margin: 0 1em;
+  margin: 0 0 0 1em;
 }
 
 .relationships .icon {
@@ -207,7 +207,7 @@
 .gallery .text {
   width: 100%;
   text-align: left;
-  padding: 0 1em;
+  padding: 0;
 }
 
 /* Character sheet: text column on the left, sticky profile picture on the right */
@@ -223,6 +223,7 @@
   flex: 0 0 15em;
   position: sticky;
   top: 1em;
+  margin: 0 0 0 1em;
 }
 
 .gallery.sheet-cols .text {
@@ -412,7 +413,6 @@ form .plot {
     margin: 0 !important;
     padding: 0 !important;
     width: 100%;
-    padding-right: 1em;
   }
 
   .gallery .el {
