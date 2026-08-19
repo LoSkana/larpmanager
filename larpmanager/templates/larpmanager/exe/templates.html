@@ -22,21 +22,33 @@
                     <td></td>
                     <td>
                         <a href="{% url 'exe_templates_edit' el.uuid %}"
+                           class="action-link"
+                           data-slug="exe_templates"
+                           data-modal-eligible="true"
                            qtip="{% trans "Edit" %}"><i class="fas fa-edit"></i></a>
                     </td>
                     <td>{{ el }}</td>
                     <td>
-                        <a href="{% url 'exe_templates_roles_new' el.uuid %}">{% trans "Add" %}</a>
+                        <a href="{% url 'exe_templates_roles_new' el.uuid %}"
+                           class="action-link"
+                           data-slug="exe_templates"
+                           data-modal-eligible="true">{% trans "Add" %}</a>
                         {% if el.roles %}
                             -
                             {% for rl in el.roles %}
                                 {% include "elements/comma.html" %}
-                                <a href="{% url 'exe_templates_roles_edit' el.uuid rl.uuid %}">{{ rl.name }}</a>
+                                <a href="{% url 'exe_templates_roles_edit' el.uuid rl.uuid %}"
+                                   class="action-link"
+                                   data-slug="exe_templates"
+                                   data-modal-eligible="true">{{ rl.name }}</a>
                             {% endfor %}
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{% url 'exe_templates_config' el.uuid %}">{% trans "Configuration" %}</a>
+                        <a href="{% url 'exe_templates_config' el.uuid %}"
+                           class="action-link"
+                           data-slug="exe_templates"
+                           data-modal-eligible="true">{% trans "Configuration" %}</a>
                     </td>
                     <td>
                         <a href="{% url 'exe_templates_delete' el.uuid %}"

@@ -521,7 +521,10 @@ def prepare_run(context: Any) -> None:
             additional_config_name = "show_addit"
             if additional_config_name not in run_configuration:
                 run_configuration[additional_config_name] = {}
-            if additional_feature in context["features"]:
+            required_features = [additional_feature]
+            if additional_feature == "relationships":
+                required_features.append("player_relationships")
+            if any(feature in context["features"] for feature in required_features):
                 run_configuration[additional_config_name][additional_feature] = True
 
     context.update(run_configuration)
