@@ -7744,15 +7744,15 @@ msgid "Create a new demo"
 msgstr ""
 
 msgid ""
-"Preparing your demo, this takes a few seconds. Please do not close this page!"
-msgstr ""
-
-msgid ""
 "A new demo organization will be created just for you, ready to explore as "
 "you want. This takes a few seconds."
 msgstr ""
 
 msgid "Proceed"
+msgstr ""
+
+msgid ""
+"Preparing your demo, this takes a few seconds. Please do not close this page!"
 msgstr ""
 
 msgid "Skip the demo, create your own organization"
