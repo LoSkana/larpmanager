@@ -71,7 +71,7 @@ def get_event_basic_cache(event_id: int) -> dict:
     cache_key = event_basic_cache_key(event_id)
     data = cache.get(cache_key)
     if data is None:
-        association_id, parent_id, slug = Event.objects.values_list("association_id", "parent_id", "slug").get(
+        association_id, parent_id, slug = Event.all_objects.values_list("association_id", "parent_id", "slug").get(
             id=event_id
         )
         currency_symbol = get_association_basic_cache(association_id)["currency_symbol"]
@@ -100,7 +100,7 @@ def get_run_basic_cache(run_id: int) -> dict:
     cache_key = run_basic_cache_key(run_id)
     data = cache.get(cache_key)
     if data is None:
-        event_id, number, media_token = Run.objects.values_list("event_id", "number", "media_token").get(id=run_id)
+        event_id, number, media_token = Run.all_objects.values_list("event_id", "number", "media_token").get(id=run_id)
         event_cache = get_event_basic_cache(event_id)
         data = {
             "event_id": event_id,
