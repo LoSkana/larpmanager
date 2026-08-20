@@ -417,11 +417,10 @@ def pre_save_callback(sender: type, instance: object, *args: Any, **kwargs: Any)
 @receiver(post_save)
 def post_save_callback(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
     """Handle post-save operations for all models."""
+    debug_set_uuid(instance, created=created)
+
     # Update text fields cache after model instance is saved
     update_text_fields_cache(instance)
-
-    # Set simplified uuid for debug
-    debug_set_uuid(instance, created=created)
 
     # Update cache for accounting items
     reset_accountingitem_cache(instance)
