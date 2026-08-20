@@ -220,7 +220,8 @@ class ConfigForm(BaseModelForm):
         save_all_element_configs(config_target, config_values)
 
         # Reset configuration cache for the config target
-        reset_element_configs(config_target)
+        # noinspection PyProtectedMember
+        reset_element_configs(config_target.id, config_target._meta.model_name.lower())  # noqa: SLF001
 
         # Final save to persist all changes
         instance.save()

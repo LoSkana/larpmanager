@@ -33,7 +33,7 @@ from larpmanager.cache.config import (
     get_association_config,
     get_event_config,
     is_event_config_set,
-    reset_element_configs,
+    reset_event_configs,
     save_all_element_configs,
     save_single_config,
 )
@@ -1242,7 +1242,7 @@ class OrgaAppearanceForm(BaseModelCssForm):
 
         # Persist theme configuration
         save_all_element_configs(instance, {"theme": self.cleaned_data.get("theme", AppearanceTheme.NEBULA)})
-        reset_element_configs(instance)
+        reset_event_configs(instance.id)
         return instance
 
     @staticmethod

@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from contextlib import suppress
 from datetime import timedelta
 from typing import TYPE_CHECKING, Any
 
@@ -522,9 +521,7 @@ def send_character_status_update_email(instance: Character) -> None:
         return
 
     # Skip if status is the same as the old one
-    old_status = None
-    with suppress(ObjectDoesNotExist):
-        old_status = Character.objects.get(pk=instance.pk).status
+    old_status = Character.objects.filter(pk=instance.pk).values_list("status", flat=True).first()
 
     if old_status == instance.status:
         return

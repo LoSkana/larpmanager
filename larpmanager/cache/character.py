@@ -30,7 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.fields import visible_writing_fields
+from larpmanager.cache.fields import get_event_fields_cache, visible_writing_fields
 from larpmanager.cache.media import get_run_media_filepath
 from larpmanager.cache.registration import search_player
 from larpmanager.cache.run import get_event_runs
@@ -532,7 +532,7 @@ def update_character_fields(character: Character, character_data: dict) -> None:
         return
 
     # Build context and update data with character element fields
-    template_context = {"features": enabled_features, "event": character.event}
+    template_context = {"features": enabled_features, "writing_fields": get_event_fields_cache(character.event_id)}
     character_data.update(get_character_element_fields(template_context, character.pk, only_visible=False))
 
 
@@ -726,7 +726,7 @@ def on_character_pre_save_update_cache(char: Character) -> None:
             clear_event_cache_all_runs(char.event)
         else:
             # Update cache with new character data
-            update_event_cache_all_runs(char.event, char)
+            update_event_cache_all_runs(char.event_id, char)
     except ObjectDoesNotExist:
         # Fallback: clear cache if character not found
         clear_event_cache_all_runs(char.event)
@@ -775,7 +775,7 @@ def on_faction_pre_save_update_cache(instance: Faction) -> None:
     # Check if display fields changed - update caches with new data
     lst = ["name", "teaser"]
     if has_different_cache_values(instance, prev, lst):
-        update_event_cache_all_runs(instance.event, instance)
+        update_event_cache_all_runs(instance.event_id, instance)
 
 
 def on_quest_type_pre_save_update_cache(instance: QuestType) -> None:
@@ -837,9 +837,9 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
         clear_event_cache_all_runs(instance.event)
 
 
-def update_event_cache_all_runs(event: Event, instance: BaseModel) -> None:
+def update_event_cache_all_runs(event_id: int, instance: BaseModel) -> None:
     """Update event cache for all runs of the given event."""
-    for run in get_event_runs(event.id):
+    for run in get_event_runs(event_id):
         update_event_cache_all(run, instance)
 
 

@@ -30,7 +30,7 @@ from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
-from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.config import reset_event_configs, reset_run_configs
 from larpmanager.cache.event_text import clear_event_text_cache
 from larpmanager.cache.experience import clear_event_exp_cache, get_exp_effective_event_id
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
@@ -664,10 +664,10 @@ def reset_all_run(event: Event, run: Run) -> None:
     clear_event_button_cache(event.id)
 
     # Clear event config cache
-    reset_element_configs(event)
+    reset_event_configs(event.id)
 
     # Clear run config cache
-    reset_element_configs(run)
+    reset_run_configs(run.id)
     reset_cache_config_run(run)
 
     # Clear question cache

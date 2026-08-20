@@ -973,10 +973,6 @@ def replace_character_names(instance: Any) -> None:
     if not instance.pk:
         return
 
-    # Early return if instance doesn't have an associated event
-    if not hasattr(instance, "event"):
-        return
-
     # Early return if event doesn't have character substitution enabled
     if not get_event_config(instance.event_id, "writing_substitute"):
         return

@@ -80,7 +80,13 @@ from larpmanager.cache.character import (
     reset_character_registration_cache,
     update_member_event_character_cache,
 )
-from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.config import (
+    reset_association_configs,
+    reset_character_configs,
+    reset_event_configs,
+    reset_member_configs,
+    reset_run_configs,
+)
 from larpmanager.cache.event_text import update_event_text_cache_on_save
 from larpmanager.cache.experience import (
     clear_event_exp_systems_cache,
@@ -672,7 +678,7 @@ def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs
 @receiver(post_save, sender=AssociationConfig)
 def post_save_reset_association_config(sender: type, instance: object, **kwargs: Any) -> None:
     """Clear association config cache after save."""
-    reset_element_configs(instance.association)
+    reset_association_configs(instance.association_id)
 
 
 @receiver(post_save, sender=AssociationSkin)
@@ -777,7 +783,7 @@ def post_softdelete_character_reset_rels(sender: type, instance: Character, **kw
 @receiver(post_save, sender=CharacterConfig)
 def post_save_reset_character_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset character configuration cache after save."""
-    reset_element_configs(instance.character)
+    reset_character_configs(instance.character_id)
 
 
 @receiver(pre_save, sender=ChatMessage)
@@ -912,14 +918,14 @@ def post_save_event_button(sender: type, instance: object, created: bool, **kwar
 @receiver(post_save, sender=EventConfig)
 def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset event configuration cache after model save, including child events of a campaign."""
-    reset_element_configs(instance.event)
+    reset_event_configs(instance.event_id)
     # some features are derived from configs, so the features cache must be rebuilt too
     clear_event_features_cache(instance.event_id)
     reset_cache_config_run_ids(get_event_run_ids(instance.event_id))
 
     # child events inherit the parent configs, so their caches must be reset too
     for child in Event.objects.filter(parent_id=instance.event_id):
-        reset_element_configs(child)
+        reset_event_configs(child.id)
         clear_event_features_cache(child.id)
         reset_cache_config_run_ids(get_event_run_ids(child.id))
 
@@ -1146,7 +1152,7 @@ def post_save_member_reset(sender: type, instance: Member, **kwargs: dict) -> No
 @receiver(post_save, sender=MemberConfig)
 def post_save_reset_member_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset member configuration cache after save."""
-    reset_element_configs(instance.member)
+    reset_member_configs(instance.member_id)
 
 
 @receiver(pre_save, sender=Membership)
@@ -1582,7 +1588,7 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 @receiver(post_save, sender=RunConfig)
 def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset run config cache when related instance is saved."""
-    reset_element_configs(instance.run)
+    reset_run_configs(instance.run_id)
     reset_cache_config_run(instance.run)
 
 

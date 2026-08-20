@@ -241,7 +241,7 @@ class BaseWritingForm(BaseRegistrationForm):
         """Return cache key for tracking option character count."""
         return f"option_char_{option['id']}"
 
-    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002, ARG002
+    def save(self, commit: bool = True) -> Any:  # noqa: FBT001, FBT002
         """Save the form and handle registration questions if present.
 
         Args:
@@ -252,8 +252,7 @@ class BaseWritingForm(BaseRegistrationForm):
 
         """
         # Save parent form and persist instance
-        instance = super().save()
-        instance.save()
+        instance = super().save(commit=commit)
 
         # Save registration questions if form has them
         if hasattr(self, "questions"):

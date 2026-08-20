@@ -164,10 +164,34 @@ def get_config_default(config_name: str) -> Any:
     return False
 
 
-def reset_element_configs(element: BaseModel) -> None:
-    """Delete cached configs for the given element."""
-    cache_key = cache_configs_key(element.id, element._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
-    cache.delete(cache_key)
+def reset_element_configs(element_id: int, model_name: str) -> None:
+    """Delete cached configs for the given element id and model name."""
+    cache.delete(cache_configs_key(element_id, model_name))
+
+
+def reset_event_configs(event_id: int) -> None:
+    """Delete cached configs for an event."""
+    reset_element_configs(event_id, "event")
+
+
+def reset_run_configs(run_id: int) -> None:
+    """Delete cached configs for a run."""
+    reset_element_configs(run_id, "run")
+
+
+def reset_association_configs(association_id: int) -> None:
+    """Delete cached configs for an association."""
+    reset_element_configs(association_id, "association")
+
+
+def reset_member_configs(member_id: int) -> None:
+    """Delete cached configs for a member."""
+    reset_element_configs(member_id, "member")
+
+
+def reset_character_configs(character_id: int) -> None:
+    """Delete cached configs for a character."""
+    reset_element_configs(character_id, "character")
 
 
 def cache_configs_key(config_owner_id: int, config_model_name: str) -> str:
@@ -290,7 +314,8 @@ def save_single_config(obj: object, name: str, value: any) -> None:
     obj.configs.model.objects.update_or_create(
         defaults={"value": value}, **{fk_field: obj, "name": name, "deleted": None}
     )
-    reset_element_configs(obj)
+    # noinspection PyProtectedMember
+    reset_element_configs(obj.id, obj._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
 
 
 def _get_fkey_config(model_instance: object) -> str | None:

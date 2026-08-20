@@ -151,20 +151,26 @@ def _init_element_cache_text_field(
     # Get applicable writing questions for this element type
     applicable = QuestionApplicable.get_applicable(element_type._meta.model_name)  # noqa: SLF001  # Django model metadata
     questions = get_cached_writing_questions(element.event, applicable)
+    editor_questions = {q["id"]: q for q in questions if q["typ"] in ALLOWED_TYPES}
+    if not editor_questions:
+        return
 
-    # Process editor-type questions and cache their answers
-    for question in [q for q in questions if q["typ"] in ALLOWED_TYPES]:
+    # Single query for all answers of this element, latest per question first
+    answer_by_question = {}
+    for answer in WritingAnswer.objects.filter(question_id__in=editor_questions.keys(), element_id=element.id).order_by(
+        "-updated"
+    ):
+        answer_by_question.setdefault(answer.question_id, answer.text)
+
+    # Cache the text content of the latest answer for each question
+    for question_id, question in editor_questions.items():
         field_key = question["uuid"]
-        if field_key in result_cache[element_uuid]:
+        if field_key in result_cache[element_uuid] or question_id not in answer_by_question:
             continue
 
-        answers = WritingAnswer.objects.filter(question_id=question["id"], element_id=element.id).order_by("-updated")
-        if not answers:
-            continue
-
-        # Cache the text content of the first matching answer
-        answer_text = answers.first().text
-        result_cache[element_uuid][field_key] = get_single_cache_text_field(element_uuid, field_key, answer_text)
+        result_cache[element_uuid][field_key] = get_single_cache_text_field(
+            element_uuid, field_key, answer_by_question[question_id]
+        )
 
 
 def get_cache_text_field(field_type: type[BaseModel], event: Event) -> str:

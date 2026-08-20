@@ -372,7 +372,7 @@ class TestModelSignals(BaseTestCase):
         # Should be created successfully
         self.assertIsNotNone(registration.id)
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_event_configs")
     def test_event_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that EventConfig post_save signal resets configs cache"""
         event = self.get_event()
@@ -383,7 +383,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_event_configs")
     def test_event_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that EventConfig post_delete signal resets configs cache"""
         event = self.get_event()
@@ -394,7 +394,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_association_configs")
     def test_association_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that AssociationConfig post_save signal resets configs cache"""
         association = self.get_association()
@@ -405,7 +405,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_association_configs")
     def test_association_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that AssociationConfig post_delete signal resets configs cache"""
         association = self.get_association()
@@ -416,7 +416,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_run_configs")
     def test_run_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that RunConfig post_save signal resets configs cache"""
         run = self.get_run()
@@ -427,7 +427,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_run_configs")
     def test_run_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that RunConfig post_delete signal resets configs cache"""
         run = self.get_run()
@@ -438,7 +438,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_member_configs")
     def test_member_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that MemberConfig post_save signal resets configs cache"""
         member = self.get_member()
@@ -449,7 +449,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_member_configs")
     def test_member_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that MemberConfig post_delete signal resets configs cache"""
         member = self.get_member()
@@ -460,7 +460,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called_once()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_character_configs")
     def test_character_config_post_save_resets_configs(self, mock_reset: Any) -> None:
         """Test that CharacterConfig post_save signal resets configs cache"""
         character = self.character()
@@ -470,7 +470,7 @@ class TestModelSignals(BaseTestCase):
 
         mock_reset.assert_called()
 
-    @patch("larpmanager.models.signals.reset_element_configs")
+    @patch("larpmanager.models.signals.reset_character_configs")
     def test_character_config_post_delete_resets_configs(self, mock_reset: Any) -> None:
         """Test that CharacterConfig post_delete signal resets configs cache"""
         character = self.character()

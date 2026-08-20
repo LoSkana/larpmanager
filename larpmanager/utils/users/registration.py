@@ -1609,12 +1609,10 @@ def process_character_ticket_options(instance: Registration) -> None:
     # Get the event from the registration run
     event = instance.run.event
 
-    # Process ticket options for characters directly linked to this registration
-    for character in instance.characters.all():
-        check_character_ticket_options(instance, character)
-
-    # Process ticket options for all characters owned by the member in this event
-    for character in event.get_elements(Character).filter(player=instance.member):
+    # Process ticket options for characters directly linked to this registration,
+    # plus all characters owned by the member in this event
+    characters = set(instance.characters.all()) | set(event.get_elements(Character).filter(player=instance.member))
+    for character in characters:
         check_character_ticket_options(instance, character)
 
 
