@@ -60,8 +60,10 @@ from larpmanager.models.writing import (
     RelationshipTag,
     SpeedLarp,
 )
+from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.core.validators import FileTypeValidator
 from larpmanager.utils.services.character import _get_character_cache_id
+from larpmanager.utils.services.experience import calculate_character_experience_points
 
 
 class WritingForm(BaseModelForm):
@@ -251,8 +253,12 @@ class BaseWritingForm(BaseRegistrationForm):
             The saved instance
 
         """
-        # Save parent form and persist instance
-        instance = super().save(commit=commit)
+        # Save parent form and persist instance. Defer the post_save experience
+        # recompute: it needs the registration questions saved below, which happen
+        # after instance.save(), otherwise it would run once here with stale data
+        # and be wasted.
+        with experience_recalc_deferred():
+            instance = super().save(commit=commit)
 
         # Registration questions need a saved instance (element_id); if commit is False
         # the caller is responsible for saving the instance and calling
@@ -262,6 +268,10 @@ class BaseWritingForm(BaseRegistrationForm):
             if hasattr(self, "orga"):
                 orga = self.orga
             self.save_registration_questions(instance, is_organizer=orga)
+
+        # Recompute the character experience point now that questions are saved
+        if commit and isinstance(instance, Character):
+            calculate_character_experience_points(instance)
 
         return instance
 

@@ -316,6 +316,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth.permission import auto_assign_event_permission_number
 from larpmanager.utils.core.clone_guard import is_clone_active
+from larpmanager.utils.core.guard import is_experience_recalc_deferred
 from larpmanager.utils.core.nav import invalidate_user_nav_entries
 from larpmanager.utils.io.pdf import (
     cleanup_character_pdfs_on_save,
@@ -717,7 +718,7 @@ def pre_save_character_update_status(sender: type, instance: Character, **kwargs
 @receiver(post_save, sender=Character, dispatch_uid="post_character_update_px_v1")
 def post_character_update_exp(sender: type, instance: Character, *args: Any, **kwargs: Any) -> None:
     """Calculate experience points for character after update."""
-    if instance.deleted or is_clone_active():
+    if instance.deleted or is_clone_active() or is_experience_recalc_deferred():
         return
     calculate_character_experience_points(instance)
 
