@@ -52,7 +52,6 @@ from larpmanager.forms.utils import (
 )
 from larpmanager.forms.writing import BaseWritingForm, WritingForm
 from larpmanager.models.base import Feature
-from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, DeliveryExp
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -207,7 +206,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         Sets up dynamic form fields based on event configuration and custom field definitions,
         organizing fields into default and custom categories, and handling organizer-specific
-        fields and character completion proposals.
+        fields.
 
         Args:
             self: The form instance containing event parameters and organizer status.
@@ -219,7 +218,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
             - Uses parent event if current event has a parent
             - Handles different field types based on question configuration
             - Adds organizer-specific fields when applicable
-            - Conditionally adds character proposal field for user approval workflow
 
         """
         # Get event, preferring parent event if available for loading questions
@@ -266,27 +264,6 @@ class CharacterForm(WritingForm, BaseWritingForm):
         all_fields = set(self.fields.keys()) - fields_default
         for field_label in all_fields - fields_custom:
             self.delete_field(field_label)
-
-        self._init_character_status(current_event)
-
-    def _init_character_status(self, event: Event) -> None:
-        """Add character completion proposal field for user approval workflow."""
-        if (
-            not self.orga
-            and get_event_config(event.id, "user_character_approval", context=self.params)
-            and (not self.instance.pk or self.instance.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW])
-        ):
-            self.fields["propose"] = forms.BooleanField(
-                required=False,
-                label=_("Complete"),
-                help_text=_(
-                    "Click here to confirm that you have completed the character and are ready to "
-                    "propose it to the staff. Be careful: some fields may no longer be editable. "
-                    "Leave the field blank to save your changes and to be able to continue them in "
-                    "the future.",
-                ),
-                widget=forms.CheckboxInput(attrs={"class": "checkbox_single"}),
-            )
 
     def _init_character(self) -> None:
         """Initialize character-specific form data."""

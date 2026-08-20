@@ -259,8 +259,10 @@ def create_first_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u13").fill("create")
     submit_confirm(page)
     page.locator("#id_que_u9").fill("fill mandatory")
-    page.locator("#id_propose").check()
     submit_confirm(page)
+
+    sidebar(page, "Confirm your character")
+    page.get_by_role("button", name="Confirm").click()
 
 
 def fill_presentation_text(page: Any) -> None:

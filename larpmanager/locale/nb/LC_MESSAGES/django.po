@@ -3672,6 +3672,9 @@ msgstr "Innsamlingen er avsluttet"
 msgid "Collection total:"
 msgstr "Total innsamling:"
 
+msgid "Confirm character"
+msgstr "Bekreft karakter"
+
 msgid "Conversion ticket"
 msgstr "Konverteringsbillett"
 
@@ -4915,6 +4918,9 @@ msgstr "Alternativer for karakterark"
 msgid "Conditions of %(event)s"
 msgstr "Vilkår for %(event)s"
 
+msgid "Confirm your character!"
+msgstr "Bekreft karakteren din!"
+
 msgid "Create a new collection"
 msgstr "Opprett en ny innsamling"
 
@@ -5062,6 +5068,9 @@ msgstr "Rediger registreringsstatus"
 
 msgid "Invalid ticket selection"
 msgstr "Ugyldig billettvalg"
+
+msgid "Is your character ready?"
+msgstr "Er karakteren din klar?"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lettvektsark (Test)"
@@ -7701,6 +7710,9 @@ msgstr "Navnet på spørsmålet dette alternativet hører til"
 msgid "The organization is running the latest version."
 msgstr "Organisasjonen kjører den nyeste versjonen."
 
+msgid "This character cannot be proposed at the moment"
+msgstr "Denne karakteren kan ikke foreslås akkurat nå"
+
 msgid "User already has a registration for this event!"
 msgstr "Bruker har allerede en registrering for dette arrangementet!"
 
@@ -9121,6 +9133,10 @@ msgstr "Du kan også laste opp en ekstra fil med registreringsalternativene:"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Valgfritt) Om evnen er synlig for brukerne: true eller false"
+
+#, python-format
+msgid "Confirm your character %(name)s is ready to propose to the staff!"
+msgstr "Bekreft at karakteren din %(name)s er klar til å foreslås for staben!"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -14472,6 +14488,14 @@ msgstr ""
 "deltakere."
 
 msgid ""
+"Click here to confirm that you have completed the character and are ready to"
+" propose it to the staff. Be careful: some fields may no longer be editable."
+msgstr ""
+"Klikk her for å bekrefte at du har fullført karakteren og er klar til å "
+"foreslå den for staben. Vær forsiktig: enkelte felt kan kanskje ikke lenger "
+"redigeres."
+
+msgid ""
 "Important: after completing the transfer, you must return to this page and "
 "submit the form at the bottom, otherwise your payment will not be "
 "registered!"
@@ -14868,17 +14892,6 @@ msgstr ""
 "Du har sendt inn en søknad om medlemskap i foreningen. Den vil bli behandlet"
 " på neste styremøte. Når den er godkjent, vil du kunne betale for de "
 "arrangementene du har meldt deg på!"
-
-msgid ""
-"Click here to confirm that you have completed the character and are ready to"
-" propose it to the staff. Be careful: some fields may no longer be editable."
-" Leave the field blank to save your changes and to be able to continue them "
-"in the future."
-msgstr ""
-"Klikk her for å bekrefte at du har fullført karakteren og er klar til å "
-"foreslå den for personalet. Vær forsiktig: Noen felt kan bli låst for "
-"redigering. La feltet stå tomt for å lagre endringene dine og for å kunne "
-"fortsette med dem i fremtiden."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "

@@ -3672,6 +3672,9 @@ msgstr "Inzameling gesloten"
 msgid "Collection total:"
 msgstr "Totaal ingezameld:"
 
+msgid "Confirm character"
+msgstr "Personage bevestigen"
+
 msgid "Conversion ticket"
 msgstr "Conversiekaartje"
 
@@ -4915,6 +4918,9 @@ msgstr "Karakterblad opties"
 msgid "Conditions of %(event)s"
 msgstr "Voorwaarden voor %(event)s"
 
+msgid "Confirm your character!"
+msgstr "Bevestig je personage!"
+
 msgid "Create a new collection"
 msgstr "Maak een nieuwe inzameling"
 
@@ -5062,6 +5068,9 @@ msgstr "Registratiestatus bewerken"
 
 msgid "Invalid ticket selection"
 msgstr "Ongeldige ticket selectie"
+
+msgid "Is your character ready?"
+msgstr "Is je personage klaar?"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lichtgewicht karakterblad (Test)"
@@ -7708,6 +7717,9 @@ msgstr "De naam van de vraag waar deze optie bij hoort"
 msgid "The organization is running the latest version."
 msgstr "De organisatie gebruikt de nieuwste versie."
 
+msgid "This character cannot be proposed at the moment"
+msgstr "Dit personage kan momenteel niet worden voorgesteld"
+
 msgid "User already has a registration for this event!"
 msgstr "Gebruiker heeft al een registratie voor dit evenement!"
 
@@ -9200,6 +9212,11 @@ msgstr "Je kunt ook een tweede bestand uploaden met de registratieopties:"
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 "(Optioneel) Of de vaardigheid zichtbaar is voor gebruikers: true of false"
+
+#, python-format
+msgid "Confirm your character %(name)s is ready to propose to the staff!"
+msgstr ""
+"Bevestig dat je personage %(name)s klaar is om aan de staf voor te stellen!"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -14708,6 +14725,14 @@ msgstr ""
 "andere deelnemers."
 
 msgid ""
+"Click here to confirm that you have completed the character and are ready to"
+" propose it to the staff. Be careful: some fields may no longer be editable."
+msgstr ""
+"Klik hier om te bevestigen dat je het personage hebt voltooid en klaar bent "
+"om het aan de staf voor te stellen. Let op: sommige velden kunnen mogelijk "
+"niet meer worden bewerkt."
+
+msgid ""
 "Important: after completing the transfer, you must return to this page and "
 "submit the form at the bottom, otherwise your payment will not be "
 "registered!"
@@ -15110,17 +15135,6 @@ msgstr ""
 "worden beoordeeld tijdens de volgende bestuursvergadering. Wanneer deze is "
 "goedgekeurd, kun je betalen voor de evenementen waarvoor je je hebt "
 "ingeschreven!"
-
-msgid ""
-"Click here to confirm that you have completed the character and are ready to"
-" propose it to the staff. Be careful: some fields may no longer be editable."
-" Leave the field blank to save your changes and to be able to continue them "
-"in the future."
-msgstr ""
-"Klik hier om te bevestigen dat je het personage hebt voltooid en klaar bent "
-"om het voor te stellen aan het personeel. Let op: sommige velden kunnen niet"
-" meer bewerkt worden. Laat het veld leeg om je wijzigingen op te slaan en er"
-" in de toekomst mee door te kunnen gaan."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "

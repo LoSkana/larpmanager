@@ -27,7 +27,6 @@ import pytest
 from django.contrib.messages.storage.cookie import CookieStorage
 from django.test import RequestFactory
 
-from larpmanager.cache.config import save_single_config
 from larpmanager.forms.character import CharacterForm
 from larpmanager.models.form import QuestionApplicable, WritingQuestion, WritingQuestionType
 from larpmanager.models.writing import Character, CharacterStatus
@@ -132,20 +131,6 @@ class TestCharacterAutoSave(BaseTestCase):
         assert second["stale"] is True
         character.refresh_from_db()
         assert character.name == "First page again"
-
-    def test_auto_save_does_not_propose(self) -> None:
-        character = self._character()
-        save_single_config(self.get_event(), "user_character_approval", "True")
-
-        response = self._call(
-            character,
-            {"ajax": "1", "name": "Renamed", "propose": "1", "base_updated": self._stamp(character)},
-        )
-
-        payload = json.loads(response.content)
-        assert payload["res"] == "ok", payload
-        character.refresh_from_db()
-        assert character.status == CharacterStatus.CREATION
 
     def test_auto_save_skips_character_without_name(self) -> None:
         before = Character.objects.count()

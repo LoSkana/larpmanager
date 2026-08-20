@@ -944,16 +944,6 @@ msgstr ""
 msgid "Character"
 msgstr ""
 
-msgid "Complete"
-msgstr ""
-
-msgid ""
-"Click here to confirm that you have completed the character and are ready to "
-"propose it to the staff. Be careful: some fields may no longer be editable. "
-"Leave the field blank to save your changes and to be able to continue them "
-"in the future."
-msgstr ""
-
 msgid "Factions"
 msgstr ""
 
@@ -2414,6 +2404,9 @@ msgid "6-digit code from your authenticator app"
 msgstr ""
 
 msgid "Overpaid"
+msgstr ""
+
+msgid "Complete"
 msgstr ""
 
 msgid "Partial"
@@ -6186,6 +6179,17 @@ msgid "No abilities found."
 msgstr ""
 
 msgid "Select the new ability to obtain"
+msgstr ""
+
+msgid "Confirm character"
+msgstr ""
+
+msgid "Is your character ready?"
+msgstr ""
+
+msgid ""
+"Click here to confirm that you have completed the character and are ready to "
+"propose it to the staff. Be careful: some fields may no longer be editable."
 msgstr ""
 
 msgid "Edit"
@@ -12240,6 +12244,13 @@ msgstr ""
 msgid "Change your character!"
 msgstr ""
 
+#, python-format
+msgid "Confirm your character %(name)s is ready to propose to the staff!"
+msgstr ""
+
+msgid "Confirm your character!"
+msgstr ""
+
 msgid "Select your preferences"
 msgstr ""
 
@@ -12847,6 +12858,9 @@ msgid "Information saved!"
 msgstr ""
 
 msgid "New character created!"
+msgstr ""
+
+msgid "This character cannot be proposed at the moment"
 msgstr ""
 
 msgid ""

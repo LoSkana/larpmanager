@@ -3672,6 +3672,9 @@ msgstr "Uzavřená sbírka"
 msgid "Collection total:"
 msgstr "Celková sbírka:"
 
+msgid "Confirm character"
+msgstr "Potvrdit postavu"
+
 msgid "Conversion ticket"
 msgstr "Konverzní lístek"
 
@@ -4915,6 +4918,9 @@ msgstr "Možnosti listu postavy"
 msgid "Conditions of %(event)s"
 msgstr "Podmínky %(event)s"
 
+msgid "Confirm your character!"
+msgstr "Potvrď svou postavu!"
+
 msgid "Create a new collection"
 msgstr "Vytvoř novou sbírku"
 
@@ -5062,6 +5068,9 @@ msgstr "Uprav stav registrace"
 
 msgid "Invalid ticket selection"
 msgstr "Neplatný výběr lístku"
+
+msgid "Is your character ready?"
+msgstr "Je tvoje postava připravená?"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Lehký list (Test)"
@@ -7701,6 +7710,9 @@ msgstr "Název otázky, ke které tato možnost patří"
 msgid "The organization is running the latest version."
 msgstr "Organizace používá nejnovější verzi."
 
+msgid "This character cannot be proposed at the moment"
+msgstr "Tuto postavu momentálně nelze předložit"
+
 msgid "User already has a registration for this event!"
 msgstr "Uživatel již má registraci na tuto událost!"
 
@@ -9071,6 +9083,11 @@ msgstr "Můžeš také nahrát druhý soubor s možnostmi registrace:"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Volitelné) Zda je schopnost viditelná pro uživatele: true nebo false"
+
+#, python-format
+msgid "Confirm your character %(name)s is ready to propose to the staff!"
+msgstr ""
+"Potvrď, že je tvoje postava %(name)s připravená k předložení organizátorům!"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -14257,6 +14274,13 @@ msgstr ""
 "registraci zrušíme, abychom uvolnili místo pro ostatní účastníky."
 
 msgid ""
+"Click here to confirm that you have completed the character and are ready to"
+" propose it to the staff. Be careful: some fields may no longer be editable."
+msgstr ""
+"Klikni sem a potvrď, že máš postavu hotovou a jsi připravený/á ji předložit "
+"organizátorům. Pozor: některá pole už možná nepůjde upravovat."
+
+msgid ""
 "Important: after completing the transfer, you must return to this page and "
 "submit the form at the bottom, otherwise your payment will not be "
 "registered!"
@@ -14638,17 +14662,6 @@ msgstr ""
 "Podal(a) jsi žádost o členství ve sdružení. Bude posouzena na příštím "
 "zasedání představenstva. Po jejím schválení budeš moci platit za akce, na "
 "které ses přihlásil(a)!"
-
-msgid ""
-"Click here to confirm that you have completed the character and are ready to"
-" propose it to the staff. Be careful: some fields may no longer be editable."
-" Leave the field blank to save your changes and to be able to continue them "
-"in the future."
-msgstr ""
-"Kliknutím zde potvrdíš, že jsi postavu dokončil(a) a jsi připraven(a) ji "
-"navrhnout personálu. Buď opatrný/á: některá pole již nemusí být "
-"editovatelná. Ponech pole prázdné, abys uložil(a) své změny a mohl(a) v nich"
-" v budoucnu pokračovat."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "

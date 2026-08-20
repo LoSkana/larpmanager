@@ -397,11 +397,10 @@ def character(page: Any, live_server: Any) -> None:
     expect_normalized(page, page.locator("#one"), "Status: Creation")
     # the server accepted the alternatives too, not only the option requirements taken all together
     expect_normalized(page, page.locator("#one"), "dep_or")
-    page.get_by_role("link", name="Edit").click()
-    page.get_by_role("cell", name="Click here to confirm that").click()
+
+    sidebar(page, "Confirm your character")
     page.get_by_text("Click here to confirm that").click()
-    page.locator("#id_propose").check()
-    submit_confirm(page)
+    page.get_by_role("button", name="Confirm").click()
 
     # check char
     expect_normalized(page, page.locator("#one"), "Status: Proposed")

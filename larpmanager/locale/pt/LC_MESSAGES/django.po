@@ -3672,6 +3672,9 @@ msgstr "Angariação encerrada"
 msgid "Collection total:"
 msgstr "Total da coleta:"
 
+msgid "Confirm character"
+msgstr "Confirmar personagem"
+
 msgid "Conversion ticket"
 msgstr "Bilhete de conversão"
 
@@ -4915,6 +4918,9 @@ msgstr "Opções da ficha de personagem"
 msgid "Conditions of %(event)s"
 msgstr "Condições de %(event)s"
 
+msgid "Confirm your character!"
+msgstr "Confirma a tua personagem!"
+
 msgid "Create a new collection"
 msgstr "Criar uma nova coleta"
 
@@ -5062,6 +5068,9 @@ msgstr "Editar estado da inscrição"
 
 msgid "Invalid ticket selection"
 msgstr "Seleção de bilhete inválida"
+
+msgid "Is your character ready?"
+msgstr "A tua personagem está pronta?"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Ficha leve (Teste)"
@@ -7701,6 +7710,9 @@ msgstr "O nome da pergunta a que esta opção pertence"
 msgid "The organization is running the latest version."
 msgstr "A organização está a usar a versão mais recente."
 
+msgid "This character cannot be proposed at the moment"
+msgstr "Esta personagem não pode ser proposta neste momento"
+
 msgid "User already has a registration for this event!"
 msgstr "O utilizador já tem uma inscrição para este evento!"
 
@@ -9118,6 +9130,12 @@ msgstr "Também podes carregar um segundo ficheiro com as opções de inscriçã
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr ""
 "(Opcional) Se a habilidade é visível para os utilizadores: true ou false"
+
+#, python-format
+msgid "Confirm your character %(name)s is ready to propose to the staff!"
+msgstr ""
+"Confirma que a tua personagem %(name)s está pronta para ser proposta à "
+"equipa!"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -14551,6 +14569,14 @@ msgstr ""
 "cancelaremos a tua inscrição para libertar espaço para outros participantes."
 
 msgid ""
+"Click here to confirm that you have completed the character and are ready to"
+" propose it to the staff. Be careful: some fields may no longer be editable."
+msgstr ""
+"Clica aqui para confirmar que concluíste a personagem e que estás pronto "
+"para a propor à equipa. Atenção: alguns campos podem deixar de ser "
+"editáveis."
+
+msgid ""
 "Important: after completing the transfer, you must return to this page and "
 "submit the form at the bottom, otherwise your payment will not be "
 "registered!"
@@ -14942,17 +14968,6 @@ msgstr ""
 "Enviaste o teu pedido de adesão à Organização. O pedido será analisado na "
 "próxima reunião da Direção. Quando for aprovado, poderás regularizar os "
 "pagamentos dos eventos em que te inscreveste!"
-
-msgid ""
-"Click here to confirm that you have completed the character and are ready to"
-" propose it to the staff. Be careful: some fields may no longer be editable."
-" Leave the field blank to save your changes and to be able to continue them "
-"in the future."
-msgstr ""
-"Clica aqui para confirmares que concluíste a personagem e estás pronto para "
-"a propor à equipa. Atenção: alguns campos podem deixar de ser editáveis. "
-"Deixa o campo em branco para guardar as tuas alterações e poderes continuar "
-"a trabalhá-las no futuro."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "

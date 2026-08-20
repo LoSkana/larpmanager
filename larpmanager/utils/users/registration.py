@@ -977,6 +977,7 @@ def registration_status_characters(
             "play_max": play_max,
         },
         can_switch=can_switch,
+        context=context,
     )
     _status_casting(run, registration, run_status, features, context, is_character_assigned=is_assigned)
 
@@ -1119,14 +1120,15 @@ def _status_approval(
     character_counts: dict,
     *,
     can_switch: bool,
+    context: dict | None = None,
 ) -> None:
     """Add character creation/selection actions to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
     is not on a waiting list, then fills run_status["character_actions"] with the available
-    actions (create a new character, choose an existing one), and run_status["character_change"]
-    / run_status["character_create"] with the links to swap the played character or to create
-    another one, shown only on the event page.
+    actions (create a new character, choose an existing one, confirm a character pending
+    approval), and run_status["character_change"] / run_status["character_create"] with the
+    links to swap the played character or to create another one, shown only on the event page.
 
     Args:
         run: Run object containing event information
@@ -1135,6 +1137,7 @@ def _status_approval(
         run_status: Dictionary with run status
         character_counts: Counts of assigned, selectable and owned characters, plus the play maximum
         can_switch: Whether the played character can be swapped for another one of the player
+        context: Optional context dictionary, used to read the user_character_approval config
 
     """
     # Check if user_character feature is enabled
@@ -1200,6 +1203,26 @@ def _status_approval(
             "tooltip": _("Change your character!"),
             "icon": "fa-solid fa-right-left",
         }
+
+    # Offer a confirm action for the player's own characters still awaiting proposal to the staff
+    if "user_character" in features and get_event_config(run.event_id, "user_character_approval", context=context):
+        pending_characters = run.event.get_elements(Character).filter(
+            player=registration.member,
+            status__in=[CharacterStatus.CREATION, CharacterStatus.REVIEW],
+        )
+        character_actions.extend(
+            {
+                "url": reverse("character_confirm", args=[run.get_slug(), character.uuid]),
+                "label": _("Confirm character"),
+                "label_long": _("Confirm your character %(name)s is ready to propose to the staff!")
+                % {"name": character.name},
+                "tooltip": _("Confirm your character!"),
+                "icon": "fa-solid fa-check",
+                "status_type": "todo",
+                "status_icon": "fa-solid fa-list-check",
+            }
+            for character in pending_characters
+        )
 
     if character_actions:
         run_status["character_actions"] = character_actions

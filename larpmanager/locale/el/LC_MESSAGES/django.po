@@ -3672,6 +3672,9 @@ msgstr "Η συλλογή χρημάτων έκλεισε"
 msgid "Collection total:"
 msgstr "Σύνολο συλλογής χρημάτων:"
 
+msgid "Confirm character"
+msgstr "Επιβεβαίωση χαρακτήρα"
+
 msgid "Conversion ticket"
 msgstr "Εισιτήριο μετατροπής"
 
@@ -4915,6 +4918,9 @@ msgstr "Επιλογές φύλλου χαρακτήρα"
 msgid "Conditions of %(event)s"
 msgstr "Όροι του %(event)s"
 
+msgid "Confirm your character!"
+msgstr "Επιβεβαίωσε τον χαρακτήρα σου!"
+
 msgid "Create a new collection"
 msgstr "Δημιούργησε νέα συλλογή"
 
@@ -5062,6 +5068,9 @@ msgstr "Επεξεργασία κατάστασης εγγραφής"
 
 msgid "Invalid ticket selection"
 msgstr "Μη έγκυρη επιλογή εισιτηρίου"
+
+msgid "Is your character ready?"
+msgstr "Είναι έτοιμος ο χαρακτήρας σου;"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Ελαφρύ φύλλο (Δοκιμή)"
@@ -7708,6 +7717,9 @@ msgstr "Το όνομα της ερώτησης στην οποία ανήκει
 msgid "The organization is running the latest version."
 msgstr "Ο οργανισμός χρησιμοποιεί την τελευταία έκδοση."
 
+msgid "This character cannot be proposed at the moment"
+msgstr "Αυτός ο χαρακτήρας δεν μπορεί να προταθεί αυτή τη στιγμή"
+
 msgid "User already has a registration for this event!"
 msgstr "Ο χρήστης έχει ήδη εγγραφή για αυτή την εκδήλωση!"
 
@@ -9262,6 +9274,12 @@ msgstr ""
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Προαιρετικό) Αν η ικανότητα είναι ορατή στους χρήστες: true ή false"
+
+#, python-format
+msgid "Confirm your character %(name)s is ready to propose to the staff!"
+msgstr ""
+"Επιβεβαίωσε ότι ο χαρακτήρας σου %(name)s είναι έτοιμος να προταθεί στο "
+"προσωπικό!"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -14808,6 +14826,14 @@ msgstr ""
 "συμμετέχοντες."
 
 msgid ""
+"Click here to confirm that you have completed the character and are ready to"
+" propose it to the staff. Be careful: some fields may no longer be editable."
+msgstr ""
+"Κάνε κλικ εδώ για να επιβεβαιώσεις ότι έχεις ολοκληρώσει τον χαρακτήρα και "
+"είσαι έτοιμος να τον προτείνεις στο προσωπικό. Πρόσεξε: ορισμένα πεδία ίσως "
+"να μην είναι πλέον επεξεργάσιμα."
+
+msgid ""
 "Important: after completing the transfer, you must return to this page and "
 "submit the form at the bottom, otherwise your payment will not be "
 "registered!"
@@ -15207,17 +15233,6 @@ msgstr ""
 " θα εξεταστεί στην επόμενη συνεδρίαση του Διοικητικού Συμβουλίου. Όταν "
 "εγκριθεί, θα μπορείς να τακτοποιήσεις τις πληρωμές για τα events στα οποία "
 "έχεις εγγραφεί!"
-
-msgid ""
-"Click here to confirm that you have completed the character and are ready to"
-" propose it to the staff. Be careful: some fields may no longer be editable."
-" Leave the field blank to save your changes and to be able to continue them "
-"in the future."
-msgstr ""
-"Κάνε κλικ εδώ για να επιβεβαιώσεις ότι ολοκλήρωσες τον χαρακτήρα και είσαι "
-"έτοιμος να τον προτείνεις στο προσωπικό. Πρόσεξε: ορισμένα πεδία μπορεί να "
-"μην είναι πλέον επεξεργάσιμα. Άφησε το πεδίο κενό για να αποθηκεύσεις τις "
-"αλλαγές σου και να μπορείς να τις συνεχίσεις στο μέλλον."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "
