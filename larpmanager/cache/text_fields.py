@@ -155,7 +155,7 @@ def _init_element_cache_text_field(
     if not editor_questions:
         return
 
-    # Single query for all answers of this element, latest per question first
+    # Query for all answers of this element, latest per question first
     answer_by_question = {}
     for answer in WritingAnswer.objects.filter(question_id__in=editor_questions.keys(), element_id=element.id).order_by(
         "-updated"
