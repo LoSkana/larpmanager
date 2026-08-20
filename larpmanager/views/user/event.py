@@ -684,7 +684,7 @@ def gallery(request: HttpRequest, event_slug: str) -> HttpResponse:
         # Add non-provisional registered members to the display list
         for registration in que_reg.select_related("member"):
             if not is_registration_provisional(
-                registration, event=context["event"], features=features, context=context
+                registration, event_id=context["event"].id, features=features, context=context
             ):
                 context["registration_list"].append(registration.member)
 

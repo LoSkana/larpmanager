@@ -565,7 +565,7 @@ def print_profiles(context: dict, *, force: bool = False) -> HttpResponse:
 def print_handout(context: dict, *, force: bool = True) -> Any:
     """Generate and return a PDF handout for the given context."""
     # Get the file path for the handout PDF
-    file_path = context["handout"].get_filepath(context["run"])
+    file_path = context["handout"].get_filepath()
 
     # Generate PDF if forced or if reprint is needed
     if force or reprint(file_path):
@@ -1030,7 +1030,7 @@ def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
             try:
                 # Load handout data into context
                 get_handout(context, handout.number)
-                filepath = context["handout"].get_filepath(context["run"])
+                filepath = context["handout"].get_filepath()
 
                 # Generate PDF if it doesn't exist or is outdated
                 if not Path(filepath).exists() or reprint(filepath):

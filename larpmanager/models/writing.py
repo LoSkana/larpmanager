@@ -813,7 +813,7 @@ class Handout(Writing):
         """Return string representation."""
         return f"H{self.number} {self.name}"
 
-    def get_filepath(self, run: Run) -> str:  # noqa: ARG002
+    def get_filepath(self) -> str:
         """Build the file path for this handout's PDF within the event's media directory."""
         return get_handout_media_filepath(self.event_id, self.number, self.media_token)
 

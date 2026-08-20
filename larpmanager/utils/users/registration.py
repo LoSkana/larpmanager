@@ -300,7 +300,7 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     registration_status_characters(run, registration, run_status, features, context)
 
     # Get user membership for the event's association
-    user_membership = get_user_membership(member, run.event.association_id)
+    user_membership = get_user_membership(member, get_run_basic_cache(run.id)["association_id"])
 
     # Build base registration message with ticket info if available
     is_provisional = is_registration_provisional(

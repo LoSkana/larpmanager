@@ -303,7 +303,7 @@ def registration_options(registration_instance: Any) -> str:
     event_features = get_event_features(run_cache["event_id"])
 
     # Get currency symbol for formatting monetary amounts
-    currency_symbol = registration_instance.run.event.association.get_currency_symbol()
+    currency_symbol = run_cache["currency_symbol"]
 
     # Display total registration fee if greater than zero
     if registration_instance.tot_iscr > 0:

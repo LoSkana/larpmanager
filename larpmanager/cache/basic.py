@@ -21,7 +21,6 @@
 
 from __future__ import annotations
 
-from babel.numbers import get_currency_symbol as babel_get_currency_symbol
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
@@ -39,9 +38,10 @@ def get_association_basic_cache(association_id: int) -> dict:
     cache_key = association_basic_cache_key(association_id)
     data = cache.get(cache_key)
     if data is None:
-        payment_currency = Association.objects.values_list("payment_currency", flat=True).get(id=association_id)
-        currency_symbol = babel_get_currency_symbol(Currency(payment_currency or Currency.EUR).label)
-        data = {"currency_symbol": currency_symbol}
+        association = Association.objects.only("payment_currency").get(id=association_id)
+        if not association.payment_currency:
+            association.payment_currency = Currency.EUR
+        data = {"currency_symbol": association.get_currency_symbol()}
         cache.set(cache_key, data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return data
 
@@ -49,6 +49,16 @@ def get_association_basic_cache(association_id: int) -> dict:
 def reset_association_basic_cache(association_id: int) -> None:
     """Invalidate the cached basic info for an association."""
     cache.delete(association_basic_cache_key(association_id))
+    reset_association_events_runs_basic_cache(association_id)
+
+
+def reset_association_events_runs_basic_cache(association_id: int) -> None:
+    """Invalidate the cached basic info for all events and runs of an association."""
+    event_ids = list(Event.all_objects.filter(association_id=association_id).values_list("id", flat=True))
+    if event_ids:
+        cache.delete_many([event_basic_cache_key(event_id) for event_id in event_ids])
+        run_ids = Run.all_objects.filter(event_id__in=event_ids).values_list("id", flat=True)
+        cache.delete_many([run_basic_cache_key(run_id) for run_id in run_ids])
 
 
 def event_basic_cache_key(event_id: int) -> str:

@@ -321,6 +321,8 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
     Note: This function transfers the accounting structure but resets payment amounts to 0
     to avoid double-counting payments. The actual financial reconciliation should be handled separately.
     """
+    target_association_id = get_run_basic_cache(target_reg.run_id)["association_id"]
+
     # Transfer PaymentInvoice records linked to the registration
     payment_invoices = PaymentInvoice.objects.filter(registration=source_reg)
 
@@ -338,7 +340,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             idx=invoice.idx,
             txn_id=None,  # Reset transaction ID to avoid conflicts
             causal=f"Transfer: {invoice.causal}",
-            association_id=get_run_basic_cache(target_reg.run_id)["association_id"],
+            association_id=target_association_id,
             registration=target_reg,
             verified=False,  # Reset verification status
             hide=invoice.hide,
@@ -352,7 +354,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
         AccountingItemPayment.objects.create(
             member=payment_item.member,
             value=0,  # Reset payment amount - actual payments should be handled separately
-            association_id=get_run_basic_cache(target_reg.run_id)["association_id"],
+            association_id=target_association_id,
             pay=payment_item.pay,
             registration=target_reg,
             info=f"Transferred from {source_reg.run}: {payment_item.info or ''}".strip(),
@@ -369,7 +371,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             AccountingItemOther.objects.create(
                 member=other_item.member,
                 value=other_item.value,
-                association_id=get_run_basic_cache(target_reg.run_id)["association_id"],
+                association_id=target_association_id,
                 oth=other_item.oth,
                 run=target_reg.run,
                 descr=f"Transferred from {source_reg.run}: {other_item.descr}",
