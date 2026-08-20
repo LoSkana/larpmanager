@@ -398,7 +398,7 @@ def save_registration_standard(
             msg = "RegistrationTicket does not exist"
             raise Http404(msg)
 
-        if sel.event != event:
+        if sel.event_id != event.id:
             msg = "RegistrationTicket wrong event"
             raise Http404(msg)
 

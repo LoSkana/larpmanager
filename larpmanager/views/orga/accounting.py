@@ -185,7 +185,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
     backend_get(context, PaymentInvoice, invoice_uuid)
 
     # Verify invoice belongs to the current event run
-    if context["el"].registration.run != context["run"]:
+    if context["el"].registration.run_id != context["run"].id:
         msg = "i'm sorry, what?"
         raise Http404(msg)
 

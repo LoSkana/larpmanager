@@ -81,7 +81,7 @@ def transfer_registration_between_runs(
         ValidationError: If the transfer is not possible
     """
     # Check that the registration is not already in the target run
-    if registration.run == target_run:
+    if registration.run_id == target_run.id:
         msg = "Registration is already in the target run"
         raise ValidationError(msg)
 
@@ -302,7 +302,7 @@ def _transfer_character_relations(source_reg: Registration, target_reg: Registra
         # (considering campaigns that share characters)
         character_event = target_reg.run.event.get_class_parent("character")
 
-        if relation.character.event == character_event:
+        if relation.character.event_id == character_event.id:
             RegistrationCharacterRel.objects.create(
                 registration=target_reg,
                 character=relation.character,
@@ -534,7 +534,7 @@ def _validate_character(registration: Registration, result: dict[str, list[str]]
     source_characters = registration.characters.all()
     if source_characters:
         character_event = target_run.event.get_class_parent("character")
-        incompatible_chars = [char.name for char in source_characters if char.event != character_event]
+        incompatible_chars = [char.name for char in source_characters if char.event_id != character_event.id]
 
         if incompatible_chars:
             result["warnings"].append(f"Characters not available in target event: {', '.join(incompatible_chars)}")

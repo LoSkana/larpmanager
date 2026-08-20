@@ -111,7 +111,7 @@ def orga_plots_rels_reorder(request: HttpRequest, event_slug: str, character_uui
     except Character.DoesNotExist as err:
         raise Http404 from err
 
-    if character.event != context["event"]:
+    if character.event_id != context["event"].id:
         msg = "character wrong event"
         raise Http404(msg)
 

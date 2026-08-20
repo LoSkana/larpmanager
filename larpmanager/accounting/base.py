@@ -161,7 +161,7 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
         instance._update_reg = prev.value != instance.value  # noqa: SLF001
 
         # Update all related transactions if registration changed using bulk update
-        if prev.registration != instance.registration:
+        if prev.registration_id != instance.registration_id:
             AccountingItemTransaction.objects.filter(inv_id=instance.inv_id).update(registration=instance.registration)
     else:
         # Early return if payment should be hidden from notifications

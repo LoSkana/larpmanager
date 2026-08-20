@@ -254,8 +254,10 @@ class BaseWritingForm(BaseRegistrationForm):
         # Save parent form and persist instance
         instance = super().save(commit=commit)
 
-        # Save registration questions if form has them
-        if hasattr(self, "questions"):
+        # Registration questions need a saved instance (element_id); if commit is False
+        # the caller is responsible for saving the instance and calling
+        # save_registration_questions() itself once it has a pk.
+        if commit and hasattr(self, "questions"):
             orga = True
             if hasattr(self, "orga"):
                 orga = self.orga

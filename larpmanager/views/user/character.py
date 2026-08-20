@@ -502,6 +502,9 @@ def _save_character(
                 # Update character with additional processing and context
                 success_message = _update_character(context, character, form, success_message, auto_save=auto_save)
                 character.save()
+                # Registration questions need the character's pk, so save them only now
+                if hasattr(form, "questions"):
+                    form.save_registration_questions(character, is_organizer=form.orga)
 
                 # Assignment to the registration is done only on explicit confirmation
                 if not auto_save:
