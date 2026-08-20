@@ -89,6 +89,7 @@ from larpmanager.utils.users.registration import (
     check_character_maximum,
     get_character_play_max,
     get_player_characters,
+    registration_status,
 )
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
@@ -402,6 +403,9 @@ def character_form(
         "character_form_hide_unavailable",
         context=context,
     )
+
+    # Render topbar status; skipped on POST success, which redirects instead
+    context["run_status"] = registration_status(context, context["run"], context["member"])
 
     return render(request, "larpmanager/event/character/edit.html", context)
 
@@ -850,7 +854,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
 @login_required
 def character_create(request: HttpRequest, event_slug: str) -> Any:
     """Handle character creation with maximum character validation."""
-    context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
+    context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
     check, _max_chars = check_character_maximum(context["event"], context["member"])
     if check:
@@ -867,7 +871,7 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
 @login_required
 def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Handle user character editing form."""
-    context = get_event_context(request, event_slug, include_status=True, signup=True)
+    context = get_event_context(request, event_slug, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
     _set_auto_save(context)
     return character_form(request, context, event_slug, context["character"], CharacterForm)
@@ -923,7 +927,7 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
         HttpResponse: Redirect to character list
 
     """
-    context = get_event_context(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     blocking_error = _get_character_assign_error(context)
