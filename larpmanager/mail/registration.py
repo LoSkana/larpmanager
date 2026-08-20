@@ -27,6 +27,7 @@ from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.mail.digest import my_send_digest_email
@@ -103,9 +104,14 @@ def update_registration_status(instance: Any) -> None:
     email_body += f" <a href='{cancel_url}'>{cancel_label}</a>."
 
     # Add custom messages from event and association configurations
+    run_cache = get_run_basic_cache(instance.run_id)
     for custom_message in [
-        get_event_text(instance.run.event_id, EventTextType.SIGNUP, instance.member.language),
-        get_association_text(instance.run.event.association_id, AssociationTextType.SIGNUP, instance.member.language),
+        get_event_text(run_cache["event_id"], EventTextType.SIGNUP, instance.member.language),
+        get_association_text(
+            run_cache["association_id"],
+            AssociationTextType.SIGNUP,
+            instance.member.language,
+        ),
     ]:
         if custom_message:
             email_body += "<br />" + custom_message
@@ -114,7 +120,7 @@ def update_registration_status(instance: Any) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Send notifications to event organizers based on configuration
-    association_id = instance.run.event.association_id
+    association_id = run_cache["association_id"]
 
     # Handle new registration notifications to organizers
     if instance.modified == 1 and get_association_config(association_id, "mail_signup_new"):
@@ -158,8 +164,10 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     if not instance.character:
         return
 
+    run_cache = get_run_basic_cache(instance.registration.run_id)
+
     # Check if character assignment emails are disabled for this event
-    if get_event_config(instance.registration.run.event_id, "mail_character"):
+    if get_event_config(run_cache["event_id"], "mail_character"):
         return
 
     # Prepare context data for email template
@@ -186,7 +194,7 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     }
 
     # Append custom assignment message if configured for the event
-    custom_assignment_message = get_event_text(instance.registration.run.event_id, EventTextType.ASSIGNMENT)
+    custom_assignment_message = get_event_text(run_cache["event_id"], EventTextType.ASSIGNMENT)
     if custom_assignment_message:
         email_body += "<br />" + custom_assignment_message
 
@@ -226,7 +234,7 @@ def update_registration_cancellation(instance: Registration) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Send notification emails to organizers if feature is enabled
-    if get_association_config(instance.run.event.association_id, "mail_signup_del"):
+    if get_association_config(get_run_basic_cache(instance.run_id)["association_id"], "mail_signup_del"):
         # Store member and ticket info in details since registration might be deleted
         for organizer in get_event_organizers(instance.run.event):
             my_send_digest_email(
@@ -301,7 +309,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
     # Check if organization wants to receive deletion notifications
-    if get_association_config(instance.run.event.association_id, "mail_signup_del"):
+    if get_association_config(get_run_basic_cache(instance.run_id)["association_id"], "mail_signup_del"):
         # Store member and ticket info in details since registration is being deleted
         for organizer in get_event_organizers(instance.run.event):
             my_send_digest_email(
@@ -328,14 +336,14 @@ def send_registration_request_received_email(instance: Registration) -> None:
     )
 
     custom_message = get_event_text(
-        instance.run.event_id, EventTextType.REGISTRATION_APPROVAL, instance.member.language
+        get_run_basic_cache(instance.run_id)["event_id"], EventTextType.REGISTRATION_APPROVAL, instance.member.language
     )
     if custom_message:
         email_body += "<br />" + custom_message
 
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
-    association_id = instance.run.event.association_id
+    association_id = get_run_basic_cache(instance.run_id)["association_id"]
     if get_association_config(association_id, "mail_signup_new"):
         for organizer in get_event_organizers(instance.run.event):
             my_send_digest_email(

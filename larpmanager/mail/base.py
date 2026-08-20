@@ -32,6 +32,7 @@ from django.utils import timezone
 from django.utils.html import escape
 from django.utils.translation import activate, gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.links import reset_event_links
@@ -404,8 +405,10 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
     # Set language context to member's preferred language
     activate(instance.member.language)
 
+    run_cache = get_run_basic_cache(instance.run_id)
+
     # Skip email if character mail is disabled for this event
-    if get_event_config(instance.run.event_id, "mail_character"):
+    if get_event_config(run_cache["event_id"], "mail_character"):
         return
 
     # Get trait and quest display information for the current run
@@ -429,7 +432,7 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
     body += "<br/><br />" + _("Access your character <a href='%(url)s'>here</a>!") % {"url": character_url}
 
     # Append custom assignment message if configured for this event
-    custom_assignment_message = get_event_text(instance.run.event_id, EventTextType.ASSIGNMENT)
+    custom_assignment_message = get_event_text(run_cache["event_id"], EventTextType.ASSIGNMENT)
     if custom_assignment_message:
         body += "<br />" + custom_assignment_message
 

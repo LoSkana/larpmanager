@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING, Any
 from django.db import transaction
 from django.db.models import Case, F, IntegerField, Q, QuerySet, Value, When
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.models.accounting import (
@@ -169,7 +170,7 @@ def registration_tokens_credits_use(
         # Prevent concurrent requests from double-spending the same balance
         membership = get_user_membership(registration.member, association_id)
         membership = Membership.objects.select_for_update().get(pk=membership.pk)
-        event_id = registration.run.event_id
+        event_id = get_run_basic_cache(registration.run_id)["event_id"]
 
         # Apply tokens first if feature is enabled
         if tokens_enabled:

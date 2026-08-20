@@ -20,7 +20,6 @@
 from __future__ import annotations
 
 import re
-from pathlib import Path
 from typing import Any, ClassVar
 
 from colorfield.fields import ColorField
@@ -34,6 +33,13 @@ from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.media import (
+    get_character_filepath,
+    get_character_media_filepath,
+    get_faction_filepath,
+    get_faction_media_filepath,
+    get_handout_media_filepath,
+)
 from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
@@ -360,14 +366,11 @@ class Character(Writing):
     @staticmethod
     def get_character_filepath(run: Run) -> str:
         """Get the directory path for storing character files for a given run."""
-        directory_path = str(Path(run.get_media_filepath()) / "characters/")
-        Path(directory_path).mkdir(mode=0o770, parents=True, exist_ok=True)
-        return directory_path
+        return get_character_filepath(run.id)
 
     def get_media_filepath(self, run: Run, descr: str) -> str:
         """Get the base path to this character's PDF files."""
-        character_directory = self.get_character_filepath(run)
-        return str(Path(character_directory) / f"{self.number}-{self.media_token}-{descr}.pdf")
+        return get_character_media_filepath(run.id, self.number, self.media_token, descr)
 
     def get_sheet_filepath(self, run: Run) -> str:
         """Get the path to this character's PDF sheet file."""
@@ -571,14 +574,11 @@ class Faction(Writing):
     @staticmethod
     def get_faction_filepath(run: Run) -> str:
         """Get the directory path for storing faction PDF files for a specific run."""
-        directory_path = str(Path(run.get_media_filepath()) / "factions/")
-        Path(directory_path).mkdir(mode=0o770, parents=True, exist_ok=True)
-        return directory_path
+        return get_faction_filepath(run.id)
 
     def get_sheet_filepath(self, run: Run) -> str:
         """Get the complete file path for this faction's PDF sheet."""
-        faction_directory = self.get_faction_filepath(run)
-        return str(Path(faction_directory) / f"{self.number}-{self.media_token}.pdf")
+        return get_faction_media_filepath(run.id, self.number, self.media_token)
 
     def show_red(self) -> dict:
         """Update JavaScript response with 'typ' and 'teaser' attributes."""
@@ -813,11 +813,9 @@ class Handout(Writing):
         """Return string representation."""
         return f"H{self.number} {self.name}"
 
-    def get_filepath(self, run: Run) -> str:
+    def get_filepath(self, run: Run) -> str:  # noqa: ARG002
         """Build the file path for this handout's PDF within the event's media directory."""
-        handouts_directory = str(Path(run.event.get_media_filepath()) / "handouts")
-        Path(handouts_directory).mkdir(mode=0o770, parents=True, exist_ok=True)
-        return str(Path(handouts_directory) / f"{self.number}-{self.media_token}.pdf")
+        return get_handout_media_filepath(self.event_id, self.number, self.media_token)
 
 
 class TextVersionChoices(models.TextChoices):

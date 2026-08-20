@@ -25,6 +25,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from larpmanager.cache.accounting import refresh_member_accounting_cache
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.models.accounting import (
@@ -337,7 +338,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             idx=invoice.idx,
             txn_id=None,  # Reset transaction ID to avoid conflicts
             causal=f"Transfer: {invoice.causal}",
-            assoc=target_reg.run.event.assoc,
+            association_id=get_run_basic_cache(target_reg.run_id)["association_id"],
             registration=target_reg,
             verified=False,  # Reset verification status
             hide=invoice.hide,
@@ -351,7 +352,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
         AccountingItemPayment.objects.create(
             member=payment_item.member,
             value=0,  # Reset payment amount - actual payments should be handled separately
-            assoc=target_reg.run.event.assoc,
+            association_id=get_run_basic_cache(target_reg.run_id)["association_id"],
             pay=payment_item.pay,
             registration=target_reg,
             info=f"Transferred from {source_reg.run}: {payment_item.info or ''}".strip(),
@@ -368,7 +369,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             AccountingItemOther.objects.create(
                 member=other_item.member,
                 value=other_item.value,
-                assoc=target_reg.run.event.assoc,
+                association_id=get_run_basic_cache(target_reg.run_id)["association_id"],
                 oth=other_item.oth,
                 run=target_reg.run,
                 descr=f"Transferred from {source_reg.run}: {other_item.descr}",

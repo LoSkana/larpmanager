@@ -31,6 +31,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
+from larpmanager.cache.media import get_run_media_filepath
 from larpmanager.cache.registration import search_player
 from larpmanager.cache.run import get_event_runs
 from larpmanager.cache.writing import get_character_element_fields
@@ -513,7 +514,7 @@ def get_event_cache_all(context: dict) -> None:
 def clear_run_cache_and_media(run: Run) -> None:
     """Clear cache and delete all media files for a run."""
     reset_event_cache_all(run)
-    media_directory_path = run.get_media_filepath()
+    media_directory_path = get_run_media_filepath(run.id)
     delete_all_in_path(media_directory_path)
 
 

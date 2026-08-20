@@ -29,6 +29,7 @@ from typing import TYPE_CHECKING
 
 from cryptography.fernet import Fernet, InvalidToken
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
@@ -42,13 +43,12 @@ from larpmanager.utils.larpmanager.tasks import notify_admins
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
-    from larpmanager.models.event import Event
     from larpmanager.models.registration import Registration
 
 
 def is_registration_provisional(
     instance: Registration,
-    event: Event | None = None,
+    event_id: int | None = None,
     features: dict | None = None,
     context: dict | None = None,
 ) -> bool:
@@ -59,7 +59,7 @@ def is_registration_provisional(
 
     Args:
         instance: Registration instance to check
-        event: Optional event instance, will be retrieved from instance.run.event if None
+        event_id: Optional event id, will be retrieved from run basic cache if None
         features: Optional event features dict, will query if None
         context: Optional dict for common data
 
@@ -67,16 +67,16 @@ def is_registration_provisional(
         bool: True if registration is provisional, False otherwise
 
     """
-    # Get event from registration if not provided
-    if not event:
-        event = instance.run.event
+    # Get event id from registration if not provided
+    if not event_id:
+        event_id = get_run_basic_cache(instance.run_id)["event_id"]
 
     # Get event features if not provided
     if not features:
-        features = get_event_features(event.id)
+        features = get_event_features(event_id)
 
     # Check if provisional payments are disabled for this event
-    if get_event_config(event.id, "payment_no_provisional", context=context):
+    if get_event_config(event_id, "payment_no_provisional", context=context):
         return False
 
     # Check if payment feature is enabled and registration has outstanding balance
@@ -169,7 +169,8 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
             return
 
         # Check if payment notifications are enabled for this association
-        if not get_association_config(instance.registration.run.event.association_id, "mail_payment"):
+        association_id = get_run_basic_cache(instance.registration.run_id)["association_id"]
+        if not get_association_config(association_id, "mail_payment"):
             return
 
         instance._send_confirmation = True  # noqa: SLF001

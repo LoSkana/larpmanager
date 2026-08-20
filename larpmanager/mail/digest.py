@@ -26,6 +26,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import activate, gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_member_config
 from larpmanager.mail.templates import (
     get_help_email,
@@ -117,12 +118,12 @@ def my_send_digest_email(
             subject += _(" for %(user)s") % {"user": instance.registration.member}
 
         elif notification_type == NotificationType.PAYMENT_CREDIT:
-            tokens_name, credits_name = get_token_credit_name(instance.registration.run.event.association_id)
+            tokens_name, credits_name = get_token_credit_name(get_run_basic_cache(run.id)["association_id"])
             subject, body = get_pay_credit_email(credits_name, instance, run)
             subject += _(" for %(user)s") % {"user": instance.registration.member}
 
         elif notification_type == NotificationType.PAYMENT_TOKEN:
-            tokens_name, credits_name = get_token_credit_name(instance.registration.run.event.association_id)
+            tokens_name, credits_name = get_token_credit_name(get_run_basic_cache(run.id)["association_id"])
             subject, body = get_pay_token_email(instance, run, tokens_name)
             subject += _(" for %(user)s") % {"user": instance.registration.member}
 

@@ -60,6 +60,12 @@ from larpmanager.cache.association_text import (
     update_association_text_cache_on_save,
 )
 from larpmanager.cache.association_translation import clear_association_translation_cache
+from larpmanager.cache.basic import (
+    get_run_basic_cache,
+    reset_association_basic_cache,
+    reset_event_basic_cache,
+    reset_run_basic_cache,
+)
 from larpmanager.cache.bulk import on_bulk_model_changed, on_event_role_deleted, on_event_role_members_changed
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import (
@@ -582,8 +588,9 @@ def post_save_assignment_trait(
 
     # Recompute auto relationships for the character of this member
     if instance.member_id and instance.run_id:
+        run_cache = get_run_basic_cache(instance.run_id)
         char_id = (
-            Character.objects.filter(player_id=instance.member_id, event=instance.run.event, deleted__isnull=True)
+            Character.objects.filter(player_id=instance.member_id, event_id=run_cache["event_id"], deleted__isnull=True)
             .values_list("id", flat=True)
             .first()
         )
@@ -649,6 +656,7 @@ def post_save_association_reset_lm_home(sender: type, instance: object, **kwargs
 
     # Clear association-specific cache
     clear_association_cache(instance.slug)
+    reset_association_basic_cache(instance.id)
 
     # Reset features cache for this association
     on_association_post_save_reset_features_cache(instance)
@@ -849,15 +857,17 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
         return
 
     # Clear event-related caches to ensure fresh data
+    reset_event_basic_cache(instance.id)
     clear_event_cache_all_runs(instance)
     clear_event_features_cache(instance.id)
 
     # Clear run and registration related caches
     clear_run_event_links_cache(instance)
 
-    # Clear registration counts for all associated runs
+    # Clear registration counts and basic-info for all associated runs
     for run_id in get_event_run_ids(instance.id):
         clear_registration_counts_cache(run_id)
+        reset_run_basic_cache(run_id)
 
     # Reset configuration cache and create default setup
     on_event_post_save_reset_config_cache(instance)
@@ -1546,6 +1556,7 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 
     # Invalidate cached run ids for the event (covers run creation/soft-deletion)
     reset_event_run_ids_cache(instance.event_id)
+    reset_run_basic_cache(instance.id)
 
     # Clear registration-related caches for this run
     clear_registration_counts_cache(instance.id)

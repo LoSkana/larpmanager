@@ -30,6 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 from django.utils import timezone
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration
@@ -268,7 +269,7 @@ def on_registration_post_save_reset_event_links(instance: Registration) -> None:
         return
 
     # Reset cached event links for the member and event association
-    reset_event_links(instance.member_id, instance.run.event.association_id)
+    reset_event_links(instance.member_id, get_run_basic_cache(instance.run_id)["association_id"])
 
 
 def reset_event_links(member_id: int, association_id: int) -> None:

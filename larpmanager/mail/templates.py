@@ -8,6 +8,7 @@ from django.core import signing
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.association import Association, get_url, hdr
@@ -297,8 +298,9 @@ def registration_options(registration_instance: Any) -> str:
             email_body += f" - {escape(registration_instance.ticket.description)}"
 
     # Get user membership and event features for permission checks
-    get_user_membership(registration_instance.member, registration_instance.run.event.association_id)
-    event_features = get_event_features(registration_instance.run.event_id)
+    run_cache = get_run_basic_cache(registration_instance.run_id)
+    get_user_membership(registration_instance.member, run_cache["association_id"])
+    event_features = get_event_features(run_cache["event_id"])
 
     # Get currency symbol for formatting monetary amounts
     currency_symbol = registration_instance.run.event.association.get_currency_symbol()
@@ -378,7 +380,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
         )
         body += " " + _("Please make sure to send your payment on time, or we might have to cancel your spot.")
 
-    body += get_payment_info(instance.run.event.association_id, payment_url)
+    body += get_payment_info(get_run_basic_cache(instance.run_id)["association_id"], payment_url)
     return body
 
 
