@@ -150,11 +150,14 @@ from larpmanager.cache.rels import (
 )
 from larpmanager.cache.role import remove_association_role_cache, remove_event_role_cache
 from larpmanager.cache.run import (
+    get_event_run_ids,
     on_event_post_save_reset_config_cache,
     on_event_pre_save_invalidate_cache,
     on_run_post_save_reset_config_cache,
     on_run_pre_save_invalidate_cache,
     reset_cache_config_run,
+    reset_cache_config_run_ids,
+    reset_event_run_ids_cache,
     update_visible_factions,
 )
 from larpmanager.cache.skin import clear_skin_cache
@@ -853,7 +856,7 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     clear_run_event_links_cache(instance)
 
     # Clear registration counts for all associated runs
-    for run_id in instance.runs.values_list("id", flat=True):
+    for run_id in get_event_run_ids(instance.id):
         clear_registration_counts_cache(run_id)
 
     # Reset configuration cache and create default setup
@@ -893,8 +896,7 @@ def post_save_system_exp(sender: type, instance: Any, **kwargs: Any) -> None:
 def post_save_event_button(sender: type, instance: object, created: bool, **kwargs: Any) -> None:
     """Clear event button cache after save."""
     clear_event_button_cache(instance.event_id)
-    for run in instance.event.runs.all():
-        reset_cache_config_run(run)
+    reset_cache_config_run_ids(get_event_run_ids(instance.event_id))
 
 
 @receiver(post_save, sender=EventConfig)
@@ -903,15 +905,13 @@ def post_save_reset_event_config(sender: type, instance: Any, **kwargs: Any) -> 
     reset_element_configs(instance.event)
     # some features are derived from configs, so the features cache must be rebuilt too
     clear_event_features_cache(instance.event_id)
-    for run in instance.event.runs.all():
-        reset_cache_config_run(run)
+    reset_cache_config_run_ids(get_event_run_ids(instance.event_id))
 
     # child events inherit the parent configs, so their caches must be reset too
     for child in Event.objects.filter(parent_id=instance.event_id):
         reset_element_configs(child)
         clear_event_features_cache(child.id)
-        for run in child.runs.all():
-            reset_cache_config_run(run)
+        reset_cache_config_run_ids(get_event_run_ids(child.id))
 
     # If a publication config has been changed, trigger event publication
     if instance.name.startswith("pub_"):
@@ -1543,6 +1543,9 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
     """
     if is_clone_active():
         return
+
+    # Invalidate cached run ids for the event (covers run creation/soft-deletion)
+    reset_event_run_ids_cache(instance.event_id)
 
     # Clear registration-related caches for this run
     clear_registration_counts_cache(instance.id)

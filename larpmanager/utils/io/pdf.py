@@ -47,6 +47,7 @@ from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
+from larpmanager.cache.run import get_event_runs
 from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.models.accounting import (
     AccountingItemDonation,
@@ -645,13 +646,13 @@ def generate_payment_receipt(accounting_item: Any) -> tuple[str, str]:
 
 def cleanup_handout_pdfs_after_save(instance: object) -> None:
     """Handle handout post-save PDF cleanup."""
-    for run in instance.event.runs.all():
+    for run in get_event_runs(instance.event_id):
         safe_remove(instance.get_filepath(run))
 
 
 def cleanup_handout_template_pdfs_after_save(instance: object) -> None:
     """Handle handout template post-save PDF cleanup."""
-    for run in instance.event.runs.all():
+    for run in get_event_runs(instance.event_id):
         for el in instance.handouts.all():
             safe_remove(el.get_filepath(run))
 
@@ -664,7 +665,7 @@ def safe_remove(file_path: str) -> None:
 
 def remove_run_pdf(event: Event) -> None:
     """Remove PDF files for all runs associated with the event."""
-    for event_run in event.runs.all():
+    for event_run in get_event_runs(event.id):
         # Remove profiles and gallery PDFs for each run
         safe_remove(event_run.get_profiles_filepath())
         safe_remove(event_run.get_gallery_filepath())
@@ -681,7 +682,7 @@ def delete_character_pdf_files(instance: object, single: Any = None, runs: Any =
     """
     # Default to all runs if none specified
     if not runs:
-        runs = instance.event.runs.all()
+        runs = get_event_runs(instance.event_id)
 
     # Delete PDF files for each run
     for run in runs:
@@ -706,7 +707,7 @@ def cleanup_relationship_pdfs_after_save(instance: object) -> None:
 
 def cleanup_faction_pdfs_on_save(instance: object) -> None:
     """Handle faction post-save PDF cleanup."""
-    runs = instance.event.runs.all()
+    runs = get_event_runs(instance.event_id)
     for char in instance.characters.all():
         delete_character_pdf_files(char, runs=runs)
 

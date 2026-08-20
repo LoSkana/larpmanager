@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.db.models import Count
+from django.db.models import Count, QuerySet
 
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.config import get_event_config, reset_event_parent_cache, save_single_config
@@ -36,6 +36,36 @@ from larpmanager.models.writing import Faction
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
+
+
+def event_run_ids_cache_key(event_id: int) -> str:
+    """Generate cache key for an event's run ids."""
+    return f"event_run_ids_{event_id}"
+
+
+def get_event_run_ids(event_id: int) -> list[int]:
+    """Get the ids of an event's runs, from cache if available.
+
+    Many independent signal handlers (character cache, widget cache, PDF
+    cleanup, config reset, ...) each need the run ids for an event; caching
+    this avoids re-issuing the same query from every one of them.
+    """
+    cache_key = event_run_ids_cache_key(event_id)
+    run_ids = cache.get(cache_key)
+    if run_ids is None:
+        run_ids = list(Run.objects.filter(event_id=event_id).values_list("id", flat=True))
+        cache.set(cache_key, run_ids, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+    return run_ids
+
+
+def reset_event_run_ids_cache(event_id: int) -> None:
+    """Invalidate the cached run ids for an event."""
+    cache.delete(event_run_ids_cache_key(event_id))
+
+
+def get_event_runs(event_id: int) -> QuerySet[Run]:
+    """Get an event's runs, using the cached run ids to build the filter."""
+    return Run.objects.filter(id__in=get_event_run_ids(event_id))
 
 
 def reset_cache_run(association: Association, slug: str) -> None:
@@ -111,13 +141,17 @@ def on_event_pre_save_invalidate_cache(instance: Event) -> None:
 
 def reset_cache_config_run(run: Run) -> None:
     """Delete cached configuration for a run."""
-    cache_key = cache_config_run_key(run)
-    cache.delete(cache_key)
+    cache.delete(cache_config_run_key(run.id))
 
 
-def cache_config_run_key(run_instance: Run) -> str:
+def reset_cache_config_run_ids(run_ids: list[int]) -> None:
+    """Delete cached configuration for a list of run ids, without fetching the Run objects."""
+    cache.delete_many([cache_config_run_key(run_id) for run_id in run_ids])
+
+
+def cache_config_run_key(run_id: int) -> str:
     """Return cache key for a run's config."""
-    return f"run_config_{run_instance.id}"
+    return f"run_config_{run_id}"
 
 
 def get_cache_config_run(run: Run) -> dict:
@@ -131,7 +165,7 @@ def get_cache_config_run(run: Run) -> dict:
 
     """
     # Generate cache key for this specific run
-    cache_key = cache_config_run_key(run)
+    cache_key = cache_config_run_key(run.id)
 
     # Attempt to retrieve from cache
     cached_config = cache.get(cache_key)
@@ -217,8 +251,7 @@ def on_run_post_save_reset_config_cache(instance: Run) -> None:
 def on_event_post_save_reset_config_cache(instance: Event) -> None:
     """Handle event post-save cache reset."""
     if instance.pk:
-        for run in instance.runs.all():
-            reset_cache_config_run(run)
+        reset_cache_config_run_ids(get_event_run_ids(instance.pk))
 
         reset_event_parent_cache(instance.pk)
 

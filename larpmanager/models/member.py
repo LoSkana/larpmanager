@@ -417,9 +417,9 @@ class Member(MediaTokenMixin, UuidMixin, BaseModel):
         """Return the full file path for member request PDF."""
         return str(Path(self.get_member_filepath()) / "request.pdf")
 
-    def join(self, association: Association) -> None:
+    def join(self, association_id: int) -> None:
         """Join an association if not already a member."""
-        membership = get_user_membership(self, association.id)  # type: ignore[arg-type]
+        membership = get_user_membership(self, association_id)
         if membership.status == MembershipStatus.EMPTY:
             membership.status = MembershipStatus.JOINED
             membership.save()
