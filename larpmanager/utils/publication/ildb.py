@@ -40,6 +40,7 @@ from larpmanager.cache.config import (
     save_config,
     save_single_config,
 )
+from larpmanager.cache.run import get_event_runs
 from larpmanager.forms.event import PromotionEventType, PromotionLanguage
 from larpmanager.mail.digest import get_exec_language
 from larpmanager.models.access import EventRole
@@ -151,7 +152,7 @@ def sync_event(event: Event) -> None:
     ctx = _get_ildb_context(event)
     if not ctx:
         return
-    for run in event.runs.all():
+    for run in get_event_runs(event.id):
         run_ctx = _get_ildb_context(event, run)
         try:
             _sync_run(run, run_ctx)

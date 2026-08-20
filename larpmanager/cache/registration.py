@@ -26,6 +26,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.run import get_event_run_ids
 from larpmanager.models.event import Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
@@ -251,7 +252,7 @@ def update_registration_counts(run: Run) -> dict[str, int]:
 def on_character_update_registration_cache(instance: Character) -> None:
     """Clear registration caches and update related registrations when character changes."""
     # Clear registration count caches for all event runs
-    for run_id in instance.event.runs.values_list("id", flat=True):
+    for run_id in get_event_run_ids(instance.event_id):
         clear_registration_counts_cache(run_id)
 
     # Trigger registration updates if character approval is enabled

@@ -38,6 +38,7 @@ from larpmanager.accounting.token_credit import handle_tokes_credits
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
+from larpmanager.cache.run import get_event_runs
 from larpmanager.mail.registration import update_registration_status_bkg
 from larpmanager.models.accounting import (
     AccountingItemDiscount,
@@ -575,7 +576,7 @@ def process_registration_pre_save(registration: Registration) -> None:
     if registration.deleted:
         return
     registration.surcharge = get_date_surcharge(registration, registration.run.event)
-    registration.member.join(registration.run.event.association)
+    registration.member.join(registration.run.event.association_id)
 
 
 def get_date_surcharge(registration: Registration | None, event: Event) -> int:
@@ -707,7 +708,7 @@ def check_registration_events(event: Event) -> None:
     """Trigger background accounting updates for all registrations in an event."""
     registration_ids = [
         str(registration_id)
-        for run in event.runs.all()
+        for run in get_event_runs(event.id)
         for registration_id in run.registrations.values_list("id", flat=True)
     ]
     check_registration_background(",".join(registration_ids))

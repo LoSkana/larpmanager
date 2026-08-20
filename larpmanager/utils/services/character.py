@@ -32,6 +32,7 @@ from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.cache.registration import search_player
+from larpmanager.cache.run import get_event_run_ids
 from larpmanager.cache.writing import get_character_element_fields
 from larpmanager.models.casting import AssignmentTrait, Trait
 from larpmanager.models.form import (
@@ -722,7 +723,13 @@ def get_char_check(
             # Locked: player sees public fields only (no full sheet)
             return
 
-    get_element(context, character_uuid, "character", Character)
+    get_element(
+        context,
+        character_uuid,
+        "character",
+        Character,
+        queryset_base=Character.objects.select_related("player"),
+    )
     context["check"] = 1
 
 
@@ -875,7 +882,7 @@ def _collect_sources_map(character: Character) -> dict[int, set[str]]:
         _add_refs(faction.text or "", faction.name)
 
     if character.player_id:
-        run_ids = list(character.event.runs.values_list("id", flat=True))
+        run_ids = get_event_run_ids(character.event_id)
         for assignment in AssignmentTrait.objects.filter(
             member_id=character.player_id, run_id__in=run_ids, deleted__isnull=True
         ).select_related("trait"):

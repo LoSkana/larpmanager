@@ -33,6 +33,7 @@ from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
 from larpmanager.cache.config import get_element_config, get_event_config
+from larpmanager.cache.feature import get_event_features
 from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
@@ -297,7 +298,11 @@ class Character(Writing):
         """
         js["guilds"] = []
 
-        guild_event = event.get_class_parent("guild") if event else self.event.get_class_parent("guild")
+        check_event = event or self.event
+        if "guild" not in get_event_features(check_event.id):
+            return
+
+        guild_event = check_event.get_class_parent("guild")
 
         # noinspection PyUnresolvedReferences
         query = self.guild_memberships.filter(
@@ -320,8 +325,13 @@ class Character(Writing):
         """
         js["factions"] = []
 
+        check_event = event or self.event
+        if "faction" not in get_event_features(check_event.id):
+            js["factions"].append(0)
+            return
+
         # Determine which event to use for faction lookup
-        faction_event = event.get_class_parent("faction") if event else self.event.get_class_parent("faction")
+        faction_event = check_event.get_class_parent("faction")
 
         # Track if we find a primary faction
         has_primary_faction = False

@@ -36,6 +36,7 @@ from larpmanager.accounting.balance import (
 )
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.run import get_event_run_ids
 from larpmanager.models.accounting import (
     AccountingItemExpense,
     PaymentInvoice,
@@ -719,8 +720,7 @@ def clear_widget_cache_for_runs(run_ids: list[int]) -> None:
 
 def clear_widget_cache_for_event(event_id: int) -> None:
     """Clear widget cache for all runs in an event."""
-    run_ids = Run.objects.filter(event_id=event_id).values_list("id", flat=True)
-    clear_widget_cache_for_runs(list(run_ids))
+    clear_widget_cache_for_runs(get_event_run_ids(event_id))
 
 
 def clear_widget_cache_for_association(association_id: int) -> None:
@@ -736,11 +736,16 @@ def clear_widget_cache_for_association(association_id: int) -> None:
 
 def reset_widgets(instance: Any) -> None:
     """Reset widget cache data for related elements."""
-    if hasattr(instance, "run") and instance.run:
-        clear_widget_cache(instance.run.id)
+    run_id = getattr(instance, "run_id", None)
+    if run_id:
+        clear_widget_cache(run_id)
         clear_widget_cache_association(instance.run.event.association_id)
-    elif hasattr(instance, "event") and instance.event:
-        clear_widget_cache_for_event(instance.event.id)
+
+    event_id = getattr(instance, "event_id", None)
+    if event_id:
+        clear_widget_cache_for_event(event_id)
         clear_widget_cache_association(instance.event.association_id)
-    elif hasattr(instance, "association_id") and instance.association_id:
-        clear_widget_cache_association(instance.association_id)
+
+    association_id = getattr(instance, "association_id", None)
+    if association_id:
+        clear_widget_cache_association(association_id)

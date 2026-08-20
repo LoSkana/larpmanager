@@ -32,6 +32,7 @@ from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.registration import search_player
+from larpmanager.cache.run import get_event_runs
 from larpmanager.cache.writing import get_character_element_fields
 from larpmanager.models.casting import AssignmentTrait, Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
@@ -837,7 +838,7 @@ def on_trait_pre_save_update_cache(instance: Trait) -> None:
 
 def update_event_cache_all_runs(event: Event, instance: BaseModel) -> None:
     """Update event cache for all runs of the given event."""
-    for run in event.runs.all():
+    for run in get_event_runs(event.id):
         update_event_cache_all(run, instance)
 
 
@@ -853,20 +854,20 @@ def reset_character_registration_cache(rcr: RegistrationCharacterRel) -> None:
 def clear_event_cache_all_runs(event: Event) -> None:
     """Clear cache and media for all runs of event, children, siblings, and parent."""
     # Clear cache for all runs of the current event
-    for run in event.runs.all():
+    for run in get_event_runs(event.id):
         clear_run_cache_and_media(run)
 
     # Clear cache for runs of child events
-    for child_event in Event.objects.filter(parent=event).prefetch_related("runs"):
-        for run in child_event.runs.all():
+    for child_event in Event.objects.filter(parent=event):
+        for run in get_event_runs(child_event.id):
             clear_run_cache_and_media(run)
 
     if event.parent:
         # Clear cache for runs of sibling events
-        for sibling_event in Event.objects.filter(parent=event.parent).prefetch_related("runs"):
-            for run in sibling_event.runs.all():
+        for sibling_event in Event.objects.filter(parent=event.parent):
+            for run in get_event_runs(sibling_event.id):
                 clear_run_cache_and_media(run)
 
         # Clear cache for runs of parent event
-        for run in event.parent.runs.all():
+        for run in get_event_runs(event.parent_id):
             clear_run_cache_and_media(run)

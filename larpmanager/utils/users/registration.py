@@ -36,6 +36,7 @@ from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
+from larpmanager.cache.run import get_event_run_ids
 from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.casting import Casting
 from larpmanager.models.event import Event, PreRegistration, RegistrationStatus, Run
@@ -1563,9 +1564,10 @@ def check_character_ticket_options(registration: Registration, character: Charac
     incompatible_choice_ids = []
 
     # Iterate through all writing choices for this character
-    for writing_choice in WritingChoice.objects.filter(element_id=character.id):
+    choices = WritingChoice.objects.filter(element_id=character.id).prefetch_related("option__tickets")
+    for writing_choice in choices:
         # Get list of ticket IDs that allow this writing option
-        allowed_ticket_ids = writing_choice.option.tickets.values_list("pk", flat=True)
+        allowed_ticket_ids = [ticket.pk for ticket in writing_choice.option.tickets.all()]
 
         # If option has ticket restrictions and current ticket not allowed
         if allowed_ticket_ids and registration_ticket_id not in allowed_ticket_ids:
@@ -1612,6 +1614,6 @@ def process_character_ticket_options(instance: Registration) -> None:
 
 def reset_registration_ticket(instance: RegistrationTicket) -> None:
     """Clear accounting cache for all runs in the ticket's event."""
-    for run in instance.event.runs.all():
-        clear_registration_accounting_cache(run.id)
-        clear_registration_counts_cache(run.id)
+    for run_id in get_event_run_ids(instance.event_id):
+        clear_registration_accounting_cache(run_id)
+        clear_registration_counts_cache(run_id)

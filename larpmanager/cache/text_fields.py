@@ -106,7 +106,9 @@ def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
     """Initialize cache for text fields of model instances related to an event."""
     cache_result = {}
     # Iterate through all instances of the given type for the event's parent
-    for instance in model_class.objects.filter(event=event.get_class_parent(model_class)):
+    for instance in model_class.objects.filter(event=event.get_class_parent(model_class)).select_related(
+        "event__parent"
+    ):
         _init_element_cache_text_field(instance, cache_result, model_class)
     return cache_result
 
@@ -302,16 +304,19 @@ def init_cache_registration_field(run: Run) -> dict:
 
     # Iterate through active (non-cancelled, non-pending) registrations for this run
     for registration in get_active_registrations(run):
-        _init_element_cache_registration_field(registration, cache_data)
+        _init_element_cache_registration_field(registration, cache_data, run.event)
     return cache_data
 
 
-def _init_element_cache_registration_field(registration: Registration, cache_result: dict[str, dict[str, Any]]) -> None:
+def _init_element_cache_registration_field(
+    registration: Registration, cache_result: dict[str, dict[str, Any]], event: Event
+) -> None:
     """Initialize cache for registration element fields.
 
     Args:
         registration: Registration element to process
         cache_result: Result dictionary to populate with cached data
+        event: Event the registration's run belongs to (avoids re-querying per registration)
 
     """
     # Get registration UUID for cache key
@@ -322,11 +327,7 @@ def _init_element_cache_registration_field(registration: Registration, cache_res
         cache_result[registration_uuid] = {}
 
     # Get all editor/paragraph-type questions for the event
-    questions = [
-        question
-        for question in get_cached_registration_questions(registration.run.event)
-        if question["typ"] in ALLOWED_TYPES
-    ]
+    questions = [question for question in get_cached_registration_questions(event) if question["typ"] in ALLOWED_TYPES]
 
     # Process each editor question and cache the answer text
     for question in questions:
@@ -378,7 +379,7 @@ def update_cache_registration_fields(registration: Registration) -> None:
     cached_registration_fields = get_cache_registration_field(run)
 
     # Initialize element cache and update cache with new data
-    _init_element_cache_registration_field(registration, cached_registration_fields)
+    _init_element_cache_registration_field(registration, cached_registration_fields, run.event)
     cache.set(cache_key, cached_registration_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 

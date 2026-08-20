@@ -44,6 +44,7 @@ from larpmanager.accounting.payment import auto_process_single_method, get_payme
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features
+from larpmanager.cache.run import get_event_runs
 from larpmanager.forms.accounting import (
     AnyInvoiceSubmitForm,
     CollectionForm,
@@ -1225,7 +1226,7 @@ def add_runs(ls: dict, lis: list, *, future: bool = True) -> None:
     """Add runs from events to dictionary, optionally filtering past runs."""
     for e in lis:
         # Filter and add runs to dictionary by ID
-        for r in e.runs.all():
+        for r in get_event_runs(e.id):
             if future and r.end < timezone.now().date():
                 continue
             ls[r.id] = r
