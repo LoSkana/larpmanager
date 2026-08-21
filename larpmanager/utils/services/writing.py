@@ -38,7 +38,7 @@ from larpmanager.cache.text_fields import ALLOWED_TYPES, get_cache_text_field
 from larpmanager.cache.writing import get_cached_relationship_tags
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import Event, ProgressStep
+from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -468,9 +468,7 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
         element_type: Writing element model class
 
     """
-    cached_text_fields = get_cache_text_field(
-        element_type, Event.objects.get(pk=get_class_parent(context["event"].id, element_type))
-    )
+    cached_text_fields = get_cache_text_field(element_type, get_class_parent(context["event"].id, element_type))
     for element in context["list"]:
         if element.uuid not in cached_text_fields:
             continue
