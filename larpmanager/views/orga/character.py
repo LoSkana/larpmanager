@@ -65,7 +65,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.common import get_element, get_event_class_parent, get_event_elements
 from larpmanager.utils.edit.backend import _process_working_ticket
 from larpmanager.utils.edit.options_inline import (
     options_inline_delete,
@@ -248,12 +248,14 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, character_uui
     context = check_event_context(request, event_slug, "orga_characters")
 
     # Get parent event to ensure character belongs to this event
-    parent_event = context["event"].get_class_parent(Character)
+    parent_event = get_event_class_parent(context["event"].id, Character)
 
     # Plots are not inherited in campaigns: keep only the ones of this event
     plots_prefetch = Prefetch(
         "plots",
-        queryset=Plot.objects.filter(event=context["event"].get_class_parent(Plot)).prefetch_related("characters"),
+        queryset=Plot.objects.filter(event=get_event_class_parent(context["event"].id, Plot)).prefetch_related(
+            "characters"
+        ),
     )
 
     # Load character with prefetched factions and plots, filtered by event
@@ -326,13 +328,13 @@ def orga_writing_form_list(request: HttpRequest, event_slug: str, writing_type: 
     max_length = 100
 
     # Get the specific question being processed
-    question = event.get_elements(WritingQuestion).get(uuid=q_uuid, applicable=applicable)
+    question = get_event_elements(event.id, WritingQuestion).get(uuid=q_uuid, applicable=applicable)
 
     # Handle single/multiple choice questions
     if question.typ in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
         # Build choice options dictionary
         cho = {}
-        for opt in event.get_elements(WritingOption).filter(question=question):
+        for opt in get_event_elements(event.id, WritingOption).filter(question=question):
             cho[opt.id] = opt.name
 
         # Process choices and group by element UUID
@@ -396,7 +398,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
     # Retrieve the specific writing question from POST data
     q_uuid = request.POST.get("q_uuid")
-    question = event.get_elements(WritingQuestion).get(uuid=q_uuid)
+    question = get_event_elements(event.id, WritingQuestion).get(uuid=q_uuid)
 
     # Only process single or multiple choice questions
     if question.typ not in [BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]:
@@ -404,7 +406,7 @@ def orga_writing_form_email(request: HttpRequest, event_slug: str, writing_type:
 
     # Build mapping of option IDs to option names
     cho = {}
-    for opt in event.get_elements(WritingOption).filter(question=question):
+    for opt in get_event_elements(event.id, WritingOption).filter(question=question):
         cho[opt.id] = opt.name
 
     # Load event cache and create character ID to number mapping
@@ -506,7 +508,7 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
     context["download"] = 1
 
     # Retrieve and order writing questions for the specified form type
-    context["list"] = get_cached_writing_questions(context["event"], context["writing_typ"])
+    context["list"] = get_cached_writing_questions(context["event"].id, context["writing_typ"])
 
     # Set approval configuration and status flags for template rendering
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
@@ -647,8 +649,8 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
     uuid_map = {}
 
     # Get all characters for the event
-    for ch_id, ch_uuid, ch_number, ch_name, ch_text in (
-        context["event"].get_elements(Character).values_list("id", "uuid", "number", "name", "text")
+    for ch_id, ch_uuid, ch_number, ch_name, ch_text in get_event_elements(context["event"].id, Character).values_list(
+        "id", "uuid", "number", "name", "text"
     ):
         check_chars[ch_number] = {"id": ch_id, "number": ch_number, "name": ch_name, "text": ch_text or ""}
         id_number_map[ch_id] = ch_number
@@ -658,7 +660,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Append plot-related text content if plot feature is enabled
     if "plot" in context["features"]:
-        event = context["event"].get_class_parent(Character)
+        event = get_event_class_parent(context["event"].id, Character)
         que = PlotCharacterRel.objects.filter(character__event=event).select_related("character")
         que = que.exclude(text__isnull=True).exclude(text__exact="")
 
@@ -751,8 +753,7 @@ def check_writings(
         cache[element_name] = {}
         # check s: all characters currently listed has
         for element in (
-            context["event"]
-            .get_elements(element_type)
+            get_event_elements(context["event"].id, element_type)
             .annotate(characters_map=ArrayAgg("characters__id"))
             .prefetch_related("characters")
         ):
@@ -789,13 +790,13 @@ def check_speedlarp(checks: Any, context: dict, id_number_map: Any) -> None:
 
     checks["speed_larps_double"] = []
     checks["speed_larps_missing"] = []
-    max_speedlarp_type = context["event"].get_elements(SpeedLarp).aggregate(Max("typ"))["typ__max"]
+    max_speedlarp_type = get_event_elements(context["event"].id, SpeedLarp).aggregate(Max("typ"))["typ__max"]
     if not max_speedlarp_type or max_speedlarp_type == 0:
         return
 
     speedlarp_assignments = {}
-    for speedlarp_element in (
-        context["event"].get_elements(SpeedLarp).annotate(characters_map=ArrayAgg("characters__id"))
+    for speedlarp_element in get_event_elements(context["event"].id, SpeedLarp).annotate(
+        characters_map=ArrayAgg("characters__id")
     ):
         check_speedlarp_prepare(speedlarp_element, id_number_map, speedlarp_assignments)
     for character_number, character in context["chars"].items():
@@ -850,9 +851,9 @@ def orga_character_get_number(request: HttpRequest, event_slug: str) -> JsonResp
     try:
         # Get element based on type (Trait or Character)
         if element_type.lower() == "trait":
-            el = context["event"].get_elements(Trait).get(pk=idx)
+            el = get_event_elements(context["event"].id, Trait).get(pk=idx)
         else:
-            el = context["event"].get_elements(Character).get(pk=idx)
+            el = get_event_elements(context["event"].id, Character).get(pk=idx)
 
         # Return the element's number
         return JsonResponse({"res": "ok", "number": el.number})
@@ -1022,8 +1023,7 @@ def _get_excel_form(
 
     # Fetch the writing question with proper filtering
     question = (
-        context["event"]
-        .get_elements(WritingQuestion)
+        get_event_elements(context["event"].id, WritingQuestion)
         .select_related("event")
         .filter(applicable=context["writing_typ"])
         .get(uuid=question_uuid)
@@ -1031,7 +1031,7 @@ def _get_excel_form(
 
     # Setup applicable type context and fetch target element
     context["applicable"] = QuestionApplicable.get_applicable_inverse(context["writing_typ"])
-    element = context["event"].get_elements(context["applicable"]).select_related("event").get(uuid=edit_uuid)
+    element = get_event_elements(context["event"].id, context["applicable"]).select_related("event").get(uuid=edit_uuid)
     context["elementTyp"] = context["applicable"]
 
     # Map element types to their corresponding form classes
@@ -1117,7 +1117,7 @@ def _get_question_update(context: dict, element: Any) -> str:
         # get option names
         if not isinstance(display_value, list):
             display_value = [display_value]
-        query = context["event"].get_elements(WritingOption).filter(uuid__in=display_value).order_by("order")
+        query = get_event_elements(context["event"].id, WritingOption).filter(uuid__in=display_value).order_by("order")
         display_value = ", ".join(list(query.values_list("name", flat=True)))
     else:
         # check if it is over the character limit
