@@ -53,7 +53,7 @@ from larpmanager.models.writing import (
     TextVersionChoices,
 )
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.common import get_class_parent, get_event_elements, get_handout
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements, get_handout
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     orga_delete,
@@ -765,7 +765,7 @@ def orga_version(request: HttpRequest, event_slug: str, name: str, version_uuid:
     model_class = type_to_model.get(tp)
     if model_class:
         # Get the parent event for this model type
-        parent_event = get_class_parent(context["event"].id, model_class)
+        parent_event = get_event_class_parent(context["event"].id, model_class)
         # Verify the entity exists in this event
         if not model_class.objects.filter(event=parent_event, id=context["version"].eid).exists():
             msg = "Version does not belong to this event"

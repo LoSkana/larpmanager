@@ -36,7 +36,7 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.core.common import get_class_parent
+from larpmanager.utils.core.common import get_event_class_parent
 from larpmanager.utils.io.download import (
     _get_column_names,
     export_abilities,
@@ -275,7 +275,7 @@ class TestExperienceUploadDownload(BaseTestCase):
 
         self.assertEqual(len([log for log in logs if "event_id" in log]), 1)
         self.assertIn("WARN - columns ignored: event_id", logs[0])
-        parent_id = get_class_parent(self.event.id, CriterionExp)
+        parent_id = get_event_class_parent(self.event.id, CriterionExp)
         self.assertEqual(CriterionExp.objects.get(event=self.event, number=1).event_id, parent_id)
 
     def test_criterion_row_is_rolled_back_on_failure(self) -> None:
@@ -366,7 +366,7 @@ class TestExperienceUploadDownload(BaseTestCase):
 
         self.assertIn("WARN - unknown column ignored: event_id", result)
         criterion = CriterionExp.objects.get(event=self.event, number=1)
-        self.assertEqual(criterion.event_id, get_class_parent(self.event.id, CriterionExp))
+        self.assertEqual(criterion.event_id, get_event_class_parent(self.event.id, CriterionExp))
 
     def test_invalid_amount_is_reported(self) -> None:
         """An unparsable numeric value is reported without aborting the row"""

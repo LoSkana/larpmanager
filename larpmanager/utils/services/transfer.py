@@ -47,7 +47,7 @@ from larpmanager.models.registration import (
     RegistrationCharacterRel,
     RegistrationTicket,
 )
-from larpmanager.utils.core.common import get_class_parent
+from larpmanager.utils.core.common import get_event_class_parent
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event, Run
@@ -301,7 +301,7 @@ def _transfer_character_relations(source_reg: Registration, target_reg: Registra
     for relation in source_relations:
         # Check that the character is available in the destination event
         # (considering campaigns that share characters)
-        character_event = get_class_parent(target_reg.run.event_id, "character")
+        character_event = get_event_class_parent(target_reg.run.event_id, "character")
 
         if relation.character.event_id == character_event.id:
             RegistrationCharacterRel.objects.create(
@@ -534,7 +534,7 @@ def _validate_character(registration: Registration, result: dict[str, list[str]]
     # Check character compatibility
     source_characters = registration.characters.all()
     if source_characters:
-        character_event = get_class_parent(target_run.event_id, "character")
+        character_event = get_event_class_parent(target_run.event_id, "character")
         incompatible_chars = [char.name for char in source_characters if char.event_id != character_event.id]
 
         if incompatible_chars:

@@ -65,7 +65,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_class_parent, get_element, get_event_elements
+from larpmanager.utils.core.common import get_element, get_event_class_parent, get_event_elements
 from larpmanager.utils.edit.backend import _process_working_ticket
 from larpmanager.utils.edit.options_inline import (
     options_inline_delete,
@@ -248,12 +248,14 @@ def orga_characters_summary(request: HttpRequest, event_slug: str, character_uui
     context = check_event_context(request, event_slug, "orga_characters")
 
     # Get parent event to ensure character belongs to this event
-    parent_event = get_class_parent(context["event"].id, Character)
+    parent_event = get_event_class_parent(context["event"].id, Character)
 
     # Plots are not inherited in campaigns: keep only the ones of this event
     plots_prefetch = Prefetch(
         "plots",
-        queryset=Plot.objects.filter(event=get_class_parent(context["event"].id, Plot)).prefetch_related("characters"),
+        queryset=Plot.objects.filter(event=get_event_class_parent(context["event"].id, Plot)).prefetch_related(
+            "characters"
+        ),
     )
 
     # Load character with prefetched factions and plots, filtered by event
@@ -658,7 +660,7 @@ def orga_check(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Append plot-related text content if plot feature is enabled
     if "plot" in context["features"]:
-        event = get_class_parent(context["event"].id, Character)
+        event = get_event_class_parent(context["event"].id, Character)
         que = PlotCharacterRel.objects.filter(character__event=event).select_related("character")
         que = que.exclude(text__isnull=True).exclude(text__exact="")
 

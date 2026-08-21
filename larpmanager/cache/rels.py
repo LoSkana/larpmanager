@@ -35,7 +35,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
 from larpmanager.utils.core.clone_guard import is_clone_active
-from larpmanager.utils.core.common import _validate_and_fetch_objects, get_class_parent, get_event_elements
+from larpmanager.utils.core.common import _validate_and_fetch_objects, get_event_class_parent, get_event_elements
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 if TYPE_CHECKING:
@@ -487,7 +487,7 @@ def _build_faction_relations(char: Character, event: Event) -> dict[str, Any]:
         faction_event_id = cache_event_id
     else:
         # Use the parent event for inherited faction lookup
-        faction_event_id = get_class_parent(char.event_id, "faction")
+        faction_event_id = get_event_class_parent(char.event_id, "faction")
 
     # Build faction list based on determined event
     if faction_event_id:

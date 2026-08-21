@@ -83,7 +83,7 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Relationship,
 )
-from larpmanager.utils.core.common import get_class_parent, get_event_elements
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _get_column_names
 from larpmanager.utils.security import (
@@ -1027,7 +1027,7 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
     writing_model_class = QuestionApplicable.get_applicable_inverse(question_applicable_type)
 
     # Get the target event - use parent if in campaign and element is inheritable
-    target_event = get_class_parent(context["event"].id, writing_model_class)
+    target_event = get_event_class_parent(context["event"].id, writing_model_class)
 
     # Try to find existing element or create new one
     element = writing_model_class.objects.filter(event=target_event, name__iexact=element_name).first()
@@ -1370,7 +1370,7 @@ def _get_or_create_writing_question(
 
     applicable = field_mappings["applicable"][applicable_value]
 
-    event = get_class_parent(context["event"].id, WritingQuestion)
+    event = get_event_class_parent(context["event"].id, WritingQuestion)
 
     # For special (non-basic) WritingQuestionTypes, look up by type+applicable.
     # These questions are auto-created by configuration and are unique per type.
@@ -1642,7 +1642,7 @@ def _get_option(
             )
             was_created = True
     else:
-        event = get_class_parent(context["event"].id, WritingOption)
+        event = get_event_class_parent(context["event"].id, WritingOption)
         matching_options = WritingOption.objects.filter(
             event=event,
             name__iexact=option_name,
@@ -1861,8 +1861,8 @@ def _resolve_exp_system(event: Any) -> Any:
     systems = get_event_exp_systems(event)
     if systems:
         return systems[0]
-    system = SystemExp.objects.create(event_id=get_class_parent(event.id, SystemExp), name="XP", number=1)
-    clear_event_exp_systems_cache(get_class_parent(event.id, SystemExp))
+    system = SystemExp.objects.create(event_id=get_event_class_parent(event.id, SystemExp), name="XP", number=1)
+    clear_event_exp_systems_cache(get_event_class_parent(event.id, SystemExp))
     return system
 
 
@@ -1951,7 +1951,7 @@ def _ability_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    parent_event = get_class_parent(event.id, AbilityExp)
+    parent_event = get_event_class_parent(event.id, AbilityExp)
 
     # Match the stored ability ignoring case, so that a different casing updates it instead of duplicating it
     ability_element = AbilityExp.objects.filter(event=parent_event, name__iexact=name).order_by("number").first()
@@ -2146,7 +2146,7 @@ def _rule_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    event_parent = get_class_parent(event.id, RuleExp)
+    event_parent = get_event_class_parent(event.id, RuleExp)
 
     rule = RuleExp.objects.filter(event=event_parent, number=number).first()
     was_created = rule is None
@@ -2199,7 +2199,7 @@ def _modifier_load(context: dict, csv_row: dict) -> str:
     event = context["event"]
 
     (modifier, was_created) = ModifierExp.objects.get_or_create(
-        event=get_class_parent(event.id, ModifierExp),
+        event=get_event_class_parent(event.id, ModifierExp),
         number=number,
         defaults={"order": 0},
     )
@@ -2311,7 +2311,7 @@ def _criterion_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    parent_event = get_class_parent(event.id, CriterionExp)
+    parent_event = get_event_class_parent(event.id, CriterionExp)
 
     criterion = CriterionExp.objects.filter(event=parent_event, number=number).first()
     was_created = criterion is None
@@ -2421,7 +2421,7 @@ def _delivery_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    parent_event = get_class_parent(event.id, DeliveryExp)
+    parent_event = get_event_class_parent(event.id, DeliveryExp)
 
     logs = []
     number = _row_delivery_number(csv_row, logs)

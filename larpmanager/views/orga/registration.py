@@ -84,9 +84,9 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import (
-    get_class_parent,
     get_discount,
     get_element_event,
+    get_event_class_parent,
     get_registration,
     get_time_diff,
 )
@@ -372,7 +372,7 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
 
         # Get question from cache instead of DB
         cached_questions = get_cached_registration_questions(
-            Event.objects.get(pk=get_class_parent(context["event"].id, RegistrationQuestion))
+            Event.objects.get(pk=get_event_class_parent(context["event"].id, RegistrationQuestion))
         )
         question = None
         for q in cached_questions:

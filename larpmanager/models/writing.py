@@ -308,9 +308,9 @@ class Character(Writing):
         if "guild" not in get_event_features(check_event.id):
             return
 
-        from larpmanager.utils.core.common import get_class_parent  # noqa: PLC0415
+        from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
 
-        guild_event = get_class_parent(check_event.id, "guild")
+        guild_event = get_event_class_parent(check_event.id, "guild")
 
         # noinspection PyUnresolvedReferences
         query = self.guild_memberships.filter(
@@ -339,9 +339,9 @@ class Character(Writing):
             return
 
         # Determine which event to use for faction lookup
-        from larpmanager.utils.core.common import get_class_parent  # noqa: PLC0415
+        from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
 
-        faction_event = get_class_parent(check_event.id, "faction")
+        faction_event = get_event_class_parent(check_event.id, "faction")
 
         # Track if we find a primary faction
         has_primary_faction = False
@@ -407,9 +407,9 @@ class Character(Writing):
         """
         queryset = PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
         if event:
-            from larpmanager.utils.core.common import get_class_parent  # noqa: PLC0415
+            from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
 
-            queryset = queryset.filter(plot__event=get_class_parent(event.id, "plot"))
+            queryset = queryset.filter(plot__event=get_event_class_parent(event.id, "plot"))
         return queryset.order_by("order")
 
     @classmethod

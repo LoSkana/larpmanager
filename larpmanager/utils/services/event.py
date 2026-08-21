@@ -69,7 +69,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.core.common import get_class_parent, get_event_elements
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.services.inventory import generate_base_inventories
 
 if TYPE_CHECKING:
@@ -213,7 +213,7 @@ def create_default_event_setup(event: Any) -> None:
     save_event_character_form(event_features, event)
 
     if "experience" in event_features and not get_event_elements(event.id, SystemExp).exists():
-        target = get_class_parent(event.id, SystemExp)
+        target = get_event_class_parent(event.id, SystemExp)
         SystemExp.objects.get_or_create(event=target, number=1, defaults={"name": "XP"})
 
     clear_event_features_cache(event.id)

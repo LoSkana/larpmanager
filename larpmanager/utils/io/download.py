@@ -54,7 +54,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, Faction, Plot, PlotCharacterRel, Relationship
-from larpmanager.utils.core.common import check_field, get_class_parent, get_event_elements
+from larpmanager.utils.core.common import check_field, get_event_class_parent, get_event_elements
 from larpmanager.utils.edit.backend import _get_values_mapping
 from larpmanager.utils.security.csv_validation import SanitizingCsvWriter, sanitize_dataframe
 
@@ -165,7 +165,7 @@ def export_plot_rels(context: Any) -> Any:
     """
     column_keys = ["plot", "character", "text"]
 
-    event_id = get_class_parent(context["event"].id, Plot)
+    event_id = get_event_class_parent(context["event"].id, Plot)
 
     relationship_values = [
         [
@@ -193,7 +193,7 @@ def export_relationships(context: Any) -> Any:
     """
     column_headers = ["source", "target", "text"]
 
-    event_id = get_class_parent(context["event"].id, Character)
+    event_id = get_event_class_parent(context["event"].id, Character)
 
     relationship_rows = [
         [relationship.source.name, relationship.target.name, relationship.text]
@@ -669,7 +669,7 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
     """
     # Apply event-based filtering if specified in type configuration
     if check_field(model_type, "event"):
-        queryset = queryset.filter(event=get_class_parent(context["event"].id, model_name))
+        queryset = queryset.filter(event=get_event_class_parent(context["event"].id, model_name))
 
     # Apply run-based filtering if specified in type configuration
     elif check_field(model_type, "run"):
@@ -1455,7 +1455,7 @@ def export_modifiers(context: Any) -> Any:
 def export_character_configs(context: Any) -> Any:
     """Export CharacterConfig entries for all characters in the event."""
     column_headers = ["character", "name", "value"]
-    event_id = get_class_parent(context["event"].id, Character)
+    event_id = get_event_class_parent(context["event"].id, Character)
     rows = [
         [cfg.character.name, cfg.name, cfg.value]
         for cfg in CharacterConfig.objects.filter(character__event_id=event_id, deleted__isnull=True)

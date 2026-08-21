@@ -43,7 +43,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.writing import Character, CharacterConfig, Faction
-from larpmanager.utils.core.common import get_class_parent, get_event_elements
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 _CRITERION_OPERATIONS = {
@@ -948,4 +948,4 @@ def calculate_event_experience_points_bgk(event_id: int) -> None:
 
 def _recalcuate_characters_experience_points(instance: Any) -> None:
     """Handle recomputing experience points of characters."""
-    calculate_event_experience_points_bgk(get_class_parent(instance.event_id, instance.__class__))
+    calculate_event_experience_points_bgk(get_event_class_parent(instance.event_id, instance.__class__))

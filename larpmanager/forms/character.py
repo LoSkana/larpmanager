@@ -76,7 +76,7 @@ from larpmanager.models.writing import (
     RelationshipTag,
     TextVersionChoices,
 )
-from larpmanager.utils.core.common import get_class_parent, get_event_elements
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.edit.backend import save_version
 
 
@@ -357,7 +357,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
 
         # Get the faction event context for filtering existing factions
-        faction_event = get_class_parent(self.params.get("run").event_id, Faction)
+        faction_event = get_event_class_parent(self.params.get("run").event_id, Faction)
 
         # Get current faction IDs associated with the instance
         # For non-orga users, only consider selectable factions to preserve staff-assigned non-selectable factions
@@ -953,7 +953,7 @@ class OrgaCharacterForm(CharacterForm):
             return
 
         # Add / remove plots, restricted to the plots of this event (they are not inherited)
-        plot_event = get_class_parent(self.params["event"].id, Plot)
+        plot_event = get_event_class_parent(self.params["event"].id, Plot)
         selected = set(self.cleaned_data.get("plots", []))
         current = set(Plot.objects.filter(plotcharacterrel__character=instance, event=plot_event))
 

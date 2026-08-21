@@ -65,7 +65,7 @@ from larpmanager.models.utils import (
     strip_tags,
 )
 from larpmanager.models.writing import Faction
-from larpmanager.utils.core.common import get_class_parent, get_event_elements
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -329,7 +329,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Get parent event based on element type from params
         typ = self.params["elementTyp"]
-        return Event.objects.get(pk=get_class_parent(self.params["event"].id, typ))
+        return Event.objects.get(pk=get_event_class_parent(self.params["event"].id, typ))
 
     def clean_association(self) -> Association:
         """Return association from params."""
@@ -366,7 +366,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         if event and element_type:
             # Determine the appropriate event ID based on the element type
-            parent_event_id = get_class_parent(event.id, element_type)
+            parent_event_id = get_event_class_parent(event.id, element_type)
 
             # Build the base queryset for uniqueness checking
             model = self._meta.model
