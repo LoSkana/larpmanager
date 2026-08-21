@@ -113,7 +113,7 @@ def get_class_parent(event_id: int, model_class: type[BaseModel] | str) -> int:
     return event_id
 
 
-def get_elements(event_id: int, element_model_class: type[BaseModel]) -> QuerySet:
+def get_event_elements(event_id: int, element_model_class: type[BaseModel]) -> QuerySet:
     """Get ordered elements of specified type for the event, following inheritance rules."""
     queryset = element_model_class.objects.filter(event_id=get_class_parent(event_id, element_model_class))
     if hasattr(element_model_class, "number"):

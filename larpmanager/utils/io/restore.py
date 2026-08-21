@@ -44,7 +44,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import Registration, RegistrationTicket
 from larpmanager.models.writing import Character, CharacterConfig, Plot, PlotCharacterRel, Relationship
-from larpmanager.utils.core.common import get_class_parent, get_elements
+from larpmanager.utils.core.common import get_class_parent, get_event_elements
 from larpmanager.utils.io.upload import (
     _get_row_number,
     abilities_load,
@@ -206,7 +206,7 @@ def _preview_features(context: dict, df: pd.DataFrame) -> dict:
 
 def _preview_tickets(context: dict, df: pd.DataFrame) -> dict:
     event = context["event"]
-    existing = set(get_elements(event.id, RegistrationTicket).values_list("name", flat=True))
+    existing = set(get_event_elements(event.id, RegistrationTicket).values_list("name", flat=True))
 
     creates, updates, skips = [], [], []
     for _idx, row in df.iterrows():
@@ -220,8 +220,8 @@ def _preview_tickets(context: dict, df: pd.DataFrame) -> dict:
 
 def _preview_registration_form(context: dict, df_q: pd.DataFrame, df_o: pd.DataFrame | None) -> dict:
     event = context["event"]
-    existing_q = set(get_elements(event.id, RegistrationQuestion).values_list("name", flat=True))
-    existing_o = set(get_elements(event.id, RegistrationOption).values_list("name", flat=True))
+    existing_q = set(get_event_elements(event.id, RegistrationQuestion).values_list("name", flat=True))
+    existing_o = set(get_event_elements(event.id, RegistrationOption).values_list("name", flat=True))
 
     creates, updates, skips = [], [], []
     for _idx, row in df_q.iterrows():
@@ -239,8 +239,8 @@ def _preview_registration_form(context: dict, df_q: pd.DataFrame, df_o: pd.DataF
 
 def _preview_character_form(context: dict, df_q: pd.DataFrame, df_o: pd.DataFrame | None) -> dict:
     event = context["event"]
-    existing_q = set(get_elements(event.id, WritingQuestion).values_list("name", flat=True))
-    existing_o = set(get_elements(event.id, WritingOption).values_list("name", flat=True))
+    existing_q = set(get_event_elements(event.id, WritingQuestion).values_list("name", flat=True))
+    existing_o = set(get_event_elements(event.id, WritingOption).values_list("name", flat=True))
 
     creates, updates, skips = [], [], []
     for _idx, row in df_q.iterrows():

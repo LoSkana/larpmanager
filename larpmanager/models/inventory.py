@@ -25,7 +25,7 @@ from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character
-from larpmanager.utils.core.common import get_elements
+from larpmanager.utils.core.common import get_event_elements
 
 
 class InventoryType(UuidMixin, BaseConceptModel):
@@ -71,7 +71,7 @@ class Inventory(UuidMixin, BaseConceptModel):
         - Type assigned, no labels selected, all pool types (safe default).
         - Type assigned, labels selected, only pool types belonging to those labels.
         """
-        all_pools = get_elements(self.event_id, PoolType).order_by("number")
+        all_pools = get_event_elements(self.event_id, PoolType).order_by("number")
         if self.inventory_type_id is None:
             return all_pools
         labels = self.inventory_type.labels.all()

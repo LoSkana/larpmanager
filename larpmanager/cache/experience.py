@@ -31,7 +31,7 @@ from django.core.cache import cache
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
-from larpmanager.utils.core.common import _validate_and_fetch_objects, get_class_parent, get_elements
+from larpmanager.utils.core.common import _validate_and_fetch_objects, get_class_parent, get_event_elements
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 if TYPE_CHECKING:
@@ -59,7 +59,7 @@ def get_event_exp_systems(event: Event) -> list[SystemExp]:
     """Get ordered SystemExp list for an event, using cache.
 
     Args:
-        event: Event instance (handles parent inheritance via get_elements).
+        event: Event instance (handles parent inheritance via get_event_elements).
 
     Returns:
         Ordered list of SystemExp instances for the effective event.
@@ -69,7 +69,7 @@ def get_event_exp_systems(event: Event) -> list[SystemExp]:
     cache_key = get_event_exp_systems_key(effective_event_id)
     systems = cache.get(cache_key)
     if systems is None:
-        systems = list(get_elements(event.id, SystemExp).order_by("order"))
+        systems = list(get_event_elements(event.id, SystemExp).order_by("order"))
         cache.set(cache_key, systems, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return systems
 
@@ -323,7 +323,7 @@ def init_event_exp_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
             px_cache[cache_key_plural] = {}
 
             # Get all elements of this type associated with the event
-            elements = get_elements(event.id, model_class)
+            elements = get_event_elements(event.id, model_class)
 
             # Build relationships for each element
             for element in elements:

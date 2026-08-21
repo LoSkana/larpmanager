@@ -53,7 +53,7 @@ from larpmanager.models.writing import (
     TextVersionChoices,
 )
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.common import get_class_parent, get_elements, get_handout
+from larpmanager.utils.core.common import get_class_parent, get_event_elements, get_handout
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     orga_delete,
@@ -603,7 +603,7 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
     context = get_event_context(request, event_slug)
 
     # Get all factions for this event, ordered by number
-    context["list"] = get_elements(context["event"].id, Faction).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, Faction).order_by("number")
 
     # Filter by selectable factions if not orga user
     orga = int(request.POST.get("orga", "0"))
@@ -616,7 +616,7 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
         # Get character by UUID and validate existence
         try:
             character = (
-                get_elements(context["event"].id, Character).prefetch_related("factions_list").get(uuid=edit_uuid)
+                get_event_elements(context["event"].id, Character).prefetch_related("factions_list").get(uuid=edit_uuid)
             )
             # Get list of faction IDs already assigned to this character
             taken_factions = character.factions_list.values_list("id", flat=True)
@@ -651,7 +651,7 @@ def orga_form_available(request: HttpRequest, event_slug: str) -> JsonResponse |
         return JsonResponse({"res": []})
 
     model_class = apps.get_model("larpmanager", model_name)
-    queryset = get_elements(context["event"].id, model_class)
+    queryset = get_event_elements(context["event"].id, model_class)
 
     if edit_uuid and owner_type and field:
         with contextlib.suppress(Exception):
@@ -820,7 +820,7 @@ def orga_reading(request: HttpRequest, event_slug: str) -> HttpResponse:
             continue
 
         # Retrieve all elements of this type for the current event
-        context["list"] = get_elements(context["event"].id, typ)
+        context["list"] = get_event_elements(context["event"].id, typ)
 
         # Cache text fields for performance optimization
         retrieve_cache_text_field(context, text_fields, typ)

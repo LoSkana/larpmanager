@@ -38,7 +38,7 @@ from larpmanager.models.association import hdr
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.writing import Character, Guild, GuildMembership, GuildMembershipStatus, GuildRole
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_elements
+from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.services.character import filter_playing_characters
 from larpmanager.utils.users.registration import get_player_characters
 
@@ -50,7 +50,7 @@ def _get_my_character_ids(context: dict) -> list[int]:
 
 def _get_event_character(context: dict, character_uuid: str, *, only_mine: bool = False) -> Character | None:
     """Return an event character by uuid, following the campaign parent for inherited elements."""
-    queryset = get_elements(context["event"].id, Character)
+    queryset = get_event_elements(context["event"].id, Character)
     if only_mine:
         queryset = queryset.filter(player=context["member"])
     return queryset.filter(uuid=character_uuid).first()
@@ -59,7 +59,7 @@ def _get_event_character(context: dict, character_uuid: str, *, only_mine: bool 
 def _get_playing_character(context: dict, character_uuid: str) -> Character | None:
     """Return a visible event character by uuid, only if active and playing in the current run."""
     queryset = filter_playing_characters(
-        get_elements(context["event"].id, Character).filter(hide=False), context["run"]
+        get_event_elements(context["event"].id, Character).filter(hide=False), context["run"]
     )
     return queryset.filter(uuid=character_uuid).first()
 

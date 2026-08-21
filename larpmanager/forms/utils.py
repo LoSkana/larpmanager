@@ -57,7 +57,7 @@ from larpmanager.models.writing import (
     Plot,
 )
 from larpmanager.utils.auth.permission import LITE_PERMISSIONS
-from larpmanager.utils.core.common import get_elements
+from larpmanager.utils.core.common import get_event_elements
 
 if TYPE_CHECKING:
     from larpmanager.forms.base import BaseModelForm
@@ -687,7 +687,7 @@ class EventCharacterS2:
     def get_queryset(self) -> QuerySet[Character]:
         """Return optimized queryset of event characters ordered by number."""
         return (
-            get_elements(self.event.id, Character)
+            get_event_elements(self.event.id, Character)
             .only("id", "uuid", "name", "number", "teaser", "title", "event_id")
             .order_by("number")
         )
@@ -733,7 +733,7 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
         from larpmanager.cache.config import get_event_config  # noqa: PLC0415
 
         show_number = get_event_config(self.event.id, "writing_number")
-        base_qs = get_elements(self.event.id, Character).only("id", "uuid", "name", "number").order_by("name")
+        base_qs = get_event_elements(self.event.id, Character).only("id", "uuid", "name", "number").order_by("name")
         qs = base_qs.filter(uuid__in=val_list)
         if not qs.exists():
             qs = base_qs.filter(pk__in=val_list)
@@ -751,7 +751,7 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
         uuids = data.getlist(name)
         if not uuids or not hasattr(self, "event"):
             return uuids
-        pks = list(get_elements(self.event.id, Character).filter(uuid__in=uuids).values_list("pk", flat=True))
+        pks = list(get_event_elements(self.event.id, Character).filter(uuid__in=uuids).values_list("pk", flat=True))
         return [str(pk) for pk in pks]
 
 
@@ -812,7 +812,7 @@ class EventPoolLabelS2:
 
     def get_queryset(self) -> QuerySet:
         """Return queryset of event pool labels ordered by number."""
-        return get_elements(self.event.id, PoolLabel).order_by("number")
+        return get_event_elements(self.event.id, PoolLabel).order_by("number")
 
 
 class EventPoolLabelS2WidgetMulti(EventPoolLabelS2, s2forms.ModelSelect2MultipleWidget):
@@ -830,7 +830,7 @@ class EventPoolTypeS2:
 
     def get_queryset(self) -> QuerySet:
         """Return queryset of event pool types ordered by number."""
-        return get_elements(self.event.id, PoolType).order_by("number")
+        return get_event_elements(self.event.id, PoolType).order_by("number")
 
 
 class EventPoolTypeS2WidgetMulti(EventPoolTypeS2, s2forms.ModelSelect2MultipleWidget):
@@ -883,7 +883,7 @@ class EventPlotS2:
 
     def get_queryset(self) -> QuerySet[Plot]:
         """Return queryset of Plot elements for this event."""
-        return get_elements(self.event.id, Plot)
+        return get_event_elements(self.event.id, Plot)
 
 
 class EventPlotS2WidgetMulti(EventPlotS2, S2WidgetMulti):
@@ -909,7 +909,11 @@ class EventTraitS2:
 
     def get_queryset(self) -> QuerySet[Trait]:
         """Return optimized queryset of traits for the event, ordered by number."""
-        return get_elements(self.event.id, Trait).only("id", "name", "number", "teaser", "event_id").order_by("number")
+        return (
+            get_event_elements(self.event.id, Trait)
+            .only("id", "name", "number", "teaser", "event_id")
+            .order_by("number")
+        )
 
 
 class EventTraitS2Widget(EventTraitS2, S2Widget):
@@ -930,7 +934,7 @@ class EventWritingOptionS2WidgetMulti(S2WidgetMulti):
 
     def get_queryset(self) -> QuerySet[WritingOption]:
         """Return queryset of WritingOption elements for the event."""
-        return get_elements(self.event.id, WritingOption)
+        return get_event_elements(self.event.id, WritingOption)
 
 
 class FactionS2WidgetMulti(S2WidgetMulti):
@@ -948,7 +952,7 @@ class FactionS2WidgetMulti(S2WidgetMulti):
 
     def get_queryset(self) -> QuerySet[Faction]:
         """Return factions associated with this event."""
-        return get_elements(self.event.id, Faction)
+        return get_event_elements(self.event.id, Faction)
 
     def label_from_instance(self, instance: Faction) -> str:
         """Return faction label with type code suffix."""
@@ -970,7 +974,7 @@ class AbilityS2WidgetMulti(S2WidgetMulti):
 
     def get_queryset(self) -> QuerySet[AbilityExp]:
         """Return ability experience entries for this event."""
-        return get_elements(self.event.id, AbilityExp)
+        return get_event_elements(self.event.id, AbilityExp)
 
 
 class ComputedFieldS2Widget(S2Widget):
@@ -986,7 +990,7 @@ class ComputedFieldS2Widget(S2Widget):
 
     def get_queryset(self) -> QuerySet[AbilityExp]:
         """Return ability experience entries for this event."""
-        return get_elements(self.event.id, WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+        return get_event_elements(self.event.id, WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
 
 
 class SystemExpS2Widget(S2Widget):
@@ -1002,7 +1006,7 @@ class SystemExpS2Widget(S2Widget):
 
     def get_queryset(self) -> QuerySet[SystemExp]:
         """Return XP systems for this event."""
-        return get_elements(self.event.id, SystemExp)
+        return get_event_elements(self.event.id, SystemExp)
 
 
 class AbilityTypePxS2Widget(S2Widget):
@@ -1018,7 +1022,7 @@ class AbilityTypePxS2Widget(S2Widget):
 
     def get_queryset(self) -> QuerySet[AbilityTypeExp]:
         """Return ability types for this event."""
-        return get_elements(self.event.id, AbilityTypeExp)
+        return get_event_elements(self.event.id, AbilityTypeExp)
 
 
 class AbilityTemplateS2WidgetMulti(S2Widget):
@@ -1034,7 +1038,7 @@ class AbilityTemplateS2WidgetMulti(S2Widget):
 
     def get_queryset(self) -> QuerySet[RegistrationTicket]:
         """Return registration tickets for the event."""
-        return get_elements(self.event.id, AbilityTemplateExp)
+        return get_event_elements(self.event.id, AbilityTemplateExp)
 
     def label_from_instance(self, obj: Any) -> str:
         """Return string representation of the given object."""
@@ -1054,7 +1058,7 @@ class TicketS2WidgetMulti(S2WidgetMulti):
 
     def get_queryset(self) -> QuerySet[RegistrationTicket]:
         """Return registration tickets for the event."""
-        return get_elements(self.event.id, RegistrationTicket)
+        return get_event_elements(self.event.id, RegistrationTicket)
 
 
 class RegistrationSectionS2Widget(S2Widget):
@@ -1143,7 +1147,7 @@ class WarehouseAreaS2Widget(S2Widget):
 
     def get_queryset(self) -> QuerySet[WarehouseArea]:
         """Return warehouse areas for this event."""
-        return get_elements(self.event.id, WarehouseArea)
+        return get_event_elements(self.event.id, WarehouseArea)
 
 
 class WarehouseItemS2(S2Widget):

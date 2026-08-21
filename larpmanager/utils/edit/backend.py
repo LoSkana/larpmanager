@@ -44,7 +44,7 @@ from larpmanager.models.miscellanea import Log
 from larpmanager.models.writing import Faction, Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context
-from larpmanager.utils.core.common import get_class_parent, get_element, get_elements, get_object_uuid, html_clean
+from larpmanager.utils.core.common import get_class_parent, get_element, get_event_elements, get_object_uuid, html_clean
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -934,7 +934,7 @@ def backend_order(
 
     """
     # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or get_elements(context["event"].id, model_class)
+    elements = elements or get_event_elements(context["event"].id, model_class)
 
     current_element = elements.get(uuid=element) if isinstance(element, str) else element
 

@@ -65,7 +65,7 @@ from larpmanager.models.utils import (
     strip_tags,
 )
 from larpmanager.models.writing import Faction
-from larpmanager.utils.core.common import get_class_parent, get_elements
+from larpmanager.utils.core.common import get_class_parent, get_event_elements
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -1248,7 +1248,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         in ``RegistrationAnswer.text`` like a plain text answer.
         """
         event = self.params["run"].event
-        visible_factions = list(get_elements(event.id, Faction).filter(hide=False).order_by("order"))
+        visible_factions = list(get_event_elements(event.id, Faction).filter(hide=False).order_by("order"))
         visible_uuids = {str(faction.uuid): faction for faction in visible_factions}
 
         # Start from the previously saved order, dropping factions no longer visible
@@ -1474,7 +1474,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         event = self.params["run"].event
         visible_faction_uuids = [
             str(uuid)
-            for uuid in get_elements(event.id, Faction)
+            for uuid in get_event_elements(event.id, Faction)
             .filter(hide=False)
             .order_by("order")
             .values_list("uuid", flat=True)

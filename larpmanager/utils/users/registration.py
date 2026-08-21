@@ -57,7 +57,7 @@ from larpmanager.utils.core.common import (
     feature_visible,
     format_datetime,
     get_class_parent,
-    get_elements,
+    get_event_elements,
     get_time_diff_today,
 )
 from larpmanager.utils.core.exceptions import PendingApprovalError, RewokedMembershipError, SignupError, WaitingError
@@ -863,7 +863,7 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
 
     """
     # Get all characters for this member in the event
-    characters = get_elements(event.id, Character).filter(player=member)
+    characters = get_event_elements(event.id, Character).filter(player=member)
 
     # Get IDs of inactive characters (those with CharacterConfig inactive=True)
     inactive_character_ids = CharacterConfig.objects.filter(
@@ -930,7 +930,7 @@ def get_player_pending_characters(member: Member, event_id: int, context: dict |
         entries = player_characters_dict.get(get_class_parent(event_id, Character), [])
         return [(uuid, name) for _id, uuid, name, status in entries if status in pending_statuses]
 
-    query = get_elements(event_id, Character).filter(player=member, status__in=pending_statuses)
+    query = get_event_elements(event_id, Character).filter(player=member, status__in=pending_statuses)
     return list(query.values_list("uuid", "name"))
 
 
@@ -1382,7 +1382,7 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
 
 def get_player_characters(member: Member, event: Event) -> QuerySet[Character]:
     """Get all characters a player has for an event, ordered by most recently updated."""
-    return get_elements(event.id, Character).filter(player=member).order_by("-updated")
+    return get_event_elements(event.id, Character).filter(player=member).order_by("-updated")
 
 
 def get_player_signup(context: dict) -> Registration | None:
@@ -1556,7 +1556,9 @@ def process_registration_event_change(registration: Registration) -> None:
     # This preserves the ticket assignment when moving between events
     ticket_name = registration.ticket.name
     try:
-        registration.ticket = get_elements(registration.run.event_id, RegistrationTicket).get(name__iexact=ticket_name)
+        registration.ticket = get_event_elements(registration.run.event_id, RegistrationTicket).get(
+            name__iexact=ticket_name
+        )
     except ObjectDoesNotExist:
         registration.ticket = None
 
@@ -1574,7 +1576,7 @@ def process_registration_event_change(registration: Registration) -> None:
             # Find matching question and option in the new event
             matched_question = next(q for q in cached_questions if q["name"].lower() == question_name.lower())
             registration_choice.question_id = matched_question["id"]
-            registration_choice.option = get_elements(registration.run.event_id, RegistrationOption).get(
+            registration_choice.option = get_event_elements(registration.run.event_id, RegistrationOption).get(
                 question_id=matched_question["id"],
                 name__iexact=option_name,
             )
@@ -1661,7 +1663,9 @@ def process_character_ticket_options(instance: Registration) -> None:
 
     # Process ticket options for characters directly linked to this registration,
     # plus all characters owned by the member in this event
-    characters = set(instance.characters.all()) | set(get_elements(event.id, Character).filter(player=instance.member))
+    characters = set(instance.characters.all()) | set(
+        get_event_elements(event.id, Character).filter(player=instance.member)
+    )
     for character in characters:
         check_character_ticket_options(instance, character)
 

@@ -984,10 +984,10 @@ def replace_character_names(instance: Any) -> None:
         return
 
     # Build character name to number mapping for replacement
-    from larpmanager.utils.core.common import get_elements  # noqa: PLC0415
+    from larpmanager.utils.core.common import get_event_elements  # noqa: PLC0415
 
     character_name_to_number_mapping = {}
-    for character in get_elements(instance.event_id, Character):
+    for character in get_event_elements(instance.event_id, Character):
         character_name_to_number_mapping[character.name] = character.number
 
     # Sort names by length (longest first) to avoid partial replacements
