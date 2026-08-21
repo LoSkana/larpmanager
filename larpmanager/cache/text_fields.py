@@ -37,6 +37,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import Writing
+from larpmanager.utils.core.common import get_event_class_parent
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -106,7 +107,7 @@ def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
     """Initialize cache for text fields of model instances related to an event."""
     cache_result = {}
     # Iterate through all instances of the given type for the event's parent
-    for instance in model_class.objects.filter(event=event.get_class_parent(model_class)).select_related(
+    for instance in model_class.objects.filter(event_id=get_event_class_parent(event.id, model_class)).select_related(
         "event__parent"
     ):
         _init_element_cache_text_field(instance, cache_result, model_class)

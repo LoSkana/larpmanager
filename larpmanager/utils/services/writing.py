@@ -38,7 +38,7 @@ from larpmanager.cache.text_fields import ALLOWED_TYPES, get_cache_text_field
 from larpmanager.cache.writing import get_cached_relationship_tags
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import ProgressStep
+from larpmanager.models.event import Event, ProgressStep
 from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -62,7 +62,7 @@ from larpmanager.models.writing import (
     replace_character_names,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
-from larpmanager.utils.core.common import check_field
+from larpmanager.utils.core.common import check_field, get_event_class_parent
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download
@@ -184,7 +184,7 @@ def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> Json
 
     # Retrieve the writing element from database using parent event context
     try:
-        writing_element = typ.objects.get(uuid=element_uuid, event=context["event"].get_class_parent(typ))
+        writing_element = typ.objects.get(uuid=element_uuid, event_id=get_event_class_parent(context["event"].id, typ))
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -430,7 +430,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
     # Determine if this is a Writing model and set up basic query structure
     is_writing_model = issubclass(model_type, Writing)
     deferred_text_fields = ["teaser", "text"]
-    context["list"] = model_type.objects.filter(event=event.get_class_parent(model_type))
+    context["list"] = model_type.objects.filter(event_id=get_event_class_parent(event.id, model_type))
 
     # Optimize query with select_related for Writing models with progress tracking
     if is_writing_model and hasattr(model_type, "progress"):
@@ -468,7 +468,9 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
         element_type: Writing element model class
 
     """
-    cached_text_fields = get_cache_text_field(element_type, context["event"].get_class_parent(element_type))
+    cached_text_fields = get_cache_text_field(
+        element_type, Event.objects.get(pk=get_event_class_parent(context["event"].id, element_type))
+    )
     for element in context["list"]:
         if element.uuid not in cached_text_fields:
             continue

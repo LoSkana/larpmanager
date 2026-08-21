@@ -38,6 +38,7 @@ from larpmanager.models.form import (
     get_def_writing_types,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.utils.core.common import get_event_elements
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
@@ -152,7 +153,7 @@ def init_writing_questions_cache(event: Event) -> dict:
     options_queryset = WritingOption.objects.order_by("order").annotate(tickets_map=ArrayAgg("tickets__id"))
 
     all_questions = (
-        event.get_elements(WritingQuestion)
+        get_event_elements(event.id, WritingQuestion)
         .order_by("order")
         .prefetch_related(Prefetch("options", queryset=options_queryset))
     )
