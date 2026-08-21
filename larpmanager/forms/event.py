@@ -1648,7 +1648,7 @@ class OrgaRunForm(ConfigForm):
                 continue
             questions = [
                 q
-                for q in get_cached_writing_questions(self.params["event"], writing_element_type)
+                for q in get_cached_writing_questions(self.params["event"].id, writing_element_type)
                 if q["visibility"] != QuestionVisibility.HIDDEN
             ]
             field_choices = []
@@ -2241,7 +2241,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         # Extract field configurations and prepare extra options
         applicable = QuestionApplicable.get_applicable(writing_section[0])
-        section_fields = get_cached_writing_questions(self.params["event"], applicable)
+        section_fields = get_cached_writing_questions(self.params["event"].id, applicable)
         extra_config_options = []
 
         # Compile basic field configurations
@@ -2292,7 +2292,7 @@ class OrgaPreferencesForm(ExePreferencesForm):
 
         # Add faction field if faction feature is enabled
         if "faction" in self.params["features"]:
-            questions = get_cached_writing_questions(self.params["event"], QuestionApplicable.CHARACTER)
+            questions = get_cached_writing_questions(self.params["event"].id, QuestionApplicable.CHARACTER)
             try:
                 faction_question = next(q for q in questions if q["typ"] == WritingQuestionType.FACTIONS)
             except StopIteration:

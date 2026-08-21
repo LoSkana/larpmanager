@@ -62,7 +62,7 @@ from larpmanager.models.writing import (
     replace_character_names,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
-from larpmanager.utils.core.common import check_field
+from larpmanager.utils.core.common import check_field, get_event_class_parent
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download
@@ -114,7 +114,7 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
 
     # Initialize assignment tracking if feature is enabled
     if "assigned" in features:
-        context["assigned"] = {member.id: member.show_nick() for member in get_event_staffers(event)}
+        context["assigned"] = {member.id: member.show_nick() for member in get_event_staffers(event.id)}
         context["assigned_map"] = dict.fromkeys(context["assigned"], 0)
 
     # Initialize combined progress/assignment tracking if both features enabled
@@ -178,13 +178,13 @@ def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> Json
     attribute_type = request.POST.get("tp", "")
 
     applicable = QuestionApplicable.get_applicable(typ._meta.model_name)  # noqa: SLF001  # Django model metadata
-    questions_list = get_cached_writing_questions(context["event"], applicable)
+    questions_list = get_cached_writing_questions(context["event"].id, applicable)
     # Convert questions list to dict keyed by UUID for lookup
     questions = {str(q["uuid"]): q for q in questions_list}
 
     # Retrieve the writing element from database using parent event context
     try:
-        writing_element = typ.objects.get(uuid=element_uuid, event=context["event"].get_class_parent(typ))
+        writing_element = typ.objects.get(uuid=element_uuid, event_id=get_event_class_parent(context["event"].id, typ))
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -399,7 +399,7 @@ def _get_custom_form(context: dict) -> None:
     # default name for fields
     context["fields_name"] = {WritingQuestionType.NAME.value: _("Name")}
 
-    questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    questions = get_cached_writing_questions(context["event"].id, context["writing_typ"])
     context["form_questions"] = {}
     for question in questions:
         question["basic_typ"] = question["typ"] in BaseQuestionType.get_basic_types()
@@ -430,7 +430,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
     # Determine if this is a Writing model and set up basic query structure
     is_writing_model = issubclass(model_type, Writing)
     deferred_text_fields = ["teaser", "text"]
-    context["list"] = model_type.objects.filter(event=event.get_class_parent(model_type))
+    context["list"] = model_type.objects.filter(event_id=get_event_class_parent(event.id, model_type))
 
     # Optimize query with select_related for Writing models with progress tracking
     if is_writing_model and hasattr(model_type, "progress"):
@@ -454,7 +454,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
 
 def writing_list_text_fields(context: dict, text_fields: Any, writing_element_type: Any) -> None:
     """Add editor/paragraph-type question fields to text fields list and retrieve cached data."""
-    writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    writing_questions = get_cached_writing_questions(context["event"].id, context["writing_typ"])
     text_fields.extend([question["uuid"] for question in writing_questions if question["typ"] in ALLOWED_TYPES])
     retrieve_cache_text_field(context, text_fields, writing_element_type)
 
@@ -468,7 +468,7 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
         element_type: Writing element model class
 
     """
-    cached_text_fields = get_cache_text_field(element_type, context["event"].get_class_parent(element_type))
+    cached_text_fields = get_cache_text_field(element_type, get_event_class_parent(context["event"].id, element_type))
     for element in context["list"]:
         if element.uuid not in cached_text_fields:
             continue
@@ -482,7 +482,7 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
 
 def _prepare_writing_list(context: dict) -> None:
     """Prepare context data for writing list display and configuration."""
-    questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    questions = get_cached_writing_questions(context["event"].id, context["writing_typ"])
 
     try:
         name_question = next(q for q in questions if q["typ"] == WritingQuestionType.NAME)
@@ -632,7 +632,7 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
             context["event"].id, "writing_relationship_tags", context=context
         )
         if context["writing_relationship_tags"]:
-            context["relationship_tags"] = get_cached_relationship_tags(context["event"])
+            context["relationship_tags"] = get_cached_relationship_tags(context["event"].id)
             for character in context["list"]:
                 character.relationship_tag_counts = event_relationships.get(character.id, {}).get(
                     "relationship_tag_counts", {}

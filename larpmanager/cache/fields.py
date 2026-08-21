@@ -29,6 +29,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     get_def_writing_types,
 )
+from larpmanager.utils.core.common import get_event_elements
 
 
 def event_fields_key(event_id: int) -> str:
@@ -76,7 +77,7 @@ def update_event_fields(event_id: int) -> dict:
 
     # Fetch visible writing questions and organize by applicability
     visible_questions = (
-        event.get_elements(WritingQuestion).exclude(visibility=QuestionVisibility.HIDDEN).order_by("order")
+        get_event_elements(event.id, WritingQuestion).exclude(visibility=QuestionVisibility.HIDDEN).order_by("order")
     )
     for question_data in visible_questions.values(
         "name", "typ", "printable", "visibility", "applicable", "uuid", "order"
@@ -86,14 +87,14 @@ def update_event_fields(event_id: int) -> dict:
         cached_fields[applicabile_label]["questions"][str(question_data["uuid"])] = question_data
 
     # Fetch writing options and group by parent question's applicability
-    writing_options = event.get_elements(WritingOption).order_by("order")
+    writing_options = get_event_elements(event.id, WritingOption).order_by("order")
     for option_data in writing_options.values("name", "question__applicable", "uuid", "question__uuid", "order"):
         applicabile_label = QuestionApplicable(option_data["question__applicable"]).label
         _ensure_cache_structure(cached_fields, applicabile_label, "options")
         cached_fields[applicabile_label]["options"][str(option_data["uuid"])] = option_data
 
     # Create name and ID mappings for default writing question types
-    default_type_questions = event.get_elements(WritingQuestion).filter(typ__in=get_def_writing_types())
+    default_type_questions = get_event_elements(event.id, WritingQuestion).filter(typ__in=get_def_writing_types())
     for question_data in default_type_questions.values("typ", "name", "applicable", "uuid"):
         applicabile_label = QuestionApplicable(question_data["applicable"]).label
         question_type = question_data["typ"]

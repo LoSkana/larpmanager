@@ -218,14 +218,14 @@ class RoleInvite(BaseModel):
         return self.event_role or self.association_role
 
 
-def get_event_staffers(event: Event) -> list:
+def get_event_staffers(event_id: int) -> list:
     """Get all non-organizer staff members of an event.
 
     Retrieves all unique members who have roles in the specified event,
     excluding organizers. Uses prefetch_related for optimized database queries.
 
     Args:
-        event: Event instance to get staff members for
+        event_id: id of Event to get staff members for
 
     Returns:
         List of Member instances with non-organizer event roles, with duplicates removed
@@ -235,7 +235,7 @@ def get_event_staffers(event: Event) -> list:
 
     """
     # Fetch all event roles with their associated members in a single query
-    roles = EventRole.objects.filter(event=event).prefetch_related("members")
+    roles = EventRole.objects.filter(event_id=event_id).prefetch_related("members")
 
     # Initialize result list and tracking dictionary for unique members
     staff_members = []

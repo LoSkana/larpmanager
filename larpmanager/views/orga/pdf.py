@@ -33,7 +33,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.writing import Character, Faction, Handout
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.common import get_element, get_event_elements
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import (
     _get_character_pdf_data,
@@ -88,7 +88,7 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
         form = EventCharactersPdfForm(instance=context["event"])
 
     # Retrieve ordered character list for the event
-    context["list"] = context["event"].get_elements(Character).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, Character).order_by("number")
 
     # Add form to context for template rendering
     context["form"] = form
@@ -145,7 +145,7 @@ def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpRespo
         "handout": Handout,
     }
     for key_name, value_type in mappings.items():
-        for element in context["event"].get_elements(value_type):
+        for element in get_event_elements(context["event"].id, value_type):
             # Create dict entry with name and type for template rendering
             context["list"][f"{key_name}_{element.id}"] = {"name": element.name, "type": value_type._meta.model_name}  # noqa: SLF001  # Django model metadata
 
@@ -169,7 +169,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Get all characters associated with the event
-    chs = context["event"].get_elements(Character)
+    chs = get_event_elements(context["event"].id, Character)
 
     # Iterate through all future runs of the event
     for run in Run.objects.filter(event=context["event"], end__gte=timezone.now()):
