@@ -329,7 +329,11 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Get parent event based on element type from params
         typ = self.params["elementTyp"]
-        return Event.objects.get(pk=get_class_parent(self.params["event"].id, typ))
+        event = self.params["event"]
+        parent_id = get_class_parent(event.id, typ)
+        if parent_id == event.id:
+            return event
+        return Event.objects.get(pk=parent_id)
 
     def clean_association(self) -> Association:
         """Return association from params."""
