@@ -63,7 +63,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
 )
 from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
-from larpmanager.models.event import PreRegistration
+from larpmanager.models.event import Event, PreRegistration
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -84,6 +84,7 @@ from larpmanager.models.writing import Character
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context
 from larpmanager.utils.core.common import (
+    get_class_parent,
     get_discount,
     get_element_event,
     get_registration,
@@ -370,7 +371,9 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
         registration = Registration.objects.get(uuid=registration_uuid, run=context["run"])
 
         # Get question from cache instead of DB
-        cached_questions = get_cached_registration_questions(context["event"].get_class_parent(RegistrationQuestion))
+        cached_questions = get_cached_registration_questions(
+            Event.objects.get(pk=get_class_parent(context["event"].id, RegistrationQuestion))
+        )
         question = None
         for q in cached_questions:
             if str(q["uuid"]) == str(question_uuid):

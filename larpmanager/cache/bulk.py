@@ -29,6 +29,7 @@ from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityTypeExp, DeliveryExp
 from larpmanager.models.writing import Character, Faction, Plot, Prologue
+from larpmanager.utils.core.common import get_elements
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event
@@ -72,7 +73,7 @@ def _init_bulk_key(event: Event, key: str) -> list[dict[str, Any]]:
     if key == "staffers":
         return [{"uuid": m.uuid, "name": m.show_nick()} for m in get_event_staffers(event)]
     model, order = BULK_CACHE_CONFIG[key]
-    return list(event.get_elements(model).values("uuid", "name").order_by(order))
+    return list(get_elements(event.id, model).values("uuid", "name").order_by(order))
 
 
 def get_bulk_options_cache(event: Event, key: str) -> list[dict[str, Any]]:

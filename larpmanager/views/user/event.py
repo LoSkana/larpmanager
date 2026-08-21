@@ -73,7 +73,13 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
-from larpmanager.utils.core.common import get_coming_runs, get_element, with_geo_configs, with_geo_configs_registrations
+from larpmanager.utils.core.common import (
+    get_coming_runs,
+    get_element,
+    get_elements,
+    with_geo_configs,
+    with_geo_configs_registrations,
+)
 from larpmanager.utils.core.exceptions import HiddenError
 from larpmanager.utils.users.registration import registration_status
 
@@ -988,7 +994,7 @@ def get_fact(factions_queryset: QuerySet[Faction]) -> list[dict[str, Any]]:
 
 def get_factions(context: dict) -> None:
     """Populate context with faction data organized by type."""
-    fcs = context["event"].get_elements(Faction)
+    fcs = get_elements(context["event"].id, Faction)
     # Get primary factions ordered by number
     context["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
     # Get transversal factions ordered by number
@@ -1246,9 +1252,9 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     """
     context = get_event(request, event_slug)
     if export_type == "char":
-        lst = context["event"].get_elements(Character).order_by("number")
+        lst = get_elements(context["event"].id, Character).order_by("number")
     elif export_type == "faction":
-        lst = context["event"].get_elements(Faction).order_by("number")
+        lst = get_elements(context["event"].id, Faction).order_by("number")
     elif export_type == "quest":
         lst = Quest.objects.filter(event=context["event"]).order_by("number")
     elif export_type == "trait":
