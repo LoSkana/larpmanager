@@ -33,6 +33,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
 from larpmanager.models.writing import Faction
+from larpmanager.utils.core.common import get_event_elements
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
@@ -260,7 +261,7 @@ def update_visible_factions(event: Event) -> None:
     """Check if there are visible factions with characters for nav display."""
     has_visible_factions = (
         "faction" in get_event_features(event.id)
-        and event.get_elements(Faction)
+        and get_event_elements(event.id, Faction)
         .prefetch_related("characters")
         .exclude(name="")
         .annotate(char_count=Count("characters"))
