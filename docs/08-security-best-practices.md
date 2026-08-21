@@ -97,7 +97,7 @@ Use `get_element_event()` or `get_element()` - these functions automatically add
 ```python
 # These functions automatically add filters like:
 # - association_id=context['association_id'] (if model has 'association' field)
-# - event=context['event'].get_class_parent(model_class) (if model has 'event' field)
+# - event=context['event'].get_event_class_parent(model_class) (if model has 'event' field)
 
 from larpmanager.utils.core.common import get_element_event
 

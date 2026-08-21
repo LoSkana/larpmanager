@@ -46,7 +46,7 @@ from larpmanager.models.experience import (
     RuleExp,
     SystemExp,
 )
-from larpmanager.utils.core.common import get_elements
+from larpmanager.utils.core.common import get_event_elements
 
 
 class OrgaSystemExpForm(BaseModelForm):
@@ -101,7 +101,7 @@ class OrgaDeliveryExpForm(ExpBaseForm):
         super().__init__(*args, **kwargs)
 
         event = self.params.get("event")
-        systems = list(get_elements(event.id, SystemExp)) if event else []
+        systems = list(get_event_elements(event.id, SystemExp)) if event else []
         if len(systems) == 1:
             self.delete_field("system")
             self.instance._default_system = systems[0]  # noqa: SLF001
@@ -151,7 +151,7 @@ class OrgaAbilityExpForm(ExpBaseForm):
         event = self.params.get("event")
 
         # Handle system field visibility
-        systems = list(get_elements(event.id, SystemExp)) if event else []
+        systems = list(get_event_elements(event.id, SystemExp)) if event else []
         if len(systems) == 1:
             self.delete_field("system")
             self.instance._default_system = systems[0]  # noqa: SLF001
@@ -269,7 +269,7 @@ class OrgaCriterionExpForm(ExpBaseForm):
         self.delete_field("name")
 
         event = self.params.get("event")
-        systems = list(get_elements(event.id, SystemExp)) if event else []
+        systems = list(get_event_elements(event.id, SystemExp)) if event else []
         if len(systems) == 1:
             self.delete_field("system")
             self.instance._default_system = systems[0]  # noqa: SLF001

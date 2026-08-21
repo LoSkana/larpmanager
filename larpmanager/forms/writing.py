@@ -60,7 +60,7 @@ from larpmanager.models.writing import (
     RelationshipTag,
     SpeedLarp,
 )
-from larpmanager.utils.core.common import get_elements
+from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.core.validators import FileTypeValidator
 from larpmanager.utils.services.character import _get_character_cache_id
@@ -663,7 +663,7 @@ class OrgaQuestForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest type choices from event elements
-        que = get_elements(self.params.get("run").event_id, QuestType)
+        que = get_event_elements(self.params.get("run").event_id, QuestType)
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
 
@@ -691,7 +691,7 @@ class OrgaTraitForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest choices from event elements
-        que = get_elements(self.params.get("run").event_id, Quest)
+        que = get_event_elements(self.params.get("run").event_id, Quest)
         self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
 
 
@@ -713,7 +713,7 @@ class OrgaHandoutForm(WritingForm):
         super().__init__(*args, **kwargs)
 
         # Retrieve handout templates for the associated run's event
-        que = get_elements(self.params.get("run").event_id, HandoutTemplate)
+        que = get_event_elements(self.params.get("run").event_id, HandoutTemplate)
 
         # Populate template field choices with template IDs and names
         self.fields["template"].choices = [(m.uuid, m.name) for m in que]
@@ -771,7 +771,7 @@ class OrgaPrologueForm(WritingForm, BaseWritingForm):
         super().__init__(*args, **kwargs)
 
         # Populate prologue type choices from event elements
-        que = get_elements(self.params.get("run").event_id, PrologueType)
+        que = get_event_elements(self.params.get("run").event_id, PrologueType)
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
         # Initialize organization-specific fields and reorder characters

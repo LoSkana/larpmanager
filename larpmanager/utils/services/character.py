@@ -56,7 +56,7 @@ from larpmanager.models.writing import (
     Relationship,
 )
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.core.common import get_class_parent, get_element
+from larpmanager.utils.core.common import get_element, get_event_class_parent
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.larpmanager.tasks import background_auto
 from larpmanager.utils.services.event import has_access_character
@@ -486,7 +486,7 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
     # If we show all the factions (player / staffer)
     all_factions = {}
     if not only_visible:
-        faction_event = get_class_parent(context["event"].id, "faction")
+        faction_event = get_event_class_parent(context["event"].id, "faction")
         faction_ids = []
         for faction in context["character"].factions_list.filter(event=faction_event).order_by("order"):
             all_factions[faction.id] = faction.show_complete()
@@ -584,7 +584,7 @@ def get_character_sheet_guilds(context: dict, *, only_visible: bool = False) -> 
     if "guild" not in context["features"]:
         return
 
-    guild_event = get_class_parent(context["event"].id, "guild")
+    guild_event = get_event_class_parent(context["event"].id, "guild")
     all_guilds = {}
     accepted_guilds = (
         Guild.objects.filter(
@@ -876,7 +876,7 @@ def _collect_sources_map(character: Character) -> dict[int, set[str]]:
         _add_refs(pcr.text or "", pcr.plot.name)
         _add_refs(pcr.plot.text or "", pcr.plot.name)
 
-    faction_event = get_class_parent(character.event_id, "faction")
+    faction_event = get_event_class_parent(character.event_id, "faction")
     faction_qs = character.factions_list.filter(event=faction_event, deleted__isnull=True)
     for faction in faction_qs:
         _add_refs(faction.text or "", faction.name)

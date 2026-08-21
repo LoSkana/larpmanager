@@ -43,7 +43,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.writing import Character, CharacterConfig, Faction
-from larpmanager.utils.core.common import get_class_parent, get_elements
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 _CRITERION_OPERATIONS = {
@@ -97,7 +97,7 @@ def build_exp_context(
 
     # Get all modifiers
     all_modifiers = (
-        get_elements(character.event_id, ModifierExp)
+        get_event_elements(character.event_id, ModifierExp)
         .only("id", "order", "cost")
         .order_by("order")
         .prefetch_related(
@@ -230,7 +230,7 @@ def _get_available_abilities(
         List of AbilityExp instances the character can purchase.
 
     """
-    qs = get_elements(char.event_id, AbilityExp).exclude(pk__in=current_character_abilities)
+    qs = get_event_elements(char.event_id, AbilityExp).exclude(pk__in=current_character_abilities)
     if visible_only:
         qs = qs.filter(visible=True, system__hidden=False)
     all_abilities = (
@@ -329,7 +329,7 @@ def _auto_buy_abilities(
 def _fetch_criterions(character: Any) -> list:
     """Fetch and materialise CriterionExp queryset for a character's event."""
     return list(
-        get_elements(character.event_id, CriterionExp)
+        get_event_elements(character.event_id, CriterionExp)
         .select_related("system")
         .order_by("order")
         .prefetch_related(
@@ -843,7 +843,7 @@ def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = Non
     """
     # Get the character's event and initialize computed question values
     event = char.event
-    computed_questions = get_elements(event.id, WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+    computed_questions = get_event_elements(event.id, WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
     computed_field_values = {question.id: Decimal(0) for question in computed_questions}
 
     # Retrieve character's ability IDs for rule filtering
@@ -852,7 +852,7 @@ def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = Non
 
     # Get applicable rules: either global rules or rules matching character's abilities
     applicable_rules = (
-        get_elements(event.id, RuleExp)
+        get_event_elements(event.id, RuleExp)
         .filter(Q(abilities__isnull=True) | Q(abilities__in=character_ability_ids))
         .distinct()
         .order_by("order")
@@ -942,10 +942,10 @@ def calculate_event_experience_points_bgk(event_id: int) -> None:
         # Event was deleted, nothing to do
         return
 
-    for character in get_elements(event.id, Character).all():
+    for character in get_event_elements(event.id, Character).all():
         calculate_character_experience_points(character)
 
 
 def _recalcuate_characters_experience_points(instance: Any) -> None:
     """Handle recomputing experience points of characters."""
-    calculate_event_experience_points_bgk(get_class_parent(instance.event_id, instance.__class__))
+    calculate_event_experience_points_bgk(get_event_class_parent(instance.event_id, instance.__class__))

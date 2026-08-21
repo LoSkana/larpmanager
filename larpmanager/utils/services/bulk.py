@@ -50,7 +50,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus, Faction, Plot, Prologue
 from larpmanager.utils.auth.admin import is_lm_admin
-from larpmanager.utils.core.common import get_elements
+from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.services.miscellanea import (
     warehouse_add_assignment,
@@ -225,13 +225,13 @@ def _scoped_bulk_queryset(context: dict, model_class: type, object_uuids: list[s
     """Return the given UUIDs scoped to the current tenant.
 
     WarehouseItem is association-scoped; all other bulk models are
-    event-scoped via Event.get_elements. Scoping here prevents cross-tenant
+    event-scoped via Event.get_event_elements. Scoping here prevents cross-tenant
     reads/deletes from raw POST UUIDs.
     """
     if model_class is WarehouseItem:
         base = WarehouseItem.objects.filter(association_id=context["association_id"])
     else:
-        base = get_elements(context["event"].id, model_class)
+        base = get_event_elements(context["event"].id, model_class)
     return base.filter(uuid__in=object_uuids)
 
 
@@ -408,7 +408,7 @@ def exec_set_item_area_remaining(context: dict, target: str, uuids: list[str]) -
 
     Items with unlimited stock or with nothing left available are skipped.
     """
-    area = get_elements(context["event"].id, WarehouseArea).get(uuid=target)
+    area = get_event_elements(context["event"].id, WarehouseArea).get(uuid=target)
     with transaction.atomic():
         items = list(
             WarehouseItem.objects.select_for_update().filter(
@@ -436,7 +436,7 @@ def handle_bulk_orga_items(request: HttpRequest, context: dict) -> None:
         mapping = {Operations.SET_ITEM_AREA_REMAINING: exec_set_item_area_remaining}
         raise ReturnNowError(exec_bulk(request, context, mapping, WarehouseItem))
 
-    areas = get_elements(context["event"].id, WarehouseArea).values("uuid", "name").order_by("name")
+    areas = get_event_elements(context["event"].id, WarehouseArea).values("uuid", "name").order_by("name")
     context["bulk"] = [
         _bulk_op(Operations.SET_ITEM_AREA_REMAINING, areas),
     ]
@@ -444,57 +444,57 @@ def handle_bulk_orga_items(request: HttpRequest, context: dict) -> None:
 
 def _get_chars(context: dict, character_uuids: list[str]) -> QuerySet[Character]:
     """Return characters filtered by event and provided UUIDs."""
-    return get_elements(context["event"].id, Character).filter(uuid__in=character_uuids)
+    return get_event_elements(context["event"].id, Character).filter(uuid__in=character_uuids)
 
 
 def exec_add_char_fact(context: dict, target: str, uuids: list[str]) -> str:
     """Add characters to a faction."""
-    fact = get_elements(context["event"].id, Faction).get(uuid=target)
+    fact = get_event_elements(context["event"].id, Faction).get(uuid=target)
     fact.characters.add(*_get_chars(context, uuids))
     return fact.name
 
 
 def exec_del_char_fact(context: dict, target: str, uuids: list[str]) -> str:
     """Remove characters from a faction."""
-    fact = get_elements(context["event"].id, Faction).get(uuid=target)
+    fact = get_event_elements(context["event"].id, Faction).get(uuid=target)
     fact.characters.remove(*_get_chars(context, uuids))
     return fact.name
 
 
 def exec_add_char_plot(context: dict, target: str, uuids: list[str]) -> str:
     """Add characters to a plot element."""
-    plot = get_elements(context["event"].id, Plot).get(uuid=target)
+    plot = get_event_elements(context["event"].id, Plot).get(uuid=target)
     plot.characters.add(*_get_chars(context, uuids))
     return plot.name
 
 
 def exec_del_char_plot(context: dict, target: str, uuids: list[str]) -> str:
     """Remove characters from a plot element."""
-    plot = get_elements(context["event"].id, Plot).get(uuid=target)
+    plot = get_event_elements(context["event"].id, Plot).get(uuid=target)
     plot.characters.remove(*_get_chars(context, uuids))
     return plot.name
 
 
 def exec_add_plot_char(context: dict, target: str, uuids: list[str]) -> str:
     """Add a character to selected plots."""
-    char = get_elements(context["event"].id, Character).get(uuid=target)
-    for plot in get_elements(context["event"].id, Plot).filter(uuid__in=uuids):
+    char = get_event_elements(context["event"].id, Character).get(uuid=target)
+    for plot in get_event_elements(context["event"].id, Plot).filter(uuid__in=uuids):
         plot.characters.add(char)
     return char.name
 
 
 def exec_del_plot_char(context: dict, target: str, uuids: list[str]) -> str:
     """Remove a character from selected plots."""
-    char = get_elements(context["event"].id, Character).get(uuid=target)
-    for plot in get_elements(context["event"].id, Plot).filter(uuid__in=uuids):
+    char = get_event_elements(context["event"].id, Character).get(uuid=target)
+    for plot in get_event_elements(context["event"].id, Plot).filter(uuid__in=uuids):
         plot.characters.remove(char)
     return char.name
 
 
 def exec_set_plot_progress(context: dict, target: str, uuids: list[str]) -> str:
     """Set progress step for selected plots."""
-    progress_step = get_elements(context["event"].id, ProgressStep).get(uuid=target)
-    get_elements(context["event"].id, Plot).filter(uuid__in=uuids).update(progress=progress_step)
+    progress_step = get_event_elements(context["event"].id, ProgressStep).get(uuid=target)
+    get_event_elements(context["event"].id, Plot).filter(uuid__in=uuids).update(progress=progress_step)
     return progress_step.name
 
 
@@ -506,7 +506,7 @@ def _get_assoc_member(context: dict, target: str) -> Member:
 def exec_set_plot_assigned(context: dict, target: str, uuids: list[str]) -> str:
     """Assign selected plots to a staff member."""
     member = _get_assoc_member(context, target)
-    get_elements(context["event"].id, Plot).filter(uuid__in=uuids).update(assigned=member)
+    get_event_elements(context["event"].id, Plot).filter(uuid__in=uuids).update(assigned=member)
     return member.name
 
 
@@ -516,21 +516,21 @@ def exec_add_char_delivery(
     uuids: list[str],
 ) -> str:
     """Add characters to a delivery."""
-    delivery = get_elements(context["event"].id, DeliveryExp).get(uuid=target)
+    delivery = get_event_elements(context["event"].id, DeliveryExp).get(uuid=target)
     delivery.characters.add(*_get_chars(context, uuids))
     return delivery.name
 
 
 def exec_del_char_delivery(context: dict, target: str, uuids: list[str]) -> str:
     """Remove characters from delivery."""
-    delivery = get_elements(context["event"].id, DeliveryExp).get(uuid=target)
+    delivery = get_event_elements(context["event"].id, DeliveryExp).get(uuid=target)
     delivery.characters.remove(*_get_chars(context, uuids))
     return delivery.name
 
 
 def exec_add_char_prologue(context: dict, target: str, uuids: list[str]) -> str:
     """Add characters to a prologue."""
-    prologue = get_elements(context["event"].id, Prologue).get(uuid=target)
+    prologue = get_event_elements(context["event"].id, Prologue).get(uuid=target)
     prologue.characters.add(*_get_chars(context, uuids))
     return prologue.name
 
@@ -541,7 +541,7 @@ def exec_del_char_prologue(
     uuids: list[str],
 ) -> str:
     """Remove characters from a prologue."""
-    prologue = get_elements(context["event"].id, Prologue).get(uuid=target)
+    prologue = get_event_elements(context["event"].id, Prologue).get(uuid=target)
     prologue.characters.remove(*_get_chars(context, uuids))
     return prologue.name
 
@@ -552,15 +552,15 @@ def exec_set_char_progress(
     uuids: list[str],
 ) -> str:
     """Update progress step for specified characters."""
-    progress_step = get_elements(context["event"].id, ProgressStep).get(uuid=target)
-    get_elements(context["event"].id, Character).filter(uuid__in=uuids).update(progress=progress_step)
+    progress_step = get_event_elements(context["event"].id, ProgressStep).get(uuid=target)
+    get_event_elements(context["event"].id, Character).filter(uuid__in=uuids).update(progress=progress_step)
     return progress_step.name
 
 
 def exec_set_char_assigned(context: dict, target: str, uuids: list[str]) -> str:
     """Assign characters to a member."""
     member = _get_assoc_member(context, target)
-    get_elements(context["event"].id, Character).filter(uuid__in=uuids).update(assigned=member)
+    get_event_elements(context["event"].id, Character).filter(uuid__in=uuids).update(assigned=member)
     return member.name
 
 
@@ -570,7 +570,7 @@ def exec_set_char_status(context: dict, target: str, uuids: list[str]) -> str:
     if target not in CharacterStatus.values:
         msg = "invalid character status"
         raise ValueError(msg)
-    get_elements(context["event"].id, Character).filter(uuid__in=uuids).update(status=target)
+    get_event_elements(context["event"].id, Character).filter(uuid__in=uuids).update(status=target)
     return dict(CharacterStatus.choices).get(target, target)
 
 
@@ -710,31 +710,31 @@ def handle_bulk_plots(request: HttpRequest, context: dict) -> None:
 
 def exec_add_faction_char(context: dict, target: str, uuids: list[str]) -> str:
     """Add a character to selected factions."""
-    char = get_elements(context["event"].id, Character).get(uuid=target)
-    for faction in get_elements(context["event"].id, Faction).filter(uuid__in=uuids):
+    char = get_event_elements(context["event"].id, Character).get(uuid=target)
+    for faction in get_event_elements(context["event"].id, Faction).filter(uuid__in=uuids):
         faction.characters.add(char)
     return char.name
 
 
 def exec_del_faction_char(context: dict, target: str, uuids: list[str]) -> str:
     """Remove a character from selected factions."""
-    char = get_elements(context["event"].id, Character).get(uuid=target)
-    for faction in get_elements(context["event"].id, Faction).filter(uuid__in=uuids):
+    char = get_event_elements(context["event"].id, Character).get(uuid=target)
+    for faction in get_event_elements(context["event"].id, Faction).filter(uuid__in=uuids):
         faction.characters.remove(char)
     return char.name
 
 
 def exec_set_faction_progress(context: dict, target: str, uuids: list[str]) -> str:
     """Set progress step for selected factions."""
-    progress_step = get_elements(context["event"].id, ProgressStep).get(uuid=target)
-    get_elements(context["event"].id, Faction).filter(uuid__in=uuids).update(progress=progress_step)
+    progress_step = get_event_elements(context["event"].id, ProgressStep).get(uuid=target)
+    get_event_elements(context["event"].id, Faction).filter(uuid__in=uuids).update(progress=progress_step)
     return progress_step.name
 
 
 def exec_set_faction_assigned(context: dict, target: str, uuids: list[str]) -> str:
     """Assign selected factions to a staff member."""
     member = _get_assoc_member(context, target)
-    get_elements(context["event"].id, Faction).filter(uuid__in=uuids).update(assigned=member)
+    get_event_elements(context["event"].id, Faction).filter(uuid__in=uuids).update(assigned=member)
     return member.name
 
 
@@ -777,8 +777,8 @@ def exec_set_quest_type(
     uuids: list[str],
 ) -> str:
     """Set quest type for multiple quests."""
-    quest_type = get_elements(context["event"].id, QuestType).get(uuid=target)
-    get_elements(context["event"].id, Quest).filter(uuid__in=uuids).update(typ=quest_type)
+    quest_type = get_event_elements(context["event"].id, QuestType).get(uuid=target)
+    get_event_elements(context["event"].id, Quest).filter(uuid__in=uuids).update(typ=quest_type)
     return quest_type.name
 
 
@@ -809,9 +809,9 @@ def exec_set_quest(
 ) -> str:
     """Assign a quest to multiple traits."""
     # Retrieve the target quest from the event
-    quest = get_elements(context["event"].id, Quest).get(uuid=target)
+    quest = get_event_elements(context["event"].id, Quest).get(uuid=target)
     # Update all specified traits to use this quest
-    get_elements(context["event"].id, Trait).filter(uuid__in=uuids).update(quest=quest)
+    get_event_elements(context["event"].id, Trait).filter(uuid__in=uuids).update(quest=quest)
     return quest.name
 
 
@@ -836,9 +836,9 @@ def exec_set_ability_type(
 ) -> str:
     """Update ability type for selected abilities in bulk."""
     # Get target ability type from event elements
-    typ = get_elements(context["event"].id, AbilityTypeExp).get(uuid=target)
+    typ = get_event_elements(context["event"].id, AbilityTypeExp).get(uuid=target)
     # Update all selected abilities with new type
-    get_elements(context["event"].id, AbilityExp).filter(uuid__in=uuids).update(typ=typ)
+    get_event_elements(context["event"].id, AbilityExp).filter(uuid__in=uuids).update(typ=typ)
     return typ.name
 
 

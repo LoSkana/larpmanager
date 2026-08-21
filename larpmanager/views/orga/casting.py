@@ -45,7 +45,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element, get_element_event, get_elements, get_time_diff_today
+from larpmanager.utils.core.common import get_element, get_element_event, get_event_elements, get_time_diff_today
 from larpmanager.utils.users.deadlines import get_membership_fee_year
 from larpmanager.views.user.casting import (
     casting_details,
@@ -216,7 +216,7 @@ def get_casting_choices_characters(
     allowed_character_uuids = []
     if "faction" in context["features"]:
         # Get primary factions for the event
-        primary_factions_query = get_elements(context["event"].id, Faction).filter(typ=FactionType.PRIM)
+        primary_factions_query = get_event_elements(context["event"].id, Faction).filter(typ=FactionType.PRIM)
         factioned_character_uuids = set()
         for faction_element in primary_factions_query.order_by("number"):
             faction_char_uuids = [str(char.uuid) for char in faction_element.characters.all()]
@@ -230,7 +230,7 @@ def get_casting_choices_characters(
         # Include characters with no primary faction if the "no faction" pseudo-choice is selected
         if NO_FACTION_KEY in filtering_options["factions"]:
             all_character_uuids = {
-                str(char.uuid) for char in get_elements(context["event"].id, Character).exclude(hide=True)
+                str(char.uuid) for char in get_event_elements(context["event"].id, Character).exclude(hide=True)
             }
             allowed_character_uuids.extend(all_character_uuids - factioned_character_uuids)
 
@@ -240,7 +240,7 @@ def get_casting_choices_characters(
     )
 
     # Process all characters for the event (excluding hidden ones)
-    characters_query = get_elements(context["event"].id, Character)
+    characters_query = get_event_elements(context["event"].id, Character)
     for character in characters_query.exclude(hide=True):
         char_uuid = str(character.uuid)
 

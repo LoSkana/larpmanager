@@ -65,7 +65,7 @@ from larpmanager.models.utils import (
     strip_tags,
 )
 from larpmanager.models.writing import Faction
-from larpmanager.utils.core.common import get_class_parent, get_elements
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -330,7 +330,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         # Get parent event based on element type from params
         typ = self.params["elementTyp"]
         event = self.params["event"]
-        parent_id = get_class_parent(event.id, typ)
+        parent_id = get_event_class_parent(event.id, typ)
         if parent_id == event.id:
             return event
         return Event.objects.get(pk=parent_id)
@@ -370,7 +370,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         if event and element_type:
             # Determine the appropriate event ID based on the element type
-            parent_event_id = get_class_parent(event.id, element_type)
+            parent_event_id = get_event_class_parent(event.id, element_type)
 
             # Build the base queryset for uniqueness checking
             model = self._meta.model
@@ -1252,7 +1252,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         in ``RegistrationAnswer.text`` like a plain text answer.
         """
         event = self.params["run"].event
-        visible_factions = list(get_elements(event.id, Faction).filter(hide=False).order_by("order"))
+        visible_factions = list(get_event_elements(event.id, Faction).filter(hide=False).order_by("order"))
         visible_uuids = {str(faction.uuid): faction for faction in visible_factions}
 
         # Start from the previously saved order, dropping factions no longer visible
@@ -1478,7 +1478,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         event = self.params["run"].event
         visible_faction_uuids = [
             str(uuid)
-            for uuid in get_elements(event.id, Faction)
+            for uuid in get_event_elements(event.id, Faction)
             .filter(hide=False)
             .order_by("order")
             .values_list("uuid", flat=True)

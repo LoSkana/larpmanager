@@ -79,7 +79,7 @@ def feature_visible(feature_slug: str, features: dict | set, allowed_sidebar: li
     return feature_slug in features and (not allowed_sidebar or feature_slug in allowed_sidebar)
 
 
-def get_class_parent(event_id: int, model_class: type[BaseModel] | str) -> int:
+def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str) -> int:
     """Get the event id to use for inheriting elements of a specific model class.
 
     Determines whether to use the parent event's id or the current event's id
@@ -113,9 +113,9 @@ def get_class_parent(event_id: int, model_class: type[BaseModel] | str) -> int:
     return event_id
 
 
-def get_elements(event_id: int, element_model_class: type[BaseModel]) -> QuerySet:
+def get_event_elements(event_id: int, element_model_class: type[BaseModel]) -> QuerySet:
     """Get ordered elements of specified type for the event, following inheritance rules."""
-    queryset = element_model_class.objects.filter(event_id=get_class_parent(event_id, element_model_class))
+    queryset = element_model_class.objects.filter(event_id=get_event_class_parent(event_id, element_model_class))
     if hasattr(element_model_class, "number"):
         queryset = queryset.order_by("number")
     return queryset
@@ -377,7 +377,7 @@ def get_element_event(
     if hasattr(model_class, "association"):
         filters["association_id"] = context["association_id"]
     if hasattr(model_class, "event"):
-        filters["event_id"] = get_class_parent(context["event"].id, model_class)
+        filters["event_id"] = get_event_class_parent(context["event"].id, model_class)
 
     return get_object_uuid(
         model_class,

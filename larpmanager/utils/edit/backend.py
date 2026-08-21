@@ -44,7 +44,13 @@ from larpmanager.models.miscellanea import Log
 from larpmanager.models.writing import Faction, Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context
-from larpmanager.utils.core.common import get_class_parent, get_element, get_elements, get_object_uuid, html_clean
+from larpmanager.utils.core.common import (
+    get_element,
+    get_event_class_parent,
+    get_event_elements,
+    get_object_uuid,
+    html_clean,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -934,7 +940,7 @@ def backend_order(
 
     """
     # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or get_elements(context["event"].id, model_class)
+    elements = elements or get_event_elements(context["event"].id, model_class)
 
     current_element = elements.get(uuid=element) if isinstance(element, str) else element
 
@@ -977,7 +983,7 @@ def backend_order(
 
 def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> None:
     """Bulk-set order field from a UUID list using index * 10 spacing."""
-    event = get_class_parent(context["event"].id, model_class)
+    event = get_event_class_parent(context["event"].id, model_class)
     objects = {str(obj.uuid): obj for obj in model_class.objects.filter(event=event, uuid__in=uuids)}
     to_update = []
     for i, uuid in enumerate(uuids):
