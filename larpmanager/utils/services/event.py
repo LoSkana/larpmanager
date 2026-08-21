@@ -656,7 +656,7 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     """
     # Clear run-specific cache and associated media files
-    clear_run_cache_and_media(run)
+    clear_run_cache_and_media(run.id)
     reset_cache_run(event.association_id, run.get_slug())
 
     # Clear event-level feature and configuration caches
@@ -671,7 +671,7 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear run config cache
     reset_run_configs(run.id)
-    reset_cache_config_run(run)
+    reset_cache_config_run(run.id)
 
     # Clear question cache
     clear_writing_questions_cache(run.event_id)

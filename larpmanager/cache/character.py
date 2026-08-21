@@ -78,9 +78,9 @@ def delete_all_in_path(path: str) -> None:
             logger.warning("could not delete %s: %s", entry, err)
 
 
-def get_event_cache_all_key(event_run: Run) -> str:
+def get_event_cache_all_key(run_id: int) -> str:
     """Generate cache key for event data."""
-    return f"event_factions_characters_{event_run.id}"
+    return f"event_factions_characters_{run_id}"
 
 
 def init_event_cache_all(context: dict) -> dict:
@@ -500,7 +500,7 @@ def get_event_cache_all(context: dict) -> None:
 
     """
     # Get cache key for the current run
-    cache_key = get_event_cache_all_key(context["run"])
+    cache_key = get_event_cache_all_key(context["run"].id)
 
     # Try to retrieve cached result
     cached_result = cache.get(cache_key)
@@ -513,16 +513,16 @@ def get_event_cache_all(context: dict) -> None:
     context.update(cached_result)
 
 
-def clear_run_cache_and_media(run: Run) -> None:
+def clear_run_cache_and_media(run_id: int) -> None:
     """Clear cache and delete all media files for a run."""
-    reset_event_cache_all(run)
-    media_directory_path = get_run_media_filepath(run.id)
+    reset_event_cache_all(run_id)
+    media_directory_path = get_run_media_filepath(run_id)
     delete_all_in_path(media_directory_path)
 
 
-def reset_event_cache_all(run: Run) -> None:
+def reset_event_cache_all(run_id: int) -> None:
     """Delete the event cache for the given run."""
-    cache_key = get_event_cache_all_key(run)
+    cache_key = get_event_cache_all_key(run_id)
     cache.delete(cache_key)
 
 
@@ -554,7 +554,7 @@ def update_event_cache_all(run: Run, instance: BaseModel) -> None:
 
     """
     # Get the cache key for the event and retrieve cached data
-    cache_key = get_event_cache_all_key(run)
+    cache_key = get_event_cache_all_key(run.id)
     cached_result = cache.get(cache_key)
 
     # Exit early if no cached data exists
@@ -855,27 +855,27 @@ def reset_character_registration_cache(rcr: RegistrationCharacterRel) -> None:
     if rcr.registration:
         rcr.registration.save()
     # Clear run-level cache and media
-    clear_run_cache_and_media(rcr.registration.run)
+    clear_run_cache_and_media(rcr.registration.run_id)
 
 
 def clear_event_cache_all_runs(event_id: int) -> None:
     """Clear cache and media for all runs of event, children, siblings, and parent."""
     # Clear cache for all runs of the current event
     for run in get_event_runs(event_id):
-        clear_run_cache_and_media(run)
+        clear_run_cache_and_media(run.id)
 
     # Clear cache for runs of child events
     for child_event_id in Event.objects.filter(parent_id=event_id).values_list("id", flat=True):
         for run in get_event_runs(child_event_id):
-            clear_run_cache_and_media(run)
+            clear_run_cache_and_media(run.id)
 
     parent_id = get_event_basic_cache(event_id)["parent_id"]
     if parent_id:
         # Clear cache for runs of sibling events
         for sibling_event_id in Event.objects.filter(parent_id=parent_id).values_list("id", flat=True):
             for run in get_event_runs(sibling_event_id):
-                clear_run_cache_and_media(run)
+                clear_run_cache_and_media(run.id)
 
         # Clear cache for runs of parent event
         for run in get_event_runs(parent_id):
-            clear_run_cache_and_media(run)
+            clear_run_cache_and_media(run.id)

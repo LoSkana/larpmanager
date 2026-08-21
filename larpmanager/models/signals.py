@@ -61,6 +61,7 @@ from larpmanager.cache.association_text import (
 )
 from larpmanager.cache.association_translation import clear_association_translation_cache
 from larpmanager.cache.basic import (
+    get_event_basic_cache,
     get_run_basic_cache,
     reset_association_basic_cache,
     reset_event_basic_cache,
@@ -584,7 +585,7 @@ def post_save_assignment_trait(
     Clears caches, sends notification emails, and manages PDF cleanup.
     """
     # Clear cached data and generated media for the run
-    clear_run_cache_and_media(instance.run)
+    clear_run_cache_and_media(instance.run_id)
 
     # Notify relevant users about trait assignment
     if created and instance.member:
@@ -827,9 +828,14 @@ def post_save_delivery_exp(
 def create_pools_for_inventory(sender: type, instance: Inventory, created: bool, **kwargs: Any) -> None:
     """Create pool balances for newly created character inventories based on event pool types."""
     if created:
-        for pool_type in PoolType.objects.filter(event=instance.event):
+        for pool_type in PoolType.objects.filter(event_id=instance.event_id):
             PoolBalance.objects.create(
-                inventory=instance, event=instance.event, number=1, name=pool_type.name, pool_type=pool_type, amount=0
+                inventory=instance,
+                event_id=instance.event_id,
+                number=1,
+                name=pool_type.name,
+                pool_type=pool_type,
+                amount=0,
             )
 
 
@@ -958,8 +964,9 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
     remove_event_role_cache(instance.pk)
 
     # Reset event links cache for all members assigned to this role
+    association_id = get_event_basic_cache(instance.event_id)["association_id"]
     for member in instance.members.all():
-        reset_event_links(member.id, instance.event.association_id)
+        reset_event_links(member.id, association_id)
 
     # Schedule publication crew sync (soft deletes are handled by post_softdelete)
     if instance.deleted is None:
@@ -1574,12 +1581,12 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
     update_run_plan_on_event_change(instance)
 
     # Clear run-specific cache and media files
-    clear_run_cache_and_media(instance)
+    clear_run_cache_and_media(instance.id)
 
     clear_run_event_links_cache(instance.event_id)
 
     # Clear association cache to update onboarding status
-    clear_association_cache(instance.event.association.slug)
+    clear_association_cache(get_run_basic_cache(instance.id)["association_slug"])
 
     # Schedule publication for this run's event
     publish_event(instance.event_id)
@@ -1589,7 +1596,7 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset run config cache when related instance is saved."""
     reset_run_configs(instance.run_id)
-    reset_cache_config_run(instance.run)
+    reset_cache_config_run(instance.run_id)
 
 
 @receiver(pre_save, sender=SpeedLarp)

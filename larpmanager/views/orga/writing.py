@@ -127,7 +127,7 @@ def orga_plots_rels_reorder(request: HttpRequest, event_slug: str, character_uui
             to_update.append(rel)
     if to_update:
         PlotCharacterRel.objects.bulk_update(to_update, ["order"])
-        reset_event_cache_all(context["run"])
+        reset_event_cache_all(context["run"].id)
 
     return JsonResponse({"ok": True})
 

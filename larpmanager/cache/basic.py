@@ -38,10 +38,10 @@ def get_association_basic_cache(association_id: int) -> dict:
     cache_key = association_basic_cache_key(association_id)
     data = cache.get(cache_key)
     if data is None:
-        association = Association.objects.only("payment_currency").get(id=association_id)
+        association = Association.objects.only("payment_currency", "slug").get(id=association_id)
         if not association.payment_currency:
             association.payment_currency = Currency.EUR
-        data = {"currency_symbol": association.get_currency_symbol()}
+        data = {"currency_symbol": association.get_currency_symbol(), "slug": association.slug}
         cache.set(cache_key, data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return data
 
@@ -74,13 +74,14 @@ def get_event_basic_cache(event_id: int) -> dict:
         association_id, parent_id, slug, name = Event.all_objects.values_list(
             "association_id", "parent_id", "slug", "name"
         ).get(id=event_id)
-        currency_symbol = get_association_basic_cache(association_id)["currency_symbol"]
+        association_cache = get_association_basic_cache(association_id)
         data = {
             "association_id": association_id,
+            "association_slug": association_cache["slug"],
             "parent_id": parent_id,
             "slug": slug,
             "name": name,
-            "currency_symbol": currency_symbol,
+            "currency_symbol": association_cache["currency_symbol"],
         }
         cache.set(cache_key, data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return data
@@ -106,6 +107,7 @@ def get_run_basic_cache(run_id: int) -> dict:
         data = {
             "event_id": event_id,
             "association_id": event_cache["association_id"],
+            "association_slug": event_cache["association_slug"],
             "parent_id": event_cache["parent_id"],
             "slug": event_cache["slug"],
             "currency_symbol": event_cache["currency_symbol"],

@@ -438,7 +438,7 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     model_class = action.config["form"].Meta.model
     backend_set_order(context, model_class, uuids)
     if action.config.get("writing"):
-        reset_event_cache_all(context["run"])
+        reset_event_cache_all(context["run"].id)
     if action.config.get("exp"):
         event_id = context["event"].id
         clear_event_exp_cache(event_id)

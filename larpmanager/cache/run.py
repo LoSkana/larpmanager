@@ -140,9 +140,9 @@ def on_event_pre_save_invalidate_cache(instance: Event) -> None:
             reset_cache_run(instance.association_id, run.get_slug())
 
 
-def reset_cache_config_run(run: Run) -> None:
+def reset_cache_config_run(run_id: int) -> None:
     """Delete cached configuration for a run."""
-    cache.delete(cache_config_run_key(run.id))
+    cache.delete(cache_config_run_key(run_id))
 
 
 def reset_cache_config_run_ids(run_ids: list[int]) -> None:
@@ -246,7 +246,7 @@ def init_cache_config_run(run: Run) -> dict:
 def on_run_post_save_reset_config_cache(instance: Run) -> None:
     """Handle run post-save cache reset."""
     if instance.pk:
-        reset_cache_config_run(instance)
+        reset_cache_config_run(instance.id)
 
 
 def on_event_post_save_reset_config_cache(instance: Event) -> None:

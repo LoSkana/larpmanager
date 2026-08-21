@@ -440,7 +440,7 @@ def _action_redirect(
     if action == Action.ORDER:
         backend_order(context, model_type, element_uuid, additional)
         if writing:
-            reset_event_cache_all(context["run"])
+            reset_event_cache_all(context["run"].id)
 
     elif action == Action.DELETE:
         is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"
