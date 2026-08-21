@@ -259,7 +259,7 @@ def get_character_rels_dict(registrations_by_run_dict: dict, member: Any) -> dic
 
 
 def get_player_characters_dict(association_id: int, member: Any) -> dict:
-    """Get ids of the member's characters in the association, grouped by event ID.
+    """Get the member's characters in the association, grouped by event ID.
 
     Precalculates the characters owned by the player with a single query, so the
     registration status of every run can be computed without a query per run.
@@ -269,14 +269,16 @@ def get_player_characters_dict(association_id: int, member: Any) -> dict:
         member: Member object to filter characters for
 
     Returns:
-        Dictionary mapping event IDs to lists of character IDs
+        Dictionary mapping event IDs to lists of (id, uuid, name, status) tuples
 
     """
-    characters_by_event: dict[int, list[int]] = {}
+    characters_by_event: dict[int, list[tuple[int, str, str, str]]] = {}
 
-    query = Character.objects.filter(player=member, event__association_id=association_id).values_list("event_id", "id")
-    for event_id, character_id in query:
-        characters_by_event.setdefault(event_id, []).append(character_id)
+    query = Character.objects.filter(player=member, event__association_id=association_id).values_list(
+        "event_id", "id", "uuid", "name", "status"
+    )
+    for event_id, character_id, character_uuid, name, status in query:
+        characters_by_event.setdefault(event_id, []).append((character_id, character_uuid, name, status))
 
     return characters_by_event
 

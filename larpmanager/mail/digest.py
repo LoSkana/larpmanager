@@ -26,7 +26,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import activate, gettext_lazy as _
 
-from larpmanager.cache.basic import get_run_association_id
+from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_member_config
 from larpmanager.mail.templates import (
     get_help_email,
@@ -113,7 +113,7 @@ def my_send_digest_email(
             subject, body = get_registration_request_new_organizer_email(instance, email_context)
 
         elif notification_type == NotificationType.PAYMENT_MONEY:
-            currency_symbol = run.event.association.get_currency_symbol()
+            currency_symbol = get_run_basic_cache(run.id)["currency_symbol"]
             subject, body = get_pay_money_email(currency_symbol, instance, run)
             subject += _(" for %(user)s") % {"user": instance.registration.member}
 

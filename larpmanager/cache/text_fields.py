@@ -45,9 +45,9 @@ if TYPE_CHECKING:
 ALLOWED_TYPES = [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
 
 
-def cache_text_field_key(model_type: type[BaseModel], model_instance: object) -> str:
+def cache_text_field_key(model_type: type[BaseModel], model_id: int) -> str:
     """Generate cache key for model text fields."""
-    return f"cache_text_fields_{model_type.__name__}_{model_instance.id}"
+    return f"cache_text_fields_{model_type.__name__}_{model_id}"
 
 
 def remove_html_tags(text: str) -> str:
@@ -176,7 +176,7 @@ def _init_element_cache_text_field(
 def get_cache_text_field(field_type: type[BaseModel], event: Event) -> str:
     """Get cached text field value for event, initializing if not found."""
     # Generate cache key for the specific type and event
-    cache_key = cache_text_field_key(field_type, event)
+    cache_key = cache_text_field_key(field_type, event.id)
 
     # Try to retrieve cached value
     cached_value = cache.get(cache_key)
@@ -196,27 +196,29 @@ def update_cache_text_fields(el: object) -> None:
         el: Element object to update cache for
 
     """
-    # Get element type and associated event
+    # Get element type and associated event id
     element_type = el.__class__
-    event = el.event
+    event_id = el.event_id
 
     # Generate cache key
-    cache_key = cache_text_field_key(element_type, event)
+    cache_key = cache_text_field_key(element_type, event_id)
 
     # Use cache lock to prevent race conditions with concurrent updates
     lock_key = f"{cache_key}_lock"
     try:
         with cache.lock(lock_key, timeout=5):
-            _update_cache_text_fields(cache_key, el, element_type, event)
+            _update_cache_text_fields(cache_key, el, element_type)
     except AttributeError:
         # Fallback for cache backends that don't support locking
-        _update_cache_text_fields(cache_key, el, element_type, event)
+        _update_cache_text_fields(cache_key, el, element_type)
 
 
-def _update_cache_text_fields(cache_key: str, el: object, element_type: type[BaseModel], event: Event) -> None:
+def _update_cache_text_fields(cache_key: str, el: object, element_type: type[BaseModel]) -> None:
     """Update cache for text fields - internal helper."""
-    # Retrieve current cache data inside lock
-    cached_data = get_cache_text_field(element_type, event)
+    # Retrieve current cache data inside lock, only fetching the real event on a miss
+    cached_data = cache.get(cache_key)
+    if cached_data is None:
+        cached_data = init_cache_text_field(element_type, el.event)
     # Initialize element cache and update cache storage
     _init_element_cache_text_field(el, cached_data, element_type)
     cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -243,7 +245,7 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
     event = instance.question.event
 
     # Generate cache key
-    cache_key = cache_text_field_key(applicable_type, event)
+    cache_key = cache_text_field_key(applicable_type, event.id)
 
     # Use cache lock to prevent race conditions with concurrent updates
     lock_key = f"{cache_key}_lock"
@@ -362,7 +364,7 @@ def get_cache_registration_field(run: Run) -> dict:
 
     """
     # Generate cache key for the run's registration fields
-    cache_key = cache_text_field_key(Registration, run)
+    cache_key = cache_text_field_key(Registration, run.id)
 
     # Try to retrieve cached result
     cached_result = cache.get(cache_key)
@@ -381,7 +383,7 @@ def update_cache_registration_fields(registration: Registration) -> None:
     run = registration.run
 
     # Generate cache key and retrieve current cached registration fields
-    cache_key = cache_text_field_key(Registration, run)
+    cache_key = cache_text_field_key(Registration, run.id)
     cached_registration_fields = get_cache_registration_field(run)
 
     # Initialize element cache and update cache with new data
@@ -412,7 +414,7 @@ def update_cache_registration_fields_answer(instance: BaseModel) -> None:
     run = instance.registration.run
 
     # Generate cache key and retrieve current cached field data
-    cache_key = cache_text_field_key(Registration, run)
+    cache_key = cache_text_field_key(Registration, run.id)
     cached_registration_fields = get_cache_registration_field(run)
 
     # Fetch the registration to get its UUID
@@ -481,12 +483,12 @@ def reset_text_fields_cache(run: Run) -> None:
             if applicable_code:
                 model_class = QuestionApplicable.get_applicable_inverse(applicable_code)
                 # Delete cache for this model type and event
-                cache_key = cache_text_field_key(model_class, run.event)
+                cache_key = cache_text_field_key(model_class, run.event_id)
                 cache.delete(cache_key)
         except (ValueError, LookupError):
             # Skip if applicable type doesn't exist
             pass
 
     # Invalidate registration text field cache
-    cache_key = cache_text_field_key(Registration, run)
+    cache_key = cache_text_field_key(Registration, run.id)
     cache.delete(cache_key)

@@ -79,6 +79,7 @@ from larpmanager.utils.services.character import (
 from larpmanager.utils.services.experience import (
     add_char_addit,
     build_exp_avail_by_system_from_addit,
+    build_exp_context,
     get_available_ability_exp,
     get_current_ability_exp,
     remove_char_ability,
@@ -524,6 +525,19 @@ def _save_character(
     return character, success_message
 
 
+def propose_character_for_approval(character: Character) -> None:
+    """Move a character from CREATION/REVIEW to PROPOSED.
+
+    Re-reads and locks the row before transitioning, so a character already moved on to
+    PROPOSED (or beyond) by a concurrent request is left untouched.
+    """
+    with transaction.atomic():
+        locked_character = Character.objects.select_for_update().get(pk=character.pk)
+        if locked_character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
+            locked_character.status = CharacterStatus.PROPOSED
+            locked_character.save()
+
+
 @login_required
 def character_confirm(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Let the player confirm their character is ready, proposing it to the staff for approval.
@@ -537,23 +551,19 @@ def character_confirm(request: HttpRequest, event_slug: str, character_uuid: str
         HttpResponse: Confirmation page on GET, redirect to character page on POST
 
     """
-    context = get_event_context(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     if not get_event_config(context["event"].id, "user_character_approval", context=context):
         raise Http404
 
-    character = Character.objects.get(uuid=character_uuid, event=context["event"])
+    character = Character.objects.get(pk=_get_character_cache_id(context))
     if character.status not in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
         messages.warning(request, _("This character cannot be proposed at the moment"))
         return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
 
     if request.method == "POST":
-        with transaction.atomic():
-            character = Character.objects.select_for_update().get(pk=character.pk)
-            if character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
-                character.status = CharacterStatus.PROPOSED
-                character.save()
+        propose_character_for_approval(character)
         messages.success(
             request,
             _(
@@ -1041,8 +1051,9 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     # Build available abilities dictionary organized by ability type
     exp_avail_by_system = build_exp_avail_by_system_from_addit(char)
     multiple_systems = len(context["exp_systems_data"]) > 1
+    exp_context = build_exp_context(char)
     context["available"] = {}
-    for ability in get_available_ability_exp(char, exp_avail_by_system):
+    for ability in get_available_ability_exp(char, exp_avail_by_system, exp_context):
         if ability.typ is None:
             continue
         # Create type entry if it doesn't exist
@@ -1058,7 +1069,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
 
     # Build current character abilities organized by type name
     context["sheet_abilities"] = {}
-    for el in get_current_ability_exp(char):
+    for el in get_current_ability_exp(char, exp_context):
         if el.typ is None:
             continue
         # Create type list if it doesn't exist
