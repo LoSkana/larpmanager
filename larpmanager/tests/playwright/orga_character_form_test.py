@@ -261,7 +261,7 @@ def create_first_char(live_server: Any, page: Any) -> None:
     page.locator("#id_que_u9").fill("fill mandatory")
     submit_confirm(page)
 
-    sidebar(page, "Confirm your character")
+    sidebar(page, "Confirm character")
     page.get_by_role("button", name="Confirm").click()
 
 

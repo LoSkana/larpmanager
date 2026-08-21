@@ -398,7 +398,7 @@ def character(page: Any, live_server: Any) -> None:
     # the server accepted the alternatives too, not only the option requirements taken all together
     expect_normalized(page, page.locator("#one"), "dep_or")
 
-    sidebar(page, "Confirm your character")
+    sidebar(page, "Confirm character")
     page.get_by_text("Click here to confirm that").click()
     page.get_by_role("button", name="Confirm").click()
 
