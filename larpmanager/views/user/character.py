@@ -64,7 +64,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
+from larpmanager.utils.core.common import get_element, get_element_event, get_elements, get_player_relationship
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
@@ -207,7 +207,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
 
     # Attempt to retrieve character using the provided access token
     try:
-        char = context["event"].get_elements(Character).get(access_token=code)
+        char = get_elements(context["event"].id, Character).get(access_token=code)
     except ObjectDoesNotExist as err:
         msg = "invalid code"
         raise Http404(msg) from err
@@ -1188,7 +1188,7 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Get character data
-    context["character"] = context["event"].get_elements(Character).get(uuid=character_uuid)
+    context["character"] = get_elements(context["event"].id, Character).get(uuid=character_uuid)
 
     inventories = {}
     for inv in context["character"].inventory.all():

@@ -37,6 +37,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.writing import Faction
 from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import get_elements
 from larpmanager.views.orga.form import get_ordered_registration_questions
 
 if TYPE_CHECKING:
@@ -75,7 +76,7 @@ def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpRespon
         )
 
     faction_names_by_uuid = {
-        str(uuid): name for uuid, name in context["event"].get_elements(Faction).values_list("uuid", "name")
+        str(uuid): name for uuid, name in get_elements(context["event"].id, Faction).values_list("uuid", "name")
     }
 
     rows = []

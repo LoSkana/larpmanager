@@ -69,6 +69,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.auth.permission import has_event_permission
+from larpmanager.utils.core.common import get_class_parent, get_elements
 from larpmanager.utils.services.inventory import generate_base_inventories
 
 if TYPE_CHECKING:
@@ -103,14 +104,14 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
         character_registrations[relation.character_id] = relation.registration
 
     characters_by_id = {}
-    for character in context["event"].get_elements(Character).filter(hide=False):
+    for character in get_elements(context["event"].id, Character).filter(hide=False):
         if character.id in character_registrations:
             character.registration = character_registrations[character.id]
             character.member = character_registrations[character.id].member
         characters_by_id[character.id] = character
 
     if "faction" in context["features"] and context["show_faction"]:
-        faction_query = context["event"].get_elements(Faction).filter(typ=FactionType.PRIM).order_by("order")
+        faction_query = get_elements(context["event"].id, Faction).filter(typ=FactionType.PRIM).order_by("order")
         character_prefetch = Prefetch(
             "characters",
             queryset=Character.objects.filter(hide=False).order_by("number"),
@@ -211,8 +212,8 @@ def create_default_event_setup(event: Any) -> None:
 
     save_event_character_form(event_features, event)
 
-    if "experience" in event_features and not event.get_elements(SystemExp).exists():
-        target = event.get_class_parent(SystemExp)
+    if "experience" in event_features and not get_elements(event.id, SystemExp).exists():
+        target = get_class_parent(event.id, SystemExp)
         SystemExp.objects.get_or_create(event=target, number=1, defaults={"name": "XP"})
 
     clear_event_features_cache(event.id)
@@ -329,7 +330,7 @@ def _init_writing_element(
 
     """
     for applicable in question_applicables:
-        existing_qs = instance.get_elements(WritingQuestion).filter(applicable=applicable)
+        existing_qs = get_elements(instance.id, WritingQuestion).filter(applicable=applicable)
 
         if not existing_qs.exists():
             writing_questions = [
@@ -397,7 +398,7 @@ def _init_character_form_questions(
 
     """
     # Get existing character questions and their types
-    existing_questions = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
+    existing_questions = get_elements(instance.id, WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
     existing_types = set(existing_questions.values_list("typ", flat=True).distinct())
 
     # Get all available question types, excluding custom ones
@@ -474,7 +475,7 @@ def save_event_registration_form(features: dict, instance: object) -> None:
     basic_tps = BaseQuestionType.get_basic_types()
 
     # Query existing questions and get their types
-    que = instance.get_elements(RegistrationQuestion)
+    que = get_elements(instance.id, RegistrationQuestion)
     types = set(que.values_list("typ", flat=True).distinct())
 
     # Get all available question type choices and filter out basic types
@@ -527,7 +528,7 @@ def save_event_registration_form(features: dict, instance: object) -> None:
     # Default matchmaker question: when the matchmaker feature is active and the
     # event has no matchmaker-applicable question yet, add a faction preference one
     if "matchmaker" in features:
-        matchmaker_questions = instance.get_elements(RegistrationQuestion).filter(
+        matchmaker_questions = get_elements(instance.id, RegistrationQuestion).filter(
             applicable=RegistrationQuestionApplicable.MATCHMAKER,
         )
         if not matchmaker_questions.exists():
@@ -728,5 +729,5 @@ def init_features(event: Event, features_dict: list[str]) -> None:
     """Perform initializazion on new features activation."""
     if "inventory" in features_dict:
         # Generate inventories for all existing characters in this event
-        for character in event.get_elements(Character):
+        for character in get_elements(event.id, Character):
             generate_base_inventories(character, check=True)

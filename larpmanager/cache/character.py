@@ -44,6 +44,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType, Guild
+from larpmanager.utils.core.common import get_elements
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -152,7 +153,7 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     assigned_character_ids = {rel.character_id for rel in context["assignments"].values()}
 
     # Process each character for the event cache
-    characters_query = context["event"].get_elements(Character).filter(hide=False).order_by("order")
+    characters_query = get_elements(context["event"].id, Character).filter(hide=False).order_by("order")
     for character in characters_query.prefetch_related("factions_list", "guild_memberships__guild"):
         # Skip mirror characters that are already assigned
         if is_mirror_enabled and character.mirror_id in assigned_character_ids:
@@ -215,7 +216,7 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
     question_uuids = fields_data["questions"].keys()
 
     # Query the Character table to get id -> number mapping for the event
-    character_id_mapping = dict(context["event"].get_elements(Character).values_list("id", "number"))
+    character_id_mapping = dict(get_elements(context["event"].id, Character).values_list("id", "number"))
 
     # Retrieve and process multiple choice answers for characters
     # Each choice can have multiple options selected per question
@@ -320,7 +321,7 @@ def get_event_cache_factions(context: dict, result: dict) -> None:
         result["factions_typ"][FactionType.PRIM] = [0]
 
     # Process real factions from the event
-    for faction in context["event"].get_elements(Faction).order_by("order"):
+    for faction in get_elements(context["event"].id, Faction).order_by("order"):
         _process_faction_cache(faction, result)
 
 
@@ -369,7 +370,7 @@ def get_event_cache_guilds(context: dict, result: dict) -> None:
     if "guild" not in get_event_features(context["event"].id):
         return
 
-    for guild in context["event"].get_elements(Guild).filter(secret=False).order_by("order"):
+    for guild in get_elements(context["event"].id, Guild).filter(secret=False).order_by("order"):
         _process_guild_cache(guild, result)
 
 

@@ -308,7 +308,9 @@ class Character(Writing):
         if "guild" not in get_event_features(check_event.id):
             return
 
-        guild_event = check_event.get_class_parent("guild")
+        from larpmanager.utils.core.common import get_class_parent  # noqa: PLC0415
+
+        guild_event = get_class_parent(check_event.id, "guild")
 
         # noinspection PyUnresolvedReferences
         query = self.guild_memberships.filter(
@@ -337,7 +339,9 @@ class Character(Writing):
             return
 
         # Determine which event to use for faction lookup
-        faction_event = check_event.get_class_parent("faction")
+        from larpmanager.utils.core.common import get_class_parent  # noqa: PLC0415
+
+        faction_event = get_class_parent(check_event.id, "faction")
 
         # Track if we find a primary faction
         has_primary_faction = False
@@ -403,7 +407,9 @@ class Character(Writing):
         """
         queryset = PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
         if event:
-            queryset = queryset.filter(plot__event=event.get_class_parent("plot"))
+            from larpmanager.utils.core.common import get_class_parent  # noqa: PLC0415
+
+            queryset = queryset.filter(plot__event=get_class_parent(event.id, "plot"))
         return queryset.order_by("order")
 
     @classmethod
@@ -978,8 +984,10 @@ def replace_character_names(instance: Any) -> None:
         return
 
     # Build character name to number mapping for replacement
+    from larpmanager.utils.core.common import get_elements  # noqa: PLC0415
+
     character_name_to_number_mapping = {}
-    for character in instance.event.get_elements(Character):
+    for character in get_elements(instance.event_id, Character):
         character_name_to_number_mapping[character.name] = character.number
 
     # Sort names by length (longest first) to avoid partial replacements

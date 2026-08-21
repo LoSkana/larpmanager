@@ -53,7 +53,13 @@ from larpmanager.models.form import (
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
-from larpmanager.utils.core.common import feature_visible, format_datetime, get_time_diff_today
+from larpmanager.utils.core.common import (
+    feature_visible,
+    format_datetime,
+    get_class_parent,
+    get_elements,
+    get_time_diff_today,
+)
 from larpmanager.utils.core.exceptions import PendingApprovalError, RewokedMembershipError, SignupError, WaitingError
 
 if TYPE_CHECKING:
@@ -857,7 +863,7 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
 
     """
     # Get all characters for this member in the event
-    characters = event.get_elements(Character).filter(player=member)
+    characters = get_elements(event.id, Character).filter(player=member)
 
     # Get IDs of inactive characters (those with CharacterConfig inactive=True)
     inactive_character_ids = CharacterConfig.objects.filter(
@@ -896,7 +902,7 @@ def get_player_characters_ids(member: Member, event: Event, context: dict | None
     """
     player_characters_dict = (context or {}).get("player_characters_dict")
     if player_characters_dict is not None:
-        return set(player_characters_dict.get(event.get_class_parent(Character).id, []))
+        return set(player_characters_dict.get(get_class_parent(event.id, Character), []))
 
     return set(get_player_characters(member, event).values_list("id", flat=True))
 
@@ -1206,7 +1212,7 @@ def _status_approval(
 
     # Offer a confirm action for the player's own characters still awaiting proposal to the staff
     if "user_character" in features and get_event_config(run.event_id, "user_character_approval", context=context):
-        pending_characters = run.event.get_elements(Character).filter(
+        pending_characters = get_elements(run.event_id, Character).filter(
             player=registration.member,
             status__in=[CharacterStatus.CREATION, CharacterStatus.REVIEW],
         )
@@ -1352,7 +1358,7 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
 
 def get_player_characters(member: Member, event: Event) -> QuerySet[Character]:
     """Get all characters a player has for an event, ordered by most recently updated."""
-    return event.get_elements(Character).filter(player=member).order_by("-updated")
+    return get_elements(event.id, Character).filter(player=member).order_by("-updated")
 
 
 def get_player_signup(context: dict) -> Registration | None:
@@ -1526,7 +1532,7 @@ def process_registration_event_change(registration: Registration) -> None:
     # This preserves the ticket assignment when moving between events
     ticket_name = registration.ticket.name
     try:
-        registration.ticket = registration.run.event.get_elements(RegistrationTicket).get(name__iexact=ticket_name)
+        registration.ticket = get_elements(registration.run.event_id, RegistrationTicket).get(name__iexact=ticket_name)
     except ObjectDoesNotExist:
         registration.ticket = None
 
@@ -1544,7 +1550,7 @@ def process_registration_event_change(registration: Registration) -> None:
             # Find matching question and option in the new event
             matched_question = next(q for q in cached_questions if q["name"].lower() == question_name.lower())
             registration_choice.question_id = matched_question["id"]
-            registration_choice.option = registration.run.event.get_elements(RegistrationOption).get(
+            registration_choice.option = get_elements(registration.run.event_id, RegistrationOption).get(
                 question_id=matched_question["id"],
                 name__iexact=option_name,
             )
@@ -1631,7 +1637,7 @@ def process_character_ticket_options(instance: Registration) -> None:
 
     # Process ticket options for characters directly linked to this registration,
     # plus all characters owned by the member in this event
-    characters = set(instance.characters.all()) | set(event.get_elements(Character).filter(player=instance.member))
+    characters = set(instance.characters.all()) | set(get_elements(event.id, Character).filter(player=instance.member))
     for character in characters:
         check_character_ticket_options(instance, character)
 

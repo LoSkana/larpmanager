@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import ast
 import html
+import inspect
 import logging
 import random
 import re
@@ -43,6 +44,8 @@ from django.http import Http404, HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_event_basic_cache
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
@@ -74,6 +77,48 @@ class DelimiterNotFoundError(ValueError):
 def feature_visible(feature_slug: str, features: dict | set, allowed_sidebar: list[str] | None) -> bool:
     """Check whether a feature is enabled and not excluded by a demo's allowed sidebar restriction."""
     return feature_slug in features and (not allowed_sidebar or feature_slug in allowed_sidebar)
+
+
+def get_class_parent(event_id: int, model_class: type[BaseModel] | str) -> int:
+    """Get the event id to use for inheriting elements of a specific model class.
+
+    Determines whether to use the parent event's id or the current event's id
+    based on inheritance settings and model class type.
+    """
+    if inspect.isclass(model_class) and issubclass(model_class, BaseModel):
+        model_class = model_class.__name__.lower()
+
+    inheritable_elements = [
+        "character",
+        "faction",
+        "abilityexp",
+        "deliveryexp",
+        "abilitytypeexp",
+        "ruleexp",
+        "abilitytemplateexp",
+        "modifierexp",
+        "criterionexp",
+        "systemexp",
+        "systemexppooltypeci",
+        "writingquestion",
+        "writingoption",
+        "relationshiptag",
+    ]
+
+    if model_class in inheritable_elements:
+        parent_id = get_event_basic_cache(event_id)["parent_id"]
+        if parent_id and not get_event_config(event_id, f"campaign_{model_class}_indep"):
+            return parent_id
+
+    return event_id
+
+
+def get_elements(event_id: int, element_model_class: type[BaseModel]) -> QuerySet:
+    """Get ordered elements of specified type for the event, following inheritance rules."""
+    queryset = element_model_class.objects.filter(event_id=get_class_parent(event_id, element_model_class))
+    if hasattr(element_model_class, "number"):
+        queryset = queryset.order_by("number")
+    return queryset
 
 
 logger = logging.getLogger(__name__)
@@ -332,7 +377,7 @@ def get_element_event(
     if hasattr(model_class, "association"):
         filters["association_id"] = context["association_id"]
     if hasattr(model_class, "event"):
-        filters["event"] = context["event"].get_class_parent(model_class)
+        filters["event_id"] = get_class_parent(context["event"].id, model_class)
 
     return get_object_uuid(
         model_class,

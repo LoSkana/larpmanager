@@ -42,6 +42,7 @@ from larpmanager.models.registration import (
     RegistrationSurcharge,
 )
 from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.common import get_class_parent, get_elements
 from larpmanager.utils.edit.backend import (
     backend_order,
     backend_set_order,
@@ -156,7 +157,7 @@ def get_ordered_registration_questions(context: dict, applicable: str | None = N
         applicable: Optional RegistrationQuestionApplicable value to filter by. Unfiltered when None.
 
     """
-    questions = context["event"].get_elements(RegistrationQuestion)
+    questions = get_elements(context["event"].id, RegistrationQuestion)
     if applicable is not None:
         questions = questions.filter(applicable=applicable)
     return questions.order_by(F("section__order").asc(nulls_first=True), "order")
@@ -447,5 +448,5 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     if action.config.get("tickets"):
         clear_registration_tickets_cache(context["event"].id)
     if action.config.get("relationship_tags"):
-        clear_relationship_tags_cache(context["event"].get_class_parent(model_class).id)
+        clear_relationship_tags_cache(get_class_parent(context["event"].id, model_class))
     return JsonResponse({"ok": True})

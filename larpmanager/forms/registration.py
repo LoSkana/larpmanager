@@ -66,7 +66,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.utils import decimal_to_str
 from larpmanager.models.writing import Character, Faction
-from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.core.common import get_elements, get_time_diff_today
 from larpmanager.utils.users.registration import get_reduced_available_count
 
 if TYPE_CHECKING:
@@ -1000,7 +1000,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         taken_characters = taken_characters - mine
         self.fields["characters_new"] = forms.ModelMultipleChoiceField(
             label=_("Characters"),
-            queryset=self.params["run"].event.get_elements(Character).exclude(pk__in=taken_characters),
+            queryset=get_elements(self.params["run"].event_id, Character).exclude(pk__in=taken_characters),
             widget=S2WidgetMulti(search_fields=["name__icontains", "number__icontains"]),
             required=False,
         )
@@ -1391,7 +1391,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             self.delete_field("factions")
         elif "factions" in self.fields:
             self.fields["factions"].choices = [
-                (m.id, str(m)) for m in self.params["run"].event.get_elements(Faction).order_by("number")
+                (m.id, str(m)) for m in get_elements(self.params["run"].event_id, Faction).order_by("number")
             ]
 
         if "gift" not in features:

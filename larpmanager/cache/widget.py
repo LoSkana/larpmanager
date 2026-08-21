@@ -65,7 +65,7 @@ from larpmanager.models.registration import (
     RegistrationTicket,
 )
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.core.common import format_datetime, get_coming_runs, get_event_features
+from larpmanager.utils.core.common import format_datetime, get_coming_runs, get_elements, get_event_features
 from larpmanager.utils.publication.ildb import (
     ILDB_CONFIG_KEY,
     ILDB_EXPIRE_CONFIG,
@@ -193,7 +193,7 @@ def _init_user_character_widget_cache(run: Run) -> dict:
     counts = {}
 
     # Get all characters for this run
-    characters = run.event.get_elements(Character)
+    characters = get_elements(run.event_id, Character)
 
     # Count by status
     counts["creation"] = characters.filter(status=CharacterStatus.CREATION).count()
@@ -206,7 +206,7 @@ def _init_user_character_widget_cache(run: Run) -> dict:
 
 def _init_progress_widget_cache(run: Run) -> dict:
     """Compute character counts by progress step for widget cache."""
-    characters = run.event.get_elements(Character)
+    characters = get_elements(run.event_id, Character)
     steps = ProgressStep.objects.filter(event=run.event, deleted=None).order_by("order")
 
     step_counts = []
@@ -231,7 +231,7 @@ def _init_casting_widget_cache(run: Run) -> dict:
     counts = {}
 
     # Get all characters for this run
-    characters = run.event.get_elements(Character)
+    characters = get_elements(run.event_id, Character)
     all_character_ids = set(characters.values_list("id", flat=True))
 
     # Precompute list of assigned character IDs via RegistrationCharacterRel
@@ -491,7 +491,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
 
     # Registration questions without options
     registration_questions_without_options = list(
-        run.event.get_elements(RegistrationQuestion)
+        get_elements(run.event_id, RegistrationQuestion)
         .filter(applicable=RegistrationQuestionApplicable.REGISTRATION)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
@@ -505,7 +505,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
 
     # Writing questions without options
     writing_questions_without_options = list(
-        run.event.get_elements(WritingQuestion)
+        get_elements(run.event_id, WritingQuestion)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
@@ -517,7 +517,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
         }
 
     # Installments with both deadlines
-    installments_with_both_deadlines = run.event.get_elements(RegistrationInstallment).filter(
+    installments_with_both_deadlines = get_elements(run.event_id, RegistrationInstallment).filter(
         date_deadline__isnull=False, days_deadline__isnull=False
     )
     if installments_with_both_deadlines.exists():
@@ -527,7 +527,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
         }
 
     # Tickets missing final installment
-    tickets_missing_final_installment = run.event.get_elements(RegistrationTicket).exclude(installments__amount=0)
+    tickets_missing_final_installment = get_elements(run.event_id, RegistrationTicket).exclude(installments__amount=0)
     if tickets_missing_final_installment.exists():
         data["tickets_missing_final_installment"] = {
             "count": tickets_missing_final_installment.count(),
@@ -537,10 +537,10 @@ def _init_orga_actions_cache(run: Run) -> dict:
     _init_orga_actions_writing(data, run)
 
     # Registration quotas existence check
-    data["has_registration_quotas"] = run.event.get_elements(RegistrationQuota).exists()
+    data["has_registration_quotas"] = get_elements(run.event_id, RegistrationQuota).exists()
 
     # Registration installments existence check
-    data["has_registration_installments"] = run.event.get_elements(RegistrationInstallment).exists()
+    data["has_registration_installments"] = get_elements(run.event_id, RegistrationInstallment).exists()
 
     # Open help questions (last 90 days, most recent per member, user-originated and not closed)
     base_queryset = HelpQuestion.objects.filter(
@@ -561,19 +561,19 @@ def _init_orga_actions_cache(run: Run) -> dict:
 def _init_orga_actions_writing(data: dict, run: Run) -> None:
     """Compute writing action counts for event organizer dashboard."""
     # Character existence check
-    data["has_characters"] = run.event.get_elements(Character).exists()
+    data["has_characters"] = get_elements(run.event_id, Character).exists()
 
     # Pending character approvals
-    proposed_characters_count = run.event.get_elements(Character).filter(status=CharacterStatus.PROPOSED).count()
+    proposed_characters_count = get_elements(run.event_id, Character).filter(status=CharacterStatus.PROPOSED).count()
     if proposed_characters_count > 0:
         data["proposed_characters"] = {"count": proposed_characters_count}
 
     # Quest types existence check
-    data["has_quest_types"] = run.event.get_elements(QuestType).exists()
+    data["has_quest_types"] = get_elements(run.event_id, QuestType).exists()
 
     # Quest types without quests
     unused_quest_types = list(
-        run.event.get_elements(QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
+        get_elements(run.event_id, QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
     )
     if unused_quest_types:
         data["quest_types_without_quests"] = {
@@ -582,16 +582,16 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
         }
 
     # Quests without traits
-    unused_quests = list(run.event.get_elements(Quest).annotate(trait_count=Count("traits")).filter(trait_count=0))
+    unused_quests = list(get_elements(run.event_id, Quest).annotate(trait_count=Count("traits")).filter(trait_count=0))
     if unused_quests:
         data["quests_without_traits"] = {"count": len(unused_quests), "names": [q.name for q in unused_quests]}
 
     # Ability types existence check
-    data["has_ability_types"] = run.event.get_elements(AbilityTypeExp).exists()
+    data["has_ability_types"] = get_elements(run.event_id, AbilityTypeExp).exists()
 
     # Ability types without abilities
     ability_types_without_abilities = list(
-        run.event.get_elements(AbilityTypeExp).annotate(ability_count=Count("abilities")).filter(ability_count=0)
+        get_elements(run.event_id, AbilityTypeExp).annotate(ability_count=Count("abilities")).filter(ability_count=0)
     )
     if ability_types_without_abilities:
         data["ability_types_without_abilities"] = {
@@ -600,7 +600,7 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
         }
 
     # Delivery EXP existence check
-    data["has_delivery_px"] = run.event.get_elements(DeliveryExp).exists()
+    data["has_delivery_px"] = get_elements(run.event_id, DeliveryExp).exists()
 
 
 def _init_milestones_widget_cache(run: Run) -> dict:
