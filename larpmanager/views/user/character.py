@@ -79,6 +79,7 @@ from larpmanager.utils.services.character import (
 from larpmanager.utils.services.experience import (
     add_char_addit,
     build_exp_avail_by_system_from_addit,
+    build_exp_context,
     get_available_ability_exp,
     get_current_ability_exp,
     remove_char_ability,
@@ -1041,8 +1042,9 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
     # Build available abilities dictionary organized by ability type
     exp_avail_by_system = build_exp_avail_by_system_from_addit(char)
     multiple_systems = len(context["exp_systems_data"]) > 1
+    exp_context = build_exp_context(char)
     context["available"] = {}
-    for ability in get_available_ability_exp(char, exp_avail_by_system):
+    for ability in get_available_ability_exp(char, exp_avail_by_system, exp_context):
         if ability.typ is None:
             continue
         # Create type entry if it doesn't exist
@@ -1058,7 +1060,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
 
     # Build current character abilities organized by type name
     context["sheet_abilities"] = {}
-    for el in get_current_ability_exp(char):
+    for el in get_current_ability_exp(char, exp_context):
         if el.typ is None:
             continue
         # Create type list if it doesn't exist

@@ -147,6 +147,19 @@ def _get_section_rels_dirty_bg_func(section: str) -> Callable:
     }[section]
 
 
+def get_character_faction_ids_cached(character: Character) -> set[int]:
+    """Return the set of faction IDs the character belongs to.
+
+    Caches the result on the character instance, so repeated calls within the
+    same signal dispatch / request (same Python object) don't re-query the DB.
+    """
+    cached = getattr(character, "_faction_ids_cache", None)
+    if cached is None:
+        cached = set(character.factions_list.values_list("id", flat=True))
+        character._faction_ids_cache = cached  # noqa: SLF001 (instance-level memoization, not real privacy)
+    return cached
+
+
 def refresh_character_related_caches(character: Character) -> None:
     """Update all caches that are related to a character.
 
@@ -167,7 +180,7 @@ def refresh_character_related_caches(character: Character) -> None:
         refresh_event_plot_relationships_background(plot_ids)
 
     # Schedule background task to update all factions that this character is part of
-    faction_ids = list(character.factions_list.values_list("id", flat=True))
+    faction_ids = list(get_character_faction_ids_cached(character))
     if faction_ids:
         refresh_event_faction_relationships_background(faction_ids)
 

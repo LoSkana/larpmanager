@@ -31,6 +31,7 @@ from django.db.models import Prefetch, Q
 from larpmanager.cache.config import get_event_config, save_all_element_configs, save_single_config
 from larpmanager.cache.experience import get_event_exp_systems
 from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.rels import get_character_faction_ids_cached
 from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, Operation, RuleExp
 from larpmanager.models.form import (
@@ -54,15 +55,15 @@ _CRITERION_OPERATIONS = {
 
 def _get_character_faction_ids(character: Any) -> set[int]:
     """Return the set of faction IDs the character belongs to."""
-    return set(character.factions_list.values_list("id", flat=True))
+    return get_character_faction_ids_cached(character)
 
 
-def _build_exp_context(
+def build_exp_context(
     character: Any,
-) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int], set[int]]]]]:
+) -> tuple[set[int], set[int], dict[int, list[tuple[int, set[int], set[int], set[int]]]], set[int]]:
     """Build context for character experience point calculations.
 
-    Gathers character abilities, choices, and modifiers with optimized queries
+    Gathers character abilities, choices, modifiers and factions with optimized queries
     to create the foundation for EXP cost and availability calculations.
 
     Args:
@@ -73,6 +74,7 @@ def _build_exp_context(
         - Set of ability IDs already learned by the character
         - Set of option IDs selected for the character
         - Dictionary mapping ability IDs to lists of modifier tuples (cost, prerequisites, requirements, factions)
+        - Set of faction IDs the character belongs to
 
     """
     # Get all abilities already learned by the character
@@ -88,7 +90,9 @@ def _build_exp_context(
 
     # Check if modifiers are enabled for this event; return empty if disabled
     if not get_event_config(character.event_id, "exp_modifiers"):
-        return current_character_abilities, current_character_choices, {}
+        return current_character_abilities, current_character_choices, {}, set()
+
+    character_faction_ids = _get_character_faction_ids(character)
 
     # Get all modifiers
     all_modifiers = (
@@ -120,7 +124,7 @@ def _build_exp_context(
         for ability_id in ability_ids:
             modifiers_by_ability[ability_id].append(payload)
 
-    return current_character_abilities, current_character_choices, modifiers_by_ability
+    return current_character_abilities, current_character_choices, modifiers_by_ability, character_faction_ids
 
 
 def _apply_modifier_cost(
@@ -169,6 +173,7 @@ def _get_current_abilities(
     current_character_abilities: set[int],
     current_character_choices: set[int],
     modifiers_by_ability: dict[int, list[tuple]],
+    character_faction_ids: set[int],
 ) -> list:
     """Get current abilities with modified costs.
 
@@ -177,6 +182,7 @@ def _get_current_abilities(
         current_character_abilities: Set of ability IDs the character currently has.
         current_character_choices: Set of choice IDs the character currently has.
         modifiers_by_ability: Mapping of ability IDs to modifier tuples.
+        character_faction_ids: Set of faction IDs the character belongs to.
 
     Returns:
         List of abilities with modified costs applied.
@@ -185,7 +191,6 @@ def _get_current_abilities(
     abilities_queryset = (
         character.exp_ability_list.select_related("system").only("id", "cost", "system_id").order_by("name")
     )
-    character_faction_ids = _get_character_faction_ids(character)
     abilities_with_modified_costs = []
     for ability in abilities_queryset:
         _apply_modifier_cost(
@@ -205,6 +210,7 @@ def _get_available_abilities(
     current_character_choices: set[int],
     modifiers_by_ability: dict[int, list[tuple]],
     px_avail_by_system: dict[int, int],
+    character_faction_ids: set[int],
     *,
     visible_only: bool = True,
 ) -> list:
@@ -216,6 +222,7 @@ def _get_available_abilities(
         current_character_choices: Set of choice IDs the character currently has.
         modifiers_by_ability: Mapping of ability IDs to modifier tuples.
         px_avail_by_system: Mapping of system_id to available EXP points for that system.
+        character_faction_ids: Set of faction IDs the character belongs to.
         visible_only: If True, only return visible abilities.
 
     Returns:
@@ -234,7 +241,6 @@ def _get_available_abilities(
         )
     )
 
-    character_faction_ids = _get_character_faction_ids(char)
     available_abilities = []
     for ability in all_abilities:
         if not check_available_ability_exp(ability, current_character_abilities, current_character_choices):
@@ -277,6 +283,7 @@ def _auto_buy_abilities(
     current_character_choices: set[int],
     modifiers_by_ability: dict[int, list[tuple]],
     px_avail_by_system: dict[int, int],
+    character_faction_ids: set[int],
 ) -> set[int]:
     """Automatically buy the most expensive available ability in a loop.
 
@@ -289,6 +296,7 @@ def _auto_buy_abilities(
         current_character_choices: Set of choice IDs the character currently has.
         modifiers_by_ability: Mapping of ability IDs to modifier tuples.
         px_avail_by_system: Mapping of system_id to available EXP points for that system.
+        character_faction_ids: Set of faction IDs the character belongs to.
 
     Returns:
         Updated set of ability IDs the character now has.
@@ -296,7 +304,12 @@ def _auto_buy_abilities(
     """
     while True:
         available = _get_available_abilities(
-            character, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail_by_system
+            character,
+            current_character_abilities,
+            current_character_choices,
+            modifiers_by_ability,
+            px_avail_by_system,
+            character_faction_ids,
         )
         # Only consider abilities with a cost > 0 (free ones are handled separately)
         affordable = [a for a in available if a.cost > 0]
@@ -494,12 +507,24 @@ def calculate_character_experience_points(character: Any) -> None:
     starting_experience_points = get_event_config(character.event_id, "exp_start")
 
     # Automatically obtain abilities with cost 0
-    current_character_abilities, current_character_choices, modifiers_by_ability = _handle_free_abilities(character)
+    (
+        current_character_abilities,
+        current_character_choices,
+        modifiers_by_ability,
+        character_faction_ids,
+        current_abilities,
+    ) = _handle_free_abilities(character)
 
     # Get current abilities, with updated cost (need system_id for per-system grouping)
-    current_abilities = _get_current_abilities(
-        character, current_character_abilities, current_character_choices, modifiers_by_ability
-    )
+    # _handle_free_abilities already computed this list unless abilities were removed after
+    if current_abilities is None:
+        current_abilities = _get_current_abilities(
+            character,
+            current_character_abilities,
+            current_character_choices,
+            modifiers_by_ability,
+            character_faction_ids,
+        )
 
     # Pre-fetch criterions once so the auto-buy loop and final data build share the same list.
     criterions: list | None = None
@@ -524,12 +549,17 @@ def calculate_character_experience_points(character: Any) -> None:
                 current_character_choices,
                 modifiers_by_ability,
                 px_avail_by_system,
+                character_faction_ids,
             )
             if new_abilities == current_character_abilities:
                 break
             current_character_abilities = new_abilities
             current_abilities = _get_current_abilities(
-                character, current_character_abilities, current_character_choices, modifiers_by_ability
+                character,
+                current_character_abilities,
+                current_character_choices,
+                modifiers_by_ability,
+                character_faction_ids,
             )
 
     experience_data = _build_experience_data(
@@ -548,20 +578,28 @@ def calculate_character_experience_points(character: Any) -> None:
 
 def _handle_free_abilities(
     character: Any,
-) -> tuple[set[int], set[int], dict[int, list[tuple]]]:
+) -> tuple[set[int], set[int], dict[int, list[tuple]], set[int], list | None]:
     """Handle free abilities that characters should automatically receive.
 
     Args:
         character: Character instance to process.
+
+    Returns:
+        Same tuple as before, plus a fifth element: the current-abilities list
+        (with modified costs) matching the returned ability set, or None if the
+        caller must rebuild it because abilities were removed after it was computed.
+
     """
     free_ability_ids = get_free_abilities(character)
 
     # Build EXP context
-    current_character_abilities, current_character_choices, modifiers_by_ability = _build_exp_context(character)
+    current_character_abilities, current_character_choices, modifiers_by_ability, character_faction_ids = (
+        build_exp_context(character)
+    )
 
     # if the automatic acquisition of cost 0 abilities is disabled, keep what already assigned
     if get_event_config(character.event_id, "exp_no_free"):
-        return current_character_abilities, current_character_choices, modifiers_by_ability
+        return current_character_abilities, current_character_choices, modifiers_by_ability, character_faction_ids, None
 
     # look for available ability with cost 0, and not already in the free list: get them!
     # Use a dict with 0 for all systems (we only want cost=0 abilities here)
@@ -573,6 +611,7 @@ def _handle_free_abilities(
         current_character_choices,
         modifiers_by_ability,
         zero_avail,
+        character_faction_ids,
         visible_only=False,
     ):
         if ability.cost == 0 and ability.id not in free_ability_ids and (ability.visible or ability.system.hidden):
@@ -585,9 +624,10 @@ def _handle_free_abilities(
 
     # look for current abilities with cost non 0, yet got in the past as free: remove them!
     all_removed_ids: set[int] = set()
-    for ability in _get_current_abilities(
-        character, updated_character_abilities, current_character_choices, modifiers_by_ability
-    ):
+    current_abilities_list = _get_current_abilities(
+        character, updated_character_abilities, current_character_choices, modifiers_by_ability, character_faction_ids
+    )
+    for ability in current_abilities_list:
         if ability.cost > 0 and ability.id in free_ability_ids:
             removed_ability_ids = remove_char_ability(character, ability.id)
             free_ability_ids = list(set(free_ability_ids) - set(removed_ability_ids))
@@ -596,10 +636,22 @@ def _handle_free_abilities(
     set_free_abilities(character, free_ability_ids)
 
     final_character_abilities = updated_character_abilities - all_removed_ids
-    return final_character_abilities, current_character_choices, modifiers_by_ability
+    # if abilities were removed, current_abilities_list is stale; caller must rebuild it
+    if all_removed_ids:
+        current_abilities_list = None
+    return (
+        final_character_abilities,
+        current_character_choices,
+        modifiers_by_ability,
+        character_faction_ids,
+        current_abilities_list,
+    )
 
 
-def get_current_ability_exp(character: Character) -> list[AbilityExp]:
+def get_current_ability_exp(
+    character: Character,
+    exp_context: tuple[set[int], set[int], dict[int, list[tuple]], set[int]] | None = None,
+) -> list[AbilityExp]:
     """Get current abilities with modified costs for a character.
 
     Retrieves character abilities and applies cost modifications based on
@@ -607,14 +659,18 @@ def get_current_ability_exp(character: Character) -> list[AbilityExp]:
 
     Args:
         character: The character to get abilities for
+        exp_context: Optional pre-built result of `build_exp_context(character)`,
+         to avoid rebuilding the modifiers/factions queries twice.
 
     Returns:
         List of abilities with modified costs applied
 
     """
-    current_character_abilities, current_character_choices, modifiers_by_ability = _build_exp_context(character)
+    if exp_context is None:
+        exp_context = build_exp_context(character)
+    current_character_abilities, current_character_choices, modifiers_by_ability, character_faction_ids = exp_context
     return _get_current_abilities(
-        character, current_character_abilities, current_character_choices, modifiers_by_ability
+        character, current_character_abilities, current_character_choices, modifiers_by_ability, character_faction_ids
     )
 
 
@@ -650,7 +706,11 @@ def check_available_ability_exp(
     return not required_faction_ids or required_faction_ids.issubset(current_char_factions or set())
 
 
-def get_available_ability_exp(char: Any, px_avail_by_system: dict[int, int] | None = None) -> list:
+def get_available_ability_exp(
+    char: Any,
+    px_avail_by_system: dict[int, int] | None = None,
+    exp_context: tuple[set[int], set[int], dict[int, list[tuple]], set[int]] | None = None,
+) -> list:
     """Get list of abilities available for purchase with character's EXP.
 
     Retrieves all visible abilities that the character can purchase based on their
@@ -661,20 +721,29 @@ def get_available_ability_exp(char: Any, px_avail_by_system: dict[int, int] | No
         char: Character instance to check abilities for
         px_avail_by_system: Mapping of system_id to available EXP. If None,
             built from character's additional data.
+        exp_context: Optional pre-built result of `build_exp_context(char)`,
+         to avoid rebuilding the modifiers/factions queries twice.
 
     Returns:
         List of AbilityExp instances that the character can purchase with their
         current EXP and that meet all prerequisites and requirements
 
     """
-    current_character_abilities, current_character_choices, modifiers_by_ability = _build_exp_context(char)
+    if exp_context is None:
+        exp_context = build_exp_context(char)
+    current_character_abilities, current_character_choices, modifiers_by_ability, character_faction_ids = exp_context
 
     if px_avail_by_system is None:
         add_char_addit(char)
         px_avail_by_system = build_exp_avail_by_system_from_addit(char)
 
     return _get_available_abilities(
-        char, current_character_abilities, current_character_choices, modifiers_by_ability, px_avail_by_system
+        char,
+        current_character_abilities,
+        current_character_choices,
+        modifiers_by_ability,
+        px_avail_by_system,
+        character_faction_ids,
     )
 
 
