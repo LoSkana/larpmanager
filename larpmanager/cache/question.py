@@ -169,7 +169,7 @@ def init_writing_questions_cache(event: Event) -> dict:
     return questions_by_applicable
 
 
-def init_registration_questions_cache(event_id: int) -> list:
+def init_registration_questions_cache(event: Event) -> list:
     """Initialize cache for registration questions.
 
     Returns a list of question dicts with serialized options and annotation maps.
@@ -178,7 +178,7 @@ def init_registration_questions_cache(event_id: int) -> list:
     cache consistency across different feature configurations.
     """
     # Get all questions for the event, ordered by section first, then by question order
-    questions = RegistrationQuestion.objects.filter(event_id=event_id).order_by(
+    questions = RegistrationQuestion.objects.filter(event=event).order_by(
         F("section__order").asc(nulls_first=True),
         "order",
     )
@@ -230,12 +230,12 @@ def get_cached_writing_questions(event: Event, applicable: str) -> list:
 
 
 def get_cached_registration_questions(
-    event_id: int, applicable: str = RegistrationQuestionApplicable.REGISTRATION
+    event: Event, applicable: str = RegistrationQuestionApplicable.REGISTRATION
 ) -> list:
     """Get cached registration questions.
 
     Args:
-        event_id: Event ID instance
+        event: Event instance
         applicable: RegistrationQuestionApplicable value to filter by (defaults to the
             standard "registration" form, e.g. excludes "matchmaker" questions).
 
@@ -244,14 +244,14 @@ def get_cached_registration_questions(
               Each dict contains question fields, annotation maps, and 'options' list.
 
     """
-    cache_key = get_event_questions_cache_key(event_id, "registration")
+    cache_key = get_event_questions_cache_key(event.id, "registration")
 
     # Try to get from cache
     cached_data = cache.get(cache_key)
 
     if cached_data is None:
         # Initialize cache
-        cached_data = init_registration_questions_cache(event_id)
+        cached_data = init_registration_questions_cache(event)
         cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     # Explicitly sort to ensure order is preserved after cache deserialization

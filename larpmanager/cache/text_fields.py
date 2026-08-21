@@ -103,11 +103,11 @@ def get_single_cache_text_field(element_uuid: str, field_name: str, text_value: 
 # Writing
 
 
-def init_cache_text_field(model_class: type[BaseModel], event_id: int) -> dict:
+def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
     """Initialize cache for text fields of model instances related to an event."""
     cache_result = {}
     # Iterate through all instances of the given type for the event's parent
-    for instance in model_class.objects.filter(event_id=get_class_parent(event_id, model_class)).select_related(
+    for instance in model_class.objects.filter(event_id=get_class_parent(event.id, model_class)).select_related(
         "event__parent"
     ):
         _init_element_cache_text_field(instance, cache_result, model_class)
@@ -174,17 +174,17 @@ def _init_element_cache_text_field(
         )
 
 
-def get_cache_text_field(field_type: type[BaseModel], event_id: int) -> str:
+def get_cache_text_field(field_type: type[BaseModel], event: Event) -> str:
     """Get cached text field value for event, initializing if not found."""
     # Generate cache key for the specific type and event
-    cache_key = cache_text_field_key(field_type, event_id)
+    cache_key = cache_text_field_key(field_type, event.id)
 
     # Try to retrieve cached value
     cached_value = cache.get(cache_key)
 
     # Initialize and cache if not found
     if cached_value is None:
-        cached_value = init_cache_text_field(field_type, event_id)
+        cached_value = init_cache_text_field(field_type, event)
         cache.set(cache_key, cached_value, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_value

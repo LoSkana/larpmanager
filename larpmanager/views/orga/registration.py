@@ -63,7 +63,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
 )
 from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
-from larpmanager.models.event import PreRegistration
+from larpmanager.models.event import Event, PreRegistration
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -372,7 +372,7 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
 
         # Get question from cache instead of DB
         cached_questions = get_cached_registration_questions(
-            get_class_parent(context["event"].id, RegistrationQuestion)
+            Event.objects.get(pk=get_class_parent(context["event"].id, RegistrationQuestion))
         )
         question = None
         for q in cached_questions:
