@@ -38,9 +38,16 @@ def is_experience_recalc_deferred() -> bool:
 
 @contextmanager
 def experience_recalc_deferred() -> Iterator[None]:
-    """Suppress the Character post_save experience recompute in this thread."""
+    """Suppress the Character post_save experience recompute in this thread.
+
+    Reentrant: nested calls (e.g. a deferred save triggering another deferred
+    save) restore the previous flag value on exit instead of always clearing it,
+    so an inner scope exiting first doesn't re-enable the recompute while an
+    outer scope is still in flight.
+    """
+    previous = is_experience_recalc_deferred()
     experience_state.deferred = True
     try:
         yield
     finally:
-        experience_state.deferred = False
+        experience_state.deferred = previous

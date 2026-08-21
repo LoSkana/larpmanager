@@ -525,6 +525,19 @@ def _save_character(
     return character, success_message
 
 
+def propose_character_for_approval(character: Character) -> None:
+    """Move a character from CREATION/REVIEW to PROPOSED.
+
+    Re-reads and locks the row before transitioning, so a character already moved on to
+    PROPOSED (or beyond) by a concurrent request is left untouched.
+    """
+    with transaction.atomic():
+        locked_character = Character.objects.select_for_update().get(pk=character.pk)
+        if locked_character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
+            locked_character.status = CharacterStatus.PROPOSED
+            locked_character.save()
+
+
 @login_required
 def character_confirm(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Let the player confirm their character is ready, proposing it to the staff for approval.
@@ -538,23 +551,19 @@ def character_confirm(request: HttpRequest, event_slug: str, character_uuid: str
         HttpResponse: Confirmation page on GET, redirect to character page on POST
 
     """
-    context = get_event_context(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     if not get_event_config(context["event"].id, "user_character_approval", context=context):
         raise Http404
 
-    character = Character.objects.get(uuid=character_uuid, event=context["event"])
+    character = Character.objects.get(pk=_get_character_cache_id(context))
     if character.status not in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
         messages.warning(request, _("This character cannot be proposed at the moment"))
         return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
 
     if request.method == "POST":
-        with transaction.atomic():
-            character = Character.objects.select_for_update().get(pk=character.pk)
-            if character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
-                character.status = CharacterStatus.PROPOSED
-                character.save()
+        propose_character_for_approval(character)
         messages.success(
             request,
             _(
