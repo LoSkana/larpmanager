@@ -248,9 +248,9 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
 
         # Get applicable questions for the event
         if is_registration_model:
-            applicable_question_list = get_cached_registration_questions(context["event"])
+            applicable_question_list = get_cached_registration_questions(context["event"].id)
         else:
-            applicable_question_list = get_cached_writing_questions(context["event"], applicable_questions)
+            applicable_question_list = get_cached_writing_questions(context["event"].id, applicable_questions)
 
         # Extract question IDs for efficient database filtering
         question_ids = {question["id"] for question in applicable_question_list}
@@ -754,7 +754,7 @@ def export_registration_form(
 
     # Extract registration questions data
     column_headers = context["columns"][0].keys()
-    questions = get_cached_registration_questions(context["event"], applicable=applicable)
+    questions = get_cached_registration_questions(context["event"].id, applicable=applicable)
     question_values = _extract_values(column_headers, questions, mappings)
 
     # Initialize exports list with registration questions sheet
@@ -1117,7 +1117,7 @@ def _get_column_names(context: dict) -> None:
 
 def _registration_column_names(context: dict) -> None:
     """Build field type mapping from registration questions for validation."""
-    questions = get_cached_registration_questions(context["event"])
+    questions = get_cached_registration_questions(context["event"].id)
     context["fields"] = {question["name"]: question["typ"] for question in questions}
 
     # Build mapping of special question type to question name
@@ -1172,7 +1172,7 @@ def _get_writing_names(context: dict) -> None:
     context["fields"] = {}
 
     # Retrieve and process writing questions for the event
-    writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+    writing_questions = get_cached_writing_questions(context["event"].id, context["writing_typ"])
     for question in writing_questions:
         context["fields"][question["name"]] = question["typ"]
         # Store the name field for special handling

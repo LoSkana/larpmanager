@@ -803,7 +803,7 @@ def check_missing_mandatory(context: dict) -> None:
         **dict.fromkeys(BaseQuestionType.get_choice_types(), WritingChoice),
     }
 
-    questions = get_cached_writing_questions(context["event"], QuestionApplicable.CHARACTER)
+    questions = get_cached_writing_questions(context["event"].id, QuestionApplicable.CHARACTER)
     character_id = _get_character_cache_id(context)
 
     # Collect mandatory questions grouped by model
@@ -860,7 +860,7 @@ def _collect_sources_map(character: Character) -> dict[int, set[str]]:
     sheet_name = next(
         (
             q["name"]
-            for q in get_cached_writing_questions(character.event, QuestionApplicable.CHARACTER)
+            for q in get_cached_writing_questions(character.event_id, QuestionApplicable.CHARACTER)
             if q["typ"] == WritingQuestionType.SHEET
         ),
         WritingQuestionType.SHEET.label,

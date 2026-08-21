@@ -748,7 +748,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     """
     context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.CHARACTER)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.CHARACTER)
 
     context["list"] = get_player_characters(context["member"], context["event"])
     # add character configs
@@ -893,7 +893,7 @@ def get_options_dependencies(context: dict) -> None:
              "questions" mappings.
 
     """
-    context["dependencies"] = get_character_dependencies(context["event"], context["features"])
+    context["dependencies"] = get_character_dependencies(context["event"].id, context["features"])
 
 
 def _get_character_assign_error(context: dict) -> str | None:

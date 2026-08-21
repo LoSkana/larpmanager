@@ -251,7 +251,7 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     3. Match by name only
     """
     # Get question by type and name
-    target_questions = get_cached_registration_questions(target_event)
+    target_questions = get_cached_registration_questions(target_event.id)
     exact_match = next(
         (q for q in target_questions if q["typ"] == source_question.typ and q["name"] == source_question.name), None
     )
@@ -483,9 +483,9 @@ def validate_transfer_feasibility(registration: Registration, target_run: Run) -
     _validate_ticket(registration, result, target_run)
 
     # Check question matching
-    source_questions = len(get_cached_registration_questions(registration.run.event))
+    source_questions = len(get_cached_registration_questions(registration.run.event_id))
 
-    target_questions = len(get_cached_registration_questions(target_run.event))
+    target_questions = len(get_cached_registration_questions(target_run.event_id))
 
     if source_questions != target_questions:
         result["info"].append(f"Number of questions differs: {source_questions} -> {target_questions}")

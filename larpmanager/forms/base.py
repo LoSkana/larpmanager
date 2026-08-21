@@ -613,7 +613,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
     def _init_questions(self, event: Event) -> None:
         """Initialize questions for the given event."""
-        self.questions = get_cached_registration_questions(event)
+        self.questions = get_cached_registration_questions(event.id)
 
     def get_options_query(self, event: Event) -> QuerySet:
         """Return ordered options for questions in the given event."""

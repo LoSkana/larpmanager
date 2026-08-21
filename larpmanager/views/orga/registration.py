@@ -63,7 +63,7 @@ from larpmanager.models.accounting import (
     OtherChoices,
 )
 from larpmanager.models.casting import AssignmentTrait, QuestType, Trait
-from larpmanager.models.event import Event, PreRegistration
+from larpmanager.models.event import PreRegistration
 from larpmanager.models.form import (
     BaseQuestionType,
     RegistrationAnswer,
@@ -372,7 +372,7 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
 
         # Get question from cache instead of DB
         cached_questions = get_cached_registration_questions(
-            Event.objects.get(pk=get_event_class_parent(context["event"].id, RegistrationQuestion))
+            get_event_class_parent(context["event"].id, RegistrationQuestion)
         )
         question = None
         for q in cached_questions:
@@ -427,7 +427,7 @@ def _orga_registrations_prepare(context: dict) -> None:
     for ticket in tickets:
         ticket["emails"] = []
         context["reg_tickets"][ticket["id"]] = ticket
-    event_questions = get_cached_registration_questions(context["event"])
+    event_questions = get_cached_registration_questions(context["event"].id)
     context["reg_questions"] = _get_registration_fields(context, context["member"], event_questions)
     context["text_field_uuids"] = [
         str(q["uuid"]) for q in event_questions if q["typ"] in [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
@@ -451,7 +451,7 @@ def _get_registration_fields(context: dict, member: Any, event_questions: list |
     registration_questions = {}
 
     if event_questions is None:
-        event_questions = get_cached_registration_questions(context["event"])
+        event_questions = get_cached_registration_questions(context["event"].id)
 
     for question in event_questions:
         # Check if question has access restrictions enabled
@@ -713,7 +713,7 @@ def orga_registration_form_list(request: HttpRequest, event_slug: str) -> Any:  
     q_uuid = request.POST.get("q_uuid")
 
     # Get question from cache instead of DB query
-    cached_questions = get_cached_registration_questions(context["event"])
+    cached_questions = get_cached_registration_questions(context["event"].id)
     q = None
     for question in cached_questions:
         if str(question["uuid"]) == str(q_uuid):

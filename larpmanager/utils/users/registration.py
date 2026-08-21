@@ -1337,7 +1337,7 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
 
     # Get event features and filter applicable questions
     event_features = get_event_features(get_run_event_id(instance.run_id))
-    for question in get_cached_registration_questions(instance.run.event):
+    for question in get_cached_registration_questions(instance.run.event_id):
         if skip_registration_question(question, instance, event_features):
             continue
         applicable_questions.append(question)
@@ -1562,7 +1562,7 @@ def process_registration_event_change(registration: Registration) -> None:
     except ObjectDoesNotExist:
         registration.ticket = None
 
-    cached_questions = get_cached_registration_questions(registration.run.event)
+    cached_questions = get_cached_registration_questions(registration.run.event_id)
 
     # Process all registration choices (question/option pairs)
     # Try to find matching questions and options in the new event

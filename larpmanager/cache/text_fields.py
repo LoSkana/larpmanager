@@ -151,7 +151,7 @@ def _init_element_cache_text_field(
 
     # Get applicable writing questions for this element type
     applicable = QuestionApplicable.get_applicable(element_type._meta.model_name)  # noqa: SLF001  # Django model metadata
-    questions = get_cached_writing_questions(element.event, applicable)
+    questions = get_cached_writing_questions(element.event_id, applicable)
     editor_questions = {q["id"]: q for q in questions if q["typ"] in ALLOWED_TYPES}
     if not editor_questions:
         return
@@ -336,7 +336,9 @@ def _init_element_cache_registration_field(
         cache_result[registration_uuid] = {}
 
     # Get all editor/paragraph-type questions for the event
-    questions = [question for question in get_cached_registration_questions(event) if question["typ"] in ALLOWED_TYPES]
+    questions = [
+        question for question in get_cached_registration_questions(event.id) if question["typ"] in ALLOWED_TYPES
+    ]
 
     # Process each editor question and cache the answer text
     for question in questions:

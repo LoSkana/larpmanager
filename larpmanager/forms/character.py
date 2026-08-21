@@ -129,7 +129,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Publish the requirements to the page, so the client mirrors the server side gating
         if "dependencies" not in self.params and self.params.get("event"):
             self.params["dependencies"] = get_character_dependencies(
-                self.params["event"],
+                self.params["event"].id,
                 self.params.get("features", []),
             )
 
@@ -166,7 +166,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if not event:
             return {}
 
-        return get_character_dependencies(event, self.params.get("features", []))[kind]
+        return get_character_dependencies(event.id, self.params.get("features", []))[kind]
 
     def is_auto_save(self) -> bool:
         """Check whether the form is bound to a background auto-save request."""
@@ -1407,7 +1407,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
             - Sets self.prevent_canc based on instance type length
         """
         # Get writing questions applicable to current writing type
-        writing_questions = get_cached_writing_questions(self.params["event"], self.params["writing_typ"])
+        writing_questions = get_cached_writing_questions(self.params["event"].id, self.params["writing_typ"])
 
         # Extract already used question types to avoid duplicates
         already_used_types = list({q["typ"] for q in writing_questions})

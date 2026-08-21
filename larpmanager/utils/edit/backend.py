@@ -196,7 +196,7 @@ def _version_applicable(element: BaseModel, model_type: str) -> str:
         choices_by_question.setdefault(choice.question_id, []).append(choice.option.name)
 
     # Collect all applicable questions and their values
-    for question in get_cached_writing_questions(element.event, model_type):
+    for question in get_cached_writing_questions(element.event_id, model_type):
         if question["typ"] == "text":
             includes_text_field = True
         value = _get_field_value(element, question, answers_by_question, choices_by_question)

@@ -231,7 +231,7 @@ class BaseWritingForm(BaseRegistrationForm):
     def _init_questions(self, event: Event) -> None:
         """Initialize questions filtered by applicable type using cache."""
         self.params.get("features", [])
-        self.questions = get_cached_writing_questions(event, self.applicable)
+        self.questions = get_cached_writing_questions(event.id, self.applicable)
 
     def get_options_query(self, event: Event) -> Any:
         """Get annotated queryset of options with ticket mappings."""

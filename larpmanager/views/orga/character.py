@@ -508,7 +508,7 @@ def orga_writing_form(request: HttpRequest, event_slug: str, writing_type: str) 
     context["download"] = 1
 
     # Retrieve and order writing questions for the specified form type
-    context["list"] = get_cached_writing_questions(context["event"], context["writing_typ"])
+    context["list"] = get_cached_writing_questions(context["event"].id, context["writing_typ"])
 
     # Set approval configuration and status flags for template rendering
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)

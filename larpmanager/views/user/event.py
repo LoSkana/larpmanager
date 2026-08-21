@@ -1026,7 +1026,7 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Load all event cache data into context
     get_event_cache_all(context)
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.FACTION)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.FACTION)
 
     return render(request, "larpmanager/event/factions.html", context)
 
@@ -1107,7 +1107,7 @@ def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = 
 
     context["list"] = [quest.show_complete() for quest in quest_queryset]
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quests.html", context)
 
@@ -1158,7 +1158,7 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
         traits.append(res)
     context["traits"] = traits
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quest.html", context)
 

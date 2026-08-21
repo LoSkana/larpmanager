@@ -27,6 +27,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.db.models import F, Prefetch
 
+from larpmanager.cache.basic import get_event_basic_cache
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -42,8 +43,6 @@ from larpmanager.utils.core.common import get_event_elements
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
-
-    from larpmanager.models.event import Event
 
 
 def skip_registration_question(
@@ -142,7 +141,7 @@ def get_event_questions_cache_key(event_id: int, question_type: str) -> str:
     return f"event_questions_{question_type}_{event_id}"
 
 
-def init_writing_questions_cache(event: Event) -> dict:
+def init_writing_questions_cache(event_id: int) -> dict:
     """Initialize cache for all writing questions grouped by applicable type.
 
     Returns:
@@ -153,7 +152,7 @@ def init_writing_questions_cache(event: Event) -> dict:
     options_queryset = WritingOption.objects.order_by("order").annotate(tickets_map=ArrayAgg("tickets__id"))
 
     all_questions = (
-        get_event_elements(event.id, WritingQuestion)
+        get_event_elements(event_id, WritingQuestion)
         .order_by("order")
         .prefetch_related(Prefetch("options", queryset=options_queryset))
     )
@@ -169,7 +168,7 @@ def init_writing_questions_cache(event: Event) -> dict:
     return questions_by_applicable
 
 
-def init_registration_questions_cache(event: Event) -> list:
+def init_registration_questions_cache(event_id: int) -> list:
     """Initialize cache for registration questions.
 
     Returns a list of question dicts with serialized options and annotation maps.
@@ -178,7 +177,7 @@ def init_registration_questions_cache(event: Event) -> list:
     cache consistency across different feature configurations.
     """
     # Get all questions for the event, ordered by section first, then by question order
-    questions = RegistrationQuestion.objects.filter(event=event).order_by(
+    questions = RegistrationQuestion.objects.filter(event_id=event_id).order_by(
         F("section__order").asc(nulls_first=True),
         "order",
     )
@@ -199,11 +198,11 @@ def init_registration_questions_cache(event: Event) -> list:
     return [question.as_dict() for question in questions]
 
 
-def get_cached_writing_questions(event: Event, applicable: str) -> list:
+def get_cached_writing_questions(event_id: int, applicable: str) -> list:
     """Get cached writing questions for a specific applicable type.
 
     Args:
-        event: Event instance
+        event_id: Event id
         applicable: Question applicable type (e.g., QuestionApplicable.CHARACTER)
 
     Returns:
@@ -211,17 +210,18 @@ def get_cached_writing_questions(event: Event, applicable: str) -> list:
               Each dict contains question fields and 'options' list with serialized options.
 
     """
-    if event.parent:
-        event = event.parent
+    parent_id = get_event_basic_cache(event_id)["parent_id"]
+    if parent_id:
+        event_id = parent_id
 
-    cache_key = get_event_questions_cache_key(event.id, "writing")
+    cache_key = get_event_questions_cache_key(event_id, "writing")
 
     # Try to get from cache
     cached_questions = cache.get(cache_key)
 
     if cached_questions is None:
         # Initialize cache with all applicable types
-        cached_questions = init_writing_questions_cache(event)
+        cached_questions = init_writing_questions_cache(event_id)
         cache.set(cache_key, cached_questions, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     # Explicitly sort to ensure order is preserved after cache deserialization
@@ -230,12 +230,12 @@ def get_cached_writing_questions(event: Event, applicable: str) -> list:
 
 
 def get_cached_registration_questions(
-    event: Event, applicable: str = RegistrationQuestionApplicable.REGISTRATION
+    event_id: int, applicable: str = RegistrationQuestionApplicable.REGISTRATION
 ) -> list:
     """Get cached registration questions.
 
     Args:
-        event: Event instance
+        event_id: Event id
         applicable: RegistrationQuestionApplicable value to filter by (defaults to the
             standard "registration" form, e.g. excludes "matchmaker" questions).
 
@@ -244,14 +244,14 @@ def get_cached_registration_questions(
               Each dict contains question fields, annotation maps, and 'options' list.
 
     """
-    cache_key = get_event_questions_cache_key(event.id, "registration")
+    cache_key = get_event_questions_cache_key(event_id, "registration")
 
     # Try to get from cache
     cached_data = cache.get(cache_key)
 
     if cached_data is None:
         # Initialize cache
-        cached_data = init_registration_questions_cache(event)
+        cached_data = init_registration_questions_cache(event_id)
         cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     # Explicitly sort to ensure order is preserved after cache deserialization
@@ -259,10 +259,10 @@ def get_cached_registration_questions(
     return sorted(questions, key=lambda q: (q.get("section_order") or -1, q["order"]))
 
 
-def get_writing_field_names(event: Event, applicable: str) -> dict:
+def get_writing_field_names(event_id: int, applicable: str) -> dict:
     """Get a mapping of default field type to field name for an applicable type."""
     def_types = get_def_writing_types()
-    questions = get_cached_writing_questions(event, applicable)
+    questions = get_cached_writing_questions(event_id, applicable)
     return {q["typ"]: q["name"] for q in questions if q["typ"] in def_types}
 
 
@@ -278,9 +278,9 @@ def _requirements_map(elements: Iterable[Any]) -> dict[str, list[str]]:
     }
 
 
-def init_dependencies_cache(event: Event) -> dict[str, dict[str, list[str]]]:
+def init_dependencies_cache(event_id: int) -> dict[str, dict[str, list[str]]]:
     """Build the requirement maps of character options and questions, keyed by uuid."""
-    character_questions = get_cached_writing_questions(event, QuestionApplicable.CHARACTER)
+    character_questions = get_cached_writing_questions(event_id, QuestionApplicable.CHARACTER)
     question_ids = [question["id"] for question in character_questions]
 
     writing_options = (
@@ -298,11 +298,11 @@ def init_dependencies_cache(event: Event) -> dict[str, dict[str, list[str]]]:
     return {"options": _requirements_map(writing_options), "questions": _requirements_map(gated_questions)}
 
 
-def get_character_dependencies(event: Event, features: Iterable[str]) -> dict[str, dict[str, list[str]]]:
+def get_character_dependencies(event_id: int, features: Iterable[str]) -> dict[str, dict[str, list[str]]]:
     """Get the requirements of character options and questions, mapped by uuid.
 
     Args:
-        event: Event the character questions belong to, parent event is used when present
+        event_id: Id of event the character questions belong to, parent event is used when present
         features: Active features of the event
 
     Returns:
@@ -315,27 +315,28 @@ def get_character_dependencies(event: Event, features: Iterable[str]) -> dict[st
     if "character" not in features or "wri_que_requirements" not in features:
         return {"options": {}, "questions": {}}
 
-    if event.parent:
-        event = event.parent
+    parent_id = get_event_basic_cache(event_id)["parent_id"]
+    if parent_id:
+        event_id = parent_id
 
-    cache_key = get_event_dependencies_cache_key(event.id)
+    cache_key = get_event_dependencies_cache_key(event_id)
 
     dependencies = cache.get(cache_key)
     if dependencies is None:
-        dependencies = init_dependencies_cache(event)
+        dependencies = init_dependencies_cache(event_id)
         cache.set(cache_key, dependencies, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return dependencies
 
 
-def get_character_option_dependencies(event: Event, features: Iterable[str]) -> dict[str, list[str]]:
+def get_character_option_dependencies(event_id: int, features: Iterable[str]) -> dict[str, list[str]]:
     """Get the requirements between character options, mapped by option uuid."""
-    return get_character_dependencies(event, features)["options"]
+    return get_character_dependencies(event_id, features)["options"]
 
 
-def get_character_question_dependencies(event: Event, features: Iterable[str]) -> dict[str, list[str]]:
+def get_character_question_dependencies(event_id: int, features: Iterable[str]) -> dict[str, list[str]]:
     """Get the options required by each character question, mapped by question uuid."""
-    return get_character_dependencies(event, features)["questions"]
+    return get_character_dependencies(event_id, features)["questions"]
 
 
 def clear_writing_questions_cache(event_id: int) -> None:
