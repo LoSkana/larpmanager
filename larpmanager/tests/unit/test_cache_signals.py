@@ -79,7 +79,7 @@ class TestCacheSignals(BaseTestCase):
         character.save()
 
         # Should reset cache for the event
-        mock_reset.assert_called_once_with(character.event)
+        mock_reset.assert_called_once_with(character.event_id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_character_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -89,7 +89,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset mock after setup
         character.delete()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.cache.character.clear_event_cache_all_runs")
     def test_faction_pre_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -99,7 +99,7 @@ class TestCacheSignals(BaseTestCase):
         faction = Faction(name="Test Faction", event=event)
         faction.save()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_faction_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -109,7 +109,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create
         faction.delete()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.cache.character.clear_event_cache_all_runs")
     def test_quest_type_pre_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -119,7 +119,7 @@ class TestCacheSignals(BaseTestCase):
         quest_type = QuestType(name="Test Quest Type", event=event)
         quest_type.save()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_quest_type_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -129,7 +129,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create
         quest_type.delete()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.cache.character.clear_event_cache_all_runs")
     def test_quest_pre_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -140,7 +140,7 @@ class TestCacheSignals(BaseTestCase):
         quest = Quest(name="Test Quest", typ=quest_type, event=event)
         quest.save()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_quest_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -151,7 +151,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after creates
         quest.delete()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.cache.character.clear_event_cache_all_runs")
     def test_trait_pre_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -161,7 +161,7 @@ class TestCacheSignals(BaseTestCase):
         trait = Trait(name="Test Trait", event=event)
         trait.save()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_trait_soft_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -171,7 +171,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create
         trait.delete()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_event_post_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -181,7 +181,7 @@ class TestCacheSignals(BaseTestCase):
         event.name = "Updated Event"
         event.save()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_run_cache_and_media")
     def test_run_post_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -200,7 +200,7 @@ class TestCacheSignals(BaseTestCase):
         question = WritingQuestion(event=event, name="test_question", description="Test")
         question.save()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_writing_question_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -210,7 +210,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create
         question.delete()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_writing_option_post_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -222,7 +222,7 @@ class TestCacheSignals(BaseTestCase):
         option.save()
 
         # The signal uses question.event
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_writing_option_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -234,7 +234,7 @@ class TestCacheSignals(BaseTestCase):
         option.delete()
 
         # The signal uses question.event
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.cache.character.clear_run_cache_and_media")
     def test_registration_character_rel_post_save_resets_character_cache(self, mock_reset: Any) -> None:
