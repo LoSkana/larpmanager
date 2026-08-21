@@ -2191,7 +2191,7 @@ def _modifier_load(context: dict, csv_row: dict) -> str:
     event = context["event"]
 
     (modifier, was_created) = ModifierExp.objects.get_or_create(
-        event=get_class_parent(event.id, ModifierExp),
+        event_id=get_class_parent(event.id, ModifierExp),
         number=number,
         defaults={"order": 0},
     )
