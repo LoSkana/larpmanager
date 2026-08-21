@@ -29,7 +29,7 @@ from typing import TYPE_CHECKING
 
 from cryptography.fernet import Fernet, InvalidToken
 
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
@@ -69,7 +69,7 @@ def is_registration_provisional(
     """
     # Get event id from registration if not provided
     if not event_id:
-        event_id = get_run_basic_cache(instance.run_id)["event_id"]
+        event_id = get_run_event_id(instance.run_id)
 
     # Get event features if not provided
     if not features:
@@ -169,7 +169,7 @@ def handle_accounting_item_payment_pre_save(instance: AccountingItemPayment) -> 
             return
 
         # Check if payment notifications are enabled for this association
-        association_id = get_run_basic_cache(instance.registration.run_id)["association_id"]
+        association_id = get_run_association_id(instance.registration.run_id)
         if not get_association_config(association_id, "mail_payment"):
             return
 

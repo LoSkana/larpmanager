@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import _format_decimal, is_registration_provisional
 from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
@@ -300,7 +300,7 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     registration_status_characters(run, registration, run_status, features, context)
 
     # Get user membership for the event's association
-    user_membership = get_user_membership(member, get_run_basic_cache(run.id)["association_id"])
+    user_membership = get_user_membership(member, get_run_association_id(run.id))
 
     # Build base registration message with ticket info if available
     is_provisional = is_registration_provisional(
@@ -1306,7 +1306,7 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
     question_ids_cache = []
 
     # Get event features and filter applicable questions
-    event_features = get_event_features(get_run_basic_cache(instance.run_id)["event_id"])
+    event_features = get_event_features(get_run_event_id(instance.run_id))
     for question in get_cached_registration_questions(instance.run.event):
         if skip_registration_question(question, instance, event_features):
             continue
@@ -1519,10 +1519,7 @@ def process_registration_event_change(registration: Registration) -> None:
         return
 
     # Skip processing if the event hasn't actually changed
-    if (
-        get_run_basic_cache(previous_registration.run_id)["event_id"]
-        == get_run_basic_cache(registration.run_id)["event_id"]
-    ):
+    if get_run_event_id(previous_registration.run_id) == get_run_event_id(registration.run_id):
         return
 
     # Attempt to find a matching ticket in the new event by name

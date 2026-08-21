@@ -35,7 +35,7 @@ from django.utils import timezone
 
 from larpmanager.accounting.base import is_registration_provisional, round_to_nearest_cent
 from larpmanager.accounting.token_credit import handle_tokes_credits
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import reset_event_links
@@ -381,9 +381,7 @@ def installment_check(registration: Registration, alert: int, association_id: in
     cumulative_amount = 0
     has_distant_installments = False
     most_overdue_deadline = None
-    installments_query = RegistrationInstallment.objects.filter(
-        event_id=get_run_basic_cache(registration.run_id)["event_id"]
-    )
+    installments_query = RegistrationInstallment.objects.filter(event_id=get_run_event_id(registration.run_id))
     installments_query = installments_query.annotate(tickets_map=ArrayAgg("tickets__id")).order_by("order")
     is_first_deadline = True
 
@@ -571,7 +569,7 @@ def cancel_reg(registration: Registration) -> None:
     AccountingItemOther.objects.filter(ref_addit=registration.id).delete()
 
     # Reset event links
-    reset_event_links(registration.member_id, get_run_basic_cache(registration.run_id)["association_id"])
+    reset_event_links(registration.member_id, get_run_association_id(registration.run_id))
 
 
 def process_registration_pre_save(registration: Registration) -> None:
@@ -579,7 +577,7 @@ def process_registration_pre_save(registration: Registration) -> None:
     if registration.deleted:
         return
     registration.surcharge = get_date_surcharge(registration, registration.run.event)
-    registration.member.join(get_run_basic_cache(registration.run_id)["association_id"])
+    registration.member.join(get_run_association_id(registration.run_id))
 
 
 def get_date_surcharge(registration: Registration | None, event: Event) -> int:

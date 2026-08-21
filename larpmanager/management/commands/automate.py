@@ -33,7 +33,7 @@ from django.utils import dateparse, timezone
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_active_registrations
@@ -904,7 +904,7 @@ class Command(BaseCommand):
 
         """
         # Get event features and user membership for this registration
-        event_features = get_event_features(get_run_basic_cache(registration.run_id)["event_id"])
+        event_features = get_event_features(get_run_event_id(registration.run_id))
         get_user_membership(registration.member, association.id)
 
         # Check if today is the scheduled day to send reminder emails
@@ -966,7 +966,7 @@ class Command(BaseCommand):
         membership_fee_already_paid = AccountingItemMembership.objects.filter(
             year=registration.run.end.year,
             member=registration.member,
-            association_id=get_run_basic_cache(registration.run_id)["association_id"],
+            association_id=get_run_association_id(registration.run_id),
         ).count()
         if membership_fee_already_paid > 0:
             return
