@@ -71,14 +71,15 @@ def get_event_basic_cache(event_id: int) -> dict:
     cache_key = event_basic_cache_key(event_id)
     data = cache.get(cache_key)
     if data is None:
-        association_id, parent_id, slug = Event.all_objects.values_list("association_id", "parent_id", "slug").get(
-            id=event_id
-        )
+        association_id, parent_id, slug, name = Event.all_objects.values_list(
+            "association_id", "parent_id", "slug", "name"
+        ).get(id=event_id)
         currency_symbol = get_association_basic_cache(association_id)["currency_symbol"]
         data = {
             "association_id": association_id,
             "parent_id": parent_id,
             "slug": slug,
+            "name": name,
             "currency_symbol": currency_symbol,
         }
         cache.set(cache_key, data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)

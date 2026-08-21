@@ -35,7 +35,7 @@ from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
 from larpmanager.utils.core.clone_guard import is_clone_active
-from larpmanager.utils.core.common import _validate_and_fetch_objects
+from larpmanager.utils.core.common import _validate_and_fetch_objects, get_event_class_parent, get_event_elements
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 if TYPE_CHECKING:
@@ -89,9 +89,7 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
 
         if cached_event_data is None:
             logger.debug("Cache miss during %s update for event %s, reinitializing", section_name, event_id)
-            # We need to get the event to reinitialize
-            event = Event.objects.get(id=event_id)
-            init_event_rels_all(event)
+            init_event_rels_all(event_id)
             return
 
         if section_name not in cached_event_data:
@@ -127,14 +125,14 @@ def remove_item_from_cache_section(event_id: int, section_name: str, section_id:
         clear_event_relationships_cache(event_id)
 
 
-def _make_char_rels_func(event: Event) -> Callable:
+def _make_char_rels_func(event_id: int) -> Callable:
     """Return a closure that computes character rels within a specific event.
 
     Fetches event features once so the closure can be called for many
     characters without repeating the features lookup.
     """
-    features = get_event_features(event.id)
-    return lambda char: get_event_char_rels(char, features, event)
+    features = get_event_features(event_id)
+    return lambda char: get_event_char_rels(char, features, event_id)
 
 
 def _get_section_rels_dirty_bg_func(section: str) -> Callable:
@@ -236,17 +234,17 @@ def update_m2m_related_characters(
                 affected_character_ids = [rel.character_id for rel in instance.get_plot_characters()]
 
         # Get all run IDs to update (event and child events)
-        event = instance.event
-        events_id = list(Event.objects.filter(parent=event).values_list("pk", flat=True))
-        events_id.append(event.id)
+        event_id = instance.event_id
+        events_id = list(Event.objects.filter(parent_id=event_id).values_list("pk", flat=True))
+        events_id.append(event_id)
         run_ids = list(Run.objects.filter(event_id__in=events_id).values_list("id", flat=True))
 
         # Mark instance and affected characters dirty, then schedule background tasks
-        _mark_rels_dirty(section, [instance.id], event.id)
+        _mark_rels_dirty(section, [instance.id], event_id)
         _get_section_rels_dirty_bg_func(section)(instance.id)
 
         if affected_character_ids:
-            _mark_rels_dirty("characters", affected_character_ids, event.id)
+            _mark_rels_dirty("characters", affected_character_ids, event_id)
             refresh_character_rels_dirty_background(affected_character_ids)
 
             # Update event cache for all runs and characters in background (single task)
@@ -254,14 +252,14 @@ def update_m2m_related_characters(
                 update_event_cache_all_background(run_ids, affected_character_ids)
 
 
-def get_event_rels_cache(event: Event) -> dict[str, Any]:
+def get_event_rels_cache(event_id: int) -> dict[str, Any]:
     """Get event relationships from cache, initializing if not present.
 
     Retrieves cached relationship data for the specified event. If no cached
     data exists, initializes the cache with fresh relationship data.
 
     Args:
-        event (Event): The Event instance to get relationships for.
+        event_id (int): The ID of the Event to get relationships for.
 
     Returns:
         dict[str, Any]: Dictionary containing cached relationship data including
@@ -273,20 +271,20 @@ def get_event_rels_cache(event: Event) -> dict[str, Any]:
 
     """
     # Generate cache key for this specific event
-    cache_key = get_event_rels_key(event.id)
+    cache_key = get_event_rels_key(event_id)
 
     # Attempt to retrieve cached relationships
     cached_relationships = cache.get(cache_key)
 
     # Initialize cache if no data found
     if cached_relationships is None:
-        logger.debug("Cache miss for event %s, initializing", event.id)
-        return init_event_rels_all(event)
+        logger.debug("Cache miss for event %s, initializing", event_id)
+        return init_event_rels_all(event_id)
 
     # Resolve any items marked still dirty by M2M signal
     any_resolved = False
-    if cache.get(_get_rels_has_dirty_key(event.id)):
-        char_rels_func = _make_char_rels_func(event)
+    if cache.get(_get_rels_has_dirty_key(event_id)):
+        char_rels_func = _make_char_rels_func(event_id)
         for _section, _model, _rels_func in (
             ("characters", Character, char_rels_func),
             ("factions", Faction, get_event_faction_rels),
@@ -296,7 +294,7 @@ def get_event_rels_cache(event: Event) -> dict[str, Any]:
             ("quests", Quest, get_event_quest_rels),
             ("questtypes", QuestType, get_event_questtype_rels),
         ):
-            if _resolve_dirty_rels_section(event.id, cached_relationships, _section, _model, _rels_func):
+            if _resolve_dirty_rels_section(event_id, cached_relationships, _section, _model, _rels_func):
                 any_resolved = True
     if any_resolved:
         cache.set(cache_key, cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -304,14 +302,14 @@ def get_event_rels_cache(event: Event) -> dict[str, Any]:
     return cached_relationships
 
 
-def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
+def init_event_rels_all(event_id: int) -> dict[str, dict[int, dict[str, Any]]]:
     """Initialize all relationships for an event and cache the result.
 
     Builds a complete relationship cache for all characters in the event,
     including plot and faction relationships based on enabled features.
 
     Args:
-        event: The Event instance to initialize relationships for
+        event_id: The ID of the Event to initialize relationships for
 
     Returns:
         Dictionary with relationship data structure organized by element type:
@@ -337,7 +335,7 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
 
     try:
         # Get enabled features for this event to determine which relationships to build
-        features = get_event_features(event.id)
+        features = get_event_features(event_id)
 
         # Configuration mapping for each relationship type with their corresponding
         # feature name, cache key, model class, relationship function, and feature flag
@@ -366,7 +364,7 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
             relationship_cache[cache_key_plural] = {}
 
             # Get all elements of this type associated with the event
-            elements = event.get_elements(model_class)
+            elements = get_event_elements(event_id, model_class)
 
             # Build relationships for each element, passing features if required
             for element in elements:
@@ -374,21 +372,21 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
                     relationship_cache[cache_key_plural][element.id] = get_relationships_function(
                         element,
                         features,
-                        event,
+                        event_id,
                     )
                 else:
                     relationship_cache[cache_key_plural][element.id] = get_relationships_function(element)
 
-            logger.debug("Initialized %s %s relationships for event %s", len(elements), feature_name, event.id)
+            logger.debug("Initialized %s %s relationships for event %s", len(elements), feature_name, event_id)
 
         # Cache the complete relationship data structure
-        cache_key = get_event_rels_key(event.id)
+        cache_key = get_event_rels_key(event_id)
         cache.set(cache_key, relationship_cache, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug("Cached relationships for event %s", event.id)
+        logger.debug("Cached relationships for event %s", event_id)
 
     except Exception:
         # Log the error with full traceback and return empty result
-        logger.exception("Error initializing relationships for event %s", event.id)
+        logger.exception("Error initializing relationships for event %s", event_id)
         relationship_cache = {}
 
     return relationship_cache
@@ -397,14 +395,14 @@ def init_event_rels_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
 def refresh_character_relationships(character: Character) -> None:
     """Refresh character relationships for the character's event and all child events."""
     # Refresh relationships for the character's primary event
-    refresh_event_character_relationships(character, character.event)
+    refresh_event_character_relationships(character, character.event_id)
 
     # Refresh relationships for all child events if this is a campaign parent
-    for child_event in Event.objects.filter(parent_id=character.event_id):
-        refresh_event_character_relationships(character, child_event)
+    for child_event_id in Event.objects.filter(parent_id=character.event_id).values_list("pk", flat=True):
+        refresh_event_character_relationships(character, child_event_id)
 
 
-def refresh_event_character_relationships(char: Character, event: Event) -> None:
+def refresh_event_character_relationships(char: Character, event_id: int) -> None:
     """Update character relationships in cache.
 
     Updates the cached relationship data for a specific character within an event.
@@ -412,7 +410,7 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
 
     Args:
         char: The Character instance to update relationships for.
-        event: The Event instance for which we are building the cache.
+        event_id: The ID of the Event for which we are building the cache.
 
     Raises:
         Exception: If there's an error updating relationships, the cache is cleared.
@@ -420,13 +418,13 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
     """
     try:
         # Get the cache key for this event's relationships
-        cache_key = get_event_rels_key(event.id)
+        cache_key = get_event_rels_key(event_id)
         cached_relationships = cache.get(cache_key)
 
         # If cache doesn't exist, initialize it for the entire event
         if cached_relationships is None:
-            logger.debug("Cache miss during character update for event %s, reinitializing", event)
-            init_event_rels_all(event)
+            logger.debug("Cache miss during character update for event %s, reinitializing", event_id)
+            init_event_rels_all(event_id)
             return
 
         # Ensure characters dictionary exists in cache structure
@@ -434,8 +432,8 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
             cached_relationships["characters"] = {}
 
         # Get event features and update character relationships
-        event_features = get_event_features(event.id)
-        cached_relationships["characters"][char.id] = get_event_char_rels(char, event_features, event)
+        event_features = get_event_features(event_id)
+        cached_relationships["characters"][char.id] = get_event_char_rels(char, event_features, event_id)
 
         # Save updated cache with 1-day timeout
         cache.set(cache_key, cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -444,7 +442,7 @@ def refresh_event_character_relationships(char: Character, event: Event) -> None
     except Exception:
         # Log error and clear cache to prevent inconsistent state
         logger.exception("Error updating character %s relationships", char.id)
-        clear_event_relationships_cache(event.id)
+        clear_event_relationships_cache(event_id)
 
 
 def _count_unimportant(rels: Any, event_id: int) -> int:
@@ -454,40 +452,40 @@ def _count_unimportant(rels: Any, event_id: int) -> int:
     return sum(1 for rel in rels if strip_tags(rel.text).lstrip().startswith("$unimportant"))
 
 
-def _build_plot_relations(char: Character, event: Event) -> dict[str, Any]:
+def _build_plot_relations(char: Character, event_id: int) -> dict[str, Any]:
     """Build plot relationships for a character.
 
     Args:
         char: Character to build plot relationships for
-        event: Event for which the cache is built, used to scope plots
+        event_id: ID of the Event for which the cache is built, used to scope plots
 
     Returns:
         Dictionary with plot relationship data including important count
     """
-    related_plots = char.get_plot_characters(event)
+    related_plots = char.get_plot_characters(event_id)
     plot_list = [(plot_rel.plot.uuid, plot_rel.plot.name) for plot_rel in related_plots]
     plot_rels = build_relationship_dict(plot_list)
     plot_rels["important"] = plot_rels["count"] - _count_unimportant(related_plots, char.event_id)
     return plot_rels
 
 
-def _build_faction_relations(char: Character, event: Event) -> dict[str, Any]:
+def _build_faction_relations(char: Character, event_id: int) -> dict[str, Any]:
     """Build faction relationships for a character.
 
     Args:
         char: Character to build faction relationships for
-        event: Event for faction independence configuration
+        event_id: ID of the Event for faction independence configuration
 
     Returns:
         Dictionary with faction relationship data
     """
-    cache_event_id = event.id if event else char.event_id
+    cache_event_id = event_id if event_id else char.event_id
     if get_event_config(cache_event_id, "campaign_faction_indep"):
         # Use the cache event for independent faction lookup
         faction_event_id = cache_event_id
     else:
         # Use the parent event for inherited faction lookup
-        faction_event_id = char.event.get_class_parent("faction").id
+        faction_event_id = get_event_class_parent(char.event_id, "faction")
 
     # Build faction list based on determined event
     if faction_event_id:
@@ -529,7 +527,7 @@ def _build_relationship_tag_counts(char: Character) -> dict[str, int]:
     return counts
 
 
-def get_event_char_rels(char: Character, features: dict[str, Any], event: Event) -> dict[str, Any]:
+def get_event_char_rels(char: Character, features: dict[str, Any], event_id: int) -> dict[str, Any]:
     """Get character relationships for a specific character.
 
     Builds relationship data for a character based on enabled event features.
@@ -539,7 +537,7 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
     Args:
         char: The Character instance to get relationships for.
         features: Dictionary of enabled features for the event.
-        event: Optional Event instance for which we are rebuilding the cache.
+        event_id: ID of the Event for which we are rebuilding the cache.
                Used to scope plots and for faction independence configuration.
 
     Returns:
@@ -564,17 +562,17 @@ def get_event_char_rels(char: Character, features: dict[str, Any], event: Event)
     try:
         # Handle plot relationships if plot feature is enabled
         if "plot" in features:
-            relations["plot_rels"] = _build_plot_relations(char, event)
+            relations["plot_rels"] = _build_plot_relations(char, event_id)
 
         # Handle faction relationships if faction feature is enabled
         if "faction" in features:
-            relations["faction_rels"] = _build_faction_relations(char, event)
+            relations["faction_rels"] = _build_faction_relations(char, event_id)
 
         # Handle character-to-character relationships if relationships feature is enabled
         if "relationships" in features:
             relations["relationships_rels"] = _build_character_relations(char)
 
-            if get_event_config(event.id, "writing_relationship_tags"):
+            if get_event_config(event_id, "writing_relationship_tags"):
                 relations["relationship_tag_counts"] = _build_relationship_tag_counts(char)
 
         # Handle speedlarp relationships if speedlarp feature is enabled

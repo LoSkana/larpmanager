@@ -33,6 +33,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
 from larpmanager.models.writing import Faction
+from larpmanager.utils.core.common import get_event_elements
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
@@ -256,15 +257,15 @@ def on_event_post_save_reset_config_cache(instance: Event) -> None:
         reset_event_parent_cache(instance.pk)
 
 
-def update_visible_factions(event: Event) -> None:
+def update_visible_factions(event_id: int) -> None:
     """Check if there are visible factions with characters for nav display."""
     has_visible_factions = (
-        "faction" in get_event_features(event.id)
-        and event.get_elements(Faction)
+        "faction" in get_event_features(event_id)
+        and get_event_elements(event_id, Faction)
         .prefetch_related("characters")
         .exclude(name="")
         .annotate(char_count=Count("characters"))
         .filter(char_count__gt=0)
         .exists()
     )
-    save_single_config(event, "has_visible_factions", has_visible_factions)
+    save_single_config(Event.objects.get(pk=event_id), "has_visible_factions", has_visible_factions)

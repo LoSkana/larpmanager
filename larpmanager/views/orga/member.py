@@ -223,7 +223,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Add event staff members to exclusion list
-    already.extend([mb.id for mb in get_event_staffers(context["event"])])
+    already.extend([mb.id for mb in get_event_staffers(context["event"].id)])
 
     # Get all active association members (exclude empty memberships)
     members = Membership.objects.filter(association_id=context["association_id"])
@@ -274,7 +274,7 @@ def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Add event staff members to exclusion list
-    already.extend([mb.id for mb in get_event_staffers(context["event"])])
+    already.extend([mb.id for mb in get_event_staffers(context["event"].id)])
 
     # Get active association members
     members = Membership.objects.filter(association_id=context["association_id"])
@@ -616,7 +616,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
             flat=True,
         ),
     )
-    member_list.extend([mb.id for mb in get_event_staffers(context["run"].event)])
+    member_list.extend([mb.id for mb in get_event_staffers(context["run"].event_id)])
 
     # Define member model and fields to display
     member_cls: type[Member] = Member
