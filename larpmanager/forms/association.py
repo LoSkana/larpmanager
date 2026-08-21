@@ -27,7 +27,7 @@ from django.core.validators import RegexValidator
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _, pgettext
 
-from larpmanager.cache.config import reset_element_configs, save_all_element_configs
+from larpmanager.cache.config import reset_association_configs, save_all_element_configs
 from larpmanager.cache.feature import get_association_features, reset_association_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.forms.base import THEME_HELP_TEXT, AppearanceTheme, BaseModelCssForm, BaseModelForm
@@ -346,7 +346,7 @@ class ExeAppearanceForm(BaseModelCssForm):
         """Save form and persist theme configuration."""
         instance = super().save(commit=commit)
         save_all_element_configs(instance, {"theme": self.cleaned_data.get("theme", AppearanceTheme.NEBULA)})
-        reset_element_configs(instance)
+        reset_association_configs(instance.id)
         return instance
 
     @staticmethod

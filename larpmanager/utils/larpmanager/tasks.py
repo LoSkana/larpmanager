@@ -37,6 +37,7 @@ from django.core.validators import validate_email
 from django.utils import timezone
 
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_event_basic_cache, get_run_association_id
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
@@ -873,7 +874,7 @@ def get_context_elements(context_object: dict) -> tuple[int, int]:
         # Handle direct model instances
         if isinstance(context_object, Run):
             run_id = context_object.id  # type: ignore[attr-defined]
-            association_id = context_object.event.association_id  # type: ignore[attr-defined]
+            association_id = get_run_association_id(run_id)
         elif isinstance(context_object, Event):
             association_id = context_object.association_id  # type: ignore[attr-defined]
         elif isinstance(context_object, Association):
@@ -881,11 +882,11 @@ def get_context_elements(context_object: dict) -> tuple[int, int]:
         # Handle objects with foreign key relationships
         elif hasattr(context_object, "run_id") and context_object.run_id:
             run_id = context_object.run_id
-            association_id = context_object.run.event.association_id
+            association_id = get_run_association_id(run_id)
         elif hasattr(context_object, "association_id") and context_object.association_id:
             association_id = context_object.association_id
         elif hasattr(context_object, "event_id") and context_object.event_id:
-            association_id = context_object.event.association_id
+            association_id = get_event_basic_cache(context_object.event_id)["association_id"]
     return association_id, run_id
 
 

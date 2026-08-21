@@ -817,10 +817,11 @@ def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = Non
 def add_char_addit(character: Any) -> None:
     """Add additional configuration data to character object (especially experience points data)."""
     character.addit = {}
-    if not CharacterConfig.objects.filter(character__id=character.id).exists():
+    character_configs = list(CharacterConfig.objects.filter(character__id=character.id))
+    if not character_configs:
         calculate_character_experience_points(character)
+        character_configs = CharacterConfig.objects.filter(character__id=character.id)
 
-    character_configs = CharacterConfig.objects.filter(character__id=character.id)
     for character_config in character_configs:
         character.addit[character_config.name] = character_config.value
 

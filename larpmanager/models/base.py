@@ -350,13 +350,13 @@ def auto_assign_sequential_numbers(instance: Any) -> None:  # noqa: C901
             scope_id = None
             if hasattr(instance, "event") and instance.event:
                 queryset = instance.__class__.objects.filter(event=instance.event)
-                scope_id = f"event_{instance.event.id}"
+                scope_id = f"event_{instance.event_id}"
             if hasattr(instance, "association") and instance.association:
                 queryset = instance.__class__.objects.filter(association=instance.association)
-                scope_id = f"assoc_{instance.association.id}"
+                scope_id = f"assoc_{instance.association_id}"
             if hasattr(instance, "character") and instance.character:
                 queryset = instance.__class__.objects.filter(character=instance.character)
-                scope_id = f"char_{instance.character.id}"
+                scope_id = f"char_{instance.character_id}"
 
             if queryset is not None and scope_id is not None:
                 # Create a unique lock key for this model + scope combination

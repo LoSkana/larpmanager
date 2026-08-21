@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.association_text import clear_association_text_cache_on_delete
 from larpmanager.cache.association_translation import clear_association_translation_cache
-from larpmanager.cache.config import get_association_config, get_event_config, reset_element_configs
+from larpmanager.cache.config import get_association_config, get_event_config, reset_association_configs
 from larpmanager.cache.feature import reset_association_features
 from larpmanager.cache.links import reset_event_links
 from larpmanager.cache.permission import clear_index_permission_cache
@@ -179,8 +179,7 @@ def _reset_all_association(association_id: int, association_slug: str) -> None:
         clear_association_translation_cache(association_id, language_code)
 
     # Clear association config cache
-    association_obj = Association.objects.get(id=association_id)
-    reset_element_configs(association_obj)
+    reset_association_configs(association_id)
 
     # Clear permission index caches (for both association and event)
     clear_index_permission_cache("association")

@@ -3672,6 +3672,9 @@ msgstr "Keräys suljettu"
 msgid "Collection total:"
 msgstr "Keräys yhteensä:"
 
+msgid "Confirm character"
+msgstr "Vahvista hahmo"
+
 msgid "Conversion ticket"
 msgstr "Muuntolippu"
 
@@ -4915,6 +4918,9 @@ msgstr "Hahmolomakkeen vaihtoehdot"
 msgid "Conditions of %(event)s"
 msgstr "%(event)s ehdot"
 
+msgid "Confirm your character!"
+msgstr "Vahvista hahmosi!"
+
 msgid "Create a new collection"
 msgstr "Luo uusi keräys"
 
@@ -5062,6 +5068,9 @@ msgstr "Muokkaa ilmoittautumistilaa"
 
 msgid "Invalid ticket selection"
 msgstr "Virheellinen lipun valinta"
+
+msgid "Is your character ready?"
+msgstr "Onko hahmosi valmis?"
 
 msgid "Lightweight sheet (Test)"
 msgstr "Kevytlomake (Testi)"
@@ -7701,6 +7710,9 @@ msgstr "Kysymyksen nimi, johon tämä vaihtoehto kuuluu"
 msgid "The organization is running the latest version."
 msgstr "Organisaatiossa on käytössä uusin versio."
 
+msgid "This character cannot be proposed at the moment"
+msgstr "Tätä hahmoa ei voi tällä hetkellä ehdottaa"
+
 msgid "User already has a registration for this event!"
 msgstr "Käyttäjällä on jo rekisteröityminen tähän tapahtumaan!"
 
@@ -9123,6 +9135,11 @@ msgstr "Voit myös ladata toisen tiedoston ilmoittautumisvaihtoehtojen kanssa:"
 
 msgid "(Optional) Whether the ability is visible to users: true or false"
 msgstr "(Valinnainen) Onko ominaisuus näkyvissä käyttäjille: true tai false"
+
+#, python-format
+msgid "Confirm your character %(name)s is ready to propose to the staff!"
+msgstr ""
+"Vahvista, että hahmosi %(name)s on valmis ehdotettavaksi järjestäjille!"
 
 msgid "Content of mail reminding participants to pay the membership fee."
 msgstr ""
@@ -14457,6 +14474,14 @@ msgstr ""
 "osallistujille."
 
 msgid ""
+"Click here to confirm that you have completed the character and are ready to"
+" propose it to the staff. Be careful: some fields may no longer be editable."
+msgstr ""
+"Klikkaa tästä vahvistaaksesi, että olet saanut hahmon valmiiksi ja voit "
+"ehdottaa sitä järjestäjille. Ole varovainen: joitakin kenttiä ei ehkä voi "
+"enää muokata."
+
+msgid ""
 "Important: after completing the transfer, you must return to this page and "
 "submit the form at the bottom, otherwise your payment will not be "
 "registered!"
@@ -14850,17 +14875,6 @@ msgstr ""
 "Olet jättänyt hakemuksesi järjestön jäseneksi. Hakemus käsitellään "
 "seuraavassa hallituksen kokouksessa. Kun se on hyväksytty, voit maksaa "
 "maksut tapahtumista, joihin olet ilmoittautunut!"
-
-msgid ""
-"Click here to confirm that you have completed the character and are ready to"
-" propose it to the staff. Be careful: some fields may no longer be editable."
-" Leave the field blank to save your changes and to be able to continue them "
-"in the future."
-msgstr ""
-"Klikkaa tästä vahvistaaksesi, että olet saanut hahmon valmiiksi ja olet "
-"valmis ehdottamaan sitä henkilökunnalle. Ole varovainen: joitakin kenttiä ei"
-" ehkä voi enää muokata. Jätä kenttä tyhjäksi, jotta voit tallentaa muutokset"
-" ja jatkaa niitä tulevaisuudessa."
 
 msgid ""
 "In rich text editors, you can reference other characters directly using "

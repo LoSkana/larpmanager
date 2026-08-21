@@ -32,6 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import _format_decimal, is_registration_provisional
 from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.cache.accounting import clear_registration_accounting_cache
+from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
@@ -299,10 +300,12 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     registration_status_characters(run, registration, run_status, features, context)
 
     # Get user membership for the event's association
-    user_membership = get_user_membership(member, run.event.association_id)
+    user_membership = get_user_membership(member, get_run_association_id(run.id))
 
     # Build base registration message with ticket info if available
-    is_provisional = is_registration_provisional(registration, features=features, event=run.event, context=context)
+    is_provisional = is_registration_provisional(
+        registration, features=features, event_id=run.event_id, context=context
+    )
     registration_message, registration_message_long = _registration_messages(
         run, registration, is_provisional=is_provisional
     )
@@ -974,6 +977,7 @@ def registration_status_characters(
             "play_max": play_max,
         },
         can_switch=can_switch,
+        context=context,
     )
     _status_casting(run, registration, run_status, features, context, is_character_assigned=is_assigned)
 
@@ -1116,14 +1120,15 @@ def _status_approval(
     character_counts: dict,
     *,
     can_switch: bool,
+    context: dict | None = None,
 ) -> None:
     """Add character creation/selection actions to run status based on feature availability.
 
     This function checks if the user_character feature is enabled and the registration
     is not on a waiting list, then fills run_status["character_actions"] with the available
-    actions (create a new character, choose an existing one), and run_status["character_change"]
-    / run_status["character_create"] with the links to swap the played character or to create
-    another one, shown only on the event page.
+    actions (create a new character, choose an existing one, confirm a character pending
+    approval), and run_status["character_change"] / run_status["character_create"] with the
+    links to swap the played character or to create another one, shown only on the event page.
 
     Args:
         run: Run object containing event information
@@ -1132,6 +1137,7 @@ def _status_approval(
         run_status: Dictionary with run status
         character_counts: Counts of assigned, selectable and owned characters, plus the play maximum
         can_switch: Whether the played character can be swapped for another one of the player
+        context: Optional context dictionary, used to read the user_character_approval config
 
     """
     # Check if user_character feature is enabled
@@ -1197,6 +1203,26 @@ def _status_approval(
             "tooltip": _("Change your character!"),
             "icon": "fa-solid fa-right-left",
         }
+
+    # Offer a confirm action for the player's own characters still awaiting proposal to the staff
+    if "user_character" in features and get_event_config(run.event_id, "user_character_approval", context=context):
+        pending_characters = run.event.get_elements(Character).filter(
+            player=registration.member,
+            status__in=[CharacterStatus.CREATION, CharacterStatus.REVIEW],
+        )
+        character_actions.extend(
+            {
+                "url": reverse("character_confirm", args=[run.get_slug(), character.uuid]),
+                "label": _("Confirm character"),
+                "label_long": _("Confirm your character %(name)s is ready to propose to the staff!")
+                % {"name": character.name},
+                "tooltip": _("Confirm your character!"),
+                "icon": "fa-solid fa-check",
+                "status_type": "todo",
+                "status_icon": "fa-solid fa-list-check",
+            }
+            for character in pending_characters
+        )
 
     if character_actions:
         run_status["character_actions"] = character_actions
@@ -1280,7 +1306,7 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
     question_ids_cache = []
 
     # Get event features and filter applicable questions
-    event_features = get_event_features(instance.run.event_id)
+    event_features = get_event_features(get_run_event_id(instance.run_id))
     for question in get_cached_registration_questions(instance.run.event):
         if skip_registration_question(question, instance, event_features):
             continue
@@ -1493,7 +1519,7 @@ def process_registration_event_change(registration: Registration) -> None:
         return
 
     # Skip processing if the event hasn't actually changed
-    if previous_registration.run.event_id == registration.run.event_id:
+    if get_run_event_id(previous_registration.run_id) == get_run_event_id(registration.run_id):
         return
 
     # Attempt to find a matching ticket in the new event by name
@@ -1603,12 +1629,10 @@ def process_character_ticket_options(instance: Registration) -> None:
     # Get the event from the registration run
     event = instance.run.event
 
-    # Process ticket options for characters directly linked to this registration
-    for character in instance.characters.all():
-        check_character_ticket_options(instance, character)
-
-    # Process ticket options for all characters owned by the member in this event
-    for character in event.get_elements(Character).filter(player=instance.member):
+    # Process ticket options for characters directly linked to this registration,
+    # plus all characters owned by the member in this event
+    characters = set(instance.characters.all()) | set(event.get_elements(Character).filter(player=instance.member))
+    for character in characters:
         check_character_ticket_options(instance, character)
 
 

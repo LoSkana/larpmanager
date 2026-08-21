@@ -26,10 +26,11 @@ from django.db.models import Prefetch, Q
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
-from larpmanager.cache.config import reset_element_configs
+from larpmanager.cache.config import reset_event_configs, reset_run_configs
 from larpmanager.cache.event_text import clear_event_text_cache
 from larpmanager.cache.experience import clear_event_exp_cache, get_exp_effective_event_id
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
@@ -595,7 +596,10 @@ def assign_previous_campaign_character(registration: Any) -> None:
         return
 
     # Only proceed if this is a campaign event with parent
-    if "campaign" not in get_event_features(registration.run.event_id) or not registration.run.event.parent:
+    run_cache = get_run_basic_cache(registration.run_id)
+    parent_id = run_cache["parent_id"]
+    event_id = run_cache["event_id"]
+    if "campaign" not in get_event_features(event_id) or not parent_id:
         return
 
     # Skip if member already has a character assigned to this run
@@ -610,12 +614,11 @@ def assign_previous_campaign_character(registration: Any) -> None:
     # Find the most recent character the member had in this campaign series
     previous_character_relation = (
         RegistrationCharacterRel.objects.filter(
-            Q(registration__run__event__parent=registration.run.event.parent)
-            | Q(registration__run__event_id=registration.run.event.parent_id),
+            Q(registration__run__event__parent_id=parent_id) | Q(registration__run__event_id=parent_id),
             registration__member=registration.member,
             registration__cancellation_date__isnull=True,
         )
-        .exclude(registration__run__event_id=registration.run.event_id)
+        .exclude(registration__run__event_id=event_id)
         .order_by("-registration__run__end")
         .first()
     )
@@ -661,10 +664,10 @@ def reset_all_run(event: Event, run: Run) -> None:
     clear_event_button_cache(event.id)
 
     # Clear event config cache
-    reset_element_configs(event)
+    reset_event_configs(event.id)
 
     # Clear run config cache
-    reset_element_configs(run)
+    reset_run_configs(run.id)
     reset_cache_config_run(run)
 
     # Clear question cache

@@ -25,6 +25,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from larpmanager.cache.accounting import refresh_member_accounting_cache
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.models.accounting import (
@@ -80,7 +81,7 @@ def transfer_registration_between_runs(
         ValidationError: If the transfer is not possible
     """
     # Check that the registration is not already in the target run
-    if registration.run == target_run:
+    if registration.run_id == target_run.id:
         msg = "Registration is already in the target run"
         raise ValidationError(msg)
 
@@ -301,7 +302,7 @@ def _transfer_character_relations(source_reg: Registration, target_reg: Registra
         # (considering campaigns that share characters)
         character_event = target_reg.run.event.get_class_parent("character")
 
-        if relation.character.event == character_event:
+        if relation.character.event_id == character_event.id:
             RegistrationCharacterRel.objects.create(
                 registration=target_reg,
                 character=relation.character,
@@ -320,6 +321,8 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
     Note: This function transfers the accounting structure but resets payment amounts to 0
     to avoid double-counting payments. The actual financial reconciliation should be handled separately.
     """
+    target_association_id = get_run_association_id(target_reg.run_id)
+
     # Transfer PaymentInvoice records linked to the registration
     payment_invoices = PaymentInvoice.objects.filter(registration=source_reg)
 
@@ -337,7 +340,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             idx=invoice.idx,
             txn_id=None,  # Reset transaction ID to avoid conflicts
             causal=f"Transfer: {invoice.causal}",
-            assoc=target_reg.run.event.assoc,
+            association_id=target_association_id,
             registration=target_reg,
             verified=False,  # Reset verification status
             hide=invoice.hide,
@@ -351,7 +354,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
         AccountingItemPayment.objects.create(
             member=payment_item.member,
             value=0,  # Reset payment amount - actual payments should be handled separately
-            assoc=target_reg.run.event.assoc,
+            association_id=target_association_id,
             pay=payment_item.pay,
             registration=target_reg,
             info=f"Transferred from {source_reg.run}: {payment_item.info or ''}".strip(),
@@ -368,7 +371,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
             AccountingItemOther.objects.create(
                 member=other_item.member,
                 value=other_item.value,
-                assoc=target_reg.run.event.assoc,
+                association_id=target_association_id,
                 oth=other_item.oth,
                 run=target_reg.run,
                 descr=f"Transferred from {source_reg.run}: {other_item.descr}",
@@ -531,7 +534,7 @@ def _validate_character(registration: Registration, result: dict[str, list[str]]
     source_characters = registration.characters.all()
     if source_characters:
         character_event = target_run.event.get_class_parent("character")
-        incompatible_chars = [char.name for char in source_characters if char.event != character_event]
+        incompatible_chars = [char.name for char in source_characters if char.event_id != character_event.id]
 
         if incompatible_chars:
             result["warnings"].append(f"Characters not available in target event: {', '.join(incompatible_chars)}")

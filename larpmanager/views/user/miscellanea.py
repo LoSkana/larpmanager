@@ -158,7 +158,7 @@ def help_attachment(request: HttpRequest, attachment_uuid: str) -> HttpResponseR
     hp = get_object_uuid(HelpQuestion, attachment_uuid)
 
     # Check access permissions: owner or association role required
-    if hp.member != context["member"] and not context["association_role"]:
+    if hp.member_id != context["member"].id and not context["association_role"]:
         msg = "illegal access"
         raise Http404(msg)
 

@@ -26,6 +26,7 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.balance import get_run_accounting
+from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.forms.accounting import (
     ExeInvoiceForm,
@@ -184,7 +185,7 @@ def orga_invoices_confirm(request: HttpRequest, event_slug: str, invoice_uuid: s
     backend_get(context, PaymentInvoice, invoice_uuid)
 
     # Verify invoice belongs to the current event run
-    if context["el"].registration.run != context["run"]:
+    if context["el"].registration.run_id != context["run"].id:
         msg = "i'm sorry, what?"
         raise Http404(msg)
 
@@ -826,7 +827,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
     exp = get_object_uuid(AccountingItemExpense, expense_uuid)
 
     # Ensure the expense belongs to the current event
-    if exp.run.event != context["event"]:
+    if get_run_event_id(exp.run_id) != context["event"].id:
         msg = "not your orga"
         raise Http404(msg)
 

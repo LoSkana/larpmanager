@@ -47,7 +47,13 @@ from larpmanager.cache.association import get_cache_association
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
-from larpmanager.cache.run import get_event_runs
+from larpmanager.cache.media import (
+    get_character_media_filepath,
+    get_handout_media_filepath,
+    get_run_gallery_filepath,
+    get_run_profiles_filepath,
+)
+from larpmanager.cache.run import get_event_run_ids
 from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.models.accounting import (
     AccountingItemDonation,
@@ -83,7 +89,7 @@ _RESTRICTED_ENGINE = Engine(
 )
 
 if TYPE_CHECKING:
-    from larpmanager.models.event import Event, Run
+    from larpmanager.models.event import Run
     from larpmanager.models.member import Member
 
 logger = logging.getLogger(__name__)
@@ -496,7 +502,7 @@ def print_gallery(context: dict, *, force: bool = False) -> HttpResponse:
 
     """
     # Get the filepath where the gallery PDF should be stored
-    filepath = context["run"].get_gallery_filepath()
+    filepath = get_run_gallery_filepath(context["run"].id)
 
     # Check if we need to regenerate the PDF (forced or cache outdated)
     if force or reprint(filepath):
@@ -512,7 +518,7 @@ def print_gallery(context: dict, *, force: bool = False) -> HttpResponse:
                 context["first_aid"].append(character_element)
 
         # Re-get filepath (in case it changed during cache loading)
-        filepath = context["run"].get_gallery_filepath()
+        filepath = get_run_gallery_filepath(context["run"].id)
 
         # Generate the PDF from the gallery template
         xhtml_pdf(context, "pdf/sheets/gallery.html", filepath)
@@ -533,7 +539,7 @@ def print_profiles(context: dict, *, force: bool = False) -> HttpResponse:
 
     """
     # Get the filepath for the profiles PDF
-    filepath = context["run"].get_profiles_filepath()
+    filepath = get_run_profiles_filepath(context["run"].id)
 
     # Check if we need to regenerate the PDF
     if force or reprint(filepath):
@@ -559,7 +565,7 @@ def print_profiles(context: dict, *, force: bool = False) -> HttpResponse:
 def print_handout(context: dict, *, force: bool = True) -> Any:
     """Generate and return a PDF handout for the given context."""
     # Get the file path for the handout PDF
-    file_path = context["handout"].get_filepath(context["run"])
+    file_path = context["handout"].get_filepath()
 
     # Generate PDF if forced or if reprint is needed
     if force or reprint(file_path):
@@ -646,15 +652,13 @@ def generate_payment_receipt(accounting_item: Any) -> tuple[str, str]:
 
 def cleanup_handout_pdfs_after_save(instance: object) -> None:
     """Handle handout post-save PDF cleanup."""
-    for run in get_event_runs(instance.event_id):
-        safe_remove(instance.get_filepath(run))
+    safe_remove(get_handout_media_filepath(instance.event_id, instance.number, instance.media_token))
 
 
 def cleanup_handout_template_pdfs_after_save(instance: object) -> None:
     """Handle handout template post-save PDF cleanup."""
-    for run in get_event_runs(instance.event_id):
-        for el in instance.handouts.all():
-            safe_remove(el.get_filepath(run))
+    for el in instance.handouts.all():
+        safe_remove(get_handout_media_filepath(instance.event_id, el.number, el.media_token))
 
 
 def safe_remove(file_path: str) -> None:
@@ -663,53 +667,53 @@ def safe_remove(file_path: str) -> None:
         Path(file_path).unlink()
 
 
-def remove_run_pdf(event: Event) -> None:
+def remove_run_pdf(event_id: int) -> None:
     """Remove PDF files for all runs associated with the event."""
-    for event_run in get_event_runs(event.id):
+    for run_id in get_event_run_ids(event_id):
         # Remove profiles and gallery PDFs for each run
-        safe_remove(event_run.get_profiles_filepath())
-        safe_remove(event_run.get_gallery_filepath())
+        safe_remove(get_run_profiles_filepath(run_id))
+        safe_remove(get_run_gallery_filepath(run_id))
 
 
-def delete_character_pdf_files(instance: object, single: Any = None, runs: Any = None) -> None:
+def delete_character_pdf_files(
+    instance: object, single_run_id: int | None = None, run_ids: list[int] | None = None
+) -> None:
     """Delete PDF files for a character across specified runs.
 
     Args:
         instance: Character instance whose PDF files should be deleted
-        single: Optional specific run to delete files for
-        runs: Optional queryset of runs, defaults to all event runs
+        single_run_id: Optional specific run id to delete files for
+        run_ids: Optional run ids, defaults to all event runs
 
     """
-    # Default to all runs if none specified
-    if not runs:
-        runs = get_event_runs(instance.event_id)
+    if run_ids is None:
+        run_ids = get_event_run_ids(instance.event_id)
 
-    # Delete PDF files for each run
-    for run in runs:
-        if single and run != single:
+    for run_id in run_ids:
+        if single_run_id and run_id != single_run_id:
             continue
-        safe_remove(instance.get_sheet_filepath(run))
-        safe_remove(instance.get_sheet_friendly_filepath(run))
-        safe_remove(instance.get_relationships_filepath(run))
+        safe_remove(get_character_media_filepath(run_id, instance.number, instance.media_token, "full"))
+        safe_remove(get_character_media_filepath(run_id, instance.number, instance.media_token, "light"))
+        safe_remove(get_character_media_filepath(run_id, instance.number, instance.media_token, "rels"))
 
 
 def cleanup_character_pdfs_on_save(instance: object) -> None:
     """Handle character post-save PDF cleanup."""
-    remove_run_pdf(instance.event)
+    remove_run_pdf(instance.event_id)
     delete_character_pdf_files(instance)
 
 
 def cleanup_relationship_pdfs_after_save(instance: object) -> None:
     """Handle player relationship post-save PDF cleanup."""
     for el in instance.registration.rcrs.all():
-        delete_character_pdf_files(el.character, instance.registration.run)
+        delete_character_pdf_files(el.character, instance.registration.run_id)
 
 
 def cleanup_faction_pdfs_on_save(instance: object) -> None:
     """Handle faction post-save PDF cleanup."""
-    runs = get_event_runs(instance.event_id)
+    run_ids = get_event_run_ids(instance.event_id)
     for char in instance.characters.all():
-        delete_character_pdf_files(char, runs=runs)
+        delete_character_pdf_files(char, run_ids=run_ids)
 
 
 def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
@@ -722,7 +726,7 @@ def deactivate_castings_and_remove_pdfs(trait_instance: Any) -> None:
     # Get character associated with this trait and remove PDF files
     character = get_trait_character(trait_instance.run, trait_instance.trait.number)
     if character:
-        delete_character_pdf_files(character, trait_instance.run)
+        delete_character_pdf_files(character, trait_instance.run_id)
 
 
 def cleanup_pdfs_on_trait_assignment(assignment_trait_instance: Any) -> None:
@@ -1026,7 +1030,7 @@ def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
             try:
                 # Load handout data into context
                 get_handout(context, handout.number)
-                filepath = context["handout"].get_filepath(context["run"])
+                filepath = context["handout"].get_filepath()
 
                 # Generate PDF if it doesn't exist or is outdated
                 if not Path(filepath).exists() or reprint(filepath):
@@ -1156,7 +1160,7 @@ def _bulk_profiles(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
     # Check if profiles PDF was requested
     if request.POST.get("profiles"):
         try:
-            filepath = context["run"].get_profiles_filepath()
+            filepath = get_run_profiles_filepath(context["run"].id)
 
             # Generate PDF if it doesn't exist or is outdated
             if not Path(filepath).exists() or reprint(filepath):
@@ -1190,7 +1194,7 @@ def _bulk_gallery(context: dict, request: HttpRequest, zip_file: zipfile.ZipFile
     # Check if gallery PDF was requested
     if request.POST.get("gallery"):
         try:
-            filepath = context["run"].get_gallery_filepath()
+            filepath = get_run_gallery_filepath(context["run"].id)
 
             # Generate PDF if it doesn't exist or is outdated
             if not Path(filepath).exists() or reprint(filepath):

@@ -206,7 +206,7 @@ def _orga_registrations_tickets(registration: Any, context: dict) -> None:
 
         # Check for provisional status first, then map ticket tier to type
         if is_registration_provisional(
-            registration, event=context["event"], features=context["features"], context=context
+            registration, event_id=context["event"].id, features=context["features"], context=context
         ):
             registration_type = ("0", _("Provisional"))
         elif ticket.get("tier") in ticket_types:

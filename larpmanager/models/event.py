@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import inspect
 import logging
-from pathlib import Path
 from typing import Any, ClassVar
 
 from colorfield.fields import ColorField
@@ -427,14 +426,6 @@ class Event(UuidMixin, BaseModel):
         # noinspection PyUnresolvedReferences
         return download(self.sheet_template.path)
 
-    def get_media_filepath(self) -> str:
-        """Get the media directory path for this object's PDFs, creating it if needed."""
-        # Build path to PDF directory using object slug
-        pdf_directory_path = str(Path(conf_settings.MEDIA_ROOT) / f"pdf/{self.slug}/")
-        # Ensure directory exists
-        Path(pdf_directory_path).mkdir(mode=0o770, parents=True, exist_ok=True)
-        return pdf_directory_path
-
     def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this event."""
         return get_element_config(self, name, bypass_cache=bypass_cache)
@@ -801,25 +792,6 @@ class Run(MediaTokenMixin, UuidMixin, BaseModel):
         # Same month and year - show day range with single month/year
         # noinspection PyUnresolvedReferences
         return f"{self.start.day} - {formats.date_format(self.end, 'j E Y')}"
-
-    def get_media_filepath(self) -> str:
-        """Return the media file path for this run, creating the directory if needed."""
-        # Build path by combining event media path with run number
-        # noinspection PyUnresolvedReferences
-        run_media_path = str(Path(self.event.get_media_filepath()) / f"{self.number}-{self.media_token}/")
-
-        # Ensure directory exists
-        Path(run_media_path).mkdir(mode=0o770, parents=True, exist_ok=True)
-
-        return run_media_path
-
-    def get_gallery_filepath(self) -> str:
-        """Return the file path for the gallery PDF."""
-        return self.get_media_filepath() + "gallery.pdf"
-
-    def get_profiles_filepath(self) -> str:
-        """Return the file path for the profiles PDF."""
-        return self.get_media_filepath() + "profiles.pdf"
 
     def get_config(self, name: str, *, bypass_cache: bool = False) -> Any:
         """Get configuration value for this run."""

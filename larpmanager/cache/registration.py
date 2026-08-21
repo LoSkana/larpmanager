@@ -220,7 +220,7 @@ def update_registration_counts(run: Run) -> dict[str, int]:
                 add_count(counts, "count_player", num_tickets)
 
             # Track provisional registrations separately
-            if is_registration_provisional(registration, event=run.event, features=features, context=context):
+            if is_registration_provisional(registration, event_id=run.event_id, features=features, context=context):
                 add_count(counts, "count_provisional", num_tickets)
 
         # Add to total registration count

@@ -281,7 +281,7 @@ def check_run(element: Any, context: Any, accessor_field: Any = None) -> None:
     if accessor_field:
         element = getattr(element, accessor_field)
 
-    if hasattr(element, "run") and element.run != context["run"]:
+    if hasattr(element, "run") and element.run_id != context["run"].id:
         msg = "not your run"
         raise Http404(msg)
 

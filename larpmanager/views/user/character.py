@@ -89,6 +89,7 @@ from larpmanager.utils.users.registration import (
     check_character_maximum,
     get_character_play_max,
     get_player_characters,
+    registration_status,
 )
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
@@ -403,6 +404,9 @@ def character_form(
         context=context,
     )
 
+    # Render topbar status; skipped on POST success, which redirects instead
+    context["run_status"] = registration_status(context, context["run"], context["member"])
+
     return render(request, "larpmanager/event/character/edit.html", context)
 
 
@@ -489,15 +493,16 @@ def _save_character(
     """Saves a character with retry behaviour."""
     # Retry logic to handle race conditions in character number assignment
     max_retries = 3
-    character = None
+    character = form.instance
     for retry_attempt in range(max_retries):
         try:
             # Save character data within atomic transaction
             with transaction.atomic():
-                character = form.save(commit=False)
-                # Update character with additional processing and context
-                success_message = _update_character(context, character, form, success_message, auto_save=auto_save)
-                character.save()
+                # Assign player if not already set
+                if isinstance(character, Character) and not character.player:
+                    character.player = context["member"]
+
+                character = form.save()
 
                 # Assignment to the registration is done only on explicit confirmation
                 if not auto_save:
@@ -519,55 +524,47 @@ def _save_character(
     return character, success_message
 
 
-def _update_character(
-    context: dict,
-    character: Any,
-    form: BaseModelForm,
-    message: str,
-    *,
-    auto_save: bool = False,
-) -> str:
-    """Update character status based on form data and event configuration.
+@login_required
+def character_confirm(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
+    """Let the player confirm their character is ready, proposing it to the staff for approval.
 
     Args:
-        context: Context dictionary containing event information
-        character: Character instance to update
-        form: Form instance with cleaned data
-        message: Initial message string
-        auto_save: Whether the save comes from the background auto-save
+        request: HTTP request object
+        event_slug: Event slug
+        character_uuid: Character UUID
 
     Returns:
-        Updated message string or original message if no changes
+        HttpResponse: Confirmation page on GET, redirect to character page on POST
 
     """
-    # Early return if character is not a Character instance
-    if not isinstance(character, Character):
-        return message
+    context = get_event_context(request, event_slug, signup=True, include_status=True)
+    get_char_check(request, context, character_uuid, deny_public=True)
 
-    # Assign player if not already set
-    if not character.player:
-        character.player = context["member"]
+    if not get_event_config(context["event"].id, "user_character_approval", context=context):
+        raise Http404
 
-    # Check if character approval is enabled for this event
-    # Update status to proposed if character is in creation/review and user clicked propose
-    # The proposal is never triggered by the auto-save, only by an explicit confirmation
-    if (
-        not auto_save
-        and get_event_config(
-            context["event"].id,
-            "user_character_approval",
-            context=context,
+    character = Character.objects.get(uuid=character_uuid, event=context["event"])
+    if character.status not in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
+        messages.warning(request, _("This character cannot be proposed at the moment"))
+        return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
+
+    if request.method == "POST":
+        with transaction.atomic():
+            character = Character.objects.select_for_update().get(pk=character.pk)
+            if character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
+                character.status = CharacterStatus.PROPOSED
+                character.save()
+        messages.success(
+            request,
+            _(
+                "The character has been proposed to the staff, who will examine it and approve it "
+                "or request changes if necessary.",
+            ),
         )
-        and character.status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]
-        and form.cleaned_data.get("propose", False)
-    ):
-        character.status = CharacterStatus.PROPOSED
-        message = _(
-            "The character has been proposed to the staff, who will examine it and approve it "
-            "or request changes if necessary.",
-        )
+        return redirect("character", event_slug=event_slug, character_uuid=character_uuid)
 
-    return message
+    context["character"] = character
+    return render(request, "larpmanager/event/character/confirm.html", context)
 
 
 @login_required
@@ -850,7 +847,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
 @login_required
 def character_create(request: HttpRequest, event_slug: str) -> Any:
     """Handle character creation with maximum character validation."""
-    context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
+    context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
     check, _max_chars = check_character_maximum(context["event"], context["member"])
     if check:
@@ -867,7 +864,7 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
 @login_required
 def character_edit(request: HttpRequest, event_slug: str, character_uuid: str) -> HttpResponse:
     """Handle user character editing form."""
-    context = get_event_context(request, event_slug, include_status=True, signup=True)
+    context = get_event_context(request, event_slug, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
     _set_auto_save(context)
     return character_form(request, context, event_slug, context["character"], CharacterForm)
@@ -923,7 +920,7 @@ def character_assign(request: HttpRequest, event_slug: str, character_uuid: str)
         HttpResponse: Redirect to character list
 
     """
-    context = get_event_context(request, event_slug, signup=True, include_status=True)
+    context = get_event_context(request, event_slug, signup=True)
     get_char_check(request, context, character_uuid, deny_public=True)
 
     blocking_error = _get_character_assign_error(context)

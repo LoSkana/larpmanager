@@ -23,6 +23,7 @@ from typing import Any
 
 from django.utils.translation import activate, gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.mail.base import notify_organization_exe
@@ -134,7 +135,7 @@ def send_expense_approval_email(expense_item: AccountingItemExpense) -> None:
     _token_name, credits_name = get_token_credit_name(expense_item.association_id)
 
     # Add credit information if run has credits feature enabled
-    event_features = get_event_features(expense_item.run.event_id) if expense_item.run else {}
+    event_features = get_event_features(get_run_event_id(expense_item.run_id)) if expense_item.run else {}
     if expense_item.run and "credits" in event_features:
         email_body += "<br /><br /><i>" + _(
             "These funds have been added to your account as %(credits)s."

@@ -45,6 +45,7 @@ from larpmanager.accounting.member import (
     membership_fee_pending_config_name,
     set_membership_fee_pending,
 )
+from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features
 from larpmanager.forms.accounting import AnyInvoiceSubmitForm, WireInvoiceSubmitForm
@@ -163,7 +164,7 @@ def set_data_invoice(
         _custom_reason_reg(context, invoice, member_real_display_name)
 
         # Check if bundle membership_fee
-        association_id = registration.run.event.association_id
+        association_id = get_run_association_id(registration.run_id)
         membership_fee = get_membership_fee_for_reg(
             association_id, registration.member_id, registration.run, registration
         )
@@ -225,9 +226,8 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
     invoice.registration = context["registration"]
 
     # Get custom reason template from event configuration
-    custom_reason_template = get_event_config(
-        context["registration"].run.event_id, "payment_custom_reason", context=context
-    )
+    event_id = get_run_event_id(context["registration"].run_id)
+    custom_reason_template = get_event_config(event_id, "payment_custom_reason", context=context)
     if not custom_reason_template:
         return
 
@@ -249,7 +249,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
         # Look for a registration question with matching name
         try:
             registration_question = RegistrationQuestion.objects.get(
-                event=context["registration"].run.event,
+                event_id=event_id,
                 name__iexact=question_name,
                 applicable=RegistrationQuestionApplicable.REGISTRATION,
             )
@@ -855,11 +855,11 @@ def cleanup_membership_fee_reservation(instance: PaymentInvoice) -> None:
     if instance.typ != PaymentType.REGISTRATION:
         return
     try:
-        registration = Registration.objects.select_related("run", "run__event").get(pk=instance.idx)
+        registration = Registration.objects.select_related("run").get(pk=instance.idx)
     except Registration.DoesNotExist:
         return
     year = registration.run.start.year
-    association_id = registration.run.event.association_id
+    association_id = get_run_association_id(registration.run_id)
     config_name = membership_fee_pending_config_name(association_id, year)
     _deleted_count, _ignored = MemberConfig.objects.filter(
         member_id=instance.member_id,

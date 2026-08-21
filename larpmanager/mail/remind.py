@@ -24,6 +24,7 @@ from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.mail.templates import get_payment_info
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
@@ -49,7 +50,7 @@ def remember_membership(registration: Any) -> None:
     }
 
     body = get_association_text(
-        registration.run.event.association_id,
+        get_run_association_id(registration.run_id),
         AssociationTextType.REMINDER_MEMBERSHIP,
         registration.member.language,
     ) or get_remember_membership_body(registration)
@@ -121,7 +122,7 @@ def remember_pay(registration: Any) -> None:
         email_subject = hdr(registration.run.event) + _("Complete payment for %(event)s") % email_context
 
     email_body = get_association_text(
-        registration.run.event.association_id,
+        get_run_association_id(registration.run_id),
         AssociationTextType.REMINDER_PAY,
         registration.member.language,
     ) or get_remember_pay_body(email_context, registration, is_provisional=is_provisional)
@@ -189,7 +190,7 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
     )
 
     # Add wire transfer details if active for this association
-    email_body += get_payment_info(registration.run.event.association_id, payment_url)
+    email_body += get_payment_info(get_run_association_id(registration.run_id), payment_url)
 
     # Add cancellation warning for non-responsive registrants
     email_body += "<br /><br />" + _(
@@ -216,7 +217,7 @@ def remember_profile(registration: Any) -> None:
     subject = hdr(registration.run.event) + _("Profile completion reminder for %(event)s") % context
 
     body = get_association_text(
-        registration.run.event.association_id,
+        get_run_association_id(registration.run_id),
         AssociationTextType.REMINDER_PROFILE,
         registration.member.language,
     ) or get_remember_profile_body(context)
@@ -251,7 +252,7 @@ def remember_membership_fee(registration: Any) -> None:
     subject = hdr(registration.run.event) + _("Membership fee payment reminder for %(event)s") % context
 
     body = get_association_text(
-        registration.run.event.association_id,
+        get_run_association_id(registration.run_id),
         AssociationTextType.REMINDER_MEMBERSHIP_FEE,
         registration.member.language,
     ) or get_remember_membership_fee_body(context, registration)
@@ -289,7 +290,7 @@ def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
 
     # Provide payment link and support information
     membership_url = get_url("accounting_membership")
-    email_body += get_payment_info(registration.run.event.association_id, membership_url)
+    email_body += get_payment_info(get_run_association_id(registration.run_id), membership_url)
 
     return email_body
 
