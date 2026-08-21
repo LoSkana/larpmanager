@@ -103,11 +103,11 @@ def get_single_cache_text_field(element_uuid: str, field_name: str, text_value: 
 # Writing
 
 
-def init_cache_text_field(model_class: type[BaseModel], event: Event) -> dict:
+def init_cache_text_field(model_class: type[BaseModel], event_id: int) -> dict:
     """Initialize cache for text fields of model instances related to an event."""
     cache_result = {}
     # Iterate through all instances of the given type for the event's parent
-    for instance in model_class.objects.filter(event_id=get_event_class_parent(event.id, model_class)).select_related(
+    for instance in model_class.objects.filter(event_id=get_event_class_parent(event_id, model_class)).select_related(
         "event__parent"
     ):
         _init_element_cache_text_field(instance, cache_result, model_class)
@@ -174,17 +174,17 @@ def _init_element_cache_text_field(
         )
 
 
-def get_cache_text_field(field_type: type[BaseModel], event: Event) -> str:
+def get_cache_text_field(field_type: type[BaseModel], event_id: int) -> str:
     """Get cached text field value for event, initializing if not found."""
     # Generate cache key for the specific type and event
-    cache_key = cache_text_field_key(field_type, event.id)
+    cache_key = cache_text_field_key(field_type, event_id)
 
     # Try to retrieve cached value
     cached_value = cache.get(cache_key)
 
     # Initialize and cache if not found
     if cached_value is None:
-        cached_value = init_cache_text_field(field_type, event)
+        cached_value = init_cache_text_field(field_type, event_id)
         cache.set(cache_key, cached_value, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_value
@@ -219,7 +219,7 @@ def _update_cache_text_fields(cache_key: str, el: object, element_type: type[Bas
     # Retrieve current cache data inside lock, only fetching the real event on a miss
     cached_data = cache.get(cache_key)
     if cached_data is None:
-        cached_data = init_cache_text_field(element_type, el.event)
+        cached_data = init_cache_text_field(element_type, el.event_id)
     # Initialize element cache and update cache storage
     _init_element_cache_text_field(el, cached_data, element_type)
     cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
@@ -243,25 +243,25 @@ def update_cache_text_fields_answer(instance: BaseModel) -> None:
 
     # Get the applicable type and event for cache key generation
     applicable_type = QuestionApplicable.get_applicable_inverse(instance.question.applicable)
-    event = instance.question.event
+    event_id = instance.question.event_id
 
     # Generate cache key
-    cache_key = cache_text_field_key(applicable_type, event.id)
+    cache_key = cache_text_field_key(applicable_type, event_id)
 
     # Use cache lock to prevent race conditions with concurrent updates
     lock_key = f"{cache_key}_lock"
     try:
         with cache.lock(lock_key, timeout=5):
-            _update_cache_text_fields_answer(applicable_type, cache_key, event, instance)
+            _update_cache_text_fields_answer(applicable_type, cache_key, event_id, instance)
     except AttributeError:
         # Fallback for cache backends that don't support locking
-        _update_cache_text_fields_answer(applicable_type, cache_key, event, instance)
+        _update_cache_text_fields_answer(applicable_type, cache_key, event_id, instance)
 
 
 def _update_cache_text_fields_answer(
     applicable_type: type[BaseModel],
     cache_key: str,
-    event: Event,
+    event_id: int,
     instance: BaseModel,
 ) -> None:
     """Update cache for editor-type question answer - internal helper.
@@ -273,12 +273,12 @@ def _update_cache_text_fields_answer(
     Args:
         applicable_type: Model class type that the question applies to (e.g., Character)
         cache_key: The cache key to update
-        event: Event instance associated with the answer
+        event_id: Event ID instance associated with the answer
         instance: WritingAnswer instance containing the question, element_id, and text data
 
     """
     # Retrieve existing cached data inside lock
-    cached_text_fields = get_cache_text_field(applicable_type, event)
+    cached_text_fields = get_cache_text_field(applicable_type, event_id)
 
     # Fetch the element to get its UUID
     try:
@@ -336,7 +336,9 @@ def _init_element_cache_registration_field(
         cache_result[registration_uuid] = {}
 
     # Get all editor/paragraph-type questions for the event
-    questions = [question for question in get_cached_registration_questions(event) if question["typ"] in ALLOWED_TYPES]
+    questions = [
+        question for question in get_cached_registration_questions(event.id) if question["typ"] in ALLOWED_TYPES
+    ]
 
     # Process each editor question and cache the answer text
     for question in questions:

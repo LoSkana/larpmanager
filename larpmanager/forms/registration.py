@@ -177,7 +177,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Get max_length from cached registration questions
         max_tickets = 5
-        for q in get_cached_registration_questions(self.params.get("run").event):
+        for q in get_cached_registration_questions(self.params.get("run").event_id):
             if q["typ"] == RegistrationQuestionType.ADDITIONAL and q["max_length"] > 0:
                 max_tickets = q["max_length"]
                 break
@@ -683,7 +683,9 @@ class MatchmakerForm(BaseRegistrationForm):
 
     def _init_questions(self, event: Event) -> None:
         """Load only the matchmaker-applicable registration questions."""
-        self.questions = get_cached_registration_questions(event, applicable=RegistrationQuestionApplicable.MATCHMAKER)
+        self.questions = get_cached_registration_questions(
+            event.id, applicable=RegistrationQuestionApplicable.MATCHMAKER
+        )
 
     def _init_matchmaker_field(self, question: dict) -> None:
         """Initialize a single matchmaker question field (mirrors RegistrationForm.init_question)."""
@@ -745,7 +747,7 @@ class RequestApprovalForm(BaseRegistrationForm):
 
     def _init_questions(self, event: Event) -> None:
         """Load only the request-applicable registration questions."""
-        self.questions = get_cached_registration_questions(event, applicable=RegistrationQuestionApplicable.REQUEST)
+        self.questions = get_cached_registration_questions(event.id, applicable=RegistrationQuestionApplicable.REQUEST)
 
     def _init_request_field(self, question: dict) -> None:
         """Initialize a single request question field (mirrors RegistrationForm.init_question)."""
@@ -868,7 +870,7 @@ class OrgaRegistrationForm(BaseRegistrationForm):
 
         # Get max_length from cached registration questions (avoids a DB query)
         max_tickets = 5
-        for q in get_cached_registration_questions(self.params["run"].event):
+        for q in get_cached_registration_questions(self.params["run"].event_id):
             if q["typ"] == RegistrationQuestionType.ADDITIONAL and q["max_length"] > 0:
                 max_tickets = q["max_length"]
                 break
@@ -1424,7 +1426,7 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
 
         # Add type of registration question to the available types, scoped to the current form
         # (the special reserved types below only make sense for the standard registration form)
-        registration_questions = get_cached_registration_questions(self.params["event"], applicable=registration_typ)
+        registration_questions = get_cached_registration_questions(self.params["event"].id, applicable=registration_typ)
         already_used_types = list({question["typ"] for question in registration_questions})
 
         if self.instance.pk and self.instance.typ:

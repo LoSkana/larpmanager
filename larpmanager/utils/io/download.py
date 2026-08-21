@@ -248,7 +248,7 @@ def _prepare_export(context: dict, model: str, query: QuerySet) -> None:
 
         # Get applicable questions for the event
         if is_registration_model:
-            applicable_question_list = get_cached_registration_questions(context["event"])
+            applicable_question_list = get_cached_registration_questions(context["event"].id)
         else:
             applicable_question_list = get_cached_writing_questions(context["event"], applicable_questions)
 
@@ -754,7 +754,7 @@ def export_registration_form(
 
     # Extract registration questions data
     column_headers = context["columns"][0].keys()
-    questions = get_cached_registration_questions(context["event"], applicable=applicable)
+    questions = get_cached_registration_questions(context["event"].id, applicable=applicable)
     question_values = _extract_values(column_headers, questions, mappings)
 
     # Initialize exports list with registration questions sheet
@@ -1117,7 +1117,7 @@ def _get_column_names(context: dict) -> None:
 
 def _registration_column_names(context: dict) -> None:
     """Build field type mapping from registration questions for validation."""
-    questions = get_cached_registration_questions(context["event"])
+    questions = get_cached_registration_questions(context["event"].id)
     context["fields"] = {question["name"]: question["typ"] for question in questions}
 
     # Build mapping of special question type to question name

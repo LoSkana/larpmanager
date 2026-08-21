@@ -383,7 +383,7 @@ def registrations_load(context: dict, uploaded_file_form: Form) -> list[str]:
     """Load registration data from uploaded CSV file."""
     (input_dataframe, processing_logs) = _get_file(context, uploaded_file_form.cleaned_data["first"], 0)
 
-    registration_questions = get_cached_registration_questions(context["event"])
+    registration_questions = get_cached_registration_questions(context["event"].id)
     questions_mapping = _get_questions(registration_questions)
 
     if input_dataframe is not None:
