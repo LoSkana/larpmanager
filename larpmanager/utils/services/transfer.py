@@ -25,7 +25,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from larpmanager.cache.accounting import refresh_member_accounting_cache
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.models.accounting import (
@@ -321,7 +321,7 @@ def _transfer_accounting_items(source_reg: Registration, target_reg: Registratio
     Note: This function transfers the accounting structure but resets payment amounts to 0
     to avoid double-counting payments. The actual financial reconciliation should be handled separately.
     """
-    target_association_id = get_run_basic_cache(target_reg.run_id)["association_id"]
+    target_association_id = get_run_association_id(target_reg.run_id)
 
     # Transfer PaymentInvoice records linked to the registration
     payment_invoices = PaymentInvoice.objects.filter(registration=source_reg)

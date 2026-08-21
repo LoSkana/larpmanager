@@ -26,7 +26,7 @@ from django.utils import timezone, translation
 from django.utils.html import escape
 from django.utils.translation import activate, gettext_lazy as _
 
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.accounting import _receipt_attachment_path
@@ -177,7 +177,7 @@ def notify_membership_approved(member: Member, resp: str) -> None:
 
     # Process each registration for payment requirements
     for registration in member_registrations:
-        features = get_event_features(get_run_basic_cache(registration.run_id)["event_id"])
+        features = get_event_features(get_run_event_id(registration.run_id))
         run_starts_this_year = registration.run.start and registration.run.start.year == timezone.now().year
 
         # Check if membership fee is required for this event

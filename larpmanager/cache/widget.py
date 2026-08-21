@@ -34,7 +34,7 @@ from larpmanager.accounting.balance import (
     association_accounting_summary,
     get_run_accounting,
 )
-from larpmanager.cache.basic import get_event_basic_cache, get_run_basic_cache
+from larpmanager.cache.basic import get_event_basic_cache, get_run_association_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.run import get_event_run_ids
@@ -740,7 +740,7 @@ def reset_widgets(instance: Any) -> None:
     run_id = getattr(instance, "run_id", None)
     if run_id:
         clear_widget_cache(run_id)
-        clear_widget_cache_association(get_run_basic_cache(run_id)["association_id"])
+        clear_widget_cache_association(get_run_association_id(run_id))
 
     event_id = getattr(instance, "event_id", None)
     if event_id:

@@ -8,7 +8,7 @@ from django.core import signing
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.association import Association, get_url, hdr
@@ -380,7 +380,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
         )
         body += " " + _("Please make sure to send your payment on time, or we might have to cancel your spot.")
 
-    body += get_payment_info(get_run_basic_cache(instance.run_id)["association_id"], payment_url)
+    body += get_payment_info(get_run_association_id(instance.run_id), payment_url)
     return body
 
 
