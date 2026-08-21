@@ -626,7 +626,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after get_event
         event.save()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_run_event_links_cache")
     def test_event_post_delete_resets_links_cache(self, mock_reset: Any) -> None:
@@ -636,7 +636,7 @@ class TestCacheSignals(BaseTestCase):
         event.delete()
 
         # Called multiple times due to cascade deletes of related runs
-        mock_reset.assert_called_with(event)
+        mock_reset.assert_called_with(event.id)
         self.assertTrue(mock_reset.call_count >= 1)
 
     @patch("larpmanager.models.signals.clear_run_event_links_cache")
@@ -646,7 +646,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after get_run
         run.save()
 
-        mock_reset.assert_called_once_with(run.event)
+        mock_reset.assert_called_once_with(run.event_id)
 
     @patch("larpmanager.models.signals.clear_run_event_links_cache")
     def test_run_post_delete_resets_links_cache(self, mock_reset: Any) -> None:
@@ -656,7 +656,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset mock after setup
         run.delete()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_registration_counts_cache")
     def test_registration_post_save_resets_registration_cache(self, mock_reset: Any) -> None:

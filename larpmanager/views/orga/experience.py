@@ -96,13 +96,13 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["download"] = 1
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"].id)
 
     # Get all deliveries ordered by number
     deliveries = list(get_event_elements(context["event"].id, DeliveryExp).order_by("order").select_related("system"))
 
     # Get cached EXP relationship data and enrich delivery objects
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for delivery in deliveries:
         if delivery.id in px_cache.get("deliveries", {}):
             delivery.cached_rels = px_cache["deliveries"][delivery.id]
@@ -210,7 +210,7 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["exp_templates"] = get_event_config(context["event"].id, "exp_templates", context=context)
 
     # Expose system column only when multiple systems are configured
-    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"].id)
 
     # Query and prepare abilities list with optimized database access
     abilities = list(
@@ -218,7 +218,7 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Get cached EXP relationship data and enrich ability objects
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for ability in abilities:
         ability.cached_rels = px_cache.get("abilities", {}).get(ability.id, [])
 
@@ -290,7 +290,7 @@ def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Get all rules ordered
     rules = list(get_event_elements(context["event"].id, RuleExp).order_by("order"))
     # Get cached EXP relationship data and enrich rule objects
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for rule in rules:
         if rule.id in px_cache.get("rules", {}):
             rule.cached_rels = px_cache["rules"][rule.id]
@@ -358,7 +358,7 @@ def orga_exp_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     modifiers = list(get_event_elements(context["event"].id, ModifierExp).order_by("order"))
 
     # Get cached EXP relationship data and enrich modifier objects
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for modifier in modifiers:
         if modifier.id in px_cache.get("modifiers", {}):
             modifier.cached_rels = px_cache["modifiers"][modifier.id]
@@ -400,13 +400,13 @@ def orga_exp_criterions(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     criterions = list(get_event_elements(context["event"].id, CriterionExp).order_by("order").select_related("system"))
 
-    px_cache = get_event_exp_cache(context["event"])
+    px_cache = get_event_exp_cache(context["event"].id)
     for criterion in criterions:
         if criterion.id in px_cache.get("criterions", {}):
             criterion.cached_rels = px_cache["criterions"][criterion.id]
 
     context["list"] = criterions
-    context["multiple_systems"] = has_multiple_exp_systems(context["event"])
+    context["multiple_systems"] = has_multiple_exp_systems(context["event"].id)
 
     return render(request, "larpmanager/orga/experience/criterions.html", context)
 

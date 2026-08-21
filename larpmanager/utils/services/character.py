@@ -358,7 +358,7 @@ def get_character_sheet_exp(context: dict) -> None:
             "used": context["character"].addit.get(f"exp_used_{sys.uuid}", 0),
             "avail": context["character"].addit.get(f"exp_avail_{sys.uuid}", 0),
         }
-        for sys in get_event_exp_systems(context["event"])
+        for sys in get_event_exp_systems(context["event"].id)
         if not sys.hidden
     ]
 

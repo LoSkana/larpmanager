@@ -415,7 +415,7 @@ def _build_px_avail_by_system(
         Dict mapping system_id to available EXP points.
 
     """
-    systems = get_event_exp_systems(character.event)
+    systems = get_event_exp_systems(character.event_id)
     if not systems:
         return {}
 
@@ -463,7 +463,7 @@ def _build_experience_data(
         Dict with exp_tot/exp_used/exp_avail and per-system keys.
 
     """
-    systems = get_event_exp_systems(character.event)
+    systems = get_event_exp_systems(character.event_id)
 
     deliveries_by_system = _build_deliveries_by_system(
         character,
@@ -758,7 +758,7 @@ def build_exp_avail_by_system_from_addit(char: Any) -> dict[int, int]:
         Dict mapping system_id to available EXP points.
 
     """
-    systems = get_event_exp_systems(char.event)
+    systems = get_event_exp_systems(char.event_id)
     px_avail_by_system: dict[int, int] = {}
     for system in systems:
         avail_key = f"exp_avail_{system.uuid}"

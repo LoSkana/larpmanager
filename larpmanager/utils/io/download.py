@@ -919,7 +919,7 @@ def _add_system_column(context: dict, columns: dict) -> None:
     With a single system the column is not offered, but it is still accepted on upload,
     so that backups taken from an event with several systems can be restored.
     """
-    if has_multiple_exp_systems(context["event"]):
+    if has_multiple_exp_systems(context["event"].id):
         columns["system"] = _("Name of the experience system")
     else:
         context["extra_columns"] = ["system"]
@@ -1292,7 +1292,7 @@ def export_event(context: Any) -> Any:
 
 def _add_system_header(context: Any, column_headers: list[str]) -> bool:
     """Append the system column header when the event has multiple systems, and report it."""
-    multiple_systems = has_multiple_exp_systems(context["event"])
+    multiple_systems = has_multiple_exp_systems(context["event"].id)
     if multiple_systems:
         column_headers.append("system")
     return multiple_systems

@@ -661,7 +661,7 @@ def reset_all_run(event: Event, run: Run) -> None:
 
     # Clear event-level feature and configuration caches
     clear_event_features_cache(event.id)
-    clear_run_event_links_cache(event)
+    clear_run_event_links_cache(event.id)
 
     # Clear event button cache
     clear_event_button_cache(event.id)
@@ -682,7 +682,7 @@ def reset_all_run(event: Event, run: Run) -> None:
     clear_registration_accounting_cache(run.id)
     clear_event_fields_cache(event.id)
     clear_event_relationships_cache(event.id)
-    clear_event_exp_cache(get_exp_effective_event_id(event))
+    clear_event_exp_cache(get_exp_effective_event_id(event.id))
     clear_registration_tickets_cache(event.id)
 
     # Clear event text caches for every type/language

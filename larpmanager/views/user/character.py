@@ -763,7 +763,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
                 "used_key": f"exp_used_{sys.uuid}",
                 "avail_key": f"exp_avail_{sys.uuid}",
             }
-            for sys in get_event_exp_systems(context["event"])
+            for sys in get_event_exp_systems(context["event"].id)
             if not sys.hidden
         ]
 
@@ -1044,7 +1044,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
             "used": char.addit.get(f"exp_used_{sys.uuid}", 0),
             "avail": char.addit.get(f"exp_avail_{sys.uuid}", 0),
         }
-        for sys in get_event_exp_systems(context["event"])
+        for sys in get_event_exp_systems(context["event"].id)
         if not sys.hidden
     ]
 

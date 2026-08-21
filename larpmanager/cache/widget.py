@@ -347,12 +347,16 @@ def _init_exe_actions_cache(association_id: int) -> dict:
     )
 
     ongoing_runs_data = []
+    parent_names: dict[int, str] = {}
     for run in ongoing_runs:
+        parent_id = get_event_basic_cache(run.event_id)["parent_id"]
+        if parent_id and parent_id not in parent_names:
+            parent_names[parent_id] = get_event_basic_cache(parent_id)["name"]
         run_data = {
             "slug": run.get_slug,
             "name": str(run),
             "pretty_dates": run.pretty_dates,
-            "parent": str(run.event.parent) if run.event.parent else None,
+            "parent": parent_names.get(parent_id),
             "development_display": run.get_development_display(),
             "registration_status": _compute_registration_status(run),
             "registration_counts": _compute_registration_counts(run),

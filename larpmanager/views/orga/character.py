@@ -133,7 +133,7 @@ def orga_characters(request: HttpRequest, event_slug: str) -> HttpResponse:
                 "used_key": f"exp_used_{sys.uuid}",
                 "avail_key": f"exp_avail_{sys.uuid}",
             }
-            for sys in get_event_exp_systems(context["event"])
+            for sys in get_event_exp_systems(context["event"].id)
         ]
 
     return writing_list(request, context, Character, "character")

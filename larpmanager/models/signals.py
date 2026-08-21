@@ -868,7 +868,7 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
     clear_event_features_cache(instance.id)
 
     # Clear run and registration related caches
-    clear_run_event_links_cache(instance)
+    clear_run_event_links_cache(instance.id)
 
     # Clear registration counts and basic-info for all associated runs
     for run_id in get_event_run_ids(instance.id):
@@ -1576,7 +1576,7 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
     # Clear run-specific cache and media files
     clear_run_cache_and_media(instance)
 
-    clear_run_event_links_cache(instance.event)
+    clear_run_event_links_cache(instance.event_id)
 
     # Clear association cache to update onboarding status
     clear_association_cache(instance.event.association.slug)

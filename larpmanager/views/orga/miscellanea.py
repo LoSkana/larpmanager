@@ -409,7 +409,7 @@ def orga_warehouse_items(request: HttpRequest, event_slug: str) -> HttpResponse:
     handle_bulk_orga_items(request, context)
 
     warehouse_cache = get_association_warehouse_cache(context["association_id"])
-    assignments_cache = get_event_warehouse_assignments_cache(context["event"])
+    assignments_cache = get_event_warehouse_assignments_cache(context["event"].id)
 
     context["list"] = []
     items = WarehouseItem.objects.filter(association_id=context["association_id"])

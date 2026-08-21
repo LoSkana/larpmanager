@@ -1858,7 +1858,7 @@ def abilities_load(context: dict, form: Form) -> list[str]:
 
 def _resolve_exp_system(event: Any) -> Any:
     """Return the first SystemExp for the event, creating it if none exists."""
-    systems = get_event_exp_systems(event)
+    systems = get_event_exp_systems(event.id)
     if systems:
         return systems[0]
     system = SystemExp.objects.create(event_id=get_event_class_parent(event.id, SystemExp), name="XP", number=1)
