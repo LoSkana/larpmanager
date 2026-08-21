@@ -19,7 +19,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
@@ -30,9 +30,6 @@ from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityTypeExp, DeliveryExp
 from larpmanager.models.writing import Character, Faction, Plot, Prologue
 from larpmanager.utils.core.common import get_event_elements
-
-if TYPE_CHECKING:
-    from larpmanager.models.event import Event
 
 # Maps each cache key to its (model_class, order_field)
 BULK_CACHE_CONFIG: dict[str, tuple[type, str]] = {
@@ -68,20 +65,20 @@ def reset_bulk_options_cache(event_id: int) -> None:
     reset_bulk_cache(event_id, "staffers")
 
 
-def _init_bulk_key(event: Event, key: str) -> list[dict[str, Any]]:
+def _init_bulk_key(event_id: int, key: str) -> list[dict[str, Any]]:
     """Build the list for a single cache key."""
     if key == "staffers":
-        return [{"uuid": m.uuid, "name": m.show_nick()} for m in get_event_staffers(event)]
+        return [{"uuid": m.uuid, "name": m.show_nick()} for m in get_event_staffers(event_id)]
     model, order = BULK_CACHE_CONFIG[key]
-    return list(get_event_elements(event.id, model).values("uuid", "name").order_by(order))
+    return list(get_event_elements(event_id, model).values("uuid", "name").order_by(order))
 
 
-def get_bulk_options_cache(event: Event, key: str) -> list[dict[str, Any]]:
+def get_bulk_options_cache(event_id: int, key: str) -> list[dict[str, Any]]:
     """Return cached list for key, building it on first access."""
-    cache_key = get_bulk_cache_key(event.id, key)
+    cache_key = get_bulk_cache_key(event_id, key)
     cached = cache.get(cache_key)
     if cached is None:
-        cached = _init_bulk_key(event, key)
+        cached = _init_bulk_key(event_id, key)
         cache.set(cache_key, cached, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return cached
 

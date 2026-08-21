@@ -613,11 +613,11 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Initialize bulk operations list for GET requests
     context["bulk"] = []
-    event = context["event"]
+    event_id = context["event"].id
 
     # Add faction-related operations if faction feature is enabled
     if "faction" in context["features"]:
-        factions = get_bulk_options_cache(event, "factions")
+        factions = get_bulk_options_cache(event_id, "factions")
         context["bulk"].extend(
             [
                 _bulk_op(Operations.ADD_CHAR_FACT, factions),
@@ -627,7 +627,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add plot-related operations if plot feature is enabled
     if "plot" in context["features"]:
-        plots = get_bulk_options_cache(event, "plots")
+        plots = get_bulk_options_cache(event_id, "plots")
         context["bulk"].extend(
             [
                 _bulk_op(Operations.ADD_CHAR_PLOT, plots),
@@ -637,7 +637,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add prologue-related operations if prologue feature is enabled
     if "prologue" in context["features"]:
-        prologues = get_bulk_options_cache(event, "prologues")
+        prologues = get_bulk_options_cache(event_id, "prologues")
         context["bulk"].extend(
             [
                 _bulk_op(Operations.ADD_CHAR_PROLOGUE, prologues),
@@ -647,7 +647,7 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
 
     # Add XP delivery operations if experience feature is enabled
     if "experience" in context["features"]:
-        deliveries = get_bulk_options_cache(event, "deliveries")
+        deliveries = get_bulk_options_cache(event_id, "deliveries")
         context["bulk"].extend(
             [
                 _bulk_op(Operations.ADD_CHAR_DELIVERY, deliveries),
@@ -658,13 +658,13 @@ def handle_bulk_characters(request: HttpRequest, context: dict) -> None:
     # Add progress step operation if progress feature is enabled
     if "progress" in context["features"]:
         context["bulk"].append(
-            _bulk_op(Operations.SET_CHAR_PROGRESS, get_bulk_options_cache(event, "progress_steps")),
+            _bulk_op(Operations.SET_CHAR_PROGRESS, get_bulk_options_cache(event_id, "progress_steps")),
         )
 
     # Add staff assignment operation if assigned feature is enabled
     if "assigned" in context["features"]:
         context["bulk"].append(
-            _bulk_op(Operations.SET_CHAR_ASSIGNED, get_bulk_options_cache(event, "staffers")),
+            _bulk_op(Operations.SET_CHAR_ASSIGNED, get_bulk_options_cache(event_id, "staffers")),
         )
 
     # Add status assignment operation if enabled
@@ -687,9 +687,9 @@ def handle_bulk_plots(request: HttpRequest, context: dict) -> None:
         }
         raise ReturnNowError(exec_bulk(request, context, mapping, Plot, allow_delete=True))
 
-    event = context["event"]
+    event_id = context["event"].id
 
-    characters = get_bulk_options_cache(event, "characters")
+    characters = get_bulk_options_cache(event_id, "characters")
     context["bulk"] = [
         _bulk_op(Operations.ADD_PLOT_CHAR, characters),
         _bulk_op(Operations.DEL_PLOT_CHAR, characters),
@@ -697,12 +697,12 @@ def handle_bulk_plots(request: HttpRequest, context: dict) -> None:
 
     if "progress" in context["features"]:
         context["bulk"].append(
-            _bulk_op(Operations.SET_PLOT_PROGRESS, get_bulk_options_cache(event, "progress_steps")),
+            _bulk_op(Operations.SET_PLOT_PROGRESS, get_bulk_options_cache(event_id, "progress_steps")),
         )
 
     if "assigned" in context["features"]:
         context["bulk"].append(
-            _bulk_op(Operations.SET_PLOT_ASSIGNED, get_bulk_options_cache(event, "staffers")),
+            _bulk_op(Operations.SET_PLOT_ASSIGNED, get_bulk_options_cache(event_id, "staffers")),
         )
 
     _add_bulk_delete_option(request, context)
@@ -750,9 +750,9 @@ def handle_bulk_factions(request: HttpRequest, context: dict) -> None:
         raise ReturnNowError(exec_bulk(request, context, mapping, Faction, allow_delete=True))
 
     context["bulk"] = []
-    event = context["event"]
+    event_id = context["event"].id
 
-    characters = get_bulk_options_cache(event, "characters")
+    characters = get_bulk_options_cache(event_id, "characters")
     context["bulk"] = [
         _bulk_op(Operations.ADD_FACT_CHAR, characters),
         _bulk_op(Operations.DEL_FACT_CHAR, characters),
@@ -760,12 +760,12 @@ def handle_bulk_factions(request: HttpRequest, context: dict) -> None:
 
     if "progress" in context["features"]:
         context["bulk"].append(
-            _bulk_op(Operations.SET_FACT_PROGRESS, get_bulk_options_cache(event, "progress_steps")),
+            _bulk_op(Operations.SET_FACT_PROGRESS, get_bulk_options_cache(event_id, "progress_steps")),
         )
 
     if "assigned" in context["features"]:
         context["bulk"].append(
-            _bulk_op(Operations.SET_FACT_ASSIGNED, get_bulk_options_cache(event, "staffers")),
+            _bulk_op(Operations.SET_FACT_ASSIGNED, get_bulk_options_cache(event_id, "staffers")),
         )
 
     _add_bulk_delete_option(request, context)
@@ -797,7 +797,7 @@ def handle_bulk_quest(request: HttpRequest, context: dict) -> None:
         )
 
     context["bulk"] = [
-        _bulk_op(Operations.SET_QUEST_TYPE, get_bulk_options_cache(context["event"], "quest_types")),
+        _bulk_op(Operations.SET_QUEST_TYPE, get_bulk_options_cache(context["event"].id, "quest_types")),
     ]
     _add_bulk_delete_option(request, context)
 
@@ -824,7 +824,7 @@ def handle_bulk_trait(request: HttpRequest, context: dict) -> None:
         )
 
     context["bulk"] = [
-        _bulk_op(Operations.SET_TRAIT_QUEST, get_bulk_options_cache(context["event"], "quests")),
+        _bulk_op(Operations.SET_TRAIT_QUEST, get_bulk_options_cache(context["event"].id, "quests")),
     ]
     _add_bulk_delete_option(request, context)
 
@@ -859,6 +859,6 @@ def handle_bulk_ability(request: HttpRequest, context: dict) -> None:
         )
 
     context["bulk"] = [
-        _bulk_op(Operations.SET_ABILITY_TYPE, get_bulk_options_cache(context["event"], "ability_types")),
+        _bulk_op(Operations.SET_ABILITY_TYPE, get_bulk_options_cache(context["event"].id, "ability_types")),
     ]
     _add_bulk_delete_option(request, context)

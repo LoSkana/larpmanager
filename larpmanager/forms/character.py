@@ -820,7 +820,7 @@ class OrgaCharacterForm(CharacterForm):
         self._load_relationships_data()
 
         if get_event_config(context["event"].id, "writing_relationship_tags", context=self.params):
-            context["relationship_tags"] = get_cached_relationship_tags(context["event"])
+            context["relationship_tags"] = get_cached_relationship_tags(context["event"].id)
             for entry in self.params["relationships"].values():
                 entry["tag_uuids"] = [tag.uuid for tag in entry.get("tags", [])]
 
@@ -1185,7 +1185,7 @@ class OrgaCharacterForm(CharacterForm):
             return
 
         # with no tag defined the form renders no checkbox, so an empty post must not clear anything
-        if not get_cached_relationship_tags(self.params["event"]):
+        if not get_cached_relationship_tags(self.params["event"].id):
             return
 
         relationships = self.params.get("relationships", {})

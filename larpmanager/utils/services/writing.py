@@ -38,7 +38,7 @@ from larpmanager.cache.text_fields import ALLOWED_TYPES, get_cache_text_field
 from larpmanager.cache.writing import get_cached_relationship_tags
 from larpmanager.models.access import get_event_staffers
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.event import Event, ProgressStep
+from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityExp
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -114,7 +114,7 @@ def orga_list_progress_assign(context: dict, typ: type[Model]) -> None:
 
     # Initialize assignment tracking if feature is enabled
     if "assigned" in features:
-        context["assigned"] = {member.id: member.show_nick() for member in get_event_staffers(event)}
+        context["assigned"] = {member.id: member.show_nick() for member in get_event_staffers(event.id)}
         context["assigned_map"] = dict.fromkeys(context["assigned"], 0)
 
     # Initialize combined progress/assignment tracking if both features enabled
@@ -468,9 +468,7 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
         element_type: Writing element model class
 
     """
-    cached_text_fields = get_cache_text_field(
-        element_type, Event.objects.get(pk=get_event_class_parent(context["event"].id, element_type))
-    )
+    cached_text_fields = get_cache_text_field(element_type, get_event_class_parent(context["event"].id, element_type))
     for element in context["list"]:
         if element.uuid not in cached_text_fields:
             continue
@@ -634,7 +632,7 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
             context["event"].id, "writing_relationship_tags", context=context
         )
         if context["writing_relationship_tags"]:
-            context["relationship_tags"] = get_cached_relationship_tags(context["event"])
+            context["relationship_tags"] = get_cached_relationship_tags(context["event"].id)
             for character in context["list"]:
                 character.relationship_tag_counts = event_relationships.get(character.id, {}).get(
                     "relationship_tag_counts", {}

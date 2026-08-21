@@ -759,7 +759,7 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     )
 
     # Update visible factions
-    update_visible_factions(instance.event)
+    update_visible_factions(instance.event_id)
 
     # Create a personal inventory for newly created characters
     generate_base_inventories(instance)
@@ -1022,7 +1022,7 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
     cleanup_faction_pdfs_on_save(instance)
 
     # Update visible factions config
-    update_visible_factions(instance.event)
+    update_visible_factions(instance.event_id)
 
 
 @receiver(post_softdelete, sender=Faction)
