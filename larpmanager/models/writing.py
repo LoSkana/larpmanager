@@ -399,17 +399,17 @@ class Character(Writing):
         """Return queryset of relationships where this character is the source."""
         return Relationship.objects.filter(source_id=self.pk)
 
-    def get_plot_characters(self, event: Any = None) -> Any:
+    def get_plot_characters(self, event_id: int | None = None) -> Any:
         """Return queryset of plot-character relations for this character.
 
-        Plots are not inherited in campaigns: when an event is given, only relations
+        Plots are not inherited in campaigns: when an event ID is given, only relations
         towards plots of that event are returned.
         """
         queryset = PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
-        if event:
+        if event_id:
             from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
 
-            queryset = queryset.filter(plot__event=get_event_class_parent(event.id, "plot"))
+            queryset = queryset.filter(plot__event=get_event_class_parent(event_id, "plot"))
         return queryset.order_by("order")
 
     @classmethod

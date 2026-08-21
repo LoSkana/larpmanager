@@ -902,7 +902,7 @@ class OrgaCharacterForm(CharacterForm):
         self.plot_role_help_text = _("This text will be added to the %(name)s plot paragraph in the sheet.")
         self.params["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
 
-        self.plots = self.instance.get_plot_characters(self.params["event"])
+        self.plots = self.instance.get_plot_characters(self.params["event"].id)
         self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
 
         self.add_char_finder = []
@@ -968,7 +968,7 @@ class OrgaCharacterForm(CharacterForm):
 
         # update texts (rows added client side are not declared fields, read them from raw data)
         to_update = []
-        for pr in instance.get_plot_characters(self.params["event"]):
+        for pr in instance.get_plot_characters(self.params["event"].id):
             field = f"pl_{pr.plot_id}"
             text = self.cleaned_data[field] if field in self.cleaned_data else self.data.get(field)
             if text is None or text == pr.text:
