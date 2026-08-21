@@ -740,9 +740,13 @@ def on_character_factions_m2m_changed(sender: type, **kwargs: Any) -> None:  # n
     if action not in ["post_add", "post_remove", "post_clear"]:
         return
 
-    # Get the faction instance and clear related event cache
-    instance: Faction | None = kwargs.pop("instance", None)
+    # Get the affected instance and clear related event cache
+    instance: Character | Faction | None = kwargs.pop("instance", None)
     clear_event_cache_all_runs(instance.event)
+
+    # Invalidate the stale per-instance faction id cache
+    if isinstance(instance, Character) and hasattr(instance, "_faction_ids_cache"):
+        del instance._faction_ids_cache  # noqa: SLF001 (instance-level memoization, not real privacy)
 
 
 def on_faction_pre_save_update_cache(instance: Faction) -> None:

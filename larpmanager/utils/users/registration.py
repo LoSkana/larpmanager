@@ -894,7 +894,8 @@ def get_player_characters_ids(member: Member, event: Event, context: dict | None
         member: Player owning the characters
         event: Event the characters belong to
         context: Optional context dictionary, optionally containing cached data:
-            - player_characters_dict: Dictionary mapping event IDs to lists of character IDs
+            - player_characters_dict: Dictionary mapping event IDs to lists of
+              (id, uuid, name, status) tuples
 
     Returns:
         Set of character IDs owned by the player in the event
@@ -902,9 +903,35 @@ def get_player_characters_ids(member: Member, event: Event, context: dict | None
     """
     player_characters_dict = (context or {}).get("player_characters_dict")
     if player_characters_dict is not None:
-        return set(player_characters_dict.get(get_class_parent(event.id, Character), []))
+        entries = player_characters_dict.get(get_class_parent(event.id, Character), [])
+        return {entry[0] for entry in entries}
 
     return set(get_player_characters(member, event).values_list("id", flat=True))
+
+
+def get_player_pending_characters(member: Member, event_id: int, context: dict | None = None) -> list[tuple[str, str]]:
+    """Get (uuid, name) of the player's characters awaiting confirmation, from the batched cache when available.
+
+    Args:
+        member: Player owning the characters
+        event_id: Event ID the characters belong to
+        context: Optional context dictionary, optionally containing cached data:
+            - player_characters_dict: Dictionary mapping event IDs to lists of
+              (id, uuid, name, status) tuples
+
+    Returns:
+        List of (uuid, name) for characters with status CREATION or REVIEW
+
+    """
+    pending_statuses = {CharacterStatus.CREATION, CharacterStatus.REVIEW}
+
+    player_characters_dict = (context or {}).get("player_characters_dict")
+    if player_characters_dict is not None:
+        entries = player_characters_dict.get(get_class_parent(event_id, Character), [])
+        return [(uuid, name) for _id, uuid, name, status in entries if status in pending_statuses]
+
+    query = get_elements(event_id, Character).filter(player=member, status__in=pending_statuses)
+    return list(query.values_list("uuid", "name"))
 
 
 def registration_status_characters(
@@ -1212,22 +1239,19 @@ def _status_approval(
 
     # Offer a confirm action for the player's own characters still awaiting proposal to the staff
     if "user_character" in features and get_event_config(run.event_id, "user_character_approval", context=context):
-        pending_characters = get_elements(run.event_id, Character).filter(
-            player=registration.member,
-            status__in=[CharacterStatus.CREATION, CharacterStatus.REVIEW],
-        )
+        pending_characters = get_player_pending_characters(registration.member, run.event_id, context)
         character_actions.extend(
             {
-                "url": reverse("character_confirm", args=[run.get_slug(), character.uuid]),
+                "url": reverse("character_confirm", args=[run.get_slug(), character_uuid]),
                 "label": _("Confirm character"),
                 "label_long": _("Confirm your character %(name)s is ready to propose to the staff!")
-                % {"name": character.name},
+                % {"name": character_name},
                 "tooltip": _("Confirm your character!"),
                 "icon": "fa-solid fa-check",
                 "status_type": "todo",
                 "status_icon": "fa-solid fa-list-check",
             }
-            for character in pending_characters
+            for character_uuid, character_name in pending_characters
         )
 
     if character_actions:

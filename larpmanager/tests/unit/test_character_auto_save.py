@@ -31,7 +31,7 @@ from larpmanager.forms.character import CharacterForm
 from larpmanager.models.form import QuestionApplicable, WritingQuestion, WritingQuestionType
 from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.views.user.character import character_form
+from larpmanager.views.user.character import character_form, propose_character_for_approval
 
 
 @pytest.mark.django_db
@@ -149,3 +149,48 @@ class TestCharacterAutoSave(BaseTestCase):
         assert "url" in payload
         character = Character.objects.get(name="Brand new")
         assert character.player_id == self.get_member().id
+
+
+@pytest.mark.django_db
+class TestProposeCharacterForApproval(BaseTestCase):
+    """Exercise the guarded CREATION/REVIEW -> PROPOSED transition used by character_confirm."""
+
+    def _character(self, status: str) -> Character:
+        return Character.objects.create(
+            event=self.get_event(),
+            player=self.get_member(),
+            name="Original",
+            status=status,
+        )
+
+    def test_proposes_character_in_creation(self) -> None:
+        character = self._character(CharacterStatus.CREATION)
+
+        propose_character_for_approval(character)
+
+        character.refresh_from_db()
+        assert character.status == CharacterStatus.PROPOSED
+
+    def test_proposes_character_in_review(self) -> None:
+        character = self._character(CharacterStatus.REVIEW)
+
+        propose_character_for_approval(character)
+
+        character.refresh_from_db()
+        assert character.status == CharacterStatus.PROPOSED
+
+    def test_does_not_reproposed_already_proposed_character(self) -> None:
+        character = self._character(CharacterStatus.PROPOSED)
+
+        propose_character_for_approval(character)
+
+        character.refresh_from_db()
+        assert character.status == CharacterStatus.PROPOSED
+
+    def test_does_not_regress_approved_character(self) -> None:
+        character = self._character(CharacterStatus.APPROVED)
+
+        propose_character_for_approval(character)
+
+        character.refresh_from_db()
+        assert character.status == CharacterStatus.APPROVED
