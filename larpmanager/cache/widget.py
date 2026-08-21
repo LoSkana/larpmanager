@@ -207,7 +207,7 @@ def _init_user_character_widget_cache(run: Run) -> dict:
 def _init_progress_widget_cache(run: Run) -> dict:
     """Compute character counts by progress step for widget cache."""
     characters = get_event_elements(run.event_id, Character)
-    steps = ProgressStep.objects.filter(event=run.event, deleted=None).order_by("order")
+    steps = ProgressStep.objects.filter(event_id=run.event_id, deleted=None).order_by("order")
 
     step_counts = []
     for step in steps:
@@ -615,7 +615,7 @@ def _init_milestones_widget_cache(run: Run) -> dict:
     """Compute 5 most urgent non-completed milestones for widget cache."""
     today = timezone.now().date()
     milestones = (
-        Milestone.objects.filter(event=run.event)
+        Milestone.objects.filter(event_id=run.event_id)
         .exclude(status=MilestoneStatus.COMPLETED)
         .select_related("assigned")
         .order_by("deadline")[:5]

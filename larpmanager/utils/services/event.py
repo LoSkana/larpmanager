@@ -692,7 +692,7 @@ def reset_all_run(event: Event, run: Run) -> None:
     for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):
         remove_event_role_cache(event_role_id)
 
-    clear_event_cache_all_runs(event)
+    clear_event_cache_all_runs(event.id)
 
     # Clear text fields cache
     reset_text_fields_cache(run)
