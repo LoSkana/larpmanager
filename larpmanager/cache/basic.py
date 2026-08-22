@@ -38,7 +38,7 @@ def get_association_basic_cache(association_id: int) -> dict:
     cache_key = association_basic_cache_key(association_id)
     data = cache.get(cache_key)
     if data is None:
-        association = Association.objects.only("payment_currency", "slug").get(id=association_id)
+        association = Association.all_objects.only("payment_currency", "slug").get(id=association_id)
         if not association.payment_currency:
             association.payment_currency = Currency.EUR
         data = {"currency_symbol": association.get_currency_symbol(), "slug": association.slug}
