@@ -252,7 +252,7 @@ class RegistrationForm(BaseRegistrationForm):
     def init_surcharge(self, event: Event) -> None:
         """Initialize date-based surcharge field if applicable."""
         # date surcharge
-        surcharge = get_date_surcharge(self.instance, event)
+        surcharge = get_date_surcharge(self.instance, event.id)
         if surcharge == 0:
             return
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]

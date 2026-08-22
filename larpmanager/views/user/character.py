@@ -750,7 +750,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
 
     context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.CHARACTER)
 
-    context["list"] = get_player_characters(context["member"], context["event"])
+    context["list"] = get_player_characters(context["member"], context["event"].id)
     # add character configs
     char_add_addit(context)
     context["list"] = list(context["list"])
@@ -777,7 +777,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
         el.fields = res["fields"]
         context.update(res)
 
-    check, _max_chars = check_character_maximum(context["event"], context["member"])
+    check, _max_chars = check_character_maximum(context["event"].id, context["member"])
     context["char_maximum"] = check
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
 
@@ -846,7 +846,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Return JSON list of player's characters for an event."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
-    context["list"] = get_player_characters(context["member"], context["event"])
+    context["list"] = get_player_characters(context["member"], context["event"].id)
 
     # Get character fields info
     return_list = [{"uuid": el.uuid, "name": el.name} for el in context["list"]]
@@ -859,7 +859,7 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
     """Handle character creation with maximum character validation."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
-    check, _max_chars = check_character_maximum(context["event"], context["member"])
+    check, _max_chars = check_character_maximum(context["event"].id, context["member"])
     if check:
         if request.POST.get("ajax") == "1":
             return JsonResponse({"res": "ko"})

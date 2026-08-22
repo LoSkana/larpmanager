@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.association import Association, get_url, hdr, hdr_run
+from larpmanager.models.association import Association, get_association_url, get_url, hdr, hdr_run
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.utils.users.registration import get_registration_options
 
@@ -355,7 +355,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
 
     """
     # Build the payment URL using the event and run slug
-    full_payment_url = get_url("accounting/pay", instance.run.event)
+    full_payment_url = get_association_url("accounting/pay", get_run_association_id(instance.run_id))
     payment_url = f"{full_payment_url}/{instance.run.get_slug()}"
 
     # Prepare template data for localization

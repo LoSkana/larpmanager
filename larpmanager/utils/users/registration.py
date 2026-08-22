@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import _format_decimal, is_registration_provisional
 from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
+from larpmanager.cache.basic import RunBasicCache, get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
@@ -40,7 +40,7 @@ from larpmanager.cache.registration import clear_registration_counts_cache, get_
 from larpmanager.cache.run import get_event_run_ids
 from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
 from larpmanager.models.casting import Casting
-from larpmanager.models.event import Event, PreRegistration, RegistrationStatus, Run
+from larpmanager.models.event import PreRegistration, RegistrationStatus, Run
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -207,13 +207,17 @@ def get_match_reg(r: Run, my_regs: list[Registration]) -> Registration | None:
 
 
 def _status_membership_fee(
-    run: Run, member: Member, user_membership: Membership, run_status: dict, registration_text: str
+    run: Run,
+    member: Member,
+    user_membership: Membership,
+    run_status: dict,
+    registration_text: str,
+    run_cache: RunBasicCache,
 ) -> bool:
     """Check if we need to show text regarding membership payment."""
     if user_membership.status != MembershipStatus.ACCEPTED:
         return False
 
-    run_cache = get_run_basic_cache(run.id)
     association_id = run_cache["association_id"]
     fee = int(get_association_config(association_id, "membership_fee"))
     if not fee:
@@ -270,7 +274,8 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     features: dict[str, Any],
     register_url: str,
     run_status: dict,
-    context: dict | None = None,
+    context: dict | None,
+    run_cache: RunBasicCache,
 ) -> None:
     """Update the registration status for a signed user based on membership and payment features.
 
@@ -284,6 +289,7 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
         context: Optional context dictionary containing cached data:
             - character_rels_dict: Dictionary mapping registration IDs to lists of RegistrationCharacterRel objects
             - payment_invoices_dict: Dictionary mapping registration IDs to lists of PaymentInvoice objects
+        run_cache: Basic cache data for the run (association_id, currency_symbol, etc.)
 
     Raises:
         RewokedMembershipError: When membership status is revoked
@@ -308,14 +314,14 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     registration_status_characters(run, registration, run_status, features, context)
 
     # Get user membership for the event's association
-    user_membership = get_user_membership(member, get_run_association_id(run.id))
+    user_membership = get_user_membership(member, run_cache["association_id"])
 
     # Build base registration message with ticket info if available
     is_provisional = is_registration_provisional(
         registration, features=features, event_id=run.event_id, context=context
     )
     registration_message, registration_message_long = _registration_messages(
-        run, registration, is_provisional=is_provisional
+        registration, is_provisional=is_provisional, run_cache=run_cache
     )
 
     # Append ticket name if ticket exists
@@ -369,7 +375,9 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
         return
 
     # Check for missing membership fee if membership feature is enabled
-    if "membership" in features and _status_membership_fee(run, member, user_membership, run_status, registration_text):
+    if "membership" in features and _status_membership_fee(
+        run, member, user_membership, run_status, registration_text, run_cache
+    ):
         return
 
     # Check for incomplete user profile and prompt completion
@@ -400,7 +408,9 @@ def registration_status_signed(  # noqa: C901, PLR0911 - Complex registration st
     run_status["text"] = registration_text
 
 
-def _registration_messages(run: Run, registration: Registration, *, is_provisional: bool) -> tuple[str, str]:
+def _registration_messages(
+    registration: Registration, *, is_provisional: bool, run_cache: RunBasicCache
+) -> tuple[str, str]:
     """Build the short and long registration status messages."""
     if not is_provisional:
         return _("Registration confirmed"), _("Your registration for this event has been confirmed")
@@ -413,7 +423,7 @@ def _registration_messages(run: Run, registration: Registration, *, is_provision
             "Your registration is provisional, and will be confirmed once the payment of %(amount)s%(currency)s is made"
         ) % {
             "amount": _format_decimal(remaining_amount),
-            "currency": get_run_basic_cache(run.id)["currency_symbol"],
+            "currency": run_cache["currency_symbol"],
         }
     return registration_message, registration_message_long
 
@@ -557,11 +567,12 @@ def _status_payment(
     return False
 
 
-def _set_membership_context(context: dict, run: Run, member: Member, registration: Any) -> None:
+def _set_membership_context(
+    context: dict, run: Run, member: Member, registration: Any, run_cache: RunBasicCache
+) -> None:
     """Set membership data in context for template rendering."""
     if not run.start or "membership" not in context.get("features", {}):
         return
-    run_cache = get_run_basic_cache(run.id)
     association_id = run_cache["association_id"]
     event_year = run.start.year
     context["membership_amount"] = get_association_config(association_id, "membership_fee")
@@ -656,8 +667,11 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
             return run_status
 
         if registration:
-            _set_membership_context(context, run, member, registration)
-            registration_status_signed(run, registration, member, features, register_url, run_status, context)
+            run_cache = get_run_basic_cache(run.id)
+            _set_membership_context(context, run, member, registration, run_cache)
+            registration_status_signed(
+                run, registration, member, features, register_url, run_status, context, run_cache
+            )
             return run_status
 
     if run.end and get_time_diff_today(run.end) < 0:
@@ -855,11 +869,11 @@ def registration_find(run: Run, member: Member) -> Registration | None:
         return None
 
 
-def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
+def check_character_maximum(event_id: int, member: Any) -> tuple[bool, int]:
     """Check if member has reached the maximum character limit for an event.
 
     Args:
-        event: The event to check character limits for
+        event_id: The event id to check character limits for
         member: The member whose character count to verify
 
     Returns:
@@ -867,7 +881,7 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
 
     """
     # Get all characters for this member in the event
-    characters = get_event_elements(event.id, Character).filter(player=member)
+    characters = get_event_elements(event_id, Character).filter(player=member)
 
     # Get IDs of inactive characters (those with CharacterConfig inactive=True)
     inactive_character_ids = CharacterConfig.objects.filter(
@@ -880,7 +894,7 @@ def check_character_maximum(event: Any, member: Any) -> tuple[bool, int]:
     current_character_count = characters.exclude(id__in=inactive_character_ids).count()
 
     # Get the maximum allowed characters from event configuration
-    maximum_characters_allowed = int(get_event_config(event.id, "user_character_max"))
+    maximum_characters_allowed = int(get_event_config(event_id, "user_character_max"))
 
     # Return whether limit is reached and the maximum allowed
     return current_character_count >= maximum_characters_allowed, maximum_characters_allowed
@@ -891,12 +905,12 @@ def get_character_play_max(event_id: int, context: dict | None = None) -> int:
     return max(1, int(get_event_config(event_id, "character_play_max", context=context)))
 
 
-def get_player_characters_ids(member: Member, event: Event, context: dict | None = None) -> set[int]:
+def get_player_characters_ids(member: Member, event_id: int, context: dict | None = None) -> set[int]:
     """Get ids of the player's characters for an event, from the batched cache when available.
 
     Args:
         member: Player owning the characters
-        event: Event the characters belong to
+        event_id: Event id the characters belong to
         context: Optional context dictionary, optionally containing cached data:
             - player_characters_dict: Dictionary mapping event IDs to lists of
               (id, uuid, name, status) tuples
@@ -907,10 +921,10 @@ def get_player_characters_ids(member: Member, event: Event, context: dict | None
     """
     player_characters_dict = (context or {}).get("player_characters_dict")
     if player_characters_dict is not None:
-        entries = player_characters_dict.get(get_event_class_parent(event.id, Character), [])
+        entries = player_characters_dict.get(get_event_class_parent(event_id, Character), [])
         return {entry[0] for entry in entries}
 
-    return set(get_player_characters(member, event).values_list("id", flat=True))
+    return set(get_player_characters(member, event_id).values_list("id", flat=True))
 
 
 def get_player_pending_characters(member: Member, event_id: int, context: dict | None = None) -> list[tuple[str, str]]:
@@ -994,7 +1008,7 @@ def registration_status_characters(
     can_switch = False
     play_max = get_character_play_max(run.event_id, context)
     if "user_character" in features:
-        owned_ids = get_player_characters_ids(registration.member, run.event, context)
+        owned_ids = get_player_characters_ids(registration.member, run.event_id, context)
         assigned_ids = {character_rel.character_id for character_rel in registration_character_rels}
         selectable_count = len(owned_ids - assigned_ids)
         owned_count = len(owned_ids)
@@ -1186,7 +1200,7 @@ def _status_approval(
         return
 
     # Get character creation limits for this user and event
-    reached_maximum, maximum_characters = check_character_maximum(run.event, registration.member)
+    reached_maximum, maximum_characters = check_character_maximum(run.event_id, registration.member)
 
     assigned_count = character_counts["assigned"]
     selectable_count = character_counts["selectable"]
@@ -1385,9 +1399,9 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
     return formatted_results
 
 
-def get_player_characters(member: Member, event: Event) -> QuerySet[Character]:
+def get_player_characters(member: Member, event_id: int) -> QuerySet[Character]:
     """Get all characters a player has for an event, ordered by most recently updated."""
-    return get_event_elements(event.id, Character).filter(player=member).order_by("-updated")
+    return get_event_elements(event_id, Character).filter(player=member).order_by("-updated")
 
 
 def get_player_signup(context: dict) -> Registration | None:
@@ -1462,7 +1476,7 @@ def check_assign_character(context: dict) -> None:
         return
 
     # Get all characters belonging to this player for the event
-    characters = get_player_characters(context["member"], context["event"])
+    characters = get_player_characters(context["member"], context["event"].id)
     if not characters:
         return
 
@@ -1561,13 +1575,13 @@ def process_registration_event_change(registration: Registration) -> None:
     # This preserves the ticket assignment when moving between events
     ticket_name = registration.ticket.name
     try:
-        registration.ticket = get_event_elements(registration.run.event_id, RegistrationTicket).get(
+        registration.ticket = get_event_elements(get_run_event_id(registration.run_id), RegistrationTicket).get(
             name__iexact=ticket_name
         )
     except ObjectDoesNotExist:
         registration.ticket = None
 
-    cached_questions = get_cached_registration_questions(registration.run.event_id)
+    cached_questions = get_cached_registration_questions(get_run_event_id(registration.run_id))
 
     # Process all registration choices (question/option pairs)
     # Try to find matching questions and options in the new event
@@ -1581,7 +1595,9 @@ def process_registration_event_change(registration: Registration) -> None:
             # Find matching question and option in the new event
             matched_question = next(q for q in cached_questions if q["name"].lower() == question_name.lower())
             registration_choice.question_id = matched_question["id"]
-            registration_choice.option = get_event_elements(registration.run.event_id, RegistrationOption).get(
+            registration_choice.option = get_event_elements(
+                get_run_event_id(registration.run_id), RegistrationOption
+            ).get(
                 question_id=matched_question["id"],
                 name__iexact=option_name,
             )
@@ -1663,13 +1679,11 @@ def process_character_ticket_options(instance: Registration) -> None:
     if not instance.ticket:
         return
 
-    # Get the event from the registration run
-    event = instance.run.event
-
     # Process ticket options for characters directly linked to this registration,
     # plus all characters owned by the member in this event
+    event_id = get_run_event_id(instance.run_id)
     characters = set(instance.characters.all()) | set(
-        get_event_elements(event.id, Character).filter(player=instance.member)
+        get_event_elements(event_id, Character).filter(player=instance.member)
     )
     for character in characters:
         check_character_ticket_options(instance, character)

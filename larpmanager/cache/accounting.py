@@ -26,7 +26,6 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.registration import get_active_registrations, get_registration_tickets
 from larpmanager.models.accounting import (
@@ -209,7 +208,7 @@ def calculate_payment_breakdown(
     return payment_breakdown
 
 
-def refresh_member_accounting_cache(run_id: int, member_id: int) -> None:
+def refresh_member_accounting_cache(run_id: int, event_id: int, member_id: int) -> None:
     """Update accounting cache for a specific member's registrations in a run.
 
     This function efficiently updates the accounting cache for a single member's
@@ -218,14 +217,13 @@ def refresh_member_accounting_cache(run_id: int, member_id: int) -> None:
 
     Args:
         run_id: Run id for which to update the accounting cache
+        event_id: Event id owning the run
         member_id: ID of the member whose accounting data should be updated
 
     Returns:
         None
 
     """
-    event_id = get_run_basic_cache(run_id)["event_id"]
-
     # Get the cache key and retrieve existing cached data
     cache_key = get_registration_accounting_cache_key(run_id)
     cached_accounting_data = cache.get(cache_key)

@@ -63,6 +63,7 @@ from larpmanager.cache.association_translation import clear_association_translat
 from larpmanager.cache.basic import (
     get_event_association_id,
     get_run_basic_cache,
+    get_run_event_id,
     reset_association_basic_cache,
     reset_event_basic_cache,
     reset_run_basic_cache,
@@ -438,7 +439,7 @@ def reset_accountingitem_cache(instance: Any) -> None:
 
     run_id = getattr(instance, "run_id", None)
     if run_id and instance.member_id:
-        refresh_member_accounting_cache(run_id, instance.member_id)
+        refresh_member_accounting_cache(run_id, get_run_event_id(run_id), instance.member_id)
 
 
 @receiver(post_save, sender=AbilityExp)
@@ -478,7 +479,7 @@ def post_save_discount_accounting_cache(
 
     # Refresh member's accounting cache if discount is associated with a run and member
     if instance.run_id and instance.member_id:
-        refresh_member_accounting_cache(instance.run_id, instance.member_id)
+        refresh_member_accounting_cache(instance.run_id, get_run_event_id(instance.run_id), instance.member_id)
 
 
 @receiver(pre_save, sender=AccountingItemDonation)
@@ -560,7 +561,7 @@ def post_save_payment_accounting_cache(
     if instance.registration and instance.registration.run_id:
         instance.registration.save()
         run_id = instance.registration.run_id
-        refresh_member_accounting_cache(run_id, instance.member_id)
+        refresh_member_accounting_cache(run_id, get_run_event_id(run_id), instance.member_id)
 
     # Update token credits based on payment changes
     update_token_credit_on_payment_save(instance, created=created)
@@ -688,6 +689,8 @@ def post_save_reset_association_config(sender: type, instance: object, **kwargs:
 def post_save_association_skin_reset_cache(sender: type, instance: Association, **kwargs: Any) -> None:
     """Clear skin cache when association is saved."""
     clear_skin_cache(instance.domain)
+    for association_id in instance.association_set.values_list("id", flat=True):
+        reset_association_basic_cache(association_id)
 
 
 @receiver(post_save, sender=LarpManagerDemoType)

@@ -841,9 +841,8 @@ def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = Non
         Computed values are formatted to remove trailing zeros and decimal points.
 
     """
-    # Get the character's event and initialize computed question values
-    event = char.event
-    computed_questions = get_event_elements(event.id, WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+    # Initialize computed question values for the character's event
+    computed_questions = get_event_elements(char.event_id, WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
     computed_field_values = {question.id: Decimal(0) for question in computed_questions}
 
     # Retrieve character's ability IDs for rule filtering
@@ -852,7 +851,7 @@ def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = Non
 
     # Get applicable rules: either global rules or rules matching character's abilities
     applicable_rules = (
-        get_event_elements(event.id, RuleExp)
+        get_event_elements(char.event_id, RuleExp)
         .filter(Q(abilities__isnull=True) | Q(abilities__in=character_ability_ids))
         .distinct()
         .order_by("order")

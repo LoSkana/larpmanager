@@ -28,7 +28,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.html import escape
 
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -385,7 +385,7 @@ def update_cache_registration_fields(registration: Registration) -> None:
     """Update cached registration fields for the given element's run."""
     # Get the run id associated with the registration element
     run_id = registration.run_id
-    event_id = get_run_basic_cache(run_id)["event_id"]
+    event_id = get_run_event_id(run_id)
 
     # Generate cache key and retrieve current cached registration fields
     cache_key = cache_text_field_key(Registration, run_id)
@@ -424,7 +424,7 @@ def update_cache_registration_fields_answer(instance: BaseModel) -> None:
         return
 
     run_id = registration.run_id
-    event_id = get_run_basic_cache(run_id)["event_id"]
+    event_id = get_run_event_id(run_id)
 
     # Generate cache key and retrieve current cached field data
     cache_key = cache_text_field_key(Registration, run_id)

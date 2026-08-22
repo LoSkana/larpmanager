@@ -51,7 +51,7 @@ from larpmanager.cache.run import reset_cache_config_run, reset_cache_run
 from larpmanager.cache.text_fields import reset_text_fields_cache
 from larpmanager.cache.widget import clear_widget_cache
 from larpmanager.cache.wwyltd import reset_orga_configs_cache
-from larpmanager.models.access import EventRole, get_event_organizers
+from larpmanager.models.access import EventRole, get_event_organizers_by_event
 from larpmanager.models.base import Feature, auto_set_uuid, debug_set_uuid
 from larpmanager.models.event import Event, Run
 from larpmanager.models.experience import SystemExp
@@ -556,7 +556,7 @@ def _activate_orga_lang(instance: Event) -> None:
     """
     # Count language frequency among organizers
     language_frequency = {}
-    for organizer in get_event_organizers(instance):
+    for organizer in get_event_organizers_by_event(instance.id):
         organizer_language = organizer.language
 
         # Track language occurrence count
@@ -728,12 +728,12 @@ def on_event_features_m2m_changed(
 
     # Initialize the newly added features
     if feature_slugs:
-        init_features(instance, feature_slugs)
+        init_features(instance.id, feature_slugs)
 
 
-def init_features(event: Event, features_dict: list[str]) -> None:
+def init_features(event_id: int, features_dict: list[str]) -> None:
     """Perform initializazion on new features activation."""
     if "inventory" in features_dict:
         # Generate inventories for all existing characters in this event
-        for character in get_event_elements(event.id, Character):
+        for character in get_event_elements(event_id, Character):
             generate_base_inventories(character, check=True)

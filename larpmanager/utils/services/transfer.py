@@ -25,7 +25,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 from larpmanager.cache.accounting import refresh_member_accounting_cache
-from larpmanager.cache.basic import get_run_association_id
+from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import get_registration_tickets
 from larpmanager.models.accounting import (
@@ -50,7 +50,7 @@ from larpmanager.models.registration import (
 from larpmanager.utils.core.common import get_event_class_parent
 
 if TYPE_CHECKING:
-    from larpmanager.models.event import Event, Run
+    from larpmanager.models.event import Run
 
 
 def transfer_registration_between_runs(
@@ -143,11 +143,11 @@ def transfer_registration_between_runs(
             _delete_original_registration_data(registration)
 
     # Refresh cache for target run (where registration was moved/copied to)
-    refresh_member_accounting_cache(target_run.id, member_id)
+    refresh_member_accounting_cache(target_run.id, target_run.event_id, member_id)
 
     # If moving (not copying), refresh cache for source run as well
     if move_registration:
-        refresh_member_accounting_cache(source_run.id, member_id)
+        refresh_member_accounting_cache(source_run.id, source_run.event_id, member_id)
 
     return new_registration
 
@@ -201,7 +201,7 @@ def _transfer_choices(source_reg: Registration, target_reg: Registration) -> lis
 
     for choice in source_choices:
         # Find corresponding question in destination event
-        target_question = _find_matching_question(choice.question, target_reg.run.event)
+        target_question = _find_matching_question(choice.question, target_reg.run_id)
         if not target_question:
             continue
 
@@ -229,7 +229,7 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
 
     for answer in source_answers:
         # Find corresponding question in destination event
-        target_question = _find_matching_question(answer.question, target_reg.run.event)
+        target_question = _find_matching_question(answer.question, target_reg.run_id)
         if not target_question:
             continue
 
@@ -242,7 +242,7 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
     return transferred_answers
 
 
-def _find_matching_question(source_question: RegistrationQuestion, target_event: Event) -> RegistrationQuestion | None:
+def _find_matching_question(source_question: RegistrationQuestion, target_run_id: int) -> RegistrationQuestion | None:
     """Find the corresponding question in the destination event.
 
     Matching logic:
@@ -251,7 +251,7 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     3. Match by name only
     """
     # Get question by type and name
-    target_questions = get_cached_registration_questions(target_event.id)
+    target_questions = get_cached_registration_questions(get_run_event_id(target_run_id))
     exact_match = next(
         (q for q in target_questions if q["typ"] == source_question.typ and q["name"] == source_question.name), None
     )
@@ -298,11 +298,11 @@ def _transfer_character_relations(source_reg: Registration, target_reg: Registra
     """Transfer character relationships from source registration to destination."""
     source_relations = RegistrationCharacterRel.objects.filter(registration=source_reg)
 
-    for relation in source_relations:
-        # Check that the character is available in the destination event
-        # (considering campaigns that share characters)
-        character_event_id = get_event_class_parent(target_reg.run.event_id, "character")
+    # Check that the character is available in the destination event
+    # (considering campaigns that share characters)
+    character_event_id = get_event_class_parent(get_run_event_id(target_reg.run_id), "character")
 
+    for relation in source_relations:
         if relation.character.event_id == character_event_id:
             RegistrationCharacterRel.objects.create(
                 registration=target_reg,
@@ -483,7 +483,7 @@ def validate_transfer_feasibility(registration: Registration, target_run: Run) -
     _validate_ticket(registration, result, target_run)
 
     # Check question matching
-    source_questions = len(get_cached_registration_questions(registration.run.event_id))
+    source_questions = len(get_cached_registration_questions(get_run_event_id(registration.run_id)))
 
     target_questions = len(get_cached_registration_questions(target_run.event_id))
 
