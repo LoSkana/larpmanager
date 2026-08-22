@@ -30,7 +30,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpRequest
 from django.utils import timezone
 
-from larpmanager.cache.basic import get_event_basic_cache, get_run_association_id
+from larpmanager.cache.basic import get_event_association_id, get_run_association_id
 from larpmanager.models.access import AssociationRole, EventRole
 from larpmanager.models.event import DevelopStatus, Run
 from larpmanager.models.registration import Registration
@@ -236,7 +236,7 @@ def clear_run_event_links_cache(event_id: int) -> None:
         May perform multiple database queries to fetch role memberships.
 
     """
-    association_id = get_event_basic_cache(event_id)["association_id"]
+    association_id = get_event_association_id(event_id)
 
     # Clear visible_runs cache for this association (public run list may have changed)
     cache.delete(f"visible_runs:{association_id}")

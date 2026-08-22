@@ -37,7 +37,7 @@ from django.core.validators import validate_email
 from django.utils import timezone
 
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.basic import get_event_basic_cache, get_run_association_id
+from larpmanager.cache.basic import get_event_association_id, get_run_association_id
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
@@ -886,7 +886,7 @@ def get_context_elements(context_object: dict) -> tuple[int, int]:
         elif hasattr(context_object, "association_id") and context_object.association_id:
             association_id = context_object.association_id
         elif hasattr(context_object, "event_id") and context_object.event_id:
-            association_id = get_event_basic_cache(context_object.event_id)["association_id"]
+            association_id = get_event_association_id(context_object.event_id)
     return association_id, run_id
 
 

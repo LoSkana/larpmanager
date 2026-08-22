@@ -30,6 +30,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.mail.suppression import get_suppressed_emails
@@ -458,7 +459,7 @@ def send_mail_batch(
     if not association_id and run_id:
         run = Run.objects.filter(pk=run_id).select_related("event").first()
         if run:
-            association_id = run.event.association_id
+            association_id = get_run_association_id(run.id)
 
     # Keep only recipients who consented to share their data with the association
     recipients = split_recipients(player_ids)

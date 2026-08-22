@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.accounting.base import _format_decimal, is_registration_provisional
 from larpmanager.accounting.member import get_membership_fee_for_reg
 from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.basic import get_run_association_id, get_run_event_id
+from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
@@ -213,7 +213,9 @@ def _status_membership_fee(
     if user_membership.status != MembershipStatus.ACCEPTED:
         return False
 
-    fee = int(get_association_config(run.event.association_id, "membership_fee"))
+    run_cache = get_run_basic_cache(run.id)
+    association_id = run_cache["association_id"]
+    fee = int(get_association_config(association_id, "membership_fee"))
     if not fee:
         return False
 
@@ -225,7 +227,7 @@ def _status_membership_fee(
     # Check if membership fee exists for current year
     membership_fee_exists = AccountingItemMembership.objects.filter(
         member=member,
-        association_id=run.event.association_id,
+        association_id=association_id,
         year=current_year,
     ).exists()
 
@@ -235,7 +237,7 @@ def _status_membership_fee(
     # Check if there's a pending membership payment
     pending_membership_payment = PaymentInvoice.objects.filter(
         member=member,
-        association_id=run.event.association_id,
+        association_id=association_id,
         status=PaymentStatus.SUBMITTED,
         typ=PaymentType.MEMBERSHIP,
     ).exists()
@@ -255,7 +257,7 @@ def _status_membership_fee(
         % {
             "year": current_year,
             "amount": fee,
-            "currency": run.event.association.get_currency_symbol(),
+            "currency": run_cache["currency_symbol"],
         },
     }
     return True
@@ -411,7 +413,7 @@ def _registration_messages(run: Run, registration: Registration, *, is_provision
             "Your registration is provisional, and will be confirmed once the payment of %(amount)s%(currency)s is made"
         ) % {
             "amount": _format_decimal(remaining_amount),
-            "currency": run.event.association.get_currency_symbol(),
+            "currency": get_run_basic_cache(run.id)["currency_symbol"],
         }
     return registration_message, registration_message_long
 
@@ -526,6 +528,7 @@ def _status_payment(
         if wire_created_invoices:
             note = _("If you have made a wire transfer, please upload its receipt for processing")
 
+        currency_symbol = get_run_basic_cache(registration.run_id)["currency_symbol"]
         total_amount = registration.quota
         if context.get("membership_fee") == "bundled" and context.get("membership_amount"):
             membership_amount = Decimal(str(context["membership_amount"]))
@@ -533,12 +536,12 @@ def _status_payment(
             if note is None and registration.run.start:
                 note = (
                     _("Includes membership fee")
-                    + f" {registration.run.start.year}: {_format_decimal(membership_amount)}{registration.run.event.association.get_currency_symbol()}"
+                    + f" {registration.run.start.year}: {_format_decimal(membership_amount)}{currency_symbol}"
                 )
 
         label_params = {
             "amount": _format_decimal(total_amount),
-            "currency": registration.run.event.association.get_currency_symbol(),
+            "currency": currency_symbol,
             "days": registration.deadline,
         }
         run_status["status_type"] = "action_needed"
@@ -558,10 +561,11 @@ def _set_membership_context(context: dict, run: Run, member: Member, registratio
     """Set membership data in context for template rendering."""
     if not run.start or "membership" not in context.get("features", {}):
         return
-    association_id = run.event.association_id
+    run_cache = get_run_basic_cache(run.id)
+    association_id = run_cache["association_id"]
     event_year = run.start.year
     context["membership_amount"] = get_association_config(association_id, "membership_fee")
-    currency_symbol = run.event.association.get_currency_symbol()
+    currency_symbol = run_cache["currency_symbol"]
     context["membership_amount_display"] = ""
     if context["membership_amount"]:
         amount = Decimal(str(context["membership_amount"]))
@@ -1336,8 +1340,9 @@ def get_registration_options(instance: object) -> list[tuple[str, str]]:
     question_ids_cache = []
 
     # Get event features and filter applicable questions
-    event_features = get_event_features(get_run_event_id(instance.run_id))
-    for question in get_cached_registration_questions(instance.run.event_id):
+    event_id = get_run_event_id(instance.run_id)
+    event_features = get_event_features(event_id)
+    for question in get_cached_registration_questions(event_id):
         if skip_registration_question(question, instance, event_features):
             continue
         applicable_questions.append(question)

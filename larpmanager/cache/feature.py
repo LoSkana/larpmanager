@@ -22,8 +22,8 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.cache.basic import get_event_basic_cache
-from larpmanager.cache.config import _get_cached_config, _get_event_parent_id
+from larpmanager.cache.basic import get_event_association_id
+from larpmanager.cache.config import _get_event_parent_id, get_event_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
 
@@ -133,7 +133,7 @@ def update_event_features(event_id: int) -> dict[str, int]:
 
     """
     try:
-        association_id = get_event_basic_cache(event_id)["association_id"]
+        association_id = get_event_association_id(event_id)
         features_dict = get_association_features(association_id)
         for feature_slug in Feature.objects.filter(events__id=event_id).values_list("slug", flat=True):
             features_dict[feature_slug] = 1
@@ -146,10 +146,10 @@ def update_event_features(event_id: int) -> dict[str, int]:
         context = {}
         for config_type, config_feature_slugs in extra_features_mapping.items():
             for feature_slug in config_feature_slugs:
-                if _get_cached_config(event_id, "event", f"{config_type}_{feature_slug}", context=context):
+                if get_event_config(event_id, f"{config_type}_{feature_slug}", context=context):
                     features_dict[feature_slug] = 1
         for feature_slug in ["exp_rules", "exp_modifiers", "exp_templates", "exp_systems", "exp_criterions"]:
-            if _get_cached_config(event_id, "event", feature_slug, context=context):
+            if get_event_config(event_id, feature_slug, context=context):
                 features_dict[feature_slug] = 1
 
     except ObjectDoesNotExist:

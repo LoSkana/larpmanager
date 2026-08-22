@@ -27,6 +27,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, QuerySet
 
+from larpmanager.cache.basic import get_event_association_id, get_event_basic_cache
 from larpmanager.cache.button import get_event_button_cache
 from larpmanager.cache.config import get_event_config, reset_event_parent_cache, save_single_config
 from larpmanager.cache.feature import get_event_features
@@ -130,7 +131,8 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
 def on_run_pre_save_invalidate_cache(instance: Run) -> None:
     """Handle run pre-save cache invalidation."""
     if instance.pk:
-        reset_cache_run(instance.event.association_id, instance.get_slug())
+        association_id = get_event_association_id(instance.event_id)
+        reset_cache_run(association_id, instance.get_slug())
 
 
 def on_event_pre_save_invalidate_cache(instance: Event) -> None:
@@ -201,7 +203,7 @@ def init_cache_config_run(run: Run) -> dict:
 
     """
     event_id = run.event_id
-    parent_id = run.event.parent.id if run.event.parent else run.event_id
+    parent_id = get_event_basic_cache(event_id)["parent_id"] or event_id
 
     # Get event features to determine what functionality is available
     event_features = get_event_features(event_id)
@@ -268,4 +270,4 @@ def update_visible_factions(event_id: int) -> None:
         .filter(char_count__gt=0)
         .exists()
     )
-    save_single_config(Event.objects.get(pk=event_id), "has_visible_factions", has_visible_factions)
+    save_single_config(Event(pk=event_id), "has_visible_factions", has_visible_factions)

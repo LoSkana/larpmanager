@@ -61,7 +61,7 @@ from larpmanager.cache.association_text import (
 )
 from larpmanager.cache.association_translation import clear_association_translation_cache
 from larpmanager.cache.basic import (
-    get_event_basic_cache,
+    get_event_association_id,
     get_run_basic_cache,
     reset_association_basic_cache,
     reset_event_basic_cache,
@@ -964,7 +964,7 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
     remove_event_role_cache(instance.pk)
 
     # Reset event links cache for all members assigned to this role
-    association_id = get_event_basic_cache(instance.event_id)["association_id"]
+    association_id = get_event_association_id(instance.event_id)
     for member in instance.members.all():
         reset_event_links(member.id, association_id)
 

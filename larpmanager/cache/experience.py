@@ -29,7 +29,6 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 
 from larpmanager.cache.basic import get_event_basic_cache
-from larpmanager.cache.config import get_event_config
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
@@ -93,10 +92,7 @@ def get_event_exp_key(event_id: int) -> str:
 
 def get_exp_effective_event_id(event_id: int) -> int:
     """Return the event ID to use as EXP cache key."""
-    parent_id = get_event_basic_cache(event_id)["parent_id"]
-    if parent_id and not get_event_config(event_id, "campaign_abilitypx_indep"):
-        return parent_id
-    return event_id
+    return get_event_class_parent(event_id, "abilitypx")
 
 
 def clear_event_exp_cache(event_id: int) -> None:

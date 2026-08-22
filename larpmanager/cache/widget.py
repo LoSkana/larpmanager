@@ -34,7 +34,7 @@ from larpmanager.accounting.balance import (
     association_accounting_summary,
     get_run_accounting,
 )
-from larpmanager.cache.basic import get_event_basic_cache, get_run_association_id
+from larpmanager.cache.basic import get_event_association_id, get_event_basic_cache, get_run_association_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.run import get_event_run_ids
@@ -550,7 +550,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
 
     # Open help questions (last 90 days, most recent per member, user-originated and not closed)
     base_queryset = HelpQuestion.objects.filter(
-        association_id=run.event.association_id, run=run, created__gte=timezone.now() - timedelta(days=90)
+        association_id=get_run_association_id(run.id), run=run, created__gte=timezone.now() - timedelta(days=90)
     )
     latest_created_per_member = (
         base_queryset.values("member_id").annotate(latest_created=Max("created")).values("latest_created")
@@ -757,7 +757,7 @@ def reset_widgets(instance: Any) -> None:
     event_id = getattr(instance, "event_id", None)
     if event_id:
         clear_widget_cache_for_event(event_id)
-        clear_widget_cache_association(get_event_basic_cache(event_id)["association_id"])
+        clear_widget_cache_association(get_event_association_id(event_id))
 
     association_id = getattr(instance, "association_id", None)
     if association_id:

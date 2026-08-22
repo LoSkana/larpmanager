@@ -128,6 +128,11 @@ def get_run_association_id(run_id: int) -> int:
     return get_run_basic_cache(run_id)["association_id"]
 
 
+def get_event_association_id(event_id: int) -> int:
+    """Get the association id for an event from cache."""
+    return get_event_basic_cache(event_id)["association_id"]
+
+
 def reset_run_basic_cache(run_id: int) -> None:
     """Invalidate the cached basic info for a run."""
     cache.delete(run_basic_cache_key(run_id))
