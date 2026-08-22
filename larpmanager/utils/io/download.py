@@ -898,7 +898,7 @@ def _orga_registrations_acc(context: Any, registrations: Any = None) -> Any:
 
     """
     # Use cached accounting data for efficiency
-    cached_data = get_registration_accounting_cache(context["run"])
+    cached_data = get_registration_accounting_cache(context["run"].id, context["run"].event_id)
 
     # If specific registrations are requested, filter the cached data
     if registrations:

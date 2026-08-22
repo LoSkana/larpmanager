@@ -848,10 +848,8 @@ class RunCampaignS2:
         """Set the event to look for other campaign events."""
         if event.parent_id:
             # Event is in a campaign - get parent and all siblings
-            parent_event = Event.objects.get(id=event.parent_id)
-            # Get all children of the parent (siblings) plus the parent itself
-            event_ids = list(Event.objects.filter(parent_id=parent_event.id).values_list("id", flat=True))
-            event_ids.append(parent_event.id)
+            event_ids = list(Event.objects.filter(parent_id=event.parent_id).values_list("id", flat=True))
+            event_ids.append(event.parent_id)
         else:
             # Event is standalone or parent - get this event and all children
             event_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))

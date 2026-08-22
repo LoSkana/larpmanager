@@ -144,7 +144,7 @@ def _compute_registration_status(run: Run) -> str:
 
 def _compute_registration_counts(run: Run) -> dict:
     """Compute registration counts: total, per-ticket and per-tier breakdown."""
-    counts = get_registration_counts(run)
+    counts = get_registration_counts(run.id, run.event_id)
 
     total = counts.get("count_reg", 0)
     if not total:

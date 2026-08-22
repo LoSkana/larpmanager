@@ -148,7 +148,7 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
             member = Member.objects.get(uuid=member_uuid)
 
             # Get active registration for this member and run
-            registration = get_active_registrations(context["run"]).get(member=member)
+            registration = get_active_registrations(context["run"].id).get(member=member)
 
             # Extract entity UUID (character or trait)
             entity_uuid = parts[1]
@@ -437,7 +437,7 @@ def get_casting_data(
     cache_aim, cache_memberships, casting_submissions = _casting_prepare(context)
 
     # Process each registration to build player preferences
-    registrations_query = get_active_registrations(context["run"])
+    registrations_query = get_active_registrations(context["run"].id)
     # Exclude non-participant ticket types from casting
     registrations_query = registrations_query.exclude(
         ticket__tier__in=[TicketTier.WAITING],

@@ -436,8 +436,9 @@ def reset_accountingitem_cache(instance: Any) -> None:
     if not isinstance(instance, AccountingItem):
         return
 
-    if hasattr(instance, "run") and instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
+    run_id = getattr(instance, "run_id", None)
+    if run_id and instance.member_id:
+        refresh_member_accounting_cache(run_id, instance.member_id)
 
 
 @receiver(post_save, sender=AbilityExp)
@@ -476,8 +477,8 @@ def post_save_discount_accounting_cache(
     process_accounting_discount_post_save(instance)
 
     # Refresh member's accounting cache if discount is associated with a run and member
-    if instance.run and instance.member_id:
-        refresh_member_accounting_cache(instance.run, instance.member_id)
+    if instance.run_id and instance.member_id:
+        refresh_member_accounting_cache(instance.run_id, instance.member_id)
 
 
 @receiver(pre_save, sender=AccountingItemDonation)
@@ -556,9 +557,10 @@ def post_save_payment_accounting_cache(
     send_payment_confirmation_email(instance)
 
     # Update registration and member accounting cache if payment has associated registration
-    if instance.registration and instance.registration.run:
+    if instance.registration and instance.registration.run_id:
         instance.registration.save()
-        refresh_member_accounting_cache(instance.registration.run, instance.member_id)
+        run_id = instance.registration.run_id
+        refresh_member_accounting_cache(run_id, instance.member_id)
 
     # Update token credits based on payment changes
     update_token_credit_on_payment_save(instance, created=created)

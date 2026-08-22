@@ -58,7 +58,7 @@ def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpRespon
     context["questions"] = questions
 
     registrations = (
-        get_active_registrations(context["run"]).select_related("member").order_by("member__name", "member__surname")
+        get_active_registrations(context["run"].id).select_related("member").order_by("member__name", "member__surname")
     )
 
     question_ids = [question.id for question in questions]

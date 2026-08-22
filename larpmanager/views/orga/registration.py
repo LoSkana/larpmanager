@@ -498,7 +498,7 @@ def _orga_registrations_text_fields(context: dict) -> None:
     """
     text_field_uuids = context["text_field_uuids"]
 
-    cached_registration_fields = get_cache_registration_field(context["run"])
+    cached_registration_fields = get_cache_registration_field(context["run"].id, context["run"].event_id)
     for registration in context["registration_list"]:
         registration_uuid = str(registration.uuid)
         if registration_uuid not in cached_registration_fields:
@@ -586,7 +586,7 @@ def orga_registrations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["list_factions"] = {}
 
     # Query active (non-cancelled, non-pending) registrations ordered by last update
-    que = get_active_registrations(context["run"]).order_by("-updated")
+    que = get_active_registrations(context["run"].id).order_by("-updated")
     context["registration_list"] = list(que.select_related("member"))
 
     _registrations_prepare_membership(context)
@@ -1042,7 +1042,7 @@ def orga_registrations_reload(request: HttpRequest, event_slug: str) -> HttpResp
     context = check_event_context(request, event_slug, "orga_registrations")
 
     # Collect all active (non-pending) registration IDs for the current run
-    registration_ids = [str(registration.id) for registration in get_active_registrations(context["run"])]
+    registration_ids = [str(registration.id) for registration in get_active_registrations(context["run"].id)]
 
     # Trigger background registration checks
     check_registration_background(registration_ids)
@@ -1561,7 +1561,7 @@ def orga_registration_member(request: HttpRequest, event_slug: str) -> JsonRespo
         return JsonResponse({"k": 0})
 
     # Verify member has an active registration for this event
-    if not get_active_registrations(context["run"]).filter(member=member).exists():
+    if not get_active_registrations(context["run"].id).filter(member=member).exists():
         return JsonResponse({"k": 0})
 
     # Build member information HTML starting with name and profile

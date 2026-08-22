@@ -1856,8 +1856,8 @@ class ExeEventForm(OrgaEventForm):
 
         # Copy template event data if template feature enabled and event is new
         if "template" in self.params["features"] and not self.instance.pk and self.cleaned_data.get("template_event"):
-            event_id = self.cleaned_data["template_event"].id
-            event = Event.objects.get(pk=event_id)
+            event = self.cleaned_data["template_event"]
+            event_id = event.id
 
             # Save instance first to get pk for M2M and FK relations
             instance.save()

@@ -500,7 +500,7 @@ class Command(BaseCommand):
         # Process past events for participation and staff/organizer roles
         for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
             # Process regular player registrations
-            registrations = get_active_registrations(run)
+            registrations = get_active_registrations(run.id)
             for registration in registrations.exclude(
                 ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
             ):
@@ -532,7 +532,7 @@ class Command(BaseCommand):
 
         # Process future events for friend referral tracking
         for run in Run.objects.filter(end__gt=timezone.now().date()):
-            for registration in get_active_registrations(run).exclude(
+            for registration in get_active_registrations(run.id).exclude(
                 ticket__tier=TicketTier.WAITING,
             ):
                 self.check_friends_player(registration, cache)

@@ -26,7 +26,7 @@ from django.db.models import Prefetch, Q
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_event_basic_cache, get_run_basic_cache
 from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
@@ -177,8 +177,7 @@ def prepare_campaign_event_data(event_instance: Any) -> None:
     """
     if event_instance.pk:
         try:
-            previous_event_instance = Event.objects.get(pk=event_instance.pk)
-            event_instance._old_parent_id = previous_event_instance.parent_id  # noqa: SLF001  # Internal flag for parent change detection
+            event_instance._old_parent_id = get_event_basic_cache(event_instance.pk)["parent_id"]  # noqa: SLF001  # Internal flag for parent change detection
         except ObjectDoesNotExist:
             event_instance._old_parent_id = None  # noqa: SLF001  # Internal flag for parent change detection
     else:
@@ -643,68 +642,73 @@ def assign_previous_campaign_character(registration: Any) -> None:
     new_character_relation.save()
 
 
-def reset_all_run(event: Event, run: Run) -> None:
-    """Clear all caches for a given event and run.
+def reset_all_run(run_id: int) -> None:
+    """Clear all caches for a given run and its event.
 
     This function comprehensively clears all cached data related to an event
     and its run, including character data, features, configurations, registrations,
     accounting, and role information.
 
     Args:
-        event: Event instance
-        run: Run instance
+        run_id: Run id
 
     """
+    run_cache = get_run_basic_cache(run_id)
+    event_id = run_cache["event_id"]
+    run_slug = run_cache["slug"]
+    if run_cache["number"] > 1:
+        run_slug += f"-{run_cache['number']}"
+
     # Clear run-specific cache and associated media files
-    clear_run_cache_and_media(run.id)
-    reset_cache_run(event.association_id, run.get_slug())
+    clear_run_cache_and_media(run_id)
+    reset_cache_run(run_cache["association_id"], run_slug)
 
     # Clear event-level feature and configuration caches
-    clear_event_features_cache(event.id)
-    clear_run_event_links_cache(event.id)
+    clear_event_features_cache(event_id)
+    clear_run_event_links_cache(event_id)
 
     # Clear event button cache
-    clear_event_button_cache(event.id)
+    clear_event_button_cache(event_id)
 
     # Clear event config cache
-    reset_event_configs(event.id)
+    reset_event_configs(event_id)
 
     # Clear run config cache
-    reset_run_configs(run.id)
-    reset_cache_config_run(run.id)
+    reset_run_configs(run_id)
+    reset_cache_config_run(run_id)
 
     # Clear question cache
-    clear_writing_questions_cache(run.event_id)
-    clear_registration_questions_cache(run.event_id)
+    clear_writing_questions_cache(event_id)
+    clear_registration_questions_cache(event_id)
 
     # Clear registration-related caches
-    clear_registration_counts_cache(run.id)
-    clear_registration_accounting_cache(run.id)
-    clear_event_fields_cache(event.id)
-    clear_event_relationships_cache(event.id)
-    clear_event_exp_cache(get_exp_effective_event_id(event.id))
-    clear_registration_tickets_cache(event.id)
+    clear_registration_counts_cache(run_id)
+    clear_registration_accounting_cache(run_id)
+    clear_event_fields_cache(event_id)
+    clear_event_relationships_cache(event_id)
+    clear_event_exp_cache(get_exp_effective_event_id(event_id))
+    clear_registration_tickets_cache(event_id)
 
     # Clear event text caches for every type/language
-    clear_event_text_cache(event.id)
+    clear_event_text_cache(event_id)
 
     # Clear event role caches
-    for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):
+    for event_role_id in EventRole.objects.filter(event_id=event_id).values_list("id", flat=True):
         remove_event_role_cache(event_role_id)
 
-    clear_event_cache_all_runs(event.id)
+    clear_event_cache_all_runs(event_id)
 
     # Clear text fields cache
-    reset_text_fields_cache(run)
+    reset_text_fields_cache(event_id, run_id)
 
     # Clear widgets
-    clear_widget_cache(run.id)
+    clear_widget_cache(run_id)
 
     # Clear orga config field definitions cache (derived from active features)
-    reset_orga_configs_cache(event.id)
+    reset_orga_configs_cache(event_id)
 
     # Clear bulk
-    reset_bulk_options_cache(run.event_id)
+    reset_bulk_options_cache(event_id)
 
 
 def on_event_features_m2m_changed(

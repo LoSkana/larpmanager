@@ -863,7 +863,7 @@ def set_sold_tickets(context: dict) -> None:
         TicketTier.SELLER,
     ]
 
-    counts = get_registration_counts(context["run"])
+    counts = get_registration_counts(context["run"].id, context["run"].event_id)
 
     total = 0
     sold_tickets = []
@@ -1188,7 +1188,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, include_status=True)
 
     # Retrieve current registration counts for tickets and options
-    counts = get_registration_counts(context["run"])
+    counts = get_registration_counts(context["run"].id, context["run"].event_id)
 
     # Count redemptions per discount for this run
     discount_counts = dict(

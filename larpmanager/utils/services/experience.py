@@ -936,13 +936,11 @@ def calculate_character_experience_points_bgk(character_ids: int | list) -> None
 @background_auto(queue="experience", skip_duplicates=True)
 def calculate_event_experience_points_bgk(event_id: int) -> None:
     """Update experience points for all event characters."""
-    try:
-        event = Event.objects.get(pk=event_id)
-    except ObjectDoesNotExist:
+    if not Event.objects.filter(pk=event_id).exists():
         # Event was deleted, nothing to do
         return
 
-    for character in get_event_elements(event.id, Character).all():
+    for character in get_event_elements(event_id, Character).all():
         calculate_character_experience_points(character)
 
 

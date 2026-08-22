@@ -43,7 +43,7 @@ from larpmanager.models.access import (
     get_association_executives,
     get_event_organizers,
 )
-from larpmanager.models.association import Association, get_association_maintainers, get_url, hdr
+from larpmanager.models.association import Association, get_association_maintainers, get_url, hdr, hdr_run
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
@@ -342,7 +342,7 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
     activate(registration.member.language)
 
     # Build email subject with event header and localized message
-    email_subject = hdr(registration.run.event) + _("Bring a friend to %(event)s!") % {"event": registration.run}
+    email_subject = hdr_run(registration.run_id) + _("Bring a friend to %(event)s!") % {"event": registration.run}
 
     # Start email body with the user's personal discount code
     email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": registration.uuid}
@@ -416,7 +416,7 @@ def send_trait_assignment_email(instance: AssignmentTrait) -> None:
     quest_display = instance.trait.quest.show(instance.run)
 
     # Build email subject with event header and localized text
-    subject = hdr(instance.run.event) + _("Trait assigned for %(event)s") % {"event": instance.run}
+    subject = hdr_run(instance.run_id) + _("Trait assigned for %(event)s") % {"event": instance.run}
 
     # Create main email body with trait assignment details
     body = _(
@@ -472,7 +472,7 @@ def mail_confirm_casting(
     activate(member.language)
 
     # Build email subject with event header and casting confirmation message
-    email_subject = hdr(run.event) + _("Casting preferences saved on '%(type)s' for %(event)s") % {
+    email_subject = hdr_run(run.id) + _("Casting preferences saved on '%(type)s' for %(event)s") % {
         "type": preference_category_name,
         "event": run,
     }

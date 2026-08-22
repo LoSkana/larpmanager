@@ -33,7 +33,7 @@ from larpmanager.cache.event_text import get_event_text
 from larpmanager.mail.digest import my_send_digest_email
 from larpmanager.mail.templates import registration_options
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssociationTextType, get_url, hdr
+from larpmanager.models.association import AssociationTextType, get_url, hdr, hdr_run
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import NotificationType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
@@ -87,10 +87,10 @@ def update_registration_status(instance: Any) -> None:
 
     # Determine email subject and body based on modification type
     if instance.modified == 1:
-        email_subject = hdr(instance.run.event) + _("Registration for %(event)s") % email_context
+        email_subject = hdr_run(instance.run_id) + _("Registration for %(event)s") % email_context
         email_body = _("Hello! Your registration for <b>%(event)s</b> has been confirmed.") % email_context
     else:
-        email_subject = hdr(instance.run.event) + _("Registration updated for %(event)s") % email_context
+        email_subject = hdr_run(instance.run_id) + _("Registration updated for %(event)s") % email_context
         email_body = _("Hello! Your registration for <b>%(event)s</b> has been updated.") % email_context
 
     # Append registration details to email body
@@ -177,7 +177,7 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     }
 
     # Construct email subject with event header and localized text
-    email_subject = hdr(instance.registration.run.event) + _("Character assigned for %(event)s") % email_context
+    email_subject = hdr_run(instance.registration.run_id) + _("Character assigned for %(event)s") % email_context
 
     # Build the main email body with character assignment information
     email_body = _("You have been assigned the character <b>%(character)s</b> for <b>%(event)s</b>.") % email_context
@@ -229,7 +229,7 @@ def update_registration_cancellation(instance: Registration) -> None:
     # Send confirmation email to the user who cancelled
     email_context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration cancelled for %(event)s") % email_context
     email_body = _("Your registration for this event has been successfully cancelled. We are sorry to see you go!")
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
@@ -304,7 +304,7 @@ def send_registration_deletion_email(instance: Registration) -> None:
 
     # Send cancellation notification to the registered user
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration cancelled for %(event)s") % context
+    email_subject = hdr_run(instance.run_id) + _("Registration cancelled for %(event)s") % context
     email_body = _("Your registration for this event has been successfully cancelled.")
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
@@ -329,7 +329,7 @@ def send_registration_request_received_email(instance: Registration) -> None:
     """
     email_context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration request received for %(event)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration request received for %(event)s") % email_context
     email_body = (
         _("Hello! We have received your request to register for <b>%(event)s</b>. An organizer will review it shortly.")
         % email_context
@@ -363,7 +363,7 @@ def send_registration_request_accepted_email(instance: Registration) -> None:
     """
     email_context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration request approved for %(event)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration request approved for %(event)s") % email_context
     email_body = _("Great news! Your request to register for <b>%(event)s</b> has been approved.") % email_context
 
     register_url = get_url(instance.run.get_slug() + "/register", instance.run.event)
@@ -381,7 +381,7 @@ def send_registration_request_rejected_email(instance: Registration) -> None:
     """
     email_context = {"event": instance.run, "user": instance.member}
     activate(instance.member.language)
-    email_subject = hdr(instance.run.event) + _("Registration request declined for %(event)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration request declined for %(event)s") % email_context
     email_body = (
         _("We regret to inform you that your request to register for <b>%(event)s</b> was not accepted.")
         % email_context

@@ -794,7 +794,7 @@ def casting_history_characters(context: dict) -> None:
 
     # Query all valid registrations (non-cancelled, non-staff/NPC)
     registration_query = (
-        get_active_registrations(context["run"])
+        get_active_registrations(context["run"].id)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     )
@@ -869,7 +869,7 @@ def casting_history_traits(context: dict) -> None:
 
     # Process registrations and attach casting preferences
     for registration in (
-        get_active_registrations(context["run"])
+        get_active_registrations(context["run"].id)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     ):

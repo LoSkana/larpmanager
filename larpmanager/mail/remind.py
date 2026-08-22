@@ -27,7 +27,7 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.mail.templates import get_payment_info
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssociationTextType, get_url, hdr
+from larpmanager.models.association import AssociationTextType, get_url, hdr_run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.deadlines import check_run_deadlines
@@ -45,7 +45,7 @@ def remember_membership(registration: Any) -> None:
     """
     activate(registration.member.language)
 
-    subject = hdr(registration.run.event) + _("Registration confirmation for %(event)s") % {
+    subject = hdr_run(registration.run_id) + _("Registration confirmation for %(event)s") % {
         "event": registration.run,
     }
 
@@ -117,9 +117,9 @@ def remember_pay(registration: Any) -> None:
     email_context = {"event": registration.run}
 
     if is_provisional:
-        email_subject = hdr(registration.run.event) + _("Confirm registration for %(event)s") % email_context
+        email_subject = hdr_run(registration.run_id) + _("Confirm registration for %(event)s") % email_context
     else:
-        email_subject = hdr(registration.run.event) + _("Complete payment for %(event)s") % email_context
+        email_subject = hdr_run(registration.run_id) + _("Complete payment for %(event)s") % email_context
 
     email_body = get_association_text(
         get_run_association_id(registration.run_id),
@@ -214,7 +214,7 @@ def remember_profile(registration: Any) -> None:
     activate(registration.member.language)
     context = {"event": registration.run, "url": get_url("profile", registration.run.event)}
 
-    subject = hdr(registration.run.event) + _("Profile completion reminder for %(event)s") % context
+    subject = hdr_run(registration.run_id) + _("Profile completion reminder for %(event)s") % context
 
     body = get_association_text(
         get_run_association_id(registration.run_id),
@@ -249,7 +249,7 @@ def remember_membership_fee(registration: Any) -> None:
     activate(registration.member.language)
     context = {"event": registration.run}
 
-    subject = hdr(registration.run.event) + _("Membership fee payment reminder for %(event)s") % context
+    subject = hdr_run(registration.run_id) + _("Membership fee payment reminder for %(event)s") % context
 
     body = get_association_text(
         get_run_association_id(registration.run_id),
@@ -326,7 +326,7 @@ def notify_deadlines(run: Any) -> None:
 
     for organizer in get_event_organizers(run.event):
         activate(organizer.language)
-        subject = hdr(run.event) + _("Deadlines") + f" {run}"
+        subject = hdr_run(run.id) + _("Deadlines") + f" {run}"
         body = _("Review users with pending event deadlines:")
         for deadline_key, description in deadline_elements.items():
             if deadline_key not in run_deadlines or not run_deadlines[deadline_key]:

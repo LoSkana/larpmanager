@@ -122,7 +122,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Get current registration counts for quota calculations and availability checks
         # This data determines ticket availability and waiting list status
-        registration_counts = get_registration_counts(run)
+        registration_counts = get_registration_counts(run.id, run.event_id)
 
         # Initialize ticket selection field and retrieve help text for user guidance
         # Creates the primary ticket selection interface with availability info

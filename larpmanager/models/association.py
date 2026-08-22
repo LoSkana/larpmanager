@@ -541,7 +541,11 @@ class AssociationTranslation(UuidMixin, BaseModel):
 
 
 def hdr(association_or_related_object: Association | Any) -> str:
-    """Return a formatted header string with the association name in brackets."""
+    """Return a formatted header string with the association name in brackets.
+
+    Accepts an Association instance, or any object with an `association` attribute.
+    For a bare run id, use `hdr_run()` instead.
+    """
     # Check if object is an Association instance directly
     if isinstance(association_or_related_object, Association):
         return f"[{association_or_related_object.name}] "
@@ -549,6 +553,14 @@ def hdr(association_or_related_object: Association | Any) -> str:
     if association_or_related_object.association:
         return f"[{association_or_related_object.association.name}] "
     return "[LarpManager] "
+
+
+def hdr_run(run_id: int) -> str:
+    """Return a formatted header string with the association name in brackets, from a run id."""
+    from larpmanager.cache.basic import get_association_basic_cache, get_run_basic_cache  # noqa: PLC0415
+
+    association_id = get_run_basic_cache(run_id)["association_id"]
+    return f"[{get_association_basic_cache(association_id)['name']}] "
 
 
 def get_association_maintainers(association: Association) -> Any:

@@ -46,7 +46,7 @@ from larpmanager.mail.templates import (
 )
 from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice, RefundRequest
-from larpmanager.models.association import Association, get_url, hdr
+from larpmanager.models.association import Association, get_url, hdr_run
 from larpmanager.models.member import Member, Membership, NotificationQueue, NotificationType
 from larpmanager.models.miscellanea import HelpQuestion
 from larpmanager.models.registration import Registration
@@ -312,7 +312,7 @@ def _daily_member_summaries(member_id: int, all_notifications: list) -> None:
         email_content = generate_summary_email(run, notifications)
 
         # Build email subject
-        email_subject = hdr(run.event) + _("Daily Summary") + f" - {run}"
+        email_subject = hdr_run(run.id) + _("Daily Summary") + f" - {run}"
 
         # Send the email
         my_send_mail(

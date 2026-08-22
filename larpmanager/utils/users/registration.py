@@ -91,7 +91,7 @@ def registration_available(run: Run, features: dict, run_status: dict, context: 
     # Get registration counts if not provided
     registration_counts = context.get("registration_counts")
     if registration_counts is None:
-        registration_counts = get_registration_counts(run)
+        registration_counts = get_registration_counts(run.id, run.event_id)
 
     # Calculate remaining primary tickets
     remaining_primary_tickets = run.event.max_pg - registration_counts.get("count_player", 0)
@@ -1130,7 +1130,7 @@ def _get_character_options_availability(run: Run) -> list[dict[str, Any]]:
         List of dicts with name, question name, max_available and used count.
 
     """
-    counts = get_registration_counts(run)
+    counts = get_registration_counts(run.id, run.event_id)
 
     options = WritingOption.objects.filter(
         event_id=run.event_id,

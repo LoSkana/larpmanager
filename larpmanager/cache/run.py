@@ -29,7 +29,7 @@ from django.db.models import Count, QuerySet
 
 from larpmanager.cache.basic import get_event_association_id, get_event_basic_cache
 from larpmanager.cache.button import get_event_button_cache
-from larpmanager.cache.config import get_event_config, reset_event_parent_cache, save_single_config
+from larpmanager.cache.config import get_event_config, reset_event_parent_cache, save_single_config_by_id
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
@@ -270,4 +270,4 @@ def update_visible_factions(event_id: int) -> None:
         .filter(char_count__gt=0)
         .exists()
     )
-    save_single_config(Event(pk=event_id), "has_visible_factions", has_visible_factions)
+    save_single_config_by_id(Event, event_id, "has_visible_factions", has_visible_factions)
