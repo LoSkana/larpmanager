@@ -166,19 +166,19 @@ def get_run_basic_cache(run_id: int, *, context: dict | None = None) -> RunBasic
     return data
 
 
-def get_run_event_id(run_id: int) -> int:
+def get_run_event_id(run_id: int, *, context: dict | None = None) -> int:
     """Get the event id for a run from cache."""
-    return get_run_basic_cache(run_id)["event_id"]
+    return get_run_basic_cache(run_id, context=context)["event_id"]
 
 
-def get_run_association_id(run_id: int) -> int:
+def get_run_association_id(run_id: int, *, context: dict | None = None) -> int:
     """Get the association id for a run from cache."""
-    return get_run_basic_cache(run_id)["association_id"]
+    return get_run_basic_cache(run_id, context=context)["association_id"]
 
 
-def get_event_association_id(event_id: int) -> int:
+def get_event_association_id(event_id: int, *, context: dict | None = None) -> int:
     """Get the association id for an event from cache."""
-    return get_event_basic_cache(event_id)["association_id"]
+    return get_event_basic_cache(event_id, context=context)["association_id"]
 
 
 def reset_run_basic_cache(run_id: int) -> None:

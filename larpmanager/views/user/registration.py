@@ -593,7 +593,11 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
         registration.provisional = is_registration_provisional(registration)
 
     _set_membership_context(
-        context, context["run"], context["member"], registration, get_run_basic_cache(context["run"].id)
+        context,
+        context["run"],
+        context["member"],
+        registration,
+        get_run_basic_cache(context["run"].id, context=context),
     )
 
 

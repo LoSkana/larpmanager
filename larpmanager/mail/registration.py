@@ -81,6 +81,7 @@ def update_registration_status(instance: Any) -> None:
 
     # Prepare common context for email templates
     email_context = {"event": instance.run, "user": instance.member}
+    context: dict = {}
 
     # Send notification to the registering user
     activate(instance.member.language)
@@ -99,12 +100,12 @@ def update_registration_status(instance: Any) -> None:
     # Add link to cancel registration
     cancel_path = f"{instance.run.get_slug()}/unregister/"
     cancel_label = _("cancel your registration")
-    cancel_url = get_association_url(cancel_path, get_run_association_id(instance.run_id))
+    cancel_url = get_association_url(cancel_path, get_run_association_id(instance.run_id, context=context))
     email_body += "<br /><br />" + _("If you no longer wish to attend, you can")
     email_body += f" <a href='{cancel_url}'>{cancel_label}</a>."
 
     # Add custom messages from event and association configurations
-    run_cache = get_run_basic_cache(instance.run_id)
+    run_cache = get_run_basic_cache(instance.run_id, context=context)
     for custom_message in [
         get_event_text(run_cache["event_id"], EventTextType.SIGNUP, instance.member.language),
         get_association_text(
@@ -185,7 +186,7 @@ def send_character_assignment_email(instance: RegistrationCharacterRel) -> None:
     # Generate URL for character access page
     character_url = get_association_url(
         f"{instance.registration.run.get_slug()}/character/your",
-        get_run_association_id(instance.registration.run_id),
+        run_cache["association_id"],
     )
 
     # Add character access link to email body
@@ -328,6 +329,7 @@ def send_registration_request_received_email(instance: Registration) -> None:
 
     """
     email_context = {"event": instance.run, "user": instance.member}
+    context: dict = {}
     activate(instance.member.language)
     email_subject = hdr_run(instance.run_id) + _("Registration request received for %(event)s") % email_context
     email_body = (
@@ -336,14 +338,16 @@ def send_registration_request_received_email(instance: Registration) -> None:
     )
 
     custom_message = get_event_text(
-        get_run_event_id(instance.run_id), EventTextType.REGISTRATION_APPROVAL, instance.member.language
+        get_run_event_id(instance.run_id, context=context),
+        EventTextType.REGISTRATION_APPROVAL,
+        instance.member.language,
     )
     if custom_message:
         email_body += "<br />" + custom_message
 
     my_send_mail(email_subject, email_body, instance.member, instance.run)
 
-    association_id = get_run_association_id(instance.run_id)
+    association_id = get_run_association_id(instance.run_id, context=context)
     if get_association_config(association_id, "mail_signup_new"):
         for organizer in get_event_organizers(instance.run_id):
             my_send_digest_email(

@@ -152,10 +152,13 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
 
     """
     # Extract payment information and build payment URL
-    currency_symbol = get_run_basic_cache(registration.run_id)["currency_symbol"]
+    basic_cache: dict = {}
+    currency_symbol = get_run_basic_cache(registration.run_id, context=basic_cache)["currency_symbol"]
     amount_to_pay = f"{registration.quota:.2f}{currency_symbol}"
     days_until_deadline = registration.deadline
-    base_payment_url = get_association_url("accounting/pay", get_run_association_id(registration.run_id))
+    base_payment_url = get_association_url(
+        "accounting/pay", get_run_association_id(registration.run_id, context=basic_cache)
+    )
     payment_url = f"{base_payment_url}/{registration.run.get_slug()}"
 
     # Generate appropriate greeting based on registration type
@@ -190,7 +193,7 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
     )
 
     # Add wire transfer details if active for this association
-    email_body += get_payment_info(get_run_association_id(registration.run_id), payment_url)
+    email_body += get_payment_info(get_run_association_id(registration.run_id, context=basic_cache), payment_url)
 
     # Add cancellation warning for non-responsive registrants
     email_body += "<br /><br />" + _(
@@ -212,15 +215,16 @@ def remember_profile(registration: Any) -> None:
 
     """
     activate(registration.member.language)
+    basic_cache: dict = {}
     context = {
         "event": registration.run,
-        "url": get_association_url("profile", get_run_association_id(registration.run_id)),
+        "url": get_association_url("profile", get_run_association_id(registration.run_id, context=basic_cache)),
     }
 
     subject = hdr_run(registration.run_id) + _("Profile completion reminder for %(event)s") % context
 
     body = get_association_text(
-        get_run_association_id(registration.run_id),
+        get_run_association_id(registration.run_id, context=basic_cache),
         AssociationTextType.REMINDER_PROFILE,
         registration.member.language,
     ) or get_remember_profile_body(context)

@@ -286,31 +286,30 @@ class Character(Writing):
         js["locked"] = self.locked
 
         if run:
-            self.show_factions(run.event, js)
-            self.show_guilds(run.event, js)
+            self.show_factions(run.event_id, js)
+            self.show_guilds(run.event_id, js)
 
         return js
 
-    def show_guilds(self, event: Event | None, js: dict) -> None:
+    def show_guilds(self, event_id: int, js: dict) -> None:
         """Add guild information to the JavaScript data structure.
 
         Populates the 'guilds' list in the js dictionary with numbers of guilds
         the character belongs to, restricted to accepted memberships.
 
         Args:
-            event: Event object to get guilds from. If None, uses self.event.
+            event_id: Event ID object to get guilds from.
             js: Dictionary to populate with guild data.
 
         """
         js["guilds"] = []
 
-        check_event = event or self.event
-        if "guild" not in get_event_features(check_event.id):
+        if "guild" not in get_event_features(event_id):
             return
 
         from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
 
-        guild_event = get_event_class_parent(check_event.id, "guild")
+        guild_event = get_event_class_parent(event_id, "guild")
 
         # noinspection PyUnresolvedReferences
         query = self.guild_memberships.filter(
@@ -319,7 +318,7 @@ class Character(Writing):
         for membership in query.order_by("guild__order"):
             js["guilds"].append(membership.guild.number)
 
-    def show_factions(self, event: Event | None, js: dict) -> None:
+    def show_factions(self, event_id: int, js: dict) -> None:
         """Add faction information to the JavaScript data structure.
 
         Populates the 'factions' list in the js dictionary with faction objects
@@ -327,28 +326,27 @@ class Character(Writing):
         adds a default faction object. Also sets thumbnail URL if primary faction has cover image.
 
         Args:
-            event: Event object to get factions from. If None, uses self.event.
+            event_id: Event ID object to get factions from.
             js: Dictionary to populate with faction data.
 
         """
         js["factions"] = []
 
-        check_event = event or self.event
-        if "faction" not in get_event_features(check_event.id):
+        if "faction" not in get_event_features(event_id):
             js["factions"].append(0)
             return
 
         # Determine which event to use for faction lookup
         from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
 
-        faction_event = get_event_class_parent(check_event.id, "faction")
+        faction_event_id = get_event_class_parent(event_id, "faction")
 
         # Track if we find a primary faction
         has_primary_faction = False
 
         # Process all public factions for this event
         # noinspection PyUnresolvedReferences
-        query = self.factions_list.filter(event=faction_event).exclude(typ=FactionType.SECRET)
+        query = self.factions_list.filter(event_id=faction_event_id).exclude(typ=FactionType.SECRET)
         for faction in query.order_by("order"):
             # Check if this is a primary faction
             if faction.typ == FactionType.PRIM:

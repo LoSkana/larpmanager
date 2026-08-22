@@ -190,7 +190,20 @@ def _get_current_abilities(
 
     """
     abilities_queryset = (
-        character.exp_ability_list.select_related("system").only("id", "cost", "system_id").order_by("name")
+        character.exp_ability_list.select_related("system", "typ", "template")
+        .only(
+            "id",
+            "name",
+            "typ__name",
+            "typ__uuid",
+            "cost",
+            "system_id",
+            "system__name",
+            "uuid",
+            "descr",
+            "template__descr",
+        )
+        .order_by("name")
     )
     abilities_with_modified_costs = []
     for ability in abilities_queryset:

@@ -355,7 +355,8 @@ def registration_payments(instance: Registration, currency: str) -> str:
 
     """
     # Build the payment URL using the event and run slug
-    full_payment_url = get_association_url("accounting/pay", get_run_association_id(instance.run_id))
+    context: dict = {}
+    full_payment_url = get_association_url("accounting/pay", get_run_association_id(instance.run_id, context=context))
     payment_url = f"{full_payment_url}/{instance.run.get_slug()}"
 
     # Prepare template data for localization
@@ -380,7 +381,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
         )
         body += " " + _("Please make sure to send your payment on time, or we might have to cancel your spot.")
 
-    body += get_payment_info(get_run_association_id(instance.run_id), payment_url)
+    body += get_payment_info(get_run_association_id(instance.run_id, context=context), payment_url)
     return body
 
 

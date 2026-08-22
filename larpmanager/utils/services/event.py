@@ -26,11 +26,11 @@ from django.db.models import Prefetch, Q
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.basic import get_event_basic_cache, get_run_basic_cache
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
-from larpmanager.cache.config import reset_event_configs, reset_run_configs
+from larpmanager.cache.config import _get_event_parent_id, reset_event_configs, reset_run_configs
 from larpmanager.cache.event_text import clear_event_text_cache
 from larpmanager.cache.experience import clear_event_exp_cache, get_exp_effective_event_id
 from larpmanager.cache.feature import clear_event_features_cache, get_event_features
@@ -181,7 +181,7 @@ def prepare_campaign_event_data(event_instance: Any) -> None:
     """
     if event_instance.pk:
         try:
-            event_instance._old_parent_id = get_event_basic_cache(event_instance.pk)["parent_id"]  # noqa: SLF001  # Internal flag for parent change detection
+            event_instance._old_parent_id = _get_event_parent_id(event_instance.pk)  # noqa: SLF001  # Internal flag for parent change detection
         except ObjectDoesNotExist:
             event_instance._old_parent_id = None  # noqa: SLF001  # Internal flag for parent change detection
     else:

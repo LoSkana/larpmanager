@@ -538,7 +538,7 @@ def _status_payment(
         if wire_created_invoices:
             note = _("If you have made a wire transfer, please upload its receipt for processing")
 
-        currency_symbol = get_run_basic_cache(registration.run_id)["currency_symbol"]
+        currency_symbol = get_run_basic_cache(registration.run_id, context=context)["currency_symbol"]
         total_amount = registration.quota
         if context.get("membership_fee") == "bundled" and context.get("membership_amount"):
             membership_amount = Decimal(str(context["membership_amount"]))
@@ -667,7 +667,7 @@ def registration_status(context: dict, run: Run, member: Member) -> dict:
             return run_status
 
         if registration:
-            run_cache = get_run_basic_cache(run.id)
+            run_cache = get_run_basic_cache(run.id, context=context)
             _set_membership_context(context, run, member, registration, run_cache)
             registration_status_signed(
                 run, registration, member, features, register_url, run_status, context, run_cache
@@ -1568,20 +1568,23 @@ def process_registration_event_change(registration: Registration) -> None:
         return
 
     # Skip processing if the event hasn't actually changed
-    if get_run_event_id(previous_registration.run_id) == get_run_event_id(registration.run_id):
+    context: dict = {}
+    if get_run_event_id(previous_registration.run_id, context=context) == get_run_event_id(
+        registration.run_id, context=context
+    ):
         return
 
     # Attempt to find a matching ticket in the new event by name
     # This preserves the ticket assignment when moving between events
     ticket_name = registration.ticket.name
     try:
-        registration.ticket = get_event_elements(get_run_event_id(registration.run_id), RegistrationTicket).get(
-            name__iexact=ticket_name
-        )
+        registration.ticket = get_event_elements(
+            get_run_event_id(registration.run_id, context=context), RegistrationTicket
+        ).get(name__iexact=ticket_name)
     except ObjectDoesNotExist:
         registration.ticket = None
 
-    cached_questions = get_cached_registration_questions(get_run_event_id(registration.run_id))
+    cached_questions = get_cached_registration_questions(get_run_event_id(registration.run_id, context=context))
 
     # Process all registration choices (question/option pairs)
     # Try to find matching questions and options in the new event
@@ -1596,7 +1599,7 @@ def process_registration_event_change(registration: Registration) -> None:
             matched_question = next(q for q in cached_questions if q["name"].lower() == question_name.lower())
             registration_choice.question_id = matched_question["id"]
             registration_choice.option = get_event_elements(
-                get_run_event_id(registration.run_id), RegistrationOption
+                get_run_event_id(registration.run_id, context=context), RegistrationOption
             ).get(
                 question_id=matched_question["id"],
                 name__iexact=option_name,

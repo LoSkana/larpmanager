@@ -576,8 +576,9 @@ def process_registration_pre_save(registration: Registration) -> None:
     """Process registration before saving."""
     if registration.deleted:
         return
-    registration.surcharge = get_date_surcharge(registration, get_run_basic_cache(registration.run_id)["event_id"])
-    registration.member.join(get_run_association_id(registration.run_id))
+    run_cache = get_run_basic_cache(registration.run_id)
+    registration.surcharge = get_date_surcharge(registration, run_cache["event_id"])
+    registration.member.join(run_cache["association_id"])
 
 
 def get_date_surcharge(registration: Registration | None, event_id: int) -> int:

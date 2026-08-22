@@ -27,9 +27,14 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, QuerySet
 
-from larpmanager.cache.basic import get_event_association_id, get_event_basic_cache
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.button import get_event_button_cache
-from larpmanager.cache.config import get_event_config, reset_event_parent_cache, save_single_config_by_id
+from larpmanager.cache.config import (
+    _get_event_parent_id,
+    get_event_config,
+    reset_event_parent_cache,
+    save_single_config_by_id,
+)
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
@@ -203,7 +208,7 @@ def init_cache_config_run(run: Run) -> dict:
 
     """
     event_id = run.event_id
-    parent_id = get_event_basic_cache(event_id)["parent_id"] or event_id
+    parent_id = _get_event_parent_id(event_id) or event_id
 
     # Get event features to determine what functionality is available
     event_features = get_event_features(event_id)

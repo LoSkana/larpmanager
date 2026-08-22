@@ -454,33 +454,18 @@ def get_association_config(
     )
 
 
-def _get_event_parent_id(event_id: int, context: dict | None) -> int | None:
-    """Get parent_id for an event, cached in context and Redis."""
-    if context is None:
-        context = {}
-    ctx_key = "event_parent_ids"
-    if ctx_key not in context:
-        context[ctx_key] = {}
-    if event_id in context[ctx_key]:
-        return context[ctx_key][event_id]
+def _get_event_parent_id(event_id: int, context: dict | None = None) -> int | None:
+    """Get parent_id for an event, using the shared event basic cache."""
+    from larpmanager.cache.basic import get_event_basic_cache  # noqa: PLC0415
 
-    redis_key = f"event_parent_{event_id}"
-    cached = cache.get(redis_key)
-    if cached is not None:
-        parent_id = cached if cached != 0 else None
-    else:
-        from larpmanager.models.event import Event  # noqa: PLC0415
-
-        parent_id = Event.objects.filter(pk=event_id).values_list("parent_id", flat=True).first()
-        cache.set(redis_key, parent_id if parent_id is not None else 0, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-
-    context[ctx_key][event_id] = parent_id
-    return parent_id
+    return get_event_basic_cache(event_id, context=context)["parent_id"]
 
 
 def reset_event_parent_cache(event_id: int) -> None:
     """Invalidate cached parent_id for an event."""
-    cache.delete(f"event_parent_{event_id}")
+    from larpmanager.cache.basic import reset_event_basic_cache  # noqa: PLC0415
+
+    reset_event_basic_cache(event_id)
 
 
 def get_event_config(

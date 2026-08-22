@@ -35,7 +35,7 @@ from larpmanager.accounting.balance import (
     get_run_accounting,
 )
 from larpmanager.cache.basic import get_event_association_id, get_event_basic_cache, get_run_association_id
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.config import _get_event_parent_id, get_association_config
 from larpmanager.cache.registration import get_registration_counts
 from larpmanager.cache.run import get_event_run_ids
 from larpmanager.models.accounting import (
@@ -348,10 +348,11 @@ def _init_exe_actions_cache(association_id: int) -> dict:
 
     ongoing_runs_data = []
     parent_names: dict[int, str] = {}
+    event_cache_context: dict = {}
     for run in ongoing_runs:
-        parent_id = get_event_basic_cache(run.event_id)["parent_id"]
+        parent_id = _get_event_parent_id(run.event_id, event_cache_context)
         if parent_id and parent_id not in parent_names:
-            parent_names[parent_id] = get_event_basic_cache(parent_id)["name"]
+            parent_names[parent_id] = get_event_basic_cache(parent_id, context=event_cache_context)["name"]
         run_data = {
             "slug": run.get_slug,
             "name": str(run),

@@ -198,10 +198,11 @@ def _transfer_choices(source_reg: Registration, target_reg: Registration) -> lis
         registration=source_reg, question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE]
     )
     transferred_choices = []
+    context: dict = {}
 
     for choice in source_choices:
         # Find corresponding question in destination event
-        target_question = _find_matching_question(choice.question, target_reg.run_id)
+        target_question = _find_matching_question(choice.question, target_reg.run_id, context=context)
         if not target_question:
             continue
 
@@ -226,10 +227,11 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
         question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
     )
     transferred_answers = []
+    context: dict = {}
 
     for answer in source_answers:
         # Find corresponding question in destination event
-        target_question = _find_matching_question(answer.question, target_reg.run_id)
+        target_question = _find_matching_question(answer.question, target_reg.run_id, context=context)
         if not target_question:
             continue
 
@@ -242,7 +244,9 @@ def _transfer_answers(source_reg: Registration, target_reg: Registration) -> lis
     return transferred_answers
 
 
-def _find_matching_question(source_question: RegistrationQuestion, target_run_id: int) -> RegistrationQuestion | None:
+def _find_matching_question(
+    source_question: RegistrationQuestion, target_run_id: int, *, context: dict | None = None
+) -> RegistrationQuestion | None:
     """Find the corresponding question in the destination event.
 
     Matching logic:
@@ -251,7 +255,7 @@ def _find_matching_question(source_question: RegistrationQuestion, target_run_id
     3. Match by name only
     """
     # Get question by type and name
-    target_questions = get_cached_registration_questions(get_run_event_id(target_run_id))
+    target_questions = get_cached_registration_questions(get_run_event_id(target_run_id, context=context))
     exact_match = next(
         (q for q in target_questions if q["typ"] == source_question.typ and q["name"] == source_question.name), None
     )

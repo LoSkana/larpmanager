@@ -28,8 +28,7 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.cache.basic import get_event_basic_cache
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import _get_event_parent_id, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import get_event_fields_cache, visible_writing_fields
 from larpmanager.cache.media import get_run_media_filepath
@@ -873,7 +872,7 @@ def clear_event_cache_all_runs(event_id: int) -> None:
         for run in get_event_runs(child_event_id):
             clear_run_cache_and_media(run.id)
 
-    parent_id = get_event_basic_cache(event_id)["parent_id"]
+    parent_id = _get_event_parent_id(event_id)
     if parent_id:
         # Clear cache for runs of sibling events
         for sibling_event_id in Event.objects.filter(parent_id=parent_id).values_list("id", flat=True):

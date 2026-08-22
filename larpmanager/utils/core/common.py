@@ -44,8 +44,7 @@ from django.http import Http404, HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.basic import get_event_basic_cache
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import _get_event_parent_id, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
@@ -106,7 +105,7 @@ def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str, *,
     ]
 
     if model_class in inheritable_elements:
-        parent_id = get_event_basic_cache(event_id, context=context)["parent_id"]
+        parent_id = _get_event_parent_id(event_id, context)
         if parent_id and not get_event_config(event_id, f"campaign_{model_class}_indep", context=context):
             return parent_id
 
