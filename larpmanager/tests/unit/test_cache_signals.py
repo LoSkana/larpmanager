@@ -190,7 +190,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after get_run
         run.save()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_writing_question_post_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -245,7 +245,7 @@ class TestCacheSignals(BaseTestCase):
         rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
-        mock_reset.assert_called_once_with(registration.run)
+        mock_reset.assert_called_once_with(registration.run_id)
 
     @patch("larpmanager.cache.character.clear_run_cache_and_media")
     def test_registration_character_rel_post_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -256,7 +256,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create
         rel.delete()
 
-        mock_reset.assert_called_once_with(registration.run)
+        mock_reset.assert_called_once_with(registration.run_id)
 
     @patch("larpmanager.models.signals.clear_run_cache_and_media")
     def test_run_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -265,7 +265,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset mock after setup
         run.delete()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.models.signals.clear_run_cache_and_media")
     def test_assignment_trait_post_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -279,7 +279,7 @@ class TestCacheSignals(BaseTestCase):
         assignment = AssignmentTrait(run=run, member=self.get_member(), trait=trait, typ=0)
         assignment.save()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.models.signals.clear_run_cache_and_media")
     def test_assignment_trait_post_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -293,7 +293,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after creates
         assignment.delete()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.models.signals.clear_association_permission_cache")
     def test_association_permission_post_save_resets_permission_cache(self, mock_reset: Any) -> None:
