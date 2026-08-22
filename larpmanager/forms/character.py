@@ -76,6 +76,7 @@ from larpmanager.models.writing import (
     RelationshipTag,
     TextVersionChoices,
 )
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.edit.backend import save_version
 
 
@@ -128,7 +129,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         # Publish the requirements to the page, so the client mirrors the server side gating
         if "dependencies" not in self.params and self.params.get("event"):
             self.params["dependencies"] = get_character_dependencies(
-                self.params["event"],
+                self.params["event"].id,
                 self.params.get("features", []),
             )
 
@@ -165,7 +166,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if not event:
             return {}
 
-        return get_character_dependencies(event, self.params.get("features", []))[kind]
+        return get_character_dependencies(event.id, self.params.get("features", []))[kind]
 
     def is_auto_save(self) -> bool:
         """Check whether the form is bound to a background auto-save request."""
@@ -228,7 +229,8 @@ class CharacterForm(WritingForm, BaseWritingForm):
 
         # Initialize registration questions and get counts
         self._init_registration_question(self.instance, event)
-        registration_counts = get_registration_counts(self.params.get("run"))
+        params_run = self.params.get("run")
+        registration_counts = get_registration_counts(params_run.id, params_run.event_id)
         self.registration_counts = registration_counts
 
         # Initialize field categorization sets
@@ -308,7 +310,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if "faction" not in self.params.get("features"):
             return
 
-        queryset = self.params.get("run").event.get_elements(Faction).filter(selectable=True)
+        queryset = get_event_elements(self.params.get("run").event_id, Faction).filter(selectable=True)
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
@@ -356,7 +358,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
 
         # Get the faction event context for filtering existing factions
-        faction_event = self.params.get("run").event.get_class_parent(Faction)
+        faction_event = get_event_class_parent(self.params.get("run").event_id, Faction)
 
         # Get current faction IDs associated with the instance
         # For non-orga users, only consider selectable factions to preserve staff-assigned non-selectable factions
@@ -819,7 +821,7 @@ class OrgaCharacterForm(CharacterForm):
         self._load_relationships_data()
 
         if get_event_config(context["event"].id, "writing_relationship_tags", context=self.params):
-            context["relationship_tags"] = get_cached_relationship_tags(context["event"])
+            context["relationship_tags"] = get_cached_relationship_tags(context["event"].id)
             for entry in self.params["relationships"].values():
                 entry["tag_uuids"] = [tag.uuid for tag in entry.get("tags", [])]
 
@@ -854,7 +856,7 @@ class OrgaCharacterForm(CharacterForm):
 
         if get_event_config(self.params["event"].id, "casting_mirror", context=self.params):
             if "mirror" in self.fields:
-                characters_query = self.params["run"].event.get_elements(Character).all()
+                characters_query = get_event_elements(self.params["run"].event_id, Character).all()
                 character_choices = [(character.uuid, character.name) for character in characters_query]
                 self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
         else:
@@ -890,7 +892,7 @@ class OrgaCharacterForm(CharacterForm):
 
         self.fields["plots"] = forms.ModelMultipleChoiceField(
             label="Plots",
-            queryset=self.params["event"].get_elements(Plot),
+            queryset=get_event_elements(self.params["event"].id, Plot),
             required=False,
             widget=EventPlotS2WidgetMulti,
         )
@@ -901,7 +903,7 @@ class OrgaCharacterForm(CharacterForm):
         self.plot_role_help_text = _("This text will be added to the %(name)s plot paragraph in the sheet.")
         self.params["TINYMCE_DISABLED"] = getattr(conf_settings, "TINYMCE_DISABLED", False)
 
-        self.plots = self.instance.get_plot_characters(self.params["event"])
+        self.plots = self.instance.get_plot_characters(self.params["event"].id)
         self.initial["plots"] = [plot_character.plot_id for plot_character in self.plots]
 
         self.add_char_finder = []
@@ -952,7 +954,7 @@ class OrgaCharacterForm(CharacterForm):
             return
 
         # Add / remove plots, restricted to the plots of this event (they are not inherited)
-        plot_event = self.params["event"].get_class_parent(Plot)
+        plot_event = get_event_class_parent(self.params["event"].id, Plot)
         selected = set(self.cleaned_data.get("plots", []))
         current = set(Plot.objects.filter(plotcharacterrel__character=instance, event=plot_event))
 
@@ -967,7 +969,7 @@ class OrgaCharacterForm(CharacterForm):
 
         # update texts (rows added client side are not declared fields, read them from raw data)
         to_update = []
-        for pr in instance.get_plot_characters(self.params["event"]):
+        for pr in instance.get_plot_characters(self.params["event"].id):
             field = f"pl_{pr.plot_id}"
             text = self.cleaned_data[field] if field in self.cleaned_data else self.data.get(field)
             if text is None or text == pr.text:
@@ -985,7 +987,7 @@ class OrgaCharacterForm(CharacterForm):
         # experience ability
         self.fields["exp_ability_list"] = forms.ModelMultipleChoiceField(
             label=_("Abilities"),
-            queryset=self.params["run"].event.get_elements(AbilityExp),
+            queryset=get_event_elements(self.params["run"].event_id, AbilityExp),
             widget=S2WidgetMulti(search_fields=["name__icontains"]),
             required=False,
         )
@@ -996,7 +998,7 @@ class OrgaCharacterForm(CharacterForm):
         # delivery list
         self.fields["exp_delivery_list"] = forms.ModelMultipleChoiceField(
             label=_("Award"),
-            queryset=self.params["run"].event.get_elements(DeliveryExp),
+            queryset=get_event_elements(self.params["run"].event_id, DeliveryExp),
             widget=S2WidgetMulti(search_fields=["name__icontains"]),
             required=False,
         )
@@ -1027,7 +1029,7 @@ class OrgaCharacterForm(CharacterForm):
         if "faction" not in self.params["features"]:
             return
 
-        queryset = self.params["run"].event.get_elements(Faction)
+        queryset = get_event_elements(self.params["run"].event_id, Faction)
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
@@ -1055,7 +1057,7 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params["features"] or "relationships" not in self.params:
             return
 
-        uuid_to_id = dict(self.params["event"].get_elements(Character).values_list("uuid", "id"))
+        uuid_to_id = dict(get_event_elements(self.params["event"].id, Character).values_list("uuid", "id"))
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel_") and not k.startswith("rel_tags_")}
         # Only process relationships if relationship fields are present in the form
@@ -1157,7 +1159,7 @@ class OrgaCharacterForm(CharacterForm):
             return {}
 
         prefix = "rel_tags_"
-        tag_by_uuid = {tag.uuid: tag for tag in self.params["event"].get_elements(RelationshipTag)}
+        tag_by_uuid = {tag.uuid: tag for tag in get_event_elements(self.params["event"].id, RelationshipTag)}
         posted: dict[str, list] = {}
         for key in self.data:
             if not key.startswith(prefix):
@@ -1184,7 +1186,7 @@ class OrgaCharacterForm(CharacterForm):
             return
 
         # with no tag defined the form renders no checkbox, so an empty post must not clear anything
-        if not get_cached_relationship_tags(self.params["event"]):
+        if not get_cached_relationship_tags(self.params["event"].id):
             return
 
         relationships = self.params.get("relationships", {})
@@ -1406,7 +1408,7 @@ class OrgaWritingQuestionForm(BaseModelForm):
             - Sets self.prevent_canc based on instance type length
         """
         # Get writing questions applicable to current writing type
-        writing_questions = get_cached_writing_questions(self.params["event"], self.params["writing_typ"])
+        writing_questions = get_cached_writing_questions(self.params["event"].id, self.params["writing_typ"])
 
         # Extract already used question types to avoid duplicates
         already_used_types = list({q["typ"] for q in writing_questions})

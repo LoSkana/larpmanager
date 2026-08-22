@@ -39,6 +39,7 @@ from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.accounting.member import info_accounting
 from larpmanager.accounting.registration import cancel_reg
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_association_features
@@ -591,7 +592,9 @@ def register_info(request: HttpRequest, context: dict, form: object, registratio
     if registration:
         registration.provisional = is_registration_provisional(registration)
 
-    _set_membership_context(context, context["run"], context["member"], registration)
+    _set_membership_context(
+        context, context["run"], context["member"], registration, get_run_basic_cache(context["run"].id)
+    )
 
 
 def init_form_submitted(context: dict, form: object, request: HttpRequest, registration: Any = None) -> None:
@@ -1236,7 +1239,7 @@ def unregister(request: HttpRequest, event_slug: str) -> Any:
             email_body += ".<br /><br />"
             email_body += _("To process the cancellation, click here:") + " "
             email_body += f"<a href='{cancel_url}'>{cancel_url}</a>"
-            for organizer in get_event_organizers(event):
+            for organizer in get_event_organizers(run.id):
                 my_send_mail(email_subject, email_body, organizer, run)
 
             mes = _("Your cancellation request has been sent to the staff; please wait for their response")

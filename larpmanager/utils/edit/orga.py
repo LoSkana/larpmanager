@@ -124,7 +124,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import Registration
 from larpmanager.models.writing import HandoutTemplate, PlotCharacterRel, PrologueType, TextVersion, TextVersionChoices
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import compute_diff, get_element
+from larpmanager.utils.core.common import compute_diff, get_element, get_event_elements
 from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.edit.backend import (
     _element_display_name,
@@ -141,7 +141,7 @@ from larpmanager.utils.services.character import get_character_relationships, ge
 
 def validate_ability_exp(request: HttpRequest, context: dict, event_slug: str) -> None:
     """Validate that ability types exist before allowing ability creation."""
-    if not context["event"].get_elements(AbilityTypeExp).exists():
+    if not get_event_elements(context["event"].id, AbilityTypeExp).exists():
         # Warn user and redirect to ability types creation page
         messages.warning(request, _("You must create at least one ability type before you can create abilities"))
         msg = "orga_exp_ability_types_new"
@@ -150,7 +150,7 @@ def validate_ability_exp(request: HttpRequest, context: dict, event_slug: str) -
 
 def validate_quest(request: HttpRequest, context: dict, event_slug: str) -> None:
     """Verify that quest types are available before allowing quest creation."""
-    if not context["event"].get_elements(QuestType).exists():
+    if not get_event_elements(context["event"].id, QuestType).exists():
         # Add warning message and redirect to quest types adding page
         messages.warning(request, _("You must create at least one quest type before you can create quests"))
         msg = "orga_quest_types_new"
@@ -159,7 +159,7 @@ def validate_quest(request: HttpRequest, context: dict, event_slug: str) -> None
 
 def validate_trait(request: HttpRequest, context: dict, event_slug: str) -> None:
     """Validate prerequisite: at least one quest must exist."""
-    if not context["event"].get_elements(Quest).exists():
+    if not get_event_elements(context["event"].id, Quest).exists():
         # Add warning message and redirect to quests adding page
         messages.warning(request, _("You must create at least one quest before you can create traits"))
         msg = "orga_quests_new"
@@ -168,7 +168,7 @@ def validate_trait(request: HttpRequest, context: dict, event_slug: str) -> None
 
 def validate_handout(request: HttpRequest, context: dict, event_slug: str) -> None:
     """Validate handout templates exist before allowing handout creation."""
-    if not context["event"].get_elements(HandoutTemplate).exists():
+    if not get_event_elements(context["event"].id, HandoutTemplate).exists():
         # Display warning and redirect to template creation page
         messages.warning(request, _("You must create at least one handout template before you can create handouts"))
         msg = "orga_handout_templates_new"
@@ -177,7 +177,7 @@ def validate_handout(request: HttpRequest, context: dict, event_slug: str) -> No
 
 def validate_prologue(request: HttpRequest, context: dict, event_slug: str) -> None:
     """Validate prologue type exist before allowing prologue creation."""
-    if not context["event"].get_elements(PrologueType).exists():
+    if not get_event_elements(context["event"].id, PrologueType).exists():
         # Display warning and redirect to template creation page
         messages.warning(request, _("You must create at least one prologue type before you can create prologues"))
         msg = "orga_prologue_types_new"
@@ -440,7 +440,7 @@ def _action_redirect(
     if action == Action.ORDER:
         backend_order(context, model_type, element_uuid, additional)
         if writing:
-            reset_event_cache_all(context["run"])
+            reset_event_cache_all(context["run"].id)
 
     elif action == Action.DELETE:
         is_frame = request.GET.get("frame") == "1" or request.POST.get("frame") == "1"

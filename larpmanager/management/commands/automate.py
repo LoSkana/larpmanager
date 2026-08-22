@@ -33,7 +33,7 @@ from django.utils import dateparse, timezone
 
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
-from larpmanager.cache.basic import get_run_association_id, get_run_event_id
+from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_active_registrations
@@ -173,7 +173,7 @@ class Command(BaseCommand):
 
             # Generate background PDF documents for the run
             if "print_pdf" in event_features:
-                print_run_bkg(run.event.association.slug, run.get_slug())
+                print_run_bkg(get_run_basic_cache(run.id)["association_slug"], run.get_slug())
 
     def check_association(self, association: Association) -> None:
         """Run all feature-specific automation checks for a single association."""
@@ -500,7 +500,7 @@ class Command(BaseCommand):
         # Process past events for participation and staff/organizer roles
         for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
             # Process regular player registrations
-            registrations = get_active_registrations(run)
+            registrations = get_active_registrations(run.id)
             for registration in registrations.exclude(
                 ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
             ):
@@ -532,7 +532,7 @@ class Command(BaseCommand):
 
         # Process future events for friend referral tracking
         for run in Run.objects.filter(end__gt=timezone.now().date()):
-            for registration in get_active_registrations(run).exclude(
+            for registration in get_active_registrations(run.id).exclude(
                 ticket__tier=TicketTier.WAITING,
             ):
                 self.check_friends_player(registration, cache)
@@ -1047,7 +1047,7 @@ class Command(BaseCommand):
             return
 
         # Get deadline interval configuration for the association
-        deadline_interval_days = int(get_association_config(run.event.association_id, "deadline_days"))
+        deadline_interval_days = int(get_association_config(get_run_association_id(run.id), "deadline_days"))
         if not deadline_interval_days:
             return
 

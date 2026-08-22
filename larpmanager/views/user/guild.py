@@ -38,18 +38,19 @@ from larpmanager.models.association import hdr
 from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.writing import Character, Guild, GuildMembership, GuildMembershipStatus, GuildRole
 from larpmanager.utils.core.base import get_event_context
+from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.services.character import filter_playing_characters
 from larpmanager.utils.users.registration import get_player_characters
 
 
 def _get_my_character_ids(context: dict) -> list[int]:
     """Return the ids of the current player's characters in this event."""
-    return list(get_player_characters(context["member"], context["event"]).values_list("id", flat=True))
+    return list(get_player_characters(context["member"], context["event"].id).values_list("id", flat=True))
 
 
 def _get_event_character(context: dict, character_uuid: str, *, only_mine: bool = False) -> Character | None:
     """Return an event character by uuid, following the campaign parent for inherited elements."""
-    queryset = context["event"].get_elements(Character)
+    queryset = get_event_elements(context["event"].id, Character)
     if only_mine:
         queryset = queryset.filter(player=context["member"])
     return queryset.filter(uuid=character_uuid).first()
@@ -57,7 +58,9 @@ def _get_event_character(context: dict, character_uuid: str, *, only_mine: bool 
 
 def _get_playing_character(context: dict, character_uuid: str) -> Character | None:
     """Return a visible event character by uuid, only if active and playing in the current run."""
-    queryset = filter_playing_characters(context["event"].get_elements(Character).filter(hide=False), context["run"])
+    queryset = filter_playing_characters(
+        get_event_elements(context["event"].id, Character).filter(hide=False), context["run"]
+    )
     return queryset.filter(uuid=character_uuid).first()
 
 
@@ -165,7 +168,7 @@ def guilds(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     max_number = _guild_max_number(context)
     total_number = Guild.objects.filter(event=context["event"]).count()
-    context["can_create_guild"] = bool(get_player_characters(context["member"], context["event"]).exists()) and (
+    context["can_create_guild"] = bool(get_player_characters(context["member"], context["event"].id).exists()) and (
         max_number <= 0 or total_number < max_number
     )
 
@@ -221,7 +224,7 @@ def guild_invites(request: HttpRequest, event_slug: str) -> HttpResponse:
     """List pending guild invites for any of the current player's characters."""
     context = get_event_context(request, event_slug, feature_slug="guild", include_status=True)
 
-    my_character_ids = list(get_player_characters(context["member"], context["event"]).values_list("id", flat=True))
+    my_character_ids = list(get_player_characters(context["member"], context["event"].id).values_list("id", flat=True))
     context["invites"] = (
         GuildMembership.objects.filter(
             character_id__in=my_character_ids,
@@ -239,7 +242,7 @@ def guild_create(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Create a new guild; the creating character becomes its first admin."""
     context = get_event_context(request, event_slug, feature_slug="guild", include_status=True)
 
-    my_characters = get_player_characters(context["member"], context["event"])
+    my_characters = get_player_characters(context["member"], context["event"].id)
     if not my_characters.exists():
         messages.error(request, _("You need a character to create a guild"))
         return redirect("guilds", event_slug=event_slug)

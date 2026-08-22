@@ -34,6 +34,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.writing import RelationshipTag
+from larpmanager.utils.core.common import get_event_elements
 
 
 def get_character_element_fields(
@@ -161,20 +162,20 @@ def get_relationship_tags_key(event_id: int) -> str:
     return f"event_relationship_tags_{event_id}"
 
 
-def init_relationship_tags_cache(event: Event) -> list[dict]:
+def init_relationship_tags_cache(event_id: int) -> list[dict]:
     """Build the serialized list of relationship tags available for an event."""
     return [
         {"uuid": tag.uuid, "name": tag.name, "symmetric": tag.symmetric}
-        for tag in event.get_elements(RelationshipTag).order_by("order", "number")
+        for tag in get_event_elements(event_id, RelationshipTag).order_by("order", "number")
     ]
 
 
-def get_cached_relationship_tags(event: Event) -> list[dict]:
+def get_cached_relationship_tags(event_id: int) -> list[dict]:
     """Get cached relationship tags of an event, as dicts with uuid, name and symmetric."""
-    cache_key = get_relationship_tags_key(event.id)
+    cache_key = get_relationship_tags_key(event_id)
     tags_list = cache.get(cache_key)
     if tags_list is None:
-        tags_list = init_relationship_tags_cache(event)
+        tags_list = init_relationship_tags_cache(event_id)
         cache.set(cache_key, tags_list, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return tags_list
 
