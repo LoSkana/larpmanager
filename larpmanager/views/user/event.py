@@ -73,7 +73,13 @@ from larpmanager.models.writing import (
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
-from larpmanager.utils.core.common import get_coming_runs, get_element, with_geo_configs, with_geo_configs_registrations
+from larpmanager.utils.core.common import (
+    get_coming_runs,
+    get_element,
+    get_event_elements,
+    with_geo_configs,
+    with_geo_configs_registrations,
+)
 from larpmanager.utils.core.exceptions import HiddenError
 from larpmanager.utils.users.registration import registration_status
 
@@ -857,7 +863,7 @@ def set_sold_tickets(context: dict) -> None:
         TicketTier.SELLER,
     ]
 
-    counts = get_registration_counts(context["run"])
+    counts = get_registration_counts(context["run"].id, context["run"].event_id)
 
     total = 0
     sold_tickets = []
@@ -988,7 +994,7 @@ def get_fact(factions_queryset: QuerySet[Faction]) -> list[dict[str, Any]]:
 
 def get_factions(context: dict) -> None:
     """Populate context with faction data organized by type."""
-    fcs = context["event"].get_elements(Faction)
+    fcs = get_event_elements(context["event"].id, Faction, context=context)
     # Get primary factions ordered by number
     context["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
     # Get transversal factions ordered by number
@@ -1020,7 +1026,7 @@ def factions(request: HttpRequest, event_slug: str) -> HttpResponse:
     # Load all event cache data into context
     get_event_cache_all(context)
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.FACTION)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.FACTION)
 
     return render(request, "larpmanager/event/factions.html", context)
 
@@ -1101,7 +1107,7 @@ def quests(request: HttpRequest, event_slug: str, quest_type_uuid: str | None = 
 
     context["list"] = [quest.show_complete() for quest in quest_queryset]
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quests.html", context)
 
@@ -1152,7 +1158,7 @@ def quest(request: HttpRequest, event_slug: str, quest_uuid: str) -> HttpRespons
         traits.append(res)
     context["traits"] = traits
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.QUEST)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.QUEST)
 
     return render(request, "larpmanager/event/quest.html", context)
 
@@ -1182,7 +1188,7 @@ def limitations(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = get_event_context(request, event_slug, include_status=True)
 
     # Retrieve current registration counts for tickets and options
-    counts = get_registration_counts(context["run"])
+    counts = get_registration_counts(context["run"].id, context["run"].event_id)
 
     # Count redemptions per discount for this run
     discount_counts = dict(
@@ -1246,9 +1252,9 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     """
     context = get_event(request, event_slug)
     if export_type == "char":
-        lst = context["event"].get_elements(Character).order_by("number")
+        lst = get_event_elements(context["event"].id, Character, context=context).order_by("number")
     elif export_type == "faction":
-        lst = context["event"].get_elements(Faction).order_by("number")
+        lst = get_event_elements(context["event"].id, Faction, context=context).order_by("number")
     elif export_type == "quest":
         lst = Quest.objects.filter(event=context["event"]).order_by("number")
     elif export_type == "trait":

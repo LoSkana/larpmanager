@@ -56,7 +56,7 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_album_cod, get_element, get_object_uuid
+from larpmanager.utils.core.common import get_album_cod, get_element, get_event_elements, get_object_uuid
 from larpmanager.utils.core.paginate import orga_paginate
 from larpmanager.utils.edit.backend import backend_edit
 from larpmanager.utils.edit.base import render_frame_or_fallback
@@ -373,7 +373,7 @@ def orga_warehouse_area(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_warehouse_area")
 
     # Retrieve all warehouse areas for the event
-    context["list"] = context["event"].get_elements(WarehouseArea)
+    context["list"] = get_event_elements(context["event"].id, WarehouseArea, context=context)
 
     return render(request, "larpmanager/orga/warehouse/area.html", context)
 
@@ -409,7 +409,7 @@ def orga_warehouse_items(request: HttpRequest, event_slug: str) -> HttpResponse:
     handle_bulk_orga_items(request, context)
 
     warehouse_cache = get_association_warehouse_cache(context["association_id"])
-    assignments_cache = get_event_warehouse_assignments_cache(context["event"])
+    assignments_cache = get_event_warehouse_assignments_cache(context["event"].id)
 
     context["list"] = []
     items = WarehouseItem.objects.filter(association_id=context["association_id"])
@@ -516,7 +516,9 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, area_
         item_all[item.id] = item
 
     # Process existing warehouse item assignments to calculate availability
-    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"]):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
+        event=context["event"]
+    ):
         item = item_all[el.item_id]
 
         # Mark items assigned to current area and track assignment details
@@ -572,7 +574,9 @@ def orga_warehouse_checks(request: HttpRequest, event_slug: str) -> HttpResponse
     context["items"] = {}
 
     # Iterate through all warehouse item assignments for this event
-    for el in context["event"].get_elements(WarehouseItemAssignment).select_related("area", "item"):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).select_related(
+        "area", "item"
+    ):
         # Check if item is already in our items dictionary
         if el.item_id not in context["items"]:
             # First time seeing this item, initialize it with empty assignment list
@@ -629,7 +633,9 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
     # Iterate through all warehouse item assignments for this event
     # Group items by their assigned areas for organized manifest display
-    for el in context["event"].get_elements(WarehouseItemAssignment).select_related("area", "item", "item__container"):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).select_related(
+        "area", "item", "item__container"
+    ):
         # Create area entry in the list if this is the first item for this area
         if el.area_id not in context["area_list"]:
             context["area_list"][el.area_id] = el.area
@@ -869,7 +875,9 @@ def orga_warehouse_commit_preview(request: HttpRequest, event_slug: str) -> Http
     # Key: item_id, Value: sum of all quantities assigned to that item
     # Only process items with "loaded" status for this event
     item_assignments: dict[int, int] = {}
-    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"], loaded=True):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
+        event=context["event"], loaded=True
+    ):
         if el.quantity:
             item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
 
@@ -956,7 +964,9 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
     # Key: item_id, Value: sum of all quantities assigned to that item
     # Only process items with "loaded" status for this event
     item_assignments: dict[int, int] = {}
-    for el in context["event"].get_elements(WarehouseItemAssignment).filter(event=context["event"], loaded=True):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
+        event=context["event"], loaded=True
+    ):
         if el.quantity:
             item_assignments[el.item_id] = item_assignments.get(el.item_id, 0) + el.quantity
 

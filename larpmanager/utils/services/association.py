@@ -206,8 +206,8 @@ def _reset_all_association(association_id: int, association_slug: str) -> None:
     clear_widget_cache_association(association_id)
 
     # Clear all events' caches for this association
-    for run in Run.objects.filter(event__association_id=association_id):
-        reset_all_run(run.event, run)
+    for run_id in Run.objects.filter(event__association_id=association_id).values_list("id", flat=True):
+        reset_all_run(run_id)
 
 
 def _get_registrations_url(association_id: int) -> str:

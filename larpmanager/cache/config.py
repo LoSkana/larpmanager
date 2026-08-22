@@ -318,6 +318,16 @@ def save_single_config(obj: object, name: str, value: any) -> None:
     reset_element_configs(obj.id, obj._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
 
 
+def save_single_config_by_id(model_cls: type, obj_id: int, name: str, value: any) -> None:
+    """Save single configuration value for an element, addressed by id without loading it."""
+    fk_field = _get_fkey_config_for_class(model_cls)
+    config_model = model_cls._meta.get_field("configs").related_model  # noqa: SLF001  # Django model metadata
+    config_model.objects.update_or_create(
+        defaults={"value": value}, **{f"{fk_field}_id": obj_id, "name": name, "deleted": None}
+    )
+    reset_element_configs(obj_id, model_cls._meta.model_name.lower())  # noqa: SLF001  # Django model metadata
+
+
 def _get_fkey_config(model_instance: object) -> str | None:
     """Get foreign key field name for configuration model.
 
@@ -338,6 +348,11 @@ def _get_fkey_config(model_instance: object) -> str | None:
         'event'
 
     """
+    return _get_fkey_config_for_class(model_instance.__class__)
+
+
+def _get_fkey_config_for_class(model_cls: type) -> str | None:
+    """Get foreign key field name for configuration model, by model class."""
     # Map model class names to their configuration foreign key field names
     foreign_key_field_map = {
         "Event": "event",
@@ -346,12 +361,7 @@ def _get_fkey_config(model_instance: object) -> str | None:
         "Character": "character",
         "Member": "member",
     }
-
-    # Extract the model class name from the instance
-    model_class_name = model_instance.__class__.__name__
-
-    # Return the corresponding foreign key field name
-    return foreign_key_field_map.get(model_class_name)
+    return foreign_key_field_map.get(model_cls.__name__)
 
 
 def get_element_config(element: Any, config_name: str, *, bypass_cache: bool = False) -> Any:

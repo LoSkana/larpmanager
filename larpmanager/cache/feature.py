@@ -22,9 +22,10 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.cache.config import _get_event_parent_id
+from larpmanager.cache.basic import get_event_association_id
+from larpmanager.cache.config import _get_event_parent_id, get_event_config
 from larpmanager.models.association import Association
-from larpmanager.models.event import Event
+from larpmanager.models.base import Feature
 
 
 def reset_association_features(association_id: int) -> None:
@@ -121,20 +122,20 @@ def get_event_features(event_id: int) -> dict[str, int]:
     return cached_features
 
 
-def update_event_features(ev_id: int) -> dict[str, int]:
+def update_event_features(event_id: int) -> dict[str, int]:
     """Update event feature cache with dependencies.
 
     Args:
-        ev_id: Event ID to update features for
+        event_id: Event ID to update features for
 
     Returns:
         dict: Feature dictionary with enabled features marked as 1
 
     """
     try:
-        event = Event.objects.get(pk=ev_id)
-        features_dict = get_association_features(event.association_id)
-        for feature_slug in event.features.values_list("slug", flat=True):
+        association_id = get_event_association_id(event_id)
+        features_dict = get_association_features(association_id)
+        for feature_slug in Feature.objects.filter(events__id=event_id).values_list("slug", flat=True):
             features_dict[feature_slug] = 1
         extra_features_mapping = {
             "writing": ["paste_text", "title", "cover", "hide", "assigned", "locked"],
@@ -142,12 +143,13 @@ def update_event_features(ev_id: int) -> dict[str, int]:
             "character_form": ["wri_que_max", "wri_que_tickets", "wri_que_requirements"],
             "casting": ["mirror"],
         }
+        context = {}
         for config_type, config_feature_slugs in extra_features_mapping.items():
             for feature_slug in config_feature_slugs:
-                if event.get_config(f"{config_type}_{feature_slug}"):
+                if get_event_config(event_id, f"{config_type}_{feature_slug}", context=context):
                     features_dict[feature_slug] = 1
         for feature_slug in ["exp_rules", "exp_modifiers", "exp_templates", "exp_systems", "exp_criterions"]:
-            if event.get_config(feature_slug):
+            if get_event_config(event_id, feature_slug, context=context):
                 features_dict[feature_slug] = 1
 
     except ObjectDoesNotExist:

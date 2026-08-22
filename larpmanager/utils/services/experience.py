@@ -43,6 +43,7 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.writing import Character, CharacterConfig, Faction
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 _CRITERION_OPERATIONS = {
@@ -96,7 +97,7 @@ def build_exp_context(
 
     # Get all modifiers
     all_modifiers = (
-        character.event.get_elements(ModifierExp)
+        get_event_elements(character.event_id, ModifierExp)
         .only("id", "order", "cost")
         .order_by("order")
         .prefetch_related(
@@ -229,7 +230,7 @@ def _get_available_abilities(
         List of AbilityExp instances the character can purchase.
 
     """
-    qs = char.event.get_elements(AbilityExp).exclude(pk__in=current_character_abilities)
+    qs = get_event_elements(char.event_id, AbilityExp).exclude(pk__in=current_character_abilities)
     if visible_only:
         qs = qs.filter(visible=True, system__hidden=False)
     all_abilities = (
@@ -328,7 +329,7 @@ def _auto_buy_abilities(
 def _fetch_criterions(character: Any) -> list:
     """Fetch and materialise CriterionExp queryset for a character's event."""
     return list(
-        character.event.get_elements(CriterionExp)
+        get_event_elements(character.event_id, CriterionExp)
         .select_related("system")
         .order_by("order")
         .prefetch_related(
@@ -414,7 +415,7 @@ def _build_px_avail_by_system(
         Dict mapping system_id to available EXP points.
 
     """
-    systems = get_event_exp_systems(character.event)
+    systems = get_event_exp_systems(character.event_id)
     if not systems:
         return {}
 
@@ -462,7 +463,7 @@ def _build_experience_data(
         Dict with exp_tot/exp_used/exp_avail and per-system keys.
 
     """
-    systems = get_event_exp_systems(character.event)
+    systems = get_event_exp_systems(character.event_id)
 
     deliveries_by_system = _build_deliveries_by_system(
         character,
@@ -757,7 +758,7 @@ def build_exp_avail_by_system_from_addit(char: Any) -> dict[int, int]:
         Dict mapping system_id to available EXP points.
 
     """
-    systems = get_event_exp_systems(char.event)
+    systems = get_event_exp_systems(char.event_id)
     px_avail_by_system: dict[int, int] = {}
     for system in systems:
         avail_key = f"exp_avail_{system.uuid}"
@@ -840,9 +841,8 @@ def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = Non
         Computed values are formatted to remove trailing zeros and decimal points.
 
     """
-    # Get the character's event and initialize computed question values
-    event = char.event
-    computed_questions = event.get_elements(WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
+    # Initialize computed question values for the character's event
+    computed_questions = get_event_elements(char.event_id, WritingQuestion).filter(typ=WritingQuestionType.COMPUTED)
     computed_field_values = {question.id: Decimal(0) for question in computed_questions}
 
     # Retrieve character's ability IDs for rule filtering
@@ -851,7 +851,7 @@ def apply_rules_computed(char: Any, character_ability_ids: set[int] | None = Non
 
     # Get applicable rules: either global rules or rules matching character's abilities
     applicable_rules = (
-        event.get_elements(RuleExp)
+        get_event_elements(char.event_id, RuleExp)
         .filter(Q(abilities__isnull=True) | Q(abilities__in=character_ability_ids))
         .distinct()
         .order_by("order")
@@ -935,16 +935,14 @@ def calculate_character_experience_points_bgk(character_ids: int | list) -> None
 @background_auto(queue="experience", skip_duplicates=True)
 def calculate_event_experience_points_bgk(event_id: int) -> None:
     """Update experience points for all event characters."""
-    try:
-        event = Event.objects.get(pk=event_id)
-    except ObjectDoesNotExist:
+    if not Event.objects.filter(pk=event_id).exists():
         # Event was deleted, nothing to do
         return
 
-    for character in event.get_elements(Character).all():
+    for character in get_event_elements(event_id, Character).all():
         calculate_character_experience_points(character)
 
 
 def _recalcuate_characters_experience_points(instance: Any) -> None:
     """Handle recomputing experience points of characters."""
-    calculate_event_experience_points_bgk(instance.event.get_class_parent(instance.__class__).id)
+    calculate_event_experience_points_bgk(get_event_class_parent(instance.event_id, instance.__class__))

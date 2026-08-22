@@ -44,6 +44,7 @@ from larpmanager.models.miscellanea import (
     WarehouseMovement,
     WarehouseTag,
 )
+from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.services.miscellanea import warehouse_add_assignment, warehouse_available_quantity
 
 
@@ -295,7 +296,7 @@ class OrgaWarehouseItemAreasForm(BaseModelForm):
 
         # Field names use the area's uuid
         self.area_fields: dict[str, int] = {}
-        for area in event.get_elements(WarehouseArea).order_by("name"):
+        for area in get_event_elements(event.id, WarehouseArea, context=self.params).order_by("name"):
             field_name = f"area_{area.uuid}"
             self.area_fields[field_name] = area.id
             self.fields[field_name] = forms.IntegerField(

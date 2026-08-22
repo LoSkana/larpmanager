@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.models.association import Association, get_url, hdr
+from larpmanager.models.association import Association, get_association_url, get_url, hdr, hdr_run
 from larpmanager.models.member import Membership, get_user_membership
 from larpmanager.utils.users.registration import get_registration_options
 
@@ -103,7 +103,7 @@ def _get_wire_payment_info(payment_url: str, *, require_receipt: bool) -> str:
 
 def get_registration_new_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for new registration organizer notification."""
-    email_subject = hdr(instance.run.event) + _("Registration for %(event)s by %(user)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration for %(event)s by %(user)s") % email_context
     email_body = _("The user has confirmed their registration for this event.")
     email_body += registration_options(instance)
     return email_subject, email_body
@@ -111,7 +111,7 @@ def get_registration_new_organizer_email(instance: Registration, email_context: 
 
 def get_registration_update_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for registration update organizer notification."""
-    email_subject = hdr(instance.run.event) + _("Registration updated for %(event)s by %(user)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration updated for %(event)s by %(user)s") % email_context
     email_body = _("The user has updated their registration details for this event.")
     email_body += registration_options(instance)
     return email_subject, email_body
@@ -119,14 +119,14 @@ def get_registration_update_organizer_email(instance: Registration, email_contex
 
 def get_registration_cancel_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for registration cancellation organizer notification."""
-    email_subject = hdr(instance.run.event) + _("Registration canceled for %(event)s by %(user)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration canceled for %(event)s by %(user)s") % email_context
     email_body = _("The registration for this event has been canceled.")
     return email_subject, email_body
 
 
 def get_registration_request_new_organizer_email(instance: Registration, email_context: dict) -> tuple[str, str]:
     """Generate email subject and body for new signup request organizer notification."""
-    email_subject = hdr(instance.run.event) + _("Registration request for %(event)s by %(user)s") % email_context
+    email_subject = hdr_run(instance.run_id) + _("Registration request for %(event)s by %(user)s") % email_context
     email_body = _("The user has submitted a request to register for this event.")
     return email_subject, email_body
 
@@ -355,7 +355,7 @@ def registration_payments(instance: Registration, currency: str) -> str:
 
     """
     # Build the payment URL using the event and run slug
-    full_payment_url = get_url("accounting/pay", instance.run.event)
+    full_payment_url = get_association_url("accounting/pay", get_run_association_id(instance.run_id))
     payment_url = f"{full_payment_url}/{instance.run.get_slug()}"
 
     # Prepare template data for localization

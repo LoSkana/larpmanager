@@ -44,7 +44,13 @@ from larpmanager.models.miscellanea import Log
 from larpmanager.models.writing import Faction, Plot, PlotCharacterRel, Relationship, TextVersion
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context
-from larpmanager.utils.core.common import get_element, get_object_uuid, html_clean
+from larpmanager.utils.core.common import (
+    get_element,
+    get_event_class_parent,
+    get_event_elements,
+    get_object_uuid,
+    html_clean,
+)
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -190,7 +196,7 @@ def _version_applicable(element: BaseModel, model_type: str) -> str:
         choices_by_question.setdefault(choice.question_id, []).append(choice.option.name)
 
     # Collect all applicable questions and their values
-    for question in get_cached_writing_questions(element.event, model_type):
+    for question in get_cached_writing_questions(element.event_id, model_type):
         if question["typ"] == "text":
             includes_text_field = True
         value = _get_field_value(element, question, answers_by_question, choices_by_question)
@@ -934,7 +940,7 @@ def backend_order(
 
     """
     # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or context["event"].get_elements(model_class)
+    elements = elements or get_event_elements(context["event"].id, model_class, context=context)
 
     current_element = elements.get(uuid=element) if isinstance(element, str) else element
 
@@ -977,7 +983,7 @@ def backend_order(
 
 def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> None:
     """Bulk-set order field from a UUID list using index * 10 spacing."""
-    event = context["event"].get_class_parent(model_class)
+    event = get_event_class_parent(context["event"].id, model_class, context=context)
     objects = {str(obj.uuid): obj for obj in model_class.objects.filter(event=event, uuid__in=uuids)}
     to_update = []
     for i, uuid in enumerate(uuids):

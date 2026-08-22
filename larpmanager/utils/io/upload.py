@@ -83,6 +83,7 @@ from larpmanager.models.writing import (
     PlotCharacterRel,
     Relationship,
 )
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _get_column_names
 from larpmanager.utils.security import (
@@ -382,7 +383,7 @@ def registrations_load(context: dict, uploaded_file_form: Form) -> list[str]:
     """Load registration data from uploaded CSV file."""
     (input_dataframe, processing_logs) = _get_file(context, uploaded_file_form.cleaned_data["first"], 0)
 
-    registration_questions = get_cached_registration_questions(context["event"])
+    registration_questions = get_cached_registration_questions(context["event"].id)
     questions_mapping = _get_questions(registration_questions)
 
     if input_dataframe is not None:
@@ -686,7 +687,11 @@ def _reg_assign_characters(
             continue
 
         # Find character by name in the current event
-        character = context["event"].get_elements(Character).filter(name__iexact=character_name).first()
+        character = (
+            get_event_elements(context["event"].id, Character, context=context)
+            .filter(name__iexact=character_name)
+            .first()
+        )
         if not character:
             error_logs.append(f"ERR - Character not found: {character_name}")
             continue
@@ -731,7 +736,7 @@ def writing_load(context: dict, form: Form) -> list[str]:
         (input_dataframe, logs) = _get_file(context, uploaded_file, 0)
 
         # Get questions for the writing type with their options
-        writing_questions = get_cached_writing_questions(context["event"], context["writing_typ"])
+        writing_questions = get_cached_writing_questions(context["event"].id, context["writing_typ"])
         questions_dict = _get_questions(writing_questions)
 
         # Activate features based on uploaded columns
@@ -779,7 +784,7 @@ def _writing_load_relationships(context: dict, form: Form, logs: list[str]) -> N
         (input_dataframe, new_logs) = _get_file(context, uploaded_file, 1)
         character_name_to_id = {
             element["name"].lower(): element["id"]
-            for element in context["event"].get_elements(Character).values("id", "name")
+            for element in get_event_elements(context["event"].id, Character, context=context).values("id", "name")
         }
 
         # Process each relationship row
@@ -812,11 +817,11 @@ def _writing_load_plot_rels(context: dict, form: Form, logs: list[str]) -> None:
         (input_dataframe, new_logs) = _get_file(context, uploaded_file, 1)
         character_name_to_id = {
             element["name"].lower(): element["id"]
-            for element in context["event"].get_elements(Character).values("id", "name")
+            for element in get_event_elements(context["event"].id, Character, context=context).values("id", "name")
         }
         plot_name_to_id = {
             element["name"].lower(): element["id"]
-            for element in context["event"].get_elements(Plot).values("id", "name")
+            for element in get_event_elements(context["event"].id, Plot, context=context).values("id", "name")
         }
 
         # Process each plot relationship row
@@ -1026,14 +1031,14 @@ def element_load(context: dict, csv_row: dict, element_questions: dict) -> str:
     writing_model_class = QuestionApplicable.get_applicable_inverse(question_applicable_type)
 
     # Get the target event - use parent if in campaign and element is inheritable
-    target_event = context["event"].get_class_parent(writing_model_class)
+    target_event = get_event_class_parent(context["event"].id, writing_model_class, context=context)
 
     # Try to find existing element or create new one
     element = writing_model_class.objects.filter(event=target_event, name__iexact=element_name).first()
     if element:
         is_newly_created = False
     else:
-        element = writing_model_class.objects.create(event=target_event, name=element_name)
+        element = writing_model_class.objects.create(event_id=target_event, name=element_name)
         is_newly_created = True
 
     # Initialize logging for field processing errors
@@ -1083,7 +1088,9 @@ def _writing_load_field(
 
     # Handle quest type field with case-insensitive lookup
     if field == "typ":
-        quest_type = context["event"].get_elements(QuestType).filter(name__iexact=value).first()
+        quest_type = (
+            get_event_elements(context["event"].id, QuestType, context=context).filter(name__iexact=value).first()
+        )
         if quest_type:
             element.typ = quest_type
         else:
@@ -1092,7 +1099,7 @@ def _writing_load_field(
 
     # Handle quest field with case-insensitive lookup
     if field == "quest":
-        quest = context["event"].get_elements(Quest).filter(name__iexact=value).first()
+        quest = get_event_elements(context["event"].id, Quest, context=context).filter(name__iexact=value).first()
         if quest:
             element.quest = quest
         else:
@@ -1193,7 +1200,11 @@ def _get_mirror_instance(
     error_logs: list[str],
 ) -> None:
     """Fetch and assign mirror character instance from event."""
-    mirror_character = context["event"].get_elements(Character).filter(name__iexact=mirror_character_name).first()
+    mirror_character = (
+        get_event_elements(context["event"].id, Character, context=context)
+        .filter(name__iexact=mirror_character_name)
+        .first()
+    )
     if mirror_character:
         character_element.mirror = mirror_character
     else:
@@ -1280,10 +1291,12 @@ def form_load(
         if options_dataframe is not None:
             # Determine question model class based on registration type
             question_model_class = WritingQuestion
-            questions_lookup = context["event"].get_elements(question_model_class)
+            questions_lookup = get_event_elements(context["event"].id, question_model_class, context=context)
             if is_registration:
                 question_model_class = RegistrationQuestion
-                questions_lookup = context["event"].get_elements(question_model_class).filter(applicable=applicable)
+                questions_lookup = get_event_elements(
+                    context["event"].id, question_model_class, context=context
+                ).filter(applicable=applicable)
 
             # Build lookup dictionary mapping question names to IDs
             questions_by_name = {
@@ -1365,7 +1378,7 @@ def _get_or_create_writing_question(
 
     applicable = field_mappings["applicable"][applicable_value]
 
-    event = context["event"].get_class_parent(WritingQuestion)
+    event = get_event_class_parent(context["event"].id, WritingQuestion, context=context)
 
     # For special (non-basic) WritingQuestionTypes, look up by type+applicable.
     # These questions are auto-created by configuration and are unique per type.
@@ -1390,7 +1403,7 @@ def _get_or_create_writing_question(
 
     return (
         WritingQuestion.objects.create(
-            event=event,
+            event_id=event,
             name=question_name,
             applicable=applicable,
         ),
@@ -1637,7 +1650,7 @@ def _get_option(
             )
             was_created = True
     else:
-        event = context["event"].get_class_parent(WritingOption)
+        event = get_event_class_parent(context["event"].id, WritingOption, context=context)
         matching_options = WritingOption.objects.filter(
             event=event,
             name__iexact=option_name,
@@ -1648,7 +1661,7 @@ def _get_option(
             was_created = False
         else:
             option_instance = WritingOption.objects.create(
-                event=event,
+                event_id=event,
                 name=option_name,
                 question_id=parent_question_id,
             )
@@ -1718,7 +1731,7 @@ def cover_load(context: dict, z_obj: Any) -> None:
     logger.debug("Extracted covers: %s", covers)
     upload_to = UploadToPathAndRename("character/cover/")
     # cicle characters
-    for c in context["run"].event.get_elements(Character):
+    for c in get_event_elements(context["run"].event_id, Character, context=context):
         num = str(c.number)
         if num not in covers:
             continue
@@ -1851,19 +1864,22 @@ def abilities_load(context: dict, form: Form) -> list[str]:
     return processing_logs
 
 
-def _resolve_exp_system(event: Any) -> Any:
+def _resolve_exp_system(event: Any, *, context: dict | None = None) -> Any:
     """Return the first SystemExp for the event, creating it if none exists."""
-    systems = get_event_exp_systems(event)
+    systems = get_event_exp_systems(event.id)
     if systems:
         return systems[0]
-    system = SystemExp.objects.create(event=event.get_class_parent(SystemExp), name="XP", number=1)
-    clear_event_exp_systems_cache(event.get_class_parent(SystemExp).id)
+    parent_id = get_event_class_parent(event.id, SystemExp, context=context)
+    system = SystemExp.objects.create(event_id=parent_id, name="XP", number=1)
+    clear_event_exp_systems_cache(parent_id)
     return system
 
 
 def _assign_system(context: dict, element: Any, logs: list[str], value: str) -> None:
     """Assign the experience system to an element by name."""
-    system = context["event"].get_elements(SystemExp).filter(name__iexact=value.strip()).first()
+    system = (
+        get_event_elements(context["event"].id, SystemExp, context=context).filter(name__iexact=value.strip()).first()
+    )
     if system:
         element.system = system
     else:
@@ -1946,16 +1962,16 @@ def _ability_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    parent_event = event.get_class_parent(AbilityExp)
+    parent_event = get_event_class_parent(event.id, AbilityExp, context=context)
 
     # Match the stored ability ignoring case, so that a different casing updates it instead of duplicating it
     ability_element = AbilityExp.objects.filter(event=parent_event, name__iexact=name).order_by("number").first()
     was_created = ability_element is None
     if was_created:
         ability_element = AbilityExp.objects.create(
-            event=parent_event,
+            event_id=parent_event,
             name=name,
-            system=_resolve_exp_system(event),
+            system=_resolve_exp_system(event, context=context),
         )
 
     logs = []
@@ -1991,7 +2007,11 @@ def _assign_type(
 ) -> None:
     """Assign ability type to element from event context."""
     # Query ability type by name from event context
-    ability_type = context["event"].get_elements(AbilityTypeExp).filter(name__iexact=ability_type_name).first()
+    ability_type = (
+        get_event_elements(context["event"].id, AbilityTypeExp, context=context)
+        .filter(name__iexact=ability_type_name)
+        .first()
+    )
     if ability_type:
         ability_element.typ = ability_type
     else:
@@ -2035,7 +2055,11 @@ def _assign_relation(
         manager.clear()
     for raw_name in raw_names:
         # Look up the related element by name (case-insensitive)
-        related_element = context["event"].get_elements(related_model).filter(name__iexact=raw_name.strip()).first()
+        related_element = (
+            get_event_elements(context["event"].id, related_model, context=context)
+            .filter(name__iexact=raw_name.strip())
+            .first()
+        )
         if related_element:
             manager.add(related_element)
         else:
@@ -2076,7 +2100,11 @@ def _assign_abilities(
 ) -> None:
     """Assign abilities to element from comma-separated names."""
     for ability_name in value.split(","):
-        ability = context["event"].get_elements(AbilityExp).filter(name__iexact=ability_name.strip()).first()
+        ability = (
+            get_event_elements(context["event"].id, AbilityExp, context=context)
+            .filter(name__iexact=ability_name.strip())
+            .first()
+        )
         if ability:
             element.save()
             element.abilities.add(ability)
@@ -2095,7 +2123,11 @@ def rules_load(context: dict, form: Form) -> list[str]:
 
 def _assign_rule_field(context: dict, rule: RuleExp, logs: list[str], value: str) -> None:
     """Assign the WritingQuestion FK field to a rule by name."""
-    field_obj = context["event"].get_elements(WritingQuestion).filter(name__iexact=value.strip()).first()
+    field_obj = (
+        get_event_elements(context["event"].id, WritingQuestion, context=context)
+        .filter(name__iexact=value.strip())
+        .first()
+    )
     if field_obj:
         rule.field = field_obj
     else:
@@ -2137,12 +2169,12 @@ def _rule_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    event_parent = event.get_class_parent(RuleExp)
+    event_parent = get_event_class_parent(event.id, RuleExp, context=context)
 
     rule = RuleExp.objects.filter(event=event_parent, number=number).first()
     was_created = rule is None
     if was_created:
-        rule = RuleExp(event=event_parent, number=number)
+        rule = RuleExp(event_id=event_parent, number=number)
 
     logs = []
     abilities_value = None
@@ -2190,7 +2222,7 @@ def _modifier_load(context: dict, csv_row: dict) -> str:
     event = context["event"]
 
     (modifier, was_created) = ModifierExp.objects.get_or_create(
-        event=event.get_class_parent(ModifierExp),
+        event_id=get_event_class_parent(event.id, ModifierExp, context=context),
         number=number,
         defaults={"order": 0},
     )
@@ -2302,7 +2334,7 @@ def _criterion_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    parent_event = event.get_class_parent(CriterionExp)
+    parent_event = get_event_class_parent(event.id, CriterionExp, context=context)
 
     criterion = CriterionExp.objects.filter(event=parent_event, number=number).first()
     was_created = criterion is None
@@ -2312,10 +2344,10 @@ def _criterion_load(context: dict, csv_row: dict) -> str:
         if err:
             return err
         criterion = CriterionExp.objects.create(
-            event=parent_event,
+            event_id=parent_event,
             number=number,
             name=name,
-            system=_resolve_exp_system(event),
+            system=_resolve_exp_system(event, context=context),
             order=0,
         )
 
@@ -2412,7 +2444,7 @@ def _delivery_load(context: dict, csv_row: dict) -> str:
         return err
 
     event = context["event"]
-    parent_event = event.get_class_parent(DeliveryExp)
+    parent_event = get_event_class_parent(event.id, DeliveryExp, context=context)
 
     logs = []
     number = _row_delivery_number(csv_row, logs)
@@ -2421,11 +2453,11 @@ def _delivery_load(context: dict, csv_row: dict) -> str:
     was_created = delivery is None
     if was_created:
         # Keep the uploaded number only on creation, and only when still available
-        fields = {"system": _resolve_exp_system(event), "amount": 0}
+        fields = {"system": _resolve_exp_system(event, context=context), "amount": 0}
         free_number = _free_delivery_number(parent_event, number, logs)
         if free_number is not None:
             fields["number"] = free_number
-        delivery = DeliveryExp.objects.create(event=parent_event, name=name, **fields)
+        delivery = DeliveryExp.objects.create(event_id=parent_event, name=name, **fields)
 
     for field_name, field_value in csv_row.items():
         if _skip_row_field(field_name, field_value, ("name", "number")):

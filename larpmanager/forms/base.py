@@ -65,6 +65,7 @@ from larpmanager.models.utils import (
     strip_tags,
 )
 from larpmanager.models.writing import Faction
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -328,7 +329,11 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         # Get parent event based on element type from params
         typ = self.params["elementTyp"]
-        return self.params["event"].get_class_parent(typ)
+        event = self.params["event"]
+        parent_id = get_event_class_parent(event.id, typ, context=self.params)
+        if parent_id == event.id:
+            return event
+        return Event.objects.get(pk=parent_id)
 
     def clean_association(self) -> Association:
         """Return association from params."""
@@ -365,7 +370,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         if event and element_type:
             # Determine the appropriate event ID based on the element type
-            parent_event_id = event.get_class_parent(element_type).id
+            parent_event_id = get_event_class_parent(event.id, element_type, context=self.params)
 
             # Build the base queryset for uniqueness checking
             model = self._meta.model
@@ -608,7 +613,7 @@ class BaseRegistrationForm(BaseModelFormRun):
 
     def _init_questions(self, event: Event) -> None:
         """Initialize questions for the given event."""
-        self.questions = get_cached_registration_questions(event)
+        self.questions = get_cached_registration_questions(event.id)
 
     def get_options_query(self, event: Event) -> QuerySet:
         """Return ordered options for questions in the given event."""
@@ -1247,7 +1252,9 @@ class BaseRegistrationForm(BaseModelFormRun):
         in ``RegistrationAnswer.text`` like a plain text answer.
         """
         event = self.params["run"].event
-        visible_factions = list(event.get_elements(Faction).filter(hide=False).order_by("order"))
+        visible_factions = list(
+            get_event_elements(event.id, Faction, context=self.params).filter(hide=False).order_by("order")
+        )
         visible_uuids = {str(faction.uuid): faction for faction in visible_factions}
 
         # Start from the previously saved order, dropping factions no longer visible
@@ -1473,7 +1480,10 @@ class BaseRegistrationForm(BaseModelFormRun):
         event = self.params["run"].event
         visible_faction_uuids = [
             str(uuid)
-            for uuid in event.get_elements(Faction).filter(hide=False).order_by("order").values_list("uuid", flat=True)
+            for uuid in get_event_elements(event.id, Faction, context=self.params)
+            .filter(hide=False)
+            .order_by("order")
+            .values_list("uuid", flat=True)
         ]
         submitted = (value or "").split(",")
         sanitized = [uuid for uuid in submitted if uuid in visible_faction_uuids]

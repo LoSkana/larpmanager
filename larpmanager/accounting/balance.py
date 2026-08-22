@@ -31,6 +31,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.accounting import (
@@ -445,7 +446,7 @@ def get_run_accounting(run: Run, context: dict) -> tuple[dict, dict]:
     # Apply organization tax if enabled
     summary["tax"] = 0
     if "organization_tax" in features:
-        tax_percentage = int(get_association_config(run.event.association_id, "organization_tax_perc"))
+        tax_percentage = int(get_association_config(get_run_association_id(run.id), "organization_tax_perc"))
         summary["tax"] = summary["revenue"] * tax_percentage / 100
 
     return summary, details
@@ -492,7 +493,7 @@ def check_run_accounting(run: Run) -> None:
 
     # Create audit record with calculated balance (bank_sum set to 0 as default)
     RecordAccounting.objects.create(
-        association=run.event.association, run=run, global_sum=summary.get("balance", 0), bank_sum=0
+        association_id=get_run_association_id(run.id), run=run, global_sum=summary.get("balance", 0), bank_sum=0
     )
 
 
