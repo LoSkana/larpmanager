@@ -88,7 +88,7 @@ def my_send_digest_email(
 
     # Check if this organizer has enabled digest mode for their notifications
     if should_queue:
-        object_id = instance.id if instance else 0
+        object_id = getattr(instance, "id", None) or 0
         # Queue notification for daily digest summary for this specific organizer
         queue_organizer_notification(run=run, member=member, notification_type=notification_type, object_id=object_id)
     else:
@@ -189,7 +189,7 @@ def my_send_digest_email_exe(
         should_queue = get_association_config(association.pk, "mail_exe_digest")
 
     if should_queue:
-        object_id = instance.id if instance and hasattr(instance, "id") else 0
+        object_id = getattr(instance, "id", None) or 0
         # Queue notification for daily digest summary
         queue_executive_notification(
             association=association, member=member, notification_type=notification_type, object_id=object_id
