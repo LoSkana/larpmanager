@@ -154,7 +154,9 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     assigned_character_ids = {rel.character_id for rel in context["assignments"].values()}
 
     # Process each character for the event cache
-    characters_query = get_event_elements(context["event"].id, Character).filter(hide=False).order_by("order")
+    characters_query = (
+        get_event_elements(context["event"].id, Character, context=context).filter(hide=False).order_by("order")
+    )
     for character in characters_query.prefetch_related("factions_list", "guild_memberships__guild"):
         # Skip mirror characters that are already assigned
         if is_mirror_enabled and character.mirror_id in assigned_character_ids:
@@ -217,7 +219,9 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
     question_uuids = fields_data["questions"].keys()
 
     # Query the Character table to get id -> number mapping for the event
-    character_id_mapping = dict(get_event_elements(context["event"].id, Character).values_list("id", "number"))
+    character_id_mapping = dict(
+        get_event_elements(context["event"].id, Character, context=context).values_list("id", "number")
+    )
 
     # Retrieve and process multiple choice answers for characters
     # Each choice can have multiple options selected per question
@@ -371,7 +375,7 @@ def get_event_cache_guilds(context: dict, result: dict) -> None:
     if "guild" not in get_event_features(context["event"].id):
         return
 
-    for guild in get_event_elements(context["event"].id, Guild).filter(secret=False).order_by("order"):
+    for guild in get_event_elements(context["event"].id, Guild, context=context).filter(secret=False).order_by("order"):
         _process_guild_cache(guild, result)
 
 

@@ -104,14 +104,18 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
         character_registrations[relation.character_id] = relation.registration
 
     characters_by_id = {}
-    for character in get_event_elements(context["event"].id, Character).filter(hide=False):
+    for character in get_event_elements(context["event"].id, Character, context=context).filter(hide=False):
         if character.id in character_registrations:
             character.registration = character_registrations[character.id]
             character.member = character_registrations[character.id].member
         characters_by_id[character.id] = character
 
     if "faction" in context["features"] and context["show_faction"]:
-        faction_query = get_event_elements(context["event"].id, Faction).filter(typ=FactionType.PRIM).order_by("order")
+        faction_query = (
+            get_event_elements(context["event"].id, Faction, context=context)
+            .filter(typ=FactionType.PRIM)
+            .order_by("order")
+        )
         character_prefetch = Prefetch(
             "characters",
             queryset=Character.objects.filter(hide=False).order_by("number"),

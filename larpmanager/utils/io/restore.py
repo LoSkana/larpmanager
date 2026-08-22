@@ -206,7 +206,7 @@ def _preview_features(context: dict, df: pd.DataFrame) -> dict:
 
 def _preview_tickets(context: dict, df: pd.DataFrame) -> dict:
     event = context["event"]
-    existing = set(get_event_elements(event.id, RegistrationTicket).values_list("name", flat=True))
+    existing = set(get_event_elements(event.id, RegistrationTicket, context=context).values_list("name", flat=True))
 
     creates, updates, skips = [], [], []
     for _idx, row in df.iterrows():
@@ -220,8 +220,8 @@ def _preview_tickets(context: dict, df: pd.DataFrame) -> dict:
 
 def _preview_registration_form(context: dict, df_q: pd.DataFrame, df_o: pd.DataFrame | None) -> dict:
     event = context["event"]
-    existing_q = set(get_event_elements(event.id, RegistrationQuestion).values_list("name", flat=True))
-    existing_o = set(get_event_elements(event.id, RegistrationOption).values_list("name", flat=True))
+    existing_q = set(get_event_elements(event.id, RegistrationQuestion, context=context).values_list("name", flat=True))
+    existing_o = set(get_event_elements(event.id, RegistrationOption, context=context).values_list("name", flat=True))
 
     creates, updates, skips = [], [], []
     for _idx, row in df_q.iterrows():
@@ -239,8 +239,8 @@ def _preview_registration_form(context: dict, df_q: pd.DataFrame, df_o: pd.DataF
 
 def _preview_character_form(context: dict, df_q: pd.DataFrame, df_o: pd.DataFrame | None) -> dict:
     event = context["event"]
-    existing_q = set(get_event_elements(event.id, WritingQuestion).values_list("name", flat=True))
-    existing_o = set(get_event_elements(event.id, WritingOption).values_list("name", flat=True))
+    existing_q = set(get_event_elements(event.id, WritingQuestion, context=context).values_list("name", flat=True))
+    existing_o = set(get_event_elements(event.id, WritingOption, context=context).values_list("name", flat=True))
 
     creates, updates, skips = [], [], []
     for _idx, row in df_q.iterrows():
@@ -257,7 +257,7 @@ def _preview_character_form(context: dict, df_q: pd.DataFrame, df_o: pd.DataFram
 
 
 def _preview_character_config(context: dict, df: pd.DataFrame) -> dict:
-    event_id = get_event_class_parent(context["event"].id, Character)
+    event_id = get_event_class_parent(context["event"].id, Character, context=context)
     char_map = {c.number: c.id for c in Character.objects.filter(event_id=event_id, deleted__isnull=True)}
     existing = set(
         CharacterConfig.objects.filter(character__event_id=event_id, deleted__isnull=True).values_list(
@@ -286,7 +286,7 @@ def _preview_writing(context: dict, df: pd.DataFrame, typ: str) -> dict:
     if model_class is None:
         return _section(typ.title(), [], [], [f"unsupported type: {typ}"])
 
-    event_id = get_event_class_parent(context["event"].id, model_class)
+    event_id = get_event_class_parent(context["event"].id, model_class, context=context)
     existing = set(model_class.objects.filter(event_id=event_id, deleted__isnull=True).values_list("number", flat=True))
 
     creates, updates, skips = [], [], []
@@ -303,7 +303,7 @@ def _preview_writing(context: dict, df: pd.DataFrame, typ: str) -> dict:
 
 
 def _preview_questtype(context: dict, df: pd.DataFrame) -> dict:
-    event_id = get_event_class_parent(context["event"].id, QuestType)
+    event_id = get_event_class_parent(context["event"].id, QuestType, context=context)
     existing = set(QuestType.objects.filter(event_id=event_id, deleted__isnull=True).values_list("name", flat=True))
 
     creates, updates, skips = [], [], []
@@ -316,7 +316,7 @@ def _preview_questtype(context: dict, df: pd.DataFrame) -> dict:
 
 
 def _preview_abilities(context: dict, df: pd.DataFrame) -> dict:
-    event_id = get_event_class_parent(context["event"].id, AbilityExp)
+    event_id = get_event_class_parent(context["event"].id, AbilityExp, context=context)
     # Names are matched case-insensitively, as the execution does
     existing = {
         name.lower()
@@ -333,7 +333,7 @@ def _preview_abilities(context: dict, df: pd.DataFrame) -> dict:
 
 
 def _preview_criterions(context: dict, df: pd.DataFrame) -> dict:
-    event_id = get_event_class_parent(context["event"].id, CriterionExp)
+    event_id = get_event_class_parent(context["event"].id, CriterionExp, context=context)
     existing = set(
         CriterionExp.objects.filter(event_id=event_id, deleted__isnull=True).values_list("number", flat=True)
     )
@@ -357,7 +357,7 @@ def _preview_criterions(context: dict, df: pd.DataFrame) -> dict:
 
 
 def _preview_deliveries(context: dict, df: pd.DataFrame) -> dict:
-    event_id = get_event_class_parent(context["event"].id, DeliveryExp)
+    event_id = get_event_class_parent(context["event"].id, DeliveryExp, context=context)
     # Names are matched case-insensitively, as the execution does
     existing = {
         name.lower()
@@ -399,7 +399,7 @@ def _preview_registration(context: dict, df: pd.DataFrame) -> dict:
 
 
 def _preview_plot_rels(context: dict, df: pd.DataFrame) -> dict:
-    event_id = get_event_class_parent(context["event"].id, Plot)
+    event_id = get_event_class_parent(context["event"].id, Plot, context=context)
     existing = set(
         PlotCharacterRel.objects.filter(plot__event_id=event_id).values_list("plot__name", "character__name")
     )
@@ -415,7 +415,7 @@ def _preview_plot_rels(context: dict, df: pd.DataFrame) -> dict:
 
 
 def _preview_relationships(context: dict, df: pd.DataFrame) -> dict:
-    event_id = get_event_class_parent(context["event"].id, Character)
+    event_id = get_event_class_parent(context["event"].id, Character, context=context)
     existing = set(Relationship.objects.filter(source__event_id=event_id).values_list("source__name", "target__name"))
 
     creates, updates, skips = [], [], []
@@ -497,7 +497,7 @@ def _exec_features(context: dict, df: pd.DataFrame) -> list[str]:
 
 
 def _exec_character_config(context: dict, df: pd.DataFrame) -> list[str]:
-    event_id = get_event_class_parent(context["event"].id, Character)
+    event_id = get_event_class_parent(context["event"].id, Character, context=context)
     char_map = {c.number: c for c in Character.objects.filter(event_id=event_id, deleted__isnull=True)}
 
     logs: list[str] = []
@@ -525,7 +525,7 @@ def _exec_character_config(context: dict, df: pd.DataFrame) -> list[str]:
 
 
 def _exec_questtype(context: dict, df: pd.DataFrame) -> list[str]:
-    event_id = get_event_class_parent(context["event"].id, QuestType)
+    event_id = get_event_class_parent(context["event"].id, QuestType, context=context)
     event = context["event"]
     logs: list[str] = []
     for _idx, row in df.iterrows():

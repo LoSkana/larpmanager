@@ -921,7 +921,7 @@ def get_player_characters_ids(member: Member, event_id: int, context: dict | Non
     """
     player_characters_dict = (context or {}).get("player_characters_dict")
     if player_characters_dict is not None:
-        entries = player_characters_dict.get(get_event_class_parent(event_id, Character), [])
+        entries = player_characters_dict.get(get_event_class_parent(event_id, Character, context=context), [])
         return {entry[0] for entry in entries}
 
     return set(get_player_characters(member, event_id).values_list("id", flat=True))
@@ -945,10 +945,10 @@ def get_player_pending_characters(member: Member, event_id: int, context: dict |
 
     player_characters_dict = (context or {}).get("player_characters_dict")
     if player_characters_dict is not None:
-        entries = player_characters_dict.get(get_event_class_parent(event_id, Character), [])
+        entries = player_characters_dict.get(get_event_class_parent(event_id, Character, context=context), [])
         return [(uuid, name) for _id, uuid, name, status in entries if status in pending_statuses]
 
-    query = get_event_elements(event_id, Character).filter(player=member, status__in=pending_statuses)
+    query = get_event_elements(event_id, Character, context=context).filter(player=member, status__in=pending_statuses)
     return list(query.values_list("uuid", "name"))
 
 

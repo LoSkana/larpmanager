@@ -88,7 +88,7 @@ def orga_characters_pdf(request: HttpRequest, event_slug: str) -> HttpResponse:
         form = EventCharactersPdfForm(instance=context["event"])
 
     # Retrieve ordered character list for the event
-    context["list"] = get_event_elements(context["event"].id, Character).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, Character, context=context).order_by("number")
 
     # Add form to context for template rendering
     context["form"] = form
@@ -145,7 +145,7 @@ def orga_characters_pdf_bulk(request: HttpRequest, event_slug: str) -> HttpRespo
         "handout": Handout,
     }
     for key_name, value_type in mappings.items():
-        for element in get_event_elements(context["event"].id, value_type):
+        for element in get_event_elements(context["event"].id, value_type, context=context):
             # Create dict entry with name and type for template rendering
             context["list"][f"{key_name}_{element.id}"] = {"name": element.name, "type": value_type._meta.model_name}  # noqa: SLF001  # Django model metadata
 
@@ -169,7 +169,7 @@ def orga_pdf_regenerate(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_characters_pdf")
 
     # Get all characters associated with the event
-    chs = get_event_elements(context["event"].id, Character)
+    chs = get_event_elements(context["event"].id, Character, context=context)
 
     # Iterate through all future runs of the event
     for run in Run.objects.filter(event=context["event"], end__gte=timezone.now()):

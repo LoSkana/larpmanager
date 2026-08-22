@@ -994,7 +994,7 @@ def get_fact(factions_queryset: QuerySet[Faction]) -> list[dict[str, Any]]:
 
 def get_factions(context: dict) -> None:
     """Populate context with faction data organized by type."""
-    fcs = get_event_elements(context["event"].id, Faction)
+    fcs = get_event_elements(context["event"].id, Faction, context=context)
     # Get primary factions ordered by number
     context["sec"] = get_fact(fcs.filter(typ=FactionType.PRIM).order_by("number"))
     # Get transversal factions ordered by number
@@ -1252,9 +1252,9 @@ def export(request: HttpRequest, event_slug: str, export_type: Any) -> Any:
     """
     context = get_event(request, event_slug)
     if export_type == "char":
-        lst = get_event_elements(context["event"].id, Character).order_by("number")
+        lst = get_event_elements(context["event"].id, Character, context=context).order_by("number")
     elif export_type == "faction":
-        lst = get_event_elements(context["event"].id, Faction).order_by("number")
+        lst = get_event_elements(context["event"].id, Faction, context=context).order_by("number")
     elif export_type == "quest":
         lst = Quest.objects.filter(event=context["event"]).order_by("number")
     elif export_type == "trait":

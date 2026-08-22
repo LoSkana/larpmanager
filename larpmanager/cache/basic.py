@@ -92,8 +92,15 @@ def event_basic_cache_key(event_id: int) -> str:
     return f"event_basic_{event_id}"
 
 
-def get_event_basic_cache(event_id: int) -> dict:
-    """Get an event basic data from cache if available."""
+def get_event_basic_cache(event_id: int, *, context: dict | None = None) -> dict:
+    """Get an event basic data from cache if available, memoizing the result in context if provided."""
+    if context is not None:
+        ctx_key = "event_basic_cache"
+        if ctx_key not in context:
+            context[ctx_key] = {}
+        if event_id in context[ctx_key]:
+            return context[ctx_key][event_id]
+
     cache_key = event_basic_cache_key(event_id)
     data = cache.get(cache_key)
     if data is None:
@@ -110,6 +117,10 @@ def get_event_basic_cache(event_id: int) -> dict:
             "currency_symbol": association_cache["currency_symbol"],
         }
         cache.set(cache_key, data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    if context is not None:
+        context["event_basic_cache"][event_id] = data
+
     return data
 
 
@@ -123,13 +134,20 @@ def run_basic_cache_key(run_id: int) -> str:
     return f"run_basic_{run_id}"
 
 
-def get_run_basic_cache(run_id: int) -> RunBasicCache:
-    """Get a run basic data from cache if available."""
+def get_run_basic_cache(run_id: int, *, context: dict | None = None) -> RunBasicCache:
+    """Get a run basic data from cache if available, memoizing the result in context if provided."""
+    if context is not None:
+        ctx_key = "run_basic_cache"
+        if ctx_key not in context:
+            context[ctx_key] = {}
+        if run_id in context[ctx_key]:
+            return context[ctx_key][run_id]
+
     cache_key = run_basic_cache_key(run_id)
     data = cache.get(cache_key)
     if data is None:
         event_id, number, media_token = Run.all_objects.values_list("event_id", "number", "media_token").get(id=run_id)
-        event_cache = get_event_basic_cache(event_id)
+        event_cache = get_event_basic_cache(event_id, context=context)
         data = {
             "event_id": event_id,
             "association_id": event_cache["association_id"],
@@ -141,6 +159,10 @@ def get_run_basic_cache(run_id: int) -> RunBasicCache:
             "media_token": media_token,
         }
         cache.set(cache_key, data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    if context is not None:
+        context["run_basic_cache"][run_id] = data
+
     return data
 
 

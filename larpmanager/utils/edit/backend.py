@@ -940,7 +940,7 @@ def backend_order(
 
     """
     # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or get_event_elements(context["event"].id, model_class)
+    elements = elements or get_event_elements(context["event"].id, model_class, context=context)
 
     current_element = elements.get(uuid=element) if isinstance(element, str) else element
 
@@ -983,7 +983,7 @@ def backend_order(
 
 def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> None:
     """Bulk-set order field from a UUID list using index * 10 spacing."""
-    event = get_event_class_parent(context["event"].id, model_class)
+    event = get_event_class_parent(context["event"].id, model_class, context=context)
     objects = {str(obj.uuid): obj for obj in model_class.objects.filter(event=event, uuid__in=uuids)}
     to_update = []
     for i, uuid in enumerate(uuids):

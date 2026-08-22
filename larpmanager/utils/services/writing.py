@@ -184,7 +184,9 @@ def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> Json
 
     # Retrieve the writing element from database using parent event context
     try:
-        writing_element = typ.objects.get(uuid=element_uuid, event_id=get_event_class_parent(context["event"].id, typ))
+        writing_element = typ.objects.get(
+            uuid=element_uuid, event_id=get_event_class_parent(context["event"].id, typ, context=context)
+        )
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -430,7 +432,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
     # Determine if this is a Writing model and set up basic query structure
     is_writing_model = issubclass(model_type, Writing)
     deferred_text_fields = ["teaser", "text"]
-    context["list"] = model_type.objects.filter(event_id=get_event_class_parent(event.id, model_type))
+    context["list"] = model_type.objects.filter(event_id=get_event_class_parent(event.id, model_type, context=context))
 
     # Optimize query with select_related for Writing models with progress tracking
     if is_writing_model and hasattr(model_type, "progress"):
@@ -468,7 +470,9 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
         element_type: Writing element model class
 
     """
-    cached_text_fields = get_cache_text_field(element_type, get_event_class_parent(context["event"].id, element_type))
+    cached_text_fields = get_cache_text_field(
+        element_type, get_event_class_parent(context["event"].id, element_type, context=context)
+    )
     for element in context["list"]:
         if element.uuid not in cached_text_fields:
             continue

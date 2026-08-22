@@ -207,7 +207,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
 
     # Attempt to retrieve character using the provided access token
     try:
-        char = get_event_elements(context["event"].id, Character).get(access_token=code)
+        char = get_event_elements(context["event"].id, Character, context=context).get(access_token=code)
     except ObjectDoesNotExist as err:
         msg = "invalid code"
         raise Http404(msg) from err
@@ -1197,7 +1197,7 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Get character data
-    context["character"] = get_event_elements(context["event"].id, Character).get(uuid=character_uuid)
+    context["character"] = get_event_elements(context["event"].id, Character, context=context).get(uuid=character_uuid)
 
     inventories = {}
     for inv in context["character"].inventory.all():

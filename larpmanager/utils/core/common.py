@@ -79,7 +79,7 @@ def feature_visible(feature_slug: str, features: dict | set, allowed_sidebar: li
     return feature_slug in features and (not allowed_sidebar or feature_slug in allowed_sidebar)
 
 
-def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str) -> int:
+def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str, *, context: dict | None = None) -> int:
     """Get the event id to use for inheriting elements of a specific model class.
 
     Determines whether to use the parent event's id or the current event's id
@@ -106,16 +106,17 @@ def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str) ->
     ]
 
     if model_class in inheritable_elements:
-        parent_id = get_event_basic_cache(event_id)["parent_id"]
-        if parent_id and not get_event_config(event_id, f"campaign_{model_class}_indep"):
+        parent_id = get_event_basic_cache(event_id, context=context)["parent_id"]
+        if parent_id and not get_event_config(event_id, f"campaign_{model_class}_indep", context=context):
             return parent_id
 
     return event_id
 
 
-def get_event_elements(event_id: int, element_model_class: type[BaseModel]) -> QuerySet:
+def get_event_elements(event_id: int, element_model_class: type[BaseModel], *, context: dict | None = None) -> QuerySet:
     """Get ordered elements of specified type for the event, following inheritance rules."""
-    queryset = element_model_class.objects.filter(event_id=get_event_class_parent(event_id, element_model_class))
+    parent_id = get_event_class_parent(event_id, element_model_class, context=context)
+    queryset = element_model_class.objects.filter(event_id=parent_id)
     if hasattr(element_model_class, "number"):
         queryset = queryset.order_by("number")
     return queryset
@@ -377,7 +378,7 @@ def get_element_event(
     if hasattr(model_class, "association"):
         filters["association_id"] = context["association_id"]
     if hasattr(model_class, "event"):
-        filters["event_id"] = get_event_class_parent(context["event"].id, model_class)
+        filters["event_id"] = get_event_class_parent(context["event"].id, model_class, context=context)
 
     return get_object_uuid(
         model_class,

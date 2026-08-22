@@ -372,7 +372,7 @@ def registrations_popup(request: HttpRequest, context: dict) -> Any:
 
         # Get question from cache instead of DB
         cached_questions = get_cached_registration_questions(
-            get_event_class_parent(context["event"].id, RegistrationQuestion)
+            get_event_class_parent(context["event"].id, RegistrationQuestion, context=context)
         )
         question = None
         for q in cached_questions:

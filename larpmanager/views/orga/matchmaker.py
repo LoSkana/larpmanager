@@ -76,7 +76,8 @@ def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpRespon
         )
 
     faction_names_by_uuid = {
-        str(uuid): name for uuid, name in get_event_elements(context["event"].id, Faction).values_list("uuid", "name")
+        str(uuid): name
+        for uuid, name in get_event_elements(context["event"].id, Faction, context=context).values_list("uuid", "name")
     }
 
     rows = []

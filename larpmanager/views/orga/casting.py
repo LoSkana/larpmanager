@@ -216,7 +216,9 @@ def get_casting_choices_characters(
     allowed_character_uuids = []
     if "faction" in context["features"]:
         # Get primary factions for the event
-        primary_factions_query = get_event_elements(context["event"].id, Faction).filter(typ=FactionType.PRIM)
+        primary_factions_query = get_event_elements(context["event"].id, Faction, context=context).filter(
+            typ=FactionType.PRIM
+        )
         factioned_character_uuids = set()
         for faction_element in primary_factions_query.order_by("number"):
             faction_char_uuids = [str(char.uuid) for char in faction_element.characters.all()]
@@ -230,7 +232,8 @@ def get_casting_choices_characters(
         # Include characters with no primary faction if the "no faction" pseudo-choice is selected
         if NO_FACTION_KEY in filtering_options["factions"]:
             all_character_uuids = {
-                str(char.uuid) for char in get_event_elements(context["event"].id, Character).exclude(hide=True)
+                str(char.uuid)
+                for char in get_event_elements(context["event"].id, Character, context=context).exclude(hide=True)
             }
             allowed_character_uuids.extend(all_character_uuids - factioned_character_uuids)
 
@@ -240,7 +243,7 @@ def get_casting_choices_characters(
     )
 
     # Process all characters for the event (excluding hidden ones)
-    characters_query = get_event_elements(context["event"].id, Character)
+    characters_query = get_event_elements(context["event"].id, Character, context=context)
     for character in characters_query.exclude(hide=True):
         char_uuid = str(character.uuid)
 

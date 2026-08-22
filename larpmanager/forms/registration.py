@@ -1002,7 +1002,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         taken_characters = taken_characters - mine
         self.fields["characters_new"] = forms.ModelMultipleChoiceField(
             label=_("Characters"),
-            queryset=get_event_elements(self.params["run"].event_id, Character).exclude(pk__in=taken_characters),
+            queryset=get_event_elements(self.params["run"].event_id, Character, context=self.params).exclude(
+                pk__in=taken_characters
+            ),
             widget=S2WidgetMulti(search_fields=["name__icontains", "number__icontains"]),
             required=False,
         )
@@ -1393,7 +1395,10 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             self.delete_field("factions")
         elif "factions" in self.fields:
             self.fields["factions"].choices = [
-                (m.id, str(m)) for m in get_event_elements(self.params["run"].event_id, Faction).order_by("number")
+                (m.id, str(m))
+                for m in get_event_elements(self.params["run"].event_id, Faction, context=self.params).order_by(
+                    "number"
+                )
             ]
 
         if "gift" not in features:

@@ -310,7 +310,9 @@ class CharacterForm(WritingForm, BaseWritingForm):
         if "faction" not in self.params.get("features"):
             return
 
-        queryset = get_event_elements(self.params.get("run").event_id, Faction).filter(selectable=True)
+        queryset = get_event_elements(self.params.get("run").event_id, Faction, context=self.params).filter(
+            selectable=True
+        )
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
@@ -358,7 +360,7 @@ class CharacterForm(WritingForm, BaseWritingForm):
         new = set(self.cleaned_data["factions_list"].values_list("pk", flat=True))
 
         # Get the faction event context for filtering existing factions
-        faction_event = get_event_class_parent(self.params.get("run").event_id, Faction)
+        faction_event = get_event_class_parent(self.params.get("run").event_id, Faction, context=self.params)
 
         # Get current faction IDs associated with the instance
         # For non-orga users, only consider selectable factions to preserve staff-assigned non-selectable factions
@@ -856,7 +858,7 @@ class OrgaCharacterForm(CharacterForm):
 
         if get_event_config(self.params["event"].id, "casting_mirror", context=self.params):
             if "mirror" in self.fields:
-                characters_query = get_event_elements(self.params["run"].event_id, Character).all()
+                characters_query = get_event_elements(self.params["run"].event_id, Character, context=self.params).all()
                 character_choices = [(character.uuid, character.name) for character in characters_query]
                 self.fields["mirror"].choices = [("", _("--- NOT ASSIGNED ---")), *character_choices]
         else:
@@ -892,7 +894,7 @@ class OrgaCharacterForm(CharacterForm):
 
         self.fields["plots"] = forms.ModelMultipleChoiceField(
             label="Plots",
-            queryset=get_event_elements(self.params["event"].id, Plot),
+            queryset=get_event_elements(self.params["event"].id, Plot, context=self.params),
             required=False,
             widget=EventPlotS2WidgetMulti,
         )
@@ -954,7 +956,7 @@ class OrgaCharacterForm(CharacterForm):
             return
 
         # Add / remove plots, restricted to the plots of this event (they are not inherited)
-        plot_event = get_event_class_parent(self.params["event"].id, Plot)
+        plot_event = get_event_class_parent(self.params["event"].id, Plot, context=self.params)
         selected = set(self.cleaned_data.get("plots", []))
         current = set(Plot.objects.filter(plotcharacterrel__character=instance, event=plot_event))
 
@@ -987,7 +989,7 @@ class OrgaCharacterForm(CharacterForm):
         # experience ability
         self.fields["exp_ability_list"] = forms.ModelMultipleChoiceField(
             label=_("Abilities"),
-            queryset=get_event_elements(self.params["run"].event_id, AbilityExp),
+            queryset=get_event_elements(self.params["run"].event_id, AbilityExp, context=self.params),
             widget=S2WidgetMulti(search_fields=["name__icontains"]),
             required=False,
         )
@@ -998,7 +1000,7 @@ class OrgaCharacterForm(CharacterForm):
         # delivery list
         self.fields["exp_delivery_list"] = forms.ModelMultipleChoiceField(
             label=_("Award"),
-            queryset=get_event_elements(self.params["run"].event_id, DeliveryExp),
+            queryset=get_event_elements(self.params["run"].event_id, DeliveryExp, context=self.params),
             widget=S2WidgetMulti(search_fields=["name__icontains"]),
             required=False,
         )
@@ -1029,7 +1031,7 @@ class OrgaCharacterForm(CharacterForm):
         if "faction" not in self.params["features"]:
             return
 
-        queryset = get_event_elements(self.params["run"].event_id, Faction)
+        queryset = get_event_elements(self.params["run"].event_id, Faction, context=self.params)
 
         self.fields["factions_list"] = forms.ModelMultipleChoiceField(
             queryset=queryset,
@@ -1057,7 +1059,9 @@ class OrgaCharacterForm(CharacterForm):
         if "relationships" not in self.params["features"] or "relationships" not in self.params:
             return
 
-        uuid_to_id = dict(get_event_elements(self.params["event"].id, Character).values_list("uuid", "id"))
+        uuid_to_id = dict(
+            get_event_elements(self.params["event"].id, Character, context=self.params).values_list("uuid", "id")
+        )
 
         rel_data = {k: v for k, v in self.data.items() if k.startswith("rel_") and not k.startswith("rel_tags_")}
         # Only process relationships if relationship fields are present in the form
@@ -1159,7 +1163,9 @@ class OrgaCharacterForm(CharacterForm):
             return {}
 
         prefix = "rel_tags_"
-        tag_by_uuid = {tag.uuid: tag for tag in get_event_elements(self.params["event"].id, RelationshipTag)}
+        tag_by_uuid = {
+            tag.uuid: tag for tag in get_event_elements(self.params["event"].id, RelationshipTag, context=self.params)
+        }
         posted: dict[str, list] = {}
         for key in self.data:
             if not key.startswith(prefix):
