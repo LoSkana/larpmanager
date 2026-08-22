@@ -26,7 +26,7 @@ from django.db.models import Prefetch, Q
 from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.cache.accounting import clear_registration_accounting_cache
-from larpmanager.cache.basic import get_run_basic_cache
+from larpmanager.cache.basic import get_event_basic_cache, get_run_basic_cache
 from larpmanager.cache.bulk import reset_bulk_options_cache
 from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import clear_event_cache_all_runs, clear_run_cache_and_media
@@ -69,6 +69,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.auth.permission import has_event_permission
+from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.services.inventory import generate_base_inventories
 
 if TYPE_CHECKING:
@@ -103,14 +104,14 @@ def get_event_filter_characters(context: dict, character_filters: Any) -> None: 
         character_registrations[relation.character_id] = relation.registration
 
     characters_by_id = {}
-    for character in context["event"].get_elements(Character).filter(hide=False):
+    for character in get_event_elements(context["event"].id, Character).filter(hide=False):
         if character.id in character_registrations:
             character.registration = character_registrations[character.id]
             character.member = character_registrations[character.id].member
         characters_by_id[character.id] = character
 
     if "faction" in context["features"] and context["show_faction"]:
-        faction_query = context["event"].get_elements(Faction).filter(typ=FactionType.PRIM).order_by("order")
+        faction_query = get_event_elements(context["event"].id, Faction).filter(typ=FactionType.PRIM).order_by("order")
         character_prefetch = Prefetch(
             "characters",
             queryset=Character.objects.filter(hide=False).order_by("number"),
@@ -176,8 +177,7 @@ def prepare_campaign_event_data(event_instance: Any) -> None:
     """
     if event_instance.pk:
         try:
-            previous_event_instance = Event.objects.get(pk=event_instance.pk)
-            event_instance._old_parent_id = previous_event_instance.parent_id  # noqa: SLF001  # Internal flag for parent change detection
+            event_instance._old_parent_id = get_event_basic_cache(event_instance.pk)["parent_id"]  # noqa: SLF001  # Internal flag for parent change detection
         except ObjectDoesNotExist:
             event_instance._old_parent_id = None  # noqa: SLF001  # Internal flag for parent change detection
     else:
@@ -211,9 +211,9 @@ def create_default_event_setup(event: Any) -> None:
 
     save_event_character_form(event_features, event)
 
-    if "experience" in event_features and not event.get_elements(SystemExp).exists():
-        target = event.get_class_parent(SystemExp)
-        SystemExp.objects.get_or_create(event=target, number=1, defaults={"name": "XP"})
+    if "experience" in event_features and not get_event_elements(event.id, SystemExp).exists():
+        target_id = get_event_class_parent(event.id, SystemExp)
+        SystemExp.objects.get_or_create(event_id=target_id, number=1, defaults={"name": "XP"})
 
     clear_event_features_cache(event.id)
 
@@ -329,7 +329,7 @@ def _init_writing_element(
 
     """
     for applicable in question_applicables:
-        existing_qs = instance.get_elements(WritingQuestion).filter(applicable=applicable)
+        existing_qs = get_event_elements(instance.id, WritingQuestion).filter(applicable=applicable)
 
         if not existing_qs.exists():
             writing_questions = [
@@ -397,7 +397,9 @@ def _init_character_form_questions(
 
     """
     # Get existing character questions and their types
-    existing_questions = instance.get_elements(WritingQuestion).filter(applicable=QuestionApplicable.CHARACTER)
+    existing_questions = get_event_elements(instance.id, WritingQuestion).filter(
+        applicable=QuestionApplicable.CHARACTER
+    )
     existing_types = set(existing_questions.values_list("typ", flat=True).distinct())
 
     # Get all available question types, excluding custom ones
@@ -474,7 +476,7 @@ def save_event_registration_form(features: dict, instance: object) -> None:
     basic_tps = BaseQuestionType.get_basic_types()
 
     # Query existing questions and get their types
-    que = instance.get_elements(RegistrationQuestion)
+    que = get_event_elements(instance.id, RegistrationQuestion)
     types = set(que.values_list("typ", flat=True).distinct())
 
     # Get all available question type choices and filter out basic types
@@ -527,7 +529,7 @@ def save_event_registration_form(features: dict, instance: object) -> None:
     # Default matchmaker question: when the matchmaker feature is active and the
     # event has no matchmaker-applicable question yet, add a faction preference one
     if "matchmaker" in features:
-        matchmaker_questions = instance.get_elements(RegistrationQuestion).filter(
+        matchmaker_questions = get_event_elements(instance.id, RegistrationQuestion).filter(
             applicable=RegistrationQuestionApplicable.MATCHMAKER,
         )
         if not matchmaker_questions.exists():
@@ -640,68 +642,73 @@ def assign_previous_campaign_character(registration: Any) -> None:
     new_character_relation.save()
 
 
-def reset_all_run(event: Event, run: Run) -> None:
-    """Clear all caches for a given event and run.
+def reset_all_run(run_id: int) -> None:
+    """Clear all caches for a given run and its event.
 
     This function comprehensively clears all cached data related to an event
     and its run, including character data, features, configurations, registrations,
     accounting, and role information.
 
     Args:
-        event: Event instance
-        run: Run instance
+        run_id: Run id
 
     """
+    run_cache = get_run_basic_cache(run_id)
+    event_id = run_cache["event_id"]
+    run_slug = run_cache["slug"]
+    if run_cache["number"] > 1:
+        run_slug += f"-{run_cache['number']}"
+
     # Clear run-specific cache and associated media files
-    clear_run_cache_and_media(run)
-    reset_cache_run(event.association_id, run.get_slug())
+    clear_run_cache_and_media(run_id)
+    reset_cache_run(run_cache["association_id"], run_slug)
 
     # Clear event-level feature and configuration caches
-    clear_event_features_cache(event.id)
-    clear_run_event_links_cache(event)
+    clear_event_features_cache(event_id)
+    clear_run_event_links_cache(event_id)
 
     # Clear event button cache
-    clear_event_button_cache(event.id)
+    clear_event_button_cache(event_id)
 
     # Clear event config cache
-    reset_event_configs(event.id)
+    reset_event_configs(event_id)
 
     # Clear run config cache
-    reset_run_configs(run.id)
-    reset_cache_config_run(run)
+    reset_run_configs(run_id)
+    reset_cache_config_run(run_id)
 
     # Clear question cache
-    clear_writing_questions_cache(run.event_id)
-    clear_registration_questions_cache(run.event_id)
+    clear_writing_questions_cache(event_id)
+    clear_registration_questions_cache(event_id)
 
     # Clear registration-related caches
-    clear_registration_counts_cache(run.id)
-    clear_registration_accounting_cache(run.id)
-    clear_event_fields_cache(event.id)
-    clear_event_relationships_cache(event.id)
-    clear_event_exp_cache(get_exp_effective_event_id(event))
-    clear_registration_tickets_cache(event.id)
+    clear_registration_counts_cache(run_id)
+    clear_registration_accounting_cache(run_id)
+    clear_event_fields_cache(event_id)
+    clear_event_relationships_cache(event_id)
+    clear_event_exp_cache(get_exp_effective_event_id(event_id))
+    clear_registration_tickets_cache(event_id)
 
     # Clear event text caches for every type/language
-    clear_event_text_cache(event.id)
+    clear_event_text_cache(event_id)
 
     # Clear event role caches
-    for event_role_id in EventRole.objects.filter(event_id=event.id).values_list("id", flat=True):
+    for event_role_id in EventRole.objects.filter(event_id=event_id).values_list("id", flat=True):
         remove_event_role_cache(event_role_id)
 
-    clear_event_cache_all_runs(event)
+    clear_event_cache_all_runs(event_id)
 
     # Clear text fields cache
-    reset_text_fields_cache(run)
+    reset_text_fields_cache(event_id, run_id)
 
     # Clear widgets
-    clear_widget_cache(run.id)
+    clear_widget_cache(run_id)
 
     # Clear orga config field definitions cache (derived from active features)
-    reset_orga_configs_cache(event.id)
+    reset_orga_configs_cache(event_id)
 
     # Clear bulk
-    reset_bulk_options_cache(run.event_id)
+    reset_bulk_options_cache(event_id)
 
 
 def on_event_features_m2m_changed(
@@ -728,5 +735,5 @@ def init_features(event: Event, features_dict: list[str]) -> None:
     """Perform initializazion on new features activation."""
     if "inventory" in features_dict:
         # Generate inventories for all existing characters in this event
-        for character in event.get_elements(Character):
+        for character in get_event_elements(event.id, Character):
             generate_base_inventories(character, check=True)

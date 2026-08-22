@@ -47,6 +47,7 @@ from larpmanager.models.registration import (
     RegistrationCharacterRel,
     RegistrationTicket,
 )
+from larpmanager.utils.core.common import get_event_class_parent
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Event, Run
@@ -142,11 +143,11 @@ def transfer_registration_between_runs(
             _delete_original_registration_data(registration)
 
     # Refresh cache for target run (where registration was moved/copied to)
-    refresh_member_accounting_cache(target_run, member_id)
+    refresh_member_accounting_cache(target_run.id, member_id)
 
     # If moving (not copying), refresh cache for source run as well
     if move_registration:
-        refresh_member_accounting_cache(source_run, member_id)
+        refresh_member_accounting_cache(source_run.id, member_id)
 
     return new_registration
 
@@ -250,7 +251,7 @@ def _find_matching_question(source_question: RegistrationQuestion, target_event:
     3. Match by name only
     """
     # Get question by type and name
-    target_questions = get_cached_registration_questions(target_event)
+    target_questions = get_cached_registration_questions(target_event.id)
     exact_match = next(
         (q for q in target_questions if q["typ"] == source_question.typ and q["name"] == source_question.name), None
     )
@@ -300,9 +301,9 @@ def _transfer_character_relations(source_reg: Registration, target_reg: Registra
     for relation in source_relations:
         # Check that the character is available in the destination event
         # (considering campaigns that share characters)
-        character_event = target_reg.run.event.get_class_parent("character")
+        character_event_id = get_event_class_parent(target_reg.run.event_id, "character")
 
-        if relation.character.event_id == character_event.id:
+        if relation.character.event_id == character_event_id:
             RegistrationCharacterRel.objects.create(
                 registration=target_reg,
                 character=relation.character,
@@ -482,9 +483,9 @@ def validate_transfer_feasibility(registration: Registration, target_run: Run) -
     _validate_ticket(registration, result, target_run)
 
     # Check question matching
-    source_questions = len(get_cached_registration_questions(registration.run.event))
+    source_questions = len(get_cached_registration_questions(registration.run.event_id))
 
-    target_questions = len(get_cached_registration_questions(target_run.event))
+    target_questions = len(get_cached_registration_questions(target_run.event_id))
 
     if source_questions != target_questions:
         result["info"].append(f"Number of questions differs: {source_questions} -> {target_questions}")
@@ -533,8 +534,8 @@ def _validate_character(registration: Registration, result: dict[str, list[str]]
     # Check character compatibility
     source_characters = registration.characters.all()
     if source_characters:
-        character_event = target_run.event.get_class_parent("character")
-        incompatible_chars = [char.name for char in source_characters if char.event_id != character_event.id]
+        character_event_id = get_event_class_parent(target_run.event_id, "character")
+        incompatible_chars = [char.name for char in source_characters if char.event_id != character_event_id]
 
         if incompatible_chars:
             result["warnings"].append(f"Characters not available in target event: {', '.join(incompatible_chars)}")
