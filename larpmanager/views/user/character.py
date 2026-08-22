@@ -64,7 +64,7 @@ from larpmanager.models.writing import (
 )
 from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
+from larpmanager.utils.core.common import get_element, get_element_event, get_event_elements, get_player_relationship
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
@@ -207,7 +207,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
 
     # Attempt to retrieve character using the provided access token
     try:
-        char = context["event"].get_elements(Character).get(access_token=code)
+        char = get_event_elements(context["event"].id, Character).get(access_token=code)
     except ObjectDoesNotExist as err:
         msg = "invalid code"
         raise Http404(msg) from err
@@ -748,7 +748,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
     """
     context = get_event_context(request, event_slug, include_status=True, signup=True, feature_slug="user_character")
 
-    context["writing_field_names"] = get_writing_field_names(context["event"], QuestionApplicable.CHARACTER)
+    context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.CHARACTER)
 
     context["list"] = get_player_characters(context["member"], context["event"])
     # add character configs
@@ -763,7 +763,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
                 "used_key": f"exp_used_{sys.uuid}",
                 "avail_key": f"exp_avail_{sys.uuid}",
             }
-            for sys in get_event_exp_systems(context["event"])
+            for sys in get_event_exp_systems(context["event"].id)
             if not sys.hidden
         ]
 
@@ -893,7 +893,7 @@ def get_options_dependencies(context: dict) -> None:
              "questions" mappings.
 
     """
-    context["dependencies"] = get_character_dependencies(context["event"], context["features"])
+    context["dependencies"] = get_character_dependencies(context["event"].id, context["features"])
 
 
 def _get_character_assign_error(context: dict) -> str | None:
@@ -1044,7 +1044,7 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
             "used": char.addit.get(f"exp_used_{sys.uuid}", 0),
             "avail": char.addit.get(f"exp_avail_{sys.uuid}", 0),
         }
-        for sys in get_event_exp_systems(context["event"])
+        for sys in get_event_exp_systems(context["event"].id)
         if not sys.hidden
     ]
 
@@ -1197,7 +1197,7 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Get character data
-    context["character"] = context["event"].get_elements(Character).get(uuid=character_uuid)
+    context["character"] = get_event_elements(context["event"].id, Character).get(uuid=character_uuid)
 
     inventories = {}
     for inv in context["character"].inventory.all():

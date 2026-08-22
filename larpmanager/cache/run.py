@@ -33,6 +33,7 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
 from larpmanager.models.writing import Faction
+from larpmanager.utils.core.common import get_event_elements
 
 if TYPE_CHECKING:
     from larpmanager.models.association import Association
@@ -139,9 +140,9 @@ def on_event_pre_save_invalidate_cache(instance: Event) -> None:
             reset_cache_run(instance.association_id, run.get_slug())
 
 
-def reset_cache_config_run(run: Run) -> None:
+def reset_cache_config_run(run_id: int) -> None:
     """Delete cached configuration for a run."""
-    cache.delete(cache_config_run_key(run.id))
+    cache.delete(cache_config_run_key(run_id))
 
 
 def reset_cache_config_run_ids(run_ids: list[int]) -> None:
@@ -245,7 +246,7 @@ def init_cache_config_run(run: Run) -> dict:
 def on_run_post_save_reset_config_cache(instance: Run) -> None:
     """Handle run post-save cache reset."""
     if instance.pk:
-        reset_cache_config_run(instance)
+        reset_cache_config_run(instance.id)
 
 
 def on_event_post_save_reset_config_cache(instance: Event) -> None:
@@ -256,15 +257,15 @@ def on_event_post_save_reset_config_cache(instance: Event) -> None:
         reset_event_parent_cache(instance.pk)
 
 
-def update_visible_factions(event: Event) -> None:
+def update_visible_factions(event_id: int) -> None:
     """Check if there are visible factions with characters for nav display."""
     has_visible_factions = (
-        "faction" in get_event_features(event.id)
-        and event.get_elements(Faction)
+        "faction" in get_event_features(event_id)
+        and get_event_elements(event_id, Faction)
         .prefetch_related("characters")
         .exclude(name="")
         .annotate(char_count=Count("characters"))
         .filter(char_count__gt=0)
         .exists()
     )
-    save_single_config(event, "has_visible_factions", has_visible_factions)
+    save_single_config(Event.objects.get(pk=event_id), "has_visible_factions", has_visible_factions)

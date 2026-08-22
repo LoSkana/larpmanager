@@ -38,7 +38,7 @@ from larpmanager.models.casting import AssignmentTrait, Casting, CastingAvoid, Q
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_element
+from larpmanager.utils.core.common import get_element, get_event_elements
 from larpmanager.utils.core.exceptions import check_event_feature
 from larpmanager.utils.services.event import get_event_filter_characters
 from larpmanager.utils.users.registration import registration_status
@@ -104,7 +104,7 @@ def casting_characters(context: dict, registration: Registration) -> None:
     context["valid_element_ids"] = valid_character_uuids
 
     # Add faction filter for transversal faction types
-    context["faction_filter"] = context["event"].get_elements(Faction).filter(typ=FactionType.TRASV)
+    context["faction_filter"] = get_event_elements(context["event"].id, Faction).filter(typ=FactionType.TRASV)
 
 
 def casting_quest_traits(context: dict, typ: str) -> None:
@@ -782,7 +782,7 @@ def casting_history_characters(context: dict) -> None:
     context["cache"] = {}
 
     # Build character cache for quick lookup, excluding hidden characters
-    for character in context["event"].get_elements(Character).filter(hide=False).select_related("mirror"):
+    for character in get_event_elements(context["event"].id, Character).filter(hide=False).select_related("mirror"):
         context["cache"][str(character.uuid)] = character
 
     # Group casting preferences by member ID for efficient processing
