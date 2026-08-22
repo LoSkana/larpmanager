@@ -56,6 +56,7 @@ from django_ratelimit.core import is_ratelimited
 from django_ratelimit.decorators import ratelimit
 
 from larpmanager.cache.association_text import get_association_text
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.config import save_single_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.larpmanager import (
@@ -1203,7 +1204,7 @@ def get_run_lm_payment(run: Any) -> None:
         Modifies run object with features, active_registrations, and total attributes
 
     """
-    run.features = len(get_association_features(run.event.association_id)) + len(get_event_features(run.event_id))
+    run.features = len(get_association_features(get_run_association_id(run.id))) + len(get_event_features(run.event_id))
     run.active_registrations = (
         Registration.objects.filter(run__id=run.id, cancellation_date__isnull=True)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.WAITING, TicketTier.NPC])

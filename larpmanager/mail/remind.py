@@ -24,7 +24,7 @@ from django.utils.translation import activate, gettext_lazy as _
 
 from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
-from larpmanager.cache.basic import get_run_association_id
+from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.mail.templates import get_payment_info
 from larpmanager.models.access import get_event_organizers
 from larpmanager.models.association import AssociationTextType, get_url, hdr
@@ -152,7 +152,7 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
 
     """
     # Extract payment information and build payment URL
-    currency_symbol = registration.run.event.association.get_currency_symbol()
+    currency_symbol = get_run_basic_cache(registration.run_id)["currency_symbol"]
     amount_to_pay = f"{registration.quota:.2f}{currency_symbol}"
     days_until_deadline = registration.deadline
     base_payment_url = get_url("accounting/pay", registration.run.event)

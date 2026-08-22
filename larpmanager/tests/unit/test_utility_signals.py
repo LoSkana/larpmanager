@@ -113,7 +113,7 @@ class TestUtilitySignals(BaseTestCase):
         modifier_px.requirements.add(option)
 
         # Populate cache with the original option name
-        cached = get_event_exp_cache(event)
+        cached = get_event_exp_cache(event.id)
         rels = cached["modifiers"][modifier_px.id]["requirement_rels"]["list"]
         self.assertIn((option.uuid, "Original Name"), rels)
 
@@ -121,7 +121,7 @@ class TestUtilitySignals(BaseTestCase):
         option.name = "Renamed"
         option.save()
 
-        cached_after = get_event_exp_cache(event)
+        cached_after = get_event_exp_cache(event.id)
         rels_after = cached_after["modifiers"][modifier_px.id]["requirement_rels"]["list"]
         names_after = [name for _uuid, name in rels_after]
         self.assertIn("Renamed", names_after, f"modifier requirement_rels not refreshed after option save: {rels_after}")

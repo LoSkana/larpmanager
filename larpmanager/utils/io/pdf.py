@@ -72,7 +72,7 @@ from larpmanager.models.writing import (
     Handout,
 )
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_element, get_handout, get_now
+from larpmanager.utils.core.common import get_element, get_event_elements, get_handout, get_now
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.larpmanager.tasks import background_auto
 from larpmanager.utils.services.character import (
@@ -815,11 +815,11 @@ def print_run_bkg(association_slug: str, event_slug: str) -> None:
     print_profiles(context)
 
     # Print individual character sheets for all characters in the event
-    for character_uuid in context["run"].event.get_elements(Character).values_list("uuid", flat=True):
+    for character_uuid in get_event_elements(context["run"].event_id, Character).values_list("uuid", flat=True):
         print_character_go(context, character_uuid)
 
     # Print all handouts associated with the event
-    for handout_uuid in context["run"].event.get_elements(Handout).values_list("uuid", flat=True):
+    for handout_uuid in get_event_elements(context["run"].event_id, Handout).values_list("uuid", flat=True):
         print_handout_go(context, handout_uuid)
 
 
@@ -953,7 +953,7 @@ def build_friendly_bundle_bkg(association_slug: str, event_slug: str) -> None:
 
     try:
         with zipfile.ZipFile(zip_path_tmp, "w", zipfile.ZIP_DEFLATED) as zip_file:
-            for character in context["event"].get_elements(Character):
+            for character in get_event_elements(context["event"].id, Character):
                 try:
                     get_char_check(request, context, character.uuid, bypass_access_checks=True)
                     filepath = context["character"].get_sheet_friendly_filepath(run)
@@ -986,7 +986,7 @@ def print_all_friendly(context: dict, request: HttpRequest) -> HttpResponse:
     """
     zip_buffer = io.BytesIO()
     with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-        for character in context["event"].get_elements(Character):
+        for character in get_event_elements(context["event"].id, Character):
             try:
                 get_char_check(request, context, character.uuid, deny_public=True)
                 filepath = context["character"].get_sheet_friendly_filepath(context["run"])
@@ -1024,7 +1024,7 @@ def _handle_handouts(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
 
     """
     # Iterate through all handouts in the event
-    for handout in context["event"].get_elements(Handout):
+    for handout in get_event_elements(context["event"].id, Handout):
         # Check if this handout was selected by user
         if request.POST.get(f"handout_{handout.id}"):
             try:
@@ -1063,7 +1063,7 @@ def _bulk_factions(context: dict, request: HttpRequest, zip_file: zipfile.ZipFil
 
     """
     # Iterate through all factions in the event
-    for faction in context["event"].get_elements(Faction):
+    for faction in get_event_elements(context["event"].id, Faction):
         # Check if this faction was selected by user
         if request.POST.get(f"faction_{faction.id}"):
             try:
@@ -1120,7 +1120,7 @@ def _bulk_characters(context: dict, request: HttpRequest, zip_file: zipfile.ZipF
 
     """
     # Iterate through all characters in the event
-    for character in context["event"].get_elements(Character):
+    for character in get_event_elements(context["event"].id, Character):
         # Check if this character was selected by user
         if request.POST.get(f"character_{character.id}"):
             try:

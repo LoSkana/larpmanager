@@ -348,6 +348,7 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
     email_body = _("Personal code: <b>%(cod)s</b>") % {"cod": registration.uuid}
 
     # Add instructions for sharing the code and friend's discount amount
+    currency_symbol = get_run_basic_cache(registration.run_id)["currency_symbol"]
     email_body += (
         "<br /><br />"
         + _("Copy this code and share it with friends!")
@@ -358,14 +359,14 @@ def bring_friend_instructions(registration: Registration, context: dict) -> None
         )
         % {
             "amount_to": context["bring_friend_discount_to"],
-            "currency": registration.run.event.association.get_currency_symbol(),
+            "currency": currency_symbol,
         }
         + " "
         # Add information about the user's own discount benefit
         + _("For each of them, you will receive %(amount_from)s %(currency)s off your own event registration.")
         % {
             "amount_from": context["bring_friend_discount_from"],
-            "currency": registration.run.event.association.get_currency_symbol(),
+            "currency": currency_symbol,
         }
     )
 

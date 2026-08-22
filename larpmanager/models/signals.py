@@ -61,6 +61,7 @@ from larpmanager.cache.association_text import (
 )
 from larpmanager.cache.association_translation import clear_association_translation_cache
 from larpmanager.cache.basic import (
+    get_event_association_id,
     get_run_basic_cache,
     reset_association_basic_cache,
     reset_event_basic_cache,
@@ -584,7 +585,7 @@ def post_save_assignment_trait(
     Clears caches, sends notification emails, and manages PDF cleanup.
     """
     # Clear cached data and generated media for the run
-    clear_run_cache_and_media(instance.run)
+    clear_run_cache_and_media(instance.run_id)
 
     # Notify relevant users about trait assignment
     if created and instance.member:
@@ -759,7 +760,7 @@ def post_save_character(sender: type, instance: Character, created: bool, **kwar
     )
 
     # Update visible factions
-    update_visible_factions(instance.event)
+    update_visible_factions(instance.event_id)
 
     # Create a personal inventory for newly created characters
     generate_base_inventories(instance)
@@ -776,7 +777,7 @@ def post_softdelete_character_reset_rels(sender: type, instance: Character, **kw
     """Clear event and relationship caches when a character is soft deleted."""
     if is_clone_active():
         return
-    clear_event_cache_all_runs(instance.event)
+    clear_event_cache_all_runs(instance.event_id)
     clear_event_relationships_cache(instance.event_id)
 
 
@@ -827,9 +828,14 @@ def post_save_delivery_exp(
 def create_pools_for_inventory(sender: type, instance: Inventory, created: bool, **kwargs: Any) -> None:
     """Create pool balances for newly created character inventories based on event pool types."""
     if created:
-        for pool_type in PoolType.objects.filter(event=instance.event):
+        for pool_type in PoolType.objects.filter(event_id=instance.event_id):
             PoolBalance.objects.create(
-                inventory=instance, event=instance.event, number=1, name=pool_type.name, pool_type=pool_type, amount=0
+                inventory=instance,
+                event_id=instance.event_id,
+                number=1,
+                name=pool_type.name,
+                pool_type=pool_type,
+                amount=0,
             )
 
 
@@ -864,11 +870,11 @@ def post_save_event_update(sender: type, instance: Event, **kwargs: Any) -> None
 
     # Clear event-related caches to ensure fresh data
     reset_event_basic_cache(instance.id)
-    clear_event_cache_all_runs(instance)
+    clear_event_cache_all_runs(instance.id)
     clear_event_features_cache(instance.id)
 
     # Clear run and registration related caches
-    clear_run_event_links_cache(instance)
+    clear_run_event_links_cache(instance.id)
 
     # Clear registration counts and basic-info for all associated runs
     for run_id in get_event_run_ids(instance.id):
@@ -958,8 +964,9 @@ def post_save_event_role_reset(sender: type, instance: EventRole, **kwargs: Any)
     remove_event_role_cache(instance.pk)
 
     # Reset event links cache for all members assigned to this role
+    association_id = get_event_association_id(instance.event_id)
     for member in instance.members.all():
-        reset_event_links(member.id, instance.event.association_id)
+        reset_event_links(member.id, association_id)
 
     # Schedule publication crew sync (soft deletes are handled by post_softdelete)
     if instance.deleted is None:
@@ -1022,7 +1029,7 @@ def post_save_faction_reset_rels(sender: type, instance: Faction, **kwargs: Any)
     cleanup_faction_pdfs_on_save(instance)
 
     # Update visible factions config
-    update_visible_factions(instance.event)
+    update_visible_factions(instance.event_id)
 
 
 @receiver(post_softdelete, sender=Faction)
@@ -1030,7 +1037,7 @@ def post_softdelete_faction_reset_rels(sender: type, instance: Faction, **kwargs
     """Clear event cache and drop a soft deleted faction from the relationship cache."""
     if is_clone_active():
         return
-    clear_event_cache_all_runs(instance.event)
+    clear_event_cache_all_runs(instance.event_id)
     remove_item_from_cache_section(instance.event_id, "factions", instance.id)
 
 
@@ -1288,7 +1295,7 @@ def post_softdelete_quest_reset_rels(sender: type, instance: Quest, **kwargs: An
     """Clear caches and drop a soft deleted quest from the event relationship cache."""
     if is_clone_active():
         return
-    clear_event_cache_all_runs(instance.event)
+    clear_event_cache_all_runs(instance.event_id)
     remove_item_from_cache_section(instance.event_id, "quests", instance.id)
 
 
@@ -1318,7 +1325,7 @@ def post_softdelete_questtype_reset_rels(sender: type, instance: QuestType, **kw
     """Clear caches and drop a soft deleted quest type from the event relationship cache."""
     if is_clone_active():
         return
-    clear_event_cache_all_runs(instance.event)
+    clear_event_cache_all_runs(instance.event_id)
     remove_item_from_cache_section(instance.event_id, "questtypes", instance.id)
 
 
@@ -1574,12 +1581,12 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
     update_run_plan_on_event_change(instance)
 
     # Clear run-specific cache and media files
-    clear_run_cache_and_media(instance)
+    clear_run_cache_and_media(instance.id)
 
-    clear_run_event_links_cache(instance.event)
+    clear_run_event_links_cache(instance.event_id)
 
     # Clear association cache to update onboarding status
-    clear_association_cache(instance.event.association.slug)
+    clear_association_cache(get_run_basic_cache(instance.id)["association_slug"])
 
     # Schedule publication for this run's event
     publish_event(instance.event_id)
@@ -1589,7 +1596,7 @@ def post_save_run_links(sender: type, instance: Run, **kwargs: Any) -> None:
 def post_save_reset_run_config(sender: type, instance: Any, **kwargs: Any) -> None:
     """Reset run config cache when related instance is saved."""
     reset_run_configs(instance.run_id)
-    reset_cache_config_run(instance.run)
+    reset_cache_config_run(instance.run_id)
 
 
 @receiver(pre_save, sender=SpeedLarp)
@@ -1639,7 +1646,7 @@ def post_softdelete_trait_reset(sender: type, instance: Trait, **kwargs: Any) ->
     """Clear event cache when a trait is soft deleted."""
     if is_clone_active():
         return
-    clear_event_cache_all_runs(instance.event)
+    clear_event_cache_all_runs(instance.event_id)
 
 
 @receiver(post_save, sender=User)
@@ -1666,7 +1673,7 @@ def post_save_writing_answer_refs(sender: type, instance: WritingAnswer, **kwarg
 def post_save_writing_option_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear caches when WritingOption is saved."""
     clear_event_fields_cache(instance.question.event_id)
-    clear_event_cache_all_runs(instance.question.event)
+    clear_event_cache_all_runs(instance.question.event_id)
     clear_writing_questions_cache(instance.event_id)
 
     # Refresh ability caches that show this option in their requirement_rels
@@ -1689,7 +1696,7 @@ def on_requirements_m2m_changed(
 def post_save_writing_question_reset(sender: type, instance: Any, **kwargs: Any) -> None:
     """Clear cache for event fields and all runs when writing question changes."""
     clear_event_fields_cache(instance.event_id)
-    clear_event_cache_all_runs(instance.event)
+    clear_event_cache_all_runs(instance.event_id)
     clear_writing_questions_cache(instance.event_id)
     modifier_ids = list(
         ModifierExp.objects.filter(requirements__question=instance).values_list("id", flat=True).distinct()
