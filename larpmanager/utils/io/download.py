@@ -37,7 +37,7 @@ from larpmanager.cache.experience import has_multiple_exp_systems
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
+from larpmanager.models.experience import AbilityExp, AbilityTypeExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -967,6 +967,38 @@ def _exp_column_names(context: dict) -> None:
     context["columns"] = [columns]
 
 
+_EXP_SIMPLE_TYPES = ("exp_rule", "exp_modifier", "exp_ability_type")
+
+
+def _exp_simple_column_names(context: dict) -> None:
+    """Define column mappings for the experience types with a fixed, system-less column set."""
+    if context["typ"] == "exp_rule":
+        columns = {
+            "number": _("The rule's number (unique identifier)"),
+            "abilities": _("(Optional) Ability names, comma-separated - rule applies if character has any"),
+            "field": _("The character field of computed type to update"),
+            "operation": _("Operation: ADD, SUB, MUL, DIV"),
+            "amount": _("Transaction amount"),
+            "order": _("(Optional) Display order"),
+        }
+        context["name"] = "Rule"
+    elif context["typ"] == "exp_modifier":
+        columns = {
+            "number": _("The modifier's number (unique identifier)"),
+            "abilities": _("(Optional) Ability names, comma-separated"),
+            "cost": _("(Optional) Cost (0 = auto assigned)"),
+            "prerequisites": _("(Optional) Prerequisite ability names, comma-separated"),
+            "requirements": _("(Optional) Character options as requirements, comma-separated"),
+            "order": _("(Optional) Display order"),
+        }
+        context["name"] = "Modifier"
+    else:
+        columns = {"name": _("The ability type's name")}
+        context["name"] = "Ability type"
+
+    context["columns"] = [columns]
+
+
 def _get_column_names(context: dict) -> None:
     """Define column mappings and field types for different export contexts.
 
@@ -1013,33 +1045,9 @@ def _get_column_names(context: dict) -> None:
     elif context["typ"] in _EXP_SYSTEM_TYPES:
         _exp_column_names(context)
 
-    # Handle experience rule export
-    elif context["typ"] == "exp_rule":
-        context["columns"] = [
-            {
-                "number": _("The rule's number (unique identifier)"),
-                "abilities": _("(Optional) Ability names, comma-separated - rule applies if character has any"),
-                "field": _("The character field of computed type to update"),
-                "operation": _("Operation: ADD, SUB, MUL, DIV"),
-                "amount": _("Transaction amount"),
-                "order": _("(Optional) Display order"),
-            },
-        ]
-        context["name"] = "Rule"
-
-    # Handle experience modifier export
-    elif context["typ"] == "exp_modifier":
-        context["columns"] = [
-            {
-                "number": _("The modifier's number (unique identifier)"),
-                "abilities": _("(Optional) Ability names, comma-separated"),
-                "cost": _("(Optional) Cost (0 = auto assigned)"),
-                "prerequisites": _("(Optional) Prerequisite ability names, comma-separated"),
-                "requirements": _("(Optional) Character options as requirements, comma-separated"),
-                "order": _("(Optional) Display order"),
-            },
-        ]
-        context["name"] = "Modifier"
+    # Handle experience rule/modifier/ability type export
+    elif context["typ"] in _EXP_SIMPLE_TYPES:
+        _exp_simple_column_names(context)
 
     # Handle registration form (questions + options) export; matchmaker questions share
     # the same RegistrationQuestion fields, just scoped to a different "applicable" value
@@ -1345,6 +1353,16 @@ def export_abilities(context: Any) -> Any:
         ability_rows.append(row_data)
 
     return [("abilities", column_headers, ability_rows)]
+
+
+def export_ability_types(context: Any) -> Any:
+    """Export ability types data for an event."""
+    column_headers = ["name"]
+
+    type_queryset = context["event"].get_elements(AbilityTypeExp).order_by("order")
+    type_rows = [[ability_type.name] for ability_type in type_queryset]
+
+    return [("ability_types", column_headers, type_rows)]
 
 
 def export_criterions(context: Any) -> Any:

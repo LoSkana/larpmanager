@@ -86,6 +86,7 @@ def build_upload_template(context: dict, upload_type: str) -> list[tuple[str, li
     builders = {
         "registration_ticket": _ticket_template,
         "exp_abilitie": _ability_template,
+        "exp_ability_type": _ability_type_template,
         "exp_rule": _rule_template,
         "exp_modifier": _modifier_template,
         "exp_criterion": _criterion_template,
@@ -139,6 +140,14 @@ def _ability_template(context: dict) -> Any:
     example_row_values = [field_example_values.get(column_name, "") for column_name in column_names]
     export_data.append(("abilities", column_names, [example_row_values]))
     return export_data
+
+
+def _ability_type_template(context: dict) -> Any:
+    """Generate template for ability type uploads with example data."""
+    field_example_values = {"name": "Ability type name"}
+    column_names = list(context["columns"][0].keys())
+    example_row = [field_example_values.get(column_name, "") for column_name in column_names]
+    return [("ability_types", column_names, [example_row])]
 
 
 def _rule_template(context: dict) -> Any:

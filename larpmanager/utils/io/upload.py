@@ -231,6 +231,7 @@ def go_upload(context: dict, upload_form_data: Any) -> Any:
         "character_form": lambda: form_load(context, upload_form_data, is_registration=False),
         "registration": lambda: registrations_load(context, upload_form_data),
         "exp_abilitie": lambda: abilities_load(context, upload_form_data),
+        "exp_ability_type": lambda: ability_types_load(context, upload_form_data),
         "exp_rule": lambda: rules_load(context, upload_form_data),
         "exp_modifier": lambda: modifiers_load(context, upload_form_data),
         "exp_criterion": lambda: criterions_load(context, upload_form_data),
@@ -1981,6 +1982,38 @@ def _ability_load(context: dict, csv_row: dict) -> str:
     # Return appropriate success message, together with the errors collected on its fields
     status = f"OK - Created {ability_element}" if was_created else f"OK - Updated {ability_element}"
     return _row_result(status, logs)
+
+
+def ability_types_load(context: dict, form: Form) -> list[str]:
+    """Load ability types from uploaded file and process each row."""
+    (input_dataframe, processing_logs) = _get_file(context, form.cleaned_data["first"], 0)
+
+    if input_dataframe is not None:
+        if len(input_dataframe) > MAX_CSV_ROWS:
+            return [f"ERR - File too large: {len(input_dataframe)} rows exceeds limit of {MAX_CSV_ROWS}"]
+        for type_row in input_dataframe.to_dict(orient="records"):
+            processing_logs.append(_ability_type_load(context, type_row))
+    return processing_logs
+
+
+def _ability_type_load(context: dict, csv_row: dict) -> str:
+    """Load ability type data from a CSV row for bulk import."""
+    name, err = _get_row_name(csv_row)
+    if err:
+        return err
+
+    event = context["event"]
+    parent_event = event.get_class_parent(AbilityTypeExp)
+
+    # Match the stored ability type ignoring case, so a different casing updates it instead of duplicating it
+    ability_type = AbilityTypeExp.objects.filter(event=parent_event, name__iexact=name).order_by("number").first()
+    was_created = ability_type is None
+    if was_created:
+        ability_type = AbilityTypeExp.objects.create(event=parent_event, name=name)
+
+    save_log(context, AbilityTypeExp, ability_type, operation_type=LogOperationType.UPLOAD)
+
+    return f"OK - Created {ability_type}" if was_created else f"OK - Updated {ability_type}"
 
 
 def _assign_type(

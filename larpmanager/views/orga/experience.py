@@ -50,6 +50,7 @@ from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import (
     export_abilities,
+    export_ability_types,
     export_criterions,
     export_deliveries,
     export_modifiers,
@@ -248,6 +249,13 @@ def orga_exp_ability_types(request: HttpRequest, event_slug: str) -> HttpRespons
     """Display ability type list for experience management."""
     # Check user has permission to access ability types management
     context = check_event_context(request, event_slug, "orga_exp_ability_types")
+
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_ability_types(context), "Ability types"))
+
+    context["upload"] = "exp_ability_types"
+    context["download"] = 1
 
     # Retrieve and order ability types by number
     context["list"] = context["event"].get_elements(AbilityTypeExp).order_by("order")
