@@ -33,6 +33,7 @@ from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import get_association_config, get_config_default, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.utils import (
@@ -311,7 +312,9 @@ class BaseModelForm(FormMixin, forms.ModelForm):
                 raise ValidationError(msg) from err
 
         # Validate run belongs to current association
-        if "event" in self.params and run_value.event.association_id != self.params["event"].association_id:
+        if "event" in self.params and get_event_association_id(run_value.event_id) != get_event_association_id(
+            self.params["event"].id
+        ):
             msg = _("Selected event does not belong to this organization")
             raise ValidationError(msg)
 

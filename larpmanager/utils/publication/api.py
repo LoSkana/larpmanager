@@ -28,7 +28,6 @@ from django.utils import timezone
 from django.views.decorators.http import require_GET
 
 from larpmanager.cache.config import get_element_config
-from larpmanager.forms.event import PromotionMood, PromotionSetting
 from larpmanager.models.association import Association
 from larpmanager.models.base import PublisherApiKey
 from larpmanager.models.event import Run
@@ -36,6 +35,7 @@ from larpmanager.models.member import Member
 from larpmanager.models.miscellanea import Log
 from larpmanager.utils.core.common import parse_multi_config
 from larpmanager.utils.larpmanager.tasks import notify_admins
+from larpmanager.utils.publication.ildb import PromotionMood, PromotionSetting
 from larpmanager.views.manage import _get_registration_status_code
 
 

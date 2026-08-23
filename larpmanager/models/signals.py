@@ -42,7 +42,6 @@ from larpmanager.accounting.payment import (
     process_refund_request_status_change,
 )
 from larpmanager.accounting.registration import (
-    handle_registration_accounting_updates,
     log_registration_ticket_saved,
     process_accounting_discount_post_save,
     process_registration_option_post_save,
@@ -54,7 +53,7 @@ from larpmanager.accounting.token_credit import (
     update_token_credit_on_payment_save,
 )
 from larpmanager.accounting.vat import calculate_payment_vat
-from larpmanager.cache.accounting import clear_registration_accounting_cache, refresh_member_accounting_cache
+from larpmanager.cache.accounting import refresh_member_accounting_cache
 from larpmanager.cache.association import clear_association_cache
 from larpmanager.cache.association_text import (
     update_association_text_cache_on_save,
@@ -127,7 +126,6 @@ from larpmanager.cache.larpmanager import (
 )
 from larpmanager.cache.links import (
     clear_run_event_links_cache,
-    on_registration_post_save_reset_event_links,
     reset_event_links,
 )
 from larpmanager.cache.permission import (
@@ -319,7 +317,6 @@ from larpmanager.models.writing import (
 from larpmanager.utils.auth.permission import auto_assign_event_permission_number
 from larpmanager.utils.core.clone_guard import is_clone_active
 from larpmanager.utils.core.guard import is_experience_recalc_deferred
-from larpmanager.utils.core.nav import invalidate_user_nav_entries
 from larpmanager.utils.io.pdf import (
     cleanup_character_pdfs_on_save,
     cleanup_faction_pdfs_on_save,
@@ -363,7 +360,7 @@ from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
 from larpmanager.utils.services.writing import replace_character_names_before_save
 from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
 from larpmanager.utils.users.registration import (
-    process_character_ticket_options,
+    apply_registration_post_save_updates,
     process_registration_event_change,
     reset_registration_ticket,
 )
@@ -1381,33 +1378,12 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
     if instance.pending:
         return
 
-    # Soft deleted registrations only need their caches dropped, not their data recomputed
+    # Assign character from previous campaign if applicable
     if not instance.deleted:
-        # Assign character from previous campaign if applicable
         assign_previous_campaign_character(instance)
 
-        # Process ticket options and character-related data
-        process_character_ticket_options(instance)
-
-        # Update accounting records and balances
-        handle_registration_accounting_updates(instance)
-
-    # Clear cached accounting data for this run
-    clear_registration_accounting_cache(instance.run_id)
-
-    # Reset event navigation links cache
-    on_registration_post_save_reset_event_links(instance)
-
-    # Invalidate user nav entries cache
-    if instance.member_id:
-        invalidate_user_nav_entries(instance.member_id)
-
-    # Update registration count caches for this run
-    clear_registration_counts_cache(instance.run_id)
-
-    # Sync published data on this registration (soft deletes are handled by post_softdelete, which knows the run)
-    if not instance.deleted:
-        publish_registration(instance.id)
+    # Process ticket options, accounting, and caches shared with other registration-save paths
+    apply_registration_post_save_updates(instance)
 
 
 @receiver(pre_softdelete, sender=Registration)

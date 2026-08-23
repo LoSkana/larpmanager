@@ -340,20 +340,25 @@ def _init_element_cache_registration_field(
         question for question in get_cached_registration_questions(event_id) if question["typ"] in ALLOWED_TYPES
     ]
 
+    # Fetch the latest answer per question in one query, tolerating duplicate
+    # rows for the same question/registration (keep the most recently updated)
+    question_ids = [question["id"] for question in questions]
+    answer_by_question = {}
+    for answer in RegistrationAnswer.objects.filter(
+        question_id__in=question_ids, registration_id=registration.id
+    ).order_by("-updated"):
+        answer_by_question.setdefault(answer.question_id, answer.text)
+
     # Process each editor question and cache the answer text
     for question in questions:
-        try:
-            answer_text = RegistrationAnswer.objects.get(
-                question_id=question["id"], registration_id=registration.id
-            ).text
-            field_key = str(question["uuid"])
-            cache_result[registration_uuid][field_key] = get_single_cache_text_field(
-                registration_uuid,
-                field_key,
-                answer_text,
-            )
-        except ObjectDoesNotExist:
-            pass
+        if question["id"] not in answer_by_question:
+            continue
+        field_key = str(question["uuid"])
+        cache_result[registration_uuid][field_key] = get_single_cache_text_field(
+            registration_uuid,
+            field_key,
+            answer_by_question[question["id"]],
+        )
 
 
 def get_cache_registration_field(run_id: int, event_id: int) -> dict:

@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from typing import Any
 
 from django.core.cache import cache
@@ -256,12 +258,15 @@ def on_character_update_registration_cache(instance: Character) -> None:
     for run_id in get_event_run_ids(instance.event_id):
         clear_registration_counts_cache(run_id)
 
-    # Trigger registration updates if character approval is enabled
+    # Refresh nav/publication caches if character approval is enabled, since the
+    # character's approval status is shown on the registration's public/nav data
     if get_event_config(instance.event_id, "user_character_approval"):
         for relation in RegistrationCharacterRel.objects.filter(character=instance).select_related(
             "registration__run", "registration__run__event", "registration__ticket", "registration__member"
         ):
-            relation.registration.save()
+            from larpmanager.utils.users.registration import apply_registration_post_save_updates  # noqa: PLC0415
+
+            apply_registration_post_save_updates(relation.registration)
 
 
 def search_player(character: Character, json_output: dict[str, Any], context: dict) -> None:

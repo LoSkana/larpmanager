@@ -28,7 +28,7 @@ from typing import TYPE_CHECKING, Any
 
 import requests
 from django.core.cache import cache
-from django.db.models import Max, Min
+from django.db.models import Max, Min, TextChoices
 from django.utils import timezone, translation
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
@@ -41,12 +41,10 @@ from larpmanager.cache.config import (
     save_single_config,
 )
 from larpmanager.cache.run import get_event_runs
-from larpmanager.forms.event import PromotionEventType, PromotionLanguage
-from larpmanager.mail.digest import get_exec_language
 from larpmanager.models.access import EventRole
 from larpmanager.models.event import DevelopStatus, Event, Run
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
-from larpmanager.utils.core.common import clean_html, parse_multi_config
+from larpmanager.utils.core.common import clean_html, get_exec_language, parse_multi_config
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 
 if TYPE_CHECKING:
@@ -611,3 +609,87 @@ def _notify_association(association: Association, run: Run, ildb_event_id: str) 
         )
 
     my_send_mail(subject, body, association.main_mail, association)
+
+
+class PromotionAccommodation(TextChoices):
+    """Accommodation type for publication."""
+
+    INCLUDED = "included", _("Included")
+    NOT_INCLUDED = "nope", _("Not included")
+    NON_RESIDENTIAL = "nonres", _("Non-residential")
+
+
+class PromotionAccommodationType(TextChoices):
+    """Accommodation facility details for publication."""
+
+    CAMPING = "camping", _("Camping")
+    FARM_STAY = "agritourism", _("Agritourism")
+    HISTORIC_RESIDENCE = "historical", _("Historic residence")
+    HOTEL = "hotel", _("Hotel")
+    OTHER = "other", _("Other")
+
+
+class PromotionMeals(TextChoices):
+    """Meals included for publication."""
+
+    NOT_INCLUDED = "nope", _("Not included")
+    RESTAURANT = "restaurant", _("Restaurant")
+    SELF_CATERING = "diy", _("Self-catering")
+    INTERNAL_CATERING = "internal", _("Internal catering")
+    EXTERNAL_CATERING = "external", _("External catering")
+
+
+class PromotionSetting(TextChoices):
+    """Event setting (world/genre) for publication. Values are lowercase slugs."""
+
+    FANTASY = "fantasy", "Fantasy"
+    HORROR = "horror", "Horror"
+    SCI_FI = "science-fiction", "Sci-Fi"
+    HISTORICAL = "historical", "Historical"
+    CONTEMPORARY = "contemporary", "Contemporary"
+    POST_APOCALYPTIC = "post-apocalyptic", "Post-Apocalyptic"
+    CYBERPUNK = "cyberpunk", "Cyberpunk"
+    STEAMPUNK = "steampunk", "Steampunk"
+    SUPERHEROES = "superheroes", "Superheroes"
+    GOTHIC = "gothic", "Gothic"
+    WESTERN = "western", "Western"
+
+
+class PromotionMood(TextChoices):
+    """Event mood/tone for publication. Values are lowercase slugs."""
+
+    ADVENTURE = "adventure", "Adventure"
+    THRILLER = "thriller", "Thriller"
+    DRAMA = "drama", "Drama"
+    COMEDY = "comedy", "Comedy"
+    SURREAL = "surreal", "Surreal"
+
+
+class PromotionEventType(TextChoices):
+    """Event category for publication."""
+
+    ONE_SHOT = "one_shot", "One shot"
+    SERIES = "serie", "Series"
+    CAMPAIGN = "campaign", "Campaign"
+    EDU_LARP = "edu_larp", "Edu larp"
+    CONVENTION = "convention", "Convention"
+    OTHER = "other", "Other"
+    CHAMBER_LARP = "chamber", "Chamber larp"
+    LAOG = "laog", "LAOG"
+
+
+class PromotionLanguage(TextChoices):
+    """Event language for publication."""
+
+    ENGLISH = "en", "English"
+    ITALIAN = "it", "Italian"
+    FRENCH = "fr", "French"
+    SPANISH = "es", "Spanish"
+    GERMAN = "de", "German"
+    SLOVENIAN = "sl", "Slovenian"
+    CHINESE = "zh", "Chinese"
+    HUNGARIAN = "hu", "Hungarian"
+    POLISH = "pl", "Polish"
+    DUTCH = "nl", "Dutch"
+    BULGARIAN = "bg", "Bulgarian"
+    GREEK = "el", "Greek"

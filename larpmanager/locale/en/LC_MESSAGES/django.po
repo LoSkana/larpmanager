@@ -2046,42 +2046,6 @@ msgstr ""
 msgid "Prologue"
 msgstr ""
 
-msgid "Included"
-msgstr ""
-
-msgid "Not included"
-msgstr ""
-
-msgid "Non-residential"
-msgstr ""
-
-msgid "Camping"
-msgstr ""
-
-msgid "Agritourism"
-msgstr ""
-
-msgid "Historic residence"
-msgstr ""
-
-msgid "Hotel"
-msgstr ""
-
-msgid "Other"
-msgstr ""
-
-msgid "Restaurant"
-msgstr ""
-
-msgid "Self-catering"
-msgstr ""
-
-msgid "Internal catering"
-msgstr ""
-
-msgid "External catering"
-msgstr ""
-
 msgid "Enter a valid number"
 msgstr ""
 
@@ -3590,6 +3554,9 @@ msgid "Venue: rent, utilities, and accommodation"
 msgstr ""
 
 msgid "Secretarial: stationery and printing"
+msgstr ""
+
+msgid "Other"
 msgstr ""
 
 msgid "Raw materials, auxiliaries, consumables and goods"
@@ -6660,6 +6627,9 @@ msgstr ""
 msgid ""
 "If you press once, it will be *included* in the search. If a character "
 "belongs to at least one inclusion category, it will be shown in the search."
+msgstr ""
+
+msgid "Included"
 msgstr ""
 
 msgid ""
@@ -11842,6 +11812,36 @@ msgid ""
 msgstr ""
 
 msgid "Please review it and submit it for publication."
+msgstr ""
+
+msgid "Not included"
+msgstr ""
+
+msgid "Non-residential"
+msgstr ""
+
+msgid "Camping"
+msgstr ""
+
+msgid "Agritourism"
+msgstr ""
+
+msgid "Historic residence"
+msgstr ""
+
+msgid "Hotel"
+msgstr ""
+
+msgid "Restaurant"
+msgstr ""
+
+msgid "Self-catering"
+msgstr ""
+
+msgid "Internal catering"
+msgstr ""
+
+msgid "External catering"
 msgstr ""
 
 msgid ""

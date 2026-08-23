@@ -48,8 +48,15 @@ def association_basic_cache_key(association_id: int) -> str:
     return f"association_basic_{association_id}"
 
 
-def get_association_basic_cache(association_id: int) -> dict:
-    """Get an association basic data from cache if available."""
+def get_association_basic_cache(association_id: int, *, context: dict | None = None) -> dict:
+    """Get an association basic data from cache if available, memoizing the result in context if provided."""
+    if context is not None:
+        ctx_key = "association_basic_cache"
+        if ctx_key not in context:
+            context[ctx_key] = {}
+        if association_id in context[ctx_key]:
+            return context[ctx_key][association_id]
+
     cache_key = association_basic_cache_key(association_id)
     data = cache.get(cache_key)
     if data is not None and "domain" not in data:
@@ -69,6 +76,10 @@ def get_association_basic_cache(association_id: int) -> dict:
             "domain": association.skin.domain,
         }
         cache.set(cache_key, data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
+
+    if context is not None:
+        context["association_basic_cache"][association_id] = data
+
     return data
 
 

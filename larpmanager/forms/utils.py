@@ -33,6 +33,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.models.access import AssociationRole, EventRole, PermissionModule
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
@@ -662,7 +663,7 @@ class TransferTargetRunS2Widget(S2Widget):
     def get_queryset(self) -> QuerySet[Run]:
         """Return runs from different events that are not concluded or cancelled."""
         return (
-            Run.objects.filter(event__association_id=self.event.association_id)
+            Run.objects.filter(event__association_id=get_event_association_id(self.event.id))
             .exclude(event_id=self.event.id)
             .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
             .select_related("event")

@@ -46,6 +46,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import _get_event_parent_id, get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, Feature
@@ -891,3 +892,35 @@ def parse_multi_config(value: str) -> list:
         return result if isinstance(result, list) else []
     except (ValueError, SyntaxError):
         return []
+
+
+def get_exec_language(association: Association) -> str:
+    """Determine the most common language among association executives.
+
+    Analyzes the language preferences of all association executives and returns
+    the most frequently used language code. If no executives are found or no
+    language preferences are set, defaults to English.
+
+    Args:
+        association: Association instance containing executives to analyze
+
+    Returns:
+        str: The language code (e.g., 'en', 'it', 'fr') preferred by the majority
+             of executives, or 'en' if no executives found or no preferences set
+
+    """
+    # Initialize dictionary to count language occurrences
+    language_counts = {}
+
+    # Iterate through all association executives
+    for executive in get_association_executives(association):
+        executive_language = executive.language
+
+        # Count each language preference
+        if executive_language not in language_counts:
+            language_counts[executive_language] = 1
+        else:
+            language_counts[executive_language] += 1
+
+    # Determine the most common language or default to English
+    return max(language_counts, key=language_counts.get) if language_counts else "en"

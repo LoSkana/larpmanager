@@ -25,6 +25,7 @@ from django.conf import settings as conf_settings
 from django.db.models import Count
 from django.utils import timezone
 
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.models.accounting import AccountingItemMembership
@@ -88,10 +89,10 @@ def check_run_deadlines(runs: list[Run]) -> list:
         registrations_by_run[registration.run_id].append(registration)
 
     # Get tolerance setting
-    tolerance = int(get_association_config(runs[0].event.association_id, "deadlines_tolerance"))
+    association_id = get_run_association_id(runs[0].id)
+    tolerance = int(get_association_config(association_id, "deadlines_tolerance"))
 
     # Check membership feature
-    association_id = runs[0].event.association_id
     now = timezone.now()
     uses_membership = "membership" in get_association_features(association_id)
 

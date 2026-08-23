@@ -385,17 +385,23 @@ def _init_exe_actions_cache(association_id: int) -> dict:
         data["pending_expenses"] = {"count": pending_expenses_count}
 
     # Pending invoice approvals split by type
-    for typ, key in [
-        (PaymentType.REGISTRATION, "pending_invoices_registration"),
-        (PaymentType.DONATE, "pending_invoices_donation"),
-        (PaymentType.COLLECTION, "pending_invoices_collection"),
-        (PaymentType.MEMBERSHIP, "pending_invoices_membership"),
-    ]:
-        count = PaymentInvoice.objects.filter(
+    invoice_type_keys = {
+        PaymentType.REGISTRATION: "pending_invoices_registration",
+        PaymentType.DONATE: "pending_invoices_donation",
+        PaymentType.COLLECTION: "pending_invoices_collection",
+        PaymentType.MEMBERSHIP: "pending_invoices_membership",
+    }
+    invoice_counts_by_type = dict(
+        PaymentInvoice.objects.filter(
             association_id=association_id,
             status=PaymentStatus.SUBMITTED,
-            typ=typ,
-        ).count()
+            typ__in=invoice_type_keys,
+        )
+        .values_list("typ")
+        .annotate(count=Count("id"))
+    )
+    for typ, key in invoice_type_keys.items():
+        count = invoice_counts_by_type.get(typ, 0)
         if count > 0:
             data[key] = {"count": count}
 
@@ -474,6 +480,7 @@ def _get_ildb_unpublished_runs(association_id: int) -> list[str]:
 def _init_orga_actions_cache(run: Run) -> dict:
     """Compute all action counts for event organizer dashboard."""
     data = {}
+    context: dict = {}
 
     # Pending expenses (for orga level)
     pending_expenses_count = AccountingItemExpense.objects.filter(run=run, is_approved=False).count()
@@ -496,7 +503,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
 
     # Registration questions without options
     registration_questions_without_options = list(
-        get_event_elements(run.event_id, RegistrationQuestion)
+        get_event_elements(run.event_id, RegistrationQuestion, context=context)
         .filter(applicable=RegistrationQuestionApplicable.REGISTRATION)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
@@ -510,7 +517,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
 
     # Writing questions without options
     writing_questions_without_options = list(
-        get_event_elements(run.event_id, WritingQuestion)
+        get_event_elements(run.event_id, WritingQuestion, context=context)
         .filter(typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE])
         .annotate(quest_count=Count("options"))
         .filter(quest_count=0)
@@ -522,9 +529,9 @@ def _init_orga_actions_cache(run: Run) -> dict:
         }
 
     # Installments with both deadlines
-    installments_with_both_deadlines = get_event_elements(run.event_id, RegistrationInstallment).filter(
-        date_deadline__isnull=False, days_deadline__isnull=False
-    )
+    installments_with_both_deadlines = get_event_elements(
+        run.event_id, RegistrationInstallment, context=context
+    ).filter(date_deadline__isnull=False, days_deadline__isnull=False)
     if installments_with_both_deadlines.exists():
         data["installments_both_deadlines"] = {
             "count": installments_with_both_deadlines.count(),
@@ -532,7 +539,7 @@ def _init_orga_actions_cache(run: Run) -> dict:
         }
 
     # Tickets missing final installment
-    tickets_missing_final_installment = get_event_elements(run.event_id, RegistrationTicket).exclude(
+    tickets_missing_final_installment = get_event_elements(run.event_id, RegistrationTicket, context=context).exclude(
         installments__amount=0
     )
     if tickets_missing_final_installment.exists():
@@ -541,13 +548,15 @@ def _init_orga_actions_cache(run: Run) -> dict:
             "names": [t.name for t in tickets_missing_final_installment],
         }
 
-    _init_orga_actions_writing(data, run)
+    _init_orga_actions_writing(data, run, context)
 
     # Registration quotas existence check
-    data["has_registration_quotas"] = get_event_elements(run.event_id, RegistrationQuota).exists()
+    data["has_registration_quotas"] = get_event_elements(run.event_id, RegistrationQuota, context=context).exists()
 
     # Registration installments existence check
-    data["has_registration_installments"] = get_event_elements(run.event_id, RegistrationInstallment).exists()
+    data["has_registration_installments"] = get_event_elements(
+        run.event_id, RegistrationInstallment, context=context
+    ).exists()
 
     # Open help questions (last 90 days, most recent per member, user-originated and not closed)
     base_queryset = HelpQuestion.objects.filter(
@@ -565,24 +574,26 @@ def _init_orga_actions_cache(run: Run) -> dict:
     return data
 
 
-def _init_orga_actions_writing(data: dict, run: Run) -> None:
+def _init_orga_actions_writing(data: dict, run: Run, context: dict) -> None:
     """Compute writing action counts for event organizer dashboard."""
     # Character existence check
-    data["has_characters"] = get_event_elements(run.event_id, Character).exists()
+    data["has_characters"] = get_event_elements(run.event_id, Character, context=context).exists()
 
     # Pending character approvals
     proposed_characters_count = (
-        get_event_elements(run.event_id, Character).filter(status=CharacterStatus.PROPOSED).count()
+        get_event_elements(run.event_id, Character, context=context).filter(status=CharacterStatus.PROPOSED).count()
     )
     if proposed_characters_count > 0:
         data["proposed_characters"] = {"count": proposed_characters_count}
 
     # Quest types existence check
-    data["has_quest_types"] = get_event_elements(run.event_id, QuestType).exists()
+    data["has_quest_types"] = get_event_elements(run.event_id, QuestType, context=context).exists()
 
     # Quest types without quests
     unused_quest_types = list(
-        get_event_elements(run.event_id, QuestType).annotate(quest_count=Count("quests")).filter(quest_count=0)
+        get_event_elements(run.event_id, QuestType, context=context)
+        .annotate(quest_count=Count("quests"))
+        .filter(quest_count=0)
     )
     if unused_quest_types:
         data["quest_types_without_quests"] = {
@@ -592,17 +603,19 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
 
     # Quests without traits
     unused_quests = list(
-        get_event_elements(run.event_id, Quest).annotate(trait_count=Count("traits")).filter(trait_count=0)
+        get_event_elements(run.event_id, Quest, context=context)
+        .annotate(trait_count=Count("traits"))
+        .filter(trait_count=0)
     )
     if unused_quests:
         data["quests_without_traits"] = {"count": len(unused_quests), "names": [q.name for q in unused_quests]}
 
     # Ability types existence check
-    data["has_ability_types"] = get_event_elements(run.event_id, AbilityTypeExp).exists()
+    data["has_ability_types"] = get_event_elements(run.event_id, AbilityTypeExp, context=context).exists()
 
     # Ability types without abilities
     ability_types_without_abilities = list(
-        get_event_elements(run.event_id, AbilityTypeExp)
+        get_event_elements(run.event_id, AbilityTypeExp, context=context)
         .annotate(ability_count=Count("abilities"))
         .filter(ability_count=0)
     )
@@ -613,7 +626,7 @@ def _init_orga_actions_writing(data: dict, run: Run) -> None:
         }
 
     # Delivery EXP existence check
-    data["has_delivery_px"] = get_event_elements(run.event_id, DeliveryExp).exists()
+    data["has_delivery_px"] = get_event_elements(run.event_id, DeliveryExp, context=context).exists()
 
 
 def _init_milestones_widget_cache(run: Run) -> dict:

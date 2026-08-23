@@ -32,6 +32,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
@@ -95,7 +96,7 @@ def save_log(
     instance = context.get("run", context["association_id"])
     if isinstance(instance, Run):
         run_id = instance.id
-        association_id = instance.event.association_id
+        association_id = get_event_association_id(instance.event_id)
     else:
         run_id = None
         association_id = instance

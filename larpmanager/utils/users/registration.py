@@ -31,11 +31,13 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import _format_decimal, is_registration_provisional
 from larpmanager.accounting.member import get_membership_fee_for_reg
+from larpmanager.accounting.registration import handle_registration_accounting_updates
 from larpmanager.cache.accounting import clear_registration_accounting_cache
 from larpmanager.cache.basic import RunBasicCache, get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
+from larpmanager.cache.links import on_registration_post_save_reset_event_links
+from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.cache.registration import clear_registration_counts_cache, get_registration_counts
 from larpmanager.cache.run import get_event_run_ids
 from larpmanager.models.accounting import AccountingItemMembership, PaymentInvoice, PaymentStatus, PaymentType
@@ -53,6 +55,7 @@ from larpmanager.models.form import (
 from larpmanager.models.member import Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
+from larpmanager.utils.core.clone_guard import is_clone_active
 from larpmanager.utils.core.common import (
     feature_visible,
     format_datetime,
@@ -61,6 +64,8 @@ from larpmanager.utils.core.common import (
     get_time_diff_today,
 )
 from larpmanager.utils.core.exceptions import PendingApprovalError, RewokedMembershipError, SignupError, WaitingError
+from larpmanager.utils.core.nav import invalidate_user_nav_entries
+from larpmanager.utils.publication.base import publish_registration
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -1329,76 +1334,6 @@ def _status_casting(
     }
 
 
-def get_registration_options(instance: object) -> list[tuple[str, str]]:
-    """Get formatted list of registration options and answers for display.
-
-    This function retrieves all registration questions for a given event run,
-    filters out skipped questions based on features, and returns the answers
-    in a formatted list of question-answer pairs.
-
-    Args:
-        instance: Registration instance containing the run and event information.
-
-    Returns:
-        List of tuples where each tuple contains:
-            - question_name (str): The name of the registration question
-            - answer_text (str): The formatted answer text (comma-separated for choices)
-
-    Note:
-        Questions are filtered based on event features and individual skip conditions.
-        Choice questions are formatted as comma-separated option names.
-
-    """
-    formatted_results = []
-    applicable_questions = []
-    question_ids_cache = []
-
-    # Get event features and filter applicable questions
-    event_id = get_run_event_id(instance.run_id)
-    event_features = get_event_features(event_id)
-    for question in get_cached_registration_questions(event_id):
-        if skip_registration_question(question, instance, event_features):
-            continue
-        applicable_questions.append(question)
-        question_ids_cache.append(question["id"])
-
-    # Fetch text answers for all relevant questions
-    text_answers_by_question = {}
-    for answer in RegistrationAnswer.objects.filter(
-        question_id__in=question_ids_cache,
-        registration=instance,
-        question__typ__in=[BaseQuestionType.TEXT, BaseQuestionType.PARAGRAPH, BaseQuestionType.EDITOR],
-    ):
-        text_answers_by_question[answer.question_id] = answer.text
-
-    # Fetch choice answers and group by question
-    choice_options_by_question = {}
-    for choice in RegistrationChoice.objects.filter(
-        question_id__in=question_ids_cache,
-        registration=instance,
-        question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
-    ).select_related(
-        "option",
-    ):
-        if choice.question_id not in choice_options_by_question:
-            choice_options_by_question[choice.question_id] = []
-        choice_options_by_question[choice.question_id].append(choice.option)
-
-    # Build result list with question names and formatted answers
-    if len(applicable_questions) > 0:
-        for question in applicable_questions:
-            # Handle multiple choice questions
-            if question["id"] in choice_options_by_question:
-                formatted_choices = ",".join([option.name for option in choice_options_by_question[question["id"]]])
-                formatted_results.append((question["name"], formatted_choices))
-
-            # Handle text answer questions
-            if question["id"] in text_answers_by_question:
-                formatted_results.append((question["name"], text_answers_by_question[question["id"]]))
-
-    return formatted_results
-
-
 def get_player_characters(member: Member, event_id: int) -> QuerySet[Character]:
     """Get all characters a player has for an event, ordered by most recently updated."""
     return get_event_elements(event_id, Character).filter(player=member).order_by("-updated")
@@ -1697,3 +1632,27 @@ def reset_registration_ticket(instance: RegistrationTicket) -> None:
     for run_id in get_event_run_ids(instance.event_id):
         clear_registration_accounting_cache(run_id)
         clear_registration_counts_cache(run_id)
+
+
+def apply_registration_post_save_updates(registration: Registration) -> None:
+    """Apply the cache/accounting updates that must run after a Registration is saved."""
+    if is_clone_active():
+        return
+
+    # Signup requests awaiting approval have no ticket/characters yet: skip
+    if registration.pending:
+        return
+
+    # Soft deleted registrations only need their caches dropped, not their data recomputed
+    if not registration.deleted:
+        process_character_ticket_options(registration)
+        handle_registration_accounting_updates(registration)
+
+    clear_registration_accounting_cache(registration.run_id)
+    on_registration_post_save_reset_event_links(registration)
+    if registration.member_id:
+        invalidate_user_nav_entries(registration.member_id)
+    clear_registration_counts_cache(registration.run_id)
+
+    if not registration.deleted:
+        publish_registration(registration.id)

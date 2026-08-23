@@ -45,6 +45,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType, Guild
 from larpmanager.utils.core.common import get_event_elements
+from larpmanager.utils.users.registration import apply_registration_post_save_updates
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -854,11 +855,12 @@ def update_event_cache_all_runs(event_id: int, instance: BaseModel) -> None:
 
 def reset_character_registration_cache(rcr: RegistrationCharacterRel) -> None:
     """Reset cache for character's registration and run."""
-    # Save registration to trigger cache invalidation
-    if rcr.registration:
-        rcr.registration.save()
+    registration = rcr.registration
+    if registration:
+        apply_registration_post_save_updates(registration)
+
     # Clear run-level cache and media
-    clear_run_cache_and_media(rcr.registration.run_id)
+    clear_run_cache_and_media(registration.run_id)
 
 
 def clear_event_cache_all_runs(event_id: int) -> None:
