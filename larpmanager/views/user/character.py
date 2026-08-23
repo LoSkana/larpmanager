@@ -65,6 +65,7 @@ from larpmanager.models.writing import (
 from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_event_elements, get_player_relationship
+from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
@@ -80,6 +81,7 @@ from larpmanager.utils.services.experience import (
     add_char_addit,
     build_exp_avail_by_system_from_addit,
     build_exp_context,
+    calculate_character_experience_points,
     get_available_ability_exp,
     get_current_ability_exp,
     remove_char_ability,
@@ -1048,10 +1050,20 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
         if not sys.hidden
     ]
 
-    # Build available abilities dictionary organized by ability type
+    # Build per-system experience data used both for display and for the POST save check
     exp_avail_by_system = build_exp_avail_by_system_from_addit(char)
-    multiple_systems = len(context["exp_systems_data"]) > 1
     exp_context = build_exp_context(char)
+    context["exp_context"] = exp_context
+
+    # Handle POST request for saving ability changes (skip building the display dict below,
+    # it's not needed since the save re-queries availability under lock and we redirect after)
+    if request.method == "POST":
+        _save_character_abilities(context, request)
+        # Redirect to prevent duplicate submissions
+        return redirect(request.path_info)
+
+    # Build available abilities dictionary organized by ability type
+    multiple_systems = len(context["exp_systems_data"]) > 1
     context["available"] = {}
     for ability in get_available_ability_exp(char, exp_avail_by_system, exp_context):
         if ability.typ is None:
@@ -1077,12 +1089,6 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
             context["sheet_abilities"][el.typ.name] = []
         # Add ability to the type's list
         context["sheet_abilities"][el.typ.name].append(el)
-
-    # Handle POST request for saving ability changes
-    if request.method == "POST":
-        _save_character_abilities(context, request)
-        # Redirect to prevent duplicate submissions
-        return redirect(request.path_info)
 
     # Create ordered list of available types for template rendering
     type_available_dict = {
@@ -1227,8 +1233,9 @@ def character_abilities_del(request: HttpRequest, event_slug: str, character_uui
         raise Http404(msg)
 
     with transaction.atomic():
-        remove_char_ability(context["character"], context["ability"].id)
-        context["character"].save()
+        with experience_recalc_deferred():
+            remove_char_ability(context["character"], context["ability"].id)
+        calculate_character_experience_points(context["character"])
 
     messages.success(request, _("Ability removed!"))
     return redirect(
@@ -1240,7 +1247,7 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
     """Process character ability selection and save to character.
 
     Args:
-        context: Context dictionary with character and available abilities
+        context: Context dictionary with character and exp_context
         request: HTTP request object with POST data
 
     """
@@ -1254,24 +1261,30 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
         messages.error(request, _("Ability missing"))
         return
 
-    if selected_type not in context["available"] or selected_uuid not in context["available"][selected_type]["list"]:
+    ability = get_element_event(context, selected_uuid, AbilityExp)
+    if ability.typ is None or str(ability.typ.uuid) != selected_type:
         messages.error(request, _("Invalid selection"))
         return
-
-    ability = get_element_event(context, selected_uuid, AbilityExp)
 
     with transaction.atomic():
         # Lock the character and recompute affordability under the lock
         char = Character.objects.select_for_update().get(pk=context["character"].pk)
         add_char_addit(char)
         exp_avail = build_exp_avail_by_system_from_addit(char)
-        available_uuids = {str(available.uuid) for available in get_available_ability_exp(char, exp_avail)}
+        available_uuids = {
+            str(available.uuid)
+            for available in get_available_ability_exp(
+                char, exp_avail, exp_context=context["exp_context"], refresh_abilities=True
+            )
+        }
         if str(ability.uuid) not in available_uuids:
             messages.error(request, _("Ability no longer available"))
             return
-        char.exp_ability_list.add(ability)
-        char.save()
+        with experience_recalc_deferred():
+            char.exp_ability_list.add(ability)
+        calculate_character_experience_points(char)
         context["character"] = char
+
     messages.success(request, _("Ability acquired!"))
 
     get_undo_abilities(context, context["character"], ability)

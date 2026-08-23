@@ -77,7 +77,9 @@ from larpmanager.models.writing import (
     TextVersionChoices,
 )
 from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.edit.backend import save_version
+from larpmanager.utils.services.experience import calculate_character_experience_points
 
 
 class CharacterForm(WritingForm, BaseWritingForm):
@@ -1261,16 +1263,21 @@ class OrgaCharacterForm(CharacterForm):
             The saved instance.
 
         """
-        # Save the main instance using parent's save method
-        instance = super().save()
+        # Save the main instance and related data under one deferral scope, to have
+        # a single experience recompute runs below
+        with experience_recalc_deferred():
+            instance = super().save()
 
-        # Only process related data if instance has been persisted
+            # Only process related data if instance has been persisted
+            if instance.pk:
+                self._save_plot(instance)
+                self._save_exp(instance)
+                self._save_relationships(instance)
+                self._save_active(instance)
+                refresh_character_relationships_background(instance.id)
+
         if instance.pk:
-            self._save_plot(instance)
-            self._save_exp(instance)
-            self._save_relationships(instance)
-            self._save_active(instance)
-            refresh_character_relationships_background(instance.id)
+            calculate_character_experience_points(instance)
 
         return instance
 
