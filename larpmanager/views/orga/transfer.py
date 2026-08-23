@@ -186,8 +186,8 @@ def orga_registration_transfer_confirm(request: HttpRequest, event_slug: str) ->
         )
 
         # Clear all relevant caches for both source and target runs
-        reset_all_run(context["run"].event, context["run"])
-        reset_all_run(target_run.event, target_run)
+        reset_all_run(context["run"].id)
+        reset_all_run(target_run.id)
 
         return redirect("orga_registrations", event_slug=context["run"].get_slug())
 

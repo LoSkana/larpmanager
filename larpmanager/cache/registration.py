@@ -17,6 +17,8 @@
 # commercial@larpmanager.com
 #
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
+from __future__ import annotations
+
 from typing import Any
 
 from django.core.cache import cache
@@ -27,7 +29,6 @@ from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.run import get_event_run_ids
-from larpmanager.models.event import Run
 from larpmanager.models.form import BaseQuestionType, RegistrationChoice, WritingChoice
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
 from larpmanager.models.utils import decimal_to_str
@@ -36,9 +37,9 @@ from larpmanager.utils.core.common import _search_char_reg
 from main.settings import CACHE_TIMEOUT_1_DAY
 
 
-def get_active_registrations(run: Run) -> Any:
+def get_active_registrations(run_id: int) -> Any:
     """Return registrations for a run that are neither cancelled nor a pending signup request."""
-    return Registration.objects.filter(run=run, cancellation_date__isnull=True, pending=False)
+    return Registration.objects.filter(run_id=run_id, cancellation_date__isnull=True, pending=False)
 
 
 def clear_registration_tickets_cache(event_id: int) -> None:
@@ -117,11 +118,12 @@ def cache_registration_counts_key(run_id: int) -> str:
     return f"registration_counts_{run_id}"
 
 
-def get_registration_counts(run: Run, *, reset_cache: bool = False) -> dict:
+def get_registration_counts(run_id: int, event_id: int, *, reset_cache: bool = False) -> dict:
     """Get registration counts for a run, with caching support.
 
     Args:
-        run: The run instance to get counts for
+        run_id: The run id to get counts for
+        event_id: The event id the run belongs to
         reset_cache: If True, force cache refresh
 
     Returns:
@@ -129,14 +131,14 @@ def get_registration_counts(run: Run, *, reset_cache: bool = False) -> dict:
 
     """
     # Generate cache key for this run
-    cache_key = cache_registration_counts_key(run.id)
+    cache_key = cache_registration_counts_key(run_id)
 
     # Check if we should bypass cache
     cached_counts = None if reset_cache else cache.get(cache_key)
 
     # Update and cache if not found
     if cached_counts is None:
-        cached_counts = update_registration_counts(run)
+        cached_counts = update_registration_counts(run_id, event_id)
         cache.set(cache_key, cached_counts, timeout=60 * 5)
 
     return cached_counts
@@ -153,14 +155,15 @@ def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1)
     counter_dict[parameter_name] += increment_value
 
 
-def update_registration_counts(run: Run) -> dict[str, int]:
+def update_registration_counts(run_id: int, event_id: int) -> dict[str, int]:
     """Update registration counts cache for the given run.
 
     Calculates and returns registration statistics including counts by ticket tier,
     provisional registrations, registration choices, and character writing choices.
 
     Args:
-        run: Run instance to update registration counts for
+        run_id: Run id to update registration counts for
+        event_id: Event id the run belongs to
 
     Returns:
         Dictionary containing registration counts data by ticket tier and choices.
@@ -179,10 +182,10 @@ def update_registration_counts(run: Run) -> dict[str, int]:
     }
 
     # Get all non-cancelled registrations for this run
-    registrations = get_active_registrations(run)
+    registrations = get_active_registrations(run_id)
 
     # Get event features
-    features = get_event_features(run.event_id)
+    features = get_event_features(event_id)
 
     context = {}
 
@@ -220,7 +223,7 @@ def update_registration_counts(run: Run) -> dict[str, int]:
                 add_count(counts, "count_player", num_tickets)
 
             # Track provisional registrations separately
-            if is_registration_provisional(registration, event_id=run.event_id, features=features, context=context):
+            if is_registration_provisional(registration, event_id=event_id, features=features, context=context):
                 add_count(counts, "count_provisional", num_tickets)
 
         # Add to total registration count
@@ -231,7 +234,7 @@ def update_registration_counts(run: Run) -> dict[str, int]:
 
     # Count registration choices (form options selected)
     registration_choices = RegistrationChoice.objects.filter(
-        registration__run=run,
+        registration__run_id=run_id,
         registration__cancellation_date__isnull=True,
         registration__pending=False,
         question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
@@ -240,7 +243,7 @@ def update_registration_counts(run: Run) -> dict[str, int]:
         counts[f"option_{choice_data['option_id']}"] = choice_data["total"]
 
     # Count character writing choices for this event
-    character_ids = Character.objects.filter(event_id=run.event_id).values_list("id", flat=True)
+    character_ids = Character.objects.filter(event_id=event_id).values_list("id", flat=True)
 
     writing_choices = WritingChoice.objects.filter(element_id__in=character_ids)
     for choice_data in writing_choices.values("option_id").annotate(total=Count("option_id")):
@@ -255,12 +258,15 @@ def on_character_update_registration_cache(instance: Character) -> None:
     for run_id in get_event_run_ids(instance.event_id):
         clear_registration_counts_cache(run_id)
 
-    # Trigger registration updates if character approval is enabled
+    # Refresh nav/publication caches if character approval is enabled, since the
+    # character's approval status is shown on the registration's public/nav data
     if get_event_config(instance.event_id, "user_character_approval"):
         for relation in RegistrationCharacterRel.objects.filter(character=instance).select_related(
             "registration__run", "registration__run__event", "registration__ticket", "registration__member"
         ):
-            relation.registration.save()
+            from larpmanager.utils.users.registration import apply_registration_post_save_updates  # noqa: PLC0415
+
+            apply_registration_post_save_updates(relation.registration)
 
 
 def search_player(character: Character, json_output: dict[str, Any], context: dict) -> None:

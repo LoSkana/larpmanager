@@ -139,7 +139,7 @@ class TestTextFieldSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset mock after setup
         run.save()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.cache.run.reset_cache_config_run")
     def test_event_post_save_resets_event_cache_detailed(self, mock_reset: Any) -> None:

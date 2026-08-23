@@ -37,8 +37,6 @@ from larpmanager.models.registration import Registration, RegistrationTicket
 if TYPE_CHECKING:
     from decimal import Decimal
 
-    from larpmanager.models.event import Run
-
 
 def round_to_nearest_cent(amount: float) -> float:
     """Round a number to the nearest cent with tolerance for small differences.
@@ -86,14 +84,15 @@ def clear_registration_accounting_cache(run_id: int) -> None:
     cache.delete(cache_key)
 
 
-def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple[dict, dict, dict]:
+def _get_accounting_context(run_id: int, event_id: int, member_filter: int | None = None) -> tuple[dict, dict, dict]:
     """Get the context data needed for accounting calculations.
 
     This function retrieves and organizes data required for accounting operations
     including event features, registration tickets, and payment cache information.
 
     Args:
-        run: Run instance representing the event run
+        run_id: Run id representing the event run
+        event_id: Event id the run belongs to
         member_filter (int, optional): Member ID to filter payments for specific member.
             If None, includes all members. Defaults to None.
 
@@ -105,12 +104,12 @@ def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple
 
     """
     # Retrieve event features and ensure it's a dictionary
-    features = get_event_features(run.event_id)
+    features = get_event_features(event_id)
     if not isinstance(features, dict):
         features = {}
 
     # Get all registration tickets for this event, ordered by price (highest first)
-    all_tickets = sorted(get_registration_tickets(run.event_id), key=lambda t: t["price"], reverse=True)
+    all_tickets = sorted(get_registration_tickets(event_id), key=lambda t: t["price"], reverse=True)
     registration_tickets_by_id = {ticket["id"]: ticket for ticket in all_tickets}
 
     # Build cache for token/credit payments if feature is enabled
@@ -120,7 +119,7 @@ def _get_accounting_context(run: Run, member_filter: int | None = None) -> tuple
     payment_types = get_special_payment_types(features)
     if payment_types:
         # Query accounting item payments for this run
-        payments_query = AccountingItemPayment.objects.filter(registration__run=run)
+        payments_query = AccountingItemPayment.objects.filter(registration__run_id=run_id)
 
         # Apply member filter if specified
         if member_filter:
@@ -209,7 +208,7 @@ def calculate_payment_breakdown(
     return payment_breakdown
 
 
-def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
+def refresh_member_accounting_cache(run_id: int, event_id: int, member_id: int) -> None:
     """Update accounting cache for a specific member's registrations in a run.
 
     This function efficiently updates the accounting cache for a single member's
@@ -217,7 +216,8 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
     it doesn't exist or by selectively updating only the affected member's data.
 
     Args:
-        run: Run instance for which to update the accounting cache
+        run_id: Run id for which to update the accounting cache
+        event_id: Event id owning the run
         member_id: ID of the member whose accounting data should be updated
 
     Returns:
@@ -225,17 +225,17 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
 
     """
     # Get the cache key and retrieve existing cached data
-    cache_key = get_registration_accounting_cache_key(run.id)
+    cache_key = get_registration_accounting_cache_key(run_id)
     cached_accounting_data = cache.get(cache_key)
 
     # If no cache exists, rebuild the entire cache and return early
     if not cached_accounting_data:
-        update_registration_accounting_cache(run)
+        update_registration_accounting_cache(run_id, event_id)
         return
 
     # Fetch all active registrations for this member in the current run
     member_registrations = Registration.objects.filter(
-        run=run, member_id=member_id, cancellation_date__isnull=True, pending=False
+        run_id=run_id, member_id=member_id, cancellation_date__isnull=True, pending=False
     )
 
     # Handle case where member has no active registrations
@@ -245,14 +245,16 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
             try:
                 registration = Registration.objects.get(uuid=registration_uuid, member_id=member_id)
                 # Remove cache entry if it belongs to this run and member
-                if registration.run_id == run.id:
+                if registration.run_id == run_id:
                     cached_accounting_data.pop(registration_uuid, None)
             except ObjectDoesNotExist:
                 # Skip if registration no longer exists
                 pass
     else:
         # Recalculate accounting data for member's active registrations
-        features, registration_tickets, cached_already_invoiced_payments = _get_accounting_context(run, member_id)
+        features, registration_tickets, cached_already_invoiced_payments = _get_accounting_context(
+            run_id, event_id, member_id
+        )
 
         # Update cache with fresh accounting data for each registration
         for registration in member_registrations:
@@ -271,7 +273,7 @@ def refresh_member_accounting_cache(run: Run, member_id: int) -> None:
     cache.set(cache_key, cached_accounting_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
-def get_registration_accounting_cache(run: Run) -> dict:
+def get_registration_accounting_cache(run_id: int, event_id: int) -> dict:
     """Get or create registration accounting cache for a run.
 
     Retrieves cached registration accounting data for the given run. If the cache
@@ -280,7 +282,8 @@ def get_registration_accounting_cache(run: Run) -> dict:
     regenerate the cache simultaneously.
 
     Args:
-        run (Run): The Run instance to get accounting data for.
+        run_id: Run id to get accounting data for.
+        event_id: Event id the run belongs to.
 
     Returns:
         dict: Cached registration accounting data containing payment summaries,
@@ -288,7 +291,7 @@ def get_registration_accounting_cache(run: Run) -> dict:
 
     """
     # Generate the cache key for this specific run
-    cache_key = get_registration_accounting_cache_key(run.id)
+    cache_key = get_registration_accounting_cache_key(run_id)
     lock_key = f"{cache_key}_lock"
 
     # Attempt to retrieve cached data
@@ -302,7 +305,7 @@ def get_registration_accounting_cache(run: Run) -> dict:
         if lock_acquired:
             # This process acquired the lock - regenerate the cache
             try:
-                cached_data = update_registration_accounting_cache(run)
+                cached_data = update_registration_accounting_cache(run_id, event_id)
                 cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
             finally:
                 # Always release the lock
@@ -321,20 +324,21 @@ def get_registration_accounting_cache(run: Run) -> dict:
 
             # If still no data after retries, regenerate without lock as fallback
             if cached_data is None:
-                cached_data = update_registration_accounting_cache(run)
+                cached_data = update_registration_accounting_cache(run_id, event_id)
                 cache.set(cache_key, cached_data, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_data
 
 
-def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
+def update_registration_accounting_cache(run_id: int, event_id: int) -> dict[int, dict[str, str]]:
     """Update registration accounting cache for the given run.
 
     Processes all active (non-cancelled) registrations for a run and calculates
     their accounting data, formatting monetary values as strings without trailing zeros.
 
     Args:
-        run: Run instance to update accounting cache for
+        run_id: Run id to update accounting cache for
+        event_id: Event id the run belongs to
 
     Returns:
         Dictionary mapping registration IDs to their accounting data, where each
@@ -342,10 +346,10 @@ def update_registration_accounting_cache(run: Run) -> dict[int, dict[str, str]]:
 
     """
     # Get accounting context data (features, tickets, pricing)
-    features, registration_tickets, cached_accounting_info_per_registration = _get_accounting_context(run)
+    features, registration_tickets, cached_accounting_info_per_registration = _get_accounting_context(run_id, event_id)
 
     # Filter for active registrations only (exclude cancelled and pending ones)
-    active_registrations = get_active_registrations(run)
+    active_registrations = get_active_registrations(run_id)
     accounting_cache = {}
 
     # Process each registration to calculate accounting data

@@ -247,7 +247,7 @@ def send_help_question_notification_email(instance: Any) -> None:
 
     if instance.is_user:
         if instance.run:
-            for organizer in get_event_organizers(instance.run.event):
+            for organizer in get_event_organizers(instance.run_id):
                 activate(organizer.language)
                 subject, body = get_help_email(instance)
                 subject += " " + _("for %(event)s") % {"event": instance.run}

@@ -25,6 +25,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models import Q, QuerySet, UniqueConstraint
 
+from larpmanager.cache.basic import get_run_event_id
 from larpmanager.models.association import Association
 from larpmanager.models.base import AlphanumericValidator, BaseModel, Feature, OrderMixin, UuidMixin
 from larpmanager.models.event import BaseConceptModel, Event
@@ -171,15 +172,26 @@ class EventRole(UuidMixin, BaseConceptModel):
         ]
 
 
-def get_event_organizers(event: Event) -> QuerySet[Member]:
-    """Get all organizer members of an event."""
+def _get_event_organizers_by_event_id(event_id: int) -> QuerySet[Member]:
+    """Get all organizer members of an event, given its id."""
     try:
         # Get or create the event organizer role (role number 1)
-        (organizer_role, _was_created) = EventRole.objects.get_or_create(event=event, number=1)
+        (organizer_role, _was_created) = EventRole.objects.get_or_create(event_id=event_id, number=1)
         # Return all members assigned to the organizer role
         return organizer_role.members.all()
     except ObjectDoesNotExist:
         return []
+
+
+def get_event_organizers(run_id: int) -> QuerySet[Member]:
+    """Get all organizer members of the event of a run."""
+    event_id = get_run_event_id(run_id)
+    return _get_event_organizers_by_event_id(event_id)
+
+
+def get_event_organizers_by_event(event_id: int) -> QuerySet[Member]:
+    """Get all organizer members of an event, when no run is in scope."""
+    return _get_event_organizers_by_event_id(event_id)
 
 
 class RoleInvite(BaseModel):
@@ -218,14 +230,14 @@ class RoleInvite(BaseModel):
         return self.event_role or self.association_role
 
 
-def get_event_staffers(event: Event) -> list:
+def get_event_staffers(event_id: int) -> list:
     """Get all non-organizer staff members of an event.
 
     Retrieves all unique members who have roles in the specified event,
     excluding organizers. Uses prefetch_related for optimized database queries.
 
     Args:
-        event: Event instance to get staff members for
+        event_id: id of Event to get staff members for
 
     Returns:
         List of Member instances with non-organizer event roles, with duplicates removed
@@ -235,7 +247,7 @@ def get_event_staffers(event: Event) -> list:
 
     """
     # Fetch all event roles with their associated members in a single query
-    roles = EventRole.objects.filter(event=event).prefetch_related("members")
+    roles = EventRole.objects.filter(event_id=event_id).prefetch_related("members")
 
     # Initialize result list and tracking dictionary for unique members
     staff_members = []

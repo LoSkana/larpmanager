@@ -41,7 +41,7 @@ from larpmanager.models.association import get_url
 from larpmanager.models.casting import Trait
 from larpmanager.models.utils import get_option_form_text
 from larpmanager.models.writing import Character, FactionType
-from larpmanager.utils.core.common import clean_html, html_clean
+from larpmanager.utils.core.common import clean_html, get_event_elements, html_clean
 from larpmanager.utils.io.pdf import get_trait_character
 from larpmanager.utils.larpmanager.versions import VERSIONS
 from larpmanager.utils.services.association import get_hint_for_slug
@@ -363,7 +363,9 @@ def show_char(context: dict, element: dict | str | None, run: Run, include_toolt
 
     # Cache the maximum character number for this run's event to avoid repeated queries
     if "max_ch_number" not in context:
-        context["max_ch_number"] = run.event.get_elements(Character).aggregate(Max("number"))["number__max"]
+        context["max_ch_number"] = get_event_elements(run.event_id, Character, context=context).aggregate(
+            Max("number")
+        )["number__max"]
 
     # Handle case where no characters exist in the event
     if not context["max_ch_number"]:

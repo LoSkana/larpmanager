@@ -57,6 +57,7 @@ from larpmanager.models.miscellanea import (
 from larpmanager.models.registration import TicketTier
 from larpmanager.models.utils import generate_id
 from larpmanager.models.writing import Faction, FactionType
+from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.core.copy import get_copy_choices
 from larpmanager.utils.core.validators import FileTypeValidator
 
@@ -363,8 +364,7 @@ class OrganizerCastingOptionsForm(BaseForm):
         # Configure faction field if faction feature is enabled
         if "faction" in self.params["features"]:
             factions = (
-                self.params["event"]
-                .get_elements(Faction)
+                get_event_elements(self.params["event"].id, Faction, context=self.params)
                 .filter(typ=FactionType.PRIM)
                 .order_by("number")
                 .values_list("uuid", "name")

@@ -202,26 +202,26 @@ class TestCharacterOptionDependencies(BaseTestCase):
 
     def test_dependencies_cached_and_cleared_on_requirement_change(self) -> None:
         features = {"character", "wri_que_requirements"}
-        assert get_character_option_dependencies(self.event, features) == {
+        assert get_character_option_dependencies(self.event.id, features) == {
             str(self.psionic.uuid): [str(self.bunker.uuid)]
         }
 
         # the requirements are written after the option is saved, so the m2m change must clear the cache
         self.psionic.requirements.set([self.wasteland])
 
-        assert get_character_option_dependencies(self.event, features) == {
+        assert get_character_option_dependencies(self.event.id, features) == {
             str(self.psionic.uuid): [str(self.wasteland.uuid)]
         }
 
         self.psionic.requirements.clear()
 
-        assert get_character_option_dependencies(self.event, features) == {}
+        assert get_character_option_dependencies(self.event.id, features) == {}
 
     def test_dependencies_empty_without_character_feature(self) -> None:
-        assert get_character_option_dependencies(self.event, {"user_character"}) == {}
+        assert get_character_option_dependencies(self.event.id, {"user_character"}) == {}
 
     def test_dependencies_empty_without_requirements_feature(self) -> None:
-        assert get_character_option_dependencies(self.event, {"character"}) == {}
+        assert get_character_option_dependencies(self.event.id, {"character"}) == {}
 
     def test_organizer_form_bound_by_requirements(self) -> None:
         form = OrgaCharacterForm(
@@ -400,19 +400,19 @@ class TestCharacterQuestionDependencies(BaseTestCase):
 
     def test_question_dependencies_cached_and_cleared_on_requirement_change(self) -> None:
         features = {"character", "wri_que_requirements"}
-        assert get_character_question_dependencies(self.event, features) == {
+        assert get_character_question_dependencies(self.event.id, features) == {
             str(self.gear.uuid): [str(self.bunker.uuid)]
         }
 
         self.gear.requirements.set([self.wasteland])
 
-        assert get_character_question_dependencies(self.event, features) == {
+        assert get_character_question_dependencies(self.event.id, features) == {
             str(self.gear.uuid): [str(self.wasteland.uuid)]
         }
 
         self.gear.requirements.clear()
 
-        assert get_character_question_dependencies(self.event, features) == {}
+        assert get_character_question_dependencies(self.event.id, features) == {}
 
     def test_question_dependencies_empty_without_requirements_feature(self) -> None:
-        assert get_character_question_dependencies(self.event, {"character"}) == {}
+        assert get_character_question_dependencies(self.event.id, {"character"}) == {}

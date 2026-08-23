@@ -45,7 +45,7 @@ from larpmanager.models.registration import (
 )
 from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element, get_element_event, get_time_diff_today
+from larpmanager.utils.core.common import get_element, get_element_event, get_event_elements, get_time_diff_today
 from larpmanager.utils.users.deadlines import get_membership_fee_year
 from larpmanager.views.user.casting import (
     casting_details,
@@ -148,7 +148,7 @@ def assign_casting(request: HttpRequest, context: dict) -> None:
             member = Member.objects.get(uuid=member_uuid)
 
             # Get active registration for this member and run
-            registration = get_active_registrations(context["run"]).get(member=member)
+            registration = get_active_registrations(context["run"].id).get(member=member)
 
             # Extract entity UUID (character or trait)
             entity_uuid = parts[1]
@@ -216,7 +216,9 @@ def get_casting_choices_characters(
     allowed_character_uuids = []
     if "faction" in context["features"]:
         # Get primary factions for the event
-        primary_factions_query = context["event"].get_elements(Faction).filter(typ=FactionType.PRIM)
+        primary_factions_query = get_event_elements(context["event"].id, Faction, context=context).filter(
+            typ=FactionType.PRIM
+        )
         factioned_character_uuids = set()
         for faction_element in primary_factions_query.order_by("number"):
             faction_char_uuids = [str(char.uuid) for char in faction_element.characters.all()]
@@ -230,7 +232,8 @@ def get_casting_choices_characters(
         # Include characters with no primary faction if the "no faction" pseudo-choice is selected
         if NO_FACTION_KEY in filtering_options["factions"]:
             all_character_uuids = {
-                str(char.uuid) for char in context["event"].get_elements(Character).exclude(hide=True)
+                str(char.uuid)
+                for char in get_event_elements(context["event"].id, Character, context=context).exclude(hide=True)
             }
             allowed_character_uuids.extend(all_character_uuids - factioned_character_uuids)
 
@@ -240,7 +243,7 @@ def get_casting_choices_characters(
     )
 
     # Process all characters for the event (excluding hidden ones)
-    characters_query = context["event"].get_elements(Character)
+    characters_query = get_event_elements(context["event"].id, Character, context=context)
     for character in characters_query.exclude(hide=True):
         char_uuid = str(character.uuid)
 
@@ -437,7 +440,7 @@ def get_casting_data(
     cache_aim, cache_memberships, casting_submissions = _casting_prepare(context)
 
     # Process each registration to build player preferences
-    registrations_query = get_active_registrations(context["run"])
+    registrations_query = get_active_registrations(context["run"].id)
     # Exclude non-participant ticket types from casting
     registrations_query = registrations_query.exclude(
         ticket__tier__in=[TicketTier.WAITING],

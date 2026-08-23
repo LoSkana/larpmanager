@@ -164,7 +164,7 @@ def set_data_invoice(
         _custom_reason_reg(context, invoice, member_real_display_name)
 
         # Check if bundle membership_fee
-        association_id = get_run_association_id(registration.run_id)
+        association_id = get_run_association_id(registration.run_id, context=context)
         membership_fee = get_membership_fee_for_reg(
             association_id, registration.member_id, registration.run, registration
         )
@@ -226,7 +226,7 @@ def _custom_reason_reg(context: dict, invoice: PaymentInvoice, member_real: Memb
     invoice.registration = context["registration"]
 
     # Get custom reason template from event configuration
-    event_id = get_run_event_id(context["registration"].run_id)
+    event_id = get_run_event_id(context["registration"].run_id, context=context)
     custom_reason_template = get_event_config(event_id, "payment_custom_reason", context=context)
     if not custom_reason_template:
         return

@@ -827,7 +827,7 @@ def orga_expenses_approve(request: HttpRequest, event_slug: str, expense_uuid: s
     exp = get_object_uuid(AccountingItemExpense, expense_uuid)
 
     # Ensure the expense belongs to the current event
-    if get_run_event_id(exp.run_id) != context["event"].id:
+    if get_run_event_id(exp.run_id, context=context) != context["event"].id:
         msg = "not your orga"
         raise Http404(msg)
 
