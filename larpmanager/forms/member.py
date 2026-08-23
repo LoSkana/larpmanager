@@ -33,7 +33,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.db.models import Max
+from django.db.models import Max, Q
 from django.forms import Textarea
 from django.template import loader
 from django.utils import timezone, translation
@@ -200,13 +200,14 @@ class MyRegistrationFormUniqueEmail(FormMixin, RegistrationFormUniqueEmail):
         self.fields = OrderedDict((key, self.fields[key]) for key in new_order)
 
     def clean_email(self) -> str:
-        """Validate that the email is not already used as a username."""
+        """Validate that the email is not already used by an existing user."""
         email = self.cleaned_data.get("email")
         if not email:
             return email
 
-        # Check if username already exists
-        if User.objects.filter(username__iexact=email).exists():
+        # Check if a user already exists with this email (as username or as email,
+        # e.g. an account created via SSO where username != email)
+        if User.objects.filter(Q(username__iexact=email) | Q(email__iexact=email)).exists():
             raise ValidationError(
                 _("A user with this email address already exists. Please use a different email or try logging in."),
             )
