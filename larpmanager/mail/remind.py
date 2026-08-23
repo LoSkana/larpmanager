@@ -295,6 +295,52 @@ def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
     return email_body
 
 
+def remember_character_creation(registration: Any, *, requires_approval: bool = False) -> None:
+    """Send character creation/confirmation reminder email to registered user.
+
+    Args:
+        registration: Registration instance with missing/unapproved character
+        requires_approval: Whether the reminder is about an unapproved character
+            (True) rather than a missing one (False)
+
+    Side effects:
+        Sends email reminder about character creation requirement
+
+    """
+    activate(registration.member.language)
+    context = {"event": registration.run, "url": get_url("characters", registration.run.event)}
+
+    subject = hdr(registration.run.event) + _("Character creation reminder for %(event)s") % context
+
+    body = get_association_text(
+        get_run_association_id(registration.run_id),
+        AssociationTextType.REMINDER_CHARACTER,
+        registration.member.language,
+    ) or get_remember_character_creation_body(context, requires_approval=requires_approval)
+
+    my_send_mail(subject, body, registration.member, registration.run)
+
+
+def get_remember_character_creation_body(email_context: Any, *, requires_approval: bool) -> Any:
+    """Generate default character creation/confirmation reminder email body text."""
+    if requires_approval:
+        return (
+            _(
+                "Hello! You registered for %(event)s and created your character, but it has not yet "
+                "been confirmed for submission to the staff for approval. "
+                "<a href='%(url)s'>click here</a> to check its status."
+            )
+            % email_context
+        )
+    return (
+        _(
+            "Hello! You registered for %(event)s but have not created your character yet. "
+            "<a href='%(url)s'>click here</a> to create it."
+        )
+        % email_context
+    )
+
+
 def notify_deadlines(run: Any) -> None:
     """Send deadline notification emails to event organizers.
 
@@ -322,6 +368,8 @@ def notify_deadlines(run: Any) -> None:
         "pay": "Overdue: Payment",
         "profile": "Overdue: Profile completion",
         "cast": "Missing casting preferences",
+        "char": "Character not yet created",
+        "char_appr": "Character not yet approved",
     }
 
     for organizer in get_event_organizers(run.event):

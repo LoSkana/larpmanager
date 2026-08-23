@@ -5199,6 +5199,9 @@ msgstr "Po uložení přidat další"
 msgid "Character Inventory Types"
 msgstr "Typy inventáře postav"
 
+msgid "Character not yet created"
+msgstr "Postava ještě nebyla vytvořena"
+
 msgid "Character sheet questions"
 msgstr "Otázky k listu postavy"
 
@@ -5338,6 +5341,9 @@ msgstr "Nelze kopírovat ze stejné události"
 
 msgid "Character assignment email"
 msgstr "E-mail s přiřazením postavy"
+
+msgid "Character not yet approved"
+msgstr "Postava ještě nebyla schválena"
 
 msgid "Choose the payment method:"
 msgstr "Zvol způsob platby:"
@@ -6157,6 +6163,9 @@ msgstr "(Nepovinné) Název lístku"
 
 msgid "Access the organization dashboard"
 msgstr "Přejdi na řídicí panel organizace"
+
+msgid "Character creation reminder email"
+msgstr "E-mail s připomenutím vytvoření postavy"
 
 msgid "Days available cannot be negative"
 msgstr "Počet dnů k dispozici nemůže být záporný"
@@ -7033,6 +7042,10 @@ msgstr "Řetězec user agent prohlížeče z přístupu"
 
 msgid "Cannot demote the last admin of the guild"
 msgstr "Nelze snížit oprávnění posledního správce cechu"
+
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr "Připomenutí vytvoření postavy pro %(event)s"
 
 msgid "Choice locked, click to make it available"
 msgstr "Volba je uzamčena, kliknutím ji zpřístupníš"
@@ -13651,6 +13664,14 @@ msgstr ""
 "Umožňuje účastníkům přizpůsobit konkrétní atributy (jméno, zájmeno, veřejné "
 "informace atd.) přiřazených postav"
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet."
+" <a href='%(url)s'>click here</a> to create it."
+msgstr ""
+"Ahoj! Zaregistroval(a) ses na %(event)s, ale ještě sis nevytvořil(a) "
+"postavu. <a href='%(url)s'>klikni sem</a> a vytvoř ji."
+
 msgid ""
 "If checked, applying this tag to a relationship also applies it to the other"
 " character's relationship back towards this one"
@@ -14547,6 +14568,16 @@ msgstr ""
 "Nezapomeň, že informace na této stránce byly poskytnuty důvěrně a musí se s "
 "nimi zacházet s maximální opatrností. Sdílej je jen tehdy, když je to "
 "nezbytně nutné, a pokud možno anonymně."
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+"Ahoj! Zaregistroval(a) ses na %(event)s a vytvořil(a) sis postavu, ale zatím"
+" nebyla potvrzena k odeslání organizátorům ke schválení. <a "
+"href='%(url)s'>klikni sem</a> a zkontroluj její stav."
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "

@@ -5199,6 +5199,9 @@ msgstr "Po zapisaniu dodaj kolejny"
 msgid "Character Inventory Types"
 msgstr "Rodzaje ekwipunku postaci"
 
+msgid "Character not yet created"
+msgstr "Postać nie została jeszcze stworzona"
+
 msgid "Character sheet questions"
 msgstr "Pytania do arkusza postaci"
 
@@ -5338,6 +5341,9 @@ msgstr "Nie można kopiować z tego samego zdarzenia"
 
 msgid "Character assignment email"
 msgstr "E-mail z przypisaniem postaci"
+
+msgid "Character not yet approved"
+msgstr "Postać nie została jeszcze zatwierdzona"
 
 msgid "Choose the payment method:"
 msgstr "Wybierz metodę płatności:"
@@ -6157,6 +6163,9 @@ msgstr "(Opcjonalnie) Nazwa biletu"
 
 msgid "Access the organization dashboard"
 msgstr "Przejdź do pulpitu nawigacyjnego organizacji"
+
+msgid "Character creation reminder email"
+msgstr "E-mail z przypomnieniem o tworzeniu postaci"
 
 msgid "Days available cannot be negative"
 msgstr "Liczba dostępnych dni nie może być ujemna"
@@ -7032,6 +7041,10 @@ msgstr "Ciąg agenta użytkownika przeglądarki z dostępu"
 
 msgid "Cannot demote the last admin of the guild"
 msgstr "Nie da się obniżyć rangi ostatniego administratora gildii"
+
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr "Przypomnienie o tworzeniu postaci na %(event)s"
 
 msgid "Choice locked, click to make it available"
 msgstr "Wybór zablokowany, kliknij, aby go udostępnić"
@@ -13931,6 +13944,15 @@ msgstr ""
 "Umożliwia uczestnikom dostosowanie określonych atrybutów (imię, zaimek, "
 "informacje publiczne itp.) przypisanych im postaci"
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet."
+" <a href='%(url)s'>click here</a> to create it."
+msgstr ""
+"Cześć! Zarejestrowałeś(-aś) się na %(event)s, ale nie stworzyłeś(-aś) "
+"jeszcze swojej postaci. <a href='%(url)s'>Kliknij tutaj</a>, aby ją "
+"stworzyć."
+
 msgid ""
 "If checked, applying this tag to a relationship also applies it to the other"
 " character's relationship back towards this one"
@@ -14857,6 +14879,16 @@ msgstr ""
 "Pamiętaj, że informacje na tej stronie zostały przekazane poufnie i należy "
 "traktować je z najwyższą ostrożnością. Udostępniaj je tylko wtedy, gdy jest "
 "to absolutnie konieczne, a jeśli to możliwe — anonimowo."
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+"Cześć! Zarejestrowałeś(-aś) się na %(event)s i stworzyłeś(-aś) swoją postać,"
+" ale nie została jeszcze potwierdzona do przesłania ekipie do zatwierdzenia."
+" <a href='%(url)s'>Kliknij tutaj</a>, aby sprawdzić jej status."
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "

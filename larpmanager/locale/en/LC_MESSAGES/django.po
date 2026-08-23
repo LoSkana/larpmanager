@@ -3339,6 +3339,23 @@ msgstr ""
 msgid "Without payment of this fee, event participation is not permitted."
 msgstr ""
 
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet. "
+"<a href='%(url)s'>click here</a> to create it."
+msgstr ""
+
 msgid "Review users with pending event deadlines:"
 msgstr ""
 
@@ -3859,6 +3876,9 @@ msgid "Payment reminder email"
 msgstr ""
 
 msgid "Profile completion reminder email"
+msgstr ""
+
+msgid "Character creation reminder email"
 msgstr ""
 
 msgid "Type of text"
@@ -5502,6 +5522,12 @@ msgid "Delay in profile"
 msgstr ""
 
 msgid "Missing casting preferences"
+msgstr ""
+
+msgid "Character not yet created"
+msgstr ""
+
+msgid "Character not yet approved"
 msgstr ""
 
 msgid "Show help tip"

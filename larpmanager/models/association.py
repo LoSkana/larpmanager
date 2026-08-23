@@ -394,6 +394,7 @@ class AssociationTextType(models.TextChoices):
     REMINDER_MEMBERSHIP_FEE = "rf", _("Membership request reminder email")
     REMINDER_PAY = "rp", _("Payment reminder email")
     REMINDER_PROFILE = "rr", _("Profile completion reminder email")
+    REMINDER_CHARACTER = "rc", _("Character creation reminder email")
 
 
 class AssociationText(UuidMixin, BaseModel):

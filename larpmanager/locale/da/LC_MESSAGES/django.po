@@ -5199,6 +5199,9 @@ msgstr "Tilføj en mere efter gemning"
 msgid "Character Inventory Types"
 msgstr "Typer af karakterinventar"
 
+msgid "Character not yet created"
+msgstr "Karakter endnu ikke oprettet"
+
 msgid "Character sheet questions"
 msgstr "Spørgsmål i karakterarket"
 
@@ -5338,6 +5341,9 @@ msgstr "Kan ikke kopiere fra samme event"
 
 msgid "Character assignment email"
 msgstr "E-mail om karaktertildeling"
+
+msgid "Character not yet approved"
+msgstr "Karakter endnu ikke godkendt"
 
 msgid "Choose the payment method:"
 msgstr "Vælg betalingsmetode:"
@@ -6157,6 +6163,9 @@ msgstr "(Valgfrit) Billettens navn"
 
 msgid "Access the organization dashboard"
 msgstr "Gå til organisationens kontrolpanel"
+
+msgid "Character creation reminder email"
+msgstr "Påmindelsesmail om oprettelse af karakter"
 
 msgid "Days available cannot be negative"
 msgstr "Antallet af tilgængelige dage kan ikke være negativt"
@@ -7032,6 +7041,10 @@ msgstr "Browserens brugeragentstreng fra adgangen"
 
 msgid "Cannot demote the last admin of the guild"
 msgstr "Kan ikke degradere guildens sidste admin"
+
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr "Påmindelse om oprettelse af karakter til %(event)s"
 
 msgid "Choice locked, click to make it available"
 msgstr "Valg låst, klik for at gøre det tilgængeligt"
@@ -13767,6 +13780,14 @@ msgstr ""
 "Giver deltagerne mulighed for at tilpasse bestemte attributter (navn, "
 "pronomen, offentlig information osv.) for de karakterer, de er tildelt"
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet."
+" <a href='%(url)s'>click here</a> to create it."
+msgstr ""
+"Hej! Du har tilmeldt dig %(event)s, men har endnu ikke oprettet din "
+"karakter. <a href='%(url)s'>klik her</a> for at oprette den."
+
 msgid ""
 "If checked, applying this tag to a relationship also applies it to the other"
 " character's relationship back towards this one"
@@ -14676,6 +14697,16 @@ msgstr ""
 "Husk, at oplysningerne på denne side er givet i fortrolighed og skal "
 "behandles med største omhu. Del dem kun, når det er strengt nødvendigt, og "
 "om muligt anonymt."
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+"Hej! Du har tilmeldt dig %(event)s og oprettet din karakter, men den er "
+"endnu ikke bekræftet til indsendelse til staben for godkendelse. <a "
+"href='%(url)s'>klik her</a> for at tjekke dens status."
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "
