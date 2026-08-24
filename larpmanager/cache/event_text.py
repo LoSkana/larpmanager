@@ -145,7 +145,7 @@ def get_event_text(event_id: int, text_type: str, language_code: str | None = No
         return default_text
 
     # Fall back to the campaign parent event, if this event belongs to one
-    parent_id = _get_event_parent_id(event_id, None)
+    parent_id = _get_event_parent_id(event_id)
     if parent_id:
         return get_event_text(parent_id, text_type, language_code)
 

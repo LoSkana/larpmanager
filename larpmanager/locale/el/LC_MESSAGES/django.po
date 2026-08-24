@@ -5015,6 +5015,9 @@ msgstr "Επίλεξε τις προτιμήσεις σου"
 msgid "Show available factions"
 msgstr "Εμφάνιση διαθέσιμων παρατάξεων"
 
+msgid "The ability type's name"
+msgstr "Το όνομα του τύπου ικανότητας"
+
 msgid "The genre of your event"
 msgstr "Το είδος της εκδήλωσής σου"
 
@@ -5199,6 +5202,9 @@ msgstr "Μετά την αποθήκευση, πρόσθεσε άλλο"
 msgid "Character Inventory Types"
 msgstr "Τύποι αποθέματος χαρακτήρων"
 
+msgid "Character not yet created"
+msgstr "Ο χαρακτήρας δεν έχει δημιουργηθεί ακόμη"
+
 msgid "Character sheet questions"
 msgstr "Ερωτήσεις φύλλου χαρακτήρα"
 
@@ -5338,6 +5344,9 @@ msgstr "Δεν μπορείς να αντιγράψεις από το ίδιο e
 
 msgid "Character assignment email"
 msgstr "Email ανάθεσης χαρακτήρα"
+
+msgid "Character not yet approved"
+msgstr "Ο χαρακτήρας δεν έχει εγκριθεί ακόμη"
 
 msgid "Choose the payment method:"
 msgstr "Επίλεξε μέθοδο πληρωμής:"
@@ -6157,6 +6166,9 @@ msgstr "(Προαιρετικό) Το όνομα του εισιτηρίου"
 
 msgid "Access the organization dashboard"
 msgstr "Πρόσβαση στον πίνακα ελέγχου του οργανισμού"
+
+msgid "Character creation reminder email"
+msgstr "Email υπενθύμισης δημιουργίας χαρακτήρα"
 
 msgid "Days available cannot be negative"
 msgstr "Οι διαθέσιμες ημέρες δεν μπορούν να είναι αρνητικές"
@@ -7033,6 +7045,10 @@ msgstr "Συμβολοσειρά user agent του προγράμματος πε
 
 msgid "Cannot demote the last admin of the guild"
 msgstr "Δεν μπορείς να υποβιβάσεις τον τελευταίο διαχειριστή του guild"
+
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr "Υπενθύμιση δημιουργίας χαρακτήρα για το %(event)s"
 
 msgid "Choice locked, click to make it available"
 msgstr "Επιλογή κλειδωμένη, κάνε κλικ για να τη διαθέσεις"
@@ -12127,6 +12143,13 @@ msgstr ""
 "πολλαπλά «Traits»"
 
 msgid ""
+"Note that existing rules with the same number, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Σημείωσε ότι οι υπάρχοντες κανόνες με τον ίδιο αριθμό θα αντικατασταθούν με "
+"τα δεδομένα που ανέβασες."
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data."
 msgstr ""
@@ -12522,6 +12545,13 @@ msgstr ""
 "τον αριθμό εγγραφών και δημιούργησε νέες"
 
 msgid ""
+"Note that existing modifiers with the same number, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Σημείωσε ότι οι υπάρχοντες τροποποιητές με τον ίδιο αριθμό θα "
+"αντικατασταθούν με τα δεδομένα που ανέβασες."
+
+msgid ""
 "Once your membership is approved, you can proceed with the payment for your "
 "registered events."
 msgstr ""
@@ -12707,6 +12737,13 @@ msgid ""
 msgstr ""
 "Δεν έχουν δημιουργηθεί ακόμη εκπτώσεις. Πρόσθεσε μια έκπτωση για να "
 "προσφέρεις μειωμένες τιμές ή κωδικούς προσφοράς στους συμμετέχοντες."
+
+msgid ""
+"Note that existing ability types with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Σημείωσε ότι οι υπάρχοντες τύποι ικανοτήτων με το ίδιο όνομα θα "
+"αντικατασταθούν με τα δεδομένα που ανέβασες."
 
 msgid ""
 "Optional: upload a photo of yourself associated with your character "
@@ -14166,6 +14203,14 @@ msgstr ""
 "(όνομα, αντωνυμία, δημόσιες πληροφορίες κ.λπ.) των χαρακτήρων που τους έχουν"
 " ανατεθεί"
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet."
+" <a href='%(url)s'>click here</a> to create it."
+msgstr ""
+"Γεια! Εγγράφηκες στο %(event)s αλλά δεν έχεις δημιουργήσει ακόμη τον "
+"χαρακτήρα σου. <a href='%(url)s'>κάνε κλικ εδώ</a> για να τον δημιουργήσεις."
+
 msgid ""
 "If checked, applying this tag to a relationship also applies it to the other"
 " character's relationship back towards this one"
@@ -15113,6 +15158,16 @@ msgstr ""
 "Θυμήσου ότι οι πληροφορίες σε αυτή τη σελίδα δόθηκαν εμπιστευτικά και πρέπει"
 " να αντιμετωπίζονται με τη μέγιστη προσοχή. Κοινοποίησέ τες μόνο όταν είναι "
 "απολύτως απαραίτητο και, όπου είναι δυνατό, ανώνυμα."
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+"Γεια! Εγγράφηκες στο %(event)s και δημιούργησες τον χαρακτήρα σου, αλλά δεν "
+"έχει ακόμη επιβεβαιωθεί η υποβολή του στο προσωπικό για έγκριση. <a "
+"href='%(url)s'>κάνε κλικ εδώ</a> για να ελέγξεις την κατάστασή του."
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "

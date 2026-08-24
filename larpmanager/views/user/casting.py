@@ -104,7 +104,9 @@ def casting_characters(context: dict, registration: Registration) -> None:
     context["valid_element_ids"] = valid_character_uuids
 
     # Add faction filter for transversal faction types
-    context["faction_filter"] = get_event_elements(context["event"].id, Faction).filter(typ=FactionType.TRASV)
+    context["faction_filter"] = get_event_elements(context["event"].id, Faction, context=context).filter(
+        typ=FactionType.TRASV
+    )
 
 
 def casting_quest_traits(context: dict, typ: str) -> None:
@@ -782,7 +784,9 @@ def casting_history_characters(context: dict) -> None:
     context["cache"] = {}
 
     # Build character cache for quick lookup, excluding hidden characters
-    for character in get_event_elements(context["event"].id, Character).filter(hide=False).select_related("mirror"):
+    for character in (
+        get_event_elements(context["event"].id, Character, context=context).filter(hide=False).select_related("mirror")
+    ):
         context["cache"][str(character.uuid)] = character
 
     # Group casting preferences by member ID for efficient processing
@@ -794,7 +798,7 @@ def casting_history_characters(context: dict) -> None:
 
     # Query all valid registrations (non-cancelled, non-staff/NPC)
     registration_query = (
-        get_active_registrations(context["run"])
+        get_active_registrations(context["run"].id)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     )
@@ -869,7 +873,7 @@ def casting_history_traits(context: dict) -> None:
 
     # Process registrations and attach casting preferences
     for registration in (
-        get_active_registrations(context["run"])
+        get_active_registrations(context["run"].id)
         .exclude(ticket__tier__in=[TicketTier.STAFF, TicketTier.NPC])
         .select_related("member")
     ):

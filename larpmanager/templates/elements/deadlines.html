@@ -206,4 +206,50 @@
             </td>
         </tr>
     {% endif %}
+    {% if res.char %}
+        <tr>
+            <td>
+                <b>{% trans "Character not yet created" %}</b>
+            </td>
+            <td>
+                <a href="{% url 'characters' %}">{% trans "give them this address" %}</a>
+            </td>
+            <td>{{ res.char|length }}</td>
+            <td>
+                {% for el in res.char %}
+                    {% include "elements/comma.html" %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.char %}
+                    {% include "elements/comma.html" %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
+    {% if res.char_appr %}
+        <tr>
+            <td>
+                <b>{% trans "Character not yet approved" %}</b>
+            </td>
+            <td>
+                <a href="{% url 'characters' %}">{% trans "give them this address" %}</a>
+            </td>
+            <td>{{ res.char_appr|length }}</td>
+            <td>
+                {% for el in res.char_appr %}
+                    {% include "elements/comma.html" %}
+                    {{ el.0 }}
+                {% endfor %}
+            </td>
+            <td>
+                {% for el in res.char_appr %}
+                    {% include "elements/comma.html" %}
+                    {{ el.1 }}
+                {% endfor %}
+            </td>
+        </tr>
+    {% endif %}
 </table>

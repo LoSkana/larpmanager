@@ -970,7 +970,7 @@ def get_personal_area(context: dict) -> None:
     all_regs = get_member_registrations(member).order_by("-run__start")
     regs_by_assoc: dict = {}
     for reg in all_regs:
-        regs_by_assoc.setdefault(reg.run.event.association_id, []).append(reg)
+        regs_by_assoc.setdefault(get_run_association_id(reg.run_id, context=context), []).append(reg)
 
     registration_list = []
     for association_id, regs in regs_by_assoc.items():

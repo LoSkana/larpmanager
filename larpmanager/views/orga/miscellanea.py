@@ -373,7 +373,7 @@ def orga_warehouse_area(request: HttpRequest, event_slug: str) -> HttpResponse:
     context = check_event_context(request, event_slug, "orga_warehouse_area")
 
     # Retrieve all warehouse areas for the event
-    context["list"] = get_event_elements(context["event"].id, WarehouseArea)
+    context["list"] = get_event_elements(context["event"].id, WarehouseArea, context=context)
 
     return render(request, "larpmanager/orga/warehouse/area.html", context)
 
@@ -516,7 +516,9 @@ def orga_warehouse_area_assignments(request: HttpRequest, event_slug: str, area_
         item_all[item.id] = item
 
     # Process existing warehouse item assignments to calculate availability
-    for el in get_event_elements(context["event"].id, WarehouseItemAssignment).filter(event=context["event"]):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
+        event=context["event"]
+    ):
         item = item_all[el.item_id]
 
         # Mark items assigned to current area and track assignment details
@@ -572,7 +574,9 @@ def orga_warehouse_checks(request: HttpRequest, event_slug: str) -> HttpResponse
     context["items"] = {}
 
     # Iterate through all warehouse item assignments for this event
-    for el in get_event_elements(context["event"].id, WarehouseItemAssignment).select_related("area", "item"):
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).select_related(
+        "area", "item"
+    ):
         # Check if item is already in our items dictionary
         if el.item_id not in context["items"]:
             # First time seeing this item, initialize it with empty assignment list
@@ -629,7 +633,7 @@ def orga_warehouse_manifest(request: HttpRequest, event_slug: str) -> HttpRespon
 
     # Iterate through all warehouse item assignments for this event
     # Group items by their assigned areas for organized manifest display
-    for el in get_event_elements(context["event"].id, WarehouseItemAssignment).select_related(
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).select_related(
         "area", "item", "item__container"
     ):
         # Create area entry in the list if this is the first item for this area
@@ -871,7 +875,7 @@ def orga_warehouse_commit_preview(request: HttpRequest, event_slug: str) -> Http
     # Key: item_id, Value: sum of all quantities assigned to that item
     # Only process items with "loaded" status for this event
     item_assignments: dict[int, int] = {}
-    for el in get_event_elements(context["event"].id, WarehouseItemAssignment).filter(
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
         event=context["event"], loaded=True
     ):
         if el.quantity:
@@ -960,7 +964,7 @@ def orga_warehouse_commit_quantities(request: HttpRequest, event_slug: str) -> H
     # Key: item_id, Value: sum of all quantities assigned to that item
     # Only process items with "loaded" status for this event
     item_assignments: dict[int, int] = {}
-    for el in get_event_elements(context["event"].id, WarehouseItemAssignment).filter(
+    for el in get_event_elements(context["event"].id, WarehouseItemAssignment, context=context).filter(
         event=context["event"], loaded=True
     ):
         if el.quantity:

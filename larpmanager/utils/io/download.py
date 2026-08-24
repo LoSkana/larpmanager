@@ -37,7 +37,7 @@ from larpmanager.cache.experience import has_multiple_exp_systems
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.association import Association
 from larpmanager.models.casting import Quest, QuestType, Trait
-from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
+from larpmanager.models.experience import AbilityExp, AbilityTypeExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -165,7 +165,7 @@ def export_plot_rels(context: Any) -> Any:
     """
     column_keys = ["plot", "character", "text"]
 
-    event_id = get_event_class_parent(context["event"].id, Plot)
+    event_id = get_event_class_parent(context["event"].id, Plot, context=context)
 
     relationship_values = [
         [
@@ -193,7 +193,7 @@ def export_relationships(context: Any) -> Any:
     """
     column_headers = ["source", "target", "text"]
 
-    event_id = get_event_class_parent(context["event"].id, Character)
+    event_id = get_event_class_parent(context["event"].id, Character, context=context)
 
     relationship_rows = [
         [relationship.source.name, relationship.target.name, relationship.text]
@@ -669,7 +669,7 @@ def _download_prepare(context: dict, model_name: str, queryset: QuerySet[Any], m
     """
     # Apply event-based filtering if specified in type configuration
     if check_field(model_type, "event"):
-        queryset = queryset.filter(event=get_event_class_parent(context["event"].id, model_name))
+        queryset = queryset.filter(event=get_event_class_parent(context["event"].id, model_name, context=context))
 
     # Apply run-based filtering if specified in type configuration
     elif check_field(model_type, "run"):
@@ -767,7 +767,9 @@ def export_registration_form(
 
     # Query registration options ordered by question order and option order, scoped to the
     # same form type as the questions above
-    options_queryset = get_event_elements(context["event"].id, RegistrationOption).select_related("question")
+    options_queryset = get_event_elements(context["event"].id, RegistrationOption, context=context).select_related(
+        "question"
+    )
     options_queryset = options_queryset.filter(question__applicable=applicable)
     options_queryset = options_queryset.order_by(F("question__order"), "order")
     option_values = _extract_values(modified_option_headers, options_queryset, mappings)
@@ -864,7 +866,9 @@ def export_character_form(context: dict) -> list[tuple[str, list, list]]:
 
     # Extract and export writing questions
     column_headers = context["columns"][0].keys()
-    questions_queryset = get_event_elements(context["event"].id, WritingQuestion).order_by("applicable", "order")
+    questions_queryset = get_event_elements(context["event"].id, WritingQuestion, context=context).order_by(
+        "applicable", "order"
+    )
     question_values = _extract_values(column_headers, questions_queryset, field_mappings)
 
     # Initialize exports list with writing questions data
@@ -877,7 +881,9 @@ def export_character_form(context: dict) -> list[tuple[str, list, list]]:
     modified_option_headers[0] = f"{modified_option_headers[0]}__name"
 
     # Extract and export writing options with related question data
-    options_queryset = get_event_elements(context["event"].id, WritingOption).select_related("question")
+    options_queryset = get_event_elements(context["event"].id, WritingOption, context=context).select_related(
+        "question"
+    )
     options_queryset = options_queryset.order_by(F("question__order"), "order")
     option_values = _extract_values(modified_option_headers, options_queryset, field_mappings)
 
@@ -898,7 +904,7 @@ def _orga_registrations_acc(context: Any, registrations: Any = None) -> Any:
 
     """
     # Use cached accounting data for efficiency
-    cached_data = get_registration_accounting_cache(context["run"])
+    cached_data = get_registration_accounting_cache(context["run"].id, context["run"].event_id)
 
     # If specific registrations are requested, filter the cached data
     if registrations:
@@ -967,6 +973,38 @@ def _exp_column_names(context: dict) -> None:
     context["columns"] = [columns]
 
 
+_EXP_SIMPLE_TYPES = ("exp_rule", "exp_modifier", "exp_ability_type")
+
+
+def _exp_simple_column_names(context: dict) -> None:
+    """Define column mappings for the experience types with a fixed, system-less column set."""
+    if context["typ"] == "exp_rule":
+        columns = {
+            "number": _("The rule's number (unique identifier)"),
+            "abilities": _("(Optional) Ability names, comma-separated - rule applies if character has any"),
+            "field": _("The character field of computed type to update"),
+            "operation": _("Operation: ADD, SUB, MUL, DIV"),
+            "amount": _("Transaction amount"),
+            "order": _("(Optional) Display order"),
+        }
+        context["name"] = "Rule"
+    elif context["typ"] == "exp_modifier":
+        columns = {
+            "number": _("The modifier's number (unique identifier)"),
+            "abilities": _("(Optional) Ability names, comma-separated"),
+            "cost": _("(Optional) Cost (0 = auto assigned)"),
+            "prerequisites": _("(Optional) Prerequisite ability names, comma-separated"),
+            "requirements": _("(Optional) Character options as requirements, comma-separated"),
+            "order": _("(Optional) Display order"),
+        }
+        context["name"] = "Modifier"
+    else:
+        columns = {"name": _("The ability type's name")}
+        context["name"] = "Ability type"
+
+    context["columns"] = [columns]
+
+
 def _get_column_names(context: dict) -> None:
     """Define column mappings and field types for different export contexts.
 
@@ -1013,33 +1051,9 @@ def _get_column_names(context: dict) -> None:
     elif context["typ"] in _EXP_SYSTEM_TYPES:
         _exp_column_names(context)
 
-    # Handle experience rule export
-    elif context["typ"] == "exp_rule":
-        context["columns"] = [
-            {
-                "number": _("The rule's number (unique identifier)"),
-                "abilities": _("(Optional) Ability names, comma-separated - rule applies if character has any"),
-                "field": _("The character field of computed type to update"),
-                "operation": _("Operation: ADD, SUB, MUL, DIV"),
-                "amount": _("Transaction amount"),
-                "order": _("(Optional) Display order"),
-            },
-        ]
-        context["name"] = "Rule"
-
-    # Handle experience modifier export
-    elif context["typ"] == "exp_modifier":
-        context["columns"] = [
-            {
-                "number": _("The modifier's number (unique identifier)"),
-                "abilities": _("(Optional) Ability names, comma-separated"),
-                "cost": _("(Optional) Cost (0 = auto assigned)"),
-                "prerequisites": _("(Optional) Prerequisite ability names, comma-separated"),
-                "requirements": _("(Optional) Character options as requirements, comma-separated"),
-                "order": _("(Optional) Display order"),
-            },
-        ]
-        context["name"] = "Modifier"
+    # Handle experience rule/modifier/ability type export
+    elif context["typ"] in _EXP_SIMPLE_TYPES:
+        _exp_simple_column_names(context)
 
     # Handle registration form (questions + options) export; matchmaker questions share
     # the same RegistrationQuestion fields, just scoped to a different "applicable" value
@@ -1252,7 +1266,7 @@ def export_tickets(context: dict) -> list[tuple[str, list[str], list]]:
     field_keys = ["name", "tier", "description", "price", "max_available"]
 
     # Get all registration tickets for the event, ordered by number
-    tickets_queryset = get_event_elements(context["event"].id, RegistrationTicket).order_by("number")
+    tickets_queryset = get_event_elements(context["event"].id, RegistrationTicket, context=context).order_by("number")
 
     # Extract and transform values using the defined mappings
     extracted_values = _extract_values(field_keys, tickets_queryset, mappings)
@@ -1323,7 +1337,7 @@ def export_abilities(context: Any) -> Any:
     multiple_systems = _add_system_header(context, column_headers)
 
     ability_queryset = (
-        get_event_elements(context["event"].id, AbilityExp)
+        get_event_elements(context["event"].id, AbilityExp, context=context)
         .order_by("number")
         .select_related("typ", "system")
         .prefetch_related("requirements", "prerequisites")
@@ -1346,13 +1360,23 @@ def export_abilities(context: Any) -> Any:
     return [("abilities", column_headers, ability_rows)]
 
 
+def export_ability_types(context: Any) -> Any:
+    """Export ability types data for an event."""
+    column_headers = ["name"]
+
+    type_queryset = context["event"].get_elements(AbilityTypeExp).order_by("order")
+    type_rows = [[ability_type.name] for ability_type in type_queryset]
+
+    return [("ability_types", column_headers, type_rows)]
+
+
 def export_criterions(context: Any) -> Any:
     """Export criterions data for an event."""
     column_headers = ["number", "name", "operation", "amount", "prerequisites", "requirements", "factions", "order"]
     multiple_systems = _add_system_header(context, column_headers)
 
     criterion_queryset = (
-        get_event_elements(context["event"].id, CriterionExp)
+        get_event_elements(context["event"].id, CriterionExp, context=context)
         .order_by("order")
         .select_related("system")
         .prefetch_related("prerequisites", "requirements", "factions")
@@ -1382,7 +1406,7 @@ def export_deliveries(context: Any) -> Any:
     multiple_systems = _add_system_header(context, column_headers)
 
     delivery_queryset = (
-        get_event_elements(context["event"].id, DeliveryExp)
+        get_event_elements(context["event"].id, DeliveryExp, context=context)
         .order_by("order")
         .select_related("system")
         .prefetch_related("characters")
@@ -1408,7 +1432,7 @@ def export_rules(context: Any) -> Any:
     column_headers = ["number", "abilities", "field", "operation", "amount", "order"]
 
     rule_queryset = (
-        get_event_elements(context["event"].id, RuleExp)
+        get_event_elements(context["event"].id, RuleExp, context=context)
         .order_by("order")
         .select_related("field")
         .prefetch_related("abilities")
@@ -1433,7 +1457,7 @@ def export_modifiers(context: Any) -> Any:
     column_headers = ["number", "abilities", "cost", "prerequisites", "requirements", "order"]
 
     modifier_queryset = (
-        get_event_elements(context["event"].id, ModifierExp)
+        get_event_elements(context["event"].id, ModifierExp, context=context)
         .order_by("order")
         .prefetch_related("abilities", "prerequisites", "requirements")
     )
@@ -1455,7 +1479,7 @@ def export_modifiers(context: Any) -> Any:
 def export_character_configs(context: Any) -> Any:
     """Export CharacterConfig entries for all characters in the event."""
     column_headers = ["character", "name", "value"]
-    event_id = get_event_class_parent(context["event"].id, Character)
+    event_id = get_event_class_parent(context["event"].id, Character, context=context)
     rows = [
         [cfg.character.name, cfg.name, cfg.value]
         for cfg in CharacterConfig.objects.filter(character__event_id=event_id, deleted__isnull=True)

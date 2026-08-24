@@ -51,6 +51,7 @@ from larpmanager.utils.edit.base import render_frame_or_fallback
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.io.download import (
     export_abilities,
+    export_ability_types,
     export_criterions,
     export_deliveries,
     export_modifiers,
@@ -66,7 +67,7 @@ logger = logging.getLogger(__name__)
 def orga_exp_systems(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of experience systems for an event."""
     context = check_event_context(request, event_slug, "orga_exp_systems")
-    context["list"] = get_event_elements(context["event"].id, SystemExp).order_by("order")
+    context["list"] = get_event_elements(context["event"].id, SystemExp, context=context).order_by("order")
     return render(request, "larpmanager/orga/experience/systems.html", context)
 
 
@@ -99,7 +100,9 @@ def orga_exp_deliveries(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["multiple_systems"] = has_multiple_exp_systems(context["event"].id)
 
     # Get all deliveries ordered by number
-    deliveries = list(get_event_elements(context["event"].id, DeliveryExp).order_by("order").select_related("system"))
+    deliveries = list(
+        get_event_elements(context["event"].id, DeliveryExp, context=context).order_by("order").select_related("system")
+    )
 
     # Get cached EXP relationship data and enrich delivery objects
     px_cache = get_event_exp_cache(context["event"].id)
@@ -214,7 +217,9 @@ def orga_exp_abilities(request: HttpRequest, event_slug: str) -> HttpResponse:
 
     # Query and prepare abilities list with optimized database access
     abilities = list(
-        get_event_elements(context["event"].id, AbilityExp).order_by("order").select_related("typ", "system")
+        get_event_elements(context["event"].id, AbilityExp, context=context)
+        .order_by("order")
+        .select_related("typ", "system")
     )
 
     # Get cached EXP relationship data and enrich ability objects
@@ -252,8 +257,15 @@ def orga_exp_ability_types(request: HttpRequest, event_slug: str) -> HttpRespons
     # Check user has permission to access ability types management
     context = check_event_context(request, event_slug, "orga_exp_ability_types")
 
+    # Handle file export request if download parameter is present
+    if request.POST and request.POST.get("download") == "1":
+        raise ReturnNowError(zip_exports(context, export_ability_types(context), "Ability types"))
+
+    context["upload"] = "exp_ability_types"
+    context["download"] = 1
+
     # Retrieve and order ability types by number
-    context["list"] = get_event_elements(context["event"].id, AbilityTypeExp).order_by("order")
+    context["list"] = get_event_elements(context["event"].id, AbilityTypeExp, context=context).order_by("order")
 
     return render(request, "larpmanager/orga/experience/ability_types.html", context)
 
@@ -288,7 +300,7 @@ def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["download"] = 1
 
     # Get all rules ordered
-    rules = list(get_event_elements(context["event"].id, RuleExp).order_by("order"))
+    rules = list(get_event_elements(context["event"].id, RuleExp, context=context).order_by("order"))
     # Get cached EXP relationship data and enrich rule objects
     px_cache = get_event_exp_cache(context["event"].id)
     for rule in rules:
@@ -302,7 +314,7 @@ def orga_exp_rules(request: HttpRequest, event_slug: str) -> HttpResponse:
 def orga_exp_ability_templates(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of ability templates for an event."""
     context = check_event_context(request, event_slug, "orga_exp_ability_templates")
-    context["list"] = get_event_elements(context["event"].id, AbilityTemplateExp).order_by("order")
+    context["list"] = get_event_elements(context["event"].id, AbilityTemplateExp, context=context).order_by("order")
     return render(request, "larpmanager/orga/experience/ability_templates.html", context)
 
 
@@ -355,7 +367,7 @@ def orga_exp_modifiers(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["download"] = 1
 
     # Retrieve ordered list of experience modifiers
-    modifiers = list(get_event_elements(context["event"].id, ModifierExp).order_by("order"))
+    modifiers = list(get_event_elements(context["event"].id, ModifierExp, context=context).order_by("order"))
 
     # Get cached EXP relationship data and enrich modifier objects
     px_cache = get_event_exp_cache(context["event"].id)
@@ -398,7 +410,11 @@ def orga_exp_criterions(request: HttpRequest, event_slug: str) -> HttpResponse:
     context["upload"] = "exp_criterions"
     context["download"] = 1
 
-    criterions = list(get_event_elements(context["event"].id, CriterionExp).order_by("order").select_related("system"))
+    criterions = list(
+        get_event_elements(context["event"].id, CriterionExp, context=context)
+        .order_by("order")
+        .select_related("system")
+    )
 
     px_cache = get_event_exp_cache(context["event"].id)
     for criterion in criterions:
@@ -444,7 +460,7 @@ def orga_character_search(request: HttpRequest, event_slug: str) -> JsonResponse
     exclude_raw = request.POST.get("exclude", "")
     exclude_uuids = [u.strip() for u in exclude_raw.split(",") if u.strip()]
 
-    qs = get_event_elements(context["event"].id, Character).only("id", "uuid", "name", "number")
+    qs = get_event_elements(context["event"].id, Character, context=context).only("id", "uuid", "name", "number")
 
     if term:
         qs = qs.filter(
@@ -473,26 +489,26 @@ def orga_exp_available(request: HttpRequest, event_slug: str) -> JsonResponse | 
     edit_uuid = request.POST.get("edit_uuid", "")
 
     if kind == "delivery":
-        queryset = get_event_elements(context["event"].id, DeliveryExp).order_by("number")
+        queryset = get_event_elements(context["event"].id, DeliveryExp, context=context).order_by("number")
         if filter_context == "character" and edit_uuid:
             try:
-                character = get_event_elements(context["event"].id, Character).get(uuid=edit_uuid)
+                character = get_event_elements(context["event"].id, Character, context=context).get(uuid=edit_uuid)
                 taken = character.exp_delivery_list.values_list("id", flat=True)
                 queryset = queryset.exclude(pk__in=taken)
             except ObjectDoesNotExist:
                 return JsonResponse({"res": "ko"})
     else:
-        queryset = get_event_elements(context["event"].id, AbilityExp).order_by("number")
+        queryset = get_event_elements(context["event"].id, AbilityExp, context=context).order_by("number")
         if filter_context == "character" and edit_uuid:
             try:
-                character = get_event_elements(context["event"].id, Character).get(uuid=edit_uuid)
+                character = get_event_elements(context["event"].id, Character, context=context).get(uuid=edit_uuid)
                 taken = character.exp_ability_list.values_list("id", flat=True)
                 queryset = queryset.exclude(pk__in=taken)
             except ObjectDoesNotExist:
                 return JsonResponse({"res": "ko"})
         elif filter_context == "ability" and edit_uuid:
             with contextlib.suppress(ObjectDoesNotExist):
-                ability = get_event_elements(context["event"].id, AbilityExp).get(uuid=edit_uuid)
+                ability = get_event_elements(context["event"].id, AbilityExp, context=context).get(uuid=edit_uuid)
                 queryset = queryset.exclude(pk=ability.pk)
 
     res = [(str(el.uuid), str(el)) for el in queryset]

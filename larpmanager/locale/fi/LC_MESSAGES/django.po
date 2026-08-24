@@ -5015,6 +5015,9 @@ msgstr "Valitse mieltymyksesi"
 msgid "Show available factions"
 msgstr "Näytä käytettävissä olevat ryhmittymät"
 
+msgid "The ability type's name"
+msgstr "Kykytyypin nimi"
+
 msgid "The genre of your event"
 msgstr "Tapahtuman laji"
 
@@ -5199,6 +5202,9 @@ msgstr "Tallenna ja lisää toinen"
 msgid "Character Inventory Types"
 msgstr "Hahmojen inventaariotyypit"
 
+msgid "Character not yet created"
+msgstr "Hahmoa ei ole vielä luotu"
+
 msgid "Character sheet questions"
 msgstr "Hahmon arkin kysymykset"
 
@@ -5338,6 +5344,9 @@ msgstr "Ei voi kopioida samasta tapahtumasta"
 
 msgid "Character assignment email"
 msgstr "Hahmonjakoa koskeva sähköposti"
+
+msgid "Character not yet approved"
+msgstr "Hahmoa ei ole vielä hyväksytty"
 
 msgid "Choose the payment method:"
 msgstr "Valitse maksutapa:"
@@ -6157,6 +6166,9 @@ msgstr "(Valinnainen) Lipun nimi"
 
 msgid "Access the organization dashboard"
 msgstr "Pääsy organisaation kojelautaan"
+
+msgid "Character creation reminder email"
+msgstr "Hahmonluonnin muistutussähköposti"
 
 msgid "Days available cannot be negative"
 msgstr "Käytettävissä olevat päivät eivät voi olla negatiivisia"
@@ -7032,6 +7044,10 @@ msgstr "Selaimen käyttäjäagentin merkkijono käytöstä"
 
 msgid "Cannot demote the last admin of the guild"
 msgstr "Killan viimeistä ylläpitäjää ei voi alentaa alemmalle tasolle"
+
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr "Hahmonluonnin muistutus tapahtumalle %(event)s"
 
 msgid "Choice locked, click to make it available"
 msgstr "Valinta lukittu, klikkaa tehdäksesi sen käytettäväksi"
@@ -11814,6 +11830,13 @@ msgstr ""
 " on useita 'Trait'eja"
 
 msgid ""
+"Note that existing rules with the same number, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Huomaa, että olemassa olevat säännöt samalla numerolla korvataan ladatuilla "
+"tiedoilla."
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data."
 msgstr ""
@@ -12207,6 +12230,13 @@ msgstr ""
 "ilmoittautuneiden määrää sekä luo uusia tapahtumia"
 
 msgid ""
+"Note that existing modifiers with the same number, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Huomaa, että olemassa olevat muokkaajat samalla numerolla korvataan "
+"ladatuilla tiedoilla."
+
+msgid ""
 "Once your membership is approved, you can proceed with the payment for your "
 "registered events."
 msgstr ""
@@ -12391,6 +12421,13 @@ msgid ""
 msgstr ""
 "Alennuksia ei ole vielä luotu. Lisää alennus, jotta voit tarjota "
 "osallistujille alennettuja hintoja tai tarjouskoodeja."
+
+msgid ""
+"Note that existing ability types with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Huomaa, että olemassa olevat kykytyypit samalla nimellä korvataan ladatuilla"
+" tiedoilla."
 
 msgid ""
 "Optional: upload a photo of yourself associated with your character "
@@ -13833,6 +13870,14 @@ msgstr ""
 "Mahdollistaa osallistujien muokata heille osoitettujen hahmojen tiettyjä "
 "ominaisuuksia (nimi, pronomini, julkiset tiedot jne.)"
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet."
+" <a href='%(url)s'>click here</a> to create it."
+msgstr ""
+"Hei! Ilmoittauduit tapahtumaan %(event)s, mutta et ole vielä luonut "
+"hahmoasi. <a href='%(url)s'>Klikkaa tästä</a> luodaksesi sen."
+
 msgid ""
 "If checked, applying this tag to a relationship also applies it to the other"
 " character's relationship back towards this one"
@@ -14756,6 +14801,16 @@ msgstr ""
 "Muista, että tämän sivun tiedot on annettu luottamuksellisesti ja niitä on "
 "käsiteltävä äärimmäisen huolellisesti. Jaa niitä vain, kun se on ehdottoman "
 "välttämätöntä, ja mahdollisuuksien mukaan nimettömästi."
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+"Hei! Ilmoittauduit tapahtumaan %(event)s ja loit hahmosi, mutta et ole vielä"
+" vahvistanut sen lähettämistä järjestäjille hyväksyttäväksi. <a "
+"href='%(url)s'>Klikkaa tästä</a> tarkistaaksesi sen tilan."
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "

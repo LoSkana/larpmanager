@@ -28,6 +28,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.html import escape
 
+from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -41,7 +42,6 @@ from larpmanager.utils.core.common import get_event_class_parent
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
-    from larpmanager.models.event import Run
 
 ALLOWED_TYPES = [BaseQuestionType.EDITOR, BaseQuestionType.PARAGRAPH]
 
@@ -306,14 +306,14 @@ def _update_cache_text_fields_answer(
 # Registration
 
 
-def init_cache_registration_field(run: Run) -> dict:
+def init_cache_registration_field(run_id: int, event_id: int) -> dict:
     """Initialize registration field cache for all registrations in a run."""
     cache_data = {}
     from larpmanager.cache.registration import get_active_registrations  # noqa: PLC0415
 
     # Iterate through active (non-cancelled, non-pending) registrations for this run
-    for registration in get_active_registrations(run):
-        _init_element_cache_registration_field(registration, cache_data, run.event_id)
+    for registration in get_active_registrations(run_id):
+        _init_element_cache_registration_field(registration, cache_data, event_id)
     return cache_data
 
 
@@ -340,41 +340,47 @@ def _init_element_cache_registration_field(
         question for question in get_cached_registration_questions(event_id) if question["typ"] in ALLOWED_TYPES
     ]
 
+    # Fetch the latest answer per question in one query, tolerating duplicate
+    # rows for the same question/registration (keep the most recently updated)
+    question_ids = [question["id"] for question in questions]
+    answer_by_question = {}
+    for answer in RegistrationAnswer.objects.filter(
+        question_id__in=question_ids, registration_id=registration.id
+    ).order_by("-updated"):
+        answer_by_question.setdefault(answer.question_id, answer.text)
+
     # Process each editor question and cache the answer text
     for question in questions:
-        try:
-            answer_text = RegistrationAnswer.objects.get(
-                question_id=question["id"], registration_id=registration.id
-            ).text
-            field_key = str(question["uuid"])
-            cache_result[registration_uuid][field_key] = get_single_cache_text_field(
-                registration_uuid,
-                field_key,
-                answer_text,
-            )
-        except ObjectDoesNotExist:
-            pass
+        if question["id"] not in answer_by_question:
+            continue
+        field_key = str(question["uuid"])
+        cache_result[registration_uuid][field_key] = get_single_cache_text_field(
+            registration_uuid,
+            field_key,
+            answer_by_question[question["id"]],
+        )
 
 
-def get_cache_registration_field(run: Run) -> dict:
+def get_cache_registration_field(run_id: int, event_id: int) -> dict:
     """Get cached registration field data for a run.
 
     Args:
-        run: The run instance to get cached registration fields for.
+        run_id: The run id to get cached registration fields for.
+        event_id: The event id the run belongs to.
 
     Returns:
         Dictionary containing cached registration field data.
 
     """
     # Generate cache key for the run's registration fields
-    cache_key = cache_text_field_key(Registration, run.id)
+    cache_key = cache_text_field_key(Registration, run_id)
 
     # Try to retrieve cached result
     cached_result = cache.get(cache_key)
 
     # If not cached, initialize and cache the result
     if cached_result is None:
-        cached_result = init_cache_registration_field(run)
+        cached_result = init_cache_registration_field(run_id, event_id)
         cache.set(cache_key, cached_result, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
     return cached_result
@@ -382,15 +388,16 @@ def get_cache_registration_field(run: Run) -> dict:
 
 def update_cache_registration_fields(registration: Registration) -> None:
     """Update cached registration fields for the given element's run."""
-    # Get the run associated with the registration element
-    run = registration.run
+    # Get the run id associated with the registration element
+    run_id = registration.run_id
+    event_id = get_run_event_id(run_id)
 
     # Generate cache key and retrieve current cached registration fields
-    cache_key = cache_text_field_key(Registration, run.id)
-    cached_registration_fields = get_cache_registration_field(run)
+    cache_key = cache_text_field_key(Registration, run_id)
+    cached_registration_fields = get_cache_registration_field(run_id, event_id)
 
     # Initialize element cache and update cache with new data
-    _init_element_cache_registration_field(registration, cached_registration_fields, run.event_id)
+    _init_element_cache_registration_field(registration, cached_registration_fields, event_id)
     cache.set(cache_key, cached_registration_fields, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
 
 
@@ -413,20 +420,20 @@ def update_cache_registration_fields_answer(instance: BaseModel) -> None:
     if instance.question.typ not in ALLOWED_TYPES:
         return
 
-    # Get the run context from the registration
-    run = instance.registration.run
-
-    # Generate cache key and retrieve current cached field data
-    cache_key = cache_text_field_key(Registration, run.id)
-    cached_registration_fields = get_cache_registration_field(run)
-
-    # Fetch the registration to get its UUID
+    # Fetch the registration to get its UUID and run
     try:
         registration = Registration.objects.get(id=instance.registration_id)
         registration_uuid = str(registration.uuid)
     except ObjectDoesNotExist:
         # If registration doesn't exist, skip cache update
         return
+
+    run_id = registration.run_id
+    event_id = get_run_event_id(run_id)
+
+    # Generate cache key and retrieve current cached field data
+    cache_key = cache_text_field_key(Registration, run_id)
+    cached_registration_fields = get_cache_registration_field(run_id, event_id)
 
     # Ensure registration structure exists in cache
     if registration_uuid not in cached_registration_fields:
@@ -476,7 +483,7 @@ def update_text_fields_cache(model_instance: object) -> None:
         update_cache_registration_fields_answer(model_instance)
 
 
-def reset_text_fields_cache(run: Run) -> None:
+def reset_text_fields_cache(event_id: int, run_id: int) -> None:
     """Reset all text fields cache for a run."""
     # Invalidate text field caches for all Writing model types
     for applicable_type in ["character", "faction", "plot", "quest", "trait", "prologue"]:
@@ -486,12 +493,12 @@ def reset_text_fields_cache(run: Run) -> None:
             if applicable_code:
                 model_class = QuestionApplicable.get_applicable_inverse(applicable_code)
                 # Delete cache for this model type and event
-                cache_key = cache_text_field_key(model_class, run.event_id)
+                cache_key = cache_text_field_key(model_class, event_id)
                 cache.delete(cache_key)
         except (ValueError, LookupError):
             # Skip if applicable type doesn't exist
             pass
 
     # Invalidate registration text field cache
-    cache_key = cache_text_field_key(Registration, run.id)
+    cache_key = cache_text_field_key(Registration, run_id)
     cache.delete(cache_key)

@@ -25,7 +25,6 @@ from typing import Any, ClassVar
 from django import forms
 from django.conf import settings as conf_settings
 from django.core.exceptions import ValidationError
-from django.db.models import TextChoices
 from django.forms import Textarea
 from django.utils.translation import gettext_lazy as _, pgettext
 
@@ -83,6 +82,15 @@ from larpmanager.models.form import (
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.copy import copy_class
+from larpmanager.utils.publication.ildb import (
+    PromotionAccommodation,
+    PromotionAccommodationType,
+    PromotionEventType,
+    PromotionLanguage,
+    PromotionMeals,
+    PromotionMood,
+    PromotionSetting,
+)
 from larpmanager.views.orga.registration import _get_registration_fields
 
 logger = logging.getLogger(__name__)
@@ -1856,8 +1864,8 @@ class ExeEventForm(OrgaEventForm):
 
         # Copy template event data if template feature enabled and event is new
         if "template" in self.params["features"] and not self.instance.pk and self.cleaned_data.get("template_event"):
-            event_id = self.cleaned_data["template_event"].id
-            event = Event.objects.get(pk=event_id)
+            event = self.cleaned_data["template_event"]
+            event_id = event.id
 
             # Save instance first to get pk for M2M and FK relations
             instance.save()
@@ -2328,90 +2336,6 @@ class OrgaPreferencesForm(ExePreferencesForm):
             if feature and feature not in self.params["features"]:
                 continue
             extra_fields.append((field_id, field_label))
-
-
-class PromotionAccommodation(TextChoices):
-    """Accommodation type for publication."""
-
-    INCLUDED = "included", _("Included")
-    NOT_INCLUDED = "nope", _("Not included")
-    NON_RESIDENTIAL = "nonres", _("Non-residential")
-
-
-class PromotionAccommodationType(TextChoices):
-    """Accommodation facility details for publication."""
-
-    CAMPING = "camping", _("Camping")
-    FARM_STAY = "agritourism", _("Agritourism")
-    HISTORIC_RESIDENCE = "historical", _("Historic residence")
-    HOTEL = "hotel", _("Hotel")
-    OTHER = "other", _("Other")
-
-
-class PromotionMeals(TextChoices):
-    """Meals included for publication."""
-
-    NOT_INCLUDED = "nope", _("Not included")
-    RESTAURANT = "restaurant", _("Restaurant")
-    SELF_CATERING = "diy", _("Self-catering")
-    INTERNAL_CATERING = "internal", _("Internal catering")
-    EXTERNAL_CATERING = "external", _("External catering")
-
-
-class PromotionSetting(TextChoices):
-    """Event setting (world/genre) for publication. Values are lowercase slugs."""
-
-    FANTASY = "fantasy", "Fantasy"
-    HORROR = "horror", "Horror"
-    SCI_FI = "science-fiction", "Sci-Fi"
-    HISTORICAL = "historical", "Historical"
-    CONTEMPORARY = "contemporary", "Contemporary"
-    POST_APOCALYPTIC = "post-apocalyptic", "Post-Apocalyptic"
-    CYBERPUNK = "cyberpunk", "Cyberpunk"
-    STEAMPUNK = "steampunk", "Steampunk"
-    SUPERHEROES = "superheroes", "Superheroes"
-    GOTHIC = "gothic", "Gothic"
-    WESTERN = "western", "Western"
-
-
-class PromotionMood(TextChoices):
-    """Event mood/tone for publication. Values are lowercase slugs."""
-
-    ADVENTURE = "adventure", "Adventure"
-    THRILLER = "thriller", "Thriller"
-    DRAMA = "drama", "Drama"
-    COMEDY = "comedy", "Comedy"
-    SURREAL = "surreal", "Surreal"
-
-
-class PromotionEventType(TextChoices):
-    """Event category for publication."""
-
-    ONE_SHOT = "one_shot", "One shot"
-    SERIES = "serie", "Series"
-    CAMPAIGN = "campaign", "Campaign"
-    EDU_LARP = "edu_larp", "Edu larp"
-    CONVENTION = "convention", "Convention"
-    OTHER = "other", "Other"
-    CHAMBER_LARP = "chamber", "Chamber larp"
-    LAOG = "laog", "LAOG"
-
-
-class PromotionLanguage(TextChoices):
-    """Event language for publication."""
-
-    ENGLISH = "en", "English"
-    ITALIAN = "it", "Italian"
-    FRENCH = "fr", "French"
-    SPANISH = "es", "Spanish"
-    GERMAN = "de", "German"
-    SLOVENIAN = "sl", "Slovenian"
-    CHINESE = "zh", "Chinese"
-    HUNGARIAN = "hu", "Hungarian"
-    POLISH = "pl", "Polish"
-    DUTCH = "nl", "Dutch"
-    BULGARIAN = "bg", "Bulgarian"
-    GREEK = "el", "Greek"
 
 
 def validate_coordinate(value: str) -> None:

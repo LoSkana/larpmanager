@@ -28,7 +28,7 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
-from larpmanager.cache.basic import get_event_basic_cache
+from larpmanager.cache.config import _get_event_parent_id
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
@@ -356,7 +356,7 @@ def get_event_exp_cache(event_id: int) -> dict[str, Any]:
         Dictionary containing cached EXP relationship data
 
     """
-    effective_event_id = get_event_basic_cache(event_id)["parent_id"] or event_id
+    effective_event_id = _get_event_parent_id(event_id) or event_id
     cache_key = get_event_exp_key(effective_event_id)
 
     # Attempt to retrieve cached relationships
@@ -398,7 +398,7 @@ def update_cache_section(event_id: int, section_name: str, section_id: int, data
 
     """
     try:
-        event_id = get_event_basic_cache(event_id)["parent_id"] or event_id
+        event_id = _get_event_parent_id(event_id) or event_id
         cache_key = get_event_exp_key(event_id)
         cached_event_data = cache.get(cache_key)
 

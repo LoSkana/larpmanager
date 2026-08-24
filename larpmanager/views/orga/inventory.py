@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 def orga_ci_inventory(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of all character inventories for an event."""
     context = check_event_context(request, event_slug, "orga_ci_inventory")
-    context["list"] = get_event_elements(context["event"].id, Inventory).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, Inventory, context=context).order_by("number")
     return render(request, "larpmanager/orga/ci/inventories.html", context)
 
 
@@ -65,7 +65,7 @@ def orga_ci_inventory_delete(request: HttpRequest, event_slug: str, inventory_uu
 def orga_ci_pool_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of pool types for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_pool_types")
-    context["list"] = get_event_elements(context["event"].id, PoolType).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, PoolType, context=context).order_by("number")
     return render(request, "larpmanager/orga/ci/pool_types.html", context)
 
 
@@ -91,7 +91,7 @@ def orga_ci_pool_types_delete(request: HttpRequest, event_slug: str, pool_uuid: 
 def orga_ci_inventory_types(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of inventory types for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_inventory_types")
-    context["list"] = get_event_elements(context["event"].id, InventoryType).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, InventoryType, context=context).order_by("number")
     return render(request, "larpmanager/orga/ci/inventory_types.html", context)
 
 
@@ -117,7 +117,7 @@ def orga_ci_inventory_types_delete(request: HttpRequest, event_slug: str, type_u
 def orga_ci_pool_labels(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display list of pool labels for character inventory."""
     context = check_event_context(request, event_slug, "orga_ci_pool_labels")
-    context["list"] = get_event_elements(context["event"].id, PoolLabel).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, PoolLabel, context=context).order_by("number")
     return render(request, "larpmanager/orga/ci/pool_labels.html", context)
 
 

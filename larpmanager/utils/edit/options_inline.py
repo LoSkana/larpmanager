@@ -90,14 +90,16 @@ def inline_options_config(context: dict, permission: str) -> dict[str, Any]:
         }
         if cfg["show_requirements"]:
             cfg["requirements_choices"] = (
-                get_event_elements(context["event"].id, WritingOption)
+                get_event_elements(context["event"].id, WritingOption, context=context)
                 .select_related("question")
                 .order_by("question__order", "order")
             )
         if cfg["show_tickets"]:
             from larpmanager.models.registration import RegistrationTicket  # noqa: PLC0415
 
-            cfg["tickets_choices"] = get_event_elements(context["event"].id, RegistrationTicket).order_by("order")
+            cfg["tickets_choices"] = get_event_elements(
+                context["event"].id, RegistrationTicket, context=context
+            ).order_by("order")
     else:
         cfg = {
             "show_price": True,
@@ -247,7 +249,7 @@ def options_inline_reorder(
     if not uuids:
         return JsonResponse({"success": False}, status=400)
 
-    options = list(get_event_elements(context["event"].id, option_model).filter(uuid__in=uuids))
+    options = list(get_event_elements(context["event"].id, option_model, context=context).filter(uuid__in=uuids))
     by_uuid = {str(opt.uuid): opt for opt in options}
 
     # All options must exist and belong to a single question

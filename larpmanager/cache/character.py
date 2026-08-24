@@ -28,8 +28,7 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.cache.basic import get_event_basic_cache
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import _get_event_parent_id, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import get_event_fields_cache, visible_writing_fields
 from larpmanager.cache.media import get_run_media_filepath
@@ -46,6 +45,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType, Guild
 from larpmanager.utils.core.common import get_event_elements
+from larpmanager.utils.users.registration import apply_registration_post_save_updates
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -154,7 +154,9 @@ def get_event_cache_characters(context: dict, cache_result: dict) -> dict:
     assigned_character_ids = {rel.character_id for rel in context["assignments"].values()}
 
     # Process each character for the event cache
-    characters_query = get_event_elements(context["event"].id, Character).filter(hide=False).order_by("order")
+    characters_query = (
+        get_event_elements(context["event"].id, Character, context=context).filter(hide=False).order_by("order")
+    )
     for character in characters_query.prefetch_related("factions_list", "guild_memberships__guild"):
         # Skip mirror characters that are already assigned
         if is_mirror_enabled and character.mirror_id in assigned_character_ids:
@@ -217,7 +219,9 @@ def get_event_cache_fields(context: dict, res: dict, *, only_visible: bool = Tru
     question_uuids = fields_data["questions"].keys()
 
     # Query the Character table to get id -> number mapping for the event
-    character_id_mapping = dict(get_event_elements(context["event"].id, Character).values_list("id", "number"))
+    character_id_mapping = dict(
+        get_event_elements(context["event"].id, Character, context=context).values_list("id", "number")
+    )
 
     # Retrieve and process multiple choice answers for characters
     # Each choice can have multiple options selected per question
@@ -371,7 +375,7 @@ def get_event_cache_guilds(context: dict, result: dict) -> None:
     if "guild" not in get_event_features(context["event"].id):
         return
 
-    for guild in get_event_elements(context["event"].id, Guild).filter(secret=False).order_by("order"):
+    for guild in get_event_elements(context["event"].id, Guild, context=context).filter(secret=False).order_by("order"):
         _process_guild_cache(guild, result)
 
 
@@ -851,11 +855,12 @@ def update_event_cache_all_runs(event_id: int, instance: BaseModel) -> None:
 
 def reset_character_registration_cache(rcr: RegistrationCharacterRel) -> None:
     """Reset cache for character's registration and run."""
-    # Save registration to trigger cache invalidation
-    if rcr.registration:
-        rcr.registration.save()
+    registration = rcr.registration
+    if registration:
+        apply_registration_post_save_updates(registration)
+
     # Clear run-level cache and media
-    clear_run_cache_and_media(rcr.registration.run_id)
+    clear_run_cache_and_media(registration.run_id)
 
 
 def clear_event_cache_all_runs(event_id: int) -> None:
@@ -869,7 +874,7 @@ def clear_event_cache_all_runs(event_id: int) -> None:
         for run in get_event_runs(child_event_id):
             clear_run_cache_and_media(run.id)
 
-    parent_id = get_event_basic_cache(event_id)["parent_id"]
+    parent_id = _get_event_parent_id(event_id)
     if parent_id:
         # Clear cache for runs of sibling events
         for sibling_event_id in Event.objects.filter(parent_id=parent_id).values_list("id", flat=True):

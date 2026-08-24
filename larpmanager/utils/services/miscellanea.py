@@ -38,6 +38,7 @@ from django.db.models import Sum
 from django.shortcuts import render
 from PIL import Image as PILImage, ImageOps
 
+from larpmanager.cache.basic import get_run_basic_cache
 from larpmanager.cache.config import get_association_config
 from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
 from larpmanager.models.member import Badge
@@ -154,7 +155,8 @@ def upload_albums_el(alb: models.Model, name: str, main: models.Model, o_path: s
     unique_filename = f"{uuid4().hex}.{file_extension}"
 
     # Build destination path starting from media root
-    destination_path = Path(conf_settings.MEDIA_ROOT) / "albums" / main.run.event.slug / str(main.run.number)
+    run_cache = get_run_basic_cache(main.run_id)
+    destination_path = Path(conf_settings.MEDIA_ROOT) / "albums" / run_cache["slug"] / str(run_cache["number"])
 
     # Traverse album hierarchy to build nested directory structure
     parent_album = alb.parent

@@ -26,8 +26,8 @@ from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.mail.templates import get_payment_info
-from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssociationTextType, get_url, hdr
+from larpmanager.models.access import get_event_organizers_by_event
+from larpmanager.models.association import AssociationTextType, get_association_url, get_url, hdr_run
 from larpmanager.models.registration import Registration
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.deadlines import check_run_deadlines
@@ -45,7 +45,7 @@ def remember_membership(registration: Any) -> None:
     """
     activate(registration.member.language)
 
-    subject = hdr(registration.run.event) + _("Registration confirmation for %(event)s") % {
+    subject = hdr_run(registration.run_id) + _("Registration confirmation for %(event)s") % {
         "event": registration.run,
     }
 
@@ -86,7 +86,7 @@ def get_remember_membership_body(registration: Any) -> str:
         % {"event": registration.run}
         + " "
         + _("To complete the process, <a href='%(url)s'>click here</a>.")
-        % {"url": get_url("membership", registration.run.event)}
+        % {"url": get_association_url("membership", get_run_association_id(registration.run_id))}
     )
 
     # Add helpful support message for users who need assistance
@@ -117,9 +117,9 @@ def remember_pay(registration: Any) -> None:
     email_context = {"event": registration.run}
 
     if is_provisional:
-        email_subject = hdr(registration.run.event) + _("Confirm registration for %(event)s") % email_context
+        email_subject = hdr_run(registration.run_id) + _("Confirm registration for %(event)s") % email_context
     else:
-        email_subject = hdr(registration.run.event) + _("Complete payment for %(event)s") % email_context
+        email_subject = hdr_run(registration.run_id) + _("Complete payment for %(event)s") % email_context
 
     email_body = get_association_text(
         get_run_association_id(registration.run_id),
@@ -152,10 +152,13 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
 
     """
     # Extract payment information and build payment URL
-    currency_symbol = get_run_basic_cache(registration.run_id)["currency_symbol"]
+    basic_cache: dict = {}
+    currency_symbol = get_run_basic_cache(registration.run_id, context=basic_cache)["currency_symbol"]
     amount_to_pay = f"{registration.quota:.2f}{currency_symbol}"
     days_until_deadline = registration.deadline
-    base_payment_url = get_url("accounting/pay", registration.run.event)
+    base_payment_url = get_association_url(
+        "accounting/pay", get_run_association_id(registration.run_id, context=basic_cache)
+    )
     payment_url = f"{base_payment_url}/{registration.run.get_slug()}"
 
     # Generate appropriate greeting based on registration type
@@ -190,7 +193,7 @@ def get_remember_pay_body(context: dict, registration: Registration, *, is_provi
     )
 
     # Add wire transfer details if active for this association
-    email_body += get_payment_info(get_run_association_id(registration.run_id), payment_url)
+    email_body += get_payment_info(get_run_association_id(registration.run_id, context=basic_cache), payment_url)
 
     # Add cancellation warning for non-responsive registrants
     email_body += "<br /><br />" + _(
@@ -212,12 +215,16 @@ def remember_profile(registration: Any) -> None:
 
     """
     activate(registration.member.language)
-    context = {"event": registration.run, "url": get_url("profile", registration.run.event)}
+    basic_cache: dict = {}
+    context = {
+        "event": registration.run,
+        "url": get_association_url("profile", get_run_association_id(registration.run_id, context=basic_cache)),
+    }
 
-    subject = hdr(registration.run.event) + _("Profile completion reminder for %(event)s") % context
+    subject = hdr_run(registration.run_id) + _("Profile completion reminder for %(event)s") % context
 
     body = get_association_text(
-        get_run_association_id(registration.run_id),
+        get_run_association_id(registration.run_id, context=basic_cache),
         AssociationTextType.REMINDER_PROFILE,
         registration.member.language,
     ) or get_remember_profile_body(context)
@@ -249,7 +256,7 @@ def remember_membership_fee(registration: Any) -> None:
     activate(registration.member.language)
     context = {"event": registration.run}
 
-    subject = hdr(registration.run.event) + _("Membership fee payment reminder for %(event)s") % context
+    subject = hdr_run(registration.run_id) + _("Membership fee payment reminder for %(event)s") % context
 
     body = get_association_text(
         get_run_association_id(registration.run_id),
@@ -295,6 +302,55 @@ def get_remember_membership_fee_body(context: dict, registration: Any) -> str:
     return email_body
 
 
+def remember_character_creation(registration: Any, *, requires_approval: bool = False) -> None:
+    """Send character creation/confirmation reminder email to registered user.
+
+    Args:
+        registration: Registration instance with missing/unapproved character
+        requires_approval: Whether the reminder is about an unapproved character
+            (True) rather than a missing one (False)
+
+    Side effects:
+        Sends email reminder about character creation requirement
+
+    """
+    activate(registration.member.language)
+    context = {
+        "event": registration.run,
+        "url": get_association_url("characters", get_run_association_id(registration.run_id)),
+    }
+
+    subject = hdr_run(registration.run_id) + _("Character creation reminder for %(event)s") % context
+
+    body = get_association_text(
+        get_run_association_id(registration.run_id),
+        AssociationTextType.REMINDER_CHARACTER,
+        registration.member.language,
+    ) or get_remember_character_creation_body(context, requires_approval=requires_approval)
+
+    my_send_mail(subject, body, registration.member, registration.run)
+
+
+def get_remember_character_creation_body(email_context: Any, *, requires_approval: bool) -> Any:
+    """Generate default character creation/confirmation reminder email body text."""
+    if requires_approval:
+        return (
+            _(
+                "Hello! You registered for %(event)s and created your character, but it has not yet "
+                "been confirmed for submission to the staff for approval. "
+                "<a href='%(url)s'>click here</a> to check its status."
+            )
+            % email_context
+        )
+    return (
+        _(
+            "Hello! You registered for %(event)s but have not created your character yet. "
+            "<a href='%(url)s'>click here</a> to create it."
+        )
+        % email_context
+    )
+
+
 def notify_deadlines(run: Any) -> None:
     """Send deadline notification emails to event organizers.
 
@@ -322,11 +378,13 @@ def notify_deadlines(run: Any) -> None:
         "pay": "Overdue: Payment",
         "profile": "Overdue: Profile completion",
         "cast": "Missing casting preferences",
+        "char": "Character not yet created",
+        "char_appr": "Character not yet approved",
     }
 
-    for organizer in get_event_organizers(run.event):
+    for organizer in get_event_organizers_by_event(run.event_id):
         activate(organizer.language)
-        subject = hdr(run.event) + _("Deadlines") + f" {run}"
+        subject = hdr_run(run.id) + _("Deadlines") + f" {run}"
         body = _("Review users with pending event deadlines:")
         for deadline_key, description in deadline_elements.items():
             if deadline_key not in run_deadlines or not run_deadlines[deadline_key]:

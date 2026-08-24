@@ -5015,6 +5015,9 @@ msgstr "Välj dina preferenser"
 msgid "Show available factions"
 msgstr "Visa tillgängliga fraktioner"
 
+msgid "The ability type's name"
+msgstr "Förmågetypens namn"
+
 msgid "The genre of your event"
 msgstr "Genren för ditt evenemang"
 
@@ -5199,6 +5202,9 @@ msgstr "Efter att du har sparat, lägg till en till"
 msgid "Character Inventory Types"
 msgstr "Typer av karaktärsinventarier"
 
+msgid "Character not yet created"
+msgstr "Karaktär ännu inte skapad"
+
 msgid "Character sheet questions"
 msgstr "Frågor om karaktärsblad"
 
@@ -5338,6 +5344,9 @@ msgstr "Kan inte kopiera från samma händelse"
 
 msgid "Character assignment email"
 msgstr "E-postmeddelande om tilldelning av karaktär"
+
+msgid "Character not yet approved"
+msgstr "Karaktär ännu inte godkänd"
 
 msgid "Choose the payment method:"
 msgstr "Välj betalningssätt:"
@@ -6157,6 +6166,9 @@ msgstr "(Valfritt) Namnet på biljetten"
 
 msgid "Access the organization dashboard"
 msgstr "Gå till organisationens instrumentpanel"
+
+msgid "Character creation reminder email"
+msgstr "E-postpåminnelse om att skapa karaktär"
 
 msgid "Days available cannot be negative"
 msgstr "Tillgängliga dagar kan inte vara negativa"
@@ -7032,6 +7044,10 @@ msgstr "Webbläsarens användaragentsträng från åtkomsten"
 
 msgid "Cannot demote the last admin of the guild"
 msgstr "Det går inte att nedgradera guildens sista administratör"
+
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr "Påminnelse om att skapa karaktär för %(event)s"
 
 msgid "Choice locked, click to make it available"
 msgstr "Valet låst, klicka för att göra det tillgängligt"
@@ -11800,6 +11816,13 @@ msgstr ""
 " 'Traits'"
 
 msgid ""
+"Note that existing rules with the same number, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Observera att befintliga regler med samma nummer kommer att skrivas över med"
+" den uppladdade datan."
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data."
 msgstr ""
@@ -12195,6 +12218,13 @@ msgstr ""
 "samt skapa nya evenemang"
 
 msgid ""
+"Note that existing modifiers with the same number, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Observera att befintliga modifierare med samma nummer kommer att skrivas "
+"över med den uppladdade datan."
+
+msgid ""
 "Once your membership is approved, you can proceed with the payment for your "
 "registered events."
 msgstr ""
@@ -12379,6 +12409,13 @@ msgid ""
 msgstr ""
 "Inga rabatter har skapats ännu. Lägg till en rabatt för att erbjuda "
 "deltagarna lägre priser eller kampanjkoder."
+
+msgid ""
+"Note that existing ability types with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Observera att befintliga förmågetyper med samma namn kommer att skrivas över"
+" med den uppladdade datan."
 
 msgid ""
 "Optional: upload a photo of yourself associated with your character "
@@ -13824,6 +13861,14 @@ msgstr ""
 "Gör det möjligt för deltagarna att anpassa specifika attribut (namn, "
 "pronomen, offentlig information etc.) för de karaktärer som de tilldelas"
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet."
+" <a href='%(url)s'>click here</a> to create it."
+msgstr ""
+"Hej! Du har registrerat dig för %(event)s men har ännu inte skapat din "
+"karaktär. <a href='%(url)s'>klicka här</a> för att skapa den."
+
 msgid ""
 "If checked, applying this tag to a relationship also applies it to the other"
 " character's relationship back towards this one"
@@ -14742,6 +14787,17 @@ msgstr ""
 "Kom ihåg att informationen på den här sidan har lämnats i förtroende och "
 "måste hanteras med största omsorg. Dela den endast när det är absolut "
 "nödvändigt och, när det är möjligt, anonymt."
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+"Hej! Du har registrerat dig för %(event)s och skapat din karaktär, men den "
+"har ännu inte bekräftats för att skickas in till arrangörerna för "
+"godkännande. <a href='%(url)s'>klicka här</a> för att kontrollera dess "
+"status."
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "

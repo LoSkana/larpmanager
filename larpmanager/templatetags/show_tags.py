@@ -363,7 +363,9 @@ def show_char(context: dict, element: dict | str | None, run: Run, include_toolt
 
     # Cache the maximum character number for this run's event to avoid repeated queries
     if "max_ch_number" not in context:
-        context["max_ch_number"] = get_event_elements(run.event_id, Character).aggregate(Max("number"))["number__max"]
+        context["max_ch_number"] = get_event_elements(run.event_id, Character, context=context).aggregate(
+            Max("number")
+        )["number__max"]
 
     # Handle case where no characters exist in the event
     if not context["max_ch_number"]:

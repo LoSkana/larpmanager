@@ -4,8 +4,8 @@
         <table class="mob">
             <tbody>
                 {% for registration in registration_list %}
-                    <tr data-assoc-slug="{{ registration.run.event.association.slug }}">
-                        {% if show_association %}<td>{{ registration.run.event.association.name }}</td>{% endif %}
+                    <tr data-assoc-slug="{{ registration.run.assoc_slug }}">
+                        {% if show_association %}<td>{{ registration.run.assoc_name }}</td>{% endif %}
                         <td>
                             <b>
                                 <a href="{% url 'event' registration.run.get_slug %}">{{ registration.run }}</a>

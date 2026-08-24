@@ -364,7 +364,7 @@ class OrganizerCastingOptionsForm(BaseForm):
         # Configure faction field if faction feature is enabled
         if "faction" in self.params["features"]:
             factions = (
-                get_event_elements(self.params["event"].id, Faction)
+                get_event_elements(self.params["event"].id, Faction, context=self.params)
                 .filter(typ=FactionType.PRIM)
                 .order_by("number")
                 .values_list("uuid", "name")

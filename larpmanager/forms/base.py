@@ -33,6 +33,7 @@ from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import get_association_config, get_config_default, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
 from larpmanager.forms.utils import (
@@ -311,7 +312,9 @@ class BaseModelForm(FormMixin, forms.ModelForm):
                 raise ValidationError(msg) from err
 
         # Validate run belongs to current association
-        if "event" in self.params and run_value.event.association_id != self.params["event"].association_id:
+        if "event" in self.params and get_event_association_id(run_value.event_id) != get_event_association_id(
+            self.params["event"].id
+        ):
             msg = _("Selected event does not belong to this organization")
             raise ValidationError(msg)
 
@@ -330,7 +333,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
         # Get parent event based on element type from params
         typ = self.params["elementTyp"]
         event = self.params["event"]
-        parent_id = get_event_class_parent(event.id, typ)
+        parent_id = get_event_class_parent(event.id, typ, context=self.params)
         if parent_id == event.id:
             return event
         return Event.objects.get(pk=parent_id)
@@ -370,7 +373,7 @@ class BaseModelForm(FormMixin, forms.ModelForm):
 
         if event and element_type:
             # Determine the appropriate event ID based on the element type
-            parent_event_id = get_event_class_parent(event.id, element_type)
+            parent_event_id = get_event_class_parent(event.id, element_type, context=self.params)
 
             # Build the base queryset for uniqueness checking
             model = self._meta.model
@@ -1252,7 +1255,9 @@ class BaseRegistrationForm(BaseModelFormRun):
         in ``RegistrationAnswer.text`` like a plain text answer.
         """
         event = self.params["run"].event
-        visible_factions = list(get_event_elements(event.id, Faction).filter(hide=False).order_by("order"))
+        visible_factions = list(
+            get_event_elements(event.id, Faction, context=self.params).filter(hide=False).order_by("order")
+        )
         visible_uuids = {str(faction.uuid): faction for faction in visible_factions}
 
         # Start from the previously saved order, dropping factions no longer visible
@@ -1478,7 +1483,7 @@ class BaseRegistrationForm(BaseModelFormRun):
         event = self.params["run"].event
         visible_faction_uuids = [
             str(uuid)
-            for uuid in get_event_elements(event.id, Faction)
+            for uuid in get_event_elements(event.id, Faction, context=self.params)
             .filter(hide=False)
             .order_by("order")
             .values_list("uuid", flat=True)

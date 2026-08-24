@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING, Any
 
 from django.conf import settings as conf_settings
 from django.core.cache import cache
+from django.db.models import Q
 
 from larpmanager.cache.character import update_event_cache_all
 from larpmanager.cache.config import get_event_config
@@ -235,9 +236,9 @@ def update_m2m_related_characters(
 
         # Get all run IDs to update (event and child events)
         event_id = instance.event_id
-        events_id = list(Event.objects.filter(parent_id=event_id).values_list("pk", flat=True))
-        events_id.append(event_id)
-        run_ids = list(Run.objects.filter(event_id__in=events_id).values_list("id", flat=True))
+        run_ids = list(
+            Run.objects.filter(Q(event_id=event_id) | Q(event__parent_id=event_id)).values_list("id", flat=True)
+        )
 
         # Mark instance and affected characters dirty, then schedule background tasks
         _mark_rels_dirty(section, [instance.id], event_id)

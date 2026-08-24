@@ -113,7 +113,7 @@ def cache_event_features_key(event_id: int) -> str:
 
 def get_event_features(event_id: int) -> dict[str, int]:
     """Get cached event features, updating cache if needed."""
-    lookup_id = _get_event_parent_id(event_id, None) or event_id
+    lookup_id = _get_event_parent_id(event_id) or event_id
     cache_key = cache_event_features_key(lookup_id)
     cached_features = cache.get(cache_key)
     if cached_features is None:

@@ -34,7 +34,7 @@ from django.utils import dateparse, timezone
 from larpmanager.accounting.balance import check_accounting, check_run_accounting
 from larpmanager.accounting.token_credit import get_regs, get_regs_paying_incomplete
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
-from larpmanager.cache.config import get_association_config
+from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_association_features, get_event_features
 from larpmanager.cache.registration import get_active_registrations
 from larpmanager.mail.accounting import notify_invoice_check
@@ -43,6 +43,7 @@ from larpmanager.mail.digest import send_daily_organizer_summaries
 from larpmanager.mail.member import send_password_reset_remainder
 from larpmanager.mail.remind import (
     notify_deadlines,
+    remember_character_creation,
     remember_membership,
     remember_membership_fee,
     remember_pay,
@@ -64,6 +65,7 @@ from larpmanager.models.larpmanager import LarpManagerChatLog
 from larpmanager.models.member import Badge, Member, Membership, MembershipStatus, get_user_membership
 from larpmanager.models.miscellanea import Log
 from larpmanager.models.registration import Registration, TicketTier
+from larpmanager.models.writing import Character, CharacterStatus
 from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
@@ -500,7 +502,7 @@ class Command(BaseCommand):
         # Process past events for participation and staff/organizer roles
         for run in Run.objects.filter(end__lt=timezone.now().date(), event__association=association):
             # Process regular player registrations
-            registrations = get_active_registrations(run)
+            registrations = get_active_registrations(run.id)
             for registration in registrations.exclude(
                 ticket__tier__in=[TicketTier.WAITING, TicketTier.STAFF, TicketTier.NPC],
             ):
@@ -532,7 +534,7 @@ class Command(BaseCommand):
 
         # Process future events for friend referral tracking
         for run in Run.objects.filter(end__gt=timezone.now().date()):
-            for registration in get_active_registrations(run).exclude(
+            for registration in get_active_registrations(run.id).exclude(
                 ticket__tier=TicketTier.WAITING,
             ):
                 self.check_friends_player(registration, cache)
@@ -932,9 +934,49 @@ class Command(BaseCommand):
             if not reminder_sent and not membership.compiled:
                 remember_profile(registration)
 
+            # Send character creation/confirmation reminder if character creation is enabled
+            if "user_character" in event_features and registration.ticket.tier not in (
+                TicketTier.STAFF,
+                TicketTier.NPC,
+            ):
+                self.check_character(registration)
+
         # Check payment status and send payment reminders if registration has alerts
         if registration.alert:
             self.check_payment(registration)
+
+    @staticmethod
+    def check_character(registration: Registration) -> None:
+        """Check if character creation/confirmation reminder should be sent.
+
+        Args:
+            registration: Registration instance to check character status for
+
+        Returns:
+            None: Function performs side effects (sending reminders) but returns nothing
+
+        Note:
+            Sends a "not created" reminder if the player has fewer characters than
+            required, or a "not approved" reminder if approval is required and the
+            player's characters have not all been approved yet.
+
+        """
+        event_id = get_run_event_id(registration.run_id)
+        required_characters = get_event_config(event_id, "user_character_max")
+
+        characters = Character.objects.filter(event_id=event_id, player_id=registration.member_id, deleted__isnull=True)
+        created_characters = characters.count()
+        if created_characters < required_characters:
+            remember_character_creation(registration)
+            return
+
+        requires_approval = get_event_config(event_id, "user_character_approval")
+        if not requires_approval:
+            return
+
+        approved_characters = characters.filter(status=CharacterStatus.APPROVED).count()
+        if approved_characters < required_characters:
+            remember_character_creation(registration, requires_approval=True)
 
     @staticmethod
     def check_membership_fee(registration: Registration) -> None:

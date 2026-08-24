@@ -33,6 +33,7 @@ from django.utils.translation import gettext_lazy as _
 from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.models.access import AssociationRole, EventRole, PermissionModule
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
@@ -662,7 +663,7 @@ class TransferTargetRunS2Widget(S2Widget):
     def get_queryset(self) -> QuerySet[Run]:
         """Return runs from different events that are not concluded or cancelled."""
         return (
-            Run.objects.filter(event__association_id=self.event.association_id)
+            Run.objects.filter(event__association_id=get_event_association_id(self.event.id))
             .exclude(event_id=self.event.id)
             .exclude(development__in=[DevelopStatus.DONE, DevelopStatus.CANC])
             .select_related("event")
@@ -848,10 +849,8 @@ class RunCampaignS2:
         """Set the event to look for other campaign events."""
         if event.parent_id:
             # Event is in a campaign - get parent and all siblings
-            parent_event = Event.objects.get(id=event.parent_id)
-            # Get all children of the parent (siblings) plus the parent itself
-            event_ids = list(Event.objects.filter(parent_id=parent_event.id).values_list("id", flat=True))
-            event_ids.append(parent_event.id)
+            event_ids = list(Event.objects.filter(parent_id=event.parent_id).values_list("id", flat=True))
+            event_ids.append(event.parent_id)
         else:
             # Event is standalone or parent - get this event and all children
             event_ids = list(Event.objects.filter(parent_id=event.id).values_list("id", flat=True))

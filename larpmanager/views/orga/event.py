@@ -780,7 +780,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
         return redirect("manage", event_slug=context["run"].get_slug())
 
     # Reset everything
-    reset_all_run(context["event"], context["run"])
+    reset_all_run(context["run"].id)
 
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))
