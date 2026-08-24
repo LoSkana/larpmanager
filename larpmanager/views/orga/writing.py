@@ -127,7 +127,7 @@ def orga_plots_rels_reorder(request: HttpRequest, event_slug: str, character_uui
             to_update.append(rel)
     if to_update:
         PlotCharacterRel.objects.bulk_update(to_update, ["order"])
-        reset_event_cache_all(context["run"])
+        reset_event_cache_all(context["run"].id)
 
     return JsonResponse({"ok": True})
 
@@ -603,7 +603,7 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
     context = get_event_context(request, event_slug)
 
     # Get all factions for this event, ordered by number
-    context["list"] = get_event_elements(context["event"].id, Faction).order_by("number")
+    context["list"] = get_event_elements(context["event"].id, Faction, context=context).order_by("number")
 
     # Filter by selectable factions if not orga user
     orga = int(request.POST.get("orga", "0"))
@@ -616,7 +616,9 @@ def orga_factions_available(request: HttpRequest, event_slug: str) -> JsonRespon
         # Get character by UUID and validate existence
         try:
             character = (
-                get_event_elements(context["event"].id, Character).prefetch_related("factions_list").get(uuid=edit_uuid)
+                get_event_elements(context["event"].id, Character, context=context)
+                .prefetch_related("factions_list")
+                .get(uuid=edit_uuid)
             )
             # Get list of faction IDs already assigned to this character
             taken_factions = character.factions_list.values_list("id", flat=True)
@@ -651,7 +653,7 @@ def orga_form_available(request: HttpRequest, event_slug: str) -> JsonResponse |
         return JsonResponse({"res": []})
 
     model_class = apps.get_model("larpmanager", model_name)
-    queryset = get_event_elements(context["event"].id, model_class)
+    queryset = get_event_elements(context["event"].id, model_class, context=context)
 
     if edit_uuid and owner_type and field:
         with contextlib.suppress(Exception):
@@ -765,7 +767,7 @@ def orga_version(request: HttpRequest, event_slug: str, name: str, version_uuid:
     model_class = type_to_model.get(tp)
     if model_class:
         # Get the parent event for this model type
-        parent_event = get_event_class_parent(context["event"].id, model_class)
+        parent_event = get_event_class_parent(context["event"].id, model_class, context=context)
         # Verify the entity exists in this event
         if not model_class.objects.filter(event=parent_event, id=context["version"].eid).exists():
             msg = "Version does not belong to this event"
@@ -820,7 +822,7 @@ def orga_reading(request: HttpRequest, event_slug: str) -> HttpResponse:
             continue
 
         # Retrieve all elements of this type for the current event
-        context["list"] = get_event_elements(context["event"].id, typ)
+        context["list"] = get_event_elements(context["event"].id, typ, context=context)
 
         # Cache text fields for performance optimization
         retrieve_cache_text_field(context, text_fields, typ)

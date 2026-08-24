@@ -184,7 +184,9 @@ def writing_popup(request: HttpRequest, context: dict, typ: type[Model]) -> Json
 
     # Retrieve the writing element from database using parent event context
     try:
-        writing_element = typ.objects.get(uuid=element_uuid, event_id=get_event_class_parent(context["event"].id, typ))
+        writing_element = typ.objects.get(
+            uuid=element_uuid, event_id=get_event_class_parent(context["event"].id, typ, context=context)
+        )
     except ObjectDoesNotExist:
         return JsonResponse({"k": 0})
 
@@ -430,7 +432,7 @@ def writing_list_query(context: dict, event: Any, model_type: Any) -> tuple[list
     # Determine if this is a Writing model and set up basic query structure
     is_writing_model = issubclass(model_type, Writing)
     deferred_text_fields = ["teaser", "text"]
-    context["list"] = model_type.objects.filter(event_id=get_event_class_parent(event.id, model_type))
+    context["list"] = model_type.objects.filter(event_id=get_event_class_parent(event.id, model_type, context=context))
 
     # Optimize query with select_related for Writing models with progress tracking
     if is_writing_model and hasattr(model_type, "progress"):
@@ -468,7 +470,9 @@ def retrieve_cache_text_field(context: dict, text_fields: Any, element_type: Any
         element_type: Writing element model class
 
     """
-    cached_text_fields = get_cache_text_field(element_type, get_event_class_parent(context["event"].id, element_type))
+    cached_text_fields = get_cache_text_field(
+        element_type, get_event_class_parent(context["event"].id, element_type, context=context)
+    )
     for element in context["list"]:
         if element.uuid not in cached_text_fields:
             continue
@@ -505,7 +509,7 @@ def _prepare_writing_list(context: dict) -> None:
 
 def writing_list_plot(context: dict) -> None:
     """Build character associations for plot list display."""
-    event_relationships = get_event_rels_cache(context["event"]).get("plots", {})
+    event_relationships = get_event_rels_cache(context["event"].id).get("plots", {})
 
     for plot in context["list"]:
         plot.character_rels = event_relationships.get(plot.id, {}).get("character_rels", [])
@@ -514,7 +518,7 @@ def writing_list_plot(context: dict) -> None:
 def writing_list_faction(context: dict) -> None:
     """Enriches faction objects with their character relationships from event cache."""
     # Retrieve cached faction relationships for the event
-    faction_relationships = get_event_rels_cache(context["event"]).get("factions", {})
+    faction_relationships = get_event_rels_cache(context["event"].id).get("factions", {})
 
     # Attach character relationships to each faction in the list
     for faction in context["list"]:
@@ -544,7 +548,7 @@ def writing_list_guild(context: dict) -> None:
 def writing_list_speedlarp(context: dict) -> None:
     """Enriches speedlarp list items with their character relationships from event cache."""
     # Retrieve speedlarp relationships from cached event data
-    speedlarp_relationships = get_event_rels_cache(context["event"]).get("speedlarps", {})
+    speedlarp_relationships = get_event_rels_cache(context["event"].id).get("speedlarps", {})
 
     # Attach character relationships to each speedlarp item
     for speedlarp_item in context["list"]:
@@ -554,7 +558,7 @@ def writing_list_speedlarp(context: dict) -> None:
 def writing_list_prologue(context: dict) -> None:
     """Enrich prologue list items with character relationships from cache."""
     # Retrieve cached prologue relationships for the event
-    prologue_relationships = get_event_rels_cache(context["event"]).get("prologues", {})
+    prologue_relationships = get_event_rels_cache(context["event"].id).get("prologues", {})
 
     # Attach character relationships to each prologue in the list
     for prologue in context["list"]:
@@ -564,7 +568,7 @@ def writing_list_prologue(context: dict) -> None:
 def writing_list_quest(context: dict) -> None:
     """Enrich quest list with trait relationships from cache."""
     # Retrieve cached quest relationships for the event
-    quest_relationships = get_event_rels_cache(context["event"]).get("quests", {})
+    quest_relationships = get_event_rels_cache(context["event"].id).get("quests", {})
 
     # Attach trait relationships to each quest in the list
     for quest in context["list"]:
@@ -574,7 +578,7 @@ def writing_list_quest(context: dict) -> None:
 def writing_list_questtype(context: dict) -> None:
     """Add quest relationships to each quest type in the context list."""
     # Retrieve cached quest type relationships for the event
-    quest_type_relationships = get_event_rels_cache(context["event"]).get("questtypes", {})
+    quest_type_relationships = get_event_rels_cache(context["event"].id).get("questtypes", {})
 
     # Attach quest relationships to each quest type element
     for quest_type in context["list"]:
@@ -620,7 +624,7 @@ def writing_list_char(context: dict) -> None:  # noqa: C901, PLR0912 - Complex c
     char_add_addit(context)
 
     # Get cached relationship data for the event
-    event_relationships = get_event_rels_cache(context["event"]).get("characters", {})
+    event_relationships = get_event_rels_cache(context["event"].id).get("characters", {})
 
     # Add relationship data based on enabled features
     if "relationships" in context["features"]:

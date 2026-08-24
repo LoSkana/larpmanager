@@ -581,7 +581,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
         run = self.get_run()
         registration = self.create_registration(member=member, run=run)
 
-        result = get_date_surcharge(registration, run.event)
+        result = get_date_surcharge(registration, run.event_id)
 
         self.assertEqual(result, 0)
 
@@ -596,7 +596,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
             event=run.event, date=registration.created.date() - timedelta(days=1), amount=Decimal("15.00")
         )
 
-        result = get_date_surcharge(registration, run.event)
+        result = get_date_surcharge(registration, run.event_id)
 
         self.assertEqual(result, Decimal("15.00"))
 
@@ -611,7 +611,7 @@ class TestRegistrationUtilityFunctions(BaseTestCase):
             event=run.event, date=registration.created.date() - timedelta(days=1), amount=Decimal("15.00")
         )
 
-        result = get_date_surcharge(registration, run.event)
+        result = get_date_surcharge(registration, run.event_id)
 
         # Waiting tier should not have surcharge
         self.assertEqual(result, 0)

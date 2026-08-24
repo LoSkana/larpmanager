@@ -36,6 +36,7 @@ from larpmanager.accounting.balance import (
     get_run_accounting,
 )
 from larpmanager.accounting.invoice import invoice_verify
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.forms.accounting import ExePaymentForm
 from larpmanager.forms.writing import UploadElementsForm
 from larpmanager.models.accounting import (
@@ -923,7 +924,7 @@ def exe_run_accounting(request: HttpRequest, run_uuid: str) -> HttpResponse:
 
     # Get the run and verify ownership
     context["run"] = get_object_uuid(Run, run_uuid)
-    if context["run"].event.association_id != context["association_id"]:
+    if get_run_association_id(context["run"].id) != context["association_id"]:
         msg = "not your run"
         raise Http404(msg)
 

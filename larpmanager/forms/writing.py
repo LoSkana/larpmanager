@@ -663,7 +663,7 @@ class OrgaQuestForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest type choices from event elements
-        que = get_event_elements(self.params.get("run").event_id, QuestType)
+        que = get_event_elements(self.params.get("run").event_id, QuestType, context=self.params)
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
 
@@ -691,7 +691,7 @@ class OrgaTraitForm(WritingForm, BaseWritingForm):
         self._init_special_fields()
 
         # Populate quest choices from event elements
-        que = get_event_elements(self.params.get("run").event_id, Quest)
+        que = get_event_elements(self.params.get("run").event_id, Quest, context=self.params)
         self.fields["quest"].choices = [(m.uuid, m.name) for m in que]
 
 
@@ -713,7 +713,7 @@ class OrgaHandoutForm(WritingForm):
         super().__init__(*args, **kwargs)
 
         # Retrieve handout templates for the associated run's event
-        que = get_event_elements(self.params.get("run").event_id, HandoutTemplate)
+        que = get_event_elements(self.params.get("run").event_id, HandoutTemplate, context=self.params)
 
         # Populate template field choices with template IDs and names
         self.fields["template"].choices = [(m.uuid, m.name) for m in que]
@@ -771,7 +771,7 @@ class OrgaPrologueForm(WritingForm, BaseWritingForm):
         super().__init__(*args, **kwargs)
 
         # Populate prologue type choices from event elements
-        que = get_event_elements(self.params.get("run").event_id, PrologueType)
+        que = get_event_elements(self.params.get("run").event_id, PrologueType, context=self.params)
         self.fields["typ"].choices = [(m.uuid, m.name) for m in que]
 
         # Initialize organization-specific fields and reorder characters

@@ -5015,6 +5015,9 @@ msgstr "Choisis tes préférences"
 msgid "Show available factions"
 msgstr "Affiche les factions disponibles"
 
+msgid "The ability type's name"
+msgstr "Le nom du type de capacité"
+
 msgid "The genre of your event"
 msgstr "Le genre de ton événement"
 
@@ -5199,6 +5202,9 @@ msgstr "Après l'enregistrement, ajoute-en un autre"
 msgid "Character Inventory Types"
 msgstr "Types d'inventaire des personnages"
 
+msgid "Character not yet created"
+msgstr "Personnage pas encore créé"
+
 msgid "Character sheet questions"
 msgstr "Questions sur la feuille de personnage"
 
@@ -5338,6 +5344,9 @@ msgstr "Impossible de copier depuis le même événement"
 
 msgid "Character assignment email"
 msgstr "E-mail d'attribution du personnage"
+
+msgid "Character not yet approved"
+msgstr "Personnage pas encore approuvé"
 
 msgid "Choose the payment method:"
 msgstr "Choisis le moyen de paiement:"
@@ -6157,6 +6166,9 @@ msgstr "(Facultatif) Le nom du ticket"
 
 msgid "Access the organization dashboard"
 msgstr "Accède au tableau de bord de l’organisation"
+
+msgid "Character creation reminder email"
+msgstr "E-mail de rappel de création de personnage"
 
 msgid "Days available cannot be negative"
 msgstr "Les jours disponibles ne peuvent pas être négatifs"
@@ -7035,6 +7047,10 @@ msgstr "Chaîne de l'agent utilisateur du navigateur à partir de l'accès"
 msgid "Cannot demote the last admin of the guild"
 msgstr ""
 "Impossible de retirer ses privilèges au dernier administrateur de la guilde"
+
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr "Rappel de création de personnage pour %(event)s"
 
 msgid "Choice locked, click to make it available"
 msgstr "Choix verrouillé, clique pour le rendre disponible"
@@ -12132,6 +12148,13 @@ msgstr ""
 "personnage, chacune comportant plusieurs « traits »."
 
 msgid ""
+"Note that existing rules with the same number, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Note que les règles existantes portant le même numéro seront remplacées par "
+"les données importées."
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data."
 msgstr ""
@@ -12528,6 +12551,13 @@ msgstr ""
 "nombre d'inscriptions, et crée-en de nouveaux"
 
 msgid ""
+"Note that existing modifiers with the same number, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Note que les modificateurs existants portant le même numéro seront remplacés"
+" par les données importées."
+
+msgid ""
 "Once your membership is approved, you can proceed with the payment for your "
 "registered events."
 msgstr ""
@@ -12715,6 +12745,13 @@ msgid ""
 msgstr ""
 "Aucune réduction n'a encore été créée. Ajoute une réduction pour proposer "
 "des prix réduits ou des codes promo aux participants."
+
+msgid ""
+"Note that existing ability types with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Note que les types de capacité existants portant le même nom seront "
+"remplacés par les données importées."
 
 msgid ""
 "Optional: upload a photo of yourself associated with your character "
@@ -14179,6 +14216,14 @@ msgstr ""
 "pronom, informations publiques, etc.) des personnages qui leur sont "
 "attribués"
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet."
+" <a href='%(url)s'>click here</a> to create it."
+msgstr ""
+"Bonjour ! Tu t'es inscrit·e à %(event)s mais n'as pas encore créé ton "
+"personnage. <a href='%(url)s'>clique ici</a> pour le créer."
+
 msgid ""
 "If checked, applying this tag to a relationship also applies it to the other"
 " character's relationship back towards this one"
@@ -15138,6 +15183,16 @@ msgstr ""
 "N’oublie pas que les informations de cette page t’ont été confiées et "
 "doivent être traitées avec le plus grand soin. Partage-les uniquement "
 "lorsque c’est strictement nécessaire et, si possible, de manière anonyme."
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+"Bonjour ! Tu t'es inscrit·e à %(event)s et as créé ton personnage, mais il "
+"n'a pas encore été confirmé pour être soumis au staff pour approbation. <a "
+"href='%(url)s'>clique ici</a> pour vérifier son statut."
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "

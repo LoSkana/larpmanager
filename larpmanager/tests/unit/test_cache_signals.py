@@ -190,7 +190,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after get_run
         run.save()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.models.signals.clear_event_cache_all_runs")
     def test_writing_question_post_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -245,7 +245,7 @@ class TestCacheSignals(BaseTestCase):
         rel = RegistrationCharacterRel(registration=registration, character=character)
         rel.save()
 
-        mock_reset.assert_called_once_with(registration.run)
+        mock_reset.assert_called_once_with(registration.run_id)
 
     @patch("larpmanager.cache.character.clear_run_cache_and_media")
     def test_registration_character_rel_post_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -256,7 +256,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create
         rel.delete()
 
-        mock_reset.assert_called_once_with(registration.run)
+        mock_reset.assert_called_once_with(registration.run_id)
 
     @patch("larpmanager.models.signals.clear_run_cache_and_media")
     def test_run_pre_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -265,7 +265,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset mock after setup
         run.delete()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.models.signals.clear_run_cache_and_media")
     def test_assignment_trait_post_save_resets_character_cache(self, mock_reset: Any) -> None:
@@ -279,7 +279,7 @@ class TestCacheSignals(BaseTestCase):
         assignment = AssignmentTrait(run=run, member=self.get_member(), trait=trait, typ=0)
         assignment.save()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.models.signals.clear_run_cache_and_media")
     def test_assignment_trait_post_delete_resets_character_cache(self, mock_reset: Any) -> None:
@@ -293,7 +293,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after creates
         assignment.delete()
 
-        mock_reset.assert_called_once_with(run)
+        mock_reset.assert_called_once_with(run.id)
 
     @patch("larpmanager.models.signals.clear_association_permission_cache")
     def test_association_permission_post_save_resets_permission_cache(self, mock_reset: Any) -> None:
@@ -396,7 +396,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(role_pk)
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
     def test_registration_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets accounting cache"""
         registration = self.get_registration()
@@ -405,7 +405,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(registration.run_id)
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
     def test_registration_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_delete signal resets accounting cache"""
         registration = self.get_registration()
@@ -453,7 +453,7 @@ class TestCacheSignals(BaseTestCase):
         )
         payment.save()
 
-        mock_reset.assert_called_once_with(registration.run, member.id)
+        mock_reset.assert_called_once_with(registration.run_id, member.id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_payment_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -472,7 +472,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create
         payment.delete()
 
-        mock_reset.assert_called_once_with(run, member_id)
+        mock_reset.assert_called_once_with(run.id, member_id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_discount_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -489,7 +489,7 @@ class TestCacheSignals(BaseTestCase):
         )
         item.save()
 
-        mock_reset.assert_called_with(run, member.id)
+        mock_reset.assert_called_with(run.id, member.id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_discount_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -508,7 +508,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create to only test delete signal
         item.delete()
 
-        mock_reset.assert_called_with(run, member_id)
+        mock_reset.assert_called_with(run.id, member_id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_other_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -525,8 +525,8 @@ class TestCacheSignals(BaseTestCase):
         )
         item.save()
 
-        # AccountingItemOther signal passes run and member_id
-        mock_reset.assert_called_once_with(run, member.id)
+        # AccountingItemOther signal passes run_id, event_id and member_id
+        mock_reset.assert_called_once_with(run.id, member.id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")
     def test_accounting_item_other_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
@@ -545,8 +545,8 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after create
         item.delete()
 
-        # AccountingItemOther signal passes run and member_id
-        mock_reset.assert_called_once_with(run, member_id)
+        # AccountingItemOther signal passes run_id, event_id and member_id
+        mock_reset.assert_called_once_with(run.id, member_id)
 
     @patch("larpmanager.models.signals.refresh_character_related_caches")
     def test_character_post_save_resets_rels_cache(self, mock_reset: Any) -> None:
@@ -626,7 +626,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after get_event
         event.save()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
     @patch("larpmanager.models.signals.clear_run_event_links_cache")
     def test_event_post_delete_resets_links_cache(self, mock_reset: Any) -> None:
@@ -636,7 +636,7 @@ class TestCacheSignals(BaseTestCase):
         event.delete()
 
         # Called multiple times due to cascade deletes of related runs
-        mock_reset.assert_called_with(event)
+        mock_reset.assert_called_with(event.id)
         self.assertTrue(mock_reset.call_count >= 1)
 
     @patch("larpmanager.models.signals.clear_run_event_links_cache")
@@ -646,7 +646,7 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset after get_run
         run.save()
 
-        mock_reset.assert_called_once_with(run.event)
+        mock_reset.assert_called_once_with(run.event_id)
 
     @patch("larpmanager.models.signals.clear_run_event_links_cache")
     def test_run_post_delete_resets_links_cache(self, mock_reset: Any) -> None:
@@ -656,9 +656,9 @@ class TestCacheSignals(BaseTestCase):
         mock_reset.reset_mock()  # Reset mock after setup
         run.delete()
 
-        mock_reset.assert_called_once_with(event)
+        mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.models.signals.clear_registration_counts_cache")
+    @patch("larpmanager.utils.users.registration.clear_registration_counts_cache")
     def test_registration_post_save_resets_registration_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets registration cache"""
         registration = self.get_registration()
@@ -1016,8 +1016,8 @@ class TestSoftDeleteSignals(BaseTestCase):
 
         mock_ctx.assert_called_once()
 
-    @patch("larpmanager.models.signals.clear_registration_accounting_cache")
-    @patch("larpmanager.models.signals.handle_registration_accounting_updates")
+    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.users.registration.handle_registration_accounting_updates")
     def test_registration_soft_delete_skips_accounting_recompute(self, mock_accounting: Any, mock_clear: Any) -> None:
         """Test that soft deleting a registration clears caches without recomputing its accounting"""
         registration = self.create_registration()

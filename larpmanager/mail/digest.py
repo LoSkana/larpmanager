@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import logging
+from functools import partial
 from typing import TYPE_CHECKING, Any
 
 from django.urls import reverse
@@ -43,12 +44,12 @@ from larpmanager.mail.templates import (
     get_registration_update_organizer_email,
     get_token_credit_name,
 )
-from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice, RefundRequest
-from larpmanager.models.association import Association, get_url, hdr
+from larpmanager.models.association import Association, get_url, hdr_run
 from larpmanager.models.member import Member, Membership, NotificationQueue, NotificationType
 from larpmanager.models.miscellanea import HelpQuestion
 from larpmanager.models.registration import Registration
+from larpmanager.utils.core.common import get_exec_language
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.member import queue_executive_notification, queue_organizer_notification
 
@@ -88,7 +89,7 @@ def my_send_digest_email(
 
     # Check if this organizer has enabled digest mode for their notifications
     if should_queue:
-        object_id = instance.id if instance else 0
+        object_id = getattr(instance, "id", None) or 0
         # Queue notification for daily digest summary for this specific organizer
         queue_organizer_notification(run=run, member=member, notification_type=notification_type, object_id=object_id)
     else:
@@ -189,7 +190,7 @@ def my_send_digest_email_exe(
         should_queue = get_association_config(association.pk, "mail_exe_digest")
 
     if should_queue:
-        object_id = instance.id if instance and hasattr(instance, "id") else 0
+        object_id = getattr(instance, "id", None) or 0
         # Queue notification for daily digest summary
         queue_executive_notification(
             association=association, member=member, notification_type=notification_type, object_id=object_id
@@ -311,7 +312,7 @@ def _daily_member_summaries(member_id: int, all_notifications: list) -> None:
         email_content = generate_summary_email(run, notifications)
 
         # Build email subject
-        email_subject = hdr(run.event) + _("Daily Summary") + f" - {run}"
+        email_subject = hdr_run(run.id) + _("Daily Summary") + f" - {run}"
 
         # Send the email
         my_send_mail(
@@ -359,7 +360,9 @@ def generate_summary_email(run: Run, notifications: list) -> str:
     grouped_notifications = _digest_organize_notifications(notifications)
 
     email_body = ""
-    currency_symbol = run.event.association.get_currency_symbol()
+    run_cache = get_run_basic_cache(run.id)
+    currency_symbol = run_cache["currency_symbol"]
+    association_id = run_cache["association_id"]
 
     # Map group keys to their handler functions (in display order)
     notification_handlers = [
@@ -367,8 +370,8 @@ def generate_summary_email(run: Run, notifications: list) -> str:
         ("updated_registrations", _digest_updated_registrations),
         ("cancelled_registrations", _digest_cancelled_registrations),
         ("request_registrations", _digest_request_registrations),
-        ("all_payments", _digest_payments),
-        ("invoice_approvals", _digest_invoices),
+        ("all_payments", partial(_digest_payments, association_id=association_id)),
+        ("invoice_approvals", partial(_digest_invoices, association_id=association_id)),
     ]
 
     # Process each notification group using its handler
@@ -411,12 +414,14 @@ def _digest_organize_notifications(notifications: list) -> dict:
     return process
 
 
-def _digest_invoices(run: Run, email_body: str, invoice_approvals: list, currency_symbol: str) -> str:
+def _digest_invoices(
+    run: Run, email_body: str, invoice_approvals: list, currency_symbol: str, association_id: int
+) -> str:
     """Generate email content for digest invoice to approve."""
     email_body += "<h4>" + _("Payments Awaiting Approval") + f": {len(invoice_approvals)}" + "</h4>"
     email_body += "<ul>"
     invoice_ids = [notification.object_id for notification in invoice_approvals]
-    for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=run.event.association_id):
+    for invoice in PaymentInvoice.objects.filter(pk__in=invoice_ids, association_id=association_id):
         email_body += f"<li><b>{invoice.member}</b> - {invoice.causal} - {invoice.mc_gross:.2f} {currency_symbol}"
         approve_url = get_url(
             reverse("orga_invoices_confirm", kwargs={"event_slug": run.get_slug(), "invoice_uuid": invoice.uuid}),
@@ -428,13 +433,13 @@ def _digest_invoices(run: Run, email_body: str, invoice_approvals: list, currenc
     return email_body
 
 
-def _digest_payments(run: Run, email_body: str, all_payments: list, currency_symbol: str) -> str:
+def _digest_payments(_run: Run, email_body: str, all_payments: list, currency_symbol: str, association_id: int) -> str:
     """Generate email content for digest payments received."""
     email_body += "<h4>" + _("Payments Received") + f": {len(all_payments)}" + "</h4>"
     email_body += "<ul>"
 
     payment_ids = [notification.object_id for notification in all_payments]
-    for payment in AccountingItemPayment.objects.filter(pk__in=payment_ids, association_id=run.event.association_id):
+    for payment in AccountingItemPayment.objects.filter(pk__in=payment_ids, association_id=association_id):
         # Calculate net value (without transaction fees)
         net_value = payment.value
         if payment.inv and payment.inv.mc_fee:
@@ -633,35 +638,3 @@ def digest_help_questions(association: Association, help_questions: list[Notific
         content += f' - <a href="{help_url}">' + _("View") + "</a></li>"
     content += "</ul>"
     return content
-
-
-def get_exec_language(association: Association) -> str:
-    """Determine the most common language among association executives.
-
-    Analyzes the language preferences of all association executives and returns
-    the most frequently used language code. If no executives are found or no
-    language preferences are set, defaults to English.
-
-    Args:
-        association: Association instance containing executives to analyze
-
-    Returns:
-        str: The language code (e.g., 'en', 'it', 'fr') preferred by the majority
-             of executives, or 'en' if no executives found or no preferences set
-
-    """
-    # Initialize dictionary to count language occurrences
-    language_counts = {}
-
-    # Iterate through all association executives
-    for executive in get_association_executives(association):
-        executive_language = executive.language
-
-        # Count each language preference
-        if executive_language not in language_counts:
-            language_counts[executive_language] = 1
-        else:
-            language_counts[executive_language] += 1
-
-    # Determine the most common language or default to English
-    return max(language_counts, key=language_counts.get) if language_counts else "en"

@@ -27,8 +27,14 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count, QuerySet
 
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.button import get_event_button_cache
-from larpmanager.cache.config import get_event_config, reset_event_parent_cache, save_single_config
+from larpmanager.cache.config import (
+    _get_event_parent_id,
+    get_event_config,
+    reset_event_parent_cache,
+    save_single_config_by_id,
+)
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import _get_writing_mapping
@@ -130,7 +136,8 @@ def init_cache_run(association_id: int, event_slug: str) -> int | None:
 def on_run_pre_save_invalidate_cache(instance: Run) -> None:
     """Handle run pre-save cache invalidation."""
     if instance.pk:
-        reset_cache_run(instance.event.association_id, instance.get_slug())
+        association_id = get_event_association_id(instance.event_id)
+        reset_cache_run(association_id, instance.get_slug())
 
 
 def on_event_pre_save_invalidate_cache(instance: Event) -> None:
@@ -140,9 +147,9 @@ def on_event_pre_save_invalidate_cache(instance: Event) -> None:
             reset_cache_run(instance.association_id, run.get_slug())
 
 
-def reset_cache_config_run(run: Run) -> None:
+def reset_cache_config_run(run_id: int) -> None:
     """Delete cached configuration for a run."""
-    cache.delete(cache_config_run_key(run.id))
+    cache.delete(cache_config_run_key(run_id))
 
 
 def reset_cache_config_run_ids(run_ids: list[int]) -> None:
@@ -201,7 +208,7 @@ def init_cache_config_run(run: Run) -> dict:
 
     """
     event_id = run.event_id
-    parent_id = run.event.parent.id if run.event.parent else run.event_id
+    parent_id = _get_event_parent_id(event_id) or event_id
 
     # Get event features to determine what functionality is available
     event_features = get_event_features(event_id)
@@ -246,7 +253,7 @@ def init_cache_config_run(run: Run) -> dict:
 def on_run_post_save_reset_config_cache(instance: Run) -> None:
     """Handle run post-save cache reset."""
     if instance.pk:
-        reset_cache_config_run(instance)
+        reset_cache_config_run(instance.id)
 
 
 def on_event_post_save_reset_config_cache(instance: Event) -> None:
@@ -268,4 +275,4 @@ def update_visible_factions(event_id: int) -> None:
         .filter(char_count__gt=0)
         .exists()
     )
-    save_single_config(Event.objects.get(pk=event_id), "has_visible_factions", has_visible_factions)
+    save_single_config_by_id(Event, event_id, "has_visible_factions", has_visible_factions)

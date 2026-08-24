@@ -394,6 +394,7 @@ class AssociationTextType(models.TextChoices):
     REMINDER_MEMBERSHIP_FEE = "rf", _("Membership request reminder email")
     REMINDER_PAY = "rp", _("Payment reminder email")
     REMINDER_PROFILE = "rr", _("Profile completion reminder email")
+    REMINDER_CHARACTER = "rc", _("Character creation reminder email")
 
 
 class AssociationText(UuidMixin, BaseModel):
@@ -541,7 +542,11 @@ class AssociationTranslation(UuidMixin, BaseModel):
 
 
 def hdr(association_or_related_object: Association | Any) -> str:
-    """Return a formatted header string with the association name in brackets."""
+    """Return a formatted header string with the association name in brackets.
+
+    Accepts an Association instance, or any object with an `association` attribute.
+    For a bare run id, use `hdr_run()` instead.
+    """
     # Check if object is an Association instance directly
     if isinstance(association_or_related_object, Association):
         return f"[{association_or_related_object.name}] "
@@ -549,6 +554,20 @@ def hdr(association_or_related_object: Association | Any) -> str:
     if association_or_related_object.association:
         return f"[{association_or_related_object.association.name}] "
     return "[LarpManager] "
+
+
+def hdr_run(run_id: int) -> str:
+    """Return a formatted header string with the association name in brackets, from a run id."""
+    from larpmanager.cache.basic import get_run_basic_cache  # noqa: PLC0415
+
+    return hdr_association(get_run_basic_cache(run_id)["association_id"])
+
+
+def hdr_association(association_id: int) -> str:
+    """Return a formatted header string with the association name in brackets, from an association id."""
+    from larpmanager.cache.basic import get_association_basic_cache  # noqa: PLC0415
+
+    return f"[{get_association_basic_cache(association_id)['name']}] "
 
 
 def get_association_maintainers(association: Association) -> Any:
@@ -576,10 +595,10 @@ def get_url(path: str, obj: object = None) -> str:
     if obj:
         # Handle Association objects directly
         if isinstance(obj, Association):
-            url = f"https://{obj.slug}.{obj.skin.domain}/{path}"
+            url = _build_association_url(path, obj.slug, obj.skin.domain)
         # Handle objects that belong to an association
         elif hasattr(obj, "association"):
-            url = f"https://{obj.association.slug}.{obj.association.skin.domain}/{path}"
+            return get_association_url(path, obj.association_id)
         # Handle string slugs or other objects
         else:
             url = f"https://{obj}.larpmanager.com/{path}"
@@ -587,5 +606,23 @@ def get_url(path: str, obj: object = None) -> str:
         # Default to main larpmanager.com domain
         url = "https://larpmanager.com/" + path
 
-    # Clean up double slashes while preserving protocol
+    return _clean_url(url)
+
+
+def _clean_url(url: str) -> str:
+    """Clean up double slashes in a URL while preserving the protocol."""
     return url.replace("//", "/").replace(":/", "://")
+
+
+def _build_association_url(path: str, slug: str, domain: str) -> str:
+    """Build the raw (uncleaned) URL for a path under an association's slug/domain."""
+    return f"https://{slug}.{domain}/{path}"
+
+
+def get_association_url(path: str, association_id: int) -> str:
+    """Build a URL for path using the association's cached slug/domain."""
+    from larpmanager.cache.basic import get_association_basic_cache  # noqa: PLC0415
+
+    assoc_cache = get_association_basic_cache(association_id)
+    url = _build_association_url(path, assoc_cache["slug"], assoc_cache["domain"])
+    return _clean_url(url)

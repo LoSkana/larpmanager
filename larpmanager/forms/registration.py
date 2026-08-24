@@ -122,7 +122,7 @@ class RegistrationForm(BaseRegistrationForm):
 
         # Get current registration counts for quota calculations and availability checks
         # This data determines ticket availability and waiting list status
-        registration_counts = get_registration_counts(run)
+        registration_counts = get_registration_counts(run.id, run.event_id)
 
         # Initialize ticket selection field and retrieve help text for user guidance
         # Creates the primary ticket selection interface with availability info
@@ -252,7 +252,7 @@ class RegistrationForm(BaseRegistrationForm):
     def init_surcharge(self, event: Event) -> None:
         """Initialize date-based surcharge field if applicable."""
         # date surcharge
-        surcharge = get_date_surcharge(self.instance, event)
+        surcharge = get_date_surcharge(self.instance, event.id)
         if surcharge == 0:
             return
         ch = [(0, f"{surcharge}{self.params['currency_symbol']}")]
@@ -1002,7 +1002,9 @@ class OrgaRegistrationForm(BaseRegistrationForm):
         taken_characters = taken_characters - mine
         self.fields["characters_new"] = forms.ModelMultipleChoiceField(
             label=_("Characters"),
-            queryset=get_event_elements(self.params["run"].event_id, Character).exclude(pk__in=taken_characters),
+            queryset=get_event_elements(self.params["run"].event_id, Character, context=self.params).exclude(
+                pk__in=taken_characters
+            ),
             widget=S2WidgetMulti(search_fields=["name__icontains", "number__icontains"]),
             required=False,
         )
@@ -1393,7 +1395,10 @@ class OrgaRegistrationQuestionForm(BaseModelForm):
             self.delete_field("factions")
         elif "factions" in self.fields:
             self.fields["factions"].choices = [
-                (m.id, str(m)) for m in get_event_elements(self.params["run"].event_id, Faction).order_by("number")
+                (m.id, str(m))
+                for m in get_event_elements(self.params["run"].event_id, Faction, context=self.params).order_by(
+                    "number"
+                )
             ]
 
         if "gift" not in features:

@@ -44,9 +44,9 @@ from django.http import Http404, HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.basic import get_event_basic_cache
-from larpmanager.cache.config import get_event_config
+from larpmanager.cache.config import _get_event_parent_id, get_event_config
 from larpmanager.cache.feature import get_event_features
+from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import Collection, Discount
 from larpmanager.models.association import Association
 from larpmanager.models.base import BaseModel, Feature
@@ -79,7 +79,7 @@ def feature_visible(feature_slug: str, features: dict | set, allowed_sidebar: li
     return feature_slug in features and (not allowed_sidebar or feature_slug in allowed_sidebar)
 
 
-def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str) -> int:
+def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str, *, context: dict | None = None) -> int:
     """Get the event id to use for inheriting elements of a specific model class.
 
     Determines whether to use the parent event's id or the current event's id
@@ -106,16 +106,17 @@ def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str) ->
     ]
 
     if model_class in inheritable_elements:
-        parent_id = get_event_basic_cache(event_id)["parent_id"]
-        if parent_id and not get_event_config(event_id, f"campaign_{model_class}_indep"):
+        parent_id = _get_event_parent_id(event_id, context)
+        if parent_id and not get_event_config(event_id, f"campaign_{model_class}_indep", context=context):
             return parent_id
 
     return event_id
 
 
-def get_event_elements(event_id: int, element_model_class: type[BaseModel]) -> QuerySet:
+def get_event_elements(event_id: int, element_model_class: type[BaseModel], *, context: dict | None = None) -> QuerySet:
     """Get ordered elements of specified type for the event, following inheritance rules."""
-    queryset = element_model_class.objects.filter(event_id=get_event_class_parent(event_id, element_model_class))
+    parent_id = get_event_class_parent(event_id, element_model_class, context=context)
+    queryset = element_model_class.objects.filter(event_id=parent_id)
     if hasattr(element_model_class, "number"):
         queryset = queryset.order_by("number")
     return queryset
@@ -377,7 +378,7 @@ def get_element_event(
     if hasattr(model_class, "association"):
         filters["association_id"] = context["association_id"]
     if hasattr(model_class, "event"):
-        filters["event_id"] = get_event_class_parent(context["event"].id, model_class)
+        filters["event_id"] = get_event_class_parent(context["event"].id, model_class, context=context)
 
     return get_object_uuid(
         model_class,
@@ -891,3 +892,35 @@ def parse_multi_config(value: str) -> list:
         return result if isinstance(result, list) else []
     except (ValueError, SyntaxError):
         return []
+
+
+def get_exec_language(association: Association) -> str:
+    """Determine the most common language among association executives.
+
+    Analyzes the language preferences of all association executives and returns
+    the most frequently used language code. If no executives are found or no
+    language preferences are set, defaults to English.
+
+    Args:
+        association: Association instance containing executives to analyze
+
+    Returns:
+        str: The language code (e.g., 'en', 'it', 'fr') preferred by the majority
+             of executives, or 'en' if no executives found or no preferences set
+
+    """
+    # Initialize dictionary to count language occurrences
+    language_counts = {}
+
+    # Iterate through all association executives
+    for executive in get_association_executives(association):
+        executive_language = executive.language
+
+        # Count each language preference
+        if executive_language not in language_counts:
+            language_counts[executive_language] = 1
+        else:
+            language_counts[executive_language] += 1
+
+    # Determine the most common language or default to English
+    return max(language_counts, key=language_counts.get) if language_counts else "en"

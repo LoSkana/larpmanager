@@ -65,6 +65,7 @@ from larpmanager.models.writing import (
 from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_event_elements, get_player_relationship
+from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
@@ -80,6 +81,7 @@ from larpmanager.utils.services.experience import (
     add_char_addit,
     build_exp_avail_by_system_from_addit,
     build_exp_context,
+    calculate_character_experience_points,
     get_available_ability_exp,
     get_current_ability_exp,
     remove_char_ability,
@@ -207,7 +209,7 @@ def character_external(request: HttpRequest, event_slug: str, code: str) -> Http
 
     # Attempt to retrieve character using the provided access token
     try:
-        char = get_event_elements(context["event"].id, Character).get(access_token=code)
+        char = get_event_elements(context["event"].id, Character, context=context).get(access_token=code)
     except ObjectDoesNotExist as err:
         msg = "invalid code"
         raise Http404(msg) from err
@@ -750,7 +752,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
 
     context["writing_field_names"] = get_writing_field_names(context["event"].id, QuestionApplicable.CHARACTER)
 
-    context["list"] = get_player_characters(context["member"], context["event"])
+    context["list"] = get_player_characters(context["member"], context["event"].id)
     # add character configs
     char_add_addit(context)
     context["list"] = list(context["list"])
@@ -763,7 +765,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
                 "used_key": f"exp_used_{sys.uuid}",
                 "avail_key": f"exp_avail_{sys.uuid}",
             }
-            for sys in get_event_exp_systems(context["event"])
+            for sys in get_event_exp_systems(context["event"].id)
             if not sys.hidden
         ]
 
@@ -777,7 +779,7 @@ def character_list(request: HttpRequest, event_slug: str) -> Any:
         el.fields = res["fields"]
         context.update(res)
 
-    check, _max_chars = check_character_maximum(context["event"], context["member"])
+    check, _max_chars = check_character_maximum(context["event"].id, context["member"])
     context["char_maximum"] = check
     context["approval"] = get_event_config(context["event"].id, "user_character_approval", context=context)
 
@@ -846,7 +848,7 @@ def character_list_json(request: HttpRequest, event_slug: str) -> JsonResponse:
     """Return JSON list of player's characters for an event."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
-    context["list"] = get_player_characters(context["member"], context["event"])
+    context["list"] = get_player_characters(context["member"], context["event"].id)
 
     # Get character fields info
     return_list = [{"uuid": el.uuid, "name": el.name} for el in context["list"]]
@@ -859,7 +861,7 @@ def character_create(request: HttpRequest, event_slug: str) -> Any:
     """Handle character creation with maximum character validation."""
     context = get_event_context(request, event_slug, signup=True, feature_slug="user_character")
 
-    check, _max_chars = check_character_maximum(context["event"], context["member"])
+    check, _max_chars = check_character_maximum(context["event"].id, context["member"])
     if check:
         if request.POST.get("ajax") == "1":
             return JsonResponse({"res": "ko"})
@@ -1044,14 +1046,24 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
             "used": char.addit.get(f"exp_used_{sys.uuid}", 0),
             "avail": char.addit.get(f"exp_avail_{sys.uuid}", 0),
         }
-        for sys in get_event_exp_systems(context["event"])
+        for sys in get_event_exp_systems(context["event"].id)
         if not sys.hidden
     ]
 
-    # Build available abilities dictionary organized by ability type
+    # Build per-system experience data used both for display and for the POST save check
     exp_avail_by_system = build_exp_avail_by_system_from_addit(char)
-    multiple_systems = len(context["exp_systems_data"]) > 1
     exp_context = build_exp_context(char)
+    context["exp_context"] = exp_context
+
+    # Handle POST request for saving ability changes (skip building the display dict below,
+    # it's not needed since the save re-queries availability under lock and we redirect after)
+    if request.method == "POST":
+        _save_character_abilities(context, request)
+        # Redirect to prevent duplicate submissions
+        return redirect(request.path_info)
+
+    # Build available abilities dictionary organized by ability type
+    multiple_systems = len(context["exp_systems_data"]) > 1
     context["available"] = {}
     for ability in get_available_ability_exp(char, exp_avail_by_system, exp_context):
         if ability.typ is None:
@@ -1077,12 +1089,6 @@ def character_abilities(request: HttpRequest, event_slug: str, character_uuid: s
             context["sheet_abilities"][el.typ.name] = []
         # Add ability to the type's list
         context["sheet_abilities"][el.typ.name].append(el)
-
-    # Handle POST request for saving ability changes
-    if request.method == "POST":
-        _save_character_abilities(context, request)
-        # Redirect to prevent duplicate submissions
-        return redirect(request.path_info)
 
     # Create ordered list of available types for template rendering
     type_available_dict = {
@@ -1197,7 +1203,7 @@ def character_inventory_json(request: HttpRequest, event_slug: str, character_uu
     get_char_check(request, context, character_uuid, deny_public=True)
 
     # Get character data
-    context["character"] = get_event_elements(context["event"].id, Character).get(uuid=character_uuid)
+    context["character"] = get_event_elements(context["event"].id, Character, context=context).get(uuid=character_uuid)
 
     inventories = {}
     for inv in context["character"].inventory.all():
@@ -1227,8 +1233,9 @@ def character_abilities_del(request: HttpRequest, event_slug: str, character_uui
         raise Http404(msg)
 
     with transaction.atomic():
-        remove_char_ability(context["character"], context["ability"].id)
-        context["character"].save()
+        with experience_recalc_deferred():
+            remove_char_ability(context["character"], context["ability"].id)
+        calculate_character_experience_points(context["character"])
 
     messages.success(request, _("Ability removed!"))
     return redirect(
@@ -1240,7 +1247,7 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
     """Process character ability selection and save to character.
 
     Args:
-        context: Context dictionary with character and available abilities
+        context: Context dictionary with character and exp_context
         request: HTTP request object with POST data
 
     """
@@ -1254,24 +1261,30 @@ def _save_character_abilities(context: dict, request: HttpRequest) -> None:
         messages.error(request, _("Ability missing"))
         return
 
-    if selected_type not in context["available"] or selected_uuid not in context["available"][selected_type]["list"]:
+    ability = get_element_event(context, selected_uuid, AbilityExp)
+    if ability.typ is None or str(ability.typ.uuid) != selected_type:
         messages.error(request, _("Invalid selection"))
         return
-
-    ability = get_element_event(context, selected_uuid, AbilityExp)
 
     with transaction.atomic():
         # Lock the character and recompute affordability under the lock
         char = Character.objects.select_for_update().get(pk=context["character"].pk)
         add_char_addit(char)
         exp_avail = build_exp_avail_by_system_from_addit(char)
-        available_uuids = {str(available.uuid) for available in get_available_ability_exp(char, exp_avail)}
+        available_uuids = {
+            str(available.uuid)
+            for available in get_available_ability_exp(
+                char, exp_avail, exp_context=context["exp_context"], refresh_abilities=True
+            )
+        }
         if str(ability.uuid) not in available_uuids:
             messages.error(request, _("Ability no longer available"))
             return
-        char.exp_ability_list.add(ability)
-        char.save()
+        with experience_recalc_deferred():
+            char.exp_ability_list.add(ability)
+        calculate_character_experience_points(char)
         context["character"] = char
+
     messages.success(request, _("Ability acquired!"))
 
     get_undo_abilities(context, context["character"], ability)

@@ -358,7 +358,7 @@ def get_character_sheet_exp(context: dict) -> None:
             "used": context["character"].addit.get(f"exp_used_{sys.uuid}", 0),
             "avail": context["character"].addit.get(f"exp_avail_{sys.uuid}", 0),
         }
-        for sys in get_event_exp_systems(context["event"])
+        for sys in get_event_exp_systems(context["event"].id)
         if not sys.hidden
     ]
 
@@ -448,7 +448,7 @@ def get_character_sheet_plots(context: dict) -> None:
     context["sheet_plots"] = []
 
     # Get the plot relations of the current event for the character, ordered by sequence
-    plot_relations = context["character"].get_plot_characters(context["event"])
+    plot_relations = context["character"].get_plot_characters(context["event"].id)
 
     for plot_relation in plot_relations:
         # Start with the base plot text
@@ -486,7 +486,7 @@ def get_character_sheet_factions(context: dict, *, only_visible: bool = False) -
     # If we show all the factions (player / staffer)
     all_factions = {}
     if not only_visible:
-        faction_event = get_event_class_parent(context["event"].id, "faction")
+        faction_event = get_event_class_parent(context["event"].id, "faction", context=context)
         faction_ids = []
         for faction in context["character"].factions_list.filter(event=faction_event).order_by("order"):
             all_factions[faction.id] = faction.show_complete()
@@ -584,7 +584,7 @@ def get_character_sheet_guilds(context: dict, *, only_visible: bool = False) -> 
     if "guild" not in context["features"]:
         return
 
-    guild_event = get_event_class_parent(context["event"].id, "guild")
+    guild_event = get_event_class_parent(context["event"].id, "guild", context=context)
     all_guilds = {}
     accepted_guilds = (
         Guild.objects.filter(

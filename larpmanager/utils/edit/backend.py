@@ -32,6 +32,7 @@ from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
+from larpmanager.cache.basic import get_event_association_id
 from larpmanager.cache.config import _get_fkey_config, get_event_config
 from larpmanager.cache.question import get_cached_writing_questions
 from larpmanager.forms.utils import EventCharacterS2Widget, EventTraitS2Widget
@@ -95,7 +96,7 @@ def save_log(
     instance = context.get("run", context["association_id"])
     if isinstance(instance, Run):
         run_id = instance.id
-        association_id = instance.event.association_id
+        association_id = get_event_association_id(instance.event_id)
     else:
         run_id = None
         association_id = instance
@@ -940,7 +941,7 @@ def backend_order(
 
     """
     # Get elements queryset, defaulting to event elements if not provided
-    elements = elements or get_event_elements(context["event"].id, model_class)
+    elements = elements or get_event_elements(context["event"].id, model_class, context=context)
 
     current_element = elements.get(uuid=element) if isinstance(element, str) else element
 
@@ -983,7 +984,7 @@ def backend_order(
 
 def backend_set_order(context: dict, model_class: type, uuids: list[str]) -> None:
     """Bulk-set order field from a UUID list using index * 10 spacing."""
-    event = get_event_class_parent(context["event"].id, model_class)
+    event = get_event_class_parent(context["event"].id, model_class, context=context)
     objects = {str(obj.uuid): obj for obj in model_class.objects.filter(event=event, uuid__in=uuids)}
     to_update = []
     for i, uuid in enumerate(uuids):

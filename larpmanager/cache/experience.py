@@ -28,6 +28,7 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
+from larpmanager.cache.config import _get_event_parent_id
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
@@ -55,28 +56,28 @@ def get_event_exp_systems_key(event_id: int) -> str:
     return f"event__exp_systems__{event_id}"
 
 
-def get_event_exp_systems(event: Event) -> list[SystemExp]:
+def get_event_exp_systems(event_id: int) -> list[SystemExp]:
     """Get ordered SystemExp list for an event, using cache.
 
     Args:
-        event: Event instance (handles parent inheritance via get_event_elements).
+        event_id: Event ID (handles parent inheritance via get_event_elements).
 
     Returns:
         Ordered list of SystemExp instances for the effective event.
 
     """
-    effective_event_id = get_event_class_parent(event.id, SystemExp)
+    effective_event_id = get_event_class_parent(event_id, SystemExp)
     cache_key = get_event_exp_systems_key(effective_event_id)
     systems = cache.get(cache_key)
     if systems is None:
-        systems = list(get_event_elements(event.id, SystemExp).order_by("order"))
+        systems = list(get_event_elements(event_id, SystemExp).order_by("order"))
         cache.set(cache_key, systems, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
     return systems
 
 
-def has_multiple_exp_systems(event: Event) -> bool:
+def has_multiple_exp_systems(event_id: int) -> bool:
     """Return whether the event has more than one experience system configured."""
-    return len(get_event_exp_systems(event)) > 1
+    return len(get_event_exp_systems(event_id)) > 1
 
 
 def clear_event_exp_systems_cache(event_id: int) -> None:
@@ -89,11 +90,9 @@ def get_event_exp_key(event_id: int) -> str:
     return f"event__exp__{event_id}"
 
 
-def get_exp_effective_event_id(event: Event) -> int:
+def get_exp_effective_event_id(event_id: int) -> int:
     """Return the event ID to use as EXP cache key."""
-    if event.parent_id and not event.get_config("campaign_abilitypx_indep"):
-        return event.parent_id
-    return event.id
+    return get_event_class_parent(event_id, "abilitypx")
 
 
 def clear_event_exp_cache(event_id: int) -> None:
@@ -274,14 +273,14 @@ def get_rule_rels(rule: RuleExp) -> dict[str, Any]:
     return relationships
 
 
-def init_event_exp_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
+def init_event_exp_all(event_id: int) -> dict[str, dict[int, dict[str, Any]]]:
     """Initialize all EXP relationships for an event and cache the result.
 
     Builds a complete relationship cache for all EXP elements in the event,
     including abilities, deliveries, modifiers, and rules.
 
     Args:
-        event: The Event instance to initialize EXP relationships for
+        event_id: The Event ID to initialize EXP relationships for
 
     Returns:
         Dictionary with relationship data structure organized by element type:
@@ -323,54 +322,54 @@ def init_event_exp_all(event: Event) -> dict[str, dict[int, dict[str, Any]]]:
             px_cache[cache_key_plural] = {}
 
             # Get all elements of this type associated with the event
-            elements = get_event_elements(event.id, model_class)
+            elements = get_event_elements(event_id, model_class)
 
             # Build relationships for each element
             for element in elements:
                 px_cache[cache_key_plural][element.id] = get_relationships_function(element)
 
-            logger.debug("Initialized %s %s for event %s", len(elements), cache_key_plural, event.id)
+            logger.debug("Initialized %s %s for event %s", len(elements), cache_key_plural, event_id)
 
         # Cache the complete relationship data structure
-        cache_key = get_event_exp_key(event.id)
+        cache_key = get_event_exp_key(event_id)
         cache.set(cache_key, px_cache, timeout=conf_settings.CACHE_TIMEOUT_1_DAY)
-        logger.debug("Cached EXP relationships for event %s", event.id)
+        logger.debug("Cached EXP relationships for event %s", event_id)
 
     except Exception:
         # Log the error with full traceback and return empty result
-        logger.exception("Error initializing EXP relationships for event %s", event.id)
+        logger.exception("Error initializing EXP relationships for event %s", event_id)
         px_cache = {}
 
     return px_cache
 
 
-def get_event_exp_cache(event: Event) -> dict[str, Any]:
+def get_event_exp_cache(event_id: int) -> dict[str, Any]:
     """Get event EXP relationships from cache, initializing if not present.
 
     Retrieves cached EXP relationship data for the specified event. If no cached
     data exists, initializes the cache with fresh relationship data.
 
     Args:
-        event: The Event instance to get EXP relationships for
+        event_id: The Event ID to get EXP relationships for
 
     Returns:
         Dictionary containing cached EXP relationship data
 
     """
-    effective_event = event.parent if event.parent else event
-    cache_key = get_event_exp_key(effective_event.id)
+    effective_event_id = _get_event_parent_id(event_id) or event_id
+    cache_key = get_event_exp_key(effective_event_id)
 
     # Attempt to retrieve cached relationships
     cached_relationships = cache.get(cache_key)
 
     # Initialize cache if no data found
     if cached_relationships is None:
-        logger.debug("EXP cache miss for event %s (effective %s), initializing", event.id, effective_event.id)
-        return init_event_exp_all(effective_event)
+        logger.debug("EXP cache miss for event %s (effective %s), initializing", event_id, effective_event_id)
+        return init_event_exp_all(effective_event_id)
 
     # Resolve any items still marked as dirty (not yet cleaned by background job)
     any_resolved = False
-    if cache.get(_get_exp_has_dirty_key(effective_event.id)):
+    if cache.get(_get_exp_has_dirty_key(effective_event_id)):
         for _section, _model, _get_rels in (
             ("abilities", AbilityExp, get_ability_rels),
             ("deliveries", DeliveryExp, get_delivery_rels),
@@ -378,38 +377,37 @@ def get_event_exp_cache(event: Event) -> dict[str, Any]:
             ("rules", RuleExp, get_rule_rels),
             ("criterions", CriterionExp, get_criterion_rels),
         ):
-            if _resolve_dirty_exp_section(effective_event.id, cached_relationships, _section, _model, _get_rels):
+            if _resolve_dirty_exp_section(effective_event_id, cached_relationships, _section, _model, _get_rels):
                 any_resolved = True
     if any_resolved:
         cache.set(
-            get_event_exp_key(effective_event.id), cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY
+            get_event_exp_key(effective_event_id), cached_relationships, timeout=conf_settings.CACHE_TIMEOUT_1_DAY
         )
 
     return cached_relationships
 
 
-def update_cache_section(event: Event, section_name: str, section_id: int, data: dict[str, Any]) -> None:
+def update_cache_section(event_id: int, section_name: str, section_id: int, data: dict[str, Any]) -> None:
     """Update a specific section in the event EXP cache.
 
     Args:
-        event: The event
+        event_id: The event ID
         section_name: Name of the cache section (e.g., 'abilities', 'deliveries')
         section_id: ID of the item within the section
         data: Data to store for this item
 
     """
     try:
-        event_id = event.parent_id if event.parent else event.id
+        event_id = _get_event_parent_id(event_id) or event_id
         cache_key = get_event_exp_key(event_id)
         cached_event_data = cache.get(cache_key)
 
         if cached_event_data is None:
             logger.debug("Cache miss during %s update for event %s, reinitializing", section_name, event_id)
-            event = Event.objects.filter(id=event_id).first()
-            if event is None:
+            if not Event.objects.filter(id=event_id).exists():
                 logger.warning("Event %s not found, skipping cache reinitialization", event_id)
                 return
-            init_event_exp_all(event)
+            init_event_exp_all(event_id)
             return
 
         if section_name not in cached_event_data:
@@ -427,25 +425,25 @@ def update_cache_section(event: Event, section_name: str, section_id: int, data:
 def refresh_ability_relationships(ability: AbilityExp) -> None:
     """Update ability relationships in cache."""
     ability_relationship_data = get_ability_rels(ability)
-    update_cache_section(ability.event, "abilities", ability.id, ability_relationship_data)
+    update_cache_section(ability.event_id, "abilities", ability.id, ability_relationship_data)
 
 
 def refresh_delivery_relationships(delivery: DeliveryExp) -> None:
     """Update delivery relationships in cache."""
     delivery_relationship_data = get_delivery_rels(delivery)
-    update_cache_section(delivery.event, "deliveries", delivery.id, delivery_relationship_data)
+    update_cache_section(delivery.event_id, "deliveries", delivery.id, delivery_relationship_data)
 
 
 def refresh_modifier_relationships(modifier: ModifierExp) -> None:
     """Update modifier relationships in cache."""
     modifier_relationship_data = get_modifier_rels(modifier)
-    update_cache_section(modifier.event, "modifiers", modifier.id, modifier_relationship_data)
+    update_cache_section(modifier.event_id, "modifiers", modifier.id, modifier_relationship_data)
 
 
 def refresh_rule_relationships(rule: RuleExp) -> None:
     """Update rule relationships in cache."""
     rule_relationship_data = get_rule_rels(rule)
-    update_cache_section(rule.event, "rules", rule.id, rule_relationship_data)
+    update_cache_section(rule.event_id, "rules", rule.id, rule_relationship_data)
 
 
 # Background tasks for cache updates
@@ -1007,7 +1005,7 @@ def get_criterion_rels(criterion: CriterionExp) -> dict[str, Any]:
 
 def refresh_criterion_relationships(criterion: CriterionExp) -> None:
     """Update criterion relationships in cache."""
-    update_cache_section(criterion.event, "criterions", criterion.id, get_criterion_rels(criterion))
+    update_cache_section(criterion.event_id, "criterions", criterion.id, get_criterion_rels(criterion))
 
 
 @background_auto(queue="cache-experience", skip_duplicates=True)

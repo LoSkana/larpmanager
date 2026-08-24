@@ -5015,6 +5015,9 @@ msgstr "Kies je voorkeuren"
 msgid "Show available factions"
 msgstr "Beschikbare facties tonen"
 
+msgid "The ability type's name"
+msgstr "De naam van het ability type"
+
 msgid "The genre of your event"
 msgstr "Het genre van je evenement"
 
@@ -5199,6 +5202,9 @@ msgstr "Na opslaan nog een toevoegen"
 msgid "Character Inventory Types"
 msgstr "Soorten personage-inventaris"
 
+msgid "Character not yet created"
+msgstr "Personage nog niet aangemaakt"
+
 msgid "Character sheet questions"
 msgstr "Karakterblad vragen"
 
@@ -5338,6 +5344,9 @@ msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 
 msgid "Character assignment email"
 msgstr "E-mail over de Casting van een personage"
+
+msgid "Character not yet approved"
+msgstr "Personage nog niet goedgekeurd"
 
 msgid "Choose the payment method:"
 msgstr "Kies het betaalmiddel:"
@@ -6157,6 +6166,9 @@ msgstr "(Optioneel) De naam van het ticket"
 
 msgid "Access the organization dashboard"
 msgstr "Ga naar het organisatiedashboard"
+
+msgid "Character creation reminder email"
+msgstr "E-mailherinnering voor het aanmaken van een personage"
 
 msgid "Days available cannot be negative"
 msgstr "Beschikbare dagen kunnen niet negatief zijn"
@@ -7033,6 +7045,10 @@ msgstr "Browser user agent string van de toegang"
 
 msgid "Cannot demote the last admin of the guild"
 msgstr "De laatste beheerder van het gilde kan niet worden gedegradeerd"
+
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr "Herinnering voor het aanmaken van een personage voor %(event)s"
 
 msgid "Choice locked, click to make it available"
 msgstr "Keuze vergrendeld, klik om deze beschikbaar te maken"
@@ -12034,6 +12050,13 @@ msgstr ""
 " 'traits'"
 
 msgid ""
+"Note that existing rules with the same number, will be overwritten with the "
+"uploaded data."
+msgstr ""
+"Let op: bestaande regels met hetzelfde nummer worden overschreven met de "
+"geüploade gegevens."
+
+msgid ""
 "Note that existing tickets with the same name, will be overwritten with the "
 "uploaded data."
 msgstr ""
@@ -12430,6 +12453,13 @@ msgstr ""
 "aanmeldingen, en maak nieuwe evenementen aan"
 
 msgid ""
+"Note that existing modifiers with the same number, will be overwritten with "
+"the uploaded data."
+msgstr ""
+"Let op: bestaande modifiers met hetzelfde nummer worden overschreven met de "
+"geüploade gegevens."
+
+msgid ""
 "Once your membership is approved, you can proceed with the payment for your "
 "registered events."
 msgstr ""
@@ -12615,6 +12645,13 @@ msgid ""
 msgstr ""
 "Er zijn nog geen kortingen aangemaakt. Voeg een korting toe om deelnemers "
 "lagere prijzen of promotiecodes aan te bieden."
+
+msgid ""
+"Note that existing ability types with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+"Let op: bestaande ability types met dezelfde naam worden overschreven met de"
+" geüploade gegevens."
 
 msgid ""
 "Optional: upload a photo of yourself associated with your character "
@@ -14068,6 +14105,14 @@ msgstr ""
 "Deelnemers kunnen specifieke attributen aanpassen (naam, voornaamwoord, "
 "publieke info, etc.) van de personages die ze toegewezen krijgen"
 
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet."
+" <a href='%(url)s'>click here</a> to create it."
+msgstr ""
+"Hallo! Je hebt je ingeschreven voor %(event)s maar je personage nog niet "
+"aangemaakt. <a href='%(url)s'>klik hier</a> om het aan te maken."
+
 msgid ""
 "If checked, applying this tag to a relationship also applies it to the other"
 " character's relationship back towards this one"
@@ -15012,6 +15057,16 @@ msgstr ""
 "Onthoud alsjeblieft dat de informatie op deze pagina vertrouwelijk is "
 "verstrekt en met de grootste zorg moet worden behandeld. Deel deze alleen "
 "wanneer strikt noodzakelijk en, waar mogelijk, anoniem."
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+"Hallo! Je hebt je ingeschreven voor %(event)s en je personage aangemaakt, "
+"maar het is nog niet bevestigd voor indiening bij de staf ter goedkeuring. "
+"<a href='%(url)s'>klik hier</a> om de status te bekijken."
 
 msgid ""
 "On this page you can book tickets for the event; once paid, a special code "

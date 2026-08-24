@@ -157,7 +157,7 @@ def get_ordered_registration_questions(context: dict, applicable: str | None = N
         applicable: Optional RegistrationQuestionApplicable value to filter by. Unfiltered when None.
 
     """
-    questions = get_event_elements(context["event"].id, RegistrationQuestion)
+    questions = get_event_elements(context["event"].id, RegistrationQuestion, context=context)
     if applicable is not None:
         questions = questions.filter(applicable=applicable)
     return questions.order_by(F("section__order").asc(nulls_first=True), "order")
@@ -438,7 +438,7 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     model_class = action.config["form"].Meta.model
     backend_set_order(context, model_class, uuids)
     if action.config.get("writing"):
-        reset_event_cache_all(context["run"])
+        reset_event_cache_all(context["run"].id)
     if action.config.get("exp"):
         event_id = context["event"].id
         clear_event_exp_cache(event_id)
@@ -448,5 +448,5 @@ def orga_reorder_items(request: HttpRequest, event_slug: str) -> JsonResponse:
     if action.config.get("tickets"):
         clear_registration_tickets_cache(context["event"].id)
     if action.config.get("relationship_tags"):
-        clear_relationship_tags_cache(get_event_class_parent(context["event"].id, model_class))
+        clear_relationship_tags_cache(get_event_class_parent(context["event"].id, model_class, context=context))
     return JsonResponse({"ok": True})

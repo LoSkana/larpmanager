@@ -27,7 +27,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.db.models import F, Prefetch
 
-from larpmanager.cache.basic import get_event_basic_cache
+from larpmanager.cache.config import _get_event_parent_id
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -210,9 +210,7 @@ def get_cached_writing_questions(event_id: int, applicable: str) -> list:
               Each dict contains question fields and 'options' list with serialized options.
 
     """
-    parent_id = get_event_basic_cache(event_id)["parent_id"]
-    if parent_id:
-        event_id = parent_id
+    event_id = _get_event_parent_id(event_id) or event_id
 
     cache_key = get_event_questions_cache_key(event_id, "writing")
 
@@ -315,9 +313,7 @@ def get_character_dependencies(event_id: int, features: Iterable[str]) -> dict[s
     if "character" not in features or "wri_que_requirements" not in features:
         return {"options": {}, "questions": {}}
 
-    parent_id = get_event_basic_cache(event_id)["parent_id"]
-    if parent_id:
-        event_id = parent_id
+    event_id = _get_event_parent_id(event_id) or event_id
 
     cache_key = get_event_dependencies_cache_key(event_id)
 

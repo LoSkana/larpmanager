@@ -219,8 +219,11 @@ class UploadToPathAndRename:
         path = self.sub_path
         if hasattr(instance, "event") and instance.event:
             path = str(Path(path) / instance.event.slug)
-        if hasattr(instance, "run") and instance.run:
-            path = str(Path(path) / instance.run.event.slug / str(instance.run.number))
+        if hasattr(instance, "run_id") and instance.run_id:
+            from larpmanager.cache.basic import get_run_basic_cache  # noqa: PLC0415
+
+            run_cache = get_run_basic_cache(instance.run_id)
+            path = str(Path(path) / run_cache["slug"] / str(run_cache["number"]))
         if hasattr(instance, "album") and instance.album:
             path = str(Path(path) / instance.album.slug)
 

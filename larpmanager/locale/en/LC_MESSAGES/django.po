@@ -2046,42 +2046,6 @@ msgstr ""
 msgid "Prologue"
 msgstr ""
 
-msgid "Included"
-msgstr ""
-
-msgid "Not included"
-msgstr ""
-
-msgid "Non-residential"
-msgstr ""
-
-msgid "Camping"
-msgstr ""
-
-msgid "Agritourism"
-msgstr ""
-
-msgid "Historic residence"
-msgstr ""
-
-msgid "Hotel"
-msgstr ""
-
-msgid "Other"
-msgstr ""
-
-msgid "Restaurant"
-msgstr ""
-
-msgid "Self-catering"
-msgstr ""
-
-msgid "Internal catering"
-msgstr ""
-
-msgid "External catering"
-msgstr ""
-
 msgid "Enter a valid number"
 msgstr ""
 
@@ -3339,6 +3303,23 @@ msgstr ""
 msgid "Without payment of this fee, event participation is not permitted."
 msgstr ""
 
+#, python-format
+msgid "Character creation reminder for %(event)s"
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s and created your character, but it has "
+"not yet been confirmed for submission to the staff for approval. <a "
+"href='%(url)s'>click here</a> to check its status."
+msgstr ""
+
+#, python-format
+msgid ""
+"Hello! You registered for %(event)s but have not created your character yet. "
+"<a href='%(url)s'>click here</a> to create it."
+msgstr ""
+
 msgid "Review users with pending event deadlines:"
 msgstr ""
 
@@ -3590,6 +3571,9 @@ msgid "Venue: rent, utilities, and accommodation"
 msgstr ""
 
 msgid "Secretarial: stationery and printing"
+msgstr ""
+
+msgid "Other"
 msgstr ""
 
 msgid "Raw materials, auxiliaries, consumables and goods"
@@ -3859,6 +3843,9 @@ msgid "Payment reminder email"
 msgstr ""
 
 msgid "Profile completion reminder email"
+msgstr ""
+
+msgid "Character creation reminder email"
 msgstr ""
 
 msgid "Type of text"
@@ -5504,6 +5491,12 @@ msgstr ""
 msgid "Missing casting preferences"
 msgstr ""
 
+msgid "Character not yet created"
+msgstr ""
+
+msgid "Character not yet approved"
+msgstr ""
+
 msgid "Show help tip"
 msgstr ""
 
@@ -6660,6 +6653,9 @@ msgstr ""
 msgid ""
 "If you press once, it will be *included* in the search. If a character "
 "belongs to at least one inclusion category, it will be shown in the search."
+msgstr ""
+
+msgid "Included"
 msgstr ""
 
 msgid ""
@@ -9611,6 +9607,21 @@ msgid ""
 "the uploaded data."
 msgstr ""
 
+msgid ""
+"Note that existing rules with the same number, will be overwritten with the "
+"uploaded data."
+msgstr ""
+
+msgid ""
+"Note that existing modifiers with the same number, will be overwritten with "
+"the uploaded data."
+msgstr ""
+
+msgid ""
+"Note that existing ability types with the same name, will be overwritten "
+"with the uploaded data."
+msgstr ""
+
 msgid "You can also upload a second file with the registration options:"
 msgstr ""
 
@@ -11674,21 +11685,6 @@ msgstr ""
 msgid "(Optional) Character names it was awarded to, comma-separated"
 msgstr ""
 
-msgid "The ticket's name"
-msgstr ""
-
-msgid "The tier of the ticket"
-msgstr ""
-
-msgid "(Optional) The ticket's description"
-msgstr ""
-
-msgid "(Optional) The cost of the ticket"
-msgstr ""
-
-msgid "(Optional) Maximum number of spots available"
-msgstr ""
-
 msgid "The rule's number (unique identifier)"
 msgstr ""
 
@@ -11706,6 +11702,24 @@ msgid "(Optional) Ability names, comma-separated"
 msgstr ""
 
 msgid "(Optional) Cost (0 = auto assigned)"
+msgstr ""
+
+msgid "The ability type's name"
+msgstr ""
+
+msgid "The ticket's name"
+msgstr ""
+
+msgid "The tier of the ticket"
+msgstr ""
+
+msgid "(Optional) The ticket's description"
+msgstr ""
+
+msgid "(Optional) The cost of the ticket"
+msgstr ""
+
+msgid "(Optional) Maximum number of spots available"
 msgstr ""
 
 msgid "The question name"
@@ -11842,6 +11856,36 @@ msgid ""
 msgstr ""
 
 msgid "Please review it and submit it for publication."
+msgstr ""
+
+msgid "Not included"
+msgstr ""
+
+msgid "Non-residential"
+msgstr ""
+
+msgid "Camping"
+msgstr ""
+
+msgid "Agritourism"
+msgstr ""
+
+msgid "Historic residence"
+msgstr ""
+
+msgid "Hotel"
+msgstr ""
+
+msgid "Restaurant"
+msgstr ""
+
+msgid "Self-catering"
+msgstr ""
+
+msgid "Internal catering"
+msgstr ""
+
+msgid "External catering"
 msgstr ""
 
 msgid ""
