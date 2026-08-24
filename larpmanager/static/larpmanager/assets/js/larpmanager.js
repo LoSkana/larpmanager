@@ -212,11 +212,13 @@ window.addTinyMCETextarea = function(sel) {
 
 // ========== Init: Headings ==========
 
-// Fit banner/sidebar/header titles with textfill and strip trailing ":" from table header labels.
+// Fit banner/sidebar/header titles with textfill (skipped on v22) and strip trailing ":" from table header labels.
 function initHeadings() {
-    $('.association #banner h1').textfill({});
-    $('#sidebar h1').textfill({});
-    $('#header h1').textfill({});
+    if (!$('body').hasClass('new_v22')) {
+        $('.association #banner h1').textfill({});
+        $('#sidebar h1').textfill({});
+        $('#header h1').textfill({});
+    }
 
     // strip trailing ":" from table header labels
     $("th label").each(function() {
@@ -598,14 +600,12 @@ function initFadeIns() {
 
 // ========== Init: Misc ==========
 
-// Leftover setup: hide empty info box, resize fields, clipboard buttons, select chevrons,
+// Leftover setup: hide empty info box, clipboard buttons, select chevrons,
 // conditional fields, new-url handlers, and removal of empty page-info.
 function initMisc() {
     if ($('.info').is(':empty')) {
         $('.info').hide();
     }
-
-    resize_fields();
 
     copyClipboardButton();
 
@@ -736,7 +736,6 @@ function refreshDatatables() {
                 data_tables();
                 if (typeof window.reloadActiveQuestions === 'function') window.reloadActiveQuestions();
                 if (typeof window.applyColumnToggles === 'function') window.applyColumnToggles();
-                resize_fields();
                 $(window).scrollTop(savedScrollTop);
                 window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
                 return;
@@ -837,7 +836,6 @@ function refreshDatatables() {
         if (typeof window.applyColumnToggles === 'function') {
             window.applyColumnToggles();
         }
-        resize_fields();
         $(window).scrollTop(savedScrollTop);
         window._datatablesRefreshCount = (window._datatablesRefreshCount || 0) + 1;
     }).fail(function() {
@@ -1498,23 +1496,6 @@ function selectLanguage(lang) {
     xhttp.open("POST", set_language_url, true);
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send("language=" + lang);
-}
-
-// Scale writing-table cell font size down as text length grows (excluding popup text).
-function resize_fields() {
-    $(".writing td").each(function( index ) {
-
-        var textLength = stripHTML($(this).text()).length;
-
-       $(this).find('.popup_text').each(function () {
-           textLength -= stripHTML($(this).text()).length;
-        });
-
-        fontSize = Math.max(50, Math.round(100 - textLength / 7));
-
-        $(this).css('font-size', fontSize + '%');
-    });
-
 }
 
 // Return an HTML-escaped (XSS-safe) version of the input string.
