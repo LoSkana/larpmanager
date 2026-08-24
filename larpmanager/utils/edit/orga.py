@@ -237,8 +237,11 @@ class OrgaAction(str, Enum):
     QUEST_TYPES = ("orga_quest_types", {"form": OrgaQuestTypeForm, "writing": TextVersionChoices.QUEST_TYPE})
     QUESTS = ("orga_quests", {"form": OrgaQuestForm, "writing": TextVersionChoices.QUEST, "check": validate_quest})
     TRAITS = ("orga_traits", {"form": OrgaTraitForm, "writing": TextVersionChoices.TRAIT, "check": validate_trait})
-    HANDOUTS = ("orga_handouts", {"form": OrgaHandoutForm, "writing": TextVersionChoices.HANDOUT})
-    HANDOUT_TEMPLATES = ("orga_handout_templates", {"form": OrgaHandoutTemplateForm, "check": validate_handout})
+    HANDOUTS = (
+        "orga_handouts",
+        {"form": OrgaHandoutForm, "writing": TextVersionChoices.HANDOUT, "check": validate_handout},
+    )
+    HANDOUT_TEMPLATES = ("orga_handout_templates", {"form": OrgaHandoutTemplateForm})
     PROLOGUE_TYPES = ("orga_prologue_types", {"form": OrgaPrologueTypeForm})
     PROLOGUES = (
         "orga_prologues",
