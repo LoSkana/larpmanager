@@ -5345,9 +5345,6 @@ msgstr "Nelze kopírovat ze stejné události"
 msgid "Character assignment email"
 msgstr "E-mail s přiřazením postavy"
 
-msgid "Character not yet approved"
-msgstr "Postava ještě nebyla schválena"
-
 msgid "Choose the payment method:"
 msgstr "Zvol způsob platby:"
 
@@ -5455,6 +5452,9 @@ msgstr "Přejít na kartu postavy"
 
 msgid "Activate new event features"
 msgstr "Aktivuj nové funkce události"
+
+msgid "Character not yet confirmed"
+msgstr "Postava ještě nebyla potvrzena"
 
 msgid "Check inverse relationship:"
 msgstr "Zkontroluj inverzní vztah:"

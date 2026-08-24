@@ -5345,9 +5345,6 @@ msgstr "Impossible de copier depuis le même événement"
 msgid "Character assignment email"
 msgstr "E-mail d'attribution du personnage"
 
-msgid "Character not yet approved"
-msgstr "Personnage pas encore approuvé"
-
 msgid "Choose the payment method:"
 msgstr "Choisis le moyen de paiement:"
 
@@ -5455,6 +5452,9 @@ msgstr "Accède à ta fiche de personnage"
 
 msgid "Activate new event features"
 msgstr "Active les nouvelles fonctionnalités de l'événement"
+
+msgid "Character not yet confirmed"
+msgstr "Personnage pas encore confirmé"
 
 msgid "Check inverse relationship:"
 msgstr "Vérifie la relation inverse :"

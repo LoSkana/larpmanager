@@ -5203,7 +5203,7 @@ msgid "Character Inventory Types"
 msgstr "Τύποι αποθέματος χαρακτήρων"
 
 msgid "Character not yet created"
-msgstr "Ο χαρακτήρας δεν έχει δημιουργηθεί ακόμη"
+msgstr "Ο χαρακτήρας δεν έχει δημιουργηθεί ακόμα"
 
 msgid "Character sheet questions"
 msgstr "Ερωτήσεις φύλλου χαρακτήρα"
@@ -5345,9 +5345,6 @@ msgstr "Δεν μπορείς να αντιγράψεις από το ίδιο e
 msgid "Character assignment email"
 msgstr "Email ανάθεσης χαρακτήρα"
 
-msgid "Character not yet approved"
-msgstr "Ο χαρακτήρας δεν έχει εγκριθεί ακόμη"
-
 msgid "Choose the payment method:"
 msgstr "Επίλεξε μέθοδο πληρωμής:"
 
@@ -5455,6 +5452,9 @@ msgstr "Δες το φύλλο χαρακτήρα σου"
 
 msgid "Activate new event features"
 msgstr "Ενεργοποίησε νέες λειτουργίες της εκδήλωσης"
+
+msgid "Character not yet confirmed"
+msgstr "Ο χαρακτήρας δεν έχει επιβεβαιωθεί ακόμα"
 
 msgid "Check inverse relationship:"
 msgstr "Έλεγχος αντίστροφης σχέσης:"

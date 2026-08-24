@@ -5203,7 +5203,7 @@ msgid "Character Inventory Types"
 msgstr "Typer av karakterinventar"
 
 msgid "Character not yet created"
-msgstr "Karakter ikke opprettet ennå"
+msgstr "Karakteret er ikke opprettet ennå"
 
 msgid "Character sheet questions"
 msgstr "Spørsmål til karakterarket"
@@ -5345,9 +5345,6 @@ msgstr "Kan ikke kopiere fra samme hendelse"
 msgid "Character assignment email"
 msgstr "E-post om tildeling av karakter"
 
-msgid "Character not yet approved"
-msgstr "Karakter ikke godkjent ennå"
-
 msgid "Choose the payment method:"
 msgstr "Velg betalingsmåte:"
 
@@ -5455,6 +5452,9 @@ msgstr "Åpne karakterarket ditt"
 
 msgid "Activate new event features"
 msgstr "Aktiver nye arrangementsfunksjoner"
+
+msgid "Character not yet confirmed"
+msgstr "Karakteret er ikke bekreftet ennå"
 
 msgid "Check inverse relationship:"
 msgstr "Sjekk det omvendte forholdet:"

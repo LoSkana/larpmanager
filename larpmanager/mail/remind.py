@@ -379,7 +379,7 @@ def notify_deadlines(run: Any) -> None:
         "profile": "Overdue: Profile completion",
         "cast": "Missing casting preferences",
         "char": "Character not yet created",
-        "char_appr": "Character not yet approved",
+        "char_confirm": "Character not yet approved",
     }
 
     for organizer in get_event_organizers_by_event(run.event_id):

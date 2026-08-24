@@ -5345,9 +5345,6 @@ msgstr "Kann nicht vom gleichen Ereignis kopieren"
 msgid "Character assignment email"
 msgstr "E-Mail zur Charakterzuweisung"
 
-msgid "Character not yet approved"
-msgstr "Charakter noch nicht genehmigt"
-
 msgid "Choose the payment method:"
 msgstr "Wähle das Zahlungsmittel:"
 
@@ -5455,6 +5452,9 @@ msgstr "Öffne dein Charakter-Sheet"
 
 msgid "Activate new event features"
 msgstr "Aktiviere neue Veranstaltungsfunktionen"
+
+msgid "Character not yet confirmed"
+msgstr "Charakter noch nicht bestätigt"
 
 msgid "Check inverse relationship:"
 msgstr "Umgekehrte Beziehung prüfen:"
