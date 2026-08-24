@@ -128,7 +128,6 @@ def check_run_deadlines(runs: list[Run]) -> list:
                 "profile",
                 "profile_del",
                 "char",
-                "char_unconfirmed",
                 "char_confirm",
             ]
         }
@@ -335,8 +334,7 @@ def deadlines_character(collect: Any, features: Any, player_ids: Any, run: Any) 
         run: Run instance
 
     Side effects:
-        Updates collect with "char" (no character created yet), "char_unconfirmed"
-        (character created but still draft/in revision, not confirmed by the player)
+        Updates collect with "char" (no character created yet)
         and "char_confirm" (confirmed but not yet approved) violations
 
     """
