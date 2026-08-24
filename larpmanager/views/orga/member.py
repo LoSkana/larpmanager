@@ -30,6 +30,7 @@ from django.utils import timezone
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from larpmanager.cache.basic import get_run_association_id
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.forms.miscellanea import OrgaHelpQuestionForm, SendMailForm
 from larpmanager.mail.suppression import get_suppressed_emails
@@ -223,7 +224,7 @@ def orga_spam(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Add event staff members to exclusion list
-    already.extend([mb.id for mb in get_event_staffers(context["event"])])
+    already.extend([mb.id for mb in get_event_staffers(context["event"].id)])
 
     # Get all active association members (exclude empty memberships)
     members = Membership.objects.filter(association_id=context["association_id"])
@@ -274,7 +275,7 @@ def orga_persuade(request: HttpRequest, event_slug: str) -> HttpResponse:
     )
 
     # Add event staff members to exclusion list
-    already.extend([mb.id for mb in get_event_staffers(context["event"])])
+    already.extend([mb.id for mb in get_event_staffers(context["event"].id)])
 
     # Get active association members
     members = Membership.objects.filter(association_id=context["association_id"])
@@ -458,7 +459,7 @@ def send_mail_batch(
     if not association_id and run_id:
         run = Run.objects.filter(pk=run_id).select_related("event").first()
         if run:
-            association_id = run.event.association_id
+            association_id = get_run_association_id(run.id)
 
     # Keep only recipients who consented to share their data with the association
     recipients = split_recipients(player_ids)
@@ -616,7 +617,7 @@ def orga_sensitive(request: HttpRequest, event_slug: str) -> HttpResponse:
             flat=True,
         ),
     )
-    member_list.extend([mb.id for mb in get_event_staffers(context["run"].event)])
+    member_list.extend([mb.id for mb in get_event_staffers(context["run"].event_id)])
 
     # Define member model and fields to display
     member_cls: type[Member] = Member

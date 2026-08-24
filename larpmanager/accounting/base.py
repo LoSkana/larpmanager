@@ -69,7 +69,7 @@ def is_registration_provisional(
     """
     # Get event id from registration if not provided
     if not event_id:
-        event_id = get_run_event_id(instance.run_id)
+        event_id = get_run_event_id(instance.run_id, context=context)
 
     # Get event features if not provided
     if not features:

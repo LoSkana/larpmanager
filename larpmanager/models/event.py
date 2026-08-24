@@ -19,7 +19,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-import inspect
 import logging
 from typing import Any, ClassVar
 
@@ -27,7 +26,7 @@ from colorfield.fields import ColorField
 from django.conf import settings as conf_settings
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.db.models import Q, QuerySet
+from django.db.models import Q
 from django.db.models.constraints import UniqueConstraint
 from django.utils import formats
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
@@ -280,68 +279,6 @@ class Event(UuidMixin, BaseModel):
         if force_policy == SOFT_DELETE and is_cascade:
             force_policy = SOFT_DELETE_CASCADE
         return super().delete(force_policy=force_policy, **kwargs)
-
-    def get_elements(self, element_model_class: type[BaseModel]) -> QuerySet:
-        """Get ordered elements of specified type for the parent event."""
-        # Get all elements for the parent event
-        queryset = element_model_class.objects.filter(event=self.get_class_parent(element_model_class))
-
-        # Order by number if the model has that field
-        if hasattr(element_model_class, "number"):
-            queryset = queryset.order_by("number")
-        return queryset
-
-    def get_class_parent(self, model_class: type[BaseModel] | str) -> Any:
-        """Get the parent event for inheriting elements of a specific model class.
-
-        This method determines whether to use the parent event's elements or the current
-        event's elements based on inheritance settings and model class type.
-
-        Args:
-            model_class: Model class (subclass of BaseModel) or class name string to check
-                inheritance for. If a class is provided, it will be converted to
-                lowercase string format.
-
-        Returns:
-            Event: Parent event if inheritance is enabled for the given model class
-                   and a parent exists, otherwise returns self.
-
-        Note:
-            Only specific model classes support inheritance. The method checks against
-            a predefined list of inheritable elements and respects campaign independence
-            configuration settings.
-
-        """
-        # Convert class objects to lowercase string representation
-        if inspect.isclass(model_class) and issubclass(model_class, BaseModel):
-            model_class = model_class.__name__.lower()
-
-        # Define which model elements can be inherited from parent events
-        inheritable_elements = [
-            "character",
-            "faction",
-            "abilityexp",
-            "deliveryexp",
-            "abilitytypeexp",
-            "ruleexp",
-            "abilitytemplateexp",
-            "modifierexp",
-            "criterionexp",
-            "systemexp",
-            "systemexppooltypeci",
-            "writingquestion",
-            "writingoption",
-            "relationshiptag",
-        ]
-
-        # Check if inheritance conditions are met
-        # Verify that campaign independence is not enabled for this element type
-        # If independence is disabled (False), use parent's elements
-        if self.parent and model_class in inheritable_elements and not self.get_config(f"campaign_{model_class}_indep"):
-            return self.parent
-
-        # Return self if no parent exists, element not inheritable, or independence enabled
-        return self
 
     def get_cover_thumb_url(self) -> str | None:
         """Get the URL of the cover thumbnail image, or None if unavailable."""

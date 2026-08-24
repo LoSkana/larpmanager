@@ -195,7 +195,7 @@ def _get_registration_status(run: Run) -> str:
 
 def _get_registration_counts(run: Run) -> dict:
     """Prepares run registration ticket counts ordered by ticket order field."""
-    counts = get_registration_counts(run)
+    counts = get_registration_counts(run.id, run.event_id)
 
     # Create a list of ticket data with name, order, and count
     ticket_data = []

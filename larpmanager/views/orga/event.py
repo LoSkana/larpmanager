@@ -479,7 +479,7 @@ def orga_features_go(request: HttpRequest, event_slug: str, slug: str, *, to_act
     target_feature_id = context["feature"].id
 
     # Clear cache and media for the current run
-    clear_run_cache_and_media(context["run"])
+    clear_run_cache_and_media(context["run"].id)
 
     # Handle feature activation/deactivation logic
     if to_active:
@@ -568,7 +568,7 @@ def orga_config_go(request: HttpRequest, event_slug: str, slug: str, *, to_activ
     else:
         save_single_config(config_target, slug, str(to_active))
         config_target.save()
-        clear_run_cache_and_media(context["run"])
+        clear_run_cache_and_media(context["run"].id)
         message = _("Option %(name)s activated!") if to_active else _("Option %(name)s deactivated!")
 
     messages.success(request, message % {"name": slug})
@@ -780,7 +780,7 @@ def orga_reload_cache(request: HttpRequest, event_slug: str) -> HttpResponse:
         return redirect("manage", event_slug=context["run"].get_slug())
 
     # Reset everything
-    reset_all_run(context["event"], context["run"])
+    reset_all_run(context["run"].id)
 
     # Notify user of successful cache reset
     messages.success(request, _("Cache reset!"))

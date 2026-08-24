@@ -576,16 +576,17 @@ def process_registration_pre_save(registration: Registration) -> None:
     """Process registration before saving."""
     if registration.deleted:
         return
-    registration.surcharge = get_date_surcharge(registration, registration.run.event)
-    registration.member.join(get_run_association_id(registration.run_id))
+    run_cache = get_run_basic_cache(registration.run_id)
+    registration.surcharge = get_date_surcharge(registration, run_cache["event_id"])
+    registration.member.join(run_cache["association_id"])
 
 
-def get_date_surcharge(registration: Registration | None, event: Event) -> int:
+def get_date_surcharge(registration: Registration | None, event_id: int) -> int:
     """Calculate date-based surcharge for a registration.
 
     Args:
         registration: Registration instance (None for current date)
-        event: Event instance to get surcharges for
+        event_id: id of the Event to get surcharges for
 
     Returns:
         int: Total surcharge amount based on registration date
@@ -600,7 +601,7 @@ def get_date_surcharge(registration: Registration | None, event: Event) -> int:
     if registration and registration.created:
         reference_date = registration.created
 
-    applicable_surcharges = RegistrationSurcharge.objects.filter(event=event, date__lt=reference_date)
+    applicable_surcharges = RegistrationSurcharge.objects.filter(event_id=event_id, date__lt=reference_date)
     if not applicable_surcharges:
         return 0
 
