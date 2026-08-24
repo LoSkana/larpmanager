@@ -5345,9 +5345,6 @@ msgstr "Ei voi kopioida samasta tapahtumasta"
 msgid "Character assignment email"
 msgstr "Hahmonjakoa koskeva sähköposti"
 
-msgid "Character not yet approved"
-msgstr "Hahmoa ei ole vielä hyväksytty"
-
 msgid "Choose the payment method:"
 msgstr "Valitse maksutapa:"
 
@@ -5455,6 +5452,9 @@ msgstr "Avaa hahmolomakkeesi"
 
 msgid "Activate new event features"
 msgstr "Aktivoi uudet tapahtumaominaisuudet"
+
+msgid "Character not yet confirmed"
+msgstr "Hahmoa ei ole vielä vahvistettu"
 
 msgid "Check inverse relationship:"
 msgstr "Tarkista käänteinen suhde:"

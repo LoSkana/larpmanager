@@ -180,7 +180,19 @@ def _init_deadline_widget_cache(run: Run) -> dict:
 
     # Extract the counts
     counts = {}
-    for category in ["pay", "pay_del", "casting", "memb", "memb_del", "fee", "fee_del", "profile", "profile_del"]:
+    for category in [
+        "pay",
+        "pay_del",
+        "casting",
+        "memb",
+        "memb_del",
+        "fee",
+        "fee_del",
+        "profile",
+        "profile_del",
+        "char",
+        "char_confirm",
+    ]:
         if category in deadline_data:
             counts[category] = len(deadline_data[category])
 

@@ -70,7 +70,7 @@ from larpmanager.models.member import Badge, Member, Membership, MembershipStatu
 from larpmanager.models.miscellanea import Log
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.core.common import get_time_diff_today
+from larpmanager.utils.core.common import get_event_class_parent, get_time_diff_today
 from larpmanager.utils.io.pdf import print_run_bkg
 from larpmanager.utils.larpmanager.tasks import my_send_mail, notify_admins
 from larpmanager.utils.publication.base import publish_event_all
@@ -1181,9 +1181,12 @@ class Command(BaseCommand):
         event_id = get_run_event_id(registration.run_id)
         required_characters = int(get_event_config(event_id, "user_character_max"))
 
-        characters = Character.objects.filter(event_id=event_id, player_id=registration.member_id, deleted__isnull=True)
-        created_characters = characters.count()
-        if created_characters < required_characters:
+        # characters are an inheritable element: in a campaign they live on the parent event
+        characters_event_id = get_event_class_parent(event_id, Character)
+        characters = Character.objects.filter(
+            event_id=characters_event_id, player_id=registration.member_id, deleted__isnull=True
+        )
+        if characters.count() < required_characters:
             remember_character_creation(registration)
             return
 
@@ -1191,8 +1194,8 @@ class Command(BaseCommand):
         if not requires_approval:
             return
 
-        approved_characters = characters.filter(status=CharacterStatus.APPROVED).count()
-        if approved_characters < required_characters:
+        uncorfimed_characters = characters.filter(status__in=[CharacterStatus.CREATION, CharacterStatus.REVIEW]).count()
+        if uncorfimed_characters > 0:
             remember_character_creation(registration, requires_approval=True)
 
     @staticmethod

@@ -5203,7 +5203,7 @@ msgid "Character Inventory Types"
 msgstr "Rodzaje ekwipunku postaci"
 
 msgid "Character not yet created"
-msgstr "Postać nie została jeszcze stworzona"
+msgstr "Postać nie została jeszcze utworzona"
 
 msgid "Character sheet questions"
 msgstr "Pytania do arkusza postaci"
@@ -5345,9 +5345,6 @@ msgstr "Nie można kopiować z tego samego zdarzenia"
 msgid "Character assignment email"
 msgstr "E-mail z przypisaniem postaci"
 
-msgid "Character not yet approved"
-msgstr "Postać nie została jeszcze zatwierdzona"
-
 msgid "Choose the payment method:"
 msgstr "Wybierz metodę płatności:"
 
@@ -5455,6 +5452,9 @@ msgstr "Przejdź do swojej karty postaci"
 
 msgid "Activate new event features"
 msgstr "Aktywuj nowe funkcje wydarzenia"
+
+msgid "Character not yet confirmed"
+msgstr "Postać nie została jeszcze potwierdzona"
 
 msgid "Check inverse relationship:"
 msgstr "Sprawdź odwrotną relację:"

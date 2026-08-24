@@ -34,6 +34,7 @@ from larpmanager.models.event import Run
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
 from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.utils.core.common import get_event_class_parent
 
 
 def get_users_data(member_ids: Any) -> Any:
@@ -127,7 +128,7 @@ def check_run_deadlines(runs: list[Run]) -> list:
                 "profile",
                 "profile_del",
                 "char",
-                "char_appr",
+                "char_confirm",
             ]
         }
         features = get_event_features(run.event_id)
@@ -333,34 +334,35 @@ def deadlines_character(collect: Any, features: Any, player_ids: Any, run: Any) 
         run: Run instance
 
     Side effects:
-        Updates collect with "char" (character not yet created) and "char_appr"
-        (character created but not yet approved) violations
+        Updates collect with "char" (no character created yet)
+        and "char_confirm" (confirmed but not yet approved) violations
 
     """
     if "user_character" not in features:
         return
 
-    required_characters = get_event_config(run.event_id, "user_character_max")
+    required_characters = int(get_event_config(run.event_id, "user_character_max"))
     requires_approval = get_event_config(run.event_id, "user_character_approval")
 
-    characters = Character.objects.filter(event_id=run.event_id, player_id__in=player_ids, deleted__isnull=True)
+    # characters are an inheritable element: in a campaign they live on the parent event
+    characters_event_id = get_event_class_parent(run.event_id, Character)
+    characters = Character.objects.filter(event_id=characters_event_id, player_id__in=player_ids, deleted__isnull=True)
 
-    character_counts: dict[int, int] = {}
-    approved_counts: dict[int, int] = {}
+    total_counts: dict[int, int] = {}
+    unconfirmed_counts: dict[int, int] = {}
     for player_id, status in characters.values_list("player_id", "status"):
-        character_counts[player_id] = character_counts.get(player_id, 0) + 1
-        if status == CharacterStatus.APPROVED:
-            approved_counts[player_id] = approved_counts.get(player_id, 0) + 1
+        total_counts[player_id] = total_counts.get(player_id, 0) + 1
+        if status in [CharacterStatus.CREATION, CharacterStatus.REVIEW]:
+            unconfirmed_counts[player_id] = unconfirmed_counts.get(player_id, 0) + 1
 
     missing = set()
-    unapproved = set()
+    uncorfimed = set()
     for player_id in player_ids:
-        created = character_counts.get(player_id, 0)
-        if created < required_characters:
+        if total_counts.get(player_id, 0) < required_characters:
             missing.add(player_id)
-        elif requires_approval and approved_counts.get(player_id, 0) < required_characters:
-            unapproved.add(player_id)
+        elif requires_approval and unconfirmed_counts.get(player_id, 0) > 0:
+            uncorfimed.add(player_id)
 
     collect["char"] = missing
     if requires_approval:
-        collect["char_appr"] = unapproved
+        collect["char_confirm"] = uncorfimed

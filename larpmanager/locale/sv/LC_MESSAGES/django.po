@@ -5203,7 +5203,7 @@ msgid "Character Inventory Types"
 msgstr "Typer av karaktärsinventarier"
 
 msgid "Character not yet created"
-msgstr "Karaktär ännu inte skapad"
+msgstr "Karaktär har inte skapats än"
 
 msgid "Character sheet questions"
 msgstr "Frågor om karaktärsblad"
@@ -5345,9 +5345,6 @@ msgstr "Kan inte kopiera från samma händelse"
 msgid "Character assignment email"
 msgstr "E-postmeddelande om tilldelning av karaktär"
 
-msgid "Character not yet approved"
-msgstr "Karaktär ännu inte godkänd"
-
 msgid "Choose the payment method:"
 msgstr "Välj betalningssätt:"
 
@@ -5455,6 +5452,9 @@ msgstr "Öppna ditt karaktärsblad"
 
 msgid "Activate new event features"
 msgstr "Aktivera nya evenemangsfunktioner"
+
+msgid "Character not yet confirmed"
+msgstr "Karaktär har inte bekräftats än"
 
 msgid "Check inverse relationship:"
 msgstr "kontrollera omvänt förhållande:"

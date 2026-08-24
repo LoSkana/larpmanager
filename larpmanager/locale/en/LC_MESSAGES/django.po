@@ -5494,7 +5494,7 @@ msgstr ""
 msgid "Character not yet created"
 msgstr ""
 
-msgid "Character not yet approved"
+msgid "Character not yet confirmed"
 msgstr ""
 
 msgid "Show help tip"

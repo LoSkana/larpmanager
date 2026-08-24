@@ -77,6 +77,22 @@
                     <td>{{ widgets.deadlines.cast }}</td>
                 </tr>
             {% endif %}
+            {% if widgets.deadlines.char %}
+                <tr>
+                    <td>
+                        <b>{% trans "Character not yet created" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.char }}</td>
+                </tr>
+            {% endif %}
+            {% if widgets.deadlines.char_confirm %}
+                <tr>
+                    <td>
+                        <b>{% trans "Character not yet confirmed" %}</b>
+                    </td>
+                    <td>{{ widgets.deadlines.char_confirm }}</td>
+                </tr>
+            {% endif %}
         </table>
     </div>
 {% endif %}

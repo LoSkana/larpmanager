@@ -5345,9 +5345,6 @@ msgstr "Kan niet kopiëren van dezelfde gebeurtenis"
 msgid "Character assignment email"
 msgstr "E-mail over de Casting van een personage"
 
-msgid "Character not yet approved"
-msgstr "Personage nog niet goedgekeurd"
-
 msgid "Choose the payment method:"
 msgstr "Kies het betaalmiddel:"
 
@@ -5455,6 +5452,9 @@ msgstr "Open je personageblad"
 
 msgid "Activate new event features"
 msgstr "Nieuwe evenementfuncties activeren"
+
+msgid "Character not yet confirmed"
+msgstr "Personage nog niet bevestigd"
 
 msgid "Check inverse relationship:"
 msgstr "controleer omgekeerde relatie:"
