@@ -1179,7 +1179,7 @@ class Command(BaseCommand):
 
         """
         event_id = get_run_event_id(registration.run_id)
-        required_characters = get_event_config(event_id, "user_character_max")
+        required_characters = int(get_event_config(event_id, "user_character_max"))
 
         characters = Character.objects.filter(event_id=event_id, player_id=registration.member_id, deleted__isnull=True)
         created_characters = characters.count()

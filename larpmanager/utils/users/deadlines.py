@@ -340,7 +340,7 @@ def deadlines_character(collect: Any, features: Any, player_ids: Any, run: Any) 
     if "user_character" not in features:
         return
 
-    required_characters = get_event_config(run.event_id, "user_character_max")
+    required_characters = int(get_event_config(run.event_id, "user_character_max"))
     requires_approval = get_event_config(run.event_id, "user_character_approval")
 
     characters = Character.objects.filter(event_id=run.event_id, player_id__in=player_ids, deleted__isnull=True)
