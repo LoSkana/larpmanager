@@ -392,6 +392,13 @@
     background 0.15s,
     border-color 0.15s;
   white-space: nowrap;
+  max-width: 16em;
+}
+
+.tv22-pill span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .tv22-pill:hover {
