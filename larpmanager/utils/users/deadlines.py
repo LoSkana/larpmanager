@@ -341,7 +341,7 @@ def deadlines_character(collect: Any, features: Any, player_ids: Any, run: Any) 
     if "user_character" not in features:
         return
 
-    required_characters = get_event_config(run.event_id, "user_character_max")
+    required_characters = int(get_event_config(run.event_id, "user_character_max"))
     requires_approval = get_event_config(run.event_id, "user_character_approval")
 
     # characters are an inheritable element: in a campaign they live on the parent event
