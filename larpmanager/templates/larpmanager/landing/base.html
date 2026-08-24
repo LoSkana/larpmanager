@@ -16,6 +16,18 @@
         {% block robots %}
             {% if staging or not index %}<meta name="robots" content="noindex, nofollow" />{% endif %}
         {% endblock robots %}
+        <link rel="canonical"
+              href="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+        {% block og %}
+            <meta property="og:url"
+                  content="{{ request.scheme }}://{{ request.get_host }}{{ request.path }}">
+            <meta property="og:type" content="website">
+            <meta property="og:site_name" content="LarpManager">
+            <meta property="og:title" content="{{ texts.page_title }}">
+            <meta property="og:description" content="{{ texts.meta_description }}">
+            <meta property="og:image"
+                  content="https://larpmanager.com/static/thumbnail.png">
+        {% endblock og %}
         <link rel="icon" href="{% static 'lm_logo.png' %}">
         {% if google_tag %}
             <!-- Google Tag Manager -->
