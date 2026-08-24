@@ -28,8 +28,11 @@ Covers:
 - Deadlines widget (permission + feature required)
 - Registrations widget (always visible to any dashboard user)
 - Negative: feature-gated widget hidden when feature is disabled
+- Regression: deadlines widget with user_character feature on and a non-default
+  user_character_max config value (stored as a string) must not crash the manage page
 """
 
+import re
 from typing import Any
 
 import pytest
@@ -113,3 +116,30 @@ def test_orga_manage_widgets_event_role(pw_page: Any) -> None:
     login_orga(page, live_server)
 
     _remove_user_from_role(page, live_server)
+
+
+def test_orga_manage_widgets_deadlines_user_character(pw_page: Any) -> None:
+    """Regression test: deadlines widget must not crash when user_character is on.
+
+    The user_character_max config is stored as a string; the deadlines widget must
+    compare it against character counts without a str/int TypeError.
+    """
+    page, live_server, _ = pw_page
+
+    login_orga(page, live_server)
+
+    go_to(page, live_server, "/manage/features/deadlines/on")
+    go_to(page, live_server, "/test/manage/features/character/on")
+    go_to(page, live_server, "/test/manage/features/user_character/on")
+
+    go_to(page, live_server, "/test/manage/config")
+    page.get_by_role("link", name=re.compile(r"^Character creation ")).click()
+    page.locator("#id_user_character_max").click()
+    page.locator("#id_user_character_max").fill("2")
+    submit_confirm(page)
+
+    go_to(page, live_server, "/test/manage/")
+    expect(page.locator("#banner")).not_to_contain_text("Access denied")
+
+    widgets = page.locator("#manage h2")
+    expect(widgets.filter(has_text="Deadlines")).to_be_visible()
