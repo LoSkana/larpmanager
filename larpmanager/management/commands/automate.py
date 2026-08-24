@@ -232,6 +232,20 @@ class Command(BaseCommand):
         Command._check_free_plan_birthday(association)
 
     @staticmethod
+    def _admin_notice_contacts_html(association: Association) -> str:
+        """Render an HTML list of the association's contact emails (main mail and executives).
+
+        For inclusion in the body of an admin notice email; the notice itself is
+        still only sent to system admins.
+        """
+        contacts = []
+        if association.main_mail:
+            contacts.append(association.main_mail)
+        contacts.extend(executive.email for executive in get_association_executives(association) if executive.email)
+        contact_lines = "".join(f"<li>{contact}</li>" for contact in contacts)
+        return f"<ul>{contact_lines or '<li>None</li>'}</ul>"
+
+    @staticmethod
     def _free_plan_metrics(association: Association, since: date | None = None) -> dict:
         """Aggregate registration, revenue, fee and character metrics for an association.
 
@@ -291,6 +305,8 @@ class Command(BaseCommand):
                 registrations: <b>{run.event.name}</b>.<br /><br />
                 <b>All-time metrics:</b><br />
                 {Command._format_metrics_html(metrics, currency_symbol)}
+                <b>Association contacts:</b><br />
+                {Command._admin_notice_contacts_html(association)}
                 - LarpManager Automate
                 """
             for _name, email in conf_settings.ADMINS:
@@ -340,6 +356,8 @@ class Command(BaseCommand):
             {Command._format_metrics_html(metrics_since_last_year, currency_symbol)}
             <b>All-time metrics:</b><br />
             {Command._format_metrics_html(metrics_all_time, currency_symbol)}
+            <b>Association contacts:</b><br />
+            {Command._admin_notice_contacts_html(association)}
             - LarpManager Automate
             """
         for _name, email in conf_settings.ADMINS:
@@ -393,6 +411,8 @@ class Command(BaseCommand):
                 <b>Registrations for this run:</b> {run.active_registrations}<br /><br />
                 <b>Other previous unpaid runs of this association:</b><br />
                 <ul>{other_lines or "<li>None</li>"}</ul>
+                <b>Association contacts:</b><br />
+                {Command._admin_notice_contacts_html(association)}
                 - LarpManager Automate
                 """
             for _name, email in conf_settings.ADMINS:
