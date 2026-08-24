@@ -6,8 +6,26 @@
 {% block meta %}
     <meta name="description" content="{{ texts.meta_description }}">
     <meta name="keywords" content="{{ texts.meta_keywords }}">
-    <meta property="og:title" content="LarpManager">
 {% endblock meta %}
+{% block og %}
+    {{ block.super }}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "LarpManager",
+        "url": "https://larpmanager.com/",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "description": {{ texts.meta_description|escapejs }},
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "EUR"
+        }
+    }
+    </script>
+{% endblock og %}
 {% block landing_body %}
     <!-- Hero -->
     <header class="hero">
