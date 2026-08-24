@@ -63,7 +63,7 @@ def get_association_basic_cache(association_id: int, *, context: dict | None = N
         data = None
     if data is None:
         association = (
-            Association.objects.select_related("skin")
+            Association.all_objects.select_related("skin")
             .only("payment_currency", "slug", "name", "skin__domain")
             .get(id=association_id)
         )

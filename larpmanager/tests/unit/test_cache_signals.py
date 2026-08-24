@@ -525,7 +525,7 @@ class TestCacheSignals(BaseTestCase):
         )
         item.save()
 
-        # AccountingItemOther signal passes run_id, event_id and member_id
+        # AccountingItemOther signal passes run_id and member_id
         mock_reset.assert_called_once_with(run.id, member.id)
 
     @patch("larpmanager.models.signals.refresh_member_accounting_cache")

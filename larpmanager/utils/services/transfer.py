@@ -143,11 +143,11 @@ def transfer_registration_between_runs(
             _delete_original_registration_data(registration)
 
     # Refresh cache for target run (where registration was moved/copied to)
-    refresh_member_accounting_cache(target_run.id, target_run.event_id, member_id)
+    refresh_member_accounting_cache(target_run.id, member_id)
 
     # If moving (not copying), refresh cache for source run as well
     if move_registration:
-        refresh_member_accounting_cache(source_run.id, source_run.event_id, member_id)
+        refresh_member_accounting_cache(source_run.id, member_id)
 
     return new_registration
 
