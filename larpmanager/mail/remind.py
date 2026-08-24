@@ -315,7 +315,10 @@ def remember_character_creation(registration: Any, *, requires_approval: bool = 
 
     """
     activate(registration.member.language)
-    context = {"event": registration.run, "url": get_url("characters", registration.run.event)}
+    context = {
+        "event": registration.run,
+        "url": get_association_url("characters", get_run_association_id(registration.run_id)),
+    }
 
     subject = hdr_run(registration.run_id) + _("Character creation reminder for %(event)s") % context
 
