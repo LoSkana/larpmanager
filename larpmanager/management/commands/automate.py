@@ -320,8 +320,15 @@ class Command(BaseCommand):
     @staticmethod
     def _check_free_plan_birthday(association: Association) -> None:
         """Send the yearly anniversary summary email, catching up if a run was missed on the exact day."""
+        if association.demo_type_id is not None:
+            return
+
         today = timezone.now().date()
         created = association.created.date()
+
+        if today.year == created.year:
+            # Skip anniversary in the year the association was created
+            return
 
         try:
             this_year_anniversary = date(today.year, created.month, created.day)
@@ -342,7 +349,7 @@ class Command(BaseCommand):
             previous_anniversary = date(today.year - 1, 2, 28)
 
         metrics_since_last_year = Command._free_plan_metrics(association, since=previous_anniversary)
-        if metrics_since_last_year["registrations"] == 0:
+        if metrics_since_last_year["registrations"] < Command._FREE_SUMMARY_BIRTHDAY_MIN_REGISTRATIONS:
             return
 
         metrics_all_time = Command._free_plan_metrics(association)
@@ -365,8 +372,10 @@ class Command(BaseCommand):
 
         save_single_config_by_id(Association, association.id, year_key, timezone.now().isoformat())
 
+    _FREE_SUMMARY_BIRTHDAY_MIN_REGISTRATIONS = 10
+
     _LM_PAYMENT_REMINDER_MONTHS = 2
-    _LM_PAYMENT_MIN_REGISTRATIONS = 5
+    _LM_PAYMENT_MIN_REGISTRATIONS = 10
     _LM_PAYMENT_REMINDER_KEY = "lm_payment_reminder_sent"
 
     @staticmethod
@@ -400,6 +409,8 @@ class Command(BaseCommand):
             other_lines = ""
             for other_run in other_unpaid_runs:
                 get_run_lm_payment(other_run)
+                if other_run.active_registrations < Command._LM_PAYMENT_MIN_REGISTRATIONS:
+                    continue
                 other_lines += f"<li>{other_run.event.name} ({other_run.get_slug()}) - {other_run.active_registrations} registrations</li>"
 
             subject = f"[LarpManager] Payment reminder: '{association.name}' - {run.event.name}"
