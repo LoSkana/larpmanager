@@ -119,6 +119,7 @@ def ticket_link_bypasses_not_open(page: Any, live_server: Any) -> None:
     """Test that direct ticket link works when registration is not yet open."""
 
     page.get_by_role("link", name="Event").first.click()
+    _wait_lm_ready(page)
     expand_options(page)
     page.locator('label[for="id_form2-registration_status_3"]').click()
     fill_date(page, "#id_form2-registration_open", "2099-12-31")
@@ -214,7 +215,11 @@ def check_character_your_link(page: Any, live_server: Any) -> None:
     # Go to your character, check result
     go_to(page, live_server, "/test/character/your")
     expect_normalized(page, page.locator("body"), "Test Character - Test Larp")
-    expect_normalized(page, page.locator("#one"), "Player: Admin Test Presentation Test Teaser Text Test Text")
+    expect_normalized(
+        page,
+        page.locator("#one"),
+        "Player: Admin Test Presentation Test Teaser Test Text",
+    )
 
 
 def check_accounting_pay_link(page: Any, live_server: Any) -> None:

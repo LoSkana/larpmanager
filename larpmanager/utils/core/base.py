@@ -511,7 +511,7 @@ def prepare_run(context: Any) -> None:
     if "staff" in context or not context.get("writing_field_visibility"):
         context["show_all"] = "1"
 
-        for writing_element in ["character", "faction", "quest", "trait"]:
+        for writing_element in ["character", "faction", "guild", "quest", "trait"]:
             visibility_config_name = f"show_{writing_element}"
             if visibility_config_name not in run_configuration:
                 run_configuration[visibility_config_name] = {}

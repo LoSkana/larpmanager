@@ -91,6 +91,37 @@ def get(value: dict[str, Any], arg: str) -> Any:
     return ""
 
 
+@register.simple_tag
+def count_sheet_titles(
+    fields: dict[str, Any],
+    questions: dict[str, Any],
+    screen: bool,  # noqa: FBT001
+    text_content: str = "",
+    show_text: bool = False,  # noqa: FBT001, FBT002
+    visibility_e_only: bool = True,  # noqa: FBT001, FBT002
+    teaser_content: str = "",
+    show_teaser: bool = False,  # noqa: FBT001, FBT002
+) -> int:
+    """Count how many questions/text blocks would render a title header in a character sheet section."""
+    count = 0
+    for idx, question in questions.items():
+        typ = question.get("typ")
+        if typ in ("e", "p"):
+            if visibility_e_only and question.get("visibility") != "e":
+                continue
+            if fields.get(idx) and (screen or question.get("printable")):
+                count += 1
+        elif (typ == "text" and text_content and show_text) or (typ == "teaser" and teaser_content and show_teaser):
+            count += 1
+    return count
+
+
+@register.simple_tag
+def count_public_questions(questions: dict[str, Any]) -> int:
+    """Count questions for the character, excluding the name question."""
+    return len([q for q in questions.values() if q.get("typ") != "name"])
+
+
 def get_tooltip(context: dict, character: dict[str, Any]) -> str:
     """Generate HTML tooltip for character display.
 

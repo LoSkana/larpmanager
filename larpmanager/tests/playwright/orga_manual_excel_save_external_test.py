@@ -170,7 +170,7 @@ def external(page: Any, live_server: Any) -> None:
     go_to_check(page, live_server + url)
     expect_normalized(page,
         page.locator("#one"),
-        "Presentation good friends with Test Character2 Text ciaoooo",
+        "Presentation good friends with Test Character2 ciaoooo",
     )
 
 

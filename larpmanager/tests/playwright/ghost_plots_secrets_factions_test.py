@@ -155,15 +155,18 @@ def test_ghost_plots_secret_factions(pw_page: Any) -> None:
     sidebar(page, "Gallery")
     page.get_by_role("link", name="Test Character").click()
     _wait_lm_ready(page)
-    expect_normalized(page, page.locator("#wrapper"), "Presentation Test Teaser eefqq")
+    expect_normalized(page, page.locator("#wrapper"), "Test Teaser eefqq")
     expect(page.locator("#wrapper")).not_to_contain_text("gggerwe")
 
-    page.get_by_role("link", name="eefqq").click()
-    _wait_lm_ready(page)
-    expect_normalized(page,
-        page.locator("#one"),
+    with page.expect_popup() as popup_info:
+        page.get_by_role("link", name="eefqq").click()
+    faction_page = popup_info.value
+    _wait_lm_ready(faction_page)
+    expect_normalized(faction_page,
+        faction_page.locator("#one"),
         "Characters Test Character Presentation: Test Teaser Factions: eefqq",
     )
+    faction_page.close()
 
     # if i try to go to secret faction, blocked
     page.goto(f"{live_server}/test/faction/u2/")

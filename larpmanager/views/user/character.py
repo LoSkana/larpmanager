@@ -76,6 +76,7 @@ from larpmanager.utils.services.character import (
     get_character_relationships,
     get_character_sheet,
     get_character_sheet_factions,
+    get_character_sheet_guilds,
 )
 from larpmanager.utils.services.experience import (
     add_char_addit,
@@ -166,6 +167,7 @@ def _character_sheet(request: HttpRequest, context: dict) -> HttpResponse:
     else:
         context["char"].update(get_character_element_fields(context, character_id, only_visible=True))
         get_character_sheet_factions(context, only_visible=True)
+        get_character_sheet_guilds(context, only_visible=True)
 
     # Load casting details and preferences if applicable
     casting_details(context)

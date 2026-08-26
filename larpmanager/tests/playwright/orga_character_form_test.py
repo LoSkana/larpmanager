@@ -132,7 +132,9 @@ def create_second_char(live_server: Any, page: Any) -> None:
     submit_confirm(page)
     expect_normalized(page,
         page.locator("#one"),
-        "player: user test status: creation available text: all multiple text: many mandatory: asda presentation dsfdfsd text sdfdsfds",
+        "Fill in the missing information in your profile to complete your registration "
+        "Confirm your character olivaaaa is ready to propose to the staff! "
+        "player: user test status: creation available text: all multiple text: many mandatory: asda presentation dsfdfsd sdfdsfds",
     )
 
 
