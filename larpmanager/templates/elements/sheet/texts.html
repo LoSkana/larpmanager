@@ -1,10 +1,11 @@
 {% load show_tags i18n %}
+{% count_sheet_titles char.fields char.questions screen sheet_char.text show_character.text visibility_e_only=True as title_count %}
 {% for idx, question in char.questions.items %}
-    {% if question.typ == 'e' %}
+    {% if question.typ == 'e' and question.visibility == 'e' %}
         {% with char.fields|get:idx as field %}
             {% if field %}
                 {% if screen or question.printable %}
-                    <h2 class="c title">{{ question.name }}</h2>
+                    {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
                     <div class="plot">{% show_char field run 1 %}</div>
                 {% endif %}
             {% endif %}
@@ -13,14 +14,14 @@
         {% with char.fields|get:idx as field %}
             {% if field %}
                 {% if screen or question.printable %}
-                    <h2 class="c title">{{ question.name }}</h2>
+                    {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
                     <div class="plot">{{ field|linebreaksbr }}</div>
                 {% endif %}
             {% endif %}
         {% endwith %}
     {% elif question.typ == 'text' %}
         {% if sheet_char.text and show_character.text %}
-            <h2 class="c title">{{ question.name }}</h2>
+            {% if title_count > 1 %}<h2 class="c title">{{ question.name }}</h2>{% endif %}
             <div class="plot">{% show_char sheet_char.text run 1 %}</div>
         {% endif %}
     {% endif %}
