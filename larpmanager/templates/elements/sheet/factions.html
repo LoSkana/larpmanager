@@ -1,9 +1,11 @@
 {% load show_tags i18n %}
 {% for fact in sheet_factions %}
     {% if fact.typ != 'g' or check %}
-        <h1 class="c">
-            <a href="{% url 'faction' run.get_slug fact.uuid %}" target="_blank">{{ fact.name }}</a>
-        </h1>
+        {% if fact.name %}
+            <h1 class="c">
+                <a href="{% url 'faction' run.get_slug fact.uuid %}" target="_blank">{{ fact.name }}</a>
+            </h1>
+        {% endif %}
         {% count_sheet_titles fact.fields fact.questions screen fact.text show_faction.text visibility_e_only=False teaser_content=fact.teaser show_teaser=show_faction.teaser as title_count %}
         {% for idx, question in fact.questions.items %}
             {% if question.typ == 'teaser' %}

@@ -283,63 +283,55 @@ def test_faction_all(pw_page: Any) -> None:
     # Verify character info are visible
     expect_normalized(page, page.locator("#one"),
   """
+      Fill in the missing information in your profile to complete your registration
       Player: User Test
         Presentation
         Alpha teaser
 
         Primary Faction 1
+        Presentation
         PF1 teaser
-
-        Transversal Faction 1
-        TF1 teaser
-
-        Transversal Faction 2
-        TF2 teaser
-
-        Transversal Faction 3
-        TF3 teaser
-
-        Primary Faction 1
-
+        Text
         PF1 private text
-
         Public Faction Question: PF1 public answer
-
-        Private Faction Question: PF1 private answer
+        Private Faction Question
+        PF1 private answer
 
         Transversal Faction 1
-
+        Presentation
+        TF1 teaser
+        Text
         TF1 private text
-
         Public Faction Question: TF1 public answer
-
-        Private Faction Question: TF1 private answer
+        Private Faction Question
+        TF1 private answer
 
         Transversal Faction 2
-
+        Presentation
+        TF2 teaser
+        Text
         TF2 private text
-
         Public Faction Question: TF2 public answer
-
-        Private Faction Question: TF2 private answer
+        Private Faction Question
+        TF2 private answer
 
         Transversal Faction 3
-
+        Presentation
+        TF3 teaser
+        Text
         TF3 private text
-
         Public Faction Question: TF3 public answer
-
-        Private Faction Question: TF3 private answer
+        Private Faction Question
+        TF3 private answer
 
         Secret Faction 1
-
-        SF1 private text
-
-        Public Faction Question: SF1 public answer
-
-        Private Faction Question: SF1 private answer
-
+        Presentation
+        SF1 teaser
         Text
+        SF1 private text
+        Public Faction Question: SF1 public answer
+        Private Faction Question
+        SF1 private answer
 
         Alpha private text
       """)
@@ -353,14 +345,16 @@ def test_faction_all(pw_page: Any) -> None:
     # Verify Beta TEASER is visible
     expect_normalized(page, page.locator("#one"),
         """
-        Presentation
+        Fill in the missing information in your profile to complete your registration
         Beta teaser
 
         Primary Faction 1
         PF1 teaser
+        Public Faction Question: PF1 public answer
 
         Transversal Faction 1
         TF1 teaser
+        Public Faction Question: TF1 public answer
         """)
 
     # Verify Beta PRIVATE TEXT is NOT visible (not assigned)
