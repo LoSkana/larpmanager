@@ -8,6 +8,9 @@ msgstr "Aller"
 msgid "Hi"
 msgstr "Bonjour"
 
+msgid "No"
+msgstr "Non"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "TVA"
 
 msgid "Who"
 msgstr "Qui"
+
+msgid "Yes"
+msgstr "Oui"
 
 msgid "age"
 msgstr "âge"
@@ -640,6 +646,9 @@ msgstr "Nation"
 msgid "Number"
 msgstr "Nombre"
 
+msgid "Online"
+msgstr "En ligne"
+
 msgid "Option"
 msgstr "Option"
 
@@ -901,6 +910,9 @@ msgstr "Pas d'étape"
 msgid "Nothing"
 msgstr "Rien"
 
+msgid "Offline"
+msgstr "Hors ligne"
+
 msgid "Options"
 msgstr "Options"
 
@@ -921,6 +933,9 @@ msgstr "Joueur:"
 
 msgid "Players"
 msgstr "Joueurs"
+
+msgid "Present"
+msgstr "Présent"
 
 msgid "Preview"
 msgstr "Aperçu"
@@ -1096,6 +1111,9 @@ msgstr "Carrousel"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Check-in"
 
 msgid "Claimant"
 msgstr "Demandeur"
@@ -2051,6 +2069,9 @@ msgstr "Modifier le cadeau"
 msgid "Characters:"
 msgstr "Personnages:"
 
+msgid "Checked in:"
+msgstr "Check-in effectué :"
+
 msgid "Collections"
 msgstr "Collectes"
 
@@ -2146,6 +2167,12 @@ msgstr "Nouvelle session"
 
 msgid "Next events"
 msgstr "Événements à venir"
+
+msgid "Not scanned"
+msgstr "Non scanné"
+
+msgid "Outstanding"
+msgstr "En attente"
 
 msgid "Participant"
 msgstr "Participant"
@@ -2447,6 +2474,9 @@ msgstr "Exigences"
 msgid "Rotate right"
 msgstr "Faire pivoter vers la droite"
 
+msgid "Scan QR code"
+msgstr "Scanner le code QR"
+
 msgid "Scroll right"
 msgstr "Fais défiler vers la droite"
 
@@ -2686,6 +2716,9 @@ msgstr "Sessions précédentes"
 
 msgid "Paste as text"
 msgstr "Coller comme texte"
+
+msgid "Pending sync:"
+msgstr "En attente de synchronisation :"
 
 msgid "Personal data"
 msgstr "Données personnelles"
@@ -3533,6 +3566,9 @@ msgstr "Message privé:"
 msgid "Promote to admin"
 msgstr "Promouvoir au rang d'administrateur"
 
+msgid "QR Code Check-in"
+msgstr "Check-in par code QR"
+
 msgid "Realized revenue"
 msgstr "Recettes réalisées"
 
@@ -4327,6 +4363,9 @@ msgstr "Description du carrousel"
 
 msgid "Character Inventory:"
 msgstr "Inventaire du personnage :"
+
+msgid "Check-in QR code.png"
+msgstr "Code QR de check-in.png"
 
 msgid "Close the collection"
 msgstr "Ferme la cagnotte"
@@ -5992,6 +6031,9 @@ msgstr "Date de début de l'événement"
 
 msgid "Total of recorded money inflows"
 msgstr "Total des entrées d'argent enregistrées"
+
+msgid "Unknown QR code for this event."
+msgstr "Code QR inconnu pour cet événement."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8031,6 +8073,11 @@ msgstr "Total des frais de participation réduits par des remises"
 msgid "View all deadlines that must be met for this event"
 msgstr "Voir toutes les dates limites à respecter pour cet événement"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr ""
+"Tu peux maintenant scanner les codes QR pour faire le check-in des "
+"participants"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Ton compte est protégé par une application d'authentification."
 
@@ -8306,6 +8353,11 @@ msgstr "Le suivi des quantités n'est pas activé pour cette organisation"
 msgid "Review participant answers to the matchmaker questions"
 msgstr ""
 "Consulte les réponses des participants aux questions du « matchmaker »"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr ""
+"Scanne les codes QR des participants sur place pour les marquer comme "
+"présents"
 
 msgid "Some features require 'Character', which is not active"
 msgstr ""
@@ -14666,6 +14718,14 @@ msgstr ""
 "recharge la page."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Génère un code QR unique par inscription et permet au staff de le scanner "
+"sur place pour marquer les participants comme présents, même hors ligne avec"
+" synchronisation automatique"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14758,6 +14818,15 @@ msgstr ""
 "Lance le tirage au sort pour sélectionner au hasard des participants parmi "
 "les inscriptions de la catégorie « tirage au sort » et faire passer les "
 "inscriptions sélectionnées au statut de billets confirmés"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Scanne les codes QR des participants sur place pour les marquer comme "
+"présents. Fonctionne hors ligne : les scans sont mis en file d’attente "
+"localement et synchronisés automatiquement dès que tu es de nouveau en "
+"ligne."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "

@@ -8,6 +8,9 @@ msgstr "Jít"
 msgid "Hi"
 msgstr "Ahoj"
 
+msgid "No"
+msgstr "Ne"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "DPH"
 
 msgid "Who"
 msgstr "Kdo"
+
+msgid "Yes"
+msgstr "Ano"
 
 msgid "age"
 msgstr "věk"
@@ -640,6 +646,9 @@ msgstr "Národ"
 msgid "Number"
 msgstr "Číslo"
 
+msgid "Online"
+msgstr "Online"
+
 msgid "Option"
 msgstr "Možnost"
 
@@ -901,6 +910,9 @@ msgstr "Žádný krok"
 msgid "Nothing"
 msgstr "Nic"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Možnosti"
 
@@ -921,6 +933,9 @@ msgstr "Hráč:"
 
 msgid "Players"
 msgstr "Hráči"
+
+msgid "Present"
+msgstr "Přítomný"
 
 msgid "Preview"
 msgstr "Náhled"
@@ -1096,6 +1111,9 @@ msgstr "Karusel"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Odbavení"
 
 msgid "Claimant"
 msgstr "Žadatel"
@@ -2051,6 +2069,9 @@ msgstr "Změnit dárek"
 msgid "Characters:"
 msgstr "Postavy:"
 
+msgid "Checked in:"
+msgstr "Odbaveno:"
+
 msgid "Collections"
 msgstr "Sbírky"
 
@@ -2146,6 +2167,12 @@ msgstr "Nová relace"
 
 msgid "Next events"
 msgstr "Nadcházející události"
+
+msgid "Not scanned"
+msgstr "Nenaskenováno"
+
+msgid "Outstanding"
+msgstr "Chybějící"
 
 msgid "Participant"
 msgstr "Účastník"
@@ -2447,6 +2474,9 @@ msgstr "Požadavky"
 msgid "Rotate right"
 msgstr "Otočit vpravo"
 
+msgid "Scan QR code"
+msgstr "Naskenovat QR kód"
+
 msgid "Scroll right"
 msgstr "Posuň doprava"
 
@@ -2686,6 +2716,9 @@ msgstr "Minulá zasedání"
 
 msgid "Paste as text"
 msgstr "Vložit jako text"
+
+msgid "Pending sync:"
+msgstr "Čeká na synchronizaci:"
 
 msgid "Personal data"
 msgstr "Osobní údaje"
@@ -3533,6 +3566,9 @@ msgstr "Soukromá zpráva:"
 msgid "Promote to admin"
 msgstr "Povýšit na správce"
 
+msgid "QR Code Check-in"
+msgstr "Odbavení pomocí QR kódu"
+
 msgid "Realized revenue"
 msgstr "Realizované příjmy"
 
@@ -4327,6 +4363,9 @@ msgstr "Popis kolotoče"
 
 msgid "Character Inventory:"
 msgstr "Inventář postavy:"
+
+msgid "Check-in QR code.png"
+msgstr "QR kód pro odbavení.png"
 
 msgid "Close the collection"
 msgstr "Uzavření sbírky"
@@ -5992,6 +6031,9 @@ msgstr "Datum zahájení této události"
 
 msgid "Total of recorded money inflows"
 msgstr "Součet zaznamenaných přílivů peněz"
+
+msgid "Unknown QR code for this event."
+msgstr "Neznámý QR kód pro tuto akci."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8012,6 +8054,9 @@ msgid "View all deadlines that must be met for this event"
 msgstr ""
 "Zobrazit všechny termíny, které je třeba dodržet v souvislosti s touto akcí"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr "Teď můžeš skenovat QR kódy a odbavovat účastníky"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Tvůj účet je chráněn aplikací autentizátoru."
 
@@ -8267,6 +8312,9 @@ msgstr "Sledování množství není pro tuto organizaci povoleno"
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Projdi si odpovědi účastníků na otázky matchmakeru"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr "Naskenuj na místě QR kódy účastníků a označ je jako přítomné"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Některé funkce vyžadují \"Postava\", která není aktivní"
@@ -14108,6 +14156,14 @@ msgstr ""
 "Zkopíruj text, který chceš zachovat, a pak stránku znovu načti."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Vygeneruje jedinečný QR kód pro každou registraci a umožní personálu jej na "
+"místě naskenovat a označit účastníky jako přítomné; funguje offline s "
+"automatickou synchronizací"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14193,6 +14249,14 @@ msgid ""
 msgstr ""
 "Proveď losování, při kterém náhodně vybereš účastníky z registrací v "
 "losovací kategorii a převedeš je na potvrzené vstupenky"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Naskenuj na místě QR kódy účastníků a označ je jako přítomné. Funguje "
+"offline: skeny se uloží lokálně do fronty a po opětovném připojení se "
+"automaticky synchronizují."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "

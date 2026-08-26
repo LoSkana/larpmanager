@@ -88,12 +88,9 @@ from larpmanager.utils.core.exceptions import (
 )
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
-from larpmanager.utils.users.registration import (
-    _set_membership_context,
-    casting_preferences_pending,
-    check_assign_character,
-    get_reduced_available_count,
-)
+from larpmanager.utils.registrations.characters import check_assign_character
+from larpmanager.utils.registrations.signals import get_reduced_available_count
+from larpmanager.utils.registrations.status import _set_membership_context, casting_preferences_pending
 
 logger = logging.getLogger(__name__)
 

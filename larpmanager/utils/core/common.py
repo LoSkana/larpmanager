@@ -59,7 +59,6 @@ from larpmanager.models.miscellanea import (
     PlayerRelationship,
     WorkshopModule,
 )
-from larpmanager.models.registration import Registration
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Handout,
@@ -252,18 +251,6 @@ def get_event_template(context: dict, template_uuid: str) -> None:
         template_uuid,
         template=True,
         association_id=context["association_id"],
-    )
-
-
-def get_registration(context: dict, registration_uuid: str) -> None:
-    """Get registration by ID and add to context."""
-    add_context_by_uuid(
-        context,
-        "registration",
-        Registration,
-        registration_uuid,
-        set_name=True,
-        run=context["run"],
     )
 
 
@@ -828,7 +815,8 @@ def get_coming_runs(association_id: int | None, *, future: bool = True, include_
     return runs
 
 
-def _geo_prefetch(prefix: str = "") -> Prefetch:
+def geo_prefetch(prefix: str = "") -> Prefetch:
+    """Build a Prefetch for pub_lat/pub_lon EventConfigs, optionally through a related-object prefix."""
     path = f"{prefix}__configs" if prefix else "event__configs"
     return Prefetch(
         path,
@@ -839,12 +827,7 @@ def _geo_prefetch(prefix: str = "") -> Prefetch:
 
 def with_geo_configs(runs_qs: QuerySet) -> QuerySet:
     """Prefetch pub_lat/pub_lon EventConfigs so Event.maps_url needs no extra queries."""
-    return runs_qs.prefetch_related(_geo_prefetch())
-
-
-def with_geo_configs_registrations(registrations_qs: QuerySet) -> QuerySet:
-    """Prefetch pub_lat/pub_lon EventConfigs through registration->run->event."""
-    return registrations_qs.prefetch_related(_geo_prefetch("run__event"))
+    return runs_qs.prefetch_related(geo_prefetch())
 
 
 def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_name: str) -> list:

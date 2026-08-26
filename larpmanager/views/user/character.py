@@ -69,6 +69,13 @@ from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization
 from larpmanager.utils.io.upload import normalize_profile_image
+from larpmanager.utils.registrations.characters import (
+    check_assign_character,
+    check_character_maximum,
+    get_character_play_max,
+    get_player_characters,
+)
+from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.character import (
     _get_character_cache_id,
     check_missing_mandatory,
@@ -87,13 +94,6 @@ from larpmanager.utils.services.experience import (
     remove_char_ability,
 )
 from larpmanager.utils.services.writing import char_add_addit
-from larpmanager.utils.users.registration import (
-    check_assign_character,
-    check_character_maximum,
-    get_character_play_max,
-    get_player_characters,
-    registration_status,
-)
 from larpmanager.views.user.casting import casting_details, get_casting_preferences
 from larpmanager.views.user.registration import init_form_submitted
 

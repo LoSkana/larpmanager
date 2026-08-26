@@ -8,6 +8,9 @@ msgstr "Μετάβαση"
 msgid "Hi"
 msgstr "Γεια"
 
+msgid "No"
+msgstr "No"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "ΦΠΑ"
 
 msgid "Who"
 msgstr "Ποιος"
+
+msgid "Yes"
+msgstr "Sì"
 
 msgid "age"
 msgstr "ηλικία"
@@ -640,6 +646,9 @@ msgstr "Χώρα"
 msgid "Number"
 msgstr "Αριθμός"
 
+msgid "Online"
+msgstr "Online"
+
 msgid "Option"
 msgstr "Επιλογή"
 
@@ -901,6 +910,9 @@ msgstr "Κανένα βήμα"
 msgid "Nothing"
 msgstr "Τίποτα"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Επιλογές"
 
@@ -921,6 +933,9 @@ msgstr "Παίκτης:"
 
 msgid "Players"
 msgstr "Παίκτες"
+
+msgid "Present"
+msgstr "Presente"
 
 msgid "Preview"
 msgstr "Προεπισκόπηση"
@@ -1096,6 +1111,9 @@ msgstr "Καρουζέλ"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Check-in"
 
 msgid "Claimant"
 msgstr "Αιτών"
@@ -2051,6 +2069,9 @@ msgstr "Αλλαγή δώρου"
 msgid "Characters:"
 msgstr "Χαρακτήρες:"
 
+msgid "Checked in:"
+msgstr "Check-in effettuato:"
+
 msgid "Collections"
 msgstr "Έρανοι"
 
@@ -2146,6 +2167,12 @@ msgstr "Νέα συνεδρία"
 
 msgid "Next events"
 msgstr "Επόμενα event"
+
+msgid "Not scanned"
+msgstr "Non scansionato"
+
+msgid "Outstanding"
+msgstr "In sospeso"
 
 msgid "Participant"
 msgstr "Συμμετέχων"
@@ -2447,6 +2474,9 @@ msgstr "Απαιτήσεις"
 msgid "Rotate right"
 msgstr "Περιστροφή δεξιά"
 
+msgid "Scan QR code"
+msgstr "Scansiona il codice QR"
+
 msgid "Scroll right"
 msgstr "Κύλιση δεξιά"
 
@@ -2686,6 +2716,9 @@ msgstr "Προηγούμενες συνεδρίες"
 
 msgid "Paste as text"
 msgstr "Επικόλληση ως κείμενο"
+
+msgid "Pending sync:"
+msgstr "In attesa di sincronizzazione:"
 
 msgid "Personal data"
 msgstr "Προσωπικά δεδομένα"
@@ -3533,6 +3566,9 @@ msgstr "Ιδιωτικό μήνυμα:"
 msgid "Promote to admin"
 msgstr "Προαγωγή σε διαχειριστή"
 
+msgid "QR Code Check-in"
+msgstr "Check-in con codice QR"
+
 msgid "Realized revenue"
 msgstr "Πραγματοποιημένα έσοδα"
 
@@ -4327,6 +4363,9 @@ msgstr "Περιγραφή καρουζέλ"
 
 msgid "Character Inventory:"
 msgstr "Απόθεμα χαρακτήρα:"
+
+msgid "Check-in QR code.png"
+msgstr "Codice QR check-in.png"
 
 msgid "Close the collection"
 msgstr "Κλείσε τη συλλογή"
@@ -5992,6 +6031,9 @@ msgstr "Η ημερομηνία έναρξης αυτής της εκδήλωσ�
 
 msgid "Total of recorded money inflows"
 msgstr "Συνολικό ποσό καταγεγραμμένων χρηματικών εισροών"
+
+msgid "Unknown QR code for this event."
+msgstr "Codice QR sconosciuto per questo evento."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8032,6 +8074,10 @@ msgstr "Συνολικό ποσό τελών συμμετοχής που μει�
 msgid "View all deadlines that must be met for this event"
 msgstr "Δες όλες τις προθεσμίες που πρέπει να τηρηθούν για αυτή την εκδήλωση"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr ""
+"Ora puoi scansionare i codici QR per effettuare il check-in dei partecipanti"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Ο λογαριασμός σου προστατεύεται από μια εφαρμογή ελέγχου ταυτότητας."
 
@@ -8304,6 +8350,11 @@ msgstr ""
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Έλεγχος απαντήσεων συμμετεχόντων στις ερωτήσεις του Matchmaker"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr ""
+"Scansiona sul posto i codici QR dei partecipanti per contrassegnarli come "
+"presenti"
 
 msgid "Some features require 'Character', which is not active"
 msgstr ""
@@ -14645,6 +14696,14 @@ msgstr ""
 "ανανέωσε τη σελίδα."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Genera un codice QR univoco per ogni iscrizione e permette allo staff di "
+"scansionarlo sul posto per contrassegnare i partecipanti come presenti, "
+"funzionando offline con sincronizzazione automatica"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14737,6 +14796,14 @@ msgstr ""
 "Εκτέλεσε την κλήρωση για να επιλέξεις τυχαία συμμετέχοντες από εγγραφές "
 "επιπέδου κλήρωσης και να αναβαθμίσεις τις επιλεγμένες εγγραφές σε "
 "επιβεβαιωμένα εισιτήρια"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Scansiona sul posto i codici QR dei partecipanti per contrassegnarli come "
+"presenti. Funziona offline: le scansioni vengono messe in coda localmente e "
+"sincronizzate automaticamente quando torni online."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "

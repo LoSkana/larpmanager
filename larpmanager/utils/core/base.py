@@ -54,8 +54,9 @@ from larpmanager.utils.core.exceptions import (
 )
 from larpmanager.utils.core.nav import build_main_nav_items
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
+from larpmanager.utils.registrations.characters import check_signup, registration_find
+from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.demo import add_demo_hint_context
-from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
 
 # Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
 MAX_DEMO_REGISTRATIONS = 10

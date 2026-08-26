@@ -67,7 +67,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import decimal_to_str
 from larpmanager.models.writing import Character, Faction
 from larpmanager.utils.core.common import get_event_elements, get_time_diff_today
-from larpmanager.utils.users.registration import get_reduced_available_count
+from larpmanager.utils.registrations.signals import get_reduced_available_count
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet

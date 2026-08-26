@@ -39,8 +39,8 @@ from larpmanager.models.form import QuestionApplicable
 from larpmanager.models.writing import Character, Guild, GuildMembership, GuildMembershipStatus, GuildRole
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_event_elements
+from larpmanager.utils.registrations.characters import get_player_characters
 from larpmanager.utils.services.character import filter_playing_characters
-from larpmanager.utils.users.registration import get_player_characters
 
 
 def _get_my_character_ids(context: dict) -> list[int]:

@@ -1,0 +1,216 @@
+{% extends "utils.html" %}
+{% load i18n static %}
+{% block title %}
+    {% trans "Check-in" %} {{ gl_name }} - {{ run.search | truncatechars:50 }}
+{% endblock title %}
+{% block info %}
+    {% trans "Scan participant QR codes on-site to mark them present. Works offline: scans are queued locally and synced automatically once you're back online." %}
+{% endblock info %}
+{% block content %}
+    <div id="checkin_status">
+        <span id="checkin_sync_state" class="checkin-online">{% trans "Online" %}</span>
+        <span id="checkin_queue_count"></span>
+    </div>
+    <div id="checkinChartContainer" class="accounting_record"></div>
+    <button type="button" id="checkin_scan_btn" class="btn">{% trans "Scan QR code" %}</button>
+    <table id="checkin_table">
+        <thead>
+            <tr>
+                <th>{% trans "Participant" %}</th>
+                <th>{% trans "Character" %}</th>
+                <th>{% trans "Payment" %}</th>
+                <th>{% trans "Present" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <dialog id="checkin_scan_popup">
+        <div id="checkin_reader"></div>
+        <p id="checkin_scan_result"></p>
+        <button type="button" id="checkin_scan_close" class="btn">{% trans "Close" %}</button>
+    </dialog>
+{% endblock content %}
+{% block js %}
+    <script type="text/javascript"
+            src="https://cdn.canvasjs.com/canvasjs.min.js"
+            defer></script>
+    <script type="text/javascript"
+            src="{% static 'node_modules/html5-qrcode/html5-qrcode.min.js' %}"
+            defer></script>
+    <script type="text/javascript">
+(function () {
+  "use strict";
+
+  var CHECKIN_DATA = {{ checkin_data|safe }};
+  var SCAN_URL = "{% url 'orga_checkin_scan' run.get_slug %}";
+  var CSRF_TOKEN = "{{ csrf_token }}";
+  var QUEUE_KEY = "checkin_queue_{{ run.id }}";
+
+  var byUuid = {};
+  CHECKIN_DATA.forEach(function (row) { byUuid[row.uuid] = row; });
+
+  function loadQueue() {
+    try {
+      return JSON.parse(window.localStorage.getItem(QUEUE_KEY) || "[]");
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function saveQueue(queue) {
+    window.localStorage.setItem(QUEUE_KEY, JSON.stringify(queue));
+    document.getElementById("checkin_queue_count").textContent =
+      queue.length ? ("{% trans 'Pending sync:' %} " + queue.length) : "";
+  }
+
+  function renderChart() {
+    var present = 0;
+    CHECKIN_DATA.forEach(function (row) { if (row.checked_in_at) present += 1; });
+    var remaining = CHECKIN_DATA.length - present;
+    if (window.CanvasJS) {
+      var chart = new CanvasJS.Chart("checkinChartContainer", {
+        theme: "dark2",
+        data: [{
+          type: "pie",
+          indexLabel: "{label} ({y})",
+          dataPoints: [
+            { label: "{% trans 'Present' %}", y: present },
+            { label: "{% trans 'Not scanned' %}", y: remaining }
+          ]
+        }]
+      });
+      chart.render();
+    }
+  }
+
+  function renderTable() {
+    var tbody = document.querySelector("#checkin_table tbody");
+    tbody.innerHTML = "";
+    CHECKIN_DATA.forEach(function (row) {
+      var tr = document.createElement("tr");
+      tr.dataset.uuid = row.uuid;
+      tr.innerHTML =
+        "<td>" + row.member + "</td>" +
+        "<td>" + row.character + "</td>" +
+        "<td>" + (row.paid ? "{% trans 'Paid' %}" : "{% trans 'Outstanding' %}") + "</td>" +
+        "<td class='checkin-present'>" + (row.checked_in_at ? "{% trans 'Yes' %}" : "{% trans 'No' %}") + "</td>";
+      tbody.appendChild(tr);
+    });
+  }
+
+  function updateLocalRow(uuid, checkedInAt) {
+    var row = byUuid[uuid];
+    if (!row) return;
+    row.checked_in_at = checkedInAt;
+    renderTable();
+    renderChart();
+  }
+
+  function postScan(uuid, scannedAt, onDone) {
+    var body = new URLSearchParams();
+    body.set("uuid", uuid);
+    body.set("scanned_at", scannedAt);
+    fetch(SCAN_URL, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": CSRF_TOKEN,
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: body.toString()
+    }).then(function (resp) { return resp.json(); })
+      .then(function (data) { onDone(data.res === "ok", data); })
+      .catch(function () { onDone(false, null); });
+  }
+
+  function flushQueue() {
+    var queue = loadQueue();
+    if (!queue.length) return;
+    var remaining = [];
+    var pending = queue.length;
+    queue.forEach(function (entry) {
+      postScan(entry.uuid, entry.scanned_at, function (ok, data) {
+        if (ok && data && data.row) {
+          updateLocalRow(data.row.uuid, data.row.checked_in_at);
+        } else if (!ok) {
+          remaining.push(entry);
+        }
+        pending -= 1;
+        if (pending === 0) saveQueue(remaining);
+      });
+    });
+  }
+
+  function setOnlineState() {
+    var el = document.getElementById("checkin_sync_state");
+    if (navigator.onLine) {
+      el.textContent = "{% trans 'Online' %}";
+      el.className = "checkin-online";
+      flushQueue();
+    } else {
+      el.textContent = "{% trans 'Offline' %}";
+      el.className = "checkin-offline";
+    }
+  }
+
+  function handleScan(uuid) {
+    var scannedAt = new Date().toISOString();
+    var resultEl = document.getElementById("checkin_scan_result");
+
+    // The QR payload is the registration's own uuid, already present in the
+    // locally downloaded list, update the UI immediately regardless of
+    // connectivity, then try to persist the scan to the server.
+    var row = byUuid[uuid];
+    if (!row) {
+      resultEl.textContent = "{% trans 'Unknown QR code for this event.' %}";
+      return;
+    }
+    updateLocalRow(uuid, row.checked_in_at || scannedAt);
+    resultEl.textContent = "{% trans 'Checked in:' %} " + row.member;
+
+    postScan(uuid, scannedAt, function (ok, data) {
+      if (ok && data && data.row) {
+        updateLocalRow(data.row.uuid, data.row.checked_in_at);
+      } else {
+        var queue = loadQueue();
+        queue.push({ uuid: uuid, scanned_at: scannedAt });
+        saveQueue(queue);
+      }
+    });
+  }
+
+  var scanner = null;
+
+  function openScanner() {
+    var popup = document.getElementById("checkin_scan_popup");
+    popup.showModal();
+    scanner = new Html5Qrcode("checkin_reader");
+    scanner.start(
+      { facingMode: "environment" },
+      { fps: 10, qrbox: 250 },
+      function (decodedText) { handleScan(decodedText); },
+      function () {}
+    );
+  }
+
+  function closeScanner() {
+    var popup = document.getElementById("checkin_scan_popup");
+    if (scanner) {
+      scanner.stop().catch(function () {});
+      scanner = null;
+    }
+    popup.close();
+  }
+
+  document.getElementById("checkin_scan_btn").addEventListener("click", openScanner);
+  document.getElementById("checkin_scan_close").addEventListener("click", closeScanner);
+  window.addEventListener("online", setOnlineState);
+  window.addEventListener("offline", setOnlineState);
+
+  renderTable();
+  renderChart();
+  saveQueue(loadQueue());
+  setOnlineState();
+})();
+    </script>
+{% endblock js %}

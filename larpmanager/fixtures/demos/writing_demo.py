@@ -93,7 +93,7 @@ def _build_characters(event: Event, progress: dict[str, ProgressStep]) -> dict[s
     n = {key: char.number for key, char in chars.items()}
 
     # Pass 2: fill teaser (public) and text (private) referencing other characters
-    # by #<number> — LarpManager auto-links these tokens to the target sheet.
+    # by #<number> - LarpManager auto-links these tokens to the target sheet.
     updates = {
         "kade": (
             f"<p>Rising executive at Zenith Dynamics, torn between duty and the black-market debt he owes #{n['dice']}.</p>",

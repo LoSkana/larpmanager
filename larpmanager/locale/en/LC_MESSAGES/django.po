@@ -3116,6 +3116,9 @@ msgstr ""
 msgid "reply here"
 msgstr ""
 
+msgid "Check-in QR code.png"
+msgstr ""
+
 #, python-format
 msgid "Registration for %(event)s"
 msgstr ""
@@ -8959,6 +8962,47 @@ msgstr ""
 msgid "Please wait"
 msgstr ""
 
+msgid "Check-in"
+msgstr ""
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans "
+"are queued locally and synced automatically once you're back online."
+msgstr ""
+
+msgid "Online"
+msgstr ""
+
+msgid "Scan QR code"
+msgstr ""
+
+msgid "Present"
+msgstr ""
+
+msgid "Pending sync:"
+msgstr ""
+
+msgid "Not scanned"
+msgstr ""
+
+msgid "Outstanding"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Offline"
+msgstr ""
+
+msgid "Unknown QR code for this event."
+msgstr ""
+
+msgid "Checked in:"
+msgstr ""
+
 msgid "Character Inventories"
 msgstr ""
 
@@ -10485,6 +10529,17 @@ msgstr ""
 msgid "You can now create the ticket for reserves"
 msgstr ""
 
+msgid "QR Code Check-in"
+msgstr ""
+
+msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+
+msgid "You can now scan QR codes to check-in participants"
+msgstr ""
+
 msgid "Chat"
 msgstr ""
 
@@ -11223,6 +11278,9 @@ msgstr ""
 msgid "Manage the registration tickets"
 msgstr ""
 
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr ""
+
 msgid "Manage the registration sections"
 msgstr ""
 
@@ -11888,187 +11946,6 @@ msgstr ""
 msgid "External catering"
 msgstr ""
 
-msgid ""
-"Click 'New' to create your first event; fill in the name, dates, and basic "
-"details, then save"
-msgstr ""
-
-msgid ""
-"Choose how participants will pay: bank transfer, PayPal, Stripe, or other "
-"options; configure at least one method and save"
-msgstr ""
-
-msgid ""
-"Create a ticket type by clicking 'New'; set the name, price, and "
-"availability, then save it"
-msgstr ""
-
-msgid ""
-"Add a question to your registration form by clicking 'New'; for example, ask "
-"for dietary requirements or emergency contact details"
-msgstr ""
-
-msgid ""
-"You are now seeing the registration form as a participant would. Select a "
-"ticket, fill in the required fields, and complete the registration to "
-"experience the full flow."
-msgstr ""
-
-msgid ""
-"Create a character by clicking 'New'; give it a name and fill in the "
-"character details, then save"
-msgstr ""
-
-msgid ""
-"Edit an existing registration and assign a character to the participant "
-"using the drop-down list."
-msgstr ""
-
-msgid "Tutorial"
-msgstr ""
-
-msgid "Visit the tutorial to learn the basics"
-msgstr ""
-
-msgid "Event creation"
-msgstr ""
-
-msgid "Configure at least one payment method for participants"
-msgstr ""
-
-msgid "Registration tickets"
-msgstr ""
-
-msgid "Create at least one ticket type for event registrations"
-msgstr ""
-
-msgid "Define at least one question in the registration form"
-msgstr ""
-
-msgid "First registration"
-msgstr ""
-
-msgid "Have at least one participant registered for an event"
-msgstr ""
-
-msgid "First character"
-msgstr ""
-
-msgid "Create at least one character for one of your events"
-msgstr ""
-
-msgid "First character assignment"
-msgstr ""
-
-msgid "Assign a character to a registered participant"
-msgstr ""
-
-msgid "Are you sure? The items might not be recoverable."
-msgstr ""
-
-msgid "Move to container"
-msgstr ""
-
-msgid "Add tag"
-msgstr ""
-
-msgid "Remove tag"
-msgstr ""
-
-msgid "Add to faction"
-msgstr ""
-
-msgid "Remove from faction"
-msgstr ""
-
-msgid "Add to plot"
-msgstr ""
-
-msgid "Remove from plot"
-msgstr ""
-
-msgid "Set quest type"
-msgstr ""
-
-msgid "Set quest"
-msgstr ""
-
-msgid "Set ability type"
-msgstr ""
-
-msgid "Add to xp award"
-msgstr ""
-
-msgid "Remove from xp award"
-msgstr ""
-
-msgid "Add prologue"
-msgstr ""
-
-msgid "Remove prologue"
-msgstr ""
-
-msgid "Set progress step"
-msgstr ""
-
-msgid "Set assigned staff member"
-msgstr ""
-
-msgid "Set character status"
-msgstr ""
-
-msgid "Add character"
-msgstr ""
-
-msgid "Remove character"
-msgstr ""
-
-msgid "Assign remaining stock to area"
-msgstr ""
-
-msgid "Your registration ticket"
-msgstr ""
-
-msgid "Reserve additional tickets beyond your own"
-msgstr ""
-
-msgid "Registration surcharge"
-msgstr ""
-
-msgid ""
-"Select how many payments to split the fee into (total amount and deadlines "
-"are divided equally starting from the registration date)"
-msgstr ""
-
-msgid "Order the factions from your most (top) to least (bottom) preferred"
-msgstr ""
-
-msgid "Characters not participating"
-msgstr ""
-
-msgid "Place of birth not included in the ISTAT list"
-msgstr ""
-
-msgid "One symbol more or less than expected"
-msgstr ""
-
-msgid "Wrong length"
-msgstr ""
-
-msgid "Differs by only one symbol from the expected one"
-msgstr ""
-
-msgid ""
-"Symbols for first and last name do not match (remember to enter the correct "
-"first and last names in legal_name)"
-msgstr ""
-
-msgid "Symbols for place of birth do not match (check exact municipality)"
-msgstr ""
-
-msgid "Symbols for date of birth do not match (check exact date)"
-msgstr ""
-
 #, python-format
 msgid " Hurry: only %(num)d tickets available."
 msgstr ""
@@ -12299,6 +12176,187 @@ msgid "Select your preferences"
 msgstr ""
 
 msgid "Select your casting preferences!"
+msgstr ""
+
+msgid ""
+"Click 'New' to create your first event; fill in the name, dates, and basic "
+"details, then save"
+msgstr ""
+
+msgid ""
+"Choose how participants will pay: bank transfer, PayPal, Stripe, or other "
+"options; configure at least one method and save"
+msgstr ""
+
+msgid ""
+"Create a ticket type by clicking 'New'; set the name, price, and "
+"availability, then save it"
+msgstr ""
+
+msgid ""
+"Add a question to your registration form by clicking 'New'; for example, ask "
+"for dietary requirements or emergency contact details"
+msgstr ""
+
+msgid ""
+"You are now seeing the registration form as a participant would. Select a "
+"ticket, fill in the required fields, and complete the registration to "
+"experience the full flow."
+msgstr ""
+
+msgid ""
+"Create a character by clicking 'New'; give it a name and fill in the "
+"character details, then save"
+msgstr ""
+
+msgid ""
+"Edit an existing registration and assign a character to the participant "
+"using the drop-down list."
+msgstr ""
+
+msgid "Tutorial"
+msgstr ""
+
+msgid "Visit the tutorial to learn the basics"
+msgstr ""
+
+msgid "Event creation"
+msgstr ""
+
+msgid "Configure at least one payment method for participants"
+msgstr ""
+
+msgid "Registration tickets"
+msgstr ""
+
+msgid "Create at least one ticket type for event registrations"
+msgstr ""
+
+msgid "Define at least one question in the registration form"
+msgstr ""
+
+msgid "First registration"
+msgstr ""
+
+msgid "Have at least one participant registered for an event"
+msgstr ""
+
+msgid "First character"
+msgstr ""
+
+msgid "Create at least one character for one of your events"
+msgstr ""
+
+msgid "First character assignment"
+msgstr ""
+
+msgid "Assign a character to a registered participant"
+msgstr ""
+
+msgid "Are you sure? The items might not be recoverable."
+msgstr ""
+
+msgid "Move to container"
+msgstr ""
+
+msgid "Add tag"
+msgstr ""
+
+msgid "Remove tag"
+msgstr ""
+
+msgid "Add to faction"
+msgstr ""
+
+msgid "Remove from faction"
+msgstr ""
+
+msgid "Add to plot"
+msgstr ""
+
+msgid "Remove from plot"
+msgstr ""
+
+msgid "Set quest type"
+msgstr ""
+
+msgid "Set quest"
+msgstr ""
+
+msgid "Set ability type"
+msgstr ""
+
+msgid "Add to xp award"
+msgstr ""
+
+msgid "Remove from xp award"
+msgstr ""
+
+msgid "Add prologue"
+msgstr ""
+
+msgid "Remove prologue"
+msgstr ""
+
+msgid "Set progress step"
+msgstr ""
+
+msgid "Set assigned staff member"
+msgstr ""
+
+msgid "Set character status"
+msgstr ""
+
+msgid "Add character"
+msgstr ""
+
+msgid "Remove character"
+msgstr ""
+
+msgid "Assign remaining stock to area"
+msgstr ""
+
+msgid "Your registration ticket"
+msgstr ""
+
+msgid "Reserve additional tickets beyond your own"
+msgstr ""
+
+msgid "Registration surcharge"
+msgstr ""
+
+msgid ""
+"Select how many payments to split the fee into (total amount and deadlines "
+"are divided equally starting from the registration date)"
+msgstr ""
+
+msgid "Order the factions from your most (top) to least (bottom) preferred"
+msgstr ""
+
+msgid "Characters not participating"
+msgstr ""
+
+msgid "Place of birth not included in the ISTAT list"
+msgstr ""
+
+msgid "One symbol more or less than expected"
+msgstr ""
+
+msgid "Wrong length"
+msgstr ""
+
+msgid "Differs by only one symbol from the expected one"
+msgstr ""
+
+msgid ""
+"Symbols for first and last name do not match (remember to enter the correct "
+"first and last names in legal_name)"
+msgstr ""
+
+msgid "Symbols for place of birth do not match (check exact municipality)"
+msgstr ""
+
+msgid "Symbols for date of birth do not match (check exact date)"
 msgstr ""
 
 msgid "Registration completed successfully!"

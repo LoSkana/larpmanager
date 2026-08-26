@@ -81,8 +81,8 @@ from larpmanager.utils.core.common import (
     get_collection_redeem,
 )
 from larpmanager.utils.core.exceptions import RedirectError, check_association_feature
+from larpmanager.utils.registrations.status import _status_payment, registration_status
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.users.registration import _status_payment, registration_status
 
 logger = logging.getLogger(__name__)
 

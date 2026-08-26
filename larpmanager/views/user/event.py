@@ -78,10 +78,10 @@ from larpmanager.utils.core.common import (
     get_element,
     get_event_elements,
     with_geo_configs,
-    with_geo_configs_registrations,
 )
 from larpmanager.utils.core.exceptions import HiddenError
-from larpmanager.utils.users.registration import registration_status
+from larpmanager.utils.registrations.context import with_geo_configs_registrations
+from larpmanager.utils.registrations.status import registration_status
 
 
 def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:

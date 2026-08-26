@@ -264,7 +264,7 @@ def on_character_update_registration_cache(instance: Character) -> None:
         for relation in RegistrationCharacterRel.objects.filter(character=instance).select_related(
             "registration__run", "registration__run__event", "registration__ticket", "registration__member"
         ):
-            from larpmanager.utils.users.registration import apply_registration_post_save_updates  # noqa: PLC0415
+            from larpmanager.utils.registrations.signals import apply_registration_post_save_updates  # noqa: PLC0415
 
             apply_registration_post_save_updates(relation.registration)
 

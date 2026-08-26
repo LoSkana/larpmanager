@@ -45,7 +45,7 @@ from larpmanager.models.form import (
 from larpmanager.models.registration import RegistrationCharacterRel
 from larpmanager.models.writing import Character, Faction, FactionType, Guild
 from larpmanager.utils.core.common import get_event_elements
-from larpmanager.utils.users.registration import apply_registration_post_save_updates
+from larpmanager.utils.registrations.signals import apply_registration_post_save_updates
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel

@@ -5,7 +5,7 @@
 ## Core Features
 
 - **Registrations & Ticketing**: Player sign-ups with custom ticket options, add-ons, food/sleep preferences
-- **QR Code Check-in**: Each registered participant receives a unique encrypted QR code tied to their profile, character, and payment status. Staff scan codes on-site to instantly validate presence, verify payment, confirm character assignment, and automatically award attendance XP. Works offline — check-ins are buffered locally and synced when connectivity is restored.
+- **QR Code Check-in**: Each registered participant receives a unique encrypted QR code tied to their profile, character, and payment status. Staff scan codes on-site to instantly validate presence, verify payment, confirm character assignment, and automatically award attendance XP. Works offline - check-ins are buffered locally and synced when connectivity is restored.
 - **Payment Management**: Track who paid, who owes, automated reminders, multiple payment gateways (Paypal, Stripe, SumUp, etc.)
 - **Character Sheets**: Custom fields, versioned writing, per-player access control
 - **Campaign / XP System**: Multi-session progression, skill trees, XP tracking, player-facing interface
@@ -17,7 +17,7 @@
 ## Pricing
 
 - **Free** (€0/forever): Full access to the hosted platform, unlimited events/players/registrations, complete feature access, community support via Discord
-- **Support plan** (€1/registration or 1% on tickets sold, whichever preferred): Everything in Free plus priority technical support, SLA, 24/7 infrastructure monitoring, and custom feature development. No monthly fees — charges only when events run.
+- **Support plan** (€1/registration or 1% on tickets sold, whichever preferred): Everything in Free plus priority technical support, SLA, 24/7 infrastructure monitoring, and custom feature development. No monthly fees - charges only when events run.
 - **Self-host** (free/open source): Full source code on GitHub, self-managed infrastructure, complete data control, all features included. No guaranteed SLA.
 
 ## Links
@@ -53,11 +53,11 @@ Features are organized by module. Each feature can be enabled or disabled indepe
 - **PDF Generation** *(event)*: Automatically generates and updates PDFs of character sheets, gallery, and participant profiles.
 - **Progress** *(event)*: Adds a progress status field (e.g. draft, ready, approved) to key writing elements, enabling editorial workflow tracking.
 - **Prologues** *(event)*: Enables short introductory paragraphs for each act of the event, distributed to participants to guide them.
-- **Plots** *(event)*: Enables Plots — story arcs involving selected characters, adding extra content to their character sheets. Supports parallel writing without conflicts.
+- **Plots** *(event)*: Enables Plots - story arcs involving selected characters, adding extra content to their character sheets. Supports parallel writing without conflicts.
 - **Factions** *(event)*: Enables Factions to organize characters into groups (visible, transversal, or secret).
-- **Handout** *(event)*: Enables Handouts — pre-written texts providing information about a plot or lore, linked to characters.
+- **Handout** *(event)*: Enables Handouts - pre-written texts providing information about a plot or lore, linked to characters.
 - **Relationships** *(event)*: Allows authors (staff) to add relationships between characters in the writing panel.
-- **Quests and Traits** *(event)*: Introduces Quests as building blocks of the character sheet, each with multiple Traits — freely combinable, player-choosable, and assignable by staff.
+- **Quests and Traits** *(event)*: Introduces Quests as building blocks of the character sheet, each with multiple Traits - freely combinable, player-choosable, and assignable by staff.
 - **Ensemble** *(event)*: Provides a character learning page with multiple display modes (book, cards, compact list) to help players memorise other characters before the event.
 
 ---
@@ -69,7 +69,7 @@ Features are organized by module. Each feature can be enabled or disabled indepe
 - **Manage Tickets** *(event)*: Define ticket types with pricing, availability, open/close dates, and descriptions.
 - **Waiting List** *(event)*: Activates waiting-list style tickets, available only when all main tickets are sold out.
 - **Lottery** *(event)*: Enables lottery tickets with unlimited availability and no cost, from which a random subset is converted into normal tickets.
-- **Filler** *(event)*: Enables Filler characters — simpler character sheets assigned to participants ready to replace last-minute dropouts of main characters.
+- **Filler** *(event)*: Enables Filler characters - simpler character sheets assigned to participants ready to replace last-minute dropouts of main characters.
 - **Patron and Reduced** *(event)*: Adds Patron and Reduced ticket types. Each Patron ticket purchased makes one Reduced ticket available.
 - **New Player** *(event)*: Enables New Player tickets, reserved for users who have never participated in an event of the organization.
 - **Additional Tickets** *(event)*: Allows a user to reserve extra tickets in addition to their own (e.g., for family members).
@@ -86,14 +86,14 @@ Features are organized by module. Each feature can be enabled or disabled indepe
 - **Payments** *(org)*: Enables payment processing, specifying which payment methods to accept (Stripe, SumUp, PayPal, wire transfer, etc.).
 - **Registration Accounting** *(event)*: View and manage the financial status of each registration, including installments and outstanding balances.
 - **Fixed Instalments** *(event)*: Enables fixed installment deadlines for registration fees, allowing you to define multiple due dates and amounts.
-- **Dynamic Rates** *(event)*: Enables dynamic installment management — the total fee is evenly split into multiple installments, each due on a date determined by dividing the remaining days until the event.
+- **Dynamic Rates** *(event)*: Enables dynamic installment management - the total fee is evenly split into multiple installments, each due on a date determined by dividing the remaining days until the event.
 - **Surcharge** *(event)*: Enables surcharges added to every registration made after a specified date.
 - **Discount** *(event)*: Allows generating discount codes that participants can use to reduce their ticket price.
 - **Bring a Friend** *(event)*: Enables a bring-a-friend discount. A participant provides their unique code to a new registrant, granting both a discounted price.
 - **Pay What You Want** *(event)*: Allows participants to add an optional extra amount to their registration fee.
 - **Gift** *(event)*: Allows participants to purchase tickets as gifts. A special code is generated and provided to the gift recipient for registration.
-- **Tokens** *(org)*: Allows managing Tokens — virtual currency participants can use instead of money for registration fees.
-- **Credits** *(org)*: Allows managing Credits — virtual currency participants can use instead of money for registration fees. Credits can also be redeemed for cash.
+- **Tokens** *(org)*: Allows managing Tokens - virtual currency participants can use instead of money for registration fees.
+- **Credits** *(org)*: Allows managing Credits - virtual currency participants can use instead of money for registration fees. Credits can also be redeemed for cash.
 - **Donation** *(org)*: Adds a link on personal account pages, allowing users to donate money to the association freely.
 - **Collections** *(org)*: Allows participants to create and contribute to collections aimed at assisting another participant with event fees.
 - **Refunds** *(org)*: Enables participants to request a refund (a money transfer from the organization).
@@ -166,7 +166,7 @@ Features are organized by module. Each feature can be enabled or disabled indepe
 
 ### Communications
 
-- **Mail Settings** *(org)*: Configure emails sent by the system upon player actions — registration confirmation, payment confirmation, cancellation, reminders, etc.
+- **Mail Settings** *(org)*: Configure emails sent by the system upon player actions - registration confirmation, payment confirmation, cancellation, reminders, etc.
 - **External Mail Server** *(org)*: Allows configuring a custom external mail server (SMTP) instead of the default one.
 - **Promotion / Public API** *(org)*: Makes upcoming events visible to external sites through a public API.
 - **App Integration** *(org)*: Enables a button in the topbar to redirect authenticated users to an external application, using a configurable URL and optional JWT-based SSO.

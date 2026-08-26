@@ -333,6 +333,11 @@ from larpmanager.utils.publication.base import (
     publish_event_role,
     publish_registration,
 )
+from larpmanager.utils.registrations.signals import (
+    apply_registration_post_save_updates,
+    process_registration_event_change,
+    reset_registration_ticket,
+)
 from larpmanager.utils.services.association import (
     apply_skin_features_to_association,
     auto_assign_association_permission_number,
@@ -358,11 +363,6 @@ from larpmanager.utils.services.inventory import generate_base_inventories
 from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
 from larpmanager.utils.services.writing import replace_character_names_before_save
 from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
-from larpmanager.utils.users.registration import (
-    apply_registration_post_save_updates,
-    process_registration_event_change,
-    reset_registration_ticket,
-)
 
 log = logging.getLogger(__name__)
 

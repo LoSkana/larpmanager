@@ -40,8 +40,8 @@ from larpmanager.models.writing import Character, Faction, FactionType
 from larpmanager.utils.core.base import get_event_context
 from larpmanager.utils.core.common import get_element, get_event_elements
 from larpmanager.utils.core.exceptions import check_event_feature
+from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.event import get_event_filter_characters
-from larpmanager.utils.users.registration import registration_status
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet

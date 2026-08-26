@@ -30,7 +30,7 @@ import pytest
 
 from larpmanager.tests.unit.base import BaseTestCase
 from larpmanager.utils.core.exceptions import SignupError
-from larpmanager.utils.users.registration import check_signup
+from larpmanager.utils.registrations.characters import check_signup
 
 
 class TestCheckSignupStaffBypass(BaseTestCase):

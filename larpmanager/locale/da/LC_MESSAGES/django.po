@@ -8,6 +8,9 @@ msgstr "Gå"
 msgid "Hi"
 msgstr "Hej"
 
+msgid "No"
+msgstr "Nej"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "Moms"
 
 msgid "Who"
 msgstr "Hvem"
+
+msgid "Yes"
+msgstr "Ja"
 
 msgid "age"
 msgstr "alder"
@@ -640,6 +646,9 @@ msgstr "Land"
 msgid "Number"
 msgstr "Nummer"
 
+msgid "Online"
+msgstr "Online"
+
 msgid "Option"
 msgstr "Mulighed"
 
@@ -901,6 +910,9 @@ msgstr "Intet trin"
 msgid "Nothing"
 msgstr "Intet"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Valgmuligheder"
 
@@ -921,6 +933,9 @@ msgstr "Spiller:"
 
 msgid "Players"
 msgstr "Spillere"
+
+msgid "Present"
+msgstr "Til stede"
 
 msgid "Preview"
 msgstr "Forhåndsvisning"
@@ -1096,6 +1111,9 @@ msgstr "Karrusel"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Check-in"
 
 msgid "Claimant"
 msgstr "Ansøger"
@@ -2051,6 +2069,9 @@ msgstr "Skift gave"
 msgid "Characters:"
 msgstr "Karakterer:"
 
+msgid "Checked in:"
+msgstr "Checket ind:"
+
 msgid "Collections"
 msgstr "Indsamlinger"
 
@@ -2146,6 +2167,12 @@ msgstr "Ny session"
 
 msgid "Next events"
 msgstr "Næste events"
+
+msgid "Not scanned"
+msgstr "Ikke scannet"
+
+msgid "Outstanding"
+msgstr "Udestående"
 
 msgid "Participant"
 msgstr "Deltager"
@@ -2447,6 +2474,9 @@ msgstr "Krav"
 msgid "Rotate right"
 msgstr "Roter til højre"
 
+msgid "Scan QR code"
+msgstr "Scan QR-kode"
+
 msgid "Scroll right"
 msgstr "Rul til højre"
 
@@ -2686,6 +2716,9 @@ msgstr "Tidligere sessioner"
 
 msgid "Paste as text"
 msgstr "Indsæt som tekst"
+
+msgid "Pending sync:"
+msgstr "Afventer synkronisering:"
 
 msgid "Personal data"
 msgstr "Personlige oplysninger"
@@ -3533,6 +3566,9 @@ msgstr "Privat besked:"
 msgid "Promote to admin"
 msgstr "Gør til admin"
 
+msgid "QR Code Check-in"
+msgstr "QR-kode-check-in"
+
 msgid "Realized revenue"
 msgstr "Realiseret indtægt"
 
@@ -4327,6 +4363,9 @@ msgstr "Karusselbeskrivelse"
 
 msgid "Character Inventory:"
 msgstr "Karakterinventar:"
+
+msgid "Check-in QR code.png"
+msgstr "Check-in QR-kode.png"
 
 msgid "Close the collection"
 msgstr "Luk indsamlingen"
@@ -5992,6 +6031,9 @@ msgstr "Datoen, hvor dette event begynder"
 
 msgid "Total of recorded money inflows"
 msgstr "Samlet beløb for registrerede pengeindbetalinger"
+
+msgid "Unknown QR code for this event."
+msgstr "Ukendt QR-kode for dette event."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8013,6 +8055,9 @@ msgstr "Samlet deltagergebyr reduceret gennem rabatter"
 msgid "View all deadlines that must be met for this event"
 msgstr "Se alle deadlines, der skal overholdes for dette event"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr "Du kan nu scanne QR-koder for at checke deltagere ind"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Din konto er beskyttet af en godkendelsesapp."
 
@@ -8266,6 +8311,9 @@ msgstr "Mængdesporing er ikke aktiveret for denne organisation"
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Gennemse deltagernes svar på Matchmaker-spørgsmålene"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr "Scan deltagernes QR-koder på stedet for at markere dem som til stede"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Nogle funktioner kræver 'Karakter', som ikke er aktiv"
@@ -14226,6 +14274,14 @@ msgstr ""
 "blevet gemt. Kopiér den tekst, du vil beholde, og genindlæs derefter siden."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Genererer en unik QR-kode pr. tilmelding og lader personalet scanne den på "
+"stedet for at markere deltagere som til stede, fungerer offline med "
+"automatisk synkronisering"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14311,6 +14367,14 @@ msgid ""
 msgstr ""
 "Kør lodtrækningen for at udvælge deltagere tilfældigt blandt tilmeldinger på"
 " lotteriniveau og opgradere de valgte tilmeldinger til bekræftede billetter"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Scan deltagernes QR-koder på stedet for at markere dem som til stede. Virker"
+" offline: scanninger gemmes lokalt i kø og synkroniseres automatisk, når du "
+"er online igen."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "

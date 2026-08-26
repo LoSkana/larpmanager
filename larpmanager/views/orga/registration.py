@@ -87,11 +87,11 @@ from larpmanager.utils.core.common import (
     get_discount,
     get_element_event,
     get_event_class_parent,
-    get_registration,
     get_time_diff,
 )
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _orga_registrations_acc, download
+from larpmanager.utils.registrations.context import get_registration
 from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.views.orga.member import member_field_correct
 

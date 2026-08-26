@@ -825,3 +825,41 @@ body.floating_iframe .inner {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============ QR check-in ============ */
+#checkin_status {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  margin-bottom: 0.5em;
+}
+
+.checkin-online {
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.checkin-offline {
+  color: #c62828;
+  font-weight: bold;
+}
+
+#checkinChartContainer {
+  height: 250px;
+  max-width: 400px;
+}
+
+#checkin_scan_popup {
+  border: none;
+  border-radius: 0.5em;
+  padding: 1em;
+  max-width: 90vw;
+}
+
+#checkin_reader {
+  width: min(90vw, 400px);
+}
+
+.checkin-present {
+  text-align: center;
+}

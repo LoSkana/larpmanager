@@ -71,8 +71,8 @@ from larpmanager.utils.core.base import check_association_context, check_event_c
 from larpmanager.utils.core.common import format_datetime
 from larpmanager.utils.core.sticky import dismiss_sticky, get_sticky_messages
 from larpmanager.utils.edit.backend import set_suggestion
+from larpmanager.utils.registrations.status import registration_available
 from larpmanager.utils.services.association import get_activation_checklist
-from larpmanager.utils.users.registration import registration_available
 
 
 @login_required

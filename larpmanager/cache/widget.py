@@ -72,8 +72,8 @@ from larpmanager.utils.publication.ildb import (
     ILDB_RUN_CONFIG,
     ILDB_TEAM_CONFIG_KEY,
 )
+from larpmanager.utils.registrations.status import registration_available
 from larpmanager.utils.users.deadlines import check_run_deadlines
-from larpmanager.utils.users.registration import registration_available
 
 
 def _compute_registration_status_code(run: Run) -> tuple[str, Any]:

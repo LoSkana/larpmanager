@@ -432,6 +432,18 @@
     module: registration
 - model: larpmanager.eventpermission
   fields:
+    name: Check-in
+    descr: Scan participant QR codes on-site to mark them present
+    slug: orga_checkin
+    number: 131
+    config: null
+    active_if: null
+    hidden: false
+    icon: qrcode
+    feature: checkin
+    module: registration
+- model: larpmanager.eventpermission
+  fields:
     name: Sections
     descr: Manage the registration sections
     slug: orga_registration_sections

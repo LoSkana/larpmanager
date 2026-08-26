@@ -8,6 +8,9 @@ msgstr "Mene"
 msgid "Hi"
 msgstr "Hei"
 
+msgid "No"
+msgstr "Ei"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "ALV"
 
 msgid "Who"
 msgstr "Kuka"
+
+msgid "Yes"
+msgstr "Kyllä"
 
 msgid "age"
 msgstr "ikä"
@@ -640,6 +646,9 @@ msgstr "Kansa"
 msgid "Number"
 msgstr "Numero"
 
+msgid "Online"
+msgstr "Verkossa"
+
 msgid "Option"
 msgstr "Vaihtoehto"
 
@@ -901,6 +910,9 @@ msgstr "Ei askelta"
 msgid "Nothing"
 msgstr "Ei mitään"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Vaihtoehdot"
 
@@ -921,6 +933,9 @@ msgstr "Pelaaja:"
 
 msgid "Players"
 msgstr "Pelaajat"
+
+msgid "Present"
+msgstr "Paikalla"
 
 msgid "Preview"
 msgstr "Esikatselu"
@@ -1096,6 +1111,9 @@ msgstr "Karuselli"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Sisäänkirjautuminen"
 
 msgid "Claimant"
 msgstr "Hakija"
@@ -2051,6 +2069,9 @@ msgstr "Muuta lahja"
 msgid "Characters:"
 msgstr "Hahmot:"
 
+msgid "Checked in:"
+msgstr "Sisäänkirjautuneet:"
+
 msgid "Collections"
 msgstr "Keräykset"
 
@@ -2146,6 +2167,12 @@ msgstr "Uusi istunto"
 
 msgid "Next events"
 msgstr "Seuraavat tapahtumat"
+
+msgid "Not scanned"
+msgstr "Ei skannattu"
+
+msgid "Outstanding"
+msgstr "Puuttuu"
 
 msgid "Participant"
 msgstr "Osallistuja"
@@ -2447,6 +2474,9 @@ msgstr "Vaatimukset"
 msgid "Rotate right"
 msgstr "Pyöritä oikealle"
 
+msgid "Scan QR code"
+msgstr "Skannaa QR-koodi"
+
 msgid "Scroll right"
 msgstr "Vieritä oikealle"
 
@@ -2686,6 +2716,9 @@ msgstr "Aiemmat istunnot"
 
 msgid "Paste as text"
 msgstr "Liitä tekstinä"
+
+msgid "Pending sync:"
+msgstr "Odottaa synkronointia:"
 
 msgid "Personal data"
 msgstr "Henkilötiedot"
@@ -3533,6 +3566,9 @@ msgstr "Yksityisviesti:"
 msgid "Promote to admin"
 msgstr "Nosta järjestelmänvalvojaksi"
 
+msgid "QR Code Check-in"
+msgstr "QR-koodilla sisäänkirjautuminen"
+
 msgid "Realized revenue"
 msgstr "Toteutuneet tulot"
 
@@ -4327,6 +4363,9 @@ msgstr "Karusellin kuvaus"
 
 msgid "Character Inventory:"
 msgstr "Hahmon inventaario:"
+
+msgid "Check-in QR code.png"
+msgstr "Check-in QR-koodi.png"
 
 msgid "Close the collection"
 msgstr "Sulje keräys"
@@ -5992,6 +6031,9 @@ msgstr "Päivämäärä, jolloin tapahtuma alkaa"
 
 msgid "Total of recorded money inflows"
 msgstr "Kirjatut rahantulot yhteensä"
+
+msgid "Unknown QR code for this event."
+msgstr "Tuntematon QR-koodi tässä tapahtumassa."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8013,6 +8055,9 @@ msgstr "Osallistumismaksujen kokonaismäärä alennettu alennusten avulla"
 msgid "View all deadlines that must be met for this event"
 msgstr "Näytä kaikki tämän tapahtuman määräajat, jotka on noudatettava"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr "Voit nyt skannata QR-koodeja kirjauttaaksesi osallistujia sisään"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Tilisi on suojattu autentikointisovelluksella."
 
@@ -8272,6 +8317,11 @@ msgstr "Määränseuranta ei ole käytössä tässä organisaatiossa"
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Tarkista osallistujien vastaukset Matchmaker-kysymyksiin."
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr ""
+"Skannaa osallistujien QR-koodit paikan päällä merkitäksesi heidät paikalla "
+"oleviksi"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Jotkin ominaisuudet vaativat 'Hahmoa', joka ei ole aktiivinen"
@@ -14304,6 +14354,14 @@ msgstr ""
 "sivu uudelleen."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Luo yksilöllisen QR-koodin jokaiselle ilmoittautumiselle ja antaa "
+"henkilökunnan skannata sen paikan päällä osallistujien merkitsemiseksi "
+"paikalla oleviksi, myös offline-tilassa automaattisen synkronoinnin kanssa"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14392,6 +14450,14 @@ msgstr ""
 "Suorita arvonta valitaksesi satunnaisesti osallistujia arvontatasoisista "
 "ilmoittautumisista ja päivitä heidän ilmoittautumisensa vahvistetuiksi "
 "lipuiksi"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Skannaa osallistujien QR-koodit paikan päällä merkitäksesi heidät paikalla "
+"oleviksi. Toimii offline-tilassa: skannaukset tallennetaan paikallisesti "
+"jonoon ja synkronoidaan automaattisesti, kun olet taas verkossa."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "

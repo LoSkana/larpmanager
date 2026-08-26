@@ -366,6 +366,20 @@
     - character
 - model: larpmanager.feature
   fields:
+    name: QR Code Check-in
+    descr: Generates a unique QR code per registration and lets staff scan it on-site
+      to mark participants present, working offline with automatic sync
+    slug: checkin
+    overall: false
+    placeholder: false
+    order: 300
+    after_text: You can now scan QR codes to check-in participants
+    after_link: orga_checkin
+    hidden: false
+    module: registration
+    dependencies: []
+- model: larpmanager.feature
+  fields:
     name: Chat
     descr: Enables participants to send private messages to each other, without revealing
       personal email addresses
