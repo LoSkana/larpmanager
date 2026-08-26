@@ -1,8 +1,8 @@
 {% load show_tags i18n %}
 {% for guild in sheet_guilds %}
-    <h2 class="c">
+    <h1 class="c">
         <a href="{% url 'guild' run.get_slug guild.uuid %}" target="_blank">{{ guild.name }}</a>
-    </h2>
+    </h1>
     {% count_sheet_titles guild.fields guild.questions screen guild.text show_guild.text visibility_e_only=False teaser_content=guild.teaser show_teaser=show_guild.teaser as title_count %}
     {% for idx, question in guild.questions.items %}
         {% if question.typ == 'teaser' %}

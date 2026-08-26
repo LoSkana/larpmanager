@@ -240,7 +240,7 @@
   margin-left: 1em;
 }
 
-.sheet h2.c:not(.title) {
+.sheet h1.c {
   font-size: 180%;
   text-align: left;
   border-left: 4px solid rgba(var(--pri-rgb), 0.6);

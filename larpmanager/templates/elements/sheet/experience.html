@@ -1,6 +1,6 @@
 {% load show_tags i18n %}
 {% if features.experience and not exp_auto_buy %}
-    <h2>{% trans "Experience points" %}</h2>
+    <h1 class="c">{% trans "Experience points" %}</h1>
     {% if exp_systems_data %}
         {% for sys in exp_systems_data %}
             <div class="exp-summary">
@@ -23,7 +23,7 @@
         {% endfor %}
     {% endif %}
     {% if sheet_abilities %}
-        <h2>{% trans "Abilities" %}</h2>
+        <h2 class="c title">{% trans "Abilities" %}</h2>
         <table class="mob abilities">
             {% for typ, ls in sheet_abilities.items %}
                 <tr>
@@ -57,7 +57,7 @@
         </table>
     {% endif %}
     {% if character.exp_delivery_list.count %}
-        <h2>{% trans "Awards" %}</h2>
+        <h2 class="c title">{% trans "Awards" %}</h2>
         <div class="exp-stat-row">
             {% for el in character.exp_delivery_list.all %}
                 <div class="exp-stat">
