@@ -118,9 +118,21 @@
         "Content-Type": "application/x-www-form-urlencoded"
       },
       body: body.toString()
-    }).then(function (resp) { return resp.json(); })
-      .then(function (data) { onDone(data.res === "ok", data); })
-      .catch(function () { onDone(false, null); });
+    }).then(function (resp) {
+      return resp.json().then(function (data) { return { status: resp.status, data: data }; });
+    }).then(function (result) {
+      onDone(result.data.res === "ok", result.status, result.data);
+    }).catch(function () {
+      onDone(false, 0, null);
+    });
+  }
+
+  // A 400 response means the server rejected the scan itself (e.g. unknown
+  // uuid) - retrying it will never succeed, so drop it instead of requeuing.
+  // status 0 means the request never reached the server (offline/network
+  // error) - keep it queued for the next sync attempt.
+  function isPermanentFailure(status) {
+    return status >= 400 && status < 500;
   }
 
   function flushQueue() {
@@ -129,10 +141,10 @@
     var remaining = [];
     var pending = queue.length;
     queue.forEach(function (entry) {
-      postScan(entry.uuid, entry.scanned_at, function (ok, data) {
+      postScan(entry.uuid, entry.scanned_at, function (ok, status, data) {
         if (ok && data && data.row) {
           updateLocalRow(data.row.uuid, data.row.checked_in_at);
-        } else if (!ok) {
+        } else if (!ok && !isPermanentFailure(status)) {
           remaining.push(entry);
         }
         pending -= 1;
@@ -168,13 +180,15 @@
     updateLocalRow(uuid, row.checked_in_at || scannedAt);
     resultEl.textContent = "{% trans 'Checked in:' %} " + row.member;
 
-    postScan(uuid, scannedAt, function (ok, data) {
+    postScan(uuid, scannedAt, function (ok, status, data) {
       if (ok && data && data.row) {
         updateLocalRow(data.row.uuid, data.row.checked_in_at);
-      } else {
+      } else if (!isPermanentFailure(status)) {
         var queue = loadQueue();
         queue.push({ uuid: uuid, scanned_at: scannedAt });
         saveQueue(queue);
+      } else {
+        resultEl.textContent = "{% trans 'Scan rejected:' %} " + row.member;
       }
     });
   }

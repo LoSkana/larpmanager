@@ -3043,6 +3043,9 @@ msgstr "Požádat o registraci"
 msgid "Requests open:"
 msgstr "Otevřené požadavky:"
 
+msgid "Scan rejected:"
+msgstr "Skenování zamítnuto:"
+
 msgid "Sensitive data"
 msgstr "Citlivé údaje"
 

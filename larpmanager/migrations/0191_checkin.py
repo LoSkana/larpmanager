@@ -22,7 +22,6 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(default=django.utils.timezone.now, editable=False)),
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('checked_in_at', models.DateTimeField(blank=True, null=True)),
-                ('synced', models.BooleanField(default=True)),
                 ('checked_in_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='checkins_performed', to='larpmanager.member')),
                 ('registration', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='check_in', to='larpmanager.registration')),
             ],

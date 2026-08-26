@@ -24,6 +24,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import transaction
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
@@ -37,7 +38,9 @@ from larpmanager.utils.core.base import check_event_context
 
 def _resolve_registration(run_id: int, registration_uuid: str) -> Registration:
     """Return the registration for the run matching a scanned QR code's uuid."""
-    return Registration.objects.get(uuid=registration_uuid, run_id=run_id, cancellation_date__isnull=True)
+    return Registration.objects.get(
+        uuid=registration_uuid, run_id=run_id, cancellation_date__isnull=True, pending=False
+    )
 
 
 def _registration_row(registration: Registration) -> dict:
@@ -92,10 +95,11 @@ def orga_checkin_scan(request: HttpRequest, event_slug: str) -> JsonResponse:
 
     scanned_at = parse_datetime(request.POST.get("scanned_at", "")) or timezone.now()
 
-    check_in, _created = CheckIn.objects.get_or_create(registration=registration)
-    if not check_in.checked_in_at:
-        check_in.checked_in_at = scanned_at
-        check_in.checked_in_by = request.user.member
-        check_in.save()
+    with transaction.atomic():
+        check_in, _created = CheckIn.objects.select_for_update().get_or_create(registration=registration)
+        if not check_in.checked_in_at:
+            check_in.checked_in_at = scanned_at
+            check_in.checked_in_by = request.user.member
+            check_in.save()
 
     return JsonResponse({"res": "ok", "row": _registration_row(registration)})

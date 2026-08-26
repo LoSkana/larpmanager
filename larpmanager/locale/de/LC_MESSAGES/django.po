@@ -3043,6 +3043,9 @@ msgstr "Anmeldung anfordern"
 msgid "Requests open:"
 msgstr "Offene Anfragen:"
 
+msgid "Scan rejected:"
+msgstr "Scan abgelehnt:"
+
 msgid "Sensitive data"
 msgstr "Sensible Daten"
 

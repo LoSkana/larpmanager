@@ -3043,6 +3043,9 @@ msgstr "Solicitar registro"
 msgid "Requests open:"
 msgstr "Peticiones abiertas:"
 
+msgid "Scan rejected:"
+msgstr "Escaneo rechazado:"
+
 msgid "Sensitive data"
 msgstr "Datos sensibles"
 

@@ -3043,6 +3043,9 @@ msgstr "Aanmelding aanvragen"
 msgid "Requests open:"
 msgstr "Open verzoeken:"
 
+msgid "Scan rejected:"
+msgstr "Scan afgewezen:"
+
 msgid "Sensitive data"
 msgstr "Gevoelige gegevens"
 

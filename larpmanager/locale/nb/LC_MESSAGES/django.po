@@ -3043,6 +3043,9 @@ msgstr "Be om registrering"
 msgid "Requests open:"
 msgstr "Åpne forespørsler:"
 
+msgid "Scan rejected:"
+msgstr "Skanning avvist:"
+
 msgid "Sensitive data"
 msgstr "Følsomme data"
 

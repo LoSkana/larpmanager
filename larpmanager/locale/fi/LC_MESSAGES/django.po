@@ -3043,6 +3043,9 @@ msgstr "Pyydä ilmoittautumista"
 msgid "Requests open:"
 msgstr "Pyynnöt avoinna:"
 
+msgid "Scan rejected:"
+msgstr "Skannaus hylätty:"
+
 msgid "Sensitive data"
 msgstr "Arkaluonteiset tiedot"
 

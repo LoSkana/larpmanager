@@ -7895,6 +7895,9 @@ msgstr ""
 msgid "Counts"
 msgstr ""
 
+msgid "Dashboard"
+msgstr ""
+
 msgid "Campaign:"
 msgstr ""
 
@@ -9001,6 +9004,9 @@ msgid "Unknown QR code for this event."
 msgstr ""
 
 msgid "Checked in:"
+msgstr ""
+
+msgid "Scan rejected:"
 msgstr ""
 
 msgid "Character Inventories"
@@ -11684,9 +11690,6 @@ msgid ""
 "multiple-choice question."
 msgstr ""
 
-msgid "Options price"
-msgstr ""
-
 msgid "Name of the experience system"
 msgstr ""
 
@@ -11853,17 +11856,7 @@ msgstr ""
 msgid "Name of quest"
 msgstr ""
 
-#, python-format
-msgid "Membership application form for %(user)s"
-msgstr ""
-
-msgid "Lightweight"
-msgstr ""
-
-msgid "Portraits"
-msgstr ""
-
-msgid "Profiles"
+msgid "Options price"
 msgstr ""
 
 msgid "Failed to add character"
@@ -11879,6 +11872,19 @@ msgid "Failed to add profiles"
 msgstr ""
 
 msgid "Failed to add gallery"
+msgstr ""
+
+#, python-format
+msgid "Membership application form for %(user)s"
+msgstr ""
+
+msgid "Lightweight"
+msgstr ""
+
+msgid "Portraits"
+msgstr ""
+
+msgid "Profiles"
 msgstr ""
 
 msgid "Character Form"
@@ -11944,6 +11950,27 @@ msgid "Internal catering"
 msgstr ""
 
 msgid "External catering"
+msgstr ""
+
+msgid "Discounts only applicable with new registrations"
+msgstr ""
+
+msgid "Code already used"
+msgstr ""
+
+msgid "Non-cumulative code"
+msgstr ""
+
+msgid "This discount code has reached its limit."
+msgstr ""
+
+msgid "Discount not combinable with other benefits."
+msgstr ""
+
+msgid "You have used a friend code."
+msgstr ""
+
+msgid "Your friend code has been used"
 msgstr ""
 
 #, python-format
@@ -12712,9 +12739,6 @@ msgstr ""
 msgid "A new version of the platform is available"
 msgstr ""
 
-msgid "Dashboard"
-msgstr ""
-
 msgid "Invalid choice format"
 msgstr ""
 
@@ -13256,12 +13280,6 @@ msgstr ""
 msgid "Registration updated to %(event)s!"
 msgstr ""
 
-msgid "You have used a friend code."
-msgstr ""
-
-msgid "Your friend code has been used"
-msgstr ""
-
 msgid "This event has concluded"
 msgstr ""
 
@@ -13283,21 +13301,6 @@ msgstr ""
 msgid ""
 "The discount has been added! It has been reserved for you for 15 minutes, "
 "after which it will be removed"
-msgstr ""
-
-msgid "Discounts only applicable with new registrations"
-msgstr ""
-
-msgid "Code already used"
-msgstr ""
-
-msgid "Non-cumulative code"
-msgstr ""
-
-msgid "This discount code has reached its limit."
-msgstr ""
-
-msgid "Discount not combinable with other benefits."
 msgstr ""
 
 #, python-format

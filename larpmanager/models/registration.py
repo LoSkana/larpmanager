@@ -70,6 +70,21 @@ class TicketTier(models.TextChoices):
             TicketTier.SELLER: "Seller",
         }
 
+    @classmethod
+    def non_player_tiers(cls) -> frozenset:
+        """Return tiers that do not consume a max_pg player slot / are excluded from player counts."""
+        return frozenset(
+            {
+                cls.LOTTERY,
+                cls.WAITING,
+                cls.FILLER,
+                cls.STAFF,
+                cls.NPC,
+                cls.COLLABORATOR,
+                cls.SELLER,
+            }
+        )
+
 
 class RegistrationTicket(UuidMixin, OrderMixin, BaseModel):
     """Represents RegistrationTicket model."""
@@ -542,9 +557,6 @@ class CheckIn(BaseModel):
         null=True,
         blank=True,
     )
-
-    # True once the server has persisted a check-in scanned while offline
-    synced = models.BooleanField(default=True)
 
     def __str__(self) -> str:
         """Return string representation."""

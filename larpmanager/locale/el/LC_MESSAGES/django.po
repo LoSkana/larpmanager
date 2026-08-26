@@ -3043,6 +3043,9 @@ msgstr "Αίτημα εγγραφής"
 msgid "Requests open:"
 msgstr "Ανοιχτά αιτήματα:"
 
+msgid "Scan rejected:"
+msgstr "Η σάρωση απορρίφθηκε:"
+
 msgid "Sensitive data"
 msgstr "Ευαίσθητα δεδομένα"
 
