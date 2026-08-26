@@ -287,6 +287,7 @@ def test_faction_all(pw_page: Any) -> None:
       Player: User Test
         Presentation
         Alpha teaser
+        Alpha private text
 
         Primary Faction 1
         Presentation
@@ -332,8 +333,6 @@ def test_faction_all(pw_page: Any) -> None:
         Public Faction Question: SF1 public answer
         Private Faction Question
         SF1 private answer
-
-        Alpha private text
       """)
 
     # Go back to character list
