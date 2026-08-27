@@ -30,6 +30,7 @@ from django.utils.html import escape
 
 from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.question import get_cached_registration_questions, get_cached_writing_questions
+from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -37,8 +38,7 @@ from larpmanager.models.form import (
     WritingAnswer,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.models.writing import Writing
-from larpmanager.utils.core.common import get_event_class_parent
+from larpmanager.models.writing import Writing, get_event_class_parent
 
 if TYPE_CHECKING:
     from larpmanager.models.base import BaseModel
@@ -309,7 +309,6 @@ def _update_cache_text_fields_answer(
 def init_cache_registration_field(run_id: int, event_id: int) -> dict:
     """Initialize registration field cache for all registrations in a run."""
     cache_data = {}
-    from larpmanager.cache.registration import get_active_registrations  # noqa: PLC0415
 
     # Iterate through active (non-cancelled, non-pending) registrations for this run
     for registration in get_active_registrations(run_id):

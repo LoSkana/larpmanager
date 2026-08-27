@@ -36,8 +36,8 @@ from larpmanager.models.form import (
     WritingChoice,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship
-from larpmanager.utils.core.common import check_field, get_event_class_parent
+from larpmanager.models.writing import Character, Plot, PlotCharacterRel, Relationship, get_event_class_parent
+from larpmanager.utils.core.common import check_field
 from larpmanager.utils.edit.backend import _get_values_mapping
 from larpmanager.utils.io.download.columns import _get_reg_type_names
 

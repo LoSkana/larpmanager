@@ -35,8 +35,8 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
+from larpmanager.models.writing import get_event_class_parent
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.core.common import get_event_class_parent
 from larpmanager.utils.io.download import (
     _get_column_names,
     export_abilities,

@@ -25,7 +25,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_association_config
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.registration_lookup import get_registration_tickets
 from larpmanager.forms.base import BaseForm, BaseModelForm
 from larpmanager.forms.member import MEMBERSHIP_CHOICES
 from larpmanager.forms.utils import (
@@ -56,9 +56,8 @@ from larpmanager.models.miscellanea import (
 )
 from larpmanager.models.registration import TicketTier
 from larpmanager.models.utils import generate_id
-from larpmanager.models.writing import Faction, FactionType
-from larpmanager.utils.core.common import get_event_elements
-from larpmanager.utils.core.copy import get_copy_choices
+from larpmanager.models.writing import Faction, FactionType, get_event_elements
+from larpmanager.utils.core.copy_choices import get_copy_choices
 from larpmanager.utils.core.validators import FileTypeValidator
 
 PAY_CHOICES = (

@@ -34,9 +34,18 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.models.casting import Quest, QuestType, Trait
 from larpmanager.models.event import Event, Run
 from larpmanager.models.utils import strip_tags
-from larpmanager.models.writing import Character, Faction, Plot, Prologue, Relationship, SpeedLarp
+from larpmanager.models.writing import (
+    Character,
+    Faction,
+    Plot,
+    Prologue,
+    Relationship,
+    SpeedLarp,
+    get_event_class_parent,
+    get_event_elements,
+)
 from larpmanager.utils.core.clone_guard import is_clone_active
-from larpmanager.utils.core.common import _validate_and_fetch_objects, get_event_class_parent, get_event_elements
+from larpmanager.utils.core.common import _validate_and_fetch_objects
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 if TYPE_CHECKING:

@@ -30,7 +30,7 @@ from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.links import on_registration_post_save_reset_event_links
 from larpmanager.cache.question import get_cached_registration_questions
-from larpmanager.cache.registration import clear_registration_counts_cache
+from larpmanager.cache.registration_counts import clear_registration_counts_cache
 from larpmanager.cache.run import get_event_run_ids
 from larpmanager.models.form import (
     BaseQuestionType,
@@ -40,9 +40,8 @@ from larpmanager.models.form import (
     WritingChoice,
 )
 from larpmanager.models.registration import Registration, RegistrationTicket, TicketTier
-from larpmanager.models.writing import Character
+from larpmanager.models.writing import Character, get_event_elements
 from larpmanager.utils.core.clone_guard import is_clone_active
-from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.core.nav import invalidate_user_nav_entries
 from larpmanager.utils.publication.base import publish_registration
 

@@ -23,7 +23,7 @@ from typing import Any
 
 from larpmanager.cache.experience import clear_event_exp_systems_cache, get_event_exp_systems
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, Operation, SystemExp
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import get_event_class_parent, get_event_elements
 from larpmanager.utils.io.upload.constants import (
     _REL_CHARACTERS,
     _REL_FACTIONS,

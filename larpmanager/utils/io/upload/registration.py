@@ -21,19 +21,17 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import pandas as pd
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.question import get_cached_registration_questions
 from larpmanager.models.member import LogOperationType, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket
-from larpmanager.models.writing import Character
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import Character, get_event_elements
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.upload.constants import MAX_COMMA_VALUES, MAX_CSV_ROWS
 from larpmanager.utils.io.upload.csv_file import _get_file
-from larpmanager.utils.io.upload.parsing import _to_decimal, _to_int
+from larpmanager.utils.io.upload.parsing import _is_missing, _to_decimal, _to_int
 from larpmanager.utils.io.upload.writing import _assign_choice_answer, _get_questions
 
 if TYPE_CHECKING:
@@ -145,7 +143,7 @@ def _registration_field_load(
     if field_name == "email":
         return
 
-    if not field_value or pd.isna(field_value):
+    if _is_missing(field_value):
         return
 
     question_info = registration_questions.get(field_name)

@@ -34,10 +34,11 @@ from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.digest import my_send_digest_email
 from larpmanager.mail.templates import registration_options
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssociationTextType, get_association_url, hdr, hdr_run
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import NotificationType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.utils.core.headers import get_association_url, hdr, hdr_run
 from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
 from larpmanager.utils.registrations.context import get_checkin_qr_path
 

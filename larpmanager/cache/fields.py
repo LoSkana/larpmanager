@@ -28,7 +28,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     get_def_writing_types,
 )
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import get_event_elements
 
 
 def event_fields_key(event_id: int) -> str:

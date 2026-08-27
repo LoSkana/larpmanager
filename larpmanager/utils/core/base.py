@@ -43,6 +43,7 @@ from larpmanager.utils.auth.permission import (
     has_association_permission,
     has_event_permission,
 )
+from larpmanager.utils.core.dashboard import set_sidebar_badges
 from larpmanager.utils.core.exceptions import (
     FeatureError,
     MainPageError,
@@ -253,7 +254,9 @@ def check_association_context(request: HttpRequest, permission_slug: str | list[
     if config_slug and has_association_permission(request, context, "exe_config"):
         context["config"] = reverse("exe_config", args=[config_slug])
 
-    # Inject page_info from the corresponding form class if available
+    # Inject page_info from the corresponding form class if available.
+    # Deferred: edit.exe imports this module for check_association_context, so a
+    # module-level import here would be circular.
     if permission_slug and isinstance(permission_slug, str):
         from larpmanager.utils.edit.exe import ExeAction  # noqa: PLC0415
 
@@ -262,10 +265,6 @@ def check_association_context(request: HttpRequest, permission_slug: str | list[
             context["page_info"] = action.config["form"].page_info
 
     # Compute pending-work counts shown as badges on the sidebar links
-    # Lazy import: set_sidebar_badges transitively imports base, so a module-level
-    # import here would create a circular import
-    from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
-
     set_sidebar_badges(request, context)
 
     return context
@@ -326,7 +325,9 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
         # Mark active sidebar entry for redirect-style views
         context["sidebar_active"] = permission_slug
 
-        # Inject page_info from the corresponding form class if available
+        # Inject page_info from the corresponding form class if available.
+        # Deferred: edit.orga imports this module for check_event_context, so a
+        # module-level import here would be circular.
         from larpmanager.utils.edit.orga import OrgaAction  # noqa: PLC0415
 
         action = OrgaAction.from_string(permission_slug)
@@ -341,8 +342,6 @@ def check_event_context(request: HttpRequest, event_slug: str, permission_slug: 
     context["manage"] = 1
 
     # Compute pending-work counts shown as badges on the sidebar links
-    from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
-
     set_sidebar_badges(request, context)
 
     return context

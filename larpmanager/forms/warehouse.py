@@ -44,7 +44,7 @@ from larpmanager.models.miscellanea import (
     WarehouseMovement,
     WarehouseTag,
 )
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import get_event_elements
 from larpmanager.utils.services.miscellanea import warehouse_add_assignment, warehouse_available_quantity
 
 

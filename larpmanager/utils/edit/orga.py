@@ -119,12 +119,18 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
     _get_registration_mapping,
-    _get_writing_mapping,
 )
 from larpmanager.models.registration import Registration
-from larpmanager.models.writing import HandoutTemplate, PlotCharacterRel, PrologueType, TextVersion, TextVersionChoices
+from larpmanager.models.writing import (
+    HandoutTemplate,
+    PlotCharacterRel,
+    PrologueType,
+    TextVersion,
+    TextVersionChoices,
+    get_event_elements,
+)
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import compute_diff, get_element, get_event_elements
+from larpmanager.utils.core.common import compute_diff, get_element
 from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.edit.backend import (
     _element_display_name,
@@ -136,6 +142,7 @@ from larpmanager.utils.edit.backend import (
     set_suggestion,
 )
 from larpmanager.utils.edit.base import Action, prepare_change, render_frame_or_fallback
+from larpmanager.utils.edit.options_inline import check_writing_form_type, inline_options_config
 from larpmanager.utils.services.character import get_character_relationships, get_character_sheet
 
 
@@ -781,8 +788,6 @@ def _prepare_inline_options(
         option_model: Option model class (RegistrationOption or WritingOption)
         writing_type: Writing form type, when editing a writing question
     """
-    from larpmanager.utils.edit.options_inline import inline_options_config  # noqa: PLC0415
-
     context["inline_cfg"] = inline_options_config(context, permission)
     context["inline_writing_type"] = writing_type
 
@@ -851,37 +856,6 @@ def options_edit_handler(
     }
 
     return render(request, "elements/dashboard/form_frame.html", form_context)
-
-
-def check_writing_form_type(context: dict, form_type: str) -> None:
-    """Validate writing form type and update context with type information.
-
-    Args:
-        context: Context dictionary to update with type information
-        form_type: Writing form type to validate
-
-    Raises:
-        Http404: If the writing form type is not available
-
-    """
-    form_type = form_type.lower()
-    writing_type_mapping = _get_writing_mapping()
-
-    # Build available types from choices that have corresponding features
-    available_types = {
-        value: key for key, value in QuestionApplicable.choices if writing_type_mapping[value] in context["features"]
-    }
-
-    # Validate the requested type is available
-    if form_type not in available_types:
-        msg = f"unknown writing form type: {form_type}"
-        raise Http404(msg)
-
-    # Update context with type information
-    context["typ"] = form_type
-    context["writing_typ"] = available_types[form_type]
-    context["label_typ"] = form_type.capitalize()
-    context["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
 
 
 def _is_registration_gate_active(context: dict, gate: str) -> bool:

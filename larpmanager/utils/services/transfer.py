@@ -27,7 +27,7 @@ from django.db import transaction
 from larpmanager.cache.accounting import refresh_member_accounting_cache
 from larpmanager.cache.basic import get_run_association_id, get_run_event_id
 from larpmanager.cache.question import get_cached_registration_questions
-from larpmanager.cache.registration import get_registration_tickets
+from larpmanager.cache.registration_lookup import get_registration_tickets
 from larpmanager.models.accounting import (
     AccountingItemOther,
     AccountingItemPayment,
@@ -47,7 +47,7 @@ from larpmanager.models.registration import (
     RegistrationCharacterRel,
     RegistrationTicket,
 )
-from larpmanager.utils.core.common import get_event_class_parent
+from larpmanager.models.writing import get_event_class_parent
 
 if TYPE_CHECKING:
     from larpmanager.models.event import Run

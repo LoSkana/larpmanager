@@ -27,7 +27,7 @@ the option list can be edited in place inside the question edit page.
 from typing import Any
 
 from django.forms.models import model_to_dict
-from django.http import HttpRequest, JsonResponse
+from django.http import Http404, HttpRequest, JsonResponse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.forms.character import OrgaWritingOptionForm
@@ -39,11 +39,45 @@ from larpmanager.models.form import (
     RegistrationQuestion,
     WritingOption,
     WritingQuestion,
+    _get_writing_mapping,
 )
 from larpmanager.models.member import LogOperationType
+from larpmanager.models.registration import RegistrationTicket
+from larpmanager.models.writing import get_event_elements
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element, get_event_elements
+from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
+
+
+def check_writing_form_type(context: dict, form_type: str) -> None:
+    """Validate writing form type and update context with type information.
+
+    Args:
+        context: Context dictionary to update with type information
+        form_type: Writing form type to validate
+
+    Raises:
+        Http404: If the writing form type is not available
+
+    """
+    form_type = form_type.lower()
+    writing_type_mapping = _get_writing_mapping()
+
+    # Build available types from choices that have corresponding features
+    available_types = {
+        value: key for key, value in QuestionApplicable.choices if writing_type_mapping[value] in context["features"]
+    }
+
+    # Validate the requested type is available
+    if form_type not in available_types:
+        msg = f"unknown writing form type: {form_type}"
+        raise Http404(msg)
+
+    # Update context with type information
+    context["typ"] = form_type
+    context["writing_typ"] = available_types[form_type]
+    context["label_typ"] = form_type.capitalize()
+    context["available_typ"] = {key.capitalize(): value for key, value in available_types.items()}
 
 
 def _allows_default(context: dict) -> bool:
@@ -95,8 +129,6 @@ def inline_options_config(context: dict, permission: str) -> dict[str, Any]:
                 .order_by("question__order", "order")
             )
         if cfg["show_tickets"]:
-            from larpmanager.models.registration import RegistrationTicket  # noqa: PLC0415
-
             cfg["tickets_choices"] = get_event_elements(
                 context["event"].id, RegistrationTicket, context=context
             ).order_by("order")
@@ -185,8 +217,6 @@ def options_inline_save(
 
     if writing_type:
         # Local import to avoid a circular dependency with utils.edit.orga
-        from larpmanager.utils.edit.orga import check_writing_form_type  # noqa: PLC0415
-
         check_writing_form_type(context, writing_type)
 
     # Resolve instance and parent question
@@ -239,8 +269,6 @@ def options_inline_reorder(
         return JsonResponse({"success": False}, status=405)
 
     if writing_type:
-        from larpmanager.utils.edit.orga import check_writing_form_type  # noqa: PLC0415
-
         check_writing_form_type(context, writing_type)
 
     _question_model, option_model, _form_class = _inline_models(permission)
@@ -277,8 +305,6 @@ def options_inline_delete(
         return JsonResponse({"success": False}, status=405)
 
     if writing_type:
-        from larpmanager.utils.edit.orga import check_writing_form_type  # noqa: PLC0415
-
         check_writing_form_type(context, writing_type)
 
     _question_model, option_model, _form_class = _inline_models(permission)

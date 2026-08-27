@@ -28,7 +28,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.basic import get_run_event_id
 from larpmanager.cache.feature import get_event_features
-from larpmanager.cache.registration import get_active_registrations, get_registration_tickets
+from larpmanager.cache.registration_lookup import get_active_registrations, get_registration_tickets
 from larpmanager.models.accounting import (
     AccountingItemPayment,
     PaymentChoices,

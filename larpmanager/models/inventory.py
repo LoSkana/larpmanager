@@ -24,8 +24,7 @@ from django.db.models import QuerySet
 from larpmanager.models.base import BaseModel, UuidMixin
 from larpmanager.models.event import BaseConceptModel
 from larpmanager.models.member import Member
-from larpmanager.models.writing import Character
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import Character, get_event_elements
 
 
 class InventoryType(UuidMixin, BaseConceptModel):

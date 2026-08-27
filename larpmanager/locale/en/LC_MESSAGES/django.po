@@ -11520,6 +11520,15 @@ msgstr ""
 msgid "Address blocked after a bounce or a complaint"
 msgstr ""
 
+msgid "No value has been selected for parent."
+msgstr ""
+
+msgid "Can't copy from same event"
+msgstr ""
+
+msgid "Copy done"
+msgstr ""
+
 msgid "Registration Tickets"
 msgstr ""
 
@@ -11544,13 +11553,198 @@ msgstr ""
 msgid "Handout and templates"
 msgstr ""
 
-msgid "No value has been selected for parent."
+msgid "Define roles to grant organization management access"
 msgstr ""
 
-msgid "Can't copy from same event"
+msgid "Customize organization pages appearance"
 msgstr ""
 
-msgid "Copy done"
+msgid "Activate new platform features"
+msgstr ""
+
+msgid "Configure organization feature settings"
+msgstr ""
+
+#, python-format
+msgid "Mark as completed: <b>%(list)s</b>."
+msgstr ""
+
+#, python-format
+msgid "<b>%(number)s</b> expenses to approve"
+msgstr ""
+
+msgid "payments"
+msgstr ""
+
+msgid "donations"
+msgstr ""
+
+msgid "collections"
+msgstr ""
+
+msgid "membership fees"
+msgstr ""
+
+#, python-format
+msgid "<b>%(number)s</b> %(label)s to approve"
+msgstr ""
+
+#, python-format
+msgid "<b>%(number)s</b> refunds to deliver"
+msgstr ""
+
+#, python-format
+msgid "<b>%(number)s</b> members to approve"
+msgstr ""
+
+msgid "Set up payment methods for participants"
+msgstr ""
+
+msgid "Define the data collected in the user profile form"
+msgstr ""
+
+msgid "Select and activate key features"
+msgstr ""
+
+#, python-format
+msgid "Publish to ILDB: <b>%(list)s</b>."
+msgstr ""
+
+msgid "Generate a new ILDB token"
+msgstr ""
+
+msgid "Set up the membership request text"
+msgstr ""
+
+msgid "Set up the membership configuration"
+msgstr ""
+
+msgid "Set up the voting configuration"
+msgstr ""
+
+#, python-format
+msgid "<b>%(number)s</b> questions to answer"
+msgstr ""
+
+msgid "Set up payment methods"
+msgstr ""
+
+msgid "Configure the association infrastructure fee"
+msgstr ""
+
+msgid "Set up the taxes configuration"
+msgstr ""
+
+msgid "Create the first character of the event"
+msgstr ""
+
+msgid "Some features require 'Character', which is not active"
+msgstr ""
+
+msgid "Some features require 'Credits', which is not active"
+msgstr ""
+
+#, python-format
+msgid "<b>%(number)s</b> characters to approve"
+msgstr ""
+
+#, python-format
+msgid "<b>%(number)s</b> signup requests to approve"
+msgstr ""
+
+#, python-format
+msgid "Registration questions without options: %(list)s"
+msgstr ""
+
+#, python-format
+msgid "Writing fields without options: %(list)s"
+msgstr ""
+
+msgid "Set casting options in the configuration"
+msgstr ""
+
+msgid "Set up quest types"
+msgstr ""
+
+#, python-format
+msgid "Quest types without quests: %(list)s"
+msgstr ""
+
+#, python-format
+msgid "Quests without traits: %(list)s"
+msgstr ""
+
+msgid "Set the experience points configuration"
+msgstr ""
+
+msgid "Set up ability types"
+msgstr ""
+
+#, python-format
+msgid "Ability types without abilities: %(list)s"
+msgstr ""
+
+msgid "Set up award for experience points"
+msgstr ""
+
+msgid "Fixed and dynamic installments cannot be used together; deactivate one"
+msgstr ""
+
+msgid "Set up dynamic installments"
+msgstr ""
+
+msgid "Set up fixed installments"
+msgstr ""
+
+#, python-format
+msgid ""
+"Some installments have both date and days set (mutually exclusive): %(list)s"
+msgstr ""
+
+#, python-format
+msgid "Some tickets are missing a final installment (0 amount): %(list)s"
+msgstr ""
+
+msgid "Set up Patron and Reduced ticket configuration"
+msgstr ""
+
+msgid "Set the organization payment currency"
+msgstr ""
+
+msgid "Set the registration opening date"
+msgstr ""
+
+msgid "Set the registration secret link"
+msgstr ""
+
+msgid "Set the registration external link"
+msgstr ""
+
+msgid "Set up character customization configuration"
+msgstr ""
+
+msgid "Set up registration tickets"
+msgstr ""
+
+msgid "Define the registration form"
+msgstr ""
+
+msgid "Define roles to grant event management access"
+msgstr ""
+
+msgid "Customize event pages appearance"
+msgstr ""
+
+msgid "Activate new event features"
+msgstr ""
+
+msgid "Configure event feature settings"
+msgstr ""
+
+msgid "No events are present, create one"
+msgstr ""
+
+msgid "A new version of the platform is available"
 msgstr ""
 
 msgid "Your registration"
@@ -11952,6 +12146,80 @@ msgstr ""
 msgid "External catering"
 msgstr ""
 
+#, python-format
+msgid " Hurry: only %(num)d tickets available."
+msgstr ""
+
+msgid "Your character is"
+msgstr ""
+
+msgid "Your characters are"
+msgstr ""
+
+msgid "Access your character sheet"
+msgstr ""
+
+msgid "Edit your character's details"
+msgstr ""
+
+msgid "Buy abilities for your character"
+msgstr ""
+
+msgid "Customize"
+msgstr ""
+
+msgid "Modify the character details to make it yours"
+msgstr ""
+
+msgid "Fill in your character's relationships"
+msgstr ""
+
+msgid "Write your questions about the character directly to the authors here."
+msgstr ""
+
+msgid "Create another character"
+msgstr ""
+
+msgid "Create another character!"
+msgstr ""
+
+msgid "Create your character"
+msgstr ""
+
+msgid "Create the character you will play in this event!"
+msgstr ""
+
+msgid "Create your character!"
+msgstr ""
+
+msgid "Choose your character"
+msgstr ""
+
+msgid "Choose the character you will play in this event!"
+msgstr ""
+
+msgid "Choose your character!"
+msgstr ""
+
+msgid "Change your character"
+msgstr ""
+
+msgid "Change your character!"
+msgstr ""
+
+#, python-format
+msgid "Confirm your character %(name)s is ready to propose to the staff!"
+msgstr ""
+
+msgid "Confirm your character!"
+msgstr ""
+
+msgid "Select your preferences"
+msgstr ""
+
+msgid "Select your casting preferences!"
+msgstr ""
+
 msgid "Discounts only applicable with new registrations"
 msgstr ""
 
@@ -11971,10 +12239,6 @@ msgid "You have used a friend code."
 msgstr ""
 
 msgid "Your friend code has been used"
-msgstr ""
-
-#, python-format
-msgid " Hurry: only %(num)d tickets available."
 msgstr ""
 
 msgid "Pay membership fee"
@@ -12133,76 +12397,6 @@ msgstr ""
 msgid ""
 "Pre-registrations are open: pre-register to be notified when registrations "
 "open!"
-msgstr ""
-
-msgid "Your character is"
-msgstr ""
-
-msgid "Your characters are"
-msgstr ""
-
-msgid "Access your character sheet"
-msgstr ""
-
-msgid "Edit your character's details"
-msgstr ""
-
-msgid "Buy abilities for your character"
-msgstr ""
-
-msgid "Customize"
-msgstr ""
-
-msgid "Modify the character details to make it yours"
-msgstr ""
-
-msgid "Fill in your character's relationships"
-msgstr ""
-
-msgid "Write your questions about the character directly to the authors here."
-msgstr ""
-
-msgid "Create another character"
-msgstr ""
-
-msgid "Create another character!"
-msgstr ""
-
-msgid "Create your character"
-msgstr ""
-
-msgid "Create the character you will play in this event!"
-msgstr ""
-
-msgid "Create your character!"
-msgstr ""
-
-msgid "Choose your character"
-msgstr ""
-
-msgid "Choose the character you will play in this event!"
-msgstr ""
-
-msgid "Choose your character!"
-msgstr ""
-
-msgid "Change your character"
-msgstr ""
-
-msgid "Change your character!"
-msgstr ""
-
-#, python-format
-msgid "Confirm your character %(name)s is ready to propose to the staff!"
-msgstr ""
-
-msgid "Confirm your character!"
-msgstr ""
-
-msgid "Select your preferences"
-msgstr ""
-
-msgid "Select your casting preferences!"
 msgstr ""
 
 msgid ""
@@ -12541,202 +12735,8 @@ msgstr ""
 msgid "Mail added to queue!"
 msgstr ""
 
-msgid "Define roles to grant organization management access"
-msgstr ""
-
-msgid "Customize organization pages appearance"
-msgstr ""
-
-msgid "Activate new platform features"
-msgstr ""
-
-msgid "Configure organization feature settings"
-msgstr ""
-
-#, python-format
-msgid "Mark as completed: <b>%(list)s</b>."
-msgstr ""
-
-#, python-format
-msgid "<b>%(number)s</b> expenses to approve"
-msgstr ""
-
-msgid "payments"
-msgstr ""
-
-msgid "donations"
-msgstr ""
-
-msgid "collections"
-msgstr ""
-
-msgid "membership fees"
-msgstr ""
-
-#, python-format
-msgid "<b>%(number)s</b> %(label)s to approve"
-msgstr ""
-
-#, python-format
-msgid "<b>%(number)s</b> refunds to deliver"
-msgstr ""
-
-#, python-format
-msgid "<b>%(number)s</b> members to approve"
-msgstr ""
-
-msgid "Set up payment methods for participants"
-msgstr ""
-
-msgid "Define the data collected in the user profile form"
-msgstr ""
-
-msgid "Select and activate key features"
-msgstr ""
-
-#, python-format
-msgid "Publish to ILDB: <b>%(list)s</b>."
-msgstr ""
-
-msgid "Generate a new ILDB token"
-msgstr ""
-
-msgid "Set up the membership request text"
-msgstr ""
-
-msgid "Set up the membership configuration"
-msgstr ""
-
-msgid "Set up the voting configuration"
-msgstr ""
-
-#, python-format
-msgid "<b>%(number)s</b> questions to answer"
-msgstr ""
-
-msgid "Set up payment methods"
-msgstr ""
-
-msgid "Configure the association infrastructure fee"
-msgstr ""
-
-msgid "Set up the taxes configuration"
-msgstr ""
-
 msgid ""
 "Last step, please complete the event setup by adding the start and end dates"
-msgstr ""
-
-msgid "Create the first character of the event"
-msgstr ""
-
-msgid "Some features require 'Character', which is not active"
-msgstr ""
-
-msgid "Some features require 'Credits', which is not active"
-msgstr ""
-
-#, python-format
-msgid "<b>%(number)s</b> characters to approve"
-msgstr ""
-
-#, python-format
-msgid "<b>%(number)s</b> signup requests to approve"
-msgstr ""
-
-#, python-format
-msgid "Registration questions without options: %(list)s"
-msgstr ""
-
-#, python-format
-msgid "Writing fields without options: %(list)s"
-msgstr ""
-
-msgid "Set casting options in the configuration"
-msgstr ""
-
-msgid "Set up quest types"
-msgstr ""
-
-#, python-format
-msgid "Quest types without quests: %(list)s"
-msgstr ""
-
-#, python-format
-msgid "Quests without traits: %(list)s"
-msgstr ""
-
-msgid "Set the experience points configuration"
-msgstr ""
-
-msgid "Set up ability types"
-msgstr ""
-
-#, python-format
-msgid "Ability types without abilities: %(list)s"
-msgstr ""
-
-msgid "Set up award for experience points"
-msgstr ""
-
-msgid "Fixed and dynamic installments cannot be used together; deactivate one"
-msgstr ""
-
-msgid "Set up dynamic installments"
-msgstr ""
-
-msgid "Set up fixed installments"
-msgstr ""
-
-#, python-format
-msgid ""
-"Some installments have both date and days set (mutually exclusive): %(list)s"
-msgstr ""
-
-#, python-format
-msgid "Some tickets are missing a final installment (0 amount): %(list)s"
-msgstr ""
-
-msgid "Set up Patron and Reduced ticket configuration"
-msgstr ""
-
-msgid "Set the organization payment currency"
-msgstr ""
-
-msgid "Set the registration opening date"
-msgstr ""
-
-msgid "Set the registration secret link"
-msgstr ""
-
-msgid "Set the registration external link"
-msgstr ""
-
-msgid "Set up character customization configuration"
-msgstr ""
-
-msgid "Set up registration tickets"
-msgstr ""
-
-msgid "Define the registration form"
-msgstr ""
-
-msgid "Define roles to grant event management access"
-msgstr ""
-
-msgid "Customize event pages appearance"
-msgstr ""
-
-msgid "Activate new event features"
-msgstr ""
-
-msgid "Configure event feature settings"
-msgstr ""
-
-msgid "No events are present, create one"
-msgstr ""
-
-msgid "A new version of the platform is available"
 msgstr ""
 
 msgid "Invalid choice format"

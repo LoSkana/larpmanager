@@ -81,7 +81,7 @@ from larpmanager.models.form import (
 )
 from larpmanager.models.utils import generate_id
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.core.copy import copy_class
+from larpmanager.utils.core.copy_class import copy_class
 from larpmanager.utils.publication.ildb import (
     PromotionAccommodation,
     PromotionAccommodationType,

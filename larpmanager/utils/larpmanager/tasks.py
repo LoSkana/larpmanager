@@ -43,11 +43,12 @@ from larpmanager.cache.text_fields import remove_html_tags
 from larpmanager.mail.factory import EmailConnectionFactory
 from larpmanager.mail.suppression import get_suppressed_emails, is_suppressed, unsuppress_email
 from larpmanager.models.access import AssociationRole
-from larpmanager.models.association import Association, AssociationTextType, get_url
+from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.event import Event, Run
 from larpmanager.models.larpmanager import LarpManagerNewsletter, NewsletterStatus
 from larpmanager.models.member import Member, Membership, MembershipStatus, NewsletterChoices
 from larpmanager.models.miscellanea import EmailContent, EmailRecipient
+from larpmanager.utils.core.headers import get_url
 from larpmanager.utils.services.miscellanea import _newsletter_set_non_active
 
 if TYPE_CHECKING:

@@ -23,8 +23,7 @@ from typing import Any
 
 from larpmanager.cache.experience import has_multiple_exp_systems
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
-from larpmanager.models.writing import Character, CharacterConfig
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import Character, CharacterConfig, get_event_class_parent, get_event_elements
 
 
 def _add_system_header(context: Any, column_headers: list[str]) -> bool:

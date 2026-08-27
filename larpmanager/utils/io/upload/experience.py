@@ -27,7 +27,7 @@ from django.db import transaction
 from larpmanager.models.experience import AbilityExp, AbilityTypeExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp
 from larpmanager.models.form import WritingQuestion
 from larpmanager.models.member import LogOperationType
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import get_event_class_parent, get_event_elements
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.upload.constants import _ABILITY_PLAIN_FIELDS, _RELATION_COLUMNS, MAX_CSV_ROWS
 from larpmanager.utils.io.upload.csv_file import _get_file
@@ -306,7 +306,7 @@ def _modifier_load(context: dict, csv_row: dict) -> str:
     logs = []
 
     for field_name, field_value in csv_row.items():
-        if not field_value or pd.isna(field_value) or field_name == "number":
+        if _skip_row_field(field_name, field_value, ("number",)):
             continue
 
         if field_name == "abilities":

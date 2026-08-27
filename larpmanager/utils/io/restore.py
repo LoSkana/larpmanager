@@ -43,8 +43,15 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.registration import Registration, RegistrationTicket
-from larpmanager.models.writing import Character, CharacterConfig, Plot, PlotCharacterRel, Relationship
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import (
+    Character,
+    CharacterConfig,
+    Plot,
+    PlotCharacterRel,
+    Relationship,
+    get_event_class_parent,
+    get_event_elements,
+)
 from larpmanager.utils.io.upload import (
     _get_row_number,
     abilities_load,

@@ -23,9 +23,9 @@ from django.contrib.auth.models import AnonymousUser
 from django.http import Http404, HttpRequest, HttpResponse
 
 from larpmanager.cache.association import get_cache_association
-from larpmanager.models.writing import Character, Handout
+from larpmanager.models.writing import Character, Handout, get_event_elements
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_event_elements, get_handout
+from larpmanager.utils.core.common import get_handout
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.io.pdf.sheets import (
     print_character,

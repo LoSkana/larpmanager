@@ -21,14 +21,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import pandas as pd
-
 from larpmanager.models.member import LogOperationType
 from larpmanager.models.registration import RegistrationTicket, TicketTier
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.upload.constants import MAX_CSV_ROWS
 from larpmanager.utils.io.upload.csv_file import _get_file
-from larpmanager.utils.io.upload.parsing import _get_row_name, _to_decimal, _to_int, invert_dict
+from larpmanager.utils.io.upload.parsing import _get_row_name, _skip_row_field, _to_decimal, _to_int, invert_dict
 
 if TYPE_CHECKING:
     from django.forms import Form
@@ -80,8 +78,8 @@ def _ticket_load(context: dict, csv_row: dict) -> str:
 
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        # Skip empty values, NaN values, and the name field (already processed)
-        if not field_value or pd.isna(field_value) or field_name in ["name"]:
+        # Skip empty/NaN values, and the name field (already processed)
+        if _skip_row_field(field_name, field_value, ("name",)):
             continue
 
         processed_value = field_value

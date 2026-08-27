@@ -454,20 +454,6 @@ def get_association_config(
     )
 
 
-def _get_event_parent_id(event_id: int, context: dict | None = None) -> int | None:
-    """Get parent_id for an event, using the shared event basic cache."""
-    from larpmanager.cache.basic import get_event_basic_cache  # noqa: PLC0415
-
-    return get_event_basic_cache(event_id, context=context)["parent_id"]
-
-
-def reset_event_parent_cache(event_id: int) -> None:
-    """Invalidate cached parent_id for an event."""
-    from larpmanager.cache.basic import reset_event_basic_cache  # noqa: PLC0415
-
-    reset_event_basic_cache(event_id)
-
-
 def get_event_config(
     event_id: int,
     config_name: str,
@@ -482,6 +468,8 @@ def get_event_config(
     if any(config_name.startswith(p) for p in EVENT_CONFIGS_OWN_CHILD):
         lookup_id = event_id
     else:
+        from larpmanager.cache.basic import _get_event_parent_id  # noqa: PLC0415
+
         parent_id = _get_event_parent_id(event_id, context)
         lookup_id = parent_id if parent_id else event_id
 

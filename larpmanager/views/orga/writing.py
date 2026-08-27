@@ -51,9 +51,11 @@ from larpmanager.models.writing import (
     SpeedLarp,
     TextVersion,
     TextVersionChoices,
+    get_event_class_parent,
+    get_event_elements,
 )
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements, get_handout
+from larpmanager.utils.core.common import get_handout
 from larpmanager.utils.edit.orga import (
     OrgaAction,
     orga_delete,

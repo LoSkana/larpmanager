@@ -62,19 +62,21 @@ from larpmanager.models.writing import (
     Prologue,
     Relationship,
     SpeedLarp,
+    get_event_class_parent,
+    get_event_elements,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element, get_event_class_parent, get_event_elements
+from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import _process_working_ticket
 from larpmanager.utils.edit.options_inline import (
+    check_writing_form_type,
     options_inline_delete,
     options_inline_reorder,
     options_inline_save,
 )
 from larpmanager.utils.edit.orga import (
     OrgaAction,
-    check_writing_form_type,
     form_edit_handler,
     options_edit_handler,
     orga_delete,

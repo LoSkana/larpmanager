@@ -25,8 +25,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.models.registration import Registration, RegistrationCharacterRel, TicketTier
-from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import (
+    Character,
+    CharacterConfig,
+    CharacterStatus,
+    get_event_class_parent,
+    get_event_elements,
+)
 from larpmanager.utils.core.exceptions import PendingApprovalError, SignupError, WaitingError
 
 if TYPE_CHECKING:

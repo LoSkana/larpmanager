@@ -30,7 +30,8 @@ from larpmanager.accounting.registration import get_date_surcharge
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
-from larpmanager.cache.registration import get_registration_counts, get_registration_tickets, get_ticket_form_text
+from larpmanager.cache.registration_counts import get_registration_counts
+from larpmanager.cache.registration_lookup import get_registration_tickets, get_ticket_form_text
 from larpmanager.forms.base import BaseForm, BaseModelForm, BaseRegistrationForm, get_question_key
 from larpmanager.forms.utils import (
     AllowedS2WidgetMulti,
@@ -65,8 +66,8 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import decimal_to_str
-from larpmanager.models.writing import Character, Faction
-from larpmanager.utils.core.common import get_event_elements, get_time_diff_today
+from larpmanager.models.writing import Character, Faction, get_event_elements
+from larpmanager.utils.core.common import get_time_diff_today
 from larpmanager.utils.registrations.signals import get_reduced_available_count
 
 if TYPE_CHECKING:

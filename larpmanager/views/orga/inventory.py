@@ -26,9 +26,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
 from larpmanager.models.inventory import Inventory, InventoryTransfer, InventoryType, PoolLabel, PoolType
+from larpmanager.models.writing import get_event_elements
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context, get_event_context
-from larpmanager.utils.core.common import get_element_event, get_event_elements
+from larpmanager.utils.core.common import get_element_event
 from larpmanager.utils.edit.orga import OrgaAction, orga_delete, orga_edit, orga_new
 from larpmanager.utils.services.inventory import perform_transfer
 

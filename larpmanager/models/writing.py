@@ -19,18 +19,20 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
+import inspect
 import re
 from typing import Any, ClassVar
 
 from colorfield.fields import ColorField
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.db.models.constraints import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFit
 from tinymce.models import HTMLField
 
+from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.cache.config import get_element_config, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.media import (
@@ -44,6 +46,49 @@ from larpmanager.models.base import BaseModel, MediaTokenMixin, OrderMixin, Uuid
 from larpmanager.models.event import BaseConceptModel, Event, ProgressStep, Run
 from larpmanager.models.member import Member
 from larpmanager.models.utils import UploadToPathAndRename, download, my_uuid, my_uuid_short, show_thumb
+
+
+def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str, *, context: dict | None = None) -> int:
+    """Get the event id to use for inheriting elements of a specific model class.
+
+    Determines whether to use the parent event's id or the current event's id
+    based on inheritance settings and model class type.
+    """
+    if inspect.isclass(model_class) and issubclass(model_class, BaseModel):
+        model_class = model_class.__name__.lower()
+
+    inheritable_elements = [
+        "character",
+        "faction",
+        "abilityexp",
+        "deliveryexp",
+        "abilitytypeexp",
+        "ruleexp",
+        "abilitytemplateexp",
+        "modifierexp",
+        "criterionexp",
+        "systemexp",
+        "systemexppooltypeci",
+        "writingquestion",
+        "writingoption",
+        "relationshiptag",
+    ]
+
+    if model_class in inheritable_elements:
+        parent_id = _get_event_parent_id(event_id, context)
+        if parent_id and not get_event_config(event_id, f"campaign_{model_class}_indep", context=context):
+            return parent_id
+
+    return event_id
+
+
+def get_event_elements(event_id: int, element_model_class: type[BaseModel], *, context: dict | None = None) -> QuerySet:
+    """Get ordered elements of specified type for the event, following inheritance rules."""
+    parent_id = get_event_class_parent(event_id, element_model_class, context=context)
+    queryset = element_model_class.objects.filter(event_id=parent_id)
+    if hasattr(element_model_class, "number"):
+        queryset = queryset.order_by("number")
+    return queryset
 
 
 class Writing(MediaTokenMixin, UuidMixin, OrderMixin, BaseConceptModel):
@@ -307,8 +352,6 @@ class Character(Writing):
         if "guild" not in get_event_features(event_id):
             return
 
-        from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
-
         guild_event = get_event_class_parent(event_id, "guild")
 
         # noinspection PyUnresolvedReferences
@@ -337,8 +380,6 @@ class Character(Writing):
             return
 
         # Determine which event to use for faction lookup
-        from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
-
         faction_event_id = get_event_class_parent(event_id, "faction")
 
         # Track if we find a primary faction
@@ -405,8 +446,6 @@ class Character(Writing):
         """
         queryset = PlotCharacterRel.objects.filter(character_id=self.pk).select_related("plot")
         if event_id:
-            from larpmanager.utils.core.common import get_event_class_parent  # noqa: PLC0415
-
             queryset = queryset.filter(plot__event=get_event_class_parent(event_id, "plot"))
         return queryset.order_by("order")
 
@@ -982,8 +1021,6 @@ def replace_character_names(instance: Any) -> None:
         return
 
     # Build character name to number mapping for replacement
-    from larpmanager.utils.core.common import get_event_elements  # noqa: PLC0415
-
     character_name_to_number_mapping = {}
     for character in get_event_elements(instance.event_id, Character):
         character_name_to_number_mapping[character.name] = character.number

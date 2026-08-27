@@ -27,8 +27,9 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache
 from larpmanager.mail.templates import get_payment_info
 from larpmanager.models.access import get_event_organizers_by_event
-from larpmanager.models.association import AssociationTextType, get_association_url, get_url, hdr_run
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.registration import Registration
+from larpmanager.utils.core.headers import get_association_url, get_url, hdr_run
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.deadlines import check_run_deadlines
 

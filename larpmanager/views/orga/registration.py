@@ -49,7 +49,7 @@ from larpmanager.accounting.registration import (
 from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.question import get_cached_registration_questions
-from larpmanager.cache.registration import get_active_registrations, get_registration_tickets
+from larpmanager.cache.registration_lookup import get_active_registrations, get_registration_tickets
 from larpmanager.cache.text_fields import get_cache_registration_field
 from larpmanager.forms.registration import (
     OrgaRegistrationForm,
@@ -78,19 +78,19 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.utils import get_option_form_text
-from larpmanager.models.writing import Character
+from larpmanager.models.writing import Character, get_event_class_parent
 from larpmanager.utils.auth.permission import has_event_permission
 from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import (
-    get_discount,
-    get_element_event,
-    get_event_class_parent,
-    get_time_diff,
-)
+from larpmanager.utils.core.common import get_discount, get_element_event, get_time_diff
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _orga_registrations_acc, download
 from larpmanager.utils.registrations.context import _get_registration_fields, get_pre_registration, get_registration
 from larpmanager.utils.registrations.features import _save_questbuilder, lottery_info
+from larpmanager.utils.registrations.questions import (
+    get_ordered_registration_questions,
+    get_registration_answers_by_question,
+    get_registration_choices_by_question,
+)
 from larpmanager.utils.security.confirm import confirm_post
 from larpmanager.views.orga.member import member_field_correct
 
@@ -1076,8 +1076,6 @@ def orga_registration_discount_del(
 @login_required
 def orga_registration_requests(request: HttpRequest, event_slug: str) -> HttpResponse:
     """Display pending signup requests, with their answers to the request questions."""
-    from larpmanager.views.orga.form import get_ordered_registration_questions  # noqa: PLC0415
-
     context = check_event_context(request, event_slug, "orga_registration_requests")
     context["list"] = list(
         Registration.objects.filter(run=context["run"], pending=True).order_by("-created").select_related("member")
@@ -1093,17 +1091,8 @@ def orga_registration_requests(request: HttpRequest, event_slug: str) -> HttpRes
     question_ids = [question.id for question in questions]
     registration_ids = [registration.id for registration in context["list"]]
 
-    answers_by_registration: dict[int, dict[int, str]] = {}
-    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids, registration_id__in=registration_ids):
-        answers_by_registration.setdefault(answer.registration_id, {})[answer.question_id] = answer.text
-
-    choices_by_registration: dict[int, dict[int, list[str]]] = {}
-    for choice in RegistrationChoice.objects.filter(
-        question_id__in=question_ids, registration_id__in=registration_ids
-    ).select_related("option"):
-        choices_by_registration.setdefault(choice.registration_id, {}).setdefault(choice.question_id, []).append(
-            choice.option.name
-        )
+    answers_by_registration = get_registration_answers_by_question(question_ids, registration_id__in=registration_ids)
+    choices_by_registration = get_registration_choices_by_question(question_ids, registration_id__in=registration_ids)
 
     for registration in context["list"]:
         cells = []

@@ -33,8 +33,8 @@ from larpmanager.mail.accounting import _receipt_attachment_path
 from larpmanager.mail.base import notify_organization_exe
 from larpmanager.mail.templates import get_help_email, get_password_reminder_email
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import get_url, hdr
 from larpmanager.models.member import Badge, Member, NotificationType
+from larpmanager.utils.core.headers import get_url, hdr
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.member import update_leaderboard
 

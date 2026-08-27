@@ -28,7 +28,8 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.cache.config import _get_event_parent_id, get_event_config
+from larpmanager.cache.basic import _get_event_parent_id
+from larpmanager.cache.config import get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import get_event_fields_cache, visible_writing_fields
 from larpmanager.cache.media import get_run_media_filepath
@@ -43,8 +44,7 @@ from larpmanager.models.form import (
     WritingChoice,
 )
 from larpmanager.models.registration import RegistrationCharacterRel
-from larpmanager.models.writing import Character, Faction, FactionType, Guild
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import Character, Faction, FactionType, Guild, get_event_elements
 from larpmanager.utils.registrations.signals import apply_registration_post_save_updates
 
 if TYPE_CHECKING:

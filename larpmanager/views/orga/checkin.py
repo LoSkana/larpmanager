@@ -31,7 +31,7 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 
 from larpmanager.accounting.registration import registration_payments_status
-from larpmanager.cache.registration import get_active_registrations
+from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.models.registration import CheckIn, Registration
 from larpmanager.utils.core.base import check_event_context
 

@@ -43,19 +43,12 @@ from larpmanager.models.access import (
     get_association_executives,
     get_event_organizers_by_event,
 )
-from larpmanager.models.association import (
-    Association,
-    get_association_maintainers,
-    get_association_url,
-    get_url,
-    hdr,
-    hdr_association,
-    hdr_run,
-)
+from larpmanager.models.association import Association, get_association_maintainers
 from larpmanager.models.casting import AssignmentTrait, Casting
 from larpmanager.models.event import EventTextType
 from larpmanager.models.member import Member
 from larpmanager.models.writing import Character, CharacterStatus
+from larpmanager.utils.core.headers import get_association_url, get_url, hdr, hdr_association, hdr_run
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.services.miscellanea import _newsletter_set_active
 

@@ -21,10 +21,14 @@ from __future__ import annotations
 
 import re
 from decimal import Decimal
+from typing import TYPE_CHECKING, Any
 
 import pandas as pd
 
 from larpmanager.utils.io.upload.constants import _HTML_TAG_RE, _RELATION_COLUMNS
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 
 def _normalize_numeric(value: str) -> str:
@@ -93,36 +97,32 @@ def _skip_row_field(field_name: str, field_value: object, handled: tuple[str, ..
     return field_name not in _RELATION_COLUMNS and _is_missing(field_value)
 
 
+def _get_row_field(
+    csv_row: dict, field_name: str, cast: Callable[[object], Any] = lambda value: value
+) -> tuple[Any | None, str | None]:
+    """Extract, validate and cast a required CSV column. Returns (value, error) tuple."""
+    if field_name not in csv_row:
+        return None, f"ERR - There is no {field_name} column"
+    raw_value = csv_row[field_name]
+    if _is_missing(raw_value):
+        return None, f"ERR - Empty {field_name}, row skipped"
+    try:
+        cast_value = cast(raw_value)
+    except (TypeError, ValueError):
+        return None, f"ERR - Invalid {field_name} value: {raw_value}"
+    if cast_value is None or (isinstance(cast_value, str) and not cast_value):
+        return None, f"ERR - Empty {field_name}, row skipped"
+    return cast_value, None
+
+
 def _get_row_name(csv_row: dict) -> tuple[str | None, str | None]:
     """Extract and validate name from a CSV row. Returns (name, error) tuple."""
-    if "name" not in csv_row:
-        return None, "ERR - There is no name column"
-    name = csv_row["name"]
-    try:
-        if pd.isna(name):
-            return None, "ERR - Empty name, row skipped"
-    except (TypeError, ValueError):
-        pass
-    stripped_name = str(name).strip()
-    if not stripped_name:
-        return None, "ERR - Empty name, row skipped"
-    return stripped_name, None
+    return _get_row_field(csv_row, "name", cast=lambda value: str(value).strip())
 
 
 def _get_row_number(csv_row: dict) -> tuple[int | None, str | None]:
     """Extract and validate number from a CSV row. Returns (number, error) tuple."""
-    if "number" not in csv_row:
-        return None, "ERR - There is no number column"
-    number = csv_row["number"]
-    try:
-        if pd.isna(number):
-            return None, "ERR - Empty number, row skipped"
-    except (TypeError, ValueError):
-        pass
-    try:
-        return int(number), None
-    except (TypeError, ValueError):
-        return None, f"ERR - Invalid number value: {number}"
+    return _get_row_field(csv_row, "number", cast=int)
 
 
 def invert_dict(dictionary: dict[str, str]) -> dict[str, str]:

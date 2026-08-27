@@ -56,7 +56,7 @@ from larpmanager.models.accounting import (
     AccountingItemDiscount,
     Discount,
 )
-from larpmanager.models.association import AssociationTextType, get_url, hdr
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import (
     DevelopStatus,
     Event,
@@ -78,8 +78,10 @@ from larpmanager.utils.core.exceptions import (
     RewokedMembershipError,
     check_event_feature,
 )
+from larpmanager.utils.core.headers import get_url, hdr
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.larpmanager.tasks import my_send_mail
+from larpmanager.utils.registrations.casting_status import casting_preferences_pending
 from larpmanager.utils.registrations.context import (
     _register_prepare,
     get_registration_gift,
@@ -87,7 +89,7 @@ from larpmanager.utils.registrations.context import (
 from larpmanager.utils.registrations.discount import _check_discount
 from larpmanager.utils.registrations.save import save_registration
 from larpmanager.utils.registrations.signals import get_reduced_available_count
-from larpmanager.utils.registrations.status import _set_membership_context, casting_preferences_pending
+from larpmanager.utils.registrations.status import _set_membership_context
 
 logger = logging.getLogger(__name__)
 

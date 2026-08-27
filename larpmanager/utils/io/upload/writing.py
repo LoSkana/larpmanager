@@ -35,8 +35,16 @@ from larpmanager.models.form import (
     WritingQuestionType,
 )
 from larpmanager.models.member import LogOperationType, Member
-from larpmanager.models.writing import Character, CharacterStatus, Faction, Plot, PlotCharacterRel, Relationship
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import (
+    Character,
+    CharacterStatus,
+    Faction,
+    Plot,
+    PlotCharacterRel,
+    Relationship,
+    get_event_class_parent,
+    get_event_elements,
+)
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.upload.constants import MAX_COMMA_VALUES, MAX_CSV_ROWS
 from larpmanager.utils.io.upload.csv_file import _get_file

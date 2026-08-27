@@ -140,6 +140,16 @@ def reset_event_basic_cache(event_id: int) -> None:
     cache.delete(event_basic_cache_key(event_id))
 
 
+def _get_event_parent_id(event_id: int, context: dict | None = None) -> int | None:
+    """Get parent_id for an event, using the shared event basic cache."""
+    return get_event_basic_cache(event_id, context=context)["parent_id"]
+
+
+def reset_event_parent_cache(event_id: int) -> None:
+    """Invalidate cached parent_id for an event."""
+    reset_event_basic_cache(event_id)
+
+
 def run_basic_cache_key(run_id: int) -> str:
     """Generate cache key for a run's basic info."""
     return f"run_basic_{run_id}"

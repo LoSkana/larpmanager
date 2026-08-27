@@ -27,7 +27,7 @@ from django.contrib.postgres.aggregates import ArrayAgg
 from django.core.cache import cache
 from django.db.models import F, Prefetch
 
-from larpmanager.cache.config import _get_event_parent_id
+from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.models.form import (
     QuestionApplicable,
     QuestionStatus,
@@ -39,7 +39,7 @@ from larpmanager.models.form import (
     get_def_writing_types,
 )
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import get_event_elements
 
 if TYPE_CHECKING:
     from collections.abc import Iterable

@@ -133,11 +133,9 @@ from larpmanager.cache.permission import (
     clear_index_permission_cache,
 )
 from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
-from larpmanager.cache.registration import (
-    clear_registration_counts_cache,
-    clear_registration_tickets_cache,
-    on_character_update_registration_cache,
-)
+from larpmanager.cache.registration import character_registration_updated, on_character_update_registration_cache
+from larpmanager.cache.registration_counts import clear_registration_counts_cache
+from larpmanager.cache.registration_lookup import clear_registration_tickets_cache
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
     collect_relationship_tag_characters,
@@ -1383,6 +1381,12 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 
     # Process ticket options, accounting, and caches shared with other registration-save paths
     apply_registration_post_save_updates(instance)
+
+
+@receiver(character_registration_updated)
+def on_character_registration_updated(sender: type, registration: Registration, **kwargs: Any) -> None:
+    """Apply registration post-save updates triggered by a related character change."""
+    apply_registration_post_save_updates(registration)
 
 
 @receiver(pre_softdelete, sender=Registration)

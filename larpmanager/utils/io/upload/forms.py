@@ -21,8 +21,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import pandas as pd
-
 from larpmanager.models.form import (
     BaseQuestionType,
     QuestionApplicable,
@@ -35,7 +33,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import get_event_class_parent, get_event_elements
 from larpmanager.utils.io.upload.constants import MAX_CSV_ROWS
 from larpmanager.utils.io.upload.csv_file import _get_file
 from larpmanager.utils.io.upload.features import (
@@ -44,7 +42,13 @@ from larpmanager.utils.io.upload.features import (
     activate_configs,
     activate_features,
 )
-from larpmanager.utils.io.upload.parsing import _get_row_name, _to_decimal, _to_int, invert_dict
+from larpmanager.utils.io.upload.parsing import (
+    _get_row_name,
+    _skip_row_field,
+    _to_decimal,
+    _to_int,
+    invert_dict,
+)
 from larpmanager.utils.io.upload.relations import _assign_requirements
 
 if TYPE_CHECKING:
@@ -237,8 +241,8 @@ def _process_question_field(
         Error message string if validation fails, None otherwise
 
     """
-    # Skip empty values and already processed fields
-    if not field_value or pd.isna(field_value) or field_name in ["applicable", "name"]:
+    # Skip empty/NaN values and already processed fields
+    if _skip_row_field(field_name, field_value, ("applicable", "name")):
         return None
 
     validated_value = field_value
@@ -356,7 +360,7 @@ def _get_mappings(*, is_registration: bool) -> dict[str, dict[str, str]]:
     return mappings
 
 
-def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: dict, *, is_registration: bool) -> str:  # noqa: C901 - Complex CSV option parsing logic
+def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: dict, *, is_registration: bool) -> str:
     """Load question options from CSV row for bulk import.
 
     Creates or updates question options with proper validation,
@@ -394,14 +398,10 @@ def _options_load(import_context: dict, csv_row: dict, question_name_to_id_map: 
 
     # Process each field in the CSV row
     for field_name, field_value in csv_row.items():
-        # Skip empty or NaN values
-        if not field_value or pd.isna(field_value):
+        # Skip empty/NaN values (except relation columns), and fields that are already processed
+        if _skip_row_field(field_name, field_value, ("question", "name")):
             continue
         processed_value = field_value
-
-        # Skip fields that are already processed
-        if field_name in ["question", "name"]:
-            continue
 
         # Convert numeric fields to appropriate types
         if field_name == "max_available":

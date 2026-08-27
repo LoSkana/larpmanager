@@ -35,7 +35,7 @@ from larpmanager.models.form import (
     WritingQuestion,
 )
 from larpmanager.models.registration import RegistrationTicket, TicketTier
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import get_event_elements
 from larpmanager.utils.io.download.columns import _get_column_names
 from larpmanager.utils.io.download.core import zip_exports
 

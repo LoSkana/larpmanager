@@ -31,8 +31,7 @@ from django.utils import timezone
 from PIL import Image
 
 from larpmanager.models.utils import UploadToPathAndRename
-from larpmanager.models.writing import Character
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import Character, get_event_elements
 from larpmanager.utils.io.upload.constants import (
     _QUALITY_MIN,
     _QUALITY_START,

@@ -34,9 +34,9 @@ from larpmanager.cache.character import get_event_cache_all
 from larpmanager.cache.media import get_run_gallery_filepath, get_run_profiles_filepath
 from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.writing import Character, Faction, Handout
+from larpmanager.models.writing import Character, Faction, Handout, get_event_elements
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_element, get_event_elements, get_handout
+from larpmanager.utils.core.common import get_element, get_handout
 from larpmanager.utils.core.exceptions import NotFoundError
 from larpmanager.utils.io.pdf.engine import reprint
 from larpmanager.utils.io.pdf.sheets import (

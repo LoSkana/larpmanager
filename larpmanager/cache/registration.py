@@ -19,237 +19,23 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later OR Proprietary
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from django.core.cache import cache
-from django.db.models import Count
-from django.utils.translation import gettext_lazy as _
+from django.dispatch import Signal
 
-from larpmanager.accounting.base import is_registration_provisional
 from larpmanager.cache.config import get_event_config
-from larpmanager.cache.feature import get_event_features
+from larpmanager.cache.registration_counts import clear_registration_counts_cache
 from larpmanager.cache.run import get_event_run_ids
-from larpmanager.models.form import BaseQuestionType, RegistrationChoice, WritingChoice
-from larpmanager.models.registration import Registration, RegistrationCharacterRel, RegistrationTicket, TicketTier
-from larpmanager.models.utils import decimal_to_str
-from larpmanager.models.writing import Character
+from larpmanager.models.registration import Registration, RegistrationCharacterRel
 from larpmanager.utils.core.common import _search_char_reg
-from main.settings import CACHE_TIMEOUT_1_DAY
 
+if TYPE_CHECKING:
+    from larpmanager.models.writing import Character
 
-def get_active_registrations(run_id: int) -> Any:
-    """Return registrations for a run that are neither cancelled nor a pending signup request."""
-    return Registration.objects.filter(run_id=run_id, cancellation_date__isnull=True, pending=False)
-
-
-def clear_registration_tickets_cache(event_id: int) -> None:
-    """Clear cached registration tickets for an event."""
-    cache.delete(cache_registration_tickets_key(event_id))
-
-
-def cache_registration_tickets_key(event_id: int) -> str:
-    """Generate cache key for registration tickets."""
-    return f"registration_tickets_{event_id}"
-
-
-def get_registration_tickets(event_id: int, *, reset_cache: bool = False) -> list[dict]:
-    """Get registration tickets for an event with caching.
-
-    Returns tickets ordered by 'order' field as dictionaries.
-
-    Args:
-        event_id: The event ID to get tickets for
-        reset_cache: If True, force cache refresh
-
-    Returns:
-        List of ticket dictionaries ordered by order field
-
-    """
-    cache_key = cache_registration_tickets_key(event_id)
-
-    cached_tickets = None if reset_cache else cache.get(cache_key)
-
-    if cached_tickets is None:
-        tickets = RegistrationTicket.objects.filter(event_id=event_id).order_by("order")
-        cached_tickets = [ticket.as_dict(many_to_many=False) for ticket in tickets]
-        # Cache for 1 day (tickets rarely change after event setup)
-        cache.set(cache_key, cached_tickets, timeout=CACHE_TIMEOUT_1_DAY)
-
-    return cached_tickets
-
-
-def get_registration_tickets_by_tier(event_id: int, tier: str) -> list[dict]:
-    """Get registration tickets filtered by tier."""
-    all_tickets = get_registration_tickets(event_id)
-    return [ticket for ticket in all_tickets if ticket["tier"] == tier]
-
-
-def get_registration_ticket_by_id(event_id: int, ticket_id: int) -> dict | None:
-    """Get a specific registration ticket by ID."""
-    all_tickets = get_registration_tickets(event_id)
-    for ticket in all_tickets:
-        if ticket["id"] == ticket_id:
-            return ticket
-    return None
-
-
-def get_ticket_form_text(ticket: dict, currency_symbol: str = "") -> str:
-    """Generate formatted text representation for form display from ticket dict."""
-    formatted_text = ticket["name"]
-
-    # Add price information if available
-    if ticket.get("price"):
-        formatted_text += f" - {decimal_to_str(ticket['price'])}{currency_symbol}"
-
-    # Add availability count if ticket has available key
-    if "available" in ticket:
-        formatted_text += f" - ({_('Available')}: {ticket['available']})"
-
-    return formatted_text
-
-
-def clear_registration_counts_cache(run_id: int) -> None:
-    """Clear cached registration counts for a run."""
-    cache.delete(cache_registration_counts_key(run_id))
-
-
-def cache_registration_counts_key(run_id: int) -> str:
-    """Generate cache key for registration counts."""
-    return f"registration_counts_{run_id}"
-
-
-def get_registration_counts(run_id: int, event_id: int, *, reset_cache: bool = False) -> dict:
-    """Get registration counts for a run, with caching support.
-
-    Args:
-        run_id: The run id to get counts for
-        event_id: The event id the run belongs to
-        reset_cache: If True, force cache refresh
-
-    Returns:
-        Dictionary containing registration count data
-
-    """
-    # Generate cache key for this run
-    cache_key = cache_registration_counts_key(run_id)
-
-    # Check if we should bypass cache
-    cached_counts = None if reset_cache else cache.get(cache_key)
-
-    # Update and cache if not found
-    if cached_counts is None:
-        cached_counts = update_registration_counts(run_id, event_id)
-        cache.set(cache_key, cached_counts, timeout=60 * 5)
-
-    return cached_counts
-
-
-def add_count(counter_dict: dict, parameter_name: str, increment_value: int = 1) -> None:
-    """Add or increment a counter value in a dictionary."""
-    # Initialize parameter if not present
-    if parameter_name not in counter_dict:
-        counter_dict[parameter_name] = increment_value
-        return
-
-    # Increment existing value
-    counter_dict[parameter_name] += increment_value
-
-
-def update_registration_counts(run_id: int, event_id: int) -> dict[str, int]:
-    """Update registration counts cache for the given run.
-
-    Calculates and returns registration statistics including counts by ticket tier,
-    provisional registrations, registration choices, and character writing choices.
-
-    Args:
-        run_id: Run id to update registration counts for
-        event_id: Event id the run belongs to
-
-    Returns:
-        Dictionary containing registration counts data by ticket tier and choices.
-        Keys include count_reg, count_wait, count_staff, count_fill, tk_{ticket_id},
-        option_{option_id}, option_char_{option_id}, tickets_map, and tickets_order.
-
-    """
-    # Initialize base counters
-    counts = {
-        "count_reg": 0,
-        "count_wait": 0,
-        "count_staff": 0,
-        "count_fill": 0,
-        "tickets_map": {},
-        "tickets_order": {},
-    }
-
-    # Get all non-cancelled registrations for this run
-    registrations = get_active_registrations(run_id)
-
-    # Get event features
-    features = get_event_features(event_id)
-
-    context = {}
-
-    # Process each registration to count by ticket tier
-    for registration in registrations.select_related("ticket"):
-        num_tickets = 1 + registration.additionals
-
-        # Handle registrations without ticket assignment
-        if not registration.ticket:
-            add_count(counts, "count_unknown", num_tickets)
-        else:
-            # Count by ticket name
-            add_count(counts, f"count_ticket_{registration.ticket_id}", num_tickets)
-            if registration.ticket_id not in counts["tickets_map"]:
-                counts["tickets_map"][registration.ticket_id] = registration.ticket.name
-            if registration.ticket_id not in counts["tickets_order"]:
-                counts["tickets_order"][registration.ticket_id] = registration.ticket.order
-
-            # Map ticket tiers to counter keys
-            tier_map = {
-                TicketTier.STAFF: "staff",
-                TicketTier.WAITING: "wait",
-                TicketTier.FILLER: "fill",
-                TicketTier.SELLER: "seller",
-                TicketTier.LOTTERY: "lottery",
-                TicketTier.NPC: "npc",
-                TicketTier.COLLABORATOR: "collaborator",
-            }
-
-            # Count by specific tier or default to player
-            tier_key = tier_map.get(registration.ticket.tier)
-            if tier_key:
-                add_count(counts, f"count_{tier_key}", num_tickets)
-            else:
-                add_count(counts, "count_player", num_tickets)
-
-            # Track provisional registrations separately
-            if is_registration_provisional(registration, event_id=event_id, features=features, context=context):
-                add_count(counts, "count_provisional", num_tickets)
-
-        # Add to total registration count
-        add_count(counts, "count_reg", num_tickets)
-
-        # Track count by specific ticket ID
-        add_count(counts, f"tk_{registration.ticket_id}", num_tickets)
-
-    # Count registration choices (form options selected)
-    registration_choices = RegistrationChoice.objects.filter(
-        registration__run_id=run_id,
-        registration__cancellation_date__isnull=True,
-        registration__pending=False,
-        question__typ__in=[BaseQuestionType.SINGLE, BaseQuestionType.MULTIPLE],
-    )
-    for choice_data in registration_choices.values("option_id").annotate(total=Count("option_id")):
-        counts[f"option_{choice_data['option_id']}"] = choice_data["total"]
-
-    # Count character writing choices for this event
-    character_ids = Character.objects.filter(event_id=event_id).values_list("id", flat=True)
-
-    writing_choices = WritingChoice.objects.filter(element_id__in=character_ids)
-    for choice_data in writing_choices.values("option_id").annotate(total=Count("option_id")):
-        counts[f"option_char_{choice_data['option_id']}"] = choice_data["total"]
-
-    return counts
+# Fired instead of calling into utils.registrations.signals directly, so this cache
+# module does not depend on business-logic modules at load time. Connected in
+# models/signals.py, which is already the central place wiring cross-module signals.
+character_registration_updated = Signal()
 
 
 def on_character_update_registration_cache(instance: Character) -> None:
@@ -264,9 +50,7 @@ def on_character_update_registration_cache(instance: Character) -> None:
         for relation in RegistrationCharacterRel.objects.filter(character=instance).select_related(
             "registration__run", "registration__run__event", "registration__ticket", "registration__member"
         ):
-            from larpmanager.utils.registrations.signals import apply_registration_post_save_updates  # noqa: PLC0415
-
-            apply_registration_post_save_updates(relation.registration)
+            character_registration_updated.send(sender=Registration, registration=relation.registration)
 
 
 def search_player(character: Character, json_output: dict[str, Any], context: dict) -> None:

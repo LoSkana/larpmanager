@@ -33,8 +33,7 @@ from larpmanager.models.casting import Casting
 from larpmanager.models.event import Run
 from larpmanager.models.member import Member, Membership, MembershipStatus
 from larpmanager.models.registration import Registration, TicketTier
-from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.core.common import get_event_class_parent
+from larpmanager.models.writing import Character, CharacterStatus, get_event_class_parent
 
 
 def get_users_data(member_ids: Any) -> Any:

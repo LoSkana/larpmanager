@@ -59,8 +59,8 @@ from larpmanager.models.writing import (
     PrologueType,
     RelationshipTag,
     SpeedLarp,
+    get_event_elements,
 )
-from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.core.validators import FileTypeValidator
 from larpmanager.utils.services.character import _get_character_cache_id

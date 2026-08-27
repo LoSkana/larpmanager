@@ -61,10 +61,11 @@ from larpmanager.models.registration import Registration, RegistrationCharacterR
 from larpmanager.models.writing import (
     Character,
     CharacterStatus,
+    get_event_elements,
 )
 from larpmanager.templatetags.show_tags import get_tooltip
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_element, get_element_event, get_event_elements, get_player_relationship
+from larpmanager.utils.core.common import get_element, get_element_event, get_player_relationship
 from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.edit.backend import user_edit
 from larpmanager.utils.io.pdf import has_pdf_customization

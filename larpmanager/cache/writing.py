@@ -33,8 +33,7 @@ from larpmanager.models.form import (
     WritingChoice,
     WritingQuestionType,
 )
-from larpmanager.models.writing import RelationshipTag
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import RelationshipTag, get_event_elements
 
 
 def get_character_element_fields(
