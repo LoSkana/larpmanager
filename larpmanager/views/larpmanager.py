@@ -1399,7 +1399,7 @@ def donate(request: HttpRequest) -> Any:
         HttpResponseForbidden: If bot detected
 
     """
-    context = get_context(request)
+    context = get_context(request, check_main_site=True)
     if context["association_id"] != 0:
         return redirect("accounting_donate")
 
