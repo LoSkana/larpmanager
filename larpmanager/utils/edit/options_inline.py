@@ -44,7 +44,7 @@ from larpmanager.models.form import (
 from larpmanager.models.member import LogOperationType
 from larpmanager.models.registration import RegistrationTicket
 from larpmanager.models.writing import get_event_elements
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
 

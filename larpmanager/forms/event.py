@@ -91,7 +91,7 @@ from larpmanager.utils.publication.ildb import (
     PromotionMood,
     PromotionSetting,
 )
-from larpmanager.views.orga.registration import _get_registration_fields
+from larpmanager.utils.registrations.context import _get_registration_fields
 
 logger = logging.getLogger(__name__)
 

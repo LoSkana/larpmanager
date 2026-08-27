@@ -34,7 +34,7 @@ from larpmanager.models.form import (
     RegistrationQuestionType,
 )
 from larpmanager.models.writing import Faction, get_event_elements
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.registrations.questions import (
     get_ordered_registration_questions,
     get_registration_answers_by_question,

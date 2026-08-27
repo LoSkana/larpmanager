@@ -47,7 +47,7 @@ from larpmanager.models.accounting import (
 )
 from larpmanager.models.member import LogOperationType
 from larpmanager.templatetags.show_tags import format_decimal
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_object_uuid
 from larpmanager.utils.core.exceptions import UserPermissionError
 from larpmanager.utils.core.paginate import orga_paginate

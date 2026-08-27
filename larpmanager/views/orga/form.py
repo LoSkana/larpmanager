@@ -42,7 +42,7 @@ from larpmanager.models.registration import (
     RegistrationSurcharge,
 )
 from larpmanager.models.writing import get_event_class_parent
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.edit.backend import (
     backend_order,
     backend_set_order,

@@ -33,7 +33,7 @@ from django.utils.dateparse import parse_datetime
 from larpmanager.accounting.registration import registration_payments_status
 from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.models.registration import CheckIn, Registration
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 
 
 def _resolve_registration(run_id: int, registration_uuid: str) -> Registration:

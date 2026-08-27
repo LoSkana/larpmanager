@@ -30,7 +30,7 @@ from larpmanager.forms.registration import RegistrationTransferForm
 from larpmanager.models.event import Run
 from larpmanager.models.member import LogOperationType
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.services.event import reset_all_run
 from larpmanager.utils.services.transfer import (

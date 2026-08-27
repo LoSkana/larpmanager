@@ -44,6 +44,7 @@ from larpmanager.models.access import AssociationPermission, EventPermission
 from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import RegistrationStatus
 from larpmanager.utils.auth.permission import has_association_permission, has_event_permission
+from larpmanager.utils.services.association import get_activation_checklist
 
 if TYPE_CHECKING:
     from django.http import HttpRequest
@@ -144,11 +145,7 @@ def _exe_actions(request: HttpRequest, context: dict, association_features: dict
         association_features = get_association_features(context["association_id"])
 
     # Add prompt to complete checklist and activate advanced mode when in demo/lite mode.
-    # Deferred: services.association transitively imports this module (via base, which
-    # this module is imported by), so a module-level import here would be circular.
     if context.get("lite_mode"):
-        from larpmanager.utils.services.association import get_activation_checklist  # noqa: PLC0415
-
         _checklist, context["progress"] = get_activation_checklist(context["association_id"])
 
     # Check if currency configuration suggestion has been dismissed

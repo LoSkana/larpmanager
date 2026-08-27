@@ -75,7 +75,8 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.member import Member, MembershipStatus, NotificationType, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import check_event_context, get_context, get_event_context
+from larpmanager.utils.core.base import get_context, get_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import (
     get_collection_partecipate,
     get_collection_redeem,

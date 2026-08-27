@@ -44,7 +44,7 @@ from larpmanager.models.registration import (
     TicketTier,
 )
 from larpmanager.models.writing import Character, Faction, FactionType, get_event_elements
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element, get_element_event, get_time_diff_today
 from larpmanager.utils.users.deadlines import get_membership_fee_year
 from larpmanager.views.user.casting import (

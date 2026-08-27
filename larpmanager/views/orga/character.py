@@ -66,7 +66,7 @@ from larpmanager.models.writing import (
     get_event_elements,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import _process_working_ticket
 from larpmanager.utils.edit.options_inline import (

@@ -80,7 +80,7 @@ from larpmanager.models.registration import (
 from larpmanager.models.utils import get_option_form_text
 from larpmanager.models.writing import Character, get_event_class_parent
 from larpmanager.utils.auth.permission import has_event_permission
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import get_discount, get_element_event, get_time_diff
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.download import _orga_registrations_acc, download
