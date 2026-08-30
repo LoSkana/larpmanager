@@ -40,6 +40,7 @@ EVENT_CONFIGS_OWN_CHILD: frozenset[str] = frozenset({"payment_custom_reason", "t
 CONFIG_DEFAULTS: dict[str, Any] = {
     "debug_toolbar_enabled": False,
     "payment_custom_reason": "",
+    "payment_custom_iban": "",
     # "nebula" mirrors AppearanceTheme.NEBULA.value;
     "theme": "nebula",
     "intro_driver": "",

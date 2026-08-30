@@ -2066,6 +2066,9 @@ msgstr "Forbindelser"
 msgid "Cover image"
 msgstr "Forsidebillede"
 
+msgid "Custom IBAN"
+msgstr "Tilpasset IBAN"
+
 msgid "Description"
 msgstr "Beskrivelse"
 
@@ -14366,6 +14369,14 @@ msgid ""
 msgstr ""
 "Hvis aktiveret, tilføjer systemet automatisk betalingsgateway-gebyrer til "
 "billetprisen, så deltageren betaler dem i stedet for organisationen."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Hvis det er angivet, viser det det IBAN, som deltagerne skal bruge til "
+"bankoverførsler for denne begivenhed, i stedet for det, der er angivet i "
+"organisationens betalingsoplysninger."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

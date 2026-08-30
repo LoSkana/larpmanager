@@ -2066,6 +2066,9 @@ msgstr "Verbindingen"
 msgid "Cover image"
 msgstr "Afbeelding omslag"
 
+msgid "Custom IBAN"
+msgstr "Aangepaste IBAN"
+
 msgid "Description"
 msgstr "Beschrijving"
 
@@ -14693,6 +14696,14 @@ msgstr ""
 "Indien ingeschakeld, voegt het systeem automatisch kosten van de "
 "betalingsgateway toe aan de ticketprijs, zodat de deelnemer deze betaalt in "
 "plaats van de organisatie."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Indien aanwezig, geeft dit de IBAN aan die deelnemers zien voor "
+"bankoverschrijvingen voor dit evenement, in plaats van de IBAN die is "
+"ingesteld in de betalingsgegevens van de organisatie."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

@@ -2066,6 +2066,9 @@ msgstr "Conexiones"
 msgid "Cover image"
 msgstr "Imagen de portada"
 
+msgid "Custom IBAN"
+msgstr "IBAN personalizado"
+
 msgid "Description"
 msgstr "Descripción"
 
@@ -14688,6 +14691,14 @@ msgstr ""
 "Si se activa, el sistema añadirá automáticamente las comisiones de la "
 "pasarela de pago al precio de la entrada, para que las cubra el participante"
 " en lugar de la organización."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Si está presente, indica el IBAN que se muestra a los participantes para las"
+" transferencias bancarias de este evento, en lugar del configurado en los "
+"datos de pago de la organización."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

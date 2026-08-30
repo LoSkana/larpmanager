@@ -2066,6 +2066,9 @@ msgstr "Ligações"
 msgid "Cover image"
 msgstr "Imagem de capa"
 
+msgid "Custom IBAN"
+msgstr "IBAN personalizzato"
+
 msgid "Description"
 msgstr "Descrição"
 
@@ -14541,6 +14544,14 @@ msgstr ""
 "Se ativado, o sistema adicionará automaticamente as taxas do gateway de "
 "pagamento ao preço do bilhete, para que o participante as cubra em vez da "
 "organização."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Se presente, indica l'IBAN mostrato ai partecipanti per i bonifici di questo"
+" evento, invece di quello impostato nei dettagli di pagamento "
+"dell'organizzazione."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "

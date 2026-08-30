@@ -2066,6 +2066,9 @@ msgstr "Yhteydet"
 msgid "Cover image"
 msgstr "Kannen kuva"
 
+msgid "Custom IBAN"
+msgstr "Mukautettu IBAN"
+
 msgid "Description"
 msgstr "Kuvaus"
 
@@ -14447,6 +14450,13 @@ msgid ""
 msgstr ""
 "Jos käytössä, järjestelmä lisää maksunvälittäjän kulut automaattisesti lipun"
 " hintaan, jolloin osallistuja maksaa ne organisaation sijaan."
+
+msgid ""
+"If present, indicates the IBAN shown to participants for wire transfers of "
+"this event, instead of the one set in the organisation's payment details."
+msgstr ""
+"Jos annettu, näyttää osallistujille tämän tapahtuman tilisiirtojen IBANin "
+"organisaation maksutiedoissa määritetyn IBANin sijaan."
 
 msgid ""
 "To add a registration to a participant, they must have consented to share "
