@@ -88,6 +88,7 @@
             </table>
             <hr />
             <div id="risultati"></div>
+            <p id="not_assigned_after"></p>
             <div id="load" class="centerized">
                 <input id="res" name="res" type="hidden" />
                 <input type="submit"
@@ -117,6 +118,7 @@ window['preferences'] = {{ preferences | safe }};
 window['didnt_choose'] = {{ didnt_choose | safe }};
 window['nopes'] = {{ nopes | safe }};
 window['taken'] = {{ taken | safe }};
+window['pref_counts'] = {{ pref_counts | safe }};
 window['mirrors'] = {{ mirrors | safe }};
 window['casting_avoid'] = {{ casting_avoid | yesno:"true,false" }};
 window['avoids'] = {{ avoids | safe }};
@@ -138,7 +140,9 @@ window['trads'] = {
     'e': '{% filter escapejs %}{% trans "Avoid" %}{% endfilter %}',
     'ne': '{% filter escapejs %}{% trans "Elements NOT chosen" %}{% endfilter %}',
     'ge': '{% filter escapejs %}{% trans "Participants that DID NOT send preferences" %}{% endfilter %}',
-    'le': '{% filter escapejs %}{% trans "Email list" %}{% endfilter %}'
+    'le': '{% filter escapejs %}{% trans "Email list" %}{% endfilter %}',
+    'na': '{% filter escapejs %}{% trans "Characters left unassigned by the algorithm" %}{% endfilter %}',
+    'op': '{% filter escapejs %}{% trans "Assigned outside expressed preferences" %}{% endfilter %}'
 }
 
     </script>

@@ -469,6 +469,11 @@ def get_casting_data(
         else:
             player_preferences[registration.member.uuid] = player_choice_list
 
+    # Number of preferences actually submitted by each player, before padding is appended
+    # below with random not-chosen characters (used client-side to flag assignments that
+    # fall outside what the player actually expressed).
+    real_preference_counts = {member_uuid: len(choice_list) for member_uuid, choice_list in player_preferences.items()}
+
     # Add random unchosen characters to resolve ties fairly
     unchosen_characters, unchosen_padding = _fill_not_chosen(
         available_choices,
@@ -496,6 +501,7 @@ def get_casting_data(
     context["didnt_choose"] = json.dumps(players_without_choices)
     context["nopes"] = json.dumps(character_avoidances)
     context["avoids"] = json.dumps(avoidance_texts)
+    context["pref_counts"] = json.dumps(real_preference_counts)
 
     # Load priority configuration for algorithm weighting
     for priority_key in ("reg_priority", "pay_priority"):

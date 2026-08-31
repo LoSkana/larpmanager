@@ -6769,6 +6769,9 @@ msgstr "<b>%(number)s</b> %(label)s om goed te keuren"
 msgid "Activate features for the organization"
 msgstr "Activeer functies voor de organisatie"
 
+msgid "Assigned outside expressed preferences"
+msgstr "Toegewezen buiten de aangegeven voorkeuren"
+
 msgid "Charge transaction fees to participant"
 msgstr "Breng transactiekosten in rekening bij de deelnemer"
 
@@ -7324,6 +7327,9 @@ msgstr "Wijs geselecteerde personages toe aan deelnemers."
 
 msgid "Browse events that have already taken place"
 msgstr "Bekijk evenementen die al hebben plaatsgevonden"
+
+msgid "Characters left unassigned by the algorithm"
+msgstr "Personages die door het algoritme niet zijn toegewezen"
 
 msgid "Click on a name to go and view it directly."
 msgstr "Klik op een naam om deze direct te bekijken."

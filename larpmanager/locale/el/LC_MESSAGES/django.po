@@ -6769,6 +6769,9 @@ msgstr "<b>%(number)s</b> %(label)s προς έγκριση"
 msgid "Activate features for the organization"
 msgstr "Ενεργοποίηση λειτουργιών για τον οργανισμό"
 
+msgid "Assigned outside expressed preferences"
+msgstr "Ανατέθηκε εκτός των δηλωμένων προτιμήσεων"
+
 msgid "Charge transaction fees to participant"
 msgstr "Χρέωση προμηθειών συναλλαγής στον συμμετέχοντα"
 
@@ -7325,6 +7328,9 @@ msgstr "Ανάθεσε τους επιλεγμένους χαρακτήρες σ
 
 msgid "Browse events that have already taken place"
 msgstr "Περιηγήσου σε event που έχουν ήδη πραγματοποιηθεί"
+
+msgid "Characters left unassigned by the algorithm"
+msgstr "Χαρακτήρες που έμειναν χωρίς ανάθεση από τον αλγόριθμο"
 
 msgid "Click on a name to go and view it directly."
 msgstr "Κάνε κλικ σε ένα όνομα για να το δεις απευθείας."

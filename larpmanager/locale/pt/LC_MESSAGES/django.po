@@ -6768,6 +6768,9 @@ msgstr "<b>%(number)s</b> %(label)s para aprovar"
 msgid "Activate features for the organization"
 msgstr "Ativar funcionalidades para a organização"
 
+msgid "Assigned outside expressed preferences"
+msgstr "Atribuído fora das preferências indicadas"
+
 msgid "Charge transaction fees to participant"
 msgstr "Cobrar taxas de transação ao participante"
 
@@ -7323,6 +7326,9 @@ msgstr "Atribui as personagens selecionadas aos participantes."
 
 msgid "Browse events that have already taken place"
 msgstr "Explora eventos que já decorreram"
+
+msgid "Characters left unassigned by the algorithm"
+msgstr "Personagens deixados sem atribuição pelo algoritmo"
 
 msgid "Click on a name to go and view it directly."
 msgstr "Clica num nome para o veres diretamente."
