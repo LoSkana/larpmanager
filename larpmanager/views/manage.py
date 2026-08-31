@@ -63,9 +63,9 @@ from larpmanager.utils.auth.permission import (
     has_event_permission,
 )
 from larpmanager.utils.core.base import get_context, get_event_context
+from larpmanager.utils.core.checks import check_association_context, check_event_context
 from larpmanager.utils.core.common import format_datetime
 from larpmanager.utils.core.dashboard import _compile, _exe_build_lists, _orga_build_lists
-from larpmanager.utils.core.checks import check_association_context, check_event_context
 from larpmanager.utils.core.sticky import dismiss_sticky, get_sticky_messages
 from larpmanager.utils.edit.backend import set_suggestion
 from larpmanager.utils.registrations.availability import registration_available
