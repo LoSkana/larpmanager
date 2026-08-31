@@ -80,7 +80,7 @@ window.addEventListener('DOMContentLoaded', function() {
         links.push(link);
     });
 
-    if (links.length === 0) return;
+    if (links.length < 2) return;
     links.forEach(function(link) { quickbar.appendChild(link); });
     quickbar.hidden = false;
 });
