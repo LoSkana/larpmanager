@@ -679,3 +679,13 @@ body.association.new_v22 .user_resize {
     padding-bottom: 3em;
   }
 }
+
+@media (max-width: 841px) {
+  body.landing .wrap {
+    padding: 0.5em 1em;
+  }
+
+  body.landing section.land {
+    padding: 0;
+  }
+}
