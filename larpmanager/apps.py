@@ -31,7 +31,10 @@ class LarpManagerConfig(AppConfig):
         _ = __import__("larpmanager.models.signals")
         _ = __import__("larpmanager.utils.profiler.receivers")
 
-        # Swap default AdminSite to OTP-enforced version
+        # Swap default AdminSite to OTP-enforced version. Must stay deferred:
+        # apps.py is imported while Django is still populating the app registry
+        # (AppConfig.create), and django_otp.admin transitively imports
+        # django.contrib.auth.models, which needs the registry fully ready.
         from django.contrib import admin  # noqa: PLC0415
 
         from larpmanager.utils.auth.otp import LarpManagerOTPAdminSite  # noqa: PLC0415

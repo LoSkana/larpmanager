@@ -12,9 +12,10 @@ from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache,
 from larpmanager.cache.config import get_association_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.question import get_cached_registration_questions, skip_registration_question
-from larpmanager.models.association import Association, get_association_url, get_url, hdr, hdr_run
+from larpmanager.models.association import Association
 from larpmanager.models.form import BaseQuestionType, RegistrationAnswer, RegistrationChoice
 from larpmanager.models.member import Membership, get_user_membership
+from larpmanager.utils.core.headers import get_association_url, get_url, hdr, hdr_run
 
 if TYPE_CHECKING:
     from larpmanager.models.accounting import AccountingItemExpense, AccountingItemOther, AccountingItemPayment

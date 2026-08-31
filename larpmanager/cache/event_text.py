@@ -26,7 +26,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import get_language
 
-from larpmanager.cache.config import _get_event_parent_id
+from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.models.event import EventText, EventTextType
 
 logger = logging.getLogger(__name__)

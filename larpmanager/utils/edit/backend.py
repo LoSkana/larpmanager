@@ -42,16 +42,18 @@ from larpmanager.models.event import Run
 from larpmanager.models.form import QuestionApplicable, WritingAnswer, WritingChoice
 from larpmanager.models.member import LogOperationType, Member
 from larpmanager.models.miscellanea import Log
-from larpmanager.models.writing import Faction, Plot, PlotCharacterRel, Relationship, TextVersion
-from larpmanager.utils.auth.admin import is_lm_admin
-from larpmanager.utils.core.base import get_context
-from larpmanager.utils.core.common import (
-    get_element,
+from larpmanager.models.writing import (
+    Faction,
+    Plot,
+    PlotCharacterRel,
+    Relationship,
+    TextVersion,
     get_event_class_parent,
     get_event_elements,
-    get_object_uuid,
-    html_clean,
 )
+from larpmanager.utils.auth.admin import is_lm_admin
+from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.common import get_element, get_object_uuid, html_clean
 
 if TYPE_CHECKING:
     from collections.abc import Callable

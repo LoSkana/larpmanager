@@ -59,10 +59,11 @@ from larpmanager.models.writing import (
     RelationshipTag,
     SpeedLarp,
     Writing,
+    get_event_class_parent,
     replace_character_names,
 )
 from larpmanager.templatetags.show_tags import show_char, show_trait
-from larpmanager.utils.core.common import check_field, get_event_class_parent
+from larpmanager.utils.core.common import check_field
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.edit.backend import _setup_char_finder
 from larpmanager.utils.io.download import download

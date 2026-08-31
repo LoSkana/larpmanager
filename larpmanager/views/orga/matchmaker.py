@@ -26,19 +26,20 @@ from django.db.models import Prefetch
 from django.shortcuts import render
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.registration import get_active_registrations
+from larpmanager.cache.registration_lookup import get_active_registrations
 from larpmanager.models.form import (
     BaseQuestionType,
-    RegistrationAnswer,
-    RegistrationChoice,
     RegistrationOption,
     RegistrationQuestionApplicable,
     RegistrationQuestionType,
 )
-from larpmanager.models.writing import Faction
-from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_event_elements
-from larpmanager.views.orga.form import get_ordered_registration_questions
+from larpmanager.models.writing import Faction, get_event_elements
+from larpmanager.utils.core.checks import check_event_context
+from larpmanager.utils.registrations.questions import (
+    get_ordered_registration_questions,
+    get_registration_answers_by_question,
+    get_registration_choices_by_question,
+)
 
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
@@ -63,17 +64,8 @@ def orga_matchmaker_answers(request: HttpRequest, event_slug: str) -> HttpRespon
 
     question_ids = [question.id for question in questions]
 
-    answers_by_registration: dict[int, dict[int, str]] = {}
-    for answer in RegistrationAnswer.objects.filter(question_id__in=question_ids, registration__run=context["run"]):
-        answers_by_registration.setdefault(answer.registration_id, {})[answer.question_id] = answer.text
-
-    choices_by_registration: dict[int, dict[int, list[str]]] = {}
-    for choice in RegistrationChoice.objects.filter(
-        question_id__in=question_ids, registration__run=context["run"]
-    ).select_related("option"):
-        choices_by_registration.setdefault(choice.registration_id, {}).setdefault(choice.question_id, []).append(
-            choice.option.name
-        )
+    answers_by_registration = get_registration_answers_by_question(question_ids, registration__run=context["run"])
+    choices_by_registration = get_registration_choices_by_question(question_ids, registration__run=context["run"])
 
     faction_names_by_uuid = {
         str(uuid): name

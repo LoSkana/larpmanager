@@ -51,7 +51,7 @@ from larpmanager.models.access import AssociationPermission, AssociationRole, Ev
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Event, EventButton, EventText, Run
 from larpmanager.utils.auth.permission import get_event_roles, get_index_event_permissions
-from larpmanager.utils.core.base import check_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
 from larpmanager.utils.core.copy import copy, get_copy_sections, read_copy_picks
 from larpmanager.utils.core.exceptions import RedirectError, UserPermissionError

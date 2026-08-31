@@ -45,11 +45,12 @@ from larpmanager.mail.templates import (
     get_token_credit_name,
 )
 from larpmanager.models.accounting import AccountingItemPayment, PaymentInvoice, RefundRequest
-from larpmanager.models.association import Association, get_url, hdr_run
+from larpmanager.models.association import Association
 from larpmanager.models.member import Member, Membership, NotificationQueue, NotificationType
 from larpmanager.models.miscellanea import HelpQuestion
 from larpmanager.models.registration import Registration
 from larpmanager.utils.core.common import get_exec_language
+from larpmanager.utils.core.headers import get_url, hdr_run
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 from larpmanager.utils.users.member import queue_executive_notification, queue_organizer_notification
 

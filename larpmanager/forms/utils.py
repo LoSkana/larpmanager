@@ -27,6 +27,7 @@ from django import forms
 from django.conf import settings as conf_settings
 from django.db.models import Q, QuerySet
 from django.forms.widgets import Textarea, Widget
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 from django.utils.translation import gettext_lazy as _
@@ -34,6 +35,7 @@ from django_select2 import forms as s2forms
 from tinymce.widgets import TinyMCE
 
 from larpmanager.cache.basic import get_event_association_id
+from larpmanager.cache.config import get_event_config
 from larpmanager.models.access import AssociationRole, EventRole, PermissionModule
 from larpmanager.models.casting import Trait
 from larpmanager.models.event import (
@@ -56,9 +58,10 @@ from larpmanager.models.writing import (
     Faction,
     FactionType,
     Plot,
+    get_event_elements,
 )
 from larpmanager.utils.auth.permission import LITE_PERMISSIONS
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.utils.services.playing_filter import filter_playing_characters
 
 if TYPE_CHECKING:
     from larpmanager.forms.base import BaseModelForm
@@ -714,8 +717,6 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
         js: ClassVar[list] = ["larpmanager/assets/js/character-dual.js"]
 
     def _get_search_url(self) -> str:
-        from django.urls import reverse  # noqa: PLC0415
-
         if hasattr(self, "event"):
             return reverse("orga_character_search", args=[self.event.slug])
         return ""
@@ -731,8 +732,6 @@ class CharacterDualListWidget(EventCharacterS2, forms.SelectMultiple):
         val_list = [v for v in value if v not in ("", None)]
         if not val_list:
             return []
-        from larpmanager.cache.config import get_event_config  # noqa: PLC0415
-
         show_number = get_event_config(self.event.id, "writing_number")
         base_qs = get_event_elements(self.event.id, Character).only("id", "uuid", "name", "number").order_by("name")
         qs = base_qs.filter(uuid__in=val_list)
@@ -792,8 +791,6 @@ class GuildInviteS2Widget(EventCharacterS2WidgetUuid):
 
     def get_queryset(self) -> QuerySet[Character]:
         """Return event characters that are visible, playing in the run, and not already in the guild."""
-        from larpmanager.utils.services.character import filter_playing_characters  # noqa: PLC0415
-
         queryset = super().get_queryset().filter(hide=False)
         if hasattr(self, "guild"):
             queryset = queryset.exclude(guild_memberships__guild=self.guild)

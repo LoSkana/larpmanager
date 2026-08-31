@@ -46,7 +46,7 @@ from larpmanager.models.experience import (
     RuleExp,
     SystemExp,
 )
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import get_event_elements
 
 
 class OrgaSystemExpForm(BaseModelForm):

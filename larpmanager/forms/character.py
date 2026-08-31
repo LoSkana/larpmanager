@@ -34,7 +34,7 @@ from django.utils.translation import gettext_lazy as _
 
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.question import get_cached_writing_questions, get_character_dependencies
-from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.registration_counts import get_registration_counts
 from larpmanager.cache.rels import refresh_character_relationships_background
 from larpmanager.cache.writing import get_cached_relationship_tags
 from larpmanager.forms.base import BaseModelForm, get_question_key
@@ -75,8 +75,9 @@ from larpmanager.models.writing import (
     Relationship,
     RelationshipTag,
     TextVersionChoices,
+    get_event_class_parent,
+    get_event_elements,
 )
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
 from larpmanager.utils.core.guard import experience_recalc_deferred
 from larpmanager.utils.edit.backend import save_version
 from larpmanager.utils.services.experience import calculate_character_experience_points

@@ -26,6 +26,7 @@ from larpmanager.views.orga import (
     accounting as views_oa,
     casting as views_oca,
     character as views_oc,
+    checkin as views_ock,
     event as views_oe,
     experience as views_ox,
     form as views_of,
@@ -94,6 +95,16 @@ urlpatterns = [
         "<slug:event_slug>/manage/casting/history/<str:casting_type>/",
         views_oca.orga_casting_history,
         name="orga_casting_history",
+    ),
+    path(
+        "<slug:event_slug>/manage/checkin/",
+        views_ock.orga_checkin,
+        name="orga_checkin",
+    ),
+    path(
+        "<slug:event_slug>/manage/checkin/scan/",
+        views_ock.orga_checkin_scan,
+        name="orga_checkin_scan",
     ),
     path(
         "<slug:event_slug>/manage/registrations/",

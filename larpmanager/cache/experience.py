@@ -28,11 +28,12 @@ from typing import TYPE_CHECKING, Any
 from django.conf import settings as conf_settings
 from django.core.cache import cache
 
-from larpmanager.cache.config import _get_event_parent_id
+from larpmanager.cache.basic import _get_event_parent_id
 from larpmanager.cache.dirty import get_has_dirty_key, mark_dirty, refresh_if_dirty, resolve_dirty_section
 from larpmanager.models.event import Event
 from larpmanager.models.experience import AbilityExp, CriterionExp, DeliveryExp, ModifierExp, RuleExp, SystemExp
-from larpmanager.utils.core.common import _validate_and_fetch_objects, get_event_class_parent, get_event_elements
+from larpmanager.models.writing import get_event_class_parent, get_event_elements
+from larpmanager.utils.core.common import _validate_and_fetch_objects
 from larpmanager.utils.larpmanager.tasks import background_auto
 
 if TYPE_CHECKING:

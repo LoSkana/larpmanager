@@ -8,6 +8,9 @@ msgstr "Ir"
 msgid "Hi"
 msgstr "Olá"
 
+msgid "No"
+msgstr "Não"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "IVA"
 
 msgid "Who"
 msgstr "Quem"
+
+msgid "Yes"
+msgstr "Sim"
 
 msgid "age"
 msgstr "idade"
@@ -640,6 +646,9 @@ msgstr "País"
 msgid "Number"
 msgstr "Número"
 
+msgid "Online"
+msgstr "Online"
+
 msgid "Option"
 msgstr "Opção"
 
@@ -901,6 +910,9 @@ msgstr "Sem passo"
 msgid "Nothing"
 msgstr "Nada"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Opções"
 
@@ -921,6 +933,9 @@ msgstr "Jogador:"
 
 msgid "Players"
 msgstr "Jogadores"
+
+msgid "Present"
+msgstr "Presente"
 
 msgid "Preview"
 msgstr "Pré-visualizar"
@@ -1096,6 +1111,9 @@ msgstr "Carrossel"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Check-in"
 
 msgid "Claimant"
 msgstr "Requerente"
@@ -2051,6 +2069,9 @@ msgstr "Alterar presente"
 msgid "Characters:"
 msgstr "Personagens:"
 
+msgid "Checked in:"
+msgstr "Check-in efetuado:"
+
 msgid "Collections"
 msgstr "Coletas"
 
@@ -2146,6 +2167,12 @@ msgstr "Nova sessão"
 
 msgid "Next events"
 msgstr "Próximos eventos"
+
+msgid "Not scanned"
+msgstr "Não digitalizado"
+
+msgid "Outstanding"
+msgstr "Pendente"
 
 msgid "Participant"
 msgstr "Participante"
@@ -2447,6 +2474,9 @@ msgstr "Requisitos"
 msgid "Rotate right"
 msgstr "Rodar para a direita"
 
+msgid "Scan QR code"
+msgstr "Digitalizar código QR"
+
 msgid "Scroll right"
 msgstr "Deslocar para a direita"
 
@@ -2686,6 +2716,9 @@ msgstr "Sessões anteriores"
 
 msgid "Paste as text"
 msgstr "Colar como texto"
+
+msgid "Pending sync:"
+msgstr "Sincronização pendente:"
 
 msgid "Personal data"
 msgstr "Dados pessoais"
@@ -3009,6 +3042,9 @@ msgstr "Pedir inscrição"
 
 msgid "Requests open:"
 msgstr "Pedidos em aberto:"
+
+msgid "Scan rejected:"
+msgstr "Leitura rejeitada:"
 
 msgid "Sensitive data"
 msgstr "Dados sensíveis"
@@ -3532,6 +3568,9 @@ msgstr "Mensagem privada:"
 
 msgid "Promote to admin"
 msgstr "Promover a administrador"
+
+msgid "QR Code Check-in"
+msgstr "Check-in por código QR"
 
 msgid "Realized revenue"
 msgstr "Receita realizada"
@@ -4327,6 +4366,9 @@ msgstr "Descrição do carrossel"
 
 msgid "Character Inventory:"
 msgstr "Inventário da personagem:"
+
+msgid "Check-in QR code.png"
+msgstr "Código QR de check-in.png"
 
 msgid "Close the collection"
 msgstr "Encerrar a coleta"
@@ -5993,6 +6035,9 @@ msgstr "A data em que este evento começa"
 msgid "Total of recorded money inflows"
 msgstr "Total de entradas de dinheiro registadas"
 
+msgid "Unknown QR code for this event."
+msgstr "Código QR desconhecido para este evento."
+
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
 msgstr "Utilização de %(tokens)s para %(event)s"
@@ -7595,7 +7640,7 @@ msgid "Number of passengers requiring transportation."
 msgstr "Número de passageiros que necessitam de transporte."
 
 msgid "Optional - Image displayed within the question"
-msgstr "Opcional — Imagem apresentada na pergunta"
+msgstr "Opcional - Imagem apresentada na pergunta"
 
 msgid "Optional image for homepage carousel/slideshow"
 msgstr "Imagem opcional para o carrossel/apresentação da página inicial"
@@ -8016,6 +8061,10 @@ msgstr "Total de taxas de participação reduzidas através de descontos"
 msgid "View all deadlines that must be met for this event"
 msgstr "Vê todos os prazos que devem ser cumpridos para este evento"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr ""
+"Agora podes digitalizar códigos QR para fazer o check-in dos participantes"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "A tua conta está protegida por uma aplicação de autenticação."
 
@@ -8118,7 +8167,7 @@ msgid "No participant has answered the matchmaker form yet."
 msgstr "Ainda nenhum participante respondeu ao formulário do Matchmaker."
 
 msgid "Optional - A screenshot of the error / bug / problem"
-msgstr "Opcional — Uma captura de ecrã do erro / bug / problema"
+msgstr "Opcional - Uma captura de ecrã do erro / bug / problema"
 
 msgid "Perform check on the consistency of character sheets"
 msgstr "Efetuar verificações à consistência das fichas de personagem"
@@ -8270,6 +8319,11 @@ msgstr "O controlo de quantidades não está ativado para esta organização"
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Consultar as respostas dos participantes às perguntas do Matchmaker"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr ""
+"Digitaliza os códigos QR dos participantes no local para marcá-los como "
+"presentes"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Algumas funcionalidades requerem «Personagem», que não está ativa"
@@ -8943,7 +8997,7 @@ msgstr ""
 "Ainda não há eventos. Cria o teu primeiro evento usando o botão acima."
 
 msgid "Optional - Extended description (displayed in small gray text)"
-msgstr "Opcional — Descrição alargada (apresentada em texto cinzento pequeno)"
+msgstr "Opcional - Descrição alargada (apresentada em texto cinzento pequeno)"
 
 msgid "Optional note about this token (e.g., recipient name, purpose)"
 msgstr ""
@@ -9159,7 +9213,7 @@ msgstr ""
 "membro."
 
 msgid "Create and manage events and their setting - names, dates, status"
-msgstr "Criar e gerir eventos e as suas definições — nomes, datas, estado"
+msgstr "Criar e gerir eventos e as suas definições - nomes, datas, estado"
 
 msgid "Current status of the membership application and approval process"
 msgstr "Estado atual do pedido de adesão e do processo de aprovação"
@@ -10779,7 +10833,7 @@ msgid ""
 "Optional - Amount added to the registration fee if selected (0 = no extra "
 "cost)"
 msgstr ""
-"Opcional — Montante adicionado à taxa de inscrição se selecionada (0 = sem "
+"Opcional - Montante adicionado à taxa de inscrição se selecionada (0 = sem "
 "custo adicional)"
 
 msgid ""
@@ -10883,7 +10937,7 @@ msgid ""
 "Optional - Additional information about the option, displayed below the "
 "question"
 msgstr ""
-"Opcional — Informações adicionais sobre a opção, apresentadas abaixo da "
+"Opcional - Informações adicionais sobre a opção, apresentadas abaixo da "
 "pergunta"
 
 msgid ""
@@ -11853,7 +11907,7 @@ msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed!"
 msgstr ""
-"Tem cuidado ao seguir estes passos — caso contrário, o teu pagamento não "
+"Tem cuidado ao seguir estes passos - caso contrário, o teu pagamento não "
 "será processado!"
 
 msgid ""
@@ -12004,7 +12058,7 @@ msgid ""
 "Optional - Maximum number of times it can be selected across all characters "
 "(0 = unlimited)"
 msgstr ""
-"Opcional — Número máximo de vezes que pode ser selecionada em todas as "
+"Opcional - Número máximo de vezes que pode ser selecionada em todas as "
 "personagens (0 = ilimitado)"
 
 msgid ""
@@ -12342,7 +12396,7 @@ msgid ""
 "Optional - Maximum number of times it can be selected across all "
 "registrations (0 = unlimited)"
 msgstr ""
-"Opcional — Número máximo de vezes que pode ser selecionada em todas as "
+"Opcional - Número máximo de vezes que pode ser selecionada em todas as "
 "inscrições (0 = ilimitado)"
 
 msgid ""
@@ -14003,7 +14057,7 @@ msgid ""
 "Optional - For text questions, maximum number of characters; For multiple "
 "options, maximum number of options (0 = no limit)"
 msgstr ""
-"Opcional — Para perguntas de texto, número máximo de caracteres; para opções"
+"Opcional - Para perguntas de texto, número máximo de caracteres; para opções"
 " múltiplas, número máximo de opções (0 = sem limite)"
 
 msgid ""
@@ -14346,7 +14400,7 @@ msgid ""
 "Optional - If you select one (or more) factions, the question will only be "
 "shown to participants with characters in all chosen factions"
 msgstr ""
-"Opcional — Se selecionares uma ou mais fações, a pergunta só será mostrada a"
+"Opcional - Se selecionares uma ou mais fações, a pergunta só será mostrada a"
 " participantes com personagens em todas as fações escolhidas"
 
 msgid ""
@@ -14395,6 +14449,14 @@ msgstr ""
 "Esta personagem foi modificada noutra janela: as tuas alterações aqui não "
 "foram guardadas. Copia o texto que queres manter e depois recarrega a "
 "página."
+
+msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Gera um código QR único por inscrição e permite à equipa digitalizá-lo no "
+"local para marcar os participantes como presentes, funcionando offline com "
+"sincronização automática"
 
 msgid ""
 "If the first name shown on your documents is different from the one you "
@@ -14485,6 +14547,14 @@ msgstr ""
 "Executa o sorteio para selecionar aleatoriamente participantes de inscrições"
 " de nível de lotaria e atualizar as inscrições selecionadas para bilhetes "
 "confirmados"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Digitaliza os códigos QR dos participantes no local para marcá-los como "
+"presentes. Funciona offline: as digitalizações são guardadas localmente e "
+"sincronizadas automaticamente quando voltares a estar online."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "

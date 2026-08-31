@@ -65,8 +65,7 @@ from larpmanager.models.utils import (
     get_option_form_text as util_get_option_form_text,
     strip_tags,
 )
-from larpmanager.models.writing import Faction
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import Faction, get_event_class_parent, get_event_elements
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet

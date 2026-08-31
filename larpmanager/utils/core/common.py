@@ -21,7 +21,6 @@ from __future__ import annotations
 
 import ast
 import html
-import inspect
 import logging
 import random
 import re
@@ -44,7 +43,6 @@ from django.http import Http404, HttpRequest
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from larpmanager.cache.config import _get_event_parent_id, get_event_config
 from larpmanager.cache.feature import get_event_features
 from larpmanager.models.access import get_association_executives
 from larpmanager.models.accounting import Collection, Discount
@@ -59,11 +57,11 @@ from larpmanager.models.miscellanea import (
     PlayerRelationship,
     WorkshopModule,
 )
-from larpmanager.models.registration import Registration
 from larpmanager.models.utils import strip_tags
 from larpmanager.models.writing import (
     Handout,
     Relationship,
+    get_event_class_parent,
 )
 
 if TYPE_CHECKING:
@@ -77,49 +75,6 @@ class DelimiterNotFoundError(ValueError):
 def feature_visible(feature_slug: str, features: dict | set, allowed_sidebar: list[str] | None) -> bool:
     """Check whether a feature is enabled and not excluded by a demo's allowed sidebar restriction."""
     return feature_slug in features and (not allowed_sidebar or feature_slug in allowed_sidebar)
-
-
-def get_event_class_parent(event_id: int, model_class: type[BaseModel] | str, *, context: dict | None = None) -> int:
-    """Get the event id to use for inheriting elements of a specific model class.
-
-    Determines whether to use the parent event's id or the current event's id
-    based on inheritance settings and model class type.
-    """
-    if inspect.isclass(model_class) and issubclass(model_class, BaseModel):
-        model_class = model_class.__name__.lower()
-
-    inheritable_elements = [
-        "character",
-        "faction",
-        "abilityexp",
-        "deliveryexp",
-        "abilitytypeexp",
-        "ruleexp",
-        "abilitytemplateexp",
-        "modifierexp",
-        "criterionexp",
-        "systemexp",
-        "systemexppooltypeci",
-        "writingquestion",
-        "writingoption",
-        "relationshiptag",
-    ]
-
-    if model_class in inheritable_elements:
-        parent_id = _get_event_parent_id(event_id, context)
-        if parent_id and not get_event_config(event_id, f"campaign_{model_class}_indep", context=context):
-            return parent_id
-
-    return event_id
-
-
-def get_event_elements(event_id: int, element_model_class: type[BaseModel], *, context: dict | None = None) -> QuerySet:
-    """Get ordered elements of specified type for the event, following inheritance rules."""
-    parent_id = get_event_class_parent(event_id, element_model_class, context=context)
-    queryset = element_model_class.objects.filter(event_id=parent_id)
-    if hasattr(element_model_class, "number"):
-        queryset = queryset.order_by("number")
-    return queryset
 
 
 logger = logging.getLogger(__name__)
@@ -252,18 +207,6 @@ def get_event_template(context: dict, template_uuid: str) -> None:
         template_uuid,
         template=True,
         association_id=context["association_id"],
-    )
-
-
-def get_registration(context: dict, registration_uuid: str) -> None:
-    """Get registration by ID and add to context."""
-    add_context_by_uuid(
-        context,
-        "registration",
-        Registration,
-        registration_uuid,
-        set_name=True,
-        run=context["run"],
     )
 
 
@@ -828,7 +771,8 @@ def get_coming_runs(association_id: int | None, *, future: bool = True, include_
     return runs
 
 
-def _geo_prefetch(prefix: str = "") -> Prefetch:
+def geo_prefetch(prefix: str = "") -> Prefetch:
+    """Build a Prefetch for pub_lat/pub_lon EventConfigs, optionally through a related-object prefix."""
     path = f"{prefix}__configs" if prefix else "event__configs"
     return Prefetch(
         path,
@@ -839,12 +783,7 @@ def _geo_prefetch(prefix: str = "") -> Prefetch:
 
 def with_geo_configs(runs_qs: QuerySet) -> QuerySet:
     """Prefetch pub_lat/pub_lon EventConfigs so Event.maps_url needs no extra queries."""
-    return runs_qs.prefetch_related(_geo_prefetch())
-
-
-def with_geo_configs_registrations(registrations_qs: QuerySet) -> QuerySet:
-    """Prefetch pub_lat/pub_lon EventConfigs through registration->run->event."""
-    return registrations_qs.prefetch_related(_geo_prefetch("run__event"))
+    return runs_qs.prefetch_related(geo_prefetch())
 
 
 def _validate_and_fetch_objects(model_class: type, ids: int | list[int], model_name: str) -> list:

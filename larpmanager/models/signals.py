@@ -133,11 +133,9 @@ from larpmanager.cache.permission import (
     clear_index_permission_cache,
 )
 from larpmanager.cache.question import clear_registration_questions_cache, clear_writing_questions_cache
-from larpmanager.cache.registration import (
-    clear_registration_counts_cache,
-    clear_registration_tickets_cache,
-    on_character_update_registration_cache,
-)
+from larpmanager.cache.registration import character_registration_updated, on_character_update_registration_cache
+from larpmanager.cache.registration_counts import clear_registration_counts_cache
+from larpmanager.cache.registration_lookup import clear_registration_tickets_cache
 from larpmanager.cache.rels import (
     clear_event_relationships_cache,
     collect_relationship_tag_characters,
@@ -333,6 +331,11 @@ from larpmanager.utils.publication.base import (
     publish_event_role,
     publish_registration,
 )
+from larpmanager.utils.registrations.signals import (
+    apply_registration_post_save_updates,
+    process_registration_event_change,
+    reset_registration_ticket,
+)
 from larpmanager.utils.services.association import (
     apply_skin_features_to_association,
     auto_assign_association_permission_number,
@@ -358,11 +361,6 @@ from larpmanager.utils.services.inventory import generate_base_inventories
 from larpmanager.utils.services.miscellanea import auto_rotate_vertical_photos
 from larpmanager.utils.services.writing import replace_character_names_before_save
 from larpmanager.utils.users.member import create_member_profile_for_user, process_membership_status_updates
-from larpmanager.utils.users.registration import (
-    apply_registration_post_save_updates,
-    process_registration_event_change,
-    reset_registration_ticket,
-)
 
 log = logging.getLogger(__name__)
 
@@ -1383,6 +1381,12 @@ def post_save_registration_cache(sender: type, instance: Registration, created: 
 
     # Process ticket options, accounting, and caches shared with other registration-save paths
     apply_registration_post_save_updates(instance)
+
+
+@receiver(character_registration_updated)
+def on_character_registration_updated(sender: type, registration: Registration, **kwargs: Any) -> None:
+    """Apply registration post-save updates triggered by a related character change."""
+    apply_registration_post_save_updates(registration)
 
 
 @receiver(pre_softdelete, sender=Registration)

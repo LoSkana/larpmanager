@@ -8,6 +8,9 @@ msgstr "Idź"
 msgid "Hi"
 msgstr "Cześć"
 
+msgid "No"
+msgstr "Nie"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "VAT"
 
 msgid "Who"
 msgstr "Kto"
+
+msgid "Yes"
+msgstr "Tak"
 
 msgid "age"
 msgstr "wiek"
@@ -640,6 +646,9 @@ msgstr "Kraj"
 msgid "Number"
 msgstr "Liczba"
 
+msgid "Online"
+msgstr "Online"
+
 msgid "Option"
 msgstr "Opcja"
 
@@ -901,6 +910,9 @@ msgstr "Brak kroku"
 msgid "Nothing"
 msgstr "Nic"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Opcje"
 
@@ -921,6 +933,9 @@ msgstr "Gracz:"
 
 msgid "Players"
 msgstr "Gracze"
+
+msgid "Present"
+msgstr "Obecny"
 
 msgid "Preview"
 msgstr "Podgląd"
@@ -1096,6 +1111,9 @@ msgstr "Karuzela"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Check-in"
 
 msgid "Claimant"
 msgstr "Wnioskodawca"
@@ -2051,6 +2069,9 @@ msgstr "Zmień prezent"
 msgid "Characters:"
 msgstr "Postacie:"
 
+msgid "Checked in:"
+msgstr "Zameldowano:"
+
 msgid "Collections"
 msgstr "Zbiórki"
 
@@ -2146,6 +2167,12 @@ msgstr "Nowa sesja"
 
 msgid "Next events"
 msgstr "Następne wydarzenia"
+
+msgid "Not scanned"
+msgstr "Nie zeskanowano"
+
+msgid "Outstanding"
+msgstr "Nierozliczone"
 
 msgid "Participant"
 msgstr "Uczestnik"
@@ -2447,6 +2474,9 @@ msgstr "Wymagania"
 msgid "Rotate right"
 msgstr "Obrót w prawo"
 
+msgid "Scan QR code"
+msgstr "Skanuj kod QR"
+
 msgid "Scroll right"
 msgstr "Przesuń w prawo"
 
@@ -2686,6 +2716,9 @@ msgstr "Poprzednie sesje"
 
 msgid "Paste as text"
 msgstr "Wklej jako tekst"
+
+msgid "Pending sync:"
+msgstr "Oczekuje na synchronizację:"
 
 msgid "Personal data"
 msgstr "Dane osobowe"
@@ -3009,6 +3042,9 @@ msgstr "Poproś o rejestrację"
 
 msgid "Requests open:"
 msgstr "Wnioski otwarte:"
+
+msgid "Scan rejected:"
+msgstr "Skanowanie odrzucone:"
 
 msgid "Sensitive data"
 msgstr "Wrażliwe dane"
@@ -3532,6 +3568,9 @@ msgstr "Prywatna wiadomość:"
 
 msgid "Promote to admin"
 msgstr "Awansuj na administratora"
+
+msgid "QR Code Check-in"
+msgstr "Check-in kodem QR"
 
 msgid "Realized revenue"
 msgstr "Zrealizowane przychody"
@@ -4327,6 +4366,9 @@ msgstr "Opis karuzeli"
 
 msgid "Character Inventory:"
 msgstr "Ekwipunek postaci:"
+
+msgid "Check-in QR code.png"
+msgstr "Kod QR check-in.png"
 
 msgid "Close the collection"
 msgstr "Zamknij zbiórkę"
@@ -5992,6 +6034,9 @@ msgstr "Data rozpoczęcia wydarzenia"
 
 msgid "Total of recorded money inflows"
 msgstr "Suma zarejestrowanych wpływów pieniężnych"
+
+msgid "Unknown QR code for this event."
+msgstr "Nieznany kod QR dla tego wydarzenia."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8018,6 +8063,9 @@ msgstr ""
 "Zobacz wszystkie terminy, których trzeba dotrzymać w związku z tym "
 "wydarzeniem"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr "Możesz teraz skanować kody QR, aby zameldować uczestników"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Twoje konto jest chronione przez aplikację uwierzytelniającą."
 
@@ -8278,6 +8326,9 @@ msgstr "Śledzenie ilości nie jest włączone dla tej organizacji"
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Przejrzyj odpowiedzi uczestników na pytania Matchmaker"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr "Skanuj na miejscu kody QR uczestników, aby oznaczyć ich jako obecnych"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Niektóre funkcje wymagają modułu „Postać”, który nie jest aktywny"
@@ -9193,7 +9244,7 @@ msgstr ""
 
 msgid "Create and manage events and their setting - names, dates, status"
 msgstr ""
-"Twórz i zarządzaj wydarzeniami oraz ich ustawieniami — nazwami, datami, "
+"Twórz i zarządzaj wydarzeniami oraz ich ustawieniami - nazwami, datami, "
 "statusem"
 
 msgid "Current status of the membership application and approval process"
@@ -9727,7 +9778,7 @@ msgstr "Wprowadź numer lub kod dokumentu identyfikacyjnego wskazanego powyżej"
 
 msgid ""
 "Enter the title of the character - it will be shown along with the name"
-msgstr "Wpisz tytuł postaci — będzie wyświetlany wraz z imieniem"
+msgstr "Wpisz tytuł postaci - będzie wyświetlany wraz z imieniem"
 
 msgid ""
 "Fine-tune every setting for your organization and each individual event"
@@ -11848,7 +11899,7 @@ msgid ""
 "Please be careful to perform these steps - otherwise your  payment will not "
 "be processed!"
 msgstr ""
-"Uważnie wykonaj te kroki — w przeciwnym razie Twoja płatność nie zostanie "
+"Uważnie wykonaj te kroki - w przeciwnym razie Twoja płatność nie zostanie "
 "przetworzona!"
 
 msgid ""
@@ -12739,7 +12790,7 @@ msgid ""
 "We only ask for a moment of your time to check the documents you have "
 "uploaded, it won't take long!"
 msgstr ""
-"Prosimy tylko o chwilę twojego czasu na sprawdzenie przesłanych dokumentów —"
+"Prosimy tylko o chwilę twojego czasu na sprawdzenie przesłanych dokumentów -"
 " nie zajmie to długo!"
 
 msgid ""
@@ -14402,6 +14453,14 @@ msgstr ""
 "stronę."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Generuje unikalny kod QR dla każdej rejestracji i umożliwia obsłudze "
+"skanowanie go na miejscu, aby oznaczać uczestników jako obecnych, działając "
+"offline z automatyczną synchronizacją"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14491,6 +14550,14 @@ msgid ""
 msgstr ""
 "Przeprowadź losowanie, aby losowo wybrać uczestników spośród zgłoszeń z puli"
 " losowania i przekształcić je w potwierdzone bilety"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Skanuj na miejscu kody QR uczestników, aby oznaczyć ich jako obecnych. "
+"Działa offline: skany są kolejkowane lokalnie i automatycznie "
+"synchronizowane po ponownym połączeniu z internetem."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "
@@ -14902,7 +14969,7 @@ msgid ""
 msgstr ""
 "Pamiętaj, że informacje na tej stronie zostały przekazane poufnie i należy "
 "traktować je z najwyższą ostrożnością. Udostępniaj je tylko wtedy, gdy jest "
-"to absolutnie konieczne, a jeśli to możliwe — anonimowo."
+"to absolutnie konieczne, a jeśli to możliwe - anonimowo."
 
 #, python-format
 msgid ""

@@ -48,9 +48,16 @@ from larpmanager.models.miscellanea import (
     WarehouseItem,
     WarehouseTag,
 )
-from larpmanager.models.writing import Character, CharacterConfig, CharacterStatus, Faction, Plot, Prologue
+from larpmanager.models.writing import (
+    Character,
+    CharacterConfig,
+    CharacterStatus,
+    Faction,
+    Plot,
+    Prologue,
+    get_event_elements,
+)
 from larpmanager.utils.auth.admin import is_lm_admin
-from larpmanager.utils.core.common import get_event_elements
 from larpmanager.utils.core.exceptions import ReturnNowError
 from larpmanager.utils.services.miscellanea import (
     warehouse_add_assignment,

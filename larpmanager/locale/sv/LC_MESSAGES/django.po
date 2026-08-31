@@ -8,6 +8,9 @@ msgstr "Gå"
 msgid "Hi"
 msgstr "Hej"
 
+msgid "No"
+msgstr "Nej"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "MOMS"
 
 msgid "Who"
 msgstr "Vem"
+
+msgid "Yes"
+msgstr "Ja"
 
 msgid "age"
 msgstr "ålder"
@@ -640,6 +646,9 @@ msgstr "Nation"
 msgid "Number"
 msgstr "Antal"
 
+msgid "Online"
+msgstr "Online"
+
 msgid "Option"
 msgstr "Alternativ"
 
@@ -901,6 +910,9 @@ msgstr "Inget steg"
 msgid "Nothing"
 msgstr "Ingenting"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Alternativ"
 
@@ -921,6 +933,9 @@ msgstr "Spelare:"
 
 msgid "Players"
 msgstr "Spelare"
+
+msgid "Present"
+msgstr "Närvarande"
 
 msgid "Preview"
 msgstr "Förhandsgranskning"
@@ -1096,6 +1111,9 @@ msgstr "Karusell"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Incheckning"
 
 msgid "Claimant"
 msgstr "Sökande"
@@ -2051,6 +2069,9 @@ msgstr "Ändra gåva"
 msgid "Characters:"
 msgstr "Karaktärer:"
 
+msgid "Checked in:"
+msgstr "Incheckad:"
+
 msgid "Collections"
 msgstr "Penninginsamlingar"
 
@@ -2146,6 +2167,12 @@ msgstr "Ny session"
 
 msgid "Next events"
 msgstr "Kommande evenemang"
+
+msgid "Not scanned"
+msgstr "Inte skannad"
+
+msgid "Outstanding"
+msgstr "Ej incheckad"
 
 msgid "Participant"
 msgstr "Deltagare"
@@ -2447,6 +2474,9 @@ msgstr "Krav"
 msgid "Rotate right"
 msgstr "Rotera höger"
 
+msgid "Scan QR code"
+msgstr "Skanna QR-kod"
+
 msgid "Scroll right"
 msgstr "Bläddra åt höger"
 
@@ -2686,6 +2716,9 @@ msgstr "Tidigare sessioner"
 
 msgid "Paste as text"
 msgstr "Klistra in som text"
+
+msgid "Pending sync:"
+msgstr "Väntar på synkning:"
 
 msgid "Personal data"
 msgstr "Personuppgifter"
@@ -3009,6 +3042,9 @@ msgstr "Begär registrering"
 
 msgid "Requests open:"
 msgstr "Öppna förfrågningar:"
+
+msgid "Scan rejected:"
+msgstr "Skanning avvisades:"
 
 msgid "Sensitive data"
 msgstr "Känsliga uppgifter"
@@ -3532,6 +3568,9 @@ msgstr "Privat meddelande:"
 
 msgid "Promote to admin"
 msgstr "Befordra till administratör"
+
+msgid "QR Code Check-in"
+msgstr "Incheckning med QR-kod"
 
 msgid "Realized revenue"
 msgstr "Realiserade intäkter"
@@ -4327,6 +4366,9 @@ msgstr "Beskrivning av karusellen"
 
 msgid "Character Inventory:"
 msgstr "Karaktärsinventering:"
+
+msgid "Check-in QR code.png"
+msgstr "QR-kod för incheckning.png"
 
 msgid "Close the collection"
 msgstr "Stäng insamlingen"
@@ -5992,6 +6034,9 @@ msgstr "Datum då händelsen börjar"
 
 msgid "Total of recorded money inflows"
 msgstr "Totalt belopp av registrerade penninginflöden"
+
+msgid "Unknown QR code for this event."
+msgstr "Okänd QR-kod för detta event."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8015,6 +8060,9 @@ msgstr "Totala deltagaravgifter reducerade genom rabatter"
 msgid "View all deadlines that must be met for this event"
 msgstr "Visa alla tidsfrister som måste iakttas för detta evenemang"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr "Du kan nu skanna QR-koder för att checka in deltagare"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Ditt konto skyddas av en autentiseringsapp."
 
@@ -8267,6 +8315,10 @@ msgstr "Kvantitetsspårning är inte aktiverad för den här organisationen"
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Granska deltagarnas svar på matchmaker-frågorna"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr ""
+"Skanna deltagarnas QR-koder på plats för att markera dem som närvarande"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Vissa funktioner kräver \"Karaktär\", som inte är aktiv"
@@ -14288,6 +14340,14 @@ msgstr ""
 " sparats. Kopiera texten du vill behålla och ladda sedan om sidan."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Skapar en unik QR-kod för varje registrering och låter personalen skanna den"
+" på plats för att markera deltagare som närvarande, fungerar offline med "
+"automatisk synkning"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14375,6 +14435,14 @@ msgstr ""
 "Genomför lotteridragningen för att slumpmässigt välja ut deltagare bland "
 "anmälningarna i lotterikategorin och uppgradera dem till bekräftade "
 "biljetter"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Skanna deltagarnas QR-koder på plats för att markera dem som närvarande. "
+"Fungerar offline: skanningar köas lokalt och synkas automatiskt när du är "
+"online igen."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "

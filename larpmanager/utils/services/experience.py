@@ -42,8 +42,7 @@ from larpmanager.models.form import (
     WritingQuestion,
     WritingQuestionType,
 )
-from larpmanager.models.writing import Character, CharacterConfig, Faction
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import Character, CharacterConfig, Faction, get_event_class_parent, get_event_elements
 from larpmanager.utils.core.guard import experience_recalc_deferred, is_experience_recalc_deferred
 from larpmanager.utils.larpmanager.tasks import background_auto
 

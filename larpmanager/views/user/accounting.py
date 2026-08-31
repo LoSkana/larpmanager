@@ -75,14 +75,15 @@ from larpmanager.models.accounting import (
 from larpmanager.models.association import Association, AssociationTextType
 from larpmanager.models.member import Member, MembershipStatus, NotificationType, get_user_membership
 from larpmanager.models.registration import Registration
-from larpmanager.utils.core.base import check_event_context, get_context, get_event_context
+from larpmanager.utils.core.base import get_context, get_event_context
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.core.common import (
     get_collection_partecipate,
     get_collection_redeem,
 )
 from larpmanager.utils.core.exceptions import RedirectError, check_association_feature
+from larpmanager.utils.registrations.status import _status_payment, registration_status
 from larpmanager.utils.users.fiscal_code import calculate_fiscal_code
-from larpmanager.utils.users.registration import _status_payment, registration_status
 
 logger = logging.getLogger(__name__)
 

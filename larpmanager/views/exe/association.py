@@ -42,7 +42,7 @@ from larpmanager.models.association import Association, AssociationText, Associa
 from larpmanager.models.base import Feature
 from larpmanager.models.event import Run
 from larpmanager.utils.auth.permission import get_index_association_permissions
-from larpmanager.utils.core.base import check_association_context
+from larpmanager.utils.core.checks import check_association_context
 from larpmanager.utils.core.common import clear_messages, get_feature, is_rate_limited
 from larpmanager.utils.core.exceptions import RedirectError
 from larpmanager.utils.edit.backend import backend_edit

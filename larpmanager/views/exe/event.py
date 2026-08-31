@@ -46,7 +46,8 @@ from larpmanager.models.event import (
     Run,
 )
 from larpmanager.models.larpmanager import LarpManagerTicket
-from larpmanager.utils.core.base import check_association_context, get_context
+from larpmanager.utils.core.base import get_context
+from larpmanager.utils.core.checks import check_association_context
 from larpmanager.utils.core.common import get_coming_runs, get_event_template
 from larpmanager.utils.edit.backend import backend_get
 from larpmanager.utils.edit.exe import ExeAction, exe_delete, exe_edit, exe_form, exe_new

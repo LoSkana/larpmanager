@@ -8,6 +8,9 @@ msgstr "Ga"
 msgid "Hi"
 msgstr "Hoi"
 
+msgid "No"
+msgstr "Nee"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "BTW"
 
 msgid "Who"
 msgstr "Wie"
+
+msgid "Yes"
+msgstr "Ja"
 
 msgid "age"
 msgstr "leeftijd"
@@ -640,6 +646,9 @@ msgstr "Natie"
 msgid "Number"
 msgstr "Nummer"
 
+msgid "Online"
+msgstr "Online"
+
 msgid "Option"
 msgstr "Optie"
 
@@ -901,6 +910,9 @@ msgstr "Geen stap"
 msgid "Nothing"
 msgstr "Niets"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Opties"
 
@@ -921,6 +933,9 @@ msgstr "Speler:"
 
 msgid "Players"
 msgstr "Spelers"
+
+msgid "Present"
+msgstr "Aanwezig"
 
 msgid "Preview"
 msgstr "Voorvertoning"
@@ -1096,6 +1111,9 @@ msgstr "Carrousel"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Check-in"
 
 msgid "Claimant"
 msgstr "Aanvrager"
@@ -2051,6 +2069,9 @@ msgstr "Verander geschenk"
 msgid "Characters:"
 msgstr "Personages:"
 
+msgid "Checked in:"
+msgstr "Ingecheckt:"
+
 msgid "Collections"
 msgstr "Inzamelingen"
 
@@ -2146,6 +2167,12 @@ msgstr "Nieuwe sessie"
 
 msgid "Next events"
 msgstr "Komende evenementen"
+
+msgid "Not scanned"
+msgstr "Niet gescand"
+
+msgid "Outstanding"
+msgstr "Openstaand"
 
 msgid "Participant"
 msgstr "Deelnemer"
@@ -2447,6 +2474,9 @@ msgstr "Vereisten"
 msgid "Rotate right"
 msgstr "Rechtsom draaien"
 
+msgid "Scan QR code"
+msgstr "Scan QR-code"
+
 msgid "Scroll right"
 msgstr "Scroll naar rechts"
 
@@ -2686,6 +2716,9 @@ msgstr "Voorbije sessies"
 
 msgid "Paste as text"
 msgstr "Plakken als tekst"
+
+msgid "Pending sync:"
+msgstr "Wachten op synchronisatie:"
 
 msgid "Personal data"
 msgstr "Persoonlijke gegevens"
@@ -3009,6 +3042,9 @@ msgstr "Aanmelding aanvragen"
 
 msgid "Requests open:"
 msgstr "Open verzoeken:"
+
+msgid "Scan rejected:"
+msgstr "Scan afgewezen:"
 
 msgid "Sensitive data"
 msgstr "Gevoelige gegevens"
@@ -3532,6 +3568,9 @@ msgstr "Privébericht:"
 
 msgid "Promote to admin"
 msgstr "Bevorder tot beheerder"
+
+msgid "QR Code Check-in"
+msgstr "QR-code check-in"
 
 msgid "Realized revenue"
 msgstr "Gerealiseerde omzet"
@@ -4327,6 +4366,9 @@ msgstr "Carrousel beschrijving"
 
 msgid "Character Inventory:"
 msgstr "Karakterinventaris:"
+
+msgid "Check-in QR code.png"
+msgstr "Check-in QR-code.png"
 
 msgid "Close the collection"
 msgstr "Sluit de inzameling"
@@ -5992,6 +6034,9 @@ msgstr "De datum waarop dit evenement begint"
 
 msgid "Total of recorded money inflows"
 msgstr "Totaal van geregistreerde geldinstromingen"
+
+msgid "Unknown QR code for this event."
+msgstr "Onbekende QR-code voor dit evenement."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8024,6 +8069,9 @@ msgstr "Totale deelnamekosten verlaagd door kortingen"
 msgid "View all deadlines that must be met for this event"
 msgstr "Bekijk alle deadlines die je voor dit evenement moet halen"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr "Je kunt nu QR-codes scannen om deelnemers in te checken"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Je account wordt beschermd door een authenticatie-app."
 
@@ -8286,6 +8334,10 @@ msgstr ""
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Bekijk de antwoorden van de deelnemers op de ‘matchmaker’-vragen"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr ""
+"Scan QR-codes van deelnemers ter plaatse om hen als aanwezig te markeren"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Sommige functies vereisen 'Personage', dat niet actief is."
@@ -14544,6 +14596,14 @@ msgstr ""
 "opnieuw."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Genereert een unieke QR-code per registratie en laat medewerkers deze ter "
+"plaatse scannen om deelnemers als aanwezig te markeren, offline werkend met "
+"automatische synchronisatie"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14634,6 +14694,14 @@ msgid ""
 msgstr ""
 "Voer de loting uit om willekeurig deelnemers te selecteren uit de "
 "inschrijvingen in de loterijcategorie en zet ze om in bevestigde tickets"
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Scan QR-codes van deelnemers ter plaatse om hen als aanwezig te markeren. "
+"Werkt offline: scans worden lokaal in de wachtrij gezet en automatisch "
+"gesynchroniseerd zodra je weer online bent."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "

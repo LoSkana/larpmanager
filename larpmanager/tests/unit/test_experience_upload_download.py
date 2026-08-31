@@ -35,8 +35,8 @@ from larpmanager.models.form import (
     WritingOption,
     WritingQuestion,
 )
+from larpmanager.models.writing import get_event_class_parent
 from larpmanager.tests.unit.base import BaseTestCase
-from larpmanager.utils.core.common import get_event_class_parent
 from larpmanager.utils.io.download import (
     _get_column_names,
     export_abilities,
@@ -286,7 +286,7 @@ class TestExperienceUploadDownload(BaseTestCase):
 
         row = {"number": "1", "name": "bonus", "amount": "5", "requirements": first.name}
         with (
-            mock.patch("larpmanager.utils.io.upload.save_log", side_effect=RuntimeError("boom")),
+            mock.patch("larpmanager.utils.io.upload.experience.save_log", side_effect=RuntimeError("boom")),
             pytest.raises(RuntimeError),
         ):
             _criterion_load(self.context, row)

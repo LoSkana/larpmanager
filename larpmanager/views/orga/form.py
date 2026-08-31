@@ -22,7 +22,7 @@ from __future__ import annotations
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import F, Prefetch, QuerySet
+from django.db.models import Prefetch
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -31,18 +31,18 @@ from larpmanager.cache.button import clear_event_button_cache
 from larpmanager.cache.character import reset_event_cache_all
 from larpmanager.cache.config import get_event_config
 from larpmanager.cache.experience import clear_event_exp_cache, clear_event_exp_systems_cache
-from larpmanager.cache.registration import clear_registration_tickets_cache, get_registration_tickets
+from larpmanager.cache.registration_lookup import clear_registration_tickets_cache, get_registration_tickets
 from larpmanager.cache.writing import clear_relationship_tags_cache
 from larpmanager.forms.registration import OrgaRegistrationTicketForm
-from larpmanager.models.form import REGISTRATION_APPLICABLE_TO_TYPE, RegistrationOption, RegistrationQuestion
+from larpmanager.models.form import REGISTRATION_APPLICABLE_TO_TYPE, RegistrationOption
 from larpmanager.models.registration import (
     RegistrationInstallment,
     RegistrationQuota,
     RegistrationSection,
     RegistrationSurcharge,
 )
-from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_event_class_parent, get_event_elements
+from larpmanager.models.writing import get_event_class_parent
+from larpmanager.utils.core.checks import check_event_context
 from larpmanager.utils.edit.backend import (
     backend_order,
     backend_set_order,
@@ -62,6 +62,7 @@ from larpmanager.utils.edit.orga import (
     orga_new,
 )
 from larpmanager.utils.io.download import orga_registration_form_download, orga_tickets_download
+from larpmanager.utils.registrations.questions import get_ordered_registration_questions
 
 
 @login_required
@@ -147,20 +148,6 @@ def orga_registration_sections_edit(request: HttpRequest, event_slug: str, secti
 def orga_registration_sections_delete(request: HttpRequest, event_slug: str, section_uuid: str) -> HttpResponse:
     """Delete section for event."""
     return orga_delete(request, event_slug, OrgaAction.REGISTRATION_SECTIONS, section_uuid)
-
-
-def get_ordered_registration_questions(context: dict, applicable: str | None = None) -> QuerySet[RegistrationQuestion]:
-    """Get registration questions ordered by section and question order.
-
-    Args:
-        context: View context (must contain "event")
-        applicable: Optional RegistrationQuestionApplicable value to filter by. Unfiltered when None.
-
-    """
-    questions = get_event_elements(context["event"].id, RegistrationQuestion, context=context)
-    if applicable is not None:
-        questions = questions.filter(applicable=applicable)
-    return questions.order_by(F("section__order").asc(nulls_first=True), "order")
 
 
 @login_required

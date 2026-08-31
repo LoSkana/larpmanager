@@ -31,9 +31,9 @@ from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.event import EventCharactersPdfForm
 from larpmanager.models.event import Event, Run
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.writing import Character, Faction, Handout
-from larpmanager.utils.core.base import check_event_context
-from larpmanager.utils.core.common import get_element, get_event_elements
+from larpmanager.models.writing import Character, Faction, Handout, get_event_elements
+from larpmanager.utils.core.checks import check_event_context
+from larpmanager.utils.core.common import get_element
 from larpmanager.utils.edit.backend import save_log
 from larpmanager.utils.io.pdf import (
     _get_character_pdf_data,

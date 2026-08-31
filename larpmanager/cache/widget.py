@@ -34,9 +34,14 @@ from larpmanager.accounting.balance import (
     association_accounting_summary,
     get_run_accounting,
 )
-from larpmanager.cache.basic import get_event_association_id, get_event_basic_cache, get_run_association_id
-from larpmanager.cache.config import _get_event_parent_id, get_association_config
-from larpmanager.cache.registration import get_registration_counts
+from larpmanager.cache.basic import (
+    _get_event_parent_id,
+    get_event_association_id,
+    get_event_basic_cache,
+    get_run_association_id,
+)
+from larpmanager.cache.config import get_association_config
+from larpmanager.cache.registration_counts import get_registration_counts
 from larpmanager.cache.run import get_event_run_ids
 from larpmanager.models.accounting import (
     AccountingItemExpense,
@@ -64,16 +69,16 @@ from larpmanager.models.registration import (
     RegistrationQuota,
     RegistrationTicket,
 )
-from larpmanager.models.writing import Character, CharacterStatus
-from larpmanager.utils.core.common import format_datetime, get_coming_runs, get_event_elements, get_event_features
+from larpmanager.models.writing import Character, CharacterStatus, get_event_elements
+from larpmanager.utils.core.common import format_datetime, get_coming_runs, get_event_features
 from larpmanager.utils.publication.ildb import (
     ILDB_CONFIG_KEY,
     ILDB_EXPIRE_CONFIG,
     ILDB_RUN_CONFIG,
     ILDB_TEAM_CONFIG_KEY,
 )
+from larpmanager.utils.registrations.availability import registration_available
 from larpmanager.utils.users.deadlines import check_run_deadlines
-from larpmanager.utils.users.registration import registration_available
 
 
 def _compute_registration_status_code(run: Run) -> tuple[str, Any]:

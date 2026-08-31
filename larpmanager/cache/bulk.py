@@ -28,8 +28,7 @@ from larpmanager.models.access import EventRole, get_event_staffers
 from larpmanager.models.casting import Quest, QuestType
 from larpmanager.models.event import ProgressStep
 from larpmanager.models.experience import AbilityTypeExp, DeliveryExp
-from larpmanager.models.writing import Character, Faction, Plot, Prologue
-from larpmanager.utils.core.common import get_event_elements
+from larpmanager.models.writing import Character, Faction, Plot, Prologue, get_event_elements
 
 # Maps each cache key to its (model_class, order_field)
 BULK_CACHE_CONFIG: dict[str, tuple[type, str]] = {

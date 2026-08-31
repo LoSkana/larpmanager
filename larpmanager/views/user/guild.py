@@ -34,13 +34,19 @@ from larpmanager.cache.writing import get_writing_element_fields
 from larpmanager.forms.utils import GuildInviteS2Widget
 from larpmanager.forms.writing import GuildForm
 from larpmanager.mail.base import my_send_mail
-from larpmanager.models.association import hdr
 from larpmanager.models.form import QuestionApplicable
-from larpmanager.models.writing import Character, Guild, GuildMembership, GuildMembershipStatus, GuildRole
+from larpmanager.models.writing import (
+    Character,
+    Guild,
+    GuildMembership,
+    GuildMembershipStatus,
+    GuildRole,
+    get_event_elements,
+)
 from larpmanager.utils.core.base import get_event_context
-from larpmanager.utils.core.common import get_event_elements
-from larpmanager.utils.services.character import filter_playing_characters
-from larpmanager.utils.users.registration import get_player_characters
+from larpmanager.utils.core.headers import hdr
+from larpmanager.utils.registrations.characters import get_player_characters
+from larpmanager.utils.services.playing_filter import filter_playing_characters
 
 
 def _get_my_character_ids(context: dict) -> list[int]:

@@ -42,7 +42,8 @@ from larpmanager.cache.event_text import get_event_text
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.fields import visible_writing_fields
 from larpmanager.cache.question import get_writing_field_names
-from larpmanager.cache.registration import get_registration_counts, get_registration_tickets
+from larpmanager.cache.registration_counts import get_registration_counts
+from larpmanager.cache.registration_lookup import get_registration_tickets
 from larpmanager.cache.writing import get_writing_element_fields, get_writing_element_fields_batch
 from larpmanager.forms.registration import MatchmakerForm
 from larpmanager.models.accounting import AccountingItemDiscount, PaymentInvoice, PaymentType
@@ -70,18 +71,14 @@ from larpmanager.models.writing import (
     CharacterStatus,
     Faction,
     FactionType,
+    get_event_elements,
 )
 from larpmanager.utils.auth.admin import is_lm_admin
 from larpmanager.utils.core.base import get_context, get_event, get_event_context
-from larpmanager.utils.core.common import (
-    get_coming_runs,
-    get_element,
-    get_event_elements,
-    with_geo_configs,
-    with_geo_configs_registrations,
-)
+from larpmanager.utils.core.common import get_coming_runs, get_element, with_geo_configs
 from larpmanager.utils.core.exceptions import HiddenError
-from larpmanager.utils.users.registration import registration_status
+from larpmanager.utils.registrations.context import with_geo_configs_registrations
+from larpmanager.utils.registrations.status import registration_status
 
 
 def calendar(request: HttpRequest, context: dict, lang: str) -> HttpResponse:

@@ -313,7 +313,6 @@ class TestCacheSignals(BaseTestCase):
     @patch("larpmanager.models.signals.clear_association_permission_cache")
     def test_association_permission_post_delete_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that AssociationPermission post_delete signal resets permission cache"""
-
         module = FeatureModule.objects.create(name="Test module", order=100)
         feature = Feature.objects.create(name="Test Feature", order=100, module=module)
         perm_module = PermissionModule.objects.create(name="Test module", order=100)
@@ -343,7 +342,6 @@ class TestCacheSignals(BaseTestCase):
     @patch("larpmanager.models.signals.clear_event_permission_cache")
     def test_event_permission_post_delete_resets_permission_cache(self, mock_reset: Any) -> None:
         """Test that EventPermission post_delete signal resets permission cache"""
-
         module = FeatureModule.objects.create(name="Test module", order=100)
         feature = Feature.objects.create(name="Test Feature", order=100, module=module)
         perm_module = PermissionModule.objects.create(name="Test module", order=100)
@@ -396,7 +394,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(role_pk)
 
-    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.registrations.signals.clear_registration_accounting_cache")
     def test_registration_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets accounting cache"""
         registration = self.get_registration()
@@ -405,7 +403,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(registration.run_id)
 
-    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.registrations.signals.clear_registration_accounting_cache")
     def test_registration_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_delete signal resets accounting cache"""
         registration = self.get_registration()
@@ -415,7 +413,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(run.id)
 
-    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.registrations.signals.clear_registration_accounting_cache")
     def test_registration_ticket_post_save_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that RegistrationTicket post_save signal resets accounting cache"""
         # RegistrationTicket signal resets for all runs in the event
@@ -428,7 +426,7 @@ class TestCacheSignals(BaseTestCase):
         # Signal calls reset for event runs
         self.assertTrue(mock_reset.called)
 
-    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.registrations.signals.clear_registration_accounting_cache")
     def test_registration_ticket_post_delete_resets_accounting_cache(self, mock_reset: Any) -> None:
         """Test that RegistrationTicket post_delete signal resets accounting cache"""
         event = self.get_event()
@@ -658,7 +656,7 @@ class TestCacheSignals(BaseTestCase):
 
         mock_reset.assert_called_once_with(event.id)
 
-    @patch("larpmanager.utils.users.registration.clear_registration_counts_cache")
+    @patch("larpmanager.utils.registrations.signals.clear_registration_counts_cache")
     def test_registration_post_save_resets_registration_cache(self, mock_reset: Any) -> None:
         """Test that Registration post_save signal resets registration cache"""
         registration = self.get_registration()
@@ -1016,8 +1014,8 @@ class TestSoftDeleteSignals(BaseTestCase):
 
         mock_ctx.assert_called_once()
 
-    @patch("larpmanager.utils.users.registration.clear_registration_accounting_cache")
-    @patch("larpmanager.utils.users.registration.handle_registration_accounting_updates")
+    @patch("larpmanager.utils.registrations.signals.clear_registration_accounting_cache")
+    @patch("larpmanager.utils.registrations.signals.handle_registration_accounting_updates")
     def test_registration_soft_delete_skips_accounting_recompute(self, mock_accounting: Any, mock_clear: Any) -> None:
         """Test that soft deleting a registration clears caches without recomputing its accounting"""
         registration = self.create_registration()

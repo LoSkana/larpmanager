@@ -25,14 +25,12 @@ from django.conf import settings as conf_settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpRequest
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from larpmanager.accounting.base import get_payment_details
 from larpmanager.cache.config import get_association_config, get_event_config, is_event_config_set
 from larpmanager.cache.feature import get_event_features
 from larpmanager.cache.links import cache_event_links
-from larpmanager.cache.permission import get_association_permission_feature, get_event_permission_feature
 from larpmanager.cache.run import get_cache_config_run, get_cache_run
 from larpmanager.models.association import Association, AssociationConfig
 from larpmanager.models.event import Run
@@ -40,22 +38,20 @@ from larpmanager.models.member import get_user_membership
 from larpmanager.utils.auth.permission import (
     get_index_association_permissions,
     get_index_event_permissions,
-    has_association_permission,
     has_event_permission,
 )
 from larpmanager.utils.core.exceptions import (
-    FeatureError,
     MainPageError,
     MembershipError,
     RedirectError,
     UnknowRunError,
-    UserPermissionError,
     check_event_feature,
 )
 from larpmanager.utils.core.nav import build_main_nav_items
 from larpmanager.utils.larpmanager.versions import LATEST_AVAILABLE_VERSION
+from larpmanager.utils.registrations.characters import check_signup, registration_find
+from larpmanager.utils.registrations.status import registration_status
 from larpmanager.utils.services.demo import add_demo_hint_context
-from larpmanager.utils.users.registration import check_signup, registration_find, registration_status
 
 # Demo mode threshold (Associations with fewer than this many registrations are considered demo/trial accounts)
 MAX_DEMO_REGISTRATIONS = 10
@@ -198,153 +194,6 @@ def fetch_payment_details(association_id: int) -> dict:
     # Fetch association with only required fields for efficiency
     association = Association.objects.only("slug", "key").get(pk=association_id)
     return get_payment_details(association)
-
-
-def check_association_context(request: HttpRequest, permission_slug: str | list[str] | None = None) -> dict:
-    """Check and validate association permissions for a request.
-
-    Validates that the user has the required association permission and that
-    any necessary features are enabled. Sets up context data for rendering
-    the view with proper permission and feature information.
-
-    Args:
-        request: HTTP request object containing user and association data
-        permission_slug: Required permission(s). Can be a single permission slug or list of permission slugs.
-
-    Returns:
-        dict: Context dictionary containing:
-            - User context data from def_user_ctx
-            - manage: Set to 1 to indicate management mode
-            - exe_page: Set to 1 to indicate executive page
-            - is_sidebar_open: Sidebar state from session
-            - tutorial: Tutorial identifier if available
-            - config: Configuration URL if user has config permissions
-
-    Raises:
-        PermissionError: If user lacks the required association permission
-        FeatureError: If required feature is not enabled for the association
-
-    """
-    # Get base user context and validate permission
-    context = get_context(request)
-    if not has_association_permission(request, context, permission_slug):
-        raise UserPermissionError
-
-    # Retrieve feature configuration for this permission
-    (required_feature, tutorial_slug, config_slug) = get_association_permission_feature(permission_slug)
-
-    # Check if required feature is enabled for this association
-    if required_feature != "def" and required_feature not in context["features"]:
-        raise FeatureError(path=request.path, feature=required_feature, run=0)
-
-    # Set management context flags
-    context["manage"] = 1
-    context["exe_page"] = 1
-
-    # Load association permissions
-    get_index_association_permissions(request, context, context["association_id"])
-
-    # Add tutorial information if not already present
-    if "tutorial" not in context:
-        context["tutorial"] = tutorial_slug
-
-    # Add configuration URL if user has config permissions
-    if config_slug and has_association_permission(request, context, "exe_config"):
-        context["config"] = reverse("exe_config", args=[config_slug])
-
-    # Inject page_info from the corresponding form class if available
-    if permission_slug and isinstance(permission_slug, str):
-        from larpmanager.utils.edit.exe import ExeAction  # noqa: PLC0415
-
-        action = ExeAction.from_string(permission_slug)
-        if action and "form" in action.config and hasattr(action.config["form"], "page_info"):
-            context["page_info"] = action.config["form"].page_info
-
-    # Compute pending-work counts shown as badges on the sidebar links
-    # Lazy import: set_sidebar_badges transitively imports base, so a module-level
-    # import here would create a circular import
-    from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
-
-    set_sidebar_badges(request, context)
-
-    return context
-
-
-def check_event_context(request: HttpRequest, event_slug: str, permission_slug: str | list[str] | None = None) -> dict:
-    """Check event permissions and prepare management context.
-
-    Validates user permissions for event management operations and prepares
-    the necessary context including features, tutorials, and configuration links.
-
-    Args:
-        request: Django HTTP request object containing user and session data
-        event_slug: Event slug identifier for the target event
-        permission_slug: Required permission(s). Can be a single permission slug or list of permission slugs.
-
-    Returns:
-        Dictionary containing event context with management permissions including:
-            - Event and run objects
-            - Available features
-            - Tutorial information
-            - Configuration links
-            - Management flags
-
-    Raises:
-        PermissionError: If user lacks required permissions for the event
-        FeatureError: If required feature is not enabled for the event
-
-    """
-    # Get basic event context and run information
-    context = get_event_context(request, event_slug)
-
-    # Verify user has the required permissions for this event
-    if not has_event_permission(request, context, event_slug, permission_slug):
-        raise UserPermissionError
-
-    # Process permission-specific features and configuration
-    if permission_slug:
-        # Handle permission lists by taking the first permission
-        if isinstance(permission_slug, list):
-            permission_slug = permission_slug[0]
-
-        # Get feature configuration for this permission
-        (feature_name, tutorial_slug, config_section) = get_event_permission_feature(permission_slug)
-
-        # Add tutorial information if not already present
-        if "tutorial" not in context:
-            context["tutorial"] = tutorial_slug
-
-        # Add configuration link if user has config permissions
-        if config_section and has_event_permission(request, context, event_slug, "orga_config"):
-            context["config"] = reverse("orga_config", args=[context["run"].get_slug(), config_section])
-
-        # Verify required feature is enabled for this event
-        if feature_name != "def" and feature_name not in context["features"]:
-            raise FeatureError(path=request.path, feature=feature_name, run=context["run"].id)
-
-        # Mark active sidebar entry for redirect-style views
-        context["sidebar_active"] = permission_slug
-
-        # Inject page_info from the corresponding form class if available
-        from larpmanager.utils.edit.orga import OrgaAction  # noqa: PLC0415
-
-        action = OrgaAction.from_string(permission_slug)
-        if action and "form" in action.config and hasattr(action.config["form"], "page_info"):
-            context["page_info"] = action.config["form"].page_info
-
-    # Load additional event permissions and management context
-    get_index_event_permissions(request, context, event_slug)
-
-    # Set management page flags
-    context["orga_page"] = 1
-    context["manage"] = 1
-
-    # Compute pending-work counts shown as badges on the sidebar links
-    from larpmanager.views.manage import set_sidebar_badges  # noqa: PLC0415
-
-    set_sidebar_badges(request, context)
-
-    return context
 
 
 def get_event(request: HttpRequest, event_slug: str, run_number: Any = None) -> Any:

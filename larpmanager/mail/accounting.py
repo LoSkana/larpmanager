@@ -48,9 +48,9 @@ from larpmanager.models.accounting import (
     PaymentInvoice,
     PaymentType,
 )
-from larpmanager.models.association import get_url, hdr
 from larpmanager.models.event import Event, Run
 from larpmanager.models.member import Member, Membership, NotificationType
+from larpmanager.utils.core.headers import get_url, hdr
 from larpmanager.utils.io.pdf import generate_payment_receipt
 from larpmanager.utils.larpmanager.tasks import my_send_mail
 

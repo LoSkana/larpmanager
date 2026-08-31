@@ -22,8 +22,8 @@ from django.conf import settings as conf_settings
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-from larpmanager.cache.basic import get_event_association_id
-from larpmanager.cache.config import _get_event_parent_id, get_event_config
+from larpmanager.cache.basic import _get_event_parent_id, get_event_association_id
+from larpmanager.cache.config import get_event_config
 from larpmanager.models.association import Association
 from larpmanager.models.base import Feature
 

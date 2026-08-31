@@ -30,14 +30,17 @@ from larpmanager.cache.association_text import get_association_text
 from larpmanager.cache.basic import get_run_association_id, get_run_basic_cache, get_run_event_id
 from larpmanager.cache.config import get_association_config, get_event_config
 from larpmanager.cache.event_text import get_event_text
+from larpmanager.cache.feature import get_event_features
 from larpmanager.mail.digest import my_send_digest_email
 from larpmanager.mail.templates import registration_options
 from larpmanager.models.access import get_event_organizers
-from larpmanager.models.association import AssociationTextType, get_association_url, hdr, hdr_run
+from larpmanager.models.association import AssociationTextType
 from larpmanager.models.event import DevelopStatus, EventTextType
 from larpmanager.models.member import NotificationType
 from larpmanager.models.registration import Registration, RegistrationCharacterRel
+from larpmanager.utils.core.headers import get_association_url, hdr, hdr_run
 from larpmanager.utils.larpmanager.tasks import background_auto, my_send_mail
+from larpmanager.utils.registrations.context import get_checkin_qr_path
 
 logger = logging.getLogger(__name__)
 
@@ -48,6 +51,13 @@ def update_registration_status_bkg(registration_id: Any) -> None:
     time.sleep(1)
     registration = Registration.objects.get(pk=registration_id)
     update_registration_status(registration)
+
+
+def _get_checkin_qr_attachment(instance: Registration, event_id: int) -> tuple[str | None, str | None]:
+    """Return the check-in QR attachment path/name for a registration, or (None, None) if the feature is off."""
+    if "checkin" not in get_event_features(event_id):
+        return None, None
+    return get_checkin_qr_path(instance), str(_("Check-in QR code.png"))
 
 
 def update_registration_status(instance: Any) -> None:
@@ -117,8 +127,17 @@ def update_registration_status(instance: Any) -> None:
         if custom_message:
             email_body += "<br />" + custom_message
 
+    # Prepare the check-in QR code if the feature is enabled
+    attachment_path, attachment_name = _get_checkin_qr_attachment(instance, run_cache["event_id"])
     # Send email to the user
-    my_send_mail(email_subject, email_body, instance.member, instance.run)
+    my_send_mail(
+        email_subject,
+        email_body,
+        instance.member,
+        instance.run,
+        attachment_path=attachment_path,
+        attachment_name=attachment_name,
+    )
 
     # Send notifications to event organizers based on configuration
     association_id = run_cache["association_id"]

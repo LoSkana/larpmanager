@@ -8,6 +8,9 @@ msgstr "Los"
 msgid "Hi"
 msgstr "Hallo"
 
+msgid "No"
+msgstr "Nein"
+
 msgid "XP"
 msgstr "XP"
 
@@ -55,6 +58,9 @@ msgstr "Mehrwertsteuer"
 
 msgid "Who"
 msgstr "Wer"
+
+msgid "Yes"
+msgstr "Ja"
 
 msgid "age"
 msgstr "Alter"
@@ -640,6 +646,9 @@ msgstr "Land"
 msgid "Number"
 msgstr "Nummer"
 
+msgid "Online"
+msgstr "Online"
+
 msgid "Option"
 msgstr "Option"
 
@@ -901,6 +910,9 @@ msgstr "Kein Schritt"
 msgid "Nothing"
 msgstr "Nichts"
 
+msgid "Offline"
+msgstr "Offline"
+
 msgid "Options"
 msgstr "Optionen"
 
@@ -921,6 +933,9 @@ msgstr "Spieler:"
 
 msgid "Players"
 msgstr "Spieler"
+
+msgid "Present"
+msgstr "Anwesend"
 
 msgid "Preview"
 msgstr "Vorschau"
@@ -1096,6 +1111,9 @@ msgstr "Karussell"
 
 msgid "Casting:"
 msgstr "Casting:"
+
+msgid "Check-in"
+msgstr "Check-in"
 
 msgid "Claimant"
 msgstr "Antragsteller"
@@ -2051,6 +2069,9 @@ msgstr "Geschenk ändern"
 msgid "Characters:"
 msgstr "Charaktere:"
 
+msgid "Checked in:"
+msgstr "Eingecheckt:"
+
 msgid "Collections"
 msgstr "Geldsammlungen"
 
@@ -2146,6 +2167,12 @@ msgstr "Neue Sitzung"
 
 msgid "Next events"
 msgstr "Kommende Veranstaltungen"
+
+msgid "Not scanned"
+msgstr "Nicht gescannt"
+
+msgid "Outstanding"
+msgstr "Ausstehend"
 
 msgid "Participant"
 msgstr "Teilnehmer"
@@ -2447,6 +2474,9 @@ msgstr "Anforderungen"
 msgid "Rotate right"
 msgstr "Nach rechts drehen"
 
+msgid "Scan QR code"
+msgstr "QR-Code scannen"
+
 msgid "Scroll right"
 msgstr "Nach rechts scrollen"
 
@@ -2686,6 +2716,9 @@ msgstr "Vergangene Sitzungen"
 
 msgid "Paste as text"
 msgstr "Als Text einfügen"
+
+msgid "Pending sync:"
+msgstr "Ausstehende Synchronisierung:"
 
 msgid "Personal data"
 msgstr "Persönliche Daten"
@@ -3009,6 +3042,9 @@ msgstr "Anmeldung anfordern"
 
 msgid "Requests open:"
 msgstr "Offene Anfragen:"
+
+msgid "Scan rejected:"
+msgstr "Scan abgelehnt:"
 
 msgid "Sensitive data"
 msgstr "Sensible Daten"
@@ -3532,6 +3568,9 @@ msgstr "Private Nachricht:"
 
 msgid "Promote to admin"
 msgstr "Zum Admin befördern"
+
+msgid "QR Code Check-in"
+msgstr "QR-Code-Check-in"
 
 msgid "Realized revenue"
 msgstr "Realisierte Einnahmen"
@@ -4327,6 +4366,9 @@ msgstr "Carousel Beschreibung"
 
 msgid "Character Inventory:"
 msgstr "Charakter-Inventar:"
+
+msgid "Check-in QR code.png"
+msgstr "Check-in QR-Code.png"
 
 msgid "Close the collection"
 msgstr "Die Sammlung schließen"
@@ -5992,6 +6034,9 @@ msgstr "Das Datum, an dem das Ereignis beginnt"
 
 msgid "Total of recorded money inflows"
 msgstr "Summe der erfassten Geldzuflüsse"
+
+msgid "Unknown QR code for this event."
+msgstr "Unbekannter QR-Code für dieses Event."
 
 #, python-format
 msgid "Use of %(tokens)s for %(event)s"
@@ -8032,6 +8077,9 @@ msgid "View all deadlines that must be met for this event"
 msgstr ""
 "Alle Fristen anzeigen, die für diese Veranstaltung eingehalten werden müssen"
 
+msgid "You can now scan QR codes to check-in participants"
+msgstr "Du kannst jetzt QR-Codes scannen, um Teilnehmende einzuchecken"
+
 msgid "Your account is protected by an authenticator app."
 msgstr "Dein Konto ist durch eine Authentifizierungs-App geschützt."
 
@@ -8307,6 +8355,11 @@ msgstr "Die Mengenverfolgung ist für diese Organisation nicht aktiviert"
 
 msgid "Review participant answers to the matchmaker questions"
 msgstr "Überprüfe die Antworten der Teilnehmer auf die Matchmaker-Fragen"
+
+msgid "Scan participant QR codes on-site to mark them present"
+msgstr ""
+"Scanne die QR-Codes der Teilnehmenden vor Ort, um sie als anwesend zu "
+"markieren"
 
 msgid "Some features require 'Character', which is not active"
 msgstr "Einige Funktionen erfordern \"Charakter\", der nicht aktiv ist"
@@ -14690,6 +14743,14 @@ msgstr ""
 "und lade dann die Seite neu."
 
 msgid ""
+"Generates a unique QR code per registration and lets staff scan it on-site "
+"to mark participants present, working offline with automatic sync"
+msgstr ""
+"Erzeugt für jede Anmeldung einen eindeutigen QR-Code und ermöglicht dem "
+"Personal, ihn vor Ort zu scannen, um Teilnehmende als anwesend zu markieren;"
+" funktioniert offline mit automatischer Synchronisierung"
+
+msgid ""
 "If the first name shown on your documents is different from the one you "
 "prefer to use, then write it here; otherwise leave this field empty."
 msgstr ""
@@ -14783,6 +14844,14 @@ msgstr ""
 "Führe die Verlosung durch, um Teilnehmer aus den Anmeldungen der "
 "Verlosungsstufe nach dem Zufallsprinzip auszuwählen und die ausgewählten "
 "Anmeldungen zu bestätigten Tickets hochzustufen."
+
+msgid ""
+"Scan participant QR codes on-site to mark them present. Works offline: scans"
+" are queued locally and synced automatically once you're back online."
+msgstr ""
+"Scanne die QR-Codes der Teilnehmenden vor Ort, um sie als anwesend zu "
+"markieren. Funktioniert offline: Scans werden lokal vorgemerkt und "
+"automatisch synchronisiert, sobald du wieder online bist."
 
 msgid ""
 "Set your personal theme, notification digest mode, and interface version; "
